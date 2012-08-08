@@ -103,12 +103,13 @@ private slots:
     void serventReady();
 
     void aclEntryClearButtonClicked();
-    
+
     void requiresRestart();
 
-private:
-    void createIcons();
+private slots:
+    void saveSettings();
 
+private:
     Ui_Settings_Accounts* m_accountsWidgetUi;
     QWidget* m_accountsWidget;
 

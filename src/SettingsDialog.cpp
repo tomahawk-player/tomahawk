@@ -237,60 +237,62 @@ SettingsDialog::SettingsDialog(QObject *parent )
     connect( m_advancedWidgetUi->staticIpRadioButton, SIGNAL( toggled(bool) ), SLOT( toggleRemoteMode() ) );
     connect( m_advancedWidgetUi->upnpRadioButton, SIGNAL( toggled(bool) ), SLOT( toggleRemoteMode() ) );
     connect( m_advancedWidgetUi->enableProxyCheckBox, SIGNAL( toggled(bool) ), SLOT( toggleProxyEnabled() ) );
-//    connect( this, SIGNAL( rejected() ), SLOT( onRejected() ) );
+
+    connect( m_dialog, SIGNAL( accepted() ), SLOT( saveSettings() ) );
+    connect( m_dialog, SIGNAL( rejected() ), SLOT( onRejected() ) );
+}
+
+
+void
+SettingsDialog::saveSettings()
+{
+    qDebug() << Q_FUNC_INFO;
+
+    TomahawkSettings* s = TomahawkSettings::instance();
+
+    s->setCrashReporterEnabled( m_advancedWidgetUi->checkBoxReporter->checkState() == Qt::Checked );
+    s->setHttpEnabled( m_advancedWidgetUi->checkBoxHttp->checkState() == Qt::Checked );
+    s->setProxyType( m_advancedWidgetUi->enableProxyCheckBox->isChecked() ? QNetworkProxy::Socks5Proxy : QNetworkProxy::NoProxy );
+    s->setExternalAddressMode( m_advancedWidgetUi->upnpRadioButton->isChecked() ? TomahawkSettings::Upnp : ( m_advancedWidgetUi->lanOnlyRadioButton->isChecked() ? TomahawkSettings::Lan : TomahawkSettings::Static ) );
+
+    s->setExternalHostname( m_advancedWidgetUi->staticHostName->text() );
+    s->setExternalPort( m_advancedWidgetUi->staticPort->value() );
+
+    s->setScannerPaths( m_collectionWidgetUi->dirTree->getCheckedPaths() );
+    s->setWatchForChanges( m_collectionWidgetUi->checkBoxWatchForChanges->isChecked() );
+    s->setScannerTime( m_collectionWidgetUi->scannerTimeSpinBox->value() );
+    s->setEnableEchonestCatalogs( m_collectionWidgetUi->enableEchonestCatalog->isChecked() );
+
+//         s->setNowPlayingEnabled( ui->checkBoxEnableAdium->isChecked() );
+
+    s->applyChanges();
+    s->sync();
+
+    if ( m_restartRequired )
+        QMessageBox::information( 0, tr( "Information" ), tr( "Some changed settings will not take effect until Tomahawk is restarted" ) );
+
+    TomahawkUtils::NetworkProxyFactory* proxyFactory = TomahawkUtils::proxyFactory();
+    if ( !m_advancedWidgetUi->enableProxyCheckBox->isChecked() )
+    {
+        tDebug() << Q_FUNC_INFO << "Got NoProxy selected";
+        proxyFactory->setProxy( QNetworkProxy::NoProxy );
+    }
+    else
+    {
+        tDebug() << Q_FUNC_INFO << "Got Socks5Proxy selected";
+        proxyFactory->setProxy( QNetworkProxy( QNetworkProxy::Socks5Proxy, s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() ) );
+        if ( !s->proxyNoProxyHosts().isEmpty() )
+        {
+            tDebug() << Q_FUNC_INFO << "noproxy hosts:" << s->proxyNoProxyHosts();
+            tDebug() << Q_FUNC_INFO << "split noproxy line edit is " << s->proxyNoProxyHosts().split( ' ', QString::SkipEmptyParts );
+            proxyFactory->setNoProxyHosts( s->proxyNoProxyHosts().split( ' ', QString::SkipEmptyParts ) );
+        }
+    }
 }
 
 
 SettingsDialog::~SettingsDialog()
 {
-    qDebug() << Q_FUNC_INFO;
-
-    if ( !m_rejected )
-    {
-        TomahawkSettings* s = TomahawkSettings::instance();
-
-        s->setCrashReporterEnabled( m_advancedWidgetUi->checkBoxReporter->checkState() == Qt::Checked );
-        s->setHttpEnabled( m_advancedWidgetUi->checkBoxHttp->checkState() == Qt::Checked );
-        s->setProxyType( m_advancedWidgetUi->enableProxyCheckBox->isChecked() ? QNetworkProxy::Socks5Proxy : QNetworkProxy::NoProxy );
-        s->setExternalAddressMode( m_advancedWidgetUi->upnpRadioButton->isChecked() ? TomahawkSettings::Upnp : ( m_advancedWidgetUi->lanOnlyRadioButton->isChecked() ? TomahawkSettings::Lan : TomahawkSettings::Static ) );
-
-        s->setExternalHostname( m_advancedWidgetUi->staticHostName->text() );
-        s->setExternalPort( m_advancedWidgetUi->staticPort->value() );
-
-        s->setScannerPaths( m_collectionWidgetUi->dirTree->getCheckedPaths() );
-        s->setWatchForChanges( m_collectionWidgetUi->checkBoxWatchForChanges->isChecked() );
-        s->setScannerTime( m_collectionWidgetUi->scannerTimeSpinBox->value() );
-        s->setEnableEchonestCatalogs( m_collectionWidgetUi->enableEchonestCatalog->isChecked() );
-
-//         s->setNowPlayingEnabled( ui->checkBoxEnableAdium->isChecked() );
-
-        s->applyChanges();
-        s->sync();
-
-        if ( m_restartRequired )
-            QMessageBox::information( 0, tr( "Information" ), tr( "Some changed settings will not take effect until Tomahawk is restarted" ) );
-
-        TomahawkUtils::NetworkProxyFactory* proxyFactory = TomahawkUtils::proxyFactory();
-        if ( !m_advancedWidgetUi->enableProxyCheckBox->isChecked() )
-        {
-            tDebug() << Q_FUNC_INFO << "Got NoProxy selected";
-            proxyFactory->setProxy( QNetworkProxy::NoProxy );
-        }
-        else
-        {
-            tDebug() << Q_FUNC_INFO << "Got Socks5Proxy selected";
-            proxyFactory->setProxy( QNetworkProxy( QNetworkProxy::Socks5Proxy, s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() ) );
-            if ( !s->proxyNoProxyHosts().isEmpty() )
-            {
-                tDebug() << Q_FUNC_INFO << "noproxy hosts:" << s->proxyNoProxyHosts();
-                tDebug() << Q_FUNC_INFO << "split noproxy line edit is " << s->proxyNoProxyHosts().split( ' ', QString::SkipEmptyParts );
-                proxyFactory->setNoProxyHosts( s->proxyNoProxyHosts().split( ' ', QString::SkipEmptyParts ) );
-            }
-        }
-    }
-    else
-        qDebug() << "Settings dialog cancelled, NOT saving prefs.";
-
     m_accountsWidget->deleteLater();
     m_collectionWidget->deleteLater();
     m_advancedWidget->deleteLater();
@@ -309,17 +311,6 @@ SettingsDialog::serventReady()
 {
     m_sipSpinner->fadeOut();
 }
-
-
-//void
-//SettingsDialog::changePage( QAction *action )
-//{
-//    int index = m_settingsGroup->actions().indexOf( action );
-//    if( ui->stackedWidget->currentIndex() != index )
-//    {
-//        ui->stackedWidget->setCurrentIndex( index );
-//    }
-//}
 
 
 void
@@ -417,7 +408,7 @@ SettingsDialog::openAccountFactoryConfig( AccountFactory* factory )
     }
 
 #ifndef Q_OS_MAC
-    AccountFactoryWrapper dialog( factory, this );
+    AccountFactoryWrapper dialog( factory, 0 );
     QWeakPointer< AccountFactoryWrapper > watcher( &dialog );
 
     dialog.exec();

@@ -409,7 +409,7 @@ IF( APPLE )
         /System/Library/Frameworks/Security.framework
     )
 ELSE( APPLE )
-    SET( libGuiSources ${libGuiSources} thirdparty/Qocoa/qsearchfield.cpp thirdparty/Qocoa/qtoolbartabdialog_nonmac.cpp )
+    SET( libGuiSources ${libGuiSources} thirdparty/Qocoa/qsearchfield.cpp thirdparty/Qocoa/qtoolbartabdialog.cpp )
 ENDIF( APPLE )
 
 IF(LIBLASTFM_FOUND)

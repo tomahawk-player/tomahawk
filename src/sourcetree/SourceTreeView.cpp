@@ -68,6 +68,8 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     setAttribute( Qt::WA_MacShowFocusRect, 0 );
     setContentsMargins( 0, 0, 0, 0 );
 
+    tDebug() << "POINT SIZEL" << font().pointSize();
+
     QFont fnt;
     fnt.setPointSize( font().pointSize() - 1 );
     setFont( fnt );

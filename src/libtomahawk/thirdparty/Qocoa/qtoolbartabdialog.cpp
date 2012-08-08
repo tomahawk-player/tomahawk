@@ -19,11 +19,12 @@ public slots:
             return;
 
         const int idx = toolbar->actions().indexOf(action);
-        Q_ASSERT(idx > -1);
-        if (idx < 0)
+        // There's a left spacer, so we want 1 less
+        Q_ASSERT(idx > 0);
+        if (idx < 1)
             return;
 
-        stack->setCurrentIndex(idx);
+        stack->setCurrentIndex(idx - 1);
     }
 
     void accepted() {
@@ -133,7 +134,7 @@ void QToolbarTabDialog::setCurrentIndex(int index)
         return;
 
 
-    Q_ASSERT(index < pimpl->toolbar->actions().length());
+    Q_ASSERT(index < pimpl->toolbar->actions().length() + 1);
     Q_ASSERT(index < pimpl->stack->count());
     if (index < 0 || index > pimpl->toolbar->actions().length())
         return;
@@ -142,6 +143,11 @@ void QToolbarTabDialog::setCurrentIndex(int index)
 
     if (pimpl->stack->currentIndex() != index)
         pimpl->stack->setCurrentIndex(index);
+
+    // 1 spacer item before the first action
+    QAction* toCheck = pimpl->toolbar->actions().at(index + 1);
+    if (pimpl->actionGroup->checkedAction() != toCheck)
+        toCheck->setChecked(true);
 }
 
 void QToolbarTabDialog::show()
@@ -164,4 +170,4 @@ void QToolbarTabDialog::hide()
     pimpl->dialog.data()->hide();
 }
 
-#include "moc_qtoolbartabdialog_nonmac.cpp"
+#include "qtoolbartabdialog.moc"
