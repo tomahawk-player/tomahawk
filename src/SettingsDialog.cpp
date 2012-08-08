@@ -197,9 +197,11 @@ SettingsDialog::SettingsDialog(QObject *parent )
     m_advancedWidgetUi->proxyButton->setFixedWidth( buttonsWidth );
     m_advancedWidgetUi->aclEntryClearButton->setFixedWidth( buttonsWidth );
 
-
+#ifndef Q_OS_MAC
     m_advancedWidget->setMinimumSize( m_advancedWidget->sizeHint() );
     m_accountsWidget->setMinimumWidth( 500 );
+#endif
+
     // NOW PLAYING
 // #ifdef Q_WS_MAC
 //     ui->checkBoxEnableAdium->setChecked( s->nowPlayingEnabled() );
