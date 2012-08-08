@@ -372,11 +372,13 @@ connect and stream from you?</source>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="493"/>
+        <location filename="../src/AudioControls.cpp" line="261"/>
         <source>Shuffle</source>
         <translation>Случаная</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="506"/>
+        <location filename="../src/AudioControls.cpp" line="262"/>
         <source>Repeat</source>
         <translation>Повторять</translation>
     </message>
@@ -389,6 +391,31 @@ connect and stream from you?</source>
         <location filename="../src/AudioControls.ui" line="576"/>
         <source>High</source>
         <translation>Громче</translation>
+    </message>
+    <message>
+        <location filename="../src/AudioControls.cpp" line="258"/>
+        <source>Time Elapsed</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/AudioControls.cpp" line="259"/>
+        <source>Time Remaining</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/AudioControls.cpp" line="260"/>
+        <source>Music Source</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/AudioControls.cpp" line="263"/>
+        <source>Share</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/AudioControls.cpp" line="264"/>
+        <source>Love</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
