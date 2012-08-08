@@ -296,6 +296,7 @@ SettingsDialog::~SettingsDialog()
 void
 SettingsDialog::show()
 {
+    m_dialog->setCurrentIndex( 0 );
     m_dialog->show();
 }
 
