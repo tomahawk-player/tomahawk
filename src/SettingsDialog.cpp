@@ -199,7 +199,7 @@ SettingsDialog::SettingsDialog(QObject *parent )
 
 
     m_advancedWidget->setMinimumSize( m_advancedWidget->sizeHint() );
-    m_accountsWidget->setMinimumSize( 500, 400 );
+    m_accountsWidget->setMinimumWidth( 500 );
     // NOW PLAYING
 // #ifdef Q_WS_MAC
 //     ui->checkBoxEnableAdium->setChecked( s->nowPlayingEnabled() );
