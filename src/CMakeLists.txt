@@ -83,7 +83,9 @@ ENDIF()
 SET( tomahawkUI ${tomahawkUI}
      TomahawkWindow.ui
      DiagnosticsDialog.ui
-     StackedSettingsDialog.ui
+     Settings_Accounts.ui
+     Settings_Advanced.ui
+     Settings_Collection.ui
      ProxyDialog.ui
 
      AudioControls.ui

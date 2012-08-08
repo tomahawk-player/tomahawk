@@ -810,7 +810,7 @@ void
 TomahawkWindow::showSettingsDialog()
 {
     SettingsDialog win;
-    win.exec();
+    win.show();
 }
 
 

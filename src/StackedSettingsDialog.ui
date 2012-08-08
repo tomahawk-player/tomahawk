@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>655</width>
-    <height>500</height>
+    <width>692</width>
+    <height>604</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -22,7 +22,7 @@
      <item>
       <widget class="QStackedWidget" name="stackedWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="accountsPage">
         <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -461,6 +461,12 @@
     </widget>
    </item>
   </layout>
+  <zorder>buttonBox</zorder>
+  <zorder></zorder>
+  <zorder>frame_4</zorder>
+  <zorder>frame_2</zorder>
+  <zorder>frameNetworkAdvanced</zorder>
+  <zorder>stackedWidget</zorder>
  </widget>
  <customwidgets>
   <customwidget>

@@ -53,75 +53,78 @@
 #include "utils/Logger.h"
 #include "accounts/AccountFactoryWrapper.h"
 #include "accounts/spotify/SpotifyAccount.h"
+#include "thirdparty/Qocoa/qtoolbartabdialog.h"
 
 #include "ui_ProxyDialog.h"
-#include "ui_StackedSettingsDialog.h"
+#include "ui_Settings_Accounts.h"
+#include "ui_Settings_Collection.h"
+#include "ui_Settings_Advanced.h"
 
 using namespace Tomahawk;
 using namespace Accounts;
 
-SettingsDialog::SettingsDialog( QWidget *parent )
-    : QDialog( parent )
-    , ui( new Ui_StackedSettingsDialog )
-    , m_proxySettings( this )
+SettingsDialog::SettingsDialog(QObject *parent )
+    : QObject( parent )
+    , m_accountsWidgetUi( new Ui_Settings_Accounts )
+    , m_accountsWidget( new QWidget )
+    , m_collectionWidgetUi( new Ui_Settings_Collection )
+    , m_collectionWidget( new QWidget )
+    , m_advancedWidgetUi( new Ui_Settings_Advanced )
+    , m_advancedWidget( new QWidget )
+    , m_proxySettings( 0 )
     , m_rejected( false )
     , m_restartRequired( false )
     , m_accountModel( 0 )
     , m_sipSpinner( 0 )
 {
-    ui->setupUi( this );
+    m_accountsWidgetUi->setupUi( m_accountsWidget );
+    m_collectionWidgetUi->setupUi( m_collectionWidget );
+    m_advancedWidgetUi->setupUi( m_advancedWidget );
+
+    m_dialog = new QToolbarTabDialog;
+
     TomahawkSettings* s = TomahawkSettings::instance();
 
-    TomahawkUtils::unmarginLayout( layout() );
-    TomahawkUtils::unmarginLayout( ui->horizontalLayout );
+//    TomahawkUtils::unmarginLayout( layout() );
+//    TomahawkUtils::unmarginLayout( ui->horizontalLayout );
 
-#ifdef Q_WS_X11
-    ui->stackedWidget->setContentsMargins( 4, 4, 4, 4 );
-#else
-    ui->stackedWidget->setContentsMargins( 4, 4, 4, 0 );
-#endif
-    ui->checkBoxReporter->setChecked( s->crashReporterEnabled() );
-    ui->checkBoxHttp->setChecked( s->httpEnabled() );
-
-    QFrame *sepLine = new QFrame( this );
-    sepLine->setFrameShape( QFrame::HLine );
-    sepLine->setFrameShadow( QFrame::Sunken );
-    ui->horizontalLayout->insertWidget( 0, sepLine );
-
-    m_toolBar = new QToolBar( tr( "Tomahawk Settings" ), this );
-    ui->horizontalLayout->insertWidget( 0, m_toolBar );
-    m_toolBar->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
+//#ifdef Q_WS_X11
+//    ui->stackedWidget->setContentsMargins( 4, 4, 4, 4 );
+//#else
+//    ui->stackedWidget->setContentsMargins( 4, 4, 4, 0 );
+//#endif
+    m_advancedWidgetUi->checkBoxReporter->setChecked( s->crashReporterEnabled() );
+    m_advancedWidgetUi->checkBoxHttp->setChecked( s->httpEnabled() );
 
     //Network settings
     TomahawkSettings::ExternalAddressMode mode = TomahawkSettings::instance()->externalAddressMode();
     if ( mode == TomahawkSettings::Lan )
-        ui->lanOnlyRadioButton->setChecked( true );
+        m_advancedWidgetUi->lanOnlyRadioButton->setChecked( true );
     else if ( mode == TomahawkSettings::Static )
-        ui->staticIpRadioButton->setChecked( true );
+        m_advancedWidgetUi->staticIpRadioButton->setChecked( true );
     else
-        ui->upnpRadioButton->setChecked( true );
+        m_advancedWidgetUi->upnpRadioButton->setChecked( true );
 
-    ui->staticHostNamePortLabel->setEnabled( ui->staticIpRadioButton->isChecked() );
-    ui->staticHostName->setEnabled( ui->staticIpRadioButton->isChecked() );
-    ui->staticPort->setEnabled( ui->staticIpRadioButton->isChecked() );
-    ui->staticHostNameLabel->setEnabled( ui->staticIpRadioButton->isChecked() );
-    ui->staticPortLabel->setEnabled( ui->staticIpRadioButton->isChecked() );
+    m_advancedWidgetUi->staticHostNamePortLabel->setEnabled( m_advancedWidgetUi->staticIpRadioButton->isChecked() );
+    m_advancedWidgetUi->staticHostName->setEnabled( m_advancedWidgetUi->staticIpRadioButton->isChecked() );
+    m_advancedWidgetUi->staticPort->setEnabled( m_advancedWidgetUi->staticIpRadioButton->isChecked() );
+    m_advancedWidgetUi->staticHostNameLabel->setEnabled( m_advancedWidgetUi->staticIpRadioButton->isChecked() );
+    m_advancedWidgetUi->staticPortLabel->setEnabled( m_advancedWidgetUi->staticIpRadioButton->isChecked() );
 
     bool useProxy = TomahawkSettings::instance()->proxyType() == QNetworkProxy::Socks5Proxy;
-    ui->enableProxyCheckBox->setChecked( useProxy );
-    ui->proxyButton->setEnabled( useProxy );
+    m_advancedWidgetUi->enableProxyCheckBox->setChecked( useProxy );
+    m_advancedWidgetUi->proxyButton->setEnabled( useProxy );
 
-    ui->aclEntryClearButton->setEnabled( TomahawkSettings::instance()->aclEntries().size() > 0 );
-    connect( ui->aclEntryClearButton, SIGNAL( clicked( bool ) ), this, SLOT( aclEntryClearButtonClicked() ) );
+    m_advancedWidgetUi->aclEntryClearButton->setEnabled( TomahawkSettings::instance()->aclEntries().size() > 0 );
+    connect( m_advancedWidgetUi->aclEntryClearButton, SIGNAL( clicked( bool ) ), this, SLOT( aclEntryClearButtonClicked() ) );
 
-    createIcons();
-#ifdef Q_WS_X11
-    setContentsMargins( 4, 4, 4, 4 );
-#elif defined( Q_OS_MAC )
-    setContentsMargins( 0, 0, 0, 4 );
-#else
-    setContentsMargins( 0, 4, 4, 4 );
-#endif
+//#ifdef Q_WS_X11
+//    setContentsMargins( 4, 4, 4, 4 );
+//#elif defined( Q_OS_MAC )
+//    setContentsMargins( 0, 0, 0, 4 );
+//#else
+//    setContentsMargins( 0, 4, 4, 4 );
+//#endif
 
 #ifdef Q_WS_MAC
     // Avoid resize handles on sheets on osx
@@ -132,14 +135,14 @@ SettingsDialog::SettingsDialog( QWidget *parent )
 
     // Accounts
     AccountDelegate* accountDelegate = new AccountDelegate( this );
-    ui->accountsView->setItemDelegate( accountDelegate );
-    ui->accountsView->setContextMenuPolicy( Qt::CustomContextMenu );
-    ui->accountsView->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
-    ui->accountsView->setMouseTracking( true );
+    m_accountsWidgetUi->accountsView->setItemDelegate( accountDelegate );
+    m_accountsWidgetUi->accountsView->setContextMenuPolicy( Qt::CustomContextMenu );
+    m_accountsWidgetUi->accountsView->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
+    m_accountsWidgetUi->accountsView->setMouseTracking( true );
 
     connect( accountDelegate, SIGNAL( openConfig( Tomahawk::Accounts::Account* ) ), this, SLOT( openAccountConfig( Tomahawk::Accounts::Account* ) ) );
     connect( accountDelegate, SIGNAL( openConfig( Tomahawk::Accounts::AccountFactory* ) ), this, SLOT( openAccountFactoryConfig( Tomahawk::Accounts::AccountFactory* ) ) );
-    connect( accountDelegate, SIGNAL( update( QModelIndex ) ), ui->accountsView, SLOT( update( QModelIndex ) ) );
+    connect( accountDelegate, SIGNAL( update( QModelIndex ) ), m_accountsWidgetUi->accountsView, SLOT( update( QModelIndex ) ) );
 
     m_accountModel = new AccountModel( this );
     m_accountProxy = new AccountModelFilterProxy( m_accountModel );
@@ -150,58 +153,58 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     connect( m_accountProxy, SIGNAL( errorInstalling( QPersistentModelIndex ) ), accountDelegate, SLOT( errorInstalling(QPersistentModelIndex) ) );
     connect( m_accountProxy, SIGNAL( scrollTo( QModelIndex ) ), this, SLOT( scrollTo( QModelIndex ) ) );
 
-    ui->accountsView->setModel( m_accountProxy );
+    m_accountsWidgetUi->accountsView->setModel( m_accountProxy );
 
-    connect( ui->installFromFileBtn, SIGNAL( clicked( bool ) ), this, SLOT( installFromFile() ) );
+    connect( m_accountsWidgetUi->installFromFileBtn, SIGNAL( clicked( bool ) ), this, SLOT( installFromFile() ) );
     connect( m_accountModel, SIGNAL( createAccount( Tomahawk::Accounts::AccountFactory* ) ), this, SLOT( createAccountFromFactory( Tomahawk::Accounts::AccountFactory* ) ) );
 
-    ui->accountsFilterCombo->addItem( tr( "All" ), Accounts::NoType );
-    ui->accountsFilterCombo->addItem( accountTypeToString( SipType ), SipType );
-    ui->accountsFilterCombo->addItem( accountTypeToString( ResolverType ), ResolverType );
-    ui->accountsFilterCombo->addItem( accountTypeToString( StatusPushType ), StatusPushType );
+    m_accountsWidgetUi->accountsFilterCombo->addItem( tr( "All" ), Accounts::NoType );
+    m_accountsWidgetUi->accountsFilterCombo->addItem( accountTypeToString( SipType ), SipType );
+    m_accountsWidgetUi->accountsFilterCombo->addItem( accountTypeToString( ResolverType ), ResolverType );
+    m_accountsWidgetUi->accountsFilterCombo->addItem( accountTypeToString( StatusPushType ), StatusPushType );
 
-    connect( ui->accountsFilterCombo, SIGNAL( activated( int ) ), this, SLOT( accountsFilterChanged( int ) ) );
+    connect( m_accountsWidgetUi->accountsFilterCombo, SIGNAL( activated( int ) ), this, SLOT( accountsFilterChanged( int ) ) );
 
     if ( !Servent::instance()->isReady() )
     {
-        m_sipSpinner = new AnimatedSpinner( ui->accountsView );
+        m_sipSpinner = new AnimatedSpinner( m_accountsWidgetUi->accountsView );
         m_sipSpinner->fadeIn();
 
         connect( Servent::instance(), SIGNAL( ready() ), this, SLOT( serventReady() ) );
     }
 
     // ADVANCED
-    ui->staticHostName->setText( s->externalHostname() );
-    ui->staticPort->setValue( s->externalPort() );
-    ui->proxyButton->setVisible( true );
+    m_advancedWidgetUi->staticHostName->setText( s->externalHostname() );
+    m_advancedWidgetUi->staticPort->setValue( s->externalPort() );
+    m_advancedWidgetUi->proxyButton->setVisible( true );
 
-    ui->checkBoxWatchForChanges->setChecked( s->watchForChanges() );
-    ui->scannerTimeSpinBox->setValue( s->scannerTime() );
-    ui->enableEchonestCatalog->setChecked( s->enableEchonestCatalogs() );
+    m_collectionWidgetUi->checkBoxWatchForChanges->setChecked( s->watchForChanges() );
+    m_collectionWidgetUi->scannerTimeSpinBox->setValue( s->scannerTime() );
+    m_collectionWidgetUi->enableEchonestCatalog->setChecked( s->enableEchonestCatalogs() );
 
-    connect( ui->checkBoxWatchForChanges, SIGNAL( clicked( bool ) ), SLOT( updateScanOptionsView() ) );
+    connect( m_collectionWidgetUi->checkBoxWatchForChanges, SIGNAL( clicked( bool ) ), SLOT( updateScanOptionsView() ) );
 
-    if ( ui->checkBoxWatchForChanges->isChecked() )
+    if ( m_collectionWidgetUi->checkBoxWatchForChanges->isChecked() )
     {
-        ui->scanTimeLabel->show();
-        ui->scannerTimeSpinBox->show();
+        m_collectionWidgetUi->scanTimeLabel->show();
+        m_collectionWidgetUi->scannerTimeSpinBox->show();
     }
     else
     {
-        ui->scanTimeLabel->hide();
-        ui->scannerTimeSpinBox->hide();
+        m_collectionWidgetUi->scanTimeLabel->hide();
+        m_collectionWidgetUi->scannerTimeSpinBox->hide();
     }
 
     foreach ( const QString& dir, TomahawkSettings::instance()->scannerPaths() )
     {
-        ui->dirTree->checkPath( dir, Qt::Checked );
+        m_collectionWidgetUi->dirTree->checkPath( dir, Qt::Checked );
     }
-    ui->advancedPage->setMinimumSize( ui->advancedPage->sizeHint() );
+//    m_collectionWidgetUi->advancedPage->setMinimumSize( ui->advancedPage->sizeHint() );
 
-    int buttonsWidth = qMax( ui->proxyButton->sizeHint().width(),
-                             ui->aclEntryClearButton->sizeHint().width() );
-    ui->proxyButton->setFixedWidth( buttonsWidth );
-    ui->aclEntryClearButton->setFixedWidth( buttonsWidth );
+    int buttonsWidth = qMax( m_advancedWidgetUi->proxyButton->sizeHint().width(),
+                             m_advancedWidgetUi->aclEntryClearButton->sizeHint().width() );
+    m_advancedWidgetUi->proxyButton->setFixedWidth( buttonsWidth );
+    m_advancedWidgetUi->aclEntryClearButton->setFixedWidth( buttonsWidth );
 
 
     // NOW PLAYING
@@ -211,15 +214,30 @@ SettingsDialog::SettingsDialog( QWidget *parent )
 //     ui->checkBoxEnableAdium->hide();
 // #endif
 
-    connect( ui->proxyButton,  SIGNAL( clicked() ),  SLOT( showProxySettings() ) );
-    connect( ui->lanOnlyRadioButton, SIGNAL( toggled(bool) ), SLOT( requiresRestart() ) );
-    connect( ui->staticIpRadioButton, SIGNAL( toggled(bool) ), SLOT( requiresRestart() ) );
-    connect( ui->upnpRadioButton, SIGNAL( toggled(bool) ), SLOT( requiresRestart() ) );
-    connect( ui->lanOnlyRadioButton, SIGNAL( toggled(bool) ), SLOT( toggleRemoteMode() ) );
-    connect( ui->staticIpRadioButton, SIGNAL( toggled(bool) ), SLOT( toggleRemoteMode() ) );
-    connect( ui->upnpRadioButton, SIGNAL( toggled(bool) ), SLOT( toggleRemoteMode() ) );
-    connect( ui->enableProxyCheckBox, SIGNAL( toggled(bool) ), SLOT( toggleProxyEnabled() ) );
-    connect( this, SIGNAL( rejected() ), SLOT( onRejected() ) );
+    m_dialog->addTab( m_accountsWidget, QPixmap( RESPATH "images/account-settings.png" ), tr( "Services" ), tr( "<b>Services</b><br>"
+                                                                                                               "Configure the accounts and services used by Tomahawk "
+                                                                                                               "to search and retrieve music, find your friends and "
+                                                                                                               "update your status." ));
+
+    m_dialog->addTab( m_collectionWidget, QPixmap( RESPATH "images/music-settings.png" ), tr( "Collection" ), tr("<b>Collection</b><br>"
+                                                                                                               "Manage how Tomahawk finds music on your computer." ));
+
+    m_dialog->addTab( m_advancedWidget, QPixmap( RESPATH "images/advanced-settings.png" ), tr( "Advanced" ), tr( "<b>Advanced</b><br>"
+                                                                                                               "Configure Tomahawk's advanced settings, including "
+                                                                                                               "network connectivity settings, browser interaction "
+                                                                                                               "and more."  ));
+
+    m_dialog->setCurrentIndex( 0 );
+
+    connect( m_advancedWidgetUi->proxyButton,  SIGNAL( clicked() ),  SLOT( showProxySettings() ) );
+    connect( m_advancedWidgetUi->lanOnlyRadioButton, SIGNAL( toggled(bool) ), SLOT( requiresRestart() ) );
+    connect( m_advancedWidgetUi->staticIpRadioButton, SIGNAL( toggled(bool) ), SLOT( requiresRestart() ) );
+    connect( m_advancedWidgetUi->upnpRadioButton, SIGNAL( toggled(bool) ), SLOT( requiresRestart() ) );
+    connect( m_advancedWidgetUi->lanOnlyRadioButton, SIGNAL( toggled(bool) ), SLOT( toggleRemoteMode() ) );
+    connect( m_advancedWidgetUi->staticIpRadioButton, SIGNAL( toggled(bool) ), SLOT( toggleRemoteMode() ) );
+    connect( m_advancedWidgetUi->upnpRadioButton, SIGNAL( toggled(bool) ), SLOT( toggleRemoteMode() ) );
+    connect( m_advancedWidgetUi->enableProxyCheckBox, SIGNAL( toggled(bool) ), SLOT( toggleProxyEnabled() ) );
+//    connect( this, SIGNAL( rejected() ), SLOT( onRejected() ) );
 }
 
 
@@ -231,18 +249,18 @@ SettingsDialog::~SettingsDialog()
     {
         TomahawkSettings* s = TomahawkSettings::instance();
 
-        s->setCrashReporterEnabled( ui->checkBoxReporter->checkState() == Qt::Checked );
-        s->setHttpEnabled( ui->checkBoxHttp->checkState() == Qt::Checked );
-        s->setProxyType( ui->enableProxyCheckBox->isChecked() ? QNetworkProxy::Socks5Proxy : QNetworkProxy::NoProxy );
-        s->setExternalAddressMode( ui->upnpRadioButton->isChecked() ? TomahawkSettings::Upnp : ( ui->lanOnlyRadioButton->isChecked() ? TomahawkSettings::Lan : TomahawkSettings::Static ) );
+        s->setCrashReporterEnabled( m_advancedWidgetUi->checkBoxReporter->checkState() == Qt::Checked );
+        s->setHttpEnabled( m_advancedWidgetUi->checkBoxHttp->checkState() == Qt::Checked );
+        s->setProxyType( m_advancedWidgetUi->enableProxyCheckBox->isChecked() ? QNetworkProxy::Socks5Proxy : QNetworkProxy::NoProxy );
+        s->setExternalAddressMode( m_advancedWidgetUi->upnpRadioButton->isChecked() ? TomahawkSettings::Upnp : ( m_advancedWidgetUi->lanOnlyRadioButton->isChecked() ? TomahawkSettings::Lan : TomahawkSettings::Static ) );
 
-        s->setExternalHostname( ui->staticHostName->text() );
-        s->setExternalPort( ui->staticPort->value() );
+        s->setExternalHostname( m_advancedWidgetUi->staticHostName->text() );
+        s->setExternalPort( m_advancedWidgetUi->staticPort->value() );
 
-        s->setScannerPaths( ui->dirTree->getCheckedPaths() );
-        s->setWatchForChanges( ui->checkBoxWatchForChanges->isChecked() );
-        s->setScannerTime( ui->scannerTimeSpinBox->value() );
-        s->setEnableEchonestCatalogs( ui->enableEchonestCatalog->isChecked() );
+        s->setScannerPaths( m_collectionWidgetUi->dirTree->getCheckedPaths() );
+        s->setWatchForChanges( m_collectionWidgetUi->checkBoxWatchForChanges->isChecked() );
+        s->setScannerTime( m_collectionWidgetUi->scannerTimeSpinBox->value() );
+        s->setEnableEchonestCatalogs( m_collectionWidgetUi->enableEchonestCatalog->isChecked() );
 
 //         s->setNowPlayingEnabled( ui->checkBoxEnableAdium->isChecked() );
 
@@ -250,10 +268,10 @@ SettingsDialog::~SettingsDialog()
         s->sync();
 
         if ( m_restartRequired )
-            QMessageBox::information( this, tr( "Information" ), tr( "Some changed settings will not take effect until Tomahawk is restarted" ) );
+            QMessageBox::information( 0, tr( "Information" ), tr( "Some changed settings will not take effect until Tomahawk is restarted" ) );
 
         TomahawkUtils::NetworkProxyFactory* proxyFactory = TomahawkUtils::proxyFactory();
-        if ( !ui->enableProxyCheckBox->isChecked() )
+        if ( !m_advancedWidgetUi->enableProxyCheckBox->isChecked() )
         {
             tDebug() << Q_FUNC_INFO << "Got NoProxy selected";
             proxyFactory->setProxy( QNetworkProxy::NoProxy );
@@ -273,9 +291,18 @@ SettingsDialog::~SettingsDialog()
     else
         qDebug() << "Settings dialog cancelled, NOT saving prefs.";
 
-    delete ui;
+    m_accountsWidget->deleteLater();
+    m_collectionWidget->deleteLater();
+    m_advancedWidget->deleteLater();
+    m_dialog->deleteLater();
 }
 
+
+void
+SettingsDialog::show()
+{
+    m_dialog->show();
+}
 
 void
 SettingsDialog::serventReady()
@@ -284,71 +311,15 @@ SettingsDialog::serventReady()
 }
 
 
-void
-SettingsDialog::createIcons()
-{
-    ensurePolished();
-
-    m_settingsGroup = new QActionGroup( m_toolBar );
-
-    QWidget *leftSpacer = new QWidget( m_toolBar );
-    leftSpacer->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
-    m_toolBar->addWidget( leftSpacer );
-
-    QAction *accountsAction = new QAction( QIcon( RESPATH "images/account-settings.png" ),
-                                           tr( "Services" ),
-                                           m_toolBar );
-    accountsAction->setCheckable( true );
-    accountsAction->setToolTip( tr( "<b>Services</b><br>"
-                                    "Configure the accounts and services used by Tomahawk "
-                                    "to search and retrieve music, find your friends and "
-                                    "update your status." ) );
-    m_settingsGroup->addAction( accountsAction );
-
-    QAction *musicAction = new QAction( QIcon( RESPATH "images/music-settings.png" ),
-                                        tr( "Collection" ),
-                                        m_toolBar );
-    musicAction->setCheckable( true );
-    musicAction->setToolTip( tr( "<b>Collection</b><br>"
-                                 "Manage how Tomahawk finds music on your computer." ) );
-    m_settingsGroup->addAction( musicAction );
-
-
-    QAction *advancedAction = new QAction( QIcon( RESPATH "images/advanced-settings.png" ),
-                                           tr( "Advanced" ),
-                                           m_toolBar );
-    advancedAction->setCheckable( true );
-    advancedAction->setToolTip( tr( "<b>Advanced</b><br>"
-                                    "Configure Tomahawk's advanced settings, including "
-                                    "network connectivity settings, browser interaction "
-                                    "and more." ) );
-    m_settingsGroup->addAction( advancedAction );
-
-    m_settingsGroup->setExclusive( true );
-
-    m_toolBar->addActions( m_settingsGroup->actions() );
-
-    QWidget *rightSpacer = new QWidget( m_toolBar );
-    rightSpacer->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
-    m_toolBar->addWidget( rightSpacer );
-
-    connect( m_settingsGroup, SIGNAL( triggered( QAction * ) ),
-             this, SLOT( changePage( QAction * ) ) );
-
-    accountsAction->setChecked( true );
-    changePage( accountsAction );
-}
-
-
-void
-SettingsDialog::changePage( QAction *action )
-{
-    int index = m_settingsGroup->actions().indexOf( action );
-    if( ui->stackedWidget->currentIndex() != index )
-    {
-        ui->stackedWidget->setCurrentIndex( index );
-    }
-}
+//void
+//SettingsDialog::changePage( QAction *action )
+//{
+//    int index = m_settingsGroup->actions().indexOf( action );
+//    if( ui->stackedWidget->currentIndex() != index )
+//    {
+//        ui->stackedWidget->setCurrentIndex( index );
+//    }
+//}
 
 
 void
@@ -361,11 +332,12 @@ SettingsDialog::onRejected()
 void
 SettingsDialog::changeEvent( QEvent *e )
 {
-    QDialog::changeEvent( e );
     switch ( e->type() )
     {
         case QEvent::LanguageChange:
-            ui->retranslateUi( this );
+            m_accountsWidgetUi->retranslateUi( m_accountsWidget );
+            m_collectionWidgetUi->retranslateUi( m_collectionWidget );
+            m_advancedWidgetUi->retranslateUi( m_advancedWidget );
             break;
 
         default:
@@ -386,33 +358,33 @@ SettingsDialog::showProxySettings()
 void
 SettingsDialog::toggleRemoteMode()
 {
-    ui->staticHostNamePortLabel->setEnabled( ui->staticIpRadioButton->isChecked() );
-    ui->staticHostName->setEnabled( ui->staticIpRadioButton->isChecked() );
-    ui->staticPort->setEnabled( ui->staticIpRadioButton->isChecked() );
-    ui->staticHostNameLabel->setEnabled( ui->staticIpRadioButton->isChecked() );
-    ui->staticPortLabel->setEnabled( ui->staticIpRadioButton->isChecked() );
+    m_advancedWidgetUi->staticHostNamePortLabel->setEnabled( m_advancedWidgetUi->staticIpRadioButton->isChecked() );
+    m_advancedWidgetUi->staticHostName->setEnabled( m_advancedWidgetUi->staticIpRadioButton->isChecked() );
+    m_advancedWidgetUi->staticPort->setEnabled( m_advancedWidgetUi->staticIpRadioButton->isChecked() );
+    m_advancedWidgetUi->staticHostNameLabel->setEnabled( m_advancedWidgetUi->staticIpRadioButton->isChecked() );
+    m_advancedWidgetUi->staticPortLabel->setEnabled( m_advancedWidgetUi->staticIpRadioButton->isChecked() );
 }
 
 
 void
 SettingsDialog::toggleProxyEnabled()
 {
-    ui->proxyButton->setEnabled( ui->enableProxyCheckBox->isChecked() );
+    m_advancedWidgetUi->proxyButton->setEnabled( m_advancedWidgetUi->enableProxyCheckBox->isChecked() );
 }
 
 
 void
 SettingsDialog::updateScanOptionsView()
 {
-    if ( ui->checkBoxWatchForChanges->isChecked() )
+    if ( m_collectionWidgetUi->checkBoxWatchForChanges->isChecked() )
     {
-        ui->scanTimeLabel->show();
-        ui->scannerTimeSpinBox->show();
+        m_collectionWidgetUi->scanTimeLabel->show();
+        m_collectionWidgetUi->scannerTimeSpinBox->show();
     }
     else
     {
-        ui->scanTimeLabel->hide();
-        ui->scannerTimeSpinBox->hide();
+        m_collectionWidgetUi->scanTimeLabel->hide();
+        m_collectionWidgetUi->scannerTimeSpinBox->hide();
     }
 }
 
@@ -420,7 +392,7 @@ SettingsDialog::updateScanOptionsView()
 void
 SettingsDialog::accountsFilterChanged( int )
 {
-    AccountType filter = static_cast< AccountType >( ui->accountsFilterCombo->itemData( ui->accountsFilterCombo->currentIndex() ).toInt() );
+    AccountType filter = static_cast< AccountType >( m_accountsWidgetUi->accountsFilterCombo->itemData( m_accountsWidgetUi->accountsFilterCombo->currentIndex() ).toInt() );
     m_accountProxy->setFilterType( filter );
 }
 
@@ -451,7 +423,7 @@ SettingsDialog::openAccountFactoryConfig( AccountFactory* factory )
     dialog.exec();
 #else
     // on osx a sheet needs to be non-modal
-    AccountFactoryWrapper* dialog = new AccountFactoryWrapper( factory, this );
+    AccountFactoryWrapper* dialog = new AccountFactoryWrapper( factory, 0 );
     dialog->show();
 #endif
 }
@@ -460,21 +432,21 @@ SettingsDialog::openAccountFactoryConfig( AccountFactory* factory )
 void
 SettingsDialog::createAccountFromFactory( AccountFactory* factory )
 {
-    TomahawkUtils::createAccountFromFactory( factory, this );
+    TomahawkUtils::createAccountFromFactory( factory, 0 );
 }
 
 
 void
 SettingsDialog::openAccountConfig( Account* account, bool showDelete )
 {
-    TomahawkUtils::openAccountConfig( account, this, showDelete );
+    TomahawkUtils::openAccountConfig( account, 0, showDelete );
 }
 
 
 void
 SettingsDialog::installFromFile()
 {
-    const QString resolver = QFileDialog::getOpenFileName( this, tr( "Install resolver from file" ), TomahawkSettings::instance()->scriptDefaultPath() );
+    const QString resolver = QFileDialog::getOpenFileName( 0, tr( "Install resolver from file" ), TomahawkSettings::instance()->scriptDefaultPath() );
 
     if( !resolver.isEmpty() )
     {
@@ -520,7 +492,7 @@ void
 SettingsDialog::aclEntryClearButtonClicked()
 {
     QMessageBox::StandardButton button = QMessageBox::question(
-                           ui->stackedWidget,
+                           0,
                            tr( "Delete all Access Control entries?" ),
                            tr( "Do you really want to delete all Access Control entries? You will be asked for a decision again for each peer that you connect to." ),
                            QMessageBox::Ok | QMessageBox::Cancel,
@@ -529,7 +501,7 @@ SettingsDialog::aclEntryClearButtonClicked()
     if ( button == QMessageBox::Ok )
     {
         ACLRegistry::instance()->wipeEntries();
-        ui->aclEntryClearButton->setEnabled( false );
+        m_advancedWidgetUi->aclEntryClearButton->setEnabled( false );
     }
 }
 
@@ -537,7 +509,7 @@ SettingsDialog::aclEntryClearButtonClicked()
 void
 SettingsDialog::scrollTo( const QModelIndex& idx )
 {
-    ui->accountsView->scrollTo( idx, QAbstractItemView::PositionAtBottom );
+    m_accountsWidgetUi->accountsView->scrollTo( idx, QAbstractItemView::PositionAtBottom );
 }
 
 
