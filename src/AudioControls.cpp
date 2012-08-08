@@ -65,10 +65,13 @@ AudioControls::AudioControls( QWidget* parent )
     ui->albumLabel->setType( QueryLabel::Album );
 
     ui->timeLabel->setFont( font );
+    ui->timeLabel->setToolTip( tr( "Time Elapsed" ) );
     ui->timeLeftLabel->setFont( font );
+    ui->timeLeftLabel->setToolTip( tr( "Time Remaining" ) );
 
     font.setPixelSize( 9 );
     ui->ownerLabel->setFont( font );
+    ui->ownerLabel->setToolTip( tr( "Music Source" ) );
 
     ui->prevButton->setPixmap( RESPATH "images/back-rest.png" );
     ui->prevButton->setPixmap( RESPATH "images/back-pressed.png", QIcon::Off, QIcon::Active );
@@ -80,13 +83,17 @@ AudioControls::AudioControls( QWidget* parent )
     ui->nextButton->setPixmap( RESPATH "images/skip-pressed.png", QIcon::Off, QIcon::Active );
     ui->shuffleButton->setPixmap( RESPATH "images/shuffle-off-rest.png" );
     ui->shuffleButton->setPixmap( RESPATH "images/shuffle-off-pressed.png", QIcon::Off, QIcon::Active );
+    ui->shuffleButton->setToolTip( tr( "Shuffle" ) );
     ui->repeatButton->setPixmap( RESPATH "images/repeat-off-rest.png" );
     ui->repeatButton->setPixmap( RESPATH "images/repeat-off-pressed.png", QIcon::Off, QIcon::Active );
+    ui->repeatButton->setToolTip( tr( "Repeat" ) );
     ui->volumeLowButton->setPixmap( RESPATH "images/volume-icon-muted.png" );
     ui->volumeHighButton->setPixmap( RESPATH "images/volume-icon-full.png" );
     ui->socialButton->setPixmap( RESPATH "images/share.png" );
+    ui->socialButton->setToolTip( tr( "Share" ) );
     ui->loveButton->setPixmap( RESPATH "images/not-loved.png" );
     ui->loveButton->setCheckable( true );
+    ui->loveButton->setToolTip( tr( "Love" ) );
 
     ui->socialButton->setFixedSize( QSize( 20, 20 ) );
     ui->loveButton->setFixedSize( QSize( 20, 20 ) );
