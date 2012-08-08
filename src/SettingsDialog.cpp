@@ -118,14 +118,6 @@ SettingsDialog::SettingsDialog(QObject *parent )
     m_advancedWidgetUi->aclEntryClearButton->setEnabled( TomahawkSettings::instance()->aclEntries().size() > 0 );
     connect( m_advancedWidgetUi->aclEntryClearButton, SIGNAL( clicked( bool ) ), this, SLOT( aclEntryClearButtonClicked() ) );
 
-//#ifdef Q_WS_X11
-//    setContentsMargins( 4, 4, 4, 4 );
-//#elif defined( Q_OS_MAC )
-//    setContentsMargins( 0, 0, 0, 4 );
-//#else
-//    setContentsMargins( 0, 4, 4, 4 );
-//#endif
-
 #ifdef Q_WS_MAC
     // Avoid resize handles on sheets on osx
     m_proxySettings.setSizeGripEnabled( true );
@@ -199,7 +191,6 @@ SettingsDialog::SettingsDialog(QObject *parent )
     {
         m_collectionWidgetUi->dirTree->checkPath( dir, Qt::Checked );
     }
-//    m_collectionWidgetUi->advancedPage->setMinimumSize( ui->advancedPage->sizeHint() );
 
     int buttonsWidth = qMax( m_advancedWidgetUi->proxyButton->sizeHint().width(),
                              m_advancedWidgetUi->aclEntryClearButton->sizeHint().width() );
@@ -207,6 +198,8 @@ SettingsDialog::SettingsDialog(QObject *parent )
     m_advancedWidgetUi->aclEntryClearButton->setFixedWidth( buttonsWidth );
 
 
+    m_advancedWidget->setMinimumSize( m_advancedWidget->sizeHint() );
+    m_accountsWidget->setMinimumSize( 500, 400 );
     // NOW PLAYING
 // #ifdef Q_WS_MAC
 //     ui->checkBoxEnableAdium->setChecked( s->nowPlayingEnabled() );

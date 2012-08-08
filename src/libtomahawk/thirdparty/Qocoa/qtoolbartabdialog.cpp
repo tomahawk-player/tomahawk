@@ -93,6 +93,7 @@ QToolbarTabDialog::QToolbarTabDialog() :
     pimpl->rightSpacer =  pimpl->toolbar->addWidget(rightSpacer);
 
     pimpl->layout = new QVBoxLayout;
+    pimpl->layout->setContentsMargins( 4, 4, 4, 4 );
     pimpl->layout->addWidget(pimpl->toolbar);
     pimpl->layout->addWidget(pimpl->separator);
     pimpl->layout->addWidget(pimpl->stack);
