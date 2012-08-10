@@ -21,7 +21,6 @@
  */
 
 #include "qtoolbartabdialog.h"
-#include "moc_qtoolbartabdialog.cpp"
 
 #include "qocoa_mac.h"
 
@@ -90,7 +89,7 @@ class QToolbarTabDialogPrivate {
 public:
     QToolbarTabDialogPrivate(QToolbarTabDialog* dialog) : q(dialog),
                                                           currentPane(NULL),
-                                                          minimumWidthForToolbar(0)
+                                                          minimumWidth(0)
     {
     }
 
@@ -116,7 +115,7 @@ public:
             [prefsWindow setFrame:windowFrame display:NO];
             [prefsWindow setMinSize: windowFrame.size];
         }
-        minimumWidthForToolbar = windowFrame.size.width;
+        minimumWidth = windowFrame.size.width;
     }
 
     void showPaneWithIdentifier(NSString* ident) {
@@ -136,6 +135,8 @@ public:
         Q_ASSERT(newPage);
         if (!newPage)
             return;
+        
+        const NSRect oldFrame = [[prefsWindow contentView] frame];
 
         // Clear first responder on window and set a temporary NSView on the window
         // while we change the widget out underneath
@@ -146,6 +147,8 @@ public:
         [tempView release];
 
         QSize sizeToUse = newPage->sizeHint().isNull() ? newPage->size() : newPage->sizeHint();
+        sizeToUse.setWidth(qMax(sizeToUse.width(), newPage->minimumWidth()));
+        sizeToUse.setHeight(qMax(sizeToUse.height(), newPage->minimumHeight()));
 
         static const int spacing = 4;
 
@@ -156,8 +159,10 @@ public:
         newFrame.size.height = sizeToUse.height() + ([prefsWindow frame].size.height - [[prefsWindow contentView] frame].size.height) + spacing;
         newFrame.size.width = sizeToUse.width() + spacing;
 
-        //Ensure the full toolbar still fits
-        if (newFrame.size.width < minimumWidthForToolbar) newFrame.size.width =  minimumWidthForToolbar;
+        // Don't resize the width---only the height, so use the maximum width for any page
+        // or the same width as before, if the user already resized it to be larger.
+        newFrame.size.width < minimumWidth ? newFrame.size.width =  minimumWidth
+                                           : newFrame.size.width = qMax(newFrame.size.width, oldFrame.size.width);
 
         // Preserve upper left point of window during resize.
         newFrame.origin.y += ([[prefsWindow contentView] frame].size.height - sizeToUse.height()) - spacing;
@@ -180,11 +185,11 @@ public:
 
         if (newPage->sizePolicy().horizontalPolicy() == QSizePolicy::Fixed) {
             canResize = NO;
-            maxSize.width = minSize.width;
+            maxSize.width = sizeToUse.width();
         }
         if (newPage->sizePolicy().verticalPolicy() == QSizePolicy::Fixed) {
             canResize = NO;
-            maxSize.height = minSize.height;
+            maxSize.height = sizeToUse.height();
         }
 
 
@@ -192,6 +197,7 @@ public:
         [prefsWindow setShowsResizeIndicator:canResize];
 
         [prefsWindow setTitle:ident];
+        [prefsWindow makeFirstResponder:[panes objectForKey:ident]];
 
         [pool drain];
     }
@@ -220,7 +226,7 @@ public:
     NSToolbar *toolBar;
     NSString* currentPane;
 
-    int minimumWidthForToolbar;
+    int minimumWidth;
 };
 
 
@@ -320,11 +326,10 @@ public:
 
 -(NSSize)windowWillResize:(NSWindow *)sender toSize:(NSSize)frameSize
 {
-    Q_UNUSED(sender);
     if (!pimpl)
         return frameSize;
 
-    pimpl->resizeCurrentPageToSize(frameSize);
+    pimpl->resizeCurrentPageToSize([[sender contentView] frame].size);
 
     return frameSize;
 }
@@ -398,6 +403,8 @@ void QToolbarTabDialog::addTab(QWidget* page, const QPixmap& icon, const QString
     [nativeView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
     [nativeView setAutoresizesSubviews:YES];
 
+    pimpl->minimumWidth = qMax(pimpl->minimumWidth, page->sizeHint().width());
+    
     nativeWidget->show();
 
     ItemData data;
@@ -433,6 +440,11 @@ void QToolbarTabDialog::setCurrentIndex(int index)
 
 void QToolbarTabDialog::show()
 {
+    Q_ASSERT(pimpl);
+    if (!pimpl)
+        return;
+
+    [pimpl->prefsWindow center];
     [pimpl->prefsWindow makeKeyAndOrderFront:nil];
 }
 
@@ -446,3 +458,4 @@ void QToolbarTabDialog::hide()
     emit accepted();
 }
 
+#include "moc_qtoolbartabdialog.cpp"

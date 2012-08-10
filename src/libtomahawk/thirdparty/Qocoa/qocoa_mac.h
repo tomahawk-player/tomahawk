@@ -32,7 +32,7 @@ static inline NSString* fromQString(const QString &string)
 {
     const QByteArray utf8 = string.toUtf8();
     const char* cString = utf8.constData();
-    return [[NSString alloc] initWithUTF8String:cString];
+    return [[[NSString alloc] initWithUTF8String:cString] autorelease];
 }
 
 static inline QString toQString(NSString *string)
@@ -45,7 +45,7 @@ static inline QString toQString(NSString *string)
 static inline NSImage* fromQPixmap(const QPixmap &pixmap)
 {
     CGImageRef cgImage = pixmap.toMacCGImageRef();
-    return [[NSImage alloc] initWithCGImage:cgImage size:NSZeroSize];
+    return [[[NSImage alloc] initWithCGImage:cgImage size:NSZeroSize] autorelease];
 }
 
 static inline void setupLayout(void *cocoaView, QWidget *parent)
