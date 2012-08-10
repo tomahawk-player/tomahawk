@@ -95,7 +95,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="73"/>
         <source>Go &amp;Online</source>
-        <translation type="unfinished"/>
+        <translation>اصبح &amp;متصل</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="75"/>
@@ -140,87 +140,87 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="97"/>
         <source>Load &amp;XSPF...</source>
-        <translation type="unfinished"/>
+        <translation>تحميل XSPF&amp;...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="98"/>
         <source>U&amp;pdate Collection</source>
-        <translation type="unfinished"/>
+        <translation>&amp;تحديث المجموعة</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="99"/>
         <source>Fully &amp;Rescan Collection</source>
-        <translation type="unfinished"/>
+        <translation>إعادة &amp;مسح المجموعة كاملة</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="100"/>
         <source>Show Offline Sources</source>
-        <translation type="unfinished"/>
+        <translation>أظهر المصادر الغير متصلة</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="102"/>
         <source>&amp;Configure Tomahawk...</source>
-        <translation type="unfinished"/>
+        <translation>&amp;تكوين توماهوك...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="105"/>
         <source>Minimize</source>
-        <translation type="unfinished"/>
+        <translation>خفض</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="107"/>
         <source>Zoom</source>
-        <translation type="unfinished"/>
+        <translation>زوم</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="110"/>
         <source>Hide Menu Bar</source>
-        <translation type="unfinished"/>
+        <translation>إخفي شريط القائمة</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="114"/>
         <source>Diagnostics...</source>
-        <translation type="unfinished"/>
+        <translation>تشخيص...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="116"/>
         <source>About &amp;Tomahawk...</source>
-        <translation type="unfinished"/>
+        <translation>عن &amp;توماهوك...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="118"/>
         <source>&amp;Legal Information...</source>
-        <translation type="unfinished"/>
+        <translation>معلومات &amp;قانونية...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="121"/>
         <source>Check For Updates...</source>
-        <translation type="unfinished"/>
+        <translation>تحقق من التحديثات...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="132"/>
         <source>&amp;Controls</source>
-        <translation type="unfinished"/>
+        <translation>&amp;ضوابط</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="147"/>
         <source>&amp;Settings</source>
-        <translation type="unfinished"/>
+        <translation>إ&amp;عدادات</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="153"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"/>
+        <translation>&amp;مساعدة</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="178"/>
         <source>&amp;Window</source>
-        <translation type="unfinished"/>
+        <translation>&amp;نافذة</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="191"/>
         <source>Main Menu</source>
-        <translation type="unfinished"/>
+        <translation>القائمة الرئيسية</translation>
     </message>
 </context>
 <context>
@@ -395,27 +395,27 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/AudioControls.cpp" line="258"/>
         <source>Time Elapsed</source>
-        <translation type="unfinished"/>
+        <translation>الوقت المنقضي</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.cpp" line="259"/>
         <source>Time Remaining</source>
-        <translation type="unfinished"/>
+        <translation>الوقت المتبقي</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.cpp" line="260"/>
         <source>Music Source</source>
-        <translation type="unfinished"/>
+        <translation>مصدر الموسيقى</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.cpp" line="263"/>
         <source>Share</source>
-        <translation type="unfinished"/>
+        <translation>شارك</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.cpp" line="264"/>
         <source>Love</source>
-        <translation type="unfinished"/>
+        <translation>أحب</translation>
     </message>
 </context>
 <context>
@@ -2009,7 +2009,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="83"/>
         <source>Google Address:</source>
-        <translation type="unfinished"/>
+        <translation>حساب الخاص بجوجل (Google):</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="84"/>
@@ -3427,18 +3427,18 @@ enter the displayed PIN number here:</source>
         <location filename="../src/TomahawkWindow.cpp" line="199"/>
         <location filename="../src/TomahawkWindow.cpp" line="1385"/>
         <source>Hide Menu Bar</source>
-        <translation type="unfinished"/>
+        <translation>إخفي شريط القائمة</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="199"/>
         <location filename="../src/TomahawkWindow.cpp" line="1379"/>
         <source>Show Menu Bar</source>
-        <translation type="unfinished"/>
+        <translation>أظهر شريط القائمة</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="292"/>
         <source>&amp;Main Menu</source>
-        <translation type="unfinished"/>
+        <translation>ال&amp;قائمة الرئيسية</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="853"/>
@@ -3525,12 +3525,12 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1182"/>
         <source>&amp;Play</source>
-        <translation type="unfinished"/>
+        <translation>&amp;إستمع</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1208"/>
         <source>Go &amp;Offline</source>
-        <translation type="unfinished"/>
+        <translation>اصبح &amp;غير متصل</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1238"/>
@@ -3846,7 +3846,7 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="129"/>
         <source>Recently played tracks</source>
-        <translation type="unfinished"/>
+        <translation>الأغاني التي إستمعت إليها مؤخرا</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="215"/>
