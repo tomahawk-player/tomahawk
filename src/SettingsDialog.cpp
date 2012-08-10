@@ -200,6 +200,10 @@ SettingsDialog::SettingsDialog(QObject *parent )
 #ifndef Q_OS_MAC
     m_advancedWidget->setMinimumSize( m_advancedWidget->sizeHint() );
     m_accountsWidget->setMinimumWidth( 500 );
+#else
+    m_accountsWidget->setMinimumSize( 500, 350 );
+    m_collectionWidget->setMinimumHeight( m_collectionWidget->sizeHint().height() + 20 );
+    m_advancedWidget->setMinimumHeight( m_advancedWidget->sizeHint().height() + 4 );
 #endif
 
     // NOW PLAYING
