@@ -92,9 +92,9 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     : QMainWindow( parent )
 #ifdef Q_OS_WIN
     , m_buttonCreatedID( RegisterWindowMessage( L"TaskbarButtonCreated" ) )
-# ifdef HAVE_THUMBBUTTON
-    , m_taskbarList(0)
-# endif
+  #ifdef HAVE_THUMBBUTTON
+    , m_taskbarList( 0 )
+  #endif
 #endif
     , ui( new Ui::TomahawkWindow )
     , m_searchWidget( 0 )
@@ -195,8 +195,7 @@ TomahawkWindow::loadSettings()
     bool mbVisible = s->menuBarVisible();
     menuBar()->setVisible( mbVisible );
     m_compactMenuAction->setVisible( !mbVisible );
-    ActionCollection::instance()->getAction( "toggleMenuBar" )
-            ->setText( mbVisible ? tr( "Hide Menu Bar" ) : tr( "Show Menu Bar" ) );
+    ActionCollection::instance()->getAction( "toggleMenuBar" )->setText( mbVisible ? tr( "Hide Menu Bar" ) : tr( "Show Menu Bar" ) );
 #endif
 }
 
@@ -767,6 +766,7 @@ TomahawkWindow::audioStateChanged( AudioState newState, AudioState oldState )
     m_taskbarList->ThumbBarUpdateButtons( winId(), ARRAYSIZE( m_thumbButtons ), m_thumbButtons );
 #endif // HAVE_THUMBBUTTON
 }
+
 
 void
 TomahawkWindow::updateWindowsLoveButton()

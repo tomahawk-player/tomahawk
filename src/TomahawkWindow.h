@@ -29,6 +29,7 @@
 #include <QStackedWidget>
 #include <QToolButton>
 
+#include "config.h"
 #include "Result.h"
 #include "audio/AudioEngine.h"
 #include "utils/XspfLoader.h"
@@ -167,10 +168,10 @@ private:
 #ifdef Q_OS_WIN
     bool setupWindowsButtons();
     const unsigned int m_buttonCreatedID;
-# ifdef HAVE_THUMBBUTTON
-    ITaskbarList3 *m_taskbarList;
+  #ifdef HAVE_THUMBBUTTON
+    ITaskbarList3* m_taskbarList;
     THUMBBUTTON m_thumbButtons[5];
-# endif
+  #endif
     enum TB_STATES{ TP_PREVIOUS = 0,TP_PLAY_PAUSE = 1,TP_NEXT = 2,TP_LOVE = 4 };
 #endif
 
