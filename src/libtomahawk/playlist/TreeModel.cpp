@@ -319,6 +319,9 @@ TreeModel::onArtistsAdded( const QList<Tomahawk::artist_ptr>& artists )
 {
     finishLoading();
 
+    if ( artists.isEmpty() )
+        return;
+
     int c = rowCount( QModelIndex() );
     QPair< int, int > crows;
     crows.first = c;
@@ -342,6 +345,7 @@ void
 TreeModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QModelIndex& parent )
 {
     finishLoading();
+
     if ( !tracks.count() )
         return;
 
