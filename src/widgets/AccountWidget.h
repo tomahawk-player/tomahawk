@@ -20,14 +20,14 @@
 #define ACCOUNTWIDGET_H
 
 #include <QWidget>
+#include <QPersistentModelIndex>
 
 class AnimatedSpinner;
 class ElidedLabel;
-class QCheckBox;
+class SlideSwitchButton;
 class QLabel;
 class QLineEdit;
 class QPushButton;
-class QPersistentModelIndex;
 class QToolButton;
 
 class AccountWidget : public QWidget
@@ -39,19 +39,24 @@ public:
     virtual ~AccountWidget();
 
     void update( const QPersistentModelIndex& idx, int accountIdx );
+    void setupConnections( const QPersistentModelIndex& idx, int accountIdx );
+
+private slots:
+    void changeAccountConnectionState( bool connected );
 
 private:
-    QLabel*          m_imageLabel;
-    ElidedLabel*     m_idLabel;
-    QWidget*         m_spinnerWidget;
-    AnimatedSpinner* m_spinner;
-    QCheckBox*       m_statusToggle;
-    QLineEdit*       m_inviteEdit;
-    QPushButton*     m_inviteButton;
-    QLabel*          m_addAccountIcon;
-    QToolButton*     m_tweetMenuButton;
+    QLabel*            m_imageLabel;
+    ElidedLabel*       m_idLabel;
+    QWidget*           m_spinnerWidget;
+    AnimatedSpinner*   m_spinner;
+    SlideSwitchButton* m_statusToggle;
+    QLineEdit*         m_inviteEdit;
+    QPushButton*       m_inviteButton;
+    QLabel*            m_addAccountIcon;
+    QToolButton*       m_tweetMenuButton;
 
-    //TODO: on/off button
+    QPersistentModelIndex m_myFactoryIdx;
+    int                   m_myAccountIdx;
 };
 
 #endif // ACCOUNTWIDGET_H

@@ -19,6 +19,7 @@
 #include "AccountWidget.h"
 
 #include "UnstyledFrame.h"
+#include "SlideSwitchButton.h"
 #include "accounts/Account.h"
 #include "accounts/AccountModel.h"
 #include "utils/TomahawkUtilsGui.h"
@@ -30,7 +31,6 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QMenu>
-#include <QPersistentModelIndex>
 #include <QPixmap>
 #include <QPushButton>
 #include <QToolButton>
@@ -79,13 +79,20 @@ AccountWidget::AccountWidget( QWidget* parent )
     m_spinner = new AnimatedSpinner( m_spinnerWidget->size(), m_spinnerWidget );
 
     idContainer->setStyleSheet( QString( "QFrame {"
-                                "border: 1px solid #c9c9c9;"
+                                "border: 1px solid #e9e9e9;"
                                 "border-radius: %1px;"
-                                "background: #c9c9c9;"
+                                "background: #e9e9e9;"
                                 "}" ).arg( idContainer->sizeHint().height() / 2 + 1 ) );
 
-    m_statusToggle = new QCheckBox( this );
-    vLayout->addWidget( m_statusToggle, 0, 1 );
+    m_statusToggle = new SlideSwitchButton( this );
+    m_statusToggle->setContentsMargins( 0, 0, 0, 0 );
+    m_statusToggle->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Expanding );
+    m_statusToggle->setFixedWidth( m_statusToggle->sizeHint().width() );
+    QHBoxLayout *statusToggleLayout = new QHBoxLayout( this );
+    vLayout->addLayout( statusToggleLayout, 0, 1, 1, 1 );
+    statusToggleLayout->addStretch();
+    statusToggleLayout->addWidget( m_statusToggle );
+    //vLayout->addWidget( m_statusToggle, 0, 1 );
 
     UnstyledFrame* inviteContainer = new UnstyledFrame( this );
     vLayout->addWidget( inviteContainer, 1, 0 );
@@ -129,7 +136,6 @@ AccountWidget::AccountWidget( QWidget* parent )
     m_inviteButton = new QPushButton( this );
     m_inviteButton->setFixedWidth( m_inviteButton->logicalDpiX() * 0.8 );
     vLayout->addWidget( m_inviteButton, 1, 1 );
-
 }
 
 AccountWidget::~AccountWidget()
@@ -158,9 +164,6 @@ AccountWidget::update( const QPersistentModelIndex& idx, int accountIdx )
                                "</b><br>" +
                                account->accountFriendlyName() );
 
-        //TODO: make it handle all connection states
-        m_statusToggle->setChecked( account->connectionState() == Tomahawk::Accounts::Account::Connected );
-
         //we already know it's a factory because of the FactoryProxy
         Tomahawk::Accounts::AccountFactory* fac =
                 qobject_cast< Tomahawk::Accounts::AccountFactory* >(
@@ -179,14 +182,63 @@ AccountWidget::update( const QPersistentModelIndex& idx, int accountIdx )
             m_addAccountIcon->setVisible( true );
         }
 
-        if ( account->connectionState() == Tomahawk::Accounts::Account::Connected ||
-             account->connectionState() == Tomahawk::Accounts::Account::Disconnected )
+        switch ( account->connectionState() )
         {
+        case Tomahawk::Accounts::Account::Disconnected:
             m_spinner->fadeOut();
+            m_statusToggle->setChecked( false );
+            m_statusToggle->setBackChecked( false );
+            break;
+        case Tomahawk::Accounts::Account::Connecting:
+            m_spinner->fadeIn();
+            m_statusToggle->setChecked( true );
+            m_statusToggle->setBackChecked( false );
+            break;
+        case Tomahawk::Accounts::Account::Connected:
+            m_spinner->fadeOut();
+            m_statusToggle->setChecked( true );
+            m_statusToggle->setBackChecked( true );
+            break;
+        case Tomahawk::Accounts::Account::Disconnecting:
+            m_spinner->fadeIn();
+            m_statusToggle->setChecked( false );
+            m_statusToggle->setBackChecked( true );
+        }
+    }
+}
+
+void
+AccountWidget::changeAccountConnectionState( bool connected )
+{
+    Tomahawk::Accounts::Account* account =
+            m_myFactoryIdx.data( Tomahawk::Accounts::AccountModel::ChildrenOfFactoryRole )
+            .value< QList< Tomahawk::Accounts::Account* > >().at( m_myAccountIdx );
+    if ( account )
+    {
+        if ( connected )
+        {
+            account->authenticate();
         }
         else
         {
-            m_spinner->fadeIn();
+            account->deauthenticate();
         }
+    }
+}
+
+void
+AccountWidget::setupConnections( const QPersistentModelIndex& idx, int accountIdx )
+{
+    m_myFactoryIdx = idx;
+    m_myAccountIdx = accountIdx;
+
+    Tomahawk::Accounts::Account* account =
+            idx.data( Tomahawk::Accounts::AccountModel::ChildrenOfFactoryRole )
+            .value< QList< Tomahawk::Accounts::Account* > >().at( accountIdx );
+    if ( account )
+    {
+        connect( m_statusToggle, SIGNAL( toggled( bool ) ),
+                 this, SLOT( changeAccountConnectionState( bool ) ) );
+        //TODO: invite/tweet
     }
 }

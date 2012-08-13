@@ -98,6 +98,8 @@ AccountListWidget::insertEntries(  const QModelIndex& parent, int start, int end
             m_layout->insertWidget( i+j, entryAccounts.at( j ) );
 
         updateEntry( idx );
+        for ( int j = 0; j < entryAccounts.length(); ++j )
+            entryAccounts[ j ]->setupConnections( idx, j );
     }
 }
 
