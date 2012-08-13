@@ -1,0 +1,192 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2012 Teo Mrnjavac <teo@kde.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include "AccountWidget.h"
+
+#include "UnstyledFrame.h"
+#include "accounts/Account.h"
+#include "accounts/AccountModel.h"
+#include "utils/TomahawkUtilsGui.h"
+#include "utils/AnimatedSpinner.h"
+#include "widgets/ElidedLabel.h"
+
+#include <QBoxLayout>
+#include <QCheckBox>
+#include <QLabel>
+#include <QLineEdit>
+#include <QMenu>
+#include <QPersistentModelIndex>
+#include <QPixmap>
+#include <QPushButton>
+#include <QToolButton>
+
+AccountWidget::AccountWidget( QWidget* parent )
+    : QWidget( parent )
+{
+    QHBoxLayout *mainLayout = new QHBoxLayout( this );
+    TomahawkUtils::unmarginLayout( mainLayout );
+    setLayout( mainLayout );
+    setContentsMargins( 8, 8, 8, 8 );
+
+    m_imageLabel = new QLabel( this );
+    mainLayout->addWidget( m_imageLabel );
+    mainLayout->setSpacing( 4 );
+
+    QGridLayout* vLayout = new QGridLayout( this );
+    vLayout->setMargin( 3 );
+    vLayout->setSpacing( 3 );
+    mainLayout->addLayout( vLayout );
+
+    QFrame* idContainer = new QFrame( this );
+    idContainer->setAttribute( Qt::WA_TranslucentBackground, false );
+    vLayout->addWidget( idContainer, 0, 0 );
+
+    QHBoxLayout* idContLayout = new QHBoxLayout( idContainer );
+    idContainer->setLayout( idContLayout );
+    idContainer->setContentsMargins( 0, 0, 0, 0 );
+    idContLayout->setMargin( 2 );
+
+    m_idLabel = new ElidedLabel( idContainer );
+    m_idLabel->setElideMode( Qt::ElideRight );
+    m_idLabel->setContentsMargins( 3, 0, 3, 0 );
+    m_idLabel->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
+    m_idLabel->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
+    idContLayout->addWidget( m_idLabel );
+
+    m_spinnerWidget = new QWidget( idContainer );
+    QSize spinnerSize = 16 > m_spinnerWidget->logicalDpiX() * .2 ?
+                            QSize( 16, 16 ) :
+                            QSize( m_spinnerWidget->logicalDpiX() * .15,
+                                   m_spinnerWidget->logicalDpiX() * .15 );
+    m_spinnerWidget->setFixedSize( spinnerSize );
+    idContLayout->addWidget( m_spinnerWidget );
+    m_spinnerWidget->setContentsMargins( 0, 0, 0, 0 );
+    m_spinner = new AnimatedSpinner( m_spinnerWidget->size(), m_spinnerWidget );
+
+    idContainer->setStyleSheet( QString( "QFrame {"
+                                "border: 1px solid #c9c9c9;"
+                                "border-radius: %1px;"
+                                "background: #c9c9c9;"
+                                "}" ).arg( idContainer->sizeHint().height() / 2 + 1 ) );
+
+    m_statusToggle = new QCheckBox( this );
+    vLayout->addWidget( m_statusToggle, 0, 1 );
+
+    UnstyledFrame* inviteContainer = new UnstyledFrame( this );
+    vLayout->addWidget( inviteContainer, 1, 0 );
+    inviteContainer->setFrameColor( QColor( 0x8c, 0x8c, 0x8c ) ); //from ProxyStyle
+    inviteContainer->setFixedWidth( inviteContainer->logicalDpiX() * 2 );
+    inviteContainer->setContentsMargins( 1, 1, 1, 2 );
+    inviteContainer->setAttribute( Qt::WA_TranslucentBackground, false );
+    inviteContainer->setStyleSheet( "background: white" );
+
+    QHBoxLayout* containerLayout = new QHBoxLayout( inviteContainer );
+    inviteContainer->setLayout( containerLayout );
+    TomahawkUtils::unmarginLayout( containerLayout );
+    containerLayout->setContentsMargins( 1, 1, 0, 0 );
+
+    m_addAccountIcon = new QLabel( inviteContainer );
+    m_addAccountIcon->setContentsMargins( 1, 0, 0, 0 );
+    m_addAccountIcon->setPixmap( QIcon( RESPATH "images/user-avatar.png" ).pixmap( 16 ) );
+    m_addAccountIcon->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding );
+    m_addAccountIcon->setAlignment( Qt::AlignCenter );
+    containerLayout->addWidget( m_addAccountIcon );
+
+    m_tweetMenuButton = new QToolButton( inviteContainer );
+    m_tweetMenuButton->setContentsMargins( 1, 0, 0, 0 );
+    m_tweetMenuButton->setIcon( QIcon( RESPATH "images/jump-link.png" ) );
+    m_tweetMenuButton->setToolButtonStyle( Qt::ToolButtonIconOnly );
+    m_tweetMenuButton->setPopupMode( QToolButton::InstantPopup );
+    m_tweetMenuButton->setMenu( new QMenu() );
+    m_tweetMenuButton->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Expanding );
+    m_tweetMenuButton->setFixedWidth( m_tweetMenuButton->sizeHint().height() ); //accommodate the menu indicator
+    QString tweetMenuButtonSheet(
+                "QToolButton { border: none; backgroud: white; }"
+                "QToolButton::menu-indicator { left: 3px; }" );
+    m_tweetMenuButton->setStyleSheet( tweetMenuButtonSheet );
+    containerLayout->addWidget( m_tweetMenuButton );
+
+    m_inviteEdit = new QLineEdit( inviteContainer );
+    m_inviteEdit->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
+    containerLayout->addWidget( m_inviteEdit );
+    m_inviteEdit->setFrame( false );
+
+    m_inviteButton = new QPushButton( this );
+    m_inviteButton->setFixedWidth( m_inviteButton->logicalDpiX() * 0.8 );
+    vLayout->addWidget( m_inviteButton, 1, 1 );
+
+}
+
+AccountWidget::~AccountWidget()
+{
+    delete m_spinner;
+}
+
+
+void
+AccountWidget::update( const QPersistentModelIndex& idx, int accountIdx )
+{
+    const QPixmap &pixmap = static_cast< QPixmap >( idx.data( Qt::DecorationRole ).value< QPixmap >() );
+    QSize pixmapSize( 32, 32 );
+    m_imageLabel->setPixmap( pixmap.scaled( pixmapSize, Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
+    m_imageLabel->setFixedSize( pixmapSize );
+
+    Tomahawk::Accounts::Account* account =
+            idx.data( Tomahawk::Accounts::AccountModel::ChildrenOfFactoryRole )
+            .value< QList< Tomahawk::Accounts::Account* > >().at( accountIdx );
+    if ( account )
+    {
+        QFontMetrics fm = m_idLabel->fontMetrics();
+        m_idLabel->setText( account->accountFriendlyName() );
+        m_idLabel->setToolTip( "<b>" +
+                               account->accountServiceName() +
+                               "</b><br>" +
+                               account->accountFriendlyName() );
+
+        //TODO: make it handle all connection states
+        m_statusToggle->setChecked( account->connectionState() == Tomahawk::Accounts::Account::Connected );
+
+        //we already know it's a factory because of the FactoryProxy
+        Tomahawk::Accounts::AccountFactory* fac =
+                qobject_cast< Tomahawk::Accounts::AccountFactory* >(
+                    idx.data( Tomahawk::Accounts::AccountModel::AccountData )
+                        .value< QObject* >() );
+        if ( fac->factoryId() == "twitteraccount" )
+        {
+            m_inviteButton->setText( tr( "Tweet" ) );
+            m_addAccountIcon->setVisible( false );
+            m_tweetMenuButton->setVisible( true );
+        }
+        else
+        {
+            m_inviteButton->setText( tr( "Invite" ) );
+            m_tweetMenuButton->setVisible( false );
+            m_addAccountIcon->setVisible( true );
+        }
+
+        if ( account->connectionState() == Tomahawk::Accounts::Account::Connected ||
+             account->connectionState() == Tomahawk::Accounts::Account::Disconnected )
+        {
+            m_spinner->fadeOut();
+        }
+        else
+        {
+            m_spinner->fadeIn();
+        }
+    }
+}

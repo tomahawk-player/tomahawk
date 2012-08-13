@@ -44,6 +44,7 @@
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/ProxyStyle.h"
 #include "utils/WidgetDragFilter.h"
+#include "widgets/AccountsToolButton.h"
 #include "widgets/AnimatedSplitter.h"
 #include "widgets/NewPlaylistWidget.h"
 #include "widgets/SearchWidget.h"
@@ -73,7 +74,7 @@
 #include "libtomahawk/filemetadata/ScanManager.h"
 #include "TomahawkApp.h"
 #include "LoadXSPFDialog.h"
-#include "ContainedMenuButton.h"
+#include "widgets/ContainedMenuButton.h"
 
 #ifdef Q_OS_WIN
     #include <qtsparkle/Updater>
@@ -284,6 +285,10 @@ TomahawkWindow::setupToolBar()
     m_toolbarRightBalancer->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred );
     m_toolbarRightBalancer->setFixedWidth( 0 );
     m_toolbar->addWidget( m_toolbarRightBalancer )->setProperty( "kind", QString( "spacer" ) );
+
+    m_accountsButton = new AccountsToolButton( m_toolbar );
+    m_toolbar->addWidget( m_accountsButton );
+    //TODO: hook up signals for the new accounts widget
 
 #ifndef Q_OS_MAC
     ContainedMenuButton* compactMenuButton = new ContainedMenuButton( m_toolbar );

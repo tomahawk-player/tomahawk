@@ -36,6 +36,17 @@ AnimatedSpinner::AnimatedSpinner( QWidget* parent )
     , m_showHide( new QTimeLine )
     , m_animation( new QTimeLine )
     , m_currentIndex( -1 )
+    , m_size( QSize( 0, 0 ) )
+{
+    init();
+}
+
+AnimatedSpinner::AnimatedSpinner( const QSize& size, QWidget *parent )
+    : QWidget( parent )
+    , m_showHide( new QTimeLine )
+    , m_animation( new QTimeLine )
+    , m_currentIndex( -1 )
+    , m_size( size )
 {
     init();
 }
@@ -87,7 +98,7 @@ AnimatedSpinner::init()
 
     QSize size;
     if ( parentWidget() )
-        size = sizeHint();
+        size = m_size != QSize( 0, 0 ) ? m_size : sizeHint();
     else
         size = m_pixmap.size();
 
@@ -111,6 +122,7 @@ AnimatedSpinner::paintEvent( QPaintEvent* event )
     if ( m_autoCenter && parentWidget() )
     {
         QPoint center = parentWidget()->contentsRect().center() - QPoint( sizeHint().width() / 2, sizeHint().height() / 2 );
+
         if ( center != pos() )
         {
             move( center );

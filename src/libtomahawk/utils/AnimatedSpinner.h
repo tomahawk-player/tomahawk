@@ -46,6 +46,7 @@ class DLLEXPORT AnimatedSpinner : public QWidget
 
 public:
     explicit AnimatedSpinner( QWidget* parent = 0 ); // widget mode
+    explicit AnimatedSpinner( const QSize& size, QWidget* parent = 0 );
     AnimatedSpinner( const QSize& size, bool autoStart ); // pixmap mode
 
     QSize sizeHint() const;
@@ -87,6 +88,8 @@ private:
     QVector<qreal> m_colors;
     QPixmap m_pixmap;
     bool m_autoCenter;
+
+    QSize m_size;
 };
 
 

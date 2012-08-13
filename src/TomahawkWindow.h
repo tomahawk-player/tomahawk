@@ -58,6 +58,8 @@ class PlaylistModel;
 class QueueView;
 class AnimatedSplitter;
 
+class AccountsToolButton;
+
 namespace Ui
 {
     class TomahawkWindow;
@@ -192,6 +194,7 @@ private:
     QAction     *m_compactMenuAction;
     QMenu       *m_compactMainMenu;
 #endif
+    AccountsToolButton *m_accountsButton;
     QToolBar *m_toolbar;
     QWidget *m_toolbarLeftBalancer;
     QWidget *m_toolbarRightBalancer;
