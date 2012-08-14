@@ -22,6 +22,7 @@
 #include "SlideSwitchButton.h"
 #include "accounts/Account.h"
 #include "accounts/AccountModel.h"
+#include "accounts/AccountManager.h"
 #include "sip/SipPlugin.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/AnimatedSpinner.h"
@@ -206,11 +207,11 @@ AccountWidget::changeAccountConnectionState( bool connected )
     {
         if ( connected )
         {
-            account->authenticate();
+            Tomahawk::Accounts::AccountManager::instance()->enableAccount( account );
         }
         else
         {
-            account->deauthenticate();
+            Tomahawk::Accounts::AccountManager::instance()->disableAccount( account );
         }
     }
 }

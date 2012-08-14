@@ -39,14 +39,15 @@ AccountModelFactoryProxy::filterAcceptsRow( int sourceRow, const QModelIndex& so
         return true;
 
     const QModelIndex idx = sourceModel()->index( sourceRow, 0, sourceParent );
-    const Qt::CheckState checkState = static_cast< Qt::CheckState >( idx.data( Qt::CheckStateRole ).value< int >() );
-
-    qDebug() << "FILTERING";
-    qDebug() << "checkState is " << checkState;
-    if( checkState == Qt::Unchecked ) //if the service is not even enabled
-        return false;
 
     const AccountModel::RowType rowType = static_cast< AccountModel::RowType >( idx.data( AccountModel::RowTypeRole ).value< int >() );
+
+    if( rowType == Tomahawk::Accounts::AccountModel::TopLevelFactory )
+    {
+        if ( idx.data( Tomahawk::Accounts::AccountModel::ChildrenOfFactoryRole )
+             .value< QList< Tomahawk::Accounts::Account* > >().isEmpty() )
+            return false;
+    }
 
     return rowType == m_filterRowType;
 }
