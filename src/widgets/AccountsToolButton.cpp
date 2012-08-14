@@ -48,7 +48,9 @@ AccountsToolButton::AccountsToolButton( QWidget* parent )
     QToolButton *settingsButton = new QToolButton( w );
     settingsButton->setIcon( QIcon( RESPATH "images/account-settings.png" ) );
     settingsButton->setToolButtonStyle( Qt::ToolButtonTextBesideIcon );
-    settingsButton->setText( tr( "Account Settings" ) );
+    settingsButton->setText( tr( "Configure Accounts" ) );
+    connect( settingsButton, SIGNAL( clicked() ),
+             window(), SLOT( showSettingsDialog() ) );
 
     QHBoxLayout *headerLayout = new QHBoxLayout( w );
     headerLayout->addWidget( connectionsLabel );
