@@ -150,5 +150,6 @@
         <file>data/images/scrollbar-horizontal-handle.png</file>
         <file>data/images/subscribe-on.png</file>
         <file>data/images/subscribe-off.png</file>
+        <file>data/images/add-contact.png</file>
     </qresource>
 </RCC>

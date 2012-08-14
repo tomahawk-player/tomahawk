@@ -67,7 +67,6 @@ QSize
 SlideSwitchButton::sizeHint()
 {
     QSize size = QPushButton::sizeHint();
-    size.rheight() += 6; //margins
     QFontMetrics fm( m_textFont );
     int maxTextLength = qMax( fm.boundingRect( m_checkedText ).width(),
                               fm.boundingRect( m_uncheckedText ).width() );

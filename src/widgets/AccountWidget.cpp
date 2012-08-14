@@ -87,54 +87,42 @@ AccountWidget::AccountWidget( QWidget* parent )
     m_statusToggle = new SlideSwitchButton( this );
     m_statusToggle->setContentsMargins( 0, 0, 0, 0 );
     m_statusToggle->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Expanding );
-    m_statusToggle->setFixedWidth( m_statusToggle->sizeHint().width() );
+    m_statusToggle->setFixedSize( m_statusToggle->sizeHint() );
     QHBoxLayout *statusToggleLayout = new QHBoxLayout( this );
     vLayout->addLayout( statusToggleLayout, 0, 1, 1, 1 );
     statusToggleLayout->addStretch();
     statusToggleLayout->addWidget( m_statusToggle );
     //vLayout->addWidget( m_statusToggle, 0, 1 );
 
-    UnstyledFrame* inviteContainer = new UnstyledFrame( this );
-    vLayout->addWidget( inviteContainer, 1, 0 );
-    inviteContainer->setFrameColor( QColor( 0x8c, 0x8c, 0x8c ) ); //from ProxyStyle
-    inviteContainer->setFixedWidth( inviteContainer->logicalDpiX() * 2 );
-    inviteContainer->setContentsMargins( 1, 1, 1, 2 );
-    inviteContainer->setAttribute( Qt::WA_TranslucentBackground, false );
-    inviteContainer->setStyleSheet( "background: white" );
+    m_inviteContainer = new UnstyledFrame( this );
+    vLayout->addWidget( m_inviteContainer, 1, 0 );
+    m_inviteContainer->setFrameColor( QColor( 0x8c, 0x8c, 0x8c ) ); //from ProxyStyle
+    m_inviteContainer->setFixedWidth( m_inviteContainer->logicalDpiX() * 2 );
+    m_inviteContainer->setContentsMargins( 1, 1, 1, 2 );
+    m_inviteContainer->setAttribute( Qt::WA_TranslucentBackground, false );
+    m_inviteContainer->setStyleSheet( "background: white" );
 
-    QHBoxLayout* containerLayout = new QHBoxLayout( inviteContainer );
-    inviteContainer->setLayout( containerLayout );
+    QHBoxLayout* containerLayout = new QHBoxLayout( m_inviteContainer );
+    m_inviteContainer->setLayout( containerLayout );
     TomahawkUtils::unmarginLayout( containerLayout );
     containerLayout->setContentsMargins( 1, 1, 0, 0 );
 
-    m_addAccountIcon = new QLabel( inviteContainer );
+    m_addAccountIcon = new QLabel( m_inviteContainer );
     m_addAccountIcon->setContentsMargins( 1, 0, 0, 0 );
-    m_addAccountIcon->setPixmap( QIcon( RESPATH "images/user-avatar.png" ).pixmap( 16 ) );
+    m_addAccountIcon->setPixmap( QIcon( RESPATH "images/add-contact.png" ).pixmap( 16 ) );
     m_addAccountIcon->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding );
     m_addAccountIcon->setAlignment( Qt::AlignCenter );
     containerLayout->addWidget( m_addAccountIcon );
 
-    m_tweetMenuButton = new QToolButton( inviteContainer );
-    m_tweetMenuButton->setContentsMargins( 1, 0, 0, 0 );
-    m_tweetMenuButton->setIcon( QIcon( RESPATH "images/jump-link.png" ) );
-    m_tweetMenuButton->setToolButtonStyle( Qt::ToolButtonIconOnly );
-    m_tweetMenuButton->setPopupMode( QToolButton::InstantPopup );
-    m_tweetMenuButton->setMenu( new QMenu() );
-    m_tweetMenuButton->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Expanding );
-    m_tweetMenuButton->setFixedWidth( m_tweetMenuButton->sizeHint().height() ); //accommodate the menu indicator
-    QString tweetMenuButtonSheet(
-                "QToolButton { border: none; backgroud: white; }"
-                "QToolButton::menu-indicator { left: 3px; }" );
-    m_tweetMenuButton->setStyleSheet( tweetMenuButtonSheet );
-    containerLayout->addWidget( m_tweetMenuButton );
-
-    m_inviteEdit = new QLineEdit( inviteContainer );
+    m_inviteEdit = new QLineEdit( m_inviteContainer );
     m_inviteEdit->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
     containerLayout->addWidget( m_inviteEdit );
     m_inviteEdit->setFrame( false );
+    idContainer->setFixedWidth( m_inviteContainer->width() );
 
     m_inviteButton = new QPushButton( this );
     m_inviteButton->setFixedWidth( m_inviteButton->logicalDpiX() * 0.8 );
+    m_inviteButton->setText( tr( "Invite" ) );
     vLayout->addWidget( m_inviteButton, 1, 1 );
 }
 
@@ -171,15 +159,8 @@ AccountWidget::update( const QPersistentModelIndex& idx, int accountIdx )
                         .value< QObject* >() );
         if ( fac->factoryId() == "twitteraccount" )
         {
-            m_inviteButton->setText( tr( "Tweet" ) );
-            m_addAccountIcon->setVisible( false );
-            m_tweetMenuButton->setVisible( true );
-        }
-        else
-        {
-            m_inviteButton->setText( tr( "Invite" ) );
-            m_tweetMenuButton->setVisible( false );
-            m_addAccountIcon->setVisible( true );
+            m_inviteContainer->setVisible( false );
+            m_inviteButton->setVisible( false );
         }
 
         switch ( account->connectionState() )
