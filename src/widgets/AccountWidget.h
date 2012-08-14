@@ -44,6 +44,9 @@ public:
 
 private slots:
     void changeAccountConnectionState( bool connected );
+    void sendInvite();
+    void clearInviteWidgets();
+    void setInviteWidgetsEnabled( bool enabled );
 
 private:
     QLabel*            m_imageLabel;
