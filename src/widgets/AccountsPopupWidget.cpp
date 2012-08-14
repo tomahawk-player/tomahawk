@@ -32,8 +32,9 @@ AccountsPopupWidget::AccountsPopupWidget( QWidget* parent )
     : QWidget( parent )
     , m_widget( 0 )
 {
-    setWindowFlags( Qt::FramelessWindowHint );
-    setWindowFlags( Qt::Popup );
+    //setWindowFlags( Qt::FramelessWindowHint );
+    //setWindowFlags( Qt::Popup );
+    setWindowFlags( Qt::Window );
 
     setAutoFillBackground( false );
     setAttribute( Qt::WA_TranslucentBackground, true );

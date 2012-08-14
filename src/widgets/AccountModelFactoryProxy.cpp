@@ -18,6 +18,8 @@
 
 #include "AccountModelFactoryProxy.h"
 
+#include <QDebug>
+
 using namespace Tomahawk;
 using namespace Accounts;
 
@@ -26,6 +28,7 @@ AccountModelFactoryProxy::AccountModelFactoryProxy( QObject* parent )
     , m_filterEnabled( false )
     , m_filterRowType( AccountModel::TopLevelFactory )
 {
+    setDynamicSortFilter( true );
 }
 
 
@@ -37,6 +40,9 @@ AccountModelFactoryProxy::filterAcceptsRow( int sourceRow, const QModelIndex& so
 
     const QModelIndex idx = sourceModel()->index( sourceRow, 0, sourceParent );
     const Qt::CheckState checkState = static_cast< Qt::CheckState >( idx.data( Qt::CheckStateRole ).value< int >() );
+
+    qDebug() << "FILTERING";
+    qDebug() << "checkState is " << checkState;
     if( checkState == Qt::Unchecked ) //if the service is not even enabled
         return false;
 

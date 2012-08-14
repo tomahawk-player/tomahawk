@@ -37,15 +37,20 @@ public:
     QSize sizeHint() const;
 
 protected:
-    void mousePressEvent( QMouseEvent *event );
+    void mousePressEvent( QMouseEvent* event );
+    void paintEvent( QPaintEvent* event );
 
 private slots:
     void popupHidden();
+    void updateIcons();
 
 private:
     AccountsPopupWidget* m_popup;
     Tomahawk::Accounts::AccountModel *m_model;
     AccountModelFactoryProxy *m_proxy;
+
+    QPixmap          m_defaultPixmap;
+    QList< QPixmap > m_factoryPixmaps;
 };
 
 #endif // ACCOUNTSTOOLBUTTON_H

@@ -24,6 +24,9 @@
 #include <QLabel>
 #include <QListView>
 #include <QMouseEvent>
+#include <QPainter>
+#include <QPaintEvent>
+#include <QToolBar>
 #include <QVBoxLayout>
 
 AccountsToolButton::AccountsToolButton( QWidget* parent )
@@ -31,6 +34,12 @@ AccountsToolButton::AccountsToolButton( QWidget* parent )
 {
     m_popup = new AccountsPopupWidget( this );
     m_popup->hide();
+
+    QToolBar* toolbar = qobject_cast< QToolBar* >( parent );
+    if ( toolbar )
+        setIconSize( toolbar->iconSize() );
+    else
+        setIconSize( QSize( 22, 22 ) );
 
     //Set up popup...
     QWidget *w = new QWidget( this );
@@ -76,6 +85,24 @@ AccountsToolButton::AccountsToolButton( QWidget* parent )
     wMainLayout->addWidget( view );
     view->setAutoFillBackground( false );
     view->setAttribute( Qt::WA_TranslucentBackground, true );
+
+    connect( m_proxy, SIGNAL( dataChanged( QModelIndex, QModelIndex ) ),
+             this, SLOT( repaint() ) );
+
+    //ToolButton stuff
+    m_defaultPixmap = QPixmap( RESPATH "images/account-none.png" )
+                        .scaled( iconSize(),
+                                 Qt::KeepAspectRatio,
+                                 Qt::SmoothTransformation );
+
+    connect( m_proxy, SIGNAL( dataChanged( QModelIndex, QModelIndex ) ),
+             this, SLOT( updateIcons() ) );
+    connect( m_proxy, SIGNAL( rowsInserted ( QModelIndex, int, int ) ),
+             this, SLOT( updateIcons() ) );
+    connect( m_proxy, SIGNAL( rowsRemoved( QModelIndex, int, int ) ),
+             this, SLOT( updateIcons() ) );
+    connect( m_proxy, SIGNAL( modelReset() ),
+             this, SLOT( updateIcons() ) );
 }
 
 void
@@ -92,9 +119,96 @@ AccountsToolButton::mousePressEvent( QMouseEvent* event )
 }
 
 void
+AccountsToolButton::paintEvent( QPaintEvent* event )
+{
+    QToolButton::paintEvent( event );
+
+    QPainter painter( this );
+    painter.initFrom( this );
+
+    if ( m_proxy->rowCount() == 0 )
+    {
+        QRect pixmapRect( QPoint( width() / 2 - iconSize().width() / 2,
+                                  height() / 2 - iconSize().height() / 2 ),
+                          iconSize() );
+        painter.drawPixmap( pixmapRect, m_defaultPixmap );
+    }
+    else
+    {
+        for ( int i = 0; i < m_factoryPixmaps.count(); ++i )
+        {
+            int diff = height() - iconSize().height();
+            int pixmapRectX = diff / 2
+                            + i * ( iconSize().width() + diff );
+            QRect pixmapRect( QPoint( pixmapRectX, height() / 2 - iconSize().height() / 2 ),
+                              iconSize() );
+            painter.drawPixmap( pixmapRect, m_factoryPixmaps.at( i ) );
+        }
+    }
+
+    painter.end();
+}
+
+void
 AccountsToolButton::popupHidden() //SLOT
 {
     setDown( false );
+}
+
+void
+AccountsToolButton::updateIcons()
+{
+    m_factoryPixmaps.clear();
+
+    for ( int i = 0; i < m_proxy->rowCount(); ++i )
+    {
+        QPersistentModelIndex idx( m_proxy->index( i, 0 ) );
+        const QList< Tomahawk::Accounts::Account* >& children =
+                idx.data( Tomahawk::Accounts::AccountModel::ChildrenOfFactoryRole )
+                   .value< QList< Tomahawk::Accounts::Account* > >();
+        int count = children.count();
+
+        if ( count == 0 )
+            continue;
+
+        if ( count == 1 )
+        {
+            m_factoryPixmaps.append( children.first()->icon()
+                                                .scaled( iconSize(),
+                                                         Qt::KeepAspectRatio,
+                                                         Qt::SmoothTransformation ) );
+        }
+        else //we need to find if at least one of this factory's accounts is connected
+        {
+            int connectedAccountIndex = -1;
+            for ( int j = 0; j < count; ++j )
+            {
+                if ( children.at( j )->connectionState() ==
+                     Tomahawk::Accounts::Account::Connected )
+                {
+                    connectedAccountIndex = j;
+                    break;
+                }
+            }
+            if ( connectedAccountIndex != -1 )
+            {
+                m_factoryPixmaps.append( children.at( connectedAccountIndex )->icon()
+                                                        .scaled( iconSize(),
+                                                                 Qt::KeepAspectRatio,
+                                                                 Qt::SmoothTransformation ) );
+            }
+            else
+            {
+                m_factoryPixmaps.append( children.first()->icon()
+                                                    .scaled( iconSize(),
+                                                             Qt::KeepAspectRatio,
+                                                             Qt::SmoothTransformation ) );
+            }
+        }
+    }
+
+    resize( sizeHint() );
+    repaint();
 }
 
 
@@ -102,6 +216,9 @@ QSize
 AccountsToolButton::sizeHint() const
 {
     QSize size = QToolButton::sizeHint();
-    size.rwidth() *= 3;
+    if ( m_factoryPixmaps.count() == 0 ) //no accounts enabled!
+        return size;
+
+    size.rwidth() *= m_factoryPixmaps.count();
     return size;
 }
