@@ -261,9 +261,10 @@ XmppSipPlugin::disconnectPlugin()
 
     publishTune( QUrl(), Tomahawk::InfoSystem::InfoStringHash() );
 
-    m_client->disconnectFromServer( true );
     m_state = Account::Disconnecting;
     emit stateChanged( m_state );
+
+    m_client->disconnectFromServer( true );
 }
 
 
