@@ -1,5 +1,6 @@
-<!DOCTYPE RCC><RCC version="1.0">
-<qresource>
-<file>xmpp-icon.png</file>
-</qresource>
+<RCC>
+    <qresource prefix="/">
+        <file>xmpp-icon.png</file>
+        <file>xmpp-offline-icon.png</file>
+    </qresource>
 </RCC>

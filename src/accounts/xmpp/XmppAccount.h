@@ -63,7 +63,7 @@ public:
     XmppAccount( const QString &accountId );
     virtual ~XmppAccount();
 
-    QPixmap icon() const { return QPixmap( ":/xmpp-icon.png" ); }
+    QPixmap icon() const;
 
     void authenticate();
     void deauthenticate();

@@ -96,3 +96,12 @@ AccountsToolButton::popupHidden() //SLOT
 {
     setDown( false );
 }
+
+
+QSize
+AccountsToolButton::sizeHint() const
+{
+    QSize size = QToolButton::sizeHint();
+    size.rwidth() *= 3;
+    return size;
+}

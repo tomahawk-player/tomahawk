@@ -98,7 +98,9 @@ GoogleWrapper::~GoogleWrapper()
 QPixmap
 GoogleWrapper::icon() const
 {
-    return QPixmap( ":/gmail-logo.png" );
+    if ( connectionState() == Connected )
+        return QPixmap( ":/gmail-logo.png" );
+    return QPixmap( ":/gmail-offline-logo.png" );
 }
 
 

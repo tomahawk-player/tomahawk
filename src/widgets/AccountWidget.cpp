@@ -139,16 +139,16 @@ AccountWidget::~AccountWidget()
 void
 AccountWidget::update( const QPersistentModelIndex& idx, int accountIdx )
 {
-    const QPixmap &pixmap = static_cast< QPixmap >( idx.data( Qt::DecorationRole ).value< QPixmap >() );
-    QSize pixmapSize( 32, 32 );
-    m_imageLabel->setPixmap( pixmap.scaled( pixmapSize, Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
-    m_imageLabel->setFixedSize( pixmapSize );
-
     Tomahawk::Accounts::Account* account =
             idx.data( Tomahawk::Accounts::AccountModel::ChildrenOfFactoryRole )
             .value< QList< Tomahawk::Accounts::Account* > >().at( accountIdx );
     if ( account )
     {
+        const QPixmap& pixmap = account->icon();
+        QSize pixmapSize( 32, 32 );
+        m_imageLabel->setPixmap( pixmap.scaled( pixmapSize, Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
+        m_imageLabel->setFixedSize( pixmapSize );
+
         QFontMetrics fm = m_idLabel->fontMetrics();
         m_idLabel->setText( account->accountFriendlyName() );
         m_idLabel->setToolTip( "<b>" +

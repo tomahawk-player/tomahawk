@@ -34,6 +34,8 @@ class DLLEXPORT AccountsToolButton : public QToolButton
 public:
     explicit AccountsToolButton( QWidget* parent = 0 );
 
+    QSize sizeHint() const;
+
 protected:
     void mousePressEvent( QMouseEvent *event );
 

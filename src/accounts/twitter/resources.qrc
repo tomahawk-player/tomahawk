@@ -1,5 +1,6 @@
-<!DOCTYPE RCC><RCC version="1.0">
-<qresource>
-<file>twitter-icon.png</file>
-</qresource>
+<RCC>
+    <qresource prefix="/">
+        <file>twitter-icon.png</file>
+        <file>twitter-offline-icon.png</file>
+    </qresource>
 </RCC>
