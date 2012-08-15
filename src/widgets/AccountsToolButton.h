@@ -42,6 +42,7 @@ signals:
 protected:
     void mousePressEvent( QMouseEvent* event );
     void paintEvent( QPaintEvent* event );
+    void moveEvent( QMoveEvent* event );
 
 private slots:
     void popupHidden();

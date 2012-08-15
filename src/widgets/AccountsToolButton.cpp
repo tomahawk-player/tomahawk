@@ -150,6 +150,19 @@ AccountsToolButton::paintEvent( QPaintEvent* event )
 }
 
 void
+AccountsToolButton::moveEvent( QMoveEvent* event )
+{
+    if ( m_popup )
+    {
+        if ( isDown() )
+        {
+            QPoint myPos = mapToGlobal( rect().bottomRight() );
+            m_popup->anchorAt( myPos );
+        }
+    }
+}
+
+void
 AccountsToolButton::popupHidden() //SLOT
 {
     setDown( false );
