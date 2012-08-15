@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>405</width>
-    <height>347</height>
+    <width>553</width>
+    <height>439</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,9 +20,12 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QPushButton" name="installFromFileBtn">
-       <property name="text">
-        <string>Install from file...</string>
+      <widget class="QButton" name="installFromFileBtn" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
       </widget>
      </item>
@@ -66,6 +69,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QButton</class>
+   <extends>QWidget</extends>
+   <header>thirdparty/Qocoa/QButton.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

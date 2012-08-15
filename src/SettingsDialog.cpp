@@ -54,6 +54,7 @@
 #include "accounts/AccountFactoryWrapper.h"
 #include "accounts/spotify/SpotifyAccount.h"
 #include "thirdparty/Qocoa/qtoolbartabdialog.h"
+#include "thirdparty/Qocoa/qbutton.h"
 
 #include "ui_ProxyDialog.h"
 #include "ui_Settings_Accounts.h"
@@ -81,18 +82,12 @@ SettingsDialog::SettingsDialog(QObject *parent )
     m_collectionWidgetUi->setupUi( m_collectionWidget );
     m_advancedWidgetUi->setupUi( m_advancedWidget );
 
+    m_accountsWidgetUi->accountsFilterCombo->setFocusPolicy( Qt::NoFocus );
+
     m_dialog = new QToolbarTabDialog;
 
     TomahawkSettings* s = TomahawkSettings::instance();
 
-//    TomahawkUtils::unmarginLayout( layout() );
-//    TomahawkUtils::unmarginLayout( ui->horizontalLayout );
-
-//#ifdef Q_WS_X11
-//    ui->stackedWidget->setContentsMargins( 4, 4, 4, 4 );
-//#else
-//    ui->stackedWidget->setContentsMargins( 4, 4, 4, 0 );
-//#endif
     m_advancedWidgetUi->checkBoxReporter->setChecked( s->crashReporterEnabled() );
     m_advancedWidgetUi->checkBoxHttp->setChecked( s->httpEnabled() );
 
@@ -124,6 +119,8 @@ SettingsDialog::SettingsDialog(QObject *parent )
     QSizeGrip* p = m_proxySettings.findChild< QSizeGrip* >();
     p->setFixedSize( 0, 0 );
 #endif
+
+    m_accountsWidgetUi->installFromFileBtn->setText( tr( "Install from file" ) );
 
     // Accounts
     AccountDelegate* accountDelegate = new AccountDelegate( this );
@@ -201,9 +198,16 @@ SettingsDialog::SettingsDialog(QObject *parent )
     m_advancedWidget->setMinimumSize( m_advancedWidget->sizeHint() );
     m_accountsWidget->setMinimumWidth( 500 );
 #else
-    m_accountsWidget->setMinimumSize( 500, 350 );
-    m_collectionWidget->setMinimumHeight( m_collectionWidget->sizeHint().height() + 20 );
-    m_advancedWidget->setMinimumHeight( m_advancedWidget->sizeHint().height() + 4 );
+    m_accountsWidget->setContentsMargins( 6, 6, 6, 6 );
+    m_accountsWidgetUi->horizontalLayout->setContentsMargins( 0, 0, 0, 0 );
+    m_accountsWidgetUi->installFromFileBtn->setContentsMargins( -4, 0, 0, 0 );
+    m_accountsWidget->setMinimumSize( 550, 400 );
+
+    m_collectionWidget->setContentsMargins( 6, 6, 6, 6 );
+    m_collectionWidget->setMinimumHeight( m_collectionWidgetUi->verticalLayout->sizeHint().height() + 20 );
+
+    m_advancedWidget->setContentsMargins( 6, 6, 6, 6 );
+    m_advancedWidget->setMinimumHeight( m_advancedWidgetUi->verticalLayout->sizeHint().height() );
 #endif
 
     // NOW PLAYING
