@@ -73,7 +73,7 @@
   <customwidget>
    <class>QButton</class>
    <extends>QWidget</extends>
-   <header>thirdparty/Qocoa/QButton.h</header>
+   <header>thirdparty/Qocoa/qbutton.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
