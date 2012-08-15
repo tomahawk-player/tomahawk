@@ -123,6 +123,18 @@ AccountListWidget::removeEntries( const QModelIndex& parent, int start, int end 
     for ( int i = start; i <= end; ++i )
     {
         QPersistentModelIndex idx( m_model->index( i, 0, parent ) );
+        if ( !idx.isValid() ) //means we just removed the last account for a factory
+        {
+            for ( QHash< QPersistentModelIndex, QList< AccountWidget* > >::iterator it = m_entries.begin();
+                  it != m_entries.end(); ++it )
+            {
+                if ( !it.key().isValid() )
+                {
+                    idx = it.key();
+                }
+            }
+        }
+
         QList< AccountWidget* > &entryAccounts = m_entries[ idx ];
         for ( int j = 0; j < entryAccounts.count(); ++j )
         {
