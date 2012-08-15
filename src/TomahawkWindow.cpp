@@ -44,6 +44,7 @@
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/ProxyStyle.h"
 #include "utils/WidgetDragFilter.h"
+#include "widgets/AccountsToolButton.h"
 #include "widgets/AnimatedSplitter.h"
 #include "widgets/NewPlaylistWidget.h"
 #include "widgets/SearchWidget.h"
@@ -73,7 +74,7 @@
 #include "libtomahawk/filemetadata/ScanManager.h"
 #include "TomahawkApp.h"
 #include "LoadXSPFDialog.h"
-#include "ContainedMenuButton.h"
+#include "widgets/ContainedMenuButton.h"
 
 #ifdef Q_OS_WIN
     #include <qtsparkle/Updater>
@@ -284,6 +285,11 @@ TomahawkWindow::setupToolBar()
     m_toolbarRightBalancer->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred );
     m_toolbarRightBalancer->setFixedWidth( 0 );
     m_toolbar->addWidget( m_toolbarRightBalancer )->setProperty( "kind", QString( "spacer" ) );
+
+    m_accountsButton = new AccountsToolButton( m_toolbar );
+    m_toolbar->addWidget( m_accountsButton );
+    connect( m_accountsButton, SIGNAL( widthChanged() ),
+             this, SLOT( balanceToolbar() ) );
 
 #ifndef Q_OS_MAC
     ContainedMenuButton* compactMenuButton = new ContainedMenuButton( m_toolbar );
@@ -535,18 +541,6 @@ TomahawkWindow::setupSignals()
     connect( AccountManager::instance(), SIGNAL( connected( Tomahawk::Accounts::Account* ) ), SLOT( onAccountConnected() ) );
     connect( AccountManager::instance(), SIGNAL( disconnected( Tomahawk::Accounts::Account* ) ), SLOT( onAccountDisconnected() ) );
     connect( AccountManager::instance(), SIGNAL( authError( Tomahawk::Accounts::Account* ) ), SLOT( onAccountError() ) );
-
-    // Menus for accounts that support them
-    connect( AccountManager::instance(), SIGNAL( added( Tomahawk::Accounts::Account* ) ), this, SLOT( onAccountAdded( Tomahawk::Accounts::Account* ) ) );
-
-    foreach ( Account* account, AccountManager::instance()->accounts( Tomahawk::Accounts::SipType ) )
-    {
-        if ( !account || !account->sipPlugin() )
-            continue;
-
-        connect( account->sipPlugin(), SIGNAL( addMenu( QMenu* ) ), this, SLOT( pluginMenuAdded( QMenu* ) ) );
-        connect( account->sipPlugin(), SIGNAL( removeMenu( QMenu* ) ), this, SLOT( pluginMenuRemoved( QMenu* ) ) );
-    }
 
     connect( ViewManager::instance(), SIGNAL( historyBackAvailable( bool ) ), SLOT( onHistoryBackAvailable( bool ) ) );
     connect( ViewManager::instance(), SIGNAL( historyForwardAvailable( bool ) ), SLOT( onHistoryForwardAvailable( bool ) ) );
@@ -877,48 +871,6 @@ TomahawkWindow::addPeerManually()
 
 
 void
-TomahawkWindow::pluginMenuAdded( QMenu* menu )
-{
-    SipPlugin* plugin = qobject_cast< SipPlugin* >( sender() );
-    if ( plugin )
-    {
-        ContainedMenuButton *button = new ContainedMenuButton( m_toolbar );
-        button->setIcon( plugin->account()->icon() );
-        button->setText( menu->title() );
-        button->setMenu( menu );
-        button->setToolButtonStyle( Qt::ToolButtonIconOnly );
-#ifdef Q_OS_MAC
-        QAction *action = m_toolbar->addWidget( button );
-#else
-        QAction *action = m_toolbar->insertWidget( m_compactMenuAction, button );
-#endif
-        action->setProperty( "id", plugin->account()->accountId() );
-        balanceToolbar();
-    }
-}
-
-
-void
-TomahawkWindow::pluginMenuRemoved( QMenu* menu )
-{
-    Q_UNUSED( menu )
-    SipPlugin* plugin = qobject_cast< SipPlugin* >( sender() );
-    if ( plugin )
-    {
-        foreach ( QAction* action, m_toolbar->actions() )
-        {
-            if ( action->property( "id" ) == plugin->account()->accountId() )
-            {
-                m_toolbar->removeAction( action );
-                return;
-            }
-        }
-        balanceToolbar();
-    }
-}
-
-
-void
 TomahawkWindow::showOfflineSources()
 {
     m_sourcetree->showOfflineSources( ActionCollection::instance()
@@ -1213,17 +1165,6 @@ void
 TomahawkWindow::onAccountDisconnected()
 {
     ActionCollection::instance()->getAction( "toggleOnline" )->setText( tr( "Go &Online" ) );
-}
-
-
-void
-TomahawkWindow::onAccountAdded( Account* acc )
-{
-    if ( !acc->types() & SipType || !acc->sipPlugin() )
-        return;
-
-    connect( acc->sipPlugin(), SIGNAL( addMenu( QMenu* ) ), this, SLOT( pluginMenuAdded( QMenu* ) ) );
-    connect( acc->sipPlugin(), SIGNAL( removeMenu( QMenu* ) ), this, SLOT( pluginMenuRemoved( QMenu* ) ) );
 }
 
 

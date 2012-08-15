@@ -227,8 +227,11 @@ TwitterAccount::connectAuthVerifyReply( const QTweetUser &user )
 
 
 QPixmap
-TwitterAccount::icon() const {
-    return QPixmap( ":/twitter-icon.png" );
+TwitterAccount::icon() const
+{
+    if ( connectionState() == Connected )
+        return QPixmap( ":/twitter-icon.png" );
+    return QPixmap( ":/twitter-offline-icon.png" );
 }
 
 

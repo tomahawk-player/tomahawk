@@ -53,6 +53,14 @@ XmppAccount::~XmppAccount()
     delete m_xmppSipPlugin.data();
 }
 
+QPixmap
+XmppAccount::icon() const
+{
+    if ( connectionState() == Connected )
+        return QPixmap( ":/xmpp-icon.png" );
+    return QPixmap( ":/xmpp-offline-icon.png" );
+}
+
 
 void
 XmppAccount::authenticate()

@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2012 Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2012,      Teo Mrnjavac   <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -16,16 +16,37 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SOURCETREE_POPUP_DIALOG_MAC_H
-#define SOURCETREE_POPUP_DIALOG_MAC_H
+#include "ContainedMenuButton.h"
 
-#include "DllMacro.h"
+#include <QtGui/QMouseEvent>
 
-class QWidget;
-
-namespace SourceTreePopupHelper {
-
-void DLLEXPORT clearBackground( QWidget* widget );
-
+ContainedMenuButton::ContainedMenuButton( QWidget *parent )
+    : QToolButton( parent )
+{
 }
-#endif
+
+void
+ContainedMenuButton::setMenu( QMenu *menu )
+{
+    m_menu = menu;
+    connect( m_menu, SIGNAL( aboutToHide() ), SLOT( menuHidden() ) );
+}
+
+void
+ContainedMenuButton::mousePressEvent( QMouseEvent* event )
+{
+    if( m_menu )
+    {
+        QPoint myPos = mapToGlobal( rect().bottomRight() );
+        myPos.rx() -= m_menu->sizeHint().width();
+        m_menu->popup( myPos );
+        event->accept();
+    }
+    QToolButton::mousePressEvent( event );
+}
+
+void
+ContainedMenuButton::menuHidden()
+{
+    setDown( false );
+}

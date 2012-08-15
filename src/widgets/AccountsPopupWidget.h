@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2012,      Teo Mrnjavac   <teo@kde.org>
+ *   Copyright 2012,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -16,37 +16,36 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ContainedMenuButton.h"
+#ifndef ACCOUNTSPOPUPWIDGET_H
+#define ACCOUNTSPOPUPWIDGET_H
 
-#include <QtGui/QMouseEvent>
+#include "DllMacro.h"
+#include "Typedefs.h"
 
-ContainedMenuButton::ContainedMenuButton( QWidget *parent )
-    : QToolButton( parent )
+#include <QWidget>
+
+class QVBoxLayout;
+
+class DLLEXPORT AccountsPopupWidget : public QWidget
 {
-}
+    Q_OBJECT
+public:
+    explicit AccountsPopupWidget( QWidget* parent = 0 );
 
-void
-ContainedMenuButton::setMenu( QMenu *menu )
-{
-    m_menu = menu;
-    connect( m_menu, SIGNAL( aboutToHide() ), SLOT( menuHidden() ) );
-}
+    void setWidget( QWidget* widget );
+    void anchorAt( const QPoint &p );
 
-void
-ContainedMenuButton::mousePressEvent( QMouseEvent *event )
-{
-    if( m_menu )
-    {
-        QPoint myPos = mapToGlobal( rect().bottomRight() );
-        myPos.rx() -= m_menu->sizeHint().width();
-        m_menu->popup( myPos );
-        event->accept();
-    }
-    QToolButton::mousePressEvent( event );
-}
+signals:
+    void hidden();
+    
+protected:
+    virtual void paintEvent( QPaintEvent* );
+    virtual void focusOutEvent( QFocusEvent* );
+    virtual void hideEvent( QHideEvent* );
+    
+private:
+    QVBoxLayout* m_layout;
+    QWidget* m_widget;
+};
 
-void
-ContainedMenuButton::menuHidden()
-{
-    setDown( false );
-}
+#endif // ACCOUNTSPOPUPWIDGET_H

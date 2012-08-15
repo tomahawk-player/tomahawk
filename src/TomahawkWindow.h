@@ -58,6 +58,8 @@ class PlaylistModel;
 class QueueView;
 class AnimatedSplitter;
 
+class AccountsToolButton;
+
 namespace Ui
 {
     class TomahawkWindow;
@@ -98,15 +100,12 @@ public slots:
     void legalInfo();
     void updateCollectionManually();
     void rescanCollectionManually();
-    void pluginMenuAdded( QMenu* );
-    void pluginMenuRemoved( QMenu* );
     void showOfflineSources();
 
     void fullScreenEntered();
     void fullScreenExited();
 
 private slots:
-    void onAccountAdded( Tomahawk::Accounts::Account* account );
     void onAccountConnected();
     void onAccountDisconnected();
     void onAccountError();
@@ -147,6 +146,7 @@ private slots:
     void crashNow();
 
     void toggleMenuBar();
+    void balanceToolbar();
 
 #ifdef Q_OS_WIN
     void audioStateChanged( AudioState newState, AudioState oldState );
@@ -163,7 +163,6 @@ private:
     void setupToolBar();
     void setupSideBar();
     void setupUpdateCheck();
-    void balanceToolbar();
 
 #ifdef Q_OS_WIN
     bool setupWindowsButtons();
@@ -192,6 +191,7 @@ private:
     QAction     *m_compactMenuAction;
     QMenu       *m_compactMainMenu;
 #endif
+    AccountsToolButton *m_accountsButton;
     QToolBar *m_toolbar;
     QWidget *m_toolbarLeftBalancer;
     QWidget *m_toolbarRightBalancer;

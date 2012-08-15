@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2012 Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2012, Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -16,16 +16,31 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SOURCETREE_POPUP_DIALOG_MAC_H
-#define SOURCETREE_POPUP_DIALOG_MAC_H
+#ifndef ACCOUNTMODELFACTORYPROXY_H
+#define ACCOUNTMODELFACTORYPROXY_H
 
-#include "DllMacro.h"
+#include "accounts/Account.h"
+#include "accounts/AccountModel.h"
 
-class QWidget;
+#include <QSortFilterProxyModel>
 
-namespace SourceTreePopupHelper {
 
-void DLLEXPORT clearBackground( QWidget* widget );
+class AccountModelFactoryProxy : public QSortFilterProxyModel
+{
+    Q_OBJECT
+public:
+    explicit AccountModelFactoryProxy( QObject* parent = 0 );
+    
+    void setFilterEnabled( bool enabled );
 
-}
-#endif
+    void setFilterRowType( Tomahawk::Accounts::AccountModel::RowType rowType );
+
+protected:
+    virtual bool filterAcceptsRow ( int sourceRow, const QModelIndex& sourceParent ) const;
+
+private:
+    bool m_filterEnabled;
+    Tomahawk::Accounts::AccountModel::RowType m_filterRowType;
+};
+
+#endif // ACCOUNTMODELFACTORYPROXY_H

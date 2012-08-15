@@ -64,6 +64,7 @@ public:
 
     //FIXME: Make this more correct
     virtual bool isValid() const { return true; }
+    virtual QString inviteString() const;
 
     Tomahawk::InfoSystem::InfoPluginPtr infoPlugin();
 
