@@ -135,13 +135,13 @@ TwitterAccount::authenticateSlot()
             Tomahawk::InfoSystem::InfoSystem::instance()->addInfoPlugin( infoPlugin() );
         }
     }
-    
+
     if ( m_isAuthenticating )
     {
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Already authenticating";
         return;
     }
-    
+
     tDebug() << Q_FUNC_INFO << "credentials: " << credentials().keys();
 
     if ( credentials()[ "oauthtoken" ].toString().isEmpty() || credentials()[ "oauthtokensecret" ].toString().isEmpty() )
@@ -165,7 +165,7 @@ void
 TwitterAccount::deauthenticate()
 {
     tDebug() << Q_FUNC_INFO;
-    
+
     if ( m_twitterSipPlugin )
         sipPlugin()->disconnectPlugin();
 
@@ -174,7 +174,7 @@ TwitterAccount::deauthenticate()
 
     m_isAuthenticated = false;
     m_isAuthenticating = false;
-    
+
     emit nowDeauthenticated();
 }
 
