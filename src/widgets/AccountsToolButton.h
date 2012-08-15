@@ -36,6 +36,9 @@ public:
 
     QSize sizeHint() const;
 
+signals:
+    void widthChanged();
+
 protected:
     void mousePressEvent( QMouseEvent* event );
     void paintEvent( QPaintEvent* event );

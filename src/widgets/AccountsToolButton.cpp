@@ -159,6 +159,7 @@ void
 AccountsToolButton::updateIcons()
 {
     m_factoryPixmaps.clear();
+    int oldWidth = sizeHint().width();
 
     for ( int i = 0; i < m_proxy->rowCount(); ++i )
     {
@@ -208,6 +209,8 @@ AccountsToolButton::updateIcons()
     }
 
     resize( sizeHint() );
+    if ( oldWidth != sizeHint().width() )
+        emit widthChanged();
     repaint();
 }
 

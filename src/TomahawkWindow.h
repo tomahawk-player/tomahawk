@@ -100,15 +100,12 @@ public slots:
     void legalInfo();
     void updateCollectionManually();
     void rescanCollectionManually();
-    void pluginMenuAdded( QMenu* );
-    void pluginMenuRemoved( QMenu* );
     void showOfflineSources();
 
     void fullScreenEntered();
     void fullScreenExited();
 
 private slots:
-    void onAccountAdded( Tomahawk::Accounts::Account* account );
     void onAccountConnected();
     void onAccountDisconnected();
     void onAccountError();
@@ -149,6 +146,7 @@ private slots:
     void crashNow();
 
     void toggleMenuBar();
+    void balanceToolbar();
 
 #ifdef Q_OS_WIN
     void audioStateChanged( AudioState newState, AudioState oldState );
@@ -165,7 +163,6 @@ private:
     void setupToolBar();
     void setupSideBar();
     void setupUpdateCheck();
-    void balanceToolbar();
 
 #ifdef Q_OS_WIN
     bool setupWindowsButtons();
