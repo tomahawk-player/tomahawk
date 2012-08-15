@@ -45,6 +45,7 @@ SpotifyParser::SpotifyParser( const QStringList& Urls, bool createNewPlaylist, Q
     , m_limit ( 40 )
     , m_single( false )
     , m_trackMode( true )
+    , m_collaborative( false )
     , m_createNewPlaylist( createNewPlaylist )
     , m_browseJob( 0 )
 
@@ -59,6 +60,7 @@ SpotifyParser::SpotifyParser( const QString& Url, bool createNewPlaylist, QObjec
     , m_limit ( 40 )
     , m_single( true )
     , m_trackMode( true )
+    , m_collaborative( false )
     , m_createNewPlaylist( createNewPlaylist )
     , m_browseJob( 0 )
 {
@@ -328,6 +330,7 @@ SpotifyParser::playlistListingResult( const QString& msgType, const QVariantMap&
     m_title = msg.value( "name" ).toString();
     m_single = false;
     m_creator = msg.value( "creator" ).toString();
+    m_collaborative = msg.value( "collaborative" ).toBool();
 
     const QVariantList tracks = msg.value( "tracks" ).toList();
     foreach ( const QVariant& blob, tracks )
@@ -390,13 +393,17 @@ SpotifyParser::checkBrowseFinished()
                 // If the user isnt dropping a playlist the he owns, its subscribeable
                 if ( !m_browseUri.contains( spotifyUsername ) )
                     updater->setCanSubscribe( true );
+                else
+                    updater->setOwner( true );
+
+                updater->setCollaborative( m_collaborative );
 
                 // Just register the infos
-                Accounts::SpotifyAccount::instance()->registerPlaylistInfo( m_title, m_browseUri, m_browseUri, false, false );
+                Accounts::SpotifyAccount::instance()->registerPlaylistInfo( m_title, m_browseUri, m_browseUri, false, false, updater->owner() );
                 Accounts::SpotifyAccount::instance()->registerUpdaterForPlaylist( m_browseUri, updater );
-
-
-                Accounts::SpotifyAccount::instance()->setSubscribedForPlaylist( m_playlist, true );
+                // On default, set the playlist as subscribed
+                if( !updater->owner() )
+                    Accounts::SpotifyAccount::instance()->setSubscribedForPlaylist( m_playlist, true );
 
             }
             return;

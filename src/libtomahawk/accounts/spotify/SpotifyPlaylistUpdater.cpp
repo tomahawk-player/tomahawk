@@ -55,17 +55,20 @@ SpotifyUpdaterFactory::create( const Tomahawk::playlist_ptr& pl, const QVariantH
     }
 
     // Register the updater with the account
-    const QString spotifyId = settings.value( "spotifyId" ).toString();
-    const QString latestRev = settings.value( "latestrev" ).toString();
-    const bool sync         = settings.value( "sync" ).toBool();
-    const bool canSubscribe = settings.value( "canSubscribe" ).toBool();
-    const bool isSubscribed = settings.value( "subscribed" ).toBool();
-
+    const QString spotifyId     = settings.value( "spotifyId" ).toString();
+    const QString latestRev     = settings.value( "latestrev" ).toString();
+    const bool sync             = settings.value( "sync" ).toBool();
+    const bool canSubscribe     = settings.value( "canSubscribe" ).toBool();
+    const bool isSubscribed     = settings.value( "subscribed" ).toBool();
+    const bool isOwner          = settings.value( "isOwner" ).toBool();
+    const bool isCollaborative  = settings.value( "collaborative" ).toBool();
     Q_ASSERT( !spotifyId.isEmpty() );
     SpotifyPlaylistUpdater* updater = new SpotifyPlaylistUpdater( m_account.data(), latestRev, spotifyId, pl );
     updater->setSync( sync );
     updater->setCanSubscribe( canSubscribe );
     updater->setSubscribedStatus( isSubscribed );
+    updater->setOwner( isOwner );
+    updater->setCollaborative( isCollaborative );
     m_account.data()->registerUpdaterForPlaylist( spotifyId, updater );
 
     return updater;
@@ -81,6 +84,8 @@ SpotifyPlaylistUpdater::SpotifyPlaylistUpdater( SpotifyAccount* acct, const QStr
     , m_sync( false )
     , m_canSubscribe( false )
     , m_subscribed( false )
+    , m_isOwner( false )
+    , m_collaborative( false )
 {
     init();
 }
@@ -177,7 +182,8 @@ SpotifyPlaylistUpdater::saveToSettings()
     s[ "canSubscribe" ] = m_canSubscribe;
     s[ "subscribed" ] = m_subscribed;
     s[ "spotifyId" ] = m_spotifyId;
-
+    s[ "isOwner" ] = m_isOwner;
+    s[ "collaborative" ] = m_collaborative;
     saveSettings( s );
 }
 
@@ -226,6 +232,41 @@ SpotifyPlaylistUpdater::sync() const
     return m_sync;
 }
 
+void
+SpotifyPlaylistUpdater::setOwner( bool owner )
+{
+    if ( m_isOwner == owner )
+        return;
+
+    m_isOwner = owner;
+
+    saveToSettings();
+    emit changed();
+}
+
+bool
+SpotifyPlaylistUpdater::owner() const
+{
+    return m_isOwner;
+}
+
+void
+SpotifyPlaylistUpdater::setCollaborative( bool collab )
+{
+    if ( m_collaborative == collab )
+        return;
+
+    m_collaborative = collab;
+
+    saveToSettings();
+    emit changed();
+}
+
+bool
+SpotifyPlaylistUpdater::collaborative() const
+{
+    return m_collaborative;
+}
 
 void
 SpotifyPlaylistUpdater::setSubscribedStatus( bool subscribed )
