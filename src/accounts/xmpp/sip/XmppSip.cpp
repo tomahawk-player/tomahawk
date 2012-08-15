@@ -191,6 +191,12 @@ XmppSipPlugin::~XmppSipPlugin()
     delete m_client;
 }
 
+QString
+XmppSipPlugin::inviteString() const
+{
+    return tr( "Enter Jabber or Google ID" );
+}
+
 
 InfoSystem::InfoPluginPtr
 XmppSipPlugin::infoPlugin()

@@ -57,6 +57,12 @@ SipPlugin::serviceName() const
     return m_account->accountServiceName();
 }
 
+QString
+SipPlugin::inviteString() const
+{
+    return QString();
+}
+
 
 #ifndef ENABLE_HEADLESS
 

@@ -25,7 +25,7 @@
 #include <QVBoxLayout>
 
 #ifdef QT_MAC_USE_COCOA
-#include "SourceTreePopupDialog_mac.h"
+#include "widgets/SourceTreePopupDialog_mac.h"
 #endif
 
 AccountsPopupWidget::AccountsPopupWidget( QWidget* parent )

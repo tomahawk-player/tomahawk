@@ -98,6 +98,12 @@ TwitterSipPlugin::connectionState() const
     return m_state;
 }
 
+QString
+TwitterSipPlugin::inviteString() const
+{
+    return tr( "Enter Twitter username" );
+}
+
 
 void
 TwitterSipPlugin::checkSettings()

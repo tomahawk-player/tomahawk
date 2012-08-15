@@ -50,6 +50,7 @@ public:
 
     virtual bool isValid() const;
     virtual Tomahawk::Accounts::Account::ConnectionState connectionState() const;
+    virtual QString inviteString() const;
 
 signals:
     void stateChanged( Tomahawk::Accounts::Account::ConnectionState );

@@ -273,5 +273,7 @@ AccountWidget::setupConnections( const QPersistentModelIndex& idx, int accountId
                  this, SLOT( changeAccountConnectionState( bool ) ) );
         connect( m_inviteButton, SIGNAL( clicked() ),
                  this, SLOT( sendInvite() ) );
+
+        m_inviteEdit->setPlaceholderText( account->sipPlugin()->inviteString() );
     }
 }

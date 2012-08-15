@@ -52,6 +52,7 @@ public:
     virtual bool isValid() const = 0;
     virtual const QString friendlyName() const;
     virtual const QString serviceName() const;
+    virtual QString inviteString() const;
 #ifndef ENABLE_HEADLESS
     virtual QMenu* menu();
 #endif
