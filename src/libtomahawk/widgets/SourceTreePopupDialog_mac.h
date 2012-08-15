@@ -19,11 +19,13 @@
 #ifndef SOURCETREE_POPUP_DIALOG_MAC_H
 #define SOURCETREE_POPUP_DIALOG_MAC_H
 
+#include "DllMacro.h"
+
 class QWidget;
 
 namespace SourceTreePopupHelper {
 
-void clearBackground( QWidget* widget );
+void DLLEXPORT clearBackground( QWidget* widget );
 
 }
 #endif
