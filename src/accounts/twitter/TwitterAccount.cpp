@@ -83,6 +83,9 @@ TwitterAccount::configDialogAuthedSignalSlot( bool authed )
 Account::ConnectionState
 TwitterAccount::connectionState() const
 {
+    if ( m_twitterSipPlugin.isNull() )
+        return Account::Disconnected;
+
     return m_twitterSipPlugin.data()->connectionState();
 }
 
