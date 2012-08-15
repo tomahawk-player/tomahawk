@@ -170,27 +170,39 @@ AccountWidget::update( const QPersistentModelIndex& idx, int accountIdx )
 
         switch ( account->connectionState() )
         {
-        case Tomahawk::Accounts::Account::Disconnected:
-            m_spinner->fadeOut();
-            m_statusToggle->setChecked( false );
-            m_statusToggle->setBackChecked( false );
-            setInviteWidgetsEnabled( false );
-            break;
-        case Tomahawk::Accounts::Account::Connecting:
-            m_spinner->fadeIn();
-            m_statusToggle->setChecked( true );
-            m_statusToggle->setBackChecked( false );
-            setInviteWidgetsEnabled( false );
-            break;
         case Tomahawk::Accounts::Account::Connected:
+            if ( account->enabled() )
+                m_statusToggle->setChecked( true );
+            else
+                qDebug() << "AccountWidget warning:" << account->accountFriendlyName()
+                         << "is Connected but Disabled!";
             m_spinner->fadeOut();
-            m_statusToggle->setChecked( true );
             m_statusToggle->setBackChecked( true );
             setInviteWidgetsEnabled( true );
             break;
-        case Tomahawk::Accounts::Account::Disconnecting:
+        case Tomahawk::Accounts::Account::Connecting:
+            if ( !account->enabled() )
+                qDebug() << "AccountWidget warning:" << account->accountFriendlyName()
+                         << "is Connecting but Disabled!";
             m_spinner->fadeIn();
-            m_statusToggle->setChecked( false );
+            m_statusToggle->setBackChecked( false );
+            setInviteWidgetsEnabled( false );
+            break;
+        case Tomahawk::Accounts::Account::Disconnected:
+            if ( !account->enabled() )
+                m_statusToggle->setChecked( false );
+            else
+                qDebug() << "AccountWidget warning:" << account->accountFriendlyName()
+                         << "is Disconnected but Enabled!";
+            m_spinner->fadeOut();
+            m_statusToggle->setBackChecked( false );
+            setInviteWidgetsEnabled( false );
+            break;
+        case Tomahawk::Accounts::Account::Disconnecting:
+            if ( account->enabled() )
+                qDebug() << "AccountWidget warning:" << account->accountFriendlyName()
+                         << "is Disconnecting but Enabled!";
+            m_spinner->fadeIn();
             m_statusToggle->setBackChecked( true );
             setInviteWidgetsEnabled( false );
         }

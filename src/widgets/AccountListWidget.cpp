@@ -44,13 +44,22 @@ AccountListWidget::AccountListWidget( AccountModelFactoryProxy* model, QWidget* 
 void
 AccountListWidget::updateEntries( const QModelIndex& topLeft, const QModelIndex& bottomRight )
 {
-    Q_UNUSED( topLeft )
-    Q_UNUSED( bottomRight )
-    for ( QHash< QPersistentModelIndex, QList< AccountWidget* > >::iterator it
-                = m_entries.begin();
-         it != m_entries.end(); ++it )
+    for( int row = topLeft.row(); row <= bottomRight.row(); ++row )
     {
-        updateEntry( it.key() );
+        QPersistentModelIndex idx( m_model->index( row, 0 ) );
+
+        int newCount = idx.data( Tomahawk::Accounts::AccountModel::ChildrenOfFactoryRole )
+                            .value< QList< Tomahawk::Accounts::Account* > >().count();
+
+        if( m_entries.value( idx ).count() == newCount )
+        {
+            updateEntry( idx );
+        }
+        else
+        {
+            removeEntries( idx.parent(), idx.row(), idx.row() );
+            insertEntries( idx.parent(), idx.row(), idx.row() );
+        }
     }
 }
 
@@ -101,7 +110,10 @@ AccountListWidget::insertEntries(  const QModelIndex& parent, int start, int end
 
         updateEntry( idx );
         for ( int j = 0; j < entryAccounts.length(); ++j )
+        {
+            entryAccounts[ j ]->update( idx, j );
             entryAccounts[ j ]->setupConnections( idx, j );
+        }
     }
 }
 
@@ -115,8 +127,6 @@ AccountListWidget::removeEntries( const QModelIndex& parent, int start, int end 
         for ( int j = 0; j < entryAccounts.count(); ++j )
         {
             AccountWidget *a = entryAccounts.at( j );
-            qDebug() << "Removing entry " << idx.data( Tomahawk::Accounts::AccountModel::ChildrenOfFactoryRole )
-                                                .value< QList< Tomahawk::Accounts::Account* > >().at( j )->accountId();
             m_layout->removeWidget( a );
             a->deleteLater();
         }
