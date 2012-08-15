@@ -115,6 +115,7 @@ AccountListWidget::insertEntries(  const QModelIndex& parent, int start, int end
             entryAccounts[ j ]->setupConnections( idx, j );
         }
     }
+
 }
 
 void
@@ -132,4 +133,6 @@ AccountListWidget::removeEntries( const QModelIndex& parent, int start, int end 
         }
         m_entries.remove( idx );
     }
+    adjustSize();
+    qobject_cast< QWidget* >( QWidget::parent() )->adjustSize();
 }

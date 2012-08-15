@@ -40,7 +40,7 @@ AccountsPopupWidget::AccountsPopupWidget( QWidget* parent )
     setAutoFillBackground( false );
     setAttribute( Qt::WA_TranslucentBackground, true );
 
-    setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred );
+    setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum );
 
     m_layout = new QVBoxLayout( this );
     setLayout( m_layout );
@@ -54,6 +54,7 @@ AccountsPopupWidget::setWidget( QWidget* widget )
 {
     m_widget = widget;
     m_layout->addWidget( m_widget );
+    m_widget->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum );
 }
 
 void
@@ -74,35 +75,6 @@ void AccountsPopupWidget::paintEvent( QPaintEvent* )
 
     QPainterPath outline;
     outline.addRoundedRect( 3, 3, brect.width(), brect.height(), cornerRadius, cornerRadius );
-    /* if we ever want to draw a triangle...
-    const int triangleWidth = 20; //the length of the base of the triangle
-
-    // Top triangle right branch
-    outline.moveTo( brect.width() - triangleOffset, brect.top() - triangleDepth );
-    outline.lineTo( brect.width() - triangleOffset + triangleWidth / 2,
-                    brect.top() );
-    const int triangleDepth = 10; //the height of the triangle
-    const int triangleOffset = 30;//the distance from the widget's top-right corner
-                                  //to the center of the triangle
-
-    // main outline
-    outline.lineTo( brect.width() - cornerRadius, brect.top() );
-    outline.quadTo( brect.topRight(),
-                    QPoint( width(), brect.top() + cornerRadius ) );
-    outline.lineTo( brect.width(), brect.height() - cornerRadius );
-    outline.quadTo( brect.bottomRight(),
-                    QPoint( brect.width() - cornerRadius, brect.height() ) );
-    outline.lineTo( brect.left() + cornerRadius, brect.height() );
-    outline.quadTo( brect.bottomLeft(),
-                    QPoint( brect.left(), brect.height() - cornerRadius ) );
-    outline.lineTo( brect.left(), brect.top() + cornerRadius );
-    outline.quadTo( brect.topLeft(),
-                    QPoint( brect.left() + cornerRadius, brect.top() ) );
-
-    // Top triangle left branch
-    outline.lineTo( brect.width() - triangleOffset - triangleWidth / 2,
-                    brect.top() );
-    outline.lineTo( brect.width() - triangleOffset, brect.top() - triangleDepth );*/
 
     QPainter p( this );
 
