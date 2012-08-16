@@ -87,6 +87,9 @@ XmppAccount::isAuthenticated() const
 Account::ConnectionState
 XmppAccount::connectionState() const
 {
+    if ( m_xmppSipPlugin.isNull() )
+        return Account::Disconnected;
+
     return m_xmppSipPlugin.data()->connectionState();
 }
 
