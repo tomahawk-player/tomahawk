@@ -176,7 +176,7 @@ AccountsToolButton::updateIcons()
 
     for ( int i = 0; i < m_proxy->rowCount(); ++i )
     {
-        QPersistentModelIndex idx( m_proxy->index( i, 0 ) );
+        QModelIndex idx = m_proxy->index( i, 0 );
         const QList< Tomahawk::Accounts::Account* >& children =
                 idx.data( Tomahawk::Accounts::AccountModel::ChildrenOfFactoryRole )
                    .value< QList< Tomahawk::Accounts::Account* > >();
