@@ -23,12 +23,10 @@
 
 #include "accounts/AccountModel.h"
 #include "AccountModelFactoryProxy.h"
-#include "DllMacro.h"
-#include "Typedefs.h"
 
 #include <QToolButton>
 
-class DLLEXPORT AccountsToolButton : public QToolButton
+class AccountsToolButton : public QToolButton
 {
     Q_OBJECT
 public:

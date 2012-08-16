@@ -19,14 +19,11 @@
 #ifndef ACCOUNTSPOPUPWIDGET_H
 #define ACCOUNTSPOPUPWIDGET_H
 
-#include "DllMacro.h"
-#include "Typedefs.h"
-
 #include <QWidget>
 
 class QVBoxLayout;
 
-class DLLEXPORT AccountsPopupWidget : public QWidget
+class AccountsPopupWidget : public QWidget
 {
     Q_OBJECT
 public:
