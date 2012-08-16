@@ -194,7 +194,7 @@ XmppSipPlugin::~XmppSipPlugin()
 QString
 XmppSipPlugin::inviteString() const
 {
-    return tr( "Enter Jabber or Google ID" );
+    return tr( "Enter Jabber ID" );
 }
 
 

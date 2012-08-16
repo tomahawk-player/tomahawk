@@ -53,6 +53,12 @@ GoogleWrapperSip::~GoogleWrapperSip()
 {
 }
 
+QString
+GoogleWrapperSip::inviteString() const
+{
+    return tr( "Enter Google Address" );
+}
+
 
 void
 GoogleWrapperSip::showAddFriendDialog()

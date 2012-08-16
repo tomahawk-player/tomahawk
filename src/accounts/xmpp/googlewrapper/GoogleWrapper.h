@@ -51,6 +51,8 @@ public:
     GoogleWrapperSip( Tomahawk::Accounts::Account* account );
     virtual ~GoogleWrapperSip();
 
+    virtual QString inviteString() const;
+
 public slots:
     void showAddFriendDialog();
 
