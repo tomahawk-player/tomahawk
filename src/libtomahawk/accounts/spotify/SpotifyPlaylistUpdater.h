@@ -49,7 +49,6 @@ public:
 
 #ifndef ENABLE_HEADLESS
     virtual QWidget* configurationWidget() const { return 0; }
-
     virtual QPixmap typeIcon() const;
 #endif
 

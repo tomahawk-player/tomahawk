@@ -103,7 +103,7 @@ public:
 
 
     void registerUpdaterForPlaylist( const QString& plId, SpotifyPlaylistUpdater* updater );
-    void registerPlaylistInfo(const QString& name, const QString& plid, const QString &revid, const bool sync, const bool subscribed , const bool owner = false);
+    void registerPlaylistInfo( const QString& name, const QString& plid, const QString &revid, const bool sync, const bool subscribed , const bool owner = false);
     void registerPlaylistInfo( SpotifyPlaylistInfo* info );
     void unregisterUpdater( const QString& plid );
 
@@ -157,8 +157,9 @@ private:
 
     void createActions();
     void removeActions();
-    playlist_ptr playlistFromAction( QAction* action ) const;
+    playlist_ptr playlistFromAction( QObject* action ) const;
     SpotifyPlaylistUpdater* getPlaylistUpdater( const playlist_ptr plptr);
+    SpotifyPlaylistUpdater* getPlaylistUpdater( QObject* sender );
     static SpotifyAccount* s_instance;
 
     QWeakPointer<SpotifyAccountConfig> m_configWidget;

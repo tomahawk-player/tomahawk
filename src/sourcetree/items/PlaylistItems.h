@@ -47,6 +47,7 @@ public:
     bool subscribed() const { return m_showSubscribed; }
     QPixmap subscribedIcon() const { return m_showSubscribed ? m_subscribedOnIcon : m_subscribedOffIcon; }
     void setSubscribed( bool subscribed );
+    bool collaborative() const;
 
 public slots:
     virtual void activate();

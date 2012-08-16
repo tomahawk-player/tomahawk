@@ -22,7 +22,6 @@
 #include "accounts/AccountManager.h"
 #include "SpotifyAccount.h"
 #include "utils/TomahawkUtils.h"
-
 #include <QMessageBox>
 
 using namespace Tomahawk;
@@ -211,7 +210,6 @@ SpotifyPlaylistUpdater::typeIcon() const
     return *s_typePixmap;
 }
 #endif
-
 
 void
 SpotifyPlaylistUpdater::setSync( bool sync )
