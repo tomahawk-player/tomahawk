@@ -61,7 +61,6 @@ private slots:
 
 private:
     void paintDecorations( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
-
     void paintCollection( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     void paintCategory( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     void paintGroup( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
@@ -73,9 +72,8 @@ private:
     QMimeData *m_dropMimeData;
     mutable SourceTreeItem::DropType m_hoveredDropType; // Hack to keep easily track of the current highlighted DropType in paint()
     QMap< QModelIndex, AnimationHelper* > m_expandedMap;
-    QPixmap m_headphonesOn, m_headphonesOff, m_realtimeLocked, m_realtimeUnlocked, m_nowPlayingSpeaker, m_nowPlayingSpeakerDark;
+    QPixmap m_headphonesOn, m_headphonesOff, m_realtimeLocked, m_realtimeUnlocked, m_nowPlayingSpeaker, m_nowPlayingSpeakerDark, m_collaborativeOn;
     qint64 m_lastClicked;
-
     QMap< int, SourceTreeItem::DropType > m_dropTypeMap;
     QMap< int, QString > m_dropTypeTextMap;
     QMap< int, QPixmap > m_dropTypeImageMap;

@@ -152,5 +152,6 @@
         <file>data/images/subscribe-off.png</file>
         <file>data/images/add-contact.png</file>
         <file>data/images/account-none.png</file>
+        <file>data/images/green-dot.png</file>
     </qresource>
 </RCC>

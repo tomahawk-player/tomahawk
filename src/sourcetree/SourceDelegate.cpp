@@ -40,7 +40,6 @@
 
 #define TREEVIEW_INDENT_ADD 12
 
-
 SourceDelegate::SourceDelegate( QAbstractItemView* parent )
     : QStyledItemDelegate( parent )
     , m_parent( parent )
@@ -72,6 +71,7 @@ SourceDelegate::SourceDelegate( QAbstractItemView* parent )
     m_realtimeUnlocked.load( RESPATH "images/open-padlock.png" );
     m_nowPlayingSpeaker.load( RESPATH "images/now-playing-speaker.png" );
     m_nowPlayingSpeakerDark.load( RESPATH "images/now-playing-speaker-dark.png" );
+    m_collaborativeOn.load( RESPATH "images/green-dot.png" );
 }
 
 
@@ -569,6 +569,13 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
                 const QRect subRect( o.rect.right() - padding - imgWidth, o.rect.top() + padding, imgWidth, imgWidth );
                 painter->drawPixmap( subRect, icon );
             }
+            if ( plItem->collaborative() )
+            {
+                const int imgWidth = m_collaborativeOn.size().width();
+                const QRect subRect( o.rect.left(), o.rect.top(), imgWidth, imgWidth );
+                painter->drawPixmap( subRect, m_collaborativeOn );
+
+            }
         }
         else
             QStyledItemDelegate::paint( painter, o, index );
@@ -578,7 +585,6 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 
     painter->restore();
 }
-
 
 void
 SourceDelegate::updateEditorGeometry( QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index ) const
