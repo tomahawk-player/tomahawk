@@ -93,20 +93,14 @@ GoogleWrapper::GoogleWrapper ( const QString& pluginID )
     config->m_ui->xmppServer->setText( "talk.google.com" );
     config->m_ui->xmppPort->setValue( 5222 );
     config->m_ui->groupBoxXmppAdvanced->hide();
+
+    m_onlinePixmap = QPixmap( ":/gmail-logo.png" );
+    m_offlinePixmap = QPixmap( ":/gmail-offline-logo.png" );
 }
 
 GoogleWrapper::~GoogleWrapper()
 {
     delete m_sipPlugin.data();
-}
-
-
-QPixmap
-GoogleWrapper::icon() const
-{
-    if ( connectionState() == Connected )
-        return QPixmap( ":/gmail-logo.png" );
-    return QPixmap( ":/gmail-offline-logo.png" );
 }
 
 

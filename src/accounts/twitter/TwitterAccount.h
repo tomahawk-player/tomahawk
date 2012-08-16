@@ -99,6 +99,9 @@ private:
 
     // for settings access
     friend class TwitterConfigWidget;
+
+    QPixmap m_onlinePixmap;
+    QPixmap m_offlinePixmap;
 };
 
 };

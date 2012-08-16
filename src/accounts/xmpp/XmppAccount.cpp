@@ -45,6 +45,9 @@ XmppAccount::XmppAccount( const QString &accountId )
     setTypes( SipType );
 
     m_configWidget = QWeakPointer< QWidget >( new XmppConfigWidget( this, 0 ) );
+
+    m_onlinePixmap = QPixmap( ":/xmpp-icon.png" );
+    m_offlinePixmap = QPixmap( ":/xmpp-offline-icon.png" );
 }
 
 
@@ -57,8 +60,8 @@ QPixmap
 XmppAccount::icon() const
 {
     if ( connectionState() == Connected )
-        return QPixmap( ":/xmpp-icon.png" );
-    return QPixmap( ":/xmpp-offline-icon.png" );
+        return m_onlinePixmap;
+    return m_offlinePixmap;
 }
 
 

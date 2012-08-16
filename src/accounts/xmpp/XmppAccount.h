@@ -83,6 +83,9 @@ protected:
     QWeakPointer< QWidget > m_configWidget; // so the google wrapper can change the config dialog a bit
     QWeakPointer< XmppSipPlugin > m_xmppSipPlugin;
     QWeakPointer< Tomahawk::InfoSystem::XmppInfoPlugin > m_xmppInfoPlugin;
+
+    QPixmap m_onlinePixmap;
+    QPixmap m_offlinePixmap;
 };
 
 };

@@ -69,7 +69,6 @@ public:
 
     virtual const QString name() const { return QString( "Google" ); }
     virtual const QString friendlyName() const { return "Google"; }
-    virtual QPixmap icon() const;
 
     virtual SipPlugin* sipPlugin();
 

@@ -59,6 +59,9 @@ TwitterAccount::TwitterAccount( const QString &accountId )
     connect( m_configWidget.data(), SIGNAL( twitterAuthed( bool ) ), SLOT( configDialogAuthedSignalSlot( bool ) ) );
 
     m_twitterAuth = QWeakPointer< TomahawkOAuthTwitter >( new TomahawkOAuthTwitter( TomahawkUtils::nam(), this ) );
+
+    m_onlinePixmap = QPixmap( ":/twitter-icon.png" );
+    m_offlinePixmap = QPixmap( ":/twitter-offline-icon.png" );
 }
 
 
@@ -230,8 +233,8 @@ QPixmap
 TwitterAccount::icon() const
 {
     if ( connectionState() == Connected )
-        return QPixmap( ":/twitter-icon.png" );
-    return QPixmap( ":/twitter-offline-icon.png" );
+        return m_onlinePixmap;
+    return m_offlinePixmap;
 }
 
 
