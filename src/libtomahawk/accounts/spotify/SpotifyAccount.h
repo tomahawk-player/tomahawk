@@ -29,6 +29,7 @@
 #include "DllMacro.h"
 
 class QAction;
+class QAction;
 class SpotifyPlaylistUpdater;
 class QTimer;
 
@@ -54,7 +55,7 @@ struct SpotifyPlaylistInfo {
 
 
     SpotifyPlaylistInfo( const QString& nname, const QString& pid, const QString& rrevid, bool ssync, bool ssubscribed, bool isowner = false )
-        : name( nname ), plid( pid ), revid( rrevid ), sync( ssync ), subscribed( ssubscribed ), isOwner( isowner ), changed( false ) {}
+        : name( nname ), plid( pid ), revid( rrevid ), sync( ssync ), subscribed( ssubscribed ), changed( false ), isOwner( isowner ) {}
 
     SpotifyPlaylistInfo() : sync( false ), changed( false ) {}
 };
@@ -115,12 +116,12 @@ public:
 
 public slots:
     QString sendMessage( const QVariantMap& msg, QObject* receiver = 0, const QString& slot = QString(), const QVariant& extraData = QVariant() );
-    
+
     void aboutToShow( QAction* action, const Tomahawk::playlist_ptr& playlist );
-    void syncActionTriggered( bool );
-    void subscribeActionTriggered( bool );
+    void syncActionTriggered( QAction* action );
+    void subscribeActionTriggered( QAction* action );
     void atticaLoaded(Attica::Content::List);
-    void collaborateActionTriggered( bool );
+    void collaborateActionTriggered( QAction* action );
 
 private slots:
     void resolverChanged();
@@ -157,7 +158,7 @@ private:
 
     void createActions();
     void removeActions();
-    playlist_ptr playlistFromAction( QObject* action ) const;
+    playlist_ptr playlistFromAction( QAction* action ) const;
     SpotifyPlaylistUpdater* getPlaylistUpdater( const playlist_ptr plptr);
     SpotifyPlaylistUpdater* getPlaylistUpdater( QObject* sender );
     static SpotifyAccount* s_instance;
@@ -187,5 +188,6 @@ private:
 }
 
 Q_DECLARE_METATYPE( Tomahawk::Accounts::SpotifyPlaylistInfo* )
+Q_DECLARE_METATYPE( QAction* )
 
 #endif // SpotifyAccount_H

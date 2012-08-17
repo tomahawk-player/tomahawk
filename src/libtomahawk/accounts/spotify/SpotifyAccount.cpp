@@ -600,9 +600,9 @@ SpotifyAccount::getPlaylistUpdater( QObject *sender )
 }
 
 void
-SpotifyAccount::subscribeActionTriggered( bool )
+SpotifyAccount::subscribeActionTriggered( QAction* action )
 {
-    SpotifyPlaylistUpdater* updater = getPlaylistUpdater( sender() );
+    SpotifyPlaylistUpdater* updater = getPlaylistUpdater( action );
 
     Q_ASSERT( updater );
     if ( !updater )
@@ -618,10 +618,10 @@ SpotifyAccount::subscribeActionTriggered( bool )
 
 
 void
-SpotifyAccount::collaborateActionTriggered( bool )
+SpotifyAccount::collaborateActionTriggered( QAction* action )
 {
 
-    SpotifyPlaylistUpdater* updater = getPlaylistUpdater( sender() );
+    SpotifyPlaylistUpdater* updater = getPlaylistUpdater( action );
 
     if ( !updater )
     {
@@ -652,9 +652,9 @@ SpotifyAccount::collaborateActionTriggered( bool )
 
 
 void
-SpotifyAccount::syncActionTriggered( bool )
+SpotifyAccount::syncActionTriggered( QAction* action )
 {
-    const playlist_ptr playlist = playlistFromAction( sender() );
+    const playlist_ptr playlist = playlistFromAction( action );
 
     if ( playlist.isNull() )
     {
@@ -762,26 +762,12 @@ SpotifyAccount::setSubscribedForPlaylist( const playlist_ptr& playlist, bool sub
 
 
 playlist_ptr
-SpotifyAccount::playlistFromAction( QObject* action ) const
+SpotifyAccount::playlistFromAction( QAction* action ) const
 {
-    if ( !action )
-    {
-        tLog() << "uuh noo, null sender!";
-        return playlist_ptr();
-    }
-
-    QAction* senderAction = qobject_cast< QAction* >( action );
-
-    if ( !senderAction )
-    {
-        tLog() << "uuh noo, null action!";
-        return playlist_ptr();
-    }
-
-    if ( !senderAction || !m_customActions.contains( senderAction ) )
+    if ( !action || !m_customActions.contains( action ) )
         return playlist_ptr();
 
-    return senderAction->property( "payload" ).value< playlist_ptr >();
+    return action->property( "payload" ).value< playlist_ptr >();
 }
 
 
@@ -1422,21 +1408,21 @@ SpotifyAccount::createActions()
 
     QAction* syncAction = new QAction( 0 );
     syncAction->setIcon( QIcon( RESPATH "images/spotify-logo.png" ) );
-    connect( syncAction, SIGNAL( triggered( bool ) ), this, SLOT( syncActionTriggered( bool ) ) );
+    NewClosure( syncAction, SIGNAL( triggered( bool ) ), this, SLOT( syncActionTriggered( QAction* ) ), syncAction );
     ActionCollection::instance()->addAction( ActionCollection::LocalPlaylists, syncAction, this );
     syncAction->setData( Sync);
     m_customActions.append( syncAction );
 
     QAction* subscribeAction = new QAction( 0 );
     subscribeAction->setIcon( QIcon( RESPATH "images/spotify-logo.png" ) );
-    connect( subscribeAction, SIGNAL( triggered( bool ) ), this, SLOT( subscribeActionTriggered( bool ) ) );
+    NewClosure( subscribeAction, SIGNAL( triggered( bool ) ), this, SLOT( subscribeActionTriggered( QAction* ) ), subscribeAction );
     ActionCollection::instance()->addAction( ActionCollection::LocalPlaylists, subscribeAction, this );
     subscribeAction->setData( Subscribe );
     m_customActions.append( subscribeAction );
 
     QAction* collaborateAction = new QAction( 0 );
     collaborateAction->setIcon( QIcon( RESPATH "images/spotify-logo.png" ) );
-    connect( collaborateAction, SIGNAL( triggered( bool ) ), this, SLOT( collaborateActionTriggered( bool ) ) );
+    NewClosure( collaborateAction, SIGNAL( triggered( bool ) ), this, SLOT( collaborateActionTriggered( QAction* ) ), collaborateAction );
     ActionCollection::instance()->addAction( ActionCollection::LocalPlaylists, collaborateAction, this );
     collaborateAction->setData( Collaborate );
     m_customActions.append( collaborateAction );
