@@ -202,9 +202,11 @@ SettingsDialog::SettingsDialog(QObject *parent )
     m_accountsWidgetUi->horizontalLayout->setContentsMargins( 0, 0, 0, 0 );
     m_accountsWidgetUi->installFromFileBtn->setContentsMargins( -4, 0, 0, 0 );
     m_accountsWidget->setMinimumSize( 550, 400 );
+    m_accountsWidgetUi->accountsView->setAttribute( Qt::WA_MacShowFocusRect, false );
 
     m_collectionWidget->setContentsMargins( 6, 6, 6, 6 );
     m_collectionWidget->setMinimumHeight( m_collectionWidgetUi->verticalLayout->sizeHint().height() + 20 );
+    m_collectionWidgetUi->dirTree->setAttribute( Qt::WA_MacShowFocusRect, false );
 
     m_advancedWidget->setContentsMargins( 6, 6, 6, 6 );
     m_advancedWidget->setMinimumHeight( m_advancedWidgetUi->verticalLayout->sizeHint().height() );
@@ -217,18 +219,15 @@ SettingsDialog::SettingsDialog(QObject *parent )
 //     ui->checkBoxEnableAdium->hide();
 // #endif
 
-    m_dialog->addTab( m_accountsWidget, QPixmap( RESPATH "images/account-settings.png" ), tr( "Services" ), tr( "<b>Services</b><br>"
-                                                                                                               "Configure the accounts and services used by Tomahawk "
-                                                                                                               "to search and retrieve music, find your friends and "
-                                                                                                               "update your status." ));
+    m_dialog->addTab( m_accountsWidget, QPixmap( RESPATH "images/account-settings.png" ), tr( "Services" ), tr( "Configure the accounts and services used by Tomahawk "
+                                                                                                                "to search and retrieve music, find your friends and "
+                                                                                                                "update your status." ) );
 
-    m_dialog->addTab( m_collectionWidget, QPixmap( RESPATH "images/music-settings.png" ), tr( "Collection" ), tr("<b>Collection</b><br>"
-                                                                                                               "Manage how Tomahawk finds music on your computer." ));
+    m_dialog->addTab( m_collectionWidget, QPixmap( RESPATH "images/music-settings.png" ), tr( "Collection" ), tr( "Manage how Tomahawk finds music on your computer." ));
 
-    m_dialog->addTab( m_advancedWidget, QPixmap( RESPATH "images/advanced-settings.png" ), tr( "Advanced" ), tr( "<b>Advanced</b><br>"
-                                                                                                               "Configure Tomahawk's advanced settings, including "
-                                                                                                               "network connectivity settings, browser interaction "
-                                                                                                               "and more."  ));
+    m_dialog->addTab( m_advancedWidget, QPixmap( RESPATH "images/advanced-settings.png" ), tr( "Advanced" ), tr( "Configure Tomahawk's advanced settings, including "
+                                                                                                                 "network connectivity settings, browser interaction "
+                                                                                                                 "and more."  ) );
 
     m_dialog->setCurrentIndex( 0 );
 
