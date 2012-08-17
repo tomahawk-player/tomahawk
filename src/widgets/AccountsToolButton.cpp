@@ -26,6 +26,7 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPaintEvent>
+#include <QPushButton>
 #include <QToolBar>
 #include <QVBoxLayout>
 
@@ -54,9 +55,8 @@ AccountsToolButton::AccountsToolButton( QWidget* parent )
     connectionsLabel->setFont( clFont );
     connectionsLabel->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
 
-    QToolButton *settingsButton = new QToolButton( w );
+    QPushButton *settingsButton = new QPushButton( w );
     settingsButton->setIcon( QIcon( RESPATH "images/account-settings.png" ) );
-    settingsButton->setToolButtonStyle( Qt::ToolButtonTextBesideIcon );
     settingsButton->setText( tr( "Configure Accounts" ) );
     connect( settingsButton, SIGNAL( clicked() ),
              window(), SLOT( showSettingsDialog() ) );
