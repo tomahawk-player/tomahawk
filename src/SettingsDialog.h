@@ -31,14 +31,16 @@
 
 class AnimatedSpinner;
 class QListWidgetItem;
-class Ui_StackedSettingsDialog;
+class Ui_Settings_Accounts;
+class Ui_Settings_Collection;
+class Ui_Settings_Advanced;
 class SipPlugin;
 class ResolversModel;
 class QNetworkReply;
+class QToolbarTabDialog;
 
 namespace Ui
 {
-    class SettingsDialog;
     class ProxyDialog;
 }
 
@@ -68,14 +70,15 @@ private:
     Ui::ProxyDialog* ui;
 };
 
-class SettingsDialog : public QDialog
+class SettingsDialog : public QObject
 {
 Q_OBJECT
 
 public:
-    explicit SettingsDialog( QWidget* parent = 0 );
+    explicit SettingsDialog( QObject* parent = 0 );
     ~SettingsDialog();
 
+    void show();
 protected:
     void changeEvent( QEvent* e );
 
@@ -97,20 +100,26 @@ private slots:
 
     void updateScanOptionsView();
 
-    void changePage( QAction *action );
     void serventReady();
 
     void aclEntryClearButtonClicked();
-    
+
     void requiresRestart();
 
+private slots:
+    void saveSettings();
+
 private:
-    void createIcons();
+    Ui_Settings_Accounts* m_accountsWidgetUi;
+    QWidget* m_accountsWidget;
 
-    Ui_StackedSettingsDialog* ui;
+    Ui_Settings_Collection* m_collectionWidgetUi;
+    QWidget* m_collectionWidget;
 
-    QToolBar *m_toolBar;
-    QActionGroup *m_settingsGroup;
+    Ui_Settings_Advanced* m_advancedWidgetUi;
+    QWidget* m_advancedWidget;
+
+    QToolbarTabDialog* m_dialog;
 
     ProxyDialog m_proxySettings;
     bool m_rejected;

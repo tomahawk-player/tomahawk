@@ -101,6 +101,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     , m_searchWidget( 0 )
     , m_audioControls( new AudioControls( this ) )
     , m_trayIcon( new TomahawkTrayIcon( this ) )
+    , m_settingsDialog( 0 )
     , m_audioRetryCounter( 0 )
 {
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
@@ -803,8 +804,10 @@ TomahawkWindow::onHistoryForwardAvailable( bool avail )
 void
 TomahawkWindow::showSettingsDialog()
 {
-    SettingsDialog win;
-    win.exec();
+    if ( !m_settingsDialog )
+        m_settingsDialog = new SettingsDialog;
+
+    m_settingsDialog->show();
 }
 
 

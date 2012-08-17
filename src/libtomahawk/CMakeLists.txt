@@ -391,7 +391,9 @@ IF( APPLE )
     SET( libSources ${libSources}
       utils/TomahawkUtils_Mac.mm
       mac/FileHelpers.mm
+      thirdparty/Qocoa/qbutton_mac.mm
       thirdparty/Qocoa/qsearchfield_mac.mm
+      thirdparty/Qocoa/qtoolbartabdialog_mac.mm
       widgets/SourceTreePopupDialog_mac.mm )
 
     SET_SOURCE_FILES_PROPERTIES(utils/TomahawkUtils_Mac.mm PROPERTIES COMPILE_FLAGS "-fvisibility=default")
@@ -408,7 +410,7 @@ IF( APPLE )
         /System/Library/Frameworks/Security.framework
     )
 ELSE( APPLE )
-    SET( libGuiSources ${libGuiSources} thirdparty/Qocoa/qsearchfield.cpp )
+    SET( libGuiSources ${libGuiSources} thirdparty/Qocoa/qbutton.cpp thirdparty/Qocoa/qsearchfield.cpp thirdparty/Qocoa/qtoolbartabdialog.cpp )
 ENDIF( APPLE )
 
 IF(LIBLASTFM_FOUND)
