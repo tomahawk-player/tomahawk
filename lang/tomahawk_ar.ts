@@ -68,7 +68,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/widgets/AccountWidget.cpp" line="128"/>
         <source>Invite</source>
-        <translation type="unfinished"/>
+        <translation>إدعو</translation>
     </message>
 </context>
 <context>
@@ -76,12 +76,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/widgets/AccountsToolButton.cpp" line="50"/>
         <source>Connections</source>
-        <translation type="unfinished"/>
+        <translation>روابط</translation>
     </message>
     <message>
         <location filename="../src/widgets/AccountsToolButton.cpp" line="60"/>
         <source>Configure Accounts</source>
-        <translation type="unfinished"/>
+        <translation>تكوين الحسابات</translation>
     </message>
 </context>
 <context>
@@ -1394,22 +1394,22 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="123"/>
         <source>Install from file</source>
-        <translation type="unfinished"/>
+        <translation>تثبيت من الملف</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="222"/>
         <source>Configure the accounts and services used by Tomahawk to search and retrieve music, find your friends and update your status.</source>
-        <translation type="unfinished"/>
+        <translation>تكوين الحسابات والخدمات التي يستخدمها توماهوك للبحث واسترجاع الموسيقى، والعثور على أصدقائك وتحديث حالتك.</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="226"/>
         <source>Manage how Tomahawk finds music on your computer.</source>
-        <translation type="unfinished"/>
+        <translation>تنظيم كيف يجد توماهوك الموسيقى على نظامك.</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="228"/>
         <source>Configure Tomahawk&apos;s advanced settings, including network connectivity settings, browser interaction and more.</source>
-        <translation type="unfinished"/>
+        <translation>تكوين إعدادات توماهوك المتطورة، بما في ذلك إعدادات شبكة الاتصال، وتفاعل المتصفح وما إلى ذلك.</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="443"/>
@@ -1437,12 +1437,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/Settings_Accounts.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>استمارة</translation>
     </message>
     <message>
         <location filename="../src/Settings_Accounts.ui" line="48"/>
         <source>Filter by capability:</source>
-        <translation type="unfinished"/>
+        <translation>التصفية حسب القدرة:</translation>
     </message>
 </context>
 <context>
@@ -1450,77 +1450,77 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="20"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>استمارة</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="29"/>
         <source>Remote Peer Connection Method</source>
-        <translation type="unfinished"/>
+        <translation>طريقة الاتصال بالأقران عن بعد</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="35"/>
         <source>None (outgoing connections only)</source>
-        <translation type="unfinished"/>
+        <translation>لا شيء (الاتصالات الصادرة فقط)</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="42"/>
         <source>Use UPnP to establish port forward (recommended)</source>
-        <translation type="unfinished"/>
+        <translation>استخدام UPNP لإنشاء توجيه المنافذ (مستحسن)</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="49"/>
         <source>Use static external IP address/host name and port</source>
-        <translation type="unfinished"/>
+        <translation>استخدام عنوان IP خارجي ثابت او اسم المضيف والمنفذ</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="62"/>
         <source>Set this to your external IP address or host name. Make sure to forward the port to this host!</source>
-        <translation type="unfinished"/>
+        <translation>تعيين هذا إلى عنوان IP  الخارجي الخاص بك أو اسم المضيف. تأكد من توجيه المنفذ إلى هذا المضيف!</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="80"/>
         <source>Static Host Name:</source>
-        <translation type="unfinished"/>
+        <translation>إسم المضيف الثابت:</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="96"/>
         <source>Static Port:</source>
-        <translation type="unfinished"/>
+        <translation>المنفذ الثابت:</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="134"/>
         <source>SOCKS Proxy</source>
-        <translation type="unfinished"/>
+        <translation>الوكيل سوكس (SOCKS Proxy):</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="140"/>
         <source>Use SOCKS Proxy</source>
-        <translation type="unfinished"/>
+        <translation>إستخدام الوكيل سوكس (SOCKS Proxy)</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="169"/>
         <source>Proxy Settings...</source>
-        <translation type="unfinished"/>
+        <translation>إعدادات الوكيل...</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="195"/>
         <source>Other Settings</source>
-        <translation type="unfinished"/>
+        <translation>إعدادات أخرى</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="204"/>
         <source>Allow web browsers to interact with Tomahawk (recommended)</source>
-        <translation type="unfinished"/>
+        <translation>السماح للمتصفح بالتفاعل مع توماهوك (مستحسن)</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="217"/>
         <source>Send reports after Tomahawk crashed</source>
-        <translation type="unfinished"/>
+        <translation>إرسال تقارير بعض تحطم توماهوك</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="245"/>
         <source>Clear All Access Control Entries</source>
-        <translation type="unfinished"/>
+        <translation>مسح كافة إدخالات التحكم بالوصول</translation>
     </message>
 </context>
 <context>
@@ -1528,12 +1528,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/Settings_Collection.ui" line="20"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>استمارة</translation>
     </message>
     <message>
         <location filename="../src/Settings_Collection.ui" line="31"/>
         <source>Path to scan for music files:</source>
-        <translation type="unfinished"/>
+        <translation>المسار للبحث عن ملفات الموسيقى:</translation>
     </message>
     <message>
         <location filename="../src/Settings_Collection.ui" line="45"/>
@@ -1541,22 +1541,22 @@ connect and stream from you?</source>
  and using it to craft personalized radios. Enabling this option
  will allow you (and all your friends) to create automatic playlists
  and stations based on your personal taste profile.</source>
-        <translation type="unfinished"/>
+        <translation>The Echo Nest يدعم تتبع البيانات الوصفية للكتالوجات الخاصة بك واستخدامها لصياغة محطاتك الشخصية. تمكين هذا الخيار يسمح لك (ولأصدقائك) بإنشاء قوائم تشغيل ومحطة أوتوماتيكيا بناء على التعريف الخاص بك والذوق الشخصي.</translation>
     </message>
     <message>
         <location filename="../src/Settings_Collection.ui" line="51"/>
         <source>Upload collection list to The Echo Nest to enable user radio</source>
-        <translation type="unfinished"/>
+        <translation>تحميل قائمة المجموعة إلى &quot;The Echo Nest&quot; لتمكين محطات المستخدم</translation>
     </message>
     <message>
         <location filename="../src/Settings_Collection.ui" line="64"/>
         <source>Watch for changes</source>
-        <translation type="unfinished"/>
+        <translation>مراقبة التغييرات</translation>
     </message>
     <message>
         <location filename="../src/Settings_Collection.ui" line="73"/>
         <source>Time between scans, in seconds:</source>
-        <translation type="unfinished"/>
+        <translation>الوقت بين المسح بالثواني:</translation>
     </message>
 </context>
 <context>
@@ -1564,12 +1564,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/widgets/SlideSwitchButton.cpp" line="27"/>
         <source>On</source>
-        <translation type="unfinished"/>
+        <translation>بدء</translation>
     </message>
     <message>
         <location filename="../src/widgets/SlideSwitchButton.cpp" line="28"/>
         <source>Off</source>
-        <translation type="unfinished"/>
+        <translation>إيقاف</translation>
     </message>
 </context>
 <context>
@@ -2078,7 +2078,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="59"/>
         <source>Enter Google Address</source>
-        <translation type="unfinished"/>
+        <translation>أدخل الحساب الخاص بجوجل (Google)</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="67"/>
@@ -2194,12 +2194,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="537"/>
         <source>Enable Spotify collaborations</source>
-        <translation type="unfinished"/>
+        <translation>تمكين التعاون الخاص بسبوتيفي (Collaborations Spotify)</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="539"/>
         <source>Disable Spotify collaborations</source>
-        <translation type="unfinished"/>
+        <translation>تعطيل التعاون الخاص بسبوتيفي (Collaborations Spotify)</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="495"/>
@@ -3851,7 +3851,7 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/accounts/twitter/sip/TwitterSip.cpp" line="104"/>
         <source>Enter Twitter username</source>
-        <translation type="unfinished"/>
+        <translation>أدخل اسم المستخدم الخاص بتويتر (Twitter)</translation>
     </message>
 </context>
 <context>
@@ -4227,7 +4227,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="197"/>
         <source>Enter Jabber ID</source>
-        <translation type="unfinished"/>
+        <translation>أدخل تعريف جابر (Jabber ID)</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="409"/>

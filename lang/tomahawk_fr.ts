@@ -68,7 +68,7 @@ de se connecter et streamer de vous?</translation>
     <message>
         <location filename="../src/widgets/AccountWidget.cpp" line="128"/>
         <source>Invite</source>
-        <translation type="unfinished"/>
+        <translation>Inviter</translation>
     </message>
 </context>
 <context>
@@ -76,12 +76,12 @@ de se connecter et streamer de vous?</translation>
     <message>
         <location filename="../src/widgets/AccountsToolButton.cpp" line="50"/>
         <source>Connections</source>
-        <translation type="unfinished"/>
+        <translation>Connexions</translation>
     </message>
     <message>
         <location filename="../src/widgets/AccountsToolButton.cpp" line="60"/>
         <source>Configure Accounts</source>
-        <translation type="unfinished"/>
+        <translation>Configurer les comptes</translation>
     </message>
 </context>
 <context>
@@ -216,7 +216,7 @@ de se connecter et streamer de vous?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="121"/>
         <source>Check For Updates...</source>
-        <translation>Les mises à jour...</translation>
+        <translation>Rechercher une mis à jour...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="132"/>
@@ -264,7 +264,7 @@ de se connecter et streamer de vous?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="60"/>
         <source>Sorry, we could not find any tracks for this album!</source>
-        <translation>Désolé, on a pas pu trouver aucune pistes pour cet album!</translation>
+        <translation>Désolé, nous n&apos;avons pu trouver aucune piste pour cet album !</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="139"/>
@@ -775,22 +775,22 @@ de se connecter et streamer de vous?</translation>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="76"/>
         <source>Sorry, we could not find any loved tracks!</source>
-        <translation>Désolé, on a pas pu trouver aucune piste favoris!</translation>
+        <translation>Désolé, nous n&apos;avons pu trouver aucune piste favorite !</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="78"/>
         <source>The most loved tracks from all your friends</source>
-        <translation type="unfinished"/>
+        <translation>Les titres favoris de vos amis</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="82"/>
         <source>All of your loved tracks</source>
-        <translation type="unfinished"/>
+        <translation>Tous vos titres favoris</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="84"/>
         <source>All of %1&apos;s loved tracks</source>
-        <translation type="unfinished"/>
+        <translation>Tous les titres favoris de %1</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="56"/>
@@ -1393,22 +1393,22 @@ de se connecter et streamer de vous?</translation>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="123"/>
         <source>Install from file</source>
-        <translation type="unfinished"/>
+        <translation>Installer depuis un fichier</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="222"/>
         <source>Configure the accounts and services used by Tomahawk to search and retrieve music, find your friends and update your status.</source>
-        <translation type="unfinished"/>
+        <translation>Configurer les comptes et les services que Tomahawk utilisera pour chercher et diffuser de la musique, retrouver vos amis ou mettre à jour votre statut.</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="226"/>
         <source>Manage how Tomahawk finds music on your computer.</source>
-        <translation type="unfinished"/>
+        <translation>Gérer la manière dont Tomahawk trouve de la musique sur votre ordinateur.</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="228"/>
         <source>Configure Tomahawk&apos;s advanced settings, including network connectivity settings, browser interaction and more.</source>
-        <translation type="unfinished"/>
+        <translation>Configurer les paramètres avancés de Tomahawk dont les paramètres de connectivité réseau, les interactions avec le navigateur et autres.</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="443"/>
@@ -1441,7 +1441,7 @@ de se connecter et streamer de vous?</translation>
     <message>
         <location filename="../src/Settings_Accounts.ui" line="48"/>
         <source>Filter by capability:</source>
-        <translation type="unfinished"/>
+        <translation>Filtrer par fonctionnalité :</translation>
     </message>
 </context>
 <context>
@@ -1454,67 +1454,67 @@ de se connecter et streamer de vous?</translation>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="29"/>
         <source>Remote Peer Connection Method</source>
-        <translation type="unfinished"/>
+        <translation>Méthode de connexion distante à un pair</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="35"/>
         <source>None (outgoing connections only)</source>
-        <translation type="unfinished"/>
+        <translation>Aucune (Connexions sortantes uniquement)</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="42"/>
         <source>Use UPnP to establish port forward (recommended)</source>
-        <translation type="unfinished"/>
+        <translation>Utiliser UPnP pour établir la redirection de port (recommandé)</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="49"/>
         <source>Use static external IP address/host name and port</source>
-        <translation type="unfinished"/>
+        <translation>Utiliser une adresse IP externe statique/nom d&apos;hôte et un port</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="62"/>
         <source>Set this to your external IP address or host name. Make sure to forward the port to this host!</source>
-        <translation type="unfinished"/>
+        <translation>Indiquez votre adresse IP externe ou nom d&apos;hôte. Vérifiez que le port est bien redirigé vers cet hôte !</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="80"/>
         <source>Static Host Name:</source>
-        <translation type="unfinished"/>
+        <translation>Nom d&apos;hôte statique :</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="96"/>
         <source>Static Port:</source>
-        <translation type="unfinished"/>
+        <translation>Port statique :</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="134"/>
         <source>SOCKS Proxy</source>
-        <translation type="unfinished"/>
+        <translation>Proxy SOCKS</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="140"/>
         <source>Use SOCKS Proxy</source>
-        <translation type="unfinished"/>
+        <translation>Utiliser le proxy SOCKS</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="169"/>
         <source>Proxy Settings...</source>
-        <translation type="unfinished"/>
+        <translation>Paramètres Proxy...</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="195"/>
         <source>Other Settings</source>
-        <translation type="unfinished"/>
+        <translation>Autres paramètres</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="204"/>
         <source>Allow web browsers to interact with Tomahawk (recommended)</source>
-        <translation type="unfinished"/>
+        <translation>Autoriser les navigateurs web à interagir avec Tomahawk (recommandé)</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="217"/>
         <source>Send reports after Tomahawk crashed</source>
-        <translation type="unfinished"/>
+        <translation>Envoyer un rapport d&apos;erreur si Tomahawk plante</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="245"/>
@@ -1532,7 +1532,7 @@ de se connecter et streamer de vous?</translation>
     <message>
         <location filename="../src/Settings_Collection.ui" line="31"/>
         <source>Path to scan for music files:</source>
-        <translation type="unfinished"/>
+        <translation>Chemin vers votre bibliothèque musicale</translation>
     </message>
     <message>
         <location filename="../src/Settings_Collection.ui" line="45"/>
@@ -1540,22 +1540,22 @@ de se connecter et streamer de vous?</translation>
  and using it to craft personalized radios. Enabling this option
  will allow you (and all your friends) to create automatic playlists
  and stations based on your personal taste profile.</source>
-        <translation type="unfinished"/>
+        <translation>The Echo Nest peut garder les métadonnées de votre catalogue et les utiliser pour créer des radios personnalisées. En activant cette option vous (et vos amis) pourrez créer des listes de lecture automatiquement et des stations basées sur vos goûts.</translation>
     </message>
     <message>
         <location filename="../src/Settings_Collection.ui" line="51"/>
         <source>Upload collection list to The Echo Nest to enable user radio</source>
-        <translation type="unfinished"/>
+        <translation>Envoyer la collection à The Echo Nest pour activer la radio utilisateur</translation>
     </message>
     <message>
         <location filename="../src/Settings_Collection.ui" line="64"/>
         <source>Watch for changes</source>
-        <translation type="unfinished"/>
+        <translation>Surveiller les changements</translation>
     </message>
     <message>
         <location filename="../src/Settings_Collection.ui" line="73"/>
         <source>Time between scans, in seconds:</source>
-        <translation type="unfinished"/>
+        <translation>Intervalle entre les scans, en secondes :</translation>
     </message>
 </context>
 <context>
@@ -1563,12 +1563,12 @@ de se connecter et streamer de vous?</translation>
     <message>
         <location filename="../src/widgets/SlideSwitchButton.cpp" line="27"/>
         <source>On</source>
-        <translation type="unfinished"/>
+        <translation>On</translation>
     </message>
     <message>
         <location filename="../src/widgets/SlideSwitchButton.cpp" line="28"/>
         <source>Off</source>
-        <translation type="unfinished"/>
+        <translation>Off</translation>
     </message>
 </context>
 <context>
@@ -1771,7 +1771,7 @@ de se connecter et streamer de vous?</translation>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="568"/>
         <source>Sorry, we could not find any recent plays!</source>
-        <translation>Désolé, on a pas pu trouver aucune piste récement joués!</translation>
+        <translation>Désolé, aucune piste récemment jouée n&apos;a pu être trouvée !</translation>
     </message>
 </context>
 <context>
@@ -1974,7 +1974,7 @@ de se connecter et streamer de vous?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="324"/>
         <source>Delete associated Spotify playlist?</source>
-        <translation type="unfinished"/>
+        <translation>Supprimer la liste de lecture dans Spotify ?</translation>
     </message>
 </context>
 <context>
@@ -2077,7 +2077,7 @@ de se connecter et streamer de vous?</translation>
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="59"/>
         <source>Enter Google Address</source>
-        <translation type="unfinished"/>
+        <translation>Saisir l&apos;adresse Google</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="67"/>
@@ -2173,32 +2173,32 @@ de se connecter et streamer de vous?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="493"/>
         <source>Create local copy</source>
-        <translation type="unfinished"/>
+        <translation>Créer une copie localement</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="509"/>
         <source>Subscribe to playlist changes</source>
-        <translation type="unfinished"/>
+        <translation>S&apos;abonner aux modifications de la liste de lecture</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="513"/>
         <source>Re-enable playlist subscription</source>
-        <translation type="unfinished"/>
+        <translation>Réactiver l&apos;abonnement à la liste de lecture</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="517"/>
         <source>Stop subscribing to changes</source>
-        <translation type="unfinished"/>
+        <translation>Stopper l&apos;abonnement aux modifications</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="537"/>
         <source>Enable Spotify collaborations</source>
-        <translation type="unfinished"/>
+        <translation>Activer les collaborations Spotify</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="539"/>
         <source>Disable Spotify collaborations</source>
-        <translation type="unfinished"/>
+        <translation>Désactiver les collaborations Spotify</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="495"/>
@@ -3685,7 +3685,7 @@ saisissez le numéro PIN ici :</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="97"/>
         <source>Sorry, but we could not find similar tracks for this song!</source>
-        <translation>Désolé, on a pas pu trouver aucune pistes pour cette chanson!</translation>
+        <translation>Désolé, nous n&apos;avons pu trouver aucune piste similaire pour cette chanson !</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="234"/>
@@ -3850,7 +3850,7 @@ Vous pouvez envoyer un message de synchronisation quand vous le souhaitez en env
     <message>
         <location filename="../src/accounts/twitter/sip/TwitterSip.cpp" line="104"/>
         <source>Enter Twitter username</source>
-        <translation type="unfinished"/>
+        <translation>Saisir le nom d&apos;utilisateur Twitter</translation>
     </message>
 </context>
 <context>
@@ -3888,7 +3888,7 @@ Vous pouvez envoyer un message de synchronisation quand vous le souhaitez en env
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="404"/>
         <source>Sorry, we could not find any recent plays!</source>
-        <translation>Désolé, on a pas pu trouver aucune piste récement joués!</translation>
+        <translation>Désolé, aucune piste récemment jouée n&apos;a pu être trouvée !</translation>
     </message>
 </context>
 <context>
@@ -4228,7 +4228,7 @@ Paroles de &quot;%1&quot; par %2 :
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="197"/>
         <source>Enter Jabber ID</source>
-        <translation type="unfinished"/>
+        <translation>Saisir l&apos;ID Jabber</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="409"/>
