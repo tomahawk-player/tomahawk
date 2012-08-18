@@ -71,7 +71,6 @@ enum ActionType {
 };
 }
 
-
 Account*
 SpotifyAccountFactory::createAccount( const QString& accountId )
 {

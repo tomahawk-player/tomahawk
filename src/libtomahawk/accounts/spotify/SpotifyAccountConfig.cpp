@@ -30,6 +30,11 @@
 using namespace Tomahawk;
 using namespace Accounts;
 
+bool InfoSorter( const SpotifyPlaylistInfo* left, const SpotifyPlaylistInfo* right )
+{
+    return left->name < right->name;
+}
+
 SpotifyAccountConfig::SpotifyAccountConfig( SpotifyAccount *account )
     : QWidget( 0 )
     , m_ui( new Ui::SpotifyConfig )
@@ -135,7 +140,11 @@ SpotifyAccountConfig::setPlaylists( const QList<SpotifyPlaylistInfo *>& playlist
         m_playlistsLoading->fadeOut();
 
     m_ui->playlistList->clear();
-    foreach ( SpotifyPlaylistInfo* pl, playlists )
+
+    QList<SpotifyPlaylistInfo *> myList = playlists;
+    qSort( myList.begin(), myList.end(), InfoSorter );
+
+    foreach ( SpotifyPlaylistInfo* pl, myList )
     {
         QListWidgetItem* item = new QListWidgetItem( pl->name, m_ui->playlistList );
         item->setData( Qt::UserRole, QVariant::fromValue< SpotifyPlaylistInfo* >( pl ) );
