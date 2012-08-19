@@ -67,7 +67,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/widgets/AccountWidget.cpp" line="128"/>
         <source>Invite</source>
-        <translation type="unfinished"/>
+        <translation>Покани</translation>
     </message>
 </context>
 <context>
@@ -75,12 +75,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/widgets/AccountsToolButton.cpp" line="50"/>
         <source>Connections</source>
-        <translation type="unfinished"/>
+        <translation>Връзки</translation>
     </message>
     <message>
         <location filename="../src/widgets/AccountsToolButton.cpp" line="60"/>
         <source>Configure Accounts</source>
-        <translation type="unfinished"/>
+        <translation>Настройка на регистрации</translation>
     </message>
 </context>
 <context>
@@ -115,7 +115,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="73"/>
         <source>Go &amp;Online</source>
-        <translation type="unfinished"/>
+        <translation>&amp;На линия</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="75"/>
@@ -160,87 +160,87 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="97"/>
         <source>Load &amp;XSPF...</source>
-        <translation type="unfinished"/>
+        <translation>Зареди &amp;XSPF...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="98"/>
         <source>U&amp;pdate Collection</source>
-        <translation type="unfinished"/>
+        <translation>О&amp;бнови колекцията</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="99"/>
         <source>Fully &amp;Rescan Collection</source>
-        <translation type="unfinished"/>
+        <translation>Пълно &amp;сканиране на колекцията</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="100"/>
         <source>Show Offline Sources</source>
-        <translation type="unfinished"/>
+        <translation>Покажи източници, които не са на линия</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="102"/>
         <source>&amp;Configure Tomahawk...</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Настройки...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="105"/>
         <source>Minimize</source>
-        <translation type="unfinished"/>
+        <translation>Минимизирай</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="107"/>
         <source>Zoom</source>
-        <translation type="unfinished"/>
+        <translation>Увеличи</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="110"/>
         <source>Hide Menu Bar</source>
-        <translation type="unfinished"/>
+        <translation>Скрий лентата на менюто</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="114"/>
         <source>Diagnostics...</source>
-        <translation type="unfinished"/>
+        <translation>Диагностика...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="116"/>
         <source>About &amp;Tomahawk...</source>
-        <translation type="unfinished"/>
+        <translation>За &amp;Tomahawk...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="118"/>
         <source>&amp;Legal Information...</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Правна информация</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="121"/>
         <source>Check For Updates...</source>
-        <translation type="unfinished"/>
+        <translation>Провери за обновления</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="132"/>
         <source>&amp;Controls</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Контроли</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="147"/>
         <source>&amp;Settings</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Настройки</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="153"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Помощ</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="178"/>
         <source>&amp;Window</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Прозорец</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="191"/>
         <source>Main Menu</source>
-        <translation type="unfinished"/>
+        <translation>Главно меню</translation>
     </message>
 </context>
 <context>
@@ -415,27 +415,27 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/AudioControls.cpp" line="258"/>
         <source>Time Elapsed</source>
-        <translation type="unfinished"/>
+        <translation>Изминало време</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.cpp" line="259"/>
         <source>Time Remaining</source>
-        <translation type="unfinished"/>
+        <translation>Оставащо време</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.cpp" line="260"/>
         <source>Music Source</source>
-        <translation type="unfinished"/>
+        <translation>Източник на музиката</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.cpp" line="263"/>
         <source>Share</source>
-        <translation type="unfinished"/>
+        <translation>Сподели</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.cpp" line="264"/>
         <source>Love</source>
-        <translation type="unfinished"/>
+        <translation>Харесай</translation>
     </message>
 </context>
 <context>
@@ -1394,22 +1394,22 @@ Tomahaw създаде доклад относно това и изпращай�
     <message>
         <location filename="../src/SettingsDialog.cpp" line="123"/>
         <source>Install from file</source>
-        <translation type="unfinished"/>
+        <translation>Инсталирай от файл</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="222"/>
         <source>Configure the accounts and services used by Tomahawk to search and retrieve music, find your friends and update your status.</source>
-        <translation type="unfinished"/>
+        <translation>Настройки на регистрации и услуги, ползвани от Tomahawk да търси музика, да сте свързва с твоите приятели и да обновява статусът ти.</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="226"/>
         <source>Manage how Tomahawk finds music on your computer.</source>
-        <translation type="unfinished"/>
+        <translation>Указва начинът по който Tomahawk открива музиката на твоя компютър</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="228"/>
         <source>Configure Tomahawk&apos;s advanced settings, including network connectivity settings, browser interaction and more.</source>
-        <translation type="unfinished"/>
+        <translation>Разширени настройки на Tomahawk, включващи настройки на мрежова свързаност, взаимодействие с браузъри и други подобни.</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="443"/>
@@ -1443,7 +1443,7 @@ Tomahaw създаде доклад относно това и изпращай�
     <message>
         <location filename="../src/Settings_Accounts.ui" line="48"/>
         <source>Filter by capability:</source>
-        <translation type="unfinished"/>
+        <translation>Филтрирай по възможности</translation>
     </message>
 </context>
 <context>
@@ -1456,72 +1456,73 @@ Tomahaw създаде доклад относно това и изпращай�
     <message>
         <location filename="../src/Settings_Advanced.ui" line="29"/>
         <source>Remote Peer Connection Method</source>
-        <translation type="unfinished"/>
+        <translation>Начин за свързване с другите потребители</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="35"/>
         <source>None (outgoing connections only)</source>
-        <translation type="unfinished"/>
+        <translation>(Само изходящи връзки) </translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="42"/>
         <source>Use UPnP to establish port forward (recommended)</source>
-        <translation type="unfinished"/>
+        <translation>Ползвай UPnP за контролиране на пренасочването на портове
+ (recommended)</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="49"/>
         <source>Use static external IP address/host name and port</source>
-        <translation type="unfinished"/>
+        <translation>Настрой статичен адрес и порт</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="62"/>
         <source>Set this to your external IP address or host name. Make sure to forward the port to this host!</source>
-        <translation type="unfinished"/>
+        <translation>Настрой тук твоят реален адрес и порт. Бъди сигурен, че ще настроиш прехвърлянето на портове към този локален адрес.</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="80"/>
         <source>Static Host Name:</source>
-        <translation type="unfinished"/>
+        <translation>татичен адрес</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="96"/>
         <source>Static Port:</source>
-        <translation type="unfinished"/>
+        <translation>Статичен порт</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="134"/>
         <source>SOCKS Proxy</source>
-        <translation type="unfinished"/>
+        <translation>SOKS Proxy</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="140"/>
         <source>Use SOCKS Proxy</source>
-        <translation type="unfinished"/>
+        <translation>Ползвай SOKS Proxy</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="169"/>
         <source>Proxy Settings...</source>
-        <translation type="unfinished"/>
+        <translation>Настройки на Proxy</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="195"/>
         <source>Other Settings</source>
-        <translation type="unfinished"/>
+        <translation>Други настройки</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="204"/>
         <source>Allow web browsers to interact with Tomahawk (recommended)</source>
-        <translation type="unfinished"/>
+        <translation>Позволи на браузърите да работят съвместно с Tomahawk (препоръчително)</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="217"/>
         <source>Send reports after Tomahawk crashed</source>
-        <translation type="unfinished"/>
+        <translation>Изпращай данни за анализ, след забиване</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="245"/>
         <source>Clear All Access Control Entries</source>
-        <translation type="unfinished"/>
+        <translation>Изтрий всички данни за достъп</translation>
     </message>
 </context>
 <context>
@@ -1534,7 +1535,7 @@ Tomahaw създаде доклад относно това и изпращай�
     <message>
         <location filename="../src/Settings_Collection.ui" line="31"/>
         <source>Path to scan for music files:</source>
-        <translation type="unfinished"/>
+        <translation>Път за сканиране на медийни файлове</translation>
     </message>
     <message>
         <location filename="../src/Settings_Collection.ui" line="45"/>
@@ -1542,22 +1543,22 @@ Tomahaw създаде доклад относно това и изпращай�
  and using it to craft personalized radios. Enabling this option
  will allow you (and all your friends) to create automatic playlists
  and stations based on your personal taste profile.</source>
-        <translation type="unfinished"/>
+        <translation>The Echo Nest supports keeping track of your catalog metadata⏎ and using it to craft personalized radios. Enabling this option⏎ will allow you (and all your friends) to create automatic playlists⏎ and stations based on your personal taste profile.</translation>
     </message>
     <message>
         <location filename="../src/Settings_Collection.ui" line="51"/>
         <source>Upload collection list to The Echo Nest to enable user radio</source>
-        <translation type="unfinished"/>
+        <translation>Качи списък на колекцията в The Echo Nest, за създаване на потребителско радио</translation>
     </message>
     <message>
         <location filename="../src/Settings_Collection.ui" line="64"/>
         <source>Watch for changes</source>
-        <translation type="unfinished"/>
+        <translation>блюдавай за промени</translation>
     </message>
     <message>
         <location filename="../src/Settings_Collection.ui" line="73"/>
         <source>Time between scans, in seconds:</source>
-        <translation type="unfinished"/>
+        <translation>Период между две сканирания, в секунди</translation>
     </message>
 </context>
 <context>
@@ -1565,12 +1566,12 @@ Tomahaw създаде доклад относно това и изпращай�
     <message>
         <location filename="../src/widgets/SlideSwitchButton.cpp" line="27"/>
         <source>On</source>
-        <translation type="unfinished"/>
+        <translation>Включен</translation>
     </message>
     <message>
         <location filename="../src/widgets/SlideSwitchButton.cpp" line="28"/>
         <source>Off</source>
-        <translation type="unfinished"/>
+        <translation>Изключен</translation>
     </message>
 </context>
 <context>
@@ -2058,7 +2059,7 @@ Tomahaw създаде доклад относно това и изпращай�
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="89"/>
         <source>Google Address:</source>
-        <translation type="unfinished"/>
+        <translation>Google адрес</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="90"/>
@@ -2084,7 +2085,7 @@ Tomahaw създаде доклад относно това и изпращай�
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="59"/>
         <source>Enter Google Address</source>
-        <translation type="unfinished"/>
+        <translation>Въведи Google адрес</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="67"/>
@@ -2157,58 +2158,58 @@ Tomahaw създаде доклад относно това и изпращай�
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="258"/>
         <source>Synchronizing...</source>
-        <translation type="unfinished"/>
+        <translation>Синхронизирам...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="418"/>
         <source>Synchronization Finished</source>
-        <translation type="unfinished"/>
+        <translation>Синхронизирането приключи</translation>
     </message>
 </context>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccount</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="481"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="480"/>
         <source>Sync with Spotify</source>
         <translation>Синхронизирай със Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="485"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="484"/>
         <source>Re-enable syncing with Spotify</source>
         <translation>Включи отново синхронизирането със Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="493"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="492"/>
         <source>Create local copy</source>
         <translation>Създай локално копие</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="509"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="508"/>
         <source>Subscribe to playlist changes</source>
         <translation>Получавай актуализации за промяната на списъкът</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="513"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="512"/>
         <source>Re-enable playlist subscription</source>
         <translation>Поднови получаването на промените на списъкът</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="517"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="516"/>
         <source>Stop subscribing to changes</source>
         <translation>Спри да получаването на на промени в списъкът</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="537"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="536"/>
         <source>Enable Spotify collaborations</source>
-        <translation type="unfinished"/>
+        <translation>Активирай  връзката с Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="539"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="538"/>
         <source>Disable Spotify collaborations</source>
-        <translation type="unfinished"/>
+        <translation>Деактивирай  връзката с Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="495"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="494"/>
         <source>Stop syncing with Spotify</source>
         <translation>Спри синхронизацията със Spotify</translation>
     </message>
@@ -2216,28 +2217,28 @@ Tomahaw създаде доклад относно това и изпращай�
 <context>
     <name>Tomahawk::Accounts::SpotifyAccountConfig</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="153"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="162"/>
         <source>Logging in...</source>
         <translation>Влизам...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="190"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="199"/>
         <source>Failed: %1</source>
         <translation>Неуспех: %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="213"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="222"/>
         <source>Logged in as %1</source>
         <translation>Регистриран като %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="215"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="224"/>
         <source>Log Out</source>
         <translation>Изход</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="231"/>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="241"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="240"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="250"/>
         <source>Log In</source>
         <translation>Влез</translation>
     </message>
@@ -3466,7 +3467,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="259"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Назад</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="260"/>
@@ -3492,18 +3493,18 @@ enter the displayed PIN number here:</source>
         <location filename="../src/TomahawkWindow.cpp" line="200"/>
         <location filename="../src/TomahawkWindow.cpp" line="1329"/>
         <source>Hide Menu Bar</source>
-        <translation type="unfinished"/>
+        <translation>Скрий лентата с менюто</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="200"/>
         <location filename="../src/TomahawkWindow.cpp" line="1323"/>
         <source>Show Menu Bar</source>
-        <translation type="unfinished"/>
+        <translation>Покажи лентата с менюто</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="298"/>
         <source>&amp;Main Menu</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Основно меню</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="850"/>
@@ -3593,12 +3594,12 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1137"/>
         <source>&amp;Play</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Възпроизвеждане</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1163"/>
         <source>Go &amp;Offline</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Извън линия</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1182"/>
@@ -3862,7 +3863,7 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/accounts/twitter/sip/TwitterSip.cpp" line="104"/>
         <source>Enter Twitter username</source>
-        <translation type="unfinished"/>
+        <translation>Въведи потребителско име в Twitter</translation>
     </message>
 </context>
 <context>
@@ -3924,7 +3925,7 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="129"/>
         <source>Recently played tracks</source>
-        <translation type="unfinished"/>
+        <translation>Наскоро изпълнени</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="215"/>
@@ -4235,7 +4236,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="197"/>
         <source>Enter Jabber ID</source>
-        <translation type="unfinished"/>
+        <translation>Въведи Jabber адрес</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="409"/>
