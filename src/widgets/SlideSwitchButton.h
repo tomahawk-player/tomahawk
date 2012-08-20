@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2012 Teo Mrnjavac <teo@kde.org>
+ *   Copyright 2012 Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -23,10 +24,16 @@
 #include <QColor>
 #include <QPixmap>
 #include <QFont>
+#include <QWeakPointer>
+
+class QPropertyAnimation;
 
 class SlideSwitchButton : public QPushButton
 {
     Q_OBJECT
+    Q_PROPERTY( qreal knobX READ knobX WRITE setKnobX )
+    Q_PROPERTY( QColor baseColorTop READ baseColorTop WRITE setBaseColorTop )
+    Q_PROPERTY( QColor baseColorBottom READ baseColorBottom WRITE setBaseColorBottom )
 public:
     explicit SlideSwitchButton( QWidget* parent = 0 );
     explicit SlideSwitchButton( const QString& checkedText,
@@ -35,22 +42,22 @@ public:
 
     void init();
 
-    virtual QSize sizeHint();
-    virtual QSize minimumSizeHint() { return sizeHint(); }
+    virtual QSize sizeHint() const;
+    virtual QSize minimumSizeHint() const { return sizeHint(); }
 
     //the back check-state cannot be changed by the user, only programmatically
     //to notify that the user-requested operation has completed
     void setBackChecked( bool state );
     bool backChecked() const;
 
-    void setKnobX( double x ) { m_knobX = x; repaint(); }
-    double knobX() const { return m_knobX; }
-    Q_PROPERTY( double knobX READ knobX WRITE setKnobX )
+    void setKnobX( qreal x ) { m_knobX = x; repaint(); }
+    qreal knobX() const { return m_knobX; }
 
-    void setBaseColor( const QColor& color ) { m_baseColor = color; repaint(); }
-    QColor baseColor() const { return m_baseColor; }
-    Q_PROPERTY( QColor baseColor READ baseColor WRITE setBaseColor )
+    void setBaseColorTop( const QColor& color ) { m_baseColorTop = color; repaint(); }
+    QColor baseColorTop() const { return m_baseColorTop; }
 
+    void setBaseColorBottom( const QColor& color ) { m_baseColorBottom = color; }
+    QColor baseColorBottom() const { return m_baseColorBottom; }
 protected:
     void paintEvent( QPaintEvent* event );
 
@@ -58,15 +65,21 @@ private slots:
     void onCheckedStateChanged();
 
 private:
+    QPixmap m_knob;
+
     QString m_checkedText;
     QString m_uncheckedText;
-    QColor m_baseColor;
+    QColor m_baseColorTop, m_baseColorBottom;
     QColor m_textColor;
-    QColor m_backUncheckedColor;
-    QColor m_backCheckedColor;
+    QColor m_backUncheckedColorTop, m_backUncheckedColorBottom;
+    QColor m_backCheckedColorTop, m_backCheckedColorBottom;
     QFont m_textFont; //needed for sizeHint
     bool m_backChecked;
-    double m_knobX;
+    qreal m_knobX;
+
+    QWeakPointer<QPropertyAnimation> m_backTopAnimation;
+    QWeakPointer<QPropertyAnimation> m_backBottomAnimation;
+    QWeakPointer<QPropertyAnimation> m_knobAnimation;
 };
 
 #endif // SLIDESWITCHBUTTON_H

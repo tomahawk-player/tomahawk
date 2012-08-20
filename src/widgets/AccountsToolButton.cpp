@@ -72,6 +72,11 @@ AccountsToolButton::AccountsToolButton( QWidget* parent )
     separatorLine->setStyleSheet( "QWidget { border-top: 1px solid black; }" );
     wMainLayout->addWidget( separatorLine );
 
+#ifdef Q_OS_MAC
+    w->setContentsMargins( 4, 4, 2, 2 );
+    wMainLayout->setContentsMargins( 4, 4, 2, 2 );
+#endif
+
     m_popup->setWidget( w );
     connect( m_popup, SIGNAL( hidden() ), SLOT( popupHidden() ) );
 

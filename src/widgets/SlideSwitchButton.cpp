@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2012 Teo Mrnjavac <teo@kde.org>
+ *   Copyright 2012 Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -18,9 +19,12 @@
 
 #include "SlideSwitchButton.h"
 
+#include "utils/TomahawkUtils.h"
+
 #include <QPainter>
 #include <QPropertyAnimation>
 #include <QStyleOptionButton>
+#include <QPixmap>
 
 SlideSwitchButton::SlideSwitchButton( QWidget* parent )
     : QPushButton( parent )
@@ -44,11 +48,20 @@ void
 SlideSwitchButton::init()
 {
     setCheckable( true );
+#ifndef Q_OS_MAC
+    setMouseTracking( true );
+#endif
 
-    m_backCheckedColor = QColor( 167, 183, 211 );
-    m_backUncheckedColor = QColor( "#d9d9d9" );
+    m_knob.load( RESPATH "images/sliderbutton_knob.png" );
 
-    m_baseColor = m_backUncheckedColor;
+    m_backCheckedColorTop = QColor( 8, 54, 134 );
+    m_backCheckedColorBottom = QColor( 118, 172, 240 );
+    m_backUncheckedColorTop = QColor( 128, 128, 128 );
+    m_backUncheckedColorBottom = QColor( 179, 179, 179 );
+
+    m_baseColorTop = m_backUncheckedColorTop;
+    m_baseColorBottom = m_backUncheckedColorBottom;
+
     m_textColor = QColor( "#606060" );
     setFocusPolicy( Qt::NoFocus );
 
@@ -64,15 +77,16 @@ SlideSwitchButton::init()
 }
 
 QSize
-SlideSwitchButton::sizeHint()
+SlideSwitchButton::sizeHint() const
 {
-    QSize size = QPushButton::sizeHint();
-    QFontMetrics fm( m_textFont );
-    int maxTextLength = qMax( fm.boundingRect( m_checkedText ).width(),
-                              fm.boundingRect( m_uncheckedText ).width() );
-    size.rwidth() = contentsMargins().left() + contentsMargins().right()
-                  + 2 /*a bit of margin*/ + maxTextLength + ( height() - 4 ) * 1.25;
-    return size;
+//    QSize size = QPushButton::sizeHint();
+//    QFontMetrics fm( m_textFont );
+//    int maxTextLength = qMax( fm.boundingRect( m_checkedText ).width(),
+//                              fm.boundingRect( m_uncheckedText ).width() );
+//    size.rwidth() = contentsMargins().left() + contentsMargins().right()
+//                  + 2 /*a bit of margin*/ + maxTextLength + ( height() - 4 ) * 1.25;
+//    return size;
+    return QSize( 70, 20 );
 }
 
 
@@ -80,83 +94,63 @@ void
 SlideSwitchButton::paintEvent( QPaintEvent* event )
 {
     QPainter painter( this );
-
-    painter.initFrom( this );
-    painter.setPen( m_baseColor );
-
-    QStyleOptionButton option;
-    option.initFrom( this );
+    painter.setRenderHint( QPainter::Antialiasing );
 
     QPalette palette;
 
+    QStyleOptionButton option;
+    initStyleOption( &option );
+
+    QPen border;
+    border.setWidth( 1 );
+#ifndef Q_OS_MAC
     if ( option.state &  QStyle::State_MouseOver )
-        painter.setPen( palette.color( QPalette::Highlight ) );
+       border.setColor( palette.color( QPalette::Highlight ) );
+    else
+#endif
+       border.setColor( QColor( "#606060" ) );
+    painter.setPen( border );
     //TODO: should the whole thing be highlighted or just the knob?
 
     QLinearGradient gradient( 0, 0, 0, 1 );
     gradient.setCoordinateMode( QGradient::ObjectBoundingMode );
-    gradient.setColorAt( 0, m_baseColor.lighter( 95 ) );
-    gradient.setColorAt( 1, m_baseColor.lighter( 115 ) );
+    gradient.setColorAt( 0, m_baseColorTop );
+    gradient.setColorAt( 1, m_baseColorBottom );
+    painter.setBrush( gradient );
 
+    painter.drawRoundedRect( QRect( 0, 0, width() - 0, height() - 0 ).adjusted( 3, 0, -3, 0 ), 2, 2 );
 
-    painter.setBrush( QBrush( gradient ) );
-    painter.setRenderHints( QPainter::Antialiasing, true );
-    painter.drawRoundedRect( QRect( 0, 0, width() - 0, height() - 0 ),
-                             5, 5 );
+    painter.drawPixmap( m_knobX * ( width() - m_knob.width() ), 0, m_knob );
 
-    //knob
-    QRect knobRect( 2, 2, ( height() - 4 ) * 1.25, height() - 4 );
-    knobRect.moveTo( QPoint( 2 + m_knobX * ( width() - 4 - knobRect.width() ), knobRect.y() ) );
-    QLinearGradient knobGradient( 0, 0, 0, 1 );
-    knobGradient.setCoordinateMode( QGradient::ObjectBoundingMode );
-    knobGradient.setColorAt( 0, m_backUncheckedColor.lighter( 115 ) );
-    knobGradient.setColorAt( 1, m_backUncheckedColor.lighter( 95 ) );
-    painter.setBrush( QBrush( knobGradient ) );
+    qDebug() << "Drawn with knob at:" << m_knobX;
 
-    painter.drawRoundedRect( knobRect, 1, 1 );
-
-//    if we ever want to try with primitives...
-//    QStyleOptionButton option;
-//    option.initFrom( this );
-//    option.rect = QRect( m_knobX + 1, 1, ( height() - 2 ) * 1.25, height() - 2 );
-//    style()->drawPrimitive( QStyle::PE_PanelButtonBevel, &option, &painter, this );
+    if ( m_knobX != 1.0 && m_knobX != 0.0 )
+        return;
 
     //let's draw some text...
-    QRect textRect = rect().adjusted( 4, 3, -4, -3 );
-    painter.setFont( m_textFont );
-    painter.setPen( m_textColor );
-    if ( m_knobX == 0. )
-    {
-        //draw on right
-        painter.drawText( textRect, Qt::AlignRight | Qt::AlignVCenter, m_uncheckedText );
-    }
-    else if ( m_knobX == 1. )
-    {
-        //draw on left
-        painter.drawText( textRect, Qt::AlignLeft | Qt::AlignVCenter, m_checkedText );
-    }
-    //otherwise don't draw because the knob is being animated
+    if ( m_baseColorTop == m_backUncheckedColorTop )
+        painter.setPen( m_textColor );
+    else
+        painter.setPen( Qt::white );
 
-    painter.end();
+    painter.setFont( m_textFont );
+    const QRect textRect( m_knobX == 0. ? m_knob.width() : 0, 0, width() - m_knob.width(), height() );
+    painter.drawText( textRect, Qt::AlignCenter, m_knobX == 0 ? m_uncheckedText : m_checkedText );
 }
 
 void
 SlideSwitchButton::onCheckedStateChanged()
 {
-    QPropertyAnimation *animation = new QPropertyAnimation( this, "knobX" );
-    animation->setDuration( 50 );
+    if ( !m_knobAnimation.isNull() )
+        m_knobAnimation.data()->stop();
 
-    if ( isChecked() )
-    {
-        animation->setStartValue( 0. );
-        animation->setEndValue( 1. );
-    }
-    else
-    {
-        animation->setStartValue( 1. );
-        animation->setEndValue( 0. );
-    }
-    animation->start( QAbstractAnimation::DeleteWhenStopped );
+    m_knobAnimation = QWeakPointer<QPropertyAnimation>( new QPropertyAnimation( this, "knobX" ) );
+    m_knobAnimation.data()->setDuration( 50 );
+
+    m_knobAnimation.data()->setStartValue( isChecked() ? 0 : 1 );
+    m_knobAnimation.data()->setEndValue( isChecked() ? 1 : 0 );
+
+    m_knobAnimation.data()->start( QAbstractAnimation::DeleteWhenStopped );
 }
 
 
@@ -165,20 +159,24 @@ SlideSwitchButton::setBackChecked( bool state )
 {
     if ( state != m_backChecked )
     {
+        if ( !m_backTopAnimation.isNull() )
+            m_backTopAnimation.data()->stop();
+        if ( !m_backBottomAnimation.isNull() )
+            m_backBottomAnimation.data()->stop();
+
         m_backChecked = state;
-        QPropertyAnimation *animation = new QPropertyAnimation( this, "baseColor" );
-        animation->setDuration( 300 );
-        if ( state )
-        {
-            animation->setStartValue( m_backUncheckedColor );
-            animation->setEndValue( m_backCheckedColor );
-        }
-        else
-        {
-            animation->setStartValue( m_backCheckedColor );
-            animation->setEndValue( m_backUncheckedColor );
-        }
-        animation->start( QAbstractAnimation::DeleteWhenStopped );
+        m_backTopAnimation = QWeakPointer<QPropertyAnimation>( new QPropertyAnimation( this, "baseColorTop" ) );
+        m_backBottomAnimation = QWeakPointer<QPropertyAnimation>( new QPropertyAnimation( this, "baseColorBottom" ) );
+        m_backTopAnimation.data()->setDuration( 300 );
+        m_backBottomAnimation.data()->setDuration( 300 );
+
+        m_backTopAnimation.data()->setStartValue( state ? m_backUncheckedColorTop : m_backCheckedColorTop );
+        m_backTopAnimation.data()->setEndValue( state ? m_backCheckedColorTop : m_backUncheckedColorTop );
+        m_backBottomAnimation.data()->setStartValue( state ? m_backUncheckedColorBottom : m_backCheckedColorBottom );
+        m_backBottomAnimation.data()->setEndValue( state ? m_backCheckedColorBottom : m_backUncheckedColorBottom );
+
+        m_backTopAnimation.data()->start( QAbstractAnimation::DeleteWhenStopped );
+        m_backBottomAnimation.data()->start( QAbstractAnimation::DeleteWhenStopped );
     }
 }
 
