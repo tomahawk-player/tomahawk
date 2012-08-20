@@ -26,6 +26,8 @@
 #include <QFont>
 #include <QWeakPointer>
 
+class QMouseEvent;
+class QMouseEvent;
 class QPropertyAnimation;
 
 class SlideSwitchButton : public QPushButton
@@ -58,9 +60,13 @@ public:
 
     void setBaseColorBottom( const QColor& color ) { m_baseColorBottom = color; }
     QColor baseColorBottom() const { return m_baseColorBottom; }
+
 protected:
     void paintEvent( QPaintEvent* event );
 
+    virtual void mousePressEvent( QMouseEvent* e );
+    virtual void mouseReleaseEvent( QMouseEvent* e );
+    virtual void mouseMoveEvent(QMouseEvent* e);
 private slots:
     void onCheckedStateChanged();
 
@@ -78,6 +84,8 @@ private:
     QFont m_textFont; //needed for sizeHint
     bool m_backChecked;
     qreal m_knobX;
+
+    QPoint m_mouseDownPos;
 
     QWeakPointer<QPropertyAnimation> m_backTopAnimation;
     QWeakPointer<QPropertyAnimation> m_backBottomAnimation;

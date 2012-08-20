@@ -21,6 +21,7 @@
 
 #include "utils/TomahawkUtils.h"
 
+#include <QMouseEvent>
 #include <QPainter>
 #include <QPropertyAnimation>
 #include <QStyleOptionButton>
@@ -31,6 +32,11 @@ namespace {
     const qreal ASPECT_RATIO = 3.5;
     // Knob is originally 32x20
     const qreal KNOB_ASPECT_RATIO = 1.6;
+
+    // Markers for when to show text, and when to snap to either end during a drag
+    const qreal LEFT_THRESHOLD = 0.3;
+    const qreal RIGHT_THRESHOLD = 0.7;
+
 }
 
 SlideSwitchButton::SlideSwitchButton( QWidget* parent )
@@ -98,6 +104,73 @@ SlideSwitchButton::sizeHint() const
 
 
 void
+SlideSwitchButton::mousePressEvent( QMouseEvent* e )
+{
+    if ( m_knob.rect().translated( m_knobX * ( width() - m_knob.width() ), 0 ).contains( e->pos() ) )
+        m_mouseDownPos = e->pos();
+    else
+        m_mouseDownPos = QPoint();
+
+    QPushButton::mousePressEvent( e );
+}
+
+
+void
+SlideSwitchButton::mouseReleaseEvent( QMouseEvent* e )
+{
+    const int delta = e->pos().x() - m_mouseDownPos.x();
+    m_mouseDownPos = QPoint();
+
+    // Only act as a real button if the user didn't drag
+    if ( qAbs( delta ) < 3 )
+    {
+        QPushButton::mouseReleaseEvent( e );
+        return;
+    }
+
+    if ( m_knobX < LEFT_THRESHOLD )
+        setChecked( false );
+    else if ( m_knobX > RIGHT_THRESHOLD )
+        setChecked( true );
+
+    QPropertyAnimation* dragEndAnimation = new QPropertyAnimation( this, "knobX" );
+    dragEndAnimation->setDuration( 50 );
+
+    dragEndAnimation->setStartValue( m_knobX );
+    dragEndAnimation->setEndValue( isChecked() ? 1 : 0 );
+    dragEndAnimation->start( QAbstractAnimation::DeleteWhenStopped );
+
+
+}
+
+
+void
+SlideSwitchButton::mouseMoveEvent( QMouseEvent* e )
+{
+    if ( m_mouseDownPos.isNull() )
+        return;
+
+    e->accept();
+
+    const int rightEdge = width() - m_knob.width();
+    const int delta = e->pos().x() - m_mouseDownPos.x();
+    const int knobStart = isChecked() ? rightEdge : 0;
+    const int newX = ( knobStart + delta );
+
+    if ( newX < 0 || newX > rightEdge ) // out of bounds
+        return;
+
+    m_knobX = newX / (qreal)rightEdge;
+    repaint();
+
+//     qDebug() << "MOVING WITH DELTA:" << delta;
+
+//     if (
+
+}
+
+
+void
 SlideSwitchButton::paintEvent( QPaintEvent* event )
 {
     QPainter painter( this );
@@ -131,7 +204,7 @@ SlideSwitchButton::paintEvent( QPaintEvent* event )
     }
 #endif
 
-    if ( m_knobX != 1.0 && m_knobX != 0.0 )
+    if ( LEFT_THRESHOLD < m_knobX && m_knobX < RIGHT_THRESHOLD )
         return;
 
     //let's draw some text...
@@ -141,8 +214,8 @@ SlideSwitchButton::paintEvent( QPaintEvent* event )
         painter.setPen( Qt::white );
 
     painter.setFont( m_textFont );
-    const QRect textRect( m_knobX == 0. ? m_knob.width() : 0, 0, width() - m_knob.width(), height() );
-    painter.drawText( textRect, Qt::AlignCenter, m_knobX == 0 ? m_uncheckedText : m_checkedText );
+    const QRect textRect( m_knobX < LEFT_THRESHOLD ? m_knob.width() : 0, 0, width() - m_knob.width(), height() );
+    painter.drawText( textRect, Qt::AlignCenter, m_knobX < LEFT_THRESHOLD ? m_uncheckedText : m_checkedText );
 }
 
 void
@@ -154,7 +227,7 @@ SlideSwitchButton::onCheckedStateChanged()
     m_knobAnimation = QWeakPointer<QPropertyAnimation>( new QPropertyAnimation( this, "knobX" ) );
     m_knobAnimation.data()->setDuration( 50 );
 
-    m_knobAnimation.data()->setStartValue( isChecked() ? 0 : 1 );
+    m_knobAnimation.data()->setStartValue( m_knobX );
     m_knobAnimation.data()->setEndValue( isChecked() ? 1 : 0 );
 
     m_knobAnimation.data()->start( QAbstractAnimation::DeleteWhenStopped );
