@@ -92,7 +92,13 @@ SlideSwitchButton::init()
 QSize
 SlideSwitchButton::sizeHint() const
 {
+#ifndef Q_OS_MAC
     const QSize size = QPushButton::sizeHint();
+#else
+    // Don't believe the hype. OS X doesn't play nice.
+    const QSize size( 70, 20 );
+#endif
+
     return QSize( ASPECT_RATIO * size.height(), size.height() );
 }
 
