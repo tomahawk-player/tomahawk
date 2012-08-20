@@ -92,14 +92,8 @@ SlideSwitchButton::init()
 QSize
 SlideSwitchButton::sizeHint() const
 {
-//    QSize size = QPushButton::sizeHint();
-//    QFontMetrics fm( m_textFont );
-//    int maxTextLength = qMax( fm.boundingRect( m_checkedText ).width(),
-//                              fm.boundingRect( m_uncheckedText ).width() );
-//    size.rwidth() = contentsMargins().left() + contentsMargins().right()
-//                  + 2 /*a bit of margin*/ + maxTextLength + ( height() - 4 ) * 1.25;
-//    return size;
-    return QSize( 70, 20 );
+    const QSize size = QPushButton::sizeHint();
+    return QSize( ASPECT_RATIO * size.height(), size.height() );
 }
 
 
@@ -139,8 +133,6 @@ SlideSwitchButton::mouseReleaseEvent( QMouseEvent* e )
     dragEndAnimation->setStartValue( m_knobX );
     dragEndAnimation->setEndValue( isChecked() ? 1 : 0 );
     dragEndAnimation->start( QAbstractAnimation::DeleteWhenStopped );
-
-
 }
 
 
@@ -162,11 +154,6 @@ SlideSwitchButton::mouseMoveEvent( QMouseEvent* e )
 
     m_knobX = newX / (qreal)rightEdge;
     repaint();
-
-//     qDebug() << "MOVING WITH DELTA:" << delta;
-
-//     if (
-
 }
 
 
@@ -214,7 +201,7 @@ SlideSwitchButton::paintEvent( QPaintEvent* event )
         painter.setPen( Qt::white );
 
     painter.setFont( m_textFont );
-    const QRect textRect( m_knobX < LEFT_THRESHOLD ? m_knob.width() : 0, 0, width() - m_knob.width(), height() );
+    const QRectF textRect( m_knobX < LEFT_THRESHOLD ? m_knob.width() : 0, 0, width() - m_knob.width(), height() );
     painter.drawText( textRect, Qt::AlignCenter, m_knobX < LEFT_THRESHOLD ? m_uncheckedText : m_checkedText );
 }
 
