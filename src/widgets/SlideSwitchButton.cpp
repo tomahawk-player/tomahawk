@@ -26,6 +26,13 @@
 #include <QStyleOptionButton>
 #include <QPixmap>
 
+namespace {
+    // Width to height ratio (70x20)
+    const qreal ASPECT_RATIO = 3.5;
+    // Knob is originally 32x20
+    const qreal KNOB_ASPECT_RATIO = 1.6;
+}
+
 SlideSwitchButton::SlideSwitchButton( QWidget* parent )
     : QPushButton( parent )
     , m_checkedText( tr( "On" ) )
@@ -52,8 +59,6 @@ SlideSwitchButton::init()
     setMouseTracking( true );
 #endif
 
-    m_knob.load( RESPATH "images/sliderbutton_knob.png" );
-
     m_backCheckedColorTop = QColor( 8, 54, 134 );
     m_backCheckedColorBottom = QColor( 118, 172, 240 );
     m_backUncheckedColorTop = QColor( 128, 128, 128 );
@@ -74,6 +79,8 @@ SlideSwitchButton::init()
 
     connect( this, SIGNAL( toggled( bool ) ),
              this, SLOT( onCheckedStateChanged() ) );
+
+    createKnob();
 }
 
 QSize
@@ -101,28 +108,28 @@ SlideSwitchButton::paintEvent( QPaintEvent* event )
     QStyleOptionButton option;
     initStyleOption( &option );
 
-    QPen border;
-    border.setWidth( 1 );
-#ifndef Q_OS_MAC
-    if ( option.state &  QStyle::State_MouseOver )
-       border.setColor( palette.color( QPalette::Highlight ) );
-    else
-#endif
-       border.setColor( QColor( "#606060" ) );
-    painter.setPen( border );
-    //TODO: should the whole thing be highlighted or just the knob?
-
     QLinearGradient gradient( 0, 0, 0, 1 );
     gradient.setCoordinateMode( QGradient::ObjectBoundingMode );
     gradient.setColorAt( 0, m_baseColorTop );
     gradient.setColorAt( 1, m_baseColorBottom );
     painter.setBrush( gradient );
 
-    painter.drawRoundedRect( QRect( 0, 0, width() - 0, height() - 0 ).adjusted( 3, 0, -3, 0 ), 2, 2 );
+    QPainterPath borderPath;
+    const QRect borderRect = QRect( 0, 0, width(), height() );
+    borderPath.addRoundedRect( borderRect, 3, 3 );
+    painter.fillPath( borderPath, gradient );
 
     painter.drawPixmap( m_knobX * ( width() - m_knob.width() ), 0, m_knob );
 
-    qDebug() << "Drawn with knob at:" << m_knobX;
+#ifndef Q_OS_MAC
+    if ( option.state &  QStyle::State_MouseOver )
+    {
+        painter.setBrush( QBrush() );
+        painter.setPen( palette.color( QPalette::Highlight ) );
+        //TODO: should the whole thing be highlighted or just the knob?
+        painter.drawRoundedRect( borderRect, 3, 3 );
+    }
+#endif
 
     if ( m_knobX != 1.0 && m_knobX != 0.0 )
         return;
@@ -184,4 +191,26 @@ bool
 SlideSwitchButton::backChecked() const
 {
     return m_backChecked;
+}
+
+
+void
+SlideSwitchButton::createKnob()
+{
+    const qreal knobWidth = sizeHint().height() * KNOB_ASPECT_RATIO;
+    m_knob = QPixmap( QSize( knobWidth, sizeHint().height() ) );
+    m_knob.fill( Qt::transparent );
+
+    QPainter p( &m_knob );
+    p.setRenderHint( QPainter::Antialiasing );
+
+    QLinearGradient gradient( 0, 0, 0, 1 );
+    gradient.setCoordinateMode( QGradient::ObjectBoundingMode );
+    gradient.setColorAt( 0, Qt::white );
+    gradient.setColorAt( 1, QColor( 223, 223, 223 ) );
+
+    p.setBrush( gradient );
+    p.setPen( QColor( 152, 152, 152 ) );
+
+    p.drawRoundedRect( m_knob.rect(), 3, 3 );
 }

@@ -65,6 +65,8 @@ private slots:
     void onCheckedStateChanged();
 
 private:
+    void createKnob();
+
     QPixmap m_knob;
 
     QString m_checkedText;

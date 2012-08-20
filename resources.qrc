@@ -153,6 +153,5 @@
         <file>data/images/add-contact.png</file>
         <file>data/images/account-none.png</file>
         <file>data/images/green-dot.png</file>
-	<file>data/images/sliderbutton_knob.png</file>
     </qresource>
 </RCC>
