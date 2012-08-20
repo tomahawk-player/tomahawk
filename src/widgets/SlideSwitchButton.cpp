@@ -118,7 +118,7 @@ SlideSwitchButton::mousePressEvent( QMouseEvent* e )
 void
 SlideSwitchButton::mouseReleaseEvent( QMouseEvent* e )
 {
-    const int delta = e->pos().x() - m_mouseDownPos.x();
+    const int delta = m_mouseDownPos.isNull() ? 0 : e->pos().x() - m_mouseDownPos.x();
     m_mouseDownPos = QPoint();
 
     // Only act as a real button if the user didn't drag
