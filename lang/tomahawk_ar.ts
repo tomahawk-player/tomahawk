@@ -1562,12 +1562,12 @@ connect and stream from you?</source>
 <context>
     <name>SlideSwitchButton</name>
     <message>
-        <location filename="../src/widgets/SlideSwitchButton.cpp" line="27"/>
+        <location filename="../src/widgets/SlideSwitchButton.cpp" line="44"/>
         <source>On</source>
         <translation>بدء</translation>
     </message>
     <message>
-        <location filename="../src/widgets/SlideSwitchButton.cpp" line="28"/>
+        <location filename="../src/widgets/SlideSwitchButton.cpp" line="45"/>
         <source>Off</source>
         <translation>إيقاف</translation>
     </message>

@@ -1561,12 +1561,12 @@ erlauben sich mit dir zu verbinden?</translation>
 <context>
     <name>SlideSwitchButton</name>
     <message>
-        <location filename="../src/widgets/SlideSwitchButton.cpp" line="27"/>
+        <location filename="../src/widgets/SlideSwitchButton.cpp" line="44"/>
         <source>On</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/widgets/SlideSwitchButton.cpp" line="28"/>
+        <location filename="../src/widgets/SlideSwitchButton.cpp" line="45"/>
         <source>Off</source>
         <translation type="unfinished"/>
     </message>

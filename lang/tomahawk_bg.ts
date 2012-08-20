@@ -1467,7 +1467,7 @@ Tomahaw създаде доклад относно това и изпращай�
         <location filename="../src/Settings_Advanced.ui" line="42"/>
         <source>Use UPnP to establish port forward (recommended)</source>
         <translation>Ползвай UPnP за контролиране на пренасочването на портове
- (recommended)</translation>
+(препоръчително)</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="49"/>
@@ -1482,7 +1482,7 @@ Tomahaw създаде доклад относно това и изпращай�
     <message>
         <location filename="../src/Settings_Advanced.ui" line="80"/>
         <source>Static Host Name:</source>
-        <translation>татичен адрес</translation>
+        <translation>Статичен адрес</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="96"/>
@@ -1564,12 +1564,12 @@ Tomahaw създаде доклад относно това и изпращай�
 <context>
     <name>SlideSwitchButton</name>
     <message>
-        <location filename="../src/widgets/SlideSwitchButton.cpp" line="27"/>
+        <location filename="../src/widgets/SlideSwitchButton.cpp" line="44"/>
         <source>On</source>
         <translation>Включен</translation>
     </message>
     <message>
-        <location filename="../src/widgets/SlideSwitchButton.cpp" line="28"/>
+        <location filename="../src/widgets/SlideSwitchButton.cpp" line="45"/>
         <source>Off</source>
         <translation>Изключен</translation>
     </message>
