@@ -1972,7 +1972,7 @@ erlauben sich mit dir zu verbinden?</translation>
 <context>
     <name>SpotifyPlaylistUpdater</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="324"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="338"/>
         <source>Delete associated Spotify playlist?</source>
         <translation type="unfinished"/>
     </message>
@@ -3230,7 +3230,7 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
 <context>
     <name>Tomahawk::SpotifyParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="250"/>
+        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="252"/>
         <source>Error fetching Spotify information from the network!</source>
         <translation>Konnte Spotify-Daten nicht laden!</translation>
     </message>
