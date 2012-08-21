@@ -311,22 +311,6 @@ PlaylistItem::collaborative() const
     return collaborative;
 }
 
-int
-PlaylistItem::subscribers() const
-{
-    Q_ASSERT( !m_playlist.isNull() );
-
-    if ( m_playlist->updaters().isEmpty() )
-        return false;
-
-    foreach ( PlaylistUpdaterInterface* updater, m_playlist->updaters() )
-    {
-        if( updater->subscribers() )
-            return updater->subscribers();
-    }
-    return 0;
-}
-
 bool
 PlaylistItem::createOverlay()
 {
