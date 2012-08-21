@@ -153,6 +153,7 @@ GlobalActionManager::shortenLink( const QUrl& url, const QVariant& callbackObj )
     QNetworkRequest request;
     request.setUrl( url );
 
+    qDebug() << "Doing lookup:" << url.toEncoded();
     QNetworkReply *reply = TomahawkUtils::nam()->get( request );
     if ( callbackObj.isValid() )
         reply->setProperty( "callbackobj", callbackObj );

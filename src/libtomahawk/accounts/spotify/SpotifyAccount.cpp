@@ -1407,21 +1407,24 @@ SpotifyAccount::createActions()
 
     QAction* syncAction = new QAction( 0 );
     syncAction->setIcon( QIcon( RESPATH "images/spotify-logo.png" ) );
-    NewClosure( syncAction, SIGNAL( triggered( bool ) ), this, SLOT( syncActionTriggered( QAction* ) ), syncAction );
+    _detail::Closure* c = NewClosure( syncAction, SIGNAL( triggered( bool ) ), this, SLOT( syncActionTriggered( QAction* ) ), syncAction );
+    c->setAutoDelete( false );
     ActionCollection::instance()->addAction( ActionCollection::LocalPlaylists, syncAction, this );
     syncAction->setData( Sync);
     m_customActions.append( syncAction );
 
     QAction* subscribeAction = new QAction( 0 );
     subscribeAction->setIcon( QIcon( RESPATH "images/spotify-logo.png" ) );
-    NewClosure( subscribeAction, SIGNAL( triggered( bool ) ), this, SLOT( subscribeActionTriggered( QAction* ) ), subscribeAction );
+    c = NewClosure( subscribeAction, SIGNAL( triggered( bool ) ), this, SLOT( subscribeActionTriggered( QAction* ) ), subscribeAction );
+    c->setAutoDelete( false );
     ActionCollection::instance()->addAction( ActionCollection::LocalPlaylists, subscribeAction, this );
     subscribeAction->setData( Subscribe );
     m_customActions.append( subscribeAction );
 
     QAction* collaborateAction = new QAction( 0 );
     collaborateAction->setIcon( QIcon( RESPATH "images/spotify-logo.png" ) );
-    NewClosure( collaborateAction, SIGNAL( triggered( bool ) ), this, SLOT( collaborateActionTriggered( QAction* ) ), collaborateAction );
+    c = NewClosure( collaborateAction, SIGNAL( triggered( bool ) ), this, SLOT( collaborateActionTriggered( QAction* ) ), collaborateAction );
+    c->setAutoDelete( false );
     ActionCollection::instance()->addAction( ActionCollection::LocalPlaylists, collaborateAction, this );
     collaborateAction->setData( Collaborate );
     m_customActions.append( collaborateAction );
