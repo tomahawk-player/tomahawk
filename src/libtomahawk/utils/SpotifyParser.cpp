@@ -48,6 +48,7 @@ SpotifyParser::SpotifyParser( const QStringList& Urls, bool createNewPlaylist, Q
     , m_collaborative( false )
     , m_createNewPlaylist( createNewPlaylist )
     , m_browseJob( 0 )
+    , m_subscribers( 0 )
 
 {
     foreach ( const QString& url, Urls )
@@ -63,6 +64,7 @@ SpotifyParser::SpotifyParser( const QString& Url, bool createNewPlaylist, QObjec
     , m_collaborative( false )
     , m_createNewPlaylist( createNewPlaylist )
     , m_browseJob( 0 )
+    , m_subscribers( 0 )
 {
     lookupUrl( Url );
 }
@@ -331,6 +333,7 @@ SpotifyParser::playlistListingResult( const QString& msgType, const QVariantMap&
     m_single = false;
     m_creator = msg.value( "creator" ).toString();
     m_collaborative = msg.value( "collaborative" ).toBool();
+    m_subscribers = msg.value( "subscribers" ).toInt();
 
     const QVariantList tracks = msg.value( "tracks" ).toList();
     foreach ( const QVariant& blob, tracks )
@@ -397,7 +400,7 @@ SpotifyParser::checkBrowseFinished()
                     updater->setOwner( true );
 
                 updater->setCollaborative( m_collaborative );
-
+                updater->setSubscribers( m_subscribers );
                 // Just register the infos
                 Accounts::SpotifyAccount::instance()->registerPlaylistInfo( m_title, m_browseUri, m_browseUri, false, false, updater->owner() );
                 Accounts::SpotifyAccount::instance()->registerUpdaterForPlaylist( m_browseUri, updater );

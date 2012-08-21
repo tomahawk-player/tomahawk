@@ -569,6 +569,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
                 const QRect subRect( o.rect.right() - padding - imgWidth, o.rect.top() + padding, imgWidth, imgWidth );
                 painter->drawPixmap( subRect, icon );
             }
+
             if ( plItem->collaborative() )
             {
                 const int imgWidth = m_collaborativeOn.size().width();

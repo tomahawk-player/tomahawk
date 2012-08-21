@@ -86,6 +86,8 @@ public:
     virtual void setSubscribed( bool ) {}
     virtual void setCollaborative( bool ) {}
     virtual bool collaborative() const { return false; }
+    virtual void setSubscribers( int ) {}
+    virtual int subscribers() const { return 0; }
 
     // The int data value associated with each question must be unique across *all* playlist updaters,
     // as setQuestionResults is called with all questions from all updaters.

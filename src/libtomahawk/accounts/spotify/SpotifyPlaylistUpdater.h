@@ -61,6 +61,8 @@ public:
     void setSubscribedStatus( bool subscribed );
     bool canSubscribe() const;
     void setCanSubscribe( bool canSub );
+    void setSubscribers( int numSubscribers );
+    int subscribers() const { return m_subscribers; }
     // Collaborative actions
     void setOwner( bool owner );
     bool owner() const;
@@ -117,6 +119,7 @@ private:
     bool m_canSubscribe;
     bool m_isOwner;
     bool m_collaborative;
+    int m_subscribers;
 
     QQueue<_detail::Closure*> m_queuedOps;
 #ifndef ENABLE_HEADLESS

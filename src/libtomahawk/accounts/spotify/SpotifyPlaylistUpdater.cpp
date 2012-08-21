@@ -61,6 +61,7 @@ SpotifyUpdaterFactory::create( const Tomahawk::playlist_ptr& pl, const QVariantH
     const bool isSubscribed     = settings.value( "subscribed" ).toBool();
     const bool isOwner          = settings.value( "isOwner" ).toBool();
     const bool isCollaborative  = settings.value( "collaborative" ).toBool();
+    const bool subscribers      = settings.value( "subscribers" ).toInt();
     Q_ASSERT( !spotifyId.isEmpty() );
     SpotifyPlaylistUpdater* updater = new SpotifyPlaylistUpdater( m_account.data(), latestRev, spotifyId, pl );
     updater->setSync( sync );
@@ -68,6 +69,7 @@ SpotifyUpdaterFactory::create( const Tomahawk::playlist_ptr& pl, const QVariantH
     updater->setSubscribedStatus( isSubscribed );
     updater->setOwner( isOwner );
     updater->setCollaborative( isCollaborative );
+    updater->setSubscribers( subscribers );
     m_account.data()->registerUpdaterForPlaylist( spotifyId, updater );
 
     return updater;
@@ -85,6 +87,7 @@ SpotifyPlaylistUpdater::SpotifyPlaylistUpdater( SpotifyAccount* acct, const QStr
     , m_subscribed( false )
     , m_isOwner( false )
     , m_collaborative( false )
+    , m_subscribers( 0 )
 {
     init();
 }
@@ -315,6 +318,17 @@ SpotifyPlaylistUpdater::canSubscribe() const
     return m_canSubscribe;
 }
 
+void
+SpotifyPlaylistUpdater::setSubscribers( int numSubscribers )
+{
+    if ( m_subscribers == numSubscribers )
+        return;
+
+    m_subscribers = numSubscribers;
+
+    saveToSettings();
+    emit changed();
+}
 
 PlaylistDeleteQuestions
 SpotifyPlaylistUpdater::deleteQuestions() const
