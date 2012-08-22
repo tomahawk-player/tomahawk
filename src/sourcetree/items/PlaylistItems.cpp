@@ -305,11 +305,15 @@ PlaylistItem::collaborative() const
     {
         if( !updater->collaborative() )
             continue;
+        /// @note:  We only care for collaborations if in sync
+        if( !updater->sync() )
+            continue;
         collaborative = updater->collaborative();
     }
 
     return collaborative;
 }
+
 
 bool
 PlaylistItem::createOverlay()
