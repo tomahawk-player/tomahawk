@@ -3248,7 +3248,7 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/TomahawkApp.cpp" line="603"/>
+        <location filename="../src/TomahawkApp.cpp" line="604"/>
         <source>My Collection</source>
         <translation>Minha Coleção</translation>
     </message>
