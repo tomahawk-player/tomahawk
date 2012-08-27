@@ -748,7 +748,10 @@ TomahawkApp::instanceStarted( KDSingleApplicationGuard::Instance instance )
     const QStringList arguments = instance.arguments();
 
     if ( arguments.size() < 2 )
+    {
+        activate();
         return;
+    }
 
     QString arg1 = arguments[ 1 ];
     if ( loadUrl( arg1 ) )
@@ -769,4 +772,6 @@ TomahawkApp::instanceStarted( KDSingleApplicationGuard::Instance instance )
         AudioEngine::instance()->pause();
     else if ( arguments.contains( "--stop" ) )
         AudioEngine::instance()->stop();
+    else
+        activate();
 }
