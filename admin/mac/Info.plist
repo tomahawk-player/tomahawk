@@ -24,6 +24,8 @@
 	<string>Tomahawk</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>10.5.0</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
 	<key>SUFeedURL</key>
 	<string>http://download.tomahawk-player.org/sparkle/update.php</string>
 	<key>SUPublicDSAKeyFile</key>
