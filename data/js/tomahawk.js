@@ -184,10 +184,15 @@ Tomahawk.syncRequest = function(url)
 	}
 };
 
-Tomahawk.asyncRequest = function(url, callback)
+Tomahawk.asyncRequest = function(url, callback, extraHeaders)
 {
     var xmlHttpRequest = new XMLHttpRequest();
     xmlHttpRequest.open('GET', url, true);
+    if (extraHeaders) {
+        for(var headerName in extraHeaders) {
+            xmlHttpRequest.setRequestHeader(headerName, extraHeaders[headerName]);
+        }
+    }
     xmlHttpRequest.onreadystatechange = function() {
         if (xmlHttpRequest.readyState == 4 && xmlHttpRequest.status == 200) {
             callback.call(window, xmlHttpRequest);
