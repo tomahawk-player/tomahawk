@@ -37,6 +37,7 @@ namespace {
     const qreal LEFT_THRESHOLD = 0.3;
     const qreal RIGHT_THRESHOLD = 0.7;
 
+    const int ROUNDING_RADIUS = 4;
 }
 
 SlideSwitchButton::SlideSwitchButton( QWidget* parent )
@@ -182,7 +183,7 @@ SlideSwitchButton::paintEvent( QPaintEvent* event )
 
     QPainterPath borderPath;
     const QRect borderRect = QRect( 0, 0, width(), height() );
-    borderPath.addRoundedRect( borderRect, 3, 3 );
+    borderPath.addRoundedRect( borderRect, ROUNDING_RADIUS, ROUNDING_RADIUS );
     painter.fillPath( borderPath, gradient );
 
     painter.drawPixmap( m_knobX * ( width() - m_knob.width() ), 0, m_knob );
@@ -193,7 +194,7 @@ SlideSwitchButton::paintEvent( QPaintEvent* event )
         painter.setBrush( QBrush() );
         painter.setPen( palette.color( QPalette::Highlight ) );
         //TODO: should the whole thing be highlighted or just the knob?
-        painter.drawRoundedRect( borderRect, 3, 3 );
+        painter.drawRoundedRect( borderRect, ROUNDING_RADIUS, ROUNDING_RADIUS );
     }
 #endif
 
@@ -278,9 +279,5 @@ SlideSwitchButton::createKnob()
     p.setBrush( gradient );
     p.setPen( QColor( 152, 152, 152 ) );
 
-#ifdef Q_OS_MAC
-    p.drawRoundedRect( m_knob.rect(), 2, 2 );
-#else
-    p.drawRoundedRect( m_knob.rect().adjusted( 1, 1, -1, -1 ), 2, 2 );
-#endif
+    p.drawRoundedRect( m_knob.rect(), ROUNDING_RADIUS-1, ROUNDING_RADIUS-1 );
 }
