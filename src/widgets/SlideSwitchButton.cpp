@@ -278,5 +278,9 @@ SlideSwitchButton::createKnob()
     p.setBrush( gradient );
     p.setPen( QColor( 152, 152, 152 ) );
 
+#ifdef Q_OS_MAC
     p.drawRoundedRect( m_knob.rect(), 3, 3 );
+#else
+    p.drawRoundedRect( m_knob.rect().adjusted( 1, 1, -1, -1 ), 2, 2 );
+#endif
 }
