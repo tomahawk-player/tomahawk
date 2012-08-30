@@ -1561,12 +1561,12 @@ de se connecter et streamer de vous?</translation>
 <context>
     <name>SlideSwitchButton</name>
     <message>
-        <location filename="../src/widgets/SlideSwitchButton.cpp" line="44"/>
+        <location filename="../src/widgets/SlideSwitchButton.cpp" line="45"/>
         <source>On</source>
         <translation>On</translation>
     </message>
     <message>
-        <location filename="../src/widgets/SlideSwitchButton.cpp" line="45"/>
+        <location filename="../src/widgets/SlideSwitchButton.cpp" line="46"/>
         <source>Off</source>
         <translation>Off</translation>
     </message>
