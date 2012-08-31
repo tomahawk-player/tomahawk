@@ -1260,7 +1260,7 @@ SpotifyAccount::playlistCopyCreated( const QString& msgType, const QVariantMap& 
         return;
     }
 
-    SpotifyPlaylistInfo *info = new SpotifyPlaylistInfo( title, id, revid, true, false );
+    SpotifyPlaylistInfo *info = new SpotifyPlaylistInfo( title, id, revid, true, false, true );
     startPlaylistSync( info );
 }
 
@@ -1291,6 +1291,7 @@ SpotifyAccount::playlistCreated( const QString& msgType, const QVariantMap& msg,
 
     playlist_ptr playlist = m_waitingForCreateReply.take( qid );
     SpotifyPlaylistUpdater* updater = new SpotifyPlaylistUpdater( this, revid, id, playlist );
+    updater->setOwner( true );
     updater->setSync( true );
     m_updaters[ id ] = updater;
 }
