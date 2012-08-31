@@ -115,7 +115,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="73"/>
         <source>Go &amp;Online</source>
-        <translation>开始并在线 (&amp;O)</translation>
+        <translation>上线 &amp;O</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="75"/>
@@ -290,7 +290,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>来自</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="73"/>
@@ -842,12 +842,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="90"/>
         <source>Disc Number:</source>
-        <translation>光盘好：</translation>
+        <translation>曲目号：</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="119"/>
         <source>Duration:</source>
-        <translation>时常：</translation>
+        <translation>时长：</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="129"/>
@@ -897,12 +897,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="235"/>
         <source>Back</source>
-        <translation>后退</translation>
+        <translation>上一页</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="245"/>
         <source>Forward</source>
-        <translation type="unfinished"/>
+        <translation>下一个</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="48"/>
@@ -976,7 +976,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="49"/>
         <source>Duration</source>
-        <translation>时常</translation>
+        <translation>时长</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
@@ -1001,7 +1001,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Origin</source>
-        <translation type="unfinished"/>
+        <translation>来源</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
@@ -1468,22 +1468,22 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="49"/>
         <source>Use static external IP address/host name and port</source>
-        <translation type="unfinished"/>
+        <translation>使用固定的 IP 地址/主机和端口</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="62"/>
         <source>Set this to your external IP address or host name. Make sure to forward the port to this host!</source>
-        <translation type="unfinished"/>
+        <translation>将这里设置为指定的 IP 地址或主机名。请确认您将转发到这台主机的指定端口！</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="80"/>
         <source>Static Host Name:</source>
-        <translation type="unfinished"/>
+        <translation>静态主机名：</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="96"/>
         <source>Static Port:</source>
-        <translation type="unfinished"/>
+        <translation>端口：</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="134"/>
@@ -1518,7 +1518,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="245"/>
         <source>Clear All Access Control Entries</source>
-        <translation type="unfinished"/>
+        <translation>清除所有访问控制条目</translation>
     </message>
 </context>
 <context>
@@ -1539,12 +1539,15 @@ connect and stream from you?</source>
  and using it to craft personalized radios. Enabling this option
  will allow you (and all your friends) to create automatic playlists
  and stations based on your personal taste profile.</source>
-        <translation type="unfinished"/>
+        <translation>Echo Nest 支持追踪你的音轨元信息
+并使用它们来生成个性化的电台。启用这个选项
+将允许你（和你所有的朋友）基于你的个人口味
+创建自动播放列表和电台。</translation>
     </message>
     <message>
         <location filename="../src/Settings_Collection.ui" line="51"/>
         <source>Upload collection list to The Echo Nest to enable user radio</source>
-        <translation type="unfinished"/>
+        <translation>向 Echo Nest 上传专辑列表以启用电台</translation>
     </message>
     <message>
         <location filename="../src/Settings_Collection.ui" line="64"/>
@@ -2315,7 +2318,7 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="186"/>
         <source>Direct Message</source>
-        <translation type="unfinished"/>
+        <translation>Direct Message</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="187"/>
@@ -2553,7 +2556,7 @@ Please change the filters or try again.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/DynamicView.cpp" line="139"/>
         <source>Add some filters above to seed this station!</source>
-        <translation type="unfinished"/>
+        <translation>为电台添加一些收听条件！</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/DynamicView.cpp" line="144"/>
@@ -2563,7 +2566,7 @@ Please change the filters or try again.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/DynamicView.cpp" line="146"/>
         <source>Add some filters above, and press Generate to get started!</source>
-        <translation type="unfinished"/>
+        <translation>在上方写上一些条件，点击“生成”即可开始！</translation>
     </message>
 </context>
 <context>
@@ -2615,7 +2618,7 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="323"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="327"/>
         <source>Less</source>
-        <translation type="unfinished"/>
+        <translation>更少</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="256"/>
@@ -2626,7 +2629,7 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="323"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="327"/>
         <source>More</source>
-        <translation type="unfinished"/>
+        <translation>更多</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="298"/>
@@ -2872,7 +2875,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="818"/>
         <source>with a %1 mood</source>
-        <translation type="unfinished"/>
+        <translation>以 %1 的情绪</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="823"/>
@@ -2970,12 +2973,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="112"/>
         <source>Apply steering command</source>
-        <translation type="unfinished"/>
+        <translation>应用操作命令</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="118"/>
         <source>Reset all steering commands</source>
-        <translation type="unfinished"/>
+        <translation>重置所有操作命令</translation>
     </message>
 </context>
 <context>
@@ -2991,7 +2994,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="373"/>
         <source>Top Overall</source>
-        <translation type="unfinished"/>
+        <translation>全局排行榜</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="462"/>
@@ -3113,7 +3116,7 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/LatchManager.cpp" line="123"/>
         <location filename="../src/libtomahawk/LatchManager.cpp" line="144"/>
         <source>&amp;Listen Along</source>
-        <translation type="unfinished"/>
+        <translation>一起听 &amp;L</translation>
     </message>
 </context>
 <context>
@@ -3135,32 +3138,32 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="743"/>
         <source> and </source>
-        <translation type="unfinished"/>
+        <translation>和</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="751"/>
         <source>You</source>
-        <translation type="unfinished"/>
+        <translation>你</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="753"/>
         <source>you</source>
-        <translation type="unfinished"/>
+        <translation>你</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="762"/>
         <source>and</source>
-        <translation type="unfinished"/>
+        <translation>和</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/Query.cpp" line="762"/>
         <source>%n other(s)</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation><numerusform>%n 其他的</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="765"/>
         <source>%1 people</source>
-        <translation type="unfinished"/>
+        <translation>%1 人</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="767"/>
@@ -3190,12 +3193,12 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/Source.cpp" line="286"/>
         <location filename="../src/libtomahawk/Source.cpp" line="335"/>
         <source>Scanning (%L1 tracks)</source>
-        <translation type="unfinished"/>
+        <translation>扫描中 (%L1 条音轨)</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Source.cpp" line="288"/>
         <source>Scanning</source>
-        <translation type="unfinished"/>
+        <translation>扫描中</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Source.cpp" line="320"/>
@@ -3337,7 +3340,7 @@ enter the displayed PIN number here:</source>
         <location filename="../src/TomahawkWindow.ui" line="78"/>
         <location filename="../src/TomahawkWindow.cpp" line="1170"/>
         <source>Go &amp;Online</source>
-        <translation type="unfinished"/>
+        <translation>上线 &amp;O</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="83"/>
@@ -3457,22 +3460,22 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="259"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>后退</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="260"/>
         <source>Go back one page</source>
-        <translation type="unfinished"/>
+        <translation>转向上一页</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="261"/>
         <source>Forward</source>
-        <translation type="unfinished"/>
+        <translation>下一个</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="262"/>
         <source>Go forward one page</source>
-        <translation type="unfinished"/>
+        <translation>转向下一页</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="274"/>
@@ -3586,7 +3589,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1163"/>
         <source>Go &amp;Offline</source>
-        <translation>开始并离线(&amp;O)</translation>
+        <translation>离线 &amp;O </translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1182"/>
@@ -3641,7 +3644,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/context/pages/TopTracksContext.h" line="47"/>
         <source>Top Hits</source>
-        <translation type="unfinished"/>
+        <translation>人气排行</translation>
     </message>
 </context>
 <context>
@@ -3806,7 +3809,12 @@ If you only want to post tweets, you're done.
 If you want to connect Tomahawk to your friends using Twitter, select the type of tweet and press the button below to send a sync message. You must both be following each other as Direct Messages are used. Then be (very) patient -- it can take several minutes!
 
 You can re-send a sync message at any time simply by sending another tweet using the button.</source>
-        <translation type="unfinished"/>
+        <translation>
+如果你只想发表 Tweet, 那么操作已经完成。
+
+如果你想连接到 Twitter 上使用 Tomahawk 的朋友，请选择 Tweet 类型并点击下方的按钮来发表一条同步状态，不过前提是你们已经互相关注，因为我们调用了 Direct Message. 然后请保持（非常的）耐心 —— 这个操作可能会花费几分钟！
+
+你也可以随时再次发送同步信息，只需要点击下方的按钮发送另一条 Tweet。</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="244"/>
@@ -3821,12 +3829,12 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="281"/>
         <source>@Mention</source>
-        <translation type="unfinished"/>
+        <translation>@提及某人</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="286"/>
         <source>Direct Message</source>
-        <translation type="unfinished"/>
+        <translation>Direct Message</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="322"/>
@@ -3946,7 +3954,7 @@ Terms for %1:
     <message>
         <location filename="../src/xmppbot/XmppBot.cpp" line="317"/>
         <source>No terms found, sorry.</source>
-        <translation type="unfinished"/>
+        <translation>没有找到相关项目，抱歉。</translation>
     </message>
     <message>
         <location filename="../src/xmppbot/XmppBot.cpp" line="350"/>
@@ -4043,7 +4051,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="79"/>
         <source>Information query</source>
-        <translation type="unfinished"/>
+        <translation>信息块</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="83"/>
@@ -4058,7 +4066,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="91"/>
         <source>Custom</source>
-        <translation type="unfinished"/>
+        <translation>自定义</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="107"/>
@@ -4254,7 +4262,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="692"/>
         <source>I&apos;m sorry -- I&apos;m just an automatic presence used by Tomahawk Player (http://gettomahawk.com). If you are getting this message, the person you are trying to reach is probably not signed on, so please try again later!</source>
-        <translation type="unfinished"/>
+        <translation>对不起 —— 我只是一个由 Tomahawk 播放器(http://gettomahawk.com)自动生成的文字。如果你看到这条信息，说明你尝试连接的用户并不可用。请稍后再试！</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="786"/>
