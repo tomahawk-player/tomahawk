@@ -72,9 +72,10 @@ protected:
         p.drawLine( l1 );
         p.drawLine( l2 );
     }
-    virtual QSize sizeHint() const {
-        return QSize( 20, TomahawkUtils::headerHeight() );
 
+    virtual QSize sizeHint() const
+    {
+        return QSize( 20, TomahawkUtils::defaultFontHeight() + 8 );
     }
 
 };
@@ -92,7 +93,7 @@ BreadcrumbButton::BreadcrumbButton( Breadcrumb* parent, QAbstractItemModel* mode
     layout()->addWidget( m_combo );
     layout()->addWidget( m_arrow );
 
-    setFixedHeight( TomahawkUtils::headerHeight() );
+    setFixedHeight( TomahawkUtils::defaultFontHeight() + 8 );
     m_combo->setSizeAdjustPolicy( QComboBox::AdjustToContents );
 
     setSizePolicy( QSizePolicy::Maximum, QSizePolicy::Expanding );

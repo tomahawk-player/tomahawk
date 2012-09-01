@@ -198,9 +198,7 @@ TomahawkApp::init()
     QFont f = font();
     tDebug() << "Default font:" << f.pixelSize() << f.pointSize() << f.pointSizeF() << f.family();
     tDebug() << "Font heights:" << QFontMetrics( f ).height();
-    f.setPixelSize( HeaderLabel::defaultFontSize() );
-    QFontMetrics fm( f );
-    TomahawkUtils::setHeaderHeight( fm.height() + 8 );
+    TomahawkUtils::setDefaultFontSize( f.pointSize() );
 #endif
 
     TomahawkUtils::setHeadless( m_headless );

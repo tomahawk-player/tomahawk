@@ -50,7 +50,8 @@
 
 namespace TomahawkUtils
 {
-static int s_headerHeight = 0;
+static int s_defaultFontSize = 0;
+static int s_defaultFontHeight = 0;
 
 
 QPixmap
@@ -320,16 +321,30 @@ createAvatarFrame( const QPixmap &avatar )
 
 
 int
-headerHeight()
+defaultFontSize()
 {
-    return s_headerHeight;
+    return s_defaultFontSize;
+}
+
+
+int
+defaultFontHeight()
+{
+    if ( s_defaultFontHeight <= 0 )
+    {
+        QFont f;
+        f.setPointSize( defaultFontSize() );
+        s_defaultFontHeight = QFontMetrics( f ).height();
+    }
+
+    return s_defaultFontHeight;
 }
 
 
 void
-setHeaderHeight( int height )
+setDefaultFontSize( int points )
 {
-    s_headerHeight = height;
+    s_defaultFontSize = points;
 }
 
 

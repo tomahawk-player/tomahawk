@@ -54,7 +54,7 @@ ComboBox::paintEvent( QPaintEvent* )
     QStyleOptionComboBox cb;
     initStyleOption( &cb );
     QRect r = cb.rect;
-    r.setHeight( TomahawkUtils::headerHeight() );
+    r.setHeight( TomahawkUtils::defaultFontHeight() + 8 );
 
     StyleHelper::horizontalHeader( &p, r );
 
