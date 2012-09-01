@@ -19,7 +19,7 @@
 #include "AccountsToolButton.h"
 
 #include "AccountListWidget.h"
-#include "utils/TomahawkUtils.h"
+#include "utils/TomahawkUtilsGui.h"
 
 #include <QLabel>
 #include <QListView>
@@ -51,7 +51,7 @@ AccountsToolButton::AccountsToolButton( QWidget* parent )
 
     QFont clFont = connectionsLabel->font();
     clFont.setBold( true );
-    clFont.setPointSize( 12 );
+    clFont.setPointSize( TomahawkUtils::defaultFontSize() + 3 );
     connectionsLabel->setFont( clFont );
     connectionsLabel->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
 

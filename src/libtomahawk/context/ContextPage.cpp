@@ -69,7 +69,7 @@ ContextProxyPage::setPage( Tomahawk::ContextPage* page )
 
     QFont f( font() );
     f.setBold( true );
-    f.setPointSize( 8 );
+    f.setPointSize( TomahawkUtils::defaultFontSize() - 1 );
     QFontMetrics fm( f );
     QGraphicsLinearLayout* layout = new QGraphicsLinearLayout();
     layout->setContentsMargins( 4, fm.height() * 1.1, 4, 4 );
