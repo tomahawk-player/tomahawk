@@ -195,16 +195,16 @@ TomahawkApp::init()
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
     setQuitOnLastWindowClosed( false );
 
-    QFont f = APP->font();
+    QFont f = font();
+    tDebug() << "Default font:" << f.pixelSize() << f.pointSize() << f.pointSizeF() << f.family();
+    tDebug() << "Font heights:" << QFontMetrics( f ).height();
     f.setPixelSize( HeaderLabel::defaultFontSize() );
     QFontMetrics fm( f );
     TomahawkUtils::setHeaderHeight( fm.height() + 8 );
 #endif
 
     TomahawkUtils::setHeadless( m_headless );
-
     TomahawkSettings* s = TomahawkSettings::instance();
-
     new ACLRegistryImpl( this );
 
     tDebug( LOGINFO ) << "Setting NAM.";
@@ -334,10 +334,9 @@ TomahawkApp::init()
     // A bug in Qt means the wheel_scroll_lines setting gets ignored and replaced
     // with the default value of 3 in QApplicationPrivate::initialize.
     {
-        QSettings qt_settings(QSettings::UserScope, "Trolltech");
-        qt_settings.beginGroup("Qt");
-        QApplication::setWheelScrollLines(
-            qt_settings.value("wheelScrollLines", QApplication::wheelScrollLines()).toInt());
+        QSettings qt_settings( QSettings::UserScope, "Trolltech" );
+        qt_settings.beginGroup( "Qt" );
+        QApplication::setWheelScrollLines( qt_settings.value( "wheelScrollLines", QApplication::wheelScrollLines() ).toInt() );
     }
 
 #ifndef ENABLE_HEADLESS
