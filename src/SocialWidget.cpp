@@ -24,12 +24,12 @@
 #include <QPropertyAnimation>
 
 #include "GlobalActionManager.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 #include "Source.h"
 
 #define CORNER_ROUNDNESS 8.0
 #define FADING_DURATION 500
-#define FONT_SIZE 16
 #define OPACITY 0.85
 
 
@@ -48,14 +48,7 @@ SocialWidget::SocialWidget( QWidget* parent )
     m_timer.setSingleShot( true );
     connect( &m_timer, SIGNAL( timeout() ), this, SLOT( hide() ) );
 
-#ifdef Q_WS_MAC
-    QFont f( font() );
-    f.setPointSize( f.pointSize() - 2 );
-    setFont( f );
-#endif
-
     ui->charsLeftLabel->setForegroundRole( QPalette::BrightText );
-    
     ui->buttonBox->button( QDialogButtonBox::Ok )->setText( tr( "Tweet" ) );
     
     m_parent->installEventFilter( this );
@@ -171,9 +164,8 @@ SocialWidget::paintEvent( QPaintEvent* event )
     QTextOption to( Qt::AlignCenter );
     to.setWrapMode( QTextOption::WrapAtWordBoundaryOrAnywhere );
 
-    // shrink to fit if needed
     QFont f( font() );
-    f.setPointSize( FONT_SIZE );
+    f.setPointSize( TomahawkUtils::defaultFontSize() + 7 );
     f.setBold( true );
 
     QRectF textRect = r.adjusted( 8, 8, -8, -8 );

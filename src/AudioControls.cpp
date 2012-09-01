@@ -54,7 +54,7 @@ AudioControls::AudioControls( QWidget* parent )
     setAcceptDrops( true );
 
     QFont font( ui->artistTrackLabel->font() );
-    font.setPixelSize( 12 );
+    font.setPointSize( TomahawkUtils::defaultFontSize() );
 
     ui->artistTrackLabel->setFont( font );
     ui->artistTrackLabel->setElideMode( Qt::ElideMiddle );
@@ -67,7 +67,7 @@ AudioControls::AudioControls( QWidget* parent )
     ui->timeLabel->setFont( font );
     ui->timeLeftLabel->setFont( font );
 
-    font.setPixelSize( 9 );
+    font.setPointSize( TomahawkUtils::defaultFontSize() - 2 );
     ui->ownerLabel->setFont( font );
 
     ui->prevButton->setPixmap( RESPATH "images/back-rest.png" );

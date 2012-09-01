@@ -23,11 +23,11 @@
 #include <QPropertyAnimation>
 
 #include "PlayableProxyModel.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
 #define CORNER_ROUNDNESS 8.0
 #define FADING_DURATION 500
-#define FONT_SIZE 16
 #define OPACITY 0.70
 
 
@@ -75,12 +75,6 @@ OverlayWidget::init()
 
     m_timer.setSingleShot( true );
     connect( &m_timer, SIGNAL( timeout() ), this, SLOT( hide() ) );
-    
-#ifdef Q_WS_MAC
-    QFont f( font() );
-    f.setPointSize( f.pointSize() - 2 );
-    setFont( f );
-#endif
 }
 
 
@@ -229,7 +223,7 @@ OverlayWidget::paintEvent( QPaintEvent* event )
 
     // shrink to fit if needed
     QFont f( font() );
-    f.setPointSize( FONT_SIZE );
+    f.setPointSize( TomahawkUtils::defaultFontSize() + 7 );
     f.setBold( true );
 
     QRectF textRect = r.adjusted( 8, 8, -8, -8 );
