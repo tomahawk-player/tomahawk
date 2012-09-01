@@ -44,31 +44,24 @@ InfoBar::InfoBar( QWidget* parent )
     , ui( new Ui::InfoBar )
     , m_queryLabel( 0 )
 {
-    int requiredHeight = 0;
-
     ui->setupUi( this );
     TomahawkUtils::unmarginLayout( layout() );
     layout()->setContentsMargins( 8, 4, 8, 4 );
-    requiredHeight += 8; // Top + bottom margins
 
     QFont boldFont = ui->captionLabel->font();
-    boldFont.setPointSize( 16 );
+    boldFont.setPointSize( TomahawkUtils::defaultFontSize() + 5 );
     boldFont.setBold( true );
     ui->captionLabel->setFont( boldFont );
     ui->captionLabel->setElideMode( Qt::ElideRight );
 
     QFontMetrics boldFontMetrics( boldFont );
-    requiredHeight += boldFontMetrics.height();
-
-    boldFont.setPointSize( 10 );
+    boldFont.setPointSize( TomahawkUtils::defaultFontSize() + 1 );
     boldFont.setBold( false );
     ui->descriptionLabel->setFont( boldFont );
 
     boldFontMetrics = QFontMetrics( boldFont );
-    requiredHeight += boldFontMetrics.height();
-
     QFont regFont = ui->longDescriptionLabel->font();
-    regFont.setPointSize( 9 );
+    regFont.setPointSize( TomahawkUtils::defaultFontSize() );
     ui->longDescriptionLabel->setFont( regFont );
 
     m_whitePal = ui->captionLabel->palette();
@@ -79,11 +72,7 @@ InfoBar::InfoBar( QWidget* parent )
     ui->longDescriptionLabel->setPalette( m_whitePal );
 
     ui->captionLabel->setMargin( 6 );
-    requiredHeight += 2*6;
-
     ui->descriptionLabel->setMargin( 6 );
-    requiredHeight += 2*6;
-
     ui->longDescriptionLabel->setMargin( 4 );
 
     ui->captionLabel->setText( QString() );
@@ -108,9 +97,7 @@ InfoBar::InfoBar( QWidget* parent )
 
     setAutoFillBackground( true );
 
-    setMinimumHeight( requiredHeight );
-    setMaximumHeight( requiredHeight );
-
+    setFixedHeight( 80 );
     createTile();
 
     connect( ViewManager::instance(), SIGNAL( filterAvailable( bool ) ), SLOT( setFilterAvailable( bool ) ) );

@@ -51,11 +51,11 @@ FlexibleHeader::FlexibleHeader( FlexibleView* parent )
     ui->descLabel->setPalette( pal );
 
     QFont font = ui->captionLabel->font();
-    font.setPointSize( 13 );
+    font.setPointSize( TomahawkUtils::defaultFontSize() + 4 );
     font.setBold( true );
     ui->captionLabel->setFont( font );
 
-    font.setPointSize( 8 );
+    font.setPointSize( TomahawkUtils::defaultFontSize() );
     ui->descLabel->setFont( font );
 
     ui->radioNormal->setFocusPolicy( Qt::NoFocus );

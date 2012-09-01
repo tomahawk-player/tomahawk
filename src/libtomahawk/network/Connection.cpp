@@ -262,7 +262,6 @@ Connection::doSetup()
         // Connections should always be in the same thread as the servent.
         qDebug() << "Fixing thead affinity...";
         moveToThread( m_servent->thread() );
-        qDebug() << Q_FUNC_INFO  << thread();
     }
 
     //stats timer calculates BW used by this connection
@@ -471,7 +470,6 @@ Connection::sendMsg( msg_ptr msg )
 void
 Connection::sendMsg_now( msg_ptr msg )
 {
-    //qDebug() << Q_FUNC_INFO << thread() << QThread::currentThread();
     Q_ASSERT( QThread::currentThread() == thread() );
 //    Q_ASSERT( this->isRunning() );
 
