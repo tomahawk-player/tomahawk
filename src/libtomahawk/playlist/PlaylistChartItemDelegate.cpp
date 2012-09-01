@@ -157,44 +157,44 @@ PlaylistChartItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         }
 
         QFont figureFont = opt.font;
-        figureFont.setPointSize( 17 );
+        figureFont.setPointSize( TomahawkUtils::defaultFontSize() + 6 );
         figureFont.setWeight( 99 );
 
         QFont boldFont = opt.font;
-        boldFont.setPointSize( 12 );
+        boldFont.setPointSize( TomahawkUtils::defaultFontSize() + 1 );
         boldFont.setWeight( 99 );
 
         QFont smallBoldFont = opt.font;
-        smallBoldFont.setPointSize( 9 );
+        smallBoldFont.setPointSize( TomahawkUtils::defaultFontSize() );
         smallBoldFont.setWeight( 60 );
 
         QFont durationFont = opt.font;
-        durationFont.setPointSize( 9 );
+        durationFont.setPointSize( TomahawkUtils::defaultFontSize() );
         durationFont.setWeight( 80 );
         QFontMetrics durationFontMetrics( durationFont );
 
         if ( index.row() == 0 )
         {
-            figureFont.setPointSize( 34 );
-            boldFont.setPointSize( 24 );
-            smallBoldFont.setPointSize( 20 );
+            figureFont.setPointSize( TomahawkUtils::defaultFontSize() + 33 );
+            boldFont.setPointSize( TomahawkUtils::defaultFontSize() + 13 );
+            smallBoldFont.setPointSize( TomahawkUtils::defaultFontSize() + 9 );
         }
         else if ( index.row() == 1 )
         {
-            figureFont.setPointSize( 28 );
-            boldFont.setPointSize( 20 );
-            smallBoldFont.setPointSize( 15 );
+            figureFont.setPointSize( TomahawkUtils::defaultFontSize() + 17 );
+            boldFont.setPointSize( TomahawkUtils::defaultFontSize() + 9 );
+            smallBoldFont.setPointSize( TomahawkUtils::defaultFontSize() + 4 );
         }
         else if ( index.row() == 2 )
         {
-            figureFont.setPointSize( 20 );
-            boldFont.setPointSize( 15 );
-            smallBoldFont.setPointSize( 11 );
+            figureFont.setPointSize( TomahawkUtils::defaultFontSize() + 9 );
+            boldFont.setPointSize( TomahawkUtils::defaultFontSize() + 4 );
+            smallBoldFont.setPointSize( TomahawkUtils::defaultFontSize() + 2 );
         }
         else if ( index.row() >= 10 )
         {
-            boldFont.setPointSize( 9 );
-            smallBoldFont.setPointSize( 8 );
+            boldFont.setPointSize( TomahawkUtils::defaultFontSize() );
+            smallBoldFont.setPointSize( TomahawkUtils::defaultFontSize() - 1 );
         }
 
         QRect figureRect = r.adjusted( 0, 0, -option.rect.width() + 60 - 6 + r.left(), 0 );

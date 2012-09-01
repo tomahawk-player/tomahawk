@@ -205,18 +205,18 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
             painter->drawPixmap( avatarRect, avatar );
 
         QFont boldFont = opt.font;
-        boldFont.setPointSize( 11 );
+        boldFont.setPointSize( TomahawkUtils::defaultFontSize() + 2 );
         boldFont.setWeight( 99 );
         QFontMetrics boldFontMetrics( boldFont );
 
         QFont smallBoldFont = opt.font;
-        smallBoldFont.setPointSize( 8 );
+        smallBoldFont.setPointSize( TomahawkUtils::defaultFontSize() - 1 );
         smallBoldFont.setBold( true );
         smallBoldFont.setWeight( 60 );
         QFontMetrics smallBoldFontMetrics( smallBoldFont );
 
         QFont smallFont = opt.font;
-        smallFont.setPointSize( 7 );
+        smallFont.setPointSize( TomahawkUtils::defaultFontSize() - 2 );
 
         r.adjust( pixmapRect.width() + 12, 1, -28 - avatar.width(), 0 );
         QRect leftRect = r.adjusted( 0, 0, -48, 0 );

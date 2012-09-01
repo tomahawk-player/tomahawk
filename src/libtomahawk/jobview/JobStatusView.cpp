@@ -62,17 +62,6 @@ JobStatusView::JobStatusView( AnimatedSplitter* parent )
     m_view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
     m_view->setUniformItemSizes( false );
 
-#ifndef Q_WS_WIN
-    QFont f = font();
-    f.setPointSize( f.pointSize() - 1 );
-    setFont( f );
-#endif
-
-#ifdef Q_WS_MAC
-    f.setPointSize( f.pointSize() - 2 );
-    setFont( f );
-#endif
-
     new PipelineStatusManager( this );
     new TransferStatusManager( this );
     new LatchedStatusManager( this );
