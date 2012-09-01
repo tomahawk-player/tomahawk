@@ -196,8 +196,13 @@ TomahawkApp::init()
     setQuitOnLastWindowClosed( false );
 
     QFont f = font();
+#ifdef Q_OS_MAC
+    f.setPointSize( f.pointSize() - 2 );
+    setFont( f );
+#endif
+
     tDebug() << "Default font:" << f.pixelSize() << f.pointSize() << f.pointSizeF() << f.family();
-    tDebug() << "Font heights:" << QFontMetrics( f ).height();
+    tDebug() << "Font height:" << QFontMetrics( f ).height();
     TomahawkUtils::setDefaultFontSize( f.pointSize() );
 #endif
 

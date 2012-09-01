@@ -69,9 +69,6 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     setContentsMargins( 0, 0, 0, 0 );
 
     QFont fnt;
-    fnt.setPointSize( TomahawkUtils::defaultFontSize() - 2 );
-    setFont( fnt );
-
     QFontMetrics fm( fnt );
     // This is sort of the longest string in there. With translations
     // we will never get it right so setting it to something reasonable for the average case

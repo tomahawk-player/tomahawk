@@ -85,15 +85,8 @@ ContextWidget::ContextWidget( QWidget* parent )
     ui->toggleButton->setPalette( whitePal );
     ui->toggleButton->setCursor( Qt::PointingHandCursor );
 
-    QFont boldFont = ui->toggleButton->font();
-    boldFont.setPointSize( 10 );
-    boldFont.setBold( true );
-    ui->toggleButton->setFont( boldFont );
-    QFontMetrics fm( boldFont );
-
-    m_minHeight = fm.height() * 1.2;
-
-    ui->toggleButton->setMinimumHeight( fm.height() * 1.2 );
+    m_minHeight = TomahawkUtils::defaultFontHeight() * 1.4;
+    ui->toggleButton->setMinimumHeight( m_minHeight );
 
     setAutoFillBackground( true );
     setFixedHeight( m_minHeight );
