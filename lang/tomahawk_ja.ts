@@ -67,7 +67,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/widgets/AccountWidget.cpp" line="128"/>
         <source>Invite</source>
-        <translation type="unfinished"/>
+        <translation>招待</translation>
     </message>
 </context>
 <context>
@@ -75,12 +75,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/widgets/AccountsToolButton.cpp" line="50"/>
         <source>Connections</source>
-        <translation type="unfinished"/>
+        <translation>コネクション</translation>
     </message>
     <message>
         <location filename="../src/widgets/AccountsToolButton.cpp" line="60"/>
         <source>Configure Accounts</source>
-        <translation type="unfinished"/>
+        <translation>アカウントを設定</translation>
     </message>
 </context>
 <context>
@@ -511,12 +511,12 @@ connect and stream from you?</source>
     </message>
     <message>
         <location filename="../src/libtomahawk/context/ContextWidget.ui" line="38"/>
-        <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="348"/>
+        <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="341"/>
         <source>Show Footnotes</source>
         <translation>脚注を表示</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="342"/>
+        <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="335"/>
         <source>Hide Footnotes</source>
         <translation>脚注を隠す</translation>
     </message>
@@ -652,7 +652,7 @@ connect and stream from you?</source>
         <translation>インフォメーションバー</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/infobar/InfoBar.cpp" line="103"/>
+        <location filename="../src/libtomahawk/infobar/InfoBar.cpp" line="92"/>
         <source>Filter...</source>
         <translation>フィルター...</translation>
     </message>
@@ -1306,17 +1306,17 @@ connect and stream from you?</source>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/QueueView.ui" line="41"/>
-        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="191"/>
+        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="188"/>
         <source>Open Queue</source>
         <translation>キューを表示</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="189"/>
+        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="186"/>
         <source>Open Queue - %n item(s)</source>
         <translation><numerusform>キューを表示 - %n項目</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="195"/>
+        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="192"/>
         <source>Close Queue</source>
         <translation>キューを隠す</translation>
     </message>
@@ -1393,22 +1393,22 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="123"/>
         <source>Install from file</source>
-        <translation type="unfinished"/>
+        <translation>ファイルからインストールする</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="222"/>
         <source>Configure the accounts and services used by Tomahawk to search and retrieve music, find your friends and update your status.</source>
-        <translation type="unfinished"/>
+        <translation>友達を探すこと、又はステータスの更新や音楽の検索と取得の為に利用するアカウントとサービスを設定。</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="226"/>
         <source>Manage how Tomahawk finds music on your computer.</source>
-        <translation type="unfinished"/>
+        <translation>音楽ファイルの検索方法を設定</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="228"/>
         <source>Configure Tomahawk&apos;s advanced settings, including network connectivity settings, browser interaction and more.</source>
-        <translation type="unfinished"/>
+        <translation>ネットワーク接続設定、又はブラウザー設定等の詳細設定を調整する。</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="443"/>
@@ -1436,12 +1436,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/Settings_Accounts.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>フォーム</translation>
     </message>
     <message>
         <location filename="../src/Settings_Accounts.ui" line="48"/>
         <source>Filter by capability:</source>
-        <translation type="unfinished"/>
+        <translation>機能別に分類</translation>
     </message>
 </context>
 <context>
@@ -1449,7 +1449,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="20"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>フォーム</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="29"/>
@@ -1777,68 +1777,68 @@ connect and stream from you?</source>
 <context>
     <name>SourceTreeView</name>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="202"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="199"/>
         <source>&amp;Copy Link</source>
         <translation>リンクをコピー</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="210"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="207"/>
         <source>&amp;Delete %1</source>
         <translation>%1を削除</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="214"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="211"/>
         <source>Add to my Playlists</source>
         <translation>プレイリストに追加する</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="216"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="213"/>
         <source>Add to my Automatic Playlists</source>
         <translation>自動プレイリストに追加する</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="218"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="215"/>
         <source>Add to my Stations</source>
         <translation>ステーションに追加する</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="206"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="203"/>
         <source>&amp;Export Playlist</source>
         <translation>プレイリストを書き出し</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="360"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="357"/>
         <source>playlist</source>
         <translation>プレイリスト</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="364"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="361"/>
         <source>automatic playlist</source>
         <translation>自動プレイリスト</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="368"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="365"/>
         <source>station</source>
         <translation>ステーション</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="391"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="388"/>
         <source>Would you like to delete the %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
         <translation>&lt;b&gt;&quot;%2&quot;&lt;/b&gt;と言う%1を削除しますか?</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="393"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="390"/>
         <source>Delete</source>
         <translation>削除</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="473"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="470"/>
         <source>Save XSPF</source>
         <translation>XSPFを保存する</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="474"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="471"/>
         <source>Playlists (*.xspf)</source>
         <translation>プレイリスト (*.xspf)</translation>
     </message>
@@ -3248,7 +3248,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/TomahawkApp.cpp" line="604"/>
+        <location filename="../src/TomahawkApp.cpp" line="606"/>
         <source>My Collection</source>
         <translation type="unfinished"/>
     </message>
@@ -3716,7 +3716,7 @@ Meta+Ctrl+Z</translation>
 <context>
     <name>TrackView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="508"/>
+        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="497"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation type="unfinished"/>
     </message>
@@ -3767,7 +3767,7 @@ Meta+Ctrl+Z</translation>
 <context>
     <name>TreeView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeView.cpp" line="297"/>
+        <location filename="../src/libtomahawk/playlist/TreeView.cpp" line="286"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>%1に一致する結果は見つかりませんでした。</translation>
     </message>
@@ -3909,12 +3909,12 @@ Twitterを使っている友達にTomahawkを接続したいなら、ツイー�
         <translation>最近再生したトラック</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="129"/>
+        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="128"/>
         <source>Recently played tracks</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="215"/>
+        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="214"/>
         <source>No recently created playlists in your network.</source>
         <translation>ネットワークに最近作成したプレイリストはありません。</translation>
     </message>
