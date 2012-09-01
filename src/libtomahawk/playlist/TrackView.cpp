@@ -80,17 +80,6 @@ TrackView::TrackView( QWidget* parent )
     sortByColumn( -1 );
     setContextMenuPolicy( Qt::CustomContextMenu );
 
-#ifndef Q_WS_WIN
-    QFont f = font();
-    f.setPointSize( f.pointSize() - 1 );
-    setFont( f );
-#endif
-
-#ifdef Q_WS_MAC
-    f.setPointSize( f.pointSize() - 2 );
-    setFont( f );
-#endif
-
     m_timer.setInterval( SCROLL_TIMEOUT );
     connect( verticalScrollBar(), SIGNAL( rangeChanged( int, int ) ), SLOT( onViewChanged() ) );
     connect( verticalScrollBar(), SIGNAL( valueChanged( int ) ), SLOT( onViewChanged() ) );

@@ -123,10 +123,9 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     m_tracksModel->setSource( source_ptr() );
 
     QFont f;
-    f.setPointSize( 9 );
     f.setBold( true );
     QFontMetrics fm( f );
-    ui->tracksView->setMinimumWidth( fm.width( tr("Recently played tracks") ) * 2 );
+    ui->tracksView->setMinimumWidth( fm.width( tr( "Recently played tracks" ) ) * 2 );
 
     m_recentAlbumsModel = new AlbumModel( ui->additionsView );
     ui->additionsView->setPlayableModel( m_recentAlbumsModel );
@@ -257,9 +256,9 @@ PlaylistDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelInde
     int height = 2 * 6; // margins
     QFont font = option.font;
     QFontMetrics fm1( font );
-    font.setPointSize( 8 );
+    font.setPointSize( TomahawkUtils::defaultFontSize() - 1 );
     height += fm1.height() * 3;
-    font.setPointSize( 9 );
+    font.setPointSize( TomahawkUtils::defaultFontSize() );
     QFontMetrics fm2( font );
     height += fm2.height();
 
@@ -286,15 +285,15 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     QTextOption to;
     to.setAlignment( Qt::AlignCenter );
     QFont font = opt.font;
-    font.setPointSize( 8 );
+    font.setPointSize( TomahawkUtils::defaultFontSize() - 1 );
 
     QFont boldFont = font;
     boldFont.setBold( true );
-    boldFont.setPointSize( 9 );
+    boldFont.setPointSize( TomahawkUtils::defaultFontSize() );
     QFontMetrics boldFontMetrics( boldFont );
 
     QFont figFont = boldFont;
-    figFont.setPointSize( 8 );
+    figFont.setPointSize( TomahawkUtils::defaultFontSize() - 1 );
 
     QPixmap icon;
     RecentlyPlayedPlaylistsModel::PlaylistTypes type = (RecentlyPlayedPlaylistsModel::PlaylistTypes)index.data( RecentlyPlayedPlaylistsModel::PlaylistTypeRole ).toInt();
