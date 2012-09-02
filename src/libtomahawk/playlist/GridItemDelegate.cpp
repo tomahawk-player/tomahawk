@@ -173,10 +173,10 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
 
     QString text;
     QFont font = opt.font;
-    font.setPixelSize( 10 );
+    font.setPointSize( TomahawkUtils::defaultFontSize() );
     QFont boldFont = font;
     boldFont.setBold( true );
-    boldFont.setPixelSize( 14 );
+    boldFont.setPointSize( TomahawkUtils::defaultFontSize() + 1 );
 
     QRect textRect = option.rect.adjusted( 6, option.rect.height() - 36, -4, -6 );
     painter->setFont( font );
