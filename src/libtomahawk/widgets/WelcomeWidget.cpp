@@ -304,9 +304,8 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     else if( type == RecentlyPlayedPlaylistsModel::Station )
         icon = m_stationIcon;
 
-    QRect pixmapRect = option.rect.adjusted( 10, 13, -option.rect.width() + option.rect.height() - 26, -13 );
+    QRect pixmapRect = option.rect.adjusted( 10, 14, -option.rect.width() + option.rect.height() - 18, -14 );
     icon = icon.scaled( pixmapRect.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation );
-
     painter->drawPixmap( pixmapRect, icon );
 
     if ( type != RecentlyPlayedPlaylistsModel::Station )
@@ -318,7 +317,7 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
 //         int bottomEdge = pixmapRect
         // right edge 10px past right edge of pixmapRect
         // bottom edge flush with bottom of pixmap
-        QRect rect( pixmapRect.right() - width , 0, width - 8, 0 );
+        QRect rect( pixmapRect.right() - width, 0, width - 8, 0 );
         rect.adjust( -2, 0, 0, 0 );
         rect.setTop( pixmapRect.bottom() - painter->fontMetrics().height() - 1 );
         rect.setBottom( pixmapRect.bottom() + 1 );

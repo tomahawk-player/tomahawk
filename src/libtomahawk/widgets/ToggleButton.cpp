@@ -21,6 +21,7 @@
 
 #include "widgets/HeaderLabel.h"
 #include "utils/StyleHelper.h"
+#include "utils/TomahawkUtilsGui.h"
 
 #include <QStylePainter>
 #include <QStyleOptionButton>
@@ -32,7 +33,7 @@ ToggleButton::ToggleButton( QWidget* parent )
 {
     QFont f( font() );
     f.setBold( true );
-    f.setPixelSize( 12 );
+    f.setPointSize( TomahawkUtils::defaultFontSize() + 1 );
 
     setFont( f );
     setFixedHeight( sizeHint().height() + 8 );
