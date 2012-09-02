@@ -147,9 +147,11 @@ MusicBrainzPlugin::artistSearchSlot()
     }
 
     QString artist_id = domNodeList.at( 0 ).toElement().attribute( "id" );
-    QString requestString( "http://musicbrainz.org/ws/2/release?status=official&type=album|ep" );
+    QString requestString( "http://musicbrainz.org/ws/2/release-group" );
     QUrl url( requestString );
     url.addQueryItem( "artist", artist_id );
+    url.addQueryItem( "type", "album" );
+    url.addQueryItem( "limit", "100" );
 
     QNetworkReply* newReply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
     newReply->setProperty( "requestData", oldReply->property( "requestData" ) );
@@ -174,9 +176,11 @@ MusicBrainzPlugin::albumSearchSlot()
     }
 
     QString artist_id = domNodeList.at( 0 ).toElement().attribute( "id" );
-    QString requestString( "http://musicbrainz.org/ws/2/release?status=official&type=album|ep" );
+    QString requestString( "http://musicbrainz.org/ws/2/release-group" );
     QUrl url( requestString );
     url.addQueryItem( "artist", artist_id );
+    url.addQueryItem( "type", "album|ep" );
+    url.addQueryItem( "limit", "100" );
 
     QNetworkReply* newReply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
     newReply->setProperty( "requestData", oldReply->property( "requestData" ) );
@@ -236,19 +240,29 @@ MusicBrainzPlugin::albumFoundSlot()
 
     QDomDocument doc;
     doc.setContent( reply->readAll() );
-    QDomNodeList domNodeList = doc.elementsByTagName( "title" );
-    if ( domNodeList.isEmpty() )
+    QDomNodeList groups = doc.elementsByTagName( "release-group" );
+    if ( groups.isEmpty() )
     {
         emit info( reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant() );
         return;
     }
 
     QStringList albums;
-    for ( int i = 0; i < domNodeList.count(); i++ )
+    for ( int i = 0; i < groups.count(); i++ )
     {
-        QString album = domNodeList.at( i ).toElement().text();
-        if ( !albums.contains( album ) )
-            albums << album;
+        QDomElement group = groups.at(i).toElement();
+        QDomNodeList secTypesDL = group.elementsByTagName("secondary-type");
+        QStringList secTypesSL;
+        for ( int i = 0; i < secTypesDL.count(); i++ )
+        {
+            secTypesSL.append(secTypesDL.at(i).toElement().text());
+        }
+        if ( !secTypesSL.contains("Live") &&  !secTypesSL.contains("Ep") && !secTypesSL.contains("Compilation") )
+        {
+            QString album = group.firstChildElement("title").text();
+            if ( !albums.contains( album ) )
+                albums << album;
+        }
     }
 
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
