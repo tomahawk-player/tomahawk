@@ -529,7 +529,6 @@ TomahawkWindow::setupSignals()
 
     // <Menu Items>
     ActionCollection *ac = ActionCollection::instance();
-    //    connect( ui->actionAddPeerManually, SIGNAL( triggered() ), SLOT( addPeerManually() ) );
     connect( ac->getAction( "preferences" ), SIGNAL( triggered() ), SLOT( showSettingsDialog() ) );
     connect( ac->getAction( "diagnostics" ), SIGNAL( triggered() ), SLOT( showDiagnosticsDialog() ) );
     connect( ac->getAction( "legalInfo" ), SIGNAL( triggered() ), SLOT( legalInfo() ) );
@@ -858,37 +857,6 @@ TomahawkWindow::rescanCollectionManually()
 {
     if ( TomahawkSettings::instance()->hasScannerPaths() )
         ScanManager::instance()->runFullRescan();
-}
-
-
-void
-TomahawkWindow::addPeerManually()
-{
-    TomahawkSettings* s = TomahawkSettings::instance();
-    bool ok;
-    QString addr = QInputDialog::getText( this, tr( "Connect To Peer" ),
-                                                tr( "Enter peer address:" ), QLineEdit::Normal,
-                                                s->value( "connip" ).toString(), &ok ); // FIXME
-    if ( !ok )
-        return;
-
-    s->setValue( "connip", addr );
-    QString ports = QInputDialog::getText( this, tr( "Connect To Peer" ),
-                                                 tr( "Enter peer port:" ), QLineEdit::Normal,
-                                                 s->value( "connport", "50210" ).toString(), &ok );
-    if ( !ok )
-        return;
-
-    s->setValue( "connport", ports );
-    int port = ports.toInt();
-    QString key = QInputDialog::getText( this, tr( "Connect To Peer" ),
-                                               tr( "Enter peer key:" ), QLineEdit::Normal,
-                                               "whitelist", &ok );
-    if ( !ok )
-        return;
-
-    qDebug() << "Attempting to connect to" << addr;
-    Servent::instance()->connectToPeer( addr, port, key );
 }
 
 
