@@ -150,7 +150,7 @@ MusicBrainzPlugin::artistSearchSlot()
     QString requestString( "http://musicbrainz.org/ws/2/release-group" );
     QUrl url( requestString );
     url.addQueryItem( "artist", artist_id );
-    url.addQueryItem( "type", "album" );
+    url.addQueryItem( "type", "album|ep" );
     url.addQueryItem( "limit", "100" );
 
     QNetworkReply* newReply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
@@ -257,7 +257,7 @@ MusicBrainzPlugin::albumFoundSlot()
         {
             secTypesSL.append(secTypesDL.at(i).toElement().text());
         }
-        if ( !secTypesSL.contains("Live") &&  !secTypesSL.contains("Ep") && !secTypesSL.contains("Compilation") )
+        if ( !secTypesSL.contains("Live") && !secTypesSL.contains("Compilation") )
         {
             QString album = group.firstChildElement("title").text();
             if ( !albums.contains( album ) )
