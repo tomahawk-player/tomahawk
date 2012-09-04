@@ -25,6 +25,7 @@ public slots:
             return;
 
         stack->setCurrentIndex(idx - 1);
+        dialog.data()->setWindowTitle(action->text());
     }
 
     void accepted() {
@@ -147,6 +148,7 @@ void QToolbarTabDialog::setCurrentIndex(int index)
 
     // 1 spacer item before the first action
     QAction* toCheck = pimpl->toolbar->actions().at(index + 1);
+    pimpl->dialog.data()->setWindowTitle(toCheck->text());
     if (pimpl->actionGroup->checkedAction() != toCheck)
         toCheck->setChecked(true);
 }
