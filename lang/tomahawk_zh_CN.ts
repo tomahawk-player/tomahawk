@@ -88,17 +88,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="55"/>
         <source>&amp;Listen Along</source>
-        <translation>独自收听</translation>
+        <translation>一块儿收听</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="58"/>
         <source>Stop &amp;Listening Along</source>
-        <translation>停止独自收听</translation>
+        <translation>停止一块儿收听</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="62"/>
         <source>&amp;Follow in real-time</source>
-        <translation>实时跟进 &amp;F</translation>
+        <translation>实时跟随收听</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="67"/>
@@ -277,7 +277,7 @@ connect and stream from you?</source>
         <location filename="../src/libtomahawk/playlist/AlbumModel.cpp" line="65"/>
         <location filename="../src/libtomahawk/playlist/AlbumModel.cpp" line="107"/>
         <source>All albums from %1</source>
-        <translation>来自 %1 的所有专辑</translation>
+        <translation>%1 的所有专辑</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/AlbumModel.cpp" line="109"/>
@@ -295,7 +295,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="73"/>
         <source>Top Hits</source>
-        <translation>最热曲目</translation>
+        <translation>最热歌曲</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="236"/>
@@ -443,7 +443,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="619"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
-        <translation>抱歉，Tomahawk 无法找到 %2 的音轨 &apos;%1&apos;</translation>
+        <translation>抱歉，Tomahawk 未找到 %2 的歌曲 &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="643"/>
@@ -513,7 +513,7 @@ connect and stream from you?</source>
         <location filename="../src/libtomahawk/context/ContextWidget.ui" line="38"/>
         <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="341"/>
         <source>Show Footnotes</source>
-        <translation>显示脚注</translation>
+        <translation>打开脚注</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="335"/>
@@ -666,7 +666,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="38"/>
         <source>Scrobble tracks to Last.fm</source>
-        <translation>将音轨发送至 Last.fm</translation>
+        <translation>将歌曲记录到 Last.fm</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="47"/>
@@ -691,7 +691,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="87"/>
         <source>Synchronize Loved Tracks</source>
-        <translation>同步喜欢的音轨</translation>
+        <translation>同步喜爱歌曲</translation>
     </message>
 </context>
 <context>
@@ -761,7 +761,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="54"/>
         <source>Saved tracks</source>
-        <translation>保存音轨</translation>
+        <translation>保存歌曲</translation>
     </message>
 </context>
 <context>
@@ -769,22 +769,22 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="54"/>
         <source>Top Loved Tracks</source>
-        <translation>最喜欢的音轨</translation>
+        <translation>最多喜爱的歌曲</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="76"/>
         <source>Sorry, we could not find any loved tracks!</source>
-        <translation>抱歉！没找到任何已喜欢的音轨。</translation>
+        <translation>抱歉！未找到任何喜爱歌曲。</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="78"/>
         <source>The most loved tracks from all your friends</source>
-        <translation>从朋友中获取的最喜欢音轨</translation>
+        <translation>从所有朋友中获取的最多喜爱歌曲</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="82"/>
         <source>All of your loved tracks</source>
-        <translation>所有喜欢的音轨</translation>
+        <translation>我所有的喜爱歌曲</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="84"/>
@@ -794,7 +794,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="56"/>
         <source>Loved Tracks</source>
-        <translation>喜爱曲目</translation>
+        <translation>喜爱歌曲</translation>
     </message>
 </context>
 <context>
@@ -842,7 +842,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="90"/>
         <source>Disc Number:</source>
-        <translation>曲目号：</translation>
+        <translation>唱片编号：</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="119"/>
@@ -971,7 +971,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="49"/>
         <source>Track</source>
-        <translation>音轨</translation>
+        <translation>歌曲</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="49"/>
@@ -1317,7 +1317,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="192"/>
         <source>Close Queue</source>
-        <translation>关闭队列</translation>
+        <translation>隐藏队列</translation>
     </message>
 </context>
 <context>
@@ -1539,10 +1539,9 @@ connect and stream from you?</source>
  and using it to craft personalized radios. Enabling this option
  will allow you (and all your friends) to create automatic playlists
  and stations based on your personal taste profile.</source>
-        <translation>Echo Nest 支持追踪你的音轨元信息
-并使用它们来生成个性化的电台。启用这个选项
-将允许你（和你所有的朋友）基于你的个人口味
-创建自动播放列表和电台。</translation>
+        <translation>The Echo Nest 支持追踪你的歌曲元信息并使用它来生
+成个性化的电台。启用这个选项将允许你（和你所有的
+朋友）基于你的个人口味创建自动播放列表和电台。</translation>
     </message>
     <message>
         <location filename="../src/Settings_Collection.ui" line="51"/>
@@ -1588,7 +1587,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/SocialPlaylistWidget.ui" line="63"/>
         <source>Most Played Tracks You Don&apos;t Have</source>
-        <translation>大量播放但你没有的音轨</translation>
+        <translation>大量播放但你目前没有的歌曲</translation>
     </message>
 </context>
 <context>
@@ -1644,7 +1643,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/SourceDelegate.cpp" line="54"/>
         <source>Track</source>
-        <translation>轨道</translation>
+        <translation>歌曲</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceDelegate.cpp" line="55"/>
@@ -1669,7 +1668,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/SourceDelegate.cpp" line="205"/>
         <source>All available tracks</source>
-        <translation>所有可用音轨</translation>
+        <translation>所有可用的歌曲</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceDelegate.cpp" line="302"/>
@@ -1699,7 +1698,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.ui" line="88"/>
         <source>Recently Played Tracks</source>
-        <translation>最近播放曲目</translation>
+        <translation>最近播放歌曲</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.cpp" line="70"/>
@@ -1738,7 +1737,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="141"/>
         <source>SuperCollection</source>
-        <translation>SuperCollection</translation>
+        <translation>超级收藏</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="518"/>
@@ -1758,17 +1757,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="556"/>
         <source>Recently Played Tracks</source>
-        <translation>最近播放曲目</translation>
+        <translation>最近播放歌曲</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="559"/>
         <source>Your recently played tracks</source>
-        <translation>你最近播放的曲目</translation>
+        <translation>你最近播放的歌曲</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="561"/>
         <source>%1&apos;s recently played tracks</source>
-        <translation>%1最近播放的曲目</translation>
+        <translation>%1最近播放的歌曲</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="568"/>
@@ -1890,12 +1889,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="291"/>
         <source>SuperCollection</source>
-        <translation>SuperCollection</translation>
+        <translation>超级收藏</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="285"/>
         <source>Dashboard</source>
-        <translation>Dashboard</translation>
+        <translation>概览</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="300"/>
@@ -1994,7 +1993,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/items/TemporaryPageItem.cpp" line="65"/>
         <source>Copy Track Link</source>
-        <translation>复制音轨链接</translation>
+        <translation>复制歌曲链接</translation>
     </message>
 </context>
 <context>
@@ -2410,17 +2409,17 @@ You may wish to try re-authenticating.</source>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="165"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="207"/>
         <source>Add to &amp;Queue</source>
-        <translation>添加到队列 (&amp;Q)</translation>
+        <translation>添加到队列</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="92"/>
         <source>Continue Playback after this &amp;Track</source>
-        <translation>在此音轨后继续播放 (&amp;T)</translation>
+        <translation>此歌曲后继续播放</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="94"/>
         <source>Stop Playback after this &amp;Track</source>
-        <translation>在此音轨后停止播放 (&amp;T)</translation>
+        <translation>此歌曲后停止播放</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="101"/>
@@ -2431,7 +2430,7 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="109"/>
         <source>&amp;Copy Track Link</source>
-        <translation>复制轨道地址 (&amp;C)</translation>
+        <translation>复制歌曲链接</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="175"/>
@@ -2456,7 +2455,7 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="112"/>
         <source>&amp;Show Track Page</source>
-        <translation>显示音轨页面 (&amp;S)</translation>
+        <translation>显示歌曲页面</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="125"/>
@@ -2494,7 +2493,7 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/libtomahawk/utils/DropJobNotifier.cpp" line="78"/>
         <source>track</source>
-        <translation>音轨</translation>
+        <translation>歌曲</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/DropJobNotifier.cpp" line="81"/>
@@ -2576,9 +2575,9 @@ Please change the filters or try again.</source>
         <source>Station ran out of tracks!
 
 Try tweaking the filters for a new set of songs to play.</source>
-        <translation>电台已经播放完所有曲目！
+        <translation>电台已经播放完所有歌曲！
 
-请尝试更换过滤条件以继续播放。</translation>
+请尝试更换过滤条件以便继续播放。</translation>
     </message>
 </context>
 <context>
@@ -3009,7 +3008,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="466"/>
         <source>Tracks</source>
-        <translation>轨道</translation>
+        <translation>歌曲</translation>
     </message>
 </context>
 <context>
@@ -3030,17 +3029,17 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="456"/>
         <source>Top Tracks</source>
-        <translation>Top 音轨</translation>
+        <translation>最热歌曲</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="459"/>
         <source>Loved Tracks</source>
-        <translation>喜爱曲目</translation>
+        <translation>喜爱歌曲</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="462"/>
         <source>Hyped Tracks</source>
-        <translation>活跃音轨</translation>
+        <translation>活跃歌曲</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="468"/>
@@ -3087,12 +3086,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="170"/>
         <source>Failed to save tracks</source>
-        <translation>保存轨道失败</translation>
+        <translation>保存歌曲失败</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="170"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
-        <translation>此播放列表中的一些轨道不含艺术家和标题信息，它们将被忽略。</translation>
+        <translation>播放列表中的一些歌曲缺失艺术家和标题。它们将被忽略。</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="192"/>
@@ -3168,7 +3167,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="767"/>
         <source>loved this track</source>
-        <translation>喜欢这条音轨</translation>
+        <translation>喜欢此歌曲</translation>
     </message>
 </context>
 <context>
@@ -3193,7 +3192,7 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/Source.cpp" line="286"/>
         <location filename="../src/libtomahawk/Source.cpp" line="335"/>
         <source>Scanning (%L1 tracks)</source>
-        <translation>扫描中 (%L1 条音轨)</translation>
+        <translation>扫描中 (%L1 首歌曲)</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Source.cpp" line="288"/>
@@ -3275,7 +3274,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="181"/>
         <source>&amp;Stop Playback after current Track</source>
-        <translation>在播放当前音轨后停止播放 &amp;S</translation>
+        <translation>播放当前歌曲后停止播放</translation>
     </message>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="76"/>
@@ -3316,7 +3315,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="179"/>
         <source>&amp;Continue Playback after current Track</source>
-        <translation>播放当前音轨后继续播放 &amp;C</translation>
+        <translation>播放当前歌曲后继续播放</translation>
     </message>
 </context>
 <context>
@@ -3534,22 +3533,22 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="961"/>
         <source>Failed to save tracks</source>
-        <translation>保存轨道时出错。</translation>
+        <translation>保存歌曲失败。</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="961"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
-        <translation>播放列表中的一些轨道没有任何艺术家和标题信息，它们将被忽略。</translation>
+        <translation>播放列表中的一些歌曲缺失艺术家和标题，它们将被忽略。</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="975"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped. Make sure you have a suitable Phonon backend and required plugins installed.</source>
-        <translation>抱歉，在访问音频设备或者指定的音轨时出错。当前音轨将被跳过。请确认您现在正在使用合适的 Phonon 后端并已经安装了必要的插件。</translation>
+        <translation>抱歉，访问音频设备或者指定的歌曲时出错。当前歌曲将被跳过。请确认你正在使用合适的 Phonon 后端并安装了必要的插件。</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="977"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped.</source>
-        <translation>抱歉，在访问音频设备或者指定的音轨时出错。当前音轨将被跳过。</translation>
+        <translation>抱歉，在访问音频设备或者指定的歌曲时出错。当前歌曲将被跳过。</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1009"/>
@@ -3662,7 +3661,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="198"/>
         <source>Track</source>
-        <translation>音轨</translation>
+        <translation>歌曲</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="216"/>
@@ -3682,7 +3681,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="89"/>
         <source>Similar Tracks</source>
-        <translation>相似音轨：</translation>
+        <translation>相似歌曲</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="97"/>
@@ -3692,12 +3691,12 @@ enter the displayed PIN number here:</source>
     <message numerus="yes">
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="234"/>
         <source>You&apos;ve listened to this track %n time(s).</source>
-        <translation><numerusform>此音轨你已经听过 %n 遍了。</numerusform></translation>
+        <translation><numerusform>你已经收听过此歌曲 %n 遍。</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="236"/>
         <source>You&apos;ve never listened to this track before.</source>
-        <translation>你之前从未听过此音轨。</translation>
+        <translation>你之前从未听过此歌曲。</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="240"/>
@@ -3870,7 +3869,7 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="341"/>
         <source>SuperCollection</source>
-        <translation>SuperCollection</translation>
+        <translation>超级收藏</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="342"/>
@@ -3880,12 +3879,12 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="396"/>
         <source>Recently Played Tracks</source>
-        <translation>最近播放曲目</translation>
+        <translation>最近播放歌曲</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="397"/>
         <source>Recently played tracks from all your friends</source>
-        <translation>所有朋友最近播放的曲目</translation>
+        <translation>所有朋友最近播放的歌曲</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="404"/>
@@ -3908,12 +3907,12 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/libtomahawk/widgets/WelcomeWidget.ui" line="70"/>
         <source>Recently Played Tracks</source>
-        <translation>最近播放曲目</translation>
+        <translation>最近播放歌曲</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="128"/>
         <source>Recently played tracks</source>
-        <translation>最近播放的音轨</translation>
+        <translation>最近播放的歌曲</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="214"/>
@@ -3992,7 +3991,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="52"/>
         <source>Some playlist entries were found without artist and track name, they will be omitted</source>
-        <translation>发现一些播放列表项目没有包含艺术家和音轨信息，它们将被忽略。</translation>
+        <translation>某些播放列表中的歌曲缺失艺术家和标题，它们将被忽略。</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="54"/>
@@ -4149,7 +4148,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="302"/>
         <source>Publish currently playing track</source>
-        <translation>公开当前收听音轨</translation>
+        <translation>公开当前收听歌曲</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="309"/>
