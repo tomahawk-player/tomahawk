@@ -91,6 +91,7 @@ ZeroconfPlugin::connectPlugin()
     m_advertisementTimer.start();
 }
 
+
 void
 ZeroconfPlugin::disconnectPlugin()
 {

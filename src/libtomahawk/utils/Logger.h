@@ -20,7 +20,6 @@
 #define TOMAHAWK_LOGGER_H
 
 #include <QDebug>
-#include <QStringList>
 
 #include "DllMacro.h"
 
