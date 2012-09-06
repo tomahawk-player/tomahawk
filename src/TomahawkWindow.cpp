@@ -1313,6 +1313,7 @@ TomahawkWindow::crashNow()
     TomahawkUtils::crash();
 }
 
+
 void
 TomahawkWindow::toggleMenuBar() //SLOT
 {
