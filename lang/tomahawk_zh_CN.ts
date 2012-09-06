@@ -986,12 +986,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Age</source>
-        <translation type="unfinished"/>
+        <translation>已发行</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Year</source>
-        <translation>发行年代</translation>
+        <translation>发行年</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
@@ -1402,7 +1402,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="226"/>
         <source>Manage how Tomahawk finds music on your computer.</source>
-        <translation>配置 Tomahawk 如何发现计算机上的音乐。</translation>
+        <translation>设置以便让 Tomahawk 发现你计算机上的音乐。</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="228"/>
@@ -2317,7 +2317,7 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="186"/>
         <source>Direct Message</source>
-        <translation>Direct Message</translation>
+        <translation>私信</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="187"/>
@@ -2378,7 +2378,7 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="284"/>
         <source>Your message has been posted!</source>
-        <translation>你的消息已经发送！</translation>
+        <translation>你的消息已发送！</translation>
     </message>
 </context>
 <context>
@@ -2470,12 +2470,12 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="168"/>
         <source>&amp;Show Album Page</source>
-        <translation>显示专辑页面 (&amp;S)</translation>
+        <translation>显示专辑页面</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="210"/>
         <source>&amp;Show Artist Page</source>
-        <translation>显示艺术家页面 (&amp;S)</translation>
+        <translation>显示艺术家页面</translation>
     </message>
 </context>
 <context>
