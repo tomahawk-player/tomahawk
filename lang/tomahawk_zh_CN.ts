@@ -160,7 +160,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="97"/>
         <source>Load &amp;XSPF...</source>
-        <translation>载入 XSPF &amp;X...</translation>
+        <translation>载入 XSPF...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="98"/>
@@ -205,12 +205,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="116"/>
         <source>About &amp;Tomahawk...</source>
-        <translation>关于 Tomahawk &amp;T...</translation>
+        <translation>关于 Tomahawk...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="118"/>
         <source>&amp;Legal Information...</source>
-        <translation>法律信息 &amp;L ...</translation>
+        <translation>法律信息...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="121"/>
@@ -220,7 +220,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="132"/>
         <source>&amp;Controls</source>
-        <translation>控制 &amp;C</translation>
+        <translation>控制</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="147"/>
@@ -235,7 +235,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="178"/>
         <source>&amp;Window</source>
-        <translation>窗口 &amp;W</translation>
+        <translation>窗口</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="191"/>
@@ -611,12 +611,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/DiagnosticsDialog.ui" line="42"/>
         <source>&amp;Copy to Clipboard</source>
-        <translation>拷贝剪贴板 (&amp;C)</translation>
+        <translation>拷贝剪贴板</translation>
     </message>
     <message>
         <location filename="../src/DiagnosticsDialog.ui" line="49"/>
         <source>Open &amp;Log-file</source>
-        <translation>打开日志文件 (&amp;L)</translation>
+        <translation>打开日志文件</translation>
     </message>
 </context>
 <context>
@@ -2402,7 +2402,7 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="84"/>
         <source>&amp;Play</source>
-        <translation>播放 (&amp;P)</translation>
+        <translation>播放</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="87"/>
@@ -2425,7 +2425,7 @@ You may wish to try re-authenticating.</source>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="101"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="346"/>
         <source>&amp;Love</source>
-        <translation>喜欢 (&amp;L)</translation>
+        <translation>喜欢</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="109"/>
@@ -2435,22 +2435,22 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="175"/>
         <source>Copy Album &amp;Link</source>
-        <translation>复制专辑链接 (&amp;L)</translation>
+        <translation>复制专辑链接</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="217"/>
         <source>Copy Artist &amp;Link</source>
-        <translation>复制艺术家链接 (&amp;L)</translation>
+        <translation>复制艺术家链接</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="341"/>
         <source>Un-&amp;Love</source>
-        <translation>不喜欢(&amp;L)</translation>
+        <translation>不喜欢</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="130"/>
         <source>&amp;Delete Items</source>
-        <translation>删除该项 (&amp;D)</translation>
+        <translation>删除该项</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="112"/>
@@ -2465,7 +2465,7 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="130"/>
         <source>&amp;Delete Item</source>
-        <translation>删除该项 (&amp;D)</translation>
+        <translation>删除该项</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="168"/>
@@ -3359,32 +3359,32 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="96"/>
         <source>&amp;Configure Tomahawk...</source>
-        <translation>配置 Tomahawk... (&amp;C)</translation>
+        <translation>配置 Tomahawk...</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="104"/>
         <source>Load &amp;XSPF...</source>
-        <translation>载入 XSPF (&amp;X) ... </translation>
+        <translation>载入 XSPF... </translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="109"/>
         <source>Create &amp;New Playlist...</source>
-        <translation>创建新的播放列表 (&amp;N)...</translation>
+        <translation>创建新的播放列表...</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="114"/>
         <source>About &amp;Tomahawk...</source>
-        <translation>关于 Tomahawk (T)...</translation>
+        <translation>关于 Tomahawk...</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="122"/>
         <source>Create New &amp;Automatic Playlist</source>
-        <translation>创建新自动播放列表 (&amp;A)</translation>
+        <translation>创建新自动播放列表</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="127"/>
         <source>Create New &amp;Station</source>
-        <translation>创建新电台 (&amp;S)</translation>
+        <translation>创建新电台</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="135"/>
@@ -3419,7 +3419,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="161"/>
         <source>&amp;Legal Info...</source>
-        <translation>法律信息 (&amp;L)... </translation>
+        <translation>法律信息... </translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="169"/>
@@ -3429,7 +3429,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="177"/>
         <source>Fully &amp;Rescan Collection</source>
-        <translation>重新完整扫描收藏 (&amp;R)</translation>
+        <translation>重新完整扫描收藏</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="180"/>
@@ -3496,7 +3496,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="298"/>
         <source>&amp;Main Menu</source>
-        <translation>主菜单 (&amp;M)</translation>
+        <translation>主菜单</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="850"/>
@@ -3583,12 +3583,12 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1137"/>
         <source>&amp;Play</source>
-        <translation>播放 (&amp;P)</translation>
+        <translation>播放</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1163"/>
         <source>Go &amp;Offline</source>
-        <translation>离线 &amp;O </translation>
+        <translation>离线</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1182"/>
