@@ -53,12 +53,10 @@ protected slots:
 
 
 private slots:
-    void artistSearchSlot();
-    void albumSearchSlot();
-    void tracksSearchSlot();
 
-    void albumFoundSlot();
-    void tracksFoundSlot();
+    void gotReleaseGroupsSlot();
+    void gotReleasesSlot();
+    void gotRecordingsSlot();
 };
 
 }
