@@ -112,7 +112,7 @@ SoundcloudParser::parseTrack( const QVariantMap& res )
 }
 
 void
-SoundcloudParser::SoundcloudLookupFinished()
+SoundcloudParser::soundcloudLookupFinished()
 {
 
     QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
@@ -187,7 +187,7 @@ SoundcloudParser::playlistCreated()
 }
 
 void
-SoundcloudParser::SoundcloudBrowseFinished()
+SoundcloudParser::soundcloudBrowseFinished()
 {
     QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
     Q_ASSERT( r );
