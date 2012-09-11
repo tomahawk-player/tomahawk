@@ -76,7 +76,7 @@ SoundcloudParser::lookupUrl( const QString& link )
     QUrl scLink( QString( "http://api.soundcloud.com/resolve.json?client_id=TiNg2DRYhBnp01DA3zNag&url=" ) + link );
     qDebug() << scLink.toString();
     QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( scLink ) );
-    connect( reply, SIGNAL( finished() ), this, SLOT( SoundcloudBrowseFinished() ) );
+    connect( reply, SIGNAL( finished() ), this, SLOT( soundcloudBrowseFinished() ) );
 
     m_browseJob = new DropJobNotifier( pixmap(), "Soundcloud", DropJob::All, reply );
     JobStatusView::instance()->model()->addJob( m_browseJob );
@@ -218,7 +218,7 @@ SoundcloudParser::SoundcloudBrowseFinished()
             if( m_type != DropJob::All )
             {
                 QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( QUrl(url) ) );
-                connect( reply, SIGNAL( finished() ), this, SLOT( SoundcloudLookupFinished() ) );
+                connect( reply, SIGNAL( finished() ), this, SLOT( soundcloudLookupFinished() ) );
             }
         }
     }

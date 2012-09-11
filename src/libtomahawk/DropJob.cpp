@@ -129,7 +129,7 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
         if ( url.contains( "spotify" ) && url.contains( "playlist" ) && s_canParseSpotifyPlaylists )
             return true;
 
-        if( url.contains( "soundcloud" ) && url.contains("sets") )
+        if( url.contains( "soundcloud" ) && url.contains( "sets" ) )
             return true;
 
         if ( url.contains( "grooveshark.com" ) && url.contains( "playlist" ) )
