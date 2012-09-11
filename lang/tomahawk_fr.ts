@@ -842,8 +842,8 @@ de se connecter et streamer de vous?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="90"/>
-        <source>Disc Number:</source>
-        <translation>Numéro Du Disque:</translation>
+        <source>Track Number:</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="119"/>
@@ -3180,7 +3180,7 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
 <context>
     <name>Tomahawk::ShortenedLinkParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/ShortenedLinkParser.cpp" line="99"/>
+        <location filename="../src/libtomahawk/utils/ShortenedLinkParser.cpp" line="100"/>
         <source>Network error parsing shortened link!</source>
         <translation>Erreur réseau lors du décodage de l&apos;URL courte!</translation>
     </message>
