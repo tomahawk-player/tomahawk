@@ -66,7 +66,8 @@ ShortenedLinkParser::handlesUrl( const QString& url )
              url.contains( "tinysong.com" ) ||
              url.contains( "grooveshark.com/s/~/" ) || // These redirect to the 'real' grooveshark track url
              url.contains( "grooveshark.com/#/s/~/" ) ||
-             url.contains( "rd.io" ) );
+             url.contains( "rd.io" ) ||
+             url.contains( "snd.sc" ) );
 }
 
 

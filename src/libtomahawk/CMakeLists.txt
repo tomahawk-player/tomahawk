@@ -102,6 +102,7 @@ set( libGuiSources
     utils/ItunesParser.cpp
     utils/RdioParser.cpp
     utils/ShortenedLinkParser.cpp
+    utils/SoundcloudParser.cpp
     utils/StyleHelper.cpp
     utils/DropJobNotifier.cpp
     utils/ProxyStyle.cpp
