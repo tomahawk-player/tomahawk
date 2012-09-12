@@ -31,6 +31,7 @@
 #include "utils/Closure.h"
 #include "SpotifyInfoPlugin.h"
 #include "infosystem/InfoSystem.h"
+#include "utils/Logger.h"
 
 #ifndef ENABLE_HEADLESS
 #include "jobview/JobStatusView.h"

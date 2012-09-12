@@ -33,8 +33,8 @@
 #include "utils/TomahawkUtils.h"
 #include "utils/Closure.h"
 #include "utils/Logger.h"
-
 #include "taglib/fileref.h"
+
 
 
 #include <QDialog>

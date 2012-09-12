@@ -22,6 +22,7 @@
 #include "SourceList.h"
 #include "TomahawkSettings.h"
 #include "ResolverAccount.h"
+#include "utils/Logger.h"
 
 #include <QtCore/QLibrary>
 #include <QtCore/QDir>

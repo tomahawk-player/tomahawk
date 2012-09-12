@@ -25,6 +25,7 @@
 #include "Pipeline.h"
 #include "TomahawkSettings.h"
 #include "Source.h"
+#include "utils/Logger.h"
 
 #include <QFile>
 #include <QFileInfo>

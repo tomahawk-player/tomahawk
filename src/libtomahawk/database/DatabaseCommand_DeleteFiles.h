@@ -29,7 +29,6 @@
 
 #include "DllMacro.h"
 
-#include "utils/Logger.h"
 
 class DLLEXPORT DatabaseCommand_DeleteFiles : public DatabaseCommandLoggable
 {

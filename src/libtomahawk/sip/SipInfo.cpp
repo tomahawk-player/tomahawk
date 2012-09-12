@@ -19,6 +19,8 @@
 
 #include "SipInfo.h"
 
+#include "utils/Logger.h"
+
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 
