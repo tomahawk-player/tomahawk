@@ -91,7 +91,7 @@ AudioControls::AudioControls( QWidget* parent )
 
     ui->socialButton->setFixedSize( QSize( 20, 20 ) );
     ui->loveButton->setFixedSize( QSize( 20, 20 ) );
-    ui->ownerButton->setFixedSize( QSize( 20, 20 ) );
+    ui->ownerButton->setFixedSize( QSize( 36, 36 ) );
 
 #ifdef Q_WS_MAC
     ui->ownerLabel->setForegroundRole( QPalette::Text );
