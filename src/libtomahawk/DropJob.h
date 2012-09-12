@@ -105,6 +105,8 @@ public:
     void handleM3u( const QString& urls );
     void handleSpotifyUrls( const QString& urls );
     void handleRdioUrls( const QString& urls );
+    void handleExfmUrls( const QString& urls );
+    void handleSoundcloudUrls( const QString& urls );
     void handleGroovesharkUrls( const QString& urls );
 
     static bool canParseSpotifyPlaylists() { return s_canParseSpotifyPlaylists; }
