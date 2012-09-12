@@ -308,7 +308,7 @@ Result::sourceIcon() const
         QPixmap avatar = collection()->source()->avatar( Source::FancyStyle );
         if ( !avatar )
         {
-            avatar = TomahawkUtils::createAvatarFrame( QPixmap( RESPATH "images/user-avatar.png" ) );
+            avatar = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultSourceAvatar, TomahawkUtils::AvatarInFrame );
         }
         return avatar;
     }

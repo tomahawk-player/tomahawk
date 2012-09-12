@@ -327,17 +327,14 @@ QtScriptResolver::init()
     m_weight  = m.value( "weight", 0 ).toUInt();
     m_timeout = m.value( "timeout", 25 ).toUInt() * 1000;
     QString iconPath = QFileInfo( filePath() ).path() + "/" + m.value( "icon" ).toString();
-    if ( !m_icon.load( iconPath ) )
-    {
-        iconPath = "none";
-    }
+    int success = m_icon.load( iconPath );
 
     // load config widget and apply settings
     loadUi();
     QVariantMap config = resolverUserConfig();
     fillDataInWidgets( config );
 
-    qDebug() << "JS" << filePath() << "READY," << "name" << m_name << "weight" << m_weight << "timeout" << m_timeout << "icon" << iconPath;
+    qDebug() << "JS" << filePath() << "READY," << "name" << m_name << "weight" << m_weight << "timeout" << m_timeout << "icon" << iconPath << "icon found" << success;
 
     m_ready = true;
 }
