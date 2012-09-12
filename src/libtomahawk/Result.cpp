@@ -28,6 +28,7 @@
 #include "database/DatabaseCommand_AllTracks.h"
 #include "database/DatabaseCommand_AddFiles.h"
 
+#include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
 using namespace Tomahawk;
@@ -304,7 +305,12 @@ Result::sourceIcon() const
     }
     else
     {
-        return collection()->source()->avatar( Source::FancyStyle );
+        QPixmap avatar = collection()->source()->avatar( Source::FancyStyle );
+        if ( !avatar )
+        {
+            avatar = TomahawkUtils::createAvatarFrame( QPixmap( RESPATH "images/user-avatar.png" ) );
+        }
+        return avatar;
     }
 }
 
