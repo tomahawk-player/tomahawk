@@ -132,11 +132,11 @@ SoundcloudParser::soundcloudLookupFinished()
             return;
         }
 
-        if( m_type == DropJob::Track )
+        if ( m_type == DropJob::Track )
         {
             parseTrack( res );
         }
-        else if( m_type == DropJob::Playlist )
+        else if ( m_type == DropJob::Playlist )
         {
             QString title, user, desc;
             title = res.value( "title" ).toString();
@@ -148,7 +148,7 @@ SoundcloudParser::soundcloudLookupFinished()
             foreach( const QVariant& track, tracks )
                 parseTrack( track.toMap() );
 
-            if( m_createNewPlaylist )
+            if ( m_createNewPlaylist )
             {
                 m_playlist = Playlist::create( SourceList::instance()->getLocal(),
                                            uuid(),
@@ -163,7 +163,7 @@ SoundcloudParser::soundcloudLookupFinished()
             }
 
         }
-        else if( m_type == DropJob::Artist )
+        else if ( m_type == DropJob::Artist )
         {
             // cant parse soundcloud json here atm.
         }
@@ -196,26 +196,26 @@ SoundcloudParser::soundcloudBrowseFinished()
 
     if ( r->error() == QNetworkReply::NoError )
     {
-        if( r->rawHeaderList().contains( "Location" ) )
+        if ( r->rawHeaderList().contains( "Location" ) )
         {
             QString url = r->rawHeader("Location");
-            if( url.contains( "tracks" ) )
+            if ( url.contains( "tracks" ) )
             {
                 m_type = DropJob::Track;
             }
-            else if( url.contains( "users" ) )
+            else if ( url.contains( "users" ) )
             {
                 // For now, dont handle user tracklists
                 m_type = DropJob::All; //DropJob::Artist;
                 url = url.replace( ".json", "/tracks.json" );
                 qDebug() << "Gots artist!" << url;
             }
-            else if( url.contains( "playlists" ) )
+            else if ( url.contains( "playlists" ) )
             {
                 m_type = DropJob::Playlist;
             }
 
-            if( m_type != DropJob::All )
+            if ( m_type != DropJob::All )
             {
                 QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( QUrl(url) ) );
                 connect( reply, SIGNAL( finished() ), this, SLOT( soundcloudLookupFinished() ) );
@@ -223,7 +223,7 @@ SoundcloudParser::soundcloudBrowseFinished()
         }
     }
 
-    if( m_type == DropJob::All )
+    if ( m_type == DropJob::All )
     { // No good
         m_queries.remove( r );
 

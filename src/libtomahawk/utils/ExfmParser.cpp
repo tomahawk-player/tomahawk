@@ -74,16 +74,16 @@ ExfmParser::lookupUrl( const QString& link )
 {
 
     const QString apiBase = "http://ex.fm/api/v3";
-    QString url(link);
+    QString url( link );
     QStringList paths;
     foreach( const QString& path, QUrl( link ).path().split( "/" ) )
     {
-        if( !path.isEmpty() )
+        if ( !path.isEmpty() )
             paths << path;
     }
 
     // User request
-    if( paths.count() == 1 )
+    if ( paths.count() == 1 )
     {
         m_type = DropJob::Artist;
         url = QString( apiBase + "/user/%1/trending" ).arg( paths.takeFirst() );
@@ -102,18 +102,18 @@ ExfmParser::lookupUrl( const QString& link )
         else if( ( url.contains( "site") && url.contains( "album" ) ) || url.contains( "mixtape-of-the-month" ) )
         {
             m_type = DropJob::Album;
-            if( url.contains( "album-of-the-week") )
+            if ( url.contains( "album-of-the-week") )
                 url = QString( apiBase + "/%1?%2" ).arg( "aotw" ).arg( "results=1" ); // Only need the first album, eg. this week
-            if( url.contains( "mixtape-of-the-month" ) )
+            if ( url.contains( "mixtape-of-the-month" ) )
                 url = QString( apiBase + "/%1?%2" ).arg( "motm" ).arg( "results=1" ); // Only need the first mixtape, eg. this week
         }
         else
         {
             m_type = DropJob::Playlist;
-            if( url.contains( "tastemakers" ) )
+            if ( url.contains( "tastemakers" ) )
                 url.replace( "trending", "explore" );
         }
-        if( m_type == DropJob::Playlist )
+        if ( m_type == DropJob::Playlist )
         {
             url.replace( "/genre/", "/tag/" );
             url.replace( "/search/", "/song/search/" ); // We can only search for tracks, even though we want an artist or whatever
@@ -127,7 +127,7 @@ ExfmParser::lookupUrl( const QString& link )
     tDebug() << "Looking up URL..." << url;
     QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( QUrl( url ) ) );
 
-    if( m_createNewPlaylist )
+    if ( m_createNewPlaylist )
         connect( reply, SIGNAL( finished() ), this, SLOT( exfmLookupFinished() ) );
     else
         connect( reply, SIGNAL( finished() ), this, SLOT( exfmBrowseFinished() ) );
@@ -191,13 +191,13 @@ ExfmParser::exfmLookupFinished()
 
         QStringList paths;
         foreach( const QString& path, r->url().path().split( "/" ) )
-            if( !path.isEmpty() )
+            if ( !path.isEmpty() )
                 paths << path;
 
         QString title, artist, desc;
         QVariantList tracks;
 
-        if( m_type == DropJob::Album )
+        if ( m_type == DropJob::Album )
         {
             QStringList meta = res.value( "site" ).toMap().value( "title" ).toString().split( ", by " );
             title = meta.takeFirst();
@@ -210,16 +210,16 @@ ExfmParser::exfmLookupFinished()
             title = paths.takeLast();
             title[0] = title[0].toUpper();
 
-            if( paths.contains( "trending") )
+            if ( paths.contains( "trending") )
                 title = "Trending " + title;
-            else if( paths.contains( "explore" ) )
+            else if ( paths.contains( "explore" ) )
                 title = "Explore " + title;
 
-            if( paths.contains( "user" ) )
+            if ( paths.contains( "user" ) )
             {
                 int index = paths.indexOf( "user");
-                if( index != -1 && paths.size() > index+1 )
-                    artist = paths.takeAt(paths.indexOf( "user") +1 );
+                if ( index != -1 && paths.size() > index+1 )
+                    artist = paths.takeAt(paths.indexOf( "user" ) +1 );
             }else
                 artist = "Ex.fm";
 
@@ -268,13 +268,13 @@ ExfmParser::exfmBrowseFinished()
         bool ok;
         QVariantMap res = p.parse( r, &ok ).toMap();
 
-        if( !ok )
+        if ( !ok )
         {
             qDebug() << "Failed to parse ex.fm json";
             return;
         }
 
-        if( m_type != DropJob::Track )
+        if ( m_type != DropJob::Track )
         {
             QVariantList tracks;
             if( m_type == DropJob::Album )
@@ -288,7 +288,6 @@ ExfmParser::exfmBrowseFinished()
         else
             parseTrack( res.value( "song" ).toMap() );
 
-        qDebug() << "Got tracks:" << m_tracks;
         if ( m_single && !m_tracks.isEmpty() )
             emit track( m_tracks.first() );
         else if ( !m_single && !m_tracks.isEmpty() )
