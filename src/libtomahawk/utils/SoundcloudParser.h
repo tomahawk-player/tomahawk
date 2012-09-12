@@ -26,10 +26,8 @@
 #include "DropJob.h"
 #include "jobview/JobStatusItem.h"
 #include <QObject>
-#include <QSet>
 #include <QtCore/QStringList>
 
-#define Soundcloud_PLAYLIST_API_URL "http://spotikea.tomahawk-player.org"
 
 /**
  * Small class to parse Soundcloud links into query_ptrs
@@ -38,8 +36,6 @@
  */
 
 class QNetworkReply;
-class SoundcloudAccount;
-class SoundcloudPlaylistUpdater;
 namespace Tomahawk
 {
 

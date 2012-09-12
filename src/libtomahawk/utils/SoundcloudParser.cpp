@@ -238,7 +238,7 @@ QPixmap
 SoundcloudParser::pixmap() const
 {
     if ( !s_pixmap )
-        s_pixmap = new QPixmap( RESPATH "images/Spotify-logo.png" );
+        s_pixmap = new QPixmap( RESPATH "images/soundcloud.png" );
 
     return *s_pixmap;
 }
