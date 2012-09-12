@@ -68,7 +68,6 @@ AudioControls::AudioControls( QWidget* parent )
     ui->timeLeftLabel->setFont( font );
 
     font.setPointSize( TomahawkUtils::defaultFontSize() - 2 );
-    ui->ownerLabel->setFont( font );
 
     ui->prevButton->setPixmap( RESPATH "images/back-rest.png" );
     ui->prevButton->setPixmap( RESPATH "images/back-pressed.png", QIcon::Off, QIcon::Active );
@@ -93,11 +92,6 @@ AudioControls::AudioControls( QWidget* parent )
     ui->loveButton->setFixedSize( QSize( 20, 20 ) );
     ui->ownerButton->setFixedSize( QSize( 36, 36 ) );
 
-#ifdef Q_WS_MAC
-    ui->ownerLabel->setForegroundRole( QPalette::Text );
-#else
-    ui->ownerLabel->setForegroundRole( QPalette::Dark );
-#endif
     ui->metaDataArea->setStyleSheet( "QWidget#metaDataArea {\nborder-width: 4px;\nborder-image: url(" RESPATH "images/now-playing-panel.png) 4 4 4 4 stretch stretch; }" );
 
     ui->seekSlider->setEnabled( true );
@@ -241,7 +235,6 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
 
     ui->artistTrackLabel->setResult( result );
     ui->albumLabel->setResult( result );
-    ui->ownerLabel->setText( result->friendlySource() );
 
     const QString duration = TomahawkUtils::timeToString( result.data()->duration() );
     ui->timeLabel->setFixedWidth( ui->timeLabel->fontMetrics().width( QString( duration.length(), QChar( '0' ) ) ) );
@@ -261,7 +254,6 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
 
     ui->timeLabel->setToolTip( tr( "Time Elapsed" ) );
     ui->timeLeftLabel->setToolTip( tr( "Time Remaining" ) );
-    ui->ownerLabel->setToolTip( tr( "Music Source" ) );
     ui->shuffleButton->setToolTip( tr( "Shuffle" ) );
     ui->repeatButton->setToolTip( tr( "Repeat" ) );
     ui->socialButton->setToolTip( tr( "Share" ) );
@@ -361,7 +353,6 @@ AudioControls::onPlaybackStopped()
 
     ui->artistTrackLabel->setText( "" );
     ui->albumLabel->setText( "" );
-    ui->ownerLabel->setText( "" );
     ui->timeLabel->setText( "" );
     ui->timeLeftLabel->setText( "" );
     ui->coverImage->setPixmap( QPixmap(), false );
@@ -381,7 +372,6 @@ AudioControls::onPlaybackStopped()
 
     ui->timeLabel->setToolTip( "" );
     ui->timeLeftLabel->setToolTip( "" );
-    ui->ownerLabel->setToolTip( "" );
     ui->shuffleButton->setToolTip( "" );
     ui->repeatButton->setToolTip( "" );
     ui->socialButton->setToolTip( "" );

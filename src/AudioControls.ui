@@ -267,24 +267,6 @@
           <item>
            <layout class="QVBoxLayout" name="verticalLayout_2">
             <item>
-             <widget class="QLabel" name="ownerLabel">
-              <property name="font">
-               <font>
-                <pointsize>7</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>Owner</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTop</set>
-              </property>
-              <property name="margin">
-               <number>0</number>
-              </property>
-             </widget>
-            </item>
-            <item>
              <layout class="QHBoxLayout" name="socialLayout">
               <item>
                <spacer name="socialSpacer">
