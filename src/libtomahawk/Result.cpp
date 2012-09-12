@@ -178,6 +178,7 @@ Result::toVariant() const
     m.insert( "album", album()->name() );
     m.insert( "track", track() );
     m.insert( "source", friendlySource() );
+    m.insert( "sourceIcon", sourceIcon() );
     m.insert( "mimetype", mimetype() );
     m.insert( "size", size() );
     m.insert( "bitrate", bitrate() );
@@ -291,6 +292,20 @@ Result::friendlySource() const
     }
     else
         return collection()->source()->friendlyName();
+}
+
+
+QPixmap
+Result::sourceIcon() const
+{
+    if ( collection().isNull() )
+    {
+        return m_sourceIcon;
+    }
+    else
+    {
+        return collection()->source()->avatar( Source::FancyStyle );
+    }
 }
 
 

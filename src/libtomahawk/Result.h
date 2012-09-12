@@ -21,6 +21,7 @@
 #define RESULT_H
 
 #include <QtCore/QObject>
+#include <QtGui/QPixmap>
 #include <QtCore/QSharedPointer>
 #include <QtCore/QVariant>
 
@@ -71,6 +72,7 @@ public:
     QString url() const { return m_url; }
     QString mimetype() const { return m_mimetype; }
     QString friendlySource() const;
+    QPixmap sourceIcon() const;
 
     unsigned int duration() const { return m_duration; }
     unsigned int bitrate() const { return m_bitrate; }
@@ -86,6 +88,7 @@ public:
     void setRID( RID id ) { m_rid = id; }
     void setCollection( const Tomahawk::collection_ptr& collection );
     void setFriendlySource( const QString& s ) { m_friendlySource = s; }
+    void setSourceIcon( const QPixmap& i ) { m_sourceIcon = i; }
     void setArtist( const Tomahawk::artist_ptr& artist );
     void setAlbum( const Tomahawk::album_ptr& album );
     void setComposer( const Tomahawk::artist_ptr& composer );
@@ -137,6 +140,7 @@ private:
     QString m_url;
     QString m_mimetype;
     QString m_friendlySource;
+    QPixmap m_sourceIcon;
 
     unsigned int m_duration;
     unsigned int m_bitrate;

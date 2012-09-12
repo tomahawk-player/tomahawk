@@ -87,9 +87,11 @@ AudioControls::AudioControls( QWidget* parent )
     ui->socialButton->setPixmap( RESPATH "images/share.png" );
     ui->loveButton->setPixmap( RESPATH "images/not-loved.png" );
     ui->loveButton->setCheckable( true );
+    ui->ownerButton->setPixmap( RESPATH "images/resolver-default.png" );
 
     ui->socialButton->setFixedSize( QSize( 20, 20 ) );
     ui->loveButton->setFixedSize( QSize( 20, 20 ) );
+    ui->ownerButton->setFixedSize( QSize( 20, 20 ) );
 
 #ifdef Q_WS_MAC
     ui->ownerLabel->setForegroundRole( QPalette::Text );
@@ -254,6 +256,8 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
     ui->loveButton->setVisible( true );
     ui->socialButton->setEnabled( true );
     ui->socialButton->setVisible( true );
+    ui->ownerButton->setEnabled( true );
+    ui->ownerButton->setVisible( true );
 
     ui->timeLabel->setToolTip( tr( "Time Elapsed" ) );
     ui->timeLeftLabel->setToolTip( tr( "Time Remaining" ) );
@@ -262,6 +266,9 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
     ui->repeatButton->setToolTip( tr( "Repeat" ) );
     ui->socialButton->setToolTip( tr( "Share" ) );
     ui->loveButton->setToolTip( tr( "Love" ) );
+    ui->ownerButton->setToolTip( QString( tr( "Playing from %1" ) ).arg( result->friendlySource() ) );
+    QPixmap sourceIcon = result->sourceIcon().scaled( ui->ownerButton->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    ui->ownerButton->setPixmap( sourceIcon );
 
     setCover();
     setSocialActions();
@@ -362,12 +369,15 @@ AudioControls::onPlaybackStopped()
     m_sliderTimeLine.stop();
     m_sliderTimeLine.setCurrentTime( 0 );
     m_phononTickCheckTimer.stop();
+    ui->ownerButton->setPixmap(  RESPATH "images/resolver-default.png" );
     
     ui->stackedLayout->setCurrentWidget( ui->playPauseButton );
     ui->loveButton->setEnabled( false );
     ui->loveButton->setVisible( false );
     ui->socialButton->setEnabled( false );
     ui->socialButton->setVisible( false );
+    ui->ownerButton->setEnabled( false );
+    ui->ownerButton->setVisible( false );
 
     ui->timeLabel->setToolTip( "" );
     ui->timeLeftLabel->setToolTip( "" );
@@ -376,6 +386,7 @@ AudioControls::onPlaybackStopped()
     ui->repeatButton->setToolTip( "" );
     ui->socialButton->setToolTip( "" );
     ui->loveButton->setToolTip( "" );
+    ui->ownerButton->setToolTip( "" );
 }
 
 
