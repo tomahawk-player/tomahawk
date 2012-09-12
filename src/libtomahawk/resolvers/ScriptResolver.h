@@ -42,6 +42,7 @@ public:
     static ExternalResolver* factory( const QString& exe );
 
     virtual QString name() const            { return m_name; }
+    virtual QPixmap icon() const            { return m_icon; }
     virtual unsigned int weight() const     { return m_weight; }
     virtual unsigned int preference() const { return m_preference; }
     virtual unsigned int timeout() const    { return m_timeout; }
@@ -82,6 +83,7 @@ private:
 
     QProcess m_proc;
     QString m_name;
+    QPixmap m_icon;
     unsigned int m_weight, m_preference, m_timeout, m_num_restarts;
     QWeakPointer< QWidget > m_configWidget;
 

@@ -35,7 +35,7 @@
 #include <shlwapi.h>
 #endif
 
-ScriptResolver::ScriptResolver( const QString& exe )
+ScriptResolver::ScriptResolver(const QString& exe)
     : Tomahawk::ExternalResolverGui( exe )
     , m_num_restarts( 0 )
     , m_msgsize( 0 )
@@ -57,6 +57,13 @@ ScriptResolver::ScriptResolver( const QString& exe )
 
     // set the name to the binary, if we launch properly we'll get the name the resolver reports
     m_name = QFileInfo( filePath() ).baseName();
+
+    // set the icon, if we launch properly we'll get the icon the resolver reports
+    QString iconPath = QFileInfo( filePath() ).path() + "/../images/icon.png";
+    if ( !m_icon.load( iconPath ) )
+    {
+        m_icon = QPixmap( RESPATH "images/resolver-default.png" );
+    }
 }
 
 
@@ -279,6 +286,7 @@ ScriptResolver::handleMsg( const QByteArray& msg )
             rp->setSize( m.value( "size" ).toUInt() );
             rp->setRID( uuid() );
             rp->setFriendlySource( m_name );
+            rp->setSourceIcon( m_icon );
             rp->setYear( m.value( "year").toUInt() );
             rp->setDiscNumber( m.value( "discnumber" ).toUInt() );
 
@@ -371,7 +379,13 @@ ScriptResolver::doSetup( const QVariantMap& m )
     m_name    = m.value( "name" ).toString();
     m_weight  = m.value( "weight", 0 ).toUInt();
     m_timeout = m.value( "timeout", 5 ).toUInt() * 1000;
-    qDebug() << "SCRIPT" << filePath() << "READY," << "name" << m_name << "weight" << m_weight << "timeout" << m_timeout;
+    QString iconPath = QFileInfo( filePath() ).path() + "/" + m.value( "icon" ).toString();
+    if ( !m_icon.load( iconPath ) )
+    {
+        iconPath = "none";
+    }
+
+    qDebug() << "SCRIPT" << filePath() << "READY," << "name" << m_name << "weight" << m_weight << "timeout" << m_timeout << "icon" << iconPath;
 
     m_ready = true;
     m_configSent = false;

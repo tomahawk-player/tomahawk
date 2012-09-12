@@ -231,6 +231,13 @@ QtScriptResolver::QtScriptResolver( const QString& scriptPath )
     m_engine = new ScriptEngine( this );
     m_name = QFileInfo( filePath() ).baseName();
 
+    // set the icon, if we launch properly we'll get the icon the resolver reports
+    QString iconPath = QFileInfo( filePath() ).path() + "/../images/icon.png";
+    if ( !m_icon.load( iconPath ) )
+    {
+        m_icon = QPixmap( RESPATH "images/resolver-default.png" );
+    }
+
     if ( !QFile::exists( filePath() ) )
     {
         tLog() << Q_FUNC_INFO << "Failed loading JavaScript resolver:" << scriptPath;
@@ -322,13 +329,18 @@ QtScriptResolver::init()
     m_name    = m.value( "name" ).toString();
     m_weight  = m.value( "weight", 0 ).toUInt();
     m_timeout = m.value( "timeout", 25 ).toUInt() * 1000;
+    QString iconPath = QFileInfo( filePath() ).path() + "/" + m.value( "icon" ).toString();
+    if ( !m_icon.load( iconPath ) )
+    {
+        iconPath = "none";
+    }
 
     // load config widget and apply settings
     loadUi();
     QVariantMap config = resolverUserConfig();
     fillDataInWidgets( config );
 
-    qDebug() << "JS" << filePath() << "READY," << "name" << m_name << "weight" << m_weight << "timeout" << m_timeout;
+    qDebug() << "JS" << filePath() << "READY," << "name" << m_name << "weight" << m_weight << "timeout" << m_timeout << "icon" << iconPath;
 
     m_ready = true;
 }
@@ -426,6 +438,7 @@ QtScriptResolver::parseResultVariantList( const QVariantList& reslist )
         rp->setSize( m.value( "size" ).toUInt() );
         rp->setRID( uuid() );
         rp->setFriendlySource( name() );
+        rp->setSourceIcon( icon() );
         rp->setScore( m.value( "score" ).toFloat() );
         rp->setDiscNumber( m.value( "discnumber" ).toUInt() );
 

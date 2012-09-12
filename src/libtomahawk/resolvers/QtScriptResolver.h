@@ -130,6 +130,7 @@ public:
     static ExternalResolver* factory( const QString& scriptPath );
 
     virtual QString name() const         { return m_name; }
+    virtual QPixmap icon() const         { return m_icon; }
     virtual unsigned int weight() const  { return m_weight; }
     virtual unsigned int timeout() const { return m_timeout; }
 
@@ -168,6 +169,7 @@ private:
     ScriptEngine* m_engine;
 
     QString m_name;
+    QPixmap m_icon;
     unsigned int m_weight, m_timeout;
 
     bool m_ready, m_stopped;
