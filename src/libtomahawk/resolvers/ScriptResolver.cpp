@@ -59,11 +59,7 @@ ScriptResolver::ScriptResolver(const QString& exe)
     m_name = QFileInfo( filePath() ).baseName();
 
     // set the icon, if we launch properly we'll get the icon the resolver reports
-    QString iconPath = QFileInfo( filePath() ).path() + "/../images/icon.png";
-    if ( !m_icon.load( iconPath ) )
-    {
-        m_icon = QPixmap( RESPATH "images/resolver-default.png" );
-    }
+    m_icon.load( RESPATH "images/resolver-default.png" );
 }
 
 
