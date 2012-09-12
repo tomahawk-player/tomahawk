@@ -103,6 +103,7 @@ set( libGuiSources
     utils/RdioParser.cpp
     utils/ShortenedLinkParser.cpp
     utils/SoundcloudParser.cpp
+    utils/ExfmParser.cpp
     utils/StyleHelper.cpp
     utils/DropJobNotifier.cpp
     utils/ProxyStyle.cpp
