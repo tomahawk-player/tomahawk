@@ -1630,7 +1630,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/SocialWidget.cpp" line="201"/>
         <source>Listening to &quot;%1&quot; by %2 on &quot;%3&quot;. %4</source>
-        <translation>正在听 %2 在专辑 &quot;%3&quot;. %4上的  &quot;%1&quot;。</translation>
+        <translation>正在听 &quot;%1&quot;，来自 %2 的专辑 &quot;%3&quot;。 %4</translation>
     </message>
     <message>
         <location filename="../src/SocialWidget.cpp" line="222"/>
