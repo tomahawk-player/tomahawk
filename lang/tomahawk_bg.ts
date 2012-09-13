@@ -383,7 +383,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/AudioControls.ui" line="383"/>
         <source>Time</source>
-        <translation>Продължителност</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="412"/>
@@ -850,7 +850,7 @@ Tomahaw създаде доклад относно това и изпращай�
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="119"/>
         <source>Duration:</source>
-        <translation>Продължителност:</translation>
+        <translation>Време:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="129"/>
@@ -979,7 +979,7 @@ Tomahaw създаде доклад относно това и изпращай�
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="49"/>
         <source>Duration</source>
-        <translation>Продължителност</translation>
+        <translation>Време</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
@@ -2756,7 +2756,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="395"/>
         <source>Duration</source>
-        <translation>Продължителност</translation>
+        <translation>Време</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="396"/>
