@@ -90,7 +90,7 @@ AudioControls::AudioControls( QWidget* parent )
 
     ui->socialButton->setFixedSize( QSize( 20, 20 ) );
     ui->loveButton->setFixedSize( QSize( 20, 20 ) );
-    ui->ownerButton->setFixedSize( QSize( 36, 36 ) );
+    ui->ownerButton->setFixedSize( QSize( 34, 34 ) );
 
     ui->metaDataArea->setStyleSheet( "QWidget#metaDataArea {\nborder-width: 4px;\nborder-image: url(" RESPATH "images/now-playing-panel.png) 4 4 4 4 stretch stretch; }" );
 
