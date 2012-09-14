@@ -168,12 +168,15 @@ MusicBrainzPlugin::gotReleaseGroupsSlot()
     {
         case InfoArtistReleases:
         {
+            QString popularId = releaseGroupsNL.at(0).firstChildElement( "artist-credit" ).firstChildElement( "name-credit" ).firstChildElement( "artist" ).attribute( "id" );
+
             QStringList albums;
             for ( int i = 0; i < releaseGroupsNL.count(); i++ )
             {
                 QString groupTitle = releaseGroupsNL.at(i).firstChildElement("title").text();
                 QString a = releaseGroupsNL.at(i).firstChildElement( "artist-credit" ).firstChildElement( "name-credit" ).firstChildElement( "artist" ).firstChildElement( "name" ).text();
-                if ( !albums.contains( groupTitle ) && hash["artist"] == a )
+                QString id = releaseGroupsNL.at(i).firstChildElement( "artist-credit" ).firstChildElement( "name-credit" ).firstChildElement( "artist" ).attribute( "id" );
+                if ( !albums.contains( groupTitle ) && hash["artist"] == a && id == popularId )
                 {
                     albums << groupTitle;
                     tDebug() << Q_FUNC_INFO << groupTitle;
