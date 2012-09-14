@@ -367,74 +367,74 @@ connect and stream from you?</source>
         <translation>البوم</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="277"/>
-        <source>Owner</source>
-        <translation>المالك</translation>
-    </message>
-    <message>
-        <location filename="../src/AudioControls.ui" line="314"/>
+        <location filename="../src/AudioControls.ui" line="296"/>
         <source>social</source>
         <translation>اجتماعي</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="330"/>
+        <location filename="../src/AudioControls.ui" line="312"/>
         <source>love</source>
         <translation>أحب</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="383"/>
+        <location filename="../src/AudioControls.ui" line="345"/>
+        <source>resolver</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/AudioControls.ui" line="381"/>
         <source>Time</source>
         <translation>الوقت</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="412"/>
+        <location filename="../src/AudioControls.ui" line="410"/>
         <source>Time Left</source>
         <translation>الوقت المتبقي</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="493"/>
-        <location filename="../src/AudioControls.cpp" line="261"/>
+        <location filename="../src/AudioControls.ui" line="491"/>
+        <location filename="../src/AudioControls.cpp" line="259"/>
         <source>Shuffle</source>
         <translation>خلط</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="506"/>
-        <location filename="../src/AudioControls.cpp" line="262"/>
+        <location filename="../src/AudioControls.ui" line="504"/>
+        <location filename="../src/AudioControls.cpp" line="260"/>
         <source>Repeat</source>
         <translation>إعادة</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="544"/>
+        <location filename="../src/AudioControls.ui" line="542"/>
         <source>Low</source>
         <translation>منخفض</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="576"/>
+        <location filename="../src/AudioControls.ui" line="574"/>
         <source>High</source>
         <translation>مرتفع</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="258"/>
+        <location filename="../src/AudioControls.cpp" line="257"/>
         <source>Time Elapsed</source>
         <translation>الوقت المنقضي</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="259"/>
+        <location filename="../src/AudioControls.cpp" line="258"/>
         <source>Time Remaining</source>
         <translation>الوقت المتبقي</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="260"/>
-        <source>Music Source</source>
-        <translation>مصدر الموسيقى</translation>
+        <location filename="../src/AudioControls.cpp" line="263"/>
+        <source>Playing from %1</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="263"/>
+        <location filename="../src/AudioControls.cpp" line="261"/>
         <source>Share</source>
         <translation>شارك</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="264"/>
+        <location filename="../src/AudioControls.cpp" line="262"/>
         <source>Love</source>
         <translation>أحب</translation>
     </message>

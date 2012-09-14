@@ -367,74 +367,74 @@ se conecte e faça o stream de você?</translation>
         <translation>Álbum</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="277"/>
-        <source>Owner</source>
-        <translation>Proprietário</translation>
-    </message>
-    <message>
-        <location filename="../src/AudioControls.ui" line="314"/>
+        <location filename="../src/AudioControls.ui" line="296"/>
         <source>social</source>
         <translation>social</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="330"/>
+        <location filename="../src/AudioControls.ui" line="312"/>
         <source>love</source>
         <translation>Favorita</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="383"/>
+        <location filename="../src/AudioControls.ui" line="345"/>
+        <source>resolver</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/AudioControls.ui" line="381"/>
         <source>Time</source>
         <translation>Tempo</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="412"/>
+        <location filename="../src/AudioControls.ui" line="410"/>
         <source>Time Left</source>
         <translation>Tempo restante</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="493"/>
-        <location filename="../src/AudioControls.cpp" line="261"/>
+        <location filename="../src/AudioControls.ui" line="491"/>
+        <location filename="../src/AudioControls.cpp" line="259"/>
         <source>Shuffle</source>
         <translation>Shuffle</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="506"/>
-        <location filename="../src/AudioControls.cpp" line="262"/>
+        <location filename="../src/AudioControls.ui" line="504"/>
+        <location filename="../src/AudioControls.cpp" line="260"/>
         <source>Repeat</source>
         <translation>Repetir</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="544"/>
+        <location filename="../src/AudioControls.ui" line="542"/>
         <source>Low</source>
         <translation>Diminuir</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="576"/>
+        <location filename="../src/AudioControls.ui" line="574"/>
         <source>High</source>
         <translation>Aumentar</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="258"/>
+        <location filename="../src/AudioControls.cpp" line="257"/>
         <source>Time Elapsed</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="259"/>
+        <location filename="../src/AudioControls.cpp" line="258"/>
         <source>Time Remaining</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="260"/>
-        <source>Music Source</source>
+        <location filename="../src/AudioControls.cpp" line="263"/>
+        <source>Playing from %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="263"/>
+        <location filename="../src/AudioControls.cpp" line="261"/>
         <source>Share</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="264"/>
+        <location filename="../src/AudioControls.cpp" line="262"/>
         <source>Love</source>
         <translation type="unfinished"/>
     </message>
