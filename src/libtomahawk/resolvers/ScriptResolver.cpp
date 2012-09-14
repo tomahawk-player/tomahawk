@@ -57,6 +57,9 @@ ScriptResolver::ScriptResolver( const QString& exe )
 
     // set the name to the binary, if we launch properly we'll get the name the resolver reports
     m_name = QFileInfo( filePath() ).baseName();
+
+    // set the icon, if we launch properly we'll get the icon the resolver reports
+    m_icon.load( RESPATH "images/resolver-default.png" );
 }
 
 
@@ -279,6 +282,8 @@ ScriptResolver::handleMsg( const QByteArray& msg )
             rp->setSize( m.value( "size" ).toUInt() );
             rp->setRID( uuid() );
             rp->setFriendlySource( m_name );
+            rp->setSourceIcon( m_icon );
+            rp->setPurchaseUrl( m.value( "purchaseUrl" ).toString() );
             rp->setYear( m.value( "year").toUInt() );
             rp->setDiscNumber( m.value( "discnumber" ).toUInt() );
 
@@ -371,7 +376,10 @@ ScriptResolver::doSetup( const QVariantMap& m )
     m_name    = m.value( "name" ).toString();
     m_weight  = m.value( "weight", 0 ).toUInt();
     m_timeout = m.value( "timeout", 5 ).toUInt() * 1000;
-    qDebug() << "SCRIPT" << filePath() << "READY," << "name" << m_name << "weight" << m_weight << "timeout" << m_timeout;
+    QString iconPath = QFileInfo( filePath() ).path() + "/" + m.value( "icon" ).toString();
+    int success = m_icon.load( iconPath );
+
+    qDebug() << "SCRIPT" << filePath() << "READY," << "name" << m_name << "weight" << m_weight << "timeout" << m_timeout << "icon" << iconPath << "icon found" << success;
 
     m_ready = true;
     m_configSent = false;

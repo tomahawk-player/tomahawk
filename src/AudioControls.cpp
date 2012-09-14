@@ -23,6 +23,7 @@
 #include <QtNetwork/QNetworkReply>
 #include <QtGui/QDropEvent>
 #include <QtGui/QMouseEvent>
+#include <QtGui/QDesktopServices>
 
 #include "audio/AudioEngine.h"
 #include "playlist/PlaylistView.h"
@@ -68,7 +69,6 @@ AudioControls::AudioControls( QWidget* parent )
     ui->timeLeftLabel->setFont( font );
 
     font.setPointSize( TomahawkUtils::defaultFontSize() - 2 );
-    ui->ownerLabel->setFont( font );
 
     ui->prevButton->setPixmap( RESPATH "images/back-rest.png" );
     ui->prevButton->setPixmap( RESPATH "images/back-pressed.png", QIcon::Off, QIcon::Active );
@@ -87,15 +87,12 @@ AudioControls::AudioControls( QWidget* parent )
     ui->socialButton->setPixmap( RESPATH "images/share.png" );
     ui->loveButton->setPixmap( RESPATH "images/not-loved.png" );
     ui->loveButton->setCheckable( true );
+    ui->ownerButton->setPixmap( RESPATH "images/resolver-default.png" );
 
     ui->socialButton->setFixedSize( QSize( 20, 20 ) );
     ui->loveButton->setFixedSize( QSize( 20, 20 ) );
+    ui->ownerButton->setFixedSize( QSize( 34, 34 ) );
 
-#ifdef Q_WS_MAC
-    ui->ownerLabel->setForegroundRole( QPalette::Text );
-#else
-    ui->ownerLabel->setForegroundRole( QPalette::Dark );
-#endif
     ui->metaDataArea->setStyleSheet( "QWidget#metaDataArea {\nborder-width: 4px;\nborder-image: url(" RESPATH "images/now-playing-panel.png) 4 4 4 4 stretch stretch; }" );
 
     ui->seekSlider->setEnabled( true );
@@ -128,6 +125,7 @@ AudioControls::AudioControls( QWidget* parent )
     connect( ui->albumLabel,       SIGNAL( clickedAlbum() ),  SLOT( onAlbumClicked() ) );
     connect( ui->socialButton,     SIGNAL( clicked() ),       SLOT( onSocialButtonClicked() ) );
     connect( ui->loveButton,       SIGNAL( clicked( bool ) ), SLOT( onLoveButtonClicked( bool ) ) );
+    connect( ui->ownerButton,      SIGNAL( clicked() ),       SLOT( onOwnerButtonClicked() ) );
 
     // <From AudioEngine>
     connect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), SLOT( onPlaybackLoading( Tomahawk::result_ptr ) ) );
@@ -239,7 +237,6 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
 
     ui->artistTrackLabel->setResult( result );
     ui->albumLabel->setResult( result );
-    ui->ownerLabel->setText( result->friendlySource() );
 
     const QString duration = TomahawkUtils::timeToString( result.data()->duration() );
     ui->timeLabel->setFixedWidth( ui->timeLabel->fontMetrics().width( QString( duration.length(), QChar( '0' ) ) ) );
@@ -254,14 +251,22 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
     ui->loveButton->setVisible( true );
     ui->socialButton->setEnabled( true );
     ui->socialButton->setVisible( true );
+    ui->ownerButton->setEnabled( true );
+    ui->ownerButton->setVisible( true );
 
     ui->timeLabel->setToolTip( tr( "Time Elapsed" ) );
     ui->timeLeftLabel->setToolTip( tr( "Time Remaining" ) );
-    ui->ownerLabel->setToolTip( tr( "Music Source" ) );
     ui->shuffleButton->setToolTip( tr( "Shuffle" ) );
     ui->repeatButton->setToolTip( tr( "Repeat" ) );
     ui->socialButton->setToolTip( tr( "Share" ) );
     ui->loveButton->setToolTip( tr( "Love" ) );
+    ui->ownerButton->setToolTip( QString( tr( "Playing from %1" ) ).arg( result->friendlySource() ) );
+    QPixmap sourceIcon = result->sourceIcon().scaled( ui->ownerButton->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    ui->ownerButton->setPixmap( sourceIcon );
+    if ( QUrl( result->purchaseUrl() ).isValid() || !result->collection().isNull() )
+        ui->ownerButton->setCursor( Qt::PointingHandCursor );
+    else
+        ui->ownerButton->setCursor( Qt::ArrowCursor );
 
     setCover();
     setSocialActions();
@@ -354,7 +359,6 @@ AudioControls::onPlaybackStopped()
 
     ui->artistTrackLabel->setText( "" );
     ui->albumLabel->setText( "" );
-    ui->ownerLabel->setText( "" );
     ui->timeLabel->setText( "" );
     ui->timeLeftLabel->setText( "" );
     ui->coverImage->setPixmap( QPixmap(), false );
@@ -362,20 +366,23 @@ AudioControls::onPlaybackStopped()
     m_sliderTimeLine.stop();
     m_sliderTimeLine.setCurrentTime( 0 );
     m_phononTickCheckTimer.stop();
-    
+    ui->ownerButton->setPixmap(  RESPATH "images/resolver-default.png" );
+
     ui->stackedLayout->setCurrentWidget( ui->playPauseButton );
     ui->loveButton->setEnabled( false );
     ui->loveButton->setVisible( false );
     ui->socialButton->setEnabled( false );
     ui->socialButton->setVisible( false );
+    ui->ownerButton->setEnabled( false );
+    ui->ownerButton->setVisible( false );
 
     ui->timeLabel->setToolTip( "" );
     ui->timeLeftLabel->setToolTip( "" );
-    ui->ownerLabel->setToolTip( "" );
     ui->shuffleButton->setToolTip( "" );
     ui->repeatButton->setToolTip( "" );
     ui->socialButton->setToolTip( "" );
     ui->loveButton->setToolTip( "" );
+    ui->ownerButton->setToolTip( "" );
 }
 
 
@@ -662,3 +669,16 @@ AudioControls::onLoveButtonClicked( bool checked )
     }
 }
 
+
+void
+AudioControls::onOwnerButtonClicked()
+{
+    if ( m_currentTrack->collection().isNull() )
+    {
+        QUrl url = QUrl( m_currentTrack->purchaseUrl() );
+        if ( url.isValid() )
+            QDesktopServices::openUrl( url );
+    }
+    else
+        ViewManager::instance()->show( m_currentTrack->collection() );
+}
