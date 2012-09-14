@@ -22,6 +22,8 @@
 #include "ExternalResolver.h"
 #include "DllMacro.h"
 
+#include <QPixmap>
+
 class QWidget;
 
 namespace Tomahawk
@@ -40,6 +42,9 @@ Q_OBJECT
 public:
     ExternalResolverGui( const QString& filePath );
     virtual QWidget* configUI() const = 0;
+
+    virtual QPixmap icon() const { return QPixmap(); }
+    virtual void setIcon( const QPixmap& ) {}
 
 protected:
     QWidget* widgetFromData( QByteArray& data, QWidget* parent = 0 );

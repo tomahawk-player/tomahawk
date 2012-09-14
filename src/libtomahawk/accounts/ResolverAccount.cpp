@@ -274,7 +274,12 @@ AtticaResolverAccount::loadIcon()
     codeDir.cd( "../images" );
 
     if ( codeDir.exists() && codeDir.exists( "icon.png" ) )
+    {
         m_icon.load( codeDir.absoluteFilePath( "icon.png" ) );
+
+        if ( !m_resolver.isNull() )
+            m_resolver.data()->setIcon( m_icon );
+    }
 }
 
 

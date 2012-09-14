@@ -141,6 +141,7 @@ public:
     virtual bool running() const;
     virtual void reload();
 
+    virtual void setIcon( const QPixmap& icon ) { m_icon = icon; }
 public slots:
     virtual void resolve( const Tomahawk::query_ptr& query );
     virtual void stop();
