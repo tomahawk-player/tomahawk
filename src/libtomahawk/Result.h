@@ -89,7 +89,6 @@ public:
     void setRID( RID id ) { m_rid = id; }
     void setCollection( const Tomahawk::collection_ptr& collection );
     void setFriendlySource( const QString& s ) { m_friendlySource = s; }
-    void setSourceIcon( const QPixmap& i ) { m_sourceIcon = i; }
     void setPurchaseUrl( const QString& u ) { m_purchaseUrl = u; }
     void setArtist( const Tomahawk::artist_ptr& artist );
     void setAlbum( const Tomahawk::album_ptr& album );
@@ -103,6 +102,9 @@ public:
     void setModificationTime( unsigned int modtime ) { m_modtime = modtime; }
     void setYear( unsigned int year ) { m_year = year; }
     void setDiscNumber( unsigned int discnumber ) { m_discnumber = discnumber; }
+
+    // Takes ownership of the pixmap
+    void setSourceIcon( QPixmap* i ) { m_sourceIcon = i; }
 
     QVariantMap attributes() const { return m_attributes; }
     void setAttributes( const QVariantMap& map ) { m_attributes = map; updateAttributes(); }
@@ -120,7 +122,7 @@ signals:
 private slots:
     void onOffline();
     void onOnline();
-    
+
     void onResolverRemoved( Tomahawk::Resolver* resolver );
 
 private:
@@ -143,7 +145,8 @@ private:
     QString m_purchaseUrl;
     QString m_mimetype;
     QString m_friendlySource;
-    QPixmap m_sourceIcon;
+
+    QPixmap* m_sourceIcon;
 
     unsigned int m_duration;
     unsigned int m_bitrate;

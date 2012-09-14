@@ -64,6 +64,7 @@ Result::isCached( const QString& url )
 Result::Result( const QString& url )
     : QObject()
     , m_url( url )
+    , m_sourceIcon( 0 )
     , m_duration( 0 )
     , m_bitrate( 0 )
     , m_size( 0 )
@@ -81,6 +82,7 @@ Result::Result( const QString& url )
 
 Result::~Result()
 {
+    delete m_sourceIcon;
 }
 
 
@@ -301,7 +303,10 @@ Result::sourceIcon() const
 {
     if ( collection().isNull() )
     {
-        return m_sourceIcon;
+        if ( !m_sourceIcon )
+            return QPixmap();
+        else
+            return *m_sourceIcon;
     }
     else
     {
