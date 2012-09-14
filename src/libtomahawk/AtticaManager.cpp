@@ -66,7 +66,7 @@ AtticaManager::AtticaManager( QObject* parent )
 
     // resolvers
 //    m_manager.addProviderFile( QUrl( "http://bakery.tomahawk-player.org/resolvers/providers.xml" ) );
-    
+
     const QString url = QString( "%1/resolvers/providers.xml?version=%2" ).arg( hostname() ).arg( TomahawkUtils::appFriendlyVersion() );
     QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( QUrl( url ) ) );
     NewClosure( reply, SIGNAL( finished() ), this, SLOT( providerFetched( QNetworkReply* ) ), reply );
@@ -760,4 +760,12 @@ AtticaManager::doResolverRemove( const QString& id ) const
         return;
 
     TomahawkUtils::removeDirectory( resolverDir.absolutePath() );
+
+    QDir cacheDir = TomahawkUtils::appDataDir();
+    if ( !cacheDir.cd( "atticacache" ) )
+        return;
+
+    const bool removed = cacheDir.remove( id + ".png" );
+    tDebug() << "Tried to remove cached image, succeeded?" << removed << cacheDir.filePath( id );
 }
+
