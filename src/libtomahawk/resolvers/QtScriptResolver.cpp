@@ -433,6 +433,7 @@ QtScriptResolver::parseResultVariantList( const QVariantList& reslist )
         rp->setRID( uuid() );
         rp->setFriendlySource( name() );
         rp->setSourceIcon( icon() );
+        rp->setPurchaseUrl( m.value( "purchaseUrl" ).toString() );
         rp->setScore( m.value( "score" ).toFloat() );
         rp->setDiscNumber( m.value( "discnumber" ).toUInt() );
 

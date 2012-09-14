@@ -23,6 +23,7 @@
 #include <QtNetwork/QNetworkReply>
 #include <QtGui/QDropEvent>
 #include <QtGui/QMouseEvent>
+#include <QtGui/QDesktopServices>
 
 #include "audio/AudioEngine.h"
 #include "playlist/PlaylistView.h"
@@ -124,6 +125,7 @@ AudioControls::AudioControls( QWidget* parent )
     connect( ui->albumLabel,       SIGNAL( clickedAlbum() ),  SLOT( onAlbumClicked() ) );
     connect( ui->socialButton,     SIGNAL( clicked() ),       SLOT( onSocialButtonClicked() ) );
     connect( ui->loveButton,       SIGNAL( clicked( bool ) ), SLOT( onLoveButtonClicked( bool ) ) );
+    connect( ui->ownerButton,      SIGNAL( clicked() ),       SLOT( onOwnerButtonClicked() ) );
 
     // <From AudioEngine>
     connect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), SLOT( onPlaybackLoading( Tomahawk::result_ptr ) ) );
@@ -261,6 +263,10 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
     ui->ownerButton->setToolTip( QString( tr( "Playing from %1" ) ).arg( result->friendlySource() ) );
     QPixmap sourceIcon = result->sourceIcon().scaled( ui->ownerButton->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
     ui->ownerButton->setPixmap( sourceIcon );
+    if ( QUrl( result->purchaseUrl() ).isValid() || !result->collection().isNull() )
+        ui->ownerButton->setCursor( Qt::PointingHandCursor );
+    else
+        ui->ownerButton->setCursor( Qt::ArrowCursor );
 
     setCover();
     setSocialActions();
@@ -361,7 +367,7 @@ AudioControls::onPlaybackStopped()
     m_sliderTimeLine.setCurrentTime( 0 );
     m_phononTickCheckTimer.stop();
     ui->ownerButton->setPixmap(  RESPATH "images/resolver-default.png" );
-    
+
     ui->stackedLayout->setCurrentWidget( ui->playPauseButton );
     ui->loveButton->setEnabled( false );
     ui->loveButton->setVisible( false );
@@ -663,3 +669,16 @@ AudioControls::onLoveButtonClicked( bool checked )
     }
 }
 
+
+void
+AudioControls::onOwnerButtonClicked()
+{
+    if ( m_currentTrack->collection().isNull() )
+    {
+        QUrl url = QUrl( m_currentTrack->purchaseUrl() );
+        if ( url.isValid() )
+            QDesktopServices::openUrl( url );
+    }
+    else
+        ViewManager::instance()->show( m_currentTrack->collection() );
+}

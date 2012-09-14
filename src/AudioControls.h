@@ -81,6 +81,7 @@ private slots:
     void onTrackClicked();
     void onSocialButtonClicked();
     void onLoveButtonClicked( bool );
+    void onOwnerButtonClicked();
 
     void droppedTracks( QList<Tomahawk::query_ptr> );
 

@@ -283,6 +283,7 @@ ScriptResolver::handleMsg( const QByteArray& msg )
             rp->setRID( uuid() );
             rp->setFriendlySource( m_name );
             rp->setSourceIcon( m_icon );
+            rp->setPurchaseUrl( m.value( "purchaseUrl" ).toString() );
             rp->setYear( m.value( "year").toUInt() );
             rp->setDiscNumber( m.value( "discnumber" ).toUInt() );
 
