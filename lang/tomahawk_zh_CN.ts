@@ -1135,12 +1135,12 @@ connect and stream from you?</source>
 <context>
     <name>PlaylistView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistView.cpp" line="163"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistView.cpp" line="150"/>
         <source>This playlist is currently empty.</source>
         <translation>当前播放列表为空。</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistView.cpp" line="165"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistView.cpp" line="152"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
         <translation>该播放列表现在为空。请为她添加一些歌曲享受吧！</translation>
     </message>
@@ -3483,13 +3483,13 @@ enter the displayed PIN number here:</source>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="200"/>
-        <location filename="../src/TomahawkWindow.cpp" line="1329"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1330"/>
         <source>Hide Menu Bar</source>
         <translation>隐藏菜单栏</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="200"/>
-        <location filename="../src/TomahawkWindow.cpp" line="1323"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1324"/>
         <source>Show Menu Bar</source>
         <translation>显示菜单栏</translation>
     </message>
@@ -3717,7 +3717,7 @@ enter the displayed PIN number here:</source>
 <context>
     <name>TrackView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="497"/>
+        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="502"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>抱歉，为找到任何匹配 &apos;%1&apos; 的结果。</translation>
     </message>
@@ -3857,37 +3857,37 @@ You can re-send a sync message at any time simply by sending another tweet using
 <context>
     <name>ViewManager</name>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="280"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="279"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
         <translation>在扫描音乐收藏后你将可以在这里找到你的音乐。</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="282"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="281"/>
         <source>This collection is empty.</source>
         <translation>收藏为空。</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="341"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="340"/>
         <source>SuperCollection</source>
         <translation>超级收藏</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="342"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="341"/>
         <source>Combined libraries of all your online friends</source>
         <translation>整合了在线朋友的音乐库</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="396"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="395"/>
         <source>Recently Played Tracks</source>
         <translation>最近播放歌曲</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="397"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="396"/>
         <source>Recently played tracks from all your friends</source>
         <translation>所有朋友最近播放的歌曲</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="404"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="403"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>对不起，找不到任何最近播放项目！</translation>
     </message>
