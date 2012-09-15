@@ -137,7 +137,6 @@ ViewManager::createPageForPlaylist( const playlist_ptr& playlist )
     PlaylistModel* model = new PlaylistModel();
 
     PlaylistView* pv = new PlaylistView();
-    pv->setPlaylistModel( model );
     view->setDetailedView( pv );
     view->setPixmap( pv->pixmap() );
 
