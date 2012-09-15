@@ -380,6 +380,7 @@ TreeModel::onTracksFound( const QList<Tomahawk::query_ptr>& tracks, Tomahawk::Mo
     Tomahawk::Album* album = qobject_cast<Tomahawk::Album*>( sender() );
 
     QModelIndex idx = indexFromAlbum( album->weakRef().toStrongRef() );
+    tDebug() << "Adding tracks" << tracks.count() << "to index:" << idx;
     onTracksAdded( tracks, idx );
 }
 
@@ -397,6 +398,7 @@ TreeModel::indexFromArtist( const Tomahawk::artist_ptr& artist ) const
         }
     }
 
+    tDebug() << "Could not find item for artist:" << artist->name();
     return QModelIndex();
 }
 
@@ -415,5 +417,6 @@ TreeModel::indexFromAlbum( const Tomahawk::album_ptr& album ) const
         }
     }
 
+    tDebug() << "Could not find item for artist:" << album->name() << album->artist()->name();
     return QModelIndex();
 }
