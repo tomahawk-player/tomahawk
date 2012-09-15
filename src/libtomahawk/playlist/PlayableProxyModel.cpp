@@ -273,6 +273,7 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
     const unsigned int albumpos2 = q2->albumpos();
     const unsigned int discnumber1 = q1->discnumber();
     const unsigned int discnumber2 = q2->discnumber();
+    unsigned int duration1 = q1->duration(), duration2 = q2->duration();
     unsigned int bitrate1 = 0, bitrate2 = 0;
     unsigned int mtime1 = 0, mtime2 = 0;
     unsigned int size1 = 0, size2 = 0;
@@ -285,6 +286,7 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
     {
         const Tomahawk::result_ptr& r = q1->results().at( 0 );
         bitrate1 = r->bitrate();
+        duration1 = r->duration();
         mtime1 = r->modificationTime();
         size1 = r->size();
         score1 = r->score();
@@ -295,6 +297,7 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
     {
         const Tomahawk::result_ptr& r = q2->results().at( 0 );
         bitrate2 = r->bitrate();
+        duration2 = r->duration();
         mtime2 = r->modificationTime();
         size2 = r->size();
         score2 = r->score();
@@ -376,6 +379,13 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
             return id1 < id2;
 
         return bitrate1 < bitrate2;
+    }
+    else if ( column == PlayableModel::Duration ) // sort by duration
+    {
+        if ( duration1 == duration2 )
+            return id1 < id2;
+
+        return duration1 < duration2;
     }
     else if ( column == PlayableModel::Age ) // sort by mtime
     {
