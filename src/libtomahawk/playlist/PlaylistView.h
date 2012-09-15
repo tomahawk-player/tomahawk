@@ -54,7 +54,6 @@ protected:
 
 private slots:
     void onMenuTriggered( int action );
-    void deleteItems();
 
     void onDeleted();
     void onChanged();

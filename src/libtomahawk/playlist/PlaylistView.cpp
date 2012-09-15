@@ -88,12 +88,6 @@ PlaylistView::keyPressEvent( QKeyEvent* event )
 
     if ( !model() )
         return;
-
-    if ( ( event->key() == Qt::Key_Delete || event->key() == Qt::Key_Backspace ) && !model()->isReadOnly() )
-    {
-        qDebug() << "Removing selected items";
-        deleteItems();
-    }
 }
 
 
@@ -126,13 +120,6 @@ PlaylistView::eventFilter( QObject* obj, QEvent* event )
     }
 
     return QObject::eventFilter( obj, event );
-}
-
-
-void
-PlaylistView::deleteItems()
-{
-    proxyModel()->removeIndexes( selectedIndexes() );
 }
 
 
@@ -183,10 +170,6 @@ PlaylistView::onMenuTriggered( int action )
 {
     switch ( action )
     {
-        case ContextMenu::ActionDelete:
-            deleteItems();
-            break;
-
         default:
             break;
     }
