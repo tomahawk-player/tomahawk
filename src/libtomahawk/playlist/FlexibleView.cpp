@@ -34,10 +34,15 @@
 using namespace Tomahawk;
 
 
-class FlexibleViewInterface : public PlayableProxyModelPlaylistInterface {
+class FlexibleViewInterface : public PlayableProxyModelPlaylistInterface
+{
     Q_OBJECT
 public:
-    explicit FlexibleViewInterface( PlayableProxyModel* proxy, FlexibleView* view ) : PlayableProxyModelPlaylistInterface( proxy ), m_view( view ) {}
+    explicit FlexibleViewInterface( PlayableProxyModel* proxy, FlexibleView* view )
+        : PlayableProxyModelPlaylistInterface( proxy )
+        , m_view( view )
+    {
+    }
 
     virtual bool hasChildInterface( playlistinterface_ptr playlistInterface )
     {
@@ -59,6 +64,7 @@ public:
 private:
     QWeakPointer<FlexibleView> m_view;
 };
+
 
 FlexibleView::FlexibleView( QWidget* parent )
     : QWidget( parent )
@@ -105,6 +111,7 @@ FlexibleView::setTrackView( TrackView* view )
 {
     if ( m_trackView )
     {
+        m_stack->removeWidget( m_trackView );
         delete m_trackView;
     }
 
@@ -113,7 +120,6 @@ FlexibleView::setTrackView( TrackView* view )
 
     m_trackView = view;
     m_stack->addWidget( view );
-
 }
 
 
@@ -122,6 +128,7 @@ FlexibleView::setDetailedView( TrackView* view )
 {
     if ( m_detailedView )
     {
+        m_stack->removeWidget( m_detailedView );
         delete m_detailedView;
     }
 
@@ -135,6 +142,7 @@ FlexibleView::setGridView( GridView* view )
 {
     if ( m_gridView )
     {
+        m_stack->removeWidget( m_gridView );
         delete m_gridView;
     }
 
@@ -178,6 +186,7 @@ FlexibleView::setCurrentMode( FlexibleViewMode mode )
     {
         case Flat:
         {
+            tDebug() << "m_trackView:" << m_trackView << m_stack->indexOf( m_trackView );
             m_stack->setCurrentWidget( m_trackView );
             break;
         }
