@@ -591,6 +591,20 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
             createSpotifyAccount();
         }
     }
+    else if ( oldVersion == 12 )
+    {
+        // Force attica resolver pixmap cache refresh
+        QDir cacheDir = TomahawkUtils::appDataDir();
+        if ( cacheDir.cd( "atticacache" ) )
+        {
+            QStringList files = cacheDir.entryList( QStringList() << "*.png" );
+            foreach ( const QString& file, files )
+            {
+                const bool removed = cacheDir.remove( file );
+                tDebug() << "Tried to remove cached image, succeeded?" << removed << cacheDir.filePath( file );
+            }
+        }
+    }
 }
 
 
