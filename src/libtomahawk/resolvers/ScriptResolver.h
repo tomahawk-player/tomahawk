@@ -47,6 +47,8 @@ public:
     virtual unsigned int preference() const { return m_preference; }
     virtual unsigned int timeout() const    { return m_timeout; }
 
+    virtual void setIcon( const QPixmap& icon );
+
     virtual QWidget* configUI() const;
     virtual void saveConfig();
 

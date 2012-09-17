@@ -217,6 +217,7 @@ SpotifyAccount::hookupResolver()
     // 0.4.x->0.5.x upgrade. So we do it manually for a while
     killExistingResolvers();
     m_spotifyResolver = QWeakPointer< ScriptResolver >( qobject_cast< ScriptResolver* >( Pipeline::instance()->addScriptResolver( path ) ) );
+    m_spotifyResolver.data()->setIcon( QPixmap( RESPATH "images/spotify-sourceicon.png" ) );
 
     connect( m_spotifyResolver.data(), SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
     connect( m_spotifyResolver.data(), SIGNAL( customMessage( QString,QVariantMap ) ), this, SLOT( resolverMessage( QString, QVariantMap ) ) );

@@ -486,6 +486,13 @@ ScriptResolver::saveConfig()
 }
 
 
+void
+ScriptResolver::setIcon( const QPixmap& icon )
+{
+    m_icon = icon;
+}
+
+
 QWidget*
 ScriptResolver::configUI() const
 {

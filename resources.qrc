@@ -156,5 +156,6 @@
         <file>data/images/exfm.png</file>
         <file>data/images/soundcloud.png</file>
         <file>data/images/resolver-default.png</file>
+        <file>data/images/spotify-sourceicon.png</file>
     </qresource>
 </RCC>

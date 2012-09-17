@@ -399,7 +399,6 @@ AtticaManager::binaryResolversList( BaseJob* j )
 
     Content::List binaryResolvers = job->itemList();
 
-    // NOTE: No binary support for linux distros
     QString platform;
 #if defined(Q_OS_MAC)
     platform = "osx";
