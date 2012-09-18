@@ -236,7 +236,9 @@ MusicBrainzPlugin::gotReleasesSlot()
             QNetworkReply* newReply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
             newReply->setProperty( "requestData", oldReply->property( "requestData" ) );
             connect( newReply, SIGNAL( finished() ), SLOT( gotRecordingsSlot() ) );
-            }
+
+            break;
+        }
 
         default:
         {
