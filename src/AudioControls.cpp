@@ -263,7 +263,7 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
     ui->ownerButton->setToolTip( QString( tr( "Playing from %1" ) ).arg( result->friendlySource() ) );
     QPixmap sourceIcon = result->sourceIcon().scaled( ui->ownerButton->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
     ui->ownerButton->setPixmap( sourceIcon );
-    if ( QUrl( result->purchaseUrl() ).isValid() || !result->collection().isNull() )
+    if ( QUrl( result->linkUrl() ).isValid() || !result->collection().isNull() )
         ui->ownerButton->setCursor( Qt::PointingHandCursor );
     else
         ui->ownerButton->setCursor( Qt::ArrowCursor );
@@ -390,15 +390,15 @@ void
 AudioControls::onPlaybackTimer( qint64 msElapsed )
 {
     //tDebug() << Q_FUNC_INFO;
-    
+
     m_phononTickCheckTimer.stop();
-    
+
     if ( m_currentTrack.isNull() )
     {
         m_sliderTimeLine.stop();
         return;
     }
-    
+
     const int seconds = msElapsed / 1000;
     if ( seconds != m_lastTextSecondShown )
     {
@@ -414,7 +414,7 @@ AudioControls::onPlaybackTimer( qint64 msElapsed )
 
     int currentTime = m_sliderTimeLine.currentTime();
     //tDebug( LOGEXTRA ) << Q_FUNC_INFO << "msElapsed =" << msElapsed << "and timer current time =" << m_sliderTimeLine.currentTime();
-    
+
     // First condition checks for the common case where
     // 1) the track has been started
     // 2) we haven't seeked,
@@ -675,7 +675,7 @@ AudioControls::onOwnerButtonClicked()
 {
     if ( m_currentTrack->collection().isNull() )
     {
-        QUrl url = QUrl( m_currentTrack->purchaseUrl() );
+        QUrl url = QUrl( m_currentTrack->linkUrl() );
         if ( url.isValid() )
             QDesktopServices::openUrl( url );
     }

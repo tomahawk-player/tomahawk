@@ -74,6 +74,7 @@ public:
     QString friendlySource() const;
     QPixmap sourceIcon() const;
     QString purchaseUrl() const { return m_purchaseUrl; }
+    QString linkUrl() const { return m_linkUrl; }
 
     unsigned int duration() const { return m_duration; }
     unsigned int bitrate() const { return m_bitrate; }
@@ -90,6 +91,7 @@ public:
     void setCollection( const Tomahawk::collection_ptr& collection );
     void setFriendlySource( const QString& s ) { m_friendlySource = s; }
     void setPurchaseUrl( const QString& u ) { m_purchaseUrl = u; }
+    void setLinkUrl( const QString& u ) { m_linkUrl = u; }
     void setArtist( const Tomahawk::artist_ptr& artist );
     void setAlbum( const Tomahawk::album_ptr& album );
     void setComposer( const Tomahawk::artist_ptr& composer );
@@ -143,6 +145,7 @@ private:
     QString m_track;
     QString m_url;
     QString m_purchaseUrl;
+    QString m_linkUrl;
     QString m_mimetype;
     QString m_friendlySource;
 

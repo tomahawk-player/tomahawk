@@ -284,6 +284,7 @@ ScriptResolver::handleMsg( const QByteArray& msg )
             rp->setFriendlySource( m_name );
             rp->setSourceIcon( new QPixmap( m_icon ) );
             rp->setPurchaseUrl( m.value( "purchaseUrl" ).toString() );
+            rp->setLinkUrl( m.value( "linkUrl" ).toString() );
             rp->setYear( m.value( "year").toUInt() );
             rp->setDiscNumber( m.value( "discnumber" ).toUInt() );
 
