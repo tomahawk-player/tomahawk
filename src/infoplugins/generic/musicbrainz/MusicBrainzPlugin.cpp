@@ -191,7 +191,8 @@ MusicBrainzPlugin::gotReleaseGroupsSlot()
             Tomahawk::InfoSystem::InfoStringHash criteria;
             criteria["artist"] = origData["artist"];
             emit updateCache( criteria, 0, requestData.type, returnedData );
-            }
+            break;
+        }
 
         default:
         {
