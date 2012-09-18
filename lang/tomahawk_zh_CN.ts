@@ -165,7 +165,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="98"/>
         <source>U&amp;pdate Collection</source>
-        <translation>更新收藏 &amp;P</translation>
+        <translation>更新收藏</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="99"/>
@@ -1275,17 +1275,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/Account.cpp" line="36"/>
         <source>Friend Finders</source>
-        <translation>朋友查找器</translation>
+        <translation>查找朋友</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/Account.cpp" line="38"/>
         <source>Music Finders</source>
-        <translation>音乐查找器</translation>
+        <translation>查找音乐</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/Account.cpp" line="41"/>
         <source>Status Updaters</source>
-        <translation>状态更新器</translation>
+        <translation>更新状态</translation>
     </message>
 </context>
 <context>
@@ -1440,7 +1440,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/Settings_Accounts.ui" line="48"/>
         <source>Filter by capability:</source>
-        <translation type="unfinished"/>
+        <translation>过滤：</translation>
     </message>
 </context>
 <context>
@@ -1458,7 +1458,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="35"/>
         <source>None (outgoing connections only)</source>
-        <translation type="unfinished"/>
+        <translation>停用（只启用对外连接）</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="42"/>
@@ -1680,7 +1680,7 @@ connect and stream from you?</source>
         <location filename="../src/sourcetree/SourceDelegate.cpp" line="304"/>
         <location filename="../src/sourcetree/SourceDelegate.cpp" line="348"/>
         <source>Hide</source>
-        <translation>隐藏</translation>
+        <translation>隐藏 </translation>
     </message>
 </context>
 <context>
@@ -2162,47 +2162,47 @@ connect and stream from you?</source>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccount</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="480"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="481"/>
         <source>Sync with Spotify</source>
         <translation>与 Spotify 同步</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="484"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="485"/>
         <source>Re-enable syncing with Spotify</source>
         <translation>重新启用 Spotify 同步</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="492"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="493"/>
         <source>Create local copy</source>
         <translation>创建本地拷贝</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="508"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="509"/>
         <source>Subscribe to playlist changes</source>
         <translation>订阅播放列表改动</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="512"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="513"/>
         <source>Re-enable playlist subscription</source>
         <translation>重新启用播放列表订阅</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="516"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="517"/>
         <source>Stop subscribing to changes</source>
         <translation>停止订阅改动</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="536"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="537"/>
         <source>Enable Spotify collaborations</source>
         <translation>启用 Spotify 碰撞</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="538"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="539"/>
         <source>Disable Spotify collaborations</source>
         <translation>禁用 Spotify 碰撞</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="494"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="495"/>
         <source>Stop syncing with Spotify</source>
         <translation>停止与 Spotify 同步</translation>
     </message>
@@ -3344,12 +3344,12 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="83"/>
         <source>Add &amp;Friend...</source>
-        <translation>添加朋友 &amp;F ...</translation>
+        <translation>添加朋友...</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="88"/>
         <source>U&amp;pdate Collection</source>
-        <translation>更新收藏  &amp;P</translation>
+        <translation>更新收藏</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="91"/>
@@ -3719,7 +3719,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="502"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
-        <translation>抱歉，为找到任何匹配 &apos;%1&apos; 的结果。</translation>
+        <translation>抱歉，未找到任何匹配 &apos;%1&apos; 的结果。</translation>
     </message>
 </context>
 <context>
