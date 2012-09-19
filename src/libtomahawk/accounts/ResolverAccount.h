@@ -122,11 +122,12 @@ public:
 private slots:
     void resolverIconUpdated( const QString& );
 
+    void loadIcon();
 private:
     // Created by factory, when user installs a new resolver
     AtticaResolverAccount( const QString& accountId, const QString& path, const QString& atticaId );
 
-    void loadIcon();
+    void init();
 
     QPixmap m_icon;
     QString m_atticaId;

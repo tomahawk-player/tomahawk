@@ -240,11 +240,9 @@ AtticaResolverAccount::AtticaResolverAccount( const QString& accountId )
 {
     TomahawkSettings::instance()->setValue( QString( "accounts/%1/atticaresolver" ).arg( accountId ), true );
 
+    init();
     m_atticaId = configuration().value( "atticaId" ).toString();
 
-    connect( AtticaManager::instance(), SIGNAL( resolverIconUpdated( QString ) ), this, SLOT( resolverIconUpdated( QString ) ) );
-
-    loadIcon();
 }
 
 AtticaResolverAccount::AtticaResolverAccount( const QString& accountId, const QString& path, const QString& atticaId )
@@ -257,15 +255,27 @@ AtticaResolverAccount::AtticaResolverAccount( const QString& accountId, const QS
 
     TomahawkSettings::instance()->setValue( QString( "accounts/%1/atticaresolver" ).arg( accountId ), true );
 
-    connect( AtticaManager::instance(), SIGNAL( resolverIconUpdated( QString ) ), this, SLOT( resolverIconUpdated( QString ) ) );
-
-    loadIcon();
+    init();
     sync();
 }
 
 
 AtticaResolverAccount::~AtticaResolverAccount()
 {
+}
+
+
+void
+AtticaResolverAccount::init()
+{
+    connect( AtticaManager::instance(), SIGNAL( resolverIconUpdated( QString ) ), this, SLOT( resolverIconUpdated( QString ) ) );
+
+    if ( AtticaManager::instance()->resolversLoaded() )
+        loadIcon();
+    else
+        connect( AtticaManager::instance(), SIGNAL( resolversLoaded( Attica::Content::List ) ), this, SLOT( loadIcon() ) );
+
+
 }
 
 
