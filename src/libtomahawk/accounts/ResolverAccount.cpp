@@ -275,17 +275,9 @@ AtticaResolverAccount::loadIcon()
     if ( m_resolver.isNull() )
         return;
 
-    const QFileInfo fi( m_resolver.data()->filePath() );
-    QDir codeDir = fi.absoluteDir();
-    codeDir.cd( "../images" );
 
-    if ( codeDir.exists() && codeDir.exists( "icon.png" ) )
-    {
-        m_icon.load( codeDir.absoluteFilePath( "icon.png" ) );
-
-        if ( !m_resolver.isNull() )
-            m_resolver.data()->setIcon( m_icon );
-    }
+    m_icon = AtticaManager::instance()->iconForResolver( AtticaManager::instance()->resolverForId( m_atticaId ) );
+    m_resolver.data()->setIcon( m_icon );
 }
 
 
