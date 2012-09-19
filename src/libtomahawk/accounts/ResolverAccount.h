@@ -118,6 +118,10 @@ public:
     QString atticaId() const { return m_atticaId; }
 
     void setPath( const QString& path );
+
+private slots:
+    void resolverIconUpdated( const QString& );
+
 private:
     // Created by factory, when user installs a new resolver
     AtticaResolverAccount( const QString& accountId, const QString& path, const QString& atticaId );

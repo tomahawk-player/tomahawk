@@ -18,13 +18,14 @@
 
 #include "ResolverAccount.h"
 
+#include "AccountManager.h"
+#include "AtticaManager.h"
 #include "ExternalResolver.h"
 #include "ExternalResolverGui.h"
-#include "AccountManager.h"
+#include "Pipeline.h"
 #include "TomahawkSettings.h"
 #include "Source.h"
 
-#include <Pipeline.h>
 #include <QFile>
 #include <QFileInfo>
 #include <QDir>
@@ -240,6 +241,9 @@ AtticaResolverAccount::AtticaResolverAccount( const QString& accountId )
     TomahawkSettings::instance()->setValue( QString( "accounts/%1/atticaresolver" ).arg( accountId ), true );
 
     m_atticaId = configuration().value( "atticaId" ).toString();
+
+    connect( AtticaManager::instance(), SIGNAL( resolverIconUpdated( QString ) ), this, SLOT( resolverIconUpdated( QString ) ) );
+
     loadIcon();
 }
 
@@ -252,6 +256,8 @@ AtticaResolverAccount::AtticaResolverAccount( const QString& accountId, const QS
     setConfiguration( conf );
 
     TomahawkSettings::instance()->setValue( QString( "accounts/%1/atticaresolver" ).arg( accountId ), true );
+
+    connect( AtticaManager::instance(), SIGNAL( resolverIconUpdated( QString ) ), this, SLOT( resolverIconUpdated( QString ) ) );
 
     loadIcon();
     sync();
@@ -300,4 +306,12 @@ QPixmap
 AtticaResolverAccount::icon() const
 {
     return m_icon;
+}
+
+
+void
+AtticaResolverAccount::resolverIconUpdated( const QString& resolver )
+{
+    if ( m_atticaId == resolver )
+        loadIcon();
 }

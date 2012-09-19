@@ -471,6 +471,8 @@ AtticaManager::resolverIconFetched()
     icon->loadFromData( data );
     m_resolverStates[ resolverId ].pixmap = icon;
     m_resolverStates[ resolverId ].pixmapDirty = true;
+
+    emit resolverIconUpdated( resolverId );
 }
 
 
