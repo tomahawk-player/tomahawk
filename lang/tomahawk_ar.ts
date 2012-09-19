@@ -4005,7 +4005,7 @@ Lyrics for &quot;%1&quot; by %2:
         <translation>فشل في جلب قائمة الأغاني المطلوبة من الشبكة، أو الملف المطلوب غير موجود</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="191"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="198"/>
         <source>New Playlist</source>
         <translation>قائمة أغاني جديدة</translation>
     </message>

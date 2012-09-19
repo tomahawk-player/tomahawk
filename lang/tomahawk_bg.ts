@@ -4014,7 +4014,7 @@ Lyrics for &quot;%1&quot; by %2:
         <translation>Неуспех при извличане на избраният списък през мрежата или избраният файл не съществува.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="191"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="198"/>
         <source>New Playlist</source>
         <translation>Нов списък</translation>
     </message>

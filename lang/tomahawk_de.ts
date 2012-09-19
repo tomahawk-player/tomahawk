@@ -3994,7 +3994,7 @@ Lyrics for &quot;%1&quot; by %2:
         <translation>Fehler beim Laden der Playlist</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="191"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="198"/>
         <source>New Playlist</source>
         <translation>Neue Playlist</translation>
     </message>

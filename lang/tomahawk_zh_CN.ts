@@ -3999,7 +3999,7 @@ Lyrics for &quot;%1&quot; by %2:
         <translation>从网络获取指定播放列表时出错，或者指定文件不存在</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="191"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="198"/>
         <source>New Playlist</source>
         <translation>新播放列表</translation>
     </message>

@@ -3995,7 +3995,7 @@ Tekst dla &quot;%1&quot; wykonawcy %2:
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="191"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="198"/>
         <source>New Playlist</source>
         <translation>Nowa Lista</translation>
     </message>

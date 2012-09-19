@@ -4006,7 +4006,7 @@ Paroles de &quot;%1&quot; par %2 :
         <translation>Échec du chargement de la liste de lecture depuis le réseau, ou le fichier n&apos;existe pas</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="191"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="198"/>
         <source>New Playlist</source>
         <translation>Nouvelle liste de lecture</translation>
     </message>

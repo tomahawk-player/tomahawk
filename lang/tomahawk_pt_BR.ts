@@ -4003,7 +4003,7 @@ Letras de &quot;%1&quot; por %2:
         <translation>Falha ao buscar a playlist desejada na rede ou o arquivo desejado não existe</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="191"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="198"/>
         <source>New Playlist</source>
         <translation>Nova lista de reprodução</translation>
     </message>

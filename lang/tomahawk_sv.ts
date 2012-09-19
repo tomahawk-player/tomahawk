@@ -3982,7 +3982,7 @@ Lyrics for &quot;%1&quot; by %2:
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="191"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="198"/>
         <source>New Playlist</source>
         <translation>Ny spellista</translation>
     </message>
