@@ -89,6 +89,13 @@ XSPFLoader::entries() const
 }
 
 
+QString
+XSPFLoader::title() const
+{
+    return m_title;
+}
+
+
 void
 XSPFLoader::load( const QUrl& url )
 {

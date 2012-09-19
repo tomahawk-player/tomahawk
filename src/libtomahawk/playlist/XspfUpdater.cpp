@@ -112,6 +112,14 @@ XspfUpdater::updateNow()
 void
 XspfUpdater::playlistLoaded( const QList<Tomahawk::query_ptr>& newEntries )
 {
+    XSPFLoader* loader = qobject_cast< XSPFLoader* >( sender() );
+    if ( loader )
+    {
+        const QString newTitle = loader->title();
+        if ( newTitle != playlist()->title() )
+            playlist()->rename( newTitle );
+    }
+
     QList< query_ptr > tracks;
     foreach ( const plentry_ptr ple, playlist()->entries() )
         tracks << ple->query();

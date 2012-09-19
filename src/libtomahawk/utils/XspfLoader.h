@@ -45,6 +45,7 @@ public:
 
     virtual ~XSPFLoader();
     QList< Tomahawk::query_ptr > entries() const;
+    QString title() const;
 
     void setOverrideTitle( const QString& newTitle );
     void setAutoResolveTracks( bool autoResolve ) { m_autoResolve = autoResolve; }

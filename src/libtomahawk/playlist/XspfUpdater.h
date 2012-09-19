@@ -33,7 +33,7 @@ class DLLEXPORT XspfUpdater : public PlaylistUpdaterInterface
 {
     Q_OBJECT
 public:
-    XspfUpdater( const playlist_ptr& pl, int interval, bool autoUpdate, const QString& xspfUrl );
+    XspfUpdater( const playlist_ptr& pl, int interval /* ms */, bool autoUpdate, const QString& xspfUrl );
 
     virtual ~XspfUpdater();
 
