@@ -200,22 +200,18 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
             m_addedmap.insert( e->guid(), e ); // needed in postcommithook
 
             QString resultHint, foundResult;
-            // Whitelist resulthint protocols
-            bool fromQuery = false;
             if ( !e->query()->results().isEmpty() )
                 foundResult = e->query()->results().first()->url();
             else if ( !e->query()->resultHint().isEmpty() )
-            {
-                resultHint = e->query()->resultHint();
-                foundResult = true;
-            }
+                foundResult = e->query()->resultHint();
 
-            if ( resultHint.startsWith( "file://" ) ||
-                 resultHint.startsWith( "servent://" ) || // Save resulthints for local files and peers automatically
-                 ( fromQuery && e->query()->saveHTTPResultHint() ) )
+            if ( foundResult.startsWith( "file://" ) ||
+                 foundResult.startsWith( "servent://" ) || // Save resulthints for local files and peers automatically
+                 ( foundResult.startsWith( "http" ) && e->query()->saveHTTPResultHint() ) )
             {
                 resultHint = foundResult;
             }
+
 
             adde.bindValue( 0, e->guid() );
             adde.bindValue( 1, m_playlistguid );

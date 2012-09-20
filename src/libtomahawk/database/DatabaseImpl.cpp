@@ -618,9 +618,8 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
         s = SourceList::instance()->getLocal();
         fileUrl = url;
     }
-    else
+    else if ( !url.isEmpty() )
     {
-//        Q_ASSERT( false );
         res = Tomahawk::Result::get( url );
         res->setRID( uuid() );
         res->setScore( 1.0 );
