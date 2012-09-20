@@ -293,7 +293,7 @@ protected:
 
 
 private slots:
-    void onResultsFound( const QList<Tomahawk::result_ptr>& results );
+    void onResultsChanged();
     void onResolvingFinished();
 
     void onDeleteResult( SourceTreePopupDialog* );

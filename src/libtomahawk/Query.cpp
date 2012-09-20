@@ -36,6 +36,7 @@
 #include "audio/AudioEngine.h"
 
 #include "utils/Logger.h"
+#include "utils/WebResultHintChecker.h"
 
 using namespace Tomahawk;
 
@@ -769,6 +770,16 @@ Query::socialActionDescription( const QString& action, DescriptionMode mode ) co
     }
 
     return desc;
+}
+
+
+void
+Query::setSaveHTTPResultHint( bool saveResultHint )
+{
+    m_saveResultHint = saveResultHint;
+
+    // Make sure it's a valid url
+    new WebResultHintChecker( m_ownRef.toStrongRef() );
 }
 
 

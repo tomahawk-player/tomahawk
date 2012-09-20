@@ -164,7 +164,7 @@ public:
     void setAllSocialActions( const QList< Tomahawk::SocialAction >& socialActions );
     QString socialActionDescription( const QString& action, DescriptionMode mode ) const;
 
-    void setSaveHTTPResultHint( bool saveResultHint ) { m_saveResultHint = saveResultHint; }
+    void setSaveHTTPResultHint( bool saveResultHint );
     bool saveHTTPResultHint() const { return m_saveResultHint; }
 
     QList<Tomahawk::query_ptr> similarTracks() const;

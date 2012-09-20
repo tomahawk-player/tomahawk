@@ -524,8 +524,8 @@ Playlist::setRevision( const QString& rev,
 
     foreach( const plentry_ptr& entry, m_entries )
     {
-        connect( entry->query().data(), SIGNAL( resultsAdded( QList<Tomahawk::result_ptr> ) ),
-                 SLOT( onResultsFound( QList<Tomahawk::result_ptr> ) ), Qt::UniqueConnection );
+        connect( entry->query().data(), SIGNAL( resultsChanged() ),
+                 SLOT( onResultsChanged() ), Qt::UniqueConnection );
     }
 
     setBusy( false );
@@ -620,9 +620,8 @@ Playlist::resolve()
 
 
 void
-Playlist::onResultsFound( const QList<Tomahawk::result_ptr>& results )
+Playlist::onResultsChanged()
 {
-    Q_UNUSED( results );
     m_locallyChanged = true;
 }
 

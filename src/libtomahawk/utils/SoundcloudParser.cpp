@@ -103,9 +103,9 @@ SoundcloudParser::parseTrack( const QVariantMap& res )
 
     if ( !q.isNull() )
     {
-        tLog() << "Setting resulthint to " << res.value( "stream_url" );
-        q->setResultHint( res.value( "trackuri" ).toString() + "&client_id=TiNg2DRYhBnp01DA3zNag" );
-        q->setProperty( "annotation", res.value( "trackuri" ).toString() + "&client_id=TiNg2DRYhBnp01DA3zNag" );
+        tLog() << "Setting resulthint to " << res.value( "stream_url" ) << res;
+        q->setResultHint( res.value( "stream_url" ).toString() + "?client_id=TiNg2DRYhBnp01DA3zNag" );
+        q->setSaveHTTPResultHint( true );
         m_tracks << q;
     }
 
