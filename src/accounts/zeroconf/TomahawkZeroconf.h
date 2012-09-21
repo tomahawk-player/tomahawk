@@ -107,12 +107,12 @@ public slots:
                             .toAscii();
         m_sock.writeDatagram( advert.data(), advert.size(),
                               QHostAddress::Broadcast, ZCONF_PORT );
-//         advert = QString( "TOMAHAWKADVERT:%1:%2" )
-//                             .arg( m_port )
-//                             .arg( Database::instance()->impl()->dbid() )
-//                             .toAscii();
-//         m_sock.writeDatagram( advert.data(), advert.size(),
-//                               QHostAddress::Broadcast, ZCONF_PORT );
+        advert = QString( "TOMAHAWKADVERT:%1:%2" )
+                            .arg( m_port )
+                            .arg( Database::instance()->impl()->dbid() )
+                            .toAscii();
+        m_sock.writeDatagram( advert.data(), advert.size(),
+                              QHostAddress::Broadcast, ZCONF_PORT );
     }
 
 signals:
