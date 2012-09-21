@@ -240,6 +240,13 @@ Pipeline::resolve( const QList<query_ptr>& qlist, bool prioritized, bool tempora
 }
 
 
+bool
+Pipeline::isResolving( const query_ptr& q ) const
+{
+    return m_qids.contains( q->id() ) && m_qidsState.contains( q->id() );
+}
+
+
 void
 Pipeline::resolve( const query_ptr& q, bool prioritized, bool temporaryQuery )
 {
@@ -275,13 +282,13 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
     Q_ASSERT( !q.isNull() );
     if ( q.isNull() )
         return;
-    
+
     QList< result_ptr > cleanResults;
     foreach ( const result_ptr& r, results )
     {
         if ( r.isNull() )
             continue;
-        
+
         float score = q->howSimilar( r );
         r->setScore( score );
         if ( !q->isFullTextQuery() && score < MINSCORE )

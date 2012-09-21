@@ -77,6 +77,8 @@ public:
         return m_rids.value( rid );
     }
 
+    bool isResolving( const query_ptr& q ) const;
+
 public slots:
     void resolve( const query_ptr& q, bool prioritized = true, bool temporaryQuery = false );
     void resolve( const QList<query_ptr>& qlist, bool prioritized = true, bool temporaryQuery = false );
