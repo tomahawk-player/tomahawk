@@ -232,6 +232,10 @@ XSPFLoader::gotBody()
             {
                 url = n.text();
             }
+            else if ( n.namespaceURI() == m_NS && n.localName() == "location" )
+            {
+                url = n.text();
+            }
         }
 
         if ( artist.isEmpty() || track.isEmpty() )
