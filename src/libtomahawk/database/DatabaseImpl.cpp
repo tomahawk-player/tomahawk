@@ -623,11 +623,12 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
         res = Tomahawk::Result::get( url );
         res->setRID( uuid() );
         res->setScore( 1.0 );
-        res->setArtist( Tomahawk::Artist::get( artistId( origquery->artist(), true ), origquery->artist() ) );
-        res->setAlbum( Tomahawk::Album::get( albumId( res->artist()->id(), origquery->album(), true ), origquery->album(), res->artist() ) );
+        res->setArtist( Tomahawk::Artist::get( artistId( origquery->artist(), false ), origquery->artist() ) );
+        res->setAlbum( Tomahawk::Album::get( albumId( res->artist()->id(), origquery->album(), false ), origquery->album(), res->artist() ) );
         res->setTrack( origquery->track() );
         res->setDuration( origquery->duration() );
-        res->setFriendlySource( url );
+        const QUrl u = QUrl::fromUserInput( url );
+        res->setFriendlySource( u.host() );
 
         return res;
     }
