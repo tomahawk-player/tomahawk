@@ -33,14 +33,19 @@ public:
     WebResultHintChecker( const query_ptr& q );
     virtual ~WebResultHintChecker();
 
+    static void checkQuery( const query_ptr& query );
+    static void checkQueries( const QList< query_ptr >& queries );
+
 private slots:
     void headFinished( QNetworkReply* reply );
 
+    void check( const QUrl& url );
+
+    void onResolvingFinished( bool hasResults );
 private:
-    void check( const QString& url );
+    void removeHint();
 
     query_ptr m_query;
-    result_ptr m_result;
     QString m_url;
 };
 

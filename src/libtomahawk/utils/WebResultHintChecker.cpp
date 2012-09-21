@@ -22,10 +22,12 @@
 #include "Source.h"
 #include "utils/Closure.h"
 #include "utils/Logger.h"
+#include "Pipeline.h"
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QUrl>
 
 using namespace Tomahawk;
 
@@ -33,25 +35,14 @@ WebResultHintChecker::WebResultHintChecker( const query_ptr& q )
     : QObject( 0 )
     , m_query( q )
 {
+    Q_ASSERT( !m_query.isNull() );
+
     m_url = q->resultHint();
 
-    foreach ( const result_ptr& result, q->results() )
-    {
-        if ( result->url() == m_url )
-        {
-            m_result = result;
-            break;
-        }
-    }
-
-    // Nothing to do
-    if ( m_url.isEmpty() || !m_url.startsWith( "http" ) )
-    {
-        deleteLater();
-        return;
-    }
-
-    check( m_url );
+    if ( Pipeline::instance()->isResolving( m_query ) )
+        connect( m_query.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( onResolvingFinished( bool ) ) );
+    else
+        check( QUrl::fromUserInput( m_url ) );
 }
 
 WebResultHintChecker::~WebResultHintChecker()
@@ -61,10 +52,68 @@ WebResultHintChecker::~WebResultHintChecker()
 
 
 void
-WebResultHintChecker::check( const QString &url )
+WebResultHintChecker::checkQuery( const query_ptr& query )
 {
-    QNetworkReply* reply = TomahawkUtils::nam()->head( QNetworkRequest( QUrl( url ) ) );
+    if ( !query->resultHint().isEmpty() && query->resultHint().startsWith( "http" ) )
+        new WebResultHintChecker( query );
+}
+
+
+void
+WebResultHintChecker::checkQueries( const QList< query_ptr >& queries )
+{
+    foreach ( const query_ptr&  query, queries )
+        checkQuery( query );
+}
+
+
+void
+WebResultHintChecker::onResolvingFinished( bool hasResults )
+{
+    Q_UNUSED( hasResults );
+
+    check( QUrl::fromUserInput( m_url ) );
+}
+
+
+void
+WebResultHintChecker::check( const QUrl &url )
+{
+    // Nothing to do
+    if ( url.isEmpty() || !url.toString().startsWith( "http" ) )
+    {
+        if ( !url.isEmpty() || m_query->saveHTTPResultHint() )
+            removeHint();
+
+        deleteLater();
+        return;
+    }
+
+    QNetworkReply* reply = TomahawkUtils::nam()->head( QNetworkRequest( url ) );
     NewClosure( reply, SIGNAL( finished() ), this, SLOT( headFinished( QNetworkReply* ) ), reply );
+}
+
+
+void
+WebResultHintChecker::removeHint()
+{
+    tLog() << "Removing HTTP result from query since HEAD request failed to verify it was a valid url:" << m_url;
+
+    result_ptr foundResult;
+    foreach ( const result_ptr& result, m_query->results() )
+    {
+        if ( result->url() == m_url )
+        {
+            foundResult = result;
+            break;
+        }
+    }
+
+    if ( !foundResult.isNull() )
+        m_query->removeResult( foundResult );
+    if ( m_query->resultHint() == m_url )
+        m_query->setResultHint( QString() );
+    m_query->setSaveHTTPResultHint( false );
 }
 
 
@@ -77,7 +126,7 @@ WebResultHintChecker::headFinished( QNetworkReply* reply )
     if ( redir.isValid() )
     {
         const QUrl url = reply->url().resolved( redir );
-        check( url.toString() );
+        check( url );
 
         return;
     }
@@ -85,12 +134,7 @@ WebResultHintChecker::headFinished( QNetworkReply* reply )
     {
         // Error getting headers for the http resulthint, remove it from the result
         // as it's definitely not playable
-        tLog() << "Removing HTTP result from query since HEAD request failed to verify it was a valid url:" << m_url;
-        if ( !m_result.isNull() )
-            m_query->removeResult( m_result );
-        if ( m_query->resultHint() == m_url )
-            m_query->setResultHint( QString() );
-        m_query->setSaveHTTPResultHint( false );
+        removeHint();
     }
 
     deleteLater();
