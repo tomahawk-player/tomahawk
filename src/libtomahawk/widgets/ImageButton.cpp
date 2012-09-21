@@ -73,6 +73,12 @@ ImageButton::setPixmap( const QPixmap& pixmap )
 
 
 void
+ImageButton::clear()
+{
+    setIcon( QIcon() );
+}
+
+void
 ImageButton::paintEvent( QPaintEvent* event )
 {
     QPainter p( this );

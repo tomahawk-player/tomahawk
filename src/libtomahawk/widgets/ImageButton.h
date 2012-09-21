@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *
@@ -35,18 +35,20 @@ public:
     explicit ImageButton( QWidget* parent = 0 );
     explicit ImageButton( const QPixmap& pixmap, QWidget* parent = 0 );
     explicit ImageButton( const QString& path, QWidget* parent = 0 );
-    
+
     void setPixmap( const QString& path );
     void setPixmap( const QPixmap& pixmap );
 
     void setPixmap( const QString&, const QIcon::State, QIcon::Mode = QIcon::Normal );
     void setPixmap( const QPixmap&, const QIcon::State, QIcon::Mode = QIcon::Normal );
-    
+
+    void clear();
+
     virtual QSize sizeHint() const { return m_sizeHint; }
-    
+
 protected:
     virtual void paintEvent( QPaintEvent* event );
-    
+
 private:
     void init( const QPixmap& );
 

@@ -93,12 +93,14 @@ private:
     void setSocialActions();
 
     Ui::AudioControls* ui;
-    
+
     QWeakPointer<SocialWidget> m_socialWidget;
 
     Tomahawk::result_ptr m_currentTrack;
     Tomahawk::PlaylistModes::RepeatMode m_repeatMode;
     bool m_shuffled;
+
+    QPixmap m_defaultSourceIcon;
 
     QTimer m_phononTickCheckTimer;
     QTimeLine m_sliderTimeLine;

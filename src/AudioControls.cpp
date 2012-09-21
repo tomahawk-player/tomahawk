@@ -70,6 +70,8 @@ AudioControls::AudioControls( QWidget* parent )
 
     font.setPointSize( TomahawkUtils::defaultFontSize() - 2 );
 
+    m_defaultSourceIcon = QPixmap( RESPATH "images/resolver-default.png" );
+
     ui->prevButton->setPixmap( RESPATH "images/back-rest.png" );
     ui->prevButton->setPixmap( RESPATH "images/back-pressed.png", QIcon::Off, QIcon::Active );
     ui->playPauseButton->setPixmap( RESPATH "images/play-rest.png" );
@@ -87,7 +89,7 @@ AudioControls::AudioControls( QWidget* parent )
     ui->socialButton->setPixmap( RESPATH "images/share.png" );
     ui->loveButton->setPixmap( RESPATH "images/not-loved.png" );
     ui->loveButton->setCheckable( true );
-    ui->ownerButton->setPixmap( RESPATH "images/resolver-default.png" );
+    ui->ownerButton->setPixmap( m_defaultSourceIcon );
 
     ui->socialButton->setFixedSize( QSize( 20, 20 ) );
     ui->loveButton->setFixedSize( QSize( 20, 20 ) );
@@ -261,8 +263,16 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
     ui->socialButton->setToolTip( tr( "Share" ) );
     ui->loveButton->setToolTip( tr( "Love" ) );
     ui->ownerButton->setToolTip( QString( tr( "Playing from %1" ) ).arg( result->friendlySource() ) );
+
     QPixmap sourceIcon = result->sourceIcon().scaled( ui->ownerButton->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    ui->ownerButton->setPixmap( sourceIcon );
+    if ( !sourceIcon.isNull() )
+        ui->ownerButton->setPixmap( sourceIcon );
+    else
+    {
+        ui->ownerButton->clear();
+        ui->ownerButton->setPixmap( m_defaultSourceIcon );
+    }
+
     if ( QUrl( result->linkUrl() ).isValid() || !result->collection().isNull() )
         ui->ownerButton->setCursor( Qt::PointingHandCursor );
     else
@@ -366,7 +376,7 @@ AudioControls::onPlaybackStopped()
     m_sliderTimeLine.stop();
     m_sliderTimeLine.setCurrentTime( 0 );
     m_phononTickCheckTimer.stop();
-    ui->ownerButton->setPixmap(  RESPATH "images/resolver-default.png" );
+    ui->ownerButton->setPixmap( m_defaultSourceIcon );
 
     ui->stackedLayout->setCurrentWidget( ui->playPauseButton );
     ui->loveButton->setEnabled( false );
