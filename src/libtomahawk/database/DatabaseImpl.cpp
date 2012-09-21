@@ -40,7 +40,7 @@
 */
 #include "Schema.sql.h"
 
-#define CURRENT_SCHEMA_VERSION 28
+#define CURRENT_SCHEMA_VERSION 29
 
 DatabaseImpl::DatabaseImpl( const QString& dbname )
 {

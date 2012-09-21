@@ -115,6 +115,8 @@
         <file>data/sql/dbmigrate-24_to_25.sql</file>
         <file>data/sql/dbmigrate-25_to_26.sql</file>
         <file>data/sql/dbmigrate-26_to_27.sql</file>
+        <file>data/sql/dbmigrate-27_to_28.sql</file>
+	<file>data/sql/dbmigrate-28_to_29.sql</file>
         <file>data/js/tomahawk.js</file>
         <file>data/images/avatar_frame.png</file>
         <file>data/images/drop-all-songs.png</file>
@@ -139,7 +141,6 @@
         <file>data/images/spotifycore-logo.png</file>
         <file>data/images/playlist-header-tiled.png</file>
         <file>data/images/share.png</file>
-        <file>data/sql/dbmigrate-27_to_28.sql</file>
         <file>data/images/process-stop.png</file>
         <file>data/icons/tomahawk-icon-128x128-grayscale.png</file>
         <file>data/images/collection.png</file>
