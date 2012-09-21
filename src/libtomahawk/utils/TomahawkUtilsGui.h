@@ -25,6 +25,7 @@
 #include <QColor>
 #include <QRect>
 #include <QTextOption>
+#include <QImage>
 
 #include "TomahawkUtils.h"
 #include "DllMacro.h"
@@ -68,6 +69,8 @@ namespace TomahawkUtils
     DLLEXPORT void drawRoundedButton( QPainter* painter, const QRect& btnRect, const QColor& color, const QColor &gradient1bottom = QColor(), const QColor& gradient2top = QColor(), const QColor& gradient2bottom = QColor() );
 
     DLLEXPORT void styleScrollBar( QScrollBar* scrollBar );
+
+    DLLEXPORT QPixmap createTiledPixmap( int width, int height, const QImage& src );
 }
 
 #endif // TOMAHAWKUTILSGUI_H

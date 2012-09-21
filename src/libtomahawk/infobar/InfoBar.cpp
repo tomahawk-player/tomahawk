@@ -98,7 +98,7 @@ InfoBar::InfoBar( QWidget* parent )
     setAutoFillBackground( true );
 
     setFixedHeight( 80 );
-    createTile();
+    m_bgTile = TomahawkUtils::createTiledPixmap( 2000, height(), QImage( RESPATH "images/playlist-header-tiled.png" ) );
 
     connect( ViewManager::instance(), SIGNAL( filterAvailable( bool ) ), SLOT( setFilterAvailable( bool ) ) );
 }
@@ -282,54 +282,13 @@ InfoBar::onFilterEdited()
     emit filterTextChanged( m_searchWidget->text() );
 }
 
-
-void
-InfoBar::createTile( int w )
-{
-    QImage tile = QImage( RESPATH "images/playlist-header-tiled.png" );
-
-    if ( tile.isNull() )
-        return;
-
-    if ( tile.height() < height() )
-    {
-        // image must be at least as tall as we are
-        QImage taller( tile.width(), height(), QImage::Format_ARGB32_Premultiplied );
-        QPainter p( &taller );
-        int curY = 0;
-        while ( curY < taller.height() )
-        {
-            const int thisHeight = (curY + tile.height() > height()) ? height() - curY : tile.height();
-            p.drawImage( QRect( 0, curY, tile.width(), thisHeight ), tile, QRect( 0, 0, tile.width(), thisHeight ) );
-            curY += tile.height();
-        }
-        tile = taller;
-    }
-
-    m_bgTile = QPixmap( w, height() );
-    m_bgTile.fill( Qt::transparent );
-
-    int curWidth = 0;
-    QPainter p( &m_bgTile );
-    while ( curWidth < w )
-    {
-        const int thisWidth = (curWidth + tile.width() > w) ? w - curWidth : tile.width();
-
-        const QRect source( 0, 0, thisWidth, m_bgTile.height() );
-        const QRect dest( curWidth, 0, thisWidth, m_bgTile.height() );
-        p.drawImage( dest, tile, source );
-        curWidth += thisWidth;
-    }
-}
-
-
 void
 InfoBar::paintEvent( QPaintEvent* e )
 {
     Q_UNUSED( e );
 
     if ( m_bgTile.isNull() || width() > m_bgTile.width() )
-        createTile( width() );
+        m_bgTile = TomahawkUtils::createTiledPixmap( width(), height(), QImage( RESPATH "images/playlist-header-tiled.png" ) );
 
     if ( m_bgTile.isNull() )
         return;

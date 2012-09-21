@@ -543,4 +543,49 @@ styleScrollBar( QScrollBar* scrollBar )
             "border: 0px; width: 0px; height: 0px; background: none; background-color: transparent; }" );
 }
 
+
+QPixmap
+createTiledPixmap( int width, int height, const QImage& inputTile )
+{
+    if ( inputTile.isNull() )
+        return QPixmap();
+
+
+    QImage localTile = inputTile;
+
+    if ( localTile.height() < height )
+    {
+        // image must be at least as tall as we are
+        QImage taller( localTile.width(), height, QImage::Format_ARGB32_Premultiplied );
+        QPainter p( &taller );
+        int curY = 0;
+        while ( curY < taller.height() )
+        {
+            const int thisHeight = (curY + localTile.height() > height) ? height - curY : localTile.height();
+            p.drawImage( QRect( 0, curY, localTile.width(), thisHeight ), localTile, QRect( 0, 0, localTile.width(), thisHeight ) );
+            curY += localTile.height();
+        }
+        localTile = taller;
+    }
+
+
+    QPixmap tiledImage = QPixmap( width, height );
+    tiledImage.fill( Qt::transparent );
+
+    int curWidth = 0;
+    QPainter p( &tiledImage );
+    while ( curWidth < width )
+    {
+        const int thisWidth = (curWidth + localTile.width() > width) ? width - curWidth : localTile.width();
+
+        const QRect source( 0, 0, thisWidth, tiledImage.height() );
+        const QRect dest( curWidth, 0, thisWidth, tiledImage.height() );
+        p.drawImage( dest, localTile, source );
+        curWidth += thisWidth;
+    }
+
+    return tiledImage;
+}
+
+
 } // ns

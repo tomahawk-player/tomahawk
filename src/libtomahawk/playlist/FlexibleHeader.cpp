@@ -36,6 +36,7 @@
 
 using namespace Tomahawk;
 
+QPixmap* FlexibleHeader::s_tiledHeader = 0;
 
 FlexibleHeader::FlexibleHeader( FlexibleView* parent )
     : QWidget( parent )
@@ -78,6 +79,9 @@ FlexibleHeader::FlexibleHeader( FlexibleView* parent )
     setPalette( pal );
     setAutoFillBackground( true );
 
+    if ( !s_tiledHeader )
+        s_tiledHeader = new QPixmap( TomahawkUtils::createTiledPixmap( 2000, height(), QImage( RESPATH "images/playlist-header-tiled.png" ) ) );
+
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
     connect( ui->filter, SIGNAL( textChanged( QString ) ), SLOT( onFilterEdited() ) );
 
@@ -89,6 +93,8 @@ FlexibleHeader::FlexibleHeader( FlexibleView* parent )
 
 FlexibleHeader::~FlexibleHeader()
 {
+    delete s_tiledHeader;
+    s_tiledHeader = 0;
     delete ui;
 }
 
@@ -153,4 +159,23 @@ FlexibleHeader::changeEvent( QEvent* e )
         default:
             break;
     }
+}
+
+
+void
+FlexibleHeader::paintEvent( QPaintEvent*  )
+{
+    if ( !s_tiledHeader || s_tiledHeader->isNull() || width() > s_tiledHeader->width() )
+    {
+        delete s_tiledHeader;
+        s_tiledHeader = new QPixmap( TomahawkUtils::createTiledPixmap( width(), height(), QImage( RESPATH "images/playlist-header-tiled.png" ) ) );
+    }
+
+    if ( !s_tiledHeader || s_tiledHeader->isNull() )
+        return;
+
+    QPainter p( this );
+
+    // Truncate bg pixmap and paint into bg
+    p.drawPixmap( rect(), *s_tiledHeader, rect() );
 }

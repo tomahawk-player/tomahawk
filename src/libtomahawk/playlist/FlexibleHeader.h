@@ -25,6 +25,7 @@
 #include "DllMacro.h"
 #include "Artist.h"
 
+class QPaintEvent;
 class FlexibleView;
 
 namespace Ui
@@ -52,6 +53,7 @@ signals:
 
 protected:
     void changeEvent( QEvent* e );
+    void paintEvent( QPaintEvent* e );
 
 private slots:
     void onFilterEdited();
@@ -63,6 +65,8 @@ private:
 
     QString m_filter;
     QTimer m_filterTimer;
+
+    static QPixmap* s_tiledHeader;
 };
 
 #endif
