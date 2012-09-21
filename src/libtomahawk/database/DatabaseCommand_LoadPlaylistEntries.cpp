@@ -74,13 +74,17 @@ DatabaseCommand_LoadPlaylistEntries::generateEntries( DatabaseImpl* dbi )
             e->setAnnotation( query.value( 4 ).toString() );
             e->setDuration( query.value( 5 ).toUInt() );
             e->setLastmodified( 0 ); // TODO e->lastmodified = query.value( 6 ).toInt();
-            e->setResultHint( query.value( 8 ).toString() );
+            const QString resultHint = query.value( 8 ).toString();
+            e->setResultHint( resultHint );
 
             Tomahawk::query_ptr q = Tomahawk::Query::get( query.value( 2 ).toString(), query.value( 1 ).toString(), query.value( 3 ).toString() );
             if ( q.isNull() )
                 continue;
 
-            q->setResultHint( query.value( 8 ).toString() );
+            q->setResultHint( resultHint );
+            if ( resultHint.startsWith( "http" ) )
+                q->setSaveHTTPResultHint( true );
+
             q->setProperty( "annotation", e->annotation() );
             e->setQuery( q );
 
