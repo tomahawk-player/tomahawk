@@ -28,6 +28,8 @@
 
 //template <typename T> class QSharedPointer;
 
+class QNetworkReply;
+
 namespace Tomahawk
 {
     class Artist;
@@ -221,5 +223,6 @@ inline static QString uuid()
 
 Q_DECLARE_METATYPE( QModelIndex )
 Q_DECLARE_METATYPE( QPersistentModelIndex )
+Q_DECLARE_METATYPE( QNetworkReply* );
 
 #endif // TYPEDEFS_H

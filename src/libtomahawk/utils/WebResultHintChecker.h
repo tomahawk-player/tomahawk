@@ -37,6 +37,8 @@ private slots:
     void headFinished( QNetworkReply* reply );
 
 private:
+    void check( const QString& url );
+
     query_ptr m_query;
     result_ptr m_result;
     QString m_url;

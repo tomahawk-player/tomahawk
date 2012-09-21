@@ -177,5 +177,4 @@ protected:
 };
 
 Q_DECLARE_METATYPE( Attica::Content );
-Q_DECLARE_METATYPE( QNetworkReply* );
 #endif // ATTICAMANAGER_H

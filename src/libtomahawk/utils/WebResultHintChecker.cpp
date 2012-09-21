@@ -25,6 +25,7 @@
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include <QNetworkRequest>
 
 using namespace Tomahawk;
 
@@ -50,8 +51,7 @@ WebResultHintChecker::WebResultHintChecker( const query_ptr& q )
         return;
     }
 
-    QNetworkReply* reply = TomahawkUtils::nam()->head( QNetworkRequest( QUrl( m_url ) ) );
-    NewClosure( reply, SIGNAL( finished() ), this, SLOT( headFinished( QNetworkReply* ) ) );
+    check( m_url );
 }
 
 WebResultHintChecker::~WebResultHintChecker()
@@ -61,9 +61,27 @@ WebResultHintChecker::~WebResultHintChecker()
 
 
 void
+WebResultHintChecker::check( const QString &url )
+{
+    QNetworkReply* reply = TomahawkUtils::nam()->head( QNetworkRequest( QUrl( url ) ) );
+    NewClosure( reply, SIGNAL( finished() ), this, SLOT( headFinished( QNetworkReply* ) ), reply );
+}
+
+
+void
 WebResultHintChecker::headFinished( QNetworkReply* reply )
 {
-    if ( reply->error() != QNetworkReply::NoError )
+    reply->deleteLater();
+
+    const QUrl redir = reply->attribute( QNetworkRequest::RedirectionTargetAttribute ).toUrl();
+    if ( redir.isValid() )
+    {
+        const QUrl url = reply->url().resolved( redir );
+        check( url.toString() );
+
+        return;
+    }
+    else if ( reply->error() != QNetworkReply::NoError )
     {
         // Error getting headers for the http resulthint, remove it from the result
         // as it's definitely not playable
@@ -72,8 +90,8 @@ WebResultHintChecker::headFinished( QNetworkReply* reply )
             m_query->removeResult( m_result );
         if ( m_query->resultHint() == m_url )
             m_query->setResultHint( QString() );
+        m_query->setSaveHTTPResultHint( false );
     }
 
-    reply->deleteLater();
     deleteLater();
 }
