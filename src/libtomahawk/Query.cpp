@@ -36,7 +36,6 @@
 #include "audio/AudioEngine.h"
 
 #include "utils/Logger.h"
-#include "utils/WebResultHintChecker.h"
 
 using namespace Tomahawk;
 
@@ -777,9 +776,6 @@ void
 Query::setSaveHTTPResultHint( bool saveResultHint )
 {
     m_saveResultHint = saveResultHint;
-
-    // Make sure it's a valid url
-    new WebResultHintChecker( m_ownRef.toStrongRef() );
 }
 
 
