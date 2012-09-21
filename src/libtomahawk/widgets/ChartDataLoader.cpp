@@ -42,6 +42,13 @@ ChartDataLoader::go()
                 if ( q.isNull() )
                     continue;
 
+                const QString url = track[ "streamUrl" ];
+                if ( !url.isEmpty() )
+                {
+                    q->setResultHint( url );
+                    q->setSaveHTTPResultHint( true );
+                }
+
                 track_ptrs << q;
             }
 

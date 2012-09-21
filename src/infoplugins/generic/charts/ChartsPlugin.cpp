@@ -546,7 +546,7 @@ ChartsPlugin::chartReturned()
 //         qDebug() << "Got chart returned!" << res;
         foreach ( QVariant chartR, chartResponse )
         {
-            QString title, artist, album;
+            QString title, artist, album, streamUrl;
             QVariantMap chartMap = chartR.toMap();
 
             if ( !chartMap.isEmpty() )
@@ -555,6 +555,7 @@ ChartsPlugin::chartReturned()
                 title = chartMap.value( "track" ).toString();
                 album = chartMap.value( "album" ).toString();
                 artist = chartMap.value( "artist" ).toString();
+                streamUrl = chartMap.value( "stream_url" ).toString();
                 /// Maybe we can use rank later on, to display something nice
                 /// rank = chartMap.value( "rank" ).toString();
 
@@ -591,6 +592,7 @@ ChartsPlugin::chartReturned()
                         Tomahawk::InfoSystem::InfoStringHash pair;
                         pair["artist"] = artist;
                         pair["track"] = title;
+                        pair["streamUrl"] = streamUrl;
                         top_tracks.append( pair );
 
                     }
