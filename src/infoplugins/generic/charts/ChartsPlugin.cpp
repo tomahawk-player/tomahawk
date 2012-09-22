@@ -54,7 +54,7 @@ ChartsPlugin::ChartsPlugin()
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << QThread::currentThread();
     /// If you add resource, update version aswell
-    m_chartVersion = "2.4";
+    m_chartVersion = "2.5";
     m_supportedGetTypes <<  InfoChart << InfoChartCapabilities;
 }
 
@@ -333,6 +333,7 @@ ChartsPlugin::chartsList()
             // WeAreHunted - Type - Artists - Chart Type
             //                    - Tracks  - Chart Type
             QHash< QString, QVariantMap > extraType;
+            QStringList processed;
             foreach( const QVariant& chartObj, res.values() )
             {
                 if( !chartObj.toMap().isEmpty() )
@@ -343,6 +344,17 @@ ChartsPlugin::chartsList()
                     QString name = chart.value( "genre" ).toString();
                     const QString type = QString( chart.value( "type" ).toString() + "s" );
                     const bool isDefault = ( chart.contains( "default" ) && chart[ "default" ].toInt() == 1 );
+
+                    // Hack!
+                    // Japan charts contains multiple duplicates, all which are linked
+                    // back to ONE specific id. So we only parse the first
+                    // Should/Could be fixed in the chartserver when its less fragile
+                    if( geo == "jp" && type == "Tracks" )
+                    {
+                        if( processed.contains( name ) )
+                            continue;
+                        processed << name;
+                    }
 
                     QString extra;
                     if( !geo.isEmpty() )
