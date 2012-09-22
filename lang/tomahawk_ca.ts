@@ -392,13 +392,13 @@ connect and stream from you?</source>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="491"/>
-        <location filename="../src/AudioControls.cpp" line="259"/>
+        <location filename="../src/AudioControls.cpp" line="261"/>
         <source>Shuffle</source>
         <translation>Mescla</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="504"/>
-        <location filename="../src/AudioControls.cpp" line="260"/>
+        <location filename="../src/AudioControls.cpp" line="262"/>
         <source>Repeat</source>
         <translation>Repeteix</translation>
     </message>
@@ -413,27 +413,27 @@ connect and stream from you?</source>
         <translation>Alt</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="257"/>
+        <location filename="../src/AudioControls.cpp" line="259"/>
         <source>Time Elapsed</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="258"/>
+        <location filename="../src/AudioControls.cpp" line="260"/>
         <source>Time Remaining</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="263"/>
+        <location filename="../src/AudioControls.cpp" line="265"/>
         <source>Playing from %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="261"/>
+        <location filename="../src/AudioControls.cpp" line="263"/>
         <source>Share</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="262"/>
+        <location filename="../src/AudioControls.cpp" line="264"/>
         <source>Love</source>
         <translation type="unfinished"/>
     </message>
@@ -1380,7 +1380,7 @@ connect and stream from you?</source>
         <translation>Tot</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="274"/>
+        <location filename="../src/SettingsDialog.cpp" line="292"/>
         <source>Some changed settings will not take effect until Tomahawk is restarted</source>
         <translation>Alguns paràmetres no tindran efecte fins que no reinicieu Tomahawk</translation>
     </message>
@@ -1410,22 +1410,22 @@ connect and stream from you?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="443"/>
+        <location filename="../src/SettingsDialog.cpp" line="444"/>
         <source>Install resolver from file</source>
         <translation>Instal·la un Resolver des d&apos;un fitxer</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="490"/>
+        <location filename="../src/SettingsDialog.cpp" line="491"/>
         <source>Delete all Access Control entries?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="491"/>
+        <location filename="../src/SettingsDialog.cpp" line="492"/>
         <source>Do you really want to delete all Access Control entries? You will be asked for a decision again for each peer that you connect to.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="274"/>
+        <location filename="../src/SettingsDialog.cpp" line="292"/>
         <source>Information</source>
         <translation>Informació</translation>
     </message>
@@ -2989,22 +2989,22 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
 <context>
     <name>Tomahawk::InfoSystem::ChartsPlugin</name>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="373"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="385"/>
         <source>Top Overall</source>
         <translation>Top General</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="462"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="474"/>
         <source>Artists</source>
         <translation>Artistes</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="464"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="476"/>
         <source>Albums</source>
         <translation>Àlbums</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="466"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="478"/>
         <source>Tracks</source>
         <translation>Cançons</translation>
     </message>

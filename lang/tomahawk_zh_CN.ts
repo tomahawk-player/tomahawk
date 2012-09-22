@@ -115,7 +115,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="73"/>
         <source>Go &amp;Online</source>
-        <translation>上线 &amp;O</translation>
+        <translation>上线</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="75"/>
@@ -392,13 +392,13 @@ connect and stream from you?</source>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="491"/>
-        <location filename="../src/AudioControls.cpp" line="259"/>
+        <location filename="../src/AudioControls.cpp" line="261"/>
         <source>Shuffle</source>
         <translation>无序播放</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="504"/>
-        <location filename="../src/AudioControls.cpp" line="260"/>
+        <location filename="../src/AudioControls.cpp" line="262"/>
         <source>Repeat</source>
         <translation>重复播放</translation>
     </message>
@@ -413,27 +413,27 @@ connect and stream from you?</source>
         <translation>高</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="257"/>
+        <location filename="../src/AudioControls.cpp" line="259"/>
         <source>Time Elapsed</source>
         <translation>已播放时间</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="258"/>
+        <location filename="../src/AudioControls.cpp" line="260"/>
         <source>Time Remaining</source>
         <translation>剩余时间</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="263"/>
+        <location filename="../src/AudioControls.cpp" line="265"/>
         <source>Playing from %1</source>
         <translation>歌曲来自 %1</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="261"/>
+        <location filename="../src/AudioControls.cpp" line="263"/>
         <source>Share</source>
         <translation>分享</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="262"/>
+        <location filename="../src/AudioControls.cpp" line="264"/>
         <source>Love</source>
         <translation>喜欢</translation>
     </message>
@@ -1380,7 +1380,7 @@ connect and stream from you?</source>
         <translation>所有</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="274"/>
+        <location filename="../src/SettingsDialog.cpp" line="292"/>
         <source>Some changed settings will not take effect until Tomahawk is restarted</source>
         <translation>一些设置改动将在 Tomahawk 下次启动时生效。</translation>
     </message>
@@ -1410,22 +1410,22 @@ connect and stream from you?</source>
         <translation>配置 Tomahawk 的高级设置，包括网络链接设置，浏览交互设置等等。</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="443"/>
+        <location filename="../src/SettingsDialog.cpp" line="444"/>
         <source>Install resolver from file</source>
         <translation>从文件安装解析器</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="490"/>
+        <location filename="../src/SettingsDialog.cpp" line="491"/>
         <source>Delete all Access Control entries?</source>
         <translation>删除所有的访问控制项？</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="491"/>
+        <location filename="../src/SettingsDialog.cpp" line="492"/>
         <source>Do you really want to delete all Access Control entries? You will be asked for a decision again for each peer that you connect to.</source>
         <translation>你真的想删除所有的访问控制项吗？将在对每个连接的客户端操作后再次询问。</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="274"/>
+        <location filename="../src/SettingsDialog.cpp" line="292"/>
         <source>Information</source>
         <translation>信息</translation>
     </message>
@@ -2991,22 +2991,22 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::InfoSystem::ChartsPlugin</name>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="373"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="385"/>
         <source>Top Overall</source>
         <translation>全局排行榜</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="462"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="474"/>
         <source>Artists</source>
         <translation>艺术家</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="464"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="476"/>
         <source>Albums</source>
         <translation>专辑</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="466"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="478"/>
         <source>Tracks</source>
         <translation>歌曲</translation>
     </message>
@@ -3339,7 +3339,7 @@ enter the displayed PIN number here:</source>
         <location filename="../src/TomahawkWindow.ui" line="78"/>
         <location filename="../src/TomahawkWindow.cpp" line="1170"/>
         <source>Go &amp;Online</source>
-        <translation>上线 &amp;O</translation>
+        <translation>上线</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="83"/>

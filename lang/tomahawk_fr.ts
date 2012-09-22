@@ -393,13 +393,13 @@ de se connecter et streamer de vous?</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="491"/>
-        <location filename="../src/AudioControls.cpp" line="259"/>
+        <location filename="../src/AudioControls.cpp" line="261"/>
         <source>Shuffle</source>
         <translation>Lecture Aléatoire</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="504"/>
-        <location filename="../src/AudioControls.cpp" line="260"/>
+        <location filename="../src/AudioControls.cpp" line="262"/>
         <source>Repeat</source>
         <translation>Répéter</translation>
     </message>
@@ -414,27 +414,27 @@ de se connecter et streamer de vous?</translation>
         <translation>Haut</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="257"/>
+        <location filename="../src/AudioControls.cpp" line="259"/>
         <source>Time Elapsed</source>
         <translation>Durée Ecoulé</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="258"/>
+        <location filename="../src/AudioControls.cpp" line="260"/>
         <source>Time Remaining</source>
         <translation>Durée Restante</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="263"/>
+        <location filename="../src/AudioControls.cpp" line="265"/>
         <source>Playing from %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="261"/>
+        <location filename="../src/AudioControls.cpp" line="263"/>
         <source>Share</source>
         <translation>Partager</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="262"/>
+        <location filename="../src/AudioControls.cpp" line="264"/>
         <source>Love</source>
         <translation>Favori</translation>
     </message>
@@ -1381,7 +1381,7 @@ de se connecter et streamer de vous?</translation>
         <translation>Tous</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="274"/>
+        <location filename="../src/SettingsDialog.cpp" line="292"/>
         <source>Some changed settings will not take effect until Tomahawk is restarted</source>
         <translation>Certaines modifications ne prendront effet qu&apos;au prochain démarrage de Tomahawk</translation>
     </message>
@@ -1411,22 +1411,22 @@ de se connecter et streamer de vous?</translation>
         <translation>Configurer les paramètres avancés de Tomahawk dont les paramètres de connectivité réseau, les interactions avec le navigateur et autres.</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="443"/>
+        <location filename="../src/SettingsDialog.cpp" line="444"/>
         <source>Install resolver from file</source>
         <translation>Installer un script de résolution depuis un fichier</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="490"/>
+        <location filename="../src/SettingsDialog.cpp" line="491"/>
         <source>Delete all Access Control entries?</source>
         <translation>Supprimer toutes les entrées de Contrôle d&apos;accès?</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="491"/>
+        <location filename="../src/SettingsDialog.cpp" line="492"/>
         <source>Do you really want to delete all Access Control entries? You will be asked for a decision again for each peer that you connect to.</source>
         <translation>Voulez-vous vraiment supprimer toutes les entrées de contrôle d&apos;accès ? On vous demandera de nouveau votre autorisation pour toutes les nouvelles connexions.</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="274"/>
+        <location filename="../src/SettingsDialog.cpp" line="292"/>
         <source>Information</source>
         <translation>Information</translation>
     </message>
@@ -2990,22 +2990,22 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
 <context>
     <name>Tomahawk::InfoSystem::ChartsPlugin</name>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="373"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="385"/>
         <source>Top Overall</source>
         <translation>Top global</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="462"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="474"/>
         <source>Artists</source>
         <translation>Artistes</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="464"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="476"/>
         <source>Albums</source>
         <translation>Albums</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="466"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="478"/>
         <source>Tracks</source>
         <translation>Pistes</translation>
     </message>
