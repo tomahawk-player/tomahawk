@@ -46,6 +46,8 @@ public:
 
 public slots:
     void parse();
+private slots:
+    void playlistCreated();
 
 signals:
     void track( const Tomahawk::query_ptr& track );

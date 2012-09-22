@@ -22,10 +22,9 @@
 #include "utils/TomahawkUtils.h"
 #include "Query.h"
 #include "SourceList.h"
-
 #include "Playlist.h"
 #include "DropJob.h"
-
+#include "ViewManager.h"
 #include <QFileInfo>
 #include <QFile>
 
@@ -76,8 +75,11 @@ M3uLoader::getTags( const QFileInfo& info )
     const char *encodedName = fileName.constData();
 
     TagLib::FileRef f( encodedName );
+    if( f.isNull() )
+        return;
     TagLib::Tag *tag = f.tag();
-
+    if( !tag )
+        return;
     QString artist = TStringToQString( tag->artist() ).trimmed();
     QString album  = TStringToQString( tag->album() ).trimmed();
     QString track  = TStringToQString( tag->title() ).trimmed();
@@ -92,7 +94,12 @@ M3uLoader::getTags( const QFileInfo& info )
         qDebug() << Q_FUNC_INFO << artist << track << album;
         Tomahawk::query_ptr q = Tomahawk::Query::get( artist, track, album, uuid(), !m_createNewPlaylist );
         if ( !q.isNull() )
+        {
+            q->setResultHint( "file://" + info.absoluteFilePath() );
+            q->setSaveHTTPResultHint( true );
+            qDebug() << "ADding resulthint" << q->resultHint();
             m_tracks << q;
+        }
     }
 }
 
@@ -110,6 +117,7 @@ M3uLoader::parseM3u( const QString& fileLink )
     }
 
     m_title = fileInfo.baseName();
+
     while ( !file.atEnd() )
     {
          QByteArray line = file.readLine();
@@ -122,14 +130,19 @@ M3uLoader::parseM3u( const QString& fileLink )
          QFileInfo tmpFile( QUrl::fromUserInput( QString( line.simplified() ) ).toLocalFile() );
 
          if( tmpFile.exists() )
+         {
              getTags( tmpFile );
+         }
          else
          {
              QUrl fileUrl = QUrl::fromUserInput( QString( QFileInfo(file).canonicalPath() + "/" + line.simplified() ) );
              QFileInfo tmpFile( fileUrl.toLocalFile() );
              if ( tmpFile.exists() )
+             {
                 getTags( tmpFile );
+             }
          }
+
     }
 
     if ( m_tracks.isEmpty() )
@@ -155,3 +168,11 @@ M3uLoader::parseM3u( const QString& fileLink )
 
     m_tracks.clear();
 }
+
+void
+M3uLoader::playlistCreated()
+{
+    ViewManager::instance()->show( m_playlist );
+    deleteLater();
+}
+
