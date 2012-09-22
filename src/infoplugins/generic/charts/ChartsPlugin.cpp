@@ -54,7 +54,7 @@ ChartsPlugin::ChartsPlugin()
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << QThread::currentThread();
     /// If you add resource, update version aswell
-    m_chartVersion = "2.3";
+    m_chartVersion = "2.4";
     m_supportedGetTypes <<  InfoChart << InfoChartCapabilities;
 }
 
@@ -341,7 +341,7 @@ ChartsPlugin::chartsList()
                     const QString id = chart.value( "id" ).toString();
                     const QString geo = chart.value( "geo" ).toString();
                     QString name = chart.value( "genre" ).toString();
-                    const QString type = chart.value( "type" ).toString();
+                    const QString type = QString( chart.value( "type" ).toString() + "s" );
                     const bool isDefault = ( chart.contains( "default" ) && chart[ "default" ].toInt() == 1 );
 
                     QString extra;
