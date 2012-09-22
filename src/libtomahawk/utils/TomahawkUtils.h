@@ -67,6 +67,7 @@ namespace TomahawkUtils
     public:
         NetworkProxyFactory()
             : m_proxy( QNetworkProxy::NoProxy )
+            , m_proxyChanged( false )
         {}
 
         NetworkProxyFactory( const NetworkProxyFactory &other );
@@ -81,10 +82,11 @@ namespace TomahawkUtils
 
         virtual NetworkProxyFactory& operator=( const NetworkProxyFactory &rhs );
         virtual bool operator==( const NetworkProxyFactory &other ) const;
-
+        bool changed() const { return m_proxyChanged; }
     private:
         QStringList m_noProxyHosts;
         QNetworkProxy m_proxy;
+        bool m_proxyChanged;
     };
 
     DLLEXPORT bool headless();

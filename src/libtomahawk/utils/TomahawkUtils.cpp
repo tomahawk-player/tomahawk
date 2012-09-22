@@ -467,6 +467,11 @@ NetworkProxyFactory::setNoProxyHosts( const QStringList& hosts )
 void
 NetworkProxyFactory::setProxy( const QNetworkProxy& proxy )
 {
+
+    m_proxyChanged = false;
+    if( m_proxy != proxy )
+         m_proxyChanged = true;
+
     m_proxy = proxy;
     QFlags< QNetworkProxy::Capability > proxyCaps;
     proxyCaps |= QNetworkProxy::TunnelingCapability;
