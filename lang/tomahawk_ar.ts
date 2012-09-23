@@ -379,7 +379,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/AudioControls.ui" line="345"/>
         <source>resolver</source>
-        <translation type="unfinished"/>
+        <translation>المحلل</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="381"/>
@@ -426,7 +426,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/AudioControls.cpp" line="265"/>
         <source>Playing from %1</source>
-        <translation type="unfinished"/>
+        <translation>يتم الاستماع من %1</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.cpp" line="263"/>
@@ -843,7 +843,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="90"/>
         <source>Track Number:</source>
-        <translation type="unfinished"/>
+        <translation>رقم الأغنية:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="119"/>
