@@ -22,7 +22,6 @@
 
 #include "utils/TomahawkUtilsGui.h"
 #include "Pipeline.h"
-#include "TomahawkApp.h"
 #include "Source.h"
 
 #ifndef ENABLE_HEADLESS

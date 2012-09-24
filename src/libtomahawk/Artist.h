@@ -20,8 +20,6 @@
 #ifndef TOMAHAWKARTIST_H
 #define TOMAHAWKARTIST_H
 
-#include "config.h"
-
 #include <QtCore/QObject>
 #ifndef ENABLE_HEADLESS
     #include <QtGui/QPixmap>
