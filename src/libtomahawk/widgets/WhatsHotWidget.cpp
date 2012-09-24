@@ -104,7 +104,7 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 
     // Read last viewed charts, to be used as defaults
-    m_currentVIds = TomahawkSettings::instance()->lastChartIds().toMap();
+    m_currentVIds = TomahawkSettings::instance()->lastChartIds();
     qDebug() << "Got last chartIds:" << m_currentVIds;
 }
 
