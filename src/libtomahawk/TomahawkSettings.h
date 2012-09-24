@@ -212,8 +212,8 @@ public:
     static void registerCustomSettingsHandlers();
 
     // Charts
-    void setLastChartIds( const QVariant& ids );
-    QVariant lastChartIds();
+    void setLastChartIds( const QMap<QString, QVariant>& ids );
+    QMap<QString, QVariant> lastChartIds();
 
 signals:
     void changed();

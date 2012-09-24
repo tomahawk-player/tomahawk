@@ -1369,15 +1369,15 @@ TomahawkSettings::setPlaylistUpdaters( const SerializedUpdaters& updaters )
 
 
 void
-TomahawkSettings::setLastChartIds( const QVariant& ids ){
+TomahawkSettings::setLastChartIds( const QMap<QString, QVariant>& ids ){
 
-    setValue( "chartIds", ids );
+    setValue( "chartIds", QVariant::fromValue<QMap<QString, QVariant> >( ids ) );
 }
 
 
-QVariant TomahawkSettings::lastChartIds(){
+QMap<QString, QVariant> TomahawkSettings::lastChartIds(){
 
-    return value( "chartIds" ).value<QVariant>();
+    return value( "chartIds" ).value<QMap<QString, QVariant> >();
 }
 
 
