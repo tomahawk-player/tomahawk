@@ -74,7 +74,7 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 
     ui->breadCrumbLeft->setRootIcon( QPixmap( RESPATH "images/charts.png" ) );
 
-    connect( ui->breadCrumbLeft, SIGNAL( activateIndex( QModelIndex ) ), SLOT( leftCrumbIndexChanged(QModelIndex) ) );
+    connect( ui->breadCrumbLeft, SIGNAL( activateIndex( QModelIndex ) ), SLOT( leftCrumbIndexChanged( QModelIndex ) ) );
 
     ui->tracksViewLeft->setHeaderHidden( true );
     ui->tracksViewLeft->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
@@ -116,7 +116,7 @@ WhatsHotWidget::~WhatsHotWidget()
 
     qDeleteAll( m_workers );
     m_workers.clear();
-    m_workerThread->exit(0);
+    m_workerThread->exit( 0 );
     m_playlistInterface.clear();
     delete ui;
 }
@@ -214,8 +214,8 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
 
             foreach ( const QString label, returnedData.keys() )
             {
-                QStandardItem *childItem = parseNode( rootItem, label, returnedData[label] );
-                rootItem->appendRow(childItem);
+                QStandardItem *childItem = parseNode( rootItem, label, returnedData[ label ] );
+                rootItem->appendRow( childItem );
             }
 
             // Set the default source
@@ -257,12 +257,12 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
 
         case InfoSystem::InfoChart:
         {
-            if( !returnedData.contains("type") )
+            if ( !returnedData.contains( "type" ) )
                 break;
-            const QString type = returnedData["type"].toString();
-            if( !returnedData.contains(type) )
+            const QString type = returnedData[ "type" ].toString();
+            if ( !returnedData.contains( type ) )
                 break;
-            const QString side = requestData.customData["whatshot_side"].toString();
+
             const QString chartId = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >().value( "chart_id" );
 
             m_queuedFetches.remove( chartId );
@@ -319,7 +319,6 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             }
 
             QMetaObject::invokeMethod( loader, "go", Qt::QueuedConnection );
-
             break;
         }
 
@@ -342,9 +341,9 @@ WhatsHotWidget::leftCrumbIndexChanged( QModelIndex index )
     tDebug( LOGVERBOSE ) << "WhatsHot:: left crumb changed" << index.data();
 
     QStandardItem* item = m_crumbModelLeft->itemFromIndex( m_sortedProxy->mapToSource( index ) );
-    if( !item )
+    if ( !item )
         return;
-    if( !item->data( Breadcrumb::ChartIdRole ).isValid() )
+    if ( !item->data( Breadcrumb::ChartIdRole ).isValid() )
         return;
 
     // Build current views as default. Will be used on next restart
@@ -403,7 +402,7 @@ WhatsHotWidget::leftCrumbIndexChanged( QModelIndex index )
     requestData.timeoutMillis = 20000;
     requestData.allSources = true;
 
-    qDebug() << "Making infosystem request for chart of type:" <<chartId;
+    qDebug() << "Making infosystem request for chart of type:" << chartId;
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 
     m_queuedFetches.insert( chartId );
@@ -444,7 +443,7 @@ WhatsHotWidget::parseNode( QStandardItem* parentItem, const QString &label, cons
             QStandardItem *childItem= new QStandardItem( chart[ "label" ] );
             childItem->setData( chart[ "id" ], Breadcrumb::ChartIdRole );
 
-            if( m_currentVIds.contains( chart.value( "id" ).toLower() ) )
+            if ( m_currentVIds.contains( chart.value( "id" ).toLower() ) )
             {
                  childItem->setData( true, Breadcrumb::DefaultRole );
             }
@@ -460,7 +459,7 @@ WhatsHotWidget::parseNode( QStandardItem* parentItem, const QString &label, cons
         QVariantMap dataMap = data.toMap();
         foreach ( const QString childLabel,dataMap.keys() )
         {
-            QStandardItem *childItem  = parseNode( sourceItem, childLabel, dataMap[childLabel] );
+            QStandardItem *childItem  = parseNode( sourceItem, childLabel, dataMap[ childLabel ] );
             sourceItem->appendRow( childItem );
         }
     }
@@ -470,13 +469,13 @@ WhatsHotWidget::parseNode( QStandardItem* parentItem, const QString &label, cons
 
         foreach ( const QVariant value, dataList )
         {
-            QStandardItem *childItem= new QStandardItem(value.toString());
-            sourceItem->appendRow(childItem);
+            QStandardItem *childItem = new QStandardItem( value.toString() );
+            sourceItem->appendRow( childItem );
         }
     }
     else
     {
-        QStandardItem *childItem= new QStandardItem( data.toString() );
+        QStandardItem *childItem = new QStandardItem( data.toString() );
         sourceItem->appendRow( childItem );
     }
     return sourceItem;
