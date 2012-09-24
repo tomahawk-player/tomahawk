@@ -105,6 +105,7 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 
     // Read last viewed charts, to be used as defaults
     m_currentVIds = TomahawkSettings::instance()->lastChartIds().toMap();
+    qDebug() << "Got last chartIds:" << m_currentVIds;
 }
 
 
@@ -112,6 +113,7 @@ WhatsHotWidget::~WhatsHotWidget()
 {
     qDebug() << "Deleting whatshot";
     // Write the settings
+    qDebug() << "Writing chartIds to settings: " << m_currentVIds;
     TomahawkSettings::instance()->setLastChartIds( m_currentVIds );
     qDeleteAll( m_workers );
     m_workers.clear();
@@ -207,10 +209,12 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                 defaults = returnedData.take( "defaults" ).toMap();
             QString defaultSource = returnedData.take( "defaultSource" ).toString();
 
+            qDebug() << "Have defaultmap" << defaults;
+            qDebug() << "Have customDefault" << m_currentVIds;
             // Merge defaults with current defaults, split the value in to a list
             foreach( const QString&key, m_currentVIds.keys() )
                 defaults[ key ] = m_currentVIds.value( key ).toString().split( "/" );
-
+            qDebug() << "Defaults after merge" << defaults;
             foreach ( const QString label, returnedData.keys() )
             {
                 QStandardItem *childItem = parseNode( rootItem, label, returnedData[ label ] );
