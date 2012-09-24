@@ -138,7 +138,7 @@ XmppSipPlugin::XmppSipPlugin( Account* account )
 #endif
 
     // setup disco
-    m_client->disco()->setSoftwareVersion( "Tomahawk Player", TOMAHAWK_VERSION, CMAKE_SYSTEM );
+    m_client->disco()->setSoftwareVersion( "Tomahawk Player", TOMAHAWK_VERSION, TOMAHAWK_SYSTEM );
     m_client->disco()->addIdentity( Jreen::Disco::Identity( "client", "type", "tomahawk", "en" ) );
     m_client->disco()->addFeature( TOMAHAWK_FEATURE );
 

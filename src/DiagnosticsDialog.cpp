@@ -62,7 +62,8 @@ DiagnosticsDialog::updateLogView()
     QString log;
 
     log.append( QString( "TOMAHAWK DIAGNOSTICS LOG -%1 \n\n" ).arg( QDateTime::currentDateTime().toString() ) );
-    log.append( "TOMAHAWK-VERSION: " TOMAHAWK_VERSION "\n\n" );
+    log.append( "TOMAHAWK-VERSION: " TOMAHAWK_VERSION "\n" );
+    log.append( "PLATFORM: " TOMAHAWK_SYSTEM "\n\n");
     log.append( "NETWORK:\n    General:\n" );
 
     if ( Servent::instance()->visibleExternally() )
