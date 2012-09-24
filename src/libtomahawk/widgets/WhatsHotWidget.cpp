@@ -3,6 +3,7 @@
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2011, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2012, Hugo Lindström <hugolm84@gmail.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -101,11 +102,18 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
              SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
+
+    // Read last viewed charts, to be used as defaults
+    m_currentVIds = QSettings().value( "chartIds" ).toMap();
 }
 
 
 WhatsHotWidget::~WhatsHotWidget()
 {
+    qDebug() << "Deleting whatshot";
+    // Write the settings
+    QSettings().setValue( "chartIds", m_currentVIds );
+
     qDeleteAll( m_workers );
     m_workers.clear();
     m_workerThread->exit(0);
@@ -200,6 +208,10 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                 defaults = returnedData.take( "defaults" ).toMap();
             QString defaultSource = returnedData.take( "defaultSource" ).toString();
 
+            // Merge defaults with current defaults, split the value in to a list
+            foreach( const QString&key, m_currentVIds.keys() )
+                defaults[ key ] = m_currentVIds.value( key ).toString().split( "/" );
+
             foreach ( const QString label, returnedData.keys() )
             {
                 QStandardItem *childItem = parseNode( rootItem, label, returnedData[label] );
@@ -226,7 +238,7 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                         // Go through the children of the current item, marking the default one as default
                         for ( int k = 0; k < cur->rowCount(); k++ )
                         {
-                            if ( cur->child( k, 0 )->text() == index )
+                            if ( cur->child( k, 0 )->text().toLower() == index.toLower() )
                             {
                                 cur = cur->child( k, 0 ); // this is the default, drill down into the default to pick the next default
                                 cur->setData( true, Breadcrumb::DefaultRole );
@@ -328,22 +340,32 @@ void
 WhatsHotWidget::leftCrumbIndexChanged( QModelIndex index )
 {
     tDebug( LOGVERBOSE ) << "WhatsHot:: left crumb changed" << index.data();
+
     QStandardItem* item = m_crumbModelLeft->itemFromIndex( m_sortedProxy->mapToSource( index ) );
     if( !item )
         return;
     if( !item->data( Breadcrumb::ChartIdRole ).isValid() )
         return;
 
+    // Build current views as default. Will be used on next restart
+    QStringList curr;
+    curr.append( index.data().toString().toLower() ); // This chartname
 
     QList<QModelIndex> indexes;
+
     while ( index.parent().isValid() )
     {
         indexes.prepend(index);
         index = index.parent();
+        curr.prepend( index.data().toString().toLower() );
     }
-
-
     const QString chartId = item->data( Breadcrumb::ChartIdRole ).toString();
+    const QString chartSource = curr.takeFirst().toLower();
+    curr.append( chartSource );
+    curr.append( chartId );
+
+    // Write the current view
+    m_currentVIds[ chartSource ] = curr.join( "/" ); // Instead of keeping an array, join and split later
 
     if ( m_artistModels.contains( chartId ) )
     {
@@ -411,16 +433,22 @@ WhatsHotWidget::parseNode( QStandardItem* parentItem, const QString &label, cons
     Q_UNUSED( parentItem );
 //     tDebug( LOGVERBOSE ) << "WhatsHot:: parsing " << label;
 
-    QStandardItem *sourceItem = new QStandardItem(label);
+    QStandardItem *sourceItem = new QStandardItem( label );
 
     if ( data.canConvert< QList< Tomahawk::InfoSystem::InfoStringHash > >() )
     {
         QList< Tomahawk::InfoSystem::InfoStringHash > charts = data.value< QList< Tomahawk::InfoSystem::InfoStringHash > >();
+
         foreach ( Tomahawk::InfoSystem::InfoStringHash chart, charts )
         {
             QStandardItem *childItem= new QStandardItem( chart[ "label" ] );
             childItem->setData( chart[ "id" ], Breadcrumb::ChartIdRole );
-            if ( chart.value( "default", "" ) == "true")
+
+            if( m_currentVIds.contains( chart.value( "id" ).toLower() ) )
+            {
+                 childItem->setData( true, Breadcrumb::DefaultRole );
+            }
+            else if ( chart.value( "default", "" ) == "true" )
             {
                 childItem->setData( true, Breadcrumb::DefaultRole );
             }
@@ -453,7 +481,6 @@ WhatsHotWidget::parseNode( QStandardItem* parentItem, const QString &label, cons
     }
     return sourceItem;
 }
-
 
 void
 WhatsHotWidget::setLeftViewAlbums( PlayableModel* model )

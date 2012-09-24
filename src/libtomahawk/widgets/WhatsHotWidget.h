@@ -118,7 +118,7 @@ private:
     QString m_queueItemToShow;
     QSet< QString > m_queuedFetches;
     QTimer* m_timer;
-
+    QMap<QString, QVariant> m_currentVIds;
     friend class Tomahawk::ChartsPlaylistInterface;
 };
 
