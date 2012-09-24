@@ -211,6 +211,10 @@ public:
 
     static void registerCustomSettingsHandlers();
 
+    // Charts
+    void setLastChartIds( const QVariant& ids );
+    QVariant lastChartIds();
+
 signals:
     void changed();
     void recentlyPlayedPlaylistAdded( const QString& playlistId, int sourceId  );

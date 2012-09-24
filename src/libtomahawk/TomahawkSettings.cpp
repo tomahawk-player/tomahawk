@@ -1369,6 +1369,19 @@ TomahawkSettings::setPlaylistUpdaters( const SerializedUpdaters& updaters )
 
 
 void
+TomahawkSettings::setLastChartIds( const QVariant& ids ){
+
+    setValue( "chartIds", ids );
+}
+
+
+QVariant TomahawkSettings::lastChartIds(){
+
+    return value( "chartIds" ).value<QVariant>();
+}
+
+
+void
 TomahawkSettings::registerCustomSettingsHandlers()
 {
     qRegisterMetaType< Tomahawk::SerializedUpdater >( "Tomahawk::SerializedUpdater" );

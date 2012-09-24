@@ -104,7 +104,7 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 
     // Read last viewed charts, to be used as defaults
-    m_currentVIds = QSettings().value( "chartIds" ).toMap();
+    m_currentVIds = TomahawkSettings::instance()->lastChartIds().toMap();
 }
 
 
@@ -112,8 +112,7 @@ WhatsHotWidget::~WhatsHotWidget()
 {
     qDebug() << "Deleting whatshot";
     // Write the settings
-    QSettings().setValue( "chartIds", m_currentVIds );
-
+    TomahawkSettings::instance()->setLastChartIds( m_currentVIds );
     qDeleteAll( m_workers );
     m_workers.clear();
     m_workerThread->exit( 0 );
