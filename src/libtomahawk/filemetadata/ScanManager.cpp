@@ -268,12 +268,14 @@ void
 ScanManager::scannerFinished()
 {
     tLog( LOGVERBOSE ) << Q_FUNC_INFO;
-    if ( !m_scanner.isNull() )
+    if ( !m_scanner.isNull() || m_musicScannerThreadController )
     {
         m_musicScannerThreadController->quit();
         m_musicScannerThreadController->wait( 60000 );
 
-        delete m_scanner.data();
+        if ( !m_scanner.isNull() )
+            delete m_scanner.data();
+        
         delete m_musicScannerThreadController;
         m_musicScannerThreadController = 0;
     }
