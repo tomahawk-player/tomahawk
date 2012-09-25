@@ -38,7 +38,7 @@ class TreeModel;
 class PlaylistModel;
 class TreeProxyModel;
 class PlayableModel;
-
+class AnimatedSpinner;
 namespace Ui
 {
     class WhatsHotWidget;
@@ -119,6 +119,7 @@ private:
     QSet< QString > m_queuedFetches;
     QTimer* m_timer;
     QMap<QString, QVariant> m_currentVIds;
+    AnimatedSpinner* m_loadingSpinner;
     friend class Tomahawk::ChartsPlaylistInterface;
 };
 
