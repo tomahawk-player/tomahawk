@@ -941,6 +941,14 @@ extractBinaryResolver( const QString& zipFilename, QObject* receiver )
 }
 
 
+bool
+whitelistedHttpResultHint( const QString& url )
+{
+    // For now, just http/https
+    return url.startsWith( "http" );
+}
+
+
 } // ns
 
 #include "TomahawkUtils.moc"

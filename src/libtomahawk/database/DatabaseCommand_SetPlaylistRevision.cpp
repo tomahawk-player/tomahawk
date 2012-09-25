@@ -280,7 +280,7 @@ DatabaseCommand_SetPlaylistRevision::hintFromQuery( const query_ptr& query ) con
 
     if ( foundResult.startsWith( "file://" ) ||
          foundResult.startsWith( "servent://" ) || // Save resulthints for local files and peers automatically
-         ( foundResult.startsWith( "http" ) && query->saveHTTPResultHint() ) )
+         ( TomahawkUtils::whitelistedHttpResultHint( foundResult ) && query->saveHTTPResultHint() ) )
     {
         resultHint = foundResult;
     }

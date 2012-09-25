@@ -618,8 +618,9 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
         s = SourceList::instance()->getLocal();
         fileUrl = url;
     }
-    else if ( !url.isEmpty() )
+    else if ( TomahawkUtils::whitelistedHttpResultHint( url ) )
     {
+        // Return http resulthint directly
         res = Tomahawk::Result::get( url );
         res->setRID( uuid() );
         res->setScore( 1.0 );
@@ -630,6 +631,11 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
         const QUrl u = QUrl::fromUserInput( url );
         res->setFriendlySource( u.host() );
 
+        return res;
+    }
+    else
+    {
+        // No resulthint
         return res;
     }
 

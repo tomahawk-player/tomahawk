@@ -127,6 +127,8 @@ namespace TomahawkUtils
     // Used by the above, not exported
     void copyWithAuthentication( const QString& srcFile, const QDir dest, QObject* receiver );
 
+    DLLEXPORT bool whitelistedHttpResultHint( const QString& url );
+
     /**
      * This helper is designed to help "update" an existing playlist with a newer revision of itself.
      * To avoid re-loading the whole playlist and re-resolving tracks that are the same in the old playlist,
