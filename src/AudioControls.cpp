@@ -381,6 +381,8 @@ AudioControls::onPlaybackResumed()
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
     ui->stackedLayout->setCurrentWidget( ui->pauseButton );
+    m_seeked = true;
+    onPlaybackTimer( m_lastSliderCheck );
 }
 
 
