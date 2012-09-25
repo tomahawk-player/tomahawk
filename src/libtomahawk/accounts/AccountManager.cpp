@@ -460,7 +460,6 @@ AccountManager::onSettingsChanged()
     }
 }
 
-
 void
 AccountManager::onStateChanged( Account::ConnectionState state )
 {

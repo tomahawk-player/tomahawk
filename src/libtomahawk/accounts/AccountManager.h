@@ -107,6 +107,7 @@ private slots:
     void onError( int code, const QString& msg );
 
     void onSettingsChanged();
+
 private:
     QStringList findPluginFactories();
     void loadPluginFactories( const QStringList &paths );
