@@ -54,6 +54,11 @@ public:
     Tomahawk::source_ptr get( const QString& username, const QString& friendlyName = QString(), bool autoCreate = false );
     Tomahawk::source_ptr get( int id ) const;
 
+public slots:
+    // called by the playlist creation dbcmds
+    void createPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents );
+    void createDynamicPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents );
+
 signals:
     void ready();
 

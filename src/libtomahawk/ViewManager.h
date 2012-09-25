@@ -153,10 +153,6 @@ public slots:
 
     void playlistInterfaceChanged( Tomahawk::playlistinterface_ptr );
 
-    // called by the playlist creation dbcmds
-    void createPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents );
-    void createDynamicPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents );
-
     void setTomahawkLoaded();
 
 private slots:

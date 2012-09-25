@@ -217,6 +217,24 @@ SourceList::get( const QString& username, const QString& friendlyName, bool auto
 
 
 void
+SourceList::createPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents )
+{
+    Tomahawk::playlist_ptr p = Tomahawk::playlist_ptr( new Tomahawk::Playlist( src ) );
+    QJson::QObjectHelper::qvariant2qobject( contents.toMap(), p.data() );
+    p->reportCreated( p );
+}
+
+
+void
+SourceList::createDynamicPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents )
+{
+    Tomahawk::dynplaylist_ptr p = Tomahawk::dynplaylist_ptr( new Tomahawk::DynamicPlaylist( src, contents.toMap().value( "type", QString() ).toString()  ) );
+    QJson::QObjectHelper::qvariant2qobject( contents.toMap(), p.data() );
+    p->reportCreated( p );
+}
+
+
+void
 SourceList::sourceSynced()
 {
     Source* src = qobject_cast< Source* >( sender() );

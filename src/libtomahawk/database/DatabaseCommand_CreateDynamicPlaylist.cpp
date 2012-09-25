@@ -24,7 +24,7 @@
 #include "playlist/dynamic/DynamicControl.h"
 #include "playlist/dynamic/GeneratorInterface.h"
 
-#include "Source.h"
+#include "SourceList.h"
 #include "network/Servent.h"
 #include "utils/Logger.h"
 
@@ -113,11 +113,11 @@ DatabaseCommand_CreateDynamicPlaylist::postCommitHook()
 
     qDebug() << Q_FUNC_INFO << "..reporting..";
     if( m_playlist.isNull() ) {
-        source_ptr src = source();
-
-        Tomahawk::dynplaylist_ptr p = Tomahawk::dynplaylist_ptr( new Tomahawk::DynamicPlaylist( src, m_v.toMap().value( "type", QString() ).toString()  ) );
-        QJson::QObjectHelper::qvariant2qobject( m_v.toMap(), p.data() );
-        p->reportCreated( p );
+        QMetaObject::invokeMethod( SourceList::instance(),
+                                   "createDynamicPlaylist",
+                                   Qt::BlockingQueuedConnection,
+                                   QGenericArgument( "Tomahawk::source_ptr", (const void*)&source() ),
+                                   Q_ARG( QVariant, m_v ) );
     }
     else
     {

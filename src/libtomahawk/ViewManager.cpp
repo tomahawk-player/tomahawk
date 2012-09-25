@@ -667,24 +667,6 @@ ViewManager::onWidgetDestroyed( QWidget* widget )
 
 
 void
-ViewManager::createPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents )
-{
-    Tomahawk::playlist_ptr p = Tomahawk::playlist_ptr( new Tomahawk::Playlist( src ) );
-    QJson::QObjectHelper::qvariant2qobject( contents.toMap(), p.data() );
-    p->reportCreated( p );
-}
-
-
-void
-ViewManager::createDynamicPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents )
-{
-    Tomahawk::dynplaylist_ptr p = Tomahawk::dynplaylist_ptr( new Tomahawk::DynamicPlaylist( src, contents.toMap().value( "type", QString() ).toString()  ) );
-    QJson::QObjectHelper::qvariant2qobject( contents.toMap(), p.data() );
-    p->reportCreated( p );
-}
-
-
-void
 ViewManager::setTomahawkLoaded()
 {
     m_loaded = true;
