@@ -295,4 +295,4 @@ CREATE TABLE IF NOT EXISTS settings (
     v TEXT NOT NULL DEFAULT ''
 );
 
-INSERT INTO settings(k,v) VALUES('schema_version', '28');
+INSERT INTO settings(k,v) VALUES('schema_version', '29');

@@ -1,5 +1,5 @@
 /*
-    This file was automatically generated from ./Schema.sql on Fri Nov 18 14:00:37 CET 2011.
+    This file was automatically generated from ./Schema.sql on Wed Sep 26 14:51:40 EDT 2012.
 */
 
 static const char * tomahawk_schema_sql = 
@@ -107,6 +107,7 @@ static const char * tomahawk_schema_sql =
 ");"
 "CREATE UNIQUE INDEX file_url_src_uniq ON file(source, url);"
 "CREATE INDEX file_source ON file(source);"
+"CREATE INDEX file_mtime ON file(mtime);"
 "CREATE TABLE IF NOT EXISTS dirs_scanned ("
 "    name TEXT PRIMARY KEY,"
 "    mtime INTEGER NOT NULL"
@@ -191,7 +192,7 @@ static const char * tomahawk_schema_sql =
 "    k TEXT NOT NULL PRIMARY KEY,"
 "    v TEXT NOT NULL DEFAULT ''"
 ");"
-"INSERT INTO settings(k,v) VALUES('schema_version', '28');"
+"INSERT INTO settings(k,v) VALUES('schema_version', '29');"
     ;
 
 const char * get_tomahawk_sql()
