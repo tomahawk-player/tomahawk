@@ -47,6 +47,8 @@
     #include <shellapi.h>
 #endif
 
+// Defined in qpixmapfilter.cpp, private but exported
+extern void qt_blurImage( QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0 );
 
 namespace TomahawkUtils
 {
@@ -585,6 +587,58 @@ createTiledPixmap( int width, int height, const QImage& inputTile )
     }
 
     return tiledImage;
+}
+
+
+//  addDropShadow is inspired by QPixmapDropShadowFilter::draw in
+//  qt/src/gui/effects/qpixmapfilter.cpp
+QPixmap
+addDropShadow( const QPixmap& source, const QSize& targetSize )
+{
+    const QPoint offset( 2, 4 );
+    const int radius = 4;
+    const QColor shadowColor( 63, 63, 63, 120 );
+
+    // If there is no targetSize, then return a larger pixmap with the shadow added on
+    // otherwise, return a bounded pixmap and shrink the source
+    const QSize sizeToUse = targetSize.isEmpty() ? QSize( source.width() + offset.x() + radius, source.height() + offset.y() + radius ) : targetSize;
+    const QSize shrunkToFit( sizeToUse.width() - offset.x() - radius, sizeToUse.height() - offset.y() - radius );
+    const QPixmap shrunk = source.scaled( shrunkToFit, Qt::KeepAspectRatio, Qt::SmoothTransformation );
+
+    QImage tmp( sizeToUse, QImage::Format_ARGB32_Premultiplied );
+    tmp.fill( 0 );
+
+    QPainter tmpPainter( &tmp );
+    tmpPainter.setCompositionMode( QPainter::CompositionMode_Source );
+    tmpPainter.drawPixmap( offset, shrunk );
+    tmpPainter.end();
+
+    // blur the alpha channel
+    QImage blurred( sizeToUse, QImage::Format_ARGB32_Premultiplied );
+    blurred.fill( 0 );
+    QPainter blurPainter( &blurred );
+    qt_blurImage( &blurPainter, tmp, radius, false, true );
+    blurPainter.end();
+
+    // blacken the image...
+    QPainter blackenPainter( &blurred );
+    blackenPainter.setCompositionMode( QPainter::CompositionMode_SourceIn );
+    blackenPainter.fillRect( blurred.rect(), shadowColor );
+    blackenPainter.end();
+
+    const QRect resultRect( shrunk.rect().united( shrunk.rect().translated( offset ).adjusted( -radius, -radius, radius, radius ) ) );
+
+    QPixmap result( resultRect.size() );
+    result.fill( Qt::transparent );
+    QPainter resultPainter( &result );
+
+    // draw the blurred drop shadow...
+    resultPainter.drawImage( 0, 0, blurred );
+
+    // Draw the actual pixmap...
+    resultPainter.drawPixmap( 0, 0, shrunk );
+
+    return result;
 }
 
 

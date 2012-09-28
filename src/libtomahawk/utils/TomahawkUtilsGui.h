@@ -71,6 +71,8 @@ namespace TomahawkUtils
     DLLEXPORT void styleScrollBar( QScrollBar* scrollBar );
 
     DLLEXPORT QPixmap createTiledPixmap( int width, int height, const QImage& src );
+
+    DLLEXPORT QPixmap addDropShadow( const QPixmap& sourceImage, const QSize& targetSize );
 }
 
 #endif // TOMAHAWKUTILSGUI_H
