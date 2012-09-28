@@ -597,7 +597,7 @@ addDropShadow( const QPixmap& source, const QSize& targetSize )
 {
     const QPoint offset( 2, 4 );
     const int radius = 4;
-    const QColor shadowColor( 63, 63, 63, 120 );
+    const QColor shadowColor( 100, 100, 100, 100 );
 
     // If there is no targetSize, then return a larger pixmap with the shadow added on
     // otherwise, return a bounded pixmap and shrink the source
