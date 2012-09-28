@@ -50,6 +50,11 @@ friend class ::DatabaseCommand_AddFiles;
 friend class ::DatabaseCommand_LoadFile;
 
 public:
+    enum SourceImageStyle {
+        Plain,
+        DropShadow
+    };
+
     static Tomahawk::result_ptr get( const QString& url );
     static bool isCached( const QString& url );
     virtual ~Result();
@@ -73,9 +78,10 @@ public:
     QString url() const { return m_url; }
     QString mimetype() const { return m_mimetype; }
     QString friendlySource() const;
-    QPixmap sourceIcon( const QSize& desiredSize = QSize() ) const;
     QString purchaseUrl() const { return m_purchaseUrl; }
     QString linkUrl() const { return m_linkUrl; }
+
+    QPixmap sourceIcon( SourceImageStyle style, const QSize& desiredSize = QSize() ) const;
 
     unsigned int duration() const { return m_duration; }
     unsigned int bitrate() const { return m_bitrate; }

@@ -41,11 +41,11 @@ typedef QMap< QString, QPixmap > SourceIconCache;
 Q_GLOBAL_STATIC( SourceIconCache, sourceIconCache );
 static QMutex s_sourceIconMutex;
 
-inline QString sourceCacheKey( Resolver* resolver, const QSize& size )
+inline QString sourceCacheKey( Resolver* resolver, const QSize& size, Result::SourceImageStyle style )
 {
     QString str;
     QTextStream stream( &str );
-    stream << resolver << size.width() << size.height();
+    stream << resolver << size.width() << size.height() << "_" << style;
     return str;
 }
 
@@ -191,7 +191,7 @@ Result::toVariant() const
     m.insert( "album", album()->name() );
     m.insert( "track", track() );
     m.insert( "source", friendlySource() );
-    m.insert( "sourceIcon", sourceIcon() );
+    m.insert( "sourceIcon", sourceIcon( Plain ) );
     m.insert( "mimetype", mimetype() );
     m.insert( "size", size() );
     m.insert( "bitrate", bitrate() );
@@ -309,7 +309,7 @@ Result::friendlySource() const
 
 
 QPixmap
-Result::sourceIcon( const QSize& desiredSize ) const
+Result::sourceIcon( SourceImageStyle style, const QSize& desiredSize ) const
 {
     if ( collection().isNull() )
     {
@@ -319,12 +319,14 @@ Result::sourceIcon( const QSize& desiredSize ) const
         else
         {
             QMutexLocker l( &s_sourceIconMutex );
-            const QString key = sourceCacheKey( m_resolvedBy.data(), desiredSize );
+            const QString key = sourceCacheKey( m_resolvedBy.data(), desiredSize, style );
             if ( !sourceIconCache()->contains( key ) )
             {
                 QPixmap pixmap = guiResolver->icon();
                 if ( !desiredSize.isEmpty() )
                     pixmap = pixmap.scaled( desiredSize, Qt::KeepAspectRatio, Qt::SmoothTransformation );
+                if ( style == DropShadow )
+                    pixmap = TomahawkUtils::addDropShadow( pixmap, QSize() );
                 sourceIconCache()->insert( key, pixmap );
                 return pixmap;
             }
