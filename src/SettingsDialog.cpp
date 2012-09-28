@@ -270,6 +270,9 @@ SettingsDialog::saveSettings()
     s->applyChanges();
     s->sync();
 
+    if ( m_restartRequired )
+        QMessageBox::information( 0, tr( "Information" ), tr( "Some changed settings will not take effect until Tomahawk is restarted" ) );
+
     TomahawkUtils::NetworkProxyFactory* proxyFactory = TomahawkUtils::proxyFactory();
     if ( !m_advancedWidgetUi->enableProxyCheckBox->isChecked() )
     {
@@ -288,8 +291,6 @@ SettingsDialog::saveSettings()
         }
     }
 
-    if ( m_restartRequired || proxyFactory->changed() )
-        QMessageBox::information( 0, tr( "Information" ), tr( "Some changed settings will not take effect until Tomahawk is restarted" ) );
 }
 
 
@@ -364,7 +365,6 @@ void
 SettingsDialog::toggleProxyEnabled()
 {
     m_advancedWidgetUi->proxyButton->setEnabled( m_advancedWidgetUi->enableProxyCheckBox->isChecked() );
-    m_restartRequired = (TomahawkSettings::instance()->proxyType() == QNetworkProxy::Socks5Proxy) != m_advancedWidgetUi->proxyButton->isEnabled();
 }
 
 
