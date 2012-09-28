@@ -264,7 +264,7 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
     ui->loveButton->setToolTip( tr( "Love" ) );
     ui->ownerButton->setToolTip( QString( tr( "Playing from %1" ) ).arg( result->friendlySource() ) );
 
-    QPixmap sourceIcon = result->sourceIcon( ui->ownerButton->size() );
+    QPixmap sourceIcon = result->sourceIcon( Result::DropShadow, ui->ownerButton->size() );
     if ( !sourceIcon.isNull() )
         ui->ownerButton->setPixmap( sourceIcon );
     else
