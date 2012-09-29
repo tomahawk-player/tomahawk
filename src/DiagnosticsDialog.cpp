@@ -77,7 +77,7 @@ DiagnosticsDialog::updateLogView()
     }
     else
     {
-        log.append( "      visible: false" );
+        log.append( "      visible: false\n" );
     }
 
     log.append( "ACCOUNTS:\n" );
