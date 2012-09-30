@@ -1942,7 +1942,12 @@ connect and stream from you?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="147"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="141"/>
+        <source>Select All</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="154"/>
         <source>High Quality Streams</source>
         <translation type="unfinished"/>
     </message>
@@ -1952,7 +1957,7 @@ connect and stream from you?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="157"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="164"/>
         <source>Delete Tomahawk playlist when removing synchronization</source>
         <translation type="unfinished"/>
     </message>
@@ -2207,28 +2212,28 @@ connect and stream from you?</source>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccountConfig</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="162"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="163"/>
         <source>Logging in...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="199"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="200"/>
         <source>Failed: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="222"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="232"/>
         <source>Logged in as %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="224"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="234"/>
         <source>Log Out</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="240"/>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="250"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="260"/>
         <source>Log In</source>
         <translation type="unfinished"/>
     </message>
@@ -3147,17 +3152,17 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message numerus="yes">
         <location filename="../src/libtomahawk/Query.cpp" line="763"/>
         <source>%n other(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>un altro</numerusform><numerusform>%n altri</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="766"/>
         <source>%1 people</source>
-        <translation type="unfinished"/>
+        <translation>%1 persona</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="768"/>
         <source>loved this track</source>
-        <translation type="unfinished"/>
+        <translation>amato questa traccia</translation>
     </message>
 </context>
 <context>
@@ -3165,7 +3170,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/utils/RdioParser.cpp" line="200"/>
         <source>Error fetching Rdio information from the network!</source>
-        <translation type="unfinished"/>
+        <translation>Errore durante il recupero informazioni Rdio dalla rete!</translation>
     </message>
 </context>
 <context>
@@ -3173,7 +3178,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/utils/ShortenedLinkParser.cpp" line="100"/>
         <source>Network error parsing shortened link!</source>
-        <translation type="unfinished"/>
+        <translation>Errore di rete nell&apos;analizzare il link accorciato!</translation>
     </message>
 </context>
 <context>
@@ -3182,17 +3187,17 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/Source.cpp" line="286"/>
         <location filename="../src/libtomahawk/Source.cpp" line="335"/>
         <source>Scanning (%L1 tracks)</source>
-        <translation type="unfinished"/>
+        <translation>Scansionando (%L1 tracce)</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Source.cpp" line="288"/>
         <source>Scanning</source>
-        <translation type="unfinished"/>
+        <translation>Scansionando</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Source.cpp" line="320"/>
         <source>Checking</source>
-        <translation type="unfinished"/>
+        <translation>Controllando</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Source.cpp" line="325"/>
@@ -3207,7 +3212,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/Source.cpp" line="472"/>
         <source>Saving (%1%)</source>
-        <translation type="unfinished"/>
+        <translation>Salvando (%1%)</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Source.cpp" line="553"/>
@@ -3225,7 +3230,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="252"/>
         <source>Error fetching Spotify information from the network!</source>
-        <translation type="unfinished"/>
+        <translation>Errore nel recuperare informazioni Spotify dalla rete!</translation>
     </message>
 </context>
 <context>
@@ -3241,7 +3246,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/TomahawkApp.cpp" line="606"/>
         <source>My Collection</source>
-        <translation type="unfinished"/>
+        <translation>La mia collezione</translation>
     </message>
 </context>
 <context>
@@ -3249,13 +3254,13 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/accounts/twitter/TomahawkOAuthTwitter.cpp" line="39"/>
         <source>Twitter PIN</source>
-        <translation type="unfinished"/>
+        <translation>PIN di Twitter</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TomahawkOAuthTwitter.cpp" line="39"/>
         <source>After authenticating on Twitter's web site,
 enter the displayed PIN number here:</source>
-        <translation type="unfinished"/>
+        <translation>Dopo esserti autenticato sulla pagina di Twitter,⏎ inserisci il PIN visualizzato qui:</translation>
     </message>
 </context>
 <context>
@@ -3269,27 +3274,27 @@ enter the displayed PIN number here:</source>
         <location filename="../src/TomahawkTrayIcon.cpp" line="76"/>
         <location filename="../src/TomahawkTrayIcon.cpp" line="115"/>
         <source>Hide Tomahawk Window</source>
-        <translation type="unfinished"/>
+        <translation>Nascondi Tomahawk</translation>
     </message>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="120"/>
         <source>Show Tomahawk Window</source>
-        <translation type="unfinished"/>
+        <translation>Mostra Tomahawk</translation>
     </message>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="201"/>
         <source>Currently not playing.</source>
-        <translation type="unfinished"/>
+        <translation>Al momento non in riproduzione.</translation>
     </message>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="262"/>
         <source>Play</source>
-        <translation type="unfinished"/>
+        <translation>Play</translation>
     </message>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="290"/>
         <source>Pause</source>
-        <translation type="unfinished"/>
+        <translation>Pausa</translation>
     </message>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="320"/>
@@ -3312,7 +3317,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="14"/>
         <source>Tomahawk</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="67"/>
@@ -3322,7 +3327,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="70"/>
         <source>Ctrl+Q</source>
-        <translation type="unfinished"/>
+        <translation>Ctrl+Q</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="78"/>
@@ -3338,12 +3343,12 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="88"/>
         <source>U&amp;pdate Collection</source>
-        <translation type="unfinished"/>
+        <translation>Aggiorna collezione</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="91"/>
         <source>Update Collection</source>
-        <translation type="unfinished"/>
+        <translation>Aggiorna collezione</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="96"/>
@@ -3353,57 +3358,57 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="104"/>
         <source>Load &amp;XSPF...</source>
-        <translation type="unfinished"/>
+        <translation>Carica &amp;XSPF...</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="109"/>
         <source>Create &amp;New Playlist...</source>
-        <translation type="unfinished"/>
+        <translation>Crea una &amp;nuova playlist...</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="114"/>
         <source>About &amp;Tomahawk...</source>
-        <translation type="unfinished"/>
+        <translation>Info su &amp;Tomahawk</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="122"/>
         <source>Create New &amp;Automatic Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Crea una nuova playlist &amp;automatica</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="127"/>
         <source>Create New &amp;Station</source>
-        <translation type="unfinished"/>
+        <translation>Crea una nuova &amp;stazione</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="135"/>
         <source>Show Offline Sources</source>
-        <translation type="unfinished"/>
+        <translation>Mostra risorse non connesse</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="140"/>
         <source>Hide Offline Sources</source>
-        <translation type="unfinished"/>
+        <translation>Nascondi risorse non connesse</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="145"/>
         <source>Minimize</source>
-        <translation type="unfinished"/>
+        <translation>Minimizza</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="148"/>
         <source>Ctrl+M</source>
-        <translation type="unfinished"/>
+        <translation>Ctrl+M</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="153"/>
         <source>Zoom</source>
-        <translation type="unfinished"/>
+        <translation>Zomma</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="156"/>
         <source>Meta+Ctrl+Z</source>
-        <translation type="unfinished"/>
+        <translation>Meta+Ctrl+Z</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="161"/>
@@ -3413,37 +3418,37 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="169"/>
         <source>Diagnostics...</source>
-        <translation type="unfinished"/>
+        <translation>Diagnostica...</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="177"/>
         <source>Fully &amp;Rescan Collection</source>
-        <translation type="unfinished"/>
+        <translation>Nuova &amp;scansione della collezione</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="180"/>
         <source>Fully Rescan Collection</source>
-        <translation type="unfinished"/>
+        <translation>Nuova scansione della collezione</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="185"/>
         <source>Play</source>
-        <translation type="unfinished"/>
+        <translation>Play</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="188"/>
         <source>Space</source>
-        <translation type="unfinished"/>
+        <translation>Spazio</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="193"/>
         <source>Previous</source>
-        <translation type="unfinished"/>
+        <translation>Precedente</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="198"/>
         <source>Next</source>
-        <translation type="unfinished"/>
+        <translation>Prossima</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="259"/>
@@ -3468,7 +3473,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="274"/>
         <source>Global Search...</source>
-        <translation type="unfinished"/>
+        <translation>Ricerca globale...</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="200"/>
@@ -3492,12 +3497,12 @@ enter the displayed PIN number here:</source>
         <location filename="../src/TomahawkWindow.cpp" line="857"/>
         <location filename="../src/TomahawkWindow.cpp" line="865"/>
         <source>Connect To Peer</source>
-        <translation type="unfinished"/>
+        <translation>Connettiti al peer</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="851"/>
         <source>Enter peer address:</source>
-        <translation type="unfinished"/>
+        <translation>Inserisci indirizzo peer:</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="858"/>

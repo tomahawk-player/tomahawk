@@ -1945,7 +1945,12 @@ connect and stream from you?</source>
         <translation>أنقر يمينا على أية قائمة أغاني في توماهوك للمزامنة مع سبوتيفي (Spotify).</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="147"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="141"/>
+        <source>Select All</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="154"/>
         <source>High Quality Streams</source>
         <translation>جودة عالية في الأغاني المحملة</translation>
     </message>
@@ -1955,7 +1960,7 @@ connect and stream from you?</source>
         <translation>قوائم أغاني سبوتيفي (Spotify) التي يجب إبقائها بتزامن:</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="157"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="164"/>
         <source>Delete Tomahawk playlist when removing synchronization</source>
         <translation>حذف قوائم أغاني توماهوك عند إزالة التزام</translation>
     </message>
@@ -2210,28 +2215,28 @@ connect and stream from you?</source>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccountConfig</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="162"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="163"/>
         <source>Logging in...</source>
         <translation>جاري تسجيل الدخول...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="199"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="200"/>
         <source>Failed: %1</source>
         <translation>فشل: %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="222"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="232"/>
         <source>Logged in as %1</source>
         <translation>مسجل تحت اسم %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="224"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="234"/>
         <source>Log Out</source>
         <translation>تسجيل الخروج</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="240"/>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="250"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="260"/>
         <source>Log In</source>
         <translation>تسجيل الدخول</translation>
     </message>
