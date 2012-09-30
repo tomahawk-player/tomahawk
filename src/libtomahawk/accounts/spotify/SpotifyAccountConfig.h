@@ -70,6 +70,7 @@ protected:
 private slots:
     void doLogin();
     void resetLoginButton();
+    void selectAllPlaylists();
 
 private:
     void showLoggedIn();
