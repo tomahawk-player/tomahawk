@@ -52,6 +52,7 @@ SpotifyAccountConfig::SpotifyAccountConfig( SpotifyAccount *account )
 
     connect( m_ui->usernameEdit, SIGNAL( textEdited( QString ) ), this, SLOT( resetLoginButton() ) );
     connect( m_ui->passwordEdit, SIGNAL( textEdited( QString ) ), this, SLOT( resetLoginButton() ) );
+    connect( m_ui->selectAllCheckbox, SIGNAL( stateChanged( int ) ), this, SLOT( selectAllPlaylists() ) );
     loadFromConfig();
 
     m_playlistsLoading = new AnimatedSpinner( m_ui->playlistList );
@@ -202,6 +203,15 @@ SpotifyAccountConfig::loginResponse( bool success, const QString& msg, const QSt
 
 }
 
+void
+SpotifyAccountConfig::selectAllPlaylists()
+{
+    for( int i = 0; i < m_ui->playlistList->count(); i++ )
+    {
+        QListWidgetItem* item = m_ui->playlistList->item( i );
+        item->setCheckState( m_ui->selectAllCheckbox->checkState() );
+    }
+}
 
 void
 SpotifyAccountConfig::showLoggedIn()

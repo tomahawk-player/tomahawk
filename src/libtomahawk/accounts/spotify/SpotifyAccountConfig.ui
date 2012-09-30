@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>375</width>
-    <height>417</height>
+    <height>487</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -132,6 +132,13 @@
     <widget class="QLabel" name="label_3">
      <property name="text">
       <string>Spotify playlists to keep in sync:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="selectAllCheckbox">
+     <property name="text">
+      <string>Select All</string>
      </property>
     </widget>
    </item>
