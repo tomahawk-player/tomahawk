@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>435</width>
+    <width>375</width>
     <height>487</height>
    </rect>
   </property>
@@ -34,7 +34,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="../../../../resources.qrc">:/data/images/spotify-logo.png</pixmap>
+        <pixmap resource="../../../resources.qrc">:/data/images/spotify-logo.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>true</bool>
@@ -168,7 +168,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../../../../resources.qrc"/>
+  <include location="../../../resources.qrc"/>
  </resources>
  <connections/>
 </ui>
