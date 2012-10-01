@@ -74,12 +74,17 @@ connect and stream from you?</translation>
 <context>
     <name>AccountsToolButton</name>
     <message>
-        <location filename="../src/widgets/AccountsToolButton.cpp" line="50"/>
+        <location filename="../src/widgets/AccountsToolButton.cpp" line="51"/>
         <source>Connections</source>
         <translation>Connections</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AccountsToolButton.cpp" line="60"/>
+        <location filename="../src/widgets/AccountsToolButton.cpp" line="55"/>
+        <source>Toggle Online</source>
+        <translation>Toggle Online</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/AccountsToolButton.cpp" line="66"/>
         <source>Configure Accounts</source>
         <translation>Configure Accounts</translation>
     </message>
@@ -103,13 +108,13 @@ connect and stream from you?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="67"/>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="304"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="302"/>
         <source>&amp;Listen Privately</source>
         <translation>&amp;Listen Privately</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="67"/>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="304"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="302"/>
         <source>&amp;Listen Publicly</source>
         <translation>&amp;Listen Publicly</translation>
     </message>
@@ -224,22 +229,22 @@ connect and stream from you?</translation>
         <translation>&amp;Controls</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="147"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="146"/>
         <source>&amp;Settings</source>
         <translation>&amp;Settings</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="153"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="152"/>
         <source>&amp;Help</source>
         <translation>&amp;Help</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="178"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="177"/>
         <source>&amp;Window</source>
         <translation>&amp;Window</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="191"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="190"/>
         <source>Main Menu</source>
         <translation>Main Menu</translation>
     </message>
