@@ -20,6 +20,7 @@
 
 #include "AccountListWidget.h"
 #include "utils/TomahawkUtilsGui.h"
+#include "ActionCollection.h"
 
 #include <QLabel>
 #include <QListView>
@@ -49,6 +50,11 @@ AccountsToolButton::AccountsToolButton( QWidget* parent )
     w->setLayout( wMainLayout  );
     QLabel *connectionsLabel = new QLabel( tr( "Connections" ), w );
 
+    QToolButton *toggleOnlineButton = new QToolButton( w );
+    toggleOnlineButton->setIcon( QIcon( RESPATH "images/view-toggle-icon-cloud-active.png" ) ); //TODO: real icon
+    toggleOnlineButton->setText( tr( "Toggle Online" ) );
+    toggleOnlineButton->setDefaultAction( ActionCollection::instance()->getAction( "toggleOnline" ) );
+
     QFont clFont = connectionsLabel->font();
     clFont.setBold( true );
     clFont.setPointSize( TomahawkUtils::defaultFontSize() + 3 );
@@ -63,6 +69,7 @@ AccountsToolButton::AccountsToolButton( QWidget* parent )
 
     QHBoxLayout *headerLayout = new QHBoxLayout( w );
     headerLayout->addWidget( connectionsLabel );
+    headerLayout->addWidget( toggleOnlineButton );
     headerLayout->addSpacing( 30 );
     headerLayout->addWidget( settingsButton );
     wMainLayout->addLayout( headerLayout );
