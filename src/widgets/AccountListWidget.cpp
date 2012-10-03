@@ -55,10 +55,11 @@ AccountListWidget::AccountListWidget( AccountModelFactoryProxy* model, QWidget* 
     mainLayout->insertWidget( 0, separatorLine );
     mainLayout->addSpacing( 6 );
 
-    QLabel *connectionsLabel = new QLabel( tr( "Connections" ), this );
+    QLabel *connectionsLabel = new QLabel( tr( "Connections" ).toUpper(), this );
     QFont clFont = connectionsLabel->font();
     clFont.setBold( true );
-    clFont.setPointSize( TomahawkUtils::defaultFontSize() + 3 );
+    connectionsLabel->setStyleSheet( "color: rgb( 99, 113, 128 );" );
+    clFont.setPointSize( TomahawkUtils::defaultFontSize() + 1 );
     connectionsLabel->setFont( clFont );
     connectionsLabel->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
 
