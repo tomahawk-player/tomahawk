@@ -137,7 +137,6 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     }
 
     // set initial state
-    onAccountDisconnected();
     audioStopped();
 
     vm->setQueue( m_queueView );
@@ -1154,20 +1153,6 @@ TomahawkWindow::onPlaybackLoading( const Tomahawk::result_ptr& result )
 {
     m_currentTrack = result;
     setWindowTitle( m_windowTitle );
-}
-
-
-void
-TomahawkWindow::onAccountConnected()
-{
-    ActionCollection::instance()->getAction( "toggleOnline" )->setText( tr( "Go &Offline" ) );
-}
-
-
-void
-TomahawkWindow::onAccountDisconnected()
-{
-    ActionCollection::instance()->getAction( "toggleOnline" )->setText( tr( "Go &Online" ) );
 }
 
 

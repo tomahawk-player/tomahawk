@@ -70,8 +70,6 @@ ActionCollection::initActions()
     m_actionCollection[ "togglePrivacy" ] = privacyToggle;
     connect( m_actionCollection[ "togglePrivacy" ], SIGNAL( triggered() ), SLOT( togglePrivateListeningMode() ), Qt::UniqueConnection );
 
-    m_actionCollection[ "toggleOnline" ] = new QAction( tr( "Go &Online" ), this );
-
     m_actionCollection[ "loadPlaylist" ] =   new QAction( tr( "&Load Playlist" ), this );
     m_actionCollection[ "renamePlaylist" ] = new QAction( tr( "&Rename Playlist" ), this );
     m_actionCollection[ "copyPlaylist" ] =   new QAction( tr( "&Copy Playlist Link" ), this );

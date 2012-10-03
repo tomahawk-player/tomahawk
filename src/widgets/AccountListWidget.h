@@ -25,6 +25,7 @@
 #include <QVBoxLayout>
 
 class AccountWidget;
+class QPushButton;
 
 class AccountListWidget : public QWidget
 {
@@ -36,13 +37,17 @@ private slots:
     void updateEntries( const QModelIndex& topLeft, const QModelIndex& bottomRight );
     void updateEntry( const QPersistentModelIndex& idx );
     void loadAllEntries();
-    void insertEntries(  const QModelIndex& parent, int start, int end );
-    void removeEntries(  const QModelIndex& parent, int start, int end );
+    void insertEntries( const QModelIndex& parent, int start, int end );
+    void removeEntries( const QModelIndex& parent, int start, int end );
+    void toggleOnlineStateForAll();
+    void updateToggleOnlineStateButton();
 
 private:
     QHash< QPersistentModelIndex, QList< AccountWidget* > > m_entries;
     AccountModelFactoryProxy* m_model;
     QVBoxLayout* m_layout;
+    QPushButton* m_toggleOnlineButton;
+    bool         m_toggleOnlineButtonState;
 };
 
 #endif // ACCOUNTLISTWIDGET_H

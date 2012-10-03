@@ -107,8 +107,6 @@ public slots:
     void fullScreenExited();
 
 private slots:
-    void onAccountConnected();
-    void onAccountDisconnected();
     void onAccountError();
 
     void onHistoryBackAvailable( bool avail );

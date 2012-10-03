@@ -19,8 +19,8 @@
 #include "AccountsToolButton.h"
 
 #include "AccountListWidget.h"
+#include "accounts/AccountManager.h"
 #include "utils/TomahawkUtilsGui.h"
-#include "ActionCollection.h"
 
 #include <QLabel>
 #include <QListView>
@@ -48,36 +48,6 @@ AccountsToolButton::AccountsToolButton( QWidget* parent )
     w->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum );
     QVBoxLayout *wMainLayout = new QVBoxLayout( w );
     w->setLayout( wMainLayout  );
-    QLabel *connectionsLabel = new QLabel( tr( "Connections" ), w );
-
-    QToolButton *toggleOnlineButton = new QToolButton( w );
-    toggleOnlineButton->setIcon( QIcon( RESPATH "images/view-toggle-icon-cloud-active.png" ) ); //TODO: real icon
-    toggleOnlineButton->setText( tr( "Toggle Online" ) );
-    toggleOnlineButton->setDefaultAction( ActionCollection::instance()->getAction( "toggleOnline" ) );
-
-    QFont clFont = connectionsLabel->font();
-    clFont.setBold( true );
-    clFont.setPointSize( TomahawkUtils::defaultFontSize() + 3 );
-    connectionsLabel->setFont( clFont );
-    connectionsLabel->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
-
-    QPushButton *settingsButton = new QPushButton( w );
-    settingsButton->setIcon( QIcon( RESPATH "images/account-settings.png" ) );
-    settingsButton->setText( tr( "Configure Accounts" ) );
-    connect( settingsButton, SIGNAL( clicked() ),
-             window(), SLOT( showSettingsDialog() ) );
-
-    QHBoxLayout *headerLayout = new QHBoxLayout( w );
-    headerLayout->addWidget( connectionsLabel );
-    headerLayout->addWidget( toggleOnlineButton );
-    headerLayout->addSpacing( 30 );
-    headerLayout->addWidget( settingsButton );
-    wMainLayout->addLayout( headerLayout );
-    QWidget *separatorLine = new QWidget( w );
-    separatorLine->setFixedHeight( 1 );
-    separatorLine->setContentsMargins( 0, 0, 0, 0 );
-    separatorLine->setStyleSheet( "QWidget { border-top: 1px solid black; }" );
-    wMainLayout->addWidget( separatorLine );
 
 #ifdef Q_OS_MAC
     w->setContentsMargins( 4, 4, 2, 2 );
@@ -100,6 +70,24 @@ AccountsToolButton::AccountsToolButton( QWidget* parent )
 
     connect( m_proxy, SIGNAL( dataChanged( QModelIndex, QModelIndex ) ),
              this, SLOT( repaint() ) );
+
+    QWidget *separatorLine = new QWidget( w );
+    separatorLine->setFixedHeight( 1 );
+    separatorLine->setContentsMargins( 0, 0, 0, 0 );
+    separatorLine->setStyleSheet( "QWidget { border-top: 1px solid black; }" );
+    wMainLayout->addWidget( separatorLine );
+
+    QPushButton *settingsButton = new QPushButton( w );
+    settingsButton->setIcon( QIcon( RESPATH "images/account-settings.png" ) );
+    settingsButton->setText( tr( "Configure Accounts" ) );
+    connect( settingsButton, SIGNAL( clicked() ),
+             window(), SLOT( showSettingsDialog() ) );
+
+    QHBoxLayout *bottomLayout = new QHBoxLayout( w );
+    bottomLayout->addStretch();
+    bottomLayout->addWidget( settingsButton );
+    wMainLayout->addLayout( bottomLayout );
+
 
     //ToolButton stuff
     m_defaultPixmap = QPixmap( RESPATH "images/account-none.png" )

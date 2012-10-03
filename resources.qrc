@@ -116,7 +116,7 @@
         <file>data/sql/dbmigrate-25_to_26.sql</file>
         <file>data/sql/dbmigrate-26_to_27.sql</file>
         <file>data/sql/dbmigrate-27_to_28.sql</file>
-	<file>data/sql/dbmigrate-28_to_29.sql</file>
+        <file>data/sql/dbmigrate-28_to_29.sql</file>
         <file>data/js/tomahawk.js</file>
         <file>data/images/avatar_frame.png</file>
         <file>data/images/drop-all-songs.png</file>
@@ -158,5 +158,7 @@
         <file>data/images/soundcloud.png</file>
         <file>data/images/resolver-default.png</file>
         <file>data/images/spotify-sourceicon.png</file>
+        <file>data/images/account-offline.png</file>
+        <file>data/images/account-online.png</file>
     </qresource>
 </RCC>

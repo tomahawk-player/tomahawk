@@ -42,6 +42,9 @@ public:
     void update( const QPersistentModelIndex& idx, int accountIdx );
     void setupConnections( const QPersistentModelIndex& idx, int accountIdx );
 
+    void setConnectionState( bool state );
+    bool connectionState() const;
+
 private slots:
     void changeAccountConnectionState( bool connected );
     void sendInvite();

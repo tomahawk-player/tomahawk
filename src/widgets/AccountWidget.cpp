@@ -44,15 +44,14 @@ AccountWidget::AccountWidget( QWidget* parent )
     QHBoxLayout *mainLayout = new QHBoxLayout( this );
     TomahawkUtils::unmarginLayout( mainLayout );
     setLayout( mainLayout );
-    setContentsMargins( 8, 8, 8, 8 );
+    setContentsMargins( 0, 8, 0, 8 );
 
     m_imageLabel = new QLabel( this );
     mainLayout->addWidget( m_imageLabel );
     mainLayout->setSpacing( 4 );
 
     QGridLayout* vLayout = new QGridLayout( this );
-    vLayout->setMargin( 3 );
-    vLayout->setSpacing( 3 );
+    vLayout->setSpacing( 8 );
     mainLayout->addLayout( vLayout );
 
     QFrame* idContainer = new QFrame( this );
@@ -95,12 +94,11 @@ AccountWidget::AccountWidget( QWidget* parent )
     vLayout->addLayout( statusToggleLayout, 0, 1, 1, 1 );
     statusToggleLayout->addStretch();
     statusToggleLayout->addWidget( m_statusToggle );
-    //vLayout->addWidget( m_statusToggle, 0, 1 );
 
     m_inviteContainer = new UnstyledFrame( this );
     vLayout->addWidget( m_inviteContainer, 1, 0 );
     m_inviteContainer->setFrameColor( QColor( 0x8c, 0x8c, 0x8c ) ); //from ProxyStyle
-    m_inviteContainer->setFixedWidth( m_inviteContainer->logicalDpiX() * 2 );
+    m_inviteContainer->setMinimumWidth( m_inviteContainer->logicalDpiX() * 2 );
     m_inviteContainer->setContentsMargins( 1, 1, 1, 2 );
     m_inviteContainer->setAttribute( Qt::WA_TranslucentBackground, false );
     m_inviteContainer->setStyleSheet( "background: white" );
@@ -121,12 +119,13 @@ AccountWidget::AccountWidget( QWidget* parent )
     m_inviteEdit->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
     containerLayout->addWidget( m_inviteEdit );
     m_inviteEdit->setFrame( false );
-    idContainer->setFixedWidth( m_inviteContainer->width() );
 
     m_inviteButton = new QPushButton( this );
     m_inviteButton->setMinimumWidth( m_inviteButton->logicalDpiX() * 0.8 );
     m_inviteButton->setText( tr( "Invite" ) );
+    m_inviteButton->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
     vLayout->addWidget( m_inviteButton, 1, 1 );
+    vLayout->setColumnStretch( 0, 1 );
 
 
 #ifdef Q_OS_MAC
@@ -211,6 +210,21 @@ AccountWidget::update( const QPersistentModelIndex& idx, int accountIdx )
             m_statusToggle->setBackChecked( true );
             setInviteWidgetsEnabled( false );
         }
+
+        if ( !account->enabled() && account->connectionState() == Tomahawk::Accounts::Account::Disconnected )
+        {
+            m_spinner->fadeOut();
+            m_statusToggle->setBackChecked( false );
+            m_statusToggle->setChecked( false );
+            setInviteWidgetsEnabled( false );
+        }
+        else if ( account->enabled() && account->connectionState() == Tomahawk::Accounts::Account::Connected )
+        {
+            m_spinner->fadeOut();
+            m_statusToggle->setBackChecked( true );
+            m_statusToggle->setChecked( true );
+            setInviteWidgetsEnabled( true );
+        }
     }
 }
 
@@ -281,4 +295,15 @@ AccountWidget::setupConnections( const QPersistentModelIndex& idx, int accountId
 
         m_inviteEdit->setPlaceholderText( account->sipPlugin()->inviteString() );
     }
+}
+
+void
+AccountWidget::setConnectionState( bool state )
+{
+    m_statusToggle->setChecked( state );
+}
+
+bool AccountWidget::connectionState() const
+{
+    return m_statusToggle->isChecked() || m_statusToggle->backChecked();
 }
