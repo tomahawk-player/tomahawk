@@ -218,6 +218,6 @@ AccountListWidget::updateToggleOnlineStateButton()
 
     m_toggleOnlineButton->setText( m_toggleOnlineButtonState ? tr( "Disconnect &All" )
                                                              : tr( "Connect &All" ) );
-    m_toggleOnlineButton->setIcon( m_toggleOnlineButtonState ? QIcon( RESPATH "images/account-offline.png" )
-                                                             : QIcon( RESPATH "images/account-online.png" ) );
+    m_toggleOnlineButton->setIcon( m_toggleOnlineButtonState ? QIcon( RESPATH "images/account-online.png" )
+                                                             : QIcon( RESPATH "images/account-offline.png" ) );
 }
