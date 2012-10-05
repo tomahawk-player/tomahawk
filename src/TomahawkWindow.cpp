@@ -522,7 +522,6 @@ TomahawkWindow::setupSignals()
     connect( ac->getAction( "preferences" ), SIGNAL( triggered() ), SLOT( showSettingsDialog() ) );
     connect( ac->getAction( "diagnostics" ), SIGNAL( triggered() ), SLOT( showDiagnosticsDialog() ) );
     connect( ac->getAction( "legalInfo" ), SIGNAL( triggered() ), SLOT( legalInfo() ) );
-    connect( ac->getAction( "toggleOnline" ), SIGNAL( triggered() ), AccountManager::instance(), SLOT( toggleAccountsConnected() ) );
     connect( ac->getAction( "updateCollection" ), SIGNAL( triggered() ), SLOT( updateCollectionManually() ) );
     connect( ac->getAction( "rescanCollection" ), SIGNAL( triggered() ), SLOT( rescanCollectionManually() ) );
     connect( ac->getAction( "loadXSPF" ), SIGNAL( triggered() ), SLOT( loadSpiff() ));
@@ -538,8 +537,6 @@ TomahawkWindow::setupSignals()
 #endif
 
     // <AccountHandler>
-    connect( AccountManager::instance(), SIGNAL( connected( Tomahawk::Accounts::Account* ) ), SLOT( onAccountConnected() ) );
-    connect( AccountManager::instance(), SIGNAL( disconnected( Tomahawk::Accounts::Account* ) ), SLOT( onAccountDisconnected() ) );
     connect( AccountManager::instance(), SIGNAL( authError( Tomahawk::Accounts::Account* ) ), SLOT( onAccountError() ) );
 
     connect( ViewManager::instance(), SIGNAL( historyBackAvailable( bool ) ), SLOT( onHistoryBackAvailable( bool ) ) );
