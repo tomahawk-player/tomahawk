@@ -112,6 +112,7 @@ AccountsToolButton::mousePressEvent( QMouseEvent* event )
     {
         QPoint myPos = mapToGlobal( rect().bottomRight() );
         m_popup->anchorAt( myPos );
+        m_popup->setArrowOffset( rect().width() / 2 );
         m_popup->show();
         event->accept();
     }
@@ -224,6 +225,9 @@ AccountsToolButton::updateIcons()
     resize( sizeHint() );
     if ( oldWidth != sizeHint().width() )
         emit widthChanged();
+
+    m_popup->setArrowOffset( rect().width() / 2 );
+
     repaint();
 }
 

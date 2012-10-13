@@ -30,7 +30,8 @@ public:
     explicit AccountsPopupWidget( QWidget* parent = 0 );
 
     void setWidget( QWidget* widget );
-    void anchorAt( const QPoint &p );
+    void anchorAt( const QPoint& p );
+    void setArrowOffset( int arrowOffset );
 
 signals:
     void hidden();
@@ -43,6 +44,7 @@ protected:
 private:
     QVBoxLayout* m_layout;
     QWidget* m_widget;
+    int m_arrowOffset;
 };
 
 #endif // ACCOUNTSPOPUPWIDGET_H

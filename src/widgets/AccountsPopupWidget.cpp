@@ -31,6 +31,7 @@
 AccountsPopupWidget::AccountsPopupWidget( QWidget* parent )
     : QWidget( parent )
     , m_widget( 0 )
+    , m_arrowOffset( 0 )
 {
     setWindowFlags( Qt::FramelessWindowHint );
     setWindowFlags( Qt::Popup );
@@ -45,7 +46,7 @@ AccountsPopupWidget::AccountsPopupWidget( QWidget* parent )
     m_layout = new QVBoxLayout( this );
     setLayout( m_layout );
 
-    setContentsMargins( contentsMargins().left() + 2, contentsMargins().top() + 2 ,
+    setContentsMargins( contentsMargins().left() + 2, contentsMargins().top() + 2 + 6 /*arrowHeight*/ ,
                         contentsMargins().right(), contentsMargins().bottom() );
 
 #ifdef Q_OS_MAC
@@ -65,27 +66,44 @@ AccountsPopupWidget::setWidget( QWidget* widget )
 void
 AccountsPopupWidget::anchorAt( const QPoint &p )
 {
-#ifdef Q_OS_WIN
-    // We do this because Windows sticks the toolbutton really close to the
-    // right side border of the window
-    QPoint myTopRight( p.x() - sizeHint().width(), p.y() );
-#else
-    QPoint myTopRight( p.x() - sizeHint().width() + 8, p.y() );
-#endif
+    QPoint myTopRight( p.x() - sizeHint().width(), p.y() - 2 ); //we go 2px up to point inside the button
+
     move( myTopRight );
     if( isVisible() )
         repaint();
 }
 
+void
+AccountsPopupWidget::setArrowOffset( int arrowOffset )
+{
+    arrowOffset -= 2; //a pinch of magic dust to handle the internal margin
+    if ( arrowOffset != m_arrowOffset )
+    {
+        m_arrowOffset = arrowOffset;
+        if ( isVisible() )
+            repaint();
+    }
+}
+
 void AccountsPopupWidget::paintEvent( QPaintEvent* )
 {
     // Constants for painting
-    const int cornerRadius = 8;   //the rounding radius of the widget
+    const int cornerRadius = 6;   //the rounding radius of the widget
+    const int arrowHeight = 6;
 
-    const QRect brect = rect().adjusted( 2, 2, -2, -2 );
+    //m_arrowOffset is the distance between the far right boundary and the x value of the arrow head.
+    //It is provided by the tool button, and is expected to be the middle of the button.
+    //With this, we make sure that whatever happens, it will be bigger than the rounding radius plus
+    //half the arrow, so that the shape of the rounded rect won't be affected.
+    m_arrowOffset = qMax( m_arrowOffset, cornerRadius + arrowHeight ); //at least 12!
+
+    const QRect brect = rect().adjusted( 2, arrowHeight + 2, -2, -2 );
 
     QPainterPath outline;
-    outline.addRoundedRect( 3, 3, brect.width(), brect.height(), cornerRadius, cornerRadius );
+    outline.addRoundedRect( brect.left(), brect.top(), brect.width(), brect.height(), cornerRadius, cornerRadius );
+    outline.moveTo( rect().right() - m_arrowOffset + arrowHeight, brect.top() );
+    outline.lineTo( rect().right() - m_arrowOffset, 2 );
+    outline.lineTo( rect().right() - m_arrowOffset - arrowHeight, brect.top() );
 
     QPainter p( this );
 
