@@ -160,5 +160,7 @@
         <file>data/images/spotify-sourceicon.png</file>
         <file>data/images/account-offline.png</file>
         <file>data/images/account-online.png</file>
+        <file>data/images/cancel.png</file>
+        <file>data/images/delete.png</file>
     </qresource>
 </RCC>

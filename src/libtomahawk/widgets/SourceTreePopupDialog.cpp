@@ -62,16 +62,18 @@ SourceTreePopupDialog::SourceTreePopupDialog()
 
     m_label = new QLabel( this );
     m_buttons = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, this );
-    //TODO: get some nice icons for this
-    m_buttons->button( QDialogButtonBox::Ok )->setIcon( QIcon() );
-    m_buttons->button( QDialogButtonBox::Cancel )->setIcon( QIcon() );
+
+    m_buttons->button( QDialogButtonBox::Ok )->setIcon( QIcon( RESPATH "images/delete.png" ) );
+    m_buttons->button( QDialogButtonBox::Cancel )->setIcon( QIcon( RESPATH "images/cancel.png" ) );
 
     connect( m_buttons, SIGNAL( accepted() ), this, SLOT( onAccepted() ) );
     connect( m_buttons, SIGNAL( rejected() ), this, SLOT( onRejected() ) );
 
     m_layout = new QVBoxLayout;
+    TomahawkUtils::unmarginLayout( m_layout );
     setLayout( m_layout );
     m_layout->setSpacing( 8 );
+    m_layout->setMargin( 6 );
 
     m_layout->addWidget( m_title );
 
