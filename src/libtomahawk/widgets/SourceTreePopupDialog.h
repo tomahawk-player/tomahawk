@@ -44,6 +44,7 @@ public:
 
     int offset() const { return 16; }
 
+    void setTitle( const QString& text );
     void setMainText( const QString& text );
     void setOkButtonText( const QString& text );
     void setExtraQuestions( const Tomahawk::PlaylistDeleteQuestions& questions );
@@ -69,11 +70,12 @@ private:
     QVBoxLayout* m_layout;
     QList< QCheckBox* > m_questionCheckboxes;
 
-    QString m_text;
     bool m_result;
     Tomahawk::PlaylistDeleteQuestions m_questions;
     QMap< int, bool > m_questionResults;
 
+    QLabel* m_title;
+    QWidget* m_separatorLine;
     QLabel* m_label;
     QDialogButtonBox* m_buttons;
 };
