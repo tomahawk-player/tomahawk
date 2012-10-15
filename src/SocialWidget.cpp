@@ -243,7 +243,7 @@ SocialWidget::onGeometryUpdate()
     m_parentRect = m_parent->rect();
 
     QPoint position( m_position - QPoint( size().width(), size().height() )
-                     + QPoint( ARROW_HEIGHT * 3, -ARROW_HEIGHT/2 ) );
+                     + QPoint( 2 + ARROW_HEIGHT * 3, 0 ) );
     if ( position != pos() )
     {
         move( position );
