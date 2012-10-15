@@ -1624,27 +1624,27 @@ connect and stream from you?</translation>
         <translation>Cover</translation>
     </message>
     <message>
-        <location filename="../src/SocialWidget.ui" line="101"/>
+        <location filename="../src/SocialWidget.ui" line="121"/>
         <source>TextLabel</source>
         <translation>TextLabel</translation>
     </message>
     <message>
-        <location filename="../src/SocialWidget.cpp" line="52"/>
+        <location filename="../src/SocialWidget.cpp" line="61"/>
         <source>Tweet</source>
         <translation>Tweet</translation>
     </message>
     <message>
-        <location filename="../src/SocialWidget.cpp" line="199"/>
+        <location filename="../src/SocialWidget.cpp" line="168"/>
         <source>Listening to &quot;%1&quot; by %2. %3</source>
         <translation>Listening to &quot;%1&quot; by %2. %3</translation>
     </message>
     <message>
-        <location filename="../src/SocialWidget.cpp" line="201"/>
+        <location filename="../src/SocialWidget.cpp" line="170"/>
         <source>Listening to &quot;%1&quot; by %2 on &quot;%3&quot;. %4</source>
         <translation>Listening to &quot;%1&quot; by %2 on &quot;%3&quot;. %4</translation>
     </message>
     <message>
-        <location filename="../src/SocialWidget.cpp" line="222"/>
+        <location filename="../src/SocialWidget.cpp" line="192"/>
         <source>%1 characters left</source>
         <translation>%1 characters left</translation>
     </message>
@@ -3071,7 +3071,7 @@ Try tweaking the filters for a new set of songs to play.</translation>
 <context>
     <name>Tomahawk::InfoSystem::NewReleasesPlugin</name>
     <message>
-        <location filename="../src/infoplugins/generic/newreleases/NewReleasesPlugin.cpp" line="337"/>
+        <location filename="../src/infoplugins/generic/newreleases/NewReleasesPlugin.cpp" line="338"/>
         <source>Albums</source>
         <translation>Albums</translation>
     </message>
