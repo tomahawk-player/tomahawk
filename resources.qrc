@@ -162,5 +162,6 @@
         <file>data/images/account-online.png</file>
         <file>data/images/cancel.png</file>
         <file>data/images/delete.png</file>
+        <file>data/images/ok.png</file>
     </qresource>
 </RCC>

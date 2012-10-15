@@ -653,7 +653,7 @@ void
 AudioControls::onSocialButtonClicked()
 {
     if ( !m_socialWidget.isNull() )
-        return;
+        m_socialWidget.data()->close();
 
     m_socialWidget = new SocialWidget( m_parent );
     m_socialWidget.data()->setPosition( m_socialWidget.data()->mapFromGlobal( QCursor::pos() ) );
