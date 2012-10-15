@@ -175,7 +175,8 @@ void
 SocialWidget::setQuery( const Tomahawk::query_ptr& query )
 {
     m_query = query;
-    ui->coverImage->setPixmap( query->cover( ui->coverImage->size() ) );
+    ui->coverImage->setPixmap( TomahawkUtils::addDropShadow(
+                    query->cover( ui->coverImage->size() ), ui->coverImage->size() ) );
     onShortLinkReady( QString(), QString(), QVariant() );
     onChanged();
 
