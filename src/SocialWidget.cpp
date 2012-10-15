@@ -62,7 +62,7 @@ SocialWidget::SocialWidget( QWidget* parent )
     ui->buttonBox->button( QDialogButtonBox::Ok )->setIcon( QIcon( RESPATH "images/ok.png" ) );
     ui->buttonBox->button( QDialogButtonBox::Cancel )->setIcon( QIcon( RESPATH "images/cancel.png" ) );
 
-    ui->textEdit->setStyleSheet( "border: 1px solid #000000;" );
+    ui->textEdit->setStyleSheet( "border: 1px solid #8c8c8c;" );
     
     m_parent->installEventFilter( this );
 
