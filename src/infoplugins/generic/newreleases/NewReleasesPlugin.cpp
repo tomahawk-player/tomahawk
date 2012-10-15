@@ -42,7 +42,7 @@ NewReleasesPlugin::NewReleasesPlugin()
     : InfoPlugin()
     , m_nrFetchJobs ( 0 )
 {
-    m_nrVersion = "0.1";
+    m_nrVersion = "0.3";
     m_supportedGetTypes << InfoNewReleaseCapabilities << InfoNewRelease;
 }
 
@@ -192,7 +192,8 @@ void NewReleasesPlugin::notInCacheSlot ( InfoStringHash criteria, InfoRequestDat
 
 void NewReleasesPlugin::fetchNRSourcesList( bool fetchOnlySourcesList )
 {
-    QUrl url = QUrl ( QString ( CHART_URL "newreleases" ) );
+
+    QUrl url = QUrl ( QString ( CHART_URL "newreleases?version=%1" ).arg( TomahawkUtils::appFriendlyVersion() ) );
     QNetworkReply* reply = TomahawkUtils::nam()->get ( QNetworkRequest ( url ) );
     reply->setProperty( "only_source_list", fetchOnlySourcesList );
 
