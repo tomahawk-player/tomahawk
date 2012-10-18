@@ -71,6 +71,7 @@ DatabaseImpl::DatabaseImpl( const QString& dbname )
 
     // in case of unclean shutdown last time:
     query.exec( "UPDATE source SET isonline = 'false'" );
+    query.exec( "DELETE FROM oplog WHERE source IS NULL AND singleton = 'true'" );
 
     m_fuzzyIndex = new FuzzyIndex( this, schemaUpdated );
 

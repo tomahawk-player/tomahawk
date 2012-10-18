@@ -79,7 +79,7 @@ Database::~Database()
 
     m_idWorker->stop();
     delete m_idWorker;
-    
+
     if ( m_workerRW )
         m_workerRW.data()->quit();
     foreach ( QWeakPointer< DatabaseWorkerThread > workerThread, m_workerThreads )
@@ -102,10 +102,10 @@ Database::~Database()
         }
     }
     m_workerThreads.clear();
-    
+
     qDeleteAll( m_implHash.values() );
     delete m_impl;
-    
+
 }
 
 
@@ -145,7 +145,7 @@ Database::enqueue( const QSharedPointer<DatabaseCommand>& lc )
         for ( int i = 0; i < m_workerThreads.count(); i++ )
         {
             workerThread = m_workerThreads.at( i );
-            
+
             if ( workerThread && workerThread.data()->worker() && !workerThread.data()->worker().data()->busy() )
             {
                 happyWorker = workerThread.data()->worker();
