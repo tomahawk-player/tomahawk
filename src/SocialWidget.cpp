@@ -44,18 +44,20 @@ SocialWidget::SocialWidget( QWidget* parent )
     ui->setupUi( this );
     setWindowFlags( Qt::FramelessWindowHint );
     setWindowFlags( Qt::Popup );
-    TomahawkUtils::unmarginLayout( layout() );
-#ifndef Q_OS_MAC
-    ui->verticalLayout->setContentsMargins( 12, 4, 12, 12 );
-#else
-    ui->verticalLayout->setContentsMargins( 8, 0, 8, 12 );
-#endif
-
-
     setAttribute( Qt::WA_TranslucentBackground, true );
 
+    TomahawkUtils::unmarginLayout( layout() );
+
+#ifndef Q_OS_MAC
+    ui->verticalLayout->setContentsMargins( 12, 4, 12, 12 );
     setContentsMargins( contentsMargins().left() + 2, contentsMargins().top() + 2,
                         contentsMargins().right() + 2, contentsMargins().bottom() + 2 + ARROW_HEIGHT );
+#else
+    ui->verticalLayout->setContentsMargins( 12, 0, 12, 12 );
+    setContentsMargins( contentsMargins().left() + 2, 4,
+                        contentsMargins().right() + 2, contentsMargins().bottom() + 2 + ARROW_HEIGHT );
+#endif
+
 
     m_timer.setSingleShot( true );
     connect( &m_timer, SIGNAL( timeout() ), this, SLOT( hide() ) );
