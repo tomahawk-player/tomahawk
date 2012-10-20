@@ -59,7 +59,6 @@ protected:
 //    void changeEvent( QEvent* e );
     void paintEvent( QPaintEvent* event );
     bool eventFilter( QObject* object, QEvent* event );
-    void focusOutEvent( QFocusEvent* );
 
 private slots:
     void accept();

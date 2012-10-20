@@ -261,9 +261,3 @@ SocialWidget::eventFilter( QObject* object, QEvent* event )
 
     return QObject::eventFilter( object, event );
 }
-
-void
-SocialWidget::focusOutEvent( QFocusEvent* )
-{
-    close();
-}
