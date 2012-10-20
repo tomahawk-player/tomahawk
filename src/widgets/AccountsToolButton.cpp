@@ -53,6 +53,7 @@ AccountsToolButton::AccountsToolButton( QWidget* parent )
 
     w->setContentsMargins( 6, 6, 6, 6 );
 #ifdef Q_OS_MAC
+    w->setContentsMargins( 6, 6, 6, 0 );
     wMainLayout->setMargin( 12 );
 #endif
 
