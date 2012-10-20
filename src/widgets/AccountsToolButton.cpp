@@ -53,7 +53,7 @@ AccountsToolButton::AccountsToolButton( QWidget* parent )
 
     w->setContentsMargins( 6, 6, 6, 6 );
 #ifdef Q_OS_MAC
-    wMainLayout->setMargin( 6 );
+    wMainLayout->setMargin( 12 );
 #endif
 
     m_popup->setWidget( w );
@@ -88,6 +88,7 @@ AccountsToolButton::AccountsToolButton( QWidget* parent )
              window(), SLOT( showSettingsDialog() ) );
 
     QHBoxLayout *bottomLayout = new QHBoxLayout( w );
+    TomahawkUtils::unmarginLayout( bottomLayout );
     bottomLayout->addStretch();
     bottomLayout->addWidget( settingsButton );
     wMainLayout->addLayout( bottomLayout );
