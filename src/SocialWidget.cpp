@@ -53,9 +53,10 @@ SocialWidget::SocialWidget( QWidget* parent )
     setContentsMargins( contentsMargins().left() + 2, contentsMargins().top() + 2,
                         contentsMargins().right() + 2, contentsMargins().bottom() + 2 + ARROW_HEIGHT );
 #else
-    ui->verticalLayout->setContentsMargins( 12, 0, 12, 12 );
+    ui->verticalLayout->setContentsMargins( 12, 0, 12, 16 );
     setContentsMargins( contentsMargins().left() + 2, 4,
                         contentsMargins().right() + 2, contentsMargins().bottom() + 2 + ARROW_HEIGHT );
+    ui->horizontalLayout->setContentsMargins( 0, 0, 0, 0 );
 #endif
 
 
