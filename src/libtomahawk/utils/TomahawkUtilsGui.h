@@ -73,6 +73,16 @@ namespace TomahawkUtils
     DLLEXPORT QPixmap createTiledPixmap( int width, int height, const QImage& src );
 
     DLLEXPORT QPixmap addDropShadow( const QPixmap& sourceImage, const QSize& targetSize );
+
+    namespace Colors
+    {
+        static const QColor BORDER_LINE = QColor( "#8c8c8c" );
+        static const QColor POPUP_BACKGROUND = QColor( "#ffffff" );
+        static const QColor GROUP_HEADER = QColor( "#637180" );
+    }
+
+    static const int POPUP_ROUNDING_RADIUS = 6;
+    static const float POPUP_OPACITY = 0.96;
 }
 
 #endif // TOMAHAWKUTILSGUI_H

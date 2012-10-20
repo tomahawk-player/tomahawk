@@ -294,7 +294,7 @@ SourceDelegate::paintCategory( QPainter* painter, const QStyleOptionViewItem& op
 
     painter->setPen( Qt::white );
     painter->drawText( option.rect.translated( 4, 1 ), index.data().toString().toUpper(), to );
-    painter->setPen( QColor( 99, 113, 128 ) );
+    painter->setPen( TomahawkUtils::Colors::GROUP_HEADER );
     painter->drawText( option.rect.translated( 4, 0 ), index.data().toString().toUpper(), to );
 
     if ( option.state & QStyle::State_MouseOver )
@@ -311,7 +311,7 @@ SourceDelegate::paintCategory( QPainter* painter, const QStyleOptionViewItem& op
         // draw close icon
         painter->setPen( Qt::white );
         painter->drawText( option.rect.translated( -4, 1 ), text, to );
-        painter->setPen( QColor( 99, 113, 128 ) );
+        painter->setPen( TomahawkUtils::Colors::GROUP_HEADER );
         painter->drawText( option.rect.translated( -4, 0 ), text, to );
     }
 
@@ -338,7 +338,7 @@ SourceDelegate::paintGroup( QPainter* painter, const QStyleOptionViewItem& optio
 
     painter->setPen( Qt::white );
     painter->drawText( option.rect.translated( 4, 1 ), index.data().toString().toUpper(), to );
-    painter->setPen( QColor( 99, 113, 128 ) );
+    painter->setPen( TomahawkUtils::Colors::GROUP_HEADER );
     painter->drawText( option.rect.translated( 4, 0 ), index.data().toString().toUpper(), to );
 
     if ( option.state & QStyle::State_MouseOver )
@@ -353,7 +353,7 @@ SourceDelegate::paintGroup( QPainter* painter, const QStyleOptionViewItem& optio
         // draw close icon
         painter->setPen( Qt::white );
         painter->drawText( option.rect.translated( -4, 1 ), text, to );
-        painter->setPen( QColor( 99, 113, 128 ) );
+        painter->setPen( TomahawkUtils::Colors::GROUP_HEADER );
         painter->drawText( option.rect.translated( -4, 0 ), text, to );
     }
 

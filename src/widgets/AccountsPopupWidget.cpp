@@ -19,6 +19,8 @@
 
 #include "AccountsPopupWidget.h"
 
+#include "utils/TomahawkUtilsGui.h"
+
 #include <QDebug>
 #include <QPainter>
 #include <QPaintEvent>
@@ -88,7 +90,7 @@ AccountsPopupWidget::setArrowOffset( int arrowOffset )
 void AccountsPopupWidget::paintEvent( QPaintEvent* )
 {
     // Constants for painting
-    const int cornerRadius = 6;   //the rounding radius of the widget
+    const int cornerRadius = TomahawkUtils::POPUP_ROUNDING_RADIUS;   //the rounding radius of the widget
     const int arrowHeight = 6;
 
     //m_arrowOffset is the distance between the far right boundary and the x value of the arrow head.
@@ -110,13 +112,13 @@ void AccountsPopupWidget::paintEvent( QPaintEvent* )
     p.setRenderHint( QPainter::Antialiasing );
     p.setBackgroundMode( Qt::TransparentMode );
 
-    QPen pen( QColor( 0x8c, 0x8c, 0x8c ) );
+    QPen pen( TomahawkUtils::Colors::BORDER_LINE );
     pen.setWidth( 2 );
     p.setPen( pen );
     p.drawPath( outline );
 
-    p.setOpacity( 0.96 );
-    p.fillPath( outline, QColor( "#FFFFFF" ) );
+    p.setOpacity( TomahawkUtils::POPUP_OPACITY );
+    p.fillPath( outline, TomahawkUtils::Colors::POPUP_BACKGROUND );
 
 #ifdef QT_MAC_USE_COCOA
     // Work around bug in Qt/Mac Cocoa where opening subsequent popups

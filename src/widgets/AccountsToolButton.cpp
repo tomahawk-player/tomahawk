@@ -77,7 +77,8 @@ AccountsToolButton::AccountsToolButton( QWidget* parent )
     QWidget *separatorLine = new QWidget( w );
     separatorLine->setFixedHeight( 1 );
     separatorLine->setContentsMargins( 0, 0, 0, 0 );
-    separatorLine->setStyleSheet( "QWidget { border-top: 1px solid rgb( 140, 140, 140 ); }" ); //from ProxyStyle
+    separatorLine->setStyleSheet( "QWidget { border-top: 1px solid " +
+                                  TomahawkUtils::Colors::BORDER_LINE.name() + "; }" ); //from ProxyStyle
     wMainLayout->addWidget( separatorLine );
 
     wMainLayout->addSpacing( 6 );

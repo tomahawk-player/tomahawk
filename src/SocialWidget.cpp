@@ -29,8 +29,6 @@
 #include "utils/Logger.h"
 #include "Source.h"
 
-#define CORNER_ROUNDNESS 6.0
-#define OPACITY 0.96
 #define ARROW_HEIGHT 6
 
 
@@ -68,7 +66,7 @@ SocialWidget::SocialWidget( QWidget* parent )
     ui->buttonBox->button( QDialogButtonBox::Ok )->setIcon( QIcon( RESPATH "images/ok.png" ) );
     ui->buttonBox->button( QDialogButtonBox::Cancel )->setIcon( QIcon( RESPATH "images/cancel.png" ) );
 
-    ui->textEdit->setStyleSheet( "border: 1px solid #8c8c8c;" );
+    ui->textEdit->setStyleSheet( "border: 1px solid " + TomahawkUtils::Colors::BORDER_LINE.name() );
     
     m_parent->installEventFilter( this );
 
@@ -142,7 +140,7 @@ SocialWidget::paintEvent( QPaintEvent* event )
     QPainterPath outline;
 
     QRect r = contentsRect();
-    outline.addRoundedRect( r, CORNER_ROUNDNESS, CORNER_ROUNDNESS );
+    outline.addRoundedRect( r, TomahawkUtils::POPUP_ROUNDING_RADIUS, TomahawkUtils::POPUP_ROUNDING_RADIUS );
     outline.moveTo( r.right() - ARROW_HEIGHT * 2, r.bottom()+1 );
     outline.lineTo( r.right() - ARROW_HEIGHT * 3, r.bottom()+1 + ARROW_HEIGHT );
     outline.lineTo( r.right() - ARROW_HEIGHT * 4, r.bottom()+1 );
@@ -151,13 +149,13 @@ SocialWidget::paintEvent( QPaintEvent* event )
     p.setRenderHint( QPainter::Antialiasing );
     p.setBackgroundMode( Qt::TransparentMode );
 
-    QPen pen( QColor( 0x8c, 0x8c, 0x8c ) );
+    QPen pen( TomahawkUtils::Colors::BORDER_LINE );
     pen.setWidth( 2 );
     p.setPen( pen );
     p.drawPath( outline );
 
-    p.setOpacity( OPACITY );
-    p.fillPath( outline, QColor( "#FFFFFF" ) );
+    p.setOpacity( TomahawkUtils::POPUP_OPACITY );
+    p.fillPath( outline, TomahawkUtils::Colors::POPUP_BACKGROUND );
 
     QWidget::paintEvent( event );
     return;

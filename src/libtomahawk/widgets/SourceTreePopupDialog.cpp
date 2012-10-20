@@ -56,7 +56,7 @@ SourceTreePopupDialog::SourceTreePopupDialog()
     m_title = new QLabel( this );
     QFont titleFont = m_title->font();
     titleFont.setBold( true );
-    m_title->setStyleSheet( "color: rgb( 99, 113, 128 );" );
+    m_title->setStyleSheet( "color: " + TomahawkUtils::Colors::GROUP_HEADER.name() );
     titleFont.setPointSize( TomahawkUtils::defaultFontSize() + 1 );
     m_title->setFont( titleFont );
     m_title->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
@@ -81,7 +81,8 @@ SourceTreePopupDialog::SourceTreePopupDialog()
     m_separatorLine = new QWidget( this );
     m_separatorLine->setFixedHeight( 1 );
     m_separatorLine->setContentsMargins( 0, 0, 0, 0 );
-    m_separatorLine->setStyleSheet( "QWidget { border-top: 1px solid black; }" );
+    m_separatorLine->setStyleSheet( "QWidget { border-top: 1px solid " +
+                                    TomahawkUtils::Colors::BORDER_LINE.name() + "; }" );
     m_layout->addWidget( m_separatorLine );
     m_layout->addWidget( m_label );
     m_layout->addWidget( m_buttons );
@@ -174,7 +175,7 @@ SourceTreePopupDialog::paintEvent( QPaintEvent* event )
 {
     // Constants for painting
     const int leftTriangleWidth = 12;
-    const int cornerRounding = 6;
+    const int cornerRounding = TomahawkUtils::POPUP_ROUNDING_RADIUS;
     const int leftEdgeOffset = 2 /*margin*/ + leftTriangleWidth / 2;
     const QRect brect = rect().adjusted( 2, 3, -2, -3 );
 
@@ -195,7 +196,7 @@ SourceTreePopupDialog::paintEvent( QPaintEvent* event )
 
     p.setRenderHint( QPainter::Antialiasing );
 
-    QPen pen( QColor( 0x8c, 0x8c, 0x8c ) );
+    QPen pen( TomahawkUtils::Colors::BORDER_LINE );
     pen.setWidth( 2 );
     p.setPen( pen );
     p.drawPath( outline );
@@ -204,8 +205,8 @@ SourceTreePopupDialog::paintEvent( QPaintEvent* event )
     p.setOpacity( 0.93 );
     p.fillPath( outline, QColor( "#D6E3F1" ) );
 #else
-    p.setOpacity( 0.96 );
-    p.fillPath( outline, QColor( "#FFFFFF" ) );
+    p.setOpacity( TomahawkUtils::POPUP_OPACITY );
+    p.fillPath( outline, TomahawkUtils::Colors::POPUP_BACKGROUND );
 #endif
 
 #ifdef QT_MAC_USE_COCOA

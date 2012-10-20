@@ -97,7 +97,7 @@ AccountWidget::AccountWidget( QWidget* parent )
 
     m_inviteContainer = new UnstyledFrame( this );
     vLayout->addWidget( m_inviteContainer, 1, 0 );
-    m_inviteContainer->setFrameColor( QColor( 0x8c, 0x8c, 0x8c ) ); //from ProxyStyle
+    m_inviteContainer->setFrameColor( TomahawkUtils::Colors::BORDER_LINE );
     m_inviteContainer->setMinimumWidth( m_inviteContainer->logicalDpiX() * 2 );
     m_inviteContainer->setContentsMargins( 1, 1, 1, 2 );
     m_inviteContainer->setAttribute( Qt::WA_TranslucentBackground, false );
