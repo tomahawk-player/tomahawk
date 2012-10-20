@@ -44,7 +44,7 @@ SocialWidget::SocialWidget( QWidget* parent )
     ui->setupUi( this );
     setWindowFlags( Qt::FramelessWindowHint );
     setWindowFlags( Qt::Popup );
-    ui->verticalLayout->setSpacing( 8 );
+    TomahawkUtils::unmarginLayout( layout() );
     ui->verticalLayout->setMargin( 12 );
 
 
