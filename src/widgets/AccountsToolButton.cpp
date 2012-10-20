@@ -52,6 +52,9 @@ AccountsToolButton::AccountsToolButton( QWidget* parent )
     TomahawkUtils::unmarginLayout( w->layout() );
 
     w->setContentsMargins( 6, 6, 6, 6 );
+#ifdef Q_OS_MAC
+    wMainLayout->setMargin( 6 );
+#endif
 
     m_popup->setWidget( w );
     connect( m_popup, SIGNAL( hidden() ), SLOT( popupHidden() ) );
