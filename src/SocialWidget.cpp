@@ -30,7 +30,6 @@
 #include "Source.h"
 
 #define CORNER_ROUNDNESS 6.0
-#define FADING_DURATION 500
 #define OPACITY 0.96
 #define ARROW_HEIGHT 6
 
