@@ -51,7 +51,7 @@ AccountListWidget::AccountListWidget( AccountModelFactoryProxy* model, QWidget* 
     QWidget* separatorLine = new QWidget( this );
     separatorLine->setFixedHeight( 1 );
     separatorLine->setContentsMargins( 0, 0, 0, 0 );
-    separatorLine->setStyleSheet( "QWidget { border-top: 1px solid black; }" );
+    separatorLine->setStyleSheet( "QWidget { border-top: 1px solid rgb( 140, 140, 140 ); }" ); //from ProxyStyle
     mainLayout->insertWidget( 0, separatorLine );
     mainLayout->addSpacing( 6 );
 
