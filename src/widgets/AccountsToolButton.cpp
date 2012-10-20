@@ -49,10 +49,9 @@ AccountsToolButton::AccountsToolButton( QWidget* parent )
     QVBoxLayout *wMainLayout = new QVBoxLayout( w );
     w->setLayout( wMainLayout  );
 
-#ifdef Q_OS_MAC
-    w->setContentsMargins( 4, 4, 2, 2 );
-    wMainLayout->setContentsMargins( 4, 4, 2, 2 );
-#endif
+    TomahawkUtils::unmarginLayout( w->layout() );
+
+    w->setContentsMargins( 6, 6, 6, 6 );
 
     m_popup->setWidget( w );
     connect( m_popup, SIGNAL( hidden() ), SLOT( popupHidden() ) );
@@ -76,6 +75,8 @@ AccountsToolButton::AccountsToolButton( QWidget* parent )
     separatorLine->setContentsMargins( 0, 0, 0, 0 );
     separatorLine->setStyleSheet( "QWidget { border-top: 1px solid rgb( 140, 140, 140 ); }" ); //from ProxyStyle
     wMainLayout->addWidget( separatorLine );
+
+    wMainLayout->addSpacing( 6 );
 
     QPushButton *settingsButton = new QPushButton( w );
     settingsButton->setIcon( QIcon( RESPATH "images/account-settings.png" ) );
