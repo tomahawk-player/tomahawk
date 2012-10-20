@@ -88,8 +88,6 @@ void
 Source::setControlConnection( ControlConnection* cc )
 {
     m_cc = cc;
-    if ( cc )
-        connect( cc, SIGNAL( finished() ), SLOT( setOffline() ), Qt::QueuedConnection );
 }
 
 
