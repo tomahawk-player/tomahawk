@@ -19,6 +19,7 @@
 #include "AccountListWidget.h"
 
 #include "accounts/AccountModel.h"
+#include "accounts/AccountManager.h"
 #include "AccountWidget.h"
 #include "utils/TomahawkUtilsGui.h"
 
@@ -214,7 +215,14 @@ AccountListWidget::updateToggleOnlineStateButton()
     }
     end:;
 
-    m_toggleOnlineButtonState = newState;
+    if ( newState != m_toggleOnlineButtonState )
+    {
+        m_toggleOnlineButtonState = newState;
+        if ( newState )
+            Tomahawk::Accounts::AccountManager::instance()->connectAll();
+        else
+            Tomahawk::Accounts::AccountManager::instance()->disconnectAll();
+    }
 
     m_toggleOnlineButton->setText( m_toggleOnlineButtonState ? tr( "Disconnect &All" )
                                                              : tr( "Connect &All" ) );
