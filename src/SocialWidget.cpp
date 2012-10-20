@@ -45,7 +45,11 @@ SocialWidget::SocialWidget( QWidget* parent )
     setWindowFlags( Qt::FramelessWindowHint );
     setWindowFlags( Qt::Popup );
     TomahawkUtils::unmarginLayout( layout() );
+#ifndef Q_OS_MAC
     ui->verticalLayout->setContentsMargins( 12, 4, 12, 12 );
+#else
+    ui->verticalLayout->setContentsMargins( 8, 0, 8, 12 );
+#endif
 
 
     setAttribute( Qt::WA_TranslucentBackground, true );
