@@ -45,6 +45,9 @@ FlexibleHeader::FlexibleHeader( FlexibleView* parent )
 {
     ui->setupUi( this );
 
+    TomahawkUtils::unmarginLayout( layout() );
+    layout()->setContentsMargins( 8, 4, 8, 4 );
+
     QPalette pal = palette();
     pal.setColor( QPalette::Foreground, Qt::white );
 
@@ -55,9 +58,14 @@ FlexibleHeader::FlexibleHeader( FlexibleView* parent )
     font.setPointSize( TomahawkUtils::defaultFontSize() + 4 );
     font.setBold( true );
     ui->captionLabel->setFont( font );
+    ui->captionLabel->setElideMode( Qt::ElideRight );
 
-    font.setPointSize( TomahawkUtils::defaultFontSize() );
+    font.setPointSize( TomahawkUtils::defaultFontSize() + 1 );
+    font.setBold( false );
     ui->descLabel->setFont( font );
+
+    ui->captionLabel->setMargin( 2 );
+    ui->descLabel->setMargin( 1 );
 
     ui->radioNormal->setFocusPolicy( Qt::NoFocus );
     ui->radioDetailed->setFocusPolicy( Qt::NoFocus );
@@ -78,6 +86,8 @@ FlexibleHeader::FlexibleHeader( FlexibleView* parent )
 
     setPalette( pal );
     setAutoFillBackground( true );
+
+    setFixedHeight( 80 );
 
     if ( !s_tiledHeader )
         s_tiledHeader = new QPixmap( TomahawkUtils::createTiledPixmap( 2000, height(), QImage( RESPATH "images/playlist-header-tiled.png" ) ) );

@@ -49,7 +49,7 @@ InfoBar::InfoBar( QWidget* parent )
     layout()->setContentsMargins( 8, 4, 8, 4 );
 
     QFont boldFont = ui->captionLabel->font();
-    boldFont.setPointSize( TomahawkUtils::defaultFontSize() + 5 );
+    boldFont.setPointSize( TomahawkUtils::defaultFontSize() + 4 );
     boldFont.setBold( true );
     ui->captionLabel->setFont( boldFont );
     ui->captionLabel->setElideMode( Qt::ElideRight );
@@ -71,8 +71,8 @@ InfoBar::InfoBar( QWidget* parent )
     ui->descriptionLabel->setPalette( m_whitePal );
     ui->longDescriptionLabel->setPalette( m_whitePal );
 
-    ui->captionLabel->setMargin( 6 );
-    ui->descriptionLabel->setMargin( 6 );
+    ui->captionLabel->setMargin( 2 );
+    ui->descriptionLabel->setMargin( 1 );
     ui->longDescriptionLabel->setMargin( 4 );
 
     ui->captionLabel->setText( QString() );
