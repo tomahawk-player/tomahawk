@@ -81,9 +81,30 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
 
     setReadOnly( !m_playlist->author()->isLocal() );
     setTitle( playlist->title() );
-    setDescription( tr( "A playlist by %1, created %2" )
-                  .arg( playlist->creator().isEmpty() ? ( playlist->author()->isLocal() ? tr( "you" ) : playlist->author()->friendlyName() ) : playlist->creator() )
-                  .arg( TomahawkUtils::ageToString( QDateTime::fromTime_t( playlist->createdOn() ), true ) ) );
+
+    QString age = TomahawkUtils::ageToString( QDateTime::fromTime_t( playlist->createdOn() ), true );
+    QString desc;
+    if ( playlist->creator().isEmpty() )
+    {
+        if ( playlist->author()->isLocal() )
+        {
+             desc = tr( "A playlist you created %1." )
+                    .arg( age );
+        }
+        else
+        {
+            desc = tr( "A playlist by %1, created %2." )
+                   .arg( playlist->author()->friendlyName() )
+                   .arg( age );
+        }
+    }
+    else
+    {
+        desc = tr( "A playlist by %1, created %2." )
+               .arg( playlist->creator() )
+               .arg( age );
+    }
+    setDescription( desc );
 
     m_isTemporary = false;
     emit playlistChanged();
