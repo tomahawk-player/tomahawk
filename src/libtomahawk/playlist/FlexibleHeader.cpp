@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2012,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -17,13 +18,14 @@
  */
 
 #include "FlexibleHeader.h"
-#include "ui_PlaylistHeader.h"
 
+#include <QBoxLayout>
 #include <QLabel>
 #include <QPixmap>
 #include <QCheckBox>
 #include <QPaintEvent>
 #include <QPainter>
+#include <QRadioButton>
 
 #include "playlist/FlexibleView.h"
 #include "ViewManager.h"
@@ -36,111 +38,81 @@
 
 using namespace Tomahawk;
 
-QPixmap* FlexibleHeader::s_tiledHeader = 0;
 
 FlexibleHeader::FlexibleHeader( FlexibleView* parent )
-    : QWidget( parent )
+    : BasicHeader( parent )
     , m_parent( parent )
-    , ui( new Ui::PlaylistHeader )
 {
-    ui->setupUi( this );
-
-    TomahawkUtils::unmarginLayout( layout() );
-    layout()->setContentsMargins( 8, 4, 8, 4 );
-
-    QPalette pal = palette();
-    pal.setColor( QPalette::Foreground, Qt::white );
-
-    ui->captionLabel->setPalette( pal );
-    ui->descLabel->setPalette( pal );
-
-    QFont font = ui->captionLabel->font();
-    font.setPointSize( TomahawkUtils::defaultFontSize() + 4 );
-    font.setBold( true );
-    ui->captionLabel->setFont( font );
-    ui->captionLabel->setElideMode( Qt::ElideRight );
-
-    font.setPointSize( TomahawkUtils::defaultFontSize() + 1 );
-    font.setBold( false );
-    ui->descLabel->setFont( font );
-
-    ui->captionLabel->setMargin( 2 );
-    ui->descLabel->setMargin( 1 );
-
-    ui->radioNormal->setFocusPolicy( Qt::NoFocus );
-    ui->radioDetailed->setFocusPolicy( Qt::NoFocus );
-    ui->radioCloud->setFocusPolicy( Qt::NoFocus );
-
     QFile f( RESPATH "stylesheets/topbar-radiobuttons.css" );
     f.open( QFile::ReadOnly );
     QString css = QString::fromAscii( f.readAll() );
     f.close();
 
-    ui->modeWidget->setStyleSheet( css );
+    QHBoxLayout* outerModeLayout = new QHBoxLayout;
+    m_verticalLayout->addLayout( outerModeLayout );
+    outerModeLayout->addSpacing( 156 );
+    outerModeLayout->addStretch();
 
-    ui->radioNormal->setChecked( true );
-    ui->filter->setPlaceholderText( tr( "Filter..." ) );
+    QWidget* modeWidget = new QWidget( this );
+    QHBoxLayout* modeLayout = new QHBoxLayout;
+    modeWidget->setLayout( modeLayout );
+    modeWidget->setStyleSheet( css );
 
-    pal = palette();
-    pal.setColor( QPalette::Window, QColor( "#454e59" ) );
+    m_radioNormal = new QRadioButton( modeWidget );
+    m_radioDetailed = new QRadioButton( modeWidget );
+    m_radioCloud = new QRadioButton( modeWidget );
+    //for the CSS:
+    m_radioNormal->setObjectName( "radioNormal");
+    m_radioCloud->setObjectName( "radioCloud" );
 
-    setPalette( pal );
-    setAutoFillBackground( true );
+    m_radioNormal->setFocusPolicy( Qt::NoFocus );
+    m_radioDetailed->setFocusPolicy( Qt::NoFocus );
+    m_radioCloud->setFocusPolicy( Qt::NoFocus );
 
-    setFixedHeight( 80 );
+    modeLayout->addWidget( m_radioNormal );
+    modeLayout->addWidget( m_radioDetailed );
+    modeLayout->addWidget( m_radioCloud );
 
-    if ( !s_tiledHeader )
-        s_tiledHeader = new QPixmap( TomahawkUtils::createTiledPixmap( 2000, height(), QImage( RESPATH "images/playlist-header-tiled.png" ) ) );
+    modeWidget->setFixedSize( 87, 30 );
+
+    m_radioNormal->setChecked( true );
+
+    outerModeLayout->addWidget( modeWidget );
+    outerModeLayout->addStretch();
+
+    m_filterField = new QSearchField( this );
+    m_filterField->setPlaceholderText( tr( "Filter..." ) );
+    m_filterField->setFixedWidth( 220 );
+    m_mainLayout->addWidget( m_filterField );
+
+    TomahawkUtils::unmarginLayout( outerModeLayout );
+    TomahawkUtils::unmarginLayout( modeLayout );
 
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
-    connect( ui->filter, SIGNAL( textChanged( QString ) ), SLOT( onFilterEdited() ) );
+    connect( m_filterField, SIGNAL( textChanged( QString ) ), SLOT( onFilterEdited() ) );
 
-    NewClosure( ui->radioNormal,   SIGNAL( clicked() ), const_cast< FlexibleView* >( parent ), SLOT( setCurrentMode( FlexibleViewMode ) ), FlexibleView::Flat )->setAutoDelete( false );
-    NewClosure( ui->radioDetailed, SIGNAL( clicked() ), const_cast< FlexibleView* >( parent ), SLOT( setCurrentMode( FlexibleViewMode ) ), FlexibleView::Detailed )->setAutoDelete( false );
-    NewClosure( ui->radioCloud,    SIGNAL( clicked() ), const_cast< FlexibleView* >( parent ), SLOT( setCurrentMode( FlexibleViewMode ) ), FlexibleView::Grid )->setAutoDelete( false );
+    NewClosure( m_radioNormal,   SIGNAL( clicked() ), const_cast< FlexibleView* >( parent ), SLOT( setCurrentMode( FlexibleViewMode ) ), FlexibleView::Flat )->setAutoDelete( false );
+    NewClosure( m_radioDetailed, SIGNAL( clicked() ), const_cast< FlexibleView* >( parent ), SLOT( setCurrentMode( FlexibleViewMode ) ), FlexibleView::Detailed )->setAutoDelete( false );
+    NewClosure( m_radioCloud,    SIGNAL( clicked() ), const_cast< FlexibleView* >( parent ), SLOT( setCurrentMode( FlexibleViewMode ) ), FlexibleView::Grid )->setAutoDelete( false );
 }
 
 
 FlexibleHeader::~FlexibleHeader()
 {
-    delete s_tiledHeader;
-    s_tiledHeader = 0;
-    delete ui;
-}
-
-
-void
-FlexibleHeader::setCaption( const QString& s )
-{
-    ui->captionLabel->setText( s );
-}
-
-
-void
-FlexibleHeader::setDescription( const QString& s )
-{
-    ui->descLabel->setText( s );
-}
-
-
-void
-FlexibleHeader::setPixmap( const QPixmap& p )
-{
-    ui->imageLabel->setPixmap( p.scaledToHeight( ui->imageLabel->height(), Qt::SmoothTransformation ) );
 }
 
 
 void
 FlexibleHeader::setFilter( const QString& filter )
 {
-    ui->filter->setText( filter );
+    m_filterField->setText( filter );
 }
 
 
 void
 FlexibleHeader::onFilterEdited()
 {
-    m_filter = ui->filter->text();
+    m_filter = m_filterField->text();
 
     m_filterTimer.stop();
     m_filterTimer.setInterval( 280 );
@@ -152,7 +124,7 @@ FlexibleHeader::onFilterEdited()
 void
 FlexibleHeader::applyFilter()
 {
-    emit filterTextChanged( ui->filter->text() );
+    emit filterTextChanged( m_filterField->text() );
 }
 
 
@@ -171,21 +143,3 @@ FlexibleHeader::changeEvent( QEvent* e )
     }
 }
 
-
-void
-FlexibleHeader::paintEvent( QPaintEvent*  )
-{
-    if ( !s_tiledHeader || s_tiledHeader->isNull() || width() > s_tiledHeader->width() )
-    {
-        delete s_tiledHeader;
-        s_tiledHeader = new QPixmap( TomahawkUtils::createTiledPixmap( width(), height(), QImage( RESPATH "images/playlist-header-tiled.png" ) ) );
-    }
-
-    if ( !s_tiledHeader || s_tiledHeader->isNull() )
-        return;
-
-    QPainter p( this );
-
-    // Truncate bg pixmap and paint into bg
-    p.drawPixmap( rect(), *s_tiledHeader, rect() );
-}

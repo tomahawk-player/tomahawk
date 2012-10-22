@@ -17,52 +17,41 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FLEXIBLEHEADER_H
-#define FLEXIBLEHEADER_H
+#ifndef BASICHEADER_H
+#define BASICHEADER_H
 
-#include <QTimer>
+#include <QtGui/QWidget>
 
-#include "widgets/BasicHeader.h"
 #include "DllMacro.h"
-#include "Artist.h"
 
+class QLabel;
+class ElidedLabel;
 class QPaintEvent;
-class FlexibleView;
-class QRadioButton;
-class QSearchField;
+class QBoxLayout;
 
-class DLLEXPORT FlexibleHeader : public BasicHeader
+class DLLEXPORT BasicHeader : public QWidget
 {
     Q_OBJECT
-
 public:
-    FlexibleHeader( FlexibleView* parent );
-    ~FlexibleHeader();
+    explicit BasicHeader( QWidget* parent = 0 );
+    virtual ~BasicHeader();
 
 public slots:
-    void setFilter( const QString& filter );
-
-signals:
-    void filterTextChanged( const QString& filter );
+    virtual void setCaption( const QString& s );
+    virtual void setDescription( const QString& s );
+    virtual void setPixmap( const QPixmap& p );
 
 protected:
-    void changeEvent( QEvent* e );
+    void paintEvent( QPaintEvent* );
 
-private slots:
-    void onFilterEdited();
-    void applyFilter();
+    QLabel* m_imageLabel;
+    ElidedLabel* m_captionLabel;
+    ElidedLabel* m_descriptionLabel;
 
-private:
-    FlexibleView* m_parent;
+    QBoxLayout* m_mainLayout;
+    QBoxLayout* m_verticalLayout;
 
-    QString m_filter;
-    QTimer m_filterTimer;
-
-    QRadioButton* m_radioCloud;
-    QRadioButton* m_radioDetailed;
-    QRadioButton* m_radioNormal;
-
-    QSearchField* m_filterField;
+    static QPixmap* s_tiledHeader;
 };
 
-#endif
+#endif // BASICHEADER_H
