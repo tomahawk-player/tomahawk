@@ -302,6 +302,7 @@ TomahawkWindow::setupToolBar()
     //      won't be picked up when the menu is hidden.
     //      This must be done for all menu bar actions that have shortcut keys :(
     //      Does not apply to Mac which always shows the menu bar.
+    addAction( ActionCollection::instance()->getAction( "playPause" ) );
     addAction( ActionCollection::instance()->getAction( "toggleMenuBar" ) );
     addAction( ActionCollection::instance()->getAction( "quit" ) );
 #endif
