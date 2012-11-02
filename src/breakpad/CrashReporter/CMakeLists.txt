@@ -1,5 +1,5 @@
 PROJECT( CrashReporter )
-
+cmake_policy(SET CMP0017 NEW)
 
 FIND_PACKAGE( Qt4 REQUIRED )
 SET( QT_USE_QTNETWORK TRUE )
