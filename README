@@ -37,12 +37,13 @@ Dependencies
   libechonest 2.0.0 - http://projects.kde.org/projects/playground/libs/libechonest/
   Attica 0.4.0 - ftp://ftp.kde.org/pub/kde/stable/attica/
   QuaZip 0.4.3 - http://quazip.sourceforge.net/
+  liblastfm 1.0.1 - http://github.com/lastfm/liblastfm/
+
 
  The following dependencies are optional, but recommended:
 
   Jreen 1.0.5 - http://qutim.org/jreen / https://github.com/euroelessar/jreen
   QTweetLib 0.5.0 - https://github.com/minimoog/QTweetLib
-  liblastfm 1.0.1 - http://github.com/eartle/liblastfm/
 
  Third party libraries that we ship with our source:
 
