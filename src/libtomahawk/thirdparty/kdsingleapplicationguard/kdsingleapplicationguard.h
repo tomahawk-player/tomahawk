@@ -3,7 +3,6 @@
 
 #include <QtCore/QObject>
 
-#if QT_VERSION >= 0x040400 || defined(DOXYGEN_RUN)
 #ifndef QT_NO_SHAREDMEMORY
 
 #include <QtCore/QStringList>
@@ -138,6 +137,5 @@ QT_END_NAMESPACE
 
 
 #endif // QT_NO_SHAREDMEMORY
-#endif // QT_VERSION >= 0x040400 || defined(DOXYGEN_RUN)
 
 #endif /* __KDTOOLSCORE_KDSINGLEAPPLICATIONGUARD_H__ */
