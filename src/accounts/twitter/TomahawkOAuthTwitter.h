@@ -21,7 +21,7 @@
 #define TOMAHAWKOAUTHTWITTERACCOUNT
 
 #include "accounts/AccountDllMacro.h"
-#include <utils/TomahawkUtils.h>
+#include "utils/TomahawkUtils.h"
 
 #include <QTweetLib/qtweetlib_global.h>
 #include <QTweetLib/oauthtwitter.h>

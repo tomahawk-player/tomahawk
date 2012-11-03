@@ -24,10 +24,10 @@
 #include <jreen/client.h>
 #include <jreen/jid.h>
 
-#include <QtGui/QWidget>
-#include <QtXml/QXmlStreamReader>
-#include <QtCore/QDateTime>
-#include <QtGui/QTextBlock>
+#include <QWidget>
+#include <QXmlStreamReader>
+#include <QDateTime>
+#include <QTextBlock>
 
 namespace Ui {
 class XmlConsole;

@@ -21,10 +21,17 @@
 
 #include "XmppSip.h"
 
-#include "config.h"
 
 #include "TomahawkXmppMessage.h"
 #include "TomahawkXmppMessageFactory.h"
+
+#include "utils/TomahawkUtils.h"
+#include "utils/Logger.h"
+#include "accounts/AccountManager.h"
+#include "TomahawkSettings.h"
+#include "utils/TomahawkUtilsGui.h"
+
+#include "config.h"
 
 #include <jreen/jid.h>
 #include <jreen/capabilities.h>
@@ -40,24 +47,16 @@
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 
-#include <QtCore/QtPlugin>
-#include <QtCore/QStringList>
-#include <QtCore/QDateTime>
-#include <QtCore/QTimer>
-
-#include <utils/TomahawkUtils.h>
-#include <utils/Logger.h>
-#include <accounts/AccountManager.h>
-#include <TomahawkSettings.h>
+#include <QtPlugin>
+#include <QStringList>
+#include <QDateTime>
+#include <QTimer>
 
 #ifndef ENABLE_HEADLESS
-    #include <QtGui/QInputDialog>
-    #include <QtGui/QLineEdit>
-    #include <QtGui/QMessageBox>
+    #include <QInputDialog>
+    #include <QLineEdit>
+    #include <QMessageBox>
 #endif
-
-#include <utils/TomahawkUtilsGui.h>
-#include "utils/Logger.h"
 
 using namespace Tomahawk;
 using namespace Accounts;

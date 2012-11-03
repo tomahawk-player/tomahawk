@@ -22,7 +22,6 @@
 #include "TwitterConfigWidget.h"
 #include "accounts/twitter/TomahawkOAuthTwitter.h"
 #include "libtomahawk/infosystem/InfoSystem.h"
-
 #include "sip/SipPlugin.h"
 
 #include <QTweetLib/qtweetaccountverifycredentials.h>

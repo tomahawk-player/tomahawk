@@ -21,10 +21,11 @@
 #include "XmppConfigWidget.h"
 #include "ui_XmppConfigWidget.h"
 
-#include <QMessageBox>
 
-#include <accounts/AccountManager.h>
-#include <utils/Logger.h>
+#include "accounts/AccountManager.h"
+#include "utils/Logger.h"
+
+#include <QMessageBox>
 
 namespace Tomahawk
 {

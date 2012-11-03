@@ -30,6 +30,10 @@
     #include "XmlConsole.h"
 #endif
 
+#include "accounts/AccountDllMacro.h"
+
+#include "../XmppInfoPlugin.h"
+
 #include <jreen/client.h>
 #include <jreen/disco.h>
 #include <jreen/message.h>
@@ -45,12 +49,9 @@
 #include <jreen/pubsubmanager.h>
 
 #ifndef ENABLE_HEADLESS
-    #include <QtGui/QMessageBox>
+    #include <QMessageBox>
 #endif
 
-#include "accounts/AccountDllMacro.h"
-
-#include "../XmppInfoPlugin.h"
 
 class ACCOUNTDLLEXPORT XmppSipPlugin : public SipPlugin
 {

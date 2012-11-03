@@ -21,9 +21,10 @@
 #ifndef TWITTER_H
 #define TWITTER_H
 
-#include <QTimer>
-#include <QWeakPointer>
-#include <QSet>
+#include "accounts/AccountDllMacro.h"
+#include "sip/SipPlugin.h"
+#include "accounts/Account.h"
+#include "accounts/twitter/TomahawkOAuthTwitter.h"
 
 #include <QTweetLib/qtweetuser.h>
 #include <QTweetLib/qtweetnetbase.h>
@@ -34,10 +35,10 @@
 #include <QTweetLib/qtweetmentions.h>
 #include <QTweetLib/qtweetdmstatus.h>
 
-#include "accounts/AccountDllMacro.h"
-#include "sip/SipPlugin.h"
-#include "accounts/Account.h"
-#include "accounts/twitter/TomahawkOAuthTwitter.h"
+#include <QTimer>
+#include <QWeakPointer>
+#include <QSet>
+
 
 class ACCOUNTDLLEXPORT TwitterSipPlugin : public SipPlugin
 {

@@ -23,7 +23,7 @@
 #include "sip/SipPlugin.h"
 #include "XmppInfoPlugin.h"
 
-#include <QtCore/QtPlugin>
+#include <QtPlugin>
 
 namespace Tomahawk
 {

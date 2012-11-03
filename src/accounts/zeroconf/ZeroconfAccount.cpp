@@ -22,7 +22,7 @@
 #include "Zeroconf.h"
 #include "Source.h"
 
-#include <QtCore/QtPlugin>
+#include <QtPlugin>
 
 using namespace Tomahawk;
 using namespace Accounts;

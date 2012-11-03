@@ -21,17 +21,17 @@
 
 #define ZCONF_PORT 50210
 
+#include "database/Database.h"
+#include "database/DatabaseImpl.h"
+#include "network/Servent.h"
+#include "accounts/AccountDllMacro.h"
+
 #include <QList>
 #include <QHostAddress>
 #include <QHostInfo>
 #include <QNetworkProxy>
 #include <QUdpSocket>
 #include <QTimer>
-
-#include "database/Database.h"
-#include "database/DatabaseImpl.h"
-#include "network/Servent.h"
-#include "accounts/AccountDllMacro.h"
 
 class Node : public QObject
 {

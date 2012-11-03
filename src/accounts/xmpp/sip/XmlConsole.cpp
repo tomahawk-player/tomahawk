@@ -21,6 +21,8 @@
 #include "XmlConsole.h"
 #include "ui_XmlConsole.h"
 
+#include "utils/Logger.h"
+
 #include <QMenu>
 #include <QActionGroup>
 #include <QStringBuilder>
@@ -28,8 +30,6 @@
 #include <QPlainTextDocumentLayout>
 #include <QFileDialog>
 #include <QTextDocumentWriter>
-
-#include "utils/Logger.h"
 
 using namespace Jreen;
 

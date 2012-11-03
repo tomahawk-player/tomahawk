@@ -22,12 +22,12 @@
 
 #include "accounts/twitter/TwitterAccount.h"
 
-#include <QTweetLib/qtweetaccountverifycredentials.h>
-#include <QTweetLib/qtweetstatusupdate.h>
-
 #include "GlobalActionManager.h"
 #include "utils/Logger.h"
 #include "Source.h"
+
+#include <QTweetLib/qtweetaccountverifycredentials.h>
+#include <QTweetLib/qtweetstatusupdate.h>
 
 namespace Tomahawk
 {

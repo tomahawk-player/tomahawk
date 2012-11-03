@@ -22,8 +22,8 @@
 
 #include <jreen/client.h>
 
-#include <QtCore/QObject>
-#include <QtCore/QDir>
+#include <QObject>
+#include <QDir>
 
 #include "accounts/AccountDllMacro.h"
 

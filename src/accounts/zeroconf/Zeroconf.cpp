@@ -19,14 +19,13 @@
 
 #include "Zeroconf.h"
 
-#include <QtPlugin>
-
-#include <QtCore/QTimer>
-
 #include "TomahawkSettings.h"
 #include "utils/Logger.h"
 #include "ZeroconfAccount.h"
 #include "Source.h"
+
+#include <QtPlugin>
+#include <QTimer>
 
 using namespace Tomahawk;
 using namespace Accounts;

@@ -20,6 +20,7 @@
 #include "AvatarManager.h"
 
 #include "utils/TomahawkUtils.h"
+#include "utils/Logger.h"
 
 #include <jreen/vcard.h>
 #include <jreen/vcardupdate.h>
@@ -29,8 +30,6 @@
 #include <QDir>
 #include <QCryptographicHash>
 #include <QPixmap>
-
-#include "utils/Logger.h"
 
 
 AvatarManager::AvatarManager( Jreen::Client* client )

@@ -19,11 +19,12 @@
 
 #include "TomahawkXmppMessageFactory.h"
 
+#include "utils/Logger.h"
+
 #include <QStringList>
 #include <QXmlStreamWriter>
 #include <QVariant>
 
-#include "utils/Logger.h"
 
 using namespace Jreen;
 

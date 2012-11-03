@@ -20,6 +20,22 @@
 
 #include "TwitterSip.h"
 
+#include "utils/TomahawkUtils.h"
+#include "TomahawkSettings.h"
+#include "database/Database.h"
+#include "database/DatabaseImpl.h"
+#include "network/Servent.h"
+#include "Source.h"
+
+#include "utils/Logger.h"
+#include "accounts/twitter/TomahawkOAuthTwitter.h"
+#include "accounts/twitter/TwitterAccount.h"
+
+#include <QTweetLib/qtweetaccountverifycredentials.h>
+#include <QTweetLib/qtweetuser.h>
+#include <QTweetLib/qtweetstatus.h>
+#include <QTweetLib/qtweetusershow.h>
+
 #include <QtPlugin>
 #include <QDateTime>
 #include <QRegExp>
@@ -27,22 +43,6 @@
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QStringList>
-
-#include <QTweetLib/qtweetaccountverifycredentials.h>
-#include <QTweetLib/qtweetuser.h>
-#include <QTweetLib/qtweetstatus.h>
-#include <QTweetLib/qtweetusershow.h>
-
-#include <utils/TomahawkUtils.h>
-#include <TomahawkSettings.h>
-#include <database/Database.h>
-#include <database/DatabaseImpl.h>
-#include <network/Servent.h>
-#include "Source.h"
-
-#include "utils/Logger.h"
-#include "accounts/twitter/TomahawkOAuthTwitter.h"
-#include <accounts/twitter/TwitterAccount.h>
 
 static QString s_gotTomahawkRegex = QString( "^(@[a-zA-Z0-9]+ )?(Got Tomahawk\\?) (\\{[a-fA-F0-9\\-]+\\}) (.*)$" );
 

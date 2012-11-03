@@ -20,9 +20,9 @@
 
 #include "TomahawkOAuthTwitter.h"
 
-#include <QtGui/QInputDialog>
-
 #include "utils/Logger.h"
+
+#include <QInputDialog>
 
 
 TomahawkOAuthTwitter::TomahawkOAuthTwitter( QNetworkAccessManager *nam, QObject* parent )
