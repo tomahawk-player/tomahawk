@@ -20,7 +20,7 @@
 #ifndef SOURCESPROXYMODEL_H
 #define SOURCESPROXYMODEL_H
 
-#include <QtGui/QSortFilterProxyModel>
+#include <QSortFilterProxyModel>
 
 class SourcesModel;
 

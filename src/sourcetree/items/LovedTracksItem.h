@@ -21,8 +21,8 @@
 
 #include "SourceTreeItem.h"
 
-#include <QtCore/QString>
-#include <QtGui/QIcon>
+#include <QString>
+#include <QIcon>
 
 
 class LovedTracksItem : public SourceTreeItem

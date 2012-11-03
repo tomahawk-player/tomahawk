@@ -25,8 +25,8 @@
 #include "SourceTreeView.h"
 #include "items/SourceTreeItem.h"
 
-#include <QtGui/QStyledItemDelegate>
-#include <QtCore/QPropertyAnimation>
+#include <QStyledItemDelegate>
+#include <QPropertyAnimation>
 
 class AnimationHelper;
 

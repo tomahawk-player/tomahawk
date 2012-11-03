@@ -19,19 +19,20 @@
 
 #include "Scrobbler.h"
 
+#include "Artist.h"
+#include "Album.h"
+#include "Source.h"
+#include "Typedefs.h"
+#include "TomahawkSettings.h"
+
+#include "audio/AudioEngine.h"
+#include "infosystem/InfoSystem.h"
+
+#include "utils/Logger.h"
+
 #include <QDir>
 #include <QSettings>
 #include <QCryptographicHash>
-
-#include "Artist.h"
-#include "Album.h"
-#include "Typedefs.h"
-#include "audio/AudioEngine.h"
-#include "TomahawkSettings.h"
-#include "infosystem/InfoSystem.h"
-#include "Source.h"
-
-#include "utils/Logger.h"
 
 static QString s_scInfoIdentifier = QString( "SCROBBLER" );
 

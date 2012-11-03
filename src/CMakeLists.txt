@@ -73,7 +73,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      TomahawkWindow.cpp
      LoadXSPFDialog.cpp
      SocialWidget.cpp
-     
+
      widgets/ContainedMenuButton.cpp
      widgets/AccountListWidget.cpp
      widgets/AccountModelFactoryProxy.cpp

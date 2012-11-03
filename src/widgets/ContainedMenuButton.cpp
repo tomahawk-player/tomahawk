@@ -18,7 +18,7 @@
 
 #include "ContainedMenuButton.h"
 
-#include <QtGui/QMouseEvent>
+#include <QMouseEvent>
 
 ContainedMenuButton::ContainedMenuButton( QWidget *parent )
     : QToolButton( parent )

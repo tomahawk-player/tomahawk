@@ -20,6 +20,10 @@
 #ifndef TOMAHAWK_ACLREGISTRYIMPL_H
 #define TOMAHAWK_ACLREGISTRYIMPL_H
 
+#include "AclRegistry.h"
+#include "HeadlessCheck.h"
+#include "DllMacro.h"
+
 #include <QObject>
 #include <QString>
 #include <QHash>
@@ -29,10 +33,6 @@
 #include <QQueue>
 #include <QStringList>
 #include <QUuid>
-
-#include "AclRegistry.h"
-#include "HeadlessCheck.h"
-#include "DllMacro.h"
 
 class ACLJobItem;
 
@@ -59,11 +59,11 @@ public slots:
      **/
     virtual ACLRegistry::ACL isAuthorizedUser( const QString &dbid, const QString &username, ACLRegistry::ACL globalType = ACLRegistry::NotFound, bool skipEmission = false );
     virtual void wipeEntries();
-    
+
 protected:
     virtual void load();
     virtual void save();
-    
+
 #ifndef ENABLE_HEADLESS
     void getUserDecision( ACLRegistry::User user, const QString &username );
 

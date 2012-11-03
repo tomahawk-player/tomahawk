@@ -31,12 +31,13 @@
 #include "AnimationHelper.h"
 #include "Source.h"
 #include "TomahawkSettings.h"
+#include "audio/AudioEngine.h"
+#include "ActionCollection.h"
 
-#include <QtGui/QApplication>
-#include <QtGui/QPainter>
-#include <QtGui/QMouseEvent>
-#include <audio/AudioEngine.h>
-#include <ActionCollection.h>
+#include <QApplication>
+#include <QPainter>
+#include <QMouseEvent>
+
 
 #define TREEVIEW_INDENT_ADD 12
 

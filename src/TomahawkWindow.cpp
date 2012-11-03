@@ -22,24 +22,6 @@
 #include "TomahawkWindow.h"
 #include "ui_TomahawkWindow.h"
 
-#include "config.h"
-
-#include <QAction>
-#include <QCloseEvent>
-#include <QDesktopServices>
-#include <QShowEvent>
-#include <QHideEvent>
-#include <QInputDialog>
-#include <QPixmap>
-#include <QPropertyAnimation>
-#include <QLineEdit>
-#include <QMessageBox>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QTimer>
-#include <QToolBar>
-#include <QToolButton>
-
 #include "accounts/AccountManager.h"
 #include "sourcetree/SourceTreeView.h"
 #include "network/Servent.h"
@@ -77,6 +59,25 @@
 #include "TomahawkApp.h"
 #include "LoadXSPFDialog.h"
 #include "widgets/ContainedMenuButton.h"
+#include "utils/Logger.h"
+
+#include "config.h"
+
+#include <QAction>
+#include <QCloseEvent>
+#include <QDesktopServices>
+#include <QShowEvent>
+#include <QHideEvent>
+#include <QInputDialog>
+#include <QPixmap>
+#include <QPropertyAnimation>
+#include <QLineEdit>
+#include <QMessageBox>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QTimer>
+#include <QToolBar>
+#include <QToolButton>
 
 #if defined( Q_WS_WIN ) && defined( WITH_QtSparkle )
     #include <qtsparkle/Updater>
@@ -84,8 +85,6 @@
         #define THBN_CLICKED    0x1800
     #endif
 #endif
-
-#include "utils/Logger.h"
 
 using namespace Tomahawk;
 using namespace Accounts;

@@ -19,7 +19,6 @@
 
 #include "CategoryItems.h"
 
-#include <QMimeData>
 
 #include "TomahawkApp.h"
 #include "ViewManager.h"
@@ -29,11 +28,13 @@
 #include "utils/TomahawkUtils.h"
 #include "widgets/NewPlaylistWidget.h"
 #include "TomahawkWindow.h"
-#include <playlist/dynamic/GeneratorInterface.h>
+#include "playlist/dynamic/GeneratorInterface.h"
 #include "utils/Logger.h"
 #include "DropJob.h"
 
 #include <echonest/Playlist.h>
+
+#include <QMimeData>
 
 using namespace Tomahawk;
 

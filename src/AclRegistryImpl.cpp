@@ -19,8 +19,6 @@
 
 #include "AclRegistryImpl.h"
 
-#include <QThread>
-#include <QVariant>
 
 #include "TomahawkSettings.h"
 #include "TomahawkApp.h"
@@ -35,6 +33,9 @@
 #endif
 
 #include "utils/Logger.h"
+
+#include <QThread>
+#include <QVariant>
 
 
 ACLRegistryImpl::ACLRegistryImpl( QObject* parent )

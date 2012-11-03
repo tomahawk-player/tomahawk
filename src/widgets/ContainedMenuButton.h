@@ -19,8 +19,8 @@
 #ifndef CONTAINEDMENUBUTTON_H
 #define CONTAINEDMENUBUTTON_H
 
-#include <QtGui/QMenu>
-#include <QtGui/QToolButton>
+#include <QMenu>
+#include <QToolButton>
 
 /**
  * @brief The ContainedMenuButton class defines a modified QToolButton that pops

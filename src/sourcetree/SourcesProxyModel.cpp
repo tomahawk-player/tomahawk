@@ -20,14 +20,13 @@
 
 #include "SourcesProxyModel.h"
 
-#include <QtGui/QTreeView>
-
 #include "SourceList.h"
 #include "SourcesModel.h"
 #include "sourcetree/items/SourceItem.h"
 
 #include "utils/Logger.h"
 
+#include <QTreeView>
 
 SourcesProxyModel::SourcesProxyModel( SourcesModel* model, QObject* parent )
     : QSortFilterProxyModel( parent )
@@ -67,7 +66,7 @@ SourcesProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourcePar
 
     if ( item && item->type() != SourcesModel::Divider && item->parent()->parent() == 0 && !item->children().count() )
         return false;
-   
+
     if ( !m_filtered )
         return true;
 

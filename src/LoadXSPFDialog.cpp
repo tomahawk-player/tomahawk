@@ -17,10 +17,11 @@
  */
 
 #include "LoadXSPFDialog.h"
+#include "ui_LoadXSPFDialog.h"
+
 #include "TomahawkSettings.h"
 #include "Source.h"
 
-#include "ui_LoadXSPFDialog.h"
 #include <QFileDialog>
 
 LoadXSPFDialog::LoadXSPFDialog( QWidget* parent, Qt::WindowFlags f )

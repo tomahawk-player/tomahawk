@@ -20,11 +20,6 @@
 #include "AudioControls.h"
 #include "ui_AudioControls.h"
 
-#include <QtNetwork/QNetworkReply>
-#include <QtGui/QDropEvent>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QDesktopServices>
-
 #include "audio/AudioEngine.h"
 #include "playlist/PlaylistView.h"
 #include "database/Database.h"
@@ -37,6 +32,11 @@
 #include "GlobalActionManager.h"
 #include "ViewManager.h"
 #include "Source.h"
+
+#include <QNetworkReply>
+#include <QDropEvent>
+#include <QMouseEvent>
+#include <QDesktopServices>
 
 const static int ALLOWED_MAX_DIVERSION = 300;
 

@@ -20,8 +20,6 @@
 
 #include "Api_v1.h"
 
-#include <QHash>
-
 #include "utils/Logger.h"
 
 #include "utils/TomahawkUtils.h"
@@ -31,6 +29,8 @@
 #include "network/Servent.h"
 #include "Pipeline.h"
 #include "Source.h"
+
+#include <QHash>
 
 using namespace Tomahawk;
 
@@ -239,7 +239,7 @@ Api_v1::statResult( const QString& clientToken, const QString& name, bool valid 
     Q_ASSERT( m_storedEvent );
     if ( !m_storedEvent )
         return;
-    
+
     QVariantMap m;
     m.insert( "name", "playdar" );
     m.insert( "version", "0.1.1" ); // TODO (needs to be >=0.1.1 for JS to work)

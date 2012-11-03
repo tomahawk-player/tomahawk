@@ -19,7 +19,7 @@
 
 #include "AnimationHelper.h"
 
-#include "QDebug"
+#include <QDebug>
 
 AnimationHelper::AnimationHelper( const QModelIndex& index, QObject *parent )
     :QObject( parent )

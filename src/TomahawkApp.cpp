@@ -21,18 +21,6 @@
 #include "TomahawkApp.h"
 
 #include "TomahawkVersion.h"
-
-#include <iostream>
-
-#include <QtCore/QPluginLoader>
-#include <QtCore/QDir>
-#include <QtCore/QMetaType>
-#include <QtCore/QTime>
-#include <QtNetwork/QNetworkReply>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QTranslator>
-
 #include "AclRegistryImpl.h"
 #include "Album.h"
 #include "Artist.h"
@@ -71,8 +59,6 @@
 #include "accounts/spotify/SpotifyPlaylistUpdater.h"
 #include "utils/TomahawkCache.h"
 
-#include "config.h"
-
 #ifndef ENABLE_HEADLESS
     #include "resolvers/QtScriptResolver.h"
     #include "resolvers/ScriptResolver.h"
@@ -81,9 +67,14 @@
     #include "TomahawkWindow.h"
     #include "SettingsDialog.h"
     #include "ActionCollection.h"
-    #include <QtGui/QMessageBox>
     #include "widgets/HeaderLabel.h"
-    #include <TomahawkSettingsGui.h>
+    #include "TomahawkSettingsGui.h"
+#endif
+
+#include "config.h"
+
+#ifndef ENABLE_HEADLESS
+    #include <QMessageBox>
 #endif
 
 #ifdef Q_WS_MAC
@@ -92,6 +83,18 @@
 #include <sys/resource.h>
 #include <sys/sysctl.h>
 #endif
+
+#include <QPluginLoader>
+#include <QDir>
+#include <QMetaType>
+#include <QTime>
+#include <QNetworkReply>
+#include <QFile>
+#include <QFileInfo>
+#include <QTranslator>
+
+#include <iostream>
+
 
 const char* enApiSecret = "BNvTzfthHr/d1eNhHLvL1Jo=";
 

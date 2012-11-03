@@ -20,14 +20,15 @@
 #include "SocialWidget.h"
 #include "ui_SocialWidget.h"
 
+#include "GlobalActionManager.h"
+#include "Source.h"
+
+#include "utils/TomahawkUtilsGui.h"
+#include "utils/Logger.h"
+
 #include <QPainter>
 #include <QDialog>
 #include <QPropertyAnimation>
-
-#include "GlobalActionManager.h"
-#include "utils/TomahawkUtilsGui.h"
-#include "utils/Logger.h"
-#include "Source.h"
 
 #define ARROW_HEIGHT 6
 
@@ -67,7 +68,7 @@ SocialWidget::SocialWidget( QWidget* parent )
     ui->buttonBox->button( QDialogButtonBox::Cancel )->setIcon( QIcon( RESPATH "images/cancel.png" ) );
 
     ui->textEdit->setStyleSheet( "border: 1px solid " + TomahawkUtils::Colors::BORDER_LINE.name() );
-    
+
     m_parent->installEventFilter( this );
 
     connect( ui->buttonBox, SIGNAL( accepted() ), SLOT( accept() ) );
@@ -202,7 +203,7 @@ void
 SocialWidget::accept()
 {
     tDebug() << "Sharing social link!";
-    
+
     QVariantMap shareInfo;
     Tomahawk::InfoSystem::InfoStringHash trackInfo;
 

@@ -23,22 +23,22 @@
 
 #define APP TomahawkApp::instance()
 
-#include "HeadlessCheck.h"
-#include "config.h"
-
-#include <QtCore/QRegExp>
-#include <QtCore/QFile>
-#include <QtCore/QSettings>
-#include <QtCore/QDir>
-#include <QtCore/QPersistentModelIndex>
-
-#include "QxtHttpServerConnector"
-#include "QxtHttpSessionManager"
-
 #include "mac/TomahawkApp_Mac.h" // for PlatforInterface
 #include "Typedefs.h"
 #include "utils/TomahawkUtils.h"
 #include "thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.h"
+
+#include "HeadlessCheck.h"
+#include "config.h"
+
+#include "QxtHttpServerConnector"
+#include "QxtHttpSessionManager"
+
+#include <QRegExp>
+#include <QFile>
+#include <QSettings>
+#include <QDir>
+#include <QPersistentModelIndex>
 
 class AudioEngine;
 class Database;

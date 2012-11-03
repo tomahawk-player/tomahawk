@@ -19,21 +19,18 @@
 
 #include "TomahawkTrayIcon.h"
 
-#include <QtGui/QWheelEvent>
-
 #include "Artist.h"
-
 #include "audio/AudioEngine.h"
 #include "TomahawkApp.h"
 #include "TomahawkWindow.h"
 #include "Query.h"
 #include "Source.h"
 #include "Collection.h"
-
+#include "ActionCollection.h"
 #include "utils/Logger.h"
 #include "utils/TomahawkUtilsGui.h"
-#include <ActionCollection.h>
 
+#include <QWheelEvent>
 
 TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
     : QSystemTrayIcon( parent )

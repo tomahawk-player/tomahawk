@@ -22,12 +22,11 @@
 #ifndef SOURCESMODEL_H
 #define SOURCESMODEL_H
 
-#include <QModelIndex>
-#include <QStringList>
-
 #include "Typedefs.h"
 #include "Source.h"
 
+#include <QModelIndex>
+#include <QStringList>
 #include <QList>
 #include <QAction>
 

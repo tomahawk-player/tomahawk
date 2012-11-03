@@ -19,10 +19,10 @@
 #ifndef SOURCETREEITEM_H
 #define SOURCETREEITEM_H
 
-#include <QIcon>
-
 #include "Typedefs.h"
 #include "SourcesModel.h"
+
+#include <QIcon>
 
 class QMimeData;
 

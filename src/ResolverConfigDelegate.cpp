@@ -18,14 +18,13 @@
 
 #include "ResolverConfigDelegate.h"
 
-// #include "resolversmodel.h"
 #include "ExternalResolverGui.h"
+
+#include "utils/Logger.h"
 
 #include <QApplication>
 #include <QPainter>
 #include <QMouseEvent>
-
-#include "utils/Logger.h"
 
 #define PADDING 4
 #define ICONSIZE 24

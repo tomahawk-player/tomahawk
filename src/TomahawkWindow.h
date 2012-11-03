@@ -22,17 +22,18 @@
 #ifndef TOMAHAWKWINDOW_H
 #define TOMAHAWKWINDOW_H
 
+#include "Result.h"
+#include "audio/AudioEngine.h"
+#include "utils/XspfLoader.h"
+
+#include "config.h"
+
 #include <QMainWindow>
 #include <QVariantMap>
 #include <QPushButton>
 #include <QString>
 #include <QStackedWidget>
 #include <QToolButton>
-
-#include "config.h"
-#include "Result.h"
-#include "audio/AudioEngine.h"
-#include "utils/XspfLoader.h"
 
 #ifdef Q_OS_WIN
     #include <shobjidl.h>

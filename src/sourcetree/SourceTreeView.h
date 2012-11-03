@@ -23,8 +23,8 @@
 #include "Typedefs.h"
 #include "SourcePlaylistInterface.h"
 
-#include <QtGui/QTreeView>
-#include <QtGui/QMenu>
+#include <QTreeView>
+#include <QMenu>
 
 class SourceTreePopupDialog;
 class CollectionModel;

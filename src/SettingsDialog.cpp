@@ -20,16 +20,12 @@
  */
 
 #include "SettingsDialog.h"
-#include "config.h"
+#include "ui_ProxyDialog.h"
+#include "ui_Settings_Accounts.h"
+#include "ui_Settings_Collection.h"
+#include "ui_Settings_Advanced.h"
 
-#include <QtGui/QDesktopServices>
-#include <QtGui/QFileDialog>
-#include <QtGui/QMessageBox>
-#include <QtNetwork/QNetworkConfiguration>
-#include <QtNetwork/QNetworkProxy>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QSizeGrip>
-#include <QtGui/QToolBar>
+#include "config.h"
 
 #include "AtticaManager.h"
 #include "AclRegistry.h"
@@ -48,18 +44,22 @@
 #include "accounts/AccountModel.h"
 #include "accounts/Account.h"
 #include "accounts/AccountManager.h"
-#include <accounts/AccountModelFilterProxy.h>
-#include <accounts/ResolverAccount.h>
+#include "accounts/AccountModelFilterProxy.h"
+#include "accounts/ResolverAccount.h"
 #include "utils/Logger.h"
 #include "accounts/AccountFactoryWrapper.h"
 #include "accounts/spotify/SpotifyAccount.h"
 #include "thirdparty/Qocoa/qtoolbartabdialog.h"
 #include "thirdparty/Qocoa/qbutton.h"
 
-#include "ui_ProxyDialog.h"
-#include "ui_Settings_Accounts.h"
-#include "ui_Settings_Collection.h"
-#include "ui_Settings_Advanced.h"
+#include <QDesktopServices>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QNetworkConfiguration>
+#include <QNetworkProxy>
+#include <QVBoxLayout>
+#include <QSizeGrip>
+#include <QToolBar>
 
 using namespace Tomahawk;
 using namespace Accounts;

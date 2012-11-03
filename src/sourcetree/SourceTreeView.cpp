@@ -20,17 +20,6 @@
 
 #include "SourceTreeView.h"
 
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QContextMenuEvent>
-#include <QtGui/QDragEnterEvent>
-#include <QtGui/QHeaderView>
-#include <QtGui/QPainter>
-#include <QtGui/QStyledItemDelegate>
-#include <QtGui/QFileDialog>
-#include <QtGui/QMessageBox>
-#include <QtCore/QSize>
-
 #include "ActionCollection.h"
 #include "Playlist.h"
 #include "ViewManager.h"
@@ -53,6 +42,17 @@
 #include "utils/Logger.h"
 #include "utils/Closure.h"
 #include "widgets/SourceTreePopupDialog.h"
+
+#include <QAction>
+#include <QApplication>
+#include <QContextMenuEvent>
+#include <QDragEnterEvent>
+#include <QHeaderView>
+#include <QPainter>
+#include <QStyledItemDelegate>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QSize>
 
 using namespace Tomahawk;
 

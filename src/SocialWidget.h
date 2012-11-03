@@ -20,11 +20,11 @@
 #ifndef SOCIALWIDGET_H
 #define SOCIALWIDGET_H
 
+#include "Query.h"
+
 #include <QWidget>
 #include <QAbstractItemView>
 #include <QTimer>
-
-#include "Query.h"
 
 namespace Ui
 {
@@ -64,7 +64,7 @@ private slots:
     void accept();
     void onChanged();
     void onShortLinkReady( const QUrl& longUrl, const QUrl& shortUrl, const QVariant& callbackObj );
-    
+
     void onGeometryUpdate();
 
 private:

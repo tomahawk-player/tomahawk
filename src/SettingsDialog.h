@@ -22,12 +22,10 @@
 #ifndef SETTINGSDIALOG_H
 #define SETTINGSDIALOG_H
 
-#include <QtGui/QDialog>
-#include <QtCore/QModelIndex>
-#include <QtGui/QActionGroup>
-#include <QtGui/QToolBar>
-
-#include "config.h"
+#include <QDialog>
+#include <QModelIndex>
+#include <QActionGroup>
+#include <QToolBar>
 
 class AnimatedSpinner;
 class QListWidgetItem;

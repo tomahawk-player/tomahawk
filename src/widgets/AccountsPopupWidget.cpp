@@ -21,14 +21,14 @@
 
 #include "utils/TomahawkUtilsGui.h"
 
+#ifdef QT_MAC_USE_COCOA
+#include "widgets/SourceTreePopupDialog_mac.h"
+#endif
+
 #include <QDebug>
 #include <QPainter>
 #include <QPaintEvent>
 #include <QVBoxLayout>
-
-#ifdef QT_MAC_USE_COCOA
-#include "widgets/SourceTreePopupDialog_mac.h"
-#endif
 
 AccountsPopupWidget::AccountsPopupWidget( QWidget* parent )
     : QWidget( parent )
