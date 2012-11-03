@@ -47,36 +47,36 @@ public:
     virtual ~SourceTreeItem();
 
     // generic info used by the tree model
-    SourcesModel::RowType type() const { return m_type; }
-    SourceTreeItem* parent() const { return m_parent; }
-    SourcesModel* model() const { return m_model; }
+    SourcesModel::RowType type() const;
+    SourceTreeItem* parent() const;
+    SourcesModel* model() const;
 
-    QList< SourceTreeItem* > children() const { return m_children; }
-    void appendChild( SourceTreeItem* item ) { m_children.append( item ); }
-    void insertChild( int index, SourceTreeItem* item ) { m_children.insert( index, item ); }
-    void removeChild( SourceTreeItem* item ) { m_children.removeAll( item ); }
+    QList< SourceTreeItem* > children() const;
+    void appendChild( SourceTreeItem* item );
+    void insertChild( int index, SourceTreeItem* item );
+    void removeChild( SourceTreeItem* item );
 
     // varies depending on the type of the item
-    virtual QString text() const { return QString(); }
-    virtual QString tooltip() const { return QString(); }
-    virtual Qt::ItemFlags flags() const { return Qt::ItemIsSelectable | Qt::ItemIsEnabled; }
-    virtual QIcon icon() const { return QIcon(); }
-    virtual bool willAcceptDrag( const QMimeData* ) const { return false; }
-    virtual bool dropMimeData( const QMimeData*, Qt::DropAction ) { return false; }
-    virtual bool setData( const QVariant&, bool ) { return false; }
-    virtual int peerSortValue() const { return m_peerSortValue; } // How to sort relative to peers in the tree.
-    virtual int IDValue() const { return 0; }
-    virtual DropTypes supportedDropTypes( const QMimeData* mimeData ) const { Q_UNUSED( mimeData ); return DropTypesNone; }
-    virtual void setDropType( DropType type ) { m_dropType = type; }
-    virtual DropType dropType() const { return m_dropType; }
-    virtual bool isBeingPlayed() const { return false; }
-    virtual QList< QAction* > customActions() const { return QList< QAction* >(); }
+    virtual QString text() const;
+    virtual QString tooltip() const;
+    virtual Qt::ItemFlags flags() const;
+    virtual QIcon icon() const;
+    virtual bool willAcceptDrag( const QMimeData* ) const;
+    virtual bool dropMimeData( const QMimeData*, Qt::DropAction );
+    virtual bool setData( const QVariant&, bool );
+    virtual int peerSortValue() const; // How to sort relative to peers in the tree.
+    virtual int IDValue() const;
+    virtual DropTypes supportedDropTypes( const QMimeData* mimeData ) const;
+    virtual void setDropType( DropType type );
+    virtual DropType dropType() const;
+    virtual bool isBeingPlayed() const;
+    virtual QList< QAction* > customActions() const;
 
     /// don't call me unless you are a sourcetreeitem. i prefer this to making everyone a friend
-    void beginRowsAdded( int from, int to ) { emit beginChildRowsAdded( from, to ); }
-    void endRowsAdded() { emit childRowsAdded(); }
-    void beginRowsRemoved( int from, int to ) { emit beginChildRowsRemoved( from, to ); }
-    void endRowsRemoved() { emit childRowsRemoved(); }
+    void beginRowsAdded( int from, int to );
+    void endRowsAdded();
+    void beginRowsRemoved( int from, int to );
+    void endRowsRemoved();
 
 public slots:
     virtual void activate() {}
@@ -95,8 +95,8 @@ signals:
     void childRowsRemoved();
 
 protected:
-    void setRowType( SourcesModel::RowType t ) { m_type = t; }
-    void setParentItem( SourceTreeItem* item ) { m_parent = item; }
+    void setRowType( SourcesModel::RowType t );
+    void setParentItem( SourceTreeItem* item );
 
 private:
     SourcesModel::RowType m_type;

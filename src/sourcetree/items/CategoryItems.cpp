@@ -378,3 +378,31 @@ CategoryItem::activate()
 {
     emit toggleExpandRequest( this );
 }
+
+
+QString
+CategoryItem::text() const
+{
+    switch( m_category )
+    {
+    case SourcesModel::PlaylistsCategory:
+        return tr( "Playlists" );
+    case SourcesModel::StationsCategory:
+        return tr( "Stations" );
+    }
+    return QString();
+}
+
+
+Qt::ItemFlags
+CategoryItem::flags() const
+{
+    return Qt::ItemIsEnabled;
+}
+
+
+SourcesModel::CategoryType
+CategoryItem::categoryType()
+{
+    return m_category;
+}

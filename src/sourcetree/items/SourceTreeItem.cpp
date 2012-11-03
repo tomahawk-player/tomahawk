@@ -54,3 +54,193 @@ SourceTreeItem::~SourceTreeItem()
 {
     qDeleteAll( m_children );
 }
+
+
+SourcesModel::RowType
+SourceTreeItem::type() const
+{
+    return m_type;
+}
+
+
+SourceTreeItem*
+SourceTreeItem::parent() const
+{
+    return m_parent;
+}
+
+
+SourcesModel*
+SourceTreeItem::model() const
+{
+    return m_model;
+}
+
+
+QList< SourceTreeItem* >
+SourceTreeItem::children() const
+{
+    return m_children;
+}
+
+
+void
+SourceTreeItem::appendChild(SourceTreeItem* item)
+{
+    m_children.append( item );
+}
+
+
+void
+SourceTreeItem::insertChild(int index, SourceTreeItem* item)
+{
+    m_children.insert( index, item );
+}
+
+
+void
+SourceTreeItem::removeChild(SourceTreeItem* item)
+{
+    m_children.removeAll( item );
+}
+
+
+QString
+SourceTreeItem::text() const
+{
+    return QString();
+}
+
+
+QString
+SourceTreeItem::tooltip() const
+{
+    return QString();
+}
+
+
+Qt::ItemFlags
+SourceTreeItem::flags() const
+{
+    return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+}
+
+
+QIcon
+SourceTreeItem::icon() const
+{
+    return QIcon();
+}
+
+
+bool
+SourceTreeItem::willAcceptDrag(const QMimeData*) const
+{
+    return false;
+}
+
+
+bool
+SourceTreeItem::dropMimeData(const QMimeData*, Qt::DropAction)
+{
+    return false;
+}
+
+
+bool
+SourceTreeItem::setData(const QVariant&, bool)
+{
+    return false;
+}
+
+
+int
+SourceTreeItem::peerSortValue() const
+{
+    return m_peerSortValue;
+}
+
+
+int
+SourceTreeItem::IDValue() const
+{
+    return 0;
+}
+
+
+SourceTreeItem::DropTypes
+SourceTreeItem::supportedDropTypes(const QMimeData* mimeData) const
+{
+    Q_UNUSED( mimeData );
+    return DropTypesNone;
+}
+
+
+void
+SourceTreeItem::setDropType(SourceTreeItem::DropType type)
+{
+    m_dropType = type;
+}
+
+
+SourceTreeItem::DropType
+SourceTreeItem::dropType() const
+{
+    return m_dropType;
+}
+
+
+bool
+SourceTreeItem::isBeingPlayed() const
+{
+    return false;
+}
+
+
+QList< QAction* >
+SourceTreeItem::customActions() const
+{
+    return QList< QAction* >();
+}
+
+
+void
+SourceTreeItem::beginRowsAdded(int from, int to)
+{
+    emit beginChildRowsAdded( from, to );
+}
+
+
+void
+SourceTreeItem::endRowsAdded()
+{
+    emit childRowsAdded();
+}
+
+
+void
+SourceTreeItem::beginRowsRemoved(int from, int to)
+{
+    emit beginChildRowsRemoved( from, to );
+}
+
+
+void
+SourceTreeItem::endRowsRemoved()
+{
+    emit childRowsRemoved();
+}
+
+
+void
+SourceTreeItem::setRowType(SourcesModel::RowType t)
+{
+    m_type = t;
+}
+
+
+void
+SourceTreeItem::setParentItem(SourceTreeItem* item)
+{
+    m_parent = item;
+}

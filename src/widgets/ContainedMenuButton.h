@@ -34,7 +34,7 @@ public:
     explicit ContainedMenuButton( QWidget *parent = 0 );
 
     void setMenu( QMenu *menu );
-    QMenu *menu() const { return m_menu; }
+    QMenu *menu() const;
 
 protected:
     void mousePressEvent( QMouseEvent *event );

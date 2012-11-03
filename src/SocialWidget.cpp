@@ -266,3 +266,17 @@ SocialWidget::eventFilter( QObject* object, QEvent* event )
 
     return QObject::eventFilter( object, event );
 }
+
+
+Tomahawk::query_ptr
+SocialWidget::query() const
+{
+    return m_query;
+}
+
+
+QPoint
+SocialWidget::position() const
+{
+    return m_position;
+}

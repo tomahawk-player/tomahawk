@@ -50,3 +50,10 @@ ContainedMenuButton::menuHidden()
 {
     setDown( false );
 }
+
+
+QMenu*
+ContainedMenuButton::menu() const
+{
+    return m_menu;
+}

@@ -76,8 +76,8 @@ public:
     TomahawkWindow( QWidget* parent = 0 );
     ~TomahawkWindow();
 
-    AudioControls* audioControls() { return m_audioControls; }
-    SourceTreeView* sourceTreeView() const { return m_sourcetree; }
+    AudioControls* audioControls();
+    SourceTreeView* sourceTreeView() const;
 
     void setWindowTitle( const QString& title );
 

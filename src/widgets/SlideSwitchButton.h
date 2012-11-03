@@ -45,21 +45,21 @@ public:
     void init();
 
     virtual QSize sizeHint() const;
-    virtual QSize minimumSizeHint() const { return sizeHint(); }
+    virtual QSize minimumSizeHint() const;
 
     //the back check-state cannot be changed by the user, only programmatically
     //to notify that the user-requested operation has completed
     void setBackChecked( bool state );
     bool backChecked() const;
 
-    void setKnobX( qreal x ) { m_knobX = x; repaint(); }
-    qreal knobX() const { return m_knobX; }
+    void setKnobX( qreal x );
+    qreal knobX() const;
 
-    void setBaseColorTop( const QColor& color ) { m_baseColorTop = color; repaint(); }
-    QColor baseColorTop() const { return m_baseColorTop; }
+    void setBaseColorTop( const QColor& color );
+    QColor baseColorTop() const;
 
-    void setBaseColorBottom( const QColor& color ) { m_baseColorBottom = color; }
-    QColor baseColorBottom() const { return m_baseColorBottom; }
+    void setBaseColorBottom( const QColor& color );
+    QColor baseColorBottom() const;
 
 protected:
     void paintEvent( QPaintEvent* event );

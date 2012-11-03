@@ -36,10 +36,10 @@ public:
     virtual QIcon icon() const;
     virtual int peerSortValue() const;
     virtual int IDValue() const;
-    virtual QList< QAction* > customActions() const { return m_customActions; }
+    virtual QList< QAction* > customActions() const;
 
-    Tomahawk::ViewPage* page() const { return m_page; }
-    virtual bool isBeingPlayed() const { return m_page->isBeingPlayed(); }
+    Tomahawk::ViewPage* page() const;
+    virtual bool isBeingPlayed() const;
 
 public slots:
     void removeFromList();

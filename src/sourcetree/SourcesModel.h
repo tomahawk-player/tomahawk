@@ -108,7 +108,7 @@ public:
 
     QModelIndex indexFromItem( SourceTreeItem* item ) const;
 
-    QList< Tomahawk::source_ptr > sourcesWithViewPage() const { return m_sourcesWithViewPage; }
+    QList< Tomahawk::source_ptr > sourcesWithViewPage() const;
 
 public slots:
     void loadSources();

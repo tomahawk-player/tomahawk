@@ -674,3 +674,10 @@ SourcesModel::itemToggleExpandRequest( SourceTreeItem *item )
 {
     emit toggleExpandRequest( QPersistentModelIndex( indexFromItem( item ) ) );
 }
+
+
+QList< source_ptr >
+SourcesModel::sourcesWithViewPage() const
+{
+    return m_sourcesWithViewPage;
+}

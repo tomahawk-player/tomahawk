@@ -42,10 +42,7 @@ Q_OBJECT
 
 public:
 
-    Api_v1( QxtAbstractWebSessionManager* sm, QObject* parent = 0 )
-        : QxtWebSlotService( sm, parent )
-    {
-    }
+    Api_v1( QxtAbstractWebSessionManager* sm, QObject* parent = 0 );
 
 public slots:
     // authenticating uses /auth_1

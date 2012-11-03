@@ -1318,3 +1318,17 @@ TomahawkWindow::toggleMenuBar() //SLOT
     saveSettings();
 #endif
 }
+
+
+AudioControls*
+TomahawkWindow::audioControls()
+{
+    return m_audioControls;
+}
+
+
+SourceTreeView*
+TomahawkWindow::sourceTreeView() const
+{
+    return m_sourcetree;
+}

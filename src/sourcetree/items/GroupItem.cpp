@@ -71,3 +71,33 @@ GroupItem::text() const
 {
     return m_text;
 }
+
+
+bool
+GroupItem::willAcceptDrag(const QMimeData* data) const
+{
+    Q_UNUSED( data );
+    return false;
+}
+
+
+QIcon
+GroupItem::icon() const
+{
+    return QIcon();
+}
+
+
+bool
+GroupItem::isBeingPlayed() const
+{
+    return false;
+}
+
+
+void
+GroupItem::setDefaultExpanded(bool b)
+{
+    m_defaultExpanded = b;
+}
+

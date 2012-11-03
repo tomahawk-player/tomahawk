@@ -34,15 +34,15 @@ public:
     virtual ~LovedTracksItem();
 
     virtual QString text() const;
-    virtual QIcon icon() const { return QIcon( RESPATH "images/loved_playlist.png" ); }
-    virtual int peerSortValue() const { return m_sortValue; }
+    virtual QIcon icon() const;
+    virtual int peerSortValue() const;
     virtual void activate();
 
     virtual bool willAcceptDrag( const QMimeData* data ) const;
     virtual DropTypes supportedDropTypes( const QMimeData* data ) const;
     virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action );
 
-    void setSortValue( int value ) { m_sortValue = value; }
+    void setSortValue( int value );
 
 private slots:
     void loveDroppedTracks( QList< Tomahawk::query_ptr > qrys );

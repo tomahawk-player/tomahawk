@@ -57,6 +57,13 @@ LovedTracksItem::text() const
 }
 
 
+QIcon
+LovedTracksItem::icon() const
+{
+    return QIcon( RESPATH "images/loved_playlist.png" );
+}
+
+
 void
 LovedTracksItem::activate()
 {
@@ -134,10 +141,23 @@ LovedTracksItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
 }
 
 
+int
+LovedTracksItem::peerSortValue() const
+{
+    return m_sortValue;
+}
+
+
+void
+LovedTracksItem::setSortValue(int value)
+{
+    m_sortValue = value;
+}
+
+
 void
 LovedTracksItem::loveDroppedTracks( QList< Tomahawk::query_ptr > qrys )
 {
     foreach( Tomahawk::query_ptr qry, qrys )
         qry->setLoved( true );
 }
-

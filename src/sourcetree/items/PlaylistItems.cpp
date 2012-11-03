@@ -610,3 +610,23 @@ DynamicPlaylistItem::isBeingPlayed() const
     return false;
 }
 
+
+bool
+PlaylistItem::canSubscribe() const
+{
+    return m_canSubscribe;
+}
+
+
+bool
+PlaylistItem::subscribed() const
+{
+    return m_showSubscribed;
+}
+
+
+QPixmap
+PlaylistItem::subscribedIcon() const
+{
+    return m_showSubscribed ? m_subscribedOnIcon : m_subscribedOffIcon;
+}

@@ -40,7 +40,7 @@ public:
   // if you want to use a config wrench, you need to have this say where to paint it
   virtual QRect configRectForIndex( const QStyleOptionViewItem& option, const QModelIndex& idx ) const = 0;
 
-  virtual QList<int> extraCheckRoles() const { return QList<int>(); }
+  virtual QList<int> extraCheckRoles() const;
 signals:
     void configPressed( const QModelIndex& idx );
 

@@ -34,8 +34,8 @@ class AnimationHelper: public QObject
 public:
     AnimationHelper( const QModelIndex& index, QObject *parent = 0 );
 
-    QSize originalSize() const { return m_startSize; }
-    QSize size() const { return m_size; }
+    QSize originalSize() const;
+    QSize size() const;
 
     bool initialized() const;
     void initialize( const QSize& startValue, const QSize& endValue, int duration );

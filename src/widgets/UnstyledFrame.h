@@ -32,7 +32,7 @@ class UnstyledFrame : public QWidget
 public:
     explicit UnstyledFrame( QWidget* parent = 0 );
 
-    void setFrameColor( const QColor& color ) { m_frameColor = color; repaint(); }
+    void setFrameColor( const QColor& color );
 
 protected:
     void paintEvent( QPaintEvent* event );

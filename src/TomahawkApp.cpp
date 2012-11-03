@@ -782,3 +782,17 @@ TomahawkApp::instanceStarted( KDSingleApplicationGuard::Instance instance )
     else
         activate();
 }
+
+
+TomahawkWindow*
+TomahawkApp::mainWindow() const
+{
+    return m_mainwindow;
+}
+
+
+bool
+TomahawkApp::isTomahawkLoaded() const
+{
+    return m_loaded;
+}

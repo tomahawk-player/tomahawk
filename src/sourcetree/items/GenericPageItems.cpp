@@ -99,3 +99,17 @@ GenericPageItem::isBeingPlayed() const
 
     return false;
 }
+
+
+int
+GenericPageItem::peerSortValue() const
+{
+    return m_sortValue;
+}
+
+
+void
+GenericPageItem::setSortValue(int value)
+{
+    m_sortValue = value;
+}

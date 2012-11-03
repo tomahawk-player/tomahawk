@@ -34,12 +34,12 @@ public:
     virtual ~GroupItem();
 
     virtual QString text() const;
-    virtual bool willAcceptDrag( const QMimeData* data ) const { Q_UNUSED( data ); return false; }
-    virtual QIcon icon() const { return QIcon(); }
-    virtual bool isBeingPlayed() const { return false; }
+    virtual bool willAcceptDrag( const QMimeData* data ) const;
+    virtual QIcon icon() const;
+    virtual bool isBeingPlayed() const;
 
     void checkExpandedState();
-    void setDefaultExpanded( bool b ) { m_defaultExpanded = b; }
+    void setDefaultExpanded( bool b );
 
 public slots:
     virtual void activate();

@@ -48,10 +48,10 @@ public:
 
     Tomahawk::source_ptr source() const;
 
-    CategoryItem* stationsCategory() const { return m_stations; }
-    CategoryItem* playlistsCategory() const { return m_playlists; }
-    void setStationsCategory( CategoryItem* item ) { m_stations = item; }
-    void setPlaylistsCategory( CategoryItem* item ) { m_playlists = item; }
+    CategoryItem* stationsCategory() const;
+    CategoryItem* playlistsCategory() const;
+    void setStationsCategory( CategoryItem* item );
+    void setPlaylistsCategory( CategoryItem* item );
 
 public slots:
     virtual void activate();

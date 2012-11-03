@@ -43,9 +43,9 @@ public:
     virtual SourceTreeItem* activateCurrent();
 
     // subscription management
-    bool canSubscribe() const { return m_canSubscribe; }
-    bool subscribed() const { return m_showSubscribed; }
-    QPixmap subscribedIcon() const { return m_showSubscribed ? m_subscribedOnIcon : m_subscribedOffIcon; }
+    bool canSubscribe() const;
+    bool subscribed() const;
+    QPixmap subscribedIcon() const;
     void setSubscribed( bool subscribed );
     bool collaborative() const;
 

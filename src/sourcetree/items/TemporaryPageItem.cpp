@@ -171,3 +171,24 @@ TemporaryPageItem::linkActionTriggered( QAction* action )
     }
     }
 }
+
+
+QList< QAction* >
+TemporaryPageItem::customActions() const
+{
+    return m_customActions;
+}
+
+
+ViewPage*
+TemporaryPageItem::page() const
+{
+    return m_page;
+}
+
+
+bool
+TemporaryPageItem::isBeingPlayed() const
+{
+    return m_page->isBeingPlayed();
+}

@@ -128,3 +128,17 @@ void AnimationHelper::collapseAnimationFinished()
 {
     emit finished( m_index );
 }
+
+
+QSize
+AnimationHelper::originalSize() const
+{
+    return m_startSize;
+}
+
+
+QSize
+AnimationHelper::size() const
+{
+    return m_size;
+}

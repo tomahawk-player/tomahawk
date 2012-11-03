@@ -56,25 +56,16 @@ class CategoryItem : public SourceTreeItem
 public:
     CategoryItem( SourcesModel* model, SourceTreeItem* parent, SourcesModel::CategoryType category, bool showAddItem );
 
-    virtual QString text() const {
-        switch( m_category )
-        {
-            case SourcesModel::PlaylistsCategory:
-                return tr( "Playlists" );
-            case SourcesModel::StationsCategory:
-                return tr( "Stations" );
-        }
-        return QString();
-    }
+    virtual QString text() const;
     virtual void activate();
     virtual int peerSortValue() const;
-    virtual Qt::ItemFlags flags() const { return Qt::ItemIsEnabled; }
+    virtual Qt::ItemFlags flags() const;
 
     // inserts an item at the end, but before the category add item
     void insertItem( SourceTreeItem* item );
     void insertItems( QList< SourceTreeItem* > item );
 
-    SourcesModel::CategoryType categoryType() { return m_category; }
+    SourcesModel::CategoryType categoryType();
 
 private:
     SourcesModel::CategoryType m_category;

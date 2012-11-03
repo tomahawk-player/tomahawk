@@ -34,6 +34,11 @@
 
 using namespace Tomahawk;
 
+Api_v1::Api_v1(QxtAbstractWebSessionManager* sm, QObject* parent)
+    : QxtWebSlotService(sm, parent)
+{
+}
+
 
 void
 Api_v1::auth_1( QxtWebRequestEvent* event, QString arg )

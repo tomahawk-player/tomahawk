@@ -581,3 +581,31 @@ SourceItem::getRecentPlaysPage() const
 {
     return m_recentPlaysPage;
 }
+
+
+CategoryItem*
+SourceItem::stationsCategory() const
+{
+    return m_stations;
+}
+
+
+CategoryItem*
+SourceItem::playlistsCategory() const
+{
+    return m_playlists;
+}
+
+
+void
+SourceItem::setStationsCategory(CategoryItem* item)
+{
+    m_stations = item;
+}
+
+
+void
+SourceItem::setPlaylistsCategory(CategoryItem* item)
+{
+    m_playlists = item;
+}

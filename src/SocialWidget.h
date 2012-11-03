@@ -39,10 +39,10 @@ public:
     SocialWidget( QWidget* parent );
     ~SocialWidget();
 
-    Tomahawk::query_ptr query() const { return m_query; }
+    Tomahawk::query_ptr query() const;
     void setQuery( const Tomahawk::query_ptr& query );
 
-    QPoint position() const { return m_position; }
+    QPoint position() const;
     void setPosition( QPoint position );
 
     bool shown() const;
