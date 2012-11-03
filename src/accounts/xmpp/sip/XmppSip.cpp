@@ -32,6 +32,7 @@
 #include "utils/TomahawkUtilsGui.h"
 
 #include "config.h"
+#include "TomahawkVersion.h"
 
 #include <jreen/jid.h>
 #include <jreen/capabilities.h>
