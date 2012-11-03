@@ -22,6 +22,8 @@
 #include "TomahawkWindow.h"
 #include "ui_TomahawkWindow.h"
 
+#include "config.h"
+
 #include <QAction>
 #include <QCloseEvent>
 #include <QDesktopServices>
@@ -76,7 +78,7 @@
 #include "LoadXSPFDialog.h"
 #include "widgets/ContainedMenuButton.h"
 
-#ifdef Q_OS_WIN
+#if defined( Q_WS_WIN ) && defined( WITH_QtSparkle )
     #include <qtsparkle/Updater>
     #ifndef THBN_CLICKED
         #define THBN_CLICKED    0x1800
@@ -411,7 +413,7 @@ TomahawkWindow::setupUpdateCheck()
 #if defined( Q_OS_MAC ) && defined( HAVE_SPARKLE )
     connect( ActionCollection::instance()->getAction( "checkForUpdates" ), SIGNAL( triggered( bool ) ),
              SLOT( checkForUpdates() ) );
-#elif defined( Q_WS_WIN )
+    #elif defined( Q_WS_WIN ) && defined( WITH_QtSparkle )
     QUrl updaterUrl;
 
     if ( qApp->arguments().contains( "--debug" ) )

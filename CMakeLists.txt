@@ -139,6 +139,11 @@ macro_log_feature(QTWEETLIB_FOUND "QTweetLib" "Qt Twitter Library" "https://gith
 macro_optional_find_package(LibLastFm 1.0.0)
 macro_log_feature(LIBLASTFM_FOUND "liblastfm" "Qt library for the Last.fm webservices" "https://github.com/eartle/liblastfm" TRUE "" "liblastfm is needed for scrobbling tracks to Last.fm and fetching cover artwork")
 
+IF( WIN32 )
+    macro_optional_find_package(QtSparkle)
+    macro_log_feature(QTSPARKLE_FOUND "qtsparkle" "Library for creating auto updaters written in Qt" "https://github.com/davidsansome/qtsparkle" FALSE "" "")
+ENDIF( WIN32 )
+
 #### submodules start
 # automatically init submodules here, don't delete this code we may add submodules again
 
@@ -180,10 +185,6 @@ IF(KDE4_FOUND)
 ELSE()
     SET( CLEAN_C_FLAGS ${CMAKE_C_FLAGS} )
 ENDIF()
-
-IF( WIN32 )
-  find_library(QTSPARKLE_LIBRARIES qtsparkle)
-ENDIF( WIN32 )
 
 #show dep log
 macro_display_feature_log()
