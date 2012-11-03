@@ -20,6 +20,8 @@
 
 #include "TomahawkApp.h"
 
+#include "TomahawkVersion.h"
+
 #include <iostream>
 
 #include <QtCore/QPluginLoader>

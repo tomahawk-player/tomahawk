@@ -18,6 +18,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "TomahawkVersion.h"
 #include "config.h"
 #include "HeadlessCheck.h"
 #include "TomahawkSettings.h"

@@ -21,6 +21,7 @@
 #include "ui_DiagnosticsDialog.h"
 
 #include "config.h"
+#include "TomahawkVersion.h"
 
 #include <QLabel>
 #include <QTextEdit>
