@@ -6,11 +6,9 @@ SET( QT_USE_QTNETWORK TRUE )
 
 
 SET( crashreporter_SOURCES main.cpp CrashReporter.cpp )
-SET( crashreporter_HEADERS CrashReporter.h )
 SET( crashreporter_UI CrashReporter.ui )
 SET( crashreporter_RC ../../../resources.qrc )
 
-QT4_WRAP_CPP( crashreporter_HEADERS_MOC ${crashreporter_HEADERS} )
 QT4_WRAP_UI( crashreporter_UI_HEADERS ${crashreporter_UI} )
 QT4_ADD_RESOURCES( crashreporter_RC_RCC ${crashreporter_RC} )
 
@@ -20,5 +18,5 @@ ADD_DEFINITIONS( ${QT_DEFINITIONS} )
 
 ADD_EXECUTABLE( tomahawk_crash_reporter WIN32 ${crashreporter_SOURCES} ${crashreporter_HEADERS_MOC} ${crashreporter_UI_HEADERS} ${crashreporter_RC_RCC} )
 TARGET_LINK_LIBRARIES( tomahawk_crash_reporter ${QT_LIBRARIES} tomahawklib )
-
+set_target_properties( tomahawk_crash_reporter PROPERTIES AUTOMOC ON)
 install(TARGETS tomahawk_crash_reporter RUNTIME DESTINATION ${CMAKE_INSTALL_LIBEXECDIR})
