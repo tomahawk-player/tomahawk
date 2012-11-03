@@ -281,3 +281,53 @@ SlideSwitchButton::createKnob()
 
     p.drawRoundedRect( m_knob.rect(), ROUNDING_RADIUS-1, ROUNDING_RADIUS-1 );
 }
+
+QSize
+SlideSwitchButton::minimumSizeHint() const
+{
+    return sizeHint();
+}
+
+
+void
+SlideSwitchButton::setKnobX(qreal x)
+{
+    m_knobX = x;
+    repaint();
+}
+
+
+qreal
+SlideSwitchButton::knobX() const
+{
+    return m_knobX;
+}
+
+
+void
+SlideSwitchButton::setBaseColorTop(const QColor& color)
+{
+    m_baseColorTop = color;
+    repaint();
+}
+
+
+QColor
+SlideSwitchButton::baseColorTop() const
+{
+    return m_baseColorTop;
+}
+
+
+void
+SlideSwitchButton::setBaseColorBottom(const QColor& color)
+{
+    m_baseColorBottom = color;
+}
+
+
+QColor
+SlideSwitchButton::baseColorBottom() const
+{
+    return m_baseColorBottom;
+}

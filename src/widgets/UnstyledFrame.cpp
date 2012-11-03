@@ -36,3 +36,10 @@ UnstyledFrame::paintEvent( QPaintEvent* event )
     p.drawRect( contentsRect() );
     p.end();
 }
+
+
+void UnstyledFrame::setFrameColor(const QColor& color)
+{
+    m_frameColor = color;
+    repaint();
+}
