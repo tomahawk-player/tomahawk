@@ -3129,12 +3129,12 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="752"/>
         <source>You</source>
-        <translation>Du</translation>
+        <translation>Dir</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="754"/>
         <source>you</source>
-        <translation>du</translation>
+        <translation>dir</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="763"/>
@@ -3154,7 +3154,7 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="768"/>
         <source>loved this track</source>
-        <translation>liebte dieses Lied</translation>
+        <translation>gefällt dieses Lied</translation>
     </message>
 </context>
 <context>
