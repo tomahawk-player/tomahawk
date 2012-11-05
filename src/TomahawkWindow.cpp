@@ -251,6 +251,10 @@ TomahawkWindow::setupToolBar()
     m_toolbar->setIconSize( QSize( 22, 22 ) );
     m_toolbar->setToolButtonStyle( Qt::ToolButtonIconOnly );
     m_toolbar->setStyleSheet( "border-bottom: 0px" );
+    // If the toolbar is hidden accidentally it causes trouble on Unity because the user can't
+    // easily bring it back (TWK-1046). So we just prevent the user from hiding the toolbar.
+    // This should not affect Mac users.
+    m_toolbar->setContextMenuPolicy( Qt::PreventContextMenu );
 
 #ifdef Q_OS_MAC
     m_toolbar->installEventFilter( new WidgetDragFilter( m_toolbar ) );
