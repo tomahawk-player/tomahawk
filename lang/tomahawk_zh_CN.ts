@@ -189,7 +189,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="100"/>
         <source>&amp;Configure Tomahawk...</source>
-        <translation>配置 Tomahawk &amp;C... </translation>
+        <translation>配置 Tomahawk...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="103"/>
@@ -234,12 +234,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="144"/>
         <source>&amp;Settings</source>
-        <translation>设置 &amp;S</translation>
+        <translation>设置</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="150"/>
         <source>&amp;Help</source>
-        <translation>帮助 &amp;H</translation>
+        <translation>帮助</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="175"/>
@@ -939,7 +939,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.cpp" line="43"/>
         <source>&amp;Create Playlist</source>
-        <translation>创建播放列表 &amp;C</translation>
+        <translation>创建播放列表</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.h" line="50"/>
@@ -1765,12 +1765,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="199"/>
         <source>&amp;Copy Link</source>
-        <translation>复制链接 &amp;C</translation>
+        <translation>复制链接</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="207"/>
         <source>&amp;Delete %1</source>
-        <translation>删除 %1 &amp;D</translation>
+        <translation>删除%1</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="211"/>
@@ -1790,7 +1790,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="203"/>
         <source>&amp;Export Playlist</source>
-        <translation>导出播放列表 &amp;E</translation>
+        <translation>导出播放列表</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="357"/>
@@ -3105,7 +3105,7 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/LatchManager.cpp" line="123"/>
         <location filename="../src/libtomahawk/LatchManager.cpp" line="144"/>
         <source>&amp;Listen Along</source>
-        <translation>一起听 &amp;L</translation>
+        <translation>一起听</translation>
     </message>
 </context>
 <context>
@@ -3295,12 +3295,12 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="320"/>
         <source>&amp;Love</source>
-        <translation>喜欢 &amp;L</translation>
+        <translation>喜欢</translation>
     </message>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="328"/>
         <source>Un-&amp;Love</source>
-        <translation>不喜欢 &amp;L</translation>
+        <translation>不喜欢</translation>
     </message>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="179"/>
@@ -3318,7 +3318,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="67"/>
         <source>&amp;Quit</source>
-        <translation>退出 &amp;Q</translation>
+        <translation>退出</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="70"/>
