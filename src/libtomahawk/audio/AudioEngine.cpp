@@ -161,7 +161,7 @@ AudioEngine::pause()
 void
 AudioEngine::stop( AudioErrorCode errorCode )
 {
-    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO << errorCode;
 
     if ( isStopped() )
         return;
@@ -229,7 +229,7 @@ AudioEngine::canGoNext()
     {
         //For instance, when doing a catch-up while listening along, but the person
         //you're following hasn't started a new track yet...don't do anything
-        tDebug( LOGEXTRA ) << Q_FUNC_INFO << "catch up, but same track or can't move on because don't have next track or it wasn't resolved";
+        tDebug( LOGEXTRA ) << Q_FUNC_INFO << "Catch up, but same track or can't move on because don't have next track or it wasn't resolved";
         return false;
     }
 
@@ -392,7 +392,7 @@ AudioEngine::onNowPlayingInfoReady( const Tomahawk::InfoSystem::InfoType type )
                 playInfo["coveruri"] = QFileInfo( *coverTempFile ).absoluteFilePath();
             }
             else
-                tDebug() << Q_FUNC_INFO << "failed to save cover image!";
+                tDebug() << Q_FUNC_INFO << "Failed to save cover image!";
         }
         delete coverTempFile;
     }
@@ -411,8 +411,6 @@ AudioEngine::onNowPlayingInfoReady( const Tomahawk::InfoSystem::InfoType type )
     playInfo["private"] = TomahawkSettings::instance()->privateListeningMode();
 
     Tomahawk::InfoSystem::InfoPushData pushData ( s_aeInfoIdentifier, type, playInfo, Tomahawk::InfoSystem::PushShortUrlFlag );
-
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "pushing data with type" << type;
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );
 }
 
@@ -554,14 +552,14 @@ AudioEngine::loadNextTrack()
 
     if ( !m_playlist.isNull() && result.isNull() )
     {
-        tDebug( LOGEXTRA ) << Q_FUNC_INFO << "Loading playlist's next item";
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Loading playlist's next item" << m_playlist.data() << m_playlist->shuffled();
         result = m_playlist.data()->nextItem();
         m_currentTrackPlaylist = m_playlist;
     }
 
     if ( !result.isNull() )
     {
-        tDebug( LOGEXTRA ) << Q_FUNC_INFO << "Got next item, loading track";
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Got next item, loading track";
         loadTrack( result );
     }
     else
@@ -755,7 +753,7 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
         if ( stopped && m_expectStop )
         {
             m_expectStop = false;
-            tDebug( LOGEXTRA ) << "Finding next track.";
+            tDebug( LOGVERBOSE ) << "Finding next track.";
             if ( canGoNext() )
                 loadNextTrack();
             else
@@ -769,7 +767,7 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
 
     if ( newState == Phonon::PausedState || newState == Phonon::PlayingState || newState == Phonon::ErrorState )
     {
-        tDebug() << "Phonon state now:" << newState;
+        tDebug( LOGVERBOSE ) << "Phonon state now:" << newState;
         if ( m_stateQueue.count() )
         {
             AudioState qState = m_stateQueue.dequeue();
@@ -883,7 +881,7 @@ AudioEngine::checkStateQueue()
     if ( m_stateQueue.count() )
     {
         AudioState state = m_stateQueue.head();
-        tDebug() << "Applying state command:" << state;
+        tDebug( LOGVERBOSE ) << "Applying state command:" << state;
         switch ( state )
         {
             case Playing:
@@ -908,14 +906,14 @@ AudioEngine::checkStateQueue()
         }
     }
     else
-        tDebug() << "Queue is empty";
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Queue is empty";
 }
 
 
 void
 AudioEngine::queueStateSafety()
 {
-    tDebug() << Q_FUNC_INFO;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     m_stateQueue.clear();
 }
 
@@ -926,7 +924,7 @@ AudioEngine::queueState( AudioState state )
     if ( m_stateQueueTimer.isActive() )
         m_stateQueueTimer.stop();
 
-    tDebug() << "Enqueuing state command:" << state << m_stateQueue.count();
+    tDebug( LOGVERBOSE ) << "Enqueuing state command:" << state << m_stateQueue.count();
     m_stateQueue.enqueue( state );
 
     if ( m_stateQueue.count() == 1 )
