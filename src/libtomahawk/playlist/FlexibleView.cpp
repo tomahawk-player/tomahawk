@@ -77,6 +77,11 @@ FlexibleView::FlexibleView( QWidget* parent )
     qRegisterMetaType< FlexibleViewMode >( "FlexibleViewMode" );
 
     m_playlistInterface = playlistinterface_ptr( new FlexibleViewInterface( m_trackView->proxyModel(), this ) );
+    m_trackView->setPlaylistInterface( m_playlistInterface );
+    m_detailedView->setPlaylistInterface( m_playlistInterface );
+
+    m_detailedView->setColumnHidden( PlayableModel::Age, true ); // Hide age column per default
+    m_detailedView->setColumnHidden( PlayableModel::Composer, true ); // Hide composer column per default
 
     PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LovedTracks, m_trackView, m_trackView->proxyModel() );
     connect( del, SIGNAL( updateIndex( QModelIndex ) ), m_trackView, SLOT( update( QModelIndex ) ) );
@@ -107,6 +112,14 @@ FlexibleView::~FlexibleView()
 
 
 void
+FlexibleView::setGuid( const QString& guid )
+{
+    m_trackView->setGuid( guid );
+    m_detailedView->setGuid( guid );
+}
+
+
+void
 FlexibleView::setTrackView( TrackView* view )
 {
     if ( m_trackView )
@@ -115,8 +128,7 @@ FlexibleView::setTrackView( TrackView* view )
         delete m_trackView;
     }
 
-    if ( view && m_trackView != view )
-        m_playlistInterface = playlistinterface_ptr( new FlexibleViewInterface( view->proxyModel(), this ) );
+    view->setPlaylistInterface( m_playlistInterface );
 
     m_trackView = view;
     m_stack->addWidget( view );
@@ -131,6 +143,8 @@ FlexibleView::setDetailedView( TrackView* view )
         m_stack->removeWidget( m_detailedView );
         delete m_detailedView;
     }
+
+    view->setPlaylistInterface( m_playlistInterface );
 
     m_detailedView = view;
     m_stack->addWidget( view );

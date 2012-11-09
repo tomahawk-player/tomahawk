@@ -56,6 +56,8 @@ public:
     TrackView* detailedView() const { return m_detailedView; }
     GridView* gridView() const { return m_gridView; }
 
+    void setGuid( const QString& guid );
+
     void setTrackView( TrackView* view );
     void setDetailedView( TrackView* view );
     void setGridView( GridView* view );
