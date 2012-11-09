@@ -142,6 +142,8 @@ ViewManager::createPageForPlaylist( const playlist_ptr& playlist )
 
     model->loadPlaylist( playlist );
     view->setPlayableModel( model );
+    pv->setPlaylistModel( model );
+
     playlist->resolve();
 
     return view;
@@ -403,6 +405,8 @@ ViewManager::showRecentPlaysPage()
         pv->setEmptyTip( tr( "Sorry, we could not find any recent plays!" ) );
         raModel->setSource( source_ptr() );
 
+        pv->setGuid( "recentlyplayed" );
+
         m_recentPlaysWidget = pv;
     }
 
@@ -599,7 +603,7 @@ ViewManager::saveCurrentPlaylistSettings()
 
     if ( !pl.isNull() )
     {
-        s->setShuffleState(  pl->guid(), currentPlaylistInterface()->shuffled() );
+        s->setShuffleState( pl->guid(), currentPlaylistInterface()->shuffled() );
         s->setRepeatMode( pl->guid(), currentPlaylistInterface()->repeatMode() );
     }
     else
@@ -734,7 +738,9 @@ void
 ViewManager::setShuffled( bool enabled )
 {
     if ( currentPlaylistInterface() )
+    {
         currentPlaylistInterface()->setShuffled( enabled );
+    }
 }
 
 

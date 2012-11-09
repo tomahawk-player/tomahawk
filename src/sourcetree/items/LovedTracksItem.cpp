@@ -82,13 +82,18 @@ LovedTracksItem::activate()
 
         pv->setEmptyTip( tr( "Sorry, we could not find any loved tracks!" ) );
         if ( !par )
+        {
             raModel->setDescription( tr( "The most loved tracks from all your friends" ) );
+            pv->setGuid( QString( "lovedtracks" ) );
+        }
         else
         {
             if ( par->source()->isLocal() )
                 raModel->setDescription( tr( "All of your loved tracks" ) );
             else
                 raModel->setDescription( tr( "All of %1's loved tracks" ).arg( par->source()->friendlyName() ) );
+
+            pv->setGuid( QString( "lovedtracks/%1" ).arg( par->source()->userName() ) );
         }
 
         pv->setPlayableModel( raModel );

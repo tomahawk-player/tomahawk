@@ -529,6 +529,8 @@ SourceItem::latestAdditionsClicked()
         pv->setEmptyTip( tr( "Sorry, we could not find any recent additions!" ) );
         raModel->setSource( m_source );
 
+        pv->setGuid( QString( "latestadditions/%1" ).arg( m_source->userName() ) );
+
         m_latestAdditionsPage = pv;
     }
 
@@ -567,6 +569,8 @@ SourceItem::recentPlaysClicked()
         pv->setPlayableModel( raModel );
         pv->setEmptyTip( tr( "Sorry, we could not find any recent plays!" ) );
         raModel->setSource( m_source );
+
+        pv->setGuid( QString( "recentplays/%1" ).arg( m_source->userName() ) );
 
         m_recentPlaysPage = pv;
     }
