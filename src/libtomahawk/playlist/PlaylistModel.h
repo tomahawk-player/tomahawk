@@ -47,6 +47,8 @@ public:
     explicit PlaylistModel( QObject* parent = 0 );
     ~PlaylistModel();
 
+    virtual QString guid() const;
+
     virtual QMimeData* mimeData( const QModelIndexList& indexes ) const;
     virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent );
 

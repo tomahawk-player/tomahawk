@@ -59,6 +59,18 @@ PlaylistModel::~PlaylistModel()
 }
 
 
+QString
+PlaylistModel::guid() const
+{
+    if ( !m_playlist.isNull() )
+    {
+        return QString( "playlistmodel/%1" ).arg( m_playlist->guid() );
+    }
+    else
+        return QString();
+}
+
+
 void
 PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEntries )
 {
