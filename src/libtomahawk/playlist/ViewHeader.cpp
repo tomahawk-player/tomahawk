@@ -60,6 +60,7 @@ ViewHeader::visibleSectionCount() const
 void
 ViewHeader::onSectionsChanged()
 {
+    tDebug( LOGVERBOSE ) << "Saving columns state for view guid:" << m_guid;
     if ( !m_guid.isEmpty() )
         TomahawkSettings::instance()->setPlaylistColumnSizes( m_guid, saveState() );
 }
@@ -77,10 +78,8 @@ ViewHeader::checkState()
 
     if ( !state.isEmpty() )
     {
+        tDebug( LOGVERBOSE ) << "Restoring columns state for view:" << m_guid;
         restoreState( state );
-
-        if ( m_guid.startsWith( "playlistview" ) ) // HACK
-            setSortIndicator( -1, Qt::AscendingOrder );
     }
     else
     {
