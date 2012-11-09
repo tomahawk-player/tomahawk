@@ -96,7 +96,7 @@ PlayableProxyModelPlaylistInterface::hasNextItem()
 Tomahawk::result_ptr
 PlayableProxyModelPlaylistInterface::siblingItem( int itemsAway, bool readOnly )
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << m_shuffled << itemsAway << readOnly;
 
     if ( m_proxyModel.isNull() )
         return Tomahawk::result_ptr();
