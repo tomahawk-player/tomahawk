@@ -49,6 +49,18 @@ PlayableProxyModel::PlayableProxyModel( QObject* parent )
 }
 
 
+QString
+PlayableProxyModel::guid() const
+{
+    if ( m_model )
+    {
+        return m_model->guid();
+    }
+    else
+        return QString();
+}
+
+
 bool
 PlayableProxyModel::isLoading() const
 {
@@ -554,7 +566,7 @@ PlayableProxyModel::columnWeights() const
 
         case Detailed:
         default:
-            w << 0.16 << 0.16 << 0.14 << 0.12 << 0.05 << 0.05 << 0.05 << 0.05 << 0.05 << 0.05 << 0.09; // << 0.03;
+            w << 0.15 << 0.15 << 0.12 << 0.12 << 0.05 << 0.05 << 0.05 << 0.05 << 0.05 << 0.05 << 0.09; // << 0.03;
             break;
     }
 

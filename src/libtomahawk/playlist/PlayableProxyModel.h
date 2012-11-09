@@ -41,6 +41,8 @@ public:
     explicit PlayableProxyModel ( QObject* parent = 0 );
     virtual ~PlayableProxyModel() {}
 
+    virtual QString guid() const;
+
     virtual PlayableModel* sourceModel() const { return m_model; }
     virtual void setSourcePlayableModel( PlayableModel* sourceModel );
     virtual void setSourceModel( QAbstractItemModel* model );

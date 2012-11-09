@@ -57,6 +57,8 @@ public:
     explicit PlayableModel( QObject* parent = 0, bool loading = true );
     virtual ~PlayableModel();
 
+    virtual QString guid() const { return QString(); }
+
     virtual QModelIndex index( int row, int column, const QModelIndex& parent ) const;
     virtual QModelIndex parent( const QModelIndex& child ) const;
 
