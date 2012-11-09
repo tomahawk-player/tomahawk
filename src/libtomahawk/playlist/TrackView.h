@@ -64,6 +64,7 @@ public:
 
     virtual QWidget* widget() { return this; }
     virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
+    void setPlaylistInterface( const Tomahawk::playlistinterface_ptr& playlistInterface );
 
     virtual QString title() const;
     virtual QString description() const;
@@ -123,7 +124,7 @@ private slots:
 
     void onCustomContextMenu( const QPoint& pos );
 
-    void autoPlayResolveFinished( const Tomahawk::query_ptr& query, int row  );
+    void autoPlayResolveFinished( const Tomahawk::query_ptr& query, int row );
 
 private:
     void startAutoPlay( const QModelIndex& index );
@@ -145,6 +146,7 @@ private:
 
     bool m_updateContextView;
 
+    Tomahawk::playlistinterface_ptr m_playlistInterface;
     QModelIndex m_hoveredIndex;
     QModelIndex m_contextMenuIndex;
 

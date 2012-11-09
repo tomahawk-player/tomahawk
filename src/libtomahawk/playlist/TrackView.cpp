@@ -102,8 +102,13 @@ TrackView::~TrackView()
 void
 TrackView::setGuid( const QString& guid )
 {
-    m_guid = guid;
-    m_header->setGuid( guid );
+    if ( !guid.isEmpty() )
+    {
+        tDebug() << Q_FUNC_INFO << "Setting guid on header" << guid << "for a view with" << m_proxyModel->columnCount() << "columns";
+
+        m_guid = QString( "%1/%2" ).arg( guid ).arg( m_proxyModel->columnCount() );
+        m_header->setGuid( m_guid );
+    }
 }
 
 
@@ -143,6 +148,7 @@ TrackView::setPlayableModel( PlayableModel* model )
 
     setAcceptDrops( true );
     m_header->setDefaultColumnWeights( m_proxyModel->columnWeights() );
+    setGuid( m_proxyModel->guid() );
 
     switch( m_proxyModel->style() )
     {
@@ -303,7 +309,7 @@ TrackView::tryToPlayItem( const QModelIndex& index )
     if ( item && !item->query().isNull() )
     {
         m_proxyModel->setCurrentIndex( index );
-        AudioEngine::instance()->playItem( m_proxyModel->playlistInterface(), item->query() );
+        AudioEngine::instance()->playItem( playlistInterface(), item->query() );
 
         return true;
     }
@@ -710,7 +716,19 @@ TrackView::mousePressEvent( QMouseEvent* event )
 Tomahawk::playlistinterface_ptr
 TrackView::playlistInterface() const
 {
-    return proxyModel()->playlistInterface();
+    if ( m_playlistInterface.isNull() )
+    {
+        return proxyModel()->playlistInterface();
+    }
+
+    return m_playlistInterface;
+}
+
+
+void
+TrackView::setPlaylistInterface( const Tomahawk::playlistinterface_ptr& playlistInterface )
+{
+    m_playlistInterface = playlistInterface;
 }
 
 
