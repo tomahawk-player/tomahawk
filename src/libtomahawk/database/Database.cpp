@@ -53,7 +53,7 @@ Database::Database( const QString& dbname, QObject* parent )
     else
         m_maxConcurrentThreads = qBound( DEFAULT_WORKER_THREADS, QThread::idealThreadCount(), MAX_WORKER_THREADS );
 
-    tDebug() << Q_FUNC_INFO << "Using" << m_maxConcurrentThreads << "database worker threads; current (GUI) thread is " << QThread::currentThread();
+    tDebug() << Q_FUNC_INFO << "Using" << m_maxConcurrentThreads << "database worker threads";
 
     connect( m_impl, SIGNAL( indexReady() ), SIGNAL( indexReady() ) );
     connect( m_impl, SIGNAL( indexReady() ), SIGNAL( ready() ) );
@@ -75,7 +75,7 @@ Database::Database( const QString& dbname, QObject* parent )
 
 Database::~Database()
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
 
     m_idWorker->stop();
     delete m_idWorker;
@@ -120,7 +120,7 @@ void
 Database::enqueue( const QList< QSharedPointer<DatabaseCommand> >& lc )
 {
     Q_ASSERT( m_ready );
-    qDebug() << "Enqueueing" << lc.count() << "commands to rw thread";
+    tDebug( LOGVERBOSE ) << "Enqueueing" << lc.count() << "commands to rw thread";
     if ( m_workerRW && m_workerRW.data()->worker() )
         m_workerRW.data()->worker().data()->enqueue( lc );
 }
@@ -132,7 +132,7 @@ Database::enqueue( const QSharedPointer<DatabaseCommand>& lc )
     Q_ASSERT( m_ready );
     if ( lc->doesMutates() )
     {
-        qDebug() << "Enqueueing command to rw thread:" << lc->commandname();
+        tDebug( LOGVERBOSE ) << "Enqueueing command to rw thread:" << lc->commandname();
         if ( m_workerRW && m_workerRW.data()->worker() )
             m_workerRW.data()->worker().data()->enqueue( lc );
     }
@@ -158,7 +158,7 @@ Database::enqueue( const QSharedPointer<DatabaseCommand>& lc )
                 happyWorker = workerThread.data()->worker();
         }
 
-//        qDebug() << "Enqueueing command to thread:" << happyThread << busyThreads << lc->commandname();
+//        tDebug( LOGVERBOSE ) << "Enqueueing command to thread:" << happyThread << busyThreads << lc->commandname();
         Q_ASSERT( happyWorker );
         happyWorker.data()->enqueue( lc );
     }
@@ -173,7 +173,7 @@ Database::impl()
     QThread* thread = QThread::currentThread();
     if ( !m_implHash.contains( thread ) )
     {
-        tDebug() << Q_FUNC_INFO << "Creating database impl for thread" << QThread::currentThread();
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Creating database impl for thread" << QThread::currentThread();
         DatabaseImpl* impl = m_impl->clone();
         m_implHash.insert( thread, impl );
     }

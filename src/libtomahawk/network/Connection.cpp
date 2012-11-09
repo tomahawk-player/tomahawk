@@ -50,7 +50,7 @@ Connection::Connection( Servent* parent )
     , m_tx_bytes_last( 0 )
 {
     moveToThread( m_servent->thread() );
-    qDebug() << "CTOR Connection (super)" << thread();
+    tDebug( LOGVERBOSE ) << "CTOR Connection (super)" << thread();
 
     connect( &m_msgprocessor_out, SIGNAL( ready( msg_ptr ) ),
              SLOT( sendMsg_now( msg_ptr ) ), Qt::QueuedConnection );
@@ -65,10 +65,9 @@ Connection::Connection( Servent* parent )
 
 Connection::~Connection()
 {
-    tDebug() << "DTOR connection (super)" << id() << thread() << m_sock.isNull();
-    if( !m_sock.isNull() )
+    tDebug( LOGVERBOSE ) << "DTOR connection (super)" << id() << thread() << m_sock.isNull();
+    if ( !m_sock.isNull() )
     {
-//        qDebug() << "deleteLatering sock" << m_sock;
         m_sock->deleteLater();
     }
 
@@ -84,11 +83,11 @@ Connection::handleIncomingQueueEmpty()
     //         << "m_peer_disconnected" << m_peer_disconnected
     //         << "bytes rx" << bytesReceived();
 
-    if( !m_sock.isNull() && m_sock->bytesAvailable() == 0 && m_peer_disconnected )
+    if ( !m_sock.isNull() && m_sock->bytesAvailable() == 0 && m_peer_disconnected )
     {
-        qDebug() << "No more data to read, peer disconnected. shutting down connection."
-                 << "bytesavail" << m_sock->bytesAvailable()
-                 << "bytesrx" << m_rx_bytes;
+        tDebug( LOGVERBOSE ) << "No more data to read, peer disconnected. shutting down connection."
+                             << "bytesavail" << m_sock->bytesAvailable()
+                             << "bytesrx" << m_rx_bytes;
         shutdown();
     }
 }
@@ -117,7 +116,7 @@ Connection::setFirstMessage( msg_ptr m )
 void
 Connection::shutdown( bool waitUntilSentAll )
 {
-    qDebug() << Q_FUNC_INFO << waitUntilSentAll << id();
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << waitUntilSentAll << id();
     if ( m_do_shutdown )
     {
         //qDebug() << id() << " already shutting down";
@@ -132,8 +131,8 @@ Connection::shutdown( bool waitUntilSentAll )
     }
     else
     {
-        qDebug() << "Shutting down after transfer complete " << id()
-                 << "Actual/Desired" << m_tx_bytes << m_tx_bytes_requested;
+        tDebug( LOGVERBOSE ) << "Shutting down after transfer complete " << id()
+                             << "Actual/Desired" << m_tx_bytes << m_tx_bytes_requested;
 
         bytesWritten( 0 ); // trigger shutdown if we've already sent everything
         // otherwise the bytesWritten slot will call actualShutdown()
@@ -145,7 +144,7 @@ Connection::shutdown( bool waitUntilSentAll )
 void
 Connection::actualShutdown()
 {
-    qDebug() << Q_FUNC_INFO << m_actually_shutting_down << id();
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << m_actually_shutting_down << id();
     if ( m_actually_shutting_down )
     {
         return;
@@ -165,7 +164,7 @@ Connection::actualShutdown()
 void
 Connection::markAsFailed()
 {
-    qDebug() << "Connection" << id() << "FAILED ***************" << thread();
+    tDebug( LOGVERBOSE ) << "Connection" << id() << "FAILED ***************" << thread();
     emit failed();
     shutdown();
 }
@@ -180,7 +179,7 @@ Connection::start( QTcpSocket* sock )
 
     m_sock = sock;
 
-    if( m_name.isEmpty() )
+    if ( m_name.isEmpty() )
     {
         m_name = QString( "peer[%1]" ).arg( m_sock->peerAddress().toString() );
     }
@@ -194,7 +193,7 @@ Connection::checkACL()
 {
     if ( !property( "nodeid" ).isValid() )
     {
-        tLog() << Q_FUNC_INFO << "Not checking ACL, nodeid is empty";
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Not checking ACL, nodeid is empty";
         QTimer::singleShot( 0, this, SLOT( doSetup() ) );
         return;
     }
@@ -219,7 +218,7 @@ Connection::checkACLResult( const QString &nodeid, const QString &username, ACLR
     QString bareName = name().contains( '/' ) ? name().left( name().indexOf( "/" ) ) : name();
     if ( nodeid != property( "nodeid" ).toString() || username != bareName )
     {
-        tLog() << Q_FUNC_INFO << "nodeid not ours, or username not our barename";
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "nodeid not ours, or username not our barename";
         return;
     }
 
@@ -238,10 +237,10 @@ Connection::checkACLResult( const QString &nodeid, const QString &username, ACLR
 void
 Connection::authCheckTimeout()
 {
-    if( m_ready )
+    if ( m_ready )
         return;
 
-    qDebug() << "Closing connection, not authed in time.";
+    tDebug( LOGVERBOSE ) << "Closing connection, not authed in time.";
     shutdown();
 }
 
@@ -249,7 +248,7 @@ Connection::authCheckTimeout()
 void
 Connection::doSetup()
 {
-    qDebug() << Q_FUNC_INFO << thread();
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << thread();
     /*
         New connections can be created from other thread contexts, such as
         when AudioEngine calls getIODevice.. - we need to ensure that connections
@@ -257,10 +256,9 @@ Connection::doSetup()
 
         HINT: export QT_FATAL_WARNINGS=1 helps to catch these kind of errors.
      */
-    if( QThread::currentThread() != m_servent->thread() )
+    if ( QThread::currentThread() != m_servent->thread() )
     {
         // Connections should always be in the same thread as the servent.
-        qDebug() << "Fixing thead affinity...";
         moveToThread( m_servent->thread() );
     }
 
@@ -289,7 +287,7 @@ Connection::doSetup()
     // if connection not authed/setup fast enough, kill it:
     QTimer::singleShot( AUTH_TIMEOUT, this, SLOT( authCheckTimeout() ) );
 
-    if( outbound() )
+    if ( outbound() )
     {
         Q_ASSERT( !m_firstmsg.isNull() );
         sendMsg( m_firstmsg );
@@ -308,15 +306,15 @@ Connection::doSetup()
 void
 Connection::socketDisconnected()
 {
-    tDebug() << "SOCKET DISCONNECTED" << this->name() << id()
-             << "shutdown will happen after incoming queue empties."
-             << "bytesavail:" << m_sock->bytesAvailable()
-             << "bytesRecvd" << bytesReceived();
+    tDebug( LOGVERBOSE ) << "SOCKET DISCONNECTED" << this->name() << id()
+                         << "shutdown will happen after incoming queue empties."
+                         << "bytesavail:" << m_sock->bytesAvailable()
+                         << "bytesRecvd" << bytesReceived();
 
     m_peer_disconnected = true;
     emit socketClosed();
 
-    if( m_msgprocessor_in.length() == 0 && m_sock->bytesAvailable() == 0 )
+    if ( m_msgprocessor_in.length() == 0 && m_sock->bytesAvailable() == 0 )
     {
         handleIncomingQueueEmpty();
         actualShutdown();
@@ -327,7 +325,7 @@ Connection::socketDisconnected()
 void
 Connection::socketDisconnectedError( QAbstractSocket::SocketError e )
 {
-    qDebug() << "SOCKET ERROR CODE" << e << this->name() << "CALLING Connection::shutdown(false)";
+    tDebug() << "SOCKET ERROR CODE" << e << this->name() << "CALLING Connection::shutdown(false)";
 
     if ( e == QAbstractSocket::RemoteHostClosedError )
         return;
@@ -360,15 +358,15 @@ Connection::readyRead()
 {
 //    qDebug() << "readyRead, bytesavail:" << m_sock->bytesAvailable();
 
-    if( m_msg.isNull() )
+    if ( m_msg.isNull() )
     {
-        if( m_sock->bytesAvailable() < Msg::headerSize() )
+        if ( m_sock->bytesAvailable() < Msg::headerSize() )
             return;
 
         char msgheader[ Msg::headerSize() ];
-        if( m_sock->read( (char*) &msgheader, Msg::headerSize() ) != Msg::headerSize() )
+        if ( m_sock->read( (char*) &msgheader, Msg::headerSize() ) != Msg::headerSize() )
         {
-            qDebug() << "Failed reading msg header";
+            tDebug() << "Failed reading msg header";
             this->markAsFailed();
             return;
         }
@@ -377,13 +375,13 @@ Connection::readyRead()
         m_rx_bytes += Msg::headerSize();
     }
 
-    if( m_sock->bytesAvailable() < m_msg->length() )
+    if ( m_sock->bytesAvailable() < m_msg->length() )
         return;
 
     QByteArray ba = m_sock->read( m_msg->length() );
-    if( ba.length() != (qint32)m_msg->length() )
+    if ( ba.length() != (qint32)m_msg->length() )
     {
-        qDebug() << "Failed to read full msg payload";
+        tDebug() << "Failed to read full msg payload";
         this->markAsFailed();
         return;
     }
@@ -393,7 +391,7 @@ Connection::readyRead()
     handleReadMsg(); // process m_msg and clear() it
 
     // since there is no explicit threading, use the event loop to schedule this:
-    if( m_sock->bytesAvailable() )
+    if ( m_sock->bytesAvailable() )
     {
         QTimer::singleShot( 0, this, SLOT( readyRead() ) );
     }
@@ -403,24 +401,24 @@ Connection::readyRead()
 void
 Connection::handleReadMsg()
 {
-    if( outbound() == false &&
+    if ( outbound() == false &&
         m_msg->is( Msg::SETUP ) &&
         m_msg->payload() == "ok" )
     {
         m_ready = true;
-        qDebug() << "Connection" << id() << "READY";
+        tDebug( LOGVERBOSE ) << "Connection" << id() << "READY";
         setup();
         emit ready();
     }
-    else if( !m_ready &&
+    else if ( !m_ready &&
              outbound() &&
              m_msg->is( Msg::SETUP ) )
     {
-        if( m_msg->payload() == PROTOVER )
+        if ( m_msg->payload() == PROTOVER )
         {
             sendMsg( Msg::factory( "ok", Msg::SETUP ) );
             m_ready = true;
-            qDebug() << "Connection" << id() << "READY";
+            tDebug( LOGVERBOSE ) << "Connection" << id() << "READY";
             setup();
             emit ready();
         }
@@ -442,7 +440,7 @@ Connection::handleReadMsg()
 void
 Connection::sendMsg( QVariant j )
 {
-    if( m_do_shutdown )
+    if ( m_do_shutdown )
         return;
 
     QJson::Serializer serializer;
@@ -455,10 +453,10 @@ Connection::sendMsg( QVariant j )
 void
 Connection::sendMsg( msg_ptr msg )
 {
-    if( m_do_shutdown )
+    if ( m_do_shutdown )
     {
-        qDebug() << Q_FUNC_INFO << "SHUTTING DOWN, NOT SENDING msg flags:"
-                << (int)msg->flags() << "length:" << msg->length() << id();
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "SHUTTING DOWN, NOT SENDING msg flags:"
+                             << (int)msg->flags() << "length:" << msg->length() << id();
         return;
     }
 
@@ -475,7 +473,7 @@ Connection::sendMsg_now( msg_ptr msg )
 
     if ( m_sock.isNull() || !m_sock->isOpen() || !m_sock->isWritable() )
     {
-        qDebug() << "***** Socket problem, whilst in sendMsg(). Cleaning up. *****";
+        tDebug() << "***** Socket problem, whilst in sendMsg(). Cleaning up. *****";
         shutdown( false );
         return;
     }

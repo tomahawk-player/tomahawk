@@ -24,7 +24,9 @@
 
 using namespace Tomahawk::InfoSystem;
 
-bool newReleaseSort( const InfoStringHash& left, const InfoStringHash& right )
+
+bool
+newReleaseSort( const InfoStringHash& left, const InfoStringHash& right )
 {
     if ( !left.contains( "date" ) || !right.contains( "date" ) )
     {
@@ -46,15 +48,16 @@ NewReleasesPlugin::NewReleasesPlugin()
     m_supportedGetTypes << InfoNewReleaseCapabilities << InfoNewRelease;
 }
 
+
 NewReleasesPlugin::~NewReleasesPlugin()
 {
     tDebug ( LOGVERBOSE ) << Q_FUNC_INFO;
 }
 
+
 void
 NewReleasesPlugin::init()
 {
-
     QVariantList source_qvarlist = TomahawkUtils::Cache::instance()->getData( "NewReleasesPlugin", "nr_sources" ).toList();
     foreach( const QVariant & source, source_qvarlist )
     {
@@ -67,15 +70,19 @@ NewReleasesPlugin::init()
         fetchNRSourcesList( true );
 }
 
-void NewReleasesPlugin::dataError ( InfoRequestData requestData )
+
+void
+NewReleasesPlugin::dataError( InfoRequestData requestData )
 {
     emit info ( requestData, QVariant() );
     return;
 }
 
-void NewReleasesPlugin::getInfo ( InfoRequestData requestData )
+
+void
+NewReleasesPlugin::getInfo( InfoRequestData requestData )
 {
-//qDebug() << Q_FUNC_INFO << requestData.caller;
+    //qDebug() << Q_FUNC_INFO << requestData.caller;
     //qDebug() << Q_FUNC_INFO << requestData.customData;
 
     InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
@@ -114,12 +121,15 @@ void NewReleasesPlugin::getInfo ( InfoRequestData requestData )
     case InfoNewReleaseCapabilities:
         fetchNRCapabilitiesFromCache ( requestData );
         break;
+
     default:
         dataError ( requestData );
     }
 }
 
-void NewReleasesPlugin::fetchNRFromCache ( InfoRequestData requestData )
+
+void
+NewReleasesPlugin::fetchNRFromCache( InfoRequestData requestData )
 {
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
@@ -145,7 +155,9 @@ void NewReleasesPlugin::fetchNRFromCache ( InfoRequestData requestData )
     emit getCachedInfo ( criteria, 86400000, requestData );
 }
 
-void NewReleasesPlugin::fetchNRCapabilitiesFromCache ( InfoRequestData requestData )
+
+void
+NewReleasesPlugin::fetchNRCapabilitiesFromCache( InfoRequestData requestData )
 {
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
@@ -160,7 +172,9 @@ void NewReleasesPlugin::fetchNRCapabilitiesFromCache ( InfoRequestData requestDa
     emit getCachedInfo ( criteria, 864000000, requestData );
 }
 
-void NewReleasesPlugin::notInCacheSlot ( InfoStringHash criteria, InfoRequestData requestData )
+
+void
+NewReleasesPlugin::notInCacheSlot( InfoStringHash criteria, InfoRequestData requestData )
 {
     switch ( requestData.type )
     {
@@ -190,7 +204,9 @@ void NewReleasesPlugin::notInCacheSlot ( InfoStringHash criteria, InfoRequestDat
     }
 }
 
-void NewReleasesPlugin::fetchNRSourcesList( bool fetchOnlySourcesList )
+
+void
+NewReleasesPlugin::fetchNRSourcesList( bool fetchOnlySourcesList )
 {
 
     QUrl url = QUrl ( QString ( CHART_URL "newreleases" ) );
@@ -203,9 +219,11 @@ void NewReleasesPlugin::fetchNRSourcesList( bool fetchOnlySourcesList )
 
 }
 
-void NewReleasesPlugin::nrSourcesList()
+
+void
+NewReleasesPlugin::nrSourcesList()
 {
-    tDebug ( LOGVERBOSE )  << "Got newreleases sources list";
+    tDebug ( LOGVERBOSE ) << "Got newreleases sources list";
     QNetworkReply* reply = qobject_cast<QNetworkReply*> ( sender() );
 
     if ( reply->error() == QNetworkReply::NoError )
@@ -232,7 +250,9 @@ void NewReleasesPlugin::nrSourcesList()
     }
 }
 
-void NewReleasesPlugin::fetchAllNRSources()
+
+void
+NewReleasesPlugin::fetchAllNRSources()
 {
     if ( !m_nrSources.isEmpty() && m_allNRsMap.isEmpty() )
     {
@@ -251,7 +271,9 @@ void NewReleasesPlugin::fetchAllNRSources()
     }
 }
 
-void NewReleasesPlugin::fetchNR ( InfoRequestData requestData, const QString& source, const QString& nr_id )
+
+void
+NewReleasesPlugin::fetchNR( InfoRequestData requestData, const QString& source, const QString& nr_id )
 {
     /// Fetch the chart, we need source and id
     QUrl url = QUrl ( QString ( CHART_URL "newreleases/%1/%2" ).arg ( source ).arg ( nr_id ) );
@@ -263,9 +285,11 @@ void NewReleasesPlugin::fetchNR ( InfoRequestData requestData, const QString& so
     connect ( reply, SIGNAL ( finished() ), SLOT ( nrReturned() ) );
 }
 
-void NewReleasesPlugin::nrList()
+
+void
+NewReleasesPlugin::nrList()
 {
-    tDebug ( LOGVERBOSE )  << "Got newreleases list result";
+    tDebug ( LOGVERBOSE ) << "Got newreleases list result";
     QNetworkReply* reply = qobject_cast<QNetworkReply*> ( sender() );
 
     if ( reply->error() == QNetworkReply::NoError )
@@ -347,7 +371,9 @@ void NewReleasesPlugin::nrList()
         QVariantMap defaultMap = m_allNRsMap.value ( "defaults" ).value< QVariantMap >();
         m_allNRsMap.insert ( nrName, QVariant::fromValue< QVariantMap > ( newreleases ) );
 
-    } else {
+    }
+    else
+    {
         tLog() << "Error fetching charts:" << reply->errorString();
     }
 
@@ -367,7 +393,9 @@ void NewReleasesPlugin::nrList()
     }
 }
 
-void NewReleasesPlugin::nrReturned()
+
+void
+NewReleasesPlugin::nrReturned()
 {
     /// Chart request returned something! Woho
     QNetworkReply* reply = qobject_cast<QNetworkReply*> ( sender() );
@@ -420,7 +448,8 @@ void NewReleasesPlugin::nrReturned()
         criteria[ "nr_id" ] = origData[ "nr_id" ];
         criteria[ "nr_source" ] = origData[ "nr_source" ];
         emit updateCache( criteria, 86400000, requestData.type, returnedData );
-    } else
+    }
+    else
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Network error in fetching newrelease:" << reply->url().toString();
 }
 

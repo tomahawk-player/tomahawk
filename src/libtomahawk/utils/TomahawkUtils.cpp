@@ -115,7 +115,7 @@ appConfigDir()
     }
     else
     {
-        qDebug() << "Error, $HOME not set.";
+        tDebug() << "Error, $HOME not set.";
         throw "$HOME not set";
         return QDir( "/tmp" );
     }
@@ -135,7 +135,7 @@ appConfigDir()
     }
     else
     {
-        qDebug() << "Error, $HOME or $XDG_CONFIG_HOME not set.";
+        tDebug() << "Error, $HOME or $XDG_CONFIG_HOME not set.";
         throw "Error, $HOME or $XDG_CONFIG_HOME not set.";
         ret = QDir( "/tmp" );
     }
@@ -449,7 +449,7 @@ void
 NetworkProxyFactory::setNoProxyHosts( const QStringList& hosts )
 {
     QStringList newList;
-    tDebug() << Q_FUNC_INFO << "No-proxy hosts:" << hosts;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "No-proxy hosts:" << hosts;
     foreach ( const QString& host, hosts )
     {
         QString munge = host.simplified();
@@ -457,7 +457,7 @@ NetworkProxyFactory::setNoProxyHosts( const QStringList& hosts )
         //TODO: wildcard support
     }
 
-    tDebug() << Q_FUNC_INFO << "New no-proxy hosts:" << newList;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "New no-proxy hosts:" << newList;
 
     s_noProxyHostsMutex.lock();
     s_noProxyHosts = newList;
@@ -468,10 +468,9 @@ NetworkProxyFactory::setNoProxyHosts( const QStringList& hosts )
 void
 NetworkProxyFactory::setProxy( const QNetworkProxy& proxy )
 {
-
     m_proxyChanged = false;
-    if( m_proxy != proxy )
-         m_proxyChanged = true;
+    if ( m_proxy != proxy )
+        m_proxyChanged = true;
 
     m_proxy = proxy;
     QFlags< QNetworkProxy::Capability > proxyCaps;
@@ -479,16 +478,17 @@ NetworkProxyFactory::setProxy( const QNetworkProxy& proxy )
     proxyCaps |= QNetworkProxy::ListeningCapability;
     if ( TomahawkSettings::instance()->proxyDns() )
         proxyCaps |= QNetworkProxy::HostNameLookupCapability;
+
     m_proxy.setCapabilities( proxyCaps );
-    tDebug() << Q_FUNC_INFO << "Proxy using host" << proxy.hostName() << "and port" << proxy.port();
-    tDebug() << Q_FUNC_INFO << "setting proxy to use proxy DNS?" << (TomahawkSettings::instance()->proxyDns() ? "true" : "false");
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Proxy using host" << proxy.hostName() << "and port" << proxy.port();
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "setting proxy to use proxy DNS?" << (TomahawkSettings::instance()->proxyDns() ? "true" : "false");
 }
 
 
 NetworkProxyFactory&
 NetworkProxyFactory::operator=( const NetworkProxyFactory& rhs )
 {
-    tDebug() << Q_FUNC_INFO;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     if ( this != &rhs )
     {
         m_proxy = QNetworkProxy( rhs.m_proxy );
@@ -500,7 +500,7 @@ NetworkProxyFactory::operator=( const NetworkProxyFactory& rhs )
 
 bool NetworkProxyFactory::operator==( const NetworkProxyFactory& other ) const
 {
-    tDebug() << Q_FUNC_INFO;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     if ( m_proxy != other.m_proxy )
         return false;
 
@@ -515,7 +515,7 @@ NetworkProxyFactory*
 proxyFactory( bool makeClone, bool noMutexLocker )
 {
     // Don't lock if being called from nam()
-    tDebug() << Q_FUNC_INFO;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     QMutex otherMutex;
     QMutexLocker locker( noMutexLocker ? &otherMutex : &s_namAccessMutex );
 
@@ -543,7 +543,7 @@ proxyFactory( bool makeClone, bool noMutexLocker )
 void
 setProxyFactory( NetworkProxyFactory* factory, bool noMutexLocker )
 {
-    tDebug() << Q_FUNC_INFO;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     Q_ASSERT( factory );
     // Don't lock if being called from setNam()
     QMutex otherMutex;
@@ -589,7 +589,7 @@ nam()
         else
             return 0;
     }
-    tDebug() << Q_FUNC_INFO << "Found gui thread in nam hash";
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Found gui thread in nam hash";
 
     // Create a nam for this thread based on the main thread's settings but with its own proxyfactory
     QNetworkAccessManager *mainNam = s_threadNamHash[ TOMAHAWK_APPLICATION::instance()->thread() ];
@@ -601,7 +601,7 @@ nam()
 
     s_threadNamHash[ QThread::currentThread() ] = newNam;
 
-    tDebug( LOGEXTRA ) << Q_FUNC_INFO << "created new nam for thread" << QThread::currentThread();
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "created new nam for thread" << QThread::currentThread();
     //QNetworkProxy proxy = dynamic_cast< TomahawkUtils::NetworkProxyFactory* >( newNam->proxyFactory() )->proxy();
     //tDebug() << Q_FUNC_INFO << "reply proxy properties:" << proxy.type() << proxy.hostName() << proxy.port();
 
@@ -619,13 +619,13 @@ setNam( QNetworkAccessManager* nam, bool noMutexLocker )
     if ( !s_threadNamHash.contains( TOMAHAWK_APPLICATION::instance()->thread() ) &&
             QThread::currentThread() == TOMAHAWK_APPLICATION::instance()->thread() )
     {
-        tDebug( LOGEXTRA ) << "creating initial gui thread (" << TOMAHAWK_APPLICATION::instance()->thread() << ") nam";
+        tDebug( LOGVERBOSE ) << "creating initial gui thread (" << TOMAHAWK_APPLICATION::instance()->thread() << ") nam";
         // Should only get here on first initialization of the nam
         TomahawkSettings *s = TomahawkSettings::instance();
         TomahawkUtils::NetworkProxyFactory* proxyFactory = new TomahawkUtils::NetworkProxyFactory();
         if ( s->proxyType() != QNetworkProxy::NoProxy && !s->proxyHost().isEmpty() )
         {
-            tDebug( LOGEXTRA ) << "Setting proxy to saved values";
+            tDebug( LOGVERBOSE ) << "Setting proxy to saved values";
             QNetworkProxy proxy( s->proxyType(), s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() );
             proxyFactory->setProxy( proxy );
             //FIXME: Jreen is broke without this
@@ -843,7 +843,7 @@ verifyFile( const QString& filePath, const QString& signature )
         return false;
     }
 
-    qDebug() << "Successfully verified signature of downloaded file:" << filePath;
+    tDebug( LOGVERBOSE ) << "Successfully verified signature of downloaded file:" << filePath;
 
     return true;
 }
@@ -890,7 +890,7 @@ unzipFileInFolder( const QString& zipFileName, const QDir& folder )
         return false;
     }
 
-    tDebug() << "Unzipping files to:" << folder.absolutePath();
+    tDebug( LOGVERBOSE ) << "Unzipping files to:" << folder.absolutePath();
 
     QuaZipFile fileInZip( &zipFile );
     do
@@ -915,7 +915,7 @@ unzipFileInFolder( const QString& zipFileName, const QDir& folder )
             folder.mkpath( dirPath );
         }
 
-        tDebug() << "Writing to output file..." << out.fileName();
+        tDebug( LOGVERBOSE ) << "Writing to output file..." << out.fileName();
         if ( !out.open( QIODevice::WriteOnly ) )
         {
             tLog() << "Failed to open zip extract file:" << out.errorString() << info.name;

@@ -124,7 +124,7 @@ DBSyncConnection::check()
 
     if ( m_source->lastCmdGuid().isEmpty() )
     {
-        tDebug() << "Fetching lastCmdGuid from database!";
+        tDebug( LOGVERBOSE ) << "Fetching lastCmdGuid from database!";
         DatabaseCommand_CollectionStats* cmd_them = new DatabaseCommand_CollectionStats( m_source );
         connect( cmd_them, SIGNAL( done( QVariantMap ) ), SLOT( gotThem( QVariantMap ) ) );
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd_them) );

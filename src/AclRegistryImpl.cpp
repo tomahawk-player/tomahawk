@@ -56,7 +56,6 @@ ACLRegistryImpl::~ACLRegistryImpl()
 ACLRegistry::ACL
 ACLRegistryImpl::isAuthorizedUser( const QString& dbid, const QString &username, ACLRegistry::ACL globalType, bool skipEmission )
 {
-    tLog() << Q_FUNC_INFO;
     if ( QThread::currentThread() != TOMAHAWK_APPLICATION::instance()->thread() )
     {
         if ( !skipEmission )
@@ -153,7 +152,7 @@ ACLRegistryImpl::getUserDecision( ACLRegistry::User user, const QString &usernam
     if ( TomahawkUtils::headless() )
         return;
 
-    tLog() << Q_FUNC_INFO;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     ACLJobItem* job = new ACLJobItem( user, username );
     m_jobQueue.enqueue( job );
     QTimer::singleShot( 0, this, SLOT( queueNextJob() ) );
@@ -166,7 +165,7 @@ ACLRegistryImpl::userDecision( ACLRegistry::User user )
     if ( TomahawkUtils::headless() )
         return;
 
-    tLog() << Q_FUNC_INFO;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     m_cache.append( user );
     save();
     emit aclResult( user.knownDbids.first(), user.knownAccountIds.first(), user.acl );
@@ -188,8 +187,9 @@ ACLRegistryImpl::queueNextJob()
         QMetaObject::invokeMethod( this, "queueNextJob", Qt::QueuedConnection );
         return;
     }
-    tLog() << Q_FUNC_INFO << "jobCount =" << m_jobCount;
-    tLog() << Q_FUNC_INFO << "jobQueue size =" << m_jobQueue.length();
+
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "jobCount =" << m_jobCount;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "jobQueue size =" << m_jobQueue.length();
     if ( m_jobCount != 0 )
         return;
 
@@ -203,21 +203,21 @@ ACLRegistryImpl::queueNextJob()
             ACLRegistry::ACL acl = isAuthorizedUser( dbid, job->username(), ACLRegistry::NotFound, true );
             if ( acl != ACLRegistry::NotFound )
             {
-                tLog() << Q_FUNC_INFO << "Found existing acl entry for =" << user.knownAccountIds.first();
+                tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Found existing acl entry for =" << user.knownAccountIds.first();
                 found = true;
                 break;
             }
         }
         if ( found )
         {
-            tLog() << Q_FUNC_INFO << "deleting job, already have ACL for" << user.knownAccountIds.first();
+            tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "deleting job, already have ACL for" << user.knownAccountIds.first();
             delete job;
             QTimer::singleShot( 0, this, SLOT( queueNextJob() ) );
             return;
         }
         else
         {
-            tLog() << Q_FUNC_INFO << "activating job for user" << user.knownAccountIds.first();
+            tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "activating job for user" << user.knownAccountIds.first();
             m_jobCount++;
             JobStatusView::instance()->model()->addJob( job );
             connect( job, SIGNAL( userDecision( ACLRegistry::User ) ), this, SLOT( userDecision( ACLRegistry::User ) ) );
@@ -238,19 +238,19 @@ ACLRegistryImpl::wipeEntries()
 void
 ACLRegistryImpl::load()
 {
-    tLog() << Q_FUNC_INFO;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     QVariantList entryList = TomahawkSettings::instance()->aclEntries();
     foreach ( QVariant entry, entryList )
     {
         if ( !entry.isValid() || !entry.canConvert< ACLRegistry::User >() )
         {
-            tLog() << Q_FUNC_INFO << "entry is invalid";
+            tDebug() << Q_FUNC_INFO << "entry is invalid";
             continue;
         }
         ACLRegistry::User entryUser = entry.value< ACLRegistry::User >();
         if ( entryUser.knownAccountIds.empty() || entryUser.knownDbids.empty() )
         {
-            tLog() << Q_FUNC_INFO << "user known account/dbids is empty";
+            tDebug() << Q_FUNC_INFO << "user known account/dbids is empty";
             continue;
         }
         m_cache.append( entryUser );
@@ -261,11 +261,11 @@ ACLRegistryImpl::load()
 void
 ACLRegistryImpl::save()
 {
-    tLog() << Q_FUNC_INFO;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     QVariantList entryList;
     foreach ( ACLRegistry::User user, m_cache )
     {
-        tLog() << Q_FUNC_INFO << "user is" << user.uuid << "with known name" << user.knownAccountIds.first();
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "user is" << user.uuid << "with known name" << user.knownAccountIds.first();
         QVariant val = QVariant::fromValue< ACLRegistry::User >( user );
         if ( val.isValid() )
             entryList.append( val );

@@ -130,7 +130,7 @@ NewReleasesWidget::fetchData()
     requestData.allSources = true;
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 
-    tDebug( LOGVERBOSE ) << "NewReleases: requested InfoNewReleaseCapabilities";
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Requested InfoNewReleaseCapabilities";
 }
 
 
@@ -142,7 +142,7 @@ NewReleasesWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData request
 
     if ( !output.canConvert< QVariantMap >() )
     {
-        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "NewReleases: Could not parse output";
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Could not parse output";
         return;
     }
 
@@ -151,14 +151,14 @@ NewReleasesWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData request
     {
         case InfoSystem::InfoNewReleaseCapabilities:
         {
-            tLog() << "NewReleases: got InfoNewReleaseCapabilities";
+            tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Got InfoNewReleaseCapabilities";
             QStandardItem *rootItem= m_crumbModelLeft->invisibleRootItem();
 
             foreach ( const QString label, returnedData.keys() )
             {
                 QStandardItem *childItem = parseNode( rootItem, label, returnedData[label] );
                 rootItem->appendRow(childItem);
-                tLog() << "NewReleases: " << label;
+                tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "NewReleases:" << label;
             }
 
             m_sortedProxy->setSourceModel( m_crumbModelLeft );
@@ -267,7 +267,7 @@ NewReleasesWidget::leftCrumbIndexChanged( QModelIndex index )
     requestData.timeoutMillis = 20000;
     requestData.allSources = true;
 
-    qDebug() << "Making infosystem request for chart of type:" <<nrId;
+    tDebug( LOGVERBOSE ) << "Making infosystem request for chart of type:" << nrId;
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 
     m_queuedFetches.insert( nrId );

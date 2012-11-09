@@ -72,7 +72,7 @@ FadingPixmap::onAnimationStep( int frame )
 void
 FadingPixmap::onAnimationFinished()
 {
-    tDebug() << Q_FUNC_INFO;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
 
     m_oldPixmap = QPixmap();
     repaint();
