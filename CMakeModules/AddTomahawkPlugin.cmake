@@ -41,7 +41,7 @@ ENDMACRO(CDR)
 macro(add_tomahawk_plugin)
     parse_arguments(PLUGIN
         "SOURCES;UI;LINK_LIBRARIES;TYPE;EXPORT_MACRO;COMPILE_DEFINITIONS"
-        "NO_INSTALL"
+        "NO_INSTALL;SHARED_LIB"
         ${ARGN}
         )
     car(PLUGIN_NAME ${PLUGIN_DEFAULT_ARGS})
@@ -70,7 +70,11 @@ macro(add_tomahawk_plugin)
     endif()
 
     # add target
-    add_library(${target} MODULE ${PLUGIN_SOURCES})
+    if(NOT ${PLUGIN_SHARED_LIB})
+        add_library(${target} MODULE ${PLUGIN_SOURCES})
+    else()
+        add_library(${target} SHARED ${PLUGIN_SOURCES})
+    endif()
 
     # add qt modules
     qt5_use_modules(${target} Core Network Widgets Sql Xml DBus)
