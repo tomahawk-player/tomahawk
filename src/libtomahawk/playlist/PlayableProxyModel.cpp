@@ -289,6 +289,7 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
     unsigned int bitrate1 = 0, bitrate2 = 0;
     unsigned int mtime1 = 0, mtime2 = 0;
     unsigned int size1 = 0, size2 = 0;
+    unsigned int year1 = 0, year2 = 0;
     float score1 = 0, score2 = 0;
     QString origin1;
     QString origin2;
@@ -301,6 +302,7 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
         duration1 = r->duration();
         mtime1 = r->modificationTime();
         size1 = r->size();
+        year1 = r->year();
         score1 = r->score();
         origin1 = r->friendlySource().toLower();
         id1 = (qint64)&r;
@@ -312,6 +314,7 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
         duration2 = r->duration();
         mtime2 = r->modificationTime();
         size2 = r->size();
+        year2 = r->year();
         score2 = r->score();
         origin2 = r->friendlySource().toLower();
         id2 = (qint64)&r;
@@ -405,6 +408,13 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
             return id1 < id2;
 
         return mtime1 < mtime2;
+    }
+    else if ( column == PlayableModel::Year ) // sort by release year
+    {
+        if ( year1 == year2 )
+            return id1 < id2;
+
+        return year1 < year2;
     }
     else if ( column == PlayableModel::Filesize ) // sort by file size
     {
