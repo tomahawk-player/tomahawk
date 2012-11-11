@@ -73,7 +73,7 @@ Artist::get( const QString& name, bool autoCreate )
     artist->setWeakRef( artist.toWeakRef() );
     artist->loadId( autoCreate );
 
-    s_artistsByName[ name ] = artist;
+    s_artistsByName.insert( name, artist );
 
     return artist;
 }
@@ -83,6 +83,10 @@ artist_ptr
 Artist::get( unsigned int id, const QString& name )
 {
     QMutexLocker lock( &s_idCacheMutex );
+    if ( s_artistsByName.contains( name ) )
+    {
+        return s_artistsByName.value( name );
+    }
     if ( s_artistsById.contains( id ) )
     {
         return s_artistsById.value( id );
@@ -92,7 +96,10 @@ Artist::get( unsigned int id, const QString& name )
     a->setWeakRef( a.toWeakRef() );
 
     if ( id > 0 )
+    {
+        s_artistsByName.insert( name, a );
         s_artistsById.insert( id, a );
+    }
 
     return a;
 }
@@ -257,7 +264,6 @@ Artist::id() const
 
     if ( waiting )
     {
-
 #if ID_THREAD_DEBUG
         qDebug() << Q_FUNC_INFO << "Asked for artist ID and NOT loaded yet" << m_name << m_idFuture.isFinished();
 #endif
@@ -270,7 +276,7 @@ Artist::id() const
 #if ID_THREAD_DEBUG
         qDebug() << Q_FUNC_INFO << "Got loaded artist:" << m_name << finalid;
 #endif
-        
+
         s_idMutex.lockForWrite();
         m_id = finalid;
         m_waitingForFuture = false;

@@ -75,7 +75,7 @@ Album::get( const Tomahawk::artist_ptr& artist, const QString& name, bool autoCr
     album->setWeakRef( album.toWeakRef() );
     album->loadId( autoCreate );
 
-    s_albumsByName[ key ] = album;
+    s_albumsByName.insert( key, album );
 
     return album;
 }
@@ -88,6 +88,10 @@ Album::get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& ar
     static QMutex s_mutex;
 
     QMutexLocker lock( &s_idCacheMutex );
+    if ( s_albumsByName.contains( name ) )
+    {
+        return s_albumsByName.value( name );
+    }
     if ( s_albumsById.contains( id ) )
     {
         return s_albumsById.value( id );
@@ -97,7 +101,10 @@ Album::get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& ar
     a->setWeakRef( a.toWeakRef() );
 
     if ( id > 0 )
+    {
         s_albumsById.insert( id, a );
+        s_albumsByName.insert( name, a );
+    }
 
     return a;
 }
