@@ -144,6 +144,8 @@ FlexibleView::setDetailedView( TrackView* view )
         delete m_detailedView;
     }
 
+    connect( view, SIGNAL( destroyed( QWidget* ) ), SLOT( onWidgetDestroyed( QWidget* ) ), Qt::UniqueConnection );
+
     view->setPlaylistInterface( m_playlistInterface );
 
     m_detailedView = view;
@@ -288,5 +290,13 @@ FlexibleView::setPixmap( const QPixmap& pixmap )
     m_pixmap = pixmap;
     m_header->setPixmap( pixmap );
 }
+
+
+void
+FlexibleView::onWidgetDestroyed( QWidget* widget )
+{
+    emit destroyed( this );
+}
+
 
 #include "FlexibleView.moc"

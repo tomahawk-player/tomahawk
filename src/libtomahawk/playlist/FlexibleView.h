@@ -72,8 +72,10 @@ public slots:
 
 signals:
     void modeChanged( FlexibleViewMode mode );
+    void destroyed( QWidget* widget );
 
 private slots:
+    void onWidgetDestroyed( QWidget* widget );
 
 private:
     FlexibleHeader* m_header;

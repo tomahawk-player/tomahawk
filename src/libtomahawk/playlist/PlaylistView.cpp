@@ -73,9 +73,6 @@ void
 PlaylistView::keyPressEvent( QKeyEvent* event )
 {
     TrackView::keyPressEvent( event );
-
-    if ( !model() )
-        return;
 }
 
 
@@ -124,7 +121,6 @@ PlaylistView::updaters() const
 void
 PlaylistView::onDeleted()
 {
-    qDebug() << Q_FUNC_INFO;
     emit destroyed( widget() );
 }
 
