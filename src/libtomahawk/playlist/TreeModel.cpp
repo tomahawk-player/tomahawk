@@ -417,6 +417,6 @@ TreeModel::indexFromAlbum( const Tomahawk::album_ptr& album ) const
         }
     }
 
-    tDebug() << "Could not find item for artist:" << album->name() << album->artist()->name();
+    tDebug() << "Could not find item for album:" << album->name() << album->artist()->name();
     return QModelIndex();
 }
