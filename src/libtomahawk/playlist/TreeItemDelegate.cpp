@@ -34,7 +34,6 @@
 
 #include "PlayableItem.h"
 #include "TreeProxyModel.h"
-#include "Source.h"
 #include "TreeView.h"
 
 
@@ -43,14 +42,6 @@ TreeItemDelegate::TreeItemDelegate( TreeView* parent, TreeProxyModel* proxy )
     , m_view( parent )
     , m_model( proxy )
 {
-}
-
-
-QSize
-TreeItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
-{
-    QSize size = QStyledItemDelegate::sizeHint( option, index );
-    return size;
 }
 
 
