@@ -280,10 +280,11 @@ PlaylistModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int
         Pipeline::instance()->resolve( queries );
         emit loadingStarted();
     }
+    else
+        finishLoading();
 
     emit endInsertRows();
     emit trackCountChanged( rowCount( QModelIndex() ) );
-    finishLoading();
 }
 
 
