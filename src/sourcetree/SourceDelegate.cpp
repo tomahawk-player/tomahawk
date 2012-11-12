@@ -348,7 +348,9 @@ SourceDelegate::paintGroup( QPainter* painter, const QStyleOptionViewItem& optio
         if ( option.state & QStyle::State_Open )
             text = tr( "Hide" );
 
-        painter->setFont( option.font );
+        QFont font = option.font;
+        font.setBold( true );
+        painter->setFont( font );
         QTextOption to( Qt::AlignBottom | Qt::AlignRight );
 
         // draw close icon
