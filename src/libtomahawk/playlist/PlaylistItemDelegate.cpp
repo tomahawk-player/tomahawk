@@ -72,7 +72,9 @@ PlaylistItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModel
         {
             int rowHeight = option.fontMetrics.height() + 8;
             size.setHeight( rowHeight * 2 );
-        } else if ( style == PlayableProxyModel::Detailed ) {
+        }
+        else if ( style == PlayableProxyModel::Detailed )
+        {
             int rowHeight = option.fontMetrics.height() * 1.4;
             size.setHeight( rowHeight );
         }
