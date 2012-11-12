@@ -20,7 +20,6 @@
 #include "PlaylistView.h"
 
 #include <QKeyEvent>
-#include <QPainter>
 
 #include "ViewManager.h"
 #include "utils/Logger.h"
