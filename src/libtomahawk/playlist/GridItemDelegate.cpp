@@ -138,7 +138,7 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     qreal opacity = -1.;
     if ( m_hoverFaders.contains( index ) )
     {
-        const qreal pct = ( m_hoverFaders[ index ]->currentFrame() / 100. );
+        const qreal pct = ( m_hoverFaders[ index ]->currentFrame() / 100.0 );
         opacity = 0.35 - pct * 0.35;
     }
     else if ( m_hoverIndex == index )
@@ -146,7 +146,7 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
         opacity = 0.35;
     }
 
-    if ( opacity > -1. )
+    if ( opacity > -1.0 )
     {
         painter->save();
 
@@ -158,16 +158,6 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
         painter->restore();
     }
 
-    painter->save();
-
-    painter->setPen( Qt::black );
-    painter->setBrush( Qt::black );
-    painter->setOpacity( 0.5 );
-    painter->drawRoundedRect( r.adjusted( 4, +r.height() - 36, -4, -4 ), 3, 3 );
-
-    painter->restore();
-
-    painter->setPen( opt.palette.color( QPalette::HighlightedText ) );
     QTextOption to;
     to.setWrapMode( QTextOption::NoWrap );
 
@@ -178,18 +168,25 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     boldFont.setBold( true );
     boldFont.setPointSize( TomahawkUtils::defaultFontSize() + 1 );
 
-    QRect textRect = option.rect.adjusted( 6, option.rect.height() - 36, -4, -6 );
-    painter->setFont( font );
-    int bottomHeight = painter->fontMetrics().boundingRect( bottom ).height();
-    painter->setFont( boldFont );
-    int topHeight = painter->fontMetrics().boundingRect( top ).height();
+    int bottomHeight = QFontMetrics( font ).boundingRect( bottom ).height();
+    int topHeight = QFontMetrics( boldFont ).boundingRect( top ).height();
+    int frameHeight = bottomHeight + topHeight + 10;
 
+    painter->save();
+    painter->setPen( Qt::black );
+    painter->setBrush( Qt::black );
+    painter->setOpacity( 0.5 );
+    painter->drawRoundedRect( r.adjusted( 4, r.height() - frameHeight, -4, -4 ), 3, 3 );
+    painter->restore();
+
+    painter->setPen( opt.palette.color( QPalette::HighlightedText ) );
+
+    QRect textRect = option.rect.adjusted( 6, option.rect.height() - frameHeight, -4, -6 );
     bool oneLiner = false;
     if ( bottom.isEmpty() )
         oneLiner = true;
-    else
-        oneLiner = ( textRect.height() < topHeight + bottomHeight );
 
+    painter->setFont( boldFont );
     if ( oneLiner )
     {
         to.setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
