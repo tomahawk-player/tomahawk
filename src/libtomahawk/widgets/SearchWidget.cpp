@@ -58,6 +58,8 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
 
     TomahawkUtils::unmarginLayout( ui->verticalLayout );
 
+    m_artistsModel->startLoading();
+    m_albumsModel->startLoading();
     m_resultsModel->startLoading();
     m_queries << Tomahawk::Query::get( search, uuid() );
 
@@ -151,6 +153,9 @@ SearchWidget::onQueryFinished()
 {
     sortAlbums();
     sortArtists();
+
+    m_artistsModel->finishLoading();
+    m_albumsModel->finishLoading();
     m_resultsModel->finishLoading();
 }
 
