@@ -14,7 +14,7 @@ INCLUDE(CheckSymbolExists)
 INCLUDE(FindLibraryWithDebug)
 
 # try to locate a patched unstable version (for comp's sake *sigh*) first
-FIND_PACKAGE(CLuceneUnstable)
+FIND_PACKAGE(CLuceneUnstable QUIET)
 IF(CLUCENEUNSTABLE_FOUND)
     SET(CLucene_FOUND TRUE)
     SET(CLUCENE_INCLUDE_DIR ${CLUCENE_UNSTABLE_INCLUDE_DIRS})
