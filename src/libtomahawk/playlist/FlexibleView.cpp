@@ -268,10 +268,16 @@ FlexibleView::pixmap() const
 bool
 FlexibleView::jumpToCurrentTrack()
 {
-    m_trackView->jumpToCurrentTrack();
-    m_detailedView->jumpToCurrentTrack();
-    m_gridView->jumpToCurrentTrack();
-    return true;
+    tDebug() << Q_FUNC_INFO;
+
+    bool b = false;
+
+    // note: the order of comparison is important here, if we'd write "b || foo" then foo will not be executed if b is already true!
+    b = m_trackView->jumpToCurrentTrack() || b;
+    b = m_detailedView->jumpToCurrentTrack() || b;
+    b = m_gridView->jumpToCurrentTrack() || b;
+
+    return b;
 }
 
 
