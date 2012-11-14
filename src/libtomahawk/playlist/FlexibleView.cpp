@@ -82,6 +82,7 @@ FlexibleView::FlexibleView( QWidget* parent )
     m_detailedView->setPlaylistInterface( m_playlistInterface );
 
     m_detailedView->setColumnHidden( PlayableModel::Age, true ); // Hide age column per default
+    m_detailedView->setColumnHidden( PlayableModel::Filesize, true ); // Hide filesize column per default
     m_detailedView->setColumnHidden( PlayableModel::Composer, true ); // Hide composer column per default
 
     PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LovedTracks, m_trackView, m_trackView->proxyModel() );
