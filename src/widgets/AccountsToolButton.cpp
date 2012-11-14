@@ -115,6 +115,7 @@ AccountsToolButton::AccountsToolButton( QWidget* parent )
 void
 AccountsToolButton::mousePressEvent( QMouseEvent* event )
 {
+    QToolButton::mousePressEvent( event );
     if( m_popup )
     {
         QPoint myPos = mapToGlobal( rect().bottomRight() );
@@ -126,7 +127,6 @@ AccountsToolButton::mousePressEvent( QMouseEvent* event )
             m_popup->hide();
         event->accept();
     }
-    QToolButton::mousePressEvent( event );
 }
 
 void
