@@ -103,20 +103,54 @@ PlayableProxyModelPlaylistInterface::siblingItem( int itemsAway, bool readOnly )
 
     PlayableProxyModel* proxyModel = m_proxyModel.data();
 
+    while ( m_shuffleHistory.count() >= proxyModel->rowCount() )
+    {
+        m_shuffleHistory.removeFirst();
+    }
+
     QModelIndex idx = proxyModel->index( 0, 0 );
     if ( proxyModel->rowCount() )
     {
         if ( m_shuffled )
         {
             // random mode is enabled
-            // TODO come up with a clever random logic, that keeps track of previously played items
-            idx = proxyModel->index( qrand() % proxyModel->rowCount(), 0 );
+            if ( m_shuffleCache.isValid() )
+            {
+                idx = m_shuffleCache;
+            }
+            else
+            {
+                int safetyCounter = 0;
+                PlayableItem* item = 0;
+                do
+                {
+                    safetyCounter++;
+                    idx = proxyModel->index( qrand() % proxyModel->rowCount(), 0 );
+                    item = proxyModel->itemFromIndex( proxyModel->mapToSource( idx ) );
+                }
+                while ( safetyCounter < proxyModel->rowCount() &&
+                      ( !item || !item->query()->playable() || m_shuffleHistory.contains( item->query() ) ) );
+
+                if ( item && item->query()->playable() )
+                {
+                    if ( readOnly )
+                    {
+                        m_shuffleCache = idx;
+                        tDebug( LOGVERBOSE ) << "Next shuffled PlaylistItem cached:" << item->query()->toString() << item->query()->results().at( 0 )->url()
+                                             << "- after" << safetyCounter << "tries to find a track";
+                    }
+                }
+                else
+                {
+                    tDebug() << Q_FUNC_INFO << "Error finding next shuffled playable track";
+                }
+            }
         }
         else if ( proxyModel->currentIndex().isValid() )
         {
+            // random mode is disabled
             idx = proxyModel->currentIndex();
 
-            // random mode is disabled
             if ( m_repeatMode != PlaylistModes::RepeatOne )
             {
                 // keep progressing through the playlist normally
@@ -146,9 +180,14 @@ PlayableProxyModelPlaylistInterface::siblingItem( int itemsAway, bool readOnly )
         PlayableItem* item = proxyModel->itemFromIndex( proxyModel->mapToSource( idx ) );
         if ( item && item->query()->playable() )
         {
-            qDebug() << "Next PlaylistItem found:" << item->query()->toString() << item->query()->results().at( 0 )->url();
+            tDebug( LOGVERBOSE ) << "Next PlaylistItem found:" << item->query()->toString() << item->query()->results().at( 0 )->url();
             if ( !readOnly )
+            {
                 proxyModel->setCurrentIndex( idx );
+                m_shuffleHistory << item->query();
+                m_shuffleCache = QPersistentModelIndex();
+            }
+
             return item->query()->results().at( 0 );
         }
 
@@ -172,6 +211,7 @@ PlayableProxyModelPlaylistInterface::currentItem() const
     PlayableItem* item = proxyModel->itemFromIndex( proxyModel->mapToSource( proxyModel->currentIndex() ) );
     if ( item && !item->query().isNull() && item->query()->playable() )
         return item->query()->results().at( 0 );
+
     return Tomahawk::result_ptr();
 }
 

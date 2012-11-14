@@ -59,8 +59,11 @@ public slots:
 
 protected:
     QWeakPointer< PlayableProxyModel > m_proxyModel;
+
     PlaylistModes::RepeatMode m_repeatMode;
     bool m_shuffled;
+    QList< Tomahawk::query_ptr > m_shuffleHistory;
+    QPersistentModelIndex m_shuffleCache;
 };
 
 } //ns
