@@ -51,7 +51,7 @@ public:
 
 public slots:
     void shortenLink( const QUrl& url, const QVariant &callbackObj = QVariant() );
-    
+
 #ifndef ENABLE_HEADLESS
 
     /// Takes a spotify link and performs the default open action on it
@@ -96,7 +96,7 @@ private slots:
     void playlistReadyToShow();
 
     void xspfCreated( const QByteArray& xspf );
-    
+
     void playOrQueueNow( const Tomahawk::query_ptr& );
     void playNow( const Tomahawk::query_ptr& );
 #endif
@@ -115,7 +115,7 @@ private:
     bool handleAutoPlaylistCommand( const QUrl& url );
     bool handleImportCommand( const QUrl& url );
     bool doQueueAdd( const QStringList& parts, const QList< QPair< QString, QString > >& queryItems );
-    
+
     bool playSpotify( const QUrl& url );
     bool queueSpotify( const QStringList& parts, const QList< QPair< QString, QString > >& queryItems );
     bool playRdio( const QUrl& url );

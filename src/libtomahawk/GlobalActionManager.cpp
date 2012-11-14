@@ -1110,10 +1110,10 @@ GlobalActionManager::playSpotify( const QUrl& url )
     return true;
 }
 
+
 void
 GlobalActionManager::playNow( const query_ptr& q )
 {
-
     Pipeline::instance()->resolve( q, true );
 
     m_waitingToPlay = q;
@@ -1270,10 +1270,8 @@ GlobalActionManager::postShortenFinished()
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
     Q_ASSERT( reply );
     const QByteArray raw = reply->readAll();
-    qDebug() << "GOT REPLYL" << raw;
 
     const QUrl url = QUrl::fromUserInput( raw );
-    qDebug() << "GOT POSTED SHORT URL:" << url.toString();
     QClipboard* cb = QApplication::clipboard();
 
     const QByteArray data = percentEncode( url );
@@ -1288,8 +1286,7 @@ GlobalActionManager::postShortenFinished()
 void
 GlobalActionManager::shortenLinkRequestError( QNetworkReply::NetworkError error )
 {
-    qDebug() << Q_FUNC_INFO;
-    qDebug() << "Network Error: " << error;
+    tDebug() << Q_FUNC_INFO << "Network Error:" << error;
 
     QNetworkReply *reply = qobject_cast<QNetworkReply*>( sender() );
 
@@ -1417,7 +1414,7 @@ GlobalActionManager::hostname() const
 
 
 QByteArray
-GlobalActionManager::percentEncode (const QUrl &url ) const
+GlobalActionManager::percentEncode( const QUrl& url ) const
 {
     QByteArray data = url.toEncoded();
 
