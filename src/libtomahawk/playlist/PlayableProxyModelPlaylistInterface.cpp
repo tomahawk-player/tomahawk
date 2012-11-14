@@ -103,7 +103,7 @@ PlayableProxyModelPlaylistInterface::siblingItem( int itemsAway, bool readOnly )
 
     PlayableProxyModel* proxyModel = m_proxyModel.data();
 
-    while ( m_shuffleHistory.count() >= proxyModel->rowCount() )
+    while ( m_shuffleHistory.count() && m_shuffleHistory.count() >= proxyModel->rowCount() )
     {
         m_shuffleHistory.removeFirst();
     }
