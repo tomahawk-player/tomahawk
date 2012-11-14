@@ -64,15 +64,15 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
 
     QFont f = font();
     f.setBold( true );
-    f.setPointSize( TomahawkUtils::defaultFontSize() + 8 );
+    f.setPointSize( TomahawkUtils::defaultFontSize() + 7 );
     ui->trackLabel->setFont( f );
 //    ui->similarTracksLabel->setFont( f );
 
-    f.setPointSize( TomahawkUtils::defaultFontSize() + 5 );
+    f.setPointSize( TomahawkUtils::defaultFontSize() + 4 );
     ui->artistLabel->setFont( f );
     ui->albumLabel->setFont( f );
 
-    f.setPointSize( TomahawkUtils::defaultFontSize() + 3 );
+    f.setPointSize( TomahawkUtils::defaultFontSize() + 2 );
     ui->statsLabel->setFont( f );
 
 //    ui->similarTracksView->setStyleSheet( "QListView { background-color: transparent; } QListView::item { background-color: transparent; }" );
