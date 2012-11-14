@@ -318,6 +318,11 @@ FlexibleView::onModelChanged()
     m_header->setPixmap( m_pixmap );
     m_header->setCaption( m_model->title() );
     m_header->setDescription( m_model->description() );
+
+    if ( m_model->isReadOnly() )
+        setEmptyTip( tr( "This playlist is currently empty." ) );
+    else
+        setEmptyTip( tr( "This playlist is currently empty. Add some tracks to it and enjoy the music!" ) );
 }
 
 
