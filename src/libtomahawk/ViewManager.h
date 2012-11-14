@@ -147,6 +147,7 @@ public slots:
     void historyBack();
     void historyForward();
 
+    QList< Tomahawk::ViewPage* > allPages() const;
     QList< Tomahawk::ViewPage* > historyPages() const;
     void destroyPage( Tomahawk::ViewPage* page );
 

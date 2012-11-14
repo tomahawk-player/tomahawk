@@ -474,6 +474,16 @@ ViewManager::historyForward()
 
 
 QList<ViewPage*>
+ViewManager::allPages() const
+{
+    QList< ViewPage* > pages = m_pageHistoryBack + m_pageHistoryFwd;
+    pages << m_currentPage;
+
+    return pages;
+}
+
+
+QList<ViewPage*>
 ViewManager::historyPages() const
 {
     return m_pageHistoryBack + m_pageHistoryFwd;
@@ -788,7 +798,7 @@ ViewManager::pageForPlaylist(const playlist_ptr& pl) const
 ViewPage*
 ViewManager::pageForInterface( Tomahawk::playlistinterface_ptr interface ) const
 {
-    QList< Tomahawk::ViewPage* > pages = historyPages();
+    QList< Tomahawk::ViewPage* > pages = allPages();
 
     for ( int i = 0; i < pages.count(); i++ )
     {
