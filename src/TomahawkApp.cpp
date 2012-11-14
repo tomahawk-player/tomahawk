@@ -424,7 +424,7 @@ TomahawkApp::printHelp()
     echo( "  --help         Show this help\n" );
     echo( "  --http         Initialize HTTP server\n" );
     echo( "  --filescan     Scan files on startup\n" );
-    echo( "  --headless     Do not create a main window\n" );
+//    echo( "  --headless     Run without a GUI\n" );
     echo( "  --hide         Hide main window on startup\n" );
     echo( "  --testdb       Use a test database instead of real collection\n" );
     echo( "  --noupnp       Disable UPnP\n" );
