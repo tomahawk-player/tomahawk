@@ -95,9 +95,9 @@ Artist::get( unsigned int id, const QString& name )
     artist_ptr a = artist_ptr( new Artist( id, name ), &QObject::deleteLater );
     a->setWeakRef( a.toWeakRef() );
 
+    s_artistsByName.insert( name, a );
     if ( id > 0 )
     {
-        s_artistsByName.insert( name, a );
         s_artistsById.insert( id, a );
     }
 
@@ -283,6 +283,7 @@ Artist::id() const
 
         if ( m_id > 0 )
             s_artistsById[ m_id ] = m_ownRef.toStrongRef();
+
         s_idMutex.unlock();
     }
 
