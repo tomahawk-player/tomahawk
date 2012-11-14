@@ -120,7 +120,10 @@ AccountsToolButton::mousePressEvent( QMouseEvent* event )
         QPoint myPos = mapToGlobal( rect().bottomRight() );
         m_popup->anchorAt( myPos );
         m_popup->setArrowOffset( rect().width() / 2 );
-        m_popup->show();
+        if ( !m_popup->isVisible() )
+            m_popup->show();
+        else
+            m_popup->hide();
         event->accept();
     }
     QToolButton::mousePressEvent( event );
