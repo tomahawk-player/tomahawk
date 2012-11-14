@@ -406,6 +406,7 @@ GridView::setFilter( const QString& filter )
     return true;
 }
 
+
 bool
 GridView::jumpToCurrentTrack()
 {
