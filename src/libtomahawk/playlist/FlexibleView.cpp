@@ -24,6 +24,7 @@
 
 #include "playlist/FlexibleHeader.h"
 #include "playlist/PlayableModel.h"
+#include "playlist/PlaylistModel.h"
 #include "playlist/TrackView.h"
 #include "playlist/GridView.h"
 #include "playlist/PlaylistLargeItemDelegate.h"
@@ -187,9 +188,21 @@ FlexibleView::setPlayableModel( PlayableModel* model )
     m_detailedView->proxyModel()->sort( -1 );
     m_gridView->proxyModel()->sort( -1 );
 
-    m_header->setPixmap( m_pixmap );
-    m_header->setCaption( model->title() );
-    m_header->setDescription( model->description() );
+    onModelChanged();
+}
+
+
+void
+FlexibleView::setPlaylistModel( PlaylistModel* model )
+{
+    if ( m_model )
+    {
+        disconnect( m_model, SIGNAL( changed() ), this, SLOT( onModelChanged() ) );
+    }
+
+    setPlayableModel( model );
+
+    connect( model, SIGNAL( changed() ), SLOT( onModelChanged() ), Qt::UniqueConnection );
 }
 
 
@@ -289,6 +302,15 @@ FlexibleView::setPixmap( const QPixmap& pixmap )
 {
     m_pixmap = pixmap;
     m_header->setPixmap( pixmap );
+}
+
+
+void
+FlexibleView::onModelChanged()
+{
+    m_header->setPixmap( m_pixmap );
+    m_header->setCaption( m_model->title() );
+    m_header->setDescription( m_model->description() );
 }
 
 

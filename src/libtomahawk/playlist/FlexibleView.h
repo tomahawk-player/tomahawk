@@ -28,6 +28,7 @@ class QStackedWidget;
 class GridView;
 class TrackView;
 class PlayableModel;
+class PlaylistModel;
 class FlexibleHeader;
 class FlexibleViewInterface;
 
@@ -62,8 +63,10 @@ public:
     void setDetailedView( TrackView* view );
     void setGridView( GridView* view );
 
-    void setPixmap( const QPixmap& pixmap );
     void setPlayableModel( PlayableModel* model );
+    void setPlaylistModel( PlaylistModel* model );
+
+    void setPixmap( const QPixmap& pixmap );
     void setEmptyTip( const QString& tip );
 
 public slots:
@@ -75,6 +78,7 @@ signals:
     void destroyed( QWidget* widget );
 
 private slots:
+    void onModelChanged();
     void onWidgetDestroyed( QWidget* widget );
 
 private:
