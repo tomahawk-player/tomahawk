@@ -19,18 +19,18 @@
 
 #include "JspfLoader.h"
 
-
 #include <QApplication>
 #include <QDomDocument>
 #include <QMessageBox>
 
 #include <qjson/parser.h>
 
-#include "utils/TomahawkUtils.h"
-#include "utils/Logger.h"
-
 #include "SourceList.h"
 #include "Playlist.h"
+
+#include "utils/NetworkReply.h"
+#include "utils/TomahawkUtils.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 
@@ -59,23 +59,19 @@ void
 JSPFLoader::load( const QUrl& url )
 {
     QNetworkRequest request( url );
+
     Q_ASSERT( TomahawkUtils::nam() != 0 );
-    QNetworkReply* reply = TomahawkUtils::nam()->get( request );
+    NetworkReply* reply = new NetworkReply( TomahawkUtils::nam()->get( request ) );
 
-    // isn't there a race condition here? something could happen before we connect()
-    // no---the event loop is needed to make the request, i think (leo)
-    connect( reply, SIGNAL( finished() ),
-             SLOT( networkLoadFinished() ) );
-
-    connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ),
-             SLOT( networkError( QNetworkReply::NetworkError ) ) );
+    connect( reply, SIGNAL( finished() ), SLOT( networkLoadFinished() ) );
+    connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), SLOT( networkError( QNetworkReply::NetworkError ) ) );
 }
 
 
 void
 JSPFLoader::load( QFile& file )
 {
-    if( file.open( QFile::ReadOnly ) )
+    if ( file.open( QFile::ReadOnly ) )
     {
         m_body = file.readAll();
         gotBody();
@@ -101,17 +97,24 @@ JSPFLoader::reportError()
 void
 JSPFLoader::networkLoadFinished()
 {
-    QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
-    m_body = reply->readAll();
-    gotBody();
+    NetworkReply* r = qobject_cast<NetworkReply*>( sender() );
+    if ( r->reply()->error() == QNetworkReply::NoError )
+    {
+        m_body = r->reply()->readAll();
+        gotBody();
+    }
+
+    r->deleteLater();
 }
 
 
 void
 JSPFLoader::networkError( QNetworkReply::NetworkError e )
 {
-    tLog() << Q_FUNC_INFO << "Network error loading jspf" << e;
     reportError();
+
+    NetworkReply* r = qobject_cast<NetworkReply*>( sender() );
+    r->deleteLater();
 }
 
 
@@ -178,7 +181,7 @@ JSPFLoader::gotBody()
                 continue;
 
             q->setDuration( duration.toInt() / 1000 );
-            if( !url.isEmpty() )
+            if ( !url.isEmpty() )
             {
                 q->setResultHint( url );
                 q->setSaveHTTPResultHint( true );
