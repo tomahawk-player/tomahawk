@@ -3,7 +3,7 @@
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2011, Hugo Lindström <hugolm84@gmail.com>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
- * 
+ *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
  *   the Free Software Foundation, either version 3 of the License, or
@@ -20,22 +20,25 @@
 
 #include "DropJobNotifier.h"
 
-#include "utils/Logger.h"
-#include "utils/TomahawkUtils.h"
-#include "Query.h"
-#include "SourceList.h"
-#include "jobview/JobStatusView.h"
-#include "jobview/JobStatusModel.h"
-#include "DropJob.h"
-#include <qjson/parser.h>
-#include "DropJobNotifier.h"
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
+
+#include <qjson/parser.h>
+
+#include "Query.h"
+#include "SourceList.h"
+#include "DropJob.h"
+#include "DropJobNotifier.h"
+#include "jobview/JobStatusView.h"
+#include "jobview/JobStatusModel.h"
+#include "utils/NetworkReply.h"
+#include "utils/TomahawkUtils.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 
 
-DropJobNotifier::DropJobNotifier( QPixmap servicePixmap, QString service, DropJob::DropType type, QNetworkReply* job )
+DropJobNotifier::DropJobNotifier( QPixmap servicePixmap, QString service, DropJob::DropType type, NetworkReply* job )
     : JobStatusItem()
     , m_type( "unknown" )
     , m_job( 0 )

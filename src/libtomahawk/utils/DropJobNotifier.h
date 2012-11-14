@@ -30,7 +30,8 @@
 #include <QStringList>
 #include <QPixmap>
 
-class QNetworkReply;
+class NetworkReply;
+
 namespace Tomahawk
 {
 
@@ -38,7 +39,7 @@ class DLLEXPORT DropJobNotifier : public JobStatusItem
 {
     Q_OBJECT
 public:
-    DropJobNotifier( QPixmap pixmap, QString service, DropJob::DropType type, QNetworkReply* job );
+    DropJobNotifier( QPixmap pixmap, QString service, DropJob::DropType type, NetworkReply* job );
 
     // No QNetworkReply, needs manual finished call
     DropJobNotifier( QPixmap pixmap, DropJob::DropType type );
@@ -57,7 +58,7 @@ private:
     void init( DropJob::DropType type );
 
     QString m_type;
-    QNetworkReply* m_job;
+    NetworkReply* m_job;
     QPixmap m_pixmap;
     QString m_service;
 };
