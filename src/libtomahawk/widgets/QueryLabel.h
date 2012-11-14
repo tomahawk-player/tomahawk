@@ -77,9 +77,6 @@ public:
     void setTextPen( const QPen& );
     QPen textPen() const;
 
-    void setFont( const QFont& );
-    QFont font() const;
-
     void setExtraContentsMargins( int left, int top, int right, int bottom );
     void setJumpLinkVisible( bool visible );
 
@@ -136,9 +133,8 @@ private:
     Qt::Alignment m_align;
     Qt::TextElideMode m_mode;
 
-    bool m_useCustomPen, m_useCustomFont;
+    bool m_useCustomPen;
     QPen m_textPen;
-    QFont m_font;
 
     DisplayType m_hoverType;
     QRect m_hoverArea;

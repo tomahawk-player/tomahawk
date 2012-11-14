@@ -89,7 +89,6 @@ QueryLabel::init()
     setMouseTracking( true );
 
     m_useCustomPen = false;
-    m_useCustomFont = false;
     m_align = Qt::AlignLeft | Qt::AlignVCenter;
     m_mode = Qt::ElideMiddle;
 
@@ -308,21 +307,6 @@ QueryLabel::setElideMode( Qt::TextElideMode mode )
 }
 
 
-QFont
-QueryLabel::font() const
-{
-    return m_font;
-}
-
-
-void
-QueryLabel::setFont( const QFont& font )
-{
-    m_useCustomFont = true;
-    m_font = font;
-}
-
-
 void
 QueryLabel::updateLabel()
 {
@@ -381,16 +365,10 @@ QueryLabel::paintEvent( QPaintEvent* event )
     QRect r = contentsRect();
     QString s = text();
     const QString elidedText = fontMetrics().elidedText( s, m_mode, r.width() );
+    const QFontMetrics& fm = fontMetrics();
 
     p.save();
     p.setRenderHint( QPainter::Antialiasing );
-
-    QFontMetrics fm = fontMetrics();
-    if ( m_useCustomFont )
-    {
-        p.setFont( m_font );
-        fm = QFontMetrics( m_font );
-    }
 
     if ( m_hoverArea.width() )
     {
@@ -601,8 +579,6 @@ QueryLabel::mouseMoveEvent( QMouseEvent* event )
     }
 
     QFontMetrics fm = fontMetrics();
-    if ( m_useCustomFont )
-        fm = QFontMetrics( m_font );
 
     int dashX = fm.width( DASH );
     int artistX = m_type & Artist ? fm.width( artist()->name() ) : 0;
