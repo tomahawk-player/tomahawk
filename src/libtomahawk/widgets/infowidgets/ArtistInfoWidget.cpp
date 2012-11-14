@@ -66,12 +66,12 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
     m_albumsModel = new PlayableModel( ui->albums );
     ui->albums->setPlayableModel( m_albumsModel );
-    ui->topHits->setEmptyTip( tr( "Sorry, we could not find any albums for this artist!" ) );
+    ui->albums->setEmptyTip( tr( "Sorry, we could not find any albums for this artist!" ) );
 
     m_relatedModel = new PlayableModel( ui->relatedArtists );
     ui->relatedArtists->setPlayableModel( m_relatedModel );
     ui->relatedArtists->proxyModel()->sort( -1 );
-    ui->topHits->setEmptyTip( tr( "Sorry, we could not find any related artists!" ) );
+    ui->relatedArtists->setEmptyTip( tr( "Sorry, we could not find any related artists!" ) );
 
     m_topHitsModel = new PlaylistModel( ui->topHits );
     ui->topHits->proxyModel()->setStyle( PlayableProxyModel::Short );
