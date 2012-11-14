@@ -29,19 +29,23 @@ AnimationHelper::AnimationHelper( const QModelIndex& index, QObject *parent )
 {
     m_expandTimer.setSingleShot( true );
     m_expandTimer.setInterval( 600 );
-    connect( &m_expandTimer, SIGNAL(timeout()), SLOT(expandTimeout()));
+    connect( &m_expandTimer, SIGNAL( timeout() ), SLOT(expandTimeout() ) );
 
     m_collapseTimer.setSingleShot( true );
     m_collapseTimer.setInterval( 600 );
-    connect( &m_collapseTimer, SIGNAL(timeout()), SLOT(collapseTimeout()));
+    connect( &m_collapseTimer, SIGNAL( timeout() ), SLOT(collapseTimeout() ) );
 }
 
-bool AnimationHelper::initialized() const
+
+bool
+AnimationHelper::initialized() const
 {
     return m_expandAnimation != 0;
 }
 
-void AnimationHelper::initialize( const QSize& startValue, const QSize& endValue, int duration )
+
+void
+AnimationHelper::initialize( const QSize& startValue, const QSize& endValue, int duration )
 {
     m_size = startValue;
     m_targetSize = endValue;
@@ -53,31 +57,37 @@ void AnimationHelper::initialize( const QSize& startValue, const QSize& endValue
     m_expandAnimation->setDuration( duration );
     m_expandAnimation->setEasingCurve( QEasingCurve::OutExpo );
     qDebug() << "starting animation" << startValue << endValue << duration;
-    connect( m_expandAnimation, SIGNAL( finished() ), SLOT(expandAnimationFinished()));
+    connect( m_expandAnimation, SIGNAL( finished() ), SLOT( expandAnimationFinished() ) );
 
     m_collapseAnimation= new QPropertyAnimation( this, "size", this );
     m_collapseAnimation->setStartValue( endValue );
     m_collapseAnimation->setEndValue( startValue );
     m_collapseAnimation->setDuration( duration );
     m_collapseAnimation->setEasingCurve( QEasingCurve::InExpo );
-    connect( m_collapseAnimation, SIGNAL( finished() ), SLOT(collapseAnimationFinished()));
+    connect( m_collapseAnimation, SIGNAL( finished() ), SLOT( collapseAnimationFinished() ) );
 
 }
 
-void AnimationHelper::setSize( const QSize& size )
+
+void
+AnimationHelper::setSize( const QSize& size )
 {
     m_size = size;
     emit sizeChanged();
     //qDebug() << "animaton setting size to" << size;
 }
 
-void AnimationHelper::expand()
+
+void
+AnimationHelper::expand()
 {
     m_collapseTimer.stop();
     m_expandTimer.start();
 }
 
-void AnimationHelper::collapse( bool immediately )
+
+void
+AnimationHelper::collapse( bool immediately )
 {
     if ( m_expandTimer.isActive() )
     {
@@ -95,7 +105,9 @@ void AnimationHelper::collapse( bool immediately )
         m_collapseTimer.start();
 }
 
-bool AnimationHelper::partlyExpanded()
+
+bool
+AnimationHelper::partlyExpanded()
 {
     return m_size != m_startSize;
 //    return m_fullyExpanded
@@ -103,28 +115,38 @@ bool AnimationHelper::partlyExpanded()
 //            || ( m_collapseAnimation->state() == QPropertyAnimation::Running && m_collapseAnimation->currentTime() < 100 );
 }
 
-bool AnimationHelper::fullyExpanded()
+
+bool
+AnimationHelper::fullyExpanded()
 {
     return m_fullyExpanded;
 }
 
-void AnimationHelper::expandTimeout()
+
+void
+AnimationHelper::expandTimeout()
 {
     m_expandAnimation->start();
 }
 
-void AnimationHelper::collapseTimeout()
+
+void
+AnimationHelper::collapseTimeout()
 {
     m_fullyExpanded = false;
     m_collapseAnimation->start();
 }
 
-void AnimationHelper::expandAnimationFinished()
+
+void
+AnimationHelper::expandAnimationFinished()
 {
     m_fullyExpanded = true;
 }
 
-void AnimationHelper::collapseAnimationFinished()
+
+void
+AnimationHelper::collapseAnimationFinished()
 {
     emit finished( m_index );
 }
