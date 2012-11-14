@@ -20,14 +20,15 @@
 #ifndef Soundcloud_PARSER_H
 #define Soundcloud_PARSER_H
 
-#include "DllMacro.h"
+#include <QObject>
+#include <QtCore/QStringList>
+
 #include "Typedefs.h"
 #include "Query.h"
 #include "DropJob.h"
 #include "jobview/JobStatusItem.h"
-#include <QObject>
-#include <QtCore/QStringList>
 
+#include "DllMacro.h"
 
 /**
  * Small class to parse Soundcloud links into query_ptrs
@@ -35,7 +36,8 @@
  * Connect to the signals to get the results
  */
 
-class QNetworkReply;
+class NetworkReply;
+
 namespace Tomahawk
 {
 
@@ -77,7 +79,7 @@ private:
 
     int m_subscribers;
     QList< query_ptr > m_tracks;
-    QSet< QNetworkReply* > m_queries;
+    QSet< NetworkReply* > m_queries;
     Tomahawk::playlist_ptr m_playlist;
     DropJobNotifier* m_browseJob;
     DropJob::DropType m_type;

@@ -19,23 +19,24 @@
 
 #include "ShortenedLinkParser.h"
 
-#include "utils/Logger.h"
-#include "utils/TomahawkUtils.h"
-#include "DropJobNotifier.h"
-#include "Query.h"
-#include "jobview/ErrorStatusMessage.h"
-#include "jobview/JobStatusModel.h"
-#include "jobview/JobStatusView.h"
-#include "Source.h"
-
 #include <qjson/parser.h>
 
 #include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkReply>
+
+#include "DropJobNotifier.h"
+#include "Query.h"
+#include "Source.h"
+#include "jobview/ErrorStatusMessage.h"
+#include "jobview/JobStatusModel.h"
+#include "jobview/JobStatusView.h"
+#include "utils/NetworkReply.h"
+#include "utils/TomahawkUtils.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 
 QPixmap* ShortenedLinkParser::s_pixmap = 0;
+
 
 ShortenedLinkParser::ShortenedLinkParser ( const QStringList& urls, QObject* parent )
     : QObject( parent )
@@ -74,47 +75,36 @@ ShortenedLinkParser::handlesUrl( const QString& url )
 void
 ShortenedLinkParser::lookupUrl( const QString& url )
 {
-    tDebug() << "Looking up..." << url;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Looking up..." << url;
     QString cleaned = url;
     if ( cleaned.contains( "/#/s/" ) )
         cleaned.replace( "/#", "" );
 
-    QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( QUrl( cleaned ) ) );
-    connect( reply, SIGNAL( finished() ), this, SLOT( lookupFinished() ) );
+    NetworkReply* reply = new NetworkReply( TomahawkUtils::nam()->get( QNetworkRequest( QUrl( cleaned ) ) ) );
+    connect( reply, SIGNAL( finished() ), SLOT( lookupFinished() ) );
 
     m_queries.insert( reply );
 
     m_expandJob = new DropJobNotifier( pixmap(), "shortened", DropJob::Track, reply );
     JobStatusView::instance()->model()->addJob( m_expandJob );
-
 }
 
 
 void
 ShortenedLinkParser::lookupFinished()
 {
-    QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
+    NetworkReply* r = qobject_cast< NetworkReply* >( sender() );
     Q_ASSERT( r );
 
-    if ( r->error() != QNetworkReply::NoError )
+    if ( r->reply()->error() != QNetworkReply::NoError )
         JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( tr( "Network error parsing shortened link!" ) ) );
 
-    QVariant redir = r->attribute( QNetworkRequest::RedirectionTargetAttribute );
-    if ( redir.isValid() && !redir.toUrl().isEmpty() )
-    {
-        tDebug() << "RedirectionTargetAttribute set on " << redir;
-        m_queries.remove( r );
-        r->deleteLater();
-        lookupUrl( redir.toUrl().toString() );
-    }
-    else
-    {
-        tLog() << "Got a redirected url:" << r->url().toString();
-        m_links << r->url().toString();
-        m_queries.remove( r );
-        r->deleteLater();
-        checkFinished();
-    }
+    tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Got an un-shortened url:" << r->reply()->url().toString();
+    m_links << r->reply()->url().toString();
+    m_queries.remove( r );
+    r->deleteLater();
+
+    checkFinished();
 }
 
 
@@ -123,7 +113,6 @@ ShortenedLinkParser::checkFinished()
 {
     if ( m_queries.isEmpty() ) // we're done
     {
-        qDebug() << "DONE and found redirected urls:" << m_links;
         emit urls( m_links );
 
         deleteLater();

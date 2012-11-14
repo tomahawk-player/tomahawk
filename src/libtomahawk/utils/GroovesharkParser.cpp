@@ -20,28 +20,28 @@
 
 #include "GroovesharkParser.h"
 
-#include "utils/Logger.h"
-#include "utils/TomahawkUtils.h"
-#include "Query.h"
-#include "SourceList.h"
-#include "DropJob.h"
-#include "jobview/JobStatusView.h"
-#include "jobview/JobStatusModel.h"
-#include "jobview/ErrorStatusMessage.h"
-#include "DropJobNotifier.h"
-#include "ViewManager.h"
-
-#include <qjson/parser.h>
-
 #include <QtCrypto>
 
 #include <QCoreApplication>
 #include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkReply>
 
 #include <QWebPage>
 #include <QWebFrame>
 #include <QWebElement>
+
+#include <qjson/parser.h>
+
+#include "Query.h"
+#include "SourceList.h"
+#include "DropJob.h"
+#include "DropJobNotifier.h"
+#include "ViewManager.h"
+#include "jobview/JobStatusView.h"
+#include "jobview/JobStatusModel.h"
+#include "jobview/ErrorStatusMessage.h"
+#include "utils/NetworkReply.h"
+#include "utils/TomahawkUtils.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 
@@ -68,10 +68,11 @@ GroovesharkParser::GroovesharkParser( const QStringList& trackUrls, bool createN
         lookupUrl( url );
 }
 
+
 GroovesharkParser::~GroovesharkParser()
 {
-
 }
+
 
 void
 GroovesharkParser::lookupUrl( const QString& link )
@@ -89,7 +90,6 @@ GroovesharkParser::lookupUrl( const QString& link )
         lookupGroovesharkTrack( link );
     else
         return;
-
 }
 
 
@@ -104,40 +104,25 @@ GroovesharkParser::lookupGroovesharkPlaylist( const QString& linkRaw )
         urlFragment = QUrl(linkRaw).path();
     }
 
-    tDebug() << urlFragment;
-
     int paramStartingPostition = urlFragment.indexOf( "?" );
-
     if ( paramStartingPostition != -1 )
         urlFragment.truncate( paramStartingPostition );
 
-    bool ok;
-
     QStringList urlParts = urlFragment.split( "/", QString::SkipEmptyParts );
 
-    tDebug() << urlParts;
-
+    bool ok;
     int playlistID = urlParts.at( 2 ).toInt( &ok, 10 );
-    if (!ok)
+    if ( !ok )
     {
-        tDebug() << "incorrect grooveshark url";
+        tDebug() << "Incorrect grooveshark url";
         return;
     }
 
-
-
     m_title = urlParts.at( 1 );
-
-    tDebug() << "should get playlist " << playlistID;
-
     DropJob::DropType type;
-
     type = DropJob::Playlist;
-
     QString base_url( "http://api.grooveshark.com/ws3.php?sig=" );
-
     QByteArray data = QString( "{\"method\":\"getPlaylistSongs\",\"parameters\":{\"playlistID\":\"%1\"},\"header\":{\"wsKey\":\"tomahawkplayer\"}}" ).arg( playlistID ).toLocal8Bit();
-
 
     QCA::MessageAuthenticationCode hmac( "hmac(md5)", m_apiKey );
 
@@ -148,10 +133,8 @@ GroovesharkParser::lookupGroovesharkPlaylist( const QString& linkRaw )
     QString hash = QCA::arrayToHex( resultArray.toByteArray() );
     QUrl url = QUrl( base_url + hash );
 
-    tDebug() << "Looking up URL..." << url.toString();
-
-    QNetworkReply* reply = TomahawkUtils::nam()->post( QNetworkRequest( url ), data );
-    connect( reply, SIGNAL( finished() ), this, SLOT( groovesharkLookupFinished() ) );
+    NetworkReply* reply = new NetworkReply( TomahawkUtils::nam()->post( QNetworkRequest( url ), data ) );
+    connect( reply, SIGNAL( finished() ), SLOT( groovesharkLookupFinished() ) );
 
     m_browseJob = new DropJobNotifier( pixmap(), "Grooveshark", type, reply );
     JobStatusView::instance()->model()->addJob( m_browseJob );
@@ -165,8 +148,8 @@ GroovesharkParser::lookupGroovesharkTrack( const QString& track )
 {
     tLog() << "Parsing Grooveshark Track Page:" << track;
 
-    QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( QUrl( track ) ) );
-    connect( reply, SIGNAL( finished() ), this, SLOT( trackPageFetchFinished() ) );
+    NetworkReply* reply = new NetworkReply( TomahawkUtils::nam()->get( QNetworkRequest( QUrl( track ) ) ) );
+    connect( reply, SIGNAL( finished() ), SLOT( trackPageFetchFinished() ) );
 
     m_browseJob = new DropJobNotifier( pixmap(), "Grooveshark", DropJob::Track, reply );
     JobStatusView::instance()->model()->addJob( m_browseJob );
@@ -178,7 +161,7 @@ GroovesharkParser::lookupGroovesharkTrack( const QString& track )
 void
 GroovesharkParser::trackPageFetchFinished()
 {
-    QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
+    NetworkReply* r = qobject_cast< NetworkReply* >( sender() );
     Q_ASSERT( r );
 
     m_queries.remove( r );
@@ -189,7 +172,7 @@ GroovesharkParser::trackPageFetchFinished()
     page.settings()->setAttribute( QWebSettings::PluginsEnabled, false );
     page.settings()->setAttribute( QWebSettings::JavaEnabled, false );
     page.settings()->setAttribute( QWebSettings::AutoLoadImages, false );
-    page.mainFrame()->setHtml( QString::fromUtf8( r->readAll() ) );
+    page.mainFrame()->setHtml( QString::fromUtf8( r->reply()->readAll() ) );
     QWebElement title = page.mainFrame()->findFirstElement("span[itemprop='name']");
     QWebElement artist = page.mainFrame()->findFirstElement("noscript span[itemprop='byArtist']");
     QWebElement album = page.mainFrame()->findFirstElement("noscript span[itemprop='inAlbum']");
@@ -210,27 +193,27 @@ GroovesharkParser::trackPageFetchFinished()
 void
 GroovesharkParser::groovesharkLookupFinished()
 {
-    QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
+    NetworkReply* r = qobject_cast< NetworkReply* >( sender() );
     Q_ASSERT( r );
 
     m_queries.remove( r );
     r->deleteLater();
 
-    if ( r->error() == QNetworkReply::NoError )
+    if ( r->reply()->error() == QNetworkReply::NoError )
     {
         QJson::Parser p;
         bool ok;
-        QVariantMap res = p.parse( r, &ok ).toMap();
+        QVariantMap res = p.parse( r->reply(), &ok ).toMap();
 
         if ( !ok )
         {
-            tLog() << "Failed to parse json from Grooveshark browse item :" << p.errorString() << "On line" << p.errorLine();
+            tLog() << "Failed to parse json from Grooveshark browse item:" << p.errorString() << "On line" << p.errorLine();
             checkTrackFinished();
             return;
         }
 
         QVariantList list = res.value( "result" ).toMap().value( "songs" ).toList();
-        foreach (const QVariant& var, list)
+        foreach ( const QVariant& var, list )
         {
             QVariantMap trackResult = var.toMap();
 
@@ -249,12 +232,11 @@ GroovesharkParser::groovesharkLookupFinished()
             Tomahawk::query_ptr q = Tomahawk::Query::get( artist, title, album, uuid(), m_trackMode );
             m_tracks << q;
         }
-
-
-    } else
+    }
+    else
     {
         JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( tr( "Error fetching Grooveshark information from the network!" ) ) );
-        tLog() << "Error in network request to grooveshark for track decoding:" << r->errorString();
+        tLog() << "Error in network request to grooveshark for track decoding:" << r->reply()->errorString();
     }
 
     if ( m_trackMode )
@@ -262,6 +244,7 @@ GroovesharkParser::groovesharkLookupFinished()
     else
         checkPlaylistFinished();
 }
+
 
 void
 GroovesharkParser::checkPlaylistFinished()
@@ -285,12 +268,11 @@ GroovesharkParser::checkPlaylistFinished()
             return;
         }
 
-
         emit tracks( m_tracks );
-
         deleteLater();
     }
 }
+
 
 void
 GroovesharkParser::checkTrackFinished()
@@ -305,13 +287,12 @@ GroovesharkParser::checkTrackFinished()
 
         deleteLater();
     }
-
 }
+
 
 void
 GroovesharkParser::playlistCreated()
 {
-
     ViewManager::instance()->show( m_playlist );
 
     deleteLater();

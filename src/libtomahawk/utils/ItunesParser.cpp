@@ -19,19 +19,20 @@
  */
 
 #include "ItunesParser.h"
-#include "utils/Logger.h"
-#include "utils/TomahawkUtils.h"
+
+#include <QtNetwork/QNetworkAccessManager>
+#include <QRegExp>
+
+#include <qjson/parser.h>
+
 #include "Query.h"
 #include "SourceList.h"
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
 #include "jobview/ErrorStatusMessage.h"
-
-#include <qjson/parser.h>
-
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkReply>
-#include <QRegExp>
+#include "utils/NetworkReply.h"
+#include "utils/TomahawkUtils.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 
@@ -91,7 +92,6 @@ ItunesParser::lookupItunesUri( const QString& link )
         else
             return;
     }
-    tLog() << "Parsing itunes track:" << link;
 
     QUrl url;
     DropJob::DropType type;
@@ -105,10 +105,9 @@ ItunesParser::lookupItunesUri( const QString& link )
         type = ( trackId.isEmpty() ? DropJob::Album : DropJob::Track );
         url = QUrl( QString( "http://ax.phobos.apple.com.edgesuite.net/WebObjects/MZStoreServices.woa/wa/wsLookup?id=%1&entity=song" ).arg( ( trackId.isEmpty() ? id : trackId ) ) );
     }
-    qDebug() << "Looking up..." << url.toString();
 
-    QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
-    connect( reply, SIGNAL( finished() ), this, SLOT( itunesResponseLookupFinished() ) );
+    NetworkReply* reply = new NetworkReply( TomahawkUtils::nam()->get( QNetworkRequest( url ) ) );
+    connect( reply, SIGNAL( finished() ), SLOT( itunesResponseLookupFinished() ) );
 
     DropJobNotifier* j = new DropJobNotifier( pixmap(), QString( "Itunes" ), type, reply );
     JobStatusView::instance()->model()->addJob( j );
@@ -120,16 +119,16 @@ ItunesParser::lookupItunesUri( const QString& link )
 void
 ItunesParser::itunesResponseLookupFinished()
 {
-    QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
+    NetworkReply* r = qobject_cast< NetworkReply* >( sender() );
     Q_ASSERT( r );
     m_queries.remove( r );
     r->deleteLater();
 
-    if ( r->error() == QNetworkReply::NoError )
+    if ( r->reply()->error() == QNetworkReply::NoError )
     {
         QJson::Parser p;
         bool ok;
-        QVariantMap res = p.parse( r, &ok ).toMap();
+        QVariantMap res = p.parse( r->reply(), &ok ).toMap();
 
         if ( !ok )
         {
@@ -173,7 +172,7 @@ ItunesParser::itunesResponseLookupFinished()
     else
     {
         JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( tr( "Error fetching iTunes information from the network!" ) ) );
-        tLog() << "Error in network request to Itunes for track decoding:" << r->errorString();
+        tLog() << "Error in network request to Itunes for track decoding:" << r->reply()->errorString();
     }
 
     checkTrackFinished();

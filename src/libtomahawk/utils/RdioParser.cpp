@@ -19,26 +19,27 @@
 
 #include "RdioParser.h"
 
-#include "ShortenedLinkParser.h"
-#include "config.h"
-#include "utils/TomahawkUtils.h"
-#include "utils/Logger.h"
-#include "DropJob.h"
-#include "jobview/JobStatusView.h"
-#include "jobview/JobStatusModel.h"
-#include "jobview/ErrorStatusMessage.h"
-#include "DropJobNotifier.h"
-#include "ViewManager.h"
-#include "SourceList.h"
-
-#include <qjson/parser.h>
 #include <QDateTime>
 #include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkReply>
 #include <QUrl>
 #include <QStringList>
 
 #include <QtCore/QCryptographicHash>
+
+#include <qjson/parser.h>
+
+#include "ShortenedLinkParser.h"
+#include "config.h"
+#include "DropJob.h"
+#include "DropJobNotifier.h"
+#include "ViewManager.h"
+#include "SourceList.h"
+#include "jobview/JobStatusView.h"
+#include "jobview/JobStatusModel.h"
+#include "jobview/ErrorStatusMessage.h"
+#include "utils/NetworkReply.h"
+#include "utils/TomahawkUtils.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 
@@ -78,7 +79,7 @@ RdioParser::parse( const QStringList& urls )
     m_multi = true;
     m_total = urls.count();
 
-    foreach( const QString& url, urls )
+    foreach ( const QString& url, urls )
         parseUrl( url );
 }
 
@@ -129,8 +130,8 @@ RdioParser::fetchObjectsFromUrl( const QString& url, DropJob::DropType type )
     QNetworkRequest request = generateRequest( "getObjectFromUrl", cleanedUrl, params, &data );
 
     request.setHeader( QNetworkRequest::ContentTypeHeader, QLatin1String( "application/x-www-form-urlencoded" ) );
-    QNetworkReply* reply = TomahawkUtils::nam()->post( request, data  );
-    connect( reply, SIGNAL( finished() ), this, SLOT( rdioReturned() ) );
+    NetworkReply* reply = new NetworkReply( TomahawkUtils::nam()->post( request, data ) );
+    connect( reply, SIGNAL( finished() ), SLOT( rdioReturned() ) );
 
     m_browseJob = new DropJobNotifier( pixmap(), QString( "Rdio" ), type, reply );
     JobStatusView::instance()->model()->addJob( m_browseJob );
@@ -142,22 +143,22 @@ RdioParser::fetchObjectsFromUrl( const QString& url, DropJob::DropType type )
 void
 RdioParser::rdioReturned()
 {
-    QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
+    NetworkReply* r = qobject_cast< NetworkReply* >( sender() );
     Q_ASSERT( r );
     m_reqQueries.remove( r );
     m_count++;
     r->deleteLater();
 
-    if ( r->error() == QNetworkReply::NoError )
+    if ( r->reply()->error() == QNetworkReply::NoError )
     {
         QJson::Parser p;
         bool ok;
-        QVariantMap res = p.parse( r, &ok ).toMap();
+        QVariantMap res = p.parse( r->reply(), &ok ).toMap();
         QVariantMap result = res.value( "result" ).toMap();
 
         if ( !ok || result.isEmpty() )
         {
-            tLog() << "Failed to parse json from Rdio browse item :" << p.errorString() << "On line" << p.errorLine() << "With data:" << res;
+            tLog() << "Failed to parse json from Rdio browse item:" << p.errorString() << "On line" << p.errorLine() << "With data:" << res;
 
             return;
         }
@@ -198,7 +199,7 @@ RdioParser::rdioReturned()
     else
     {
         JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( tr( "Error fetching Rdio information from the network!" ) ) );
-        tLog() << "Error in network request to Rdio for track decoding:" << r->errorString();
+        tLog() << "Error in network request to Rdio for track decoding:" << r->reply()->errorString();
     }
 
     checkFinished();
@@ -256,7 +257,7 @@ RdioParser::generateRequest( const QString& method, const QString& url, const QL
     QUrl toSignUrl = fetchUrl;
 
     QPair<QByteArray, QByteArray> param;
-    foreach( param, extraParams )
+    foreach ( param, extraParams )
     {
         toSignUrl.addEncodedQueryItem( param.first, param.second );
     }
@@ -289,8 +290,6 @@ RdioParser::generateRequest( const QString& method, const QString& url, const QL
         data->append( item.first + "=" + item.second + "&" );
     }
     data->truncate( data->size() - 1 ); // remove extra &
-
-    qDebug() << "POST data:" << *data;
 
     QNetworkRequest request = QNetworkRequest( fetchUrl );
     request.setHeader( QNetworkRequest::ContentTypeHeader, QLatin1String( "application/x-www-form-urlencoded" ) );

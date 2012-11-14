@@ -30,7 +30,7 @@
 #include <QSet>
 #include <QtCore/QStringList>
 
-class QNetworkReply;
+class NetworkReply;
 class TrackModel;
 
 namespace Tomahawk
@@ -63,7 +63,7 @@ private:
 
     bool m_single;
     QList< query_ptr > m_tracks;
-    QSet< QNetworkReply* > m_queries;
+    QSet< NetworkReply* > m_queries;
     QString m_title, m_info, m_creator;
     Tomahawk::playlist_ptr m_playlist;
 

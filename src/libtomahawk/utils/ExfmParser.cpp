@@ -18,20 +18,20 @@
 
 #include "ExfmParser.h"
 
-#include "utils/Logger.h"
-#include "utils/TomahawkUtils.h"
-#include "Query.h"
-#include "SourceList.h"
-#include "jobview/JobStatusView.h"
-#include "jobview/JobStatusModel.h"
-#include "jobview/ErrorStatusMessage.h"
-#include "DropJobNotifier.h"
-#include "ViewManager.h"
+#include <QtNetwork/QNetworkAccessManager>
 
 #include <qjson/parser.h>
 
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkReply>
+#include "Query.h"
+#include "SourceList.h"
+#include "DropJobNotifier.h"
+#include "ViewManager.h"
+#include "jobview/JobStatusView.h"
+#include "jobview/JobStatusModel.h"
+#include "jobview/ErrorStatusMessage.h"
+#include "utils/NetworkReply.h"
+#include "utils/TomahawkUtils.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 
@@ -72,7 +72,6 @@ ExfmParser::~ExfmParser()
 void
 ExfmParser::lookupUrl( const QString& link )
 {
-
     const QString apiBase = "http://ex.fm/api/v3";
     QString url( link );
     QStringList paths;
@@ -117,34 +116,29 @@ ExfmParser::lookupUrl( const QString& link )
         {
             url.replace( "/genre/", "/tag/" );
             url.replace( "/search/", "/song/search/" ); // We can only search for tracks, even though we want an artist or whatever
-
         }
 
         url.replace( "http://ex.fm", apiBase );
     }
 
-
     tDebug() << "Looking up URL..." << url;
-    QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( QUrl( url ) ) );
+    NetworkReply* reply = new NetworkReply( TomahawkUtils::nam()->get( QNetworkRequest( QUrl( url ) ) ) );
 
     if ( m_createNewPlaylist )
-        connect( reply, SIGNAL( finished() ), this, SLOT( exfmLookupFinished() ) );
+        connect( reply, SIGNAL( finished() ), SLOT( exfmLookupFinished() ) );
     else
-        connect( reply, SIGNAL( finished() ), this, SLOT( exfmBrowseFinished() ) );
+        connect( reply, SIGNAL( finished() ), SLOT( exfmBrowseFinished() ) );
 
     m_browseJob = new DropJobNotifier( pixmap(), "Exfm", m_type, reply );
     JobStatusView::instance()->model()->addJob( m_browseJob );
 
     m_queries.insert( reply );
-
-
-
 }
+
 
 void
 ExfmParser::parseTrack( const QVariantMap& res )
 {
-
     QString title, artist, album;
     album = res.value( "album", QString() ).toString();
     title = res.value( "title", QString() ).toString();
@@ -165,34 +159,35 @@ ExfmParser::parseTrack( const QVariantMap& res )
         q->setProperty( "annotation", res.value( "url" ).toString() );
         m_tracks << q;
     }
-
 }
+
 
 void
 ExfmParser::exfmLookupFinished()
 {
-
-    QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
+    NetworkReply* r = qobject_cast< NetworkReply* >( sender() );
     Q_ASSERT( r );
     m_queries.remove( r );
     r->deleteLater();
 
-    if ( r->error() == QNetworkReply::NoError )
+    if ( r->reply()->error() == QNetworkReply::NoError )
     {
         QJson::Parser p;
         bool ok;
-        QVariantMap res = p.parse( r, &ok ).toMap();
+        QVariantMap res = p.parse( r->reply(), &ok ).toMap();
 
         if ( !ok )
         {
-            tLog() << "Failed to parse json from Exfm browse item :" << p.errorString() << "On line" << p.errorLine();
+            tLog() << "Failed to parse json from Exfm browse item:" << p.errorString() << "On line" << p.errorLine();
             return;
         }
 
         QStringList paths;
-        foreach( const QString& path, r->url().path().split( "/" ) )
+        foreach ( const QString& path, r->reply()->url().path().split( "/" ) )
+        {
             if ( !path.isEmpty() )
                 paths << path;
+        }
 
         QString title, artist, desc;
         QVariantList tracks;
@@ -243,30 +238,31 @@ ExfmParser::exfmLookupFinished()
         connect( m_playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( playlistCreated() ) );
         return;
     }
-
 }
+
 
 void
 ExfmParser::playlistCreated()
 {
     ViewManager::instance()->show( m_playlist );
+
     deleteLater();
 }
+
 
 void
 ExfmParser::exfmBrowseFinished()
 {
-    QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
+    NetworkReply* r = qobject_cast< NetworkReply* >( sender() );
     Q_ASSERT( r );
 
     r->deleteLater();
 
-    if ( r->error() == QNetworkReply::NoError )
+    if ( r->reply()->error() == QNetworkReply::NoError )
     {
-
         QJson::Parser p;
         bool ok;
-        QVariantMap res = p.parse( r, &ok ).toMap();
+        QVariantMap res = p.parse( r->reply(), &ok ).toMap();
 
         if ( !ok )
         {
@@ -295,8 +291,8 @@ ExfmParser::exfmBrowseFinished()
 
         deleteLater();
     }
-
 }
+
 
 QPixmap
 ExfmParser::pixmap() const

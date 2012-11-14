@@ -38,7 +38,7 @@
  * Connect to the signals to get the results
  */
 
-class QNetworkReply;
+class NetworkReply;
 
 namespace Tomahawk
 {
@@ -74,7 +74,7 @@ private:
     bool m_trackMode;
     bool m_createNewPlaylist;
     QList< query_ptr > m_tracks;
-    QSet< QNetworkReply* > m_queries;
+    QSet< NetworkReply* > m_queries;
     QString m_title, m_info, m_creator;
     Tomahawk::playlist_ptr m_playlist;
     DropJobNotifier* m_browseJob;
@@ -82,7 +82,6 @@ private:
     QCA::SymmetricKey m_apiKey;
 
     static QPixmap* s_pixmap;
-
 };
 
 }

@@ -18,20 +18,20 @@
 
 #include "SoundcloudParser.h"
 
-#include "utils/Logger.h"
-#include "utils/TomahawkUtils.h"
-#include "Query.h"
-#include "SourceList.h"
-#include "jobview/JobStatusView.h"
-#include "jobview/JobStatusModel.h"
-#include "jobview/ErrorStatusMessage.h"
-#include "DropJobNotifier.h"
-#include "ViewManager.h"
+#include <QtNetwork/QNetworkAccessManager>
 
 #include <qjson/parser.h>
 
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkReply>
+#include "Query.h"
+#include "SourceList.h"
+#include "DropJobNotifier.h"
+#include "ViewManager.h"
+#include "jobview/JobStatusView.h"
+#include "jobview/JobStatusModel.h"
+#include "jobview/ErrorStatusMessage.h"
+#include "utils/NetworkReply.h"
+#include "utils/TomahawkUtils.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 
@@ -74,21 +74,20 @@ SoundcloudParser::lookupUrl( const QString& link )
 {
     tDebug() << "Looking up URL..." << link;
     QUrl scLink( QString( "http://api.soundcloud.com/resolve.json?client_id=TiNg2DRYhBnp01DA3zNag&url=" ) + link );
-    qDebug() << scLink.toString();
-    QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( scLink ) );
-    connect( reply, SIGNAL( finished() ), this, SLOT( soundcloudBrowseFinished() ) );
+
+    NetworkReply* reply = new NetworkReply( TomahawkUtils::nam()->get( QNetworkRequest( scLink ) ) );
+    connect( reply, SIGNAL( finished() ), SLOT( soundcloudBrowseFinished() ) );
 
     m_browseJob = new DropJobNotifier( pixmap(), "Soundcloud", DropJob::All, reply );
     JobStatusView::instance()->model()->addJob( m_browseJob );
 
     m_queries.insert( reply );
-
 }
+
 
 void
 SoundcloudParser::parseTrack( const QVariantMap& res )
 {
-
     QString title, artist;
     title = res.value( "title", QString() ).toString();
     artist = res.value( "user" ).toMap().value( "username", QString() ).toString();
@@ -110,27 +109,26 @@ SoundcloudParser::parseTrack( const QVariantMap& res )
         q->setSaveHTTPResultHint( true );
         m_tracks << q;
     }
-
 }
+
 
 void
 SoundcloudParser::soundcloudLookupFinished()
 {
-
-    QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
+    NetworkReply* r = qobject_cast< NetworkReply* >( sender() );
     Q_ASSERT( r );
     m_queries.remove( r );
     r->deleteLater();
 
-    if ( r->error() == QNetworkReply::NoError )
+    if ( r->reply()->error() == QNetworkReply::NoError )
     {
         QJson::Parser p;
         bool ok;
-        QVariantMap res = p.parse( r, &ok ).toMap();
+        QVariantMap res = p.parse( r->reply(), &ok ).toMap();
 
         if ( !ok )
         {
-            tLog() << "Failed to parse json from Soundcloud browse item :" << p.errorString() << "On line" << p.errorLine();
+            tLog() << "Failed to parse json from Soundcloud browse item:" << p.errorString() << "On line" << p.errorLine();
             return;
         }
 
@@ -163,13 +161,11 @@ SoundcloudParser::soundcloudLookupFinished()
                 connect( m_playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( playlistCreated() ) );
                 return;
             }
-
         }
         else if ( m_type == DropJob::Artist )
         {
             // cant parse soundcloud json here atm.
         }
-
     }
 
     if ( m_single && !m_tracks.isEmpty() )
@@ -178,29 +174,31 @@ SoundcloudParser::soundcloudLookupFinished()
         emit tracks( m_tracks );
 
     deleteLater();
-
 }
+
 
 void
 SoundcloudParser::playlistCreated()
 {
     ViewManager::instance()->show( m_playlist );
+
     deleteLater();
 }
+
 
 void
 SoundcloudParser::soundcloudBrowseFinished()
 {
-    QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
+    NetworkReply* r = qobject_cast< NetworkReply* >( sender() );
     Q_ASSERT( r );
 
     r->deleteLater();
 
-    if ( r->error() == QNetworkReply::NoError )
+    if ( r->reply()->error() == QNetworkReply::NoError )
     {
-        if ( r->rawHeaderList().contains( "Location" ) )
+        if ( r->reply()->rawHeaderList().contains( "Location" ) )
         {
-            QString url = r->rawHeader("Location");
+            QString url = r->reply()->rawHeader( "Location" );
             if ( url.contains( "tracks" ) )
             {
                 m_type = DropJob::Track;
@@ -210,8 +208,7 @@ SoundcloudParser::soundcloudBrowseFinished()
                 // For now, dont handle user tracklists
                 m_type = DropJob::All; //DropJob::Artist;
                 url = url.replace( ".json", "/tracks.json" );
-                qDebug() << "Gots artist!" << url;
-            }
+}
             else if ( url.contains( "playlists" ) )
             {
                 m_type = DropJob::Playlist;
@@ -219,8 +216,8 @@ SoundcloudParser::soundcloudBrowseFinished()
 
             if ( m_type != DropJob::All )
             {
-                QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( QUrl(url) ) );
-                connect( reply, SIGNAL( finished() ), this, SLOT( soundcloudLookupFinished() ) );
+                NetworkReply* reply = new NetworkReply( TomahawkUtils::nam()->get( QNetworkRequest( QUrl( url ) ) ) );
+                connect( reply, SIGNAL( finished() ), SLOT( soundcloudLookupFinished() ) );
             }
         }
     }
@@ -233,8 +230,8 @@ SoundcloudParser::soundcloudBrowseFinished()
             m_browseJob->setFinished();
         return;
     }
-
 }
+
 
 QPixmap
 SoundcloudParser::pixmap() const

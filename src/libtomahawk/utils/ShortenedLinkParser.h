@@ -31,7 +31,7 @@
     #include <QPixmap>
 #endif
 
-class QNetworkReply;
+class NetworkReply;
 
 namespace Tomahawk
 {
@@ -70,7 +70,7 @@ private:
 #endif
 
     QStringList m_links;
-    QSet< QNetworkReply* > m_queries;
+    QSet< NetworkReply* > m_queries;
     DropJobNotifier* m_expandJob;
 };
 

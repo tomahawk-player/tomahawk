@@ -37,11 +37,13 @@
 #include <QtCrypto>
 #endif
 
-class QNetworkReply;
+class NetworkReply;
+
 namespace Tomahawk
 {
 
 class DropJobNotifier;
+
 /**
  * Small class to parse spotify links into query_ptrs
  *
@@ -82,7 +84,7 @@ private:
 
     bool m_multi;
     int m_count, m_total;
-    QSet< QNetworkReply* > m_reqQueries;
+    QSet< NetworkReply* > m_reqQueries;
     DropJobNotifier* m_browseJob;
 
     QString m_title, m_creator;
