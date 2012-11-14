@@ -106,8 +106,8 @@ SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex&
         if ( !m_expandedMap.value( index )->initialized() )
         {
             int dropTypes = dropTypeCount( item );
-            QSize originalSize = QSize( option.rect.width(), option.fontMetrics.height() * 1.2 );
-            QSize targetSize = originalSize + QSize( 0, dropTypes == 0 ? 0 : 38 + option.fontMetrics.height() * 1.2 );
+            QSize originalSize = QSize( option.rect.width(), option.fontMetrics.height() * 1.4 );
+            QSize targetSize = originalSize + QSize( 0, dropTypes == 0 ? 0 : 38 + option.fontMetrics.height() * 1.4 );
             m_expandedMap.value( index )->initialize( originalSize, targetSize, 300 );
             m_expandedMap.value( index )->expand();
         }
