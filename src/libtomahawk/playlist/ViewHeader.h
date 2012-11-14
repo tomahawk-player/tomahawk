@@ -37,7 +37,7 @@ public:
     void setDefaultColumnWeights( QList<double> weights ) { m_columnWeights = weights; }
 
     QString guid() const { return m_guid; }
-    void setGuid( const QString& guid ) { m_guid = guid; }
+    void setGuid( const QString& guid );
 
 public slots:
     void toggleVisibility( int index );
