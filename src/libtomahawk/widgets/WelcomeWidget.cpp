@@ -59,7 +59,6 @@ public:
     }
     virtual ~WelcomeWidgetInterface() {}
 
-
     virtual Tomahawk::PlaylistModes::RepeatMode repeatMode() const { return m_w->ui->tracksView->proxyModel()->playlistInterface()->repeatMode(); }
     virtual bool shuffled() const { return m_w->ui->tracksView->proxyModel()->playlistInterface()->shuffled(); }
 
