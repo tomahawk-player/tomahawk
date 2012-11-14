@@ -36,38 +36,38 @@ public:
         : PlaylistInterface()
         , m_w( w )
     {
-        connect( m_w->ui->tracksView->proxyModel()->playlistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ),
+        connect( m_w->ui->tracks->proxyModel()->playlistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ),
                  SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ) );
 
-        connect( m_w->ui->tracksView->proxyModel()->playlistInterface().data(), SIGNAL( shuffleModeChanged( bool ) ),
+        connect( m_w->ui->tracks->proxyModel()->playlistInterface().data(), SIGNAL( shuffleModeChanged( bool ) ),
                  SIGNAL( shuffleModeChanged( bool ) ) );
     }
     virtual ~MetaAlbumInfoInterface() {}
 
 
-    virtual Tomahawk::PlaylistModes::RepeatMode repeatMode() const { return m_w->ui->tracksView->proxyModel()->playlistInterface()->repeatMode(); }
-    virtual bool shuffled() const { return m_w->ui->tracksView->proxyModel()->playlistInterface()->shuffled(); }
+    virtual Tomahawk::PlaylistModes::RepeatMode repeatMode() const { return m_w->ui->tracks->proxyModel()->playlistInterface()->repeatMode(); }
+    virtual bool shuffled() const { return m_w->ui->tracks->proxyModel()->playlistInterface()->shuffled(); }
 
-    virtual Tomahawk::result_ptr currentItem() const { return m_w->ui->tracksView->proxyModel()->playlistInterface()->currentItem(); }
-    virtual Tomahawk::result_ptr siblingItem( int itemsAway ) { return m_w->ui->tracksView->proxyModel()->playlistInterface()->siblingItem( itemsAway ); }
-    virtual int trackCount() const { return m_w->ui->tracksView->proxyModel()->playlistInterface()->trackCount(); }
-    virtual QList< Tomahawk::query_ptr > tracks() { return m_w->ui->tracksView->proxyModel()->playlistInterface()->tracks(); }
+    virtual Tomahawk::result_ptr currentItem() const { return m_w->ui->tracks->proxyModel()->playlistInterface()->currentItem(); }
+    virtual Tomahawk::result_ptr siblingItem( int itemsAway ) { return m_w->ui->tracks->proxyModel()->playlistInterface()->siblingItem( itemsAway ); }
+    virtual int trackCount() const { return m_w->ui->tracks->proxyModel()->playlistInterface()->trackCount(); }
+    virtual QList< Tomahawk::query_ptr > tracks() { return m_w->ui->tracks->proxyModel()->playlistInterface()->tracks(); }
 
     virtual bool hasChildInterface( Tomahawk::playlistinterface_ptr other )
     {
-        return m_w->ui->tracksView->proxyModel()->playlistInterface() == other ||
-               m_w->ui->tracksView->proxyModel()->playlistInterface()->hasChildInterface( other ) ||
-               m_w->ui->albumsView->playlistInterface()->hasChildInterface( other );
+        return m_w->ui->tracks->proxyModel()->playlistInterface() == other ||
+               m_w->ui->tracks->proxyModel()->playlistInterface()->hasChildInterface( other ) ||
+               m_w->ui->albums->playlistInterface()->hasChildInterface( other );
     }
 
     virtual void setRepeatMode( Tomahawk::PlaylistModes::RepeatMode mode )
     {
-        m_w->ui->tracksView->proxyModel()->playlistInterface()->setRepeatMode( mode );
+        m_w->ui->tracks->proxyModel()->playlistInterface()->setRepeatMode( mode );
     }
 
     virtual void setShuffled( bool enabled )
     {
-        m_w->ui->tracksView->proxyModel()->playlistInterface()->setShuffled( enabled );
+        m_w->ui->tracks->proxyModel()->playlistInterface()->setShuffled( enabled );
     }
 
 private:
