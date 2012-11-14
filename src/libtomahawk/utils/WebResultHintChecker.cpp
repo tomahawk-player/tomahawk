@@ -15,21 +15,22 @@
  *   You should have received a copy of the GNU General Public License
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "WebResultHintChecker.h"
+
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QUrl>
 
 #include "Query.h"
 #include "Result.h"
 #include "Source.h"
-#include "utils/Closure.h"
-#include "utils/Logger.h"
 #include "Pipeline.h"
-
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QNetworkRequest>
-#include <QUrl>
+#include "utils/NetworkReply.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
+
 
 WebResultHintChecker::WebResultHintChecker( const query_ptr& q )
     : QObject( 0 )
@@ -45,9 +46,9 @@ WebResultHintChecker::WebResultHintChecker( const query_ptr& q )
         check( QUrl::fromUserInput( m_url ) );
 }
 
+
 WebResultHintChecker::~WebResultHintChecker()
 {
-
 }
 
 
@@ -62,7 +63,7 @@ WebResultHintChecker::checkQuery( const query_ptr& query )
 void
 WebResultHintChecker::checkQueries( const QList< query_ptr >& queries )
 {
-    foreach ( const query_ptr&  query, queries )
+    foreach ( const query_ptr& query, queries )
         checkQuery( query );
 }
 
@@ -89,8 +90,8 @@ WebResultHintChecker::check( const QUrl &url )
         return;
     }
 
-    QNetworkReply* reply = TomahawkUtils::nam()->head( QNetworkRequest( url ) );
-    NewClosure( reply, SIGNAL( finished() ), this, SLOT( headFinished( QNetworkReply* ) ), reply );
+    NetworkReply* reply = new NetworkReply( TomahawkUtils::nam()->head( QNetworkRequest( url ) ) );
+    connect( reply, SIGNAL( finished() ), SLOT( headFinished() ) );
 }
 
 
@@ -118,19 +119,12 @@ WebResultHintChecker::removeHint()
 
 
 void
-WebResultHintChecker::headFinished( QNetworkReply* reply )
+WebResultHintChecker::headFinished()
 {
-    reply->deleteLater();
+    NetworkReply* r = qobject_cast<NetworkReply*>( sender() );
+    r->deleteLater();
 
-    const QUrl redir = reply->attribute( QNetworkRequest::RedirectionTargetAttribute ).toUrl();
-    if ( redir.isValid() )
-    {
-        const QUrl url = reply->url().resolved( redir );
-        check( url );
-
-        return;
-    }
-    else if ( reply->error() != QNetworkReply::NoError )
+    if ( r->reply()->error() != QNetworkReply::NoError )
     {
         // Error getting headers for the http resulthint, remove it from the result
         // as it's definitely not playable

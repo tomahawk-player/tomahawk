@@ -22,9 +22,8 @@
 
 #include <QObject>
 
-class QNetworkReply;
-
-namespace Tomahawk {
+namespace Tomahawk
+{
 
 class WebResultHintChecker : public QObject
 {
@@ -37,7 +36,7 @@ public:
     static void checkQueries( const QList< query_ptr >& queries );
 
 private slots:
-    void headFinished( QNetworkReply* reply );
+    void headFinished();
 
     void check( const QUrl& url );
 
