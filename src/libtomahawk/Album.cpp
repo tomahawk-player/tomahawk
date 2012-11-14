@@ -67,14 +67,14 @@ Album::get( const Tomahawk::artist_ptr& artist, const QString& name, bool autoCr
     const QString key = albumCacheKey( artist, name );
     if ( s_albumsByName.contains( key ) )
     {
-        return s_albumsByName[ key ];
+        return s_albumsByName.value( key );
     }
 
-//     qDebug() << "LOOKING UP ALBUM:" << artist->name() << name;
     album_ptr album = album_ptr( new  Album( name, artist ) );
     album->setWeakRef( album.toWeakRef() );
     album->loadId( autoCreate );
 
+//    tDebug() << Q_FUNC_INFO << "ADDING:" << artist->name() << name;
     s_albumsByName.insert( key, album );
 
     return album;
@@ -88,9 +88,11 @@ Album::get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& ar
     static QMutex s_mutex;
 
     QMutexLocker lock( &s_idCacheMutex );
-    if ( s_albumsByName.contains( name ) )
+
+    const QString key = albumCacheKey( artist, name );
+    if ( s_albumsByName.contains( key ) )
     {
-        return s_albumsByName.value( name );
+        return s_albumsByName.value( key );
     }
     if ( s_albumsById.contains( id ) )
     {
@@ -100,10 +102,12 @@ Album::get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& ar
     album_ptr a = album_ptr( new Album( id, name, artist ), &QObject::deleteLater );
     a->setWeakRef( a.toWeakRef() );
 
+//    tDebug() << Q_FUNC_INFO << "ADDING:" << artist->name() << name << id;
+    s_albumsByName.insert( key, a );
+
     if ( id > 0 )
     {
         s_albumsById.insert( id, a );
-        s_albumsByName.insert( name, a );
     }
 
     return a;
@@ -187,8 +191,8 @@ Album::id() const
 
         if ( m_id > 0 )
             s_albumsById[ m_id ] = m_ownRef.toStrongRef();
-        s_idMutex.unlock();
 
+        s_idMutex.unlock();
     }
 
     return finalId;
