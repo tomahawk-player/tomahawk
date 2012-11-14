@@ -67,11 +67,11 @@ public:
     virtual bool isLoading() const { return m_loading; }
 
     virtual QString title() const { return m_title; }
-    virtual void setTitle( const QString& title ) { m_title = title; }
+    virtual void setTitle( const QString& title );
     virtual QString description() const { return m_description; }
-    virtual void setDescription( const QString& description ) { m_description = description; }
+    virtual void setDescription( const QString& description );
     virtual QPixmap icon() const { return m_icon; }
-    virtual void setIcon( const QPixmap& pixmap ) { m_icon = pixmap; }
+    virtual void setIcon( const QPixmap& pixmap );
 
     virtual int trackCount() const { return rowCount( QModelIndex() ); }
     virtual int itemCount() const { return rowCount( QModelIndex() ); }
@@ -116,6 +116,8 @@ signals:
 
     void loadingStarted();
     void loadingFinished();
+
+    void changed();
 
 public slots:
     virtual void setCurrentItem( const QModelIndex& index );

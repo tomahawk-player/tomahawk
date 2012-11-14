@@ -820,3 +820,27 @@ PlayableModel::insertQueries( const QList< Tomahawk::query_ptr >& queries, int r
 {
     insertInternal( queries, row );
 }
+
+
+void
+PlayableModel::setTitle( const QString& title )
+{
+    m_title = title;
+    emit changed();
+}
+
+
+void
+PlayableModel::setDescription( const QString& description )
+{
+    m_description = description;
+    emit changed();
+}
+
+
+void
+PlayableModel::setIcon( const QPixmap& pixmap )
+{
+    m_icon = pixmap;
+    emit changed();
+}
