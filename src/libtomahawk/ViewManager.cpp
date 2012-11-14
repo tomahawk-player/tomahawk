@@ -141,7 +141,7 @@ ViewManager::createPageForPlaylist( const playlist_ptr& playlist )
     view->setPixmap( pv->pixmap() );
 
     // We need to set the model on the view before loading the playlist, so spinners & co are connected
-    view->setPlayableModel( model );
+    view->setPlaylistModel( model );
     pv->setPlaylistModel( model );
 
     model->loadPlaylist( playlist );
