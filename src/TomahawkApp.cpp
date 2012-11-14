@@ -430,12 +430,14 @@ TomahawkApp::printHelp()
     echo( "  --noupnp       Disable UPnP\n" );
     echo( "  --nosip        Disable SIP\n" );
     echo( "\nPlayback Controls:\n" );
-    echo( "  --playpause    Toggle playing/paused state\n" );
     echo( "  --play         Start/resume playback\n" );
     echo( "  --pause        Pause playback\n" );
+    echo( "  --playpause    Toggle playing/paused state\n" );
     echo( "  --stop         Stop playback\n" );
-    echo( "  --next         Advances to the next track (if available)\n" );
     echo( "  --prev         Returns to the previous track (if available)\n" );
+    echo( "  --next         Advances to the next track (if available)\n" );
+    echo( "  --voldown      Decrease the volume\n" );
+    echo( "  --volup        Increase the volume\n" );
     echo( "\nurl is a tomahawk:// command or alternatively a url that Tomahawk can recognize.\n" );
     echo( "For more documentation, see http://wiki.tomahawk-player.org/mediawiki/index.php/Tomahawk://_Links\n" );
 }
@@ -779,6 +781,10 @@ TomahawkApp::instanceStarted( KDSingleApplicationGuard::Instance instance )
         AudioEngine::instance()->pause();
     else if ( arguments.contains( "--stop" ) )
         AudioEngine::instance()->stop();
+    else if ( arguments.contains( "--voldown" ) )
+        AudioEngine::instance()->lowerVolume();
+    else if ( arguments.contains( "--volup" ) )
+        AudioEngine::instance()->raiseVolume();
     else
         activate();
 }
