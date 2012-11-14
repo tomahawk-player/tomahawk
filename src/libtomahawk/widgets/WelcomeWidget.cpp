@@ -96,8 +96,11 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     , ui( new Ui::WelcomeWidget )
 {
     ui->setupUi( this );
+
     ui->splitter_2->setStretchFactor( 0, 3 );
     ui->splitter_2->setStretchFactor( 1, 1 );
+    ui->splitter->setChildrenCollapsible( false );
+    ui->splitter_2->setChildrenCollapsible( false );
 
     RecentPlaylistsModel* model = new RecentPlaylistsModel( HISTORY_PLAYLIST_ITEMS, this );
 
@@ -384,7 +387,7 @@ PlaylistWidget::PlaylistWidget( QWidget* parent )
     : QListView( parent )
 {
     m_overlay = new OverlayWidget( this );
-    LoadingSpinner* spinner = new LoadingSpinner( this );
+    /* LoadingSpinner* spinner = */ new LoadingSpinner( this );
 }
 
 
