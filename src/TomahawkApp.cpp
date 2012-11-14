@@ -153,11 +153,11 @@ TomahawkApp::installTranslator()
     QTranslator* translator = new QTranslator( this );
     if ( translator->load( QString( ":/lang/tomahawk_" ) + locale ) )
     {
-        tDebug() << "Translation: Tomahawk: Using system locale:" << locale;
+        tDebug( LOGVERBOSE ) << "Translation: Tomahawk: Using system locale:" << locale;
     }
     else
     {
-        tDebug() << "Translation: Tomahawk: Using default locale, system locale one not found:" << locale;
+        tDebug( LOGVERBOSE ) << "Translation: Tomahawk: Using default locale, system locale one not found:" << locale;
         translator->load( QString( ":/lang/tomahawk_en" ) );
     }
 
@@ -167,11 +167,11 @@ TomahawkApp::installTranslator()
     translator = new QTranslator( this );
     if ( translator->load( QString( ":/lang/qt_" ) + locale ) )
     {
-        tDebug() << "Translation: Qt: Using system locale:" << locale;
+        tDebug( LOGVERBOSE ) << "Translation: Qt: Using system locale:" << locale;
     }
     else
     {
-        tDebug() << "Translation: Qt: Using default locale, system locale one not found:" << locale;
+        tDebug( LOGVERBOSE ) << "Translation: Qt: Using default locale, system locale one not found:" << locale;
     }
 
     TOMAHAWK_APPLICATION::installTranslator( translator );
@@ -417,29 +417,31 @@ TomahawkApp::instance()
 void
 TomahawkApp::printHelp()
 {
-    #define echo( X ) std::cout << QString( X ).toAscii().data()
+    #define echo( X ) std::cout << QString( X ).toAscii().data() << "\n"
 
-    echo( "Usage: " + arguments().at( 0 ) + " [options] [url]\n" );
-    echo( "Options are:\n" );
-    echo( "  --help         Show this help\n" );
-    echo( "  --http         Initialize HTTP server\n" );
-    echo( "  --filescan     Scan files on startup\n" );
-//    echo( "  --headless     Run without a GUI\n" );
-    echo( "  --hide         Hide main window on startup\n" );
-    echo( "  --testdb       Use a test database instead of real collection\n" );
-    echo( "  --noupnp       Disable UPnP\n" );
-    echo( "  --nosip        Disable SIP\n" );
-    echo( "\nPlayback Controls:\n" );
-    echo( "  --play         Start/resume playback\n" );
-    echo( "  --pause        Pause playback\n" );
-    echo( "  --playpause    Toggle playing/paused state\n" );
-    echo( "  --stop         Stop playback\n" );
-    echo( "  --prev         Returns to the previous track (if available)\n" );
-    echo( "  --next         Advances to the next track (if available)\n" );
-    echo( "  --voldown      Decrease the volume\n" );
-    echo( "  --volup        Increase the volume\n" );
-    echo( "\nurl is a tomahawk:// command or alternatively a url that Tomahawk can recognize.\n" );
-    echo( "For more documentation, see http://wiki.tomahawk-player.org/mediawiki/index.php/Tomahawk://_Links\n" );
+    echo( "Usage: " + arguments().at( 0 ) + " [options] [url]" );
+    echo( "Options are:" );
+    echo( "  --help         Show this help" );
+    echo( "  --http         Initialize HTTP server" );
+    echo( "  --filescan     Scan files on startup" );
+//    echo( "  --headless     Run without a GUI" );
+    echo( "  --hide         Hide main window on startup" );
+    echo( "  --testdb       Use a test database instead of real collection" );
+    echo( "  --noupnp       Disable UPnP" );
+    echo( "  --nosip        Disable SIP" );
+    echo();
+    echo( "Playback Controls:" );
+    echo( "  --play         Start/resume playback" );
+    echo( "  --pause        Pause playback" );
+    echo( "  --playpause    Toggle playing/paused state" );
+    echo( "  --stop         Stop playback" );
+    echo( "  --prev         Returns to the previous track (if available)" );
+    echo( "  --next         Advances to the next track (if available)" );
+    echo( "  --voldown      Decrease the volume" );
+    echo( "  --volup        Increase the volume" );
+    echo();
+    echo( "url is a tomahawk:// command or alternatively a url that Tomahawk can recognize." );
+    echo( "For more documentation, see http://wiki.tomahawk-player.org/index.php/Tomahawk://_Links" );
 }
 
 
