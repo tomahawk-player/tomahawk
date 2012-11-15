@@ -329,8 +329,6 @@ createRoundedImage( const QPixmap& pixmap, const QSize& size, float frameWidthPc
     if ( !height || !width )
         return QPixmap();
 
-    int frameWidth = (float)width * frameWidthPct;
-
     QPixmap scaledAvatar = pixmap.scaled( width, height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
     QPixmap frame( width, height );
     frame.fill( Qt::transparent );
@@ -346,11 +344,11 @@ createRoundedImage( const QPixmap& pixmap, const QSize& size, float frameWidthPc
 
     painter.setBrush( brush );
     painter.setPen( pen );
-    painter.drawRoundedRect( outerRect, frameWidth * 2, frameWidth * 2 );
+    painter.drawRoundedRect( outerRect, frameWidthPct * 100.0, frameWidthPct * 100.0, Qt::RelativeSize );
 
 /*    painter.setBrush( Qt::transparent );
     painter.setPen( Qt::white );
-    painter.drawRoundedRect( outerRect, frameWidth * 2, frameWidth * 2 ); */
+    painter.drawRoundedRect( outerRect, frameWidthPct, frameWidthPct, Qt::RelativeSize ); */
 
     return frame;
 }

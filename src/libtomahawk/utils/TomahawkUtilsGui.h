@@ -48,7 +48,7 @@ namespace TomahawkUtils
 
     DLLEXPORT void openUrl( const QUrl& url );
 
-    DLLEXPORT QPixmap createRoundedImage( const QPixmap& avatar, const QSize& size, float frameWidthPct = 0.10 );
+    DLLEXPORT QPixmap createRoundedImage( const QPixmap& avatar, const QSize& size, float frameWidthPct = 0.20 );
 
     DLLEXPORT QColor alphaBlend( const QColor& colorFrom, const QColor& colorTo, float opacity );
     DLLEXPORT QPixmap createDragPixmap( MediaType type, int itemCount = 1 );
