@@ -310,13 +310,44 @@ openUrl( const QUrl& url )
 
 
 QPixmap
-createAvatarFrame( const QPixmap &avatar )
+createRoundedImage( const QPixmap& pixmap, const QSize& size, float frameWidthPct )
 {
-    QPixmap frame( ":/data/images/avatar_frame.png" );
-    QPixmap scaledAvatar = avatar.scaled( frame.height() * 75 / 100, frame.width() * 75 / 100, Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
+    int height;
+    int width;
+
+    if ( !size.isEmpty() )
+    {
+        height = size.height();
+        width = size.width();
+    }
+    else
+    {
+        height = pixmap.height();
+        width = pixmap.width();
+    }
+
+    int frameWidth = (float)width * frameWidthPct;
+
+    QPixmap scaledAvatar = pixmap.scaled( width, height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
+    QPixmap frame( width, height );
+    frame.fill( Qt::transparent );
 
     QPainter painter( &frame );
-    painter.drawPixmap( ( frame.height() - scaledAvatar.height() ) / 2, ( frame.width() - scaledAvatar.width() ) / 2, scaledAvatar );
+    painter.setRenderHint( QPainter::Antialiasing );
+
+    QRect outerRect( 0, 0, width, height );
+    QBrush brush( scaledAvatar );
+    QPen pen;
+    pen.setColor( Qt::transparent );
+    pen.setJoinStyle( Qt::RoundJoin );
+
+    painter.setBrush( brush );
+    painter.setPen( pen );
+    painter.drawRoundedRect( outerRect, frameWidth * 2, frameWidth * 2 );
+
+/*    painter.setBrush( Qt::transparent );
+    painter.setPen( Qt::white );
+    painter.drawRoundedRect( outerRect, frameWidth * 2, frameWidth * 2 ); */
 
     return frame;
 }
@@ -408,7 +439,7 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
 
         case DefaultSourceAvatar:
             if ( mode == AvatarInFrame )
-                pixmap = TomahawkUtils::createAvatarFrame( QPixmap( RESPATH "images/user-avatar.png" ) );
+                pixmap = TomahawkUtils::createRoundedImage( QPixmap( RESPATH "images/user-avatar.png" ), size );
             else
                 pixmap = QPixmap( RESPATH "images/user-avatar.png" );
             break;
