@@ -19,6 +19,8 @@ SET( TOMAHAWK_VERSION_PATCH 99 )
 
 # enforce proper symbol exporting on all platforms
 add_definitions( "-fvisibility=hidden" )
+# enforce using constBegin, constEnd for const-iterators
+add_definitions( "-DQT_STRICT_ITERATORS" )
 
 # build options
 option(BUILD_GUI "Build Tomahawk with GUI" ON)

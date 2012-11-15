@@ -212,8 +212,8 @@ void QxtWebCgiService::pageRequestedEvent(QxtWebRequestEvent* event)
     env["QUERY_STRING"] = event->url.encodedQuery();
 
     // Populate HTTP header environment variables
-    QMultiHash<QString, QString>::const_iterator iter = event->headers.begin();
-    while (iter != event->headers.end())
+    QMultiHash<QString, QString>::const_iterator iter = event->headers.constBegin();
+    while (iter != event->headers.constEnd())
     {
         QString key = "HTTP_" + iter.key().toUpper().replace('-', '_');
         if (key != "HTTP_CONTENT_TYPE" && key != "HTTP_CONTENT_LENGTH")
@@ -222,9 +222,9 @@ void QxtWebCgiService::pageRequestedEvent(QxtWebRequestEvent* event)
     }
 
     // Populate HTTP_COOKIE parameter
-    iter = event->cookies.begin();
+    iter = event->cookies.constBegin();
     QString cookies;
-    while (iter != event->cookies.end())
+    while (iter != event->cookies.constEnd())
     {
         if (!cookies.isEmpty())
             cookies += "; ";
