@@ -63,10 +63,10 @@ QList< Tomahawk::query_ptr >
 PlayableProxyModelPlaylistInterface::tracks()
 {
     if ( m_proxyModel.isNull() )
-        return QList< Tomahawk::query_ptr >();
+        return QList< query_ptr >();
 
     PlayableProxyModel* proxyModel = m_proxyModel.data();
-    QList<Tomahawk::query_ptr> queries;
+    QList< query_ptr > queries;
 
     for ( int i = 0; i < proxyModel->rowCount( QModelIndex() ); i++ )
     {
@@ -99,7 +99,7 @@ PlayableProxyModelPlaylistInterface::siblingItem( int itemsAway, bool readOnly )
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << m_shuffled << itemsAway << readOnly;
 
     if ( m_proxyModel.isNull() )
-        return Tomahawk::result_ptr();
+        return result_ptr();
 
     PlayableProxyModel* proxyModel = m_proxyModel.data();
 
@@ -113,36 +113,50 @@ PlayableProxyModelPlaylistInterface::siblingItem( int itemsAway, bool readOnly )
     {
         if ( m_shuffled )
         {
-            // random mode is enabled
-            if ( m_shuffleCache.isValid() )
+            if ( itemsAway < 0 )
             {
-                idx = m_shuffleCache;
+                if ( m_shuffleHistory.count() > 1 )
+                {
+                    m_shuffleHistory.removeLast();
+                    if ( proxyModel->itemFromQuery( m_shuffleHistory.last() ) )
+                        idx = proxyModel->mapFromSource( proxyModel->itemFromQuery( m_shuffleHistory.takeLast() )->index );
+                }
+                else
+                    return result_ptr();
             }
             else
             {
-                int safetyCounter = 0;
-                PlayableItem* item = 0;
-                do
+                // random mode is enabled
+                if ( m_shuffleCache.isValid() )
                 {
-                    safetyCounter++;
-                    idx = proxyModel->index( qrand() % proxyModel->rowCount(), 0 );
-                    item = proxyModel->itemFromIndex( proxyModel->mapToSource( idx ) );
-                }
-                while ( safetyCounter < proxyModel->rowCount() &&
-                      ( !item || !item->query()->playable() || m_shuffleHistory.contains( item->query() ) ) );
-
-                if ( item && item->query()->playable() )
-                {
-                    if ( readOnly )
-                    {
-                        m_shuffleCache = idx;
-                        tDebug( LOGVERBOSE ) << "Next shuffled PlaylistItem cached:" << item->query()->toString() << item->query()->results().at( 0 )->url()
-                                             << "- after" << safetyCounter << "tries to find a track";
-                    }
+                    idx = m_shuffleCache;
                 }
                 else
                 {
-                    tDebug() << Q_FUNC_INFO << "Error finding next shuffled playable track";
+                    int safetyCounter = 0;
+                    PlayableItem* item = 0;
+                    do
+                    {
+                        safetyCounter++;
+                        idx = proxyModel->index( qrand() % proxyModel->rowCount(), 0 );
+                        item = proxyModel->itemFromIndex( proxyModel->mapToSource( idx ) );
+                    }
+                    while ( safetyCounter < proxyModel->rowCount() &&
+                        ( !item || !item->query()->playable() || m_shuffleHistory.contains( item->query() ) ) );
+
+                    if ( item && item->query()->playable() )
+                    {
+                        if ( readOnly )
+                        {
+                            m_shuffleCache = idx;
+                            tDebug( LOGVERBOSE ) << "Next shuffled PlaylistItem cached:" << item->query()->toString() << item->query()->results().at( 0 )->url()
+                                                << "- after" << safetyCounter << "tries to find a track";
+                        }
+                    }
+                    else
+                    {
+                        tDebug() << Q_FUNC_INFO << "Error finding next shuffled playable track";
+                    }
                 }
             }
         }
@@ -196,7 +210,8 @@ PlayableProxyModelPlaylistInterface::siblingItem( int itemsAway, bool readOnly )
 
     if ( !readOnly )
         proxyModel->setCurrentIndex( QModelIndex() );
-    return Tomahawk::result_ptr();
+
+    return result_ptr();
 }
 
 
@@ -204,7 +219,7 @@ Tomahawk::result_ptr
 PlayableProxyModelPlaylistInterface::currentItem() const
 {
     if ( m_proxyModel.isNull() )
-        return Tomahawk::result_ptr();
+        return result_ptr();
 
     PlayableProxyModel* proxyModel = m_proxyModel.data();
 
@@ -212,6 +227,6 @@ PlayableProxyModelPlaylistInterface::currentItem() const
     if ( item && !item->query().isNull() && item->query()->playable() )
         return item->query()->results().at( 0 );
 
-    return Tomahawk::result_ptr();
+    return result_ptr();
 }
 
