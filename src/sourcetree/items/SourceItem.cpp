@@ -57,7 +57,7 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
 {
     if ( m_source.isNull() )
     {
-        m_superCol = TomahawkUtils::createAvatarFrame( QPixmap( RESPATH "images/supercollection.png" ) );
+        m_superCol = TomahawkUtils::createRoundedImage( QPixmap( RESPATH "images/supercollection.png" ), QSize( 0, 0 ) );
         return;
     }
 
@@ -104,7 +104,7 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
 /*    if ( ViewManager::instance()->pageForCollection( source->collection() ) )
         model()->linkSourceItemToPage( this, ViewManager::instance()->pageForCollection( source->collection() ) );*/
 
-    m_defaultAvatar = TomahawkUtils::createAvatarFrame( QPixmap( RESPATH "images/user-avatar.png" ) );
+    m_defaultAvatar = TomahawkUtils::createRoundedImage( QPixmap( RESPATH "images/user-avatar.png" ), QSize( 0, 0 ) );
 
     // load auto playlists and stations!
 
@@ -191,7 +191,9 @@ QIcon
 SourceItem::icon() const
 {
     if ( m_source.isNull() )
+    {
        return m_superCol;
+    }
     else
     {
         if ( m_source->avatar().isNull() )

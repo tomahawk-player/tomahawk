@@ -118,7 +118,7 @@ TreeModel::fetchMore( const QModelIndex& parent )
     }
     else if ( !parentItem->album().isNull() )
     {
-        tDebug() << Q_FUNC_INFO << "Loading Album:" << parentItem->album()->name();
+        tDebug() << Q_FUNC_INFO << "Loading Album:" << parentItem->album()->artist()->name() << parentItem->album()->name() << parentItem->album()->id();
         addTracks( parentItem->album(), parent );
     }
     else
@@ -261,7 +261,7 @@ TreeModel::addCollection( const collection_ptr& collection )
     connect( collection.data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ), Qt::UniqueConnection );
 
     if ( !collection->source()->avatar().isNull() )
-        setIcon( collection->source()->avatar() );
+        setIcon( collection->source()->avatar( Source::FancyStyle ) );
 
     if ( collection->source()->isLocal() )
         setTitle( tr( "My Collection" ) );
@@ -379,6 +379,7 @@ TreeModel::onTracksFound( const QList<Tomahawk::query_ptr>& tracks, Tomahawk::Mo
 
     Tomahawk::Album* album = qobject_cast<Tomahawk::Album*>( sender() );
 
+    tDebug() << "Adding album:" << album->artist()->name() << album->name() << album->id();
     QModelIndex idx = indexFromAlbum( album->weakRef().toStrongRef() );
     tDebug() << "Adding tracks" << tracks.count() << "to index:" << idx;
     onTracksAdded( tracks, idx );
