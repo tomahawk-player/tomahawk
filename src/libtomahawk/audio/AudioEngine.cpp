@@ -734,8 +734,14 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
         {
             case Phonon::PausedState:
             {
-                qint64 duration = m_mediaObject->totalTime() > 0 ? m_mediaObject->totalTime() : m_currentTrack->duration() * 1000;
-                stopped = ( duration - 1000 < m_mediaObject->currentTime() );
+                if ( m_mediaObject && m_currentTrack )
+                {
+                    qint64 duration = m_mediaObject->totalTime() > 0 ? m_mediaObject->totalTime() : m_currentTrack->duration() * 1000;
+                    stopped = ( duration - 1000 < m_mediaObject->currentTime() );
+                }
+                else
+                    stopped = true;
+
                 if ( !stopped )
                     setState( Paused );
 
