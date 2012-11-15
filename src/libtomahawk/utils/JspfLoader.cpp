@@ -111,6 +111,8 @@ JSPFLoader::networkLoadFinished()
 void
 JSPFLoader::networkError( QNetworkReply::NetworkError e )
 {
+    Q_UNUSED( e );
+
     reportError();
 
     NetworkReply* r = qobject_cast<NetworkReply*>( sender() );

@@ -82,17 +82,19 @@ private:
     void lookupSpotifyBrowse( const QString& playlist );
     void checkTrackFinished();
     void checkBrowseFinished();
+
+
     int  m_limit;
     bool m_single;
     bool m_trackMode;
-    bool m_createNewPlaylist;
     bool m_collaborative;
+    bool m_createNewPlaylist;
+    DropJobNotifier* m_browseJob;
     int m_subscribers;
     QList< query_ptr > m_tracks;
     QSet< NetworkReply* > m_queries;
     QString m_title, m_info, m_creator;
     Tomahawk::playlist_ptr m_playlist;
-    DropJobNotifier* m_browseJob;
     QString m_browseUri;
     static QPixmap* s_pixmap;
 };

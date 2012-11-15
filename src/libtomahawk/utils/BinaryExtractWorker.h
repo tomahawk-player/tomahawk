@@ -31,7 +31,7 @@ namespace TomahawkUtils
 class ScopedDeleter
 {
 public:
-    ScopedDeleter( QObject* o ) : m_o( 0 ) {}
+    ScopedDeleter( QObject* o ) : m_o( o ) {}
     ~ScopedDeleter() { m_o->deleteLater(); }
 
 private:

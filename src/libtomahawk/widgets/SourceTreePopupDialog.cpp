@@ -173,6 +173,8 @@ SourceTreePopupDialog::setExtraQuestions( const Tomahawk::PlaylistDeleteQuestion
 void
 SourceTreePopupDialog::paintEvent( QPaintEvent* event )
 {
+    Q_UNUSED( event );
+
     // Constants for painting
     const int leftTriangleWidth = 12;
     const int cornerRounding = TomahawkUtils::POPUP_ROUNDING_RADIUS;

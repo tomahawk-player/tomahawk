@@ -51,7 +51,7 @@ SourceList::SourceList( QObject* parent )
 
 
 const source_ptr&
-SourceList::getLocal()
+SourceList::getLocal() const
 {
     return m_local;
 }

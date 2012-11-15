@@ -741,7 +741,9 @@ TomahawkApp::notify( QObject *receiver, QEvent *e )
     catch ( const std::exception& e )
     {
         qWarning( "TomahawkApp::notify caught a std exception in a Qt event handler: " );
-        qFatal( e.what() );
+
+        // the second parameter surpresses a format-security warning
+        qFatal( e.what(), "" );
     }
     catch ( ... )
     {

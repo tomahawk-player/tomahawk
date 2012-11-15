@@ -157,6 +157,7 @@ void
 PlaylistModel::insertAlbums( const QList< Tomahawk::album_ptr >& albums, int row )
 {
     // FIXME: This currently appends, not inserts!
+    Q_UNUSED( row );
 
     foreach ( const album_ptr& album, albums )
     {
@@ -182,6 +183,7 @@ void
 PlaylistModel::insertArtists( const QList< Tomahawk::artist_ptr >& artists, int row )
 {
     // FIXME: This currently appends, not inserts!
+    Q_UNUSED( row );
 
     foreach ( const artist_ptr& artist, artists )
     {

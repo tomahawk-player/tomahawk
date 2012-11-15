@@ -167,6 +167,8 @@ SlideSwitchButton::mouseMoveEvent( QMouseEvent* e )
 void
 SlideSwitchButton::paintEvent( QPaintEvent* event )
 {
+    Q_UNUSED( event );
+
     QPainter painter( this );
     painter.setRenderHint( QPainter::Antialiasing );
 

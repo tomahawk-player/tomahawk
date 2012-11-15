@@ -163,6 +163,8 @@ AccountsToolButton::paintEvent( QPaintEvent* event )
 void
 AccountsToolButton::moveEvent( QMoveEvent* event )
 {
+    Q_UNUSED( event );
+
     if ( m_popup )
     {
         if ( isDown() )

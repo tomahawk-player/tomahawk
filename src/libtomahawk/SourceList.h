@@ -39,7 +39,7 @@ public:
 
     bool isReady() const { return m_isReady; }
 
-    const Tomahawk::source_ptr& getLocal();
+    const Tomahawk::source_ptr& getLocal() const;
     void setLocal( const Tomahawk::source_ptr& localSrc );
 
     void setWebSource( const Tomahawk::source_ptr& websrc );

@@ -323,6 +323,8 @@ SpotifyParser::spotifyTrackLookupFinished()
 void
 SpotifyParser::playlistListingResult( const QString& msgType, const QVariantMap& msg, const QVariant& extraData )
 {
+    Q_UNUSED( extraData );
+
     Q_ASSERT( msgType == "playlistListing" );
 
     m_title = msg.value( "name" ).toString();

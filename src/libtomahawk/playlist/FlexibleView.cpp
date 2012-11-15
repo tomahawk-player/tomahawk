@@ -329,6 +329,7 @@ FlexibleView::onModelChanged()
 void
 FlexibleView::onWidgetDestroyed( QWidget* widget )
 {
+    Q_UNUSED( widget );
     emit destroyed( this );
 }
 

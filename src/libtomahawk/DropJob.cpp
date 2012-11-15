@@ -850,6 +850,7 @@ DropJob::removeRemoteSources()
 QList< query_ptr >
 DropJob::getArtist( const QString &artist, Tomahawk::ModelMode mode )
 {
+    Q_UNUSED( mode );
     artist_ptr artistPtr = Artist::get( artist );
     if ( artistPtr->playlistInterface( Mixed )->tracks().isEmpty() )
     {

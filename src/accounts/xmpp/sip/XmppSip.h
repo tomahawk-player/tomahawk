@@ -91,7 +91,6 @@ public slots:
     virtual void sendMsg( const QString& peerId, const SipInfo& info );
     virtual void addContact( const QString& peerId, const QString& msg = QString() );
 
-    void broadcastMsg( const QString& msg );
     void showAddFriendDialog();
     void publishTune( const QUrl& url, const Tomahawk::InfoSystem::InfoStringHash& trackInfo );
 

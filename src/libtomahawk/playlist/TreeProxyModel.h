@@ -42,6 +42,9 @@ public:
     virtual ~TreeProxyModel() {}
 
     virtual void setSourcePlayableModel( TreeModel* model );
+    // workaround overloaded-virtual warning
+    virtual void setSourcePlayableModel( PlayableModel* ) { Q_ASSERT( false ); }
+
     virtual Tomahawk::playlistinterface_ptr playlistInterface();
 
     virtual void setFilter( const QString& pattern );
@@ -50,7 +53,10 @@ signals:
 
 protected:
     bool filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const;
+
     bool lessThan( const QModelIndex& left, const QModelIndex& right ) const;
+    // workaround overloaded-virtual warning: using this would lead to serious weirdness in release mode, sometimes an assert is simply not enough
+    bool lessThan(int, const Tomahawk::query_ptr&, const Tomahawk::query_ptr&) const {  Q_ASSERT(false); TomahawkUtils::crash(); return false; }
 
 private slots:
     void onRowsInserted( const QModelIndex& parent, int start, int end );

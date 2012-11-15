@@ -13,7 +13,7 @@ QT4_WRAP_UI( crashreporter_UI_HEADERS ${crashreporter_UI} )
 QT4_ADD_RESOURCES( crashreporter_RC_RCC ${crashreporter_RC} )
 
 INCLUDE( ${QT_USE_FILE} )
-INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/src ../../libtomahawk )
+INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_BINARY_DIR} ../../libtomahawk )
 ADD_DEFINITIONS( ${QT_DEFINITIONS} )
 
 ADD_EXECUTABLE( tomahawk_crash_reporter WIN32 ${crashreporter_SOURCES} ${crashreporter_HEADERS_MOC} ${crashreporter_UI_HEADERS} ${crashreporter_RC_RCC} )

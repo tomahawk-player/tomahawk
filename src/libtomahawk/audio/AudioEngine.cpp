@@ -770,7 +770,7 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
         tDebug( LOGVERBOSE ) << "Phonon state now:" << newState;
         if ( m_stateQueue.count() )
         {
-            AudioState qState = m_stateQueue.dequeue();
+            /*/ AudioState qState = */ m_stateQueue.dequeue();
             checkStateQueue();
         }
     }

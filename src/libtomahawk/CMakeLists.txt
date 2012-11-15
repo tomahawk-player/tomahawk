@@ -172,6 +172,7 @@ set( libSources
     Album.cpp
     AlbumPlaylistInterface.cpp
     Collection.cpp
+    CountryUtils.cpp
     FuncTimeout.cpp
     Playlist.cpp
     PlaylistPlaylistInterface.cpp

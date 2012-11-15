@@ -46,7 +46,7 @@ public:
     virtual void setRepeatMode( PlaylistModes::RepeatMode ) {}
     virtual void setShuffled( bool ) {}
     virtual bool shuffled() const { return false; }
-    virtual result_ptr siblingItem( int itemsAway ) { return result_ptr(); }
+    virtual result_ptr siblingItem( int ) { return result_ptr(); }
     virtual int trackCount() const { return 1; }
     virtual QList< query_ptr > tracks() { return QList< query_ptr >(); }
 

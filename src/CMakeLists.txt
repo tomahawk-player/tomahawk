@@ -105,18 +105,11 @@ INCLUDE_DIRECTORIES(
     .
     ${CMAKE_CURRENT_BINARY_DIR}
 
-    audio
-    database
-    playlist
-    network
     sourcetree
-    topbar
     libtomahawk
     mac
 
     ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/qxtweb
-    ${THIRDPARTY_DIR}/qtweetlib/qtweetlib/src
-    ${THIRDPARTY_DIR}/qtweetlib/tomahawk-custom
     ${THIRDPARTY_DIR}/breakpad
 
     ${TAGLIB_INCLUDES}

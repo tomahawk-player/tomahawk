@@ -40,7 +40,7 @@ ENDIF()
 IF( WITH_BREAKPAD )
     message(STATUS "Build with support for breakpad.")
     IF( CMAKE_COMPILER_IS_GNUCXX )
-        ADD_DEFINITIONS( -DSTDC_HEADERS -std=gnu++98 )
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DSTDC_HEADERS -std=gnu++98" )
     ENDIF()
 ENDIF()
 

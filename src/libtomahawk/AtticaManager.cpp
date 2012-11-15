@@ -303,6 +303,8 @@ AtticaManager::resolverData(const QString &atticaId) const
 void
 AtticaManager::providerError( QNetworkReply::NetworkError err )
 {
+    Q_UNUSED( err );
+
     // So those who care know
     emit resolversLoaded( Content::List() );
 }

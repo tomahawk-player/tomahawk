@@ -64,7 +64,7 @@ public slots:
 
     void advertise();
 
-    void sendMsg( const QString& peerId , const SipInfo&  ) {}
+    void sendMsg( const QString&, const SipInfo&  ) {}
     void broadcastMsg( const QString & ) {}
     void addContact( const QString &, const QString&  ) {}
 

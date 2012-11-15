@@ -122,6 +122,7 @@ SpotifyInfoPlugin::notInCacheSlot( InfoStringHash criteria, InfoRequestData requ
 void
 SpotifyInfoPlugin::albumListingResult( const QString& msgType, const QVariantMap& msg, const QVariant& extraData )
 {
+    Q_UNUSED( msgType );
     Q_ASSERT( msg.contains( "qid" ) );
     Q_ASSERT( extraData.canConvert< InfoRequestData >() );
 

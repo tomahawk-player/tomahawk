@@ -457,12 +457,6 @@ XmppSipPlugin::sendMsg( const QString& to, const SipInfo& info )
 
 
 void
-XmppSipPlugin::broadcastMsg( const QString& msg )
-{
-}
-
-
-void
 XmppSipPlugin::addContact( const QString& jid, const QString& msg )
 {
     // Add contact to the Tomahawk group on the roster

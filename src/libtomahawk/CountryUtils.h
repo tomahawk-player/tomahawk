@@ -19,6 +19,8 @@
 #ifndef CHARTSPLUGIN_DATA_P_H
 #define CHARTSPLUGIN_DATA_P_H
 
+#include "DllMacro.h"
+
 #include <QtCore/qchar.h>
 #include <QLocale>
 
@@ -777,27 +779,7 @@ static const quint16 country_name_index[] = {
 };
 
 // Assumes that code is a 2 letter code
-static QString fullCountryFromCode(const QString& countryCode)
-{
-    ushort uc1 = countryCode[0].toUpper().unicode();
-    ushort uc2 = countryCode[1].toUpper().unicode();
-    ushort uc3 = QChar('\0').unicode(); // No, not dealign with LatinAmericaAndTheCaribbean for convenience
-
-    const unsigned char *c = country_code_list;
-    for (; *c != 0; c += 3) {
-        if (uc1 == c[0] && uc2 == c[1] && uc3 == c[2])
-        {
-            uint country = (uint)((c - country_code_list)/3);
-
-            if (country > uint(QLocale::LastCountry))
-                return QLatin1String("Unknown");
-
-            return QString(country_name_list + country_name_index[country]);
-        }
-    }
-
-    return QString("Unknown");
-}
+DLLEXPORT QString fullCountryFromCode(const QString& countryCode);
 
 }
 }

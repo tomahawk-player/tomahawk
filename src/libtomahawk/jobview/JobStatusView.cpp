@@ -112,6 +112,7 @@ JobStatusView::customDelegateJobInserted( int row, JobStatusItem* item )
 void
 JobStatusView::customDelegateJobRemoved( int row )
 {
+    Q_UNUSED( row );
     checkCount();
 }
 

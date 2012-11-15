@@ -108,7 +108,7 @@ bool
 AlbumPlaylistInterface::setCurrentTrack( unsigned int albumpos )
 {
     albumpos--;
-    if ( albumpos >= m_queries.count() )
+    if ( ( int ) albumpos >= m_queries.count() )
         return false;
 
     m_currentTrack = albumpos;
