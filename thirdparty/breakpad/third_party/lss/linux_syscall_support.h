@@ -1346,7 +1346,7 @@ struct kernel_statfs {
 
 
 /* After forking, we must make sure to only call system calls.               */
-#if __BOUNDED_POINTERS__
+#if defined __BOUNDED_POINTERS__
   #error "Need to port invocations of syscalls for bounded ptrs"
 #else
   /* The core dumper and the thread lister get executed after threads
@@ -1379,27 +1379,27 @@ struct kernel_statfs {
   #undef LSS_NAME
   #ifndef SYS_PREFIX
     #define LSS_NAME(name) sys_##name
-  #elif SYS_PREFIX < 0
+  #elif defined SYS_PREFIX && SYS_PREFIX < 0
     #define LSS_NAME(name) name
-  #elif SYS_PREFIX == 0
+  #elif defined SYS_PREFIX && SYS_PREFIX == 0
     #define LSS_NAME(name) sys0_##name
-  #elif SYS_PREFIX == 1
+  #elif defined SYS_PREFIX && SYS_PREFIX == 1
     #define LSS_NAME(name) sys1_##name
-  #elif SYS_PREFIX == 2
+  #elif defined SYS_PREFIX && SYS_PREFIX == 2
     #define LSS_NAME(name) sys2_##name
-  #elif SYS_PREFIX == 3
+  #elif defined SYS_PREFIX && SYS_PREFIX == 3
     #define LSS_NAME(name) sys3_##name
-  #elif SYS_PREFIX == 4
+  #elif defined SYS_PREFIX && SYS_PREFIX == 4
     #define LSS_NAME(name) sys4_##name
-  #elif SYS_PREFIX == 5
+  #elif defined SYS_PREFIX && SYS_PREFIX == 5
     #define LSS_NAME(name) sys5_##name
-  #elif SYS_PREFIX == 6
+  #elif defined SYS_PREFIX && SYS_PREFIX == 6
     #define LSS_NAME(name) sys6_##name
-  #elif SYS_PREFIX == 7
+  #elif defined SYS_PREFIX && SYS_PREFIX == 7
     #define LSS_NAME(name) sys7_##name
-  #elif SYS_PREFIX == 8
+  #elif defined SYS_PREFIX && SYS_PREFIX == 8
     #define LSS_NAME(name) sys8_##name
-  #elif SYS_PREFIX == 9
+  #elif defined SYS_PREFIX && SYS_PREFIX == 9
     #define LSS_NAME(name) sys9_##name
   #endif
 
