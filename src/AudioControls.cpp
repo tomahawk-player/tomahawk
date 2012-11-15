@@ -301,7 +301,7 @@ AudioControls::setCover()
     {
         QPixmap cover;
         cover = m_currentTrack->toQuery()->cover( ui->coverImage->size() );
-        ui->coverImage->setPixmap( cover, false );
+        ui->coverImage->setPixmap( TomahawkUtils::createRoundedImage( cover, QSize( 0, 0 ) ), false );
     }
     else
         ui->coverImage->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::ScaledCover, ui->coverImage->size() ), true );
