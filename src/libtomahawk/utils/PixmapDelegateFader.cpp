@@ -52,7 +52,7 @@ PixmapDelegateFader::PixmapDelegateFader( const artist_ptr& artist, const QSize&
         connect( m_artist.data(), SIGNAL( updated() ), SLOT( artistChanged() ) );
         connect( m_artist.data(), SIGNAL( coverChanged() ), SLOT( artistChanged() ) );
 
-        m_currentReference = m_artist->cover( size, forceLoad );
+        m_currentReference = TomahawkUtils::createRoundedImage( m_artist->cover( size, forceLoad ), QSize( 0, 0 ), m_mode == TomahawkUtils::Grid ? 0.00 : 0.20 );
     }
 
     init();
@@ -69,7 +69,7 @@ PixmapDelegateFader::PixmapDelegateFader( const album_ptr& album, const QSize& s
         connect( m_album.data(), SIGNAL( updated() ), SLOT( albumChanged() ) );
         connect( m_album.data(), SIGNAL( coverChanged() ), SLOT( albumChanged() ) );
 
-        m_currentReference = m_album->cover( size, forceLoad );
+        m_currentReference = TomahawkUtils::createRoundedImage( m_album->cover( size, forceLoad ), QSize( 0, 0 ), m_mode == TomahawkUtils::Grid ? 0.00 : 0.20 );
     }
 
     init();
@@ -87,7 +87,7 @@ PixmapDelegateFader::PixmapDelegateFader( const query_ptr& track, const QSize& s
         connect( m_track.data(), SIGNAL( resultsChanged() ), SLOT( trackChanged() ) );
         connect( m_track->displayQuery().data(), SIGNAL( coverChanged() ), SLOT( trackChanged() ) );
 
-        m_currentReference = m_track->displayQuery()->cover( size, forceLoad );
+        m_currentReference = TomahawkUtils::createRoundedImage( m_track->displayQuery()->cover( size, forceLoad ), QSize( 0, 0 ), m_mode == TomahawkUtils::Grid ? 0.00 : 0.20 );
     }
 
     init();
@@ -144,11 +144,11 @@ PixmapDelegateFader::setSize( const QSize& size )
     else
     {
         if ( !m_album.isNull() )
-            m_currentReference = m_album->cover( m_size );
+            m_currentReference = TomahawkUtils::createRoundedImage( m_album->cover( m_size ), QSize( 0, 0 ), m_mode == TomahawkUtils::Grid ? 0.00 : 0.20 );
         else if ( !m_artist.isNull() )
-            m_currentReference = m_artist->cover( m_size );
+            m_currentReference = TomahawkUtils::createRoundedImage( m_artist->cover( m_size ), QSize( 0, 0 ), m_mode == TomahawkUtils::Grid ? 0.00 : 0.20 );
         else if ( !m_track.isNull() )
-            m_currentReference = m_track->displayQuery()->cover( m_size );
+            m_currentReference = TomahawkUtils::createRoundedImage( m_track->displayQuery()->cover( m_size ), QSize( 0, 0 ), m_mode == TomahawkUtils::Grid ? 0.00 : 0.20 );
     }
 
     emit repaintRequest();
@@ -161,7 +161,7 @@ PixmapDelegateFader::albumChanged()
     if ( m_album.isNull() )
         return;
 
-    QMetaObject::invokeMethod( this, "setPixmap", Qt::QueuedConnection, Q_ARG( QPixmap, m_album->cover( m_size ) ) );
+    QMetaObject::invokeMethod( this, "setPixmap", Qt::QueuedConnection, Q_ARG( QPixmap, TomahawkUtils::createRoundedImage( m_album->cover( m_size ), QSize( 0, 0 ), m_mode == TomahawkUtils::Grid ? 0.00 : 0.20 ) ) );
 }
 
 
@@ -171,7 +171,7 @@ PixmapDelegateFader::artistChanged()
     if ( m_artist.isNull() )
         return;
 
-    QMetaObject::invokeMethod( this, "setPixmap", Qt::QueuedConnection, Q_ARG( QPixmap, m_artist->cover( m_size ) ) );
+    QMetaObject::invokeMethod( this, "setPixmap", Qt::QueuedConnection, Q_ARG( QPixmap, TomahawkUtils::createRoundedImage( m_artist->cover( m_size ), QSize( 0, 0 ), m_mode == TomahawkUtils::Grid ? 0.00 : 0.20 ) ) );
 }
 
 
@@ -182,7 +182,7 @@ PixmapDelegateFader::trackChanged()
         return;
 
     connect( m_track->displayQuery().data(), SIGNAL( coverChanged() ), SLOT( trackChanged() ) );
-    QMetaObject::invokeMethod( this, "setPixmap", Qt::QueuedConnection, Q_ARG( QPixmap, m_track->displayQuery()->cover( m_size ) ) );
+    QMetaObject::invokeMethod( this, "setPixmap", Qt::QueuedConnection, Q_ARG( QPixmap, TomahawkUtils::createRoundedImage( m_track->displayQuery()->cover( m_size ), QSize( 0, 0 ), m_mode == TomahawkUtils::Grid ? 0.00 : 0.20 ) ) );
 }
 
 
