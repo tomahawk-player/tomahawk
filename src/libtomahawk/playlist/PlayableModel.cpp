@@ -39,7 +39,7 @@ using namespace Tomahawk;
 
 PlayableModel::PlayableModel( QObject* parent, bool loading )
     : QAbstractItemModel( parent )
-    , m_rootItem( new PlayableItem( 0, this ) )
+    , m_rootItem( new PlayableItem( 0 ) )
     , m_readOnly( true )
     , m_loading( loading )
 {
@@ -499,7 +499,7 @@ PlayableModel::clear()
         emit beginResetModel();
         delete m_rootItem;
         m_rootItem = 0;
-        m_rootItem = new PlayableItem( 0, this );
+        m_rootItem = new PlayableItem( 0 );
         emit endResetModel();
     }
 }

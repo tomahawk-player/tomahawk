@@ -43,7 +43,7 @@ PlayableItem::~PlayableItem()
 }
 
 
-PlayableItem::PlayableItem( PlayableItem* parent, QAbstractItemModel* model )
+PlayableItem::PlayableItem( PlayableItem* parent )
 {
     init( parent );
 }
@@ -130,8 +130,6 @@ PlayableItem::init( PlayableItem* parent, int row )
         {
             parent->children.insert( row, this );
         }
-
-        this->model = parent->model;
     }
 
     if ( !m_query.isNull() )

@@ -34,7 +34,7 @@ Q_OBJECT
 public:
     ~PlayableItem();
 
-    explicit PlayableItem( PlayableItem* parent = 0, QAbstractItemModel* model = 0 );
+    explicit PlayableItem( PlayableItem* parent = 0 );
     explicit PlayableItem( const Tomahawk::artist_ptr& artist, PlayableItem* parent = 0, int row = -1 );
     explicit PlayableItem( const Tomahawk::album_ptr& album, PlayableItem* parent = 0, int row = -1 );
     explicit PlayableItem( const Tomahawk::result_ptr& result, PlayableItem* parent = 0, int row = -1 );
@@ -61,7 +61,6 @@ public:
     QList<PlayableItem*> children;
 
     QPersistentModelIndex index;
-    QAbstractItemModel* model;
 
 signals:
     void dataChanged();
