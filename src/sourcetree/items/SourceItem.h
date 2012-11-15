@@ -40,6 +40,7 @@ public:
     virtual QString text() const;
     virtual QString tooltip() const;
     virtual QIcon icon() const;
+    virtual QPixmap pixmap( const QSize& size = QSize( 0, 0 ) ) const;
     virtual int peerSortValue() const;
     virtual int IDValue() const;
 

@@ -190,6 +190,13 @@ SourceItem::activate()
 QIcon
 SourceItem::icon() const
 {
+    return pixmap();
+}
+
+
+QPixmap
+SourceItem::pixmap( const QSize& size ) const
+{
     if ( m_source.isNull() )
     {
        return m_superCol;
@@ -199,7 +206,7 @@ SourceItem::icon() const
         if ( m_source->avatar().isNull() )
             return m_defaultAvatar;
         else
-            return m_source->avatar( Source::FancyStyle );
+            return m_source->avatar( Source::FancyStyle, size );
     }
 }
 
