@@ -90,6 +90,7 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     setVerticalScrollMode( QTreeView::ScrollPerPixel );
     setMouseTracking( true );
     setEditTriggers( NoEditTriggers );
+    setAutoExpandDelay( 500 );
 
     // TODO animation conflicts with the expanding-playlists-when-collection-is-null
     // so investigate
