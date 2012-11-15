@@ -185,9 +185,8 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
     }
 
     QRect iconRect = option.rect.adjusted( 4, 6, -option.rect.width() + option.rect.height() - 12 + 4, -6 );
-
-    QPixmap avatar = colItem->icon().pixmap( iconRect.size() );
-    painter->drawPixmap( iconRect, avatar.scaledToHeight( iconRect.height(), Qt::SmoothTransformation ) );
+    QPixmap avatar = colItem->pixmap( iconRect.size() );
+    painter->drawPixmap( iconRect, avatar );
 
     if ( ( option.state & QStyle::State_Selected ) == QStyle::State_Selected )
     {
