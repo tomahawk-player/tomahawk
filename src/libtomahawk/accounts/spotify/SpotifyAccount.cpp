@@ -43,6 +43,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QMessageBox>
+#include <QCoreApplication>
 
 using namespace Tomahawk;
 using namespace Accounts;
