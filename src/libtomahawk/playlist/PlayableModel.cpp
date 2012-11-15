@@ -844,3 +844,21 @@ PlayableModel::setIcon( const QPixmap& pixmap )
     m_icon = pixmap;
     emit changed();
 }
+
+
+PlayableItem*
+PlayableModel::itemFromQuery( const Tomahawk::query_ptr& query ) const
+{
+    for ( int i = 0; i < rowCount( QModelIndex() ); i++ )
+    {
+        QModelIndex idx = index( i, 0, QModelIndex() );
+        PlayableItem* item = itemFromIndex( idx );
+        if ( item && item->query() == query )
+        {
+            return item;
+        }
+    }
+
+    tDebug() << "Could not find item for query:" << query->toString();
+    return 0;
+}

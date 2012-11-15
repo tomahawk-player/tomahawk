@@ -69,6 +69,7 @@ public:
     virtual void setMaxVisibleItems( int items );
 
     virtual PlayableItem* itemFromIndex( const QModelIndex& index ) const { return sourceModel()->itemFromIndex( index ); }
+    virtual PlayableItem* itemFromQuery( const Tomahawk::query_ptr& query ) const { return sourceModel()->itemFromQuery( query ); }
 
     virtual Tomahawk::playlistinterface_ptr playlistInterface();
 
