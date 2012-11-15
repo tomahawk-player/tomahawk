@@ -230,7 +230,7 @@ AlbumInfoWidget::onAlbumImageUpdated()
     m_pixmap = m_album->cover( QSize( 0, 0 ) );
     emit pixmapChanged( m_pixmap );
 
-    ui->cover->setPixmap( m_album->cover( ui->cover->sizeHint() ) );
+    ui->cover->setPixmap( TomahawkUtils::createRoundedImage( m_album->cover( ui->cover->sizeHint() ), QSize( 0, 0 ), 0.05 ) );
 }
 
 

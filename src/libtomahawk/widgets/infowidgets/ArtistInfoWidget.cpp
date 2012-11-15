@@ -304,7 +304,7 @@ ArtistInfoWidget::onArtistImageUpdated()
     m_pixmap = m_artist->cover( QSize( 0, 0 ) );
     emit pixmapChanged( m_pixmap );
 
-    ui->cover->setPixmap( m_artist->cover( ui->cover->sizeHint() ) );
+    ui->cover->setPixmap( TomahawkUtils::createRoundedImage( m_artist->cover( ui->cover->sizeHint() ), QSize( 0, 0 ), 0.05 ) );
 }
 
 
