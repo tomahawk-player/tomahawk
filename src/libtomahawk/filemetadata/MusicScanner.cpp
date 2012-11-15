@@ -214,7 +214,6 @@ MusicScanner::scanFilePaths()
 }
 
 
-
 void
 MusicScanner::postOps()
 {
@@ -243,7 +242,8 @@ MusicScanner::postOps()
         m_filesToDelete.clear();
     }
 
-    cleanup();
+    if ( !m_cmdQueue )
+        cleanup();
 }
 
 

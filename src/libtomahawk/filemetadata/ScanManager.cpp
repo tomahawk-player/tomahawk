@@ -219,7 +219,6 @@ ScanManager::runFileScan( const QStringList &paths )
 }
 
 
-
 void
 ScanManager::fileMtimesCheck( const QMap< QString, QMap< unsigned int, unsigned int > >& mtimes )
 {
