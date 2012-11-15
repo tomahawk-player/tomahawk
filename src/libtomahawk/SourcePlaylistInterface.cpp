@@ -64,13 +64,13 @@ SourcePlaylistInterface::nextItem()
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
     if ( !sourceValid() )
     {
-        tDebug( LOGEXTRA ) << Q_FUNC_INFO << " Source no longer valid";
+        tDebug( LOGEXTRA ) << Q_FUNC_INFO << "Source no longer valid";
         m_currentItem = Tomahawk::result_ptr();
         return m_currentItem;
     }
     else if ( !hasNextItem() )
     {
-        tDebug( LOGEXTRA ) << Q_FUNC_INFO << " This song was already fetched or the source isn't playing anything";
+        tDebug( LOGEXTRA ) << Q_FUNC_INFO << "This song was already fetched or the source isn't playing anything";
         return Tomahawk::result_ptr();
     }
 
@@ -151,7 +151,7 @@ SourcePlaylistInterface::onSourcePlaybackStarted( const Tomahawk::query_ptr& que
 void
 SourcePlaylistInterface::resolvingFinished( bool hasResults )
 {
-    tDebug( LOGEXTRA ) << Q_FUNC_INFO << " and has results? : " << (hasResults ? "true" : "false");
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO << "Has results?" << ( hasResults ? "true" : "false" );
     if ( hasResults )
     {
         m_gotNextItem = true;
