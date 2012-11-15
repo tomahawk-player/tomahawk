@@ -330,6 +330,9 @@ createRoundedImage( const QPixmap& pixmap, const QSize& size, float frameWidthPc
         return QPixmap();
 
     QPixmap scaledAvatar = pixmap.scaled( width, height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
+    if ( frameWidthPct == 0.00 )
+        return scaledAvatar;
+
     QPixmap frame( width, height );
     frame.fill( Qt::transparent );
 
