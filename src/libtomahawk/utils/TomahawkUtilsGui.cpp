@@ -326,6 +326,9 @@ createRoundedImage( const QPixmap& pixmap, const QSize& size, float frameWidthPc
         width = pixmap.width();
     }
 
+    if ( !height || !width )
+        return QPixmap();
+
     int frameWidth = (float)width * frameWidthPct;
 
     QPixmap scaledAvatar = pixmap.scaled( width, height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
