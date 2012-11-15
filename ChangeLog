@@ -1,6 +1,14 @@
 Version 0.6.0:
     * Access Control queries now stay on the bottom of the job view,
       removing the tendency to jump away from the mouse.
+    * Improved random mode, preventing songs from being played in too rapid
+      succession.
+    * You can now choose between Various view modes for your playlists.
+    * Nicer layout for the Album page.
+    * Follow HTTP redirects when fetching Playlists from the Internet.
+    * Main menu can now be hidden and instead be shown as a toolbar button.
+    * Connectivity controls in the toolbar.
+    * Cleaned up settings dialog.
 
 Version 0.5.5:
     * Changed the Spotify config dialog to indicate when the user
