@@ -1067,7 +1067,7 @@ connect and stream from you?</translation>
         <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="96"/>
         <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="103"/>
         <source>A playlist by %1, created %2.</source>
-        <translation>A playlist by %1, created %2.</translation>
+        <translation>A playlist by %1, created %2. {1,?}</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="163"/>
