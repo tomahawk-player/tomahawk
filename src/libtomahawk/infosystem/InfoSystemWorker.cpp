@@ -21,7 +21,6 @@
 #include "InfoSystemWorker.h"
 
 #include "config.h"
-#include "HeadlessCheck.h"
 #include "InfoSystemCache.h"
 #include "GlobalActionManager.h"
 #include "utils/TomahawkUtils.h"

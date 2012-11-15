@@ -19,12 +19,13 @@
 
 #include "OverlayWidget.h"
 
+#include "playlist/PlayableProxyModel.h"
+#include "utils/TomahawkUtilsGui.h"
+#include "utils/Logger.h"
+
 #include <QPainter>
 #include <QPropertyAnimation>
 
-#include "PlayableProxyModel.h"
-#include "utils/TomahawkUtilsGui.h"
-#include "utils/Logger.h"
 
 #define CORNER_ROUNDNESS 8.0
 #define FADING_DURATION 500

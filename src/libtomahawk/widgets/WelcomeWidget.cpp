@@ -21,8 +21,6 @@
 #include "WelcomeWidget.h"
 #include "ui_WelcomeWidget.h"
 
-#include <QtGui/QPainter>
-
 #include "ViewManager.h"
 #include "SourceList.h"
 #include "TomahawkSettings.h"
@@ -35,8 +33,11 @@
 #include "utils/AnimatedSpinner.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
-#include "dynamic/GeneratorInterface.h"
+#include "playlist/dynamic/GeneratorInterface.h"
 #include "RecentlyPlayedPlaylistsModel.h"
+
+#include <QPainter>
+
 
 #define HISTORY_PLAYLIST_ITEMS 10
 

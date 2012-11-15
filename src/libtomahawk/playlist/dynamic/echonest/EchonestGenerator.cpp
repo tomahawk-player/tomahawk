@@ -16,9 +16,9 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "dynamic/echonest/EchonestGenerator.h"
-#include "dynamic/echonest/EchonestControl.h"
-#include "dynamic/echonest/EchonestSteerer.h"
+#include "playlist/dynamic/echonest/EchonestGenerator.h"
+#include "playlist/dynamic/echonest/EchonestControl.h"
+#include "playlist/dynamic/echonest/EchonestSteerer.h"
 #include "Query.h"
 #include "utils/TomahawkUtils.h"
 #include "TomahawkSettings.h"

@@ -19,7 +19,7 @@
 #ifndef DATABASE_CONTROL_H
 #define DATABASE_CONTROL_H
 
-#include "dynamic/DynamicControl.h"
+#include "playlist/dynamic/DynamicControl.h"
 
 #include <QTimer>
 

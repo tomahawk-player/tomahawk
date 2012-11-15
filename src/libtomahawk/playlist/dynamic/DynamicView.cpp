@@ -19,18 +19,19 @@
 
 #include "DynamicView.h"
 
+#include "../PlaylistModel.h"
+#include "../PlayableProxyModel.h"
+#include "DynamicModel.h"
+#include "widgets/OverlayWidget.h"
+#include "utils/Logger.h"
+#include "Source.h"
+
 #include <QApplication>
 #include <QPainter>
 #include <QPaintEvent>
 #include <QPaintEngine>
 #include <QScrollBar>
 
-#include "PlaylistModel.h"
-#include "PlayableProxyModel.h"
-#include "DynamicModel.h"
-#include "widgets/OverlayWidget.h"
-#include "utils/Logger.h"
-#include "Source.h"
 
 using namespace Tomahawk;
 

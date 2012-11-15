@@ -19,14 +19,16 @@
 #ifndef DBSYNCCONNECTION_H
 #define DBSYNCCONNECTION_H
 
+#include "network/Connection.h"
+#include "database/Op.h"
+#include "Typedefs.h"
+
 #include <QObject>
 #include <QTimer>
 #include <QSharedPointer>
 #include <QIODevice>
 
-#include "network/Connection.h"
-#include "database/Op.h"
-#include "Typedefs.h"
+
 
 class DatabaseCommand;
 

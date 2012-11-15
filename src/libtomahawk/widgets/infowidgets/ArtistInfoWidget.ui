@@ -368,7 +368,7 @@
   <customwidget>
    <class>GridView</class>
    <extends>QListView</extends>
-   <header location="global">GridView.h</header>
+   <header location="global">playlist/GridView.h</header>
   </customwidget>
   <customwidget>
    <class>PlaylistView</class>

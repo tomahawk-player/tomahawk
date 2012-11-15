@@ -71,7 +71,7 @@
   <customwidget>
    <class>TreeView</class>
    <extends>QTreeView</extends>
-   <header>TreeView.h</header>
+   <header>playlist/TreeView.h</header>
   </customwidget>
   <customwidget>
    <class>PlaylistView</class>

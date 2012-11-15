@@ -20,6 +20,8 @@
 #ifndef TOMAHAWK_ACLREGISTRY_H
 #define TOMAHAWK_ACLREGISTRY_H
 
+#include "DllMacro.h"
+
 #include <QObject>
 #include <QString>
 #include <QHash>
@@ -29,9 +31,6 @@
 #include <QQueue>
 #include <QStringList>
 #include <QUuid>
-
-#include "HeadlessCheck.h"
-#include "DllMacro.h"
 
 #define ACLUSERVERSION 1
 

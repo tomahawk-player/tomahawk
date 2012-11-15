@@ -23,11 +23,11 @@
 #include "audio/AudioEngine.h"
 #include "SourceList.h"
 #include "utils/Logger.h"
-#include "dynamic/DynamicPlaylist.h"
+#include "playlist/dynamic/DynamicPlaylist.h"
 #include "database/Database.h"
 #include "database/DatabaseCommand_LoadAllSortedPlaylists.h"
 #include "RecentlyPlayedPlaylistsModel.h"
-#include <network/Servent.h>
+#include "network/Servent.h"
 
 #define REFRESH_TIMEOUT 1000
 

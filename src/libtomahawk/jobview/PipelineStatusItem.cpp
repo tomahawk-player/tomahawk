@@ -22,7 +22,6 @@
 
 #include "utils/TomahawkUtils.h"
 #include "Pipeline.h"
-#include "TomahawkApp.h"
 #include "JobStatusModel.h"
 #include "JobStatusView.h"
 #include "Source.h"

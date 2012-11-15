@@ -18,6 +18,12 @@
 
 #include "DynamicControlList.h"
 
+#include "DynamicControlWrapper.h"
+#include "playlist/dynamic/GeneratorInterface.h"
+#include "utils/TomahawkUtils.h"
+#include "utils/Logger.h"
+#include "Source.h"
+
 #include <QLayout>
 #include <QLabel>
 #include <QPaintEvent>
@@ -27,11 +33,6 @@
 #include <QGridLayout>
 #include <QHBoxLayout>
 
-#include "DynamicControlWrapper.h"
-#include "dynamic/GeneratorInterface.h"
-#include "utils/TomahawkUtils.h"
-#include "utils/Logger.h"
-#include "Source.h"
 
 using namespace Tomahawk;
 

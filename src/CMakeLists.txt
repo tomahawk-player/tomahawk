@@ -104,6 +104,7 @@ SET( tomahawkUI ${tomahawkUI}
 INCLUDE_DIRECTORIES(
     .
     ${CMAKE_CURRENT_BINARY_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}/libtomahawk
 
     sourcetree
     libtomahawk
@@ -146,10 +147,12 @@ IF(QCA2_FOUND)
 ENDIF(QCA2_FOUND)
 
 INCLUDE(GNUInstallDirs)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.h.in
-               ${CMAKE_CURRENT_BINARY_DIR}/config.h)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/TomahawkVersion.h.in
-               ${CMAKE_CURRENT_BINARY_DIR}/TomahawkVersion.h)
+
+# currently only in libtomahawk, we might want to properly split what's in which config file
+# configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.h.in
+#                ${CMAKE_CURRENT_BINARY_DIR}/config.h)
+# configure_file(${CMAKE_CURRENT_SOURCE_DIR}/TomahawkVersion.h.in
+#                ${CMAKE_CURRENT_BINARY_DIR}/TomahawkVersion.h)
 
 # translations
 include( ${CMAKE_SOURCE_DIR}/lang/translations.cmake )

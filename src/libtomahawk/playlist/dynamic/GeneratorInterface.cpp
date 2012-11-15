@@ -17,7 +17,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "dynamic/GeneratorInterface.h"
+#include "playlist/dynamic/GeneratorInterface.h"
 
 #include "utils/Logger.h"
 #include "Source.h"

@@ -20,9 +20,6 @@
 
 #include "Playlist.h"
 
-#include <QtXml/QDomDocument>
-#include <QtXml/QDomElement>
-
 #include "database/Database.h"
 #include "database/DatabaseCommand_LoadPlaylistEntries.h"
 #include "database/DatabaseCommand_SetPlaylistRevision.h"
@@ -38,8 +35,11 @@
 
 #include "utils/Logger.h"
 #include "utils/Closure.h"
-#include "PlaylistUpdaterInterface.h"
+#include "playlist/PlaylistUpdaterInterface.h"
 #include "widgets/SourceTreePopupDialog.h"
+
+#include <QtXml/QDomDocument>
+#include <QtXml/QDomElement>
 
 using namespace Tomahawk;
 

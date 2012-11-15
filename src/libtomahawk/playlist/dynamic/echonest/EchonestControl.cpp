@@ -16,20 +16,22 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "dynamic/echonest/EchonestControl.h"
+#include "playlist/dynamic/echonest/EchonestControl.h"
+
+#include "playlist/dynamic/widgets/MiscControlWidgets.h"
+
+#include "EchonestGenerator.h"
+
+#include "utils/Logger.h"
+#include "SourceList.h"
+
+#include <echonest/Playlist.h>
 
 #include <QComboBox>
 #include <QLineEdit>
 #include <QLabel>
 #include <QCompleter>
 #include <QStringListModel>
-
-#include "dynamic/widgets/MiscControlWidgets.h"
-#include <echonest/Playlist.h>
-#include "EchonestGenerator.h"
-
-#include "utils/Logger.h"
-#include <SourceList.h>
 
 
 QHash< QString, QStringList > Tomahawk::EchonestControl::s_suggestCache = QHash< QString, QStringList >();

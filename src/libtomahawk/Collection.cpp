@@ -19,13 +19,13 @@
 
 #include "Collection.h"
 
-#include <QMetaObject>
-#include <QGenericArgument>
-
 #include "Source.h"
 
 #include "utils/Logger.h"
-#include <PlaylistUpdaterInterface.h>
+#include "playlist/PlaylistUpdaterInterface.h"
+
+#include <QMetaObject>
+#include <QGenericArgument>
 
 using namespace Tomahawk;
 

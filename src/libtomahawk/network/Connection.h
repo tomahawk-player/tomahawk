@@ -20,27 +20,28 @@
 #ifndef CONNECTION_H
 #define CONNECTION_H
 
-#include <QtCore/QSharedPointer>
-#include <QtNetwork/QTcpSocket>
-#include <QtNetwork/QHostAddress>
-#include <QtCore/QVariant>
-#include <QtCore/QVariantMap>
-#include <QtCore/QString>
-#include <QtCore/QDataStream>
-#include <QtCore/QtEndian>
-#include <QtCore/QTimer>
-#include <QtCore/QTime>
-#include <QtCore/QPointer>
+#include "Msg.h"
+#include "MsgProcessor.h"
+#include "AclRegistry.h"
+
+#include "DllMacro.h"
 
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 #include <qjson/qobjecthelper.h>
 
-#include "Msg.h"
-#include "MsgProcessor.h"
-#include "libtomahawk/AclRegistry.h"
+#include <QSharedPointer>
+#include <QTcpSocket>
+#include <QHostAddress>
+#include <QVariant>
+#include <QVariantMap>
+#include <QString>
+#include <QDataStream>
+#include <QtEndian>
+#include <QTimer>
+#include <QTime>
+#include <QPointer>
 
-#include "DllMacro.h"
 
 class Servent;
 

@@ -23,7 +23,7 @@
 #include "ArtistInfoWidget.h"
 #include "ui_ArtistInfoWidget.h"
 #include "PlaylistInterface.h"
-#include "TreeProxyModel.h"
+#include "playlist/TreeProxyModel.h"
 #include "Result.h"
 #include "Typedefs.h"
 

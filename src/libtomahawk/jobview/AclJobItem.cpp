@@ -22,7 +22,7 @@
 #include "JobStatusModel.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/TomahawkUtilsGui.h"
-#include "libtomahawk/infosystem/InfoSystem.h"
+#include "infosystem/InfoSystem.h"
 #include "utils/Logger.h"
 
 #include <QPixmap>

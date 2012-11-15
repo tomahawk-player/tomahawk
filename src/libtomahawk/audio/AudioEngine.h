@@ -20,21 +20,21 @@
 #ifndef AUDIOENGINE_H
 #define AUDIOENGINE_H
 
-#include <QtCore/QObject>
-#include <QtCore/QTimer>
-#include <QtCore/QQueue>
-
-#include <phonon/MediaObject>
-#include <phonon/AudioOutput>
-#include <phonon/BackendCapabilities>
-
-#include "libtomahawk/infosystem/InfoSystem.h"
-
+#include "infosystem/InfoSystem.h"
 #include "Typedefs.h"
 #include "Result.h"
 #include "PlaylistInterface.h"
 
 #include "DllMacro.h"
+
+#include <phonon/MediaObject>
+#include <phonon/AudioOutput>
+#include <phonon/BackendCapabilities>
+
+#include <QtCore/QObject>
+#include <QtCore/QTimer>
+#include <QtCore/QQueue>
+
 
 class DLLEXPORT AudioEngine : public QObject
 {

@@ -26,6 +26,8 @@
 #include "utils/Logger.h"
 #include "Source.h"
 
+#include <QCoreApplication>
+
 ActionCollection* ActionCollection::s_instance = 0;
 ActionCollection* ActionCollection::instance()
 {

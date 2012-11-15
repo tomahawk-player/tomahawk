@@ -23,8 +23,8 @@
 #include "WhatsHotWidget.h"
 #include "PlaylistInterface.h"
 #include "ui_WhatsHotWidget.h"
-#include "TreeProxyModel.h"
-#include "PlaylistView.h"
+#include "playlist/TreeProxyModel.h"
+#include "playlist/PlaylistView.h"
 #include "Result.h"
 
 #include <QObject>

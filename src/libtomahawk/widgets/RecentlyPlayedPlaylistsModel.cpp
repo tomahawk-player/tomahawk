@@ -24,7 +24,7 @@
 #include "audio/AudioEngine.h"
 #include "SourceList.h"
 #include "utils/Logger.h"
-#include "dynamic/DynamicPlaylist.h"
+#include "playlist/dynamic/DynamicPlaylist.h"
 #include "Playlist.h"
 
 using namespace Tomahawk;

@@ -61,8 +61,8 @@ if (CMAKE_COMPILER_IS_GNUC)
   endif (NOT CONFIGURED)
 endif ()
 
-configure_file (${CMAKE_SOURCE_DIR}/miniupnpcstrings.h.cmake ${CMAKE_BINARY_DIR}/miniupnpcstrings.h)
-include_directories (${CMAKE_BINARY_DIR})
+configure_file (${CMAKE_CURRENT_SOURCE_DIR}/miniupnpcstrings.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/miniupnpcstrings.h)
+include_directories (${CMAKE_CURRENT_BINARY_DIR})
 
 set (MINIUPNPC_SOURCES
   igd_desc_parse.c

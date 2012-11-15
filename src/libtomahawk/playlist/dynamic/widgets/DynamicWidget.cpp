@@ -19,20 +19,12 @@
 
 #include "DynamicWidget.h"
 
-#include <QVBoxLayout>
-#include <QLabel>
-#include <QComboBox>
-#include <QPushButton>
-#include <QSpinBox>
-#include <QEvent>
-#include <QPainter>
-
 #include "DynamicControlList.h"
-#include "dynamic/DynamicModel.h"
-#include "PlayableProxyModel.h"
-#include "PlayableItem.h"
-#include "dynamic/GeneratorInterface.h"
-#include "dynamic/GeneratorFactory.h"
+#include "playlist/dynamic/DynamicModel.h"
+#include "playlist/PlayableProxyModel.h"
+#include "playlist/PlayableItem.h"
+#include "playlist/dynamic/GeneratorInterface.h"
+#include "playlist/dynamic/GeneratorFactory.h"
 #include "Pipeline.h"
 #include "Source.h"
 #include "audio/AudioEngine.h"
@@ -40,10 +32,18 @@
 #include "CollapsibleControls.h"
 #include "DynamicControlWrapper.h"
 #include "ViewManager.h"
-#include "dynamic/DynamicView.h"
+#include "playlist/dynamic/DynamicView.h"
 #include "DynamicSetupWidget.h"
 #include "utils/AnimatedSpinner.h"
 #include "utils/Logger.h"
+
+#include <QVBoxLayout>
+#include <QLabel>
+#include <QComboBox>
+#include <QPushButton>
+#include <QSpinBox>
+#include <QEvent>
+#include <QPainter>
 
 using namespace Tomahawk;
 

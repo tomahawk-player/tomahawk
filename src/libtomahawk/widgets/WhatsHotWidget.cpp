@@ -23,9 +23,6 @@
 #include "WhatsHotWidget_p.h"
 #include "ui_WhatsHotWidget.h"
 
-#include <QPainter>
-#include <QStandardItemModel>
-#include <QStandardItem>
 
 #include "ViewManager.h"
 #include "SourceList.h"
@@ -34,7 +31,7 @@
 #include "ChartDataLoader.h"
 
 #include "audio/AudioEngine.h"
-#include "dynamic/GeneratorInterface.h"
+#include "playlist/dynamic/GeneratorInterface.h"
 #include "playlist/PlayableModel.h"
 #include "playlist/PlaylistModel.h"
 #include "playlist/TreeProxyModel.h"
@@ -43,6 +40,11 @@
 #include "utils/Logger.h"
 #include "Pipeline.h"
 #include "utils/AnimatedSpinner.h"
+
+#include <QPainter>
+#include <QStandardItemModel>
+#include <QStandardItem>
+
 
 #define HISTORY_TRACK_ITEMS 25
 #define HISTORY_PLAYLIST_ITEMS 10

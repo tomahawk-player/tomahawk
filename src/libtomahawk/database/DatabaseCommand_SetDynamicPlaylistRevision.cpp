@@ -18,16 +18,15 @@
 
 #include "DatabaseCommand_SetDynamicPlaylistRevision.h"
 
-#include <QSqlQuery>
-
 #include "Source.h"
 #include "DatabaseImpl.h"
 #include "TomahawkSqlQuery.h"
-#include "dynamic/DynamicPlaylist.h"
-#include "dynamic/DynamicControl.h"
+#include "playlist/dynamic/DynamicPlaylist.h"
+#include "playlist/dynamic/DynamicControl.h"
 #include "network/Servent.h"
 #include "utils/Logger.h"
 
+#include <QSqlQuery>
 
 DatabaseCommand_SetDynamicPlaylistRevision::DatabaseCommand_SetDynamicPlaylistRevision( const Tomahawk::source_ptr& s,
                                                                                 const QString& playlistguid,

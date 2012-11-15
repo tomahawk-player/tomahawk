@@ -20,7 +20,7 @@
 #include "DatabaseImpl.h"
 
 #include "Playlist.h"
-#include <libtomahawk/SourceList.h>
+#include "SourceList.h"
 
 using namespace Tomahawk;
 

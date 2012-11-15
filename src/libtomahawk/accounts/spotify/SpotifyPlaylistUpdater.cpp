@@ -22,7 +22,9 @@
 #include "accounts/AccountManager.h"
 #include "SpotifyAccount.h"
 #include "utils/TomahawkUtils.h"
+
 #include <QMessageBox>
+#include <QApplication>
 
 using namespace Tomahawk;
 using namespace Accounts;

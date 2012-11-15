@@ -16,7 +16,14 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "dynamic/echonest/EchonestSteerer.h"
+#include "playlist/dynamic/echonest/EchonestSteerer.h"
+
+#include "Source.h"
+#include "playlist/dynamic/widgets/DynamicWidget.h"
+#include "utils/TomahawkUtils.h"
+#include "utils/Logger.h"
+
+#include <echonest/Playlist.h>
 
 #include <QPaintEvent>
 #include <QHBoxLayout>
@@ -26,13 +33,6 @@
 #include <QPainter>
 #include <QToolButton>
 #include <QPropertyAnimation>
-
-#include "echonest/Playlist.h"
-#include "Source.h"
-#include "dynamic/widgets/DynamicWidget.h"
-
-#include "utils/TomahawkUtils.h"
-#include "utils/Logger.h"
 
 using namespace Tomahawk;
 

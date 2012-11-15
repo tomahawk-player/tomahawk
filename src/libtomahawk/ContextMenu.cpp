@@ -20,7 +20,7 @@
 #include "ContextMenu.h"
 
 #include "GlobalActionManager.h"
-#include "PlaylistView.h"
+#include "playlist/PlaylistView.h"
 #include "ViewManager.h"
 #include "Query.h"
 #include "Result.h"

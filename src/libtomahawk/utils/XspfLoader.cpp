@@ -20,10 +20,6 @@
 
 #include "XspfLoader.h"
 
-#include "HeadlessCheck.h"
-
-#include <QDomDocument>
-
 #ifndef ENABLE_HEADLESS
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
@@ -32,12 +28,14 @@
 
 #include "SourceList.h"
 #include "Playlist.h"
-#include <XspfUpdater.h>
-#include <Pipeline.h>
+#include "playlist/XspfUpdater.h"
+#include "Pipeline.h"
 
 #include "utils/NetworkReply.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
+
+#include <QDomDocument>
 
 using namespace Tomahawk;
 

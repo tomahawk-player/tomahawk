@@ -22,9 +22,6 @@
 #include "ui_AlbumInfoWidget.h"
 #include "AlbumInfoWidget_p.h"
 
-#include <QScrollArea>
-#include <QScrollBar>
-
 #include "audio/AudioEngine.h"
 #include "ViewManager.h"
 #include "database/Database.h"
@@ -38,6 +35,9 @@
 
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+
+#include <QScrollArea>
+#include <QScrollBar>
 
 using namespace Tomahawk;
 

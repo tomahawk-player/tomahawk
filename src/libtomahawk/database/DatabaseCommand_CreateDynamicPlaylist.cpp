@@ -18,14 +18,11 @@
 
 #include "DatabaseCommand_CreateDynamicPlaylist.h"
 
-#include <QSqlQuery>
-#include <QSqlDriver>
-
 #include "DatabaseImpl.h"
 #include "TomahawkSqlQuery.h"
-#include "dynamic/DynamicPlaylist.h"
-#include "dynamic/DynamicControl.h"
-#include "dynamic/GeneratorInterface.h"
+#include "playlist/dynamic/DynamicPlaylist.h"
+#include "playlist/dynamic/DynamicControl.h"
+#include "playlist/dynamic/GeneratorInterface.h"
 
 #include "Source.h"
 #include "network/Servent.h"
@@ -34,6 +31,9 @@
 #ifndef ENABLE_HEADLESS
     #include "ViewManager.h"
 #endif
+
+#include <QSqlQuery>
+#include <QSqlDriver>
 
 using namespace Tomahawk;
 

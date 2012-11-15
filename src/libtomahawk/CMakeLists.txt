@@ -17,6 +17,11 @@ add_definitions( -DQT_SHARED )
 add_definitions( -DDLLEXPORT_PRO )
 add_definitions( -DQT_SHAREDPOINTER_TRACK_POINTERS )
 
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../Config.h.in
+               ${CMAKE_CURRENT_BINARY_DIR}/config.h)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../TomahawkVersion.h.in
+               ${CMAKE_CURRENT_BINARY_DIR}/TomahawkVersion.h)
+
 set( libGuiSources
     ActionCollection.cpp
 
@@ -335,17 +340,16 @@ set( libUI ${libUI}
     accounts/lastfm/LastFmConfig.ui
 )
 
-include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.. ..
+include_directories(
+    ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}
+
     ${QT_INCLUDE_DIR}
     ${QJSON_INCLUDE_DIR}
     ${ECHONEST_INCLUDE_DIR}
     ${LIBLASTFM_INCLUDE_DIRS}
-    ${LIBLASTFM_INCLUDE_DIRS}/..
     ${CLUCENE_INCLUDE_DIRS}
     ${PHONON_INCLUDES}
-
-    playlist
 
     ${LIBPORTFWD_INCLUDE_DIR}
     ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/qxtweb

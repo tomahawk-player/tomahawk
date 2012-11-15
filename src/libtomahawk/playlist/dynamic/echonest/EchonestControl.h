@@ -19,9 +19,9 @@
 #ifndef ECHONEST_CONTROL_H
 #define ECHONEST_CONTROL_H
 
-#include <echonest/Playlist.h>
+#include "playlist/dynamic/DynamicControl.h"
 
-#include "dynamic/DynamicControl.h"
+#include <echonest/Playlist.h>
 
 #include <QTimer>
 

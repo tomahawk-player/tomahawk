@@ -18,6 +18,10 @@
 
 #include "DynamicControlWrapper.h"
 
+#include "playlist/dynamic/DynamicControl.h"
+#include "utils/TomahawkUtils.h"
+#include "utils/Logger.h"
+
 #include <QHBoxLayout>
 #include <QComboBox>
 #include <QLayout>
@@ -25,10 +29,6 @@
 #include <QPaintEvent>
 #include <QPainter>
 #include <QStackedLayout>
-
-#include "dynamic/DynamicControl.h"
-#include "utils/TomahawkUtils.h"
-#include "utils/Logger.h"
 
 using namespace Tomahawk;
 

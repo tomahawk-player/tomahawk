@@ -20,28 +20,25 @@
 
 #include "ViewManager.h"
 
-#include <QVBoxLayout>
-#include <QMetaMethod>
-
 #include "audio/AudioEngine.h"
 #include "context/ContextWidget.h"
 #include "infobar/InfoBar.h"
 
-#include "FlexibleView.h"
-#include "TreeModel.h"
-#include "PlaylistModel.h"
-#include "PlaylistView.h"
-#include "PlayableProxyModel.h"
-#include "PlayableModel.h"
-#include "TreeView.h"
-#include "GridView.h"
-#include "AlbumModel.h"
+#include "playlist/FlexibleView.h"
+#include "playlist/TreeModel.h"
+#include "playlist/PlaylistModel.h"
+#include "playlist/PlaylistView.h"
+#include "playlist/PlayableProxyModel.h"
+#include "playlist/PlayableModel.h"
+#include "playlist/TreeView.h"
+#include "playlist/GridView.h"
+#include "playlist/AlbumModel.h"
 #include "SourceList.h"
 #include "TomahawkSettings.h"
 
-#include "PlaylistLargeItemDelegate.h"
-#include "RecentlyPlayedModel.h"
-#include "dynamic/widgets/DynamicWidget.h"
+#include "playlist/PlaylistLargeItemDelegate.h"
+#include "playlist/RecentlyPlayedModel.h"
+#include "playlist/dynamic/widgets/DynamicWidget.h"
 
 #include "widgets/NewReleasesWidget.h"
 #include "widgets/WelcomeWidget.h"
@@ -54,6 +51,10 @@
 #include "widgets/AnimatedSplitter.h"
 
 #include "utils/Logger.h"
+
+#include <QVBoxLayout>
+#include <QMetaMethod>
+
 
 #define FILTER_TIMEOUT 280
 

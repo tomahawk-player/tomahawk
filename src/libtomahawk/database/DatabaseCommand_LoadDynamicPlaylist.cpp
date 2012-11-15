@@ -18,13 +18,14 @@
 
 #include "DatabaseCommand_LoadDynamicPlaylist.h"
 
-#include <QSqlQuery>
-
 #include "DatabaseImpl.h"
 #include "Source.h"
-#include "dynamic/DynamicPlaylist.h"
+#include "playlist/dynamic/DynamicPlaylist.h"
 #include "utils/Logger.h"
 #include "Source.h"
+
+#include <QSqlQuery>
+
 
 using namespace Tomahawk;
 

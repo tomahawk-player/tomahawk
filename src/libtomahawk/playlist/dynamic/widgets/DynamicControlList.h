@@ -20,7 +20,7 @@
 #define DYNAMIC_CONTROL_LIST_H
 
 #include "Typedefs.h"
-#include "dynamic/DynamicPlaylist.h"
+#include "playlist/dynamic/DynamicPlaylist.h"
 
 #include <QStackedWidget>
 

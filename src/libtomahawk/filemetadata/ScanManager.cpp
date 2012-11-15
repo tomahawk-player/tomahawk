@@ -19,21 +19,21 @@
 
 #include "ScanManager.h"
 
-#include <QtCore/QThread>
-#include <QtCore/QCoreApplication>
-#include <QtCore/QTimer>
-#include <QtCore/QSet>
-
 #include "MusicScanner.h"
 #include "TomahawkSettings.h"
 #include "utils/TomahawkUtils.h"
-#include "libtomahawk/SourceList.h"
+#include "SourceList.h"
 
 #include "database/Database.h"
 #include "database/DatabaseCommand_FileMTimes.h"
 #include "database/DatabaseCommand_DeleteFiles.h"
 
 #include "utils/Logger.h"
+
+#include <QThread>
+#include <QCoreApplication>
+#include <QTimer>
+#include <QSet>
 
 ScanManager* ScanManager::s_instance = 0;
 

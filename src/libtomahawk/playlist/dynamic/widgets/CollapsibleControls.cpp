@@ -21,19 +21,19 @@
 
 #include "DynamicControlList.h"
 #include "DynamicControlWrapper.h"
-#include "dynamic/GeneratorInterface.h"
-#include "dynamic/DynamicControl.h"
+#include "playlist/dynamic/GeneratorInterface.h"
+#include "playlist/dynamic/DynamicControl.h"
 #include "utils/TomahawkUtils.h"
 #include "widgets/ElidedLabel.h"
 #include "Source.h"
 
-#include <QtGui/QLabel>
-#include <QtGui/QStackedLayout>
-#include <QtGui/QToolButton>
-#include <QtCore/QEasingCurve>
-#include <QtCore/QTimeLine>
-#include <QtGui/QPaintEvent>
-#include <QtGui/QPainter>
+#include <QLabel>
+#include <QStackedLayout>
+#include <QToolButton>
+#include <QEasingCurve>
+#include <QTimeLine>
+#include <QPaintEvent>
+#include <QPainter>
 
 #include "utils/Logger.h"
 

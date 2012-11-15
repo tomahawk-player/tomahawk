@@ -20,7 +20,6 @@
 
 #include "TomahawkVersion.h"
 #include "config.h"
-#include "HeadlessCheck.h"
 #include "TomahawkSettings.h"
 
 #include "utils/TomahawkUtils.h"
@@ -33,6 +32,10 @@
     #include <lastfm/ws.h>
 #endif
 
+#include <quazip.h>
+#include <quazipfile.h>
+
+
 #include <QNetworkConfiguration>
 #include <QNetworkAccessManager>
 #include <QNetworkProxy>
@@ -43,9 +46,6 @@
 #include <QMutex>
 #include <QCryptographicHash>
 #include <QProcess>
-
-#include <quazip.h>
-#include <quazipfile.h>
 
 #ifdef Q_OS_WIN
     #include <windows.h>
@@ -527,9 +527,9 @@ proxyFactory( bool makeClone, bool noMutexLocker )
 
     // create a new proxy factory for this thread
     TomahawkUtils::NetworkProxyFactory *newProxyFactory = new TomahawkUtils::NetworkProxyFactory();
-    if ( s_threadProxyFactoryHash.contains( TOMAHAWK_APPLICATION::instance()->thread() ) )
+    if ( s_threadProxyFactoryHash.contains( QCoreApplication::instance()->thread() ) )
     {
-        TomahawkUtils::NetworkProxyFactory *mainProxyFactory = s_threadProxyFactoryHash[ TOMAHAWK_APPLICATION::instance()->thread() ];
+        TomahawkUtils::NetworkProxyFactory *mainProxyFactory = s_threadProxyFactoryHash[ QCoreApplication::instance()->thread() ];
         *newProxyFactory = *mainProxyFactory;
     }
 
@@ -549,10 +549,10 @@ setProxyFactory( NetworkProxyFactory* factory, bool noMutexLocker )
     QMutex otherMutex;
     QMutexLocker locker( noMutexLocker ? &otherMutex : &s_namAccessMutex );
 
-    if ( !s_threadProxyFactoryHash.contains( TOMAHAWK_APPLICATION::instance()->thread() ) )
+    if ( !s_threadProxyFactoryHash.contains( QCoreApplication::instance()->thread() ) )
         return;
 
-    if ( QThread::currentThread() == TOMAHAWK_APPLICATION::instance()->thread() )
+    if ( QThread::currentThread() == QCoreApplication::instance()->thread() )
     {
         foreach ( QThread* thread, s_threadProxyFactoryHash.keys() )
         {
@@ -579,9 +579,9 @@ nam()
         return s_threadNamHash[ QThread::currentThread() ];
     }
 
-    if ( !s_threadNamHash.contains( TOMAHAWK_APPLICATION::instance()->thread() ) )
+    if ( !s_threadNamHash.contains( QCoreApplication::instance()->thread() ) )
     {
-        if ( QThread::currentThread() == TOMAHAWK_APPLICATION::instance()->thread() )
+        if ( QThread::currentThread() == QCoreApplication::instance()->thread() )
         {
             setNam( new QNetworkAccessManager(), true );
             return s_threadNamHash[ QThread::currentThread() ];
@@ -592,7 +592,7 @@ nam()
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Found gui thread in nam hash";
 
     // Create a nam for this thread based on the main thread's settings but with its own proxyfactory
-    QNetworkAccessManager *mainNam = s_threadNamHash[ TOMAHAWK_APPLICATION::instance()->thread() ];
+    QNetworkAccessManager *mainNam = s_threadNamHash[ QCoreApplication::instance()->thread() ];
     QNetworkAccessManager* newNam = new QNetworkAccessManager();
 
     newNam->setConfiguration( QNetworkConfiguration( mainNam->configuration() ) );
@@ -616,10 +616,10 @@ setNam( QNetworkAccessManager* nam, bool noMutexLocker )
     // Don't lock if being called from nam()()
     QMutex otherMutex;
     QMutexLocker locker( noMutexLocker ? &otherMutex : &s_namAccessMutex );
-    if ( !s_threadNamHash.contains( TOMAHAWK_APPLICATION::instance()->thread() ) &&
-            QThread::currentThread() == TOMAHAWK_APPLICATION::instance()->thread() )
+    if ( !s_threadNamHash.contains( QCoreApplication::instance()->thread() ) &&
+            QThread::currentThread() == QCoreApplication::instance()->thread() )
     {
-        tDebug( LOGVERBOSE ) << "creating initial gui thread (" << TOMAHAWK_APPLICATION::instance()->thread() << ") nam";
+        tDebug( LOGVERBOSE ) << "creating initial gui thread (" << QCoreApplication::instance()->thread() << ") nam";
         // Should only get here on first initialization of the nam
         TomahawkSettings *s = TomahawkSettings::instance();
         TomahawkUtils::NetworkProxyFactory* proxyFactory = new TomahawkUtils::NetworkProxyFactory();
@@ -649,7 +649,7 @@ setNam( QNetworkAccessManager* nam, bool noMutexLocker )
 
     s_threadNamHash[ QThread::currentThread() ] = nam;
 
-    if ( QThread::currentThread() == TOMAHAWK_APPLICATION::instance()->thread() )
+    if ( QThread::currentThread() == QCoreApplication::instance()->thread() )
         setProxyFactory( dynamic_cast< TomahawkUtils::NetworkProxyFactory* >( nam->proxyFactory() ), true );
 }
 

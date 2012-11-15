@@ -23,16 +23,16 @@
 #include "Query.h"
 #include "Result.h"
 #include "Logger.h"
-#include "PlayableItem.h"
+#include "playlist/PlayableItem.h"
 #include "Source.h"
 
-#include <QtGui/QLayout>
-#include <QtGui/QPainter>
-#include <QtGui/QPixmap>
-#include <QtGui/QPalette>
-#include <QtGui/QApplication>
-#include <QtGui/QScrollBar>
-#include <QtGui/QWidget>
+#include <QLayout>
+#include <QPainter>
+#include <QPixmap>
+#include <QPalette>
+#include <QApplication>
+#include <QScrollBar>
+#include <QWidget>
 #include <QStyleOption>
 #include <QDesktopServices>
 

@@ -21,10 +21,6 @@
 
 #include "config.h"
 
-#include <QtCore/QUrl>
-#include <QtNetwork/QNetworkReply>
-#include <QTemporaryFile>
-
 #include "PlaylistInterface.h"
 #include "SourcePlaylistInterface.h"
 #include "TomahawkSettings.h"
@@ -33,7 +29,6 @@
 #include "network/Servent.h"
 #include "utils/Qnr_IoDeviceStream.h"
 #include "utils/Closure.h"
-#include "HeadlessCheck.h"
 #include "infosystem/InfoSystem.h"
 #include "Album.h"
 #include "Pipeline.h"
@@ -42,7 +37,11 @@
 #include "jobview/ErrorStatusMessage.h"
 
 #include "utils/Logger.h"
-#include "SingleTrackPlaylistInterface.h"
+#include "playlist/SingleTrackPlaylistInterface.h"
+
+#include <QtCore/QUrl>
+#include <QtNetwork/QNetworkReply>
+#include <QTemporaryFile>
 
 using namespace Tomahawk;
 
