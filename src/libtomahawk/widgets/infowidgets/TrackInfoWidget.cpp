@@ -217,7 +217,7 @@ TrackInfoWidget::onCoverUpdated()
         return;
 
     m_pixmap = m_query->cover( ui->cover->size() );
-    ui->cover->setPixmap( TomahawkUtils::createRoundedImage( m_pixmap, QSize( 0, 0 ), 0.05 ) );
+    ui->cover->setPixmap( TomahawkUtils::createRoundedImage( m_pixmap, QSize( 0, 0 ) ) );
 }
 
 
