@@ -156,6 +156,7 @@ Source::avatar( AvatarStyle style, const QSize& size )
 
         if ( ba.count() )
             m_avatar->loadFromData( ba );
+
         if ( m_avatar->isNull() )
         {
             delete m_avatar;
@@ -164,8 +165,8 @@ Source::avatar( AvatarStyle style, const QSize& size )
         m_avatarUpdated = false;
     }
 
-    if ( style == FancyStyle && m_avatar && !m_fancyAvatar )
-        m_fancyAvatar = new QPixmap( TomahawkUtils::createAvatarFrame( QPixmap( *m_avatar ) ) );
+    if ( style == FancyStyle && m_avatar && !m_avatar->isNull() && !m_fancyAvatar )
+        m_fancyAvatar = new QPixmap( TomahawkUtils::createRoundedImage( QPixmap( *m_avatar ), QSize( 0, 0 ) ) );
 
     QPixmap pixmap;
     if ( style == Original && m_avatar )
@@ -175,14 +176,18 @@ Source::avatar( AvatarStyle style, const QSize& size )
 
     if ( !pixmap.isNull() && !size.isEmpty() )
     {
-        if ( m_coverCache.contains( size.width() ) )
+        if ( m_coverCache[ style ].contains( size.width() ) )
         {
-            return m_coverCache.value( size.width() );
+            return m_coverCache[ style ].value( size.width() );
         }
 
         QPixmap scaledCover;
         scaledCover = pixmap.scaled( size, Qt::KeepAspectRatio, Qt::SmoothTransformation );
-        m_coverCache.insert( size.width(), scaledCover );
+
+        QHash< int, QPixmap > innerCache = m_coverCache[ style ];
+        innerCache.insert( size.width(), scaledCover );
+        m_coverCache[ style ] = innerCache;
+
         return scaledCover;
     }
 
