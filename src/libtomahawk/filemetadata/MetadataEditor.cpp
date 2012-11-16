@@ -24,6 +24,7 @@
 #include <QtCore/QFileInfo>
 #include <QtCore/QFile>
 
+#include "Source.h"
 #include "Result.h"
 #include "Artist.h"
 #include "Album.h"
@@ -38,98 +39,171 @@
 #include "utils/Closure.h"
 
 
+MetadataEditor::MetadataEditor( const Tomahawk::query_ptr& query, const Tomahawk::playlistinterface_ptr& interface, QWidget* parent )
+    : QDialog( parent )
+{
+    init( interface );
+
+    loadQuery( query );
+}
+
+
 MetadataEditor::MetadataEditor( const Tomahawk::result_ptr& result, const Tomahawk::playlistinterface_ptr& interface, QWidget* parent )
     : QDialog( parent )
-    , ui( new Ui::MetadataEditor )
-    , m_result( result )
-    , m_interface( interface )
-    , m_index( 0 )
 {
-    ui->setupUi( this );
-    setWindowTitle( QString( result->track() + tr( " - Properties" ) ) );
-    setAttribute( Qt::WA_DeleteOnClose );
-
-    NewClosure( ui->buttonBox, SIGNAL( accepted() ),
-                this, SLOT( writeMetadata( bool ) ), true )->setAutoDelete( false );
-
-    connect( ui->buttonBox, SIGNAL( rejected() ), SLOT( close() ) );
-    connect( ui->forwardPushButton, SIGNAL( clicked() ), SLOT( loadNextResult() ) );
-    connect( ui->previousPushButton, SIGNAL( clicked() ), SLOT( loadPreviousResult() ) );
+    init( interface );
 
     loadResult( result );
 }
 
 
 void
+MetadataEditor::init( const Tomahawk::playlistinterface_ptr& interface )
+{
+    ui = new Ui::MetadataEditor();
+    ui->setupUi( this );
+
+    setAttribute( Qt::WA_DeleteOnClose );
+
+    m_interface = interface;
+    m_index = 0;
+    m_editable = false;
+
+    NewClosure( ui->buttonBox, SIGNAL( accepted() ), this, SLOT( writeMetadata( bool ) ), true )->setAutoDelete( false );
+
+    connect( ui->buttonBox, SIGNAL( rejected() ), SLOT( close() ) );
+    connect( ui->forwardPushButton, SIGNAL( clicked() ), SLOT( loadNextResult() ) );
+    connect( ui->previousPushButton, SIGNAL( clicked() ), SLOT( loadPreviousResult() ) );
+}
+
+
+void
 MetadataEditor::writeMetadata( bool closeDlg )
 {
-    QFileInfo fi( QUrl( m_result->url() ).toLocalFile() );
-
-    bool changed = false;
-    QByteArray fileName = QFile::encodeName( fi.canonicalFilePath() );
-    const char *encodedName = fileName.constData();
-
-    TagLib::FileRef f( encodedName );
-    Tomahawk::Tag* tag = Tomahawk::Tag::fromFile( f );
-
-    if ( title() != m_result->track() )
+    if ( m_result )
     {
-        tag->setTitle( title() );
-        m_result->setTrack( title() );
+        QFileInfo fi( QUrl( m_result->url() ).toLocalFile() );
 
-        changed = true;
-    }
+        bool changed = false;
+        QByteArray fileName = QFile::encodeName( fi.canonicalFilePath() );
+        const char *encodedName = fileName.constData();
 
-    Tomahawk::artist_ptr newArtist = Tomahawk::Artist::get( artist(), true );
-    if ( newArtist != m_result->artist() )
-    {
-        tag->setArtist( artist() );
-        m_result->setArtist( newArtist );
+        TagLib::FileRef f( encodedName );
+        Tomahawk::Tag* tag = Tomahawk::Tag::fromFile( f );
 
-        changed = true;
+        if ( title() != m_result->track() )
+        {
+            tDebug() << Q_FUNC_INFO << "Track changed" << title() << m_result->track();
 
-    }
+            tag->setTitle( title() );
+            m_result->setTrack( title() );
 
-    Tomahawk::album_ptr newAlbum = Tomahawk::Album::get( newArtist, album(), true );
-    if ( newAlbum != m_result->album() )
-    {
-        tag->setAlbum( album() );
-        m_result->setAlbum( newAlbum );
+            changed = true;
+        }
 
-        changed = true;
-    }
+        Tomahawk::artist_ptr newArtist = Tomahawk::Artist::get( artist(), true );
+        if ( newArtist != m_result->artist() )
+        {
+            tDebug() << Q_FUNC_INFO << "Artist changed" << artist() << m_result->artist();
 
-    if ( albumPos() != (int)m_result->albumpos() )
-    {
-        tag->setTrack( albumPos() );
-        m_result->setAlbumPos( albumPos() );
+            tag->setArtist( artist() );
+            m_result->setArtist( newArtist );
 
-        changed = true;
-    }
+            changed = true;
+        }
 
-    if ( year() != m_result->year() )
-    {
-        tag->setYear( year() );
-        m_result->setYear( year() );
+        Tomahawk::album_ptr newAlbum = Tomahawk::Album::get( newArtist, album(), true );
+        if ( newAlbum != m_result->album() )
+        {
+            tDebug() << Q_FUNC_INFO << "Album changed" << album() << newAlbum->id() << m_result->album()->name() << m_result->album()->id() << newAlbum.data() << m_result->album().data();
+            if ( newAlbum->id() != m_result->album()->id() )
+            {
+                tag->setAlbum( album() );
+                m_result->setAlbum( newAlbum );
 
-        changed = true;
-    }
+                changed = true;
+            }
+            else
+                Q_ASSERT( false );
+        }
 
-    if ( changed )
-    {
-        f.save();
+        // FIXME: Ugly workaround for the min value of 0
+        if ( albumPos() != 0 && albumPos() != (int)m_result->albumpos() )
+        {
+            tag->setTrack( albumPos() );
+            m_result->setAlbumPos( albumPos() );
 
-        m_editFiles.append( fileName );
-        m_result->doneEditing();
+            tDebug() << Q_FUNC_INFO << "Albumpos changed";
+            changed = true;
+        }
 
-        tDebug() << Q_FUNC_INFO << m_result->toString();
-        tDebug() << Q_FUNC_INFO << m_result->toQuery()->toString();
+        // FIXME: Ugly workaround for the min value of 1900
+        if ( year() != 1900 && year() != m_result->year() )
+        {
+            tag->setYear( year() );
+            m_result->setYear( year() );
+
+            tDebug() << Q_FUNC_INFO << "Year changed";
+            changed = true;
+        }
+
+        if ( changed )
+        {
+            f.save();
+
+            m_editFiles.append( fileName );
+            m_result->doneEditing();
+
+            tDebug() << Q_FUNC_INFO << m_result->toString();
+            tDebug() << Q_FUNC_INFO << m_result->toQuery()->toString();
+        }
     }
 
     if ( closeDlg )
     {
-        ScanManager::instance()->runFileScan( m_editFiles, false );
+        if ( m_editFiles.count() )
+            ScanManager::instance()->runFileScan( m_editFiles, false );
+
         close();
+    }
+}
+
+
+void
+MetadataEditor::loadQuery( const Tomahawk::query_ptr& query )
+{
+    if ( query.isNull() )
+        return;
+
+    if ( query->numResults() )
+    {
+        loadResult( query->results().first() );
+        return;
+    }
+
+    m_result = Tomahawk::result_ptr();
+    m_query = query;
+    setEditable( false );
+
+    setTitle( query->displayQuery()->track() );
+    setArtist( query->displayQuery()->artist() );
+    setAlbum( query->displayQuery()->album() );
+    setAlbumPos( query->displayQuery()->albumpos() );
+    setDuration( query->displayQuery()->duration() );
+    setYear( 0 );
+    setBitrate( 0 );
+
+    setFileName( QString() );
+    setFileSize( 0 );
+
+    setWindowTitle( QString( query->track() + " - " + tr( "Properties" ) ) );
+
+    if ( m_interface )
+    {
+        m_index = m_interface->indexOfQuery( query );
+
+        if ( m_index >= 0 )
+            enablePushButtons();
     }
 }
 
@@ -141,6 +215,8 @@ MetadataEditor::loadResult( const Tomahawk::result_ptr& result )
         return;
 
     m_result = result;
+    setEditable( result->collection()->source()->isLocal() );
+
     setTitle( result->track() );
     setArtist( result->artist()->name() );
     setAlbum( result->album()->name() );
@@ -152,6 +228,8 @@ MetadataEditor::loadResult( const Tomahawk::result_ptr& result )
     QFileInfo fi( QUrl( m_result->url() ).toLocalFile() );
     setFileName( fi.fileName() );
     setFileSize( TomahawkUtils::filesizeToString( fi.size() ) );
+
+    setWindowTitle( QString( result->track() + " - " + tr( "Properties" ) ) );
 
     if ( m_interface )
     {
@@ -185,8 +263,8 @@ MetadataEditor::loadNextResult()
 
     m_index++;
 
-    if ( m_interface->itemAt( m_index )->numResults() )
-        loadResult( m_interface->itemAt( m_index )->results().first() );
+    if ( m_interface->itemAt( m_index ) )
+        loadQuery( m_interface->itemAt( m_index ) );
 }
 
 
@@ -197,8 +275,8 @@ MetadataEditor::loadPreviousResult()
 
     m_index--;
 
-    if ( m_interface->itemAt( m_index )->numResults() )
-        loadResult( m_interface->itemAt( m_index )->results().first() );
+    if ( m_interface->itemAt( m_index ) )
+        loadQuery( m_interface->itemAt( m_index ) );
 }
 
 
@@ -262,4 +340,17 @@ void
 MetadataEditor::setFileSize( const QString& size )
 {
     ui->fileSizeLineEdit->setText( size );
+}
+
+
+void
+MetadataEditor::setEditable( bool editable )
+{
+    ui->artistLineEdit->setReadOnly( !editable );
+    ui->albumLineEdit->setReadOnly( !editable );
+    ui->titleLineEdit->setReadOnly( !editable );
+    ui->albumPosSpinBox->setReadOnly( !editable );
+    ui->yearSpinBox->setReadOnly( !editable );
+
+    m_editable = editable;
 }

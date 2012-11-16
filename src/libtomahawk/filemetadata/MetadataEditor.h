@@ -24,19 +24,22 @@
 #include <QtGui/QSpinBox>
 
 #include "ui_MetadataEditor.h"
+#include "Query.h"
 #include "Result.h"
 #include "Typedefs.h"
 
 class QString;
-
 
 class MetadataEditor : public QDialog
 {
 Q_OBJECT
 
 public:
+    MetadataEditor( const Tomahawk::query_ptr& query, const Tomahawk::playlistinterface_ptr& interface, QWidget* parent = 0 );
     MetadataEditor( const Tomahawk::result_ptr& result, const Tomahawk::playlistinterface_ptr& interface, QWidget* parent = 0 );
     ~MetadataEditor() {};
+
+    void init( const Tomahawk::playlistinterface_ptr& interface );
 
 protected:
     QString title() const { return ui->titleLineEdit->text(); }
@@ -45,7 +48,9 @@ protected:
     int albumPos() const { return ui->albumPosSpinBox->value(); }
     int year() const { return ui->yearSpinBox->value(); }
     int bitrate() const { return ui->bitrateSpinBox->value(); }
+
     void loadResult( const Tomahawk::result_ptr& result );
+    void loadQuery( const Tomahawk::query_ptr& query );
 
 private slots:
     void writeMetadata( bool closeDlg = false );
@@ -66,14 +71,19 @@ private slots:
     void setFileName( const QString& fn );
     void setFileSize( const QString& size );
 
+    void setEditable( bool editable );
+
 private:
     Ui::MetadataEditor* ui;
 
     Tomahawk::result_ptr m_result;
+    Tomahawk::query_ptr m_query;
+
     Tomahawk::playlistinterface_ptr m_interface;
     QStringList m_editFiles;
 
     int m_index;
+    bool m_editable;
 };
 
 #endif // METADATAEDITOR_H
