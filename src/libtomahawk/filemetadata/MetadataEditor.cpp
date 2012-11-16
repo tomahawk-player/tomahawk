@@ -89,20 +89,21 @@ MetadataEditor::writeMetadata( bool closeDlg )
     }
 
     Tomahawk::artist_ptr newArtist = Tomahawk::Artist::get( artist(), true );
-    if ( artist() != m_result->artist()->name() )
+    if ( newArtist != m_result->artist() )
     {
         tag->setArtist( artist() );
         m_result->setArtist( newArtist );
     }
 
-    if ( album() != m_result->album()->name() )
+    Tomahawk::album_ptr newAlbum = Tomahawk::Album::get( newArtist, album(), true );
+    if ( newAlbum != m_result->album() )
     {
         tag->setAlbum( album() );
-        m_result->setAlbum( Tomahawk::Album::get( newArtist, album(), true ) );
+        m_result->setAlbum( newAlbum );
     }
 
-    tag->setTrack( discnumber() );
-    m_result->setDiscNumber( discnumber() );
+    tag->setTrack( albumPos() );
+    m_result->setAlbumPos( albumPos() );
 
     if ( year() != m_result->year() )
     {
@@ -113,9 +114,13 @@ MetadataEditor::writeMetadata( bool closeDlg )
     f.save();
 
     m_editFiles.append( fileName );
+    m_result->doneEditing();
+    tDebug() << Q_FUNC_INFO << m_result->toString();
+    tDebug() << Q_FUNC_INFO << m_result->toQuery()->toString();
 
-    if ( closeDlg ) {
-        ScanManager::instance()->runFileScan( m_editFiles );
+    if ( closeDlg )
+    {
+        ScanManager::instance()->runFileScan( m_editFiles, false );
         close();
     }
 }
@@ -131,7 +136,7 @@ MetadataEditor::loadResult( const Tomahawk::result_ptr& result )
     setTitle( result->track() );
     setArtist( result->artist()->name() );
     setAlbum( result->album()->name() );
-    setDiscNumber( result->albumpos() );
+    setAlbumPos( result->albumpos() );
     setDuration( result->duration() );
     setYear( result->year() );
     setBitrate( result->bitrate() );
@@ -144,7 +149,8 @@ MetadataEditor::loadResult( const Tomahawk::result_ptr& result )
 }
 
 
-void MetadataEditor::enablePushButtons()
+void
+MetadataEditor::enablePushButtons()
 {
     if ( !m_interface->setCurrentTrack( m_result->albumpos() ) )
         tDebug() << "Error setting current track for MetadataEditor.";
@@ -199,16 +205,16 @@ MetadataEditor::setAlbum( const QString& album )
 
 
 void
-MetadataEditor::setDiscNumber( unsigned int num )
+MetadataEditor::setAlbumPos( unsigned int num )
 {
-    ui->discNumberSpinBox->setValue( num );
+    ui->albumPosSpinBox->setValue( num );
 }
 
 
 void
 MetadataEditor::setDuration( unsigned int duration )
 {
-    ui->durationLineEdit->setText( TomahawkUtils::timeToString( duration )  );
+    ui->durationLineEdit->setText( TomahawkUtils::timeToString( duration ) );
 }
 
 

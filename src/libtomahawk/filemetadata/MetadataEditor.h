@@ -42,7 +42,7 @@ protected:
     QString title() const { return ui->titleLineEdit->text(); }
     QString artist() const { return ui->artistLineEdit->text(); }
     QString album() const { return ui->albumLineEdit->text(); }
-    int discnumber() const { return ui->discNumberSpinBox->value(); }
+    int albumPos() const { return ui->albumPosSpinBox->value(); }
     int year() const { return ui->yearSpinBox->value(); }
     int bitrate() const { return ui->bitrateSpinBox->value(); }
     void loadResult( const Tomahawk::result_ptr& result );
@@ -57,7 +57,7 @@ private slots:
     void setTitle( const QString& title );
     void setArtist( const QString& artist );
     void setAlbum( const QString& album );
-    void setDiscNumber( unsigned int num );
+    void setAlbumPos( unsigned int num );
     void setDuration( unsigned int duration );
     void setYear( int year );
     void setBitrate( unsigned int num );
