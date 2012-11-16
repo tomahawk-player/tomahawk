@@ -665,7 +665,8 @@ AudioControls::onSocialButtonClicked()
     QPoint socialWidgetPos = ui->socialButton->pos();
     socialWidgetPos.rx() += ui->socialButton->width() / 2;
     socialWidgetPos.ry() += 6;
-    m_socialWidget.data()->setPosition( m_socialWidget.data()->mapFromGlobal( ui->socialButton->parentWidget()->mapToGlobal( socialWidgetPos ) ) );
+
+    m_socialWidget.data()->setPosition( ui->metaDataArea->mapToGlobal( socialWidgetPos ) );
     m_socialWidget.data()->setQuery( m_currentTrack->toQuery() );
     m_socialWidget.data()->show();
 }
