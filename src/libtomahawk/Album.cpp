@@ -52,7 +52,7 @@ Album::~Album()
 inline QString
 albumCacheKey( const Tomahawk::artist_ptr& artist, const QString& albumName )
 {
-    return QString( "%1\t\t%2" ).arg( artist->name() ).arg( albumName );
+    return QString( "%1\t\t%2" ).arg( artist->name().toLower() ).arg( albumName.toLower() );
 }
 
 
@@ -70,11 +70,9 @@ Album::get( const Tomahawk::artist_ptr& artist, const QString& name, bool autoCr
         return s_albumsByName.value( key );
     }
 
-    album_ptr album = album_ptr( new  Album( name, artist ) );
+    album_ptr album = album_ptr( new Album( name, artist ) );
     album->setWeakRef( album.toWeakRef() );
     album->loadId( autoCreate );
-
-//    tDebug() << Q_FUNC_INFO << "ADDING:" << artist->name() << name;
     s_albumsByName.insert( key, album );
 
     return album;
@@ -101,8 +99,6 @@ Album::get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& ar
 
     album_ptr a = album_ptr( new Album( id, name, artist ), &QObject::deleteLater );
     a->setWeakRef( a.toWeakRef() );
-
-//    tDebug() << Q_FUNC_INFO << "ADDING:" << artist->name() << name << id;
     s_albumsByName.insert( key, a );
 
     if ( id > 0 )

@@ -59,21 +59,23 @@ Artist::get( const QString& name, bool autoCreate )
     if ( name.isEmpty() )
         return artist_ptr();
 
+    const QString sortname = name.toLower();
+
     QMutexLocker lock( &s_nameCacheMutex );
-    if ( s_artistsByName.contains( name ) )
-        return s_artistsByName.value( name );
+    if ( s_artistsByName.contains( sortname ) )
+        return s_artistsByName.value( sortname );
 
     if ( !Database::instance() || !Database::instance()->impl() )
         return artist_ptr();
 
 #if ID_THREAD_DEBUG
-        qDebug() << "Creating artist:" << name;
+        tDebug() << "Creating artist:" << name << "( sortname:" << sortname << ")";
 #endif
+
     artist_ptr artist = artist_ptr( new Artist( name ), &QObject::deleteLater );
     artist->setWeakRef( artist.toWeakRef() );
     artist->loadId( autoCreate );
-
-    s_artistsByName.insert( name, artist );
+    s_artistsByName.insert( sortname, artist );
 
     return artist;
 }
@@ -83,9 +85,11 @@ artist_ptr
 Artist::get( unsigned int id, const QString& name )
 {
     QMutexLocker lock( &s_idCacheMutex );
-    if ( s_artistsByName.contains( name ) )
+
+    const QString sortname = name.toLower();
+    if ( s_artistsByName.contains( sortname ) )
     {
-        return s_artistsByName.value( name );
+        return s_artistsByName.value( sortname );
     }
     if ( s_artistsById.contains( id ) )
     {
@@ -95,7 +99,7 @@ Artist::get( unsigned int id, const QString& name )
     artist_ptr a = artist_ptr( new Artist( id, name ), &QObject::deleteLater );
     a->setWeakRef( a.toWeakRef() );
 
-    s_artistsByName.insert( name, a );
+    s_artistsByName.insert( sortname, a );
     if ( id > 0 )
     {
         s_artistsById.insert( id, a );
