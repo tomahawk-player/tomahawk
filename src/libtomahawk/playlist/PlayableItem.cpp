@@ -74,6 +74,9 @@ PlayableItem::PlayableItem( const Tomahawk::result_ptr& result, PlayableItem* pa
     , m_result( result )
 {
     init( parent, row );
+
+    connect( result.data(), SIGNAL( updated() ),
+                            SIGNAL( dataChanged() ) );
 }
 
 
