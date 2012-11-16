@@ -361,6 +361,8 @@ TrackView::resizeEvent( QResizeEvent* event )
     int sortSection = m_header->sortIndicatorSection();
     Qt::SortOrder sortOrder = m_header->sortIndicatorOrder();
 
+    tDebug() << Q_FUNC_INFO << width();
+
     if ( m_header->checkState() && sortSection >= 0 )
     {
         // restoreState keeps overwriting our previous sort-order
@@ -563,6 +565,7 @@ void
 TrackView::onCustomContextMenu( const QPoint& pos )
 {
     m_contextMenu->clear();
+    m_contextMenu->setPlaylistInterface( playlistInterface() );
 
     QModelIndex idx = indexAt( pos );
     idx = idx.sibling( idx.row(), 0 );
