@@ -76,11 +76,14 @@ ActionCollection::initActions()
     m_actionCollection[ "renamePlaylist" ] = new QAction( tr( "&Rename Playlist" ), this );
     m_actionCollection[ "copyPlaylist" ] =   new QAction( tr( "&Copy Playlist Link" ), this );
     m_actionCollection[ "playPause" ] =      new QAction( tr( "&Play" ), this );
+    m_actionCollection[ "playPause" ]->setIcon( QIcon( RESPATH "images/play-rest.png" ) );
     m_actionCollection[ "playPause" ]->setShortcut( Qt::Key_Space );
     m_actionCollection[ "playPause" ]->setShortcutContext( Qt::ApplicationShortcut );
     m_actionCollection[ "stop" ] =           new QAction( tr( "&Stop" ), this );
     m_actionCollection[ "previousTrack" ] =  new QAction( tr( "&Previous Track" ), this );
+    m_actionCollection[ "previousTrack" ]->setIcon( QIcon( RESPATH "images/back-rest.png" ) );
     m_actionCollection[ "nextTrack" ] =      new QAction( tr( "&Next Track" ), this );
+    m_actionCollection[ "nextTrack" ]->setIcon( QIcon( RESPATH "images/skip-rest.png" ) );
     m_actionCollection[ "quit" ] =           new QAction( tr( "&Quit" ), this );
     m_actionCollection[ "quit" ]->setShortcut( QKeySequence::Quit );
     m_actionCollection[ "quit" ]->setShortcutContext( Qt::ApplicationShortcut );
@@ -100,6 +103,7 @@ ActionCollection::initActions()
     m_actionCollection[ "showOfflineSources" ] = new QAction( tr( "Show Offline Sources" ), this );
     m_actionCollection[ "showOfflineSources" ]->setCheckable( true );
     m_actionCollection[ "preferences" ] =        new QAction( tr( "&Configure Tomahawk..." ), this );
+    m_actionCollection[ "preferences" ]->setIcon( QIcon( RESPATH "images/configure.png" ) );
     m_actionCollection[ "preferences" ]->setMenuRole( QAction::PreferencesRole );
 #ifdef Q_OS_MAC
     m_actionCollection[ "minimize" ] =           new QAction( tr( "Minimize" ), this );
@@ -114,6 +118,7 @@ ActionCollection::initActions()
     m_actionCollection[ "diagnostics" ] =        new QAction( tr( "Diagnostics..." ), this );
     m_actionCollection[ "diagnostics" ]->setMenuRole( QAction::ApplicationSpecificRole );
     m_actionCollection[ "aboutTomahawk" ] =      new QAction( tr( "About &Tomahawk..." ), this );
+    m_actionCollection[ "aboutTomahawk" ]->setIcon( QIcon( RESPATH "images/info.png" ) );
     m_actionCollection[ "aboutTomahawk" ]->setMenuRole( QAction::AboutRole );
     m_actionCollection[ "legalInfo" ] =          new QAction( tr( "&Legal Information..." ), this );
     m_actionCollection[ "legalInfo" ]->setMenuRole( QAction::ApplicationSpecificRole );
