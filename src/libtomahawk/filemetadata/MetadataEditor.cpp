@@ -153,9 +153,13 @@ MetadataEditor::loadResult( const Tomahawk::result_ptr& result )
     setFileName( fi.fileName() );
     setFileSize( TomahawkUtils::filesizeToString( fi.size() ) );
 
-    m_index = m_interface->indexOfResult( result );
-    if ( m_index >= 0 )
-        enablePushButtons();
+    if ( m_interface )
+    {
+        m_index = m_interface->indexOfResult( result );
+
+        if ( m_index >= 0 )
+            enablePushButtons();
+    }
 }
 
 
