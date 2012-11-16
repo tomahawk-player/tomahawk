@@ -45,6 +45,7 @@ public:
 
     virtual Tomahawk::query_ptr itemAt( unsigned int position ) const;
     virtual int indexOfResult( const Tomahawk::result_ptr& result ) const;
+    virtual int indexOfQuery( const Tomahawk::query_ptr& query ) const;
 
     virtual Tomahawk::result_ptr currentItem() const;
     virtual Tomahawk::result_ptr siblingItem( int itemsAway, bool readOnly );

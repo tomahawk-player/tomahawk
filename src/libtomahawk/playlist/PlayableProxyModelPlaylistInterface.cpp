@@ -259,3 +259,24 @@ PlayableProxyModelPlaylistInterface::indexOfResult( const Tomahawk::result_ptr& 
 
     return -1;
 }
+
+
+int
+PlayableProxyModelPlaylistInterface::indexOfQuery( const Tomahawk::query_ptr& query ) const
+{
+    if ( m_proxyModel.isNull() )
+        return -1;
+
+    PlayableProxyModel* proxyModel = m_proxyModel.data();
+
+    for ( int i = 0; i < proxyModel->rowCount( QModelIndex() ); i++ )
+    {
+        PlayableItem* item = proxyModel->itemFromIndex( proxyModel->mapToSource( proxyModel->index( i, 0 ) ) );
+        if ( item && item->query() == query )
+        {
+            return i;
+        }
+    }
+
+    return -1;
+}
