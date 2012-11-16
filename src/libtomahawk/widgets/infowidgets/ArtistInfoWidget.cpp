@@ -159,6 +159,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
 ArtistInfoWidget::~ArtistInfoWidget()
 {
+    tDebug() << Q_FUNC_INFO;
     delete ui;
 }
 

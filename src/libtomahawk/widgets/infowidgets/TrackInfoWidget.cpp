@@ -128,6 +128,7 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
 
 TrackInfoWidget::~TrackInfoWidget()
 {
+    tDebug() << Q_FUNC_INFO;
     delete ui;
 }
 

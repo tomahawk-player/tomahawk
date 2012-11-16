@@ -143,6 +143,7 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
 
 AlbumInfoWidget::~AlbumInfoWidget()
 {
+    tDebug() << Q_FUNC_INFO;
     delete ui;
 }
 
