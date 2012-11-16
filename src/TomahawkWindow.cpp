@@ -1116,6 +1116,7 @@ TomahawkWindow::audioStarted()
 {
     m_audioRetryCounter = 0;
 
+    ActionCollection::instance()->getAction( "playPause" )->setIcon( QIcon( RESPATH "images/pause-rest.png" ) );
     ActionCollection::instance()->getAction( "playPause" )->setText( tr( "Pause" ) );
     ActionCollection::instance()->getAction( "stop" )->setEnabled( true );
 
@@ -1136,6 +1137,7 @@ TomahawkWindow::audioFinished()
 void
 TomahawkWindow::audioPaused()
 {
+    ActionCollection::instance()->getAction( "playPause" )->setIcon( QIcon( RESPATH "images/play-rest.png" ) );
     ActionCollection::instance()->getAction( "playPause" )->setText( tr( "&Play" ) );
 }
 
