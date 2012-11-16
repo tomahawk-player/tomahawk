@@ -114,17 +114,7 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
     addSeparator();
 
     if ( m_supportedActions & ActionEditMetadata && itemCount() == 1 )
-    {
-        if ( m_queries.first()->results().isEmpty() )
-            return;
-
-        Tomahawk::result_ptr result = m_queries.first()->results().first();
-        if ( result->collection() && result->collection()->source() &&
-             result->collection()->source()->isLocal() )
-        {
-            m_sigmap->setMapping( addAction( tr( "Properties..." ) ), ActionEditMetadata );
-        }
-    }
+        m_sigmap->setMapping( addAction( tr( "Properties..." ) ), ActionEditMetadata );
 
     if ( m_supportedActions & ActionDelete )
         m_sigmap->setMapping( addAction( queries.count() > 1 ? tr( "&Delete Items" ) : tr( "&Delete Item" ) ), ActionDelete );
@@ -261,8 +251,8 @@ ContextMenu::onTriggered( int action )
             break;
 
         case ActionEditMetadata:
-            if ( !m_queries.first()->results().isEmpty() ) {
-                MetadataEditor* d = new MetadataEditor( m_queries.first()->results().first(), m_interface, this );
+            {
+                MetadataEditor* d = new MetadataEditor( m_queries.first(), m_interface, this );
                 d->show();
             }
             break;
