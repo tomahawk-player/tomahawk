@@ -46,7 +46,9 @@
 
 using namespace Tomahawk;
 
-class GridPlaylistInterface : public PlayableProxyModelPlaylistInterface {
+
+class GridPlaylistInterface : public PlayableProxyModelPlaylistInterface
+{
     Q_OBJECT
 public:
     explicit GridPlaylistInterface( PlayableProxyModel* proxy, GridView* view ) : PlayableProxyModelPlaylistInterface( proxy ), m_view( view ) {}
@@ -74,6 +76,7 @@ public:
 private:
     QWeakPointer<GridView> m_view;
 };
+
 
 GridView::GridView( QWidget* parent )
     : QListView( parent )
@@ -118,7 +121,7 @@ GridView::GridView( QWidget* parent )
 
 GridView::~GridView()
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug() << Q_FUNC_INFO;
 }
 
 
