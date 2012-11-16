@@ -35,7 +35,7 @@ class MetadataEditor : public QDialog
 Q_OBJECT
 
 public:
-    MetadataEditor( const Tomahawk::result_ptr& result, QWidget* parent = 0 );
+    MetadataEditor( const Tomahawk::result_ptr& result, const Tomahawk::playlistinterface_ptr& interface, QWidget* parent = 0 );
     ~MetadataEditor() {};
 
 protected:
@@ -72,6 +72,8 @@ private:
     Tomahawk::result_ptr m_result;
     Tomahawk::playlistinterface_ptr m_interface;
     QStringList m_editFiles;
+
+    int m_index;
 };
 
 #endif // METADATAEDITOR_H

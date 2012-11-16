@@ -38,11 +38,12 @@
 #include "utils/Closure.h"
 
 
-MetadataEditor::MetadataEditor( const Tomahawk::result_ptr& result, QWidget* parent )
+MetadataEditor::MetadataEditor( const Tomahawk::result_ptr& result, const Tomahawk::playlistinterface_ptr& interface, QWidget* parent )
     : QDialog( parent )
     , ui( new Ui::MetadataEditor )
     , m_result( result )
-    , m_interface( 0 )
+    , m_interface( interface )
+    , m_index( 0 )
 {
     ui->setupUi( this );
     setWindowTitle( QString( result->track() + tr( " - Properties" ) ) );
@@ -54,18 +55,6 @@ MetadataEditor::MetadataEditor( const Tomahawk::result_ptr& result, QWidget* par
     connect( ui->buttonBox, SIGNAL( rejected() ), SLOT( close() ) );
     connect( ui->forwardPushButton, SIGNAL( clicked() ), SLOT( loadNextResult() ) );
     connect( ui->previousPushButton, SIGNAL( clicked() ), SLOT( loadPreviousResult() ) );
-
-    m_interface = Tomahawk::playlistinterface_ptr( new Tomahawk::AlbumPlaylistInterface(
-                                                             result->album().data(),
-                                                             Tomahawk::DatabaseMode,
-                                                             result->collection() ) );
-    connect( m_interface.data(),
-             SIGNAL( tracksLoaded( Tomahawk::ModelMode,
-                                   const Tomahawk::collection_ptr& ) ),
-             SLOT( enablePushButtons() ) );
-
-    /* Initiate the interface */
-    m_interface->tracks();
 
     loadResult( result );
 }
@@ -145,22 +134,21 @@ MetadataEditor::loadResult( const Tomahawk::result_ptr& result )
     setFileName( fi.fileName() );
     setFileSize( TomahawkUtils::filesizeToString( fi.size() ) );
 
-    enablePushButtons();
+    m_index = m_interface->indexOfResult( result );
+    if ( m_index >= 0 )
+        enablePushButtons();
 }
 
 
 void
 MetadataEditor::enablePushButtons()
 {
-    if ( !m_interface->setCurrentTrack( m_result->albumpos() ) )
-        tDebug() << "Error setting current track for MetadataEditor.";
-
-    if ( m_interface->hasNextItem() )
+    if ( m_interface->itemAt( m_index + 1 ) )
         ui->forwardPushButton->setEnabled( true );
     else
         ui->forwardPushButton->setEnabled( false );
 
-    if ( m_interface->hasPreviousItem() )
+    if ( m_interface->itemAt( m_index - 1 ) )
         ui->previousPushButton->setEnabled( true );
     else
         ui->previousPushButton->setEnabled( false );
@@ -171,7 +159,11 @@ void
 MetadataEditor::loadNextResult()
 {
     writeMetadata();
-    loadResult( m_interface->nextItem() );
+
+    m_index++;
+
+    if ( m_interface->itemAt( m_index )->numResults() )
+        loadResult( m_interface->itemAt( m_index )->results().first() );
 }
 
 
@@ -179,7 +171,11 @@ void
 MetadataEditor::loadPreviousResult()
 {
     writeMetadata();
-    loadResult( m_interface->previousItem() );
+
+    m_index--;
+
+    if ( m_interface->itemAt( m_index )->numResults() )
+        loadResult( m_interface->itemAt( m_index )->results().first() );
 }
 
 
