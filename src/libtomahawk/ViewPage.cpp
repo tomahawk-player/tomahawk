@@ -19,9 +19,14 @@
 #include "ViewPage.h"
 
 #include "utils/Logger.h"
-#include "Source.h"
 
 using namespace Tomahawk;
+
+
+ViewPage::~ViewPage()
+{
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
+}
 
 
 bool

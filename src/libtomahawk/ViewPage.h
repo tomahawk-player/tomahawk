@@ -43,7 +43,7 @@ public:
     };
 
     ViewPage() {}
-    virtual ~ViewPage() {}
+    virtual ~ViewPage();
 
     virtual QWidget* widget() = 0;
     virtual Tomahawk::playlistinterface_ptr playlistInterface() const = 0;
