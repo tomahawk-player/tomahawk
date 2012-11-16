@@ -80,10 +80,12 @@ protected:
     void removeFromWaitList( const QString& revisionguid ) { m_waitForRevision.removeAll( revisionguid ); }
 
     QList<Tomahawk::plentry_ptr> playlistEntries() const;
+
 private slots:
     void onRevisionLoaded( Tomahawk::PlaylistRevision revision );
     void parsedDroppedTracks( QList<Tomahawk::query_ptr> );
     void trackResolved( bool );
+    void onPlaylistChanged();
 
 private:
     void beginPlaylistChanges();
