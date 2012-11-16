@@ -30,6 +30,7 @@
 
 #include "DllMacro.h"
 
+class MetadataEditor;
 class DatabaseCommand_Resolve;
 class DatabaseCommand_AllTracks;
 class DatabaseCommand_AddFiles;
@@ -44,6 +45,7 @@ class DLLEXPORT Result : public QObject
 {
 Q_OBJECT
 
+friend class ::MetadataEditor;
 friend class ::DatabaseCommand_Resolve;
 friend class ::DatabaseCommand_AllTracks;
 friend class ::DatabaseCommand_AddFiles;
@@ -124,12 +126,14 @@ public slots:
 signals:
     // emitted when the collection this result comes from is going offline/online:
     void statusChanged();
+    void updated();
 
 private slots:
     void onOffline();
     void onOnline();
 
     void onResolverRemoved( Tomahawk::Resolver* resolver );
+    void doneEditing();
 
 private:
     // private constructor

@@ -27,6 +27,7 @@
 #include "database/DatabaseCommand_Resolve.h"
 #include "database/DatabaseCommand_AllTracks.h"
 #include "database/DatabaseCommand_AddFiles.h"
+#include "filemetadata/MetadataEditor.h"
 
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
@@ -211,7 +212,13 @@ Result::toVariant() const
 QString
 Result::toString() const
 {
-    return QString( "Result(%1) %2\t%3 - %4  %5" ).arg( id() ).arg( score() ).arg( artist().isNull() ? QString() : artist()->name() ).arg( track() ).arg( url() );
+    return QString( "Result(%1, score: %2) %3 - %4%5 (%6)" )
+              .arg( id() )
+              .arg( score() )
+              .arg( artist().isNull() ? QString() : artist()->name() )
+              .arg( track() )
+              .arg( album().isNull() || album()->name().isEmpty() ? "" : QString( " on %1" ).arg( album()->name() ) )
+              .arg( url() );
 }
 
 
@@ -362,4 +369,12 @@ void
 Result::setResolvedBy( Tomahawk::Resolver* resolver )
 {
     m_resolvedBy = QWeakPointer< Tomahawk::Resolver >( resolver );
+}
+
+
+void
+Result::doneEditing()
+{
+    m_query.clear();
+    emit updated();
 }
