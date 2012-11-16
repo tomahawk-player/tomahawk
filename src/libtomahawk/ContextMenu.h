@@ -52,6 +52,8 @@ public:
     int supportedActions() const { return m_supportedActions; }
     void setSupportedActions( int actions ) { m_supportedActions = actions; }
 
+    void setPlaylistInterface( const Tomahawk::playlistinterface_ptr& interface );
+
     void setQuery( const Tomahawk::query_ptr& query );
     void setQueries( const QList<Tomahawk::query_ptr>& queries );
 
@@ -82,9 +84,11 @@ private:
 
     QAction* m_loveAction;
 
-    QList<Tomahawk::query_ptr> m_queries;
-    QList<Tomahawk::artist_ptr> m_artists;
-    QList<Tomahawk::album_ptr> m_albums;
+    QList< Tomahawk::query_ptr > m_queries;
+    QList< Tomahawk::artist_ptr > m_artists;
+    QList< Tomahawk::album_ptr > m_albums;
+
+    Tomahawk::playlistinterface_ptr m_interface;
 };
 
 }; // ns

@@ -262,7 +262,7 @@ ContextMenu::onTriggered( int action )
 
         case ActionEditMetadata:
             if ( !m_queries.first()->results().isEmpty() ) {
-                MetadataEditor* d = new MetadataEditor( m_queries.first()->results().first(), this );
+                MetadataEditor* d = new MetadataEditor( m_queries.first()->results().first(), m_interface, this );
                 d->show();
             }
             break;
@@ -346,4 +346,11 @@ ContextMenu::onSocialActionsLoaded()
         m_loveAction->setText( tr( "&Love" ) );
         m_loveAction->setIcon( QIcon( RESPATH "images/loved.png" ) );
     }
+}
+
+
+void
+ContextMenu::setPlaylistInterface( const Tomahawk::playlistinterface_ptr& interface )
+{
+    m_interface = interface;
 }
