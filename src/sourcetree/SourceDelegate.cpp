@@ -33,6 +33,7 @@
 #include "TomahawkSettings.h"
 #include "audio/AudioEngine.h"
 #include "ActionCollection.h"
+#include "ViewManager.h"
 
 #include <QApplication>
 #include <QPainter>
@@ -242,7 +243,11 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
             pmRect.setRight( pmRect.left() + pmRect.height() );
             painter->drawPixmap( pmRect, listenAlongPixmap.scaledToHeight( pmRect.height(), Qt::SmoothTransformation ) );
             textRect.adjust( pmRect.width() + 3, 0, 0, 0 );
+
+            m_headphoneRects[ index ] = pmRect;
         }
+        else
+            m_headphoneRects.remove( index );
 
         if ( !realtimeListeningAlongPixmap.isNull() )
         {
@@ -250,7 +255,11 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
             pmRect.setRight( pmRect.left() + pmRect.height() );
             painter->drawPixmap( pmRect, realtimeListeningAlongPixmap.scaledToHeight( pmRect.height(), Qt::SmoothTransformation ) );
             textRect.adjust( pmRect.width() + 3, 0, 0, 0 );
+
+            m_lockRects[ index ] = pmRect;
         }
+        else
+            m_lockRects.remove( index );
     }
 
     textRect.adjust( 0, 0, 0, 2 );
@@ -258,6 +267,11 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
     QTextOption to( Qt::AlignVCenter );
     to.setWrapMode( QTextOption::NoWrap );
     painter->drawText( textRect, text, to );
+
+    if ( colItem->source() && colItem->source()->currentTrack() )
+        m_trackRects[ index ] = textRect;
+    else
+        m_trackRects.remove( index );
 
     if ( status )
     {
@@ -589,6 +603,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     painter->restore();
 }
 
+
 void
 SourceDelegate::updateEditorGeometry( QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
@@ -604,6 +619,36 @@ SourceDelegate::updateEditorGeometry( QWidget* editor, const QStyleOptionViewIte
 bool
 SourceDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index )
 {
+    bool hoveringTrack = false;
+    if ( m_trackRects.contains( index ) )
+    {
+        const QRect trackRect = m_trackRects[ index ];
+        const QMouseEvent* ev = static_cast< QMouseEvent* >( event );
+        hoveringTrack = trackRect.contains( ev->pos() );
+    }
+
+    bool lockRectContainsClick = false, headphonesRectContainsClick = false;
+    if ( m_headphoneRects.contains( index ) )
+    {
+        const QRect headphoneRect = m_headphoneRects[ index ];
+        const QMouseEvent* ev = static_cast< QMouseEvent* >( event );
+        headphonesRectContainsClick = headphoneRect.contains( ev->pos() );
+    }
+    if ( m_lockRects.contains( index ) )
+    {
+        const QRect lockRect = m_lockRects[ index ];
+        const QMouseEvent* ev = static_cast< QMouseEvent* >( event );
+        lockRectContainsClick = lockRect.contains( ev->pos() );
+    }
+
+    if ( event->type() == QEvent::MouseMove )
+    {
+        if ( hoveringTrack || lockRectContainsClick || headphonesRectContainsClick )
+            m_parent->setCursor( Qt::PointingHandCursor );
+        else
+            m_parent->setCursor( Qt::ArrowCursor );
+    }
+
     if ( event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::MouseButtonPress )
     {
         SourcesModel::RowType type = static_cast< SourcesModel::RowType >( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() );
@@ -637,19 +682,13 @@ SourceDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QSt
             SourceItem* colItem = qobject_cast< SourceItem* >( index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >() );
             Q_ASSERT( colItem );
 
+            if ( hoveringTrack && colItem->source() && colItem->source()->currentTrack() )
+            {
+                ViewManager::instance()->show( colItem->source()->currentTrack() );
+            }
+
             if ( !colItem->source().isNull() && !colItem->source()->currentTrack().isNull() && !colItem->source()->isLocal() )
             {
-                QMouseEvent* ev = static_cast< QMouseEvent* >( event );
-
-                QStyleOptionViewItemV4 o = option;
-                initStyleOption( &o, index );
-                QFontMetrics fm( o.font );
-                const int height = fm.height() + 3;
-
-                QRect headphonesRect( option.rect.height() + 10, o.rect.bottom() - height, height, height );
-                bool headphonesRectContainsClick = headphonesRect.contains( ev->pos() );
-                QRect lockRect( option.rect.height() + 20, o.rect.bottom() - height, height, height );
-                bool lockRectContainsClick = lockRect.contains( ev->pos() );
                 if ( headphonesRectContainsClick || lockRectContainsClick )
                 {
                     if ( event->type() == QEvent::MouseButtonRelease )
@@ -713,7 +752,6 @@ SourceDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QSt
                 emit clicked( index );
             }
         }
-
     }
 
     return QStyledItemDelegate::editorEvent ( event, model, option, index );

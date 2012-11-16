@@ -78,6 +78,10 @@ private:
     QMap< int, QString > m_dropTypeTextMap;
     QMap< int, QPixmap > m_dropTypeImageMap;
 
+    mutable QHash< QPersistentModelIndex, QRect > m_trackRects;
+    mutable QHash< QPersistentModelIndex, QRect > m_headphoneRects;
+    mutable QHash< QPersistentModelIndex, QRect > m_lockRects;
+
     mutable QLinearGradient m_gradient;
 };
 
