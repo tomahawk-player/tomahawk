@@ -67,7 +67,7 @@ TransferStatusItem::rightColumnText() const
     if ( m_stream.isNull() )
         return QString();
 
-    return QString( "%1 kb/s" ).arg( m_stream.data()->transferRate() / 1024 );
+    return QString( "%1 kB/s" ).arg( m_stream.data()->transferRate() / 1000 );
 }
 
 void
