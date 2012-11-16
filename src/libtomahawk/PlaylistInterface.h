@@ -55,6 +55,7 @@ public:
 
     virtual Tomahawk::query_ptr itemAt( unsigned int position ) const = 0;
     virtual int indexOfResult( const Tomahawk::result_ptr& result ) const = 0;
+    virtual int indexOfQuery( const Tomahawk::query_ptr& query ) const = 0;
 
     virtual PlaylistModes::RepeatMode repeatMode() const = 0;
 
