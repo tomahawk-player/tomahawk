@@ -53,15 +53,16 @@ public:
     }
     virtual ~MetaArtistInfoInterface() {}
 
-
     // Any one is fine, we keep them all synched
     virtual Tomahawk::PlaylistModes::RepeatMode repeatMode() const { return m_w->ui->albums->proxyModel()->playlistInterface()->repeatMode(); }
 
     virtual bool shuffled() const { return m_w->ui->albums->proxyModel()->playlistInterface()->shuffled(); }
 
     // Do nothing
+    virtual Tomahawk::query_ptr itemAt( unsigned int position ) const { Q_UNUSED( position ); Q_ASSERT( false ); return Tomahawk::query_ptr(); }
+    virtual int indexOfResult( const Tomahawk::result_ptr& result ) const { Q_UNUSED( result ); Q_ASSERT( false ); return -1; }
     virtual Tomahawk::result_ptr currentItem() const { return Tomahawk::result_ptr(); }
-    virtual Tomahawk::result_ptr siblingItem( int ) { return Tomahawk::result_ptr(); }
+    virtual Tomahawk::result_ptr siblingItem( int, bool ) { return Tomahawk::result_ptr(); }
     virtual int trackCount() const { return 0; }
     virtual QList< Tomahawk::query_ptr > tracks() { return QList< Tomahawk::query_ptr >(); }
     virtual int unfilteredTrackCount() const { return 0; }

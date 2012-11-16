@@ -42,11 +42,17 @@ public:
     void setQuery( const query_ptr& track ) { m_track = track; }
 
     virtual result_ptr currentItem() const { return result_ptr(); }
+
+    virtual Tomahawk::query_ptr itemAt( unsigned int position ) const { Q_UNUSED( position ); Q_ASSERT( false ); return Tomahawk::query_ptr(); }
+    virtual int indexOfResult( const Tomahawk::result_ptr& result ) const { Q_UNUSED( result ); Q_ASSERT( false ); return -1; }
+
     virtual PlaylistModes::RepeatMode repeatMode() const { return PlaylistModes::NoRepeat; }
     virtual void setRepeatMode( PlaylistModes::RepeatMode ) {}
-    virtual void setShuffled( bool ) {}
+
     virtual bool shuffled() const { return false; }
-    virtual result_ptr siblingItem( int ) { return result_ptr(); }
+    virtual void setShuffled( bool ) {}
+
+    virtual result_ptr siblingItem( int, bool ) { return result_ptr(); }
     virtual int trackCount() const { return 1; }
     virtual QList< query_ptr > tracks() { return QList< query_ptr >(); }
 

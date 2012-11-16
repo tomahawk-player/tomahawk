@@ -46,10 +46,13 @@ public:
 
     virtual int trackCount() const;
 
+    virtual Tomahawk::query_ptr itemAt( unsigned int position ) const { Q_UNUSED( position ); Q_ASSERT( false ); return Tomahawk::query_ptr(); }
+    virtual int indexOfResult( const Tomahawk::result_ptr& result ) const { Q_UNUSED( result ); Q_ASSERT( false ); return -1; }
+
     virtual bool hasNextItem() { return false; }
     virtual Tomahawk::result_ptr currentItem() const { return m_currentItem; }
 
-    virtual Tomahawk::result_ptr siblingItem( int /*itemsAway*/ ) { return result_ptr(); }
+    virtual Tomahawk::result_ptr siblingItem( int /*itemsAway*/, bool /*readOnly*/ ) { return result_ptr(); }
 
     virtual PlaylistModes::RepeatMode repeatMode() const { return PlaylistModes::NoRepeat; }
     virtual bool shuffled() const { return false; }

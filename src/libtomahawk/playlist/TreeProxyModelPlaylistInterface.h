@@ -43,9 +43,11 @@ public:
 
     virtual int trackCount() const;
 
+    virtual Tomahawk::query_ptr itemAt( unsigned int position ) const { Q_UNUSED( position ); Q_ASSERT( false ); return Tomahawk::query_ptr(); }
+    virtual int indexOfResult( const Tomahawk::result_ptr& result ) const { Q_UNUSED( result ); Q_ASSERT( false ); return -1; }
+
     virtual bool hasNextItem();
     virtual Tomahawk::result_ptr currentItem() const;
-    virtual Tomahawk::result_ptr siblingItem( int direction );
     virtual Tomahawk::result_ptr siblingItem( int direction, bool readOnly );
 
     virtual QString filter() const;

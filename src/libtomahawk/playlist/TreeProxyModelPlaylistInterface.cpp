@@ -74,13 +74,6 @@ TreeProxyModelPlaylistInterface::hasNextItem()
 
 
 Tomahawk::result_ptr
-TreeProxyModelPlaylistInterface::siblingItem( int itemsAway )
-{
-    return siblingItem( itemsAway, false );
-}
-
-
-Tomahawk::result_ptr
 TreeProxyModelPlaylistInterface::siblingItem( int itemsAway, bool readOnly )
 {
     if ( m_proxyModel.isNull() )

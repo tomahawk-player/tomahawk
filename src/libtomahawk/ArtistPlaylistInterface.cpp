@@ -52,8 +52,10 @@ ArtistPlaylistInterface::~ArtistPlaylistInterface()
 
 
 Tomahawk::result_ptr
-ArtistPlaylistInterface::siblingItem( int itemsAway )
+ArtistPlaylistInterface::siblingItem( int itemsAway, bool readOnly )
 {
+    Q_UNUSED( readOnly );
+
     int p = m_currentTrack;
     p += itemsAway;
 

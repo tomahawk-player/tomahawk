@@ -51,9 +51,11 @@ SourcePlaylistInterface::~SourcePlaylistInterface()
 
 
 Tomahawk::result_ptr
-SourcePlaylistInterface::siblingItem( int itemsAway )
+SourcePlaylistInterface::siblingItem( int itemsAway, bool readOnly )
 {
     Q_UNUSED( itemsAway );
+    Q_UNUSED( readOnly );
+
     return nextItem();
 }
 
