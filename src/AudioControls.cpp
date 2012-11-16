@@ -264,6 +264,9 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
     ui->loveButton->setToolTip( tr( "Love" ) );
     ui->ownerButton->setToolTip( QString( tr( "Playing from %1" ) ).arg( result->friendlySource() ) );
 
+    ui->prevButton->setEnabled( AudioEngine::instance()->canGoPrevious() );
+    ui->nextButton->setEnabled( AudioEngine::instance()->canGoNext() );
+
     QPixmap sourceIcon = result->sourceIcon( Result::Plain, ui->ownerButton->size() );
     if ( !sourceIcon.isNull() )
         ui->ownerButton->setPixmap( sourceIcon );
@@ -393,6 +396,9 @@ AudioControls::onPlaybackStopped()
     ui->socialButton->setToolTip( "" );
     ui->loveButton->setToolTip( "" );
     ui->ownerButton->setToolTip( "" );
+
+    ui->prevButton->setEnabled( AudioEngine::instance()->canGoPrevious() );
+    ui->nextButton->setEnabled( AudioEngine::instance()->canGoNext() );
 }
 
 
