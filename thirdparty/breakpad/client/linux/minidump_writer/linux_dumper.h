@@ -49,19 +49,10 @@
 #include "common/memory.h"
 #include "google_breakpad/common/minidump_format.h"
 
-#if __cplusplus > 199711L
-#include <type_traits>
-#endif
-
 namespace google_breakpad {
 
 #if defined(__i386) || defined(__x86_64)
-//typedef typeof(((struct user*) 0)->u_debugreg[0]) debugreg_t;
-#if __cplusplus > 199711L
-typedef std::remove_reference< decltype(((struct user*) 0)->u_debugreg[0]) >::type debugreg_t;
-#else
 typedef typeof(((struct user*) 0)->u_debugreg[0]) debugreg_t;
-#endif
 #endif
 
 // Typedef for our parsing of the auxv variables in /proc/pid/auxv.
