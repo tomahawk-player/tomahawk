@@ -7,7 +7,7 @@ set( CMAKE_MODULE_PATH
 )
 
 if( CMAKE_COMPILER_IS_GNUCXX )
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++98")
+    ADD_DEFINITIONS( -DSTDC_HEADERS -std=gnu++98 )
 endif()
 
 if(${CMAKE_BUILD_TYPE} MATCHES "Release")
