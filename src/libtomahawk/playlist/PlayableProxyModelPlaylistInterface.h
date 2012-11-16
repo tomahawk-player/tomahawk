@@ -43,8 +43,10 @@ public:
 
     virtual int trackCount() const;
 
+    virtual Tomahawk::query_ptr itemAt( unsigned int position ) const;
+    virtual int indexOfResult( const Tomahawk::result_ptr& result ) const;
+
     virtual Tomahawk::result_ptr currentItem() const;
-    virtual Tomahawk::result_ptr siblingItem( int itemsAway );
     virtual Tomahawk::result_ptr siblingItem( int itemsAway, bool readOnly );
     virtual bool hasNextItem();
 

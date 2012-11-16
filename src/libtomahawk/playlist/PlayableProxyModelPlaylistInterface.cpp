@@ -79,13 +79,6 @@ PlayableProxyModelPlaylistInterface::tracks()
 }
 
 
-Tomahawk::result_ptr
-PlayableProxyModelPlaylistInterface::siblingItem( int itemsAway )
-{
-    return siblingItem( itemsAway, false );
-}
-
-
 bool
 PlayableProxyModelPlaylistInterface::hasNextItem()
 {
@@ -230,3 +223,39 @@ PlayableProxyModelPlaylistInterface::currentItem() const
     return result_ptr();
 }
 
+
+Tomahawk::query_ptr
+PlayableProxyModelPlaylistInterface::itemAt( unsigned int position ) const
+{
+    if ( m_proxyModel.isNull() )
+        return query_ptr();
+
+    PlayableProxyModel* proxyModel = m_proxyModel.data();
+
+    PlayableItem* item = proxyModel->itemFromIndex( proxyModel->mapToSource( proxyModel->index( position, 0 ) ) );
+    if ( item && item->query() )
+        return item->query();
+
+    return query_ptr();
+}
+
+
+int
+PlayableProxyModelPlaylistInterface::indexOfResult( const Tomahawk::result_ptr& result ) const
+{
+    if ( m_proxyModel.isNull() )
+        return -1;
+
+    PlayableProxyModel* proxyModel = m_proxyModel.data();
+
+    for ( int i = 0; i < proxyModel->rowCount( QModelIndex() ); i++ )
+    {
+        PlayableItem* item = proxyModel->itemFromIndex( proxyModel->mapToSource( proxyModel->index( i, 0 ) ) );
+        if ( item && item->result() == result )
+        {
+            return i;
+        }
+    }
+
+    return -1;
+}
