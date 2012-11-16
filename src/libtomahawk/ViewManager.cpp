@@ -505,8 +505,6 @@ ViewManager::destroyPage( ViewPage* page )
 
         emit historyBackAvailable( m_pageHistoryBack.count() );
         emit historyForwardAvailable( m_pageHistoryFwd.count() );
-
-        delete page;
     }
 
     if ( m_currentPage == page )
@@ -514,7 +512,6 @@ ViewManager::destroyPage( ViewPage* page )
         m_currentPage = 0;
 
         historyBack();
-        delete page;
     }
 }
 

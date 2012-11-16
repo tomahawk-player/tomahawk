@@ -82,6 +82,12 @@ TemporaryPageItem::TemporaryPageItem ( SourcesModel* mdl, SourceTreeItem* parent
 }
 
 
+TemporaryPageItem::~TemporaryPageItem()
+{
+    delete m_page;
+}
+
+
 QString
 TemporaryPageItem::text() const
 {

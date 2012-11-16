@@ -28,7 +28,8 @@ class TemporaryPageItem : public SourceTreeItem
 {
     Q_OBJECT
 public:
-    TemporaryPageItem ( SourcesModel* model, SourceTreeItem* parent, Tomahawk::ViewPage* page, int sortValue );
+    TemporaryPageItem( SourcesModel* model, SourceTreeItem* parent, Tomahawk::ViewPage* page, int sortValue );
+    virtual ~TemporaryPageItem();
 
     virtual QString text() const;
     virtual void activate();
