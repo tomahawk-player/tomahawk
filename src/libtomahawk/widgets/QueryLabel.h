@@ -116,6 +116,9 @@ protected:
 
     virtual void startDrag();
 
+private slots:
+    void onResultChanged();
+
 private:
     QString smartAppend( QString& text, const QString& appendage ) const;
     QTime m_time;

@@ -180,6 +180,19 @@ QueryLabel::setText( const QString& text )
 
 
 void
+QueryLabel::onResultChanged()
+{
+    m_query = m_result->toQuery();
+    m_artist = m_result->artist();
+    m_album = m_result->album();
+
+    updateLabel();
+
+    emit textChanged( text() );
+}
+
+
+void
 QueryLabel::setResult( const Tomahawk::result_ptr& result )
 {
     if ( result.isNull() )
@@ -193,13 +206,9 @@ QueryLabel::setResult( const Tomahawk::result_ptr& result )
     if ( m_result.isNull() || m_result.data() != result.data() )
     {
         m_result = result;
-        m_query = m_result->toQuery();
-        m_artist = result->artist();
-        m_album = result->album();
+        connect( m_result.data(), SIGNAL( updated() ), SLOT( onResultChanged() ) );
 
-        updateLabel();
-
-        emit textChanged( text() );
+        onResultChanged();
         emit resultChanged( m_result );
     }
 }
