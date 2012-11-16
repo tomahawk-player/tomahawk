@@ -78,6 +78,7 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
 
 SearchWidget::~SearchWidget()
 {
+    tDebug() << Q_FUNC_INFO;
     delete ui;
 }
 
