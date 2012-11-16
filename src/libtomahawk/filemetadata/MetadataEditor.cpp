@@ -226,9 +226,12 @@ MetadataEditor::loadResult( const Tomahawk::result_ptr& result )
     setYear( result->year() );
     setBitrate( result->bitrate() );
 
-    QFileInfo fi( QUrl( m_result->url() ).toLocalFile() );
-    setFileName( fi.fileName() );
-    setFileSize( TomahawkUtils::filesizeToString( fi.size() ) );
+    if ( result->collection()->source()->isLocal() )
+    {
+        QFileInfo fi( QUrl( m_result->url() ).toLocalFile() );
+        setFileName( fi.absoluteFilePath() );
+        setFileSize( TomahawkUtils::filesizeToString( fi.size() ) );
+    }
 
     setWindowTitle( QString( result->track() + " - " + tr( "Properties" ) ) );
 
