@@ -341,7 +341,7 @@ ContextMenu::onSocialActionsLoaded()
 
 
 void
-ContextMenu::setPlaylistInterface( const Tomahawk::playlistinterface_ptr& interface )
+ContextMenu::setPlaylistInterface( const Tomahawk::playlistinterface_ptr& plInterface )
 {
-    m_interface = interface;
+    m_interface = plInterface;
 }
