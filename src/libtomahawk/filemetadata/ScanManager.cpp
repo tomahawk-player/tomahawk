@@ -51,6 +51,7 @@ ScanManager::ScanManager( QObject* parent )
     , m_currScannerPaths()
     , m_cachedScannerDirs()
     , m_queuedScanType( None )
+    , m_updateGUI( true )
 {
     s_instance = this;
 
@@ -131,6 +132,7 @@ ScanManager::scanTimerTimeout()
         runNormalScan();
 }
 
+
 void
 ScanManager::runFullRescan()
 {
@@ -138,13 +140,12 @@ ScanManager::runFullRescan()
 }
 
 
-
 void
 ScanManager::runNormalScan( bool manualFull )
 {
     if ( !Database::instance() || ( Database::instance() && !Database::instance()->isReady() ) )
     {
-        tLog() << Q_FUNC_INFO << "Error...Database is not ready, but should be";
+        tLog() << Q_FUNC_INFO << "Error... Database is not ready, but should be";
         return;
     }
 
@@ -184,11 +185,11 @@ ScanManager::runNormalScan( bool manualFull )
 
 
 void
-ScanManager::runFileScan( const QStringList &paths )
+ScanManager::runFileScan( const QStringList& paths, bool updateGUI )
 {
     if ( !Database::instance() || ( Database::instance() && !Database::instance()->isReady() ) )
     {
-        tLog() << Q_FUNC_INFO << "Error...Database is not ready, but should be";
+        tLog() << Q_FUNC_INFO << "Error... Database is not ready, but should be";
         return;
     }
 
@@ -214,6 +215,7 @@ ScanManager::runFileScan( const QStringList &paths )
     m_scanTimer->stop();
     m_musicScannerThreadController = new QThread( this );
     m_currScanMode = FileScan;
+    m_updateGUI = updateGUI;
 
     QMetaObject::invokeMethod( this, "runScan", Qt::QueuedConnection );
 }
@@ -276,10 +278,11 @@ ScanManager::scannerFinished()
         m_musicScannerThreadController = 0;
     }
 
-    SourceList::instance()->getLocal()->scanningFinished();
+    SourceList::instance()->getLocal()->scanningFinished( m_updateGUI );
+    m_updateGUI = true;
     emit finished();
 
-    if ( !m_queuedScanType == File )
+    if ( m_queuedScanType != File )
         m_currScannerPaths.clear();
     switch ( m_queuedScanType )
     {
@@ -288,7 +291,7 @@ ScanManager::scannerFinished()
             QMetaObject::invokeMethod( this, "runNormalScan", Qt::QueuedConnection, Q_ARG( bool, m_queuedScanType == Full ) );
             break;
         case File:
-            QMetaObject::invokeMethod( this, "runFileScan", Qt::QueuedConnection, Q_ARG( QStringList, QStringList() ) );
+            QMetaObject::invokeMethod( this, "", Qt::QueuedConnection, Q_ARG( QStringList, QStringList() ) );
             break;
         default:
             break;

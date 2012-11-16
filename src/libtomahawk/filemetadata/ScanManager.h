@@ -42,7 +42,7 @@ Q_OBJECT
 public:
     enum ScanMode { DirScan, FileScan };
     enum ScanType { None, Full, Normal, File };
-    
+
     static ScanManager* instance();
 
     explicit ScanManager( QObject* parent = 0 );
@@ -52,7 +52,7 @@ signals:
     void finished();
 
 public slots:
-    void runFileScan( const QStringList &paths = QStringList() );
+    void runFileScan( const QStringList& paths = QStringList(), bool updateGUI = true );
     void runFullRescan();
     void runNormalScan( bool manualFull = false );
 
@@ -79,6 +79,8 @@ private:
 
     QTimer* m_scanTimer;
     ScanType m_queuedScanType;
+
+    bool m_updateGUI;
 };
 
 #endif
