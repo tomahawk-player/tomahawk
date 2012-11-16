@@ -115,6 +115,8 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
     if ( m_supportedActions & ActionEditMetadata && itemCount() == 1 )
         m_sigmap->setMapping( addAction( tr( "Properties..." ) ), ActionEditMetadata );
 
+    addSeparator();
+
     if ( m_supportedActions & ActionDelete )
         m_sigmap->setMapping( addAction( queries.count() > 1 ? tr( "&Delete Items" ) : tr( "&Delete Item" ) ), ActionDelete );
 
