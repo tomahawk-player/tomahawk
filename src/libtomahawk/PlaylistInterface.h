@@ -45,11 +45,16 @@ public:
     virtual int trackCount() const = 0;
 
     virtual Tomahawk::result_ptr currentItem() const = 0;
-    virtual Tomahawk::result_ptr previousItem();
+
     virtual bool hasNextItem() { return true; }
     virtual bool hasPreviousItem() { return true; }
     virtual Tomahawk::result_ptr nextItem();
-    virtual Tomahawk::result_ptr siblingItem( int itemsAway ) = 0;
+    virtual Tomahawk::result_ptr previousItem();
+
+    virtual Tomahawk::result_ptr siblingItem( int itemsAway, bool readOnly = false ) = 0;
+
+    virtual Tomahawk::query_ptr itemAt( unsigned int position ) const = 0;
+    virtual int indexOfResult( const Tomahawk::result_ptr& result ) const = 0;
 
     virtual PlaylistModes::RepeatMode repeatMode() const = 0;
 
