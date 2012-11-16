@@ -514,6 +514,7 @@ ViewManager::destroyPage( ViewPage* page )
         m_currentPage = 0;
 
         historyBack();
+        delete page;
     }
 }
 
