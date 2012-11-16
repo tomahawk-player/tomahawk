@@ -34,6 +34,7 @@
 #include "TomahawkSettings.h"
 #include "ActionCollection.h"
 #include "ViewManager.h"
+#include "ContextMenu.h"
 
 #include <QApplication>
 #include <QPainter>
@@ -682,10 +683,21 @@ SourceDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QSt
             SourceItem* colItem = qobject_cast< SourceItem* >( index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >() );
             Q_ASSERT( colItem );
 
-            if ( event->type() == QEvent::MouseButtonRelease && hoveringTrack && colItem->source() && colItem->source()->currentTrack() )
+            if ( hoveringTrack && colItem->source() && colItem->source()->currentTrack() )
             {
-                ViewManager::instance()->show( colItem->source()->currentTrack() );
-                return true;
+                const QMouseEvent* ev = static_cast< QMouseEvent* >( event );
+                if ( event->type() == QEvent::MouseButtonRelease && ev->button() == Qt::LeftButton )
+                {
+                    ViewManager::instance()->show( colItem->source()->currentTrack() );
+                    return true;
+                }
+                else if ( event->type() == QEvent::MouseButtonPress && ev->button() == Qt::RightButton )
+                {
+                    Tomahawk::ContextMenu* contextMenu = new Tomahawk::ContextMenu( m_parent );
+                    contextMenu->setQuery( colItem->source()->currentTrack() );
+                    contextMenu->exec( QCursor::pos() );
+                    return true;
+                }
             }
 
             if ( !colItem->source().isNull() && !colItem->source()->currentTrack().isNull() && !colItem->source()->isLocal() )
