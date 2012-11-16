@@ -172,11 +172,24 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     int topHeight = QFontMetrics( boldFont ).boundingRect( top ).height();
     int frameHeight = bottomHeight + topHeight + 10;
 
+    QColor c1;
+    c1.setRgb( 0, 0, 0 );
+    c1.setAlphaF( 0.00 );
+    QColor c2;
+    c2.setRgb( 0, 0, 0 );
+    c2.setAlphaF( 0.99 );
+
+    QRect gradientRect = r.adjusted( 0, r.height() - frameHeight * 2, 0, 0 );
+    QLinearGradient gradient( QPointF( 0, 0 ), QPointF( 0, 1 ) );
+    gradient.setCoordinateMode( QGradient::ObjectBoundingMode );
+    gradient.setColorAt( 0.0, c1 );
+    gradient.setColorAt( 0.8, c2 );
+    gradient.setColorAt( 1.0, c2 );
+
     painter->save();
-    painter->setPen( Qt::black );
-    painter->setBrush( Qt::black );
-    painter->setOpacity( 0.5 );
-    painter->drawRoundedRect( r.adjusted( 4, r.height() - frameHeight, -4, -4 ), 3, 3 );
+    painter->setPen( Qt::transparent );
+    painter->setBrush( gradient );
+    painter->drawRect( gradientRect );
     painter->restore();
 
     painter->setPen( opt.palette.color( QPalette::HighlightedText ) );
