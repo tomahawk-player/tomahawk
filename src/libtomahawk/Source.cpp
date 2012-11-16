@@ -295,7 +295,7 @@ Source::scanningProgress( unsigned int files )
 
 
 void
-Source::scanningFinished()
+Source::scanningFinished( bool updateGUI )
 {
     m_textStatus = QString();
 
@@ -306,7 +306,9 @@ Source::scanningFinished()
     }
 
     emit stateChanged();
-    emit synced();
+
+    if ( updateGUI )
+        emit synced();
 }
 
 

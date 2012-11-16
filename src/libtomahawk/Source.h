@@ -80,7 +80,7 @@ public:
     void setControlConnection( ControlConnection* cc );
 
     void scanningProgress( unsigned int files );
-    void scanningFinished();
+    void scanningFinished( bool updateGUI );
 
     unsigned int trackCount() const;
 
