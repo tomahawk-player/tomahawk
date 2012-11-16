@@ -150,8 +150,8 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     {
         painter->save();
 
-        painter->setPen( QColor( 33, 33, 33 ) );
-        painter->setBrush( QColor( 33, 33, 33 ) );
+        painter->setPen( QColor( "dddddd" ) );
+        painter->setBrush( QColor( "#dddddd" ) );
         painter->setOpacity( opacity );
         painter->drawRect( r );
 
@@ -177,7 +177,7 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     c1.setAlphaF( 0.00 );
     QColor c2;
     c2.setRgb( 0, 0, 0 );
-    c2.setAlphaF( 0.90 );
+    c2.setAlphaF( 0.88 );
 
     QRect gradientRect = r.adjusted( 0, r.height() - frameHeight * 2, 0, 0 );
     QLinearGradient gradient( QPointF( 0, 0 ), QPointF( 0, 1 ) );
