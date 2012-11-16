@@ -28,10 +28,10 @@
 #include "items/TemporaryPageItem.h"
 
 #include "utils/TomahawkUtilsGui.h"
+#include "audio/AudioEngine.h"
 #include "AnimationHelper.h"
 #include "Source.h"
 #include "TomahawkSettings.h"
-#include "audio/AudioEngine.h"
 #include "ActionCollection.h"
 #include "ViewManager.h"
 
@@ -682,9 +682,10 @@ SourceDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QSt
             SourceItem* colItem = qobject_cast< SourceItem* >( index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >() );
             Q_ASSERT( colItem );
 
-            if ( hoveringTrack && colItem->source() && colItem->source()->currentTrack() )
+            if ( event->type() == QEvent::MouseButtonRelease && hoveringTrack && colItem->source() && colItem->source()->currentTrack() )
             {
                 ViewManager::instance()->show( colItem->source()->currentTrack() );
+                return true;
             }
 
             if ( !colItem->source().isNull() && !colItem->source()->currentTrack().isNull() && !colItem->source()->isLocal() )
@@ -754,7 +755,7 @@ SourceDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QSt
         }
     }
 
-    return QStyledItemDelegate::editorEvent ( event, model, option, index );
+    return QStyledItemDelegate::editorEvent( event, model, option, index );
 }
 
 
