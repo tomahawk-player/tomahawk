@@ -75,6 +75,8 @@ private slots:
     void setEditable( bool editable );
 
 private:
+    void setWindowTitle( const QString& title );
+
     Ui::MetadataEditor* ui;
 
     Tomahawk::result_ptr m_result;

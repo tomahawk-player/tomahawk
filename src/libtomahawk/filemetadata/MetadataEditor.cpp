@@ -197,7 +197,7 @@ MetadataEditor::loadQuery( const Tomahawk::query_ptr& query )
     setFileName( QString() );
     setFileSize( 0 );
 
-    setWindowTitle( QString( query->track() + " - " + tr( "Properties" ) ) );
+    setWindowTitle( query->track() );
 
     if ( m_interface )
     {
@@ -233,7 +233,7 @@ MetadataEditor::loadResult( const Tomahawk::result_ptr& result )
         setFileSize( TomahawkUtils::filesizeToString( fi.size() ) );
     }
 
-    setWindowTitle( QString( result->track() + " - " + tr( "Properties" ) ) );
+    setWindowTitle( result->track() );
 
     if ( m_interface )
     {
@@ -357,4 +357,11 @@ MetadataEditor::setEditable( bool editable )
     ui->yearSpinBox->setReadOnly( !editable );
 
     m_editable = editable;
+}
+
+
+void
+MetadataEditor::setWindowTitle( const QString& title )
+{
+    QDialog::setWindowTitle( title + " - " + tr( "Properties" ) );
 }
