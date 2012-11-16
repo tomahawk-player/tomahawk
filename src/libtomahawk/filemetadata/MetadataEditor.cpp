@@ -65,6 +65,7 @@ MetadataEditor::writeMetadata( bool closeDlg )
 {
     QFileInfo fi( QUrl( m_result->url() ).toLocalFile() );
 
+    bool changed = false;
     QByteArray fileName = QFile::encodeName( fi.canonicalFilePath() );
     const char *encodedName = fileName.constData();
 
@@ -75,6 +76,8 @@ MetadataEditor::writeMetadata( bool closeDlg )
     {
         tag->setTitle( title() );
         m_result->setTrack( title() );
+
+        changed = true;
     }
 
     Tomahawk::artist_ptr newArtist = Tomahawk::Artist::get( artist(), true );
@@ -82,6 +85,9 @@ MetadataEditor::writeMetadata( bool closeDlg )
     {
         tag->setArtist( artist() );
         m_result->setArtist( newArtist );
+
+        changed = true;
+
     }
 
     Tomahawk::album_ptr newAlbum = Tomahawk::Album::get( newArtist, album(), true );
@@ -89,23 +95,36 @@ MetadataEditor::writeMetadata( bool closeDlg )
     {
         tag->setAlbum( album() );
         m_result->setAlbum( newAlbum );
+
+        changed = true;
     }
 
-    tag->setTrack( albumPos() );
-    m_result->setAlbumPos( albumPos() );
+    if ( albumPos() != (int)m_result->albumpos() )
+    {
+        tag->setTrack( albumPos() );
+        m_result->setAlbumPos( albumPos() );
+
+        changed = true;
+    }
 
     if ( year() != m_result->year() )
     {
         tag->setYear( year() );
         m_result->setYear( year() );
+
+        changed = true;
     }
 
-    f.save();
+    if ( changed )
+    {
+        f.save();
 
-    m_editFiles.append( fileName );
-    m_result->doneEditing();
-    tDebug() << Q_FUNC_INFO << m_result->toString();
-    tDebug() << Q_FUNC_INFO << m_result->toQuery()->toString();
+        m_editFiles.append( fileName );
+        m_result->doneEditing();
+
+        tDebug() << Q_FUNC_INFO << m_result->toString();
+        tDebug() << Q_FUNC_INFO << m_result->toQuery()->toString();
+    }
 
     if ( closeDlg )
     {
