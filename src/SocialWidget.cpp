@@ -41,7 +41,9 @@ SocialWidget::SocialWidget( QWidget* parent )
 {
     ui->setupUi( this );
     setWindowFlags( Qt::FramelessWindowHint );
+#ifndef Q_OS_WIN
     setWindowFlags( Qt::Popup );
+#endif
     setAttribute( Qt::WA_TranslucentBackground, true );
 
     TomahawkUtils::unmarginLayout( layout() );
