@@ -483,6 +483,7 @@ AtticaManager::syncServerData()
 {
     // look for any newer. m_resolvers has list from server, and m_resolverStates will contain any locally installed ones
     // also update ratings
+    tLog() << "Syncing server data!";
     foreach ( const QString& id, m_resolverStates.keys() )
     {
         Resolver r = m_resolverStates[ id ];
@@ -506,6 +507,7 @@ AtticaManager::syncServerData()
             {
                 if ( TomahawkUtils::newerVersion( r.version, upstream.version() ) )
                 {
+                    tLog() << "Doing upgrade of: " << id;
                     m_resolverStates[ id ].state = NeedsUpgrade;
                     QMetaObject::invokeMethod( this, "upgradeResolver", Qt::QueuedConnection, Q_ARG( Attica::Content, upstream ) );
                 }
@@ -557,6 +559,7 @@ void AtticaManager::doInstallResolver( const Content& resolver, bool autoCreate,
 void
 AtticaManager::upgradeResolver( const Content& resolver )
 {
+    tLog() << "UPGRADING:" << resolver.id() << m_resolverStates[ resolver.id() ].state;
     Q_ASSERT( m_resolverStates.contains( resolver.id() ) );
     Q_ASSERT( m_resolverStates[ resolver.id() ].state == NeedsUpgrade );
 

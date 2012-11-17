@@ -195,7 +195,7 @@ TrackInfoWidget::load( const query_ptr& query )
 
     m_artist->loadStats();
     m_query->loadStats();
-//    m_query->lyrics();
+    m_query->lyrics();
     onCoverUpdated();
 
     ui->trackLabel->setText( query->track() );
