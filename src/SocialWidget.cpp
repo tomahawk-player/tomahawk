@@ -40,8 +40,8 @@ SocialWidget::SocialWidget( QWidget* parent )
     , m_parentRect( parent->rect() )
 {
     ui->setupUi( this );
-    setWindowFlags( Qt::FramelessWindowHint );
 #ifndef Q_OS_WIN
+    setWindowFlags( Qt::FramelessWindowHint );
     setWindowFlags( Qt::Popup );
 #endif
     setAttribute( Qt::WA_TranslucentBackground, true );
