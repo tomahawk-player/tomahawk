@@ -112,9 +112,6 @@ SourceTreePopupDialog::SourceTreePopupDialog()
                             background-color: #D35052; \
                             border-style: flat; \
                         }" );*/
-#ifdef Q_OS_WIN
-    setMask( geometry() );
-#endif
 }
 
 void
@@ -219,6 +216,10 @@ SourceTreePopupDialog::paintEvent( QPaintEvent* event )
     // would incorrectly calculate the background due to it not being
     // invalidated.
     SourceTreePopupHelper::clearBackground( this );
+#endif
+#ifdef Q_OS_WIN
+    QRegion bubble = QRegion( outline.toFillPolygon().toPolygon(), Qt::WindingFill );
+    setMask( bubble );
 #endif
 }
 
