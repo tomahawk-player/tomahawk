@@ -44,7 +44,9 @@ SourceTreePopupDialog::SourceTreePopupDialog()
     , m_label( 0 )
     , m_buttons( 0 )
 {
+#ifndef Q_OS_WIN
     setWindowFlags( Qt::FramelessWindowHint );
+#endif
     setWindowFlags( Qt::Popup );
 
     setAutoFillBackground( false );
@@ -216,10 +218,6 @@ SourceTreePopupDialog::paintEvent( QPaintEvent* event )
     // would incorrectly calculate the background due to it not being
     // invalidated.
     SourceTreePopupHelper::clearBackground( this );
-#endif
-#ifdef Q_OS_WIN
-    QRegion bubble = QRegion( outline.toFillPolygon().toPolygon(), Qt::WindingFill );
-    setMask( bubble );
 #endif
 }
 
