@@ -41,9 +41,9 @@ SocialWidget::SocialWidget( QWidget* parent )
 {
     ui->setupUi( this );
 #ifndef Q_OS_WIN
-    setWindowFlags( Qt::FramelessWindowHint );
-    setWindowFlags( Qt::Popup );
+    setWindowFlags( Qt::FramelessWindowHint ); //this causes ugly black shadows on Windows
 #endif
+    setWindowFlags( Qt::Popup );
     setAttribute( Qt::WA_TranslucentBackground, true );
 
     TomahawkUtils::unmarginLayout( layout() );

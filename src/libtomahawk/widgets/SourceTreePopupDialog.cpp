@@ -112,6 +112,9 @@ SourceTreePopupDialog::SourceTreePopupDialog()
                             background-color: #D35052; \
                             border-style: flat; \
                         }" );*/
+#ifdef Q_OS_WIN
+    setMask( geometry() );
+#endif
 }
 
 void
