@@ -79,7 +79,7 @@ private:
 
     void lookupUrl( const QString& url );
     void lookupTrack( const QString& track );
-    void lookupSpotifyBrowse( const QString& playlist );
+    void lookupSpotifyBrowse(const QString& link );
     void checkTrackFinished();
     void checkBrowseFinished();
 

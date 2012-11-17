@@ -75,8 +75,29 @@ SpotifyParser::~SpotifyParser()
 
 
 void
-SpotifyParser::lookupUrl( const QString& link )
+SpotifyParser::lookupUrl( const QString& rawLink )
 {
+    tLog() << "Looking up Spotify rawURI:" << rawLink;
+    QString link = rawLink;
+    if ( link.contains( "open.spotify.com/" ) ) // convert to a URI
+    {
+        link.replace( "http://open.spotify.com/", "" );
+        link.replace( "/", ":" );
+        link = "spotify:" + link;
+    }
+    // TODO: Ignoring search and user querys atm
+    // (spotify:(?:(?:artist|album|track|user:[^:]+:playlist):[a-zA-Z0-9]+|user:[^:]+|search:(?:[-\w$\.+!*'(),<>:\s]+|%[a-fA-F0-9\s]{2})+))
+    QRegExp rx( "(spotify:(?:(?:artist|album|track|user:[^:]+:playlist):[a-zA-Z0-9]+[^:]))" );
+    if ( rx.indexIn( link, 0 ) != -1 )
+    {
+        link = rx.cap(1);
+    }
+    else
+    {
+        tLog() << "Bad SpotifyURI!" << link;
+        return;
+    }
+
     if ( link.contains( "track" ) )
     {
         m_trackMode = true;
@@ -97,17 +118,12 @@ SpotifyParser::lookupUrl( const QString& link )
 
 
 void
-SpotifyParser::lookupSpotifyBrowse( const QString& linkRaw )
+SpotifyParser::lookupSpotifyBrowse( const QString& link )
 {
-    tLog() << "Parsing Spotify Browse URI:" << linkRaw;
-    m_browseUri = linkRaw;
+    tLog() << "Parsing Spotify Browse URI:" << link;
 
-    if ( m_browseUri.contains( "open.spotify.com/" ) ) // convert to a URI
-    {
-        m_browseUri.replace( "http://open.spotify.com/", "" );
-        m_browseUri.replace( "/", ":" );
-        m_browseUri = "spotify:" + m_browseUri;
-    }
+    // Used in checkBrowseFinished as identifier
+    m_browseUri = link;
 
     if ( m_browseUri.contains( "playlist" ) &&
          Tomahawk::Accounts::SpotifyAccount::instance() != 0 &&
