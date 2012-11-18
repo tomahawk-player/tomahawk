@@ -46,8 +46,8 @@ SourceTreePopupDialog::SourceTreePopupDialog()
 {
 #ifndef Q_OS_WIN
     setWindowFlags( Qt::FramelessWindowHint );
-#endif
     setWindowFlags( Qt::Popup );
+#endif
 
     setAutoFillBackground( false );
     setAttribute( Qt::WA_TranslucentBackground, true );
