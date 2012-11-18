@@ -68,18 +68,18 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/widgets/AccountListWidget.cpp" line="60"/>
         <source>Connections</source>
-        <translation type="unfinished"/>
+        <translation>Conexões</translation>
     </message>
     <message>
         <location filename="../src/widgets/AccountListWidget.cpp" line="68"/>
         <location filename="../src/widgets/AccountListWidget.cpp" line="229"/>
         <source>Connect &amp;All</source>
-        <translation type="unfinished"/>
+        <translation>Conect&amp;ar todos</translation>
     </message>
     <message>
         <location filename="../src/widgets/AccountListWidget.cpp" line="228"/>
         <source>Disconnect &amp;All</source>
-        <translation type="unfinished"/>
+        <translation>Desconect&amp;ar todos</translation>
     </message>
 </context>
 <context>
@@ -87,7 +87,7 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/widgets/AccountWidget.cpp" line="125"/>
         <source>Invite</source>
-        <translation type="unfinished"/>
+        <translation>Convidar</translation>
     </message>
 </context>
 <context>
@@ -95,7 +95,7 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/widgets/AccountsToolButton.cpp" line="88"/>
         <source>Configure Accounts</source>
-        <translation type="unfinished"/>
+        <translation>Configurar contas</translation>
     </message>
 </context>
 <context>
@@ -170,87 +170,87 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="95"/>
         <source>Load &amp;XSPF...</source>
-        <translation type="unfinished"/>
+        <translation>Carregar &amp;XSPF...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="96"/>
         <source>U&amp;pdate Collection</source>
-        <translation type="unfinished"/>
+        <translation>At&amp;ualizar coleção</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="97"/>
         <source>Fully &amp;Rescan Collection</source>
-        <translation type="unfinished"/>
+        <translation>Varredura completa de coleção</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="98"/>
         <source>Show Offline Sources</source>
-        <translation type="unfinished"/>
+        <translation>Mostrar fontes offline</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="100"/>
         <source>&amp;Configure Tomahawk...</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Configurar o Tomahawk...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="103"/>
         <source>Minimize</source>
-        <translation type="unfinished"/>
+        <translation>Minimizar</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="105"/>
         <source>Zoom</source>
-        <translation type="unfinished"/>
+        <translation>Zoom</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="108"/>
         <source>Hide Menu Bar</source>
-        <translation type="unfinished"/>
+        <translation>Esconder barra de menu</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="112"/>
         <source>Diagnostics...</source>
-        <translation type="unfinished"/>
+        <translation>Diagnósticos...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="114"/>
         <source>About &amp;Tomahawk...</source>
-        <translation type="unfinished"/>
+        <translation>Sobre &amp;Tomahawk...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="116"/>
         <source>&amp;Legal Information...</source>
-        <translation type="unfinished"/>
+        <translation>Informação &amp;legal...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="119"/>
         <source>Check For Updates...</source>
-        <translation type="unfinished"/>
+        <translation>Verificar atualizações...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="130"/>
         <source>&amp;Controls</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Controles</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="144"/>
         <source>&amp;Settings</source>
-        <translation type="unfinished"/>
+        <translation>C&amp;onfigurações</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="150"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Ajuda</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="175"/>
         <source>&amp;Window</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Janela</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="188"/>
         <source>Main Menu</source>
-        <translation type="unfinished"/>
+        <translation>Menu principal</translation>
     </message>
 </context>
 <context>
@@ -388,7 +388,7 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/AudioControls.ui" line="345"/>
         <source>resolver</source>
-        <translation type="unfinished"/>
+        <translation>resolvedor</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="381"/>
@@ -425,27 +425,27 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/AudioControls.cpp" line="259"/>
         <source>Time Elapsed</source>
-        <translation type="unfinished"/>
+        <translation>Tempo decorrido</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.cpp" line="260"/>
         <source>Time Remaining</source>
-        <translation type="unfinished"/>
+        <translation>Tempo restante</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.cpp" line="265"/>
         <source>Playing from %1</source>
-        <translation type="unfinished"/>
+        <translation>Reproduzindo de %1</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.cpp" line="263"/>
         <source>Share</source>
-        <translation type="unfinished"/>
+        <translation>Compartilhar</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.cpp" line="264"/>
         <source>Love</source>
-        <translation type="unfinished"/>
+        <translation>Gostar</translation>
     </message>
 </context>
 <context>
@@ -621,12 +621,12 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/DiagnosticsDialog.ui" line="42"/>
         <source>&amp;Copy to Clipboard</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Copiar para a área de transferência</translation>
     </message>
     <message>
         <location filename="../src/DiagnosticsDialog.ui" line="49"/>
         <source>Open &amp;Log-file</source>
-        <translation type="unfinished"/>
+        <translation>Abrir arquivo &amp;log</translation>
     </message>
 </context>
 <context>
@@ -634,7 +634,7 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleHeader.cpp" line="84"/>
         <source>Filter...</source>
-        <translation type="unfinished"/>
+        <translation>Filtro...</translation>
     </message>
 </context>
 <context>
@@ -701,7 +701,7 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="87"/>
         <source>Synchronize Loved Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Sincronizar faixas favoritas</translation>
     </message>
 </context>
 <context>
@@ -717,7 +717,7 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/libtomahawk/jobview/LatchedStatusItem.cpp" line="33"/>
         <source>%1 is listening along with you!</source>
-        <translation type="unfinished"/>
+        <translation>%1 está ouvindo junto com você!</translation>
     </message>
 </context>
 <context>
@@ -779,7 +779,7 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="54"/>
         <source>Top Loved Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Faixas mais favoritas</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="76"/>
@@ -789,22 +789,22 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="78"/>
         <source>The most loved tracks from all your friends</source>
-        <translation type="unfinished"/>
+        <translation>As faixas mais favoritas de todos os seus amigos</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="82"/>
         <source>All of your loved tracks</source>
-        <translation type="unfinished"/>
+        <translation>Todas as suas faixas favoritas</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="84"/>
         <source>All of %1&apos;s loved tracks</source>
-        <translation type="unfinished"/>
+        <translation>Todas as faixas favoritas do %1</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="56"/>
         <source>Loved Tracks</source>
-        <translation>Faixas Favoritas</translation>
+        <translation>Faixas favoritas</translation>
     </message>
 </context>
 <context>
@@ -852,7 +852,7 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="90"/>
         <source>Track Number:</source>
-        <translation type="unfinished"/>
+        <translation>Número da faixa:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="119"/>
@@ -1061,13 +1061,13 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="91"/>
         <source>A playlist you created %1.</source>
-        <translation type="unfinished"/>
+        <translation>Uma lista de reprodução que você criou %1.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="96"/>
         <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="103"/>
         <source>A playlist by %1, created %2.</source>
-        <translation type="unfinished"/>
+        <translation>Uma lista de reprodução de %1, criada %2. {1,?}</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="163"/>
@@ -1378,22 +1378,22 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="123"/>
         <source>Install from file</source>
-        <translation type="unfinished"/>
+        <translation>Instalar do arquivo</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="222"/>
         <source>Configure the accounts and services used by Tomahawk to search and retrieve music, find your friends and update your status.</source>
-        <translation type="unfinished"/>
+        <translation>Configure as contas e serviços usados pelo Tomahawk para pesquisar e obter músicas, encontrar seus amigos e atualizar seu status.</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="226"/>
         <source>Manage how Tomahawk finds music on your computer.</source>
-        <translation type="unfinished"/>
+        <translation>Gerenciar como o Tomahawk encontra música no seu computador</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="228"/>
         <source>Configure Tomahawk&apos;s advanced settings, including network connectivity settings, browser interaction and more.</source>
-        <translation type="unfinished"/>
+        <translation>Configure as configurações avançadas do Tomahawk, incluindo as configurações de conectividade de rede, interação com o navegador e mais.</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="444"/>
@@ -1421,12 +1421,12 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/Settings_Accounts.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>Forma</translation>
     </message>
     <message>
         <location filename="../src/Settings_Accounts.ui" line="48"/>
         <source>Filter by capability:</source>
-        <translation type="unfinished"/>
+        <translation>Filtrar por capacidade:</translation>
     </message>
 </context>
 <context>
@@ -1434,77 +1434,77 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="20"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>Forma</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="29"/>
         <source>Remote Peer Connection Method</source>
-        <translation type="unfinished"/>
+        <translation>Método de conexão com o par remoto</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="35"/>
         <source>None (outgoing connections only)</source>
-        <translation type="unfinished"/>
+        <translation>Nenhum (somente conexões de saída)</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="42"/>
         <source>Use UPnP to establish port forward (recommended)</source>
-        <translation type="unfinished"/>
+        <translation>Usar UPnP para estabelecer redirecionamento de porta (recomendado)</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="49"/>
         <source>Use static external IP address/host name and port</source>
-        <translation type="unfinished"/>
+        <translation>Usar nome de máquina/endereço IP estático externo e porta</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="62"/>
         <source>Set this to your external IP address or host name. Make sure to forward the port to this host!</source>
-        <translation type="unfinished"/>
+        <translation>Defina isso para seu nome de máquina ou endereço IP externo. Certifique-se de redirecionar a porta para esta máquina!</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="80"/>
         <source>Static Host Name:</source>
-        <translation type="unfinished"/>
+        <translation>Nome de máquina estático:</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="96"/>
         <source>Static Port:</source>
-        <translation type="unfinished"/>
+        <translation>Porta estática:</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="134"/>
         <source>SOCKS Proxy</source>
-        <translation type="unfinished"/>
+        <translation>Proxy SOCKS</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="140"/>
         <source>Use SOCKS Proxy</source>
-        <translation type="unfinished"/>
+        <translation>Usar proxy SOCKS</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="169"/>
         <source>Proxy Settings...</source>
-        <translation type="unfinished"/>
+        <translation>Configurações de proxy...</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="195"/>
         <source>Other Settings</source>
-        <translation type="unfinished"/>
+        <translation>Outras configurações</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="204"/>
         <source>Allow web browsers to interact with Tomahawk (recommended)</source>
-        <translation type="unfinished"/>
+        <translation>Permitir que navegadores web interajam com o Tomahawk (recomendável)</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="217"/>
         <source>Send reports after Tomahawk crashed</source>
-        <translation type="unfinished"/>
+        <translation>Enviar relatórios após Tomahawk ter travado</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="245"/>
         <source>Clear All Access Control Entries</source>
-        <translation type="unfinished"/>
+        <translation>Limpar todo os registros de controle de acesso</translation>
     </message>
 </context>
 <context>
@@ -1512,12 +1512,12 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/Settings_Collection.ui" line="20"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>Forma</translation>
     </message>
     <message>
         <location filename="../src/Settings_Collection.ui" line="31"/>
         <source>Path to scan for music files:</source>
-        <translation type="unfinished"/>
+        <translation>Caminho para varrer por arquivos de músicas:</translation>
     </message>
     <message>
         <location filename="../src/Settings_Collection.ui" line="45"/>
@@ -1525,22 +1525,22 @@ se conecte e faça o stream de você?</translation>
  and using it to craft personalized radios. Enabling this option
  will allow you (and all your friends) to create automatic playlists
  and stations based on your personal taste profile.</source>
-        <translation type="unfinished"/>
+        <translation>The Echo Nest suporta manter rastro dosmetadados do seu catálogo e usá-los para criar rádios personalizadas. Ao habilitar essa opção você (e todos os seus amigos) poderão criar listas de reprodução e estações automaticamente baseado nas preferências pessoais do perfil.</translation>
     </message>
     <message>
         <location filename="../src/Settings_Collection.ui" line="51"/>
         <source>Upload collection list to The Echo Nest to enable user radio</source>
-        <translation type="unfinished"/>
+        <translation>Enviar lista de coleções para The Echo Nest para habilitar rádio de usuário</translation>
     </message>
     <message>
         <location filename="../src/Settings_Collection.ui" line="64"/>
         <source>Watch for changes</source>
-        <translation type="unfinished"/>
+        <translation>Vigiar por alterações</translation>
     </message>
     <message>
         <location filename="../src/Settings_Collection.ui" line="73"/>
         <source>Time between scans, in seconds:</source>
-        <translation type="unfinished"/>
+        <translation>Intervalo entre varreduras, em segundos:</translation>
     </message>
 </context>
 <context>
@@ -1548,12 +1548,12 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/widgets/SlideSwitchButton.cpp" line="45"/>
         <source>On</source>
-        <translation type="unfinished"/>
+        <translation>On</translation>
     </message>
     <message>
         <location filename="../src/widgets/SlideSwitchButton.cpp" line="46"/>
         <source>Off</source>
-        <translation type="unfinished"/>
+        <translation>Off</translation>
     </message>
 </context>
 <context>
@@ -1815,7 +1815,7 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="390"/>
         <source>Delete</source>
-        <translation type="unfinished"/>
+        <translation>Excluir</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="470"/>
@@ -1931,7 +1931,7 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="141"/>
         <source>Select All</source>
-        <translation type="unfinished"/>
+        <translation>Selecionar todos</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="154"/>
@@ -1964,7 +1964,7 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="338"/>
         <source>Delete associated Spotify playlist?</source>
-        <translation type="unfinished"/>
+        <translation>Excluir lista de reprodução associada a Spotify?</translation>
     </message>
 </context>
 <context>
@@ -2041,7 +2041,7 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="89"/>
         <source>Google Address:</source>
-        <translation type="unfinished"/>
+        <translation>Endereço Google:</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="90"/>
@@ -2067,7 +2067,7 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="59"/>
         <source>Enter Google Address</source>
-        <translation type="unfinished"/>
+        <translation>Informe o endereço Google</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="67"/>
@@ -2140,12 +2140,12 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="258"/>
         <source>Synchronizing...</source>
-        <translation type="unfinished"/>
+        <translation>Sincronizando...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="418"/>
         <source>Synchronization Finished</source>
-        <translation type="unfinished"/>
+        <translation>Sincronização concluída</translation>
     </message>
 </context>
 <context>
@@ -2163,32 +2163,32 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="493"/>
         <source>Create local copy</source>
-        <translation type="unfinished"/>
+        <translation>Criar cópia local</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="509"/>
         <source>Subscribe to playlist changes</source>
-        <translation type="unfinished"/>
+        <translation>Assinar para alterações na lista de reprodução</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="513"/>
         <source>Re-enable playlist subscription</source>
-        <translation type="unfinished"/>
+        <translation>Re-habilitar assinatura da lista de reprodução</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="517"/>
         <source>Stop subscribing to changes</source>
-        <translation type="unfinished"/>
+        <translation>Parar a assinatura de alterações</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="537"/>
         <source>Enable Spotify collaborations</source>
-        <translation type="unfinished"/>
+        <translation>Habilitar colaborações Spotify</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="539"/>
         <source>Disable Spotify collaborations</source>
-        <translation type="unfinished"/>
+        <translation>Desabilitar colaborações Spotify</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="495"/>
@@ -2211,12 +2211,12 @@ se conecte e faça o stream de você?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="232"/>
         <source>Logged in as %1</source>
-        <translation type="unfinished"/>
+        <translation>Conectado como %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="234"/>
         <source>Log Out</source>
-        <translation type="unfinished"/>
+        <translation>Sair</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="250"/>
@@ -2449,7 +2449,7 @@ Você pode tentar re-autenticar.</translation>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="125"/>
         <source>Properties...</source>
-        <translation type="unfinished"/>
+        <translation>Propriedades...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="130"/>
@@ -3023,7 +3023,7 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="459"/>
         <source>Loved Tracks</source>
-        <translation>Faixas Favoritas</translation>
+        <translation>Faixas favoritas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="462"/>
@@ -3113,12 +3113,12 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
         <location filename="../src/libtomahawk/Playlist.cpp" line="344"/>
         <source>Would you like to delete the playlist &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
-        <translation type="unfinished"/>
+        <translation>Você gostaria de excluir a lista de reprodução &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Playlist.cpp" line="346"/>
         <source>Delete</source>
-        <translation type="unfinished"/>
+        <translation>Excluir</translation>
     </message>
 </context>
 <context>
@@ -3473,18 +3473,18 @@ colocar o número PIN mostrado aqui:</translation>
         <location filename="../src/TomahawkWindow.cpp" line="199"/>
         <location filename="../src/TomahawkWindow.cpp" line="1313"/>
         <source>Hide Menu Bar</source>
-        <translation type="unfinished"/>
+        <translation>Esconder barra de menu</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="199"/>
         <location filename="../src/TomahawkWindow.cpp" line="1307"/>
         <source>Show Menu Bar</source>
-        <translation type="unfinished"/>
+        <translation>Mostrar barra de menu</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="297"/>
         <source>&amp;Main Menu</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Menu principal</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="847"/>
@@ -3571,7 +3571,7 @@ colocar o número PIN mostrado aqui:</translation>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1134"/>
         <source>&amp;Play</source>
-        <translation type="unfinished"/>
+        <translation>Re&amp;produzir</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1165"/>
@@ -3711,13 +3711,13 @@ colocar o número PIN mostrado aqui:</translation>
         <location filename="../src/libtomahawk/jobview/TransferStatusItem.cpp" line="58"/>
         <source>from</source>
         <comment>streaming artist - track from friend</comment>
-        <translation type="unfinished"/>
+        <translation>de</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/TransferStatusItem.cpp" line="58"/>
         <source>to</source>
         <comment>streaming artist - track to friend</comment>
-        <translation type="unfinished"/>
+        <translation>para</translation>
     </message>
 </context>
 <context>
@@ -3834,7 +3834,7 @@ Você pode enviar uma outra mensagem de sincronia a qualquer momento simplesment
     <message>
         <location filename="../src/accounts/twitter/sip/TwitterSip.cpp" line="104"/>
         <source>Enter Twitter username</source>
-        <translation type="unfinished"/>
+        <translation>Informe o nome de usuário no Twitter</translation>
     </message>
 </context>
 <context>
@@ -3872,7 +3872,7 @@ Você pode enviar uma outra mensagem de sincronia a qualquer momento simplesment
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="403"/>
         <source>Sorry, we could not find any recent plays!</source>
-        <translation type="unfinished"/>
+        <translation>Desculpe, não foi possível encontrar reproduções recentes!</translation>
     </message>
 </context>
 <context>
@@ -3895,7 +3895,7 @@ Você pode enviar uma outra mensagem de sincronia a qualquer momento simplesment
     <message>
         <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="128"/>
         <source>Recently played tracks</source>
-        <translation type="unfinished"/>
+        <translation>Faixas reproduzidas recentemente</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="214"/>
@@ -4209,7 +4209,7 @@ Letras de &quot;%1&quot; por %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="197"/>
         <source>Enter Jabber ID</source>
-        <translation type="unfinished"/>
+        <translation>Informar o Jabber ID</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="409"/>
