@@ -21,6 +21,7 @@
 
 #include "utils/TomahawkUtilsGui.h"
 
+#include <QApplication>
 #include <QPaintEvent>
 #include <QPainter>
 #include <QDialogButtonBox>
@@ -44,6 +45,9 @@ SourceTreePopupDialog::SourceTreePopupDialog()
     , m_label( 0 )
     , m_buttons( 0 )
 {
+#ifndef ENABLE_HEADLESS
+    setParent( QApplication::activeWindow() );
+#endif
 #ifndef Q_OS_WIN
     setWindowFlags( Qt::FramelessWindowHint );
     setWindowFlags( Qt::Popup );
@@ -53,7 +57,6 @@ SourceTreePopupDialog::SourceTreePopupDialog()
     setAttribute( Qt::WA_TranslucentBackground, true );
 
     //setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
-
 
     m_title = new QLabel( this );
     QFont titleFont = m_title->font();
@@ -114,6 +117,7 @@ SourceTreePopupDialog::SourceTreePopupDialog()
                             background-color: #D35052; \
                             border-style: flat; \
                         }" );*/
+    setFixedHeight( 80 );
 }
 
 void
@@ -137,6 +141,8 @@ void
 SourceTreePopupDialog::setMainText( const QString& text )
 {
     m_label->setText( text );
+    QFontMetrics fm = m_label->fontMetrics();
+    setFixedWidth( fm.width( text ) + 20 );
 }
 
 
@@ -153,6 +159,7 @@ SourceTreePopupDialog::setExtraQuestions( const Tomahawk::PlaylistDeleteQuestion
 {
     m_questions = questions;
 
+    int baseHeight = 80;
     int idx = m_layout->indexOf( m_label ) + 1;
     foreach ( const Tomahawk::PlaylistDeleteQuestion& question, m_questions )
     {
@@ -168,7 +175,9 @@ SourceTreePopupDialog::setExtraQuestions( const Tomahawk::PlaylistDeleteQuestion
 
         m_questionCheckboxes << cb;
         idx++;
+        baseHeight += cb->height() + m_layout->spacing();
     }
+    setFixedHeight( baseHeight );
 }
 
 

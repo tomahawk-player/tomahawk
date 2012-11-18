@@ -372,8 +372,11 @@ SourceTreeView::deletePlaylist( const QModelIndex& idxIn )
 
     PlaylistItem* item = itemFromIndex< PlaylistItem >( idx );
     playlist_ptr playlist = item->playlist();
+    QPoint rightCenter = viewport()->mapToGlobal( visualRect( idx ).topRight() + QPoint( 0, visualRect( idx ).height() / 2 ) );
+#ifdef Q_OS_WIN
+    rightCenter = QApplication::activeWindow()->mapFromGlobal( rightCenter );
+#endif
 
-    const QPoint rightCenter = viewport()->mapToGlobal( visualRect( idx ).topRight() + QPoint( 0, visualRect( idx ).height() / 2 ) );
     if ( playlist->hasCustomDeleter() )
     {
         playlist->customDelete( rightCenter );
