@@ -163,6 +163,7 @@ private:
 
     mutable QPixmap* m_avatar;
     mutable QPixmap* m_fancyAvatar;
+    mutable QByteArray m_avatarHash;
     mutable QHash< AvatarStyle, QHash< int, QPixmap > > m_coverCache;
 
     Tomahawk::playlistinterface_ptr m_playlistInterface;

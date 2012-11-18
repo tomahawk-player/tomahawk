@@ -221,34 +221,21 @@ SipHandler::onAvatarReceived( const QString& from, const QPixmap& avatar )
 //    qDebug() << Q_FUNC_INFO << "setting avatar on source for" << from;
     if ( avatar.isNull() )
     {
-//        qDebug() << Q_FUNC_INFO << "got null pixmap, not adding anything";
         return;
     }
 
     m_usernameAvatars.insert( from, avatar );
 
-    //
-
-    //Tomahawk::source_ptr source = ->source();
     ControlConnection *conn = Servent::instance()->lookupControlConnection( from );
     if( conn )
     {
-//        qDebug() << Q_FUNC_INFO << from << "got control connection";
         Tomahawk::source_ptr source = conn->source();
         if( source )
         {
 
-//            qDebug() << Q_FUNC_INFO << from << "got source, setting avatar";
+//            qDebug() << Q_FUNC_INFO << from << "got source, setting avatar on source:" << source->friendlyName();
             source->setAvatar( avatar );
         }
-        else
-        {
-//            qDebug() << Q_FUNC_INFO << from << "no source found, not setting avatar";
-        }
-    }
-    else
-    {
-//        qDebug() << Q_FUNC_INFO << from << "no control connection setup yet";
     }
 }
 

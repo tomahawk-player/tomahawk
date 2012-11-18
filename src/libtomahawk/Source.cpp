@@ -132,14 +132,21 @@ Source::friendlyName() const
 void
 Source::setAvatar( const QPixmap& avatar )
 {
-    delete m_avatar;
-    m_avatar = new QPixmap( avatar );
-    m_fancyAvatar = 0;
-
     QByteArray ba;
     QBuffer buffer( &ba );
     buffer.open( QIODevice::WriteOnly );
     avatar.save( &buffer, "PNG" );
+
+    // Check if the avatar is different by comparing a hash of the first 4096 bytes
+    const QByteArray hash = QCryptographicHash::hash( ba.left( 4096 ), QCryptographicHash::Sha1 );
+    if ( m_avatarHash == hash )
+        return;
+    else
+        m_avatarHash = hash;
+
+    delete m_avatar;
+    m_avatar = new QPixmap( avatar );
+    m_fancyAvatar = 0;
 
     TomahawkUtils::Cache::instance()->putData( "Sources", 7776000000 /* 90 days */, m_username, ba );
     m_avatarUpdated = true;
