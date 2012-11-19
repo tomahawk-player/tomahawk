@@ -79,8 +79,10 @@
 #include <QToolBar>
 #include <QToolButton>
 
-#if defined( Q_WS_WIN ) && defined( WITH_QtSparkle )
-    #include <qtsparkle/Updater>
+#if defined( Q_WS_WIN )
+    #if defined ( WITH_QtSparkle )
+        #include <qtsparkle/Updater>
+    #endif
     #ifndef THBN_CLICKED
         #define THBN_CLICKED    0x1800
     #endif
