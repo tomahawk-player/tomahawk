@@ -7,7 +7,7 @@ SET( CPACK_PACKAGE_FILE_NAME  tomahawk-${TOMAHAWK_VERSION} )    # Package file n
 # CPACK_GENERATOR   CPack generator to be used  STGZ;TGZ;TZ
 # CPACK_INCLUDE_TOPLEVEL_DIRECTORY    Controls whether CPack adds a top-level directory, usually of the form ProjectName-Version-OS, to the top of package tree.  0 to disable, 1 to enable
 # CPACK_INSTALL_CMAKE_PROJECTS    List of four values: Build directory, Project Name, Project Component, Directory in the package     /home/andy/vtk/CMake-bin;CMake;ALL;/
-SET( CPACK_PACKAGE_DESCRIPTION_FILE  "${CMAKE_SOURCE_DIR}/README" ) # File used as a description of a project     /path/to/project/ReadMe.txt
+SET( CPACK_PACKAGE_DESCRIPTION_FILE  "${CMAKE_SOURCE_DIR}/README.md" ) # File used as a description of a project     /path/to/project/ReadMe.txt
 SET( CPACK_PACKAGE_DESCRIPTION_SUMMARY  ${TOMAHAWK_DESCRIPTION_SUMMARY} ) #  Description summary of a project
 # CPACK_PACKAGE_EXECUTABLES   List of pairs of executables and labels. Used by the NSIS generator to create Start Menu shortcuts.     ccmake;CMake
 SET( CPACK_PACKAGE_INSTALL_DIRECTORY  ${TOMAHAWK_APPLICATION_NAME} )     # Installation directory on the target system -> C:\Program Files\fellody
