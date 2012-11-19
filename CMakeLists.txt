@@ -210,8 +210,9 @@ IF( NOT APPLE )
     SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--no-undefined" )
 ENDIF( NOT APPLE )
 
-ADD_SUBDIRECTORY( thirdparty )
-ADD_SUBDIRECTORY( src/libtomahawk )
 SET( TOMAHAWK_LIBRARIES tomahawklib )
+
+ADD_SUBDIRECTORY( thirdparty )
 ADD_SUBDIRECTORY( src )
+ADD_SUBDIRECTORY( src/libtomahawk )
 ADD_SUBDIRECTORY( admin )
