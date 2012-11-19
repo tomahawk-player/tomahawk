@@ -487,7 +487,7 @@ connect and stream from you?</source>
         <location filename="../src/sourcetree/items/CategoryItems.cpp" line="183"/>
         <location filename="../src/sourcetree/items/CategoryItems.cpp" line="292"/>
         <source>%1 Station</source>
-        <translation>%1 Σταθμός</translation>
+        <translation>%1 Σταθμού</translation>
     </message>
 </context>
 <context>
@@ -495,12 +495,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/items/CategoryItems.h" line="63"/>
         <source>Playlists</source>
-        <translation>Λίστες  Αναπαραγωγής</translation>
+        <translation>Λιστες  Αναπαραγωγης</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/CategoryItems.h" line="65"/>
         <source>Stations</source>
-        <translation>Σταθμοί</translation>
+        <translation>Σταθμοι</translation>
     </message>
 </context>
 <context>
@@ -871,7 +871,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="162"/>
         <source>Bitrate:</source>
-        <translation>Ρυθμός:</translation>
+        <translation>Ρυθμός δεδομένων:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="183"/>
@@ -952,7 +952,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/NewReleasesWidget.h" line="71"/>
         <source>New Releases</source>
-        <translation type="unfinished"/>
+        <translation>Νέες Κυκλοφορίες</translation>
     </message>
 </context>
 <context>
@@ -990,7 +990,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Bitrate</source>
-        <translation type="unfinished"/>
+        <translation>Ρυθμός δεδομένων</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
@@ -1021,7 +1021,7 @@ connect and stream from you?</source>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="290"/>
         <source>Name</source>
-        <translation type="unfinished"/>
+        <translation>Όνομα</translation>
     </message>
 </context>
 <context>
@@ -1292,17 +1292,17 @@ connect and stream from you?</source>
         <location filename="../src/libtomahawk/playlist/QueueView.ui" line="41"/>
         <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="188"/>
         <source>Open Queue</source>
-        <translation>Άνοιγμα Ουράς</translation>
+        <translation>Άνοιγμα Σειράς</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="186"/>
         <source>Open Queue - %n item(s)</source>
-        <translation><numerusform>Άνοιγμα Ουράς - %n αντικείμενο</numerusform><numerusform>Άνοιγμα Ουράς - %n αντικείμενα</numerusform></translation>
+        <translation><numerusform>Άνοιγμα Σειράς - %n αντικείμενο</numerusform><numerusform>Άνοιγμα Σειράς - %n αντικείμενα</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="192"/>
         <source>Close Queue</source>
-        <translation>Κλείσιμο Ουράς</translation>
+        <translation>Κλείσιμο Σειράς</translation>
     </message>
 </context>
 <context>
@@ -1377,7 +1377,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="123"/>
         <source>Install from file</source>
-        <translation type="unfinished"/>
+        <translation>Εγκατάσταση από αρχείο</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="222"/>
@@ -1425,7 +1425,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/Settings_Accounts.ui" line="48"/>
         <source>Filter by capability:</source>
-        <translation type="unfinished"/>
+        <translation>Φιλτράρισμα βάση δυνατότητας:</translation>
     </message>
 </context>
 <context>
@@ -1488,7 +1488,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="195"/>
         <source>Other Settings</source>
-        <translation type="unfinished"/>
+        <translation>Άλλες Ρυθμίσεις</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="204"/>
@@ -1516,7 +1516,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/Settings_Collection.ui" line="31"/>
         <source>Path to scan for music files:</source>
-        <translation type="unfinished"/>
+        <translation>Διαδρομή για σάρωση αρχείων μουσικής:</translation>
     </message>
     <message>
         <location filename="../src/Settings_Collection.ui" line="45"/>
@@ -1534,7 +1534,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/Settings_Collection.ui" line="64"/>
         <source>Watch for changes</source>
-        <translation type="unfinished"/>
+        <translation>Παρακολούθηση για αλλαγές</translation>
     </message>
     <message>
         <location filename="../src/Settings_Collection.ui" line="73"/>
@@ -1681,7 +1681,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.ui" line="88"/>
         <source>Recently Played Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Πρόσφατες αναπαραγωγές</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.cpp" line="70"/>
@@ -1715,7 +1715,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="76"/>
         <source>Recently Played</source>
-        <translation type="unfinished"/>
+        <translation>Τελευταίες Αναπαραγωγές</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="141"/>
@@ -1740,12 +1740,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="556"/>
         <source>Recently Played Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Τελευταίες Αναπαραγωγές Κομματιών</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="559"/>
         <source>Your recently played tracks</source>
-        <translation type="unfinished"/>
+        <translation>Οι τελευταίες σας αναπαραγωγές</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="561"/>
@@ -1809,7 +1809,7 @@ connect and stream from you?</source>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="388"/>
         <source>Would you like to delete the %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
-        <translation type="unfinished"/>
+        <translation>Θέλετε να διαγράψετε την %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;;</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="390"/>
@@ -1862,12 +1862,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="281"/>
         <source>Search History</source>
-        <translation>Ιστορικό Αναζήτησης</translation>
+        <translation>Ιστορικο Αναζητησης</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="283"/>
         <source>My Music</source>
-        <translation>Η Μουσική Μου</translation>
+        <translation>Η Μουσικη Μου</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="291"/>
@@ -1882,7 +1882,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="300"/>
         <source>Recently Played</source>
-        <translation type="unfinished"/>
+        <translation>Τελευταίες Αναπαραγωγές</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="305"/>
@@ -1892,7 +1892,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="310"/>
         <source>New Releases</source>
-        <translation type="unfinished"/>
+        <translation>Νέες Κυκλοφορίες</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="315"/>
@@ -2397,7 +2397,7 @@ You may wish to try re-authenticating.</source>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="165"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="207"/>
         <source>Add to &amp;Queue</source>
-        <translation>Προσθήκη στην &amp;Ουρά</translation>
+        <translation>Προσθήκη στην &amp;Σειρά</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="92"/>
@@ -3471,7 +3471,7 @@ enter the displayed PIN number here:</source>
         <location filename="../src/TomahawkWindow.cpp" line="199"/>
         <location filename="../src/TomahawkWindow.cpp" line="1313"/>
         <source>Hide Menu Bar</source>
-        <translation type="unfinished"/>
+        <translation>Απόκρυψη Γραμμής Μενού</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="199"/>
@@ -3611,7 +3611,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1201"/>
         <source>Thanks to:</source>
-        <translation type="unfinished"/>
+        <translation>Χάρη στους:</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1208"/>
@@ -3845,7 +3845,7 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="340"/>
         <source>SuperCollection</source>
-        <translation type="unfinished"/>
+        <translation>ΥπερΣυλλογή</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="341"/>
@@ -3855,12 +3855,12 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="395"/>
         <source>Recently Played Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Τελευταίες Αναπαραγωγές Κομματιών</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="396"/>
         <source>Recently played tracks from all your friends</source>
-        <translation type="unfinished"/>
+        <translation>Τελευταίες αναπαραγωγές από όλους τους φίλους σας</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="403"/>
@@ -3873,22 +3873,22 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/libtomahawk/widgets/WelcomeWidget.ui" line="34"/>
         <source>Recent Additions</source>
-        <translation type="unfinished"/>
+        <translation>Τελευταίες Προσθήκες</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/WelcomeWidget.ui" line="55"/>
         <source>Newest Stations &amp; Playlists</source>
-        <translation type="unfinished"/>
+        <translation>Τελευταίοι Σταθμοί &amp; Λίστες Αναπαραγωγής</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/WelcomeWidget.ui" line="70"/>
         <source>Recently Played Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Τελευταίες Αναπαραγωγές Κομματιών</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="128"/>
         <source>Recently played tracks</source>
-        <translation type="unfinished"/>
+        <translation>Τελευταίες αναπαραγωγές κομματιών</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="214"/>
