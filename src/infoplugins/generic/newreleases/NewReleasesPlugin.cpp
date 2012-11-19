@@ -19,8 +19,8 @@
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 
-//#define CHART_URL "http://charts.tomahawk-player.org/"
-#define CHART_URL "http://localhost:8080/"
+#define CHART_URL "http://charts.tomahawk-player.org/"
+//#define CHART_URL "http://localhost:8080/"
 
 using namespace Tomahawk::InfoSystem;
 
@@ -44,7 +44,7 @@ NewReleasesPlugin::NewReleasesPlugin()
     : InfoPlugin()
     , m_nrFetchJobs ( 0 )
 {
-    m_nrVersion = "2.5";
+    m_nrVersion = "0.5";
     m_supportedGetTypes << InfoNewReleaseCapabilities << InfoNewRelease;
 }
 
