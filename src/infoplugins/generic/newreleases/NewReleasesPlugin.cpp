@@ -19,8 +19,8 @@
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 
-#define CHART_URL "http://charts.tomahawk-player.org/"
-//#define CHART_URL "http://localhost:8080/"
+//#define CHART_URL "http://charts.tomahawk-player.org/"
+#define CHART_URL "http://localhost:8080/"
 
 using namespace Tomahawk::InfoSystem;
 
@@ -44,7 +44,7 @@ NewReleasesPlugin::NewReleasesPlugin()
     : InfoPlugin()
     , m_nrFetchJobs ( 0 )
 {
-    m_nrVersion = "0.4";
+    m_nrVersion = "2.5";
     m_supportedGetTypes << InfoNewReleaseCapabilities << InfoNewRelease;
 }
 
@@ -311,66 +311,152 @@ NewReleasesPlugin::nrList()
         // We'll populate newreleases with the data from the server
         QVariantMap newreleases;
         QString nrName;
-
+        QStringList defaultChain;
         // Building:
         // [Source] - New Release
         QList< InfoStringHash > albumNRs;
         QHash< QString, QVariantMap > extraType;
-        foreach ( const QVariant &nrObj, res.values() )
+
+        if( source == "itunes" )
         {
-            if ( !nrObj.toMap().isEmpty() )
+            // Itunes has geographic-area based releases. So we build a breadcrumb of
+            // iTunes - Country - Featured/Just Released/New Releases - Genre
+             foreach ( const QVariant &nrObj, res.values() )
             {
-                const QVariantMap nrMap = nrObj.toMap();
-                const QString type = nrMap.value ( "type" ).toString();
-                const QString extra = nrMap.value( "extra" ).toString();
-
-                InfoStringHash nr;
-                nr["id"] = nrMap.value ( "id" ).toString();
-                nr["label"] = nrMap.value ( "name" ).toString();
-                nr["date"] = nrMap.value ( "date" ).toString();
-
-                if ( type == "Album" )
+                if ( !nrObj.toMap().isEmpty() )
                 {
-                    nr[ "type" ] = "album";
+                    const QVariantMap nrMap = nrObj.toMap();
+                    const QString id = nrMap.value( "id" ).toString();
+                    const QString geo = nrMap.value( "geo" ).toString();
+                    const QString name = nrMap.value( "genre" ).toString();
+                    const QString type = QString( nrMap.value( "type" ).toString() + "s" );
+                    const bool isDefault = ( nrMap.contains( "default" ) && nrMap[ "default" ].toInt() == 1 );
 
-                    if( !extra.isEmpty() )
+                    // We only have albums in newReleases
+                    if ( type != "Albums" || name.isEmpty() )
+                        continue;
+
+                    QString extra, nrExtraType;
+                    if ( !geo.isEmpty() )
                     {
-                        qDebug() << "FOUND EXTRA!! " << extra;
-                        QList< Tomahawk::InfoSystem::InfoStringHash > extraTypeData = extraType[ extra ][ type ].value< QList< Tomahawk::InfoSystem::InfoStringHash > >();
-                        extraTypeData.append( nr );
-                        extraType[ extra ][ type ] = QVariant::fromValue< QList< Tomahawk::InfoSystem::InfoStringHash > >( extraTypeData );
+                        if ( !m_cachedCountries.contains( geo ) )
+                        {
+                            extra = Tomahawk::CountryUtils::fullCountryFromCode( geo );
+                            if( extra.isEmpty() || extra.isNull() ){
+                                qWarning() << "Geo string seems to be off!" << geo;
+                                continue;
+                            }
+                            for ( int i = 1; i < extra.size(); i++ )
+                            {
+                                if ( extra.at( i ).isUpper() )
+                                {
+                                    extra.insert( i, " " );
+                                    i++;
+                                }
+                            }
+                            m_cachedCountries[ geo ] = extra;
+                        }
+                        else
+                        {
+                            extra = m_cachedCountries[ geo ];
+                        }
+                        nrExtraType = nrMap.value( "extra" ).toString() + " " + type;
                     }
                     else
-                        albumNRs.append ( nr );
-                }
-                else
-                {
-                    tLog() << "Unknown newrelease type " << type;
-                    continue;
-                }
+                    {
+                        // No geo? Extra is the type, eg. Album
+                        extra = type;
+                        nrExtraType = nrMap.value( "extra" ).toString();
+                    }
 
+                    InfoStringHash c;
+                    c[ "id" ] = id;
+                    c[ "label" ] = name;
+                    c[ "type" ] = "album";
+                    if ( isDefault )
+                        c[ "default" ] = "true";
+
+                    QList< Tomahawk::InfoSystem::InfoStringHash > extraTypeData = extraType[ nrExtraType ][ extra ].value< QList< Tomahawk::InfoSystem::InfoStringHash > >();
+                    extraTypeData.append( c );
+                    extraType[ nrExtraType ][ extra ] = QVariant::fromValue< QList< Tomahawk::InfoSystem::InfoStringHash > >( extraTypeData );
+
+                    if ( isDefault )
+                    {
+                        defaultChain.clear();
+                        defaultChain.append( nrExtraType );
+                        defaultChain.append( type );
+                        defaultChain.append( name );
+                    }
+                }
             }
 
-            foreach( const QString& c, extraType.keys() )
+            foreach ( const QString& c, extraType.keys() )
             {
                 newreleases[ c ] = extraType[ c ];
-                tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "extraType has types:" << c;
+//                tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Itunes extraType has types:" << c;
             }
+            if ( source == "itunes" )
+            {
+                nrName = "iTunes";
+            }
+
+        }
+        else
+        {
+            foreach ( const QVariant &nrObj, res.values() )
+            {
+                if ( !nrObj.toMap().isEmpty() )
+                {
+                    const QVariantMap nrMap = nrObj.toMap();
+                    const QString type = nrMap.value ( "type" ).toString();
+                    const QString extra = nrMap.value( "extra" ).toString();
+
+                    InfoStringHash nr;
+                    nr["id"] = nrMap.value ( "id" ).toString();
+                    nr["label"] = nrMap.value ( "name" ).toString();
+                    nr["date"] = nrMap.value ( "date" ).toString();
+
+                    if ( type == "Album" )
+                    {
+                        nr[ "type" ] = "album";
+
+                        if( !extra.isEmpty() )
+                        {
+//                            qDebug() << "FOUND EXTRA!! " << extra;
+                            QList< Tomahawk::InfoSystem::InfoStringHash > extraTypeData = extraType[ extra ][ type ].value< QList< Tomahawk::InfoSystem::InfoStringHash > >();
+                            extraTypeData.append( nr );
+                            extraType[ extra ][ type ] = QVariant::fromValue< QList< Tomahawk::InfoSystem::InfoStringHash > >( extraTypeData );
+                        }
+                        else
+                            albumNRs.append ( nr );
+                    }
+                    else
+                    {
+                        tLog() << "Unknown newrelease type " << type;
+                        continue;
+                    }
+
+                }
+
+                foreach( const QString& c, extraType.keys() )
+                {
+                    newreleases[ c ] = extraType[ c ];
+//                    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "extraType has types:" << c;
+                }
+            }
+
+            if ( !albumNRs.isEmpty() )
+                newreleases.insert ( tr ( "Albums" ), QVariant::fromValue< QList< Tomahawk::InfoSystem::InfoStringHash > > ( albumNRs ) );
+
+            /// @note For displaying purposes, upper the first letter
+            /// @note Remeber to lower it when fetching this!
+            nrName = source;
+            nrName[0] = nrName[0].toUpper();
         }
 
-        if ( !albumNRs.isEmpty() )
-            newreleases.insert ( tr ( "Albums" ), QVariant::fromValue< QList< Tomahawk::InfoSystem::InfoStringHash > > ( albumNRs ) );
-
-
-        /// @note For displaying purposes, upper the first letter
-        /// @note Remeber to lower it when fetching this!
-        nrName = source;
-        nrName[0] = nrName[0].toUpper();
-
+        /// Add the possible charts and its types to breadcrumb
         tDebug ( LOGVERBOSE ) << Q_FUNC_INFO << "ADDING newrelease TO NRS:" << nrName;
-        QVariantMap defaultMap = m_allNRsMap.value ( "defaults" ).value< QVariantMap >();
         m_allNRsMap.insert ( nrName, QVariant::fromValue< QVariantMap > ( newreleases ) );
-
     }
     else
     {
