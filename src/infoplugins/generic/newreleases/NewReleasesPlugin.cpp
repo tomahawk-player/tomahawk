@@ -208,11 +208,9 @@ NewReleasesPlugin::notInCacheSlot( InfoStringHash criteria, InfoRequestData requ
 void
 NewReleasesPlugin::fetchNRSourcesList( bool fetchOnlySourcesList )
 {
-
-    QUrl url = QUrl ( QString ( CHART_URL "newreleases" ) );
+    QUrl url = QUrl ( QString ( CHART_URL "newreleases?version=%1" ).arg( TomahawkUtils::appFriendlyVersion() ) );
     QNetworkReply* reply = TomahawkUtils::nam()->get ( QNetworkRequest ( url ) );
     reply->setProperty( "only_source_list", fetchOnlySourcesList );
-
 
     tDebug() << "fetching:" << url;
     connect ( reply, SIGNAL ( finished() ), SLOT ( nrSourcesList() ) );
@@ -276,7 +274,7 @@ void
 NewReleasesPlugin::fetchNR( InfoRequestData requestData, const QString& source, const QString& nr_id )
 {
     /// Fetch the chart, we need source and id
-    QUrl url = QUrl ( QString ( CHART_URL "newreleases/%1/%2" ).arg ( source ).arg ( nr_id ) );
+    QUrl url = QUrl ( QString ( CHART_URL "newreleases/%1/%2?version=%3" ).arg ( source ).arg ( nr_id ).arg( TomahawkUtils::appFriendlyVersion() ) );
     tDebug ( LOGVERBOSE ) << Q_FUNC_INFO << "fetching: " << url;
 
     QNetworkReply* reply = TomahawkUtils::nam()->get ( QNetworkRequest ( url ) );
