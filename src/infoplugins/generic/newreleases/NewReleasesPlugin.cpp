@@ -208,7 +208,9 @@ NewReleasesPlugin::notInCacheSlot( InfoStringHash criteria, InfoRequestData requ
 void
 NewReleasesPlugin::fetchNRSourcesList( bool fetchOnlySourcesList )
 {
-    QUrl url = QUrl ( QString ( CHART_URL "newreleases?version=%1" ).arg( TomahawkUtils::appFriendlyVersion() ) );
+    QUrl url = QUrl ( QString ( CHART_URL "newreleases" ) );
+    url.addQueryItem( "version", TomahawkUtils::appFriendlyVersion() );
+
     QNetworkReply* reply = TomahawkUtils::nam()->get ( QNetworkRequest ( url ) );
     reply->setProperty( "only_source_list", fetchOnlySourcesList );
 
@@ -257,7 +259,8 @@ NewReleasesPlugin::fetchAllNRSources()
         tDebug ( LOGVERBOSE ) << Q_FUNC_INFO << "InfoNewRelease fetching source data";
         foreach ( QString source, m_nrSources )
         {
-            QUrl url = QUrl ( QString ( CHART_URL "newreleases/%1?version=%2" ).arg ( source ).arg( TomahawkUtils::appFriendlyVersion() ) );
+            QUrl url = QUrl ( QString ( CHART_URL "newreleases/%1" ).arg ( source ) );
+            url.addQueryItem( "version", TomahawkUtils::appFriendlyVersion() );
             QNetworkReply* reply = TomahawkUtils::nam()->get ( QNetworkRequest ( url ) );
             reply->setProperty ( "nr_source", source );
 
@@ -274,7 +277,9 @@ void
 NewReleasesPlugin::fetchNR( InfoRequestData requestData, const QString& source, const QString& nr_id )
 {
     /// Fetch the chart, we need source and id
-    QUrl url = QUrl ( QString ( CHART_URL "newreleases/%1/%2?version=%3" ).arg ( source ).arg ( nr_id ).arg( TomahawkUtils::appFriendlyVersion() ) );
+    QUrl url = QUrl ( QString ( CHART_URL "newreleases/%1/%2" ).arg ( source ).arg ( nr_id ) );
+    url.addQueryItem( "version", TomahawkUtils::appFriendlyVersion() );
+
     tDebug ( LOGVERBOSE ) << Q_FUNC_INFO << "fetching: " << url;
 
     QNetworkReply* reply = TomahawkUtils::nam()->get ( QNetworkRequest ( url ) );
