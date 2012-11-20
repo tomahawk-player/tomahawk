@@ -626,6 +626,7 @@ void
 TomahawkWindow::keyPressEvent( QKeyEvent* e )
 {
     bool accept = true;
+
 #if ! defined ( Q_OS_MAC )
 #define KEY_PRESSED Q_FUNC_INFO << "Multimedia Key Pressed:"
     switch( e->key() )
@@ -746,8 +747,9 @@ TomahawkWindow::audioStateChanged( AudioState newState, AudioState oldState )
         {
             if ( !AudioEngine::instance()->currentTrack().isNull() )
             {
-                disconnect(AudioEngine::instance()->currentTrack()->toQuery().data(),SIGNAL(socialActionsLoaded()),this,SLOT(updateWindowsLoveButton()));
+                disconnect( AudioEngine::instance()->currentTrack()->toQuery().data(), SIGNAL( socialActionsLoaded() ), this, SLOT( updateWindowsLoveButton() ) );
             }
+
             QPixmap play( RESPATH "images/play-rest.png" );
             m_thumbButtons[TP_PLAY_PAUSE].hIcon = play.toWinHICON();
             m_thumbButtons[TP_PLAY_PAUSE].szTip[ tr( "Play" ).toWCharArray( m_thumbButtons[TP_PLAY_PAUSE].szTip ) ] = 0;
@@ -783,6 +785,7 @@ TomahawkWindow::updateWindowsLoveButton()
         m_thumbButtons[TP_LOVE].hIcon = not_loved.toWinHICON();
         m_thumbButtons[TP_LOVE].szTip[ tr( "Love" ).toWCharArray( m_thumbButtons[TP_LOVE].szTip ) ] = 0;
     }
+
     m_thumbButtons[TP_LOVE].dwFlags = THBF_ENABLED;
     m_taskbarList->ThumbBarUpdateButtons( winId(), ARRAYSIZE( m_thumbButtons ), m_thumbButtons );
 #endif // HAVE_THUMBBUTTON
@@ -1126,6 +1129,7 @@ TomahawkWindow::audioStarted()
     connect( AudioEngine::instance()->currentTrack()->toQuery().data(), SIGNAL( socialActionsLoaded() ), SLOT( updateWindowsLoveButton() ) );
 #endif
 }
+
 
 void
 TomahawkWindow::audioFinished()
