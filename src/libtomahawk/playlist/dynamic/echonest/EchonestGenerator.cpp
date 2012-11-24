@@ -167,6 +167,17 @@ EchonestGenerator::generate( int number )
 //        qWarning() << "Got invalid controls!" << e.what();
 //        emit error( "Filters are not valid", e.what() );
 //    }
+
+
+    QList< query_ptr > queries;
+    queries << Query::get("Colour Haze", "All", QString(), uuid(), true);
+    queries << Query::get("Colour Haze", "Sun", QString(), uuid(), true);
+    queries << Query::get("Colour Haze", "Zen", QString(), uuid(), true);
+    queries << Query::get("Colour Haze", "Outside", QString(), uuid(), true);
+    queries << Query::get("Colour Haze", "Dirt", QString(), uuid(), true);
+
+    emit generated( queries );
+
 }
 
 

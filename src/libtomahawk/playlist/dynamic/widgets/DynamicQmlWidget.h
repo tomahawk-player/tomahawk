@@ -54,6 +54,10 @@ public:
 
     playlist_ptr playlist() const;
 
+public slots:
+    void playItem(int index);
+    void pause();
+
 private slots:
     void currentItemChanged( const QPersistentModelIndex &currentIndex );
     void tracksGenerated( const QList< Tomahawk::query_ptr>& queries );

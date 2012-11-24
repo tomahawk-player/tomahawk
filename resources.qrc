@@ -171,5 +171,6 @@
         <file>data/qml/tomahawkimports/InputField.qml</file>
         <file>data/qml/tomahawkimports/Button.qml</file>
         <file>data/qml/tomahawkimports/DoubleSlider.qml</file>
+        <file>data/qml/CoverFlip.qml</file>
     </qresource>
 </RCC>

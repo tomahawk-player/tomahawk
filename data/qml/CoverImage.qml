@@ -5,8 +5,13 @@ Item {
 
     // Should the artist + track labels be painted
     property bool showLabels: true
+
     // Should the play button be painted on mouse hover?
     property bool showPlayButton: false
+
+    // if this is true, the play button will be swapped by a pause button
+    property bool currentyPlayed: false
+
     // Should the mirror be painted?
     property bool showMirror: false
 
@@ -57,31 +62,35 @@ Item {
                 source: "image://albumart/" + artworkId
             }
 
-
             Rectangle {
                 id: textBackground
                 anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
-                height: 32
-                anchors.margins: 5
-                color: "black"
-                opacity: showLabels ? 0.5 : 0
+                height: (artistText.height + trackText.height) * 2
+                opacity: 1// showLabels ? 1 : 0
                 radius: 3
+                gradient: Gradient {
+                    GradientStop { position: 0.0; color: "#00000000" }
+                    GradientStop { position: 0.5; color: "black" }
+                    GradientStop { position: 1.0; color: "black" }
+                }
             }
 
             Text {
+                id: trackText
                 color: "white"
                 font.bold: true
                 text: trackName
-                anchors { left: textBackground.left; right: textBackground.right; top: textBackground.top }
+                anchors { left: parent.left; right: parent.right; bottom: artistText.top }
                 anchors.margins: 2
                 horizontalAlignment: Text.AlignHCenter
                 elide: Text.ElideRight
                 opacity: showLabels ? 1 : 0
             }
             Text {
+                id: artistText
                 color: "white"
                 text: artistName
-                anchors { left: textBackground.left; right: textBackground.right; bottom: textBackground.bottom }
+                anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
                 anchors.margins: 2
                 horizontalAlignment: Text.AlignHCenter
                 elide: Text.ElideRight
@@ -144,7 +153,7 @@ Item {
     Image {
         id: playButton
         visible: showPlayButton ? mouseArea.containsMouse : false
-        source: "../images/play-rest.png"
+        source: currentyPlayed ? "../images/pause-rest.png" : "../images/play-rest.png"
         anchors.centerIn: parent
         MouseArea {
             anchors.fill: parent

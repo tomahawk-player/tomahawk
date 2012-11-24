@@ -42,8 +42,6 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
 
     m_model->loadPlaylist( m_playlist );
 
-    // Initially seed the playlist
-    m_playlist->generator()->generate( 20 );
 
     qDebug() << "###got" << m_playlist->generator()->controls().size() << "controls";
 
@@ -55,6 +53,7 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
 
     rootContext()->setContextProperty( "dynamicModel", m_proxyModel );
     rootContext()->setContextProperty( "generator", m_playlist->generator().data() );
+    rootContext()->setContextProperty( "rootView", this );
 
     setSource( QUrl( "qrc" RESPATH "qml/StationScene.qml" ) );
 
@@ -66,6 +65,9 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
 
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), this, SLOT( trackStarted() ) );
     connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::playlistinterface_ptr ) ), this, SLOT( playlistChanged( Tomahawk::playlistinterface_ptr ) ) );
+
+    // Initially seed the playlist
+    m_playlist->generator()->generate( 20 );
 
 }
 
@@ -112,6 +114,17 @@ DynamicQmlWidget::jumpToCurrentTrack()
 playlist_ptr DynamicQmlWidget::playlist() const
 {
     return m_model->playlist();
+}
+
+void DynamicQmlWidget::playItem(int index)
+{
+    qDebug() << "playItem called for cover" << index;
+    AudioEngine::instance()->playItem( m_proxyModel->playlistInterface(), m_proxyModel->itemFromIndex( index )->result() );
+}
+
+void DynamicQmlWidget::pause()
+{
+    AudioEngine::instance()->pause();
 }
 
 void DynamicQmlWidget::currentItemChanged( const QPersistentModelIndex &currentIndex )

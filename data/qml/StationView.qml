@@ -8,79 +8,24 @@ Item {
 
     signal configure()
 
-    PathView {
+
+    CoverFlip {
         id: coverView
         anchors.fill: parent
-        anchors.rightMargin: parent.width / 3
-
-        preferredHighlightBegin: 0.2 // scene.width / 11000
-        preferredHighlightEnd: preferredHighlightBegin
-        pathItemCount: 5
-        //highlightMoveDuration: 500
+        anchors.leftMargin: parent.width / 2
 
         model: dynamicModel
-        currentIndex: currentlyPlayedIndex
 
-        property int pathStartX: width / 2
-        property int pathStartY: height / 2
-
-        delegate: CoverImage {
-            height: root.coverSize
-            width: root.coverSize
-
-            showLabels: false
-            showMirror: true
-            //artistName: model.artistName
-            //trackName: model.trackName
-            artworkId: model.coverID
-
-            scale: PathView.itemScale
-            itemBrightness: PathView.itemBrightness
-            opacity: PathView.itemOpacity
-            z: x
-
-            onClicked: {
-                if ( currentlyPlayedIndex !==-1 ) {
-                    echonestStation.playItem( index )
-                }
-            }
-        }
-
-        path: Path {
-            startX: coverView.pathStartX
-            startY: coverView.pathStartY
-
-            PathAttribute { name: "itemOpacity"; value: 0 }
-            PathAttribute { name: "itemBrightness"; value: 0 }
-            PathAttribute { name: "itemScale"; value: 1.5 }
-            PathLine { x: coverView.pathStartX * 0.9 ; y: coverView.pathStartY * 0.9 }
-            PathPercent { value: .2 }
-            PathAttribute { name: "itemOpacity"; value: 1 }
-            PathAttribute { name: "itemBrightness"; value: 1 }
-            PathAttribute { name: "itemScale"; value: 1 }
-            PathLine { x: coverView.pathStartX * .5; y: coverView.pathStartY * .5}
-            PathPercent { value: .3 }
-            PathAttribute { name: "itemOpacity"; value: 1 }
-            PathAttribute { name: "itemBrightness"; value: 1 }
-            PathAttribute { name: "itemScale"; value: 0.5 }
-            //            PathLine { x: coverView.pathStartX * .25 ; y: coverView.pathStartY * .25 }
-            //            PathPercent { value: .75 }
-            //            PathAttribute { name: "itemOpacity"; value: 1 }
-            //            PathAttribute { name: "itemBrightness"; value: .5 }
-            //            PathAttribute { name: "itemScale"; value: 0.4 }
-            PathLine { x: 0; y: 0 }
-            PathPercent { value: 1 }
-            PathAttribute { name: "itemOpacity"; value: 1 }
-            PathAttribute { name: "itemBrightness"; value: 0 }
-            PathAttribute { name: "itemScale"; value: 0.1 }
+        onItemPlayPauseClicked: {
+            rootView.playItem(index)
         }
 
     }
 
     Item {
-        anchors { top: parent.top; right: parent.right; bottom: parent.bottom }
+        anchors { top: parent.top; left: parent.left; bottom: parent.bottom }
         anchors.margins: 50
-        width: scene.width / 3
+        width: scene.width / 2
 
         Column {
             anchors { left: parent.left; top: parent.top; right: parent.right }
