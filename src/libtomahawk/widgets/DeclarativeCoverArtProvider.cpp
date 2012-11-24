@@ -1,5 +1,5 @@
 #include "DeclarativeCoverArtProvider.h"
-#include "PlayableItem.h"
+#include "playlist/PlayableItem.h"
 #include "playlist/PlayableProxyModel.h"
 #include "Query.h"
 #include "Album.h"

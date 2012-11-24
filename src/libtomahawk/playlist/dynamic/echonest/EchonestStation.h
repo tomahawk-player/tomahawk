@@ -1,8 +1,8 @@
 #ifndef ECHONESTSTATION_H
 #define ECHONESTSTATION_H
 
-#include "PlayableProxyModel.h"
-#include "dynamic/GeneratorInterface.h"
+#include "playlist/PlayableProxyModel.h"
+#include "playlist/dynamic/GeneratorInterface.h"
 
 namespace Tomahawk
 {

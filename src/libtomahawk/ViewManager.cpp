@@ -39,7 +39,6 @@
 #include "playlist/PlaylistLargeItemDelegate.h"
 #include "playlist/RecentlyPlayedModel.h"
 #include "playlist/dynamic/widgets/DynamicWidget.h"
-#include "CustomPlaylistView.h"
 #include "playlist/dynamic/widgets/DynamicQmlWidget.h"
 
 #include "widgets/NewReleasesWidget.h"

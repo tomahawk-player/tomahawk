@@ -1,7 +1,7 @@
 #include "EchonestStation.h"
-#include "dynamic/DynamicPlaylist.h"
+#include "playlist/dynamic/DynamicPlaylist.h"
 
-#include "PlayableItem.h"
+#include "playlist/PlayableItem.h"
 #include "audio/AudioEngine.h"
 
 #include <echonest/Playlist.h>

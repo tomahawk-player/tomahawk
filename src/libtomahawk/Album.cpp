@@ -41,6 +41,13 @@ static QMutex s_mutex;
 static QReadWriteLock s_idMutex;
 
 
+inline QString
+albumCacheKey( const Tomahawk::artist_ptr& artist, const QString& albumName )
+{
+    return QString( "%1\t\t%2" ).arg( artist->name().toLower() ).arg( albumName.toLower() );
+}
+
+
 Album::~Album()
 {
     QMutexLocker lock( &s_mutex );
@@ -54,13 +61,6 @@ Album::~Album()
 #ifndef ENABLE_HEADLESS
     delete m_cover;
 #endif
-}
-
-
-inline QString
-albumCacheKey( const Tomahawk::artist_ptr& artist, const QString& albumName )
-{
-    return QString( "%1\t\t%2" ).arg( artist->name().toLower() ).arg( albumName.toLower() );
 }
 
 
@@ -162,22 +162,6 @@ Album::Album( const QString& name, const Tomahawk::artist_ptr& artist )
 #endif
 {
     m_sortname = DatabaseImpl::sortname( name );
-}
-
-
-Album::~Album()
-{
-    QMutexLocker lock( &s_mutex );
-    s_albumsByName.remove( albumCacheKey( artist(), name() ) );
-    s_albumsByCoverId.remove( coverId() );
-/*    if ( id() > 0 )
-        s_albumsById.remove( id() );*/
-
-    m_ownRef.clear();
-
-#ifndef ENABLE_HEADLESS
-    delete m_cover;
-#endif
 }
 
 
