@@ -1,6 +1,5 @@
 #include "DynamicQmlWidget.h"
 
-#include "playlist/dynamic/echonest/EchonestStation.h"
 #include "playlist/dynamic/DynamicModel.h"
 #include "playlist/PlayableProxyModel.h"
 #include "utils/TomahawkUtilsGui.h"
@@ -48,16 +47,12 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
 
     qDebug() << "###got" << m_playlist->generator()->controls().size() << "controls";
 
-    qmlRegisterUncreatableType<EchonestStation>("tomahawk", 1, 0, "EchonestStation", "bla");
-
     // TODO: In case QML is used in more places, this should probably be moved to some generic place
     qmlRegisterType<PlayableItem>("tomahawk", 1, 0, "PlayableItem");
     qmlRegisterUncreatableType<GeneratorInterface>("tomahawk", 1, 0, "Generator", "you cannot create it on your own - should be set in context");
     qmlRegisterUncreatableType<PlayableItem>("tomahawk", 1, 0, "PlayableItem", "you cannot create it on your own - they will appear in the model");
 
 
-    EchonestStation *station = new EchonestStation( m_proxyModel, m_playlist, this);
-    rootContext()->setContextProperty( "echonestStation", station);
     rootContext()->setContextProperty( "dynamicModel", m_proxyModel );
     rootContext()->setContextProperty( "generator", m_playlist->generator().data() );
 
@@ -112,6 +107,11 @@ bool
 DynamicQmlWidget::jumpToCurrentTrack()
 {
     return true;
+}
+
+playlist_ptr DynamicQmlWidget::playlist() const
+{
+    return m_model->playlist();
 }
 
 void DynamicQmlWidget::currentItemChanged( const QPersistentModelIndex &currentIndex )

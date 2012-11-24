@@ -52,6 +52,8 @@ public:
 
     virtual bool jumpToCurrentTrack();
 
+    playlist_ptr playlist() const;
+
 private slots:
     void currentItemChanged( const QPersistentModelIndex &currentIndex );
     void tracksGenerated( const QList< Tomahawk::query_ptr>& queries );
@@ -78,34 +80,4 @@ private:
 
 }
 
-#include "playlist/dynamic/GeneratorInterface.h"
-namespace Tomahawk
-{
-
-class ControlModel: public QAbstractListModel
-{
-    Q_OBJECT
-public:
-    ControlModel(geninterface_ptr generator, QObject *parent = 0): QAbstractListModel(parent), m_generator(generator) {
-        connect(generator.data(), SIGNAL(controlAdded(const dyncontrol_ptr&)), SLOT(controlAdded()));
-    }
-
-    int rowCount(const QModelIndex &parent) const { return m_generator->controls().size(); }
-    QVariant data(const QModelIndex &index, int role) const {
-        return "blabla";
-    }
-    Q_INVOKABLE Tomahawk::DynamicControl *controlAt( int index ) { qDebug() << "returning" << m_generator->controls().at(index).data(); return m_generator->controls().at(index).data(); }
-
-private slots:
-    void controlAdded() {
-        qDebug() << "control added";
-        beginInsertRows(QModelIndex(), m_generator->controls().size() - 1, m_generator->controls().size() - 1);
-        endInsertRows();
-    }
-private:
-    geninterface_ptr m_generator;
-
-};
-
-}
 #endif // DYNAMIC_QML_WIDGET_H

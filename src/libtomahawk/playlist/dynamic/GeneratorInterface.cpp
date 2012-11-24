@@ -34,58 +34,18 @@ Tomahawk::GeneratorInterface::~GeneratorInterface()
 }
 
 
-QList< Tomahawk::dyncontrol_ptr >
-Tomahawk::GeneratorInterface::controls()
-{
-//     if( m_controls.isEmpty() ) { // return a default control (so the user can add more)
-//         return QList< Tomahawk::dyncontrol_ptr >() << createControl();
-//     }
-
-    return m_controls;
-}
-
-
 QPixmap
 Tomahawk::GeneratorInterface::logo()
 {
     return QPixmap();
 }
 
-
-void
-Tomahawk::GeneratorInterface::addControl( const Tomahawk::dyncontrol_ptr& control )
+QVariantMap Tomahawk::GeneratorInterface::controls() const
 {
-    m_controls << control;
-    emit controlAdded( control );
+    return m_controls;
 }
 
-
-void
-Tomahawk::GeneratorInterface::clearControls()
-{
-    m_controls.clear();
-}
-
-
-void
-Tomahawk::GeneratorInterface::setControls( const QList< Tomahawk::dyncontrol_ptr >& controls )
+void Tomahawk::GeneratorInterface::setControls(const QVariantMap &controls)
 {
     m_controls = controls;
-}
-
-
-void
-Tomahawk::GeneratorInterface::removeControl( const Tomahawk::dyncontrol_ptr& control )
-{
-    m_controls.removeAll( control );
-    controlRemoved( control );
-}
-
-
-Tomahawk::dyncontrol_ptr
-Tomahawk::GeneratorInterface::createControl( const QString& type )
-{
-    Q_UNUSED( type );
-    Q_ASSERT( false );
-    return dyncontrol_ptr();
 }

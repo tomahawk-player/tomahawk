@@ -42,13 +42,7 @@ public:
     virtual ~GeneratorFactoryInterface() {}
 
     virtual GeneratorInterface* create() = 0;
-    /**
-     * Create a control for this generator, not tied to this generator itself. Used when loading dynamic
-     *  playlists from a dbcmd.
-     */
-    virtual dyncontrol_ptr createControl( const QString& controlType = QString() ) = 0;
 
-    virtual QStringList typeSelectors() const = 0;
 };
 
 /**

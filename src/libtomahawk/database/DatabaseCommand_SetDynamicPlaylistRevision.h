@@ -45,7 +45,7 @@ public:
                                                   const QList<plentry_ptr>& entries,
                                                   const QString& type,
                                                   GeneratorMode mode,
-                                                  const QList< dyncontrol_ptr >& controls );
+                                                  const QVariantMap &controls );
 
     explicit DatabaseCommand_SetDynamicPlaylistRevision( const source_ptr& s,
                                                   const QString& playlistguid,
@@ -53,7 +53,7 @@ public:
                                                   const QString& oldrev,
                                                   const QString& type,
                                                   GeneratorMode mode,
-                                                  const QList< dyncontrol_ptr >& controls );
+                                                  const QVariantMap &controls );
 
     QString commandname() const { return "setdynamicplaylistrevision"; }
 
@@ -64,7 +64,7 @@ public:
 
     void setControlsV( const QVariantList& vlist )
     {
-        m_controlsV = vlist;
+        m_controls = vlist.first().toMap();
     }
 
     QVariantList controlsV();
@@ -80,8 +80,7 @@ public:
 private:
     QString m_type;
     GeneratorMode m_mode;
-    QList< dyncontrol_ptr > m_controls;
-    QList< QVariant > m_controlsV;
+    QVariantMap m_controls;
 
     // ARG i hate sharedpointers sometimes
     DynamicPlaylist* m_playlist; // Only used if setting revision of a non-autoloaded playlist, as those aren't able to be looked up by guid

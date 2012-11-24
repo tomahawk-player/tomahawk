@@ -40,16 +40,6 @@ GeneratorFactory::create ( const QString& type )
 }
 
 
-dyncontrol_ptr
-GeneratorFactory::createControl( const QString& generatorType, const QString& controlType )
-{
-    if( generatorType.isEmpty() || !s_factories.contains( generatorType ) )
-        return dyncontrol_ptr();
-
-    return s_factories.value( generatorType )->createControl( controlType );
-}
-
-
 void
 GeneratorFactory::registerFactory ( const QString& type, GeneratorFactoryInterface* interface )
 {
@@ -63,12 +53,3 @@ GeneratorFactory::types()
     return s_factories.keys();
 }
 
-
-QStringList
-GeneratorFactory::typeSelectors( const QString& type )
-{
-    if( !s_factories.contains( type ) )
-        return QStringList();
-
-    return s_factories.value( type )->typeSelectors();
-}

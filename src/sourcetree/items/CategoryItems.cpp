@@ -164,27 +164,27 @@ CategoryAddItem::dropMimeData( const QMimeData* data, Qt::DropAction )
 
         QString firstArtist;
         // now we want to add each artist as a filter...
-        QList< dyncontrol_ptr > contrls;
-        while ( !stream.atEnd() )
-        {
-            QString artist;
-            stream >> artist;
-            if ( firstArtist.isEmpty() )
-                firstArtist = artist;
+//        QList< dyncontrol_ptr > contrls;
+//        while ( !stream.atEnd() )
+//        {
+//            QString artist;
+//            stream >> artist;
+//            if ( firstArtist.isEmpty() )
+//                firstArtist = artist;
 
-            QString album;
-            if ( data->hasFormat( "application/tomahawk.metadata.album" ) )
-                stream >> album; // throw away album title... we only create artists filters for now
+//            QString album;
+//            if ( data->hasFormat( "application/tomahawk.metadata.album" ) )
+//                stream >> album; // throw away album title... we only create artists filters for now
 
-            dyncontrol_ptr c = newpl->generator()->createControl( "Artist" );
-            c->setInput( QString( "%1" ).arg( artist ) );
-            contrls << c;
-        }
+//            dyncontrol_ptr c = newpl->generator()->createControl( "Artist" );
+//            c->setInput( QString( "%1" ).arg( artist ) );
+//            contrls << c;
+//        }
 
-        QString name = firstArtist.isEmpty() ? tr( "New Station" ) : tr( "%1 Station" ).arg( firstArtist );
-        newpl->createNewRevision( uuid(), newpl->currentrevision(), newpl->type(), contrls );
-        newpl->setProperty( "newname", name );
-        connect( newpl.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ), this, SLOT( playlistToRenameLoaded() ) );
+//        QString name = firstArtist.isEmpty() ? tr( "New Station" ) : tr( "%1 Station" ).arg( firstArtist );
+//        newpl->createNewRevision( uuid(), newpl->currentrevision(), newpl->type(), contrls );
+//        newpl->setProperty( "newname", name );
+//        connect( newpl.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ), this, SLOT( playlistToRenameLoaded() ) );
 
         ViewManager::instance()->show( newpl );
         return true;
@@ -295,16 +295,16 @@ CategoryAddItem::parsedDroppedTracks( const QList< query_ptr >& tracks )
         dynplaylist_ptr newpl = DynamicPlaylist::create( SourceList::instance()->getLocal(), uuid(), name, "", SourceList::instance()->getLocal()->friendlyName(), OnDemand, false );
         newpl->setMode( OnDemand );
 
-        // now we want to add each query as a song or similar artist filter...
-        QList< dyncontrol_ptr > controls;
-        foreach ( const Tomahawk::query_ptr& q, tracks )
-        {
-            dyncontrol_ptr c = newpl->generator()->createControl( "Song" );
-            c->setInput( QString( "%1 %2" ).arg( q->track() ).arg( q->artist() ) );
-            controls << c;
-        }
+//        // now we want to add each query as a song or similar artist filter...
+//        QList< dyncontrol_ptr > controls;
+//        foreach ( const Tomahawk::query_ptr& q, tracks )
+//        {
+//            dyncontrol_ptr c = newpl->generator()->createControl( "Song" );
+//            c->setInput( QString( "%1 %2" ).arg( q->track() ).arg( q->artist() ) );
+//            controls << c;
+//        }
 
-        newpl->createNewRevision( uuid(), newpl->currentrevision(), newpl->type(), controls );
+//        newpl->createNewRevision( uuid(), newpl->currentrevision(), newpl->type(), controls );
 
         ViewManager::instance()->show( newpl );
         connect( newpl.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ), this, SLOT( playlistToRenameLoaded() ) );

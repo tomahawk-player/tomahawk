@@ -87,16 +87,9 @@ set( libGuiSources
     playlist/dynamic/DynamicModel.cpp
     playlist/dynamic/echonest/EchonestGenerator.cpp
     playlist/dynamic/echonest/EchonestControl.cpp
-    playlist/dynamic/echonest/EchonestSteerer.cpp
-    playlist/dynamic/echonest/EchonestStation.cpp
-    playlist/dynamic/widgets/DynamicWidget.cpp
     playlist/dynamic/widgets/DynamicQmlWidget.cpp
-    playlist/dynamic/widgets/DynamicControlWrapper.cpp
-    playlist/dynamic/widgets/DynamicControlList.cpp
     playlist/dynamic/widgets/ReadOrWriteWidget.cpp
     playlist/dynamic/widgets/MiscControlWidgets.cpp
-    playlist/dynamic/widgets/CollapsibleControls.cpp
-    playlist/dynamic/widgets/DynamicSetupWidget.cpp
 
     ExternalResolverGui.cpp
     resolvers/ScriptResolver.cpp
@@ -306,7 +299,7 @@ set( libSources
     playlist/dynamic/GeneratorInterface.cpp
     playlist/dynamic/DynamicPlaylistRevision.cpp
     playlist/XspfUpdater.cpp
-    playlist/dynamic/database/DatabaseGenerator.cpp
+#    playlist/dynamic/database/DatabaseGenerator.cpp
     playlist/dynamic/database/DatabaseControl.cpp
     playlist/dynamic/DynamicControl.cpp
 

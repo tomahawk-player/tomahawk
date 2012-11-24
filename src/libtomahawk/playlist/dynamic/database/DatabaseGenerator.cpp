@@ -35,13 +35,6 @@ DatabaseFactory::create()
 
 
 dyncontrol_ptr
-DatabaseFactory::createControl ( const QString& controlType )
-{
-    return dyncontrol_ptr( new DatabaseControl( controlType, typeSelectors() ) );
-}
-
-
-dyncontrol_ptr
 DatabaseFactory::createControl ( const QString& sql, DatabaseCommand_GenericSelect::QueryType type, const QString& summary )
 {
     dyncontrol_ptr control = dyncontrol_ptr( new DatabaseControl( sql, summary, typeSelectors() ) );
@@ -101,9 +94,6 @@ DatabaseGenerator::generate( int number )
         emit error( "Failed to generate tracks", "No controls!" );
         return;
     }
-
-    foreach ( const dyncontrol_ptr& ctrl, m_controls )
-        qDebug() << ctrl->selectedType() << ctrl->match() << ctrl->input();
 
     // TODO for now, we just support the special "SQL" control, not meant to be shown to the user. Just does a raw query.
     bool hasSql = false;

@@ -55,12 +55,6 @@ public:
     explicit GeneratorInterface( QObject* parent = 0 );
     virtual ~GeneratorInterface();
 
-    // Can't make it pure otherwise we can't shove it in QVariants :-/
-    // empty QString means use default
-    /// The generator will keep track of all the controls it creates. No need to tell it about controls
-    ///  you ask it to create
-    Q_INVOKABLE virtual dyncontrol_ptr createControl( const QString& type = QString() );
-
     /// A logo to display for this generator, if it has one
     virtual QPixmap logo();
 
@@ -98,17 +92,17 @@ public:
      */
     virtual bool onDemandSteerable() const { return false; }
 
+
     /**
-     * Returns a widget used to steer the OnDemand dynamic playlist.
-     *  If this generator doesn't support this (and returns false for
-     * \c onDemandSteerable) this will be null. The generator is responsible
-     *  for reacting to changes in the widget.
-     *
-     * Steering widgets may emit a \c steeringChanged() signal, which will cause the model to toss any
-     *  upcoming tracks and re-fetch them.
-     *
+     * Returns the controls for this station.
      */
-    virtual QWidget* steeringWidget() { return 0; }
+    virtual QVariantMap controls() const;
+
+    /**
+     * Sets the controls (for example when loaded from database)
+     */
+    virtual void setControls(const QVariantMap &controls);
+
 
     /// The type of this generator
     QString type() const { return m_type; }
@@ -116,24 +110,16 @@ public:
     int mode() const { return (int)m_mode; }
     void setMode( int mode ) { m_mode = (GeneratorMode)mode; }
 
-    // control functions
-    QList< dyncontrol_ptr > controls();
-    void addControl( const dyncontrol_ptr& control );
-    void clearControls();
-    void setControls( const QList< dyncontrol_ptr>& controls );
-    void removeControl( const dyncontrol_ptr& control );
 
 signals:
     void error( const QString& title, const QString& body);
     void generated( const QList< Tomahawk::query_ptr>& queries );
     void nextTrackGenerated( const Tomahawk::query_ptr& track );
-    void controlAdded(const dyncontrol_ptr& control);
-    void controlRemoved(const dyncontrol_ptr& control);
 
 protected:
     QString m_type;
     GeneratorMode m_mode;
-    QList< dyncontrol_ptr > m_controls;
+    QVariantMap m_controls;
 };
 
 typedef QSharedPointer<GeneratorInterface> geninterface_ptr;

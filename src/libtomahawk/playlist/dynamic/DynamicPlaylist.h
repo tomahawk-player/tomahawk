@@ -49,10 +49,10 @@ class DatabaseCommand_LoadDynamicPlaylist;
 struct DynQueueItem : RevisionQueueItem
 {
     QString type;
-    QList <dyncontrol_ptr> controls;
+    QVariantMap controls;
     int mode;
 
-    DynQueueItem( const QString& nRev, const QString& oRev, const QString& typ, const QList< dyncontrol_ptr >& ctrls,  int m, const QList< plentry_ptr >& e, bool latest ) :
+    DynQueueItem( const QString& nRev, const QString& oRev, const QString& typ, const QVariantMap& ctrls,  int m, const QList< plentry_ptr >& e, bool latest ) :
         RevisionQueueItem( nRev, oRev, e, latest ), type( typ ), controls( ctrls ), mode( m ) {}
 };
 
@@ -125,32 +125,22 @@ public slots:
     // want to update the playlist from the model?
     // generate a newrev using uuid() and call this:
     // if this is a static playlist, pass it a new list of entries. implicitly sets mode to static
-    void createNewRevision( const QString& newrev, const QString& oldrev, const QString& type, const QList< dyncontrol_ptr>& controls, const QList< plentry_ptr >& entries );
+    void createNewRevision( const QString& newrev, const QString& oldrev, const QString& type, const QVariantMap &controls, const QList< plentry_ptr >& entries );
     // if it is ondemand, no entries are needed implicitly sets mode to ondemand
-    void createNewRevision( const QString& newrev, const QString& oldrev, const QString& type, const QList< dyncontrol_ptr>& controls );
+    void createNewRevision( const QString& newrev, const QString& oldrev, const QString& type, const QVariantMap& controls );
 
     void reportCreated( const Tomahawk::dynplaylist_ptr& self );
     void reportDeleted( const Tomahawk::dynplaylist_ptr& self );
 
     // called from setdynamicplaylistrevision db cmd
-    // 4 options, because dbcmds can't create qwidgets:
-    // static version,   qvariant controls
-    // static version,   dyncontrol_ptr controls
-    // ondemand version, qvariant controls
-    // ondemand version, dyncontrol_ptr controls
+    // 2 options:
+    // static version
+    // ondemand version
     void setRevision( const QString& rev,
                       const QList<QString>& neworderedguids,
                       const QList<QString>& oldorderedguids,
                       const QString& type,
-                      const QList< QVariantMap >& controls,
-                      bool is_newest_rev,
-                      const QMap< QString, Tomahawk::plentry_ptr >& addedmap,
-                      bool applied );
-    void setRevision( const QString& rev,
-                      const QList<QString>& neworderedguids,
-                      const QList<QString>& oldorderedguids,
-                      const QString& type,
-                      const QList< Tomahawk::dyncontrol_ptr >& controls,
+                      const QVariantMap& controls,
                       bool is_newest_rev,
                       const QMap< QString, Tomahawk::plentry_ptr >& addedmap,
                       bool applied );
@@ -158,12 +148,7 @@ public slots:
     void setRevision( const QString& rev,
                       bool is_newest_rev,
                       const QString& type,
-                      const QList< QVariantMap>& controls,
-                      bool applied );
-    void setRevision( const QString& rev,
-                      bool is_newest_rev,
-                      const QString& type,
-                      const QList< Tomahawk::dyncontrol_ptr>& controls,
+                      const QVariantMap& controls,
                       bool applied );
 private:
     // called from loadAllPlaylists DB cmd via databasecollection (in GUI thread)
@@ -191,8 +176,6 @@ private:
                               bool autoLoad = true );
 
     void checkRevisionQueue();
-
-    QList< dyncontrol_ptr > variantsToControl( const QList< QVariantMap >& controlsV );
 
     geninterface_ptr m_generator;
     bool m_autoLoad;

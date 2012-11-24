@@ -29,7 +29,7 @@ struct DLLEXPORT DynamicPlaylistRevision : PlaylistRevision
 {
 public:
 
-    QList< dyncontrol_ptr > controls;
+    QVariantMap controls;
     Tomahawk::GeneratorMode mode;
     QString type;
 

@@ -60,8 +60,6 @@ public:
     EchonestFactory();
 
     virtual GeneratorInterface* create();
-    virtual dyncontrol_ptr createControl( const QString& controlType = QString() );
-    virtual QStringList typeSelectors() const;
 };
 
 class DLLEXPORT EchonestGenerator : public GeneratorInterface
@@ -71,7 +69,6 @@ public:
     explicit EchonestGenerator( QObject* parent = 0 );
     virtual ~EchonestGenerator();
 
-    Q_INVOKABLE virtual dyncontrol_ptr createControl( const QString& type = QString() );
     virtual QPixmap logo();
     virtual void generate ( int number = -1 );
     virtual void startOnDemand();
@@ -108,7 +105,6 @@ private:
 
     query_ptr queryFromSong( const Echonest::Song& song );
     Echonest::DynamicPlaylist::ArtistTypeEnum appendRadioType( Echonest::DynamicPlaylist::PlaylistParams& params ) const throw( std::runtime_error );
-    bool onlyThisArtistType( Echonest::DynamicPlaylist::ArtistTypeEnum type ) const throw( std::runtime_error );
 
     void loadStylesAndMoods();
     void saveStylesAndMoods();

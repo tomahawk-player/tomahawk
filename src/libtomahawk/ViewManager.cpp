@@ -38,7 +38,6 @@
 
 #include "playlist/PlaylistLargeItemDelegate.h"
 #include "playlist/RecentlyPlayedModel.h"
-#include "playlist/dynamic/widgets/DynamicWidget.h"
 #include "playlist/dynamic/widgets/DynamicQmlWidget.h"
 
 #include "widgets/NewReleasesWidget.h"
@@ -162,8 +161,8 @@ ViewManager::playlistForPage( ViewPage* page ) const
     {
         p = dynamic_cast< PlaylistView* >( page )->playlistModel()->playlist();
     }
-    else if ( dynamic_cast< DynamicWidget* >( page ) )
-        p = dynamic_cast< DynamicWidget* >( page )->playlist();
+    else if ( dynamic_cast< DynamicQmlWidget* >( page ) )
+        p = dynamic_cast< DynamicQmlWidget* >( page )->playlist();
 
     return p;
 }

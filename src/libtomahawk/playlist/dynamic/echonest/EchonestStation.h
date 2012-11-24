@@ -12,7 +12,6 @@ class EchonestStation: public QObject
     Q_ENUMS(StationType)
     Q_PROPERTY( QString name READ name WRITE setName NOTIFY nameChanged )
     Q_PROPERTY( bool configured READ configured NOTIFY configurationChanged )
-    Q_PROPERTY( Tomahawk::DynamicControl* mainControl READ mainControl )
     Q_PROPERTY( int minTempo READ minTempo NOTIFY configurationChanged )
     Q_PROPERTY( int maxTempo READ maxTempo NOTIFY configurationChanged )
 
@@ -27,7 +26,6 @@ public:
     QString name() const;
     void setName( const QString &name );
 
-    Tomahawk::DynamicControl* mainControl();
     bool configured();
 
     int minTempo() const;
@@ -36,7 +34,6 @@ public:
 public slots:
     void playItem( int row );
 
-    void setMainControl(StationType type, const QString &value);
     void setTempo( int min, int max );
 
 signals:

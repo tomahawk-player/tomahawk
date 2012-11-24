@@ -38,7 +38,6 @@
 #include "items/PlaylistItems.h"
 #include "playlist/TreeView.h"
 #include "playlist/PlaylistView.h"
-#include "playlist/dynamic/widgets/DynamicWidget.h"
 
 #include <QMimeData>
 #include <QSize>

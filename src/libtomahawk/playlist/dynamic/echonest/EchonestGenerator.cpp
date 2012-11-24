@@ -18,7 +18,6 @@
 
 #include "playlist/dynamic/echonest/EchonestGenerator.h"
 #include "playlist/dynamic/echonest/EchonestControl.h"
-#include "playlist/dynamic/echonest/EchonestSteerer.h"
 #include "Query.h"
 #include "utils/TomahawkUtils.h"
 #include "TomahawkSettings.h"
@@ -52,23 +51,6 @@ EchonestFactory::create()
     return new EchonestGenerator();
 }
 
-
-dyncontrol_ptr
-EchonestFactory::createControl( const QString& controlType )
-{
-    return dyncontrol_ptr( new EchonestControl( controlType, typeSelectors() ) );
-}
-
-
-QStringList
-EchonestFactory::typeSelectors() const
-{
-    QStringList types =  QStringList() << "Artist" << "Artist Description" << "User Radio" << "Song" << "Mood" << "Style" << "Adventurousness" << "Variety" << "Tempo" << "Duration" << "Loudness"
-                          << "Danceability" << "Energy" << "Artist Familiarity" << "Artist Hotttnesss" << "Song Hotttnesss"
-                          << "Longitude" << "Latitude" <<  "Mode" << "Key" << "Sorting";
-
-    return types;
-}
 
 CatalogManager::CatalogManager( QObject* parent )
     : QObject( parent )
@@ -152,15 +134,6 @@ EchonestGenerator::setupCatalogs()
 //    qDebug() << "ECHONEST:" << m_logo.size();
 }
 
-dyncontrol_ptr
-EchonestGenerator::createControl( const QString& type )
-{
-    m_controls << dyncontrol_ptr( new EchonestControl( type, GeneratorFactory::typeSelectors( m_type ) ) );
-    emit controlAdded( m_controls.last() );
-    return m_controls.last();
-}
-
-
 QPixmap EchonestGenerator::logo()
 {
     return m_logo;
@@ -169,33 +142,31 @@ QPixmap EchonestGenerator::logo()
 void
 EchonestGenerator::knownCatalogsChanged()
 {
-    // Refresh all contrls
-    foreach( const dyncontrol_ptr& control, m_controls )
-    {
-        control.staticCast< EchonestControl >()->updateWidgetsFromData();
-    }
+//    // Refresh all contrls
+//    foreach( const dyncontrol_ptr& control, m_controls )
+//    {
+//        control.staticCast< EchonestControl >()->updateWidgetsFromData();
+//    }
 }
 
 
 void
 EchonestGenerator::generate( int number )
 {
-    // convert to an echonest query, and fire it off
-    qDebug() << Q_FUNC_INFO;
-    qDebug() << "Generating playlist with" << m_controls.size();
-    foreach( const dyncontrol_ptr& ctrl, m_controls )
-        qDebug() << ctrl->selectedType() << ctrl->match() << ctrl->input();
+//    // convert to an echonest query, and fire it off
+//    qDebug() << Q_FUNC_INFO;
+//    qDebug() << "Generating playlist with" << m_controls.size() << "controls";
 
-    setProperty( "number", number ); //HACK
+//    setProperty( "number", number ); //HACK
 
-    connect( this, SIGNAL( paramsGenerated( Echonest::DynamicPlaylist::PlaylistParams ) ), this, SLOT( doGenerate(Echonest::DynamicPlaylist::PlaylistParams ) ) );
+//    connect( this, SIGNAL( paramsGenerated( Echonest::DynamicPlaylist::PlaylistParams ) ), this, SLOT( doGenerate(Echonest::DynamicPlaylist::PlaylistParams ) ) );
 
-    try {
-        getParams();
-    } catch( std::runtime_error& e ) {
-        qWarning() << "Got invalid controls!" << e.what();
-        emit error( "Filters are not valid", e.what() );
-    }
+//    try {
+//        getParams();
+//    } catch( std::runtime_error& e ) {
+//        qWarning() << "Got invalid controls!" << e.what();
+//        emit error( "Filters are not valid", e.what() );
+//    }
 }
 
 
@@ -301,42 +272,42 @@ void
 EchonestGenerator::getParams() throw( std::runtime_error )
 {
     Echonest::DynamicPlaylist::PlaylistParams params;
-    foreach( const dyncontrol_ptr& control, m_controls ) {
-        params.append( control.dynamicCast<EchonestControl>()->toENParam() );
-    }
+//    foreach( const dyncontrol_ptr& control, m_controls ) {
+//        params.append( control.dynamicCast<EchonestControl>()->toENParam() );
+//    }
 
-    if( appendRadioType( params ) == Echonest::DynamicPlaylist::SongRadioType ) {
-        // we need to do another pass, converting all song queries to song-ids.
-        m_storedParams = params;
-        qDeleteAll( m_waiting );
-        m_waiting.clear();
+//    if( appendRadioType( params ) == Echonest::DynamicPlaylist::SongRadioType ) {
+//        // we need to do another pass, converting all song queries to song-ids.
+//        m_storedParams = params;
+//        qDeleteAll( m_waiting );
+//        m_waiting.clear();
 
-        // one query per track
-        for( int i = 0; i < params.count(); i++ ) {
-            const Echonest::DynamicPlaylist::PlaylistParamData param = params.value( i );
+//        // one query per track
+//        for( int i = 0; i < params.count(); i++ ) {
+//            const Echonest::DynamicPlaylist::PlaylistParamData param = params.value( i );
 
-            if( param.first == Echonest::DynamicPlaylist::SongId ) { // this is a song type enum
-                QString text = param.second.toString();
+//            if( param.first == Echonest::DynamicPlaylist::SongId ) { // this is a song type enum
+//                QString text = param.second.toString();
 
-                Echonest::Song::SearchParams q;
-                q.append( Echonest::Song::SearchParamData( Echonest::Song::Combined, text ) ); // search with the free text "combined" parameter
-                QNetworkReply* r = Echonest::Song::search( q );
-                r->setProperty( "index", i );
-                r->setProperty( "search", text );
+//                Echonest::Song::SearchParams q;
+//                q.append( Echonest::Song::SearchParamData( Echonest::Song::Combined, text ) ); // search with the free text "combined" parameter
+//                QNetworkReply* r = Echonest::Song::search( q );
+//                r->setProperty( "index", i );
+//                r->setProperty( "search", text );
 
-                m_waiting.insert( r );
-                connect( r, SIGNAL( finished() ), this, SLOT( songLookupFinished() ) );
-            }
-        }
+//                m_waiting.insert( r );
+//                connect( r, SIGNAL( finished() ), this, SLOT( songLookupFinished() ) );
+//            }
+//        }
 
-        if( m_waiting.isEmpty() ) {
-            m_storedParams.clear();
-            emit paramsGenerated( params );
-        }
+//        if( m_waiting.isEmpty() ) {
+//            m_storedParams.clear();
+//            emit paramsGenerated( params );
+//        }
 
-    } else {
-        emit paramsGenerated( params );
-    }
+//    } else {
+//        emit paramsGenerated( params );
+//    }
 
     qDebug() << "ParamsGenerated" << params;
 }
@@ -435,60 +406,38 @@ EchonestGenerator::userCatalogs()
     return s_catalogs->catalogs().keys();
 }
 
-bool
-EchonestGenerator::onlyThisArtistType( Echonest::DynamicPlaylist::ArtistTypeEnum type ) const throw( std::runtime_error )
-{
-    bool only = true;
-    bool some = false;
-
-    foreach( const dyncontrol_ptr& control, m_controls ) {
-        if( ( control->selectedType() == "Artist" || control->selectedType() == "Artist Description" || control->selectedType() == "Song" ) && static_cast<Echonest::DynamicPlaylist::ArtistTypeEnum>( control->match().toInt() ) != type ) {
-            only = false;
-        } else if( ( control->selectedType() == "Artist" || control->selectedType() == "Artist Description" || control->selectedType() == "Song" ) && static_cast<Echonest::DynamicPlaylist::ArtistTypeEnum>( control->match().toInt() ) == type ) {
-            some = true;
-        }
-    }
-    if( some && only ) {
-        return true;
-    } else if( some && !only ) {
-        throw std::runtime_error( "All artist and song match types must be the same" );
-    }
-
-    return false;
-}
-
 
 Echonest::DynamicPlaylist::ArtistTypeEnum
 EchonestGenerator::appendRadioType( Echonest::DynamicPlaylist::PlaylistParams& params ) const throw( std::runtime_error )
 {
-    /**
-     * So we try to match the best type of echonest playlist, based on the controls
-     * the types are artist, artist-radio, artist-description, catalog, catalog-radio, song-radio. we don't care about the catalog ones
-     *
-     */
+//    /**
+//     * So we try to match the best type of echonest playlist, based on the controls
+//     * the types are artist, artist-radio, artist-description, catalog, catalog-radio, song-radio. we don't care about the catalog ones
+//     *
+//     */
 
-    /// 1. catalog-radio: If any the entries are catalog types.
-    /// 2. artist: If all the artist controls are Limit-To. If some were but not all, error out.
-    /// 3. artist-description: If all the artist entries are Description. If some were but not all, error out.
-    /// 4. artist-radio: If all the artist entries are Similar To. If some were but not all, error out.
-    /// 5. song-radio: If all the artist entries are Similar To. If some were but not all, error out.
-    bool someCatalog = false;
-    foreach( const dyncontrol_ptr& control, m_controls ) {
-        if ( control->selectedType() == "User Radio" )
-            someCatalog = true;
-    }
-    if( someCatalog )
-        params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::CatalogRadioType ) );
-    else if( onlyThisArtistType( Echonest::DynamicPlaylist::ArtistType ) )
-        params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::ArtistType ) );
-    else if( onlyThisArtistType( Echonest::DynamicPlaylist::ArtistDescriptionType ) )
-        params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::ArtistDescriptionType ) );
-    else if( onlyThisArtistType( Echonest::DynamicPlaylist::ArtistRadioType ) )
-        params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::ArtistRadioType ) );
-    else if( onlyThisArtistType( Echonest::DynamicPlaylist::SongRadioType ) )
+//    /// 1. catalog-radio: If any the entries are catalog types.
+//    /// 2. artist: If all the artist controls are Limit-To. If some were but not all, error out.
+//    /// 3. artist-description: If all the artist entries are Description. If some were but not all, error out.
+//    /// 4. artist-radio: If all the artist entries are Similar To. If some were but not all, error out.
+//    /// 5. song-radio: If all the artist entries are Similar To. If some were but not all, error out.
+//    bool someCatalog = false;
+//    foreach( const dyncontrol_ptr& control, m_controls ) {
+//        if ( control->selectedType() == "User Radio" )
+//            someCatalog = true;
+//    }
+//    if( someCatalog )
+//        params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::CatalogRadioType ) );
+//    else if( onlyThisArtistType( Echonest::DynamicPlaylist::ArtistType ) )
+//        params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::ArtistType ) );
+//    else if( onlyThisArtistType( Echonest::DynamicPlaylist::ArtistDescriptionType ) )
+//        params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::ArtistDescriptionType ) );
+//    else if( onlyThisArtistType( Echonest::DynamicPlaylist::ArtistRadioType ) )
+//        params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::ArtistRadioType ) );
+//    else if( onlyThisArtistType( Echonest::DynamicPlaylist::SongRadioType ) )
         params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::SongRadioType ) );
-    else // no artist or song or description types. default to artist-description
-        params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::ArtistDescriptionType ) );
+//    else // no artist or song or description types. default to artist-description
+//        params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::ArtistDescriptionType ) );
 
     return static_cast< Echonest::DynamicPlaylist::ArtistTypeEnum >( params.last().second.toInt() );
 }
@@ -519,90 +468,91 @@ EchonestGenerator::sentenceSummary()
      *  NOTE / TODO: In order for the sentence to be grammatically correct, we must follow the EN API rules. That means we can't have multiple of some types of filters,
      *        and all Artist types must be the same. The filters aren't checked at the moment until Generate / Play is pressed. Consider doing a check on hide as well.
      */
-    QList< dyncontrol_ptr > allcontrols = m_controls;
-    QString sentence = "Songs ";
+//    QList< dyncontrol_ptr > allcontrols = m_controls;
+//    QString sentence = "Songs ";
 
-    /// 1. Collect all required filters
-    /// 2. Get the sorted by filter if it exists.
-    QList< dyncontrol_ptr > required;
-    dyncontrol_ptr sorting;
-    foreach( const dyncontrol_ptr& control, allcontrols ) {
-        if( control->selectedType() == "Artist" || control->selectedType() == "Artist Description" || control->selectedType() == "Song" )
-            required << control;
-        else if( control->selectedType() == "Sorting" )
-            sorting = control;
-    }
-    if( !sorting.isNull() )
-        allcontrols.removeAll( sorting );
+//    /// 1. Collect all required filters
+//    /// 2. Get the sorted by filter if it exists.
+//    QList< dyncontrol_ptr > required;
+//    dyncontrol_ptr sorting;
+//    foreach( const dyncontrol_ptr& control, allcontrols ) {
+//        if( control->selectedType() == "Artist" || control->selectedType() == "Artist Description" || control->selectedType() == "Song" )
+//            required << control;
+//        else if( control->selectedType() == "Sorting" )
+//            sorting = control;
+//    }
+//    if( !sorting.isNull() )
+//        allcontrols.removeAll( sorting );
 
-    /// Skip empty artists
-    QList< dyncontrol_ptr > empty;
-    foreach( const dyncontrol_ptr& artistOrTrack, required ) {
-        QString summary = artistOrTrack.dynamicCast< EchonestControl >()->summary();
-        if( summary.lastIndexOf( "~" ) == summary.length() - 1 )
-            empty << artistOrTrack;
-    }
-    foreach( const dyncontrol_ptr& toremove, empty ) {
-        required.removeAll( toremove );
-        allcontrols.removeAll( toremove );
-    }
+//    /// Skip empty artists
+//    QList< dyncontrol_ptr > empty;
+//    foreach( const dyncontrol_ptr& artistOrTrack, required ) {
+//        QString summary = artistOrTrack.dynamicCast< EchonestControl >()->summary();
+//        if( summary.lastIndexOf( "~" ) == summary.length() - 1 )
+//            empty << artistOrTrack;
+//    }
+//    foreach( const dyncontrol_ptr& toremove, empty ) {
+//        required.removeAll( toremove );
+//        allcontrols.removeAll( toremove );
+//    }
 
-    /// If there are no artists and no filters, show some help text
-    if( required.isEmpty() && allcontrols.isEmpty() )
-        sentence = "No configured filters!";
+//    /// If there are no artists and no filters, show some help text
+//    if( required.isEmpty() && allcontrols.isEmpty() )
+//        sentence = "No configured filters!";
 
-    /// Do the assembling. Start with the artists if there are any, then do all the rest.
-    for( int i = 0; i < required.size(); i++ ) {
-        dyncontrol_ptr artist = required.value( i );
-        allcontrols.removeAll( artist ); // remove from pool while we're here
+//    /// Do the assembling. Start with the artists if there are any, then do all the rest.
+//    for( int i = 0; i < required.size(); i++ ) {
+//        dyncontrol_ptr artist = required.value( i );
+//        allcontrols.removeAll( artist ); // remove from pool while we're here
 
-        /// Collapse artist lists
-        QString center, suffix;
-        QString summary = artist.dynamicCast< EchonestControl >()->summary();
+//        /// Collapse artist lists
+//        QString center, suffix;
+//        QString summary = artist.dynamicCast< EchonestControl >()->summary();
 
-        if( i == 0 ) { // if it's the first.. special casez
-            center = summary.remove( "~" );
-            if( required.size() == 2 ) // special case for 2, no comma. ( X and Y )
-                suffix = " and ";
-            else if( required.size() > 2 ) // in a list with more after
-                suffix = ", ";
-            else if( allcontrols.isEmpty() && sorting.isNull() ) // the last one, and no more controls, so put a period
-                suffix = ".";
-            else
-                suffix = " ";
-        } else {
-            center = summary.mid( summary.indexOf( "~" ) + 1 );
-            if( i == required.size() - 1 ) { // if there are more, add an " and "
-                if( !( allcontrols.isEmpty() && sorting.isNull() ) )
-                    suffix = ", ";
-                else
-                    suffix = ".";
-            } else if ( i < required.size() - 2 ) // An item in the list that is before the second to last one, don't use ", and", we only want that for the last item
-                suffix += ", ";
-            else
-                suffix += ", and ";
-        }
-        sentence += center + suffix;
-    }
-    /// Add each filter individually
-    for( int i = 0; i < allcontrols.size(); i++ ) {
-        /// end case: if this is the last AND there is not a sorting filter (so this is the real last one)
-        const bool last = ( i == allcontrols.size() - 1 && sorting.isNull() );
-        QString prefix, suffix;
-        if( last ) { // only if there is not just 1
-            if( !( required.isEmpty() && allcontrols.size() == 1 ) )
-                prefix = "and ";
-            suffix = ".";
-        } else
-            suffix = ", ";
-        sentence += prefix + allcontrols.value( i ).dynamicCast< EchonestControl >()->summary() + suffix;
-    }
+//        if( i == 0 ) { // if it's the first.. special casez
+//            center = summary.remove( "~" );
+//            if( required.size() == 2 ) // special case for 2, no comma. ( X and Y )
+//                suffix = " and ";
+//            else if( required.size() > 2 ) // in a list with more after
+//                suffix = ", ";
+//            else if( allcontrols.isEmpty() && sorting.isNull() ) // the last one, and no more controls, so put a period
+//                suffix = ".";
+//            else
+//                suffix = " ";
+//        } else {
+//            center = summary.mid( summary.indexOf( "~" ) + 1 );
+//            if( i == required.size() - 1 ) { // if there are more, add an " and "
+//                if( !( allcontrols.isEmpty() && sorting.isNull() ) )
+//                    suffix = ", ";
+//                else
+//                    suffix = ".";
+//            } else if ( i < required.size() - 2 ) // An item in the list that is before the second to last one, don't use ", and", we only want that for the last item
+//                suffix += ", ";
+//            else
+//                suffix += ", and ";
+//        }
+//        sentence += center + suffix;
+//    }
+//    /// Add each filter individually
+//    for( int i = 0; i < allcontrols.size(); i++ ) {
+//        /// end case: if this is the last AND there is not a sorting filter (so this is the real last one)
+//        const bool last = ( i == allcontrols.size() - 1 && sorting.isNull() );
+//        QString prefix, suffix;
+//        if( last ) { // only if there is not just 1
+//            if( !( required.isEmpty() && allcontrols.size() == 1 ) )
+//                prefix = "and ";
+//            suffix = ".";
+//        } else
+//            suffix = ", ";
+//        sentence += prefix + allcontrols.value( i ).dynamicCast< EchonestControl >()->summary() + suffix;
+//    }
 
-    if( !sorting.isNull() ) {
-        sentence += "and " + sorting.dynamicCast< EchonestControl >()->summary() + ".";
-    }
+//    if( !sorting.isNull() ) {
+//        sentence += "and " + sorting.dynamicCast< EchonestControl >()->summary() + ".";
+//    }
 
-    return sentence;
+//    return sentence;
+    return "This is a station!";
 }
 
 void
