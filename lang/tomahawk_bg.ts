@@ -67,18 +67,18 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/widgets/AccountListWidget.cpp" line="60"/>
         <source>Connections</source>
-        <translation type="unfinished"/>
+        <translation>Връзки</translation>
     </message>
     <message>
         <location filename="../src/widgets/AccountListWidget.cpp" line="68"/>
         <location filename="../src/widgets/AccountListWidget.cpp" line="229"/>
         <source>Connect &amp;All</source>
-        <translation type="unfinished"/>
+        <translation>Свържи &amp;Всички</translation>
     </message>
     <message>
         <location filename="../src/widgets/AccountListWidget.cpp" line="228"/>
         <source>Disconnect &amp;All</source>
-        <translation type="unfinished"/>
+        <translation>Прекъсни &amp;Всички</translation>
     </message>
 </context>
 <context>
@@ -262,27 +262,27 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="76"/>
         <source>Tracklist</source>
-        <translation type="unfinished"/>
+        <translation>Списък на песни за изпълняване</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="156"/>
         <source>Other Albums</source>
-        <translation type="unfinished"/>
+        <translation>Други албуми</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="216"/>
         <source>Cover</source>
-        <translation type="unfinished"/>
+        <translation>Обложка</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="258"/>
         <source>Album</source>
-        <translation type="unfinished"/>
+        <translation>Албум</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="278"/>
         <source>Artist</source>
-        <translation type="unfinished"/>
+        <translation>Артист</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="60"/>
@@ -407,12 +407,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/AudioControls.ui" line="345"/>
         <source>resolver</source>
-        <translation type="unfinished"/>
+        <translation>Модул за извличане</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="381"/>
         <source>Time</source>
-        <translation type="unfinished"/>
+        <translation>Времетраене</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="410"/>
@@ -454,7 +454,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/AudioControls.cpp" line="265"/>
         <source>Playing from %1</source>
-        <translation type="unfinished"/>
+        <translation>Изпълнявам от %1</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.cpp" line="263"/>
@@ -656,97 +656,97 @@ Tomahaw създаде доклад относно това и изпращай�
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="58"/>
         <source>Steer this station:</source>
-        <translation type="unfinished"/>
+        <translation>Настрой, тази станция:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="81"/>
         <source>Much less</source>
-        <translation type="unfinished"/>
+        <translation>Много по-малко</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="82"/>
         <source>Less</source>
-        <translation type="unfinished"/>
+        <translation>По-малко</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="83"/>
         <source>A bit less</source>
-        <translation type="unfinished"/>
+        <translation>Малко по-малко</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="84"/>
         <source>Keep at current</source>
-        <translation type="unfinished"/>
+        <translation>Задръж</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="85"/>
         <source>A bit more</source>
-        <translation type="unfinished"/>
+        <translation>Малко повече</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="86"/>
         <source>More</source>
-        <translation type="unfinished"/>
+        <translation>Повече</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="87"/>
         <source>Much more</source>
-        <translation type="unfinished"/>
+        <translation>Много повече</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="90"/>
         <source>Tempo</source>
-        <translation type="unfinished"/>
+        <translation>Темпо</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="91"/>
         <source>Loudness</source>
-        <translation type="unfinished"/>
+        <translation>Сила</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="92"/>
         <source>Danceability</source>
-        <translation type="unfinished"/>
+        <translation>Танцувалност</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="93"/>
         <source>Energy</source>
-        <translation type="unfinished"/>
+        <translation>Енергичност</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="94"/>
         <source>Song Hotttnesss</source>
-        <translation type="unfinished"/>
+        <translation>Популярност на песента</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="95"/>
         <source>Artist Hotttnesss</source>
-        <translation type="unfinished"/>
+        <translation>Популярност на изпълнителя</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="96"/>
         <source>Artist Familiarity</source>
-        <translation type="unfinished"/>
+        <translation>Сходност на изпълнителите</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="97"/>
         <source>By Description</source>
-        <translation type="unfinished"/>
+        <translation>По описание</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="105"/>
         <source>Enter a description</source>
-        <translation type="unfinished"/>
+        <translation>Въведи описание</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="112"/>
         <source>Apply steering command</source>
-        <translation type="unfinished"/>
+        <translation>Приложи настройката</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="118"/>
         <source>Reset all steering commands</source>
-        <translation type="unfinished"/>
+        <translation>Нулирай всички настройки</translation>
     </message>
 </context>
 <context>
@@ -762,12 +762,12 @@ Tomahaw създаде доклад относно това и изпращай�
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleView.cpp" line="323"/>
         <source>This playlist is currently empty.</source>
-        <translation type="unfinished"/>
+        <translation>Този списък е празен, в момента.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleView.cpp" line="325"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
-        <translation type="unfinished"/>
+        <translation>Този списък е празен в моментът. Добави няколко песни и се наслади на музиката.</translation>
     </message>
 </context>
 <context>
@@ -985,7 +985,7 @@ Tomahaw създаде доклад относно това и изпращай�
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="90"/>
         <source>Track Number:</source>
-        <translation type="unfinished"/>
+        <translation>Песен, №</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="119"/>
@@ -1050,7 +1050,7 @@ Tomahaw създаде доклад относно това и изпращай�
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="366"/>
         <source>Properties</source>
-        <translation type="unfinished"/>
+        <translation>Настройки</translation>
     </message>
 </context>
 <context>
@@ -1194,13 +1194,13 @@ Tomahaw създаде доклад относно това и изпращай�
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="124"/>
         <source>A playlist you created %1.</source>
-        <translation type="unfinished"/>
+        <translation>Списък, създаден от %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="129"/>
         <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="136"/>
         <source>A playlist by %1, created %2.</source>
-        <translation type="unfinished"/>
+        <translation>Списък с изпълнения на %1, създаден от %2</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="184"/>
@@ -2067,7 +2067,7 @@ Tomahaw създаде доклад относно това и изпращай�
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="141"/>
         <source>Select All</source>
-        <translation type="unfinished"/>
+        <translation>Избери всички</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="154"/>
