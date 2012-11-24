@@ -52,52 +52,52 @@ DatabaseCommand_LoadDynamicPlaylistEntries::exec( DatabaseImpl* dbi )
     QString type;
     GeneratorMode mode;
 
-    QList< QVariantMap > controls;
+    QVariantMap controls;
     QString playlist_guid;
 //    qDebug() << "Loading controls..." << revisionGuid();
 //    qDebug() << "SELECT playlist_revision.playlist, controls, plmode, pltype "
 //    "FROM dynamic_playlist_revision, playlist_revision "
 //    "WHERE dynamic_playlist_revision.guid = "<< revisionGuid() << " AND playlist_revision.guid = dynamic_playlist_revision.guid";
 
-    if( controlsQuery.first() )
-    {
-        playlist_guid = controlsQuery.value( 0 ).toString();
-        QJson::Parser parser;
-        bool ok;
-        QVariant v = parser.parse( controlsQuery.value(1).toByteArray(), &ok );
-        Q_ASSERT( ok && v.type() == QVariant::List ); //TODO
+//    if( controlsQuery.first() )
+//    {
+//        playlist_guid = controlsQuery.value( 0 ).toString();
+//        QJson::Parser parser;
+//        bool ok;
+//        QVariant v = parser.parse( controlsQuery.value(1).toByteArray(), &ok );
+//        Q_ASSERT( ok && v.type() == QVariant::List ); //TODO
 
 
-        type = controlsQuery.value( 3 ).toString();
-        mode = static_cast<GeneratorMode>( controlsQuery.value( 2 ).toInt() );
+//        type = controlsQuery.value( 3 ).toString();
+//        mode = static_cast<GeneratorMode>( controlsQuery.value( 2 ).toInt() );
 
-        QStringList controlIds = v.toStringList();
-//        qDebug() << "Got controls in dynamic playlist, loading:" << controlIds << controlsQuery.value(1);
-        foreach( const QString& controlId, controlIds )
-        {
-            TomahawkSqlQuery controlQuery = dbi->newquery();
-            controlQuery.prepare( "SELECT selectedType, match, input "
-                                  "FROM dynamic_playlist_controls "
-                                  "WHERE id = :id" );
-            controlQuery.bindValue( ":id", controlId );
-            controlQuery.exec();
-            if( controlQuery.next() )
-            {
-                QVariantMap c;
-                c[ "type" ] = type;
-                c[ "id" ] = controlId;
-                c[ "selectedType" ] = controlQuery.value( 0 ).toString();
-                c[ "match" ] = controlQuery.value( 1 ).toString();
-                c[ "input" ] = controlQuery.value( 2 ).toString();
-                controls << c;
-            }
-        }
-    }
-    else
-    {
-        // No controls or plguid is null, but that's okay. We'll get a setdynrevision command with a proper revision some point later
-        return;
-    }
+//        QStringList controlIds = v.toStringList();
+////        qDebug() << "Got controls in dynamic playlist, loading:" << controlIds << controlsQuery.value(1);
+//        foreach( const QString& controlId, controlIds )
+//        {
+//            TomahawkSqlQuery controlQuery = dbi->newquery();
+//            controlQuery.prepare( "SELECT selectedType, match, input "
+//                                  "FROM dynamic_playlist_controls "
+//                                  "WHERE id = :id" );
+//            controlQuery.bindValue( ":id", controlId );
+//            controlQuery.exec();
+//            if( controlQuery.next() )
+//            {
+//                QVariantMap c;
+//                c[ "type" ] = type;
+//                c[ "id" ] = controlId;
+//                c[ "selectedType" ] = controlQuery.value( 0 ).toString();
+//                c[ "match" ] = controlQuery.value( 1 ).toString();
+//                c[ "input" ] = controlQuery.value( 2 ).toString();
+//                controls << c;
+//            }
+//        }
+//    }
+//    else
+//    {
+//        // No controls or plguid is null, but that's okay. We'll get a setdynrevision command with a proper revision some point later
+//        return;
+//    }
 
     if( mode == OnDemand )
     {
