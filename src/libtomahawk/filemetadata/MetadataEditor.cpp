@@ -248,12 +248,12 @@ MetadataEditor::loadResult( const Tomahawk::result_ptr& result )
 void
 MetadataEditor::enablePushButtons()
 {
-    if ( m_interface->itemAt( m_index + 1 ) )
+    if ( m_interface->queryAt( m_index + 1 ) )
         ui->forwardPushButton->setEnabled( true );
     else
         ui->forwardPushButton->setEnabled( false );
 
-    if ( m_interface->itemAt( m_index - 1 ) )
+    if ( m_interface->queryAt( m_index - 1 ) )
         ui->previousPushButton->setEnabled( true );
     else
         ui->previousPushButton->setEnabled( false );
@@ -267,8 +267,8 @@ MetadataEditor::loadNextResult()
 
     m_index++;
 
-    if ( m_interface->itemAt( m_index ) )
-        loadQuery( m_interface->itemAt( m_index ) );
+    if ( m_interface->queryAt( m_index ) )
+        loadQuery( m_interface->queryAt( m_index ) );
 }
 
 
@@ -279,8 +279,8 @@ MetadataEditor::loadPreviousResult()
 
     m_index--;
 
-    if ( m_interface->itemAt( m_index ) )
-        loadQuery( m_interface->itemAt( m_index ) );
+    if ( m_interface->queryAt( m_index ) )
+        loadQuery( m_interface->queryAt( m_index ) );
 }
 
 

@@ -146,7 +146,6 @@ private:
 
     bool m_updateContextView;
 
-    Tomahawk::playlistinterface_ptr m_playlistInterface;
     QModelIndex m_hoveredIndex;
     QModelIndex m_contextMenuIndex;
 

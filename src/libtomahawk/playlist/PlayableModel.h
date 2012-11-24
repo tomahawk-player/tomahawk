@@ -122,6 +122,7 @@ public:
 
     PlayableItem* itemFromIndex( const QModelIndex& index ) const;
     PlayableItem* itemFromQuery( const Tomahawk::query_ptr& query ) const;
+    PlayableItem* itemFromResult( const Tomahawk::result_ptr& result ) const;
     Q_INVOKABLE PlayableItem* itemFromIndex( int itemIndex ) const;
 
     /// Returns a flat list of all tracks in this model
@@ -140,6 +141,7 @@ signals:
     void loadingStarted();
     void loadingFinished();
 
+    void indexPlayable( const QModelIndex& index );
     void changed();
     void currentItemChanged( const QPersistentModelIndex &currentIndex );
 
@@ -172,9 +174,11 @@ public slots:
 
 protected:
     PlayableItem* rootItem() const { return m_rootItem; }
+    QModelIndex createIndex( int row, int column, PlayableItem* item = 0 ) const;
 
 private slots:
     void onDataChanged();
+    void onQueryBecamePlayable( bool playable );
 
     void onPlaybackStarted( const Tomahawk::result_ptr& result );
     void onPlaybackStopped();

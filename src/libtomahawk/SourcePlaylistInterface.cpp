@@ -50,18 +50,27 @@ SourcePlaylistInterface::~SourcePlaylistInterface()
 }
 
 
-Tomahawk::result_ptr
-SourcePlaylistInterface::siblingItem( int itemsAway, bool readOnly )
+void
+SourcePlaylistInterface::setCurrentIndex( qint64 index )
+{
+    Q_UNUSED( index );
+}
+
+
+qint64
+SourcePlaylistInterface::siblingIndex( int itemsAway ) const
 {
     Q_UNUSED( itemsAway );
-    Q_UNUSED( readOnly );
 
-    return nextItem();
+    if ( nextResult() )
+        return 0;
+    else
+        return -1;
 }
 
 
 Tomahawk::result_ptr
-SourcePlaylistInterface::nextItem()
+SourcePlaylistInterface::nextResult() const
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
     if ( !sourceValid() )
@@ -70,7 +79,7 @@ SourcePlaylistInterface::nextItem()
         m_currentItem = Tomahawk::result_ptr();
         return m_currentItem;
     }
-    else if ( !hasNextItem() )
+    else if ( !hasNextResult() )
     {
         tDebug( LOGEXTRA ) << Q_FUNC_INFO << "This song was already fetched or the source isn't playing anything";
         return Tomahawk::result_ptr();
@@ -95,7 +104,7 @@ SourcePlaylistInterface::currentItem() const
 
 
 bool
-SourcePlaylistInterface::sourceValid()
+SourcePlaylistInterface::sourceValid() const
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
     if ( m_source.isNull() || m_source.data()->currentTrack().isNull() )
@@ -106,7 +115,7 @@ SourcePlaylistInterface::sourceValid()
 
 
 bool
-SourcePlaylistInterface::hasNextItem()
+SourcePlaylistInterface::hasNextResult() const
 {
     if ( !sourceValid() )
         return false;
@@ -157,6 +166,25 @@ SourcePlaylistInterface::resolvingFinished( bool hasResults )
     if ( hasResults )
     {
         m_gotNextItem = true;
-        emit nextTrackReady();
+        emit nextTrackAvailable();
     }
+}
+
+
+Tomahawk::query_ptr
+SourcePlaylistInterface::queryAt( qint64 index ) const
+{
+    Q_UNUSED( index );
+
+    Tomahawk::result_ptr res = nextResult();
+    return res->toQuery();
+}
+
+
+Tomahawk::result_ptr
+SourcePlaylistInterface::resultAt( qint64 index ) const
+{
+    Q_UNUSED( index );
+
+    return nextResult();
 }

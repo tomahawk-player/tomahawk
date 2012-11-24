@@ -44,14 +44,14 @@ public:
 
     virtual int trackCount() const { return m_queries.count(); }
 
-    virtual Tomahawk::result_ptr siblingItem( int itemsAway, bool readOnly = false );
+    virtual void setCurrentIndex( qint64 index );
+    virtual qint64 siblingIndex( int itemsAway ) const;
 
-    virtual Tomahawk::query_ptr itemAt( unsigned int position ) const { Q_UNUSED( position ); Q_ASSERT( false ); return Tomahawk::query_ptr(); }
-    virtual int indexOfResult( const Tomahawk::result_ptr& result ) const { Q_UNUSED( result ); Q_ASSERT( false ); return -1; }
-    virtual int indexOfQuery( const Tomahawk::query_ptr& query ) const { Q_UNUSED( query ); Q_ASSERT( false ); return -1; }
+    virtual Tomahawk::result_ptr resultAt( qint64 index ) const { Q_UNUSED( index ); Q_ASSERT( false ); return Tomahawk::result_ptr(); }
+    virtual Tomahawk::query_ptr queryAt( qint64 index ) const { Q_UNUSED( index ); Q_ASSERT( false ); return Tomahawk::query_ptr(); }
+    virtual qint64 indexOfResult( const Tomahawk::result_ptr& result ) const { Q_UNUSED( result ); Q_ASSERT( false ); return -1; }
+    virtual qint64 indexOfQuery( const Tomahawk::query_ptr& query ) const { Q_UNUSED( query ); Q_ASSERT( false ); return -1; }
 
-    virtual bool hasNextItem();
-    virtual bool hasPreviousItem();
     virtual Tomahawk::result_ptr currentItem() const;
 
     virtual PlaylistModes::RepeatMode repeatMode() const { return PlaylistModes::NoRepeat; }
@@ -71,8 +71,8 @@ private slots:
 
 private:
     QList< Tomahawk::query_ptr > m_queries;
-    result_ptr m_currentItem;
-    unsigned int m_currentTrack;
+    mutable result_ptr m_currentItem;
+    mutable qint64 m_currentTrack;
 
     bool m_infoSystemLoaded;
     bool m_databaseLoaded;

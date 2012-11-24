@@ -138,6 +138,7 @@ AudioControls::AudioControls( QWidget* parent )
     connect( AudioEngine::instance(), SIGNAL( seeked( qint64 ) ), SLOT( onPlaybackSeeked( qint64 ) ) );
     connect( AudioEngine::instance(), SIGNAL( timerMilliSeconds( qint64 ) ), SLOT( onPlaybackTimer( qint64 ) ) );
     connect( AudioEngine::instance(), SIGNAL( volumeChanged( int ) ), SLOT( onVolumeChanged( int ) ) );
+    connect( AudioEngine::instance(), SIGNAL( controlStateChanged() ), SLOT( onControlStateChanged() ) );
 
     ui->buttonAreaLayout->setSpacing( 0 );
     ui->stackedLayout->setSpacing( 0 );
@@ -186,6 +187,22 @@ AudioControls::onVolumeChanged( int volume )
     ui->volumeSlider->blockSignals( true );
     ui->volumeSlider->setValue( volume );
     ui->volumeSlider->blockSignals( false );
+}
+
+
+void
+AudioControls::onControlStateChanged()
+{
+    tDebug() << Q_FUNC_INFO;
+
+    if ( QThread::currentThread() != thread() )
+    {
+        tDebug() << Q_FUNC_INFO << "Reinvoking in correct thread!";
+        QMetaObject::invokeMethod( this, "onControlStateChanged", Qt::QueuedConnection );
+    }
+
+    ui->prevButton->setEnabled( AudioEngine::instance()->canGoPrevious() );
+    ui->nextButton->setEnabled( AudioEngine::instance()->canGoNext() );
 }
 
 
@@ -264,8 +281,7 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
     ui->loveButton->setToolTip( tr( "Love" ) );
     ui->ownerButton->setToolTip( QString( tr( "Playing from %1" ) ).arg( result->friendlySource() ) );
 
-    ui->prevButton->setEnabled( AudioEngine::instance()->canGoPrevious() );
-    ui->nextButton->setEnabled( AudioEngine::instance()->canGoNext() );
+    onControlStateChanged();
 
     QPixmap sourceIcon = result->sourceIcon( Result::Plain, ui->ownerButton->size() );
     if ( !sourceIcon.isNull() )
@@ -397,8 +413,7 @@ AudioControls::onPlaybackStopped()
     ui->loveButton->setToolTip( "" );
     ui->ownerButton->setToolTip( "" );
 
-    ui->prevButton->setEnabled( AudioEngine::instance()->canGoPrevious() );
-    ui->nextButton->setEnabled( AudioEngine::instance()->canGoNext() );
+    onControlStateChanged();
 }
 
 

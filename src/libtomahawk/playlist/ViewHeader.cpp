@@ -60,7 +60,7 @@ ViewHeader::visibleSectionCount() const
 void
 ViewHeader::onSectionsChanged()
 {
-    tDebug( LOGVERBOSE ) << "Saving columns state for view guid:" << m_guid;
+    tDebug() << "Saving columns state for view guid:" << m_guid;
     if ( !m_guid.isEmpty() )
         TomahawkSettings::instance()->setPlaylistColumnSizes( m_guid, saveState() );
 }
@@ -76,7 +76,7 @@ ViewHeader::checkState()
     disconnect( this, SIGNAL( sectionResized( int, int, int ) ), this, SLOT( onSectionsChanged() ) );
 
     QByteArray state;
-    tDebug( LOGVERBOSE ) << "Restoring columns state for view:" << m_guid;
+    tDebug() << "Restoring columns state for view:" << m_guid;
 
     if ( !m_guid.isEmpty() )
         state = TomahawkSettings::instance()->playlistColumnSizes( m_guid );
@@ -87,7 +87,7 @@ ViewHeader::checkState()
     }
     else
     {
-        tDebug( LOGVERBOSE ) << "Giving columns initial weighting:" << m_columnWeights;
+        tDebug() << "Giving columns initial weighting:" << m_columnWeights;
         for ( int i = 0; i < count() - 1; i++ )
         {
             if ( isSectionHidden( i ) )
@@ -97,6 +97,7 @@ ViewHeader::checkState()
 
             double nw = (double)m_parent->width() * m_columnWeights.at( i );
             resizeSection( i, qMax( minimumSectionSize(), int( nw - 0.5 ) ) );
+            tDebug() << "Initial size for column" << i << qMax( minimumSectionSize(), int( nw - 0.5 ) );
         }
     }
 

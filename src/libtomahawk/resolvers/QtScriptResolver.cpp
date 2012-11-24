@@ -19,6 +19,14 @@
 
 #include "QtScriptResolver.h"
 
+#include <QtGui/QMessageBox>
+
+#include <QtNetwork/QNetworkRequest>
+#include <QtNetwork/QNetworkReply>
+
+#include <QtCore/QMetaProperty>
+#include <QtCore/QCryptographicHash>
+
 #include "Artist.h"
 #include "Album.h"
 #include "config.h"
@@ -29,15 +37,6 @@
 
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
-
-
-#include <QtGui/QMessageBox>
-
-#include <QtNetwork/QNetworkRequest>
-#include <QtNetwork/QNetworkReply>
-
-#include <QtCore/QMetaProperty>
-#include <QtCore/QCryptographicHash>
 
 // FIXME: bloody hack, remove this for 0.3
 // this one adds new functionality to old resolvers

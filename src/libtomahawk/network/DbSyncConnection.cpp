@@ -213,7 +213,7 @@ DBSyncConnection::handleMsg( msg_ptr msg )
     if ( m.value( "method" ).toString() == "fetchops" )
     {
         ++m_fetchCount;
-        tDebug() << "Fetching new dbops:" << m["lastop"].toString() << m_fetchCount;
+        tDebug( LOGVERBOSE ) << "Fetching new dbops:" << m["lastop"].toString() << m_fetchCount;
         m_uscache = m;
         sendOps();
         return;

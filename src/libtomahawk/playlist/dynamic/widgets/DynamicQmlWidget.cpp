@@ -67,8 +67,7 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
     connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::playlistinterface_ptr ) ), this, SLOT( playlistChanged( Tomahawk::playlistinterface_ptr ) ) );
 
     // Initially seed the playlist
-    m_playlist->generator()->generate( 20 );
-
+    m_playlist->generator()->startFromArtist( Artist::get( "Eminem" , false ) );
 }
 
 

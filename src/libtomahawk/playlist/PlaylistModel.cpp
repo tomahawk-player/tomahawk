@@ -148,9 +148,8 @@ PlaylistModel::onPlaylistChanged()
 void
 PlaylistModel::clear()
 {
-    PlayableModel::clear();
-
     m_waitingForResolved.clear();
+    PlayableModel::clear();
 }
 
 

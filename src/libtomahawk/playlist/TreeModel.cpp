@@ -421,3 +421,32 @@ TreeModel::indexFromAlbum( const Tomahawk::album_ptr& album ) const
     tDebug() << "Could not find item for album:" << album->name() << album->artist()->name();
     return QModelIndex();
 }
+
+
+QModelIndex
+TreeModel::indexFromResult( const Tomahawk::result_ptr& result ) const
+{
+    QModelIndex artistIdx = indexFromArtist( result->artist() );
+    for ( int i = 0; i < rowCount( artistIdx ); i++ )
+    {
+        QModelIndex idx = index( i, 0, artistIdx );
+        PlayableItem* albumItem = itemFromIndex( idx );
+        if ( albumItem && albumItem->album() == result->album() )
+        {
+            for ( int j = 0; j < rowCount( idx ); j++ )
+            {
+                QModelIndex subidx = index( j, 0, idx );
+                PlayableItem* item = itemFromIndex( subidx );
+                if ( item && item->result() == result )
+                {
+                    return subidx;
+                }
+            }
+
+            break;
+        }
+    }
+
+    tDebug() << "Could not find item for result:" << result->toString();
+    return QModelIndex();
+}

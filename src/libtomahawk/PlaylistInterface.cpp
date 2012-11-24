@@ -41,16 +41,42 @@ PlaylistInterface::~PlaylistInterface()
 
 
 result_ptr
-PlaylistInterface::previousItem()
+PlaylistInterface::previousResult() const
 {
-     return siblingItem( -1 );
+     return siblingResult( -1 );
 }
 
 
 result_ptr
-PlaylistInterface::nextItem()
+PlaylistInterface::nextResult() const
 {
-     return siblingItem( 1 );
+     return siblingResult( 1 );
+}
+
+
+Tomahawk::result_ptr
+PlaylistInterface::siblingResult( int itemsAway ) const
+{
+    int idx = siblingIndex( itemsAway );
+
+    while ( idx >= 0 )
+    {
+        Tomahawk::query_ptr query = queryAt( idx );
+//        Tomahawk::result_ptr result = resultAt( idx );
+        if ( query->numResults() )
+        {
+            return query->results().first();
+        }
+
+        if ( itemsAway < 0 )
+            itemsAway--;
+        else
+            itemsAway++;
+
+        idx = siblingIndex( itemsAway );
+    }
+
+    return Tomahawk::result_ptr();
 }
 
 
@@ -88,4 +114,18 @@ PlaylistInterface::filterTracks( const QList<Tomahawk::query_ptr>& queries )
 
     Pipeline::instance()->resolve( result );
     return result;
+}
+
+
+bool
+PlaylistInterface::hasNextResult() const
+{
+    return !( siblingResult( 1 ).isNull() );
+}
+
+
+bool
+PlaylistInterface::hasPreviousResult() const
+{
+    return !( siblingResult( -1 ).isNull() );
 }

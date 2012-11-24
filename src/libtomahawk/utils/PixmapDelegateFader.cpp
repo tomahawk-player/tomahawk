@@ -244,7 +244,7 @@ PixmapDelegateFader::onAnimationStep( int step )
     }
 
     Q_ASSERT( !m_currentReference.isNull() );
-    if ( !m_currentReference.isNull() ) // Should never be null..
+    if ( !m_currentReference.isNull() ) // Should never be null...
     {
         p.setOpacity( opacity );
         p.drawPixmap( 0, 0, m_currentReference );

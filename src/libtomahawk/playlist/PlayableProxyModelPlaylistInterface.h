@@ -43,13 +43,14 @@ public:
 
     virtual int trackCount() const;
 
-    virtual Tomahawk::query_ptr itemAt( unsigned int position ) const;
-    virtual int indexOfResult( const Tomahawk::result_ptr& result ) const;
-    virtual int indexOfQuery( const Tomahawk::query_ptr& query ) const;
+    virtual void setCurrentIndex( qint64 index );
+    virtual Tomahawk::result_ptr resultAt( qint64 index ) const;
+    virtual Tomahawk::query_ptr queryAt( qint64 index ) const;
+    virtual qint64 indexOfResult( const Tomahawk::result_ptr& result ) const;
+    virtual qint64 indexOfQuery( const Tomahawk::query_ptr& query ) const;
 
     virtual Tomahawk::result_ptr currentItem() const;
-    virtual Tomahawk::result_ptr siblingItem( int itemsAway, bool readOnly );
-    virtual bool hasNextItem();
+    virtual qint64 siblingIndex( int itemsAway ) const;
 
     virtual QString filter() const;
 
@@ -60,13 +61,23 @@ public slots:
     virtual void setRepeatMode( Tomahawk::PlaylistModes::RepeatMode mode ) { m_repeatMode = mode; emit repeatModeChanged( mode ); }
     virtual void setShuffled( bool enabled ) { m_shuffled = enabled; emit shuffleModeChanged( enabled ); }
 
+signals:
+    void previousTrackAvailable();
+    void nextTrackAvailable();
+
+private slots:
+    virtual void onModelChanged();
+
 protected:
     QWeakPointer< PlayableProxyModel > m_proxyModel;
 
     PlaylistModes::RepeatMode m_repeatMode;
     bool m_shuffled;
-    QList< Tomahawk::query_ptr > m_shuffleHistory;
-    QPersistentModelIndex m_shuffleCache;
+    mutable QList< Tomahawk::query_ptr > m_shuffleHistory;
+    mutable QPersistentModelIndex m_shuffleCache;
+
+    mutable bool m_prevAvail;
+    mutable bool m_nextAvail;
 };
 
 } //ns

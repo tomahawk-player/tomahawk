@@ -46,14 +46,14 @@ public:
 
     virtual int trackCount() const;
 
-    virtual Tomahawk::query_ptr itemAt( unsigned int position ) const { Q_UNUSED( position ); Q_ASSERT( false ); return Tomahawk::query_ptr(); }
-    virtual int indexOfResult( const Tomahawk::result_ptr& result ) const { Q_UNUSED( result ); Q_ASSERT( false ); return -1; }
-    virtual int indexOfQuery( const Tomahawk::query_ptr& query ) const { Q_UNUSED( query ); Q_ASSERT( false ); return -1; }
+    virtual void setCurrentIndex( qint64 index ) { Q_UNUSED( index ); }
+    virtual Tomahawk::result_ptr resultAt( qint64 index ) const { Q_UNUSED( index ); Q_ASSERT( false ); return Tomahawk::result_ptr(); }
+    virtual Tomahawk::query_ptr queryAt( qint64 index ) const { Q_UNUSED( index ); Q_ASSERT( false ); return Tomahawk::query_ptr(); }
+    virtual qint64 indexOfResult( const Tomahawk::result_ptr& result ) const { Q_UNUSED( result ); Q_ASSERT( false ); return -1; }
+    virtual qint64 indexOfQuery( const Tomahawk::query_ptr& query ) const { Q_UNUSED( query ); Q_ASSERT( false ); return -1; }
 
-    virtual bool hasNextItem() { return false; }
     virtual Tomahawk::result_ptr currentItem() const { return m_currentItem; }
-
-    virtual Tomahawk::result_ptr siblingItem( int /*itemsAway*/, bool /*readOnly*/ ) { return result_ptr(); }
+    virtual qint64 siblingIndex( int /*itemsAway*/ ) const { return -1; }
 
     virtual PlaylistModes::RepeatMode repeatMode() const { return PlaylistModes::NoRepeat; }
     virtual bool shuffled() const { return false; }
