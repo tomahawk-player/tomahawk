@@ -76,6 +76,8 @@ public:
     virtual QString sentenceSummary();
     virtual bool onDemandSteerable() const { return false; }
     virtual QWidget* steeringWidget() { return 0; }
+    virtual bool startFromTrack( const Tomahawk::query_ptr& query );
+    virtual bool startFromArtist( const Tomahawk::artist_ptr& artist );
 
     Q_INVOKABLE static QStringList styles();
     static QStringList moods();

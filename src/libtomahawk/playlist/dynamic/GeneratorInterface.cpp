@@ -40,12 +40,16 @@ Tomahawk::GeneratorInterface::logo()
     return QPixmap();
 }
 
-QVariantMap Tomahawk::GeneratorInterface::controls() const
+
+QVariantMap
+Tomahawk::GeneratorInterface::controls() const
 {
     return m_controls;
 }
 
-void Tomahawk::GeneratorInterface::setControls(const QVariantMap &controls)
+
+void
+Tomahawk::GeneratorInterface::setControls( const QVariantMap& controls )
 {
     m_controls = controls;
 }

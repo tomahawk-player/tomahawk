@@ -201,6 +201,50 @@ EchonestGenerator::startOnDemand()
 }
 
 
+bool
+EchonestGenerator::startFromTrack( const Tomahawk::query_ptr& query )
+{
+    tDebug() << "Generating station content by query:" << query->toString();
+
+    Echonest::DynamicPlaylist::PlaylistParamData data;
+    data.first = Echonest::DynamicPlaylist::SongId;
+    data.second = query->artist() + " " + query->track();
+
+    Echonest::DynamicPlaylist::PlaylistParams params;
+    params << data;
+
+    // FIXME!
+
+    return true;
+}
+
+
+bool
+EchonestGenerator::startFromArtist( const Tomahawk::artist_ptr& artist )
+{
+    tDebug() << "Generating station content by artist:" << artist->name();
+
+    if ( !m_dynPlaylist->sessionId().isNull() )
+    {
+        // Running session, delete it
+        QNetworkReply* deleteReply = m_dynPlaylist->deleteSession();
+        connect( deleteReply, SIGNAL( finished() ), deleteReply, SLOT( deleteLater() ) );
+    }
+
+    connect( this, SIGNAL( paramsGenerated( Echonest::DynamicPlaylist::PlaylistParams ) ), this, SLOT( doStartOnDemand( Echonest::DynamicPlaylist::PlaylistParams ) ) );
+
+    Echonest::DynamicPlaylist::PlaylistParamData data;
+    data.first = Echonest::DynamicPlaylist::Artist;
+    data.second = artist->name();
+
+    Echonest::DynamicPlaylist::PlaylistParams params;
+    params << data;
+    emit paramsGenerated( params );
+
+    return true;
+}
+
+
 void
 EchonestGenerator::doGenerate( const Echonest::DynamicPlaylist::PlaylistParams& paramsIn )
 {
@@ -223,7 +267,7 @@ EchonestGenerator::doStartOnDemand( const Echonest::DynamicPlaylist::PlaylistPar
     disconnect( this, SIGNAL( paramsGenerated( Echonest::DynamicPlaylist::PlaylistParams ) ), this, SLOT( doStartOnDemand( Echonest::DynamicPlaylist::PlaylistParams ) ) );
 
     QNetworkReply* reply = m_dynPlaylist->create( params );
-    qDebug() << "starting a dynamic playlist from echonest!" << reply->url().toString();
+    tDebug() << Q_FUNC_INFO << "Starting a dynamic playlist from echonest!" << reply->url().toString();
     connect( reply, SIGNAL( finished() ), this, SLOT( dynamicStarted() ) );
 }
 

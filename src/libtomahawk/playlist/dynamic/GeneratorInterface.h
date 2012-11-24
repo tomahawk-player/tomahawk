@@ -101,7 +101,7 @@ public:
     /**
      * Sets the controls (for example when loaded from database)
      */
-    virtual void setControls(const QVariantMap &controls);
+    virtual void setControls( const QVariantMap& controls );
 
 
     /// The type of this generator
@@ -110,6 +110,9 @@ public:
     int mode() const { return (int)m_mode; }
     void setMode( int mode ) { m_mode = (GeneratorMode)mode; }
 
+
+    virtual bool startFromTrack( const Tomahawk::query_ptr& query ) = 0;
+    virtual bool startFromArtist( const Tomahawk::artist_ptr& artist ) = 0;
 
 signals:
     void error( const QString& title, const QString& body);
