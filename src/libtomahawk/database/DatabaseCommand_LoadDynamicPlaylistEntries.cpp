@@ -36,7 +36,6 @@ using namespace Tomahawk;
 void
 DatabaseCommand_LoadDynamicPlaylistEntries::exec( DatabaseImpl* dbi )
 {
-//    qDebug() << "Loading dynamic playlist guid" << guid();
     // load the entries first
     generateEntries( dbi );
 
@@ -54,22 +53,18 @@ DatabaseCommand_LoadDynamicPlaylistEntries::exec( DatabaseImpl* dbi )
 
     QVariantMap controls;
     QString playlist_guid;
-//    qDebug() << "Loading controls..." << revisionGuid();
-//    qDebug() << "SELECT playlist_revision.playlist, controls, plmode, pltype "
-//    "FROM dynamic_playlist_revision, playlist_revision "
-//    "WHERE dynamic_playlist_revision.guid = "<< revisionGuid() << " AND playlist_revision.guid = dynamic_playlist_revision.guid";
 
-//    if( controlsQuery.first() )
-//    {
-//        playlist_guid = controlsQuery.value( 0 ).toString();
-//        QJson::Parser parser;
-//        bool ok;
-//        QVariant v = parser.parse( controlsQuery.value(1).toByteArray(), &ok );
-//        Q_ASSERT( ok && v.type() == QVariant::List ); //TODO
+    if( controlsQuery.first() )
+    {
+        playlist_guid = controlsQuery.value( 0 ).toString();
+        QJson::Parser parser;
+        bool ok;
+        QVariant v = parser.parse( controlsQuery.value(1).toByteArray(), &ok );
+        Q_ASSERT( ok && v.type() == QVariant::List ); //TODO
 
 
-//        type = controlsQuery.value( 3 ).toString();
-//        mode = static_cast<GeneratorMode>( controlsQuery.value( 2 ).toInt() );
+        type = controlsQuery.value( 3 ).toString();
+        mode = static_cast<GeneratorMode>( controlsQuery.value( 2 ).toInt() );
 
 //        QStringList controlIds = v.toStringList();
 ////        qDebug() << "Got controls in dynamic playlist, loading:" << controlIds << controlsQuery.value(1);
@@ -92,7 +87,7 @@ DatabaseCommand_LoadDynamicPlaylistEntries::exec( DatabaseImpl* dbi )
 //                controls << c;
 //            }
 //        }
-//    }
+    }
 //    else
 //    {
 //        // No controls or plguid is null, but that's okay. We'll get a setdynrevision command with a proper revision some point later
@@ -102,7 +97,6 @@ DatabaseCommand_LoadDynamicPlaylistEntries::exec( DatabaseImpl* dbi )
     if( mode == OnDemand )
     {
 //        Q_ASSERT( m_entrymap.isEmpty() ); // ondemand should have no entry
-
         emit done( revisionGuid(), m_islatest, type, controls, true );
     }
     else
