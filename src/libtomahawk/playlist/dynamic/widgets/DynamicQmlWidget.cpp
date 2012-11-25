@@ -66,8 +66,6 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), this, SLOT( trackStarted() ) );
     connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::playlistinterface_ptr ) ), this, SLOT( playlistChanged( Tomahawk::playlistinterface_ptr ) ) );
 
-    // Initially seed the playlist
-    m_playlist->generator()->startFromArtist( Artist::get( "Eminem" , false ) );
 }
 
 
@@ -117,13 +115,19 @@ playlist_ptr DynamicQmlWidget::playlist() const
 
 void DynamicQmlWidget::playItem(int index)
 {
-    qDebug() << "playItem called for cover" << index;
+    tDebug() << "playItem called for cover" << index;
     AudioEngine::instance()->playItem( m_proxyModel->playlistInterface(), m_proxyModel->itemFromIndex( index )->result() );
 }
 
 void DynamicQmlWidget::pause()
 {
     AudioEngine::instance()->pause();
+}
+
+void DynamicQmlWidget::startStationFromArtist(const QString &artist)
+{
+    tDebug() << "should start startion from artist" << artist;
+    m_playlist->generator()->startFromArtist(Artist::get(artist));
 }
 
 void DynamicQmlWidget::currentItemChanged( const QPersistentModelIndex &currentIndex )
@@ -134,7 +138,6 @@ void DynamicQmlWidget::currentItemChanged( const QPersistentModelIndex &currentI
 void
 DynamicQmlWidget::tracksGenerated( const QList< query_ptr >& queries )
 {
-    qDebug() << queries.count() << "tracks generated";
     m_model->tracksGenerated( queries, queries.count() );
     m_playlist->resolve();
 }

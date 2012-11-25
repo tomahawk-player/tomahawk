@@ -429,6 +429,7 @@ EchonestGenerator::dynamicFetched()
     Q_ASSERT( qobject_cast< QNetworkReply* >( sender() ) );
     QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
 
+    tDebug() << "dynamicFetched";
     try
     {
         Echonest::DynamicPlaylist::FetchPair fetched = m_dynPlaylist->parseNext( reply );

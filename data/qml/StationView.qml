@@ -11,8 +11,14 @@ Item {
 
     CoverFlip {
         id: coverView
-        anchors.fill: parent
-        anchors.leftMargin: parent.width / 2
+        anchors {
+            top: parent.top
+            right: parent.right
+            bottom:parent.bottom
+        }
+        width: parent.width / 2
+
+        backgroundColor: scene.color
 
         model: dynamicModel
 
@@ -42,7 +48,7 @@ Item {
                 font.bold: true
                 width: parent.width
                 elide: Text.ElideRight
-                text: echonestStation.name
+                text: rootView.title
             }
         }
 

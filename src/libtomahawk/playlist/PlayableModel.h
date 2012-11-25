@@ -70,7 +70,8 @@ public:
         OriginRole,
         ScoreRole,
         NameRole,
-        CoverIDRole
+        CoverIDRole,
+        IsPlayingRole
     };
 
 

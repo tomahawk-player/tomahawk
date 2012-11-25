@@ -34,7 +34,10 @@ class DynamicModel;
 
 class DynamicQmlWidget : public QDeclarativeView, public Tomahawk::ViewPage
 {
-Q_OBJECT
+    Q_OBJECT
+
+    Q_PROPERTY(QString title READ title)
+
 public:
     explicit DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* parent = 0 );
     virtual ~DynamicQmlWidget();
@@ -57,6 +60,7 @@ public:
 public slots:
     void playItem(int index);
     void pause();
+    void startStationFromArtist(const QString &artist);
 
 private slots:
     void currentItemChanged( const QPersistentModelIndex &currentIndex );

@@ -10,7 +10,7 @@ Item {
     property bool showPlayButton: false
 
     // if this is true, the play button will be swapped by a pause button
-    property bool currentyPlayed: false
+    property bool currentlyPlaying: false
 
     // Should the mirror be painted?
     property bool showMirror: false
@@ -19,8 +19,6 @@ Item {
     property string artistName
     property string trackName
     property string artworkId
-
-    onArtworkIdChanged: print("!*!*!*!*!* artworkId", artworkId)
 
     // The border color for the cover image
     property color borderColor: "black"
@@ -44,7 +42,10 @@ Item {
         anchors.fill: parent
         hoverEnabled: true
 
-        onClicked: root.clicked();
+        onClicked: {
+            print("Cover clicked");
+            root.clicked();
+        }
 
     }
 
@@ -144,7 +145,7 @@ Item {
 
         gradient: Gradient {
             // TODO: no clue how to get the RGB component of the container rectangle color
-            // For now the Qt.rgba needs to be manually updated to match the backgroundColor
+            // For now the Qt.rgba needs to be manually updated to match the backgroundColor 454e59
             GradientStop { position: 0.0; color: Qt.rgba(0, 0, 0, 1-mirrorBrightness) }
             GradientStop { position: 0.5; color: backgroundColor }
         }
@@ -152,12 +153,15 @@ Item {
 
     Image {
         id: playButton
-        visible: showPlayButton ? mouseArea.containsMouse : false
-        source: currentyPlayed ? "../images/pause-rest.png" : "../images/play-rest.png"
+        visible: showPlayButton ? (mouseArea.containsMouse || currentlyPlaying) : false
+        source: currentlyPlaying ? "../images/pause-rest.png" : "../images/play-rest.png"
         anchors.centerIn: parent
         MouseArea {
             anchors.fill: parent
-            onClicked: root.playClicked();
+            onClicked: {
+                print("Play button clicked");
+                root.playClicked();
+            }
         }
     }
 

@@ -47,6 +47,7 @@ PlayableModel::PlayableModel( QObject* parent, bool loading )
     roleNames.insert( ArtistRole, "artistName" );
     roleNames.insert( TrackRole, "trackName" );
     roleNames.insert( CoverIDRole, "coverID" );
+    roleNames.insert( IsPlayingRole, "isPlaying" );
     setRoleNames( roleNames );
 
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( onPlaybackStarted( Tomahawk::result_ptr ) ), Qt::DirectConnection );
@@ -281,6 +282,10 @@ PlayableModel::data( const QModelIndex& index, int role ) const
     else if ( role == Qt::TextAlignmentRole )
     {
         return QVariant( columnAlignment( index.column() ) );
+    }
+    else if ( role == IsPlayingRole )
+    {
+        return entry->isPlaying();
     }
 
     int column = index.column();

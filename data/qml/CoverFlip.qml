@@ -7,11 +7,13 @@ PathView {
 
     // The start coordinates for the covers
     // Default is left, centered in height
-    property int pathStartX: coverSize
+    property int pathStartX: 0
     property int pathStartY: height / 2
 
     // The size of the covers in the path
     property int coverSize: 100
+
+    property color backgroundColor: "black"
 
     // emitted when a cover is clicked
     signal itemClicked(int index)
@@ -19,14 +21,15 @@ PathView {
     // emitted when a cover is clicked
     signal itemPlayPauseClicked(int index)
 
-    preferredHighlightBegin: 0.2 // scene.width / 11000
-    preferredHighlightEnd: preferredHighlightBegin
+//    preferredHighlightBegin: 0.2 // scene.width / 11000
+//    preferredHighlightEnd: preferredHighlightBegin
     pathItemCount: 5
     //highlightMoveDuration: 500
 
     delegate: CoverImage {
         height: root.coverSize
         width: root.coverSize
+        backgroundColor: coverView.backgroundColor
 
         showLabels: true
         showMirror: true
@@ -34,7 +37,7 @@ PathView {
         trackName: model.trackName
         artworkId: model.coverID
         showPlayButton: true
-        currentyPlayed: mode.itemFromIndex(index).isPlaying
+        currentlyPlaying: isPlaying
 
         scale: PathView.itemScale
         itemBrightness: PathView.itemBrightness
@@ -42,6 +45,7 @@ PathView {
         z: -x
 
         onPlayClicked: {
+            console.log("***************")
             coverView.itemPlayPauseClicked(index)
         }
 
@@ -72,7 +76,7 @@ PathView {
 //            //            PathAttribute { name: "itemOpacity"; value: 1 }
 //            //            PathAttribute { name: "itemBrightness"; value: .5 }
 //            //            PathAttribute { name: "itemScale"; value: 0.4 }
-        PathLine { x: root.width; y: 0 }
+        PathLine { x: coverView.width; y: 0 }
         PathPercent { value: 1 }
         PathAttribute { name: "itemOpacity"; value: 1 }
         PathAttribute { name: "itemBrightness"; value: 0 }
