@@ -222,6 +222,16 @@
        </widget>
       </item>
       <item>
+       <widget class="QCheckBox" name="checkBoxSongChangeNotifications">
+        <property name="text">
+         <string>Show notification when a new song starts to play</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
        <layout class="QHBoxLayout" name="aclEntryClearLayout">
         <item>
          <spacer name="horizontalSpacer_2">

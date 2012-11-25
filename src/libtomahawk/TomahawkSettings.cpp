@@ -727,6 +727,20 @@ TomahawkSettings::setCrashReporterEnabled( bool enable )
 }
 
 
+bool
+TomahawkSettings::songChangeNotificationEnabled() const
+{
+    return value( "ui/songChangeNotification", true ).toBool();
+}
+
+
+void
+TomahawkSettings::setSongChangeNotificationEnabled(bool enable)
+{
+    setValue( "ui/songChangeNotification", enable );
+}
+
+
 unsigned int
 TomahawkSettings::volume() const
 {

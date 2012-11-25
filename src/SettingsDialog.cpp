@@ -90,6 +90,7 @@ SettingsDialog::SettingsDialog(QObject *parent )
 
     m_advancedWidgetUi->checkBoxReporter->setChecked( s->crashReporterEnabled() );
     m_advancedWidgetUi->checkBoxHttp->setChecked( s->httpEnabled() );
+    m_advancedWidgetUi->checkBoxSongChangeNotifications->setChecked( s->songChangeNotificationEnabled() );
 
     //Network settings
     TomahawkSettings::ExternalAddressMode mode = TomahawkSettings::instance()->externalAddressMode();
@@ -254,6 +255,7 @@ SettingsDialog::saveSettings()
 
     s->setCrashReporterEnabled( m_advancedWidgetUi->checkBoxReporter->checkState() == Qt::Checked );
     s->setHttpEnabled( m_advancedWidgetUi->checkBoxHttp->checkState() == Qt::Checked );
+    s->setSongChangeNotificationEnabled( m_advancedWidgetUi->checkBoxSongChangeNotifications->checkState() == Qt::Checked );
     s->setProxyType( m_advancedWidgetUi->enableProxyCheckBox->isChecked() ? QNetworkProxy::Socks5Proxy : QNetworkProxy::NoProxy );
     s->setExternalAddressMode( m_advancedWidgetUi->upnpRadioButton->isChecked() ? TomahawkSettings::Upnp : ( m_advancedWidgetUi->lanOnlyRadioButton->isChecked() ? TomahawkSettings::Lan : TomahawkSettings::Static ) );
 
