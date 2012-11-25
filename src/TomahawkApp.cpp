@@ -365,7 +365,7 @@ TomahawkApp::init()
 
 TomahawkApp::~TomahawkApp()
 {
-    tLog() << "Shutting down Tomahawk...";
+    tDebug( LOGVERBOSE ) << "Shutting down Tomahawk...";
 
     if ( !m_session.isNull() )
         delete m_session.data();
@@ -403,7 +403,7 @@ TomahawkApp::~TomahawkApp()
 
     delete TomahawkUtils::Cache::instance();
 
-    tLog() << "Finished shutdown.";
+    tDebug( LOGVERBOSE ) << "Finished shutdown.";
 }
 
 
