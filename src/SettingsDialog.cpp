@@ -91,6 +91,9 @@ SettingsDialog::SettingsDialog(QObject *parent )
     m_advancedWidgetUi->checkBoxReporter->setChecked( s->crashReporterEnabled() );
     m_advancedWidgetUi->checkBoxHttp->setChecked( s->httpEnabled() );
     m_advancedWidgetUi->checkBoxSongChangeNotifications->setChecked( s->songChangeNotificationEnabled() );
+    #ifndef Q_OS_LINUX // no backends on OSX or Win so far
+        m_advancedWidgetUi->checkBoxSongChangeNotifications->setVisible( false );
+    #endif
 
     //Network settings
     TomahawkSettings::ExternalAddressMode mode = TomahawkSettings::instance()->externalAddressMode();
