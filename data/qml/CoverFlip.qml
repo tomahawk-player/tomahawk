@@ -27,6 +27,7 @@ PathView {
     //highlightMoveDuration: 500
 
     delegate: CoverImage {
+        id: coverDelegate
         height: root.coverSize
         width: root.coverSize
         backgroundColor: coverView.backgroundColor
@@ -44,6 +45,10 @@ PathView {
         opacity: PathView.itemOpacity
         z: coverView.width - x
 
+        property int _origX
+        property int _origY
+        property int _origZ
+
         onPlayClicked: {
             console.log("***************")
             coverView.itemPlayPauseClicked(index)
@@ -52,6 +57,40 @@ PathView {
         onClicked: {
             coverView.itemClicked(index)
         }
+
+        function newZ() {
+            return z;
+        }
+
+        onContainsMouseChanged: {
+            if (containsMouse) {
+                _origX = x;
+                _origY = y;
+                _origZ = z;
+            }
+        }
+
+        states: [
+            State {
+                name: "hovered"; when: coverDelegate.containsMouse && index !== currentIndex
+                PropertyChanges {
+                    target: coverDelegate
+                    x: _origX + coverDelegate.width * coverDelegate.scale / 2
+                    z: _origZ
+                }
+            }
+        ]
+        transitions: [
+            Transition {
+                NumberAnimation {
+                    properties: "x"
+                    duration: 300
+                    easing.type: Easing.InOutSine
+                }
+
+            }
+        ]
+
     }
 
     path: Path {

@@ -36,6 +36,8 @@ Item {
     signal playClicked()
     // will be emitted when the cover is clicked
     signal clicked()
+    // will be emitted when the cover is hovered by the mouse
+    property alias containsMouse: mouseArea.containsMouse
 
     MouseArea {
         id: mouseArea
@@ -46,7 +48,6 @@ Item {
             print("Cover clicked");
             root.clicked();
         }
-
     }
 
     Component {
