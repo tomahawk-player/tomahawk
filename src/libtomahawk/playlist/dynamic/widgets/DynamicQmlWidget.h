@@ -61,6 +61,7 @@ public slots:
     void playItem(int index);
     void pause();
     void startStationFromArtist(const QString &artist);
+    void startStationFromGenre(const QString &genre);
 
 private slots:
     void currentIndexChanged( const QPersistentModelIndex &currentIndex );

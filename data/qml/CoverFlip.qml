@@ -34,64 +34,64 @@ PathView {
         width: root.coverSize
 
         scale: PathView.itemScale
-//        itemBrightness: PathView.itemBrightness - ((coverView.itemHovered && !coverDelegate.containsMouse) ? .4 : 0)
+        //        itemBrightness: PathView.itemBrightness - ((coverView.itemHovered && !coverDelegate.containsMouse) ? .4 : 0)
         property double itemBrightness: PathView.itemBrightness
         property double itemOpacity: PathView.itemOpacity
+        property int _origZ
+
         z: coverView.width - x
 
         CoverImage {
-        id: coverDelegate
-        height: root.coverSize
-        width: root.coverSize
-        anchors {
-            top: parent.top
-            right: parent.right
-        }
-
-        backgroundColor: coverView.backgroundColor
-
-        showLabels: true
-        showMirror: true
-        artistName: model.artistName
-        trackName: model.trackName
-        artworkId: model.coverID
-        showPlayButton: true
-        currentlyPlaying: isPlaying
-
-//        itemBrightness: PathView.itemBrightness - ((coverView.itemHovered && !coverDelegate.containsMouse) ? .4 : 0)
-        itemBrightness: coverDelegate.containsMouse ? 1 : parent.itemBrightness * (coverView.itemHovered ? .5 : 1)
-        opacity: parent.itemOpacity
-        z: coverView.width - x
-
-        property int _origZ
-
-        onPlayClicked: {
-            console.log("***************")
-            coverView.itemPlayPauseClicked(index)
-        }
-
-        onClicked: {
-            coverView.itemClicked(index)
-        }
-
-        onContainsMouseChanged: {
-            if (containsMouse) {
-                _origZ = z;
-                coverView.itemHovered = true
-            } else {
-                coverView.itemHovered = false
+            id: coverDelegate
+            height: root.coverSize
+            width: root.coverSize
+            anchors {
+                top: parent.top
+                right: parent.right
             }
+
+            backgroundColor: coverView.backgroundColor
+
+            showLabels: true
+            showMirror: true
+            artistName: model.artistName
+            trackName: model.trackName
+            artworkId: model.coverID
+            showPlayButton: true
+            currentlyPlaying: isPlaying
+
+            //        itemBrightness: PathView.itemBrightness - ((coverView.itemHovered && !coverDelegate.containsMouse) ? .4 : 0)
+            itemBrightness: coverDelegate.containsMouse ? 1 : parent.itemBrightness * (coverView.itemHovered ? .5 : 1)
+            opacity: parent.itemOpacity
+            z: coverView.width - x
+
+            onPlayClicked: {
+                console.log("***************")
+                coverView.itemPlayPauseClicked(index)
+            }
+
+            onClicked: {
+                coverView.itemClicked(index)
+            }
+
+            onContainsMouseChanged: {
+                if (containsMouse) {
+                    delegateItem._origZ = delegateItem.z;
+                    coverView.itemHovered = true
+                } else {
+                    coverView.itemHovered = false
+                }
+            }
+
+
         }
-
-
-    }
         states: [
             State {
                 name: "hovered"; when: coverDelegate.containsMouse && !coverView.moving && index !== currentIndex
                 PropertyChanges {
                     target: delegateItem
                     width: root.coverSize * 2
-                    z: _origZ
+                    z: coverDelegate._origZ
                 }
             }
         ]

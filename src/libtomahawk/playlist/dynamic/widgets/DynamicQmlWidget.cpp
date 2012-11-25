@@ -128,9 +128,13 @@ void DynamicQmlWidget::pause()
 
 void DynamicQmlWidget::startStationFromArtist(const QString &artist)
 {
-    tDebug() << "should start startion from artist" << artist;
- //   m_playlist->generator()->startFromArtist(Artist::get(artist));
-    m_playlist->generator()->startFromGenre( "rock" );
+    m_playlist->generator()->startFromArtist(Artist::get(artist));
+}
+
+void DynamicQmlWidget::startStationFromGenre(const QString &genre)
+{
+    tDebug() << "should start startion from genre" << genre;
+    m_playlist->generator()->startFromGenre( genre );
 }
 
 void DynamicQmlWidget::currentIndexChanged( const QPersistentModelIndex &currentIndex )

@@ -103,6 +103,10 @@ Rectangle {
                     InputField {
                         anchors.centerIn: parent
                         width: parent.width
+                        onAccepted: {
+                            rootView.startStationFromArtist(text)
+                            stationListView.incrementCurrentIndex();
+                        }
                     }
                 }
 
@@ -116,7 +120,7 @@ Rectangle {
                         opacity: echonestStation.configured ? 0 : 1
 
                         onTagClicked: {
-                            echonestStation.setMainControl( EchonestStation.StationTypeStyle, item );
+                            rootView.startStationFromGenre(item)
                             stationListView.incrementCurrentIndex();
                         }
 
@@ -140,6 +144,10 @@ Rectangle {
                     InputField {
                         anchors.centerIn: parent
                         width: parent.width
+                        onAccepted: {
+                            rootView.startStationFromGenre(text)
+                            stationListView.incrementCurrentIndex();
+                        }
                     }
                 }
             }
