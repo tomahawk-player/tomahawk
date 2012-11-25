@@ -78,6 +78,7 @@ public:
     virtual QWidget* steeringWidget() { return 0; }
     virtual bool startFromTrack( const Tomahawk::query_ptr& query );
     virtual bool startFromArtist( const Tomahawk::artist_ptr& artist );
+    virtual bool startFromGenre( const QString& genre );
 
     Q_INVOKABLE static QStringList styles();
     static QStringList moods();

@@ -191,6 +191,7 @@ EchonestGenerator::startOnDemand()
         connect( deleteReply, SIGNAL( finished() ), deleteReply, SLOT( deleteLater() ) );
     }
 
+    tDebug() << Q_FUNC_INFO;
     connect( this, SIGNAL( paramsGenerated( Echonest::DynamicPlaylist::PlaylistParams ) ), this, SLOT( doStartOnDemand( Echonest::DynamicPlaylist::PlaylistParams ) ) );
     try {
         getParams();
@@ -236,6 +237,32 @@ EchonestGenerator::startFromArtist( const Tomahawk::artist_ptr& artist )
     Echonest::DynamicPlaylist::PlaylistParamData data;
     data.first = Echonest::DynamicPlaylist::Artist;
     data.second = artist->name();
+
+    Echonest::DynamicPlaylist::PlaylistParams params;
+    params << data;
+    emit paramsGenerated( params );
+
+    return true;
+}
+
+
+bool
+EchonestGenerator::startFromGenre( const QString& genre )
+{
+    tDebug() << "Generating station content by genre:" << genre;
+
+    if ( !m_dynPlaylist->sessionId().isNull() )
+    {
+        // Running session, delete it
+        QNetworkReply* deleteReply = m_dynPlaylist->deleteSession();
+        connect( deleteReply, SIGNAL( finished() ), deleteReply, SLOT( deleteLater() ) );
+    }
+
+    connect( this, SIGNAL( paramsGenerated( Echonest::DynamicPlaylist::PlaylistParams ) ), this, SLOT( doStartOnDemand( Echonest::DynamicPlaylist::PlaylistParams ) ) );
+
+    Echonest::DynamicPlaylist::PlaylistParamData data;
+    data.first = Echonest::DynamicPlaylist::Description;
+    data.second = genre;
 
     Echonest::DynamicPlaylist::PlaylistParams params;
     params << data;
@@ -364,7 +391,7 @@ EchonestGenerator::getParams() throw( std::runtime_error )
 //        emit paramsGenerated( params );
 //    }
 
-    qDebug() << "ParamsGenerated" << params;
+    tDebug() << "ParamsGenerated" << params;
 }
 
 

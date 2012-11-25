@@ -281,6 +281,7 @@ PlayableProxyModelPlaylistInterface::queryAt( qint64 index ) const
     if ( m_proxyModel.isNull() )
         return query_ptr();
 
+    tDebug() << Q_FUNC_INFO << "item on index:" << index;
     PlayableItem* item = static_cast<PlayableItem*>( (void*)index );
     if ( item && item->query() )
         return item->query();
