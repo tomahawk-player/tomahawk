@@ -91,7 +91,7 @@ PathView {
                 PropertyChanges {
                     target: delegateItem
                     width: root.coverSize * 2
-                    z: coverDelegate._origZ
+                    z: delegateItem._origZ
                 }
             }
         ]

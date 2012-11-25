@@ -47,6 +47,7 @@ class DLLEXPORT GeneratorInterface : public QObject
 {
     Q_OBJECT
     Q_PROPERTY( QString type READ type )
+    Q_PROPERTY( QString summary READ sentenceSummary)
     /// oh qjson.
     Q_PROPERTY( int mode READ mode WRITE setMode )
 

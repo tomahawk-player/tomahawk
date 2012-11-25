@@ -6,67 +6,7 @@ Item {
     id: root
     property int coverSize
 
-    Item {
-        anchors { top: parent.top; left: parent.left; bottom: parent.bottom }
-        anchors.margins: 50
-        width: scene.width / 2
-
-        Column {
-            anchors { left: parent.left; top: parent.top; right: parent.right }
-            Text {
-                color: "white"
-                font.pointSize: 12
-                width: parent.width
-                elide: Text.ElideRight
-                text: "Station:"
-            }
-            Text {
-                color: "white"
-                font.pointSize: 14
-                font.bold: true
-                width: parent.width
-                elide: Text.ElideRight
-                text: rootView.title
-            }
-        }
-        Column {
-            anchors.right: parent.right
-            anchors.left: parent.left
-            anchors.verticalCenter: parent.verticalCenter
-            width: scene.width / 3
-
-
-            Text {
-                color: "white"
-                font.pointSize: 12
-                width: parent.width
-                elide: Text.ElideRight
-                text: "Now Playing:"
-                visible: currentlyPlayedIndex !== -1
-            }
-            Text {
-                color: "white"
-                font.pointSize: 16
-                width: parent.width
-                elide: Text.ElideRight
-                text: currentlyPlayedIndex > -1 ? coverView.model.itemFromIndex( currentlyPlayedIndex ).name : ""
-            }
-            Text {
-                color: "white"
-                font.pointSize: 14
-                width: parent.width
-                elide: Text.ElideRight
-                text: currentlyPlayedIndex > -1 ? coverView.model.itemFromIndex( currentlyPlayedIndex ).artistName : ""
-            }
-            Text {
-                color: "white"
-                font.pointSize: 14
-                width: parent.width
-                elide: Text.ElideRight
-                text: currentlyPlayedIndex > -1 ? coverView.model.itemFromIndex( currentlyPlayedIndex ).albumName : ""
-            }
-        }
-    }
+    signal backClicked()
 
     CoverFlip {
         id: coverView
@@ -86,5 +26,91 @@ Item {
         }
 
     }
+
+    Item {
+        anchors { top: parent.top; left: parent.left; bottom: parent.bottom }
+        anchors.margins: titleText.height * 3
+        width: scene.width / 2
+
+        Column {
+            anchors { left: parent.left; top: parent.top; right: parent.right }
+            Text {
+                id: titleText
+                color: "white"
+                font.pointSize: 18
+                width: parent.width
+                elide: Text.ElideRight
+                text: rootView.title
+            }
+            Text {
+                color: "white"
+                font.pointSize: 14
+                font.bold: true
+                width: parent.width
+                elide: Text.ElideRight
+                opacity: .8
+                text: generator.summary
+            }
+        }
+        Column {
+            anchors.right: parent.right
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+            width: scene.width / 3
+            spacing: titleText.height * 2
+
+
+            Rectangle {
+                border.width: 4
+                border.color: "white"
+                height: titleText.height * 3
+                width: height
+                radius: height / 2
+                color: backbuttonMouseArea.containsMouse ? "#22ffffff" : "black"
+                Behavior on color {
+                    ColorAnimation { duration: 200 }
+                }
+
+                Text {
+                    anchors.centerIn: parent
+                    text: "<"
+                    color: "white"
+                    font.pixelSize: parent.height * .75
+                    font.bold: true
+                }
+                MouseArea {
+                    id: backbuttonMouseArea
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    onClicked: root.backClicked()
+                }
+            }
+            Rectangle {
+                border.width: 4
+                border.color: "white"
+                height: titleText.height * 3
+                width: height
+                radius: height / 2
+                color: addbuttonMouseArea.containsMouse ? "#22ffffff" : "black"
+                Behavior on color {
+                    ColorAnimation { duration: 200 }
+                }
+                Text {
+                    anchors.centerIn: parent
+                    text: "+"
+                    color: "white"
+                    font.pixelSize: parent.height * .75
+                    font.bold: true
+                }
+                MouseArea {
+                    id: addbuttonMouseArea
+                    hoverEnabled: true
+                    anchors.fill: parent
+                    onClicked: root.backClicked()
+                }
+            }
+        }
+    }
+
 }
 

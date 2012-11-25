@@ -158,6 +158,8 @@ Rectangle {
             height: scene.height
             width: scene.width
             visible: stationListView.currentIndex == 1
+
+            onBackClicked: stationListView.decrementCurrentIndex()
         }
 
     }
