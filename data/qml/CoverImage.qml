@@ -65,16 +65,27 @@ Item {
             }
 
             Rectangle {
+                id: itemGlow
+                color: "white"
+                anchors.fill: parent
+
+                opacity: mouseArea.containsMouse ? .2 : 0
+
+                Behavior on opacity {
+                    NumberAnimation { easing.type: Easing.Linear; duration: 300 }
+                }
+            }
+
+            Rectangle {
                 id: textBackground
                 anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
                 anchors.margins: -1
-                height: (artistText.height + trackText.height) * 2
-                opacity: 1// showLabels ? 1 : 0
-                radius: 3
+                height: (artistText.height + trackText.height) * 3
+                opacity: showLabels ? 1 : 0
                 gradient: Gradient {
                     GradientStop { position: 0.0; color: "#00000000" }
-                    GradientStop { position: 0.75; color: "black" }
-                    GradientStop { position: 1.0; color: "black" }
+                    GradientStop { position: 0.6; color: "#E1000000" }
+                    GradientStop { position: 1.0; color: "#E1000000" }
                 }
             }
 
@@ -93,13 +104,14 @@ Item {
             Text {
                 id: artistText
                 color: "white"
+                font.bold: trackText.text.length == 0
                 text: artistName
                 anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
                 anchors.margins: root.height / 20
                 horizontalAlignment: Text.AlignHCenter
                 elide: Text.ElideRight
                 opacity: showLabels ? 1 : 0
-                font.pixelSize: root.height / 15
+                font.pixelSize: trackText.text.length == 0 ? root.height / 10 : root.height / 15
             }
         }
 
@@ -133,24 +145,6 @@ Item {
         anchors.topMargin: -2
 
         opacity: 1 - itemBrightness
-
-        Behavior on opacity {
-            NumberAnimation { easing.type: Easing.Linear; duration: 300 }
-        }
-    }
-
-    Rectangle {
-        id: itemGlow
-        color: "white"
-        anchors.fill: parent
-        anchors.bottomMargin: - parent.height
-
-        // scaling might be off a pixel... make sure that the shadow is at least as large as the image
-        anchors.leftMargin: -2
-        anchors.rightMargin: -2
-        anchors.topMargin: -2
-
-        opacity: mouseArea.containsMouse ? .2 : 0
 
         Behavior on opacity {
             NumberAnimation { easing.type: Easing.Linear; duration: 300 }

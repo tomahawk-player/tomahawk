@@ -71,12 +71,13 @@ Rectangle {
                         cellHeight: cellWidth
 
                         delegate: Item {
-                            height: gridView.cellHeight * .9
+                            height: gridView.cellHeight// * .9
                             width: height
 
                             CoverImage {
                                 artistName: modelData
                                 anchors.fill: parent
+                                showPlayButton: true
 
                                 onClicked: {
                                     rootView.startStationFromArtist(modelData);
