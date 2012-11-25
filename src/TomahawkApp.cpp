@@ -132,6 +132,12 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     , m_headless( false )
     , m_loaded( false )
 {
+    if ( arguments().contains( "--help" ) || arguments().contains( "-h" ) )
+    {
+        printHelp();
+        ::exit( 0 );
+    }
+
     setOrganizationName( QLatin1String( TOMAHAWK_ORGANIZATION_NAME ) );
     setOrganizationDomain( QLatin1String( TOMAHAWK_ORGANIZATION_DOMAIN ) );
     setApplicationName( QLatin1String( TOMAHAWK_APPLICATION_NAME ) );
@@ -181,12 +187,6 @@ TomahawkApp::installTranslator()
 void
 TomahawkApp::init()
 {
-    if ( arguments().contains( "--help" ) || arguments().contains( "-h" ) )
-    {
-        printHelp();
-        ::exit( 0 );
-    }
-
     qDebug() << "TomahawkApp thread:" << thread();
     Logger::setupLogfile();
     qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
