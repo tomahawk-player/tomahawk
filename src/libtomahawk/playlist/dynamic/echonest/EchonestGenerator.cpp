@@ -212,6 +212,7 @@ EchonestGenerator::startFromTrack( const Tomahawk::query_ptr& query )
     data.second = query->artist() + " " + query->track();
 
     Echonest::DynamicPlaylist::PlaylistParams params;
+    params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::SongRadioType ) );
     params << data;
 
     // FIXME!
@@ -240,6 +241,7 @@ EchonestGenerator::startFromArtist( const Tomahawk::artist_ptr& artist )
 
     Echonest::DynamicPlaylist::PlaylistParams params;
     params << data;
+    params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::SongRadioType ) );
     emit paramsGenerated( params );
 
     return true;
@@ -258,7 +260,9 @@ EchonestGenerator::startFromGenre( const QString& genre )
         connect( deleteReply, SIGNAL( finished() ), deleteReply, SLOT( deleteLater() ) );
     }
 
-    connect( this, SIGNAL( paramsGenerated( Echonest::DynamicPlaylist::PlaylistParams ) ), this, SLOT( doStartOnDemand( Echonest::DynamicPlaylist::PlaylistParams ) ) );
+    connect( this, SIGNAL( paramsGenerated( Echonest::DynamicPlaylist::PlaylistParams ) ), this, SLOT( doGenerate( Echonest::DynamicPlaylist::PlaylistParams ) ) );
+
+    setProperty( "number", 20 );
 
     Echonest::DynamicPlaylist::PlaylistParamData data;
     data.first = Echonest::DynamicPlaylist::Description;
@@ -266,6 +270,7 @@ EchonestGenerator::startFromGenre( const QString& genre )
 
     Echonest::DynamicPlaylist::PlaylistParams params;
     params << data;
+    params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::ArtistDescriptionType ) );
     emit paramsGenerated( params );
 
     return true;
@@ -283,7 +288,7 @@ EchonestGenerator::doGenerate( const Echonest::DynamicPlaylist::PlaylistParams& 
     Echonest::DynamicPlaylist::PlaylistParams params = paramsIn;
     params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Results, number ) );
     QNetworkReply* reply = Echonest::DynamicPlaylist::staticPlaylist( params );
-    qDebug() << "Generating a static playlist from echonest!" << reply->url().toString();
+    tDebug() << "Generating a static playlist from echonest!" << reply->url().toString() << params;
     connect( reply, SIGNAL( finished() ), this, SLOT( staticFinished() ) );
 }
 
@@ -518,7 +523,7 @@ EchonestGenerator::appendRadioType( Echonest::DynamicPlaylist::PlaylistParams& p
 //    else if( onlyThisArtistType( Echonest::DynamicPlaylist::ArtistRadioType ) )
 //        params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::ArtistRadioType ) );
 //    else if( onlyThisArtistType( Echonest::DynamicPlaylist::SongRadioType ) )
-        params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::SongRadioType ) );
+//        params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::SongRadioType ) );
 //    else // no artist or song or description types. default to artist-description
 //        params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::ArtistDescriptionType ) );
 
