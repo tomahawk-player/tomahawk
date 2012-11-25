@@ -6,9 +6,6 @@ Item {
     id: root
     property int coverSize
 
-    signal configure()
-
-
     Item {
         anchors { top: parent.top; left: parent.left; bottom: parent.bottom }
         anchors.margins: 50
@@ -89,15 +86,5 @@ Item {
         }
 
     }
-
-    Button {
-        id: configureButton
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 20
-        anchors.horizontalCenter: parent.horizontalCenter
-        text: "configure"
-        onClicked: root.configure();
-    }
-
 }
 

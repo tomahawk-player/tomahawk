@@ -63,8 +63,6 @@ PathView {
         opacity: parent.itemOpacity
         z: coverView.width - x
 
-        property int _origX
-        property int _origY
         property int _origZ
 
         onPlayClicked: {
@@ -78,8 +76,6 @@ PathView {
 
         onContainsMouseChanged: {
             if (containsMouse) {
-                _origX = x;
-                _origY = y;
                 _origZ = z;
                 coverView.itemHovered = true
             } else {

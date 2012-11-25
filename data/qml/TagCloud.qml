@@ -30,18 +30,45 @@ Item {
                 scale: itemScale
                 Text {
                     id: delegateText
-                    color: "white"
+                    color: "gray"
                     //text: controlModel.controlAt( index ).summary
                     text: modelData
                     font.pointSize: 16
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.verticalCenterOffset: tagCloud.randomNumber(0, 15)
+
+                    states: [
+                        State {
+                            name: "hovered"; when: cloudItemMouseArea.containsMouse
+                            PropertyChanges {
+                                target: delegateText
+                                color: "white"
+                            }
+                        }
+                    ]
+                    transitions: [
+                        Transition {
+                            from: "*"
+                            to: "hovered"
+                            ColorAnimation {
+                                duration: 200
+                            }
+                        },
+                        Transition {
+                            from: "hovered"
+                            to: "*"
+                            ColorAnimation {
+                                duration: 1000
+                            }
+                        }
+                    ]
+
                 }
                 MouseArea {
+                    id: cloudItemMouseArea
                     hoverEnabled: true
                     anchors.fill: parent
                     onClicked: tagCloud.tagClicked( modelData )
-
                 }
 
                 Behavior on scale {

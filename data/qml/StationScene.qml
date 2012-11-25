@@ -48,18 +48,20 @@ Rectangle {
         id: stationVisualModel
 
 
-        Column {
+        Item {
             height: scene.height
             width: scene.width
-
-            Row {
-                height: scene.height / 2
-                width: scene.width
+            Grid {
+                anchors.fill: parent
+                anchors.margins: spacing
                 spacing: width * .1
+                columns: 3
+
+                property int rowHeight: height / 2
 
                 Item {
-                    height: parent.height
-                    width: (parent.width - orText.width - parent.spacing * 2 ) * 2 / 3
+                    height: parent.rowHeight
+                    width: parent.width / 2
                     GridView {
                         id: gridView
                         anchors.fill: parent
@@ -85,39 +87,60 @@ Rectangle {
                         }
                     }
                 }
-
-            }
-
-            Row {
-                height: scene.height / 2
-                width: scene.width * .9
-                anchors.horizontalCenter: parent.horizontalCenter
-                spacing: width * .1
-
-                TagCloud {
-                    height: parent.height
-                    width: (parent.width - orText.width - parent.spacing * 2 ) * 2 / 3
-                    model: styleModel//generator.styles()
-                    opacity: echonestStation.configured ? 0 : 1
-
-                    onTagClicked: {
-                        echonestStation.setMainControl( EchonestStation.StationTypeStyle, item );
-                        stationListView.incrementCurrentIndex();
-                    }
-
-                    Behavior on opacity {
-                        NumberAnimation { duration: 300 }
+                Item {
+                    height: parent.rowHeight
+                    width: orText.width
+                    Text {
+                        id: orText
+                        anchors.centerIn: parent
+                        text: "or"
+                        color: "white"
                     }
                 }
-                Text {
-                    id: orText
-                    text: "or"
-                    color: "white"
-                    anchors.verticalCenter: parent.verticalCenter
+                Item {
+                    height: parent.rowHeight
+                    width: parent.width / 4
+                    InputField {
+                        anchors.centerIn: parent
+                        width: parent.width
+                    }
                 }
-                InputField {
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: (parent.width - orText.width - parent.spacing * 2 ) * 1 / 3
+
+                Item {
+                    height: parent.rowHeight
+                    width: parent.width / 2
+
+                    TagCloud {
+                        anchors.fill: parent
+                        model: styleModel//generator.styles()
+                        opacity: echonestStation.configured ? 0 : 1
+
+                        onTagClicked: {
+                            echonestStation.setMainControl( EchonestStation.StationTypeStyle, item );
+                            stationListView.incrementCurrentIndex();
+                        }
+
+                        Behavior on opacity {
+                            NumberAnimation { duration: 300 }
+                        }
+                    }
+                }
+                Item {
+                    height: parent.rowHeight
+                    width: orText.width
+                    Text {
+                        text: "or"
+                        color: "white"
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                }
+                Item {
+                    height: parent.rowHeight
+                    width: parent.width / 4
+                    InputField {
+                        anchors.centerIn: parent
+                        width: parent.width
+                    }
                 }
             }
         }
@@ -126,17 +149,8 @@ Rectangle {
             coverSize: Math.min(scene.height, scene.width) / 2
             height: scene.height
             width: scene.width
-
-            onConfigure: stationListView.incrementCurrentIndex();
         }
 
-
-        StationConfig {
-            height: scene.height
-            width: scene.width
-
-            onDone: stationListView.decrementCurrentIndex();
-        }
     }
 
     ListView {
