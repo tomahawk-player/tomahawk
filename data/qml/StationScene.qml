@@ -65,7 +65,6 @@ Rectangle {
                     GridView {
                         id: gridView
                         anchors.fill: parent
-                        anchors.margins: cellWidth / 2
                         model: dummyArtistModel
 
                         cellWidth: gridView.width / 4 - 1 // -1 to make sure there is space for 4 items even with rounding error
@@ -157,6 +156,7 @@ Rectangle {
             coverSize: Math.min(scene.height, scene.width) / 2
             height: scene.height
             width: scene.width
+            visible: stationListView.currentIndex == 1
         }
 
     }
@@ -169,7 +169,13 @@ Rectangle {
         orientation: ListView.Horizontal
         model: stationVisualModel
         interactive: false
-        highlightMoveDuration: 200
+        highlightMoveDuration: 300
 
+        onHeightChanged: {
+            contentHeight = scene.height
+        }
+        onWidthChanged: {
+            contentWidth = scene.width
+        }
     }
 }
