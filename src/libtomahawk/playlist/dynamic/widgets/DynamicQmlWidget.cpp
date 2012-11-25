@@ -57,7 +57,7 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
 
     setSource( QUrl( "qrc" RESPATH "qml/StationScene.qml" ) );
 
-    connect( m_model, SIGNAL( currentItemChanged( QPersistentModelIndex ) ), SLOT( currentItemChanged( QPersistentModelIndex ) ) );
+    connect( m_model, SIGNAL( currentItemChanged(QPersistentModelIndex)), SLOT( currentIndexChanged( QPersistentModelIndex ) ) );
     connect( m_playlist->generator().data(), SIGNAL( generated( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
     connect( m_playlist->generator().data(), SIGNAL( nextTrackGenerated( Tomahawk::query_ptr ) ), this, SLOT( nextTrackGenerated( Tomahawk::query_ptr ) ) );
     connect( m_playlist.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ), this, SLOT( onRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ) );
@@ -65,6 +65,8 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
 
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), this, SLOT( trackStarted() ) );
     connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::playlistinterface_ptr ) ), this, SLOT( playlistChanged( Tomahawk::playlistinterface_ptr ) ) );
+
+//    m_playlist->generator()->generate( 20 );
 
 }
 
@@ -130,8 +132,9 @@ void DynamicQmlWidget::startStationFromArtist(const QString &artist)
     m_playlist->generator()->startFromArtist(Artist::get(artist));
 }
 
-void DynamicQmlWidget::currentItemChanged( const QPersistentModelIndex &currentIndex )
+void DynamicQmlWidget::currentIndexChanged( const QPersistentModelIndex &currentIndex )
 {
+    tDebug() << "current index is" << currentIndex.row();
     rootContext()->setContextProperty( "currentlyPlayedIndex", m_proxyModel->mapFromSource( currentIndex ).row() );
 }
 

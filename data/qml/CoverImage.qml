@@ -71,7 +71,7 @@ Item {
                 radius: 3
                 gradient: Gradient {
                     GradientStop { position: 0.0; color: "#00000000" }
-                    GradientStop { position: 0.5; color: "black" }
+                    GradientStop { position: 0.75; color: "black" }
                     GradientStop { position: 1.0; color: "black" }
                 }
             }
@@ -86,16 +86,18 @@ Item {
                 horizontalAlignment: Text.AlignHCenter
                 elide: Text.ElideRight
                 opacity: showLabels ? 1 : 0
+                font.pixelSize: root.height / 15
             }
             Text {
                 id: artistText
                 color: "white"
                 text: artistName
                 anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
-                anchors.margins: 2
+                anchors.margins: root.height / 20
                 horizontalAlignment: Text.AlignHCenter
                 elide: Text.ElideRight
                 opacity: showLabels ? 1 : 0
+                font.pixelSize: root.height / 15
             }
         }
 
@@ -156,6 +158,8 @@ Item {
         visible: showPlayButton ? (mouseArea.containsMouse || currentlyPlaying) : false
         source: currentlyPlaying ? "../images/pause-rest.png" : "../images/play-rest.png"
         anchors.centerIn: parent
+        height: mirroredCover.height / 5
+        width: height
         MouseArea {
             anchors.fill: parent
             onClicked: {

@@ -63,7 +63,7 @@ public slots:
     void startStationFromArtist(const QString &artist);
 
 private slots:
-    void currentItemChanged( const QPersistentModelIndex &currentIndex );
+    void currentIndexChanged( const QPersistentModelIndex &currentIndex );
     void tracksGenerated( const QList< Tomahawk::query_ptr>& queries );
     void nextTrackGenerated( const Tomahawk::query_ptr& track );
     void error( const QString& title, const QString& body);

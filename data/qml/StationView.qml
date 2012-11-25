@@ -9,25 +9,6 @@ Item {
     signal configure()
 
 
-    CoverFlip {
-        id: coverView
-        anchors {
-            top: parent.top
-            right: parent.right
-            bottom:parent.bottom
-        }
-        width: parent.width / 2
-
-        backgroundColor: scene.color
-
-        model: dynamicModel
-
-        onItemPlayPauseClicked: {
-            rootView.playItem(index)
-        }
-
-    }
-
     Item {
         anchors { top: parent.top; left: parent.left; bottom: parent.bottom }
         anchors.margins: 50
@@ -51,7 +32,6 @@ Item {
                 text: rootView.title
             }
         }
-
         Column {
             anchors.right: parent.right
             anchors.left: parent.left
@@ -67,41 +47,6 @@ Item {
                 text: "Now Playing:"
                 visible: currentlyPlayedIndex !== -1
             }
-            Rectangle {
-                height: image.height + image.height / 5
-                width: image.width + startPlayingText.width * 1.2
-                radius: height / 2
-                border.width: 2
-                border.color: "white"
-                color: startPlayingMouseArea.containsMouse ? "blue" : "gray"
-                visible: currentlyPlayedIndex === -1
-                Image {
-                    id: image
-                    source: "../images/play-rest.png"
-                    anchors.left: parent.left
-                    anchors.margins: 10
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-
-                Text {
-                    id: startPlayingText
-                    color: "white"
-                    font.pointSize: 20
-                    anchors.left: image.right
-                    anchors.margins: height / 5
-                    anchors.verticalCenter: parent.verticalCenter
-                    //width: parent.width - 30 - image.width
-                    elide: Text.ElideRight
-                    text: "Start playing"
-                }
-                MouseArea {
-                    id: startPlayingMouseArea
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    onClicked: echonestStation.playItem( 0 );
-                }
-            }
-
             Text {
                 color: "white"
                 font.pointSize: 16
@@ -124,6 +69,25 @@ Item {
                 text: currentlyPlayedIndex > -1 ? coverView.model.itemFromIndex( currentlyPlayedIndex ).albumName : ""
             }
         }
+    }
+
+    CoverFlip {
+        id: coverView
+        anchors.fill: parent
+
+        backgroundColor: scene.color
+
+        model: dynamicModel
+        currentIndex: currentlyPlayedIndex
+
+        onItemPlayPauseClicked: {
+            rootView.playItem(index)
+        }
+
+        onItemClicked: {
+            rootView.playItem(index)
+        }
+
     }
 
     Button {
