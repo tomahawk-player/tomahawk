@@ -11,6 +11,7 @@ Item {
     CoverFlip {
         id: coverView
         anchors.fill: parent
+        interactive: false
 
         backgroundColor: scene.color
 
@@ -59,55 +60,21 @@ Item {
             width: scene.width / 3
             spacing: titleText.height * 2
 
-
-            Rectangle {
-                border.width: 4
-                border.color: "white"
+            RoundedButton {
+                text: "<"
                 height: titleText.height * 3
                 width: height
-                radius: height / 2
-                color: backbuttonMouseArea.containsMouse ? "#22ffffff" : "black"
-                Behavior on color {
-                    ColorAnimation { duration: 200 }
-                }
+                onClicked: root.backClicked()
 
-                Text {
-                    anchors.centerIn: parent
-                    text: "<"
-                    color: "white"
-                    font.pixelSize: parent.height * .75
-                    font.bold: true
-                }
-                MouseArea {
-                    id: backbuttonMouseArea
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    onClicked: root.backClicked()
-                }
             }
-            Rectangle {
-                border.width: 4
-                border.color: "white"
+
+            RoundedButton {
+                text: "+"
                 height: titleText.height * 3
                 width: height
-                radius: height / 2
-                color: addbuttonMouseArea.containsMouse ? "#22ffffff" : "black"
-                Behavior on color {
-                    ColorAnimation { duration: 200 }
-                }
-                Text {
-                    anchors.centerIn: parent
-                    text: "+"
-                    color: "white"
-                    font.pixelSize: parent.height * .75
-                    font.bold: true
-                }
-                MouseArea {
-                    id: addbuttonMouseArea
-                    hoverEnabled: true
-                    anchors.fill: parent
-                    onClicked: root.backClicked()
-                }
+
+                onClicked: print("TODO: save station")
+
             }
         }
     }

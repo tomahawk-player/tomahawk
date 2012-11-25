@@ -54,20 +54,28 @@ Rectangle {
             Grid {
                 anchors.fill: parent
                 anchors.margins: spacing
-                spacing: width * .1
-                columns: 3
+                spacing: width * .05
+                columns: 2
 
                 property int rowHeight: height / 2
 
                 Item {
                     height: parent.rowHeight
-                    width: parent.width / 2
+                    width: parent.width * 0.7
+                    Text {
+                        id: artistGridLabel
+                        text: "Select an artist..."
+                        anchors { left: parent.left; top: parent.top; right: parent.right }
+                        color: "white"
+                        font.bold: true
+                    }
+
                     GridView {
                         id: gridView
-                        anchors.fill: parent
+                        anchors { left: parent.left; top: artistGridLabel.bottom; topMargin: artistGridLabel.height; right: parent.right; bottom: parent.bottom }
                         model: dummyArtistModel
 
-                        cellWidth: gridView.width / 4 - 1 // -1 to make sure there is space for 4 items even with rounding error
+                        cellWidth: Math.min(gridView.width / 4 - 1, gridView.height / 2) // -1 to make sure there is space for 4 items even with rounding error
                         cellHeight: cellWidth
 
                         delegate: Item {
@@ -89,18 +97,18 @@ Rectangle {
                 }
                 Item {
                     height: parent.rowHeight
-                    width: orText.width
+                    width: parent.width * 0.25
                     Text {
                         id: orText
-                        anchors.centerIn: parent
-                        text: "or"
+                        anchors { left: parent.left; right: parent.right;
+                            bottom: artistInputField.top; bottomMargin: height }
+                        text: "...or enter a name:"
                         color: "white"
+                        font.bold: true
                     }
-                }
-                Item {
-                    height: parent.rowHeight
-                    width: parent.width / 4
+
                     InputField {
+                        id: artistInputField
                         anchors.centerIn: parent
                         width: parent.width
                         onAccepted: {
@@ -108,14 +116,32 @@ Rectangle {
                             stationListView.incrementCurrentIndex();
                         }
                     }
+
+                    RoundedButton {
+                        text: ">"
+                        height: orText.height * 3
+                        width: height
+                        anchors { horizontalCenter: artistInputField.horizontalCenter
+                            top: artistInputField.bottom; topMargin: orText.height }
+                        onClicked: artistInputField.accepted(artistInputField.text)
+                    }
+
                 }
 
                 Item {
                     height: parent.rowHeight
-                    width: parent.width / 2
+                    width: parent.width * 0.7
+                    Text {
+                        id: selectGenreText
+                        anchors { left: parent.left; right: parent.right; top: parent.top}
+                        text: "Select a genre..."
+                        color: "white"
+                        font.bold: true
+                    }
 
                     TagCloud {
                         anchors.fill: parent
+                        anchors.topMargin: selectGenreText.height * 2
                         model: styleModel//generator.styles()
                         opacity: echonestStation.configured ? 0 : 1
 
@@ -131,17 +157,16 @@ Rectangle {
                 }
                 Item {
                     height: parent.rowHeight
-                    width: orText.width
+                    width: parent.width * 0.25
                     Text {
-                        text: "or"
+                        text: "...or enter your style:"
                         color: "white"
-                        anchors.verticalCenter: parent.verticalCenter
+                        anchors { left: parent.left; right: parent.right;
+                            bottom: genreInputField.top; bottomMargin: height }
+                        font.bold: true
                     }
-                }
-                Item {
-                    height: parent.rowHeight
-                    width: parent.width / 4
                     InputField {
+                        id: genreInputField
                         anchors.centerIn: parent
                         width: parent.width
                         onAccepted: {
@@ -149,6 +174,16 @@ Rectangle {
                             stationListView.incrementCurrentIndex();
                         }
                     }
+
+                    RoundedButton {
+                        text: ">"
+                        height: orText.height * 3
+                        width: height
+                        anchors { horizontalCenter: genreInputField.horizontalCenter
+                            top: genreInputField.bottom; topMargin: orText.height }
+                        onClicked: genreInputField.accepted(genreInputField.text)
+                    }
+
                 }
             }
         }
