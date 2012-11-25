@@ -26,10 +26,28 @@ PathView {
     pathItemCount: 5
     //highlightMoveDuration: 500
 
-    delegate: CoverImage {
+    property bool itemHovered: false
+
+    delegate: Item {
+        id: delegateItem
+        height: root.coverSize
+        width: root.coverSize
+
+        scale: PathView.itemScale
+//        itemBrightness: PathView.itemBrightness - ((coverView.itemHovered && !coverDelegate.containsMouse) ? .4 : 0)
+        property double itemBrightness: PathView.itemBrightness
+        property double itemOpacity: PathView.itemOpacity
+        z: coverView.width - x
+
+        CoverImage {
         id: coverDelegate
         height: root.coverSize
         width: root.coverSize
+        anchors {
+            top: parent.top
+            right: parent.right
+        }
+
         backgroundColor: coverView.backgroundColor
 
         showLabels: true
@@ -40,9 +58,9 @@ PathView {
         showPlayButton: true
         currentlyPlaying: isPlaying
 
-        scale: PathView.itemScale
-        itemBrightness: PathView.itemBrightness
-        opacity: PathView.itemOpacity
+//        itemBrightness: PathView.itemBrightness - ((coverView.itemHovered && !coverDelegate.containsMouse) ? .4 : 0)
+        itemBrightness: coverDelegate.containsMouse ? 1 : parent.itemBrightness * (coverView.itemHovered ? .5 : 1)
+        opacity: parent.itemOpacity
         z: coverView.width - x
 
         property int _origX
@@ -58,24 +76,25 @@ PathView {
             coverView.itemClicked(index)
         }
 
-        function newZ() {
-            return z;
-        }
-
         onContainsMouseChanged: {
             if (containsMouse) {
                 _origX = x;
                 _origY = y;
                 _origZ = z;
+                coverView.itemHovered = true
+            } else {
+                coverView.itemHovered = false
             }
         }
 
+
+    }
         states: [
             State {
-                name: "hovered"; when: coverDelegate.containsMouse && index !== currentIndex
+                name: "hovered"; when: coverDelegate.containsMouse && !coverView.moving && index !== currentIndex
                 PropertyChanges {
-                    target: coverDelegate
-                    x: _origX + coverDelegate.width * coverDelegate.scale / 2
+                    target: delegateItem
+                    width: root.coverSize * 2
                     z: _origZ
                 }
             }
@@ -83,14 +102,13 @@ PathView {
         transitions: [
             Transition {
                 NumberAnimation {
-                    properties: "x"
+                    properties: "width"
                     duration: 300
                     easing.type: Easing.InOutSine
                 }
 
             }
         ]
-
     }
 
     path: Path {

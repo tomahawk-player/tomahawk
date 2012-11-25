@@ -67,6 +67,7 @@ Item {
             Rectangle {
                 id: textBackground
                 anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
+                anchors.margins: -1
                 height: (artistText.height + trackText.height) * 2
                 opacity: 1// showLabels ? 1 : 0
                 radius: 3
@@ -131,7 +132,25 @@ Item {
         anchors.rightMargin: -2
         anchors.topMargin: -2
 
-        opacity: 1 - itemBrightness + (mouseArea.containsMouse ? .2 : 0)
+        opacity: 1 - itemBrightness
+
+        Behavior on opacity {
+            NumberAnimation { easing.type: Easing.Linear; duration: 300 }
+        }
+    }
+
+    Rectangle {
+        id: itemGlow
+        color: "white"
+        anchors.fill: parent
+        anchors.bottomMargin: - parent.height
+
+        // scaling might be off a pixel... make sure that the shadow is at least as large as the image
+        anchors.leftMargin: -2
+        anchors.rightMargin: -2
+        anchors.topMargin: -2
+
+        opacity: mouseArea.containsMouse ? .2 : 0
 
         Behavior on opacity {
             NumberAnimation { easing.type: Easing.Linear; duration: 300 }
