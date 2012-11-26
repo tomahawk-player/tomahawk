@@ -39,7 +39,7 @@
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 
-#define CHART_URL "http://charts.stage.tomahawk-player.org/"
+#define CHART_URL "http://charts.tomahawk-player.org/"
 //#define CHART_URL "http://localhost:8080/"
 
 using namespace Tomahawk::InfoSystem;
@@ -89,7 +89,7 @@ NewReleasesPlugin::init()
          foreach ( const Tomahawk::InfoSystem::InfoStringHash &sourceHash, sourceList )
          {
              bool ok;
-             qlonglong maxAge = getMaxAge( QString(sourceHash[ "nr_expires" ]).toLongLong( &ok ) );
+             qlonglong maxAge = getMaxAge( QString( sourceHash[ "nr_expires" ] ).toLongLong( &ok ) );
              if ( !ok || maxAge <= 0 )
              {
                  // This source has expired.
@@ -327,13 +327,19 @@ NewReleasesPlugin::nrSourcesList()
                         m_nrSources.removeAt( i );
                     }
                 }
+                reply->setProperty( "only_source_list", false );
             }
 
             /**
              * @brief Expiration
              * Each item has an expiration, on next request for cache, it will be checked
              */
-            const QString headerExpiration = reply->rawHeader( QString( source + "Expires" ).toLocal8Bit() );
+
+            /// Twisted backend Uppers first header letter, and lowers the rest
+            QString tmpSource = source + "expires";
+            tmpSource[0] = tmpSource[0].toUpper();
+            const QString headerExpiration = reply->rawHeader( QString( tmpSource ).toLocal8Bit() );
+
             const qlonglong maxAge = getMaxAge( headerExpiration.toLocal8Bit() );
             const qlonglong expires = headerExpiration.toLongLong(&ok);
             Tomahawk::InfoSystem::InfoStringHash source_expire;
@@ -360,6 +366,7 @@ NewReleasesPlugin::nrSourcesList()
          */
         TomahawkUtils::Cache::instance()->putData( "NewReleasesPlugin", 172800000 /* 2 days */, "nr_sources", QVariant::fromValue< QList< Tomahawk::InfoSystem::InfoStringHash > > ( m_nrSources ) );
         m_nrFetchJobs--;
+
         if( !reply->property( "only_source_list" ).toBool() )
         {
             tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Fetching all sources!";
@@ -376,7 +383,7 @@ NewReleasesPlugin::fetchAllNRSources()
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "InfoNewRelease fetching source data";
         foreach ( const Tomahawk::InfoSystem::InfoStringHash source, m_nrSources )
         {
-            QUrl url = QUrl( QString ( CHART_URL "newreleases/%1" ).arg( source[ "nr_source" ] ) );
+            QUrl url = QUrl( QString( CHART_URL "newreleases/%1" ).arg( source[ "nr_source" ] ) );
             url.addQueryItem( "version", TomahawkUtils::appFriendlyVersion() );
 
             QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
@@ -427,7 +434,11 @@ NewReleasesPlugin::nrList()
 
         /// Got types, append!
         const QString source = reply->property( "nr_source" ).toString();
-        const qlonglong expires = QString( reply->rawHeader( QString( "Expires" ).toLocal8Bit() ) ).toLongLong( &ok );
+
+        /// Twisted backend Uppers first header letter, and lowers the rest
+        QString tmpSource = source + "expires";
+        tmpSource[0] = tmpSource[0].toUpper();
+        const qlonglong expires = QString( reply->rawHeader( QString( tmpSource ).toLocal8Bit() ) ).toLongLong( &ok );
 
         // We'll populate newreleases with the data from the server
         QVariantMap newreleases;
@@ -441,7 +452,7 @@ NewReleasesPlugin::nrList()
         {
             // Itunes has geographic-area based releases. So we build a breadcrumb of
             // iTunes - Country - Featured/Just Released/New Releases - Genre
-             foreach ( const QVariant &nrObj, res.values() )
+            foreach ( const QVariant &nrObj, res.values() )
             {
                 if ( !nrObj.toMap().isEmpty() )
                 {
@@ -450,13 +461,14 @@ NewReleasesPlugin::nrList()
                     const QString geo = nrMap.value( "geo" ).toString();
                     const QString name = nrMap.value( "genre" ).toString();
                     const QString type = QString( nrMap.value( "type" ).toString() + "s" );
+                    const QString nrExtraType = nrMap.value( "extra" ).toString();
                     const bool isDefault = ( nrMap.contains( "default" ) && nrMap[ "default" ].toInt() == 1 );
 
                     // We only have albums in newReleases
                     if ( type != "Albums" || name.isEmpty() )
                         continue;
 
-                    QString extra, nrExtraType;
+                    QString extra;
                     if ( !geo.isEmpty() )
                     {
                         if ( !m_cachedCountries.contains( geo ) )
@@ -480,13 +492,11 @@ NewReleasesPlugin::nrList()
                         {
                             extra = m_cachedCountries[ geo ];
                         }
-                        nrExtraType = nrMap.value( "extra" ).toString() + " " + type;
                     }
                     else
                     {
                         // No geo? Extra is the type, eg. Album
                         extra = type;
-                        nrExtraType = nrMap.value( "extra" ).toString();
                     }
 
                     InfoStringHash nr;
@@ -497,6 +507,7 @@ NewReleasesPlugin::nrList()
                      * If this item has expired, set it to 0.
                      */
                     nr[ "expires" ] = ( ok ? QString::number (expires ) : QString::number( 0 ) );
+
                     if ( isDefault )
                         nr[ "default" ] = "true";
 
@@ -546,7 +557,7 @@ NewReleasesPlugin::nrList()
                     {
                         nr[ "type" ] = "album";
 
-                        if( !extra.isEmpty() )
+                        if ( !extra.isEmpty() )
                         {
                             QList< Tomahawk::InfoSystem::InfoStringHash > extraTypeData = extraType[ extra ][ type ].value< QList< Tomahawk::InfoSystem::InfoStringHash > >();
                             extraTypeData.append( nr );
@@ -563,7 +574,7 @@ NewReleasesPlugin::nrList()
 
                 }
 
-                foreach( const QString& c, extraType.keys() )
+                foreach ( const QString& c, extraType.keys() )
                 {
                     newreleases[ c ] = extraType[ c ];
                 }
@@ -622,7 +633,7 @@ NewReleasesPlugin::getMaxAge( const QByteArray &rawHeader ) const
 qlonglong
 NewReleasesPlugin::getMaxAge( const qlonglong expires ) const
 {
-    qlonglong currentEpoch = QDateTime::currentMSecsSinceEpoch() / 1000;
+    qlonglong currentEpoch = QDateTime::currentMSecsSinceEpoch()/1000;
     qlonglong expiresInSeconds = expires-currentEpoch;
 
     if ( expiresInSeconds > 0 )
@@ -663,9 +674,9 @@ NewReleasesPlugin::nrReturned()
             QVariantMap albumMap = albumObj.toMap();
             if( !albumMap.isEmpty() )
             {
-                const QString album = albumMap.value("album").toString();
-                const QString artist = albumMap.value("artist").toString();
-                const QString date = albumMap.value("date").toString();
+                const QString album = albumMap.value( "album" ).toString();
+                const QString artist = albumMap.value( "artist" ).toString();
+                const QString date = albumMap.value( "date" ).toString();
 
                 Tomahawk::InfoSystem::InfoStringHash pair;
                 pair[ "artist" ] = artist;
