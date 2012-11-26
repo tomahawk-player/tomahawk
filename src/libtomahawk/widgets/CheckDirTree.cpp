@@ -90,6 +90,23 @@ void
 CheckDirModel::volumeShowFinished()
 {
     reset();
+
+#ifdef Q_OS_MAC
+    // Make sure /Volumes is there, if not wait and try again
+    const QModelIndex parent = index("/");
+    const int count = rowCount(parent);
+    bool found = false;
+    for ( int i = 0; i < count; i++ )
+    {
+        if ( data( index( i, 0, parent ) ).toString() == "Volumes" )
+        {
+            found = true;
+            break;
+        }
+    }
+    if ( !found )
+        QTimer::singleShot( 500, this, SLOT( volumeShowFinished() ) );
+#endif
 }
 
 
