@@ -4,12 +4,16 @@ import "tomahawkimports"
 
 Item {
     id: stationCreator
+
+    property int spacing: width  * .05
+
     Flickable {
         id: flickArea
+        width: parent.width - stationCreator.spacing
         anchors.fill: parent
-        contentHeight: mainGrid.height
+        anchors.margins: stationCreator.spacing
+        contentHeight: stationCreator.height
         contentWidth: width
-        anchors.margins: mainGrid.spacing
         clip: true
         interactive: false
 
@@ -28,7 +32,7 @@ Item {
         Grid {
             id: mainGrid
             width: parent.width
-            spacing: width * .05
+            spacing: stationCreator.spacing
             columns: 2
             height: rowHeight * 3 + spacing * 2
 
@@ -116,9 +120,8 @@ Item {
 
                 TagCloud {
                     anchors.fill: parent
-                    anchors.topMargin: selectGenreText.height * 2
+
                     model: styleModel//generator.styles()
-                    opacity: echonestStation.configured ? 0 : 1
 
                     onTagClicked: {
                         rootView.startStationFromGenre(item)
@@ -238,8 +241,7 @@ Item {
     RoundedButton {
         anchors {
             top: parent.top
-            right: parent.right
-            rightMargin: width / 3
+            horizontalCenter: parent.horizontalCenter
         }
         height: orText.height * 3
         width: height * 3
@@ -253,8 +255,7 @@ Item {
     RoundedButton {
         anchors {
             bottom: parent.bottom
-            right: parent.right
-            rightMargin: width / 3
+            horizontalCenter: parent.horizontalCenter
         }
         height: orText.height * 3
         width: height * 3
