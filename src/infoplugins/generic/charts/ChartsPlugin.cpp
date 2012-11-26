@@ -79,8 +79,7 @@ ChartsPlugin::init()
     }
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "total sources" << m_chartResources.size() << source_qvarlist.size();
-    if ( m_chartResources.size() == 0 )
-        fetchChartSourcesList( true );
+
 }
 
 
