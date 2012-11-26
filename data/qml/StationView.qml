@@ -8,6 +8,16 @@ Item {
 
     signal backClicked()
 
+    Image {
+        id: busyIndicator
+        source: "../images/loading-animation.gif"
+        anchors.centerIn: parent
+        height: backButton.height
+        width: height
+        visible: rootView.loading
+        RotationAnimation { target: busyIndicator; from: 360; to: 0; duration: 1500; running: visible; loops: Animation.Infinite }
+    }
+
     CoverFlip {
         id: coverView
         anchors.fill: parent
@@ -61,6 +71,7 @@ Item {
             spacing: titleText.height * 2
 
             RoundedButton {
+                id: backButton
                 text: "<"
                 height: titleText.height * 3
                 width: height

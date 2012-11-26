@@ -58,6 +58,8 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
     setSource( QUrl( "qrc" RESPATH "qml/StationScene.qml" ) );
 
     connect( m_model, SIGNAL( currentItemChanged(QPersistentModelIndex)), SLOT( currentIndexChanged( QPersistentModelIndex ) ) );
+    connect( m_model, SIGNAL( loadingStarted() ), SIGNAL(loadingChanged() ) );
+    connect( m_model, SIGNAL( loadingFinished() ), SIGNAL(loadingChanged() ) );
     connect( m_playlist->generator().data(), SIGNAL( generated( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
     connect( m_playlist->generator().data(), SIGNAL( nextTrackGenerated( Tomahawk::query_ptr ) ), this, SLOT( nextTrackGenerated( Tomahawk::query_ptr ) ) );
     connect( m_playlist.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ), this, SLOT( onRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ) );
@@ -115,6 +117,11 @@ playlist_ptr DynamicQmlWidget::playlist() const
     return m_model->playlist();
 }
 
+bool DynamicQmlWidget::loading()
+{
+    return m_model->isLoading();
+}
+
 void DynamicQmlWidget::playItem(int index)
 {
     tDebug() << "playItem called for cover" << index;
@@ -134,6 +141,7 @@ void DynamicQmlWidget::startStationFromArtist(const QString &artist)
 void DynamicQmlWidget::startStationFromGenre(const QString &genre)
 {
     tDebug() << "should start startion from genre" << genre;
+    m_model->clear();
     m_playlist->generator()->startFromGenre( genre );
 }
 
