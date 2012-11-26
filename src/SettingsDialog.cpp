@@ -278,6 +278,8 @@ SettingsDialog::saveSettings()
     if ( m_restartRequired )
         QMessageBox::information( 0, tr( "Information" ), tr( "Some changed settings will not take effect until Tomahawk is restarted" ) );
 
+    m_collectionWidgetUi->dirTree->cleanup();
+
     TomahawkUtils::NetworkProxyFactory* proxyFactory = TomahawkUtils::proxyFactory();
     if ( !m_advancedWidgetUi->enableProxyCheckBox->isChecked() )
     {

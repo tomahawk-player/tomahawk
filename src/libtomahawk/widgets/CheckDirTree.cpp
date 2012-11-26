@@ -45,6 +45,13 @@ CheckDirModel::CheckDirModel( QWidget* parent )
 
 CheckDirModel::~CheckDirModel()
 {
+    cleanup();
+}
+
+
+void
+CheckDirModel::cleanup()
+{
 #ifdef Q_OS_MAC
     // reset to previous state
     if ( m_shownVolumes )
@@ -187,6 +194,13 @@ CheckDirTree::CheckDirTree( QWidget* parent )
                      SLOT( onCollapse( QModelIndex ) ) );
     connect( this, SIGNAL( expanded( QModelIndex ) ),
                      SLOT( onExpand( QModelIndex ) ) );
+}
+
+
+void
+CheckDirTree::cleanup()
+{
+    m_dirModel.cleanup();
 }
 
 
