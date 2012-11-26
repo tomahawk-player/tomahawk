@@ -173,5 +173,6 @@
         <file>data/qml/tomahawkimports/DoubleSlider.qml</file>
         <file>data/qml/CoverFlip.qml</file>
         <file>data/qml/tomahawkimports/RoundedButton.qml</file>
+        <file>data/qml/StationCreator.qml</file>
     </qresource>
 </RCC>
