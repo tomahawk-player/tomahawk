@@ -40,6 +40,7 @@ public:
     void setCheck( const QModelIndex& index, const QVariant& value );
     Qt::CheckState getCheck( const QModelIndex& index );
 
+    void cleanup();
 signals:
     void dataChangedByUser( const QModelIndex & index );
 
@@ -69,6 +70,7 @@ public:
     QStringList getExclusions();
     QStringList getCheckedPaths();
 
+    void cleanup();
 signals:
     void changed();
 

@@ -247,14 +247,10 @@ SpotifyAccount::killExistingResolvers()
 bool
 SpotifyAccount::checkForResolver()
 {
-#if defined(Q_OS_MAC)
-    const QDir path = QCoreApplication::applicationDirPath();
-    QFile file( path.absoluteFilePath( "spotify_tomahawkresolver" ) );
-    return file.exists();
-#elif defined(Q_OS_WIN)
+#if defined(Q_OS_WIN)
     QDir appDataDir = TomahawkUtils::appDataDir();
     return appDataDir.exists( QString( "atticaresolvers/%1/spotify_tomahawkresolver.exe" ).arg( s_resolverId ) );
-#elif defined(Q_OS_LINUX)
+#elif defined(Q_OS_LINUX)  || defined(Q_OS_MAC)
     QDir appDataDir = TomahawkUtils::appDataDir();
     return appDataDir.exists( QString( "atticaresolvers/%1/spotify_tomahawkresolver" ).arg( s_resolverId ) );
 #endif

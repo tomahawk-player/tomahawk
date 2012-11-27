@@ -175,7 +175,7 @@ NewReleasesWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData request
             const QString type = returnedData["type"].toString();
             if( !returnedData.contains(type) )
                 break;
-            const QString side = requestData.customData["whatshot_side"].toString();
+
             const QString releaseId = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >().value( "nr_id" );
 
             m_queuedFetches.remove( releaseId );
@@ -241,6 +241,7 @@ NewReleasesWidget::leftCrumbIndexChanged( QModelIndex index )
 
 
     const QString nrId = item->data( Breadcrumb::ChartIdRole ).toString();
+    const qlonglong nrExpires = item->data( Breadcrumb::ChartExpireRole ).toLongLong();
 
     if ( m_albumModels.contains( nrId ) )
     {
@@ -255,6 +256,7 @@ NewReleasesWidget::leftCrumbIndexChanged( QModelIndex index )
 
     Tomahawk::InfoSystem::InfoStringHash criteria;
     criteria.insert( "nr_id", nrId );
+    criteria.insert( "nr_expires", QString::number(nrExpires) );
     /// Remember to lower the source!
     criteria.insert( "nr_source",  index.data().toString().toLower() );
 
@@ -307,6 +309,7 @@ NewReleasesWidget::parseNode( QStandardItem* parentItem, const QString &label, c
         {
             QStandardItem *childItem= new QStandardItem( chart[ "label" ] );
             childItem->setData( chart[ "id" ], Breadcrumb::ChartIdRole );
+            childItem->setData( chart[ "expires" ], Breadcrumb::ChartExpireRole );
             if ( chart.value( "default", "" ) == "true")
             {
                 childItem->setData( true, Breadcrumb::DefaultRole );
