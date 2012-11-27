@@ -30,6 +30,19 @@
     #include "TomahawkApp_Mac.h"
     #include </System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/AE.framework/Versions/A/Headers/AppleEvents.h>
     static pascal OSErr appleEventHandler( const AppleEvent*, AppleEvent*, long );
+
+    bool
+    detectGDB()
+    {
+        bool res = false;
+        FILE *fd = fopen( "/tmp", "r" );
+
+        if ( fileno( fd ) > 5 )
+            res = true;
+
+        fclose( fd );
+        return res;
+    }
 #endif
 
 #ifndef ENABLE_HEADLESS
@@ -148,9 +161,22 @@ main( int argc, char *argv[] )
     new TomahawkSettingsGui( &a );
 #endif
 
-#ifndef ENABLE_HEADLESSs
+#ifndef ENABLE_HEADLESS
 #ifdef WITH_BREAKPAD
-    new BreakPad( QDir::tempPath(), TomahawkSettings::instance()->crashReporterEnabled() && !TomahawkUtils::headless() );
+#ifdef Q_OS_MAC
+    const bool gdb = detectGDB();
+#else
+    const bool gdb = false;
+#endif
+    if ( gdb )
+    {
+        tDebug() << "Disabling BreakPad, gdb detected.";
+    }
+    else
+    {
+        tDebug() << "Enabling BreakPad, no gdb detected.";
+        new BreakPad( QDir::tempPath(), TomahawkSettings::instance()->crashReporterEnabled() && !TomahawkUtils::headless() );
+    }
 #endif
 #endif
 
