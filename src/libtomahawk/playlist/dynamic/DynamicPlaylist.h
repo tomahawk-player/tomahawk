@@ -49,10 +49,10 @@ class DatabaseCommand_LoadDynamicPlaylist;
 struct DynQueueItem : RevisionQueueItem
 {
     QString type;
-    QVariantMap controls;
+    QVariantList controls;
     int mode;
 
-    DynQueueItem( const QString& nRev, const QString& oRev, const QString& typ, const QVariantMap& ctrls,  int m, const QList< plentry_ptr >& e, bool latest ) :
+    DynQueueItem( const QString& nRev, const QString& oRev, const QString& typ, const QVariantList& ctrls, int m, const QList< plentry_ptr >& e, bool latest ) :
         RevisionQueueItem( nRev, oRev, e, latest ), type( typ ), controls( ctrls ), mode( m ) {}
 };
 
@@ -69,7 +69,7 @@ class DLLEXPORT DynamicPlaylist : public Tomahawk::Playlist
     friend class ::DatabaseCommand_CreateDynamicPlaylist;
     friend class Tomahawk::DatabaseCommand_LoadDynamicPlaylist;
     friend class ::DatabaseCommand_LoadAllSortedPlaylists;
-    friend class ::DatabaseCollection; /// :-(
+    friend class ::DatabaseCollection;
 
 public:
     virtual ~DynamicPlaylist();
@@ -125,9 +125,9 @@ public slots:
     // want to update the playlist from the model?
     // generate a newrev using uuid() and call this:
     // if this is a static playlist, pass it a new list of entries. implicitly sets mode to static
-    void createNewRevision( const QString& newrev, const QString& oldrev, const QString& type, const QVariantMap &controls, const QList< plentry_ptr >& entries );
+    void createNewRevision( const QString& newrev, const QString& oldrev, const QString& type, const QVariantList& controls, const QList< plentry_ptr >& entries );
     // if it is ondemand, no entries are needed implicitly sets mode to ondemand
-    void createNewRevision( const QString& newrev, const QString& oldrev, const QString& type, const QVariantMap& controls );
+    void createNewRevision( const QString& newrev, const QString& oldrev, const QString& type, const QVariantList& controls );
 
     void reportCreated( const Tomahawk::dynplaylist_ptr& self );
     void reportDeleted( const Tomahawk::dynplaylist_ptr& self );
@@ -140,7 +140,7 @@ public slots:
                       const QList<QString>& neworderedguids,
                       const QList<QString>& oldorderedguids,
                       const QString& type,
-                      const QVariantMap& controls,
+                      const QVariantList& controls,
                       bool is_newest_rev,
                       const QMap< QString, Tomahawk::plentry_ptr >& addedmap,
                       bool applied );
@@ -148,7 +148,7 @@ public slots:
     void setRevision( const QString& rev,
                       bool is_newest_rev,
                       const QString& type,
-                      const QVariantMap& controls,
+                      const QVariantList& controls,
                       bool applied );
 private:
     // called from loadAllPlaylists DB cmd via databasecollection (in GUI thread)

@@ -51,7 +51,7 @@ DatabaseCommand_LoadDynamicPlaylistEntries::exec( DatabaseImpl* dbi )
     QString type;
     GeneratorMode mode;
 
-    QVariantMap controls;
+    QVariantList controls;
     QString playlist_guid;
 
     if( controlsQuery.first() )
@@ -61,7 +61,6 @@ DatabaseCommand_LoadDynamicPlaylistEntries::exec( DatabaseImpl* dbi )
         bool ok;
         QVariant v = parser.parse( controlsQuery.value(1).toByteArray(), &ok );
         Q_ASSERT( ok && v.type() == QVariant::List ); //TODO
-
 
         type = controlsQuery.value( 3 ).toString();
         mode = static_cast<GeneratorMode>( controlsQuery.value( 2 ).toInt() );

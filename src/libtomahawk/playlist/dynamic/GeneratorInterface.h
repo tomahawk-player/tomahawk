@@ -97,12 +97,12 @@ public:
     /**
      * Returns the controls for this station.
      */
-    virtual QVariantMap controls() const;
+    virtual QVariantList controls() const;
 
     /**
      * Sets the controls (for example when loaded from database)
      */
-    virtual void setControls( const QVariantMap& controls );
+    virtual void setControls( const QVariantList& controls );
 
 
     /// The type of this generator
@@ -124,7 +124,7 @@ signals:
 protected:
     QString m_type;
     GeneratorMode m_mode;
-    QVariantMap m_controls;
+    QVariantList m_controls;
 };
 
 typedef QSharedPointer<GeneratorInterface> geninterface_ptr;

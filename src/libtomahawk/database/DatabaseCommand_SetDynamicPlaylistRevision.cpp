@@ -37,7 +37,7 @@ DatabaseCommand_SetDynamicPlaylistRevision::DatabaseCommand_SetDynamicPlaylistRe
                                                                                 const QList<plentry_ptr>& entries,
                                                                                 const QString& type,
                                                                                 GeneratorMode mode,
-                                                                                const QVariantMap &controls )
+                                                                                const QVariantList& controls )
     : DatabaseCommand_SetPlaylistRevision( s, playlistguid, newrev, oldrev, orderedguids, addedentries, entries )
     , m_type( type )
     , m_mode( mode )
@@ -54,7 +54,7 @@ DatabaseCommand_SetDynamicPlaylistRevision::DatabaseCommand_SetDynamicPlaylistRe
                                                                                 const QString& oldrev,
                                                                                 const QString& type,
                                                                                 GeneratorMode mode,
-                                                                                const QVariantMap &controls )
+                                                                                const QVariantList& controls )
     : DatabaseCommand_SetPlaylistRevision( s, playlistguid, newrev, oldrev, QStringList(), QList< plentry_ptr >(), QList< plentry_ptr >() )
     , m_type( type )
     , m_mode( mode )
@@ -68,7 +68,7 @@ DatabaseCommand_SetDynamicPlaylistRevision::DatabaseCommand_SetDynamicPlaylistRe
 QVariantList
 DatabaseCommand_SetDynamicPlaylistRevision::controlsV()
 {
-    return QList<QVariant>() << m_controls;
+    return m_controls;
 }
 
 

@@ -20,7 +20,6 @@
 #define DATABASECOMMAND_LOADDYNAMICPLAYLISTENTRIES_H
 
 #include <QObject>
-#include <QVariantMap>
 
 #include "Typedefs.h"
 #include "DatabaseCommand.h"
@@ -47,14 +46,14 @@ signals:
     void done( QString,
                      bool,
                      QString,
-                     QVariantMap,
+                     QVariantList,
                      bool );
     // used when loading a static playlist
     void done( QString,
                QList< QString >,
                QList< QString >,
                QString,
-               QVariantMap,
+               QVariantList,
                bool,
                QMap< QString, Tomahawk::plentry_ptr >,
                bool );
