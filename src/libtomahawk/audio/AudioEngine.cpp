@@ -141,7 +141,14 @@ AudioEngine::play()
         sendNowPlayingNotification( Tomahawk::InfoSystem::InfoNowResumed );
     }
     else
-        next();
+    {
+        if ( !m_currentTrack && m_playlist && m_playlist->nextResult() )
+        {
+            loadNextTrack();
+        }
+        else
+            next();
+    }
 }
 
 
@@ -520,7 +527,7 @@ AudioEngine::loadPreviousTrack()
     }
 
     Tomahawk::result_ptr result;
-    if ( m_playlist.data()->hasPreviousResult() )
+    if ( m_playlist.data()->previousResult() )
     {
         result = m_playlist.data()->previousResult();
         m_currentTrackPlaylist = m_playlist;
@@ -561,7 +568,7 @@ AudioEngine::loadNextTrack()
     {
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Loading playlist's next item" << m_playlist.data() << m_playlist->shuffled();
 
-        if ( m_playlist.data()->hasNextResult() )
+        if ( m_playlist.data()->nextResult() )
         {
             result = m_playlist.data()->nextResult();
             m_currentTrackPlaylist = m_playlist;
