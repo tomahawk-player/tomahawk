@@ -57,15 +57,17 @@ PlaylistInterface::nextResult() const
 Tomahawk::result_ptr
 PlaylistInterface::siblingResult( int itemsAway ) const
 {
-    int idx = siblingIndex( itemsAway );
+    qint64 idx = siblingIndex( itemsAway );
 
     while ( idx >= 0 )
     {
         Tomahawk::query_ptr query = queryAt( idx );
-//        Tomahawk::result_ptr result = resultAt( idx );
-        if ( query->numResults() )
+        if ( query )
         {
-            return query->results().first();
+            if ( query->numResults() )
+            {
+                return query->results().first();
+            }
         }
 
         if ( itemsAway < 0 )
