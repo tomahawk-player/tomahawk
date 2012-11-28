@@ -39,17 +39,17 @@ public:
     explicit TreeProxyModelPlaylistInterface( TreeProxyModel* proxyModel );
     virtual ~TreeProxyModelPlaylistInterface();
 
-    virtual QList< Tomahawk::query_ptr > tracks();
+    virtual QList< Tomahawk::query_ptr > tracks() const;
     virtual int trackCount() const;
 
     virtual Tomahawk::result_ptr resultAt( qint64 index ) const;
     virtual Tomahawk::query_ptr queryAt( qint64 index ) const;
     virtual qint64 indexOfResult( const Tomahawk::result_ptr& result ) const;
-    virtual qint64 indexOfQuery( const Tomahawk::query_ptr& query ) const { Q_UNUSED( query ); Q_ASSERT( false ); return -1; }
+    virtual qint64 indexOfQuery( const Tomahawk::query_ptr& query ) const;
 
     virtual void setCurrentIndex( qint64 index );
     virtual Tomahawk::result_ptr currentItem() const;
-    virtual qint64 siblingIndex( int itemsAway ) const;
+    virtual qint64 siblingIndex( int itemsAway, qint64 rootIndex = -1 ) const;
 
     virtual QString filter() const;
 
