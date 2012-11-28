@@ -46,7 +46,7 @@ public:
     virtual void setCurrentIndex( qint64 index );
     virtual Tomahawk::result_ptr resultAt( qint64 index ) const;
     virtual Tomahawk::query_ptr queryAt( qint64 index ) const;
-    virtual qint64 indexOfResult( const Tomahawk::result_ptr& result ) const { Q_UNUSED( result ); Q_ASSERT( false ); return -1; }
+    virtual qint64 indexOfResult( const Tomahawk::result_ptr& result ) const;
     virtual qint64 indexOfQuery( const Tomahawk::query_ptr& query ) const { Q_UNUSED( query ); Q_ASSERT( false ); return -1; }
 
     virtual qint64 siblingIndex( int itemsAway, qint64 rootIndex = -1 ) const;
