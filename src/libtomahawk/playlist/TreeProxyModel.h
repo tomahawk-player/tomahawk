@@ -50,6 +50,7 @@ public:
     QModelIndex indexFromArtist( const Tomahawk::artist_ptr& artist ) const;
     QModelIndex indexFromAlbum( const Tomahawk::album_ptr& album ) const;
     QModelIndex indexFromResult( const Tomahawk::result_ptr& result ) const;
+    QModelIndex indexFromQuery( const Tomahawk::query_ptr& query ) const;
 
 protected:
     bool filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const;
