@@ -327,7 +327,7 @@ AudioEngine::sendWaitingNotification() const
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     //since it's async, after this is triggered our result could come in, so don't show the popup in that case
-    if ( !m_playlist.isNull() && m_playlist->hasNextResult() )
+    if ( m_playlist && m_playlist->nextResult() && m_playlist->nextResult()->isOnline() )
         return;
 
     Tomahawk::InfoSystem::InfoPushData pushData (
@@ -552,7 +552,9 @@ AudioEngine::loadNextTrack()
 
     if ( m_queue && m_queue->trackCount() )
     {
-        result = m_queue->nextResult();
+        query_ptr query = m_queue->tracks().first();
+        if ( query && query->numResults() )
+            result = query->results().first();
     }
 
     if ( !m_playlist.isNull() && result.isNull() )
@@ -562,7 +564,6 @@ AudioEngine::loadNextTrack()
         if ( m_playlist.data()->hasNextResult() )
         {
             result = m_playlist.data()->nextResult();
-            tDebug() << Q_FUNC_INFO << result->toString();
             m_currentTrackPlaylist = m_playlist;
         }
     }

@@ -28,7 +28,7 @@
 using namespace Tomahawk;
 
 
-SourcePlaylistInterface::SourcePlaylistInterface( Tomahawk::Source *source, Tomahawk::PlaylistModes::LatchMode latchMode )
+SourcePlaylistInterface::SourcePlaylistInterface( Tomahawk::Source* source, Tomahawk::PlaylistModes::LatchMode latchMode )
     : PlaylistInterface()
     , m_source( source )
     , m_currentItem( 0 )
@@ -53,7 +53,18 @@ SourcePlaylistInterface::~SourcePlaylistInterface()
 void
 SourcePlaylistInterface::setCurrentIndex( qint64 index )
 {
-    Q_UNUSED( index );
+    if ( index == 1 )
+        m_gotNextItem = false;
+}
+
+
+qint64
+SourcePlaylistInterface::indexOfResult( const Tomahawk::result_ptr& result ) const
+{
+    if ( nextResult() == result )
+        return 1;
+    else
+        return -1;
 }
 
 
@@ -64,7 +75,7 @@ SourcePlaylistInterface::siblingIndex( int itemsAway, qint64 rootIndex ) const
     Q_UNUSED( rootIndex );
 
     if ( nextResult() )
-        return 0;
+        return 1;
     else
         return -1;
 }
@@ -73,23 +84,22 @@ SourcePlaylistInterface::siblingIndex( int itemsAway, qint64 rootIndex ) const
 Tomahawk::result_ptr
 SourcePlaylistInterface::nextResult() const
 {
-    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
     if ( !sourceValid() )
     {
-        tDebug( LOGEXTRA ) << Q_FUNC_INFO << "Source no longer valid";
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Source no longer valid";
         m_currentItem = Tomahawk::result_ptr();
         return m_currentItem;
     }
     else if ( !hasNextResult() )
     {
-        tDebug( LOGEXTRA ) << Q_FUNC_INFO << "This song was already fetched or the source isn't playing anything";
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "This song was already fetched or the source isn't playing anything";
         return Tomahawk::result_ptr();
     }
 
-    m_gotNextItem = false;
-
     if ( m_source.data()->currentTrack()->numResults() )
+    {
         m_currentItem = m_source.data()->currentTrack()->results().first();
+    }
     else
         m_currentItem = result_ptr();
 
@@ -129,7 +139,10 @@ QList<Tomahawk::query_ptr>
 SourcePlaylistInterface::tracks() const
 {
     QList<Tomahawk::query_ptr> tracks;
-    return tracks; // FIXME (with what?)
+    if ( nextResult() )
+        tracks << nextResult()->toQuery();
+
+    return tracks;
 }
 
 
@@ -175,17 +188,21 @@ SourcePlaylistInterface::resolvingFinished( bool hasResults )
 Tomahawk::query_ptr
 SourcePlaylistInterface::queryAt( qint64 index ) const
 {
-    Q_UNUSED( index );
-
-    Tomahawk::result_ptr res = nextResult();
-    return res->toQuery();
+    if ( index == 1 )
+    {
+        Tomahawk::result_ptr res = nextResult();
+        return res->toQuery();
+    }
+    else
+        return Tomahawk::query_ptr();
 }
 
 
 Tomahawk::result_ptr
 SourcePlaylistInterface::resultAt( qint64 index ) const
 {
-    Q_UNUSED( index );
-
-    return nextResult();
+    if ( index == 1 )
+        return nextResult();
+    else
+        return Tomahawk::result_ptr();
 }
