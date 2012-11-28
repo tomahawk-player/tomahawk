@@ -175,8 +175,6 @@ private:
     void setPage( Tomahawk::ViewPage* page, bool trackHistory = true );
     void updateView();
     void unlinkPlaylist();
-    void saveCurrentPlaylistSettings();
-    void loadCurrentPlaylistSettings();
 
     Tomahawk::playlist_ptr playlistForInterface( Tomahawk::playlistinterface_ptr plInterface ) const;
     Tomahawk::dynplaylist_ptr dynamicPlaylistForInterface( Tomahawk::playlistinterface_ptr plInterface ) const;
