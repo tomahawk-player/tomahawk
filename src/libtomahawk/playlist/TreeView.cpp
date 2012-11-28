@@ -232,12 +232,15 @@ TreeView::onItemActivated( const QModelIndex& index )
     if ( item )
     {
         if ( !item->artist().isNull() )
+        {
             ViewManager::instance()->show( item->artist() );
+        }
         else if ( !item->album().isNull() )
+        {
             ViewManager::instance()->show( item->album() );
+        }
         else if ( !item->result().isNull() && item->result()->isOnline() )
         {
-            m_model->setCurrentItem( item->index );
             AudioEngine::instance()->playItem( m_proxyModel->playlistInterface(), item->result() );
         }
     }

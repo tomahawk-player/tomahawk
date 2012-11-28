@@ -248,7 +248,6 @@ TrackView::autoPlayResolveFinished( const query_ptr& query, int row )
     const QModelIndex sib = index.sibling( index.row() + 1, index.column() );
     if ( sib.isValid() )
         startAutoPlay( sib );
-
 }
 
 
@@ -308,7 +307,6 @@ TrackView::tryToPlayItem( const QModelIndex& index )
     PlayableItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( index ) );
     if ( item && !item->query().isNull() )
     {
-        m_proxyModel->setCurrentIndex( index );
         AudioEngine::instance()->playItem( playlistInterface(), item->query() );
 
         return true;
@@ -719,19 +717,14 @@ TrackView::mousePressEvent( QMouseEvent* event )
 Tomahawk::playlistinterface_ptr
 TrackView::playlistInterface() const
 {
-    if ( m_playlistInterface.isNull() )
-    {
-        return proxyModel()->playlistInterface();
-    }
-
-    return m_playlistInterface;
+    return proxyModel()->playlistInterface();
 }
 
 
 void
 TrackView::setPlaylistInterface( const Tomahawk::playlistinterface_ptr& playlistInterface )
 {
-    m_playlistInterface = playlistInterface;
+    proxyModel()->setPlaylistInterface( playlistInterface );
 }
 
 
