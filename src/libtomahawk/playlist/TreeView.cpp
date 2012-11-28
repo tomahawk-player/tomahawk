@@ -388,6 +388,7 @@ TreeView::onCustomContextMenu( const QPoint& pos )
     m_contextMenu->setQueries( queries );
     m_contextMenu->setArtists( artists );
     m_contextMenu->setAlbums( albums );
+    m_contextMenu->setPlaylistInterface( playlistInterface() );
 
     m_contextMenu->exec( viewport()->mapToGlobal( pos ) );
 }
