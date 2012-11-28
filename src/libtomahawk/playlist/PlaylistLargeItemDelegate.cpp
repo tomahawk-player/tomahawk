@@ -151,7 +151,7 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
     source_ptr source = item->query()->playedBy().first;
     if ( m_mode == RecentlyPlayed && !source.isNull() )
     {
-        avatar = source->avatar( Source::FancyStyle, avatarSize );
+        avatar = source->avatar( TomahawkUtils::RoundedCorners, avatarSize );
         QString playtime = TomahawkUtils::ageToString( QDateTime::fromTime_t( item->query()->playedBy().second ), true );
 
         if ( source == SourceList::instance()->getLocal() )
@@ -244,12 +244,12 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         drawRichText( painter, option, leftRect, Qt::AlignBottom, textDoc );
 
         const int sourceIconSize = avatarRect.width() - 6;
-        if ( !q->results().isEmpty() && !q->results().first()->sourceIcon( Result::DropShadow, QSize( sourceIconSize, sourceIconSize ) ).isNull() )
+        if ( q->numResults() && !q->results().first()->sourceIcon( TomahawkUtils::RoundedCorners, QSize( sourceIconSize, sourceIconSize ) ).isNull() )
         {
-            const QPixmap sourceIcon = q->results().first()->sourceIcon( Result::DropShadow, QSize( sourceIconSize, sourceIconSize ) );
+            const QPixmap sourceIcon = q->results().first()->sourceIcon( TomahawkUtils::RoundedCorners, QSize( sourceIconSize, sourceIconSize ) );
             painter->setOpacity( 0.8 );
-            painter->drawPixmap( QRect( rightRect.right() - sourceIconSize, r.center().y() - sourceIconSize/2, sourceIcon.width(), sourceIcon.height() ), sourceIcon );
-            painter->setOpacity( 1. );
+            painter->drawPixmap( QRect( rightRect.right() - sourceIconSize, r.center().y() - sourceIconSize / 2, sourceIcon.width(), sourceIcon.height() ), sourceIcon );
+            painter->setOpacity( 1.0 );
             rightRect.moveLeft( rightRect.left() - sourceIcon.width() - 8 );
         }
 

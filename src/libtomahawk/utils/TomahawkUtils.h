@@ -56,9 +56,10 @@ namespace TomahawkUtils
     {
         Original,
         CoverInCase,
-        AvatarInFrame,
         ScaledCover,
-        Grid
+        Grid,
+        DropShadow,
+        RoundedCorners
     };
 
 

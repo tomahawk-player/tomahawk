@@ -283,9 +283,11 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
 
     onControlStateChanged();
 
-    QPixmap sourceIcon = result->sourceIcon( Result::Plain, ui->ownerButton->size() );
+    QPixmap sourceIcon = result->sourceIcon( TomahawkUtils::RoundedCorners, ui->ownerButton->size() );
     if ( !sourceIcon.isNull() )
+    {
         ui->ownerButton->setPixmap( sourceIcon );
+    }
     else
     {
         ui->ownerButton->clear();

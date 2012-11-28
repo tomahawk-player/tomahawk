@@ -261,7 +261,7 @@ TreeModel::addCollection( const collection_ptr& collection )
     connect( collection.data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ), Qt::UniqueConnection );
 
     if ( !collection->source()->avatar().isNull() )
-        setIcon( collection->source()->avatar( Source::FancyStyle ) );
+        setIcon( collection->source()->avatar( TomahawkUtils::RoundedCorners ) );
 
     if ( collection->source()->isLocal() )
         setTitle( tr( "My Collection" ) );

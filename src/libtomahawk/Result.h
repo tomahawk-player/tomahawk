@@ -26,6 +26,7 @@
 #include <QtCore/QVariant>
 #include <QMutex>
 
+#include "utils/TomahawkUtils.h"
 #include "Typedefs.h"
 
 #include "DllMacro.h"
@@ -52,11 +53,6 @@ friend class ::DatabaseCommand_AddFiles;
 friend class ::DatabaseCommand_LoadFile;
 
 public:
-    enum SourceImageStyle {
-        Plain,
-        DropShadow
-    };
-
     static Tomahawk::result_ptr get( const QString& url );
     static bool isCached( const QString& url );
     virtual ~Result();
@@ -83,7 +79,7 @@ public:
     QString purchaseUrl() const { return m_purchaseUrl; }
     QString linkUrl() const { return m_linkUrl; }
 
-    QPixmap sourceIcon( SourceImageStyle style, const QSize& desiredSize = QSize() ) const;
+    QPixmap sourceIcon( TomahawkUtils::ImageMode style, const QSize& desiredSize = QSize() ) const;
 
     unsigned int duration() const { return m_duration; }
     unsigned int bitrate() const { return m_bitrate; }

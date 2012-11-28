@@ -42,13 +42,14 @@ typedef QMap< QString, QPixmap > SourceIconCache;
 Q_GLOBAL_STATIC( SourceIconCache, sourceIconCache );
 static QMutex s_sourceIconMutex;
 
-inline QString sourceCacheKey( Resolver* resolver, const QSize& size, Result::SourceImageStyle style )
+inline QString sourceCacheKey( Resolver* resolver, const QSize& size, TomahawkUtils::ImageMode style )
 {
     QString str;
     QTextStream stream( &str );
     stream << resolver << size.width() << size.height() << "_" << style;
     return str;
 }
+
 
 Tomahawk::result_ptr
 Result::get( const QString& url )
@@ -192,7 +193,6 @@ Result::toVariant() const
     m.insert( "album", album()->name() );
     m.insert( "track", track() );
     m.insert( "source", friendlySource() );
-    m.insert( "sourceIcon", sourceIcon( Plain ) );
     m.insert( "mimetype", mimetype() );
     m.insert( "size", size() );
     m.insert( "bitrate", bitrate() );
@@ -316,24 +316,40 @@ Result::friendlySource() const
 
 
 QPixmap
-Result::sourceIcon( SourceImageStyle style, const QSize& desiredSize ) const
+Result::sourceIcon( TomahawkUtils::ImageMode style, const QSize& desiredSize ) const
 {
     if ( collection().isNull() )
     {
         const ExternalResolverGui* guiResolver = qobject_cast< ExternalResolverGui* >( m_resolvedBy.data() );
         if ( !guiResolver )
+        {
             return QPixmap();
+        }
         else
         {
             QMutexLocker l( &s_sourceIconMutex );
+
             const QString key = sourceCacheKey( m_resolvedBy.data(), desiredSize, style );
             if ( !sourceIconCache()->contains( key ) )
             {
                 QPixmap pixmap = guiResolver->icon();
                 if ( !desiredSize.isEmpty() )
                     pixmap = pixmap.scaled( desiredSize, Qt::KeepAspectRatio, Qt::SmoothTransformation );
-                if ( style == DropShadow )
-                    pixmap = TomahawkUtils::addDropShadow( pixmap, QSize() );
+
+                switch ( style )
+                {
+                    case TomahawkUtils::DropShadow:
+                        pixmap = TomahawkUtils::addDropShadow( pixmap, QSize() );
+                        break;
+
+                    case TomahawkUtils::RoundedCorners:
+                        pixmap = TomahawkUtils::createRoundedImage( pixmap, QSize() );
+                        break;
+
+                    default:
+                        break;
+                }
+
                 sourceIconCache()->insert( key, pixmap );
                 return pixmap;
             }
@@ -345,10 +361,10 @@ Result::sourceIcon( SourceImageStyle style, const QSize& desiredSize ) const
     }
     else
     {
-        QPixmap avatar = collection()->source()->avatar( Source::FancyStyle, desiredSize );
+        QPixmap avatar = collection()->source()->avatar( TomahawkUtils::RoundedCorners, desiredSize );
         if ( !avatar )
         {
-            avatar = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultSourceAvatar, TomahawkUtils::AvatarInFrame, desiredSize );
+            avatar = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultSourceAvatar, TomahawkUtils::RoundedCorners, desiredSize );
         }
         return avatar;
     }

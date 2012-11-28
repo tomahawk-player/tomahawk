@@ -442,7 +442,7 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
             break;
 
         case DefaultSourceAvatar:
-            if ( mode == AvatarInFrame )
+            if ( mode == RoundedCorners )
                 pixmap = TomahawkUtils::createRoundedImage( QPixmap( RESPATH "images/user-avatar.png" ), size );
             else
                 pixmap = QPixmap( RESPATH "images/user-avatar.png" );
