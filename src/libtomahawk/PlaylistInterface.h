@@ -22,6 +22,7 @@
 
 #include <QtCore/QModelIndex>
 
+#include "playlist/PlayableItem.h"
 #include "Typedefs.h"
 #include "DllMacro.h"
 #include "utils/Logger.h"
@@ -45,20 +46,22 @@ public:
     virtual int trackCount() const = 0;
 
     virtual Tomahawk::result_ptr currentItem() const = 0;
+    virtual void setCurrentIndex( qint64 index ) = 0;
 
-    virtual bool hasNextItem() { return true; }
-    virtual bool hasPreviousItem() { return true; }
-    virtual Tomahawk::result_ptr nextItem();
-    virtual Tomahawk::result_ptr previousItem();
+    virtual bool hasNextResult() const;
+    virtual bool hasPreviousResult() const;
+    virtual Tomahawk::result_ptr nextResult() const;
+    virtual Tomahawk::result_ptr previousResult() const;
 
-    virtual Tomahawk::result_ptr siblingItem( int itemsAway, bool readOnly = false ) = 0;
+    virtual qint64 siblingIndex( int itemsAway ) const = 0;
+    virtual Tomahawk::result_ptr siblingResult( int itemsAway ) const;
 
-    virtual Tomahawk::query_ptr itemAt( unsigned int position ) const = 0;
-    virtual int indexOfResult( const Tomahawk::result_ptr& result ) const = 0;
-    virtual int indexOfQuery( const Tomahawk::query_ptr& query ) const = 0;
+    virtual Tomahawk::result_ptr resultAt( qint64 index ) const = 0;
+    virtual Tomahawk::query_ptr queryAt( qint64 index ) const = 0;
+    virtual qint64 indexOfResult( const Tomahawk::result_ptr& result ) const = 0;
+    virtual qint64 indexOfQuery( const Tomahawk::query_ptr& query ) const = 0;
 
     virtual PlaylistModes::RepeatMode repeatMode() const = 0;
-
     virtual bool shuffled() const = 0;
 
     virtual PlaylistModes::ViewMode viewMode() const { return PlaylistModes::Unknown; }
@@ -90,7 +93,9 @@ signals:
     void repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
     void latchModeChanged( Tomahawk::PlaylistModes::LatchMode mode );
-    void nextTrackReady();
+
+    void previousTrackAvailable();
+    void nextTrackAvailable();
 
 protected:
     virtual QList<Tomahawk::query_ptr> filterTracks( const QList<Tomahawk::query_ptr>& queries );
