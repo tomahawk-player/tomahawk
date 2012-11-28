@@ -541,6 +541,8 @@ AudioControls::onRepeatModeChanged( PlaylistModes::RepeatMode mode )
         default:
             break;
     }
+
+    onControlStateChanged();
 }
 
 
@@ -595,6 +597,8 @@ AudioControls::onShuffleModeChanged( bool enabled )
 
         ui->repeatButton->setEnabled( true );
     }
+
+    onControlStateChanged();
 }
 
 
