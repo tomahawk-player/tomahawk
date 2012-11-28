@@ -44,7 +44,7 @@ using namespace Tomahawk;
 
 
 ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget* parent )
-    : QDeclarativeView( parent )
+    : QWidget( parent )
     , ui( new Ui::ArtistInfoWidget )
     , m_artist( artist )
 {
