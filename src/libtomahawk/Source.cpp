@@ -154,7 +154,7 @@ Source::setAvatar( const QPixmap& avatar )
 
 
 QPixmap
-Source::avatar( AvatarStyle style, const QSize& size )
+Source::avatar( TomahawkUtils::ImageMode style, const QSize& size )
 {
     if ( !m_avatar && m_avatarUpdated )
     {
@@ -172,14 +172,18 @@ Source::avatar( AvatarStyle style, const QSize& size )
         m_avatarUpdated = false;
     }
 
-    if ( style == FancyStyle && m_avatar && !m_avatar->isNull() && !m_fancyAvatar )
+    if ( style == TomahawkUtils::RoundedCorners && m_avatar && !m_avatar->isNull() && !m_fancyAvatar )
         m_fancyAvatar = new QPixmap( TomahawkUtils::createRoundedImage( QPixmap( *m_avatar ), QSize( 0, 0 ) ) );
 
     QPixmap pixmap;
-    if ( style == Original && m_avatar )
-        pixmap = *m_avatar;
-    else if ( style == FancyStyle && m_fancyAvatar )
+    if ( style == TomahawkUtils::RoundedCorners && m_fancyAvatar )
+    {
         pixmap = *m_fancyAvatar;
+    }
+    else if ( m_avatar )
+    {
+        pixmap = *m_avatar;
+    }
 
     if ( !pixmap.isNull() && !size.isEmpty() )
     {

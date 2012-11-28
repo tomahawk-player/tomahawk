@@ -28,6 +28,7 @@
 #include "network/DbSyncConnection.h"
 #include "Collection.h"
 #include "Query.h"
+#include "utils/TomahawkUtils.h"
 
 #include "DllMacro.h"
 
@@ -54,8 +55,6 @@ friend class ::DatabaseCommand_DeleteFiles;
 friend class ::MusicScanner;
 
 public:
-    enum AvatarStyle { Original, FancyStyle };
-
     explicit Source( int id, const QString& username = QString() );
     virtual ~Source();
 
@@ -68,7 +67,7 @@ public:
 
 #ifndef ENABLE_HEADLESS
     void setAvatar( const QPixmap& avatar );
-    QPixmap avatar( AvatarStyle style = Original, const QSize& size = QSize() );
+    QPixmap avatar( TomahawkUtils::ImageMode style = TomahawkUtils::Original, const QSize& size = QSize() );
 #endif
 
     collection_ptr collection() const;
@@ -164,7 +163,7 @@ private:
     mutable QPixmap* m_avatar;
     mutable QPixmap* m_fancyAvatar;
     mutable QByteArray m_avatarHash;
-    mutable QHash< AvatarStyle, QHash< int, QPixmap > > m_coverCache;
+    mutable QHash< TomahawkUtils::ImageMode, QHash< int, QPixmap > > m_coverCache;
 
     Tomahawk::playlistinterface_ptr m_playlistInterface;
 };

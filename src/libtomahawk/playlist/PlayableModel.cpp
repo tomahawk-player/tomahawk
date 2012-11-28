@@ -900,6 +900,8 @@ PlayableModel::setIcon( const QPixmap& pixmap )
 void
 PlayableModel::onQueryBecamePlayable( bool playable )
 {
+    Q_UNUSED( playable );
+
     Tomahawk::Query* q = qobject_cast< Query* >( sender() );
     if ( !q )
     {
