@@ -73,8 +73,8 @@ MetadataEditor::init( const Tomahawk::playlistinterface_ptr& interface )
     NewClosure( ui->buttonBox, SIGNAL( accepted() ), this, SLOT( writeMetadata( bool ) ), true )->setAutoDelete( false );
 
     connect( ui->buttonBox, SIGNAL( rejected() ), SLOT( close() ) );
-    connect( ui->forwardPushButton, SIGNAL( clicked() ), SLOT( loadNextResult() ) );
-    connect( ui->previousPushButton, SIGNAL( clicked() ), SLOT( loadPreviousResult() ) );
+    connect( ui->forwardPushButton, SIGNAL( clicked() ), SLOT( loadNextQuery() ) );
+    connect( ui->previousPushButton, SIGNAL( clicked() ), SLOT( loadPreviousQuery() ) );
 }
 
 
@@ -216,7 +216,7 @@ MetadataEditor::loadResult( const Tomahawk::result_ptr& result )
         return;
 
     m_result = result;
-    setEditable( result->collection()->source()->isLocal() );
+    setEditable( result->collection() && result->collection()->source()->isLocal() );
 
     setTitle( result->track() );
     setArtist( result->artist()->name() );
@@ -226,7 +226,7 @@ MetadataEditor::loadResult( const Tomahawk::result_ptr& result )
     setYear( result->year() );
     setBitrate( result->bitrate() );
 
-    if ( result->collection()->source()->isLocal() )
+    if ( result->collection() && result->collection()->source()->isLocal() )
     {
         QFileInfo fi( QUrl( m_result->url() ).toLocalFile() );
         setFileName( fi.absoluteFilePath() );
@@ -248,12 +248,12 @@ MetadataEditor::loadResult( const Tomahawk::result_ptr& result )
 void
 MetadataEditor::enablePushButtons()
 {
-    if ( m_interface->queryAt( m_index + 1 ) )
+    if ( m_interface->siblingIndex( 1, m_index ) > 0 )
         ui->forwardPushButton->setEnabled( true );
     else
         ui->forwardPushButton->setEnabled( false );
 
-    if ( m_interface->queryAt( m_index - 1 ) )
+    if ( m_interface->siblingIndex( -1, m_index ) > 0 )
         ui->previousPushButton->setEnabled( true );
     else
         ui->previousPushButton->setEnabled( false );
@@ -261,26 +261,28 @@ MetadataEditor::enablePushButtons()
 
 
 void
-MetadataEditor::loadNextResult()
+MetadataEditor::loadNextQuery()
 {
     writeMetadata();
 
-    m_index++;
-
-    if ( m_interface->queryAt( m_index ) )
+    if ( m_interface->siblingIndex( 1, m_index ) > 0 )
+    {
+        m_index = m_interface->siblingIndex( 1, m_index );
         loadQuery( m_interface->queryAt( m_index ) );
+    }
 }
 
 
 void
-MetadataEditor::loadPreviousResult()
+MetadataEditor::loadPreviousQuery()
 {
     writeMetadata();
 
-    m_index--;
-
-    if ( m_interface->queryAt( m_index ) )
+    if ( m_interface->siblingIndex( -1, m_index ) > 0 )
+    {
+        m_index = m_interface->siblingIndex( -1, m_index );
         loadQuery( m_interface->queryAt( m_index ) );
+    }
 }
 
 
