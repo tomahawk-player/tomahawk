@@ -141,7 +141,14 @@ AudioEngine::play()
         sendNowPlayingNotification( Tomahawk::InfoSystem::InfoNowResumed );
     }
     else
-        next();
+    {
+        if ( !m_currentTrack && m_playlist && m_playlist->nextResult() )
+        {
+            loadNextTrack();
+        }
+        else
+            next();
+    }
 }
 
 
@@ -220,11 +227,13 @@ AudioEngine::canGoNext()
         return false;
 
     if ( m_playlist.data()->skipRestrictions() == PlaylistModes::NoSkip ||
-        m_playlist.data()->skipRestrictions() == PlaylistModes::NoSkipForwards )
+         m_playlist.data()->skipRestrictions() == PlaylistModes::NoSkipForwards )
+    {
         return false;
+    }
 
     if ( !m_currentTrack.isNull() && !m_playlist->hasNextResult() &&
-         ( m_playlist->currentItem().isNull() || ( m_currentTrack->id() == m_playlist->currentItem()->id() ) ) )
+       ( m_playlist->currentItem().isNull() || ( m_currentTrack->id() == m_playlist->currentItem()->id() ) ) )
     {
         //For instance, when doing a catch-up while listening along, but the person
         //you're following hasn't started a new track yet...don't do anything
@@ -232,7 +241,7 @@ AudioEngine::canGoNext()
         return false;
     }
 
-    return ( m_playlist.data()->hasNextResult() && m_playlist.data()->nextResult()->isOnline() );
+    return ( m_currentTrack && m_playlist.data()->hasNextResult() && m_playlist.data()->nextResult()->isOnline() );
 }
 
 
@@ -246,7 +255,7 @@ AudioEngine::canGoPrevious()
         m_playlist.data()->skipRestrictions() == PlaylistModes::NoSkipBackwards )
         return false;
 
-    return ( m_playlist.data()->hasPreviousResult() && m_playlist.data()->previousResult()->isOnline() );
+    return ( m_currentTrack && m_playlist.data()->hasPreviousResult() && m_playlist.data()->previousResult()->isOnline() );
 }
 
 
@@ -520,7 +529,7 @@ AudioEngine::loadPreviousTrack()
     }
 
     Tomahawk::result_ptr result;
-    if ( m_playlist.data()->hasPreviousResult() )
+    if ( m_playlist.data()->previousResult() )
     {
         result = m_playlist.data()->previousResult();
         m_currentTrackPlaylist = m_playlist;
@@ -561,7 +570,7 @@ AudioEngine::loadNextTrack()
     {
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Loading playlist's next item" << m_playlist.data() << m_playlist->shuffled();
 
-        if ( m_playlist.data()->hasNextResult() )
+        if ( m_playlist.data()->nextResult() )
         {
             result = m_playlist.data()->nextResult();
             m_currentTrackPlaylist = m_playlist;

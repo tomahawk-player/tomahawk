@@ -195,9 +195,6 @@ PlayableProxyModelPlaylistInterface::siblingIndex( int itemsAway, qint64 rootInd
             }
             else
             {
-                if ( !proxyModel->currentIndex().isValid() )
-                    return -1;
-
                 // random mode is enabled
                 if ( m_shuffleCache.isValid() )
                 {
@@ -251,17 +248,13 @@ PlayableProxyModelPlaylistInterface::siblingIndex( int itemsAway, qint64 rootInd
                     idx = proxyModel->mapFromSource( pitem->index );
                 }
 
-                if ( idx.isValid() )
-                    idx = proxyModel->index( idx.row() + itemsAway, 0 );
+                idx = proxyModel->index( idx.row() + itemsAway, 0 );
             }
         }
     }
 
     if ( !idx.isValid() && m_repeatMode == PlaylistModes::RepeatAll )
     {
-        if ( !proxyModel->currentIndex().isValid() )
-            return -1;
-
         // repeat all tracks
         if ( itemsAway > 0 )
         {
