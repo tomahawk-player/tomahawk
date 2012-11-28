@@ -140,6 +140,19 @@ PlayableProxyModelPlaylistInterface::setCurrentIndex( qint64 index )
     }
     else
     {
+        if ( m_shuffled && m_shuffleHistory.count() > 1 )
+        {
+            if ( m_proxyModel.data()->itemFromQuery( m_shuffleHistory.at( m_shuffleHistory.count() - 2 ) ) &&
+               ( m_proxyModel.data()->mapFromSource( item->index ) == m_proxyModel.data()->mapFromSource( m_proxyModel.data()->itemFromQuery( m_shuffleHistory.at( m_shuffleHistory.count() - 2 ) )->index ) ) )
+            {
+                // Note: the following lines aren't by mistake:
+                // We detected that we're going to the previous track in our shuffle history and hence we want to remove the currently playing and the previous track from the shuffle history.
+                // The upcoming track will be added right back to the history further down below in this method.
+                m_shuffleHistory.removeLast();
+                m_shuffleHistory.removeLast();
+            }
+        }
+
         m_proxyModel.data()->setCurrentIndex( m_proxyModel.data()->mapFromSource( item->index ) );
         m_shuffleHistory << queryAt( index );
         m_shuffleCache = QPersistentModelIndex();
@@ -169,9 +182,8 @@ PlayableProxyModelPlaylistInterface::siblingIndex( int itemsAway, qint64 rootInd
             {
                 if ( m_shuffleHistory.count() > 1 )
                 {
-                    m_shuffleHistory.removeLast();
-                    if ( proxyModel->itemFromQuery( m_shuffleHistory.last() ) )
-                        idx = proxyModel->mapFromSource( proxyModel->itemFromQuery( m_shuffleHistory.takeLast() )->index );
+                    if ( proxyModel->itemFromQuery( m_shuffleHistory.at( m_shuffleHistory.count() - 2 ) ) )
+                        idx = proxyModel->mapFromSource( proxyModel->itemFromQuery( m_shuffleHistory.at( m_shuffleHistory.count() - 2 ) )->index );
                 }
                 else
                     return -1;
@@ -231,7 +243,8 @@ PlayableProxyModelPlaylistInterface::siblingIndex( int itemsAway, qint64 rootInd
                     idx = proxyModel->mapFromSource( pitem->index );
                 }
 
-                idx = proxyModel->index( idx.row() + itemsAway, 0 );
+                if ( idx.isValid() )
+                    idx = proxyModel->index( idx.row() + itemsAway, 0 );
             }
         }
     }
