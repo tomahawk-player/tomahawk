@@ -224,7 +224,7 @@ ChartsPlugin::fetchChartCapabilitiesFromCache( Tomahawk::InfoSystem::InfoRequest
     }
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Checking cache for " << "InfoChartCapabilities" << m_chartVersion;
-    emit getCachedInfo ( criteria, 172800000 /* 2 days */, requestData );
+    emit getCachedInfo( criteria, 172800000 /* 2 days */, requestData );
 }
 
 
@@ -377,7 +377,7 @@ ChartsPlugin::fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData, con
     QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
     reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
 
-    connect ( reply, SIGNAL( finished() ), SLOT( chartReturned() ) );
+    connect( reply, SIGNAL( finished() ), SLOT( chartReturned() ) );
 }
 
 
@@ -404,11 +404,13 @@ ChartsPlugin::chartsList()
         const QString source = reply->property("chart_source").toString();
         const qlonglong expires = QString( reply->rawHeader( QString( "Expires" ).toLocal8Bit() ) ).toLongLong( &ok );
 
-        if( !ok )
+        if ( !ok )
         {
+            tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Failed to parse expire headers!";
             tDebug( LOGVERBOSE ) << Q_FUNC_INFO << reply->url();
             tDebug( LOGVERBOSE ) << Q_FUNC_INFO << reply->rawHeaderPairs();
         }
+
         // We'll populate charts with the data from the server
         QVariantMap charts;
         QString chartName;
@@ -433,7 +435,7 @@ ChartsPlugin::chartsList()
                     const QString geo = chart.value( "geo" ).toString();
                     QString name = chart.value( "genre" ).toString();
                     const QString type = QString( chart.value( "type" ).toString() + "s" );
-                    bool isDefault = ( chart.contains( "default" ) && chart[ "default" ].toInt() == 1 );
+                    const bool isDefault = ( chart.contains( "default" ) && chart[ "default" ].toInt() == 1 );
 
                     // Hack!
                     // Japan charts contains multiple duplicates, all which are linked
@@ -477,9 +479,7 @@ ChartsPlugin::chartsList()
                     c[ "label" ] = name;
                     c[ "type" ] = "album";
                     if ( isDefault )
-                    {
                         c[ "default" ] = "true";
-                    }
 
                     /// If this item has expired, set it to 0.
                     c[ "expires" ] = ( ok ? QString::number (expires ) : QString::number( 0 ) );
