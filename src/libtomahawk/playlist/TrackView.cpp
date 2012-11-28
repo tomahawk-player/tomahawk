@@ -28,17 +28,18 @@
 #include "PlayableModel.h"
 #include "PlayableProxyModel.h"
 #include "PlayableItem.h"
-#include "audio/AudioEngine.h"
-#include "context/ContextWidget.h"
-#include "widgets/OverlayWidget.h"
-#include "utils/TomahawkUtilsGui.h"
-#include "utils/Logger.h"
-#include "utils/Closure.h"
 #include "DropJob.h"
 #include "Artist.h"
 #include "Album.h"
 #include "Source.h"
+#include "TomahawkSettings.h"
+#include "audio/AudioEngine.h"
+#include "context/ContextWidget.h"
+#include "widgets/OverlayWidget.h"
+#include "utils/TomahawkUtilsGui.h"
+#include "utils/Closure.h"
 #include "utils/AnimatedSpinner.h"
+#include "utils/Logger.h"
 
 #define SCROLL_TIMEOUT 280
 
@@ -95,19 +96,47 @@ TrackView::TrackView( QWidget* parent )
 
 TrackView::~TrackView()
 {
-    tDebug() << Q_FUNC_INFO;
+    tDebug() << Q_FUNC_INFO << ( m_guid.isEmpty() ? QString( "with empty guid" ) : QString( "with guid %1" ).arg( m_guid ) );
+
+    if ( !m_guid.isEmpty() && proxyModel()->playlistInterface() )
+    {
+        tDebug() << Q_FUNC_INFO << "Storing shuffle & random mode settings for guid" << m_guid;
+
+        TomahawkSettings* s = TomahawkSettings::instance();
+        s->setShuffleState( m_guid, proxyModel()->playlistInterface()->shuffled() );
+        s->setRepeatMode( m_guid, proxyModel()->playlistInterface()->repeatMode() );
+    }
+}
+
+
+QString
+TrackView::guid() const
+{
+    if ( m_guid.isEmpty() )
+        return QString();
+
+    return QString( "%1/%2" ).arg( m_guid ).arg( m_proxyModel->columnCount() );
 }
 
 
 void
-TrackView::setGuid( const QString& guid )
+TrackView::setGuid( const QString& newguid )
 {
-    if ( !guid.isEmpty() )
+    if ( !newguid.isEmpty() )
     {
-        tDebug() << Q_FUNC_INFO << "Setting guid on header" << guid << "for a view with" << m_proxyModel->columnCount() << "columns";
+        tDebug() << Q_FUNC_INFO << "Setting guid on header" << newguid << "for a view with" << m_proxyModel->columnCount() << "columns";
 
-        m_guid = QString( "%1/%2" ).arg( guid ).arg( m_proxyModel->columnCount() );
-        m_header->setGuid( m_guid );
+        m_guid = newguid;
+        m_header->setGuid( guid() );
+
+        if ( !m_guid.isEmpty() && proxyModel()->playlistInterface() )
+        {
+            tDebug() << Q_FUNC_INFO << "Restoring shuffle & random mode settings for guid" << m_guid;
+
+            TomahawkSettings* s = TomahawkSettings::instance();
+            proxyModel()->playlistInterface()->setShuffled( s->shuffleState( m_guid ) );
+            proxyModel()->playlistInterface()->setRepeatMode( s->repeatMode( m_guid ) );
+        }
     }
 }
 
