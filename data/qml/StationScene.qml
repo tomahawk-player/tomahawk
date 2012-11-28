@@ -9,6 +9,13 @@ Rectangle {
     state: "list"
 
     ListModel {
+        id: modeModel
+        ListElement { label: "By Artist"; image: "../images/artist-placeholder-grid.png"; creatorState: "artist" }
+        ListElement { label: "By Genre"; image: "../images/album-placeholder-grid.png"; creatorState: "genre" }
+        ListElement { label: "By Year"; image: "image://albumart/foobar"; creatorState: "year" }
+    }
+
+    ListModel {
         id: styleModel
         ListElement { modelData: "acoustic" }
         ListElement { modelData: "alternative" }
@@ -47,17 +54,32 @@ Rectangle {
     VisualItemModel {
         id: stationVisualModel
 
-
-        StationCreator {
+        StationCreatorPage1 {
             height: scene.height
             width: scene.width
+            model: modeModel
+
+            onItemClicked: {
+                stationCreator.state = modeModel.get(index).creatorState
+                stationListView.incrementCurrentIndex()
+            }
+        }
+
+        StationCreator {
+            id: stationCreator
+            height: scene.height
+            width: scene.width
+
+            onBack: stationListView.decrementCurrentIndex()
+
+            onNext: stationListView.incrementCurrentIndex()
         }
 
         StationView {
             coverSize: Math.min(scene.height, scene.width) / 2
             height: scene.height
             width: scene.width
-            visible: stationListView.currentIndex == 1
+//            visible: stationListView.currentIndex == 1
 
             onBackClicked: stationListView.decrementCurrentIndex()
         }

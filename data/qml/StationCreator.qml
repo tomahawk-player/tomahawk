@@ -4,42 +4,81 @@ import "tomahawkimports"
 
 Item {
     id: stationCreator
+    state: "artist"
 
-    property int spacing: width  * .05
+    property int spacing: width / 10
 
-    Flickable {
-        id: flickArea
-        width: parent.width - stationCreator.spacing
-        anchors.fill: parent
-        anchors.margins: stationCreator.spacing
-        contentHeight: stationCreator.height
-        contentWidth: width
-        clip: true
-        interactive: false
+    signal back()
+    signal next()
 
-        Behavior on contentY {
-            NumberAnimation { duration: 200; easing.type: Easing.InOutQuad }
+    Loader {
+        id: loader
+        anchors {
+            left: parent.left
+            right: parent.right
+            top: parent.top
+            bottom: previousButton.top
+            margins: parent.spacing
+        }
+    }
+
+    RoundedButton {
+        id: previousButton
+        text: "<"
+        height: spacing
+        width: height
+        anchors {
+            left: parent.left
+            bottom: parent.bottom;
+            margins: stationCreator.spacing
+        }
+        onClicked: stationCreator.back()
+    }
+
+    RoundedButton {
+        id: nextButton
+        text: ">"
+        height: spacing
+        width: height
+        anchors {
+            right: parent.right
+            bottom: parent.bottom
+            margins: stationCreator.spacing
+        }
+        onClicked: {
+            loader.item.createStation()
+            stationCreator.next()
+        }
+    }
+
+    states: [
+        State {
+            name: "artist"
+            PropertyChanges { target: loader; sourceComponent: createByArtist }
+        },
+        State {
+            name: "genre"
+            PropertyChanges { target: loader; sourceComponent: createByGenre }
+        },
+        State {
+            name: "year"
+            PropertyChanges { target: loader; sourceComponent: createByYear }
         }
 
-        function moveDown() {
-            contentY = contentY + mainGrid.rowHeight + mainGrid.spacing
-        }
+    ]
 
-        function moveUp() {
-            contentY = contentY - mainGrid.rowHeight - mainGrid.spacing
-        }
+    Component {
+        id: createByArtist
 
-        Grid {
-            id: mainGrid
-            width: parent.width
+        Row {
+            function createStation() {
+                rootView.startStationFromArtist(artistInputField.text)
+            }
+
+            anchors.fill: parent
             spacing: stationCreator.spacing
-            columns: 2
-            height: rowHeight * 3 + spacing * 2
-
-            property int rowHeight: flickArea.height / 2
-
             Item {
-                height: parent.rowHeight
+                height: parent.height
                 width: parent.width * 0.7
                 Text {
                     id: artistGridLabel
@@ -68,14 +107,15 @@ Item {
 
                             onClicked: {
                                 rootView.startStationFromArtist(modelData);
-                                stationListView.incrementCurrentIndex();
+                                stationCreator.next()
                             }
                         }
                     }
                 }
+
             }
             Item {
-                height: parent.rowHeight
+                height: parent.height
                 width: parent.width * 0.25
                 Text {
                     id: orText
@@ -92,23 +132,26 @@ Item {
                     width: parent.width
                     onAccepted: {
                         rootView.startStationFromArtist(text)
-                        stationListView.incrementCurrentIndex();
+                        stationCreator.next()
                     }
                 }
 
-                RoundedButton {
-                    text: ">"
-                    height: orText.height * 3
-                    width: height
-                    anchors { horizontalCenter: artistInputField.horizontalCenter
-                        top: artistInputField.bottom; topMargin: orText.height }
-                    onClicked: artistInputField.accepted(artistInputField.text)
-                }
+            }
+        }
+    }
 
+
+    Component {
+        id: createByGenre
+        Row {
+            function createStation() {
+                rootView.startStationFromGenre(genreInputField.text)
             }
 
+            anchors.fill: parent
+            spacing: stationCreator.spacing
             Item {
-                height: parent.rowHeight
+                height: parent.height
                 width: parent.width * 0.7
                 Text {
                     id: selectGenreText
@@ -125,7 +168,7 @@ Item {
 
                     onTagClicked: {
                         rootView.startStationFromGenre(item)
-                        stationListView.incrementCurrentIndex();
+                        stationCreator.next()
                     }
 
                     Behavior on opacity {
@@ -134,9 +177,10 @@ Item {
                 }
             }
             Item {
-                height: parent.rowHeight
+                height: parent.height
                 width: parent.width * 0.25
                 Text {
+                    id: orText
                     text: "...or enter your style:"
                     color: "white"
                     anchors { left: parent.left; right: parent.right;
@@ -149,33 +193,21 @@ Item {
                     width: parent.width
                     onAccepted: {
                         rootView.startStationFromGenre(text)
-                        stationListView.incrementCurrentIndex();
+                        stationCreator.next()
                     }
                 }
 
-                RoundedButton {
-                    text: ">"
-                    height: orText.height * 3
-                    width: height
-                    anchors { horizontalCenter: genreInputField.horizontalCenter
-                        top: genreInputField.bottom; topMargin: orText.height }
-                    onClicked: genreInputField.accepted(genreInputField.text)
-                }
-
             }
+        }
+    }
+    Component {
+        id: createByYear
 
-
-
-
-
-
-
-
-
-
+        Row {
+            anchors.fill: parent
 
             Item {
-                height: parent.rowHeight
+                height: parent.height
                 width: parent.width * 0.7
                 Text {
                     id: selectYearText
@@ -193,7 +225,7 @@ Item {
 
                     function decadeClicked(decade) {
                         rootView.startStationFromYear(decade)
-                        stationListView.incrementCurrentIndex();
+                        stationCreator.next()
                     }
 
                     Text { text: "60s"; font.pointSize: 20; color: "white"; MouseArea{ anchors.fill: parent; onClicked: yearsRow.decadeClicked(parent.text)}}
@@ -204,9 +236,10 @@ Item {
                 }
             }
             Item {
-                height: parent.rowHeight
+                height: parent.height
                 width: parent.width * 0.25
                 Text {
+                    id: orText
                     text: "...or specify a year:"
                     color: "white"
                     anchors { left: parent.left; right: parent.right;
@@ -219,51 +252,10 @@ Item {
                     width: parent.width
                     onAccepted: {
                         rootView.startStationFromYear(text)
-                        stationListView.incrementCurrentIndex();
+                        stationCreator.next()
                     }
                 }
-
-                RoundedButton {
-                    text: ">"
-                    height: orText.height * 3
-                    width: height
-                    anchors { horizontalCenter: yearInputField.horizontalCenter
-                        top: yearInputField.bottom; topMargin: orText.height }
-                    onClicked: yearInputField.accepted(yearInputField.text)
-                }
-
             }
-
-        }
-    }
-
-
-    RoundedButton {
-        anchors {
-            top: parent.top
-            horizontalCenter: parent.horizontalCenter
-        }
-        height: orText.height * 3
-        width: height * 3
-        text: "^"
-        onClicked: flickArea.moveUp()
-        opacity: flickArea.contentY > 0 ? 1 : 0
-        Behavior on opacity {
-            NumberAnimation { duration: 200 }
-        }
-    }
-    RoundedButton {
-        anchors {
-            bottom: parent.bottom
-            horizontalCenter: parent.horizontalCenter
-        }
-        height: orText.height * 3
-        width: height * 3
-        text: "v"
-        onClicked: flickArea.moveDown()
-        opacity: flickArea.contentY < mainGrid.rowHeight ? 1 : 0
-        Behavior on opacity {
-            NumberAnimation { duration: 200 }
         }
     }
 }
