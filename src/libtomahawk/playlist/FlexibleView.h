@@ -30,7 +30,6 @@ class TrackView;
 class PlayableModel;
 class PlaylistModel;
 class FlexibleHeader;
-class FlexibleViewInterface;
 
 class DLLEXPORT FlexibleView : public QWidget, public Tomahawk::ViewPage
 {
@@ -89,14 +88,10 @@ private:
     TrackView* m_detailedView;
     GridView* m_gridView;
 
-    Tomahawk::playlistinterface_ptr m_playlistInterface;
-
     PlayableModel* m_model;
     QStackedWidget* m_stack;
 
     FlexibleViewMode m_mode;
-
-    friend class ::FlexibleViewInterface;
 };
 
 Q_DECLARE_METATYPE( FlexibleView::FlexibleViewMode );
