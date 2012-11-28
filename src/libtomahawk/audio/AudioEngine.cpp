@@ -232,7 +232,7 @@ AudioEngine::canGoNext()
         return false;
     }
 
-    return m_playlist.data()->hasNextResult();
+    return ( m_playlist.data()->hasNextResult() && m_playlist.data()->nextResult()->isOnline() );
 }
 
 
@@ -246,7 +246,7 @@ AudioEngine::canGoPrevious()
         m_playlist.data()->skipRestrictions() == PlaylistModes::NoSkipBackwards )
         return false;
 
-    return m_playlist.data()->hasPreviousResult();
+    return ( m_playlist.data()->hasPreviousResult() && m_playlist.data()->previousResult()->isOnline() );
 }
 
 
