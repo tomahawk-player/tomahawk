@@ -116,7 +116,7 @@ PlayableProxyModelPlaylistInterface::onModelChanged()
 
 
 QList< Tomahawk::query_ptr >
-PlayableProxyModelPlaylistInterface::tracks()
+PlayableProxyModelPlaylistInterface::tracks() const
 {
     if ( m_proxyModel.isNull() )
         return QList< query_ptr >();
@@ -153,7 +153,7 @@ PlayableProxyModelPlaylistInterface::setCurrentIndex( qint64 index )
 
 
 qint64
-PlayableProxyModelPlaylistInterface::siblingIndex( int itemsAway ) const
+PlayableProxyModelPlaylistInterface::siblingIndex( int itemsAway, qint64 rootIndex ) const
 {
     if ( m_proxyModel.isNull() )
         return -1;
@@ -213,14 +213,28 @@ PlayableProxyModelPlaylistInterface::siblingIndex( int itemsAway ) const
                 }
             }
         }
-        else if ( proxyModel->currentIndex().isValid() )
+        else
         {
-            // random mode is disabled
-            idx = proxyModel->currentIndex();
-
-            if ( m_repeatMode != PlaylistModes::RepeatOne )
+            if ( m_repeatMode == PlaylistModes::RepeatOne )
             {
-                // keep progressing through the playlist normally
+                idx = proxyModel->currentIndex();
+            }
+            else
+            {
+                // random mode is disabled
+                if ( rootIndex == -1 )
+                {
+                    idx = proxyModel->currentIndex();
+                }
+                else
+                {
+                    PlayableItem* pitem = static_cast<PlayableItem*>( (void*)rootIndex );
+                    if ( !pitem )
+                        return -1;
+
+                    idx = proxyModel->mapFromSource( pitem->index );
+                }
+
                 idx = proxyModel->index( idx.row() + itemsAway, 0 );
             }
         }

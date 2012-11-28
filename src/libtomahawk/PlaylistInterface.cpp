@@ -82,6 +82,42 @@ PlaylistInterface::siblingResult( int itemsAway ) const
 }
 
 
+int
+PlaylistInterface::posOfResult( const Tomahawk::result_ptr& result ) const
+{
+    const QList< Tomahawk::query_ptr > queries = tracks();
+
+    int res = 0;
+    foreach ( const Tomahawk::query_ptr& query, queries )
+    {
+        if ( query && query->numResults() && query->results().contains( result ) )
+            return res;
+
+        res++;
+    }
+
+    return -1;
+}
+
+
+int
+PlaylistInterface::posOfQuery( const Tomahawk::query_ptr& query ) const
+{
+    const QList< Tomahawk::query_ptr > queries = tracks();
+
+    int res = 0;
+    foreach ( const Tomahawk::query_ptr& q, queries )
+    {
+        if ( query == q )
+            return res;
+
+        res++;
+    }
+
+    return -1;
+}
+
+
 QList<Tomahawk::query_ptr>
 PlaylistInterface::filterTracks( const QList<Tomahawk::query_ptr>& queries )
 {

@@ -36,10 +36,10 @@ class DLLEXPORT SourcePlaylistInterface : public Tomahawk::PlaylistInterface
 Q_OBJECT
 
 public:
-    SourcePlaylistInterface( Tomahawk::Source *source, Tomahawk::PlaylistModes::LatchMode latchMode = PlaylistModes::StayOnSong );
+    SourcePlaylistInterface( Tomahawk::Source* source, Tomahawk::PlaylistModes::LatchMode latchMode = PlaylistModes::StayOnSong );
     virtual ~SourcePlaylistInterface();
 
-    QList<Tomahawk::query_ptr> tracks();
+    QList<Tomahawk::query_ptr> tracks() const;
 
     virtual int trackCount() const { return 1; }
 
@@ -49,7 +49,7 @@ public:
     virtual qint64 indexOfResult( const Tomahawk::result_ptr& result ) const { Q_UNUSED( result ); Q_ASSERT( false ); return -1; }
     virtual qint64 indexOfQuery( const Tomahawk::query_ptr& query ) const { Q_UNUSED( query ); Q_ASSERT( false ); return -1; }
 
-    virtual qint64 siblingIndex( int itemsAway ) const;
+    virtual qint64 siblingIndex( int itemsAway, qint64 rootIndex = -1 ) const;
     virtual bool sourceValid() const;
     virtual bool hasNextResult() const;
     virtual Tomahawk::result_ptr nextResult() const;

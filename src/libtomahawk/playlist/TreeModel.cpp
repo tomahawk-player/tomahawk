@@ -426,27 +426,59 @@ TreeModel::indexFromAlbum( const Tomahawk::album_ptr& album ) const
 QModelIndex
 TreeModel::indexFromResult( const Tomahawk::result_ptr& result ) const
 {
-    QModelIndex artistIdx = indexFromArtist( result->artist() );
-    for ( int i = 0; i < rowCount( artistIdx ); i++ )
+    QModelIndex albumIdx = indexFromAlbum( result->album() );
+    for ( int i = 0; i < rowCount( albumIdx ); i++ )
     {
-        QModelIndex idx = index( i, 0, artistIdx );
-        PlayableItem* albumItem = itemFromIndex( idx );
-        if ( albumItem && albumItem->album() == result->album() )
+        QModelIndex idx = index( i, 0, albumIdx );
+        PlayableItem* item = itemFromIndex( idx );
+        tDebug() << item->result()->toString();
+        if ( item && item->result() == result )
         {
-            for ( int j = 0; j < rowCount( idx ); j++ )
-            {
-                QModelIndex subidx = index( j, 0, idx );
-                PlayableItem* item = itemFromIndex( subidx );
-                if ( item && item->result() == result )
-                {
-                    return subidx;
-                }
-            }
-
-            break;
+            return idx;
         }
     }
 
     tDebug() << "Could not find item for result:" << result->toString();
     return QModelIndex();
+}
+
+
+QModelIndex
+TreeModel::indexFromQuery( const Tomahawk::query_ptr& query ) const
+{
+    Tomahawk::artist_ptr artist = Artist::get( query->artist(), false );
+    Tomahawk::album_ptr album = Album::get( artist, query->album(), false );
+
+    QModelIndex albumIdx = indexFromAlbum( album );
+    for ( int i = 0; i < rowCount( albumIdx ); i++ )
+    {
+        QModelIndex idx = index( i, 0, albumIdx );
+        PlayableItem* item = itemFromIndex( idx );
+        if ( item && item->result() && item->result()->toQuery()->equals( query ) )
+        {
+            return idx;
+        }
+    }
+
+    tDebug() << "Could not find item for query:" << query->toString();
+    return QModelIndex();
+}
+
+
+PlayableItem*
+TreeModel::itemFromResult( const Tomahawk::result_ptr& result ) const
+{
+    QModelIndex albumIdx = indexFromAlbum( result->album() );
+    for ( int i = 0; i < rowCount( albumIdx ); i++ )
+    {
+        QModelIndex idx = index( i, 0, albumIdx );
+        PlayableItem* item = itemFromIndex( idx );
+        if ( item && item->result() == result )
+        {
+            return item;
+        }
+    }
+
+    tDebug() << "Could not find item for result:" << result->toString();
+    return 0;
 }

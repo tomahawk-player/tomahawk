@@ -367,3 +367,10 @@ TreeProxyModel::indexFromResult( const Tomahawk::result_ptr& result ) const
 {
     return mapFromSource( m_model->indexFromResult( result ) );
 }
+
+
+QModelIndex
+TreeProxyModel::indexFromQuery( const Tomahawk::query_ptr& query ) const
+{
+    return mapFromSource( m_model->indexFromQuery( query ) );
+}

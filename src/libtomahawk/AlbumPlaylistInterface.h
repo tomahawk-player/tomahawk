@@ -40,12 +40,12 @@ public:
     AlbumPlaylistInterface( Tomahawk::Album* album, Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection );
     virtual ~AlbumPlaylistInterface();
 
-    QList<Tomahawk::query_ptr> tracks();
+    QList<Tomahawk::query_ptr> tracks() const;
 
     virtual int trackCount() const { return m_queries.count(); }
 
     virtual void setCurrentIndex( qint64 index );
-    virtual qint64 siblingIndex( int itemsAway ) const;
+    virtual qint64 siblingIndex( int itemsAway, qint64 rootIndex = -1 ) const;
 
     virtual Tomahawk::result_ptr resultAt( qint64 index ) const { Q_UNUSED( index ); Q_ASSERT( false ); return Tomahawk::result_ptr(); }
     virtual Tomahawk::query_ptr queryAt( qint64 index ) const { Q_UNUSED( index ); Q_ASSERT( false ); return Tomahawk::query_ptr(); }

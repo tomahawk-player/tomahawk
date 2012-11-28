@@ -38,9 +38,9 @@ public:
     explicit PlaylistInterface();
     virtual ~PlaylistInterface();
 
-    const QString id() { return m_id; }
+    const QString id() const { return m_id; }
 
-    virtual QList< Tomahawk::query_ptr > tracks() = 0;
+    virtual QList< Tomahawk::query_ptr > tracks() const = 0;
     virtual bool isFinished() const { return m_finished; }
 
     virtual int trackCount() const = 0;
@@ -53,13 +53,16 @@ public:
     virtual Tomahawk::result_ptr nextResult() const;
     virtual Tomahawk::result_ptr previousResult() const;
 
-    virtual qint64 siblingIndex( int itemsAway ) const = 0;
+    virtual qint64 siblingIndex( int itemsAway, qint64 rootIndex = -1 ) const = 0;
     virtual Tomahawk::result_ptr siblingResult( int itemsAway ) const;
 
     virtual Tomahawk::result_ptr resultAt( qint64 index ) const = 0;
     virtual Tomahawk::query_ptr queryAt( qint64 index ) const = 0;
     virtual qint64 indexOfResult( const Tomahawk::result_ptr& result ) const = 0;
     virtual qint64 indexOfQuery( const Tomahawk::query_ptr& query ) const = 0;
+
+    virtual int posOfResult( const Tomahawk::result_ptr& result ) const;
+    virtual int posOfQuery( const Tomahawk::query_ptr& query ) const;
 
     virtual PlaylistModes::RepeatMode repeatMode() const = 0;
     virtual bool shuffled() const = 0;

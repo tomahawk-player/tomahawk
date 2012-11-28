@@ -39,7 +39,7 @@ public:
     explicit PlayableProxyModelPlaylistInterface( PlayableProxyModel* proxyModel );
     virtual ~PlayableProxyModelPlaylistInterface();
 
-    virtual QList<Tomahawk::query_ptr> tracks();
+    virtual QList<Tomahawk::query_ptr> tracks() const;
 
     virtual int trackCount() const;
 
@@ -50,7 +50,7 @@ public:
     virtual qint64 indexOfQuery( const Tomahawk::query_ptr& query ) const;
 
     virtual Tomahawk::result_ptr currentItem() const;
-    virtual qint64 siblingIndex( int itemsAway ) const;
+    virtual qint64 siblingIndex( int itemsAway, qint64 rootIndex = -1 ) const;
 
     virtual QString filter() const;
 
