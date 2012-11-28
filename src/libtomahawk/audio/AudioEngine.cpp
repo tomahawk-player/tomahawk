@@ -327,7 +327,7 @@ AudioEngine::sendWaitingNotification() const
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     //since it's async, after this is triggered our result could come in, so don't show the popup in that case
-    if ( !m_playlist.isNull() && m_playlist->hasNextResult() )
+    if ( m_playlist && m_playlist->nextResult() && m_playlist->nextResult()->isOnline() )
         return;
 
     Tomahawk::InfoSystem::InfoPushData pushData (
