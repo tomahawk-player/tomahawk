@@ -54,6 +54,7 @@ ArtistPlaylistInterface::~ArtistPlaylistInterface()
 void
 ArtistPlaylistInterface::setCurrentIndex( qint64 index )
 {
+    Q_UNUSED( index );
     Q_ASSERT( false );
 
 /*    m_currentTrack = index;
@@ -64,6 +65,8 @@ ArtistPlaylistInterface::setCurrentIndex( qint64 index )
 qint64
 ArtistPlaylistInterface::siblingIndex( int itemsAway, qint64 rootIndex ) const
 {
+    Q_UNUSED( itemsAway );
+    Q_UNUSED( rootIndex );
     Q_ASSERT( false );
 
 /*    qint64 p = m_currentTrack;

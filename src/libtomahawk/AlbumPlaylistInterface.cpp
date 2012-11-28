@@ -55,6 +55,7 @@ AlbumPlaylistInterface::~AlbumPlaylistInterface()
 void
 AlbumPlaylistInterface::setCurrentIndex( qint64 index )
 {
+    Q_UNUSED( index );
     Q_ASSERT( false );
 /*    m_currentTrack = index;
     m_currentItem = m_queries.at( index )->results().first();*/
@@ -64,6 +65,8 @@ AlbumPlaylistInterface::setCurrentIndex( qint64 index )
 qint64
 AlbumPlaylistInterface::siblingIndex( int itemsAway, qint64 rootIndex ) const
 {
+    Q_UNUSED( itemsAway );
+    Q_UNUSED( rootIndex );
     Q_ASSERT( false );
 
     /*
@@ -92,6 +95,7 @@ AlbumPlaylistInterface::currentItem() const
 bool
 AlbumPlaylistInterface::setCurrentTrack( unsigned int albumpos )
 {
+    Q_UNUSED( albumpos );
     Q_ASSERT( false );
     return false;
 
