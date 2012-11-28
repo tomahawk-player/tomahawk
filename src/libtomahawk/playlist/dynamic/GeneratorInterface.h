@@ -111,7 +111,6 @@ public:
     int mode() const { return (int)m_mode; }
     void setMode( int mode ) { m_mode = (GeneratorMode)mode; }
 
-
     virtual bool startFromTrack( const Tomahawk::query_ptr& query ) = 0;
     virtual bool startFromArtist( const Tomahawk::artist_ptr& artist ) = 0;
     virtual bool startFromGenre( const QString& genre ) = 0;

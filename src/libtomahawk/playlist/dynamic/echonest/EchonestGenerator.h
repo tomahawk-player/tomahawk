@@ -86,6 +86,7 @@ public:
     static QByteArray catalogId( const QString& collectionId );
 
     static void setupCatalogs();
+
 signals:
     void paramsGenerated( const Echonest::DynamicPlaylist::PlaylistParams& );
 
@@ -102,6 +103,7 @@ private slots:
     void knownCatalogsChanged();
 
     void songLookupFinished();
+
 private:
     // get result from signal paramsGenerated
     void getParams() throw( std::runtime_error );
