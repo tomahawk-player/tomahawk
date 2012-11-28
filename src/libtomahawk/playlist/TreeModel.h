@@ -61,9 +61,12 @@ public:
 
     void getCover( const QModelIndex& index );
 
-    QModelIndex indexFromArtist( const Tomahawk::artist_ptr& artist ) const;
-    QModelIndex indexFromAlbum( const Tomahawk::album_ptr& album ) const;
-    QModelIndex indexFromResult( const Tomahawk::result_ptr& result ) const;
+    virtual PlayableItem* itemFromResult( const Tomahawk::result_ptr& result ) const;
+
+    virtual QModelIndex indexFromArtist( const Tomahawk::artist_ptr& artist ) const;
+    virtual QModelIndex indexFromAlbum( const Tomahawk::album_ptr& album ) const;
+    virtual QModelIndex indexFromResult( const Tomahawk::result_ptr& result ) const;
+    virtual QModelIndex indexFromQuery( const Tomahawk::query_ptr& query ) const;
 
 public slots:
     void addAlbums( const QModelIndex& parent, const QList<Tomahawk::album_ptr>& albums );
