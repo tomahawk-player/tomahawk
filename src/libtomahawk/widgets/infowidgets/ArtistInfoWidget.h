@@ -50,7 +50,7 @@ namespace Ui
 
 class MetaArtistInfoInterface;
 
-class DLLEXPORT ArtistInfoWidget : public QDeclarativeView, public Tomahawk::ViewPage
+class DLLEXPORT ArtistInfoWidget : public QWidget, public Tomahawk::ViewPage
 {
 Q_OBJECT
 
