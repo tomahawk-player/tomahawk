@@ -223,7 +223,7 @@ AudioEngine::canGoNext()
         m_playlist.data()->skipRestrictions() == PlaylistModes::NoSkipForwards )
         return false;
 
-    if ( !m_currentTrack.isNull() && !m_playlist->hasNextItem() &&
+    if ( !m_currentTrack.isNull() && !m_playlist->hasNextResult() &&
          ( m_playlist->currentItem().isNull() || ( m_currentTrack->id() == m_playlist->currentItem()->id() ) ) )
     {
         //For instance, when doing a catch-up while listening along, but the person
@@ -232,7 +232,7 @@ AudioEngine::canGoNext()
         return false;
     }
 
-    return m_playlist.data()->hasNextItem();
+    return m_playlist.data()->hasNextResult();
 }
 
 
@@ -246,7 +246,7 @@ AudioEngine::canGoPrevious()
         m_playlist.data()->skipRestrictions() == PlaylistModes::NoSkipBackwards )
         return false;
 
-    return true;
+    return m_playlist.data()->hasPreviousResult();
 }
 
 
@@ -327,7 +327,7 @@ AudioEngine::sendWaitingNotification() const
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     //since it's async, after this is triggered our result could come in, so don't show the popup in that case
-    if ( !m_playlist.isNull() && m_playlist->hasNextItem() )
+    if ( !m_playlist.isNull() && m_playlist->hasNextResult() )
         return;
 
     Tomahawk::InfoSystem::InfoPushData pushData (
@@ -519,7 +519,13 @@ AudioEngine::loadPreviousTrack()
         return;
     }
 
-    Tomahawk::result_ptr result = m_playlist.data()->previousItem();
+    Tomahawk::result_ptr result;
+    if ( m_playlist.data()->hasPreviousResult() )
+    {
+        result = m_playlist.data()->previousResult();
+        m_currentTrackPlaylist = m_playlist;
+    }
+
     if ( !result.isNull() )
         loadTrack( result );
     else
@@ -546,14 +552,19 @@ AudioEngine::loadNextTrack()
 
     if ( m_queue && m_queue->trackCount() )
     {
-        result = m_queue->nextItem();
+        result = m_queue->nextResult();
     }
 
     if ( !m_playlist.isNull() && result.isNull() )
     {
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Loading playlist's next item" << m_playlist.data() << m_playlist->shuffled();
-        result = m_playlist.data()->nextItem();
-        m_currentTrackPlaylist = m_playlist;
+
+        if ( m_playlist.data()->hasNextResult() )
+        {
+            result = m_playlist.data()->nextResult();
+            tDebug() << Q_FUNC_INFO << result->toString();
+            m_currentTrackPlaylist = m_playlist;
+        }
     }
 
     if ( !result.isNull() )
@@ -681,21 +692,25 @@ AudioEngine::playItem( const Tomahawk::album_ptr& album )
 
 
 void
-AudioEngine::onPlaylistNextTrackReady()
+AudioEngine::onPlaylistNextTrackAvailable()
 {
-    // If in real-time and you have a few seconds left, you're probably lagging -- finish it up
-    if ( m_playlist && m_playlist->latchMode() == PlaylistModes::RealTime && ( m_waitingOnNewTrack || m_currentTrack.isNull() || m_currentTrack->id() == 0 || ( currentTrackTotalTime() - currentTime() > 6000 ) ) )
+    tDebug() << Q_FUNC_INFO;
+
     {
+        // If in real-time and you have a few seconds left, you're probably lagging -- finish it up
+        if ( m_playlist && m_playlist->latchMode() == PlaylistModes::RealTime && ( m_waitingOnNewTrack || m_currentTrack.isNull() || m_currentTrack->id() == 0 || ( currentTrackTotalTime() - currentTime() > 6000 ) ) )
+        {
+            m_waitingOnNewTrack = false;
+            loadNextTrack();
+            return;
+        }
+
+        if ( !m_waitingOnNewTrack )
+            return;
+
         m_waitingOnNewTrack = false;
         loadNextTrack();
-        return;
     }
-
-    if ( !m_waitingOnNewTrack )
-        return;
-
-    m_waitingOnNewTrack = false;
-    loadNextTrack();
 }
 
 
@@ -815,8 +830,12 @@ AudioEngine::setPlaylist( Tomahawk::playlistinterface_ptr playlist )
 
     if ( !m_playlist.isNull() )
     {
-        if ( m_playlist.data() && m_playlist.data()->retryMode() == PlaylistModes::Retry )
-            disconnect( m_playlist.data(), SIGNAL( nextTrackReady() ) );
+        if ( m_playlist.data() )
+        {
+            disconnect( m_playlist.data(), SIGNAL( previousTrackAvailable( bool ) ) );
+            disconnect( m_playlist.data(), SIGNAL( nextTrackAvailable( bool ) ) );
+        }
+
         m_playlist.data()->reset();
     }
 
@@ -830,8 +849,13 @@ AudioEngine::setPlaylist( Tomahawk::playlistinterface_ptr playlist )
     m_playlist = playlist;
     m_stopAfterTrack.clear();
 
-    if ( !m_playlist.isNull() && m_playlist.data() && m_playlist.data()->retryMode() == PlaylistModes::Retry )
-        connect( m_playlist.data(), SIGNAL( nextTrackReady() ), SLOT( onPlaylistNextTrackReady() ) );
+    if ( !m_playlist.isNull() )
+    {
+        connect( m_playlist.data(), SIGNAL( nextTrackAvailable() ), SLOT( onPlaylistNextTrackAvailable() ) );
+
+        connect( m_playlist.data(), SIGNAL( previousTrackAvailable() ), SIGNAL( controlStateChanged() ) );
+        connect( m_playlist.data(), SIGNAL( nextTrackAvailable() ), SIGNAL( controlStateChanged() ) );
+    }
 
     emit playlistChanged( playlist );
 }
@@ -863,6 +887,14 @@ AudioEngine::setCurrentTrack( const Tomahawk::result_ptr& result )
     }
 
     m_currentTrack = result;
+
+    if ( result )
+    {
+        if ( m_playlist )
+        {
+            m_playlist.data()->setCurrentIndex( m_playlist.data()->indexOfResult( result ) );
+        }
+    }
 }
 
 
