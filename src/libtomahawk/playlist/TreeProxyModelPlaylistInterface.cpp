@@ -123,7 +123,6 @@ TreeProxyModelPlaylistInterface::siblingIndex( int itemsAway ) const
         PlayableItem* item = proxyModel->itemFromIndex( proxyModel->mapToSource( idx ) );
         if ( item )
         {
-            tDebug() << Q_FUNC_INFO << "Next PlaylistItem found:" << item->result()->url();
             return (qint64)( item->index.internalPointer() );
         }
 

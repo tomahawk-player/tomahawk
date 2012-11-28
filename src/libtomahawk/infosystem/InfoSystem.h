@@ -119,14 +119,14 @@ signals:
     void updateCache( Tomahawk::InfoSystem::InfoStringHash criteria, qint64 maxAge, Tomahawk::InfoSystem::InfoType type, QVariant output );
 
 protected slots:
-    
+
     /**
      * @brief Called after the plugin has been moved to the appropriate thread. Do network-based setup tasks here.
      *
      * @return void
      **/
     virtual void init() = 0;
-    
+
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData ) = 0;
     virtual void pushInfo( Tomahawk::InfoSystem::InfoPushData pushData ) = 0;
     virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData ) = 0;

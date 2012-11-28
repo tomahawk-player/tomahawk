@@ -623,6 +623,7 @@ PlayableProxyModel::setFilter( const QString& pattern )
     }
 }
 
+
 PlayableItem*
 PlayableProxyModel::itemFromIndex( int itemIndex ) const
 {

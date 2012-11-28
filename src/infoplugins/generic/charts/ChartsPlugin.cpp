@@ -286,7 +286,7 @@ ChartsPlugin::fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData, con
 {
     /// Fetch the chart, we need source and id
     QUrl url = QUrl( QString( CHART_URL "charts/%1/%2" ).arg( source ).arg( chart_id ) );
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "fetching: " << url;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "fetching:" << url;
 
     QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
     reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
@@ -640,7 +640,7 @@ ChartsPlugin::chartReturned()
         emit updateCache( criteria, 86400000, requestData.type, returnedData );
     }
     else
-        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Network error in fetching chart:" << reply->url().toString();
+        tDebug() << Q_FUNC_INFO << "Network error in fetching chart:" << reply->url().toString();
 }
 
 }

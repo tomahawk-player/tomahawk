@@ -361,7 +361,7 @@ void
 WhatsHotWidget::leftCrumbIndexChanged( QModelIndex index )
 {
 
-    tDebug( LOGVERBOSE ) << "WhatsHot:: left crumb changed" << index.data();
+    tDebug( LOGVERBOSE ) << "WhatsHot: left crumb changed" << index.data();
 
     QStandardItem* item = m_crumbModelLeft->itemFromIndex( m_sortedProxy->mapToSource( index ) );
     if ( !item )
@@ -454,7 +454,7 @@ QStandardItem*
 WhatsHotWidget::parseNode( QStandardItem* parentItem, const QString &label, const QVariant &data )
 {
     Q_UNUSED( parentItem );
-//     tDebug( LOGVERBOSE ) << "WhatsHot:: parsing " << label;
+//     tDebug( LOGVERBOSE ) << "WhatsHot: parsing " << label;
 
     QStandardItem *sourceItem = new QStandardItem( label );
 

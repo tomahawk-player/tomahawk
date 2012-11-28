@@ -2290,47 +2290,47 @@ connect and stream from you?</source>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccount</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="482"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="478"/>
         <source>Sync with Spotify</source>
         <translation>Spotifyと同期する</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="486"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="482"/>
         <source>Re-enable syncing with Spotify</source>
         <translation>Spotifyとの同期を再び有効にする</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="494"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="490"/>
         <source>Create local copy</source>
         <translation>ローカルのコピーを作成</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="510"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="506"/>
         <source>Subscribe to playlist changes</source>
         <translation>プレイリストの変更フィードに登録する</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="514"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="510"/>
         <source>Re-enable playlist subscription</source>
         <translation>再びプレイリストのフィードに登録する</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="518"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="514"/>
         <source>Stop subscribing to changes</source>
         <translation>変更フィードの登録を解除</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="538"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="534"/>
         <source>Enable Spotify collaborations</source>
         <translation>Spotifyのコラボレーションを有効にする</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="540"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="536"/>
         <source>Disable Spotify collaborations</source>
         <translation>Spotifyのコラボレーションを無効にする</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="496"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="492"/>
         <source>Stop syncing with Spotify</source>
         <translation>Spotifyとの同期を解除</translation>
     </message>
