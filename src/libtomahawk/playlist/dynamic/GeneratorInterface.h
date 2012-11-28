@@ -97,12 +97,12 @@ public:
     /**
      * Returns the controls for this station.
      */
-    virtual QVariantMap controls() const;
+    virtual QVariantList controls() const;
 
     /**
      * Sets the controls (for example when loaded from database)
      */
-    virtual void setControls( const QVariantMap& controls );
+    virtual void setControls( const QVariantList& controls );
 
 
     /// The type of this generator
@@ -110,7 +110,6 @@ public:
 
     int mode() const { return (int)m_mode; }
     void setMode( int mode ) { m_mode = (GeneratorMode)mode; }
-
 
     virtual bool startFromTrack( const Tomahawk::query_ptr& query ) = 0;
     virtual bool startFromArtist( const Tomahawk::artist_ptr& artist ) = 0;
@@ -124,7 +123,7 @@ signals:
 protected:
     QString m_type;
     GeneratorMode m_mode;
-    QVariantMap m_controls;
+    QVariantList m_controls;
 };
 
 typedef QSharedPointer<GeneratorInterface> geninterface_ptr;

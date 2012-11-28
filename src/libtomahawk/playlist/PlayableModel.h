@@ -121,9 +121,9 @@ public:
 
     virtual void ensureResolved();
 
-    PlayableItem* itemFromIndex( const QModelIndex& index ) const;
-    PlayableItem* itemFromQuery( const Tomahawk::query_ptr& query ) const;
-    PlayableItem* itemFromResult( const Tomahawk::result_ptr& result ) const;
+    virtual PlayableItem* itemFromIndex( const QModelIndex& index ) const;
+    virtual PlayableItem* itemFromQuery( const Tomahawk::query_ptr& query ) const;
+    virtual PlayableItem* itemFromResult( const Tomahawk::result_ptr& result ) const;
     Q_INVOKABLE PlayableItem* itemFromIndex( int itemIndex ) const;
 
     /// Returns a flat list of all tracks in this model

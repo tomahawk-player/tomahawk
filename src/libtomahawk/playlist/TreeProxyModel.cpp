@@ -36,7 +36,7 @@ TreeProxyModel::TreeProxyModel( QObject* parent )
     , m_artistsFilterCmd( 0 )
     , m_model( 0 )
 {
-//    setPlaylistInterface( Tomahawk::playlistinterface_ptr( new Tomahawk::TreeProxyModelPlaylistInterface( this ) ) );
+    setPlaylistInterface( Tomahawk::playlistinterface_ptr( new Tomahawk::TreeProxyModelPlaylistInterface( this ) ) );
 }
 
 
@@ -366,4 +366,11 @@ QModelIndex
 TreeProxyModel::indexFromResult( const Tomahawk::result_ptr& result ) const
 {
     return mapFromSource( m_model->indexFromResult( result ) );
+}
+
+
+QModelIndex
+TreeProxyModel::indexFromQuery( const Tomahawk::query_ptr& query ) const
+{
+    return mapFromSource( m_model->indexFromQuery( query ) );
 }

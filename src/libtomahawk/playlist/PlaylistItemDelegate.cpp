@@ -182,7 +182,7 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
         if ( useAvatars )
         {
             if ( !source.isNull() )
-                pixmap = source->avatar( Source::FancyStyle, ir.size() );
+                pixmap = source->avatar( TomahawkUtils::RoundedCorners, ir.size() );
         }
         else
             pixmap = item->query()->cover( ir.size(), false );
@@ -192,7 +192,7 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
             if ( !useAvatars )
                 pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::ScaledCover, ir.size() );
             else
-                pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultSourceAvatar, TomahawkUtils::AvatarInFrame, ir.size() );
+                pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultSourceAvatar, TomahawkUtils::RoundedCorners, ir.size() );
         }
 
         painter->drawPixmap( ir, pixmap );

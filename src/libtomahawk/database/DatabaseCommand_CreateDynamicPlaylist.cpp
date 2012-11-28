@@ -42,53 +42,59 @@ DatabaseCommand_CreateDynamicPlaylist::DatabaseCommand_CreateDynamicPlaylist( QO
     : DatabaseCommand_CreatePlaylist( parent )
     , m_autoLoad( true )
 {
-    tDebug() << Q_FUNC_INFO << "creating dynamiccreatecommand 1";
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Creating dynamiccreatecommand 1";
 }
 
 
-DatabaseCommand_CreateDynamicPlaylist::DatabaseCommand_CreateDynamicPlaylist( const source_ptr& author,
-                                                                const dynplaylist_ptr& playlist, bool autoLoad )
+DatabaseCommand_CreateDynamicPlaylist::DatabaseCommand_CreateDynamicPlaylist( const source_ptr& author, const dynplaylist_ptr& playlist, bool autoLoad )
     : DatabaseCommand_CreatePlaylist( author, playlist.staticCast<Playlist>() )
     , m_playlist( playlist )
     , m_autoLoad( autoLoad )
 {
-    tDebug() << Q_FUNC_INFO << "creating dynamiccreatecommand 2";
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Creating dynamiccreatecommand 2";
 }
 
+
 DatabaseCommand_CreateDynamicPlaylist::~DatabaseCommand_CreateDynamicPlaylist()
-{}
+{
+}
+
 
 QVariant
 DatabaseCommand_CreateDynamicPlaylist::playlistV() const
 {
-        if( m_v.isNull() )
-            return QJson::QObjectHelper::qobject2qvariant( (QObject*)m_playlist.data() );
-        else
-            return m_v;
+    if ( m_v.isNull() )
+        return QJson::QObjectHelper::qobject2qvariant( (QObject*)m_playlist.data() );
+    else
+        return m_v;
 }
+
 
 void
 DatabaseCommand_CreateDynamicPlaylist::exec( DatabaseImpl* lib )
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     Q_ASSERT( !( m_playlist.isNull() && m_v.isNull() ) );
     Q_ASSERT( !source().isNull() );
 
     DatabaseCommand_CreatePlaylist::createPlaylist( lib, true );
-    qDebug() << "Created normal playlist, now creating additional dynamic info!";
+    tDebug( LOGVERBOSE ) << "Created normal playlist, now creating additional dynamic info!";
 
-    qDebug() << "Create dynamic execing!" << m_playlist << m_v;
+    tDebug( LOGVERBOSE ) << "Create dynamic execing!" << m_playlist << m_v;
     TomahawkSqlQuery cre = lib->newquery();
 
     cre.prepare( "INSERT INTO dynamic_playlist( guid, pltype, plmode, autoload ) "
                  "VALUES( ?, ?, ?, ? )" );
 
-    if( m_playlist.isNull() ) {
+    if ( m_playlist.isNull() )
+    {
         QVariantMap m = m_v.toMap();
         cre.addBindValue( m.value( "guid" ) );
         cre.addBindValue( m.value( "type" ) );
         cre.addBindValue( m.value( "mode" ) );
-    } else {
+    }
+    else
+    {
         cre.addBindValue( m_playlist->guid() );
         cre.addBindValue( m_playlist->type() );
         cre.addBindValue( m_playlist->mode() );
@@ -101,18 +107,18 @@ DatabaseCommand_CreateDynamicPlaylist::exec( DatabaseImpl* lib )
 void
 DatabaseCommand_CreateDynamicPlaylist::postCommitHook()
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     if ( source().isNull() || source()->collection().isNull() )
     {
-        qDebug() << "Source has gone offline, not emitting to GUI.";
+        Q_ASSERT( false );
         return;
     }
 
-    if(  !DatabaseCommand_CreatePlaylist::report() || report() == false )
+    if ( !DatabaseCommand_CreatePlaylist::report() || report() == false )
         return;
 
-    qDebug() << Q_FUNC_INFO << "..reporting..";
-    if( m_playlist.isNull() ) {
+    if ( m_playlist.isNull() )
+    {
         source_ptr src = source();
 #ifndef ENABLE_HEADLESS
         QMetaObject::invokeMethod( ViewManager::instance(),
@@ -121,9 +127,12 @@ DatabaseCommand_CreateDynamicPlaylist::postCommitHook()
                                    QGenericArgument( "Tomahawk::source_ptr", (const void*)&src ),
                                    Q_ARG( QVariant, m_v ) );
 #endif
-    } else {
+    }
+    else
+    {
         m_playlist->reportCreated( m_playlist );
     }
-    if( source()->isLocal() )
+
+    if ( source()->isLocal() )
         Servent::instance()->triggerDBSync();
 }

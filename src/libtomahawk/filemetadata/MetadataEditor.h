@@ -56,8 +56,8 @@ protected:
 private slots:
     void writeMetadata( bool closeDlg = false );
     void enablePushButtons();
-    void loadNextResult();
-    void loadPreviousResult();
+    void loadNextQuery();
+    void loadPreviousQuery();
 
     /* tag attributes */
     void setTitle( const QString& title );
@@ -85,7 +85,7 @@ private:
     Tomahawk::playlistinterface_ptr m_interface;
     QStringList m_editFiles;
 
-    int m_index;
+    qint64 m_index;
     bool m_editable;
 };
 

@@ -41,7 +41,7 @@ Tomahawk::GeneratorInterface::logo()
 }
 
 
-QVariantMap
+QVariantList
 Tomahawk::GeneratorInterface::controls() const
 {
     return m_controls;
@@ -49,7 +49,7 @@ Tomahawk::GeneratorInterface::controls() const
 
 
 void
-Tomahawk::GeneratorInterface::setControls( const QVariantMap& controls )
+Tomahawk::GeneratorInterface::setControls( const QVariantList& controls )
 {
     m_controls = controls;
 }

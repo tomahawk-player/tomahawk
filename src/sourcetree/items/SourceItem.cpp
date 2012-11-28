@@ -206,7 +206,7 @@ SourceItem::pixmap( const QSize& size ) const
         if ( m_source->avatar().isNull() )
             return m_defaultAvatar;
         else
-            return m_source->avatar( Source::FancyStyle, size );
+            return m_source->avatar( TomahawkUtils::RoundedCorners, size );
     }
 }
 

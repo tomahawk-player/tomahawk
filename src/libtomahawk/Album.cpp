@@ -50,13 +50,11 @@ albumCacheKey( const Tomahawk::artist_ptr& artist, const QString& albumName )
 
 Album::~Album()
 {
-    QMutexLocker lock( &s_mutex );
+/*    QMutexLocker lock( &s_mutex );
     s_albumsByName.remove( albumCacheKey( artist(), name() ) );
-    s_albumsByCoverId.remove( coverId() );
+    s_albumsByCoverId.remove( coverId() );*/
 /*    if ( id() > 0 )
         s_albumsById.remove( id() );*/
-
-    m_ownRef.clear();
 
 #ifndef ENABLE_HEADLESS
     delete m_cover;

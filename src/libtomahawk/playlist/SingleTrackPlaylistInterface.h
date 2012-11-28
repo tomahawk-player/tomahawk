@@ -55,9 +55,9 @@ public:
     virtual bool shuffled() const { return false; }
     virtual void setShuffled( bool ) {}
 
-    virtual qint64 siblingIndex( int ) const { return -1; }
+    virtual qint64 siblingIndex( int, qint64 rootIndex = -1 ) const { Q_UNUSED( rootIndex ); return -1; }
     virtual int trackCount() const { return 1; }
-    virtual QList< query_ptr > tracks() { return QList< query_ptr >(); }
+    virtual QList< query_ptr > tracks() const { return QList< query_ptr >(); }
 
 private:
     query_ptr m_track;

@@ -241,7 +241,7 @@ EchonestGenerator::startFromArtist( const Tomahawk::artist_ptr& artist )
 
     Echonest::DynamicPlaylist::PlaylistParams params;
     params << data;
-    params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::SongRadioType ) );
+//    params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::SongRadioType ) );
     emit paramsGenerated( params );
 
     return true;

@@ -4,6 +4,7 @@
 #include "Query.h"
 #include "Album.h"
 #include "Artist.h"
+#include "utils/TomahawkUtilsGui.h"
 
 #include <QDeclarativeImageProvider>
 #include <QModelIndex>
@@ -41,29 +42,44 @@ QPixmap DeclarativeCoverArtProvider::requestPixmap(const QString &id, QSize *siz
 //        }
 //    }
 
-    tDebug() << "Getting by id:" << id;
-    album_ptr album = Album::getByCoverId( id );
-    if ( !album.isNull() )
-    {
-        tDebug() << "Returning album cover:" << album->cover( requestedSize ).isNull();
-        return album->cover( requestedSize );
-    }
-    artist_ptr artist = Artist::getByCoverId( id );
-    if ( !artist.isNull() )
-    {
-        tDebug() << "Returning artist cover:" << artist->cover( requestedSize ).isNull();
-        return artist->cover( requestedSize );
-    }
+    QPixmap cover;
+
+    tDebug() << "Getting by id:" << id << requestedSize;
 /*    query_ptr query = Query::getByCoverId( id );
     if ( !query.isNull() ) {
         return query->cover( requestedSize );
     }*/
 
-    // TODO: create default cover art image
-    QPixmap pixmap( *size );
-    pixmap.fill();
+    album_ptr album = Album::getByCoverId( id );
+    if ( !album.isNull() )
+    {
+        tDebug() << "Returning album cover:" << album->cover( *size ).isNull();
+        cover = album->cover( *size );
+        if ( cover.isNull() )
+        {
+            tDebug() << Q_FUNC_INFO << "Returning default album image";
+            cover = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::Original, *size );
+        }
+    }
 
-    return pixmap;
+    artist_ptr artist = Artist::getByCoverId( id );
+    if ( !artist.isNull() )
+    {
+        tDebug() << "Returning artist cover:" << artist->cover( *size ).isNull();
+        cover = artist->cover( *size );
+        if ( cover.isNull() )
+        {
+            tDebug() << Q_FUNC_INFO << "Returning default artist image";
+            cover = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::Original, *size );
+        }
+    }
+
+    if ( cover.isNull() )
+    {
+        tDebug() << Q_FUNC_INFO << "Returning default track image";
+        cover = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::Original, *size );
+    }
+    return cover;
 }
 
 }

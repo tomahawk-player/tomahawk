@@ -57,15 +57,21 @@ PlaylistInterface::nextResult() const
 Tomahawk::result_ptr
 PlaylistInterface::siblingResult( int itemsAway ) const
 {
-    int idx = siblingIndex( itemsAway );
+    qint64 idx = siblingIndex( itemsAway );
+    qint64 safetyCheck = 0;
 
-    while ( idx >= 0 )
+    // If safetyCheck equals idx, this means the interface keeps returning the same item and we won't discover anything new - abort
+    // This can happen in repeat / random mode e.g.
+    while ( idx >= 0 && safetyCheck != idx )
     {
+        safetyCheck = idx;
         Tomahawk::query_ptr query = queryAt( idx );
-//        Tomahawk::result_ptr result = resultAt( idx );
-        if ( query->numResults() )
+        if ( query )
         {
-            return query->results().first();
+            if ( query->numResults() )
+            {
+                return query->results().first();
+            }
         }
 
         if ( itemsAway < 0 )
@@ -77,6 +83,42 @@ PlaylistInterface::siblingResult( int itemsAway ) const
     }
 
     return Tomahawk::result_ptr();
+}
+
+
+int
+PlaylistInterface::posOfResult( const Tomahawk::result_ptr& result ) const
+{
+    const QList< Tomahawk::query_ptr > queries = tracks();
+
+    int res = 0;
+    foreach ( const Tomahawk::query_ptr& query, queries )
+    {
+        if ( query && query->numResults() && query->results().contains( result ) )
+            return res;
+
+        res++;
+    }
+
+    return -1;
+}
+
+
+int
+PlaylistInterface::posOfQuery( const Tomahawk::query_ptr& query ) const
+{
+    const QList< Tomahawk::query_ptr > queries = tracks();
+
+    int res = 0;
+    foreach ( const Tomahawk::query_ptr& q, queries )
+    {
+        if ( query == q )
+            return res;
+
+        res++;
+    }
+
+    return -1;
 }
 
 
@@ -120,12 +162,12 @@ PlaylistInterface::filterTracks( const QList<Tomahawk::query_ptr>& queries )
 bool
 PlaylistInterface::hasNextResult() const
 {
-    return !( siblingResult( 1 ).isNull() );
+    return ( siblingResult( 1 ) );
 }
 
 
 bool
 PlaylistInterface::hasPreviousResult() const
 {
-    return !( siblingResult( -1 ).isNull() );
+    return ( siblingResult( -1 ) );
 }

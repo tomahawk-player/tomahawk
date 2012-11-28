@@ -152,13 +152,11 @@ Artist::Artist( const QString& name )
 
 Artist::~Artist()
 {
-    QMutexLocker lock( &s_mutex );
+/*    QMutexLocker lock( &s_mutex );
     s_artistsByName.remove( name() );
     s_artistsByCoverId.remove( coverId() );
 /*    if ( id() > 0 )
         s_artistsById.remove( id() );*/
-
-    m_ownRef.clear();
 
 #ifndef ENABLE_HEADLESS
     delete m_cover;

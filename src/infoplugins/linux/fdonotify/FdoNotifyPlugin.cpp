@@ -41,12 +41,14 @@
 #include "utils/TomahawkUtils.h"
 #include "ImageConverter.h"
 
+#include "TomahawkSettings.h"
+
+#include "utils/Logger.h"
+
 #include <QtDBus/QDBusConnection>
 #include <QtDBus/QDBusMessage>
 #include <QtGui/QImage>
 #include <QtPlugin>
-
-#include "utils/Logger.h"
 
 namespace Tomahawk
 {
@@ -72,7 +74,11 @@ FdoNotifyPlugin::~FdoNotifyPlugin()
 void
 FdoNotifyPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
 {
-    qDebug() << Q_FUNC_INFO;
+    qDebug() << Q_FUNC_INFO << "showing notification: " << TomahawkSettings::instance()->songChangeNotificationEnabled();
+
+    if ( !TomahawkSettings::instance()->songChangeNotificationEnabled() )
+        return;
+
     QVariant inputData = pushData.infoPair.second;
 
     switch ( pushData.type )

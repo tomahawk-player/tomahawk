@@ -1482,67 +1482,67 @@ de se connecter et streamer de vous?</translation>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="226"/>
+        <location filename="../src/SettingsDialog.cpp" line="230"/>
         <source>Collection</source>
         <translation>Collection</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="228"/>
+        <location filename="../src/SettingsDialog.cpp" line="232"/>
         <source>Advanced</source>
         <translation>Avancés</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="150"/>
+        <location filename="../src/SettingsDialog.cpp" line="154"/>
         <source>All</source>
         <translation>Tous</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="274"/>
+        <location filename="../src/SettingsDialog.cpp" line="279"/>
         <source>Some changed settings will not take effect until Tomahawk is restarted</source>
         <translation>Certaines modifications ne prendront effet qu&apos;au prochain démarrage de Tomahawk</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="222"/>
+        <location filename="../src/SettingsDialog.cpp" line="226"/>
         <source>Services</source>
         <translation>Services</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="123"/>
+        <location filename="../src/SettingsDialog.cpp" line="127"/>
         <source>Install from file</source>
         <translation>Installer depuis un fichier</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="222"/>
+        <location filename="../src/SettingsDialog.cpp" line="226"/>
         <source>Configure the accounts and services used by Tomahawk to search and retrieve music, find your friends and update your status.</source>
         <translation>Configurer les comptes et les services que Tomahawk utilisera pour chercher et diffuser de la musique, retrouver vos amis ou mettre à jour votre statut.</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="226"/>
+        <location filename="../src/SettingsDialog.cpp" line="230"/>
         <source>Manage how Tomahawk finds music on your computer.</source>
         <translation>Gérer la manière dont Tomahawk trouve de la musique sur votre ordinateur.</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="228"/>
+        <location filename="../src/SettingsDialog.cpp" line="232"/>
         <source>Configure Tomahawk&apos;s advanced settings, including network connectivity settings, browser interaction and more.</source>
         <translation>Configurer les paramètres avancés de Tomahawk dont les paramètres de connectivité réseau, les interactions avec le navigateur et autres.</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="444"/>
+        <location filename="../src/SettingsDialog.cpp" line="451"/>
         <source>Install resolver from file</source>
         <translation>Installer un script de résolution depuis un fichier</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="491"/>
+        <location filename="../src/SettingsDialog.cpp" line="498"/>
         <source>Delete all Access Control entries?</source>
         <translation>Supprimer toutes les entrées de Contrôle d&apos;accès?</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="492"/>
+        <location filename="../src/SettingsDialog.cpp" line="499"/>
         <source>Do you really want to delete all Access Control entries? You will be asked for a decision again for each peer that you connect to.</source>
         <translation>Voulez-vous vraiment supprimer toutes les entrées de contrôle d&apos;accès ? On vous demandera de nouveau votre autorisation pour toutes les nouvelles connexions.</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="274"/>
+        <location filename="../src/SettingsDialog.cpp" line="279"/>
         <source>Information</source>
         <translation>Information</translation>
     </message>
@@ -1633,7 +1633,12 @@ de se connecter et streamer de vous?</translation>
         <translation>Envoyer un rapport d&apos;erreur si Tomahawk plante</translation>
     </message>
     <message>
-        <location filename="../src/Settings_Advanced.ui" line="245"/>
+        <location filename="../src/Settings_Advanced.ui" line="227"/>
+        <source>Show notification when a new song starts to play</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Settings_Advanced.ui" line="255"/>
         <source>Clear All Access Control Entries</source>
         <translation type="unfinished"/>
     </message>
@@ -2282,47 +2287,47 @@ de se connecter et streamer de vous?</translation>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccount</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="482"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="478"/>
         <source>Sync with Spotify</source>
         <translation>Synchroniser avec Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="486"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="482"/>
         <source>Re-enable syncing with Spotify</source>
         <translation>Réactiver la synchronisation avec Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="494"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="490"/>
         <source>Create local copy</source>
         <translation>Créer une copie localement</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="510"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="506"/>
         <source>Subscribe to playlist changes</source>
         <translation>S&apos;abonner aux modifications de la liste de lecture</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="514"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="510"/>
         <source>Re-enable playlist subscription</source>
         <translation>Réactiver l&apos;abonnement à la liste de lecture</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="518"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="514"/>
         <source>Stop subscribing to changes</source>
         <translation>Stopper l&apos;abonnement aux modifications</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="538"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="534"/>
         <source>Enable Spotify collaborations</source>
         <translation>Activer les collaborations Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="540"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="536"/>
         <source>Disable Spotify collaborations</source>
         <translation>Désactiver les collaborations Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="496"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="492"/>
         <source>Stop syncing with Spotify</source>
         <translation>Stopper la synchronisation avec Spotify</translation>
     </message>
@@ -3013,22 +3018,22 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
 <context>
     <name>Tomahawk::InfoSystem::ChartsPlugin</name>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="383"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="382"/>
         <source>Top Overall</source>
         <translation>Top global</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="476"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="475"/>
         <source>Artists</source>
         <translation>Artistes</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="478"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="477"/>
         <source>Albums</source>
         <translation>Albums</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="480"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="479"/>
         <source>Tracks</source>
         <translation>Pistes</translation>
     </message>
@@ -3036,12 +3041,12 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
 <context>
     <name>Tomahawk::InfoSystem::FdoNotifyPlugin</name>
     <message>
-        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="140"/>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="146"/>
         <source>Tomahawk is playing &quot;%1&quot; by %2%3.</source>
         <translation>Tomahawk joue &quot;%1&quot; par %2%3.</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="143"/>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="149"/>
         <source>on &quot;%1&quot;</source>
         <translation>sur &quot;%1&quot;</translation>
     </message>
@@ -3077,7 +3082,7 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
 <context>
     <name>Tomahawk::InfoSystem::NewReleasesPlugin</name>
     <message>
-        <location filename="../src/infoplugins/generic/newreleases/NewReleasesPlugin.cpp" line="452"/>
+        <location filename="../src/infoplugins/generic/newreleases/NewReleasesPlugin.cpp" line="584"/>
         <source>Albums</source>
         <translation>Albums</translation>
     </message>
@@ -3873,37 +3878,42 @@ Vous pouvez envoyer un message de synchronisation quand vous le souhaitez en env
 <context>
     <name>ViewManager</name>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="283"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="143"/>
+        <source>This playlist is empty!</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="284"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
         <translation>Après avoir scanné votre collection musicale, vous trouverez tous vos titres ici.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="285"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="286"/>
         <source>This collection is empty.</source>
         <translation>La collection est vide.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="344"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="345"/>
         <source>SuperCollection</source>
         <translation>SuperCollection</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="345"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="346"/>
         <source>Combined libraries of all your online friends</source>
         <translation>Collections regroupant toutes celles de vos amis en ligne</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="399"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="400"/>
         <source>Recently Played Tracks</source>
         <translation>Derniers titres joués</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="400"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="401"/>
         <source>Recently played tracks from all your friends</source>
         <translation>Derniers titres joués par vos amis</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="407"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="408"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>Désolé, aucune piste récemment jouée n&apos;a pu être trouvée !</translation>
     </message>

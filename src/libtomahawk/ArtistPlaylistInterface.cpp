@@ -54,15 +54,22 @@ ArtistPlaylistInterface::~ArtistPlaylistInterface()
 void
 ArtistPlaylistInterface::setCurrentIndex( qint64 index )
 {
-    m_currentTrack = index;
-    m_currentItem = m_queries.at( index )->results().first();
+    Q_UNUSED( index );
+    Q_ASSERT( false );
+
+/*    m_currentTrack = index;
+    m_currentItem = m_queries.at( index )->results().first();*/
 }
 
 
 qint64
-ArtistPlaylistInterface::siblingIndex( int itemsAway ) const
+ArtistPlaylistInterface::siblingIndex( int itemsAway, qint64 rootIndex ) const
 {
-    qint64 p = m_currentTrack;
+    Q_UNUSED( itemsAway );
+    Q_UNUSED( rootIndex );
+    Q_ASSERT( false );
+
+/*    qint64 p = m_currentTrack;
     p += itemsAway;
 
     if ( p < 0 )
@@ -71,7 +78,9 @@ ArtistPlaylistInterface::siblingIndex( int itemsAway ) const
     if ( p >= m_queries.count() )
         return -1;
 
-    return p;
+    return p;*/
+
+    return -1;
 }
 
 
@@ -83,7 +92,7 @@ ArtistPlaylistInterface::currentItem() const
 
 
 QList<Tomahawk::query_ptr>
-ArtistPlaylistInterface::tracks()
+ArtistPlaylistInterface::tracks() const
 {
     if ( m_queries.isEmpty() && m_artist )
     {
