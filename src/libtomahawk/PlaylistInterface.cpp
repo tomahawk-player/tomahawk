@@ -159,12 +159,12 @@ PlaylistInterface::filterTracks( const QList<Tomahawk::query_ptr>& queries )
 bool
 PlaylistInterface::hasNextResult() const
 {
-    return ( currentItem() && siblingResult( 1 ) );
+    return ( siblingResult( 1 ) );
 }
 
 
 bool
 PlaylistInterface::hasPreviousResult() const
 {
-    return ( currentItem() && siblingResult( -1 ) );
+    return ( siblingResult( -1 ) );
 }

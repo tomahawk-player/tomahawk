@@ -227,11 +227,13 @@ AudioEngine::canGoNext()
         return false;
 
     if ( m_playlist.data()->skipRestrictions() == PlaylistModes::NoSkip ||
-        m_playlist.data()->skipRestrictions() == PlaylistModes::NoSkipForwards )
+         m_playlist.data()->skipRestrictions() == PlaylistModes::NoSkipForwards )
+    {
         return false;
+    }
 
     if ( !m_currentTrack.isNull() && !m_playlist->hasNextResult() &&
-         ( m_playlist->currentItem().isNull() || ( m_currentTrack->id() == m_playlist->currentItem()->id() ) ) )
+       ( m_playlist->currentItem().isNull() || ( m_currentTrack->id() == m_playlist->currentItem()->id() ) ) )
     {
         //For instance, when doing a catch-up while listening along, but the person
         //you're following hasn't started a new track yet...don't do anything
@@ -239,7 +241,7 @@ AudioEngine::canGoNext()
         return false;
     }
 
-    return ( m_playlist.data()->hasNextResult() && m_playlist.data()->nextResult()->isOnline() );
+    return ( m_currentTrack && m_playlist.data()->hasNextResult() && m_playlist.data()->nextResult()->isOnline() );
 }
 
 
@@ -253,7 +255,7 @@ AudioEngine::canGoPrevious()
         m_playlist.data()->skipRestrictions() == PlaylistModes::NoSkipBackwards )
         return false;
 
-    return ( m_playlist.data()->hasPreviousResult() && m_playlist.data()->previousResult()->isOnline() );
+    return ( m_currentTrack && m_playlist.data()->hasPreviousResult() && m_playlist.data()->previousResult()->isOnline() );
 }
 
 
