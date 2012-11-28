@@ -57,6 +57,18 @@ PlayableModel::~PlayableModel()
 
 
 QModelIndex
+PlayableModel::createIndex( int row, int column, PlayableItem* item ) const
+{
+    if ( item->query() )
+    {
+        connect( item->query().data(), SIGNAL( playableStateChanged( bool ) ), SLOT( onQueryBecamePlayable( bool ) ), Qt::UniqueConnection );
+    }
+
+    return QAbstractItemModel::createIndex( row, column, item );
+}
+
+
+QModelIndex
 PlayableModel::index( int row, int column, const QModelIndex& parent ) const
 {
     if ( !m_rootItem || row < 0 || column < 0 )
@@ -192,7 +204,7 @@ PlayableModel::queryData( const query_ptr& query, int column, int role ) const
             if ( query->albumpos() != 0 )
             {
                 tPos = QString::number( query->albumpos() );
-                if( query->discnumber() == 0 )
+                if ( query->discnumber() == 0 )
                     return tPos;
                 else
                     return QString( "%1.%2" ).arg( QString::number( query->discnumber() ) )
@@ -542,7 +554,7 @@ PlayableModel::insertInternal( const QList< T >& items, int row )
 
     int i = 0;
     PlayableItem* plitem;
-    foreach( const T& item, items )
+    foreach ( const T& item, items )
     {
         plitem = new PlayableItem( item, m_rootItem, row + i );
         plitem->index = createIndex( row + i, 0, plitem );
@@ -846,9 +858,32 @@ PlayableModel::setIcon( const QPixmap& pixmap )
 }
 
 
+void
+PlayableModel::onQueryBecamePlayable( bool playable )
+{
+    Tomahawk::Query* q = qobject_cast< Query* >( sender() );
+    if ( !q )
+    {
+        // Track has been removed from the playlist by now
+        return;
+    }
+
+    Tomahawk::query_ptr query = q->weakRef().toStrongRef();
+    PlayableItem* item = itemFromQuery( query );
+
+    if ( item )
+    {
+        emit indexPlayable( item->index );
+    }
+}
+
+
 PlayableItem*
 PlayableModel::itemFromQuery( const Tomahawk::query_ptr& query ) const
 {
+    if ( !query )
+        return 0;
+
     for ( int i = 0; i < rowCount( QModelIndex() ); i++ )
     {
         QModelIndex idx = index( i, 0, QModelIndex() );
@@ -860,5 +895,26 @@ PlayableModel::itemFromQuery( const Tomahawk::query_ptr& query ) const
     }
 
     tDebug() << "Could not find item for query:" << query->toString();
+    return 0;
+}
+
+
+PlayableItem*
+PlayableModel::itemFromResult( const Tomahawk::result_ptr& result ) const
+{
+    if ( !result )
+        return 0;
+
+    for ( int i = 0; i < rowCount( QModelIndex() ); i++ )
+    {
+        QModelIndex idx = index( i, 0, QModelIndex() );
+        PlayableItem* item = itemFromIndex( idx );
+        if ( item && item->result() == result )
+        {
+            return item;
+        }
+    }
+
+    tDebug() << "Could not find item for result:" << result->toString();
     return 0;
 }

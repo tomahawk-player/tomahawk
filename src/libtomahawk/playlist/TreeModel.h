@@ -63,6 +63,7 @@ public:
 
     QModelIndex indexFromArtist( const Tomahawk::artist_ptr& artist ) const;
     QModelIndex indexFromAlbum( const Tomahawk::album_ptr& album ) const;
+    QModelIndex indexFromResult( const Tomahawk::result_ptr& result ) const;
 
 public slots:
     void addAlbums( const QModelIndex& parent, const QList<Tomahawk::album_ptr>& albums );

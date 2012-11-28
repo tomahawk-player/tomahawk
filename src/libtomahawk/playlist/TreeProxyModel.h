@@ -45,11 +45,11 @@ public:
     // workaround overloaded-virtual warning
     virtual void setSourcePlayableModel( PlayableModel* ) { Q_ASSERT( false ); }
 
-    virtual Tomahawk::playlistinterface_ptr playlistInterface();
-
     virtual void setFilter( const QString& pattern );
 
-signals:
+    QModelIndex indexFromArtist( const Tomahawk::artist_ptr& artist ) const;
+    QModelIndex indexFromAlbum( const Tomahawk::album_ptr& album ) const;
+    QModelIndex indexFromResult( const Tomahawk::result_ptr& result ) const;
 
 protected:
     bool filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const;
@@ -78,8 +78,6 @@ private:
 
     QString m_filter;
     TreeModel* m_model;
-
-    Tomahawk::playlistinterface_ptr m_playlistInterface;
 };
 
 #endif // TREEPROXYMODEL_H
