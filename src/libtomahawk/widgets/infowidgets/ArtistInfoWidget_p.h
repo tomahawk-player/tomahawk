@@ -65,9 +65,9 @@ public:
     virtual qint64 indexOfResult( const Tomahawk::result_ptr& result ) const { Q_UNUSED( result ); Q_ASSERT( false ); return -1; }
     virtual qint64 indexOfQuery( const Tomahawk::query_ptr& query ) const { Q_UNUSED( query ); Q_ASSERT( false ); return -1; }
     virtual Tomahawk::result_ptr currentItem() const { return Tomahawk::result_ptr(); }
-    virtual qint64 siblingIndex( int ) const { return -1; }
+    virtual qint64 siblingIndex( int itemsAway, qint64 rootIndex = -1 ) const { Q_UNUSED( itemsAway ); Q_UNUSED( rootIndex ); return -1; }
     virtual int trackCount() const { return 0; }
-    virtual QList< Tomahawk::query_ptr > tracks() { return QList< Tomahawk::query_ptr >(); }
+    virtual QList< Tomahawk::query_ptr > tracks() const { return QList< Tomahawk::query_ptr >(); }
     virtual int unfilteredTrackCount() const { return 0; }
 
     virtual bool hasChildInterface( Tomahawk::playlistinterface_ptr other )

@@ -42,7 +42,7 @@ public:
     PlaylistPlaylistInterface( Tomahawk::Playlist* playlist );
     virtual ~PlaylistPlaylistInterface();
 
-    virtual QList<Tomahawk::query_ptr> tracks();
+    virtual QList<Tomahawk::query_ptr> tracks() const;
 
     virtual int trackCount() const;
 
@@ -53,7 +53,7 @@ public:
     virtual qint64 indexOfQuery( const Tomahawk::query_ptr& query ) const { Q_UNUSED( query ); Q_ASSERT( false ); return -1; }
 
     virtual Tomahawk::result_ptr currentItem() const { return m_currentItem; }
-    virtual qint64 siblingIndex( int /*itemsAway*/ ) const { return -1; }
+    virtual qint64 siblingIndex( int /*itemsAway*/, qint64 rootIndex = -1 ) const { Q_UNUSED( rootIndex ); return -1; }
 
     virtual PlaylistModes::RepeatMode repeatMode() const { return PlaylistModes::NoRepeat; }
     virtual bool shuffled() const { return false; }

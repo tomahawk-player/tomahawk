@@ -58,9 +58,10 @@ SourcePlaylistInterface::setCurrentIndex( qint64 index )
 
 
 qint64
-SourcePlaylistInterface::siblingIndex( int itemsAway ) const
+SourcePlaylistInterface::siblingIndex( int itemsAway, qint64 rootIndex ) const
 {
     Q_UNUSED( itemsAway );
+    Q_UNUSED( rootIndex );
 
     if ( nextResult() )
         return 0;
@@ -125,7 +126,7 @@ SourcePlaylistInterface::hasNextResult() const
 
 
 QList<Tomahawk::query_ptr>
-SourcePlaylistInterface::tracks()
+SourcePlaylistInterface::tracks() const
 {
     QList<Tomahawk::query_ptr> tracks;
     return tracks; // FIXME (with what?)

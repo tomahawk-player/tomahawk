@@ -55,14 +55,18 @@ AlbumPlaylistInterface::~AlbumPlaylistInterface()
 void
 AlbumPlaylistInterface::setCurrentIndex( qint64 index )
 {
-    m_currentTrack = index;
-    m_currentItem = m_queries.at( index )->results().first();
+    Q_ASSERT( false );
+/*    m_currentTrack = index;
+    m_currentItem = m_queries.at( index )->results().first();*/
 }
 
 
 qint64
-AlbumPlaylistInterface::siblingIndex( int itemsAway ) const
+AlbumPlaylistInterface::siblingIndex( int itemsAway, qint64 rootIndex ) const
 {
+    Q_ASSERT( false );
+
+    /*
     qint64 p = m_currentTrack;
     p += itemsAway;
 
@@ -72,7 +76,9 @@ AlbumPlaylistInterface::siblingIndex( int itemsAway ) const
     if ( p >= m_queries.count() )
         return -1;
 
-    return p;
+    return p;*/
+
+    return -1;
 }
 
 
@@ -86,18 +92,21 @@ AlbumPlaylistInterface::currentItem() const
 bool
 AlbumPlaylistInterface::setCurrentTrack( unsigned int albumpos )
 {
-    albumpos--;
+    Q_ASSERT( false );
+    return false;
+
+/*    albumpos--;
     if ( ( int ) albumpos >= m_queries.count() )
         return false;
 
     m_currentTrack = albumpos;
     m_currentItem = m_queries.at( albumpos )->results().first();
-    return true;
+    return true;*/
 }
 
 
 QList< Tomahawk::query_ptr >
-AlbumPlaylistInterface::tracks()
+AlbumPlaylistInterface::tracks() const
 {
     if ( m_queries.isEmpty() && m_album )
     {

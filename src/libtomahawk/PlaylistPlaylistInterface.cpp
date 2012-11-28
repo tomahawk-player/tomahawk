@@ -48,7 +48,7 @@ PlaylistPlaylistInterface::trackCount() const
 
 
 QList< Tomahawk::query_ptr >
-PlaylistPlaylistInterface::tracks()
+PlaylistPlaylistInterface::tracks() const
 {
     QList<Tomahawk::query_ptr> queries;
     foreach( const plentry_ptr& p, ( m_playlist.isNull() ? QList< Tomahawk::plentry_ptr >() : m_playlist.data()->entries() ) )
