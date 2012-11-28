@@ -51,38 +51,27 @@ ArtistPlaylistInterface::~ArtistPlaylistInterface()
 }
 
 
-Tomahawk::result_ptr
-ArtistPlaylistInterface::siblingItem( int itemsAway, bool readOnly )
+void
+ArtistPlaylistInterface::setCurrentIndex( qint64 index )
 {
-    Q_UNUSED( readOnly );
-
-    int p = m_currentTrack;
-    p += itemsAway;
-
-    if ( p < 0 )
-        return Tomahawk::result_ptr();
-
-    if ( p >= m_queries.count() )
-        return Tomahawk::result_ptr();
-
-    if ( !m_queries.at( p )->numResults() )
-        return siblingItem( itemsAway + 1 );
-
-    m_currentTrack = p;
-    m_currentItem = m_queries.at( p )->results().first();
-    return m_currentItem;
+    m_currentTrack = index;
+    m_currentItem = m_queries.at( index )->results().first();
 }
 
 
-bool
-ArtistPlaylistInterface::hasNextItem()
+qint64
+ArtistPlaylistInterface::siblingIndex( int itemsAway ) const
 {
-    int p = m_currentTrack;
-    p++;
-    if ( p < 0 || p >= m_queries.count() )
-        return false;
+    qint64 p = m_currentTrack;
+    p += itemsAway;
 
-    return true;
+    if ( p < 0 )
+        return -1;
+
+    if ( p >= m_queries.count() )
+        return -1;
+
+    return p;
 }
 
 
