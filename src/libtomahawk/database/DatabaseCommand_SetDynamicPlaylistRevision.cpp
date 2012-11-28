@@ -116,7 +116,7 @@ DatabaseCommand_SetDynamicPlaylistRevision::postCommitHook()
         Q_ASSERT( false );
         return;
     }
-    
+
     // workaround a bug in pre-0.1.0 tomahawks. they created dynamic playlists in OnDemand mode *always*, and then set the mode to the real one.
     // now that we separate them, if we get them as one and then get a changed mode, the playlist ends up in the wrong bucket in Collection.
     // so here we fix it if we have to.

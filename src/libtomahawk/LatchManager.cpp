@@ -42,6 +42,7 @@ LatchManager::~LatchManager()
 
 }
 
+
 bool
 LatchManager::isLatched( const source_ptr& src )
 {
@@ -58,8 +59,9 @@ LatchManager::latchRequest( const source_ptr& source )
 
     m_state = Latching;
     m_waitingForLatch = source;
-    AudioEngine::instance()->playItem( source->playlistInterface(), source->playlistInterface()->nextItem() );
+    AudioEngine::instance()->playItem( source->playlistInterface(), source->playlistInterface()->nextResult() );
 }
+
 
 void
 LatchManager::playlistChanged( Tomahawk::playlistinterface_ptr )

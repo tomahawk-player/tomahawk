@@ -568,7 +568,6 @@ MprisPlugin::onTrackCountChanged( unsigned int tracks )
     Q_UNUSED( tracks );
     notifyPropertyChanged( "org.mpris.MediaPlayer2.Player", "CanGoNext" );
     notifyPropertyChanged( "org.mpris.MediaPlayer2.Player", "CanGoPrevious" );
-
 }
 
 

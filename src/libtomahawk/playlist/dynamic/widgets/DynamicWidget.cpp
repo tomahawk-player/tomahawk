@@ -107,6 +107,7 @@ DynamicWidget::~DynamicWidget()
 {
 }
 
+
 dynplaylist_ptr
 DynamicWidget::playlist()
 {
@@ -153,7 +154,6 @@ DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
         disconnect( m_playlist.data(), SIGNAL( deleted( Tomahawk::dynplaylist_ptr ) ), this, SLOT( onDeleted() ) );
         disconnect( m_playlist.data(), SIGNAL( changed() ), this, SLOT( onChanged() ) );
     }
-
 
     m_playlist = playlist;
     m_view->setOnDemand( m_playlist->mode() == OnDemand );
@@ -414,6 +414,7 @@ DynamicWidget::controlChanged( const Tomahawk::dyncontrol_ptr& control )
     emit descriptionChanged( m_playlist->generator()->sentenceSummary() );
 }
 
+
 void
 DynamicWidget::steeringChanged()
 {
@@ -497,17 +498,20 @@ DynamicWidget::paintRoundedFilledRect( QPainter& p, QPalette& /* pal */, QRect& 
     p.drawRoundedRect( r, 10, 10 );
 }
 
+
 QString
 DynamicWidget::description() const
 {
     return m_model->description();
 }
 
+
 QString
 DynamicWidget::title() const
 {
     return m_model->title();
 }
+
 
 QPixmap
 DynamicWidget::pixmap() const

@@ -194,7 +194,7 @@ OverlayWidget::paintEvent( QPaintEvent* event )
         int width = qMin( maxiSize.width(), prefSize.width() );
         int height = qMin( maxiSize.height(), prefSize.height() );
         QSize newSize = QSize( width, height );
-        
+
         if ( newSize != size() )
             resize( newSize );
     }
