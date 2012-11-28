@@ -139,7 +139,7 @@ void
 PlayableProxyModelPlaylistInterface::setCurrentIndex( qint64 index )
 {
     PlayableItem* item = static_cast<PlayableItem*>( (void*)index );
-    if ( !item )
+    if ( index < 0 || !item )
     {
         m_proxyModel.data()->setCurrentIndex( QModelIndex() );
     }

@@ -71,7 +71,7 @@ void
 TreeProxyModelPlaylistInterface::setCurrentIndex( qint64 index )
 {
     PlayableItem* item = static_cast<PlayableItem*>( (void*)index );
-    if ( !item )
+    if ( index < 0 || !item )
     {
         m_proxyModel.data()->setCurrentIndex( QModelIndex() );
     }
@@ -124,7 +124,7 @@ TreeProxyModelPlaylistInterface::siblingIndex( int itemsAway ) const
         if ( item )
         {
             tDebug() << Q_FUNC_INFO << "Next PlaylistItem found:" << item->result()->url();
-            return (qint64)( proxyModel->mapToSource( idx ).internalPointer() );
+            return (qint64)( item->index.internalPointer() );
         }
 
         idx = proxyModel->index( idx.row() + ( itemsAway > 0 ? 1 : -1 ), 0, idx.parent() );

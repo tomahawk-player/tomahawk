@@ -36,7 +36,7 @@ TreeProxyModel::TreeProxyModel( QObject* parent )
     , m_artistsFilterCmd( 0 )
     , m_model( 0 )
 {
-//    setPlaylistInterface( Tomahawk::playlistinterface_ptr( new Tomahawk::TreeProxyModelPlaylistInterface( this ) ) );
+    setPlaylistInterface( Tomahawk::playlistinterface_ptr( new Tomahawk::TreeProxyModelPlaylistInterface( this ) ) );
 }
 
 
