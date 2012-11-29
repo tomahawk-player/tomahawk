@@ -86,8 +86,8 @@ ChartsPlugin::init()
     }
     else
     {
-        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Migrating charts";
-        fetchChartSourcesList(true);
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Migrating";
+        m_refetchSource << "ALL";
     }
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "total sources" << m_chartResources.size() << m_chartResources;
