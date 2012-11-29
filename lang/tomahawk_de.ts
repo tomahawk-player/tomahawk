@@ -422,13 +422,13 @@ erlauben sich mit dir zu verbinden?</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="491"/>
-        <location filename="../src/AudioControls.cpp" line="261"/>
+        <location filename="../src/AudioControls.cpp" line="278"/>
         <source>Shuffle</source>
         <translation>Zufall</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="504"/>
-        <location filename="../src/AudioControls.cpp" line="262"/>
+        <location filename="../src/AudioControls.cpp" line="279"/>
         <source>Repeat</source>
         <translation>Wiederholen</translation>
     </message>
@@ -443,27 +443,27 @@ erlauben sich mit dir zu verbinden?</translation>
         <translation>Hoch</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="259"/>
+        <location filename="../src/AudioControls.cpp" line="276"/>
         <source>Time Elapsed</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="260"/>
+        <location filename="../src/AudioControls.cpp" line="277"/>
         <source>Time Remaining</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="265"/>
+        <location filename="../src/AudioControls.cpp" line="282"/>
         <source>Playing from %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="263"/>
+        <location filename="../src/AudioControls.cpp" line="280"/>
         <source>Share</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="264"/>
+        <location filename="../src/AudioControls.cpp" line="281"/>
         <source>Love</source>
         <translation type="unfinished"/>
     </message>
@@ -471,17 +471,17 @@ erlauben sich mit dir zu verbinden?</translation>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="616"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="637"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>Sorry, Tomahawk konnte &apos;%1&apos; von %2 nicht finden</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="640"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="661"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>Sorry, Tomahawk konnte den Künstler &apos;%1&apos; nicht finden</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="666"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="687"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>Sorry, Tomahawk konnte das Album &apos;%1&apos; von %2 nicht finden</translation>
     </message>
@@ -758,12 +758,12 @@ erlauben sich mit dir zu verbinden?</translation>
 <context>
     <name>FlexibleView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/FlexibleView.cpp" line="323"/>
+        <location filename="../src/libtomahawk/playlist/FlexibleView.cpp" line="290"/>
         <source>This playlist is currently empty.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/FlexibleView.cpp" line="325"/>
+        <location filename="../src/libtomahawk/playlist/FlexibleView.cpp" line="292"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
         <translation type="unfinished"/>
     </message>
@@ -1046,7 +1046,7 @@ erlauben sich mit dir zu verbinden?</translation>
         <translation>Vorwärts</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="366"/>
+        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="368"/>
         <source>Properties</source>
         <translation type="unfinished"/>
     </message>
@@ -1151,7 +1151,7 @@ erlauben sich mit dir zu verbinden?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="290"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="302"/>
         <source>Name</source>
         <translation>Name</translation>
     </message>
@@ -1201,12 +1201,12 @@ erlauben sich mit dir zu verbinden?</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="184"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="183"/>
         <source>All tracks by %1 on album %2</source>
         <translation>Alle Lieder von %1 auf dem Album %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="210"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="209"/>
         <source>All tracks by %1</source>
         <translation>Alle Lieder von %1</translation>
     </message>
@@ -2694,7 +2694,7 @@ Bitte ändere den Filter oder versuche es erneut.</translation>
 <context>
     <name>Tomahawk::DynamicWidget</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/widgets/DynamicWidget.cpp" line="472"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/widgets/DynamicWidget.cpp" line="473"/>
         <source>Station ran out of tracks!
 
 Try tweaking the filters for a new set of songs to play.</source>
@@ -3016,22 +3016,22 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
 <context>
     <name>Tomahawk::InfoSystem::ChartsPlugin</name>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="382"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="475"/>
         <source>Top Overall</source>
         <translation>Top Allgemein</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="475"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="570"/>
         <source>Artists</source>
         <translation>Künstler</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="477"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="572"/>
         <source>Albums</source>
         <translation>Alben</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="479"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="574"/>
         <source>Tracks</source>
         <translation>Stücke</translation>
     </message>
@@ -3132,13 +3132,13 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
 <context>
     <name>Tomahawk::LatchManager</name>
     <message>
-        <location filename="../src/libtomahawk/LatchManager.cpp" line="86"/>
+        <location filename="../src/libtomahawk/LatchManager.cpp" line="88"/>
         <source>&amp;Catch Up</source>
         <translation>Zum aktuellen Titel &amp;springen</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/LatchManager.cpp" line="123"/>
-        <location filename="../src/libtomahawk/LatchManager.cpp" line="144"/>
+        <location filename="../src/libtomahawk/LatchManager.cpp" line="125"/>
+        <location filename="../src/libtomahawk/LatchManager.cpp" line="146"/>
         <source>&amp;Listen Along</source>
         <translation>&amp;Mithören</translation>
     </message>
@@ -3214,43 +3214,43 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="296"/>
-        <location filename="../src/libtomahawk/Source.cpp" line="347"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="300"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="351"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Scanne (%L1 Stücke)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="298"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="302"/>
         <source>Scanning</source>
         <translation>Scanne</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="332"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="336"/>
         <source>Checking</source>
         <translation>Überprüfe</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="337"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="341"/>
         <source>Syncing</source>
         <translation>Synchronisiere</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="342"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="346"/>
         <source>Importing</source>
         <translation>Importiere</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="484"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="488"/>
         <source>Saving (%1%)</source>
         <translation>Speichere (%1%)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="565"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="569"/>
         <source>Online</source>
         <translation>Online</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="569"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="573"/>
         <source>Offline</source>
         <translation>Offline</translation>
     </message>
@@ -3736,7 +3736,7 @@ Tomahawk auf Twitter&apos;s Website authentifiziert hast:</translation>
 <context>
     <name>TrackView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="510"/>
+        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="537"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Entschuldige, dein Filter &apos;%1&apos; erzeugte keine Ergebnisse.</translation>
     </message>
@@ -3759,7 +3759,7 @@ Tomahawk auf Twitter&apos;s Website authentifiziert hast:</translation>
 <context>
     <name>TreeItemDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeItemDelegate.cpp" line="139"/>
+        <location filename="../src/libtomahawk/playlist/TreeItemDelegate.cpp" line="138"/>
         <source>Unknown</source>
         <translation>Unbekannt</translation>
     </message>
@@ -3787,7 +3787,7 @@ Tomahawk auf Twitter&apos;s Website authentifiziert hast:</translation>
 <context>
     <name>TreeView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeView.cpp" line="286"/>
+        <location filename="../src/libtomahawk/playlist/TreeView.cpp" line="289"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Sorry, dein Filter &apos;%1&apos; konnte keine Ergebnisse finden.</translation>
     </message>
@@ -3871,42 +3871,42 @@ You can re-send a sync message at any time simply by sending another tweet using
 <context>
     <name>ViewManager</name>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="143"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="142"/>
         <source>This playlist is empty!</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="284"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="283"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
         <translation>Nachdem du deine Musik Sammlung gescannt hast, findest du all deine Lieder genau hier.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="286"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="285"/>
         <source>This collection is empty.</source>
         <translation>Diese Sammlung ist leer.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="345"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="344"/>
         <source>SuperCollection</source>
         <translation>SuperCollection</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="346"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="345"/>
         <source>Combined libraries of all your online friends</source>
         <translation>Kombinierte Sammlung all deiner Freunde</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="400"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="399"/>
         <source>Recently Played Tracks</source>
         <translation>Zuletzt gehörte Lieder</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="401"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="400"/>
         <source>Recently played tracks from all your friends</source>
         <translation>Zuletzt gehörte Lieder all deiner Freunde</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="408"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="407"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation type="unfinished"/>
     </message>
@@ -3929,12 +3929,12 @@ You can re-send a sync message at any time simply by sending another tweet using
         <translation>Kürzlich gehörte Lieder</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="134"/>
+        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="136"/>
         <source>Recently played tracks</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="220"/>
+        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="222"/>
         <source>No recently created playlists in your network.</source>
         <translation>Es gibt keine kürzlich erstellten Playlisten in deinem Netzwerk.</translation>
     </message>
