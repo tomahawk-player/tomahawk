@@ -1,7 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2012, Casey Link <unnamedrambler@gmail.com>
- *   Copyright 2010-2011, Hugo Lindström <hugolm84@gmail.com>
+ *   Copyright 2011-2012, Hugo Lindström <hugolm84@gmail.com>
  *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *
@@ -420,7 +420,7 @@ ChartsPlugin::chartsList()
         QVariantMap charts;
         QString chartName;
         QStringList defaultChain;
-        if ( source == "wearehunted" || source == "itunes" )
+        if ( source == "wearehunted" || source == "itunes" || source == "hotnewhiphop" )
         {
             // Some charts can have an extra param, itunes has geo, WAH has emerging/mainstream
             // Itunes has geographic-area based charts. So we build a breadcrumb of
@@ -476,6 +476,9 @@ ChartsPlugin::chartsList()
                     else
                         extra = chart.value( "extra" ).toString();
 
+                    if ( source == "hotnewhiphop" )
+                        name = chart.value( "name" ).toString();
+
                     if ( name.isEmpty() ) // not a specific chart, an all chart
                         name = tr( "Top Overall" );
 
@@ -516,6 +519,10 @@ ChartsPlugin::chartsList()
                 else if ( source == "wearehunted" )
                 {
                     chartName = "WeAreHunted";
+                }
+                else if ( source == "hotnewhiphop" )
+                {
+                    chartName = "HotNewHiphop";
                 }
             }
         }
