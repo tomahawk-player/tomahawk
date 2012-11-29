@@ -84,6 +84,11 @@ ChartsPlugin::init()
              m_chartResources << sourceHash;
          }
     }
+    else
+    {
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Migrating charts";
+        fetchChartSourcesList(true);
+    }
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "total sources" << m_chartResources.size() << m_chartResources;
 
