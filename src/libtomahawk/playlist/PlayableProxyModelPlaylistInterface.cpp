@@ -139,6 +139,10 @@ PlayableProxyModelPlaylistInterface::tracks() const
 void
 PlayableProxyModelPlaylistInterface::setCurrentIndex( qint64 index )
 {
+    Q_ASSERT( m_proxyModel );
+    if ( m_proxyModel.isNull() )
+        return;
+
     PlayableItem* item = static_cast<PlayableItem*>( (void*)index );
     if ( index < 0 || !item )
     {

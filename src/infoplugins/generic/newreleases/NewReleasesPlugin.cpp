@@ -98,6 +98,11 @@ NewReleasesPlugin::init()
              m_nrSources << sourceHash;
          }
     }
+    else
+    {
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Migrating";
+        m_refetchSource << "ALL";
+    }
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "total sources" << m_nrSources.size() << m_nrSources;
 

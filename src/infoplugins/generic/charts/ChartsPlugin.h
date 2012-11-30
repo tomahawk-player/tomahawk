@@ -99,9 +99,13 @@ private:
     void fetchChartCapabilitiesFromCache( Tomahawk::InfoSystem::InfoRequestData requestData );
     void dataError( Tomahawk::InfoSystem::InfoRequestData requestData );
 
-    QStringList m_chartResources;
+
+    qlonglong getMaxAge( const QByteArray &rawHeader ) const;
+    qlonglong getMaxAge( const qlonglong expires ) const;
+
+    QList< Tomahawk::InfoSystem::InfoStringHash > m_chartResources;
+    QStringList m_refetchSource;
     QString m_chartVersion;
-    QList< InfoStringHash > m_charts;
     ChartType m_chartType;
     QVariantMap m_allChartsMap;
     uint m_chartsFetchJobs;
