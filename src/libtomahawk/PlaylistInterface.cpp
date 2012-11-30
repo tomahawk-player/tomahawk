@@ -66,7 +66,7 @@ PlaylistInterface::siblingResult( int itemsAway ) const
     {
         safetyCheck = idx;
         Tomahawk::query_ptr query = queryAt( idx );
-        if ( query->numResults() )
+        if ( query && query->numResults() )
         {
             return query->results().first();
         }
