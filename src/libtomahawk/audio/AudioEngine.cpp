@@ -902,7 +902,7 @@ AudioEngine::setCurrentTrack( const Tomahawk::result_ptr& result )
     {
         if ( m_playlist )
         {
-            m_playlist.data()->setCurrentIndex( m_playlist.data()->indexOfResult( result ) );
+            m_playlist->setCurrentIndex( m_playlist->indexOfResult( result ) );
         }
     }
 }

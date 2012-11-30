@@ -627,10 +627,9 @@ PlayableProxyModel::setFilter( const QString& pattern )
 void
 PlayableProxyModel::setCurrentIndex( const QModelIndex& index )
 {
-    tDebug() << Q_FUNC_INFO << QThread::currentThread();
+    tDebug() << Q_FUNC_INFO;
     m_model->setCurrentItem( mapToSource( index ) );
     emit currentIndexChanged();
-    tDebug() << Q_FUNC_INFO << QThread::currentThread() << "Finished";
 }
 
 
