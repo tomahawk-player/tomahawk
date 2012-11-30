@@ -151,7 +151,7 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
 void
 TomahawkApp::installTranslator()
 {
-    QString locale = QLocale::system().name();
+    QString locale = QLocale::system().uiLanguages().first();
     if ( locale == "C" )
         locale = "en";
 
