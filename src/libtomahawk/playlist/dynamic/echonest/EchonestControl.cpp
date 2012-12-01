@@ -441,6 +441,28 @@ Tomahawk::EchonestControl::updateWidgets()
         m_input = QWeakPointer< QWidget >( combo );
 
         insertMoodsAndStyles();
+    } else if( selectedType() == "Song Type" ) {
+        m_currentType = Echonest::DynamicPlaylist::SongType;
+
+        QComboBox* match = new QComboBox();
+        match->addItem( tr( "is" ), 1 );
+        match->addItem( tr( "is not" ), 0 );
+
+        QComboBox* combo = new QComboBox();
+        combo->addItem( tr( "Christmas" ), "christmas" );
+        combo->addItem( tr( "Studio" ), "studio" );
+        combo->addItem( tr( "Live" ), "live" );
+
+        connect( match, SIGNAL( activated( int ) ), this, SLOT( updateData() ) );
+        connect( match, SIGNAL( activated( int ) ), this, SLOT( editingFinished() ) );
+        connect( combo, SIGNAL( activated( int ) ), this, SLOT( updateData() ) );
+        connect( combo, SIGNAL( activated( int ) ), this, SLOT( editingFinished() ) );
+
+        m_matchString = match->currentText();
+        m_matchData = match->currentText();
+
+        m_match = QWeakPointer< QWidget >( match );
+        m_input = QWeakPointer< QWidget >( combo );
     } else {
         m_match = QWeakPointer<QWidget>( new QWidget );
         m_input = QWeakPointer<QWidget>( new QWidget );
@@ -522,6 +544,23 @@ Tomahawk::EchonestControl::updateData()
             m_data.second = enumVal;
 //             qDebug() << "SAVING" << input->currentIndex() << "AS" << enumVal << "(" << input->itemData( input->currentIndex() ).toInt() << "+" << m_matchData.toInt() << ")";
         }
+    } else if( selectedType() == "Song Type" ) {
+        QComboBox* match = qobject_cast<QComboBox*>( m_match.data() );
+        QComboBox* input = qobject_cast< QComboBox* >( m_input.data() );
+        if ( match && input ) {
+            m_matchString = match->currentText();
+            m_matchData = match->itemData( match->currentIndex() ).toString();
+
+            QString songType = input->currentText().toLower();
+            if ( match->currentText() == "is not" )
+               songType.append(":false");
+
+            qDebug() << "ST: " << songType;
+
+            m_data.first = Echonest::DynamicPlaylist::SongType;
+            m_data.second = songType;
+        }
+
     }
 
     calculateSummary();
