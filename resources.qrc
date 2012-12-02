@@ -164,7 +164,6 @@
         <file>data/images/delete.png</file>
         <file>data/images/ok.png</file>
         <file>data/qml/StationScene.qml</file>
-        <file>data/qml/CoverImage.qml</file>
         <file>data/qml/TagCloud.qml</file>
         <file>data/qml/StationConfig.qml</file>
         <file>data/qml/StationView.qml</file>
@@ -176,5 +175,10 @@
         <file>data/qml/StationCreator.qml</file>
         <file>data/qml/StationCreatorPage1.qml</file>
         <file>data/qml/GridView.qml</file>
+        <file>data/qml/StationCreatorPage2.qml</file>
+        <file>data/qml/stations/CreateByArtist.qml</file>
+        <file>data/qml/tomahawkimports/CoverImage.qml</file>
+        <file>data/qml/tomahawkimports/ArtistView.qml</file>
+        <file>data/qml/tomahawkimports/HeaderLabel.qml</file>
     </qresource>
 </RCC>

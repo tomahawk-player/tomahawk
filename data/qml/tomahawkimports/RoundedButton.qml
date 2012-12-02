@@ -7,6 +7,9 @@ Rectangle {
     radius: height / 2
     color: buttonMouseArea.containsMouse ? "#22ffffff" : "black"
 
+    height: defaultFontHeight * 2
+    width: height
+
     property string text
 
     signal clicked()

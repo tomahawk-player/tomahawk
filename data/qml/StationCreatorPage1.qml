@@ -10,13 +10,12 @@ Item {
 
     signal itemClicked(int index)
 
-    Text {
+    HeaderLabel {
         text: "Listen to radio..."
-        color: "white"
         anchors {
             left: parent.left
             top: parent.top
-            margins: height * 2
+            margins: defaultFontHeight * 2
         }
     }
 

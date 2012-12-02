@@ -19,6 +19,7 @@
 #include "DeclarativeView.h"
 #include "playlist/PlayableItem.h"
 #include "DeclarativeCoverArtProvider.h"
+#include "utils/TomahawkUtilsGui.h"
 
 #include <qdeclarative.h>
 #include <QDeclarativeEngine>
@@ -35,13 +36,16 @@ DeclarativeView::DeclarativeView( QWidget *parent ):
     setResizeMode( QDeclarativeView::SizeRootObjectToView );
 
     // This types seem to be needed everywhere anyways, lets the register here
-    qmlRegisterUncreatableType<PlayableItem>( "tomahawk", 1, 0, "PlayableItem", "bla" );
+    qmlRegisterType<PlayableItem>( "tomahawk", 1, 0, "PlayableItem");
 
     // QML image providers will be deleted by the view
     engine()->addImageProvider( "albumart", new DeclarativeCoverArtProvider() );
 
     // Register the view itself to make it easy to invoke the view's slots from QML
     rootContext()->setContextProperty( "mainView", this );
+
+    rootContext()->setContextProperty( "defaultFontSize", TomahawkUtils::defaultFontSize() );
+    rootContext()->setContextProperty( "defaultFontHeight", TomahawkUtils::defaultFontHeight() );
 }
 
 DeclarativeView::~DeclarativeView()

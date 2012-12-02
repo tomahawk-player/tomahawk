@@ -10,9 +10,9 @@ Rectangle {
 
     ListModel {
         id: modeModel
-        ListElement { label: "By Artist"; image: "../images/artist-placeholder-grid.png"; creatorState: "artist" }
-        ListElement { label: "By Genre"; image: "../images/album-placeholder-grid.png"; creatorState: "genre" }
-        ListElement { label: "By Year"; image: "image://albumart/foobar"; creatorState: "year" }
+        ListElement { label: "By Artist"; image: "../images/artist-placeholder-grid.png"; creatorContent: "stations/CreateByArtist.qml" }
+        ListElement { label: "By Genre"; image: "../images/album-placeholder-grid.png"; creatorContent: "genre" }
+        ListElement { label: "By Year"; image: "image://albumart/foobar"; creatorContent: "year" }
     }
 
     ListModel {
@@ -39,18 +39,6 @@ Rectangle {
         ListElement { modelData: "drum and base" }
     }
 
-    ListModel {
-        id: dummyArtistModel
-        ListElement { modelData: "Pink Floyd" }
-        ListElement { modelData: "Tool" }
-        ListElement { modelData: "Cake" }
-        ListElement { modelData: "Metallica" }
-        ListElement { modelData: "Red Hot Chili Peppers" }
-        ListElement { modelData: "Korn" }
-        ListElement { modelData: "Prodigy" }
-        ListElement { modelData: "Otto Waalkes" }
-    }
-
     VisualItemModel {
         id: stationVisualModel
 
@@ -60,12 +48,12 @@ Rectangle {
             model: modeModel
 
             onItemClicked: {
-                stationCreator.state = modeModel.get(index).creatorState
+                stationCreator.content = modeModel.get(index).creatorContent
                 stationListView.incrementCurrentIndex()
             }
         }
 
-        StationCreator {
+        StationCreatorPage2 {
             id: stationCreator
             height: scene.height
             width: scene.width

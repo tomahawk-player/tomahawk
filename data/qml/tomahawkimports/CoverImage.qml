@@ -171,7 +171,7 @@ Item {
     Image {
         id: playButton
         visible: showPlayButton ? (mouseArea.containsMouse || currentlyPlaying) : false
-        source: currentlyPlaying ? "../images/pause-rest.png" : "../images/play-rest.png"
+        source: currentlyPlaying ? "../../images/pause-rest.png" : "../../images/play-rest.png"
         anchors.centerIn: parent
         height: mirroredCover.height / 5
         width: height

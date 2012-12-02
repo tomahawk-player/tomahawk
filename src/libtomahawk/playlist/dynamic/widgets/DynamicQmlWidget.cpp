@@ -42,6 +42,7 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
     qmlRegisterUncreatableType<GeneratorInterface>("tomahawk", 1, 0, "Generator", "you cannot create it on your own - should be set in context");
 
     rootContext()->setContextProperty( "dynamicModel", m_proxyModel );
+    rootContext()->setContextProperty( "artistChartsModel", m_artistChartsModel );
     rootContext()->setContextProperty( "generator", m_playlist->generator().data() );
 
     setSource( QUrl( "qrc" RESPATH "qml/StationScene.qml" ) );
@@ -238,11 +239,5 @@ DynamicQmlWidget::onArtistCharts( const QList< Tomahawk::artist_ptr >& artists )
     m_artistChartsModel->clear();
     m_artistChartsModel->appendArtists( artists );
 
-    int i = 0;
-    foreach ( const artist_ptr& artist, artists )
-    {
-        tDebug() << "Found artist in chart:" << artist->name() << QString::number( ++i );
-    }
 }
-
 }

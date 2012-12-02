@@ -35,6 +35,8 @@ class QAbstractItemModel;
   *
   * Set context properties:
   * - mainView: This view, so you can invoke this view's slots from QML
+  * - defaultFontSize: system default font point size
+  * - defaultFontHeight: system default font pixel height
   *
   * It also registers an albumart image provider. You can access album art
   * in QML with the source url "image://albumart/<coverid>".
