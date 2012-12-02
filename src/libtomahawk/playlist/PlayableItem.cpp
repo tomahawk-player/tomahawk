@@ -212,6 +212,14 @@ PlayableItem::artistName() const
     {
         return m_query->artist();
     }
+    else if ( !m_album.isNull() )
+    {
+        return m_album->artist()->name();
+    }
+    else if ( !m_artist.isNull() )
+    {
+        return m_artist->name();
+    }
 
     return QString();
 }
@@ -227,6 +235,10 @@ PlayableItem::albumName() const
     else if ( !m_query.isNull() )
     {
         return m_query->album();
+    }
+    else if ( !m_album.isNull() )
+    {
+        return m_album->name();
     }
 
     return QString();
