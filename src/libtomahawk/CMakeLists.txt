@@ -149,6 +149,7 @@ set( libGuiSources
     widgets/SocialPlaylistWidget.cpp
     widgets/SourceTreePopupDialog.cpp
     widgets/DeclarativeCoverArtProvider.cpp
+    widgets/DeclarativeView.cpp
     widgets/infowidgets/SourceInfoWidget.cpp
     widgets/infowidgets/ArtistInfoWidget.cpp
     widgets/infowidgets/AlbumInfoWidget.cpp

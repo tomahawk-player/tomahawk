@@ -14,7 +14,7 @@ Item {
         anchors.centerIn: parent
         height: backButton.height
         width: height
-        visible: rootView.loading
+        visible: mainView.loading
         RotationAnimation { target: busyIndicator; from: 360; to: 0; duration: 1500; running: visible; loops: Animation.Infinite }
     }
 
@@ -29,11 +29,11 @@ Item {
         currentIndex: currentlyPlayedIndex
 
         onItemPlayPauseClicked: {
-            rootView.playItem(index)
+            mainView.playItem(index)
         }
 
         onItemClicked: {
-            rootView.playItem(index)
+            mainView.playItem(index)
         }
 
     }
@@ -51,7 +51,7 @@ Item {
                 font.pointSize: 18
                 width: parent.width
                 elide: Text.ElideRight
-                text: rootView.title
+                text: mainView.title
             }
             Text {
                 color: "white"

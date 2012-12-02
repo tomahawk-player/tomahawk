@@ -12,24 +12,19 @@
 #include "audio/AudioEngine.h"
 
 #include <QUrl>
+#include <QSize>
 #include <qdeclarative.h>
 #include <QDeclarativeContext>
-#include <QDeclarativeEngine>
-#include <QSize>
 
 namespace Tomahawk
 {
 
 DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* parent )
-    : QDeclarativeView( parent )
+    : DeclarativeView( parent )
     , m_playlist( playlist )
     , m_runningOnDemand( false )
     , m_activePlaylist( false )
 {
-
-
-
-    setResizeMode( QDeclarativeView::SizeRootObjectToView );
 
     m_model = new DynamicModel( this );
 
@@ -37,23 +32,13 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
     m_proxyModel->setSourcePlayableModel( m_model );
     m_proxyModel->setShowOfflineResults( false );
 
-    // QML image providers will be deleted by the view
-    engine()->addImageProvider( "albumart", new DeclarativeCoverArtProvider( m_proxyModel ) );
-
     m_model->loadPlaylist( m_playlist );
 
 
-    qDebug() << "###got" << m_playlist->generator()->controls().size() << "controls";
-
-    // TODO: In case QML is used in more places, this should probably be moved to some generic place
-    qmlRegisterType<PlayableItem>("tomahawk", 1, 0, "PlayableItem");
     qmlRegisterUncreatableType<GeneratorInterface>("tomahawk", 1, 0, "Generator", "you cannot create it on your own - should be set in context");
-    qmlRegisterUncreatableType<PlayableItem>("tomahawk", 1, 0, "PlayableItem", "you cannot create it on your own - they will appear in the model");
-
 
     rootContext()->setContextProperty( "dynamicModel", m_proxyModel );
     rootContext()->setContextProperty( "generator", m_playlist->generator().data() );
-    rootContext()->setContextProperty( "rootView", this );
 
     setSource( QUrl( "qrc" RESPATH "qml/StationScene.qml" ) );
 
@@ -67,9 +52,6 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
 
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), this, SLOT( trackStarted() ) );
     connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::playlistinterface_ptr ) ), this, SLOT( playlistChanged( Tomahawk::playlistinterface_ptr ) ) );
-
-//    m_playlist->generator()->generate( 20 );
-
 }
 
 

@@ -72,7 +72,7 @@ Item {
 
         Row {
             function createStation() {
-                rootView.startStationFromArtist(artistInputField.text)
+                mainView.startStationFromArtist(artistInputField.text)
             }
 
             anchors.fill: parent
@@ -106,7 +106,7 @@ Item {
                             showPlayButton: true
 
                             onClicked: {
-                                rootView.startStationFromArtist(modelData);
+                                mainView.startStationFromArtist(modelData);
                                 stationCreator.next()
                             }
                         }
@@ -131,7 +131,7 @@ Item {
                     anchors.centerIn: parent
                     width: parent.width
                     onAccepted: {
-                        rootView.startStationFromArtist(text)
+                        mainView.startStationFromArtist(text)
                         stationCreator.next()
                     }
                 }
@@ -145,7 +145,7 @@ Item {
         id: createByGenre
         Row {
             function createStation() {
-                rootView.startStationFromGenre(genreInputField.text)
+                mainView.startStationFromGenre(genreInputField.text)
             }
 
             anchors.fill: parent
@@ -167,7 +167,7 @@ Item {
                     model: styleModel//generator.styles()
 
                     onTagClicked: {
-                        rootView.startStationFromGenre(item)
+                        mainView.startStationFromGenre(item)
                         stationCreator.next()
                     }
 
@@ -192,7 +192,7 @@ Item {
                     anchors.centerIn: parent
                     width: parent.width
                     onAccepted: {
-                        rootView.startStationFromGenre(text)
+                        mainView.startStationFromGenre(text)
                         stationCreator.next()
                     }
                 }
@@ -224,7 +224,7 @@ Item {
                     spacing: selectYearText.height
 
                     function decadeClicked(decade) {
-                        rootView.startStationFromYear(decade)
+                        mainView.startStationFromYear(decade)
                         stationCreator.next()
                     }
 
@@ -251,7 +251,7 @@ Item {
                     anchors.centerIn: parent
                     width: parent.width
                     onAccepted: {
-                        rootView.startStationFromYear(text)
+                        mainView.startStationFromYear(text)
                         stationCreator.next()
                     }
                 }

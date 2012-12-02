@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2012, Michael Zanetti <mzanetti@kde.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "QmlGridView.h"
 #include "widgets/DeclarativeCoverArtProvider.h"
 #include "PlayableProxyModelPlaylistInterface.h"
@@ -5,7 +23,6 @@
 #include "audio/AudioEngine.h"
 
 #include <QDeclarativeContext>
-#include <QDeclarativeEngine>
 
 using namespace Tomahawk;
 
@@ -39,20 +56,14 @@ private:
     QWeakPointer<QmlGridView> m_view;
 };
 
-QmlGridView::QmlGridView(QWidget *parent) : QDeclarativeView(parent)
+QmlGridView::QmlGridView(QWidget *parent) : DeclarativeView(parent)
 {
     m_proxyModel = new PlayableProxyModel( this );
     m_playlistInterface = playlistinterface_ptr( new QmlGridPlaylistInterface( m_proxyModel, this ) );
 
-    setResizeMode( QDeclarativeView::SizeRootObjectToView );
-
-    // QML image providers will be deleted by the view
-    engine()->addImageProvider( "albumart", new DeclarativeCoverArtProvider( m_proxyModel ) );
-
     rootContext()->setContextProperty( "mainModel", m_proxyModel );
-    rootContext()->setContextProperty( "rootView", this );
-    setSource( QUrl( "qrc" RESPATH "qml/GridView.qml" ) );
 
+    setSource( QUrl( "qrc" RESPATH "qml/GridView.qml" ) );
 }
 
 QmlGridView::~QmlGridView()

@@ -10,6 +10,16 @@ Item {
 
     signal itemClicked(int index)
 
+    Text {
+        text: "Listen to radio..."
+        color: "white"
+        anchors {
+            left: parent.left
+            top: parent.top
+            margins: height * 2
+        }
+    }
+
     GridView {
         id: gridView
         anchors.centerIn: parent

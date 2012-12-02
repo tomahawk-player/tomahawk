@@ -13,13 +13,10 @@ namespace Tomahawk
 class DeclarativeCoverArtProvider: public QDeclarativeImageProvider
 {
 public:
-    DeclarativeCoverArtProvider( PlayableProxyModel *model );
+    DeclarativeCoverArtProvider();
     ~DeclarativeCoverArtProvider();
 
     QPixmap requestPixmap( const QString &id, QSize *size, const QSize &requestedSize );
-
-private:
-    PlayableProxyModel *m_model;
 };
 
 }

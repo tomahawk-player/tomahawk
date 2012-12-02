@@ -20,7 +20,7 @@
 #ifndef QMLGRIDVIEW_H
 #define QMLGRIDVIEW_H
 
-#include <QDeclarativeView>
+#include <widgets/DeclarativeView.h>
 #include <QSortFilterProxyModel>
 #include <QTimer>
 
@@ -39,7 +39,7 @@ class GridItemDelegate;
 class PlayableModel;
 class GridPlaylistInterface;
 
-class DLLEXPORT QmlGridView : public QDeclarativeView, public Tomahawk::ViewPage
+class DLLEXPORT QmlGridView : public Tomahawk::DeclarativeView, public Tomahawk::ViewPage
 {
 Q_OBJECT
 public:

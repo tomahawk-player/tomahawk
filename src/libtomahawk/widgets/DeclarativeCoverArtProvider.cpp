@@ -13,9 +13,8 @@
 namespace Tomahawk
 {
 
-DeclarativeCoverArtProvider::DeclarativeCoverArtProvider( PlayableProxyModel *model )
+DeclarativeCoverArtProvider::DeclarativeCoverArtProvider(  )
     : QDeclarativeImageProvider( QDeclarativeImageProvider::Pixmap )
-    , m_model( model )
 {
 
 }
@@ -34,22 +33,9 @@ QPixmap DeclarativeCoverArtProvider::requestPixmap(const QString &id, QSize *siz
     if( size )
         *size = QSize( width, height );
 
-//    PlayableItem *item = m_model->itemFromIndex( id.toInt() );
-//    if( item ) {
-//        qDebug() << "item:" << item;
-//        qDebug() << "item2:" << item->artistName() << item->name();
-//        if ( !item->query().isNull() ) {
-//            return item->query()->displayQuery()->cover( *size );
-//        }
-//    }
-
     QPixmap cover;
 
     tDebug() << "Getting by id:" << id << requestedSize;
-/*    query_ptr query = Query::getByCoverId( id );
-    if ( !query.isNull() ) {
-        return query->cover( requestedSize );
-    }*/
 
     album_ptr album = Album::getByCoverId( id );
     if ( !album.isNull() )

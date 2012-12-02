@@ -21,8 +21,8 @@
 
 #include "ViewPage.h"
 #include "Typedefs.h"
+#include "widgets/DeclarativeView.h"
 
-#include <QDeclarativeView>
 #include <QDeclarativeImageProvider>
 
 class PlayableProxyModel;
@@ -32,7 +32,7 @@ namespace Tomahawk
 
 class DynamicModel;
 
-class DynamicQmlWidget : public QDeclarativeView, public Tomahawk::ViewPage
+class DynamicQmlWidget : public DeclarativeView, public Tomahawk::ViewPage
 {
     Q_OBJECT
 
