@@ -32,7 +32,7 @@ Item {
         }
 
         Row {
-            width: defaultFontHeight * 15
+            width: defaultFontHeight * 30
             height: artistInputField.height
             spacing: defaultFontHeight
 
@@ -50,9 +50,10 @@ Item {
 
         ArtistView {
             height: parent.height - headerText.height - artistInputField.height
-            width: defaultFontHeight * 15
+            width: defaultFontHeight * 30
             model: artistChartsModel
             clip: true
+            delegateHeight: defaultFontHeight * 6
 
             onItemClicked: {
                 mainView.startStationFromArtist(artistChartsModel.itemFromIndex(index).artistName)
