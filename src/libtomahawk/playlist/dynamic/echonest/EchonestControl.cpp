@@ -449,17 +449,17 @@ Tomahawk::EchonestControl::updateWidgets()
         match->addItem( tr( "is not" ), 0 );
 
         QComboBox* combo = new QComboBox();
-        combo->addItem( tr( "Christmas" ), "christmas" );
         combo->addItem( tr( "Studio" ), "studio" );
         combo->addItem( tr( "Live" ), "live" );
+        combo->addItem( tr( "Christmas" ), "christmas" );
 
         connect( match, SIGNAL( activated( int ) ), this, SLOT( updateData() ) );
         connect( match, SIGNAL( activated( int ) ), this, SLOT( editingFinished() ) );
         connect( combo, SIGNAL( activated( int ) ), this, SLOT( updateData() ) );
         connect( combo, SIGNAL( activated( int ) ), this, SLOT( editingFinished() ) );
 
-        m_matchString = match->currentText();
-        m_matchData = match->currentText();
+        m_matchString = "is";
+        m_matchData = 1;
 
         m_match = QWeakPointer< QWidget >( match );
         m_input = QWeakPointer< QWidget >( combo );
@@ -546,16 +546,14 @@ Tomahawk::EchonestControl::updateData()
         }
     } else if( selectedType() == "Song Type" ) {
         QComboBox* match = qobject_cast<QComboBox*>( m_match.data() );
-        QComboBox* input = qobject_cast< QComboBox* >( m_input.data() );
-        if ( match && input ) {
+        QComboBox* combo = qobject_cast< QComboBox* >( m_input.data() );
+        if ( match && combo ) {
             m_matchString = match->currentText();
             m_matchData = match->itemData( match->currentIndex() ).toString();
 
-            QString songType = input->currentText().toLower();
+            QString songType = combo->currentText().toLower();
             if ( match->currentText() == "is not" )
                songType.append(":false");
-
-            qDebug() << "ST: " << songType;
 
             m_data.first = Echonest::DynamicPlaylist::SongType;
             m_data.second = songType;
@@ -649,6 +647,15 @@ Tomahawk::EchonestControl::updateWidgetsFromData()
             int val = ( m_data.second.toInt() - ( m_data.second.toInt() % 2 ) ) / 2;
             input->setCurrentIndex( val );
 //             qDebug() << "LOADING" << m_data.second.toInt() << "AS" << val;
+        }
+    } else if( selectedType() == "Song Type" ) {
+        QComboBox* match = qobject_cast<QComboBox*>( m_match.data() );
+        QComboBox* combo = qobject_cast< QComboBox* >( m_input.data() );
+        if ( match && combo ) {
+            match->setCurrentIndex( match->findData( m_matchData ));
+
+            QString songType = m_data.second.toString().split(":").at(0);
+            combo->setCurrentIndex( combo->findData( songType ) );
         }
     }
     calculateSummary();
@@ -862,6 +869,19 @@ Tomahawk::EchonestControl::calculateSummary()
         Q_ASSERT( qobject_cast< QComboBox* >( m_input.data() ) );
         QString text = qobject_cast< QComboBox* >( m_input.data() )->currentText().toLower();
         summary = tr( "in a %1 style" ).arg( text );
+    } else if( selectedType() == "Song Type" ) {
+        Q_ASSERT( !m_input.isNull() );
+        Q_ASSERT( qobject_cast< QComboBox* >( m_input.data() ) );
+        QString text = qobject_cast< QComboBox* >( m_input.data() )->currentText();
+
+
+        Q_ASSERT( !m_match.isNull() );
+        Q_ASSERT( qobject_cast< QComboBox* >( m_match.data() ) );
+        QString isOrIsNot = qobject_cast< QComboBox* >( m_match.data() )->currentText().toLower();
+        if ( isOrIsNot == "is" )
+            summary = tr( "where Song Type is %1" ).arg( text );
+        else
+            summary = tr( "where Song Type is not %1" ).arg( text );
     }
     m_summary = summary;
 }
