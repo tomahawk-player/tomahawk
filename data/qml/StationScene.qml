@@ -11,32 +11,8 @@ Rectangle {
     ListModel {
         id: modeModel
         ListElement { label: "By Artist"; image: "../images/artist-placeholder-grid.png"; creatorContent: "stations/CreateByArtist.qml" }
-        ListElement { label: "By Genre"; image: "../images/album-placeholder-grid.png"; creatorContent: "genre" }
+        ListElement { label: "By Genre"; image: "../images/album-placeholder-grid.png"; creatorContent: "stations/CreateByGenre.qml" }
         ListElement { label: "By Year"; image: "image://albumart/foobar"; creatorContent: "year" }
-    }
-
-    ListModel {
-        id: styleModel
-        ListElement { modelData: "acoustic" }
-        ListElement { modelData: "alternative" }
-        ListElement { modelData: "alternative rock" }
-        ListElement { modelData: "classic" }
-        ListElement { modelData: "folk" }
-        ListElement { modelData: "indie" }
-        ListElement { modelData: "pop" }
-        ListElement { modelData: "rock" }
-        ListElement { modelData: "hip-hop" }
-        ListElement { modelData: "punk" }
-        ListElement { modelData: "grunge" }
-        ListElement { modelData: "indie" }
-        ListElement { modelData: "electronic" }
-        ListElement { modelData: "country" }
-        ListElement { modelData: "jazz" }
-        ListElement { modelData: "psychodelic" }
-        ListElement { modelData: "soundtrack" }
-        ListElement { modelData: "reggae" }
-        ListElement { modelData: "house" }
-        ListElement { modelData: "drum and base" }
     }
 
     VisualItemModel {
@@ -57,6 +33,7 @@ Rectangle {
             id: stationCreator
             height: scene.height
             width: scene.width
+            nextEnabled: rootView.configured
 
             onBack: stationListView.decrementCurrentIndex()
 

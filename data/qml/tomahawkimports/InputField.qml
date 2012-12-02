@@ -6,7 +6,7 @@ Rectangle {
     border.color: "black"
     border.width: 2
 
-    height: textInput.height + 4
+    height: textInput.height * 1.2
     width: 300
 
     property alias text: textInput.text
@@ -15,7 +15,7 @@ Rectangle {
 
     TextInput {
         id: textInput
-        width: parent.width
+        width: parent.width - defaultFontHeight
         anchors.centerIn: parent
 
         onAccepted: root.accepted( text );

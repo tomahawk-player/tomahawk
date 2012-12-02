@@ -6,7 +6,7 @@ Item {
 
     property variant model: 10
 
-    signal tagClicked( string item )
+    signal tagClicked( string tag )
 
     function randomNumber(min, max) {
         var date = new Date();

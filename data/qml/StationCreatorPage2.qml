@@ -6,8 +6,8 @@ Item {
     id: root
 
     property int margins: defaultFontHeight * 2
-
     property alias content: contentLoader.source
+    property bool nextEnabled: false
 
     signal back()
     signal next()
@@ -34,11 +34,25 @@ Item {
         text: "<"
         height: defaultFontHeight * 4
         anchors {
-            left:parent.left
+            left: parent.left
             bottom: parent.bottom
             margins: root.margins
         }
 
         onClicked: root.back()
+    }
+
+    RoundedButton  {
+        id: nextButton
+        text: ">"
+        height: defaultFontHeight * 4
+        visible: root.nextEnabled
+        anchors {
+            right: parent.right
+            bottom: parent.bottom
+            margins: root.margins
+        }
+
+        onClicked: root.next()
     }
 }

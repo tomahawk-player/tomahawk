@@ -8,16 +8,9 @@ Item {
 
     signal done()
 
-    ListModel {
-        id: dummyArtistModel
-        ListElement { modelData: "Pink Floyd" }
-        ListElement { modelData: "Tool" }
-        ListElement { modelData: "Cake" }
-        ListElement { modelData: "Metallica" }
-        ListElement { modelData: "Red Hot Chili Peppers" }
-        ListElement { modelData: "Korn" }
-        ListElement { modelData: "Prodigy" }
-        ListElement { modelData: "Otto Waalkes" }
+    function createStation(artist) {
+        mainView.startStationFromArtist(artist)
+        root.done()
     }
 
     Column {
@@ -39,12 +32,16 @@ Item {
             InputField {
                 id: artistInputField
                 width: parent.width - createFromInputButton.width - parent.spacing
+
+                onAccepted: createStation(text)
             }
 
             RoundedButton {
                 id: createFromInputButton
                 text: ">"
                 height: artistInputField.height
+                enabled: artistInputField.text.length > 2
+                onClicked: createStation(artistInputField.text)
             }
         }
 
@@ -56,8 +53,7 @@ Item {
             delegateHeight: defaultFontHeight * 6
 
             onItemClicked: {
-                mainView.startStationFromArtist(artistChartsModel.itemFromIndex(index).artistName)
-                root.done()
+                createStation(artistChartsModel.itemFromIndex(index).artistName);
             }
         }
     }

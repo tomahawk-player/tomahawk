@@ -39,6 +39,7 @@ class DynamicQmlWidget : public DeclarativeView, public Tomahawk::ViewPage
 
     Q_PROPERTY(QString title READ title)
     Q_PROPERTY(bool loading READ loading NOTIFY loadingChanged)
+    Q_PROPERTY(bool configured READ configured NOTIFY configuredChanged)
 
 public:
     explicit DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* parent = 0 );
@@ -60,9 +61,11 @@ public:
     playlist_ptr playlist() const;
 
     bool loading();
+    bool configured();
 
 signals:
     void loadingChanged();
+    void configuredChanged();
 
 public slots:
     void playItem(int index);

@@ -112,6 +112,11 @@ bool DynamicQmlWidget::loading()
     return m_model->isLoading();
 }
 
+bool DynamicQmlWidget::configured()
+{
+    return !m_playlist->generator()->controls().isEmpty();
+}
+
 void DynamicQmlWidget::playItem(int index)
 {
     tDebug() << "playItem called for cover" << index;
@@ -125,7 +130,9 @@ void DynamicQmlWidget::pause()
 
 void DynamicQmlWidget::startStationFromArtist(const QString &artist)
 {
+    m_model->clear();
     m_playlist->generator()->startFromArtist(Artist::get(artist));
+    emit configuredChanged();
 }
 
 void DynamicQmlWidget::startStationFromGenre(const QString &genre)
@@ -133,6 +140,7 @@ void DynamicQmlWidget::startStationFromGenre(const QString &genre)
     tDebug() << "should start startion from genre" << genre;
     m_model->clear();
     m_playlist->generator()->startFromGenre( genre );
+    emit configuredChanged();
 }
 
 void DynamicQmlWidget::currentIndexChanged( const QPersistentModelIndex &currentIndex )
