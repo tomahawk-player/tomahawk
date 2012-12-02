@@ -25,6 +25,7 @@
 
 #include <QDeclarativeImageProvider>
 
+class PlayableModel;
 class PlayableProxyModel;
 
 namespace Tomahawk
@@ -83,11 +84,16 @@ private slots:
     void trackStarted();
     void startStation();
     void stopStation( bool stopPlaying );
+
+    void loadArtistCharts();
+    void onArtistCharts( const QList< Tomahawk::artist_ptr >& artists );
+
 private:
     DynamicModel* m_model;
     PlayableProxyModel* m_proxyModel;
-
     dynplaylist_ptr m_playlist;
+
+    PlayableModel* m_artistChartsModel;
 
     bool m_runningOnDemand;
     bool m_activePlaylist;

@@ -3276,7 +3276,7 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/TomahawkApp.cpp" line="615"/>
+        <location filename="../src/TomahawkApp.cpp" line="619"/>
         <source>My Collection</source>
         <translation>Ma Collection</translation>
     </message>
