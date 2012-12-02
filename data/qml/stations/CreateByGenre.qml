@@ -9,7 +9,7 @@ Item {
     signal done()
 
     function createStation(genre) {
-        mainView.startStationFromArtist(genre)
+        mainView.startStationFromGenre(genre)
         root.done()
     }
 
