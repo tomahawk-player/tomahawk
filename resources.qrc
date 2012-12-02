@@ -181,5 +181,6 @@
         <file>data/qml/tomahawkimports/HeaderLabel.qml</file>
         <file>data/qml/stations/CreateByGenre.qml</file>
         <file>data/qml/tomahawkimports/TagCloud.qml</file>
+        <file>data/qml/tomahawkimports/ScrollBar.qml</file>
     </qresource>
 </RCC>

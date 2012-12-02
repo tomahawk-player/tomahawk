@@ -15,7 +15,7 @@ Item {
 
     Column {
         id: upperColumn
-        anchors.centerIn: parent
+        anchors.horizontalCenter: parent.horizontalCenter
         height: parent.height
         width: defaultFontHeight * 30
         anchors.bottomMargin: defaultFontHeight
@@ -48,6 +48,7 @@ Item {
         }
 
         ArtistView {
+            id: artistView
             height: parent.height - headerText.height - artistInputField.height - parent.spacing * 3
             width: parent.width
             model: artistChartsModel
@@ -57,6 +58,9 @@ Item {
             onItemClicked: {
                 createStation(artistChartsModel.itemFromIndex(index).artistName);
             }
+        }
+        ScrollBar {
+            listView: artistView
         }
     }
 }
