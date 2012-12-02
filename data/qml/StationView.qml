@@ -63,32 +63,7 @@ Item {
                 text: generator.summary
             }
         }
-        Column {
-            anchors.right: parent.right
-            anchors.left: parent.left
-            anchors.verticalCenter: parent.verticalCenter
-            width: scene.width / 3
-            spacing: titleText.height * 2
 
-            RoundedButton {
-                id: backButton
-                text: "<"
-                height: titleText.height * 3
-                width: height
-                onClicked: root.backClicked()
-
-            }
-
-            RoundedButton {
-                text: "+"
-                height: titleText.height * 3
-                width: height
-
-                onClicked: print("TODO: save station")
-
-            }
-        }
     }
-
 }
 

@@ -15,7 +15,9 @@ Item {
 
     Column {
         id: upperColumn
-        anchors.fill: parent
+        anchors.centerIn: parent
+        height: parent.height
+        width: defaultFontHeight * 30
         anchors.bottomMargin: defaultFontHeight
         spacing: defaultFontHeight
 
@@ -25,8 +27,8 @@ Item {
         }
 
         Row {
-            width: defaultFontHeight * 30
             height: artistInputField.height
+            width: parent.width
             spacing: defaultFontHeight
 
             InputField {
@@ -46,8 +48,8 @@ Item {
         }
 
         ArtistView {
-            height: parent.height - headerText.height - artistInputField.height
-            width: defaultFontHeight * 30
+            height: parent.height - headerText.height - artistInputField.height - parent.spacing * 3
+            width: parent.width
             model: artistChartsModel
             clip: true
             delegateHeight: defaultFontHeight * 6

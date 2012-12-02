@@ -33,9 +33,6 @@ Rectangle {
             id: stationCreator
             height: scene.height
             width: scene.width
-            nextEnabled: rootView.configured
-
-            onBack: stationListView.decrementCurrentIndex()
 
             onNext: stationListView.incrementCurrentIndex()
         }
@@ -68,4 +65,35 @@ Rectangle {
             contentWidth = scene.width
         }
     }
+
+    RoundedButton {
+        id: backButton
+        text: "<"
+        height: defaultFontHeight * 4
+        width: height
+        hidden: stationListView.currentIndex == 0
+        anchors {
+            left: parent.left
+            bottom: parent.bottom
+            margins: defaultFontHeight * 2
+        }
+
+        onClicked: stationListView.decrementCurrentIndex()
+    }
+
+    RoundedButton  {
+        id: nextButton
+        text: stationListView.currentIndex == 2 ? "+" : ">"
+        height: defaultFontHeight * 4
+        //hidden: stationListView.currentIndex == 0 || !rootView.configured // This should work once rootView.configured works
+        hidden: stationListView.currentIndex != 2
+        anchors {
+            right: parent.right
+            bottom: parent.bottom
+            margins: defaultFontHeight * 2
+        }
+
+        onClicked: stationListView.incrementCurrentIndex()
+    }
+
 }

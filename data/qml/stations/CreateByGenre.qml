@@ -45,6 +45,7 @@ Item {
 
         HeaderLabel {
             id: headerText
+            anchors.horizontalCenter: parent.horizontalCenter
             text: "Create station by genre..."
         }
 
@@ -52,6 +53,7 @@ Item {
             width: defaultFontHeight * 30
             height: artistInputField.height
             spacing: defaultFontHeight
+            anchors.horizontalCenter: parent.horizontalCenter
 
             InputField {
                 id: genreInputField

@@ -7,20 +7,13 @@ Item {
 
     property int margins: defaultFontHeight * 2
     property alias content: contentLoader.source
-    property bool nextEnabled: false
 
-    signal back()
     signal next()
 
     Loader {
         id: contentLoader
-        anchors {
-            left: parent.left
-            top: parent.top
-            right: parent.right
-            bottom: backButton.top
-            margins: root.margins
-        }
+        anchors.fill: parent
+        anchors.margins: root.margins
     }
 
     Connections {
@@ -29,30 +22,4 @@ Item {
         onDone: root.next()
     }
 
-    RoundedButton  {
-        id: backButton
-        text: "<"
-        height: defaultFontHeight * 4
-        anchors {
-            left: parent.left
-            bottom: parent.bottom
-            margins: root.margins
-        }
-
-        onClicked: root.back()
-    }
-
-    RoundedButton  {
-        id: nextButton
-        text: ">"
-        height: defaultFontHeight * 4
-        visible: root.nextEnabled
-        anchors {
-            right: parent.right
-            bottom: parent.bottom
-            margins: root.margins
-        }
-
-        onClicked: root.next()
-    }
 }

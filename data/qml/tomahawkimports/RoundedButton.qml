@@ -7,14 +7,20 @@ Rectangle {
     border.color: enabled ? "white" : "grey"
     radius: height / 2
     color: (buttonMouseArea.containsMouse && enabled) ? "#22ffffff" : "black"
+    opacity: hidden ? 0 : 1
 
     height: defaultFontHeight * 2
     width: height
 
     property string text
     property bool enabled: true
+    property bool hidden: false
 
     signal clicked()
+
+    Behavior on opacity {
+        NumberAnimation { duration: 200 }
+    }
 
     Behavior on color {
         ColorAnimation { duration: 200 }
