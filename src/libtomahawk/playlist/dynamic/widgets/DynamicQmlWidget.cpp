@@ -2,14 +2,17 @@
 
 #include "playlist/dynamic/DynamicModel.h"
 #include "playlist/PlayableProxyModel.h"
-#include "utils/TomahawkUtilsGui.h"
 #include "playlist/dynamic/DynamicModel.h"
 #include "playlist/dynamic/echonest/EchonestControl.h"
 #include "playlist/dynamic/GeneratorInterface.h"
 #include "playlist/PlayableItem.h"
 #include "Source.h"
-#include "widgets/DeclarativeCoverArtProvider.h"
+#include "SourceList.h"
 #include "audio/AudioEngine.h"
+#include "database/Database.h"
+#include "database/DatabaseCommand_PlaybackCharts.h"
+#include "widgets/DeclarativeCoverArtProvider.h"
+#include "utils/TomahawkUtilsGui.h"
 
 #include <QUrl>
 #include <qdeclarative.h>
@@ -26,9 +29,6 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
     , m_runningOnDemand( false )
     , m_activePlaylist( false )
 {
-
-
-
     setResizeMode( QDeclarativeView::SizeRootObjectToView );
 
     m_model = new DynamicModel( this );
@@ -70,6 +70,10 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
 
 //    m_playlist->generator()->generate( 20 );
 
+    DatabaseCommand_PlaybackCharts* cmd = new DatabaseCommand_PlaybackCharts( SourceList::instance()->getLocal(), this );
+    cmd->setLimit( 15 );
+    connect( cmd, SIGNAL( artists( QList<Tomahawk::artist_ptr> ) ), SLOT( onArtistChart( QList< Tomahawk::artist_ptr > ) ) );
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
 
@@ -232,5 +236,15 @@ DynamicQmlWidget::startStation()
     m_model->startOnDemand();
 }
 
+
+void
+DynamicQmlWidget::onArtistChart( const QList< Tomahawk::artist_ptr >& artists )
+{
+    int i = 0;
+    foreach ( const artist_ptr& artist, artists )
+    {
+        tDebug() << "Found artist in chart:" << artist->name() << QString::number( ++i );
+    }
+}
 
 }

@@ -83,6 +83,9 @@ private slots:
     void trackStarted();
     void startStation();
     void stopStation( bool stopPlaying );
+
+    void onArtistChart( const QList< Tomahawk::artist_ptr >& artists );
+
 private:
     DynamicModel* m_model;
     PlayableProxyModel* m_proxyModel;
