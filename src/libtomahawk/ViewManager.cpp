@@ -31,7 +31,6 @@
 #include "playlist/PlayableProxyModel.h"
 #include "playlist/PlayableModel.h"
 #include "playlist/TreeView.h"
-#include "playlist/GridView.h"
 #include "playlist/AlbumModel.h"
 #include "SourceList.h"
 #include "TomahawkSettings.h"

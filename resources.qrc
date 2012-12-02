@@ -175,5 +175,6 @@
         <file>data/qml/tomahawkimports/RoundedButton.qml</file>
         <file>data/qml/StationCreator.qml</file>
         <file>data/qml/StationCreatorPage1.qml</file>
+        <file>data/qml/GridView.qml</file>
     </qresource>
 </RCC>

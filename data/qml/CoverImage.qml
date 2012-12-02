@@ -137,7 +137,7 @@ Item {
         id: itemShadow
         color: backgroundColor
         anchors.fill: parent
-        anchors.bottomMargin: - parent.height
+        //anchors.bottomMargin: - parent.height
 
         // scaling might be off a pixel... make sure that the shadow is at least as large as the image
         anchors.leftMargin: -2
@@ -158,6 +158,7 @@ Item {
         width: parent.width + 4
         anchors.centerIn: parent
         anchors.verticalCenterOffset: parent.height
+        visible: showMirror
 
         gradient: Gradient {
             // TODO: no clue how to get the RGB component of the container rectangle color

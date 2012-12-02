@@ -26,6 +26,7 @@ DeclarativeCoverArtProvider::~DeclarativeCoverArtProvider()
 
 QPixmap DeclarativeCoverArtProvider::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
 {
+    tDebug() << "requresting albumart" << id;
     // We always can generate it in the requested size
     int width = requestedSize.width() > 0 ? requestedSize.width() : 230;
     int height = requestedSize.height() > 0 ? requestedSize.height() : 230;

@@ -36,14 +36,7 @@
          </widget>
         </item>
         <item>
-         <widget class="GridView" name="additionsView">
-          <property name="dragEnabled">
-           <bool>true</bool>
-          </property>
-          <property name="selectionMode">
-           <enum>QAbstractItemView::ExtendedSelection</enum>
-          </property>
-         </widget>
+         <widget class="QmlGridView" name="additionsView"/>
         </item>
        </layout>
       </widget>
@@ -87,9 +80,9 @@
    <header location="global">widgets/HeaderLabel.h</header>
   </customwidget>
   <customwidget>
-   <class>GridView</class>
+   <class>QmlGridView</class>
    <extends>QListView</extends>
-   <header>playlist/GridView.h</header>
+   <header>playlist/QmlGridView.h</header>
   </customwidget>
   <customwidget>
    <class>PlaylistView</class>

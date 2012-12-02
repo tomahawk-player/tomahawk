@@ -72,6 +72,7 @@ set( libGuiSources
     playlist/AlbumModel.cpp
     playlist/GridItemDelegate.cpp
     playlist/GridView.cpp
+    playlist/QmlGridView.cpp
     playlist/TreeView.cpp
     playlist/ViewHeader.cpp
     playlist/LovedTracksModel.cpp
