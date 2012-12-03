@@ -76,7 +76,7 @@ DynamicView::setDynamicModel( DynamicModel* model )
     m_model = model;
     PlaylistView::setPlaylistModel( m_model );
 
-    connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
+    connect( m_model, SIGNAL( itemCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
     connect( m_model, SIGNAL( checkForOverflow() ), SLOT( checkForOverflow() ) );
 }
 

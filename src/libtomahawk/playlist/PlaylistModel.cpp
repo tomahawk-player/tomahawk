@@ -242,7 +242,7 @@ PlaylistModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int
 {
     if ( !entries.count() )
     {
-        emit trackCountChanged( rowCount( QModelIndex() ) );
+        emit itemCountChanged( rowCount( QModelIndex() ) );
         finishLoading();
         return;
     }
@@ -293,7 +293,7 @@ PlaylistModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int
         finishLoading();
 
     emit endInsertRows();
-    emit trackCountChanged( rowCount( QModelIndex() ) );
+    emit itemCountChanged( rowCount( QModelIndex() ) );
 }
 
 

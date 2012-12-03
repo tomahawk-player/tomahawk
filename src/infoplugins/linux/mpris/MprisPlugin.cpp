@@ -84,7 +84,7 @@ MprisPlugin::init()
     Tomahawk::playlistinterface_ptr playlist = AudioEngine::instance()->playlist();
     if ( !playlist.isNull() )
     {
-        connect( playlist.data(), SIGNAL( trackCountChanged( unsigned int ) ),
+        connect( playlist.data(), SIGNAL( itemCountChanged( unsigned int ) ),
                                     SLOT( onTrackCountChanged( unsigned int ) ) );
     }
 
@@ -551,7 +551,7 @@ MprisPlugin::onPlaylistChanged( Tomahawk::playlistinterface_ptr playlist )
     disconnect( this, SLOT( onTrackCountChanged( unsigned int ) ) );
 
     if ( !playlist.isNull() )
-        connect( playlist.data(), SIGNAL( trackCountChanged( unsigned int ) ),
+        connect( playlist.data(), SIGNAL( itemCountChanged( unsigned int ) ),
             SLOT( onTrackCountChanged( unsigned int ) ) );
 
     // Notify relevant changes

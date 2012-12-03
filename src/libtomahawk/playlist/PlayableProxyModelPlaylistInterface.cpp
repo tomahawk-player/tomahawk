@@ -41,7 +41,7 @@ PlayableProxyModelPlaylistInterface::PlayableProxyModelPlaylistInterface( Playab
     connect( proxyModel, SIGNAL( currentIndexChanged() ), SLOT( onModelChanged() ) );
     connect( proxyModel, SIGNAL( indexPlayable( QModelIndex ) ), SLOT( onModelChanged() ) );
     connect( proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onModelChanged() ) );
-//    connect( proxyModel, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onModelChanged() ) );
+    connect( proxyModel, SIGNAL( itemCountChanged( unsigned int ) ), SLOT( onModelChanged() ) );
 }
 
 
