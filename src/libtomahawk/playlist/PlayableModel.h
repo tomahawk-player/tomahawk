@@ -136,7 +136,6 @@ signals:
     void repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 
-    void trackCountChanged( unsigned int tracks );
     void itemCountChanged( unsigned int items );
 
     void loadingStarted();

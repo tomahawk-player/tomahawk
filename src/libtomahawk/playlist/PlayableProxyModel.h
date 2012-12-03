@@ -97,6 +97,8 @@ signals:
     void indexPlayable( const QModelIndex& index );
     void currentIndexChanged();
 
+    void itemCountChanged( unsigned int items );
+
 protected:
     virtual bool filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const;
     virtual bool lessThan( const QModelIndex& left, const QModelIndex& right ) const;

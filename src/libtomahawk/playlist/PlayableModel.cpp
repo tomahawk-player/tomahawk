@@ -577,7 +577,6 @@ PlayableModel::insertInternal( const QList< T >& items, int row )
 {
     if ( !items.count() )
     {
-        emit trackCountChanged( rowCount( QModelIndex() ) );
         emit itemCountChanged( rowCount( QModelIndex() ) );
 
         finishLoading();
@@ -606,7 +605,7 @@ PlayableModel::insertInternal( const QList< T >& items, int row )
     }
 
     emit endInsertRows();
-    emit trackCountChanged( rowCount( QModelIndex() ) );
+    emit itemCountChanged( rowCount( QModelIndex() ) );
     finishLoading();
 }
 
@@ -642,7 +641,7 @@ PlayableModel::removeIndex( const QModelIndex& index, bool moreToCome )
     }
 
     if ( !moreToCome )
-        emit trackCountChanged( rowCount( QModelIndex() ) );
+        emit itemCountChanged( rowCount( QModelIndex() ) );
 }
 
 

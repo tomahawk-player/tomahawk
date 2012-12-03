@@ -263,6 +263,12 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
             m_lockRects.remove( index );
     }
 
+    if ( m_trackHovered == index )
+    {
+        QFont font = painter->font();
+        font.setUnderline( true );
+        painter->setFont( font );
+    }
     textRect.adjust( 0, 0, 0, 2 );
     text = painter->fontMetrics().elidedText( desc, Qt::ElideRight, textRect.width() - 8 );
     QTextOption to( Qt::AlignVCenter );
@@ -626,6 +632,22 @@ SourceDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QSt
         const QRect trackRect = m_trackRects[ index ];
         const QMouseEvent* ev = static_cast< QMouseEvent* >( event );
         hoveringTrack = trackRect.contains( ev->pos() );
+
+        if ( hoveringTrack )
+        {
+            if ( m_trackHovered != index )
+            {
+                m_trackHovered = index;
+                QMetaObject::invokeMethod( m_parent, "update", Qt::QueuedConnection, Q_ARG( QModelIndex, index ) );
+            }
+        }
+    }
+    if ( !hoveringTrack )
+    {
+        if ( m_trackHovered.isValid() )
+            QMetaObject::invokeMethod( m_parent, "update", Qt::QueuedConnection, Q_ARG( QModelIndex, m_trackHovered ) );
+
+        m_trackHovered = QPersistentModelIndex();
     }
 
     bool lockRectContainsClick = false, headphonesRectContainsClick = false;
@@ -806,7 +828,7 @@ SourceDelegate::hovered( const QModelIndex& index, const QMimeData* mimeData )
 {
     if ( !index.isValid() )
     {
-        foreach ( AnimationHelper *helper, m_expandedMap )
+        foreach ( AnimationHelper* helper, m_expandedMap )
         {
             helper->collapse();
         }
@@ -815,14 +837,14 @@ SourceDelegate::hovered( const QModelIndex& index, const QMimeData* mimeData )
 
     if ( !m_expandedMap.contains( index ) )
     {
-        foreach ( AnimationHelper *helper, m_expandedMap )
+        foreach ( AnimationHelper* helper, m_expandedMap )
         {
             helper->collapse();
         }
 
         m_newDropHoverIndex = index;
         m_dropMimeData->clear();
-        foreach ( const QString &mimeDataFormat, mimeData->formats() )
+        foreach ( const QString& mimeDataFormat, mimeData->formats() )
         {
             m_dropMimeData->setData( mimeDataFormat, mimeData->data( mimeDataFormat ) );
         }

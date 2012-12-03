@@ -92,7 +92,7 @@ public slots:
     virtual void setShuffled( bool enabled ) = 0;
 
 signals:
-    void trackCountChanged( unsigned int tracks );
+    void itemCountChanged( unsigned int tracks );
     void repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
     void latchModeChanged( Tomahawk::PlaylistModes::LatchMode mode );
