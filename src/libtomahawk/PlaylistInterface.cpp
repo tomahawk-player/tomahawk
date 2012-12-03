@@ -58,7 +58,7 @@ Tomahawk::result_ptr
 PlaylistInterface::siblingResult( int itemsAway ) const
 {
     qint64 idx = siblingIndex( itemsAway );
-    qint64 safetyCheck = 0;
+    qint64 safetyCheck = -1;
 
     // If safetyCheck equals idx, this means the interface keeps returning the same item and we won't discover anything new - abort
     // This can happen in repeat / random mode e.g.
