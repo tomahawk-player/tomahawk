@@ -619,7 +619,8 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
         s = SourceList::instance()->getLocal();
         fileUrl = url;
     }
-    else if ( TomahawkUtils::whitelistedHttpResultHint( url ) )
+    else if ( TomahawkUtils::whitelistedHttpResultHint( url ) ||
+              TomahawkUtils::whitelistedCustomProtocolResultHint( url ) )
     {
         // Return http resulthint directly
         res = Tomahawk::Result::get( url );
