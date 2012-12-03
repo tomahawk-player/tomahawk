@@ -55,22 +55,18 @@ AlbumPlaylistInterface::~AlbumPlaylistInterface()
 void
 AlbumPlaylistInterface::setCurrentIndex( qint64 index )
 {
-    Q_UNUSED( index );
-    Q_ASSERT( false );
-/*    m_currentTrack = index;
-    m_currentItem = m_queries.at( index )->results().first();*/
+    m_currentTrack = index;
+    m_currentItem = m_queries.at( index )->results().first();
 }
 
 
 qint64
 AlbumPlaylistInterface::siblingIndex( int itemsAway, qint64 rootIndex ) const
 {
-    Q_UNUSED( itemsAway );
-    Q_UNUSED( rootIndex );
-    Q_ASSERT( false );
-
-    /*
     qint64 p = m_currentTrack;
+    if ( rootIndex >= 0 )
+        p = rootIndex;
+
     p += itemsAway;
 
     if ( p < 0 )
@@ -79,9 +75,7 @@ AlbumPlaylistInterface::siblingIndex( int itemsAway, qint64 rootIndex ) const
     if ( p >= m_queries.count() )
         return -1;
 
-    return p;*/
-
-    return -1;
+    return p;
 }
 
 
@@ -251,4 +245,59 @@ AlbumPlaylistInterface::onTracksLoaded( const QList< query_ptr >& tracks )
 
     m_finished = true;
     emit tracksLoaded( m_mode, m_collection );
+}
+
+
+qint64
+AlbumPlaylistInterface::indexOfResult( const Tomahawk::result_ptr& result ) const
+{
+    int i = 0;
+    foreach ( const Tomahawk::query_ptr& query, m_queries )
+    {
+        if ( query->numResults() && query->results().contains( result ) )
+            return i;
+
+        i++;
+    }
+
+    return -1;
+}
+
+
+qint64
+AlbumPlaylistInterface::indexOfQuery( const Tomahawk::query_ptr& query ) const
+{
+    int i = 0;
+    foreach ( const Tomahawk::query_ptr& q, m_queries )
+    {
+        if ( q->equals( query ) )
+            return i;
+
+        i++;
+    }
+
+    return -1;
+}
+
+
+query_ptr
+AlbumPlaylistInterface::queryAt( qint64 index ) const
+{
+    if ( index >= 0 && index < m_queries.count() )
+    {
+        return m_queries.at( index );
+    }
+
+    return Tomahawk::query_ptr();
+}
+
+
+result_ptr
+AlbumPlaylistInterface::resultAt( qint64 index ) const
+{
+    Tomahawk::query_ptr query = queryAt( index );
+    if ( query && query->numResults() )
+        return query->results().first();
+
+    return Tomahawk::result_ptr();
 }
