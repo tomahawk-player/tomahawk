@@ -833,6 +833,25 @@ AudioEngine::timerTriggered( qint64 time )
 
 
 void
+AudioEngine::setQueue( const playlistinterface_ptr& queue )
+{
+    if ( m_queue )
+    {
+        disconnect( m_queue.data(), SIGNAL( previousTrackAvailable() ), this, SIGNAL( controlStateChanged() ) );
+        disconnect( m_queue.data(), SIGNAL( nextTrackAvailable() ), this, SIGNAL( controlStateChanged() ) );
+    }
+
+    m_queue = queue;
+
+    if ( m_queue )
+    {
+        connect( m_queue.data(), SIGNAL( previousTrackAvailable() ), SIGNAL( controlStateChanged() ) );
+        connect( m_queue.data(), SIGNAL( nextTrackAvailable() ), SIGNAL( controlStateChanged() ) );
+    }
+}
+
+
+void
 AudioEngine::setPlaylist( Tomahawk::playlistinterface_ptr playlist )
 {
     if ( m_playlist == playlist )
@@ -842,8 +861,8 @@ AudioEngine::setPlaylist( Tomahawk::playlistinterface_ptr playlist )
     {
         if ( m_playlist.data() )
         {
-            disconnect( m_playlist.data(), SIGNAL( previousTrackAvailable( bool ) ) );
-            disconnect( m_playlist.data(), SIGNAL( nextTrackAvailable( bool ) ) );
+            disconnect( m_playlist.data(), SIGNAL( previousTrackAvailable() ) );
+            disconnect( m_playlist.data(), SIGNAL( nextTrackAvailable() ) );
         }
 
         m_playlist.data()->reset();
