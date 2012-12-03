@@ -151,7 +151,7 @@ void
 TomahawkApp::installTranslator()
 {
 #if QT_VERSION >= 0x040800
-    QString locale = QLocale::system().uiLanguages().first();
+    QString locale = QLocale::system().uiLanguages().first().replace( "-", "_" );
 #else
     QString locale = QLocale::system().name();
 #endif
