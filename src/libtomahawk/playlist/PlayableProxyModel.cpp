@@ -537,6 +537,8 @@ PlayableProxyModel::data( const QModelIndex& index, int role ) const
         return QVariant();
     if ( !m_headerStyle.contains( m_style ) )
         return QVariant();
+    if ( index.column() < 0 )
+        return QVariant();
 
     PlayableModel::Columns col = m_headerStyle[ m_style ].at( index.column() );
     QModelIndex sourceIdx = mapToSource( index );
