@@ -950,12 +950,6 @@ whitelistedHttpResultHint( const QString& url )
 }
 
 
-bool
-whitelistedCustomProtocolResultHint( const QString& url )
-{
-    return url.startsWith( "hnhh" );
-}
-
 } // ns
 
 #include "TomahawkUtils.moc"

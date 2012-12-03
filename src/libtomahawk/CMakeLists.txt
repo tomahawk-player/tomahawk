@@ -120,8 +120,6 @@ set( libGuiSources
     utils/BinaryInstallerHelper.cpp
     utils/BinaryExtractWorker.cpp
     utils/SharedTimeLine.cpp
-    utils/ResultHintChecker.cpp
-    utils/CustomResultHintChecker.cpp
     utils/WebResultHintChecker.cpp
     utils/NetworkReply.cpp
 
