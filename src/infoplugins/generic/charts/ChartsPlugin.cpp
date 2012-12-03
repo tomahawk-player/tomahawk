@@ -37,8 +37,8 @@
 #include "utils/TomahawkCache.h"
 #include "Source.h"
 
-#define CHART_URL "http://charts.tomahawk-player.org/"
-//#define CHART_URL "http://localhost:8080/"
+//#define CHART_URL "http://charts.tomahawk-player.org/"
+#define CHART_URL "http://localhost:8080/"
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 
@@ -665,8 +665,11 @@ ChartsPlugin::chartReturned()
         else
             setChartType( None );
 
+        int count = 0;
         foreach ( const QVariant& chartR, chartResponse )
         {
+            if( count++ >= 1)
+                break;
             QString title, artist, album, streamUrl;
             QVariantMap chartMap = chartR.toMap();
 

@@ -129,6 +129,7 @@ namespace TomahawkUtils
     void copyWithAuthentication( const QString& srcFile, const QDir dest, QObject* receiver );
 
     DLLEXPORT bool whitelistedHttpResultHint( const QString& url );
+    DLLEXPORT bool whitelistedCustomProtocolResultHint( const QString& url );
 
     /**
      * This helper is designed to help "update" an existing playlist with a newer revision of itself.
