@@ -61,25 +61,21 @@ Tomahawk::result_ptr
 PlaylistInterface::siblingResult( int itemsAway, qint64 rootIndex ) const
 {
     qint64 idx = siblingIndex( itemsAway, rootIndex );
-    qint64 safetyCheck = -1;
+    QList< qint64 > safetyCheck;
 
-    // If safetyCheck equals idx, this means the interface keeps returning the same item and we won't discover anything new - abort
+    // If safetyCheck contains idx, this means the interface keeps returning the same items and we won't discover anything new - abort
     // This can happen in repeat / random mode e.g.
-    while ( idx >= 0 && safetyCheck != idx )
+    while ( idx >= 0 && !safetyCheck.contains( idx ) )
     {
-        safetyCheck = idx;
+        safetyCheck << idx;
         Tomahawk::query_ptr query = queryAt( idx );
-        if ( query && query->numResults() )
+
+        if ( query && query->playable() )
         {
             return query->results().first();
         }
 
-        if ( itemsAway < 0 )
-            itemsAway--;
-        else
-            itemsAway++;
-
-        idx = siblingIndex( itemsAway );
+        idx = siblingIndex( itemsAway < 0 ? -1 : 1, idx );
     }
 
     return Tomahawk::result_ptr();
