@@ -281,6 +281,9 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
     ui->loveButton->setToolTip( tr( "Love" ) );
     ui->ownerButton->setToolTip( QString( tr( "Playing from %1" ) ).arg( result->friendlySource() ) );
 
+    // If the ViewManager doesn't know a page for the current interface, we can't offer the jump link
+    ui->artistTrackLabel->setJumpLinkVisible( ( ViewManager::instance()->pageForInterface( AudioEngine::instance()->currentTrackPlaylist() ) ) );
+
     onControlStateChanged();
 
     QPixmap sourceIcon = result->sourceIcon( TomahawkUtils::RoundedCorners, ui->ownerButton->size() );
