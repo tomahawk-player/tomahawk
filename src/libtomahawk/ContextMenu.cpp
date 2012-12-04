@@ -109,7 +109,8 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
     if ( m_supportedActions & ActionPage && itemCount() == 1 )
     {
         m_sigmap->setMapping( addAction( tr( "&Go to \"%1\"" ).arg( m_queries.first()->track() ) ), ActionTrackPage );
-        m_sigmap->setMapping( addAction( tr( "Go to \"%1\"" ).arg( m_queries.first()->album() ) ), ActionAlbumPage );
+        if ( !m_queries.first()->album().isEmpty() )
+            m_sigmap->setMapping( addAction( tr( "Go to \"%1\"" ).arg( m_queries.first()->album() ) ), ActionAlbumPage );
         m_sigmap->setMapping( addAction( tr( "Go to \"%1\"" ).arg( m_queries.first()->artist() ) ), ActionArtistPage );
     }
 
