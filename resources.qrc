@@ -2,6 +2,8 @@
     <qresource prefix="/">
         <file>data/images/back-pressed.png</file>
         <file>data/images/back-rest.png</file>
+        <file>data/images/back-pressed.svg</file>
+        <file>data/images/back-rest.svg</file>
         <file>data/images/filter.png</file>
         <file>data/images/loved.png</file>
         <file>data/images/not-loved.png</file>
@@ -15,8 +17,12 @@
         <file>data/images/now-playing-speaker-dark.png</file>
         <file>data/images/pause-pressed.png</file>
         <file>data/images/pause-rest.png</file>
+        <file>data/images/pause-pressed.svg</file>
+        <file>data/images/pause-rest.svg</file>
         <file>data/images/play-pressed.png</file>
+        <file>data/images/play-pressed.svg</file>
         <file>data/images/play-rest.png</file>
+        <file>data/images/play-rest.svg</file>
         <file>data/images/sipplugin-add.png</file>
         <file>data/images/sipplugin-remove.png</file>
         <file>data/images/playlist-icon.png</file>
@@ -37,6 +43,8 @@
         <file>data/images/shuffle-on-rest.png</file>
         <file>data/images/skip-pressed.png</file>
         <file>data/images/skip-rest.png</file>
+        <file>data/images/skip-pressed.svg</file>
+        <file>data/images/skip-rest.svg</file>
         <file>data/images/user-avatar.png</file>
         <file>data/images/view-toggle-active-centre.png</file>
         <file>data/images/view-toggle-active-left.png</file>
