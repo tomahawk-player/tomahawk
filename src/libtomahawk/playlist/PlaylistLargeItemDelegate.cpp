@@ -141,7 +141,7 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
     const QString artist = q->artist();
     const QString album = q->album();
     const QString track = q->track();
-    unsigned int duration = q->duration();
+    int duration = q->duration();
     QPixmap avatar;
     QString lowerText;
 
@@ -262,8 +262,7 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         {
             painter->setPen( opt.palette.text().color() );
             painter->setFont( smallBoldFont );
-            text = painter->fontMetrics().elidedText( TomahawkUtils::timeToString( duration ), Qt::ElideRight, rightRect.width() );
-            painter->drawText( rightRect, text, m_centerRightOption );
+            painter->drawText( rightRect, TomahawkUtils::timeToString( duration ), m_centerRightOption );
         }
     }
     painter->restore();
