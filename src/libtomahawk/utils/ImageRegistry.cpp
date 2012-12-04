@@ -17,6 +17,9 @@
 
 #include "ImageRegistry.h"
 
+#include <QSvgRenderer>
+#include <QPainter>
+
 #include "utils/Logger.h"
 
 static QHash< QString, QHash< int, QHash< int, QPixmap > > > s_cache;
@@ -58,7 +61,21 @@ ImageRegistry::getFromCache( const QString& image, const QSize& size, TomahawkUt
     }
 
     // Image not found in cache. Let's load it.
-    QPixmap pixmap( image );
+    QPixmap pixmap;
+    if ( image.toLower().endsWith( ".svg" ) )
+    {
+        QSvgRenderer svgRenderer( image );
+        QPixmap p( size.isNull() ? svgRenderer.defaultSize() : size );
+        p.fill( Qt::transparent );
+
+        QPainter pixPainter( &p );
+        svgRenderer.render( &pixPainter );
+
+        pixmap = p;
+    }
+    else
+        pixmap = QPixmap( image );
+
     if ( !pixmap.isNull() )
     {
         switch ( mode )
