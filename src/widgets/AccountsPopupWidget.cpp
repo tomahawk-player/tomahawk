@@ -35,15 +35,15 @@ AccountsPopupWidget::AccountsPopupWidget( QWidget* parent )
     , m_widget( 0 )
     , m_arrowOffset( 0 )
 {
-#ifndef Q_OS_WIN
     setWindowFlags( Qt::FramelessWindowHint );
-#endif
     setWindowFlags( Qt::Popup );
     //Uncomment this if using a debugger:
     //setWindowFlags( Qt::Window );
 
     setAutoFillBackground( false );
     setAttribute( Qt::WA_TranslucentBackground, true );
+    setAttribute( Qt::WA_NoSystemBackground, true );
+
 
     setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum );
 
