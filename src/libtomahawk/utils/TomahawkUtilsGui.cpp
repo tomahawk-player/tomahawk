@@ -443,6 +443,35 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
 
         case InfoIcon:
             pixmap = ImageRegistry::instance()->getFromCache( RESPATH "images/info.png", size );
+            break;
+
+        case PlayButton:
+            pixmap = ImageRegistry::instance()->getFromCache( RESPATH "images/play-rest.svg", size );
+            break;
+        case PlayButtonPressed:
+            pixmap = ImageRegistry::instance()->getFromCache( RESPATH "images/play-pressed.svg", size );
+            break;
+
+        case PauseButton:
+            pixmap = ImageRegistry::instance()->getFromCache( RESPATH "images/pause-rest.svg", size );
+            break;
+        case PauseButtonPressed:
+            pixmap = ImageRegistry::instance()->getFromCache( RESPATH "images/pause-pressed.svg", size );
+            break;
+
+        case PrevButton:
+            pixmap = ImageRegistry::instance()->getFromCache( RESPATH "images/back-rest.svg", size );
+            break;
+        case PrevButtonPressed:
+            pixmap = ImageRegistry::instance()->getFromCache( RESPATH "images/back-pressed.svg", size );
+            break;
+
+        case NextButton:
+            pixmap = ImageRegistry::instance()->getFromCache( RESPATH "images/skip-rest.svg", size );
+            break;
+        case NextButtonPressed:
+            pixmap = ImageRegistry::instance()->getFromCache( RESPATH "images/skip-pressed.svg", size );
+            break;
 
         default:
             break;
