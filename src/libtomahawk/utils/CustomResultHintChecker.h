@@ -1,6 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2012, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2012, Hugo Lindström <hugolm84@gmail.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -16,28 +15,38 @@
  *   You should have received a copy of the GNU General Public License
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef WEB_RESULT_HINT_CHECKER_H
-#define WEB_RESULT_HINT_CHECKER_H
+#ifndef Custom_RESULT_HINT_CHECKER_H
+#define Custom_RESULT_HINT_CHECKER_H
 
 #include "Typedefs.h"
+#include <QUrl>
 #include <QObject>
 #include "ResultHintChecker.h"
 
 namespace Tomahawk
 {
 
-class WebResultHintChecker : public ResultHintChecker
+/**
+ * @brief The CustomResultHintChecker class
+ * This class is to be used with custom protocol to retrieve
+ * streamable urls for resulthints.
+ */
+class CustomResultHintChecker : public ResultHintChecker
 {
     Q_OBJECT
 public:
-    WebResultHintChecker( const query_ptr& q );
-    virtual ~WebResultHintChecker(){}
+    CustomResultHintChecker( const query_ptr& q );
+    virtual ~CustomResultHintChecker(){}
 private slots:
-    void headFinished();
+    /* HotNewHiphop specific */
+    void hnhhFinished();
+    void handleHnhhResult( result_ptr result );
 private:
+    void handleResultHint();
+    QString m_streamUrl;
     query_ptr m_query;
-    QString m_url;
 };
+
 
 }
 

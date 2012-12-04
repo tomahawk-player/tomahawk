@@ -16,27 +16,49 @@
  *   You should have received a copy of the GNU General Public License
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef WEB_RESULT_HINT_CHECKER_H
-#define WEB_RESULT_HINT_CHECKER_H
+#ifndef RESULT_HINT_CHECKER_H
+#define RESULT_HINT_CHECKER_H
 
 #include "Typedefs.h"
 #include <QObject>
-#include "ResultHintChecker.h"
 
 namespace Tomahawk
 {
 
-class WebResultHintChecker : public ResultHintChecker
+class ResultHintChecker : public QObject
 {
     Q_OBJECT
 public:
-    WebResultHintChecker( const query_ptr& q );
-    virtual ~WebResultHintChecker(){}
+    explicit ResultHintChecker( const query_ptr& q );
+    virtual ~ResultHintChecker();
+
+    static void checkQuery( const query_ptr& query );
+    static void checkQueries( const QList< query_ptr >& queries );
+
+    bool isValid();
+
+    QString url() const { return m_url; }
+    QString resultHint() const;
+
+    void setUrl( const QString& url ) { m_url = url; }
+    void setResultHint( const QString &url, const bool saveHint );
+    void removeHint();
+
+signals:
+    void result( result_ptr );
+
 private slots:
-    void headFinished();
+    void onResolvingFinished( bool hasResults );
+    void onResultsAdded( const QList<Tomahawk::result_ptr>& results );
+    void onResultsRemoved( const Tomahawk::result_ptr& result );
+    void onResultsChanged();
+
 private:
+    void check( const QUrl& url );
+    result_ptr getResultPtr();
     query_ptr m_query;
     QString m_url;
+    bool m_isValid;
 };
 
 }
