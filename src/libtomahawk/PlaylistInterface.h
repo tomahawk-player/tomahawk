@@ -46,7 +46,7 @@ public:
     virtual int trackCount() const = 0;
 
     virtual Tomahawk::result_ptr currentItem() const = 0;
-    virtual void setCurrentIndex( qint64 index ) = 0;
+    virtual void setCurrentIndex( qint64 index );
 
     virtual bool hasNextResult() const;
     virtual bool hasPreviousResult() const;
@@ -54,7 +54,7 @@ public:
     virtual Tomahawk::result_ptr previousResult() const;
 
     virtual qint64 siblingIndex( int itemsAway, qint64 rootIndex = -1 ) const = 0;
-    virtual Tomahawk::result_ptr siblingResult( int itemsAway ) const;
+    virtual Tomahawk::result_ptr siblingResult( int itemsAway, qint64 rootIndex = -1 ) const;
 
     virtual Tomahawk::result_ptr resultAt( qint64 index ) const = 0;
     virtual Tomahawk::query_ptr queryAt( qint64 index ) const = 0;
@@ -100,11 +100,17 @@ signals:
     void previousTrackAvailable();
     void nextTrackAvailable();
 
+protected slots:
+    virtual void onItemsChanged();
+
 protected:
     virtual QList<Tomahawk::query_ptr> filterTracks( const QList<Tomahawk::query_ptr>& queries );
 
     PlaylistModes::LatchMode m_latchMode;
     bool m_finished;
+    mutable bool m_prevAvail;
+    mutable bool m_nextAvail;
+    mutable qint64 m_currentIndex;
 
 private:
     Q_DISABLE_COPY( PlaylistInterface )
