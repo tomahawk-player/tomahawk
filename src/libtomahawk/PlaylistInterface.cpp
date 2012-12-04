@@ -30,6 +30,9 @@ PlaylistInterface::PlaylistInterface ()
     : QObject()
     , m_latchMode( PlaylistModes::StayOnSong )
     , m_finished( false )
+    , m_prevAvail( false )
+    , m_nextAvail( false )
+    , m_currentIndex( -1 )
 {
     m_id = uuid();
 }
@@ -55,28 +58,24 @@ PlaylistInterface::nextResult() const
 
 
 Tomahawk::result_ptr
-PlaylistInterface::siblingResult( int itemsAway ) const
+PlaylistInterface::siblingResult( int itemsAway, qint64 rootIndex ) const
 {
-    qint64 idx = siblingIndex( itemsAway );
-    qint64 safetyCheck = 0;
+    qint64 idx = siblingIndex( itemsAway, rootIndex );
+    QList< qint64 > safetyCheck;
 
-    // If safetyCheck equals idx, this means the interface keeps returning the same item and we won't discover anything new - abort
+    // If safetyCheck contains idx, this means the interface keeps returning the same items and we won't discover anything new - abort
     // This can happen in repeat / random mode e.g.
-    while ( idx >= 0 && safetyCheck != idx )
+    while ( idx >= 0 && !safetyCheck.contains( idx ) )
     {
-        safetyCheck = idx;
+        safetyCheck << idx;
         Tomahawk::query_ptr query = queryAt( idx );
-        if ( query && query->numResults() )
+
+        if ( query && query->playable() )
         {
             return query->results().first();
         }
 
-        if ( itemsAway < 0 )
-            itemsAway--;
-        else
-            itemsAway++;
-
-        idx = siblingIndex( itemsAway );
+        idx = siblingIndex( itemsAway < 0 ? -1 : 1, idx );
     }
 
     return Tomahawk::result_ptr();
@@ -167,4 +166,56 @@ bool
 PlaylistInterface::hasPreviousResult() const
 {
     return ( siblingResult( -1 ) );
+}
+
+
+void
+PlaylistInterface::onItemsChanged()
+{
+    if ( QThread::currentThread() != thread() )
+    {
+        QMetaObject::invokeMethod( this, "onItemsChanged", Qt::QueuedConnection );
+        return;
+    }
+
+    Tomahawk::result_ptr prevResult = siblingResult( -1, m_currentIndex );
+    Tomahawk::result_ptr nextResult = siblingResult( 1, m_currentIndex );
+
+    if ( prevResult )
+    {
+        bool avail = prevResult->toQuery()->playable();
+        if ( avail != m_prevAvail )
+        {
+            m_prevAvail = avail;
+            emit previousTrackAvailable();
+        }
+    }
+    else if ( m_prevAvail )
+    {
+        m_prevAvail = false;
+        emit previousTrackAvailable();
+    }
+
+    if ( nextResult )
+    {
+        bool avail = nextResult->toQuery()->playable();
+        if ( avail != m_nextAvail )
+        {
+            m_nextAvail = avail;
+            emit nextTrackAvailable();
+        }
+    }
+    else if ( m_nextAvail )
+    {
+        m_nextAvail = false;
+        emit nextTrackAvailable();
+    }
+}
+
+
+void
+PlaylistInterface::setCurrentIndex( qint64 index )
+{
+    m_currentIndex = index;
+    onItemsChanged();
 }

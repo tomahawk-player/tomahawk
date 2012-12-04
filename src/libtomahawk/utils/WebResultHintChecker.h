@@ -1,7 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2012, Leo Franchi <lfranchi@kde.org>
- *   Copyright 2012, Hugo Lindström <hugolm84@gmail.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -20,21 +19,31 @@
 #define WEB_RESULT_HINT_CHECKER_H
 
 #include "Typedefs.h"
+
 #include <QObject>
-#include "ResultHintChecker.h"
 
 namespace Tomahawk
 {
 
-class WebResultHintChecker : public ResultHintChecker
+class WebResultHintChecker : public QObject
 {
     Q_OBJECT
 public:
     WebResultHintChecker( const query_ptr& q );
-    virtual ~WebResultHintChecker(){}
+    virtual ~WebResultHintChecker();
+
+    static void checkQuery( const query_ptr& query );
+    static void checkQueries( const QList< query_ptr >& queries );
+
 private slots:
     void headFinished();
+
+    void check( const QUrl& url );
+
+    void onResolvingFinished( bool hasResults );
 private:
+    void removeHint();
+
     query_ptr m_query;
     QString m_url;
 };

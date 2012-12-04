@@ -95,10 +95,12 @@ InfoBar::InfoBar( QWidget* parent )
 
     ui->horizontalLayout->addWidget( m_searchWidget );
 
-    setAutoFillBackground( true );
+    QPalette pal = palette();
+    pal.setColor( QPalette::Window, QColor( "#454e59" ) );
 
+    setPalette( pal );
+    setAutoFillBackground( true );
     setFixedHeight( 80 );
-    m_bgTile = TomahawkUtils::createTiledPixmap( 2000, height(), QImage( RESPATH "images/playlist-header-tiled.png" ) );
 
     connect( ViewManager::instance(), SIGNAL( filterAvailable( bool ) ), SLOT( setFilterAvailable( bool ) ) );
 }
@@ -280,23 +282,6 @@ void
 InfoBar::onFilterEdited()
 {
     emit filterTextChanged( m_searchWidget->text() );
-}
-
-void
-InfoBar::paintEvent( QPaintEvent* e )
-{
-    Q_UNUSED( e );
-
-    if ( m_bgTile.isNull() || width() > m_bgTile.width() )
-        m_bgTile = TomahawkUtils::createTiledPixmap( width(), height(), QImage( RESPATH "images/playlist-header-tiled.png" ) );
-
-    if ( m_bgTile.isNull() )
-        return;
-
-    QPainter p( this );
-
-    // Truncate bg pixmap and paint into bg
-    p.drawPixmap( rect(), m_bgTile, rect() );
 }
 
 

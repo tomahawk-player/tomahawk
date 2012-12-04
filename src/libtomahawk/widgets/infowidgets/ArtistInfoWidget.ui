@@ -276,7 +276,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QLabel" name="cover">
+        <widget class="PlayableCover" name="cover">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -374,6 +374,11 @@
    <class>PlaylistView</class>
    <extends>QTreeView</extends>
    <header>playlist/PlaylistView.h</header>
+  </customwidget>
+  <customwidget>
+   <class>PlayableCover</class>
+   <extends>QLabel</extends>
+   <header>widgets/PlayableCover.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

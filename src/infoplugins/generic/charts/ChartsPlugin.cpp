@@ -665,11 +665,8 @@ ChartsPlugin::chartReturned()
         else
             setChartType( None );
 
-        int count = 0;
         foreach ( const QVariant& chartR, chartResponse )
         {
-            if( count++ >= 1)
-                break;
             QString title, artist, album, streamUrl;
             QVariantMap chartMap = chartR.toMap();
 

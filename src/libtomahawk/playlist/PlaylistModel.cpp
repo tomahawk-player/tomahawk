@@ -35,7 +35,7 @@
 #include "PlayableItem.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
-#include <utils/ResultHintChecker.h>
+#include <utils/WebResultHintChecker.h>
 
 using namespace Tomahawk;
 
@@ -281,7 +281,7 @@ PlaylistModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int
 
         connect( plitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
 
-        ResultHintChecker::checkQuery( entry->query() );
+        WebResultHintChecker::checkQuery( entry->query() );
     }
 
     if ( !m_waitingForResolved.isEmpty() )

@@ -84,7 +84,6 @@ TemporaryPageItem::TemporaryPageItem ( SourcesModel* mdl, SourceTreeItem* parent
 
 TemporaryPageItem::~TemporaryPageItem()
 {
-    delete m_page;
 }
 
 
@@ -137,6 +136,7 @@ TemporaryPageItem::removeFromList()
 
     emit removed();
 
+    delete m_page;
     deleteLater();
 }
 

@@ -1794,14 +1794,14 @@ connect and stream from you?</source>
         <translation>利用可能トラック</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="317"/>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="361"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="323"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="367"/>
         <source>Show</source>
         <translation>表示</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="319"/>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="363"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="325"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="369"/>
         <source>Hide</source>
         <translation>隠す</translation>
     </message>

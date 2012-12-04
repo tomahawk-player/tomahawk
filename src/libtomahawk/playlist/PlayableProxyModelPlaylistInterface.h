@@ -65,9 +65,6 @@ signals:
     void previousTrackAvailable();
     void nextTrackAvailable();
 
-private slots:
-    virtual void onModelChanged();
-
 protected:
     QWeakPointer< PlayableProxyModel > m_proxyModel;
 
@@ -75,9 +72,6 @@ protected:
     bool m_shuffled;
     mutable QList< Tomahawk::query_ptr > m_shuffleHistory;
     mutable QPersistentModelIndex m_shuffleCache;
-
-    mutable bool m_prevAvail;
-    mutable bool m_nextAvail;
 };
 
 } //ns

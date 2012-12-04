@@ -120,8 +120,6 @@ set( libGuiSources
     utils/BinaryInstallerHelper.cpp
     utils/BinaryExtractWorker.cpp
     utils/SharedTimeLine.cpp
-    utils/ResultHintChecker.cpp
-    utils/CustomResultHintChecker.cpp
     utils/WebResultHintChecker.cpp
     utils/NetworkReply.cpp
 
@@ -151,6 +149,7 @@ set( libGuiSources
     widgets/ComboBox.cpp
     widgets/ToggleButton.cpp
     widgets/FadingPixmap.cpp
+    widgets/PlayableCover.cpp
     widgets/SocialPlaylistWidget.cpp
     widgets/SourceTreePopupDialog.cpp
     widgets/infowidgets/SourceInfoWidget.cpp

@@ -69,7 +69,6 @@ signals:
 
 protected:
     void changeEvent( QEvent* e );
-    void paintEvent( QPaintEvent* e );
 
 private slots:
     void onFilterEdited();
@@ -78,7 +77,6 @@ private slots:
 private:
     Ui::InfoBar* ui;
 
-    QPixmap m_bgTile;
     QPalette m_whitePal;
 
     QList<Tomahawk::PlaylistUpdaterInterface*> m_updaters;;
