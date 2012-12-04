@@ -1791,14 +1791,14 @@ erlauben sich mit dir zu verbinden?</translation>
         <translation>Alle verfügbaren Stücke</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="317"/>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="361"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="323"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="367"/>
         <source>Show</source>
         <translation>Einblenden</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="319"/>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="363"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="325"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="369"/>
         <source>Hide</source>
         <translation>Verstecken</translation>
     </message>
