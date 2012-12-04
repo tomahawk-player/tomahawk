@@ -195,6 +195,7 @@ QT_PLUGINS = [
     'imageformats/libqgif.dylib',
     'imageformats/libqico.dylib',
     'imageformats/libqjpeg.dylib',
+    'imageformats/libqsvg.dylib',
     'imageformats/libqmng.dylib',
 ]
 

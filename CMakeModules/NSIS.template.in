@@ -320,6 +320,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    SetOutPath "$INSTDIR\imageformats"
    File "${IMAGEFORMATS_DLL_PATH}\qgif4.dll"
    File "${IMAGEFORMATS_DLL_PATH}\qjpeg4.dll"
+   File "${IMAGEFORMATS_DLL_PATH}\qsvg4.dll"
    SetOutPath "$INSTDIR"
 
    ;Cygwin/c++ stuff
