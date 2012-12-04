@@ -35,16 +35,25 @@ class CustomResultHintChecker : public ResultHintChecker
 {
     Q_OBJECT
 public:
-    CustomResultHintChecker( const query_ptr& q );
+    /**
+     * @brief CustomResultHintChecker
+     * @note Set a previous url when you you know that you have a result, and that it
+     * needs to be revalidated
+     */
+    explicit CustomResultHintChecker( const query_ptr& q, const QString& prevUrl = QString() );
+
+   // explicit CustomResultHintChecker( const query_ptr& q, const QString& prevUrl );
+
     virtual ~CustomResultHintChecker(){}
 private slots:
+    /**
+     * Add slots for specific custom protocol checks
+     */
     /* HotNewHiphop specific */
     void hnhhFinished();
-    void handleHnhhResult( result_ptr result );
 private:
     void handleResultHint();
-    QString m_streamUrl;
-    query_ptr m_query;
+    QString m_prevUrl;
 };
 
 

@@ -29,7 +29,7 @@ class ResultHintChecker : public QObject
 {
     Q_OBJECT
 public:
-    explicit ResultHintChecker( const query_ptr& q );
+    explicit ResultHintChecker( const query_ptr& q, qint64 expires = 0 );
     virtual ~ResultHintChecker();
 
     static void checkQuery( const query_ptr& query );
@@ -40,24 +40,18 @@ public:
     QString url() const { return m_url; }
     QString resultHint() const;
 
+    void setResultUrl( const QString &url );
     void setUrl( const QString& url ) { m_url = url; }
-    void setResultHint( const QString &url, const bool saveHint );
+    void setExpires( qint64 expires );
     void removeHint();
-
-signals:
-    void result( result_ptr );
-
-private slots:
-    void onResolvingFinished( bool hasResults );
-    void onResultsAdded( const QList<Tomahawk::result_ptr>& results );
-    void onResultsRemoved( const Tomahawk::result_ptr& result );
-    void onResultsChanged();
 
 private:
     void check( const QUrl& url );
+
     result_ptr getResultPtr();
     query_ptr m_query;
     QString m_url;
+    qint64 m_expires;
     bool m_isValid;
 };
 

@@ -24,21 +24,23 @@
 #include <QXmlStreamReader>
 #include "Query.h"
 #include "utils/NetworkReply.h"
-#include "utils/Closure.h"
+
 using namespace Tomahawk;
 
 
-CustomResultHintChecker::CustomResultHintChecker( const query_ptr& q )
+/**
+ * @brief CustomResultHintChecker::CustomResultHintChecker
+ * !!@note: only set prevUrl if you know that you have a previous result that needs revalidate
+ */
+CustomResultHintChecker::CustomResultHintChecker( const query_ptr& q, const QString& prevUrl )
     : ResultHintChecker( q )
-    , m_query( q )
+    , m_prevUrl( prevUrl )
 {
-    if( !isValid() )
+    if ( !isValid() )
     {
         qDebug() << Q_FUNC_INFO <<  "invalid:" << url();
         return;
     }
-
-    qDebug() << Q_FUNC_INFO << url();
 
     handleResultHint();
 }
@@ -53,22 +55,8 @@ CustomResultHintChecker::handleResultHint()
         httpUrl.setScheme( "http" );
 
         NetworkReply* reply = new NetworkReply( TomahawkUtils::nam()->get( QNetworkRequest( httpUrl ) ) );
-
-        connect( this, SIGNAL( result( result_ptr ) ), this, SLOT( handleHnhhResult( result_ptr ) ) );
         connect( reply, SIGNAL( finished() ), SLOT( hnhhFinished() ) );
         return;
-    }
-}
-
-void
-CustomResultHintChecker::handleHnhhResult( result_ptr result )
-{
-    if( !result.isNull() )
-    {
-
-        qDebug() << Q_FUNC_INFO << "Setting expiration for hotnewhiphop" << result->toString();
-        qDebug() << Q_FUNC_INFO << url() << resultHint();
-
     }
 }
 
@@ -98,11 +86,22 @@ CustomResultHintChecker::hnhhFinished()
                 {
                     if ( xmlStream.name().toString() == "song" )
                     {
-                        const QString streamUrl = QString( xmlStream.attributes().value("filename").toLatin1() );
+                        const QUrl stream = QUrl::fromUserInput( QString( xmlStream.attributes().value("filename").toLatin1() ) );
                         // Dont save this resulthint, it needs to revalidate
-                        qDebug() << Q_FUNC_INFO << "GOT STREAMABLE " << streamUrl;
-                        setResultHint( streamUrl, false );
-                        foundStreamable = true;
+                        qDebug() << Q_FUNC_INFO << "GOT STREAMABLE " << stream.toString();
+                        bool ok;
+                        const qint64 expires = stream.queryItemValue( QString("e") ).toLongLong( &ok );
+                        if( ok )
+                        {
+                            /// @note: Previous url is set, use that to find result
+                            /// that needs to be updated
+                            if ( !m_prevUrl.isEmpty() )
+                                setUrl( m_prevUrl );
+
+                            setExpires( expires );
+                            setResultUrl( stream.toString() );
+                            foundStreamable = true;
+                        }
                         break;
                     }
                 }

@@ -42,6 +42,7 @@ typedef QMap< QString, QPixmap > SourceIconCache;
 Q_GLOBAL_STATIC( SourceIconCache, sourceIconCache );
 static QMutex s_sourceIconMutex;
 
+
 inline QString sourceCacheKey( Resolver* resolver, const QSize& size, TomahawkUtils::ImageMode style )
 {
     QString str;
@@ -88,6 +89,7 @@ Result::Result( const QString& url )
     , m_score( 0 )
     , m_trackId( 0 )
     , m_fileId( 0 )
+    , m_expires( 0 )
 {
     connect( Pipeline::instance(), SIGNAL( resolverRemoved( Tomahawk::Resolver* ) ), SLOT( onResolverRemoved( Tomahawk::Resolver* ) ), Qt::QueuedConnection );
 }
@@ -111,6 +113,11 @@ Result::deleteLater()
     QObject::deleteLater();
 }
 
+void
+Result::setExpires( const qint64 &expires )
+{
+    m_expires = expires;
+}
 
 void
 Result::onResolverRemoved( Tomahawk::Resolver* resolver )

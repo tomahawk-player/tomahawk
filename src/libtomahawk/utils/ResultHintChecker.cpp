@@ -17,6 +17,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "ResultExpirationTimer.h"
 #include "WebResultHintChecker.h"
 #include "CustomResultHintChecker.h"
 #include <QNetworkAccessManager>
@@ -30,28 +31,6 @@
 #include "utils/Logger.h"
 
 using namespace Tomahawk;
-
-ResultHintChecker::ResultHintChecker( const query_ptr& q )
-    : QObject( 0 )
-    , m_query( q )
-    , m_isValid( false )
-{
-    Q_ASSERT( !m_query.isNull() );
-    m_url = q->resultHint();
-
-    connect( m_query.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( onResolvingFinished( bool ) ) );
-    connect( m_query.data(), SIGNAL( resultsRemoved( const Tomahawk::result_ptr& ) ), this, SLOT( onResultsRemoved( const Tomahawk::result_ptr& ) ) );
-    connect( m_query.data(), SIGNAL( resultsChanged() ), this, SLOT( onResultsChanged() ) );
-    connect( m_query.data(), SIGNAL( updated() ), this, SLOT( onResultsChanged() ) );
-    connect( m_query.data(), SIGNAL( resultsAdded( const QList<Tomahawk::result_ptr>& ) ), this, SLOT( onResultsAdded( const QList<Tomahawk::result_ptr>& ) ) );
-
-    check( m_url );
-}
-
-
-ResultHintChecker::~ResultHintChecker()
-{
-}
 
 /**
  * @brief ResultHintChecker::checkQuery
@@ -68,22 +47,21 @@ ResultHintChecker::checkQuery( const query_ptr& query )
         new CustomResultHintChecker( query );
 }
 
-
-void
-ResultHintChecker::onResultsRemoved(const result_ptr &result)
+ResultHintChecker::ResultHintChecker( const query_ptr& q, qint64 expires )
+    : QObject( 0 )
+    , m_query( q )
+    , m_isValid( false )
+    , m_expires( expires )
 {
-    qDebug() << Q_FUNC_INFO << result->toString();
+    Q_ASSERT( !m_query.isNull() );
+    m_url = q->resultHint();
+    check( m_url );
 }
 
-void
-ResultHintChecker::onResultsChanged()
-{
-    foreach( const result_ptr& rp,  m_query->results() )
-    {
-        qDebug() << Q_FUNC_INFO << rp->toString();
-    }
-}
 
+ResultHintChecker::~ResultHintChecker()
+{
+}
 
 void
 ResultHintChecker::checkQueries( const QList< query_ptr >& queries )
@@ -93,22 +71,9 @@ ResultHintChecker::checkQueries( const QList< query_ptr >& queries )
 }
 
 void
-ResultHintChecker::onResolvingFinished( bool hasResults )
+ResultHintChecker::setExpires( qint64 expires )
 {
-    foreach ( const result_ptr& result, m_query->results() )
-    {
-        qDebug() << Q_FUNC_INFO << "result url():" << result->url();
-    }
-}
-
-void
-ResultHintChecker::onResultsAdded( const QList<Tomahawk::result_ptr>& results )
-{
-    foreach( const result_ptr& result, results )
-    {
-        qDebug() << Q_FUNC_INFO << "result url():" << result->url();
-    }
-
+    m_expires = expires;
 }
 
 QString
@@ -163,22 +128,23 @@ ResultHintChecker::getResultPtr()
 }
 
 void
-ResultHintChecker::setResultHint(const QString &url, const bool saveHint)
+ResultHintChecker::setResultUrl( const QString &url )
 {
 
-    qDebug() << Q_FUNC_INFO << "Setting new resulthint" << url << "save it? " << saveHint;
+    result_ptr result = getResultPtr();
 
-    result_ptr foundResult = getResultPtr();
-
-    if ( !foundResult.isNull() )
+    if ( !result.isNull() )
     {
-        qDebug() << Q_FUNC_INFO << "Removing old result " << foundResult->toString();
-        m_query->removeResult( foundResult );
+        result->setUrl( url );
+        if( m_expires <= 0 )
+            return;
+
+        result->setExpires( m_expires );
+        ResultExpirationTimer::instance()->addResult( m_query, result );
+        return;
     }
 
-    m_query->setResultHint( url );
-    m_query->setSaveHTTPResultHint( saveHint );
-
+    qDebug() << Q_FUNC_INFO << "Error updating result" << url;
 }
 
 

@@ -37,9 +37,11 @@ class DatabaseCommand_AllTracks;
 class DatabaseCommand_AddFiles;
 class DatabaseCommand_LoadFile;
 
+
 namespace Tomahawk
 {
 
+class ResultHintChecker;
 class Resolver;
 
 class DLLEXPORT Result : public QObject
@@ -51,6 +53,7 @@ friend class ::DatabaseCommand_Resolve;
 friend class ::DatabaseCommand_AllTracks;
 friend class ::DatabaseCommand_AddFiles;
 friend class ::DatabaseCommand_LoadFile;
+friend class Tomahawk::ResultHintChecker;
 
 public:
     static Tomahawk::result_ptr get( const QString& url );
@@ -109,7 +112,8 @@ public:
     void setModificationTime( unsigned int modtime ) { m_modtime = modtime; }
     void setYear( unsigned int year ) { m_year = year; }
     void setDiscNumber( unsigned int discnumber ) { m_discnumber = discnumber; }
-
+    void setExpires( const qint64& expires );
+    qint64 getExpires() const { return m_expires; }
     QVariantMap attributes() const { return m_attributes; }
     void setAttributes( const QVariantMap& map ) { m_attributes = map; updateAttributes(); }
 
@@ -137,7 +141,7 @@ private:
     explicit Result();
 
     void updateAttributes();
-
+    void setUrl( const QString& url ){ m_url = url; }
     mutable RID m_rid;
     collection_ptr m_collection;
     Tomahawk::query_ptr m_query;
@@ -161,6 +165,7 @@ private:
     unsigned int m_discnumber;
     int m_year;
     float m_score;
+    qint64 m_expires;
 
     QVariantMap m_attributes;
     unsigned int m_trackId, m_fileId;

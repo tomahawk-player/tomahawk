@@ -31,7 +31,7 @@ using namespace Tomahawk;
 WebResultHintChecker::WebResultHintChecker( const query_ptr& q )
     : ResultHintChecker( q )
 {
-    if( !isValid() )
+    if ( !isValid() )
     {
         return;
     }
