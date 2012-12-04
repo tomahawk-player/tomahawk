@@ -196,7 +196,7 @@ PlayableProxyModelPlaylistInterface::siblingIndex( int itemsAway, qint64 rootInd
                 else
                 {
                     PlayableItem* pitem = static_cast<PlayableItem*>( (void*)rootIndex );
-                    if ( !pitem )
+                    if ( !pitem || !pitem->index.isValid() )
                         return -1;
 
                     idx = proxyModel->mapFromSource( pitem->index );
