@@ -25,16 +25,17 @@
 #include "Playlist.h"
 #include "GenericPageItems.h"
 #include "LovedTracksItem.h"
-#include "utils/TomahawkUtilsGui.h"
-#include "utils/Logger.h"
+#include "Source.h"
+#include "SourceList.h"
 #include "widgets/SocialPlaylistWidget.h"
 #include "playlist/FlexibleView.h"
 #include "playlist/PlaylistView.h"
 #include "playlist/RecentlyAddedModel.h"
 #include "playlist/RecentlyPlayedModel.h"
 #include "playlist/PlaylistLargeItemDelegate.h"
-#include "Source.h"
-#include "SourceList.h"
+#include "utils/ImageRegistry.h"
+#include "utils/TomahawkUtilsGui.h"
+#include "utils/Logger.h"
 
 /// SourceItem
 
@@ -103,8 +104,6 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
 
 /*    if ( ViewManager::instance()->pageForCollection( source->collection() ) )
         model()->linkSourceItemToPage( this, ViewManager::instance()->pageForCollection( source->collection() ) );*/
-
-    m_defaultAvatar = TomahawkUtils::createRoundedImage( QPixmap( RESPATH "images/user-avatar.png" ), QSize( 0, 0 ) );
 
     // load auto playlists and stations!
 
@@ -204,7 +203,7 @@ SourceItem::pixmap( const QSize& size ) const
     else
     {
         if ( m_source->avatar().isNull() )
-            return m_defaultAvatar;
+            return TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultSourceAvatar, TomahawkUtils::RoundedCorners );
         else
             return m_source->avatar( TomahawkUtils::RoundedCorners, size );
     }

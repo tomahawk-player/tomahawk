@@ -49,6 +49,7 @@ namespace TomahawkUtils
         DefaultTrackImage,
         DefaultSourceAvatar,
         NowPlayingSpeaker,
+        NowPlayingSpeakerDark,
         InfoIcon
     };
 
