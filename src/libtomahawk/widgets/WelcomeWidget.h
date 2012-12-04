@@ -54,7 +54,7 @@ public:
         m_playlistIcon = QPixmap( RESPATH "images/playlist-icon.png" );
         m_autoIcon = QPixmap( RESPATH "images/automatic-playlist.png" );
         m_stationIcon = QPixmap( RESPATH "images/station.png" );
-        m_defaultAvatar = TomahawkUtils::createRoundedImage( QPixmap( RESPATH "images/user-avatar.png" ), QSize( 0, 0 ) );
+        m_defaultAvatar = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultSourceAvatar, TomahawkUtils::RoundedCorners );
     }
 
 protected:

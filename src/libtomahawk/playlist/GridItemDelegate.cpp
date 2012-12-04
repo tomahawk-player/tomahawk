@@ -320,8 +320,8 @@ GridItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const Q
             m_playButton.clear();
 
             ImageButton* button = new ImageButton( m_view );
-            button->setPixmap( RESPATH "images/play-rest.png" );
-            button->setPixmap( RESPATH "images/play-pressed.png", QIcon::Off, QIcon::Active );
+            button->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PlayButton, TomahawkUtils::Original, QSize( 48, 48 ) ) );
+            button->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PlayButtonPressed, TomahawkUtils::Original, QSize( 48, 48 ) ), QIcon::Off, QIcon::Active );
             button->setFixedSize( 48, 48 );
             button->move( option.rect.center() - QPoint( 23, 23 ) );
             button->setContentsMargins( 0, 0, 0, 0 );
@@ -534,8 +534,8 @@ GridItemDelegate::onPlaybackStarted( const QPersistentModelIndex& index )
     m_spinner.clear();
 
     ImageButton* button = new ImageButton( m_view );
-    button->setPixmap( RESPATH "images/pause-rest.png" );
-    button->setPixmap( RESPATH "images/pause-pressed.png", QIcon::Off, QIcon::Active );
+    button->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PauseButton, TomahawkUtils::Original, QSize( 48, 48 ) ) );
+    button->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PauseButtonPressed, TomahawkUtils::Original, QSize( 48, 48 ) ), QIcon::Off, QIcon::Active );
     button->setFixedSize( 48, 48 );
     button->move( pos );
     button->setContentsMargins( 0, 0, 0, 0 );

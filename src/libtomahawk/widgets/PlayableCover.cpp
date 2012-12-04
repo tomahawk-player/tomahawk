@@ -20,7 +20,7 @@
 
 #include "audio/AudioEngine.h"
 #include "widgets/ImageButton.h"
-#include "utils/TomahawkUtils.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
 #include <QPainter>
@@ -32,8 +32,8 @@ PlayableCover::PlayableCover( QWidget* parent )
     setMouseTracking( true );
 
     m_button = new ImageButton( this );
-    m_button->setPixmap( RESPATH "images/play-rest.png" );
-    m_button->setPixmap( RESPATH "images/play-pressed.png", QIcon::Off, QIcon::Active );
+    m_button->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PlayButton, TomahawkUtils::Original, QSize( 48, 48 ) ) );
+    m_button->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PlayButtonPressed, TomahawkUtils::Original, QSize( 48, 48 ) ), QIcon::Off, QIcon::Active );
     m_button->setFixedSize( 48, 48 );
     m_button->setContentsMargins( 0, 0, 0, 0 );
     m_button->setFocusPolicy( Qt::NoFocus );

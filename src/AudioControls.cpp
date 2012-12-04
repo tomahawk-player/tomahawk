@@ -72,14 +72,14 @@ AudioControls::AudioControls( QWidget* parent )
 
     m_defaultSourceIcon = QPixmap( RESPATH "images/resolver-default.png" );
 
-    ui->prevButton->setPixmap( RESPATH "images/back-rest.png" );
-    ui->prevButton->setPixmap( RESPATH "images/back-pressed.png", QIcon::Off, QIcon::Active );
-    ui->playPauseButton->setPixmap( RESPATH "images/play-rest.png" );
-    ui->playPauseButton->setPixmap( RESPATH "images/play-pressed.png", QIcon::Off, QIcon::Active );
-    ui->pauseButton->setPixmap( RESPATH "images/pause-rest.png" );
-    ui->pauseButton->setPixmap( RESPATH "images/pause-pressed.png", QIcon::Off, QIcon::Active );
-    ui->nextButton->setPixmap( RESPATH "images/skip-rest.png" );
-    ui->nextButton->setPixmap( RESPATH "images/skip-pressed.png", QIcon::Off, QIcon::Active );
+    ui->prevButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PrevButton, TomahawkUtils::Original, QSize( 35, 35 ) ) );
+    ui->prevButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PrevButtonPressed, TomahawkUtils::Original, QSize( 35, 35 ) ), QIcon::Off, QIcon::Active );
+    ui->playPauseButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PlayButton, TomahawkUtils::Original, QSize( 48, 48 ) ) );
+    ui->playPauseButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PlayButtonPressed, TomahawkUtils::Original, QSize( 48, 48 ) ), QIcon::Off, QIcon::Active );
+    ui->pauseButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PauseButton, TomahawkUtils::Original, QSize( 48, 48 ) ) );
+    ui->pauseButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PauseButtonPressed, TomahawkUtils::Original, QSize( 48, 48 ) ), QIcon::Off, QIcon::Active );
+    ui->nextButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::NextButton, TomahawkUtils::Original, QSize( 35, 35 ) ) );
+    ui->nextButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::NextButtonPressed, TomahawkUtils::Original, QSize( 35, 35 ) ), QIcon::Off, QIcon::Active );
     ui->shuffleButton->setPixmap( RESPATH "images/shuffle-off-rest.png" );
     ui->shuffleButton->setPixmap( RESPATH "images/shuffle-off-pressed.png", QIcon::Off, QIcon::Active );
     ui->repeatButton->setPixmap( RESPATH "images/repeat-off-rest.png" );

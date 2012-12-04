@@ -49,7 +49,16 @@ namespace TomahawkUtils
         DefaultTrackImage,
         DefaultSourceAvatar,
         NowPlayingSpeaker,
-        InfoIcon
+        NowPlayingSpeakerDark,
+        InfoIcon,
+        PlayButton,
+        PlayButtonPressed,
+        PauseButton,
+        PauseButtonPressed,
+        PrevButton,
+        PrevButtonPressed,
+        NextButton,
+        NextButtonPressed
     };
 
     enum ImageMode

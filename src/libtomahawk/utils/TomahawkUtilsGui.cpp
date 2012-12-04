@@ -19,12 +19,13 @@
 
 #include "TomahawkUtilsGui.h"
 
+#include "playlist/PlayableItem.h"
 #include "config.h"
 #include "Query.h"
 #include "Result.h"
-#include "Logger.h"
-#include "playlist/PlayableItem.h"
 #include "Source.h"
+#include "ImageRegistry.h"
+#include "Logger.h"
 
 #include <QLayout>
 #include <QPainter>
@@ -402,58 +403,75 @@ QPixmap
 defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
 {
     QPixmap pixmap;
-    QHash< int, QPixmap > subsubcache;
-    QHash< int, QHash< int, QPixmap > > subcache;
-    static QHash< int, QHash< int, QHash< int, QPixmap > > > cache;
-
-    if ( cache.contains( type ) )
-    {
-        subcache = cache.value( type );
-
-        if ( subcache.contains( mode ) )
-        {
-            subsubcache = subcache.value( mode );
-
-            if ( subsubcache.contains( size.width() ) )
-                return subsubcache.value( size.width() );
-        }
-    }
 
     switch ( type )
     {
         case DefaultAlbumCover:
             if ( mode == CoverInCase )
-                pixmap = QPixmap( RESPATH "images/no-album-art-placeholder.png" );
+                pixmap = ImageRegistry::instance()->getFromCache( RESPATH "images/no-album-art-placeholder.png", size );
             else if ( mode == Grid )
-                pixmap = QPixmap( RESPATH "images/album-placeholder-grid.png" );
+                pixmap = ImageRegistry::instance()->getFromCache( RESPATH "images/album-placeholder-grid.png", size );
             else
-                pixmap = QPixmap( RESPATH "images/no-album-no-case.png" );
+                pixmap = ImageRegistry::instance()->getFromCache( RESPATH "images/no-album-no-case.png", size );
             break;
 
         case DefaultArtistImage:
             if ( mode == Grid )
-                pixmap = QPixmap( RESPATH "images/artist-placeholder-grid.png" );
+                pixmap = ImageRegistry::instance()->getFromCache( RESPATH "images/artist-placeholder-grid.png", size );
             else
-                pixmap = QPixmap( RESPATH "images/no-artist-image-placeholder.png" );
+                pixmap = ImageRegistry::instance()->getFromCache( RESPATH "images/no-artist-image-placeholder.png", size );
             break;
 
         case DefaultTrackImage:
-                pixmap = QPixmap( RESPATH "images/track-placeholder.png" );
+                pixmap = ImageRegistry::instance()->getFromCache( RESPATH "images/track-placeholder.png", size );
             break;
 
         case DefaultSourceAvatar:
             if ( mode == RoundedCorners )
-                pixmap = TomahawkUtils::createRoundedImage( QPixmap( RESPATH "images/user-avatar.png" ), size );
+                pixmap = ImageRegistry::instance()->getFromCache( RESPATH "images/user-avatar.png", size, TomahawkUtils::RoundedCorners );
             else
-                pixmap = QPixmap( RESPATH "images/user-avatar.png" );
+                pixmap = ImageRegistry::instance()->getFromCache( RESPATH "images/user-avatar.png", size );
             break;
 
         case NowPlayingSpeaker:
-            pixmap = QPixmap( RESPATH "images/now-playing-speaker.png" );
+            pixmap = ImageRegistry::instance()->getFromCache( RESPATH "images/now-playing-speaker.png", size );
+            break;
+
+        case NowPlayingSpeakerDark:
+            pixmap = ImageRegistry::instance()->getFromCache( RESPATH "images/now-playing-speaker-dark.png", size );
             break;
 
         case InfoIcon:
-            pixmap = QPixmap( RESPATH "images/info.png" );
+            pixmap = ImageRegistry::instance()->getFromCache( RESPATH "images/info.png", size );
+            break;
+
+        case PlayButton:
+            pixmap = ImageRegistry::instance()->getFromCache( RESPATH "images/play-rest.svg", size );
+            break;
+        case PlayButtonPressed:
+            pixmap = ImageRegistry::instance()->getFromCache( RESPATH "images/play-pressed.svg", size );
+            break;
+
+        case PauseButton:
+            pixmap = ImageRegistry::instance()->getFromCache( RESPATH "images/pause-rest.svg", size );
+            break;
+        case PauseButtonPressed:
+            pixmap = ImageRegistry::instance()->getFromCache( RESPATH "images/pause-pressed.svg", size );
+            break;
+
+        case PrevButton:
+            pixmap = ImageRegistry::instance()->getFromCache( RESPATH "images/back-rest.svg", size );
+            break;
+        case PrevButtonPressed:
+            pixmap = ImageRegistry::instance()->getFromCache( RESPATH "images/back-pressed.svg", size );
+            break;
+
+        case NextButton:
+            pixmap = ImageRegistry::instance()->getFromCache( RESPATH "images/skip-rest.svg", size );
+            break;
+        case NextButtonPressed:
+            pixmap = ImageRegistry::instance()->getFromCache( RESPATH "images/skip-pressed.svg", size );
+            break;
 
         default:
             break;
@@ -464,13 +482,6 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
         Q_ASSERT( false );
         return QPixmap();
     }
-
-    if ( !size.isNull() )
-        pixmap = pixmap.scaled( size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
-
-    subsubcache.insert( size.width(), pixmap );
-    subcache.insert( mode, subsubcache );
-    cache.insert( type, subcache );
 
     return pixmap;
 }

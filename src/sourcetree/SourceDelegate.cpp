@@ -72,8 +72,6 @@ SourceDelegate::SourceDelegate( QAbstractItemView* parent )
     m_headphonesOn.load( RESPATH "images/headphones-sidebar.png" );
     m_realtimeLocked.load( RESPATH "images/closed-padlock.png" );
     m_realtimeUnlocked.load( RESPATH "images/open-padlock.png" );
-    m_nowPlayingSpeaker.load( RESPATH "images/now-playing-speaker.png" );
-    m_nowPlayingSpeakerDark.load( RESPATH "images/now-playing-speaker-dark.png" );
     m_collaborativeOn.load( RESPATH "images/green-dot.png" );
 }
 
@@ -149,8 +147,10 @@ SourceDelegate::paintDecorations( QPainter* painter, const QStyleOptionViewItem&
         }
 
         QRect iconRect = QRect( 4, option.rect.y() + 2, iconW, iconW );
-        QPixmap speaker = option.state & QStyle::State_Selected ? m_nowPlayingSpeaker : m_nowPlayingSpeakerDark;
-        speaker = speaker.scaledToHeight( iconW, Qt::SmoothTransformation );
+        QPixmap speaker = option.state & QStyle::State_Selected ?
+            TomahawkUtils::defaultPixmap( TomahawkUtils::NowPlayingSpeaker, TomahawkUtils::Original, iconRect.size() ) :
+            TomahawkUtils::defaultPixmap( TomahawkUtils::NowPlayingSpeakerDark, TomahawkUtils::Original, iconRect.size() );
+
         painter->drawPixmap( iconRect, speaker );
     }
 }

@@ -4,6 +4,7 @@ SET( QT_USE_QTGUI TRUE )
 SET( QT_USE_QTSQL TRUE )
 SET( QT_USE_QTNETWORK TRUE )
 SET( QT_USE_QTXML TRUE )
+SET( QT_USE_QTSVG TRUE )
 SET( QT_USE_QTUITOOLS TRUE )
 
 IF( UNIX AND NOT APPLE )
@@ -99,6 +100,7 @@ set( libGuiSources
     resolvers/ScriptResolver.cpp
     resolvers/QtScriptResolver.cpp
 
+    utils/ImageRegistry.cpp
     utils/WidgetDragFilter.cpp
     utils/XspfGenerator.cpp
     utils/JspfLoader.cpp
@@ -471,6 +473,7 @@ TARGET_LINK_LIBRARIES( tomahawklib
     ${QT_QTSCRIPT_LIBRARY}
     ${QT_QTNETWORK_LIBRARY}
     ${QT_QTXML_LIBRARY}
+    ${QT_QTSVG_LIBRARY}
     ${QT_QTCORE_LIBRARY}
     ${OS_SPECIFIC_LINK_LIBRARIES}
     ${CMAKE_THREAD_LIBS_INIT}

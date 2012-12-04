@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="210px" height="210px" xmlns="http://www.w3.org/2000/svg" version="1.1">
+    <title>artist-placeholder</title>
+    <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
+    <defs>
+        <linearGradient id="gradient-1" x1="50%" y1="0%" x2="50%" y2="100%">
+            <stop offset="0%" style="stop-color:rgb(255,255,255); stop-opacity:100"></stop>
+            <stop offset="100%" style="stop-color:rgb(0,0,0); stop-opacity:100"></stop>
+        </linearGradient>
+        <linearGradient id="gradient-2" x1="50%" y1="0%" x2="50%" y2="100%">
+            <stop offset="0%" style="stop-color:rgb(255,255,255); stop-opacity:100"></stop>
+            <stop offset="100%" style="stop-color:rgb(0,0,0); stop-opacity:100"></stop>
+        </linearGradient>
+        <linearGradient id="gradient-3" x1="50%" y1="0%" x2="50%" y2="100%">
+            <stop offset="0%" style="stop-color:rgb(255,255,255); stop-opacity:100"></stop>
+            <stop offset="100%" style="stop-color:rgb(0,0,0); stop-opacity:100"></stop>
+        </linearGradient>
+        <linearGradient id="gradient-4" x1="50%" y1="0%" x2="50%" y2="100%">
+            <stop offset="0%" style="stop-color:rgb(255,255,255); stop-opacity:100"></stop>
+            <stop offset="100%" style="stop-color:rgb(0,0,0); stop-opacity:100"></stop>
+        </linearGradient>
+        <linearGradient id="gradient-5" x1="50%" y1="0%" x2="50%" y2="100%">
+            <stop offset="0%" style="stop-color:rgb(255,255,255); stop-opacity:100"></stop>
+            <stop offset="100%" style="stop-color:rgb(0,0,0); stop-opacity:100"></stop>
+        </linearGradient>
+        <linearGradient id="gradient-6" x1="50%" y1="0%" x2="50%" y2="100%">
+            <stop offset="0%" style="stop-color:rgb(255,255,255); stop-opacity:100"></stop>
+            <stop offset="100%" style="stop-color:rgb(0,0,0); stop-opacity:100"></stop>
+        </linearGradient>
+    </defs>
+    <g fill="rgb(215,215,215)" id="Page 1">
+        <g fill="rgb(0,0,0)" id="Rectangle 4"></g>
+        <path id="Rectangle 4" d="M5,5 L5,205 L205,205 L205,5 L5,5 Z M5,5" fill="rgb(0,0,0)"></path>
+        <path id="Rectangle 4 decoration" d="" fill="rgb(0,0,0)"></path>
+        <g fill="rgb(255,254,254)" id="Shape"></g>
+        <path id="Shape" d="M192,83 C192,81 190,79 187,79 L130,78 L112,21 C111,19 109,18 107,18 C104,18 103,19 102,21 L83,78 L26,79 C24,79 22,81 21,83 C21,85 21,88 23,89 L68,125 L52,183 C51,185 52,187 54,189 C56,190 58,190 60,189 L107,154 L154,189 C154,189 155,190 157,190 C158,190 159,189 160,189 C161,187 162,185 161,183 L145,125 L190,89 C192,88 193,85 192,83 C192,83 193,85 192,83 L192,83 M136,119 C134,120 133,122 134,125 L147,171 L110,143 C108,142 106,142 104,143 L66,171 L79,125 C80,122 79,120 78,119 L41,90 L87,89 C89,89 91,87 92,85 L107,39 L122,85 C122,87 124,89 127,89 L172,90 L136,119 L136,119 L136,119" fill="rgb(255,254,254)"></path>
+        <path id="Shape decoration" d="" fill="rgb(255,254,254)"></path>
+    </g>
+</svg>
