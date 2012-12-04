@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="60px" height="60px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <title>sipplugin-remove</title>
+    <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
+    <defs></defs>
+    <g id="Page 1" fill="rgb(223,223,223)" fill-rule="evenodd">
+        <path d="M30,60 C46.5685433,60 60,46.5685433 60,30 C60,13.4314567 46.5685433,0 30,0 C13.4314567,0 0,13.4314567 0,30 C0,46.5685433 13.4314567,60 30,60 Z M30,60" id="Oval 1" fill="rgb(94,94,94)"></path>
+        <path d="M42.0705004,27.0965 L17.9294996,27.0965 C17.1014996,27.0965 16.4294996,27.7685 16.4294996,28.5965 L16.4294996,31.4035 C16.4294996,32.2315 17.1014996,32.9035 17.9294996,32.9035 L42.0705004,32.9035 C42.8985004,32.9035 43.5705004,32.2315 43.5705004,31.4035 L43.5705004,28.5965 C43.5705004,27.7684971 42.8985033,27.0965 42.0705004,27.0965 L42.0705004,27.0965 L42.0705004,27.0965" id="Shape" fill="rgb(255,255,255)"></path>
+    </g>
+</svg>

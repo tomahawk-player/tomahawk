@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="117px" height="117px" xmlns="http://www.w3.org/2000/svg" version="1.1">
+    <title>prev</title>
+    <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
+    <defs>
+        <linearGradient id="gradient-1" x1="50%" y1="0%" x2="50%" y2="100%">
+            <stop offset="0%" style="stop-color:rgb(255,255,255); stop-opacity:100"></stop>
+            <stop offset="100%" style="stop-color:rgb(0,0,0); stop-opacity:100"></stop>
+        </linearGradient>
+        <linearGradient id="gradient-2" x1="50%" y1="-38%" x2="50%" y2="100%">
+            <stop offset="0%" style="stop-color:rgb(255,255,255); stop-opacity:100"></stop>
+            <stop offset="100%" style="stop-color:rgb(0,0,0); stop-opacity:100"></stop>
+        </linearGradient>
+        <linearGradient id="gradient-3" x1="50%" y1="0%" x2="50%" y2="100%">
+            <stop offset="0%" style="stop-color:rgb(255,255,255); stop-opacity:100"></stop>
+            <stop offset="100%" style="stop-color:rgb(0,0,0); stop-opacity:100"></stop>
+        </linearGradient>
+        <linearGradient id="gradient-4" x1="86%" y1="56%" x2="146%" y2="61%">
+            <stop offset="0%" style="stop-color:rgb(247,247,247); stop-opacity:100"></stop>
+            <stop offset="100%" style="stop-color:rgb(0,0,0); stop-opacity:100"></stop>
+        </linearGradient>
+        <linearGradient id="gradient-5" x1="50%" y1="0%" x2="50%" y2="100%">
+            <stop offset="0%" style="stop-color:rgb(255,255,255); stop-opacity:100"></stop>
+            <stop offset="100%" style="stop-color:rgb(0,0,0); stop-opacity:100"></stop>
+        </linearGradient>
+        <linearGradient id="gradient-6" x1="86%" y1="56%" x2="146%" y2="61%">
+            <stop offset="0%" style="stop-color:rgb(247,247,247); stop-opacity:100"></stop>
+            <stop offset="100%" style="stop-color:rgb(0,0,0); stop-opacity:100"></stop>
+        </linearGradient>
+        <linearGradient id="gradient-7" x1="50%" y1="0%" x2="50%" y2="100%">
+            <stop offset="0%" style="stop-color:rgb(255,255,255); stop-opacity:100"></stop>
+            <stop offset="100%" style="stop-color:rgb(0,0,0); stop-opacity:100"></stop>
+        </linearGradient>
+        <linearGradient id="gradient-8" x1="50%" y1="0%" x2="50%" y2="100%">
+            <stop offset="0%" style="stop-color:rgb(255,255,255); stop-opacity:100"></stop>
+            <stop offset="100%" style="stop-color:rgb(0,0,0); stop-opacity:100"></stop>
+        </linearGradient>
+        <linearGradient id="gradient-9" x1="50%" y1="0%" x2="50%" y2="100%">
+            <stop offset="0%" style="stop-color:rgb(255,255,255); stop-opacity:100"></stop>
+            <stop offset="100%" style="stop-color:rgb(0,0,0); stop-opacity:100"></stop>
+        </linearGradient>
+    </defs>
+    <g fill="rgb(215,215,215)" id="Page 1">
+        <g stroke="rgb(57,57,57)" stroke-width="1" style="fill:url(#gradient-2)" fill="none" id="Oval 9"></g>
+        <path id="Oval 9" d="M58,98 C79,98 96,81 96,60 C96,39 79,23 58,23 C37,23 21,39 21,60 C21,81 37,98 58,98 Z M58,98" stroke="rgb(57,57,57)" stroke-width="1" style="fill:url(#gradient-2)" fill="none"></path>
+        <path id="Oval 9 decoration" d="" stroke="rgb(57,57,57)" stroke-width="1" style="fill:url(#gradient-2)" fill="none"></path>
+        <g stroke="rgb(150,150,150)" stroke-width="1" style="fill:url(#gradient-4)" fill="none" id="Triangle 10"></g>
+        <path id="Triangle 10" d="M68,50 L84,71 L53,71 L68,50 Z M68,50" stroke="rgb(150,150,150)" stroke-width="1" style="fill:url(#gradient-4)" fill="none"></path>
+        <path id="Triangle 10 decoration" d="" stroke="rgb(150,150,150)" stroke-width="1" style="fill:url(#gradient-4)" fill="none"></path>
+        <g stroke="rgb(150,150,150)" stroke-width="1" style="fill:url(#gradient-6)" fill="none" id="Triangle 10"></g>
+        <path id="Triangle 10" d="M48,50 L64,71 L33,71 L48,50 Z M48,50" stroke="rgb(150,150,150)" stroke-width="1" style="fill:url(#gradient-6)" fill="none"></path>
+        <path id="Triangle 10 decoration" d="" stroke="rgb(150,150,150)" stroke-width="1" style="fill:url(#gradient-6)" fill="none"></path>
+        <g stroke="rgb(150,150,150)" stroke-width="1" fill="rgb(255,254,254)" id="Rectangle 11"></g>
+        <path id="Rectangle 11" d="M33,48 L33,73 L38,73 L38,48 L33,48 Z M33,48" stroke="rgb(150,150,150)" stroke-width="1" fill="rgb(255,254,254)"></path>
+        <path id="Rectangle 11 decoration" d="" stroke="rgb(150,150,150)" stroke-width="1" fill="rgb(255,254,254)"></path>
+    </g>
+</svg>
