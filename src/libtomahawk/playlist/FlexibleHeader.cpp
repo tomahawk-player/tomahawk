@@ -62,7 +62,7 @@ FlexibleHeader::FlexibleHeader( FlexibleView* parent )
     m_radioDetailed = new QRadioButton( modeWidget );
     m_radioCloud = new QRadioButton( modeWidget );
     //for the CSS:
-    m_radioNormal->setObjectName( "radioNormal");
+    m_radioNormal->setObjectName( "radioNormal" );
     m_radioCloud->setObjectName( "radioCloud" );
 
     m_radioNormal->setFocusPolicy( Qt::NoFocus );

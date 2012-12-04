@@ -42,8 +42,6 @@ public slots:
     virtual void setPixmap( const QPixmap& p );
 
 protected:
-    void paintEvent( QPaintEvent* );
-
     QLabel* m_imageLabel;
     ElidedLabel* m_captionLabel;
     ElidedLabel* m_descriptionLabel;

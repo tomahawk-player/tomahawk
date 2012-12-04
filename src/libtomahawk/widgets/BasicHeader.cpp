@@ -86,16 +86,11 @@ BasicHeader::BasicHeader( QWidget* parent )
 
     setPalette( pal );
     setAutoFillBackground( true );
-
-    if ( !s_tiledHeader )
-        s_tiledHeader = new QPixmap( TomahawkUtils::createTiledPixmap( 2000, height(), QImage( RESPATH "images/playlist-header-tiled.png" ) ) );
 }
 
 
 BasicHeader::~BasicHeader()
 {
-    delete s_tiledHeader;
-    s_tiledHeader = 0;
 }
 
 
@@ -118,23 +113,3 @@ BasicHeader::setPixmap( const QPixmap& p )
 {
     m_imageLabel->setPixmap( p.scaledToHeight( m_imageLabel->height(), Qt::SmoothTransformation ) );
 }
-
-
-void
-BasicHeader::paintEvent( QPaintEvent* )
-{
-    if ( !s_tiledHeader || s_tiledHeader->isNull() || width() > s_tiledHeader->width() )
-    {
-        delete s_tiledHeader;
-        s_tiledHeader = new QPixmap( TomahawkUtils::createTiledPixmap( width(), height(), QImage( RESPATH "images/playlist-header-tiled.png" ) ) );
-    }
-
-    if ( !s_tiledHeader || s_tiledHeader->isNull() )
-        return;
-
-    QPainter p( this );
-
-    // Truncate bg pixmap and paint into bg
-    p.drawPixmap( rect(), *s_tiledHeader, rect() );
-}
-
