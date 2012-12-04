@@ -113,7 +113,7 @@ PlaylistLargeItemDelegate::drawRichText( QPainter* painter, const QStyleOptionVi
 
     QAbstractTextDocumentLayout::PaintContext context;
 
-    context.palette.setColor( QPalette::Text, option.palette.text().color() );
+    context.palette.setColor( QPalette::Text, painter->pen().color() );
 
     painter->save();
     painter->translate( rect.x(), y );
@@ -214,8 +214,6 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
 
         QFont smallFont = opt.font;
         smallFont.setPointSize( TomahawkUtils::defaultFontSize() - 1 );
-        QFont smallestFont = opt.font;
-        smallestFont.setPointSize( TomahawkUtils::defaultFontSize() - 2 );
 
         r.adjust( pixmapRect.width() + 12, 1, - 16 - avatar.width(), 0 );
         QRect leftRect = r.adjusted( 0, 0, -48, 0 );
@@ -237,8 +235,9 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
 
         drawRichText( painter, opt, leftRect.adjusted( 0, boldFontMetrics.height() + 1, 0, 0 ), Qt::AlignTop, textDoc );
 
-        painter->setFont( smallestFont );
-        painter->setPen( Qt::gray );
+        if ( !( option.state & QStyle::State_Selected || item->isPlaying() ) )
+            painter->setPen( Qt::gray );
+
         textDoc.setHtml( lowerText );
         textDoc.setDocumentMargin( 0 );
         textDoc.setDefaultFont( painter->font() );
