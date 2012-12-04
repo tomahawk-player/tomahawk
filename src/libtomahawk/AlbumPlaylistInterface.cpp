@@ -36,7 +36,6 @@ using namespace Tomahawk;
 AlbumPlaylistInterface::AlbumPlaylistInterface( Tomahawk::Album* album, Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection )
     : Tomahawk::PlaylistInterface()
     , m_currentItem( 0 )
-    , m_currentTrack( 0 )
     , m_infoSystemLoaded( false )
     , m_databaseLoaded( false )
     , m_mode( mode )
@@ -55,7 +54,8 @@ AlbumPlaylistInterface::~AlbumPlaylistInterface()
 void
 AlbumPlaylistInterface::setCurrentIndex( qint64 index )
 {
-    m_currentTrack = index;
+    PlaylistInterface::setCurrentIndex( index );
+
     m_currentItem = m_queries.at( index )->results().first();
 }
 
@@ -63,7 +63,7 @@ AlbumPlaylistInterface::setCurrentIndex( qint64 index )
 qint64
 AlbumPlaylistInterface::siblingIndex( int itemsAway, qint64 rootIndex ) const
 {
-    qint64 p = m_currentTrack;
+    qint64 p = m_currentIndex;
     if ( rootIndex >= 0 )
         p = rootIndex;
 
@@ -181,6 +181,7 @@ AlbumPlaylistInterface::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData re
                 Pipeline::instance()->resolve( ql );
 
                 m_queries << ql;
+                checkQueries();
             }
 
             break;
@@ -243,6 +244,8 @@ AlbumPlaylistInterface::onTracksLoaded( const QList< query_ptr >& tracks )
     else
         m_queries << tracks;
 
+    checkQueries();
+
     m_finished = true;
     emit tracksLoaded( m_mode, m_collection );
 }
@@ -300,4 +303,14 @@ AlbumPlaylistInterface::resultAt( qint64 index ) const
         return query->results().first();
 
     return Tomahawk::result_ptr();
+}
+
+
+void
+AlbumPlaylistInterface::checkQueries()
+{
+    foreach ( const Tomahawk::query_ptr& query, m_queries )
+    {
+        connect( query.data(), SIGNAL( playableStateChanged( bool ) ), SLOT( onItemsChanged() ), Qt::UniqueConnection );
+    }
 }
