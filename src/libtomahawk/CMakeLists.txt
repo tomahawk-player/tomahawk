@@ -149,6 +149,7 @@ set( libGuiSources
     widgets/ComboBox.cpp
     widgets/ToggleButton.cpp
     widgets/FadingPixmap.cpp
+    widgets/PlayableCover.cpp
     widgets/SocialPlaylistWidget.cpp
     widgets/SourceTreePopupDialog.cpp
     widgets/infowidgets/SourceInfoWidget.cpp
