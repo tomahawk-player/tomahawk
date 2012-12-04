@@ -198,6 +198,7 @@ AlbumInfoWidget::load( const album_ptr& album )
     ui->artistLabel->setArtist( album->artist() );
     ui->albumLabel->setText( album->name() );
     ui->label_2->setText( tr( "Other Albums by %1" ).arg( album->artist()->name() ) );
+    ui->cover->setAlbum( album );
 
     m_tracksModel->startLoading();
     m_tracksModel->addTracks( album, QModelIndex(), true );

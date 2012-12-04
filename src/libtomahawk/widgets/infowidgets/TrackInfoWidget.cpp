@@ -202,6 +202,7 @@ TrackInfoWidget::load( const query_ptr& query )
     ui->artistLabel->setQuery( query );
     ui->albumLabel->setQuery( query );
     ui->albumLabel->setVisible( !query->album().isEmpty() );
+    ui->cover->setQuery( query );
 
     m_relatedTracksModel->clear();
     m_relatedTracksModel->startLoading();

@@ -241,6 +241,7 @@ ArtistInfoWidget::load( const artist_ptr& artist )
                                 SLOT( onTracksFound( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode ) ) );
 
     ui->artistLabel->setText( artist->name() );
+    ui->cover->setArtist( artist );
 
     m_topHitsModel->startLoading();
 
