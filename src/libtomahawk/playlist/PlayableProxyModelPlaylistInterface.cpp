@@ -222,7 +222,6 @@ PlayableProxyModelPlaylistInterface::siblingIndex( int itemsAway, qint64 rootInd
         }
     }
 
-    // Try to find the next available PlaylistItem (with results)
     while ( idx.isValid() )
     {
         PlayableItem* item = proxyModel->itemFromIndex( proxyModel->mapToSource( idx ) );
