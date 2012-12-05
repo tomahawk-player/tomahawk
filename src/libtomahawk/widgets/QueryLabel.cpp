@@ -93,7 +93,6 @@ QueryLabel::init()
     m_mode = Qt::ElideMiddle;
 
     m_jumpLinkVisible = false;
-    m_jumpPixmap = QPixmap( RESPATH "images/jump-link.png" ).scaled( QSize( fontMetrics().height(), fontMetrics().height() ), Qt::KeepAspectRatio, Qt::SmoothTransformation );
 }
 
 
@@ -475,7 +474,7 @@ QueryLabel::paintEvent( QPaintEvent* event )
         {
             r.adjust( 6, 0, 0, 0 );
             r.setWidth( r.height() );
-            p.drawPixmap( r, m_jumpPixmap.scaled( r.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
+            p.drawPixmap( r, TomahawkUtils::defaultPixmap( TomahawkUtils::JumpLink, TomahawkUtils::Original, r.size() ) );
         }
     }
 
@@ -635,7 +634,7 @@ QueryLabel::mouseMoveEvent( QMouseEvent* event )
             hoverArea.setLeft( albumX + spacing );
             hoverArea.setRight( trackX + contentsMargins().left() - 1 );
         }
-        else if ( m_jumpLinkVisible && x < trackX + 6 + m_jumpPixmap.width() && x > trackX + 6 )
+        else if ( m_jumpLinkVisible && x < trackX + 6 + fm.height() && x > trackX + 6 )
         {
             m_hoverType = Complete;
         }

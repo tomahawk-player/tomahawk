@@ -32,14 +32,11 @@ public:
     explicit TransferStatusManager( QObject* parent = 0 );
     virtual ~TransferStatusManager() {}
 
-    QPixmap rxPixmap() const { return m_rxPixmap; }
-    QPixmap txPixmap() const { return m_txPixmap; }
+    QPixmap rxPixmap() const;
+    QPixmap txPixmap() const;
 
 private slots:
     void streamRegistered( StreamConnection* sc );
-
-private:
-    QPixmap m_rxPixmap, m_txPixmap;
 };
 
 class TransferStatusItem : public JobStatusItem

@@ -35,6 +35,7 @@
 #include "playlist/dynamic/DynamicView.h"
 #include "DynamicSetupWidget.h"
 #include "utils/AnimatedSpinner.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
 #include <QVBoxLayout>
@@ -517,7 +518,7 @@ QPixmap
 DynamicWidget::pixmap() const
 {
     if ( m_playlist->mode() == OnDemand )
-        return QPixmap( RESPATH "images/station.png" );
+        return TomahawkUtils::defaultPixmap( TomahawkUtils::Station );
     else if ( m_playlist->mode() == Static )
         return QPixmap( RESPATH "images/automatic-playlist.png" );
     else

@@ -58,11 +58,10 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
 {
     if ( m_source.isNull() )
     {
-        m_superCol = TomahawkUtils::createRoundedImage( QPixmap( RESPATH "images/supercollection.png" ), QSize( 0, 0 ) );
         return;
     }
 
-    m_collectionItem = new GenericPageItem( model(), this, tr( "Collection" ), QIcon( RESPATH "images/collection.png" ), //FIXME different icon
+    m_collectionItem = new GenericPageItem( model(), this, tr( "Collection" ), ImageRegistry::instance()->icon( RESPATH "images/collection.svg" ), //FIXME different icon
                                             boost::bind( &SourceItem::collectionClicked, this ),
                                             boost::bind( &SourceItem::getCollectionPage, this ) );
 
@@ -70,7 +69,7 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
                                             boost::bind( &SourceItem::sourceInfoClicked, this ),
                                             boost::bind( &SourceItem::getSourceInfoPage, this ) );*/
 
-    m_latestAdditionsItem = new GenericPageItem( model(), this, tr( "Latest Additions" ), QIcon( RESPATH "images/new-additions.png" ),
+    m_latestAdditionsItem = new GenericPageItem( model(), this, tr( "Latest Additions" ), ImageRegistry::instance()->icon( RESPATH "images/new-additions.svg" ),
                                                  boost::bind( &SourceItem::latestAdditionsClicked, this ),
                                                  boost::bind( &SourceItem::getLatestAdditionsPage, this ) );
 
@@ -198,7 +197,7 @@ SourceItem::pixmap( const QSize& size ) const
 {
     if ( m_source.isNull() )
     {
-       return m_superCol;
+       return TomahawkUtils::defaultPixmap( TomahawkUtils::SuperCollection, TomahawkUtils::Original, size );
     }
     else
     {
@@ -517,7 +516,7 @@ SourceItem::latestAdditionsClicked()
     if ( !m_latestAdditionsPage )
     {
         FlexibleView* pv = new FlexibleView( ViewManager::instance()->widget() );
-        pv->setPixmap( QPixmap( RESPATH "images/new-additions.png" ) );
+        pv->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::NewAdditions, TomahawkUtils::Original ) );
 
         RecentlyAddedModel* raModel = new RecentlyAddedModel( pv );
         raModel->setTitle( tr( "Latest Additions" ) );

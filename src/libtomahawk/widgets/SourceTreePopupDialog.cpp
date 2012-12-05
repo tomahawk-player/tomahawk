@@ -19,8 +19,6 @@
 
 #include "SourceTreePopupDialog.h"
 
-#include "utils/TomahawkUtilsGui.h"
-
 #include <QApplication>
 #include <QPaintEvent>
 #include <QPainter>
@@ -33,8 +31,11 @@
 #include <QTimer>
 
 #ifdef QT_MAC_USE_COCOA
-#include "SourceTreePopupDialog_mac.h"
+    #include "SourceTreePopupDialog_mac.h"
 #endif
+
+#include "utils/TomahawkUtilsGui.h"
+#include "utils/ImageRegistry.h"
 
 using namespace Tomahawk;
 
@@ -69,8 +70,8 @@ SourceTreePopupDialog::SourceTreePopupDialog()
     m_label = new QLabel( this );
     m_buttons = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, this );
 
-    m_buttons->button( QDialogButtonBox::Ok )->setIcon( QIcon( RESPATH "images/delete.png" ) );
-    m_buttons->button( QDialogButtonBox::Cancel )->setIcon( QIcon( RESPATH "images/cancel.png" ) );
+    m_buttons->button( QDialogButtonBox::Ok )->setIcon( ImageRegistry::instance()->icon( RESPATH "images/delete.svg" ) );
+    m_buttons->button( QDialogButtonBox::Cancel )->setIcon( ImageRegistry::instance()->icon( RESPATH "images/cancel.svg" ) );
 
     connect( m_buttons, SIGNAL( accepted() ), this, SLOT( onAccepted() ) );
     connect( m_buttons, SIGNAL( rejected() ), this, SLOT( onRejected() ) );

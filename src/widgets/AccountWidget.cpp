@@ -110,7 +110,7 @@ AccountWidget::AccountWidget( QWidget* parent )
 
     m_addAccountIcon = new QLabel( m_inviteContainer );
     m_addAccountIcon->setContentsMargins( 1, 0, 0, 0 );
-    m_addAccountIcon->setPixmap( QIcon( RESPATH "images/add-contact.png" ).pixmap( 16 ) );
+    m_addAccountIcon->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::AddContact, TomahawkUtils::Original, QSize( 16, 16 ) ) );
     m_addAccountIcon->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding );
     m_addAccountIcon->setAlignment( Qt::AlignCenter );
     containerLayout->addWidget( m_addAccountIcon );

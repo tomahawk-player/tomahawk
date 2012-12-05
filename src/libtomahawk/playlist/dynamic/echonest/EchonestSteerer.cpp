@@ -20,6 +20,7 @@
 
 #include "Source.h"
 #include "playlist/dynamic/widgets/DynamicWidget.h"
+#include "utils/ImageRegistry.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
@@ -108,13 +109,13 @@ EchonestSteerer::EchonestSteerer( QWidget* parent )
     connect( m_description, SIGNAL( textChanged( QString ) ), this, SLOT( changed() ) );
 
     m_apply = initButton( this );
-    m_apply->setIcon( QIcon( RESPATH "images/apply-check.png" ) );
+    m_apply->setIcon( ImageRegistry::instance()->icon( RESPATH "images/apply-check.svg" ) );
     m_apply->setToolTip( tr( "Apply steering command" ) );
     m_layout->addWidget( m_apply );
     connect( m_apply, SIGNAL( clicked( bool ) ), this, SLOT( applySteering() ) );
 
     m_reset = initButton( this );
-    m_reset->setIcon( QIcon( RESPATH "images/view-refresh.png" ) );
+    m_reset->setIcon( ImageRegistry::instance()->icon( RESPATH "images/view-refresh.svg" ) );
     m_reset->setToolTip( tr( "Reset all steering commands" ) );
     m_layout->addWidget( m_reset );
 

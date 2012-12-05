@@ -145,7 +145,6 @@ private:
     QMargins m_textMargins;
 
     bool m_jumpLinkVisible;
-    QPixmap m_jumpPixmap;
 };
 
 #endif // QUERYLABEL_H

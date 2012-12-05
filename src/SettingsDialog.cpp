@@ -223,15 +223,18 @@ SettingsDialog::SettingsDialog(QObject *parent )
 //     ui->checkBoxEnableAdium->hide();
 // #endif
 
-    m_dialog->addTab( m_accountsWidget, QPixmap( RESPATH "images/account-settings.png" ), tr( "Services" ), tr( "Configure the accounts and services used by Tomahawk "
-                                                                                                                "to search and retrieve music, find your friends and "
-                                                                                                                "update your status." ) );
+    m_dialog->addTab( m_accountsWidget, TomahawkUtils::defaultPixmap( TomahawkUtils::AccountSettings ),
+                      tr( "Services" ), tr( "Configure the accounts and services used by Tomahawk "
+                                             "to search and retrieve music, find your friends and "
+                                             "update your status." ) );
 
-    m_dialog->addTab( m_collectionWidget, QPixmap( RESPATH "images/music-settings.png" ), tr( "Collection" ), tr( "Manage how Tomahawk finds music on your computer." ));
+    m_dialog->addTab( m_collectionWidget, TomahawkUtils::defaultPixmap( TomahawkUtils::MusicSettings ),
+                      tr( "Collection" ), tr( "Manage how Tomahawk finds music on your computer." ) );
 
-    m_dialog->addTab( m_advancedWidget, QPixmap( RESPATH "images/advanced-settings.png" ), tr( "Advanced" ), tr( "Configure Tomahawk's advanced settings, including "
-                                                                                                                 "network connectivity settings, browser interaction "
-                                                                                                                 "and more."  ) );
+    m_dialog->addTab( m_advancedWidget, TomahawkUtils::defaultPixmap( TomahawkUtils::AdvancedSettings ),
+                      tr( "Advanced" ), tr( "Configure Tomahawk's advanced settings, including "
+                                            "network connectivity settings, browser interaction "
+                                            "and more." ) );
 
     m_dialog->setCurrentIndex( 0 );
 

@@ -23,6 +23,7 @@
 #include "DynamicControlWrapper.h"
 #include "playlist/dynamic/GeneratorInterface.h"
 #include "playlist/dynamic/DynamicControl.h"
+#include "utils/ImageRegistry.h"
 #include "utils/TomahawkUtils.h"
 #include "widgets/ElidedLabel.h"
 #include "Source.h"
@@ -100,7 +101,7 @@ CollapsibleControls::init()
     m_summary->setFont( f );
     m_summaryLayout->addWidget( m_summary, 1 );
     m_summaryExpand = DynamicControlWrapper::initButton( this );
-    m_summaryExpand->setIcon( QIcon( RESPATH "images/arrow-down-double.png" ) );
+    m_summaryExpand->setIcon( ImageRegistry::instance()->icon( RESPATH "images/arrow-down-double.svg" ) );
     m_expandL = new QStackedLayout;
     m_expandL->setContentsMargins( 0, 0, 0, 0 );
     m_expandL->setMargin( 0 );

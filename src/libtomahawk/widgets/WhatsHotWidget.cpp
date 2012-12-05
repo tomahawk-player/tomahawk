@@ -75,7 +75,7 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     m_sortedProxy->setDynamicSortFilter( true );
     m_sortedProxy->setFilterCaseSensitivity( Qt::CaseInsensitive );
 
-    ui->breadCrumbLeft->setRootIcon( QPixmap( RESPATH "images/charts.png" ) );
+    ui->breadCrumbLeft->setRootIcon( TomahawkUtils::defaultPixmap( TomahawkUtils::Charts, TomahawkUtils::Original ) );
 
     connect( ui->breadCrumbLeft, SIGNAL( activateIndex( QModelIndex ) ), SLOT( leftCrumbIndexChanged( QModelIndex ) ) );
 

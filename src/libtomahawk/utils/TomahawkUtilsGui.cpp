@@ -101,13 +101,13 @@ createDragPixmap( MediaType type, int itemCount )
     switch ( type )
     {
         case MediaTypeArtist:
-            pixmap = QPixmap( ":/data/images/artist-icon.png" ).scaledToWidth( size, Qt::SmoothTransformation );
+            pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::Original, QSize( size, size ) );
             break;
         case MediaTypeAlbum:
-            pixmap = QPixmap( ":/data/images/album-icon.png" ).scaledToWidth( size, Qt::SmoothTransformation );
+            pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::Original, QSize( size, size ) );
             break;
         case MediaTypeTrack:
-            pixmap = QPixmap( QString( ":/data/images/track-icon-%2x%2.png" ).arg( size ) );
+            pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::Original, QSize( size, size ) );
             break;
     }
 
@@ -420,21 +420,21 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
             else if ( mode == Grid )
                 pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/album-placeholder-grid.svg", size );
             else
-                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/no-album-no-case.svg", size );
+                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/album-icon.svg", size );
             break;
 
         case DefaultArtistImage:
             if ( mode == Grid )
                 pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/artist-placeholder-grid.svg", size );
             else
-                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/no-artist-image-placeholder.svg", size );
+                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/artist-icon.png", size );
             break;
 
         case DefaultTrackImage:
             if ( mode == Grid )
                 pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/track-placeholder-grid.svg", size );
             else
-                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/track-placeholder.png", size );
+                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/track-icon.svg", size );
             break;
 
         case DefaultSourceAvatar:
@@ -449,6 +449,10 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
                 pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/resolver-default.svg", size, TomahawkUtils::RoundedCorners );
             else
                 pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/resolver-default.svg", size );
+            break;
+
+        case DefaultCollection:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/collection.svg", size );
             break;
 
         case NowPlayingSpeaker:
@@ -543,6 +547,93 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
 
         case Configure:
             pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/configure.svg", size );
+            break;
+
+        case GreenDot:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/green-dot.svg", size );
+            break;
+
+        case AddContact:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/add-contact.svg", size );
+            break;
+
+        case SubscribeOn:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/subscribe-on.svg", size );
+            break;
+        case SubscribeOff:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/subscribe-off.svg", size );
+            break;
+
+        case JumpLink:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/jump-link.svg", size );
+            break;
+
+        case ProcessStop:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/process-stop.svg", size );
+            break;
+
+        case HeadphonesOn:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/headphones.svg", size );
+            break;
+        case HeadphonesOff:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/headphones-off.png", size );
+            break;
+
+        case PadlockClosed:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/closed-padlock.png", size );
+            break;
+        case PadlockOpen:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/open-padlock.svg", size );
+            break;
+
+        case Downloading:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/downloading.svg", size );
+            break;
+        case Uploading:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/uploading.svg", size );
+            break;
+
+        case ViewRefresh:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/view-refresh.svg", size );
+            break;
+
+        case SuperCollection:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/supercollection.svg", size );
+            break;
+        case LovedPlaylist:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/loved_playlist.svg", size );
+            break;
+        case NewReleases:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/new-releases.svg", size );
+            break;
+        case NewAdditions:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/new-additions.svg", size );
+            break;
+        case Charts:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/charts.svg", size );
+            break;
+        case Station:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/station.svg", size );
+            break;
+        case Playlist:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/playlist-icon.svg", size );
+            break;
+
+        case ListAdd:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/list-add.svg", size );
+            break;
+        case ListRemove:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/list-remove.svg", size );
+            break;
+
+        case AdvancedSettings:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/advanced-settings.svg", size );
+            break;
+        case AccountSettings:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/account-settings.svg", size );
+            break;
+        case MusicSettings:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/music-settings.svg", size );
             break;
 
         default:

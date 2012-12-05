@@ -46,7 +46,6 @@ public slots:
     void doneInstalling ( const QPersistentModelIndex& idx );
     void errorInstalling ( const QPersistentModelIndex& idx );
 
-
     void doUpdateIndex( const QPersistentModelIndex& idx );
 
 protected:
@@ -71,7 +70,7 @@ private:
 
     QRect checkRectForIndex( const QStyleOptionViewItem &option, const QModelIndex &idx ) const;
 
-    QPixmap m_offlineIcon, m_onlineIcon, m_defaultCover, m_onHoverStar, m_ratingStarPositive, m_ratingStarNegative, m_removeIcon;
+    QPixmap m_offlineIcon, m_onlineIcon, m_defaultCover, m_onHoverStar, m_ratingStarPositive, m_ratingStarNegative;
     int m_hoveringOver;
     QPersistentModelIndex m_hoveringItem, m_configPressed;
     mutable QHash< QPersistentModelIndex, QRect > m_cachedButtonRects;

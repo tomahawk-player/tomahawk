@@ -22,9 +22,10 @@
 #include <QKeyEvent>
 
 #include "ViewManager.h"
-#include "utils/Logger.h"
 #include "PlaylistUpdaterInterface.h"
 #include "Source.h"
+#include "utils/TomahawkUtilsGui.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 
@@ -159,4 +160,11 @@ PlaylistView::onMenuTriggered( int action )
         default:
             break;
     }
+}
+
+
+QPixmap
+PlaylistView::pixmap() const
+{
+    return TomahawkUtils::defaultPixmap( TomahawkUtils::Playlist );
 }

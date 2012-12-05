@@ -76,8 +76,6 @@ SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget*
     {
         m_description = tr( "Recent activity from %1" ).arg( source->friendlyName() );
     }
-
-    m_pixmap.load( RESPATH "images/new-additions.png" );
 }
 
 
@@ -114,4 +112,12 @@ SourceInfoWidget::changeEvent( QEvent* e )
         default:
             break;
     }
+}
+
+
+QPixmap
+SourceInfoWidget::pixmap() const
+{
+    return TomahawkUtils::defaultPixmap( TomahawkUtils::NewAdditions, TomahawkUtils::Original );
+
 }
