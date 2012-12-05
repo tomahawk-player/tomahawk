@@ -29,21 +29,28 @@
 #include <QPainter>
 #include <QPaintEvent>
 #include <QVBoxLayout>
+#ifdef Q_WS_X11
+    #include <QtGui/QX11Info>
+    #include <QBitmap>
+#endif
+#ifdef Q_OS_WIN
+    #include <QBitmap>
+#endif
+
 
 AccountsPopupWidget::AccountsPopupWidget( QWidget* parent )
     : QWidget( parent )
     , m_widget( 0 )
     , m_arrowOffset( 0 )
 {
-    setWindowFlags( Qt::FramelessWindowHint );
-    setWindowFlags( Qt::Popup );
+    setWindowFlags( Qt::Popup | Qt::FramelessWindowHint );
+
     //Uncomment this if using a debugger:
     //setWindowFlags( Qt::Window );
 
     setAutoFillBackground( false );
     setAttribute( Qt::WA_TranslucentBackground, true );
     setAttribute( Qt::WA_NoSystemBackground, true );
-
 
     setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum );
 
@@ -59,6 +66,7 @@ AccountsPopupWidget::AccountsPopupWidget( QWidget* parent )
 #endif
 }
 
+
 void
 AccountsPopupWidget::setWidget( QWidget* widget )
 {
@@ -66,6 +74,7 @@ AccountsPopupWidget::setWidget( QWidget* widget )
     m_layout->addWidget( m_widget );
     m_widget->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum );
 }
+
 
 void
 AccountsPopupWidget::anchorAt( const QPoint &p )
@@ -76,6 +85,7 @@ AccountsPopupWidget::anchorAt( const QPoint &p )
     if( isVisible() )
         repaint();
 }
+
 
 void
 AccountsPopupWidget::setArrowOffset( int arrowOffset )
@@ -89,7 +99,9 @@ AccountsPopupWidget::setArrowOffset( int arrowOffset )
     }
 }
 
-void AccountsPopupWidget::paintEvent( QPaintEvent* )
+
+void
+AccountsPopupWidget::paintEvent( QPaintEvent* )
 {
     // Constants for painting
     const int cornerRadius = TomahawkUtils::POPUP_ROUNDING_RADIUS;   //the rounding radius of the widget
@@ -109,10 +121,30 @@ void AccountsPopupWidget::paintEvent( QPaintEvent* )
     outline.lineTo( rect().right() - m_arrowOffset, 2 );
     outline.lineTo( rect().right() - m_arrowOffset - arrowHeight, brect.top() );
 
-    QPainter p( this );
+    bool compositingWorks = true;
+#if defined(Q_WS_WIN)   //HACK: Windows refuses to perform compositing so we must fake it
+    compositingWorks = false;
+#elif defined(Q_WS_X11)
+    if ( !QX11Info::isCompositingManagerRunning() )
+        compositingWorks = false;
+#endif
 
-    p.setRenderHint( QPainter::Antialiasing );
-    p.setBackgroundMode( Qt::TransparentMode );
+    QPainter p;
+    QImage result;
+    if ( compositingWorks )
+    {
+        p.begin( this );
+        p.setRenderHint( QPainter::Antialiasing );
+        p.setBackgroundMode( Qt::TransparentMode );
+    }
+    else
+    {
+        result =  QImage( rect().size(), QImage::Format_ARGB32_Premultiplied );
+        p.begin( &result );
+        p.setCompositionMode( QPainter::CompositionMode_Source );
+        p.fillRect(result.rect(), Qt::transparent);
+        p.setCompositionMode( QPainter::CompositionMode_SourceOver );
+    }
 
     QPen pen( TomahawkUtils::Colors::BORDER_LINE );
     pen.setWidth( 2 );
@@ -121,6 +153,16 @@ void AccountsPopupWidget::paintEvent( QPaintEvent* )
 
     p.setOpacity( TomahawkUtils::POPUP_OPACITY );
     p.fillPath( outline, TomahawkUtils::Colors::POPUP_BACKGROUND );
+    p.end();
+
+    if ( !compositingWorks )
+    {
+        QPainter finalPainter( this );
+        finalPainter.setRenderHint( QPainter::Antialiasing );
+        finalPainter.setBackgroundMode( Qt::TransparentMode );
+        finalPainter.drawImage( 0, 0, result );
+        setMask( QPixmap::fromImage( result ).mask() );
+    }
 
 #ifdef QT_MAC_USE_COCOA
     // Work around bug in Qt/Mac Cocoa where opening subsequent popups
@@ -130,14 +172,17 @@ void AccountsPopupWidget::paintEvent( QPaintEvent* )
 #endif
 }
 
+
 void
 AccountsPopupWidget::focusOutEvent( QFocusEvent* )
 {
     hide();
 }
 
+
 void
 AccountsPopupWidget::hideEvent( QHideEvent* )
 {
     emit hidden();
 }
+
