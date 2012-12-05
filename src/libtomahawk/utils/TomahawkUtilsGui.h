@@ -58,9 +58,10 @@ namespace TomahawkUtils
 
     DLLEXPORT void unmarginLayout( QLayout* layout );
 
+    DLLEXPORT void setDefaultFontSize( int points );
     DLLEXPORT int defaultFontSize();
     DLLEXPORT int defaultFontHeight();
-    DLLEXPORT void setDefaultFontSize( int points );
+    DLLEXPORT QSize defaultIconSize();
 
     DLLEXPORT QPixmap defaultPixmap( ImageType type, ImageMode mode = TomahawkUtils::Original, const QSize& size = QSize( 0, 0 ) );
 
