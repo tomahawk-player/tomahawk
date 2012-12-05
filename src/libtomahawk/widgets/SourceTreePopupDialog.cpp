@@ -206,28 +206,18 @@ SourceTreePopupDialog::paintEvent( QPaintEvent* event )
     outline.lineTo( leftEdgeOffset, brect.top() + brect.height() / 2 + leftTriangleWidth / 2 );
     outline.lineTo( brect.left(), brect.top() + brect.height() / 2 );
 
-    QPainter p( this );
-
-    p.setRenderHint( QPainter::Antialiasing );
-
-    QPen pen( TomahawkUtils::Colors::BORDER_LINE );
-    pen.setWidth( 2 );
-    p.setPen( pen );
-    p.drawPath( outline );
-
-#ifdef Q_OS_MAC
-    p.setOpacity( 0.93 );
-    p.fillPath( outline, QColor( "#D6E3F1" ) );
+#ifndef Q_OS_MAC
+    TomahawkUtils::drawCompositedPopup( this,
+                                        outline,
+                                        TomahawkUtils::Colors::BORDER_LINE,
+                                        TomahawkUtils::Colors::POPUP_BACKGROUND,
+                                        TomahawkUtils::POPUP_OPACITY );
 #else
-    p.setOpacity( TomahawkUtils::POPUP_OPACITY );
-    p.fillPath( outline, TomahawkUtils::Colors::POPUP_BACKGROUND );
-#endif
-
-#ifdef QT_MAC_USE_COCOA
-    // Work around bug in Qt/Mac Cocoa where opening subsequent popups
-    // would incorrectly calculate the background due to it not being
-    // invalidated.
-    SourceTreePopupHelper::clearBackground( this );
+    TomahawkUtils::drawCompositedPopup( this,
+                                        outline,
+                                        TomahawkUtils::Colors::BORDER_LINE,
+                                        QColor( "#D6E3F1" ),
+                                        0.93 );
 #endif
 }
 

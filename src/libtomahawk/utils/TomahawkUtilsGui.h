@@ -75,6 +75,8 @@ namespace TomahawkUtils
 
     DLLEXPORT QPixmap addDropShadow( const QPixmap& sourceImage, const QSize& targetSize );
 
+    DLLEXPORT void drawCompositedPopup( QWidget* widget, const QPainterPath& outline, const QColor& lineColor, const QBrush& backgroundBrush, qreal opacity );
+
     namespace Colors
     {
         static const QColor BORDER_LINE = QColor( "#8c8c8c" );

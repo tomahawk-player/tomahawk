@@ -29,14 +29,6 @@
 #include <QPainter>
 #include <QPaintEvent>
 #include <QVBoxLayout>
-#ifdef Q_WS_X11
-    #include <QtGui/QX11Info>
-    #include <QBitmap>
-#endif
-#ifdef Q_OS_WIN
-    #include <QBitmap>
-#endif
-
 
 AccountsPopupWidget::AccountsPopupWidget( QWidget* parent )
     : QWidget( parent )
@@ -121,55 +113,11 @@ AccountsPopupWidget::paintEvent( QPaintEvent* )
     outline.lineTo( rect().right() - m_arrowOffset, 2 );
     outline.lineTo( rect().right() - m_arrowOffset - arrowHeight, brect.top() );
 
-    bool compositingWorks = true;
-#if defined(Q_WS_WIN)   //HACK: Windows refuses to perform compositing so we must fake it
-    compositingWorks = false;
-#elif defined(Q_WS_X11)
-    if ( !QX11Info::isCompositingManagerRunning() )
-        compositingWorks = false;
-#endif
-
-    QPainter p;
-    QImage result;
-    if ( compositingWorks )
-    {
-        p.begin( this );
-        p.setRenderHint( QPainter::Antialiasing );
-        p.setBackgroundMode( Qt::TransparentMode );
-    }
-    else
-    {
-        result =  QImage( rect().size(), QImage::Format_ARGB32_Premultiplied );
-        p.begin( &result );
-        p.setCompositionMode( QPainter::CompositionMode_Source );
-        p.fillRect(result.rect(), Qt::transparent);
-        p.setCompositionMode( QPainter::CompositionMode_SourceOver );
-    }
-
-    QPen pen( TomahawkUtils::Colors::BORDER_LINE );
-    pen.setWidth( 2 );
-    p.setPen( pen );
-    p.drawPath( outline );
-
-    p.setOpacity( TomahawkUtils::POPUP_OPACITY );
-    p.fillPath( outline, TomahawkUtils::Colors::POPUP_BACKGROUND );
-    p.end();
-
-    if ( !compositingWorks )
-    {
-        QPainter finalPainter( this );
-        finalPainter.setRenderHint( QPainter::Antialiasing );
-        finalPainter.setBackgroundMode( Qt::TransparentMode );
-        finalPainter.drawImage( 0, 0, result );
-        setMask( QPixmap::fromImage( result ).mask() );
-    }
-
-#ifdef QT_MAC_USE_COCOA
-    // Work around bug in Qt/Mac Cocoa where opening subsequent popups
-    // would incorrectly calculate the background due to it not being
-    // invalidated.
-    SourceTreePopupHelper::clearBackground( this );
-#endif
+    TomahawkUtils::drawCompositedPopup( this,
+                                        outline,
+                                        TomahawkUtils::Colors::BORDER_LINE,
+                                        TomahawkUtils::Colors::POPUP_BACKGROUND,
+                                        TomahawkUtils::POPUP_OPACITY );
 }
 
 
