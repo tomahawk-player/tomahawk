@@ -20,6 +20,7 @@
 
 #include "DynamicControlWrapper.h"
 #include "playlist/dynamic/GeneratorInterface.h"
+#include "utils/ImageRegistry.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 #include "Source.h"
@@ -57,7 +58,6 @@ DynamicControlList::DynamicControlList( const geninterface_ptr& generator, const
 
 DynamicControlList::~DynamicControlList()
 {
-
 }
 
 
@@ -86,7 +86,7 @@ DynamicControlList::init()
     m_collapseLayout->addWidget( m_collapse );
     m_addControl = new QToolButton( this );
     m_addControl->setAttribute( Qt::WA_LayoutUsesWidgetRect );
-    m_addControl->setIcon( QIcon( RESPATH "images/list-add.png" ) );
+    m_addControl->setIcon( ImageRegistry::instance()->icon( RESPATH "images/list-add.svg" ) );
     m_addControl->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
     m_addControl->setIconSize( QSize( 16, 16 ) );
     m_addControl->setToolButtonStyle( Qt::ToolButtonIconOnly );

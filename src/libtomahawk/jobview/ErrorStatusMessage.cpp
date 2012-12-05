@@ -18,11 +18,10 @@
 
 #include "ErrorStatusMessage.h"
 
-#include "utils/TomahawkUtils.h"
+#include "utils/TomahawkUtilsGui.h"
 
 #include <QTimer>
 
-QPixmap* ErrorStatusMessage::s_pixmap = 0;
 
 ErrorStatusMessage::ErrorStatusMessage( const QString& message, int timeoutSecs )
   : JobStatusItem()
@@ -33,10 +32,6 @@ ErrorStatusMessage::ErrorStatusMessage( const QString& message, int timeoutSecs 
     m_timer->setSingleShot( true );
 
     connect( m_timer, SIGNAL( timeout() ), this, SIGNAL( finished() ) );
-
-    if ( !s_pixmap )
-        s_pixmap = new QPixmap( RESPATH "images/process-stop.png" );
-
     m_timer->start();
 }
 
@@ -44,8 +39,7 @@ ErrorStatusMessage::ErrorStatusMessage( const QString& message, int timeoutSecs 
 QPixmap
 ErrorStatusMessage::icon() const
 {
-    Q_ASSERT( s_pixmap );
-    return *s_pixmap;
+    return TomahawkUtils::defaultPixmap( TomahawkUtils::ProcessStop, TomahawkUtils::Original, QSize( 64, 64 ) );
 }
 
 

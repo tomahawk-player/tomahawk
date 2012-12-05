@@ -51,10 +51,7 @@ Q_OBJECT
 public:
     PlaylistDelegate()
     {
-        m_playlistIcon = QPixmap( RESPATH "images/playlist-icon.png" );
         m_autoIcon = QPixmap( RESPATH "images/automatic-playlist.png" );
-        m_stationIcon = QPixmap( RESPATH "images/station.png" );
-        m_defaultAvatar = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultSourceAvatar, TomahawkUtils::RoundedCorners );
     }
 
 protected:
@@ -62,7 +59,7 @@ protected:
     QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
 private:
-    QPixmap m_playlistIcon, m_autoIcon, m_stationIcon, m_defaultAvatar;
+    QPixmap m_autoIcon;
 };
 
 

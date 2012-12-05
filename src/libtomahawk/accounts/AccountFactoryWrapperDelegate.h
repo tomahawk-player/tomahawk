@@ -50,7 +50,6 @@ signals:
 
 private:
     QPixmap m_removePixmap, m_offlineIcon, m_onlineIcon;
-    QIcon m_configIcon;
     QModelIndex m_configPressed;
 
     mutable QHash< QPersistentModelIndex, QRect > m_cachedCheckRects;

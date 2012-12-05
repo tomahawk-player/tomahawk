@@ -304,16 +304,16 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     figFont.setPointSize( TomahawkUtils::defaultFontSize() - 1 );
 
     QPixmap icon;
-    RecentlyPlayedPlaylistsModel::PlaylistTypes type = (RecentlyPlayedPlaylistsModel::PlaylistTypes)index.data( RecentlyPlayedPlaylistsModel::PlaylistTypeRole ).toInt();
-    if( type == RecentlyPlayedPlaylistsModel::StaticPlaylist )
-        icon = m_playlistIcon;
-    else if( type == RecentlyPlayedPlaylistsModel::AutoPlaylist )
-        icon = m_autoIcon;
-    else if( type == RecentlyPlayedPlaylistsModel::Station )
-        icon = m_stationIcon;
-
     QRect pixmapRect = option.rect.adjusted( 10, 14, -option.rect.width() + option.rect.height() - 18, -14 );
-    icon = icon.scaled( pixmapRect.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation );
+    RecentlyPlayedPlaylistsModel::PlaylistTypes type = (RecentlyPlayedPlaylistsModel::PlaylistTypes)index.data( RecentlyPlayedPlaylistsModel::PlaylistTypeRole ).toInt();
+
+    if ( type == RecentlyPlayedPlaylistsModel::StaticPlaylist )
+        icon = TomahawkUtils::defaultPixmap( TomahawkUtils::Playlist, TomahawkUtils::Original, pixmapRect.size() );
+    else if ( type == RecentlyPlayedPlaylistsModel::AutoPlaylist )
+        icon = m_autoIcon;
+    else if ( type == RecentlyPlayedPlaylistsModel::Station )
+        icon = TomahawkUtils::defaultPixmap( TomahawkUtils::Station, TomahawkUtils::Original, pixmapRect.size() );
+
     painter->drawPixmap( pixmapRect, icon );
 
     if ( type != RecentlyPlayedPlaylistsModel::Station )
@@ -341,7 +341,7 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     QRect r( option.rect.width() - option.fontMetrics.height() * 2.5 - 10, option.rect.top() + option.rect.height() / 3 - option.fontMetrics.height(), option.fontMetrics.height() * 2.5, option.fontMetrics.height() * 2.5 );
     QPixmap avatar = index.data( RecentlyPlayedPlaylistsModel::PlaylistRole ).value< Tomahawk::playlist_ptr >()->author()->avatar( TomahawkUtils::RoundedCorners, r.size() );
     if ( avatar.isNull() )
-        avatar = m_defaultAvatar;
+        avatar = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultSourceAvatar, TomahawkUtils::RoundedCorners, r.size() );
     painter->drawPixmap( r, avatar );
 
     painter->setFont( font );

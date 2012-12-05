@@ -66,14 +66,12 @@ AccountDelegate::AccountDelegate( QObject* parent )
     m_onHoverStar.load( RESPATH "images/star-hover.png" );
     m_onlineIcon.load( RESPATH "images/sipplugin-online.png" );
     m_offlineIcon.load( RESPATH "images/sipplugin-offline.png" );
-    m_removeIcon.load( RESPATH "images/list-remove.png" );
 
     m_ratingStarPositive = m_ratingStarPositive.scaled( STAR_SIZE, STAR_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation  );
     m_ratingStarNegative = m_ratingStarNegative.scaled( STAR_SIZE, STAR_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation  );
     m_onlineIcon = m_onlineIcon.scaled( STATUS_ICON_SIZE, STATUS_ICON_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation  );
     m_offlineIcon = m_offlineIcon.scaled( STATUS_ICON_SIZE, STATUS_ICON_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation  );
     m_onHoverStar = m_onHoverStar.scaled( STAR_SIZE, STAR_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation  );
-    m_removeIcon = m_removeIcon.scaled( REMOVE_ICON_SIZE, REMOVE_ICON_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation );
 
     m_defaultCover = m_defaultCover.scaled( ICONSIZE, ICONSIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation );
 
@@ -267,7 +265,6 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
 
             rightEdge = drawStatus( painter, QPointF( rightEdge, center - painter->fontMetrics().height()/2 ), accts.first(), true );
         }
-
     }
     else if ( canDelete )
     {
