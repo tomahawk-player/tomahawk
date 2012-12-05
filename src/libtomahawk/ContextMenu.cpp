@@ -18,8 +18,10 @@
 
 #include "ContextMenu.h"
 
-#include "GlobalActionManager.h"
+#include "audio/AudioEngine.h"
 #include "playlist/PlaylistView.h"
+#include "filemetadata/MetadataEditor.h"
+#include "GlobalActionManager.h"
 #include "ViewManager.h"
 #include "Query.h"
 #include "Result.h"
@@ -28,9 +30,8 @@
 #include "Artist.h"
 #include "Album.h"
 
+#include "utils/ImageRegistry.h"
 #include "utils/Logger.h"
-#include "audio/AudioEngine.h"
-#include "filemetadata/MetadataEditor.h"
 
 using namespace Tomahawk;
 
@@ -365,12 +366,12 @@ ContextMenu::onSocialActionsLoaded()
     if ( m_loveAction && m_queries.first()->loved() )
     {
         m_loveAction->setText( tr( "Un-&Love" ) );
-        m_loveAction->setIcon( QIcon( RESPATH "images/not-loved.png" ) );
+        m_loveAction->setIcon( ImageRegistry::instance()->icon( RESPATH "images/not-loved.svg" ) );
     }
     else if ( m_loveAction )
     {
         m_loveAction->setText( tr( "&Love" ) );
-        m_loveAction->setIcon( QIcon( RESPATH "images/loved.png" ) );
+        m_loveAction->setIcon( ImageRegistry::instance()->icon( RESPATH "images/loved.svg" ) );
     }
 }
 

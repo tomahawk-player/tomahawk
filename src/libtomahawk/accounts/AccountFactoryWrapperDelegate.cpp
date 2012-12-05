@@ -17,10 +17,12 @@
  */
 
 #include "AccountFactoryWrapperDelegate.h"
-#include "accounts/Account.h"
+
 #include "AccountFactoryWrapper.h"
-#include "utils/TomahawkUtils.h"
 #include "Source.h"
+#include "accounts/Account.h"
+#include "utils/ImageRegistry.h"
+#include "utils/TomahawkUtils.h"
 
 #include <QApplication>
 #include <QPainter>
@@ -43,7 +45,7 @@ AccountFactoryWrapperDelegate::AccountFactoryWrapperDelegate( QObject* parent )
     m_onlineIcon = m_onlineIcon.scaled( ICON_SIZE, ICON_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation  );
     m_offlineIcon = m_offlineIcon.scaled( ICON_SIZE, ICON_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation  );
 
-    m_configIcon.addFile( RESPATH "images/configure.png", QSize( CONFIG_WRENCH_SIZE - 8, CONFIG_WRENCH_SIZE - 8 ) );
+    m_configIcon = ImageRegistry::instance()->pixmap( RESPATH "images/configure.svg", QSize( CONFIG_WRENCH_SIZE - 8, CONFIG_WRENCH_SIZE - 8 ) );
 }
 
 void

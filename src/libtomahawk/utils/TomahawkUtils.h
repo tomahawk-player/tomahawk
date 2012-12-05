@@ -48,6 +48,7 @@ namespace TomahawkUtils
         DefaultArtistImage,
         DefaultTrackImage,
         DefaultSourceAvatar,
+        DefaultResolver,
         NowPlayingSpeaker,
         NowPlayingSpeakerDark,
         InfoIcon,
@@ -58,7 +59,23 @@ namespace TomahawkUtils
         PrevButton,
         PrevButtonPressed,
         NextButton,
-        NextButtonPressed
+        NextButtonPressed,
+        ShuffleOff,
+        ShuffleOffPressed,
+        ShuffleOn,
+        ShuffleOnPressed,
+        RepeatOne,
+        RepeatOnePressed,
+        RepeatAll,
+        RepeatAllPressed,
+        RepeatOff,
+        RepeatOffPressed,
+        VolumeMuted,
+        VolumeFull,
+        Share,
+        NotLoved,
+        Loved,
+        Configure
     };
 
     enum ImageMode
