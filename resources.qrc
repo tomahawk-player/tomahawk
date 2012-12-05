@@ -12,8 +12,8 @@
         <file>data/images/track-placeholder.png</file>
         <file>data/images/track-placeholder-grid.svg</file>
         <file>data/images/now-playing-panel.png</file>
-        <file>data/images/now-playing-speaker.png</file>
-        <file>data/images/now-playing-speaker-dark.png</file>
+        <file>data/images/now-playing-speaker.svg</file>
+        <file>data/images/now-playing-speaker-dark.svg</file>
         <file>data/images/pause-pressed.svg</file>
         <file>data/images/pause-rest.svg</file>
         <file>data/images/play-pressed.svg</file>
