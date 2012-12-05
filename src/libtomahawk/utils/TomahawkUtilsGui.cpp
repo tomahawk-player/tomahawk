@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2012,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -30,6 +31,7 @@
 #include <QLayout>
 #include <QPainter>
 #include <QPixmap>
+#include <QBitmap>
 #include <QPalette>
 #include <QApplication>
 #include <QScrollBar>
@@ -46,6 +48,10 @@
     #include <windows.h>
     #include <windowsx.h>
     #include <shellapi.h>
+#endif
+
+#ifdef QT_MAC_USE_COCOA
+    #include "widgets/SourceTreePopupDialog_mac.h"
 #endif
 
 // Defined in qpixmapfilter.cpp, private but exported
@@ -848,6 +854,65 @@ addDropShadow( const QPixmap& source, const QSize& targetSize )
     resultPainter.drawPixmap( 0, 0, shrunk );
 
     return result;
+}
+
+
+void
+drawCompositedPopup( QWidget* widget,
+                     const QPainterPath& outline,
+                     const QColor& lineColor,
+                     const QBrush& backgroundBrush,
+                     qreal opacity )
+{
+    bool compositingWorks = true;
+#if defined(Q_WS_WIN)   //HACK: Windows refuses to perform compositing so we must fake it
+    compositingWorks = false;
+#elif defined(Q_WS_X11)
+    if ( !QX11Info::isCompositingManagerRunning() )
+        compositingWorks = false;
+#endif
+
+    QPainter p;
+    QImage result;
+    if ( compositingWorks )
+    {
+        p.begin( widget );
+        p.setRenderHint( QPainter::Antialiasing );
+        p.setBackgroundMode( Qt::TransparentMode );
+    }
+    else
+    {
+        result =  QImage( widget->rect().size(), QImage::Format_ARGB32_Premultiplied );
+        p.begin( &result );
+        p.setCompositionMode( QPainter::CompositionMode_Source );
+        p.fillRect( result.rect(), Qt::transparent );
+        p.setCompositionMode( QPainter::CompositionMode_SourceOver );
+    }
+
+    QPen pen( lineColor );
+    pen.setWidth( 2 );
+    p.setPen( pen );
+    p.drawPath( outline );
+
+    p.setOpacity( opacity );
+    p.fillPath( outline, backgroundBrush );
+    p.end();
+
+    if ( !compositingWorks )
+    {
+        QPainter finalPainter( widget );
+        finalPainter.setRenderHint( QPainter::Antialiasing );
+        finalPainter.setBackgroundMode( Qt::TransparentMode );
+        finalPainter.drawImage( 0, 0, result );
+        widget->setMask( QPixmap::fromImage( result ).mask() );
+    }
+
+#ifdef QT_MAC_USE_COCOA
+    // Work around bug in Qt/Mac Cocoa where opening subsequent popups
+    // would incorrectly calculate the background due to it not being
+    // invalidated.
+    SourceTreePopupHelper::clearBackground( widget );
+#endif
 }
 
 
