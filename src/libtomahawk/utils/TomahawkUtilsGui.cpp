@@ -31,6 +31,7 @@
 #include <QLayout>
 #include <QPainter>
 #include <QPixmap>
+#include <QBitmap>
 #include <QPalette>
 #include <QApplication>
 #include <QScrollBar>
@@ -49,6 +50,10 @@
     #include <windows.h>
     #include <windowsx.h>
     #include <shellapi.h>
+#endif
+
+#ifdef QT_MAC_USE_COCOA
+    #include "widgets/SourceTreePopupDialog_mac.h"
 #endif
 
 // Defined in qpixmapfilter.cpp, private but exported
@@ -908,7 +913,7 @@ drawCompositedPopup( QWidget* widget,
     // Work around bug in Qt/Mac Cocoa where opening subsequent popups
     // would incorrectly calculate the background due to it not being
     // invalidated.
-    SourceTreePopupHelper::clearBackground( this );
+    SourceTreePopupHelper::clearBackground( widget );
 #endif
 }
 
