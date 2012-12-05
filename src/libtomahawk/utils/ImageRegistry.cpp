@@ -19,6 +19,7 @@
 
 #include <QSvgRenderer>
 #include <QPainter>
+#include <qicon.h>
 
 #include "utils/Logger.h"
 
@@ -39,8 +40,15 @@ ImageRegistry::ImageRegistry()
 }
 
 
+QIcon
+ImageRegistry::icon( const QString& image, TomahawkUtils::ImageMode mode )
+{
+    return pixmap( image, TomahawkUtils::defaultIconSize(), mode );
+}
+
+
 QPixmap
-ImageRegistry::getFromCache( const QString& image, const QSize& size, TomahawkUtils::ImageMode mode )
+ImageRegistry::pixmap( const QString& image, const QSize& size, TomahawkUtils::ImageMode mode )
 {
     QHash< int, QPixmap > subsubcache;
     QHash< int, QHash< int, QPixmap > > subcache;

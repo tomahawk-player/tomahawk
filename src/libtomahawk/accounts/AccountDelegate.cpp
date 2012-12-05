@@ -26,7 +26,7 @@
 #include "accounts/Account.h"
 #include "accounts/AccountManager.h"
 
-#include "utils/TomahawkUtils.h"
+#include "utils/ImageRegistry.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 #include "utils/AnimatedSpinner.h"
@@ -637,7 +637,7 @@ AccountDelegate::drawConfigWrench ( QPainter* painter, QStyleOptionViewItemV4& o
 
     // draw it the same size as the check belox
     topt.font = opt.font;
-    topt.icon = QIcon( RESPATH "images/configure.png" );
+    topt.icon = ImageRegistry::instance()->icon( RESPATH "images/configure.svg" );
     topt.iconSize = QSize( 14, 14 );
     topt.subControls = QStyle::SC_ToolButton;
     topt.activeSubControls = QStyle::SC_None;

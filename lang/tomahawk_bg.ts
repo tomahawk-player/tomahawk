@@ -1174,19 +1174,29 @@ Tomahaw създаде доклад относно това и изпращай�
 <context>
     <name>PlaylistLargeItemDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="158"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="156"/>
         <source>played %1 by you</source>
         <translation>изпълнена %1 от мен</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="160"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="158"/>
         <source>played %1 by %2</source>
         <translation>изпълнена %1 от %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="167"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="165"/>
         <source>added %1</source>
         <translation>добавен %1</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="229"/>
+        <source>by &lt;b&gt;%1&lt;/b&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="231"/>
+        <source>by &lt;b&gt;%1&lt;/b&gt; on &lt;b&gt;%2&lt;/b&gt;</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1842,59 +1852,59 @@ Tomahaw създаде доклад относно това и изпращай�
 <context>
     <name>SourceItem</name>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="64"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="65"/>
         <source>Collection</source>
         <translation>Колекция</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="72"/>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="524"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="73"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="523"/>
         <source>Latest Additions</source>
         <translation>Последно добавени</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="76"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="77"/>
         <source>Recently Played</source>
         <translation>Наскоро изпълнени песни</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="141"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="140"/>
         <source>SuperCollection</source>
         <translation>Супер колекция
 /Сборен излед от локалните и наличните в колекциите на приятелите ти/</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="527"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="526"/>
         <source>Latest additions to your collection</source>
         <translation>Последно добавени към колекцията</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="529"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="528"/>
         <source>Latest additions to %1&apos;s collection</source>
         <translation>Последно добавени в колекцията на %1</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="538"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="537"/>
         <source>Sorry, we could not find any recent additions!</source>
         <translation>Съжалявам, но не откривам нито една ново-добавена позиция!</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="567"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="566"/>
         <source>Recently Played Tracks</source>
         <translation>Наскоро изпълнени песни</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="570"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="569"/>
         <source>Your recently played tracks</source>
         <translation>Наскоро изпълнени песни от теб</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="572"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="571"/>
         <source>%1&apos;s recently played tracks</source>
         <translation>Наскоро изпълнените песни от %1</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="579"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="578"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>Съжалявам, но не откривам нито една наскоро изпълнена песен!</translation>
     </message>
@@ -2541,8 +2551,8 @@ You may wish to try re-authenticating.</source>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="86"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="156"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="198"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="160"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="207"/>
         <source>Add to &amp;Queue</source>
         <translation>Добави към &amp;опашката</translation>
     </message>
@@ -2558,59 +2568,58 @@ You may wish to try re-authenticating.</source>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="100"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="337"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="372"/>
         <source>&amp;Love</source>
         <translation>&amp;Харесай</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="108"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="111"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="166"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="212"/>
+        <source>&amp;Go to &quot;%1&quot;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="113"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="114"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="167"/>
+        <source>Go to &quot;%1&quot;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="120"/>
         <source>&amp;Copy Track Link</source>
         <translation>&amp;Копирай адреса на изпълнението</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="166"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="175"/>
         <source>Copy Album &amp;Link</source>
         <translation>Копирай адресът на албума</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="208"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="219"/>
         <source>Copy Artist &amp;Link</source>
         <translation>Копирай адресът на изпълнителя</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="332"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="367"/>
         <source>Un-&amp;Love</source>
         <translation>Не-&amp;харесай</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="121"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="128"/>
         <source>&amp;Delete Items</source>
         <translation>&amp;Изтрий позициите</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="111"/>
-        <source>&amp;Show Track Page</source>
-        <translation>&amp;Покажи страницата на песента</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="116"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="123"/>
         <source>Properties...</source>
         <translation>Подробности:</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="121"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="128"/>
         <source>&amp;Delete Item</source>
         <translation>&amp;Изтрий позицията</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="159"/>
-        <source>&amp;Show Album Page</source>
-        <translation>&amp;Покажи страницата на албума</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="201"/>
-        <source>&amp;Show Artist Page</source>
-        <translation>&amp;Покажи страницата на артиста</translation>
     </message>
 </context>
 <context>
@@ -3722,27 +3731,27 @@ enter the displayed PIN number here:</source>
         <translation>Съжалявам, но не откривам нито една подобна на тази песен!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="235"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="236"/>
         <source>You&apos;ve listened to this track %n time(s).</source>
         <translation><numerusform>Ти си слушал тази песен %n път(и)</numerusform><numerusform>Ти си слушал тази песен %n път(и)</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="237"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="238"/>
         <source>You&apos;ve never listened to this track before.</source>
         <translation>Никога не си слушал тази песен преди</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="241"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="242"/>
         <source>You first listened to it on %1.</source>
         <translation>Първоначално си я слушал на %1</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="245"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="246"/>
         <source>You&apos;ve listened to %1 %n time(s).</source>
         <translation><numerusform>Слушал си %1 път(и)</numerusform><numerusform>Слушал си %1 %n път(и)</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="247"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="248"/>
         <source>You&apos;ve never listened to %1 before.</source>
         <translation>Никога не си слушал %1 преди</translation>
     </message>
