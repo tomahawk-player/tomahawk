@@ -4,11 +4,11 @@
     <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
     <defs>
         <linearGradient x1="50%" y1="0%" x2="50%" y2="173.920641%" id="linearGradient-1">
-            <stop stop-color="rgb(254,255,255)" offset="0%"></stop>
+            <stop stop-color="rgb(254,255,254)" offset="0%"></stop>
             <stop stop-color="rgb(0,0,0)" offset="100%"></stop>
         </linearGradient>
     </defs>
-    <g id="Page 1" fill="rgb(223,223,223)" fill-rule="evenodd">
-        <path d="M8.00079513,0 C3.582078,0 0,3.57494774 0,8.00079513 L0,29.9992049 C0,34.417922 3.57494774,38 8.00079513,38 L38,38 L38,0 L8.00079513,0 Z M8.00079513,0" id="Rectangle 1" stroke="rgb(167,167,167)" stroke-width="1" fill="url(#linearGradient-1)"></path>
+    <g id="Page 1" fill="rgb(215,215,215)" fill-rule="evenodd">
+        <path d="M0,0 L0,38 L26.0026482,38 C32.6286026,38 38,32.636124 38,26.0026482 L38,11.9973518 C38,5.37139735 32.636124,0 26.0026482,0 L0,0 Z M0,0" id="Rectangle 2" stroke="rgb(150,150,150)" stroke-width="1" fill="url(#linearGradient-1)"></path>
     </g>
 </svg>
