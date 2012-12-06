@@ -47,17 +47,17 @@ connect and stream from you?</source>
 <context>
     <name>AccountFactoryWrapperDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountFactoryWrapperDelegate.cpp" line="106"/>
+        <location filename="../src/libtomahawk/accounts/AccountFactoryWrapperDelegate.cpp" line="104"/>
         <source>Online</source>
         <translation>Σε σύνδεση</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountFactoryWrapperDelegate.cpp" line="111"/>
+        <location filename="../src/libtomahawk/accounts/AccountFactoryWrapperDelegate.cpp" line="109"/>
         <source>Connecting...</source>
         <translation>Σύνδεση...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountFactoryWrapperDelegate.cpp" line="116"/>
+        <location filename="../src/libtomahawk/accounts/AccountFactoryWrapperDelegate.cpp" line="114"/>
         <source>Offline</source>
         <translation>Εκτός σύνδεσης</translation>
     </message>
@@ -100,154 +100,154 @@ connect and stream from you?</source>
 <context>
     <name>ActionCollection</name>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="57"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="59"/>
         <source>&amp;Listen Along</source>
         <translation>&amp;Συνακρόαση</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="60"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="62"/>
         <source>Stop &amp;Listening Along</source>
         <translation>Διακοπή &amp;Συνακρόασης</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="64"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="66"/>
         <source>&amp;Follow in real-time</source>
         <translation>&amp;Ακολούθηση σε πραγματικό χρόνο</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="69"/>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="307"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="71"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="309"/>
         <source>&amp;Listen Privately</source>
         <translation>&amp;Ιδιωτική Ακρόαση</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="69"/>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="307"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="71"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="309"/>
         <source>&amp;Listen Publicly</source>
         <translation>&amp;Δημόσια Ακρόαση</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="75"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="77"/>
         <source>&amp;Load Playlist</source>
         <translation>&amp;Φόρτωση Λίστας Αναπαραγωγής</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="76"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="78"/>
         <source>&amp;Rename Playlist</source>
         <translation>&amp;Μετονομασία Λίστας Αναπαραγωγής</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="77"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="79"/>
         <source>&amp;Copy Playlist Link</source>
         <translation>&amp;Αντιγραφή Συνδέσμου Λίστας Αναπαραγωγής</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="78"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="80"/>
         <source>&amp;Play</source>
         <translation>&amp;Αναπαραγωγή</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="82"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="84"/>
         <source>&amp;Stop</source>
         <translation>&amp;Διακοπή</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="83"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="85"/>
         <source>&amp;Previous Track</source>
         <translation>&amp;Προηγούμενο Κομμάτι</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="85"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="87"/>
         <source>&amp;Next Track</source>
         <translation>&amp;Επόμενο Κομμάτι</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="87"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="89"/>
         <source>&amp;Quit</source>
         <translation>&amp;Έξοδος</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="100"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="102"/>
         <source>Load &amp;XSPF...</source>
         <translation>Φόρτωση &amp;XSPF</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="101"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="103"/>
         <source>U&amp;pdate Collection</source>
         <translation>Ε&amp;νημέρωση Συλλογής</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="102"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="104"/>
         <source>Fully &amp;Rescan Collection</source>
         <translation>Πλήρης &amp;Επανασάρωση Συλλογής</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="103"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="105"/>
         <source>Show Offline Sources</source>
         <translation>Εμφάνιση Εκτός Σύνδεσης Πηγών</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="105"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="107"/>
         <source>&amp;Configure Tomahawk...</source>
         <translation>&amp;Ρύθμιση Tomahawk</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="109"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="111"/>
         <source>Minimize</source>
         <translation>Ελαχιστοποίηση</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="111"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="113"/>
         <source>Zoom</source>
         <translation>Μεγέθυνση</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="114"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="116"/>
         <source>Hide Menu Bar</source>
         <translation>Απόκρυψη Γραμμής Μενού</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="118"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="120"/>
         <source>Diagnostics...</source>
         <translation>Διαγνωστικά</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="120"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="122"/>
         <source>About &amp;Tomahawk...</source>
         <translation>Σχετικά με το &amp;Tomahawk...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="123"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="125"/>
         <source>&amp;Legal Information...</source>
         <translation>&amp;Νομικές Πληροφορίες</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="126"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="128"/>
         <source>Check For Updates...</source>
         <translation>Έλεγχος Για Ενημερώσεις</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="137"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="139"/>
         <source>&amp;Controls</source>
         <translation>&amp;Χειριστήρια</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="151"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="153"/>
         <source>&amp;Settings</source>
         <translation>&amp;Ρυθμίσεις</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="157"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="159"/>
         <source>&amp;Help</source>
         <translation>&amp;Βοήθεια</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="182"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="184"/>
         <source>&amp;Window</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="195"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="197"/>
         <source>Main Menu</source>
         <translation type="unfinished"/>
     </message>
@@ -421,13 +421,13 @@ connect and stream from you?</source>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="491"/>
-        <location filename="../src/AudioControls.cpp" line="278"/>
+        <location filename="../src/AudioControls.cpp" line="277"/>
         <source>Shuffle</source>
         <translation>Τυχαία σειρά</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="504"/>
-        <location filename="../src/AudioControls.cpp" line="279"/>
+        <location filename="../src/AudioControls.cpp" line="278"/>
         <source>Repeat</source>
         <translation>Επανάληψη</translation>
     </message>
@@ -442,27 +442,27 @@ connect and stream from you?</source>
         <translation>Υψηλή</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="276"/>
+        <location filename="../src/AudioControls.cpp" line="275"/>
         <source>Time Elapsed</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="277"/>
+        <location filename="../src/AudioControls.cpp" line="276"/>
         <source>Time Remaining</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="282"/>
+        <location filename="../src/AudioControls.cpp" line="281"/>
         <source>Playing from %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="280"/>
+        <location filename="../src/AudioControls.cpp" line="279"/>
         <source>Share</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="281"/>
+        <location filename="../src/AudioControls.cpp" line="280"/>
         <source>Love</source>
         <translation type="unfinished"/>
     </message>
@@ -651,97 +651,97 @@ connect and stream from you?</source>
 <context>
     <name>EchonestSteerer</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="58"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="59"/>
         <source>Steer this station:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="81"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="82"/>
         <source>Much less</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="82"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="83"/>
         <source>Less</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="83"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="84"/>
         <source>A bit less</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="84"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="85"/>
         <source>Keep at current</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="85"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="86"/>
         <source>A bit more</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="86"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="87"/>
         <source>More</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="87"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="88"/>
         <source>Much more</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="90"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="91"/>
         <source>Tempo</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="91"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="92"/>
         <source>Loudness</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="92"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="93"/>
         <source>Danceability</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="93"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="94"/>
         <source>Energy</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="94"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="95"/>
         <source>Song Hotttnesss</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="95"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="96"/>
         <source>Artist Hotttnesss</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="96"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="97"/>
         <source>Artist Familiarity</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="97"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="98"/>
         <source>By Description</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="105"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="106"/>
         <source>Enter a description</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="112"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="113"/>
         <source>Apply steering command</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="118"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="119"/>
         <source>Reset all steering commands</source>
         <translation type="unfinished"/>
     </message>
@@ -778,7 +778,7 @@ connect and stream from you?</source>
 <context>
     <name>IndexingJobItem</name>
     <message>
-        <location filename="../src/libtomahawk/jobview/IndexingJobItem.cpp" line="31"/>
+        <location filename="../src/libtomahawk/jobview/IndexingJobItem.cpp" line="29"/>
         <source>Indexing database</source>
         <translation>Ευρετηριοποίηση βάσης δεδομένων</translation>
     </message>
@@ -845,7 +845,7 @@ connect and stream from you?</source>
 <context>
     <name>LatchedStatusItem</name>
     <message>
-        <location filename="../src/libtomahawk/jobview/LatchedStatusItem.cpp" line="33"/>
+        <location filename="../src/libtomahawk/jobview/LatchedStatusItem.cpp" line="34"/>
         <source>%1 is listening along with you!</source>
         <translation>Ο/Η %1 ακούει μαζί σας!</translation>
     </message>
@@ -907,32 +907,32 @@ connect and stream from you?</source>
 <context>
     <name>LovedTracksItem</name>
     <message>
-        <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="54"/>
+        <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="56"/>
         <source>Top Loved Tracks</source>
         <translation>Κορυφαία Αγαπημένα Κομμάτια</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="83"/>
+        <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="85"/>
         <source>Sorry, we could not find any loved tracks!</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="86"/>
+        <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="88"/>
         <source>The most loved tracks from all your friends</source>
         <translation>Τα πιο αγαπημένα κομμάτια από όλους τους φίλους σας</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="92"/>
+        <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="94"/>
         <source>All of your loved tracks</source>
         <translation>Όλα τα αγαπημένα κομμάτια σας</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="94"/>
+        <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="96"/>
         <source>All of %1&apos;s loved tracks</source>
         <translation>Όλα τα αγαπημένα κομμάτια του/της %1</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="56"/>
+        <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="58"/>
         <source>Loved Tracks</source>
         <translation>Αγαπημένα Κομμάτια</translation>
     </message>
@@ -1261,12 +1261,12 @@ connect and stream from you?</source>
 <context>
     <name>PlaylistView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistView.cpp" line="134"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistView.cpp" line="135"/>
         <source>This playlist is currently empty.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistView.cpp" line="136"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistView.cpp" line="137"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
         <translation>Αυτή η λίστα αναπαραγωγής είναι άδεια προς το παρόν. Προσθέστε μερικά κομμάτια σε αυτήν και απολαύστε την μουσική!</translation>
     </message>
@@ -1491,12 +1491,12 @@ connect and stream from you?</source>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="230"/>
+        <location filename="../src/SettingsDialog.cpp" line="232"/>
         <source>Collection</source>
         <translation>Συλλογή</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="232"/>
+        <location filename="../src/SettingsDialog.cpp" line="235"/>
         <source>Advanced</source>
         <translation>Προχωρημένα</translation>
     </message>
@@ -1506,12 +1506,12 @@ connect and stream from you?</source>
         <translation>Όλα</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="279"/>
+        <location filename="../src/SettingsDialog.cpp" line="282"/>
         <source>Some changed settings will not take effect until Tomahawk is restarted</source>
         <translation>Μερικές αλλαγμένες ρυθμίσεις δεν θα εφαρμοστούν μέχρι το Tomahawk να επανεκκινηθεί.</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="226"/>
+        <location filename="../src/SettingsDialog.cpp" line="227"/>
         <source>Services</source>
         <translation>Υπηρεσίες</translation>
     </message>
@@ -1521,37 +1521,37 @@ connect and stream from you?</source>
         <translation>Εγκατάσταση από αρχείο</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="226"/>
+        <location filename="../src/SettingsDialog.cpp" line="227"/>
         <source>Configure the accounts and services used by Tomahawk to search and retrieve music, find your friends and update your status.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="230"/>
+        <location filename="../src/SettingsDialog.cpp" line="232"/>
         <source>Manage how Tomahawk finds music on your computer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="232"/>
+        <location filename="../src/SettingsDialog.cpp" line="235"/>
         <source>Configure Tomahawk&apos;s advanced settings, including network connectivity settings, browser interaction and more.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="451"/>
+        <location filename="../src/SettingsDialog.cpp" line="454"/>
         <source>Install resolver from file</source>
         <translation>Εγκατάσταση επιλυτή από αρχείο</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="498"/>
+        <location filename="../src/SettingsDialog.cpp" line="501"/>
         <source>Delete all Access Control entries?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="499"/>
+        <location filename="../src/SettingsDialog.cpp" line="502"/>
         <source>Do you really want to delete all Access Control entries? You will be asked for a decision again for each peer that you connect to.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="279"/>
+        <location filename="../src/SettingsDialog.cpp" line="282"/>
         <source>Information</source>
         <translation>Πληροφορίες</translation>
     </message>
@@ -1747,22 +1747,22 @@ connect and stream from you?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/SocialWidget.cpp" line="68"/>
+        <location filename="../src/SocialWidget.cpp" line="69"/>
         <source>Tweet</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/SocialWidget.cpp" line="175"/>
+        <location filename="../src/SocialWidget.cpp" line="176"/>
         <source>Listening to &quot;%1&quot; by %2. %3</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/SocialWidget.cpp" line="177"/>
+        <location filename="../src/SocialWidget.cpp" line="178"/>
         <source>Listening to &quot;%1&quot; by %2 on &quot;%3&quot;. %4</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/SocialWidget.cpp" line="198"/>
+        <location filename="../src/SocialWidget.cpp" line="199"/>
         <source>%1 characters left</source>
         <translation type="unfinished"/>
     </message>
@@ -1795,19 +1795,19 @@ connect and stream from you?</source>
         <translation>Κορυφαία 10</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="207"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="201"/>
         <source>All available tracks</source>
         <translation>Όλα τα διαθέσιμα τραγούδια</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="323"/>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="367"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="317"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="361"/>
         <source>Show</source>
         <translation>Προβολή</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="325"/>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="369"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="319"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="363"/>
         <source>Hide</source>
         <translation>Απόκρυψη</translation>
     </message>
@@ -1848,58 +1848,58 @@ connect and stream from you?</source>
 <context>
     <name>SourceItem</name>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="65"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="64"/>
         <source>Collection</source>
         <translation>Συλλογή</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="73"/>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="523"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="72"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="522"/>
         <source>Latest Additions</source>
         <translation>Τελευταίες Προσθήκες</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="77"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="76"/>
         <source>Recently Played</source>
         <translation>Τελευταίες Αναπαραγωγές</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="140"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="139"/>
         <source>SuperCollection</source>
         <translation>ΥπερΣυλλογή</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="526"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="525"/>
         <source>Latest additions to your collection</source>
         <translation>Τελευταίες προσθήκες στην βιβλιοθήκη σας</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="528"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="527"/>
         <source>Latest additions to %1&apos;s collection</source>
         <translation>Τελευταίες προσθήκες στην βιβλιοθήκη του %1</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="537"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="536"/>
         <source>Sorry, we could not find any recent additions!</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="566"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="565"/>
         <source>Recently Played Tracks</source>
         <translation>Τελευταίες Αναπαραγωγές Κομματιών</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="569"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="568"/>
         <source>Your recently played tracks</source>
         <translation>Οι τελευταίες σας αναπαραγωγές</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="571"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="570"/>
         <source>%1&apos;s recently played tracks</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="578"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="577"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation type="unfinished"/>
     </message>
@@ -2115,17 +2115,17 @@ connect and stream from you?</source>
 <context>
     <name>TemporaryPageItem</name>
     <message>
-        <location filename="../src/sourcetree/items/TemporaryPageItem.cpp" line="51"/>
+        <location filename="../src/sourcetree/items/TemporaryPageItem.cpp" line="52"/>
         <source>Copy Artist Link</source>
         <translation>Αντιγραφή Συνδέσμου Καλλιτέχνη</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/TemporaryPageItem.cpp" line="58"/>
+        <location filename="../src/sourcetree/items/TemporaryPageItem.cpp" line="59"/>
         <source>Copy Album Link</source>
         <translation>Αντιγραφή Συνδέσμου Άλμπουμ</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/TemporaryPageItem.cpp" line="65"/>
+        <location filename="../src/sourcetree/items/TemporaryPageItem.cpp" line="66"/>
         <source>Copy Track Link</source>
         <translation>Αντιγραφή Συνδέσμου Κομματιού</translation>
     </message>
@@ -2133,32 +2133,32 @@ connect and stream from you?</source>
 <context>
     <name>Tomahawk::Accounts::AccountDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="224"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="222"/>
         <source>Add Account</source>
         <translation>Προσθήκη Λογαριασμού</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="274"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="271"/>
         <source>Remove</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="387"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="384"/>
         <source>%1 downloads</source>
         <translation>%1 λήψεις</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="570"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="567"/>
         <source>Online</source>
         <translation>Συνεδεμένος</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="575"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="572"/>
         <source>Connecting...</source>
         <translation>Σύνδεση...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="580"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="577"/>
         <source>Offline</source>
         <translation>Εκτός Σύνδεσης</translation>
     </message>
@@ -2534,79 +2534,79 @@ You may wish to try re-authenticating.</source>
 <context>
     <name>Tomahawk::ContextMenu</name>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="83"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="84"/>
         <source>&amp;Play</source>
         <translation>&amp;Αναπαραγωγή</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="86"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="160"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="207"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="87"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="161"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="208"/>
         <source>Add to &amp;Queue</source>
         <translation>Προσθήκη στην &amp;Σειρά</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="91"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="92"/>
         <source>Continue Playback after this &amp;Track</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="93"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="94"/>
         <source>Stop Playback after this &amp;Track</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="100"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="372"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="101"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="373"/>
         <source>&amp;Love</source>
         <translation>&amp;Αγάπησε</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="111"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="166"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="212"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="112"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="167"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="213"/>
         <source>&amp;Go to &quot;%1&quot;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="113"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="114"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="167"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="115"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="168"/>
         <source>Go to &quot;%1&quot;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="120"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="121"/>
         <source>&amp;Copy Track Link</source>
         <translation>&amp;Αντιγραφή Συνδέσμου Κομματιού</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="175"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="176"/>
         <source>Copy Album &amp;Link</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="219"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="220"/>
         <source>Copy Artist &amp;Link</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="367"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="368"/>
         <source>Un-&amp;Love</source>
         <translation>&amp;Μίσησε</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="128"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="129"/>
         <source>&amp;Delete Items</source>
         <translation>&amp;Διαγραφή Αντικειμένων</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="123"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="124"/>
         <source>Properties...</source>
         <translation>Ιδιότητες</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="128"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="129"/>
         <source>&amp;Delete Item</source>
         <translation>&amp;Διαγραφή Αντικειμένου</translation>
     </message>
@@ -2704,7 +2704,7 @@ Please change the filters or try again.</source>
 <context>
     <name>Tomahawk::DynamicWidget</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/widgets/DynamicWidget.cpp" line="473"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/widgets/DynamicWidget.cpp" line="474"/>
         <source>Station ran out of tracks!
 
 Try tweaking the filters for a new set of songs to play.</source>
@@ -3490,178 +3490,178 @@ enter the displayed PIN number here:</source>
         <translation>Επόμενο</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="265"/>
+        <location filename="../src/TomahawkWindow.cpp" line="266"/>
         <source>Back</source>
         <translation>Πίσω</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="266"/>
+        <location filename="../src/TomahawkWindow.cpp" line="267"/>
         <source>Go back one page</source>
         <translation>Πήγαινε πίσω μία σελίδα</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="267"/>
+        <location filename="../src/TomahawkWindow.cpp" line="268"/>
         <source>Forward</source>
         <translation>Μπροστά</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="268"/>
+        <location filename="../src/TomahawkWindow.cpp" line="269"/>
         <source>Go forward one page</source>
         <translation>Πήγαινε μπροστά μία σελίδα</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="280"/>
+        <location filename="../src/TomahawkWindow.cpp" line="281"/>
         <source>Global Search...</source>
         <translation>Αναζήτηση Παντού...</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="202"/>
-        <location filename="../src/TomahawkWindow.cpp" line="1326"/>
+        <location filename="../src/TomahawkWindow.cpp" line="203"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1327"/>
         <source>Hide Menu Bar</source>
         <translation>Απόκρυψη Γραμμής Μενού</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="202"/>
-        <location filename="../src/TomahawkWindow.cpp" line="1320"/>
+        <location filename="../src/TomahawkWindow.cpp" line="203"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1321"/>
         <source>Show Menu Bar</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="304"/>
+        <location filename="../src/TomahawkWindow.cpp" line="305"/>
         <source>&amp;Main Menu</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="857"/>
-        <location filename="../src/TomahawkWindow.cpp" line="864"/>
-        <location filename="../src/TomahawkWindow.cpp" line="872"/>
+        <location filename="../src/TomahawkWindow.cpp" line="858"/>
+        <location filename="../src/TomahawkWindow.cpp" line="865"/>
+        <location filename="../src/TomahawkWindow.cpp" line="873"/>
         <source>Connect To Peer</source>
         <translation>Σύνδεση Σε Ομότιμο Κόμβο</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="858"/>
+        <location filename="../src/TomahawkWindow.cpp" line="859"/>
         <source>Enter peer address:</source>
         <translation>Εισαγωγή διεύθυνσης ομότιμου κόμβου:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="865"/>
+        <location filename="../src/TomahawkWindow.cpp" line="866"/>
         <source>Enter peer port:</source>
         <translation>Εισαγωγή θύρας ομότιμου κόμβου:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="873"/>
+        <location filename="../src/TomahawkWindow.cpp" line="874"/>
         <source>Enter peer key:</source>
         <translation>Εισαγωγή κλειδιού ομότιμου κόμβου:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="964"/>
+        <location filename="../src/TomahawkWindow.cpp" line="965"/>
         <source>XSPF Error</source>
         <translation>Σφάλμα XSPF</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="964"/>
+        <location filename="../src/TomahawkWindow.cpp" line="965"/>
         <source>This is not a valid XSPF playlist.</source>
         <translation>Αυτή δεν είναι μια έγκυρη λίστα αναπαραγωγής XSPF.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="968"/>
+        <location filename="../src/TomahawkWindow.cpp" line="969"/>
         <source>Failed to save tracks</source>
         <translation>Αποτυχία αποθήκευσης κομματιών.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="968"/>
+        <location filename="../src/TomahawkWindow.cpp" line="969"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
         <translation>Μερικά κομμάτια στην λίστα αναπαραγωγής δεν περιέχουν έναν καλλιτέχνη ή έναν τίτλο. Θα αγνοηθούν.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="982"/>
+        <location filename="../src/TomahawkWindow.cpp" line="983"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped. Make sure you have a suitable Phonon backend and required plugins installed.</source>
         <translation>Συγγνώμη, υπάρχει ένα πρόβλημα πρόσβασης στην συσκευή ήχου ή στο επιθυμητό κομμάτι, το τρέχον κομμάτι θα παραλειφθεί. Σιγουρευτείτε ότι έχετε εγκαταστήσει ένα κατάλληλο Phonon backend και τα απαιτούμενα πρόσθετα.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="984"/>
+        <location filename="../src/TomahawkWindow.cpp" line="985"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped.</source>
         <translation>Συγγνώμη, υπάρχει ένα πρόβλημα πρόσβασης στην συσκευή ήχου ή στο επιθυμητό κομμάτι, το τρέχον κομμάτι θα παραλειφθεί.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1016"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1017"/>
         <source>Station</source>
         <translation>Σταθμός</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1018"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1019"/>
         <source>Create New Station</source>
         <translation>Δημιουργία Νέου Σταθμού</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1018"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1019"/>
         <source>Name:</source>
         <translation>Όνομα:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1081"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1082"/>
         <source>Playlist</source>
         <translation>Λίστας Αναπαραγωγής</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1103"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1104"/>
         <source>Automatic Playlist</source>
         <translation>Αυτόματη Λίστα Αναπαραγωγής</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1125"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1126"/>
         <source>Pause</source>
         <translation>Παύση</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1147"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1148"/>
         <source>&amp;Play</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1178"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1179"/>
         <source>Authentication Error</source>
         <translation>Σφάλμα Πιστοποίησης</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1179"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1180"/>
         <source>Error connecting to SIP: Authentication failed!</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1193"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1194"/>
         <source>%1 by %2</source>
         <comment>track, artist name</comment>
         <translation>%1 από %2</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1194"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1195"/>
         <source>%1 - %2</source>
         <comment>current track, some window title</comment>
         <translation>%1 - %2</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1205"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1206"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1209"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1210"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1213"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1214"/>
         <source>Copyright 2010 - 2012</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1214"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1215"/>
         <source>Thanks to:</source>
         <translation>Χάρη στους:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1221"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1222"/>
         <source>About Tomahawk</source>
         <translation>Σχετικά με το Tomahawk</translation>
     </message>
@@ -3753,13 +3753,13 @@ enter the displayed PIN number here:</source>
 <context>
     <name>TransferStatusItem</name>
     <message>
-        <location filename="../src/libtomahawk/jobview/TransferStatusItem.cpp" line="58"/>
+        <location filename="../src/libtomahawk/jobview/TransferStatusItem.cpp" line="59"/>
         <source>from</source>
         <comment>streaming artist - track from friend</comment>
         <translation>από</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/jobview/TransferStatusItem.cpp" line="58"/>
+        <location filename="../src/libtomahawk/jobview/TransferStatusItem.cpp" line="59"/>
         <source>to</source>
         <comment>streaming artist - track to friend</comment>
         <translation>προς</translation>
@@ -3948,7 +3948,7 @@ You can re-send a sync message at any time simply by sending another tweet using
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/WelcomeWidget.h" line="99"/>
+        <location filename="../src/libtomahawk/widgets/WelcomeWidget.h" line="96"/>
         <source>Welcome to Tomahawk</source>
         <translation type="unfinished"/>
     </message>
