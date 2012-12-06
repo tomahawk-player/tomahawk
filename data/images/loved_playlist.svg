@@ -3,14 +3,14 @@
     <title>loved_playlist</title>
     <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
     <defs>
-        <radialGradient cx="50%" cy="50%" fx="50%" fy="50%" r="211.271691%" id="radialGradient-1">
-            <stop stop-color="rgb(254,255,254)" stop-opacity="0.5" offset="0%"></stop>
-            <stop stop-color="rgb(0,0,0)" stop-opacity="0.5" offset="100%"></stop>
-        </radialGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="rgb(233,105,103)" offset="0%"></stop>
+            <stop stop-color="rgb(150,44,38)" offset="100%"></stop>
+        </linearGradient>
         <path d="M55.0021389,27.2169656 C49.4723594,19.3379083 42.111921,15.0126471 34.1916638,15.0126471 C22.4642834,15.0126471 10.0024792,25.3241374 10.0024792,44.4358042 C10.0024792,64.0955064 24.8907622,77.8174611 35.763115,87.8359636 C39.8798485,91.6384837 42.9003465,94.3322867 45.3556263,96.5244272 C49.2383525,99.9875871 51.1860157,101.724437 53.286684,104.169516 C53.7420987,104.704904 54.3523186,105 55.0003396,105 C55.6465606,105 56.2549804,104.707012 56.7139953,104.171624 C59.4914854,100.938217 62.0133673,98.6975973 68.7707865,92.7008293 L74.205163,87.8675819 C83.2198554,79.8451921 100,64.9112378 100,44.2418842 C100.001727,25.2461957 87.5543621,15 75.8432154,15 C67.9121578,15 60.5373182,19.3315847 55.0021389,27.2169656 Z M55.0021389,27.2169656" id="path-2"></path>
     </defs>
-    <g id="Page 1" fill="rgb(223,223,223)" fill-rule="evenodd">
-        <use id="Shape" fill="rgb(255,38,0)" xlink:href="#path-2"></use>
-        <use id="Shape-1" stroke="none" fill="url(#radialGradient-1)" xlink:href="#path-2"></use>
+    <g id="Page 1" fill="rgb(215,215,215)" fill-rule="evenodd">
+        <use id="Shape" fill="url(#linearGradient-1)" xlink:href="#path-2"></use>
+        <use id="Shape-1" stroke="none" fill="none" xlink:href="#path-2"></use>
     </g>
 </svg>
