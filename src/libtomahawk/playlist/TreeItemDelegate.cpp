@@ -115,10 +115,11 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
                 // Paint Now Playing Speaker Icon
                 if ( item->isPlaying() && m_view->header()->visualIndex( index.column() ) == 0 )
                 {
-                    r.adjust( 0, 0, 0, -3 );
-                    QRect npr = r.adjusted( 3, 1, 18 - r.width(), 1 );
+                    const int pixMargin = 1;
+                    const int pixHeight = r.height() - pixMargin * 2;
+                    QRect npr = r.adjusted( pixMargin, pixMargin, pixHeight - r.width() + pixMargin, -pixMargin );
                     painter->drawPixmap( npr, TomahawkUtils::defaultPixmap( TomahawkUtils::NowPlayingSpeaker, TomahawkUtils::Original, npr.size() ) );
-                    r.adjust( 25, 0, 0, 3 );
+                    r.adjust( pixHeight + 6, 0, 0, 0 );
                 }
 
                 painter->setPen( o.palette.text().color() );
