@@ -4,8 +4,8 @@
     <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
     <defs>
         <radialGradient cx="50%" cy="41.7356136%" fx="50%" fy="41.7356136%" r="58.2643867%" id="radialGradient-1">
-            <stop stop-color="rgb(245,223,62)" offset="0%"></stop>
-            <stop stop-color="rgb(238,232,46)" offset="100%"></stop>
+            <stop stop-color="rgb(248,233,132)" offset="0%"></stop>
+            <stop stop-color="rgb(243,236,66)" offset="100%"></stop>
         </radialGradient>
     </defs>
     <g id="Page 1" fill="rgb(215,215,215)" fill-rule="evenodd">
