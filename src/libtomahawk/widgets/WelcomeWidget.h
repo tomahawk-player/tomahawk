@@ -51,15 +51,11 @@ Q_OBJECT
 public:
     PlaylistDelegate()
     {
-        m_autoIcon = QPixmap( RESPATH "images/automatic-playlist.png" );
     }
 
 protected:
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
-
-private:
-    QPixmap m_autoIcon;
 };
 
 

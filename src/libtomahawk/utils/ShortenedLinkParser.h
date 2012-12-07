@@ -66,7 +66,6 @@ private:
 
 #ifndef ENABLE_HEADLESS
     static QPixmap pixmap();
-    static QPixmap* s_pixmap;
 #endif
 
     QStringList m_links;

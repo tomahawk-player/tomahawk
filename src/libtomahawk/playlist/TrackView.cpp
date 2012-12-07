@@ -774,7 +774,7 @@ TrackView::description() const
 QPixmap
 TrackView::pixmap() const
 {
-    return QPixmap( RESPATH "images/music-icon.png" );
+    return TomahawkUtils::defaultPixmap( TomahawkUtils::SuperCollection );
 }
 
 

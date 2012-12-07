@@ -448,8 +448,6 @@ DynamicPlaylistItem::DynamicPlaylistItem( SourcesModel* mdl, SourceTreeItem* par
     connect( pl.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ),
              SLOT( onDynamicPlaylistLoaded( Tomahawk::DynamicPlaylistRevision ) ), Qt::QueuedConnection );
 
-    m_automaticPlaylistIcon = QIcon( RESPATH "images/automatic-playlist.png" );
-
     if ( ViewManager::instance()->pageForDynPlaylist( pl ) )
         model()->linkSourceItemToPage( this, ViewManager::instance()->pageForDynPlaylist( pl ) );
 }
@@ -576,11 +574,11 @@ DynamicPlaylistItem::icon() const
 {
     if ( m_dynplaylist->mode() == OnDemand )
     {
-        return TomahawkUtils::defaultPixmap( TomahawkUtils::Station, TomahawkUtils::Original );
+        return TomahawkUtils::defaultPixmap( TomahawkUtils::Station );
     }
     else
     {
-        return m_automaticPlaylistIcon;
+        return TomahawkUtils::defaultPixmap( TomahawkUtils::AutomaticPlaylist );
     }
 }
 

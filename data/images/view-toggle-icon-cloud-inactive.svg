@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="92px" height="69px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <title>view-toggle-icon-cloud-inactive</title>
+    <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="173.920641%" id="linearGradient-1">
+            <stop stop-color="rgb(123,125,121)" offset="0%"></stop>
+            <stop stop-color="rgb(0,0,0)" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page 1" fill="rgb(215,215,215)" fill-rule="evenodd">
+        <path d="M53.2281328,62.3975796 C49.0021193,62.3975796 44.7250631,60.1044871 41.4741479,58.2654723 L25.3727026,58.2654723 C12.8266705,58.2654723 3,49.4563637 3,38.2126997 C3,26.7437438 13.0361222,17.4124462 25.3727026,17.4124462 C26.2052325,17.4124462 27.0360024,17.4543611 27.8614919,17.5399373 C30.3678823,8.48283289 39.1332076,2 49.5143107,2 C59.3497803,2 67.9373357,7.97286897 70.83975,16.5060372 C82.1413879,17.5434301 91,26.431129 91,37.2067426 C91,48.6739521 80.9638778,58.0035034 68.6290582,58.0035034 C67.5659545,58.0035034 66.5028508,57.9336453 65.4538277,57.7939291 C62.2135448,60.1465059 58.3360271,62.3975796 53.2281328,62.3975796 L53.2281328,62.3975796 L53.2281328,62.3975796 L53.2281328,62.3975796" id="Shape" fill="url(#linearGradient-1)"></path>
+    </g>
+</svg>

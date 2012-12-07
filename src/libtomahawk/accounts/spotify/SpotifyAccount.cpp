@@ -24,7 +24,7 @@
 #include "SpotifyAccountConfig.h"
 #include "SpotifyPlaylistUpdater.h"
 #include "resolvers/ScriptResolver.h"
-#include "utils/TomahawkUtils.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "ActionCollection.h"
 #include "Pipeline.h"
 #include "accounts/AccountManager.h"
@@ -218,7 +218,7 @@ SpotifyAccount::hookupResolver()
     // 0.4.x->0.5.x upgrade. So we do it manually for a while
     killExistingResolvers();
     m_spotifyResolver = QWeakPointer< ScriptResolver >( qobject_cast< ScriptResolver* >( Pipeline::instance()->addScriptResolver( path ) ) );
-    m_spotifyResolver.data()->setIcon( QPixmap( RESPATH "images/spotify-sourceicon.png" ) );
+    m_spotifyResolver.data()->setIcon( TomahawkUtils::defaultPixmap( TomahawkUtils::SpotifyIcon ) );
 
     connect( m_spotifyResolver.data(), SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
     connect( m_spotifyResolver.data(), SIGNAL( customMessage( QString,QVariantMap ) ), this, SLOT( resolverMessage( QString, QVariantMap ) ) );

@@ -520,7 +520,7 @@ DynamicWidget::pixmap() const
     if ( m_playlist->mode() == OnDemand )
         return TomahawkUtils::defaultPixmap( TomahawkUtils::Station );
     else if ( m_playlist->mode() == Static )
-        return QPixmap( RESPATH "images/automatic-playlist.png" );
+        return TomahawkUtils::defaultPixmap( TomahawkUtils::AutomaticPlaylist );
     else
         return QPixmap();
 }

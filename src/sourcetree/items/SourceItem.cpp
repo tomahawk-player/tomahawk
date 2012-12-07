@@ -73,7 +73,7 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
                                                  boost::bind( &SourceItem::latestAdditionsClicked, this ),
                                                  boost::bind( &SourceItem::getLatestAdditionsPage, this ) );
 
-    m_recentPlaysItem = new GenericPageItem( model(), this, tr( "Recently Played" ), QIcon( RESPATH "images/recently-played.png" ),
+    m_recentPlaysItem = new GenericPageItem( model(), this, tr( "Recently Played" ), ImageRegistry::instance()->icon( RESPATH "images/recently-played.svg" ),
                                              boost::bind( &SourceItem::recentPlaysClicked, this ),
                                              boost::bind( &SourceItem::getRecentPlaysPage, this ) );
 
@@ -559,7 +559,7 @@ SourceItem::recentPlaysClicked()
     if ( !m_recentPlaysPage )
     {
         FlexibleView* pv = new FlexibleView( ViewManager::instance()->widget() );
-        pv->setPixmap( QPixmap( RESPATH "images/recently-played.png" ) );
+        pv->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::RecentlyPlayed ) );
 
         RecentlyPlayedModel* raModel = new RecentlyPlayedModel( pv );
         raModel->setTitle( tr( "Recently Played Tracks" ) );

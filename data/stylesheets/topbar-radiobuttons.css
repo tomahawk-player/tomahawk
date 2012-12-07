@@ -18,7 +18,7 @@ QRadioButton::indicator {
  }
 
 QRadioButton::indicator::unchecked {
-  background-image: url(:/data/images/view-toggle-inactive-centre.svg);
+  background-image: url(:/data/images/view-toggle-inactive-centre.png);
   image: url(:/data/images/view-toggle-icon-list-inactive.svg);
 }
 QRadioButton::indicator::checked {
@@ -26,11 +26,11 @@ QRadioButton::indicator::checked {
   image: url(:/data/images/view-toggle-icon-list-active.svg);
 }
 QRadioButton::indicator::pressed {
-  background-image: url(:/data/images/view-toggle-pressed-centre.svg);
+  background-image: url(:/data/images/view-toggle-pressed-centre.png);
   image: url(:/data/images/view-toggle-icon-list-active.svg);
 }
 QRadioButton#radioNormal::indicator::unchecked {
-  background-image: url(:/data/images/view-toggle-inactive-left.svg);
+  background-image: url(:/data/images/view-toggle-inactive-left.png);
   image: url(:/data/images/view-toggle-icon-artist-inactive.svg);
 }
 QRadioButton#radioNormal::indicator::checked {
@@ -38,11 +38,11 @@ QRadioButton#radioNormal::indicator::checked {
   image: url(:/data/images/view-toggle-icon-artist-active.svg);
 }
 QRadioButton#radioNormal::indicator::pressed {
-  background-image: url(:/data/images/view-toggle-pressed-left.svg);
+  background-image: url(:/data/images/view-toggle-pressed-left.png);
   image: url(:/data/images/view-toggle-icon-artist-active.svg);
 }
 QRadioButton#radioCloud::indicator::unchecked {
-  background-image: url(:/data/images/view-toggle-inactive-right.svg);
+  background-image: url(:/data/images/view-toggle-inactive-right.png);
   image: url(:/data/images/view-toggle-icon-grid-inactive.svg);
 }
 QRadioButton#radioCloud::indicator::checked {
@@ -50,6 +50,6 @@ QRadioButton#radioCloud::indicator::checked {
   image: url(:/data/images/view-toggle-icon-grid-active.svg);
 }
 QRadioButton#radioCloud::indicator::pressed {
-  background-image: url(:/data/images/view-toggle-pressed-right.svg);
+  background-image: url(:/data/images/view-toggle-pressed-right.png);
   image: url(:/data/images/view-toggle-icon-grid-active.svg);
 }

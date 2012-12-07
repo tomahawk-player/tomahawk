@@ -213,3 +213,10 @@ SearchWidget::sortAlbums()
     m_albumsModel->clear();
     m_albumsModel->appendAlbums( sortedAlbums );
 }
+
+
+QPixmap
+SearchWidget::pixmap() const
+{
+    return TomahawkUtils::defaultPixmap( TomahawkUtils::Search );
+}

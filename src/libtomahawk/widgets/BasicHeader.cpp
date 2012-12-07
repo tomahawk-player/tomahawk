@@ -81,11 +81,7 @@ BasicHeader::BasicHeader( QWidget* parent )
     setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
     setFixedHeight( 80 );
 
-    pal = palette();
-    pal.setColor( QPalette::Window, QColor( "#454e59" ) );
-
     setPalette( pal );
-    setAutoFillBackground( true );
 }
 
 
@@ -112,4 +108,22 @@ void
 BasicHeader::setPixmap( const QPixmap& p )
 {
     m_imageLabel->setPixmap( p.scaledToHeight( m_imageLabel->height(), Qt::SmoothTransformation ) );
+}
+
+
+void
+BasicHeader::paintEvent( QPaintEvent* event )
+{
+    QWidget::paintEvent( event );
+
+    QPainter painter( this );
+    painter.setRenderHint( QPainter::Antialiasing );
+
+    QLinearGradient gradient( QPoint( 0, 0 ), QPoint( 0, 1 ) );
+    gradient.setCoordinateMode( QGradient::ObjectBoundingMode );
+    gradient.setColorAt( 0.0, QColor( "#615858" ) );
+    gradient.setColorAt( 1.0, QColor( "#231F1F" ) );
+
+    painter.setBrush( gradient );
+    painter.fillRect( event->rect(), gradient );
 }

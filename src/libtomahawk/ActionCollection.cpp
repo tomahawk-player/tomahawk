@@ -57,10 +57,10 @@ void
 ActionCollection::initActions()
 {
     QAction *latchOn = new QAction( tr( "&Listen Along" ), this );
-    latchOn->setIcon( QIcon( RESPATH "images/headphones-sidebar.png" ) );
+    latchOn->setIcon( ImageRegistry::instance()->icon( RESPATH "images/headphones.svg" ) );
     m_actionCollection[ "latchOn" ] = latchOn;
     QAction *latchOff = new QAction( tr( "Stop &Listening Along" ), this );
-    latchOff->setIcon( QIcon( RESPATH "images/headphones-off.png" ) );
+    latchOff->setIcon( ImageRegistry::instance()->icon( RESPATH "images/headphones-off.svg" ) );
     m_actionCollection[ "latchOff" ] = latchOff;
 
     QAction *realtimeFollowingAlong = new QAction( tr( "&Follow in real-time" ), this );
@@ -69,7 +69,7 @@ ActionCollection::initActions()
 
     bool isPublic = TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::PublicListening;
     QAction *privacyToggle = new QAction( ( isPublic ? tr( "&Listen Privately" ) : tr( "&Listen Publicly" ) ), this );
-    privacyToggle->setIcon( QIcon( RESPATH "images/private-listening.png" ) );
+    privacyToggle->setIcon( ImageRegistry::instance()->icon( RESPATH "images/private-listening.svg" ) );
     privacyToggle->setIconVisibleInMenu( isPublic );
     m_actionCollection[ "togglePrivacy" ] = privacyToggle;
     connect( m_actionCollection[ "togglePrivacy" ], SIGNAL( triggered() ), SLOT( togglePrivateListeningMode() ), Qt::UniqueConnection );

@@ -99,8 +99,6 @@ private:
     void checkReparentHackNeeded( const Tomahawk::DynamicPlaylistRevision& rev );
 
     Tomahawk::dynplaylist_ptr m_dynplaylist;
-
-    QIcon m_automaticPlaylistIcon;
 };
 
 

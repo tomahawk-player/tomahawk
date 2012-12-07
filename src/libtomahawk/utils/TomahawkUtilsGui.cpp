@@ -433,7 +433,7 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
             if ( mode == Grid )
                 pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/artist-placeholder-grid.svg", size );
             else
-                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/artist-icon.png", size );
+                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/artist-icon.svg", size );
             break;
 
         case DefaultTrackImage:
@@ -582,11 +582,11 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
             pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/headphones.svg", size );
             break;
         case HeadphonesOff:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/headphones-off.png", size );
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/headphones-off.svg", size );
             break;
 
         case PadlockClosed:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/closed-padlock.png", size );
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/closed-padlock.svg", size );
             break;
         case PadlockOpen:
             pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/open-padlock.svg", size );
@@ -615,8 +615,14 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
         case NewAdditions:
             pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/new-additions.svg", size );
             break;
+        case RecentlyPlayed:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/recently-played.svg", size );
+            break;
         case Charts:
             pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/charts.svg", size );
+            break;
+        case AutomaticPlaylist:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/automatic-playlist.svg", size );
             break;
         case Station:
             pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/station.svg", size );
@@ -624,7 +630,13 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
         case Playlist:
             pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/playlist-icon.svg", size );
             break;
+        case Search:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/search-icon.svg", size );
+            break;
 
+        case Add:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/add.svg", size );
+            break;
         case ListAdd:
             pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/list-add.svg", size );
             break;
@@ -640,6 +652,52 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
             break;
         case MusicSettings:
             pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/music-settings.svg", size );
+            break;
+
+        case DropSong:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/drop-song.svg", size );
+            break;
+        case DropAlbum:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/drop-album.svg", size );
+            break;
+        case DropAllSongs:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/drop-all-songs.svg", size );
+            break;
+        case DropLocalSongs:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/drop-local-songs.svg", size );
+            break;
+        case DropTopSongs:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/drop-top-songs.svg", size );
+            break;
+
+        case Starred:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/starred.svg", size );
+            break;
+        case Unstarred:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/star-unstarred.svg", size );
+            break;
+        case StarHovered:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/star-hover.svg", size );
+            break;
+
+        case SipPluginOnline:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/sipplugin-online.svg", size );
+            break;
+        case SipPluginOffline:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/sipplugin-offline.svg", size );
+            break;
+
+        case AccountNone:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/account-none.svg", size );
+            break;
+        case LastfmIcon:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/lastfm-icon.svg", size );
+            break;
+        case SpotifyIcon:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/spotify-sourceicon.svg", size );
+            break;
+        case SoundcloudIcon:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/soundcloud.svg", size );
             break;
 
         default:

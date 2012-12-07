@@ -70,7 +70,7 @@ TemporaryPageItem::TemporaryPageItem ( SourcesModel* mdl, SourceTreeItem* parent
     }
     else if ( dynamic_cast< SearchWidget* >( page ) )
     {
-        m_icon = QIcon( RESPATH "images/search-icon.png" );
+        m_icon = ImageRegistry::instance()->icon( RESPATH "images/search-icon.svg" );
     }
 
     if ( action )
