@@ -38,6 +38,7 @@
 #include <QDropEvent>
 #include <QMouseEvent>
 #include <QDesktopServices>
+#include <QGraphicsDropShadowEffect>
 
 const static int ALLOWED_MAX_DIVERSION = 300;
 
@@ -57,6 +58,7 @@ AudioControls::AudioControls( QWidget* parent )
 
     QFont font( ui->artistTrackLabel->font() );
     font.setPointSize( TomahawkUtils::defaultFontSize() );
+    font.setWeight( QFont::Normal );
 
     ui->artistTrackLabel->setFont( font );
     ui->artistTrackLabel->setElideMode( Qt::ElideMiddle );
