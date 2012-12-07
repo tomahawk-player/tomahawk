@@ -41,6 +41,7 @@ SET(TRIAL_LIBRARY_PATHS
   /sw/lib${LIB_SUFFIX}
   /usr/pkg/lib${LIB_SUFFIX}
   /usr/lib64
+  /usr/lib/${CMAKE_LIBRARY_ARCHITECTURE}
   )
 SET(TRIAL_INCLUDE_PATHS
   $ENV{CLUCENE_HOME}/include
