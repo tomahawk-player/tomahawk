@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="55px" height="55px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <title>account-none</title>
+    <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
+    <defs>
+        <radialGradient cx="50%" cy="42.571189%" fx="50%" fy="42.571189%" r="57.428813%" id="radialGradient-1">
+            <stop stop-color="rgb(113,114,112)" offset="0%"></stop>
+            <stop stop-color="rgb(60,60,60)" offset="100%"></stop>
+        </radialGradient>
+    </defs>
+    <g id="Page 1" fill="rgb(215,215,215)" fill-rule="evenodd">
+        <g id="g430" fill="rgb(0,0,0)">
+            <path d="M6.25636752,11.5187741 C4.20816486,14.5775092 3,18.3321999 3,22.3856982 C3,31.7567891 9.30999994,39.4618424 17.6929998,40.778919 L17.6929998,49.303531 C17.6929998,50.1410367 18.2039998,50.8957889 18.9839998,51.2088565 C19.2339998,51.3085596 19.4939998,51.356417 19.7519999,51.356417 C20.3029999,51.356417 20.8429998,51.1360733 21.2399999,50.7242996 L22.9542104,48.9393602 L30.5949994,40.98331 L35.5949994,40.98331 C45.0989991,40.98331 52.8309995,32.6411552 52.8309995,22.385698 C52.8319998,12.131227 45.0989981,3.78908268 35.5950003,3.78908268 L20.2360001,3.78908268 C14.488848,3.78908268 9.3896678,6.83958098 6.25636752,11.5187741 Z M6.25636752,11.5187741" id="path432" fill="url(#radialGradient-1)"></path>
+        </g>
+    </g>
+</svg>
