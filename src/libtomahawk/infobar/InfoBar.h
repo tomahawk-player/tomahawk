@@ -68,7 +68,8 @@ signals:
     void filterTextChanged( const QString& filter );
 
 protected:
-    void changeEvent( QEvent* e );
+    void changeEvent( QEvent* event );
+    void paintEvent( QPaintEvent* event );
 
 private slots:
     void onFilterEdited();

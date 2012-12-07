@@ -96,10 +96,8 @@ InfoBar::InfoBar( QWidget* parent )
     ui->horizontalLayout->addWidget( m_searchWidget );
 
     QPalette pal = palette();
-    pal.setColor( QPalette::Window, QColor( "#454e59" ) );
 
     setPalette( pal );
-    setAutoFillBackground( true );
     setFixedHeight( 80 );
 
     connect( ViewManager::instance(), SIGNAL( filterAvailable( bool ) ), SLOT( setFilterAvailable( bool ) ) );
@@ -286,10 +284,28 @@ InfoBar::onFilterEdited()
 
 
 void
-InfoBar::changeEvent( QEvent* e )
+InfoBar::paintEvent( QPaintEvent* event )
 {
-    QWidget::changeEvent( e );
-    switch ( e->type() )
+    QWidget::paintEvent( event );
+
+    QPainter painter( this );
+    painter.setRenderHint( QPainter::Antialiasing );
+
+    QLinearGradient gradient( QPoint( 0, 0 ), QPoint( 0, 1 ) );
+    gradient.setCoordinateMode( QGradient::ObjectBoundingMode );
+    gradient.setColorAt( 0.0, QColor( "#615858" ) );
+    gradient.setColorAt( 1.0, QColor( "#231F1F" ) );
+
+    painter.setBrush( gradient );
+    painter.fillRect( event->rect(), gradient );
+}
+
+
+void
+InfoBar::changeEvent( QEvent* event )
+{
+    QWidget::changeEvent( event );
+    switch ( event->type() )
     {
         case QEvent::LanguageChange:
 //            ui->retranslateUi( this );
