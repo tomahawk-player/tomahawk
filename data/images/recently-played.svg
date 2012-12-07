@@ -3,9 +3,9 @@
     <title>recently-played</title>
     <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
     <defs>
-        <radialGradient cx="50%" cy="50%" fx="50%" fy="50%" r="83.8948071%" id="radialGradient-1">
-            <stop stop-color="rgb(80,193,251)" offset="0%"></stop>
-            <stop stop-color="rgb(76,79,123)" offset="100%"></stop>
+        <radialGradient cx="50%" cy="55.5052529%" fx="50%" fy="55.5052529%" r="55.5052519%" id="radialGradient-1">
+            <stop stop-color="rgb(83,147,174)" offset="0%"></stop>
+            <stop stop-color="rgb(80,193,251)" offset="100%"></stop>
         </radialGradient>
         <path d="M0.416038513,50.541996 C0.416038513,78.041996 22.792038,100.415997 50.2900391,100.415997 C77.7880402,100.415997 100.160038,78.041996 100.160038,50.541996 C100.157959,23.0419922 77.7879639,0.67199707 50.2900391,0.67199707 C22.7920399,0.67199707 0.416038513,23.0439968 0.416038513,50.541996 Z M0.416038513,50.541996" id="path-2"></path>
     </defs>
