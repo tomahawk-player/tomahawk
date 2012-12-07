@@ -3,12 +3,12 @@
     <title>view-toggle-pressed-left</title>
     <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
     <defs>
-        <linearGradient x1="50%" y1="173.920641%" x2="50%" y2="0%" id="linearGradient-1">
-            <stop stop-color="rgb(254,255,254)" offset="0%"></stop>
-            <stop stop-color="rgb(0,0,0)" offset="100%"></stop>
-        </linearGradient>
+        <radialGradient cx="50%" cy="50%" fx="50%" fy="50%" r="57.2162807%" id="radialGradient-1">
+            <stop stop-color="rgb(6,6,6)" offset="0%"></stop>
+            <stop stop-color="rgb(99,97,97)" offset="100%"></stop>
+        </radialGradient>
     </defs>
     <g id="Page 1" fill="rgb(215,215,215)" fill-rule="evenodd">
-        <path d="M11.9973518,0 C5.37139735,0 0,5.36387601 0,11.9973518 L0,26.0026482 C0,32.6286026 5.36387601,38 11.9973518,38 L38,38 L38,0 L11.9973518,0 Z M11.9973518,0" id="Rectangle 2" stroke="rgb(150,150,150)" stroke-width="1" fill="url(#linearGradient-1)"></path>
+        <path d="M0,0 L0,38 L29.9992049,38 C34.417922,38 38,34.4250523 38,29.9992049 L38,8.00079513 C38,3.582078 34.4250523,0 29.9992049,0 L0,0 Z M0,0" id="Rectangle 1" stroke="rgb(150,150,150)" stroke-width="1" fill="url(#radialGradient-1)"></path>
     </g>
 </svg>
