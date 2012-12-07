@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg width="33px" height="33px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+<svg width="85px" height="85px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
     <title>green-dot</title>
     <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
     <defs>
-        <radialGradient cx="50%" cy="50%" fx="50%" fy="50%" r="101.219225%" id="radialGradient-1">
-            <stop stop-color="rgb(189,235,31)" offset="0%"></stop>
-            <stop stop-color="rgb(127,213,24)" offset="100%"></stop>
+        <radialGradient cx="50%" cy="50%" fx="50%" fy="50%" r="94.7975874%" id="radialGradient-1">
+            <stop stop-color="rgb(193,223,81)" offset="0%"></stop>
+            <stop stop-color="rgb(86,136,31)" offset="100%"></stop>
         </radialGradient>
     </defs>
     <g id="Page 1" fill="rgb(215,215,215)" fill-rule="evenodd">
         <g id="green-dot" fill="rgb(0,0,0)">
             <g id="Page 1" fill="rgb(222,223,222)">
-                <path d="M33,16.5 C33,7.38730145 25.6126995,0 16.5,0 C7.38730145,0 0,7.38730145 0,16.5 C0,25.6126995 7.38730145,33 16.5,33 C25.6126995,33 33,25.6126995 33,16.5 Z M33,16.5" id="Oval 1" fill="url(#radialGradient-1)"></path>
+                <path d="M34,17.5 C34,8.38730145 26.6126995,1 17.5,1 C8.38730145,1 1,8.38730145 1,17.5 C1,26.6126995 8.38730145,34 17.5,34 C26.6126995,34 34,26.6126995 34,17.5 Z M34,17.5" id="Oval 1" fill="url(#radialGradient-1)"></path>
             </g>
         </g>
     </g>
