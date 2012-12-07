@@ -104,6 +104,8 @@ signals:
     void queryChanged( const Tomahawk::query_ptr& query );
 
 protected:
+    void drawFancyText( QPainter* painter, const QRect& rect, const QString& text );
+
     virtual void contextMenuEvent( QContextMenuEvent* event );
 
     virtual void mousePressEvent( QMouseEvent* event );

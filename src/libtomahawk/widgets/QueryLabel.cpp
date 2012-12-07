@@ -366,6 +366,36 @@ QueryLabel::minimumSizeHint() const
 
 
 void
+QueryLabel::drawFancyText( QPainter* painter, const QRect& rect, const QString& text )
+{
+    if ( m_align & Qt::AlignLeft )
+    {
+        painter->save();
+
+        QFont fnt = painter->font();
+        fnt.setStyleStrategy( QFont::ForceOutline );
+        QFontMetrics fm( fnt );
+
+        QPainterPath textPath;
+        textPath.addText( rect.topLeft() + QPoint( 0, fm.ascent() ), fnt, text );
+
+        QLinearGradient gradient( 0, 0, 0, 1 );
+        gradient.setCoordinateMode( QGradient::ObjectBoundingMode );
+        gradient.setColorAt( 0, painter->pen().color() );
+        gradient.setColorAt( 1, painter->pen().color().lighter() );
+        painter->setPen( QPen( gradient, 0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin ) );
+
+        painter->setBrush( gradient );
+        painter->drawPath( textPath );
+
+        painter->restore();
+    }
+    else
+        painter->drawText( rect, m_align, text );
+}
+
+
+void
 QueryLabel::paintEvent( QPaintEvent* event )
 {
     QFrame::paintEvent( event );
@@ -377,6 +407,7 @@ QueryLabel::paintEvent( QPaintEvent* event )
 
     p.save();
     p.setRenderHint( QPainter::Antialiasing );
+    p.setRenderHint( QPainter::TextAntialiasing );
 
     if ( m_hoverArea.width() )
     {
@@ -402,7 +433,8 @@ QueryLabel::paintEvent( QPaintEvent* event )
             p.setBrush( palette().window() );
             p.setPen( palette().color( foregroundRole() ) );
         }
-        p.drawText( r, m_align, elidedText );
+
+        drawFancyText( &p, r, elidedText );
     }
     else
     {
@@ -426,7 +458,7 @@ QueryLabel::paintEvent( QPaintEvent* event )
                 p.setBrush( palette().highlight() );
             }
 
-            p.drawText( r, m_align, artist()->name() );
+            drawFancyText( &p, r, artist()->name() );
             r.adjust( artistX, 0, 0, 0 );
         }
         if ( m_type & Album )
@@ -437,7 +469,7 @@ QueryLabel::paintEvent( QPaintEvent* event )
 
             if ( m_type & Artist )
             {
-                p.drawText( r, m_align, DASH );
+                drawFancyText( &p, r, DASH );
                 r.adjust( dashX, 0, 0, 0 );
             }
             if ( m_hoverType == Album )
@@ -446,7 +478,7 @@ QueryLabel::paintEvent( QPaintEvent* event )
                 p.setBrush( palette().highlight() );
             }
 
-            p.drawText( r, m_align, album()->name() );
+            drawFancyText( &p, r, album()->name() );
             r.adjust( albumX, 0, 0, 0 );
         }
         if ( m_type & Track )
@@ -457,7 +489,7 @@ QueryLabel::paintEvent( QPaintEvent* event )
 
             if ( m_type & Artist || m_type & Album )
             {
-                p.drawText( r, m_align, DASH );
+                drawFancyText( &p, r, DASH );
                 r.adjust( dashX, 0, 0, 0 );
             }
             if ( m_hoverType == Track )
@@ -466,7 +498,7 @@ QueryLabel::paintEvent( QPaintEvent* event )
                 p.setBrush( palette().highlight() );
             }
 
-            p.drawText( r, m_align, track() );
+            drawFancyText( &p, r, track() );
             r.adjust( trackX, 0, 0, 0 );
         }
 
