@@ -45,8 +45,6 @@ private slots:
 
 private:
     QString m_latestQuery;
-
-    static QPixmap* s_pixmap;
 };
 
 class PipelineStatusManager : public QObject

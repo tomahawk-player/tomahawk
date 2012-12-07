@@ -75,7 +75,6 @@ private:
     qint64 m_lastClicked;
     QMap< int, SourceTreeItem::DropType > m_dropTypeMap;
     QMap< int, QString > m_dropTypeTextMap;
-    QMap< int, QPixmap > m_dropTypeImageMap;
 
     mutable QPersistentModelIndex m_trackHovered;
     mutable QHash< QPersistentModelIndex, QRect > m_trackRects;

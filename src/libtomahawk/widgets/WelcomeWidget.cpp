@@ -310,7 +310,7 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     if ( type == RecentlyPlayedPlaylistsModel::StaticPlaylist )
         icon = TomahawkUtils::defaultPixmap( TomahawkUtils::Playlist, TomahawkUtils::Original, pixmapRect.size() );
     else if ( type == RecentlyPlayedPlaylistsModel::AutoPlaylist )
-        icon = m_autoIcon;
+        icon = TomahawkUtils::defaultPixmap( TomahawkUtils::AutomaticPlaylist, TomahawkUtils::Original, pixmapRect.size() );
     else if ( type == RecentlyPlayedPlaylistsModel::Station )
         icon = TomahawkUtils::defaultPixmap( TomahawkUtils::Station, TomahawkUtils::Original, pixmapRect.size() );
 

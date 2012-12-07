@@ -297,7 +297,7 @@ SourcesModel::appendGroups()
     LovedTracksItem* loved = new LovedTracksItem( this, browse );
     loved->setSortValue( 2 );
 
-    GenericPageItem* recent = new GenericPageItem( this, browse, tr( "Recently Played" ), QIcon( RESPATH "images/recently-played.png" ),
+    GenericPageItem* recent = new GenericPageItem( this, browse, tr( "Recently Played" ), ImageRegistry::instance()->icon( RESPATH "images/recently-played.svg" ),
                                                    boost::bind( &ViewManager::showRecentPlaysPage, ViewManager::instance() ),
                                                    boost::bind( &ViewManager::recentPlaysWidget, ViewManager::instance() ) );
     recent->setSortValue( 3 );

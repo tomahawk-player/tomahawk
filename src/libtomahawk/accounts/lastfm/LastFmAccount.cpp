@@ -21,7 +21,7 @@
 
 #include "infosystem/InfoSystem.h"
 #include "LastFmInfoPlugin.h"
-#include "utils/TomahawkUtils.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "resolvers/QtScriptResolver.h"
 #include "AtticaManager.h"
 #include "Pipeline.h"
@@ -34,7 +34,6 @@ using namespace Accounts;
 
 LastFmAccountFactory::LastFmAccountFactory()
 {
-    m_icon.load( RESPATH "images/lastfm-icon.png" );
 }
 
 
@@ -48,7 +47,7 @@ LastFmAccountFactory::createAccount( const QString& accountId )
 QPixmap
 LastFmAccountFactory::icon() const
 {
-    return m_icon;
+    return TomahawkUtils::defaultPixmap( TomahawkUtils::LastfmIcon );
 }
 
 
@@ -56,7 +55,6 @@ LastFmAccount::LastFmAccount( const QString& accountId )
     : CustomAtticaAccount( accountId )
 {
     setAccountFriendlyName( "Last.Fm" );
-    m_icon.load( RESPATH "images/lastfm-icon.png" );
 
     AtticaManager::instance()->registerCustomAccount( "lastfm", this );
 
@@ -152,14 +150,14 @@ LastFmAccount::configurationWidget()
 Account::ConnectionState
 LastFmAccount::connectionState() const
 {
-    return (!m_resolver.isNull() && m_resolver.data()->running()) ? Account::Connected : Account::Disconnected;
+    return ( !m_resolver.isNull() && m_resolver.data()->running() ) ? Account::Connected : Account::Disconnected;
 }
 
 
 QPixmap
 LastFmAccount::icon() const
 {
-    return m_icon;
+    return TomahawkUtils::defaultPixmap( TomahawkUtils::LastfmIcon );
 }
 
 

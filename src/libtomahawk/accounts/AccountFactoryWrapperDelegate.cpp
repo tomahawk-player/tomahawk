@@ -34,15 +34,12 @@ using namespace Tomahawk::Accounts;
 #define CONFIG_WRENCH_SIZE 20
 #define PADDING 4
 
+
 AccountFactoryWrapperDelegate::AccountFactoryWrapperDelegate( QObject* parent )
     : QStyledItemDelegate( parent )
 {
-    m_onlineIcon.load( RESPATH "images/sipplugin-online.png" );
-    m_offlineIcon.load( RESPATH "images/sipplugin-offline.png" );
-
-    m_onlineIcon = m_onlineIcon.scaled( ICON_SIZE, ICON_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation  );
-    m_offlineIcon = m_offlineIcon.scaled( ICON_SIZE, ICON_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation  );
 }
+
 
 void
 AccountFactoryWrapperDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
@@ -98,23 +95,24 @@ AccountFactoryWrapperDelegate::paint(QPainter* painter, const QStyleOptionViewIt
     QPixmap p;
     QString statusText;
     Account::ConnectionState state = acc->connectionState();
+    const QRect connectIconRect( confRect.left() - PADDING - ICON_SIZE, topIcon, ICON_SIZE, ICON_SIZE );
+
     if ( state == Account::Connected )
     {
-        p = m_onlineIcon;
+        p = TomahawkUtils::defaultPixmap( TomahawkUtils::SipPluginOnline, TomahawkUtils::Original, connectIconRect.size() );
         statusText = tr( "Online" );
     }
     else if ( state == Account::Connecting )
     {
-        p = m_offlineIcon;
+        p = TomahawkUtils::defaultPixmap( TomahawkUtils::SipPluginOffline, TomahawkUtils::Original, connectIconRect.size() );
         statusText = tr( "Connecting..." );
     }
     else
     {
-        p = m_offlineIcon;
+        p = TomahawkUtils::defaultPixmap( TomahawkUtils::SipPluginOffline, TomahawkUtils::Original, connectIconRect.size() );
         statusText = tr( "Offline" );
     }
 
-    const QRect connectIconRect( confRect.left() - PADDING - ICON_SIZE, topIcon, ICON_SIZE, ICON_SIZE );
     painter->drawPixmap( connectIconRect, p );
 
     int width = painter->fontMetrics().width( statusText );

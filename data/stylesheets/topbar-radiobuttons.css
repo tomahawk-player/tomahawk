@@ -22,7 +22,7 @@ QRadioButton::indicator::unchecked {
   image: url(:/data/images/view-toggle-icon-list-inactive.svg);
 }
 QRadioButton::indicator::checked {
-  background-image: url(:/data/images/view-toggle-active-centre.png);
+  background-image: url(:/data/images/view-toggle-active-centre.svg);
   image: url(:/data/images/view-toggle-icon-list-active.svg);
 }
 QRadioButton::indicator::pressed {
@@ -34,7 +34,7 @@ QRadioButton#radioNormal::indicator::unchecked {
   image: url(:/data/images/view-toggle-icon-artist-inactive.svg);
 }
 QRadioButton#radioNormal::indicator::checked {
-  background-image: url(:/data/images/view-toggle-active-left.png);
+  background-image: url(:/data/images/view-toggle-active-left.svg);
   image: url(:/data/images/view-toggle-icon-artist-active.svg);
 }
 QRadioButton#radioNormal::indicator::pressed {
@@ -46,7 +46,7 @@ QRadioButton#radioCloud::indicator::unchecked {
   image: url(:/data/images/view-toggle-icon-grid-inactive.svg);
 }
 QRadioButton#radioCloud::indicator::checked {
-  background-image: url(:/data/images/view-toggle-active-right.png);
+  background-image: url(:/data/images/view-toggle-active-right.svg);
   image: url(:/data/images/view-toggle-icon-grid-active.svg);
 }
 QRadioButton#radioCloud::indicator::pressed {

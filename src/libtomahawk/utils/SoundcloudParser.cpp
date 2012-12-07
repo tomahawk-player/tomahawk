@@ -30,12 +30,10 @@
 #include "jobview/JobStatusModel.h"
 #include "jobview/ErrorStatusMessage.h"
 #include "utils/NetworkReply.h"
-#include "utils/TomahawkUtils.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
 using namespace Tomahawk;
-
-QPixmap* SoundcloudParser::s_pixmap = 0;
 
 
 SoundcloudParser::SoundcloudParser( const QStringList& Urls, bool createNewPlaylist, QObject* parent )
@@ -236,8 +234,5 @@ SoundcloudParser::soundcloudBrowseFinished()
 QPixmap
 SoundcloudParser::pixmap() const
 {
-    if ( !s_pixmap )
-        s_pixmap = new QPixmap( RESPATH "images/soundcloud.png" );
-
-    return *s_pixmap;
+    return TomahawkUtils::defaultPixmap( TomahawkUtils::SoundcloudIcon );
 }
