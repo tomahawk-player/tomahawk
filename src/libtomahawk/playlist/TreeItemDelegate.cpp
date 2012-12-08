@@ -84,7 +84,7 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
 
             if ( item->isPlaying() )
             {
-                o.palette.setColor( QPalette::Highlight, o.palette.color( QPalette::Mid ) );
+                o.palette.setColor( QPalette::Highlight, TomahawkUtils::Colors::NOW_PLAYING_ITEM );
                 if ( o.state & QStyle::State_Selected )
                     o.palette.setColor( QPalette::Text, textColor );
                 o.state |= QStyle::State_Selected;

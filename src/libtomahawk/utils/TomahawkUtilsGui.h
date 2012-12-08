@@ -82,6 +82,7 @@ namespace TomahawkUtils
         static const QColor BORDER_LINE = QColor( "#8c8c8c" );
         static const QColor POPUP_BACKGROUND = QColor( "#ffffff" );
         static const QColor GROUP_HEADER = QColor( "#637180" );
+        static const QColor NOW_PLAYING_ITEM = QColor( "#962c26" );
     }
 
     static const int POPUP_ROUNDING_RADIUS = 6;

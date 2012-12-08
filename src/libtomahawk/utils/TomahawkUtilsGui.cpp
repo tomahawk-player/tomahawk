@@ -721,10 +721,10 @@ prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, Pl
 
     if ( item->isPlaying() )
     {
-        option->palette.setColor( QPalette::Highlight, option->palette.color( QPalette::Mid ) );
+        option->palette.setColor( QPalette::Highlight, TomahawkUtils::Colors::NOW_PLAYING_ITEM.lighter() );
+        option->backgroundBrush = TomahawkUtils::Colors::NOW_PLAYING_ITEM;
 
-        option->backgroundBrush = option->palette.color( QPalette::Mid );
-        option->palette.setColor( QPalette::Text, option->palette.color( QPalette::Text ) );
+        option->palette.setColor( QPalette::Text, Qt::white );
 
     }
 
