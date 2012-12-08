@@ -62,12 +62,12 @@ AudioControls::AudioControls( QWidget* parent )
 
     ui->artistTrackLabel->setFont( font );
     ui->artistTrackLabel->setElideMode( Qt::ElideMiddle );
-    ui->artistTrackLabel->setType( QueryLabel::ArtistAndTrack );
+    ui->artistTrackLabel->setType( QueryLabel::Track );
     ui->artistTrackLabel->setJumpLinkVisible( true );
 
     font.setItalic( true );
     ui->albumLabel->setFont( font );
-    ui->albumLabel->setType( QueryLabel::Album );
+    ui->albumLabel->setType( QueryLabel::ArtistAndAlbum );
 
     font.setItalic( false );
     font.setPointSize( TomahawkUtils::defaultFontSize() );
@@ -125,7 +125,7 @@ AudioControls::AudioControls( QWidget* parent )
     connect( ui->repeatButton,     SIGNAL( clicked() ), SLOT( onRepeatClicked() ) );
     connect( ui->shuffleButton,    SIGNAL( clicked() ), SLOT( onShuffleClicked() ) );
 
-    connect( ui->artistTrackLabel, SIGNAL( clickedArtist() ), SLOT( onArtistClicked() ) );
+    connect( ui->albumLabel,       SIGNAL( clickedArtist() ), SLOT( onArtistClicked() ) );
     connect( ui->artistTrackLabel, SIGNAL( clickedTrack() ),  SLOT( onTrackClicked() ) );
     connect( ui->albumLabel,       SIGNAL( clickedAlbum() ),  SLOT( onAlbumClicked() ) );
     connect( ui->socialButton,     SIGNAL( clicked() ),       SLOT( onSocialButtonClicked() ) );
