@@ -49,12 +49,19 @@ StyleHelper::horizontalHeader( QPainter* painter, const QRect& r )
 {
     painter->save();
 
-    QRect upperHalf( 0, 0, r.width(), r.height() / 2 );
+/*    QRect upperHalf( 0, 0, r.width(), r.height() / 2 );
     QRect lowerHalf( 0, upperHalf.height(), r.width(), r.height() );
     painter->fillRect( upperHalf, StyleHelper::headerUpperColor() );
-    painter->fillRect( lowerHalf, StyleHelper::headerLowerColor() );
+    painter->fillRect( lowerHalf, StyleHelper::headerLowerColor() );*/
+    QLinearGradient gradient( QPoint( 0, 0 ), QPoint( 0, 1 ) );
+    gradient.setCoordinateMode( QGradient::ObjectBoundingMode );
+    gradient.setColorAt( 0.0, StyleHelper::headerLowerColor() );
+    gradient.setColorAt( 1.0, StyleHelper::headerUpperColor() );
 
-    {
+    painter->setBrush( gradient );
+    painter->fillRect( r, gradient );
+
+/*    {
         QColor lineColor( 100, 100, 100 );
         QLine line( 0, 0, r.width(), 0 );
         painter->setPen( lineColor );
@@ -65,7 +72,7 @@ StyleHelper::horizontalHeader( QPainter* painter, const QRect& r )
         QLine line( 0, r.height() - 1, r.width(), r.height() - 1 );
         painter->setPen( lineColor );
         painter->drawLine( line );
-    }
+    }*/
 
     painter->restore();
 }
