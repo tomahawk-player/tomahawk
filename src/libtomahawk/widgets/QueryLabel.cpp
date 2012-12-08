@@ -372,8 +372,8 @@ QueryLabel::paintEvent( QPaintEvent* event )
     QPainter p( this );
     QRect r = contentsRect();
     QString s = text();
-    const QString elidedText = fontMetrics().elidedText( s, m_mode, r.width() );
     const QFontMetrics& fm = fontMetrics();
+    const QString elidedText = fm.elidedText( s, m_mode, r.width() );
 
     p.save();
     p.setRenderHint( QPainter::Antialiasing );
@@ -624,8 +624,8 @@ QueryLabel::mouseMoveEvent( QMouseEvent* event )
         {
             m_hoverType = Album;
             int spacing = ( m_type & Artist ) ? dashX : 0;
-            hoverArea.setLeft( artistX + spacing );
-            hoverArea.setRight( albumX + spacing + contentsMargins().left() - 1 );
+            hoverArea.setLeft( artistX + spacing - contentsMargins().left() );
+            hoverArea.setRight( albumX + contentsMargins().left() - 1 );
         }
         else if ( m_type & Track && x < trackX && x > albumX )
         {
