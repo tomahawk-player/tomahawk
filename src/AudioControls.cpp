@@ -65,12 +65,10 @@ AudioControls::AudioControls( QWidget* parent )
     ui->artistTrackLabel->setType( QueryLabel::Track );
     ui->artistTrackLabel->setJumpLinkVisible( true );
 
-    font.setItalic( true );
+    font.setPointSize( TomahawkUtils::defaultFontSize() );
     ui->albumLabel->setFont( font );
     ui->albumLabel->setType( QueryLabel::ArtistAndAlbum );
 
-    font.setItalic( false );
-    font.setPointSize( TomahawkUtils::defaultFontSize() );
     font.setWeight( QFont::Normal );
     ui->timeLabel->setFont( font );
     ui->timeLeftLabel->setFont( font );
