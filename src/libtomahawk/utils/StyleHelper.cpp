@@ -26,14 +26,14 @@
 QColor
 StyleHelper::headerUpperColor()
 {
-    return QColor( "#464e57" );
+    return QColor( "#615858" );
 }
 
 
 QColor
 StyleHelper::headerLowerColor()
 {
-    return QColor( "#3f4650" );
+    return QColor( "#231F1F" );
 }
 
 
