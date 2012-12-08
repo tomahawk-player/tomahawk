@@ -57,8 +57,8 @@ AudioControls::AudioControls( QWidget* parent )
     setAcceptDrops( true );
 
     QFont font( ui->artistTrackLabel->font() );
-    font.setPointSize( TomahawkUtils::defaultFontSize() );
-    font.setWeight( QFont::Normal );
+    font.setPointSize( TomahawkUtils::defaultFontSize() + 1 );
+    font.setWeight( QFont::Bold );
 
     ui->artistTrackLabel->setFont( font );
     ui->artistTrackLabel->setElideMode( Qt::ElideMiddle );
@@ -68,10 +68,9 @@ AudioControls::AudioControls( QWidget* parent )
     ui->albumLabel->setFont( font );
     ui->albumLabel->setType( QueryLabel::Album );
 
+    font.setPointSize( TomahawkUtils::defaultFontSize() );
     ui->timeLabel->setFont( font );
     ui->timeLeftLabel->setFont( font );
-
-    font.setPointSize( TomahawkUtils::defaultFontSize() - 2 );
 
     ui->ownerButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultResolver, TomahawkUtils::Original, QSize( 34, 34 ) ) );
     ui->prevButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PrevButton, TomahawkUtils::Original, QSize( 35, 35 ) ) );
