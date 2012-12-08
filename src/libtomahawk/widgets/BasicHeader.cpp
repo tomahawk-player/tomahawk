@@ -24,6 +24,7 @@
 #include <QtGui/QPaintEvent>
 #include <QtGui/QPainter>
 #include <QtGui/QBoxLayout>
+#include <QGraphicsDropShadowEffect>
 
 #include "utils/TomahawkUtilsGui.h"
 #include "ElidedLabel.h"
@@ -74,7 +75,15 @@ BasicHeader::BasicHeader( QWidget* parent )
     m_descriptionLabel->setAlignment( Qt::AlignTop | Qt::AlignLeft );
 
     m_captionLabel->setMargin( 2 );
-    m_descriptionLabel->setMargin( 1 );
+    m_descriptionLabel->setMargin( 2 );
+
+    QGraphicsDropShadowEffect* effect = new QGraphicsDropShadowEffect();
+    effect->setBlurRadius( 4 );
+    effect->setXOffset( 0 );
+    effect->setYOffset( 0 );
+    effect->setColor( Qt::white );
+    m_captionLabel->setGraphicsEffect( effect );
+//    m_descriptionLabel->setGraphicsEffect( effect );
 
     TomahawkUtils::unmarginLayout( layout() );
     layout()->setContentsMargins( 8, 4, 8, 4 );
