@@ -69,6 +69,7 @@ AudioControls::AudioControls( QWidget* parent )
     ui->albumLabel->setType( QueryLabel::Album );
 
     font.setPointSize( TomahawkUtils::defaultFontSize() );
+    font.setWeight( QFont::Normal );
     ui->timeLabel->setFont( font );
     ui->timeLeftLabel->setFont( font );
 
