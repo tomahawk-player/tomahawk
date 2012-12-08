@@ -77,12 +77,12 @@ BasicHeader::BasicHeader( QWidget* parent )
     m_captionLabel->setMargin( 2 );
     m_descriptionLabel->setMargin( 2 );
 
-    QGraphicsDropShadowEffect* effect = new QGraphicsDropShadowEffect();
+/*    QGraphicsDropShadowEffect* effect = new QGraphicsDropShadowEffect();
     effect->setBlurRadius( 4 );
     effect->setXOffset( 0 );
     effect->setYOffset( 0 );
     effect->setColor( Qt::white );
-    m_captionLabel->setGraphicsEffect( effect );
+    m_captionLabel->setGraphicsEffect( effect );*/
 //    m_descriptionLabel->setGraphicsEffect( effect );
 
     TomahawkUtils::unmarginLayout( layout() );
