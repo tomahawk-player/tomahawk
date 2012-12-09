@@ -1,5 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
+ *   Copyright 2010-2012, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *
@@ -18,15 +19,15 @@
  */
 
 #include "PlaylistInterface.h"
-#include "utils/Logger.h"
 #include "Result.h"
 #include "Pipeline.h"
 #include "Source.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 
 
-PlaylistInterface::PlaylistInterface ()
+PlaylistInterface::PlaylistInterface()
     : QObject()
     , m_latchMode( PlaylistModes::StayOnSong )
     , m_finished( false )
