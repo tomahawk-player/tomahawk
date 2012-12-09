@@ -110,7 +110,7 @@ QueryLabel::text() const
         {
             text += m_result->artist()->name();
         }
-        if ( m_type & Album )
+        if ( m_type & Album && !m_result->album()->name().isEmpty() )
         {
             smartAppend( text, m_result->album()->name() );
         }
@@ -125,7 +125,7 @@ QueryLabel::text() const
         {
             text += m_query->artist();
         }
-        if ( m_type & Album )
+        if ( m_type & Album && !m_query->album().isEmpty() )
         {
             smartAppend( text, m_query->album() );
         }
@@ -429,7 +429,7 @@ QueryLabel::paintEvent( QPaintEvent* event )
             p.drawText( r, m_align, artist()->name() );
             r.adjust( artistX, 0, 0, 0 );
         }
-        if ( m_type & Album )
+        if ( m_type & Album && !album()->name().isEmpty() )
         {
             p.setBrush( palette().window() );
             if ( !m_useCustomPen )
@@ -455,7 +455,7 @@ QueryLabel::paintEvent( QPaintEvent* event )
             if ( !m_useCustomPen )
                 p.setPen( palette().color( foregroundRole() ) );
 
-            if ( m_type & Artist || m_type & Album )
+            if ( m_type & Artist || ( m_type & Album && !album()->name().isEmpty() ) )
             {
                 p.drawText( r, m_align, DASH );
                 r.adjust( dashX, 0, 0, 0 );
@@ -597,7 +597,7 @@ QueryLabel::mouseMoveEvent( QMouseEvent* event )
     {
         trackX += contentsMargins().left();
     }
-    if ( m_type & Album )
+    if ( m_type & Album && !album()->name().isEmpty() )
     {
         trackX += albumX + dashX;
         albumX += contentsMargins().left();
@@ -620,7 +620,7 @@ QueryLabel::mouseMoveEvent( QMouseEvent* event )
             hoverArea.setLeft( 0 );
             hoverArea.setRight( artistX + contentsMargins().left() - 1 );
         }
-        else if ( m_type & Album && x < albumX && x > artistX )
+        else if ( m_type & Album && !album()->name().isEmpty() && x < albumX && x > artistX )
         {
             m_hoverType = Album;
             int spacing = ( m_type & Artist ) ? dashX : 0;
@@ -630,7 +630,7 @@ QueryLabel::mouseMoveEvent( QMouseEvent* event )
         else if ( m_type & Track && x < trackX && x > albumX )
         {
             m_hoverType = Track;
-            int spacing = ( m_type & Album ) ? dashX : 0;
+            int spacing = ( m_type & Album && !album()->name().isEmpty() ) ? dashX : 0;
             hoverArea.setLeft( albumX + spacing );
             hoverArea.setRight( trackX + contentsMargins().left() - 1 );
         }
