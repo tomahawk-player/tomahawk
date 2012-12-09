@@ -110,8 +110,6 @@ GridView::GridView( QWidget* parent )
     setAutoResize( false );
     setProxyModel( new PlayableProxyModel( this ) );
 
-    m_playlistInterface = playlistinterface_ptr( new GridPlaylistInterface( m_proxyModel, this ) );
-
     connect( this, SIGNAL( doubleClicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
     connect( this, SIGNAL( customContextMenuRequested( QPoint ) ), SLOT( onCustomContextMenu( QPoint ) ) );
 
@@ -135,6 +133,9 @@ GridView::setProxyModel( PlayableProxyModel* model )
 
     m_proxyModel = model;
     connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
+
+    if ( m_delegate )
+        delete m_delegate;
 
     m_delegate = new GridItemDelegate( this, m_proxyModel );
     connect( m_delegate, SIGNAL( updateIndex( QModelIndex ) ), this, SLOT( update( QModelIndex ) ) );
@@ -429,6 +430,20 @@ GridView::currentTrackRect() const
         return QRect();
 
     return visualRect( m_playing );
+}
+
+
+playlistinterface_ptr
+GridView::playlistInterface() const
+{
+    return proxyModel()->playlistInterface();
+}
+
+
+void
+GridView::setPlaylistInterface( const Tomahawk::playlistinterface_ptr& playlistInterface )
+{
+    proxyModel()->setPlaylistInterface( playlistInterface );
 }
 
 
