@@ -102,8 +102,7 @@ GlobalActionManager::copyOpenLink( const artist_ptr& artist ) const
     const QUrl link( QString( "%1/artist/%2" ).arg( hostname() ).arg( artist->name() ) );
 
     QClipboard* cb = QApplication::clipboard();
-    QByteArray data = percentEncode( link );
-    cb->setText( data );
+    cb->setText( link.toString() );
 
     return link;
 }
@@ -115,9 +114,7 @@ GlobalActionManager::copyOpenLink( const album_ptr& album ) const
     const QUrl link = QUrl::fromUserInput( QString( "%1/album/%2/%3" ).arg( hostname() ).arg( album->artist().isNull() ? QString() : album->artist()->name() ).arg( album->name() ) );
 
     QClipboard* cb = QApplication::clipboard();
-    QByteArray data = percentEncode( link );
-
-    cb->setText( data );
+    cb->setText( link.toString() );
 
     return link;
 }
@@ -129,11 +126,11 @@ GlobalActionManager::openLink( const QString& title, const QString& artist, cons
     QUrl link( QString( "%1/open/track/" ).arg( hostname() ) );
 
     if ( !artist.isEmpty() )
-        link.addQueryItem( "artist", artist );
+        link.addQueryItem( "artist", percentEncode( artist ) );
     if ( !title.isEmpty() )
-        link.addQueryItem( "title", title );
+        link.addQueryItem( "title", percentEncode( title ) );
     if ( !album.isEmpty() )
-        link.addQueryItem( "album", album );
+        link.addQueryItem( "album", percentEncode( album ) );
 
     return link;
 }
@@ -221,22 +218,23 @@ GlobalActionManager::copyPlaylistToClipboard( const dynplaylist_ptr& playlist )
         return QString();
     }
 
-    link.addEncodedQueryItem( "type", "echonest" );
-    link.addQueryItem( "title", playlist->title() );
+    link.addQueryItem( "type", "echonest" );
+    link.addQueryItem( "title", percentEncode( playlist->title() ) );
 
     QList< dyncontrol_ptr > controls = playlist->generator()->controls();
     foreach ( const dyncontrol_ptr& c, controls )
     {
+        tDebug() << Q_FUNC_INFO << percentEncode( c->input() );
         if ( c->selectedType() == "Artist" )
         {
             if ( c->match().toInt() == Echonest::DynamicPlaylist::ArtistType )
-                link.addQueryItem( "artist_limitto", c->input() );
+                link.addQueryItem( "artist_limitto", percentEncode( c->input() ) );
             else
-                link.addQueryItem( "artist", c->input() );
+                link.addQueryItem( "artist", percentEncode( c->input() ) );
         }
         else if ( c->selectedType() == "Artist Description" )
         {
-            link.addQueryItem( "description", c->input() );
+            link.addQueryItem( "description", percentEncode( c->input() ) );
         }
         else
         {
@@ -249,14 +247,14 @@ GlobalActionManager::copyPlaylistToClipboard( const dynplaylist_ptr& playlist )
                || p == Echonest::DynamicPlaylist::ArtistMaxLongitude )
                 name += "_max";
 
-            link.addQueryItem( name, c->input() );
+            link.addQueryItem( percentEncode( name ), percentEncode( c->input() ) );
         }
     }
 
     QClipboard* cb = QApplication::clipboard();
-    QByteArray data = percentEncode( link );
-    cb->setText( data );
+    cb->setText( link.toString() );
 
+    tDebug() << Q_FUNC_INFO << link << link.toString();
     return link.toString();
 }
 
@@ -319,7 +317,7 @@ GlobalActionManager::parseTomahawkLink( const QString& urlIn )
         {
             if ( u.hasQueryItem( "xspf" ) )
             {
-                QUrl xspf = QUrl::fromUserInput( u.queryItemValue( "xspf" ) );
+                QUrl xspf = QUrl::fromPercentEncoding( u.encodedQueryItemValue( "xspf" ) ).replace( "+", " " );
                 XSPFLoader* l = new XSPFLoader( true, this );
                 tDebug() << "Loading spiff:" << xspf.toString();
                 l->load( xspf );
@@ -329,7 +327,7 @@ GlobalActionManager::parseTomahawkLink( const QString& urlIn )
             }
             else if ( u.hasQueryItem( "jspf" ) )
             {
-                QUrl jspf = QUrl::fromUserInput( u.queryItemValue( "jspf" ) );
+                QUrl jspf = QUrl::fromPercentEncoding( u.encodedQueryItemValue( "jspf" ) ).replace( "+", " " );
                 JSPFLoader* l = new JSPFLoader( true, this );
 
                 tDebug() << "Loading jspiff:" << jspf.toString();
@@ -417,12 +415,16 @@ GlobalActionManager::handlePlaylistCommand( const QUrl& url )
         }
         if ( url.hasQueryItem( "xspf" ) )
         {
-            createPlaylistFromUrl( "xspf", url.queryItemValue( "xspf" ), url.hasQueryItem( "title" ) ? url.queryItemValue( "title" ) : QString() );
+            createPlaylistFromUrl( "xspf",
+                                   QUrl::fromPercentEncoding( url.encodedQueryItemValue( "xspf" ) ).replace( "+", " " ),
+                                   url.hasQueryItem( "title" ) ? QUrl::fromPercentEncoding( url.encodedQueryItemValue( "title" ) ).replace( "+", " " ) : QString() );
             return true;
         }
         else if ( url.hasQueryItem( "jspf" ) )
         {
-            createPlaylistFromUrl( "jspf", url.queryItemValue( "jspf" ), url.hasQueryItem( "title" ) ? url.queryItemValue( "title" ) : QString() );
+            createPlaylistFromUrl( "jspf",
+                                   QUrl::fromPercentEncoding( url.encodedQueryItemValue( "jspf" ) ).replace( "+", " " ),
+                                   url.hasQueryItem( "title" ) ? QUrl::fromPercentEncoding( url.encodedQueryItemValue( "title" ) ).replace( "+", " " ) : QString() );
             return true;
         }
     }
@@ -433,7 +435,7 @@ GlobalActionManager::handlePlaylistCommand( const QUrl& url )
             tLog() << "New playlist command needs a title...";
             return false;
         }
-        playlist_ptr pl = Playlist::create( SourceList::instance()->getLocal(), uuid(), url.queryItemValue( "title" ), QString(), QString(), false );
+        playlist_ptr pl = Playlist::create( SourceList::instance()->getLocal(), uuid(), QUrl::fromPercentEncoding( url.encodedQueryItemValue( "title" ) ).replace( "+", " " ), QString(), QString(), false );
         ViewManager::instance()->show( pl );
     }
     else if ( parts[ 0 ] == "add" )
@@ -462,12 +464,16 @@ GlobalActionManager::handleImportCommand( const QUrl& url )
     {
         if ( url.hasQueryItem( "xspf" ) )
         {
-            createPlaylistFromUrl( "xspf", url.queryItemValue( "xspf" ), url.hasQueryItem( "title" ) ? url.queryItemValue( "title" ) : QString() );
+            createPlaylistFromUrl( "xspf",
+                                   QUrl::fromPercentEncoding( url.encodedQueryItemValue( "xspf" ) ).replace( "+", " " ),
+                                   url.hasQueryItem( "title" ) ? QUrl::fromPercentEncoding( url.encodedQueryItemValue( "title" ) ).replace( "+", " " ) : QString() );
             return true;
         }
         else if ( url.hasQueryItem( "jspf" ) )
         {
-            createPlaylistFromUrl( "jspf", url.queryItemValue( "jspf" ), url.hasQueryItem( "title" ) ? url.queryItemValue( "title" ) : QString() );
+            createPlaylistFromUrl( "jspf",
+                                   QUrl::fromPercentEncoding( url.encodedQueryItemValue( "jspf" ) ).replace( "+", " " ),
+                                   url.hasQueryItem( "title" ) ? QUrl::fromPercentEncoding( url.encodedQueryItemValue( "title" ) ).replace( "+", " " ) : QString() );
             return true;
         }
     }
@@ -477,7 +483,7 @@ GlobalActionManager::handleImportCommand( const QUrl& url )
 
 
 void
-GlobalActionManager::createPlaylistFromUrl( const QString& type, const QString &url, const QString& title )
+GlobalActionManager::createPlaylistFromUrl( const QString& type, const QString& url, const QString& title )
 {
     if ( type == "xspf" )
     {
@@ -783,16 +789,16 @@ GlobalActionManager::handleSearchCommand( const QUrl& url )
     // open the super collection and set this as the search filter
     QString queryStr;
     if ( url.hasQueryItem( "query" ) )
-        queryStr = url.queryItemValue( "query" );
+        queryStr = QUrl::fromPercentEncoding( url.encodedQueryItemValue( "query" ) ).replace( "+", " " );
     else
     {
         QStringList query;
         if ( url.hasQueryItem( "artist" ) )
-            query << url.queryItemValue( "artist" );
+            query << QUrl::fromPercentEncoding( url.encodedQueryItemValue( "artist" ) ).replace( "+", " " );
         if ( url.hasQueryItem( "album" ) )
-            query << url.queryItemValue( "album" );
+            query << QUrl::fromPercentEncoding( url.encodedQueryItemValue( "album" ) ).replace( "+", " " );
         if ( url.hasQueryItem( "title" ) )
-            query << url.queryItemValue( "title" );
+            query << QUrl::fromPercentEncoding( url.encodedQueryItemValue( "title" ) ).replace( "+", " " );
         queryStr = query.join( " " );
     }
 
@@ -891,8 +897,8 @@ GlobalActionManager::loadDynamicPlaylist( const QUrl& url, bool station )
             tLog() << "Station create command needs title and type..." << url.toString();
             return Tomahawk::dynplaylist_ptr();
         }
-        QString title = url.queryItemValue( "title" );
-        QString type = url.queryItemValue( "type" );
+        QString title = QUrl::fromPercentEncoding( url.encodedQueryItemValue( "title" ) ).replace( "+", " " );
+        QString type = QUrl::fromPercentEncoding( url.encodedQueryItemValue( "type" ) ).replace( "+", " " );
         GeneratorMode m = Static;
         if ( station )
             m = OnDemand;
@@ -903,6 +909,8 @@ GlobalActionManager::loadDynamicPlaylist( const QUrl& url, bool station )
         QPair< QString, QString > param;
         foreach ( param, url.queryItems() )
         {
+            param.second = param.second.replace( "+", " " );
+
             if ( param.first == "artist" )
             {
                 dyncontrol_ptr c = pl->generator()->createControl( "Artist" );
