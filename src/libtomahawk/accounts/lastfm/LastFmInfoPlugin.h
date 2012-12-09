@@ -60,6 +60,7 @@ public slots:
     void similarArtistsReturned();
     void topTracksReturned();
     void artistInfoReturned();
+    void albumInfoReturned();
     void chartReturned();
     void similarTracksReturned();
 
@@ -71,10 +72,10 @@ protected slots:
     virtual void pushInfo( Tomahawk::InfoSystem::InfoPushData pushData );
 
 private:
-    void fetchCoverArt( Tomahawk::InfoSystem::InfoRequestData requestData );
     void fetchSimilarArtists( Tomahawk::InfoSystem::InfoRequestData requestData );
     void fetchTopTracks( Tomahawk::InfoSystem::InfoRequestData requestData );
     void fetchArtistInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
+    void fetchAlbumInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
     void fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData );
     void fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData requestData );
     void fetchSimilarTracks( Tomahawk::InfoSystem::InfoRequestData requestData );

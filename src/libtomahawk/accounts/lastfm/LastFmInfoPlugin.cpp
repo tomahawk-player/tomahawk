@@ -108,7 +108,7 @@ LastFmInfoPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
     switch ( requestData.type )
     {
         case InfoAlbumCoverArt:
-            fetchCoverArt( requestData );
+            fetchAlbumInfo( requestData );
             break;
 
         case InfoArtistSimilars:
@@ -386,7 +386,7 @@ LastFmInfoPlugin::fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData 
 
 
 void
-LastFmInfoPlugin::fetchCoverArt( Tomahawk::InfoSystem::InfoRequestData requestData )
+LastFmInfoPlugin::fetchAlbumInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
     {
@@ -529,22 +529,11 @@ LastFmInfoPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::In
 
         case InfoAlbumCoverArt:
         {
-            QString artistName = criteria["artist"];
-            QString albumName = criteria["album"];
-
-            QUrl imgurl( "http://ws.audioscrobbler.com/2.0/" );
-            imgurl.addQueryItem( "method", "album.imageredirect" );
-            imgurl.addEncodedQueryItem( "artist", QUrl::toPercentEncoding( artistName, "", "+" ) );
-            imgurl.addEncodedQueryItem( "album", QUrl::toPercentEncoding( albumName, "", "+" ) );
-            imgurl.addQueryItem( "autocorrect", QString::number( 1 ) );
-            imgurl.addQueryItem( "size", "large" );
-            imgurl.addQueryItem( "api_key", "7a90f6672a04b809ee309af169f34b8b" );
-
-            QNetworkRequest req( imgurl );
-            QNetworkReply* reply = TomahawkUtils::nam()->get( req );
+            lastfm::Album a( criteria["artist"], criteria["album"] );
+            QNetworkReply* reply = a.getInfo();
             reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
 
-            connect( reply, SIGNAL( finished() ), SLOT( coverArtReturned() ) );
+            connect( reply, SIGNAL( finished() ), SLOT( albumInfoReturned() ) );
             return;
         }
 
@@ -765,9 +754,9 @@ LastFmInfoPlugin::artistInfoReturned()
     {
         lastfm::Artist artist = lastfm::Artist::getInfo( reply );
 
-        QUrl imgurl = artist.imageUrl( lastfm::AbstractType::MegaImage );
+        QUrl imgurl = artist.imageUrl( lastfm::AbstractType::ExtraLargeImage );
         if ( !imgurl.isValid() )
-            imgurl = artist.imageUrl( lastfm::AbstractType::ExtraLargeImage );
+            imgurl = artist.imageUrl( lastfm::AbstractType::MegaImage );
         if ( !imgurl.isValid() )
             imgurl = artist.imageUrl( lastfm::AbstractType::LargeImage );
 
@@ -775,6 +764,32 @@ LastFmInfoPlugin::artistInfoReturned()
         QNetworkReply* newReply = TomahawkUtils::nam()->get( req );
         newReply->setProperty( "requestData", reply->property( "requestData" ) );
         connect( newReply, SIGNAL( finished() ), SLOT( coverArtReturned() ) );
+    }
+}
+
+
+void
+LastFmInfoPlugin::albumInfoReturned()
+{
+    QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
+    Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
+
+    if ( requestData.type == Tomahawk::InfoSystem::InfoAlbumCoverArt )
+    {
+        lastfm::XmlQuery lfm;
+        if ( lfm.parse( reply->readAll() ) )
+        {
+            QUrl imgurl = QUrl( lfm["album"]["image size=extralarge"].text() );
+            if ( !imgurl.isValid() )
+                imgurl = QUrl( lfm["album"]["image size=mega"].text() );
+            if ( !imgurl.isValid() )
+                imgurl = QUrl( lfm["album"]["image size=large"].text() );
+
+            QNetworkRequest req( imgurl );
+            QNetworkReply* newReply = TomahawkUtils::nam()->get( req );
+            newReply->setProperty( "requestData", reply->property( "requestData" ) );
+            connect( newReply, SIGNAL( finished() ), SLOT( coverArtReturned() ) );
+        }
     }
 }
 
