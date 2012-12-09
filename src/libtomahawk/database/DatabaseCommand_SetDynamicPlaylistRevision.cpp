@@ -117,19 +117,7 @@ DatabaseCommand_SetDynamicPlaylistRevision::postCommitHook()
         return;
     }
 
-    // workaround a bug in pre-0.1.0 tomahawks. they created dynamic playlists in OnDemand mode *always*, and then set the mode to the real one.
-    // now that we separate them, if we get them as one and then get a changed mode, the playlist ends up in the wrong bucket in Collection.
-    // so here we fix it if we have to.
-    // HACK
-    tDebug() << "Does this need the 0.3->0.1 playlist category hack fix?" << ( rawPl->mode() == Static && source()->collection()->autoPlaylist( playlistguid() ).isNull() )
-        <<  ( rawPl->mode() == OnDemand && source()->collection()->station( playlistguid() ).isNull() )
-                    << rawPl->mode() << source()->collection()->autoPlaylist( playlistguid() ).isNull() << source()->collection()->station( playlistguid() ).isNull();
-    if( rawPl->mode() == Static && source()->collection()->autoPlaylist( playlistguid() ).isNull() ) // should be here
-        source()->collection()->moveStationToAuto( playlistguid() );
-    else if ( rawPl->mode() == OnDemand && source()->collection()->station( playlistguid() ).isNull() ) // should be here
-        source()->collection()->moveAutoToStation( playlistguid() );
-
-  if ( !m_controlsV.isEmpty() && m_controls.isEmpty() )
+    if ( !m_controlsV.isEmpty() && m_controls.isEmpty() )
     {
         QList<QVariantMap> controlMap;
         foreach( const QVariant& v, m_controlsV )
