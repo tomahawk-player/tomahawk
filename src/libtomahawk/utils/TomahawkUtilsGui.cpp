@@ -913,6 +913,28 @@ addDropShadow( const QPixmap& source, const QSize& targetSize )
 }
 
 
+QPixmap
+squareCenterPixmap( const QPixmap& sourceImage )
+{
+    if ( sourceImage.width() != sourceImage.height() )
+    {
+        const int sqwidth = qMin( sourceImage.width(), sourceImage.height() );
+        const int delta = abs( sourceImage.width() - sourceImage.height() );
+
+        if ( sourceImage.width() > sourceImage.height() )
+        {
+            return sourceImage.copy( delta / 2, 0, sqwidth, sqwidth );
+        }
+        else
+        {
+            return sourceImage.copy( 0, delta / 2, sqwidth, sqwidth );
+        }
+    }
+
+    return sourceImage;
+}
+
+
 void
 drawCompositedPopup( QWidget* widget,
                      const QPainterPath& outline,
