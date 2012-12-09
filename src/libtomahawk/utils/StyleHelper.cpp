@@ -86,7 +86,7 @@ StyleHelper::headerTextColor()
 
 
 /*
- * This implementation is from QWindowsStyle (Qt 7.2)
+ * This implementation is from QWindowsStyle (Qt 4.2)
  *
  * It is licensed under the GPL 3:
  * Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
@@ -103,7 +103,7 @@ void StyleHelper::drawArrow( QStyle::PrimitiveElement element, QPainter* p, cons
     QString pixmapName;
 
     pixmapName.sprintf( "arrow-%s-%d-%d-%d-%lld", "$qt_ia", uint(opt->state), element, size, opt->palette.cacheKey() );
-    if ( !QPixmapCache::find( pixmapName, pixmap) )
+    if ( !QPixmapCache::find( pixmapName, pixmap ) )
     {
         int border = size / 5;
         int sqsize = 2 * ( size / 2 );
