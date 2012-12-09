@@ -27,6 +27,7 @@
 #include "Query.h"
 #include "Source.h"
 
+#include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
 #include <QReadWriteLock>
@@ -229,8 +230,11 @@ Album::cover( const QSize& size, bool forceLoad ) const
 
     if ( !m_cover && !m_coverBuffer.isEmpty() )
     {
-        m_cover = new QPixmap();
-        m_cover->loadFromData( m_coverBuffer );
+        QPixmap cover;
+        cover.loadFromData( m_coverBuffer );
+        m_coverBuffer.clear();
+
+        m_cover = new QPixmap( TomahawkUtils::squareCenterPixmap( cover ) );
     }
 
     if ( m_cover && !m_cover->isNull() && !size.isEmpty() )
