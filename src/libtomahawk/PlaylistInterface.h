@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2012, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -25,7 +25,6 @@
 #include "playlist/PlayableItem.h"
 #include "Typedefs.h"
 #include "DllMacro.h"
-#include "utils/Logger.h"
 
 namespace Tomahawk
 {
@@ -85,7 +84,7 @@ public:
     //TODO: Get rid of the next two functions once all playlsitinterfaces are factored out
     // Some playlist interfaces can wrap other interfaces. When checking for top-level
     // equality (say, to compare the currently playing interface) this might be needed
-    virtual bool hasChildInterface( Tomahawk::playlistinterface_ptr ) { return false; }
+    virtual bool hasChildInterface( const Tomahawk::playlistinterface_ptr& ) { return false; }
 
 public slots:
     virtual void setRepeatMode( PlaylistModes::RepeatMode mode ) = 0;
@@ -99,6 +98,8 @@ signals:
 
     void previousTrackAvailable();
     void nextTrackAvailable();
+
+    void currentIndexChanged();
 
 protected slots:
     virtual void onItemsChanged();

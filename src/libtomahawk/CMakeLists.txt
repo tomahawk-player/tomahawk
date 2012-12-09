@@ -187,6 +187,7 @@ set( libSources
     FuncTimeout.cpp
     Playlist.cpp
     PlaylistPlaylistInterface.cpp
+    MetaPlaylistInterface.cpp
     Resolver.cpp
     ExternalResolver.cpp
     Query.cpp

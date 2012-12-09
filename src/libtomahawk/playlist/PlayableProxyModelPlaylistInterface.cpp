@@ -90,8 +90,6 @@ PlayableProxyModelPlaylistInterface::setCurrentIndex( qint64 index )
     if ( m_proxyModel.isNull() )
         return;
 
-    PlaylistInterface::setCurrentIndex( index );
-
     PlayableItem* item = static_cast<PlayableItem*>( (void*)index );
     if ( index < 0 || !item )
     {
@@ -116,6 +114,8 @@ PlayableProxyModelPlaylistInterface::setCurrentIndex( qint64 index )
         m_shuffleHistory << queryAt( index );
         m_shuffleCache = QPersistentModelIndex();
     }
+
+    PlaylistInterface::setCurrentIndex( index );
 }
 
 

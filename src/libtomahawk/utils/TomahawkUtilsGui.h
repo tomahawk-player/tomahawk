@@ -63,17 +63,15 @@ namespace TomahawkUtils
     DLLEXPORT int defaultFontHeight();
     DLLEXPORT QSize defaultIconSize();
 
-    DLLEXPORT QPixmap defaultPixmap( ImageType type, ImageMode mode = TomahawkUtils::Original, const QSize& size = QSize( 0, 0 ) );
-
     DLLEXPORT void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item );
 
     DLLEXPORT void drawRoundedButton( QPainter* painter, const QRect& btnRect, const QColor& color, const QColor &gradient1bottom = QColor(), const QColor& gradient2top = QColor(), const QColor& gradient2bottom = QColor() );
-
     DLLEXPORT void styleScrollBar( QScrollBar* scrollBar );
 
+    DLLEXPORT QPixmap defaultPixmap( ImageType type, ImageMode mode = TomahawkUtils::Original, const QSize& size = QSize( 0, 0 ) );
     DLLEXPORT QPixmap createTiledPixmap( int width, int height, const QImage& src );
-
     DLLEXPORT QPixmap addDropShadow( const QPixmap& sourceImage, const QSize& targetSize );
+    DLLEXPORT QPixmap squareCenterPixmap( const QPixmap& sourceImage );
 
     DLLEXPORT void drawCompositedPopup( QWidget* widget, const QPainterPath& outline, const QColor& lineColor, const QBrush& backgroundBrush, qreal opacity );
 
@@ -82,6 +80,8 @@ namespace TomahawkUtils
         static const QColor BORDER_LINE = QColor( "#8c8c8c" );
         static const QColor POPUP_BACKGROUND = QColor( "#ffffff" );
         static const QColor GROUP_HEADER = QColor( "#637180" );
+        static const QColor NOW_PLAYING_ITEM = QColor( "#962c26" );
+        static const QColor NOW_PLAYING_ITEM_TEXT = QColor( "#ffffff" );
     }
 
     static const int POPUP_ROUNDING_RADIUS = 6;

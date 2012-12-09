@@ -98,6 +98,8 @@ private slots:
     void onTracksFound( const QList<Tomahawk::query_ptr>& queries, Tomahawk::ModelMode mode );
     void onSimilarArtistsLoaded();
 
+    void onBiographyLinkClicked( const QUrl& url );
+
 private:
     Ui::ArtistInfoWidget *ui;
 

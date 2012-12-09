@@ -309,6 +309,7 @@ GlobalActionManager::parseTomahawkLink( const QString& urlIn )
     {
         QString cmd = url.mid( 11 );
         cmd.replace( "%2B", "%20" );
+        cmd.replace( "+", "%20" ); // QUrl doesn't parse '+' into " "
         tLog() << "Parsing tomahawk link command" << cmd;
 
         QString cmdType = cmd.split( "/" ).first();
@@ -808,19 +809,21 @@ bool
 GlobalActionManager::handleViewCommand( const QUrl& url )
 {
     QStringList parts = url.path().split( "/" ).mid( 1 ); // get the rest of the command
-    if ( parts.isEmpty() ) {
+    if ( parts.isEmpty() )
+    {
         tLog() << "No specific view command:" << url.toString();
         return false;
     }
 
     if ( parts[ 0 ] == "artist" )
     {
-        const QString artist = url.queryItemValue( "name" );
+        const QString artist = QUrl::fromPercentEncoding( url.encodedQueryItemValue( "name" ) ).replace( "+", " " );
         if ( artist.isEmpty() )
         {
-            tLog() << "Not artist supplied for view/artist command.";
+            tLog() << "No artist supplied for view/artist command.";
             return false;
         }
+
         artist_ptr artistPtr = Artist::get( artist );
         if ( !artistPtr.isNull() )
             ViewManager::instance()->show( artistPtr );
@@ -829,16 +832,34 @@ GlobalActionManager::handleViewCommand( const QUrl& url )
     }
     else if ( parts[ 0 ] == "album" )
     {
-        const QString artist = url.queryItemValue( "artist" );
-        const QString album = url.queryItemValue( "name" );
+        const QString artist = QUrl::fromPercentEncoding( url.encodedQueryItemValue( "artist" ) ).replace( "+", " " );
+        const QString album = QUrl::fromPercentEncoding( url.encodedQueryItemValue( "name" ) ).replace( "+", " " );
         if ( artist.isEmpty() || album.isEmpty() )
         {
-            tLog() << "Not artist or album supplied for view/artist command:" << url;
+            tLog() << "No artist or album supplied for view/album command:" << url;
             return false;
         }
+
         album_ptr albumPtr = Album::get( Artist::get( artist, false ), album, false );
         if ( !albumPtr.isNull() )
             ViewManager::instance()->show( albumPtr );
+
+        return true;
+    }
+    else if ( parts[ 0 ] == "track" )
+    {
+        const QString artist = QUrl::fromPercentEncoding( url.encodedQueryItemValue( "artist" ) ).replace( "+", " " );
+        const QString album = QUrl::fromPercentEncoding( url.encodedQueryItemValue( "album" ) ).replace( "+", " " );
+        const QString track = QUrl::fromPercentEncoding( url.encodedQueryItemValue( "name" ) ).replace( "+", " " );
+        if ( artist.isEmpty() || track.isEmpty() )
+        {
+            tLog() << "No artist or track supplied for view/track command:" << url;
+            return false;
+        }
+
+        query_ptr queryPtr = Query::get( artist, track, album );
+        if ( !queryPtr.isNull() )
+            ViewManager::instance()->show( queryPtr );
 
         return true;
     }
@@ -1420,7 +1441,6 @@ GlobalActionManager::percentEncode( const QUrl& url ) const
 
     data.replace( "'", "%27" ); // QUrl doesn't encode ', which it doesn't have to. Some apps don't like ' though, and want %27. Both are valid.
     data.replace( "%20", "+" );
-    data.replace( "&", "%26" );
 
     return data;
 }

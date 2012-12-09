@@ -20,7 +20,6 @@
  */
 
 #include "NewReleasesWidget.h"
-#include "WhatsHotWidget_p.h"
 #include "ui_NewReleasesWidget.h"
 
 #include "ViewManager.h"

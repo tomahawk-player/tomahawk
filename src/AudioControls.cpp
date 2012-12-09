@@ -38,6 +38,7 @@
 #include <QDropEvent>
 #include <QMouseEvent>
 #include <QDesktopServices>
+#include <QGraphicsDropShadowEffect>
 
 const static int ALLOWED_MAX_DIVERSION = 300;
 
@@ -56,20 +57,21 @@ AudioControls::AudioControls( QWidget* parent )
     setAcceptDrops( true );
 
     QFont font( ui->artistTrackLabel->font() );
-    font.setPointSize( TomahawkUtils::defaultFontSize() );
+    font.setPointSize( TomahawkUtils::defaultFontSize() + 1 );
+    font.setWeight( QFont::Bold );
 
     ui->artistTrackLabel->setFont( font );
     ui->artistTrackLabel->setElideMode( Qt::ElideMiddle );
-    ui->artistTrackLabel->setType( QueryLabel::ArtistAndTrack );
+    ui->artistTrackLabel->setType( QueryLabel::Track );
     ui->artistTrackLabel->setJumpLinkVisible( true );
 
+    font.setPointSize( TomahawkUtils::defaultFontSize() );
     ui->albumLabel->setFont( font );
-    ui->albumLabel->setType( QueryLabel::Album );
+    ui->albumLabel->setType( QueryLabel::ArtistAndAlbum );
 
+    font.setWeight( QFont::Normal );
     ui->timeLabel->setFont( font );
     ui->timeLeftLabel->setFont( font );
-
-    font.setPointSize( TomahawkUtils::defaultFontSize() - 2 );
 
     ui->ownerButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultResolver, TomahawkUtils::Original, QSize( 34, 34 ) ) );
     ui->prevButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PrevButton, TomahawkUtils::Original, QSize( 35, 35 ) ) );
@@ -121,7 +123,7 @@ AudioControls::AudioControls( QWidget* parent )
     connect( ui->repeatButton,     SIGNAL( clicked() ), SLOT( onRepeatClicked() ) );
     connect( ui->shuffleButton,    SIGNAL( clicked() ), SLOT( onShuffleClicked() ) );
 
-    connect( ui->artistTrackLabel, SIGNAL( clickedArtist() ), SLOT( onArtistClicked() ) );
+    connect( ui->albumLabel,       SIGNAL( clickedArtist() ), SLOT( onArtistClicked() ) );
     connect( ui->artistTrackLabel, SIGNAL( clickedTrack() ),  SLOT( onTrackClicked() ) );
     connect( ui->albumLabel,       SIGNAL( clickedAlbum() ),  SLOT( onAlbumClicked() ) );
     connect( ui->socialButton,     SIGNAL( clicked() ),       SLOT( onSocialButtonClicked() ) );

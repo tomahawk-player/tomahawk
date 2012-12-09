@@ -721,14 +721,12 @@ prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, Pl
 
     if ( item->isPlaying() )
     {
-        option->palette.setColor( QPalette::Highlight, option->palette.color( QPalette::Mid ) );
-
-        option->backgroundBrush = option->palette.color( QPalette::Mid );
-        option->palette.setColor( QPalette::Text, option->palette.color( QPalette::Text ) );
+        option->backgroundBrush = TomahawkUtils::Colors::NOW_PLAYING_ITEM;
+        option->palette.setColor( QPalette::Highlight, TomahawkUtils::Colors::NOW_PLAYING_ITEM.lighter() );
+        option->palette.setColor( QPalette::Text, TomahawkUtils::Colors::NOW_PLAYING_ITEM_TEXT );
 
     }
-
-    if ( option->state & QStyle::State_Selected && !item->isPlaying() )
+    else if ( option->state & QStyle::State_Selected )
     {
         option->palette.setColor( QPalette::Text, option->palette.color( QPalette::HighlightedText ) );
     }
@@ -912,6 +910,28 @@ addDropShadow( const QPixmap& source, const QSize& targetSize )
     resultPainter.drawPixmap( 0, 0, shrunk );
 
     return result;
+}
+
+
+QPixmap
+squareCenterPixmap( const QPixmap& sourceImage )
+{
+    if ( sourceImage.width() != sourceImage.height() )
+    {
+        const int sqwidth = qMin( sourceImage.width(), sourceImage.height() );
+        const int delta = abs( sourceImage.width() - sourceImage.height() );
+
+        if ( sourceImage.width() > sourceImage.height() )
+        {
+            return sourceImage.copy( delta / 2, 0, sqwidth, sqwidth );
+        }
+        else
+        {
+            return sourceImage.copy( 0, delta / 2, sqwidth, sqwidth );
+        }
+    }
+
+    return sourceImage;
 }
 
 
