@@ -729,7 +729,7 @@ LastFmInfoPlugin::artistInfoReturned()
     {
         QVariantMap returnedData;
         lastfm::XmlQuery lfm;
-        if ( lfm.parse( reply ) )
+        if ( lfm.parse( reply->readAll() ) )
         {
             QRegExp tagRegExp( "<a href=\"http://www.last.fm/tag/([^\"]*)\" class=\"bbcode_tag\" rel=\"tag\">" );
             QRegExp artistRegExp( "<a href=\"http://www.last.fm/music/([^\"]*)\" class=\"bbcode_artist\">" );
