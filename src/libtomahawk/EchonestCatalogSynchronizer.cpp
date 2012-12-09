@@ -18,6 +18,9 @@
 
 #include "EchonestCatalogSynchronizer.h"
 
+#include <echonest/CatalogUpdateEntry.h>
+#include <echonest/Config.h>
+
 #include "Collection.h"
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
@@ -27,9 +30,7 @@
 #include "TomahawkSettings.h"
 #include "SourceList.h"
 #include "Query.h"
-
-#include <echonest/CatalogUpdateEntry.h>
-#include <echonest/Config.h>
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 
