@@ -160,7 +160,7 @@ main( int argc, char *argv[] )
     if ( guard.isPrimaryInstance() )
         a.init();
 
-    if ( argc > 1 )
+    if ( !guard.isPrimaryInstance() && argc > 1 )
     {
         QString arg = a.arguments()[ 1 ];
         a.loadUrl( arg );
