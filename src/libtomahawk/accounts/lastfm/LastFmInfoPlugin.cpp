@@ -732,10 +732,10 @@ LastFmInfoPlugin::artistInfoReturned()
 
             QString biography = lfm["artist"]["bio"]["content"].text().trimmed().replace( "User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.", "" );
             biography = biography.replace( tagRegExp, "<a href=\"tomahawk://view/tag?name=\\1\">" )
-                                .replace( artistRegExp, "<a href=\"tomahawk://view/artist?name=\\1\">" )
-                                .replace( albumRegExp, "<a href=\"tomahawk://view/album?artist=\\2&name=\\3\">" )
-                                .replace( trackRegExp, "<a href=\"tomahawk://view/track?artist=\\2&album=\\3&name=\\4\">" )
-                                .replace( "&album=_", "" );
+                                 .replace( artistRegExp, "<a href=\"tomahawk://view/artist?name=\\1\">" )
+                                 .replace( albumRegExp, "<a href=\"tomahawk://view/album?artist=\\2&name=\\3\">" )
+                                 .replace( trackRegExp, "<a href=\"tomahawk://view/track?artist=\\2&album=\\3&name=\\4\">" )
+                                 .replace( "&album=_", "" );
 
             QVariantHash siteData;
             siteData[ "site" ] = "last.fm";
