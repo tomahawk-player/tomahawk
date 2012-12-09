@@ -219,5 +219,7 @@ void
 PlaylistInterface::setCurrentIndex( qint64 index )
 {
     m_currentIndex = index;
+
+    emit currentIndexChanged();
     onItemsChanged();
 }

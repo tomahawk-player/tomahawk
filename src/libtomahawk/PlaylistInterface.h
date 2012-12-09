@@ -100,6 +100,8 @@ signals:
     void previousTrackAvailable();
     void nextTrackAvailable();
 
+    void currentIndexChanged();
+
 protected slots:
     virtual void onItemsChanged();
 
