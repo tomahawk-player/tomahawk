@@ -64,19 +64,21 @@ signals:
 private slots:
     void modelChanged();
     void doUpdateIndex( const QPersistentModelIndex& idx );
+    void onCurrentIndexChanged();
 
     void onViewChanged();
     void onPlaybackStarted( const QPersistentModelIndex& index );
     void onPlaybackFinished();
 
     void onPlayClicked( const QPersistentModelIndex& index );
-    void onPlaylistChanged( const QPersistentModelIndex& index );
 
     void fadingFrameChanged( const QPersistentModelIndex& );
     void fadingFrameFinished( const QPersistentModelIndex& );
 
 private:
     QTimeLine* createTimeline( QTimeLine::Direction direction );
+    void createPauseButton( const QPersistentModelIndex& index );
+    void clearButtons();
 
     QAbstractItemView* m_view;
     PlayableProxyModel* m_model;
@@ -94,7 +96,6 @@ private:
     mutable QHash< QPersistentModelIndex, ImageButton* > m_playButton;
     mutable QHash< QPersistentModelIndex, ImageButton* > m_pauseButton;
     mutable QHash< QPersistentModelIndex, QTimeLine* > m_hoverFaders;
-    mutable QHash< QPersistentModelIndex, _detail::Closure* > m_closures;
 };
 
 #endif // GRIDITEMDELEGATE_H
