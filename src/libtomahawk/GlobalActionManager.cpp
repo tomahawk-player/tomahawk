@@ -224,7 +224,6 @@ GlobalActionManager::copyPlaylistToClipboard( const dynplaylist_ptr& playlist )
     QList< dyncontrol_ptr > controls = playlist->generator()->controls();
     foreach ( const dyncontrol_ptr& c, controls )
     {
-        tDebug() << Q_FUNC_INFO << percentEncode( c->input() );
         if ( c->selectedType() == "Artist" )
         {
             if ( c->match().toInt() == Echonest::DynamicPlaylist::ArtistType )
