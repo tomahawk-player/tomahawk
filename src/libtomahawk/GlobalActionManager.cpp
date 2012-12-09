@@ -309,6 +309,7 @@ GlobalActionManager::parseTomahawkLink( const QString& urlIn )
     {
         QString cmd = url.mid( 11 );
         cmd.replace( "%2B", "%20" );
+        cmd.replace( "+", "%20" ); // QUrl doesn't parse '+' into " "
         tLog() << "Parsing tomahawk link command" << cmd;
 
         QString cmdType = cmd.split( "/" ).first();
@@ -1440,7 +1441,6 @@ GlobalActionManager::percentEncode( const QUrl& url ) const
 
     data.replace( "'", "%27" ); // QUrl doesn't encode ', which it doesn't have to. Some apps don't like ' though, and want %27. Both are valid.
     data.replace( "%20", "+" );
-    data.replace( "&", "%26" );
 
     return data;
 }
