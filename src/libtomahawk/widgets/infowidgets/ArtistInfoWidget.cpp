@@ -18,7 +18,6 @@
  */
 
 #include "ArtistInfoWidget.h"
-#include "ArtistInfoWidget_p.h"
 #include "ui_ArtistInfoWidget.h"
 
 #include <QScrollArea>
@@ -35,6 +34,7 @@
 #include "Source.h"
 #include "GlobalActionManager.h"
 #include "Pipeline.h"
+#include "MetaPlaylistInterface.h"
 #include "utils/StyleHelper.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
@@ -55,8 +55,6 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
     widget->setPalette( pal );
     widget->setAutoFillBackground( true );
-
-    m_plInterface = Tomahawk::playlistinterface_ptr( new MetaArtistInfoInterface( this ) );
 
 /*    TomahawkUtils::unmarginLayout( ui->layoutWidget->layout() );
     TomahawkUtils::unmarginLayout( ui->layoutWidget1->layout() );
@@ -162,6 +160,12 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
                                "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }" );
 
     connect( ui->biography, SIGNAL( anchorClicked( QUrl ) ), SLOT( onBiographyLinkClicked( QUrl ) ) );
+
+    MetaPlaylistInterface* mpl = new MetaPlaylistInterface();
+    mpl->addChildInterface( ui->relatedArtists->playlistInterface() );
+    mpl->addChildInterface( ui->topHits->playlistInterface() );
+    mpl->addChildInterface( ui->albums->playlistInterface() );
+    m_plInterface = playlistinterface_ptr( mpl );
 
     load( artist );
 }

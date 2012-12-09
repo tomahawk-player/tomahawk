@@ -20,7 +20,6 @@
 
 #include "AlbumInfoWidget.h"
 #include "ui_AlbumInfoWidget.h"
-#include "AlbumInfoWidget_p.h"
 
 #include "audio/AudioEngine.h"
 #include "ViewManager.h"
@@ -29,6 +28,7 @@
 #include "playlist/PlayableModel.h"
 #include "playlist/GridItemDelegate.h"
 #include "Source.h"
+#include "MetaPlaylistInterface.h"
 
 #include "database/DatabaseCommand_AllTracks.h"
 #include "database/DatabaseCommand_AllAlbums.h"
@@ -134,7 +134,11 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
                                "border-image: url(" RESPATH "images/scrollbar-vertical-handle.png) 3 3 3 3 stretch stretch;"
                                "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }" );
 
-    m_playlistInterface = playlistinterface_ptr( new MetaAlbumInfoInterface( this ) );
+    MetaPlaylistInterface* mpl = new MetaPlaylistInterface();
+    mpl->addChildInterface( ui->tracks->playlistInterface() );
+    mpl->addChildInterface( ui->albums->playlistInterface() );
+    m_playlistInterface = playlistinterface_ptr( mpl );
+
     load( album );
 
     connect( ui->artistLabel, SIGNAL( clickedArtist() ), SLOT( onArtistClicked() ) );
