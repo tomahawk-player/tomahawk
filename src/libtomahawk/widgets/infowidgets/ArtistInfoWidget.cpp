@@ -51,7 +51,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->setupUi( widget );
 
     QPalette pal = palette();
-    pal.setColor( QPalette::Window, QColor( "#454e59" ) );
+    pal.setColor( QPalette::Window, QColor( "#231F1F" ) );
 
     widget->setPalette( pal );
     widget->setAutoFillBackground( true );
@@ -109,12 +109,12 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     TomahawkUtils::styleScrollBar( ui->biography->verticalScrollBar() );
 
     f.setBold( true );
-    f.setPointSize( TomahawkUtils::defaultFontSize() + 5 );
+    f.setPointSize( TomahawkUtils::defaultFontSize() + 8 );
     ui->artistLabel->setFont( f );
 
     QPalette p = ui->biography->palette();
     p.setColor( QPalette::Foreground, Qt::white );
-    p.setColor( QPalette::Text, Qt::white );
+    p.setColor( QPalette::Text, Qt::gray );
 
     ui->artistLabel->setPalette( p );
     ui->biography->setPalette( p );
