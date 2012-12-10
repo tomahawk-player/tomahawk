@@ -38,6 +38,8 @@
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
+#include "config.h"
+
 // FIXME: bloody hack, remove this for 0.3
 // this one adds new functionality to old resolvers
 #define RESOLVER_LEGACY_CODE "var resolver = Tomahawk.resolver.instance ? Tomahawk.resolver.instance : TomahawkResolver;"
@@ -212,7 +214,7 @@ void
 ScriptEngine::javaScriptConsoleMessage( const QString& message, int lineNumber, const QString& sourceID )
 {
     tLog() << "JAVASCRIPT:" << m_scriptPath << message << lineNumber << sourceID;
-#ifndef QT_NO_DEBUG
+#ifndef DEBUG_BUILD
     QMessageBox::critical( 0, "Script Resolver Error", QString( "%1 %2 %3 %4" ).arg( m_scriptPath ).arg( message ).arg( lineNumber ).arg( sourceID ) );
 #endif
 }
