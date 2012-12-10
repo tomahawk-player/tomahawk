@@ -104,6 +104,7 @@ AccountsToolButton::AccountsToolButton( QWidget* parent )
              this, SLOT( updateIcons() ) );
 
 #ifdef Q_WS_MAC
+    setIconSize( QSize( iconSize().width()-4, iconSize().height()-4 ) );
     setStyleSheet( "AccountsToolButton {"
                    "    border: 1px solid #7d7d7d;"
                    "    border-radius: 4px;"
