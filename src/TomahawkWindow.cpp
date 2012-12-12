@@ -116,18 +116,6 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     connect( APP, SIGNAL( tomahawkLoaded() ), vm, SLOT( setTomahawkLoaded() ) ); // Pass loaded signal into libtomahawk so components in there can connect to ViewManager
 
 #ifdef Q_OS_WIN
-    QList<TomahawkUtils::ImageType> list;
-    list<<TomahawkUtils::PauseButton<<TomahawkUtils::PlayButton<<TomahawkUtils::PrevButton<<TomahawkUtils::NextButton<<TomahawkUtils::NotLoved<<TomahawkUtils::Loved;
-    foreach(TomahawkUtils::ImageType type,list)
-    {
-        QPixmap pix ( TomahawkUtils::defaultPixmap(type , TomahawkUtils::Original, QSize( 20, 20 ) ) );
-        if( pix.isNull() )
-        {
-            qFatal("One of thumbbar icons is null, this would lead to explorer.exe crashes, aborting tomahawk");
-        }
-        m_thumbIcons[type] = pix.toWinHICON();
-    }
-
     connect( AudioEngine::instance(), SIGNAL( stateChanged( AudioState, AudioState) ), SLOT( audioStateChanged( AudioState, AudioState) ) );
 #endif
     ui->setupUi( this );
@@ -461,19 +449,19 @@ TomahawkWindow::setupWindowsButtons()
     THUMBBUTTONMASK dwMask = THUMBBUTTONMASK( THB_ICON | THB_TOOLTIP | THB_FLAGS );
     m_thumbButtons[TP_PREVIOUS].dwMask = dwMask;
     m_thumbButtons[TP_PREVIOUS].iId = TP_PREVIOUS;
-    m_thumbButtons[TP_PREVIOUS].hIcon = m_thumbIcons[TomahawkUtils::PrevButton];
+    m_thumbButtons[TP_PREVIOUS].hIcon = thumbIcon(TomahawkUtils::PrevButton);
     m_thumbButtons[TP_PREVIOUS].dwFlags = THBF_ENABLED;
     m_thumbButtons[TP_PREVIOUS].szTip[ tr( "Back" ).toWCharArray( m_thumbButtons[TP_PREVIOUS].szTip ) ] = 0;
 
     m_thumbButtons[TP_PLAY_PAUSE].dwMask = dwMask;
     m_thumbButtons[TP_PLAY_PAUSE].iId = TP_PLAY_PAUSE;
-    m_thumbButtons[TP_PLAY_PAUSE].hIcon = m_thumbIcons[TomahawkUtils::PlayButton];
+    m_thumbButtons[TP_PLAY_PAUSE].hIcon = thumbIcon(TomahawkUtils::PlayButton);
     m_thumbButtons[TP_PLAY_PAUSE].dwFlags = THBF_ENABLED;
     m_thumbButtons[TP_PLAY_PAUSE].szTip[ tr( "Play" ).toWCharArray( m_thumbButtons[TP_PLAY_PAUSE].szTip ) ] = 0;
 
     m_thumbButtons[TP_NEXT].dwMask = dwMask;
     m_thumbButtons[TP_NEXT].iId = TP_NEXT;
-    m_thumbButtons[TP_NEXT].hIcon = m_thumbIcons[TomahawkUtils::NextButton];
+    m_thumbButtons[TP_NEXT].hIcon = thumbIcon(TomahawkUtils::NextButton);
     m_thumbButtons[TP_NEXT].dwFlags = THBF_ENABLED;
     m_thumbButtons[TP_NEXT].szTip[ tr( "Next" ).toWCharArray( m_thumbButtons[TP_NEXT].szTip ) ] = 0;
 
@@ -485,7 +473,7 @@ TomahawkWindow::setupWindowsButtons()
 
     m_thumbButtons[TP_LOVE].dwMask = dwMask;
     m_thumbButtons[TP_LOVE].iId = TP_LOVE;
-    m_thumbButtons[TP_LOVE].hIcon = m_thumbIcons[TomahawkUtils::NotLoved];
+    m_thumbButtons[TP_LOVE].hIcon = thumbIcon(TomahawkUtils::NotLoved);
     m_thumbButtons[TP_LOVE].dwFlags = THBF_DISABLED;
     m_thumbButtons[TP_LOVE].szTip[ tr( "Love" ).toWCharArray( m_thumbButtons[TP_LOVE].szTip ) ] = 0;
 
@@ -507,6 +495,18 @@ TomahawkWindow::setupWindowsButtons()
 #else // HAVE_THUMBBUTTON
     return false;
 #endif
+}
+
+HICON
+TomahawkWindow::thumbIcon(TomahawkUtils::ImageType type)
+{
+    static QMap<TomahawkUtils::ImageType,HICON> thumbIcons;
+    if(!thumbIcons.contains( type ) )
+    {
+        QPixmap pix ( TomahawkUtils::defaultPixmap(type , TomahawkUtils::Original, QSize( 20, 20 ) ) );
+        thumbIcons[type] = pix.toWinHICON();
+    }
+    return thumbIcons[type];
 }
 #endif
 
@@ -731,7 +731,7 @@ TomahawkWindow::audioStateChanged( AudioState newState, AudioState oldState )
     {
     case AudioEngine::Playing:
     {
-        m_thumbButtons[TP_PLAY_PAUSE].hIcon = m_thumbIcons[TomahawkUtils::PauseButton];
+        m_thumbButtons[TP_PLAY_PAUSE].hIcon = thumbIcon(TomahawkUtils::PauseButton);
         m_thumbButtons[TP_PLAY_PAUSE].szTip[ tr( "Pause" ).toWCharArray( m_thumbButtons[TP_PLAY_PAUSE].szTip ) ] = 0;
         updateWindowsLoveButton();
 
@@ -740,7 +740,7 @@ TomahawkWindow::audioStateChanged( AudioState newState, AudioState oldState )
 
     case AudioEngine::Paused:
     {
-        m_thumbButtons[TP_PLAY_PAUSE].hIcon = m_thumbIcons[TomahawkUtils::PlayButton];
+        m_thumbButtons[TP_PLAY_PAUSE].hIcon = thumbIcon(TomahawkUtils::PlayButton);
         m_thumbButtons[TP_PLAY_PAUSE].szTip[ tr( "Play" ).toWCharArray( m_thumbButtons[TP_PLAY_PAUSE].szTip ) ] = 0;
     }
         break;
@@ -752,10 +752,10 @@ TomahawkWindow::audioStateChanged( AudioState newState, AudioState oldState )
             disconnect( AudioEngine::instance()->currentTrack()->toQuery().data(), SIGNAL( socialActionsLoaded() ), this, SLOT( updateWindowsLoveButton() ) );
         }
 
-        m_thumbButtons[TP_PLAY_PAUSE].hIcon = m_thumbIcons[TomahawkUtils::PlayButton];
+        m_thumbButtons[TP_PLAY_PAUSE].hIcon = thumbIcon(TomahawkUtils::PlayButton);
         m_thumbButtons[TP_PLAY_PAUSE].szTip[ tr( "Play" ).toWCharArray( m_thumbButtons[TP_PLAY_PAUSE].szTip ) ] = 0;
 
-        m_thumbButtons[TP_LOVE].hIcon = m_thumbIcons[TomahawkUtils::NotLoved];
+        m_thumbButtons[TP_LOVE].hIcon = thumbIcon(TomahawkUtils::NotLoved);
         m_thumbButtons[TP_LOVE].dwFlags = THBF_DISABLED;
     }
         break;
@@ -775,12 +775,12 @@ TomahawkWindow::updateWindowsLoveButton()
 #ifdef HAVE_THUMBBUTTON
     if ( !AudioEngine::instance()->currentTrack().isNull() && AudioEngine::instance()->currentTrack()->toQuery()->loved() )
     {
-        m_thumbButtons[TP_LOVE].hIcon = m_thumbIcons[TomahawkUtils::Loved];
+        m_thumbButtons[TP_LOVE].hIcon = thumbIcon(TomahawkUtils::Loved);
         m_thumbButtons[TP_LOVE].szTip[ tr( "Unlove" ).toWCharArray( m_thumbButtons[TP_LOVE].szTip ) ] = 0;
     }
     else
     {
-        m_thumbButtons[TP_LOVE].hIcon = m_thumbIcons[TomahawkUtils::NotLoved];
+        m_thumbButtons[TP_LOVE].hIcon = thumbIcon(TomahawkUtils::NotLoved);
         m_thumbButtons[TP_LOVE].szTip[ tr( "Love" ).toWCharArray( m_thumbButtons[TP_LOVE].szTip ) ] = 0;
     }
 

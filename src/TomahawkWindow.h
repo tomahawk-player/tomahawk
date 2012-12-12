@@ -167,7 +167,7 @@ private:
 #ifdef Q_OS_WIN
     bool setupWindowsButtons();
     const unsigned int m_buttonCreatedID;
-    QMap<TomahawkUtils::ImageType,HICON> m_thumbIcons;
+    HICON thumbIcon(TomahawkUtils::ImageType type);
   #ifdef HAVE_THUMBBUTTON
     ITaskbarList3* m_taskbarList;
     THUMBBUTTON m_thumbButtons[5];
