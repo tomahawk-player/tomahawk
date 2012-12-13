@@ -26,12 +26,13 @@ Item {
         height: cellHeight
 
         cellWidth: (width - 1) / 3
-        cellHeight: cellWidth * 10 / 16
+        cellHeight: cellWidth //* 10 / 16
 
         delegate: Image {
             width: gridView.cellWidth - root.spacing
             height: gridView.cellHeight - root.spacing
             source: image
+            smooth: true
 
             Rectangle {
                 id: textBackground
@@ -51,8 +52,20 @@ Item {
                 color: "white"
                 font.bold: true
             }
-            MouseArea {
+            Rectangle {
+                id: hoverShade
                 anchors.fill: parent
+                color: "white"
+                opacity: mouseArea.containsMouse ? .2 : 0
+
+                Behavior on opacity {
+                    NumberAnimation { easing.type: Easing.Linear; duration: 300 }
+                }
+            }
+            MouseArea {
+                id: mouseArea
+                anchors.fill: parent
+                hoverEnabled: true
                 onClicked: root.itemClicked(index)
             }
         }

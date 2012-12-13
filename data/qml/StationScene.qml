@@ -10,8 +10,8 @@ Rectangle {
 
     ListModel {
         id: modeModel
-        ListElement { label: "By Artist"; image: "../images/artist-placeholder-grid.png"; creatorContent: "stations/CreateByArtist.qml" }
-        ListElement { label: "By Genre"; image: "../images/album-placeholder-grid.png"; creatorContent: "stations/CreateByGenre.qml" }
+        ListElement { label: "By Artist"; image: "../images/artist-placeholder-grid.svg"; creatorContent: "stations/CreateByArtist.qml" }
+        ListElement { label: "By Genre"; image: "../images/album-placeholder-grid.svg"; creatorContent: "stations/CreateByGenre.qml" }
         ListElement { label: "By Year"; image: "image://albumart/foobar"; creatorContent: "year" }
     }
 
