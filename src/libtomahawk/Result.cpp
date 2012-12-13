@@ -30,6 +30,7 @@
 #include "filemetadata/MetadataEditor.h"
 
 #include "utils/TomahawkUtilsGui.h"
+#include "utils/ResultExpirationTimer.h"
 #include "utils/Logger.h"
 #include "ExternalResolverGui.h"
 
@@ -92,6 +93,7 @@ Result::Result( const QString& url )
     , m_expires( 0 )
 {
     connect( Pipeline::instance(), SIGNAL( resolverRemoved( Tomahawk::Resolver* ) ), SLOT( onResolverRemoved( Tomahawk::Resolver* ) ), Qt::QueuedConnection );
+
 }
 
 
@@ -117,6 +119,14 @@ void
 Result::setExpires( const qint64 &expires )
 {
     m_expires = expires;
+}
+
+void
+Result::expired()
+{
+   m_resolvedBy.clear();
+   m_url.clear();
+   emit statusChanged();
 }
 
 void

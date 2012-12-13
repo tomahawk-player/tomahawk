@@ -22,7 +22,7 @@
 #include <QObject>
 #include <QTimer>
 #include <QDateTime>
-
+#include "Resolver.h"
 namespace Tomahawk
 {
 
@@ -42,7 +42,7 @@ public:
     static ResultExpirationTimer* instance();
 
     void addResult( const query_ptr& query, const Tomahawk::result_ptr& result );
-
+    void addResult(const Tomahawk::result_ptr& result);
 signals:
     void resultAdded();
 

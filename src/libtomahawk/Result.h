@@ -67,6 +67,7 @@ public:
     Tomahawk::Resolver* resolvedBy() const;
     void setResolvedBy( Tomahawk::Resolver* resolver );
 
+    void expired();
     float score() const;
     RID id() const;
     bool isOnline() const;

@@ -17,6 +17,7 @@
  */
 
 #include "ResultExpirationTimer.h"
+#include "WebResultHintChecker.h"
 #include "CustomResultHintChecker.h"
 #include "Query.h"
 #include "Result.h"
@@ -101,8 +102,21 @@ ResultExpirationTimer::onExpired()
     {
         foreach ( const result_ptr& result, it.value() )
         {
-            /// @note: Must be a Custom if it has expiration
-            new CustomResultHintChecker( m_queries[ result->url() ], result->url() );
+            if ( m_queries[ result->url() ]->resultHint().isEmpty() )
+            {
+                result->expired();
+            }
+            else
+            {
+                if ( TomahawkUtils::whitelistedHttpResultHint( m_queries[ result->url() ]->resultHint() ) )
+                {
+                    new WebResultHintChecker( m_queries[ result->url() ] );
+                }
+                else if ( TomahawkUtils::whitelistedCustomProtocolResultHint( m_queries[ result->url() ]->resultHint() ) )
+                {
+                    new CustomResultHintChecker( m_queries[ result->url() ], result->url() );
+                }
+            }
         }
         m_results.remove( it.key() );
         m_currentTimeout = 0;
@@ -119,10 +133,16 @@ ResultExpirationTimer::onExpired()
 void
 ResultExpirationTimer::addResult( const query_ptr& query, const Tomahawk::result_ptr& result )
 {
-    if ( result->getExpires() >= 0 )
+    if ( result->getExpires() > 0 )
     {
         m_results[ result->getExpires() ].append( result );
         m_queries[ result->url() ] = query;
         emit resultAdded();
     }
+}
+
+void
+ResultExpirationTimer::addResult( const Tomahawk::result_ptr& result )
+{
+    addResult( result->toQuery(), result );
 }

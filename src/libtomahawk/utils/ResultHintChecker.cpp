@@ -144,7 +144,7 @@ ResultHintChecker::setResultUrl( const QString &url )
         return;
     }
 
-    qDebug() << Q_FUNC_INFO << "Error updating result" << url;
+    qDebug() << Q_FUNC_INFO << "Error updating result" << url << m_expires;
 }
 
 

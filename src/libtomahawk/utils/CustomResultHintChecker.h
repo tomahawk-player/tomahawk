@@ -41,9 +41,6 @@ public:
      * needs to be revalidated
      */
     explicit CustomResultHintChecker( const query_ptr& q, const QString& prevUrl = QString() );
-
-   // explicit CustomResultHintChecker( const query_ptr& q, const QString& prevUrl );
-
     virtual ~CustomResultHintChecker(){}
 private slots:
     /**

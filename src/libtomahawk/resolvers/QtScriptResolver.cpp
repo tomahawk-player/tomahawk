@@ -37,6 +37,7 @@
 
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+#include "utils/ResultExpirationTimer.h"
 
 #include "config.h"
 
@@ -434,6 +435,7 @@ QtScriptResolver::parseResultVariantList( const QVariantList& reslist )
         rp->setFriendlySource( name() );
         rp->setPurchaseUrl( m.value( "purchaseUrl" ).toString() );
         rp->setLinkUrl( m.value( "linkUrl" ).toString() );
+        rp->setExpires( m.value( "expires" ).toLongLong() );
         rp->setScore( m.value( "score" ).toFloat() );
         rp->setDiscNumber( m.value( "discnumber" ).toUInt() );
 
@@ -459,6 +461,12 @@ QtScriptResolver::parseResultVariantList( const QVariantList& reslist )
         }
 
         rp->setResolvedBy( this );
+
+        if ( m.contains( "expires" ) )
+        {
+            rp->setExpires( m.value( "expires" ).toLongLong() );
+            Tomahawk::ResultExpirationTimer::instance()->addResult( rp );
+        }
         results << rp;
     }
 

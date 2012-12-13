@@ -36,7 +36,6 @@ private slots:
     void headFinished();
 private:
     query_ptr m_query;
-    QString m_url;
 };
 
 }
