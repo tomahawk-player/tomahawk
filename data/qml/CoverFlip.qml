@@ -11,7 +11,7 @@ PathView {
     property int pathStartY: height
 
     // The size of the covers in the path
-    property int coverSize: 100
+    property int coverSize: height
 
     property color backgroundColor: "black"
 
@@ -30,8 +30,8 @@ PathView {
 
     delegate: Item {
         id: delegateItem
-        height: root.coverSize
-        width: root.coverSize
+        height: coverView.coverSize
+        width: coverView.coverSize
 
         scale: PathView.itemScale
         //        itemBrightness: PathView.itemBrightness - ((coverView.itemHovered && !coverDelegate.containsMouse) ? .4 : 0)
@@ -43,8 +43,8 @@ PathView {
 
         CoverImage {
             id: coverDelegate
-            height: root.coverSize
-            width: root.coverSize
+            height: coverView.coverSize
+            width: coverView.coverSize
             anchors {
                 top: parent.top
                 right: parent.right
@@ -59,6 +59,7 @@ PathView {
             artworkId: model.coverID
             showPlayButton: true
             currentlyPlaying: isPlaying
+            smooth: true
 
             //        itemBrightness: PathView.itemBrightness - ((coverView.itemHovered && !coverDelegate.containsMouse) ? .4 : 0)
             itemBrightness: coverDelegate.containsMouse ? 1 : parent.itemBrightness * (coverView.itemHovered ? .5 : 1)
@@ -90,7 +91,7 @@ PathView {
                 name: "hovered"; when: coverDelegate.containsMouse && !coverView.moving && index !== currentIndex
                 PropertyChanges {
                     target: delegateItem
-                    width: root.coverSize * 2
+                    width: coverView.coverSize * 2
                     z: delegateItem._origZ
                 }
             }
@@ -113,19 +114,19 @@ PathView {
 
         PathAttribute { name: "itemOpacity"; value: 0 }
         PathAttribute { name: "itemBrightness"; value: 0 }
-        PathAttribute { name: "itemScale"; value: 2 }
+        PathAttribute { name: "itemScale"; value: 1.3 }
 
         PathLine { x: coverView.width / 4; y: coverView.height / 4 * 3}
         PathPercent { value: 0.1 }
         PathAttribute { name: "itemOpacity"; value: 0 }
         PathAttribute { name: "itemBrightness"; value: 1 }
-        PathAttribute { name: "itemScale"; value: 1.5 }
+        PathAttribute { name: "itemScale"; value: 1.0 }
 
         PathLine { x: coverView.width / 2; y: coverView.height / 2}
         PathPercent { value: 0.2 }
         PathAttribute { name: "itemOpacity"; value: 1 }
         PathAttribute { name: "itemBrightness"; value: 1 }
-        PathAttribute { name: "itemScale"; value: 1 }
+        PathAttribute { name: "itemScale"; value: 0.5 }
 
         PathLine { x: coverView.width; y: 0 }
         PathPercent { value: 1 }

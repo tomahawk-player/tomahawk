@@ -38,7 +38,6 @@ Rectangle {
         }
 
         StationView {
-            coverSize: Math.min(scene.height, scene.width) / 2
             height: scene.height
             width: scene.width
 //            visible: stationListView.currentIndex == 1

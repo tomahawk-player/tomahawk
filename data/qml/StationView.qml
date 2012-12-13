@@ -4,7 +4,6 @@ import "tomahawkimports"
 
 Item {
     id: root
-    property int coverSize
 
     signal backClicked()
 

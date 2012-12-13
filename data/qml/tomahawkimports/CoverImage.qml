@@ -32,6 +32,9 @@ Item {
     property double itemBrightness: 1
     property double mirrorBrightness: .5
 
+    // set this to true if you want to smoothly scale the cover (be aware of performance impacts)
+    property bool smooth: false
+
     // will be emitted when the on hower play button is clicked
     signal playClicked()
     // will be emitted when the cover is clicked
@@ -62,6 +65,7 @@ Item {
                 anchors.fill: parent
                 //anchors.margins: borderWidth
                 source: "image://albumart/" + artworkId
+                smooth: root.smooth
             }
 
             Rectangle {
@@ -171,10 +175,11 @@ Item {
     Image {
         id: playButton
         visible: showPlayButton ? (mouseArea.containsMouse || currentlyPlaying) : false
-        source: currentlyPlaying ? "../../images/pause-rest.png" : "../../images/play-rest.png"
+        source: currentlyPlaying ? "../../images/pause-rest.svg" : "../../images/play-rest.svg"
         anchors.centerIn: parent
         height: mirroredCover.height / 5
         width: height
+        smooth: root.smooth
         MouseArea {
             anchors.fill: parent
             onClicked: {
