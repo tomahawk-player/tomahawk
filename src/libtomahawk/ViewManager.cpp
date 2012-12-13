@@ -392,7 +392,7 @@ ViewManager::showRecentPlaysPage()
     if ( !m_recentPlaysWidget )
     {
         FlexibleView* pv = new FlexibleView( m_widget );
-        pv->setPixmap( QPixmap( RESPATH "images/recently-played.png" ) );
+        pv->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::RecentlyPlayed ) );
 
         RecentlyPlayedModel* raModel = new RecentlyPlayedModel( pv );
         raModel->setTitle( tr( "Recently Played Tracks" ) );

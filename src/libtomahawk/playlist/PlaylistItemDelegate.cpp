@@ -168,11 +168,11 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
         // Paint Now Playing Speaker Icon
         if ( item->isPlaying() )
         {
-            QPixmap nowPlayingIcon = TomahawkUtils::defaultPixmap( TomahawkUtils::NowPlayingSpeaker );
-            QRect npr = r.adjusted( 3, r.height() / 2 - nowPlayingIcon.height() / 2, 18 - r.width(), -r.height() / 2 + nowPlayingIcon.height() / 2  );
-            nowPlayingIcon = TomahawkUtils::defaultPixmap( TomahawkUtils::NowPlayingSpeaker, TomahawkUtils::Original, npr.size() );
-            painter->drawPixmap( npr, nowPlayingIcon );
-            r.adjust( 22, 0, 0, 0 );
+            const int pixMargin = 2;
+            const int pixHeight = r.height() - pixMargin * 2;
+            QRect npr = r.adjusted( pixMargin, pixMargin + 1, pixHeight - r.width() + pixMargin, -pixMargin + 1 );
+            painter->drawPixmap( npr, TomahawkUtils::defaultPixmap( TomahawkUtils::NowPlayingSpeaker, TomahawkUtils::Original, npr.size() ) );
+            r.adjust( pixHeight + 8, 0, 0, 0 );
         }
 
         painter->setPen( opt.palette.text().color() );
@@ -206,9 +206,7 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
         painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, m_topOption );
 
         painter->setFont( opt.font );
-        if ( option.state & QStyle::State_Selected )
-            painter->setPen( option.palette.color( QPalette::HighlightedText ) );
-        else
+        if ( !( option.state & QStyle::State_Selected || item->isPlaying() ) )
             painter->setPen( Qt::gray );
 
         text = painter->fontMetrics().elidedText( lowerText, Qt::ElideRight, r.width() );
@@ -273,9 +271,11 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
         // Paint Now Playing Speaker Icon
         if ( m_view->header()->visualIndex( index.column() ) == 0 )
         {
-            r.adjust( 0, 0, 0, -3 );
-            painter->drawPixmap( r.adjusted( 3, 1, 18 - r.width(), 1 ), TomahawkUtils::defaultPixmap( TomahawkUtils::NowPlayingSpeaker ) );
-            r.adjust( 25, 0, 0, 3 );
+            const int pixMargin = 1;
+            const int pixHeight = r.height() - pixMargin * 2;
+            QRect npr = r.adjusted( pixMargin, pixMargin, pixHeight - r.width() + pixMargin, -pixMargin );
+            painter->drawPixmap( npr, TomahawkUtils::defaultPixmap( TomahawkUtils::NowPlayingSpeaker, TomahawkUtils::Original, npr.size() ) );
+            r.adjust( pixHeight + 6, 0, 0, 0 );
         }
 
         painter->setPen( opt.palette.text().color() );

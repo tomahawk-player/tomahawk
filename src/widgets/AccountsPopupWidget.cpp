@@ -21,10 +21,6 @@
 
 #include "utils/TomahawkUtilsGui.h"
 
-#ifdef QT_MAC_USE_COCOA
-#include "widgets/SourceTreePopupDialog_mac.h"
-#endif
-
 #include <QDebug>
 #include <QPainter>
 #include <QPaintEvent>
@@ -35,15 +31,14 @@ AccountsPopupWidget::AccountsPopupWidget( QWidget* parent )
     , m_widget( 0 )
     , m_arrowOffset( 0 )
 {
-#ifndef Q_OS_WIN
-    setWindowFlags( Qt::FramelessWindowHint );
-#endif
-    setWindowFlags( Qt::Popup );
+    setWindowFlags( Qt::Popup | Qt::FramelessWindowHint );
+
     //Uncomment this if using a debugger:
     //setWindowFlags( Qt::Window );
 
     setAutoFillBackground( false );
     setAttribute( Qt::WA_TranslucentBackground, true );
+    setAttribute( Qt::WA_NoSystemBackground, true );
 
     setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum );
 
@@ -59,6 +54,7 @@ AccountsPopupWidget::AccountsPopupWidget( QWidget* parent )
 #endif
 }
 
+
 void
 AccountsPopupWidget::setWidget( QWidget* widget )
 {
@@ -66,6 +62,7 @@ AccountsPopupWidget::setWidget( QWidget* widget )
     m_layout->addWidget( m_widget );
     m_widget->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum );
 }
+
 
 void
 AccountsPopupWidget::anchorAt( const QPoint &p )
@@ -76,6 +73,7 @@ AccountsPopupWidget::anchorAt( const QPoint &p )
     if( isVisible() )
         repaint();
 }
+
 
 void
 AccountsPopupWidget::setArrowOffset( int arrowOffset )
@@ -89,7 +87,9 @@ AccountsPopupWidget::setArrowOffset( int arrowOffset )
     }
 }
 
-void AccountsPopupWidget::paintEvent( QPaintEvent* )
+
+void
+AccountsPopupWidget::paintEvent( QPaintEvent* )
 {
     // Constants for painting
     const int cornerRadius = TomahawkUtils::POPUP_ROUNDING_RADIUS;   //the rounding radius of the widget
@@ -109,26 +109,13 @@ void AccountsPopupWidget::paintEvent( QPaintEvent* )
     outline.lineTo( rect().right() - m_arrowOffset, 2 );
     outline.lineTo( rect().right() - m_arrowOffset - arrowHeight, brect.top() );
 
-    QPainter p( this );
-
-    p.setRenderHint( QPainter::Antialiasing );
-    p.setBackgroundMode( Qt::TransparentMode );
-
-    QPen pen( TomahawkUtils::Colors::BORDER_LINE );
-    pen.setWidth( 2 );
-    p.setPen( pen );
-    p.drawPath( outline );
-
-    p.setOpacity( TomahawkUtils::POPUP_OPACITY );
-    p.fillPath( outline, TomahawkUtils::Colors::POPUP_BACKGROUND );
-
-#ifdef QT_MAC_USE_COCOA
-    // Work around bug in Qt/Mac Cocoa where opening subsequent popups
-    // would incorrectly calculate the background due to it not being
-    // invalidated.
-    SourceTreePopupHelper::clearBackground( this );
-#endif
+    TomahawkUtils::drawCompositedPopup( this,
+                                        outline,
+                                        TomahawkUtils::Colors::BORDER_LINE,
+                                        TomahawkUtils::Colors::POPUP_BACKGROUND,
+                                        TomahawkUtils::POPUP_OPACITY );
 }
+
 
 void
 AccountsPopupWidget::focusOutEvent( QFocusEvent* )
@@ -136,8 +123,10 @@ AccountsPopupWidget::focusOutEvent( QFocusEvent* )
     hide();
 }
 
+
 void
 AccountsPopupWidget::hideEvent( QHideEvent* )
 {
     emit hidden();
 }
+

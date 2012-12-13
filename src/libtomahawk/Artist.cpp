@@ -28,6 +28,7 @@
 #include "database/IdThreadWorker.h"
 #include "Source.h"
 
+#include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
 #include <QReadWriteLock>
@@ -322,13 +323,14 @@ Artist::biography() const
 {
     if ( !m_biographyLoaded )
     {
+        Tomahawk::InfoSystem::InfoStringHash trackInfo;
+        trackInfo["artist"] = name();
+
         Tomahawk::InfoSystem::InfoRequestData requestData;
         requestData.caller = uniqueId();
-        requestData.customData = QVariantMap();
-
-        requestData.input = name();
         requestData.type = Tomahawk::InfoSystem::InfoArtistBiography;
-        requestData.requestId = TomahawkUtils::infosystemRequestId();
+        requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
+        requestData.customData = QVariantMap();
 
         connect( Tomahawk::InfoSystem::InfoSystem::instance(),
                 SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
@@ -482,7 +484,6 @@ Artist::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVari
         case InfoSystem::InfoArtistBiography:
         {
             QVariantMap bmap = output.toMap();
-
             foreach ( const QString& source, bmap.keys() )
             {
                 if ( source == "last.fm" )
@@ -558,9 +559,11 @@ Artist::cover( const QSize& size, bool forceLoad ) const
 
     if ( !m_cover && !m_coverBuffer.isEmpty() )
     {
-        m_cover = new QPixmap();
-        m_cover->loadFromData( m_coverBuffer );
+        QPixmap cover;
+        cover.loadFromData( m_coverBuffer );
         m_coverBuffer.clear();
+
+        m_cover = new QPixmap( TomahawkUtils::squareCenterPixmap( cover ) );
     }
 
     if ( m_cover && !m_cover->isNull() && !size.isEmpty() )

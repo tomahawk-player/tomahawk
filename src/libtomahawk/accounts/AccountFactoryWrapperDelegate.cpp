@@ -17,10 +17,12 @@
  */
 
 #include "AccountFactoryWrapperDelegate.h"
-#include "accounts/Account.h"
+
 #include "AccountFactoryWrapper.h"
-#include "utils/TomahawkUtils.h"
 #include "Source.h"
+#include "accounts/Account.h"
+#include "utils/ImageRegistry.h"
+#include "utils/TomahawkUtils.h"
 
 #include <QApplication>
 #include <QPainter>
@@ -32,19 +34,12 @@ using namespace Tomahawk::Accounts;
 #define CONFIG_WRENCH_SIZE 20
 #define PADDING 4
 
+
 AccountFactoryWrapperDelegate::AccountFactoryWrapperDelegate( QObject* parent )
     : QStyledItemDelegate( parent )
 {
-    m_removePixmap.load( RESPATH "images/list-remove.png" );
-    m_onlineIcon.load( RESPATH "images/sipplugin-online.png" );
-    m_offlineIcon.load( RESPATH "images/sipplugin-offline.png" );
-
-    m_removePixmap = m_removePixmap.scaled( ICON_SIZE, ICON_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation );
-    m_onlineIcon = m_onlineIcon.scaled( ICON_SIZE, ICON_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation  );
-    m_offlineIcon = m_offlineIcon.scaled( ICON_SIZE, ICON_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation  );
-
-    m_configIcon.addFile( RESPATH "images/configure.png", QSize( CONFIG_WRENCH_SIZE - 8, CONFIG_WRENCH_SIZE - 8 ) );
 }
+
 
 void
 AccountFactoryWrapperDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
@@ -75,8 +70,8 @@ AccountFactoryWrapperDelegate::paint(QPainter* painter, const QStyleOptionViewIt
     painter->drawText( opt.rect.adjusted( checkRect.right() + PADDING, PADDING, -PADDING, -PADDING ), Qt::AlignLeft | Qt::AlignVCenter, acc->accountFriendlyName() );
 
     // remove, config, status on right
-    const QRect pmRect( opt.rect.right() - PADDING - m_removePixmap.width(), topIcon, ICON_SIZE, ICON_SIZE );
-    painter->drawPixmap( pmRect, m_removePixmap );
+    const QRect pmRect( opt.rect.right() - PADDING - ICON_SIZE, topIcon, ICON_SIZE, ICON_SIZE );
+    painter->drawPixmap( pmRect, TomahawkUtils::defaultPixmap( TomahawkUtils::ListRemove, TomahawkUtils::Original, pmRect.size() ) );
     m_cachedButtonRects[ index ] = pmRect;
 
     const QRect confRect( pmRect.left() - PADDING - CONFIG_WRENCH_SIZE, center - CONFIG_WRENCH_SIZE/2, CONFIG_WRENCH_SIZE, CONFIG_WRENCH_SIZE );
@@ -85,7 +80,7 @@ AccountFactoryWrapperDelegate::paint(QPainter* painter, const QStyleOptionViewIt
     topt.rect = confRect;
     topt.pos = confRect.topLeft();
     topt.font = opt.font;
-    topt.icon = m_configIcon;
+    topt.icon = ImageRegistry::instance()->pixmap( RESPATH "images/configure.svg", QSize( CONFIG_WRENCH_SIZE - 8, CONFIG_WRENCH_SIZE - 8 ) );
     topt.iconSize = QSize( CONFIG_WRENCH_SIZE - 8, CONFIG_WRENCH_SIZE - 8 );
     topt.subControls = QStyle::SC_ToolButton;
     topt.activeSubControls = QStyle::SC_None;
@@ -100,23 +95,24 @@ AccountFactoryWrapperDelegate::paint(QPainter* painter, const QStyleOptionViewIt
     QPixmap p;
     QString statusText;
     Account::ConnectionState state = acc->connectionState();
+    const QRect connectIconRect( confRect.left() - PADDING - ICON_SIZE, topIcon, ICON_SIZE, ICON_SIZE );
+
     if ( state == Account::Connected )
     {
-        p = m_onlineIcon;
+        p = TomahawkUtils::defaultPixmap( TomahawkUtils::SipPluginOnline, TomahawkUtils::Original, connectIconRect.size() );
         statusText = tr( "Online" );
     }
     else if ( state == Account::Connecting )
     {
-        p = m_offlineIcon;
+        p = TomahawkUtils::defaultPixmap( TomahawkUtils::SipPluginOffline, TomahawkUtils::Original, connectIconRect.size() );
         statusText = tr( "Connecting..." );
     }
     else
     {
-        p = m_offlineIcon;
+        p = TomahawkUtils::defaultPixmap( TomahawkUtils::SipPluginOffline, TomahawkUtils::Original, connectIconRect.size() );
         statusText = tr( "Offline" );
     }
 
-    const QRect connectIconRect( confRect.left() - PADDING - ICON_SIZE, topIcon, ICON_SIZE, ICON_SIZE );
     painter->drawPixmap( connectIconRect, p );
 
     int width = painter->fontMetrics().width( statusText );

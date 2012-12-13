@@ -65,7 +65,8 @@ public:
     void setEmptyTip( const QString& tip );
 
     virtual QWidget* widget() { return this; }
-    virtual Tomahawk::playlistinterface_ptr playlistInterface() const { return m_playlistInterface; }
+    virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
+    void setPlaylistInterface( const Tomahawk::playlistinterface_ptr& playlistInterface );
 
     virtual QString title() const { return m_model->title(); }
     virtual QString description() const { return m_model->description(); }
@@ -110,7 +111,6 @@ private:
     GridItemDelegate* m_delegate;
     AnimatedSpinner* m_loadingSpinner;
     OverlayWidget* m_overlay;
-    Tomahawk::playlistinterface_ptr m_playlistInterface;
 
     QModelIndex m_contextMenuIndex;
     QPersistentModelIndex m_playing;

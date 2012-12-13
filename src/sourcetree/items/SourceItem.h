@@ -92,7 +92,6 @@ private:
     void playlistDeletedInternal( SourceTreeItem* parent, const T& playlists );
 
     Tomahawk::source_ptr m_source;
-    QPixmap m_superCol, m_defaultAvatar;
     CategoryItem* m_playlists;
     CategoryItem* m_stations;
 

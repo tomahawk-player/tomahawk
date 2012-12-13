@@ -23,6 +23,7 @@
 #include "GlobalActionManager.h"
 #include "Source.h"
 
+#include "utils/ImageRegistry.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
@@ -66,8 +67,8 @@ SocialWidget::SocialWidget( QWidget* parent )
     ui->charsLeftLabel->setForegroundRole( QPalette::Text );
     ui->charsLeftLabel->setStyleSheet( "text: black" );
     ui->buttonBox->button( QDialogButtonBox::Ok )->setText( tr( "Tweet" ) );
-    ui->buttonBox->button( QDialogButtonBox::Ok )->setIcon( QIcon( RESPATH "images/ok.png" ) );
-    ui->buttonBox->button( QDialogButtonBox::Cancel )->setIcon( QIcon( RESPATH "images/cancel.png" ) );
+    ui->buttonBox->button( QDialogButtonBox::Ok )->setIcon( ImageRegistry::instance()->icon( RESPATH "images/ok.svg" ) );
+    ui->buttonBox->button( QDialogButtonBox::Cancel )->setIcon( ImageRegistry::instance()->icon( RESPATH "images/cancel.svg" ) );
 
     ui->textEdit->setStyleSheet( "border: 1px solid " + TomahawkUtils::Colors::BORDER_LINE.name() );
 

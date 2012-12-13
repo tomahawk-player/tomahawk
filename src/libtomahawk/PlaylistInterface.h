@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2012, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -25,7 +25,6 @@
 #include "playlist/PlayableItem.h"
 #include "Typedefs.h"
 #include "DllMacro.h"
-#include "utils/Logger.h"
 
 namespace Tomahawk
 {
@@ -46,7 +45,7 @@ public:
     virtual int trackCount() const = 0;
 
     virtual Tomahawk::result_ptr currentItem() const = 0;
-    virtual void setCurrentIndex( qint64 index ) = 0;
+    virtual void setCurrentIndex( qint64 index );
 
     virtual bool hasNextResult() const;
     virtual bool hasPreviousResult() const;
@@ -54,7 +53,7 @@ public:
     virtual Tomahawk::result_ptr previousResult() const;
 
     virtual qint64 siblingIndex( int itemsAway, qint64 rootIndex = -1 ) const = 0;
-    virtual Tomahawk::result_ptr siblingResult( int itemsAway ) const;
+    virtual Tomahawk::result_ptr siblingResult( int itemsAway, qint64 rootIndex = -1 ) const;
 
     virtual Tomahawk::result_ptr resultAt( qint64 index ) const = 0;
     virtual Tomahawk::query_ptr queryAt( qint64 index ) const = 0;
@@ -85,7 +84,7 @@ public:
     //TODO: Get rid of the next two functions once all playlsitinterfaces are factored out
     // Some playlist interfaces can wrap other interfaces. When checking for top-level
     // equality (say, to compare the currently playing interface) this might be needed
-    virtual bool hasChildInterface( Tomahawk::playlistinterface_ptr ) { return false; }
+    virtual bool hasChildInterface( const Tomahawk::playlistinterface_ptr& ) { return false; }
 
 public slots:
     virtual void setRepeatMode( PlaylistModes::RepeatMode mode ) = 0;
@@ -100,11 +99,19 @@ signals:
     void previousTrackAvailable();
     void nextTrackAvailable();
 
+    void currentIndexChanged();
+
+protected slots:
+    virtual void onItemsChanged();
+
 protected:
     virtual QList<Tomahawk::query_ptr> filterTracks( const QList<Tomahawk::query_ptr>& queries );
 
     PlaylistModes::LatchMode m_latchMode;
     bool m_finished;
+    mutable bool m_prevAvail;
+    mutable bool m_nextAvail;
+    mutable qint64 m_currentIndex;
 
 private:
     Q_DISABLE_COPY( PlaylistInterface )

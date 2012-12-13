@@ -46,8 +46,6 @@ private slots:
 
 private:
     SourcesModel::CategoryType m_categoryType;
-    QIcon m_icon;
-
 };
 
 class CategoryItem : public SourceTreeItem

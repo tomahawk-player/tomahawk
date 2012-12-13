@@ -60,21 +60,7 @@ SourceDelegate::SourceDelegate( QAbstractItemView* parent )
     m_dropTypeTextMap.insert( 3, tr( "Local" ) );
     m_dropTypeTextMap.insert( 4, tr( "Top 10" ) );
 
-    m_dropTypeImageMap.insert( 0, QPixmap( RESPATH "images/drop-song.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
-    m_dropTypeImageMap.insert( 1, QPixmap( RESPATH "images/drop-album.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
-    m_dropTypeImageMap.insert( 2, QPixmap( RESPATH "images/drop-all-songs.png" ).scaledToHeight( 32, Qt::SmoothTransformation ) );
-    m_dropTypeImageMap.insert( 3, QPixmap( RESPATH "images/drop-local-songs.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
-    m_dropTypeImageMap.insert( 4, QPixmap( RESPATH "images/drop-top-songs.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
-
     m_dropMimeData = new QMimeData();
-
-    m_headphonesOff.load( RESPATH "images/headphones-off.png" );
-    m_headphonesOn.load( RESPATH "images/headphones-sidebar.png" );
-    m_realtimeLocked.load( RESPATH "images/closed-padlock.png" );
-    m_realtimeUnlocked.load( RESPATH "images/open-padlock.png" );
-    m_nowPlayingSpeaker.load( RESPATH "images/now-playing-speaker.png" );
-    m_nowPlayingSpeakerDark.load( RESPATH "images/now-playing-speaker-dark.png" );
-    m_collaborativeOn.load( RESPATH "images/green-dot.png" );
 }
 
 
@@ -149,8 +135,10 @@ SourceDelegate::paintDecorations( QPainter* painter, const QStyleOptionViewItem&
         }
 
         QRect iconRect = QRect( 4, option.rect.y() + 2, iconW, iconW );
-        QPixmap speaker = option.state & QStyle::State_Selected ? m_nowPlayingSpeaker : m_nowPlayingSpeakerDark;
-        speaker = speaker.scaledToHeight( iconW, Qt::SmoothTransformation );
+        QPixmap speaker = option.state & QStyle::State_Selected ?
+            TomahawkUtils::defaultPixmap( TomahawkUtils::NowPlayingSpeaker, TomahawkUtils::Original, iconRect.size() ) :
+            TomahawkUtils::defaultPixmap( TomahawkUtils::NowPlayingSpeakerDark, TomahawkUtils::Original, iconRect.size() );
+
         painter->drawPixmap( iconRect, speaker );
     }
 }
@@ -220,29 +208,29 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
     if ( isPlaying || ( !colItem->source().isNull() && colItem->source()->isLocal() ) )
     {
         // Show a listen icon
-        QPixmap listenAlongPixmap;
-        QPixmap realtimeListeningAlongPixmap;
+        TomahawkUtils::ImageType listenAlongPixmap = TomahawkUtils::Invalid;
+        TomahawkUtils::ImageType realtimeListeningAlongPixmap = TomahawkUtils::Invalid;
         if ( index.data( SourcesModel::LatchedOnRole ).toBool() )
         {
             // Currently listening along
-            listenAlongPixmap = m_headphonesOn;
+            listenAlongPixmap = TomahawkUtils::HeadphonesOn;
             if ( !colItem->source()->isLocal() )
             {
                 realtimeListeningAlongPixmap =
                     colItem->source()->playlistInterface()->latchMode() == Tomahawk::PlaylistModes::RealTime ?
-                        m_realtimeLocked : m_realtimeUnlocked;
+                        TomahawkUtils::PadlockClosed : TomahawkUtils::PadlockOpen;
             }
         }
         else if ( !colItem->source()->isLocal() )
         {
-            listenAlongPixmap = m_headphonesOff;
+            listenAlongPixmap = TomahawkUtils::HeadphonesOff;
         }
 
-        if ( !listenAlongPixmap.isNull() )
+        if ( listenAlongPixmap != TomahawkUtils::Invalid )
         {
             QRect pmRect = textRect;
             pmRect.setRight( pmRect.left() + pmRect.height() );
-            painter->drawPixmap( pmRect, listenAlongPixmap.scaledToHeight( pmRect.height(), Qt::SmoothTransformation ) );
+            painter->drawPixmap( pmRect, TomahawkUtils::defaultPixmap( listenAlongPixmap, TomahawkUtils::Original, pmRect.size() ) );
             textRect.adjust( pmRect.width() + 3, 0, 0, 0 );
 
             m_headphoneRects[ index ] = pmRect;
@@ -250,11 +238,11 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
         else
             m_headphoneRects.remove( index );
 
-        if ( !realtimeListeningAlongPixmap.isNull() )
+        if ( realtimeListeningAlongPixmap != TomahawkUtils::Invalid )
         {
             QRect pmRect = textRect;
             pmRect.setRight( pmRect.left() + pmRect.height() );
-            painter->drawPixmap( pmRect, realtimeListeningAlongPixmap.scaledToHeight( pmRect.height(), Qt::SmoothTransformation ) );
+            painter->drawPixmap( pmRect, TomahawkUtils::defaultPixmap( realtimeListeningAlongPixmap, TomahawkUtils::Original, pmRect.size() ) );
             textRect.adjust( pmRect.width() + 3, 0, 0, 0 );
 
             m_lockRects[ index ] = pmRect;
@@ -522,7 +510,28 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
             if ( itemsRect.bottom() - textRect.height() - 2 > itemsRect.top() )
             {
                 imageRect = itemsRect.adjusted( iconSpacing, verticalOffset, -iconSpacing, -textRect.height() - 2 );
-                painter->drawPixmap( imageRect.x(), imageRect.y(), m_dropTypeImageMap.value( i ).copy( 0, 32 - imageRect.height(), 32, imageRect.height() ) );
+
+                QPixmap pixmap;
+                switch ( i )
+                {
+                    case 0:
+                        pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DropSong, TomahawkUtils::Original, imageRect.size() );
+                        break;
+                    case 1:
+                        pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DropAlbum, TomahawkUtils::Original, imageRect.size() );
+                        break;
+                    case 2:
+                        pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DropAllSongs, TomahawkUtils::Original, imageRect.size() );
+                        break;
+                    case 3:
+                        pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DropLocalSongs, TomahawkUtils::Original, imageRect.size() );
+                        break;
+                    case 4:
+                        pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DropTopSongs, TomahawkUtils::Original, imageRect.size() );
+                        break;
+                }
+
+                painter->drawPixmap( imageRect, pixmap );
             }
 
             count++;
@@ -568,11 +577,8 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
                 QStyledItemDelegate::paint( painter, o, index );
 
                 // draw close icon
-                QPixmap p( RESPATH "images/list-remove.png" );
-                p = p.scaledToHeight( m_iconHeight, Qt::SmoothTransformation );
-
                 QRect r( o3.rect.right() - padding - m_iconHeight, padding + o3.rect.y(), m_iconHeight, m_iconHeight );
-                painter->drawPixmap( r, p );
+                painter->drawPixmap( r, TomahawkUtils::defaultPixmap( TomahawkUtils::ListRemove, TomahawkUtils::Original, r.size() ) );
             }
             else
                 QStyledItemDelegate::paint( painter, o, index );
@@ -585,20 +591,20 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
             if ( plItem->canSubscribe() && !plItem->subscribedIcon().isNull() )
             {
                 const int padding = 2;
-                const int imgWidth = o.rect.height() - 2*padding;
+                const int imgWidth = o.rect.height() - 2 * padding;
 
                 const QPixmap icon = plItem->subscribedIcon().scaled( imgWidth, imgWidth, Qt::KeepAspectRatio, Qt::SmoothTransformation );
-
                 const QRect subRect( o.rect.right() - padding - imgWidth, o.rect.top() + padding, imgWidth, imgWidth );
                 painter->drawPixmap( subRect, icon );
             }
 
             if ( plItem->collaborative() )
             {
-                const int imgWidth = m_collaborativeOn.size().width();
+                const int padding = 2;
+                const int imgWidth = o.rect.height() - 2 * padding;
                 const QRect subRect( o.rect.left(), o.rect.top(), imgWidth, imgWidth );
-                painter->drawPixmap( subRect, m_collaborativeOn );
 
+                painter->drawPixmap( subRect, TomahawkUtils::defaultPixmap( TomahawkUtils::GreenDot, TomahawkUtils::Original, subRect.size() ) );
             }
         }
         else

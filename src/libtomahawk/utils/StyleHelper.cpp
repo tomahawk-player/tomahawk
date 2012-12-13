@@ -26,14 +26,14 @@
 QColor
 StyleHelper::headerUpperColor()
 {
-    return QColor( "#464e57" );
+    return QColor( "#615858" );
 }
 
 
 QColor
 StyleHelper::headerLowerColor()
 {
-    return QColor( "#3f4650" );
+    return QColor( "#231F1F" );
 }
 
 
@@ -49,12 +49,19 @@ StyleHelper::horizontalHeader( QPainter* painter, const QRect& r )
 {
     painter->save();
 
-    QRect upperHalf( 0, 0, r.width(), r.height() / 2 );
+/*    QRect upperHalf( 0, 0, r.width(), r.height() / 2 );
     QRect lowerHalf( 0, upperHalf.height(), r.width(), r.height() );
     painter->fillRect( upperHalf, StyleHelper::headerUpperColor() );
-    painter->fillRect( lowerHalf, StyleHelper::headerLowerColor() );
+    painter->fillRect( lowerHalf, StyleHelper::headerLowerColor() );*/
+    QLinearGradient gradient( QPoint( 0, 0 ), QPoint( 0, 1 ) );
+    gradient.setCoordinateMode( QGradient::ObjectBoundingMode );
+    gradient.setColorAt( 0.0, StyleHelper::headerLowerColor() );
+    gradient.setColorAt( 1.0, StyleHelper::headerUpperColor() );
 
-    {
+    painter->setBrush( gradient );
+    painter->fillRect( r, gradient );
+
+/*    {
         QColor lineColor( 100, 100, 100 );
         QLine line( 0, 0, r.width(), 0 );
         painter->setPen( lineColor );
@@ -65,7 +72,7 @@ StyleHelper::horizontalHeader( QPainter* painter, const QRect& r )
         QLine line( 0, r.height() - 1, r.width(), r.height() - 1 );
         painter->setPen( lineColor );
         painter->drawLine( line );
-    }
+    }*/
 
     painter->restore();
 }
@@ -79,7 +86,7 @@ StyleHelper::headerTextColor()
 
 
 /*
- * This implementation is from QWindowsStyle (Qt 7.2)
+ * This implementation is from QWindowsStyle (Qt 4.2)
  *
  * It is licensed under the GPL 3:
  * Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
@@ -96,7 +103,7 @@ void StyleHelper::drawArrow( QStyle::PrimitiveElement element, QPainter* p, cons
     QString pixmapName;
 
     pixmapName.sprintf( "arrow-%s-%d-%d-%d-%lld", "$qt_ia", uint(opt->state), element, size, opt->palette.cacheKey() );
-    if ( !QPixmapCache::find( pixmapName, pixmap) )
+    if ( !QPixmapCache::find( pixmapName, pixmap ) )
     {
         int border = size / 5;
         int sqsize = 2 * ( size / 2 );

@@ -28,7 +28,7 @@
 #include "Pipeline.h"
 #include "SourceList.h"
 
-#include "utils/TomahawkUtils.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
 #ifdef Q_OS_WIN
@@ -59,7 +59,7 @@ ScriptResolver::ScriptResolver( const QString& exe )
     m_name = QFileInfo( filePath() ).baseName();
 
     // set the icon, if we launch properly we'll get the icon the resolver reports
-    m_icon.load( RESPATH "images/resolver-default.png" );
+    m_icon = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultResolver, TomahawkUtils::Original, QSize( 128, 128 ) );
 }
 
 

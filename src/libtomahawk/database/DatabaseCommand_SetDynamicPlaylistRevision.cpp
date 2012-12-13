@@ -105,7 +105,7 @@ DatabaseCommand_SetDynamicPlaylistRevision::postCommitHook()
         Q_ASSERT( false );
         return;
     }
-    
+
     if ( m_mode == OnDemand )
         rawPl->setRevision(  newrev(),
                                 true, // this *is* the newest revision so far

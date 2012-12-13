@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="400px" height="400px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <title>album-placeholder-grid</title>
+    <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
+    <defs>
+        <radialGradient cx="50%" cy="50%" fx="50%" fy="50%" r="70.6690133%" id="radialGradient-1">
+            <stop stop-color="rgb(187,190,185)" offset="0%"></stop>
+            <stop stop-color="rgb(213,211,209)" offset="0.923389476%"></stop>
+            <stop stop-color="rgb(241,240,240)" offset="100%"></stop>
+        </radialGradient>
+        <path d="M201,260 C234.137087,260 261,233.137087 261,200 C261,166.862913 234.137087,140 201,140 C167.862913,140 141,166.862913 141,200 C141,233.137087 167.862913,260 201,260 Z M200.5,377 C102.469452,377 23,297.530548 23,199.5 C23,101.469452 102.469452,22 200.5,22 C298.530548,22 378,101.469452 378,199.5 C378,297.530548 298.530548,377 200.5,377 Z M200.5,377" id="path-2"></path>
+    </defs>
+    <g id="Page 1" fill="rgb(215,215,215)" fill-rule="evenodd">
+        <path d="M0,0 L0,400 L400,400 L400,0 L0,0 Z M0,0" id="Rectangle 1" fill="rgb(0,0,0)"></path>
+        <g id="Group">
+            <use id="Oval 1" fill="url(#radialGradient-1)" xlink:href="#path-2"></use>
+            <use id="Oval 1-1" stroke="none" fill="none" xlink:href="#path-2"></use>
+            <path d="M201,260 C167.862913,260 141,233.137087 141,200 C141,166.862913 167.862913,140 201,140 C234.137087,140 261,166.862913 261,200 C261,233.137087 234.137087,260 201,260 Z M201.5,226 C216.135547,226 228,214.359404 228,200 C228,185.640596 216.135547,174 201.5,174 C186.864453,174 175,185.640596 175,200 C175,214.359404 186.864453,226 201.5,226 Z M201.5,226" id="Oval 2" stroke="rgb(150,150,150)" stroke-width="1" fill="rgb(137,137,137)"></path>
+        </g>
+    </g>
+</svg>

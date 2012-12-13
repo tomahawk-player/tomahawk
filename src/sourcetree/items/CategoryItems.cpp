@@ -19,22 +19,22 @@
 
 #include "CategoryItems.h"
 
+#include <QMimeData>
 
+#include <echonest/Playlist.h>
+
+#include "DropJob.h"
 #include "TomahawkApp.h"
 #include "ViewManager.h"
 #include "ViewPage.h"
 #include "SourceList.h"
 #include "SourceTreeView.h"
-#include "utils/TomahawkUtils.h"
-#include "widgets/NewPlaylistWidget.h"
 #include "TomahawkWindow.h"
+#include "utils/TomahawkUtils.h"
 #include "playlist/dynamic/GeneratorInterface.h"
+#include "widgets/NewPlaylistWidget.h"
+#include "utils/ImageRegistry.h"
 #include "utils/Logger.h"
-#include "DropJob.h"
-
-#include <echonest/Playlist.h>
-
-#include <QMimeData>
 
 using namespace Tomahawk;
 
@@ -45,7 +45,6 @@ CategoryAddItem::CategoryAddItem( SourcesModel* model, SourceTreeItem* parent, S
     : SourceTreeItem( model, parent, SourcesModel::CategoryAdd )
     , m_categoryType( type )
 {
-    m_icon = QIcon( RESPATH "images/add.png" );
 }
 
 
@@ -107,7 +106,7 @@ CategoryAddItem::flags() const
 QIcon
 CategoryAddItem::icon() const
 {
-    return m_icon;
+    return ImageRegistry::instance()->icon( RESPATH "images/add.svg" );
 }
 
 

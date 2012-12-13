@@ -47,6 +47,7 @@ FlexibleView::FlexibleView( QWidget* parent )
 
 //    m_trackView->setPlaylistInterface( m_playlistInterface );
     m_detailedView->setPlaylistInterface( m_trackView->proxyModel()->playlistInterface() );
+    m_gridView->setPlaylistInterface( m_trackView->proxyModel()->playlistInterface() );
 
     m_detailedView->setColumnHidden( PlayableModel::Age, true ); // Hide age column per default
     m_detailedView->setColumnHidden( PlayableModel::Filesize, true ); // Hide filesize column per default
@@ -130,6 +131,8 @@ FlexibleView::setGridView( GridView* view )
         m_stack->removeWidget( m_gridView );
         delete m_gridView;
     }
+
+    view->setPlaylistInterface( m_trackView->proxyModel()->playlistInterface() );
 
     m_gridView = view;
     m_stack->addWidget( view );

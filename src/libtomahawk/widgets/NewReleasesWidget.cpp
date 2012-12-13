@@ -20,7 +20,6 @@
  */
 
 #include "NewReleasesWidget.h"
-#include "WhatsHotWidget_p.h"
 #include "ui_NewReleasesWidget.h"
 
 #include "ViewManager.h"
@@ -69,7 +68,7 @@ NewReleasesWidget::NewReleasesWidget( QWidget* parent )
     m_sortedProxy->setDynamicSortFilter( true );
     m_sortedProxy->setFilterCaseSensitivity( Qt::CaseInsensitive );
 
-    ui->breadCrumbLeft->setRootIcon( QPixmap( RESPATH "images/new-releases.png" ) );
+    ui->breadCrumbLeft->setRootIcon( TomahawkUtils::defaultPixmap( TomahawkUtils::NewReleases, TomahawkUtils::Original ) );
 
     connect( ui->breadCrumbLeft, SIGNAL( activateIndex( QModelIndex ) ), SLOT( leftCrumbIndexChanged(QModelIndex) ) );
 

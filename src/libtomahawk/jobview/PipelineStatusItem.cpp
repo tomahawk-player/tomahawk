@@ -20,13 +20,12 @@
 
 #include "PipelineStatusItem.h"
 
-#include "utils/TomahawkUtils.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "Pipeline.h"
 #include "JobStatusModel.h"
 #include "JobStatusView.h"
 #include "Source.h"
 
-QPixmap* PipelineStatusItem::s_pixmap = 0;
 
 PipelineStatusItem::PipelineStatusItem( const Tomahawk::query_ptr& q )
     : JobStatusItem()
@@ -69,12 +68,7 @@ PipelineStatusItem::idle()
 QPixmap
 PipelineStatusItem::icon() const
 {
-    if ( !s_pixmap )
-    {
-        s_pixmap = new QPixmap( RESPATH"images/search-icon.png" );
-    }
-
-    return *s_pixmap;
+    return TomahawkUtils::defaultPixmap( TomahawkUtils::Search );
 }
 
 

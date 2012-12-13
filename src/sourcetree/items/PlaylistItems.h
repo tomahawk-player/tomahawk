@@ -67,7 +67,7 @@ private:
 
     bool m_loaded, m_canSubscribe, m_showSubscribed;
     Tomahawk::playlist_ptr m_playlist;
-    QIcon m_icon, m_overlaidIcon;
+    QIcon m_overlaidIcon;
     QPixmap m_subscribedOnIcon, m_subscribedOffIcon;
     QList<Tomahawk::PlaylistUpdaterInterface*> m_overlaidUpdaters;
 };
@@ -99,9 +99,6 @@ private:
     void checkReparentHackNeeded( const Tomahawk::DynamicPlaylistRevision& rev );
 
     Tomahawk::dynplaylist_ptr m_dynplaylist;
-
-    QIcon m_stationIcon;
-    QIcon m_automaticPlaylistIcon;
 };
 
 

@@ -70,6 +70,8 @@ TreeProxyModelPlaylistInterface::trackCount() const
 void
 TreeProxyModelPlaylistInterface::setCurrentIndex( qint64 index )
 {
+    PlaylistInterface::setCurrentIndex( index );
+
     PlayableItem* item = static_cast<PlayableItem*>( (void*)index );
     if ( index < 0 || !item )
     {

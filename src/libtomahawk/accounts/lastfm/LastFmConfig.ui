@@ -20,7 +20,7 @@
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap>:/data/images/lastfm-icon.png</pixmap>
+      <pixmap>:/data/images/lastfm-icon.svg</pixmap>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

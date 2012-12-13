@@ -13,6 +13,7 @@
 #include "database/DatabaseCommand_PlaybackCharts.h"
 #include "widgets/DeclarativeCoverArtProvider.h"
 #include "utils/TomahawkUtilsGui.h"
+#include "utils/Logger.h"
 
 #include <QUrl>
 #include <QSize>

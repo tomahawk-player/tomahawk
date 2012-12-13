@@ -40,7 +40,7 @@ public:
 
     virtual QList<Tomahawk::PlaylistUpdaterInterface*> updaters() const;
 
-    virtual QPixmap pixmap() const { return QPixmap( RESPATH "images/playlist-icon.png" ); }
+    virtual QPixmap pixmap() const;
     virtual bool isTemporaryPage() const;
 
 signals:

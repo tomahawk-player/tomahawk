@@ -51,7 +51,6 @@ private:
     Tomahawk::Accounts::AccountModel *m_model;
     AccountModelFactoryProxy *m_proxy;
 
-    QPixmap          m_defaultPixmap;
     QList< QPixmap > m_factoryPixmaps;
 };
 

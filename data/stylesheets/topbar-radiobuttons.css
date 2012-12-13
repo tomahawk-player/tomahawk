@@ -19,37 +19,37 @@ QRadioButton::indicator {
 
 QRadioButton::indicator::unchecked {
   background-image: url(:/data/images/view-toggle-inactive-centre.png);
-  image: url(:/data/images/view-toggle-icon-list-inactive.png);
+  image: url(:/data/images/view-toggle-icon-list-inactive.svg);
 }
 QRadioButton::indicator::checked {
   background-image: url(:/data/images/view-toggle-active-centre.png);
-  image: url(:/data/images/view-toggle-icon-list-active.png);
+  image: url(:/data/images/view-toggle-icon-list-active.svg);
 }
 QRadioButton::indicator::pressed {
   background-image: url(:/data/images/view-toggle-pressed-centre.png);
-  image: url(:/data/images/view-toggle-icon-list-active.png);
+  image: url(:/data/images/view-toggle-icon-list-active.svg);
 }
 QRadioButton#radioNormal::indicator::unchecked {
   background-image: url(:/data/images/view-toggle-inactive-left.png);
-  image: url(:/data/images/view-toggle-icon-artist-inactive.png);
+  image: url(:/data/images/view-toggle-icon-artist-inactive.svg);
 }
 QRadioButton#radioNormal::indicator::checked {
   background-image: url(:/data/images/view-toggle-active-left.png);
-  image: url(:/data/images/view-toggle-icon-artist-active.png);
+  image: url(:/data/images/view-toggle-icon-artist-active.svg);
 }
 QRadioButton#radioNormal::indicator::pressed {
   background-image: url(:/data/images/view-toggle-pressed-left.png);
-  image: url(:/data/images/view-toggle-icon-artist-active.png);
+  image: url(:/data/images/view-toggle-icon-artist-active.svg);
 }
 QRadioButton#radioCloud::indicator::unchecked {
   background-image: url(:/data/images/view-toggle-inactive-right.png);
-  image: url(:/data/images/view-toggle-icon-grid-inactive.png);
+  image: url(:/data/images/view-toggle-icon-grid-inactive.svg);
 }
 QRadioButton#radioCloud::indicator::checked {
   background-image: url(:/data/images/view-toggle-active-right.png);
-  image: url(:/data/images/view-toggle-icon-grid-active.png);
+  image: url(:/data/images/view-toggle-icon-grid-active.svg);
 }
 QRadioButton#radioCloud::indicator::pressed {
   background-image: url(:/data/images/view-toggle-pressed-right.png);
-  image: url(:/data/images/view-toggle-icon-grid-active.png);
+  image: url(:/data/images/view-toggle-icon-grid-active.svg);
 }

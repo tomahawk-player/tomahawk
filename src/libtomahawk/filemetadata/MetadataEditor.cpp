@@ -38,6 +38,7 @@
 #include "filemetadata/taghandlers/tag.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Closure.h"
+#include "utils/Logger.h"
 
 
 MetadataEditor::MetadataEditor( const Tomahawk::query_ptr& query, const Tomahawk::playlistinterface_ptr& interface, QWidget* parent )

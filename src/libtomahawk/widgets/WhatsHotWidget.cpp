@@ -20,15 +20,14 @@
  */
 
 #include "WhatsHotWidget.h"
-#include "WhatsHotWidget_p.h"
 #include "ui_WhatsHotWidget.h"
-
 
 #include "ViewManager.h"
 #include "SourceList.h"
 #include "TomahawkSettings.h"
 #include "RecentPlaylistsModel.h"
 #include "ChartDataLoader.h"
+#include "MetaPlaylistInterface.h"
 
 #include "audio/AudioEngine.h"
 #include "playlist/dynamic/GeneratorInterface.h"
@@ -75,7 +74,7 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     m_sortedProxy->setDynamicSortFilter( true );
     m_sortedProxy->setFilterCaseSensitivity( Qt::CaseInsensitive );
 
-    ui->breadCrumbLeft->setRootIcon( QPixmap( RESPATH "images/charts.png" ) );
+    ui->breadCrumbLeft->setRootIcon( TomahawkUtils::defaultPixmap( TomahawkUtils::Charts, TomahawkUtils::Original ) );
 
     connect( ui->breadCrumbLeft, SIGNAL( activateIndex( QModelIndex ) ), SLOT( leftCrumbIndexChanged( QModelIndex ) ) );
 
@@ -91,11 +90,8 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     artistsProxy->setDynamicSortFilter( true );
 
     ui->artistsViewLeft->setProxyModel( artistsProxy );
-
     ui->artistsViewLeft->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     ui->artistsViewLeft->header()->setVisible( true );
-
-    m_playlistInterface = Tomahawk::playlistinterface_ptr( new ChartsPlaylistInterface( this ) );
 
     m_workerThread = new QThread( this );
     m_workerThread->start();
@@ -115,6 +111,11 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     m_loadingSpinner =  new AnimatedSpinner( ui->tracksViewLeft );
     m_loadingSpinner->fadeIn();
 
+    MetaPlaylistInterface* mpl = new MetaPlaylistInterface();
+    mpl->addChildInterface( ui->tracksViewLeft->playlistInterface() );
+    mpl->addChildInterface( ui->artistsViewLeft->playlistInterface() );
+    mpl->addChildInterface( ui->albumsView->playlistInterface() );
+    m_playlistInterface = playlistinterface_ptr( mpl );
 }
 
 

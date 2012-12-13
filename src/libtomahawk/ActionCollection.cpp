@@ -20,11 +20,13 @@
  */
 
 #include "ActionCollection.h"
+
 #include "TomahawkSettings.h"
+#include "Source.h"
 #include "audio/AudioEngine.h"
+#include "utils/ImageRegistry.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
-#include "Source.h"
 
 #include <QCoreApplication>
 
@@ -55,10 +57,10 @@ void
 ActionCollection::initActions()
 {
     QAction *latchOn = new QAction( tr( "&Listen Along" ), this );
-    latchOn->setIcon( QIcon( RESPATH "images/headphones-sidebar.png" ) );
+    latchOn->setIcon( ImageRegistry::instance()->icon( RESPATH "images/headphones.svg" ) );
     m_actionCollection[ "latchOn" ] = latchOn;
     QAction *latchOff = new QAction( tr( "Stop &Listening Along" ), this );
-    latchOff->setIcon( QIcon( RESPATH "images/headphones-off.png" ) );
+    latchOff->setIcon( ImageRegistry::instance()->icon( RESPATH "images/headphones-off.svg" ) );
     m_actionCollection[ "latchOff" ] = latchOff;
 
     QAction *realtimeFollowingAlong = new QAction( tr( "&Follow in real-time" ), this );
@@ -67,7 +69,7 @@ ActionCollection::initActions()
 
     bool isPublic = TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::PublicListening;
     QAction *privacyToggle = new QAction( ( isPublic ? tr( "&Listen Privately" ) : tr( "&Listen Publicly" ) ), this );
-    privacyToggle->setIcon( QIcon( RESPATH "images/private-listening.png" ) );
+    privacyToggle->setIcon( ImageRegistry::instance()->icon( RESPATH "images/private-listening.svg" ) );
     privacyToggle->setIconVisibleInMenu( isPublic );
     m_actionCollection[ "togglePrivacy" ] = privacyToggle;
     connect( m_actionCollection[ "togglePrivacy" ], SIGNAL( triggered() ), SLOT( togglePrivateListeningMode() ), Qt::UniqueConnection );
@@ -76,14 +78,14 @@ ActionCollection::initActions()
     m_actionCollection[ "renamePlaylist" ] = new QAction( tr( "&Rename Playlist" ), this );
     m_actionCollection[ "copyPlaylist" ] =   new QAction( tr( "&Copy Playlist Link" ), this );
     m_actionCollection[ "playPause" ] =      new QAction( tr( "&Play" ), this );
-    m_actionCollection[ "playPause" ]->setIcon( QIcon( RESPATH "images/play-rest.png" ) );
+    m_actionCollection[ "playPause" ]->setIcon( ImageRegistry::instance()->icon( RESPATH "images/play-rest.svg" ) );
     m_actionCollection[ "playPause" ]->setShortcut( Qt::Key_Space );
     m_actionCollection[ "playPause" ]->setShortcutContext( Qt::ApplicationShortcut );
     m_actionCollection[ "stop" ] =           new QAction( tr( "&Stop" ), this );
     m_actionCollection[ "previousTrack" ] =  new QAction( tr( "&Previous Track" ), this );
-    m_actionCollection[ "previousTrack" ]->setIcon( QIcon( RESPATH "images/back-rest.png" ) );
+    m_actionCollection[ "previousTrack" ]->setIcon( ImageRegistry::instance()->icon( RESPATH "images/back-rest.svg" ) );
     m_actionCollection[ "nextTrack" ] =      new QAction( tr( "&Next Track" ), this );
-    m_actionCollection[ "nextTrack" ]->setIcon( QIcon( RESPATH "images/skip-rest.png" ) );
+    m_actionCollection[ "nextTrack" ]->setIcon( ImageRegistry::instance()->icon( RESPATH "images/skip-rest.svg" ) );
     m_actionCollection[ "quit" ] =           new QAction( tr( "&Quit" ), this );
     m_actionCollection[ "quit" ]->setShortcut( QKeySequence::Quit );
     m_actionCollection[ "quit" ]->setShortcutContext( Qt::ApplicationShortcut );
@@ -103,7 +105,7 @@ ActionCollection::initActions()
     m_actionCollection[ "showOfflineSources" ] = new QAction( tr( "Show Offline Sources" ), this );
     m_actionCollection[ "showOfflineSources" ]->setCheckable( true );
     m_actionCollection[ "preferences" ] =        new QAction( tr( "&Configure Tomahawk..." ), this );
-    m_actionCollection[ "preferences" ]->setIcon( QIcon( RESPATH "images/configure.png" ) );
+    m_actionCollection[ "preferences" ]->setIcon( ImageRegistry::instance()->icon( RESPATH "images/configure.svg" ) );
     m_actionCollection[ "preferences" ]->setMenuRole( QAction::PreferencesRole );
 #ifdef Q_OS_MAC
     m_actionCollection[ "minimize" ] =           new QAction( tr( "Minimize" ), this );
@@ -118,7 +120,7 @@ ActionCollection::initActions()
     m_actionCollection[ "diagnostics" ] =        new QAction( tr( "Diagnostics..." ), this );
     m_actionCollection[ "diagnostics" ]->setMenuRole( QAction::ApplicationSpecificRole );
     m_actionCollection[ "aboutTomahawk" ] =      new QAction( tr( "About &Tomahawk..." ), this );
-    m_actionCollection[ "aboutTomahawk" ]->setIcon( QIcon( RESPATH "images/info.png" ) );
+    m_actionCollection[ "aboutTomahawk" ]->setIcon( ImageRegistry::instance()->icon( RESPATH "images/info.svg" ) );
     m_actionCollection[ "aboutTomahawk" ]->setMenuRole( QAction::AboutRole );
     m_actionCollection[ "legalInfo" ] =          new QAction( tr( "&Legal Information..." ), this );
     m_actionCollection[ "legalInfo" ]->setMenuRole( QAction::ApplicationSpecificRole );

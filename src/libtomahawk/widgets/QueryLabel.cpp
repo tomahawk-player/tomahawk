@@ -93,7 +93,6 @@ QueryLabel::init()
     m_mode = Qt::ElideMiddle;
 
     m_jumpLinkVisible = false;
-    m_jumpPixmap = QPixmap( RESPATH "images/jump-link.png" ).scaled( QSize( fontMetrics().height(), fontMetrics().height() ), Qt::KeepAspectRatio, Qt::SmoothTransformation );
 }
 
 
@@ -111,7 +110,7 @@ QueryLabel::text() const
         {
             text += m_result->artist()->name();
         }
-        if ( m_type & Album )
+        if ( m_type & Album && !m_result->album()->name().isEmpty() )
         {
             smartAppend( text, m_result->album()->name() );
         }
@@ -126,7 +125,7 @@ QueryLabel::text() const
         {
             text += m_query->artist();
         }
-        if ( m_type & Album )
+        if ( m_type & Album && !m_query->album().isEmpty() )
         {
             smartAppend( text, m_query->album() );
         }
@@ -373,8 +372,8 @@ QueryLabel::paintEvent( QPaintEvent* event )
     QPainter p( this );
     QRect r = contentsRect();
     QString s = text();
-    const QString elidedText = fontMetrics().elidedText( s, m_mode, r.width() );
     const QFontMetrics& fm = fontMetrics();
+    const QString elidedText = fm.elidedText( s, m_mode, r.width() );
 
     p.save();
     p.setRenderHint( QPainter::Antialiasing );
@@ -430,7 +429,7 @@ QueryLabel::paintEvent( QPaintEvent* event )
             p.drawText( r, m_align, artist()->name() );
             r.adjust( artistX, 0, 0, 0 );
         }
-        if ( m_type & Album )
+        if ( m_type & Album && !album()->name().isEmpty() )
         {
             p.setBrush( palette().window() );
             if ( !m_useCustomPen )
@@ -456,7 +455,7 @@ QueryLabel::paintEvent( QPaintEvent* event )
             if ( !m_useCustomPen )
                 p.setPen( palette().color( foregroundRole() ) );
 
-            if ( m_type & Artist || m_type & Album )
+            if ( m_type & Artist || ( m_type & Album && !album()->name().isEmpty() ) )
             {
                 p.drawText( r, m_align, DASH );
                 r.adjust( dashX, 0, 0, 0 );
@@ -475,7 +474,7 @@ QueryLabel::paintEvent( QPaintEvent* event )
         {
             r.adjust( 6, 0, 0, 0 );
             r.setWidth( r.height() );
-            p.drawPixmap( r, m_jumpPixmap.scaled( r.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
+            p.drawPixmap( r, TomahawkUtils::defaultPixmap( TomahawkUtils::JumpLink, TomahawkUtils::Original, r.size() ) );
         }
     }
 
@@ -598,7 +597,7 @@ QueryLabel::mouseMoveEvent( QMouseEvent* event )
     {
         trackX += contentsMargins().left();
     }
-    if ( m_type & Album )
+    if ( m_type & Album && !album()->name().isEmpty() )
     {
         trackX += albumX + dashX;
         albumX += contentsMargins().left();
@@ -621,21 +620,21 @@ QueryLabel::mouseMoveEvent( QMouseEvent* event )
             hoverArea.setLeft( 0 );
             hoverArea.setRight( artistX + contentsMargins().left() - 1 );
         }
-        else if ( m_type & Album && x < albumX && x > artistX )
+        else if ( m_type & Album && !album()->name().isEmpty() && x < albumX && x > artistX )
         {
             m_hoverType = Album;
             int spacing = ( m_type & Artist ) ? dashX : 0;
-            hoverArea.setLeft( artistX + spacing );
-            hoverArea.setRight( albumX + spacing + contentsMargins().left() - 1 );
+            hoverArea.setLeft( artistX + spacing - contentsMargins().left() );
+            hoverArea.setRight( albumX + contentsMargins().left() - 1 );
         }
         else if ( m_type & Track && x < trackX && x > albumX )
         {
             m_hoverType = Track;
-            int spacing = ( m_type & Album ) ? dashX : 0;
+            int spacing = ( m_type & Album && !album()->name().isEmpty() ) ? dashX : 0;
             hoverArea.setLeft( albumX + spacing );
             hoverArea.setRight( trackX + contentsMargins().left() - 1 );
         }
-        else if ( m_jumpLinkVisible && x < trackX + 6 + m_jumpPixmap.width() && x > trackX + 6 )
+        else if ( m_jumpLinkVisible && x < trackX + 6 + fm.height() && x > trackX + 6 )
         {
             m_hoverType = Complete;
         }

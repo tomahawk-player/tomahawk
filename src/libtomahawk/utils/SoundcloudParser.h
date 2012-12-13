@@ -83,7 +83,6 @@ private:
     Tomahawk::playlist_ptr m_playlist;
     DropJobNotifier* m_browseJob;
     DropJob::DropType m_type;
-    static QPixmap* s_pixmap;
 };
 
 }

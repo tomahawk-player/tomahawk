@@ -5,6 +5,7 @@
 #include "Album.h"
 #include "Artist.h"
 #include "utils/TomahawkUtilsGui.h"
+#include "utils/Logger.h"
 
 #include <QDeclarativeImageProvider>
 #include <QModelIndex>
