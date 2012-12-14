@@ -14,9 +14,11 @@
 #include "widgets/DeclarativeCoverArtProvider.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+#include "widgets/Breadcrumb.h"
 
 #include <QUrl>
 #include <QSize>
+#include <QVBoxLayout>
 #include <qdeclarative.h>
 #include <QDeclarativeContext>
 
@@ -24,7 +26,7 @@ namespace Tomahawk
 {
 
 DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* parent )
-    : DeclarativeView( parent )
+    : QWidget( parent )
     , m_playlist( playlist )
     , m_runningOnDemand( false )
     , m_activePlaylist( false )
@@ -40,13 +42,30 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
     m_artistChartsModel = new PlayableModel( this );
 
 
+    QVBoxLayout *vLayout = new QVBoxLayout();
+    setLayout(vLayout);
+    TomahawkUtils::unmarginLayout(vLayout);
+
+    createStationModel();
+    m_breadcrumb = new Breadcrumb();
+    connect(m_breadcrumb, SIGNAL(activateIndex(QModelIndex)), SLOT(breadcrumbChanged(QModelIndex)));
+    m_breadcrumb->setModel(m_createStationModel);
+    m_breadcrumb->setRootIcon( TomahawkUtils::defaultPixmap( TomahawkUtils::Charts, TomahawkUtils::Original ) );
+    vLayout->addWidget(m_breadcrumb);
+
+    DeclarativeView *m_declarativeView = new DeclarativeView();
+    vLayout->addWidget(m_declarativeView);
+    qRegisterMetaType<CreateBy>("CreateBy");
+
     qmlRegisterUncreatableType<GeneratorInterface>("tomahawk", 1, 0, "Generator", "you cannot create it on your own - should be set in context");
+    qmlRegisterUncreatableType<DynamicQmlWidget>("tomahawk", 1, 0, "StationWidget", "bla");
 
-    rootContext()->setContextProperty( "dynamicModel", m_proxyModel );
-    rootContext()->setContextProperty( "artistChartsModel", m_artistChartsModel );
-    rootContext()->setContextProperty( "generator", m_playlist->generator().data() );
+    m_declarativeView->rootContext()->setContextProperty( "dynamicModel", m_proxyModel );
+    m_declarativeView->rootContext()->setContextProperty( "artistChartsModel", m_artistChartsModel );
+    m_declarativeView->rootContext()->setContextProperty( "generator", m_playlist->generator().data() );
+    m_declarativeView->rootContext()->setContextProperty( "stationView", this );
 
-    setSource( QUrl( "qrc" RESPATH "qml/StationScene.qml" ) );
+    m_declarativeView->setSource( QUrl( "qrc" RESPATH "qml/StationScene.qml" ) );
 
     connect( m_model, SIGNAL( currentItemChanged(QPersistentModelIndex)), SLOT( currentIndexChanged( QPersistentModelIndex ) ) );
     connect( m_model, SIGNAL( loadingStarted() ), SIGNAL(loadingChanged() ) );
@@ -147,7 +166,7 @@ void DynamicQmlWidget::startStationFromGenre(const QString &genre)
 void DynamicQmlWidget::currentIndexChanged( const QPersistentModelIndex &currentIndex )
 {
     tDebug() << "current index is" << currentIndex.row();
-    rootContext()->setContextProperty( "currentlyPlayedIndex", m_proxyModel->mapFromSource( currentIndex ).row() );
+    m_declarativeView->rootContext()->setContextProperty( "currentlyPlayedIndex", m_proxyModel->mapFromSource( currentIndex ).row() );
 }
 
 void
@@ -248,5 +267,94 @@ DynamicQmlWidget::onArtistCharts( const QList< Tomahawk::artist_ptr >& artists )
     m_artistChartsModel->clear();
     m_artistChartsModel->appendArtists( artists );
 
+    QStandardItem *byArtistItem = 0;
+    for(int i = 0; i < m_createStationModel->rowCount(); ++i) {
+        QStandardItem *item = m_createStationModel->itemFromIndex(m_createStationModel->index(i, 0));
+        tDebug() << "##" << item->data(Qt::UserRole);
+        if(item->data(RoleCreateBy).toInt() == CreateByArtist) {
+            byArtistItem = item;
+            break;
+        }
+    }
+    if(!byArtistItem) {
+        // huh? no "...by artist selection? Cannot continue...
+        return;
+    }
+
+    QStandardItem *selectArtistItem = new QStandardItem("choose artist...");
+    selectArtistItem->setData(1, RolePage);
+    selectArtistItem->setData(CreateByArtist, RoleCreateBy);
+    byArtistItem->appendRow(selectArtistItem);
+    foreach(const Tomahawk::artist_ptr &artist, artists) {
+        QStandardItem *artistItem = new QStandardItem(artist->name());
+        artistItem->setData(2, RolePage);
+        artistItem->setData(CreateByNone, RoleCreateBy);
+        byArtistItem->appendRow(artistItem);
+    }
+    m_breadcrumb->setModel(m_createStationModel);
+}
+
+void DynamicQmlWidget::createStationModel()
+{
+    m_createStationModel = new QStandardItemModel(this);
+
+    // Create Station by...
+    QStandardItem *selectionItem = new QStandardItem("Start...");
+    selectionItem->setData(0, RolePage);
+    selectionItem->setData(CreateByNone, RoleCreateBy);
+    m_createStationModel->insertRow(0, selectionItem);
+
+    QStandardItem *byArtistItem = new QStandardItem("...by Artist");
+    byArtistItem->setData(1, RolePage);
+    byArtistItem->setData(CreateByArtist, RoleCreateBy);
+    m_createStationModel->insertRow(0, byArtistItem);
+
+    QStandardItem *byGenreItem = new QStandardItem("...by Genre");
+    byArtistItem->setData(1, RolePage);
+    byGenreItem->setData(CreateByGenre, RoleCreateBy);
+    m_createStationModel->insertRow(0, byGenreItem);
+
+    QStandardItem *byYearItem = new QStandardItem("...by Year");
+    byArtistItem->setData(1, RolePage);
+    byYearItem->setData(CreateByYear, RoleCreateBy);
+    m_createStationModel->insertRow(0, byYearItem);
+
+    // Fill in genres (static for now)
+    QStringList genres;
+    genres << "acoustic" << "alternative" << "alternative rock" << "classic" << "folk" << "indie" << "pop" <<
+              "rock" << "hip-hop" << "punk" << "grunge" << "indie" << "electronic" << "country" << "jazz" <<
+              "psychodelic" << "soundtrack" << "reggae" << "house" << "drum and base";
+
+    QStandardItem *selectGenreItem = new QStandardItem("choose genre...");
+    selectGenreItem->setData(1, RolePage);
+    selectGenreItem->setData(CreateByGenre, RoleCreateBy);
+    byGenreItem->appendRow(selectGenreItem);
+    foreach(const QString &genre, genres) {
+        QStandardItem *genreItem = new QStandardItem(genre);
+        genreItem->setData(2, RolePage);
+        genreItem->setData(CreateByNone, RoleCreateBy);
+        byGenreItem->appendRow(genreItem);
+    }
+
+    // Fill in years (static for now)
+    QStringList years;
+    years << "50" << "60" << "70" << "80" << "90";
+
+    QStandardItem *selectYearItem = new QStandardItem("choose year...");
+    selectYearItem->setData(1, RolePage);
+    selectYearItem->setData(CreateByYear, RoleCreateBy);
+    byYearItem->appendRow(selectYearItem);
+    foreach(const QString &year, years) {
+        QStandardItem *yearItem = new QStandardItem(year);
+        yearItem->setData(2, RolePage);
+        yearItem->setData(CreateByNone, RoleCreateBy);
+        byYearItem->appendRow(yearItem);
+    }
+}
+
+void DynamicQmlWidget::breadcrumbChanged(const QModelIndex &index)
+{
+    tDebug() << "**************************************" << index.data(RolePage).toInt() << index.data(RoleCreateBy);
+    emit pagePicked(index.data(RolePage).toInt(), index.data(RoleCreateBy).toInt());
 }
 }
