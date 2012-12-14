@@ -273,7 +273,11 @@ MusicBrainzPlugin::gotRecordingsSlot()
     for ( int i = 0; i < tracksNL.count(); i++ )
     {
         QString track = tracksNL.at(i).firstChildElement( "recording" ).firstChildElement( "title" ).text();
-        tracksSL << track;
+        if ( !tracksSL.contains( track ) )
+        {
+            tracksSL << track;
+            tDebug(LOGVERBOSE) << Q_FUNC_INFO << track;
+        }
     }
 
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
