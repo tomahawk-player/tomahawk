@@ -176,7 +176,7 @@ MusicBrainzPlugin::gotReleaseGroupsSlot()
                 QString groupTitle = releaseGroupsNL.at(i).firstChildElement("title").text();
                 QString a = releaseGroupsNL.at(i).firstChildElement( "artist-credit" ).firstChildElement( "name-credit" ).firstChildElement( "artist" ).firstChildElement( "name" ).text();
                 QString id = releaseGroupsNL.at(i).firstChildElement( "artist-credit" ).firstChildElement( "name-credit" ).firstChildElement( "artist" ).attribute( "id" );
-                if ( !albums.contains( groupTitle ) && hash["artist"] == a && id == popularId )
+                if ( !albums.contains( groupTitle ) && id == popularId && a.normalized( QString::NormalizationForm_KC ) == hash["artist"].normalized( QString::NormalizationForm_KC ) )
                 {
                     albums << groupTitle;
                     tDebug() << Q_FUNC_INFO << groupTitle;
