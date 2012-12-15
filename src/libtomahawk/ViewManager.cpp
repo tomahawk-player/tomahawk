@@ -53,7 +53,7 @@
 
 #include <QVBoxLayout>
 #include <QMetaMethod>
-
+#include <QApplication>
 
 #define FILTER_TIMEOUT 280
 
@@ -192,7 +192,7 @@ ViewManager::show( const Tomahawk::dynplaylist_ptr& playlist )
 {
     if ( !m_dynamicWidgets.contains( playlist ) || m_dynamicWidgets.value( playlist ).isNull() )
     {
-       m_dynamicWidgets[ playlist ] = new Tomahawk::DynamicQmlWidget( playlist, m_stack );
+        m_dynamicWidgets[ playlist ] = new Tomahawk::DynamicQmlWidget( playlist );
 
        playlist->resolve();
     }
@@ -540,7 +540,7 @@ ViewManager::setPage( ViewPage* page, bool trackHistory )
     emit historyBackAvailable( m_pageHistoryBack.count() );
     emit historyForwardAvailable( m_pageHistoryFwd.count() );
 
-    qDebug() << "View page shown:" << page->title();
+    tDebug() << "View page shown:" << page->title();
     emit viewPageActivated( page );
 
     if ( page->isTemporaryPage() )
@@ -575,6 +575,8 @@ ViewManager::setPage( ViewPage* page, bool trackHistory )
             connect( obj, SIGNAL( destroyed( QWidget* ) ), SLOT( onWidgetDestroyed( QWidget* ) ), Qt::UniqueConnection );
     }
 
+    // Let QML initialize before we call setVisible() on it (happens inside QPageStack)
+    qApp->processEvents();
     m_stack->setCurrentWidget( page->widget() );
 
     updateView();
