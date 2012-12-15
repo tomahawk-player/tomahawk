@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+<svg width="38px" height="38px" viewBox="0 0 38 38" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
     <title>view-toggle-pressed-right</title>
     <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
     <defs>
@@ -7,7 +7,7 @@
             <stop stop-color="rgb(37,41,44)" offset="0%"></stop>
             <stop stop-color="rgb(0,0,0)" stop-opacity="0.5" offset="100%"></stop>
         </linearGradient>
-        <path d="M1,1 L1,39 L27.0026482,39 C33.6286026,39 39,33.636124 39,27.0026482 L39,12.9973518 C39,6.37139735 33.636124,1 27.0026482,1 L1,1 Z M1,1" id="path-2"></path>
+        <path d="M0,0 L0,38 L26.0026482,38 C32.6286026,38 38,32.636124 38,26.0026482 L38,11.9973518 C38,5.37139735 32.636124,0 26.0026482,0 L0,0 Z M0,0" id="path-2"></path>
     </defs>
     <g id="Page 1" fill="rgb(215,215,215)" fill-rule="evenodd">
         <use id="Rectangle 2" stroke="rgb(150,150,150)" stroke-width="1" fill="url(#linearGradient-1)" xlink:href="#path-2"></use>
