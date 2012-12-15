@@ -63,7 +63,7 @@ public:
     virtual QString title() const { return m_title; }
     virtual QString description() const { return QString(); }
     virtual QString longDescription() const { return QString(); }
-    virtual QPixmap pixmap() const { if ( m_pixmap.isNull() ) return Tomahawk::ViewPage::pixmap(); else return m_pixmap; }
+    virtual QString iconSource() const { if ( m_iconSource.isEmpty() ) return Tomahawk::ViewPage::iconSource(); else return m_iconSource; }
 
     virtual bool isBeingPlayed() const;
     virtual bool isTemporaryPage() const { return true; }
@@ -96,7 +96,7 @@ private:
 
     PlayableModel* m_relatedTracksModel;
     QString m_title;
-    QPixmap m_pixmap;
+    QString m_iconSource;
 };
 
 #endif // TRACKINFOWIDGET_H

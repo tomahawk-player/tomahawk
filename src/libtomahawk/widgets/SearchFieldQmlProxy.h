@@ -11,6 +11,11 @@ class SearchFieldQmlProxy: public QGraphicsProxyWidget
 public:
     SearchFieldQmlProxy(QGraphicsItem* parent = 0);
 
+signals:
+    void textChanged(const QString &text);
+    void editingFinished();
+    void returnPressed();
+
 private:
     QSearchField *m_searchField;
 };

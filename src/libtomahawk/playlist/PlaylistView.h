@@ -40,7 +40,7 @@ public:
 
     virtual QList<Tomahawk::PlaylistUpdaterInterface*> updaters() const;
 
-    virtual QPixmap pixmap() const;
+    virtual QString iconSource() const;
     virtual bool isTemporaryPage() const;
 
 signals:

@@ -22,7 +22,7 @@
 #include <QStackedWidget>
 #include <QVBoxLayout>
 
-#include "playlist/FlexibleHeader.h"
+#include "widgets/DeclarativeHeader.h"
 #include "playlist/PlayableModel.h"
 #include "playlist/PlaylistModel.h"
 #include "playlist/TrackView.h"
@@ -37,13 +37,13 @@ using namespace Tomahawk;
 
 FlexibleView::FlexibleView( QWidget* parent )
     : QWidget( parent )
-    , m_header( new FlexibleHeader( this ) )
+    , m_header( new DeclarativeHeader( this ) )
     , m_trackView( new TrackView() )
     , m_detailedView( new TrackView() )
     , m_gridView( new GridView() )
     , m_model( 0 )
 {
-    qRegisterMetaType< FlexibleViewMode >( "FlexibleViewMode" );
+    qRegisterMetaType< TomahawkUtils::ViewMode >( "TomahawkUtils::ViewMode" );
 
 //    m_trackView->setPlaylistInterface( m_playlistInterface );
     m_detailedView->setPlaylistInterface( m_trackView->proxyModel()->playlistInterface() );
@@ -69,9 +69,10 @@ FlexibleView::FlexibleView( QWidget* parent )
     m_stack->addWidget( m_detailedView );
     m_stack->addWidget( m_gridView );
 
-    setCurrentMode( Flat );
+    setCurrentMode( TomahawkUtils::ViewModeFlat );
 
     connect( m_header, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
+    connect( m_header, SIGNAL(viewModeChanged(TomahawkUtils::ViewMode)), SLOT(setCurrentMode(TomahawkUtils::ViewMode)));
 }
 
 
@@ -178,26 +179,26 @@ FlexibleView::setPlaylistModel( PlaylistModel* model )
 
 
 void
-FlexibleView::setCurrentMode( FlexibleViewMode mode )
+FlexibleView::setCurrentMode( TomahawkUtils::ViewMode mode )
 {
     m_mode = mode;
 
     switch ( mode )
     {
-        case Flat:
+        case TomahawkUtils::ViewModeFlat:
         {
             tDebug() << "m_trackView:" << m_trackView << m_stack->indexOf( m_trackView );
             m_stack->setCurrentWidget( m_trackView );
             break;
         }
 
-        case Detailed:
+        case TomahawkUtils::ViewModeDetailed:
         {
             m_stack->setCurrentWidget( m_detailedView );
             break;
         }
 
-        case Grid:
+        case TomahawkUtils::ViewModeGrid:
         {
             m_stack->setCurrentWidget( m_gridView );
             break;
@@ -229,10 +230,10 @@ FlexibleView::description() const
 }
 
 
-QPixmap
-FlexibleView::pixmap() const
+QString
+FlexibleView::headerIconSource() const
 {
-    return m_pixmap;
+    return m_headerIconSource;
 }
 
 
@@ -275,17 +276,17 @@ FlexibleView::setEmptyTip( const QString& tip )
 
 
 void
-FlexibleView::setPixmap( const QPixmap& pixmap )
+FlexibleView::setHeaderIconSource( const QString& headerIconSource )
 {
-    m_pixmap = pixmap;
-    m_header->setPixmap( pixmap );
+    m_headerIconSource = headerIconSource;
+    m_header->setIconSource( headerIconSource );
 }
 
 
 void
 FlexibleView::onModelChanged()
 {
-    m_header->setPixmap( m_pixmap );
+    m_header->setIconSource( m_headerIconSource );
     m_header->setCaption( m_model->title() );
     m_header->setDescription( m_model->description() );
 

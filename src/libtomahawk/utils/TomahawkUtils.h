@@ -133,6 +133,12 @@ namespace TomahawkUtils
         RoundedCorners
     };
 
+    enum ViewMode
+    {
+        ViewModeFlat = 0,
+        ViewModeDetailed = 1,
+        ViewModeGrid = 2
+    };
 
     class DLLEXPORT NetworkProxyFactory : public QNetworkProxyFactory
     {
@@ -214,5 +220,6 @@ namespace TomahawkUtils
 
     DLLEXPORT void crash();
 }
+Q_DECLARE_METATYPE( TomahawkUtils::ViewMode );
 
 #endif // TOMAHAWKUTILS_H

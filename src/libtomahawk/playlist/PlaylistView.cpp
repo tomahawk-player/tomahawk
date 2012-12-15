@@ -163,8 +163,8 @@ PlaylistView::onMenuTriggered( int action )
 }
 
 
-QPixmap
-PlaylistView::pixmap() const
+QString
+PlaylistView::iconSource() const
 {
-    return TomahawkUtils::defaultPixmap( TomahawkUtils::Playlist );
+    return TomahawkUtils::defaultImagePath( TomahawkUtils::Playlist );
 }

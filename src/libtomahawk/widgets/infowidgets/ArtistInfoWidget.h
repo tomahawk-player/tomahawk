@@ -76,7 +76,7 @@ public:
     virtual QString title() const { return m_title; }
     virtual QString description() const { return m_description; }
     virtual QString longDescription() const { return m_longDescription; }
-    virtual QPixmap pixmap() const { if ( m_pixmap.isNull() ) return Tomahawk::ViewPage::pixmap(); else return m_pixmap; }
+    virtual QString iconSource() const { if ( m_iconSource.isNull() ) return Tomahawk::ViewPage::iconSource(); else return m_iconSource; }
 
     virtual bool isTemporaryPage() const { return true; }
     virtual bool showInfoBar() const { return false; }
@@ -115,7 +115,7 @@ private:
     QString m_title;
     QString m_description;
     QString m_longDescription;
-    QPixmap m_pixmap;
+    QString m_iconSource;
 
     friend class ::MetaArtistInfoInterface;
 };

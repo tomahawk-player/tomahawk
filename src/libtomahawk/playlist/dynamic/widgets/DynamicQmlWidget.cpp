@@ -90,10 +90,10 @@ DynamicQmlWidget::description() const
 }
 
 
-QPixmap
-DynamicQmlWidget::pixmap() const
+QString
+DynamicQmlWidget::iconSource() const
 {
-    return QPixmap( RESPATH "images/station.png" );
+    return QLatin1String( RESPATH "images/station.png" );
 }
 
 

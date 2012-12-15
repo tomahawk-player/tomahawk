@@ -413,295 +413,302 @@ alphaBlend( const QColor& colorFrom, const QColor& colorTo, float opacity )
 }
 
 
-QPixmap
-defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
+QString
+defaultImagePath( ImageType type, ImageMode mode )
 {
-    QPixmap pixmap;
-
     switch ( type )
     {
         case DefaultAlbumCover:
             if ( mode == CoverInCase )
-                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/no-album-art-placeholder.svg", size );
+                return QLatin1String( RESPATH "images/no-album-art-placeholder.svg" );
             else if ( mode == Grid )
-                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/album-placeholder-grid.svg", size );
+                return QLatin1String( RESPATH "images/album-placeholder-grid.svg" );
             else
-                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/album-icon.svg", size );
+                return QLatin1String( RESPATH "images/album-icon.svg" );
             break;
 
         case DefaultArtistImage:
             if ( mode == Grid )
-                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/artist-placeholder-grid.svg", size );
+                return QLatin1String( RESPATH "images/artist-placeholder-grid.svg" );
             else
-                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/artist-icon.svg", size );
+                return QLatin1String( RESPATH "images/artist-icon.svg" );
             break;
 
         case DefaultTrackImage:
             if ( mode == Grid )
-                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/track-placeholder-grid.svg", size );
+                return QLatin1String( RESPATH "images/track-placeholder-grid.svg" );
             else
-                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/track-icon.svg", size );
+                return QLatin1String( RESPATH "images/track-icon.svg" );
             break;
 
         case DefaultSourceAvatar:
-            if ( mode == RoundedCorners )
-                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/user-avatar.svg", size, TomahawkUtils::RoundedCorners );
-            else
-                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/user-avatar.svg", size );
+            return QLatin1String( RESPATH "images/user-avatar.svg" );
             break;
 
         case DefaultResolver:
-            if ( mode == RoundedCorners )
-                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/resolver-default.svg", size, TomahawkUtils::RoundedCorners );
-            else
-                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/resolver-default.svg", size );
+            return QLatin1String( RESPATH "images/resolver-default.svg" );
             break;
 
         case DefaultCollection:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/collection.svg", size );
+            return QLatin1String( RESPATH "images/collection.svg" );
             break;
 
         case NowPlayingSpeaker:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/now-playing-speaker.svg", size );
+            return QLatin1String( RESPATH "images/now-playing-speaker.svg" );
             break;
 
         case NowPlayingSpeakerDark:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/now-playing-speaker-dark.svg", size );
+            return QLatin1String( RESPATH "images/now-playing-speaker-dark.svg" );
             break;
 
         case InfoIcon:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/info.svg", size );
+            return QLatin1String( RESPATH "images/info.svg" );
             break;
 
         case PlayButton:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/play-rest.svg", size );
+            return QLatin1String( RESPATH "images/play-rest.svg" );
             break;
         case PlayButtonPressed:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/play-pressed.svg", size );
+            return QLatin1String( RESPATH "images/play-pressed.svg" );
             break;
 
         case PauseButton:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/pause-rest.svg", size );
+            return QLatin1String( RESPATH "images/pause-rest.svg" );
             break;
         case PauseButtonPressed:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/pause-pressed.svg", size );
+            return QLatin1String( RESPATH "images/pause-pressed.svg" );
             break;
 
         case PrevButton:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/back-rest.svg", size );
+            return QLatin1String( RESPATH "images/back-rest.svg" );
             break;
         case PrevButtonPressed:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/back-pressed.svg", size );
+            return QLatin1String( RESPATH "images/back-pressed.svg" );
             break;
 
         case NextButton:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/skip-rest.svg", size );
+            return QLatin1String( RESPATH "images/skip-rest.svg" );
             break;
         case NextButtonPressed:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/skip-pressed.svg", size );
+            return QLatin1String( RESPATH "images/skip-pressed.svg" );
             break;
 
         case ShuffleOff:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/shuffle-off-rest.svg", size );
+            return QLatin1String( RESPATH "images/shuffle-off-rest.svg" );
             break;
         case ShuffleOffPressed:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/shuffle-off-pressed.svg", size );
+            return QLatin1String( RESPATH "images/shuffle-off-pressed.svg" );
             break;
         case ShuffleOn:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/shuffle-on-rest.svg", size );
+            return QLatin1String( RESPATH "images/shuffle-on-rest.svg" );
             break;
         case ShuffleOnPressed:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/shuffle-on-pressed.svg", size );
+            return QLatin1String( RESPATH "images/shuffle-on-pressed.svg" );
             break;
 
         case RepeatOne:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/repeat-1-on-rest.svg", size );
+            return QLatin1String( RESPATH "images/repeat-1-on-rest.svg" );
             break;
         case RepeatOnePressed:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/repeat-1-on-pressed.svg", size );
+            return QLatin1String( RESPATH "images/repeat-1-on-pressed.svg" );
             break;
         case RepeatAll:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/repeat-all-on-rest.svg", size );
+            return QLatin1String( RESPATH "images/repeat-all-on-rest.svg" );
             break;
         case RepeatAllPressed:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/repeat-all-on-pressed.svg", size );
+            return QLatin1String( RESPATH "images/repeat-all-on-pressed.svg" );
             break;
         case RepeatOff:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/repeat-off-rest.svg", size );
+            return QLatin1String( RESPATH "images/repeat-off-rest.svg" );
             break;
         case RepeatOffPressed:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/repeat-off-pressed.svg", size );
+            return QLatin1String( RESPATH "images/repeat-off-pressed.svg" );
             break;
 
         case VolumeMuted:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/volume-icon-muted.svg", size );
+            return QLatin1String( RESPATH "images/volume-icon-muted.svg" );
             break;
         case VolumeFull:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/volume-icon-full.svg", size );
+            return QLatin1String( RESPATH "images/volume-icon-full.svg" );
             break;
 
         case Share:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/share.svg", size );
+            return QLatin1String( RESPATH "images/share.svg" );
             break;
 
         case NotLoved:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/not-loved.svg", size );
+            return QLatin1String( RESPATH "images/not-loved.svg" );
             break;
         case Loved:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/loved.svg", size );
+            return QLatin1String( RESPATH "images/loved.svg" );
             break;
 
         case Configure:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/configure.svg", size );
+            return QLatin1String( RESPATH "images/configure.svg" );
             break;
 
         case GreenDot:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/green-dot.svg", size );
+            return QLatin1String( RESPATH "images/green-dot.svg" );
             break;
 
         case AddContact:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/add-contact.svg", size );
+            return QLatin1String( RESPATH "images/add-contact.svg" );
             break;
 
         case SubscribeOn:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/subscribe-on.svg", size );
+            return QLatin1String( RESPATH "images/subscribe-on.svg" );
             break;
         case SubscribeOff:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/subscribe-off.svg", size );
+            return QLatin1String( RESPATH "images/subscribe-off.svg" );
             break;
 
         case JumpLink:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/jump-link.svg", size );
+            return QLatin1String( RESPATH "images/jump-link.svg" );
             break;
 
         case ProcessStop:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/process-stop.svg", size );
+            return QLatin1String( RESPATH "images/process-stop.svg" );
             break;
 
         case HeadphonesOn:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/headphones.svg", size );
+            return QLatin1String( RESPATH "images/headphones.svg" );
             break;
         case HeadphonesOff:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/headphones-off.svg", size );
+            return QLatin1String( RESPATH "images/headphones-off.svg" );
             break;
 
         case PadlockClosed:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/closed-padlock.svg", size );
+            return QLatin1String( RESPATH "images/closed-padlock.svg" );
             break;
         case PadlockOpen:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/open-padlock.svg", size );
+            return QLatin1String( RESPATH "images/open-padlock.svg" );
             break;
 
         case Downloading:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/downloading.svg", size );
+            return QLatin1String( RESPATH "images/downloading.svg" );
             break;
         case Uploading:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/uploading.svg", size );
+            return QLatin1String( RESPATH "images/uploading.svg" );
             break;
 
         case ViewRefresh:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/view-refresh.svg", size );
+            return QLatin1String( RESPATH "images/view-refresh.svg" );
             break;
 
         case SuperCollection:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/supercollection.svg", size );
+            return QLatin1String( RESPATH "images/supercollection.svg" );
             break;
         case LovedPlaylist:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/loved_playlist.svg", size );
+            return QLatin1String( RESPATH "images/loved_playlist.svg" );
             break;
         case NewReleases:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/new-releases.svg", size );
+            return QLatin1String( RESPATH "images/new-releases.svg" );
             break;
         case NewAdditions:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/new-additions.svg", size );
+            return QLatin1String( RESPATH "images/new-additions.svg" );
             break;
         case RecentlyPlayed:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/recently-played.svg", size );
+            return QLatin1String( RESPATH "images/recently-played.svg" );
             break;
         case Charts:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/charts.svg", size );
+            return QLatin1String( RESPATH "images/charts.svg" );
             break;
         case AutomaticPlaylist:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/automatic-playlist.svg", size );
+            return QLatin1String( RESPATH "images/automatic-playlist.svg" );
             break;
         case Station:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/station.svg", size );
+            return QLatin1String( RESPATH "images/station.svg" );
             break;
         case Playlist:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/playlist-icon.svg", size );
+            return QLatin1String( RESPATH "images/playlist-icon.svg" );
             break;
         case Search:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/search-icon.svg", size );
+            return QLatin1String( RESPATH "images/search-icon.svg" );
             break;
 
         case Add:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/add.svg", size );
+            return QLatin1String( RESPATH "images/add.svg" );
             break;
         case ListAdd:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/list-add.svg", size );
+            return QLatin1String( RESPATH "images/list-add.svg" );
             break;
         case ListRemove:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/list-remove.svg", size );
+            return QLatin1String( RESPATH "images/list-remove.svg" );
             break;
 
         case AdvancedSettings:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/advanced-settings.svg", size );
+            return QLatin1String( RESPATH "images/advanced-settings.svg" );
             break;
         case AccountSettings:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/account-settings.svg", size );
+            return QLatin1String( RESPATH "images/account-settings.svg" );
             break;
         case MusicSettings:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/music-settings.svg", size );
+            return QLatin1String( RESPATH "images/music-settings.svg" );
             break;
 
         case DropSong:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/drop-song.svg", size );
+            return QLatin1String( RESPATH "images/drop-song.svg" );
             break;
         case DropAlbum:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/drop-album.svg", size );
+            return QLatin1String( RESPATH "images/drop-album.svg" );
             break;
         case DropAllSongs:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/drop-all-songs.svg", size );
+            return QLatin1String( RESPATH "images/drop-all-songs.svg" );
             break;
         case DropLocalSongs:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/drop-local-songs.svg", size );
+            return QLatin1String( RESPATH "images/drop-local-songs.svg" );
             break;
         case DropTopSongs:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/drop-top-songs.svg", size );
+            return QLatin1String( RESPATH "images/drop-top-songs.svg" );
             break;
 
         case Starred:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/starred.svg", size );
+            return QLatin1String( RESPATH "images/starred.svg" );
             break;
         case Unstarred:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/star-unstarred.svg", size );
+            return QLatin1String( RESPATH "images/star-unstarred.svg" );
             break;
         case StarHovered:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/star-hover.svg", size );
+            return QLatin1String( RESPATH "images/star-hover.svg" );
             break;
 
         case SipPluginOnline:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/sipplugin-online.svg", size );
+            return QLatin1String( RESPATH "images/sipplugin-online.svg" );
             break;
         case SipPluginOffline:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/sipplugin-offline.svg", size );
+            return QLatin1String( RESPATH "images/sipplugin-offline.svg" );
             break;
 
         case AccountNone:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/account-none.svg", size );
+            return QLatin1String( RESPATH "images/account-none.svg" );
             break;
         case LastfmIcon:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/lastfm-icon.svg", size );
+            return QLatin1String( RESPATH "images/lastfm-icon.svg" );
             break;
         case SpotifyIcon:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/spotify-sourceicon.svg", size );
+            return QLatin1String( RESPATH "images/spotify-sourceicon.svg" );
             break;
         case SoundcloudIcon:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/soundcloud.svg", size );
+            return QLatin1String( RESPATH "images/soundcloud.svg" );
             break;
 
         default:
             break;
+    }
+
+    Q_ASSERT(false);
+    return QString();
+}
+
+
+QPixmap
+defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
+{
+    QPixmap pixmap;
+    if ( mode == RoundedCorners ) {
+        pixmap = ImageRegistry::instance()->pixmap( defaultImagePath( type, mode ), size, TomahawkUtils::RoundedCorners );
+    } else {
+        pixmap = ImageRegistry::instance()->pixmap( defaultImagePath( type, mode ), size );
     }
 
     if ( pixmap.isNull() )
@@ -711,6 +718,7 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
     }
 
     return pixmap;
+
 }
 
 

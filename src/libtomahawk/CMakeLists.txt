@@ -55,7 +55,6 @@ set( libGuiSources
 
     infobar/InfoBar.cpp
 
-    playlist/FlexibleHeader.cpp
     playlist/FlexibleView.cpp
     playlist/TreeModel.cpp
     playlist/TreeProxyModel.cpp
@@ -124,6 +123,7 @@ set( libGuiSources
 
     widgets/AnimatedCounterLabel.cpp
     widgets/BasicHeader.cpp
+    widgets/DeclarativeHeader.cpp
     widgets/Breadcrumb.cpp
     widgets/BreadcrumbButton.cpp
     widgets/CheckDirTree.cpp

@@ -137,7 +137,7 @@ ViewManager::createPageForPlaylist( const playlist_ptr& playlist )
 
     PlaylistView* pv = new PlaylistView();
     view->setDetailedView( pv );
-    view->setPixmap( pv->pixmap() );
+    view->setHeaderIconSource( pv->iconSource() );
     view->setEmptyTip( tr( "This playlist is empty!" ) );
 
     // We need to set the model on the view before loading the playlist, so spinners & co are connected
@@ -392,7 +392,7 @@ ViewManager::showRecentPlaysPage()
     if ( !m_recentPlaysWidget )
     {
         FlexibleView* pv = new FlexibleView( m_widget );
-        pv->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::RecentlyPlayed ) );
+        pv->setHeaderIconSource( TomahawkUtils::defaultImagePath( TomahawkUtils::RecentlyPlayed ) );
 
         RecentlyPlayedModel* raModel = new RecentlyPlayedModel( pv );
         raModel->setTitle( tr( "Recently Played Tracks" ) );
@@ -568,8 +568,8 @@ ViewManager::setPage( ViewPage* page, bool trackHistory )
         if( obj->metaObject()->indexOfSignal( "nameChanged(QString)" ) > -1 )
             connect( obj, SIGNAL( nameChanged( QString ) ), m_infobar, SLOT( setCaption( QString ) ), Qt::UniqueConnection );
 
-        if( obj->metaObject()->indexOfSignal( "pixmapChanged(QPixmap)" ) > -1 )
-            connect( obj, SIGNAL( pixmapChanged( QPixmap ) ), m_infobar, SLOT( setPixmap( QPixmap ) ), Qt::UniqueConnection );
+        if( obj->metaObject()->indexOfSignal( "iconSourceChanged(QString)" ) > -1 )
+            connect( obj, SIGNAL( iconSourceChanged( QString ) ), m_infobar, SLOT( setPixmap( QPixmap ) ), Qt::UniqueConnection );
 
         if( obj->metaObject()->indexOfSignal( "destroyed(QWidget*)" ) > -1 )
             connect( obj, SIGNAL( destroyed( QWidget* ) ), SLOT( onWidgetDestroyed( QWidget* ) ), Qt::UniqueConnection );
@@ -646,7 +646,7 @@ ViewManager::updateView()
 
     }
     m_infobar->setLongDescription( currentPage()->longDescription() );
-    m_infobar->setPixmap( currentPage()->pixmap() );
+    m_infobar->setIconSource( currentPage()->iconSource() );
 }
 
 

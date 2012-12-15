@@ -50,7 +50,7 @@ public:
 
     virtual QString title() const;
     virtual QString description() const;
-    virtual QPixmap pixmap() const;
+    virtual QString iconSource() const;
 
     virtual bool showInfoBar() const { return false; }
     virtual bool showModes() const { return false; }

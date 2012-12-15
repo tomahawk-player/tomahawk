@@ -69,6 +69,7 @@ namespace TomahawkUtils
     DLLEXPORT void styleScrollBar( QScrollBar* scrollBar );
 
     DLLEXPORT QPixmap defaultPixmap( ImageType type, ImageMode mode = TomahawkUtils::Original, const QSize& size = QSize( 0, 0 ) );
+    DLLEXPORT QString defaultImagePath( ImageType type, ImageMode mode = TomahawkUtils::Original );
     DLLEXPORT QPixmap createTiledPixmap( int width, int height, const QImage& src );
     DLLEXPORT QPixmap addDropShadow( const QPixmap& sourceImage, const QSize& targetSize );
     DLLEXPORT QPixmap squareCenterPixmap( const QPixmap& sourceImage );

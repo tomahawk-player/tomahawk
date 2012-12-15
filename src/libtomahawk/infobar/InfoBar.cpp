@@ -184,9 +184,9 @@ InfoBar::setLongDescription( const QString& s )
 
 
 void
-InfoBar::setPixmap( const QPixmap& p )
+InfoBar::setIconSource( const QString& iconSource )
 {
-    ui->imageLabel->setPixmap( p.scaledToHeight( IMAGE_HEIGHT, Qt::SmoothTransformation ) );
+    ui->imageLabel->setPixmap( QPixmap( iconSource ).scaledToHeight( IMAGE_HEIGHT, Qt::SmoothTransformation ) );
 }
 
 

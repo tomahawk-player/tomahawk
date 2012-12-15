@@ -29,16 +29,19 @@ class GridView;
 class TrackView;
 class PlayableModel;
 class PlaylistModel;
-class FlexibleHeader;
+
+namespace Tomahawk
+{
+class DeclarativeHeader;
+}
+
+using namespace Tomahawk;
 
 class DLLEXPORT FlexibleView : public QWidget, public Tomahawk::ViewPage
 {
 Q_OBJECT
 
 public:
-    enum FlexibleViewMode
-    { Flat = 0, Detailed = 1, Grid = 2 };
-
     explicit FlexibleView( QWidget* parent = 0 );
     ~FlexibleView();
 
@@ -47,7 +50,7 @@ public:
 
     virtual QString title() const;
     virtual QString description() const;
-    virtual QPixmap pixmap() const;
+    virtual QString headerIconSource() const;
 
     virtual bool showInfoBar() const { return false; }
     virtual bool jumpToCurrentTrack();
@@ -65,15 +68,15 @@ public:
     void setPlayableModel( PlayableModel* model );
     void setPlaylistModel( PlaylistModel* model );
 
-    void setPixmap( const QPixmap& pixmap );
+    void setHeaderIconSource( const QString& headerIconSource );
     void setEmptyTip( const QString& tip );
 
 public slots:
-    void setCurrentMode( FlexibleViewMode mode );
+    void setCurrentMode( TomahawkUtils::ViewMode mode );
     virtual bool setFilter( const QString& pattern );
 
 signals:
-    void modeChanged( FlexibleViewMode mode );
+    void modeChanged( TomahawkUtils::ViewMode mode );
     void destroyed( QWidget* widget );
 
 private slots:
@@ -81,8 +84,8 @@ private slots:
     void onWidgetDestroyed( QWidget* widget );
 
 private:
-    FlexibleHeader* m_header;
-    QPixmap m_pixmap;
+    DeclarativeHeader* m_header;
+    QString m_headerIconSource;
 
     TrackView* m_trackView;
     TrackView* m_detailedView;
@@ -91,9 +94,7 @@ private:
     PlayableModel* m_model;
     QStackedWidget* m_stack;
 
-    FlexibleViewMode m_mode;
+    TomahawkUtils::ViewMode m_mode;
 };
-
-Q_DECLARE_METATYPE( FlexibleView::FlexibleViewMode );
 
 #endif // FLEXIBLEVIEW_H

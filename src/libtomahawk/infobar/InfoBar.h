@@ -58,7 +58,7 @@ public slots:
     void setDescription( const Tomahawk::album_ptr& album_ptr );
 
     void setLongDescription( const QString& s );
-    void setPixmap( const QPixmap& p );
+    void setIconSource( const QString& iconSource );
 
     void setFilter( const QString& filter );
     void setFilterAvailable( bool b );

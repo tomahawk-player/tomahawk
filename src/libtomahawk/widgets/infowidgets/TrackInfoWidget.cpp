@@ -96,7 +96,7 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     ui->similarTracksView->proxyModel()->sort( -1 );
     ui->similarTracksView->setEmptyTip( tr( "Sorry, but we could not find similar tracks for this song!" ) );
 
-    m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::ScaledCover, QSize( 48, 48 ) );
+    m_iconSource = TomahawkUtils::defaultImagePath( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::ScaledCover);
     ui->cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::ScaledCover, QSize( ui->cover->sizeHint() ) ) );
 
     m_scrollArea = new QScrollArea();
@@ -218,8 +218,8 @@ TrackInfoWidget::onCoverUpdated()
     if ( m_query->cover( QSize( 0, 0 ) ).isNull() )
         return;
 
-    m_pixmap = m_query->cover( ui->cover->size() );
-    ui->cover->setPixmap( TomahawkUtils::createRoundedImage( m_pixmap, QSize( 0, 0 ) ) );
+    m_iconSource = m_query->coverId();
+    ui->cover->setPixmap( TomahawkUtils::createRoundedImage( m_query->cover( ui->cover->size() ), QSize( 0, 0 ) ) );
 }
 
 

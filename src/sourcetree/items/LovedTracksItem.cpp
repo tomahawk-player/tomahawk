@@ -73,7 +73,7 @@ LovedTracksItem::activate()
     {
         SourceItem* par = dynamic_cast< SourceItem* >( parent() );
         FlexibleView* pv = new FlexibleView( ViewManager::instance()->widget() );
-        pv->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::LovedPlaylist, TomahawkUtils::Original, QSize( 128, 128 ) ) );
+        pv->setHeaderIconSource( TomahawkUtils::defaultImagePath( TomahawkUtils::LovedPlaylist, TomahawkUtils::Original ) );
 
         LovedTracksModel* raModel = new LovedTracksModel( pv );
         raModel->setTitle( text() );

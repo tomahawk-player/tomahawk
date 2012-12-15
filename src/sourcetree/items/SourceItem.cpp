@@ -516,7 +516,7 @@ SourceItem::latestAdditionsClicked()
     if ( !m_latestAdditionsPage )
     {
         FlexibleView* pv = new FlexibleView( ViewManager::instance()->widget() );
-        pv->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::NewAdditions, TomahawkUtils::Original ) );
+        pv->setHeaderIconSource( TomahawkUtils::defaultImagePath( TomahawkUtils::NewAdditions, TomahawkUtils::Original ) );
 
         RecentlyAddedModel* raModel = new RecentlyAddedModel( pv );
         raModel->setTitle( tr( "Latest Additions" ) );
@@ -559,7 +559,7 @@ SourceItem::recentPlaysClicked()
     if ( !m_recentPlaysPage )
     {
         FlexibleView* pv = new FlexibleView( ViewManager::instance()->widget() );
-        pv->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::RecentlyPlayed ) );
+        pv->setHeaderIconSource( TomahawkUtils::defaultImagePath( TomahawkUtils::RecentlyPlayed ) );
 
         RecentlyPlayedModel* raModel = new RecentlyPlayedModel( pv );
         raModel->setTitle( tr( "Recently Played Tracks" ) );

@@ -9,4 +9,8 @@ SearchFieldQmlProxy::SearchFieldQmlProxy(QGraphicsItem *parent) :
     m_searchField->setAttribute(Qt::WA_NoSystemBackground);
     setWidget(m_searchField);
 
+    connect(m_searchField, SIGNAL(textChanged(QString)), SIGNAL(textChanged(QString)));
+    connect(m_searchField, SIGNAL(editingFinished()), SIGNAL(editingFinished()));
+    connect(m_searchField, SIGNAL(returnPressed()), SIGNAL(returnPressed()));
+
 }

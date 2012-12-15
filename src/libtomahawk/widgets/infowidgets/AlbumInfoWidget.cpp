@@ -76,7 +76,7 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
     ui->tracks->setFrameShape( QFrame::StyledPanel );
     ui->tracks->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
-    m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::ScaledCover, QSize( 48, 48 ) );
+    m_iconSource = TomahawkUtils::defaultImagePath( TomahawkUtils::DefaultArtistImage, TomahawkUtils::ScaledCover );
     ui->cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::ScaledCover, QSize( ui->cover->sizeHint() ) ) );
 
     ui->biography->setFrameShape( QFrame::NoFrame );
@@ -233,8 +233,8 @@ AlbumInfoWidget::onAlbumImageUpdated()
     if ( m_album->cover( QSize( 0, 0 ) ).isNull() )
         return;
 
-    m_pixmap = m_album->cover( QSize( 0, 0 ) );
-    emit pixmapChanged( m_pixmap );
+    m_iconSource = QLatin1String( "image://albumart/" ) + m_album->coverId();
+    emit imageSourceChanged( m_iconSource );
 
     ui->cover->setPixmap( TomahawkUtils::createRoundedImage( m_album->cover( ui->cover->sizeHint() ), QSize( 0, 0 ) ) );
 }

@@ -56,7 +56,7 @@ public:
     virtual Tomahawk::album_ptr descriptionAlbum() const { return Tomahawk::album_ptr(); }
 
     virtual QString longDescription() const { return QString(); }
-    virtual QPixmap pixmap() const { return QPixmap( RESPATH "icons/tomahawk-icon-128x128.png" ); }
+    virtual QString iconSource() const { return QLatin1String(RESPATH "icons/tomahawk-icon.svg"); }
 
     virtual bool showInfoBar() const { return true; }
     virtual bool showFilter() const { return false; }
