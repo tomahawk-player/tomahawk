@@ -71,7 +71,7 @@
 <item>
 <widget class="ImageButton" name="prevButton">
 <property name="text">
-<string>Prev</string>
+<string notr="true" extracomment="not translatable because is placeholder text">Prev</string>
 </property>
 </widget>
 </item>
@@ -83,14 +83,14 @@
 <item>
 <widget class="ImageButton" name="playPauseButton">
 <property name="text">
-<string>Play</string>
+<string notr="true" extracomment="not translatable because is placeholder text">Play</string>
 </property>
 </widget>
 </item>
 <item>
 <widget class="ImageButton" name="pauseButton">
 <property name="text">
-<string>Pause</string>
+<string notr="true" extracomment="not translatable because is placeholder text">Pause</string>
 </property>
 </widget>
 </item>
@@ -99,7 +99,7 @@
 <item>
 <widget class="ImageButton" name="nextButton">
 <property name="text">
-<string>Next</string>
+<string notr="true" extracomment="not translatable because is placeholder text">Next</string>
 </property>
 </widget>
 </item>
@@ -225,7 +225,7 @@
 </size>
 </property>
 <property name="text">
-<string>Artist</string>
+<string notr="true" extracomment="not translatable because is placeholder text">Artist</string>
 </property>
 </widget>
 </item>
@@ -244,7 +244,7 @@
 </size>
 </property>
 <property name="text">
-<string>Album</string>
+<string notr="true" extracomment="not translatable because is placeholder text">Album</string>
 </property>
 </widget>
 </item>
@@ -292,7 +292,7 @@
 <cursorShape>PointingHandCursor</cursorShape>
 </property>
 <property name="text">
-<string>social</string>
+<string notr="true" extracomment="not translatable because is placeholder text">social</string>
 </property>
 </widget>
 </item>
@@ -308,7 +308,7 @@
 <cursorShape>PointingHandCursor</cursorShape>
 </property>
 <property name="text">
-<string>love</string>
+<string notr="true" extracomment="not translatable because is placeholder text">love</string>
 </property>
 </widget>
 </item>
@@ -341,7 +341,7 @@
 <cursorShape>PointingHandCursor</cursorShape>
 </property>
 <property name="text">
-<string>resolver</string>
+<string notr="true" extracomment="not translatable because is placeholder text">resolver</string>
 </property>
 </widget>
 </item>
@@ -377,7 +377,7 @@
 <item>
 <widget class="QLabel" name="timeLabel">
 <property name="text">
-<string>Time</string>
+<string notr="true" extracomment="not translatable because is placeholder text">Time</string>
 </property>
 <property name="alignment">
 <set>Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -406,7 +406,7 @@
 <item>
 <widget class="QLabel" name="timeLeftLabel">
 <property name="text">
-<string>Time Left</string>
+<string notr="true" extracomment="not translatable because is placeholder text">Time Left</string>
 </property>
 <property name="alignment">
 <set>Qt::AlignRight|Qt::AlignVCenter</set>
@@ -487,7 +487,7 @@
 </sizepolicy>
 </property>
 <property name="text">
-<string>Shuffle</string>
+<string notr="true" extracomment="not translatable because is placeholder text">Shuffle</string>
 </property>
 </widget>
 </item>
@@ -500,7 +500,7 @@
 </sizepolicy>
 </property>
 <property name="text">
-<string>Repeat</string>
+<string notr="true" extracomment="not translatable because is placeholder text">Repeat</string>
 </property>
 </widget>
 </item>
@@ -538,7 +538,7 @@
 </sizepolicy>
 </property>
 <property name="text">
-<string>Low</string>
+<string notr="true" extracomment="not translatable because is placeholder text">Low</string>
 </property>
 </widget>
 </item>
@@ -570,7 +570,7 @@
 </sizepolicy>
 </property>
 <property name="text">
-<string>High</string>
+<string notr="true" extracomment="not translatable because is placeholder text">High</string>
 </property>
 </widget>
 </item>
