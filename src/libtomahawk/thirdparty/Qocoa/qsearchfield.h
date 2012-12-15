@@ -14,7 +14,7 @@ class DLLEXPORT QSearchField : public QWidget
     Q_PROPERTY(QString placeholderText READ placeholderText WRITE setPlaceholderText);
 
 public:
-    explicit QSearchField(QWidget *parent);
+    explicit QSearchField(QWidget *parent = 0);
 
     QString text() const;
     QString placeholderText() const;

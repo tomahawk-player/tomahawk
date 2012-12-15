@@ -161,6 +161,8 @@ set( libGuiSources
     widgets/searchlineedit/LineEdit.cpp
     widgets/searchlineedit/SearchButton.cpp
     widgets/searchlineedit/SearchLineEdit.cpp
+    widgets/SearchFieldQmlProxy.cpp
+
 )
 
 IF(QCA2_FOUND)

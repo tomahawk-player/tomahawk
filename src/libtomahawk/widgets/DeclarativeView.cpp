@@ -20,6 +20,7 @@
 #include "playlist/PlayableItem.h"
 #include "DeclarativeCoverArtProvider.h"
 #include "utils/TomahawkUtilsGui.h"
+#include "widgets/SearchFieldQmlProxy.h"
 
 #include <qdeclarative.h>
 #include <QDeclarativeEngine>
@@ -37,6 +38,7 @@ DeclarativeView::DeclarativeView( QWidget *parent ):
 
     // This types seem to be needed everywhere anyways, lets the register here
     qmlRegisterType<PlayableItem>( "tomahawk", 1, 0, "PlayableItem");
+    qmlRegisterType<SearchFieldQmlProxy>("tomahawk", 1, 0, "SearchField");
 
     // QML image providers will be deleted by the view
     engine()->addImageProvider( "albumart", new DeclarativeCoverArtProvider() );
@@ -46,6 +48,7 @@ DeclarativeView::DeclarativeView( QWidget *parent ):
 
     rootContext()->setContextProperty( "defaultFontSize", TomahawkUtils::defaultFontSize() );
     rootContext()->setContextProperty( "defaultFontHeight", TomahawkUtils::defaultFontHeight() );
+
 }
 
 DeclarativeView::~DeclarativeView()
