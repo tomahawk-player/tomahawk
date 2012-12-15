@@ -15,27 +15,6 @@ Rectangle {
         ListElement { label: "By Year"; image: "image://albumart/foobar"; creatorContent: "year" }
     }
 
-    Connections {
-        target: stationView
-
-        onPagePicked: {
-            switch(createBy) {
-            case StationWidget.CreateByArtist:
-                stationCreator.content = "stations/CreateByArtist.qml";
-                break;
-            case StationWidget.CreateByGenre:
-                stationCreator.content = "stations/CreateByGenre.qml";
-                break;
-            case StationWidget.CreateByYear:
-                stationCreator.content = "stations/CreateByYear.qml";
-                break;
-            }
-
-            print("########", createBy, stationCreator.content)
-            stationListView.currentIndex = page;
-        }
-    }
-
     VisualItemModel {
         id: stationVisualModel
 
@@ -86,34 +65,34 @@ Rectangle {
         }
     }
 
-    Image {
+    RoundedButton {
         id: backButton
+        text: "<"
         height: defaultFontHeight * 4
         width: height
-        opacity: stationListView.currentIndex == 0 ? 0 : 1
-        source: "../images/back-rest.svg"
-        smooth: true
+        hidden: stationListView.currentIndex == 0
         anchors {
             left: parent.left
             bottom: parent.bottom
             margins: defaultFontHeight * 2
         }
-        MouseArea {
-            anchors.fill: parent
-            onClicked: stationListView.decrementCurrentIndex()
-        }
+
+        onClicked: stationListView.decrementCurrentIndex()
     }
 
-    Image {
+    RoundedButton  {
+        id: nextButton
+        text: stationListView.currentIndex == 2 ? "+" : ">"
         height: defaultFontHeight * 4
-        opacity: stationListView.currentIndex != 2 ? 0 : 1
-        source: stationListView.currentIndex == 2 ? "../images/list-add.svg" : "../images/skip-rest.svg"
-        smooth: true
+        //hidden: stationListView.currentIndex == 0 || !rootView.configured // This should work once rootView.configured works
+        hidden: stationListView.currentIndex != 2
         anchors {
             right: parent.right
             bottom: parent.bottom
             margins: defaultFontHeight * 2
         }
+
+        onClicked: stationListView.incrementCurrentIndex()
     }
 
 }

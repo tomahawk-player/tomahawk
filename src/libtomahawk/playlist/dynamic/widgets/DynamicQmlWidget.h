@@ -24,7 +24,6 @@
 #include "widgets/DeclarativeView.h"
 
 #include <QDeclarativeImageProvider>
-#include <QStandardItemModel>
 
 class PlayableModel;
 class PlayableProxyModel;
@@ -32,26 +31,17 @@ class PlayableProxyModel;
 namespace Tomahawk
 {
 
-class Breadcrumb;
 class DynamicModel;
 
-class DynamicQmlWidget : public QWidget, public Tomahawk::ViewPage
+class DynamicQmlWidget : public DeclarativeView, public Tomahawk::ViewPage
 {
     Q_OBJECT
 
-    Q_ENUMS(CreateBy)
     Q_PROPERTY(QString title READ title)
     Q_PROPERTY(bool loading READ loading NOTIFY loadingChanged)
     Q_PROPERTY(bool configured READ configured NOTIFY configuredChanged)
 
 public:
-    enum CreateBy {
-        CreateByNone,
-        CreateByArtist,
-        CreateByGenre,
-        CreateByYear
-    };
-
     explicit DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* parent = 0 );
     virtual ~DynamicQmlWidget();
 
@@ -76,7 +66,6 @@ public:
 signals:
     void loadingChanged();
     void configuredChanged();
-    void pagePicked(int page, int createBy);
 
 public slots:
     void playItem(int index);
@@ -102,29 +91,17 @@ private slots:
     void loadArtistCharts();
     void onArtistCharts( const QList< Tomahawk::artist_ptr >& artists );
 
-    void createStationModel();
-    void breadcrumbChanged(const QModelIndex &index);
-
 private:
-    enum Roles {
-        RolePage = Qt::UserRole,
-        RoleCreateBy,
-    };
-
     DynamicModel* m_model;
     PlayableProxyModel* m_proxyModel;
     dynplaylist_ptr m_playlist;
 
     PlayableModel* m_artistChartsModel;
 
-    QStandardItemModel *m_createStationModel;
-    Breadcrumb *m_breadcrumb;
-    DeclarativeView *m_declarativeView;
-
     bool m_runningOnDemand;
     bool m_activePlaylist;
 };
+
 }
-Q_DECLARE_METATYPE(Tomahawk::DynamicQmlWidget::CreateBy);
 
 #endif // DYNAMIC_QML_WIDGET_H
