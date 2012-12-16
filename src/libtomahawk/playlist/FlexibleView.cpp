@@ -26,7 +26,7 @@
 #include "playlist/PlayableModel.h"
 #include "playlist/PlaylistModel.h"
 #include "playlist/TrackView.h"
-#include "playlist/GridView.h"
+#include "playlist/QmlGridView.h"
 #include "playlist/PlaylistLargeItemDelegate.h"
 #include "PlayableProxyModelPlaylistInterface.h"
 #include "utils/TomahawkUtilsGui.h"
@@ -40,7 +40,7 @@ FlexibleView::FlexibleView( QWidget* parent )
     , m_header( new DeclarativeHeader( this ) )
     , m_trackView( new TrackView() )
     , m_detailedView( new TrackView() )
-    , m_gridView( new GridView() )
+    , m_gridView( new QmlGridView() )
     , m_model( 0 )
 {
     qRegisterMetaType< TomahawkUtils::ViewMode >( "TomahawkUtils::ViewMode" );
@@ -125,7 +125,7 @@ FlexibleView::setDetailedView( TrackView* view )
 
 
 void
-FlexibleView::setGridView( GridView* view )
+FlexibleView::setGridView( QmlGridView *view )
 {
     if ( m_gridView )
     {
@@ -271,7 +271,7 @@ FlexibleView::setEmptyTip( const QString& tip )
 {
     m_trackView->setEmptyTip( tip );
     m_detailedView->setEmptyTip( tip );
-    m_gridView->setEmptyTip( tip );
+//    m_gridView->setEmptyTip( tip );
 }
 
 

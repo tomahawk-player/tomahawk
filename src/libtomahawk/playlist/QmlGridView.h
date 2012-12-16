@@ -52,6 +52,7 @@ public:
 
 
     QWidget *widget() { return this; }
+    virtual void setPlaylistInterface(Tomahawk::playlistinterface_ptr playlistInterface);
     virtual Tomahawk::playlistinterface_ptr playlistInterface() const { return m_playlistInterface; }
     virtual QString title() const { return m_model->title(); }
     virtual QString description() const { return m_model->description(); }

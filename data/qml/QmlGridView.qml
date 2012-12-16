@@ -20,6 +20,8 @@ Rectangle {
         cellHeight: cellWidth
         cellWidth: calculateCoverSize(gridView.width - 3)
 
+        cacheBuffer: cellHeight * 5
+
         function calculateCoverSize(rectWidth) {
             var itemWidth = fontMetrics.width;
             var itemsPerRow = Math.max( 1, Math.floor( rectWidth / itemWidth ) );

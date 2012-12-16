@@ -25,7 +25,7 @@
 
 class QStackedWidget;
 
-class GridView;
+class QmlGridView;
 class TrackView;
 class PlayableModel;
 class PlaylistModel;
@@ -57,13 +57,13 @@ public:
 
     TrackView* trackView() const { return m_trackView; }
     TrackView* detailedView() const { return m_detailedView; }
-    GridView* gridView() const { return m_gridView; }
+    QmlGridView* gridView() const { return m_gridView; }
 
     void setGuid( const QString& guid );
 
     void setTrackView( TrackView* view );
     void setDetailedView( TrackView* view );
-    void setGridView( GridView* view );
+    void setGridView( QmlGridView* view );
 
     void setPlayableModel( PlayableModel* model );
     void setPlaylistModel( PlaylistModel* model );
@@ -89,7 +89,7 @@ private:
 
     TrackView* m_trackView;
     TrackView* m_detailedView;
-    GridView* m_gridView;
+    QmlGridView* m_gridView;
 
     PlayableModel* m_model;
     QStackedWidget* m_stack;

@@ -87,6 +87,12 @@ void QmlGridView::setPlayableModel(PlayableModel *model)
 }
 
 
+void QmlGridView::setPlaylistInterface(playlistinterface_ptr playlistInterface)
+{
+    proxyModel()->setPlaylistInterface( playlistInterface );
+}
+
+
 void
 QmlGridView::onItemClicked( int index )
 {
