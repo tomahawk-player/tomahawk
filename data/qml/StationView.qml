@@ -22,14 +22,13 @@ Rectangle {
         subtitle: generator.summary
         showSearchField: false
         showBackButton: stationListView.currentIndex > 0
-        showNextButton: dynamicModel.rowCount() > 0 && stationListView.currentIndex < 2
-        showSaveButton: stationListView.currentIndex === 2
+        showNextButton: stationListView.currentIndex == 2
+        nextButtonText: "Save"
 
         z: 1 //cover albumcovers that may leave their area
 
         onBackPressed: stationListView.decrementCurrentIndex()
         onNextPressed: stationListView.incrementCurrentIndex()
-        onSavePressed: print("should save station now")
     }
 
     ListModel {

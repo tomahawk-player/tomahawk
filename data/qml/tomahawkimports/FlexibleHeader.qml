@@ -29,7 +29,9 @@ Rectangle {
 
     property bool showBackButton: false
     property bool showNextButton: false
-    property bool showSaveButton: false
+
+    property string backButtonText: "Back"
+    property string nextButtonText: "Next"
 
     // Layout spacing
     property int spacing: defaultFontHeight * 0.5
@@ -139,34 +141,51 @@ Rectangle {
         anchors {
             top: parent.top
             right: parent.right
+            rightMargin: -backButton.width - root.spacing - nextButton.width - root.spacing
             bottom: parent.bottom
             margins: root.spacing
+
+            onRightMarginChanged: print("#+#+#+#+", anchors.rightMargin)
         }
+
+        states: [
+            State {
+                name: "oneVisible"; when: root.showBackButton && !root.showNextButton
+                PropertyChanges {
+                    target: rightRow
+                    anchors.rightMargin: -nextButton.width
+                }
+            },
+            State {
+                name: "bothVisible"; when: root.showBackButton && root.showNextButton
+                PropertyChanges {
+                    target: rightRow
+                    anchors.rightMargin: root.spacing
+                }
+            }
+
+        ]
+
         width: childrenRect.width
         spacing: root.spacing
         layoutDirection: Qt.RightToLeft
 
-
-
-        RoundedButton {
-            height: parent.height * 0.8
-            anchors.verticalCenter: parent.verticalCenter
-            text: "+"
-            visible: root.showSaveButton
-            onClicked: root.saveClicked()
+        Behavior on anchors.rightMargin {
+            NumberAnimation { duration: 200 }
         }
-        RoundedButton {
-            height: parent.height * 0.8
+
+        PushButton {
+            id: nextButton
             anchors.verticalCenter: parent.verticalCenter
-            text: ">"
-            visible: root.showNextButton
+            text: root.nextButtonText
+//            visible: root.showNextButton
             onClicked: root.nextPressed();
         }
-        RoundedButton {
+        PushButton {
+            id: backButton
             anchors.verticalCenter: parent.verticalCenter
-            height: parent.height * 0.8
-            text: "<"
-            visible: root.showBackButton
+            text: root.backButtonText
+//            visible: root.showBackButton
             onClicked: root.backPressed();
         }
         InputField {

@@ -148,6 +148,7 @@
         <file>data/qml/tomahawkimports/Button.qml</file>
         <file>data/qml/tomahawkimports/DoubleSlider.qml</file>
         <file>data/qml/tomahawkimports/RoundedButton.qml</file>
+        <file>data/qml/tomahawkimports/PushButton.qml</file>
         <file>data/qml/tomahawkimports/CoverFlip.qml</file>
         <file>data/qml/StationView.qml</file>
         <file>data/qml/stations/StationCreatorPage1.qml</file>

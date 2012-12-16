@@ -38,11 +38,13 @@ Rectangle {
         anchors.rightMargin: root.spacing
         height: textInput.height
         anchors.verticalCenter: parent.verticalCenter
+
         TextInput {
             id: textInput
             width: parent.width
             anchors.centerIn: parent
             text: root.text
+            font.pointSize: defaultFontSize
 
             onAccepted: root.accepted( text );
             onTextChanged: root.text = text;
@@ -52,6 +54,7 @@ Rectangle {
             anchors.centerIn: parent
             text: root.text.length === 0 ? root.placeholderText : ""
             color: "lightgray"
+            font.pointSize: defaultFontSize
         }
     }
 
