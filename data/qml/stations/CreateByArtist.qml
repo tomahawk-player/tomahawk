@@ -29,7 +29,7 @@ Item {
         Row {
             height: artistInputField.height
             width: parent.width
-            spacing: defaultFontHeight
+            spacing: defaultFontHeight * 0.5
 
             InputField {
                 id: artistInputField
@@ -38,10 +38,9 @@ Item {
                 onAccepted: createStation(text)
             }
 
-            RoundedButton {
+            PushButton {
                 id: createFromInputButton
-                text: ">"
-                height: artistInputField.height
+                text: "Go!"
                 enabled: artistInputField.text.length > 2
                 onClicked: createStation(artistInputField.text)
             }
