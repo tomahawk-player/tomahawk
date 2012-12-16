@@ -27,7 +27,7 @@ Item {
                 width: delegateText.width * 1.1
                 height: delegateText.height
                 property double itemScale: Math.random() + .3
-                scale: itemScale
+                scale: 1//itemScale
                 Text {
                     id: delegateText
                     color: "gray"
