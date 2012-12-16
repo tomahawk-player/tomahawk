@@ -350,11 +350,13 @@ PlayableModel::headerData( int section, Qt::Orientation orientation, int role ) 
 void
 PlayableModel::setCurrentItem( const QModelIndex& index )
 {
-    PlayableItem* oldEntry = itemFromIndex( m_currentIndex );
-    if ( oldEntry )
+    if ( m_currentIndex.isValid() )
     {
-        tDebug() << "ISNT PLAYING ANYMORE:" << oldEntry->name();
-        oldEntry->setIsPlaying( false );
+        PlayableItem* oldEntry = itemFromIndex( m_currentIndex );
+        if ( oldEntry )
+        {
+            oldEntry->setIsPlaying( false );
+        }
     }
 
     PlayableItem* entry = itemFromIndex( index );
@@ -362,7 +364,6 @@ PlayableModel::setCurrentItem( const QModelIndex& index )
     {
         m_currentIndex = index;
         m_currentUuid = entry->query()->id();
-        tDebug() << "IS PLAYING NOW:" << entry->name();
         entry->setIsPlaying( true );
     }
     else
@@ -769,18 +770,13 @@ PlayableModel::itemFromIndex( const QModelIndex& index ) const
     }
 }
 
-PlayableItem *PlayableModel::itemFromIndex(int itemIndex) const
+
+PlayableItem*
+PlayableModel::itemFromIndex( int itemIndex ) const
 {
-    QModelIndex modelIndex = index( itemIndex, 0, QModelIndex() );
-    if ( modelIndex.isValid() )
-    {
-        return static_cast<PlayableItem*>( modelIndex.internalPointer() );
-    }
-    else
-    {
-        return m_rootItem;
-    }
+    return itemFromIndex( index( itemIndex, 0, QModelIndex() ) );
 }
+
 
 void
 PlayableModel::appendArtist( const Tomahawk::artist_ptr& artist )
