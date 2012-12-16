@@ -1,5 +1,7 @@
 #include "DeclarativeHeader.h"
+
 #include "utils/TomahawkUtilsGui.h"
+#include "utils/Logger.h"
 
 #include <QDeclarativeContext>
 
@@ -44,6 +46,11 @@ void DeclarativeHeader::setDescription(const QString &description)
 QSize DeclarativeHeader::sizeHint() const
 {
     return QSize(0, TomahawkUtils::defaultFontHeight() * 4);
+}
+
+QSize DeclarativeHeader::minimumSizeHint() const
+{
+    return sizeHint();
 }
 
 void DeclarativeHeader::viewModeSelected(int viewMode)

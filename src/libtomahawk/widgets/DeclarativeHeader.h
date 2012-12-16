@@ -19,6 +19,7 @@ public:
     void setCaption(const QString &caption);
     void setDescription(const QString &description);
 
+    QSize minimumSizeHint() const;
     QSize sizeHint() const;
 
 signals:
