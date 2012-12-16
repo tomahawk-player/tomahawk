@@ -1,6 +1,6 @@
 import QtQuick 1.1
 import tomahawk 1.0
-import "tomahawkimports"
+import "../tomahawkimports"
 
 Item {
     id: root

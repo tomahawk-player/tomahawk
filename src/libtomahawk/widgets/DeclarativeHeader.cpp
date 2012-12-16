@@ -11,12 +11,19 @@ DeclarativeHeader::DeclarativeHeader(QWidget *parent)
 {
 
     QStringList buttonList;
-    buttonList << "view-toggle-icon-artist" << "view-toggle-icon-list" << "view-toggle-icon-grid";
-    rootContext()->setContextProperty("toggleViewButtonModel", buttonList );
+    buttonList << "view-toggle-icon-artist"
+               << "view-toggle-icon-list"
+               << "view-toggle-icon-grid";
+    rootContext()->setContextProperty("buttonList", buttonList );
 
-    setSource( QUrl( "qrc" RESPATH "qml/tomahawkimports/FlexibleHeader.qml" ) );
+    setIconSource(QString());
+    setCaption(QString());
+    setDescription(QString());
 
     connect(&m_filterTimer, SIGNAL(timeout()), SLOT(applyFilter()));
+
+
+    setSource( QUrl( "qrc" RESPATH "qml/DeclarativeHeader.qml" ) );
 }
 
 void DeclarativeHeader::setIconSource(const QString &iconSource)

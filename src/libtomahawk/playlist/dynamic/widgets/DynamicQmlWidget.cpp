@@ -45,12 +45,14 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
     rootContext()->setContextProperty( "dynamicModel", m_proxyModel );
     rootContext()->setContextProperty( "artistChartsModel", m_artistChartsModel );
     rootContext()->setContextProperty( "generator", m_playlist->generator().data() );
+    rootContext()->setContextProperty( "currentlyPlayedIndex", QVariant::fromValue( 0 ) );
 
-    setSource( QUrl( "qrc" RESPATH "qml/StationScene.qml" ) );
+    setSource( QUrl( "qrc" RESPATH "qml/StationView.qml" ) );
 
     connect( m_model, SIGNAL( currentItemChanged(QPersistentModelIndex)), SLOT( currentIndexChanged( QPersistentModelIndex ) ) );
     connect( m_model, SIGNAL( loadingStarted() ), SIGNAL(loadingChanged() ) );
     connect( m_model, SIGNAL( loadingFinished() ), SIGNAL(loadingChanged() ) );
+    connect( m_model, SIGNAL( changed() ), SIGNAL( titleChanged() ) );
     connect( m_playlist->generator().data(), SIGNAL( generated( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
     connect( m_playlist->generator().data(), SIGNAL( nextTrackGenerated( Tomahawk::query_ptr ) ), this, SLOT( nextTrackGenerated( Tomahawk::query_ptr ) ) );
     connect( m_playlist.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ), this, SLOT( onRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ) );

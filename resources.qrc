@@ -139,25 +139,23 @@
         <file>data/images/account-none.svg</file>
         <file>data/images/green-dot.svg</file>
         <file>data/images/exfm.png</file>
-        <file>data/qml/StationScene.qml</file>
-        <file>data/qml/StationConfig.qml</file>
-        <file>data/qml/StationView.qml</file>
-        <file>data/qml/tomahawkimports/InputField.qml</file>
-        <file>data/qml/tomahawkimports/Button.qml</file>
-        <file>data/qml/tomahawkimports/DoubleSlider.qml</file>
-        <file>data/qml/CoverFlip.qml</file>
-        <file>data/qml/tomahawkimports/RoundedButton.qml</file>
-        <file>data/qml/StationCreator.qml</file>
-        <file>data/qml/StationCreatorPage1.qml</file>
-        <file>data/qml/GridView.qml</file>
-        <file>data/qml/StationCreatorPage2.qml</file>
-        <file>data/qml/stations/CreateByArtist.qml</file>
         <file>data/qml/tomahawkimports/CoverImage.qml</file>
         <file>data/qml/tomahawkimports/ArtistView.qml</file>
         <file>data/qml/tomahawkimports/HeaderLabel.qml</file>
-        <file>data/qml/stations/CreateByGenre.qml</file>
         <file>data/qml/tomahawkimports/TagCloud.qml</file>
         <file>data/qml/tomahawkimports/ScrollBar.qml</file>
+        <file>data/qml/tomahawkimports/InputField.qml</file>
+        <file>data/qml/tomahawkimports/Button.qml</file>
+        <file>data/qml/tomahawkimports/DoubleSlider.qml</file>
+        <file>data/qml/tomahawkimports/RoundedButton.qml</file>
+        <file>data/qml/tomahawkimports/CoverFlip.qml</file>
+        <file>data/qml/StationView.qml</file>
+        <file>data/qml/stations/StationCreatorPage1.qml</file>
+        <file>data/qml/stations/StationCreatorPage2.qml</file>
+        <file>data/qml/stations/CreateByArtist.qml</file>
+        <file>data/qml/stations/StationConfig.qml</file>
+        <file>data/qml/QmlGridView.qml</file>
+        <file>data/qml/stations/CreateByGenre.qml</file>
         <file>data/images/soundcloud.svg</file>
         <file>data/images/resolver-default.svg</file>
         <file>data/images/spotify-sourceicon.svg</file>
@@ -168,5 +166,6 @@
         <file>data/images/ok.svg</file>
         <file>data/qml/tomahawkimports/FlexibleHeader.qml</file>
         <file>data/qml/tomahawkimports/ToggleViewButtons.qml</file>
+        <file>data/qml/DeclarativeHeader.qml</file>
     </qresource>
 </RCC>

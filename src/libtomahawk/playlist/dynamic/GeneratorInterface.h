@@ -119,6 +119,7 @@ signals:
     void error( const QString& title, const QString& body);
     void generated( const QList< Tomahawk::query_ptr>& queries );
     void nextTrackGenerated( const Tomahawk::query_ptr& track );
+    void summaryChanged();
 
 protected:
     QString m_type;

@@ -14,3 +14,13 @@ SearchFieldQmlProxy::SearchFieldQmlProxy(QGraphicsItem *parent) :
     connect(m_searchField, SIGNAL(returnPressed()), SIGNAL(returnPressed()));
 
 }
+
+QString SearchFieldQmlProxy::text() const
+{
+    return m_searchField->text();
+}
+
+void SearchFieldQmlProxy::setText(const QString &text)
+{
+    m_searchField->setText(text);
+}

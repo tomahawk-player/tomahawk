@@ -1,6 +1,6 @@
 import QtQuick 1.1
 import tomahawk 1.0
-import "tomahawkimports"
+import "../tomahawkimports"
 
 
 Item {
@@ -9,15 +9,6 @@ Item {
     property int spacing: 10
 
     signal itemClicked(int index)
-
-    HeaderLabel {
-        text: "Listen to radio..."
-        anchors {
-            left: parent.left
-            top: parent.top
-            margins: defaultFontHeight * 2
-        }
-    }
 
     GridView {
         id: gridView

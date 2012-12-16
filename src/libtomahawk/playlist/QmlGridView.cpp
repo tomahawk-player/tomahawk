@@ -63,7 +63,7 @@ QmlGridView::QmlGridView(QWidget *parent) : DeclarativeView(parent)
 
     rootContext()->setContextProperty( "mainModel", m_proxyModel );
 
-    setSource( QUrl( "qrc" RESPATH "qml/GridView.qml" ) );
+    setSource( QUrl( "qrc" RESPATH "qml/QmlGridView.qml" ) );
 }
 
 QmlGridView::~QmlGridView()

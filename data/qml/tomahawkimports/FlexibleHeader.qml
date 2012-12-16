@@ -3,11 +3,40 @@ import tomahawk 1.0
 
 Rectangle {
     id: root
-    anchors.fill: parent
 
+    // The icon
+    property alias icon: iconImage.source
+
+    // The title
+    property alias title: titleItem.titleText
+
+    // The subtitle/description
+    property alias subtitle: subtitleText.text
+
+    // The model for the ToggleViewButtons.
+    // "modelData" role name holds the iconSource
+    // => You can use a QStringList or StandardListModel here
+    property alias buttonModel: toggleViewButtons.model
+
+    // The index of the currently selected item
+    property alias currentButtonIndex: toggleViewButtons.currentIndex
+
+    // Should we show the searchfield?
     property bool showSearchField: true
 
+    // The SearchFields text
+    property alias searchText: searchField.text
+
+    property bool showBackButton: false
+    property bool showNextButton: false
+    property bool showSaveButton: false
+
+    // Layout spacing
     property int spacing: defaultFontHeight / 2
+
+    signal backPressed()
+    signal nextPressed()
+    signal savePressed()
 
     gradient: Gradient {
         GradientStop { position: 0.0; color: "#615858" }
@@ -15,13 +44,19 @@ Rectangle {
     }
 
     Row {
-        anchors.fill: parent
+        id: leftRow
+        anchors {
+            left: parent.left
+            top: parent.top
+            bottom: parent.bottom
+            right: rightRow.left
+        }
+
         anchors.margins: root.spacing
         spacing: root.spacing
 
         Image {
             id: iconImage
-            source: iconSource
             height: parent.height * 0.8
             width: height
             anchors.verticalCenter: parent.verticalCenter
@@ -29,7 +64,7 @@ Rectangle {
 
         Column {
             height: parent.height
-            width: parent.width - iconImage.width - toggleViewButtons.width - searchField.width - parent.spacing * 5
+            width: parent.width - iconImage.width - parent.spacing
 
             Item {
                 id: titleItem
@@ -37,11 +72,11 @@ Rectangle {
                 width: parent.width
                 clip: true
 
-                property string titleText: caption
+                property string titleText
 
                 onTitleTextChanged: {
                     if(captionText1.text.length > 0) {
-                        captionText2.text = caption;
+                        captionText2.text = titleText;
                         renewTitleAnimation.start();
                     } else {
                         captionText1.text = titleText;
@@ -88,7 +123,7 @@ Rectangle {
 
             }
             Text {
-                text: description
+                id: subtitleText
                 color: "white"
                 font.pointSize:  defaultFontSize + 1
                 width: parent.width
@@ -96,27 +131,52 @@ Rectangle {
             }
         }
 
+    }
+
+    Row {
+        id: rightRow
+        anchors {
+            top: parent.top
+            right: parent.right
+            bottom: parent.bottom
+            margins: root.spacing
+        }
+        width: childrenRect.width
+        spacing: root.spacing
+        layoutDirection: Qt.RightToLeft
+
+
+
+        RoundedButton {
+            height: parent.height * 0.8
+            anchors.verticalCenter: parent.verticalCenter
+            text: "+"
+            visible: root.showSaveButton
+            onClicked: root.saveClicked()
+        }
+        RoundedButton {
+            height: parent.height * 0.8
+            anchors.verticalCenter: parent.verticalCenter
+            text: ">"
+            visible: root.showNextButton
+            onClicked: root.nextPressed();
+        }
+        RoundedButton {
+            anchors.verticalCenter: parent.verticalCenter
+            height: parent.height * 0.8
+            text: "<"
+            visible: root.showBackButton
+            onClicked: root.backPressed();
+        }
+        InputField {
+            id: searchField
+            visible: root.showSearchField
+            anchors.verticalCenter: parent.verticalCenter
+        }
         ToggleViewButtons {
             id: toggleViewButtons
             anchors.verticalCenter: parent.verticalCenter
             height: defaultFontHeight * 1.5
-            model: toggleViewButtonModel
-
-            onCurrentIndexChanged: mainView.viewModeSelected(currentIndex)
-        }
-
-
-        SearchField {
-            id: searchField
-            opacity: root.showSearchField ? 1 : 0
-            anchors {
-                right: parent.right
-                verticalCenter: parent.verticalCenter
-                rightMargin: root.spacing
-            }
-
-            onTextChanged: mainView.setFilterText(text)
-
         }
     }
 }

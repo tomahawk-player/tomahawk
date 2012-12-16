@@ -37,7 +37,7 @@ class DynamicQmlWidget : public DeclarativeView, public Tomahawk::ViewPage
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString title READ title)
+    Q_PROPERTY(QString title READ title NOTIFY titleChanged)
     Q_PROPERTY(bool loading READ loading NOTIFY loadingChanged)
     Q_PROPERTY(bool configured READ configured NOTIFY configuredChanged)
 
@@ -66,6 +66,7 @@ public:
 signals:
     void loadingChanged();
     void configuredChanged();
+    void titleChanged();
 
 public slots:
     void playItem(int index);

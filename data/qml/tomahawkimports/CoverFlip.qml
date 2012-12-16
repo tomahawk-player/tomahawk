@@ -1,6 +1,5 @@
 import QtQuick 1.1
 import tomahawk 1.0
-import "tomahawkimports"
 
 PathView {
     id: coverView
