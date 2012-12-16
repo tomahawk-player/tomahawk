@@ -4,7 +4,7 @@ import QtQuick 1.1
 Rectangle {
     id: root
     height: buttonText.height * 1.4
-    width: childrenRect.width + (spacing * 2)
+    width: buttonText.width + (spacing * 2)
     radius: defaultFontHeight * 0.25
     border.width: defaultFontHeight * 0.05
     border.color: "#a7a7a7"
@@ -23,7 +23,6 @@ Rectangle {
         id: buttonText
         anchors.centerIn: root
         font.pointSize: defaultFontSize
-        text: root.text
         color: mouseArea.pressed ? "white" : "black"
     }
 

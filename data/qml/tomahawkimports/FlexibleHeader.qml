@@ -144,9 +144,10 @@ Rectangle {
             rightMargin: -backButton.width - root.spacing - nextButton.width
             bottom: parent.bottom
             margins: root.spacing
-
-            onRightMarginChanged: print("#+#+#+#+", anchors.rightMargin)
         }
+        width: childrenRect.width
+        spacing: root.spacing
+        layoutDirection: Qt.RightToLeft
 
         states: [
             State {
@@ -166,10 +167,6 @@ Rectangle {
 
         ]
 
-        width: childrenRect.width
-        spacing: root.spacing
-        layoutDirection: Qt.RightToLeft
-
         Behavior on anchors.rightMargin {
             NumberAnimation { duration: 200 }
         }
@@ -178,14 +175,12 @@ Rectangle {
             id: nextButton
             anchors.verticalCenter: parent.verticalCenter
             text: root.nextButtonText
-//            visible: root.showNextButton
             onClicked: root.nextPressed();
         }
         PushButton {
             id: backButton
             anchors.verticalCenter: parent.verticalCenter
             text: root.backButtonText
-//            visible: root.showBackButton
             onClicked: root.backPressed();
         }
         InputField {

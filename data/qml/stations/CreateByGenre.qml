@@ -51,7 +51,7 @@ Item {
 
         Row {
             width: defaultFontHeight * 30
-            height: artistInputField.height
+            height: genreInputField.height
             spacing: defaultFontHeight * 0.5
             anchors.horizontalCenter: parent.horizontalCenter
 

@@ -46,20 +46,24 @@ Item {
             }
         }
 
-        ArtistView {
-            id: artistView
+        Item {
             height: parent.height - headerText.height - artistInputField.height - parent.spacing * 3
             width: parent.width
-            model: artistChartsModel
-            clip: true
-            delegateHeight: defaultFontHeight * 6
+            ArtistView {
+                id: artistView
+                height: parent.height
+                width: parent.width
+                model: artistChartsModel
+                clip: true
+                delegateHeight: defaultFontHeight * 6
 
-            onItemClicked: {
-                createStation(artistChartsModel.itemFromIndex(index).artistName);
+                onItemClicked: {
+                    createStation(artistChartsModel.itemFromIndex(index).artistName);
+                }
             }
-        }
-        ScrollBar {
-            listView: artistView
+            ScrollBar {
+                listView: artistView
+            }
         }
     }
 }
