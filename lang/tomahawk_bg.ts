@@ -367,79 +367,79 @@ connect and stream from you?</source>
 <context>
     <name>AudioControls</name>
     <message>
-        <location filename="../src/AudioControls.ui" line="75"/>
+        <location filename="../src/AudioControls.ui" line="74"/>
         <source>Prev</source>
         <translation>Предходна</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="87"/>
+        <location filename="../src/AudioControls.ui" line="86"/>
         <source>Play</source>
         <translation>Изпълни</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="94"/>
+        <location filename="../src/AudioControls.ui" line="93"/>
         <source>Pause</source>
         <translation>Пауза</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="103"/>
+        <location filename="../src/AudioControls.ui" line="102"/>
         <source>Next</source>
         <translation>Следваща</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="229"/>
+        <location filename="../src/AudioControls.ui" line="228"/>
         <source>Artist</source>
         <translation>Артист</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="248"/>
+        <location filename="../src/AudioControls.ui" line="247"/>
         <source>Album</source>
         <translation>Албум</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="296"/>
+        <location filename="../src/AudioControls.ui" line="295"/>
         <source>social</source>
         <translation>социален</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="312"/>
+        <location filename="../src/AudioControls.ui" line="311"/>
         <source>love</source>
         <translation>Харесай</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="345"/>
+        <location filename="../src/AudioControls.ui" line="344"/>
         <source>resolver</source>
         <translation>Модул за извличане</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="381"/>
+        <location filename="../src/AudioControls.ui" line="380"/>
         <source>Time</source>
         <translation>Времетраене</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="410"/>
+        <location filename="../src/AudioControls.ui" line="409"/>
         <source>Time Left</source>
         <translation>Оставащо време</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="491"/>
+        <location filename="../src/AudioControls.ui" line="490"/>
         <location filename="../src/AudioControls.cpp" line="279"/>
         <source>Shuffle</source>
         <translation>Разбъркано</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="504"/>
+        <location filename="../src/AudioControls.ui" line="503"/>
         <location filename="../src/AudioControls.cpp" line="280"/>
         <source>Repeat</source>
         <translation>Повтори</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="542"/>
+        <location filename="../src/AudioControls.ui" line="541"/>
         <source>Low</source>
         <translation>0</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.ui" line="574"/>
+        <location filename="../src/AudioControls.ui" line="573"/>
         <source>High</source>
         <translation>100%</translation>
     </message>
