@@ -170,5 +170,6 @@
         <file>data/qml/DeclarativeHeader.qml</file>
         <file>data/images/inputfield-border.svg</file>
         <file>data/images/search-box-dismiss-x.svg</file>
+        <file>data/images/loading-animation.svg</file>
     </qresource>
 </RCC>

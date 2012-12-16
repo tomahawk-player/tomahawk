@@ -65,16 +65,6 @@ Rectangle {
             height: stationListView.height
             width: stationListView.width
 
-            Image {
-                id: busyIndicator
-                source: "../images/advanced-settings.svg"
-                anchors.centerIn: parent
-                height: defaultFontHeight * 4
-                width: height
-                visible: mainView.loading
-                RotationAnimation { target: busyIndicator; from: 360; to: 0; duration: 1500; running: visible; loops: Animation.Infinite }
-            }
-
             CoverFlip {
                 id: coverView
                 anchors.fill: parent
@@ -94,6 +84,23 @@ Rectangle {
                 }
 
             }
+            Image {
+                id: busyIndicator
+                source: "../images/loading-animation.svg"
+                anchors.centerIn: parent
+                height: defaultFontHeight * 4
+                width: height
+                visible: mainView.loading
+                RotationAnimation {
+                    target: busyIndicator
+                    from: 0
+                    to: 360
+                    duration: 1500
+                    running: true
+                    loops: Animation.Infinite
+                }
+            }
+
         }
 
     }
