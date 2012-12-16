@@ -141,7 +141,7 @@ Rectangle {
         anchors {
             top: parent.top
             right: parent.right
-            rightMargin: -backButton.width - root.spacing - nextButton.width - root.spacing
+            rightMargin: -backButton.width - root.spacing - nextButton.width
             bottom: parent.bottom
             margins: root.spacing
 
