@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="130px" height="130px" viewBox="0 0 130 130" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <title>station-genre</title>
+    <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="173.920641%" id="linearGradient-1">
+            <stop stop-color="rgb(123,125,121)" offset="0%"></stop>
+            <stop stop-color="rgb(0,0,0)" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page 1" fill="rgb(215,215,215)" fill-rule="evenodd">
+        <path d="M121.737066,30 C124.090737,30 125.999988,31.9014125 126,34.2430461 L126,100.756957 C126,103.101015 124.090742,105 121.737066,105 L39.6563335,105 C38.5266682,105 37.4392102,104.554926 36.6447204,103.758737 L3.24635583,70.5042528 C2.44938329,69.7055913 2,68.6250494 2,67.4999999 C2,66.3749503 2.44938321,65.2968809 3.24635583,64.5006921 L36.6447204,31.2412633 C37.4392104,30.4475471 38.5217028,30 39.6563335,30 Z M35.2344961,78.1866733 C41.1609151,78.1866733 45.9625892,73.4071088 45.9625916,67.49994 C45.9625916,61.6002302 41.1584108,56.8132067 35.2344961,56.8132067 C29.3105813,56.8132067 24.503918,61.5977574 24.503918,67.49994 C24.503918,73.4045951 29.3080985,78.1866733 35.2344961,78.1866733 Z M35.2344961,78.1866733" id="Shape" fill="url(#linearGradient-1)"></path>
+    </g>
+</svg>
