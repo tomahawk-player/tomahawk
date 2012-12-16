@@ -33,9 +33,9 @@ Rectangle {
 
     ListModel {
         id: modeModel
-        ListElement { label: "By Artist"; image: "../../images/artist-placeholder-grid.svg"; creatorContent: "stations/CreateByArtist.qml" }
-        ListElement { label: "By Genre"; image: "../../images/album-placeholder-grid.svg"; creatorContent: "stations/CreateByGenre.qml" }
-        ListElement { label: "By Year"; image: "image://albumart/foobar"; creatorContent: "year" }
+        ListElement { label: "By Artist"; image: "../../images/station-artist.svg"; creatorContent: "stations/CreateByArtist.qml" }
+        ListElement { label: "By Genre"; image: "../../images/station-genre.svg"; creatorContent: "stations/CreateByGenre.qml" }
+        ListElement { label: "By Year"; image: "../../images/station-year.svg"; creatorContent: "year" }
     }
 
     VisualItemModel {
