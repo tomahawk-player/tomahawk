@@ -167,5 +167,7 @@
         <file>data/qml/tomahawkimports/FlexibleHeader.qml</file>
         <file>data/qml/tomahawkimports/ToggleViewButtons.qml</file>
         <file>data/qml/DeclarativeHeader.qml</file>
+        <file>data/images/inputfield-border.svg</file>
+        <file>data/images/search-box-dismiss-x.svg</file>
     </qresource>
 </RCC>

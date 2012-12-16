@@ -172,6 +172,8 @@ Rectangle {
             id: searchField
             visible: root.showSearchField
             anchors.verticalCenter: parent.verticalCenter
+            placeholderText: "Search..."
+            showSearchIcon: true
         }
         ToggleViewButtons {
             id: toggleViewButtons
