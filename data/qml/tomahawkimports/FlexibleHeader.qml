@@ -32,7 +32,7 @@ Rectangle {
     property bool showSaveButton: false
 
     // Layout spacing
-    property int spacing: defaultFontHeight / 2
+    property int spacing: defaultFontHeight * 0.5
 
     signal backPressed()
     signal nextPressed()
@@ -104,7 +104,7 @@ Rectangle {
                     anchors.left: parent.left
                     anchors.top: parent.top
 
-                    font.pointSize: defaultFontSize + 4
+                    font.pointSize: defaultFontSize * 1.5
                     font.bold: true
                     width: parent.width
                     elide: Text.ElideRight
@@ -115,7 +115,7 @@ Rectangle {
                     anchors.left: parent.left
                     anchors.top: parent.top
                     anchors.topMargin: -height * 2
-                    font.pointSize: defaultFontSize + 4
+                    font.pointSize: defaultFontSize * 1.5
                     font.bold: true
                     width: parent.width
                     elide: Text.ElideRight
@@ -125,7 +125,7 @@ Rectangle {
             Text {
                 id: subtitleText
                 color: "white"
-                font.pointSize:  defaultFontSize + 1
+                font.pointSize:  defaultFontSize * 1.2
                 width: parent.width
                 elide: Text.ElideRight
             }
