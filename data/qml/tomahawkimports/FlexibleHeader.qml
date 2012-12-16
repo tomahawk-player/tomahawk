@@ -60,6 +60,7 @@ Rectangle {
             height: parent.height * 0.8
             width: height
             anchors.verticalCenter: parent.verticalCenter
+            smooth: true
         }
 
         Column {

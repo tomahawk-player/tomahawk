@@ -9,6 +9,8 @@ Item {
     // the orientation of the scrollbar
     property variant orientation : Qt.Vertical
 
+    property int margin: defaultFontHeight * 0.25
+
     states: [
         State {
             name: "hidden"; when: !listView.moving
@@ -34,9 +36,9 @@ Item {
 
     anchors {
         left: orientation == Qt.Vertical ? listView.right : listView.left
-        leftMargin: orientation == Qt.Vertical ? defaultFontHeight / 4 : 0
+        leftMargin: orientation == Qt.Vertical ? scrollBar.margin : 0
         top: orientation == Qt.Vertical ? listView.top : listView.bottom
-        topMargin: orientation == Qt.Vertical ? 0 : defaultFontHeight / 4
+        topMargin: orientation == Qt.Vertical ? 0 : scrollBar.margin
         bottom: orientation == Qt.Vertical ? listView.bottom : undefined
         right: orientation == Qt.Vertical ? undefined : listView.right
     }
@@ -48,19 +50,20 @@ Item {
         radius: orientation == Qt.Vertical ? (width/2 - 1) : (height/2 - 1)
         color: "white"
         opacity: 0.2
+        clip: true
+        // Size the bar to the required size, depending upon the orientation.
+        Rectangle {
+            property real position: orientation == Qt.Vertical ? (listView.contentY / listView.contentHeight) : (listView.contentX / listView.contentWidth)
+            property real pageSize: orientation == Qt.Vertical ? (listView.height / listView.contentHeight) : (listView.width / listView.contentWidth)
+
+            x: orientation == Qt.Vertical ? 1 : (position * (scrollBar.width-2) + 1)
+            y: orientation == Qt.Vertical ? (position * (scrollBar.height-2) + 1) : 1
+            width: orientation == Qt.Vertical ? (parent.width-2) : (pageSize * (scrollBar.width-2))
+            height: orientation == Qt.Vertical ? (pageSize * (scrollBar.height-2)) : (parent.height-2)
+            radius: orientation == Qt.Vertical ? (width/2 - 1) : (height/2 - 1)
+            color: "white"
+            opacity: 1
+        }
     }
 
-    // Size the bar to the required size, depending upon the orientation.
-    Rectangle {
-        property real position: orientation == Qt.Vertical ? (listView.contentY / listView.contentHeight) : (listView.contentX / listView.contentWidth)
-        property real pageSize: orientation == Qt.Vertical ? (listView.height / listView.contentHeight) : (listView.width / listView.contentWidth)
-
-        x: orientation == Qt.Vertical ? 1 : (position * (scrollBar.width-2) + 1)
-        y: orientation == Qt.Vertical ? (position * (scrollBar.height-2) + 1) : 1
-        width: orientation == Qt.Vertical ? (parent.width-2) : (pageSize * (scrollBar.width-2))
-        height: orientation == Qt.Vertical ? (pageSize * (scrollBar.height-2)) : (parent.height-2)
-        radius: orientation == Qt.Vertical ? (width/2 - 1) : (height/2 - 1)
-        color: "white"
-        opacity: 0.2
-    }
 }

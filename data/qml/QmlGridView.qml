@@ -15,6 +15,7 @@ Rectangle {
     GridView {
         id: gridView
         anchors.fill: parent
+        //anchors.rightMargin: scrollBar.width
 
         cellHeight: cellWidth
         cellWidth: calculateCoverSize(gridView.width - 3)
@@ -50,5 +51,12 @@ Rectangle {
                 rootView.onItemPlayClicked(index)
             }
         }
+    }
+
+    ScrollBar {
+        id: scrollBar
+        listView: gridView
+        orientation: Qt.Vertical
+        margin: -width
     }
 }
