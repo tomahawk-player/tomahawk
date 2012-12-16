@@ -43,6 +43,7 @@ Rectangle {
             artworkId: model.coverID
             showPlayButton: true
             currentlyPlaying: isPlaying
+            smooth: true
 
             onClicked: {
                 rootView.onItemClicked(index)

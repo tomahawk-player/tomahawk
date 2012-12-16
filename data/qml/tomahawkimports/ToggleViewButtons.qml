@@ -18,7 +18,7 @@ Row {
             height: repeater.height
             width: height
 
-            source: "../../images/view-toggle-" + (index === root.currentIndex ? "pressed-" : "inactive-" ) + (index === 0 ? "left" : ( index === repeater.count - 1 ? "right" : "centre" )) +  ".svg"
+            source: "../../images/view-toggle-" + (index === root.currentIndex ? "active-" : "inactive-" ) + (index === 0 ? "left" : ( index === repeater.count - 1 ? "right" : "centre" )) +  ".svg"
             smooth: true
             Image {
                 anchors.fill: parent
