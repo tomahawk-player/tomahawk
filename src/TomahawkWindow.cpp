@@ -278,7 +278,7 @@ TomahawkWindow::setupToolBar()
     m_toolbar->addWidget( toolbarLeftSpacer )->setProperty( "kind", QString( "spacer" ) );
 
     m_searchWidget = new QSearchField( this );
-    m_searchWidget->setPlaceholderText( tr( "Global Search..." ) );
+    m_searchWidget->setPlaceholderText( tr( "Search for any artist, album or song..." ) );
     m_searchWidget->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred );
     m_searchWidget->setFixedWidth( 340 );
     connect( m_searchWidget, SIGNAL( returnPressed() ), this, SLOT( onFilterEdited() ) );
