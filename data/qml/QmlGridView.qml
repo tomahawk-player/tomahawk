@@ -45,7 +45,7 @@ Rectangle {
             artworkId: model.coverID
             showPlayButton: true
             currentlyPlaying: isPlaying
-            smooth: true
+            smooth: !gridView.moving
 
             onClicked: {
                 rootView.onItemClicked(index)
