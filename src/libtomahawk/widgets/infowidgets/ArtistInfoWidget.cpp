@@ -51,7 +51,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->setupUi( widget );
 
     QPalette pal = palette();
-    pal.setColor( QPalette::Window, QColor( "#323435" ) );
+    pal.setColor( QPalette::Window, QColor( "#393840" ) );
 
     widget->setPalette( pal );
     widget->setAutoFillBackground( true );

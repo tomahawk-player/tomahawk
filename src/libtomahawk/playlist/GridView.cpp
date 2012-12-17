@@ -74,7 +74,7 @@ GridView::GridView( QWidget* parent )
     setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
     setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
 
-    setStyleSheet( "QListView { background-color: #323435; }" );
+    setStyleSheet( "QListView { background-color: #393840; }" );
 
     setAutoFitItems( true );
     setAutoResize( false );

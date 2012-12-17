@@ -50,7 +50,7 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
     ui->setupUi( widget );
 
     QPalette pal = palette();
-    pal.setColor( QPalette::Window, QColor( "#323435" ) );
+    pal.setColor( QPalette::Window, QColor( "#393840" ) );
 
     widget->setPalette( pal );
     widget->setAutoFillBackground( true );
