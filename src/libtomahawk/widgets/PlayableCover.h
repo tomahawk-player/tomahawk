@@ -47,6 +47,7 @@ public slots:
 
 protected:
     virtual void resizeEvent( QResizeEvent* event );
+    virtual void paintEvent( QPaintEvent* event );
 
     void leaveEvent( QEvent* event );
     void enterEvent( QEvent* event );
