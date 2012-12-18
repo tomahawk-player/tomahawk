@@ -108,15 +108,10 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->biography->setFont( f );
     TomahawkUtils::styleScrollBar( ui->biography->verticalScrollBar() );
 
-    f.setBold( true );
-    f.setPointSize( TomahawkUtils::defaultFontSize() + 8 );
-    ui->artistLabel->setFont( f );
-
     QPalette p = ui->biography->palette();
     p.setColor( QPalette::Foreground, Qt::white );
     p.setColor( QPalette::Text, Qt::gray );
 
-    ui->artistLabel->setPalette( p );
     ui->biography->setPalette( p );
     ui->label->setPalette( p );
     ui->label_2->setPalette( p );
@@ -254,7 +249,6 @@ ArtistInfoWidget::load( const artist_ptr& artist )
     connect( m_artist.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
                                 SLOT( onTracksFound( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode ) ) );
 
-    ui->artistLabel->setText( artist->name() );
     ui->cover->setArtist( artist );
 
     m_topHitsModel->startLoading();
