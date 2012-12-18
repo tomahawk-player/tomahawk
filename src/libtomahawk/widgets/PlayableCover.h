@@ -40,6 +40,9 @@ public:
     PlayableCover( QWidget* parent = 0 );
     virtual ~PlayableCover();
 
+    bool showText() const { return m_showText; }
+    void setShowText( bool b ) { m_showText = b; }
+
 public slots:
     virtual void setArtist( const Tomahawk::artist_ptr& artist );
     virtual void setAlbum( const Tomahawk::album_ptr& album );
@@ -62,6 +65,8 @@ private:
     Tomahawk::artist_ptr m_artist;
     Tomahawk::album_ptr m_album;
     Tomahawk::query_ptr m_query;
+
+    bool m_showText;
 };
 
 #endif

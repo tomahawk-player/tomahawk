@@ -29,6 +29,7 @@
 
 PlayableCover::PlayableCover( QWidget* parent )
     : QLabel( parent )
+    , m_showText( false )
 {
     setMouseTracking( true );
 
@@ -80,6 +81,8 @@ void
 PlayableCover::paintEvent( QPaintEvent* event )
 {
     QLabel::paintEvent( event );
+    if ( !m_showText )
+        return;
 
     QRect r = contentsRect().adjusted( margin(), margin(), -margin(), -margin() );
     QPixmap buffer( r.size() );
