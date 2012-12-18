@@ -61,10 +61,6 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     TomahawkUtils::unmarginLayout( ui->layoutWidget2->layout() );
     TomahawkUtils::unmarginLayout( ui->albumHeader->layout() );*/
 
-    ui->artistLabel_2->setVisible( false );
-    ui->biography_2->setVisible( false );
-    ui->cover_2->setVisible( false );
-
     m_albumsModel = new PlayableModel( ui->albums );
     ui->albums->setPlayableModel( m_albumsModel );
     ui->albums->setEmptyTip( tr( "Sorry, we could not find any albums for this artist!" ) );
