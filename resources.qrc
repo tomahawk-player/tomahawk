@@ -147,5 +147,6 @@
         <file>data/images/cancel.svg</file>
         <file>data/images/delete.svg</file>
         <file>data/images/ok.svg</file>
+        <file>data/images/tweet.svg</file>
     </qresource>
 </RCC>
