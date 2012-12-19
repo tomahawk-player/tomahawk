@@ -12,6 +12,10 @@ Item {
     property bool running: true
     property int interval: 200
 
+    Behavior on opacity {
+        NumberAnimation { duration: 500 }
+    }
+
     Repeater {
         model: busyIndicator.count
 
