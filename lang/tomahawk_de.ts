@@ -68,18 +68,18 @@ erlauben sich mit dir zu verbinden?</translation>
     <message>
         <location filename="../src/widgets/AccountListWidget.cpp" line="62"/>
         <source>Connections</source>
-        <translation type="unfinished"/>
+        <translation>Verbindungen</translation>
     </message>
     <message>
         <location filename="../src/widgets/AccountListWidget.cpp" line="70"/>
         <location filename="../src/widgets/AccountListWidget.cpp" line="231"/>
         <source>Connect &amp;All</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Alle verbinden</translation>
     </message>
     <message>
         <location filename="../src/widgets/AccountListWidget.cpp" line="230"/>
         <source>Disconnect &amp;All</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Alle trennen</translation>
     </message>
 </context>
 <context>
@@ -250,7 +250,7 @@ erlauben sich mit dir zu verbinden?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="197"/>
         <source>Main Menu</source>
-        <translation type="unfinished"/>
+        <translation>Hauptmenü</translation>
     </message>
 </context>
 <context>
@@ -263,7 +263,7 @@ erlauben sich mit dir zu verbinden?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="76"/>
         <source>Tracklist</source>
-        <translation type="unfinished"/>
+        <translation>Tracklist</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="156"/>
@@ -273,7 +273,7 @@ erlauben sich mit dir zu verbinden?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="216"/>
         <source>Cover</source>
-        <translation type="unfinished"/>
+        <translation>Cover</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="258"/>
@@ -323,44 +323,37 @@ erlauben sich mit dir zu verbinden?</translation>
         <translation>Form</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="167"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="139"/>
         <source>Top Hits</source>
         <translation>Top Hits</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="330"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="302"/>
         <source>Related Artists</source>
         <translation>Ähnliche Künstler</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="43"/>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="404"/>
-        <source>Artist</source>
-        <translation>Künstler</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="247"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="219"/>
         <source>Albums</source>
         <translation>Alben</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="81"/>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="378"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="53"/>
         <source>Cover</source>
         <translation>Cover</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="70"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="66"/>
         <source>Sorry, we could not find any albums for this artist!</source>
         <translation>Sorry, wir konnten keine Alben für diesen Künstler finden!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="75"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="71"/>
         <source>Sorry, we could not find any related artists!</source>
         <translation>Sorry, wir konnten keine ähnlichen Künstler finden!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="81"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="77"/>
         <source>Sorry, we could not find any top hits for this artist!</source>
         <translation>Sorry, wir konnten keine Lieder für diesen Künstler finden!</translation>
     </message>
@@ -410,7 +403,7 @@ erlauben sich mit dir zu verbinden?</translation>
     <message>
         <location filename="../src/AudioControls.ui" line="344"/>
         <source>resolver</source>
-        <translation type="unfinished"/>
+        <translation>Resolver</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.ui" line="380"/>
@@ -457,7 +450,7 @@ erlauben sich mit dir zu verbinden?</translation>
     <message>
         <location filename="../src/AudioControls.cpp" line="283"/>
         <source>Playing from %1</source>
-        <translation type="unfinished"/>
+        <translation>Wiedergabe von %1</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.cpp" line="281"/>
@@ -563,7 +556,7 @@ erlauben sich mit dir zu verbinden?</translation>
     <message utf8="true">
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="80"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Sorry!&lt;/span&gt; Tomahawk crashed. Please tell us about it! Tomahawk has created an error report for you that can help improve the stability in the future. You can now send this report directly to the Tomahawk developers.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Sorry!&lt;/span&gt; Tomahawk ist abgestürzt. Bitte informiere uns darüber! Tomahawk hat einen Fehlerbericht für dich erstellt, der uns dabei helfen kann die Stabilität zukünftiger Versionen zu verbessern. Du kannst diesen Bericht nun direkt an die Tomahawk Entwickler abschicken.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="129"/>
@@ -1564,7 +1557,7 @@ erlauben sich mit dir zu verbinden?</translation>
     <message>
         <location filename="../src/Settings_Accounts.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>Form</translation>
     </message>
     <message>
         <location filename="../src/Settings_Accounts.ui" line="48"/>
@@ -1577,7 +1570,7 @@ erlauben sich mit dir zu verbinden?</translation>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="20"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>Form</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="29"/>
@@ -1660,7 +1653,7 @@ erlauben sich mit dir zu verbinden?</translation>
     <message>
         <location filename="../src/Settings_Collection.ui" line="20"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>Form</translation>
     </message>
     <message>
         <location filename="../src/Settings_Collection.ui" line="31"/>
@@ -1673,7 +1666,7 @@ erlauben sich mit dir zu verbinden?</translation>
  and using it to craft personalized radios. Enabling this option
  will allow you (and all your friends) to create automatic playlists
  and stations based on your personal taste profile.</source>
-        <translation type="unfinished"/>
+        <translation>The Echo Nest kann die Metadaten deiner Sammlung analysieren um dir personalisierte Radio Stationen anzubieten. Wenn diese Option aktiviert ist, kannst du (und all deine Freunde) Automatische Playlisten und Stationen erstellen die auf deinen persönlichen Musikgeschmack zugeschnitten wurden.</translation>
     </message>
     <message>
         <location filename="../src/Settings_Collection.ui" line="51"/>
@@ -2079,7 +2072,7 @@ erlauben sich mit dir zu verbinden?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="141"/>
         <source>Select All</source>
-        <translation type="unfinished"/>
+        <translation>Alles markieren</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="154"/>
@@ -2112,7 +2105,7 @@ erlauben sich mit dir zu verbinden?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="340"/>
         <source>Delete associated Spotify playlist?</source>
-        <translation type="unfinished"/>
+        <translation>Möchtest du die zugehörige Spotify Playlist löschen?</translation>
     </message>
 </context>
 <context>
@@ -2316,27 +2309,27 @@ erlauben sich mit dir zu verbinden?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="506"/>
         <source>Subscribe to playlist changes</source>
-        <translation type="unfinished"/>
+        <translation>Playlist Änderungen abonnieren</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="510"/>
         <source>Re-enable playlist subscription</source>
-        <translation type="unfinished"/>
+        <translation>Playlist Abonnement re-aktivieren</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="514"/>
         <source>Stop subscribing to changes</source>
-        <translation type="unfinished"/>
+        <translation>Abonnement stoppen</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="534"/>
         <source>Enable Spotify collaborations</source>
-        <translation type="unfinished"/>
+        <translation>Spotify Kollaboration aktivieren</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="536"/>
         <source>Disable Spotify collaborations</source>
-        <translation type="unfinished"/>
+        <translation>Spotify Kollaboration deaktivieren</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="492"/>
@@ -3531,7 +3524,7 @@ Tomahawk auf Twitter&apos;s Website authentifiziert hast:</translation>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="305"/>
         <source>&amp;Main Menu</source>
-        <translation type="unfinished"/>
+        <translation>Haupt&amp;menü</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="855"/>
@@ -3838,7 +3831,11 @@ If you only want to post tweets, you're done.
 If you want to connect Tomahawk to your friends using Twitter, select the type of tweet and press the button below to send a sync message. You must both be following each other as Direct Messages are used. Then be (very) patient -- it can take several minutes!
 
 You can re-send a sync message at any time simply by sending another tweet using the button.</source>
-        <translation type="unfinished"/>
+        <translation>Wenn du lediglich Tweets abschicken willst, bist du nun fertig.
+
+Wenn du Tomahawk mit deinen Freunden über Twitter verbinden willst, wähle nun einen Tweet-Typ aus und clicke den untenstehenden Button um eine Sync-Nachricht abzuschicken. Ihr müsst euch gegenseitig auf Twitter folgen, da Tomahawk über &apos;Direct Messages&apos; kommuniziert. Bitte seid geduldig -- die initiale Verbindung kann ein paar Minuten dauern!
+
+Du kannst jederzeit eine neue Sync-Nachricht abschicken.</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="244"/>
@@ -3992,14 +3989,14 @@ Begriffe für %1:
         <source>
 Hotttness for %1: %2
 </source>
-        <translation type="unfinished"/>
+        <translation>Hotttness für %1: %2</translation>
     </message>
     <message>
         <location filename="../src/xmppbot/XmppBot.cpp" line="366"/>
         <source>
 Familiarity for %1: %2
 </source>
-        <translation type="unfinished"/>
+        <translation>Bekanntheitsgrad für %1: %2</translation>
     </message>
     <message>
         <location filename="../src/xmppbot/XmppBot.cpp" line="384"/>
@@ -4294,7 +4291,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="686"/>
         <source>I&apos;m sorry -- I&apos;m just an automatic presence used by Tomahawk Player (http://gettomahawk.com). If you are getting this message, the person you are trying to reach is probably not signed on, so please try again later!</source>
-        <translation type="unfinished"/>
+        <translation>I&apos;m sorry -- I&apos;m just an automatic presence used by Tomahawk Player (http://gettomahawk.com). If you are getting this message, the person you are trying to reach is probably not signed on, so please try again later!</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="780"/>

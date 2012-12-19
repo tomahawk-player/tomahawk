@@ -323,44 +323,37 @@ conectarse a usted y transmitir música?</translation>
         <translation>Form</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="167"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="139"/>
         <source>Top Hits</source>
         <translation>Grandes éxitos</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="330"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="302"/>
         <source>Related Artists</source>
         <translation>Artistas relacionados</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="43"/>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="404"/>
-        <source>Artist</source>
-        <translation>Artista</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="247"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="219"/>
         <source>Albums</source>
         <translation>Álbumes</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="81"/>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="378"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="53"/>
         <source>Cover</source>
         <translation>Portada</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="70"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="66"/>
         <source>Sorry, we could not find any albums for this artist!</source>
         <translation>No se encontraron álbumes de este artista</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="75"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="71"/>
         <source>Sorry, we could not find any related artists!</source>
         <translation>No se encontraron artistas relacionados</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="81"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="77"/>
         <source>Sorry, we could not find any top hits for this artist!</source>
         <translation>No se encontraron éxitos de este artista</translation>
     </message>
@@ -493,12 +486,12 @@ conectarse a usted y transmitir música?</translation>
     <message>
         <location filename="../src/sourcetree/items/CategoryItems.cpp" line="62"/>
         <source>Create new Playlist</source>
-        <translation>Crear nueva lista de reproducción</translation>
+        <translation>Nueva lista de reproducción</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/CategoryItems.cpp" line="65"/>
         <source>Create new Station</source>
-        <translation>Crear nueva emisora</translation>
+        <translation>Nueva estación</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/CategoryItems.cpp" line="183"/>
@@ -523,7 +516,7 @@ conectarse a usted y transmitir música?</translation>
     <message>
         <location filename="../src/sourcetree/items/CategoryItems.cpp" line="390"/>
         <source>Stations</source>
-        <translation>Estaciones</translation>
+        <translation>Radio</translation>
     </message>
 </context>
 <context>
@@ -578,7 +571,7 @@ conectarse a usted y transmitir música?</translation>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="190"/>
         <source>Abort</source>
-        <translation>Abortar</translation>
+        <translation>Cancelar</translation>
     </message>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="210"/>
@@ -656,7 +649,7 @@ conectarse a usted y transmitir música?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="59"/>
         <source>Steer this station:</source>
-        <translation>Controlar esta emisora:</translation>
+        <translation>Controlar esta estación:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="82"/>
@@ -809,7 +802,7 @@ conectarse a usted y transmitir música?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="38"/>
         <source>Scrobble tracks to Last.fm</source>
-        <translation>Hacer scrobble a las pistas en Last.fm</translation>
+        <translation>Hacer scrobble en Last.fm</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="47"/>
@@ -927,7 +920,7 @@ conectarse a usted y transmitir música?</translation>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="94"/>
         <source>All of your loved tracks</source>
-        <translation>Pistas favoritas</translation>
+        <translation>Mis pistas favoritas</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="96"/>
@@ -1078,7 +1071,7 @@ conectarse a usted y transmitir música?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.h" line="50"/>
         <source>Create a new playlist</source>
-        <translation>Crear una nueva lista de reproducción</translation>
+        <translation>Nueva lista de reproducción</translation>
     </message>
 </context>
 <context>
@@ -1228,7 +1221,7 @@ conectarse a usted y transmitir música?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="32"/>
         <source>New Playlist</source>
-        <translation>Nueva lista de reproducción</translation>
+        <translation>Crear nueva lista de reproducción</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="49"/>
@@ -1253,12 +1246,12 @@ conectarse a usted y transmitir música?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="113"/>
         <source>Create Manual Playlist</source>
-        <translation>Crear lista de reproducción manual</translation>
+        <translation>Lista de reproducción manual</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="123"/>
         <source>Create Automatic Playlist</source>
-        <translation>Crear lista de reproducción automática</translation>
+        <translation>Lista de reproducción automática</translation>
     </message>
 </context>
 <context>
@@ -1681,7 +1674,7 @@ y estaciones basadas en sus gustos personales.</translation>
     <message>
         <location filename="../src/Settings_Collection.ui" line="51"/>
         <source>Upload collection list to The Echo Nest to enable user radio</source>
-        <translation>Enviar la lista de colección a Echo Nest para activar la radio de usuario</translation>
+        <translation>Enviar información de la colección a The Echo Nest para activar la radio</translation>
     </message>
     <message>
         <location filename="../src/Settings_Collection.ui" line="64"/>
@@ -1877,12 +1870,12 @@ y estaciones basadas en sus gustos personales.</translation>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="525"/>
         <source>Latest additions to your collection</source>
-        <translation>Últimas novedades en mi colección</translation>
+        <translation>Pistas añadidas recientemente</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="527"/>
         <source>Latest additions to %1&apos;s collection</source>
-        <translation>Últimas novedadoes en la colección de %1</translation>
+        <translation>Pistas añadidas recientemente en la colección de %1</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="536"/>
@@ -1892,17 +1885,17 @@ y estaciones basadas en sus gustos personales.</translation>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="565"/>
         <source>Recently Played Tracks</source>
-        <translation>Temas Escuchados Recientemente</translation>
+        <translation>Pistas reproducidas recientemente</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="568"/>
         <source>Your recently played tracks</source>
-        <translation>Mis canciones escuchadas recientemente</translation>
+        <translation>Mis pistas escuchadas recientemente</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="570"/>
         <source>%1&apos;s recently played tracks</source>
-        <translation>Las canciones escuchadas recientemente por %1</translation>
+        <translation>Canciones escuchadas recientemente por %1</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="577"/>
@@ -1935,7 +1928,7 @@ y estaciones basadas en sus gustos personales.</translation>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="216"/>
         <source>Add to my Stations</source>
-        <translation>Añadir a mis emisoras</translation>
+        <translation>Añadir a mis estaciones</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="204"/>
@@ -1955,7 +1948,7 @@ y estaciones basadas en sus gustos personales.</translation>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="366"/>
         <source>station</source>
-        <translation>emisora</translation>
+        <translation>estación</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="392"/>
@@ -2077,7 +2070,7 @@ y estaciones basadas en sus gustos personales.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="124"/>
         <source>Right click on any Tomahawk playlist to sync it to Spotify.</source>
-        <translation>Click derecho en cualquier lista de Tomahawk para sincronizarla con Spotify.</translation>
+        <translation>Haga click derecho en cualquier lista de Tomahawk para sincronizarla con Spotify.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="141"/>
@@ -2092,7 +2085,7 @@ y estaciones basadas en sus gustos personales.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="134"/>
         <source>Spotify playlists to keep in sync:</source>
-        <translation>Listas de Spotify a mantener sincronizadas:</translation>
+        <translation>Listas de Spotify sincronizadas:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="164"/>
@@ -2236,7 +2229,7 @@ y estaciones basadas en sus gustos personales.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmAccount.h" line="52"/>
         <source>Scrobble your tracks to last.fm, and find freely downloadable tracks to play</source>
-        <translation>Hacer scrobble de mis temas a last.fm y encontrar canciones gratuitas para reproducirlas</translation>
+        <translation>Hacer scrobble  en Last.fm y encontrar canciones gratuitas</translation>
     </message>
 </context>
 <context>
@@ -2534,7 +2527,7 @@ Deberá volverse a autenticar.</translation>
     <message>
         <location filename="../src/accounts/zeroconf/ZeroconfAccount.h" line="43"/>
         <source>Automatically connect to Tomahawks on the local network</source>
-        <translation>Conectarse automáticament a los Tomahawks de la red local</translation>
+        <translation>Conectarse automáticamente a los Tomahawks de la red local</translation>
     </message>
 </context>
 <context>
@@ -2714,7 +2707,7 @@ Por favor, cambie los filtros o inténtelo de nuevo.</translation>
         <source>Station ran out of tracks!
 
 Try tweaking the filters for a new set of songs to play.</source>
-        <translation>La emisora se ha quedado sin pistas
+        <translation>La estación se ha quedado sin pistas
 
 Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     </message>
@@ -3224,7 +3217,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/libtomahawk/utils/ShortenedLinkParser.cpp" line="98"/>
         <source>Network error parsing shortened link!</source>
-        <translation>Error en la red al analizar el enlace acortado!</translation>
+        <translation>Error en la red al analizar el enlace acortado</translation>
     </message>
 </context>
 <context>
@@ -3593,7 +3586,7 @@ introduzca su número PIN aquí:</translation>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1014"/>
         <source>Station</source>
-        <translation>Radio</translation>
+        <translation>Nueva estación</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1016"/>
@@ -3741,7 +3734,7 @@ introduzca su número PIN aquí:</translation>
     <message numerus="yes">
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="246"/>
         <source>You&apos;ve listened to %1 %n time(s).</source>
-        <translation><numerusform>Ha escuchado %1 %n vez.</numerusform><numerusform>Ha escuchado %1 %n veces.</numerusform></translation>
+        <translation><numerusform>Ha escuchado %1 una vez.</numerusform><numerusform>Ha escuchado %1 %n veces.</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="248"/>
@@ -3909,17 +3902,17 @@ Puede reenviar el mensaje de sincronización en cualquier momento simplemente en
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="344"/>
         <source>SuperCollection</source>
-        <translation>SuperColección</translation>
+        <translation>Supercolección</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="345"/>
         <source>Combined libraries of all your online friends</source>
-        <translation>Bibliotecas combinadas de todos tus amigos conectados</translation>
+        <translation>Bibliotecas combinadas de todos tus amigos</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="399"/>
         <source>Recently Played Tracks</source>
-        <translation>Temas Escuchados Recientemente</translation>
+        <translation>Pistas reproducidas recientemente</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="400"/>
@@ -4033,7 +4026,7 @@ Letras de &quot;%1&quot; por %2:
     <message>
         <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="49"/>
         <source>Failed to parse contents of XSPF playlist</source>
-        <translation>Error al analizar los contenidos de la lista XSPF</translation>
+        <translation>Error al analizar el contenido de la lista XSPF</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="51"/>
@@ -4043,7 +4036,7 @@ Letras de &quot;%1&quot; por %2:
     <message>
         <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="53"/>
         <source>Failed to fetch the desired playlist from the network, or the desired file does not exist</source>
-        <translation>Error al buscar la lista deseada en la red, o el fichero no existe</translation>
+        <translation>Error al buscar la lista deseada en la red (o el fichero no existe)</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="199"/>
@@ -4195,7 +4188,7 @@ Letras de &quot;%1&quot; por %2:
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="302"/>
         <source>Publish currently playing track</source>
-        <translation>Publicar el tema reproducido al momento</translation>
+        <translation>Publicar la pista en reproducción</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="309"/>
@@ -4208,7 +4201,7 @@ Letras de &quot;%1&quot; por %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="379"/>
         <source>User Interaction</source>
-        <translation>Interacción de usuario</translation>
+        <translation>Interacción del usuario</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="382"/>
@@ -4223,22 +4216,22 @@ Letras de &quot;%1&quot; por %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="388"/>
         <source>Authorization Error</source>
-        <translation>Error de Autorización</translation>
+        <translation>Error de autorización</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="391"/>
         <source>Remote Stream Error</source>
-        <translation>Error de Stream Remoto</translation>
+        <translation>Error de stream remoto</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="394"/>
         <source>Remote Connection failed</source>
-        <translation>Fallo en la Conexión Remota</translation>
+        <translation>Fallo en la conexión remota</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="397"/>
         <source>Internal Server Error</source>
-        <translation>Error de Servidor Interno</translation>
+        <translation>Error interno del servidor</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="400"/>
@@ -4263,7 +4256,7 @@ Letras de &quot;%1&quot; por %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="406"/>
         <source>No Compression Support</source>
-        <translation>Compresión no sportada</translation>
+        <translation>Compresión no soportada</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="197"/>
