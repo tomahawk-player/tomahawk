@@ -84,21 +84,14 @@ Rectangle {
                 }
 
             }
-            Image {
+            BusyIndicator {
                 id: busyIndicator
-                source: "../images/loading-animation.svg"
                 anchors.centerIn: parent
                 height: defaultFontHeight * 4
                 width: height
+
                 visible: mainView.loading
-                RotationAnimation {
-                    target: busyIndicator
-                    from: 0
-                    to: 360
-                    duration: 1500
-                    running: true
-                    loops: Animation.Infinite
-                }
+                running: mainView.loading
             }
 
         }

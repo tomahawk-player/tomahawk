@@ -28,6 +28,7 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
     , m_playlist( playlist )
     , m_runningOnDemand( false )
     , m_activePlaylist( false )
+    , m_playNextResolved( false )
 {
     m_model = new DynamicModel( this );
 
@@ -112,7 +113,9 @@ playlist_ptr DynamicQmlWidget::playlist() const
 
 bool DynamicQmlWidget::loading()
 {
-    return m_model->isLoading();
+    // Why does isLoading() not reset to true when cleared and station started again?
+//    return m_model->isLoading();
+    return m_playNextResolved && m_proxyModel->rowCount() == 0;
 }
 
 bool DynamicQmlWidget::configured()
@@ -134,7 +137,9 @@ void DynamicQmlWidget::pause()
 void DynamicQmlWidget::startStationFromArtist(const QString &artist)
 {
     m_model->clear();
+    m_playNextResolved = true;
     m_playlist->generator()->startFromArtist(Artist::get(artist));
+    emit loadingChanged();
     emit configuredChanged();
 }
 
@@ -142,7 +147,9 @@ void DynamicQmlWidget::startStationFromGenre(const QString &genre)
 {
     tDebug() << "should start startion from genre" << genre;
     m_model->clear();
+    m_playNextResolved = true;
     m_playlist->generator()->startFromGenre( genre );
+    emit loadingChanged();
     emit configuredChanged();
 }
 
@@ -188,6 +195,11 @@ void DynamicQmlWidget::resolvingFinished(bool hasResults)
     if( m_proxyModel->rowCount() <= m_proxyModel->currentIndex().row() + 8 ) {
         qDebug() << "fetching next one";
         m_playlist->generator()->fetchNext();
+    }
+
+    if( m_playNextResolved && m_proxyModel->rowCount() > 0 ) {
+        playItem( 0 );
+        m_playNextResolved = false;
     }
 }
 

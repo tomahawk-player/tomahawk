@@ -101,6 +101,7 @@ private:
 
     bool m_runningOnDemand;
     bool m_activePlaylist;
+    bool m_playNextResolved;
 };
 
 }
