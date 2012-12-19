@@ -3,6 +3,7 @@ Type=Application
 Version=1.0
 Name=Tomahawk
 GenericName=Music Player
+GenericName[fi]=Musiikkisoitin
 TryExec=tomahawk
 Exec=tomahawk %u
 Comment=Tomahawk - Social Music Player
