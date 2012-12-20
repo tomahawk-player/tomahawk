@@ -767,6 +767,9 @@ TomahawkWindow::audioStateChanged( AudioState newState, AudioState oldState )
     }
 
     m_taskbarList->ThumbBarUpdateButtons( winId(), ARRAYSIZE( m_thumbButtons ), m_thumbButtons );
+#else
+    Q_UNUSED( newState );
+    Q_UNUSED( oldState );
 #endif // HAVE_THUMBBUTTON
 }
 
