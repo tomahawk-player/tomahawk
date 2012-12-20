@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string notr="true" extracomment="not translatable because not shown to the user">Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -43,7 +43,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Cover</string>
+        <string notr="true" extracomment="not translatable because is placeholder test">Cover</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -78,7 +78,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Statistics</string>
+        <string notr="true" extracomment="not translatable because is placeholder test">Statistics</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>

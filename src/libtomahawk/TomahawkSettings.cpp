@@ -372,7 +372,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
             }
             else if ( pluginName == "sipzeroconf" )
             {
-                setValue( QString( "accounts/%1/accountfriendlyname" ).arg( accountKey ), "Local Network" );
+                setValue( QString( "accounts/%1/accountfriendlyname" ).arg( accountKey ), tr( "Local Network" ) );
             }
 
             beginGroup( "accounts/" + accountKey );
