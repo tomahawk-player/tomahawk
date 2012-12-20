@@ -63,7 +63,7 @@ signals:
     void playlist( const Tomahawk::query_ptr& playlist );
 
 private slots:
-    void soundcloudBrowseFinished();
+    void soundcloudArtistLookupFinished();
     void soundcloudLookupFinished();
     void playlistCreated();
 
