@@ -439,6 +439,8 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
         case DefaultTrackImage:
             if ( mode == Grid )
                 pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/track-placeholder-grid.svg", size );
+            else if ( mode == RoundedCorners )
+                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/track-icon.svg", size, TomahawkUtils::RoundedCorners );
             else
                 pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/track-icon.svg", size );
             break;
