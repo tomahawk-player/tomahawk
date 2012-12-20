@@ -44,7 +44,7 @@ using namespace Tomahawk;
 
 
 PlaylistLargeItemDelegate::PlaylistLargeItemDelegate( DisplayMode mode, TrackView* parent, PlayableProxyModel* proxy )
-    : QStyledItemDelegate( (QObject*)parent )
+    : PlaylistItemDelegate( parent, proxy )
     , m_view( parent )
     , m_model( proxy )
     , m_mode( mode )
@@ -58,9 +58,8 @@ PlaylistLargeItemDelegate::PlaylistLargeItemDelegate( DisplayMode mode, TrackVie
     m_bottomOption = QTextOption( Qt::AlignBottom );
     m_bottomOption.setWrapMode( QTextOption::NoWrap );
 
-    connect( proxy, SIGNAL( modelReset() ), this, SLOT( modelChanged() ) );
-    if ( PlaylistView* plView = qobject_cast< PlaylistView* >( parent ) )
-        connect( plView, SIGNAL( modelChanged() ), this, SLOT( modelChanged() ) );
+    connect( proxy, SIGNAL( modelReset() ), SLOT( modelChanged() ) );
+    connect( parent, SIGNAL( modelChanged() ), SLOT( modelChanged() ) );
 }
 
 
@@ -76,25 +75,6 @@ PlaylistLargeItemDelegate::sizeHint( const QStyleOptionViewItem& option, const Q
     }
 
     return size;
-}
-
-
-QWidget*
-PlaylistLargeItemDelegate::createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const
-{
-    Q_UNUSED( parent );
-    Q_UNUSED( option );
-    Q_UNUSED( index );
-    return 0;
-}
-
-
-void
-PlaylistLargeItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item ) const
-{
-    initStyleOption( option, index );
-
-    TomahawkUtils::prepareStyleOption( option, index, item );
 }
 
 
