@@ -139,7 +139,7 @@ PixmapDelegateFader::setSize( const QSize& size )
         else if ( !m_artist.isNull() )
             m_current = m_currentReference = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, m_mode, m_size );
         else if ( !m_track.isNull() )
-            m_current = m_currentReference = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, m_mode, m_size );
+            m_current = m_currentReference = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, m_mode, m_size );
     }
     else
     {
