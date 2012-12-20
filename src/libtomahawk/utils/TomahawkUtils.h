@@ -127,7 +127,6 @@ namespace TomahawkUtils
     {
         Original,
         CoverInCase,
-        ScaledCover,
         Grid,
         DropShadow,
         RoundedCorners
