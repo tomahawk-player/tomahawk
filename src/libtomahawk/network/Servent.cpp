@@ -28,6 +28,8 @@
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkReply>
 
+#include <boost/bind.hpp>
+
 #include "Result.h"
 #include "Source.h"
 #include "BufferIoDevice.h"
@@ -88,7 +90,6 @@ Servent::Servent( QObject* parent )
 
 Servent::~Servent()
 {
-
     if ( m_portfwd )
     {
         m_portfwd.data()->quit();

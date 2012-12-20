@@ -20,12 +20,12 @@
 #include "QtScriptResolver.h"
 
 #include <QtGui/QMessageBox>
-
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkReply>
-
 #include <QtCore/QMetaProperty>
 #include <QtCore/QCryptographicHash>
+
+#include <boost/bind.hpp>
 
 #include "Artist.h"
 #include "Album.h"
