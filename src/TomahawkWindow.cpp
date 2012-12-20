@@ -721,6 +721,8 @@ TomahawkWindow::winEvent( MSG* msg, long* result )
 }
 
 
+#endif // Q_OS_WIN
+
 void
 TomahawkWindow::audioStateChanged( AudioState newState, AudioState oldState )
 {
@@ -788,8 +790,6 @@ TomahawkWindow::updateWindowsLoveButton()
     m_taskbarList->ThumbBarUpdateButtons( winId(), ARRAYSIZE( m_thumbButtons ), m_thumbButtons );
 #endif // HAVE_THUMBBUTTON
 }
-
-#endif
 
 
 void
