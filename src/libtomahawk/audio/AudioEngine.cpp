@@ -167,7 +167,7 @@ AudioEngine::pause()
 void
 AudioEngine::stop( AudioErrorCode errorCode )
 {
-    tDebug( LOGEXTRA ) << Q_FUNC_INFO << errorCode;
+    tDebug() << Q_FUNC_INFO << errorCode;
 
     if ( isStopped() )
         return;
@@ -471,6 +471,8 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
                         furl = QUrl( m_currentTrack->url().left( m_currentTrack->url().indexOf( '?' ) ) );
                         furl.setEncodedQuery( QString( m_currentTrack->url().mid( m_currentTrack->url().indexOf( '?' ) + 1 ) ).toLocal8Bit() );
                     }
+
+                    tLog( LOGVERBOSE ) << "Passing to Phonon:" << furl;
                     m_mediaObject->setCurrentSource( furl );
                 }
                 else
