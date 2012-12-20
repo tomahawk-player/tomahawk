@@ -26,6 +26,7 @@
 #include "database/Database.h"
 #include "playlist/TreeModel.h"
 #include "playlist/PlayableModel.h"
+#include "playlist/AlbumItemDelegate.h"
 #include "playlist/GridItemDelegate.h"
 #include "Source.h"
 #include "MetaPlaylistInterface.h"
@@ -61,10 +62,14 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
 
     m_tracksModel = new TreeModel( ui->tracks );
     m_tracksModel->setMode( Mixed );
-    ui->tracks->setTreeModel( m_tracksModel );
     ui->tracks->setRootIsDecorated( false );
     ui->tracks->setEmptyTip( tr( "Sorry, we could not find any tracks for this album!" ) );
-    ui->tracks->proxyModel()->setStyle( PlayableProxyModel::Collection );
+    ui->tracks->proxyModel()->setStyle( PlayableProxyModel::Large );
+    ui->tracks->setAutoResize( true );
+    ui->tracks->setPlayableModel( m_tracksModel );
+
+    AlbumItemDelegate* del = new AlbumItemDelegate( ui->tracks, ui->tracks->proxyModel() );
+    ui->tracks->setPlaylistItemDelegate( del );
 
     ui->albums->setAutoFitItems( false );
     ui->albums->setWrapping( false );
@@ -77,32 +82,20 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
     ui->tracks->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
     m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::Original, QSize( 48, 48 ) );
-    ui->cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::Original, QSize( ui->cover->sizeHint() ) ) );
+    ui->cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::Grid ) );
+    ui->cover->setShowText( true );
 
     ui->biography->setFrameShape( QFrame::NoFrame );
     ui->biography->setAttribute( Qt::WA_MacShowFocusRect, 0 );
     TomahawkUtils::styleScrollBar( ui->biography->verticalScrollBar() );
 
-    QFont f = font();
-    f.setBold( true );
-    f.setPointSize( TomahawkUtils::defaultFontSize() + 7 );
-    ui->albumLabel->setFont( f );
-//    ui->similarTracksLabel->setFont( f );
-
-    f.setPointSize( TomahawkUtils::defaultFontSize() + 4 );
-    ui->artistLabel->setFont( f );
-
     QPalette p = ui->biography->palette();
     p.setColor( QPalette::Foreground, Qt::white );
     p.setColor( QPalette::Text, Qt::white );
 
-    ui->albumLabel->setPalette( p );
-    ui->artistLabel->setPalette( p );
     ui->biography->setPalette( p );
     ui->label->setPalette( p );
     ui->label_2->setPalette( p );
-
-    ui->artistLabel->setType( QueryLabel::Artist );
 
     QScrollArea* area = new QScrollArea();
     area->setWidgetResizable( true );
@@ -128,7 +121,6 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
                                "border-image: url(" RESPATH "images/scrollbar-vertical-handle.png) 3 3 3 3 stretch stretch;"
                                "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }" );
 
-//    ui->topHits->setStyleSheet( "QTreeView#topHits { background-color: transparent; }" );
     ui->trackFrame->setStyleSheet( "QFrame#trackFrame { background-color: transparent; }"
                                "QFrame#trackFrame { "
                                "border-image: url(" RESPATH "images/scrollbar-vertical-handle.png) 3 3 3 3 stretch stretch;"
@@ -140,8 +132,6 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
     m_playlistInterface = playlistinterface_ptr( mpl );
 
     load( album );
-
-    connect( ui->artistLabel, SIGNAL( clickedArtist() ), SLOT( onArtistClicked() ) );
 }
 
 
@@ -197,10 +187,8 @@ AlbumInfoWidget::load( const album_ptr& album )
     m_album = album;
     m_title = album->name();
 
-    connect( m_album.data(), SIGNAL( updated() ), SLOT( onArtistImageUpdated() ) );
+    connect( m_album.data(), SIGNAL( updated() ), SLOT( onAlbumImageUpdated() ) );
 
-    ui->artistLabel->setArtist( album->artist() );
-    ui->albumLabel->setText( album->name() );
     ui->label_2->setText( tr( "Other Albums by %1" ).arg( album->artist()->name() ) );
     ui->cover->setAlbum( album );
 
