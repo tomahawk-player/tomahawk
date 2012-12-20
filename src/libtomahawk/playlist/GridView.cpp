@@ -19,7 +19,6 @@
 
 #include "GridView.h"
 
-#include <QHeaderView>
 #include <QKeyEvent>
 #include <QPainter>
 #include <QScrollBar>
@@ -99,10 +98,14 @@ GridView::setProxyModel( PlayableProxyModel* model )
     if ( m_proxyModel )
     {
         disconnect( m_proxyModel, SIGNAL( filterChanged( QString ) ), this, SLOT( onFilterChanged( QString ) ) );
+        disconnect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), this, SLOT( verifySize() ) );
+        disconnect( m_proxyModel, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), this, SLOT( verifySize() ) );
     }
 
     m_proxyModel = model;
     connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
+    connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( verifySize() ) );
+    connect( m_proxyModel, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), SLOT( verifySize() ) );
 
     if ( m_delegate )
         delete m_delegate;
@@ -131,8 +134,6 @@ GridView::setPlayableModel( PlayableModel* model )
 {
     if ( m_model )
     {
-        disconnect( model, SIGNAL( rowsInserted( QModelIndex, int, int ) ), this, SLOT( verifySize() ) );
-        disconnect( model, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), this, SLOT( verifySize() ) );
     }
 
     m_inited = false;
@@ -143,9 +144,6 @@ GridView::setPlayableModel( PlayableModel* model )
         m_proxyModel->setSourcePlayableModel( m_model );
         m_proxyModel->sort( 0 );
     }
-
-    connect( model, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( verifySize() ) );
-    connect( model, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), SLOT( verifySize() ) );
 
     emit modelChanged();
 }
