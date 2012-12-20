@@ -44,7 +44,7 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     ui->setupUi( widget );
 
     QPalette pal = palette();
-    pal.setColor( QPalette::Window, QColor( "#393840" ) );
+    pal.setColor( QPalette::Window, QColor( "##272b2e" ) );
 
     widget->setPalette( pal );
     widget->setAutoFillBackground( true );
@@ -102,7 +102,7 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     ui->similarTracksView->setStyleSheet( "QListView { background-color: transparent; }" );
     ui->frame->setStyleSheet( "QFrame#frame { background-color: transparent; }"
                               "QFrame#frame { "
-                              "border-image: url(" RESPATH "images/scrollbar-vertical-handle.png) 3 3 3 3 stretch stretch;"
+                              "border-image: url(" RESPATH "images/widget-border.png) 3 3 3 3 stretch stretch;"
                               "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }" );
 
     load( query );

@@ -51,7 +51,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->setupUi( widget );
 
     QPalette pal = palette();
-    pal.setColor( QPalette::Window, QColor( "#393840" ) );
+    pal.setColor( QPalette::Window, QColor( "##272b2e" ) );
 
     widget->setPalette( pal );
     widget->setAutoFillBackground( true );
@@ -136,19 +136,19 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->albums->setStyleSheet( "QListView { background-color: transparent; }" );
     ui->albumFrame->setStyleSheet( "QFrame#albumFrame { background-color: transparent; }"
                                "QFrame#albumFrame { "
-                               "border-image: url(" RESPATH "images/scrollbar-vertical-handle.png) 3 3 3 3 stretch stretch;"
+                               "border-image: url(" RESPATH "images/widget-border.png) 3 3 3 3 stretch stretch;"
                                "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }" );
 
     ui->relatedArtists->setStyleSheet( "QListView { background-color: transparent; }" );
     ui->artistFrame->setStyleSheet( "QFrame#artistFrame { background-color: transparent; }"
                                "QFrame#artistFrame { "
-                               "border-image: url(" RESPATH "images/scrollbar-vertical-handle.png) 3 3 3 3 stretch stretch;"
+                               "border-image: url(" RESPATH "images/widget-border.png) 3 3 3 3 stretch stretch;"
                                "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }" );
 
 //    ui->topHits->setStyleSheet( "QTreeView#topHits { background-color: transparent; }" );
     ui->trackFrame->setStyleSheet( "QFrame#trackFrame { background-color: transparent; }"
                                "QFrame#trackFrame { "
-                               "border-image: url(" RESPATH "images/scrollbar-vertical-handle.png) 3 3 3 3 stretch stretch;"
+                               "border-image: url(" RESPATH "images/widget-border.png) 3 3 3 3 stretch stretch;"
                                "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }" );
 
     connect( ui->biography, SIGNAL( anchorClicked( QUrl ) ), SLOT( onBiographyLinkClicked( QUrl ) ) );

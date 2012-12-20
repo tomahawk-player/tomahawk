@@ -148,5 +148,6 @@
         <file>data/images/delete.svg</file>
         <file>data/images/ok.svg</file>
         <file>data/images/tweet.svg</file>
+        <file>data/images/widget-border.png</file>
     </qresource>
 </RCC>

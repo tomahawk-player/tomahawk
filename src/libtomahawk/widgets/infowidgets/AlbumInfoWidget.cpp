@@ -51,7 +51,7 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
     ui->setupUi( widget );
 
     QPalette pal = palette();
-    pal.setColor( QPalette::Window, QColor( "#393840" ) );
+    pal.setColor( QPalette::Window, QColor( "#272b2e" ) );
 
     widget->setPalette( pal );
     widget->setAutoFillBackground( true );
@@ -118,12 +118,12 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
     ui->albums->setStyleSheet( "QListView { background-color: transparent; }" );
     ui->albumFrame->setStyleSheet( "QFrame#albumFrame { background-color: transparent; }"
                                "QFrame#albumFrame { "
-                               "border-image: url(" RESPATH "images/scrollbar-vertical-handle.png) 3 3 3 3 stretch stretch;"
+                               "border-image: url(" RESPATH "images/widget-border.png) 3 3 3 3 stretch stretch;"
                                "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }" );
 
     ui->trackFrame->setStyleSheet( "QFrame#trackFrame { background-color: transparent; }"
                                "QFrame#trackFrame { "
-                               "border-image: url(" RESPATH "images/scrollbar-vertical-handle.png) 3 3 3 3 stretch stretch;"
+                               "border-image: url(" RESPATH "images/widget-border.png) 3 3 3 3 stretch stretch;"
                                "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }" );
 
     MetaPlaylistInterface* mpl = new MetaPlaylistInterface();
