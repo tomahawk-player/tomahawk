@@ -78,18 +78,27 @@ PlayableCover::resizeEvent( QResizeEvent* event )
 
 
 void
+PlayableCover::setPixmap( const QPixmap& pixmap )
+{
+    m_pixmap = TomahawkUtils::createRoundedImage( pixmap, size() );
+}
+
+
+void
 PlayableCover::paintEvent( QPaintEvent* event )
 {
-    QLabel::paintEvent( event );
+    QPainter painter( this );
+    painter.setRenderHint( QPainter::Antialiasing );
+    painter.drawPixmap( 0, 0, pixmap() );
+
     if ( !m_showText )
         return;
 
     QRect r = contentsRect().adjusted( margin(), margin(), -margin(), -margin() );
     QPixmap buffer( r.size() );
     buffer.fill( Qt::transparent );
-
-    QPainter painter( &buffer );
-
+    QPainter bufpainter( &buffer );
+    
     QTextOption to;
     to.setWrapMode( QTextOption::NoWrap );
     
@@ -134,63 +143,60 @@ PlayableCover::paintEvent( QPaintEvent* event )
     gradient.setColorAt( 0.6, c2 );
     gradient.setColorAt( 1.0, c2 );
     
-    painter.save();
-    painter.setPen( Qt::transparent );
-    painter.setBrush( gradient );
-    painter.drawRect( gradientRect );
-    painter.restore();
+    bufpainter.save();
+    bufpainter.setPen( Qt::transparent );
+    bufpainter.setBrush( gradient );
+    bufpainter.drawRect( gradientRect );
+    bufpainter.restore();
     
-    painter.setPen( Qt::white );
+    bufpainter.setPen( Qt::white );
     
     QRect textRect = r.adjusted( 8, r.height() - frameHeight - 16, -8, -16 );
     bool oneLiner = false;
     if ( bottom.isEmpty() )
         oneLiner = true;
     
-    painter.setFont( boldFont );
+    bufpainter.setFont( boldFont );
     if ( oneLiner )
     {
-        painter.save();
-        QFont f = painter.font();
+        bufpainter.save();
+        QFont f = bufpainter.font();
 
-        while ( f.pointSizeF() > 9 && painter.fontMetrics().width( top ) > textRect.width() )
+        while ( f.pointSizeF() > 9 && bufpainter.fontMetrics().width( top ) > textRect.width() )
         {
             f.setPointSizeF( f.pointSizeF() - 0.2 );
-            painter.setFont( f );
+            bufpainter.setFont( f );
         }
             
         to.setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
-        text = painter.fontMetrics().elidedText( top, Qt::ElideRight, textRect.width() - 3 );
-        painter.drawText( textRect, text, to );
+        text = bufpainter.fontMetrics().elidedText( top, Qt::ElideRight, textRect.width() - 3 );
+        bufpainter.drawText( textRect, text, to );
 
-        painter.restore();
+        bufpainter.restore();
     }
     else
     {
         to.setAlignment( Qt::AlignHCenter | Qt::AlignTop );
-        text = painter.fontMetrics().elidedText( top, Qt::ElideRight, textRect.width() - 3 );
-        painter.drawText( textRect, text, to );
+        text = bufpainter.fontMetrics().elidedText( top, Qt::ElideRight, textRect.width() - 3 );
+        bufpainter.drawText( textRect, text, to );
         
-        painter.setFont( font );
+        bufpainter.setFont( font );
         // If the user is hovering over an artist rect, draw a background so she knows it's clickable
         QRect r = textRect;
-        r.setTop( r.bottom() - painter.fontMetrics().height() );
+        r.setTop( r.bottom() - bufpainter.fontMetrics().height() );
         r.adjust( 4, 0, -4, -1 );
 /*        if ( m_hoveringOver == index )
         {
-            TomahawkUtils::drawQueryBackground( painter, opt.palette, r, 1.1 );
-            painter.setPen( opt.palette.color( QPalette::HighlightedText ) );
+            TomahawkUtils::drawQueryBackground( bufpainter, opt.palette, r, 1.1 );
+            bufpainter.setPen( opt.palette.color( QPalette::HighlightedText ) );
         }*/
         
         to.setAlignment( Qt::AlignHCenter | Qt::AlignBottom );
-        text = painter.fontMetrics().elidedText( bottom, Qt::ElideRight, textRect.width() - 16 );
-        painter.drawText( textRect.adjusted( 5, -1, -5, -1 ), text, to );
+        text = bufpainter.fontMetrics().elidedText( bottom, Qt::ElideRight, textRect.width() - 16 );
+        bufpainter.drawText( textRect.adjusted( 5, -1, -5, -1 ), text, to );
     }
 
     {
-        QPainter painter( this );
-        painter.setRenderHint( QPainter::Antialiasing );
-
         QBrush brush( buffer );
         QPen pen;
         pen.setColor( Qt::transparent );
