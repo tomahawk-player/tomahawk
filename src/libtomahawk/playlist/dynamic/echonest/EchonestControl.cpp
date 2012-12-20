@@ -758,10 +758,9 @@ Tomahawk::EchonestControl::calculateSummary()
             {
                 QString subSum;
                 if ( b->currentText() == tr( "My Collection" ) )
-                    subSum = "my";
+                    summary = tr( "from my radio" );
                 else
-                    subSum = b->currentText();
-                summary = tr( "from %1 radio" ).arg( subSum );
+                    summary = tr( "from %1 radio" ).arg( b->currentText() );
             }
         }
         else
@@ -775,15 +774,15 @@ Tomahawk::EchonestControl::calculateSummary()
         qreal sliderVal = m_data.second.toReal();
         // divide into avpproximate chunks
         if( 0.0 <= sliderVal && sliderVal < 0.2 )
-            modifier = "very low";
+            modifier = tr( "very low" );
         else if( 0.2 <= sliderVal && sliderVal < 0.4 )
-            modifier = "low";
+            modifier = tr( "low" );
         else if( 0.4 <= sliderVal && sliderVal < 0.6 )
-            modifier = "moderate";
+            modifier = tr( "moderate" );
         else if( 0.6 <= sliderVal && sliderVal < 0.8 )
-            modifier = "high";
+            modifier = tr( "high" );
         else if( 0.8 <= sliderVal && sliderVal <= 1 )
-            modifier = "very high";
+            modifier = tr( "very high" );
         summary = tr( "with %1 %2" ).arg( modifier ).arg( selectedType().toLower() );
     } else if( selectedType() == "Tempo" ) {
         summary = tr( "about %1 BPM" ).arg( m_data.second.toString() );
