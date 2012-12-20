@@ -64,8 +64,8 @@ ZeroconfFactory::icon() const
 ZeroconfAccount::ZeroconfAccount( const QString& accountId )
     : Account( accountId )
 {
-    setAccountServiceName( "Local Network" );
-    setAccountFriendlyName( "Local Network" );
+    setAccountServiceName( tr( "Local Network" ) );
+    setAccountFriendlyName( tr( "Local Network" ) );
 
     setTypes( SipType );
 }

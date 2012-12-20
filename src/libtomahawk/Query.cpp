@@ -773,7 +773,7 @@ Query::socialActionDescription( const QString& action, DescriptionMode mode ) co
             desc += " " + tr( "and" ) + " <b>" + tr( "%n other(s)", "", loveCounter - 3 ) + "</b>";
 
         if ( mode == Short )
-            desc = "<b>" + tr( "%1 people" ).arg( loveCounter ) + "</b>";
+            desc = "<b>" + tr( "%n people", "", loveCounter ) + "</b>";
 
         desc += " " + tr( "loved this track" ); //FIXME: more action descs required
     }

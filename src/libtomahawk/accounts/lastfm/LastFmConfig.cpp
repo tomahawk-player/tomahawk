@@ -191,6 +191,7 @@ LastFmConfig::onHistoryLoaded()
     {
         if ( m_page != total )
         {
+            //: Text on a button that resumes import
             m_ui->importHistory->setText( tr( "History Incomplete. Resume" ) );
             m_ui->importHistory->setEnabled( true );
         }
