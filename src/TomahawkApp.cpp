@@ -20,6 +20,8 @@
 
 #include "TomahawkApp.h"
 
+#include <boost/bind.hpp>
+
 #include "TomahawkVersion.h"
 #include "AclRegistryImpl.h"
 #include "Album.h"

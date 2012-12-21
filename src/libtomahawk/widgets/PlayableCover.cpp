@@ -18,6 +18,7 @@
 
 #include "PlayableCover.h"
 
+#include "Album.h"
 #include "audio/AudioEngine.h"
 #include "widgets/ImageButton.h"
 #include "utils/TomahawkUtilsGui.h"
@@ -28,6 +29,7 @@
 
 PlayableCover::PlayableCover( QWidget* parent )
     : QLabel( parent )
+    , m_showText( false )
 {
     setMouseTracking( true );
 
@@ -72,6 +74,139 @@ PlayableCover::resizeEvent( QResizeEvent* event )
 {
     QLabel::resizeEvent( event );
     m_button->move( contentsRect().center() - QPoint( 23, 23 ) );
+}
+
+
+void
+PlayableCover::setPixmap( const QPixmap& pixmap )
+{
+    m_pixmap = TomahawkUtils::createRoundedImage( pixmap, size() );
+}
+
+
+void
+PlayableCover::paintEvent( QPaintEvent* event )
+{
+    QPainter painter( this );
+    painter.setRenderHint( QPainter::Antialiasing );
+    painter.drawPixmap( 0, 0, pixmap() );
+
+    if ( !m_showText )
+        return;
+
+    QRect r = contentsRect().adjusted( margin(), margin(), -margin(), -margin() );
+    QPixmap buffer( r.size() );
+    buffer.fill( Qt::transparent );
+    QPainter bufpainter( &buffer );
+    
+    QTextOption to;
+    to.setWrapMode( QTextOption::NoWrap );
+    
+    QColor c1;
+    c1.setRgb( 0, 0, 0 );
+    c1.setAlphaF( 0.00 );
+    QColor c2;
+    c2.setRgb( 0, 0, 0 );
+    c2.setAlphaF( 0.88 );
+
+    QString text;
+    QFont font = QLabel::font();
+    font.setPointSize( TomahawkUtils::defaultFontSize() );
+    QFont boldFont = font;
+    boldFont.setBold( true );
+    boldFont.setPointSize( TomahawkUtils::defaultFontSize() + 5 );
+
+    QString top, bottom;
+    if ( m_artist )
+    {
+        top = m_artist->name();
+    }
+    else if ( m_album )
+    {
+        top = m_album->name();
+        bottom = m_album->artist()->name();
+    }
+    else if ( m_query )
+    {
+        top = m_query->track();
+        bottom = m_query->artist();
+    }
+
+    int bottomHeight = QFontMetrics( font ).boundingRect( bottom ).height();
+    int topHeight = QFontMetrics( boldFont ).boundingRect( top ).height();
+    int frameHeight = bottomHeight + topHeight + 4;
+    
+    QRect gradientRect = r.adjusted( 0, r.height() - frameHeight * 3, 0, 0 );
+    QLinearGradient gradient( QPointF( 0, 0 ), QPointF( 0, 1 ) );
+    gradient.setCoordinateMode( QGradient::ObjectBoundingMode );
+    gradient.setColorAt( 0.0, c1 );
+    gradient.setColorAt( 0.6, c2 );
+    gradient.setColorAt( 1.0, c2 );
+    
+    bufpainter.save();
+    bufpainter.setPen( Qt::transparent );
+    bufpainter.setBrush( gradient );
+    bufpainter.drawRect( gradientRect );
+    bufpainter.restore();
+    
+    bufpainter.setPen( Qt::white );
+    
+    QRect textRect = r.adjusted( 8, r.height() - frameHeight - 16, -8, -16 );
+    bool oneLiner = false;
+    if ( bottom.isEmpty() )
+        oneLiner = true;
+    
+    bufpainter.setFont( boldFont );
+    if ( oneLiner )
+    {
+        bufpainter.save();
+        QFont f = bufpainter.font();
+
+        while ( f.pointSizeF() > 9 && bufpainter.fontMetrics().width( top ) > textRect.width() )
+        {
+            f.setPointSizeF( f.pointSizeF() - 0.2 );
+            bufpainter.setFont( f );
+        }
+            
+        to.setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
+        text = bufpainter.fontMetrics().elidedText( top, Qt::ElideRight, textRect.width() - 3 );
+        bufpainter.drawText( textRect, text, to );
+
+        bufpainter.restore();
+    }
+    else
+    {
+        to.setAlignment( Qt::AlignHCenter | Qt::AlignTop );
+        text = bufpainter.fontMetrics().elidedText( top, Qt::ElideRight, textRect.width() - 3 );
+        bufpainter.drawText( textRect, text, to );
+        
+        bufpainter.setFont( font );
+        // If the user is hovering over an artist rect, draw a background so she knows it's clickable
+        QRect r = textRect;
+        r.setTop( r.bottom() - bufpainter.fontMetrics().height() );
+        r.adjust( 4, 0, -4, -1 );
+/*        if ( m_hoveringOver == index )
+        {
+            TomahawkUtils::drawQueryBackground( bufpainter, opt.palette, r, 1.1 );
+            bufpainter.setPen( opt.palette.color( QPalette::HighlightedText ) );
+        }*/
+        
+        to.setAlignment( Qt::AlignHCenter | Qt::AlignBottom );
+        text = bufpainter.fontMetrics().elidedText( bottom, Qt::ElideRight, textRect.width() - 16 );
+        bufpainter.drawText( textRect.adjusted( 5, -1, -5, -1 ), text, to );
+    }
+
+    {
+        QBrush brush( buffer );
+        QPen pen;
+        pen.setColor( Qt::transparent );
+        pen.setJoinStyle( Qt::RoundJoin );
+
+        float frameWidthPct = 0.20;
+        painter.setBrush( brush );
+        painter.setPen( pen );
+        painter.drawRoundedRect( r, frameWidthPct * 100.0, frameWidthPct * 100.0, Qt::RelativeSize );
+    }
 }
 
 

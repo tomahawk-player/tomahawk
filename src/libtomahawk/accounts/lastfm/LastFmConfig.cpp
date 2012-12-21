@@ -19,6 +19,8 @@
 #include "LastFmConfig.h"
 #include "ui_LastFmConfig.h"
 
+#include <boost/bind.hpp>
+
 #include "LastFmAccount.h"
 #include "database/Database.h"
 #include "database/DatabaseCommand_LogPlayback.h"
@@ -191,6 +193,7 @@ LastFmConfig::onHistoryLoaded()
     {
         if ( m_page != total )
         {
+            //: Text on a button that resumes import
             m_ui->importHistory->setText( tr( "History Incomplete. Resume" ) );
             m_ui->importHistory->setEnabled( true );
         }

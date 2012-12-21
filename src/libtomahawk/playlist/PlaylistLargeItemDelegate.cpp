@@ -44,7 +44,7 @@ using namespace Tomahawk;
 
 
 PlaylistLargeItemDelegate::PlaylistLargeItemDelegate( DisplayMode mode, TrackView* parent, PlayableProxyModel* proxy )
-    : QStyledItemDelegate( (QObject*)parent )
+    : PlaylistItemDelegate( parent, proxy )
     , m_view( parent )
     , m_model( proxy )
     , m_mode( mode )
@@ -58,9 +58,8 @@ PlaylistLargeItemDelegate::PlaylistLargeItemDelegate( DisplayMode mode, TrackVie
     m_bottomOption = QTextOption( Qt::AlignBottom );
     m_bottomOption.setWrapMode( QTextOption::NoWrap );
 
-    connect( proxy, SIGNAL( modelReset() ), this, SLOT( modelChanged() ) );
-    if ( PlaylistView* plView = qobject_cast< PlaylistView* >( parent ) )
-        connect( plView, SIGNAL( modelChanged() ), this, SLOT( modelChanged() ) );
+    connect( proxy, SIGNAL( modelReset() ), SLOT( modelChanged() ) );
+    connect( parent, SIGNAL( modelChanged() ), SLOT( modelChanged() ) );
 }
 
 
@@ -76,25 +75,6 @@ PlaylistLargeItemDelegate::sizeHint( const QStyleOptionViewItem& option, const Q
     }
 
     return size;
-}
-
-
-QWidget*
-PlaylistLargeItemDelegate::createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const
-{
-    Q_UNUSED( parent );
-    Q_UNUSED( option );
-    Q_UNUSED( index );
-    return 0;
-}
-
-
-void
-PlaylistLargeItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item ) const
-{
-    initStyleOption( option, index );
-
-    TomahawkUtils::prepareStyleOption( option, index, item );
 }
 
 
@@ -153,16 +133,16 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         QString playtime = TomahawkUtils::ageToString( QDateTime::fromTime_t( item->query()->playedBy().second ), true );
 
         if ( source == SourceList::instance()->getLocal() )
-            lowerText = QString( tr( "played %1 by you" ) ).arg( playtime );
+            lowerText = QString( tr( "played %1 by you", "e.g. played 3 hours ago by you" ) ).arg( playtime );
         else
-            lowerText = QString( tr( "played %1 by %2" ) ).arg( playtime ).arg( source->friendlyName() );
+            lowerText = QString( tr( "played %1 by %2", "e.g. played 3 hours ago by SomeSource" ) ).arg( playtime ).arg( source->friendlyName() );
     }
 
     if ( m_mode == LatestAdditions && item->query()->numResults() )
     {
         QString playtime = TomahawkUtils::ageToString( QDateTime::fromTime_t( item->query()->results().first()->modificationTime() ), true );
 
-        lowerText = QString( tr( "added %1" ) ).arg( playtime );
+        lowerText = QString( tr( "added %1", "e.g. added 3 hours ago" ) ).arg( playtime );
     }
 
     if ( m_mode == LovedTracks )
@@ -190,7 +170,7 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
 
         if ( !m_pixmaps.contains( index ) )
         {
-            m_pixmaps.insert( index, QSharedPointer< Tomahawk::PixmapDelegateFader >( new Tomahawk::PixmapDelegateFader( item->query(), pixmapRect.size(), TomahawkUtils::ScaledCover, false ) ) );
+            m_pixmaps.insert( index, QSharedPointer< Tomahawk::PixmapDelegateFader >( new Tomahawk::PixmapDelegateFader( item->query(), pixmapRect.size(), TomahawkUtils::RoundedCorners, false ) ) );
             _detail::Closure* closure = NewClosure( m_pixmaps[ index ], SIGNAL( repaintRequest() ), const_cast<PlaylistLargeItemDelegate*>(this), SLOT( doUpdateIndex( const QPersistentModelIndex& ) ), QPersistentModelIndex( index ) );
             closure->setAutoDelete( false );
         }
@@ -226,9 +206,9 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         painter->setFont( smallFont );
         QTextDocument textDoc;
         if ( album.isEmpty() )
-            textDoc.setHtml( tr( "by <b>%1</b>" ).arg( artist ) );
+            textDoc.setHtml( tr( "by <b>%1</b>", "e.g. by SomeArtist" ).arg( artist ) );
         else
-            textDoc.setHtml( tr( "by <b>%1</b> on <b>%2</b>" ).arg( artist ).arg( album ) );
+            textDoc.setHtml( tr( "by <b>%1</b> on <b>%2</b>", "e.g. by SomeArtist on SomeAlbum" ).arg( artist ).arg( album ) );
         textDoc.setDocumentMargin( 0 );
         textDoc.setDefaultFont( painter->font() );
         textDoc.setDefaultTextOption( m_topOption );

@@ -278,7 +278,7 @@ TomahawkWindow::setupToolBar()
     m_toolbar->addWidget( toolbarLeftSpacer )->setProperty( "kind", QString( "spacer" ) );
 
     m_searchWidget = new QSearchField( this );
-    m_searchWidget->setPlaceholderText( tr( "Global Search..." ) );
+    m_searchWidget->setPlaceholderText( tr( "Search for any artist, album or song..." ) );
     m_searchWidget->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred );
     m_searchWidget->setFixedWidth( 340 );
     connect( m_searchWidget, SIGNAL( returnPressed() ), this, SLOT( onFilterEdited() ) );
@@ -721,6 +721,8 @@ TomahawkWindow::winEvent( MSG* msg, long* result )
 }
 
 
+#endif // Q_OS_WIN
+
 void
 TomahawkWindow::audioStateChanged( AudioState newState, AudioState oldState )
 {
@@ -765,6 +767,9 @@ TomahawkWindow::audioStateChanged( AudioState newState, AudioState oldState )
     }
 
     m_taskbarList->ThumbBarUpdateButtons( winId(), ARRAYSIZE( m_thumbButtons ), m_thumbButtons );
+#else
+    Q_UNUSED( newState );
+    Q_UNUSED( oldState );
 #endif // HAVE_THUMBBUTTON
 }
 
@@ -788,8 +793,6 @@ TomahawkWindow::updateWindowsLoveButton()
     m_taskbarList->ThumbBarUpdateButtons( winId(), ARRAYSIZE( m_thumbButtons ), m_thumbButtons );
 #endif // HAVE_THUMBBUTTON
 }
-
-#endif
 
 
 void

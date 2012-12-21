@@ -28,6 +28,8 @@
 
 using namespace Tomahawk;
 
+const unsigned int MAX_HISTORY_ITEMS = 15;       // 0 disables this feature
+
 
 HistoryItem::HistoryItem( SourcesModel* model, SourceTreeItem* parent, const QString& text, int peerSortValue )
     : GroupItem( model, parent, text, peerSortValue )
@@ -60,8 +62,8 @@ HistoryItem::tempPageActivated( Tomahawk::ViewPage* v )
         }
     }
 
-    // Only keep 5 temporary pages at once
-    while ( m_tempItems.size() > 4 )
+    // Only keep a certain amount of temporary pages at once
+    while ( MAX_HISTORY_ITEMS > 0 && m_tempItems.size() > (int)MAX_HISTORY_ITEMS - 1 )
     {
         TemporaryPageItem* item = m_tempItems.takeFirst();
         QTimer::singleShot( 0, item, SLOT( removeFromList() ) );

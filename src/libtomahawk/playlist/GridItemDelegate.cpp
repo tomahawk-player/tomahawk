@@ -194,9 +194,9 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     painter->drawRect( gradientRect );
     painter->restore();
 
-    painter->setPen( opt.palette.color( QPalette::HighlightedText ) );
+    painter->setPen( Qt::white );
 
-    QRect textRect = option.rect.adjusted( 6, option.rect.height() - frameHeight, -4, -6 );
+    QRect textRect = option.rect.adjusted( 6, option.rect.height() - frameHeight, -6, -6 );
     bool oneLiner = false;
     if ( bottom.isEmpty() )
         oneLiner = true;
