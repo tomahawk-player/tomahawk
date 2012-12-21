@@ -904,12 +904,12 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
     }
     else if ( msgType == "starredChanged" )
     {
-        if( loveSync() )
+        if ( loveSync() )
         {
             const QVariantList tracksList = msg.value( "tracks" ).toList();
             const bool love = msg.value( "starred" ).toBool();
             QList<query_ptr> qs = SpotifyPlaylistUpdater::variantToQueries( tracksList );
-            foreach( const query_ptr& query, qs )
+            foreach ( const query_ptr& query, qs )
             {
                 query->setLoved( love );
             }
@@ -1137,7 +1137,7 @@ SpotifyAccount::saveConfig()
         if ( pl->changed )
         {
             pl->changed = false;
-            if( !pl->sync && pl->loveSync )
+            if ( !pl->sync && pl->loveSync )
             {
                 QVariantMap msg;
                 msg[ "_msgtype" ] = "setSync";
