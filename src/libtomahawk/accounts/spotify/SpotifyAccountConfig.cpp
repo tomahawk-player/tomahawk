@@ -77,6 +77,7 @@ SpotifyAccountConfig::loadFromConfig()
     m_ui->passwordEdit->setText( m_account->credentials().value( "password" ).toString() );
     m_ui->streamingCheckbox->setChecked( m_account->credentials().value( "highQuality" ).toBool() );
     m_ui->deleteOnUnsync->setChecked( m_account->deleteOnUnsync() );
+    m_ui->loveSync->setChecked( m_account->loveSync() );
 
     if ( m_account->loggedIn() )
     {
@@ -102,6 +103,11 @@ SpotifyAccountConfig::saveSettings()
         {
             pl->changed = true;
             pl->sync = toSync;
+        }
+        if ( pl->name == "Starred Tracks" && pl->loveSync != loveSync() )
+        {
+            pl->loveSync = loveSync();
+            pl->changed = true;
         }
     }
 }
@@ -130,6 +136,13 @@ bool
 SpotifyAccountConfig::deleteOnUnsync() const
 {
     return m_ui->deleteOnUnsync->isChecked();
+}
+
+
+bool
+SpotifyAccountConfig::loveSync() const
+{
+    return m_ui->loveSync->isChecked();
 }
 
 

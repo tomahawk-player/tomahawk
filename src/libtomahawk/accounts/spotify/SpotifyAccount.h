@@ -51,13 +51,13 @@ class SpotifyAccountConfig;
 // metadata for a playlist
 struct SpotifyPlaylistInfo {
     QString name, plid, revid;
-    bool sync, subscribed, changed, isOwner;
+    bool sync, subscribed, changed, isOwner, loveSync;
 
 
-    SpotifyPlaylistInfo( const QString& nname, const QString& pid, const QString& rrevid, bool ssync, bool ssubscribed, bool isowner = false )
-        : name( nname ), plid( pid ), revid( rrevid ), sync( ssync ), subscribed( ssubscribed ), changed( false ), isOwner( isowner ) {}
+    SpotifyPlaylistInfo( const QString& nname, const QString& pid, const QString& rrevid, bool ssync, bool ssubscribed, bool isowner = false, bool lovesync = false )
+        : name( nname ), plid( pid ), revid( rrevid ), sync( ssync ), subscribed( ssubscribed ), changed( false ), isOwner( isowner ), loveSync( lovesync ) {}
 
-    SpotifyPlaylistInfo() : sync( false ), changed( false ) {}
+    SpotifyPlaylistInfo() : sync( false ), changed( false ), loveSync( false ) {}
 };
 
 
@@ -109,7 +109,7 @@ public:
     void unregisterUpdater( const QString& plid );
 
     bool deleteOnUnsync() const;
-
+    bool loveSync() const;
     void setManualResolverPath( const QString& resolverPath );
 
     bool loggedIn() const;

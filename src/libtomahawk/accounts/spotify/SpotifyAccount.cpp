@@ -902,6 +902,19 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
 
         updater->spotifyTracksMoved( tracksList, newStartPos, newRev, oldRev  );
     }
+    else if ( msgType == "starredChanged" )
+    {
+        if( loveSync() )
+        {
+            const QVariantList tracksList = msg.value( "tracks" ).toList();
+            const bool love = msg.value( "starred" ).toBool();
+            QList<query_ptr> qs = SpotifyPlaylistUpdater::variantToQueries( tracksList );
+            foreach( const query_ptr& query, qs )
+            {
+                query->setLoved( love );
+            }
+        }
+    }
     else if ( msgType == "playlistMetadataChanged" )
     {
         const QString plid = msg.value( "id" ).toString();
@@ -1114,6 +1127,7 @@ SpotifyAccount::saveConfig()
 
     QVariantHash config = configuration();
     config[ "deleteOnUnsync" ] = m_configWidget.data()->deleteOnUnsync();
+    config[ "loveSync" ] = m_configWidget.data()->loveSync();
     setConfiguration( config );
 
     m_configWidget.data()->saveSettings();
@@ -1123,7 +1137,15 @@ SpotifyAccount::saveConfig()
         if ( pl->changed )
         {
             pl->changed = false;
-            if ( pl->sync )
+            if( !pl->sync && pl->loveSync )
+            {
+                QVariantMap msg;
+                msg[ "_msgtype" ] = "setSync";
+                msg[ "playlistid" ] = pl->plid;
+                msg[ "sync" ] = pl->loveSync;
+                sendMessage( msg );
+            }
+            else if ( pl->sync )
             {
                 // Fetch full playlist contents, then begin the sync
                 startPlaylistSync( pl );
@@ -1354,6 +1376,14 @@ SpotifyAccount::deleteOnUnsync() const
 {
     return configuration().value( "deleteOnUnsync", false ).toBool();
 }
+
+
+bool
+SpotifyAccount::loveSync() const
+{
+    return configuration().value( "loveSync", false ).toBool();
+}
+
 
 void
 SpotifyAccount::stopPlaylistSync( SpotifyPlaylistInfo* playlist, bool forceDontDelete )

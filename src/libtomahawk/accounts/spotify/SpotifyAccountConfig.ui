@@ -146,6 +146,19 @@
     <widget class="QListWidget" name="playlistList"/>
    </item>
    <item>
+    <widget class="QCheckBox" name="loveSync">
+     <property name="layoutDirection">
+      <enum>Qt::LeftToRight</enum>
+     </property>
+     <property name="text">
+      <string>Sync Starred tracks to Loved tracks</string>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QCheckBox" name="streamingCheckbox">
      <property name="layoutDirection">
       <enum>Qt::LeftToRight</enum>
