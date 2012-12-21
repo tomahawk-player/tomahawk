@@ -97,12 +97,31 @@ M3uLoader::getTags( const QFileInfo& info )
         {
             q->setResultHint( "file://" + info.absoluteFilePath() );
             q->setSaveHTTPResultHint( true );
-            qDebug() << "ADding resulthint" << q->resultHint();
+            qDebug() << "Adding resulthint" << q->resultHint();
             m_tracks << q;
         }
     }
 }
 
+void
+M3uLoader::parseLine( const QString& line, const QFile& file )
+{
+    QFileInfo tmpFile( QUrl::fromUserInput( QString( line.simplified() ) ).toLocalFile() );
+
+    if( tmpFile.exists() )
+    {
+        getTags( tmpFile );
+    }
+    else
+    {
+        QUrl fileUrl = QUrl::fromUserInput( QString( QFileInfo(file).canonicalPath() + "/" + line.simplified() ) );
+        QFileInfo tmpFile( fileUrl.toLocalFile() );
+        if ( tmpFile.exists() )
+        {
+            getTags( tmpFile );
+        }
+    }
+}
 
 void
 M3uLoader::parseM3u( const QString& fileLink )
@@ -110,7 +129,7 @@ M3uLoader::parseM3u( const QString& fileLink )
     QFileInfo fileInfo( fileLink );
     QFile file( QUrl::fromUserInput( fileLink ).toLocalFile() );
 
-    if ( !file.open( QIODevice::ReadOnly | QIODevice::Text ) )
+    if ( !file.open( QIODevice::ReadOnly ) )
     {
         tDebug() << "Error opening m3u:" << file.errorString();
         return;
@@ -118,54 +137,56 @@ M3uLoader::parseM3u( const QString& fileLink )
 
     m_title = fileInfo.baseName();
 
-    while ( !file.atEnd() )
+    QTextStream stream( &file );
+    QString singleLine;
+
+    while ( !stream.atEnd() )
     {
-         QByteArray line = file.readLine();
-         /// If anyone wants to take on the regex for parsing EXT, go ahead
-         /// But the notion that users does not tag by a common rule. that seems hard
-         /// So ignore that for now
-         if ( line.contains( "EXT" ) )
-             continue;
+        QString line = stream.readLine().trimmed();
 
-         QFileInfo tmpFile( QUrl::fromUserInput( QString( line.simplified() ) ).toLocalFile() );
+        /// Fallback solution for, (drums) itunes!
+        singleLine.append(line);
 
-         if( tmpFile.exists() )
-         {
-             getTags( tmpFile );
-         }
-         else
-         {
-             QUrl fileUrl = QUrl::fromUserInput( QString( QFileInfo(file).canonicalPath() + "/" + line.simplified() ) );
-             QFileInfo tmpFile( fileUrl.toLocalFile() );
-             if ( tmpFile.exists() )
-             {
-                getTags( tmpFile );
-             }
-         }
+        /// If anyone wants to take on the regex for parsing EXT, go ahead
+        /// But the notion that users does not tag by a common rule. that seems hard
+        /// So ignore that for now
+        if ( line.contains( "EXT" ) )
+            continue;
+
+        parseLine( line, file );
 
     }
 
     if ( m_tracks.isEmpty() )
     {
-        tDebug() << Q_FUNC_INFO << "Could not parse M3U!";
-        return;
+        if ( !singleLine.isEmpty() )
+        {
+            QStringList m3uList = singleLine.split("\r");
+            foreach( const QString& line, m3uList )
+                parseLine( line, file );
+        }
+
+        if ( m_tracks.isEmpty() )
+        {
+            tDebug() << "Could not parse M3U!";
+            return;
+        }
     }
 
     if ( m_createNewPlaylist )
     {
         m_playlist = Playlist::create( SourceList::instance()->getLocal(),
-                                       uuid(),
-                                       m_title,
-                                       m_info,
-                                       m_creator,
-                                       false,
-                                       m_tracks );
+                                        uuid(),
+                                        m_title,
+                                        m_info,
+                                        m_creator,
+                                        false,
+                                        m_tracks );
 
         connect( m_playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( playlistCreated() ) );
     }
     else
         emit tracks( m_tracks );
-
     m_tracks.clear();
 }
 
