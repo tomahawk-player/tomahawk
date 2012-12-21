@@ -46,6 +46,7 @@
 #include <QMutex>
 #include <QCryptographicHash>
 #include <QProcess>
+#include <QTranslator>
 
 #ifdef Q_OS_WIN
     #include <windows.h>
@@ -773,6 +774,44 @@ crash()
     *a = 1;
 }
 
+void
+installTranslator(QObject* parent)
+{
+#if QT_VERSION >= 0x040800
+    QString locale = QLocale::system().uiLanguages().first().replace( "-", "_" );
+#else
+    QString locale = QLocale::system().name();
+#endif
+    if ( locale == "C" )
+        locale = "en";
+
+    // Tomahawk translations
+    QTranslator* translator = new QTranslator( parent );
+    if ( translator->load( QString( ":/lang/tomahawk_" ) + locale ) )
+    {
+        tDebug( LOGVERBOSE ) << "Translation: Tomahawk: Using system locale:" << locale;
+    }
+    else
+    {
+        tDebug( LOGVERBOSE ) << "Translation: Tomahawk: Using default locale, system locale one not found:" << locale;
+        translator->load( QString( ":/lang/tomahawk_en" ) );
+    }
+
+    QCoreApplication::installTranslator( translator );
+
+    // Qt translations
+    translator = new QTranslator( parent );
+    if ( translator->load( QString( ":/lang/qt_" ) + locale ) )
+    {
+        tDebug( LOGVERBOSE ) << "Translation: Qt: Using system locale:" << locale;
+    }
+    else
+    {
+        tDebug( LOGVERBOSE ) << "Translation: Qt: Using default locale, system locale one not found:" << locale;
+    }
+
+    QCoreApplication::installTranslator( translator );
+}
 
 bool
 verifyFile( const QString& filePath, const QString& signature )

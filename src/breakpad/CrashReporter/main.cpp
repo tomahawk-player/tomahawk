@@ -18,6 +18,8 @@
 
 #include "CrashReporter.h"
 
+#include "utils/TomahawkUtils.h"
+
 #include <QTranslator>
 
 #include <iostream>
@@ -36,12 +38,7 @@ int main( int argc, char* argv[] )
 
     QApplication app( argc, argv );
 
-    QString langCode;
-    QTranslator translatorApp;
-    QTranslator translatorQt;
-
-/*    app.installTranslator( &translatorApp );
-    app.installTranslator( &translatorQt );*/
+    TomahawkUtils::installTranslator(&app);
 
     if ( app.arguments().size() != 4 )
     {

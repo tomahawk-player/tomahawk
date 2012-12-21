@@ -16,7 +16,11 @@ INCLUDE( ${QT_USE_FILE} )
 INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_BINARY_DIR} ../../libtomahawk )
 ADD_DEFINITIONS( ${QT_DEFINITIONS} )
 
-ADD_EXECUTABLE( tomahawk_crash_reporter WIN32 ${crashreporter_SOURCES} ${crashreporter_HEADERS_MOC} ${crashreporter_UI_HEADERS} ${crashreporter_RC_RCC} )
+# translations
+include( ${CMAKE_SOURCE_DIR}/lang/translations.cmake )
+add_tomahawk_translations( ${TOMAHAWK_TRANSLATION_LANGUAGES} )
+
+ADD_EXECUTABLE( tomahawk_crash_reporter WIN32 ${crashreporter_SOURCES} ${crashreporter_HEADERS_MOC} ${crashreporter_UI_HEADERS} ${crashreporter_RC_RCC} ${trans_outfile} )
 TARGET_LINK_LIBRARIES( tomahawk_crash_reporter ${QT_LIBRARIES} tomahawklib )
 set_target_properties( tomahawk_crash_reporter PROPERTIES AUTOMOC ON)
 install(TARGETS tomahawk_crash_reporter RUNTIME DESTINATION ${CMAKE_INSTALL_LIBEXECDIR})
