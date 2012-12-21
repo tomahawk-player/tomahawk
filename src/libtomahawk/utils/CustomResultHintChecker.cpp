@@ -24,6 +24,8 @@
 #include <QXmlStreamReader>
 #include "Query.h"
 #include "utils/NetworkReply.h"
+#include <QFileInfo>
+#include <QFile>
 
 using namespace Tomahawk;
 
@@ -49,6 +51,15 @@ void
 CustomResultHintChecker::handleResultHint()
 {
 
+    if ( url().startsWith( "file:" ) )
+    {
+        QFileInfo tmpFile( QUrl::fromUserInput( url() ).toLocalFile() );
+        if( !tmpFile.exists() )
+        {
+            qDebug() << Q_FUNC_INFO << url();
+            removeHint();
+        }
+    }
     if ( url().startsWith( "hnhh" ) )
     {
         QUrl httpUrl = QUrl::fromUserInput( url() );

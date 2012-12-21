@@ -31,6 +31,7 @@
 /* taglib */
 #include <taglib/fileref.h>
 #include <taglib/tag.h>
+#include "filemetadata/taghandlers/tag.h"
 
 using namespace Tomahawk;
 
@@ -77,12 +78,15 @@ M3uLoader::getTags( const QFileInfo& info )
     TagLib::FileRef f( encodedName );
     if( f.isNull() )
         return;
-    TagLib::Tag *tag = f.tag();
+
+    Tag* tag = Tag::fromFile( f );
     if( !tag )
         return;
-    QString artist = TStringToQString( tag->artist() ).trimmed();
-    QString album  = TStringToQString( tag->album() ).trimmed();
-    QString track  = TStringToQString( tag->title() ).trimmed();
+
+    QString artist, album, track;
+    artist = tag->artist().trimmed();
+    album  = tag->album().trimmed();
+    track  = tag->title().trimmed();
 
     if ( artist.isEmpty() || track.isEmpty() )
     {
@@ -91,12 +95,21 @@ M3uLoader::getTags( const QFileInfo& info )
     }
     else
     {
-        qDebug() << Q_FUNC_INFO << artist << track << album;
         Tomahawk::query_ptr q = Tomahawk::Query::get( artist, track, album, uuid(), !m_createNewPlaylist );
         if ( !q.isNull() )
         {
             q->setResultHint( "file://" + info.absoluteFilePath() );
             q->setSaveHTTPResultHint( true );
+
+            TagLib::AudioProperties *audioProp = f.audioProperties();
+            if ( audioProp )
+            {
+                q->setDuration( audioProp->length() );
+            }
+            q->setComposer( tag->composer() );
+            q->setAlbumPos( tag->track() );
+            q->setDiscNumber( tag->discNumber() );
+
             qDebug() << "Adding resulthint" << q->resultHint();
             m_tracks << q;
         }

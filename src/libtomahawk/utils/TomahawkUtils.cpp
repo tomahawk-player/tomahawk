@@ -953,7 +953,7 @@ whitelistedHttpResultHint( const QString& url )
 bool
 whitelistedCustomProtocolResultHint( const QString& url )
 {
-    return url.startsWith( "hnhh" );
+    return url.startsWith( "hnhh" ) | url.startsWith( "file:" );
 }
 
 } // ns

@@ -614,11 +614,6 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
         if ( s.isNull() )
             return res;
     }
-    else if ( url.contains( "file://" ) )
-    {
-        s = SourceList::instance()->getLocal();
-        fileUrl = url;
-    }
     else if ( TomahawkUtils::whitelistedHttpResultHint( url ) ||
               TomahawkUtils::whitelistedCustomProtocolResultHint( url ) )
     {
