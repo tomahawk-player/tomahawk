@@ -414,6 +414,18 @@ SpotifyAccount::setManualResolverPath( const QString &resolverPath )
     }
 }
 
+void
+SpotifyAccount::starTrack(const QString &artist, const QString &title, const bool starred)
+{
+    qDebug() << Q_FUNC_INFO << artist << title << starred;
+    QVariantMap msg;
+    msg[ "_msgtype" ] = "setStarred";
+    msg[ "starred" ] = starred;
+    msg[ "artist" ] = artist;
+    msg[ "title" ] = title;
+    sendMessage( msg );
+}
+
 
 bool
 SpotifyAccount::loggedIn() const

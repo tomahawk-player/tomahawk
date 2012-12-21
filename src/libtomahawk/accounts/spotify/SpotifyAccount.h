@@ -110,6 +110,7 @@ public:
 
     bool deleteOnUnsync() const;
     bool loveSync() const;
+    void starTrack(const QString& artist, const QString&title, const bool starred);
     void setManualResolverPath( const QString& resolverPath );
 
     bool loggedIn() const;
@@ -139,13 +140,11 @@ private slots:
     void playlistCopyCreated( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
     void delayedInit();
     void hookupAfterDeletion( bool autoEnable );
-
 private:
     void init();
     bool checkForResolver();
     void hookupResolver();
     void killExistingResolvers();
-
     void loadPlaylists();
     void clearUser( bool permanentlyDelete = false );
 
