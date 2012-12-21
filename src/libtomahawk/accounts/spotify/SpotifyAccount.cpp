@@ -863,6 +863,12 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
             return;
 
         SpotifyPlaylistUpdater* updater = m_updaters[ plid ];
+
+        // We have previously sycned starred container, but not anymore.
+        // If we added loveSync, its synced in the background
+        if( !updater->sync() && m_configWidget.data()->loveSync() )
+            return;
+
         Q_ASSERT( updater->sync() );
 
         const QString startPos = msg.value( "startPosition" ).toString();
@@ -1149,6 +1155,7 @@ SpotifyAccount::saveConfig()
         if ( pl->changed )
         {
             pl->changed = false;
+
             if ( !pl->sync && pl->loveSync )
             {
                 QVariantMap msg;
@@ -1156,8 +1163,10 @@ SpotifyAccount::saveConfig()
                 msg[ "playlistid" ] = pl->plid;
                 msg[ "sync" ] = pl->loveSync;
                 sendMessage( msg );
+
             }
-            else if ( pl->sync )
+
+            if ( pl->sync )
             {
                 // Fetch full playlist contents, then begin the sync
                 startPlaylistSync( pl );
