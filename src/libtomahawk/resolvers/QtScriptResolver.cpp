@@ -529,28 +529,6 @@ QtScriptResolver::saveConfig()
 }
 
 
-QWidget*
-QtScriptResolver::findWidget(QWidget* widget, const QString& objectName)
-{
-    if( !widget || !widget->isWidgetType() )
-        return 0;
-
-    if( widget->objectName() == objectName )
-        return widget;
-
-
-    foreach( QObject* child, widget->children() )
-    {
-        QWidget* found = findWidget(qobject_cast< QWidget* >( child ), objectName);
-
-        if( found )
-            return found;
-    }
-
-    return 0;
-}
-
-
 QVariant
 QtScriptResolver::widgetData(QWidget* widget, const QString& property)
 {
@@ -589,7 +567,7 @@ QtScriptResolver::loadDataFromWidgets()
         QVariantMap data = dataWidget.toMap();
 
         QString widgetName = data["widget"].toString();
-        QWidget* widget= findWidget( m_configWidget.data(), widgetName );
+        QWidget* widget= m_configWidget->findChild< QWidget* >( widgetName );
 
         QVariant value = widgetData( widget, data["property"].toString() );
 
@@ -606,7 +584,7 @@ QtScriptResolver::fillDataInWidgets( const QVariantMap& data )
     foreach(const QVariant& dataWidget, m_dataWidgets)
     {
         QString widgetName = dataWidget.toMap()["widget"].toString();
-        QWidget* widget= findWidget( m_configWidget.data(), widgetName );
+        QWidget* widget= m_configWidget->find< QWidget* >( widgetName );
         if( !widget )
         {
             tLog() << Q_FUNC_INFO << "Widget specified in resolver was not found:" << widgetName;
