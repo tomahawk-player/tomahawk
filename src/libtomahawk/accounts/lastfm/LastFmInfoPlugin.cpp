@@ -623,7 +623,7 @@ LastFmInfoPlugin::similarTracksReturned()
     returnedData["artists"] = sortedArtists;
     returnedData["score"] = sortedScores;
 
-    qDebug() << "Returning data, tracks:" << sortedTracks << "artists:" << sortedArtists << "scors:" << sortedScores;
+    tDebug( LOGVERBOSE ) << "Returning data, tracks:" << sortedTracks << "artists:" << sortedArtists << "scores:" << sortedScores;
 
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
 

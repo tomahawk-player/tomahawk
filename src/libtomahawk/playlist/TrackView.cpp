@@ -191,7 +191,7 @@ TrackView::setPlaylistItemDelegate( PlaylistItemDelegate* delegate )
 void
 TrackView::setPlayableModel( PlayableModel* model )
 {
-   m_model = model;
+    m_model = model;
 
     if ( m_proxyModel )
     {

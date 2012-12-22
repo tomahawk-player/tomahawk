@@ -268,7 +268,6 @@ LastFmConfig::syncLovedTracks( uint page )
     connect( cmd, SIGNAL( done( DatabaseCommand_LoadSocialActions::TrackActions ) ), this, SLOT( localLovedLoaded( DatabaseCommand_LoadSocialActions::TrackActions ) ) );
 
     Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
-
 }
 
 
@@ -304,7 +303,6 @@ LastFmConfig::onLovedFinished( QNetworkReply* reply )
 
                 m_lastfmLoved.insert( query );
             }
-
 
             if ( thisPage == m_totalLovedPages )
             {
