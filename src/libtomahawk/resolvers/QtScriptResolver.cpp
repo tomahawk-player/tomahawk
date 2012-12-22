@@ -567,7 +567,7 @@ QtScriptResolver::loadDataFromWidgets()
         QVariantMap data = dataWidget.toMap();
 
         QString widgetName = data["widget"].toString();
-        QWidget* widget= m_configWidget->findChild< QWidget* >( widgetName );
+        QWidget* widget= m_configWidget.data()->findChild<QWidget*>( widgetName );
 
         QVariant value = widgetData( widget, data["property"].toString() );
 
@@ -584,7 +584,7 @@ QtScriptResolver::fillDataInWidgets( const QVariantMap& data )
     foreach(const QVariant& dataWidget, m_dataWidgets)
     {
         QString widgetName = dataWidget.toMap()["widget"].toString();
-        QWidget* widget= m_configWidget->find< QWidget* >( widgetName );
+        QWidget* widget= m_configWidget.data()->findChild<QWidget*>( widgetName );
         if( !widget )
         {
             tLog() << Q_FUNC_INFO << "Widget specified in resolver was not found:" << widgetName;
