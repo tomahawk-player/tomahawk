@@ -13,7 +13,6 @@ Version 0.6.0:
     * Add iTunes as available source for New Releases
     * Added more options and icons to right-click/context menu
     * Make friends' Now Playing song (in sidebar) clickable
-    * New account status button and dialog
     * Improve MusicBrainz plugin to use normalized artist names and avoid duplicate tracks
     * Access Control queries now stay on the bottom of the job view,
       removing the tendency to jump away from the mouse.
