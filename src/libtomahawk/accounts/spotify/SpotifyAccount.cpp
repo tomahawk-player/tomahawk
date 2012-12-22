@@ -838,6 +838,7 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
             const bool isOwner = plMap.value( "owner" ).toBool();
             const bool sync = plMap.value( "sync" ).toBool();
             const bool subscribed = plMap.value( "subscribed" ).toBool();
+            const bool starContainer = plMap.value( "starContainer" ).toBool();
 
             if ( name.isNull() || plid.isNull() || revid.isNull() )
             {
@@ -845,7 +846,7 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
                 continue;
             }
 
-            registerPlaylistInfo( new SpotifyPlaylistInfo( name, plid, revid, sync, subscribed, isOwner ) );
+            registerPlaylistInfo( new SpotifyPlaylistInfo( name, plid, revid, sync, subscribed, isOwner, starContainer ) );
         }
 
         if ( !m_configWidget.isNull() )
@@ -862,8 +863,14 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
         if ( !m_updaters.contains( plid ) )
             return;
 
-        SpotifyPlaylistUpdater* updater = m_updaters[ plid ];
+        SpotifyPlaylistInfo* info = m_allSpotifyPlaylists[ plid ];
+        if( (info && info->starContainer ) && loveSync() )
+        {
+            qDebug() << Q_FUNC_INFO << "SKIPPING" << msgType;
+            return;
+        }
 
+        SpotifyPlaylistUpdater* updater = m_updaters[ plid ];
         // We have previously sycned starred container, but not anymore.
         // If we added loveSync, its synced in the background
         if( !updater->sync() && m_configWidget.data()->loveSync() )
@@ -887,6 +894,12 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
         if ( !m_updaters.contains( plid ) )
             return;
 
+        SpotifyPlaylistInfo* info = m_allSpotifyPlaylists[ plid ];
+        if( (info && info->starContainer ) && loveSync() )
+        {
+            qDebug() << Q_FUNC_INFO << "SKIPPING" << msgType;
+            return;
+        }
         SpotifyPlaylistUpdater* updater = m_updaters[ plid ];
 
         // If we're not syncing with this, the resolver is quite misinformed.
@@ -897,7 +910,6 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
         const QVariantList tracksList = msg.value( "trackPositions" ).toList();
         const QString newRev = msg.value( "revid" ).toString();
         const QString oldRev = msg.value( "oldRev" ).toString();
-
 
         updater->spotifyTracksRemoved( tracksList, newRev, oldRev );
     }
@@ -910,6 +922,12 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
         if ( !m_updaters.contains( plid ) )
             return;
 
+        SpotifyPlaylistInfo* info = m_allSpotifyPlaylists[ plid ];
+        if( (info && info->starContainer ) && loveSync() )
+        {
+            qDebug() << Q_FUNC_INFO << "SKIPPING" << msgType;
+            return;
+        }
         SpotifyPlaylistUpdater* updater = m_updaters[ plid ];
         Q_ASSERT( updater->sync() );
 
@@ -926,6 +944,7 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
         {
             const QVariantList tracksList = msg.value( "tracks" ).toList();
             const bool love = msg.value( "starred" ).toBool();
+
             QList<query_ptr> qs = SpotifyPlaylistUpdater::variantToQueries( tracksList );
             foreach ( const query_ptr& query, qs )
             {
@@ -943,6 +962,12 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
         if ( !m_updaters.contains( plid ) )
             return;
 
+        SpotifyPlaylistInfo* info = m_allSpotifyPlaylists[ plid ];
+        if( (info && info->starContainer ) && loveSync() )
+        {
+            qDebug() << Q_FUNC_INFO << "SKIPPING" << msgType;
+            return;
+        }
         SpotifyPlaylistUpdater* updater = m_updaters[ plid ];
         Q_ASSERT( updater->sync() );
 
@@ -952,7 +977,6 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
         const bool collaborative = msg.value( "collaborative" ).toBool();
         const int subscribers = msg.value( "subscribers" ).toInt();
 
-        SpotifyPlaylistInfo* info = m_allSpotifyPlaylists[ plid ];
         if( info && info->name != title )
         {
             qDebug() << "Playlist renamed fetched in tomahawk";
@@ -1156,17 +1180,7 @@ SpotifyAccount::saveConfig()
         {
             pl->changed = false;
 
-            if ( !pl->sync && pl->loveSync )
-            {
-                QVariantMap msg;
-                msg[ "_msgtype" ] = "setSync";
-                msg[ "playlistid" ] = pl->plid;
-                msg[ "sync" ] = pl->loveSync;
-                sendMessage( msg );
-
-            }
-
-            if ( pl->sync )
+            if ( pl->sync || ( pl->starContainer && loveSync() ) )
             {
                 // Fetch full playlist contents, then begin the sync
                 startPlaylistSync( pl );
@@ -1216,11 +1230,22 @@ SpotifyAccount::startPlaylistSync( SpotifyPlaylistInfo* playlist )
         return;
 
     QVariantMap msg;
-    msg[ "_msgtype" ] = "getPlaylist";
     msg[ "playlistid" ] = playlist->plid;
-    msg[ "sync" ] = playlist->sync;
+    msg[ "sync" ] = true;
 
-    sendMessage( msg, this, "startPlaylistSyncWithPlaylist" );
+    if( playlist->loveSync )
+    {
+        msg[ "_msgtype" ] = "setSync";
+        sendMessage( msg );
+        if( playlist->sync && m_updaters.contains( playlist->plid ) )
+            stopPlaylistSync(playlist, true);
+    }
+    else if( playlist->sync )
+    {
+        msg[ "_msgtype" ] = "getPlaylist";
+        sendMessage( msg, this, "startPlaylistSyncWithPlaylist" );
+    }
+
 }
 
 
@@ -1240,7 +1265,6 @@ SpotifyAccount::startPlaylistSyncWithPlaylist( const QString& msgType, const QVa
 
     // create a list of query/plentries directly
     QList< query_ptr > queries = SpotifyPlaylistUpdater::variantToQueries( tracks );
-
     /**
      * Begin syncing a playlist. Two options:
      * 1) This is a playlist that has never been synced to tomahawk. Create a new one
@@ -1253,12 +1277,22 @@ SpotifyAccount::startPlaylistSyncWithPlaylist( const QString& msgType, const QVa
     {
         //Q_ASSERT( m_updaters[ id ]->sync() == false ); /// Should have been unchecked/off before, but might not be if the user
         // changed spotify resolver meanwhile, so allow it for now
-        m_updaters[ id ]->setSync( true );
-//         m_updaters[ id ]->
-        // TODO
+        SpotifyPlaylistInfo* info = m_allSpotifyPlaylists[ id ];
+        if ( loveSync() && ( info && info->starContainer ) )
+        {
+            qDebug() << "Stopping playlist sync in favour for Love Sync";
+            stopPlaylistSync( info, true );
+        }
+        else
+        {
+            m_updaters[ id ]->setSync( true );
+//          m_updaters[ id ]->
+            // TODO
+        }
     }
     else
     {
+
         playlist_ptr plPtr = Tomahawk::Playlist::create( SourceList::instance()->getLocal(),
                                                         uuid(),
                                                         name,
@@ -1412,15 +1446,21 @@ SpotifyAccount::stopPlaylistSync( SpotifyPlaylistInfo* playlist, bool forceDontD
     if ( !playlist )
         return;
 
-    QVariantMap msg;
-    msg[ "_msgtype" ] = "removeFromSyncList";
-    msg[ "playlistid" ] = playlist->plid;
+    if ( loveSync() && playlist->starContainer )
+    {
+        qDebug() << "LoveSync in action, wont remove playlist " << playlist->name;
+    }
+    else if( !loveSync() )
+    {
+        QVariantMap msg;
+        msg[ "_msgtype" ] = "removeFromSyncList";
+        msg[ "playlistid" ] = playlist->plid;
 
-    m_spotifyResolver.data()->sendMessage( msg );
+        m_spotifyResolver.data()->sendMessage( msg );
+    }
 
     if ( m_updaters.contains( playlist->plid ) )
     {
-
         SpotifyPlaylistUpdater* updater = m_updaters[ playlist->plid ];
         updater->setSync( false );
 

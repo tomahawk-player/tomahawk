@@ -51,13 +51,14 @@ class SpotifyAccountConfig;
 // metadata for a playlist
 struct SpotifyPlaylistInfo {
     QString name, plid, revid;
-    bool sync, subscribed, changed, isOwner, loveSync;
+    bool sync, subscribed, changed, isOwner, starContainer;
+    bool loveSync;
 
+    SpotifyPlaylistInfo( const QString& nname, const QString& pid, const QString& rrevid, bool ssync, bool ssubscribed, bool isowner = false, bool star = false )
+        : name( nname ), plid( pid ), revid( rrevid ), sync( ssync ), subscribed( ssubscribed )
+        , changed( false ), isOwner( isowner ), starContainer( star ), loveSync( false ) {}
 
-    SpotifyPlaylistInfo( const QString& nname, const QString& pid, const QString& rrevid, bool ssync, bool ssubscribed, bool isowner = false, bool lovesync = false )
-        : name( nname ), plid( pid ), revid( rrevid ), sync( ssync ), subscribed( ssubscribed ), changed( false ), isOwner( isowner ), loveSync( lovesync ) {}
-
-    SpotifyPlaylistInfo() : sync( false ), changed( false ), loveSync( false ) {}
+    SpotifyPlaylistInfo() : sync( false ), changed( false ), starContainer( false ), loveSync( false ) {}
 };
 
 

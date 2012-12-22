@@ -49,7 +49,7 @@ SpotifyAccountConfig::SpotifyAccountConfig( SpotifyAccount *account )
     m_ui->loginButton->setDefault( true );
 
     connect( m_ui->loginButton, SIGNAL( clicked( bool ) ), this, SLOT( doLogin() ) );
-
+    connect( m_ui->loveSync, SIGNAL( toggled(bool) ), this, SLOT( showStarredPlaylist(bool) ) );
     connect( m_ui->usernameEdit, SIGNAL( textEdited( QString ) ), this, SLOT( resetLoginButton() ) );
     connect( m_ui->passwordEdit, SIGNAL( textEdited( QString ) ), this, SLOT( resetLoginButton() ) );
     connect( m_ui->selectAllCheckbox, SIGNAL( stateChanged( int ) ), this, SLOT( selectAllPlaylists() ) );
@@ -104,7 +104,8 @@ SpotifyAccountConfig::saveSettings()
             pl->changed = true;
             pl->sync = toSync;
         }
-        if ( pl->name == "Starred Tracks" && pl->loveSync != loveSync() )
+
+        if ( ( pl->starContainer && loveSync() ) && ( pl->loveSync != loveSync() ) )
         {
             pl->loveSync = loveSync();
             pl->changed = true;
@@ -162,6 +163,9 @@ SpotifyAccountConfig::setPlaylists( const QList<SpotifyPlaylistInfo *>& playlist
     {
         QListWidgetItem* item = new QListWidgetItem( pl->name, m_ui->playlistList );
         item->setData( Qt::UserRole, QVariant::fromValue< SpotifyPlaylistInfo* >( pl ) );
+        item->setData( Qt::UserRole+2, pl->starContainer );
+        if( loveSync() && pl->starContainer )
+            item->setHidden(true);
         item->setFlags( Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled );
         item->setCheckState( pl->sync ? Qt::Checked : Qt::Unchecked );
     }
@@ -216,6 +220,16 @@ SpotifyAccountConfig::loginResponse( bool success, const QString& msg, const QSt
 
 }
 
+void
+SpotifyAccountConfig::showStarredPlaylist( bool hide )
+{
+    for ( int i = 0; i < m_ui->playlistList->count(); i++ )
+    {
+        QListWidgetItem* item = m_ui->playlistList->item( i );
+        if ( item->data( Qt::UserRole+2 ).toBool() )
+            item->setHidden( hide );
+    }
+}
 void
 SpotifyAccountConfig::selectAllPlaylists()
 {

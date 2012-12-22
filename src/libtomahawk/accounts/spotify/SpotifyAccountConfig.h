@@ -72,6 +72,7 @@ private slots:
     void doLogin();
     void resetLoginButton();
     void selectAllPlaylists();
+    void showStarredPlaylist(bool);
 
 private:
     void showLoggedIn();
