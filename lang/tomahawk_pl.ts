@@ -363,7 +363,7 @@ połączyć się i strumieniować od ciebie?</translation>
     <message>
         <location filename="../src/AudioControls.cpp" line="282"/>
         <source>Love</source>
-        <translation type="unfinished"/>
+        <translation>Lubię</translation>
     </message>
 </context>
 <context>
@@ -454,7 +454,7 @@ połączyć się i strumieniować od ciebie?</translation>
     <message utf8="true">
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="80"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Sorry!&lt;/span&gt; Tomahawk crashed. Please tell us about it! Tomahawk has created an error report for you that can help improve the stability in the future. You can now send this report directly to the Tomahawk developers.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;font-weigth:600;&quot;&gt;Przepraszamy!&lt;/span&gt;Tomahawk przestał odpowiadać. Poinformuj nas o tym! Tomahawk utworzył raport o błędzie, który może poprawić stabilność w przyszłości. Możesz teraz wysłać ten raport bezpośrednio do programistów Tomahawka.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="129"/>
@@ -707,7 +707,7 @@ połączyć się i strumieniować od ciebie?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="87"/>
         <source>Synchronize Loved Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Synchronizuj lubiane utwory</translation>
     </message>
 </context>
 <context>
@@ -785,32 +785,32 @@ połączyć się i strumieniować od ciebie?</translation>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="56"/>
         <source>Top Loved Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Najczęściej lubiane utwory</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="85"/>
         <source>Sorry, we could not find any loved tracks!</source>
-        <translation type="unfinished"/>
+        <translation>Przepraszamy, nie mogliśmy znaleźć żadnych lubianych utworów!</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="88"/>
         <source>The most loved tracks from all your friends</source>
-        <translation type="unfinished"/>
+        <translation>Najczęściej lubiane utwory wszystkich twoich znajomych</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="94"/>
         <source>All of your loved tracks</source>
-        <translation type="unfinished"/>
+        <translation>Wszystkie twoje lubiane utwory</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="96"/>
         <source>All of %1&apos;s loved tracks</source>
-        <translation type="unfinished"/>
+        <translation>Wszystkie utwory lubiane przez %1</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="58"/>
         <source>Loved Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Lubiane</translation>
     </message>
 </context>
 <context>
@@ -1772,17 +1772,17 @@ połączyć się i strumieniować od ciebie?</translation>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="212"/>
         <source>Add to my Playlists</source>
-        <translation type="unfinished"/>
+        <translation>Dodaj do moich List odtwarzania</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="214"/>
         <source>Add to my Automatic Playlists</source>
-        <translation type="unfinished"/>
+        <translation>Dodaj do moich Automatycznych list odtwarzania</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="216"/>
         <source>Add to my Stations</source>
-        <translation type="unfinished"/>
+        <translation>Dodaj do moich Stacji</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="204"/>
@@ -1792,17 +1792,17 @@ połączyć się i strumieniować od ciebie?</translation>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="358"/>
         <source>playlist</source>
-        <translation type="unfinished"/>
+        <translation>lista odtwarzania</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="362"/>
         <source>automatic playlist</source>
-        <translation type="unfinished"/>
+        <translation>automatyczna lista odtwarzania</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="366"/>
         <source>station</source>
-        <translation type="unfinished"/>
+        <translation>stacja</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="392"/>
@@ -1928,6 +1928,11 @@ połączyć się i strumieniować od ciebie?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="154"/>
+        <source>Sync Starred tracks to Loved tracks</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="167"/>
         <source>High Quality Streams</source>
         <translation>Strumieniowanie w wysokiej jakości</translation>
     </message>
@@ -1937,7 +1942,7 @@ połączyć się i strumieniować od ciebie?</translation>
         <translation>Listy Spotify do synchronizacji:</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="164"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="177"/>
         <source>Delete Tomahawk playlist when removing synchronization</source>
         <translation>Usuń listy Tomahawka podczas usuwania synchronizacji</translation>
     </message>
@@ -2021,7 +2026,7 @@ połączyć się i strumieniować od ciebie?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="542"/>
         <source>Unfortunately, automatic installation of this resolver is not available or disabled for your platform.&lt;br /&gt;&lt;br /&gt;Please use &quot;Install from file&quot; above, by fetching it from your distribution or compiling it yourself. Further instructions can be found here:&lt;br /&gt;&lt;br /&gt;http://www.tomahawk-player.org/resolvers/%1</source>
-        <translation type="unfinished"/>
+        <translation>Niestety, automatyczna instalacja tej usługi jest niedostępna lub wyłączona na twojej platformie.&lt;br /&gt;&lt;br /&gt;Użyj instalacji z pliku, ściągając usługę lub kompilując ją samodzielnie. Więcej informacji można znaleźć na:&lt;br /&gt;&lt;br /&gt;http://www.tomahawk-player.org/resolvers/%1</translation>
     </message>
 </context>
 <context>
@@ -2145,47 +2150,47 @@ połączyć się i strumieniować od ciebie?</translation>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccount</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="478"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="490"/>
         <source>Sync with Spotify</source>
         <translation>Synchronizuj ze Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="482"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="494"/>
         <source>Re-enable syncing with Spotify</source>
-        <translation type="unfinished"/>
+        <translation>Włącz ponownie synchronizację ze Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="490"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="502"/>
         <source>Create local copy</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="506"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="518"/>
         <source>Subscribe to playlist changes</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="510"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="522"/>
         <source>Re-enable playlist subscription</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="514"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="526"/>
         <source>Stop subscribing to changes</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="534"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="546"/>
         <source>Enable Spotify collaborations</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="536"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="548"/>
         <source>Disable Spotify collaborations</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="492"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="504"/>
         <source>Stop syncing with Spotify</source>
         <translation>Przestań synchronizować ze Spotify</translation>
     </message>
@@ -2193,28 +2198,28 @@ połączyć się i strumieniować od ciebie?</translation>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccountConfig</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="163"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="176"/>
         <source>Logging in...</source>
         <translation>Loguję się...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="200"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="213"/>
         <source>Failed: %1</source>
         <translation>Nie udało się: %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="232"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="245"/>
         <source>Logged in as %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="234"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="247"/>
         <source>Log Out</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="250"/>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="260"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="263"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="273"/>
         <source>Log In</source>
         <translation>Zaloguj się</translation>
     </message>
@@ -2422,7 +2427,7 @@ Możesz spróbować ponowić uwierzytelnienie.</translation>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="101"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="373"/>
         <source>&amp;Love</source>
-        <translation>&amp;Uwielbiam</translation>
+        <translation>&amp;Lubię</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="112"/>
@@ -2479,22 +2484,22 @@ Możesz spróbować ponowić uwierzytelnienie.</translation>
     <message>
         <location filename="../src/libtomahawk/utils/DropJobNotifier.cpp" line="75"/>
         <source>playlist</source>
-        <translation type="unfinished"/>
+        <translation>lista odtwarzania</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/DropJobNotifier.cpp" line="78"/>
         <source>artist</source>
-        <translation type="unfinished"/>
+        <translation>wykonawca</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/DropJobNotifier.cpp" line="81"/>
         <source>track</source>
-        <translation type="unfinished"/>
+        <translation>utwór</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/DropJobNotifier.cpp" line="84"/>
         <source>album</source>
-        <translation type="unfinished"/>
+        <translation>album</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/DropJobNotifier.cpp" line="107"/>
@@ -3131,6 +3136,14 @@ Spróbuj poprawić filtry aby uzyskać nowy zestaw piosenek do odtworzenia.</tra
     </message>
 </context>
 <context>
+    <name>Tomahawk::SoundcloudParser</name>
+    <message>
+        <location filename="../src/libtomahawk/utils/SoundcloudParser.cpp" line="112"/>
+        <source>Track &apos;%1&apos; by %2 is not streamable.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Tomahawk::Source</name>
     <message>
         <location filename="../src/libtomahawk/Source.cpp" line="300"/>
@@ -3257,12 +3270,12 @@ wprowadź pokazany numer PIN tutaj:</translation>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="317"/>
         <source>&amp;Love</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Lubię</translation>
     </message>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="325"/>
         <source>Un-&amp;Love</source>
-        <translation type="unfinished"/>
+        <translation>Przestań &amp;lubić</translation>
     </message>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="176"/>
@@ -3571,12 +3584,12 @@ wprowadź pokazany numer PIN tutaj:</translation>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1214"/>
         <source>Copyright 2010 - 2012</source>
-        <translation type="unfinished"/>
+        <translation>Copyright 2010 - 2012</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1215"/>
         <source>Thanks to:</source>
-        <translation type="unfinished"/>
+        <translation>Podziękowania dla:</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1222"/>
