@@ -191,6 +191,7 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
 
     bool isPlaying = !( colItem->source()->currentTrack().isNull() );
     QString desc = colItem->source()->textStatus();
+    QColor descColor = QColor( "#8d8d8d" );
     if ( colItem->source().isNull() )
         desc = tr( "All available tracks" );
 
@@ -249,6 +250,9 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
         }
         else
             m_lockRects.remove( index );
+
+        if ( isPlaying )
+            descColor = Qt::black;
     }
 
     if ( m_trackHovered == index )
@@ -261,6 +265,7 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
     text = painter->fontMetrics().elidedText( desc, Qt::ElideRight, textRect.width() - 8 );
     QTextOption to( Qt::AlignVCenter );
     to.setWrapMode( QTextOption::NoWrap );
+    painter->setPen( descColor );
     painter->drawText( textRect, text, to );
 
     if ( colItem->source() && colItem->source()->currentTrack() )
