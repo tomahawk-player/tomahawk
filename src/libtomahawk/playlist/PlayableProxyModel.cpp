@@ -131,7 +131,7 @@ PlayableProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourcePa
     if ( !pi )
         return false;
 
-    if ( m_maxVisibleItems >= 0 && sourceRow > m_maxVisibleItems - 1 )
+    if ( m_maxVisibleItems > 0 && sourceRow > m_maxVisibleItems - 1 )
         return false;
 
     if ( m_hideDupeItems )
