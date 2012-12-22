@@ -34,7 +34,6 @@
 #include "AlbumModel.h"
 #include "PlayableModel.h"
 #include "PlayableProxyModelPlaylistInterface.h"
-#include "SingleTrackPlaylistInterface.h"
 #include "ContextMenu.h"
 #include "ViewManager.h"
 #include "MetaPlaylistInterface.h"
