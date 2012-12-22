@@ -122,14 +122,12 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
     const QString album = q->album();
     const QString track = q->track();
     int duration = q->duration();
-    QPixmap avatar;
     QString lowerText;
 
     QSize avatarSize( 32, 32 );
     source_ptr source = item->query()->playedBy().first;
     if ( m_mode == RecentlyPlayed && !source.isNull() )
     {
-        avatar = source->avatar( TomahawkUtils::RoundedCorners, avatarSize );
         QString playtime = TomahawkUtils::ageToString( QDateTime::fromTime_t( item->query()->playedBy().second ), true );
 
         if ( source == SourceList::instance()->getLocal() )
@@ -178,9 +176,6 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         const QPixmap pixmap = m_pixmaps[ index ]->currentPixmap();
         painter->drawPixmap( pixmapRect, pixmap );
 
-        if ( !avatar.isNull() )
-            painter->drawPixmap( avatarRect, avatar );
-
         QFont boldFont = opt.font;
         boldFont.setPointSize( TomahawkUtils::defaultFontSize() + 2 );
         boldFont.setWeight( 99 );
@@ -195,7 +190,7 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         QFont smallFont = opt.font;
         smallFont.setPointSize( TomahawkUtils::defaultFontSize() - 1 );
 
-        r.adjust( pixmapRect.width() + 12, 1, - 16 - avatar.width(), 0 );
+        r.adjust( pixmapRect.width() + 12, 1, - 16, 0 );
         QRect leftRect = r.adjusted( 0, 0, -48, 0 );
         QRect rightRect = r.adjusted( r.width() - smallBoldFontMetrics.width( TomahawkUtils::timeToString( duration ) ), 0, 0, 0 );
 
