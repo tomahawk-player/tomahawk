@@ -101,12 +101,14 @@ SpotifyAccountConfig::saveSettings()
         const bool toSync = ( item->checkState() == Qt::Checked );
         if ( pl->sync != toSync )
         {
+            qDebug() << Q_FUNC_INFO << "Setting sync";
             pl->changed = true;
             pl->sync = toSync;
         }
 
         if ( ( pl->starContainer && loveSync() ) && ( pl->loveSync != loveSync() ) )
         {
+            qDebug() << Q_FUNC_INFO << "Setting lovesync";
             pl->loveSync = loveSync();
             pl->changed = true;
         }
@@ -161,10 +163,11 @@ SpotifyAccountConfig::setPlaylists( const QList<SpotifyPlaylistInfo *>& playlist
 
     foreach ( SpotifyPlaylistInfo* pl, myList )
     {
+        bool starContainer = ( pl->starContainer || pl->name == "Starred Tracks" );
         QListWidgetItem* item = new QListWidgetItem( pl->name, m_ui->playlistList );
         item->setData( Qt::UserRole, QVariant::fromValue< SpotifyPlaylistInfo* >( pl ) );
-        item->setData( Qt::UserRole+2, pl->starContainer );
-        if( loveSync() && pl->starContainer )
+        item->setData( Qt::UserRole+2, starContainer );
+        if( loveSync() &&  starContainer )
             item->setHidden(true);
         item->setFlags( Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled );
         item->setCheckState( pl->sync ? Qt::Checked : Qt::Unchecked );

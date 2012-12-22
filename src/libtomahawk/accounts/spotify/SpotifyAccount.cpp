@@ -838,7 +838,7 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
             const bool isOwner = plMap.value( "owner" ).toBool();
             const bool sync = plMap.value( "sync" ).toBool();
             const bool subscribed = plMap.value( "subscribed" ).toBool();
-            const bool starContainer = plMap.value( "starContainer" ).toBool();
+            const bool starContainer = ( plMap.value( "starContainer" ).toBool() || name == "Starred Tracks");
 
             if ( name.isNull() || plid.isNull() || revid.isNull() )
             {
@@ -1175,7 +1175,7 @@ SpotifyAccount::saveConfig()
     m_configWidget.data()->saveSettings();
     foreach ( SpotifyPlaylistInfo* pl, m_allSpotifyPlaylists.values() )
     {
-//        qDebug() << "Checking changed state:" << pl->changed << pl->name << pl->sync;
+//        qDebug() << "Checking changed state:" << pl->changed << "name:" << pl->name << "sync" << pl->sync << "starred:" << pl->starContainer;
         if ( pl->changed )
         {
             pl->changed = false;
