@@ -47,7 +47,7 @@ PlayableModel::PlayableModel( QObject* parent, bool loading )
     connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( onPlaybackStopped() ), Qt::DirectConnection );
 
     m_header << tr( "Artist" ) << tr( "Title" ) << tr( "Composer" ) << tr( "Album" ) << tr( "Track" ) << tr( "Duration" )
-             << tr( "Bitrate" ) << tr( "Age" ) << tr( "Year" ) << tr( "Size" ) << tr( "Origin" ) << tr( "Score" ) << tr( "Name" );
+             << tr( "Bitrate" ) << tr( "Age" ) << tr( "Year" ) << tr( "Size" ) << tr( "Origin" ) << tr( "Accuracy" ) << tr( "Name" );
 }
 
 
@@ -235,8 +235,22 @@ PlayableModel::queryData( const query_ptr& query, int column, int role ) const
                 break;
 
             case Score:
-                return query->results().first()->score();
+            {
+                float score = query->results().first()->score();
+                if ( score == 1.0 )
+                    return tr( "Perfect match" );
+                if ( score > 0.9 )
+                    return tr( "Very good match" );
+                if ( score > 0.7 )
+                    return tr( "Good match" );
+                if ( score > 0.5 )
+                    return tr( "Vague match" );
+                if ( score > 0.3 )
+                    return tr( "Bad match" );
+                
+                return tr( "Not available" );
                 break;
+            }
 
             default:
                 break;
@@ -679,6 +693,7 @@ PlayableModel::columnAlignment( int column ) const
         case Bitrate:
         case Duration:
         case Filesize:
+        case Score:
         case Year:
             return Qt::AlignHCenter;
             break;
