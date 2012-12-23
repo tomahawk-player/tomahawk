@@ -270,7 +270,7 @@ PlaylistModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int
         i++;
 
         if ( entry->query()->id() == currentItemUuid() )
-            setCurrentItem( plitem->index );
+            setCurrentIndex( plitem->index );
 
         if ( !entry->query()->resolvingFinished() && !entry->query()->playable() )
         {

@@ -108,6 +108,7 @@ PlayableProxyModel::setSourcePlayableModel( PlayableModel* sourceModel )
         disconnect( m_model, SIGNAL( loadingFinished() ), this, SIGNAL( loadingFinished() ) );
         disconnect( m_model, SIGNAL( itemCountChanged( unsigned int ) ), this, SIGNAL( itemCountChanged( unsigned int ) ) );
         disconnect( m_model, SIGNAL( indexPlayable( QModelIndex ) ), this, SLOT( onIndexPlayable( QModelIndex ) ) );
+        disconnect( m_model, SIGNAL( currentIndexChanged() ), this, SIGNAL( currentIndexChanged() ) );
     }
 
     m_model = sourceModel;
@@ -118,6 +119,7 @@ PlayableProxyModel::setSourcePlayableModel( PlayableModel* sourceModel )
         connect( m_model, SIGNAL( loadingFinished() ), SIGNAL( loadingFinished() ) );
         connect( m_model, SIGNAL( itemCountChanged( unsigned int ) ), SIGNAL( itemCountChanged( unsigned int ) ) );
         connect( m_model, SIGNAL( indexPlayable( QModelIndex ) ), SLOT( onIndexPlayable( QModelIndex ) ) );
+        connect( m_model, SIGNAL( currentIndexChanged() ), SIGNAL( currentIndexChanged() ) );
     }
 
     QSortFilterProxyModel::setSourceModel( m_model );
@@ -632,8 +634,7 @@ void
 PlayableProxyModel::setCurrentIndex( const QModelIndex& index )
 {
     tDebug() << Q_FUNC_INFO;
-    m_model->setCurrentItem( mapToSource( index ) );
-    emit currentIndexChanged();
+    m_model->setCurrentIndex( mapToSource( index ) );
 }
 
 
