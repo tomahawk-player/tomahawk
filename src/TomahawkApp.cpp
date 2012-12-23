@@ -146,7 +146,7 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     setApplicationVersion( QLatin1String( TOMAHAWK_VERSION ) );
 
     registerMetaTypes();
-    TomahawkUtils::installTranslator(this);
+    TomahawkUtils::installTranslator( this );
 }
 
 

@@ -169,6 +169,8 @@ namespace TomahawkUtils
     DLLEXPORT QDir appDataDir();
     DLLEXPORT QDir appLogDir();
 
+    DLLEXPORT void installTranslator( QObject* parent );
+
     DLLEXPORT QString timeToString( int seconds );
     DLLEXPORT QString ageToString( const QDateTime& time, bool appendAgoString = false );
     DLLEXPORT QString filesizeToString( unsigned int size );
@@ -212,8 +214,6 @@ namespace TomahawkUtils
     DLLEXPORT QList< Tomahawk::query_ptr > mergePlaylistChanges( const QList< Tomahawk::query_ptr >& orig, const QList< Tomahawk::query_ptr >& newTracks, bool& changed );
 
     DLLEXPORT void crash();
-    
-    DLLEXPORT void installTranslator(QObject *parent);
 }
 
 #endif // TOMAHAWKUTILS_H

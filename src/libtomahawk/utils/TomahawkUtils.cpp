@@ -18,12 +18,12 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "utils/TomahawkUtils.h"
+
 #include "TomahawkVersion.h"
 #include "config.h"
 #include "TomahawkSettings.h"
 
-#include "utils/TomahawkUtils.h"
-#include "utils/Logger.h"
 #include "Source.h"
 #include "BinaryExtractWorker.h"
 #include "SharedTimeLine.h"
@@ -34,7 +34,6 @@
 
 #include <quazip.h>
 #include <quazipfile.h>
-
 
 #include <QNetworkConfiguration>
 #include <QNetworkAccessManager>
@@ -61,6 +60,8 @@
 #ifdef QCA2_FOUND
     #include <QtCrypto>
 #endif
+
+#include "Logger.h"
 
 namespace TomahawkUtils
 {
@@ -774,8 +775,9 @@ crash()
     *a = 1;
 }
 
+
 void
-installTranslator(QObject* parent)
+installTranslator( QObject* parent )
 {
 #if QT_VERSION >= 0x040800
     QString locale = QLocale::system().uiLanguages().first().replace( "-", "_" );
@@ -812,6 +814,7 @@ installTranslator(QObject* parent)
 
     QCoreApplication::installTranslator( translator );
 }
+
 
 bool
 verifyFile( const QString& filePath, const QString& signature )
