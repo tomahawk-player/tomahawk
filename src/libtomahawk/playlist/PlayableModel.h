@@ -123,8 +123,10 @@ signals:
     void indexPlayable( const QModelIndex& index );
     void changed();
 
+    void currentIndexChanged();
+
 public slots:
-    virtual void setCurrentItem( const QModelIndex& index );
+    virtual void setCurrentIndex( const QModelIndex& index );
 
     virtual void clear();
 

@@ -312,7 +312,7 @@ PlayableModel::headerData( int section, Qt::Orientation orientation, int role ) 
 
 
 void
-PlayableModel::setCurrentItem( const QModelIndex& index )
+PlayableModel::setCurrentIndex( const QModelIndex& index )
 {
     PlayableItem* oldEntry = itemFromIndex( m_currentIndex );
     if ( oldEntry )
@@ -332,6 +332,8 @@ PlayableModel::setCurrentItem( const QModelIndex& index )
         m_currentIndex = QModelIndex();
         m_currentUuid = QString();
     }
+
+    emit currentIndexChanged();
 }
 
 
@@ -596,6 +598,9 @@ PlayableModel::removeIndex( const QModelIndex& index, bool moreToCome )
     PlayableItem* item = itemFromIndex( index );
     if ( item )
     {
+        if ( index == m_currentIndex )
+            setCurrentIndex( QModelIndex() );
+            
         emit beginRemoveRows( index.parent(), index.row(), index.row() );
         delete item;
         emit endRemoveRows();
