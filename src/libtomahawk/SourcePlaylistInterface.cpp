@@ -180,8 +180,9 @@ SourcePlaylistInterface::resolvingFinished( bool hasResults )
     if ( hasResults )
     {
         m_gotNextItem = true;
-        emit nextTrackAvailable();
     }
+
+    emit nextTrackAvailable( hasResults );
 }
 
 
