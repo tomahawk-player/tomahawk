@@ -19,13 +19,14 @@
 #include "JobStatusDelegate.h"
 
 #include "JobStatusModel.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
 #include <QPainter>
 #include <QApplication>
 #include <QListView>
 
-#define ROW_HEIGHT 20
+#define ROW_HEIGHT ( TomahawkUtils::defaultFontHeight() + 6 )
 #define ICON_PADDING 2
 #define PADDING 2
 
@@ -80,7 +81,7 @@ JobStatusDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
         rightEdge = rRect.left();
     }
 
-    const int mainW = rightEdge - 4 * PADDING - iconRect.right();
+    const int mainW = rightEdge - 6 * PADDING - iconRect.right();
     QString mainText = index.data( Qt::DisplayRole ).toString();
     QTextOption to( Qt::AlignLeft | Qt::AlignVCenter );
     if ( !allowMultiLine )
@@ -98,9 +99,9 @@ JobStatusDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelInd
     const bool allowMultiLine = index.data( JobStatusModel::AllowMultiLineRole ).toBool();
 
     if ( !allowMultiLine )
-        return QSize( QStyledItemDelegate::sizeHint ( option, index ).width(), ROW_HEIGHT );
+        return QSize( QStyledItemDelegate::sizeHint( option, index ).width(), ROW_HEIGHT );
     else if ( m_cachedMultiLineHeights.contains( index ) )
-        return QSize( QStyledItemDelegate::sizeHint ( option, index ).width(), m_cachedMultiLineHeights[ index ] );
+        return QSize( QStyledItemDelegate::sizeHint( option, index ).width(), m_cachedMultiLineHeights[ index ] );
 
     // Don't elide, but stretch across as many rows as required
     QStyleOptionViewItemV4 opt = option;
