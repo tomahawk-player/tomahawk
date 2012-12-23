@@ -109,7 +109,7 @@ ImageRegistry::pixmap( const QString& image, const QSize& size, TomahawkUtils::I
 void
 ImageRegistry::putInCache( const QString& image, const QSize& size, TomahawkUtils::ImageMode mode, const QPixmap& pixmap )
 {
-    tDebug() << Q_FUNC_INFO << "Adding to image cache:" << image << size << mode;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Adding to image cache:" << image << size << mode;
 
     QHash< qint64, QPixmap > subsubcache;
     QHash< int, QHash< qint64, QPixmap > > subcache;
