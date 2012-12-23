@@ -81,6 +81,8 @@ PlaylistLargeItemDelegate::sizeHint( const QStyleOptionViewItem& option, const Q
 void
 PlaylistLargeItemDelegate::drawRichText( QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, int flags, QTextDocument& text ) const
 {
+    Q_UNUSED( option );
+
     text.setPageSize( QSize( rect.width(), QWIDGETSIZE_MAX ) );
     QAbstractTextDocumentLayout* layout = text.documentLayout();
 
