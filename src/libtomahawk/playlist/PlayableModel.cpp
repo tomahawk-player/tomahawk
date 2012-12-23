@@ -247,6 +247,8 @@ PlayableModel::queryData( const query_ptr& query, int column, int role ) const
                     return tr( "Vague match" );
                 if ( score > 0.3 )
                     return tr( "Bad match" );
+                if ( score > 0.0 )
+                    return tr( "Very bad match" );
                 
                 return tr( "Not available" );
                 break;
