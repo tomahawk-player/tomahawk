@@ -144,9 +144,6 @@ PlayableModel::parent( const QModelIndex& child ) const
 QVariant
 PlayableModel::artistData( const artist_ptr& artist, int role ) const
 {
-    if ( role == Qt::SizeHintRole )
-        return QSize( 0, 44 );
-
     if ( role != Qt::DisplayRole ) // && role != Qt::ToolTipRole )
         return QVariant();
 
@@ -157,9 +154,6 @@ PlayableModel::artistData( const artist_ptr& artist, int role ) const
 QVariant
 PlayableModel::albumData( const album_ptr& album, int role ) const
 {
-    if ( role == Qt::SizeHintRole )
-        return QSize( 0, 32 );
-
     if ( role != Qt::DisplayRole ) // && role != Qt::ToolTipRole )
         return QVariant();
 
@@ -170,9 +164,6 @@ PlayableModel::albumData( const album_ptr& album, int role ) const
 QVariant
 PlayableModel::queryData( const query_ptr& query, int column, int role ) const
 {
-    if ( role == Qt::SizeHintRole )
-        return QSize( 0, 18 );
-
     if ( role != Qt::DisplayRole ) // && role != Qt::ToolTipRole )
         return QVariant();
 
