@@ -801,13 +801,17 @@ LastFmInfoPlugin::coverArtReturned()
     QUrl redir = reply->attribute( QNetworkRequest::RedirectionTargetAttribute ).toUrl();
     if ( redir.isEmpty() )
     {
+        Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
+        Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>();
+
         QByteArray ba = reply->readAll();
         if ( ba.isNull() || !ba.length() )
         {
-            tLog() << Q_FUNC_INFO << "Uh oh, null byte array";
-            emit info( reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant() );
+            tLog() << Q_FUNC_INFO << "Null byte array for cover of" << origData["artist"] << origData["album"];
+            emit info( requestData, QVariant() );
             return;
         }
+
         foreach ( const QUrl& url, m_badUrls )
         {
             if ( reply->url().toString().startsWith( url.toString() ) )
@@ -818,11 +822,8 @@ LastFmInfoPlugin::coverArtReturned()
         returnedData["imgbytes"] = ba;
         returnedData["url"] = reply->url().toString();
 
-        Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
-
         emit info( requestData, returnedData );
 
-        Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>();
         Tomahawk::InfoSystem::InfoStringHash criteria;
         criteria["artist"] = origData["artist"];
         criteria["album"] = origData["album"];
