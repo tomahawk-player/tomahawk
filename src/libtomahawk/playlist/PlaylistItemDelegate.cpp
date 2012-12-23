@@ -65,17 +65,15 @@ PlaylistItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModel
 {
     QSize size = QStyledItemDelegate::sizeHint( option, index );
 
-    if ( index.isValid() )
     {
-        int style = index.data( PlayableProxyModel::StyleRole ).toInt();
-        if ( style == PlayableProxyModel::Short || style == PlayableProxyModel::ShortWithAvatars )
+        if ( m_model->style() == PlayableProxyModel::Short || m_model->style() == PlayableProxyModel::ShortWithAvatars )
         {
             int rowHeight = option.fontMetrics.height() + 8;
             size.setHeight( rowHeight * 2 );
         }
-        else if ( style == PlayableProxyModel::Detailed )
+        else if ( m_model->style() == PlayableProxyModel::Detailed )
         {
-            int rowHeight = option.fontMetrics.height() * 1.4;
+            int rowHeight = option.fontMetrics.height() * 1.6;
             size.setHeight( rowHeight );
         }
     }

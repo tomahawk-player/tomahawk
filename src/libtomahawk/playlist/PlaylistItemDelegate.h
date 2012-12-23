@@ -34,7 +34,7 @@ class DLLEXPORT PlaylistItemDelegate : public QStyledItemDelegate
 Q_OBJECT
 
 public:
-    PlaylistItemDelegate( TrackView* parent = 0, PlayableProxyModel* proxy = 0 );
+    PlaylistItemDelegate( TrackView* parent, PlayableProxyModel* proxy );
 
     void updateRowSize( const QModelIndex& index );
 
