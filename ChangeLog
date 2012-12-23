@@ -1,5 +1,6 @@
 Version 0.6.0:
     * Ability to sync Spotify Starred Tracks with Tomahawk Loved Tracks
+    * Increased maximum number of temporary pages open to 20
     * Support dropping of new Soundcloud user, track, set and Likes URLs
     * Remove YouTube resolver from plug-in directory on request of YouTube
     * Fixed iTunes m3u playlist support
