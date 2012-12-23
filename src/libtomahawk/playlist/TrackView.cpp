@@ -426,8 +426,6 @@ TrackView::resizeEvent( QResizeEvent* event )
     {
         m_header->resizeSection( 0, event->size().width() );
     }
-
-    
 }
 
 

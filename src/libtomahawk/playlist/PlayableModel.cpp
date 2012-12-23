@@ -62,6 +62,7 @@ PlayableModel::createIndex( int row, int column, PlayableItem* item ) const
     if ( item->query() )
     {
         connect( item->query().data(), SIGNAL( playableStateChanged( bool ) ), SLOT( onQueryBecamePlayable( bool ) ), Qt::UniqueConnection );
+        connect( item->query().data(), SIGNAL( resolvingFinished( bool ) ), SLOT( onQueryResolved( bool ) ), Qt::UniqueConnection );
     }
 
     return QAbstractItemModel::createIndex( row, column, item );
@@ -880,6 +881,28 @@ PlayableModel::onQueryBecamePlayable( bool playable )
     if ( item )
     {
         emit indexPlayable( item->index );
+    }
+}
+
+
+void
+PlayableModel::onQueryResolved( bool hasResults )
+{
+    Q_UNUSED( hasResults );
+    
+    Tomahawk::Query* q = qobject_cast< Query* >( sender() );
+    if ( !q )
+    {
+        // Track has been removed from the playlist by now
+        return;
+    }
+    
+    Tomahawk::query_ptr query = q->weakRef().toStrongRef();
+    PlayableItem* item = itemFromQuery( query );
+    
+    if ( item )
+    {
+        emit indexResolved( item->index );
     }
 }
 

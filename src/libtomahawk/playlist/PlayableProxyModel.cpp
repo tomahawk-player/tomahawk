@@ -108,6 +108,7 @@ PlayableProxyModel::setSourcePlayableModel( PlayableModel* sourceModel )
         disconnect( m_model, SIGNAL( loadingFinished() ), this, SIGNAL( loadingFinished() ) );
         disconnect( m_model, SIGNAL( itemCountChanged( unsigned int ) ), this, SIGNAL( itemCountChanged( unsigned int ) ) );
         disconnect( m_model, SIGNAL( indexPlayable( QModelIndex ) ), this, SLOT( onIndexPlayable( QModelIndex ) ) );
+        disconnect( m_model, SIGNAL( indexResolved( QModelIndex ) ), this, SLOT( onIndexResolved( QModelIndex ) ) );
         disconnect( m_model, SIGNAL( currentIndexChanged() ), this, SIGNAL( currentIndexChanged() ) );
     }
 
@@ -119,6 +120,7 @@ PlayableProxyModel::setSourcePlayableModel( PlayableModel* sourceModel )
         connect( m_model, SIGNAL( loadingFinished() ), SIGNAL( loadingFinished() ) );
         connect( m_model, SIGNAL( itemCountChanged( unsigned int ) ), SIGNAL( itemCountChanged( unsigned int ) ) );
         connect( m_model, SIGNAL( indexPlayable( QModelIndex ) ), SLOT( onIndexPlayable( QModelIndex ) ) );
+        connect( m_model, SIGNAL( indexResolved( QModelIndex ) ), SLOT( onIndexResolved( QModelIndex ) ) );
         connect( m_model, SIGNAL( currentIndexChanged() ), SIGNAL( currentIndexChanged() ) );
     }
 
@@ -642,4 +644,11 @@ void
 PlayableProxyModel::onIndexPlayable( const QModelIndex& index )
 {
     emit indexPlayable( mapFromSource( index ) );
+}
+
+
+void
+PlayableProxyModel::onIndexResolved( const QModelIndex& index )
+{
+    emit indexResolved( mapFromSource( index ) );
 }
