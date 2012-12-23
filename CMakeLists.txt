@@ -17,6 +17,8 @@ SET( TOMAHAWK_VERSION_PATCH 99 )
 
 #SET( TOMAHAWK_VERSION_RC 0 )
 
+SET( TOMAHAWK_TRANSLATION_LANGUAGES ar bg ca de en es fi fr ja pl pt_BR ru sv tr zh_CN zh_TW )
+
 # enforce proper symbol exporting on all platforms
 add_definitions( "-fvisibility=hidden" )
 # enforce using constBegin, constEnd for const-iterators

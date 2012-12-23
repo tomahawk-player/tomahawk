@@ -212,6 +212,8 @@ namespace TomahawkUtils
     DLLEXPORT QList< Tomahawk::query_ptr > mergePlaylistChanges( const QList< Tomahawk::query_ptr >& orig, const QList< Tomahawk::query_ptr >& newTracks, bool& changed );
 
     DLLEXPORT void crash();
+    
+    DLLEXPORT void installTranslator(QObject *parent);
 }
 
 #endif // TOMAHAWKUTILS_H
