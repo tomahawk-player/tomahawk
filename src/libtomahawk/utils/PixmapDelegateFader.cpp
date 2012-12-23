@@ -87,6 +87,7 @@ PixmapDelegateFader::PixmapDelegateFader( const query_ptr& track, const QSize& s
     {
         connect( m_track.data(), SIGNAL( updated() ), SLOT( trackChanged() ) );
         connect( m_track.data(), SIGNAL( resultsChanged() ), SLOT( trackChanged() ) );
+        connect( m_track->displayQuery().data(), SIGNAL( updated() ), SLOT( trackChanged() ) );
         connect( m_track->displayQuery().data(), SIGNAL( coverChanged() ), SLOT( trackChanged() ) );
 
         m_currentReference = TomahawkUtils::createRoundedImage( m_track->displayQuery()->cover( size, forceLoad ), QSize( 0, 0 ), m_mode == TomahawkUtils::Grid ? 0.00 : 0.20 );
