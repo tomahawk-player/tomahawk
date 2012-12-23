@@ -200,6 +200,12 @@ Album::id() const
 QPixmap
 Album::cover( const QSize& size, bool forceLoad ) const
 {
+    if ( name().isEmpty() )
+    {
+        m_coverLoaded = true;
+        return QPixmap();
+    }
+
     if ( !m_coverLoaded && !m_coverLoading )
     {
         if ( !forceLoad )
@@ -299,7 +305,6 @@ Album::infoSystemFinished( const QString& target )
                 this, SLOT( infoSystemFinished( QString ) ) );
 
     m_coverLoading = false;
-
     emit updated();
 }
 

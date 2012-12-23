@@ -169,6 +169,8 @@ namespace TomahawkUtils
     DLLEXPORT QDir appDataDir();
     DLLEXPORT QDir appLogDir();
 
+    DLLEXPORT void installTranslator( QObject* parent );
+
     DLLEXPORT QString timeToString( int seconds );
     DLLEXPORT QString ageToString( const QDateTime& time, bool appendAgoString = false );
     DLLEXPORT QString filesizeToString( unsigned int size );

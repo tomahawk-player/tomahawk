@@ -19,8 +19,10 @@
 #include "CrashReporter.h"
 
 #include <QTranslator>
-
 #include <iostream>
+
+#include "utils/TomahawkUtils.h"
+
 
 const char* k_usage =
     "Usage:\n"
@@ -35,13 +37,7 @@ int main( int argc, char* argv[] )
     QCoreApplication::setOrganizationDomain( "tomahawk-player.org" );
 
     QApplication app( argc, argv );
-
-    QString langCode;
-    QTranslator translatorApp;
-    QTranslator translatorQt;
-
-/*    app.installTranslator( &translatorApp );
-    app.installTranslator( &translatorQt );*/
+    TomahawkUtils::installTranslator( &app );
 
     if ( app.arguments().size() != 4 )
     {

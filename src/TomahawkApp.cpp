@@ -146,47 +146,7 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     setApplicationVersion( QLatin1String( TOMAHAWK_VERSION ) );
 
     registerMetaTypes();
-    installTranslator();
-}
-
-
-void
-TomahawkApp::installTranslator()
-{
-#if QT_VERSION >= 0x040800
-    QString locale = QLocale::system().uiLanguages().first().replace( "-", "_" );
-#else
-    QString locale = QLocale::system().name();
-#endif
-    if ( locale == "C" )
-        locale = "en";
-
-    // Tomahawk translations
-    QTranslator* translator = new QTranslator( this );
-    if ( translator->load( QString( ":/lang/tomahawk_" ) + locale ) )
-    {
-        tDebug( LOGVERBOSE ) << "Translation: Tomahawk: Using system locale:" << locale;
-    }
-    else
-    {
-        tDebug( LOGVERBOSE ) << "Translation: Tomahawk: Using default locale, system locale one not found:" << locale;
-        translator->load( QString( ":/lang/tomahawk_en" ) );
-    }
-
-    TOMAHAWK_APPLICATION::installTranslator( translator );
-
-    // Qt translations
-    translator = new QTranslator( this );
-    if ( translator->load( QString( ":/lang/qt_" ) + locale ) )
-    {
-        tDebug( LOGVERBOSE ) << "Translation: Qt: Using system locale:" << locale;
-    }
-    else
-    {
-        tDebug( LOGVERBOSE ) << "Translation: Qt: Using default locale, system locale one not found:" << locale;
-    }
-
-    TOMAHAWK_APPLICATION::installTranslator( translator );
+    TomahawkUtils::installTranslator( this );
 }
 
 

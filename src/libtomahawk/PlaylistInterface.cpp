@@ -184,34 +184,22 @@ PlaylistInterface::onItemsChanged()
     Tomahawk::result_ptr prevResult = siblingResult( -1, m_currentIndex );
     Tomahawk::result_ptr nextResult = siblingResult( 1, m_currentIndex );
 
-    if ( prevResult )
     {
-        bool avail = prevResult->toQuery()->playable();
+        bool avail = prevResult && prevResult->toQuery()->playable();
         if ( avail != m_prevAvail )
         {
             m_prevAvail = avail;
-            emit previousTrackAvailable();
+            emit previousTrackAvailable( avail );
         }
     }
-    else if ( m_prevAvail )
-    {
-        m_prevAvail = false;
-        emit previousTrackAvailable();
-    }
 
-    if ( nextResult )
     {
-        bool avail = nextResult->toQuery()->playable();
+        bool avail = nextResult && nextResult->toQuery()->playable();
         if ( avail != m_nextAvail )
         {
             m_nextAvail = avail;
-            emit nextTrackAvailable();
+            emit nextTrackAvailable( avail );
         }
-    }
-    else if ( m_nextAvail )
-    {
-        m_nextAvail = false;
-        emit nextTrackAvailable();
     }
 }
 

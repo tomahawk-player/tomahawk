@@ -39,6 +39,7 @@ PlayableProxyModelPlaylistInterface::PlayableProxyModelPlaylistInterface( Playab
     connect( proxyModel, SIGNAL( indexPlayable( QModelIndex ) ), SLOT( onItemsChanged() ) );
     connect( proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onItemsChanged() ) );
     connect( proxyModel, SIGNAL( itemCountChanged( unsigned int ) ), SLOT( onItemsChanged() ) );
+    connect( proxyModel, SIGNAL( currentIndexChanged() ), SLOT( onCurrentIndexChanged() ) );
 }
 
 
@@ -84,18 +85,30 @@ PlayableProxyModelPlaylistInterface::tracks() const
 
 
 void
+PlayableProxyModelPlaylistInterface::onCurrentIndexChanged()
+{
+    if ( m_proxyModel.data()->currentIndex().isValid() )
+        setCurrentIndex( (qint64) m_proxyModel.data()->mapToSource( m_proxyModel.data()->currentIndex() ).internalPointer() );
+    else
+        setCurrentIndex( -1 );
+}
+
+
+void
 PlayableProxyModelPlaylistInterface::setCurrentIndex( qint64 index )
 {
     Q_ASSERT( m_proxyModel );
     if ( m_proxyModel.isNull() )
         return;
 
-    PlayableItem* item = static_cast<PlayableItem*>( (void*)index );
-    if ( index < 0 || !item )
-    {
-        m_proxyModel.data()->setCurrentIndex( QModelIndex() );
-    }
-    else
+    if ( m_currentIndex == index )
+        return;
+    m_currentIndex = index; // we need to manually set m_currentIndex (protected member from PlaylistInterface) here
+                            // because calling m_proxyModel.data()->setCurrentIndex( ... ) will end up emitting a
+                            // signal which leads right back here and would cause an infinite loop.
+
+    PlayableItem* item = reinterpret_cast<PlayableItem*>( (void*)index );
+    if ( index >= 0 && item )
     {
         if ( m_shuffled && m_shuffleHistory.count() > 1 )
         {
@@ -195,7 +208,7 @@ PlayableProxyModelPlaylistInterface::siblingIndex( int itemsAway, qint64 rootInd
                 }
                 else
                 {
-                    PlayableItem* pitem = static_cast<PlayableItem*>( (void*)rootIndex );
+                    PlayableItem* pitem = reinterpret_cast<PlayableItem*>( (void*)rootIndex );
                     if ( !pitem || !pitem->index.isValid() )
                         return -1;
 
@@ -259,7 +272,7 @@ PlayableProxyModelPlaylistInterface::queryAt( qint64 index ) const
     if ( m_proxyModel.isNull() )
         return query_ptr();
 
-    PlayableItem* item = static_cast<PlayableItem*>( (void*)index );
+    PlayableItem* item = reinterpret_cast<PlayableItem*>( (void*)index );
     if ( item && item->query() )
         return item->query();
 
@@ -273,7 +286,7 @@ PlayableProxyModelPlaylistInterface::resultAt( qint64 index ) const
     if ( m_proxyModel.isNull() )
         return result_ptr();
 
-    PlayableItem* item = static_cast<PlayableItem*>( (void*)index );
+    PlayableItem* item = reinterpret_cast<PlayableItem*>( (void*)index );
     if ( item && item->result() )
         return item->result();
 

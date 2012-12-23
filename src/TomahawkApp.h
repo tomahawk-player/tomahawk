@@ -115,7 +115,6 @@ private slots:
     void accountManagerReady();
 
 private:
-    void installTranslator();
     void registerMetaTypes();
 
     void printHelp();

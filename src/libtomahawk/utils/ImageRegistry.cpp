@@ -23,7 +23,7 @@
 
 #include "utils/Logger.h"
 
-static QHash< QString, QHash< int, QHash< int, QPixmap > > > s_cache;
+static QHash< QString, QHash< int, QHash< qint64, QPixmap > > > s_cache;
 ImageRegistry* ImageRegistry::s_instance = 0;
 
 
@@ -50,8 +50,8 @@ ImageRegistry::icon( const QString& image, TomahawkUtils::ImageMode mode )
 QPixmap
 ImageRegistry::pixmap( const QString& image, const QSize& size, TomahawkUtils::ImageMode mode )
 {
-    QHash< int, QPixmap > subsubcache;
-    QHash< int, QHash< int, QPixmap > > subcache;
+    QHash< qint64, QPixmap > subsubcache;
+    QHash< int, QHash< qint64, QPixmap > > subcache;
 
     if ( s_cache.contains( image ) )
     {
@@ -61,9 +61,9 @@ ImageRegistry::pixmap( const QString& image, const QSize& size, TomahawkUtils::I
         {
             subsubcache = subcache.value( mode );
 
-            if ( subsubcache.contains( size.width() ) )
+            if ( subsubcache.contains( size.width() * size.height() ) )
             {
-                return subsubcache.value( size.width() );
+                return subsubcache.value( size.width() * size.height() );
             }
         }
     }
@@ -109,10 +109,10 @@ ImageRegistry::pixmap( const QString& image, const QSize& size, TomahawkUtils::I
 void
 ImageRegistry::putInCache( const QString& image, const QSize& size, TomahawkUtils::ImageMode mode, const QPixmap& pixmap )
 {
-    tDebug() << Q_FUNC_INFO << "Adding to image cache:" << image << size << mode;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Adding to image cache:" << image << size << mode;
 
-    QHash< int, QPixmap > subsubcache;
-    QHash< int, QHash< int, QPixmap > > subcache;
+    QHash< qint64, QPixmap > subsubcache;
+    QHash< int, QHash< qint64, QPixmap > > subcache;
 
     if ( s_cache.contains( image ) )
     {
@@ -122,14 +122,14 @@ ImageRegistry::putInCache( const QString& image, const QSize& size, TomahawkUtil
         {
             subsubcache = subcache.value( mode );
 
-/*            if ( subsubcache.contains( size.width() ) )
+/*            if ( subsubcache.contains( size.width() * size.height() ) )
             {
                 Q_ASSERT( false );
             }*/
         }
     }
 
-    subsubcache.insert( size.width(), pixmap );
+    subsubcache.insert( size.width() * size.height(), pixmap );
     subcache.insert( mode, subsubcache );
     s_cache.insert( image, subcache );
 }

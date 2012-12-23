@@ -62,6 +62,7 @@ PlayableModel::createIndex( int row, int column, PlayableItem* item ) const
     if ( item->query() )
     {
         connect( item->query().data(), SIGNAL( playableStateChanged( bool ) ), SLOT( onQueryBecamePlayable( bool ) ), Qt::UniqueConnection );
+        connect( item->query().data(), SIGNAL( resolvingFinished( bool ) ), SLOT( onQueryResolved( bool ) ), Qt::UniqueConnection );
     }
 
     return QAbstractItemModel::createIndex( row, column, item );
@@ -312,7 +313,7 @@ PlayableModel::headerData( int section, Qt::Orientation orientation, int role ) 
 
 
 void
-PlayableModel::setCurrentItem( const QModelIndex& index )
+PlayableModel::setCurrentIndex( const QModelIndex& index )
 {
     PlayableItem* oldEntry = itemFromIndex( m_currentIndex );
     if ( oldEntry )
@@ -332,6 +333,8 @@ PlayableModel::setCurrentItem( const QModelIndex& index )
         m_currentIndex = QModelIndex();
         m_currentUuid = QString();
     }
+
+    emit currentIndexChanged();
 }
 
 
@@ -596,6 +599,9 @@ PlayableModel::removeIndex( const QModelIndex& index, bool moreToCome )
     PlayableItem* item = itemFromIndex( index );
     if ( item )
     {
+        if ( index == m_currentIndex )
+            setCurrentIndex( QModelIndex() );
+            
         emit beginRemoveRows( index.parent(), index.row(), index.row() );
         delete item;
         emit endRemoveRows();
@@ -875,6 +881,28 @@ PlayableModel::onQueryBecamePlayable( bool playable )
     if ( item )
     {
         emit indexPlayable( item->index );
+    }
+}
+
+
+void
+PlayableModel::onQueryResolved( bool hasResults )
+{
+    Q_UNUSED( hasResults );
+    
+    Tomahawk::Query* q = qobject_cast< Query* >( sender() );
+    if ( !q )
+    {
+        // Track has been removed from the playlist by now
+        return;
+    }
+    
+    Tomahawk::query_ptr query = q->weakRef().toStrongRef();
+    PlayableItem* item = itemFromQuery( query );
+    
+    if ( item )
+    {
+        emit indexResolved( item->index );
     }
 }
 
