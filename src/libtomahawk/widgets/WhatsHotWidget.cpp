@@ -123,7 +123,7 @@ WhatsHotWidget::~WhatsHotWidget()
 {
     qDebug() << "Deleting whatshot";
     // Write the settings
-    qDebug() << "Writing chartIds to settings: " << m_currentVIds;
+    qDebug() << "Writing chartIds to settings:" << m_currentVIds;
     TomahawkSettings::instance()->setLastChartIds( m_currentVIds );
     qDeleteAll( m_workers );
     m_workers.clear();
@@ -175,7 +175,6 @@ WhatsHotWidget::jumpToCurrentTrack()
 void
 WhatsHotWidget::fetchData()
 {
-
     Tomahawk::InfoSystem::InfoStringHash criteria;
 
     Tomahawk::InfoSystem::InfoRequestData requestData;
@@ -384,7 +383,6 @@ WhatsHotWidget::infoSystemFinished( QString target )
 void
 WhatsHotWidget::leftCrumbIndexChanged( QModelIndex index )
 {
-
     tDebug( LOGVERBOSE ) << "WhatsHot: left crumb changed" << index.data();
     QStandardItem* item = m_crumbModelLeft->itemFromIndex( m_sortedProxy->mapToSource( index ) );
     if ( !item )
@@ -530,13 +528,13 @@ WhatsHotWidget::parseNode( QStandardItem* parentItem, const QString &label, cons
     return sourceItem;
 }
 
+
 void
 WhatsHotWidget::setLeftViewAlbums( PlayableModel* model )
 {
     ui->albumsView->setPlayableModel( model );
     ui->albumsView->proxyModel()->sort( -1 ); // disable sorting, must be called after artistsViewLeft->setTreeModel
     ui->stackLeft->setCurrentIndex( 2 );
-
 }
 
 
