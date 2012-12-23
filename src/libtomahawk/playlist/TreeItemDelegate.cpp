@@ -45,6 +45,35 @@ TreeItemDelegate::TreeItemDelegate( TreeView* parent, TreeProxyModel* proxy )
 }
 
 
+QSize
+TreeItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
+{
+    QSize size = QStyledItemDelegate::sizeHint( option, index );
+
+    if ( index.isValid() )
+    {
+        PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
+        if ( item )
+        {
+            if ( item->album() )
+            {
+                size.setHeight( option.fontMetrics.height() * 3 );
+                return size;
+            }
+            else if ( item->query() || item->result() )
+            {
+                size.setHeight( option.fontMetrics.height() * 1.6 );
+                return size;
+            }
+        }
+    }
+    
+    // artist per default
+    size.setHeight( option.fontMetrics.height() * 4 );
+    return size;
+}
+
+
 void
 TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
