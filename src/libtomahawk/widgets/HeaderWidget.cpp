@@ -40,7 +40,7 @@ void
 HeaderWidget::paintEvent( QPaintEvent* e )
 {
     QStylePainter p( this );
-    QRect r = e->rect();
+    QRect r = rect();
 
     StyleHelper::horizontalHeader( &p, r );
 }
