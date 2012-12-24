@@ -47,7 +47,7 @@ PlayableModel::PlayableModel( QObject* parent, bool loading )
     connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( onPlaybackStopped() ), Qt::DirectConnection );
 
     m_header << tr( "Artist" ) << tr( "Title" ) << tr( "Composer" ) << tr( "Album" ) << tr( "Track" ) << tr( "Duration" )
-             << tr( "Bitrate" ) << tr( "Age" ) << tr( "Year" ) << tr( "Size" ) << tr( "Origin" ) << tr( "Score" ) << tr( "Name" );
+             << tr( "Bitrate" ) << tr( "Age" ) << tr( "Year" ) << tr( "Size" ) << tr( "Origin" ) << tr( "Accuracy" ) << tr( "Name" );
 }
 
 
@@ -144,9 +144,6 @@ PlayableModel::parent( const QModelIndex& child ) const
 QVariant
 PlayableModel::artistData( const artist_ptr& artist, int role ) const
 {
-    if ( role == Qt::SizeHintRole )
-        return QSize( 0, 44 );
-
     if ( role != Qt::DisplayRole ) // && role != Qt::ToolTipRole )
         return QVariant();
 
@@ -157,9 +154,6 @@ PlayableModel::artistData( const artist_ptr& artist, int role ) const
 QVariant
 PlayableModel::albumData( const album_ptr& album, int role ) const
 {
-    if ( role == Qt::SizeHintRole )
-        return QSize( 0, 32 );
-
     if ( role != Qt::DisplayRole ) // && role != Qt::ToolTipRole )
         return QVariant();
 
@@ -170,9 +164,6 @@ PlayableModel::albumData( const album_ptr& album, int role ) const
 QVariant
 PlayableModel::queryData( const query_ptr& query, int column, int role ) const
 {
-    if ( role == Qt::SizeHintRole )
-        return QSize( 0, 18 );
-
     if ( role != Qt::DisplayRole ) // && role != Qt::ToolTipRole )
         return QVariant();
 
@@ -244,8 +235,24 @@ PlayableModel::queryData( const query_ptr& query, int column, int role ) const
                 break;
 
             case Score:
-                return query->results().first()->score();
+            {
+                float score = query->results().first()->score();
+                if ( score == 1.0 )
+                    return tr( "Perfect match" );
+                if ( score > 0.9 )
+                    return tr( "Very good match" );
+                if ( score > 0.7 )
+                    return tr( "Good match" );
+                if ( score > 0.5 )
+                    return tr( "Vague match" );
+                if ( score > 0.3 )
+                    return tr( "Bad match" );
+                if ( score > 0.0 )
+                    return tr( "Very bad match" );
+                
+                return tr( "Not available" );
                 break;
+            }
 
             default:
                 break;
@@ -688,6 +695,7 @@ PlayableModel::columnAlignment( int column ) const
         case Bitrate:
         case Duration:
         case Filesize:
+        case Score:
         case Year:
             return Qt::AlignHCenter;
             break;

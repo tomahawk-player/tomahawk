@@ -388,8 +388,8 @@ TomahawkApp::printHelp()
     echo( "Usage: " + arguments().at( 0 ) + " [options] [url]" );
     echo( "Options are:" );
     echo( "  --help         Show this help" );
-    echo( "  --http         Initialize HTTP server" );
-    echo( "  --filescan     Scan files on startup" );
+//    echo( "  --http         Initialize HTTP server" );
+//    echo( "  --filescan     Scan files on startup" );
 //    echo( "  --headless     Run without a GUI" );
     echo( "  --hide         Hide main window on startup" );
     echo( "  --testdb       Use a test database instead of real collection" );

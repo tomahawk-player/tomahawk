@@ -131,9 +131,6 @@ GridView::setModel( QAbstractItemModel* model )
 void
 GridView::setPlayableModel( PlayableModel* model )
 {
-    if ( m_model )
-        delete m_model;
-
     m_inited = false;
     m_model = model;
 
