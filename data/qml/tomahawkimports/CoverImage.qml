@@ -53,43 +53,74 @@ Item {
         }
     }
 
+    Rectangle {
+        id: itemShadow
+        color: backgroundColor
+        anchors.fill: parent
+
+        //opacity: 1 - itemBrightness
+
+        Behavior on opacity {
+            NumberAnimation { easing.type: Easing.Linear; duration: 300 }
+        }
+    }
+
     Component {
         id: coverImage
 
-        Rectangle {
-            color: "white"
-            border.color: borderColor
-            border.width: borderWidth
+        Item {
+            property bool isMirror: false
 
             Image {
                 anchors.fill: parent
-                //anchors.margins: borderWidth
-                source: "image://albumart/" + artworkId
+                source: "image://albumart/" + artworkId + (isMirror ? "-mirror" : "") + (showLabels ? "-labels" : "")
                 smooth: root.smooth
-            }
-
-            Rectangle {
-                id: itemGlow
-                color: "white"
-                anchors.fill: parent
-
-                opacity: mouseArea.containsMouse ? .2 : 0
-
+                opacity: itemBrightness
                 Behavior on opacity {
-                    NumberAnimation { easing.type: Easing.Linear; duration: 300 }
+                    NumberAnimation { duration: 300 }
                 }
             }
 
             Rectangle {
-                id: textBackground
-                anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
-                anchors.margins: -1
-                height: (artistText.height + trackText.height) * 3
-                opacity: showLabels ? 1 : 0
-                gradient: Gradient {
+                id: itemGlow
+                anchors.fill: parent
+                anchors.topMargin: isMirror ? parent.height / 2 : 0
+
+                opacity: (mouseArea.containsMouse ? .2 : 0)
+
+                Gradient {
+                    id: glowGradient
+                    GradientStop { position: 0.0; color: "white" }
+                    GradientStop { position: 0.7; color: "white" }
+                    GradientStop { position: 0.8; color: "#00000000" }
+                    GradientStop { position: 1.0; color: "#00000000" }
+                }
+                Gradient {
+                    id: mirrorGlowGradient
                     GradientStop { position: 0.0; color: "#00000000" }
-                    GradientStop { position: 0.6; color: "#E1000000" }
-                    GradientStop { position: 1.0; color: "#E1000000" }
+                    GradientStop { position: 0.5; color: "#00000000" }
+                    GradientStop { position: 1.0; color: "#44FFFFFF" }
+                }
+
+                states: [
+                    State {
+                        name: "mirrored"; when: isMirror
+                        PropertyChanges {
+                            target: itemGlow
+                            gradient: mirrorGlowGradient
+                        }
+                    },
+                    State {
+                        name: "normal"; when: !isMirror
+                        PropertyChanges {
+                            target: itemGlow
+                            gradient: glowGradient
+                        }
+                    }
+                ]
+
+                Behavior on opacity {
+                    NumberAnimation { easing.type: Easing.Linear; duration: 300 }
                 }
             }
 
@@ -102,8 +133,11 @@ Item {
                 anchors.margins: 2
                 horizontalAlignment: Text.AlignHCenter
                 elide: Text.ElideRight
-                opacity: showLabels ? 1 : 0
+                opacity: showLabels ? itemBrightness * (isMirror ? 0.5 : 1): 0
                 font.pixelSize: root.height / 15
+                Behavior on opacity {
+                    NumberAnimation { duration: 300 }
+                }
             }
             Text {
                 id: artistText
@@ -114,8 +148,11 @@ Item {
                 anchors.margins: root.height / 20
                 horizontalAlignment: Text.AlignHCenter
                 elide: Text.ElideRight
-                opacity: showLabels ? 1 : 0
+                opacity: showLabels ? itemBrightness * (isMirror ? 0.5 : 1) : 0
                 font.pixelSize: trackText.text.length == 0 ? root.height / 10 : root.height / 15
+                Behavior on opacity {
+                    NumberAnimation { duration: 300 }
+                }
             }
         }
 
@@ -129,47 +166,15 @@ Item {
         id: mirroredCover
         sourceComponent: parent.showMirror ? coverImage : undefined
         anchors.fill: parent
+        onLoaded: {
+            item.isMirror = true
+        }
         transform : [
             Rotation {
                 angle: 180; origin.y: root.height
                 axis.x: 1; axis.y: 0; axis.z: 0
             }
         ]
-    }
-
-    Rectangle {
-        id: itemShadow
-        color: backgroundColor
-        anchors.fill: parent
-        //anchors.bottomMargin: - parent.height
-
-        // scaling might be off a pixel... make sure that the shadow is at least as large as the image
-        anchors.leftMargin: -2
-        anchors.rightMargin: -2
-        anchors.topMargin: -2
-
-        opacity: 1 - itemBrightness
-
-        Behavior on opacity {
-            NumberAnimation { easing.type: Easing.Linear; duration: 300 }
-        }
-    }
-
-    Rectangle {
-        id: mirrorShadow
-        color: parent.backgroundColor
-        height: parent.height + 2
-        width: parent.width + 4
-        anchors.centerIn: parent
-        anchors.verticalCenterOffset: parent.height
-        visible: showMirror
-
-        gradient: Gradient {
-            // TODO: no clue how to get the RGB component of the container rectangle color
-            // For now the Qt.rgba needs to be manually updated to match the backgroundColor 454e59
-            GradientStop { position: 0.0; color: Qt.rgba(0, 0, 0, 1-mirrorBrightness) }
-            GradientStop { position: 0.5; color: backgroundColor }
-        }
     }
 
     Image {
