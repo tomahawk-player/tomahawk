@@ -1017,42 +1017,42 @@ erlauben sich mit dir zu verbinden?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Accuracy</source>
-        <translation type="unfinished"/>
+        <translation>Treffsicherheit</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="241"/>
         <source>Perfect match</source>
-        <translation type="unfinished"/>
+        <translation>Perfekt</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="243"/>
         <source>Very good match</source>
-        <translation type="unfinished"/>
+        <translation>Sehr gut</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="245"/>
         <source>Good match</source>
-        <translation type="unfinished"/>
+        <translation>Gut</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="247"/>
         <source>Vague match</source>
-        <translation type="unfinished"/>
+        <translation>Vage</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="249"/>
         <source>Bad match</source>
-        <translation type="unfinished"/>
+        <translation>Schlecht</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="251"/>
         <source>Very bad match</source>
-        <translation type="unfinished"/>
+        <translation>Sehr schlecht</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="253"/>
         <source>Not available</source>
-        <translation type="unfinished"/>
+        <translation>Nicht verfügbar</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
