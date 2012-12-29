@@ -76,6 +76,7 @@ ViewManager::ViewManager( QObject* parent )
     , m_whatsHotWidget( new WhatsHotWidget() )
     , m_newReleasesWidget( new NewReleasesWidget() )
     , m_recentPlaysWidget( 0 )
+    , m_radioView( 0 )
     , m_currentPage( 0 )
     , m_loaded( false )
 {
@@ -345,6 +346,22 @@ ViewManager::showSuperCollection()
 
     setPage( m_superCollectionView );
     return m_superCollectionView;
+}
+
+
+Tomahawk::ViewPage*
+ViewManager::showRadioPage()
+{
+    if ( !m_radioView )
+    {
+        dynplaylist_ptr playlist = DynamicPlaylist::create( SourceList::instance()->getLocal(), uuid(), QString(), "", SourceList::instance()->getLocal()->friendlyName(), OnDemand, false, QString(), false, false );
+        playlist->setMode( OnDemand );
+
+        m_radioView = new Tomahawk::DynamicQmlWidget( playlist, m_stack );
+    }
+
+    setPage( m_radioView );
+    return m_radioView;
 }
 
 
