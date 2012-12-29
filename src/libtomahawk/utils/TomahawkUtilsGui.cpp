@@ -436,9 +436,9 @@ defaultImagePath( ImageType type, ImageMode mode )
 
         case DefaultTrackImage:
             if ( mode == Grid )
-                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/track-placeholder-grid.svg", size );
+                return QLatin1String(  RESPATH "images/track-placeholder-grid.svg" );
             else if ( mode == RoundedCorners )
-                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/track-icon.svg", size, TomahawkUtils::RoundedCorners );
+                return QLatin1String( RESPATH "images/track-icon.svg" );
             else
                 return QLatin1String( RESPATH "images/track-icon.svg" );
             break;
