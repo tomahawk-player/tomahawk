@@ -162,6 +162,12 @@ PlayableModel::artistData( const artist_ptr& artist, int role ) const
     if ( role != Qt::DisplayRole ) // && role != Qt::ToolTipRole )
         return QVariant();
 
+    if ( role == CoverIDRole )
+    {
+        artist->cover( QSize( 0, 0 ) );
+        return artist->coverId();
+    }
+
     return artist->name();
 }
 
@@ -180,6 +186,12 @@ PlayableModel::albumData( const album_ptr& album, int role ) const
 
     if ( role != Qt::DisplayRole ) // && role != Qt::ToolTipRole )
         return QVariant();
+
+    if ( role == CoverIDRole )
+    {
+        album->cover( QSize( 0, 0 ) );
+        return album->coverId();
+    }
 
     return album->name();
 }
