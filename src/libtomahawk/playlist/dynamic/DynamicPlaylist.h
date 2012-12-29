@@ -85,7 +85,8 @@ public:
                                              GeneratorMode mode,
                                              bool shared,
                                              const QString& type = QString(),
-                                             bool autoLoad = true
+                                             bool autoLoad = true,
+                                             bool temporary = false
                                            );
 
     static void remove( const dynplaylist_ptr& playlist );
@@ -95,7 +96,7 @@ public:
     int mode() const;
     QString type() const;
     geninterface_ptr generator() const;
-    bool autoLoad() const  { return m_autoLoad; }
+    bool autoLoad() const { return m_autoLoad; }
 
     // Creates a new revision from the playlist in memory. Use this is you change the controls or
     // mode of a playlist and want to save it to db/others.
