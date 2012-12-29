@@ -25,7 +25,8 @@ Rectangle {
             verticalCenter:  parent.verticalCenter
         }
         height: parent.height * 0.6
-        width: root.showSearchIcon ? height : 0
+        width: root.showSearchIcon ? height : 1
+        opacity: root.showSearchIcon ? 1 : 0
         smooth: true
         source: "../../images/search-icon.svg"
     }
@@ -66,7 +67,8 @@ Rectangle {
             verticalCenter:  parent.verticalCenter
         }
         height: parent.height * 0.8
-        width: (root.showSearchIcon && root.text.length > 0) ? height : 0
+        width: (root.showSearchIcon && root.text.length > 0) ? height : 1
+        opacity: (root.showSearchIcon && root.text.length > 0) ? 1 : 0
         smooth: true
         source: "../../images/search-box-dismiss-x.svg"
 
