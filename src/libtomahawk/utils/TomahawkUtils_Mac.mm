@@ -18,8 +18,7 @@
 
 #include "mac/FileHelpers.h"
 
-#import <AppKit/NSApplication.h>
-#import <Foundation/Foundation.h>
+#import <Cocoa/Cocoa.h>
 
 #include "TomahawkUtils.h"
 #include "TomahawkUtils_Mac.h"

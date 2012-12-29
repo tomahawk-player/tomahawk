@@ -19,7 +19,6 @@
 
 #include "GridView.h"
 
-#include <QHeaderView>
 #include <QKeyEvent>
 #include <QPainter>
 #include <QScrollBar>
@@ -35,7 +34,6 @@
 #include "AlbumModel.h"
 #include "PlayableModel.h"
 #include "PlayableProxyModelPlaylistInterface.h"
-#include "SingleTrackPlaylistInterface.h"
 #include "ContextMenu.h"
 #include "ViewManager.h"
 #include "MetaPlaylistInterface.h"
@@ -74,7 +72,7 @@ GridView::GridView( QWidget* parent )
     setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
     setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
 
-    setStyleSheet( "QListView { background-color: #323435; }" );
+    setStyleSheet( "QListView { background-color: #272b2e; }" );
 
     setAutoFitItems( true );
     setAutoResize( false );
@@ -82,8 +80,6 @@ GridView::GridView( QWidget* parent )
 
     connect( this, SIGNAL( doubleClicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
     connect( this, SIGNAL( customContextMenuRequested( QPoint ) ), SLOT( onCustomContextMenu( QPoint ) ) );
-
-    connect( proxyModel(), SIGNAL( modelReset() ), SLOT( layoutItems() ) );
 }
 
 
@@ -99,11 +95,17 @@ GridView::setProxyModel( PlayableProxyModel* model )
     if ( m_proxyModel )
     {
         disconnect( m_proxyModel, SIGNAL( filterChanged( QString ) ), this, SLOT( onFilterChanged( QString ) ) );
+        disconnect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), this, SLOT( verifySize() ) );
+        disconnect( m_proxyModel, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), this, SLOT( verifySize() ) );
+        disconnect( proxyModel(), SIGNAL( modelReset() ), this, SLOT( layoutItems() ) );
     }
 
     m_proxyModel = model;
     connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
-
+    connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( verifySize() ) );
+    connect( m_proxyModel, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), SLOT( verifySize() ) );
+    connect( proxyModel(), SIGNAL( modelReset() ), SLOT( layoutItems() ) );
+    
     if ( m_delegate )
         delete m_delegate;
 
@@ -129,23 +131,14 @@ GridView::setModel( QAbstractItemModel* model )
 void
 GridView::setPlayableModel( PlayableModel* model )
 {
-    if ( m_model )
-    {
-        disconnect( model, SIGNAL( rowsInserted( QModelIndex, int, int ) ), this, SLOT( verifySize() ) );
-        disconnect( model, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), this, SLOT( verifySize() ) );
-    }
-
     m_inited = false;
     m_model = model;
 
     if ( m_proxyModel )
     {
         m_proxyModel->setSourcePlayableModel( m_model );
-        m_proxyModel->sort( 0 );
+        m_proxyModel->sort( -1 );
     }
-
-    connect( model, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( verifySize() ) );
-    connect( model, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), SLOT( verifySize() ) );
 
     emit modelChanged();
 }
@@ -239,10 +232,10 @@ GridView::verifySize()
     const int rows = floor( (double)m_model->rowCount( QModelIndex() ) / (double)itemsPerRow );
     const int newHeight = rows * m_delegate->itemSize().height();
 
+    m_proxyModel->setMaxVisibleItems( m_model->rowCount( QModelIndex() ) - overlapRows );
+
     if ( newHeight > 0 )
         setFixedHeight( newHeight );
-
-    m_proxyModel->setMaxVisibleItems( m_model->rowCount( QModelIndex() ) - overlapRows );
 }
 
 

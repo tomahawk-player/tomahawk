@@ -293,11 +293,11 @@ InfoBar::paintEvent( QPaintEvent* event )
 
     QLinearGradient gradient( QPoint( 0, 0 ), QPoint( 0, 1 ) );
     gradient.setCoordinateMode( QGradient::ObjectBoundingMode );
-    gradient.setColorAt( 0.0, QColor( "#615858" ) );
-    gradient.setColorAt( 1.0, QColor( "#231F1F" ) );
+    gradient.setColorAt( 0.0, QColor( "#707070" ) );
+    gradient.setColorAt( 1.0, QColor( "#25292c" ) );
 
     painter.setBrush( gradient );
-    painter.fillRect( event->rect(), gradient );
+    painter.fillRect( rect(), gradient );
 }
 
 

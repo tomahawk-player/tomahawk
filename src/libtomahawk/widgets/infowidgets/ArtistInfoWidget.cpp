@@ -51,7 +51,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->setupUi( widget );
 
     QPalette pal = palette();
-    pal.setColor( QPalette::Window, QColor( "#231F1F" ) );
+    pal.setColor( QPalette::Window, QColor( "##272b2e" ) );
 
     widget->setPalette( pal );
     widget->setAutoFillBackground( true );
@@ -60,10 +60,6 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     TomahawkUtils::unmarginLayout( ui->layoutWidget1->layout() );
     TomahawkUtils::unmarginLayout( ui->layoutWidget2->layout() );
     TomahawkUtils::unmarginLayout( ui->albumHeader->layout() );*/
-
-    ui->artistLabel_2->setVisible( false );
-    ui->biography_2->setVisible( false );
-    ui->cover_2->setVisible( false );
 
     m_albumsModel = new PlayableModel( ui->albums );
     ui->albums->setPlayableModel( m_albumsModel );
@@ -96,8 +92,9 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->topHits->setFrameShape( QFrame::StyledPanel );
     ui->topHits->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
-    m_iconSource = TomahawkUtils::defaultImagePath( TomahawkUtils::DefaultArtistImage, TomahawkUtils::ScaledCover );
-    ui->cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::ScaledCover, QSize( ui->cover->sizeHint() ) ) );
+    m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::Original, QSize( 48, 48 ) );
+    ui->cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::Grid, ui->cover->size() ) );
+    ui->cover->setShowText( true );
 
     QFont f = font();
     f.setPointSize( f.pointSize() + 1 );
@@ -108,15 +105,10 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->biography->setFont( f );
     TomahawkUtils::styleScrollBar( ui->biography->verticalScrollBar() );
 
-    f.setBold( true );
-    f.setPointSize( TomahawkUtils::defaultFontSize() + 8 );
-    ui->artistLabel->setFont( f );
-
     QPalette p = ui->biography->palette();
     p.setColor( QPalette::Foreground, Qt::white );
     p.setColor( QPalette::Text, Qt::gray );
 
-    ui->artistLabel->setPalette( p );
     ui->biography->setPalette( p );
     ui->label->setPalette( p );
     ui->label_2->setPalette( p );
@@ -144,19 +136,19 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->albums->setStyleSheet( "QListView { background-color: transparent; }" );
     ui->albumFrame->setStyleSheet( "QFrame#albumFrame { background-color: transparent; }"
                                "QFrame#albumFrame { "
-                               "border-image: url(" RESPATH "images/scrollbar-vertical-handle.png) 3 3 3 3 stretch stretch;"
+                               "border-image: url(" RESPATH "images/widget-border.png) 3 3 3 3 stretch stretch;"
                                "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }" );
 
     ui->relatedArtists->setStyleSheet( "QListView { background-color: transparent; }" );
     ui->artistFrame->setStyleSheet( "QFrame#artistFrame { background-color: transparent; }"
                                "QFrame#artistFrame { "
-                               "border-image: url(" RESPATH "images/scrollbar-vertical-handle.png) 3 3 3 3 stretch stretch;"
+                               "border-image: url(" RESPATH "images/widget-border.png) 3 3 3 3 stretch stretch;"
                                "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }" );
 
 //    ui->topHits->setStyleSheet( "QTreeView#topHits { background-color: transparent; }" );
     ui->trackFrame->setStyleSheet( "QFrame#trackFrame { background-color: transparent; }"
                                "QFrame#trackFrame { "
-                               "border-image: url(" RESPATH "images/scrollbar-vertical-handle.png) 3 3 3 3 stretch stretch;"
+                               "border-image: url(" RESPATH "images/widget-border.png) 3 3 3 3 stretch stretch;"
                                "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }" );
 
     connect( ui->biography, SIGNAL( anchorClicked( QUrl ) ), SLOT( onBiographyLinkClicked( QUrl ) ) );
@@ -254,7 +246,6 @@ ArtistInfoWidget::load( const artist_ptr& artist )
     connect( m_artist.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
                                 SLOT( onTracksFound( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode ) ) );
 
-    ui->artistLabel->setText( artist->name() );
     ui->cover->setArtist( artist );
 
     m_topHitsModel->startLoading();
@@ -320,7 +311,7 @@ ArtistInfoWidget::onArtistImageUpdated()
     m_iconSource = QLatin1String( "image://albumart/" ) + m_artist->coverId();
     emit pixmapChanged( m_iconSource );
 
-    ui->cover->setPixmap( TomahawkUtils::createRoundedImage( m_artist->cover( ui->cover->sizeHint() ), QSize( 0, 0 ) ) );
+    ui->cover->setPixmap( m_artist->cover( QSize( 0, 0 ) ) );
 }
 
 

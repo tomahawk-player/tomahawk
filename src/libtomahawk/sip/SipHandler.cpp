@@ -29,8 +29,6 @@
     #include <QMessageBox>
 #endif
 
-#include "FuncTimeout.h"
-
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
 #include "network/ControlConnection.h"

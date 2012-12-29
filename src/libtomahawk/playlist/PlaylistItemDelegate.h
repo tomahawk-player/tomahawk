@@ -34,18 +34,22 @@ class DLLEXPORT PlaylistItemDelegate : public QStyledItemDelegate
 Q_OBJECT
 
 public:
-    PlaylistItemDelegate( TrackView* parent = 0, PlayableProxyModel* proxy = 0 );
+    PlaylistItemDelegate( TrackView* parent, PlayableProxyModel* proxy );
 
     void updateRowSize( const QModelIndex& index );
 
+    virtual QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+
+signals:
+    void updateIndex( const QModelIndex& idx );
+
 protected:
+    void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item ) const;
+
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
-    QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     QWidget* createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
 private:
-    void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item ) const;
-
     void paintDetailed( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     void paintShort( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index, bool useAvatars = false ) const;
 

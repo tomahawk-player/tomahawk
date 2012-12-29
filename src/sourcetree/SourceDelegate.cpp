@@ -21,13 +21,16 @@
 
 #include "SourceDelegate.h"
 
+#include <QApplication>
+#include <QPainter>
+#include <QMouseEvent>
+
 #include "items/SourceTreeItem.h"
 #include "items/SourceItem.h"
 #include "items/PlaylistItems.h"
 #include "items/CategoryItems.h"
 #include "items/TemporaryPageItem.h"
 
-#include "utils/TomahawkUtilsGui.h"
 #include "audio/AudioEngine.h"
 #include "AnimationHelper.h"
 #include "Source.h"
@@ -35,10 +38,8 @@
 #include "ActionCollection.h"
 #include "ViewManager.h"
 #include "ContextMenu.h"
-
-#include <QApplication>
-#include <QPainter>
-#include <QMouseEvent>
+#include "utils/TomahawkUtilsGui.h"
+#include "utils/Logger.h"
 
 
 #define TREEVIEW_INDENT_ADD 12
@@ -191,6 +192,7 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
 
     bool isPlaying = !( colItem->source()->currentTrack().isNull() );
     QString desc = colItem->source()->textStatus();
+    QColor descColor = QColor( "#8d8d8d" );
     if ( colItem->source().isNull() )
         desc = tr( "All available tracks" );
 
@@ -249,6 +251,9 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
         }
         else
             m_lockRects.remove( index );
+
+        if ( isPlaying )
+            descColor = Qt::black;
     }
 
     if ( m_trackHovered == index )
@@ -261,6 +266,7 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
     text = painter->fontMetrics().elidedText( desc, Qt::ElideRight, textRect.width() - 8 );
     QTextOption to( Qt::AlignVCenter );
     to.setWrapMode( QTextOption::NoWrap );
+    painter->setPen( descColor );
     painter->drawText( textRect, text, to );
 
     if ( colItem->source() && colItem->source()->currentTrack() )

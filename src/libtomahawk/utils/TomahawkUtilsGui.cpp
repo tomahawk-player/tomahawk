@@ -193,7 +193,7 @@ drawBackgroundAndNumbers( QPainter* painter, const QString& text, const QRect& f
 
     painter->setPen( origpen );
     painter->setPen( Qt::white );
-    painter->drawText( figRect.adjusted( -5, 0, 6, 0 ), text, QTextOption( Qt::AlignCenter ) );
+    painter->drawText( figRect.adjusted( -5, 2, 6, 0 ), text, QTextOption( Qt::AlignCenter ) );
 
     painter->restore();
 }
@@ -436,7 +436,9 @@ defaultImagePath( ImageType type, ImageMode mode )
 
         case DefaultTrackImage:
             if ( mode == Grid )
-                return QLatin1String( RESPATH "images/track-placeholder-grid.svg" );
+                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/track-placeholder-grid.svg", size );
+            else if ( mode == RoundedCorners )
+                pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/track-icon.svg", size, TomahawkUtils::RoundedCorners );
             else
                 return QLatin1String( RESPATH "images/track-icon.svg" );
             break;

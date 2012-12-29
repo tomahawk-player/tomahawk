@@ -24,8 +24,7 @@
 
 #include "qocoa_mac.h"
 
-#import <Foundation/NSAutoreleasePool.h>
-#import <AppKit/NSToolbar.h>
+#import <Cocoa/Cocoa.h>
 
 #include <QCoreApplication>
 #include <QIcon>

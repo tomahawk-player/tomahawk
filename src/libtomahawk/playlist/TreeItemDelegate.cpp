@@ -45,6 +45,35 @@ TreeItemDelegate::TreeItemDelegate( TreeView* parent, TreeProxyModel* proxy )
 }
 
 
+QSize
+TreeItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
+{
+    QSize size = QStyledItemDelegate::sizeHint( option, index );
+
+    if ( index.isValid() )
+    {
+        PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
+        if ( item )
+        {
+            if ( item->album() )
+            {
+                size.setHeight( option.fontMetrics.height() * 3 );
+                return size;
+            }
+            else if ( item->query() || item->result() )
+            {
+                size.setHeight( option.fontMetrics.height() * 1.6 );
+                return size;
+            }
+        }
+    }
+    
+    // artist per default
+    size.setHeight( option.fontMetrics.height() * 4 );
+    return size;
+}
+
+
 void
 TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
@@ -161,13 +190,13 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     {
         if ( !item->album().isNull() )
         {
-            m_pixmaps.insert( index, QSharedPointer< Tomahawk::PixmapDelegateFader >( new Tomahawk::PixmapDelegateFader( item->album(), r.size(), TomahawkUtils::ScaledCover, false ) ) );
+            m_pixmaps.insert( index, QSharedPointer< Tomahawk::PixmapDelegateFader >( new Tomahawk::PixmapDelegateFader( item->album(), r.size(), TomahawkUtils::Original, false ) ) );
             _detail::Closure* closure = NewClosure( m_pixmaps[ index ], SIGNAL( repaintRequest() ), const_cast<TreeItemDelegate*>(this), SLOT( doUpdateIndex( const QPersistentModelIndex& ) ), QPersistentModelIndex( index ) );
             closure->setAutoDelete( false );
         }
         else if ( !item->artist().isNull() )
         {
-            m_pixmaps.insert( index, QSharedPointer< Tomahawk::PixmapDelegateFader >( new Tomahawk::PixmapDelegateFader( item->artist(), r.size(), TomahawkUtils::ScaledCover, false ) ) );
+            m_pixmaps.insert( index, QSharedPointer< Tomahawk::PixmapDelegateFader >( new Tomahawk::PixmapDelegateFader( item->artist(), r.size(), TomahawkUtils::Original, false ) ) );
             _detail::Closure* closure = NewClosure( m_pixmaps[ index ], SIGNAL( repaintRequest() ), const_cast<TreeItemDelegate*>(this), SLOT( doUpdateIndex( const QPersistentModelIndex& ) ), QPersistentModelIndex( index ) );
             closure->setAutoDelete( false );
         }

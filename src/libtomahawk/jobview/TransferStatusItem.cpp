@@ -85,9 +85,9 @@ TransferStatusItem::icon() const
         return QPixmap();
 
     if ( m_stream.data()->type() == StreamConnection::SENDING )
-        return m_parent->rxPixmap();
-    else
         return m_parent->txPixmap();
+    else
+        return m_parent->rxPixmap();
 }
 
 

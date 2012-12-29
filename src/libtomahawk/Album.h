@@ -96,7 +96,7 @@ private:
 
     artist_ptr m_artist;
 
-    bool m_coverLoaded;
+    mutable bool m_coverLoaded;
     mutable bool m_coverLoading;
     mutable QString m_uuid;
     mutable QString m_coverId;

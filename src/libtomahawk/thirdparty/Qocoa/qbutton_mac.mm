@@ -24,9 +24,7 @@ THE SOFTWARE.
 
 #include "qocoa_mac.h"
 
-#import "Foundation/NSAutoreleasePool.h"
-#import "AppKit/NSButton.h"
-#import "AppKit/NSFont.h"
+#import <Cocoa/Cocoa.h>
 
 class QButtonPrivate : public QObject
 {

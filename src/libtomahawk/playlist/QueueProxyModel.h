@@ -36,6 +36,7 @@ public:
     virtual ~QueueProxyModel();
 
 private slots:
+    void onIndexChanged( const QModelIndex& index );
     void onIndexActivated( const QModelIndex& index );
     void onPlaybackStarted( const Tomahawk::result_ptr& result );
 };

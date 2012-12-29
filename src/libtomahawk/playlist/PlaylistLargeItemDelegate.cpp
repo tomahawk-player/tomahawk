@@ -44,7 +44,7 @@ using namespace Tomahawk;
 
 
 PlaylistLargeItemDelegate::PlaylistLargeItemDelegate( DisplayMode mode, TrackView* parent, PlayableProxyModel* proxy )
-    : QStyledItemDelegate( (QObject*)parent )
+    : PlaylistItemDelegate( parent, proxy )
     , m_view( parent )
     , m_model( proxy )
     , m_mode( mode )
@@ -58,9 +58,8 @@ PlaylistLargeItemDelegate::PlaylistLargeItemDelegate( DisplayMode mode, TrackVie
     m_bottomOption = QTextOption( Qt::AlignBottom );
     m_bottomOption.setWrapMode( QTextOption::NoWrap );
 
-    connect( proxy, SIGNAL( modelReset() ), this, SLOT( modelChanged() ) );
-    if ( PlaylistView* plView = qobject_cast< PlaylistView* >( parent ) )
-        connect( plView, SIGNAL( modelChanged() ), this, SLOT( modelChanged() ) );
+    connect( proxy, SIGNAL( modelReset() ), SLOT( modelChanged() ) );
+    connect( parent, SIGNAL( modelChanged() ), SLOT( modelChanged() ) );
 }
 
 
@@ -79,28 +78,11 @@ PlaylistLargeItemDelegate::sizeHint( const QStyleOptionViewItem& option, const Q
 }
 
 
-QWidget*
-PlaylistLargeItemDelegate::createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const
-{
-    Q_UNUSED( parent );
-    Q_UNUSED( option );
-    Q_UNUSED( index );
-    return 0;
-}
-
-
-void
-PlaylistLargeItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item ) const
-{
-    initStyleOption( option, index );
-
-    TomahawkUtils::prepareStyleOption( option, index, item );
-}
-
-
 void
 PlaylistLargeItemDelegate::drawRichText( QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, int flags, QTextDocument& text ) const
 {
+    Q_UNUSED( option );
+
     text.setPageSize( QSize( rect.width(), QWIDGETSIZE_MAX ) );
     QAbstractTextDocumentLayout* layout = text.documentLayout();
 
@@ -142,27 +124,25 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
     const QString album = q->album();
     const QString track = q->track();
     int duration = q->duration();
-    QPixmap avatar;
     QString lowerText;
 
     QSize avatarSize( 32, 32 );
     source_ptr source = item->query()->playedBy().first;
     if ( m_mode == RecentlyPlayed && !source.isNull() )
     {
-        avatar = source->avatar( TomahawkUtils::RoundedCorners, avatarSize );
         QString playtime = TomahawkUtils::ageToString( QDateTime::fromTime_t( item->query()->playedBy().second ), true );
 
         if ( source == SourceList::instance()->getLocal() )
-            lowerText = QString( tr( "played %1 by you" ) ).arg( playtime );
+            lowerText = QString( tr( "played %1 by you", "e.g. played 3 hours ago by you" ) ).arg( playtime );
         else
-            lowerText = QString( tr( "played %1 by %2" ) ).arg( playtime ).arg( source->friendlyName() );
+            lowerText = QString( tr( "played %1 by %2", "e.g. played 3 hours ago by SomeSource" ) ).arg( playtime ).arg( source->friendlyName() );
     }
 
     if ( m_mode == LatestAdditions && item->query()->numResults() )
     {
         QString playtime = TomahawkUtils::ageToString( QDateTime::fromTime_t( item->query()->results().first()->modificationTime() ), true );
 
-        lowerText = QString( tr( "added %1" ) ).arg( playtime );
+        lowerText = QString( tr( "added %1", "e.g. added 3 hours ago" ) ).arg( playtime );
     }
 
     if ( m_mode == LovedTracks )
@@ -190,16 +170,13 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
 
         if ( !m_pixmaps.contains( index ) )
         {
-            m_pixmaps.insert( index, QSharedPointer< Tomahawk::PixmapDelegateFader >( new Tomahawk::PixmapDelegateFader( item->query(), pixmapRect.size(), TomahawkUtils::ScaledCover, false ) ) );
+            m_pixmaps.insert( index, QSharedPointer< Tomahawk::PixmapDelegateFader >( new Tomahawk::PixmapDelegateFader( item->query(), pixmapRect.size(), TomahawkUtils::RoundedCorners, false ) ) );
             _detail::Closure* closure = NewClosure( m_pixmaps[ index ], SIGNAL( repaintRequest() ), const_cast<PlaylistLargeItemDelegate*>(this), SLOT( doUpdateIndex( const QPersistentModelIndex& ) ), QPersistentModelIndex( index ) );
             closure->setAutoDelete( false );
         }
 
         const QPixmap pixmap = m_pixmaps[ index ]->currentPixmap();
         painter->drawPixmap( pixmapRect, pixmap );
-
-        if ( !avatar.isNull() )
-            painter->drawPixmap( avatarRect, avatar );
 
         QFont boldFont = opt.font;
         boldFont.setPointSize( TomahawkUtils::defaultFontSize() + 2 );
@@ -215,7 +192,7 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         QFont smallFont = opt.font;
         smallFont.setPointSize( TomahawkUtils::defaultFontSize() - 1 );
 
-        r.adjust( pixmapRect.width() + 12, 1, - 16 - avatar.width(), 0 );
+        r.adjust( pixmapRect.width() + 12, 1, - 16, 0 );
         QRect leftRect = r.adjusted( 0, 0, -48, 0 );
         QRect rightRect = r.adjusted( r.width() - smallBoldFontMetrics.width( TomahawkUtils::timeToString( duration ) ), 0, 0, 0 );
 
@@ -226,9 +203,9 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         painter->setFont( smallFont );
         QTextDocument textDoc;
         if ( album.isEmpty() )
-            textDoc.setHtml( tr( "by <b>%1</b>" ).arg( artist ) );
+            textDoc.setHtml( tr( "by <b>%1</b>", "e.g. by SomeArtist" ).arg( artist ) );
         else
-            textDoc.setHtml( tr( "by <b>%1</b> on <b>%2</b>" ).arg( artist ).arg( album ) );
+            textDoc.setHtml( tr( "by <b>%1</b> on <b>%2</b>", "e.g. by SomeArtist on SomeAlbum" ).arg( artist ).arg( album ) );
         textDoc.setDocumentMargin( 0 );
         textDoc.setDefaultFont( painter->font() );
         textDoc.setDefaultTextOption( m_topOption );

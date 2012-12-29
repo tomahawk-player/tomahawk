@@ -39,7 +39,7 @@ public:
     virtual ~ZeroconfFactory();
 
     virtual QString factoryId() const { return "zeroconfaccount"; }
-    virtual QString prettyName() const { return "Local Network"; }
+    virtual QString prettyName() const { return tr( "Local Network" ); }
     QString description() const { return tr( "Automatically connect to Tomahawks on the local network" ); }
     virtual bool isUnique() const { return true; }
     AccountTypes types() const { return AccountTypes( SipType ); };

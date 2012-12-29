@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string notr="true" extracomment="not translatable because not shown to the user">Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -66,7 +66,7 @@
           </size>
          </property>
          <property name="text">
-          <string>Cover</string>
+          <string notr="true" extracomment="not translatable because is placeholder text">Cover</string>
          </property>
         </widget>
        </item>
@@ -123,7 +123,7 @@
        <item>
         <widget class="QLabel" name="charsLeftLabel">
          <property name="text">
-          <string>TextLabel</string>
+          <string notr="true" extracomment="not translatable because is placeholder text">TextLabel</string>
          </property>
         </widget>
        </item>

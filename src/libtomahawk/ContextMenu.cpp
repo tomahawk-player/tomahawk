@@ -109,10 +109,13 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
 
     if ( m_supportedActions & ActionPage && itemCount() == 1 )
     {
-        m_sigmap->setMapping( addAction( tr( "&Go to \"%1\"" ).arg( m_queries.first()->track() ) ), ActionTrackPage );
+        m_sigmap->setMapping( addAction( ImageRegistry::instance()->icon( RESPATH "images/track-icon.svg" ),
+                                         tr( "&Go to \"%1\"" ).arg( m_queries.first()->track() ) ), ActionTrackPage );
         if ( !m_queries.first()->album().isEmpty() )
-            m_sigmap->setMapping( addAction( tr( "Go to \"%1\"" ).arg( m_queries.first()->album() ) ), ActionAlbumPage );
-        m_sigmap->setMapping( addAction( tr( "Go to \"%1\"" ).arg( m_queries.first()->artist() ) ), ActionArtistPage );
+            m_sigmap->setMapping( addAction( ImageRegistry::instance()->icon( RESPATH "images/album-icon.svg" ),
+                                             tr( "Go to \"%1\"" ).arg( m_queries.first()->album() ) ), ActionAlbumPage );
+        m_sigmap->setMapping( addAction( ImageRegistry::instance()->icon( RESPATH "images/artist-icon.svg" ),
+                                         tr( "Go to \"%1\"" ).arg( m_queries.first()->artist() ) ), ActionArtistPage );
     }
 
     addSeparator();
@@ -164,8 +167,10 @@ ContextMenu::setAlbums( const QList<Tomahawk::album_ptr>& albums )
 
     if ( m_supportedActions & ActionPage && itemCount() == 1 )
     {
-        m_sigmap->setMapping( addAction( tr( "&Go to \"%1\"" ).arg( m_albums.first()->name() ) ), ActionAlbumPage );
-        m_sigmap->setMapping( addAction( tr( "Go to \"%1\"" ).arg( m_albums.first()->artist()->name() ) ), ActionArtistPage );
+        m_sigmap->setMapping( addAction( ImageRegistry::instance()->icon( RESPATH "images/album-icon.svg" ),
+                                         tr( "&Go to \"%1\"" ).arg( m_albums.first()->name() ) ), ActionAlbumPage );
+        m_sigmap->setMapping( addAction( ImageRegistry::instance()->icon( RESPATH "images/artist-icon.svg" ),
+                                         tr( "Go to \"%1\"" ).arg( m_albums.first()->artist()->name() ) ), ActionArtistPage );
     }
 
     //m_sigmap->setMapping( addAction( tr( "&Add to Playlist" ) ), ActionAddToPlaylist );
@@ -210,7 +215,8 @@ ContextMenu::setArtists( const QList<Tomahawk::artist_ptr>& artists )
     addSeparator();
 
     if ( m_supportedActions & ActionPage && itemCount() == 1 )
-        m_sigmap->setMapping( addAction( tr( "&Go to \"%1\"" ).arg( m_artists.first()->name() ) ), ActionArtistPage );
+        m_sigmap->setMapping( addAction( ImageRegistry::instance()->icon( RESPATH "images/artist-icon.svg" ),
+                                         tr( "&Go to \"%1\"" ).arg( m_artists.first()->name() ) ), ActionArtistPage );
 
     //m_sigmap->setMapping( addAction( tr( "&Add to Playlist" ) ), ActionAddToPlaylist );
 

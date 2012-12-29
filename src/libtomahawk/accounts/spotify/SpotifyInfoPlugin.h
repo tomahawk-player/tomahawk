@@ -52,7 +52,7 @@ protected slots:
     virtual void init() {}
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );
     virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
-    virtual void pushInfo( Tomahawk::InfoSystem::InfoPushData  ) {}
+    virtual void pushInfo( Tomahawk::InfoSystem::InfoPushData  );
 
 private slots:
     void albumIdLookupFinished( QNetworkReply* reply, const Tomahawk::InfoSystem::InfoRequestData& requestData );
@@ -61,7 +61,7 @@ private slots:
 private:
     void dataError( InfoRequestData );
     void trackListResult( const QStringList& trackNameList, const Tomahawk::InfoSystem::InfoRequestData& requestData );
-
+    void sendLoveSong( const InfoType type, QVariant input );
     QWeakPointer< Tomahawk::Accounts::SpotifyAccount > m_account;
 };
 

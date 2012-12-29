@@ -175,5 +175,7 @@
         <file>data/images/station-artist.svg</file>
         <file>data/images/station-genre.svg</file>
         <file>data/images/station-year.svg</file>
+        <file>data/images/tweet.svg</file>
+        <file>data/images/widget-border.png</file>
     </qresource>
 </RCC>

@@ -57,6 +57,9 @@ public:
     virtual void loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEntries = true );
     bool isTemporary() const;
 
+    bool acceptPlayableQueriesOnly() const { return m_acceptPlayableQueriesOnly; }
+    void setAcceptPlayableQueriesOnly( bool b ) { m_acceptPlayableQueriesOnly = b; }
+
 public slots:
     virtual void clear();
 
@@ -95,6 +98,7 @@ private:
     bool m_isTemporary;
     bool m_changesOngoing;
     bool m_isLoading;
+    bool m_acceptPlayableQueriesOnly;
     QList< Tomahawk::Query* > m_waitingForResolved;
     QStringList m_waitForRevision;
 

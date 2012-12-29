@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>InfoBar</string>
+   <string notr="true" extracomment="not translatable because not shown to the user">InfoBar</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>

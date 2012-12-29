@@ -65,17 +65,15 @@ PlaylistItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModel
 {
     QSize size = QStyledItemDelegate::sizeHint( option, index );
 
-    if ( index.isValid() )
     {
-        int style = index.data( PlayableProxyModel::StyleRole ).toInt();
-        if ( style == PlayableProxyModel::Short || style == PlayableProxyModel::ShortWithAvatars )
+        if ( m_model->style() == PlayableProxyModel::Short || m_model->style() == PlayableProxyModel::ShortWithAvatars )
         {
             int rowHeight = option.fontMetrics.height() + 8;
             size.setHeight( rowHeight * 2 );
         }
-        else if ( style == PlayableProxyModel::Detailed )
+        else if ( m_model->style() == PlayableProxyModel::Detailed )
         {
-            int rowHeight = option.fontMetrics.height() * 1.4;
+            int rowHeight = option.fontMetrics.height() * 1.6;
             size.setHeight( rowHeight );
         }
     }
@@ -190,7 +188,7 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
         if ( pixmap.isNull() )
         {
             if ( !useAvatars )
-                pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::ScaledCover, ir.size() );
+                pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::Original, ir.size() );
             else
                 pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultSourceAvatar, TomahawkUtils::RoundedCorners, ir.size() );
         }
@@ -242,11 +240,11 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
 
     painter->save();
 
-    if ( index.column() == PlayableModel::Score )
+/*    if ( index.column() == PlayableModel::Score )
     {
         QColor barColor( 167, 183, 211 ); // This matches the sidebar (sourcetreeview.cpp:672)
-        if ( opt.state & QStyle::State_Selected )
-            painter->setPen( opt.palette.brightText().color() );
+        if ( opt.state & QStyle::State_Selected && !item->isPlaying() )
+            painter->setPen( Qt::white );
         else
             painter->setPen( barColor );
 
@@ -257,14 +255,14 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
         int fillerWidth = (int)( index.data().toFloat() * (float)fillR.width() );
         fillR.adjust( 0, 0, -( fillR.width() - fillerWidth ), 0 );
 
-        if ( opt.state & QStyle::State_Selected )
-            painter->setBrush( opt.palette.brightText().color() );
+        if ( opt.state & QStyle::State_Selected && !item->isPlaying() )
+            painter->setBrush( TomahawkUtils::Colors::NOW_PLAYING_ITEM.lighter() );
         else
             painter->setBrush( barColor );
 
         painter->drawRect( fillR );
     }
-    else if ( item->isPlaying() )
+    else */ if ( item->isPlaying() )
     {
         QRect r = opt.rect.adjusted( 3, 0, 0, 0 );
 

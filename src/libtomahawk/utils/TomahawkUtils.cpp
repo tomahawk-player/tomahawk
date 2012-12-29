@@ -18,12 +18,12 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "utils/TomahawkUtils.h"
+
 #include "TomahawkVersion.h"
 #include "config.h"
 #include "TomahawkSettings.h"
 
-#include "utils/TomahawkUtils.h"
-#include "utils/Logger.h"
 #include "Source.h"
 #include "BinaryExtractWorker.h"
 #include "SharedTimeLine.h"
@@ -35,7 +35,6 @@
 #include <quazip.h>
 #include <quazipfile.h>
 
-
 #include <QNetworkConfiguration>
 #include <QNetworkAccessManager>
 #include <QNetworkProxy>
@@ -46,6 +45,7 @@
 #include <QMutex>
 #include <QCryptographicHash>
 #include <QProcess>
+#include <QTranslator>
 
 #ifdef Q_OS_WIN
     #include <windows.h>
@@ -60,6 +60,8 @@
 #ifdef QCA2_FOUND
     #include <QtCrypto>
 #endif
+
+#include "Logger.h"
 
 namespace TomahawkUtils
 {
@@ -771,6 +773,46 @@ crash()
 {
     volatile int* a = (int*)(NULL);
     *a = 1;
+}
+
+
+void
+installTranslator( QObject* parent )
+{
+#if QT_VERSION >= 0x040800
+    QString locale = QLocale::system().uiLanguages().first().replace( "-", "_" );
+#else
+    QString locale = QLocale::system().name();
+#endif
+    if ( locale == "C" )
+        locale = "en";
+
+    // Tomahawk translations
+    QTranslator* translator = new QTranslator( parent );
+    if ( translator->load( QString( ":/lang/tomahawk_" ) + locale ) )
+    {
+        tDebug( LOGVERBOSE ) << "Translation: Tomahawk: Using system locale:" << locale;
+    }
+    else
+    {
+        tDebug( LOGVERBOSE ) << "Translation: Tomahawk: Using default locale, system locale one not found:" << locale;
+        translator->load( QString( ":/lang/tomahawk_en" ) );
+    }
+
+    QCoreApplication::installTranslator( translator );
+
+    // Qt translations
+    translator = new QTranslator( parent );
+    if ( translator->load( QString( ":/lang/qt_" ) + locale ) )
+    {
+        tDebug( LOGVERBOSE ) << "Translation: Qt: Using system locale:" << locale;
+    }
+    else
+    {
+        tDebug( LOGVERBOSE ) << "Translation: Qt: Using default locale, system locale one not found:" << locale;
+    }
+
+    QCoreApplication::installTranslator( translator );
 }
 
 
