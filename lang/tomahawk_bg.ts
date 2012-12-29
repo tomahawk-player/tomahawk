@@ -453,9 +453,11 @@ connect and stream from you?</source>
     <message utf8="true">
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="80"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Sorry!&lt;/span&gt; Tomahawk crashed. Please tell us about it! Tomahawk has created an error report for you that can help improve the stability in the future. You can now send this report directly to the Tomahawk developers.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Извинявай!&lt;/span&gt; Tomahawk заби. 
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;
+Извинявай!&lt;/span&gt; 
+Tomahawk заби. 
 Моля уведоми ни  за този слуай! 
-Tomahaw създаде доклад относно това и изпращайки го, ще помогнеш за по-добрата работа на приложението за в бъдеще.
+Tomahawk създаде доклад относно това и изпращайки го, ще помогнеш за по-добрата работа на приложението за в бъдеще.
 Изпрати директно до разработчиците на Tomahawk&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
@@ -1020,42 +1022,42 @@ Tomahaw създаде доклад относно това и изпращай�
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Accuracy</source>
-        <translation type="unfinished"/>
+        <translation>Съвпадение</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="241"/>
         <source>Perfect match</source>
-        <translation type="unfinished"/>
+        <translation>Абсолютно</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="243"/>
         <source>Very good match</source>
-        <translation type="unfinished"/>
+        <translation>Много добро</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="245"/>
         <source>Good match</source>
-        <translation type="unfinished"/>
+        <translation>Добро</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="247"/>
         <source>Vague match</source>
-        <translation type="unfinished"/>
+        <translation>Горе-долу</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="249"/>
         <source>Bad match</source>
-        <translation type="unfinished"/>
+        <translation>Лошо</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="251"/>
         <source>Very bad match</source>
-        <translation type="unfinished"/>
+        <translation>Много лошо</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="253"/>
         <source>Not available</source>
-        <translation type="unfinished"/>
+        <translation>Няма съвпадение</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
@@ -4250,7 +4252,10 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="686"/>
         <source>I&apos;m sorry -- I&apos;m just an automatic presence used by Tomahawk Player (http://gettomahawk.com). If you are getting this message, the person you are trying to reach is probably not signed on, so please try again later!</source>
-        <translation>Извинявай.. Аз съм режимът за автоматични отговори изпълзван от Tomahawk. ( http://gettomahawk.com ) Щом получаваш това съобщение, този с който се опитваш да се свържеш вероятно не е на линия. Моля, опитай отново по-късно.</translation>
+        <translation>Извинявай..
+ Аз съм режимът за автоматични отговори изпълзван от Tomahawk. 
+(http://gettomahawk.com) 
+Щом получаваш това съобщение, този с когото се опитваш да се свържеш вероятно не е на линия, така че опитай отново по-късно.</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="780"/>
