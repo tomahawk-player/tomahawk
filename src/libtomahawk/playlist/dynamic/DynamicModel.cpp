@@ -154,27 +154,30 @@ DynamicModel::trackResolveFinished( bool success )
 
     Query* q = qobject_cast<Query*>( sender() );
 
-    tDebug() << "Got resolveFinished in DynamicModel" << q->track() << q->artist();
+    tDebug() << "Got resolveFinished in DynamicModel" << q->toString();
     if ( !m_waitingFor.contains( q ) )
         return;
 
     if ( !q->playable() )
     {
-        tDebug() << "Got not playable or resolved track:" << q->track() << q->artist() << m_lastResolvedRow << m_currentAttempts;
+        tDebug() << "Got not playable or resolved track:" << q->toString() << m_lastResolvedRow << m_currentAttempts;
         m_currentAttempts++;
 
         int curAttempts = m_startingAfterFailed ? m_currentAttempts - 20 : m_currentAttempts; // if we just failed, m_currentAttempts includes those failures
-        if( curAttempts < 20 ) {
+        if ( curAttempts < 20 )
+        {
             qDebug() << "FETCHING MORE!";
             m_playlist->generator()->fetchNext();
-        } else {
+        }
+        else
+        {
             m_startingAfterFailed = true;
             emit trackGenerationFailure( tr( "Could not find a playable track.\n\nPlease change the filters or try again." ) );
         }
     }
     else
     {
-        qDebug() << "Got successful resolved track:" << q->track() << q->artist() << m_lastResolvedRow << m_currentAttempts;
+        qDebug() << "Got successful resolved track:" << q->toString() << m_lastResolvedRow << m_currentAttempts;
 
         if ( m_currentAttempts > 0 ) {
             qDebug() << "EMITTING AN ASK FOR COLLAPSE:" << m_lastResolvedRow << m_currentAttempts;
