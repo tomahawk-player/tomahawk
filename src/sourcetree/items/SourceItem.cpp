@@ -97,7 +97,7 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
     }
     if ( !stations.isEmpty() || source->isLocal() )
     {
-        m_stations = new CategoryItem( model(), this, SourcesModel::StationsCategory, source->isLocal() );
+        m_stations = new CategoryItem( model(), this, SourcesModel::StationsCategory, /* source->isLocal() */ false );
         onStationsAdded( stations );
     }
 
@@ -431,7 +431,7 @@ SourceItem::onStationsAdded( const QList< dynplaylist_ptr >& stations )
         // add the category too
         int cur = children().count();
         beginRowsAdded( cur, cur );
-        m_stations = new CategoryItem( model(), this, SourcesModel::StationsCategory, source()->isLocal() );
+        m_stations = new CategoryItem( model(), this, SourcesModel::StationsCategory, /* source()->isLocal() */ false );
         endRowsAdded();
     }
 
