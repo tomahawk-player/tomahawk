@@ -293,23 +293,28 @@ SourcesModel::appendGroups()
     sc->setSortValue( 1 );
 
     // browse section
+    GenericPageItem* radio = new GenericPageItem( this, browse, tr( "Radio" ), QIcon( RESPATH "images/station.png" ),
+                                                   boost::bind( &ViewManager::showRadioPage, ViewManager::instance() ),
+                                                   boost::bind( &ViewManager::recentPlaysWidget, ViewManager::instance() ) );
+    radio->setSortValue( 2 );
+
     LovedTracksItem* loved = new LovedTracksItem( this, browse );
-    loved->setSortValue( 2 );
+    loved->setSortValue( 3 );
 
     GenericPageItem* recent = new GenericPageItem( this, browse, tr( "Recently Played" ), ImageRegistry::instance()->icon( RESPATH "images/recently-played.svg" ),
                                                    boost::bind( &ViewManager::showRecentPlaysPage, ViewManager::instance() ),
                                                    boost::bind( &ViewManager::recentPlaysWidget, ViewManager::instance() ) );
-    recent->setSortValue( 3 );
+    recent->setSortValue( 4 );
 
     GenericPageItem* hot = new GenericPageItem( this, browse, tr( "Charts" ), ImageRegistry::instance()->icon( RESPATH "images/charts.svg" ),
                                                 boost::bind( &ViewManager::showWhatsHotPage, ViewManager::instance() ),
                                                 boost::bind( &ViewManager::whatsHotWidget, ViewManager::instance() ) );
-    hot->setSortValue( 4 );
+    hot->setSortValue( 5 );
 
     GenericPageItem* newReleases = new GenericPageItem( this, browse, tr( "New Releases" ), ImageRegistry::instance()->icon( RESPATH "images/new-releases.svg" ),
                                                 boost::bind( &ViewManager::showNewReleasesPage, ViewManager::instance() ),
                                                 boost::bind( &ViewManager::newReleasesWidget, ViewManager::instance() ) );
-    newReleases->setSortValue( 5 );
+    newReleases->setSortValue( 6 );
 
     m_collectionsGroup = new GroupItem( this, m_rootItem, tr( "Friends" ), 4 );
 
