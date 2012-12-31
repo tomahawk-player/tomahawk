@@ -941,30 +941,29 @@ LastFmInfoPlugin::onAuthenticated()
         return;
     }
 
-    if ( authJob->error() == QNetworkReply::NoError )
+    lastfm::XmlQuery lfm;
+    lfm.parse( authJob->readAll() );
+    if ( authJob->error() == QNetworkReply::NoError && lfm.attribute("status") == "ok" )
     {
-        lastfm::XmlQuery lfm;
-        lfm.parse( authJob->readAll() );
+        lastfm::ws::SessionKey = lfm[ "session" ][ "key" ].text();
+        m_account.data()->setSessionKey( lastfm::ws::SessionKey.toLatin1() );
 
-        if ( lfm.children( "error" ).size() > 0 )
-        {
-            tLog() << "Error from authenticating with Last.fm service:" << lfm.text();
-            m_account.data()->setSessionKey( QByteArray() );
-        }
-        else
-        {
-            lastfm::ws::SessionKey = lfm[ "session" ][ "key" ].text();
-
-            m_account.data()->setSessionKey( lastfm::ws::SessionKey.toLatin1() );
-
-//            qDebug() << "Got session key from last.fm";
-            if ( m_account.data()->scrobble() )
-                m_scrobbler = new lastfm::Audioscrobbler( "thk" );
-        }
+        if ( m_account.data()->scrobble() )
+            m_scrobbler = new lastfm::Audioscrobbler( "thk" );
     }
     else
     {
-        tLog() << "Got error in Last.fm authentication job:" << authJob->errorString();
+        m_account.data()->setSessionKey( QByteArray() );
+
+        QString error = "Got error in Last.fm authentication job";
+        if ( lfm.children( "error" ).size() > 0 )
+            error += ": " + lfm.text();
+        else if ( authJob->error() != QNetworkReply::NoError )
+            error += ": " + authJob->errorString();
+        else
+            error += ".";
+
+        tLog() << error.simplified();
     }
 
     authJob->deleteLater();
