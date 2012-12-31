@@ -87,7 +87,8 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/widgets/AccountWidget.cpp" line="125"/>
         <source>Invite</source>
-        <translation type="unfinished"/>
+        <translation>Пригласить
+</translation>
     </message>
 </context>
 <context>
@@ -95,7 +96,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/widgets/AccountsToolButton.cpp" line="88"/>
         <source>Configure Accounts</source>
-        <translation type="unfinished"/>
+        <translation>Настройки аккаунта</translation>
     </message>
 </context>
 <context>
@@ -200,7 +201,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="113"/>
         <source>Zoom</source>
-        <translation type="unfinished"/>
+        <translation>Увеличить</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="116"/>
@@ -363,7 +364,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/AudioControls.cpp" line="282"/>
         <source>Love</source>
-        <translation type="unfinished"/>
+        <translation>Любимый</translation>
     </message>
 </context>
 <context>
@@ -2074,7 +2075,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="89"/>
         <source>Google Address:</source>
-        <translation type="unfinished"/>
+        <translation>Адрес Google:</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="90"/>
