@@ -547,7 +547,7 @@ de se connecter et streamer de vous?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="59"/>
         <source>Steer this station:</source>
-        <translation type="unfinished"/>
+        <translation>Modifier cette station :</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="82"/>
@@ -632,12 +632,12 @@ de se connecter et streamer de vous?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="113"/>
         <source>Apply steering command</source>
-        <translation type="unfinished"/>
+        <translation>Appliquer la modification</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="119"/>
         <source>Reset all steering commands</source>
-        <translation type="unfinished"/>
+        <translation>Annuler toutes les modifications</translation>
     </message>
 </context>
 <context>
@@ -1017,42 +1017,42 @@ de se connecter et streamer de vous?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Accuracy</source>
-        <translation type="unfinished"/>
+        <translation>Précision</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="241"/>
         <source>Perfect match</source>
-        <translation type="unfinished"/>
+        <translation>Correspondance parfaite</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="243"/>
         <source>Very good match</source>
-        <translation type="unfinished"/>
+        <translation>Très bonne correspondance</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="245"/>
         <source>Good match</source>
-        <translation type="unfinished"/>
+        <translation>Bonne correspondance</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="247"/>
         <source>Vague match</source>
-        <translation type="unfinished"/>
+        <translation>Vague correspondance</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="249"/>
         <source>Bad match</source>
-        <translation type="unfinished"/>
+        <translation>Mauvaise correspondance</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="251"/>
         <source>Very bad match</source>
-        <translation type="unfinished"/>
+        <translation>Très mauvaise correspondance</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="253"/>
         <source>Not available</source>
-        <translation type="unfinished"/>
+        <translation>Indisponible</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
@@ -1328,13 +1328,13 @@ de se connecter et streamer de vous?</translation>
         <location filename="../src/libtomahawk/utils/GuiHelpers.cpp" line="102"/>
         <location filename="../src/libtomahawk/utils/GuiHelpers.cpp" line="113"/>
         <source>%1 Config</source>
-        <translation type="unfinished"/>
+        <translation>%1 Configuration</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/GuiHelpers.cpp" line="142"/>
         <location filename="../src/libtomahawk/utils/GuiHelpers.cpp" line="157"/>
         <source>%1 Configuration</source>
-        <translation type="unfinished"/>
+        <translation>%1 Configuration</translation>
     </message>
 </context>
 <context>
@@ -2418,7 +2418,7 @@ Essayez de vous authentifier de nouveau.</translation>
         <location filename="../src/accounts/zeroconf/ZeroconfAccount.cpp" line="67"/>
         <location filename="../src/accounts/zeroconf/ZeroconfAccount.cpp" line="68"/>
         <source>Local Network</source>
-        <translation type="unfinished"/>
+        <translation>Réseau local</translation>
     </message>
 </context>
 <context>
@@ -2426,7 +2426,7 @@ Essayez de vous authentifier de nouveau.</translation>
     <message>
         <location filename="../src/accounts/zeroconf/ZeroconfAccount.h" line="42"/>
         <source>Local Network</source>
-        <translation type="unfinished"/>
+        <translation>Réseau local</translation>
     </message>
     <message>
         <location filename="../src/accounts/zeroconf/ZeroconfAccount.h" line="43"/>
@@ -3146,7 +3146,7 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
     <message numerus="yes">
         <location filename="../src/libtomahawk/Query.cpp" line="776"/>
         <source>%n people</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n personne</numerusform><numerusform>%n personnes</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="778"/>
@@ -3175,7 +3175,7 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
     <message>
         <location filename="../src/libtomahawk/utils/SoundcloudParser.cpp" line="112"/>
         <source>Track &apos;%1&apos; by %2 is not streamable.</source>
-        <translation type="unfinished"/>
+        <translation>La piste &apos;%1&apos; par %2 n&apos;est pas écoutable.</translation>
     </message>
 </context>
 <context>
@@ -3266,7 +3266,7 @@ saisissez le numéro PIN ici :</translation>
     <message>
         <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="375"/>
         <source>Local Network</source>
-        <translation type="unfinished"/>
+        <translation>Réseau local</translation>
     </message>
 </context>
 <context>
@@ -3547,7 +3547,7 @@ saisissez le numéro PIN ici :</translation>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="985"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped.</source>
-        <translation>Désolé, il y a un problème d&apos;accès à votre matériel audio ou la piste en cours va être sauter.</translation>
+        <translation>Désolé, il y a un problème d&apos;accès à votre matériel audio ou la piste en cours , celle-ci va être sautée.</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1017"/>
