@@ -14,10 +14,9 @@ SET( TOMAHAWK_DESCRIPTION_SUMMARY "The social media player" )
 SET( TOMAHAWK_VERSION_MAJOR 0 )
 SET( TOMAHAWK_VERSION_MINOR 5 )
 SET( TOMAHAWK_VERSION_PATCH 99 )
-
 #SET( TOMAHAWK_VERSION_RC 0 )
 
-SET( TOMAHAWK_TRANSLATION_LANGUAGES ar bg ca de en es fi fr ja pl pt_BR ru sv tr zh_CN zh_TW )
+SET( TOMAHAWK_TRANSLATION_LANGUAGES ar bg bn_IN ca cs de en el es fi fr hi_IN hu gl it ja lt pl pt_BR ru sv tr zh_CN zh_TW )
 
 # enforce proper symbol exporting on all platforms
 add_definitions( "-fvisibility=hidden" )
