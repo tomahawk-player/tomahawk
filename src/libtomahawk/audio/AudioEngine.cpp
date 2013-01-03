@@ -865,6 +865,8 @@ AudioEngine::setPlaylist( Tomahawk::playlistinterface_ptr playlist )
         {
             disconnect( m_playlist.data(), SIGNAL( previousTrackAvailable( bool ) ) );
             disconnect( m_playlist.data(), SIGNAL( nextTrackAvailable( bool ) ) );
+            disconnect( m_playlist.data(), SIGNAL( shuffleModeChanged( bool ) ) );
+            disconnect( m_playlist.data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ) );
         }
 
         m_playlist.data()->reset();
@@ -886,9 +888,35 @@ AudioEngine::setPlaylist( Tomahawk::playlistinterface_ptr playlist )
 
         connect( m_playlist.data(), SIGNAL( previousTrackAvailable( bool ) ), SIGNAL( controlStateChanged() ) );
         connect( m_playlist.data(), SIGNAL( nextTrackAvailable( bool ) ), SIGNAL( controlStateChanged() ) );
+
+        connect( m_playlist.data(), SIGNAL( shuffleModeChanged( bool ) ), SIGNAL( shuffleModeChanged( bool ) ) );
+        connect( m_playlist.data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode ) ), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode ) ) );
+        
+        emit shuffleModeChanged( m_playlist.data()->shuffled() );
+        emit repeatModeChanged( m_playlist.data()->repeatMode() );
     }
 
     emit playlistChanged( playlist );
+}
+
+
+void
+AudioEngine::setRepeatMode( Tomahawk::PlaylistModes::RepeatMode mode )
+{
+    if ( !m_playlist.isNull() )
+    {
+        m_playlist.data()->setRepeatMode( mode );
+    }
+}
+
+
+void
+AudioEngine::setShuffled( bool enabled )
+{
+    if ( !m_playlist.isNull() )
+    {
+        m_playlist.data()->setShuffled( enabled );
+    }
 }
 
 
