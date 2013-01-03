@@ -497,6 +497,7 @@ TomahawkWindow::setupWindowsButtons()
 #endif
 }
 
+
 HICON
 TomahawkWindow::thumbIcon(TomahawkUtils::ImageType type)
 {
@@ -514,12 +515,6 @@ TomahawkWindow::thumbIcon(TomahawkUtils::ImageType type)
 void
 TomahawkWindow::setupSignals()
 {
-    // <From PlaylistManager>
-    connect( ViewManager::instance(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ),
-             m_audioControls,           SLOT( onRepeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ) );
-    connect( ViewManager::instance(), SIGNAL( shuffleModeChanged( bool ) ),
-             m_audioControls,           SLOT( onShuffleModeChanged( bool ) ) );
-
     // <From AudioEngine>
     connect( AudioEngine::instance(), SIGNAL( error( AudioEngine::AudioErrorCode ) ), SLOT( onAudioEngineError( AudioEngine::AudioErrorCode ) ) );
     connect( AudioEngine::instance(), SIGNAL( loading( const Tomahawk::result_ptr& ) ), SLOT( onPlaybackLoading( const Tomahawk::result_ptr& ) ) );

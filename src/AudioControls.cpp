@@ -140,6 +140,8 @@ AudioControls::AudioControls( QWidget* parent )
     connect( AudioEngine::instance(), SIGNAL( timerMilliSeconds( qint64 ) ), SLOT( onPlaybackTimer( qint64 ) ) );
     connect( AudioEngine::instance(), SIGNAL( volumeChanged( int ) ), SLOT( onVolumeChanged( int ) ) );
     connect( AudioEngine::instance(), SIGNAL( controlStateChanged() ), SLOT( onControlStateChanged() ) );
+    connect( AudioEngine::instance(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ), SLOT( onRepeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ) );
+    connect( AudioEngine::instance(), SIGNAL( shuffleModeChanged( bool ) ), SLOT( onShuffleModeChanged( bool ) ) );
 
     ui->buttonAreaLayout->setSpacing( 0 );
     ui->stackedLayout->setSpacing( 0 );
@@ -560,21 +562,21 @@ AudioControls::onRepeatClicked()
         case PlaylistModes::NoRepeat:
         {
             // switch to RepeatOne
-            ViewManager::instance()->setRepeatMode( PlaylistModes::RepeatOne );
+            AudioEngine::instance()->setRepeatMode( PlaylistModes::RepeatOne );
         }
         break;
 
         case PlaylistModes::RepeatOne:
         {
             // switch to RepeatAll
-            ViewManager::instance()->setRepeatMode( PlaylistModes::RepeatAll );
+            AudioEngine::instance()->setRepeatMode( PlaylistModes::RepeatAll );
         }
         break;
 
         case PlaylistModes::RepeatAll:
         {
             // switch to NoRepeat
-            ViewManager::instance()->setRepeatMode( PlaylistModes::NoRepeat );
+            AudioEngine::instance()->setRepeatMode( PlaylistModes::NoRepeat );
         }
         break;
 
@@ -611,7 +613,7 @@ AudioControls::onShuffleModeChanged( bool enabled )
 void
 AudioControls::onShuffleClicked()
 {
-    ViewManager::instance()->setShuffled( m_shuffled ^ true );
+    AudioEngine::instance()->setShuffled( m_shuffled ^ true );
 }
 
 
