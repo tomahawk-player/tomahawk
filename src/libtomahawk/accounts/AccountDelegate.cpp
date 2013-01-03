@@ -171,7 +171,7 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
     QPixmap p = index.data( Qt::DecorationRole ).value< QPixmap >();
     QRect pixmapRect( leftEdge + PADDING, center - ICONSIZE/2, ICONSIZE, ICONSIZE );
     if ( p.isNull() ) // default image... TODO
-        p = TomahawkUtils::defaultPixmap( TomahawkUtils::SipPluginOnline, TomahawkUtils::Original, pixmapRect.size() );
+        p = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultResolver, TomahawkUtils::Original, pixmapRect.size() );
     else
         p = p.scaled( pixmapRect.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation );
 

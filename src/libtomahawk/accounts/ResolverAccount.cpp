@@ -232,6 +232,11 @@ ResolverAccount::resolverChanged()
     emit connectionStateChanged( connectionState() );
 }
 
+QPixmap
+ResolverAccount::icon() const
+{
+    return m_resolver.data()->icon();
+}
 
 /// AtticaResolverAccount
 
