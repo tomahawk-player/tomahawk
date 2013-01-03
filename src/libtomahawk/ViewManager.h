@@ -108,9 +108,6 @@ public:
     bool isTomahawkLoaded() const { return m_loaded; }
 
 signals:
-    void repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode );
-    void shuffleModeChanged( bool enabled );
-
     void filterAvailable( bool b );
 
     void playClicked();
@@ -154,9 +151,6 @@ public slots:
     void showQueue() { emit showQueueRequested(); }
     void hideQueue() { emit hideQueueRequested(); }
 
-    void setRepeatMode( Tomahawk::PlaylistModes::RepeatMode mode );
-    void setShuffled( bool enabled );
-
     void playlistInterfaceChanged( Tomahawk::playlistinterface_ptr );
 
     // called by the playlist creation dbcmds
@@ -174,7 +168,6 @@ private slots:
 private:
     void setPage( Tomahawk::ViewPage* page, bool trackHistory = true );
     void updateView();
-    void unlinkPlaylist();
 
     Tomahawk::playlist_ptr playlistForInterface( Tomahawk::playlistinterface_ptr plInterface ) const;
     Tomahawk::dynplaylist_ptr dynamicPlaylistForInterface( Tomahawk::playlistinterface_ptr plInterface ) const;
