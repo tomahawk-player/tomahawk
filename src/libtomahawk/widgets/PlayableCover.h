@@ -56,6 +56,9 @@ protected:
     virtual void resizeEvent( QResizeEvent* event );
     virtual void paintEvent( QPaintEvent* event );
 
+    virtual void mouseMoveEvent( QMouseEvent* event );
+    virtual void mouseReleaseEvent( QMouseEvent* event );
+    
     void leaveEvent( QEvent* event );
     void enterEvent( QEvent* event );
 
@@ -69,6 +72,9 @@ private:
     Tomahawk::artist_ptr m_artist;
     Tomahawk::album_ptr m_album;
     Tomahawk::query_ptr m_query;
+
+    QList< QRect > m_itemRects;
+    QRect m_hoveredRect;
 
     bool m_showText;
 };

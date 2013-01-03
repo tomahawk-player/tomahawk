@@ -18,7 +18,9 @@
 
 #include "PlayableCover.h"
 
+#include "Artist.h"
 #include "Album.h"
+#include "ViewManager.h"
 #include "audio/AudioEngine.h"
 #include "widgets/ImageButton.h"
 #include "utils/TomahawkUtilsGui.h"
@@ -78,6 +80,56 @@ PlayableCover::resizeEvent( QResizeEvent* event )
 
 
 void
+PlayableCover::mouseMoveEvent( QMouseEvent* event )
+{
+    QLabel::mouseMoveEvent( event );
+
+    foreach ( const QRect& rect, m_itemRects )
+    {
+        if ( rect.contains( event->pos() ) )
+        {
+            if ( m_hoveredRect != rect )
+            {
+                setCursor( Qt::PointingHandCursor );
+                m_hoveredRect = rect;
+                repaint();
+            }
+            return;
+        }
+    }
+
+    if ( !m_hoveredRect.isNull() )
+    {
+        setCursor( Qt::ArrowCursor );
+        m_hoveredRect = QRect();
+        repaint();
+    }
+}
+
+
+void
+PlayableCover::mouseReleaseEvent( QMouseEvent* event )
+{
+    QLabel::mouseReleaseEvent( event );
+    
+    foreach ( const QRect& rect, m_itemRects )
+    {
+        if ( rect.contains( event->pos() ) )
+        {
+            if ( m_artist )
+                ViewManager::instance()->show( m_artist );
+            else if ( m_album )
+                ViewManager::instance()->show( m_album->artist() );
+            else if ( m_query )
+                ViewManager::instance()->show( Tomahawk::Artist::get( m_query->artist() ) );
+            
+            return;
+        }
+    }
+}
+
+
+void
 PlayableCover::setPixmap( const QPixmap& pixmap )
 {
     m_pixmap = TomahawkUtils::createRoundedImage( pixmap, size() );
@@ -87,6 +139,8 @@ PlayableCover::setPixmap( const QPixmap& pixmap )
 void
 PlayableCover::paintEvent( QPaintEvent* event )
 {
+    Q_UNUSED( event );
+
     QPainter painter( this );
     painter.setRenderHint( QPainter::Antialiasing );
     painter.drawPixmap( 0, 0, pixmap() );
@@ -98,6 +152,7 @@ PlayableCover::paintEvent( QPaintEvent* event )
     QPixmap buffer( r.size() );
     buffer.fill( Qt::transparent );
     QPainter bufpainter( &buffer );
+    bufpainter.setRenderHint( QPainter::Antialiasing );
     
     QTextOption to;
     to.setWrapMode( QTextOption::NoWrap );
@@ -181,18 +236,25 @@ PlayableCover::paintEvent( QPaintEvent* event )
         bufpainter.drawText( textRect, text, to );
         
         bufpainter.setFont( font );
-        // If the user is hovering over an artist rect, draw a background so she knows it's clickable
+
         QRect r = textRect;
         r.setTop( r.bottom() - bufpainter.fontMetrics().height() );
         r.adjust( 4, 0, -4, -1 );
-/*        if ( m_hoveringOver == index )
+
+        text = bufpainter.fontMetrics().elidedText( bottom, Qt::ElideRight, textRect.width() - 16 );
+        int textWidth = bufpainter.fontMetrics().width( text );
+        r.adjust( ( r.width() - textWidth ) / 2 - 6, 0, - ( ( r.width() - textWidth ) / 2 - 6 ), 0 );
+
+        m_itemRects.clear();
+        m_itemRects << r;
+
+        if ( m_hoveredRect == r )
         {
-            TomahawkUtils::drawQueryBackground( bufpainter, opt.palette, r, 1.1 );
-            bufpainter.setPen( opt.palette.color( QPalette::HighlightedText ) );
-        }*/
+            TomahawkUtils::drawQueryBackground( &bufpainter, palette(), r, 1.1 );
+            bufpainter.setPen( Qt::white );
+        }
         
         to.setAlignment( Qt::AlignHCenter | Qt::AlignBottom );
-        text = bufpainter.fontMetrics().elidedText( bottom, Qt::ElideRight, textRect.width() - 16 );
         bufpainter.drawText( textRect.adjusted( 5, -1, -5, -1 ), text, to );
     }
 
