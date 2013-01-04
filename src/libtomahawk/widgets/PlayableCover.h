@@ -41,7 +41,7 @@ public:
     virtual ~PlayableCover();
 
     bool showText() const { return m_showText; }
-    void setShowText( bool b ) { m_showText = b; }
+    void setShowText( bool b );
 
     QPixmap pixmap() const { return m_pixmap; }
 

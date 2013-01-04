@@ -133,6 +133,7 @@ void
 PlayableCover::setPixmap( const QPixmap& pixmap )
 {
     m_pixmap = TomahawkUtils::createRoundedImage( pixmap, size() );
+    repaint();
 }
 
 
@@ -288,6 +289,7 @@ void
 PlayableCover::setArtist( const Tomahawk::artist_ptr& artist )
 {
     m_artist = artist;
+    repaint();
 }
 
 
@@ -295,6 +297,7 @@ void
 PlayableCover::setAlbum( const Tomahawk::album_ptr& album )
 {
     m_album = album;
+    repaint();
 }
 
 
@@ -302,4 +305,12 @@ void
 PlayableCover::setQuery( const Tomahawk::query_ptr& query )
 {
     m_query = query;
+    repaint();
+}
+
+
+void PlayableCover::setShowText( bool b )
+{
+    m_showText = b;
+    repaint();
 }
