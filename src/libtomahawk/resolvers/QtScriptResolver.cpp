@@ -342,6 +342,13 @@ QtScriptResolver::init()
         m_icon = ico.scaled( m_icon.size(), Qt::IgnoreAspectRatio );
         success = true;
     }
+    // see if the resolver sent an icon path to not break the old (unofficial) api.
+    // TODO: remove this and publish a definitive api
+    if ( !success )
+    {
+        QString iconPath = QFileInfo( filePath() ).path() + "/" + m.value( "icon" ).toString();
+        success = m_icon.load( iconPath );
+    }
 
     // load config widget and apply settings
     loadUi();
