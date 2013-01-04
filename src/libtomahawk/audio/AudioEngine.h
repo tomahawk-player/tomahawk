@@ -42,7 +42,7 @@ Q_OBJECT
 
 public:
     enum AudioErrorCode { StreamReadError, AudioDeviceError, DecodeError, UnknownError, NoError };
-    enum AudioState { Stopped, Playing, Paused, Error };
+    enum AudioState { Stopped, Playing, Paused, Error, Loading };
 
     static AudioEngine* instance();
 
@@ -171,7 +171,6 @@ private:
     bool m_waitingOnNewTrack;
 
     mutable QStringList m_supportedMimeTypes;
-    unsigned int m_volume;
 
     AudioState m_state;
     QQueue< AudioState > m_stateQueue;
