@@ -158,12 +158,12 @@ ActionCollection::createMenuBar( QWidget *parent )
 
     QMenu *helpMenu = new QMenu( tr( "&Help" ), menuBar );
     helpMenu->addAction( m_actionCollection[ "diagnostics" ] );
-    helpMenu->addAction( m_actionCollection[ "aboutTomahawk" ] );
     helpMenu->addAction( m_actionCollection[ "legalInfo" ] );
+    helpMenu->addAction( m_actionCollection[ "aboutTomahawk" ] );
 
     // Setup update check
 #ifndef Q_OS_MAC
-    helpMenu->insertSeparator( m_actionCollection[ "aboutTomahawk" ] );
+    helpMenu->insertSeparator( m_actionCollection[ "legalInfo" ] );
 #endif
 
 #if defined( Q_OS_MAC ) && defined( HAVE_SPARKLE )
