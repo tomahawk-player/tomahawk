@@ -451,6 +451,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
         if ( !err )
         {
             tLog() << "Starting new song:" << m_currentTrack->url();
+            m_state = Loading;
             emit loading( m_currentTrack );
 
             if ( !isHttpResult( m_currentTrack->url() ) && !isLocalResult( m_currentTrack->url() ) )
@@ -736,8 +737,17 @@ AudioEngine::onAboutToFinish()
 void
 AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
 {
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << oldState << newState << m_expectStop;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << oldState << newState << m_expectStop << state();
 
+    if ( newState == Phonon::LoadingState )
+    {
+        // We don't emit this state to listeners - yet.
+        m_state = Loading;
+    }
+    if ( newState == Phonon::StoppedState )
+    {
+        m_state = Stopped;
+    }
     if ( newState == Phonon::ErrorState )
     {
         stop( UnknownError );
@@ -749,7 +759,9 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
     }
     if ( newState == Phonon::PlayingState )
     {
-        emit started( m_currentTrack );
+        if ( state() != Paused && state() != Playing )
+            emit started( m_currentTrack );
+
         setState( Playing );
     }
 
@@ -982,17 +994,12 @@ AudioEngine::checkStateQueue()
         {
             case Playing:
             {
-                bool paused = isPaused();
                 m_mediaObject->play();
-                if ( paused )
-                    setVolume( m_volume );
-
                 break;
             }
 
             case Paused:
             {
-                m_volume = volume();
                 m_mediaObject->pause();
                 break;
             }
