@@ -68,11 +68,8 @@ PlaylistLargeItemDelegate::sizeHint( const QStyleOptionViewItem& option, const Q
 {
     QSize size = QStyledItemDelegate::sizeHint( option, index );
 
-    if ( index.isValid() )
-    {
-        int rowHeight = option.fontMetrics.height() + 8;
-        size.setHeight( rowHeight * 3 );
-    }
+    int rowHeight = option.fontMetrics.height() + 8;
+    size.setHeight( rowHeight * 3 );
 
     return size;
 }

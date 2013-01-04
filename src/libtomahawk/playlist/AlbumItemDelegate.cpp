@@ -64,11 +64,8 @@ AlbumItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelInd
 {
     QSize size = QStyledItemDelegate::sizeHint( option, index );
 
-    if ( index.isValid() )
-    {
-        int rowHeight = option.fontMetrics.height() + 8;
-        size.setHeight( rowHeight * 1.5 );
-    }
+    int rowHeight = option.fontMetrics.height() + 8;
+    size.setHeight( rowHeight * 1.5 );
 
     return size;
 }
