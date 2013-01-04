@@ -75,7 +75,7 @@ void
 PlayableCover::resizeEvent( QResizeEvent* event )
 {
     QLabel::resizeEvent( event );
-    m_button->move( contentsRect().center() - QPoint( 23, 23 ) );
+    m_button->move( contentsRect().center() - QPoint( 22, 23 ) );
 }
 
 
