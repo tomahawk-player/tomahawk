@@ -140,8 +140,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 
     if ( qApp->arguments().contains( "--debug" ) )
     {
-        connect( ActionCollection::instance()->getAction( "crashNow" ), SIGNAL( triggered() ),
-                 this, SLOT( crashNow() ) );
+        connect( ActionCollection::instance()->getAction( "crashNow" ), SIGNAL( triggered() ), SLOT( crashNow() ) );
     }
 
     // set initial state
@@ -233,7 +232,7 @@ TomahawkWindow::applyPlatformTweaks()
     //       nothing and in QtCurve does evil things), and avoid forwarding it
     //       to QtCurve.
     bool isQtCurve = false;
-    if( QString( qApp->style()->metaObject()->className() ).toLower().contains( "qtcurve" ) )
+    if ( QString( qApp->style()->metaObject()->className() ).toLower().contains( "qtcurve" ) )
         isQtCurve = true;
     qApp->setStyle( new ProxyStyle( isQtCurve ) );
 
@@ -506,7 +505,7 @@ HICON
 TomahawkWindow::thumbIcon(TomahawkUtils::ImageType type)
 {
     static QMap<TomahawkUtils::ImageType,HICON> thumbIcons;
-    if(!thumbIcons.contains( type ) )
+    if (!thumbIcons.contains( type ) )
     {
         QPixmap pix ( TomahawkUtils::defaultPixmap(type , TomahawkUtils::Original, QSize( 20, 20 ) ) );
         thumbIcons[type] = pix.toWinHICON();
@@ -567,6 +566,7 @@ TomahawkWindow::setupMenuBar()
     m_compactMainMenu = ActionCollection::instance()->createCompactMenu( this );
 #endif
 }
+
 
 void
 TomahawkWindow::changeEvent( QEvent* e )
@@ -895,10 +895,10 @@ TomahawkWindow::addPeerManually()
 void
 TomahawkWindow::showOfflineSources()
 {
-    m_sourcetree->showOfflineSources( ActionCollection::instance()
-                                      ->getAction( "showOfflineSources" )->isChecked() );
-    TomahawkSettings::instance()->setShowOfflineSources( ActionCollection::instance()
-                                                         ->getAction( "showOfflineSources" )->isChecked() );
+    m_sourcetree->showOfflineSources(
+        ActionCollection::instance()->getAction( "showOfflineSources" )->isChecked() );
+    TomahawkSettings::instance()->setShowOfflineSources(
+        ActionCollection::instance()->getAction( "showOfflineSources" )->isChecked() );
 }
 
 
@@ -1326,7 +1326,7 @@ void
 TomahawkWindow::toggleMenuBar() //SLOT
 {
 #ifndef Q_OS_MAC
-    if( menuBar()->isVisible() )
+    if ( menuBar()->isVisible() )
     {
         menuBar()->setVisible( false );
         ActionCollection::instance()->getAction( "toggleMenuBar" )->setText( tr( "Show Menu Bar" ) );
