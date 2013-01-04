@@ -530,6 +530,7 @@ TomahawkWindow::setupSignals()
     connect( ac->getAction( "preferences" ), SIGNAL( triggered() ), SLOT( showSettingsDialog() ) );
     connect( ac->getAction( "diagnostics" ), SIGNAL( triggered() ), SLOT( showDiagnosticsDialog() ) );
     connect( ac->getAction( "legalInfo" ), SIGNAL( triggered() ), SLOT( legalInfo() ) );
+    connect( ac->getAction( "openLogfile" ), SIGNAL( triggered() ), SLOT( openLogfile() ) );
     connect( ac->getAction( "updateCollection" ), SIGNAL( triggered() ), SLOT( updateCollectionManually() ) );
     connect( ac->getAction( "rescanCollection" ), SIGNAL( triggered() ), SLOT( rescanCollectionManually() ) );
     connect( ac->getAction( "loadXSPF" ), SIGNAL( triggered() ), SLOT( loadSpiff() ));
@@ -826,6 +827,17 @@ void
 TomahawkWindow::legalInfo()
 {
     QDesktopServices::openUrl( QUrl( "http://www.tomahawk-player.org/legal.html" ) );
+}
+
+
+void
+TomahawkWindow::openLogfile()
+{
+#ifdef WIN32
+    ShellExecuteW( 0, 0, (LPCWSTR)Logger::logfilePath().utf16(), 0, 0, SW_SHOWNORMAL );
+#else
+    QDesktopServices::openUrl( QUrl::fromLocalFile( Logger::logFile() ) );
+#endif
 }
 
 

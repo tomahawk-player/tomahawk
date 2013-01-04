@@ -100,6 +100,7 @@ public slots:
     void showSettingsDialog();
     void showDiagnosticsDialog();
     void legalInfo();
+    void openLogfile();
     void updateCollectionManually();
     void rescanCollectionManually();
     void showOfflineSources();
