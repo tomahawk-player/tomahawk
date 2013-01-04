@@ -212,7 +212,6 @@ AudioControls::onControlStateChanged()
 void
 AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
 {
-    tDebug() << "FOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO";
     if ( result.isNull() )
         return;
 
