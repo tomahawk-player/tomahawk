@@ -333,14 +333,22 @@ QtScriptResolver::init()
         icoData = qUncompress( QByteArray::fromBase64( icoData ) );
     else
         icoData = QByteArray::fromBase64( icoData );
-    bool success = m_icon.loadFromData( icoData );
+    QPixmap ico;
+    ico.loadFromData( icoData );
+
+    bool success = false;
+    if ( !ico.isNull() )
+    {
+        m_icon = ico.scaled( m_icon.size(), Qt::IgnoreAspectRatio );
+        success = true;
+    }
 
     // load config widget and apply settings
     loadUi();
     QVariantMap config = resolverUserConfig();
     fillDataInWidgets( config );
 
-    qDebug() << "JS" << filePath() << "READY," << "name" << m_name << "weight" << m_weight << "timeout" << m_timeout << "icon found" << success;
+    qDebug() << "JS" << filePath() << "READY," << "name" << m_name << "weight" << m_weight << "timeout" << m_timeout << "icon received" << success;
 
     m_ready = true;
 }
