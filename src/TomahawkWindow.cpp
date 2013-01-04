@@ -84,6 +84,10 @@
     #if defined ( WITH_QtSparkle )
         #include <qtsparkle/Updater>
     #endif
+
+    #include <windows.h>
+    #include <shellapi.h>
+
     #ifndef THBN_CLICKED
         #define THBN_CLICKED    0x1800
     #endif
@@ -834,7 +838,7 @@ void
 TomahawkWindow::openLogfile()
 {
 #ifdef WIN32
-    ShellExecuteW( 0, 0, (LPCWSTR)Logger::logfilePath().utf16(), 0, 0, SW_SHOWNORMAL );
+    ShellExecuteW( 0, 0, (LPCWSTR)Logger::logFile().utf16(), 0, 0, SW_SHOWNORMAL );
 #else
     QDesktopServices::openUrl( QUrl::fromLocalFile( Logger::logFile() ) );
 #endif
