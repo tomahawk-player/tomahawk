@@ -496,7 +496,6 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
             }
             m_input = io;
             queueState( Playing );
-            emit started( m_currentTrack );
 
             if ( TomahawkSettings::instance()->privateListeningMode() != TomahawkSettings::FullyPrivate )
             {
@@ -750,6 +749,7 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
     }
     if ( newState == Phonon::PlayingState )
     {
+        emit started( m_currentTrack );
         setState( Playing );
     }
 
