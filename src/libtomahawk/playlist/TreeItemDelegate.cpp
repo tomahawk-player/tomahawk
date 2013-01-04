@@ -131,7 +131,7 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
 
             if ( m_view->hoveredIndex() == index && !index.data().toString().isEmpty() && index.column() == 0 )
             {
-                o.rect.setWidth( o.rect.width() - 16 );
+                o.rect.setWidth( o.rect.width() - o.rect.height() );
                 QRect arrowRect( o.rect.x() + o.rect.width(), o.rect.y() + 1, o.rect.height() - 2, o.rect.height() - 2 );
 
                 QPixmap infoIcon = TomahawkUtils::defaultPixmap( TomahawkUtils::InfoIcon, TomahawkUtils::Original, arrowRect.size() );
