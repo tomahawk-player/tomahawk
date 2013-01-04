@@ -71,7 +71,7 @@ DynamicModel::loadPlaylist( const Tomahawk::dynplaylist_ptr& playlist, bool load
     PlaylistModel::loadPlaylist( m_playlist, m_playlist->mode() == Static );
 
     if ( m_playlist->mode() == OnDemand && oldCount != rowCount( QModelIndex() ) )
-        emit trackCountChanged( rowCount( QModelIndex() ) );
+        emit itemCountChanged( rowCount( QModelIndex() ) );
 }
 
 

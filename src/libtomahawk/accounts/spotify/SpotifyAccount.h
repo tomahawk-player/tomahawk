@@ -51,13 +51,14 @@ class SpotifyAccountConfig;
 // metadata for a playlist
 struct SpotifyPlaylistInfo {
     QString name, plid, revid;
-    bool sync, subscribed, changed, isOwner;
+    bool sync, subscribed, changed, isOwner, starContainer;
+    bool loveSync;
 
+    SpotifyPlaylistInfo( const QString& nname, const QString& pid, const QString& rrevid, bool ssync, bool ssubscribed, bool isowner = false, bool star = false )
+        : name( nname ), plid( pid ), revid( rrevid ), sync( ssync ), subscribed( ssubscribed )
+        , changed( false ), isOwner( isowner ), starContainer( star ), loveSync( false ) {}
 
-    SpotifyPlaylistInfo( const QString& nname, const QString& pid, const QString& rrevid, bool ssync, bool ssubscribed, bool isowner = false )
-        : name( nname ), plid( pid ), revid( rrevid ), sync( ssync ), subscribed( ssubscribed ), changed( false ), isOwner( isowner ) {}
-
-    SpotifyPlaylistInfo() : sync( false ), changed( false ) {}
+    SpotifyPlaylistInfo() : sync( false ), changed( false ), starContainer( false ), loveSync( false ) {}
 };
 
 
@@ -109,7 +110,8 @@ public:
     void unregisterUpdater( const QString& plid );
 
     bool deleteOnUnsync() const;
-
+    bool loveSync() const;
+    void starTrack(const QString& artist, const QString&title, const bool starred);
     void setManualResolverPath( const QString& resolverPath );
 
     bool loggedIn() const;
@@ -139,13 +141,11 @@ private slots:
     void playlistCopyCreated( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
     void delayedInit();
     void hookupAfterDeletion( bool autoEnable );
-
 private:
     void init();
     bool checkForResolver();
     void hookupResolver();
     void killExistingResolvers();
-
     void loadPlaylists();
     void clearUser( bool permanentlyDelete = false );
 

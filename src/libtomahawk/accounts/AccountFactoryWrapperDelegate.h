@@ -49,8 +49,6 @@ signals:
     void checkOrUncheck( const QModelIndex& row, Tomahawk::Accounts::Account* account, Qt::CheckState newState );
 
 private:
-    QPixmap m_removePixmap, m_offlineIcon, m_onlineIcon;
-    QIcon m_configIcon;
     QModelIndex m_configPressed;
 
     mutable QHash< QPersistentModelIndex, QRect > m_cachedCheckRects;

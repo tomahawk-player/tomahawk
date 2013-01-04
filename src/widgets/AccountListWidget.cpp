@@ -21,10 +21,12 @@
 #include "accounts/AccountModel.h"
 #include "accounts/AccountManager.h"
 #include "AccountWidget.h"
+#include "utils/ImageRegistry.h"
 #include "utils/TomahawkUtilsGui.h"
+#include "utils/Logger.h"
 
-#include <QDebug>
 #include <QPushButton>
+
 
 AccountListWidget::AccountListWidget( AccountModelFactoryProxy* model, QWidget* parent )
     : QWidget( parent )
@@ -227,6 +229,7 @@ AccountListWidget::updateToggleOnlineStateButton()
 
     m_toggleOnlineButton->setText( m_toggleOnlineButtonState ? tr( "Disconnect &All" )
                                                              : tr( "Connect &All" ) );
-    m_toggleOnlineButton->setIcon( m_toggleOnlineButtonState ? QIcon( RESPATH "images/account-online.png" )
-                                                             : QIcon( RESPATH "images/account-offline.png" ) );
+    m_toggleOnlineButton->setIcon( m_toggleOnlineButtonState ?
+                                        ImageRegistry::instance()->icon( RESPATH "images/account-online.svg" ) :
+                                        ImageRegistry::instance()->icon( RESPATH "images/account-offline.svg" ) );
 }

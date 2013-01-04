@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string notr="true" extracomment="not translatable because not shown to the user">Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -20,7 +20,7 @@
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap>:/data/images/lastfm-icon.png</pixmap>
+      <pixmap>:/data/images/lastfm-icon.svg</pixmap>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

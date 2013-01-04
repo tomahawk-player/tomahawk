@@ -24,18 +24,7 @@
 #include "TomahawkWindow.h"
 #include "audio/AudioEngine.h"
 
-#import <AppKit/NSApplication.h>
-#import <Foundation/NSAutoreleasePool.h>
-#import <Foundation/NSBundle.h>
-#import <Foundation/NSError.h>
-#import <Foundation/NSFileManager.h>
-#import <Foundation/NSPathUtilities.h>
-#import <Foundation/NSThread.h>
-#import <Foundation/NSTimer.h>
-#import <Foundation/NSAppleEventManager.h>
-#import <Foundation/NSURL.h>
-#import <AppKit/NSEvent.h>
-#import <AppKit/NSNibDeclarations.h>
+#import <Cocoa/Cocoa.h>
 
 #ifdef HAVE_SPARKLE
 #import <Sparkle/SUUpdater.h>

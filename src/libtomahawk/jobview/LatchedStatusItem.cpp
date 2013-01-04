@@ -22,7 +22,8 @@
 #include "SourceList.h"
 #include "JobStatusView.h"
 #include "JobStatusModel.h"
-#include "utils/TomahawkUtils.h"
+#include "utils/TomahawkUtilsGui.h"
+
 
 LatchedStatusItem::LatchedStatusItem( const Tomahawk::source_ptr& from, const Tomahawk::source_ptr& to, LatchedStatusManager* parent )
     : JobStatusItem()
@@ -65,8 +66,6 @@ LatchedStatusManager::LatchedStatusManager( QObject* parent )
 {
     connect( SourceList::instance(), SIGNAL( sourceLatchedOn( Tomahawk::source_ptr, Tomahawk::source_ptr ) ), this, SLOT( latchedOn( Tomahawk::source_ptr, Tomahawk::source_ptr ) ) );
     connect( SourceList::instance(), SIGNAL( sourceLatchedOff( Tomahawk::source_ptr, Tomahawk::source_ptr ) ), this, SLOT( latchedOff( Tomahawk::source_ptr, Tomahawk::source_ptr ) ) );
-
-    m_pixmap.load( RESPATH "images/headphones-bigger.png" );
 }
 
 void
@@ -112,4 +111,11 @@ LatchedStatusManager::latchedOff( const Tomahawk::source_ptr& from, const Tomaha
         if ( !item.isNull() )
             item.data()->stop();
     }
+}
+
+
+QPixmap
+LatchedStatusManager::pixmap() const
+{
+    return TomahawkUtils::defaultPixmap( TomahawkUtils::HeadphonesOn, TomahawkUtils::Original, QSize( 128, 128 ) );
 }

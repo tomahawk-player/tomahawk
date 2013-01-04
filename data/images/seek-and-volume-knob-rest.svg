@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="42px" height="42px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <title>seek-and-volume-knob-rest</title>
+    <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
+    <defs>
+        <linearGradient x1="50%" y1="-61.8847656%" x2="50%" y2="193.261719%" id="linearGradient-1">
+            <stop stop-color="rgb(254,255,255)" offset="0%"></stop>
+            <stop stop-color="rgb(0,0,0)" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page 1" fill="rgb(223,223,223)" fill-rule="evenodd">
+        <path d="M21,41 C32.0456955,41 41,32.0456955 41,21 C41,9.95430446 32.0456955,1 21,1 C9.95430446,1 1,9.95430446 1,21 C1,32.0456955 9.95430446,41 21,41 Z M21,41" id="Oval 1" stroke="rgb(167,167,167)" stroke-width="1" fill="url(#linearGradient-1)"></path>
+    </g>
+</svg>

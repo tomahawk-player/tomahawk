@@ -31,7 +31,7 @@
 #include "database/Database.h"
 #include "AlbumPlaylistInterface.h"
 #include "PlayableItem.h"
-#include "utils/TomahawkUtils.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
 using namespace Tomahawk;
@@ -41,7 +41,7 @@ TreeModel::TreeModel( QObject* parent )
     : PlayableModel( parent )
     , m_mode( DatabaseMode )
 {
-    setIcon( QPixmap( RESPATH "images/music-icon.png" ) );
+    setIcon( TomahawkUtils::defaultPixmap( TomahawkUtils::SuperCollection ) );
 
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( onPlaybackStarted( Tomahawk::result_ptr ) ), Qt::DirectConnection );
     connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( onPlaybackStopped() ), Qt::DirectConnection );

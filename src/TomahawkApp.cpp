@@ -20,6 +20,8 @@
 
 #include "TomahawkApp.h"
 
+#include <boost/bind.hpp>
+
 #include "TomahawkVersion.h"
 #include "AclRegistryImpl.h"
 #include "Album.h"
@@ -144,47 +146,7 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     setApplicationVersion( QLatin1String( TOMAHAWK_VERSION ) );
 
     registerMetaTypes();
-    installTranslator();
-}
-
-
-void
-TomahawkApp::installTranslator()
-{
-#if QT_VERSION >= 0x040800
-    QString locale = QLocale::system().uiLanguages().first();
-#else
-    QString locale = QLocale::system().name();
-#endif
-    if ( locale == "C" )
-        locale = "en";
-
-    // Tomahawk translations
-    QTranslator* translator = new QTranslator( this );
-    if ( translator->load( QString( ":/lang/tomahawk_" ) + locale ) )
-    {
-        tDebug( LOGVERBOSE ) << "Translation: Tomahawk: Using system locale:" << locale;
-    }
-    else
-    {
-        tDebug( LOGVERBOSE ) << "Translation: Tomahawk: Using default locale, system locale one not found:" << locale;
-        translator->load( QString( ":/lang/tomahawk_en" ) );
-    }
-
-    TOMAHAWK_APPLICATION::installTranslator( translator );
-
-    // Qt translations
-    translator = new QTranslator( this );
-    if ( translator->load( QString( ":/lang/qt_" ) + locale ) )
-    {
-        tDebug( LOGVERBOSE ) << "Translation: Qt: Using system locale:" << locale;
-    }
-    else
-    {
-        tDebug( LOGVERBOSE ) << "Translation: Qt: Using default locale, system locale one not found:" << locale;
-    }
-
-    TOMAHAWK_APPLICATION::installTranslator( translator );
+    TomahawkUtils::installTranslator( this );
 }
 
 
@@ -426,8 +388,8 @@ TomahawkApp::printHelp()
     echo( "Usage: " + arguments().at( 0 ) + " [options] [url]" );
     echo( "Options are:" );
     echo( "  --help         Show this help" );
-    echo( "  --http         Initialize HTTP server" );
-    echo( "  --filescan     Scan files on startup" );
+//    echo( "  --http         Initialize HTTP server" );
+//    echo( "  --filescan     Scan files on startup" );
 //    echo( "  --headless     Run without a GUI" );
     echo( "  --hide         Hide main window on startup" );
     echo( "  --testdb       Use a test database instead of real collection" );

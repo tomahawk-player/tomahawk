@@ -20,6 +20,7 @@
 #include "TomahawkSqlQuery.h"
 #include "DatabaseImpl.h"
 #include "Source.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 

@@ -19,20 +19,17 @@
 
 #include "AclJobItem.h"
 
-#include "JobStatusModel.h"
-#include "utils/TomahawkUtils.h"
-#include "utils/TomahawkUtilsGui.h"
-#include "infosystem/InfoSystem.h"
-#include "utils/Logger.h"
-
 #include <QPixmap>
 #include <QPainter>
 #include <QListView>
 #include <QApplication>
 #include <QMouseEvent>
 
+#include "JobStatusModel.h"
+#include "infosystem/InfoSystem.h"
+#include "utils/TomahawkUtilsGui.h"
+#include "utils/Logger.h"
 
-#define ROW_HEIGHT 20
 #define ICON_PADDING 1
 #define PADDING 2
 
@@ -65,7 +62,6 @@ ACLJobDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     QApplication::style()->drawPrimitive( QStyle::PE_PanelItemViewItem, &opt, painter, opt.widget );
 
     painter->setRenderHint( QPainter::Antialiasing );
-
     painter->fillRect( opt.rect, Qt::lightGray );
 
     QString mainText = QString( tr( "Allow %1 to\nconnect and stream from you?" ) ).arg( item->username() );
@@ -85,11 +81,11 @@ ACLJobDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     int minPixels = 20;
     
     QString allowBtnText = tr( "Allow Streaming" );
-    int allowBtnWidth = fm.width( allowBtnText ) + 2*PADDING;
-    allowBtnRect = QRect( opt.rect.left() + thirds - allowBtnWidth/2, opt.rect.bottom() - fm.height() - 4*PADDING,  allowBtnWidth + 2*PADDING, fm.height() + 2*PADDING );
+    int allowBtnWidth = fm.width( allowBtnText ) + 2 * PADDING;
+    allowBtnRect = QRect( opt.rect.left() + thirds - allowBtnWidth / 2, opt.rect.bottom() - fm.height() - 4 * PADDING,  allowBtnWidth + 2 * PADDING, fm.height() + 2 * PADDING );
     QString denyBtnText = tr( "Deny Access" );
-    int denyBtnWidth = fm.width( denyBtnText ) + 2*PADDING;
-    denyBtnRect = QRect( opt.rect.right() - thirds - denyBtnWidth/2, opt.rect.bottom() - fm.height() - 4*PADDING,  denyBtnWidth + 2*PADDING, fm.height() + 2*PADDING );
+    int denyBtnWidth = fm.width( denyBtnText ) + 2 * PADDING;
+    denyBtnRect = QRect( opt.rect.right() - thirds - denyBtnWidth / 2, opt.rect.bottom() - fm.height() - 4 * PADDING,  denyBtnWidth + 2 * PADDING, fm.height() + 2 * PADDING );
 
     if ( allowBtnRect.right() >= denyBtnRect.left() )
     {
@@ -105,10 +101,11 @@ ACLJobDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     m_savedDenyRect = denyBtnRect;
 }
 
+
 QSize
 ACLJobDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    QSize size( QStyledItemDelegate::sizeHint ( option, index ).width(), ROW_HEIGHT * 3 );
+    QSize size( QStyledItemDelegate::sizeHint( option, index ).width(), ( TomahawkUtils::defaultFontHeight() + 6 ) * 3.5 );
     return size;
 }
 
@@ -117,9 +114,9 @@ void
 ACLJobDelegate::drawRoundedButton( QPainter* painter, const QRect& btnRect, bool red ) const
 {
     if ( !red )
-        TomahawkUtils::drawRoundedButton( painter, btnRect, QColor(54, 127, 211), QColor(43, 104, 182), QColor(34, 85, 159), QColor(35, 79, 147) );
+        TomahawkUtils::drawRoundedButton( painter, btnRect, QColor( 54, 127, 211 ), QColor( 43, 104, 182 ), QColor( 34, 85, 159 ), QColor( 35, 79, 147 ) );
     else
-        TomahawkUtils::drawRoundedButton( painter, btnRect, QColor(206, 63, 63), QColor(170, 52, 52), QColor(150, 50, 50), QColor(130, 40, 40) );
+        TomahawkUtils::drawRoundedButton( painter, btnRect, QColor( 206, 63, 63 ), QColor( 170, 52, 52 ), QColor( 150, 50, 50 ), QColor( 130, 40, 40 ) );
 }
 
 

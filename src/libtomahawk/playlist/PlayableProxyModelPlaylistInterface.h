@@ -61,12 +61,8 @@ public slots:
     virtual void setRepeatMode( Tomahawk::PlaylistModes::RepeatMode mode ) { m_repeatMode = mode; emit repeatModeChanged( mode ); }
     virtual void setShuffled( bool enabled ) { m_shuffled = enabled; emit shuffleModeChanged( enabled ); }
 
-signals:
-    void previousTrackAvailable();
-    void nextTrackAvailable();
-
 private slots:
-    virtual void onModelChanged();
+    void onCurrentIndexChanged();
 
 protected:
     QWeakPointer< PlayableProxyModel > m_proxyModel;
@@ -75,9 +71,6 @@ protected:
     bool m_shuffled;
     mutable QList< Tomahawk::query_ptr > m_shuffleHistory;
     mutable QPersistentModelIndex m_shuffleCache;
-
-    mutable bool m_prevAvail;
-    mutable bool m_nextAvail;
 };
 
 } //ns

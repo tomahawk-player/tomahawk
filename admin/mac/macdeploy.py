@@ -195,6 +195,7 @@ QT_PLUGINS = [
     'imageformats/libqgif.dylib',
     'imageformats/libqico.dylib',
     'imageformats/libqjpeg.dylib',
+    'imageformats/libqsvg.dylib',
     'imageformats/libqmng.dylib',
 ]
 
@@ -216,7 +217,7 @@ TOMAHAWK_PLUGINS = [
 ]
 
 QT_PLUGINS_SEARCH_PATH=[
-    '/usr/local/Cellar/qt/4.8.2/plugins',
+    '/usr/local/Cellar/qt/4.8.4/plugins',
 ]
 
 

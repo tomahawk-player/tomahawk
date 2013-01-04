@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string notr="true" extracomment="not translatable because not shown to the user">Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -144,6 +144,19 @@
    </item>
    <item>
     <widget class="QListWidget" name="playlistList"/>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="loveSync">
+     <property name="layoutDirection">
+      <enum>Qt::LeftToRight</enum>
+     </property>
+     <property name="text">
+      <string>Sync Starred tracks to Loved tracks</string>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+    </widget>
    </item>
    <item>
     <widget class="QCheckBox" name="streamingCheckbox">

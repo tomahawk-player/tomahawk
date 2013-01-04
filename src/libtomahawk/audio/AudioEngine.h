@@ -94,9 +94,12 @@ public slots:
     void playItem( const Tomahawk::artist_ptr& artist );
     void playItem( const Tomahawk::album_ptr& album );
     void setPlaylist( Tomahawk::playlistinterface_ptr playlist );
-    void setQueue( Tomahawk::playlistinterface_ptr queue ) { m_queue = queue; }
+    void setQueue( const Tomahawk::playlistinterface_ptr& queue );
 
     void setStopAfterTrack( const Tomahawk::query_ptr& query );
+
+    void setRepeatMode( Tomahawk::PlaylistModes::RepeatMode mode );
+    void setShuffled( bool enabled );
 
 signals:
     void loading( const Tomahawk::result_ptr& track );
@@ -110,6 +113,8 @@ signals:
 
     void seeked( qint64 ms );
 
+    void shuffleModeChanged( bool enabled );
+    void repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode );
     void controlStateChanged();
     void stateChanged( AudioState newState, AudioState oldState );
     void volumeChanged( int volume /* in percent */ );

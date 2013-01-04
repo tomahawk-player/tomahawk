@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="101px" height="101px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <title>recently-played</title>
+    <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
+    <defs>
+        <radialGradient cx="50%" cy="55.5052529%" fx="50%" fy="55.5052529%" r="55.5052519%" id="radialGradient-1">
+            <stop stop-color="rgb(83,147,174)" offset="0%"></stop>
+            <stop stop-color="rgb(80,193,251)" offset="100%"></stop>
+        </radialGradient>
+        <path d="M0.416038513,50.541996 C0.416038513,78.041996 22.792038,100.415997 50.2900391,100.415997 C77.7880402,100.415997 100.160038,78.041996 100.160038,50.541996 C100.157959,23.0419922 77.7879639,0.67199707 50.2900391,0.67199707 C22.7920399,0.67199707 0.416038513,23.0439968 0.416038513,50.541996 Z M0.416038513,50.541996" id="path-2"></path>
+    </defs>
+    <g id="Page 1" fill="rgb(215,215,215)" fill-rule="evenodd">
+        <g id="Group" fill="rgb(0,0,0)">
+            <use id="Shape" fill="url(#radialGradient-1)" xlink:href="#path-2"></use>
+            <use id="Shape-1" stroke="none" fill="none" xlink:href="#path-2"></use>
+        </g>
+        <path d="M51.5940001,51.37 L51.5940001,23.5840007 C51.5940001,21.9020007 50.2300001,20.5360006 48.5480001,20.5360006 C46.8660001,20.5360006 45.5,21.9040006 45.5,23.5840007 L45.5,55.436 C45.5,56.078 45.702,56.674 46.042,57.164 C46.692,58.5400001 48.0840001,59.5 49.7079999,59.5 L71.1160008,59.5 C73.3620009,59.5 75.180001,57.6799999 75.180001,55.4359999 C75.180001,53.1919998 73.3620932,51.37 71.1159995,51.37 L51.5940001,51.37 Z M51.5940001,51.37" id="Path" fill="rgb(254,255,254)"></path>
+    </g>
+</svg>

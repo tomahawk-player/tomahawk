@@ -24,6 +24,7 @@
 #include <QtGui/QPaintEvent>
 #include <QtGui/QPainter>
 #include <QtGui/QBoxLayout>
+#include <QGraphicsDropShadowEffect>
 
 #include "utils/TomahawkUtilsGui.h"
 #include "ElidedLabel.h"
@@ -74,28 +75,27 @@ BasicHeader::BasicHeader( QWidget* parent )
     m_descriptionLabel->setAlignment( Qt::AlignTop | Qt::AlignLeft );
 
     m_captionLabel->setMargin( 2 );
-    m_descriptionLabel->setMargin( 1 );
+    m_descriptionLabel->setMargin( 2 );
+
+/*    QGraphicsDropShadowEffect* effect = new QGraphicsDropShadowEffect();
+    effect->setBlurRadius( 4 );
+    effect->setXOffset( 0 );
+    effect->setYOffset( 0 );
+    effect->setColor( Qt::white );
+    m_captionLabel->setGraphicsEffect( effect );*/
+//    m_descriptionLabel->setGraphicsEffect( effect );
 
     TomahawkUtils::unmarginLayout( layout() );
     layout()->setContentsMargins( 8, 4, 8, 4 );
     setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
     setFixedHeight( 80 );
 
-    pal = palette();
-    pal.setColor( QPalette::Window, QColor( "#454e59" ) );
-
     setPalette( pal );
-    setAutoFillBackground( true );
-
-    if ( !s_tiledHeader )
-        s_tiledHeader = new QPixmap( TomahawkUtils::createTiledPixmap( 2000, height(), QImage( RESPATH "images/playlist-header-tiled.png" ) ) );
 }
 
 
 BasicHeader::~BasicHeader()
 {
-    delete s_tiledHeader;
-    s_tiledHeader = 0;
 }
 
 
@@ -121,20 +121,18 @@ BasicHeader::setPixmap( const QPixmap& p )
 
 
 void
-BasicHeader::paintEvent( QPaintEvent* )
+BasicHeader::paintEvent( QPaintEvent* event )
 {
-    if ( !s_tiledHeader || s_tiledHeader->isNull() || width() > s_tiledHeader->width() )
-    {
-        delete s_tiledHeader;
-        s_tiledHeader = new QPixmap( TomahawkUtils::createTiledPixmap( width(), height(), QImage( RESPATH "images/playlist-header-tiled.png" ) ) );
-    }
+    QWidget::paintEvent( event );
 
-    if ( !s_tiledHeader || s_tiledHeader->isNull() )
-        return;
+    QPainter painter( this );
+    painter.setRenderHint( QPainter::Antialiasing );
 
-    QPainter p( this );
+    QLinearGradient gradient( QPoint( 0, 0 ), QPoint( 0, 1 ) );
+    gradient.setCoordinateMode( QGradient::ObjectBoundingMode );
+    gradient.setColorAt( 0.0, QColor( "#707070" ) );
+    gradient.setColorAt( 1.0, QColor( "#25292c" ) );
 
-    // Truncate bg pixmap and paint into bg
-    p.drawPixmap( rect(), *s_tiledHeader, rect() );
+    painter.setBrush( gradient );
+    painter.fillRect( rect(), gradient );
 }
-

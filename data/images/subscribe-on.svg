@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="70px"
+   height="70px"
+   version="1.1"
+   id="svg2"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="subscribe-on.svg">
+  <metadata
+     id="metadata24">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1366"
+     inkscape:window-height="750"
+     id="namedview22"
+     showgrid="false"
+     inkscape:zoom="3.3714286"
+     inkscape:cx="35"
+     inkscape:cy="32.627119"
+     inkscape:window-x="0"
+     inkscape:window-y="-3"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2" />
+  <title
+     id="title4">subscribe-on</title>
+  <description
+     id="description6">Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
+  <defs
+     id="defs8">
+    <radialGradient
+       cx="35.995116"
+       cy="30.403396"
+       fx="35.995116"
+       fy="30.403396"
+       r="68.949998"
+       id="radialGradient-1"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         stop-color="rgb(250,211,103)"
+         offset="0%"
+         id="stop11" />
+      <stop
+         stop-color="rgb(237,119,51)"
+         offset="100%"
+         id="stop13" />
+    </radialGradient>
+    <path
+       d="M46.8499985,19.6000036 C46.8499985,34.813804 34.5369987,47.1954035 19.4029999,47.1954035 L19.4029999,53.7418054 C38.1447983,53.7418016 53.3936005,38.4230036 53.3936005,19.6000036 L46.8499985,19.6000036 M35.2915993,19.6056036 C35.2915993,23.885404 33.6367989,27.9048036 30.6310005,30.9204038 C27.6308002,33.936004 23.6408005,35.5992044 19.3917999,35.5992044 L19.3917999,42.1428026 C31.7678013,42.1428026 41.8338013,32.0306028 41.8338013,19.6056036 L35.2916031,19.6056036 L35.2915993,19.6056036 M23.9194012,19.6350034 C21.4176006,19.6350034 19.3889999,21.6678041 19.3889999,24.1696047 C19.3889999,26.6742033 21.4176006,28.702804 23.9194012,28.702804 C26.4225998,28.702804 28.4526005,26.6742033 28.4526005,24.1696047 C28.4526005,21.6678041 26.4225998,19.6350034 23.9194012,19.6350034 M34.6126022,69.6640009 C15.5712004,69.6640009 0.137600422,54.2276033 0.137600422,35.1890062 C0.137600422,16.1462044 15.5712004,0.714004517 34.6126022,0.714004517 C53.6525993,0.714004517 69.0876007,16.1462044 69.0876007,35.1890062 C69.0876007,54.2276033 53.6525993,69.6640009 34.6126022,69.6640009"
+       id="path-2" />
+  </defs>
+  <g
+     id="Page 1"
+     style="fill:#d7d7d7;fill-rule:evenodd"
+     transform="matrix(0,-1,1,0,-0.57640215,69.801603)">
+    <g
+       id="subscribe-off"
+       style="fill:#000000">
+      <g
+         id="g18"
+         style="fill:#dedfde">
+        <use
+           id="path870"
+           xlink:href="#path-2"
+           style="fill:url(#radialGradient-1)"
+           x="0"
+           y="0"
+           width="70"
+           height="70" />
+        <use
+           id="path870-1"
+           xlink:href="#path-2"
+           style="fill:none;stroke:none"
+           x="0"
+           y="0"
+           width="70"
+           height="70" />
+      </g>
+    </g>
+  </g>
+</svg>

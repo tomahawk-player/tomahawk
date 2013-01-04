@@ -393,7 +393,7 @@ ViewManager::showRecentPlaysPage()
     if ( !m_recentPlaysWidget )
     {
         FlexibleView* pv = new FlexibleView( m_widget );
-        pv->setPixmap( QPixmap( RESPATH "images/recently-played.png" ) );
+        pv->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::RecentlyPlayed ) );
 
         RecentlyPlayedModel* raModel = new RecentlyPlayedModel( pv );
         raModel->setTitle( tr( "Recently Played Tracks" ) );
@@ -524,8 +524,6 @@ ViewManager::setPage( ViewPage* page, bool trackHistory )
     if ( page == m_currentPage )
         return;
 
-    unlinkPlaylist();
-
     if ( m_stack->indexOf( page->widget() ) < 0 )
     {
         m_stack->addWidget( page->widget() );
@@ -590,34 +588,11 @@ ViewManager::isNewPlaylistPageVisible() const
 
 
 void
-ViewManager::unlinkPlaylist()
-{
-    if ( currentPlaylistInterface() )
-    {
-        disconnect( currentPlaylistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ),
-                    this,                              SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ) );
-
-        disconnect( currentPlaylistInterface().data(), SIGNAL( shuffleModeChanged( bool ) ),
-                    this,                              SIGNAL( shuffleModeChanged( bool ) ) );
-    }
-}
-
-
-void
 ViewManager::updateView()
 {
     if ( currentPlaylistInterface() )
     {
-        connect( currentPlaylistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ),
-                                                    SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ) );
-
-        connect( currentPlaylistInterface().data(), SIGNAL( shuffleModeChanged( bool ) ),
-                                                    SIGNAL( shuffleModeChanged( bool ) ) );
-
         m_infobar->setFilter( currentPage()->filter() );
-
-        emit repeatModeChanged( currentPlaylistInterface()->repeatMode() );
-        emit shuffleModeChanged( currentPlaylistInterface()->shuffled() );
     }
 
 /*    if ( currentPage()->queueVisible() )
@@ -682,24 +657,6 @@ ViewManager::onWidgetDestroyed( QWidget* widget )
     {
         m_currentPage = 0;
         historyBack();
-    }
-}
-
-
-void
-ViewManager::setRepeatMode( Tomahawk::PlaylistModes::RepeatMode mode )
-{
-    if ( currentPlaylistInterface() )
-        currentPlaylistInterface()->setRepeatMode( mode );
-}
-
-
-void
-ViewManager::setShuffled( bool enabled )
-{
-    if ( currentPlaylistInterface() )
-    {
-        currentPlaylistInterface()->setShuffled( enabled );
     }
 }
 

@@ -38,7 +38,7 @@ EchonestPlugin::EchonestPlugin()
     : InfoPlugin()
 {
     qDebug() << Q_FUNC_INFO;
-    m_supportedGetTypes << Tomahawk::InfoSystem::InfoArtistBiography << Tomahawk::InfoSystem::InfoArtistFamiliarity << Tomahawk::InfoSystem::InfoArtistHotttness << Tomahawk::InfoSystem::InfoArtistTerms << Tomahawk::InfoSystem::InfoMiscTopTerms;
+    m_supportedGetTypes << Tomahawk::InfoSystem::InfoArtistFamiliarity << Tomahawk::InfoSystem::InfoArtistHotttness << Tomahawk::InfoSystem::InfoArtistTerms << Tomahawk::InfoSystem::InfoMiscTopTerms;
 }
 
 
@@ -102,10 +102,17 @@ EchonestPlugin::getSongProfile( const Tomahawk::InfoSystem::InfoRequestData &req
 void
 EchonestPlugin::getArtistBiography( const Tomahawk::InfoSystem::InfoRequestData &requestData )
 {
-    if( !isValidArtistData( requestData ) )
+    if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
+    {
         return;
+    }
+    InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
+    if ( !hash.contains( "artist" ) )
+    {
+        return;
+    }
 
-    Echonest::Artist artist( requestData.input.toString() );
+    Echonest::Artist artist( hash["artist"] );
     QNetworkReply *reply = artist.fetchBiographies();
     reply->setProperty( "artist", QVariant::fromValue< Echonest::Artist >( artist ) );
     reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
@@ -180,7 +187,6 @@ EchonestPlugin::getArtistBiographySlot()
         siteData[ "text" ] = biography.text();
         siteData[ "attribution" ] = biography.license().attribution;
         siteData[ "licensetype" ] = biography.license().type;
-        siteData[ "attribution" ] = biography.license().url.toString();
         biographyMap[ biography.site() ] = siteData;
     }
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();

@@ -20,12 +20,13 @@
 
 #include "JobStatusView.h"
 #include "JobStatusModel.h"
-#include "network/StreamConnection.h"
-#include "network/Servent.h"
-#include "utils/TomahawkUtils.h"
 #include "Result.h"
 #include "Source.h"
 #include "Artist.h"
+#include "network/StreamConnection.h"
+#include "network/Servent.h"
+#include "utils/TomahawkUtilsGui.h"
+
 
 TransferStatusItem::TransferStatusItem( TransferStatusManager* p, StreamConnection* sc )
     : m_parent( p )
@@ -84,9 +85,9 @@ TransferStatusItem::icon() const
         return QPixmap();
 
     if ( m_stream.data()->type() == StreamConnection::SENDING )
+        return m_parent->txPixmap();
+    else
         return m_parent->rxPixmap();
-   else
-       return m_parent->txPixmap();
 }
 
 
@@ -100,9 +101,6 @@ TransferStatusItem::onTransferUpdate()
 TransferStatusManager::TransferStatusManager( QObject* parent )
     : QObject( parent )
 {
-    m_rxPixmap.load( RESPATH "images/uploading.png" );
-    m_txPixmap.load( RESPATH "images/downloading.png" );
-
     connect( Servent::instance(), SIGNAL( streamStarted( StreamConnection* ) ), SLOT( streamRegistered( StreamConnection* ) ) );
 }
 
@@ -110,4 +108,18 @@ void
 TransferStatusManager::streamRegistered( StreamConnection* sc )
 {
     JobStatusView::instance()->model()->addJob( new TransferStatusItem( this, sc ) );
+}
+
+
+QPixmap
+TransferStatusManager::rxPixmap() const
+{
+    return TomahawkUtils::defaultPixmap( TomahawkUtils::Downloading, TomahawkUtils::Original, QSize( 128, 128 ) );
+}
+
+
+QPixmap
+TransferStatusManager::txPixmap() const
+{
+    return TomahawkUtils::defaultPixmap( TomahawkUtils::Uploading, TomahawkUtils::Original, QSize( 128, 128 ) );
 }

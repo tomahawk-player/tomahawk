@@ -47,10 +47,10 @@ public:
     virtual void setCurrentIndex( qint64 index );
     virtual qint64 siblingIndex( int itemsAway, qint64 rootIndex = -1 ) const;
 
-    virtual Tomahawk::result_ptr resultAt( qint64 index ) const { Q_UNUSED( index ); Q_ASSERT( false ); return Tomahawk::result_ptr(); }
-    virtual Tomahawk::query_ptr queryAt( qint64 index ) const { Q_UNUSED( index ); Q_ASSERT( false ); return Tomahawk::query_ptr(); }
-    virtual qint64 indexOfResult( const Tomahawk::result_ptr& result ) const { Q_UNUSED( result ); Q_ASSERT( false ); return -1; }
-    virtual qint64 indexOfQuery( const Tomahawk::query_ptr& query ) const { Q_UNUSED( query ); Q_ASSERT( false ); return -1; }
+    virtual Tomahawk::result_ptr resultAt( qint64 index ) const;
+    virtual Tomahawk::query_ptr queryAt( qint64 index ) const;
+    virtual qint64 indexOfResult( const Tomahawk::result_ptr& result ) const;
+    virtual qint64 indexOfQuery( const Tomahawk::query_ptr& query ) const;
 
     virtual Tomahawk::result_ptr currentItem() const;
 
@@ -70,9 +70,10 @@ private slots:
     void infoSystemFinished( const QString& infoId );
 
 private:
+    void checkQueries();
+
     QList< Tomahawk::query_ptr > m_queries;
     mutable result_ptr m_currentItem;
-    mutable qint64 m_currentTrack;
 
     bool m_infoSystemLoaded;
     bool m_databaseLoaded;

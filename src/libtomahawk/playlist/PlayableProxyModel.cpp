@@ -106,7 +106,10 @@ PlayableProxyModel::setSourcePlayableModel( PlayableModel* sourceModel )
     {
         disconnect( m_model, SIGNAL( loadingStarted() ), this, SIGNAL( loadingStarted() ) );
         disconnect( m_model, SIGNAL( loadingFinished() ), this, SIGNAL( loadingFinished() ) );
+        disconnect( m_model, SIGNAL( itemCountChanged( unsigned int ) ), this, SIGNAL( itemCountChanged( unsigned int ) ) );
         disconnect( m_model, SIGNAL( indexPlayable( QModelIndex ) ), this, SLOT( onIndexPlayable( QModelIndex ) ) );
+        disconnect( m_model, SIGNAL( indexResolved( QModelIndex ) ), this, SLOT( onIndexResolved( QModelIndex ) ) );
+        disconnect( m_model, SIGNAL( currentIndexChanged() ), this, SIGNAL( currentIndexChanged() ) );
     }
 
     m_model = sourceModel;
@@ -115,7 +118,10 @@ PlayableProxyModel::setSourcePlayableModel( PlayableModel* sourceModel )
     {
         connect( m_model, SIGNAL( loadingStarted() ), SIGNAL( loadingStarted() ) );
         connect( m_model, SIGNAL( loadingFinished() ), SIGNAL( loadingFinished() ) );
+        connect( m_model, SIGNAL( itemCountChanged( unsigned int ) ), SIGNAL( itemCountChanged( unsigned int ) ) );
         connect( m_model, SIGNAL( indexPlayable( QModelIndex ) ), SLOT( onIndexPlayable( QModelIndex ) ) );
+        connect( m_model, SIGNAL( indexResolved( QModelIndex ) ), SLOT( onIndexResolved( QModelIndex ) ) );
+        connect( m_model, SIGNAL( currentIndexChanged() ), SIGNAL( currentIndexChanged() ) );
     }
 
     QSortFilterProxyModel::setSourceModel( m_model );
@@ -129,7 +135,7 @@ PlayableProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourcePa
     if ( !pi )
         return false;
 
-    if ( m_maxVisibleItems >= 0 && sourceRow > m_maxVisibleItems - 1 )
+    if ( m_maxVisibleItems > 0 && sourceRow > m_maxVisibleItems - 1 )
         return false;
 
     if ( m_hideDupeItems )
@@ -537,6 +543,8 @@ PlayableProxyModel::data( const QModelIndex& index, int role ) const
         return QVariant();
     if ( !m_headerStyle.contains( m_style ) )
         return QVariant();
+    if ( index.column() < 0 )
+        return QVariant();
 
     PlayableModel::Columns col = m_headerStyle[ m_style ].at( index.column() );
     QModelIndex sourceIdx = mapToSource( index );
@@ -603,7 +611,7 @@ PlayableProxyModel::updateDetailedInfo( const QModelIndex& index )
 
     if ( style() == PlayableProxyModel::Short || style() == PlayableProxyModel::Large )
     {
-        item->query()->cover( QSize( 0, 0 ) );
+        item->query()->displayQuery()->cover( QSize( 0, 0 ) );
     }
 
     if ( style() == PlayableProxyModel::Large )
@@ -628,8 +636,7 @@ void
 PlayableProxyModel::setCurrentIndex( const QModelIndex& index )
 {
     tDebug() << Q_FUNC_INFO;
-    m_model->setCurrentItem( mapToSource( index ) );
-    emit currentIndexChanged();
+    m_model->setCurrentIndex( mapToSource( index ) );
 }
 
 
@@ -637,4 +644,11 @@ void
 PlayableProxyModel::onIndexPlayable( const QModelIndex& index )
 {
     emit indexPlayable( mapFromSource( index ) );
+}
+
+
+void
+PlayableProxyModel::onIndexResolved( const QModelIndex& index )
+{
+    emit indexResolved( mapFromSource( index ) );
 }

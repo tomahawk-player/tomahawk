@@ -50,7 +50,7 @@ public:
 
     virtual QString title() const { return m_title; }
     virtual QString description() const { return m_description; }
-    virtual QPixmap pixmap() const { return m_pixmap; }
+    virtual QPixmap pixmap() const;
 
     virtual bool jumpToCurrentTrack() { return false; }
 
@@ -73,7 +73,6 @@ private:
 
     QString m_title;
     QString m_description;
-    QPixmap m_pixmap;
 };
 
 #endif // SOURCEINFOWIDGET_H

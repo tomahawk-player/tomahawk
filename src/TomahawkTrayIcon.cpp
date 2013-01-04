@@ -315,7 +315,7 @@ void
 TomahawkTrayIcon::onSocialActionsLoaded()
 {
     m_loveTrackAction->setText( tr( "&Love" ) );
-    m_loveTrackAction->setIcon( QIcon( RESPATH "images/loved.png" ) );
+    m_loveTrackAction->setIcon( QIcon( RESPATH "images/loved.svg" ) );
 
     if ( !m_currentTrack )
         return;
@@ -323,7 +323,7 @@ TomahawkTrayIcon::onSocialActionsLoaded()
     if ( m_currentTrack->toQuery()->loved() )
     {
         m_loveTrackAction->setText( tr( "Un-&Love" ) );
-        m_loveTrackAction->setIcon( QIcon( RESPATH "images/not-loved.png" ) );
+        m_loveTrackAction->setIcon( QIcon( RESPATH "images/not-loved.svg" ) );
     }
 }
 

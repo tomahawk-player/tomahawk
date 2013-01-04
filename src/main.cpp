@@ -160,12 +160,6 @@ main( int argc, char *argv[] )
     if ( guard.isPrimaryInstance() )
         a.init();
 
-    if ( argc > 1 )
-    {
-        QString arg = a.arguments()[ 1 ];
-        a.loadUrl( arg );
-    }
-
     int returnCode = 0;
     if ( guard.isPrimaryInstance() )
         returnCode = a.exec();

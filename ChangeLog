@@ -1,14 +1,30 @@
 Version 0.6.0:
-    * Access Control queries now stay on the bottom of the job view,
-      removing the tendency to jump away from the mouse.
+    * Improved icon theme with vector graphics.
+    * Higher resolution artist and album images.
+    * You can now click artists, albums and tracks mentioned in artists'
+      biographies.
+    * New AudioControl logic - only enable Prev/Skip buttons if available.
+    * Added more options to right-click/context menus.
+    * Make friends' currently playing song (in sidebar) clickable.
+    * Improve MusicBrainz plugin to use normalized artist names and avoid
+      duplicate tracks.
+    * Access Control queries now stay on the bottom of the job view, removing
+      the tendency to jump away from the mouse.
     * Improved random mode, preventing songs from being played in too rapid
       succession.
-    * You can now choose between Various view modes for your playlists.
-    * Nicer layout for the Album page.
-    * Follow HTTP redirects when fetching Playlists from the Internet.
+    * You can now choose between various view modes for your playlists.
+    * Nicer layout for the Artist, Album & Track pages.
+    * Follow HTTP redirects when fetching Playlists.
     * Main menu can now be hidden and instead be shown as a toolbar button.
     * Connectivity controls in the toolbar.
     * Cleaned up settings dialog.
+    * Ability to sync Spotify Starred Tracks with Tomahawk's Loved Tracks.
+    * Remove YouTube resolver from plug-in directory on request of YouTube.
+    * Fixed iTunes m3u playlist support.
+    * Support dropping of new Soundcloud user, track, set & likes URLs.
+    * Add HotNewHipHop as available chart.
+    * Add iTunes as available source for New Releases.
+    * (Linux) Allow disabling of playback notifications.
 
 Version 0.5.5:
     * Changed the Spotify config dialog to indicate when the user

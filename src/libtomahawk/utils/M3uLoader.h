@@ -28,6 +28,7 @@
 #include "Playlist.h"
 #include <QObject>
 #include <QSet>
+#include <QFile>
 #include <QtCore/QStringList>
 
 class TrackModel;
@@ -56,6 +57,7 @@ signals:
 private:
     void parseM3u( const QString& track );
     void getTags( const QFileInfo& info );
+    void parseLine(const QString& line , const QFile &file);
     QList< query_ptr > m_tracks;
     QString m_title, m_info, m_creator;
     bool m_single;

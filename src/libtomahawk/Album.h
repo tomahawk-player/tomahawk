@@ -93,12 +93,12 @@ private:
     QString m_sortname;
 
     artist_ptr m_artist;
-    QByteArray m_coverBuffer;
 
-    bool m_coverLoaded;
+    mutable bool m_coverLoaded;
     mutable bool m_coverLoading;
     mutable QString m_uuid;
 
+    mutable QByteArray m_coverBuffer;
 #ifndef ENABLE_HEADLESS
     mutable QPixmap* m_cover;
     mutable QHash< int, QPixmap > m_coverCache;

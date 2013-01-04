@@ -26,9 +26,7 @@ THE SOFTWARE.
 
 #include "qocoa_mac.h"
 
-#import "Foundation/NSAutoreleasePool.h"
-#import "Foundation/NSNotification.h"
-#import "AppKit/NSSearchField.h"
+#import <Cocoa/Cocoa.h>
 
 #include <QApplication>
 #include <QClipboard>

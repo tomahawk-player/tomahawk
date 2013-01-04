@@ -1,5 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
+ *   Copyright 2010-2012, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *
@@ -18,18 +19,21 @@
  */
 
 #include "PlaylistInterface.h"
-#include "utils/Logger.h"
 #include "Result.h"
 #include "Pipeline.h"
 #include "Source.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 
 
-PlaylistInterface::PlaylistInterface ()
+PlaylistInterface::PlaylistInterface()
     : QObject()
     , m_latchMode( PlaylistModes::StayOnSong )
     , m_finished( false )
+    , m_prevAvail( false )
+    , m_nextAvail( false )
+    , m_currentIndex( -1 )
 {
     m_id = uuid();
 }
@@ -55,28 +59,24 @@ PlaylistInterface::nextResult() const
 
 
 Tomahawk::result_ptr
-PlaylistInterface::siblingResult( int itemsAway ) const
+PlaylistInterface::siblingResult( int itemsAway, qint64 rootIndex ) const
 {
-    qint64 idx = siblingIndex( itemsAway );
-    qint64 safetyCheck = 0;
+    qint64 idx = siblingIndex( itemsAway, rootIndex );
+    QList< qint64 > safetyCheck;
 
-    // If safetyCheck equals idx, this means the interface keeps returning the same item and we won't discover anything new - abort
+    // If safetyCheck contains idx, this means the interface keeps returning the same items and we won't discover anything new - abort
     // This can happen in repeat / random mode e.g.
-    while ( idx >= 0 && safetyCheck != idx )
+    while ( idx >= 0 && !safetyCheck.contains( idx ) )
     {
-        safetyCheck = idx;
+        safetyCheck << idx;
         Tomahawk::query_ptr query = queryAt( idx );
-        if ( query && query->numResults() )
+
+        if ( query && query->playable() )
         {
             return query->results().first();
         }
 
-        if ( itemsAway < 0 )
-            itemsAway--;
-        else
-            itemsAway++;
-
-        idx = siblingIndex( itemsAway );
+        idx = siblingIndex( itemsAway < 0 ? -1 : 1, idx );
     }
 
     return Tomahawk::result_ptr();
@@ -159,12 +159,56 @@ PlaylistInterface::filterTracks( const QList<Tomahawk::query_ptr>& queries )
 bool
 PlaylistInterface::hasNextResult() const
 {
-    return ( siblingResult( 1 ) );
+    Tomahawk::result_ptr r = siblingResult( 1 );
+    return ( r && r->isOnline() );
 }
 
 
 bool
 PlaylistInterface::hasPreviousResult() const
 {
-    return ( siblingResult( -1 ) );
+    Tomahawk::result_ptr r = siblingResult( -1 );
+    return ( r && r->isOnline() );
+}
+
+
+void
+PlaylistInterface::onItemsChanged()
+{
+    if ( QThread::currentThread() != thread() )
+    {
+        QMetaObject::invokeMethod( this, "onItemsChanged", Qt::QueuedConnection );
+        return;
+    }
+
+    Tomahawk::result_ptr prevResult = siblingResult( -1, m_currentIndex );
+    Tomahawk::result_ptr nextResult = siblingResult( 1, m_currentIndex );
+
+    {
+        bool avail = prevResult && prevResult->toQuery()->playable();
+        if ( avail != m_prevAvail )
+        {
+            m_prevAvail = avail;
+            emit previousTrackAvailable( avail );
+        }
+    }
+
+    {
+        bool avail = nextResult && nextResult->toQuery()->playable();
+        if ( avail != m_nextAvail )
+        {
+            m_nextAvail = avail;
+            emit nextTrackAvailable( avail );
+        }
+    }
+}
+
+
+void
+PlaylistInterface::setCurrentIndex( qint64 index )
+{
+    m_currentIndex = index;
+
+    emit currentIndexChanged();
+    onItemsChanged();
 }

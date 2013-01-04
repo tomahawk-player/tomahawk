@@ -101,8 +101,6 @@ private:
     Tomahawk::PlaylistModes::RepeatMode m_repeatMode;
     bool m_shuffled;
 
-    QPixmap m_defaultSourceIcon;
-
     QTimer m_phononTickCheckTimer;
     QTimeLine m_sliderTimeLine;
     bool m_seeked;

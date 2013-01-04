@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="130px" height="130px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <title>view-toggle-icon-list-inactive</title>
+    <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
+    <defs>
+        <path d="M33,32 L90,32" id="path-1"></path>
+        <path d="M33,52 L90,52" id="path-2"></path>
+        <path d="M33,70 L90,70" id="path-3"></path>
+        <path d="M33,89 L90,89" id="path-4"></path>
+    </defs>
+    <g id="Page 1" fill="rgb(215,215,215)" fill-rule="evenodd">
+        <use id="Line" xlink:href="#path-1"></use>
+        <use id="Line-1" stroke="rgb(57,57,57)" stroke-width="6" stroke-linecap="square" fill="none" xlink:href="#path-1"></use>
+        <use id="Line" xlink:href="#path-2"></use>
+        <use id="Line-1" stroke="rgb(57,57,57)" stroke-width="6" stroke-linecap="square" fill="none" xlink:href="#path-2"></use>
+        <use id="Line" xlink:href="#path-3"></use>
+        <use id="Line-1" stroke="rgb(57,57,57)" stroke-width="6" stroke-linecap="square" fill="none" xlink:href="#path-3"></use>
+        <use id="Line" xlink:href="#path-4"></use>
+        <use id="Line-1" stroke="rgb(57,57,57)" stroke-width="6" stroke-linecap="square" fill="none" xlink:href="#path-4"></use>
+    </g>
+</svg>

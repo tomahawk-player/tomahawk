@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="365px" height="365px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <title>album-icon</title>
+    <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
+    <defs>
+        <radialGradient cx="50%" cy="50%" fx="50%" fy="50%" r="70.6690133%" id="radialGradient-1">
+            <stop stop-color="rgb(187,190,185)" offset="0%"></stop>
+            <stop stop-color="rgb(213,211,209)" offset="0.923389476%"></stop>
+            <stop stop-color="rgb(241,240,240)" offset="100%"></stop>
+        </radialGradient>
+        <path d="M183,243 C216.137087,243 243,216.137087 243,183 C243,149.862913 216.137087,123 183,123 C149.862913,123 123,149.862913 123,183 C123,216.137087 149.862913,243 183,243 Z M182.5,360 C84.4694521,360 5,280.530548 5,182.5 C5,84.4694521 84.4694521,5 182.5,5 C280.530548,5 360,84.4694521 360,182.5 C360,280.530548 280.530548,360 182.5,360 Z M182.5,360" id="path-2"></path>
+    </defs>
+    <g id="Page 1" fill="rgb(215,215,215)" fill-rule="evenodd">
+        <g id="Group">
+            <use id="Oval 1" stroke="rgb(49,54,58)" stroke-width="5" fill="url(#radialGradient-1)" xlink:href="#path-2"></use>
+            <use id="Oval 1-1" stroke="none" fill="none" xlink:href="#path-2"></use>
+            <path d="M183,243 C149.862913,243 123,216.137087 123,183 C123,149.862913 149.862913,123 183,123 C216.137087,123 243,149.862913 243,183 C243,216.137087 216.137087,243 183,243 Z M183.5,209 C198.135547,209 210,197.359404 210,183 C210,168.640596 198.135547,157 183.5,157 C168.864453,157 157,168.640596 157,183 C157,197.359404 168.864453,209 183.5,209 Z M183.5,209" id="Oval 2" stroke="rgb(150,150,150)" stroke-width="1" fill="rgb(137,137,137)"></path>
+        </g>
+    </g>
+</svg>

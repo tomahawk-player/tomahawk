@@ -53,7 +53,7 @@ public:
     explicit LatchedStatusManager( QObject* parent = 0 );
     virtual ~LatchedStatusManager() {}
 
-    QPixmap pixmap() const { return m_pixmap; }
+    QPixmap pixmap() const;
 
 private slots:
     void latchedOn( const Tomahawk::source_ptr&, const Tomahawk::source_ptr& );
@@ -61,7 +61,6 @@ private slots:
     void sourceOffline();
 
 private:
-    QPixmap m_pixmap;
     QHash< QString, QWeakPointer< LatchedStatusItem > > m_jobs;
 };
 

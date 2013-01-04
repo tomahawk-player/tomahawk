@@ -3,7 +3,7 @@
 
 // This file inspired by clementine's MacDelegate.h
 
-#import <AppKit/NSApplication.h>
+#import <Cocoa/Cocoa.h>
 
 #include "SPMediaKeyTap.h"
 

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="51px" height="51px" viewBox="0 0 51 51" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <title>list-remove</title>
+    <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
+    <defs></defs>
+    <g id="Page 1" fill="rgb(215,215,215)" fill-rule="evenodd">
+        <path d="M25.5,51 C39.5832618,51 51,39.5832618 51,25.5 C51,11.4167382 39.5832618,0 25.5,0 C11.4167382,0 0,11.4167382 0,25.5 C0,39.5832618 11.4167382,51 25.5,51 Z M25.5,51" id="Oval 1" fill="rgb(80,81,80)"></path>
+        <path d="M37.6410007,23 L13.5,23 C12.672,23 12,23.672 12,24.5 L12,27.3069999 C12,28.1349999 12.672,28.8069999 13.5,28.8069999 L37.6410007,28.8069999 C38.4690008,28.8069999 39.1410007,28.1349999 39.1410007,27.3069999 L39.1410007,24.5 C39.1410007,23.6719971 38.4690037,23 37.6410007,23 L37.6410007,23 L37.6410007,23" id="Shape" fill="rgb(254,255,254)"></path>
+    </g>
+</svg>

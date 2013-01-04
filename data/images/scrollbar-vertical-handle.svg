@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="4px" height="113px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <title>scrollbar-vertical-handle</title>
+    <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
+    <defs></defs>
+    <g id="Page 1" fill="rgb(223,223,223)" fill-rule="evenodd">
+        <path d="M0.284935717,0.614990234 C0.284935717,0.614990234 0.265869141,29.3612391 0.265869141,56.5 C0.265869107,85.2462489 0.284935717,112.38501 0.284935717,112.38501 L3.24863583,112.38501 C3.24863583,112.38501 3.26586914,86.9231958 3.26586914,56.5 C3.26586911,31.0381861 3.24863583,0.614990234 3.24863583,0.614990234 L0.284935717,0.614990234 Z M0.284935717,0.614990234" id="Rectangle 2" stroke="rgb(254,254,254)" stroke-width="0.2" fill="rgb(155,155,155)" transform="translate(1.76586914, 56.5) rotate(-90) translate(-1.76586914, -56.5)"></path>
+    </g>
+</svg>

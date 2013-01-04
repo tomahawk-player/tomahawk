@@ -33,7 +33,8 @@ class DLLEXPORT DatabaseCommand_AllArtists : public DatabaseCommand
 {
 Q_OBJECT
 public:
-    enum SortOrder {
+    enum SortOrder
+    {
         None = 0,
         ModificationTime = 1
     };

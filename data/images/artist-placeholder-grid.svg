@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="200px" height="200px" viewBox="0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <title>artist-placeholder-grid</title>
+    <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
+    <defs></defs>
+    <g id="Page 1" fill="rgb(215,215,215)" fill-rule="evenodd">
+        <g id="artist-placeholder" fill="rgb(0,0,0)">
+            <g id="Page 1" fill="rgb(214,215,214)">
+                <path d="M0,200 L200,200 L200,0 L0,0 L0,200 Z M0,200" id="Rectangle 4" fill="rgb(0,0,0)"></path>
+                <path d="M187,78 C187,76 185,74 182,74 L125,73 L107,16 C106,14 104,13 102,13 C99,13 98,14 97,16 L78,73 L21,74 C19,74 17,76 16,78 C16,80 16,83 18,84 L63,120 L47,178 C46,180 47,182 49,184 C51,185 53,185 55,184 L102,149 L149,184 C149,184 150,185 152,185 C153,185 154,184 155,184 C156,182 157,180 156,178 L140,120 L185,84 C187,83 188,80 187,78 C187,78 188,80 187,78 L187,78 M131,114 C129,115 128,117 129,120 L142,166 L105,138 C103,137 101,137 99,138 L61,166 L74,120 C75,117 74,115 73,114 L36,85 L82,84 C84,84 86,82 87,80 L102,34 L117,80 C117,82 119,84 122,84 L167,85 L131,114" id="Shape" fill="rgb(254,254,254)"></path>
+            </g>
+        </g>
+    </g>
+</svg>

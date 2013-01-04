@@ -24,6 +24,7 @@
 #include "widgets/infowidgets/ArtistInfoWidget.h"
 #include "widgets/infowidgets/TrackInfoWidget.h"
 #include "widgets/SearchWidget.h"
+#include "utils/ImageRegistry.h"
 #include "utils/Closure.h"
 
 #include <QAction>
@@ -41,7 +42,7 @@ using namespace Tomahawk;
 TemporaryPageItem::TemporaryPageItem ( SourcesModel* mdl, SourceTreeItem* parent, ViewPage* page, int sortValue )
     : SourceTreeItem( mdl, parent, SourcesModel::TemporaryPage )
     , m_page( page )
-    , m_icon( QIcon( RESPATH "images/playlist-icon.png" ) )
+    , m_icon( ImageRegistry::instance()->icon( RESPATH "images/playlist-icon.svg" ) )
     , m_sortValue( sortValue )
 {
     QAction* action = 0;
@@ -51,25 +52,25 @@ TemporaryPageItem::TemporaryPageItem ( SourcesModel* mdl, SourceTreeItem* parent
         action = new QAction( tr( "Copy Artist Link" ), this );
         action->setProperty( "linkType", (int)ArtistLink );
 
-        m_icon = QIcon( RESPATH "images/artist-icon.png" );
+        m_icon = ImageRegistry::instance()->icon( RESPATH "images/artist-icon.svg" );
     }
     else if ( dynamic_cast< AlbumInfoWidget* >( page ) )
     {
         action = new QAction( tr( "Copy Album Link" ), this );
         action->setProperty( "linkType", (int)AlbumLink );
 
-        m_icon = QIcon( RESPATH "images/album-icon.png" );
+        m_icon = ImageRegistry::instance()->icon( RESPATH "images/album-icon.svg" );
     }
     else if ( dynamic_cast< TrackInfoWidget* >( page ) )
     {
         action = new QAction( tr( "Copy Track Link" ), this );
         action->setProperty( "linkType", (int)TrackLink );
 
-        m_icon = QIcon( RESPATH "images/track-icon-sidebar.png" );
+        m_icon = ImageRegistry::instance()->icon( RESPATH "images/track-icon.svg" );
     }
     else if ( dynamic_cast< SearchWidget* >( page ) )
     {
-        m_icon = QIcon( RESPATH "images/search-icon.png" );
+        m_icon = ImageRegistry::instance()->icon( RESPATH "images/search-icon.svg" );
     }
 
     if ( action )
@@ -84,7 +85,6 @@ TemporaryPageItem::TemporaryPageItem ( SourcesModel* mdl, SourceTreeItem* parent
 
 TemporaryPageItem::~TemporaryPageItem()
 {
-    delete m_page;
 }
 
 
@@ -137,6 +137,7 @@ TemporaryPageItem::removeFromList()
 
     emit removed();
 
+    delete m_page;
     deleteLater();
 }
 

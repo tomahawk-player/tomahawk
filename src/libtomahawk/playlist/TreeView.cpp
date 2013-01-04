@@ -243,6 +243,10 @@ TreeView::onItemActivated( const QModelIndex& index )
         {
             AudioEngine::instance()->playItem( m_proxyModel->playlistInterface(), item->result() );
         }
+        else if ( !item->query().isNull() )
+        {
+            AudioEngine::instance()->playItem( m_proxyModel->playlistInterface(), item->query() );
+        }
     }
 }
 

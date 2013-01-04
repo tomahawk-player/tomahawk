@@ -32,7 +32,6 @@
 #include <QSharedPointer>
 
 #include "Typedefs.h"
-#include "FuncTimeout.h"
 #include "Playlist.h"
 #include "playlist/dynamic/DynamicPlaylist.h"
 

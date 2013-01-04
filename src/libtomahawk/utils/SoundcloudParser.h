@@ -63,7 +63,7 @@ signals:
     void playlist( const Tomahawk::query_ptr& playlist );
 
 private slots:
-    void soundcloudBrowseFinished();
+    void soundcloudArtistLookupFinished();
     void soundcloudLookupFinished();
     void playlistCreated();
 
@@ -79,11 +79,12 @@ private:
 
     int m_subscribers;
     QList< query_ptr > m_tracks;
+    QVariantMap m_userData;
+    bool m_getLikes;
     QSet< NetworkReply* > m_queries;
     Tomahawk::playlist_ptr m_playlist;
     DropJobNotifier* m_browseJob;
     DropJob::DropType m_type;
-    static QPixmap* s_pixmap;
 };
 
 }

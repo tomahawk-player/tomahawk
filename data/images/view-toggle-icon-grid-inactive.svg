@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="170px" height="170px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <title>view-toggle-icon-grid-inactive</title>
+    <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
+    <defs></defs>
+    <g id="Page 1" fill="rgb(215,215,215)" fill-rule="evenodd">
+        <path d="M37,36 L37,76 L77,76 L77,36 L37,36 Z M37,36" id="Rectangle 2" stroke="rgb(150,150,150)" stroke-width="1" fill="rgb(0,0,0)"></path>
+        <path d="M82,36 L82,76 L122,76 L122,36 L82,36 Z M82,36" id="Rectangle 2" stroke="rgb(150,150,150)" stroke-width="1" fill="rgb(0,0,0)"></path>
+        <path d="M37,81 L37,121 L77,121 L77,81 L37,81 Z M37,81" id="Rectangle 2" stroke="rgb(150,150,150)" stroke-width="1" fill="rgb(0,0,0)"></path>
+        <path d="M82,81 L82,121 L122,121 L122,81 L82,81 Z M82,81" id="Rectangle 2" stroke="rgb(150,150,150)" stroke-width="1" fill="rgb(0,0,0)"></path>
+    </g>
+</svg>

@@ -29,6 +29,8 @@
 #include "playlist/LovedTracksModel.h"
 #include "playlist/PlaylistLargeItemDelegate.h"
 
+#include "utils/ImageRegistry.h"
+
 using namespace Tomahawk;
 
 
@@ -60,7 +62,7 @@ LovedTracksItem::text() const
 QIcon
 LovedTracksItem::icon() const
 {
-    return QIcon( RESPATH "images/loved_playlist.png" );
+    return ImageRegistry::instance()->icon( RESPATH "images/loved_playlist.svg" );
 }
 
 
@@ -71,7 +73,7 @@ LovedTracksItem::activate()
     {
         SourceItem* par = dynamic_cast< SourceItem* >( parent() );
         FlexibleView* pv = new FlexibleView( ViewManager::instance()->widget() );
-        pv->setPixmap( QPixmap( RESPATH "images/loved_playlist.png" ) );
+        pv->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::LovedPlaylist, TomahawkUtils::Original, QSize( 128, 128 ) ) );
 
         LovedTracksModel* raModel = new LovedTracksModel( pv );
         raModel->setTitle( text() );

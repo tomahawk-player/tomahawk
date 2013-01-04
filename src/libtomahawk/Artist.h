@@ -65,7 +65,7 @@ public:
     QList< Tomahawk::PlaybackLog > playbackHistory( const Tomahawk::source_ptr& source = Tomahawk::source_ptr() ) const;
     void setPlaybackHistory( const QList< Tomahawk::PlaybackLog >& playbackData );
     unsigned int playbackCount( const Tomahawk::source_ptr& source = Tomahawk::source_ptr() );
-    
+
     QString biography() const;
 
 #ifndef ENABLE_HEADLESS
@@ -133,7 +133,7 @@ private:
 #endif
 
     QHash< Tomahawk::ModelMode, QHash< Tomahawk::collection_ptr, Tomahawk::playlistinterface_ptr > > m_playlistInterface;
-    
+
     QWeakPointer< Tomahawk::Artist > m_ownRef;
 
     static QHash< QString, artist_ptr > s_artistsByName;

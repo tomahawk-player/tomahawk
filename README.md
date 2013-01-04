@@ -37,6 +37,7 @@ Required dependencies:
 
 * CMake 2.8.6 - http://www.cmake.org/
 * Qt 4.7.0 - http://qt.nokia.com/
+* Phonon 4.6.0 - http://phonon.kde.org/
 * QJson 0.7.1 - http://qjson.sourceforge.net/
 * SQLite 3.6.22 - http://www.sqlite.org/
 * TagLib 1.6.2 - http://developer.kde.org/~wheeler/taglib.html
@@ -55,5 +56,6 @@ The following dependencies are optional, but recommended:
 Third party libraries that we ship with our source:
 
 * MiniUPnP 1.6 - http://miniupnp.free.fr/
+* Breakpad - http://code.google.com/p/google-breakpad/
 
 Enjoy!

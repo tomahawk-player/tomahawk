@@ -22,6 +22,7 @@
 #include <QKeyEvent>
 #include <QPainter>
 #include <QScrollBar>
+#include <QStyleOptionViewItem>
 
 #include "ViewHeader.h"
 #include "ViewManager.h"
@@ -75,6 +76,7 @@ TrackView::TrackView( QWidget* parent )
     setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
     setRootIsDecorated( false );
     setUniformRowHeights( true );
+    setAutoResize( false );
 
     setHeader( m_header );
     setSortingEnabled( true );
@@ -144,8 +146,21 @@ TrackView::setGuid( const QString& newguid )
 void
 TrackView::setProxyModel( PlayableProxyModel* model )
 {
+    if ( m_proxyModel )
+    {
+        disconnect( m_proxyModel, SIGNAL( filterChanged( QString ) ), this, SLOT( onFilterChanged( QString ) ) );
+        disconnect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), this, SLOT( onViewChanged() ) );
+        disconnect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), this, SLOT( verifySize() ) );
+        disconnect( m_proxyModel, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), this, SLOT( verifySize() ) );
+    }
+    
     m_proxyModel = model;
 
+    connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
+    connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onViewChanged() ) );
+    connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( verifySize() ) );
+    connect( m_proxyModel, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), SLOT( verifySize() ) );
+    
     m_delegate = new PlaylistItemDelegate( this, m_proxyModel );
     setItemDelegate( m_delegate );
 
@@ -163,6 +178,17 @@ TrackView::setModel( QAbstractItemModel* model )
 
 
 void
+TrackView::setPlaylistItemDelegate( PlaylistItemDelegate* delegate )
+{
+    m_delegate = delegate;
+    setItemDelegate( delegate );
+    connect( delegate, SIGNAL( updateIndex( QModelIndex ) ), SLOT( update( QModelIndex ) ) );
+
+    verifySize();
+}
+
+
+void
 TrackView::setPlayableModel( PlayableModel* model )
 {
     m_model = model;
@@ -171,9 +197,6 @@ TrackView::setPlayableModel( PlayableModel* model )
     {
         m_proxyModel->setSourcePlayableModel( m_model );
     }
-
-    connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
-    connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onViewChanged() ) );
 
     setAcceptDrops( true );
     m_header->setDefaultColumnWeights( m_proxyModel->columnWeights() );
@@ -774,7 +797,7 @@ TrackView::description() const
 QPixmap
 TrackView::pixmap() const
 {
-    return QPixmap( RESPATH "images/music-icon.png" );
+    return TomahawkUtils::defaultPixmap( TomahawkUtils::SuperCollection );
 }
 
 
@@ -806,4 +829,25 @@ TrackView::deleteSelectedItems()
     {
         tDebug() << Q_FUNC_INFO << "Error: Model is read-only!";
     }
+}
+
+
+void
+TrackView::verifySize()
+{
+    if ( !autoResize() || !m_proxyModel )
+        return;
+
+    if ( m_proxyModel->rowCount() > 0 )
+        setFixedHeight( m_proxyModel->rowCount() * m_delegate->sizeHint( QStyleOptionViewItem(), m_proxyModel->index( 0, 0 ) ).height() + frameWidth() * 2 );
+}
+
+
+void
+TrackView::setAutoResize( bool b )
+{
+    m_autoResize = b;
+
+    if ( m_autoResize )
+        setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
 }

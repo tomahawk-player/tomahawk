@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="122px" height="122px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <title>pause-rest</title>
+    <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
+    <defs>
+        <linearGradient x1="50%" y1="50%" x2="50%" y2="0%" id="linearGradient-1">
+            <stop stop-color="rgb(37,41,44)" offset="0%"></stop>
+            <stop stop-color="rgb(0,0,0)" stop-opacity="0.5" offset="100%"></stop>
+        </linearGradient>
+        <path d="M61,121 C27.8629134,121 1,94.1370866 1,61 C1,27.8629134 27.8629134,1 61,1 C94.1370866,1 121,27.8629134 121,61 C121,94.1370866 94.1370866,121 61,121 Z M61,106 C85.852815,106 106,85.852815 106,61 C106,36.147185 85.852815,16 61,16 C36.147185,16 16,36.147185 16,61 C16,85.852815 36.147185,106 61,106 Z M61,106" id="path-2"></path>
+        <path d="M47.8163555,41.1253995 C46.9554464,41.1253995 46.2563556,41.8235813 46.2563556,42.6853995 L46.2563556,78.9744897 C46.2563556,79.8363079 46.9554465,80.5353988 47.8163555,80.5353988 L54.8781738,80.5353988 C55.7390829,80.5353988 56.4390829,79.8363079 56.4390829,78.9744897 L56.4390829,42.6853995 C56.4381769,41.8227539 55.7391025,41.1253995 54.8781738,41.1253995 L47.8163555,41.1253995 Z M47.8163555,41.1253995" id="path-3"></path>
+        <path d="M74.2227117,41.1253995 L67.1618025,41.1253995 C66.2999843,41.1253995 65.6008934,41.8235813 65.6008934,42.6853995 L65.6008934,78.9744897 C65.6008934,79.8363079 66.2999843,80.5353988 67.1618025,80.5353988 L74.2227117,80.5353988 C75.0845299,80.5353988 75.7836208,79.8363079 75.7836208,78.9744897 L75.7836208,42.6853995 C75.7836581,41.8227539 75.0845281,41.1253995 74.2227117,41.1253995 L74.2227117,41.1253995 L74.2227117,41.1253995" id="path-4"></path>
+    </defs>
+    <g id="Page 1" fill="rgb(215,215,215)" fill-rule="evenodd">
+        <path d="M61,121 C94.1370866,121 121,94.1370866 121,61 C121,27.8629134 94.1370866,1 61,1 C27.8629134,1 1,27.8629134 1,61 C1,94.1370866 27.8629134,121 61,121 Z M61,121" id="Oval 18" stroke="rgb(150,150,150)" stroke-width="1" fill-opacity="0.5027861" fill="rgb(254,255,254)"></path>
+        <g id="Group">
+            <use id="Oval 33" stroke="rgb(150,150,150)" stroke-width="1" fill="url(#linearGradient-1)" xlink:href="#path-2"></use>
+            <use id="Oval 33-1" stroke="none" fill="none" xlink:href="#path-2"></use>
+            <g stroke="rgb(150,150,150)" stroke-width="1" fill="url(#linearGradient-1)">
+                <use id="Shape" xlink:href="#path-3"></use>
+                <use id="Shape-1" stroke="none" fill="none" xlink:href="#path-3"></use>
+                <use id="Shape" xlink:href="#path-4"></use>
+                <use id="Shape-1" stroke="none" fill="none" xlink:href="#path-4"></use>
+            </g>
+        </g>
+    </g>
+</svg>

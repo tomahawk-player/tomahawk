@@ -4,6 +4,7 @@ SET( QT_USE_QTGUI TRUE )
 SET( QT_USE_QTSQL TRUE )
 SET( QT_USE_QTNETWORK TRUE )
 SET( QT_USE_QTXML TRUE )
+SET( QT_USE_QTSVG TRUE )
 SET( QT_USE_QTUITOOLS TRUE )
 
 IF( UNIX AND NOT APPLE )
@@ -76,10 +77,11 @@ set( libGuiSources
     playlist/LovedTracksModel.cpp
     playlist/RecentlyAddedModel.cpp
     playlist/RecentlyPlayedModel.cpp
+    playlist/AlbumItemDelegate.cpp
     playlist/PlaylistLargeItemDelegate.cpp
     playlist/PlaylistChartItemDelegate.cpp
     playlist/PlayableItem.cpp
-    playlist/SingleTrackPlaylistInterface.h
+    playlist/SingleTrackPlaylistInterface.cpp
 
     playlist/dynamic/DynamicPlaylist.cpp
     playlist/dynamic/DynamicView.cpp
@@ -99,6 +101,7 @@ set( libGuiSources
     resolvers/ScriptResolver.cpp
     resolvers/QtScriptResolver.cpp
 
+    utils/ImageRegistry.cpp
     utils/WidgetDragFilter.cpp
     utils/XspfGenerator.cpp
     utils/JspfLoader.cpp
@@ -149,6 +152,7 @@ set( libGuiSources
     widgets/ComboBox.cpp
     widgets/ToggleButton.cpp
     widgets/FadingPixmap.cpp
+    widgets/PlayableCover.cpp
     widgets/SocialPlaylistWidget.cpp
     widgets/SourceTreePopupDialog.cpp
     widgets/infowidgets/SourceInfoWidget.cpp
@@ -181,6 +185,7 @@ set( libSources
     FuncTimeout.cpp
     Playlist.cpp
     PlaylistPlaylistInterface.cpp
+    MetaPlaylistInterface.cpp
     Resolver.cpp
     ExternalResolver.cpp
     Query.cpp
@@ -267,6 +272,7 @@ set( libSources
     database/DatabaseCommand_CollectionAttributes.cpp
     database/DatabaseCommand_TrackAttributes.cpp
     database/DatabaseCommand_SetTrackAttributes.cpp
+    database/DatabaseCommand_PlaybackCharts.cpp
     database/Database.cpp
     database/TomahawkSqlQuery.cpp
     database/IdThreadWorker.cpp
@@ -466,6 +472,7 @@ TARGET_LINK_LIBRARIES( tomahawklib
     ${QT_QTSCRIPT_LIBRARY}
     ${QT_QTNETWORK_LIBRARY}
     ${QT_QTXML_LIBRARY}
+    ${QT_QTSVG_LIBRARY}
     ${QT_QTCORE_LIBRARY}
     ${OS_SPECIFIC_LINK_LIBRARIES}
     ${CMAKE_THREAD_LIBS_INIT}

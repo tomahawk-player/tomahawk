@@ -37,7 +37,7 @@ public:
     SourceDelegate( QAbstractItemView* parent = 0 );
     ~SourceDelegate();
 
-    void hovered( const QModelIndex &index, const QMimeData *mimeData );
+    void hovered( const QModelIndex& index, const QMimeData* mimeData );
     void dragLeaveEvent();
 
     SourceTreeItem::DropType hoveredDropType() const;
@@ -69,15 +69,14 @@ private:
     mutable int m_iconHeight;
     QModelIndex m_dropHoverIndex;
     QModelIndex m_newDropHoverIndex;
-    QMimeData *m_dropMimeData;
+    QMimeData* m_dropMimeData;
     mutable SourceTreeItem::DropType m_hoveredDropType; // Hack to keep easily track of the current highlighted DropType in paint()
     QMap< QModelIndex, AnimationHelper* > m_expandedMap;
-    QPixmap m_headphonesOn, m_headphonesOff, m_realtimeLocked, m_realtimeUnlocked, m_nowPlayingSpeaker, m_nowPlayingSpeakerDark, m_collaborativeOn;
     qint64 m_lastClicked;
     QMap< int, SourceTreeItem::DropType > m_dropTypeMap;
     QMap< int, QString > m_dropTypeTextMap;
-    QMap< int, QPixmap > m_dropTypeImageMap;
 
+    mutable QPersistentModelIndex m_trackHovered;
     mutable QHash< QPersistentModelIndex, QRect > m_trackRects;
     mutable QHash< QPersistentModelIndex, QRect > m_headphoneRects;
     mutable QHash< QPersistentModelIndex, QRect > m_lockRects;

@@ -28,7 +28,7 @@
 #include "Pipeline.h"
 #include "SourceList.h"
 
-#include "utils/TomahawkUtils.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
 #ifdef Q_OS_WIN
@@ -59,7 +59,7 @@ ScriptResolver::ScriptResolver( const QString& exe )
     m_name = QFileInfo( filePath() ).baseName();
 
     // set the icon, if we launch properly we'll get the icon the resolver reports
-    m_icon.load( RESPATH "images/resolver-default.png" );
+    m_icon = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultResolver, TomahawkUtils::Original, QSize( 128, 128 ) );
 }
 
 
@@ -376,10 +376,16 @@ ScriptResolver::doSetup( const QVariantMap& m )
     m_name    = m.value( "name" ).toString();
     m_weight  = m.value( "weight", 0 ).toUInt();
     m_timeout = m.value( "timeout", 5 ).toUInt() * 1000;
-    QString iconPath = QFileInfo( filePath() ).path() + "/" + m.value( "icon" ).toString();
-    int success = m_icon.load( iconPath );
+    bool compressed = m.value( "compressed", "false" ).toString() == "true";
 
-    qDebug() << "SCRIPT" << filePath() << "READY," << "name" << m_name << "weight" << m_weight << "timeout" << m_timeout << "icon" << iconPath << "icon found" << success;
+    QByteArray icoData = m.value( "icon" ).toByteArray();
+    if( compressed )
+        icoData = qUncompress( QByteArray::fromBase64( icoData ) );
+    else
+        icoData = QByteArray::fromBase64( icoData );
+    bool success = m_icon.loadFromData( icoData );
+
+    qDebug() << "SCRIPT" << filePath() << "READY," << "name" << m_name << "weight" << m_weight << "timeout" << m_timeout << "icon found" << success;
 
     m_ready = true;
     m_configSent = false;

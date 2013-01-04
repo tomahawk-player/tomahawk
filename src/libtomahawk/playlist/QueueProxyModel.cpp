@@ -32,6 +32,8 @@ using namespace Tomahawk;
 QueueProxyModel::QueueProxyModel( TrackView* parent )
     : PlayableProxyModel( parent )
 {
+    connect( this, SIGNAL( indexPlayable( QModelIndex ) ), SLOT( onIndexChanged( QModelIndex ) ) );
+    connect( this, SIGNAL( indexResolved( QModelIndex ) ), SLOT( onIndexChanged( QModelIndex ) ) );
     connect( parent, SIGNAL( itemActivated( QModelIndex ) ), SLOT( onIndexActivated( QModelIndex ) ) );
     connect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), SLOT( onPlaybackStarted( Tomahawk::result_ptr ) ) );
 }
@@ -39,6 +41,21 @@ QueueProxyModel::QueueProxyModel( TrackView* parent )
 
 QueueProxyModel::~QueueProxyModel()
 {
+}
+
+
+void
+QueueProxyModel::onIndexChanged( const QModelIndex& index )
+{
+    PlayableItem* item = itemFromIndex( mapToSource( index ) );
+    if ( item && item->query() )
+    {
+        tDebug() << item->query()->toString() << item->query()->resolvingFinished() << item->query()->playable();
+    }
+    if ( !item || !item->query() || ( item->query()->resolvingFinished() && !item->query()->playable() ) )
+    {
+        removeIndex( index );
+    }
 }
 
 

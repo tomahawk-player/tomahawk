@@ -94,7 +94,10 @@ signals:
     void loadingFinished();
 
     void indexPlayable( const QModelIndex& index );
+    void indexResolved( const QModelIndex& index );
     void currentIndexChanged();
+
+    void itemCountChanged( unsigned int items );
 
 protected:
     virtual bool filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const;
@@ -104,6 +107,7 @@ protected:
 
 private slots:
     void onIndexPlayable( const QModelIndex& index );
+    void onIndexResolved( const QModelIndex& index );
 
 private:
     virtual bool lessThan( int column, const Tomahawk::query_ptr& left, const Tomahawk::query_ptr& right ) const;

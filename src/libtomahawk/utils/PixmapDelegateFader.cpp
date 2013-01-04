@@ -19,13 +19,15 @@
  */
 
 #include "PixmapDelegateFader.h"
-#include "TomahawkUtilsGui.h"
-#include "Source.h"
 
 #include <QPainter>
 #include <QBuffer>
 #include <QPaintEngine>
 #include <QTimer>
+
+#include "Source.h"
+#include "TomahawkUtilsGui.h"
+#include "Logger.h"
 
 using namespace Tomahawk;
 
@@ -85,6 +87,7 @@ PixmapDelegateFader::PixmapDelegateFader( const query_ptr& track, const QSize& s
     {
         connect( m_track.data(), SIGNAL( updated() ), SLOT( trackChanged() ) );
         connect( m_track.data(), SIGNAL( resultsChanged() ), SLOT( trackChanged() ) );
+        connect( m_track->displayQuery().data(), SIGNAL( updated() ), SLOT( trackChanged() ) );
         connect( m_track->displayQuery().data(), SIGNAL( coverChanged() ), SLOT( trackChanged() ) );
 
         m_currentReference = TomahawkUtils::createRoundedImage( m_track->displayQuery()->cover( size, forceLoad ), QSize( 0, 0 ), m_mode == TomahawkUtils::Grid ? 0.00 : 0.20 );
@@ -139,7 +142,7 @@ PixmapDelegateFader::setSize( const QSize& size )
         else if ( !m_artist.isNull() )
             m_current = m_currentReference = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, m_mode, m_size );
         else if ( !m_track.isNull() )
-            m_current = m_currentReference = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, m_mode, m_size );
+            m_current = m_currentReference = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, m_mode, m_size );
     }
     else
     {
@@ -161,7 +164,7 @@ PixmapDelegateFader::albumChanged()
     if ( m_album.isNull() )
         return;
 
-    QMetaObject::invokeMethod( this, "setPixmap", Qt::QueuedConnection, Q_ARG( QPixmap, TomahawkUtils::createRoundedImage( m_album->cover( m_size ), QSize( 0, 0 ), m_mode == TomahawkUtils::Grid ? 0.00 : 0.20 ) ) );
+    QMetaObject::invokeMethod( this, "setPixmap", Qt::QueuedConnection, Q_ARG( QPixmap, m_album->cover( m_size ) ) );
 }
 
 
@@ -171,7 +174,7 @@ PixmapDelegateFader::artistChanged()
     if ( m_artist.isNull() )
         return;
 
-    QMetaObject::invokeMethod( this, "setPixmap", Qt::QueuedConnection, Q_ARG( QPixmap, TomahawkUtils::createRoundedImage( m_artist->cover( m_size ), QSize( 0, 0 ), m_mode == TomahawkUtils::Grid ? 0.00 : 0.20 ) ) );
+    QMetaObject::invokeMethod( this, "setPixmap", Qt::QueuedConnection, Q_ARG( QPixmap, m_artist->cover( m_size ) ) );
 }
 
 
@@ -181,8 +184,9 @@ PixmapDelegateFader::trackChanged()
     if ( m_track.isNull() )
         return;
 
-    connect( m_track->displayQuery().data(), SIGNAL( coverChanged() ), SLOT( trackChanged() ) );
-    QMetaObject::invokeMethod( this, "setPixmap", Qt::QueuedConnection, Q_ARG( QPixmap, TomahawkUtils::createRoundedImage( m_track->displayQuery()->cover( m_size ), QSize( 0, 0 ), m_mode == TomahawkUtils::Grid ? 0.00 : 0.20 ) ) );
+    connect( m_track->displayQuery().data(), SIGNAL( updated() ), SLOT( trackChanged() ), Qt::UniqueConnection );
+    connect( m_track->displayQuery().data(), SIGNAL( coverChanged() ), SLOT( trackChanged() ), Qt::UniqueConnection );
+    QMetaObject::invokeMethod( this, "setPixmap", Qt::QueuedConnection, Q_ARG( QPixmap, m_track->displayQuery()->cover( m_size ) ) );
 }
 
 
@@ -193,14 +197,10 @@ PixmapDelegateFader::setPixmap( const QPixmap& pixmap )
         return;
 
     m_defaultImage = false;
-    QCryptographicHash hash( QCryptographicHash::Md5 );
-    const QImage img = pixmap.toImage();
-    hash.addData( (const char*)img.constBits(), img.byteCount() );
-    const QString newImageMd5 = hash.result();
+    const qint64 newImageMd5 = pixmap.cacheKey();
 
     if ( m_oldImageMd5 == newImageMd5 )
         return;
-
     m_oldImageMd5 = newImageMd5;
 
     if ( m_connectedToStl )
@@ -210,7 +210,7 @@ PixmapDelegateFader::setPixmap( const QPixmap& pixmap )
     }
 
     m_oldReference = m_currentReference;
-    m_currentReference = pixmap;
+    m_currentReference = TomahawkUtils::createRoundedImage( pixmap, QSize( 0, 0 ), m_mode == TomahawkUtils::Grid ? 0.00 : 0.20 );
 
     stlInstance().data()->setUpdateInterval( 20 );
     m_startFrame = stlInstance().data()->currentFrame();

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="100px" height="100px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <title>loved_playlist</title>
+    <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
+    <defs>
+        <radialGradient cx="50%" cy="39.1449653%" fx="50%" fy="39.1449653%" r="60.855037%" id="radialGradient-1">
+            <stop stop-color="rgb(150,44,38)" offset="0%"></stop>
+            <stop stop-color="rgb(233,105,103)" offset="100%"></stop>
+        </radialGradient>
+        <path d="M50.0021389,17.2169656 C44.4723594,9.33790827 37.111921,5.01264705 29.1916638,5.01264705 C17.4642834,5.01264705 5.00247921,15.3241374 5.00247921,34.4358042 C5.00247921,54.0955064 19.8907622,67.8174611 30.763115,77.8359636 C34.8798485,81.6384837 37.9003465,84.3322867 40.3556263,86.5244272 C44.2383525,89.9875871 46.1860157,91.7244366 48.286684,94.1695162 C48.7420987,94.7049042 49.3523186,95 50.0003396,95 C50.6465606,95 51.2549804,94.707012 51.7139953,94.171624 C54.4914854,90.9382172 57.0133673,88.6975973 63.7707865,82.7008293 L69.205163,77.8675819 C78.2198554,69.8451921 95,54.9112378 95,34.2418842 C95.0017265,15.2461957 82.5543621,5 70.8432154,5 C62.9121578,5 55.5373182,9.33158474 50.0021389,17.2169656 Z M50.0021389,17.2169656" id="path-2"></path>
+    </defs>
+    <g id="Page 1" fill="rgb(215,215,215)" fill-rule="evenodd">
+        <g id="Group">
+            <use id="Shape" stroke="rgb(254,255,254)" stroke-width="1" fill="url(#radialGradient-1)" xlink:href="#path-2"></use>
+            <use id="Shape-1" stroke="none" fill="none" xlink:href="#path-2"></use>
+        </g>
+    </g>
+</svg>

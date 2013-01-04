@@ -18,11 +18,9 @@
 
 #include "IndexingJobItem.h"
 
-#include "utils/TomahawkUtils.h"
+#include "utils/TomahawkUtilsGui.h"
 
 #include <QPixmap>
-
-static QPixmap* s_indexIcon = 0;
 
 
 QString
@@ -34,10 +32,7 @@ IndexingJobItem::mainText() const
 QPixmap
 IndexingJobItem::icon() const
 {
-    if ( s_indexIcon == 0 )
-        s_indexIcon = new QPixmap( RESPATH "images/view-refresh.png" );
-
-    return *s_indexIcon;
+    return TomahawkUtils::defaultPixmap( TomahawkUtils::ViewRefresh, TomahawkUtils::Original, QSize( 128, 128 ) );
 
 }
 

@@ -23,6 +23,7 @@
 #include <QTextDocument>
 #include <QTextOption>
 
+#include "PlaylistItemDelegate.h"
 #include "DllMacro.h"
 #include "Typedefs.h"
 
@@ -30,12 +31,11 @@ namespace Tomahawk {
 class PixmapDelegateFader;
 }
 
-class TrackModel;
 class PlayableItem;
 class PlayableProxyModel;
 class TrackView;
 
-class DLLEXPORT PlaylistLargeItemDelegate : public QStyledItemDelegate
+class DLLEXPORT PlaylistLargeItemDelegate : public PlaylistItemDelegate
 {
 Q_OBJECT
 
@@ -45,20 +45,16 @@ public:
 
     PlaylistLargeItemDelegate( DisplayMode mode, TrackView* parent = 0, PlayableProxyModel* proxy = 0 );
 
+    virtual QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+    
 protected:
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
-    QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
-    QWidget* createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
-
-signals:
-    void updateIndex( const QModelIndex& idx );
 
 private slots:
-    void modelChanged();
     void doUpdateIndex( const QPersistentModelIndex& idx );
+    void modelChanged();
 
 private:
-    void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item ) const;
     void drawRichText( QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, int flags, QTextDocument& text ) const;
 
     QTextOption m_topOption;

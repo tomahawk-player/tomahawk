@@ -30,9 +30,8 @@ void
 DatabaseCommand_PlaybackHistory::exec( DatabaseImpl* dbi )
 {
     TomahawkSqlQuery query = dbi->newquery();
-    QList<Tomahawk::query_ptr> ql;
-
     QString whereToken;
+
     if ( !source().isNull() )
     {
         whereToken = QString( "WHERE source %1" ).arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) );
@@ -49,6 +48,7 @@ DatabaseCommand_PlaybackHistory::exec( DatabaseImpl* dbi )
     query.prepare( sql );
     query.exec();
 
+    QList<Tomahawk::query_ptr> ql;
     while ( query.next() )
     {
         TomahawkSqlQuery query_track = dbi->newquery();

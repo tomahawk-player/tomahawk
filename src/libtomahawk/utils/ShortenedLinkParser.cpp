@@ -30,12 +30,10 @@
 #include "jobview/JobStatusModel.h"
 #include "jobview/JobStatusView.h"
 #include "utils/NetworkReply.h"
-#include "utils/TomahawkUtils.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
 using namespace Tomahawk;
-
-QPixmap* ShortenedLinkParser::s_pixmap = 0;
 
 
 ShortenedLinkParser::ShortenedLinkParser ( const QStringList& urls, QObject* parent )
@@ -125,10 +123,7 @@ ShortenedLinkParser::checkFinished()
 QPixmap
 ShortenedLinkParser::pixmap()
 {
-    if ( !s_pixmap )
-        s_pixmap = new QPixmap( RESPATH "images/add.png" );
-
-    return *s_pixmap;
+    return TomahawkUtils::defaultPixmap( TomahawkUtils::Add );
 }
 
 #endif

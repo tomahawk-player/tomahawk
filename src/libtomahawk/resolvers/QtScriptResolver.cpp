@@ -20,12 +20,12 @@
 #include "QtScriptResolver.h"
 
 #include <QtGui/QMessageBox>
-
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkReply>
-
 #include <QtCore/QMetaProperty>
 #include <QtCore/QCryptographicHash>
+
+#include <boost/bind.hpp>
 
 #include "Artist.h"
 #include "Album.h"
@@ -35,8 +35,10 @@
 
 #include "network/Servent.h"
 
-#include "utils/TomahawkUtils.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+
+#include "config.h"
 
 // FIXME: bloody hack, remove this for 0.3
 // this one adds new functionality to old resolvers
@@ -212,7 +214,7 @@ void
 ScriptEngine::javaScriptConsoleMessage( const QString& message, int lineNumber, const QString& sourceID )
 {
     tLog() << "JAVASCRIPT:" << m_scriptPath << message << lineNumber << sourceID;
-#ifndef QT_NO_DEBUG
+#ifndef DEBUG_BUILD
     QMessageBox::critical( 0, "Script Resolver Error", QString( "%1 %2 %3 %4" ).arg( m_scriptPath ).arg( message ).arg( lineNumber ).arg( sourceID ) );
 #endif
 }
@@ -231,8 +233,7 @@ QtScriptResolver::QtScriptResolver( const QString& scriptPath )
     m_name = QFileInfo( filePath() ).baseName();
 
     // set the icon, if we launch properly we'll get the icon the resolver reports
-    m_icon.load( RESPATH "images/resolver-default.png" );
-
+    m_icon = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultResolver, TomahawkUtils::Original, QSize( 128, 128 ) );
 
     if ( !QFile::exists( filePath() ) )
     {
@@ -325,15 +326,21 @@ QtScriptResolver::init()
     m_name    = m.value( "name" ).toString();
     m_weight  = m.value( "weight", 0 ).toUInt();
     m_timeout = m.value( "timeout", 25 ).toUInt() * 1000;
-    QString iconPath = QFileInfo( filePath() ).path() + "/" + m.value( "icon" ).toString();
-    int success = m_icon.load( iconPath );
+    bool compressed = m.value( "compressed", "false" ).toString() == "true";
+
+    QByteArray icoData = m.value( "icon" ).toByteArray();
+    if( compressed )
+        icoData = qUncompress( QByteArray::fromBase64( icoData ) );
+    else
+        icoData = QByteArray::fromBase64( icoData );
+    bool success = m_icon.loadFromData( icoData );
 
     // load config widget and apply settings
     loadUi();
     QVariantMap config = resolverUserConfig();
     fillDataInWidgets( config );
 
-    qDebug() << "JS" << filePath() << "READY," << "name" << m_name << "weight" << m_weight << "timeout" << m_timeout << "icon" << iconPath << "icon found" << success;
+    qDebug() << "JS" << filePath() << "READY," << "name" << m_name << "weight" << m_weight << "timeout" << m_timeout << "icon found" << success;
 
     m_ready = true;
 }
@@ -528,28 +535,6 @@ QtScriptResolver::saveConfig()
 }
 
 
-QWidget*
-QtScriptResolver::findWidget(QWidget* widget, const QString& objectName)
-{
-    if( !widget || !widget->isWidgetType() )
-        return 0;
-
-    if( widget->objectName() == objectName )
-        return widget;
-
-
-    foreach( QObject* child, widget->children() )
-    {
-        QWidget* found = findWidget(qobject_cast< QWidget* >( child ), objectName);
-
-        if( found )
-            return found;
-    }
-
-    return 0;
-}
-
-
 QVariant
 QtScriptResolver::widgetData(QWidget* widget, const QString& property)
 {
@@ -588,7 +573,7 @@ QtScriptResolver::loadDataFromWidgets()
         QVariantMap data = dataWidget.toMap();
 
         QString widgetName = data["widget"].toString();
-        QWidget* widget= findWidget( m_configWidget.data(), widgetName );
+        QWidget* widget= m_configWidget.data()->findChild<QWidget*>( widgetName );
 
         QVariant value = widgetData( widget, data["property"].toString() );
 
@@ -605,7 +590,7 @@ QtScriptResolver::fillDataInWidgets( const QVariantMap& data )
     foreach(const QVariant& dataWidget, m_dataWidgets)
     {
         QString widgetName = dataWidget.toMap()["widget"].toString();
-        QWidget* widget= findWidget( m_configWidget.data(), widgetName );
+        QWidget* widget= m_configWidget.data()->findChild<QWidget*>( widgetName );
         if( !widget )
         {
             tLog() << Q_FUNC_INFO << "Widget specified in resolver was not found:" << widgetName;

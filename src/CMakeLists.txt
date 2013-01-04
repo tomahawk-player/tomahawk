@@ -155,7 +155,7 @@ INCLUDE(GNUInstallDirs)
 
 # translations
 include( ${CMAKE_SOURCE_DIR}/lang/translations.cmake )
-add_tomahawk_translations(ar bg ca de en es fr ja pl pt_BR ru sv tr zh_CN zh_TW)
+add_tomahawk_translations( ${TOMAHAWK_TRANSLATION_LANGUAGES} )
 
 SET( final_src ${final_src} ${tomahawkMoc} ${tomahawkSources} ${trans_outfile})
 

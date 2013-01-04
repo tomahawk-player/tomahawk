@@ -116,6 +116,8 @@ SearchWidget::jumpToCurrentTrack()
 void
 SearchWidget::onResultsFound( const QList<Tomahawk::result_ptr>& results )
 {
+    QList<Tomahawk::artist_ptr> artists;
+    QList<Tomahawk::album_ptr> albums;
     foreach( const Tomahawk::result_ptr& result, results )
     {
         if ( !result->collection().isNull() && !result->isOnline() )
@@ -129,32 +131,58 @@ SearchWidget::onResultsFound( const QList<Tomahawk::result_ptr>& results )
 
         m_resultsModel->appendQuery( q );
 
-        m_artists << result->artist();
-        m_albums << result->album();
+        artists << result->artist();
+        albums << result->album();
     }
+
+    onArtistsFound( artists );
+    onAlbumsFound( albums );
 }
 
 
 void
 SearchWidget::onAlbumsFound( const QList<Tomahawk::album_ptr>& albums )
 {
-    m_albums << albums;
+    foreach ( const Tomahawk::album_ptr& album, albums)
+    {
+        int distance = TomahawkUtils::levenshtein( m_search, album->name() );
+        int maxlen = qMax( m_search.length(), album->name().length() );
+        float score = (float)( maxlen - distance ) / maxlen;
+
+        if ( score <= 0.1 )
+            continue;
+
+        m_albums.insert( score, album );
+        tDebug() << Q_FUNC_INFO << "found album:" << album->name() << "score:" << score;
+    }
+
+    updateAlbums();
 }
 
 
 void
 SearchWidget::onArtistsFound( const QList<Tomahawk::artist_ptr>& artists )
 {
-    m_artists << artists;
+    foreach ( const Tomahawk::artist_ptr& artist, artists )
+    {
+        int distance = TomahawkUtils::levenshtein( m_search, artist->name() );
+        int maxlen = qMax( m_search.length(), artist->name().length() );
+        float score = (float)( maxlen - distance ) / maxlen;
+
+        if ( score <= 0.1 )
+            continue;
+
+        m_artists.insert( score, artist );
+        tDebug() << Q_FUNC_INFO << "found artist:" << artist->name() << "score:" << score;
+    }
+
+    updateArtists();
 }
 
 
 void
 SearchWidget::onQueryFinished()
 {
-    sortAlbums();
-    sortArtists();
-
     m_artistsModel->finishLoading();
     m_albumsModel->finishLoading();
     m_resultsModel->finishLoading();
@@ -162,25 +190,15 @@ SearchWidget::onQueryFinished()
 
 
 void
-SearchWidget::sortArtists()
+SearchWidget::updateArtists()
 {
-    QMap< float, Tomahawk::artist_ptr > ars;
     QList< Tomahawk::artist_ptr > sortedArtists;
-    foreach ( const Tomahawk::artist_ptr& artist, m_artists )
-    {
-        int distance = TomahawkUtils::levenshtein( m_search, artist->name() );
-        int maxlen = qMax( m_search.length(), artist->name().length() );
-        float score = (float)( maxlen - distance ) / maxlen;
-
-        ars.insert( score, artist );
-    }
-
-    QList< float > floats = ars.keys();
+    QList< float > floats = m_artists.keys();
     qSort( floats.begin(), floats.end() );
 
     for ( int i = floats.count() - 1; i >= 0; i-- )
     {
-        sortedArtists << ars.value( floats.at( i ) );
+        sortedArtists << m_artists.value( floats.at( i ) );
     }
 
     m_artistsModel->clear();
@@ -189,27 +207,24 @@ SearchWidget::sortArtists()
 
 
 void
-SearchWidget::sortAlbums()
+SearchWidget::updateAlbums()
 {
-    QMap< float, Tomahawk::album_ptr > ars;
     QList< Tomahawk::album_ptr > sortedAlbums;
-    foreach ( const Tomahawk::album_ptr& album, m_albums )
-    {
-        int distance = TomahawkUtils::levenshtein( m_search, album->name() );
-        int maxlen = qMax( m_search.length(), album->name().length() );
-        float score = (float)( maxlen - distance ) / maxlen;
-
-        ars.insert( score, album );
-    }
-
-    QList< float > floats = ars.keys();
+    QList< float > floats = m_albums.keys();
     qSort( floats.begin(), floats.end() );
 
     for ( int i = floats.count() - 1; i >= 0; i-- )
     {
-        sortedAlbums << ars.value( floats.at( i ) );
+        sortedAlbums << m_albums.value( floats.at( i ) );
     }
 
     m_albumsModel->clear();
     m_albumsModel->appendAlbums( sortedAlbums );
+}
+
+
+QPixmap
+SearchWidget::pixmap() const
+{
+    return TomahawkUtils::defaultPixmap( TomahawkUtils::Search );
 }

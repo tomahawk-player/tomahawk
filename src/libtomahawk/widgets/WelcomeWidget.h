@@ -51,18 +51,11 @@ Q_OBJECT
 public:
     PlaylistDelegate()
     {
-        m_playlistIcon = QPixmap( RESPATH "images/playlist-icon.png" );
-        m_autoIcon = QPixmap( RESPATH "images/automatic-playlist.png" );
-        m_stationIcon = QPixmap( RESPATH "images/station.png" );
-        m_defaultAvatar = TomahawkUtils::createRoundedImage( QPixmap( RESPATH "images/user-avatar.png" ), QSize( 0, 0 ) );
     }
 
 protected:
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
-
-private:
-    QPixmap m_playlistIcon, m_autoIcon, m_stationIcon, m_defaultAvatar;
 };
 
 

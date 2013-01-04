@@ -154,7 +154,6 @@ private:
     void init();
 
     void loadUi();
-    QWidget* findWidget( QWidget* widget, const QString& objectName );
     void setWidgetData( const QVariant& value, QWidget* widget, const QString& property );
     QVariant widgetData( QWidget* widget, const QString& property );
     QVariantMap loadDataFromWidgets();
