@@ -22,7 +22,7 @@
 
 #include <QObject>
 #include <QList>
-#include <QSharedPointer>
+#include <QPointer>
 
 #include "Typedefs.h"
 #include "Result.h"
@@ -66,7 +66,7 @@ private:
     PlaylistPlaylistInterface();
     Q_DISABLE_COPY( PlaylistPlaylistInterface )
 
-    QWeakPointer< Tomahawk::Playlist > m_playlist;
+    QPointer< Tomahawk::Playlist > m_playlist;
 
     result_ptr m_currentItem;
 };

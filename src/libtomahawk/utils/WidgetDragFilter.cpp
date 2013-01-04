@@ -30,7 +30,7 @@ WidgetDragFilter::WidgetDragFilter( QObject* parent )
     , m_dragStarted( false )
 {
     Q_ASSERT( parent->isWidgetType() );
-    m_target = QWeakPointer<QWidget>(static_cast<QWidget*>(parent));
+    m_target = QPointer<QWidget>(static_cast<QWidget*>(parent));
     m_target.data()->installEventFilter( this );
 }
 

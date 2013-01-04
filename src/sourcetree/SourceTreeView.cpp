@@ -385,7 +385,7 @@ SourceTreeView::deletePlaylist( const QModelIndex& idxIn )
     {
         if ( m_popupDialog.isNull() )
         {
-            m_popupDialog = QWeakPointer< SourceTreePopupDialog >( new SourceTreePopupDialog() );
+            m_popupDialog = QPointer< SourceTreePopupDialog >( new SourceTreePopupDialog() );
             connect( m_popupDialog.data(), SIGNAL( result( bool ) ), this, SLOT( onDeletePlaylistResult( bool ) ) );
         }
 

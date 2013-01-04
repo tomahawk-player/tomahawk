@@ -47,8 +47,8 @@ void
 DatabaseWorkerThread::run()
 {
     tDebug() << Q_FUNC_INFO << "DatabaseWorkerThread starting...";
-    m_worker = QWeakPointer< DatabaseWorker >( new DatabaseWorker( m_db, m_mutates ) );
-    exec();    
+    m_worker = QPointer< DatabaseWorker >( new DatabaseWorker( m_db, m_mutates ) );
+    exec();
     tDebug() << Q_FUNC_INFO << "DatabaseWorkerThread finishing...";
     if ( m_worker )
         delete m_worker.data();
@@ -60,7 +60,7 @@ DatabaseWorkerThread::~DatabaseWorkerThread()
 }
 
 
-QWeakPointer< DatabaseWorker >
+QPointer< DatabaseWorker >
 DatabaseWorkerThread::worker() const
 {
     return m_worker;

@@ -87,7 +87,7 @@ private:
 
     void dataError( Tomahawk::InfoSystem::InfoRequestData requestData );
 
-    QWeakPointer< Accounts::LastFmAccount > m_account;
+    QPointer< Accounts::LastFmAccount > m_account;
     QList<lastfm::Track> parseTrackList( QNetworkReply* reply );
 
     lastfm::MutableTrack m_track;

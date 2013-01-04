@@ -120,7 +120,7 @@ SipPlugin*
 ZeroconfAccount::sipPlugin()
 {
     if ( m_sipPlugin.isNull() )
-        m_sipPlugin = QWeakPointer< ZeroconfPlugin >( new ZeroconfPlugin( this ) );
+        m_sipPlugin = QPointer< ZeroconfPlugin >( new ZeroconfPlugin( this ) );
 
     return m_sipPlugin.data();
 }

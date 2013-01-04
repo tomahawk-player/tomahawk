@@ -523,7 +523,7 @@ QtScriptResolver::loadUi()
     if( m.contains( "images" ) )
         uiData = fixDataImagePaths( uiData, compressed, images );
 
-    m_configWidget = QWeakPointer< QWidget >( widgetFromData( uiData, 0 ) );
+    m_configWidget = QPointer< QWidget >( widgetFromData( uiData, 0 ) );
 
     emit changed();
 }

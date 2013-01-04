@@ -73,7 +73,7 @@ public:
     virtual SipPlugin* sipPlugin();
 
 private:
-    QWeakPointer< GoogleWrapperSip > m_sipPlugin;
+    QPointer< GoogleWrapperSip > m_sipPlugin;
 };
 
 }

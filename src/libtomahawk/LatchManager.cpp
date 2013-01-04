@@ -95,7 +95,7 @@ LatchManager::playlistChanged( Tomahawk::playlistinterface_ptr )
     // We're current latched, and the user changed playlist, so stop
     SourcePlaylistInterface* origsourcepi = dynamic_cast< SourcePlaylistInterface* >( m_latchedInterface.data() );
     Q_ASSERT( origsourcepi );
-    const source_ptr source = origsourcepi->source();
+    const source_ptr source = SourceList::instance()->get( origsourcepi->source()->id() );
 
     DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction();
     cmd->setSource( SourceList::instance()->getLocal() );

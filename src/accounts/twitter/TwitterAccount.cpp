@@ -54,10 +54,10 @@ TwitterAccount::TwitterAccount( const QString &accountId )
 
     qDebug() << "Got cached peers:" << configuration() << configuration()[ "cachedpeers" ];
 
-    m_configWidget = QWeakPointer< TwitterConfigWidget >( new TwitterConfigWidget( this, 0 ) );
+    m_configWidget = QPointer< TwitterConfigWidget >( new TwitterConfigWidget( this, 0 ) );
     connect( m_configWidget.data(), SIGNAL( twitterAuthed( bool ) ), SLOT( configDialogAuthedSignalSlot( bool ) ) );
 
-    m_twitterAuth = QWeakPointer< TomahawkOAuthTwitter >( new TomahawkOAuthTwitter( TomahawkUtils::nam(), this ) );
+    m_twitterAuth = QPointer< TomahawkOAuthTwitter >( new TomahawkOAuthTwitter( TomahawkUtils::nam(), this ) );
 
     m_onlinePixmap = QPixmap( ":/twitter-icon.png" );
     m_offlinePixmap = QPixmap( ":/twitter-offline-icon.png" );
@@ -97,7 +97,7 @@ TwitterAccount::sipPlugin()
     if ( m_twitterSipPlugin.isNull() )
     {
         qDebug() << "CHECKING:" << configuration() << configuration()[ "cachedpeers" ];
-        m_twitterSipPlugin = QWeakPointer< TwitterSipPlugin >( new TwitterSipPlugin( this ) );
+        m_twitterSipPlugin = QPointer< TwitterSipPlugin >( new TwitterSipPlugin( this ) );
 
         connect( m_twitterSipPlugin.data(), SIGNAL( stateChanged( Tomahawk::Accounts::Account::ConnectionState ) ), this, SIGNAL( connectionStateChanged( Tomahawk::Accounts::Account::ConnectionState ) ) );
         return m_twitterSipPlugin.data();
@@ -110,7 +110,7 @@ Tomahawk::InfoSystem::InfoPluginPtr
 TwitterAccount::infoPlugin()
 {
     if ( m_twitterInfoPlugin.isNull() )
-        m_twitterInfoPlugin = QWeakPointer< Tomahawk::InfoSystem::TwitterInfoPlugin >( new Tomahawk::InfoSystem::TwitterInfoPlugin( this ) );
+        m_twitterInfoPlugin = QPointer< Tomahawk::InfoSystem::TwitterInfoPlugin >( new Tomahawk::InfoSystem::TwitterInfoPlugin( this ) );
 
     return Tomahawk::InfoSystem::InfoPluginPtr( m_twitterInfoPlugin.data() );
 }
@@ -191,7 +191,7 @@ TwitterAccount::refreshTwitterAuth()
 
     Q_ASSERT( TomahawkUtils::nam() != 0 );
     tDebug() << Q_FUNC_INFO << " with nam " << TomahawkUtils::nam();
-    m_twitterAuth = QWeakPointer< TomahawkOAuthTwitter >( new TomahawkOAuthTwitter( TomahawkUtils::nam(), this ) );
+    m_twitterAuth = QPointer< TomahawkOAuthTwitter >( new TomahawkOAuthTwitter( TomahawkUtils::nam(), this ) );
 
     if( m_twitterAuth.isNull() )
       return false;

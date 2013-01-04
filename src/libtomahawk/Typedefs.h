@@ -21,9 +21,11 @@
 #define TYPEDEFS_H
 
 #include <QSharedPointer>
+#include <QPointer>
 #include <QUuid>
 #include <QPair>
 #include <QPersistentModelIndex>
+
 #include <boost/function.hpp>
 
 //template <typename T> class QSharedPointer;
@@ -203,7 +205,7 @@ namespace Tomahawk
         typedef QHash< QString, QString > InfoStringHash;
         typedef QPair< QVariantMap, QVariant > PushInfoPair;
 
-        typedef QWeakPointer< InfoPlugin > InfoPluginPtr;
+        typedef QPointer< InfoPlugin > InfoPluginPtr;
     }
 }; // ns
 

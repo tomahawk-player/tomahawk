@@ -141,7 +141,7 @@ private:
     mutable RID m_rid;
     collection_ptr m_collection;
     Tomahawk::query_ptr m_query;
-    QWeakPointer< Tomahawk::Resolver > m_resolvedBy;
+    QPointer< Tomahawk::Resolver > m_resolvedBy;
 
     Tomahawk::artist_ptr m_artist;
     Tomahawk::album_ptr m_album;

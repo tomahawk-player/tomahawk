@@ -217,7 +217,7 @@ SpotifyAccount::hookupResolver()
     // Since the resolver in 0.4.x used an incompatible version of kdsingleappguard, we can't auto-kill old resolvers on the
     // 0.4.x->0.5.x upgrade. So we do it manually for a while
     killExistingResolvers();
-    m_spotifyResolver = QWeakPointer< ScriptResolver >( qobject_cast< ScriptResolver* >( Pipeline::instance()->addScriptResolver( path ) ) );
+    m_spotifyResolver = QPointer< ScriptResolver >( qobject_cast< ScriptResolver* >( Pipeline::instance()->addScriptResolver( path ) ) );
     m_spotifyResolver.data()->setIcon( TomahawkUtils::defaultPixmap( TomahawkUtils::SpotifyIcon ) );
 
     connect( m_spotifyResolver.data(), SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
@@ -352,7 +352,7 @@ SpotifyAccount::infoPlugin()
 {
     if ( m_infoPlugin.isNull() )
     {
-        m_infoPlugin = QWeakPointer< InfoSystem::SpotifyInfoPlugin >( new InfoSystem::SpotifyInfoPlugin( this ) );
+        m_infoPlugin = QPointer< InfoSystem::SpotifyInfoPlugin >( new InfoSystem::SpotifyInfoPlugin( this ) );
     }
 
     return InfoSystem::InfoPluginPtr( m_infoPlugin.data() );
@@ -1112,7 +1112,7 @@ SpotifyAccount::configurationWidget()
 {
     if ( m_configWidget.isNull() )
     {
-        m_configWidget = QWeakPointer< SpotifyAccountConfig >( new SpotifyAccountConfig( this ) );
+        m_configWidget = QPointer< SpotifyAccountConfig >( new SpotifyAccountConfig( this ) );
         connect( m_configWidget.data(), SIGNAL( login( QString,QString ) ), this, SLOT( login( QString,QString ) ) );
         connect( m_configWidget.data(), SIGNAL( logout() ), this, SLOT( logout() ) );
         m_configWidget.data()->setPlaylists( m_allSpotifyPlaylists.values() );
@@ -1141,7 +1141,7 @@ SpotifyAccount::aboutWidget()
         l->addWidget( pm );
         l->addWidget( text );
         w->setLayout( l );
-        m_aboutWidget = QWeakPointer< QWidget >( w );
+        m_aboutWidget = QPointer< QWidget >( w );
     }
 
     return m_aboutWidget.data();

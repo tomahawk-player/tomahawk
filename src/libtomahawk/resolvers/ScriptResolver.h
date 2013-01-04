@@ -87,7 +87,7 @@ private:
     QString m_name;
     QPixmap m_icon;
     unsigned int m_weight, m_preference, m_timeout, m_num_restarts;
-    QWeakPointer< QWidget > m_configWidget;
+    QPointer< QWidget > m_configWidget;
 
     quint32 m_msgsize;
     QByteArray m_msg;

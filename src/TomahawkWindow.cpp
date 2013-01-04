@@ -924,7 +924,7 @@ TomahawkWindow::loadSpiff()
     connect( diag, SIGNAL( finished( int ) ), this, SLOT( loadXspfFinished( int ) ) );
     diag->show();
 #else
-    QWeakPointer< LoadXSPFDialog > safe( diag );
+    QPointer< LoadXSPFDialog > safe( diag );
 
     int ret = diag->exec();
     if ( !safe.isNull() && ret == QDialog::Accepted )

@@ -46,7 +46,7 @@ SourcePlaylistInterface::SourcePlaylistInterface( Tomahawk::Source* source, Toma
 
 SourcePlaylistInterface::~SourcePlaylistInterface()
 {
-    m_source.clear();
+    m_source = 0;
 }
 
 
@@ -146,7 +146,7 @@ SourcePlaylistInterface::tracks() const
 }
 
 
-QWeakPointer< Tomahawk::Source >
+QPointer< Tomahawk::Source >
 SourcePlaylistInterface::source() const
 {
     return m_source;

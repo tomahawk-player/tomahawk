@@ -294,13 +294,13 @@ InfoSystem::removeInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin )
 }
 
 
-QWeakPointer< QThread >
+QPointer< QThread >
 InfoSystem::workerThread() const
 {
     if ( m_infoSystemWorkerThreadController->isRunning() && m_infoSystemWorkerThreadController->worker() )
-        return QWeakPointer< QThread >( m_infoSystemWorkerThreadController->worker()->thread() );
+        return QPointer< QThread >( m_infoSystemWorkerThreadController->worker()->thread() );
 
-    return QWeakPointer< QThread >();
+    return QPointer< QThread >();
 }
 
 
@@ -320,7 +320,7 @@ InfoSystemCacheThread::~InfoSystemCacheThread()
 void
 InfoSystemCacheThread::InfoSystemCacheThread::run()
 {
-    m_cache = QWeakPointer< InfoSystemCache >( new InfoSystemCache() );
+    m_cache = QPointer< InfoSystemCache >( new InfoSystemCache() );
     exec();
     if ( !m_cache.isNull() )
         delete m_cache.data();
@@ -350,7 +350,7 @@ InfoSystemWorkerThread::~InfoSystemWorkerThread()
 void
 InfoSystemWorkerThread::InfoSystemWorkerThread::run()
 {
-    m_worker = QWeakPointer< InfoSystemWorker >( new InfoSystemWorker() );
+    m_worker = QPointer< InfoSystemWorker >( new InfoSystemWorker() );
     exec();
     if( !m_worker.isNull() )
         delete m_worker.data();

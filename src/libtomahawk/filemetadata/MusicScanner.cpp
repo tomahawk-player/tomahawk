@@ -184,7 +184,7 @@ MusicScanner::scan()
 
     m_dirListerThreadController = new QThread( this );
 
-    m_dirLister = QWeakPointer< DirLister >( new DirLister( m_paths ) );
+    m_dirLister = QPointer< DirLister >( new DirLister( m_paths ) );
     m_dirLister.data()->moveToThread( m_dirListerThreadController );
 
     connect( m_dirLister.data(), SIGNAL( fileToScan( QFileInfo ) ),

@@ -43,7 +43,7 @@ TreeProxyModelPlaylistInterface::TreeProxyModelPlaylistInterface( TreeProxyModel
 
 TreeProxyModelPlaylistInterface::~TreeProxyModelPlaylistInterface()
 {
-    m_proxyModel.clear();
+    m_proxyModel = 0;
 }
 
 

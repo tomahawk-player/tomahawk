@@ -61,7 +61,7 @@ private slots:
     void sourceOffline();
 
 private:
-    QHash< QString, QWeakPointer< LatchedStatusItem > > m_jobs;
+    QHash< QString, QPointer< LatchedStatusItem > > m_jobs;
 };
 
 #endif // LATCHEDSTATUSITEM_H

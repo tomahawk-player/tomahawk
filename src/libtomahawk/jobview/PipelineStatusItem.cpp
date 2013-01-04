@@ -101,7 +101,7 @@ PipelineStatusManager::resolving( const Tomahawk::query_ptr& p )
     if ( m_curItem.isNull() )
     {
         // No current query item and we're resolving something, so show it
-        m_curItem = QWeakPointer< PipelineStatusItem >( new PipelineStatusItem( p ) );
+        m_curItem = QPointer< PipelineStatusItem >( new PipelineStatusItem( p ) );
         JobStatusView::instance()->model()->addJob( m_curItem.data() );
     }
 }

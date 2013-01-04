@@ -92,7 +92,7 @@ private:
     uint m_nrFetchJobs;
     QList< InfoRequestData > m_cachedRequests;
     QHash< QString, QString > m_cachedCountries;
-    QWeakPointer< QNetworkAccessManager > m_nam;
+    QPointer< QNetworkAccessManager > m_nam;
 };
 
 }

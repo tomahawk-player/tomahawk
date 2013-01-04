@@ -23,7 +23,7 @@
 #include <QTimeLine>
 #include <QPropertyAnimation>
 #include <QEasingCurve>
-#include <cmath>
+#include <QPointer>
 
 #include "DllMacro.h"
 
@@ -52,7 +52,7 @@ private:
     unsigned int m_val, m_oldval;
 
     QString m_format;
-    QWeakPointer<QLabel> m_diff;
+    QPointer<QLabel> m_diff;
 };
 
 #endif // ANIMATEDCOUNTERLABEL_H

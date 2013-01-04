@@ -117,7 +117,7 @@ Result::onResolverRemoved( Tomahawk::Resolver* resolver )
 {
     if ( m_resolvedBy.data() == resolver )
     {
-        m_resolvedBy.clear();
+        m_resolvedBy = 0;
         emit statusChanged();
     }
 }
@@ -384,7 +384,7 @@ Result::resolvedBy() const
 void
 Result::setResolvedBy( Tomahawk::Resolver* resolver )
 {
-    m_resolvedBy = QWeakPointer< Tomahawk::Resolver >( resolver );
+    m_resolvedBy = QPointer< Tomahawk::Resolver >( resolver );
 }
 
 

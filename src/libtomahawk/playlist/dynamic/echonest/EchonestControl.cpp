@@ -181,8 +181,8 @@ Tomahawk::EchonestControl::updateWidgets()
 
         match->hide();
         input->hide();
-        m_match = QWeakPointer< QWidget >( match );
-        m_input = QWeakPointer< QWidget >( input );
+        m_match = QPointer< QWidget >( match );
+        m_input = QPointer< QWidget >( input );
         m_data.first = m_currentType;
     } else if( selectedType() == "Artist Description" ) {
         m_currentType = Echonest::DynamicPlaylist::Description;
@@ -200,8 +200,8 @@ Tomahawk::EchonestControl::updateWidgets()
 
         match->hide();
         input->hide();
-        m_match = QWeakPointer< QWidget >( match );
-        m_input = QWeakPointer< QWidget >( input );
+        m_match = QPointer< QWidget >( match );
+        m_input = QPointer< QWidget >( input );
         m_data.first = m_currentType;
     } else if( selectedType() == "User Radio" ) {
         m_currentType = Echonest::DynamicPlaylist::SourceCatalog;
@@ -229,8 +229,8 @@ Tomahawk::EchonestControl::updateWidgets()
 
         match->hide();
         combo->hide();
-        m_match = QWeakPointer< QWidget >( match );
-        m_input = QWeakPointer< QWidget >( combo );
+        m_match = QPointer< QWidget >( match );
+        m_input = QPointer< QWidget >( combo );
     } else if( selectedType() == "Song" ) {
         m_currentType = Echonest::DynamicPlaylist::SongId;
 
@@ -248,8 +248,8 @@ Tomahawk::EchonestControl::updateWidgets()
 
         match->hide();
         input->hide();
-        m_match = QWeakPointer< QWidget >( match );
-        m_input = QWeakPointer< QWidget >( input );
+        m_match = QPointer< QWidget >( match );
+        m_input = QPointer< QWidget >( input );
         m_data.first = m_currentType;
     } else if( selectedType() == "Variety" ) {
         m_currentType = Echonest::DynamicPlaylist::Variety;
@@ -269,8 +269,8 @@ Tomahawk::EchonestControl::updateWidgets()
 
         match->hide();
         input->hide();
-        m_match = QWeakPointer< QWidget >( match );
-        m_input = QWeakPointer< QWidget >( input );
+        m_match = QPointer< QWidget >( match );
+        m_input = QPointer< QWidget >( input );
         m_data.first = m_currentType;
     } else if( selectedType() == "Adventurousness" ) {
         m_currentType = Echonest::DynamicPlaylist::Adventurousness;
@@ -291,8 +291,8 @@ Tomahawk::EchonestControl::updateWidgets()
 
         match->hide();
         input->hide();
-        m_match = QWeakPointer< QWidget >( match );
-        m_input = QWeakPointer< QWidget >( input );
+        m_match = QPointer< QWidget >( match );
+        m_input = QPointer< QWidget >( input );
         m_data.first = m_currentType;
     } else if( selectedType() == "Tempo" ) {
         m_currentType = Echonest::DynamicPlaylist::MinTempo;
@@ -354,8 +354,8 @@ Tomahawk::EchonestControl::updateWidgets()
 
         match->hide();
         combo->hide();
-        m_match = QWeakPointer< QWidget >( match );
-        m_input = QWeakPointer< QWidget >( combo );
+        m_match = QPointer< QWidget >( match );
+        m_input = QPointer< QWidget >( combo );
     } else if( selectedType() == "Key" ) {
         m_currentType = Echonest::DynamicPlaylist::Key;
 
@@ -383,8 +383,8 @@ Tomahawk::EchonestControl::updateWidgets()
 
         match->hide();
         combo->hide();
-        m_match = QWeakPointer< QWidget >( match );
-        m_input = QWeakPointer< QWidget >( combo );
+        m_match = QPointer< QWidget >( match );
+        m_input = QPointer< QWidget >( combo );
     } else if( selectedType() == "Sorting" ) {
         m_currentType = Echonest::DynamicPlaylist::Sort;
 
@@ -416,8 +416,8 @@ Tomahawk::EchonestControl::updateWidgets()
 
         match->hide();
         combo->hide();
-        m_match = QWeakPointer< QWidget >( match );
-        m_input = QWeakPointer< QWidget >( combo );
+        m_match = QPointer< QWidget >( match );
+        m_input = QPointer< QWidget >( combo );
     } else if( selectedType() == "Mood" || selectedType() == "Style" ) {
         if( selectedType() == "Mood" )
             m_currentType = Echonest::DynamicPlaylist::Mood;
@@ -437,13 +437,13 @@ Tomahawk::EchonestControl::updateWidgets()
 
         match->hide();
         combo->hide();
-        m_match = QWeakPointer< QWidget >( match );
-        m_input = QWeakPointer< QWidget >( combo );
+        m_match = QPointer< QWidget >( match );
+        m_input = QPointer< QWidget >( combo );
 
         insertMoodsAndStyles();
     } else {
-        m_match = QWeakPointer<QWidget>( new QWidget );
-        m_input = QWeakPointer<QWidget>( new QWidget );
+        m_match = QPointer<QWidget>( new QWidget );
+        m_input = QPointer<QWidget>( new QWidget );
     }
     updateData();
     calculateSummary();
@@ -472,8 +472,8 @@ Tomahawk::EchonestControl::setupMinMaxWidgets( Echonest::DynamicPlaylist::Playli
 
     match->hide();
     input->hide();
-    m_match = QWeakPointer< QWidget >( match );
-    m_input = QWeakPointer< QWidget >( input );
+    m_match = QPointer< QWidget >( match );
+    m_input = QPointer< QWidget >( input );
 }
 
 

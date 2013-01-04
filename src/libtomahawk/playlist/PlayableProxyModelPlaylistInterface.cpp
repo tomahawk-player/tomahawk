@@ -46,7 +46,7 @@ PlayableProxyModelPlaylistInterface::PlayableProxyModelPlaylistInterface( Playab
 PlayableProxyModelPlaylistInterface::~PlayableProxyModelPlaylistInterface()
 {
     tDebug() << Q_FUNC_INFO;
-    m_proxyModel.clear();
+    m_proxyModel = 0;
 }
 
 

@@ -176,7 +176,7 @@ private:
     ExternalResolver::ErrorState m_error;
 
     QtScriptResolverHelper* m_resolverHelper;
-    QWeakPointer< QWidget > m_configWidget;
+    QPointer< QWidget > m_configWidget;
     QList< QVariant > m_dataWidgets;
 };
 

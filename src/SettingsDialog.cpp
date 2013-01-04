@@ -423,7 +423,7 @@ SettingsDialog::openAccountFactoryConfig( AccountFactory* factory )
 
 #ifndef Q_OS_MAC
     AccountFactoryWrapper dialog( factory, 0 );
-    QWeakPointer< AccountFactoryWrapper > watcher( &dialog );
+    QPointer< AccountFactoryWrapper > watcher( &dialog );
 
     dialog.exec();
 #else

@@ -22,13 +22,14 @@
 #include "utils/Closure.h"
 #include "utils/Logger.h"
 
+
 using namespace Tomahawk;
 using namespace Tomahawk::InfoSystem;
 
 
 SpotifyInfoPlugin::SpotifyInfoPlugin( Accounts::SpotifyAccount* account )
     : InfoPlugin()
-    , m_account( QWeakPointer< Accounts::SpotifyAccount >( account ) )
+    , m_account( QPointer< Accounts::SpotifyAccount >( account ) )
 {
     if ( !m_account.isNull() )
     {

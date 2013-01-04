@@ -26,7 +26,7 @@
 #include <QNetworkAccessManager>
 #include <QObject>
 #include <QVariant>
-#include <QWeakPointer>
+#include <QPointer>
 
 class QTimer;
 
@@ -80,7 +80,7 @@ private:
     QUrl m_currentLongUrl;
 
     QTimer* m_pauseTimer;
-    QWeakPointer<QNetworkAccessManager> m_nam;
+    QPointer<QNetworkAccessManager> m_nam;
 
 };
 

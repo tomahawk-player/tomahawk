@@ -202,7 +202,7 @@ InfoSystem::InfoPluginPtr
 XmppSipPlugin::infoPlugin()
 {
     if ( m_infoPlugin.isNull() )
-        m_infoPlugin = QWeakPointer< Tomahawk::InfoSystem::XmppInfoPlugin >( new Tomahawk::InfoSystem::XmppInfoPlugin( this ) );
+        m_infoPlugin = QPointer< Tomahawk::InfoSystem::XmppInfoPlugin >( new Tomahawk::InfoSystem::XmppInfoPlugin( this ) );
 
     return InfoSystem::InfoPluginPtr( m_infoPlugin.data() );
 }

@@ -26,7 +26,6 @@
 #include <QtCore/QObject>
 #include <QtCore/QtDebug>
 #include <QtCore/QMap>
-#include <QtCore/QWeakPointer>
 #include <QtCore/QSet>
 #include <QtCore/QList>
 #include <QtCore/QVariant>

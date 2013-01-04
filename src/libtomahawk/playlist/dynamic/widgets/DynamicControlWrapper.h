@@ -20,6 +20,7 @@
 #define DYNAMIC_CONTROL_WRAPPER_H
 
 #include <QWidget>
+#include <QPointer>
 
 #include "Typedefs.h"
 
@@ -70,9 +71,9 @@ private:
 
     dyncontrol_ptr m_control;
     QComboBox* m_typeSelector;
-    QWeakPointer<QWidget> m_matchSelector;
-    QWeakPointer<QWidget> m_entryWidget;
-    QWeakPointer<QGridLayout> m_layout;
+    QPointer<QWidget> m_matchSelector;
+    QPointer<QWidget> m_entryWidget;
+    QPointer<QGridLayout> m_layout;
 };
 
 };
