@@ -522,8 +522,8 @@ TomahawkWindow::setupSignals()
     connect( AudioEngine::instance(), SIGNAL( error( AudioEngine::AudioErrorCode ) ), SLOT( onAudioEngineError( AudioEngine::AudioErrorCode ) ) );
     connect( AudioEngine::instance(), SIGNAL( loading( const Tomahawk::result_ptr& ) ), SLOT( onPlaybackLoading( const Tomahawk::result_ptr& ) ) );
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( audioStarted() ) );
-    connect( AudioEngine::instance(), SIGNAL( finished(Tomahawk::result_ptr) ), SLOT( audioFinished() ) );
-    connect( AudioEngine::instance(), SIGNAL( resumed()), SLOT( audioStarted() ) );
+    connect( AudioEngine::instance(), SIGNAL( finished( Tomahawk::result_ptr ) ), SLOT( audioFinished() ) );
+    connect( AudioEngine::instance(), SIGNAL( resumed() ), SLOT( audioStarted() ) );
     connect( AudioEngine::instance(), SIGNAL( paused() ), SLOT( audioPaused() ) );
     connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( audioStopped() ) );
 
@@ -536,7 +536,7 @@ TomahawkWindow::setupSignals()
     connect( ac->getAction( "openLogfile" ), SIGNAL( triggered() ), SLOT( openLogfile() ) );
     connect( ac->getAction( "updateCollection" ), SIGNAL( triggered() ), SLOT( updateCollectionManually() ) );
     connect( ac->getAction( "rescanCollection" ), SIGNAL( triggered() ), SLOT( rescanCollectionManually() ) );
-    connect( ac->getAction( "loadXSPF" ), SIGNAL( triggered() ), SLOT( loadSpiff() ));
+    connect( ac->getAction( "loadXSPF" ), SIGNAL( triggered() ), SLOT( loadSpiff() ) );
     connect( ac->getAction( "aboutTomahawk" ), SIGNAL( triggered() ), SLOT( showAboutTomahawk() ) );
     connect( ac->getAction( "quit" ), SIGNAL( triggered() ), qApp, SLOT( quit() ) );
     connect( ac->getAction( "showOfflineSources" ), SIGNAL( triggered() ), SLOT( showOfflineSources() ) );
@@ -634,7 +634,7 @@ TomahawkWindow::keyPressEvent( QKeyEvent* e )
 
 #if ! defined ( Q_OS_MAC )
 #define KEY_PRESSED Q_FUNC_INFO << "Multimedia Key Pressed:"
-    switch( e->key() )
+    switch ( e->key() )
     {
         case Qt::Key_MediaPlay:
             tLog() << KEY_PRESSED << "Play";
@@ -681,12 +681,12 @@ TomahawkWindow::winEvent( MSG* msg, long* result )
 {
     #define TB_PRESSED Q_FUNC_INFO << "Taskbar Button Pressed:"
 
-    switch( msg->message )
+    switch ( msg->message )
     {
     case WM_COMMAND:
         if ( HIWORD( msg->wParam ) == THBN_CLICKED )
         {
-            switch( TB_STATES(LOWORD( msg->wParam )) )
+            switch ( TB_STATES( LOWORD( msg->wParam ) ) )
             {
             case TP_PREVIOUS:
                 tLog() << TB_PRESSED << "Previous";
