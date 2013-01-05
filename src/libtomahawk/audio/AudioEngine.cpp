@@ -902,7 +902,7 @@ AudioEngine::setPlaylist( Tomahawk::playlistinterface_ptr playlist )
         connect( m_playlist.data(), SIGNAL( nextTrackAvailable( bool ) ), SIGNAL( controlStateChanged() ) );
 
         connect( m_playlist.data(), SIGNAL( shuffleModeChanged( bool ) ), SIGNAL( shuffleModeChanged( bool ) ) );
-        connect( m_playlist.data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode ) ), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode ) ) );
+        connect( m_playlist.data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ) );
         
         emit shuffleModeChanged( m_playlist.data()->shuffled() );
         emit repeatModeChanged( m_playlist.data()->repeatMode() );
