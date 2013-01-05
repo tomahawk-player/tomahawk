@@ -97,27 +97,37 @@ log( const char *msg, unsigned int debugLevel, bool toDisk = true )
 
 
 void
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+TomahawkLogHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+#else
 TomahawkLogHandler( QtMsgType type, const char* msg )
+#endif
 {
     static QMutex s_mutex;
+
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    const char* message = msg.toLatin1().constData();
+#else
+    const char* message = msg;
+#endif
 
     QMutexLocker locker( &s_mutex );
     switch( type )
     {
         case QtDebugMsg:
-            log( msg, LOGTHIRDPARTY );
+            log( message, LOGTHIRDPARTY );
             break;
 
         case QtCriticalMsg:
-            log( msg, 0 );
+            log( message, 0 );
             break;
 
         case QtWarningMsg:
-            log( msg, 0 );
+            log( message, 0 );
             break;
 
         case QtFatalMsg:
-            log( msg, 0 );
+            log( message, 0 );
             break;
     }
 }
@@ -154,7 +164,11 @@ setupLogfile()
     }
 
     logfile.open( logFile().toLocal8Bit(), ios::app );
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    qInstallMessageHandler( TomahawkLogHandler );
+#else
     qInstallMsgHandler( TomahawkLogHandler );
+#endif
 }
 
 }
