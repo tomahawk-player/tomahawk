@@ -174,7 +174,7 @@ QHttpRequestHeader QxtScgiServerConnector::parseRequest(QByteArray& buffer)
         }
         else
         {
-            request_m.setValue(QString::fromAscii(name).toLower(), QString::fromAscii(buffer.left(i)));
+            request_m.setValue(QString::fromLatin1(name).toLower(), QString::fromLatin1(buffer.left(i)));
             name = "";
         }
         buffer = buffer.mid(i + 1);
@@ -207,11 +207,11 @@ QHttpRequestHeader QxtScgiServerConnector::parseRequest(QByteArray& buffer)
 void QxtScgiServerConnector::writeHeaders(QIODevice* device, const QHttpResponseHeader& response_m)
 {
 
-    device->write(("Status:" + QString::number(response_m.statusCode()) + ' ' + response_m.reasonPhrase() + "\r\n").toAscii());
+    device->write(("Status:" + QString::number(response_m.statusCode()) + ' ' + response_m.reasonPhrase() + "\r\n").toLatin1());
 
     foreach(const QString& key, response_m.keys())
     {
-        device->write((key + ':' + response_m.value(key) + "\r\n").toAscii());
+        device->write((key + ':' + response_m.value(key) + "\r\n").toLatin1());
     }
     device->write("\r\n");
 }
