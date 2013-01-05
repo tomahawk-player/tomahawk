@@ -143,8 +143,6 @@ private:
 };
 
 //FIXME: Qt5: this fails with Qt5, is it needed at all? It compiles fine without in Qt4 as well
-#if ! QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
-Q_DECLARE_METATYPE( DatabaseCommand_LoadSocialActions::TrackActions )
-#endif
+// Q_DECLARE_METATYPE( DatabaseCommand_LoadSocialActions::TrackActions )
 
 #endif // DATABASECOMMAND_LOADSOCIALACTIONS_H
