@@ -20,6 +20,9 @@
 #ifndef TOMAHAWKUTILSGUI_H
 #define TOMAHAWKUTILSGUI_H
 
+#include "TomahawkUtils.h"
+#include "DllMacro.h"
+
 #include <QSize>
 #include <QModelIndex>
 #include <QColor>
@@ -27,11 +30,10 @@
 #include <QTextOption>
 #include <QImage>
 
-#include "TomahawkUtils.h"
-#include "DllMacro.h"
+// include contains typedefs for Qt4/Qt5 compatibility
+#include <QStyleOption>
 
 class PlayableItem;
-class QStyleOptionViewItemV4;
 class QPainter;
 class QPixmap;
 class QLayout;
