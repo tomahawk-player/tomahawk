@@ -7,11 +7,6 @@
 # (c) Dominik Schmidt <dev@dominik-schmidt.de>
 #
 
-# Dependencies
-if(NOT QT4_FOUND)
-    find_package(Qt4 REQUIRED)
-endif()
-
 # Include dir
 find_path(LIBLASTFM_INCLUDE_DIR
   # Track.h doesn't exist in liblastfm-0.3.1, was called Track back then
