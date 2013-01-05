@@ -30,16 +30,9 @@
 #ifndef MSGPROCESSOR_H
 #define MSGPROCESSOR_H
 
-#include <QObject>
-#include <QtConcurrentRun>
-#include <QFuture>
-#include <QFutureWatcher>
-
-#include <qjson/parser.h>
-#include <qjson/serializer.h>
-#include <qjson/qobjecthelper.h>
-
 #include "Msg.h"
+
+#include <QObject>
 
 class MsgProcessor : public QObject
 {
