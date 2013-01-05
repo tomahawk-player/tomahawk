@@ -20,15 +20,15 @@
 #ifndef SCRIPTRESOLVER_H
 #define SCRIPTRESOLVER_H
 
-#include <QProcess>
+#include "Query.h"
+#include "ExternalResolverGui.h"
+#include "DllMacro.h"
 
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 #include <qjson/qobjecthelper.h>
 
-#include "Query.h"
-#include "ExternalResolverGui.h"
-#include "DllMacro.h"
+#include <QProcess>
 
 class QWidget;
 

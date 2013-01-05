@@ -18,14 +18,16 @@
 
 #include "DiscogsPlugin.h"
 
-#include <QNetworkReply>
-#include <QDomDocument>
-#include <QtPlugin>
 
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 #include "utils/Closure.h"
+
 #include <parser.h>
+
+#include <QNetworkReply>
+#include <QDomDocument>
+#include <QtPlugin>
 
 using namespace Tomahawk::InfoSystem;
 

@@ -20,11 +20,11 @@
 
 #include "DllMacro.h"
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
-#include <QtCore/QSize>
-#include <QtGui/QColor>
-#include <QtGui/QPixmap>
+#include <QSize>
+#include <QColor>
+#include <QPixmap>
 #include <QPainter>
 #include <QAbstractItemView>
 

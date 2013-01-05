@@ -20,11 +20,13 @@
 #ifndef DYNAMIC_PLAYLIST_CONTROL
 #define DYNAMIC_PLAYLIST_CONTROL
 
-#include <QtCore/QObject>
-#include <QtCore/QSharedPointer>
-#include <QStringList>
-#include <QtGui/QWidget>
 #include "Typedefs.h"
+
+
+#include <QObject>
+#include <QSharedPointer>
+#include <QStringList>
+#include <QWidget>
 
 namespace Tomahawk
 {

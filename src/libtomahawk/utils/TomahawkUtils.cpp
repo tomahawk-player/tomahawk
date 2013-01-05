@@ -32,8 +32,8 @@
     #include <lastfm/ws.h>
 #endif
 
-#include <quazip.h>
-#include <quazipfile.h>
+#include <quazip/quazip.h>
+#include <quazip/quazipfile.h>
 
 #include <QNetworkConfiguration>
 #include <QNetworkAccessManager>

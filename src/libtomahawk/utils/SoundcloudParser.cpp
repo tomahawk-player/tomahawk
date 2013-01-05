@@ -18,10 +18,6 @@
 
 #include "SoundcloudParser.h"
 
-#include <QtNetwork/QNetworkAccessManager>
-
-#include <qjson/parser.h>
-
 #include "Query.h"
 #include "SourceList.h"
 #include "DropJobNotifier.h"
@@ -32,6 +28,10 @@
 #include "utils/NetworkReply.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+
+#include <qjson/parser.h>
+
+#include <QNetworkAccessManager>
 
 using namespace Tomahawk;
 

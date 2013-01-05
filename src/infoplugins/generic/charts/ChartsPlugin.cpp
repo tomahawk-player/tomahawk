@@ -21,12 +21,6 @@
 
 #include "ChartsPlugin.h"
 
-#include <QDir>
-#include <QSettings>
-#include <QNetworkConfiguration>
-#include <QNetworkReply>
-#include <QtPlugin>
-
 #include "Album.h"
 #include "CountryUtils.h"
 #include "Typedefs.h"
@@ -37,10 +31,17 @@
 #include "utils/TomahawkCache.h"
 #include "Source.h"
 
-#define CHART_URL "http://charts.tomahawk-player.org/"
-//#define CHART_URL "http://localhost:8080/"
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
+
+#include <QDir>
+#include <QSettings>
+#include <QNetworkConfiguration>
+#include <QNetworkReply>
+#include <QtPlugin>
+
+#define CHART_URL "http://charts.tomahawk-player.org/"
+//#define CHART_URL "http://localhost:8080/"
 
 namespace Tomahawk
 {

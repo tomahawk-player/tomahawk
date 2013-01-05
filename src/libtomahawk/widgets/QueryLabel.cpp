@@ -18,12 +18,6 @@
 
 #include "QueryLabel.h"
 
-#include <QApplication>
-#include <QEvent>
-#include <QFontMetrics>
-#include <QMouseEvent>
-#include <QPainter>
-
 #include "Artist.h"
 #include "Album.h"
 #include "Query.h"
@@ -32,6 +26,14 @@
 #include "utils/Logger.h"
 #include "ViewManager.h"
 #include "Source.h"
+
+#include <QApplication>
+#include <QEvent>
+#include <QFontMetrics>
+#include <QMouseEvent>
+#include <QPainter>
+#include <QDrag>
+#include <QMimeData>
 
 #define BOXMARGIN 2
 #define DASH "  -  "

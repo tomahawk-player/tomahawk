@@ -20,10 +20,10 @@
 #ifndef RESULT_H
 #define RESULT_H
 
-#include <QtCore/QObject>
-#include <QtGui/QPixmap>
-#include <QtCore/QSharedPointer>
-#include <QtCore/QVariant>
+#include <QObject>
+#include <QPixmap>
+#include <QPointer>
+#include <QVariant>
 #include <QMutex>
 
 #include "utils/TomahawkUtils.h"

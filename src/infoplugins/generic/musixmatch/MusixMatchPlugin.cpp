@@ -19,12 +19,12 @@
 
 #include "MusixMatchPlugin.h"
 
+#include "utils/TomahawkUtils.h"
+#include "utils/Logger.h"
+
 #include <QNetworkReply>
 #include <QDomDocument>
 #include <QtPlugin>
-
-#include "utils/TomahawkUtils.h"
-#include "utils/Logger.h"
 
 using namespace Tomahawk::InfoSystem;
 

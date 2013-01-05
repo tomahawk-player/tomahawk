@@ -29,14 +29,15 @@
 #include <taglib/fileref.h>
 #include <taglib/tag.h>
 
-#include <QtCore/QVariantMap>
-#include <QtCore/QDir>
-#include <QtCore/QFileInfo>
-#include <QtCore/QString>
-#include <QtCore/QDateTime>
-#include <QtCore/QTimer>
-#include <QtCore/QMutex>
-#include <QtCore/QMutexLocker>
+#include <QVariantMap>
+#include <QDir>
+#include <QFileInfo>
+#include <QString>
+#include <QDateTime>
+#include <QTimer>
+#include <QMutex>
+#include <QMutexLocker>
+#include <QPointer>
 #include <database/Database.h>
 
 // descend dir tree comparing dir mtimes to last known mtime

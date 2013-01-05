@@ -19,15 +19,6 @@
 
 #include "RdioParser.h"
 
-#include <QDateTime>
-#include <QtNetwork/QNetworkAccessManager>
-#include <QUrl>
-#include <QStringList>
-
-#include <QtCore/QCryptographicHash>
-
-#include <qjson/parser.h>
-
 #include "ShortenedLinkParser.h"
 #include "config.h"
 #include "DropJob.h"
@@ -40,6 +31,15 @@
 #include "utils/NetworkReply.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
+
+
+#include <qjson/parser.h>
+
+#include <QDateTime>
+#include <QNetworkAccessManager>
+#include <QUrl>
+#include <QStringList>
+#include <QCryptographicHash>
 
 using namespace Tomahawk;
 

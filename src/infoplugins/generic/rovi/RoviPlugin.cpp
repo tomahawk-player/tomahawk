@@ -19,12 +19,13 @@
 
 #include "RoviPlugin.h"
 
+#include "utils/Logger.h"
+
+#include <parser.h>
+
 #include <QDateTime>
 #include <QNetworkReply>
 #include <QtPlugin>
-
-#include <parser.h>
-#include "utils/Logger.h"
 
 using namespace Tomahawk::InfoSystem;
 

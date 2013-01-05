@@ -28,8 +28,8 @@
 #include "utils/SmartPointerList.h"
 #include "DllMacro.h"
 
-class QAction;
-class QAction;
+#include <QAction>
+
 class SpotifyPlaylistUpdater;
 class QTimer;
 

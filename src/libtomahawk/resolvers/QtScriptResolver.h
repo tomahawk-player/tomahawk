@@ -25,11 +25,11 @@
 #include "utils/TomahawkUtils.h"
 #include "config.h"
 
-#include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QThread>
-#include <QtWebKit/QWebPage>
-#include <QtWebKit/QWebFrame>
+#include <QDir>
+#include <QFile>
+#include <QThread>
+#include <QWebPage>
+#include <QWebFrame>
 
 #ifdef QCA2_FOUND
 #include <QtCrypto>

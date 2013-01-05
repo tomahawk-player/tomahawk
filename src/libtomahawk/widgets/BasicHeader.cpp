@@ -19,15 +19,15 @@
 
 #include "BasicHeader.h"
 
-#include <QtGui/QLabel>
-#include <QtGui/QPixmap>
-#include <QtGui/QPaintEvent>
-#include <QtGui/QPainter>
-#include <QtGui/QBoxLayout>
-#include <QGraphicsDropShadowEffect>
-
 #include "utils/TomahawkUtilsGui.h"
 #include "ElidedLabel.h"
+
+#include <QLabel>
+#include <QPixmap>
+#include <QPaintEvent>
+#include <QPainter>
+#include <QBoxLayout>
+#include <QGraphicsDropShadowEffect>
 
 using namespace Tomahawk;
 

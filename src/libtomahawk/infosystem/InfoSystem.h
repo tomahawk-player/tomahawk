@@ -20,6 +20,10 @@
 #ifndef TOMAHAWK_INFOSYSTEM_H
 #define TOMAHAWK_INFOSYSTEM_H
 
+#include "DllMacro.h"
+#include "utils/TomahawkUtils.h"
+#include "Typedefs.h"
+
 #include <QtCore/QCryptographicHash>
 #include <QtCore/QObject>
 #include <QtCore/QtDebug>
@@ -31,10 +35,6 @@
 #include <QtCore/QVariant>
 #include <QtCore/QThread>
 #include <QtCore/QStringList>
-
-#include "DllMacro.h"
-#include "utils/TomahawkUtils.h"
-#include "Typedefs.h"
 
 class QNetworkAccessManager;
 

@@ -24,6 +24,12 @@
 #include "Source.h"
 #include "config.h"
 
+#include "utils/Logger.h"
+#include "accounts/ResolverAccount.h"
+#include "accounts/AccountManager.h"
+#include "utils/BinaryInstallerHelper.h"
+#include "utils/Closure.h"
+
 #include <attica/downloaditem.h>
 
 #include <QCoreApplication>
@@ -34,12 +40,6 @@
 #include <QDomDocument>
 #include <QDomElement>
 #include <QDomNode>
-
-#include "utils/Logger.h"
-#include "accounts/ResolverAccount.h"
-#include "accounts/AccountManager.h"
-#include "utils/BinaryInstallerHelper.h"
-#include "utils/Closure.h"
 
 using namespace Attica;
 

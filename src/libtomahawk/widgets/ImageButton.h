@@ -20,11 +20,11 @@
 #ifndef IMAGE_BUTTON_H
 #define IMAGE_BUTTON_H
 
-#include <QtGui/QAbstractButton>
-#include <QtGui/QIcon>
-#include <QtCore/QMap>
-
 #include "DllMacro.h"
+
+#include <QAbstractButton>
+#include <QIcon>
+#include <QMap>
 
 class DLLEXPORT ImageButton : public QAbstractButton
 {

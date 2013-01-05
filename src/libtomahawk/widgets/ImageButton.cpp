@@ -19,15 +19,14 @@
 
 #include "ImageButton.h"
 
-#include <QtGui/QPainter>
-#include <QtGui/QPaintEvent>
-#include <QtGui/QLayout>
-#include <QtGui/QPixmap>
-#include <QtGui/QIcon>
-#include <QtCore/QString>
-
 #include "utils/Logger.h"
 
+#include <QPainter>
+#include <QPaintEvent>
+#include <QLayout>
+#include <QPixmap>
+#include <QIcon>
+#include <QString>
 
 ImageButton::ImageButton( QWidget* parent )
     : QAbstractButton( parent )
