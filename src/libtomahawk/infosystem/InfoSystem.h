@@ -244,7 +244,6 @@ Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoStringHash );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::PushInfoPair );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::PushInfoFlags );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoType );
-Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoSystemCache* );
 Q_DECLARE_METATYPE( QList< Tomahawk::InfoSystem::InfoStringHash > );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoPluginPtr );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoPlugin* );
