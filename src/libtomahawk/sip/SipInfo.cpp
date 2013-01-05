@@ -205,7 +205,7 @@ SipInfo::toJson() const
     QJson::Serializer serializer;
     QByteArray ba = serializer.serialize( m );
 
-    return QString::fromAscii( ba );
+    return QString::fromLatin1( ba );
 }
 
 
@@ -216,7 +216,7 @@ SipInfo::fromJson( QString json )
 
     QJson::Parser parser;
     bool ok;
-    QVariant v = parser.parse( json.toAscii(), &ok );
+    QVariant v = parser.parse( json.toLatin1(), &ok );
     if ( !ok  || v.type() != QVariant::Map )
     {
         qDebug() << Q_FUNC_INFO << "Invalid JSON: " << json;

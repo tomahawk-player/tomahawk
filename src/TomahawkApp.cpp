@@ -383,7 +383,7 @@ TomahawkApp::instance()
 void
 TomahawkApp::printHelp()
 {
-    #define echo( X ) std::cout << QString( X ).toAscii().data() << "\n"
+    #define echo( X ) std::cout << QString( X ).toLatin1().data() << "\n"
 
     echo( "Usage: " + arguments().at( 0 ) + " [options] [url]" );
     echo( "Options are:" );
