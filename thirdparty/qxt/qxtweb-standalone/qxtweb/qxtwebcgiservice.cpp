@@ -215,7 +215,11 @@ void QxtWebCgiService::pageRequestedEvent(QxtWebRequestEvent* event)
         env["CONTENT_TYPE"] = event->contentType;
         env["CONTENT_LENGTH"] = QString::number(event->content->unreadBytes());
     }
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    env["QUERY_STRING"] = event->url.query();
+#else
     env["QUERY_STRING"] = event->url.encodedQuery();
+#endif
 
     // Populate HTTP header environment variables
     QMultiHash<QString, QString>::const_iterator iter = event->headers.constBegin();
@@ -251,10 +255,18 @@ void QxtWebCgiService::pageRequestedEvent(QxtWebRequestEvent* event)
     process->setEnvironment(p_env);
 
     // Launch process
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    if (event->url.hasQuery() && event->url.query().contains('='))
+#else
     if (event->url.hasQuery() && event->url.encodedQuery().contains('='))
+#endif
     {
         // CGI/1.1 spec says to pass the query on the command line if there's no embedded = sign
-        process->start(qxt_d().binary + ' ' + QUrl::fromPercentEncoding(event->url.encodedQuery()), QIODevice::ReadWrite);
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+        process->start(qxt_d().binary + ' ' + event->url.query(), QIODevice::ReadWrite);
+#else
+        process->start(qxt_d().binary + ' ' + event->url.encodedQuery(), QIODevice::ReadWrite);
+#endif
     }
     else
     {

@@ -148,6 +148,11 @@ IF( WIN32 )
     macro_log_feature(QTSPARKLE_FOUND "qtsparkle" "Library for creating auto updaters written in Qt" "https://github.com/davidsansome/qtsparkle" FALSE "" "")
 ENDIF( WIN32 )
 
+#TODO: support external qxt
+set(QXTWEB_FOUND TRUE)
+set(QXTWEB_LIBRARIES qxtweb-standalone)
+set(QXTWEB_INCLUDE_DIRS ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/qxtweb ${CMAKE_CURRENT_BINARY_DIR})
+
 #### submodules start
 # automatically init submodules here, don't delete this code we may add submodules again
 

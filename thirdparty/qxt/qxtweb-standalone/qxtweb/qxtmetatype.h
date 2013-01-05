@@ -111,7 +111,11 @@ public:
 
 inline void* qxtConstructByName(const char* typeName, const void* copy = 0)
 {
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    return QMetaType::create(QMetaType::type(typeName), copy);
+#else
     return QMetaType::construct(QMetaType::type(typeName), copy);
+#endif
 }
 
 inline void qxtDestroyByName(const char* typeName, void* data)

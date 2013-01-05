@@ -31,8 +31,8 @@
 #include "HeadlessCheck.h"
 #include "config.h"
 
-#include "QxtHttpServerConnector"
-#include "QxtHttpSessionManager"
+#include <QxtWeb/QxtHttpServerConnector>
+#include <QxtWeb/HttpSessionManager>
 
 #include <QRegExp>
 #include <QFile>
