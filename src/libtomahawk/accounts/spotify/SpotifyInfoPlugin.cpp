@@ -141,7 +141,7 @@ SpotifyInfoPlugin::notInCacheSlot( InfoStringHash criteria, InfoRequestData requ
         {
             // No running spotify account, use our webservice
             QUrl lookupUrl( "http://ws.spotify.com/search/1/album.json" );
-            lookupUrl.addQueryItem( "q", QString( "%1 %2" ).arg( artist ).arg( album ) );
+            TomahawkUtils::urlAddQueryItem( lookupUrl, "q", QString( "%1 %2" ).arg( artist ).arg( album ) );
 
             QNetworkReply * reply = TomahawkUtils::nam()->get( QNetworkRequest( lookupUrl ) );
             NewClosure( reply, SIGNAL( finished() ), this, SLOT( albumIdLookupFinished( QNetworkReply*, Tomahawk::InfoSystem::InfoRequestData ) ), reply, requestData );

@@ -106,8 +106,10 @@ MusicBrainzPlugin::notInCacheSlot( InfoStringHash criteria, InfoRequestData requ
 
             QString requestString( "http://musicbrainz.org/ws/2/release-group" );
             QUrl url( requestString );
-            url.addQueryItem( "query", querySt );
-            url.addQueryItem( "limit", "100" );
+
+            TomahawkUtils::urlAddQueryItem( url, "query", querySt );
+            TomahawkUtils::urlAddQueryItem( url, "limit", "100" );
+
             tDebug() << Q_FUNC_INFO << url.toString();
             QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
             reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
@@ -124,8 +126,10 @@ MusicBrainzPlugin::notInCacheSlot( InfoStringHash criteria, InfoRequestData requ
 
             QString requestString( "http://musicbrainz.org/ws/2/release" );
             QUrl url( requestString );
-            url.addQueryItem( "query", querySt );
-            url.addQueryItem( "limit", "100" );
+
+            TomahawkUtils::urlAddQueryItem( url, "query", querySt );
+            TomahawkUtils::urlAddQueryItem( url, "limit", "100" );
+
             tDebug() << Q_FUNC_INFO << url.toString();
             QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
             reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
@@ -230,7 +234,7 @@ MusicBrainzPlugin::gotReleasesSlot()
 
             QString requestString = QString( "http://musicbrainz.org/ws/2/release/%1" ).arg( release_id );
             QUrl url( requestString );
-            url.addQueryItem( "inc", "recordings" );
+            TomahawkUtils::urlAddQueryItem( url, "inc", "recordings" );
             tDebug() << Q_FUNC_INFO << url.toString();
 
             QNetworkReply* newReply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );

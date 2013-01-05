@@ -267,7 +267,8 @@ void
 ChartsPlugin::fetchChartSourcesList( bool fetchOnlySourceList )
 {
     QUrl url = QUrl( QString ( CHART_URL "charts" ) );
-    url.addQueryItem( "version", TomahawkUtils::appFriendlyVersion() );
+
+    TomahawkUtils::urlAddQueryItem( url, "version", TomahawkUtils::appFriendlyVersion() );
 
     QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
     reply->setProperty( "only_source_list", fetchOnlySourceList );
@@ -356,7 +357,8 @@ ChartsPlugin::fetchAllChartSources()
         foreach ( const Tomahawk::InfoSystem::InfoStringHash source, m_chartResources )
         {
             QUrl url = QUrl( QString( CHART_URL "charts/%1" ).arg( source[ "chart_source" ] ) );
-            url.addQueryItem( "version", TomahawkUtils::appFriendlyVersion() );
+
+            TomahawkUtils::urlAddQueryItem( url, "version", TomahawkUtils::appFriendlyVersion() );
 
             QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
             reply->setProperty( "chart_source", source[ "chart_source" ] );
@@ -375,7 +377,8 @@ ChartsPlugin::fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData, con
 {
     /// Fetch the chart, we need source and id
     QUrl url = QUrl ( QString ( CHART_URL "charts/%1/%2" ).arg( source ).arg( chart_id ) );
-    url.addQueryItem( "version", TomahawkUtils::appFriendlyVersion() );
+
+    TomahawkUtils::urlAddQueryItem( url, "version", TomahawkUtils::appFriendlyVersion() );
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "fetching: " << url;
 

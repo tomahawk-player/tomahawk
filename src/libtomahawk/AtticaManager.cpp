@@ -546,7 +546,8 @@ void AtticaManager::doInstallResolver( const Content& resolver, bool autoCreate,
 
 //    ItemJob< DownloadItem >* job = m_resolverProvider.downloadLink( resolver.id() );
     QUrl url( QString( "%1/resolvers/v1/content/download/%2/1" ).arg( hostname() ).arg( resolver.id() ) );
-    url.addQueryItem( "tomahawkversion", TomahawkUtils::appFriendlyVersion() );
+
+    TomahawkUtils::urlAddQueryItem( url, "tomahawkversion", TomahawkUtils::appFriendlyVersion() );
     QNetworkReply* r = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
     NewClosure( r, SIGNAL( finished() ), this, SLOT( resolverDownloadFinished( QNetworkReply* ) ), r );
     r->setProperty( "resolverId", resolver.id() );

@@ -119,7 +119,10 @@ SoundcloudParser::parseTrack( const QVariantMap& res )
     if ( !q.isNull() )
     {
         QUrl url = QUrl::fromUserInput( res.value( "stream_url" ).toString() );
-        url.addQueryItem( "client_id", "TiNg2DRYhBnp01DA3zNag" );
+
+        TomahawkUtils::urlAddQueryItem( url, "client_id", "TiNg2DRYhBnp01DA3zNag" );
+
+
         tLog() << "Setting resulthint to " << res.value( "stream_url" ) << url.toString();
         q->setResultHint( url.toString() );
         q->setSaveHTTPResultHint( true );
