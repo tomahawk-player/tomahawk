@@ -251,8 +251,8 @@ PlayableCover::paintEvent( QPaintEvent* event )
 
         if ( m_hoveredRect == r )
         {
-            TomahawkUtils::drawQueryBackground( &bufpainter, palette(), r, 1.1 );
-            bufpainter.setPen( Qt::white );
+            TomahawkUtils::drawQueryBackground( &bufpainter, r );
+            bufpainter.setPen( TomahawkUtils::Colors::SELECTION_FOREGROUND );
         }
         
         to.setAlignment( Qt::AlignHCenter | Qt::AlignBottom );
