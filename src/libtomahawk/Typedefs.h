@@ -217,7 +217,7 @@ typedef QList< QPair< QString, QString > > PairList;
 inline static QString uuid()
 {
     // kinda lame, but
-    QString q = QUuid::createUuid();
+    QString q = QUuid::createUuid().toString();
     q.remove( 0, 1 );
     q.chop( 1 );
     return q;
