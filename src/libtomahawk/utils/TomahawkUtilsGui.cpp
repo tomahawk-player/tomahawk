@@ -200,11 +200,15 @@ drawBackgroundAndNumbers( QPainter* painter, const QString& text, const QRect& f
 
 
 void
-drawQueryBackground( QPainter* p, const QPalette& palette, const QRect& r, qreal lightnessFactor )
+drawQueryBackground( QPainter* p, const QRect& r )
 {
-    p->setPen( palette.highlight().color().lighter( lightnessFactor * 100 ) );
-    p->setBrush( palette.highlight().color().lighter( lightnessFactor * 100 ) );
+    p->save();
+
+    p->setPen( Colors::SELECTION_BACKGROUND );
+    p->setBrush( Colors::SELECTION_BACKGROUND );
     p->drawRoundedRect( r, 4.0, 4.0 );
+
+    p->restore();
 }
 
 
