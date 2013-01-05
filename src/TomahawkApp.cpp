@@ -28,6 +28,7 @@
 #include "Artist.h"
 #include "Collection.h"
 #include "infosystem/InfoSystem.h"
+#include "infosystem/InfoSystemCache.h"
 #include "accounts/AccountManager.h"
 #include "accounts/spotify/SpotifyAccount.h"
 #include "accounts/lastfm/LastFmAccount.h"
