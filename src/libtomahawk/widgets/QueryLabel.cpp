@@ -387,21 +387,22 @@ QueryLabel::paintEvent( QPaintEvent* event )
             m_hoverType = Track;
         }
 
-        TomahawkUtils::drawQueryBackground( &p, palette(), m_hoverArea );
+        TomahawkUtils::drawQueryBackground( &p, m_hoverArea );
     }
 
     if ( elidedText != s || ( m_result.isNull() && m_query.isNull() && m_artist.isNull() && m_album.isNull() ) )
     {
         if ( m_hoverArea.width() )
         {
-            p.setPen( palette().highlightedText().color() );
-            p.setBrush( palette().highlight() );
+            p.setBrush( TomahawkUtils::Colors::SELECTION_BACKGROUND );
+            p.setPen( TomahawkUtils::Colors::SELECTION_FOREGROUND );
         }
         else
         {
             p.setBrush( palette().window() );
             p.setPen( palette().color( foregroundRole() ) );
         }
+
         p.drawText( r, m_align, elidedText );
     }
     else
