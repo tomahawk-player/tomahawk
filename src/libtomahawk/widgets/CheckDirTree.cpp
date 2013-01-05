@@ -89,7 +89,10 @@ CheckDirModel::getFileInfoResult()
 void
 CheckDirModel::volumeShowFinished()
 {
+#if ! QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+//FIXME: this has no equivalent in Qt5, does it just work there?
     reset();
+#endif
 
 #ifdef Q_OS_MAC
     // Make sure /Volumes is there, if not wait and try again
