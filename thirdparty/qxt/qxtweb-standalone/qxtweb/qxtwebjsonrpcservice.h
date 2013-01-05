@@ -29,42 +29,28 @@
 ** <http://libqxt.org>  <foundation@libqxt.org>
 *****************************************************************************/
 
-#ifndef QXTABSTRACTWEBSESSIONMANAGER_H
-#define QXTABSTRACTWEBSESSIONMANAGER_H
+#ifndef QXTWEBJSONRPCSERVICE_H
+#define QXTWEBJSONRPCSERVICE_H
 
-#include <QObject>
-#include <qxtglobal.h>
-class QxtAbstractWebService;
-class QxtWebEvent;
+#include "qxtabstractwebservice.h"
+#include <QUrl>
 
-class QxtAbstractWebSessionManagerPrivate;
-class QXT_WEB_EXPORT QxtAbstractWebSessionManager : public QObject
+class QXT_WEB_EXPORT QxtWebJsonRPCService : public QxtAbstractWebService
 {
     Q_OBJECT
 public:
-    typedef QxtAbstractWebService* ServiceFactory(QxtAbstractWebSessionManager*, int);
-
-    QxtAbstractWebSessionManager(QObject* parent = 0);
-
-    virtual bool start() = 0;
-    virtual void postEvent(QxtWebEvent* event) = 0;
-    void setServiceFactory(ServiceFactory* factory);
-    ServiceFactory* serviceFactory() const;
-
-    QxtAbstractWebService* session(int sessionID) const;
-
-public Q_SLOTS:
-    virtual bool shutdown() = 0;
+    explicit QxtWebJsonRPCService(QxtAbstractWebSessionManager* sm, QObject* parent = 0);
+    virtual ~QxtWebJsonRPCService();
 
 protected:
-    int createService();
-    virtual void sessionDestroyed(int sessionID);
+    void throwRPCError(QVariant error);
 
-protected Q_SLOTS:
-    virtual void processEvents() = 0;
-
+    QUrl self(QxtWebRequestEvent* event);
+    virtual void pageRequestedEvent(QxtWebRequestEvent* event);
+    virtual void functionInvokedEvent(QxtWebRequestEvent* event);
 private:
-    QXT_DECLARE_PRIVATE(QxtAbstractWebSessionManager)
+    class Private;
+    Private *d;
 };
 
-#endif // QXTABSTRACTWEBSESSIONMANAGER_H
+#endif // QXTWEBJSONRPCSERVICE_H

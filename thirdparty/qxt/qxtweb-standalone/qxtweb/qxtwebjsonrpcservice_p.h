@@ -1,4 +1,3 @@
-
 /****************************************************************************
 ** Copyright (c) 2006 - 2011, the LibQxt project.
 ** See the Qxt AUTHORS file for a list of authors and copyright holders.
@@ -29,42 +28,39 @@
 ** <http://libqxt.org>  <foundation@libqxt.org>
 *****************************************************************************/
 
-#ifndef QXTABSTRACTWEBSESSIONMANAGER_H
-#define QXTABSTRACTWEBSESSIONMANAGER_H
+#include "qxtwebjsonrpcservice.h"
+#include "qxtwebcontent.h"
+#include "qxtwebevent.h"
+#include <QtCore/QMetaMethod>
 
-#include <QObject>
-#include <qxtglobal.h>
-class QxtAbstractWebService;
-class QxtWebEvent;
-
-class QxtAbstractWebSessionManagerPrivate;
-class QXT_WEB_EXPORT QxtAbstractWebSessionManager : public QObject
+class QxtWebJsonRPCService::Private : public QObject
 {
-    Q_OBJECT
+Q_OBJECT
 public:
-    typedef QxtAbstractWebService* ServiceFactory(QxtAbstractWebSessionManager*, int);
+    Private(QxtWebJsonRPCService *that);
+    QMap<QxtWebContent *, QxtWebRequestEvent*> content;
 
-    QxtAbstractWebSessionManager(QObject* parent = 0);
+    QxtWebJsonRPCService *p;
+    void initTables(QObject *invokable);
+    bool tablesInitilized;
+    QObject *invokable;
 
-    virtual bool start() = 0;
-    virtual void postEvent(QxtWebEvent* event) = 0;
-    void setServiceFactory(ServiceFactory* factory);
-    ServiceFactory* serviceFactory() const;
+    struct Method
+    {
+        QMetaMethod meta;
+        QByteArray name;
+        bool returns;
+        int argCount;
+    };
+    QMap<QByteArray, Method> methods;
 
-    QxtAbstractWebService* session(int sessionID) const;
+    QxtWebRequestEvent *currentRequest;
+    QVariant currentRequestId;
+    bool requestCanceled;
 
-public Q_SLOTS:
-    virtual bool shutdown() = 0;
-
-protected:
-    int createService();
-    virtual void sessionDestroyed(int sessionID);
-
-protected Q_SLOTS:
-    virtual void processEvents() = 0;
-
-private:
-    QXT_DECLARE_PRIVATE(QxtAbstractWebSessionManager)
+public slots:
+    void readFinished();
+    void handle(QxtWebContent *);
+    void handle( QxtWebRequestEvent *event, QVariant id, QString method, QVariant args);
 };
 
-#endif // QXTABSTRACTWEBSESSIONMANAGER_H

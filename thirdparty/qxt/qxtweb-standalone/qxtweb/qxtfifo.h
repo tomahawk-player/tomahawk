@@ -29,42 +29,29 @@
 ** <http://libqxt.org>  <foundation@libqxt.org>
 *****************************************************************************/
 
-#ifndef QXTABSTRACTWEBSESSIONMANAGER_H
-#define QXTABSTRACTWEBSESSIONMANAGER_H
+#ifndef QXTFIFO_H
+#define QXTFIFO_H
+#include "qxtglobal.h"
+#include <QIODevice>
 
-#include <QObject>
-#include <qxtglobal.h>
-class QxtAbstractWebService;
-class QxtWebEvent;
-
-class QxtAbstractWebSessionManagerPrivate;
-class QXT_WEB_EXPORT QxtAbstractWebSessionManager : public QObject
+class QxtFifoPrivate;
+class QXT_CORE_EXPORT QxtFifo : public QIODevice
 {
     Q_OBJECT
 public:
-    typedef QxtAbstractWebService* ServiceFactory(QxtAbstractWebSessionManager*, int);
+    QxtFifo(QObject * parent = 0);
+    virtual bool isSequential() const;
+    virtual qint64 bytesAvailable() const;
 
-    QxtAbstractWebSessionManager(QObject* parent = 0);
-
-    virtual bool start() = 0;
-    virtual void postEvent(QxtWebEvent* event) = 0;
-    void setServiceFactory(ServiceFactory* factory);
-    ServiceFactory* serviceFactory() const;
-
-    QxtAbstractWebService* session(int sessionID) const;
-
-public Q_SLOTS:
-    virtual bool shutdown() = 0;
+    void clear();
 
 protected:
-    int createService();
-    virtual void sessionDestroyed(int sessionID);
-
-protected Q_SLOTS:
-    virtual void processEvents() = 0;
+    explicit QxtFifo(const QByteArray &prime, QObject * parent = 0);
+    virtual qint64 readData(char * data, qint64 maxSize);
+    virtual qint64 writeData(const char * data, qint64 maxSize);
 
 private:
-    QXT_DECLARE_PRIVATE(QxtAbstractWebSessionManager)
+    QXT_DECLARE_PRIVATE(QxtFifo)
 };
 
-#endif // QXTABSTRACTWEBSESSIONMANAGER_H
+#endif // QXTFIFO_H

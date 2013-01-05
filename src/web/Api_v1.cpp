@@ -192,7 +192,7 @@ Api_v1::sid( QxtWebRequestEvent* event, QString unused )
         return send404( event ); // 503?
     }
 
-    QxtWebPageEvent* e = new QxtWebPageEvent( event->sessionID, event->requestID, iodev );
+    QxtWebPageEvent* e = new QxtWebPageEvent( event->sessionID, event->requestID, iodev.data() );
     e->streaming = iodev->isSequential();
     e->contentType = rp->mimetype().toAscii();
     if ( rp->size() > 0 )
