@@ -1013,7 +1013,7 @@ QString
 urlQueryItemValue( const QUrl& url, const QString& key )
 {
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
-    return QUrlQuery( url ).queryItemValue( key ).replace( "+", " " )
+    return QUrlQuery( url ).queryItemValue( key ).replace( "+", " " );
 #else
     return url.queryItemValue( key ).replace( "+", " " );
 #endif
