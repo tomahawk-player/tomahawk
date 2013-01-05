@@ -155,7 +155,7 @@ TwitterSipPlugin::disconnectPlugin()
     if( !m_directMessageDestroy.isNull() )
         delete m_directMessageDestroy.data();
 
-    m_cachedTwitterAuth.clear();
+    m_cachedTwitterAuth = 0;
 
     m_configuration[ "cachedpeers" ] = m_cachedPeers;
     syncConfig();
