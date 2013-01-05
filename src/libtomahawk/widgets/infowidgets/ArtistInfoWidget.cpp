@@ -75,7 +75,8 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->topHits->setPlayableModel( m_topHitsModel );
     ui->topHits->setSortingEnabled( false );
     ui->topHits->setEmptyTip( tr( "Sorry, we could not find any top hits for this artist!" ) );
-
+    ui->topHits->setAutoResize( true );
+    
     ui->relatedArtists->setAutoFitItems( false );
     ui->relatedArtists->setWrapping( false );
     ui->relatedArtists->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
@@ -281,7 +282,7 @@ ArtistInfoWidget::onTracksFound( const QList<Tomahawk::query_ptr>& queries, Mode
     Q_UNUSED( mode );
 
     m_topHitsModel->finishLoading();
-    m_topHitsModel->appendQueries( queries );
+    m_topHitsModel->appendQueries( queries.mid( 0, 20 ) );
 }
 
 
