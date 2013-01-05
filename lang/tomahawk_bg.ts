@@ -116,13 +116,13 @@ connect and stream from you?</source>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="71"/>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="309"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="317"/>
         <source>&amp;Listen Privately</source>
         <translation>&amp;Слушай самостоятелно</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="71"/>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="309"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="317"/>
         <source>&amp;Listen Publicly</source>
         <translation>&amp;Слушай публично</translation>
     </message>
@@ -222,32 +222,37 @@ connect and stream from you?</source>
         <translation>&amp;Правна информация</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="128"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="127"/>
+        <source>&amp;View Logfile</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="130"/>
         <source>Check For Updates...</source>
         <translation>Провери за обновления</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="139"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="142"/>
         <source>&amp;Controls</source>
         <translation>&amp;Контроли</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="153"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="156"/>
         <source>&amp;Settings</source>
         <translation>&amp;Настройки</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="159"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="162"/>
         <source>&amp;Help</source>
         <translation>&amp;Помощ</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="184"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="189"/>
         <source>&amp;Window</source>
         <translation>&amp;Прозорец</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="197"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="204"/>
         <source>Main Menu</source>
         <translation>Главно меню</translation>
     </message>
@@ -330,37 +335,37 @@ connect and stream from you?</source>
 <context>
     <name>AudioControls</name>
     <message>
-        <location filename="../src/AudioControls.cpp" line="281"/>
+        <location filename="../src/AudioControls.cpp" line="278"/>
         <source>Shuffle</source>
         <translation>Разбъркано</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="282"/>
+        <location filename="../src/AudioControls.cpp" line="279"/>
         <source>Repeat</source>
         <translation>Повтори</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="279"/>
+        <location filename="../src/AudioControls.cpp" line="276"/>
         <source>Time Elapsed</source>
         <translation>Изминало време</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="280"/>
+        <location filename="../src/AudioControls.cpp" line="277"/>
         <source>Time Remaining</source>
         <translation>Оставащо време</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="285"/>
+        <location filename="../src/AudioControls.cpp" line="282"/>
         <source>Playing from %1</source>
         <translation>Изпълнявам от %1</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="283"/>
+        <location filename="../src/AudioControls.cpp" line="280"/>
         <source>Share</source>
         <translation>Сподели</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="284"/>
+        <location filename="../src/AudioControls.cpp" line="281"/>
         <source>Love</source>
         <translation>Харесай</translation>
     </message>
@@ -1082,31 +1087,31 @@ Tomahawk създаде доклад относно това и изпращай
 <context>
     <name>PlaylistLargeItemDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="136"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="133"/>
         <source>played %1 by you</source>
         <comment>e.g. played 3 hours ago by you</comment>
         <translation>Изпълнена %1 от теб</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="138"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="135"/>
         <source>played %1 by %2</source>
         <comment>e.g. played 3 hours ago by SomeSource</comment>
         <translation>Изпълнена %1 от %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="145"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="142"/>
         <source>added %1</source>
         <comment>e.g. added 3 hours ago</comment>
         <translation>Добавена %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="206"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="203"/>
         <source>by &lt;b&gt;%1&lt;/b&gt;</source>
         <comment>e.g. by SomeArtist</comment>
         <translation>от &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="208"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="205"/>
         <source>by &lt;b&gt;%1&lt;/b&gt; on &lt;b&gt;%2&lt;/b&gt;</source>
         <comment>e.g. by SomeArtist on SomeAlbum</comment>
         <translation>от &lt;b&gt;%1&lt;/b&gt; на &lt;b&gt;%2&lt;/b&gt;</translation>
@@ -3341,311 +3346,181 @@ enter the displayed PIN number here:</source>
         <translation>Tomahawk</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.ui" line="67"/>
-        <source>&amp;Quit</source>
-        <translation>&amp;Изход</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.ui" line="70"/>
-        <source>Ctrl+Q</source>
-        <translation>Ctrl+Q</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.ui" line="78"/>
-        <source>Go &amp;Online</source>
-        <translation>&amp;Свържи се</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.ui" line="83"/>
-        <source>Add &amp;Friend...</source>
-        <translation>Добави &amp;приятел</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.ui" line="88"/>
-        <source>U&amp;pdate Collection</source>
-        <translation>О&amp;бнови колекцията</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.ui" line="91"/>
-        <source>Update Collection</source>
-        <translation>Обнови колекцията</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.ui" line="96"/>
-        <source>&amp;Configure Tomahawk...</source>
-        <translation>&amp;Настройки на Tomahawk</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.ui" line="104"/>
-        <source>Load &amp;XSPF...</source>
-        <translation>Зареди &amp;XSPF...</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.ui" line="109"/>
-        <source>Create &amp;New Playlist...</source>
-        <translation>Зареди &amp;Нов списък</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.ui" line="114"/>
-        <source>About &amp;Tomahawk...</source>
-        <translation>За &amp;Tomahawk</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.ui" line="122"/>
-        <source>Create New &amp;Automatic Playlist</source>
-        <translation>Създай нов &amp;Автоматичен списък</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.ui" line="127"/>
-        <source>Create New &amp;Station</source>
-        <translation>Създай нова &amp;Станция</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.ui" line="135"/>
-        <source>Show Offline Sources</source>
-        <translation>Покажи източници извън линия</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.ui" line="140"/>
-        <source>Hide Offline Sources</source>
-        <translation>Скрий източници извън линия</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.ui" line="145"/>
-        <source>Minimize</source>
-        <translation>Смали</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.ui" line="148"/>
-        <source>Ctrl+M</source>
-        <translation>Ctrl+M</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.ui" line="153"/>
-        <source>Zoom</source>
-        <translation>Увеличи</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.ui" line="156"/>
-        <source>Meta+Ctrl+Z</source>
-        <translation>Mod+Ctrl+Z</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.ui" line="161"/>
-        <source>&amp;Legal Info...</source>
-        <translation>&amp;Правна инфоормация</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.ui" line="169"/>
-        <source>Diagnostics...</source>
-        <translation>Диагностика...</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.ui" line="177"/>
-        <source>Fully &amp;Rescan Collection</source>
-        <translation>Пълно &amp;сканиране на колекцията</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.ui" line="180"/>
-        <source>Fully Rescan Collection</source>
-        <translation>Пълно сканиране на колекцията</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.ui" line="185"/>
-        <source>Play</source>
-        <translation>Изпълни</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.ui" line="188"/>
-        <source>Space</source>
-        <translation>Интервал</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.ui" line="193"/>
-        <source>Previous</source>
-        <translation>Предишна</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.ui" line="198"/>
-        <source>Next</source>
-        <translation>Следваща</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.cpp" line="266"/>
+        <location filename="../src/TomahawkWindow.cpp" line="269"/>
         <source>Back</source>
         <translation>Назад</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="267"/>
+        <location filename="../src/TomahawkWindow.cpp" line="270"/>
         <source>Go back one page</source>
         <translation>Една страница назад</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="268"/>
+        <location filename="../src/TomahawkWindow.cpp" line="271"/>
         <source>Forward</source>
         <translation>Напред</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="269"/>
+        <location filename="../src/TomahawkWindow.cpp" line="272"/>
         <source>Go forward one page</source>
         <translation>Една страница напред</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="203"/>
-        <location filename="../src/TomahawkWindow.cpp" line="1322"/>
+        <location filename="../src/TomahawkWindow.cpp" line="206"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1338"/>
         <source>Hide Menu Bar</source>
         <translation>Скрий лентата с менюто</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="203"/>
-        <location filename="../src/TomahawkWindow.cpp" line="1316"/>
+        <location filename="../src/TomahawkWindow.cpp" line="206"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1332"/>
         <source>Show Menu Bar</source>
         <translation>Покажи лентата с менюто</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="281"/>
+        <location filename="../src/TomahawkWindow.cpp" line="284"/>
         <source>Search for any artist, album or song...</source>
-        <translation>Търси за всеки Артист, Албум или Песен...</translation>
+        <translation>Търси всеки Артист, Албум или Песен...</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="305"/>
+        <location filename="../src/TomahawkWindow.cpp" line="308"/>
         <source>&amp;Main Menu</source>
         <translation>&amp;Основно меню</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="853"/>
-        <location filename="../src/TomahawkWindow.cpp" line="860"/>
-        <location filename="../src/TomahawkWindow.cpp" line="868"/>
+        <location filename="../src/TomahawkWindow.cpp" line="869"/>
+        <location filename="../src/TomahawkWindow.cpp" line="876"/>
+        <location filename="../src/TomahawkWindow.cpp" line="884"/>
         <source>Connect To Peer</source>
         <translation>Свържи се с друг потребител</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="854"/>
+        <location filename="../src/TomahawkWindow.cpp" line="870"/>
         <source>Enter peer address:</source>
         <translation>Въведи адресът на отдалеченият потребител:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="861"/>
+        <location filename="../src/TomahawkWindow.cpp" line="877"/>
         <source>Enter peer port:</source>
         <translation>Въведи порт:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="869"/>
+        <location filename="../src/TomahawkWindow.cpp" line="885"/>
         <source>Enter peer key:</source>
         <translation>Въведи ключът за удостоверяване:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="960"/>
+        <location filename="../src/TomahawkWindow.cpp" line="976"/>
         <source>XSPF Error</source>
         <translation>XSPF Грешка</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="960"/>
+        <location filename="../src/TomahawkWindow.cpp" line="976"/>
         <source>This is not a valid XSPF playlist.</source>
         <translation>Това не е валиден XSPF списък</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="964"/>
+        <location filename="../src/TomahawkWindow.cpp" line="980"/>
         <source>Failed to save tracks</source>
         <translation>Не мога да запазя списъкът с песни</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="964"/>
+        <location filename="../src/TomahawkWindow.cpp" line="980"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
         <translation>Някои от песните в този списък нямат артист и заглавие. 
 Те ще бъдат игнорирани.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="978"/>
+        <location filename="../src/TomahawkWindow.cpp" line="994"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped. Make sure you have a suitable Phonon backend and required plugins installed.</source>
         <translation>Съжалявам. Има проблем с достъпа до твоето аудио-устройство или до избраната песен - тя ще бъде прескочена.
 Моля, увери се, че са инсталирани подходящ Phonon и приставки.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="980"/>
+        <location filename="../src/TomahawkWindow.cpp" line="996"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped.</source>
         <translation>Съжалявам. 
 Има проблем с достъпа до твоето аудио устройство или избраната песен. Тя ще бъде пропусната.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1012"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1028"/>
         <source>Station</source>
         <translation>Станция</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1014"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1030"/>
         <source>Create New Station</source>
         <translation>Създай нова станция</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1014"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1030"/>
         <source>Name:</source>
         <translation>Име:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1077"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1093"/>
         <source>Playlist</source>
         <translation>Списък</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1099"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1115"/>
         <source>Automatic Playlist</source>
         <translation>Автоматично-генериран списък</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1121"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1137"/>
         <source>Pause</source>
         <translation>Пауза</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1143"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1159"/>
         <source>&amp;Play</source>
         <translation>&amp;Възпроизвеждане</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1174"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1190"/>
         <source>Authentication Error</source>
         <translation>Грешка при удостоверяване</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1175"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1191"/>
         <source>Error connecting to SIP: Authentication failed!</source>
         <translation>Грешка при свързване: Неуспешно удостоверяване!</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1189"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1205"/>
         <source>%1 by %2</source>
         <comment>track, artist name</comment>
         <translation>%1 от %2</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1190"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1206"/>
         <source>%1 - %2</source>
         <comment>current track, some window title</comment>
         <translation>%1 - %2</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1201"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1217"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1205"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1221"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1209"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1225"/>
         <source>Copyright 2010 - 2012</source>
         <translation>Всички права - запазени. 2010 - 2012</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1210"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1226"/>
         <source>Thanks to:</source>
         <translation>Благодарности на:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1217"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1233"/>
         <source>About Tomahawk</source>
         <translation>Относно Tomahawk</translation>
     </message>
