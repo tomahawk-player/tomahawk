@@ -22,8 +22,6 @@
 #include "Zeroconf.h"
 #include "Source.h"
 
-#include <QtPlugin>
-
 using namespace Tomahawk;
 using namespace Accounts;
 

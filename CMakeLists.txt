@@ -81,26 +81,76 @@ INCLUDE( GNUInstallDirs )
 # installer creation
 INCLUDE( TomahawkCPack.cmake )
 
-#deps
+# deps
 INCLUDE( MacroOptionalFindPackage )
 INCLUDE( MacroLogFeature )
 
-# Check if we need qtgui:
-SET(NEEDED_QT4_COMPONENTS QtCore QtXml QtNetwork )
-IF( NOT BUILD_GUI )
-    ADD_DEFINITIONS( -DENABLE_HEADLESS )
-    MESSAGE( STATUS "Building Tomahawk ${TOMAHAWK_VERSION} in HEADLESS mode ***" )
-ELSE()
-    MESSAGE( STATUS "Building Tomahawk ${TOMAHAWK_VERSION} full GUI version ***" )
-    LIST(APPEND NEEDED_QT4_COMPONENTS "QtGui" "QtWebkit" "QtUiTools" )
-ENDIF()
+# headless mode
+if( NOT BUILD_GUI )
+    add_definitions( -DENABLE_HEADLESS )
+    message( STATUS "Building Tomahawk ${TOMAHAWK_VERSION} in HEADLESS mode ***" )
+else()
+    message( STATUS "Building Tomahawk ${TOMAHAWK_VERSION} full GUI version ***" )
+endif()
 
-IF( BUILD_GUI AND UNIX AND NOT APPLE )
-    FIND_PACKAGE( X11 )
-ENDIF()
 
-macro_optional_find_package(Qt4 4.7.0 COMPONENTS ${NEEDED_QT4_COMPONENTS} )
-macro_log_feature(QT4_FOUND "Qt" "A cross-platform application and UI framework" "http://qt.nokia.com" TRUE "" "If you see this, although libqt4-devel is installed, check whether the \n     qtwebkit-devel package and whatever contains QtUiTools is installed too")
+find_package(Qt5Core QUIET)
+if(Qt5Core_DIR)
+    find_package(Qt5Widgets QUIET)
+    message(STATUS "Found Qt5! Please keep in mind, this is highly experimental and not our main development..")
+
+    macro(qt_wrap_ui)
+        qt5_wrap_ui(${ARGN})
+    endmacro()
+
+    macro(qt_add_resources)
+        qt5_add_resources(${ARGN})
+    endmacro()
+
+    find_package(Qt5LinguistTools REQUIRED)
+    macro(qt_add_translation)
+        qt5_add_translation(${ARGN})
+    endmacro()
+
+    macro(setup_qt)
+    endmacro()
+
+    #FIXME: CrashReporter depends on deprecated QHttp
+    set(WITH_CRASHREPORTER OFF)
+    set(WITH_BREAKPAD OFF)
+else()
+    message(STATUS "Could not find Qt5, now searching for Qt4... you're better off this way!")
+
+    set(NEEDED_QT4_COMPONENTS "QtCore" "QtXml" "QtNetwork")
+    if(BUILD_GUI)
+        list(APPEND NEEDED_QT4_COMPONENTS "QtGui" "QtWebkit" "QtUiTools" )
+    endif()
+
+    macro_optional_find_package(Qt4 4.7.0 COMPONENTS ${NEEDED_QT4_COMPONENTS} )
+    macro_logfeature(QT4_FOUND "Qt" "A cross-platform application and UI framework" "http://qt.nokia.com" TRUE "" "If you see this, although libqt4-devel is installed, check whether the \n     qtwebkit-devel package and whatever contains QtUiTools is installed too")
+
+    macro(qt5_use_modules)
+    endmacro()
+
+    macro(setup_qt)
+        if(NOT BUILD_GUI)
+            set(QT_DONT_USE_QTGUI TRUE)
+        endif()
+        if(UNIX AND NOT APPLE)
+            set(QT_USE_QTDBUS TRUE)
+        endif()
+        set(QT_USE_QTSQL TRUE)
+        set(QT_USE_QTNETWORK TRUE)
+        set(QT_USE_QTXML TRUE)
+        set(QT_USE_QTWEBKIT TRUE)
+
+        include( ${QT_USE_FILE} )
+    endmacro()
+endif()
+
+if(BUILD_GUI AND UNIX AND NOT APPLE)
+    find_package( X11 )
+endif()
 
 macro_optional_find_package(Phonon 4.5.0)
 macro_log_feature(PHONON_FOUND "Phonon" "The Phonon multimedia library" "http://phonon.kde.org" TRUE "" "")
@@ -143,6 +193,10 @@ macro_log_feature(QTWEETLIB_FOUND "QTweetLib" "Qt Twitter Library" "https://gith
 macro_optional_find_package(LibLastFm 1.0.0)
 macro_log_feature(LIBLASTFM_FOUND "liblastfm" "Qt library for the Last.fm webservices" "https://github.com/eartle/liblastfm" TRUE "" "liblastfm is needed for scrobbling tracks to Last.fm and fetching cover artwork")
 
+# we need pthreads too
+macro_optional_find_package(Threads)
+macro_log_feature(THREADS_FOUND "Threads" "Threading Library" "" TRUE "" "Platform specific library for threading")
+
 IF( WIN32 )
     macro_optional_find_package(QtSparkle)
     macro_log_feature(QTSPARKLE_FOUND "qtsparkle" "Library for creating auto updaters written in Qt" "https://github.com/davidsansome/qtsparkle" FALSE "" "")
@@ -152,6 +206,12 @@ ENDIF( WIN32 )
 set(QXTWEB_FOUND TRUE)
 set(QXTWEB_LIBRARIES qxtweb-standalone)
 set(QXTWEB_INCLUDE_DIRS ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/qxtweb ${CMAKE_CURRENT_BINARY_DIR})
+
+### libportfwd
+set(LIBPORTFWD_INCLUDE_DIR ${THIRDPARTY_DIR}/libportfwd/include)
+set(LIBPORTFWD_LIBRARY tomahawk_portfwd)
+set(LIBPORTFWD_LIBRARIES ${LIBPORTFWD_LIBRARY})
+add_subdirectory(${THIRDPARTY_DIR}/libportfwd)
 
 #### submodules start
 # automatically init submodules here, don't delete this code we may add submodules again
@@ -167,15 +227,7 @@ set(QXTWEB_INCLUDE_DIRS ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/qxtweb ${CMAKE_C
 
 #### submodules end
 
-### libportfwd
-SET( LIBPORTFWD_INCLUDE_DIR ${THIRDPARTY_DIR}/libportfwd/include )
-SET( LIBPORTFWD_LIBRARY tomahawk_portfwd )
-SET( LIBPORTFWD_LIBRARIES ${LIBPORTFWD_LIBRARY} )
-ADD_SUBDIRECTORY( ${THIRDPARTY_DIR}/libportfwd )
 
-# we need pthreads too
-macro_optional_find_package(Threads)
-macro_log_feature(THREADS_FOUND "Threads" "Threading Library" "" TRUE "" "Platform specific library for threading")
 
 macro_optional_find_package(KDE4)
 macro_optional_find_package(KDE4Installed)

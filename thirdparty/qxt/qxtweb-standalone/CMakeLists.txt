@@ -1,15 +1,11 @@
 PROJECT(libqxtweb-standalone)
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8 FATAL_ERROR)
-SET(CMAKE_VERBOSE_MAKEFILE ON)
-SET(CMAKE_INSTALL_PREFIX ".")
 
 IF( ${CMAKE_VERSION} VERSION_GREATER 2.8.3 )
   CMAKE_POLICY(SET CMP0017 NEW)
 ENDIF( ${CMAKE_VERSION} VERSION_GREATER 2.8.3 )
 
-FIND_PACKAGE( Qt4 4.6.0 COMPONENTS QtCore QtNetwork REQUIRED )
-set(QT_USE_QTNETWORK TRUE)
-include( ${QT_USE_FILE} )
+setup_qt()
 
 SET(qxtweb "qxtweb")
 
@@ -84,7 +80,9 @@ ENDIF()
 
 
 target_link_libraries( qxtweb-standalone
-	    ${QT_LIBRARIES}
+    ${QT_LIBRARIES}
 )
+
+qt5_use_modules(qxtweb-standalone Network)
 
 set_target_properties(qxtweb-standalone PROPERTIES AUTOMOC TRUE)

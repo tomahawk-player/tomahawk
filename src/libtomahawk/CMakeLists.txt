@@ -1,17 +1,6 @@
 project( tomahawklib )
 
-SET( QT_USE_QTGUI TRUE )
-SET( QT_USE_QTSQL TRUE )
-SET( QT_USE_QTNETWORK TRUE )
-SET( QT_USE_QTXML TRUE )
-SET( QT_USE_QTSVG TRUE )
-SET( QT_USE_QTUITOOLS TRUE )
-
-IF( UNIX AND NOT APPLE )
-  SET( QT_USE_QTDBUS TRUE )
-ENDIF( UNIX AND NOT APPLE )
-
-include( ${QT_USE_FILE} )
+setup_qt()
 
 add_definitions( ${QT_DEFINITIONS} )
 add_definitions( -DQT_SHARED )
@@ -358,7 +347,6 @@ include_directories(
     ${PHONON_INCLUDES}
 
     ${LIBPORTFWD_INCLUDE_DIR}
-    ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/qxtweb
     ${QuaZip_INCLUDE_DIR}
 )
 
@@ -372,14 +360,6 @@ IF(LIBATTICA_FOUND)
     INCLUDE_DIRECTORIES( ${LIBATTICA_INCLUDE_DIR} )
     LIST(APPEND LINK_LIBRARIES ${LIBATTICA_LIBRARIES} ${QuaZip_LIBRARIES} )
 ENDIF(LIBATTICA_FOUND)
-
-IF( UNIX AND NOT APPLE )
-    IF( BUILD_GUI AND X11_FOUND )
-        INCLUDE_DIRECTORIES( ${THIRDPARTY_DIR}/libqnetwm )
-        SET( libSources ${libSources} ${THIRDPARTY_DIR}/libqnetwm/libqnetwm/netwm.cpp )
-        LIST(APPEND LINK_LIBRARIES ${X11_LIBRARIES} )
-    ENDIF()
-ENDIF( UNIX AND NOT APPLE )
 
 IF( WIN32 )
     SET( OS_SPECIFIC_LINK_LIBRARIES
@@ -437,12 +417,13 @@ IF(BUILD_GUI)
     LIST(APPEND libSources ${libGuiSources} )
 ENDIF()
 
-qt4_wrap_ui( libUI_H ${libUI} )
+qt_wrap_ui(libUI_H ${libUI})
 
 SET( libSources ${libSources} ${libUI_H} )
 
-ADD_LIBRARY( tomahawklib SHARED ${libSources})
+add_library( tomahawklib SHARED ${libSources})
 set_target_properties(tomahawklib PROPERTIES AUTOMOC TRUE)
+qt5_use_modules(tomahawklib Widgets Network Sql WebKitWidgets Concurrent Xml UiTools Svg)
 
 IF(QCA2_FOUND)
     LIST(APPEND LINK_LIBRARIES ${QCA2_LIBRARIES} )
