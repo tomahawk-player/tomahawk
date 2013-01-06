@@ -23,7 +23,7 @@
 #include "utils/Logger.h"
 #include "utils/Closure.h"
 
-#include <parser.h>
+#include <qjson/parser.h>
 
 #include <QNetworkReply>
 #include <QDomDocument>

@@ -21,7 +21,7 @@
 
 #include "utils/Logger.h"
 
-#include <parser.h>
+#include <qjson/parser.h>
 
 #include <QDateTime>
 #include <QNetworkReply>

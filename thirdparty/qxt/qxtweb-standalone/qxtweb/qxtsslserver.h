@@ -39,7 +39,7 @@
 #include <QSslSocket>
 
 class QxtSslServerPrivate;
-class QXT_NETWORK_EXPORT QxtSslServer : public QTcpServer
+class QxtSslServer : public QTcpServer
 {
     Q_OBJECT
 public:
