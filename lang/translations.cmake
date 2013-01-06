@@ -39,7 +39,7 @@ macro(add_tomahawk_translations language)
     # Run the resource compiler (rcc_options should already be set)
     add_custom_command(
         OUTPUT ${trans_outfile}
-        COMMAND ${Qt5Core_RCC_EXECUTABLE}
+        COMMAND ${QT_RCC_EXECUTABLE}
         ARGS ${rcc_options} -name ${trans_file} -o ${trans_outfile} ${trans_infile}
         MAIN_DEPENDENCY ${trans_infile}
         DEPENDS ${QM_FILES}

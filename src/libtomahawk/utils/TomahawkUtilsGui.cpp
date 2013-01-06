@@ -39,6 +39,8 @@
 #include <QStyleOption>
 #include <QDesktopServices>
 
+//FIXME: Qt5: this doesnt fail because Q_WS_X11 is deprecated
+//TODO: change to Q_OS_X11 and fix errors
 #ifdef Q_WS_X11
     #include <QtGui/QX11Info>
     #include <libqnetwm/netwm.h>

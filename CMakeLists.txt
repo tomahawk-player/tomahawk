@@ -115,6 +115,7 @@ if(Qt5Core_DIR)
     macro(setup_qt)
     endmacro()
 
+    set(QT_RCC_EXECUTABLE "${Qt5Core_RCC_EXECUTABLE}")
     #FIXME: CrashReporter depends on deprecated QHttp
     set(WITH_CRASHREPORTER OFF)
     set(WITH_BREAKPAD OFF)
@@ -123,13 +124,25 @@ else()
 
     set(NEEDED_QT4_COMPONENTS "QtCore" "QtXml" "QtNetwork")
     if(BUILD_GUI)
-        list(APPEND NEEDED_QT4_COMPONENTS "QtGui" "QtWebkit" "QtUiTools" )
+        list(APPEND NEEDED_QT4_COMPONENTS "QtGui" "QtWebkit" "QtUiTools" "QtSvg" )
     endif()
 
     macro_optional_find_package(Qt4 4.7.0 COMPONENTS ${NEEDED_QT4_COMPONENTS} )
-    macro_logfeature(QT4_FOUND "Qt" "A cross-platform application and UI framework" "http://qt.nokia.com" TRUE "" "If you see this, although libqt4-devel is installed, check whether the \n     qtwebkit-devel package and whatever contains QtUiTools is installed too")
+    macro_log_feature(QT4_FOUND "Qt" "A cross-platform application and UI framework" "http://qt.nokia.com" TRUE "" "If you see this, although libqt4-devel is installed, check whether the \n     qtwebkit-devel package and whatever contains QtUiTools is installed too")
 
     macro(qt5_use_modules)
+    endmacro()
+
+    macro(qt_wrap_ui)
+        qt4_wrap_ui(${ARGN})
+    endmacro()
+
+    macro(qt_add_resources)
+        qt4_add_resources(${ARGN})
+    endmacro()
+
+    macro(qt_add_translation)
+        qt4_add_translation(${ARGN})
     endmacro()
 
     macro(setup_qt)

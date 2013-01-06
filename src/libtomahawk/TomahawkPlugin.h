@@ -1,3 +1,5 @@
+#include <QtPlugin>
+
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     #if defined(Q_EXPORT_PLUGIN)
         #undef Q_EXPORT_PLUGIN

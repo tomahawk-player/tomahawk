@@ -154,12 +154,20 @@ set( libGuiSources
     widgets/searchlineedit/SearchLineEdit.cpp
 )
 
-IF(QCA2_FOUND)
+if(QCA2_FOUND)
     set( libGuiSources ${libGuiSources} utils/GroovesharkParser.cpp )
     set( libGuiHeaders ${libGuiHeaders} utils/GroovesharkParser.h )
-ENDIF(QCA2_FOUND)
+endif()
 
-set( libSources
+if(UNIX AND NOT APPLE)
+    if(BUILD_GUI AND X11_FOUND)
+        include_directories( ${THIRDPARTY_DIR}/libqnetwm )
+        list(APPEND libSources ${libSources} ${THIRDPARTY_DIR}/libqnetwm/libqnetwm/netwm.cpp)
+        list(APPEND LINK_LIBRARIES ${X11_LIBRARIES})
+    endif()
+endif()
+
+list(APPEND libSources
     TomahawkSettings.cpp
     SourceList.cpp
     Pipeline.cpp
