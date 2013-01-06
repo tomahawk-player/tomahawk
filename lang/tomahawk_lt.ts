@@ -920,7 +920,7 @@ connect and stream from you?</source>
         <translation>Pirmyn</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="369"/>
+        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="371"/>
         <source>Properties</source>
         <translation type="unfinished"/>
     </message>
@@ -1248,67 +1248,67 @@ connect and stream from you?</source>
 <context>
     <name>QObject</name>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="236"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="240"/>
         <source>%n year(s) ago</source>
         <translation><numerusform>prieš %n metus</numerusform><numerusform>prieš %n metus</numerusform><numerusform>prieš %n metų</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="238"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="242"/>
         <source>%n year(s)</source>
         <translation><numerusform>%n metai</numerusform><numerusform>%n metai</numerusform><numerusform>%n metų</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="244"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="248"/>
         <source>%n month(s) ago</source>
         <translation><numerusform>prieš %n mėnesį</numerusform><numerusform>prieš %n mėnesius</numerusform><numerusform>prieš %n mėnesių</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="246"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="250"/>
         <source>%n month(s)</source>
         <translation><numerusform>%n mėnuo</numerusform><numerusform>%n mėnesiai</numerusform><numerusform>%n mėnesių</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="252"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="256"/>
         <source>%n week(s) ago</source>
         <translation><numerusform>prieš %n savaitę</numerusform><numerusform>prieš %n savaites</numerusform><numerusform>prieš %n savaičių</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="254"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="258"/>
         <source>%n week(s)</source>
         <translation><numerusform>%n savaitė</numerusform><numerusform>%n savaitės</numerusform><numerusform>%n savaičių</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="260"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="264"/>
         <source>%n day(s) ago</source>
         <translation><numerusform>prieš %n dieną</numerusform><numerusform>prieš %n dienas</numerusform><numerusform>prieš %n dienų</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="262"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="266"/>
         <source>%n day(s)</source>
         <translation><numerusform>%n diena</numerusform><numerusform>%n dienos</numerusform><numerusform>%n dienų</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="268"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="272"/>
         <source>%n hour(s) ago</source>
         <translation><numerusform>prieš %n valandą</numerusform><numerusform>prieš %n valandas</numerusform><numerusform>prieš %n valandų</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="270"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="274"/>
         <source>%n hour(s)</source>
         <translation><numerusform>%n valanda</numerusform><numerusform>%n valandos</numerusform><numerusform>%n valandų</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="276"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="280"/>
         <source>%1 minutes ago</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="278"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="282"/>
         <source>%1 minutes</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="282"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="286"/>
         <source>just now</source>
         <translation>ką tik</translation>
     </message>
@@ -1661,44 +1661,44 @@ connect and stream from you?</source>
 <context>
     <name>SourceDelegate</name>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="58"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="59"/>
         <source>Track</source>
         <translation>Takelis</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="59"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="60"/>
         <source>Album</source>
         <translation>Albumas</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="60"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="61"/>
         <source>Artist</source>
         <translation>Atlikėjas</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="61"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="62"/>
         <source>Local</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="62"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="63"/>
         <source>Top 10</source>
         <translation>Top 10</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="197"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="198"/>
         <source>All available tracks</source>
         <translation>Visi prieinami takeliai</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="317"/>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="361"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="318"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="362"/>
         <source>Show</source>
         <translation>Rodyti</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="319"/>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="363"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="320"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="364"/>
         <source>Hide</source>
         <translation>Slėpti</translation>
     </message>
@@ -1798,68 +1798,68 @@ connect and stream from you?</source>
 <context>
     <name>SourceTreeView</name>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="200"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="204"/>
         <source>&amp;Copy Link</source>
         <translation>&amp;Kopijuoti nuorodą</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="208"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="212"/>
         <source>&amp;Delete %1</source>
         <translation>Paša&amp;linti %1</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="212"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="216"/>
         <source>Add to my Playlists</source>
         <translation>Pridėti prie mano grojaraščių</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="214"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="218"/>
         <source>Add to my Automatic Playlists</source>
         <translation>Pridėti prie mano automatinių grojaraščių</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="216"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="220"/>
         <source>Add to my Stations</source>
         <translation>Pridėti prie mano stočių</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="204"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="208"/>
         <source>&amp;Export Playlist</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="358"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="362"/>
         <source>playlist</source>
         <translation>grojaraštis</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="362"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="366"/>
         <source>automatic playlist</source>
         <translation>automatinis grojaraštis</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="366"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="370"/>
         <source>station</source>
         <translation>stotis</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="392"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="396"/>
         <source>Would you like to delete the %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
         <translation>Ar norite pašalinti %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="394"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="398"/>
         <source>Delete</source>
         <translation>Pašalinti</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="474"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="478"/>
         <source>Save XSPF</source>
         <translation>Išsaugoti XSPF</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="475"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="479"/>
         <source>Playlists (*.xspf)</source>
         <translation>Grojaraščiai (*.xspf)</translation>
     </message>
@@ -2971,22 +2971,22 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::InfoSystem::ChartsPlugin</name>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="483"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="487"/>
         <source>Top Overall</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="582"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="586"/>
         <source>Artists</source>
         <translation>Atlikėjai</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="584"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="588"/>
         <source>Albums</source>
         <translation>Albumai</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="586"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="590"/>
         <source>Tracks</source>
         <translation>Takeliai</translation>
     </message>
@@ -3035,7 +3035,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::InfoSystem::NewReleasesPlugin</name>
     <message>
-        <location filename="../src/infoplugins/generic/newreleases/NewReleasesPlugin.cpp" line="589"/>
+        <location filename="../src/infoplugins/generic/newreleases/NewReleasesPlugin.cpp" line="593"/>
         <source>Albums</source>
         <translation>Albumai</translation>
     </message>
@@ -3087,13 +3087,13 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::LatchManager</name>
     <message>
-        <location filename="../src/libtomahawk/LatchManager.cpp" line="88"/>
+        <location filename="../src/libtomahawk/LatchManager.cpp" line="89"/>
         <source>&amp;Catch Up</source>
         <translation>&amp;Pasivyti</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/LatchManager.cpp" line="125"/>
-        <location filename="../src/libtomahawk/LatchManager.cpp" line="146"/>
+        <location filename="../src/libtomahawk/LatchManager.cpp" line="126"/>
+        <location filename="../src/libtomahawk/LatchManager.cpp" line="147"/>
         <source>&amp;Listen Along</source>
         <translation>K&amp;lausytis kartu</translation>
     </message>
@@ -3237,7 +3237,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/TomahawkApp.cpp" line="581"/>
+        <location filename="../src/TomahawkApp.cpp" line="580"/>
         <source>My Collection</source>
         <translation>Mano kolekcija</translation>
     </message>
@@ -3259,7 +3259,7 @@ enter the displayed PIN number here:</source>
 <context>
     <name>TomahawkSettings</name>
     <message>
-        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="375"/>
+        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="376"/>
         <source>Local Network</source>
         <translation type="unfinished"/>
     </message>
@@ -3546,7 +3546,7 @@ enter the displayed PIN number here:</source>
 <context>
     <name>TrackView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="560"/>
+        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="561"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation type="unfinished"/>
     </message>
@@ -3597,7 +3597,7 @@ enter the displayed PIN number here:</source>
 <context>
     <name>TreeView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeView.cpp" line="293"/>
+        <location filename="../src/libtomahawk/playlist/TreeView.cpp" line="295"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Atsiprašome, Jūsų užklausa &apos;%1&apos; neatitiko jokių rezultatų.</translation>
     </message>
