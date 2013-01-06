@@ -45,6 +45,8 @@ public:
     explicit SpotifyInfoPlugin( Accounts::SpotifyAccount* account );
     virtual ~SpotifyInfoPlugin();
 
+    const QString friendlyName() const { return "Spotify"; };
+
 public slots:
     void  albumListingResult( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
 

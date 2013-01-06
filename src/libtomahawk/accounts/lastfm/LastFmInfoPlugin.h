@@ -51,6 +51,8 @@ public:
     LastFmInfoPlugin( Accounts::LastFmAccount* account );
     virtual ~LastFmInfoPlugin();
 
+    const QString friendlyName() const { return "LastFM"; };
+
 public slots:
     void settingsChanged();
 

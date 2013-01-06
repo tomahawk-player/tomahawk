@@ -68,9 +68,24 @@ InfoPlugin::InfoPlugin()
 {
 }
 
+
 InfoPlugin::~InfoPlugin()
 {
 }
+
+
+void
+InfoPlugin::setFriendlyName( const QString& friendlyName )
+{
+    m_friendlyName = friendlyName;
+}
+
+const QString
+InfoPlugin::friendlyName() const
+{
+    return m_friendlyName;
+}
+
 
 InfoSystem* InfoSystem::s_instance = 0;
 

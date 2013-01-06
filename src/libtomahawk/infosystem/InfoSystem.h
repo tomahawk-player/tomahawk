@@ -109,6 +109,9 @@ public:
 
     virtual ~InfoPlugin();
 
+    void setFriendlyName( const QString& friendlyName );
+    virtual const QString friendlyName() const;
+
     QSet< InfoType > supportedGetTypes() const { return m_supportedGetTypes; }
     QSet< InfoType > supportedPushTypes() const { return m_supportedPushTypes; }
 
@@ -133,6 +136,7 @@ protected slots:
 
 protected:
     InfoType m_type;
+    QString m_friendlyName;
     QSet< InfoType > m_supportedGetTypes;
     QSet< InfoType > m_supportedPushTypes;
 
@@ -141,7 +145,7 @@ private:
 };
 
 
-class InfoSystemCacheThread : public QThread
+class DLLEXPORT InfoSystemCacheThread : public QThread
 {
     Q_OBJECT
 
@@ -157,7 +161,7 @@ private:
 };
 
 
-class InfoSystemWorkerThread : public QThread
+class DLLEXPORT InfoSystemWorkerThread : public QThread
 {
     Q_OBJECT
 

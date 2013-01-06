@@ -48,6 +48,8 @@ public:
     InfoSystemWorker();
     ~InfoSystemWorker();
 
+    const QList< InfoPluginPtr > plugins() const;
+
 signals:
     void info( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void finished( QString target );

@@ -30,6 +30,8 @@
 #include "sip/SipHandler.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+#include "infosystem/InfoSystem.h"
+#include "infosystem/InfoSystemWorker.h"
 
 #include <QLabel>
 #include <QTextEdit>
@@ -80,6 +82,19 @@ DiagnosticsDialog::updateLogView()
     {
         log.append( "      visible: false\n" );
     }
+
+    log.append( "\n\nINFOPLUGINS:\n" );
+    QThread* infoSystemWorkerThreadSuperClass = Tomahawk::InfoSystem::InfoSystem::instance()->workerThread();
+    Tomahawk::InfoSystem::InfoSystemWorkerThread* infoSystemWorkerThread = qobject_cast< Tomahawk::InfoSystem::InfoSystemWorkerThread* >(infoSystemWorkerThreadSuperClass);
+
+    foreach(const Tomahawk::InfoSystem::InfoPluginPtr& plugin, infoSystemWorkerThread->worker()->plugins())
+    {
+        log.append("      ");
+        log.append( plugin->friendlyName() );
+        log.append("\n");
+    }
+
+    log.append( "\n\n" );
 
     log.append( "ACCOUNTS:\n" );
 
