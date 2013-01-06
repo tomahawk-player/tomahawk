@@ -25,7 +25,6 @@
 
 #include <QDateTime>
 #include <QNetworkReply>
-#include <QtPlugin>
 
 using namespace Tomahawk::InfoSystem;
 

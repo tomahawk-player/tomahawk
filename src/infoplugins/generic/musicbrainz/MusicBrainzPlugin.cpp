@@ -24,7 +24,6 @@
 
 #include <QNetworkReply>
 #include <QDomDocument>
-#include <QtPlugin>
 
 using namespace Tomahawk::InfoSystem;
 

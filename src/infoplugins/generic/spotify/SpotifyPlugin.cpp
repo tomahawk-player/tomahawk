@@ -24,7 +24,6 @@
 #include <QCryptographicHash>
 #include <QNetworkConfiguration>
 #include <QNetworkReply>
-#include <QtPlugin>
 
 #include "Album.h"
 #include "Typedefs.h"

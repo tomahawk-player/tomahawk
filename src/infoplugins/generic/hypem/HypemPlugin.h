@@ -36,6 +36,7 @@ namespace InfoSystem
 
 class INFOPLUGINDLLEXPORT HypemPlugin : public InfoPlugin
 {
+    Q_PLUGIN_METADATA( IID "org.tomahawk-player.Player.InfoPlugin" )
     Q_OBJECT
     Q_INTERFACES( Tomahawk::InfoSystem::InfoPlugin )
 

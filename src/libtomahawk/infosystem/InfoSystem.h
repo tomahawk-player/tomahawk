@@ -23,6 +23,7 @@
 #include "DllMacro.h"
 #include "utils/TomahawkUtils.h"
 #include "Typedefs.h"
+#include "TomahawkPlugin.h"
 
 #include <QtCore/QCryptographicHash>
 #include <QtCore/QObject>

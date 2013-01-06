@@ -37,8 +37,10 @@ namespace InfoSystem
 
 class INFOPLUGINDLLEXPORT NewReleasesPlugin : public InfoPlugin
 {
+    Q_PLUGIN_METADATA( IID "org.tomahawk-player.Player.InfoPlugin" )
     Q_OBJECT
     Q_INTERFACES( Tomahawk::InfoSystem::InfoPlugin )
+
 public:
     NewReleasesPlugin();
     virtual ~NewReleasesPlugin();
