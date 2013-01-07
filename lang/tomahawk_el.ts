@@ -2419,8 +2419,8 @@ You may wish to try re-authenticating.</source>
 <context>
     <name>Tomahawk::Accounts::ZeroconfAccount</name>
     <message>
-        <location filename="../src/accounts/zeroconf/ZeroconfAccount.cpp" line="67"/>
-        <location filename="../src/accounts/zeroconf/ZeroconfAccount.cpp" line="68"/>
+        <location filename="../src/accounts/zeroconf/ZeroconfAccount.cpp" line="65"/>
+        <location filename="../src/accounts/zeroconf/ZeroconfAccount.cpp" line="66"/>
         <source>Local Network</source>
         <translation type="unfinished"/>
     </message>
@@ -2979,22 +2979,22 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::InfoSystem::ChartsPlugin</name>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="487"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="486"/>
         <source>Top Overall</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="586"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="585"/>
         <source>Artists</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="588"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="587"/>
         <source>Albums</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="590"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="589"/>
         <source>Tracks</source>
         <translation type="unfinished"/>
     </message>
@@ -3002,12 +3002,12 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::InfoSystem::FdoNotifyPlugin</name>
     <message>
-        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="146"/>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="145"/>
         <source>Tomahawk is playing &quot;%1&quot; by %2%3.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="149"/>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="148"/>
         <source>on &quot;%1&quot;</source>
         <translation type="unfinished"/>
     </message>
@@ -3043,7 +3043,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::InfoSystem::NewReleasesPlugin</name>
     <message>
-        <location filename="../src/infoplugins/generic/newreleases/NewReleasesPlugin.cpp" line="593"/>
+        <location filename="../src/infoplugins/generic/newreleases/NewReleasesPlugin.cpp" line="592"/>
         <source>Albums</source>
         <translation type="unfinished"/>
     </message>
@@ -3350,13 +3350,13 @@ enter the displayed PIN number here:</source>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="206"/>
-        <location filename="../src/TomahawkWindow.cpp" line="1338"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1306"/>
         <source>Hide Menu Bar</source>
         <translation>Απόκρυψη Γραμμής Μενού</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="206"/>
-        <location filename="../src/TomahawkWindow.cpp" line="1332"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1300"/>
         <source>Show Menu Bar</source>
         <translation type="unfinished"/>
     </message>
@@ -3371,136 +3371,114 @@ enter the displayed PIN number here:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="869"/>
-        <location filename="../src/TomahawkWindow.cpp" line="876"/>
-        <location filename="../src/TomahawkWindow.cpp" line="884"/>
-        <source>Connect To Peer</source>
-        <translation>Σύνδεση Σε Ομότιμο Κόμβο</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.cpp" line="870"/>
-        <source>Enter peer address:</source>
-        <translation>Εισαγωγή διεύθυνσης ομότιμου κόμβου:</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.cpp" line="877"/>
-        <source>Enter peer port:</source>
-        <translation>Εισαγωγή θύρας ομότιμου κόμβου:</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.cpp" line="885"/>
-        <source>Enter peer key:</source>
-        <translation>Εισαγωγή κλειδιού ομότιμου κόμβου:</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.cpp" line="976"/>
+        <location filename="../src/TomahawkWindow.cpp" line="944"/>
         <source>XSPF Error</source>
         <translation>Σφάλμα XSPF</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="976"/>
+        <location filename="../src/TomahawkWindow.cpp" line="944"/>
         <source>This is not a valid XSPF playlist.</source>
         <translation>Αυτή δεν είναι μια έγκυρη λίστα αναπαραγωγής XSPF.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="980"/>
+        <location filename="../src/TomahawkWindow.cpp" line="948"/>
         <source>Failed to save tracks</source>
         <translation>Αποτυχία αποθήκευσης κομματιών.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="980"/>
+        <location filename="../src/TomahawkWindow.cpp" line="948"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
         <translation>Μερικά κομμάτια στην λίστα αναπαραγωγής δεν περιέχουν έναν καλλιτέχνη ή έναν τίτλο. Θα αγνοηθούν.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="994"/>
+        <location filename="../src/TomahawkWindow.cpp" line="962"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped. Make sure you have a suitable Phonon backend and required plugins installed.</source>
         <translation>Συγγνώμη, υπάρχει ένα πρόβλημα πρόσβασης στην συσκευή ήχου ή στο επιθυμητό κομμάτι, το τρέχον κομμάτι θα παραλειφθεί. Σιγουρευτείτε ότι έχετε εγκαταστήσει ένα κατάλληλο Phonon backend και τα απαιτούμενα πρόσθετα.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="996"/>
+        <location filename="../src/TomahawkWindow.cpp" line="964"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped.</source>
         <translation>Συγγνώμη, υπάρχει ένα πρόβλημα πρόσβασης στην συσκευή ήχου ή στο επιθυμητό κομμάτι, το τρέχον κομμάτι θα παραλειφθεί.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1028"/>
+        <location filename="../src/TomahawkWindow.cpp" line="996"/>
         <source>Station</source>
         <translation>Σταθμός</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1030"/>
+        <location filename="../src/TomahawkWindow.cpp" line="998"/>
         <source>Create New Station</source>
         <translation>Δημιουργία Νέου Σταθμού</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1030"/>
+        <location filename="../src/TomahawkWindow.cpp" line="998"/>
         <source>Name:</source>
         <translation>Όνομα:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1093"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1061"/>
         <source>Playlist</source>
         <translation>Λίστας Αναπαραγωγής</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1115"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1083"/>
         <source>Automatic Playlist</source>
         <translation>Αυτόματη Λίστα Αναπαραγωγής</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1137"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1105"/>
         <source>Pause</source>
         <translation>Παύση</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1159"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1127"/>
         <source>&amp;Play</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1190"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1158"/>
         <source>Authentication Error</source>
         <translation>Σφάλμα Πιστοποίησης</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1191"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1159"/>
         <source>Error connecting to SIP: Authentication failed!</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1205"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1173"/>
         <source>%1 by %2</source>
         <comment>track, artist name</comment>
         <translation>%1 από %2</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1206"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1174"/>
         <source>%1 - %2</source>
         <comment>current track, some window title</comment>
         <translation>%1 - %2</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1217"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1185"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1221"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1189"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1225"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1193"/>
         <source>Copyright 2010 - 2012</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1226"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1194"/>
         <source>Thanks to:</source>
         <translation>Χάρη στους:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1233"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1201"/>
         <source>About Tomahawk</source>
         <translation>Σχετικά με το Tomahawk</translation>
     </message>

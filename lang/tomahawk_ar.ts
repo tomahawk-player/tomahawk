@@ -2421,8 +2421,8 @@ You may wish to try re-authenticating.</source>
 <context>
     <name>Tomahawk::Accounts::ZeroconfAccount</name>
     <message>
-        <location filename="../src/accounts/zeroconf/ZeroconfAccount.cpp" line="67"/>
-        <location filename="../src/accounts/zeroconf/ZeroconfAccount.cpp" line="68"/>
+        <location filename="../src/accounts/zeroconf/ZeroconfAccount.cpp" line="65"/>
+        <location filename="../src/accounts/zeroconf/ZeroconfAccount.cpp" line="66"/>
         <source>Local Network</source>
         <translation type="unfinished"/>
     </message>
@@ -2981,22 +2981,22 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::InfoSystem::ChartsPlugin</name>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="487"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="486"/>
         <source>Top Overall</source>
         <translation>الأكثر شهرة بالإجمال</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="586"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="585"/>
         <source>Artists</source>
         <translation>فنانين</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="588"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="587"/>
         <source>Albums</source>
         <translation>ألبومات</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="590"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="589"/>
         <source>Tracks</source>
         <translation>أغاني</translation>
     </message>
@@ -3004,12 +3004,12 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::InfoSystem::FdoNotifyPlugin</name>
     <message>
-        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="146"/>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="145"/>
         <source>Tomahawk is playing &quot;%1&quot; by %2%3.</source>
         <translation>توماهوك يلعب &quot;%1&quot; ل%2%3.</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="149"/>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="148"/>
         <source>on &quot;%1&quot;</source>
         <translation>على &quot;%1&quot;</translation>
     </message>
@@ -3045,7 +3045,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::InfoSystem::NewReleasesPlugin</name>
     <message>
-        <location filename="../src/infoplugins/generic/newreleases/NewReleasesPlugin.cpp" line="593"/>
+        <location filename="../src/infoplugins/generic/newreleases/NewReleasesPlugin.cpp" line="592"/>
         <source>Albums</source>
         <translation>ألبومات</translation>
     </message>
@@ -3353,13 +3353,13 @@ enter the displayed PIN number here:</source>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="206"/>
-        <location filename="../src/TomahawkWindow.cpp" line="1338"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1306"/>
         <source>Hide Menu Bar</source>
         <translation>إخفي شريط القائمة</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="206"/>
-        <location filename="../src/TomahawkWindow.cpp" line="1332"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1300"/>
         <source>Show Menu Bar</source>
         <translation>أظهر شريط القائمة</translation>
     </message>
@@ -3374,136 +3374,114 @@ enter the displayed PIN number here:</source>
         <translation>ال&amp;قائمة الرئيسية</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="869"/>
-        <location filename="../src/TomahawkWindow.cpp" line="876"/>
-        <location filename="../src/TomahawkWindow.cpp" line="884"/>
-        <source>Connect To Peer</source>
-        <translation>ربط بالند</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.cpp" line="870"/>
-        <source>Enter peer address:</source>
-        <translation>أدخل عنوان الند:</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.cpp" line="877"/>
-        <source>Enter peer port:</source>
-        <translation>أدخل بوابة الند:</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.cpp" line="885"/>
-        <source>Enter peer key:</source>
-        <translation>أدخل مفتاح الند:</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.cpp" line="976"/>
+        <location filename="../src/TomahawkWindow.cpp" line="944"/>
         <source>XSPF Error</source>
         <translation>خطأ XSPF</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="976"/>
+        <location filename="../src/TomahawkWindow.cpp" line="944"/>
         <source>This is not a valid XSPF playlist.</source>
         <translation>قائمة الأغاني XSPF هذه ليست صالحة.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="980"/>
+        <location filename="../src/TomahawkWindow.cpp" line="948"/>
         <source>Failed to save tracks</source>
         <translation>فشل في حفظ الأغاني</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="980"/>
+        <location filename="../src/TomahawkWindow.cpp" line="948"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
         <translation>بعض الأغاني في قائمة الأغاني لا تحتوي على إسم الفنان أو إسم الأغنية. هذه الأغاني سوف تتجاهل.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="994"/>
+        <location filename="../src/TomahawkWindow.cpp" line="962"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped. Make sure you have a suitable Phonon backend and required plugins installed.</source>
         <translation>عذرا، هناك مشكلة في الوصول إلى جهاز الصوت أو الأغنية المطلوب، سوف يتم تخطي الأغنية الحالية. تأكد أن لديك خلفية فونون المناسبة والإضافات المطلوبة مثبتة.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="996"/>
+        <location filename="../src/TomahawkWindow.cpp" line="964"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped.</source>
         <translation>عذرا، هناك مشكلة في الوصول إلى جهاز الصوت أو الأغنية المطلوب، سوف يتم تخطي الأغنية الحالية.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1028"/>
+        <location filename="../src/TomahawkWindow.cpp" line="996"/>
         <source>Station</source>
         <translation>إذاعة</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1030"/>
+        <location filename="../src/TomahawkWindow.cpp" line="998"/>
         <source>Create New Station</source>
         <translation>إنشاء قائمة أغاني جديدة</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1030"/>
+        <location filename="../src/TomahawkWindow.cpp" line="998"/>
         <source>Name:</source>
         <translation>الاسم:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1093"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1061"/>
         <source>Playlist</source>
         <translation>قائمة الأغاني</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1115"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1083"/>
         <source>Automatic Playlist</source>
         <translation>قائمة أغاني أوتوماتيكية</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1137"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1105"/>
         <source>Pause</source>
         <translation>تعليق</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1159"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1127"/>
         <source>&amp;Play</source>
         <translation>&amp;إستمع</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1190"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1158"/>
         <source>Authentication Error</source>
         <translation>خطأ في المصادقة</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1191"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1159"/>
         <source>Error connecting to SIP: Authentication failed!</source>
         <translation>خطأ في الاتصال بسيب (SIP): فشلت المصادقة!</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1205"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1173"/>
         <source>%1 by %2</source>
         <comment>track, artist name</comment>
         <translation>%1 من قبل %2</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1206"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1174"/>
         <source>%1 - %2</source>
         <comment>current track, some window title</comment>
         <translation>%1 - %2</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1217"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1185"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1221"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1189"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1225"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1193"/>
         <source>Copyright 2010 - 2012</source>
         <translation>حقوق الطبع والنشر ٢٠١٠ - ٢٠١٢</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1226"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1194"/>
         <source>Thanks to:</source>
         <translation>شكر لكل من:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1233"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1201"/>
         <source>About Tomahawk</source>
         <translation>عن توماهوك</translation>
     </message>
