@@ -5,6 +5,7 @@ Version 0.6.0:
       biographies.
     * New AudioControl logic - only enable Prev/Skip buttons if available.
     * Added more options to right-click/context menus.
+    * Resolver source icon in Audiocontrols now supports being a link-back URL to original source.
     * Make friends' currently playing song (in sidebar) clickable.
     * Improve MusicBrainz plugin to use normalized artist names and avoid
       duplicate tracks.
