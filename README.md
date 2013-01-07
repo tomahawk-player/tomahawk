@@ -61,6 +61,6 @@ Third party libraries that we ship with our source:
 * libqnetwm - http://code.google.com/p/libqnetwm/
 * libqxt (QxtWeb module) - http://libqxt.org
 * SPMediaKeyTap - https://github.com/nevyn/SPMediaKeyTap
-* kdsingleapplicationguard/
+* kdsingleapplicationguard
 
 Enjoy!
