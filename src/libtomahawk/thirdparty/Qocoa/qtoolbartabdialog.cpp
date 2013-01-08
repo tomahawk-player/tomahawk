@@ -68,6 +68,9 @@ QToolbarTabDialog::QToolbarTabDialog() :
 
     pimpl->toolbar = new QToolBar(pimpl->dialog.data());
     pimpl->toolbar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+#ifdef Q_OS_WIN
+    pimpl->toolbar->setStyleSheet( "QToolBar { border: 0px; }" );
+#endif
 
     pimpl->stack = new QStackedWidget(pimpl->dialog.data());
 
