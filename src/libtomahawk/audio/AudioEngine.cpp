@@ -241,7 +241,9 @@ AudioEngine::canGoNext()
         return false;
     }
 
-    return ( m_currentTrack && m_playlist.data()->hasNextResult() && m_playlist.data()->nextResult()->isOnline() );
+    return ( m_currentTrack && m_playlist.data()->hasNextResult() &&
+             !m_playlist.data()->nextResult().isNull() &&
+             m_playlist.data()->nextResult()->isOnline() );
 }
 
 
@@ -903,7 +905,7 @@ AudioEngine::setPlaylist( Tomahawk::playlistinterface_ptr playlist )
 
         connect( m_playlist.data(), SIGNAL( shuffleModeChanged( bool ) ), SIGNAL( shuffleModeChanged( bool ) ) );
         connect( m_playlist.data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ) );
-        
+
         emit shuffleModeChanged( m_playlist.data()->shuffled() );
         emit repeatModeChanged( m_playlist.data()->repeatMode() );
     }
