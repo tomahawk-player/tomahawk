@@ -78,7 +78,7 @@ public:
         : DatabaseCommand( parent ), m_actionOnly( action )
     {
         setSource( source );
-        qRegisterMetaType<TrackActions>( "DatabaseCommand_LoadSocialAction::TrackActions" );
+        qRegisterMetaType<TrackActions>( "DatabaseCommand_LoadSocialActions::TrackActions" );
     }
 
     /**

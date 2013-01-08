@@ -50,12 +50,17 @@ Required dependencies:
 
 The following dependencies are optional, but recommended:
 
-* Jreen 1.0.5 - http://qutim.org/jreen / https://github.com/euroelessar/jreen
+* Jreen 1.0.5 (1.1.0 will fail, 1.1.1 is fine) - http://qutim.org/jreen / https://github.com/euroelessar/jreen
 * QTweetLib 0.5.0 - https://github.com/minimoog/QTweetLib
 
 Third party libraries that we ship with our source:
 
 * MiniUPnP 1.6 - http://miniupnp.free.fr/
 * Breakpad - http://code.google.com/p/google-breakpad/
+* Qocoa - http://github.com/mikemcquaid/Qocoa
+* libqnetwm - http://code.google.com/p/libqnetwm/
+* libqxt (QxtWeb module) - http://libqxt.org
+* SPMediaKeyTap - https://github.com/nevyn/SPMediaKeyTap
+* kdsingleapplicationguard
 
 Enjoy!
