@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2012 Teo Mrnjavac <teo@kde.org>
+ *   Copyright 2012-2013, Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -291,6 +291,8 @@ AccountWidget::setupConnections( const QPersistentModelIndex& idx, int accountId
         connect( m_statusToggle, SIGNAL( toggled( bool ) ),
                  this, SLOT( changeAccountConnectionState( bool ) ) );
         connect( m_inviteButton, SIGNAL( clicked() ),
+                 this, SLOT( sendInvite() ) );
+        connect( m_inviteEdit, SIGNAL( returnPressed() ),
                  this, SLOT( sendInvite() ) );
 
         m_inviteEdit->setPlaceholderText( account->sipPlugin()->inviteString() );
