@@ -227,14 +227,11 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
     ui->seekSlider->setValue( 0 );
     ui->seekSlider->setEnabled( AudioEngine::instance()->canSeek() );
 
-    m_sliderTimeLine.stop();
     m_sliderTimeLine.setDuration( duration );
     m_sliderTimeLine.setFrameRange( 0, duration );
     m_sliderTimeLine.setCurveShape( QTimeLine::LinearCurve );
     m_sliderTimeLine.setCurrentTime( 0 );
     m_seeked = false;
-
-    ui->seekSlider->setVisible( true );
 
     int updateRate = (double)1000 / ( (double)ui->seekSlider->contentsRect().width() / (double)( duration / 1000 ) );
     m_sliderTimeLine.setUpdateInterval( qBound( 40, updateRate, 500 ) );
@@ -283,6 +280,11 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
     ui->socialButton->setToolTip( tr( "Share" ) );
     ui->loveButton->setToolTip( tr( "Love" ) );
     ui->ownerButton->setToolTip( QString( tr( "Playing from %1" ) ).arg( result->friendlySource() ) );
+
+    ui->seekSlider->setRange( 0, 0 );
+    ui->seekSlider->setValue( 0 );
+    ui->seekSlider->setVisible( true );
+    m_sliderTimeLine.stop();
 
     // If the ViewManager doesn't know a page for the current interface, we can't offer the jump link
     ui->artistTrackLabel->setJumpLinkVisible( ( ViewManager::instance()->pageForInterface( AudioEngine::instance()->currentTrackPlaylist() ) ) );

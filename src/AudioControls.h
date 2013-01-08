@@ -95,7 +95,7 @@ private:
 
     Ui::AudioControls* ui;
 
-    QWeakPointer<SocialWidget> m_socialWidget;
+    QPointer<SocialWidget> m_socialWidget;
 
     Tomahawk::result_ptr m_currentTrack;
     Tomahawk::PlaylistModes::RepeatMode m_repeatMode;

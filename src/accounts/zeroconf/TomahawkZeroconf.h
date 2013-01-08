@@ -104,13 +104,13 @@ public slots:
                                .arg( m_port )
                                .arg( Database::instance()->impl()->dbid() )
                                .arg( QHostInfo::localHostName() )
-                               .toAscii();
+                               .toLatin1();
         m_sock.writeDatagram( advert.data(), advert.size(), QHostAddress::Broadcast, ZCONF_PORT );
 
         advert = QString( "TOMAHAWKADVERT:%1:%2" )
                     .arg( m_port )
                     .arg( Database::instance()->impl()->dbid() )
-                    .toAscii();
+                    .toLatin1();
         m_sock.writeDatagram( advert.data(), advert.size(), QHostAddress::Broadcast, ZCONF_PORT );
     }
 
@@ -129,13 +129,13 @@ private slots:
         QHostAddress sender;
         quint16 senderPort;
         m_sock.readDatagram( datagram.data(), datagram.size(), &sender, &senderPort );
-        qDebug() << "DATAGRAM RCVD" << QString::fromAscii( datagram ) << sender;
+        qDebug() << "DATAGRAM RCVD" << QString::fromLatin1( datagram ) << sender;
 
         // only process msgs originating on the LAN:
         if ( datagram.startsWith( "TOMAHAWKADVERT:" ) &&
             Servent::isIPWhitelisted( sender ) )
         {
-            QStringList parts = QString::fromAscii( datagram ).split( ':' );
+            QStringList parts = QString::fromLatin1( datagram ).split( ':' );
             if ( parts.length() == 4 )
             {
                 bool ok;

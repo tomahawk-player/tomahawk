@@ -31,14 +31,15 @@
 #include "HeadlessCheck.h"
 #include "config.h"
 
-#include "QxtHttpServerConnector"
-#include "QxtHttpSessionManager"
+#include <QxtWeb/QxtHttpServerConnector>
+#include <QxtWeb/HttpSessionManager>
 
 #include <QRegExp>
 #include <QFile>
 #include <QSettings>
 #include <QDir>
 #include <QPersistentModelIndex>
+#include <QPointer>
 
 class AudioEngine;
 class Database;
@@ -124,13 +125,13 @@ private:
     void initLocalCollection();
     void initPipeline();
 
-    QWeakPointer<Database> m_database;
-    QWeakPointer<ScanManager> m_scanManager;
-    QWeakPointer<AudioEngine> m_audioEngine;
-    QWeakPointer<Servent> m_servent;
-    QWeakPointer<Tomahawk::InfoSystem::InfoSystem> m_infoSystem;
-    QWeakPointer<Tomahawk::ShortcutHandler> m_shortcutHandler;
-    QWeakPointer< Tomahawk::Accounts::AccountManager > m_accountManager;
+    QPointer<Database> m_database;
+    QPointer<ScanManager> m_scanManager;
+    QPointer<AudioEngine> m_audioEngine;
+    QPointer<Servent> m_servent;
+    QPointer<Tomahawk::InfoSystem::InfoSystem> m_infoSystem;
+    QPointer<Tomahawk::ShortcutHandler> m_shortcutHandler;
+    QPointer< Tomahawk::Accounts::AccountManager > m_accountManager;
     bool m_scrubFriendlyName;
 
 #ifdef LIBLASTFM_FOUND
@@ -143,8 +144,8 @@ private:
 
     bool m_headless, m_loaded;
 
-    QWeakPointer< QxtHttpServerConnector > m_connector;
-    QWeakPointer< QxtHttpSessionManager > m_session;
+    QPointer< QxtHttpServerConnector > m_connector;
+    QPointer< QxtHttpSessionManager > m_session;
 };
 
 Q_DECLARE_METATYPE( PairList )

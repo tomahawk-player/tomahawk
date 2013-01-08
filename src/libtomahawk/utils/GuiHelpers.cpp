@@ -111,7 +111,7 @@ createAccountFromFactory( Tomahawk::Accounts::AccountFactory* factory, QWidget* 
         dialog->show();
 #else
         DelegateConfigWrapper dialog( account->configurationWidget(), account->aboutWidget(), QObject::tr( "%1 Config" ).arg( account->accountFriendlyName() ), parent );
-        QWeakPointer< DelegateConfigWrapper > watcher( &dialog );
+        QPointer< DelegateConfigWrapper > watcher( &dialog );
 
         if( account->configurationWidget()->metaObject()->indexOfSignal( "dataError(bool)" ) > -1 )
             QObject::connect( account->configurationWidget(), SIGNAL( dataError( bool ) ), &dialog, SLOT( toggleOkButton( bool ) ), Qt::UniqueConnection );
@@ -141,7 +141,7 @@ openAccountConfig( Tomahawk::Accounts::Account* account, QWidget* parent, bool s
 #ifndef Q_OS_MAC
         DelegateConfigWrapper dialog( account->configurationWidget(), account->aboutWidget(), QObject::tr("%1 Configuration" ).arg( account->accountFriendlyName() ), parent );
         dialog.setShowDelete( showDelete );
-        QWeakPointer< DelegateConfigWrapper > watcher( &dialog );
+        QPointer< DelegateConfigWrapper > watcher( &dialog );
         int ret = dialog.exec();
         if ( !watcher.isNull() && dialog.deleted() )
         {

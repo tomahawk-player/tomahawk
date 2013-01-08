@@ -23,7 +23,7 @@
 #include <QThread>
 #include <QMutex>
 #include <QList>
-#include <QSharedPointer>
+#include <QPointer>
 
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
@@ -71,13 +71,13 @@ public:
     DatabaseWorkerThread( Database* db, bool mutates );
     ~DatabaseWorkerThread();
 
-    QWeakPointer< DatabaseWorker > worker() const;
-    
+    QPointer< DatabaseWorker > worker() const;
+
 protected:
     void run();
 
 private:
-    QWeakPointer< DatabaseWorker > m_worker;
+    QPointer< DatabaseWorker > m_worker;
     Database* m_db;
     bool m_mutates;
 };

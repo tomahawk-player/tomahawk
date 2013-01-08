@@ -72,7 +72,7 @@ public:
     QWidget* aclWidget() { return 0; }
 
 private:
-    QWeakPointer< ZeroconfPlugin > m_sipPlugin;
+    QPointer< ZeroconfPlugin > m_sipPlugin;
 };
 
 }

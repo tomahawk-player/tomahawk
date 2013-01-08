@@ -37,8 +37,10 @@ namespace InfoSystem
 
 class INFOPLUGINDLLEXPORT NewReleasesPlugin : public InfoPlugin
 {
+    Q_PLUGIN_METADATA( IID "org.tomahawk-player.Player.InfoPlugin" )
     Q_OBJECT
     Q_INTERFACES( Tomahawk::InfoSystem::InfoPlugin )
+
 public:
     NewReleasesPlugin();
     virtual ~NewReleasesPlugin();
@@ -92,7 +94,7 @@ private:
     uint m_nrFetchJobs;
     QList< InfoRequestData > m_cachedRequests;
     QHash< QString, QString > m_cachedCountries;
-    QWeakPointer< QNetworkAccessManager > m_nam;
+    QPointer< QNetworkAccessManager > m_nam;
 };
 
 }

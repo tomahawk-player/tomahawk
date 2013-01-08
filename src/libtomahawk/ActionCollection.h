@@ -23,8 +23,8 @@
 
 #include "DllMacro.h"
 
-#include <QtGui/QAction>
-#include <QtGui/QMenuBar>
+#include <QAction>
+#include <QMenuBar>
 
 class DLLEXPORT ActionCollection : public QObject
 {

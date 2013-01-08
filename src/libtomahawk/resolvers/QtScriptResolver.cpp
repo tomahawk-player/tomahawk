@@ -19,14 +19,6 @@
 
 #include "QtScriptResolver.h"
 
-#include <QtGui/QMessageBox>
-#include <QtNetwork/QNetworkRequest>
-#include <QtNetwork/QNetworkReply>
-#include <QtCore/QMetaProperty>
-#include <QtCore/QCryptographicHash>
-
-#include <boost/bind.hpp>
-
 #include "Artist.h"
 #include "Album.h"
 #include "config.h"
@@ -39,6 +31,14 @@
 #include "utils/Logger.h"
 
 #include "config.h"
+
+#include <QMessageBox>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QMetaProperty>
+#include <QCryptographicHash>
+
+#include <boost/bind.hpp>
 
 // FIXME: bloody hack, remove this for 0.3
 // this one adds new functionality to old resolvers
@@ -333,14 +333,29 @@ QtScriptResolver::init()
         icoData = qUncompress( QByteArray::fromBase64( icoData ) );
     else
         icoData = QByteArray::fromBase64( icoData );
-    bool success = m_icon.loadFromData( icoData );
+    QPixmap ico;
+    ico.loadFromData( icoData );
+
+    bool success = false;
+    if ( !ico.isNull() )
+    {
+        m_icon = ico.scaled( m_icon.size(), Qt::IgnoreAspectRatio );
+        success = true;
+    }
+    // see if the resolver sent an icon path to not break the old (unofficial) api.
+    // TODO: remove this and publish a definitive api
+    if ( !success )
+    {
+        QString iconPath = QFileInfo( filePath() ).path() + "/" + m.value( "icon" ).toString();
+        success = m_icon.load( iconPath );
+    }
 
     // load config widget and apply settings
     loadUi();
     QVariantMap config = resolverUserConfig();
     fillDataInWidgets( config );
 
-    qDebug() << "JS" << filePath() << "READY," << "name" << m_name << "weight" << m_weight << "timeout" << m_timeout << "icon found" << success;
+    qDebug() << "JS" << filePath() << "READY," << "name" << m_name << "weight" << m_weight << "timeout" << m_timeout << "icon received" << success;
 
     m_ready = true;
 }
@@ -508,7 +523,7 @@ QtScriptResolver::loadUi()
     if( m.contains( "images" ) )
         uiData = fixDataImagePaths( uiData, compressed, images );
 
-    m_configWidget = QWeakPointer< QWidget >( widgetFromData( uiData, 0 ) );
+    m_configWidget = QPointer< QWidget >( widgetFromData( uiData, 0 ) );
 
     emit changed();
 }

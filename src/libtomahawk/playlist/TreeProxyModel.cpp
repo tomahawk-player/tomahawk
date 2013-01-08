@@ -19,8 +19,6 @@
 
 #include "TreeProxyModel.h"
 
-#include <QtGui/QListView>
-
 #include "TreeProxyModelPlaylistInterface.h"
 #include "Source.h"
 #include "Query.h"
@@ -30,6 +28,7 @@
 #include "PlayableItem.h"
 #include "utils/Logger.h"
 
+#include <QListView>
 
 TreeProxyModel::TreeProxyModel( QObject* parent )
     : PlayableProxyModel( parent )

@@ -30,14 +30,14 @@
 #ifndef ALBUMINFOWIDGET_H
 #define ALBUMINFOWIDGET_H
 
-#include <QtGui/QWidget>
-
 #include "PlaylistInterface.h"
 #include "ViewPage.h"
 #include "infosystem/InfoSystem.h"
 
 #include "DllMacro.h"
 #include "Typedefs.h"
+
+#include <QWidget>
 
 class PlayableModel;
 class TreeModel;

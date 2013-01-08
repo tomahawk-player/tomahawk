@@ -32,7 +32,10 @@
 
 #include <QHash>
 
+
+
 using namespace Tomahawk;
+using namespace TomahawkUtils;
 
 Api_v1::Api_v1(QxtAbstractWebSessionManager* sm, QObject* parent)
     : QxtWebSlotService(sm, parent)
@@ -45,7 +48,7 @@ Api_v1::auth_1( QxtWebRequestEvent* event, QString arg )
 {
     tDebug( LOGVERBOSE ) << "AUTH_1 HTTP" << event->url.toString() << arg;
 
-    if ( !event->url.hasQueryItem( "website" ) || !event->url.hasQueryItem( "name" ) )
+    if ( !urlHasQueryItem( event->url, "website" ) || !urlHasQueryItem( event->url, "name" ) )
     {
         tDebug( LOGVERBOSE ) << "Malformed HTTP resolve request";
         send404( event );
@@ -54,7 +57,7 @@ Api_v1::auth_1( QxtWebRequestEvent* event, QString arg )
 
     QString formToken = uuid();
 
-    if ( event->url.hasQueryItem( "json" ) )
+    if ( urlHasQueryItem( event->url, "json" ) )
     {
         // JSON response
         QVariantMap m;
@@ -66,12 +69,12 @@ Api_v1::auth_1( QxtWebRequestEvent* event, QString arg )
         // webpage request
         QString authPage = RESPATH "www/auth.html";
         QHash< QString, QString > args;
-        if ( event->url.hasQueryItem( "receiverurl" ) )
-            args[ "url" ] = QUrl::fromPercentEncoding( event->url.queryItemValue( "receiverurl" ).toUtf8() );
+        if ( urlHasQueryItem( event->url, "receiverurl" ) )
+            args[ "url" ] = urlQueryItemValue( event->url, "receiverurl" ).toUtf8();
 
         args[ "formtoken" ] = formToken;
-        args[ "website" ] = QUrl::fromPercentEncoding( event->url.queryItemValue( "website" ).toUtf8() );
-        args[ "name" ] = QUrl::fromPercentEncoding( event->url.queryItemValue( "name" ).toUtf8() );
+        args[ "website" ] = urlQueryItemValue( event->url, "website" ).toUtf8();
+        args[ "name" ] = urlQueryItemValue( event->url, "name" ).toUtf8();
         sendWebpageWithArgs( event, authPage, args );
     }
 }
@@ -138,7 +141,7 @@ Api_v1::auth_2( QxtWebRequestEvent* event, QString arg )
     {
         // do what the client wants
         QUrl receiverurl = QUrl( queryItems.value( "receiverurl" ), QUrl::TolerantMode );
-        receiverurl.addEncodedQueryItem( "authtoken", "#" + authtoken );
+        urlAddQueryItem( receiverurl, "authtoken", "#" + authtoken );
         tDebug( LOGVERBOSE ) << "Got receiver url:" << receiverurl.toString();
 
         QxtWebRedirectEvent* e = new QxtWebRedirectEvent( event->sessionID, event->requestID, receiverurl.toString() );
@@ -158,9 +161,9 @@ Api_v1::api( QxtWebRequestEvent* event )
     tDebug( LOGVERBOSE ) << "HTTP" << event->url.toString();
 
     const QUrl& url = event->url;
-    if ( url.hasQueryItem( "method" ) )
+    if ( urlHasQueryItem( url, "method" ) )
     {
-        const QString method = url.queryItemValue( "method" );
+        const QString method = urlQueryItemValue( url, "method" );
 
         if ( method == "stat" )        return stat( event );
         if ( method == "resolve" )     return resolve( event );
@@ -192,9 +195,9 @@ Api_v1::sid( QxtWebRequestEvent* event, QString unused )
         return send404( event ); // 503?
     }
 
-    QxtWebPageEvent* e = new QxtWebPageEvent( event->sessionID, event->requestID, iodev );
+    QxtWebPageEvent* e = new QxtWebPageEvent( event->sessionID, event->requestID, iodev.data() );
     e->streaming = iodev->isSequential();
-    e->contentType = rp->mimetype().toAscii();
+    e->contentType = rp->mimetype().toLatin1();
     if ( rp->size() > 0 )
         e->headers.insert( "Content-Length", QString::number( rp->size() ) );
     postEvent( e );
@@ -221,10 +224,10 @@ Api_v1::stat( QxtWebRequestEvent* event )
     if ( !event->content.isNull() )
         tDebug( LOGVERBOSE ) << "BODY:" << event->content->readAll();
 
-    if ( event->url.hasQueryItem( "auth" ) )
+    if ( urlHasQueryItem( event->url, "auth" ) )
     {
         // check for auth status
-        DatabaseCommand_ClientAuthValid* dbcmd = new DatabaseCommand_ClientAuthValid( event->url.queryItemValue( "auth" ) );
+        DatabaseCommand_ClientAuthValid* dbcmd = new DatabaseCommand_ClientAuthValid( urlQueryItemValue( event->url, "auth" ) );
         connect( dbcmd, SIGNAL( authValid( QString, QString, bool ) ), this, SLOT( statResult( QString, QString, bool ) ) );
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(dbcmd) );
     }
@@ -259,16 +262,16 @@ Api_v1::statResult( const QString& clientToken, const QString& name, bool valid 
 void
 Api_v1::resolve( QxtWebRequestEvent* event )
 {
-    if ( !event->url.hasQueryItem( "artist" ) ||
-         !event->url.hasQueryItem( "track" ) )
+    if ( !urlHasQueryItem( event->url, "artist" ) ||
+         !urlHasQueryItem( event->url, "track" ) )
     {
         tDebug( LOGVERBOSE ) << "Malformed HTTP resolve request";
         return send404( event );
     }
 
-    const QString artist = QUrl::fromPercentEncoding( event->url.queryItemValue( "artist" ).toUtf8() );
-    const QString track = QUrl::fromPercentEncoding( event->url.queryItemValue( "track" ).toUtf8() );
-    const QString album = QUrl::fromPercentEncoding( event->url.queryItemValue( "album" ).toUtf8() );
+    const QString artist = urlQueryItemValue( event->url, "artist" );
+    const QString track = urlQueryItemValue( event->url, "track" );
+    const QString album = urlQueryItemValue( event->url, "album" );
 
     if ( artist.trimmed().isEmpty() ||
          track.trimmed().isEmpty() )
@@ -278,8 +281,8 @@ Api_v1::resolve( QxtWebRequestEvent* event )
     }
 
     QString qid;
-    if ( event->url.hasQueryItem( "qid" ) )
-        qid = event->url.queryItemValue( "qid" );
+    if ( urlHasQueryItem( event->url, "qid" ) )
+        qid = urlQueryItemValue( event->url, "qid" );
     else
         qid = uuid();
 
@@ -316,14 +319,14 @@ Api_v1::staticdata( QxtWebRequestEvent* event, const QString& str )
 void
 Api_v1::get_results( QxtWebRequestEvent* event )
 {
-    if ( !event->url.hasQueryItem( "qid" ) )
+    if ( !urlHasQueryItem( event->url, "qid" ) )
     {
         tDebug( LOGVERBOSE ) << "Malformed HTTP get_results request";
         send404( event );
         return;
     }
 
-    query_ptr qry = Pipeline::instance()->query( event->url.queryItemValue( "qid" ) );
+    query_ptr qry = Pipeline::instance()->query( urlQueryItemValue( event->url, "qid" ) );
     if ( qry.isNull() )
     {
         send404( event );
@@ -357,10 +360,10 @@ Api_v1::sendJSON( const QVariantMap& m, QxtWebRequestEvent* event )
     QByteArray ctype;
     QByteArray body = ser.serialize( m );
 
-    if ( event->url.hasQueryItem("jsonp") && !event->url.queryItemValue( "jsonp" ).isEmpty() )
+    if ( urlHasQueryItem( event->url, "jsonp" ) && !urlQueryItemValue( event->url, "jsonp" ).isEmpty() )
     {
         ctype = "text/javascript; charset=utf-8";
-        body.prepend( QString("%1( ").arg( event->url.queryItemValue( "jsonp" ) ).toAscii() );
+        body.prepend( QString("%1( ").arg( urlQueryItemValue( event->url, "jsonp" ) ).toLatin1() );
         body.append( " );" );
     }
     else

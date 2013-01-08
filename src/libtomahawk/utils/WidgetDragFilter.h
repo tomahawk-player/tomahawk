@@ -19,11 +19,12 @@
 #ifndef WIDGET_DRAG_FILTER_H
 #define WIDGET_DRAG_FILTER_H
 
+#include "DllMacro.h"
+
 #include <QObject>
 #include <QPoint>
 #include <QWidget>
-
-#include "DllMacro.h"
+#include <QPointer>
 
 class QMouseEvent;
 class QEvent;
@@ -41,8 +42,8 @@ public:
     virtual bool eventFilter(QObject* , QEvent* );
 private:
     bool canDrag( QObject* obj, QMouseEvent* ev ) const;
-    
-    QWeakPointer<QWidget> m_target; // in case it's deleted under us
+
+    QPointer<QWidget> m_target; // in case it's deleted under us
     QPoint m_dragPoint;
     bool m_dragStarted;
 };

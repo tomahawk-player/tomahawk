@@ -62,8 +62,8 @@ namespace Tomahawk
         // utility
         void calculateSummary();
 
-        QWeakPointer< QWidget > m_input;
-        QWeakPointer< QWidget > m_match;
+        QPointer< QWidget > m_input;
+        QPointer< QWidget > m_match;
         QString m_matchData;
         QString m_matchString;
         QString m_summary;

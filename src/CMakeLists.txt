@@ -1,26 +1,14 @@
 PROJECT( tomahawk )
 CMAKE_MINIMUM_REQUIRED( VERSION 2.8 )
 
-IF( "${gui}" STREQUAL "no" )
-    SET( QT_DONT_USE_QTGUI TRUE )
-ENDIF()
 
-IF( UNIX AND NOT APPLE )
-  SET( QT_USE_QTDBUS TRUE )
-ENDIF( UNIX AND NOT APPLE )
-SET( QT_USE_QTSQL TRUE )
-SET( QT_USE_QTNETWORK TRUE )
-SET( QT_USE_QTXML TRUE )
-SET( QT_USE_QTWEBKIT TRUE )
+setup_qt()
 
-INCLUDE( ${QT_USE_FILE} )
-INCLUDE( AddAppIconMacro )
+include( AddAppIconMacro )
 
-#SET( CMAKE_BUILD_TYPE "Release" )
-SET( CMAKE_VERBOSE_MAKEFILE ON )
-SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
-SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
-SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
+# SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
+# SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
+# SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
 IF( NOT CMAKE_BUILD_TYPE STREQUAL "Release" )
     MESSAGE( "Building in debug mode, enabling all debug updates" )
     SET( DEBUG_BUILD ON )
@@ -35,8 +23,6 @@ ENDIF()
 #ENDFOREACH( moddir )
 
 SET( tomahawkSources ${tomahawkSources}
-     web/Api_v1.cpp
-
      AclRegistryImpl.cpp
      ShortcutHandler.cpp
      UbuntuUnityHack.cpp
@@ -110,7 +96,6 @@ INCLUDE_DIRECTORIES(
     libtomahawk
     mac
 
-    ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/qxtweb
     ${THIRDPARTY_DIR}/breakpad
 
     ${TAGLIB_INCLUDES}
@@ -120,6 +105,12 @@ INCLUDE_DIRECTORIES(
     ${ECHONEST_INCLUDE_DIR}
     ${LIBLASTFM_INCLUDE_DIRS}
 )
+
+IF(QXTWEB_FOUND)
+    LIST(APPEND tomahawkSources web/Api_v1.cpp)
+    LIST(APPEND LINK_LIBRARIES ${QXTWEB_LIBRARIES})
+    INCLUDE_DIRECTORIES(${QXTWEB_INCLUDE_DIRS})
+ENDIF()
 
 SET( OS_SPECIFIC_LINK_LIBRARIES "" )
 
@@ -161,7 +152,7 @@ SET( final_src ${final_src} ${tomahawkMoc} ${tomahawkSources} ${trans_outfile})
 
 IF( BUILD_GUI )
     LIST(APPEND tomahawkSources ${tomahawkSourcesGui})
-    qt4_wrap_ui( tomahawkUI_H ${tomahawkUI} )
+    qt_wrap_ui( tomahawkUI_H ${tomahawkUI} )
 
     IF( WITH_CRASHREPORTER )
         ADD_SUBDIRECTORY( breakpad/CrashReporter )
@@ -169,7 +160,7 @@ IF( BUILD_GUI )
 ENDIF()
 
 kde4_add_app_icon( tomahawkSources "${CMAKE_SOURCE_DIR}/data/icons/tomahawk-icon-*.png" )
-qt4_add_resources( RC_SRCS "../resources.qrc" )
+qt_add_resources( RC_SRCS "../resources.qrc" )
 
 SET( final_src ${final_src} ${tomahawkUI_H} ${tomahawkMoc} ${tomahawkSources} ${RC_SRCS} )
 
@@ -185,18 +176,18 @@ IF( WIN32 )
 ENDIF( WIN32 )
 
 SET_TARGET_PROPERTIES(tomahawk PROPERTIES AUTOMOC TRUE)
+qt5_use_modules(tomahawk Core Widgets Network Sql WebKitWidgets)
 
 MESSAGE( STATUS "OS_SPECIFIC_LINK_LIBRARIES: ${OS_SPECIFIC_LINK_LIBRARIES}" )
 
-SET(LINK_LIBRARIES  "")
 IF(LIBLASTFM_FOUND)
-    SET( LINK_LIBRARIES ${LINK_LIBRARIES} ${LIBLASTFM_LIBRARIES} )
+    LIST(APPEND LINK_LIBRARIES ${LINK_LIBRARIES} ${LIBLASTFM_LIBRARIES} )
 ENDIF(LIBLASTFM_FOUND)
 IF(QCA2_FOUND)
-    SET( LINK_LIBRARIES ${LINK_LIBRARIES} ${QCA2_LIBRARIES} )
+    LIST(APPEND LINK_LIBRARIES ${LINK_LIBRARIES} ${QCA2_LIBRARIES} )
 ENDIF(QCA2_FOUND)
 IF(WITH_BREAKPAD)
-    SET( LINK_LIBRARIES ${LINK_LIBRARIES} tomahawk_breakpad )
+    LIST(APPEND LINK_LIBRARIES ${LINK_LIBRARIES} tomahawk_breakpad )
 ENDIF()
 
 TARGET_LINK_LIBRARIES( tomahawk
@@ -207,7 +198,6 @@ TARGET_LINK_LIBRARIES( tomahawk
     ${QT_LIBRARIES}
     ${MAC_EXTRA_LIBS}
     ${ECHONEST_LIBRARIES}
-    ${QXTWEB_LIBRARIES}
     ${QJSON_LIBRARIES}
     ${TAGLIB_LIBRARIES}
 )

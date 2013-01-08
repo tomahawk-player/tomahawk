@@ -86,7 +86,7 @@ private slots:
     void onResultsAdded( const QList<Tomahawk::result_ptr>& result );
 
 private:
-    QWeakPointer<XMPPBotClient> m_client;
+    QPointer<XMPPBotClient> m_client;
     Tomahawk::result_ptr m_currTrack;
     Tomahawk::InfoSystem::InfoTypeMap m_currInfoMap;
     QString m_currReturnMessage;

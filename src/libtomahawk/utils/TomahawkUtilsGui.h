@@ -20,6 +20,9 @@
 #ifndef TOMAHAWKUTILSGUI_H
 #define TOMAHAWKUTILSGUI_H
 
+#include "TomahawkUtils.h"
+#include "DllMacro.h"
+
 #include <QSize>
 #include <QModelIndex>
 #include <QColor>
@@ -27,11 +30,10 @@
 #include <QTextOption>
 #include <QImage>
 
-#include "TomahawkUtils.h"
-#include "DllMacro.h"
+// include contains typedefs for Qt4/Qt5 compatibility
+#include <QStyleOption>
 
 class PlayableItem;
-class QStyleOptionViewItemV4;
 class QPainter;
 class QPixmap;
 class QLayout;
@@ -41,7 +43,7 @@ class QScrollBar;
 
 namespace TomahawkUtils
 {
-    DLLEXPORT void drawQueryBackground( QPainter* p, const QPalette& palette, const QRect& r, qreal lightnessFactor = 1 );
+    DLLEXPORT void drawQueryBackground( QPainter* p, const QRect& r );
     DLLEXPORT QWidget* tomahawkWindow();
     /// Platform-specific bringing tomahawk mainwindow to front, b/c qt's activate() and such don't seem to work well enough for us
     DLLEXPORT void bringToFront();
@@ -82,6 +84,8 @@ namespace TomahawkUtils
         static const QColor GROUP_HEADER = QColor( "#637180" );
         static const QColor NOW_PLAYING_ITEM = QColor( "#962c26" );
         static const QColor NOW_PLAYING_ITEM_TEXT = QColor( "#ffffff" );
+        static const QColor SELECTION_BACKGROUND = QColor( "#962c26" );
+        static const QColor SELECTION_FOREGROUND = QColor( "#ffffff" );
     }
 
     static const int POPUP_ROUNDING_RADIUS = 6;

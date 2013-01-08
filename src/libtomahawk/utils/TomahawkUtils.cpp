@@ -32,8 +32,8 @@
     #include <lastfm/ws.h>
 #endif
 
-#include <quazip.h>
-#include <quazipfile.h>
+#include <quazip/quazip.h>
+#include <quazip/quazipfile.h>
 
 #include <QNetworkConfiguration>
 #include <QNetworkAccessManager>
@@ -46,6 +46,10 @@
 #include <QCryptographicHash>
 #include <QProcess>
 #include <QTranslator>
+
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    #include <QUrlQuery>
+#endif
 
 #ifdef Q_OS_WIN
     #include <windows.h>
@@ -989,6 +993,63 @@ whitelistedHttpResultHint( const QString& url )
 {
     // For now, just http/https
     return url.startsWith( "http" );
+}
+
+
+void
+urlAddQueryItem( QUrl& url, const QString& key, const QString& value )
+{
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    QUrlQuery urlQuery( url );
+    urlQuery.addQueryItem( key, value );
+    url.setQuery( urlQuery );
+#else
+    url.addQueryItem( key, value );
+#endif
+}
+
+
+QString
+urlQueryItemValue( const QUrl& url, const QString& key )
+{
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    return QUrlQuery( url ).queryItemValue( key ).replace( "+", " " );
+#else
+    return url.queryItemValue( key ).replace( "+", " " );
+#endif
+}
+
+
+bool
+urlHasQueryItem( const QUrl& url, const QString& key )
+{
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    return QUrlQuery( url ).hasQueryItem( key );
+#else
+    return url.hasQueryItem( key );
+#endif
+}
+
+
+QList<QPair<QString, QString> >
+urlQueryItems( const QUrl& url )
+{
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    return QUrlQuery( url ).queryItems();
+#else
+    return url.queryItems();
+#endif
+}
+
+
+void
+urlSetQuery( QUrl& url, const QString& query )
+{
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    url.setQuery( query );
+#else
+    url.setEncodedQuery( query.toLocal8Bit() );
+#endif
 }
 
 

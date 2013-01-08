@@ -7,6 +7,7 @@
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QDebug>
+#include <QPointer>
 
 class QToolbarTabDialogPrivate : public QObject {
     Q_OBJECT
@@ -45,8 +46,8 @@ public slots:
     }
 
 public:
-    QWeakPointer<QDialog> dialog;
-    QWeakPointer<QToolbarTabDialog> q;
+    QPointer<QDialog> dialog;
+    QPointer<QToolbarTabDialog> q;
 
     QVBoxLayout* layout;
     QToolBar* toolbar;

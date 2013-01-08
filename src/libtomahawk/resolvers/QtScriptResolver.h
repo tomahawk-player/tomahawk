@@ -25,11 +25,11 @@
 #include "utils/TomahawkUtils.h"
 #include "config.h"
 
-#include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QThread>
-#include <QtWebKit/QWebPage>
-#include <QtWebKit/QWebFrame>
+#include <QDir>
+#include <QFile>
+#include <QThread>
+#include <QWebPage>
+#include <QWebFrame>
 
 #ifdef QCA2_FOUND
 #include <QtCrypto>
@@ -176,7 +176,7 @@ private:
     ExternalResolver::ErrorState m_error;
 
     QtScriptResolverHelper* m_resolverHelper;
-    QWeakPointer< QWidget > m_configWidget;
+    QPointer< QWidget > m_configWidget;
     QList< QVariant > m_dataWidgets;
 };
 

@@ -255,7 +255,7 @@ ScanManager::runScan()
 
     if ( m_musicScannerThreadController && m_scanner.isNull() )
     {
-        m_scanner = QWeakPointer< MusicScanner >( new MusicScanner( m_currScanMode, paths ) );
+        m_scanner = QPointer< MusicScanner >( new MusicScanner( m_currScanMode, paths ) );
         m_scanner.data()->moveToThread( m_musicScannerThreadController );
         connect( m_scanner.data(), SIGNAL( finished() ), SLOT( scannerFinished() ) );
         m_musicScannerThreadController->start( QThread::IdlePriority );

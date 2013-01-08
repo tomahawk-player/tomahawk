@@ -389,7 +389,7 @@ Query::currentResolver() const
     int x = m_resolvers.count();
     while ( --x )
     {
-        QWeakPointer< Resolver > r = m_resolvers.at( x );
+        QPointer< Resolver > r = m_resolvers.at( x );
         if ( r.isNull() )
             continue;
 

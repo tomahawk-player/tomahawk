@@ -141,7 +141,7 @@ QWidget*
 LastFmAccount::configurationWidget()
 {
     if ( m_configWidget.isNull() )
-        m_configWidget = QWeakPointer<LastFmConfig>( new LastFmConfig( this ) );
+        m_configWidget = QPointer<LastFmConfig>( new LastFmConfig( this ) );
 
     return m_configWidget.data();
 }
@@ -165,7 +165,7 @@ InfoPluginPtr
 LastFmAccount::infoPlugin()
 {
     if ( m_infoPlugin.isNull() )
-        m_infoPlugin = QWeakPointer< LastFmInfoPlugin >( new LastFmInfoPlugin( this ) );
+        m_infoPlugin = QPointer< LastFmInfoPlugin >( new LastFmInfoPlugin( this ) );
 
     return InfoPluginPtr( m_infoPlugin.data() );
 }
@@ -286,7 +286,7 @@ LastFmAccount::hookupResolver()
 
     const AtticaManager::Resolver data = AtticaManager::instance()->resolverData( res.id() );
 
-    m_resolver = QWeakPointer< ExternalResolverGui >( qobject_cast< ExternalResolverGui* >( Pipeline::instance()->addScriptResolver( data.scriptPath ) ) );
+    m_resolver = QPointer< ExternalResolverGui >( qobject_cast< ExternalResolverGui* >( Pipeline::instance()->addScriptResolver( data.scriptPath ) ) );
     connect( m_resolver.data(), SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
 }
 

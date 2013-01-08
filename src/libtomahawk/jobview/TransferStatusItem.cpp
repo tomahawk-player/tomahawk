@@ -30,7 +30,7 @@
 
 TransferStatusItem::TransferStatusItem( TransferStatusManager* p, StreamConnection* sc )
     : m_parent( p )
-    , m_stream( QWeakPointer< StreamConnection >( sc ) )
+    , m_stream( QPointer< StreamConnection >( sc ) )
 {
     if ( m_stream.data()->type() == StreamConnection::RECEIVING )
         m_type = "receive";

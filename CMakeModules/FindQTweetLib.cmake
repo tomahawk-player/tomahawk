@@ -7,9 +7,6 @@
 # (c) Dominik Schmidt <dev@dominik-schmidt.de>
 #
 
-# Dependencies
-find_package(Qt4 REQUIRED)
-
 # Include dir
 find_path(QTWEETLIB_INCLUDE_DIR
   NAMES QTweetLib/qtweetlib_global.h

@@ -220,7 +220,7 @@ SlideSwitchButton::onCheckedStateChanged()
     if ( !m_knobAnimation.isNull() )
         m_knobAnimation.data()->stop();
 
-    m_knobAnimation = QWeakPointer<QPropertyAnimation>( new QPropertyAnimation( this, "knobX" ) );
+    m_knobAnimation = QPointer<QPropertyAnimation>( new QPropertyAnimation( this, "knobX" ) );
     m_knobAnimation.data()->setDuration( 50 );
 
     m_knobAnimation.data()->setStartValue( m_knobX );
@@ -241,8 +241,8 @@ SlideSwitchButton::setBackChecked( bool state )
             m_backBottomAnimation.data()->stop();
 
         m_backChecked = state;
-        m_backTopAnimation = QWeakPointer<QPropertyAnimation>( new QPropertyAnimation( this, "baseColorTop" ) );
-        m_backBottomAnimation = QWeakPointer<QPropertyAnimation>( new QPropertyAnimation( this, "baseColorBottom" ) );
+        m_backTopAnimation = QPointer<QPropertyAnimation>( new QPropertyAnimation( this, "baseColorTop" ) );
+        m_backBottomAnimation = QPointer<QPropertyAnimation>( new QPropertyAnimation( this, "baseColorBottom" ) );
         m_backTopAnimation.data()->setDuration( 300 );
         m_backBottomAnimation.data()->setDuration( 300 );
 

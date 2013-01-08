@@ -1,17 +1,6 @@
 project( tomahawklib )
 
-SET( QT_USE_QTGUI TRUE )
-SET( QT_USE_QTSQL TRUE )
-SET( QT_USE_QTNETWORK TRUE )
-SET( QT_USE_QTXML TRUE )
-SET( QT_USE_QTSVG TRUE )
-SET( QT_USE_QTUITOOLS TRUE )
-
-IF( UNIX AND NOT APPLE )
-  SET( QT_USE_QTDBUS TRUE )
-ENDIF( UNIX AND NOT APPLE )
-
-include( ${QT_USE_FILE} )
+setup_qt()
 
 add_definitions( ${QT_DEFINITIONS} )
 add_definitions( -DQT_SHARED )
@@ -165,12 +154,20 @@ set( libGuiSources
     widgets/searchlineedit/SearchLineEdit.cpp
 )
 
-IF(QCA2_FOUND)
+if(QCA2_FOUND)
     set( libGuiSources ${libGuiSources} utils/GroovesharkParser.cpp )
     set( libGuiHeaders ${libGuiHeaders} utils/GroovesharkParser.h )
-ENDIF(QCA2_FOUND)
+endif()
 
-set( libSources
+if(UNIX AND NOT APPLE AND NOT Qt5Core_DIR)
+    if(BUILD_GUI AND X11_FOUND)
+        include_directories( ${THIRDPARTY_DIR}/libqnetwm )
+        list(APPEND libSources ${libSources} ${THIRDPARTY_DIR}/libqnetwm/libqnetwm/netwm.cpp)
+        list(APPEND LINK_LIBRARIES ${X11_LIBRARIES})
+    endif()
+endif()
+
+list(APPEND libSources
     TomahawkSettings.cpp
     SourceList.cpp
     Pipeline.cpp
@@ -358,7 +355,6 @@ include_directories(
     ${PHONON_INCLUDES}
 
     ${LIBPORTFWD_INCLUDE_DIR}
-    ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/qxtweb
     ${QuaZip_INCLUDE_DIR}
 )
 
@@ -370,15 +366,8 @@ IF(LIBATTICA_FOUND)
     SET( libGuiSources ${libGuiSources} AtticaManager.cpp )
     SET( libGuiHeaders ${libGuiHeaders} AtticaManager.h )
     INCLUDE_DIRECTORIES( ${LIBATTICA_INCLUDE_DIR} )
+    LIST(APPEND LINK_LIBRARIES ${LIBATTICA_LIBRARIES} ${QuaZip_LIBRARIES} )
 ENDIF(LIBATTICA_FOUND)
-
-IF( UNIX AND NOT APPLE )
-    IF( BUILD_GUI AND X11_FOUND )
-        INCLUDE_DIRECTORIES( ${THIRDPARTY_DIR}/libqnetwm )
-        SET( libSources ${libSources} ${THIRDPARTY_DIR}/libqnetwm/libqnetwm/netwm.cpp )
-        SET( LINK_LIBRARIES ${LINK_LIBRARIES} ${X11_LIBRARIES} )
-    ENDIF()
-ENDIF( UNIX AND NOT APPLE )
 
 IF( WIN32 )
     SET( OS_SPECIFIC_LINK_LIBRARIES
@@ -429,30 +418,27 @@ ELSE( APPLE )
 ENDIF( APPLE )
 
 IF(LIBLASTFM_FOUND)
-    SET(LINK_LIBRARIES ${LINK_LIBRARIES} ${LIBLASTFM_LIBRARIES} )
+    LIST(APPEND LINK_LIBRARIES ${LIBLASTFM_LIBRARIES} )
 ENDIF(LIBLASTFM_FOUND)
 
 IF(BUILD_GUI)
     LIST(APPEND libSources ${libGuiSources} )
 ENDIF()
 
-qt4_wrap_ui( libUI_H ${libUI} )
+qt_wrap_ui(libUI_H ${libUI})
 
 SET( libSources ${libSources} ${libUI_H} )
 
-ADD_LIBRARY( tomahawklib SHARED ${libSources})
+add_library( tomahawklib SHARED ${libSources})
 set_target_properties(tomahawklib PROPERTIES AUTOMOC TRUE)
+qt5_use_modules(tomahawklib Widgets Network Sql WebKitWidgets Concurrent Xml UiTools Svg)
 
 IF(QCA2_FOUND)
-    SET(LINK_LIBRARIES ${LINK_LIBRARIES} ${QCA2_LIBRARIES} )
+    LIST(APPEND LINK_LIBRARIES ${QCA2_LIBRARIES} )
 ENDIF(QCA2_FOUND)
 
-IF(LIBATTICA_FOUND)
-    SET( LINK_LIBRARIES ${LINK_LIBRARIES} ${LIBATTICA_LIBRARIES} ${QuaZip_LIBRARIES} )
-ENDIF(LIBATTICA_FOUND)
-
 IF( UNIX AND NOT APPLE )
-    SET( LINK_LIBRARIES ${LINK_LIBRARIES} ${QT_QTDBUS_LIBRARY} )
+    LIST(APPEND LINK_LIBRARIES ${QT_QTDBUS_LIBRARY} )
 ENDIF( UNIX AND NOT APPLE )
 
 TARGET_LINK_LIBRARIES( tomahawklib

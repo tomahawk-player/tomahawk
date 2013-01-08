@@ -24,7 +24,6 @@
 #include "utils/Logger.h"
 
 #include <QNetworkConfiguration>
-#include <QtPlugin>
 
 namespace Tomahawk
 {

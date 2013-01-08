@@ -20,10 +20,10 @@
 #ifndef RESULT_H
 #define RESULT_H
 
-#include <QtCore/QObject>
-#include <QtGui/QPixmap>
-#include <QtCore/QSharedPointer>
-#include <QtCore/QVariant>
+#include <QObject>
+#include <QPixmap>
+#include <QPointer>
+#include <QVariant>
 #include <QMutex>
 
 #include "utils/TomahawkUtils.h"
@@ -141,7 +141,7 @@ private:
     mutable RID m_rid;
     collection_ptr m_collection;
     Tomahawk::query_ptr m_query;
-    QWeakPointer< Tomahawk::Resolver > m_resolvedBy;
+    QPointer< Tomahawk::Resolver > m_resolvedBy;
 
     Tomahawk::artist_ptr m_artist;
     Tomahawk::album_ptr m_album;

@@ -40,14 +40,14 @@ AlbumPlaylistInterface::AlbumPlaylistInterface( Tomahawk::Album* album, Tomahawk
     , m_databaseLoaded( false )
     , m_mode( mode )
     , m_collection( collection )
-    , m_album( QWeakPointer< Tomahawk::Album >( album ) )
+    , m_album( QPointer< Tomahawk::Album >( album ) )
 {
 }
 
 
 AlbumPlaylistInterface::~AlbumPlaylistInterface()
 {
-    m_album.clear();
+    m_album = 0;
 }
 
 
@@ -133,7 +133,7 @@ AlbumPlaylistInterface::tracks() const
         else if ( m_mode == DatabaseMode && !m_databaseLoaded )
         {
             DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks( m_collection );
-            cmd->setAlbum( m_album );
+            cmd->setAlbum( m_album->weakRef() );
             cmd->setSortOrder( DatabaseCommand_AllTracks::AlbumPosition );
 
             connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),
@@ -216,7 +216,7 @@ AlbumPlaylistInterface::infoSystemFinished( const QString& infoId )
     if ( m_queries.isEmpty() && m_mode == Mixed )
     {
         DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks( m_collection );
-        cmd->setAlbum( m_album );
+        cmd->setAlbum( m_album->weakRef() );
         //this takes discnumber into account as well
         cmd->setSortOrder( DatabaseCommand_AllTracks::AlbumPosition );
 

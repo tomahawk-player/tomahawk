@@ -20,13 +20,13 @@
 #ifndef NEWPLAYLISTWIDGET_H
 #define NEWPLAYLISTWIDGET_H
 
-#include <QtGui/QWidget>
-#include <QtCore/QTimer>
-
 #include "PlaylistInterface.h"
 #include "ViewPage.h"
 
 #include "DllMacro.h"
+
+#include <QWidget>
+#include <QTimer>
 
 class QPushButton;
 class PlaylistModel;

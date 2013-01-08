@@ -4,8 +4,6 @@ ADD_DEFINITIONS( -g )
 ADD_DEFINITIONS( -fno-operator-names )
 ADD_DEFINITIONS( -fPIC )
 
-SET( QXTWEB_LIBRARIES qxtweb-standalone )
-
 IF( APPLE )
     INCLUDE( "CMakeLists.osx.cmake" )
 ENDIF( APPLE )

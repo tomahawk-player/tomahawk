@@ -27,7 +27,7 @@
 #include <QtCore/QMap>
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
-#include <QtCore/QWeakPointer>
+#include <QtCore/QPointer>
 #include <QtCore/QSet>
 
 class MusicScanner;
@@ -72,7 +72,7 @@ private:
     static ScanManager* s_instance;
 
     ScanMode m_currScanMode;
-    QWeakPointer< MusicScanner > m_scanner;
+    QPointer< MusicScanner > m_scanner;
     QThread* m_musicScannerThreadController;
     QSet< QString > m_currScannerPaths;
     QStringList m_cachedScannerDirs;

@@ -21,15 +21,15 @@
 #ifndef WHATSHOTWIDGET_H
 #define WHATSHOTWIDGET_H
 
-#include <QtGui/QWidget>
-#include <QtGui/QListWidgetItem>
-#include <QtGui/QStyledItemDelegate>
-
 #include "PlaylistInterface.h"
 #include "infosystem/InfoSystem.h"
 #include "ViewPage.h"
 
 #include "DllMacro.h"
+
+#include <QWidget>
+#include <QListWidgetItem>
+#include <QStyledItemDelegate>
 
 class QSortFilterProxyModel;
 class QStandardItemModel;

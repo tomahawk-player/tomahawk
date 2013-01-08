@@ -20,9 +20,9 @@
 #ifndef TREEVIEW_H
 #define TREEVIEW_H
 
-#include <QtGui/QSortFilterProxyModel>
-#include <QtGui/QTreeView>
-#include <QtCore/QTimer>
+#include <QSortFilterProxyModel>
+#include <QTreeView>
+#include <QTimer>
 
 #include "TreeProxyModel.h"
 #include "ViewPage.h"

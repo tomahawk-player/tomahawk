@@ -78,7 +78,7 @@ public:
         : DatabaseCommand( parent ), m_actionOnly( action )
     {
         setSource( source );
-        qRegisterMetaType<TrackActions>( "DatabaseCommand_LoadSocialAction::TrackActions" );
+        qRegisterMetaType<TrackActions>( "DatabaseCommand_LoadSocialActions::TrackActions" );
     }
 
     /**
@@ -142,6 +142,7 @@ private:
 
 };
 
-Q_DECLARE_METATYPE( DatabaseCommand_LoadSocialActions::TrackActions )
+//FIXME: Qt5: this fails with Qt5, is it needed at all? It compiles fine without in Qt4 as well
+// Q_DECLARE_METATYPE( DatabaseCommand_LoadSocialActions::TrackActions )
 
 #endif // DATABASECOMMAND_LOADSOCIALACTIONS_H

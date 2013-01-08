@@ -18,7 +18,11 @@
 
 #include "TomahawkSettingsGui.h"
 
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+#include <QStandardPaths>
+#else
 #include <QDesktopServices>
+#endif
 
 using namespace Tomahawk;
 
@@ -82,7 +86,11 @@ TomahawkSettingsGui::~TomahawkSettingsGui()
 QString
 TomahawkSettingsGui::storageCacheLocation() const
 {
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    return QStandardPaths::writableLocation( QStandardPaths::CacheLocation );
+#else
     return QDesktopServices::storageLocation( QDesktopServices::CacheLocation );
+#endif
 }
 
 
@@ -91,7 +99,11 @@ TomahawkSettingsGui::scannerPaths() const
 {
     QString musicLocation;
 
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    musicLocation = QStandardPaths::writableLocation( QStandardPaths::MusicLocation );
+#else
     musicLocation = QDesktopServices::storageLocation( QDesktopServices::MusicLocation );
+#endif
 
     return value( "scanner/paths", musicLocation ).toStringList();
 }

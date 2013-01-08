@@ -18,19 +18,18 @@
 
 #include "WidgetDragFilter.h"
 
+#include "utils/Logger.h"
+
 #include <QMouseEvent>
 #include <QApplication>
 #include <QMenuBar>
-
-#include "utils/Logger.h"
-
 
 WidgetDragFilter::WidgetDragFilter( QObject* parent )
     : QObject( parent )
     , m_dragStarted( false )
 {
     Q_ASSERT( parent->isWidgetType() );
-    m_target = QWeakPointer<QWidget>(static_cast<QWidget*>(parent));
+    m_target = QPointer<QWidget>(static_cast<QWidget*>(parent));
     m_target.data()->installEventFilter( this );
 }
 

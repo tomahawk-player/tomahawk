@@ -20,15 +20,15 @@
 #ifndef TRACKVIEW_H
 #define TRACKVIEW_H
 
-#include <QtGui/QTreeView>
-#include <QtGui/QSortFilterProxyModel>
-#include <QtCore/QTimer>
-
 #include "ContextMenu.h"
 #include "PlaylistItemDelegate.h"
 #include "ViewPage.h"
 
 #include "DllMacro.h"
+
+#include <QTreeView>
+#include <QSortFilterProxyModel>
+#include <QTimer>
 
 class QAction;
 class AnimatedSpinner;

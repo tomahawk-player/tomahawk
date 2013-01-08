@@ -20,9 +20,9 @@
 #ifndef METADATAEDITOR_H
 #define METADATAEDITOR_H
 
-#include <QtGui/QDialog>
-#include <QtGui/QLineEdit>
-#include <QtGui/QSpinBox>
+#include <QDialog>
+#include <QLineEdit>
+#include <QSpinBox>
 
 #include "ui_MetadataEditor.h"
 #include "Query.h"

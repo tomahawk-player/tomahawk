@@ -22,6 +22,8 @@
 #include "JobStatusItem.h"
 
 #include <QPixmap>
+#include <QPointer>
+
 
 class StreamConnection;
 
@@ -58,7 +60,7 @@ private slots:
 private:
     TransferStatusManager* m_parent;
     QString m_type, m_main, m_right;
-    QWeakPointer< StreamConnection > m_stream;
+    QPointer< StreamConnection > m_stream;
 };
 
 #endif // TRANSFERSTATUSITEM_H

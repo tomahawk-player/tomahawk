@@ -32,6 +32,7 @@
 #include "database/DatabaseCommand_UpdateSearchIndex.h"
 #include "database/Database.h"
 #include "playlist/PlaylistUpdaterInterface.h"
+#include "infosystem/InfoSystemCache.h"
 
 using namespace Tomahawk;
 

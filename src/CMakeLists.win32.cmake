@@ -5,8 +5,6 @@ ADD_DEFINITIONS( /DWIN32_LEAN_AND_MEAN )
 ADD_DEFINITIONS( -static-libgcc )
 ADD_DEFINITIONS( -DUNICODE )
 
-SET( QXTWEB_LIBRARIES  qxtweb-standalone )
-
 # Check for the availability of the Thumbbutton
 
 check_cxx_source_compiles( "

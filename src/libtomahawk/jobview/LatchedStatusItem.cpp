@@ -92,7 +92,7 @@ LatchedStatusManager::sourceOffline()
 
     if ( m_jobs.contains( s->userName() ) )
     {
-        QWeakPointer< LatchedStatusItem> job = m_jobs.take( s->userName() ).data();
+        QPointer< LatchedStatusItem> job = m_jobs.take( s->userName() ).data();
         if ( !job.isNull() )
             job.data()->stop();
     }
@@ -107,7 +107,7 @@ LatchedStatusManager::latchedOff( const Tomahawk::source_ptr& from, const Tomaha
 
     if ( to->isLocal() && m_jobs.contains( from->userName() ) )
     {
-        QWeakPointer< LatchedStatusItem > item = m_jobs.take( from->userName() );
+        QPointer< LatchedStatusItem > item = m_jobs.take( from->userName() );
         if ( !item.isNull() )
             item.data()->stop();
     }

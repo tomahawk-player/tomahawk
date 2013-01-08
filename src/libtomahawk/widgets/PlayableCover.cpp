@@ -20,6 +20,7 @@
 
 #include "Artist.h"
 #include "Album.h"
+#include "ContextMenu.h"
 #include "ViewManager.h"
 #include "audio/AudioEngine.h"
 #include "widgets/ImageButton.h"
@@ -28,6 +29,7 @@
 
 #include <QPainter>
 
+using namespace Tomahawk;
 
 PlayableCover::PlayableCover( QWidget* parent )
     : QLabel( parent )
@@ -45,6 +47,9 @@ PlayableCover::PlayableCover( QWidget* parent )
     m_button->hide();
 
     connect( m_button, SIGNAL( clicked( bool ) ), SLOT( onClicked() ) );
+
+    m_contextMenu = new ContextMenu( this );
+    m_contextMenu->setSupportedActions( ContextMenu::ActionQueue | ContextMenu::ActionCopyLink | ContextMenu::ActionStopAfter | ContextMenu::ActionLove | ContextMenu::ActionPage );
 }
 
 
@@ -126,6 +131,22 @@ PlayableCover::mouseReleaseEvent( QMouseEvent* event )
             return;
         }
     }
+}
+
+
+void
+PlayableCover::contextMenuEvent( QContextMenuEvent* event )
+{
+    m_contextMenu->clear();
+
+    if ( m_artist )
+        m_contextMenu->setArtist( m_artist );
+    else if ( m_album )
+        m_contextMenu->setAlbum( m_album );
+    else
+        m_contextMenu->setQuery( m_query );
+    
+    m_contextMenu->exec( event->globalPos() );
 }
 
 
@@ -251,8 +272,8 @@ PlayableCover::paintEvent( QPaintEvent* event )
 
         if ( m_hoveredRect == r )
         {
-            TomahawkUtils::drawQueryBackground( &bufpainter, palette(), r, 1.1 );
-            bufpainter.setPen( Qt::white );
+            TomahawkUtils::drawQueryBackground( &bufpainter, r );
+            bufpainter.setPen( TomahawkUtils::Colors::SELECTION_FOREGROUND );
         }
         
         to.setAlignment( Qt::AlignHCenter | Qt::AlignBottom );

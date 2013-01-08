@@ -1,15 +1,11 @@
 PROJECT(libqxtweb-standalone)
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8 FATAL_ERROR)
-SET(CMAKE_VERBOSE_MAKEFILE ON)
-SET(CMAKE_INSTALL_PREFIX ".")
 
 IF( ${CMAKE_VERSION} VERSION_GREATER 2.8.3 )
   CMAKE_POLICY(SET CMP0017 NEW)
 ENDIF( ${CMAKE_VERSION} VERSION_GREATER 2.8.3 )
 
-FIND_PACKAGE( Qt4 4.6.0 COMPONENTS QtCore QtNetwork REQUIRED )
-set(QT_USE_QTNETWORK TRUE)
-include( ${QT_USE_FILE} )
+setup_qt()
 
 SET(qxtweb "qxtweb")
 
@@ -22,6 +18,16 @@ ADD_DEFINITIONS( -DBUILD_QXT_CORE -DBUILD_QXT_WEB )
 
 INCLUDE_DIRECTORIES( ${qxtweb} )
 
+macro(create_qxtweb_fancy_header simpleHeader fancyHeader)
+    file(WRITE ${CMAKE_BINARY_DIR}/QxtWeb/${fancyHeader} "#include \"${simpleHeader}\"" )
+endmacro()
+
+create_qxtweb_fancy_header("qxtabstracthttpconnector.h" "QxtHttpServerConnector")
+create_qxtweb_fancy_header("qxthttpsessionmanager.h" "HttpSessionManager")
+create_qxtweb_fancy_header("qxthttpsessionmanager.h" "QxtHttpSessionManager")
+create_qxtweb_fancy_header("qxtwebcontent.h" "QxtWebContent")
+create_qxtweb_fancy_header("qxtwebslotservice.h" "QxtWebSlotService")
+create_qxtweb_fancy_header("qxtwebevent.h" "QxtWebPageEvent")
 
 SET( sources
         # QxtWeb:
@@ -37,40 +43,20 @@ SET( sources
         ${qxtweb}/qxtwebservicedirectory.cpp
         ${qxtweb}/qxtwebslotservice.cpp
         ${qxtweb}/qxtwebcgiservice.cpp
+        ${qxtweb}/qhttpheader.cpp
 
         # Ripped bits of QxtCore:
         ${qxtweb}/qxtmetaobject.cpp
         ${qxtweb}/qxtnull.cpp
-)
+        ${qxtweb}/qxtfifo.cpp
 
-SET( headers
-        # QxtWeb:
-        ${qxtweb}/qxtabstracthttpconnector.h
-        ${qxtweb}/qxtabstractwebservice.h
-        ${qxtweb}/qxtabstractwebsessionmanager.h
-        ${qxtweb}/qxtabstractwebsessionmanager_p.h
-#        ${qxtweb}/qxthtmltemplate.h
-        ${qxtweb}/qxthttpsessionmanager.h
-#        ${qxtweb}/qxtweb.h
-        ${qxtweb}/qxtwebcontent.h
-#        ${qxtweb}/qxtwebevent.h
-        ${qxtweb}/qxtwebservicedirectory.h
-        ${qxtweb}/qxtwebservicedirectory_p.h
-        ${qxtweb}/qxtwebslotservice.h
-        ${qxtweb}/qxtwebcgiservice.h
-        ${qxtweb}/qxtwebcgiservice_p.h
+        # QxtNetwork
+        ${qxtweb}/qxtsslserver.cpp
 
-        # Ripped bits of QxtCore:
-#        ${qxtweb}/qxtmetaobject.h
-#        ${qxtweb}/qxtnullable.h
-#        ${qxtweb}/qxtnull.h
+        # automoc hack
         ${qxtweb}/qxtboundfunction.h
-#        ${qxtweb}/qxtboundfunctionbase.h
-#        ${qxtweb}/qxtboundcfunction.h
-#        ${qxtweb}/qxtmetatype.h
 )
 
-qt4_wrap_cpp( mocstuff ${headers} )
 
 # DLL on windows due to linker issues, otherwise static
 IF(WIN32)
@@ -94,20 +80,9 @@ ENDIF()
 
 
 target_link_libraries( qxtweb-standalone
-	    ${QT_LIBRARIES}
+    ${QT_LIBRARIES}
 )
 
-# Also build small example app from qxt demos:
+qt5_use_modules(qxtweb-standalone Network)
 
-#qt4_wrap_cpp( mocex "example/myservice.h" )
-
-#ADD_EXECUTABLE( example-webserver
-#    ${mocex}
-#    example/main.cpp
-#    example/myservice.h
-#    )
-
-#TARGET_LINK_LIBRARIES( example-webserver
-#    ${QT_LIBRARIES}
-#    "${CMAKE_CURRENT_SOURCE_DIR}/libqxtweb-standalone.a"
-#    )
+set_target_properties(qxtweb-standalone PROPERTIES AUTOMOC TRUE)

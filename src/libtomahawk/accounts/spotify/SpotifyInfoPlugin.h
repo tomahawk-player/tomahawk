@@ -22,7 +22,7 @@
 #include "infosystem/InfoSystem.h"
 #include "DllMacro.h"
 
-#include <QWeakPointer>
+#include <QPointer>
 
 class QNetworkReply;
 
@@ -45,6 +45,8 @@ public:
     explicit SpotifyInfoPlugin( Accounts::SpotifyAccount* account );
     virtual ~SpotifyInfoPlugin();
 
+    const QString friendlyName() const { return "Spotify"; };
+
 public slots:
     void  albumListingResult( const QString& msgType, const QVariantMap& msg, const QVariant& extraData );
 
@@ -62,7 +64,8 @@ private:
     void dataError( InfoRequestData );
     void trackListResult( const QStringList& trackNameList, const Tomahawk::InfoSystem::InfoRequestData& requestData );
     void sendLoveSong( const InfoType type, QVariant input );
-    QWeakPointer< Tomahawk::Accounts::SpotifyAccount > m_account;
+
+    QPointer< Tomahawk::Accounts::SpotifyAccount > m_account;
 };
 
 }

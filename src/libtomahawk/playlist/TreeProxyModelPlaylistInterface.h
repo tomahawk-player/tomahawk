@@ -67,7 +67,7 @@ public slots:
     virtual void setShuffled( bool enabled ) { m_shuffled = enabled; emit shuffleModeChanged( enabled ); }
 
 private:
-    QWeakPointer< TreeProxyModel > m_proxyModel;
+    QPointer< TreeProxyModel > m_proxyModel;
 
     PlaylistModes::RepeatMode m_repeatMode;
     bool m_shuffled;

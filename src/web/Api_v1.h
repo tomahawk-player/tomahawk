@@ -22,11 +22,11 @@
 
 // See: http://doc.libqxt.org/tip/qxtweb.html
 
-#include "QxtHttpServerConnector"
-#include "QxtHttpSessionManager"
-#include "QxtWebContent"
-#include "QxtWebSlotService"
-#include "QxtWebPageEvent"
+#include <QxtWeb/QxtHttpServerConnector>
+#include <QxtWeb/QxtHttpSessionManager>
+#include <QxtWeb/QxtWebContent>
+#include <QxtWeb/QxtWebSlotService>
+#include <QxtWeb/QxtWebPageEvent>
 
 #include <qjson/parser.h>
 #include <qjson/serializer.h>

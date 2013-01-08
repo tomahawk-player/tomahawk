@@ -21,14 +21,16 @@
 #define TYPEDEFS_H
 
 #include <QSharedPointer>
+#include <QPointer>
 #include <QUuid>
 #include <QPair>
 #include <QPersistentModelIndex>
+
 #include <boost/function.hpp>
 
 //template <typename T> class QSharedPointer;
 
-class QNetworkReply;
+#include <QNetworkReply>
 
 namespace Tomahawk
 {
@@ -203,7 +205,7 @@ namespace Tomahawk
         typedef QHash< QString, QString > InfoStringHash;
         typedef QPair< QVariantMap, QVariant > PushInfoPair;
 
-        typedef QWeakPointer< InfoPlugin > InfoPluginPtr;
+        typedef QPointer< InfoPlugin > InfoPluginPtr;
     }
 }; // ns
 
@@ -215,7 +217,7 @@ typedef QList< QPair< QString, QString > > PairList;
 inline static QString uuid()
 {
     // kinda lame, but
-    QString q = QUuid::createUuid();
+    QString q = QUuid::createUuid().toString();
     q.remove( 0, 1 );
     q.chop( 1 );
     return q;

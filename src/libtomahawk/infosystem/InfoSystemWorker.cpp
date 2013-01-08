@@ -65,6 +65,13 @@ InfoSystemWorker::~InfoSystemWorker()
 }
 
 
+const QList< InfoPluginPtr >
+InfoSystemWorker::plugins() const
+{
+    return m_plugins;
+}
+
+
 void
 InfoSystemWorker::init( Tomahawk::InfoSystem::InfoSystemCache* cache )
 {
@@ -221,6 +228,7 @@ InfoSystemWorker::loadInfoPlugins( const QStringList& pluginPaths )
         if ( infoPlugin )
         {
             tDebug() << Q_FUNC_INFO << "Loaded info plugin:" << loader.fileName();
+            infoPlugin->setFriendlyName( loader.fileName() );
             addInfoPlugin( InfoPluginPtr( infoPlugin ) );
         }
         else

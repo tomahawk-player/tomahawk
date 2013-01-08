@@ -44,7 +44,7 @@ XmppAccount::XmppAccount( const QString &accountId )
     setAccountServiceName( "Jabber (XMPP)" );
     setTypes( SipType );
 
-    m_configWidget = QWeakPointer< QWidget >( new XmppConfigWidget( this, 0 ) );
+    m_configWidget = QPointer< QWidget >( new XmppConfigWidget( this, 0 ) );
 
     m_onlinePixmap = QPixmap( ":/xmpp-icon.png" );
     m_offlinePixmap = QPixmap( ":/xmpp-offline-icon.png" );
@@ -119,7 +119,7 @@ XmppAccount::sipPlugin()
 {
     if ( m_xmppSipPlugin.isNull() )
     {
-        m_xmppSipPlugin = QWeakPointer< XmppSipPlugin >( new XmppSipPlugin( this ) );
+        m_xmppSipPlugin = QPointer< XmppSipPlugin >( new XmppSipPlugin( this ) );
 
         connect( m_xmppSipPlugin.data(), SIGNAL( stateChanged( Tomahawk::Accounts::Account::ConnectionState ) ), this, SIGNAL( connectionStateChanged( Tomahawk::Accounts::Account::ConnectionState ) ) );
         connect( m_xmppSipPlugin.data(), SIGNAL( error( int, QString ) ), this, SIGNAL( error( int, QString ) ) );

@@ -64,7 +64,7 @@ public:
         QTimer::singleShot( AUTH_TIMEOUT, this, SLOT( authTimeout() ) ) ;
     }
 
-    QWeakPointer<Connection> _conn;
+    QPointer<Connection> _conn;
     bool _outbound;
     bool _disowned;
     msg_ptr _msg;
@@ -159,7 +159,7 @@ private:
 
     QJson::Parser parser;
     QList< ControlConnection* > m_controlconnections; // canonical list of authed peers
-    QMap< QString, QWeakPointer< Connection > > m_offers;
+    QMap< QString, QPointer< Connection > > m_offers;
     QStringList m_connectedNodes;
 
     int m_port, m_externalPort;
@@ -174,7 +174,7 @@ private:
 
     QMap< QString,boost::function< QSharedPointer< QIODevice >(Tomahawk::result_ptr) > > m_iofactories;
 
-    QWeakPointer< PortFwdThread > m_portfwd;
+    QPointer< PortFwdThread > m_portfwd;
     static Servent* s_instance;
 };
 

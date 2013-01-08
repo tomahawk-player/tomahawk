@@ -20,9 +20,9 @@
 #ifndef SEEKSLIDER_H
 #define SEEKSLIDER_H
 
-#include <QtGui/QSlider>
-
 #include "DllMacro.h"
+
+#include <QSlider>
 
 class QTimeLine;
 

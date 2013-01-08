@@ -61,5 +61,7 @@ private:
     DatabaseCommand_LoadAllPlaylists::SortAscDesc m_sortAscDesc;
 };
 
-Q_DECLARE_METATYPE(QList<DatabaseCommand_LoadAllSortedPlaylists::SourcePlaylistPair>)
+//FIXME: Qt5: this fails with Qt5, is it needed at all? It compiles fine without in Qt4 as well
+// Q_DECLARE_METATYPE(QList<DatabaseCommand_LoadAllSortedPlaylists::SourcePlaylistPair>)
+
 #endif // DATABASECOMMAND_LOADALLSORTEDPLAYLISTS_H

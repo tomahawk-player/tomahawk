@@ -588,7 +588,7 @@ MprisPlugin::notifyPropertyChanged( const QString& interface, const QString& pro
         "PropertiesChanged" );
     signal << interface;
     QVariantMap changedProps;
-    changedProps.insert(propertyName, property(propertyName.toAscii()));
+    changedProps.insert(propertyName, property(propertyName.toLatin1()));
     signal << changedProps;
     signal << QStringList();
     QDBusConnection::sessionBus().send(signal);

@@ -36,7 +36,7 @@ PlaylistPlaylistInterface::PlaylistPlaylistInterface( Tomahawk::Playlist* playli
 
 PlaylistPlaylistInterface::~PlaylistPlaylistInterface()
 {
-    m_playlist.clear();
+    m_playlist = 0;
 }
 
 

@@ -21,10 +21,6 @@
 
 #include "SourceDelegate.h"
 
-#include <QApplication>
-#include <QPainter>
-#include <QMouseEvent>
-
 #include "items/SourceTreeItem.h"
 #include "items/SourceItem.h"
 #include "items/PlaylistItems.h"
@@ -38,9 +34,14 @@
 #include "ActionCollection.h"
 #include "ViewManager.h"
 #include "ContextMenu.h"
+
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
+#include <QMimeData>
+#include <QPainter>
+#include <QMouseEvent>
+#include <QApplication>
 
 #define TREEVIEW_INDENT_ADD 12
 

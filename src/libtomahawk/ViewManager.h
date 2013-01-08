@@ -188,13 +188,13 @@ private:
 
     QList< Tomahawk::collection_ptr > m_superCollections;
 
-    QHash< Tomahawk::dynplaylist_ptr, QWeakPointer<Tomahawk::DynamicWidget> > m_dynamicWidgets;
-    QHash< Tomahawk::collection_ptr, QWeakPointer<TreeView> > m_treeViews;
-    QHash< Tomahawk::artist_ptr, QWeakPointer<ArtistInfoWidget> > m_artistViews;
-    QHash< Tomahawk::album_ptr, QWeakPointer<AlbumInfoWidget> > m_albumViews;
-    QHash< Tomahawk::query_ptr, QWeakPointer<TrackInfoWidget> > m_trackViews;
-    QHash< Tomahawk::playlist_ptr, QWeakPointer<FlexibleView> > m_playlistViews;
-    QHash< Tomahawk::source_ptr, QWeakPointer<SourceInfoWidget> > m_sourceViews;
+    QHash< Tomahawk::dynplaylist_ptr, QPointer<Tomahawk::DynamicWidget> > m_dynamicWidgets;
+    QHash< Tomahawk::collection_ptr, QPointer<TreeView> > m_treeViews;
+    QHash< Tomahawk::artist_ptr, QPointer<ArtistInfoWidget> > m_artistViews;
+    QHash< Tomahawk::album_ptr, QPointer<AlbumInfoWidget> > m_albumViews;
+    QHash< Tomahawk::query_ptr, QPointer<TrackInfoWidget> > m_trackViews;
+    QHash< Tomahawk::playlist_ptr, QPointer<FlexibleView> > m_playlistViews;
+    QHash< Tomahawk::source_ptr, QPointer<SourceInfoWidget> > m_sourceViews;
 
     QList<Tomahawk::ViewPage*> m_pageHistoryBack;
     QList<Tomahawk::ViewPage*> m_pageHistoryFwd;

@@ -451,6 +451,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
         if ( !err )
         {
             tLog() << "Starting new song:" << m_currentTrack->url();
+            m_state = Loading;
             emit loading( m_currentTrack );
 
             if ( !isHttpResult( m_currentTrack->url() ) && !isLocalResult( m_currentTrack->url() ) )
@@ -469,7 +470,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
                     if ( m_currentTrack->url().contains( "?" ) )
                     {
                         furl = QUrl( m_currentTrack->url().left( m_currentTrack->url().indexOf( '?' ) ) );
-                        furl.setEncodedQuery( QString( m_currentTrack->url().mid( m_currentTrack->url().indexOf( '?' ) + 1 ) ).toLocal8Bit() );
+                        TomahawkUtils::urlSetQuery( furl, QString( m_currentTrack->url().mid( m_currentTrack->url().indexOf( '?' ) + 1 ) ) );
                     }
 
                     tLog( LOGVERBOSE ) << "Passing to Phonon:" << furl;
@@ -736,8 +737,17 @@ AudioEngine::onAboutToFinish()
 void
 AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
 {
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << oldState << newState << m_expectStop;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << oldState << newState << m_expectStop << state();
 
+    if ( newState == Phonon::LoadingState )
+    {
+        // We don't emit this state to listeners - yet.
+        m_state = Loading;
+    }
+    if ( newState == Phonon::StoppedState )
+    {
+        m_state = Stopped;
+    }
     if ( newState == Phonon::ErrorState )
     {
         stop( UnknownError );
@@ -749,7 +759,9 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
     }
     if ( newState == Phonon::PlayingState )
     {
-        emit started( m_currentTrack );
+        if ( state() != Paused && state() != Playing )
+            emit started( m_currentTrack );
+
         setState( Playing );
     }
 
@@ -890,7 +902,7 @@ AudioEngine::setPlaylist( Tomahawk::playlistinterface_ptr playlist )
         connect( m_playlist.data(), SIGNAL( nextTrackAvailable( bool ) ), SIGNAL( controlStateChanged() ) );
 
         connect( m_playlist.data(), SIGNAL( shuffleModeChanged( bool ) ), SIGNAL( shuffleModeChanged( bool ) ) );
-        connect( m_playlist.data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode ) ), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode ) ) );
+        connect( m_playlist.data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ) );
         
         emit shuffleModeChanged( m_playlist.data()->shuffled() );
         emit repeatModeChanged( m_playlist.data()->repeatMode() );
@@ -982,17 +994,12 @@ AudioEngine::checkStateQueue()
         {
             case Playing:
             {
-                bool paused = isPaused();
                 m_mediaObject->play();
-                if ( paused )
-                    setVolume( m_volume );
-
                 break;
             }
 
             case Paused:
             {
-                m_volume = volume();
                 m_mediaObject->pause();
                 break;
             }

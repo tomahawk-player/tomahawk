@@ -39,6 +39,8 @@
 #include <QStyleOption>
 #include <QDesktopServices>
 
+//FIXME: Qt5: this doesnt fail because Q_WS_X11 is deprecated
+//TODO: change to Q_OS_X11 and fix errors
 #ifdef Q_WS_X11
     #include <QtGui/QX11Info>
     #include <libqnetwm/netwm.h>
@@ -200,11 +202,15 @@ drawBackgroundAndNumbers( QPainter* painter, const QString& text, const QRect& f
 
 
 void
-drawQueryBackground( QPainter* p, const QPalette& palette, const QRect& r, qreal lightnessFactor )
+drawQueryBackground( QPainter* p, const QRect& r )
 {
-    p->setPen( palette.highlight().color().lighter( lightnessFactor * 100 ) );
-    p->setBrush( palette.highlight().color().lighter( lightnessFactor * 100 ) );
+    p->save();
+
+    p->setPen( Colors::SELECTION_BACKGROUND );
+    p->setBrush( Colors::SELECTION_BACKGROUND );
     p->drawRoundedRect( r, 4.0, 4.0 );
+
+    p->restore();
 }
 
 

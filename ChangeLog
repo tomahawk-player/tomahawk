@@ -5,6 +5,7 @@ Version 0.6.0:
       biographies.
     * New AudioControl logic - only enable Prev/Skip buttons if available.
     * Added more options to right-click/context menus.
+    * Resolver source icon in Audiocontrols now supports being a link-back URL to original source.
     * Make friends' currently playing song (in sidebar) clickable.
     * Improve MusicBrainz plugin to use normalized artist names and avoid
       duplicate tracks.
@@ -24,6 +25,8 @@ Version 0.6.0:
     * Support dropping of new Soundcloud user, track, set & likes URLs.
     * Add HotNewHipHop as available chart.
     * Add iTunes as available source for New Releases.
+    * Updates and additions to translations including: Japanese, Bulgarian, 
+      Finish, Russian, Arabic, Chinese, Swedish and more.
     * (Linux) Allow disabling of playback notifications.
 
 Version 0.5.5:

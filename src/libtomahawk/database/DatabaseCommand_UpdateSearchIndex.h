@@ -21,6 +21,7 @@
 
 #include "DatabaseCommand.h"
 #include "DllMacro.h"
+#include <QPointer>
 
 class IndexingJobItem;
 
@@ -36,7 +37,7 @@ public:
     virtual void exec( DatabaseImpl* db );
 
 private:
-    QWeakPointer<IndexingJobItem> m_statusJob;
+    QPointer<IndexingJobItem> m_statusJob;
 };
 
 #endif // DATABASECOMMAND_UPDATESEARCHINDEX_H

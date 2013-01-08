@@ -19,11 +19,6 @@
 
 #include "TrackView.h"
 
-#include <QKeyEvent>
-#include <QPainter>
-#include <QScrollBar>
-#include <QStyleOptionViewItem>
-
 #include "ViewHeader.h"
 #include "ViewManager.h"
 #include "PlayableModel.h"
@@ -41,6 +36,12 @@
 #include "utils/Closure.h"
 #include "utils/AnimatedSpinner.h"
 #include "utils/Logger.h"
+
+
+#include <QKeyEvent>
+#include <QPainter>
+#include <QScrollBar>
+#include <QDrag>
 
 #define SCROLL_TIMEOUT 280
 

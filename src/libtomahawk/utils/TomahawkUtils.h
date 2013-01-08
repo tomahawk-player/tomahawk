@@ -214,6 +214,19 @@ namespace TomahawkUtils
     DLLEXPORT QList< Tomahawk::query_ptr > mergePlaylistChanges( const QList< Tomahawk::query_ptr >& orig, const QList< Tomahawk::query_ptr >& newTracks, bool& changed );
 
     DLLEXPORT void crash();
+
+
+    /**
+     * Qt4 / Qt5 compatibility layer
+     */
+
+    /* QUrl */
+    DLLEXPORT void urlAddQueryItem( QUrl& url, const QString& key, const QString& value );
+    DLLEXPORT QString urlQueryItemValue( const QUrl& url, const QString& key );
+    DLLEXPORT bool urlHasQueryItem( const QUrl& url, const QString& key );
+    DLLEXPORT QList<QPair<QString, QString> > urlQueryItems( const QUrl& url );
+    DLLEXPORT void urlSetQuery( QUrl& url, const QString& query );
+
 }
 
 #endif // TOMAHAWKUTILS_H

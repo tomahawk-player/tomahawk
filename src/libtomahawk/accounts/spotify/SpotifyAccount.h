@@ -28,8 +28,8 @@
 #include "utils/SmartPointerList.h"
 #include "DllMacro.h"
 
-class QAction;
-class QAction;
+#include <QAction>
+
 class SpotifyPlaylistUpdater;
 class QTimer;
 
@@ -163,10 +163,10 @@ private:
     SpotifyPlaylistUpdater* getPlaylistUpdater( QObject* sender );
     static SpotifyAccount* s_instance;
 
-    QWeakPointer<SpotifyAccountConfig> m_configWidget;
-    QWeakPointer<QWidget> m_aboutWidget;
-    QWeakPointer<ScriptResolver> m_spotifyResolver;
-    QWeakPointer< InfoSystem::SpotifyInfoPlugin > m_infoPlugin;
+    QPointer<SpotifyAccountConfig> m_configWidget;
+    QPointer<QWidget> m_aboutWidget;
+    QPointer<ScriptResolver> m_spotifyResolver;
+    QPointer< InfoSystem::SpotifyInfoPlugin > m_infoPlugin;
 
     QMap<QString, QPair<QObject*, QString> > m_qidToSlotMap;
     QMap<QString, QVariant > m_qidToExtraData;
