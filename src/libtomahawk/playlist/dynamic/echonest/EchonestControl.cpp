@@ -461,8 +461,8 @@ Tomahawk::EchonestControl::updateWidgets()
         m_matchString = "is";
         m_matchData = 1;
 
-        m_match = QWeakPointer< QWidget >( match );
-        m_input = QWeakPointer< QWidget >( combo );
+        m_match = QPointer< QWidget >( match );
+        m_input = QPointer< QWidget >( combo );
     } else {
         m_match = QPointer<QWidget>( new QWidget );
         m_input = QPointer<QWidget>( new QWidget );
