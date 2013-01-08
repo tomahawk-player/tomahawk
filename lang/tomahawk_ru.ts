@@ -209,7 +209,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="116"/>
         <source>Hide Menu Bar</source>
-        <translation>Спрятать строку меню приложения</translation>
+        <translation>Спрятать Строку Меню</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="120"/>
@@ -662,7 +662,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleView.cpp" line="293"/>
         <source>This playlist is currently empty.</source>
-        <translation>Этот плейлист пуст.</translation>
+        <translation>Плейлист пуст</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleView.cpp" line="295"/>
@@ -1075,7 +1075,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="157"/>
         <source>played %1 by you</source>
-        <translation>Проиграно %1 мной</translation>
+        <translation>Воспроизводилась %1 мной</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="159"/>
@@ -1183,7 +1183,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistView.cpp" line="135"/>
         <source>This playlist is currently empty.</source>
-        <translation>Текущий плейлист пуст.</translation>
+        <translation>Плейлист пуст</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistView.cpp" line="137"/>
@@ -1321,12 +1321,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/Account.cpp" line="36"/>
         <source>Friend Finders</source>
-        <translation type="unfinished"/>
+        <translation>Среди Друзей</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/Account.cpp" line="38"/>
         <source>Music Finders</source>
-        <translation>Music Finders</translation>
+        <translation>Среди Музыкальных Сервисов</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/Account.cpp" line="41"/>
@@ -1724,7 +1724,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.ui" line="88"/>
         <source>Recently Played Tracks</source>
-        <translation>Последние проигрыные песни</translation>
+        <translation>Последние Воспроизводимые</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.cpp" line="70"/>
@@ -3286,7 +3286,7 @@ enter the displayed PIN number here:</source>
         <location filename="../src/TomahawkTrayIcon.cpp" line="73"/>
         <location filename="../src/TomahawkTrayIcon.cpp" line="112"/>
         <source>Hide Tomahawk Window</source>
-        <translation>Спрятать окно Tomahawk</translation>
+        <translation>Спрятать Окно Tomahawk</translation>
     </message>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="117"/>
@@ -3355,13 +3355,13 @@ enter the displayed PIN number here:</source>
         <location filename="../src/TomahawkWindow.cpp" line="206"/>
         <location filename="../src/TomahawkWindow.cpp" line="1306"/>
         <source>Hide Menu Bar</source>
-        <translation>Спрятать строку меню приложения</translation>
+        <translation>Спрятать Строку Меню</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="206"/>
         <location filename="../src/TomahawkWindow.cpp" line="1300"/>
         <source>Show Menu Bar</source>
-        <translation>Показать строку меню приложения</translation>
+        <translation>Показать Строку Меню</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="284"/>
@@ -3391,7 +3391,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="948"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
-        <translation>Некоторые треки в плейлисте не содержат исполнителя и название. Они будут проигнорированы.</translation>
+        <translation>Некоторые песни в плейлисте не содержат исполнителя и название. Они будут проигнорированы.</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="962"/>
@@ -3504,7 +3504,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="82"/>
         <source>Sorry, but we could not find similar tracks for this song!</source>
-        <translation>Извините, но мы не смогли найти похожие треки на эту песню!</translation>
+        <translation>Извините, но мы не смогли найти похожие на эту песни !</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="215"/>
@@ -3514,7 +3514,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="217"/>
         <source>You&apos;ve never listened to this track before.</source>
-        <translation>Вы никогда не слушали этот трек раньше.</translation>
+        <translation>Вы никогда не слушали эту песню раньше.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="221"/>
