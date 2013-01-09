@@ -81,7 +81,6 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     ui->tracksViewLeft->setHeaderHidden( true );
     ui->tracksViewLeft->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     PlaylistChartItemDelegate* del = new PlaylistChartItemDelegate( ui->tracksViewLeft, ui->tracksViewLeft->proxyModel() );
-    connect( del, SIGNAL( updateRequest( QModelIndex ) ), ui->tracksViewLeft, SLOT( update( QModelIndex ) ) );
     ui->tracksViewLeft->setItemDelegate( del );
     ui->tracksViewLeft->setUniformRowHeights( false );
 
