@@ -17,9 +17,7 @@ find_library (QJSON_LIBRARIES
 
 find_path (QJSON_INCLUDE_DIR
     NAMES
-    parser.h
-    PATH_SUFFIXES
-    qjson
+    qjson/parser.h
     PATHS
     ${QJSON_INCLUDE_DIRS}
     ${INCLUDE_INSTALL_DIR}
