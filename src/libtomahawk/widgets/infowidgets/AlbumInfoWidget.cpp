@@ -99,6 +99,7 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
 
     QScrollArea* area = new QScrollArea();
     area->setWidgetResizable( true );
+    area->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
     area->setWidget( widget );
 
     area->setStyleSheet( "QScrollArea { background-color: #454e59; }" );
