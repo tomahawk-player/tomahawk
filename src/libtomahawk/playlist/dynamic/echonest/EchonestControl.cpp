@@ -551,8 +551,8 @@ Tomahawk::EchonestControl::updateData()
             m_matchString = match->currentText();
             m_matchData = match->itemData( match->currentIndex() ).toString();
 
-            QString songType = combo->currentText().toLower();
-            if ( match->currentText() == "is not" )
+            QString songType = combo->itemData( combo->currentIndex() ).toString();
+            if ( match->currentIndex() == 1 )
                songType.append( ":false" );
 
             m_data.first = Echonest::DynamicPlaylist::SongType;
@@ -904,8 +904,8 @@ Tomahawk::EchonestControl::calculateSummary()
 
         Q_ASSERT( !m_match.isNull() );
         Q_ASSERT( qobject_cast< QComboBox* >( m_match.data() ) );
-        QString isOrIsNot = qobject_cast< QComboBox* >( m_match.data() )->currentText().toLower();
-        if ( isOrIsNot == "is" )
+        QComboBox* combo = qobject_cast< QComboBox* >( m_match.data() );
+        if ( combo->currentIndex() == 0 )
             summary = tr( "where song type is %1" ).arg( text );
         else
             summary = tr( "where song type is not %1" ).arg( text );
