@@ -74,7 +74,7 @@ ViewManager::ViewManager( QObject* parent )
     : QObject( parent )
     , m_widget( new QWidget() )
     , m_welcomeWidget( new WelcomeWidget() )
-    , m_whatsHotWidget( new WhatsHotWidget() )
+    , m_whatsHotWidget( 0 )
     , m_newReleasesWidget( new NewReleasesWidget() )
     , m_recentPlaysWidget( 0 )
     , m_currentPage( 0 )
@@ -109,7 +109,6 @@ ViewManager::ViewManager( QObject* parent )
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
     connect( m_infobar, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
 
-    connect( this, SIGNAL( tomahawkLoaded() ), m_whatsHotWidget, SLOT( fetchData() ) );
     connect( this, SIGNAL( tomahawkLoaded() ), m_newReleasesWidget, SLOT( fetchData() ) );
     connect( this, SIGNAL( tomahawkLoaded() ), m_welcomeWidget, SLOT( loadData() ) );
 
@@ -376,6 +375,12 @@ ViewManager::showWelcomePage()
 Tomahawk::ViewPage*
 ViewManager::showWhatsHotPage()
 {
+    if ( !m_whatsHotWidget )
+    {
+        m_whatsHotWidget = new WhatsHotWidget();
+        m_whatsHotWidget->fetchData();
+    }
+
     return show( m_whatsHotWidget );
 }
 
