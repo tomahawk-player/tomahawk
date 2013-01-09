@@ -20,6 +20,7 @@
 #include "ArtistInfoWidget.h"
 #include "ui_ArtistInfoWidget.h"
 
+#include <QDesktopServices>
 #include <QScrollArea>
 #include <QScrollBar>
 
@@ -324,7 +325,15 @@ void
 ArtistInfoWidget::onBiographyLinkClicked( const QUrl& url )
 {
     tDebug() << Q_FUNC_INFO << url;
-    GlobalActionManager::instance()->parseTomahawkLink( url.toString() );
+
+    if ( url.scheme() == "tomahawk" )
+    {
+        GlobalActionManager::instance()->parseTomahawkLink( url.toString() );
+    }
+    else
+    {
+        QDesktopServices::openUrl( url );
+    }
 }
 
 
