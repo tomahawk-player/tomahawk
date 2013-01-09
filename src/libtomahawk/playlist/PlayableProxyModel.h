@@ -36,7 +36,7 @@ public:
     { Detailed = 0, Short = 1, ShortWithAvatars = 2, Large = 3, Collection = 4 };
 
     enum PlayableProxyModelRole
-    { StyleRole = Qt::UserRole + 1 };
+    { StyleRole = Qt::UserRole + 1, TypeRole };
 
     explicit PlayableProxyModel ( QObject* parent = 0 );
     virtual ~PlayableProxyModel() {}

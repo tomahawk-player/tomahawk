@@ -24,14 +24,15 @@
 #include <QMimeData>
 #include <QTreeView>
 
-#include "audio/AudioEngine.h"
-#include "utils/TomahawkUtils.h"
-#include "Source.h"
-
 #include "Artist.h"
 #include "Album.h"
 #include "Pipeline.h"
 #include "PlayableItem.h"
+#include "PlayableProxyModel.h"
+#include "Source.h"
+#include "Typedefs.h"
+#include "audio/AudioEngine.h"
+#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
 using namespace Tomahawk;
@@ -274,10 +275,28 @@ PlayableModel::data( const QModelIndex& index, int role ) const
     {
         return QVariant();
     }
-
-    if ( role == Qt::TextAlignmentRole )
+    else if ( role == Qt::TextAlignmentRole )
     {
         return QVariant( columnAlignment( index.column() ) );
+    }
+    else if ( role == PlayableProxyModel::TypeRole )
+    {
+        if ( entry->result() )
+        {
+            return Tomahawk::TypeResult;
+        }
+        else if ( entry->query() )
+        {
+            return Tomahawk::TypeQuery;
+        }
+        else if ( entry->artist() )
+        {
+            return Tomahawk::TypeArtist;
+        }
+        else if ( entry->album() )
+        {
+            return Tomahawk::TypeAlbum;
+        }
     }
 
     if ( !entry->query().isNull() )

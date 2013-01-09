@@ -78,6 +78,14 @@ namespace Tomahawk
         InfoSystemMode,
     };
 
+    enum ModelTypes
+    {
+        TypeArtist = 0,
+        TypeAlbum,
+        TypeQuery,
+        TypeResult
+    };
+
     class ExternalResolver;
     typedef boost::function<Tomahawk::ExternalResolver*(QString)> ResolverFactoryFunc;
 
