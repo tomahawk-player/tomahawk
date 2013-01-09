@@ -1123,7 +1123,7 @@ se conecte e faça o stream de você?</translation>
         <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="130"/>
         <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="137"/>
         <source>A playlist by %1, created %2.</source>
-        <translation>Uma lista de reprodução de %1, criada %2. {1,?}</translation>
+        <translation>Uma lista de reprodução de %1, criada %2.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="184"/>
