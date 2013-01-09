@@ -59,10 +59,11 @@ PlaylistChartItemDelegate::PlaylistChartItemDelegate( TrackView* parent, Playabl
     m_bottomOption = QTextOption( Qt::AlignBottom );
     m_bottomOption.setWrapMode( QTextOption::NoWrap );
 
+    connect( this, SIGNAL( updateIndex( QModelIndex ) ), parent, SLOT( update( QModelIndex ) ) );
+
     connect( m_model, SIGNAL( modelReset() ), this, SLOT( modelChanged() ) );
     if ( PlaylistView* plView = qobject_cast< PlaylistView* >( parent ) )
         connect( plView, SIGNAL( modelChanged() ), this, SLOT( modelChanged() ) );
-
 }
 
 
@@ -91,11 +92,8 @@ PlaylistChartItemDelegate::sizeHint( const QStyleOptionViewItem& option, const Q
                 stretch = 2;
     }
 
-    if ( index.isValid() )
-    {
-        int rowHeight = option.fontMetrics.height() + 8;
-        size.setHeight( rowHeight * stretch );
-    }
+    int rowHeight = option.fontMetrics.height() + 8;
+    size.setHeight( rowHeight * stretch );
 
     return size;
 }
@@ -241,7 +239,7 @@ PlaylistChartItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
 void
 PlaylistChartItemDelegate::doUpdateIndex( const QPersistentModelIndex& idx )
 {
-    emit updateRequest( idx );
+    emit updateIndex( idx );
 }
 
 
