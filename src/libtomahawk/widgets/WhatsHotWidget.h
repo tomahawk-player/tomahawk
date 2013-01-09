@@ -97,9 +97,9 @@ private:
     void setLeftViewAlbums( PlayableModel* albumModel );
     void setLeftViewTracks( PlaylistModel* trackModel );
 
-    QStandardItem* parseNode( QStandardItem* parentItem, const QString &label, const QVariant &data );
+    QStandardItem* parseNode( QStandardItem* parentItem, const QString& label, const QVariant& data );
 
-    Ui::WhatsHotWidget *ui;
+    Ui::WhatsHotWidget* ui;
     Tomahawk::playlistinterface_ptr m_playlistInterface;
 
     QStandardItemModel* m_crumbModelLeft;
@@ -119,7 +119,7 @@ private:
     QSet< QString > m_queuedFetches;
     QTimer* m_timer;
     QMap<QString, QVariant> m_currentVIds;
-    AnimatedSpinner* m_loadingSpinner;
+
     friend class Tomahawk::ChartsPlaylistInterface;
 };
 
