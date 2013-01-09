@@ -35,6 +35,7 @@
 #include "PlayableItem.h"
 #include "TreeProxyModel.h"
 #include "TreeView.h"
+#include "Typedefs.h"
 
 
 TreeItemDelegate::TreeItemDelegate( TreeView* parent, TreeProxyModel* proxy )
@@ -48,23 +49,28 @@ TreeItemDelegate::TreeItemDelegate( TreeView* parent, TreeProxyModel* proxy )
 QSize
 TreeItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    QSize size = QStyledItemDelegate::sizeHint( option, index );
+    QSize size;
 
     if ( index.isValid() )
     {
-        PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
-        if ( item )
+        Tomahawk::ModelTypes type = (Tomahawk::ModelTypes)index.data( PlayableProxyModel::TypeRole ).toInt();
+        switch ( type )
         {
-            if ( item->album() )
+            case Tomahawk::TypeAlbum:
             {
                 size.setHeight( option.fontMetrics.height() * 3 );
                 return size;
             }
-            else if ( item->query() || item->result() )
+
+            case Tomahawk::TypeQuery:
+            case Tomahawk::TypeResult:
             {
                 size.setHeight( option.fontMetrics.height() * 1.6 );
                 return size;
             }
+
+            default:
+                break;
         }
     }
     

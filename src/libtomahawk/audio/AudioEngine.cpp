@@ -167,17 +167,19 @@ AudioEngine::pause()
 void
 AudioEngine::stop( AudioErrorCode errorCode )
 {
-    tDebug() << Q_FUNC_INFO << errorCode;
+    tDebug() << Q_FUNC_INFO << errorCode << isStopped();
 
     if ( isStopped() )
         return;
 
-    if( errorCode == NoError )
+    if ( errorCode == NoError )
         setState( Stopped );
     else
         setState( Error );
 
-    m_mediaObject->stop();
+    if ( m_mediaObject->state() != Phonon::StoppedState )
+        m_mediaObject->stop();
+
     emit stopped();
 
     if ( !m_playlist.isNull() )
@@ -241,7 +243,9 @@ AudioEngine::canGoNext()
         return false;
     }
 
-    return ( m_currentTrack && m_playlist.data()->hasNextResult() && m_playlist.data()->nextResult()->isOnline() );
+    return ( m_currentTrack && m_playlist.data()->hasNextResult() &&
+             !m_playlist.data()->nextResult().isNull() &&
+             m_playlist.data()->nextResult()->isOnline() );
 }
 
 
@@ -744,10 +748,6 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
         // We don't emit this state to listeners - yet.
         m_state = Loading;
     }
-    if ( newState == Phonon::StoppedState )
-    {
-        m_state = Stopped;
-    }
     if ( newState == Phonon::ErrorState )
     {
         stop( UnknownError );
@@ -799,11 +799,14 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
             m_expectStop = false;
             tDebug( LOGVERBOSE ) << "Finding next track.";
             if ( canGoNext() )
+            {
                 loadNextTrack();
+            }
             else
             {
                 if ( !m_playlist.isNull() && m_playlist.data()->retryMode() == Tomahawk::PlaylistModes::Retry )
                     m_waitingOnNewTrack = true;
+
                 stop();
             }
         }
@@ -903,7 +906,7 @@ AudioEngine::setPlaylist( Tomahawk::playlistinterface_ptr playlist )
 
         connect( m_playlist.data(), SIGNAL( shuffleModeChanged( bool ) ), SIGNAL( shuffleModeChanged( bool ) ) );
         connect( m_playlist.data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ) );
-        
+
         emit shuffleModeChanged( m_playlist.data()->shuffled() );
         emit repeatModeChanged( m_playlist.data()->repeatMode() );
     }

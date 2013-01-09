@@ -81,7 +81,6 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     ui->tracksViewLeft->setHeaderHidden( true );
     ui->tracksViewLeft->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     PlaylistChartItemDelegate* del = new PlaylistChartItemDelegate( ui->tracksViewLeft, ui->tracksViewLeft->proxyModel() );
-    connect( del, SIGNAL( updateRequest( QModelIndex ) ), ui->tracksViewLeft, SLOT( update( QModelIndex ) ) );
     ui->tracksViewLeft->setItemDelegate( del );
     ui->tracksViewLeft->setUniformRowHeights( false );
 
@@ -104,12 +103,7 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 
     // Read last viewed charts, to be used as defaults
     m_currentVIds = TomahawkSettings::instance()->lastChartIds();
-    qDebug() << "Got last chartIds:" << m_currentVIds;
-
-    // TracksView is first shown, show spinner on that
-    // After fadeOut, charts are loaded
-    m_loadingSpinner =  new AnimatedSpinner( ui->tracksViewLeft );
-    m_loadingSpinner->fadeIn();
+    tDebug( LOGVERBOSE ) << "Re-loading last chartIds:" << m_currentVIds;
 
     MetaPlaylistInterface* mpl = new MetaPlaylistInterface();
     mpl->addChildInterface( ui->tracksViewLeft->playlistInterface() );
@@ -121,14 +115,15 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 
 WhatsHotWidget::~WhatsHotWidget()
 {
-    qDebug() << "Deleting whatshot";
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
+
     // Write the settings
-    qDebug() << "Writing chartIds to settings:" << m_currentVIds;
     TomahawkSettings::instance()->setLastChartIds( m_currentVIds );
+
     qDeleteAll( m_workers );
     m_workers.clear();
     m_workerThread->exit( 0 );
-    m_playlistInterface.clear();
+
     delete ui;
 }
 
@@ -213,7 +208,7 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
     {
         case InfoSystem::InfoChartCapabilities:
         {
-            QStandardItem *rootItem= m_crumbModelLeft->invisibleRootItem();
+            QStandardItem* rootItem= m_crumbModelLeft->invisibleRootItem();
             QVariantMap defaults;
             if ( returnedData.contains( "defaults" ) )
                 defaults = returnedData.take( "defaults" ).toMap();
@@ -222,22 +217,23 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             QString defaultSource = returnedData.take( "defaultSource" ).toString();
             // Here, we dont want current sessions last view, but rather what was current on previus quit
             QString lastSeen = TomahawkSettings::instance()->lastChartIds().value( "lastseen" ).toString();
-            if( !lastSeen.isEmpty() )
+            if ( !lastSeen.isEmpty() )
                 defaultSource = lastSeen;
 
             // Merge defaults with current defaults, split the value in to a list
-            foreach( const QString&key, m_currentVIds.keys() )
+            foreach ( const QString& key, m_currentVIds.keys() )
                 defaults[ key ] = m_currentVIds.value( key ).toString().split( "/" );
-            qDebug() << "Defaults after merge" << defaults;
+
+            tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Defaults after merge" << defaults;
             foreach ( const QString label, returnedData.keys() )
             {
-                QStandardItem *childItem = parseNode( rootItem, label, returnedData[ label ] );
+                QStandardItem* childItem = parseNode( rootItem, label, returnedData[ label ] );
                 rootItem->appendRow( childItem );
             }
 
             // Set the default source
             // Set the default chart for each source
-            if( !defaults.empty() )
+            if ( !defaults.empty() )
             {
                 for ( int i = 0; i < rootItem->rowCount(); i++ )
                 {
@@ -252,7 +248,7 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                         QStringList defaultIndices = defaults[ source->text().toLower() ].toStringList();
                         QStandardItem* cur = source;
 
-                        foreach( const QString& index, defaultIndices )
+                        foreach ( const QString& index, defaultIndices )
                         {
                             // Go through the children of the current item, marking the default one as default
                             for ( int k = 0; k < cur->rowCount(); k++ )
@@ -277,10 +273,9 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
 
         case InfoSystem::InfoChart:
         {
-
-            if( returnedData.contains( "chart_error") )
+            if ( returnedData.contains( "chart_error" ) )
             {
-                tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Info came back with error!!";
+                tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Info came back with error!";
 
                 Tomahawk::InfoSystem::InfoStringHash criteria;
                 criteria.insert( "chart_refetch", returnedData[ "chart_source" ].value< QString >() );
@@ -302,7 +297,6 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                 break;
 
             const QString type = returnedData[ "type" ].toString();
-
             if ( !returnedData.contains( type ) )
                 break;
 
@@ -319,7 +313,7 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                 loader->setType( ChartDataLoader::Artist );
                 loader->setData( returnedData[ "artists" ].value< QStringList >() );
 
-                connect( loader, SIGNAL( artists( Tomahawk::ChartDataLoader*, QList< Tomahawk::artist_ptr > ) ), this, SLOT( chartArtistsLoaded( Tomahawk::ChartDataLoader*, QList< Tomahawk::artist_ptr > ) ) );
+                connect( loader, SIGNAL( artists( Tomahawk::ChartDataLoader*, QList< Tomahawk::artist_ptr > ) ), SLOT( chartArtistsLoaded( Tomahawk::ChartDataLoader*, QList< Tomahawk::artist_ptr > ) ) );
 
                 TreeModel* artistsModel = new TreeModel( ui->artistsViewLeft );
                 artistsModel->setMode( InfoSystemMode );
@@ -335,7 +329,7 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                 loader->setType( ChartDataLoader::Album );
                 loader->setData( returnedData[ "albums" ].value< QList< Tomahawk::InfoSystem::InfoStringHash > >() );
 
-                connect( loader, SIGNAL( albums( Tomahawk::ChartDataLoader*, QList< Tomahawk::album_ptr > ) ), this, SLOT( chartAlbumsLoaded( Tomahawk::ChartDataLoader*, QList< Tomahawk::album_ptr > ) ) );
+                connect( loader, SIGNAL( albums( Tomahawk::ChartDataLoader*, QList< Tomahawk::album_ptr > ) ), SLOT( chartAlbumsLoaded( Tomahawk::ChartDataLoader*, QList< Tomahawk::album_ptr > ) ) );
 
                 PlayableModel* albumModel = new PlayableModel( ui->albumsView );
                 albumModel->startLoading();
@@ -350,7 +344,7 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
                 loader->setType( ChartDataLoader::Track );
                 loader->setData( returnedData[ "tracks" ].value< QList< Tomahawk::InfoSystem::InfoStringHash > >() );
 
-                connect( loader, SIGNAL( tracks( Tomahawk::ChartDataLoader*, QList< Tomahawk::query_ptr > ) ), this, SLOT( chartTracksLoaded( Tomahawk::ChartDataLoader*, QList< Tomahawk::query_ptr > ) ) );
+                connect( loader, SIGNAL( tracks( Tomahawk::ChartDataLoader*, QList< Tomahawk::query_ptr > ) ), SLOT( chartTracksLoaded( Tomahawk::ChartDataLoader*, QList< Tomahawk::query_ptr > ) ) );
 
                 PlaylistModel* trackModel = new PlaylistModel( ui->tracksViewLeft );
                 trackModel->startLoading();
@@ -376,7 +370,6 @@ void
 WhatsHotWidget::infoSystemFinished( QString target )
 {
     Q_UNUSED( target );
-    m_loadingSpinner->fadeOut();
 }
 
 
@@ -438,6 +431,7 @@ WhatsHotWidget::leftCrumbIndexChanged( QModelIndex index )
     criteria.insert( "chart_expires", QString::number( chartExpires ) );
     /// Remember to lower the source!
     criteria.insert( "chart_source",  index.data().toString().toLower() );
+
     Tomahawk::InfoSystem::InfoRequestData requestData;
     QVariantMap customData;
     customData.insert( "whatshot_side", "left" );
@@ -473,12 +467,12 @@ WhatsHotWidget::changeEvent( QEvent* e )
 
 
 QStandardItem*
-WhatsHotWidget::parseNode( QStandardItem* parentItem, const QString &label, const QVariant &data )
+WhatsHotWidget::parseNode( QStandardItem* parentItem, const QString& label, const QVariant& data )
 {
     Q_UNUSED( parentItem );
-//     tDebug( LOGVERBOSE ) << "WhatsHot: parsing " << label;
+//     tDebug( LOGVERBOSE ) << "WhatsHot: parsing" << label;
 
-    QStandardItem *sourceItem = new QStandardItem( label );
+    QStandardItem* sourceItem = new QStandardItem( label );
 
     if ( data.canConvert< QList< Tomahawk::InfoSystem::InfoStringHash > >() )
     {
@@ -486,7 +480,7 @@ WhatsHotWidget::parseNode( QStandardItem* parentItem, const QString &label, cons
 
         foreach ( Tomahawk::InfoSystem::InfoStringHash chart, charts )
         {
-            QStandardItem *childItem= new QStandardItem( chart[ "label" ] );
+            QStandardItem* childItem= new QStandardItem( chart[ "label" ] );
             childItem->setData( chart[ "id" ], Breadcrumb::ChartIdRole );
             childItem->setData( chart[ "expires" ], Breadcrumb::ChartExpireRole );
 
@@ -506,7 +500,7 @@ WhatsHotWidget::parseNode( QStandardItem* parentItem, const QString &label, cons
         QVariantMap dataMap = data.toMap();
         foreach ( const QString childLabel,dataMap.keys() )
         {
-            QStandardItem *childItem  = parseNode( sourceItem, childLabel, dataMap[ childLabel ] );
+            QStandardItem* childItem  = parseNode( sourceItem, childLabel, dataMap[ childLabel ] );
             sourceItem->appendRow( childItem );
         }
     }
@@ -516,13 +510,13 @@ WhatsHotWidget::parseNode( QStandardItem* parentItem, const QString &label, cons
 
         foreach ( const QVariant value, dataList )
         {
-            QStandardItem *childItem = new QStandardItem( value.toString() );
+            QStandardItem* childItem = new QStandardItem( value.toString() );
             sourceItem->appendRow( childItem );
         }
     }
     else
     {
-        QStandardItem *childItem = new QStandardItem( data.toString() );
+        QStandardItem* childItem = new QStandardItem( data.toString() );
         sourceItem->appendRow( childItem );
     }
     return sourceItem;
@@ -566,7 +560,7 @@ WhatsHotWidget::chartArtistsLoaded( ChartDataLoader* loader, const QList< artist
 
     if ( m_artistModels.contains( chartId ) )
     {
-        foreach( const artist_ptr& artist, artists )
+        foreach ( const artist_ptr& artist, artists )
         {
             m_artistModels[ chartId ]->addArtists( artist );
             m_artistModels[ chartId ]->finishLoading();

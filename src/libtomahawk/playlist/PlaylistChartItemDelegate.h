@@ -43,7 +43,7 @@ public:
     PlaylistChartItemDelegate( TrackView* parent = 0, PlayableProxyModel* proxy = 0 );
 
 signals:
-    void updateRequest( const QModelIndex& idx );
+    void updateIndex( const QModelIndex& idx );
 
 protected:
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
