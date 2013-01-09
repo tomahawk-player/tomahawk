@@ -3475,7 +3475,7 @@ enter the displayed PIN number here:</translation>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1193"/>
         <source>Copyright 2010 - 2013</source>
-        <translation>Copyright 2010 - 2013 {2010 ?}</translation>
+        <translation>Copyright 2010 - 2013</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1194"/>
