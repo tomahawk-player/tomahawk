@@ -122,6 +122,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
     QScrollArea* area = new QScrollArea();
     area->setWidgetResizable( true );
+    area->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
     area->setWidget( widget );
 
     area->setStyleSheet( "QScrollArea { background-color: #454e59; }" );
