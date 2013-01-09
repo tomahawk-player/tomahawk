@@ -71,20 +71,21 @@ AccountWidget::AccountWidget( QWidget* parent )
     idContLayout->addWidget( m_idLabel );
 
     m_spinnerWidget = new QWidget( idContainer );
-    QSize spinnerSize = 16 > m_spinnerWidget->logicalDpiX() * .2 ?
+    QSize spinnerSize = 16 > TomahawkUtils::defaultFontHeight()  ?
                             QSize( 16, 16 ) :
-                            QSize( m_spinnerWidget->logicalDpiX() * .15,
-                                   m_spinnerWidget->logicalDpiX() * .15 );
+                            QSize( TomahawkUtils::defaultFontHeight(),
+                                   TomahawkUtils::defaultFontHeight() );
     m_spinnerWidget->setFixedSize( spinnerSize );
     idContLayout->addWidget( m_spinnerWidget );
-    m_spinnerWidget->setContentsMargins( 0, 0, 0, 0 );
-    m_spinner = new AnimatedSpinner( m_spinnerWidget->size(), m_spinnerWidget );
+    m_spinnerWidget->setContentsMargins( 0, 1, 0, 0 );
+    m_spinner = new AnimatedSpinner( m_spinnerWidget->size() - QSize( 2, 2 ), m_spinnerWidget );
 
     idContainer->setStyleSheet( QString( "QFrame {"
                                 "border: 1px solid #e9e9e9;"
                                 "border-radius: %1px;"
                                 "background: #e9e9e9;"
                                 "}" ).arg( idContainer->sizeHint().height() / 2 + 1 ) );
+    idContainer->setMinimumHeight( spinnerSize.height() + 6 /*margins*/ );
 
     m_statusToggle = new SlideSwitchButton( this );
     m_statusToggle->setContentsMargins( 0, 0, 0, 0 );
