@@ -260,12 +260,12 @@ connect and stream from you?</source>
 <context>
     <name>AlbumInfoWidget</name>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="114"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="108"/>
         <source>Tracklist</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="184"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="166"/>
         <source>Other Albums</source>
         <translation>其他专辑</translation>
     </message>
@@ -280,7 +280,7 @@ connect and stream from you?</source>
         <translation>抱歉，没有找到这张专辑的其他歌曲！</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="192"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="193"/>
         <source>Other Albums by %1</source>
         <translation>%1 的其他专辑</translation>
     </message>
@@ -302,32 +302,32 @@ connect and stream from you?</source>
 <context>
     <name>ArtistInfoWidget</name>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="114"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="108"/>
         <source>Top Hits</source>
         <translation>最热歌曲</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="251"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="227"/>
         <source>Related Artists</source>
         <translation>相关艺人</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="184"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="166"/>
         <source>Albums</source>
         <translation>专辑</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="66"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="68"/>
         <source>Sorry, we could not find any albums for this artist!</source>
         <translation>抱歉，未找到该艺术家的其他专辑！</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="71"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="73"/>
         <source>Sorry, we could not find any related artists!</source>
         <translation>抱歉，没有找到相关的艺术家！</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="77"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="79"/>
         <source>Sorry, we could not find any top hits for this artist!</source>
         <translation>抱歉，没有找到该艺术家的任何人气歌曲！</translation>
     </message>
@@ -3675,42 +3675,42 @@ You can re-send a sync message at any time simply by sending another tweet using
 <context>
     <name>ViewManager</name>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="142"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="141"/>
         <source>This playlist is empty!</source>
         <translation>当前播放列表为空！</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="283"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="282"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
         <translation>在扫描音乐收藏后你将可以在这里找到你的音乐。</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="285"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="284"/>
         <source>This collection is empty.</source>
         <translation>收藏为空。</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="344"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="343"/>
         <source>SuperCollection</source>
         <translation>超级收藏</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="345"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="344"/>
         <source>Combined libraries of all your online friends</source>
         <translation>当前在线的朋友的音乐库集合</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="399"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="404"/>
         <source>Recently Played Tracks</source>
         <translation>最近播放歌曲</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="400"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="405"/>
         <source>Recently played tracks from all your friends</source>
         <translation>所有朋友最近播放的歌曲</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="407"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="412"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>对不起，找不到任何最近播放项目！</translation>
     </message>

@@ -261,12 +261,12 @@ yhdistää ja toistaa sinulta virtaa?</translation>
 <context>
     <name>AlbumInfoWidget</name>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="114"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="108"/>
         <source>Tracklist</source>
         <translation>Kappalelista</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="184"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="166"/>
         <source>Other Albums</source>
         <translation>Muita albumeita</translation>
     </message>
@@ -281,7 +281,7 @@ yhdistää ja toistaa sinulta virtaa?</translation>
         <translation>Valitettavasti emme löytäneet mitään tämän albumin kappaleita!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="192"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="193"/>
         <source>Other Albums by %1</source>
         <translation>Muita artistin %1 levyjä</translation>
     </message>
@@ -303,32 +303,32 @@ yhdistää ja toistaa sinulta virtaa?</translation>
 <context>
     <name>ArtistInfoWidget</name>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="114"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="108"/>
         <source>Top Hits</source>
         <translation>Parhaat hitit</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="251"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="227"/>
         <source>Related Artists</source>
         <translation>Samankaltaisia artisteja</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="184"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="166"/>
         <source>Albums</source>
         <translation>Albumit</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="66"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="68"/>
         <source>Sorry, we could not find any albums for this artist!</source>
         <translation>Valitettavasti emme löytänet yhtään tämän artistin albumia!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="71"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="73"/>
         <source>Sorry, we could not find any related artists!</source>
         <translation>Valitettavasti emme löytäneet yhtään samankaltaista artistia!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="77"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="79"/>
         <source>Sorry, we could not find any top hits for this artist!</source>
         <translation>Valitettavasti emme löytäneet yhtään tämän artistin parhaista hiteistä!</translation>
     </message>
@@ -3680,42 +3680,42 @@ Voit lähettää synkronointiviestin uudelleen millä hetkellä hyvänsä lähet
 <context>
     <name>ViewManager</name>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="142"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="141"/>
         <source>This playlist is empty!</source>
         <translation>Tämä soittolista on tyhjä!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="283"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="282"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
         <translation>Löydät kappaleesi tästä, kunhan musiikkikokoelmasi haku on valmistunut.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="285"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="284"/>
         <source>This collection is empty.</source>
         <translation>Tämä kokoelma on tyhjä.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="344"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="343"/>
         <source>SuperCollection</source>
         <translation>Superkokoelma</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="345"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="344"/>
         <source>Combined libraries of all your online friends</source>
         <translation>Kaikkien verkkokaveriesi yhdistetyt kirjastot</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="399"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="404"/>
         <source>Recently Played Tracks</source>
         <translation>Viime aikoina kuunnellut kappaleet</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="400"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="405"/>
         <source>Recently played tracks from all your friends</source>
         <translation>Kaikkien kaveriesi viime aikoina kuuntelemat kappaleet</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="407"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="412"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>Valitettavasti emme löytäneet yhtään viimeaikaisia soittoja!</translation>
     </message>
