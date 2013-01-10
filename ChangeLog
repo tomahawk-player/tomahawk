@@ -28,6 +28,7 @@ Version 0.6.0:
     * Added iTunes as available source for New Releases.
     * Updates and additions to translations including: Japanese, Bulgarian, 
       Finnish, Russian, Arabic, Chinese, Swedish, Czech and more.
+    * (Windows) Added thumb buttons to Windows 7's taskbar.
     * (Linux) Allow disabling of playback notifications.
 
 Version 0.5.5:
