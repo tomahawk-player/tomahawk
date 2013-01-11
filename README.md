@@ -46,7 +46,7 @@ Required dependencies:
 * libechonest (2.0.2) - http://projects.kde.org/projects/playground/libs/libechonest/
 * Attica 0.4.0 - ftp://ftp.kde.org/pub/kde/stable/attica/
 * QuaZip 0.4.3 - http://quazip.sourceforge.net/
-* liblastfm 1.0.1 - http://github.com/lastfm/liblastfm/
+* liblastfm 1.0.1 - https://github.com/lastfm/liblastfm/
 
 The following dependencies are optional, but recommended:
 
@@ -57,7 +57,7 @@ Third party libraries that we ship with our source:
 
 * MiniUPnP 1.6 - http://miniupnp.free.fr/
 * Breakpad - http://code.google.com/p/google-breakpad/
-* Qocoa - http://github.com/mikemcquaid/Qocoa/
+* Qocoa - https://github.com/mikemcquaid/Qocoa/
 * libqnetwm - http://code.google.com/p/libqnetwm/
 * libqxt (QxtWeb module) - http://libqxt.org/
 * SPMediaKeyTap - https://github.com/nevyn/SPMediaKeyTap/
