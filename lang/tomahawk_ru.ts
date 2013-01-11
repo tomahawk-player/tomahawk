@@ -171,7 +171,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="104"/>
         <source>Fully &amp;Rescan Collection</source>
-        <translation>Полное сканирование коллекции
+        <translation>Полное Сканирование Коллекции
 </translation>
     </message>
     <message>
@@ -509,7 +509,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="52"/>
         <source>About</source>
-        <translation>О</translation>
+        <translation>О Spotify</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="84"/>
@@ -798,12 +798,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="94"/>
         <source>All of your loved tracks</source>
-        <translation>Все ваши любимые песни</translation>
+        <translation>Ваши любимые песни</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="96"/>
         <source>All of %1&apos;s loved tracks</source>
-        <translation>Все Любимые Песни %1 </translation>
+        <translation>Любимые Песни %1 </translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="58"/>
@@ -1090,7 +1090,7 @@ connect and stream from you?</source>
         <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="142"/>
         <source>added %1</source>
         <comment>e.g. added 3 hours ago</comment>
-        <translation>Добавлен %1</translation>
+        <translation>Добавлена %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="203"/>
@@ -1510,7 +1510,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="80"/>
         <source>Static Host Name:</source>
-        <translation>Статические имя хоста:</translation>
+        <translation>Статическое имя хоста:</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="96"/>
@@ -1545,7 +1545,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="217"/>
         <source>Send reports after Tomahawk crashed</source>
-        <translation>Отправлять отчеты при подениях Tomahawk</translation>
+        <translation>Отправлять отчеты при ошибках Tomahawk</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="227"/>
@@ -1706,12 +1706,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.ui" line="30"/>
         <source>Recent Albums</source>
-        <translation>Последние альбомы</translation>
+        <translation>Последние Альбомы</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.ui" line="74"/>
         <source>Latest Additions</source>
-        <translation>Последние добавленые</translation>
+        <translation>Последние Добавленые</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.ui" line="88"/>
@@ -1721,7 +1721,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.cpp" line="70"/>
         <source>New Additions</source>
-        <translation>Последние добавленые</translation>
+        <translation>Последние Добавленные</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.cpp" line="73"/>
@@ -1745,12 +1745,12 @@ connect and stream from you?</source>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="72"/>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="522"/>
         <source>Latest Additions</source>
-        <translation>Последние добавленные</translation>
+        <translation>Последние Добавленные</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="76"/>
         <source>Recently Played</source>
-        <translation>Последние воспроизводимые</translation>
+        <translation>Последние Воспроизводимые</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="139"/>
@@ -1760,7 +1760,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="525"/>
         <source>Latest additions to your collection</source>
-        <translation>Последние добавления в коллекцию</translation>
+        <translation>Новые Поступления в Коллекцию</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="527"/>
@@ -1917,7 +1917,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="300"/>
         <source>Recently Played</source>
-        <translation>Последние воспроизводимые</translation>
+        <translation>Последние Воспроизводимые</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="305"/>
@@ -1940,7 +1940,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="57"/>
         <source>Configure your Spotify account</source>
-        <translation>Настроить аккаунт Spotify</translation>
+        <translation>Настройка аккаунт Spotify</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="89"/>
@@ -2844,22 +2844,22 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="449"/>
         <source>is not</source>
-        <translation type="unfinished"/>
+        <translation>Не</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="452"/>
         <source>Studio</source>
-        <translation type="unfinished"/>
+        <translation>Студия</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="453"/>
         <source>Live</source>
-        <translation type="unfinished"/>
+        <translation>В живую</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="454"/>
         <source>Christmas</source>
-        <translation type="unfinished"/>
+        <translation>Рождество</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="793"/>
@@ -2986,7 +2986,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="909"/>
         <source>where song type is %1</source>
-        <translation type="unfinished"/>
+        <translation>где песни типа %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="911"/>
@@ -3156,12 +3156,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="762"/>
         <source>You</source>
-        <translation>Ты</translation>
+        <translation>Ваша</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="764"/>
         <source>you</source>
-        <translation>ты</translation>
+        <translation>ваша</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="773"/>
@@ -3624,7 +3624,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="119"/>
         <source>The Twitter plugin allows you to discover and play music from your Twitter friends running Tomahawk and post messages to your account.</source>
-        <translation>Твиттер плагин позволяет вам находить и воспроизводить музыку друзей через Твиттер и посылать сообщения.</translation>
+        <translation>Плагин для Твиттера позволяет вам находить и воспроизводить музыку друзей, посылать сообщения в Твиттер.</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="137"/>
@@ -3639,7 +3639,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="196"/>
         <source>Twitter Connections</source>
-        <translation>Твиттер соединение</translation>
+        <translation>Соединение Твиттер</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="202"/>
@@ -3944,7 +3944,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="52"/>
         <source>Configure this Xmpp account</source>
-        <translation>Настроить аккаунт XMPP</translation>
+        <translation>Настройка аккаунт XMPP</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="89"/>
