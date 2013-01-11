@@ -58,25 +58,11 @@ SET( sources
 )
 
 
-# DLL on windows due to linker issues, otherwise static
-IF(WIN32)
-	ADD_LIBRARY(qxtweb-standalone SHARED
-			${mocstuff}
-			${headers}
-			${sources}
-	)
-    INSTALL( TARGETS qxtweb-standalone
-             RUNTIME DESTINATION bin
-             LIBRARY DESTINATION lib
-             ARCHIVE DESTINATION lib
-    )
-ELSE()
-	ADD_LIBRARY(qxtweb-standalone STATIC
-			${mocstuff}
-			${headers}
-			${sources}
-	)
-ENDIF()
+ADD_LIBRARY(qxtweb-standalone STATIC
+        ${mocstuff}
+        ${headers}
+        ${sources}
+)
 
 
 target_link_libraries( qxtweb-standalone
