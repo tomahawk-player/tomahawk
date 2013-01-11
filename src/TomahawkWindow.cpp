@@ -777,6 +777,8 @@ void
 TomahawkWindow::updateWindowsLoveButton()
 {
 #ifdef HAVE_THUMBBUTTON
+    if ( m_taskbarList == 0 )
+        return;
     if ( !AudioEngine::instance()->currentTrack().isNull() && AudioEngine::instance()->currentTrack()->toQuery()->loved() )
     {
         m_thumbButtons[TP_LOVE].hIcon = thumbIcon(TomahawkUtils::Loved);
