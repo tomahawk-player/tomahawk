@@ -276,7 +276,6 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
         File "${INSTALL_PATH}\bin\tomahawk_crash_reporter.exe"
         File "${INSTALL_PATH}\bin\libtomahawk_breakpad.dll"
 
-        File "${INSTALL_PATH}\bin\libqxtweb-standalone.dll"
         File "${INSTALL_PATH}\bin\libtomahawk_portfwd.dll"
         File "${INSTALL_PATH}\bin\libtomahawklib.dll"
         ; plugins
@@ -290,7 +289,6 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
         File "${BUILD_PATH}\libtomahawk_breakpad.dll"
 
         File "${BUILD_PATH}\libtomahawklib.dll"
-        File "${BUILD_PATH}\libqxtweb-standalone.dll"
         File "${BUILD_PATH}\libtomahawk_portfwd.dll"
         ; plugins
         File "${BUILD_PATH}\libtomahawk_*_*.dll"
