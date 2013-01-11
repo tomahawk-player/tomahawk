@@ -2840,22 +2840,22 @@ Zkuste vyladit filtry pro nové písně.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="449"/>
         <source>is not</source>
-        <translation type="unfinished"/>
+        <translation>není</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="452"/>
         <source>Studio</source>
-        <translation type="unfinished"/>
+        <translation>Studio</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="453"/>
         <source>Live</source>
-        <translation type="unfinished"/>
+        <translation>Naživo</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="454"/>
         <source>Christmas</source>
-        <translation type="unfinished"/>
+        <translation>Vánoce</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="793"/>
@@ -2982,12 +2982,12 @@ Zkuste vyladit filtry pro nové písně.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="909"/>
         <source>where song type is %1</source>
-        <translation type="unfinished"/>
+        <translation>kde typ písně je %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="911"/>
         <source>where song type is not %1</source>
-        <translation type="unfinished"/>
+        <translation>kde typ písně není %1</translation>
     </message>
 </context>
 <context>

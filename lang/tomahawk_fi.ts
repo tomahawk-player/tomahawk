@@ -2846,22 +2846,22 @@ Koeta säätää suodattimia saadaksesi uuden joukon kappaleita kuunneltavaksi.<
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="449"/>
         <source>is not</source>
-        <translation type="unfinished"/>
+        <translation>ei ole</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="452"/>
         <source>Studio</source>
-        <translation type="unfinished"/>
+        <translation>Studio</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="453"/>
         <source>Live</source>
-        <translation type="unfinished"/>
+        <translation>Live</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="454"/>
         <source>Christmas</source>
-        <translation type="unfinished"/>
+        <translation>Joululaulu</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="793"/>
@@ -2988,12 +2988,12 @@ Koeta säätää suodattimia saadaksesi uuden joukon kappaleita kuunneltavaksi.<
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="909"/>
         <source>where song type is %1</source>
-        <translation type="unfinished"/>
+        <translation>jossa kappaleen tyyppi on %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="911"/>
         <source>where song type is not %1</source>
-        <translation type="unfinished"/>
+        <translation>jossa kappaleen tyyppi ei ole %1</translation>
     </message>
 </context>
 <context>
