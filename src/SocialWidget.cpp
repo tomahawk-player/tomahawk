@@ -242,9 +242,7 @@ SocialWidget::onGeometryUpdate()
 
     QPoint position( m_position - QPoint( size().width(), size().height() )
                      + QPoint( 2 + ARROW_HEIGHT * 3, 0 ) );
-#ifdef Q_OS_WIN
-    position.ry() -= 18/*margins I guess*/ + ARROW_HEIGHT;
-#endif
+
     if ( position != pos() )
     {
         move( position );
