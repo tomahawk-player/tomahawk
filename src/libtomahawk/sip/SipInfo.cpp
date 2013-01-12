@@ -237,7 +237,8 @@ SipInfo::fromJson( QString json )
 }
 
 
-QDebug operator<< ( QDebug dbg, const SipInfo& info )
+QDebug
+operator<< ( QDebug dbg, const SipInfo& info )
 {
     if( !info.isValid() )
         dbg.nospace() << "info is invalid";
@@ -246,3 +247,31 @@ QDebug operator<< ( QDebug dbg, const SipInfo& info )
 
     return dbg.maybeSpace();
 }
+
+bool operator==( const SipInfo& one, const SipInfo& two )
+{
+    // check valid/invalid combinations first, so we don't try to access any invalid sipInfos (->assert)
+    if( !one.isValid() && !two.isValid() )
+    {
+        return true;
+    }
+    else if( ( one.isValid() && !two.isValid() ) || ( !one.isValid() && two.isValid() ) )
+    {
+        return false;
+    }
+    else if( one.isValid() && two.isValid() )
+    {
+        if(    one.isVisible() == two.isVisible()
+            && one.host() == two.host()
+            && one.port() == two.port()
+            && one.uniqname() == two.uniqname()
+            && one.key() == two.key()
+          )
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+

@@ -28,7 +28,6 @@
 #include <QtCore/QPluginLoader>
 #include <QtCore/QCoreApplication>
 #include <QTimer>
-#include <sip/SipHandler.h>
 
 namespace Tomahawk
 {
@@ -58,8 +57,6 @@ AccountManager::AccountManager( QObject *parent )
 
 AccountManager::~AccountManager()
 {
-    delete SipHandler::instance();
-
     disconnectAll();
     qDeleteAll( m_accounts );
     qDeleteAll( m_accountFactories );
@@ -397,6 +394,18 @@ AccountManager::addAccountFactory( AccountFactory* factory )
 }
 
 
+Account*
+AccountManager::zeroconfAccount() const
+{
+    foreach( Account* account, accounts() )
+    {
+        if( account->sipPlugin() && account->sipPlugin()->serviceName() == "zeroconf" )
+            return account;
+    }
+
+    return 0;
+}
+
 void
 AccountManager::hookupAccount( Account* account ) const
 {
@@ -411,9 +420,6 @@ AccountManager::hookupAndEnable( Account* account, bool startup )
     Q_UNUSED( startup );
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
-    SipPlugin* p = account->sipPlugin();
-    if ( p )
-        SipHandler::instance()->hookUpPlugin( p );
 
     hookupAccount( account );
     if ( account->enabled() )

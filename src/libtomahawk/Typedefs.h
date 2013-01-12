@@ -46,6 +46,7 @@ namespace Tomahawk
     class Source;
     class DynamicControl;
     class GeneratorInterface;
+    class PeerInfo;
 
     typedef QSharedPointer<Collection> collection_ptr;
     typedef QSharedPointer<Playlist> playlist_ptr;
@@ -57,6 +58,7 @@ namespace Tomahawk
     typedef QSharedPointer<Source> source_ptr;
     typedef QSharedPointer<Artist> artist_ptr;
     typedef QSharedPointer<Album> album_ptr;
+    typedef QSharedPointer<PeerInfo> peerinfo_ptr;
 
     typedef QSharedPointer<DynamicControl> dyncontrol_ptr;
     typedef QSharedPointer<GeneratorInterface> geninterface_ptr;

@@ -212,8 +212,8 @@ list(APPEND libSources
     accounts/lastfm/LastFmInfoPlugin.cpp
 
     sip/SipPlugin.cpp
-    sip/SipHandler.cpp
     sip/SipInfo.cpp
+    sip/PeerInfo.cpp
 
     audio/AudioEngine.cpp
 

@@ -30,6 +30,7 @@
 #include "accounts/AccountManager.h"
 #include "TomahawkSettings.h"
 #include "utils/TomahawkUtilsGui.h"
+#include "sip/PeerInfo.h"
 
 #include "config.h"
 #include "TomahawkVersion.h"
@@ -432,9 +433,9 @@ XmppSipPlugin::errorMessage( Jreen::Client::DisconnectReason reason )
 
 
 void
-XmppSipPlugin::sendMsg( const QString& to, const SipInfo& info )
+XmppSipPlugin::sendSipInfo( const Tomahawk::peerinfo_ptr& receiver, const SipInfo& info )
 {
-    qDebug() << Q_FUNC_INFO << to << info;
+    qDebug() << Q_FUNC_INFO << receiver << info;
 
     if ( !m_client )
         return;
@@ -447,8 +448,8 @@ XmppSipPlugin::sendMsg( const QString& to, const SipInfo& info )
     else
         sipMessage = new TomahawkXmppMessage();
 
-    qDebug() << "Send sip messsage to" << to;
-    Jreen::IQ iq( Jreen::IQ::Set, to );
+    qDebug() << "Send sip messsage to" << receiver;
+    Jreen::IQ iq( Jreen::IQ::Set, receiver->id() );
     iq.addExtension( sipMessage );
     Jreen::IQReply *reply = m_client->send( iq );
     reply->setData( SipMessageSent );
@@ -689,13 +690,10 @@ XmppSipPlugin::onNewMessage( const Jreen::Message& message )
 
         // this is not a sip message, so we send it directly through the client
         m_client->send( Jreen::Message ( Jreen::Message::Error, Jreen::JID( to ), response) );
-
-        emit msgReceived( from, msg );
         return;
     }
 
     qDebug() << Q_FUNC_INFO << "From:" << message.from().full() << ":" << message.body();
-    emit sipInfoReceived( from, info );
 }
 
 
@@ -864,7 +862,11 @@ XmppSipPlugin::onNewIq( const Jreen::IQ& iq )
         {
             QString versionString = QString( "%1 %2 %3" ).arg( softwareVersion->name(), softwareVersion->os(), softwareVersion->version() );
             qDebug() << Q_FUNC_INFO << "Received software version for" << iq.from().full() << ":" << versionString;
-            emit softwareVersionReceived( iq.from().full(), versionString );
+            Tomahawk::peerinfo_ptr peerInfo =  PeerInfo::get( this, iq.from().full() );
+            if( !peerInfo.isNull() )
+            {
+                peerInfo->setVersionString( versionString );
+            }
         }
     }
     else if ( context == RequestedDisco )
@@ -902,7 +904,13 @@ XmppSipPlugin::onNewIq( const Jreen::IQ& iq )
             Q_ASSERT( info.isValid() );
 
             qDebug() << Q_FUNC_INFO << "From:" << iq.from().full() << ":" << info;
-            emit sipInfoReceived( iq.from().full(), info );
+            Tomahawk::peerinfo_ptr peerInfo = PeerInfo::get( this, iq.from().full() );
+            if( peerInfo.isNull() )
+            {
+                tDebug() << Q_FUNC_INFO << "no valid peerInfo for " << iq.from().full();
+                return;
+            }
+            peerInfo->setSipInfo( info );
         }
     }
 }
@@ -930,14 +938,23 @@ XmppSipPlugin::handlePeerStatus( const Jreen::JID& jid, Jreen::Presence::Type pr
 {
     QString fulljid = jid.full();
 
+    if(fulljid.contains("public.talk.google.com"))
+        return;
+
     // "going offline" event
     if ( !presenceMeansOnline( presenceType ) &&
        ( !m_peers.contains( jid ) || presenceMeansOnline( m_peers.value( jid ) ) ) )
     {
-        m_peers[ jid ] = presenceType;
         qDebug() << Q_FUNC_INFO << "* Peer goes offline:" << fulljid;
 
-        emit peerOffline( fulljid );
+        m_peers[ jid ] = presenceType;
+
+        Tomahawk::peerinfo_ptr peerInfo = PeerInfo::get( this, fulljid );
+        if( !peerInfo.isNull() )
+        {
+            peerInfo->setStatus( PeerInfo::Offline );
+        }
+
         return;
     }
 
@@ -945,10 +962,12 @@ XmppSipPlugin::handlePeerStatus( const Jreen::JID& jid, Jreen::Presence::Type pr
     if ( presenceMeansOnline( presenceType ) &&
        ( !m_peers.contains( jid ) || !presenceMeansOnline( m_peers.value( jid ) ) ) )
     {
-        m_peers[ jid ] = presenceType;
         qDebug() << Q_FUNC_INFO << "* Peer goes online:" << fulljid;
 
-        emit peerOnline( fulljid );
+        m_peers[ jid ] = presenceType;
+
+        Tomahawk::peerinfo_ptr peerInfo = PeerInfo::get( this, fulljid, PeerInfo::AutoCreate );
+        peerInfo->setStatus( PeerInfo::Online );
 
 #ifndef ENABLE_HEADLESS
         if ( !m_avatarManager->avatar( jid.bare() ).isNull() )
@@ -986,16 +1005,17 @@ XmppSipPlugin::onNewAvatar( const QString& jid )
     {
         if ( peer.bare() == jid )
         {
-            emit avatarReceived( peer.full(), m_avatarManager->avatar( jid ) );
+            Tomahawk::peerinfo_ptr peerInfo = PeerInfo::get( this, peer.full() );
+            if( !peerInfo.isNull() )
+                peerInfo->setAvatar( m_avatarManager->avatar( jid ) );
         }
     }
 
     if ( jid == m_client->jid().bare() )
+    {
         // own avatar
         emit avatarReceived( m_avatarManager->avatar( jid ) );
-    else
-        // someone else's avatar
-        emit avatarReceived( jid,  m_avatarManager->avatar( jid ) );
+    }
 #endif
 }
 

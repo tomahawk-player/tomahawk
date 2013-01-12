@@ -64,7 +64,7 @@ private:
 };
 
 DLLEXPORT QDebug operator<<( QDebug dbg, const SipInfo &info );
-
+DLLEXPORT bool operator==( const SipInfo& one, const SipInfo& two );
 
 
 #endif // SIPINFO_H

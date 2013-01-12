@@ -27,7 +27,7 @@
 
 #include "accounts/AccountManager.h"
 #include "network/Servent.h"
-#include "sip/SipHandler.h"
+#include "sip/PeerInfo.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 #include "infosystem/InfoSystem.h"
@@ -109,10 +109,7 @@ DiagnosticsDialog::updateLogView()
 
         connect( account, SIGNAL( connectionStateChanged( Tomahawk::Accounts::Account::ConnectionState ) ), SLOT( updateLogView() ), Qt::UniqueConnection );
         connect( account, SIGNAL( error( int, QString ) ), SLOT( updateLogView() ), Qt::UniqueConnection );
-        connect( account->sipPlugin(), SIGNAL( peerOnline( QString ) ), SLOT( updateLogView() ), Qt::UniqueConnection );
-        connect( account->sipPlugin(), SIGNAL( peerOffline( QString ) ), SLOT( updateLogView() ), Qt::UniqueConnection );
-        connect( account->sipPlugin(), SIGNAL( sipInfoReceived( QString, SipInfo ) ), SLOT( updateLogView() ), Qt::UniqueConnection );
-        connect( account->sipPlugin(), SIGNAL( softwareVersionReceived( QString, QString ) ), SLOT( updateLogView() ), Qt::UniqueConnection );
+        connect( account->sipPlugin(), SIGNAL( peerOnline( Tomahawk::peerinfo_ptr ) ), SLOT( updateLogView() ), Qt::UniqueConnection );
 
         log.append( accountLog( account ) + "\n" );
     }
@@ -163,15 +160,16 @@ DiagnosticsDialog::accountLog( Tomahawk::Accounts::Account* account )
             .arg( stateString )
     );
 
-    foreach( const QString& peerId, account->sipPlugin()->peersOnline() )
+    foreach( const Tomahawk::peerinfo_ptr& peerInfo, account->sipPlugin()->peersOnline() )
     {
-        QString versionString = SipHandler::instance()->versionString( peerId );
-        SipInfo sipInfo = SipHandler::instance()->sipInfo( peerId );
+        QString peerId = peerInfo->id();
+        QString versionString = peerInfo->versionString();
+        SipInfo sipInfo = peerInfo->sipInfo();
         if ( !sipInfo.isValid() )
         {
             accountInfo.append(
-                QString("       %1: %2 %3" /*"(%4)"*/ "\n")
-                    .arg( peerId )
+                QString("       %1: %2 %3" /*"(%4)"*/)
+                    .arg( peerInfo->id() )
                     .arg( "sipinfo invalid" )
                     .arg( versionString )
                     // .arg( connected ? "connected" : "not connected")
@@ -180,7 +178,7 @@ DiagnosticsDialog::accountLog( Tomahawk::Accounts::Account* account )
         else if ( sipInfo.isVisible() )
         {
             accountInfo.append(
-                QString("       %1: %2:%3 %4" /*" (%5)"*/ "\n")
+                QString("       %1: %2:%3 %4" /*" (%5)"*/)
                     .arg( peerId )
                     .arg( sipInfo.host() )
                     .arg( sipInfo.port() )
@@ -191,12 +189,27 @@ DiagnosticsDialog::accountLog( Tomahawk::Accounts::Account* account )
         else
         {
             accountInfo.append(
-                QString("       %1: visible: false %2" /*" (%3)"*/ "\n")
+                QString("       %1: visible: false %2" /*" (%3)"*/)
                     .arg( peerId )
                     .arg( versionString )
                     // .arg( connected ? "connected" : "not connected")
             );
         }
+
+        if( sipInfo.isValid() )
+        {
+            if( !Servent::instance()->visibleExternally() ||
+                Servent::instance()->externalAddress() < sipInfo.host() ||
+            ( Servent::instance()->externalAddress() == sipInfo.host() && Servent::instance()->externalPort() < sipInfo.port() ) )
+            {
+                accountInfo.append(" (outbound)");
+            }
+            else
+            {
+                accountInfo.append(" (inbound)");
+            }
+        }
+        accountInfo.append("\n");
     }
     accountInfo.append( "\n" );
 

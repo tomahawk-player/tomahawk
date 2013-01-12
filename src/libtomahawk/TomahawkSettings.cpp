@@ -23,7 +23,6 @@
 #include <QDir>
 
 #include "Source.h"
-#include "sip/SipHandler.h"
 #include "PlaylistInterface.h"
 
 #include "utils/Logger.h"

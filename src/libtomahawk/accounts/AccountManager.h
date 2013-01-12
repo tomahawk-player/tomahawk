@@ -80,6 +80,8 @@ public:
 
     void addAccountFactory( AccountFactory* factory );
 
+    Account* zeroconfAccount() const;
+
 public slots:
     void connectAll();
     void disconnectAll();

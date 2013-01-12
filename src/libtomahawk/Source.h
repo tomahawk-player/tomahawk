@@ -66,7 +66,6 @@ public:
     void setFriendlyName( const QString& fname );
 
 #ifndef ENABLE_HEADLESS
-    void setAvatar( const QPixmap& avatar );
     QPixmap avatar( TomahawkUtils::ImageMode style = TomahawkUtils::Original, const QSize& size = QSize() );
 #endif
 
@@ -147,7 +146,6 @@ private:
     int m_id;
     bool m_scrubFriendlyName;
     bool m_updateIndexWhenSynced;
-    bool m_avatarUpdated;
 
     Tomahawk::query_ptr m_currentTrack;
     QString m_textStatus;
@@ -159,11 +157,6 @@ private:
     int m_commandCount;
     QString m_lastCmdGuid;
     mutable QMutex m_cmdMutex;
-
-    mutable QPixmap* m_avatar;
-    mutable QPixmap* m_fancyAvatar;
-    mutable QByteArray m_avatarHash;
-    mutable QHash< TomahawkUtils::ImageMode, QHash< int, QPixmap > > m_coverCache;
 
     Tomahawk::playlistinterface_ptr m_playlistInterface;
 };
