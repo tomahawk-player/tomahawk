@@ -511,7 +511,6 @@ Servent::readyRead()
 
             foreach(ControlConnection* keepConnection, m_controlconnections)
             {
-                Q_ASSERT(keepConnection);
                 if( !keepConnection )
                     continue;
 
@@ -1040,7 +1039,6 @@ Servent::connectedToSession( const QString& session )
 {
     foreach( ControlConnection* cc, m_controlconnections )
     {
-        Q_ASSERT( cc );
         if( !cc )
             continue;
 
