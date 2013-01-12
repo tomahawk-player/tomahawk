@@ -111,7 +111,7 @@ void
 TreeView::setModel( QAbstractItemModel* model )
 {
     Q_UNUSED( model );
-    qDebug() << "Explicitly use setPlaylistModel instead";
+    tDebug() << "Explicitly use setPlaylistModel instead";
     Q_ASSERT( false );
 }
 
@@ -335,7 +335,7 @@ TreeView::startDrag( Qt::DropActions supportedActions )
     if ( indexes.count() == 0 )
         return;
 
-    qDebug() << "Dragging" << indexes.count() << "indexes";
+    tDebug( LOGVERBOSE ) << "Dragging" << indexes.count() << "indexes";
     QMimeData* data = m_proxyModel->mimeData( indexes );
     if ( !data )
         return;
