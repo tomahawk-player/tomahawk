@@ -13,6 +13,7 @@ Compile:
 Start the application on Linux:
 
     $ ./tomahawk
+
 Start the application on OS X:
 
     $ open tomahawk.app
