@@ -764,6 +764,11 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
 
         setState( Playing );
     }
+    if ( newState == Phonon::StoppedState && oldState == Phonon::PausedState )
+    {
+        // GStreamer backend hack: instead of going from PlayingState to StoppedState, it traverses PausedState
+        setState( Stopped );
+    }
 
     if ( oldState == Phonon::PlayingState )
     {
