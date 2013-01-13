@@ -13,6 +13,7 @@ Compile:
 Start the application on Linux:
 
     $ ./tomahawk
+
 Start the application on OS X:
 
     $ open tomahawk.app
@@ -43,7 +44,7 @@ Required dependencies:
 * TagLib 1.6.2 - http://developer.kde.org/~wheeler/taglib.html
 * Boost 1.3 - http://www.boost.org/
 * CLucene 0.9.23 (0.9.21 will fail) - http://clucene.sourceforge.net/download.shtml
-* libechonest (2.0.2) - http://projects.kde.org/projects/playground/libs/libechonest/
+* libechonest 2.0.2 - http://projects.kde.org/projects/playground/libs/libechonest/
 * Attica 0.4.0 - ftp://ftp.kde.org/pub/kde/stable/attica/
 * QuaZip 0.4.3 - http://quazip.sourceforge.net/
 * liblastfm 1.0.1 - https://github.com/lastfm/liblastfm/
