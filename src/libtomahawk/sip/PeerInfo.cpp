@@ -70,11 +70,12 @@ PeerInfo::getAll()
 PeerInfo::PeerInfo( SipPlugin* parent, const QString& id )
     : QObject( parent )
     , m_type( External )
+    , m_id( id )
+    , m_status( Offline )
     , m_avatar( 0 )
     , m_fancyAvatar( 0 )
     , m_avatarUpdated( true )
 {
-    m_id = id;
 }
 
 
