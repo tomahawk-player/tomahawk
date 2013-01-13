@@ -109,7 +109,7 @@ DiagnosticsDialog::updateLogView()
 
         connect( account, SIGNAL( connectionStateChanged( Tomahawk::Accounts::Account::ConnectionState ) ), SLOT( updateLogView() ), Qt::UniqueConnection );
         connect( account, SIGNAL( error( int, QString ) ), SLOT( updateLogView() ), Qt::UniqueConnection );
-        connect( account->sipPlugin(), SIGNAL( peerOnline( Tomahawk::peerinfo_ptr ) ), SLOT( updateLogView() ), Qt::UniqueConnection );
+        connect( account->sipPlugin(), SIGNAL( peerStatusChanged( Tomahawk::peerinfo_ptr ) ), SLOT( updateLogView() ), Qt::UniqueConnection );
 
         log.append( accountLog( account ) + "\n" );
     }

@@ -41,6 +41,8 @@ class DLLEXPORT SipPlugin : public QObject
 {
     Q_OBJECT
 
+friend Tomahawk::PeerInfo;
+
 public:
     SipPlugin();
     explicit SipPlugin( Tomahawk::Accounts::Account *account, QObject* parent = 0 );
@@ -71,7 +73,7 @@ public slots:
     virtual void sendSipInfo( const Tomahawk::peerinfo_ptr& receiver, const SipInfo& info ) = 0;
 
 signals:
-    void peerOnline( const Tomahawk::peerinfo_ptr& );
+    void peerStatusChanged( const Tomahawk::peerinfo_ptr& );
     void dataError( bool );
 
 #ifndef ENABLE_HEADLESS

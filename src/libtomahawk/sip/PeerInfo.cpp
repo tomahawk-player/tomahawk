@@ -177,6 +177,12 @@ PeerInfo::setStatus( PeerInfo::Status status )
 
     if( status == Online )
         announce();
+
+    // we need this to update the DiagnosticsDialog on new peers
+    // if we ever happen to have a central PeerInfo manager object
+    // we better add it there, but so far this would be the only
+    // usage
+    sipPlugin()->peerStatusChanged( weakRef().toStrongRef() );
 }
 
 
