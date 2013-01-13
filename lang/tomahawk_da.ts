@@ -1634,17 +1634,17 @@ connect and stream from you?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/SocialWidget.cpp" line="176"/>
+        <location filename="../src/SocialWidget.cpp" line="167"/>
         <source>Listening to &quot;%1&quot; by %2. %3</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/SocialWidget.cpp" line="178"/>
+        <location filename="../src/SocialWidget.cpp" line="169"/>
         <source>Listening to &quot;%1&quot; by %2 on &quot;%3&quot;. %4</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/SocialWidget.cpp" line="199"/>
+        <location filename="../src/SocialWidget.cpp" line="190"/>
         <source>%1 characters left</source>
         <translation type="unfinished"/>
     </message>
@@ -1834,23 +1834,23 @@ connect and stream from you?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="396"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="393"/>
         <source>Would you like to delete the %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="398"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="395"/>
         <source>Delete</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="478"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="475"/>
         <source>Save XSPF</source>
         <translation>Gem XSPF</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="479"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="476"/>
         <source>Playlists (*.xspf)</source>
         <translation>Spilleliste (*.xspf)</translation>
     </message>
@@ -2758,27 +2758,27 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="392"/>
         <source>Ascending</source>
-        <translation type="unfinished"/>
+        <translation>Stigende</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="393"/>
         <source>Descending</source>
-        <translation type="unfinished"/>
+        <translation>Faldende</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="396"/>
         <source>Tempo</source>
-        <translation type="unfinished"/>
+        <translation>Tempo</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="397"/>
         <source>Duration</source>
-        <translation type="unfinished"/>
+        <translation>Varighed</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="398"/>
         <source>Loudness</source>
-        <translation type="unfinished"/>
+        <translation>Lydstyrke</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="399"/>
@@ -2801,12 +2801,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="402"/>
         <source>Latitude</source>
-        <translation type="unfinished"/>
+        <translation>Breddegrad</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="403"/>
         <source>Longitude</source>
-        <translation type="unfinished"/>
+        <translation>Længdegrad</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="404"/>
@@ -2822,7 +2822,7 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="406"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="825"/>
         <source>Energy</source>
-        <translation type="unfinished"/>
+        <translation>Energi</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="407"/>
@@ -2870,12 +2870,12 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="807"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="818"/>
         <source>from no one</source>
-        <translation type="unfinished"/>
+        <translation>fra ingen</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="811"/>
         <source>My Collection</source>
-        <translation type="unfinished"/>
+        <translation>Min Samling</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="812"/>
@@ -2885,7 +2885,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="814"/>
         <source>from %1 radio</source>
-        <translation type="unfinished"/>
+        <translation>fra %1 radio</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="824"/>
@@ -2925,12 +2925,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="842"/>
         <source>with %1 %2</source>
-        <translation type="unfinished"/>
+        <translation>med %1 %2</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="846"/>
         <source>about %1 BPM</source>
-        <translation type="unfinished"/>
+        <translation>ca. %1 BPM</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="850"/>
@@ -2950,12 +2950,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="865"/>
         <source>in %1</source>
-        <translation type="unfinished"/>
+        <translation>i %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="872"/>
         <source>in a %1 key</source>
-        <translation type="unfinished"/>
+        <translation>i %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="884"/>
@@ -3140,22 +3140,22 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="754"/>
         <source> and </source>
-        <translation type="unfinished"/>
+        <translation>og</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="762"/>
         <source>You</source>
-        <translation type="unfinished"/>
+        <translation>Dig</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="764"/>
         <source>you</source>
-        <translation type="unfinished"/>
+        <translation>dig</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="773"/>
         <source>and</source>
-        <translation type="unfinished"/>
+        <translation>og</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/Query.cpp" line="773"/>
@@ -3170,7 +3170,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="778"/>
         <source>loved this track</source>
-        <translation type="unfinished"/>
+        <translation>elskede dette nummer</translation>
     </message>
 </context>
 <context>
@@ -3203,17 +3203,17 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/Source.cpp" line="300"/>
         <location filename="../src/libtomahawk/Source.cpp" line="351"/>
         <source>Scanning (%L1 tracks)</source>
-        <translation type="unfinished"/>
+        <translation>Scanner (%L1 numre)</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Source.cpp" line="302"/>
         <source>Scanning</source>
-        <translation type="unfinished"/>
+        <translation>Scanner</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Source.cpp" line="336"/>
         <source>Checking</source>
-        <translation type="unfinished"/>
+        <translation>Checker</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Source.cpp" line="341"/>
@@ -3228,7 +3228,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/Source.cpp" line="488"/>
         <source>Saving (%1%)</source>
-        <translation type="unfinished"/>
+        <translation>Gemmer (%1%)</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Source.cpp" line="569"/>
@@ -3262,7 +3262,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/TomahawkApp.cpp" line="580"/>
         <source>My Collection</source>
-        <translation type="unfinished"/>
+        <translation>Min Samling</translation>
     </message>
 </context>
 <context>
@@ -3298,12 +3298,12 @@ enter the displayed PIN number here:</source>
         <location filename="../src/TomahawkTrayIcon.cpp" line="73"/>
         <location filename="../src/TomahawkTrayIcon.cpp" line="112"/>
         <source>Hide Tomahawk Window</source>
-        <translation type="unfinished"/>
+        <translation>Skjul Tomahawk Vindue</translation>
     </message>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="117"/>
         <source>Show Tomahawk Window</source>
-        <translation type="unfinished"/>
+        <translation>Vis Tomahawk Vindue</translation>
     </message>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="198"/>
@@ -3313,12 +3313,12 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="259"/>
         <source>Play</source>
-        <translation type="unfinished"/>
+        <translation>Afspil</translation>
     </message>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="287"/>
         <source>Pause</source>
-        <translation type="unfinished"/>
+        <translation>Pause</translation>
     </message>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="317"/>
@@ -3341,7 +3341,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="14"/>
         <source>Tomahawk</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="269"/>
@@ -3388,17 +3388,17 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="946"/>
         <source>XSPF Error</source>
-        <translation type="unfinished"/>
+        <translation>XSPF Fejl</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="946"/>
         <source>This is not a valid XSPF playlist.</source>
-        <translation type="unfinished"/>
+        <translation>Dette er ikke en gyldig XSPF spilleliste</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="950"/>
         <source>Failed to save tracks</source>
-        <translation type="unfinished"/>
+        <translation>Fejlede i at gemme numrene</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="950"/>
@@ -3423,12 +3423,12 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1000"/>
         <source>Create New Station</source>
-        <translation type="unfinished"/>
+        <translation>Lav Ny Station</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1000"/>
         <source>Name:</source>
-        <translation type="unfinished"/>
+        <translation>Navn:</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1063"/>
@@ -3443,7 +3443,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1107"/>
         <source>Pause</source>
-        <translation type="unfinished"/>
+        <translation>Pause</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1129"/>
@@ -3470,7 +3470,7 @@ enter the displayed PIN number here:</source>
         <location filename="../src/TomahawkWindow.cpp" line="1176"/>
         <source>%1 - %2</source>
         <comment>current track, some window title</comment>
-        <translation type="unfinished"/>
+        <translation>%1 - %2</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1187"/>
@@ -3503,7 +3503,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/context/pages/TopTracksContext.h" line="47"/>
         <source>Top Hits</source>
-        <translation type="unfinished"/>
+        <translation>Top Hits</translation>
     </message>
 </context>
 <context>
@@ -3572,7 +3572,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/playlist/TreeItemDelegate.cpp" line="174"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>Ukendt</translation>
     </message>
 </context>
 <context>
@@ -3580,19 +3580,19 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="149"/>
         <source>All Artists</source>
-        <translation type="unfinished"/>
+        <translation>Alle Kunstnere</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="267"/>
         <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="292"/>
         <source>My Collection</source>
-        <translation type="unfinished"/>
+        <translation>Min Samling</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="269"/>
         <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="294"/>
         <source>Collection of %1</source>
-        <translation type="unfinished"/>
+        <translation>Samling af %1</translation>
     </message>
 </context>
 <context>
@@ -3608,7 +3608,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="73"/>
         <source>Configure this Twitter account</source>
-        <translation type="unfinished"/>
+        <translation>Konfigurer denne Twitter konto</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="119"/>
@@ -3648,7 +3648,7 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="276"/>
         <source>Global Tweet</source>
-        <translation type="unfinished"/>
+        <translation>Global Tweet</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="281"/>

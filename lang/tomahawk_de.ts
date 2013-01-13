@@ -1635,17 +1635,17 @@ erlauben sich mit dir zu verbinden?</translation>
         <translation>Tweet</translation>
     </message>
     <message>
-        <location filename="../src/SocialWidget.cpp" line="176"/>
+        <location filename="../src/SocialWidget.cpp" line="167"/>
         <source>Listening to &quot;%1&quot; by %2. %3</source>
         <translation>Hört &quot;%1&quot; von %2, %3</translation>
     </message>
     <message>
-        <location filename="../src/SocialWidget.cpp" line="178"/>
+        <location filename="../src/SocialWidget.cpp" line="169"/>
         <source>Listening to &quot;%1&quot; by %2 on &quot;%3&quot;. %4</source>
         <translation>Hört &quot;%1&quot; von %2 auf &quot;%3&quot;, %4</translation>
     </message>
     <message>
-        <location filename="../src/SocialWidget.cpp" line="199"/>
+        <location filename="../src/SocialWidget.cpp" line="190"/>
         <source>%1 characters left</source>
         <translation>%1 Zeichen übrig</translation>
     </message>
@@ -1835,23 +1835,23 @@ erlauben sich mit dir zu verbinden?</translation>
         <translation>Station</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="396"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="393"/>
         <source>Would you like to delete the %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
         <translation>Möchtest du die %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt; löschen?</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="398"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="395"/>
         <source>Delete</source>
         <translation>Löschen</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="478"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="475"/>
         <source>Save XSPF</source>
         <translation>XSPF speichern</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="479"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="476"/>
         <source>Playlists (*.xspf)</source>
         <translation>Playlisten (*.xspf)</translation>
     </message>

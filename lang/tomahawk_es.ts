@@ -109,7 +109,7 @@ conectarse a usted y transmitir música?</translation>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="71"/>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="317"/>
         <source>&amp;Listen Privately</source>
-        <translation>&amp;Modo privado</translation>
+        <translation>&amp;Escuchar en privado</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="71"/>
@@ -195,12 +195,12 @@ conectarse a usted y transmitir música?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="116"/>
         <source>Hide Menu Bar</source>
-        <translation>Esconder barra de menú</translation>
+        <translation>Ocultar barra de menús</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="120"/>
         <source>Diagnostics...</source>
-        <translation>Diagnósticos...</translation>
+        <translation>Diagnósticos…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="122"/>
@@ -220,7 +220,7 @@ conectarse a usted y transmitir música?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="130"/>
         <source>Check For Updates...</source>
-        <translation>Buscar actualizaciones...</translation>
+        <translation>Buscar actualizaciones…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="142"/>
@@ -389,13 +389,13 @@ conectarse a usted y transmitir música?</translation>
     <message>
         <location filename="../src/sourcetree/items/CategoryItems.cpp" line="65"/>
         <source>Create new Station</source>
-        <translation>Nueva estación</translation>
+        <translation>Crear estación nueva</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/CategoryItems.cpp" line="183"/>
         <location filename="../src/sourcetree/items/CategoryItems.cpp" line="292"/>
         <source>New Station</source>
-        <translation>Nueva estación</translation>
+        <translation>Estación nueva</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/CategoryItems.cpp" line="183"/>
@@ -677,7 +677,7 @@ conectarse a usted y transmitir música?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="38"/>
         <source>Scrobble tracks to Last.fm</source>
-        <translation>Hacer scrobble en Last.fm</translation>
+        <translation>Enviar las pistas a Last.fm</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="47"/>
@@ -736,7 +736,7 @@ conectarse a usted y transmitir música?</translation>
     <message>
         <location filename="../src/LoadXSPFDialog.ui" line="29"/>
         <source>Enter URL...</source>
-        <translation>Introducir URL...</translation>
+        <translation>Introducir URL…</translation>
     </message>
     <message>
         <location filename="../src/LoadXSPFDialog.ui" line="42"/>
@@ -1151,7 +1151,7 @@ conectarse a usted y transmitir música?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="102"/>
         <source>New Playlist...</source>
-        <translation>Nueva lista de reproducción...</translation>
+        <translation>Lista de reproducción nueva…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="113"/>
@@ -1638,17 +1638,17 @@ y estaciones basadas en sus gustos personales.</translation>
         <translation>Tweet</translation>
     </message>
     <message>
-        <location filename="../src/SocialWidget.cpp" line="176"/>
+        <location filename="../src/SocialWidget.cpp" line="167"/>
         <source>Listening to &quot;%1&quot; by %2. %3</source>
         <translation>Escuchando &quot;%1&quot; de %2.%3</translation>
     </message>
     <message>
-        <location filename="../src/SocialWidget.cpp" line="178"/>
+        <location filename="../src/SocialWidget.cpp" line="169"/>
         <source>Listening to &quot;%1&quot; by %2 on &quot;%3&quot;. %4</source>
         <translation>Escuchando &quot;%1&quot; de %2 en &quot;%3&quot;. %4</translation>
     </message>
     <message>
-        <location filename="../src/SocialWidget.cpp" line="199"/>
+        <location filename="../src/SocialWidget.cpp" line="190"/>
         <source>%1 characters left</source>
         <translation>%1 caracteres restantes</translation>
     </message>
@@ -1838,23 +1838,23 @@ y estaciones basadas en sus gustos personales.</translation>
         <translation>estación</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="396"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="393"/>
         <source>Would you like to delete the %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
         <translation>¿Borrar lista de reproducción %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="398"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="395"/>
         <source>Delete</source>
         <translation>Eliminar</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="478"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="475"/>
         <source>Save XSPF</source>
         <translation>Guardar XSPF</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="479"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="476"/>
         <source>Playlists (*.xspf)</source>
         <translation>Listas de reproducción (*.xspf)</translation>
     </message>
@@ -1982,7 +1982,7 @@ y estaciones basadas en sus gustos personales.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="79"/>
         <source>Username:</source>
-        <translation>Usuario:</translation>
+        <translation>Nombre de usuario:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="96"/>
@@ -2116,7 +2116,7 @@ y estaciones basadas en sus gustos personales.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmAccount.h" line="52"/>
         <source>Scrobble your tracks to last.fm, and find freely downloadable tracks to play</source>
-        <translation>Hacer scrobble  en Last.fm y encontrar canciones gratuitas</translation>
+        <translation>Haga «scrobbling» de sus pistas a Last.fm, y encuentre pistas gratuitas para reproducir</translation>
     </message>
 </context>
 <context>
@@ -2124,7 +2124,7 @@ y estaciones basadas en sus gustos personales.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="93"/>
         <source>Testing...</source>
-        <translation>Probando conexión...</translation>
+        <translation>Probando…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="115"/>
@@ -2140,7 +2140,7 @@ y estaciones basadas en sus gustos personales.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="128"/>
         <source>Importing History...</source>
-        <translation>Importando historial...</translation>
+        <translation>Importando el historial…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="197"/>
@@ -2172,7 +2172,7 @@ y estaciones basadas en sus gustos personales.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="261"/>
         <source>Synchronizing...</source>
-        <translation>Sincronizando...</translation>
+        <translation>Sincronizando…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="419"/>
@@ -2233,7 +2233,7 @@ y estaciones basadas en sus gustos personales.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="183"/>
         <source>Logging in...</source>
-        <translation>Iniciando sesión...</translation>
+        <translation>Iniciando sesión…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="220"/>
@@ -2504,7 +2504,7 @@ Deberá volverse a autenticar.</translation>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="127"/>
         <source>Properties...</source>
-        <translation>Propiedades...</translation>
+        <translation>Propiedades…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="132"/>
@@ -2609,7 +2609,7 @@ Por favor, cambie los filtros o inténtelo de nuevo.</translation>
         <source>Station ran out of tracks!
 
 Try tweaking the filters for a new set of songs to play.</source>
-        <translation>La estación se ha quedado sin pistas
+        <translation>La estación se ha quedado sin pistas.
 
 Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     </message>
@@ -3029,12 +3029,12 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="145"/>
         <source>Tomahawk is playing &quot;%1&quot; by %2%3.</source>
-        <translation>Tomahawk está reproduciendo &quot;%1&quot; de %2%3.</translation>
+        <translation>Tomahawk está reproduciendo «%1» de %2%3.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="148"/>
         <source>on &quot;%1&quot;</source>
-        <translation>en &quot;%1&quot;</translation>
+        <translation>en «%1»</translation>
     </message>
 </context>
 <context>
@@ -3078,7 +3078,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/accounts/twitter/TwitterInfoPlugin.cpp" line="159"/>
         <source>Listening to &quot;%1&quot; by %2 and loving it! %3</source>
-        <translation>Escuchando &quot;%1&quot; de %2 y me encanta! %3</translation>
+        <translation>Escuchando «%1» de %2 y ¡me encanta! %3</translation>
     </message>
 </context>
 <context>
@@ -3378,18 +3378,18 @@ introduzca su número PIN aquí:</translation>
         <location filename="../src/TomahawkWindow.cpp" line="206"/>
         <location filename="../src/TomahawkWindow.cpp" line="1308"/>
         <source>Hide Menu Bar</source>
-        <translation>Esconder barra de menú</translation>
+        <translation>Ocultar barra de menús</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="206"/>
         <location filename="../src/TomahawkWindow.cpp" line="1302"/>
         <source>Show Menu Bar</source>
-        <translation>Mostrar barra de menú</translation>
+        <translation>Mostrar barra de menús</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="284"/>
         <source>Search for any artist, album or song...</source>
-        <translation>Buscar un artista, álbum o pista...</translation>
+        <translation>Buscar un artista, álbum o pista…</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="308"/>
@@ -3429,12 +3429,12 @@ introduzca su número PIN aquí:</translation>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="998"/>
         <source>Station</source>
-        <translation>Nueva estación</translation>
+        <translation>Estación</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1000"/>
         <source>Create New Station</source>
-        <translation>Crear nueva estación</translation>
+        <translation>Crear estación nueva</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1000"/>
@@ -3961,7 +3961,7 @@ Letras de &quot;%1&quot; por %2:
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="131"/>
         <source>Xmpp ID:</source>
-        <translation>ID XMPP:</translation>
+        <translation>ID de XMPP:</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="147"/>
@@ -4079,12 +4079,12 @@ Letras de &quot;%1&quot; por %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="409"/>
         <source>No Encryption Support</source>
-        <translation>Encriptación no soportada</translation>
+        <translation>Sin soporte de cifrado</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="412"/>
         <source>No Authorization Support</source>
-        <translation>Autorización no soportada</translation>
+        <translation>Sin soporte de autorización</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="415"/>
@@ -4104,12 +4104,12 @@ Letras de &quot;%1&quot; por %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="633"/>
         <source>Add Friend...</source>
-        <translation>Añadir amigo...</translation>
+        <translation>Añadir amigo…</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="638"/>
         <source>XML Console...</source>
-        <translation>Consola XML...</translation>
+        <translation>Consola XML…</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="686"/>
