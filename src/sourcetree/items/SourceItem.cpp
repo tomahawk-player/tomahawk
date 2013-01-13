@@ -35,6 +35,7 @@
 #include "playlist/RecentlyPlayedModel.h"
 #include "playlist/PlaylistLargeItemDelegate.h"
 #include "sip/PeerInfo.h"
+#include "sip/SipPlugin.h"
 #include "utils/ImageRegistry.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
@@ -151,10 +152,15 @@ SourceItem::tooltip() const
     QString t;
 
     // This is kind of debug output for now.
+    t.append( "<PRE>" );
     foreach( Tomahawk::peerinfo_ptr p, m_source->peerInfos() )
     {
-        t.append( p->id() + "<br>" );
+        QString line( p->sipPlugin()->serviceName() + p->sipPlugin()->friendlyName() + ": " + p->id() );
+
+        t.append( line + "\n" );
+        t.append("\n");
     }
+    t.append( "</PRE>" );
 
     if ( !m_source->currentTrack().isNull() )
         t.append( m_source->textStatus() );
