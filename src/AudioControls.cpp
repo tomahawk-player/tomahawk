@@ -227,6 +227,9 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
     ui->seekSlider->setValue( 0 );
     ui->seekSlider->setEnabled( AudioEngine::instance()->canSeek() );
 
+    ui->timeLabel->setText( TomahawkUtils::timeToString( 0 ) );
+    ui->timeLeftLabel->setText( "-" + TomahawkUtils::timeToString( 0 ) );
+    
     m_sliderTimeLine.setDuration( duration );
     m_sliderTimeLine.setFrameRange( 0, duration );
     m_sliderTimeLine.setCurveShape( QTimeLine::LinearCurve );
