@@ -85,6 +85,14 @@ Source::setControlConnection( ControlConnection* cc )
     m_cc = cc;
 }
 
+const QSet<peerinfo_ptr>
+Source::peerInfos() const
+{
+    if( controlConnection() )
+        return controlConnection()->peerInfos();
+    return QSet< Tomahawk::peerinfo_ptr >();
+}
+
 
 collection_ptr
 Source::collection() const

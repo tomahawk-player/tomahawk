@@ -77,6 +77,8 @@ public:
     ControlConnection* controlConnection() const { return m_cc; }
     void setControlConnection( ControlConnection* cc );
 
+    const QSet< Tomahawk::peerinfo_ptr > peerInfos() const;
+
     void scanningProgress( unsigned int files );
     void scanningFinished( bool updateGUI );
 
