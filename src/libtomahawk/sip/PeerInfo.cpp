@@ -22,6 +22,7 @@
 #include "utils/TomahawkUtilsGui.h"
 #include "network/ControlConnection.h"
 #include "network/Servent.h"
+#include "utils/Logger.h"
 
 #include <QCryptographicHash>
 #include <QBuffer>
