@@ -155,9 +155,11 @@ public:
     virtual ~InfoSystemCacheThread();
 
     void run();
-    InfoSystemCache* cache() const;
 
 private:
+    friend class InfoSystem;
+    InfoSystemCache* cache() const;
+
     QPointer< InfoSystemCache > m_cache;
 };
 
@@ -171,9 +173,12 @@ public:
     virtual ~InfoSystemWorkerThread();
 
     void run();
-    InfoSystemWorker* worker() const;
 
 private:
+    friend class DiagnosticsDialog;
+    friend class InfoSystem;
+    InfoSystemWorker* worker() const;
+
     QPointer< InfoSystemWorker > m_worker;
 };
 
@@ -185,14 +190,17 @@ class DLLEXPORT InfoSystem : public QObject
 public:
     static InfoSystem* instance();
 
-    InfoSystem( QObject *parent );
+    InfoSystem( QObject* parent );
     ~InfoSystem();
 
-    bool getInfo( const InfoRequestData &requestData );
+    bool getInfo( const InfoRequestData& requestData );
     //WARNING: if changing timeoutMillis above, also change in below function in .cpp file
-    bool getInfo( const QString &caller, const QVariantMap &customData, const InfoTypeMap &inputMap, const InfoTimeoutMap &timeoutMap = InfoTimeoutMap(), bool allSources = false );
+    bool getInfo( const QString &caller, const QVariantMap& customData, const InfoTypeMap& inputMap, const InfoTimeoutMap& timeoutMap = InfoTimeoutMap(), bool allSources = false );
     bool pushInfo( InfoPushData pushData );
-    bool pushInfo( const QString &caller, const InfoTypeMap &input, const PushInfoFlags pushFlags );
+    bool pushInfo( const QString& caller, const InfoTypeMap& input, const PushInfoFlags pushFlags );
+
+    const InfoTypeSet& supportedGetTypes() const { return m_supportedGetTypes; }
+    const InfoTypeSet& supportedPushTypes() const { return m_supportedPushTypes; }
 
     QPointer< QThread > workerThread() const;
 
@@ -206,13 +214,21 @@ signals:
     void finished( QString target );
     void finished( QString target, Tomahawk::InfoSystem::InfoType type );
 
+    void updatedSupportedGetTypes( Tomahawk::InfoSystem::InfoTypeSet supportedTypes );
+    void updatedSupportedPushTypes( Tomahawk::InfoSystem::InfoTypeSet supportedTypes );
+
 private slots:
     void init();
+    void receiveUpdatedSupportedGetTypes( Tomahawk::InfoSystem::InfoTypeSet supportedTypes );
+    void receiveUpdatedSupportedPushTypes( Tomahawk::InfoSystem::InfoTypeSet supportedTypes );
 
 private:
     bool m_inited;
     InfoSystemCacheThread* m_infoSystemCacheThreadController;
     InfoSystemWorkerThread* m_infoSystemWorkerThreadController;
+
+    InfoTypeSet m_supportedGetTypes;
+    InfoTypeSet m_supportedPushTypes;
 
     static InfoSystem* s_instance;
 };

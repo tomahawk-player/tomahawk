@@ -208,6 +208,7 @@ namespace Tomahawk
 
         class InfoPlugin;
 
+        typedef QSet< InfoType > InfoTypeSet;
         typedef QMap< InfoType, QVariant > InfoTypeMap;
         typedef QMap< InfoType, uint > InfoTimeoutMap;
         typedef QHash< QString, QString > InfoStringHash;
