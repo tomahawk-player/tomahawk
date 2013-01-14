@@ -435,7 +435,7 @@ XmppSipPlugin::errorMessage( Jreen::Client::DisconnectReason reason )
 void
 XmppSipPlugin::sendSipInfo( const Tomahawk::peerinfo_ptr& receiver, const SipInfo& info )
 {
-    qDebug() << Q_FUNC_INFO << receiver << info;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << receiver << info;
 
     if ( !m_client )
         return;
@@ -938,7 +938,7 @@ XmppSipPlugin::handlePeerStatus( const Jreen::JID& jid, Jreen::Presence::Type pr
 {
     QString fulljid = jid.full();
 
-    if(fulljid.contains("public.talk.google.com"))
+    if( fulljid.contains( "public.talk.google.com" ) )
         return;
 
     // "going offline" event

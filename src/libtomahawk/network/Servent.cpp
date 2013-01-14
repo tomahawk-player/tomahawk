@@ -290,11 +290,11 @@ Servent::registerPeer( const Tomahawk::peerinfo_ptr& peerInfo )
 {
     if( peerInfo->hasControlConnection() )
     {
-        peerInfoDebug(peerInfo) << "already had control connection, not doin nuffin: " << peerInfo->controlConnection()->name();
+        peerInfoDebug( peerInfo ) << "already had control connection, not doin nuffin: " << peerInfo->controlConnection()->name();
         tLog() << "existing control connection has following peers:";
         foreach(const peerinfo_ptr& otherPeerInfo, peerInfo->controlConnection()->peerInfos())
         {
-            peerInfoDebug(otherPeerInfo);
+            peerInfoDebug( otherPeerInfo );
         }
 
         tLog() << "end peers";
@@ -306,7 +306,7 @@ Servent::registerPeer( const Tomahawk::peerinfo_ptr& peerInfo )
         peerInfoDebug(peerInfo) << "YAY, we need to establish the connection now.. thinking";
         if ( !connectedToSession( peerInfo->sipInfo().uniqname() ) )
         {
-            Servent::instance()->connectToPeer( peerInfo );
+            connectToPeer( peerInfo );
         }
         else
         {
@@ -328,25 +328,25 @@ Servent::registerPeer( const Tomahawk::peerinfo_ptr& peerInfo )
     else
     {
         SipInfo info;
-        if( Servent::instance()->visibleExternally() )
+        if( visibleExternally() )
         {
             QString peerId = peerInfo->id();
             QString key = uuid();
-            ControlConnection* conn = new ControlConnection( Servent::instance() );
+            ControlConnection* conn = new ControlConnection( this );
 
             const QString& nodeid = Database::instance()->impl()->dbid();
             conn->setName( peerId.left( peerId.indexOf( "/" ) ) );
             conn->setId( nodeid );
             conn->addPeerInfo( peerInfo );
 
-            Servent::instance()->registerOffer( key, conn );
+            registerOffer( key, conn );
             info.setVisible( true );
-            info.setHost( Servent::instance()->externalAddress() );
-            info.setPort( Servent::instance()->externalPort() );
+            info.setHost( externalAddress() );
+            info.setPort( externalPort() );
             info.setKey( key );
             info.setUniqname( nodeid );
 
-            tDebug() << "Asking them ( " << peerInfo->id() << " ) to connect to us:" << info;
+            tDebug() << "Asking them (" << peerInfo->id() << ") to connect to us:" << info;
         }
         else
         {
@@ -389,13 +389,13 @@ void Servent::handleSipInfo( const Tomahawk::peerinfo_ptr& peerInfo )
     */
     if ( info.isVisible() )
     {
-        if( !Servent::instance()->visibleExternally() ||
-             Servent::instance()->externalAddress() < info.host() ||
-           ( Servent::instance()->externalAddress() == info.host() && Servent::instance()->externalPort() < info.port() ) )
+        if( !visibleExternally() ||
+             externalAddress() < info.host() ||
+           ( externalAddress() == info.host() && externalPort() < info.port() ) )
         {
 
             tDebug() << "Initiate connection to" << peerInfo->id() << "at" << info.host() << " peer of: " << peerInfo->sipPlugin()->account()->accountFriendlyName();
-            Servent::instance()->connectToPeer( peerInfo );
+            connectToPeer( peerInfo );
         }
         else
         {
@@ -503,13 +503,13 @@ Servent::readyRead()
             tLog() << "Duplicate control connection detected, dropping:" << nodeid << conntype;
 
             tDebug() << "PEERINFO: to be dropped connection has following peers";
-            foreach(const peerinfo_ptr& currentPeerInfo, ccMatch->peerInfos() )
+            foreach( const peerinfo_ptr& currentPeerInfo, ccMatch->peerInfos() )
             {
-                peerInfoDebug(currentPeerInfo);
+                peerInfoDebug( currentPeerInfo );
             }
 
 
-            foreach(ControlConnection* keepConnection, m_controlconnections)
+            foreach( ControlConnection* keepConnection, m_controlconnections )
             {
                 if( !keepConnection )
                     continue;
@@ -518,7 +518,7 @@ Servent::readyRead()
                 {
                     tDebug() << "Keep connection" << keepConnection->name() << "with following peers";
                     foreach( const peerinfo_ptr& currentPeerInfo, keepConnection->peerInfos() )
-                        peerInfoDebug(currentPeerInfo);
+                        peerInfoDebug( currentPeerInfo );
 
                     tDebug() << "Add these peers now";
                     foreach( const peerinfo_ptr& currentPeerInfo, ccMatch->peerInfos() )
@@ -699,7 +699,7 @@ Servent::connectToPeer( const peerinfo_ptr& peerInfo )
 
     SipInfo sipInfo = peerInfo->sipInfo();
 
-    peerInfoDebug(peerInfo) << "connectToPeer: search for already established connections to the same nodeid: " << m_controlconnections.count() << "connections";
+    peerInfoDebug( peerInfo ) << "connectToPeer: search for already established connections to the same nodeid: " << m_controlconnections.count() << "connections";
 
     bool isDupe = false;
     ControlConnection* conn = 0;
@@ -714,14 +714,14 @@ Servent::connectToPeer( const peerinfo_ptr& peerInfo )
             conn = c;
 
 
-           foreach(const peerinfo_ptr& currentPeerInfo, c->peerInfos())
+           foreach( const peerinfo_ptr& currentPeerInfo, c->peerInfos() )
            {
-               tLog() << "peerInfo:" << currentPeerInfo->debugName() << "same object: " << (peerInfo == currentPeerInfo) << (peerInfo.data() == currentPeerInfo.data()) << (peerInfo->debugName() == currentPeerInfo->debugName());
+               peerInfoDebug( currentPeerInfo ) << "Same object: " << ( peerInfo == currentPeerInfo ) << ( peerInfo.data() == currentPeerInfo.data() ) << ( peerInfo->debugName() == currentPeerInfo->debugName() );
 
                if(peerInfo == currentPeerInfo)
                {
                    isDupe = true;
-                   tLog() << "Not adding " << peerInfo->debugName() << ", because it's a dupe: peerInfoCount remains " << conn->peerInfos().count();
+                   peerInfoDebug( currentPeerInfo ) << "Not adding, because it's a dupe: peerInfoCount remains the same " << conn->peerInfos().count();
                }
            }
 
@@ -883,6 +883,7 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
             conn->setName( peer.toString() );
 
             Tomahawk::Accounts::Account* account = Tomahawk::Accounts::AccountManager::instance()->zeroconfAccount();
+
             // if we get this connection the account should exist and be enabled
             Q_ASSERT( account );
             Q_ASSERT( account->enabled() );
@@ -890,8 +891,8 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
             // this is terrible, actually there should be a way to let this be created by the zeroconf plugin
             // because this way we rely on the ip being used as id in two totally different parts of the code
             Tomahawk::peerinfo_ptr peerInfo = Tomahawk::PeerInfo::get( account->sipPlugin(), peer.toString(), Tomahawk::PeerInfo::AutoCreate );
-            peerInfoDebug(peerInfo);
-            conn->addPeerInfo(peerInfo);
+            peerInfoDebug( peerInfo );
+            conn->addPeerInfo( peerInfo );
             return conn;
         }
         else
