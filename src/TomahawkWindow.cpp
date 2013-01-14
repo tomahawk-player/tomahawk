@@ -959,13 +959,16 @@ TomahawkWindow::onXSPFError( XSPFLoader::XSPFErrorCode error )
 void
 TomahawkWindow::onAudioEngineError( AudioEngine::AudioErrorCode /* error */ )
 {
-#ifndef ENABLE_HEADLESS
     QString msg;
     #ifdef Q_WS_X11
         msg = tr( "Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped. Make sure you have a suitable Phonon backend and required plugins installed." );
     #else
         msg = tr( "Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped." );
     #endif
+
+    tLog() << msg;
+
+#ifndef ENABLE_HEADLESS
     JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( msg, 15 ) );
 #endif
 
