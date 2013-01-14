@@ -272,6 +272,8 @@ XmppSipPlugin::disconnectPlugin()
     emit stateChanged( m_state );
 
     m_client->disconnectFromServer( true );
+
+    setAllPeersOffline();
 }
 
 

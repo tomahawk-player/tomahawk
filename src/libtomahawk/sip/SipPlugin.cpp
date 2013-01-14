@@ -95,3 +95,12 @@ SipPlugin::peersOnline() const
 
     return result;
 }
+
+
+void SipPlugin::setAllPeersOffline()
+{
+    foreach( const Tomahawk::peerinfo_ptr& peerInfo, peersOnline() )
+    {
+        peerInfo->setStatus( Tomahawk::PeerInfo::Offline );
+    }
+}

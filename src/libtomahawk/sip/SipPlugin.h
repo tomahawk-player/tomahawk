@@ -85,6 +85,8 @@ signals:
 #endif
 
 protected:
+    void setAllPeersOffline();
+
     Tomahawk::Accounts::Account *m_account;
 };
 

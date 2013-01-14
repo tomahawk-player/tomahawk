@@ -49,6 +49,7 @@ public:
     Tomahawk::source_ptr source() const;
 
     void addPeerInfo( const Tomahawk::peerinfo_ptr& peerInfo );
+    void removePeerInfo( const Tomahawk::peerinfo_ptr& peerInfo );
     const QSet< Tomahawk::peerinfo_ptr > peerInfos() const;
 
 protected:

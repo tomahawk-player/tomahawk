@@ -280,6 +280,22 @@ ControlConnection::addPeerInfo( const peerinfo_ptr& peerInfo )
 }
 
 
+void
+ControlConnection::removePeerInfo( const peerinfo_ptr& peerInfo )
+{
+    peerInfoDebug( peerInfo ) << "Remove peer from control connection:" << name();
+    Q_ASSERT( peerInfo->controlConnection() == this );
+    Q_ASSERT( m_peerInfos.contains( peerInfo ) );
+
+    m_peerInfos.remove( peerInfo );
+
+    if ( m_peerInfos.isEmpty() )
+    {
+        shutdown( true );
+    }
+}
+
+
 const QSet< peerinfo_ptr >
 ControlConnection::peerInfos() const
 {

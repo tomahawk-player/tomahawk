@@ -176,7 +176,13 @@ PeerInfo::setStatus( PeerInfo::Status status )
     m_status = status;
 
     if( status == Online )
+    {
         announce();
+    }
+    else if( status == Offline && controlConnection() )
+    {
+        controlConnection()->removePeerInfo( weakRef().toStrongRef() );
+    }
 
     // we need this to update the DiagnosticsDialog on new peers
     // if we ever happen to have a central PeerInfo manager object

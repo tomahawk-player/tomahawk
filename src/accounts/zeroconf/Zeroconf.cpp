@@ -106,6 +106,8 @@ ZeroconfPlugin::disconnectPlugin()
 
     delete m_zeroconf;
     m_zeroconf = 0;
+
+    setAllPeersOffline();
 }
 
 
