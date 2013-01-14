@@ -29,10 +29,10 @@
 
 
 #include <QCoreApplication>
-#include <QNetworkConfiguration>
-#include <QNetworkProxy>
 #include <QDir>
 #include <QLibrary>
+#include <QNetworkConfiguration>
+#include <QNetworkProxy>
 #include <QPluginLoader>
 
 namespace Tomahawk
@@ -123,6 +123,9 @@ InfoSystemWorker::addInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin )
     );
     
     QMetaObject::invokeMethod( plugin.data(), "init", Qt::QueuedConnection );
+
+    emit updatedSupportedGetTypes( QSet< InfoType >::fromList( m_infoGetMap.keys() ) );
+    emit updatedSupportedPushTypes( QSet< InfoType >::fromList( m_infoPushMap.keys() ) );
 }
 
 

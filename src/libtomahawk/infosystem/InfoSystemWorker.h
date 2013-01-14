@@ -54,6 +54,9 @@ signals:
     void finished( QString target );
     void finished( QString target, Tomahawk::InfoSystem::InfoType type );
 
+    void updatedSupportedGetTypes( Tomahawk::InfoSystem::InfoTypeSet supportedTypes );
+    void updatedSupportedPushTypes( Tomahawk::InfoSystem::InfoTypeSet supportedTypes );
+
 public slots:
     void init( Tomahawk::InfoSystem::InfoSystemCache* cache );
     void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData );

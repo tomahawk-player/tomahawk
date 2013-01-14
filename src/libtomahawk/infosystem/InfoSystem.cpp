@@ -294,6 +294,22 @@ InfoSystem::removeInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin )
 }
 
 
+void
+InfoSystem::receiveUpdatedSupportedGetTypes( InfoTypeSet supportedTypes )
+{
+    m_supportedGetTypes = supportedTypes;
+    emit updatedSupportedGetTypes( m_supportedGetTypes );
+}
+
+
+void
+InfoSystem::receiveUpdatedSupportedPushTypes( InfoTypeSet supportedTypes )
+{
+    m_supportedPushTypes = supportedTypes;
+    emit updatedSupportedPushTypes( m_supportedPushTypes );
+}
+
+
 QWeakPointer< QThread >
 InfoSystem::workerThread() const
 {
