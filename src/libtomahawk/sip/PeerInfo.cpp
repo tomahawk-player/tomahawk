@@ -182,7 +182,7 @@ PeerInfo::setStatus( PeerInfo::Status status )
     // if we ever happen to have a central PeerInfo manager object
     // we better add it there, but so far this would be the only
     // usage
-    sipPlugin()->peerStatusChanged( weakRef().toStrongRef() );
+    emit sipPlugin()->peerStatusChanged( weakRef().toStrongRef() );
 }
 
 
