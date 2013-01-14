@@ -325,6 +325,10 @@ XmppSipPlugin::onDisconnect( Jreen::Client::DisconnectReason reason )
     switch( reason )
     {
         case Jreen::Client::User:
+            foreach( const Jreen::JID &peer, m_peers.keys() )
+            {
+                handlePeerStatus( peer, Jreen::Presence::Unavailable );
+            }
             break;
 
         case Jreen::Client::AuthorizationError:
@@ -355,11 +359,6 @@ XmppSipPlugin::onDisconnect( Jreen::Client::DisconnectReason reason )
     emit stateChanged( m_state );
 
     removeMenuHelper();
-
-    Q_FOREACH( const Jreen::JID &peer, m_peers.keys() )
-    {
-        handlePeerStatus( peer, Jreen::Presence::Unavailable );
-    }
 
     if ( !m_infoPlugin.isNull() )
         Tomahawk::InfoSystem::InfoSystem::instance()->removeInfoPlugin( infoPlugin() );
