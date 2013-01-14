@@ -35,7 +35,7 @@
 
 
 QHash< QString, QStringList > Tomahawk::EchonestControl::s_suggestCache = QHash< QString, QStringList >();
-bool Tomahawk::EchonestControl::s_fetchingMoodsAndStyles = false;
+bool Tomahawk::EchonestControl::s_fetchingMoodsStylesAndGenres = false;
 int Tomahawk::EchonestControl::s_stylePollCount = 0;
 
 
@@ -418,11 +418,13 @@ Tomahawk::EchonestControl::updateWidgets()
         combo->hide();
         m_match = QPointer< QWidget >( match );
         m_input = QPointer< QWidget >( combo );
-    } else if( selectedType() == "Mood" || selectedType() == "Style" ) {
+    } else if( selectedType() == "Mood" || selectedType() == "Style" || selectedType() == "Genre" ) {
         if( selectedType() == "Mood" )
             m_currentType = Echonest::DynamicPlaylist::Mood;
-        else
+        else if ( selectedType() == "Style" )
             m_currentType = Echonest::DynamicPlaylist::Style;
+        else
+            m_currentType = Echonest::DynamicPlaylist::Genre;
 
         QLabel* match = new QLabel( tr( "is" ) );
 
@@ -440,7 +442,7 @@ Tomahawk::EchonestControl::updateWidgets()
         m_match = QPointer< QWidget >( match );
         m_input = QPointer< QWidget >( combo );
 
-        insertMoodsAndStyles();
+        insertMoodsStylesAndGenres();
     } else if( selectedType() == "Song Type" ) {
         m_currentType = Echonest::DynamicPlaylist::SongType;
 
@@ -529,7 +531,7 @@ Tomahawk::EchonestControl::updateData()
         updateFromComboAndSlider();
     } else if( selectedType() == "Danceability" || selectedType() == "Energy" || selectedType() == "Artist Familiarity" || selectedType() == "Artist Hotttnesss" || selectedType() == "Song Hotttnesss" ) {
         updateFromComboAndSlider( true );
-    } else if( selectedType() == "Mode" || selectedType() == "Key" || selectedType() == "Mood" || selectedType() == "Style" || selectedType() == "User Radio" ) {
+    } else if( selectedType() == "Mode" || selectedType() == "Key" || selectedType() == "Mood" || selectedType() == "Style" || selectedType() == "Genre" || selectedType() == "User Radio" ) {
         updateFromLabelAndCombo();
     } else if( selectedType() == "Sorting" ) {
         QComboBox* match = qobject_cast<QComboBox*>( m_match.data() );
@@ -635,7 +637,7 @@ Tomahawk::EchonestControl::updateWidgetsFromData()
         updateToComboAndSlider();
     } else if( selectedType() == "Danceability" || selectedType() == "Energy" || selectedType() == "Artist Familiarity" || selectedType() == "Artist Hotttnesss" || selectedType() == "Song Hotttnesss" ) {
         updateToComboAndSlider( true );
-    } else if( selectedType() == "Mode" || selectedType() == "Key" || selectedType() == "Mood" || selectedType() == "Style") {
+    } else if( selectedType() == "Mode" || selectedType() == "Key" || selectedType() == "Mood" || selectedType() == "Style" || selectedType() == "Genre" ) {
         updateToLabelAndCombo();
     } else if( selectedType() == "Sorting" ) {
         QComboBox* match = qobject_cast<QComboBox*>( m_match.data() );
@@ -896,7 +898,16 @@ Tomahawk::EchonestControl::calculateSummary()
         Q_ASSERT( qobject_cast< QComboBox* >( m_input.data() ) );
         QString text = qobject_cast< QComboBox* >( m_input.data() )->currentText().toLower();
         summary = tr( "in a %1 style" ).arg( text );
-    } else if( selectedType() == "Song Type" ) {
+    }
+    else if ( selectedType() == "Genre" )
+    {
+        Q_ASSERT( !m_input.isNull() );
+        Q_ASSERT( qobject_cast< QComboBox* >( m_input.data() ) );
+        QString text = qobject_cast< QComboBox* >( m_input.data() )->currentText().toLower();
+        summary = tr( "where genre is %1" ).arg( text );
+    }
+    else if ( selectedType() == "Song Type" )
+    {
         Q_ASSERT( !m_input.isNull() );
         Q_ASSERT( qobject_cast< QComboBox* >( m_input.data() ) );
         QString text = qobject_cast< QComboBox* >( m_input.data() )->currentText();
@@ -916,13 +927,13 @@ Tomahawk::EchonestControl::calculateSummary()
 
 
 void
-Tomahawk::EchonestControl::checkForMoodsOrStylesFetched()
+Tomahawk::EchonestControl::checkForMoodsStylesOrGenresFetched()
 {
-    s_fetchingMoodsAndStyles = false;
-    if( selectedType() == "Mood" || selectedType() == "Style" ) {
+    s_fetchingMoodsStylesAndGenres = false;
+    if( selectedType() == "Mood" || selectedType() == "Style" || selectedType() == "Genre" ) {
         QComboBox* cb = qobject_cast< QComboBox* >( m_input.data() );
         if( cb && cb->count() == 0 ) { // got nothing, so lets populate
-            if( insertMoodsAndStyles() )
+            if( insertMoodsStylesAndGenres() )
                 updateWidgetsFromData();
         }
     }
@@ -930,9 +941,16 @@ Tomahawk::EchonestControl::checkForMoodsOrStylesFetched()
 
 
 bool
-Tomahawk::EchonestControl::insertMoodsAndStyles()
+Tomahawk::EchonestControl::insertMoodsStylesAndGenres()
 {
-    QStringList src = selectedType() == "Mood" ? EchonestGenerator::moods() : EchonestGenerator::styles();
+    QStringList src;
+    if ( selectedType() == "Mood" )
+        src = EchonestGenerator::moods();
+    else if ( selectedType() == "Style" )
+        src = EchonestGenerator::styles();
+    else
+        src = EchonestGenerator::genres();
+    
     QComboBox* combo = qobject_cast< QComboBox* >( m_input.data() );
     if( !combo )
         return false;
@@ -942,9 +960,9 @@ Tomahawk::EchonestControl::insertMoodsAndStyles()
     }
 
     if( src.isEmpty() && !combo->count() ) {
-        if( s_stylePollCount <= 20 && !s_fetchingMoodsAndStyles ) { // try for 20s to get the styles...
-            s_fetchingMoodsAndStyles = true;
-            QTimer::singleShot( 1000, this, SLOT( checkForMoodsOrStylesFetched() ) );
+        if( s_stylePollCount <= 20 && !s_fetchingMoodsStylesAndGenres ) { // try for 20s to get the styles...
+            s_fetchingMoodsStylesAndGenres = true;
+            QTimer::singleShot( 1000, this, SLOT( checkForMoodsStylesOrGenresFetched() ) );
         }
         s_stylePollCount++;
         return false;

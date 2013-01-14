@@ -82,6 +82,7 @@ public:
 
     static QStringList styles();
     static QStringList moods();
+    static QStringList genres();
     static QStringList userCatalogs();
     static QByteArray catalogId( const QString& collectionId );
 
@@ -99,6 +100,7 @@ private slots:
 
     void stylesReceived();
     void moodsReceived();
+    void genresReceived();
     void knownCatalogsChanged();
 
     void songLookupFinished();
@@ -110,16 +112,18 @@ private:
     Echonest::DynamicPlaylist::ArtistTypeEnum appendRadioType( Echonest::DynamicPlaylist::PlaylistParams& params ) const throw( std::runtime_error );
     bool onlyThisArtistType( Echonest::DynamicPlaylist::ArtistTypeEnum type ) const throw( std::runtime_error );
 
-    void loadStylesAndMoods();
-    void saveStylesAndMoods();
+    void loadStylesMoodsAndGenres();
+    void saveStylesMoodsAndGenres();
 
     Echonest::DynamicPlaylist* m_dynPlaylist;
     QPixmap m_logo;
 
     static QStringList s_styles;
     static QStringList s_moods;
+    static QStringList s_genres;
     static QNetworkReply* s_stylesJob;
     static QNetworkReply* s_moodsJob;
+    static QNetworkReply* s_genresJob;
 
     static CatalogManager* s_catalogs;
 
@@ -131,3 +135,4 @@ private:
 };
 
 #endif
+
