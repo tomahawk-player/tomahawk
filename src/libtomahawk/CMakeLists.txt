@@ -318,10 +318,12 @@ list(APPEND libSources
 )
 
 IF(LIBLASTFM_FOUND)
-    set( libSources ${libSources}
-                    accounts/lastfm/LastFmAccount.cpp
-                    accounts/lastfm/LastFmConfig.cpp
-                    accounts/lastfm/LastFmInfoPlugin.cpp
+    include_directories( ${LIBLASTFM_INCLUDE_DIRS} )
+    list(APPEND LINK_LIBRARIES ${LIBLASTFM_LIBRARIES} )
+    list(APPEND libSources
+        accounts/lastfm/LastFmAccount.cpp
+        accounts/lastfm/LastFmConfig.cpp
+        accounts/lastfm/LastFmInfoPlugin.cpp
     )
 ENDIF(LIBLASTFM_FOUND)
 
@@ -353,7 +355,6 @@ include_directories(
     ${QT_INCLUDE_DIR}
     ${QJSON_INCLUDE_DIR}
     ${ECHONEST_INCLUDE_DIR}
-    ${LIBLASTFM_INCLUDE_DIRS}
     ${CLUCENE_INCLUDE_DIRS}
     ${PHONON_INCLUDES}
 
@@ -418,10 +419,6 @@ IF( APPLE )
 ELSE( APPLE )
     SET( libGuiSources ${libGuiSources} thirdparty/Qocoa/qbutton.cpp thirdparty/Qocoa/qsearchfield.cpp thirdparty/Qocoa/qtoolbartabdialog.cpp )
 ENDIF( APPLE )
-
-IF(LIBLASTFM_FOUND)
-    LIST(APPEND LINK_LIBRARIES ${LIBLASTFM_LIBRARIES} )
-ENDIF(LIBLASTFM_FOUND)
 
 IF(BUILD_GUI)
     LIST(APPEND libSources ${libGuiSources} )
