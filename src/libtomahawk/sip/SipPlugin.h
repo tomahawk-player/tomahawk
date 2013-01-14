@@ -41,7 +41,7 @@ class DLLEXPORT SipPlugin : public QObject
 {
     Q_OBJECT
 
-friend Tomahawk::PeerInfo;
+friend class Tomahawk::PeerInfo;
 
 public:
     SipPlugin();
