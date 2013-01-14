@@ -38,6 +38,7 @@
 #include <QtCore/QStringList>
 
 class QNetworkAccessManager;
+class DiagnosticsDialog;
 
 namespace Tomahawk {
 
@@ -175,7 +176,7 @@ public:
     void run();
 
 private:
-    friend class DiagnosticsDialog;
+    friend class ::DiagnosticsDialog;
     friend class InfoSystem;
     InfoSystemWorker* worker() const;
 
