@@ -106,8 +106,8 @@ GridView::setProxyModel( PlayableProxyModel* model )
     connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
     connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( verifySize() ) );
     connect( m_proxyModel, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), SLOT( verifySize() ) );
-    connect( proxyModel(), SIGNAL( modelReset() ), SLOT( layoutItems() ) );
-    
+    connect( proxyModel(), SIGNAL( modelReset() ), SLOT( layoutItems() ), Qt::QueuedConnection );
+
     if ( m_delegate )
         delete m_delegate;
 
