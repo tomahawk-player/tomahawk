@@ -21,7 +21,7 @@
 
 #include "Zeroconf.h"
 #include "accounts/Account.h"
-#include "../AccountDllMacro.h"
+#include "accounts/AccountDllMacro.h"
 
 class SipPlugin;
 

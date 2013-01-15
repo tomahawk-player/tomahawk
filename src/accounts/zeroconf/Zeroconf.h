@@ -24,7 +24,7 @@
 #include "accounts/Account.h"
 #include "TomahawkZeroconf.h"
 
-#include "../AccountDllMacro.h"
+#include "accounts/AccountDllMacro.h"
 
 #include <QtCore/QTimer>
 
