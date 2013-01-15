@@ -449,6 +449,7 @@ TrackView::dragEnterEvent( QDragEnterEvent* event )
 void
 TrackView::dragMoveEvent( QDragMoveEvent* event )
 {
+    tDebug() << Q_FUNC_INFO;
     QTreeView::dragMoveEvent( event );
 
     if ( model()->isReadOnly() )
@@ -489,8 +490,20 @@ TrackView::dragMoveEvent( QDragMoveEvent* event )
 
 
 void
+TrackView::dragLeaveEvent( QDragLeaveEvent* event )
+{
+    tDebug() << Q_FUNC_INFO;
+    QTreeView::dragLeaveEvent( event );
+
+    m_dragging = false;
+    setDirtyRegion( m_dropRect );
+}
+
+
+void
 TrackView::dropEvent( QDropEvent* event )
 {
+    tDebug() << Q_FUNC_INFO;
     QTreeView::dropEvent( event );
 
     if ( event->isAccepted() )
@@ -499,7 +512,7 @@ TrackView::dropEvent( QDropEvent* event )
     }
     else
     {
-        if ( DropJob::acceptsMimeData( event->mimeData()) )
+        if ( DropJob::acceptsMimeData( event->mimeData() ) )
         {
             const QPoint pos = event->pos();
             const QModelIndex index = indexAt( pos );
@@ -609,6 +622,8 @@ TrackView::startDrag( Qt::DropActions supportedActions )
     {
         m_proxyModel->removeIndexes( pindexes );
     }
+
+    delete drag;
 }
 
 
