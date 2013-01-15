@@ -35,6 +35,10 @@
 
 #include "network/Servent.h"
 
+#include "jobview/JobStatusView.h"
+#include "jobview/JobStatusModel.h"
+#include "jobview/ErrorStatusMessage.h"
+
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
@@ -215,7 +219,7 @@ ScriptEngine::javaScriptConsoleMessage( const QString& message, int lineNumber, 
 {
     tLog() << "JAVASCRIPT:" << m_scriptPath << message << lineNumber << sourceID;
 #ifndef DEBUG_BUILD
-    QMessageBox::critical( 0, "Script Resolver Error", QString( "%1 %2 %3 %4" ).arg( m_scriptPath ).arg( message ).arg( lineNumber ).arg( sourceID ) );
+    JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( tr( "Script Resolver Error: %1 %2 %3 %4" ).arg( m_scriptPath ).arg( message ).arg( lineNumber ).arg( sourceID ) ) );
 #endif
 }
 
