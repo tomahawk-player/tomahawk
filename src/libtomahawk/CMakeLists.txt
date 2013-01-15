@@ -470,6 +470,17 @@ INSTALL( TARGETS tomahawklib
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
+# Install cmake config
+install( FILES
+            TomahawkConfig.cmake
+            TomahawkUse.cmake
+            ${CMAKE_SOURCE_DIR}/CMakeModules/TomahawkAddPlugin.cmake
+         DESTINATION
+            ${CMAKE_INSTALL_LIBDIR}/cmake/Tomahawk
+)
+
+
+
 # Install header files
 file( GLOB rootHeaders "*.h" )
 file( GLOB accountsHeaders "accounts/*.h" )
