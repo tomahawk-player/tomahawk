@@ -77,7 +77,7 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/widgets/AccountWidget.cpp" line="126"/>
         <source>Invite</source>
-        <translation type="unfinished"/>
+        <translation>Bjud in</translation>
     </message>
 </context>
 <context>
@@ -85,7 +85,7 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/widgets/AccountsToolButton.cpp" line="88"/>
         <source>Configure Accounts</source>
-        <translation type="unfinished"/>
+        <translation>Konfigurera konton</translation>
     </message>
 </context>
 <context>
@@ -170,7 +170,7 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="104"/>
         <source>Fully &amp;Rescan Collection</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Skanna om hela kollektionen</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="105"/>
@@ -200,52 +200,52 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="120"/>
         <source>Diagnostics...</source>
-        <translation type="unfinished"/>
+        <translation>Diagnostik...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="122"/>
         <source>About &amp;Tomahawk...</source>
-        <translation type="unfinished"/>
+        <translation>Om &amp;Tomahawk...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="125"/>
         <source>&amp;Legal Information...</source>
-        <translation type="unfinished"/>
+        <translation>&amp;juridisk information</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="127"/>
         <source>&amp;View Logfile</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Öppna logfil</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="130"/>
         <source>Check For Updates...</source>
-        <translation type="unfinished"/>
+        <translation>Leta efter uppdateringar...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="142"/>
         <source>&amp;Controls</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Kontroller</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="156"/>
         <source>&amp;Settings</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Inställningar</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="162"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Hjälp</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="189"/>
         <source>&amp;Window</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Fönster</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="204"/>
         <source>Main Menu</source>
-        <translation type="unfinished"/>
+        <translation>Huvudmeny</translation>
     </message>
 </context>
 <context>
@@ -338,12 +338,12 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/AudioControls.cpp" line="279"/>
         <source>Time Elapsed</source>
-        <translation type="unfinished"/>
+        <translation>Förfluten tid</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.cpp" line="280"/>
         <source>Time Remaining</source>
-        <translation type="unfinished"/>
+        <translation>Tid kvar</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.cpp" line="285"/>
@@ -353,12 +353,12 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/AudioControls.cpp" line="283"/>
         <source>Share</source>
-        <translation type="unfinished"/>
+        <translation>Dela</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.cpp" line="284"/>
         <source>Love</source>
-        <translation type="unfinished"/>
+        <translation>Älska</translation>
     </message>
 </context>
 <context>
@@ -449,7 +449,7 @@ ansluta och strömma från dig?</translation>
     <message utf8="true">
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="80"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Sorry!&lt;/span&gt; Tomahawk crashed. Please tell us about it! Tomahawk has created an error report for you that can help improve the stability in the future. You can now send this report directly to the Tomahawk developers.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Sorry!&lt;/span&gt; Tomahawk kraschade Låt oss veta vad som hänt! Tomahawk har skapat en felrapport åt dig som kan hjälpa till att förbättra stabiliteten i framtiden. Du kan skicka den direkt till Tomahawks utvecklare.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="129"/>
@@ -1017,37 +1017,37 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="242"/>
         <source>Perfect match</source>
-        <translation type="unfinished"/>
+        <translation>Perfekt matchning</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="244"/>
         <source>Very good match</source>
-        <translation type="unfinished"/>
+        <translation>Mycket bra matchning</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="246"/>
         <source>Good match</source>
-        <translation type="unfinished"/>
+        <translation>Bra matchning</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="248"/>
         <source>Vague match</source>
-        <translation type="unfinished"/>
+        <translation>Svag matchning</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="250"/>
         <source>Bad match</source>
-        <translation type="unfinished"/>
+        <translation>Dålig matchning</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="252"/>
         <source>Very bad match</source>
-        <translation type="unfinished"/>
+        <translation>Väldigt dålig matchning</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="254"/>
         <source>Not available</source>
-        <translation type="unfinished"/>
+        <translation>Inte tillgänglig</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
@@ -1431,12 +1431,12 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="127"/>
         <source>Install from file</source>
-        <translation type="unfinished"/>
+        <translation>Installera från fil</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="227"/>
         <source>Configure the accounts and services used by Tomahawk to search and retrieve music, find your friends and update your status.</source>
-        <translation type="unfinished"/>
+        <translation>Konfigurera alla konton och services som Tomahawk använder för att söka och hitta musik, hitta dina vänner och uppdaterar din status.</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="232"/>
@@ -1573,7 +1573,7 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/Settings_Collection.ui" line="51"/>
         <source>Upload collection list to The Echo Nest to enable user radio</source>
-        <translation type="unfinished"/>
+        <translation>Ladda upp kollektionslistan till Echo Nest för att aktivera användar-radio</translation>
     </message>
     <message>
         <location filename="../src/Settings_Collection.ui" line="64"/>
@@ -1591,12 +1591,12 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/widgets/SlideSwitchButton.cpp" line="45"/>
         <source>On</source>
-        <translation type="unfinished"/>
+        <translation>På</translation>
     </message>
     <message>
         <location filename="../src/widgets/SlideSwitchButton.cpp" line="46"/>
         <source>Off</source>
-        <translation type="unfinished"/>
+        <translation>Av</translation>
     </message>
 </context>
 <context>
@@ -1731,58 +1731,58 @@ ansluta och strömma från dig?</translation>
 <context>
     <name>SourceItem</name>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="64"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="67"/>
         <source>Collection</source>
         <translation>Samling</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="72"/>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="522"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="75"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="541"/>
         <source>Latest Additions</source>
         <translation>Senast tillagda</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="76"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="79"/>
         <source>Recently Played</source>
         <translation>Senast spelade spår</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="139"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="142"/>
         <source>SuperCollection</source>
         <translation>SuperCollection</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="525"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="544"/>
         <source>Latest additions to your collection</source>
         <translation>Senaste tillägget till ditt kollektion.</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="527"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="546"/>
         <source>Latest additions to %1&apos;s collection</source>
         <translation>Senaste tillägget till %1&apos;s kollektion.</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="536"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="555"/>
         <source>Sorry, we could not find any recent additions!</source>
-        <translation type="unfinished"/>
+        <translation>Tyvärr! Det gick inte hitta några nya tillägg!</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="565"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="584"/>
         <source>Recently Played Tracks</source>
         <translation>Senast spelade spår</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="568"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="587"/>
         <source>Your recently played tracks</source>
         <translation>Dina senast spelade spår</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="570"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="589"/>
         <source>%1&apos;s recently played tracks</source>
         <translation>%1&apos;s senast spelade spår</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="577"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="596"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>Tyvärr! Det gick inte hitta några nyligen spelade spår</translation>
     </message>
@@ -1992,7 +1992,7 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="340"/>
         <source>Delete associated Spotify playlist?</source>
-        <translation type="unfinished"/>
+        <translation>Ta bort alla associerade spotify-spellistor</translation>
     </message>
 </context>
 <context>
@@ -2069,7 +2069,7 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="89"/>
         <source>Google Address:</source>
-        <translation type="unfinished"/>
+        <translation>Google-adress:</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="90"/>
@@ -2095,7 +2095,7 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="59"/>
         <source>Enter Google Address</source>
-        <translation type="unfinished"/>
+        <translation>Ange Google-adress</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="67"/>
@@ -2197,7 +2197,7 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="518"/>
         <source>Subscribe to playlist changes</source>
-        <translation type="unfinished"/>
+        <translation>Prenummerera på spellist-ändringar</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="522"/>
@@ -2207,7 +2207,7 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="526"/>
         <source>Stop subscribing to changes</source>
-        <translation type="unfinished"/>
+        <translation>Sluta prenummerera på ändringar</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="546"/>
@@ -2840,22 +2840,22 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="449"/>
         <source>is not</source>
-        <translation type="unfinished"/>
+        <translation>är inte</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="452"/>
         <source>Studio</source>
-        <translation type="unfinished"/>
+        <translation>Studio</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="453"/>
         <source>Live</source>
-        <translation type="unfinished"/>
+        <translation>Live</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="454"/>
         <source>Christmas</source>
-        <translation type="unfinished"/>
+        <translation>Jul</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="793"/>
@@ -2977,17 +2977,17 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="898"/>
         <source>in a %1 style</source>
-        <translation type="unfinished"/>
+        <translation>med en %1-stil</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="909"/>
         <source>where song type is %1</source>
-        <translation type="unfinished"/>
+        <translation>där låttypen är %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="911"/>
         <source>where song type is not %1</source>
-        <translation type="unfinished"/>
+        <translation>där låttypen inte är %1</translation>
     </message>
 </context>
 <context>
@@ -3207,43 +3207,43 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="300"/>
-        <location filename="../src/libtomahawk/Source.cpp" line="351"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="250"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="301"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Söker igenom (%L1 spår)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="302"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="252"/>
         <source>Scanning</source>
         <translation>Skannar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="336"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="286"/>
         <source>Checking</source>
         <translation>Kontrollerar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="341"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="291"/>
         <source>Syncing</source>
         <translation>Synkroniserar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="346"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="296"/>
         <source>Importing</source>
         <translation>Importerar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="488"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="438"/>
         <source>Saving (%1%)</source>
         <translation>Sparar (%1%)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="569"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="519"/>
         <source>Online</source>
         <translation>Online</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="573"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="523"/>
         <source>Offline</source>
         <translation>Offline</translation>
     </message>
@@ -3290,7 +3290,7 @@ anger du PIN-koden här:</translation>
 <context>
     <name>TomahawkSettings</name>
     <message>
-        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="376"/>
+        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="375"/>
         <source>Local Network</source>
         <translation>Lokalt nätverk</translation>
     </message>
@@ -3375,13 +3375,13 @@ anger du PIN-koden här:</translation>
         <location filename="../src/TomahawkWindow.cpp" line="206"/>
         <location filename="../src/TomahawkWindow.cpp" line="1308"/>
         <source>Hide Menu Bar</source>
-        <translation type="unfinished"/>
+        <translation>Göm Menyrad</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="206"/>
         <location filename="../src/TomahawkWindow.cpp" line="1302"/>
         <source>Show Menu Bar</source>
-        <translation type="unfinished"/>
+        <translation>Visa Menyrad</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="284"/>
@@ -3391,7 +3391,7 @@ anger du PIN-koden här:</translation>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="308"/>
         <source>&amp;Main Menu</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Huvudmeny</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="946"/>
@@ -3456,7 +3456,7 @@ anger du PIN-koden här:</translation>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1129"/>
         <source>&amp;Play</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Spela</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1160"/>
@@ -3621,7 +3621,7 @@ anger du PIN-koden här:</translation>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="119"/>
         <source>The Twitter plugin allows you to discover and play music from your Twitter friends running Tomahawk and post messages to your account.</source>
-        <translation type="unfinished"/>
+        <translation>Twitter-pluginnet låter dig utforska och spela musik från dina Twitter-vänner som använder Tomahawk, samt posta meddelanden till ditt konto</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="137"/>
@@ -3684,7 +3684,7 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/accounts/twitter/sip/TwitterSip.cpp" line="104"/>
         <source>Enter Twitter username</source>
-        <translation type="unfinished"/>
+        <translation>Ange användarnamn till Twitter</translation>
     </message>
 </context>
 <context>
@@ -3697,12 +3697,12 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="282"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
-        <translation type="unfinished"/>
+        <translation>Efter att du skannat din musik-kollektion kommer du hitta alla dina spår  här.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="284"/>
         <source>This collection is empty.</source>
-        <translation type="unfinished"/>
+        <translation>Denna kollektionen är tom.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="343"/>
@@ -4002,112 +4002,112 @@ Lyrics for &quot;%1&quot; by %2:
 <context>
     <name>XmppSipPlugin</name>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="379"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="381"/>
         <source>User Interaction</source>
         <translation>Användarinteraktion</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="382"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="384"/>
         <source>Host is unknown</source>
         <translation>Värden är okänd</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="385"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="387"/>
         <source>Item not found</source>
         <translation>Artikeln kunde inte hittas</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="388"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="390"/>
         <source>Authorization Error</source>
         <translation>Auktorisationsfel</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="391"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="393"/>
         <source>Remote Stream Error</source>
         <translation>Ström-fel</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="394"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="396"/>
         <source>Remote Connection failed</source>
         <translation>Fjärranslutningen misslyckades</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="397"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="399"/>
         <source>Internal Server Error</source>
         <translation>Internt serverfel</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="400"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="402"/>
         <source>System shutdown</source>
         <translation>systemavstängning</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="403"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="405"/>
         <source>Conflict</source>
         <translation>Konflikt</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="418"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="420"/>
         <source>Unknown</source>
         <translation>Okänd</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="781"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="780"/>
         <source>Do you want to add &lt;b&gt;%1&lt;/b&gt; to your friend list?</source>
         <translation>Vill du lägga till &lt;b&gt;%1&lt;/b&gt; till din vänlista?</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="406"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="408"/>
         <source>No Compression Support</source>
         <translation>Inget kompression-stöd</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="197"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="198"/>
         <source>Enter Jabber ID</source>
-        <translation type="unfinished"/>
+        <translation>Ange Jabber-ID</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="409"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="411"/>
         <source>No Encryption Support</source>
         <translation>Inget krypteringsstöd</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="412"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="414"/>
         <source>No Authorization Support</source>
         <translation>Inget auktoriseringsstöd</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="415"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="417"/>
         <source>No Supported Feature</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="476"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="478"/>
         <source>Add Friend</source>
         <translation>Lägg till vän</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="477"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="479"/>
         <source>Enter Xmpp ID:</source>
         <translation>Ange XMPP-id:</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="633"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="635"/>
         <source>Add Friend...</source>
         <translation>Lägg till vän...</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="638"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="640"/>
         <source>XML Console...</source>
         <translation>XML-konsol...</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="686"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="688"/>
         <source>I&apos;m sorry -- I&apos;m just an automatic presence used by Tomahawk Player (http://gettomahawk.com). If you are getting this message, the person you are trying to reach is probably not signed on, so please try again later!</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="780"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="779"/>
         <source>Authorize User</source>
         <translation>Auktorisera användare</translation>
     </message>
