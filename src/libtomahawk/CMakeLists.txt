@@ -471,9 +471,6 @@ INSTALL( TARGETS tomahawklib
 )
 
 # Install header files
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.h.in
-               ${CMAKE_CURRENT_SOURCE_DIR}/config.h)
-
 file( GLOB rootHeaders "*.h" )
 file( GLOB accountsHeaders "accounts/*.h" )
 file( GLOB accountsLastfmHeaders "accounts/lastfm/*.h" )
@@ -502,6 +499,7 @@ file( GLOB widgetsHeaders "widgets/*.h" )
 file( GLOB widgetsInfowidgetsHeaders "widgets/infowidgets/*.h" )
 file( GLOB widgetsSearchlineeditHeaders "widgets/searchlineedit/*.h" )
 
+install( FILES ${CMAKE_CURRENT_BINARY_DIR}/config.h DESTINATION include/libtomahawk )
 install( FILES ${rootHeaders} DESTINATION include/libtomahawk )
 install( FILES ${accountsHeaders} DESTINATION include/libtomahawk/accounts )
 install( FILES ${accountsLastfmHeaders} DESTINATION include/libtomahawk/accounts/lastfm )
