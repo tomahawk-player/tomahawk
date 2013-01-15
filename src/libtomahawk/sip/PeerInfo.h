@@ -99,6 +99,10 @@ public:
     void setVersionString( const QString& versionString );
     const QString versionString() const;
 
+    // you can store arbitrary internal data for your plugin here
+    void setData( const QVariant& data );
+    const QVariant data() const;
+
 signals:
     void sipInfoChanged();
 
@@ -117,6 +121,7 @@ private:
     SipInfo m_sipInfo;
     QString m_friendlyName;
     QString m_versionString;
+    QVariant m_data;
 
     mutable QPixmap* m_avatar;
     mutable QPixmap* m_fancyAvatar;

@@ -326,4 +326,18 @@ PeerInfo::versionString() const
 }
 
 
+void
+PeerInfo::setData(const QVariant& data)
+{
+    m_data = data;
+}
+
+
+const
+QVariant PeerInfo::data() const
+{
+    return m_data;
+}
+
+
 } // ns
