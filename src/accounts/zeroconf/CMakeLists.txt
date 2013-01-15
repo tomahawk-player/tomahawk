@@ -1,5 +1,5 @@
 
-add_tomahawk_plugin(zeroconf
+tomahawk_add_plugin(zeroconf
     TYPE account
     EXPORT_MACRO ACCOUNTDLLEXPORT_PRO
     SOURCES

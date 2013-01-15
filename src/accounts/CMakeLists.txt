@@ -1,4 +1,4 @@
-include(AddTomahawkPlugin)
+include(TomahawkAddPlugin)
 
 IF( JREEN_FOUND )
     add_subdirectory( xmpp )

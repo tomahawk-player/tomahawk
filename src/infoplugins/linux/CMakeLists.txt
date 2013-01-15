@@ -10,7 +10,7 @@ if(NOT Qt5Core_DIR)
         )
         SET(FDO_LINK_LIBRARIES ${LINK_LIBRARIES} ${X11_LIBRARIES})
 
-        add_tomahawk_plugin(fdonotify
+        tomahawk_add_plugin(fdonotify
             TYPE infoplugin EXPORT_MACRO INFOPLUGINDLLEXPORT_PRO
             SOURCES "${fdo_srcs}" LINK_LIBRARIES "${FDO_LINK_LIBRARIES}"
         )
@@ -24,7 +24,7 @@ SET(mpris_srcs
     mpris/MprisPlugin.cpp
     )
 
-add_tomahawk_plugin(mpris
+tomahawk_add_plugin(mpris
     TYPE infoplugin EXPORT_MACRO INFOPLUGINDLLEXPORT_PRO
     SOURCES "${mpris_srcs}"
     )

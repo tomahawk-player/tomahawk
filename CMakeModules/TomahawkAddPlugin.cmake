@@ -38,7 +38,7 @@ MACRO(CDR var junk)
 ENDMACRO(CDR)
 
 
-macro(add_tomahawk_plugin)
+macro(tomahawk_add_plugin)
     parse_arguments(PLUGIN
         "SOURCES;UI;LINK_LIBRARIES;TYPE;EXPORT_MACRO;COMPILE_DEFINITIONS"
         "NO_INSTALL;SHARED_LIB"
@@ -93,7 +93,7 @@ macro(add_tomahawk_plugin)
     endif()
 
     # add link targets
-    target_link_libraries(${target} tomahawklib)
+    target_link_libraries(${target} ${TOMAHAWK_LIBRARIES})
     if(PLUGIN_LINK_LIBRARIES)
         target_link_libraries(${target} ${PLUGIN_LINK_LIBRARIES})
     endif()

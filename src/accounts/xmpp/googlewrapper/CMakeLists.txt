@@ -1,6 +1,6 @@
 include_directories( ${JREEN_INCLUDE_DIR} )
 
-add_tomahawk_plugin(google
+tomahawk_add_plugin(google
     TYPE account
     EXPORT_MACRO ACCOUNTDLLEXPORT_PRO
     SOURCES
