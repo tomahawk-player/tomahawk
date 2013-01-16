@@ -929,6 +929,7 @@ TomahawkSettings::setVerboseNotifications( bool notifications )
     setValue( "ui/notifications/verbose", notifications );
 }
 
+
 bool
 TomahawkSettings::menuBarVisible() const
 {
@@ -939,12 +940,27 @@ TomahawkSettings::menuBarVisible() const
 #endif
 }
 
+
 void
 TomahawkSettings::setMenuBarVisible( bool visible )
 {
 #ifndef Q_OS_MAC
     setValue( "ui/mainwindow/menuBarVisible", visible );
 #endif
+}
+
+
+bool
+TomahawkSettings::fullscreenEnabled() const
+{
+    return value( "ui/mainwindow/fullscreenEnabled", false ).toBool();
+}
+
+
+void
+TomahawkSettings::setFullscreenEnabled( bool enabled )
+{
+    setValue( "ui/mainwindow/fullscreenEnabled", enabled );
 }
 
 
