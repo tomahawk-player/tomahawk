@@ -184,6 +184,6 @@ TLog::TLog( unsigned int debugLevel )
 
 TLog::~TLog()
 {
-    log( m_msg.toLatin1().data(), m_debugLevel );
+    log( m_msg.toLocal8Bit().data(), m_debugLevel );
 }
 
