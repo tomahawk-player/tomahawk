@@ -250,6 +250,26 @@ void Tomahawk::checkForUpdates() {
 #define LION_FULLSCREEN_EXIT_NOTIFICATION_VALUE @"NSWindowDidExitFullScreenNotification"
 #endif
 
+void Tomahawk::toggleFullscreen()
+{
+    if ( QSysInfo::MacintoshVersion != QSysInfo::MV_SNOWLEOPARD &&
+         QSysInfo::MacintoshVersion != QSysInfo::MV_LEOPARD   )
+    {
+        qDebug() << "Toggling Lion Full-screeen";
+        // Can't include TomahawkApp.h in a .mm file, pulls in InfoSystem.h which uses
+        // the objc keyword 'id'
+        foreach( QWidget* w, QApplication::topLevelWidgets() )
+        {
+            if ( qobject_cast< TomahawkWindow* >( w ) )
+            {
+                NSView *nsview = (NSView *)w->winId();
+                NSWindow *nswindow = [nsview window];
+                [nswindow toggleFullScreen: nil];
+            }
+        }
+    }
+}
+
 void Tomahawk::enableFullscreen( QObject* receiver )
 {
     // We don't support anything below leopard, so if it's not [snow] leopard it must be lion

@@ -46,6 +46,7 @@ void setApplicationHandler(PlatformInterface* handler);
 void checkForUpdates();
 
 // Pass in a QObject with slots "fullScreenEntered() and fullScreenExited() in order to be notified
+void toggleFullscreen();
 void enableFullscreen( QObject* notifier );
 
 };
