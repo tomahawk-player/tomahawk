@@ -240,7 +240,7 @@ void Tomahawk::checkForUpdates() {
 #endif
 }
 
-#ifdef LION
+#if defined(LION) || defined(MOUNTAIN_LION)
 #define SET_LION_FULLSCREEN NSWindowCollectionBehaviorFullScreenPrimary
 #define LION_FULLSCREEN_ENTER_NOTIFICATION_VALUE NSWindowWillEnterFullScreenNotification
 #define LION_FULLSCREEN_EXIT_NOTIFICATION_VALUE NSWindowDidExitFullScreenNotification
