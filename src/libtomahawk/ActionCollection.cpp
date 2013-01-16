@@ -112,6 +112,8 @@ ActionCollection::initActions()
     m_actionCollection[ "minimize" ]->setShortcut( QKeySequence( "Ctrl+M" ) );
     m_actionCollection[ "zoom" ] = new QAction( tr( "Zoom" ), this );
     m_actionCollection[ "zoom" ]->setShortcut( QKeySequence( "Meta+Ctrl+Z" ) );
+    m_actionCollection[ "fullscreen" ] = new QAction( tr( "Enter Full Screen" ), this );
+    m_actionCollection[ "fullscreen" ]->setShortcut( QKeySequence( "Meta+Ctrl+F" ) );
 #else
     m_actionCollection[ "toggleMenuBar" ] = new QAction( tr( "Hide Menu Bar" ), this );
     m_actionCollection[ "toggleMenuBar" ]->setShortcut( QKeySequence( "Ctrl+M" ) );
@@ -189,6 +191,7 @@ ActionCollection::createMenuBar( QWidget *parent )
     QMenu* windowMenu = new QMenu( tr( "&Window" ), menuBar );
     windowMenu->addAction( m_actionCollection[ "minimize" ] );
     windowMenu->addAction( m_actionCollection[ "zoom" ] );
+    windowMenu->addAction( m_actionCollection[ "fullscreen" ] );
 
     menuBar->addMenu( windowMenu );
 #endif
