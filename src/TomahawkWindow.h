@@ -139,6 +139,7 @@ private slots:
 
     void minimize();
     void maximize();
+    void toggleFullscreen();
 
     void playlistCreateDialogFinished( int ret );
 
