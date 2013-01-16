@@ -58,6 +58,8 @@ public:
     const QString toJson() const;
     static const SipInfo fromJson( QString json );
 
+    const QString debugString() const;
+
 private:
     QSharedDataPointer<SipInfoPrivate> d;
 };

@@ -272,3 +272,15 @@ bool operator==( const SipInfo& one, const SipInfo& two )
     return false;
 }
 
+const QString
+SipInfo::debugString() const
+{
+    QString debugString( "SIP INFO: visible: %1 host: host %2 port: %3 nodeid: %4 key: %5" );
+    return debugString.arg( d->visible.toBool() )
+                      .arg( d->host )
+                      .arg( d->port )
+                      .arg( d->uniqname )
+                      .arg( d->key );
+
+}
+
