@@ -148,6 +148,12 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 
     vm->setQueue( m_queueView );
     vm->showWelcomePage();
+
+    if ( TomahawkSettings::instance()->fullscreenEnabled() )
+    {
+        // Window must be fully constructed to toggle fullscreen mode. Queue it up.
+        QTimer::singleShot( 0, this, SLOT( toggleFullscreen() ) );
+    }
 }
 
 
@@ -544,6 +550,7 @@ TomahawkWindow::setupSignals()
 #if defined( Q_OS_MAC )
     connect( ac->getAction( "minimize" ), SIGNAL( triggered() ), SLOT( minimize() ) );
     connect( ac->getAction( "zoom" ), SIGNAL( triggered() ), SLOT( maximize() ) );
+    connect( ac->getAction( "fullscreen" ), SIGNAL( triggered() ), SLOT( toggleFullscreen() ) );
 #else
     connect( ac->getAction( "toggleMenuBar" ), SIGNAL( triggered() ), SLOT( toggleMenuBar() ) );
 #endif
@@ -905,14 +912,24 @@ TomahawkWindow::showOfflineSources()
 void
 TomahawkWindow::fullScreenEntered()
 {
+    TomahawkSettings::instance()->setFullscreenEnabled( true );
     statusBar()->setSizeGripEnabled( false );
+
+#if defined( Q_WS_MAC )
+    ActionCollection::instance()->getAction( "fullscreen" )->setText( tr( "Exit Full Screen" ) );
+#endif
 }
 
 
 void
 TomahawkWindow::fullScreenExited()
 {
+    TomahawkSettings::instance()->setFullscreenEnabled( false );
     statusBar()->setSizeGripEnabled( true );
+
+#if defined( Q_WS_MAC )
+    ActionCollection::instance()->getAction( "fullscreen" )->setText( tr( "Enter Full Screen" ) );
+#endif
 }
 
 
@@ -1312,6 +1329,17 @@ TomahawkWindow::maximize()
     {
         showMaximized();
     }
+}
+
+
+void
+TomahawkWindow::toggleFullscreen()
+{
+    tDebug() << Q_FUNC_INFO;
+
+#if defined( Q_WS_MAC )
+   Tomahawk::toggleFullscreen();
+#endif
 }
 
 
