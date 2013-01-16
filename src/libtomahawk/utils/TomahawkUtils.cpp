@@ -791,11 +791,11 @@ installTranslator( QObject* parent )
     QTranslator* translator = new QTranslator( parent );
     if ( translator->load( QString( ":/lang/tomahawk_" ) + locale ) )
     {
-        tDebug( LOGVERBOSE ) << "Translation: Tomahawk: Using system locale:" << locale;
+        qDebug() << "Translation: Tomahawk: Using system locale:" << locale;
     }
     else
     {
-        tDebug( LOGVERBOSE ) << "Translation: Tomahawk: Using default locale, system locale one not found:" << locale;
+        qDebug() << "Translation: Tomahawk: Using default locale, system locale one not found:" << locale;
         translator->load( QString( ":/lang/tomahawk_en" ) );
     }
 
@@ -805,11 +805,11 @@ installTranslator( QObject* parent )
     translator = new QTranslator( parent );
     if ( translator->load( QString( ":/lang/qt_" ) + locale ) )
     {
-        tDebug( LOGVERBOSE ) << "Translation: Qt: Using system locale:" << locale;
+        qDebug() << "Translation: Qt: Using system locale:" << locale;
     }
     else
     {
-        tDebug( LOGVERBOSE ) << "Translation: Qt: Using default locale, system locale one not found:" << locale;
+        qDebug() << "Translation: Qt: Using default locale, system locale one not found:" << locale;
     }
 
     QCoreApplication::installTranslator( translator );
