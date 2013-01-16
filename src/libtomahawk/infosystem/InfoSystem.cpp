@@ -173,6 +173,12 @@ InfoSystem::init()
     connect( worker, SIGNAL( finished( QString, Tomahawk::InfoSystem::InfoType ) ),
              this, SIGNAL( finished( QString, Tomahawk::InfoSystem::InfoType ) ), Qt::UniqueConnection );
 
+    qRegisterMetaType< Tomahawk::InfoSystem::InfoTypeSet >();
+    connect( worker, SIGNAL( updatedSupportedGetTypes( Tomahawk::InfoSystem::InfoTypeSet ) ),
+             this,   SLOT(   receiveUpdatedSupportedGetTypes( Tomahawk::InfoSystem::InfoTypeSet ) ) );
+    connect( worker, SIGNAL( updatedSupportedPushTypes( Tomahawk::InfoSystem::InfoTypeSet ) ),
+             this,   SLOT(   receiveUpdatedSupportedPushTypes( Tomahawk::InfoSystem::InfoTypeSet ) ) );
+
     QMetaObject::invokeMethod( worker, "init", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoSystemCache*, cache ) );
 
     m_inited = true;

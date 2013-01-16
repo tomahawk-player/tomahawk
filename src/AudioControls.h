@@ -89,6 +89,8 @@ private slots:
     void onCoverUpdated();
     void onSocialActionsLoaded();
 
+    void onInfoSystemPushTypesUpdated( Tomahawk::InfoSystem::InfoTypeSet supportedTypes );
+
 private:
     void setCover();
     void setSocialActions();
@@ -100,6 +102,7 @@ private:
     Tomahawk::result_ptr m_currentTrack;
     Tomahawk::PlaylistModes::RepeatMode m_repeatMode;
     bool m_shuffled;
+    bool m_shouldShowShareAction;
 
     QTimer m_phononTickCheckTimer;
     QTimeLine m_sliderTimeLine;
