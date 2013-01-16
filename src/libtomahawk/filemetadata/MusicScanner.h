@@ -79,6 +79,21 @@ private:
     bool m_deleting;
 };
 
+class DirListerThreadController : public QThread
+{
+    Q_OBJECT
+
+public:
+    DirListerThreadController( QObject* parent );
+    virtual ~DirListerThreadController();
+
+    void setPaths( const QStringList& paths ) { m_paths = paths; }
+    void run();
+
+private:
+    QPointer< DirLister > m_dirLister;
+    QStringList m_paths;
+};
 
 class MusicScanner : public QObject
 {
@@ -125,8 +140,7 @@ private:
     QVariantList m_filesToDelete;
     quint32 m_batchsize;
 
-    QPointer< DirLister > m_dirLister;
-    QThread* m_dirListerThreadController;
+    DirListerThreadController* m_dirListerThreadController;
 };
 
 #endif

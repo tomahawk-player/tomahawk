@@ -123,7 +123,7 @@ InfoSystem::~InfoSystem()
 {
     tDebug() << Q_FUNC_INFO << " beginning";
 
-    if ( m_infoSystemWorkerThreadController->worker() )
+    if ( m_infoSystemWorkerThreadController )
     {
         m_infoSystemWorkerThreadController->quit();
         m_infoSystemWorkerThreadController->wait( 60000 );
@@ -133,7 +133,7 @@ InfoSystem::~InfoSystem()
     }
     tDebug() << Q_FUNC_INFO << " done deleting worker";
 
-    if( m_infoSystemCacheThreadController->cache() )
+    if( m_infoSystemCacheThreadController )
     {
         m_infoSystemCacheThreadController->quit();
         m_infoSystemCacheThreadController->wait( 60000 );
