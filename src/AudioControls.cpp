@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -151,6 +152,10 @@ AudioControls::AudioControls( QWidget* parent )
     ui->pauseButton->setContentsMargins( 0, 0, 0, 0 );
     ui->stackedLayout->setSizeConstraint( QLayout::SetFixedSize );
 
+    connect( InfoSystem::InfoSystem::instance(), SIGNAL( updatedSupportedPushTypes( Tomahawk::InfoSystem::InfoTypeSet ) ),
+             this, SLOT( onInfoSystemPushTypesUpdated( Tomahawk::InfoSystem::InfoTypeSet ) ) );
+    onInfoSystemPushTypesUpdated( InfoSystem::InfoSystem::instance()->supportedPushTypes() );
+
     onPlaybackStopped(); // initial state
 }
 
@@ -272,7 +277,7 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
     ui->loveButton->setEnabled( true );
     ui->loveButton->setVisible( true );
     ui->socialButton->setEnabled( true );
-    ui->socialButton->setVisible( true );
+    ui->socialButton->setVisible( m_shouldShowShareAction );
     ui->ownerButton->setEnabled( true );
     ui->ownerButton->setVisible( true );
 
@@ -348,6 +353,25 @@ AudioControls::onSocialActionsLoaded()
         return;
 
     setSocialActions();
+}
+
+
+void
+AudioControls::onInfoSystemPushTypesUpdated( InfoSystem::InfoTypeSet supportedTypes )
+{
+    if ( supportedTypes.contains( InfoSystem::InfoShareTrack ) )
+    {
+        m_shouldShowShareAction = true;
+    }
+    else
+    {
+        m_shouldShowShareAction = false;
+    }
+
+    if ( AudioEngine::instance()->state() == AudioEngine::Stopped )
+        ui->socialButton->setVisible( false );
+    else
+        ui->socialButton->setVisible( m_shouldShowShareAction );
 }
 
 
