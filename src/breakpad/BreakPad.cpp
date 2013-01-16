@@ -89,7 +89,7 @@ BreakPad::BreakPad( const QString& path, bool active )
     else if ( QFileInfo( globalReporter ).exists() )
         reporter = globalReporter;
     else
-        tLog() << "Could not find \"" CRASH_REPORTER_BINARY "\" in \"" CMAKE_INSTALL_FULL_LIBEXECDIR "\" or application path";
+        qDebug() << "Could not find \"" CRASH_REPORTER_BINARY "\" in \"" CMAKE_INSTALL_FULL_LIBEXECDIR "\" or application path";
 
     char* creporter;
     std::string sreporter = reporter.toStdString();
