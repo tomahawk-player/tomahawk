@@ -253,11 +253,7 @@ operator<< ( QDebug dbg, const SipInfo& info )
 bool operator==( const SipInfo& one, const SipInfo& two )
 {
     // check valid/invalid combinations first, so we don't try to access any invalid sipInfos (->assert)
-    if ( !one.isValid() && !two.isValid() )
-    {
-        return true;
-    }
-    else if ( ( one.isValid() && !two.isValid() ) || ( !one.isValid() && two.isValid() ) )
+    if ( ( one.isValid() && !two.isValid() ) || ( !one.isValid() && two.isValid() ) )
     {
         return false;
     }
