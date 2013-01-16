@@ -26,7 +26,7 @@
 #include <QWaitCondition>
 #include <QMutex>
 
-class QueueItem;
+struct QueueItem;
 class Database;
 class DatabaseImpl;
 
