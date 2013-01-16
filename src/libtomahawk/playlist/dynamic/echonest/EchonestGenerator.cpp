@@ -641,7 +641,7 @@ EchonestGenerator::loadStylesMoodsAndGenres()
         }
         s_moods = parts[ 0 ].split( "|" );
         s_styles = parts[ 1 ].split( "|" );
-        s_genres = parts[ 2 ].split( " | ");
+        s_genres = parts[ 2 ].split( "|");
     }
 }
 
