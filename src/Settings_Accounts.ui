@@ -55,7 +55,7 @@
     </layout>
    </item>
    <item>
-    <widget class="QListView" name="accountsView">
+    <widget class="AccountListView" name="accountsView">
      <property name="alternatingRowColors">
       <bool>true</bool>
      </property>
@@ -75,6 +75,11 @@
    <extends>QWidget</extends>
    <header>thirdparty/Qocoa/qbutton.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>AccountListView</class>
+   <extends>QListView</extends>
+   <header>widgets/AccountListView.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
