@@ -230,13 +230,12 @@ StreamConnection::handleMsg( msg_ptr msg )
     //         << "payload len" << msg->payload().length()
     //         << "written to device so far: " << m_badded;
 
-    if ( !m_iodev || ( (BufferIODevice*)m_iodev.data() )->nextEmptyBlock() < 0 )
+    if ( m_iodev && ( (BufferIODevice*)m_iodev.data() )->nextEmptyBlock() < 0 )
     {
         m_allok = true;
 
         // tell our iodev there is no more data to read, no args meaning a success:
-        if ( m_iodev )
-            ( (BufferIODevice*)m_iodev.data() )->inputComplete();
+        ( (BufferIODevice*)m_iodev.data() )->inputComplete();
 
         shutdown();
     }
