@@ -23,6 +23,14 @@
 #include <QStyledItemDelegate>
 #include "accounts/AccountModel.h"
 
+
+#ifdef Q_OS_MAC
+#define ACCOUNT_DELEGATE_ROW_HEIGHT_MULTIPLIER 4.9
+#else
+#define ACCOUNT_DELEGATE_ROW_HEIGHT_MULTIPLIER 5.7
+#endif
+
+
 class AnimatedSpinner;
 
 namespace Tomahawk

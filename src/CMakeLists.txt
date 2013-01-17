@@ -75,6 +75,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      SocialWidget.cpp
 
      widgets/ContainedMenuButton.cpp
+     widgets/AccountListView.cpp
      widgets/AccountListWidget.cpp
      widgets/AccountModelFactoryProxy.cpp
      widgets/AccountWidget.cpp
