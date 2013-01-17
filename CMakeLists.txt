@@ -310,3 +310,45 @@ if( BUILD_TESTS )
     enable_testing()
     add_subdirectory( tests )
 endif()
+
+
+# Add all targets to the build-tree export set
+set(CMAKE_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/Tomahawk" CACHE PATH  "Installation directory for CMake files")
+set(CMAKE_INSTALL_FULL_CMAKEDIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_CMAKEDIR}")
+export(TARGETS tomahawklib tomahawk_portfwd
+  FILE "${PROJECT_BINARY_DIR}/TomahawkLibraryDepends.cmake")
+
+# Export the package for use from the build-tree
+# (this registers the build-tree with a global CMake-registry)
+export(PACKAGE Tomahawk)
+
+# Create a TomahawkBuildTreeSettings.cmake file for the use from the build tree
+configure_file(TomahawkBuildTreeSettings.cmake.in "${PROJECT_BINARY_DIR}/TomahawkBuildTreeSettings.cmake" @ONLY)
+
+# Create the TomahawkConfig.cmake and TomahawkConfigVersion files
+file(RELATIVE_PATH CONF_REL_INCLUDE_DIR "${CMAKE_INSTALL_FULL_CMAKEDIR}" "${CMAKE_INSTALL_FULL_INCLUDEDIR}")
+
+configure_file(TomahawkConfig.cmake.in "${PROJECT_BINARY_DIR}/TomahawkConfig.cmake" @ONLY)
+configure_file(TomahawkConfigVersion.cmake.in "${PROJECT_BINARY_DIR}/TomahawkConfigVersion.cmake" @ONLY)
+file(COPY TomahawkUse.cmake DESTINATION "${PROJECT_BINARY_DIR}")
+file(COPY TomahawkAddPlugin.cmake DESTINATION "${PROJECT_BINARY_DIR}")
+
+
+# Install the cmake files
+install(
+    FILES
+        "${PROJECT_BINARY_DIR}/TomahawkConfig.cmake"
+        "${PROJECT_BINARY_DIR}/TomahawkConfigVersion.cmake"
+        "${PROJECT_BINARY_DIR}/TomahawkUse.cmake"
+        "${PROJECT_BINARY_DIR}/TomahawkAddPlugin.cmake"
+    DESTINATION
+        "${CMAKE_INSTALL_CMAKEDIR}"
+)
+
+# Install the export set for use with the install-tree
+install(
+    EXPORT
+        TomahawkLibraryDepends
+    DESTINATION
+        "${CMAKE_INSTALL_CMAKEDIR}"
+)

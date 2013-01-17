@@ -27,4 +27,8 @@ macro(qt_add_translation)
 endmacro()
 
 
-include( "${Tomahawk_CMAKE_DIR}/TomahawkAddPlugin.cmake" )
+if(NOT TOMAHAWK_CMAKE_DIR)
+    set(TOMAHAWK_CMAKE_DIR ${CMAKE_CURRENT_LIST_DIR})
+endif()
+
+include( "${TOMAHAWK_CMAKE_DIR}/TomahawkAddPlugin.cmake" )

@@ -1,0 +1,21 @@
+# - Config file for the Tomahawk package
+# It defines the following variables
+#  TOMAHAWK_INCLUDE_DIRS - include directories for Tomahawk
+#  TOMAHAWK_LIBRARIES    - libraries to link against
+#  TOMAHAWK_EXECUTABLE   - the bar executable
+
+# Compute paths
+get_filename_component(TOMAHAWK_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+if(EXISTS "${TOMAHAWK_CMAKE_DIR}/CMakeCache.txt")
+   # In build tree
+   include("${TOMAHAWK_CMAKE_DIR}/TomahawkBuildTreeSettings.cmake")
+else()
+   set(TOMAHAWK_INCLUDE_DIRS "${TOMAHAWK_CMAKE_DIR}/@CONF_REL_INCLUDE_DIR@/libtomahawk")
+endif()
+
+# Our library dependencies (contains definitions for IMPORTED targets)
+include("${TOMAHAWK_CMAKE_DIR}/TomahawkLibraryDepends.cmake")
+
+# These are IMPORTED targets created by TomahawkLibraryDepends.cmake
+set(TOMAHAWK_LIBRARIES tomahawklib)
+set(TOMAHAWK_USE_FILE "${TOMAHAWK_CMAKE_DIR}/TomahawkUse.cmake")

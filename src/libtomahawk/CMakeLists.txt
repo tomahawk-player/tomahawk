@@ -465,21 +465,11 @@ TARGET_LINK_LIBRARIES( tomahawklib
 )
 
 INSTALL( TARGETS tomahawklib
+    EXPORT TomahawkLibraryDepends
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
-
-# Install cmake config
-install( FILES
-            TomahawkConfig.cmake
-            TomahawkUse.cmake
-            ${CMAKE_SOURCE_DIR}/CMakeModules/TomahawkAddPlugin.cmake
-         DESTINATION
-            ${CMAKE_INSTALL_LIBDIR}/cmake/Tomahawk
-)
-
-
 
 # Install header files
 file( GLOB rootHeaders "*.h" )
