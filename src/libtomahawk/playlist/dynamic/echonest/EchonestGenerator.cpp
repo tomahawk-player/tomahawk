@@ -21,6 +21,7 @@
 #include "playlist/dynamic/echonest/EchonestSteerer.h"
 #include "Query.h"
 #include "utils/TomahawkUtils.h"
+#include "utils/TomahawkCache.h"
 #include "TomahawkSettings.h"
 #include "database/DatabaseCommand_CollectionAttributes.h"
 #include "database/Database.h"
@@ -612,51 +613,53 @@ EchonestGenerator::sentenceSummary()
 void
 EchonestGenerator::loadStylesMoodsAndGenres()
 {
-    if( !s_styles.isEmpty() || !s_moods.isEmpty() )
+    if( !s_styles.isEmpty() || !s_moods.isEmpty() || !s_genres.isEmpty() ) //TODO: rly? if one of those is not empty we don't try to load the others?
         return;
 
-    QFile dataFile( TomahawkUtils::appDataDir().absoluteFilePath( "echonest_stylesmoodsandgenres.dat" ) ); //TODO: delete old file in migrate function
-    if( !dataFile.exists() ) // load TODO: re-fetch styles, moods & genres if file is older than X days?
+    QVariant styles = TomahawkUtils::Cache::instance()->getData( "EchonesGenerator", "styles" );
+    if ( styles.isValid() && styles.canConvert< QStringList >() )
     {
+        s_styles = styles.toStringList();
+    }
+    else
+    {
+        tLog() << "Styles not in cache or too old, refetching styles ...";
         s_stylesJob = Echonest::Artist::listTerms( "style" );
         connect( s_stylesJob, SIGNAL( finished() ), this, SLOT( stylesReceived() ) );
+    }
+
+    QVariant moods = TomahawkUtils::Cache::instance()->getData( "EchonesGenerator", "moods" );
+    if ( moods.isValid() && moods.canConvert< QStringList >() )
+    {
+        s_moods = moods.toStringList();
+    }
+    else
+    {
+        tLog() << "Moods not in cache or too old, refetching moods ...";
         s_moodsJob = Echonest::Artist::listTerms( "mood" );
         connect( s_moodsJob, SIGNAL( finished() ), this, SLOT( moodsReceived() ) );
+    }
+
+    QVariant genres = TomahawkUtils::Cache::instance()->getData( "EchonesGenerator", "genres" );
+    if ( genres.isValid() && genres.canConvert< QStringList >() )
+    {
+        s_genres = genres.toStringList();
+    }
+    else
+    {
+        tLog() << "Genres not in cache or too old, refetching genres ...";
         s_genresJob = Echonest::Artist::fetchGenres();
         connect( s_genresJob, SIGNAL( finished() ), this, SLOT( genresReceived() ) );
-    } else
-    {
-        if( !dataFile.open( QIODevice::ReadOnly ) )
-        {
-            tLog() << "Failed to open for reading styles/moods/genres db file:" << dataFile.fileName();
-            return;
-        }
-
-        QString allData = QString::fromUtf8( dataFile.readAll() );
-        QStringList parts = allData.split( "\n" );
-        if( parts.size() != 3 )
-        {
-            tLog() << "Didn't get moods, styles and genres in file...:" << allData;
-            return;
-        }
-        s_moods = parts[ 0 ].split( "|" );
-        s_styles = parts[ 1 ].split( "|" );
-        s_genres = parts[ 2 ].split( "|");
     }
+
 }
 
 void
 EchonestGenerator::saveStylesMoodsAndGenres()
 {
-    QFile dataFile( TomahawkUtils::appDataDir().absoluteFilePath( "echonest_stylesmoodsandgenres.dat" ) );
-    if( !dataFile.open( QIODevice::WriteOnly ) )
-    {
-        tLog() << "Failed to open styles and moods data file for saving:" << dataFile.errorString() << dataFile.fileName();
-        return;
-    }
-
-    QByteArray data = QString( "%1\n%2\n%3" ).arg( s_moods.join( "|" ) ).arg( s_styles.join( "|" ) ).arg( s_genres.join( "|" ) ).toUtf8();
-    dataFile.write( data );
+    TomahawkUtils::Cache::instance()->putData( "EchonesGenerator", 1209600000 /* 2 weeks */, "moods", QVariant::fromValue< QStringList >( s_moods ) );
+    TomahawkUtils::Cache::instance()->putData( "EchonesGenerator", 1209600000 /* 2 weeks */, "styles", QVariant::fromValue< QStringList >( s_styles ) );
+    TomahawkUtils::Cache::instance()->putData( "EchonesGenerator", 1209600000 /* 2 weeks */, "genres", QVariant::fromValue< QStringList >( s_genres ) );
 }
 
 
