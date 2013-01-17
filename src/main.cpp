@@ -148,9 +148,9 @@ main( int argc, char *argv[] )
     new TomahawkSettingsGui( &a );
 #endif
 
-#ifndef ENABLE_HEADLESS
+#ifndef ENABLE_HEADLESSs
 #ifdef WITH_BREAKPAD
-//    new BreakPad( QDir::tempPath(), TomahawkSettings::instance()->crashReporterEnabled() && !TomahawkUtils::headless() );
+    new BreakPad( QDir::tempPath(), TomahawkSettings::instance()->crashReporterEnabled() && !TomahawkUtils::headless() );
 #endif
 #endif
 
