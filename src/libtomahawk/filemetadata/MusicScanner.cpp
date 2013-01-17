@@ -124,12 +124,12 @@ DirListerThreadController::run()
     QMetaObject::invokeMethod( m_dirLister.data(), "go", Qt::QueuedConnection );
 
     exec();
-    if( !m_dirLister.isNull() )
+    if ( !m_dirLister.isNull() )
         delete m_dirLister.data();
 }
 
 
-MusicScanner::MusicScanner( ScanManager::ScanMode scanMode, const QStringList& paths, quint32 bs )
+MusicScanner::MusicScanner( MusicScanner::ScanMode scanMode, const QStringList& paths, quint32 bs )
     : QObject()
     , m_scanMode( scanMode )
     , m_paths( paths )
@@ -204,7 +204,7 @@ MusicScanner::scan()
     connect( this, SIGNAL( batchReady( QVariantList, QVariantList ) ),
                      SLOT( commitBatch( QVariantList, QVariantList ) ), Qt::DirectConnection );
 
-    if ( m_scanMode == ScanManager::FileScan )
+    if ( m_scanMode == MusicScanner::FileScan )
     {
         scanFilePaths();
         return;
@@ -236,7 +236,7 @@ MusicScanner::postOps()
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
 
-    if ( m_scanMode == ScanManager::DirScan )
+    if ( m_scanMode == MusicScanner::DirScan )
     {
         // any remaining stuff that wasnt emitted as a batch:
         foreach( const QString& key, m_filemtimes.keys() )
