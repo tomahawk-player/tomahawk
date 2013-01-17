@@ -476,7 +476,7 @@ EchonestGenerator::appendRadioType( Echonest::DynamicPlaylist::PlaylistParams& p
     foreach( const dyncontrol_ptr& control, m_controls ) {
         if ( control->selectedType() == "User Radio" )
             someCatalog = true;
-        else if (control->selectedType() == "Genre" )
+        else if ( control->selectedType() == "Genre" )
             genreType = true;
     }
     if( someCatalog )
