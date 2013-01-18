@@ -19,10 +19,6 @@
 
 #include "ScriptResolver.h"
 
-#include <QtEndian>
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkProxy>
-
 #include "Artist.h"
 #include "Album.h"
 #include "Pipeline.h"
@@ -31,6 +27,11 @@
 #include "accounts/AccountConfigWidget.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+
+#include <QtEndian>
+#include <QFileInfo>
+#include <QNetworkAccessManager>
+#include <QNetworkProxy>
 
 #ifdef Q_OS_WIN
 #include <shlwapi.h>

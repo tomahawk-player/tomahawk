@@ -27,7 +27,6 @@
 #define TOMAHAWK_COLLECTION_H
 
 #include <QHash>
-#include <QDir>
 #include <QList>
 #include <QSharedPointer>
 
@@ -90,12 +89,6 @@ signals:
     void changed();
 
 public slots:
-    //TODO: should be made private and the dbcmd friended
-    //      and can probably be moved into database collection
-    //      it's a slot so the dynamic hookup will work
-    virtual void addTracks( const QList<QVariant>& newitems ) = 0;
-    virtual void removeTracks( const QDir& dir ) = 0;
-
     void setPlaylists( const QList<Tomahawk::playlist_ptr>& plists );
     void setAutoPlaylists( const QList< Tomahawk::dynplaylist_ptr >& autoplists );
     void setStations( const QList< Tomahawk::dynplaylist_ptr >& stations );
