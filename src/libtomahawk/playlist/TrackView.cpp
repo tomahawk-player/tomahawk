@@ -608,6 +608,8 @@ TrackView::startDrag( Qt::DropActions supportedActions )
     {
         m_proxyModel->removeIndexes( pindexes );
     }
+
+    // delete drag; FIXME? On OSX it doesn't seem to get deleted automatically.
 }
 
 
