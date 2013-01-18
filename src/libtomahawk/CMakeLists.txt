@@ -89,6 +89,7 @@ set( libGuiSources
     ExternalResolverGui.cpp
     resolvers/ScriptResolver.cpp
     resolvers/QtScriptResolver.cpp
+    resolvers/ScriptCollection.cpp
 
     utils/ImageRegistry.cpp
     utils/WidgetDragFilter.cpp
