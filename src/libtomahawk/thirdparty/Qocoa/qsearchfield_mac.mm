@@ -24,6 +24,7 @@ THE SOFTWARE.
 #include "moc_qsearchfield.cpp"
 
 #include "qocoa_mac.h"
+#include "utils/Logger.h"
 
 #import "Foundation/NSAutoreleasePool.h"
 #import "Foundation/NSNotification.h"
@@ -104,12 +105,12 @@ static const unsigned short kKeycodeV = 9;
     if ([event type] == NSKeyDown && [event modifierFlags] & NSCommandKeyMask)
     {
         const unsigned short keyCode = [event keyCode];
-        if (keyCode == kKeycodeA)  // Cmd+a
+/*        if (keyCode == kKeycodeA)  // Cmd+a
         {
             [self performSelector:@selector(selectText:)];
             return YES;
         }
-        else if (keyCode == kKeycodeC)  // Cmd+c
+        else*/ if (keyCode == kKeycodeC)  // Cmd+c
         {
             QClipboard* clipboard = QApplication::clipboard();
             clipboard->setText(toQString([self stringValue]));
