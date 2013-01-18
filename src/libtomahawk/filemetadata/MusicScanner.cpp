@@ -113,7 +113,7 @@ DirListerThreadController::~DirListerThreadController()
 void
 DirListerThreadController::run()
 {
-    m_dirLister = QPointer< DirLister >( new DirLister( m_paths ) );
+    m_dirLister = QWeakPointer< DirLister >( new DirLister( m_paths ) );
     connect( m_dirLister.data(), SIGNAL( fileToScan( QFileInfo ) ),
              parent(), SLOT( scanFile( QFileInfo ) ), Qt::QueuedConnection );
 
