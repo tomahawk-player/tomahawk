@@ -109,13 +109,13 @@ se s vámi spojil?</translation>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="71"/>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="320"/>
         <source>&amp;Listen Privately</source>
-        <translation>Zapnout režim &amp;sokromého poslechu</translation>
+        <translation>Zapnout režim &amp;soukromého poslechu</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="71"/>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="320"/>
         <source>&amp;Listen Publicly</source>
-        <translation>Opustit režim so&amp;kromého poslechu</translation>
+        <translation>Opustit režim sou&amp;kromého poslechu</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="77"/>
@@ -195,7 +195,7 @@ se s vámi spojil?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="115"/>
         <source>Enter Full Screen</source>
-        <translation type="unfinished"/>
+        <translation>Vstoupit do režimu na celou obrazovku</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="118"/>
@@ -1390,7 +1390,7 @@ se s vámi spojil?</translation>
     <message>
         <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="222"/>
         <source>Script Resolver Error: %1 %2 %3 %4</source>
-        <translation type="unfinished"/>
+        <translation>Chyba řešitele skriptu: %1 %2 %3 %4</translation>
     </message>
 </context>
 <context>
@@ -2029,32 +2029,32 @@ se s vámi spojil?</translation>
 <context>
     <name>Tomahawk::Accounts::AccountDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="207"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="201"/>
         <source>Add Account</source>
         <translation>Přidat účet</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="256"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="250"/>
         <source>Remove</source>
         <translation>Odstranit</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="369"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="363"/>
         <source>%1 downloads</source>
         <translation>%1 stažení</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="555"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="549"/>
         <source>Online</source>
         <translation>Připojený</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="560"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="554"/>
         <source>Connecting...</source>
         <translation>Připojuje se...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="565"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="559"/>
         <source>Offline</source>
         <translation>Nepřipojený</translation>
     </message>
@@ -3409,12 +3409,12 @@ služby Twitter zde zadejte tam zobrazené číslo PIN:</translation>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="889"/>
         <source>Exit Full Screen</source>
-        <translation type="unfinished"/>
+        <translation>Ukončit režim na celou obrazovku</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="901"/>
         <source>Enter Full Screen</source>
-        <translation type="unfinished"/>
+        <translation>Vstoupit do režimu na celou obrazovku</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="963"/>
