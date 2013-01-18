@@ -429,7 +429,15 @@ qt_wrap_ui(libUI_H ${libUI})
 SET( libSources ${libSources} ${libUI_H} )
 
 add_library( tomahawklib SHARED ${libSources})
-set_target_properties(tomahawklib PROPERTIES AUTOMOC TRUE)
+set_target_properties(
+    tomahawklib
+        PROPERTIES
+            AUTOMOC TRUE
+            VERSION ${TOMAHAWK_VERSION_SHORT}
+            SOVERSION ${TOMAHAWK_VERSION_SHORT}
+)
+
+
 qt5_use_modules(tomahawklib Widgets Network Sql WebKitWidgets Concurrent Xml UiTools Svg)
 
 IF(QCA2_FOUND)
