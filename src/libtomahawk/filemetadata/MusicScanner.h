@@ -89,7 +89,7 @@ public:
     void run();
 
 private:
-    QPointer< DirLister > m_dirLister;
+    QWeakPointer< DirLister > m_dirLister;
     QStringList m_paths;
 };
 
