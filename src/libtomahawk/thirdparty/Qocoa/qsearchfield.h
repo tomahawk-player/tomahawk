@@ -10,19 +10,16 @@ class QSearchFieldPrivate;
 class DLLEXPORT QSearchField : public QWidget
 {
     Q_OBJECT
-
-    Q_PROPERTY(QString placeholderText READ placeholderText WRITE setPlaceholderText);
-
 public:
     explicit QSearchField(QWidget *parent);
 
     QString text() const;
     QString placeholderText() const;
-    void setFocus(Qt::FocusReason);
+    void setFocus(Qt::FocusReason reason);
 
 public slots:
     void setText(const QString &text);
-    void setPlaceholderText(const QString& text);
+    void setPlaceholderText(const QString &text);
     void clear();
     void selectAll();
     void setFocus();
@@ -34,10 +31,13 @@ signals:
 
 protected:
     void resizeEvent(QResizeEvent*);
+    bool eventFilter(QObject*, QEvent*);
 
 private:
     friend class QSearchFieldPrivate;
     QPointer <QSearchFieldPrivate> pimpl;
+
+    Q_PROPERTY(QString placeholderText READ placeholderText WRITE setPlaceholderText);
 };
 
 #endif // QSEARCHFIELD_H
