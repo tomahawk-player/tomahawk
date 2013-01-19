@@ -146,8 +146,9 @@ AccountManager::loadPluginFactories( const QStringList& paths )
 bool
 AccountManager::hasPluginWithFactory( const QString& factory ) const
 {
-    foreach( Account* account, m_accounts ) {
-        if( factoryFromId( account->accountId() ) == factory )
+    foreach ( Account* account, m_accounts )
+    {
+        if ( factoryFromId( account->accountId() ) == factory )
             return true;
     }
     return false;
@@ -160,6 +161,7 @@ AccountManager::factoryFromId( const QString& accountId ) const
 {
     return accountId.split( "_" ).first();
 }
+
 
 AccountFactory*
 AccountManager::factoryForAccount( Account* account ) const
@@ -230,7 +232,7 @@ void
 AccountManager::connectAll()
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
-    foreach( Account* acc, m_accounts )
+    foreach ( Account* acc, m_accounts )
     {
         if ( acc->enabled() )
         {
@@ -247,7 +249,7 @@ void
 AccountManager::disconnectAll()
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
-    foreach( Account* acc, m_enabledAccounts )
+    foreach ( Account* acc, m_enabledAccounts )
         acc->deauthenticate();
 
     m_enabledAccounts.clear();
@@ -272,10 +274,10 @@ AccountManager::loadFromConfig()
 {
     QStringList accountIds = TomahawkSettings::instance()->accounts();
     qDebug() << "LOADING ALL ACCOUNTS" << accountIds;
-    foreach( const QString& accountId, accountIds )
+    foreach ( const QString& accountId, accountIds )
     {
         QString pluginFactory = factoryFromId( accountId );
-        if( m_accountFactories.contains( pluginFactory ) )
+        if ( m_accountFactories.contains( pluginFactory ) )
         {
             Account* account = loadPlugin( accountId );
             addAccount( account );
@@ -283,11 +285,12 @@ AccountManager::loadFromConfig()
     }
 }
 
+
 void
 AccountManager::initSIP()
 {
     tDebug() << Q_FUNC_INFO;
-    foreach( Account* account, accounts() )
+    foreach ( Account* account, accounts() )
     {
         hookupAndEnable( account, true );
     }
@@ -376,7 +379,7 @@ AccountManager::accountFromPath( const QString& accountPath )
         }
     }
 
-    Q_ASSERT_X( false, "Shouldn't have had no account factory accepting a path.. at least ResolverAccount!!", "");
+    Q_ASSERT_X( false, "Shouldn't have had no account factory accepting a path.. at least ResolverAccount!", "" );
     return 0;
 }
 
@@ -398,14 +401,15 @@ AccountManager::addAccountFactory( AccountFactory* factory )
 Account*
 AccountManager::zeroconfAccount() const
 {
-    foreach( Account* account, accounts() )
+    foreach ( Account* account, accounts() )
     {
-        if( account->sipPlugin() && account->sipPlugin()->serviceName() == "zeroconf" )
+        if ( account->sipPlugin() && account->sipPlugin()->serviceName() == "zeroconf" )
             return account;
     }
 
     return 0;
 }
+
 
 void
 AccountManager::hookupAccount( Account* account ) const
@@ -450,15 +454,17 @@ AccountManager::onError( int code, const QString& msg )
     }
 }
 
+
 void
 AccountManager::onSettingsChanged()
 {
-    foreach( Account* account, m_accounts )
+    foreach ( Account* account, m_accounts )
     {
         if ( account->types() & Accounts::SipType && account->sipPlugin() )
             account->sipPlugin()->checkSettings();
     }
 }
+
 
 void
 AccountManager::onStateChanged( Account::ConnectionState state )
