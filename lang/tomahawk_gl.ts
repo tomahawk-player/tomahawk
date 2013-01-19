@@ -194,7 +194,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="115"/>
         <source>Enter Full Screen</source>
-        <translation type="unfinished"/>
+        <translation>Entrar na pantalla ao completo</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="118"/>
@@ -1389,7 +1389,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="222"/>
         <source>Script Resolver Error: %1 %2 %3 %4</source>
-        <translation type="unfinished"/>
+        <translation>Erro do solucionador de erros: %1 %2 %3 %4</translation>
     </message>
 </context>
 <context>
@@ -3409,12 +3409,12 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="889"/>
         <source>Exit Full Screen</source>
-        <translation type="unfinished"/>
+        <translation>Saír da pantalla ao completo</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="901"/>
         <source>Enter Full Screen</source>
-        <translation type="unfinished"/>
+        <translation>Entrar na pantalla ao completo</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="963"/>
