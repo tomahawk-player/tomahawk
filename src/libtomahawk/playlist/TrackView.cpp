@@ -813,7 +813,7 @@ TrackView::description() const
 QPixmap
 TrackView::pixmap() const
 {
-    return TomahawkUtils::defaultPixmap( TomahawkUtils::SuperCollection );
+    return model()->icon();
 }
 
 
