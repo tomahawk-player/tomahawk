@@ -90,7 +90,6 @@ QueryLabel::init()
     setContentsMargins( 0, 0, 0, 0 );
     setMouseTracking( true );
 
-    m_useCustomPen = false;
     m_align = Qt::AlignLeft | Qt::AlignVCenter;
     m_mode = Qt::ElideMiddle;
 
@@ -284,21 +283,6 @@ QueryLabel::setAlignment( Qt::Alignment alignment )
 }
 
 
-void
-QueryLabel::setTextPen( const QPen & pen )
-{
-    m_useCustomPen = true;
-    m_textPen = pen;
-}
-
-
-QPen
-QueryLabel::textPen() const
-{
-    return m_textPen;
-}
-
-
 Qt::TextElideMode
 QueryLabel::elideMode() const
 {
@@ -414,19 +398,15 @@ QueryLabel::paintEvent( QPaintEvent* event )
         int albumX = m_type & Album ? fm.width( album()->name() ) : 0;
         int trackX = m_type & Track ? fm.width( track() ) : 0;
 
-        if ( m_useCustomPen )
-            p.setPen( m_textPen );
-
         if ( m_type & Artist )
         {
             p.setBrush( palette().window() );
-            if ( !m_useCustomPen )
-                p.setPen( palette().color( foregroundRole() ) );
+            p.setPen( palette().color( foregroundRole() ) );
 
             if ( m_hoverType == Artist )
             {
-                p.setPen( palette().highlightedText().color() );
-                p.setBrush( palette().highlight() );
+                p.setBrush( TomahawkUtils::Colors::SELECTION_BACKGROUND );
+                p.setPen( TomahawkUtils::Colors::SELECTION_FOREGROUND );
             }
 
             p.drawText( r, m_align, artist()->name() );
@@ -435,8 +415,7 @@ QueryLabel::paintEvent( QPaintEvent* event )
         if ( m_type & Album && !album()->name().isEmpty() )
         {
             p.setBrush( palette().window() );
-            if ( !m_useCustomPen )
-                p.setPen( palette().color( foregroundRole() ) );
+            p.setPen( palette().color( foregroundRole() ) );
 
             if ( m_type & Artist )
             {
@@ -445,8 +424,8 @@ QueryLabel::paintEvent( QPaintEvent* event )
             }
             if ( m_hoverType == Album )
             {
-                p.setPen( palette().highlightedText().color() );
-                p.setBrush( palette().highlight() );
+                p.setBrush( TomahawkUtils::Colors::SELECTION_BACKGROUND );
+                p.setPen( TomahawkUtils::Colors::SELECTION_FOREGROUND );
             }
 
             p.drawText( r, m_align, album()->name() );
@@ -455,8 +434,7 @@ QueryLabel::paintEvent( QPaintEvent* event )
         if ( m_type & Track )
         {
             p.setBrush( palette().window() );
-            if ( !m_useCustomPen )
-                p.setPen( palette().color( foregroundRole() ) );
+            p.setPen( palette().color( foregroundRole() ) );
 
             if ( m_type & Artist || ( m_type & Album && !album()->name().isEmpty() ) )
             {
@@ -465,8 +443,8 @@ QueryLabel::paintEvent( QPaintEvent* event )
             }
             if ( m_hoverType == Track )
             {
-                p.setPen( palette().highlightedText().color() );
-                p.setBrush( palette().highlight() );
+                p.setBrush( TomahawkUtils::Colors::SELECTION_BACKGROUND );
+                p.setPen( TomahawkUtils::Colors::SELECTION_FOREGROUND );
             }
 
             p.drawText( r, m_align, track() );
