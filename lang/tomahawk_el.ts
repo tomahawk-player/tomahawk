@@ -244,7 +244,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="191"/>
         <source>&amp;Window</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Παράθυρο</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="207"/>
@@ -362,7 +362,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/AudioControls.cpp" line="289"/>
         <source>Love</source>
-        <translation type="unfinished"/>
+        <translation>Αγάπησε</translation>
     </message>
 </context>
 <context>
@@ -556,7 +556,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="83"/>
         <source>Less</source>
-        <translation type="unfinished"/>
+        <translation>Λιγότερο</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="84"/>
@@ -576,22 +576,22 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="87"/>
         <source>More</source>
-        <translation type="unfinished"/>
+        <translation>Περισσότερο</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="88"/>
         <source>Much more</source>
-        <translation type="unfinished"/>
+        <translation>Πολύ περισσότερο</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="91"/>
         <source>Tempo</source>
-        <translation type="unfinished"/>
+        <translation>Ρυθμός</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="92"/>
         <source>Loudness</source>
-        <translation type="unfinished"/>
+        <translation>Ένταση</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="93"/>
@@ -817,7 +817,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="30"/>
         <source>Tags</source>
-        <translation type="unfinished"/>
+        <translation>Ετικέτες</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="39"/>
@@ -1644,7 +1644,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/SocialWidget.cpp" line="69"/>
         <source>Tweet</source>
-        <translation type="unfinished"/>
+        <translation>Tweet</translation>
     </message>
     <message>
         <location filename="../src/SocialWidget.cpp" line="167"/>
@@ -1834,17 +1834,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="362"/>
         <source>playlist</source>
-        <translation type="unfinished"/>
+        <translation>λίστας αναπαραγωγής</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="366"/>
         <source>automatic playlist</source>
-        <translation type="unfinished"/>
+        <translation>αυτόματη λίστα αναπαραγωγής</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="370"/>
         <source>station</source>
-        <translation type="unfinished"/>
+        <translation>σταθμός</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourceTreeView.cpp" line="393"/>
@@ -2138,7 +2138,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="115"/>
         <source>Test Login</source>
-        <translation type="unfinished"/>
+        <translation>Δοκιμαστική Σύνδεση</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="125"/>
@@ -2531,17 +2531,17 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/libtomahawk/utils/DropJobNotifier.cpp" line="78"/>
         <source>artist</source>
-        <translation type="unfinished"/>
+        <translation>καλλιτέχνης</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/DropJobNotifier.cpp" line="81"/>
         <source>track</source>
-        <translation type="unfinished"/>
+        <translation>κομμάτι</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/DropJobNotifier.cpp" line="84"/>
         <source>album</source>
-        <translation type="unfinished"/>
+        <translation>άλμπουμ</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/DropJobNotifier.cpp" line="107"/>
@@ -2702,17 +2702,17 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="308"/>
         <source>100 dB</source>
-        <translation type="unfinished"/>
+        <translation>100 dB</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="345"/>
         <source>Major</source>
-        <translation type="unfinished"/>
+        <translation>Μείζονα</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="346"/>
         <source>Minor</source>
-        <translation type="unfinished"/>
+        <translation>Ελάσσονα</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="364"/>
@@ -2732,22 +2732,22 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="367"/>
         <source>E Flat</source>
-        <translation type="unfinished"/>
+        <translation>Μι Ύφεση</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="368"/>
         <source>E</source>
-        <translation type="unfinished"/>
+        <translation>Μι</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="369"/>
         <source>F</source>
-        <translation type="unfinished"/>
+        <translation>Φα</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="370"/>
         <source>F Sharp</source>
-        <translation type="unfinished"/>
+        <translation>Φα Δίεση</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="371"/>
@@ -2757,7 +2757,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="372"/>
         <source>A Flat</source>
-        <translation type="unfinished"/>
+        <translation>Λα Ύφεση</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="373"/>
@@ -2767,12 +2767,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="374"/>
         <source>B Flat</source>
-        <translation type="unfinished"/>
+        <translation>Σι Ύφεση</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="375"/>
         <source>B</source>
-        <translation type="unfinished"/>
+        <translation>Σι</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="392"/>
@@ -2797,7 +2797,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="398"/>
         <source>Loudness</source>
-        <translation type="unfinished"/>
+        <translation>Ένταση</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="399"/>
@@ -2820,17 +2820,17 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="402"/>
         <source>Latitude</source>
-        <translation type="unfinished"/>
+        <translation>Γεωγραφικό πλάτος</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="403"/>
         <source>Longitude</source>
-        <translation type="unfinished"/>
+        <translation>Γεωγραφικό μήκος</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="404"/>
         <source>Mode</source>
-        <translation type="unfinished"/>
+        <translation>Λειτουργία</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="405"/>
@@ -2847,7 +2847,7 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="407"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="824"/>
         <source>Danceability</source>
-        <translation type="unfinished"/>
+        <translation>Χορευτικότητα</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="449"/>
@@ -3020,17 +3020,17 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="585"/>
         <source>Artists</source>
-        <translation type="unfinished"/>
+        <translation>Καλλιτέχνες</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="587"/>
         <source>Albums</source>
-        <translation type="unfinished"/>
+        <translation>Άλμπουμ</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="589"/>
         <source>Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Κομμάτια</translation>
     </message>
 </context>
 <context>
@@ -3079,7 +3079,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/infoplugins/generic/newreleases/NewReleasesPlugin.cpp" line="592"/>
         <source>Albums</source>
-        <translation type="unfinished"/>
+        <translation>Άλμπουμ</translation>
     </message>
 </context>
 <context>
@@ -3103,27 +3103,27 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="149"/>
         <source>New Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Νέα Λίστα Αναπαραγωγής</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="175"/>
         <source>Failed to save tracks</source>
-        <translation type="unfinished"/>
+        <translation>Αποτυχία αποθήκευσης κομματιών</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="175"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
-        <translation type="unfinished"/>
+        <translation>Μερικά κομμάτια στην λίστα αναπαραγωγής δεν περιέχουν καλλιτέχνη και τίτλο. Θα αγνοηθούν.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="200"/>
         <source>XSPF Error</source>
-        <translation type="unfinished"/>
+        <translation>Σφάλμα XSPF</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="200"/>
         <source>This is not a valid XSPF playlist.</source>
-        <translation type="unfinished"/>
+        <translation>Αυτή δεν είναι μια έγκυρη λίστα αναπαραγωγής XSPF.</translation>
     </message>
 </context>
 <context>
@@ -3137,7 +3137,7 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/LatchManager.cpp" line="126"/>
         <location filename="../src/libtomahawk/LatchManager.cpp" line="147"/>
         <source>&amp;Listen Along</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Συνακρόαση</translation>
     </message>
 </context>
 <context>
@@ -3159,27 +3159,27 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="754"/>
         <source> and </source>
-        <translation type="unfinished"/>
+        <translation>και</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="762"/>
         <source>You</source>
-        <translation type="unfinished"/>
+        <translation>Εσείς</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="764"/>
         <source>you</source>
-        <translation type="unfinished"/>
+        <translation>εσείς</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="773"/>
         <source>and</source>
-        <translation type="unfinished"/>
+        <translation>και</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/Query.cpp" line="773"/>
         <source>%n other(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n ακόμη</numerusform><numerusform>%n άλλοι</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/Query.cpp" line="776"/>
@@ -3332,22 +3332,22 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="259"/>
         <source>Play</source>
-        <translation type="unfinished"/>
+        <translation>Αναπαραγωγή</translation>
     </message>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="287"/>
         <source>Pause</source>
-        <translation type="unfinished"/>
+        <translation>Παύση</translation>
     </message>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="317"/>
         <source>&amp;Love</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Αγάπησε</translation>
     </message>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="325"/>
         <source>Un-&amp;Love</source>
-        <translation type="unfinished"/>
+        <translation>Ξε-&amp;Αγάπησε</translation>
     </message>
     <message>
         <location filename="../src/TomahawkTrayIcon.cpp" line="176"/>
@@ -3360,7 +3360,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.ui" line="14"/>
         <source>Tomahawk</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="275"/>
@@ -3477,7 +3477,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1151"/>
         <source>&amp;Play</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Αναπαραγωγή</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="1182"/>
@@ -3687,7 +3687,7 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="286"/>
         <source>Direct Message</source>
-        <translation type="unfinished"/>
+        <translation>Άμεσο Μήνυμα</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="322"/>
@@ -3697,7 +3697,7 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="351"/>
         <source>Send Message</source>
-        <translation type="unfinished"/>
+        <translation>Αποστολή Μηνύματος</translation>
     </message>
 </context>
 <context>
@@ -3781,7 +3781,7 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/libtomahawk/widgets/WelcomeWidget.h" line="92"/>
         <source>Welcome to Tomahawk</source>
-        <translation type="unfinished"/>
+        <translation>Καλωσήρθατε στο Tomahawk</translation>
     </message>
 </context>
 <context>
@@ -3789,7 +3789,7 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/libtomahawk/widgets/WhatsHotWidget.h" line="69"/>
         <source>Charts</source>
-        <translation type="unfinished"/>
+        <translation>Γραφήματα</translation>
     </message>
 </context>
 <context>
@@ -3797,7 +3797,7 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/libtomahawk/context/pages/WikipediaContext.h" line="42"/>
         <source>Wikipedia</source>
-        <translation type="unfinished"/>
+        <translation>Wikipedia</translation>
     </message>
 </context>
 <context>
@@ -3858,7 +3858,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="199"/>
         <source>New Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Νέα Λίστα Αναπαραγωγής</translation>
     </message>
 </context>
 <context>
@@ -3872,7 +3872,7 @@ Lyrics for &quot;%1&quot; by %2:
         <location filename="../src/accounts/xmpp/sip/XmlConsole.ui" line="33"/>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="60"/>
         <source>Filter</source>
-        <translation type="unfinished"/>
+        <translation>Φίλτρο</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.ui" line="43"/>
@@ -3912,7 +3912,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="83"/>
         <source>Message</source>
-        <translation type="unfinished"/>
+        <translation>Μήνυμα</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="87"/>
@@ -3927,7 +3927,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="107"/>
         <source>Close</source>
-        <translation type="unfinished"/>
+        <translation>Κλείσιμο</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="358"/>
@@ -3955,12 +3955,12 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="89"/>
         <source>Enter your Xmpp login to connect with your friends using Tomahawk!</source>
-        <translation type="unfinished"/>
+        <translation>Εισάγετε τα Xmpp διαπιστευτήρια σας για να συνδεθείτε με τους φίλους σας χρησιμοποιώντας το Tomahawk!</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="111"/>
         <source>Login Information</source>
-        <translation type="unfinished"/>
+        <translation>Πληροφορίες σύνδεσης</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="131"/>
@@ -3970,12 +3970,12 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="147"/>
         <source>e.g. user@example.com</source>
-        <translation type="unfinished"/>
+        <translation>π.χ. user@example.com</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="160"/>
         <source>Password:</source>
-        <translation type="unfinished"/>
+        <translation>Συνθηματικό:</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="188"/>
@@ -3995,7 +3995,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="253"/>
         <source>Port:</source>
-        <translation type="unfinished"/>
+        <translation>Θύρα:</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="299"/>
@@ -4063,7 +4063,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="420"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>Άγνωστο</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="780"/>
@@ -4098,7 +4098,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="478"/>
         <source>Add Friend</source>
-        <translation type="unfinished"/>
+        <translation>Προσθήκη φίλου</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="479"/>
@@ -4108,7 +4108,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="635"/>
         <source>Add Friend...</source>
-        <translation type="unfinished"/>
+        <translation>Προσθήκη Φίλου...</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="640"/>
