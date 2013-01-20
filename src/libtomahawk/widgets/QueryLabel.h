@@ -74,9 +74,6 @@ public:
     Qt::TextElideMode elideMode() const;
     void setElideMode( Qt::TextElideMode mode );
 
-    void setTextPen( const QPen& );
-    QPen textPen() const;
-
     void setExtraContentsMargins( int left, int top, int right, int bottom );
     void setJumpLinkVisible( bool visible );
 
@@ -135,9 +132,6 @@ private:
 
     Qt::Alignment m_align;
     Qt::TextElideMode m_mode;
-
-    bool m_useCustomPen;
-    QPen m_textPen;
 
     DisplayType m_hoverType;
     QRect m_hoverArea;
