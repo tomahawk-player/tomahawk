@@ -83,7 +83,6 @@ InfoBar::InfoBar( QWidget* parent )
     m_queryLabel = new QueryLabel( this );
     m_queryLabel->setType( QueryLabel::Artist );
     m_queryLabel->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
-    m_queryLabel->setTextPen( palette().brightText().color() );
     m_queryLabel->setFont( boldFont );
     m_queryLabel->hide();
     connect( m_queryLabel, SIGNAL( clickedArtist() ), this, SLOT( artistClicked() ) );
