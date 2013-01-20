@@ -70,6 +70,11 @@ AudioControls::AudioControls( QWidget* parent )
     ui->albumLabel->setFont( font );
     ui->albumLabel->setType( QueryLabel::ArtistAndAlbum );
 
+    QPalette queryLabelsPalette = ui->artistTrackLabel->palette();
+    queryLabelsPalette.setColor( QPalette::Foreground, Qt::black );
+    ui->artistTrackLabel->setPalette( queryLabelsPalette );
+    ui->albumLabel->setPalette( queryLabelsPalette );
+    
     font.setWeight( QFont::Normal );
     ui->timeLabel->setFont( font );
     ui->timeLeftLabel->setFont( font );
