@@ -51,6 +51,16 @@ public:
         FailedToLoad
     };
 
+    enum Capability
+    {
+        NullCapability = 0x0,
+        Browsable = 0x1,        // can be represented in one or more collection tree views
+        PlaylistSync = 0x2,     // can sync playlists
+        AccountFactory = 0x4    // can configure multiple accounts at the same time
+    };
+    Q_DECLARE_FLAGS( Capabilities, Capability )
+    Q_FLAGS( Capabilities )
+
     ExternalResolver( const QString& filePath ) { m_filePath = filePath; }
 
     virtual QString filePath() const { return m_filePath; }
@@ -60,6 +70,7 @@ public:
     virtual void reload() {} // Reloads from file (especially useful to check if file now exists)
     virtual ErrorState error() const;
     virtual bool running() const = 0;
+    virtual Capabilities capabilities() const = 0;
 
 public slots:
     virtual void start() = 0;
@@ -67,13 +78,18 @@ public slots:
 
 signals:
     void changed(); // if config widget was added/removed, name changed, etc
+    void collectionAdded( const Tomahawk::collection_ptr& collection );
+    void collectionRemoved( const Tomahawk::collection_ptr& collection );
 
 protected:
     void setFilePath( const QString& path ) { m_filePath = path; }
+    QList< Tomahawk::collection_ptr > m_collections;
 
 private:
     QString m_filePath;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS( ExternalResolver::Capabilities )
 
 }; //ns
 

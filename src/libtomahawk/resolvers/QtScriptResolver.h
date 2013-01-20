@@ -129,6 +129,8 @@ public:
     virtual ~QtScriptResolver();
     static ExternalResolver* factory( const QString& scriptPath );
 
+    virtual Capabilities capabilities() const { return m_capabilities; }
+
     virtual QString name() const         { return m_name; }
     virtual QPixmap icon() const         { return m_icon; }
     virtual unsigned int weight() const  { return m_weight; }
@@ -171,6 +173,7 @@ private:
     QString m_name;
     QPixmap m_icon;
     unsigned int m_weight, m_timeout;
+    Capabilities m_capabilities;
 
     bool m_ready, m_stopped;
     ExternalResolver::ErrorState m_error;

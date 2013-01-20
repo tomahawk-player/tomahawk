@@ -41,11 +41,12 @@ public:
     virtual ~ScriptResolver();
     static ExternalResolver* factory( const QString& exe );
 
-    virtual QString name() const            { return m_name; }
-    virtual QPixmap icon() const            { return m_icon; }
-    virtual unsigned int weight() const     { return m_weight; }
-    virtual unsigned int preference() const { return m_preference; }
-    virtual unsigned int timeout() const    { return m_timeout; }
+    virtual QString name() const              { return m_name; }
+    virtual QPixmap icon() const              { return m_icon; }
+    virtual unsigned int weight() const       { return m_weight; }
+    virtual unsigned int preference() const   { return m_preference; }
+    virtual unsigned int timeout() const      { return m_timeout; }
+    virtual Capabilities capabilities() const { return m_capabilities; }
 
     virtual void setIcon( const QPixmap& icon );
 
@@ -87,6 +88,7 @@ private:
     QString m_name;
     QPixmap m_icon;
     unsigned int m_weight, m_preference, m_timeout, m_num_restarts;
+    Capabilities m_capabilities;
     QPointer< AccountConfigWidget > m_configWidget;
 
     quint32 m_msgsize;

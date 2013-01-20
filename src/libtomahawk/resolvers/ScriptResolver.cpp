@@ -380,6 +380,13 @@ ScriptResolver::doSetup( const QVariantMap& m )
     m_timeout = m.value( "timeout", 5 ).toUInt() * 1000;
     bool compressed = m.value( "compressed", "false" ).toString() == "true";
 
+    bool ok = 0;
+    int intCap = m.value( "capabilities" ).toInt( &ok );
+    if ( !ok )
+        m_capabilities = NullCapability;
+    else
+        m_capabilities = static_cast< Capabilities >( intCap );
+
     QByteArray icoData = m.value( "icon" ).toByteArray();
     if( compressed )
         icoData = qUncompress( QByteArray::fromBase64( icoData ) );

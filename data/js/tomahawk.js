@@ -79,6 +79,14 @@ Tomahawk.extend = function(object, members) {
 };
 
 
+var TomahawkResolverCapability = {
+    NullCapability: 0,
+    Browsable:      1,
+    PlaylistSync:   2,
+    AccountFactory: 4
+};
+
+
 // Resolver BaseObject, inherit it to implement your own resolver
 var TomahawkResolver = {
     init: function()
@@ -125,6 +133,10 @@ var TomahawkResolver = {
     search: function( qid, searchString )
     {
         return this.resolve( qid, "", "", searchString );
+    },
+    capabilities: function()
+    {
+        return TomahawkResolverCapability.NullCapability;
     }
 };
 

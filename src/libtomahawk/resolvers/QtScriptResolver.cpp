@@ -334,6 +334,13 @@ QtScriptResolver::init()
     m_timeout = m.value( "timeout", 25 ).toUInt() * 1000;
     bool compressed = m.value( "compressed", "false" ).toString() == "true";
 
+    bool ok = 0;
+    int intCap = m_engine->mainFrame()->evaluateJavaScript( "resolver.capabilities()" ).toInt( &ok );
+    if ( !ok )
+        m_capabilities = NullCapability;
+    else
+        m_capabilities = static_cast< Capabilities >( intCap );
+
     QByteArray icoData = m.value( "icon" ).toByteArray();
     if( compressed )
         icoData = qUncompress( QByteArray::fromBase64( icoData ) );

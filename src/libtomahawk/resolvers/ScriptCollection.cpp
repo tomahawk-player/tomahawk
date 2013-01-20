@@ -19,16 +19,20 @@
 
 #include "ScriptCollection.h"
 
+#include "Source.h"
+
 using namespace Tomahawk;
 
 
 ScriptCollection::ScriptCollection( const source_ptr& source,
-                                    const QString& name,
                                     QtScriptResolver* resolver,
                                     QObject* parent )
-    : Collection( source, name, parent )
+    : Collection( source, resolver->name(), parent )
 {
+    Q_ASSERT( resolver != 0 );
+    qDebug() << Q_FUNC_INFO << resolver->name() << source->friendlyName();
 
+    m_resolver = resolver;
 }
 
 

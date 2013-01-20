@@ -36,14 +36,12 @@ class DLLEXPORT ScriptCollection : public Collection
 
 public:
     explicit ScriptCollection( const source_ptr& source,
-                               const QString& name,
                                QtScriptResolver* resolver,
                                QObject* parent = 0 );
     virtual ~ScriptCollection();
-    
-signals:
-    
-public slots:
+
+private:
+    QtScriptResolver* m_resolver;
     
 };
 
