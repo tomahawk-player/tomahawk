@@ -46,9 +46,7 @@ SourceTreePopupDialog::SourceTreePopupDialog()
     , m_label( 0 )
     , m_buttons( 0 )
 {
-#ifndef ENABLE_HEADLESS
     setParent( QApplication::activeWindow() );
-#endif
     setWindowFlags( Qt::Popup | Qt::FramelessWindowHint );
 
     setAutoFillBackground( false );
