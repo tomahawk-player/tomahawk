@@ -326,6 +326,11 @@ SourcesModel::appendGroups()
                                                 boost::bind( &ViewManager::newReleasesWidget, ViewManager::instance() ) );
     newReleases->setSortValue( 5 );
 
+    GenericPageItem* inbox = new GenericPageItem( this, browse, tr( "Inbox" ), ImageRegistry::instance()->icon( RESPATH "images/downloading.svg" ),
+                                                  boost::bind( &ViewManager::showInboxPage, ViewManager::instance() ),
+                                                  boost::bind( &ViewManager::inboxWidget, ViewManager::instance() ) );
+    inbox->setSortValue( 6 );
+
     m_collectionsGroup = new GroupItem( this, m_rootItem, tr( "Friends" ), 4 );
 
     m_cloudGroup = new GroupItem( this, m_rootItem, tr( "Cloud" ), 5 );

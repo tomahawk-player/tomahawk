@@ -121,6 +121,7 @@ namespace TomahawkUtils
         SipPluginOnline,
         SipPluginOffline,
         ResolverBundle,
+        Inbox,
         Invalid
     };
 

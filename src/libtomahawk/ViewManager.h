@@ -55,6 +55,7 @@ class NewReleasesWidget;
 class WelcomeWidget;
 class WhatsHotWidget;
 class QPushButton;
+class InboxModel;
 
 namespace Tomahawk
 {
@@ -92,6 +93,9 @@ public:
     Tomahawk::ViewPage* newReleasesWidget() const;
     Tomahawk::ViewPage* recentPlaysWidget() const;
     Tomahawk::ViewPage* superCollectionView() const;
+    Tomahawk::ViewPage* inboxWidget() const;
+
+    InboxModel* inboxModel();
 
     /// Get the view page for the given item. Not pretty...
     Tomahawk::ViewPage* pageForPlaylist( const Tomahawk::playlist_ptr& pl ) const;
@@ -130,6 +134,7 @@ public slots:
     Tomahawk::ViewPage* showWhatsHotPage();
     Tomahawk::ViewPage* showNewReleasesPage();
     Tomahawk::ViewPage* showRecentPlaysPage();
+    Tomahawk::ViewPage* showInboxPage();
     void showCurrentTrack();
 
     // Returns the shown viewpage
@@ -181,6 +186,8 @@ private:
     WhatsHotWidget* m_whatsHotWidget;
     NewReleasesWidget* m_newReleasesWidget;
     Tomahawk::ViewPage* m_recentPlaysWidget;
+    Tomahawk::ViewPage* m_inboxWidget;
+    InboxModel* m_inboxModel;
 
     QList< Tomahawk::collection_ptr > m_superCollections;
 

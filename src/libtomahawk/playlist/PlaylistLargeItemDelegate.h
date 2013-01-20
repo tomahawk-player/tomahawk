@@ -41,7 +41,7 @@ Q_OBJECT
 
 public:
     enum DisplayMode
-    { LovedTracks, RecentlyPlayed, LatestAdditions };
+    { LovedTracks, RecentlyPlayed, LatestAdditions, Inbox };
 
     PlaylistLargeItemDelegate( DisplayMode mode, TrackView* parent = 0, PlayableProxyModel* proxy = 0 );
 
