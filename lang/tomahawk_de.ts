@@ -331,37 +331,37 @@ erlauben sich mit dir zu verbinden?</translation>
 <context>
     <name>AudioControls</name>
     <message>
-        <location filename="../src/AudioControls.cpp" line="286"/>
+        <location filename="../src/AudioControls.cpp" line="291"/>
         <source>Shuffle</source>
         <translation>Zufall</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="287"/>
+        <location filename="../src/AudioControls.cpp" line="292"/>
         <source>Repeat</source>
         <translation>Wiederholen</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="284"/>
+        <location filename="../src/AudioControls.cpp" line="289"/>
         <source>Time Elapsed</source>
         <translation>Abgelaufene Zeit</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="285"/>
+        <location filename="../src/AudioControls.cpp" line="290"/>
         <source>Time Remaining</source>
         <translation>Verbleibende Zeit</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="290"/>
+        <location filename="../src/AudioControls.cpp" line="295"/>
         <source>Playing from %1</source>
         <translation>Wiedergabe von %1</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="288"/>
+        <location filename="../src/AudioControls.cpp" line="293"/>
         <source>Share</source>
         <translation>Teilen</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="289"/>
+        <location filename="../src/AudioControls.cpp" line="294"/>
         <source>Love</source>
         <translation>Lieben</translation>
     </message>
@@ -672,7 +672,7 @@ erlauben sich mit dir zu verbinden?</translation>
 <context>
     <name>InfoBar</name>
     <message>
-        <location filename="../src/libtomahawk/infobar/InfoBar.cpp" line="92"/>
+        <location filename="../src/libtomahawk/infobar/InfoBar.cpp" line="91"/>
         <source>Filter...</source>
         <translation>Filter...</translation>
     </message>

@@ -330,37 +330,37 @@ connect and stream from you?</source>
 <context>
     <name>AudioControls</name>
     <message>
-        <location filename="../src/AudioControls.cpp" line="286"/>
+        <location filename="../src/AudioControls.cpp" line="291"/>
         <source>Shuffle</source>
         <translation>シャッフル</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="287"/>
+        <location filename="../src/AudioControls.cpp" line="292"/>
         <source>Repeat</source>
         <translation>リピート</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="284"/>
+        <location filename="../src/AudioControls.cpp" line="289"/>
         <source>Time Elapsed</source>
         <translation>再生時間</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="285"/>
+        <location filename="../src/AudioControls.cpp" line="290"/>
         <source>Time Remaining</source>
         <translation>残り時間</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="290"/>
+        <location filename="../src/AudioControls.cpp" line="295"/>
         <source>Playing from %1</source>
         <translation>%1から再生中</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="288"/>
+        <location filename="../src/AudioControls.cpp" line="293"/>
         <source>Share</source>
         <translation>シェアー</translation>
     </message>
     <message>
-        <location filename="../src/AudioControls.cpp" line="289"/>
+        <location filename="../src/AudioControls.cpp" line="294"/>
         <source>Love</source>
         <translation>Love</translation>
     </message>
@@ -672,7 +672,7 @@ connect and stream from you?</source>
 <context>
     <name>InfoBar</name>
     <message>
-        <location filename="../src/libtomahawk/infobar/InfoBar.cpp" line="92"/>
+        <location filename="../src/libtomahawk/infobar/InfoBar.cpp" line="91"/>
         <source>Filter...</source>
         <translation>フィルター...</translation>
     </message>
