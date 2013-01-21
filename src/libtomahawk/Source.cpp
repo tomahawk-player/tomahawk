@@ -104,8 +104,12 @@ Source::peerInfos() const
 collection_ptr
 Source::collection() const
 {
-    if( m_collections.length() )
-        return m_collections.first();
+    if ( m_collections.length() )
+    {
+        foreach ( const collection_ptr& collection, m_collections )
+            if ( collection->type() == "databasecollection" )
+                return collection; // We assume only one is a db collection. Now get off my lawn.
+    }
 
     collection_ptr tmp;
     return tmp;

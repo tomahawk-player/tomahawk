@@ -39,6 +39,8 @@ public:
         qDebug() << Q_FUNC_INFO;
     }
 
+    virtual QString type() const { return "databasecollection"; }
+
     virtual void loadPlaylists();
     virtual void loadAutoPlaylists();
     virtual void loadStations();

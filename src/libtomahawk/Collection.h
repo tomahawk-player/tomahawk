@@ -48,6 +48,7 @@ public:
     virtual ~Collection();
 
     virtual QString name() const;
+    virtual QString type() const { return QString(); }
 
     virtual void loadPlaylists() { qDebug() << Q_FUNC_INFO; }
     virtual void loadAutoPlaylists() { qDebug() << Q_FUNC_INFO; }

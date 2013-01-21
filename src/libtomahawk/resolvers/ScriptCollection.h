@@ -40,6 +40,8 @@ public:
                                QObject* parent = 0 );
     virtual ~ScriptCollection();
 
+    virtual QString type() const { return "scriptcollection"; }
+
 private:
     ExternalResolver* m_resolver;
     
