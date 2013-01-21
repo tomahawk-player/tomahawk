@@ -170,8 +170,8 @@ void
 RecentlyPlayedPlaylistsModel::onSourceAdded( const Tomahawk::source_ptr& source )
 {
     connect( source.data(), SIGNAL( online() ), this, SLOT( sourceOnline() ) );
-    connect( source->collection().data(), SIGNAL( playlistsAdded( QList<Tomahawk::playlist_ptr> ) ), SLOT( loadFromSettings() ) );
-    connect( source->collection().data(), SIGNAL( playlistsDeleted( QList<Tomahawk::playlist_ptr> ) ), SLOT( onPlaylistsRemoved( QList<Tomahawk::playlist_ptr> ) ) );
+    connect( source->dbCollection().data(), SIGNAL( playlistsAdded( QList<Tomahawk::playlist_ptr> ) ), SLOT( loadFromSettings() ) );
+    connect( source->dbCollection().data(), SIGNAL( playlistsDeleted( QList<Tomahawk::playlist_ptr> ) ), SLOT( onPlaylistsRemoved( QList<Tomahawk::playlist_ptr> ) ) );
 }
 
 void
@@ -224,11 +224,11 @@ RecentlyPlayedPlaylistsModel::plAdded( const QString& plguid, int sId )
     if ( source.isNull() )
         return;
 
-    playlist_ptr pl = source->collection()->playlist( plguid );
+    playlist_ptr pl = source->dbCollection()->playlist( plguid );
     if ( pl.isNull() )
-        pl = source->collection()->autoPlaylist( plguid );
+        pl = source->dbCollection()->autoPlaylist( plguid );
     if ( pl.isNull() )
-        pl = source->collection()->station( plguid );
+        pl = source->dbCollection()->station( plguid );
 
     if ( pl.isNull() )
         return;

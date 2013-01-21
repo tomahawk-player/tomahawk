@@ -58,12 +58,12 @@ DatabaseCommand_RenamePlaylist::exec( DatabaseImpl* lib )
 void
 DatabaseCommand_RenamePlaylist::postCommitHook()
 {
-    playlist_ptr playlist = source()->collection()->playlist( m_playlistguid );
+    playlist_ptr playlist = source()->dbCollection()->playlist( m_playlistguid );
     // fallback, check for auto and stations too
     if( playlist.isNull() )
-        playlist = source()->collection()->autoPlaylist( m_playlistguid );
+        playlist = source()->dbCollection()->autoPlaylist( m_playlistguid );
     if( playlist.isNull() )
-        playlist = source()->collection()->station( m_playlistguid );
+        playlist = source()->dbCollection()->station( m_playlistguid );
 
     Q_ASSERT( !playlist.isNull() );
 

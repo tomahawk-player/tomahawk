@@ -53,13 +53,13 @@ void
 DatabaseCommand_DeletePlaylist::postCommitHook()
 {
     qDebug() << Q_FUNC_INFO << "..reporting..";
-    if ( source().isNull() || source()->collection().isNull() )
+    if ( source().isNull() || source()->dbCollection().isNull() )
     {
         qDebug() << "Source has gone offline, not emitting to GUI.";
         return;
     }
 
-    playlist_ptr playlist = source()->collection()->playlist( m_playlistguid );
+    playlist_ptr playlist = source()->dbCollection()->playlist( m_playlistguid );
     Q_ASSERT( !playlist.isNull() );
 
     playlist->reportDeleted( playlist );

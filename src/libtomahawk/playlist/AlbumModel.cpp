@@ -71,7 +71,7 @@ AlbumModel::addCollection( const collection_ptr& collection, bool overwrite )
         QList<Tomahawk::source_ptr> sources = SourceList::instance()->sources();
         foreach ( const source_ptr& source, sources )
         {
-            connect( source->collection().data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ), Qt::UniqueConnection );
+            connect( source->dbCollection().data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ), Qt::UniqueConnection );
         }
     }
     else
@@ -236,7 +236,7 @@ AlbumModel::addQueries( const QList<Tomahawk::query_ptr>& queries )
 void
 AlbumModel::onSourceAdded( const Tomahawk::source_ptr& source )
 {
-    connect( source->collection().data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ), Qt::UniqueConnection );
+    connect( source->dbCollection().data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ), Qt::UniqueConnection );
 }
 
 

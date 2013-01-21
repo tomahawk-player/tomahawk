@@ -86,7 +86,7 @@ DatabaseCommand_SetDynamicPlaylistRevision::controlsV()
 void
 DatabaseCommand_SetDynamicPlaylistRevision::postCommitHook()
 {
-    if ( source().isNull() || source()->collection().isNull() )
+    if ( source().isNull() || source()->dbCollection().isNull() )
     {
         tDebug() << "Source has gone offline, not emitting to GUI.";
         return;
@@ -97,13 +97,13 @@ DatabaseCommand_SetDynamicPlaylistRevision::postCommitHook()
         orderedentriesguids << v.toString();
 
     Q_ASSERT( !source().isNull() );
-    Q_ASSERT( !source()->collection().isNull() );
+    Q_ASSERT( !source()->dbCollection().isNull() );
     tLog() << "Postcommitting this playlist:" << playlistguid() << source().isNull();
 
     // private, but we are a friend. will recall itself in its own thread:
-    dynplaylist_ptr playlist = source()->collection()->autoPlaylist( playlistguid() );
+    dynplaylist_ptr playlist = source()->dbCollection()->autoPlaylist( playlistguid() );
     if ( playlist.isNull() )
-        playlist = source()->collection()->station( playlistguid() );
+        playlist = source()->dbCollection()->station( playlistguid() );
     // UGH we don't have a sharedptr from DynamicPlaylist+
 
     DynamicPlaylist* rawPl = playlist.data();
@@ -112,7 +112,7 @@ DatabaseCommand_SetDynamicPlaylistRevision::postCommitHook()
 
     if ( rawPl == 0 )
     {
-        tLog() <<"Got null playlist with guid:" << playlistguid() << "from source and collection:" << source()->friendlyName() << source()->collection()->name() << "and mode is static?:" << (m_mode == Static);
+        tLog() <<"Got null playlist with guid:" << playlistguid() << "from source and collection:" << source()->friendlyName() << source()->dbCollection()->name() << "and mode is static?:" << (m_mode == Static);
         Q_ASSERT( false );
         return;
     }

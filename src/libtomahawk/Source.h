@@ -77,7 +77,7 @@ public:
     QPixmap avatar( TomahawkUtils::ImageMode style = TomahawkUtils::Original, const QSize& size = QSize() );
 #endif
 
-    collection_ptr collection() const;
+    collection_ptr dbCollection() const;
     void addCollection( const Tomahawk::collection_ptr& c );
     void removeCollection( const Tomahawk::collection_ptr& c );
 

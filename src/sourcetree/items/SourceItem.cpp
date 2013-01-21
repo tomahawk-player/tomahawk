@@ -88,9 +88,9 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
     m_recentPlaysItem->setSortValue( -200 );
 
     // create category items if there are playlists to show, or stations to show
-    QList< playlist_ptr > playlists = source->collection()->playlists();
-    QList< dynplaylist_ptr > autoplaylists = source->collection()->autoPlaylists();
-    QList< dynplaylist_ptr > stations = source->collection()->stations();
+    QList< playlist_ptr > playlists = source->dbCollection()->playlists();
+    QList< dynplaylist_ptr > autoplaylists = source->dbCollection()->autoPlaylists();
+    QList< dynplaylist_ptr > stations = source->dbCollection()->stations();
 
     if ( !playlists.isEmpty() || !autoplaylists.isEmpty() || source->isLocal() )
     {
@@ -117,11 +117,11 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
     connect( SourceList::instance(), SIGNAL( sourceLatchedOn( Tomahawk::source_ptr, Tomahawk::source_ptr ) ), SLOT( latchedOn( Tomahawk::source_ptr, Tomahawk::source_ptr ) ) );
     connect( SourceList::instance(), SIGNAL( sourceLatchedOff( Tomahawk::source_ptr, Tomahawk::source_ptr ) ), SLOT( latchedOff( Tomahawk::source_ptr, Tomahawk::source_ptr ) ) );
 
-    connect( source->collection().data(), SIGNAL( playlistsAdded( QList<Tomahawk::playlist_ptr> ) ),
+    connect( source->dbCollection().data(), SIGNAL( playlistsAdded( QList<Tomahawk::playlist_ptr> ) ),
              SLOT( onPlaylistsAdded( QList<Tomahawk::playlist_ptr> ) ), Qt::QueuedConnection );
-    connect( source->collection().data(), SIGNAL( autoPlaylistsAdded( QList< Tomahawk::dynplaylist_ptr > ) ),
+    connect( source->dbCollection().data(), SIGNAL( autoPlaylistsAdded( QList< Tomahawk::dynplaylist_ptr > ) ),
              SLOT( onAutoPlaylistsAdded( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
-    connect( source->collection().data(), SIGNAL( stationsAdded( QList<Tomahawk::dynplaylist_ptr> ) ),
+    connect( source->dbCollection().data(), SIGNAL( stationsAdded( QList<Tomahawk::dynplaylist_ptr> ) ),
              SLOT( onStationsAdded( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
 
     if ( m_source->isLocal() )
@@ -503,7 +503,7 @@ SourceItem::collectionClicked()
     if ( m_source.isNull() )
         return 0;
 
-    m_collectionPage = ViewManager::instance()->show( m_source->collection() );
+    m_collectionPage = ViewManager::instance()->show( m_source->dbCollection() );
     return m_collectionPage;
 }
 

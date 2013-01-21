@@ -217,7 +217,7 @@ Playlist::load( const QString& guid )
 
     foreach( const Tomahawk::source_ptr& source, SourceList::instance()->sources() )
     {
-        p = source->collection()->playlist( guid );
+        p = source->dbCollection()->playlist( guid );
         if ( !p.isNull() )
             return p;
     }
@@ -265,7 +265,7 @@ void
 Playlist::reportCreated( const playlist_ptr& self )
 {
     Q_ASSERT( self.data() == this );
-    m_source->collection()->addPlaylist( self );
+    m_source->dbCollection()->addPlaylist( self );
 }
 
 
@@ -280,7 +280,7 @@ Playlist::reportDeleted( const Tomahawk::playlist_ptr& self )
     }
 
     m_deleted = true;
-    m_source->collection()->deletePlaylist( self );
+    m_source->dbCollection()->deletePlaylist( self );
 
     emit deleted( self );
 }

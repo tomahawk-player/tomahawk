@@ -333,9 +333,9 @@ ViewManager::showSuperCollection()
 
     foreach( const Tomahawk::source_ptr& source, SourceList::instance()->sources() )
     {
-        if ( !m_superCollections.contains( source->collection() ) )
+        if ( !m_superCollections.contains( source->dbCollection() ) )
         {
-            m_superCollections.append( source->collection() );
+            m_superCollections.append( source->dbCollection() );
 //            m_superAlbumModel->addCollection( source->collection() );
         }
     }

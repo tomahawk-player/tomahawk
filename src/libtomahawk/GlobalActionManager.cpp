@@ -1207,7 +1207,7 @@ bool GlobalActionManager::handleBookmarkCommand(const QUrl& url)
         Pipeline::instance()->resolve( q, true );
 
         // now we add it to the special "bookmarks" playlist, creating it if it doesn't exist. if nothing is playing, start playing the track
-        QSharedPointer< LocalCollection > col = SourceList::instance()->getLocal()->collection().dynamicCast< LocalCollection >();
+        QSharedPointer< LocalCollection > col = SourceList::instance()->getLocal()->dbCollection().dynamicCast< LocalCollection >();
         playlist_ptr bookmarkpl = col->bookmarksPlaylist();
         if ( bookmarkpl.isNull() )
         {
