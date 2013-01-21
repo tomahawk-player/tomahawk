@@ -21,6 +21,14 @@
 #include "network/Servent.h"
 #include "utils/Logger.h"
 
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
+#include <qjson/qobjecthelper.h>
+
+#include <QThread>
+#include <QFuture>
+#include <QFutureWatcher>
+#include <qtconcurrentrun.h>
 
 MsgProcessor::MsgProcessor( quint32 mode, quint32 t ) :
     QObject(), m_mode( mode ), m_threshold( t ), m_totmsgsize( 0 )

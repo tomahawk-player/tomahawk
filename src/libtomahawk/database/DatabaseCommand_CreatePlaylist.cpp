@@ -20,15 +20,11 @@
 
 #include <QSqlQuery>
 
-#include "Source.h"
+#include "SourceList.h"
 #include "DatabaseImpl.h"
 #include "TomahawkSqlQuery.h"
 #include "network/Servent.h"
 #include "utils/Logger.h"
-
-#ifndef ENABLE_HEADLESS
-    #include "ViewManager.h"
-#endif
 
 using namespace Tomahawk;
 
@@ -81,14 +77,11 @@ DatabaseCommand_CreatePlaylist::postCommitHook()
     tDebug() << Q_FUNC_INFO << "reporting...";
     if ( m_playlist.isNull() )
     {
-        source_ptr src = source();
-#ifndef ENABLE_HEADLESS
-        QMetaObject::invokeMethod( ViewManager::instance(),
+        QMetaObject::invokeMethod( SourceList::instance(),
                                    "createPlaylist",
                                    Qt::BlockingQueuedConnection,
-                                   QGenericArgument( "Tomahawk::source_ptr", (const void*)&src ),
+                                   QGenericArgument( "Tomahawk::source_ptr", (const void*)&source() ),
                                    Q_ARG( QVariant, m_v ) );
-#endif
     }
     else
     {

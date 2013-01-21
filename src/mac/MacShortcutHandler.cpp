@@ -39,10 +39,12 @@ MacShortcutHandler::macMediaKeyPressed( int key )
         emit playPause();
         break;
       case NX_KEYTYPE_FAST:
+      case NX_KEYTYPE_NEXT:
         qDebug() << "emitting next pressed";
         emit next();
         break;
       case NX_KEYTYPE_REWIND:
+      case NX_KEYTYPE_PREVIOUS:
         qDebug() << "emitting prev pressed";
         emit previous();
         break;

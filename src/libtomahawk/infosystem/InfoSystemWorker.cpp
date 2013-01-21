@@ -29,10 +29,10 @@
 
 
 #include <QCoreApplication>
-#include <QNetworkConfiguration>
-#include <QNetworkProxy>
 #include <QDir>
 #include <QLibrary>
+#include <QNetworkConfiguration>
+#include <QNetworkProxy>
 #include <QPluginLoader>
 
 namespace Tomahawk
@@ -62,6 +62,13 @@ InfoSystemWorker::~InfoSystemWorker()
             delete plugin.data();
     }
     tDebug() << Q_FUNC_INFO << " finished";
+}
+
+
+const QList< InfoPluginPtr >
+InfoSystemWorker::plugins() const
+{
+    return m_plugins;
 }
 
 
@@ -123,6 +130,9 @@ InfoSystemWorker::addInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin )
     );
     
     QMetaObject::invokeMethod( plugin.data(), "init", Qt::QueuedConnection );
+
+    emit updatedSupportedGetTypes( QSet< InfoType >::fromList( m_infoGetMap.keys() ) );
+    emit updatedSupportedPushTypes( QSet< InfoType >::fromList( m_infoPushMap.keys() ) );
 }
 
 
@@ -221,6 +231,7 @@ InfoSystemWorker::loadInfoPlugins( const QStringList& pluginPaths )
         if ( infoPlugin )
         {
             tDebug() << Q_FUNC_INFO << "Loaded info plugin:" << loader.fileName();
+            infoPlugin->setFriendlyName( loader.fileName() );
             addInfoPlugin( InfoPluginPtr( infoPlugin ) );
         }
         else

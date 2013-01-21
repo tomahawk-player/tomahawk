@@ -50,6 +50,7 @@ public:
     QString password() const;
     bool highQuality() const;
     bool deleteOnUnsync() const;
+    bool loveSync() const;
 
     void setPlaylists( const QList< SpotifyPlaylistInfo* >& playlists );
 
@@ -71,6 +72,7 @@ private slots:
     void doLogin();
     void resetLoginButton();
     void selectAllPlaylists();
+    void showStarredPlaylist(bool);
 
 private:
     void showLoggedIn();

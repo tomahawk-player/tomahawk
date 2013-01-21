@@ -40,12 +40,12 @@ DynamicControlWrapper::DynamicControlWrapper( const Tomahawk::dyncontrol_ptr& co
      , m_minusButton( 0 )
      , m_control( control )
      , m_typeSelector( 0 )
-     , m_layout( QWeakPointer< QGridLayout >( layout ) )
+     , m_layout( QPointer< QGridLayout >( layout ) )
 {
     m_typeSelector = new QComboBox( m_parent );
 
-    m_matchSelector = QWeakPointer<QWidget>( control->matchSelector() );
-    m_entryWidget = QWeakPointer<QWidget>( control->inputField() );
+    m_matchSelector = QPointer<QWidget>( control->matchSelector() );
+    m_entryWidget = QPointer<QWidget>( control->inputField() );
 
     m_minusButton = initButton( m_parent );
     m_minusButton->setIcon( TomahawkUtils::defaultPixmap( TomahawkUtils::ListRemove ) );
@@ -157,12 +157,12 @@ DynamicControlWrapper::typeSelectorChanged( const QString& type, bool firstLoad 
 
 
     if( m_control->matchSelector() ) {
-        m_matchSelector = QWeakPointer<QWidget>( m_control->matchSelector() );
+        m_matchSelector = QPointer<QWidget>( m_control->matchSelector() );
         m_layout.data()->addWidget( m_matchSelector.data(), m_row, 1, Qt::AlignCenter );
         m_matchSelector.data()->show();
     }
     if( m_control->inputField() ) {
-        m_entryWidget = QWeakPointer<QWidget>( m_control->inputField() );
+        m_entryWidget = QPointer<QWidget>( m_control->inputField() );
         m_layout.data()->addWidget( m_entryWidget.data(), m_row, 2 );
         m_entryWidget.data()->show();
     }

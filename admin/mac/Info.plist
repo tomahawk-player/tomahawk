@@ -26,6 +26,8 @@
 	<string>10.5.0</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>NSHighResolutionCapable</key>
+	<true />
 	<key>SUFeedURL</key>
 	<string>http://download.tomahawk-player.org/sparkle/update.php</string>
 	<key>SUPublicDSAKeyFile</key>

@@ -74,7 +74,7 @@ ViewManager::ViewManager( QObject* parent )
     : QObject( parent )
     , m_widget( new QWidget() )
     , m_welcomeWidget( new WelcomeWidget() )
-    , m_whatsHotWidget( new WhatsHotWidget() )
+    , m_whatsHotWidget( 0 )
     , m_newReleasesWidget( new NewReleasesWidget() )
     , m_recentPlaysWidget( 0 )
     , m_currentPage( 0 )
@@ -109,7 +109,6 @@ ViewManager::ViewManager( QObject* parent )
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
     connect( m_infobar, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
 
-    connect( this, SIGNAL( tomahawkLoaded() ), m_whatsHotWidget, SLOT( fetchData() ) );
     connect( this, SIGNAL( tomahawkLoaded() ), m_newReleasesWidget, SLOT( fetchData() ) );
     connect( this, SIGNAL( tomahawkLoaded() ), m_welcomeWidget, SLOT( loadData() ) );
 
@@ -376,6 +375,12 @@ ViewManager::showWelcomePage()
 Tomahawk::ViewPage*
 ViewManager::showWhatsHotPage()
 {
+    if ( !m_whatsHotWidget )
+    {
+        m_whatsHotWidget = new WhatsHotWidget();
+        m_whatsHotWidget->fetchData();
+    }
+
     return show( m_whatsHotWidget );
 }
 
@@ -524,8 +529,6 @@ ViewManager::setPage( ViewPage* page, bool trackHistory )
     if ( page == m_currentPage )
         return;
 
-    unlinkPlaylist();
-
     if ( m_stack->indexOf( page->widget() ) < 0 )
     {
         m_stack->addWidget( page->widget() );
@@ -590,34 +593,11 @@ ViewManager::isNewPlaylistPageVisible() const
 
 
 void
-ViewManager::unlinkPlaylist()
-{
-    if ( currentPlaylistInterface() )
-    {
-        disconnect( currentPlaylistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ),
-                    this,                              SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ) );
-
-        disconnect( currentPlaylistInterface().data(), SIGNAL( shuffleModeChanged( bool ) ),
-                    this,                              SIGNAL( shuffleModeChanged( bool ) ) );
-    }
-}
-
-
-void
 ViewManager::updateView()
 {
     if ( currentPlaylistInterface() )
     {
-        connect( currentPlaylistInterface().data(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ),
-                                                    SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ) );
-
-        connect( currentPlaylistInterface().data(), SIGNAL( shuffleModeChanged( bool ) ),
-                                                    SIGNAL( shuffleModeChanged( bool ) ) );
-
         m_infobar->setFilter( currentPage()->filter() );
-
-        emit repeatModeChanged( currentPlaylistInterface()->repeatMode() );
-        emit shuffleModeChanged( currentPlaylistInterface()->shuffled() );
     }
 
 /*    if ( currentPage()->queueVisible() )
@@ -687,42 +667,6 @@ ViewManager::onWidgetDestroyed( QWidget* widget )
 
 
 void
-ViewManager::setRepeatMode( Tomahawk::PlaylistModes::RepeatMode mode )
-{
-    if ( currentPlaylistInterface() )
-        currentPlaylistInterface()->setRepeatMode( mode );
-}
-
-
-void
-ViewManager::setShuffled( bool enabled )
-{
-    if ( currentPlaylistInterface() )
-    {
-        currentPlaylistInterface()->setShuffled( enabled );
-    }
-}
-
-
-void
-ViewManager::createPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents )
-{
-    Tomahawk::playlist_ptr p = Tomahawk::playlist_ptr( new Tomahawk::Playlist( src ) );
-    QJson::QObjectHelper::qvariant2qobject( contents.toMap(), p.data() );
-    p->reportCreated( p );
-}
-
-
-void
-ViewManager::createDynamicPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents )
-{
-    Tomahawk::dynplaylist_ptr p = Tomahawk::dynplaylist_ptr( new Tomahawk::DynamicPlaylist( src, contents.toMap().value( "type", QString() ).toString()  ) );
-    QJson::QObjectHelper::qvariant2qobject( contents.toMap(), p.data() );
-    p->reportCreated( p );
-}
-
-
-void
 ViewManager::setTomahawkLoaded()
 {
     m_loaded = true;
@@ -782,7 +726,7 @@ ViewManager::currentPage() const
 Tomahawk::playlist_ptr
 ViewManager::playlistForInterface( Tomahawk::playlistinterface_ptr interface ) const
 {
-    foreach ( QWeakPointer<FlexibleView> view, m_playlistViews.values() )
+    foreach ( QPointer<FlexibleView> view, m_playlistViews.values() )
     {
         if ( !view.isNull() && view.data()->playlistInterface() == interface )
         {
@@ -797,7 +741,7 @@ ViewManager::playlistForInterface( Tomahawk::playlistinterface_ptr interface ) c
 Tomahawk::dynplaylist_ptr
 ViewManager::dynamicPlaylistForInterface( Tomahawk::playlistinterface_ptr interface ) const
 {
-    foreach ( QWeakPointer<DynamicWidget> view, m_dynamicWidgets.values() )
+    foreach ( QPointer<DynamicWidget> view, m_dynamicWidgets.values() )
     {
         if ( !view.isNull() && view.data()->playlistInterface() == interface )
         {

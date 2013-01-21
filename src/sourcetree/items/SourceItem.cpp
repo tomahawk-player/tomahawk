@@ -1,6 +1,7 @@
 /*
  *    Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *    Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
+ *    Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *    This program is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -33,6 +34,8 @@
 #include "playlist/RecentlyAddedModel.h"
 #include "playlist/RecentlyPlayedModel.h"
 #include "playlist/PlaylistLargeItemDelegate.h"
+#include "sip/PeerInfo.h"
+#include "sip/SipPlugin.h"
 #include "utils/ImageRegistry.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
@@ -143,10 +146,26 @@ SourceItem::text() const
 QString
 SourceItem::tooltip() const
 {
-    if ( !m_source.isNull() && !m_source->currentTrack().isNull() )
-        return m_source->textStatus();
+    if ( m_source.isNull() || m_source->peerInfos().isEmpty() )
+        return QString();
 
-    return QString();
+    QString t;
+
+    // This is kind of debug output for now.
+    t.append( "<PRE>" );
+    foreach( Tomahawk::peerinfo_ptr p, m_source->peerInfos() )
+    {
+        QString line( p->sipPlugin()->serviceName() + p->sipPlugin()->friendlyName() + ": " + p->id() );
+
+        t.append( line + "\n" );
+        t.append("\n");
+    }
+    t.append( "</PRE>" );
+
+    if ( !m_source->currentTrack().isNull() )
+        t.append( m_source->textStatus() );
+
+    return t;
 }
 
 

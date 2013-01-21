@@ -20,18 +20,17 @@
 #ifndef ACCOUNT_H
 #define ACCOUNT_H
 
-#include <QtCore/QObject>
-#include <QtCore/QVariantMap>
-#include <QtGui/QWidget>
-#include <QtGui/QIcon>
-#include <QtCore/QString>
-#include <QtCore/QUuid>
-#include <QMutex>
-
 #include "Typedefs.h"
 #include "DllMacro.h"
 
-// #include "libtomahawk/infosystem/InfoSystem.h"
+#include <QObject>
+#include <QVariantMap>
+#include <QWidget>
+#include <QIcon>
+#include <QString>
+#include <QUuid>
+#include <QMutex>
+
 
 class SipPlugin;
 

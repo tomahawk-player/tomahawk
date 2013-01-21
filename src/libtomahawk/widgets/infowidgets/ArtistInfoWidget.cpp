@@ -20,11 +20,13 @@
 #include "ArtistInfoWidget.h"
 #include "ui_ArtistInfoWidget.h"
 
+#include <QDesktopServices>
 #include <QScrollArea>
 #include <QScrollBar>
 
 #include "audio/AudioEngine.h"
 #include "playlist/GridItemDelegate.h"
+#include "playlist/AlbumItemDelegate.h"
 #include "playlist/PlayableModel.h"
 #include "playlist/TreeModel.h"
 #include "playlist/PlaylistModel.h"
@@ -75,6 +77,10 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->topHits->setPlayableModel( m_topHitsModel );
     ui->topHits->setSortingEnabled( false );
     ui->topHits->setEmptyTip( tr( "Sorry, we could not find any top hits for this artist!" ) );
+    ui->topHits->setAutoResize( true );
+
+    AlbumItemDelegate* del = new AlbumItemDelegate( ui->topHits, ui->topHits->proxyModel() );
+    ui->topHits->setPlaylistItemDelegate( del );
 
     ui->relatedArtists->setAutoFitItems( false );
     ui->relatedArtists->setWrapping( false );
@@ -116,6 +122,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
     QScrollArea* area = new QScrollArea();
     area->setWidgetResizable( true );
+    area->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
     area->setWidget( widget );
 
     area->setStyleSheet( "QScrollArea { background-color: #454e59; }" );
@@ -281,7 +288,7 @@ ArtistInfoWidget::onTracksFound( const QList<Tomahawk::query_ptr>& queries, Mode
     Q_UNUSED( mode );
 
     m_topHitsModel->finishLoading();
-    m_topHitsModel->appendQueries( queries );
+    m_topHitsModel->appendQueries( queries.mid( 0, 20 ) );
 }
 
 
@@ -319,7 +326,15 @@ void
 ArtistInfoWidget::onBiographyLinkClicked( const QUrl& url )
 {
     tDebug() << Q_FUNC_INFO << url;
-    GlobalActionManager::instance()->parseTomahawkLink( url.toString() );
+
+    if ( url.scheme() == "tomahawk" )
+    {
+        GlobalActionManager::instance()->parseTomahawkLink( url.toString() );
+    }
+    else
+    {
+        QDesktopServices::openUrl( url );
+    }
 }
 
 

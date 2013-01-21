@@ -22,7 +22,7 @@
 
 #include "Typedefs.h"
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class QPaintEvent;
 class QHBoxLayout;

@@ -20,15 +20,15 @@
 #ifndef SCRIPTRESOLVER_H
 #define SCRIPTRESOLVER_H
 
-#include <QProcess>
+#include "Query.h"
+#include "ExternalResolverGui.h"
+#include "DllMacro.h"
 
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 #include <qjson/qobjecthelper.h>
 
-#include "Query.h"
-#include "ExternalResolverGui.h"
-#include "DllMacro.h"
+#include <QProcess>
 
 class QWidget;
 
@@ -87,7 +87,7 @@ private:
     QString m_name;
     QPixmap m_icon;
     unsigned int m_weight, m_preference, m_timeout, m_num_restarts;
-    QWeakPointer< QWidget > m_configWidget;
+    QPointer< QWidget > m_configWidget;
 
     quint32 m_msgsize;
     QByteArray m_msg;

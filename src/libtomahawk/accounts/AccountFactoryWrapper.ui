@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string notr="true" extracomment="not translatable because not shown to the user">Dialog</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -27,7 +27,7 @@
    <item>
     <widget class="QLabel" name="factoryDescription">
      <property name="text">
-      <string>Description goes here</string>
+      <string notr="true" extracomment="not translatable because not shown to the user">Description goes here</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

@@ -7,6 +7,7 @@
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QDebug>
+#include <QPointer>
 
 class QToolbarTabDialogPrivate : public QObject {
     Q_OBJECT
@@ -45,8 +46,8 @@ public slots:
     }
 
 public:
-    QWeakPointer<QDialog> dialog;
-    QWeakPointer<QToolbarTabDialog> q;
+    QPointer<QDialog> dialog;
+    QPointer<QToolbarTabDialog> q;
 
     QVBoxLayout* layout;
     QToolBar* toolbar;
@@ -67,6 +68,9 @@ QToolbarTabDialog::QToolbarTabDialog() :
 
     pimpl->toolbar = new QToolBar(pimpl->dialog.data());
     pimpl->toolbar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+#ifdef Q_OS_WIN
+    pimpl->toolbar->setStyleSheet( "QToolBar { border: 0px; }" );
+#endif
 
     pimpl->stack = new QStackedWidget(pimpl->dialog.data());
 

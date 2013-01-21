@@ -19,11 +19,6 @@
 
 #include "TreeView.h"
 
-#include <QHeaderView>
-#include <QKeyEvent>
-#include <QPainter>
-#include <QScrollBar>
-
 #include "audio/AudioEngine.h"
 #include "context/ContextWidget.h"
 #include "utils/AnimatedSpinner.h"
@@ -39,6 +34,13 @@
 #include "ViewManager.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+
+#include <QHeaderView>
+#include <QKeyEvent>
+#include <QPainter>
+#include <QScrollBar>
+#include <QDrag>
+#include <QMimeData>
 
 #define SCROLL_TIMEOUT 280
 
@@ -109,7 +111,7 @@ void
 TreeView::setModel( QAbstractItemModel* model )
 {
     Q_UNUSED( model );
-    qDebug() << "Explicitly use setPlaylistModel instead";
+    tDebug() << "Explicitly use setPlaylistModel instead";
     Q_ASSERT( false );
 }
 
@@ -243,6 +245,10 @@ TreeView::onItemActivated( const QModelIndex& index )
         {
             AudioEngine::instance()->playItem( m_proxyModel->playlistInterface(), item->result() );
         }
+        else if ( !item->query().isNull() )
+        {
+            AudioEngine::instance()->playItem( m_proxyModel->playlistInterface(), item->query() );
+        }
     }
 }
 
@@ -329,7 +335,7 @@ TreeView::startDrag( Qt::DropActions supportedActions )
     if ( indexes.count() == 0 )
         return;
 
-    qDebug() << "Dragging" << indexes.count() << "indexes";
+    tDebug( LOGVERBOSE ) << "Dragging" << indexes.count() << "indexes";
     QMimeData* data = m_proxyModel->mimeData( indexes );
     if ( !data )
         return;

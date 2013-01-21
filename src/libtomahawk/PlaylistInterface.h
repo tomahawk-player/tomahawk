@@ -96,8 +96,8 @@ signals:
     void shuffleModeChanged( bool enabled );
     void latchModeChanged( Tomahawk::PlaylistModes::LatchMode mode );
 
-    void previousTrackAvailable();
-    void nextTrackAvailable();
+    void previousTrackAvailable( bool available );
+    void nextTrackAvailable( bool available );
 
     void currentIndexChanged();
 

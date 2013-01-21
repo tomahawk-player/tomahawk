@@ -22,7 +22,6 @@
 #include <QSharedPointer>
 #include <QHostInfo>
 
-#include "utils/Logger.h"
 #include "DllMacro.h"
 
 class SipInfoPrivate;
@@ -59,12 +58,13 @@ public:
     const QString toJson() const;
     static const SipInfo fromJson( QString json );
 
+    const QString debugString() const;
+
 private:
     QSharedDataPointer<SipInfoPrivate> d;
 };
 
 DLLEXPORT QDebug operator<<( QDebug dbg, const SipInfo &info );
-
-
+DLLEXPORT bool operator==( const SipInfo& one, const SipInfo& two );
 
 #endif // SIPINFO_H

@@ -68,7 +68,7 @@ namespace Tomahawk {
             bool isValid() const;
             
             Tomahawk::Accounts::TwitterAccount* m_account;
-            QWeakPointer< TomahawkOAuthTwitter > m_twitterAuth;
+            QPointer< TomahawkOAuthTwitter > m_twitterAuth;
         };
 
     }

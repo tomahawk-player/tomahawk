@@ -82,15 +82,12 @@ void
 GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
     PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
-    if ( !item )
+    if ( !item || !index.isValid() )
         return;
 
     QStyleOptionViewItemV4 opt = option;
     initStyleOption( &opt, QModelIndex() );
     qApp->style()->drawControl( QStyle::CE_ItemViewItem, &opt, painter );
-
-    painter->save();
-    painter->setRenderHint( QPainter::Antialiasing );
 
     QRect r = option.rect;
     QString top, bottom;
@@ -105,11 +102,18 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     {
         top = item->artist()->name();
     }
-    else
+    else if ( !item->query().isNull() )
     {
         top = item->query()->track();
         bottom = item->query()->artist();
     }
+    else
+    {
+        return;
+    }
+
+    painter->save();
+    painter->setRenderHint( QPainter::Antialiasing );
 
     if ( !m_covers.contains( index ) )
     {
@@ -194,7 +198,7 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     painter->drawRect( gradientRect );
     painter->restore();
 
-    painter->setPen( Qt::white );
+    painter->setPen( TomahawkUtils::Colors::SELECTION_FOREGROUND );
 
     QRect textRect = option.rect.adjusted( 6, option.rect.height() - frameHeight, -6, -6 );
     bool oneLiner = false;
@@ -221,8 +225,8 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
         r.adjust( 4, 0, -4, -1 );
         if ( m_hoveringOver == index )
         {
-            TomahawkUtils::drawQueryBackground( painter, opt.palette, r, 1.1 );
-            painter->setPen( opt.palette.color( QPalette::HighlightedText ) );
+            TomahawkUtils::drawQueryBackground( painter, r );
+            painter->setPen( TomahawkUtils::Colors::SELECTION_FOREGROUND );
         }
 
         to.setAlignment( Qt::AlignHCenter | Qt::AlignBottom );

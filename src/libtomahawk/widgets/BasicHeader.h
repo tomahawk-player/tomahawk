@@ -20,7 +20,7 @@
 #ifndef BASICHEADER_H
 #define BASICHEADER_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 #include "DllMacro.h"
 

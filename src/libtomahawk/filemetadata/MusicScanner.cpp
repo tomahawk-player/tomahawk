@@ -34,9 +34,6 @@
 
 #include "utils/Logger.h"
 
-using namespace Tomahawk;
-
-
 void
 DirLister::go()
 {
@@ -100,7 +97,39 @@ DirLister::scanDir( QDir dir, int depth )
 }
 
 
-MusicScanner::MusicScanner( ScanManager::ScanMode scanMode, const QStringList& paths, quint32 bs )
+DirListerThreadController::DirListerThreadController( QObject *parent )
+    : QThread( parent )
+{
+    tDebug() << Q_FUNC_INFO;
+}
+
+
+DirListerThreadController::~DirListerThreadController()
+{
+    tDebug() << Q_FUNC_INFO;
+}
+
+
+void
+DirListerThreadController::run()
+{
+    m_dirLister = QPointer< DirLister >( new DirLister( m_paths ) );
+    connect( m_dirLister.data(), SIGNAL( fileToScan( QFileInfo ) ),
+             parent(), SLOT( scanFile( QFileInfo ) ), Qt::QueuedConnection );
+
+    // queued, so will only fire after all dirs have been scanned:
+    connect( m_dirLister.data(), SIGNAL( finished() ),
+             parent(), SLOT( postOps() ), Qt::QueuedConnection );
+
+    QMetaObject::invokeMethod( m_dirLister.data(), "go", Qt::QueuedConnection );
+
+    exec();
+    if ( !m_dirLister.isNull() )
+        delete m_dirLister.data();
+}
+
+
+MusicScanner::MusicScanner( MusicScanner::ScanMode scanMode, const QStringList& paths, quint32 bs )
     : QObject()
     , m_scanMode( scanMode )
     , m_paths( paths )
@@ -125,12 +154,11 @@ MusicScanner::~MusicScanner()
 {
     tDebug() << Q_FUNC_INFO;
 
-    if ( !m_dirLister.isNull() )
+    if ( m_dirListerThreadController )
     {
-        m_dirListerThreadController->quit();;
+        m_dirListerThreadController->quit();
         m_dirListerThreadController->wait( 60000 );
 
-        delete m_dirLister.data();
         delete m_dirListerThreadController;
         m_dirListerThreadController = 0;
     }
@@ -176,26 +204,15 @@ MusicScanner::scan()
     connect( this, SIGNAL( batchReady( QVariantList, QVariantList ) ),
                      SLOT( commitBatch( QVariantList, QVariantList ) ), Qt::DirectConnection );
 
-    if ( m_scanMode == ScanManager::FileScan )
+    if ( m_scanMode == MusicScanner::FileScan )
     {
         scanFilePaths();
         return;
     }
 
-    m_dirListerThreadController = new QThread( this );
-
-    m_dirLister = QWeakPointer< DirLister >( new DirLister( m_paths ) );
-    m_dirLister.data()->moveToThread( m_dirListerThreadController );
-
-    connect( m_dirLister.data(), SIGNAL( fileToScan( QFileInfo ) ),
-                                   SLOT( scanFile( QFileInfo ) ), Qt::QueuedConnection );
-
-    // queued, so will only fire after all dirs have been scanned:
-    connect( m_dirLister.data(), SIGNAL( finished() ),
-                                   SLOT( postOps() ), Qt::QueuedConnection );
-
+    m_dirListerThreadController = new DirListerThreadController( this );
+    m_dirListerThreadController->setPaths( m_paths );
     m_dirListerThreadController->start( QThread::IdlePriority );
-    QMetaObject::invokeMethod( m_dirLister.data(), "go" );
 }
 
 
@@ -219,7 +236,7 @@ MusicScanner::postOps()
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
 
-    if ( m_scanMode == ScanManager::DirScan )
+    if ( m_scanMode == MusicScanner::DirScan )
     {
         // any remaining stuff that wasnt emitted as a batch:
         foreach( const QString& key, m_filemtimes.keys() )
@@ -250,12 +267,11 @@ MusicScanner::postOps()
 void
 MusicScanner::cleanup()
 {
-    if ( !m_dirLister.isNull() )
+    if ( m_dirListerThreadController )
     {
-        m_dirListerThreadController->quit();;
+        m_dirListerThreadController->quit();
         m_dirListerThreadController->wait( 60000 );
 
-        delete m_dirLister.data();
         delete m_dirListerThreadController;
         m_dirListerThreadController = 0;
     }
@@ -368,7 +384,7 @@ MusicScanner::readFile( const QFileInfo& fi )
     int bitrate = 0;
     int duration = 0;
 
-    Tag *tag = Tag::fromFile( f );
+    Tomahawk::Tag *tag = Tomahawk::Tag::fromFile( f );
     if ( f.audioProperties() )
     {
         TagLib::AudioProperties *properties = f.audioProperties();
@@ -414,3 +430,4 @@ MusicScanner::readFile( const QFileInfo& fi )
     m_scanned++;
     return m;
 }
+

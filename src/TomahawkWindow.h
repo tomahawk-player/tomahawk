@@ -100,6 +100,7 @@ public slots:
     void showSettingsDialog();
     void showDiagnosticsDialog();
     void legalInfo();
+    void openLogfile();
     void updateCollectionManually();
     void rescanCollectionManually();
     void showOfflineSources();
@@ -117,8 +118,6 @@ private slots:
 
     void onXSPFError( XSPFLoader::XSPFErrorCode error );
     void onXSPFOk( const Tomahawk::playlist_ptr& );
-
-    void addPeerManually();
 
     void onPlaybackLoading( const Tomahawk::result_ptr& result );
 
@@ -140,6 +139,7 @@ private slots:
 
     void minimize();
     void maximize();
+    void toggleFullscreen();
 
     void playlistCreateDialogFinished( int ret );
 

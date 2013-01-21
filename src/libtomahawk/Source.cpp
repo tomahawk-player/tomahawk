@@ -32,7 +32,6 @@
 #include "database/Database.h"
 
 #include <QCoreApplication>
-#include <QBuffer>
 
 #include "utils/TomahawkCache.h"
 #include "database/DatabaseCommand_SocialAction.h"
@@ -42,6 +41,7 @@
 #endif
 
 #include "utils/Logger.h"
+#include "sip/PeerInfo.h"
 
 using namespace Tomahawk;
 
@@ -53,12 +53,9 @@ Source::Source( int id, const QString& username )
     , m_username( username )
     , m_id( id )
     , m_updateIndexWhenSynced( false )
-    , m_avatarUpdated( true )
     , m_state( DBSyncConnection::UNKNOWN )
     , m_cc( 0 )
     , m_commandCount( 0 )
-    , m_avatar( 0 )
-    , m_fancyAvatar( 0 )
 {
     m_scrubFriendlyName = qApp->arguments().contains( "--demo" );
 
@@ -79,8 +76,6 @@ Source::Source( int id, const QString& username )
 Source::~Source()
 {
     qDebug() << Q_FUNC_INFO << friendlyName();
-    delete m_avatar;
-    delete m_fancyAvatar;
 }
 
 
@@ -88,6 +83,14 @@ void
 Source::setControlConnection( ControlConnection* cc )
 {
     m_cc = cc;
+}
+
+const QSet<peerinfo_ptr>
+Source::peerInfos() const
+{
+    if( controlConnection() )
+        return controlConnection()->peerInfos();
+    return QSet< Tomahawk::peerinfo_ptr >();
 }
 
 
@@ -129,80 +132,27 @@ Source::friendlyName() const
 
 
 #ifndef ENABLE_HEADLESS
-void
-Source::setAvatar( const QPixmap& avatar )
-{
-    QByteArray ba;
-    QBuffer buffer( &ba );
-    buffer.open( QIODevice::WriteOnly );
-    avatar.save( &buffer, "PNG" );
-
-    // Check if the avatar is different by comparing a hash of the first 4096 bytes
-    const QByteArray hash = QCryptographicHash::hash( ba.left( 4096 ), QCryptographicHash::Sha1 );
-    if ( m_avatarHash == hash )
-        return;
-    else
-        m_avatarHash = hash;
-
-    delete m_avatar;
-    m_avatar = new QPixmap( avatar );
-    m_fancyAvatar = 0;
-
-    TomahawkUtils::Cache::instance()->putData( "Sources", 7776000000 /* 90 days */, m_username, ba );
-    m_avatarUpdated = true;
-}
-
-
 QPixmap
 Source::avatar( TomahawkUtils::ImageMode style, const QSize& size )
 {
-    if ( !m_avatar && m_avatarUpdated )
+    if( controlConnection() )
     {
-        m_avatar = new QPixmap();
-        QByteArray ba = TomahawkUtils::Cache::instance()->getData( "Sources", m_username ).toByteArray();
-
-        if ( ba.count() )
-            m_avatar->loadFromData( ba );
-
-        if ( m_avatar->isNull() )
+//        tLog() << "****************************************************************************************";
+//        tLog() << controlConnection()->peerInfos().count() << "PEERS FOR " << friendlyName();
+        QPixmap result;
+        foreach( const peerinfo_ptr& peerInfo, controlConnection()->peerInfos() )
         {
-            delete m_avatar;
-            m_avatar = 0;
+//             peerInfoDebug(peerInfo);
+            if( !peerInfo.isNull() && !peerInfo->avatar( style, size ).isNull() )
+            {
+                result =  peerInfo->avatar( style, size );
+            }
         }
-        m_avatarUpdated = false;
+//        tLog() << "****************************************************************************************";
+        return result;
     }
 
-    if ( style == TomahawkUtils::RoundedCorners && m_avatar && !m_avatar->isNull() && !m_fancyAvatar )
-        m_fancyAvatar = new QPixmap( TomahawkUtils::createRoundedImage( QPixmap( *m_avatar ), QSize( 0, 0 ) ) );
-
-    QPixmap pixmap;
-    if ( style == TomahawkUtils::RoundedCorners && m_fancyAvatar )
-    {
-        pixmap = *m_fancyAvatar;
-    }
-    else if ( m_avatar )
-    {
-        pixmap = *m_avatar;
-    }
-
-    if ( !pixmap.isNull() && !size.isEmpty() )
-    {
-        if ( m_coverCache[ style ].contains( size.width() ) )
-        {
-            return m_coverCache[ style ].value( size.width() );
-        }
-
-        QPixmap scaledCover;
-        scaledCover = pixmap.scaled( size, Qt::KeepAspectRatio, Qt::SmoothTransformation );
-
-        QHash< int, QPixmap > innerCache = m_coverCache[ style ];
-        innerCache.insert( size.width(), scaledCover );
-        m_coverCache[ style ] = innerCache;
-
-        return scaledCover;
-    }
-
-    return pixmap;
+    return QPixmap();
 }
 #endif
 

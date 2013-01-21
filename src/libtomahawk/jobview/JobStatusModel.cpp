@@ -88,7 +88,6 @@ JobStatusSortModel::lessThan( const QModelIndex& left, const QModelIndex& right 
     if ( leftSort == rightSort )
         return left.data( JobStatusModel::AgeRole ).toUInt() > right.data( JobStatusModel::AgeRole ).toUInt();
 
-
     return leftSort < rightSort;
 }
 

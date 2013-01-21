@@ -24,11 +24,11 @@
 #include "accounts/Account.h"
 #include "TomahawkZeroconf.h"
 
-#include "../AccountDllMacro.h"
+#include "accounts/AccountDllMacro.h"
 
 #include <QtCore/QTimer>
 
-#define MYNAME "Local Network"
+#define MYNAME "zeroconf"
 
 namespace Tomahawk
 {
@@ -50,6 +50,7 @@ public:
     virtual const QString name() const;
     virtual const QString friendlyName() const;
     virtual const QString accountName() const;
+    virtual const QString serviceName() const;
     virtual Account::ConnectionState connectionState() const;
     virtual bool isValid() const { return true; }
 #ifndef ENABLE_HEADLESS
@@ -64,7 +65,7 @@ public slots:
 
     void advertise();
 
-    void sendMsg( const QString&, const SipInfo&  ) {}
+    void sendSipInfo( const Tomahawk::peerinfo_ptr&, const SipInfo& ) {}
     void broadcastMsg( const QString & ) {}
     void addContact( const QString &, const QString&  ) {}
 

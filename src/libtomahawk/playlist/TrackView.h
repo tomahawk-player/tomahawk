@@ -20,15 +20,15 @@
 #ifndef TRACKVIEW_H
 #define TRACKVIEW_H
 
-#include <QtGui/QTreeView>
-#include <QtGui/QSortFilterProxyModel>
-#include <QtCore/QTimer>
-
 #include "ContextMenu.h"
 #include "PlaylistItemDelegate.h"
 #include "ViewPage.h"
 
 #include "DllMacro.h"
+
+#include <QTreeView>
+#include <QSortFilterProxyModel>
+#include <QTimer>
 
 class QAction;
 class AnimatedSpinner;
@@ -108,16 +108,16 @@ protected:
 
     virtual void startDrag( Qt::DropActions supportedActions );
     virtual void dragEnterEvent( QDragEnterEvent* event );
-    virtual void dragLeaveEvent( QDragLeaveEvent* /*event*/ ) { m_dragging = false; setDirtyRegion( m_dropRect ); }
+    virtual void dragLeaveEvent( QDragLeaveEvent* event );
     virtual void dragMoveEvent( QDragMoveEvent* event );
     virtual void dropEvent( QDropEvent* event );
 
-    void wheelEvent( QWheelEvent* event );
-    void mouseMoveEvent( QMouseEvent* event );
-    void mousePressEvent( QMouseEvent* event );
-    void leaveEvent( QEvent* event );
-    void paintEvent( QPaintEvent* event );
-    void keyPressEvent( QKeyEvent* event );
+    virtual void wheelEvent( QWheelEvent* event );
+    virtual void mouseMoveEvent( QMouseEvent* event );
+    virtual void mousePressEvent( QMouseEvent* event );
+    virtual void leaveEvent( QEvent* event );
+    virtual void paintEvent( QPaintEvent* event );
+    virtual void keyPressEvent( QKeyEvent* event );
 
 protected slots:
     virtual void currentChanged( const QModelIndex& current, const QModelIndex& previous );

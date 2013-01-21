@@ -45,7 +45,7 @@ FlexibleHeader::FlexibleHeader( FlexibleView* parent )
 {
     QFile f( RESPATH "stylesheets/topbar-radiobuttons.css" );
     f.open( QFile::ReadOnly );
-    QString css = QString::fromAscii( f.readAll() );
+    QString css = QString::fromLatin1( f.readAll() );
     f.close();
 
     QHBoxLayout* outerModeLayout = new QHBoxLayout;

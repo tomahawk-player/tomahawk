@@ -23,7 +23,7 @@ THE SOFTWARE.
 #ifndef QCOCOA_MAC_H
 #define QCOCOA_MAC_H
 
-#include <Foundation/NSString.h>
+#import <Cocoa/Cocoa.h>
 #include <QString>
 #include <QVBoxLayout>
 #include <QMacCocoaViewContainer>

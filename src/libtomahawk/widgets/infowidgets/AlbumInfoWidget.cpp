@@ -81,7 +81,7 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
     ui->tracks->setFrameShape( QFrame::StyledPanel );
     ui->tracks->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
-    m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::Original, QSize( 48, 48 ) );
+    m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::Original, QSize( 48, 48 ) );
     ui->cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::Grid, ui->cover->size() ) );
     ui->cover->setShowText( true );
 
@@ -99,6 +99,7 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
 
     QScrollArea* area = new QScrollArea();
     area->setWidgetResizable( true );
+    area->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
     area->setWidget( widget );
 
     area->setStyleSheet( "QScrollArea { background-color: #454e59; }" );

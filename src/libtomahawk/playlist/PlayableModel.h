@@ -120,11 +120,14 @@ signals:
     void loadingStarted();
     void loadingFinished();
 
+    void indexResolved( const QModelIndex& index );
     void indexPlayable( const QModelIndex& index );
+
     void changed();
+    void currentIndexChanged();
 
 public slots:
-    virtual void setCurrentItem( const QModelIndex& index );
+    virtual void setCurrentIndex( const QModelIndex& index );
 
     virtual void clear();
 
@@ -156,8 +159,10 @@ protected:
 
 private slots:
     void onDataChanged();
-    void onQueryBecamePlayable( bool playable );
 
+    void onQueryBecamePlayable( bool playable );
+    void onQueryResolved( bool hasResults );
+    
     void onPlaybackStarted( const Tomahawk::result_ptr& result );
     void onPlaybackStopped();
 

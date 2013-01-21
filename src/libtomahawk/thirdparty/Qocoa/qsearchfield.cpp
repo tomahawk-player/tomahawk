@@ -145,4 +145,9 @@ void QSearchField::resizeEvent(QResizeEvent* e)
 }
 
 
+bool QSearchField::eventFilter(QObject *o, QEvent *e)
+{
+    return QWidget::eventFilter(o, e);
+}
+
 #include "qsearchfield.moc"

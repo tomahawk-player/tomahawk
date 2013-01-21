@@ -117,7 +117,11 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     setModel( m_proxyModel );
 
     header()->setStretchLastSection( false );
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    header()->setSectionResizeMode( 0, QHeaderView::Stretch );
+#else
     header()->setResizeMode( 0, QHeaderView::Stretch );
+#endif
 
     connect( this, SIGNAL( expanded( QModelIndex ) ), SLOT( onItemExpanded( QModelIndex ) ) );
     connect( selectionModel(), SIGNAL( selectionChanged( QItemSelection, QItemSelection ) ), SLOT( onSelectionChanged() ) );
@@ -373,9 +377,6 @@ SourceTreeView::deletePlaylist( const QModelIndex& idxIn )
     PlaylistItem* item = itemFromIndex< PlaylistItem >( idx );
     playlist_ptr playlist = item->playlist();
     QPoint rightCenter = viewport()->mapToGlobal( visualRect( idx ).topRight() + QPoint( 0, visualRect( idx ).height() / 2 ) );
-#ifdef Q_OS_WIN
-    rightCenter = QApplication::activeWindow()->mapFromGlobal( rightCenter );
-#endif
 
     if ( playlist->hasCustomDeleter() )
     {
@@ -385,7 +386,7 @@ SourceTreeView::deletePlaylist( const QModelIndex& idxIn )
     {
         if ( m_popupDialog.isNull() )
         {
-            m_popupDialog = QWeakPointer< SourceTreePopupDialog >( new SourceTreePopupDialog() );
+            m_popupDialog = QPointer< SourceTreePopupDialog >( new SourceTreePopupDialog() );
             connect( m_popupDialog.data(), SIGNAL( result( bool ) ), this, SLOT( onDeletePlaylistResult( bool ) ) );
         }
 

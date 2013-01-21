@@ -36,7 +36,7 @@
 #include <QTweetLib/qtweetdmstatus.h>
 
 #include <QTimer>
-#include <QWeakPointer>
+#include <QPointer>
 #include <QSet>
 
 
@@ -81,7 +81,7 @@ public slots:
     void checkSettings();
 
 private slots:
-    void accountAuthenticated( const QWeakPointer< TomahawkOAuthTwitter > &twitterAuth, const QTweetUser &user );
+    void accountAuthenticated( const QPointer< TomahawkOAuthTwitter > &twitterAuth, const QTweetUser &user );
     void checkTimerFired();
     void connectTimerFired();
     void friendsTimelineStatuses( const QList< QTweetStatus > &statuses );
@@ -104,13 +104,13 @@ private:
     bool refreshTwitterAuth();
     void parseGotTomahawk( const QRegExp &regex, const QString &screenName, const QString &text );
 
-    QWeakPointer< TomahawkOAuthTwitter > m_cachedTwitterAuth;
+    QPointer< TomahawkOAuthTwitter > m_cachedTwitterAuth;
 
-    QWeakPointer< QTweetFriendsTimeline > m_friendsTimeline;
-    QWeakPointer< QTweetMentions > m_mentions;
-    QWeakPointer< QTweetDirectMessages > m_directMessages;
-    QWeakPointer< QTweetDirectMessageNew > m_directMessageNew;
-    QWeakPointer< QTweetDirectMessageDestroy > m_directMessageDestroy;
+    QPointer< QTweetFriendsTimeline > m_friendsTimeline;
+    QPointer< QTweetMentions > m_mentions;
+    QPointer< QTweetDirectMessages > m_directMessages;
+    QPointer< QTweetDirectMessageNew > m_directMessageNew;
+    QPointer< QTweetDirectMessageDestroy > m_directMessageDestroy;
 
     QVariantHash m_configuration;
 

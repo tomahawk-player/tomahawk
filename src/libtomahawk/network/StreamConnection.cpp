@@ -215,7 +215,7 @@ StreamConnection::handleMsg( msg_ptr msg )
     else if ( msg->payload().startsWith( "doneblock" ) )
     {
         int block = QString( msg->payload() ).mid( 9 ).toInt();
-        ((BufferIODevice*)m_iodev.data())->seeked( block );
+        ( (BufferIODevice*)m_iodev.data() )->seeked( block );
 
         m_curBlock = block;
         qDebug() << "Next block is now:" << block;
@@ -223,18 +223,20 @@ StreamConnection::handleMsg( msg_ptr msg )
     else if ( msg->payload().startsWith( "data" ) )
     {
         m_badded += msg->payload().length() - 4;
-        ((BufferIODevice*)m_iodev.data())->addData( m_curBlock++, msg->payload().mid( 4 ) );
+        ( (BufferIODevice*)m_iodev.data() )->addData( m_curBlock++, msg->payload().mid( 4 ) );
     }
 
     //qDebug() << Q_FUNC_INFO << "flags" << (int) msg->flags()
     //         << "payload len" << msg->payload().length()
     //         << "written to device so far: " << m_badded;
 
-    if ( ((BufferIODevice*)m_iodev.data())->nextEmptyBlock() < 0 )
+    if ( m_iodev && ( (BufferIODevice*)m_iodev.data() )->nextEmptyBlock() < 0 )
     {
         m_allok = true;
+
         // tell our iodev there is no more data to read, no args meaning a success:
-        ((BufferIODevice*)m_iodev.data())->inputComplete();
+        ( (BufferIODevice*)m_iodev.data() )->inputComplete();
+
         shutdown();
     }
 }

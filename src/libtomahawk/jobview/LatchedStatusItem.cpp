@@ -24,6 +24,10 @@
 #include "JobStatusModel.h"
 #include "utils/TomahawkUtilsGui.h"
 
+#ifndef ENABLE_HEADLESS
+#include "JobStatusModel.h"
+#include "JobStatusView.h"
+#endif
 
 LatchedStatusItem::LatchedStatusItem( const Tomahawk::source_ptr& from, const Tomahawk::source_ptr& to, LatchedStatusManager* parent )
     : JobStatusItem()
@@ -76,9 +80,11 @@ LatchedStatusManager::latchedOn( const Tomahawk::source_ptr& from, const Tomahaw
 
     if ( to->isLocal() )
     {
+#ifndef ENABLE_HEADLESS
         LatchedStatusItem* item = new LatchedStatusItem( from, to, this );
         m_jobs[ from->userName() ] = item;
         JobStatusView::instance()->model()->addJob( item );
+#endif
 
         connect( from.data(), SIGNAL( offline() ), this, SLOT( sourceOffline() ), Qt::UniqueConnection );
     }
@@ -92,7 +98,7 @@ LatchedStatusManager::sourceOffline()
 
     if ( m_jobs.contains( s->userName() ) )
     {
-        QWeakPointer< LatchedStatusItem> job = m_jobs.take( s->userName() ).data();
+        QPointer< LatchedStatusItem> job = m_jobs.take( s->userName() ).data();
         if ( !job.isNull() )
             job.data()->stop();
     }
@@ -107,7 +113,7 @@ LatchedStatusManager::latchedOff( const Tomahawk::source_ptr& from, const Tomaha
 
     if ( to->isLocal() && m_jobs.contains( from->userName() ) )
     {
-        QWeakPointer< LatchedStatusItem > item = m_jobs.take( from->userName() );
+        QPointer< LatchedStatusItem > item = m_jobs.take( from->userName() );
         if ( !item.isNull() )
             item.data()->stop();
     }

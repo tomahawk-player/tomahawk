@@ -623,7 +623,7 @@ LastFmInfoPlugin::similarTracksReturned()
     returnedData["artists"] = sortedArtists;
     returnedData["score"] = sortedScores;
 
-    qDebug() << "Returning data, tracks:" << sortedTracks << "artists:" << sortedArtists << "scors:" << sortedScores;
+    tDebug( LOGVERBOSE ) << "Returning data, tracks:" << sortedTracks << "artists:" << sortedArtists << "scores:" << sortedScores;
 
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
 
@@ -801,13 +801,17 @@ LastFmInfoPlugin::coverArtReturned()
     QUrl redir = reply->attribute( QNetworkRequest::RedirectionTargetAttribute ).toUrl();
     if ( redir.isEmpty() )
     {
+        Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
+        Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>();
+
         QByteArray ba = reply->readAll();
         if ( ba.isNull() || !ba.length() )
         {
-            tLog() << Q_FUNC_INFO << "Uh oh, null byte array";
-            emit info( reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant() );
+            tLog() << Q_FUNC_INFO << "Null byte array for cover of" << origData["artist"] << origData["album"];
+            emit info( requestData, QVariant() );
             return;
         }
+
         foreach ( const QUrl& url, m_badUrls )
         {
             if ( reply->url().toString().startsWith( url.toString() ) )
@@ -818,11 +822,8 @@ LastFmInfoPlugin::coverArtReturned()
         returnedData["imgbytes"] = ba;
         returnedData["url"] = reply->url().toString();
 
-        Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
-
         emit info( requestData, returnedData );
 
-        Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>();
         Tomahawk::InfoSystem::InfoStringHash criteria;
         criteria["artist"] = origData["artist"];
         criteria["album"] = origData["album"];
@@ -940,30 +941,29 @@ LastFmInfoPlugin::onAuthenticated()
         return;
     }
 
-    if ( authJob->error() == QNetworkReply::NoError )
+    lastfm::XmlQuery lfm;
+    lfm.parse( authJob->readAll() );
+    if ( authJob->error() == QNetworkReply::NoError && lfm.attribute("status") == "ok" )
     {
-        lastfm::XmlQuery lfm;
-        lfm.parse( authJob->readAll() );
+        lastfm::ws::SessionKey = lfm[ "session" ][ "key" ].text();
+        m_account.data()->setSessionKey( lastfm::ws::SessionKey.toLatin1() );
 
-        if ( lfm.children( "error" ).size() > 0 )
-        {
-            tLog() << "Error from authenticating with Last.fm service:" << lfm.text();
-            m_account.data()->setSessionKey( QByteArray() );
-        }
-        else
-        {
-            lastfm::ws::SessionKey = lfm[ "session" ][ "key" ].text();
-
-            m_account.data()->setSessionKey( lastfm::ws::SessionKey.toLatin1() );
-
-//            qDebug() << "Got session key from last.fm";
-            if ( m_account.data()->scrobble() )
-                m_scrobbler = new lastfm::Audioscrobbler( "thk" );
-        }
+        if ( m_account.data()->scrobble() )
+            m_scrobbler = new lastfm::Audioscrobbler( "thk" );
     }
     else
     {
-        tLog() << "Got error in Last.fm authentication job:" << authJob->errorString();
+        m_account.data()->setSessionKey( QByteArray() );
+
+        QString error = "Got error in Last.fm authentication job";
+        if ( lfm.children( "error" ).size() > 0 )
+            error += ": " + lfm.text();
+        else if ( authJob->error() != QNetworkReply::NoError )
+            error += ": " + authJob->errorString();
+        else
+            error += ".";
+
+        tLog() << error.simplified();
     }
 
     authJob->deleteLater();

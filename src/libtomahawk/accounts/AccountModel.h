@@ -31,7 +31,7 @@ namespace Tomahawk {
 
 namespace Accounts {
 
-class AccountModelNode;
+struct AccountModelNode;
 
 class DLLEXPORT AccountModel : public QAbstractListModel
 {

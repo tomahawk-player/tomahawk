@@ -22,7 +22,7 @@
 #include <QThread>
 #include <QMutex>
 #include <QHostAddress>
-#include <QWeakPointer>
+#include <QPointer>
 
 class Portfwd;
 
@@ -59,7 +59,7 @@ public:
     explicit PortFwdThread( unsigned int port );
     ~PortFwdThread();
 
-    QWeakPointer< PortFwdWorker > worker() const;
+    QPointer< PortFwdWorker > worker() const;
 
 signals:
     void externalAddressDetected( QHostAddress ha, unsigned int port );
@@ -68,7 +68,7 @@ protected:
     void run();
 
 private:
-    QWeakPointer< PortFwdWorker > m_worker;
+    QPointer< PortFwdWorker > m_worker;
     unsigned int m_port;
 };
 

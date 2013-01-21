@@ -24,18 +24,7 @@
 #include "TomahawkWindow.h"
 #include "audio/AudioEngine.h"
 
-#import <AppKit/NSApplication.h>
-#import <Foundation/NSAutoreleasePool.h>
-#import <Foundation/NSBundle.h>
-#import <Foundation/NSError.h>
-#import <Foundation/NSFileManager.h>
-#import <Foundation/NSPathUtilities.h>
-#import <Foundation/NSThread.h>
-#import <Foundation/NSTimer.h>
-#import <Foundation/NSAppleEventManager.h>
-#import <Foundation/NSURL.h>
-#import <AppKit/NSEvent.h>
-#import <AppKit/NSNibDeclarations.h>
+#import <Cocoa/Cocoa.h>
 
 #ifdef HAVE_SPARKLE
 #import <Sparkle/SUUpdater.h>
@@ -251,7 +240,7 @@ void Tomahawk::checkForUpdates() {
 #endif
 }
 
-#ifdef LION
+#if defined(LION) || defined(MOUNTAIN_LION)
 #define SET_LION_FULLSCREEN NSWindowCollectionBehaviorFullScreenPrimary
 #define LION_FULLSCREEN_ENTER_NOTIFICATION_VALUE NSWindowWillEnterFullScreenNotification
 #define LION_FULLSCREEN_EXIT_NOTIFICATION_VALUE NSWindowDidExitFullScreenNotification
@@ -260,6 +249,26 @@ void Tomahawk::checkForUpdates() {
 #define LION_FULLSCREEN_ENTER_NOTIFICATION_VALUE @"NSWindowWillEnterFullScreenNotification"
 #define LION_FULLSCREEN_EXIT_NOTIFICATION_VALUE @"NSWindowDidExitFullScreenNotification"
 #endif
+
+void Tomahawk::toggleFullscreen()
+{
+    if ( QSysInfo::MacintoshVersion != QSysInfo::MV_SNOWLEOPARD &&
+         QSysInfo::MacintoshVersion != QSysInfo::MV_LEOPARD   )
+    {
+        qDebug() << "Toggling Lion Full-screeen";
+        // Can't include TomahawkApp.h in a .mm file, pulls in InfoSystem.h which uses
+        // the objc keyword 'id'
+        foreach( QWidget* w, QApplication::topLevelWidgets() )
+        {
+            if ( qobject_cast< TomahawkWindow* >( w ) )
+            {
+                NSView *nsview = (NSView *)w->winId();
+                NSWindow *nswindow = [nsview window];
+                [nswindow toggleFullScreen: nil];
+            }
+        }
+    }
+}
 
 void Tomahawk::enableFullscreen( QObject* receiver )
 {

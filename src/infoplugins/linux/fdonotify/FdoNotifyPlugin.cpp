@@ -48,7 +48,6 @@
 #include <QtDBus/QDBusConnection>
 #include <QtDBus/QDBusMessage>
 #include <QtGui/QImage>
-#include <QtPlugin>
 
 namespace Tomahawk
 {

@@ -28,6 +28,11 @@
 
 class ImageButton;
 
+namespace Tomahawk
+{
+    class ContextMenu;
+};
+
 /**
  * \class PlayableCover
  * \brief QLabel which shows a play/pause button on hovering.
@@ -41,7 +46,7 @@ public:
     virtual ~PlayableCover();
 
     bool showText() const { return m_showText; }
-    void setShowText( bool b ) { m_showText = b; }
+    void setShowText( bool b );
 
     QPixmap pixmap() const { return m_pixmap; }
 
@@ -56,6 +61,11 @@ protected:
     virtual void resizeEvent( QResizeEvent* event );
     virtual void paintEvent( QPaintEvent* event );
 
+    virtual void mouseMoveEvent( QMouseEvent* event );
+    virtual void mouseReleaseEvent( QMouseEvent* event );
+
+    virtual void contextMenuEvent( QContextMenuEvent* event );
+    
     void leaveEvent( QEvent* event );
     void enterEvent( QEvent* event );
 
@@ -66,9 +76,14 @@ private:
     QPixmap m_pixmap;
 
     ImageButton* m_button;
+    Tomahawk::ContextMenu* m_contextMenu;
+
     Tomahawk::artist_ptr m_artist;
     Tomahawk::album_ptr m_album;
     Tomahawk::query_ptr m_query;
+
+    QList< QRect > m_itemRects;
+    QRect m_hoveredRect;
 
     bool m_showText;
 };

@@ -21,7 +21,7 @@
 #define TOMAHAWKSOURCEPLAYLISTINTERFACE_H
 
 #include <QObject>
-#include <QSharedPointer>
+#include <QPointer>
 
 #include "Typedefs.h"
 #include "PlaylistInterface.h"
@@ -65,7 +65,7 @@ public:
 
     virtual bool shuffled() const { return false; }
 
-    virtual QWeakPointer< Tomahawk::Source > source() const;
+    virtual QPointer< Tomahawk::Source > source() const;
 
     virtual void reset();
 
@@ -79,7 +79,7 @@ private slots:
     void resolvingFinished( bool hasResults );
 
 private:
-    QWeakPointer< Tomahawk::Source > m_source;
+    QPointer< Tomahawk::Source > m_source;
     mutable Tomahawk::result_ptr m_currentItem;
     mutable bool m_gotNextItem;
 };

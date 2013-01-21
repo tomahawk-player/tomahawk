@@ -21,14 +21,16 @@
 #define TYPEDEFS_H
 
 #include <QSharedPointer>
+#include <QPointer>
 #include <QUuid>
 #include <QPair>
 #include <QPersistentModelIndex>
+
 #include <boost/function.hpp>
 
 //template <typename T> class QSharedPointer;
 
-class QNetworkReply;
+#include <QNetworkReply>
 
 namespace Tomahawk
 {
@@ -44,6 +46,7 @@ namespace Tomahawk
     class Source;
     class DynamicControl;
     class GeneratorInterface;
+    class PeerInfo;
 
     typedef QSharedPointer<Collection> collection_ptr;
     typedef QSharedPointer<Playlist> playlist_ptr;
@@ -55,6 +58,7 @@ namespace Tomahawk
     typedef QSharedPointer<Source> source_ptr;
     typedef QSharedPointer<Artist> artist_ptr;
     typedef QSharedPointer<Album> album_ptr;
+    typedef QSharedPointer<PeerInfo> peerinfo_ptr;
 
     typedef QSharedPointer<DynamicControl> dyncontrol_ptr;
     typedef QSharedPointer<GeneratorInterface> geninterface_ptr;
@@ -74,6 +78,14 @@ namespace Tomahawk
         Mixed = 0,
         DatabaseMode,
         InfoSystemMode,
+    };
+
+    enum ModelTypes
+    {
+        TypeArtist = 0,
+        TypeAlbum,
+        TypeQuery,
+        TypeResult
     };
 
     class ExternalResolver;
@@ -198,12 +210,13 @@ namespace Tomahawk
 
         class InfoPlugin;
 
+        typedef QSet< InfoType > InfoTypeSet;
         typedef QMap< InfoType, QVariant > InfoTypeMap;
         typedef QMap< InfoType, uint > InfoTimeoutMap;
         typedef QHash< QString, QString > InfoStringHash;
         typedef QPair< QVariantMap, QVariant > PushInfoPair;
 
-        typedef QWeakPointer< InfoPlugin > InfoPluginPtr;
+        typedef QPointer< InfoPlugin > InfoPluginPtr;
     }
 }; // ns
 
@@ -215,7 +228,7 @@ typedef QList< QPair< QString, QString > > PairList;
 inline static QString uuid()
 {
     // kinda lame, but
-    QString q = QUuid::createUuid();
+    QString q = QUuid::createUuid().toString();
     q.remove( 0, 1 );
     q.chop( 1 );
     return q;

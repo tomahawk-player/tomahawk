@@ -26,7 +26,9 @@
 
 //#define TOMAHAWK_QUERY_ANALYZE 1
 
-class TomahawkSqlQuery : public QSqlQuery
+#include "DllMacro.h"
+
+class DLLEXPORT TomahawkSqlQuery : public QSqlQuery
 {
 
 public:

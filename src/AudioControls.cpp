@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -140,6 +141,8 @@ AudioControls::AudioControls( QWidget* parent )
     connect( AudioEngine::instance(), SIGNAL( timerMilliSeconds( qint64 ) ), SLOT( onPlaybackTimer( qint64 ) ) );
     connect( AudioEngine::instance(), SIGNAL( volumeChanged( int ) ), SLOT( onVolumeChanged( int ) ) );
     connect( AudioEngine::instance(), SIGNAL( controlStateChanged() ), SLOT( onControlStateChanged() ) );
+    connect( AudioEngine::instance(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ), SLOT( onRepeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ) );
+    connect( AudioEngine::instance(), SIGNAL( shuffleModeChanged( bool ) ), SLOT( onShuffleModeChanged( bool ) ) );
 
     ui->buttonAreaLayout->setSpacing( 0 );
     ui->stackedLayout->setSpacing( 0 );
@@ -148,6 +151,10 @@ AudioControls::AudioControls( QWidget* parent )
     ui->playPauseButton->setContentsMargins( 0, 0, 0, 0 );
     ui->pauseButton->setContentsMargins( 0, 0, 0, 0 );
     ui->stackedLayout->setSizeConstraint( QLayout::SetFixedSize );
+
+    connect( InfoSystem::InfoSystem::instance(), SIGNAL( updatedSupportedPushTypes( Tomahawk::InfoSystem::InfoTypeSet ) ),
+             this, SLOT( onInfoSystemPushTypesUpdated( Tomahawk::InfoSystem::InfoTypeSet ) ) );
+    onInfoSystemPushTypesUpdated( InfoSystem::InfoSystem::instance()->supportedPushTypes() );
 
     onPlaybackStopped(); // initial state
 }
@@ -225,14 +232,14 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
     ui->seekSlider->setValue( 0 );
     ui->seekSlider->setEnabled( AudioEngine::instance()->canSeek() );
 
-    m_sliderTimeLine.stop();
+    ui->timeLabel->setText( TomahawkUtils::timeToString( 0 ) );
+    ui->timeLeftLabel->setText( "-" + TomahawkUtils::timeToString( 0 ) );
+    
     m_sliderTimeLine.setDuration( duration );
     m_sliderTimeLine.setFrameRange( 0, duration );
     m_sliderTimeLine.setCurveShape( QTimeLine::LinearCurve );
     m_sliderTimeLine.setCurrentTime( 0 );
     m_seeked = false;
-
-    ui->seekSlider->setVisible( true );
 
     int updateRate = (double)1000 / ( (double)ui->seekSlider->contentsRect().width() / (double)( duration / 1000 ) );
     m_sliderTimeLine.setUpdateInterval( qBound( 40, updateRate, 500 ) );
@@ -270,7 +277,7 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
     ui->loveButton->setEnabled( true );
     ui->loveButton->setVisible( true );
     ui->socialButton->setEnabled( true );
-    ui->socialButton->setVisible( true );
+    ui->socialButton->setVisible( m_shouldShowShareAction );
     ui->ownerButton->setEnabled( true );
     ui->ownerButton->setVisible( true );
 
@@ -281,6 +288,11 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
     ui->socialButton->setToolTip( tr( "Share" ) );
     ui->loveButton->setToolTip( tr( "Love" ) );
     ui->ownerButton->setToolTip( QString( tr( "Playing from %1" ) ).arg( result->friendlySource() ) );
+
+    ui->seekSlider->setRange( 0, 0 );
+    ui->seekSlider->setValue( 0 );
+    ui->seekSlider->setVisible( true );
+    m_sliderTimeLine.stop();
 
     // If the ViewManager doesn't know a page for the current interface, we can't offer the jump link
     ui->artistTrackLabel->setJumpLinkVisible( ( ViewManager::instance()->pageForInterface( AudioEngine::instance()->currentTrackPlaylist() ) ) );
@@ -345,6 +357,25 @@ AudioControls::onSocialActionsLoaded()
 
 
 void
+AudioControls::onInfoSystemPushTypesUpdated( InfoSystem::InfoTypeSet supportedTypes )
+{
+    if ( supportedTypes.contains( InfoSystem::InfoShareTrack ) )
+    {
+        m_shouldShowShareAction = true;
+    }
+    else
+    {
+        m_shouldShowShareAction = false;
+    }
+
+    if ( AudioEngine::instance()->state() == AudioEngine::Stopped )
+        ui->socialButton->setVisible( false );
+    else
+        ui->socialButton->setVisible( m_shouldShowShareAction );
+}
+
+
+void
 AudioControls::setSocialActions()
 {
     if ( m_currentTrack->toQuery()->loved() )
@@ -374,6 +405,8 @@ AudioControls::onPlaybackResumed()
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
     ui->stackedLayout->setCurrentWidget( ui->pauseButton );
+    m_seeked = true;
+    onPlaybackTimer( m_lastSliderCheck );
 }
 
 
@@ -450,15 +483,14 @@ AudioControls::onPlaybackTimer( qint64 msElapsed )
         return;
 
     int currentTime = m_sliderTimeLine.currentTime();
-    //tDebug( LOGEXTRA ) << Q_FUNC_INFO << "msElapsed =" << msElapsed << "and timer current time =" << m_sliderTimeLine.currentTime();
+    //tDebug( LOGEXTRA ) << Q_FUNC_INFO << "msElapsed =" << msElapsed << "and timer current time =" << currentTime << "and audio engine state is" << (int)AudioEngine::instance()->state();
 
     // First condition checks for the common case where
     // 1) the track has been started
     // 2) we haven't seeked,
     // 3) the timeline is pretty close to the actual time elapsed, within ALLOWED_MAX_DIVERSIONmsec, so no adustment needed, and
     // 4) The audio engine is actually currently running
-    if ( msElapsed > 0
-            && !m_seeked
+    if ( !m_seeked
             && qAbs( msElapsed - currentTime ) <= ALLOWED_MAX_DIVERSION
             && AudioEngine::instance()->state() == AudioEngine::Playing )
     {
@@ -560,21 +592,21 @@ AudioControls::onRepeatClicked()
         case PlaylistModes::NoRepeat:
         {
             // switch to RepeatOne
-            ViewManager::instance()->setRepeatMode( PlaylistModes::RepeatOne );
+            AudioEngine::instance()->setRepeatMode( PlaylistModes::RepeatOne );
         }
         break;
 
         case PlaylistModes::RepeatOne:
         {
             // switch to RepeatAll
-            ViewManager::instance()->setRepeatMode( PlaylistModes::RepeatAll );
+            AudioEngine::instance()->setRepeatMode( PlaylistModes::RepeatAll );
         }
         break;
 
         case PlaylistModes::RepeatAll:
         {
             // switch to NoRepeat
-            ViewManager::instance()->setRepeatMode( PlaylistModes::NoRepeat );
+            AudioEngine::instance()->setRepeatMode( PlaylistModes::NoRepeat );
         }
         break;
 
@@ -611,7 +643,7 @@ AudioControls::onShuffleModeChanged( bool enabled )
 void
 AudioControls::onShuffleClicked()
 {
-    ViewManager::instance()->setShuffled( m_shuffled ^ true );
+    AudioEngine::instance()->setShuffled( m_shuffled ^ true );
 }
 
 

@@ -22,6 +22,7 @@
 
 #include <QObject>
 #include <QList>
+#include <QMutex>
 #include <QPair>
 #include <QVariant>
 #include <QVariantMap>
@@ -31,13 +32,14 @@
 #include <QHash>
 #include <QThread>
 
+#include "DllMacro.h"
 #include "TomahawkSqlQuery.h"
-#include "FuzzyIndex.h"
 #include "Typedefs.h"
 
 class Database;
+class FuzzyIndex;
 
-class DatabaseImpl : public QObject
+class DLLEXPORT DatabaseImpl : public QObject
 {
 Q_OBJECT
 

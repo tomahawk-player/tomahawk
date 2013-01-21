@@ -35,6 +35,7 @@
 #include "PlayableItem.h"
 #include "TreeProxyModel.h"
 #include "TreeView.h"
+#include "Typedefs.h"
 
 
 TreeItemDelegate::TreeItemDelegate( TreeView* parent, TreeProxyModel* proxy )
@@ -42,6 +43,40 @@ TreeItemDelegate::TreeItemDelegate( TreeView* parent, TreeProxyModel* proxy )
     , m_view( parent )
     , m_model( proxy )
 {
+}
+
+
+QSize
+TreeItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
+{
+    QSize size;
+
+    if ( index.isValid() )
+    {
+        Tomahawk::ModelTypes type = (Tomahawk::ModelTypes)index.data( PlayableProxyModel::TypeRole ).toInt();
+        switch ( type )
+        {
+            case Tomahawk::TypeAlbum:
+            {
+                size.setHeight( option.fontMetrics.height() * 3 );
+                return size;
+            }
+
+            case Tomahawk::TypeQuery:
+            case Tomahawk::TypeResult:
+            {
+                size.setHeight( option.fontMetrics.height() * 1.6 );
+                return size;
+            }
+
+            default:
+                break;
+        }
+    }
+    
+    // artist per default
+    size.setHeight( option.fontMetrics.height() * 4 );
+    return size;
 }
 
 
@@ -102,7 +137,7 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
 
             if ( m_view->hoveredIndex() == index && !index.data().toString().isEmpty() && index.column() == 0 )
             {
-                o.rect.setWidth( o.rect.width() - 16 );
+                o.rect.setWidth( o.rect.width() - o.rect.height() );
                 QRect arrowRect( o.rect.x() + o.rect.width(), o.rect.y() + 1, o.rect.height() - 2, o.rect.height() - 2 );
 
                 QPixmap infoIcon = TomahawkUtils::defaultPixmap( TomahawkUtils::InfoIcon, TomahawkUtils::Original, arrowRect.size() );

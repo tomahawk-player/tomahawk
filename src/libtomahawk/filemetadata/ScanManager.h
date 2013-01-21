@@ -23,26 +23,44 @@
 #include "Typedefs.h"
 #include "DllMacro.h"
 
-#include <QtCore/QHash>
-#include <QtCore/QMap>
-#include <QtCore/QObject>
-#include <QtCore/QStringList>
-#include <QtCore/QWeakPointer>
-#include <QtCore/QSet>
+#include "MusicScanner.h"
 
-class MusicScanner;
-class QThread;
+#include <QHash>
+#include <QMap>
+#include <QObject>
+#include <QStringList>
+#include <QPointer>
+#include <QSet>
+#include <QThread>
+
 class QFileSystemWatcher;
 class QTimer;
+
+class MusicScannerThreadController : public QThread
+{
+    Q_OBJECT
+
+public:
+    MusicScannerThreadController( QObject* parent );
+    virtual ~MusicScannerThreadController();
+
+    void setScanMode( MusicScanner::ScanMode mode ) { m_mode = mode; }
+    void setPaths( const QStringList& paths ) { m_paths = paths; }
+    void run();
+
+private:
+    QPointer< MusicScanner > m_musicScanner;
+    MusicScanner::ScanMode m_mode;
+    QStringList m_paths;
+    quint32 m_bs; 
+};
+
 
 class DLLEXPORT ScanManager : public QObject
 {
 Q_OBJECT
 
 public:
-    enum ScanMode { DirScan, FileScan };
-    enum ScanType { None, Full, Normal, File };
-
     static ScanManager* instance();
 
     explicit ScanManager( QObject* parent = 0 );
@@ -71,14 +89,13 @@ private slots:
 private:
     static ScanManager* s_instance;
 
-    ScanMode m_currScanMode;
-    QWeakPointer< MusicScanner > m_scanner;
-    QThread* m_musicScannerThreadController;
+    MusicScanner::ScanMode m_currScanMode;
+    MusicScannerThreadController* m_musicScannerThreadController;
     QSet< QString > m_currScannerPaths;
     QStringList m_cachedScannerDirs;
 
     QTimer* m_scanTimer;
-    ScanType m_queuedScanType;
+    MusicScanner::ScanType m_queuedScanType;
 
     bool m_updateGUI;
 };

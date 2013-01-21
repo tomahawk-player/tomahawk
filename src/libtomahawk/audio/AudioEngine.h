@@ -42,7 +42,7 @@ Q_OBJECT
 
 public:
     enum AudioErrorCode { StreamReadError, AudioDeviceError, DecodeError, UnknownError, NoError };
-    enum AudioState { Stopped, Playing, Paused, Error };
+    enum AudioState { Stopped = 0, Playing = 1, Paused = 2, Error = 3, Loading = 4 };
 
     static AudioEngine* instance();
 
@@ -98,6 +98,9 @@ public slots:
 
     void setStopAfterTrack( const Tomahawk::query_ptr& query );
 
+    void setRepeatMode( Tomahawk::PlaylistModes::RepeatMode mode );
+    void setShuffled( bool enabled );
+
 signals:
     void loading( const Tomahawk::result_ptr& track );
     void started( const Tomahawk::result_ptr& track );
@@ -110,6 +113,8 @@ signals:
 
     void seeked( qint64 ms );
 
+    void shuffleModeChanged( bool enabled );
+    void repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode mode );
     void controlStateChanged();
     void stateChanged( AudioState newState, AudioState oldState );
     void volumeChanged( int volume /* in percent */ );
@@ -147,9 +152,6 @@ private:
 
     void setState( AudioState state );
 
-    bool isHttpResult( const QString& ) const;
-    bool isLocalResult( const QString& ) const;
-
     QSharedPointer<QIODevice> m_input;
 
     Tomahawk::query_ptr m_stopAfterTrack;
@@ -166,7 +168,6 @@ private:
     bool m_waitingOnNewTrack;
 
     mutable QStringList m_supportedMimeTypes;
-    unsigned int m_volume;
 
     AudioState m_state;
     QQueue< AudioState > m_stateQueue;

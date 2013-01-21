@@ -19,16 +19,15 @@
 #include "ExternalResolverGui.h"
 
 
+#include "Source.h"
+#include "utils/Logger.h"
+
 #include <QMetaProperty>
 #include <QBuffer>
 #include <QDir>
-
-#include <QtGui/QIcon>
-#include <QtGui/QWidget>
+#include <QIcon>
+#include <QWidget>
 #include <QUiLoader>
-#include "utils/Logger.h"
-
-#include "Source.h"
 
 Tomahawk::ExternalResolverGui::ExternalResolverGui(const QString& filePath)
     : Tomahawk::ExternalResolver(filePath)

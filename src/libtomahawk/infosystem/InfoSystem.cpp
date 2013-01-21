@@ -68,9 +68,24 @@ InfoPlugin::InfoPlugin()
 {
 }
 
+
 InfoPlugin::~InfoPlugin()
 {
 }
+
+
+void
+InfoPlugin::setFriendlyName( const QString& friendlyName )
+{
+    m_friendlyName = friendlyName;
+}
+
+const QString
+InfoPlugin::friendlyName() const
+{
+    return m_friendlyName;
+}
+
 
 InfoSystem* InfoSystem::s_instance = 0;
 
@@ -108,7 +123,7 @@ InfoSystem::~InfoSystem()
 {
     tDebug() << Q_FUNC_INFO << " beginning";
 
-    if ( m_infoSystemWorkerThreadController->worker() )
+    if ( m_infoSystemWorkerThreadController )
     {
         m_infoSystemWorkerThreadController->quit();
         m_infoSystemWorkerThreadController->wait( 60000 );
@@ -118,7 +133,7 @@ InfoSystem::~InfoSystem()
     }
     tDebug() << Q_FUNC_INFO << " done deleting worker";
 
-    if( m_infoSystemCacheThreadController->cache() )
+    if( m_infoSystemCacheThreadController )
     {
         m_infoSystemCacheThreadController->quit();
         m_infoSystemCacheThreadController->wait( 60000 );
@@ -157,6 +172,12 @@ InfoSystem::init()
 
     connect( worker, SIGNAL( finished( QString, Tomahawk::InfoSystem::InfoType ) ),
              this, SIGNAL( finished( QString, Tomahawk::InfoSystem::InfoType ) ), Qt::UniqueConnection );
+
+    qRegisterMetaType< Tomahawk::InfoSystem::InfoTypeSet >();
+    connect( worker, SIGNAL( updatedSupportedGetTypes( Tomahawk::InfoSystem::InfoTypeSet ) ),
+             this,   SLOT(   receiveUpdatedSupportedGetTypes( Tomahawk::InfoSystem::InfoTypeSet ) ) );
+    connect( worker, SIGNAL( updatedSupportedPushTypes( Tomahawk::InfoSystem::InfoTypeSet ) ),
+             this,   SLOT(   receiveUpdatedSupportedPushTypes( Tomahawk::InfoSystem::InfoTypeSet ) ) );
 
     QMetaObject::invokeMethod( worker, "init", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoSystemCache*, cache ) );
 
@@ -294,13 +315,29 @@ InfoSystem::removeInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin )
 }
 
 
-QWeakPointer< QThread >
+void
+InfoSystem::receiveUpdatedSupportedGetTypes( InfoTypeSet supportedTypes )
+{
+    m_supportedGetTypes = supportedTypes;
+    emit updatedSupportedGetTypes( m_supportedGetTypes );
+}
+
+
+void
+InfoSystem::receiveUpdatedSupportedPushTypes( InfoTypeSet supportedTypes )
+{
+    m_supportedPushTypes = supportedTypes;
+    emit updatedSupportedPushTypes( m_supportedPushTypes );
+}
+
+
+QPointer< QThread >
 InfoSystem::workerThread() const
 {
     if ( m_infoSystemWorkerThreadController->isRunning() && m_infoSystemWorkerThreadController->worker() )
-        return QWeakPointer< QThread >( m_infoSystemWorkerThreadController->worker()->thread() );
+        return QPointer< QThread >( m_infoSystemWorkerThreadController->worker()->thread() );
 
-    return QWeakPointer< QThread >();
+    return QPointer< QThread >();
 }
 
 
@@ -320,7 +357,7 @@ InfoSystemCacheThread::~InfoSystemCacheThread()
 void
 InfoSystemCacheThread::InfoSystemCacheThread::run()
 {
-    m_cache = QWeakPointer< InfoSystemCache >( new InfoSystemCache() );
+    m_cache = QPointer< InfoSystemCache >( new InfoSystemCache() );
     exec();
     if ( !m_cache.isNull() )
         delete m_cache.data();
@@ -350,7 +387,7 @@ InfoSystemWorkerThread::~InfoSystemWorkerThread()
 void
 InfoSystemWorkerThread::InfoSystemWorkerThread::run()
 {
-    m_worker = QWeakPointer< InfoSystemWorker >( new InfoSystemWorker() );
+    m_worker = QPointer< InfoSystemWorker >( new InfoSystemWorker() );
     exec();
     if( !m_worker.isNull() )
         delete m_worker.data();

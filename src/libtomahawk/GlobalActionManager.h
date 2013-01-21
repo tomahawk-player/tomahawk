@@ -29,8 +29,6 @@
 #include <QNetworkReply>
 #include <QObject>
 #include <QUrl>
-#include <QWeakPointer>
-
 
 /**
  * Handles global actions such as parsing and creation of links, mime data handling, etc

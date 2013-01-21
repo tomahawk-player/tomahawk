@@ -79,6 +79,9 @@ public:
     bool menuBarVisible() const;
     void setMenuBarVisible( bool visible );
 
+    bool fullscreenEnabled() const;
+    void setFullscreenEnabled( bool fullscreen );
+
     // Collection Stuff
     bool showOfflineSources() const;
     void setShowOfflineSources( bool show );

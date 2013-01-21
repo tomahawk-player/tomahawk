@@ -34,6 +34,12 @@
 <property name="bottomMargin">
 <number>0</number>
 </property>
+<property name="leftMargin">
+<number>0</number>
+</property>
+<property name="rightMargin">
+<number>0</number>
+</property>
 <item>
 <widget class="QWidget" name="buttonArea" native="true">
 <property name="sizePolicy">
@@ -44,13 +50,13 @@
 </property>
 <property name="minimumSize">
 <size>
-<width>254</width>
+<width>170</width>
 <height>0</height>
 </size>
 </property>
 <property name="maximumSize">
 <size>
-<width>254</width>
+<width>170</width>
 <height>16777215</height>
 </size>
 </property>
@@ -129,13 +135,13 @@
 </property>
 <layout class="QHBoxLayout" name="horizontalLayout_3">
 <property name="leftMargin">
-<number>10</number>
+<number>8</number>
 </property>
 <property name="topMargin">
 <number>0</number>
 </property>
 <property name="rightMargin">
-<number>12</number>
+<number>10</number>
 </property>
 <property name="bottomMargin">
 <number>0</number>
@@ -168,7 +174,7 @@
 <item>
 <layout class="QVBoxLayout" name="verticalLayout">
 <property name="leftMargin">
-<number>4</number>
+<number>2</number>
 </property>
 <property name="topMargin">
 <number>6</number>
@@ -430,13 +436,13 @@
 </property>
 <property name="minimumSize">
 <size>
-<width>200</width>
+<width>170</width>
 <height>0</height>
 </size>
 </property>
 <property name="maximumSize">
 <size>
-<width>200</width>
+<width>170</width>
 <height>66</height>
 </size>
 </property>
@@ -448,10 +454,10 @@
 <number>0</number>
 </property>
 <property name="rightMargin">
-<number>2</number>
+<number>0</number>
 </property>
 <property name="leftMargin">
-<number>0</number>
+<number>12</number>
 </property>
 <property name="bottomMargin">
 <number>0</number>
@@ -527,7 +533,7 @@
 <number>2</number>
 </property>
 <property name="margin">
-<number>2</number>
+<number>0</number>
 </property>
 <item>
 <widget class="ImageButton" name="volumeLowButton">

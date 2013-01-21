@@ -24,7 +24,7 @@
 #include <QColor>
 #include <QPixmap>
 #include <QFont>
-#include <QWeakPointer>
+#include <QPointer>
 
 class QMouseEvent;
 class QMouseEvent;
@@ -87,9 +87,9 @@ private:
 
     QPoint m_mouseDownPos;
 
-    QWeakPointer<QPropertyAnimation> m_backTopAnimation;
-    QWeakPointer<QPropertyAnimation> m_backBottomAnimation;
-    QWeakPointer<QPropertyAnimation> m_knobAnimation;
+    QPointer<QPropertyAnimation> m_backTopAnimation;
+    QPointer<QPropertyAnimation> m_backBottomAnimation;
+    QPointer<QPropertyAnimation> m_knobAnimation;
 };
 
 #endif // SLIDESWITCHBUTTON_H

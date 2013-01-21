@@ -45,6 +45,7 @@ PlaylistModel::PlaylistModel( QObject* parent )
     , m_isTemporary( false )
     , m_changesOngoing( false )
     , m_isLoading( false )
+    , m_acceptPlayableQueriesOnly( false )
     , m_savedInsertPos( -1 )
 {
     m_dropStorage.parent = QPersistentModelIndex();
@@ -218,6 +219,9 @@ PlaylistModel::insertQueries( const QList< Tomahawk::query_ptr >& queries, int r
     QList< Tomahawk::plentry_ptr > entries;
     foreach ( const query_ptr& query, queries )
     {
+        if ( m_acceptPlayableQueriesOnly && query && query->resolvingFinished() && !query->playable() )
+            continue;
+
         plentry_ptr entry = plentry_ptr( new PlaylistEntry() );
 
         entry->setDuration( query->displayQuery()->duration() );
@@ -270,7 +274,7 @@ PlaylistModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int
         i++;
 
         if ( entry->query()->id() == currentItemUuid() )
-            setCurrentItem( plitem->index );
+            setCurrentIndex( plitem->index );
 
         if ( !entry->query()->resolvingFinished() && !entry->query()->playable() )
         {

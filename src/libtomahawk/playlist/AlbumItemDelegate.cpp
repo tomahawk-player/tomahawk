@@ -64,11 +64,8 @@ AlbumItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelInd
 {
     QSize size = QStyledItemDelegate::sizeHint( option, index );
 
-    if ( index.isValid() )
-    {
-        int rowHeight = option.fontMetrics.height() + 8;
-        size.setHeight( rowHeight * 1.5 );
-    }
+    int rowHeight = option.fontMetrics.height() + 8;
+    size.setHeight( rowHeight * 1.5 );
 
     return size;
 }
@@ -121,12 +118,12 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
         QFontMetrics smallBoldFontMetrics( smallBoldFont );
 
         painter->setFont( boldFont );
-        painter->setPen( option.palette.text().color().lighter() );
+        painter->setPen( option.palette.text().color().lighter( 450 ) );
         
         QRect figureRect = r.adjusted( 4, 0, 0, 0 );
         figureRect.setWidth( QFontMetrics( painter->font() ).width( "888" ) );
         painter->drawText( figureRect, QString::number( index.row() + 1 ), QTextOption( Qt::AlignCenter ) );
-        
+
         r.adjust( figureRect.width() + 12, 0, 0, 0 );
         QRect leftRect = r.adjusted( 0, 0, -48, 0 );
         QRect rightRect = r.adjusted( r.width() - smallBoldFontMetrics.width( TomahawkUtils::timeToString( duration ) ), 0, 0, 0 );

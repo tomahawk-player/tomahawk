@@ -18,8 +18,12 @@
 
 #include "TransferStatusItem.h"
 
+
 #include "JobStatusView.h"
 #include "JobStatusModel.h"
+#include "network/StreamConnection.h"
+#include "network/Servent.h"
+#include "utils/TomahawkUtils.h"
 #include "Result.h"
 #include "Source.h"
 #include "Artist.h"
@@ -28,9 +32,14 @@
 #include "utils/TomahawkUtilsGui.h"
 
 
+#ifndef ENABLE_HEADLESS
+#include "JobStatusModel.h"
+#include "JobStatusView.h"
+#endif
+
 TransferStatusItem::TransferStatusItem( TransferStatusManager* p, StreamConnection* sc )
     : m_parent( p )
-    , m_stream( QWeakPointer< StreamConnection >( sc ) )
+    , m_stream( QPointer< StreamConnection >( sc ) )
 {
     if ( m_stream.data()->type() == StreamConnection::RECEIVING )
         m_type = "receive";
@@ -85,9 +94,9 @@ TransferStatusItem::icon() const
         return QPixmap();
 
     if ( m_stream.data()->type() == StreamConnection::SENDING )
-        return m_parent->rxPixmap();
-    else
         return m_parent->txPixmap();
+    else
+        return m_parent->rxPixmap();
 }
 
 
@@ -104,10 +113,13 @@ TransferStatusManager::TransferStatusManager( QObject* parent )
     connect( Servent::instance(), SIGNAL( streamStarted( StreamConnection* ) ), SLOT( streamRegistered( StreamConnection* ) ) );
 }
 
+
 void
 TransferStatusManager::streamRegistered( StreamConnection* sc )
 {
+#ifndef ENABLE_HEADLESS
     JobStatusView::instance()->model()->addJob( new TransferStatusItem( this, sc ) );
+#endif
 }
 
 

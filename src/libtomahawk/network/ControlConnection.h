@@ -40,14 +40,17 @@ class DLLEXPORT ControlConnection : public Connection
 Q_OBJECT
 
 public:
-    explicit ControlConnection( Servent* parent = 0, const QHostAddress &ha = QHostAddress() );
-    explicit ControlConnection( Servent* parent = 0, const QString &ha = QString() );
+    ControlConnection( Servent* parent );
     ~ControlConnection();
     Connection* clone();
 
     DBSyncConnection* dbSyncConnection();
 
     Tomahawk::source_ptr source() const;
+
+    void addPeerInfo( const Tomahawk::peerinfo_ptr& peerInfo );
+    void removePeerInfo( const Tomahawk::peerinfo_ptr& peerInfo );
+    const QSet< Tomahawk::peerinfo_ptr > peerInfos() const;
 
 protected:
     virtual void setup();
@@ -71,6 +74,8 @@ private:
 
     QTimer* m_pingtimer;
     QTime m_pingtimer_mark;
+
+    QSet< Tomahawk::peerinfo_ptr > m_peerInfos;
 };
 
 #endif // CONTROLCONNECTION_H

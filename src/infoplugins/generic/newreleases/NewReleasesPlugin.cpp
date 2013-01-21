@@ -21,12 +21,6 @@
 
 #include "NewReleasesPlugin.h"
 
-#include <QtCore/QDir>
-#include <QtCore/QSettings>
-#include <QtNetwork/QNetworkConfiguration>
-#include <QtNetwork/QNetworkReply>
-#include <QtPlugin>
-
 #include "Album.h"
 #include "CountryUtils.h"
 #include "Typedefs.h"
@@ -36,8 +30,14 @@
 #include "utils/Logger.h"
 #include "utils/TomahawkCache.h"
 #include "Source.h"
+
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
+
+#include <QDir>
+#include <QSettings>
+#include <QNetworkConfiguration>
+#include <QNetworkReply>
 
 #define CHART_URL "http://charts.tomahawk-player.org/"
 //#define CHART_URL "http://localhost:8080/"
@@ -257,7 +257,8 @@ NewReleasesPlugin::notInCacheSlot( InfoStringHash criteria, InfoRequestData requ
             tDebug ( LOGVERBOSE ) << Q_FUNC_INFO << "InfoChartCapabilities not in cache! Fetching..." << criteria << requestData.requestId;
 
             QUrl url = QUrl( QString ( CHART_URL "newreleases" ) );
-            url.addQueryItem( "version", TomahawkUtils::appFriendlyVersion() );
+
+            TomahawkUtils::urlAddQueryItem( url, "version", TomahawkUtils::appFriendlyVersion() );
 
             QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest ( url ) );
             reply->setProperty( "only_source_list", true );
@@ -389,7 +390,8 @@ NewReleasesPlugin::fetchAllNRSources()
         foreach ( const Tomahawk::InfoSystem::InfoStringHash source, m_nrSources )
         {
             QUrl url = QUrl( QString( CHART_URL "newreleases/%1" ).arg( source[ "nr_source" ] ) );
-            url.addQueryItem( "version", TomahawkUtils::appFriendlyVersion() );
+
+            TomahawkUtils::urlAddQueryItem( url, "version", TomahawkUtils::appFriendlyVersion() );
 
             QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
             reply->setProperty( "nr_source", source[ "nr_source" ] );
@@ -408,7 +410,8 @@ NewReleasesPlugin::fetchNR( InfoRequestData requestData, const QString& source, 
 {
     /// Fetch the chart, we need source and id
     QUrl url = QUrl ( QString ( CHART_URL "newreleases/%1/%2" ).arg( source ).arg( nr_id ) );
-    url.addQueryItem( "version", TomahawkUtils::appFriendlyVersion() );
+
+    TomahawkUtils::urlAddQueryItem( url, "version", TomahawkUtils::appFriendlyVersion() );
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "fetching: " << url;
 

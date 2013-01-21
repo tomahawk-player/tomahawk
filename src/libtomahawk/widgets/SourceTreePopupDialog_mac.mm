@@ -20,9 +20,7 @@
 
 #include <QWidget>
 
-#import <Foundation/Foundation.h>
-#import <AppKit/NSView.h>
-#import <AppKit/NSWindow.h>
+#import <Cocoa/Cocoa.h>
 
 void
 SourceTreePopupHelper::clearBackground( QWidget* widget )

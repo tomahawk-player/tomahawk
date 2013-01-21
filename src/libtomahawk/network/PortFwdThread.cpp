@@ -45,7 +45,7 @@ PortFwdThread::~PortFwdThread()
 void
 PortFwdThread::run()
 {
-    m_worker = QWeakPointer< PortFwdWorker >( new PortFwdWorker( m_port ) );
+    m_worker = QPointer< PortFwdWorker >( new PortFwdWorker( m_port ) );
     Q_ASSERT( m_worker );
     connect( m_worker.data(), SIGNAL( externalAddressDetected( QHostAddress, unsigned int ) ), this, SIGNAL( externalAddressDetected( QHostAddress, unsigned int ) ) );
     QTimer::singleShot( 0, m_worker.data(), SLOT( work() ) );
@@ -62,7 +62,7 @@ PortFwdThread::run()
 }
 
 
-QWeakPointer< PortFwdWorker >
+QPointer< PortFwdWorker >
 PortFwdThread::worker() const
 {
     return m_worker;

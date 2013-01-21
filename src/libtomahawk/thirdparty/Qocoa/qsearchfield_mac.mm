@@ -1,6 +1,5 @@
 /*
 Copyright (C) 2011 by Mike McQuaid
-Copyright (C) 2011 by Leo Franchi
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +24,7 @@ THE SOFTWARE.
 #include "moc_qsearchfield.cpp"
 
 #include "qocoa_mac.h"
+#include "utils/Logger.h"
 
 #import "Foundation/NSAutoreleasePool.h"
 #import "Foundation/NSNotification.h"
@@ -32,11 +32,6 @@ THE SOFTWARE.
 
 #include <QApplication>
 #include <QClipboard>
-
-#define KEYCODE_A 0
-#define KEYCODE_X 7
-#define KEYCODE_C 8
-#define KEYCODE_V 9
 
 class QSearchFieldPrivate : public QObject
 {
@@ -83,7 +78,6 @@ public:
 }
 
 -(void)controlTextDidEndEditing:(NSNotification*)notification {
-    Q_UNUSED(notification);
     // No Q_ASSERT here as it is called on destruction.
     if (pimpl)
         pimpl->textDidEndEditing();
@@ -92,6 +86,15 @@ public:
         pimpl->returnPressed();
 }
 @end
+
+namespace {
+
+static const unsigned short kKeycodeA = 0;
+static const unsigned short kKeycodeX = 7;
+static const unsigned short kKeycodeC = 8;
+static const unsigned short kKeycodeV = 9;
+
+}  // namespace
 
 @interface QocoaSearchField : NSSearchField
 -(BOOL)performKeyEquivalent:(NSEvent*)event;
@@ -102,24 +105,24 @@ public:
     if ([event type] == NSKeyDown && [event modifierFlags] & NSCommandKeyMask)
     {
         const unsigned short keyCode = [event keyCode];
-        if (keyCode == KEYCODE_A)
+/*        if (keyCode == kKeycodeA)  // Cmd+a
         {
             [self performSelector:@selector(selectText:)];
             return YES;
         }
-        else if (keyCode == KEYCODE_C)
+        else*/ if (keyCode == kKeycodeC)  // Cmd+c
         {
             QClipboard* clipboard = QApplication::clipboard();
             clipboard->setText(toQString([self stringValue]));
             return YES;
         }
-        else if (keyCode == KEYCODE_V)
+        else if (keyCode == kKeycodeV)  // Cmd+v
         {
             QClipboard* clipboard = QApplication::clipboard();
             [self setStringValue:fromQString(clipboard->text())];
             return YES;
         }
-        else if (keyCode == KEYCODE_X)
+        else if (keyCode == kKeycodeX)  // Cmd+x
         {
             QClipboard* clipboard = QApplication::clipboard();
             clipboard->setText(toQString([self stringValue]));
@@ -147,10 +150,8 @@ QSearchField::QSearchField(QWidget *parent) : QWidget(parent)
     setFixedHeight(24);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
-    layout()->setContentsMargins(2, 0, 2, 0);
-    setStyleSheet( "* { background: #DDE4EB; }" );
-
     [search release];
+
     [pool drain];
 }
 
@@ -165,7 +166,7 @@ void QSearchField::setText(const QString &text)
     [pool drain];
 }
 
-void QSearchField::setPlaceholderText(const QString& text)
+void QSearchField::setPlaceholderText(const QString &text)
 {
     Q_ASSERT(pimpl);
     if (!pimpl)
@@ -174,6 +175,27 @@ void QSearchField::setPlaceholderText(const QString& text)
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     [[pimpl->nsSearchField cell] setPlaceholderString:fromQString(text)];
     [pool drain];
+}
+
+QString QSearchField::placeholderText() const {
+    Q_ASSERT(pimpl);
+    NSString* placeholder = [[pimpl->nsSearchField cell] placeholderString];
+    return toQString(placeholder);
+}
+
+void QSearchField::setFocus(Qt::FocusReason reason)
+{
+    Q_ASSERT(pimpl);
+    if (!pimpl)
+        return;
+
+    if ([pimpl->nsSearchField acceptsFirstResponder])
+        [[pimpl->nsSearchField window] makeFirstResponder: pimpl->nsSearchField];
+}
+
+void QSearchField::setFocus()
+{
+    setFocus(Qt::OtherFocusReason);
 }
 
 void QSearchField::clear()
@@ -204,31 +226,12 @@ QString QSearchField::text() const
     return toQString([pimpl->nsSearchField stringValue]);
 }
 
-QString QSearchField::placeholderText() const
-{
-    Q_ASSERT(pimpl);
-    if (!pimpl)
-        return QString();
-
-    return toQString([[pimpl->nsSearchField cell] placeholderString]);
-}
-
-void QSearchField::setFocus(Qt::FocusReason reason)
-{
-    Q_ASSERT(pimpl);
-    if (!pimpl)
-        return;
-
-    if ([pimpl->nsSearchField acceptsFirstResponder])
-        [[pimpl->nsSearchField window] makeFirstResponder: pimpl->nsSearchField];
-}
-
-void QSearchField::setFocus()
-{
-    setFocus(Qt::OtherFocusReason);
-}
-
 void QSearchField::resizeEvent(QResizeEvent *resizeEvent)
 {
     QWidget::resizeEvent(resizeEvent);
+}
+
+bool QSearchField::eventFilter(QObject *o, QEvent *e)
+{
+    return QWidget::eventFilter(o, e);
 }

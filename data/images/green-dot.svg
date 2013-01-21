@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg width="85px" height="85px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+<svg width="50px" height="50px" viewBox="0 0 50 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
     <title>green-dot</title>
     <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
     <defs>
@@ -11,7 +11,7 @@
     <g id="Page 1" fill="rgb(215,215,215)" fill-rule="evenodd">
         <g id="green-dot" fill="rgb(0,0,0)">
             <g id="Page 1" fill="rgb(222,223,222)">
-                <path d="M34,17.5 C34,8.38730145 26.6126995,1 17.5,1 C8.38730145,1 1,8.38730145 1,17.5 C1,26.6126995 8.38730145,34 17.5,34 C26.6126995,34 34,26.6126995 34,17.5 Z M34,17.5" id="Oval 1" fill="url(#radialGradient-1)"></path>
+                <path d="M24,12 C24,6.47715239 19.5228482,2 14,2 C8.47715239,2 4,6.47715239 4,12 C4,17.5228482 8.47715239,22 14,22 C19.5228482,22 24,17.5228482 24,12 Z M24,12" id="Oval 1" fill="url(#radialGradient-1)"></path>
             </g>
         </g>
     </g>

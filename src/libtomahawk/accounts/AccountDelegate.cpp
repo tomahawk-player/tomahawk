@@ -39,12 +39,6 @@
 #define PADDING_BETWEEN_STARS 2
 #define STAR_SIZE 12
 
-#ifdef Q_OS_MAC
-#define ROW_HEIGHT_MULTIPLIER 4.9
-#else
-#define ROW_HEIGHT_MULTIPLIER 5.7
-#endif
-
 #define ICONSIZE 40
 #define WRENCH_SIZE 24
 #define SMALL_WRENCH_SIZE 16
@@ -72,7 +66,7 @@ AccountDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex
         // Haven't calculated normal item height yet, do it once and save it
         QStyleOptionViewItemV4 opt( option );
         initStyleOption( &opt, index );
-        m_accountRowHeight = ROW_HEIGHT_MULTIPLIER * opt.fontMetrics.height();
+        m_accountRowHeight = ACCOUNT_DELEGATE_ROW_HEIGHT_MULTIPLIER * opt.fontMetrics.height();
     }
 
     if ( rowType == AccountModel::TopLevelAccount || rowType == AccountModel::UniqueFactory || rowType == AccountModel::CustomAccount )
@@ -171,7 +165,7 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
     QPixmap p = index.data( Qt::DecorationRole ).value< QPixmap >();
     QRect pixmapRect( leftEdge + PADDING, center - ICONSIZE/2, ICONSIZE, ICONSIZE );
     if ( p.isNull() ) // default image... TODO
-        p = TomahawkUtils::defaultPixmap( TomahawkUtils::SipPluginOnline, TomahawkUtils::Original, pixmapRect.size() );
+        p = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultResolver, TomahawkUtils::Original, pixmapRect.size() );
     else
         p = p.scaled( pixmapRect.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation );
 

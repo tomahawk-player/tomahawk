@@ -20,12 +20,13 @@
 #ifndef TRACKPROXYMODELPLAYLISTINTERFACE_H
 #define TRACKPROXYMODELPLAYLISTINTERFACE_H
 
-#include <QtGui/QSortFilterProxyModel>
-
 #include "PlaylistInterface.h"
 #include "playlist/PlayableModel.h"
 
 #include "DllMacro.h"
+
+#include <QSortFilterProxyModel>
+#include <QPointer>
 
 class PlayableProxyModel;
 
@@ -61,12 +62,11 @@ public slots:
     virtual void setRepeatMode( Tomahawk::PlaylistModes::RepeatMode mode ) { m_repeatMode = mode; emit repeatModeChanged( mode ); }
     virtual void setShuffled( bool enabled ) { m_shuffled = enabled; emit shuffleModeChanged( enabled ); }
 
-signals:
-    void previousTrackAvailable();
-    void nextTrackAvailable();
+private slots:
+    void onCurrentIndexChanged();
 
 protected:
-    QWeakPointer< PlayableProxyModel > m_proxyModel;
+    QPointer< PlayableProxyModel > m_proxyModel;
 
     PlaylistModes::RepeatMode m_repeatMode;
     bool m_shuffled;

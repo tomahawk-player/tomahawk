@@ -1,7 +1,7 @@
 
 include_directories(${QTWEETLIB_INCLUDE_DIR})
 
-add_tomahawk_plugin(twitter
+tomahawk_add_plugin(twitter
     TYPE account
     EXPORT_MACRO ACCOUNTDLLEXPORT_PRO
     SOURCES

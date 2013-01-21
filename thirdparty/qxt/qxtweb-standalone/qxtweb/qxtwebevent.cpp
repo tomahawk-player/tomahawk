@@ -1,27 +1,33 @@
+
 /****************************************************************************
- **
- ** Copyright (C) Qxt Foundation. Some rights reserved.
- **
- ** This file is part of the QxtWeb module of the Qxt library.
- **
- ** This library is free software; you can redistribute it and/or modify it
- ** under the terms of the Common Public License, version 1.0, as published
- ** by IBM, and/or under the terms of the GNU Lesser General Public License,
- ** version 2.1, as published by the Free Software Foundation.
- **
- ** This file is provided "AS IS", without WARRANTIES OR CONDITIONS OF ANY
- ** KIND, EITHER EXPRESS OR IMPLIED INCLUDING, WITHOUT LIMITATION, ANY
- ** WARRANTIES OR CONDITIONS OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY OR
- ** FITNESS FOR A PARTICULAR PURPOSE.
- **
- ** You should have received a copy of the CPL and the LGPL along with this
- ** file. See the LICENSE file and the cpl1.0.txt/lgpl-2.1.txt files
- ** included with the source distribution for more information.
- ** If you did not receive a copy of the licenses, contact the Qxt Foundation.
- **
- ** <http://libqxt.org>  <foundation@libqxt.org>
- **
- ****************************************************************************/
+** Copyright (c) 2006 - 2011, the LibQxt project.
+** See the Qxt AUTHORS file for a list of authors and copyright holders.
+** All rights reserved.
+**
+** Redistribution and use in source and binary forms, with or without
+** modification, are permitted provided that the following conditions are met:
+**     * Redistributions of source code must retain the above copyright
+**       notice, this list of conditions and the following disclaimer.
+**     * Redistributions in binary form must reproduce the above copyright
+**       notice, this list of conditions and the following disclaimer in the
+**       documentation and/or other materials provided with the distribution.
+**     * Neither the name of the LibQxt project nor the
+**       names of its contributors may be used to endorse or promote products
+**       derived from this software without specific prior written permission.
+**
+** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+** ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+** WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+** DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
+** DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+** (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+** LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+** ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+** SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+**
+** <http://libqxt.org>  <foundation@libqxt.org>
+*****************************************************************************/
 
 #include "qxtwebevent.h"
 #include "qxtwebcontent.h"
@@ -89,8 +95,8 @@ browser.
 /*!
  * Constructs a QxtWebRequestEvent for the specified \a sessionID, \a requestID and \a url.
  */
-QxtWebRequestEvent::QxtWebRequestEvent(int sessionID, int requestID, const QUrl& url)
-        : QxtWebEvent(QxtWebEvent::Request, sessionID), requestID(requestID), url(url), originalUrl(url) {}
+QxtWebRequestEvent::QxtWebRequestEvent(int _sessionID, int _requestID, const QUrl& _url)
+        : QxtWebEvent(QxtWebEvent::Request, _sessionID), requestID(_requestID), url(_url), originalUrl(_url), isSecure(false) {}
 
 /*!
  * Destroys the event and any content that may still be associated with it.
@@ -129,6 +135,37 @@ QxtWebRequestEvent::~QxtWebRequestEvent()
  */
 
 /*!
+ * \variable QxtWebRequestEvent::isSecure
+ * If the request was sent over an encrypted channel, such as HTTPS, isSecure will be
+ * set to \a true and clientCertificate will be set. Otherwise, isSecure will be set
+ * to \a false.
+ *
+ * \sa clientCertificate, remoteAddress
+ */
+
+/*!
+ *  \variable QxtWebRequestEvent::remoteAddress
+ *  This variable will contain the address of the client as a QHostAddress.
+ *  In IPv6 dual-stack systems (generally only Linux), this may be a IPv4
+ *  mapped address.
+ *
+ *  \warning This variable was originally declared as a QString value in
+ *  prior releases, albeit undocumented until now.
+ *
+ * \sa isSecure, clientCertificate
+ */
+
+/*!
+ * \variable QxtWebRequestEvent::clientCertificate
+ * If the request was sent over an encrypted channel, such as HTTPS, clientCertificate
+ * will contain the certificate presented by the requesting client, if any.
+ *
+ * This member variable is not available if Qt was not compiled with SSL support.
+ *
+ * \sa isSecure, remoteAddress
+ */
+
+/*!
  * \variable QxtWebRequestEvent::cookies
  * Contains all of the cookies sent by the web browser.
  */
@@ -137,7 +174,7 @@ QxtWebRequestEvent::~QxtWebRequestEvent()
  * \variable QxtWebRequestEvent::headers
  * Contains all of the headers sent by the web browser.
  *
- * Note that use of these values may not be portable across session maangers.
+ * Note that use of these values may not be portable across session managers.
  */
 
 /*
@@ -197,7 +234,7 @@ content that will be sent to a web browser.
  * QxtWeb takes ownership of the source and will delete it when the response
  * is completed.
  */
-QxtWebPageEvent::QxtWebPageEvent(int sessionID, int requestID, QSharedPointer<QIODevice> source)
+QxtWebPageEvent::QxtWebPageEvent(int sessionID, int requestID, QIODevice* source)
         : QxtWebEvent(QxtWebEvent::Page, sessionID), dataSource(source), chunked(true), streaming(true), requestID(requestID),
         status(200), statusMessage("OK"), contentType("text/html") {}
 
@@ -216,7 +253,7 @@ QxtWebPageEvent::QxtWebPageEvent(int sessionID, int requestID, QByteArray source
     QBuffer* buffer = new QBuffer;
     buffer->setData(source);
     buffer->open(QIODevice::ReadOnly);
-    dataSource = QSharedPointer<QIODevice>( buffer );
+    dataSource = buffer;
 }
 
 /*!
@@ -229,15 +266,15 @@ QxtWebPageEvent::QxtWebPageEvent(QxtWebEvent::EventType typeOverride, int sessio
     QBuffer* buffer = new QBuffer;
     buffer->setData(source);
     buffer->open(QIODevice::ReadOnly);
-    dataSource = QSharedPointer<QIODevice>( buffer );
+    dataSource = buffer;
 }
 
 /*!
- * Destroys the event
+ * Destroys the event and any data source attached to it.
  */
 QxtWebPageEvent::~QxtWebPageEvent()
 {
-
+    if (!dataSource.isNull()) dataSource->deleteLater();
 }
 
 /*!
@@ -323,9 +360,12 @@ a cookie on the web browser.
  * with the cookie. The browser will delete the cookie automatically after
  * the specified date. If an expiration date is not supplied, the cookie will
  * expire when the browser is closed.
+ *
+ * The cookie will be assigned a path of / by default. You may change this
+ * using the \a path member.
  */
 QxtWebStoreCookieEvent::QxtWebStoreCookieEvent(int sessionID, QString name, QString data, QDateTime expiration)
-        : QxtWebEvent(QxtWebEvent::StoreCookie, sessionID), name(name), data(data), expiration(expiration) {}
+        : QxtWebEvent(QxtWebEvent::StoreCookie, sessionID), name(name), data(data), expiration(expiration), path("/") {}
 
 /*!
  * \variable QxtWebStoreCookieEvent::name
@@ -344,6 +384,14 @@ QxtWebStoreCookieEvent::QxtWebStoreCookieEvent(int sessionID, QString name, QStr
  */
 
 /*!
+ * \variable QxtWebStoreCookieEvent::path
+ * Contains the path of the cookie to be stored.
+ *
+ * The default value is "/". Set the path to an empty QString to send
+ * the cookie with no path specifier.
+ */
+
+/*!
 \class QxtWebRemoveCookieEvent
 
 \inmodule QxtWeb
@@ -357,6 +405,8 @@ a cookie stored on the web browser.
 /*!
  * Constructs a QxtWebRemoveCookieEvent for the specified \a sessionID that
  * removed the cookie with \a name from the web browser.
+ *
+ * The cookie's path is / by default. You may change this using the \a path member.
  */
 QxtWebRemoveCookieEvent::QxtWebRemoveCookieEvent(int sessionID, QString name)
         : QxtWebEvent(QxtWebEvent::RemoveCookie, sessionID), name(name) {}
@@ -364,6 +414,14 @@ QxtWebRemoveCookieEvent::QxtWebRemoveCookieEvent(int sessionID, QString name)
 /*!
  * \variable QxtWebRemoveCookieEvent::name
  * Contains the name of the cookie to be removed.
+ */
+
+/*!
+ * \variable QxtWebStoreCookieEvent::path
+ * Contains the path of the cookie to be removed.
+ *
+ * The default value is "/". Set the path to an empty QString to send
+ * the cookie with no path specifier.
  */
 
 /*!

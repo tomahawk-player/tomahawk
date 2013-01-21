@@ -19,6 +19,25 @@
 
 #include "Servent.h"
 
+#include "Result.h"
+#include "Source.h"
+#include "BufferIoDevice.h"
+#include "Connection.h"
+#include "ControlConnection.h"
+#include "database/Database.h"
+#include "database/DatabaseImpl.h"
+#include "StreamConnection.h"
+#include "SourceList.h"
+#include "sip/SipInfo.h"
+#include "sip/PeerInfo.h"
+#include "sip/SipPlugin.h"
+#include "PortFwdThread.h"
+#include "TomahawkSettings.h"
+#include "utils/TomahawkUtils.h"
+#include "utils/Logger.h"
+#include "accounts/AccountManager.h"
+
+
 #include <QtCore/QCoreApplication>
 #include <QtCore/QMutexLocker>
 #include <QtNetwork/QNetworkInterface>
@@ -29,21 +48,6 @@
 #include <QtNetwork/QNetworkReply>
 
 #include <boost/bind.hpp>
-
-#include "Result.h"
-#include "Source.h"
-#include "BufferIoDevice.h"
-#include "Connection.h"
-#include "ControlConnection.h"
-#include "database/Database.h"
-#include "database/DatabaseImpl.h"
-#include "StreamConnection.h"
-#include "SourceList.h"
-
-#include "PortFwdThread.h"
-#include "TomahawkSettings.h"
-#include "utils/TomahawkUtils.h"
-#include "utils/Logger.h"
 
 using namespace Tomahawk;
 
@@ -150,7 +154,7 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
             }
             // TODO check if we have a public/internet IP on this machine directly
             tLog() << "External address mode set to upnp...";
-            m_portfwd = QWeakPointer< PortFwdThread >( new PortFwdThread( m_port ) );
+            m_portfwd = QPointer< PortFwdThread >( new PortFwdThread( m_port ) );
             Q_ASSERT( m_portfwd );
             connect( m_portfwd.data(), SIGNAL( externalAddressDetected( QHostAddress, unsigned int ) ),
                                   SLOT( setExternalAddress( QHostAddress, unsigned int ) ) );
@@ -168,7 +172,7 @@ Servent::createConnectionKey( const QString& name, const QString &nodeid, const 
     Q_ASSERT( this->thread() == QThread::currentThread() );
 
     QString _key = ( key.isEmpty() ? uuid() : key );
-    ControlConnection* cc = new ControlConnection( this, name );
+    ControlConnection* cc = new ControlConnection( this );
     cc->setName( name.isEmpty() ? QString( "KEY(%1)" ).arg( key ) : name );
     if ( !nodeid.isEmpty() )
         cc->setId( nodeid );
@@ -243,7 +247,7 @@ Servent::setExternalAddress( QHostAddress ha, unsigned int port )
 void
 Servent::registerOffer( const QString& key, Connection* conn )
 {
-    m_offers[key] = QWeakPointer<Connection>(conn);
+    m_offers[key] = QPointer<Connection>(conn);
 }
 
 
@@ -268,15 +272,141 @@ Servent::unregisterControlConnection( ControlConnection* conn )
 
 
 ControlConnection*
-Servent::lookupControlConnection( const QString& name )
+Servent::lookupControlConnection( const SipInfo& sipInfo )
 {
     foreach( ControlConnection* c, m_controlconnections )
-        if( c->name() == name )
-            return c;
+    {
+        tLog() << sipInfo.port() << c->peerPort() << sipInfo.host() << c->peerIpAddress().toString();
+        if ( sipInfo.port() == c->peerPort() && sipInfo.host() == c->peerIpAddress().toString() )
+             return c;
+    }
 
     return NULL;
 }
 
+
+void
+Servent::registerPeer( const Tomahawk::peerinfo_ptr& peerInfo )
+{
+    if( peerInfo->hasControlConnection() )
+    {
+        peerInfoDebug( peerInfo ) << "already had control connection, not doin nuffin: " << peerInfo->controlConnection()->name();
+        tLog() << "existing control connection has following peers:";
+        foreach(const peerinfo_ptr& otherPeerInfo, peerInfo->controlConnection()->peerInfos())
+        {
+            peerInfoDebug( otherPeerInfo );
+        }
+
+        tLog() << "end peers";
+        return;
+    }
+
+    if( peerInfo->type() == Tomahawk::PeerInfo::Local )
+    {
+        peerInfoDebug(peerInfo) << "YAY, we need to establish the connection now.. thinking";
+        if ( !connectedToSession( peerInfo->sipInfo().uniqname() ) )
+        {
+            connectToPeer( peerInfo );
+        }
+        else
+        {
+//            FIXME: do we need to port this?!
+
+//            qDebug() << "Already connected to" << host; // so peerInfo was 0 before
+//            qDebug() << "They connected to us and we don't have a PeerInfo object, created one...";
+//            m_peersOnline.append( peerInfo );
+
+//            // attach to control connection
+//            ControlConnection* conn = Servent::instance()->lookupControlConnection( sipInfo );
+
+//            // we're connected to this nodeid, so we should find a control connection for this sipinfo, no?
+//            Q_ASSERT( conn );
+
+//            conn->addPeerInfo( peerInfo );
+        }
+    }
+    else
+    {
+        SipInfo info;
+        if( visibleExternally() )
+        {
+            QString peerId = peerInfo->id();
+            QString key = uuid();
+            ControlConnection* conn = new ControlConnection( this );
+
+            const QString& nodeid = Database::instance()->impl()->dbid();
+            conn->setName( peerId.left( peerId.indexOf( "/" ) ) );
+            conn->setId( nodeid );
+            conn->addPeerInfo( peerInfo );
+
+            registerOffer( key, conn );
+            info.setVisible( true );
+            info.setHost( externalAddress() );
+            info.setPort( externalPort() );
+            info.setKey( key );
+            info.setUniqname( nodeid );
+
+            tDebug() << "Asking them (" << peerInfo->id() << ") to connect to us:" << info;
+        }
+        else
+        {
+            info.setVisible( false );
+            tDebug() << "We are not visible externally:" << info;
+        }
+
+        peerInfo->sendLocalSipInfo( info );
+
+        handleSipInfo( peerInfo );
+        connect( peerInfo.data(), SIGNAL( sipInfoChanged() ), SLOT( onSipInfoChanged() ) );
+    }
+}
+
+void
+Servent::onSipInfoChanged()
+{
+    Tomahawk::PeerInfo* peerInfo = qobject_cast< Tomahawk::PeerInfo* >( sender() );
+
+    if( !peerInfo )
+        return;
+
+    handleSipInfo( peerInfo->weakRef().toStrongRef() );
+}
+
+
+void Servent::handleSipInfo( const Tomahawk::peerinfo_ptr& peerInfo )
+{
+    tLog() << Q_FUNC_INFO << peerInfo->id() << peerInfo->sipInfo();
+
+    SipInfo info = peerInfo->sipInfo();
+    if( !info.isValid() )
+        return;
+
+    /*
+        If only one party is externally visible, connection is obvious
+        If both are, peer with lowest IP address initiates the connection.
+
+        This avoids dupe connections.
+    */
+    if ( info.isVisible() )
+    {
+        if( !visibleExternally() ||
+             externalAddress() < info.host() ||
+           ( externalAddress() == info.host() && externalPort() < info.port() ) )
+        {
+
+            tDebug() << "Initiate connection to" << peerInfo->id() << "at" << info.host() << " peer of: " << peerInfo->sipPlugin()->account()->accountFriendlyName();
+            connectToPeer( peerInfo );
+        }
+        else
+        {
+            tDebug() << Q_FUNC_INFO << "They should be conecting to us...";
+        }
+    }
+    else
+    {
+        tDebug() << Q_FUNC_INFO << "They are not visible, doing nothing atm";
+    }
+}
 
 void
 Servent::incomingConnection( int sd )
@@ -304,7 +434,7 @@ void
 Servent::readyRead()
 {
     Q_ASSERT( this->thread() == QThread::currentThread() );
-    QWeakPointer< QTcpSocketExtra > sock = (QTcpSocketExtra*)sender();
+    QPointer< QTcpSocketExtra > sock = (QTcpSocketExtra*)sender();
 
     if( sock.isNull() || sock.data()->_disowned )
     {
@@ -344,16 +474,21 @@ Servent::readyRead()
     controlid = m.value( "controlid" ).toString();
 
     tDebug( LOGVERBOSE ) << "Incoming connection details:" << m;
-
     if( !nodeid.isEmpty() ) // only control connections send nodeid
     {
         bool dupe = false;
         if ( m_connectedNodes.contains( nodeid ) )
+        {
+            tDebug() << "connected nodes contains it.";
             dupe = true;
+        }
 
         foreach( ControlConnection* con, m_controlconnections )
         {
-            tLog( LOGVERBOSE ) << "known connection:" << con->id() << con->source()->friendlyName();
+            if(!con)
+                continue;
+
+            tLog() << "known connection:" << con->id();
             if( con->id() == nodeid )
             {
                 dupe = true;
@@ -361,16 +496,46 @@ Servent::readyRead()
             }
         }
 
-        if ( dupe )
+        // for zeroconf there might be no offer, that case is handled later
+        ControlConnection* ccMatch = qobject_cast< ControlConnection*  >( m_offers.value( key ).data() );
+        if ( dupe && ccMatch )
         {
             tLog() << "Duplicate control connection detected, dropping:" << nodeid << conntype;
+
+            tDebug() << "PEERINFO: to be dropped connection has following peers";
+            foreach( const peerinfo_ptr& currentPeerInfo, ccMatch->peerInfos() )
+            {
+                peerInfoDebug( currentPeerInfo );
+            }
+
+
+            foreach( ControlConnection* keepConnection, m_controlconnections )
+            {
+                if( !keepConnection )
+                    continue;
+
+                if( keepConnection->id() == nodeid )
+                {
+                    tDebug() << "Keep connection" << keepConnection->name() << "with following peers";
+                    foreach( const peerinfo_ptr& currentPeerInfo, keepConnection->peerInfos() )
+                        peerInfoDebug( currentPeerInfo );
+
+                    tDebug() << "Add these peers now";
+                    foreach( const peerinfo_ptr& currentPeerInfo, ccMatch->peerInfos() )
+                    {
+                        tDebug() << "Adding " << currentPeerInfo->id();
+                        keepConnection->addPeerInfo( currentPeerInfo );
+                    }
+                    tDebug() << "Done adding.";
+                }
+            }
             goto closeconnection;
         }
     }
 
     foreach( ControlConnection* con, m_controlconnections )
     {
-        if ( con->id() == controlid )
+        if ( con && con->id() == controlid )
         {
             cc = con;
             break;
@@ -398,7 +563,9 @@ Servent::readyRead()
             tLog() << "Socket has become invalid, possibly took too long to make an ACL decision, key:" << key << nodeid;
             goto closeconnection;
         }
-        tDebug( LOGVERBOSE ) << "claimOffer OK:" << key << nodeid;        
+        tDebug( LOGVERBOSE ) << "claimOffer OK:" << key << nodeid;
+
+        registerControlConnection( qobject_cast<ControlConnection*>(conn) );
         
         m_connectedNodes << nodeid;
         if( !nodeid.isEmpty() )
@@ -526,26 +693,84 @@ Servent::socketError( QAbstractSocket::SocketError e )
 
 
 void
-Servent::connectToPeer( const QString& ha, int port, const QString &key, const QString& name, const QString& id )
+Servent::connectToPeer( const peerinfo_ptr& peerInfo )
 {
     Q_ASSERT( this->thread() == QThread::currentThread() );
 
-    ControlConnection* conn = new ControlConnection( this, ha );
+    SipInfo sipInfo = peerInfo->sipInfo();
+
+    peerInfoDebug( peerInfo ) << "connectToPeer: search for already established connections to the same nodeid: " << m_controlconnections.count() << "connections";
+
+    bool isDupe = false;
+    ControlConnection* conn = 0;
+    // try to find a ControlConnection with the same SipInfo, then we dont need to try to connect again
+    foreach( ControlConnection* c, m_controlconnections )
+    {
+        if( !c )
+            continue;
+
+        if( c->id() == sipInfo.uniqname() )
+        {
+            conn = c;
+
+
+           foreach( const peerinfo_ptr& currentPeerInfo, c->peerInfos() )
+           {
+               peerInfoDebug( currentPeerInfo ) << "Same object: " << ( peerInfo == currentPeerInfo ) << ( peerInfo.data() == currentPeerInfo.data() ) << ( peerInfo->debugName() == currentPeerInfo->debugName() );
+
+               if(peerInfo == currentPeerInfo)
+               {
+                   isDupe = true;
+                   peerInfoDebug( currentPeerInfo ) << "Not adding, because it's a dupe: peerInfoCount remains the same " << conn->peerInfos().count();
+               }
+           }
+
+            if( !c->peerInfos().contains( peerInfo ) )
+            {
+                c->addPeerInfo( peerInfo );
+//                peerInfoDebug(peerInfo) << "Adding " << peerInfo->debugName() << ", not a dupe... new peerInfoCount:" << c->peerInfos().count();
+//                foreach(const peerinfo_ptr& kuh, c->peerInfos())
+//                {
+//                    peerInfoDebug(peerInfo) << " ** " << kuh->debugName();
+//                }
+            }
+
+            break;
+        }
+    }
+
+    peerInfoDebug(peerInfo) << "connectToPeer: found a match: " << ( conn ? conn->name() : "false" ) << "dupe: " << isDupe;
+
+    if(isDupe)
+    {
+        peerInfoDebug(peerInfo) << "it's a dupe, nothing to do here, returning and stopping processing: peerInfoCount:" << conn->peerInfos().count();
+    }
+
+    if(conn)
+        return;
+
     QVariantMap m;
     m["conntype"]  = "accept-offer";
-    m["key"]       = key;
+    m["key"]       = sipInfo.key();
     m["port"]      = externalPort();
     m["nodeid"]    = Database::instance()->impl()->dbid();
 
+    peerInfoDebug(peerInfo) << "No match found, creating a new ControlConnection...";
+    conn = new ControlConnection( this );
+    conn->addPeerInfo( peerInfo );
     conn->setFirstMessage( m );
-    if( name.length() )
-        conn->setName( name );
-    if( id.length() )
-        conn->setId( id );
 
-    conn->setProperty( "nodeid", id );
+    if( peerInfo->id().length() )
+        conn->setName( peerInfo->id() );
 
-    connectToPeer( ha, port, key, conn );
+    if( sipInfo.uniqname().length() )
+        conn->setId( sipInfo.uniqname() );
+
+    conn->setProperty( "nodeid", sipInfo.uniqname() );
+
+    registerControlConnection( conn );
+
+    connectToPeer( sipInfo.host(), sipInfo.port(), sipInfo.key(), conn );
 }
 
 
@@ -654,8 +879,20 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
         if( isIPWhitelisted( peer ) )
         {
             tDebug() << "Connection is from whitelisted IP range (LAN)";
-            Connection* conn = new ControlConnection( this, peer.toString() );
+            ControlConnection* conn = new ControlConnection( this );
             conn->setName( peer.toString() );
+
+            Tomahawk::Accounts::Account* account = Tomahawk::Accounts::AccountManager::instance()->zeroconfAccount();
+
+            // if we get this connection the account should exist and be enabled
+            Q_ASSERT( account );
+            Q_ASSERT( account->enabled() );
+
+            // this is terrible, actually there should be a way to let this be created by the zeroconf plugin
+            // because this way we rely on the ip being used as id in two totally different parts of the code
+            Tomahawk::peerinfo_ptr peerInfo = Tomahawk::PeerInfo::get( account->sipPlugin(), peer.toString(), Tomahawk::PeerInfo::AutoCreate );
+            peerInfoDebug( peerInfo );
+            conn->addPeerInfo( peerInfo );
             return conn;
         }
         else
@@ -667,7 +904,7 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
 
     if( m_offers.contains( key ) )
     {
-        QWeakPointer<Connection> conn = m_offers.value( key );
+        QPointer<Connection> conn = m_offers.value( key );
         if( conn.isNull() )
         {
             // This can happen if it's a streamconnection, but the audioengine has
@@ -698,7 +935,7 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
     else if ( noauth )
     {
         Connection* conn;
-        conn = new ControlConnection( this, peer );
+        conn = new ControlConnection( this );
         conn->setName( key );
         return conn;
     }
@@ -803,6 +1040,9 @@ Servent::connectedToSession( const QString& session )
 {
     foreach( ControlConnection* cc, m_controlconnections )
     {
+        if( !cc )
+            continue;
+
         if( cc->id() == session )
             return true;
     }

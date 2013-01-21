@@ -20,7 +20,7 @@
 #ifndef TRACKPROXYMODEL_H
 #define TRACKPROXYMODEL_H
 
-#include <QtGui/QSortFilterProxyModel>
+#include <QSortFilterProxyModel>
 
 #include "PlaylistInterface.h"
 #include "playlist/PlayableModel.h"
@@ -36,7 +36,7 @@ public:
     { Detailed = 0, Short = 1, ShortWithAvatars = 2, Large = 3, Collection = 4 };
 
     enum PlayableProxyModelRole
-    { StyleRole = Qt::UserRole + 1 };
+    { StyleRole = Qt::UserRole + 1, TypeRole };
 
     explicit PlayableProxyModel ( QObject* parent = 0 );
     virtual ~PlayableProxyModel() {}
@@ -94,6 +94,7 @@ signals:
     void loadingFinished();
 
     void indexPlayable( const QModelIndex& index );
+    void indexResolved( const QModelIndex& index );
     void currentIndexChanged();
 
     void itemCountChanged( unsigned int items );
@@ -106,6 +107,7 @@ protected:
 
 private slots:
     void onIndexPlayable( const QModelIndex& index );
+    void onIndexResolved( const QModelIndex& index );
 
 private:
     virtual bool lessThan( int column, const Tomahawk::query_ptr& left, const Tomahawk::query_ptr& right ) const;

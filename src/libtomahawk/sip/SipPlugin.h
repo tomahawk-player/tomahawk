@@ -41,6 +41,8 @@ class DLLEXPORT SipPlugin : public QObject
 {
     Q_OBJECT
 
+friend class Tomahawk::PeerInfo;
+
 public:
     SipPlugin();
     explicit SipPlugin( Tomahawk::Accounts::Account *account, QObject* parent = 0 );
@@ -59,7 +61,7 @@ public:
     virtual Tomahawk::Accounts::Account* account() const;
 
     // peer infos
-    virtual const QStringList peersOnline() const;
+    virtual const QList< Tomahawk::peerinfo_ptr > peersOnline() const;
 
 public slots:
     virtual void connectPlugin() = 0;
@@ -67,38 +69,25 @@ public slots:
     virtual void checkSettings() = 0;
     virtual void configurationChanged() = 0;
 
-    virtual void addContact( const QString &jid, const QString& msg = QString() ) = 0;
-    virtual void sendMsg( const QString& to, const SipInfo& info ) = 0;
+    virtual void addContact( const QString& peerId, const QString& msg = QString() ) = 0;
+    virtual void sendSipInfo( const Tomahawk::peerinfo_ptr& receiver, const SipInfo& info ) = 0;
 
 signals:
-    void peerOnline( const QString& );
-    void peerOffline( const QString& );
-    void msgReceived( const QString& from, const QString& msg );
-    void sipInfoReceived( const QString& peerId, const SipInfo& info );
-    void softwareVersionReceived( const QString& peerId, const QString& versionString );
+    void peerStatusChanged( const Tomahawk::peerinfo_ptr& );
+    void dataError( bool );
 
 #ifndef ENABLE_HEADLESS
     // new data for own source
     void avatarReceived ( const QPixmap& avatar );
 
-    // new data for other sources;
-    void avatarReceived ( const QString& from,  const QPixmap& avatar);
-
     void addMenu( QMenu* menu );
     void removeMenu( QMenu* menu );
 #endif
 
-    void dataError( bool );
-
-private slots:
-    void onPeerOnline( const QString &peerId );
-    void onPeerOffline( const QString &peerId );
-
 protected:
-    Tomahawk::Accounts::Account *m_account;
+    void setAllPeersOffline();
 
-private:
-    QStringList m_peersOnline;
+    Tomahawk::Accounts::Account *m_account;
 };
 
 #endif

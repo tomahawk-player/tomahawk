@@ -22,6 +22,7 @@
 #include <QSqlRecord>
 
 #include "DatabaseImpl.h"
+#include "FuzzyIndex.h"
 #include "Source.h"
 #include "TomahawkSqlQuery.h"
 #include "jobview/IndexingJobItem.h"

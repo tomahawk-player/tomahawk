@@ -19,15 +19,6 @@
 
 #include "RdioParser.h"
 
-#include <QDateTime>
-#include <QtNetwork/QNetworkAccessManager>
-#include <QUrl>
-#include <QStringList>
-
-#include <QtCore/QCryptographicHash>
-
-#include <qjson/parser.h>
-
 #include "ShortenedLinkParser.h"
 #include "config.h"
 #include "DropJob.h"
@@ -40,6 +31,15 @@
 #include "utils/NetworkReply.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
+
+
+#include <qjson/parser.h>
+
+#include <QDateTime>
+#include <QNetworkAccessManager>
+#include <QUrl>
+#include <QStringList>
+#include <QCryptographicHash>
 
 using namespace Tomahawk;
 
@@ -133,8 +133,10 @@ RdioParser::fetchObjectsFromUrl( const QString& url, DropJob::DropType type )
     NetworkReply* reply = new NetworkReply( TomahawkUtils::nam()->post( request, data ) );
     connect( reply, SIGNAL( finished() ), SLOT( rdioReturned() ) );
 
+#ifndef ENABLE_HEADLESS
     m_browseJob = new DropJobNotifier( pixmap(), QString( "Rdio" ), type, reply );
     JobStatusView::instance()->model()->addJob( m_browseJob );
+#endif
 
     m_reqQueries.insert( reply );
 }
@@ -198,7 +200,10 @@ RdioParser::rdioReturned()
     }
     else
     {
+#ifndef ENABLE_HEADLESS
         JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( tr( "Error fetching Rdio information from the network!" ) ) );
+#endif
+
         tLog() << "Error in network request to Rdio for track decoding:" << r->reply()->errorString();
     }
 
@@ -256,24 +261,26 @@ RdioParser::generateRequest( const QString& method, const QString& url, const QL
     QUrl fetchUrl( "http://api.rdio.com/1/" );
     QUrl toSignUrl = fetchUrl;
 
+
     QPair<QByteArray, QByteArray> param;
     foreach ( param, extraParams )
     {
-        toSignUrl.addEncodedQueryItem( param.first, param.second );
+        TomahawkUtils::urlAddQueryItem( toSignUrl, param.first, param.second );
     }
-    toSignUrl.addQueryItem( "method", method );
-    toSignUrl.addEncodedQueryItem("oauth_consumer_key", "gk8zmyzj5xztt8aj48csaart" );
+    TomahawkUtils::urlAddQueryItem( toSignUrl, "method", method );
+    TomahawkUtils::urlAddQueryItem( toSignUrl, "oauth_consumer_key", "gk8zmyzj5xztt8aj48csaart" );
     QString nonce;
     for ( int i = 0; i < 8; i++ )
         nonce += QString::number( qrand() % 10 );
-    toSignUrl.addQueryItem("oauth_nonce", nonce );
-    toSignUrl.addEncodedQueryItem("oauth_signature_method", "HMAC-SHA1");
-    toSignUrl.addQueryItem("oauth_timestamp", QString::number(QDateTime::currentMSecsSinceEpoch() / 1000 ) );
-    toSignUrl.addEncodedQueryItem("oauth_version",  "1.0");
-    toSignUrl.addEncodedQueryItem( "url", QUrl::toPercentEncoding( url ) );
-    int size = toSignUrl.encodedQueryItems().size();
+    TomahawkUtils::urlAddQueryItem( toSignUrl, "oauth_nonce", nonce );
+    TomahawkUtils::urlAddQueryItem( toSignUrl, "oauth_signature_method", "HMAC-SHA1");
+    TomahawkUtils::urlAddQueryItem( toSignUrl, "oauth_timestamp", QString::number(QDateTime::currentMSecsSinceEpoch() / 1000 ) );
+    TomahawkUtils::urlAddQueryItem( toSignUrl, "oauth_version",  "1.0");
+    TomahawkUtils::urlAddQueryItem( toSignUrl, "url", QUrl::toPercentEncoding( url ) );
+
+    int size = TomahawkUtils::urlQueryItems( toSignUrl ).size();
     for( int i = 0; i < size; i++ ) {
-        const QPair< QByteArray, QByteArray > item = toSignUrl.encodedQueryItems().at( i );
+        const QPair< QString, QString > item = TomahawkUtils::urlQueryItems( toSignUrl ).at( i );
         data->append( item.first + "=" + item.second + "&" );
     }
     data->truncate( data->size() - 1 ); // remove extra &
@@ -281,13 +288,13 @@ RdioParser::generateRequest( const QString& method, const QString& url, const QL
     QByteArray toSign = "POST&" + QUrl::toPercentEncoding( fetchUrl.toEncoded() ) + '&' + QUrl::toPercentEncoding( *data );
     qDebug() << "Rdio" << toSign;
 
-    toSignUrl.addEncodedQueryItem( "oauth_signature", QUrl::toPercentEncoding( hmacSha1("yt35kakDyW&", toSign ) ) );
+    TomahawkUtils::urlAddQueryItem( toSignUrl, "oauth_signature", QUrl::toPercentEncoding( hmacSha1("yt35kakDyW&", toSign ) ) );
 
     data->clear();
-    size = toSignUrl.encodedQueryItems().size();
+    size = TomahawkUtils::urlQueryItems( toSignUrl ).size();
     for( int i = 0; i < size; i++ ) {
-        const QPair< QByteArray, QByteArray > item = toSignUrl.encodedQueryItems().at( i );
-        data->append( item.first + "=" + item.second + "&" );
+        const QPair< QString, QString > item = TomahawkUtils::urlQueryItems( toSignUrl ).at( i );
+        data->append( item.first.toLatin1() + "=" + item.second.toLatin1() + "&" );
     }
     data->truncate( data->size() - 1 ); // remove extra &
 

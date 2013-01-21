@@ -19,8 +19,6 @@
 #ifndef ATTICAMANAGER_H
 #define ATTICAMANAGER_H
 
-#include "config.h"
-
 #include <QObject>
 #include <QHash>
 #include <QPixmap>

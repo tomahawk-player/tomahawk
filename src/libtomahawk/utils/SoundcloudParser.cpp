@@ -18,10 +18,6 @@
 
 #include "SoundcloudParser.h"
 
-#include <QtNetwork/QNetworkAccessManager>
-
-#include <qjson/parser.h>
-
 #include "Query.h"
 #include "SourceList.h"
 #include "DropJobNotifier.h"
@@ -32,6 +28,10 @@
 #include "utils/NetworkReply.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+
+#include <qjson/parser.h>
+
+#include <QNetworkAccessManager>
 
 using namespace Tomahawk;
 
@@ -119,7 +119,10 @@ SoundcloudParser::parseTrack( const QVariantMap& res )
     if ( !q.isNull() )
     {
         QUrl url = QUrl::fromUserInput( res.value( "stream_url" ).toString() );
-        url.addQueryItem( "client_id", "TiNg2DRYhBnp01DA3zNag" );
+
+        TomahawkUtils::urlAddQueryItem( url, "client_id", "TiNg2DRYhBnp01DA3zNag" );
+
+
         tLog() << "Setting resulthint to " << res.value( "stream_url" ) << url.toString();
         q->setResultHint( url.toString() );
         q->setSaveHTTPResultHint( true );

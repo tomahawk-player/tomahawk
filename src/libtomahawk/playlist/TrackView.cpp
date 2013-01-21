@@ -19,11 +19,6 @@
 
 #include "TrackView.h"
 
-#include <QKeyEvent>
-#include <QPainter>
-#include <QScrollBar>
-#include <QStyleOptionViewItem>
-
 #include "ViewHeader.h"
 #include "ViewManager.h"
 #include "PlayableModel.h"
@@ -41,6 +36,12 @@
 #include "utils/Closure.h"
 #include "utils/AnimatedSpinner.h"
 #include "utils/Logger.h"
+
+
+#include <QKeyEvent>
+#include <QPainter>
+#include <QScrollBar>
+#include <QDrag>
 
 #define SCROLL_TIMEOUT 280
 
@@ -191,7 +192,7 @@ TrackView::setPlaylistItemDelegate( PlaylistItemDelegate* delegate )
 void
 TrackView::setPlayableModel( PlayableModel* model )
 {
-   m_model = model;
+    m_model = model;
 
     if ( m_proxyModel )
     {
@@ -426,8 +427,6 @@ TrackView::resizeEvent( QResizeEvent* event )
     {
         m_header->resizeSection( 0, event->size().width() );
     }
-
-    
 }
 
 
@@ -450,6 +449,7 @@ TrackView::dragEnterEvent( QDragEnterEvent* event )
 void
 TrackView::dragMoveEvent( QDragMoveEvent* event )
 {
+    tDebug() << Q_FUNC_INFO;
     QTreeView::dragMoveEvent( event );
 
     if ( model()->isReadOnly() )
@@ -490,8 +490,20 @@ TrackView::dragMoveEvent( QDragMoveEvent* event )
 
 
 void
+TrackView::dragLeaveEvent( QDragLeaveEvent* event )
+{
+    tDebug() << Q_FUNC_INFO;
+    QTreeView::dragLeaveEvent( event );
+
+    m_dragging = false;
+    setDirtyRegion( m_dropRect );
+}
+
+
+void
 TrackView::dropEvent( QDropEvent* event )
 {
+    tDebug() << Q_FUNC_INFO;
     QTreeView::dropEvent( event );
 
     if ( event->isAccepted() )
@@ -500,7 +512,7 @@ TrackView::dropEvent( QDropEvent* event )
     }
     else
     {
-        if ( DropJob::acceptsMimeData( event->mimeData()) )
+        if ( DropJob::acceptsMimeData( event->mimeData() ) )
         {
             const QPoint pos = event->pos();
             const QModelIndex index = indexAt( pos );
@@ -610,6 +622,8 @@ TrackView::startDrag( Qt::DropActions supportedActions )
     {
         m_proxyModel->removeIndexes( pindexes );
     }
+
+    // delete drag; FIXME? On OSX it doesn't seem to get deleted automatically.
 }
 
 

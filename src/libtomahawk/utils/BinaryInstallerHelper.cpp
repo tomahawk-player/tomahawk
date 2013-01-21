@@ -27,7 +27,7 @@ BinaryInstallerHelper::BinaryInstallerHelper( QTemporaryFile* tempFile, const QS
     , m_tempFile( tempFile )
     , m_resolverId( resolverId )
     , m_createAccount( createAccount )
-    , m_manager( QWeakPointer< AtticaManager >( manager ) )
+    , m_manager( QPointer< AtticaManager >( manager ) )
 {
     Q_ASSERT( m_tempFile );
     Q_ASSERT( !m_resolverId.isEmpty() );

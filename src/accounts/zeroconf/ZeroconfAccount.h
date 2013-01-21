@@ -21,7 +21,7 @@
 
 #include "Zeroconf.h"
 #include "accounts/Account.h"
-#include "../AccountDllMacro.h"
+#include "accounts/AccountDllMacro.h"
 
 class SipPlugin;
 
@@ -72,7 +72,7 @@ public:
     QWidget* aclWidget() { return 0; }
 
 private:
-    QWeakPointer< ZeroconfPlugin > m_sipPlugin;
+    QPointer< ZeroconfPlugin > m_sipPlugin;
 };
 
 }

@@ -84,6 +84,10 @@
     #if defined ( WITH_QtSparkle )
         #include <qtsparkle/Updater>
     #endif
+
+    #include <windows.h>
+    #include <shellapi.h>
+
     #ifndef THBN_CLICKED
         #define THBN_CLICKED    0x1800
     #endif
@@ -136,8 +140,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 
     if ( qApp->arguments().contains( "--debug" ) )
     {
-        connect( ActionCollection::instance()->getAction( "crashNow" ), SIGNAL( triggered() ),
-                 this, SLOT( crashNow() ) );
+        connect( ActionCollection::instance()->getAction( "crashNow" ), SIGNAL( triggered() ), SLOT( crashNow() ) );
     }
 
     // set initial state
@@ -145,6 +148,12 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 
     vm->setQueue( m_queueView );
     vm->showWelcomePage();
+
+    if ( TomahawkSettings::instance()->fullscreenEnabled() )
+    {
+        // Window must be fully constructed to toggle fullscreen mode. Queue it up.
+        QTimer::singleShot( 0, this, SLOT( toggleFullscreen() ) );
+    }
 }
 
 
@@ -229,7 +238,7 @@ TomahawkWindow::applyPlatformTweaks()
     //       nothing and in QtCurve does evil things), and avoid forwarding it
     //       to QtCurve.
     bool isQtCurve = false;
-    if( QString( qApp->style()->metaObject()->className() ).toLower().contains( "qtcurve" ) )
+    if ( QString( qApp->style()->metaObject()->className() ).toLower().contains( "qtcurve" ) )
         isQtCurve = true;
     qApp->setStyle( new ProxyStyle( isQtCurve ) );
 
@@ -497,11 +506,12 @@ TomahawkWindow::setupWindowsButtons()
 #endif
 }
 
+
 HICON
 TomahawkWindow::thumbIcon(TomahawkUtils::ImageType type)
 {
     static QMap<TomahawkUtils::ImageType,HICON> thumbIcons;
-    if(!thumbIcons.contains( type ) )
+    if (!thumbIcons.contains( type ) )
     {
         QPixmap pix ( TomahawkUtils::defaultPixmap(type , TomahawkUtils::Original, QSize( 20, 20 ) ) );
         thumbIcons[type] = pix.toWinHICON();
@@ -514,30 +524,24 @@ TomahawkWindow::thumbIcon(TomahawkUtils::ImageType type)
 void
 TomahawkWindow::setupSignals()
 {
-    // <From PlaylistManager>
-    connect( ViewManager::instance(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ),
-             m_audioControls,           SLOT( onRepeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ) );
-    connect( ViewManager::instance(), SIGNAL( shuffleModeChanged( bool ) ),
-             m_audioControls,           SLOT( onShuffleModeChanged( bool ) ) );
-
     // <From AudioEngine>
     connect( AudioEngine::instance(), SIGNAL( error( AudioEngine::AudioErrorCode ) ), SLOT( onAudioEngineError( AudioEngine::AudioErrorCode ) ) );
     connect( AudioEngine::instance(), SIGNAL( loading( const Tomahawk::result_ptr& ) ), SLOT( onPlaybackLoading( const Tomahawk::result_ptr& ) ) );
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( audioStarted() ) );
-    connect( AudioEngine::instance(), SIGNAL( finished(Tomahawk::result_ptr) ), SLOT( audioFinished() ) );
-    connect( AudioEngine::instance(), SIGNAL( resumed()), SLOT( audioStarted() ) );
+    connect( AudioEngine::instance(), SIGNAL( finished( Tomahawk::result_ptr ) ), SLOT( audioFinished() ) );
+    connect( AudioEngine::instance(), SIGNAL( resumed() ), SLOT( audioStarted() ) );
     connect( AudioEngine::instance(), SIGNAL( paused() ), SLOT( audioPaused() ) );
     connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( audioStopped() ) );
 
     // <Menu Items>
     ActionCollection *ac = ActionCollection::instance();
-    //    connect( ui->actionAddPeerManually, SIGNAL( triggered() ), SLOT( addPeerManually() ) );
     connect( ac->getAction( "preferences" ), SIGNAL( triggered() ), SLOT( showSettingsDialog() ) );
     connect( ac->getAction( "diagnostics" ), SIGNAL( triggered() ), SLOT( showDiagnosticsDialog() ) );
     connect( ac->getAction( "legalInfo" ), SIGNAL( triggered() ), SLOT( legalInfo() ) );
+    connect( ac->getAction( "openLogfile" ), SIGNAL( triggered() ), SLOT( openLogfile() ) );
     connect( ac->getAction( "updateCollection" ), SIGNAL( triggered() ), SLOT( updateCollectionManually() ) );
     connect( ac->getAction( "rescanCollection" ), SIGNAL( triggered() ), SLOT( rescanCollectionManually() ) );
-    connect( ac->getAction( "loadXSPF" ), SIGNAL( triggered() ), SLOT( loadSpiff() ));
+    connect( ac->getAction( "loadXSPF" ), SIGNAL( triggered() ), SLOT( loadSpiff() ) );
     connect( ac->getAction( "aboutTomahawk" ), SIGNAL( triggered() ), SLOT( showAboutTomahawk() ) );
     connect( ac->getAction( "quit" ), SIGNAL( triggered() ), qApp, SLOT( quit() ) );
     connect( ac->getAction( "showOfflineSources" ), SIGNAL( triggered() ), SLOT( showOfflineSources() ) );
@@ -545,6 +549,7 @@ TomahawkWindow::setupSignals()
 #if defined( Q_OS_MAC )
     connect( ac->getAction( "minimize" ), SIGNAL( triggered() ), SLOT( minimize() ) );
     connect( ac->getAction( "zoom" ), SIGNAL( triggered() ), SLOT( maximize() ) );
+    connect( ac->getAction( "fullscreen" ), SIGNAL( triggered() ), SLOT( toggleFullscreen() ) );
 #else
     connect( ac->getAction( "toggleMenuBar" ), SIGNAL( triggered() ), SLOT( toggleMenuBar() ) );
 #endif
@@ -567,6 +572,7 @@ TomahawkWindow::setupMenuBar()
     m_compactMainMenu = ActionCollection::instance()->createCompactMenu( this );
 #endif
 }
+
 
 void
 TomahawkWindow::changeEvent( QEvent* e )
@@ -634,7 +640,7 @@ TomahawkWindow::keyPressEvent( QKeyEvent* e )
 
 #if ! defined ( Q_OS_MAC )
 #define KEY_PRESSED Q_FUNC_INFO << "Multimedia Key Pressed:"
-    switch( e->key() )
+    switch ( e->key() )
     {
         case Qt::Key_MediaPlay:
             tLog() << KEY_PRESSED << "Play";
@@ -681,12 +687,12 @@ TomahawkWindow::winEvent( MSG* msg, long* result )
 {
     #define TB_PRESSED Q_FUNC_INFO << "Taskbar Button Pressed:"
 
-    switch( msg->message )
+    switch ( msg->message )
     {
     case WM_COMMAND:
         if ( HIWORD( msg->wParam ) == THBN_CLICKED )
         {
-            switch( TB_STATES(LOWORD( msg->wParam )) )
+            switch ( TB_STATES( LOWORD( msg->wParam ) ) )
             {
             case TP_PREVIOUS:
                 tLog() << TB_PRESSED << "Previous";
@@ -778,6 +784,8 @@ void
 TomahawkWindow::updateWindowsLoveButton()
 {
 #ifdef HAVE_THUMBBUTTON
+    if ( m_taskbarList == 0 )
+        return;
     if ( !AudioEngine::instance()->currentTrack().isNull() && AudioEngine::instance()->currentTrack()->toQuery()->loved() )
     {
         m_thumbButtons[TP_LOVE].hIcon = thumbIcon(TomahawkUtils::Loved);
@@ -835,6 +843,17 @@ TomahawkWindow::legalInfo()
 
 
 void
+TomahawkWindow::openLogfile()
+{
+#ifdef WIN32
+    ShellExecuteW( 0, 0, (LPCWSTR)Logger::logFile().utf16(), 0, 0, SW_SHOWNORMAL );
+#else
+    QDesktopServices::openUrl( QUrl::fromLocalFile( Logger::logFile() ) );
+#endif
+}
+
+
+void
 TomahawkWindow::updateCollectionManually()
 {
     if ( TomahawkSettings::instance()->hasScannerPaths() )
@@ -851,57 +870,36 @@ TomahawkWindow::rescanCollectionManually()
 
 
 void
-TomahawkWindow::addPeerManually()
-{
-    TomahawkSettings* s = TomahawkSettings::instance();
-    bool ok;
-    QString addr = QInputDialog::getText( this, tr( "Connect To Peer" ),
-                                                tr( "Enter peer address:" ), QLineEdit::Normal,
-                                                s->value( "connip" ).toString(), &ok ); // FIXME
-    if ( !ok )
-        return;
-
-    s->setValue( "connip", addr );
-    QString ports = QInputDialog::getText( this, tr( "Connect To Peer" ),
-                                                 tr( "Enter peer port:" ), QLineEdit::Normal,
-                                                 s->value( "connport", "50210" ).toString(), &ok );
-    if ( !ok )
-        return;
-
-    s->setValue( "connport", ports );
-    int port = ports.toInt();
-    QString key = QInputDialog::getText( this, tr( "Connect To Peer" ),
-                                               tr( "Enter peer key:" ), QLineEdit::Normal,
-                                               "whitelist", &ok );
-    if ( !ok )
-        return;
-
-    qDebug() << "Attempting to connect to" << addr;
-    Servent::instance()->connectToPeer( addr, port, key );
-}
-
-
-void
 TomahawkWindow::showOfflineSources()
 {
-    m_sourcetree->showOfflineSources( ActionCollection::instance()
-                                      ->getAction( "showOfflineSources" )->isChecked() );
-    TomahawkSettings::instance()->setShowOfflineSources( ActionCollection::instance()
-                                                         ->getAction( "showOfflineSources" )->isChecked() );
+    m_sourcetree->showOfflineSources(
+        ActionCollection::instance()->getAction( "showOfflineSources" )->isChecked() );
+    TomahawkSettings::instance()->setShowOfflineSources(
+        ActionCollection::instance()->getAction( "showOfflineSources" )->isChecked() );
 }
 
 
 void
 TomahawkWindow::fullScreenEntered()
 {
+    TomahawkSettings::instance()->setFullscreenEnabled( true );
     statusBar()->setSizeGripEnabled( false );
+
+#if defined( Q_WS_MAC )
+    ActionCollection::instance()->getAction( "fullscreen" )->setText( tr( "Exit Full Screen" ) );
+#endif
 }
 
 
 void
 TomahawkWindow::fullScreenExited()
 {
+    TomahawkSettings::instance()->setFullscreenEnabled( false );
     statusBar()->setSizeGripEnabled( true );
+
+#if defined( Q_WS_MAC )
+    ActionCollection::instance()->getAction( "fullscreen" )->setText( tr( "Enter Full Screen" ) );
+#endif
 }
 
 
@@ -913,7 +911,7 @@ TomahawkWindow::loadSpiff()
     connect( diag, SIGNAL( finished( int ) ), this, SLOT( loadXspfFinished( int ) ) );
     diag->show();
 #else
-    QWeakPointer< LoadXSPFDialog > safe( diag );
+    QPointer< LoadXSPFDialog > safe( diag );
 
     int ret = diag->exec();
     if ( !safe.isNull() && ret == QDialog::Accepted )
@@ -979,12 +977,17 @@ void
 TomahawkWindow::onAudioEngineError( AudioEngine::AudioErrorCode /* error */ )
 {
     QString msg;
-#ifdef Q_WS_X11
-    msg = tr( "Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped. Make sure you have a suitable Phonon backend and required plugins installed." );
-#else
-    msg = tr( "Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped." );
-#endif
+    #ifdef Q_WS_X11
+        msg = tr( "Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped. Make sure you have a suitable Phonon backend and required plugins installed." );
+    #else
+        msg = tr( "Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped." );
+    #endif
+
+    tLog() << msg;
+
+#ifndef ENABLE_HEADLESS
     JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( msg, 15 ) );
+#endif
 
     if ( m_audioRetryCounter < 3 )
         AudioEngine::instance()->play();
@@ -1211,11 +1214,11 @@ TomahawkWindow::showAboutTomahawk()
          .arg( TomahawkUtils::appFriendlyVersion() );
 #endif
 
-    const QString copyright( tr( "Copyright 2010 - 2012" ) );
+    const QString copyright( tr( "Copyright 2010 - 2013" ) );
     const QString thanksto( tr( "Thanks to:" ) );
 
     desc = QString( "%1<br/>Christian Muehlhaeuser &lt;muesli@tomahawk-player.org&gt;<br/><br/>"
-                    "%2 Leo Franchi, Jeff Mitchell, Dominik Schmidt, Jason Herskowitz, Alejandro Wainzinger, Hugo Lindstr&ouml;m, Syd Lawrence, Michael Zanetti, Harald Sitter, Steve Robertson" )
+    "%2 Leo Franchi, Jeff Mitchell, Dominik Schmidt, Jason Herskowitz, Alejandro Wainzinger, Hugo Lindstr&ouml;m, Syd Lawrence, Michael Zanetti, Teo Mrnjavac, Christopher Reichert, Harald Sitter" )
               .arg( copyright )
               .arg( thanksto );
 
@@ -1305,6 +1308,17 @@ TomahawkWindow::maximize()
 
 
 void
+TomahawkWindow::toggleFullscreen()
+{
+    tDebug() << Q_FUNC_INFO;
+
+#if defined( Q_WS_MAC )
+   Tomahawk::toggleFullscreen();
+#endif
+}
+
+
+void
 TomahawkWindow::crashNow()
 {
     TomahawkUtils::crash();
@@ -1315,7 +1329,7 @@ void
 TomahawkWindow::toggleMenuBar() //SLOT
 {
 #ifndef Q_OS_MAC
-    if( menuBar()->isVisible() )
+    if ( menuBar()->isVisible() )
     {
         menuBar()->setVisible( false );
         ActionCollection::instance()->getAction( "toggleMenuBar" )->setText( tr( "Show Menu Bar" ) );

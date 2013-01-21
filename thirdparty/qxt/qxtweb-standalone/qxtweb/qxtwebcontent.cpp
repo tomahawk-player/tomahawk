@@ -1,37 +1,43 @@
+
 /****************************************************************************
- **
- ** Copyright (C) Qxt Foundation. Some rights reserved.
- **
- ** This file is part of the QxtWeb module of the Qxt library.
- **
- ** This library is free software; you can redistribute it and/or modify it
- ** under the terms of the Common Public License, version 1.0, as published
- ** by IBM, and/or under the terms of the GNU Lesser General Public License,
- ** version 2.1, as published by the Free Software Foundation.
- **
- ** This file is provided "AS IS", without WARRANTIES OR CONDITIONS OF ANY
- ** KIND, EITHER EXPRESS OR IMPLIED INCLUDING, WITHOUT LIMITATION, ANY
- ** WARRANTIES OR CONDITIONS OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY OR
- ** FITNESS FOR A PARTICULAR PURPOSE.
- **
- ** You should have received a copy of the CPL and the LGPL along with this
- ** file. See the LICENSE file and the cpl1.0.txt/lgpl-2.1.txt files
- ** included with the source distribution for more information.
- ** If you did not receive a copy of the licenses, contact the Qxt Foundation.
- **
- ** <http://libqxt.org>  <foundation@libqxt.org>
- **
- ****************************************************************************/
+** Copyright (c) 2006 - 2011, the LibQxt project.
+** See the Qxt AUTHORS file for a list of authors and copyright holders.
+** All rights reserved.
+**
+** Redistribution and use in source and binary forms, with or without
+** modification, are permitted provided that the following conditions are met:
+**     * Redistributions of source code must retain the above copyright
+**       notice, this list of conditions and the following disclaimer.
+**     * Redistributions in binary form must reproduce the above copyright
+**       notice, this list of conditions and the following disclaimer in the
+**       documentation and/or other materials provided with the distribution.
+**     * Neither the name of the LibQxt project nor the
+**       names of its contributors may be used to endorse or promote products
+**       derived from this software without specific prior written permission.
+**
+** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+** ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+** WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+** DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
+** DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+** (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+** LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+** ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+** SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+**
+** <http://libqxt.org>  <foundation@libqxt.org>
+*****************************************************************************/
 
 /*!
 \class QxtWebContent
 
 \inmodule QxtWeb
 
-\brief The QxtWebContent class provides and I/O device for data sent by the web browser
+\brief The QxtWebContent class provides an I/O device for data sent by the web browser
 
-QxtWebContent is a read-only QIODevice subclass that encapsulates data sent
-from the web browser, for instance in a POST or PUT request.
+QxtWebContent is a QxtFifo subclass that encapsulates data sent from the web
+browser, for instance in a POST or PUT request.
 
 In order to avoid delays while reading content sent from the client, and to
 insulate multiple pipelined requests on the same connection from each other,
@@ -43,93 +49,75 @@ QxtWeb uses QxtWebContent as an abstraction for streaming data.
 #include "qxtwebcontent.h"
 #include <string.h>
 #include <QUrl>
+#include <QCoreApplication>
+#include <QThread>
+
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+#include <QUrlQuery>
+#endif
 
 #ifndef QXT_DOXYGEN_RUN
 class QxtWebContentPrivate : public QxtPrivate<QxtWebContent>
 {
 public:
-    QxtWebContentPrivate() : ignoreRemaining(false) {}
+    QxtWebContentPrivate() : bytesNeeded(0), ignoreRemaining(false) {}
     QXT_DECLARE_PUBLIC(QxtWebContent)
 
-    void init(int contentLength, const QByteArray& start, QIODevice* device)
+    void init(int contentLength, QIODevice* device)
     {
-        this->start = start;
-        this->device = device;
-        if (contentLength <= 0)
-            bytesRemaining = -1;
-        else
-            bytesRemaining = contentLength - start.length();
-        if (device)
-        {
-            QObject::connect(device, SIGNAL(readyRead()), &qxt_p(), SIGNAL(readyRead()));
-            // QObject::connect(device, SIGNAL(aboutToClose()), this, SIGNAL(aboutToClose()));
-            // QObject::connect(device, SIGNAL(destroyed()), this, SIGNAL(aboutToClose()));
-            // ask the object if it has an error signal
-            if (device->metaObject()->indexOfSignal(QMetaObject::normalizedSignature(SIGNAL(error(QAbstractSocket::SocketError)))) >= 0)
-            {
-                QObject::connect(device, SIGNAL(error(QAbstractSocket::SocketError)), &qxt_p(), SLOT(errorReceived(QAbstractSocket::SocketError)));
-            }
-        }
-        qxt_p().setOpenMode(QIODevice::ReadOnly);
+        if (contentLength < 0)
+            bytesNeeded = -1;
+        else{
+            bytesNeeded = contentLength - qxt_p().bytesAvailable();
+	    Q_ASSERT(bytesNeeded >= 0);
+	}
+	if(device){
+	    // Connect a disconnected signal if it has one
+	    if(device->metaObject()->indexOfSignal(QMetaObject::normalizedSignature(SIGNAL(disconnected()))) >= 0){
+		QObject::connect(device, SIGNAL(disconnected()), &qxt_p(), SLOT(sourceDisconnect()), Qt::QueuedConnection);
+	    }
+	    // Likewise, connect an error signal if it has one
+	    if(device->metaObject()->indexOfSignal(QMetaObject::normalizedSignature(SIGNAL(error(QAbstractSocket::SocketError)))) >= 0){
+		QObject::connect(device, SIGNAL(error(QAbstractSocket::SocketError)), &qxt_p(), SLOT(errorReceived(QAbstractSocket::SocketError)));
+	    }
+	}
     }
 
-    qint64 bytesRemaining;
-    QByteArray start;
-    QIODevice* device;
+    qint64 bytesNeeded;
     bool ignoreRemaining;
 };
 #endif
 
 /*!
- * Constructs a QxtWebContent object.
+ * Constructs a QxtWebContent object with the specified \a parent.
  *
- * The content provided by this constructor is the first \a contentLength bytes
- * read from the provided \a device.
+ * The content provided by this constructor is the data contained in \a prime,
+ * followed by whatever data is subsequently written to this object from the
+ * source device up to the specified \a contentLength. Note that the provided
+ * \a sourceDevice is used solely to detect socket errors and does not specify
+ * parentage. This variation is ReadWrite to permit incoming data but should
+ * never be written to by the service handler.
  *
- * The QxtWebContent object is parented to the \a device.
  */
-QxtWebContent::QxtWebContent(int contentLength, QIODevice* device) : QIODevice(device)
+QxtWebContent::QxtWebContent(int contentLength, const QByteArray& prime,
+	QObject *parent, QIODevice* sourceDevice) : QxtFifo(prime, parent)
 {
     QXT_INIT_PRIVATE(QxtWebContent);
-    qxt_d().init(contentLength, QByteArray(), device);
-}
-
-/*!
- * Constructs a QxtWebContent object.
- *
- * The content provided by this constructor is the data contained in \a start,
- * followed by enough data read from the provided \a device to fill the desired
- * \a contentLength.
- *
- * The QxtWebContent object is parented to the \a device.
- */
-QxtWebContent::QxtWebContent(int contentLength, const QByteArray& start, QIODevice* device) : QIODevice(device)
-{
-    QXT_INIT_PRIVATE(QxtWebContent);
-    qxt_d().init(contentLength, start, device);
+    qxt_d().init(contentLength, sourceDevice);
 }
 
 /*!
  * Constructs a QxtWebContent object with the specified \a parent.
  *
  * The content provided by this constructor is exactly the data contained in
- * \a content.
+ * \a content. This variation is ReadOnly.
  */
-QxtWebContent::QxtWebContent(const QByteArray& content, QObject* parent) : QIODevice(parent)
+QxtWebContent::QxtWebContent(const QByteArray& content, QObject* parent)
+: QxtFifo(content, parent)
 {
     QXT_INIT_PRIVATE(QxtWebContent);
-    qxt_d().init(content.size(), content, 0);
-}
-
-/*!
- * \reimp
- */
-qint64 QxtWebContent::bytesAvailable() const
-{
-    qint64 available = QIODevice::bytesAvailable() + (qxt_d().device ? qxt_d().device->bytesAvailable() : 0) + qxt_d().start.count();
-    if (available > qxt_d().bytesRemaining)
-        return qxt_d().bytesRemaining;
-    return available;
+    qxt_d().init(content.size(), 0);
+    setOpenMode(ReadOnly);
 }
 
 /*!
@@ -137,61 +125,72 @@ qint64 QxtWebContent::bytesAvailable() const
  */
 qint64 QxtWebContent::readData(char* data, qint64 maxSize)
 {
-    char* writePtr = data;
-    // read more than 32k; TCP ideally handles 48k blocks but we need wiggle room
-    if (maxSize > 32768) maxSize = 32768;
-
-    // don't read more than the content-length
-    int sz = qxt_d().start.count();
-    if (sz > 0 && maxSize > sz)
-    {
-        memcpy(writePtr, qxt_d().start.constData(), sz);
-        writePtr += sz;
-        maxSize -= sz;
-        qxt_d().start.clear();
-    }
-    else if (sz > 0 && sz > maxSize)
-    {
-        memcpy(writePtr, qxt_d().start.constData(), maxSize);
-        qxt_d().start = qxt_d().start.mid(maxSize);
-        return maxSize;
-    }
-
-    if (qxt_d().device == 0)
-    {
-        return sz;
-    }
-    else if (qxt_d().bytesRemaining >= 0)
-    {
-        qint64 readBytes = qxt_d().device->read(writePtr, (maxSize > qxt_d().bytesRemaining) ? qxt_d().bytesRemaining : maxSize);
-        qxt_d().bytesRemaining -= readBytes;
-        if (qxt_d().bytesRemaining == 0) QMetaObject::invokeMethod(this, "aboutToClose", Qt::QueuedConnection);
-        return sz + readBytes;
-    }
-    else
-    {
-        return sz + qxt_d().device->read(writePtr, maxSize);
-    }
+    int result = QxtFifo::readData(data, maxSize);
+    if(bytesAvailable() == 0 && bytesNeeded() == 0)
+        QMetaObject::invokeMethod(this, "aboutToClose", Qt::QueuedConnection);
+    return result;
 }
 
 /*!
- * Returns the number of bytes of content that have not yet been read.
- *
- * Note that not all of the remaining content may be immediately available for
- * reading. This function returns the content length, minus the number of
- * bytes that have already been read.
+ *  Returns \bold true if the total content size is unknown and
+ *  \bold false otherwise.
+ */
+bool QxtWebContent::wantAll() const
+{
+    return (qxt_d().bytesNeeded == -1);
+}
+
+/*!
+ * Returns the total number of bytes of content expected. This will be \bold -1
+ * if the total content size is unknown. This total includes both unread
+ * data and that which has not been received yet. To obtain the number of
+ * bytes available for reading, use bytesAvailable().
+ * \sa bytesNeeded(), wantAll()
  */
 qint64 QxtWebContent::unreadBytes() const
 {
-    return qxt_d().start.size() + qxt_d().bytesRemaining;
+    if(wantAll())
+	return -1;
+    return bytesAvailable() + bytesNeeded();
+}
+
+/*!
+ * Returns the number of bytes of content that have not yet been written
+ * from the source device. This will be \bold -1 if the total content size is
+ * unknown and \bold zero once all data has been received from the source (the
+ * readChannelFinished() signal will be emitted when that occurs).
+ */
+qint64 QxtWebContent::bytesNeeded() const
+{
+    return qxt_d().bytesNeeded;
 }
 
 /*!
  * \reimp
  */
-qint64 QxtWebContent::writeData(const char*, qint64)
+qint64 QxtWebContent::writeData(const char *data, qint64 maxSize)
 {
-    // always an error to write
+    if(!(openMode() & WriteOnly)){
+	qWarning("QxtWebContent(): size=%lld but read-only", maxSize);
+	return -1; // Not accepting writes
+    }
+    if(maxSize > 0) {
+	// This must match the QxtFifo implementation for consistency
+        if(maxSize > INT_MAX) maxSize = INT_MAX; // qint64 could easily exceed QAtomicInt, so let's play it safe
+	if(qxt_d().bytesNeeded >= 0){
+	    if(maxSize > qxt_d().bytesNeeded){
+		qWarning("QxtWebContent(): size=%lld needed %lld", maxSize,
+			qxt_d().bytesNeeded);
+		maxSize = qxt_d().bytesNeeded;
+	    }
+	    qxt_d().bytesNeeded -= maxSize;
+	    Q_ASSERT(qxt_d().bytesNeeded >= 0);
+	}
+	if(qxt_d().ignoreRemaining)
+	    return maxSize;
+	return QxtFifo::writeData(data, maxSize);
+    }
+    // Error
     return -1;
 }
 
@@ -200,26 +199,28 @@ qint64 QxtWebContent::writeData(const char*, qint64)
  */
 void QxtWebContent::errorReceived(QAbstractSocket::SocketError)
 {
-    setErrorString(qxt_d().device->errorString());
+    QIODevice *device = qobject_cast<QIODevice*>(sender());
+    if(device)
+	setErrorString(device->errorString());
 }
 
 /*!
- * Blocks until all of the streaming data has been read from the browser.
+ *  Blocks until all of the streaming data has been read from the browser.
  *
- * Note that this function will block events for the thread on which it is called.
- * If the main thread is blocked, QxtWeb will be unable to process additional
- * requests until the content has been received.
+ *  Note that this method effectively runs a tight event loop. Although it
+ *  will not block a thread's other activities, it may result in high CPU
+ *  consumption and cause performance problems. It is suggested that you
+ *  avoid use of this method and try to implement services using the
+ *  readChannelFinished() signal instead.
  */
 void QxtWebContent::waitForAllContent()
 {
-    if (!qxt_d().device) return;
-    QByteArray buffer;
-    while (qxt_d().device && qxt_d().bytesRemaining > 0)
-    {
-        buffer = qxt_d().device->readAll();
-        qxt_d().start += buffer;
-        qxt_d().bytesRemaining -= buffer.size();
-        if (qxt_d().bytesRemaining > 0) qxt_d().device->waitForReadyRead(-1);
+    while(qxt_d().bytesNeeded != 0 && !qxt_d().ignoreRemaining){
+	// Still need data ... yield processing
+	if(QCoreApplication::hasPendingEvents())
+	    QCoreApplication::processEvents();
+	if(this->thread() != QThread::currentThread())
+	    QThread::yieldCurrentThread();
     }
 }
 
@@ -231,11 +232,30 @@ void QxtWebContent::waitForAllContent()
  */
 void QxtWebContent::ignoreRemainingContent()
 {
-    if (qxt_d().bytesRemaining <= 0 || !qxt_d().device) return;
-    if (!qxt_d().ignoreRemaining)
-    {
-        qxt_d().ignoreRemaining = true;
-        QObject::connect(qxt_d().device, SIGNAL(readyRead()), this, SLOT(ignoreRemainingContent()));
+    if (qxt_d().bytesNeeded == 0) return;
+    if(!qxt_d().ignoreRemaining){
+	qxt_d().ignoreRemaining = true;
+	qxt_d().bytesNeeded = 0;
+    }
+}
+
+/*!
+ *  \internal
+ *  This slot handles a disconnect notice from a source I/O device to handle
+ *  cases where the source size is unknown. The internal state is adjusted
+ *  ensuring a reader will unblock in waitForAllContent(). If unread
+ *  data is present, a readyRead() signal will be emitted.
+ *  The readChannelFinished() signal is emitted regardless.
+ */
+void QxtWebContent::sourceDisconnect()
+{
+    if (qxt_d().bytesNeeded == 0) return;
+    if(!qxt_d().ignoreRemaining){
+	qxt_d().ignoreRemaining = true;
+	qxt_d().bytesNeeded = 0;
+	if(bytesAvailable() != 0)
+	    QMetaObject::invokeMethod(this, "readyRead", Qt::QueuedConnection);
+        QMetaObject::invokeMethod(this, "readChannelFinished", Qt::QueuedConnection);
     }
 }
 
@@ -244,14 +264,21 @@ typedef QPair<QString, QString> QxtQueryItem;
 #endif
 
 /*!
- * Extracts the key/value pairs from application/x-www-form-urlencoded \a data,
- * such as the query string from the URL or the form data from a POST request.
+ *  Parses URL-encoded form data
+ *
+ *  Extracts the key/value pairs from \bold application/x-www-form-urlencoded
+ *  \a data, such as the query string from the URL or the form data from a
+ *  POST request.
  */
 QHash<QString, QString> QxtWebContent::parseUrlEncodedQuery(const QString& data)
 {
     QUrl post("/?" + data);
     QHash<QString, QString> rv;
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    foreach(const QxtQueryItem& item, QUrlQuery( post ).queryItems())
+#else
     foreach(const QxtQueryItem& item, post.queryItems())
+#endif
     {
         rv.insertMulti(item.first, item.second);
     }

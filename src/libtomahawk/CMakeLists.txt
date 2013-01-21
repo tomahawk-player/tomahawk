@@ -1,17 +1,6 @@
 project( tomahawklib )
 
-SET( QT_USE_QTGUI TRUE )
-SET( QT_USE_QTSQL TRUE )
-SET( QT_USE_QTNETWORK TRUE )
-SET( QT_USE_QTXML TRUE )
-SET( QT_USE_QTSVG TRUE )
-SET( QT_USE_QTUITOOLS TRUE )
-
-IF( UNIX AND NOT APPLE )
-  SET( QT_USE_QTDBUS TRUE )
-ENDIF( UNIX AND NOT APPLE )
-
-include( ${QT_USE_FILE} )
+setup_qt()
 
 add_definitions( ${QT_DEFINITIONS} )
 add_definitions( -DQT_SHARED )
@@ -81,7 +70,7 @@ set( libGuiSources
     playlist/PlaylistLargeItemDelegate.cpp
     playlist/PlaylistChartItemDelegate.cpp
     playlist/PlayableItem.cpp
-    playlist/SingleTrackPlaylistInterface.h
+    playlist/SingleTrackPlaylistInterface.cpp
 
     playlist/dynamic/DynamicPlaylist.cpp
     playlist/dynamic/DynamicView.cpp
@@ -168,12 +157,19 @@ set( libGuiSources
     widgets/searchlineedit/SearchLineEdit.cpp
 )
 
-IF(QCA2_FOUND)
+if(QCA2_FOUND)
     set( libGuiSources ${libGuiSources} utils/GroovesharkParser.cpp )
-    set( libGuiHeaders ${libGuiHeaders} utils/GroovesharkParser.h )
-ENDIF(QCA2_FOUND)
+endif()
 
-set( libSources
+if(UNIX AND NOT APPLE AND NOT Qt5Core_DIR)
+    if(BUILD_GUI AND X11_FOUND)
+        include_directories( ${THIRDPARTY_DIR}/libqnetwm )
+        list(APPEND libSources ${libSources} ${THIRDPARTY_DIR}/libqnetwm/libqnetwm/netwm.cpp)
+        list(APPEND LINK_LIBRARIES ${X11_LIBRARIES})
+    endif()
+endif()
+
+list(APPEND libSources
     TomahawkSettings.cpp
     SourceList.cpp
     Pipeline.cpp
@@ -214,13 +210,9 @@ set( libSources
     accounts/spotify/SpotifyPlaylistUpdater.cpp
     accounts/spotify/SpotifyInfoPlugin.cpp
 
-    accounts/lastfm/LastFmAccount.cpp
-    accounts/lastfm/LastFmConfig.cpp
-    accounts/lastfm/LastFmInfoPlugin.cpp
-
     sip/SipPlugin.cpp
-    sip/SipHandler.cpp
     sip/SipInfo.cpp
+    sip/PeerInfo.cpp
 
     audio/AudioEngine.cpp
 
@@ -328,6 +320,16 @@ set( libSources
     thirdparty/kdsingleapplicationguard/kdlockedsharedmemorypointer.cpp
 )
 
+IF(LIBLASTFM_FOUND)
+    include_directories( ${LIBLASTFM_INCLUDE_DIRS} )
+    list(APPEND LINK_LIBRARIES ${LIBLASTFM_LIBRARIES} )
+    list(APPEND libSources
+        accounts/lastfm/LastFmAccount.cpp
+        accounts/lastfm/LastFmConfig.cpp
+        accounts/lastfm/LastFmInfoPlugin.cpp
+    )
+ENDIF(LIBLASTFM_FOUND)
+
 set( libUI ${libUI}
     widgets/PlaylistTypeSelectorDialog.ui
     widgets/NewPlaylistWidget.ui
@@ -356,12 +358,10 @@ include_directories(
     ${QT_INCLUDE_DIR}
     ${QJSON_INCLUDE_DIR}
     ${ECHONEST_INCLUDE_DIR}
-    ${LIBLASTFM_INCLUDE_DIRS}
     ${CLUCENE_INCLUDE_DIRS}
     ${PHONON_INCLUDES}
 
     ${LIBPORTFWD_INCLUDE_DIR}
-    ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/qxtweb
     ${QuaZip_INCLUDE_DIR}
 )
 
@@ -371,17 +371,9 @@ ENDIF(QCA2_FOUND)
 
 IF(LIBATTICA_FOUND)
     SET( libGuiSources ${libGuiSources} AtticaManager.cpp )
-    SET( libGuiHeaders ${libGuiHeaders} AtticaManager.h )
     INCLUDE_DIRECTORIES( ${LIBATTICA_INCLUDE_DIR} )
+    LIST(APPEND LINK_LIBRARIES ${LIBATTICA_LIBRARIES} ${QuaZip_LIBRARIES} )
 ENDIF(LIBATTICA_FOUND)
-
-IF( UNIX AND NOT APPLE )
-    IF( BUILD_GUI AND X11_FOUND )
-        INCLUDE_DIRECTORIES( ${THIRDPARTY_DIR}/libqnetwm )
-        SET( libSources ${libSources} ${THIRDPARTY_DIR}/libqnetwm/libqnetwm/netwm.cpp )
-        SET( LINK_LIBRARIES ${LINK_LIBRARIES} ${X11_LIBRARIES} )
-    ENDIF()
-ENDIF( UNIX AND NOT APPLE )
 
 IF( WIN32 )
     SET( OS_SPECIFIC_LINK_LIBRARIES
@@ -431,31 +423,32 @@ ELSE( APPLE )
     SET( libGuiSources ${libGuiSources} thirdparty/Qocoa/qbutton.cpp thirdparty/Qocoa/qsearchfield.cpp thirdparty/Qocoa/qtoolbartabdialog.cpp )
 ENDIF( APPLE )
 
-IF(LIBLASTFM_FOUND)
-    SET(LINK_LIBRARIES ${LINK_LIBRARIES} ${LIBLASTFM_LIBRARIES} )
-ENDIF(LIBLASTFM_FOUND)
-
 IF(BUILD_GUI)
     LIST(APPEND libSources ${libGuiSources} )
 ENDIF()
 
-qt4_wrap_ui( libUI_H ${libUI} )
+qt_wrap_ui(libUI_H ${libUI})
 
 SET( libSources ${libSources} ${libUI_H} )
 
-ADD_LIBRARY( tomahawklib SHARED ${libSources})
-set_target_properties(tomahawklib PROPERTIES AUTOMOC TRUE)
+add_library( tomahawklib SHARED ${libSources})
+set_target_properties(
+    tomahawklib
+        PROPERTIES
+            AUTOMOC TRUE
+            VERSION ${TOMAHAWK_VERSION_SHORT}
+            SOVERSION ${TOMAHAWK_VERSION_SHORT}
+)
+
+
+qt5_use_modules(tomahawklib Widgets Network Sql WebKitWidgets Concurrent Xml UiTools Svg)
 
 IF(QCA2_FOUND)
-    SET(LINK_LIBRARIES ${LINK_LIBRARIES} ${QCA2_LIBRARIES} )
+    LIST(APPEND LINK_LIBRARIES ${QCA2_LIBRARIES} )
 ENDIF(QCA2_FOUND)
 
-IF(LIBATTICA_FOUND)
-    SET( LINK_LIBRARIES ${LINK_LIBRARIES} ${LIBATTICA_LIBRARIES} ${QuaZip_LIBRARIES} )
-ENDIF(LIBATTICA_FOUND)
-
 IF( UNIX AND NOT APPLE )
-    SET( LINK_LIBRARIES ${LINK_LIBRARIES} ${QT_QTDBUS_LIBRARY} )
+    LIST(APPEND LINK_LIBRARIES ${QT_QTDBUS_LIBRARY} )
 ENDIF( UNIX AND NOT APPLE )
 
 TARGET_LINK_LIBRARIES( tomahawklib
@@ -483,7 +476,66 @@ TARGET_LINK_LIBRARIES( tomahawklib
 )
 
 INSTALL( TARGETS tomahawklib
+    EXPORT TomahawkLibraryDepends
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
+
+# Install header files
+file( GLOB rootHeaders "*.h" )
+file( GLOB accountsHeaders "accounts/*.h" )
+file( GLOB accountsLastfmHeaders "accounts/lastfm/*.h" )
+file( GLOB accountsSpotifyHeaders "accounts/spotify/*.h" )
+file( GLOB audioHeaders "audio/*.h" )
+file( GLOB contextHeaders "context/*.h" )
+file( GLOB contextPagesHeaders "context/pages/*.h" )
+file( GLOB databaseHeaders "database/*.h" )
+file( GLOB filemetadataHeaders "filemetadata/*.h" )
+file( GLOB filemetadataTaghandlersHeaders "filemetadata/taghandlers/*.h" )
+file( GLOB infobarHeaders "infobar/*.h" )
+file( GLOB infosystemHeaders "infosystem/*.h" )
+file( GLOB jobviewHeaders "jobview/*.h" )
+file( GLOB networkHeaders "network/*.h" )
+file( GLOB playlistHeaders "playlist/*.h" )
+file( GLOB playlistDynamicHeaders "playlist/dynamic/*.h" )
+file( GLOB playlistDynamicDatabaseHeaders "playlist/dynamic/database/*.h" )
+file( GLOB playlistDynamicEchonestHeaders "playlist/dynamic/echonest/*.h" )
+file( GLOB playlistDynamicWidgetsHeaders "playlist/dynamic/widgets/*.h" )
+file( GLOB resolversHeaders "resolvers/*.h" )
+file( GLOB sipHeaders "sip/*.h" )
+file( GLOB thirdpartyKdsingleapplicationguardHeaders "thirdparty/kdsingleapplicationguard/*.h" )
+file( GLOB thirdpartyQocoaHeaders "thirdparty/Qocoa/*.h" )
+file( GLOB utilsHeaders "utils/*.h" )
+file( GLOB widgetsHeaders "widgets/*.h" )
+file( GLOB widgetsInfowidgetsHeaders "widgets/infowidgets/*.h" )
+file( GLOB widgetsSearchlineeditHeaders "widgets/searchlineedit/*.h" )
+
+install( FILES ${CMAKE_CURRENT_BINARY_DIR}/config.h DESTINATION include/libtomahawk )
+install( FILES ${rootHeaders} DESTINATION include/libtomahawk )
+install( FILES ${accountsHeaders} DESTINATION include/libtomahawk/accounts )
+install( FILES ${accountsLastfmHeaders} DESTINATION include/libtomahawk/accounts/lastfm )
+install( FILES ${accountsSpotifyHeaders} DESTINATION include/libtomahawk/accounts/spotify )
+install( FILES ${audioHeaders} DESTINATION include/libtomahawk/audio )
+install( FILES ${contextHeaders} DESTINATION include/libtomahawk/context )
+install( FILES ${contextPagesHeaders} DESTINATION include/libtomahawk/context/pages )
+install( FILES ${databaseHeaders} DESTINATION include/libtomahawk/database )
+install( FILES ${filemetadataHeaders} DESTINATION include/libtomahawk/filemetadata )
+install( FILES ${filemetadataTaghandlersHeaders} DESTINATION include/libtomahawk/filemetadata/taghandlers )
+install( FILES ${infobarHeaders} DESTINATION include/libtomahawk/infobar )
+install( FILES ${infosystemHeaders} DESTINATION include/libtomahawk/infosystem )
+install( FILES ${jobviewHeaders} DESTINATION include/libtomahawk/jobview )
+install( FILES ${networkHeaders} DESTINATION include/libtomahawk/network )
+install( FILES ${playlistHeaders} DESTINATION include/libtomahawk/playlist )
+install( FILES ${playlistDynamicHeaders} DESTINATION include/libtomahawk/playlist/dynamic )
+install( FILES ${playlistDynamicDatabaseHeaders} DESTINATION include/libtomahawk/playlist/dynamic/database )
+install( FILES ${playlistDynamicEchonestHeaders} DESTINATION include/libtomahawk/playlist/dynamic/echonest )
+install( FILES ${playlistDynamicWidgetsHeaders} DESTINATION include/libtomahawk/playlist/dynamic/widgets )
+install( FILES ${resolversHeaders} DESTINATION include/libtomahawk/resolvers )
+install( FILES ${sipHeaders} DESTINATION include/libtomahawk/sip )
+install( FILES ${thirdpartyKdsingleapplicationguardHeaders} DESTINATION include/libtomahawk/thirdparty/kdsingleapplicationguard )
+install( FILES ${thirdpartyQocoaHeaders} DESTINATION include/libtomahawk/thirdparty/Qocoa )
+install( FILES ${utilsHeaders} DESTINATION include/libtomahawk/utils )
+install( FILES ${widgetsHeaders} DESTINATION include/libtomahawk/widgets )
+install( FILES ${widgetsInfowidgetsHeaders} DESTINATION include/libtomahawk/widgets/infowidgets )
+install( FILES ${widgetsSearchlineeditHeaders} DESTINATION include/libtomahawk/widgets/searchlineedit )

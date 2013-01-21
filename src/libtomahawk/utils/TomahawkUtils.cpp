@@ -18,12 +18,12 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "utils/TomahawkUtils.h"
+
 #include "TomahawkVersion.h"
 #include "config.h"
 #include "TomahawkSettings.h"
 
-#include "utils/TomahawkUtils.h"
-#include "utils/Logger.h"
 #include "Source.h"
 #include "BinaryExtractWorker.h"
 #include "SharedTimeLine.h"
@@ -32,9 +32,8 @@
     #include <lastfm/ws.h>
 #endif
 
-#include <quazip.h>
-#include <quazipfile.h>
-
+#include <quazip/quazip.h>
+#include <quazip/quazipfile.h>
 
 #include <QNetworkConfiguration>
 #include <QNetworkAccessManager>
@@ -46,6 +45,11 @@
 #include <QMutex>
 #include <QCryptographicHash>
 #include <QProcess>
+#include <QTranslator>
+
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    #include <QUrlQuery>
+#endif
 
 #ifdef Q_OS_WIN
     #include <windows.h>
@@ -60,6 +64,8 @@
 #ifdef QCA2_FOUND
     #include <QtCrypto>
 #endif
+
+#include "Logger.h"
 
 namespace TomahawkUtils
 {
@@ -766,11 +772,65 @@ md5( const QByteArray& data )
 }
 
 
+bool
+isHttpResult( const QString& url )
+{
+    return url.startsWith( "http://" ) || url.startsWith( "https://" );
+}
+
+
+bool
+isLocalResult( const QString& url )
+{
+    return url.startsWith( "file://" );
+}
+
+
 void
 crash()
 {
     volatile int* a = (int*)(NULL);
     *a = 1;
+}
+
+
+void
+installTranslator( QObject* parent )
+{
+#if QT_VERSION >= 0x040800
+    QString locale = QLocale::system().uiLanguages().first().replace( "-", "_" );
+#else
+    QString locale = QLocale::system().name();
+#endif
+    if ( locale == "C" )
+        locale = "en";
+
+    // Tomahawk translations
+    QTranslator* translator = new QTranslator( parent );
+    if ( translator->load( QString( ":/lang/tomahawk_" ) + locale ) )
+    {
+        qDebug() << "Translation: Tomahawk: Using system locale:" << locale;
+    }
+    else
+    {
+        qDebug() << "Translation: Tomahawk: Using default locale, system locale one not found:" << locale;
+        translator->load( QString( ":/lang/tomahawk_en" ) );
+    }
+
+    QCoreApplication::installTranslator( translator );
+
+    // Qt translations
+    translator = new QTranslator( parent );
+    if ( translator->load( QString( ":/lang/qt_" ) + locale ) )
+    {
+        qDebug() << "Translation: Qt: Using system locale:" << locale;
+    }
+    else
+    {
+        qDebug() << "Translation: Qt: Using default locale, system locale one not found:" << locale;
+    }
+
+    QCoreApplication::installTranslator( translator );
 }
 
 
@@ -955,6 +1015,64 @@ whitelistedCustomProtocolResultHint( const QString& url )
 {
     return url.startsWith( "hnhh" ) | url.startsWith( "file:" );
 }
+
+
+void
+urlAddQueryItem( QUrl& url, const QString& key, const QString& value )
+{
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    QUrlQuery urlQuery( url );
+    urlQuery.addQueryItem( key, value );
+    url.setQuery( urlQuery );
+#else
+    url.addQueryItem( key, value );
+#endif
+}
+
+
+QString
+urlQueryItemValue( const QUrl& url, const QString& key )
+{
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    return QUrlQuery( url ).queryItemValue( key ).replace( "+", " " );
+#else
+    return url.queryItemValue( key ).replace( "+", " " );
+#endif
+}
+
+
+bool
+urlHasQueryItem( const QUrl& url, const QString& key )
+{
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    return QUrlQuery( url ).hasQueryItem( key );
+#else
+    return url.hasQueryItem( key );
+#endif
+}
+
+
+QList<QPair<QString, QString> >
+urlQueryItems( const QUrl& url )
+{
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    return QUrlQuery( url ).queryItems();
+#else
+    return url.queryItems();
+#endif
+}
+
+
+void
+urlSetQuery( QUrl& url, const QString& query )
+{
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    url.setQuery( query );
+#else
+    url.setEncodedQuery( query.toLocal8Bit() );
+#endif
+}
+
 
 } // ns
 

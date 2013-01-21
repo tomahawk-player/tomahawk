@@ -23,6 +23,7 @@
 
 #include "utils/Logger.h"
 #include "Source.h"
+#include "sip/PeerInfo.h"
 
 
 SipPlugin::SipPlugin() : QObject() {}
@@ -32,8 +33,7 @@ SipPlugin::SipPlugin( Tomahawk::Accounts::Account *account, QObject* parent )
     : QObject( parent )
     , m_account( account )
 {
-    connect( this, SIGNAL( peerOnline( QString ) ), this, SLOT( onPeerOnline( QString ) ) );
-    connect( this, SIGNAL( peerOffline( QString ) ), this, SLOT( onPeerOffline( QString ) ) );
+    connect( account, SIGNAL( configurationChanged() ), SLOT( configurationChanged() ) );
 }
 
 
@@ -82,25 +82,25 @@ SipPlugin::account() const
 }
 
 
-const QStringList
+const QList< Tomahawk::peerinfo_ptr >
 SipPlugin::peersOnline() const
 {
-    return m_peersOnline;
+    QList< Tomahawk::peerinfo_ptr > result;
+
+    foreach( const Tomahawk::peerinfo_ptr& peerInfo, Tomahawk::PeerInfo::getAll() )
+    {
+        if(peerInfo->sipPlugin() == this)
+            result.append( peerInfo );
+    }
+
+    return result;
 }
 
 
-void
-SipPlugin::onPeerOnline( const QString& peerId )
+void SipPlugin::setAllPeersOffline()
 {
-   if( !m_peersOnline.contains( peerId ) )
-   {
-       m_peersOnline.append( peerId );
-   }
-}
-
-
-void
-SipPlugin::onPeerOffline( const QString& peerId )
-{
-    m_peersOnline.removeAll( peerId );
+    foreach( const Tomahawk::peerinfo_ptr& peerInfo, peersOnline() )
+    {
+        peerInfo->setStatus( Tomahawk::PeerInfo::Offline );
+    }
 }

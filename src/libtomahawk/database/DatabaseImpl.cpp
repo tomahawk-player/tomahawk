@@ -27,6 +27,7 @@
 #include <QFile>
 
 #include "database/Database.h"
+#include "FuzzyIndex.h"
 #include "SourceList.h"
 #include "Result.h"
 #include "Artist.h"

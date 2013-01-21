@@ -26,7 +26,6 @@
 #include <QtCore/QObject>
 #include <QtCore/QtDebug>
 #include <QtCore/QMap>
-#include <QtCore/QWeakPointer>
 #include <QtCore/QSet>
 #include <QtCore/QList>
 #include <QtCore/QVariant>
@@ -49,10 +48,15 @@ public:
     InfoSystemWorker();
     ~InfoSystemWorker();
 
+    const QList< InfoPluginPtr > plugins() const;
+
 signals:
     void info( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void finished( QString target );
     void finished( QString target, Tomahawk::InfoSystem::InfoType type );
+
+    void updatedSupportedGetTypes( Tomahawk::InfoSystem::InfoTypeSet supportedTypes );
+    void updatedSupportedPushTypes( Tomahawk::InfoSystem::InfoTypeSet supportedTypes );
 
 public slots:
     void init( Tomahawk::InfoSystem::InfoSystemCache* cache );

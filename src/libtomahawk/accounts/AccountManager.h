@@ -80,6 +80,10 @@ public:
 
     void addAccountFactory( AccountFactory* factory );
 
+    Account* zeroconfAccount() const;
+
+    bool isConnected() { return m_connected; }
+
 public slots:
     void connectAll();
     void disconnectAll();
@@ -103,6 +107,7 @@ private slots:
     void onError( int code, const QString& msg );
 
     void onSettingsChanged();
+
 private:
     QStringList findPluginFactories();
     void loadPluginFactories( const QStringList &paths );

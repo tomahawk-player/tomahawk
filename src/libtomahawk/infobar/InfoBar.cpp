@@ -297,7 +297,7 @@ InfoBar::paintEvent( QPaintEvent* event )
     gradient.setColorAt( 1.0, QColor( "#25292c" ) );
 
     painter.setBrush( gradient );
-    painter.fillRect( event->rect(), gradient );
+    painter.fillRect( rect(), gradient );
 }
 
 

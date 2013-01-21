@@ -169,6 +169,8 @@ namespace TomahawkUtils
     DLLEXPORT QDir appDataDir();
     DLLEXPORT QDir appLogDir();
 
+    DLLEXPORT void installTranslator( QObject* parent );
+
     DLLEXPORT QString timeToString( int seconds );
     DLLEXPORT QString ageToString( const QDateTime& time, bool appendAgoString = false );
     DLLEXPORT QString filesizeToString( unsigned int size );
@@ -186,6 +188,9 @@ namespace TomahawkUtils
 
     DLLEXPORT QString md5( const QByteArray& data );
     DLLEXPORT bool removeDirectory( const QString& dir );
+
+    DLLEXPORT bool isHttpResult( const QString& url );
+    DLLEXPORT bool isLocalResult( const QString& url );
 
     DLLEXPORT bool verifyFile( const QString& filePath, const QString& signature );
     DLLEXPORT QString extractScriptPayload( const QString& filename, const QString& resolverId );
@@ -213,6 +218,19 @@ namespace TomahawkUtils
     DLLEXPORT QList< Tomahawk::query_ptr > mergePlaylistChanges( const QList< Tomahawk::query_ptr >& orig, const QList< Tomahawk::query_ptr >& newTracks, bool& changed );
 
     DLLEXPORT void crash();
+
+
+    /**
+     * Qt4 / Qt5 compatibility layer
+     */
+
+    /* QUrl */
+    DLLEXPORT void urlAddQueryItem( QUrl& url, const QString& key, const QString& value );
+    DLLEXPORT QString urlQueryItemValue( const QUrl& url, const QString& key );
+    DLLEXPORT bool urlHasQueryItem( const QUrl& url, const QString& key );
+    DLLEXPORT QList<QPair<QString, QString> > urlQueryItems( const QUrl& url );
+    DLLEXPORT void urlSetQuery( QUrl& url, const QString& query );
+
 }
 
 #endif // TOMAHAWKUTILS_H

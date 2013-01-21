@@ -23,21 +23,19 @@
 #include "TomahawkSettings.h"
 #include "database/DatabaseCommand.h"
 
-#include "ScanManager.h"
-
 /* taglib */
 #include <taglib/fileref.h>
 #include <taglib/tag.h>
 
-#include <QtCore/QVariantMap>
-#include <QtCore/QDir>
-#include <QtCore/QFileInfo>
-#include <QtCore/QString>
-#include <QtCore/QDateTime>
-#include <QtCore/QTimer>
-#include <QtCore/QMutex>
-#include <QtCore/QMutexLocker>
-#include <QtCore/QWeakPointer>
+#include <QVariantMap>
+#include <QDir>
+#include <QFileInfo>
+#include <QString>
+#include <QDateTime>
+#include <QTimer>
+#include <QMutex>
+#include <QMutexLocker>
+#include <QPointer>
 #include <database/Database.h>
 
 // descend dir tree comparing dir mtimes to last known mtime
@@ -79,13 +77,31 @@ private:
     bool m_deleting;
 };
 
+class DirListerThreadController : public QThread
+{
+    Q_OBJECT
+
+public:
+    DirListerThreadController( QObject* parent );
+    virtual ~DirListerThreadController();
+
+    void setPaths( const QStringList& paths ) { m_paths = paths; }
+    void run();
+
+private:
+    QPointer< DirLister > m_dirLister;
+    QStringList m_paths;
+};
 
 class MusicScanner : public QObject
 {
 Q_OBJECT
 
 public:
-    MusicScanner( ScanManager::ScanMode scanMode, const QStringList& paths, quint32 bs = 0 );
+    enum ScanMode { DirScan, FileScan };
+    enum ScanType { None, Full, Normal, File };
+
+    MusicScanner( MusicScanner::ScanMode scanMode, const QStringList& paths, quint32 bs = 0 );
     ~MusicScanner();
 
 signals:
@@ -109,8 +125,8 @@ private slots:
 
 private:
     void scanFilePaths();
-    
-    ScanManager::ScanMode m_scanMode;
+
+    MusicScanner::ScanMode m_scanMode;
     QStringList m_paths;
     QMap<QString, QString> m_ext2mime; // eg: mp3 -> audio/mpeg
     unsigned int m_scanned;
@@ -125,8 +141,7 @@ private:
     QVariantList m_filesToDelete;
     quint32 m_batchsize;
 
-    QWeakPointer< DirLister > m_dirLister;
-    QThread* m_dirListerThreadController;
+    DirListerThreadController* m_dirListerThreadController;
 };
 
 #endif

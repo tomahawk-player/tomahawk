@@ -18,14 +18,15 @@
 
 #include "DiscogsPlugin.h"
 
-#include <QNetworkReply>
-#include <QDomDocument>
-#include <QtPlugin>
 
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 #include "utils/Closure.h"
-#include <parser.h>
+
+#include <qjson/parser.h>
+
+#include <QNetworkReply>
+#include <QDomDocument>
 
 using namespace Tomahawk::InfoSystem;
 
@@ -89,9 +90,11 @@ DiscogsPlugin::notInCacheSlot( InfoStringHash criteria, InfoRequestData requestD
         {
             QString requestString( "http://api.discogs.com/database/search" );
             QUrl url( requestString );
-            url.addQueryItem( "type", "release" );
-            url.addQueryItem( "release_title", criteria[ "album" ] );
-            url.addQueryItem( "artist", criteria[ "artist" ] );
+
+            TomahawkUtils::urlAddQueryItem( url, "type", "release" );
+            TomahawkUtils::urlAddQueryItem( url, "release_title", criteria[ "album" ] );
+            TomahawkUtils::urlAddQueryItem( url, "artist", criteria[ "artist" ] );
+
             QNetworkRequest req( url );
             req.setRawHeader( "User-Agent", "TomahawkPlayer/1.0 +http://tomahawk-player.org" );
             QNetworkReply* reply = TomahawkUtils::nam()->get( req );

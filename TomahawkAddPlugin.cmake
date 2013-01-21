@@ -38,10 +38,10 @@ MACRO(CDR var junk)
 ENDMACRO(CDR)
 
 
-macro(add_tomahawk_plugin)
+macro(tomahawk_add_plugin)
     parse_arguments(PLUGIN
         "SOURCES;UI;LINK_LIBRARIES;TYPE;EXPORT_MACRO;COMPILE_DEFINITIONS"
-        "NO_INSTALL"
+        "NO_INSTALL;SHARED_LIB"
         ${ARGN}
         )
     car(PLUGIN_NAME ${PLUGIN_DEFAULT_ARGS})
@@ -59,18 +59,25 @@ macro(add_tomahawk_plugin)
     # qt stuff
     include_directories(${CMAKE_CURRENT_BINARY_DIR})
     if(PLUGIN_UI)
-        qt4_wrap_ui(PLUGIN_UI_SOURCES ${PLUGIN_UI})
+        qt_wrap_ui(PLUGIN_UI_SOURCES ${PLUGIN_UI})
         list(APPEND PLUGIN_SOURCES ${PLUGIN_UI_SOURCES})
     endif()
 
     if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/resources.qrc")
-        qt4_add_resources(PLUGIN_RC_SOURCES "resources.qrc")
+        qt_add_resources(PLUGIN_RC_SOURCES "resources.qrc")
         list(APPEND PLUGIN_SOURCES ${PLUGIN_RC_SOURCES})
         unset(PLUGIN_RC_SOURCES)
     endif()
 
     # add target
-    add_library(${target} MODULE ${PLUGIN_SOURCES})
+    if(NOT ${PLUGIN_SHARED_LIB})
+        add_library(${target} MODULE ${PLUGIN_SOURCES})
+    else()
+        add_library(${target} SHARED ${PLUGIN_SOURCES})
+    endif()
+
+    # add qt modules
+    qt5_use_modules(${target} Core Network Widgets Sql Xml DBus)
 
     # definitions - can this be moved into set_target_properties below?
     add_definitions(${QT_DEFINITIONS})
@@ -86,7 +93,7 @@ macro(add_tomahawk_plugin)
     endif()
 
     # add link targets
-    target_link_libraries(${target} tomahawklib)
+    target_link_libraries(${target} ${TOMAHAWK_LIBRARIES})
     if(PLUGIN_LINK_LIBRARIES)
         target_link_libraries(${target} ${PLUGIN_LINK_LIBRARIES})
     endif()

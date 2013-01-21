@@ -55,7 +55,7 @@ namespace Tomahawk {
             void audioPaused();
 
         private:
-            QWeakPointer< XmppSipPlugin > m_sipPlugin;
+            QPointer< XmppSipPlugin > m_sipPlugin;
             QTimer m_pauseTimer;
         };
 

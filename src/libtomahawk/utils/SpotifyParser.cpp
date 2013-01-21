@@ -165,8 +165,10 @@ SpotifyParser::lookupSpotifyBrowse( const QString& link )
     NetworkReply* reply = new NetworkReply( TomahawkUtils::nam()->get( QNetworkRequest( url ) ) );
     connect( reply, SIGNAL( finished() ), SLOT( spotifyBrowseFinished() ) );
 
+#ifndef ENABLE_HEADLESS
     m_browseJob = new DropJobNotifier( pixmap(), "Spotify", type, reply );
     JobStatusView::instance()->model()->addJob( m_browseJob );
+#endif
 
     m_queries.insert( reply );
 }
@@ -192,8 +194,10 @@ SpotifyParser::lookupTrack( const QString& link )
     NetworkReply* reply = new NetworkReply( TomahawkUtils::nam()->get( QNetworkRequest( url ) ) );
     connect( reply, SIGNAL( finished() ), SLOT( spotifyTrackLookupFinished() ) );
 
+#ifndef ENABLE_HEADLESS
     DropJobNotifier* j = new DropJobNotifier( pixmap(), QString( "Spotify" ), DropJob::Track, reply );
     JobStatusView::instance()->model()->addJob( j );
+#endif
 
     m_queries.insert( reply );
 }

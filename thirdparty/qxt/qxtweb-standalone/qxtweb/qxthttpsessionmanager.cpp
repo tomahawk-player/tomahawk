@@ -1,27 +1,33 @@
+
 /****************************************************************************
- **
- ** Copyright (C) Qxt Foundation. Some rights reserved.
- **
- ** This file is part of the QxtWeb module of the Qxt library.
- **
- ** This library is free software; you can redistribute it and/or modify it
- ** under the terms of the Common Public License, version 1.0, as published
- ** by IBM, and/or under the terms of the GNU Lesser General Public License,
- ** version 2.1, as published by the Free Software Foundation.
- **
- ** This file is provided "AS IS", without WARRANTIES OR CONDITIONS OF ANY
- ** KIND, EITHER EXPRESS OR IMPLIED INCLUDING, WITHOUT LIMITATION, ANY
- ** WARRANTIES OR CONDITIONS OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY OR
- ** FITNESS FOR A PARTICULAR PURPOSE.
- **
- ** You should have received a copy of the CPL and the LGPL along with this
- ** file. See the LICENSE file and the cpl1.0.txt/lgpl-2.1.txt files
- ** included with the source distribution for more information.
- ** If you did not receive a copy of the licenses, contact the Qxt Foundation.
- **
- ** <http://libqxt.org>  <foundation@libqxt.org>
- **
- ****************************************************************************/
+** Copyright (c) 2006 - 2011, the LibQxt project.
+** See the Qxt AUTHORS file for a list of authors and copyright holders.
+** All rights reserved.
+**
+** Redistribution and use in source and binary forms, with or without
+** modification, are permitted provided that the following conditions are met:
+**     * Redistributions of source code must retain the above copyright
+**       notice, this list of conditions and the following disclaimer.
+**     * Redistributions in binary form must reproduce the above copyright
+**       notice, this list of conditions and the following disclaimer in the
+**       documentation and/or other materials provided with the distribution.
+**     * Neither the name of the LibQxt project nor the
+**       names of its contributors may be used to endorse or promote products
+**       derived from this software without specific prior written permission.
+**
+** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+** ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+** WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+** DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
+** DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+** (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+** LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+** ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+** SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+**
+** <http://libqxt.org>  <foundation@libqxt.org>
+*****************************************************************************/
 
 /*!
 \class QxtHttpSessionManager
@@ -44,7 +50,7 @@ service, even one that only returns a more useful error message.
 QxtHttpSessionManager attempts to be thread-safe in accepting connections and
 posting events. It is reentrant for all other functionality.
 
-\sa QxtAbstractWebService
+\sa class QxtAbstractWebService
 */
 
 #include "qxthttpsessionmanager.h"
@@ -62,6 +68,9 @@ posting events. It is reentrant for all other functionality.
 #include <QThread>
 #include <qxtmetaobject.h>
 #include <QTcpSocket>
+#ifndef QT_NO_OPENSSL
+#include <QSslSocket>
+#endif
 
 #ifndef QXT_DOXYGEN_RUN
 class QxtHttpSessionManagerPrivate : public QxtPrivate<QxtHttpSessionManager>
@@ -69,7 +78,7 @@ class QxtHttpSessionManagerPrivate : public QxtPrivate<QxtHttpSessionManager>
 public:
     struct ConnectionState
     {
-        QxtBoundFunction* onBytesWritten;
+        QxtBoundFunction *onBytesWritten, *onReadyRead, *onAboutToClose;
         bool readyRead;
         bool finishedTransfer;
         bool keepAlive;
@@ -77,6 +86,13 @@ public:
         int httpMajorVersion;
         int httpMinorVersion;
         int sessionID;
+
+        void clearHandlers() {
+            delete onBytesWritten;
+            delete onReadyRead;
+            delete onAboutToClose;
+            onBytesWritten = onReadyRead = onAboutToClose = 0;
+        }
     };
 
     QxtHttpSessionManagerPrivate() : iface(QHostAddress::Any), port(80), sessionCookieName("sessionID"), connector(0), staticService(0), autoCreateSession(true),
@@ -92,6 +108,7 @@ public:
 
     QMutex eventLock;
     QList<QxtWebEvent*> eventQueue;
+    QHash<QPair<int,int>, QxtWebRequestEvent*> pendingRequests;
 
     QMutex sessionLock;
     QHash<QUuid, int> sessionKeys;                      // sessionKey->sessionID
@@ -112,12 +129,12 @@ QxtHttpSessionManager::QxtHttpSessionManager(QObject* parent) : QxtAbstractWebSe
 
 /*!
  * Returns the interface on which the session manager will listen for incoming connections.
- * \sa setInterface
+ * \sa setListenInterface()
  */
 QHostAddress QxtHttpSessionManager::listenInterface() const
-    {
-        return qxt_d().iface;
-    }
+{
+    return qxt_d().iface;
+}
 
 /*!
  * Sets the interface \a iface on which the session manager will listen for incoming
@@ -126,7 +143,7 @@ QHostAddress QxtHttpSessionManager::listenInterface() const
  * The default value is QHostAddress::Any, which will cause the session manager
  * to listen on all network interfaces.
  *
- * \sa QxtAbstractHttpConnector::listen
+ * \sa QxtAbstractHttpConnector::listen()
  */
 void QxtHttpSessionManager::setListenInterface(const QHostAddress& iface)
 {
@@ -134,8 +151,11 @@ void QxtHttpSessionManager::setListenInterface(const QHostAddress& iface)
 }
 
 /*!
- * Returns the port on which the session manager will listen for incoming connections.
- * \sa setInterface
+ * Returns the port on which the session manager is expected to listen for
+ * incoming connections. This is always whatever value was supplied in the
+ * last setPort() and not neccessarily the port number actually being
+ * used.
+ * \sa setPort(), serverPort()
  */
 quint16 QxtHttpSessionManager::port() const
 {
@@ -143,17 +163,37 @@ quint16 QxtHttpSessionManager::port() const
 }
 
 /*!
- * Sets the \a port on which the session manager will listen for incoming connections.
+ * Sets the \a port on which the session manager should listen for incoming
+ * connections.
  *
  * The default value is to listen on port 80. This is an acceptable value when
  * using QxtHttpServerConnector, but it is not likely to be desirable for other
- * connectors.
+ * connectors. You may also use 0 to allow the network layer to dynamically
+ * assign a port number. In this case, the serverPort() method will
+ * return the actual port assigned once the session has been successfully
+ * started.
  *
- * \sa port
+ * \note Setting the port number after the session has been started will
+ * have no effect unless it is shutdown and started again.
+ *
+ * \sa port(), serverPort()
  */
 void QxtHttpSessionManager::setPort(quint16 port)
 {
     qxt_d().port = port;
+}
+
+/*!
+ * Returns the port on which the session manager is listening for incoming
+ * connections. This will be 0 if the session manager has not been started
+ * or was shutdown.
+ * \sa setInterface(), setPort()
+ */
+quint16 QxtHttpSessionManager::serverPort() const
+{
+    if(qxt_d().connector)
+	return connector()->serverPort();
+    return 0;
 }
 
 /*!
@@ -166,8 +206,17 @@ bool QxtHttpSessionManager::start()
 }
 
 /*!
+ * \reimp
+ */
+bool QxtHttpSessionManager::shutdown()
+{
+    Q_ASSERT(qxt_d().connector);
+    return connector()->shutdown();
+}
+
+/*!
  * Returns the name of the HTTP cookie used to track sessions in the web browser.
- * \sa setSessionCookieName
+ * \sa setSessionCookieName()
  */
 QByteArray QxtHttpSessionManager::sessionCookieName() const
 {
@@ -175,11 +224,12 @@ QByteArray QxtHttpSessionManager::sessionCookieName() const
 }
 
 /*!
- * Sets the \a name of the HTTP cookie used to track sessions in the web browser.
+ * Sets the \a name of the HTTP cookie used to track sessions in the web
+ * browser.
  *
  * The default value is "sessionID".
  *
- * \sa sessionCookieName
+ * \sa sessionCookieName()
  */
 void QxtHttpSessionManager::setSessionCookieName(const QByteArray& name)
 {
@@ -189,7 +239,7 @@ void QxtHttpSessionManager::setSessionCookieName(const QByteArray& name)
 /*!
  * Sets the \a connector used to manage connections to web browsers.
  *
- * \sa connector
+ * \sa connector()
  */
 void QxtHttpSessionManager::setConnector(QxtAbstractHttpConnector* connector)
 {
@@ -203,7 +253,7 @@ void QxtHttpSessionManager::setConnector(QxtAbstractHttpConnector* connector)
  * This overload is provided for convenience and can construct the predefined
  * connectors provided with Qxt.
  *
- * \sa connector
+ * \sa connector()
  */
 void QxtHttpSessionManager::setConnector(Connector connector)
 {
@@ -220,7 +270,7 @@ void QxtHttpSessionManager::setConnector(Connector connector)
 
 /*!
  * Returns the connector used to manage connections to web browsers.
- * \sa setConnector
+ * \sa setConnector()
  */
 QxtAbstractHttpConnector* QxtHttpSessionManager::connector() const
 {
@@ -231,7 +281,7 @@ QxtAbstractHttpConnector* QxtHttpSessionManager::connector() const
  * Returns \c true if sessions are automatically created for every connection
  * that does not already have a session cookie associated with it; otherwise
  * returns \c false.
- * \sa setAutoCreateSession
+ * \sa setAutoCreateSession()
  */
 bool QxtHttpSessionManager::autoCreateSession() const
 {
@@ -245,7 +295,7 @@ bool QxtHttpSessionManager::autoCreateSession() const
  * Sessions are only created for clients that support HTTP cookies. HTTP/0.9
  * clients will never generate a session.
  *
- * \sa autoCreateSession
+ * \sa autoCreateSession()
  */
 void QxtHttpSessionManager::setAutoCreateSession(bool enable)
 {
@@ -256,7 +306,7 @@ void QxtHttpSessionManager::setAutoCreateSession(bool enable)
  * Returns the QxtAbstractWebService that is used to respond to requests from
  * connections that are not associated with a session.
  *
- * \sa setStaticContentService
+ * \sa setStaticContentService()
  */
 QxtAbstractWebService* QxtHttpSessionManager::staticContentService() const
 {
@@ -270,7 +320,7 @@ QxtAbstractWebService* QxtHttpSessionManager::staticContentService() const
  * If no static content service is set, connections that are not associated
  * with a session will receive an "Internal Configuration Error".
  *
- * \sa staticContentService
+ * \sa staticContentService()
  */
 void QxtHttpSessionManager::setStaticContentService(QxtAbstractWebService* service)
 {
@@ -287,6 +337,19 @@ void QxtHttpSessionManager::postEvent(QxtWebEvent* h)
     qxt_d().eventLock.unlock();
     // if(h->type() == QxtWebEvent::Page)
     QMetaObject::invokeMethod(this, "processEvents", Qt::QueuedConnection);
+}
+
+/*!
+ * This method removes the session cookie value corresponding to a deleted
+ * service.
+ */
+void QxtHttpSessionManager::sessionDestroyed(int sessionID)
+{
+    QMutexLocker locker(&qxt_d().sessionLock);
+    QUuid key = qxt_d().sessionKeys.key(sessionID);
+//    qDebug() << Q_FUNC_INFO << "sessionID" << sessionID << "key" << key;
+    if(!key.isNull())
+	qxt_d().sessionKeys.remove(key);
 }
 
 /*!
@@ -307,7 +370,7 @@ int QxtHttpSessionManager::newSession()
     }
     while (qxt_d().sessionKeys.contains(key));
     qxt_d().sessionKeys[key] = sessionID;
-    postEvent(new QxtWebStoreCookieEvent(sessionID, qxt_d().sessionCookieName, key));
+    postEvent(new QxtWebStoreCookieEvent(sessionID, qxt_d().sessionCookieName, key.toString()));
     return sessionID;
 }
 
@@ -319,6 +382,9 @@ int QxtHttpSessionManager::newSession()
  * Subclasses may override this function to perform preprocessing on each
  * request, but they must call the base class implementation in order to
  * generate and dispatch the appropriate events.
+ *
+ * To facilitate use with multi-threaded applications, the event will remain
+ * valid until a response is posted.
  */
 void QxtHttpSessionManager::incomingRequest(quint32 requestID, const QHttpRequestHeader& header, QxtWebContent* content)
 {
@@ -340,6 +406,8 @@ void QxtHttpSessionManager::incomingRequest(quint32 requestID, const QHttpReques
     if (qxt_d().sessionKeys.contains(sessionCookie))
     {
         sessionID = qxt_d().sessionKeys[sessionCookie];
+        if(!sessionID && header.majorVersion() > 0 && qxt_d().autoCreateSession)
+            sessionID = newSession();
     }
     else if (header.majorVersion() > 0 && qxt_d().autoCreateSession)
     {
@@ -361,11 +429,21 @@ void QxtHttpSessionManager::incomingRequest(quint32 requestID, const QHttpReques
         state.keepAlive = true;
     qxt_d().sessionLock.unlock();
 
-    QxtWebRequestEvent* event = new QxtWebRequestEvent(sessionID, requestID, QUrl(header.path()));
+    QxtWebRequestEvent* event = new QxtWebRequestEvent(sessionID, requestID, QUrl::fromEncoded(header.path().toUtf8()));
+    qxt_d().eventLock.lock();
+    qxt_d().pendingRequests.insert(QPair<int,int>(sessionID, requestID), event);
+    qxt_d().eventLock.unlock();
     QTcpSocket* socket = qobject_cast<QTcpSocket*>(device);
     if (socket)
     {
-        event->remoteAddress = socket->peerAddress().toString();
+        event->remoteAddress = socket->peerAddress();
+#ifndef QT_NO_OPENSSL
+        QSslSocket* sslSocket = qobject_cast<QSslSocket*>(socket);
+        if(sslSocket) {
+            event->isSecure = true;
+            event->clientCertificate = sslSocket->peerCertificate();
+        }
+#endif
     }
     event->method = header.method();
     event->cookies = cookies;
@@ -385,7 +463,10 @@ void QxtHttpSessionManager::incomingRequest(quint32 requestID, const QHttpReques
     event->headers.insert("X-Request-Protocol", "HTTP/" + QString::number(state.httpMajorVersion) + '.' + QString::number(state.httpMinorVersion));
     if (sessionID && session(sessionID))
     {
-        session(sessionID)->pageRequestedEvent(event);
+        QxtAbstractWebService *service = session(sessionID);
+        if(content)
+            content->setParent(service); // Set content ownership to the service
+        service->pageRequestedEvent(event);
     }
     else if (qxt_d().staticService)
     {
@@ -403,9 +484,11 @@ void QxtHttpSessionManager::incomingRequest(quint32 requestID, const QHttpReques
 void QxtHttpSessionManager::disconnected(QIODevice* device)
 {
     QMutexLocker locker(&qxt_d().sessionLock);
-    if (qxt_d().connectionState.contains(device))
-        delete qxt_d().connectionState[device].onBytesWritten;
+    if (qxt_d().connectionState.contains(device)) {
+        qxt_d().connectionState[device].clearHandlers();
+    }
     qxt_d().connectionState.remove(device);
+    device->deleteLater(); 
 }
 
 /*!
@@ -451,6 +534,8 @@ void QxtHttpSessionManager::processEvents()
         {
             QxtWebStoreCookieEvent* ce = static_cast<QxtWebStoreCookieEvent*>(e);
             QString cookie = ce->name + '=' + ce->data;
+            if (!ce->path.isEmpty())
+                cookie += "; path=" + ce->path;
             if (ce->expiration.isValid())
             {
                 cookie += "; max-age=" + QString::number(QDateTime::currentDateTime().secsTo(ce->expiration))
@@ -462,7 +547,9 @@ void QxtHttpSessionManager::processEvents()
         else if (e->type() == QxtWebEvent::RemoveCookie)
         {
             QxtWebRemoveCookieEvent* ce = static_cast<QxtWebRemoveCookieEvent*>(e);
-            header.addValue("set-cookie", ce->name + "=; max-age=0; expires=" + QDateTime(QDate(1970, 1, 1)).toString("ddd, dd-MMM-YYYY hh:mm:ss GMT"));
+            QString path;
+            if(!ce->path.isEmpty()) path = "path=" + ce->path + "; ";
+            header.addValue("set-cookie", ce->name + "=; "+path+"max-age=0; expires=" + QDateTime(QDate(1970, 1, 1)).toString("ddd, dd-MMM-YYYY hh:mm:ss GMT"));
             removeIDs.push_front(i);
         }
     }
@@ -473,9 +560,15 @@ void QxtHttpSessionManager::processEvents()
     // TODO: This should only be invoked when pipelining occurs
     // In theory it shouldn't cause any problems as POST is specced to not be pipelined
     if (content) content->ignoreRemainingContent();
+    QHash<QPair<int,int>,QxtWebRequestEvent*>::iterator iPending =
+	qxt_d().pendingRequests.find(QPair<int,int>(sessionID, requestID));
+    if(iPending != qxt_d().pendingRequests.end()){
+	delete *iPending;
+	qxt_d().pendingRequests.erase(iPending);
+    }
 
     QxtHttpSessionManagerPrivate::ConnectionState& state = qxt_d().connectionState[connector()->getRequestConnection(requestID)];
-
+    QIODevice* source;
     header.setStatusLine(pe->status, pe->statusMessage, state.httpMajorVersion, state.httpMinorVersion);
 
     if (re)
@@ -493,8 +586,7 @@ void QxtHttpSessionManager::processEvents()
     if (state.httpMajorVersion == 0 || (state.httpMajorVersion == 1 && state.httpMinorVersion == 0))
         pe->chunked = false;
 
-    connector()->setRequestDataSource( pe->requestID, pe->dataSource );
-    QSharedPointer<QIODevice> source( pe->dataSource );
+    source = pe->dataSource;
     state.finishedTransfer = false;
     bool emptyContent = !source->bytesAvailable() && !pe->streaming;
     state.readyRead = source->bytesAvailable();
@@ -508,40 +600,27 @@ void QxtHttpSessionManager::processEvents()
     }
     else
     {
-        if (state.onBytesWritten) delete state.onBytesWritten;  // disconnect old handler
+        pe->dataSource = 0;     // so that it isn't destroyed when the event is deleted
+        state.clearHandlers();  // disconnect old handlers
+
         if (!pe->chunked)
         {
             state.keepAlive = false;
-            state.onBytesWritten = QxtMetaObject::bind(this, SLOT(sendNextBlock(int)),
-                                                             Q_ARG(int, requestID));
-
-            QxtMetaObject::connect(source.data(), SIGNAL(readyRead()),
-                                   QxtMetaObject::bind(this, SLOT(blockReadyRead(int)),
-                                                             Q_ARG(int, requestID)),
-                                   Qt::QueuedConnection);
-
-            QxtMetaObject::connect(source.data(), SIGNAL(aboutToClose()),
-                                   QxtMetaObject::bind(this, SLOT(closeConnection(int)),
-                                                             Q_ARG(int, requestID)),
-                                   Qt::QueuedConnection);
+            state.onBytesWritten = QxtMetaObject::bind(this, SLOT(sendNextBlock(int, QObject*)), Q_ARG(int, requestID), Q_ARG(QObject*, source));
+            state.onReadyRead = QxtMetaObject::bind(this, SLOT(blockReadyRead(int, QObject*)), Q_ARG(int, requestID), Q_ARG(QObject*, source));
+            state.onAboutToClose = QxtMetaObject::bind(this, SLOT(closeConnection(int)), Q_ARG(int, requestID));
         }
         else
         {
             header.setValue("transfer-encoding", "chunked");
-            state.onBytesWritten = QxtMetaObject::bind(this, SLOT(sendNextChunk(int)),
-                                                             Q_ARG(int, requestID));
-
-            QxtMetaObject::connect(source.data(), SIGNAL(readyRead()),
-                                   QxtMetaObject::bind(this, SLOT(chunkReadyRead(int)),
-                                                             Q_ARG(int, requestID)),
-                                   Qt::QueuedConnection);
-
-            QxtMetaObject::connect(source.data(), SIGNAL(aboutToClose()),
-                                   QxtMetaObject::bind(this, SLOT(sendEmptyChunk(int)),
-                                                             Q_ARG(int, requestID)),
-                                   Qt::QueuedConnection);
+            state.onBytesWritten = QxtMetaObject::bind(this, SLOT(sendNextChunk(int, QObject*)), Q_ARG(int, requestID), Q_ARG(QObject*, source));
+            state.onReadyRead = QxtMetaObject::bind(this, SLOT(chunkReadyRead(int, QObject*)), Q_ARG(int, requestID), Q_ARG(QObject*, source));
+            state.onAboutToClose = QxtMetaObject::bind(this, SLOT(sendEmptyChunk(int, QObject*)), Q_ARG(int, requestID), Q_ARG(QObject*, source));
         }
         QxtMetaObject::connect(device, SIGNAL(bytesWritten(qint64)), state.onBytesWritten, Qt::QueuedConnection);
+        QxtMetaObject::connect(source, SIGNAL(readyRead()), state.onReadyRead, Qt::QueuedConnection);
+        QxtMetaObject::connect(source, SIGNAL(aboutToClose()), state.onAboutToClose, Qt::QueuedConnection);
+        QObject::connect(device, SIGNAL(destroyed()), source, SLOT(deleteLater()));
 
         if (state.keepAlive)
         {
@@ -555,9 +634,9 @@ void QxtHttpSessionManager::processEvents()
         if (state.readyRead)
         {
             if (pe->chunked)
-                sendNextChunk(requestID);
+                sendNextChunk(requestID, source);
             else
-                sendNextBlock(requestID);
+                sendNextBlock(requestID, source);
         }
     }
 
@@ -573,32 +652,24 @@ void QxtHttpSessionManager::processEvents()
 /*!
  * \internal
  */
-void QxtHttpSessionManager::chunkReadyRead(int requestID)
+void QxtHttpSessionManager::chunkReadyRead(int requestID, QObject* dataSourceObject)
 {
-    if (!connector()) return;
-
-    const QSharedPointer<QIODevice>& dataSource = connector()->getRequestDataSource( requestID );
+    QIODevice* dataSource = static_cast<QIODevice*>(dataSourceObject);
     if (!dataSource->bytesAvailable()) return;
-
     QIODevice* device = connector()->getRequestConnection(requestID);
-    if (!device) return;
-
     if (!device->bytesToWrite() || qxt_d().connectionState[device].readyRead == false)
     {
         qxt_d().connectionState[device].readyRead = true;
-        sendNextChunk(requestID);
+        sendNextChunk(requestID, dataSourceObject);
     }
 }
 
 /*!
  * \internal
  */
-void QxtHttpSessionManager::sendNextChunk(int requestID)
+void QxtHttpSessionManager::sendNextChunk(int requestID, QObject* dataSourceObject)
 {
-    if ( !connector() )
-        return;
-
-    const QSharedPointer<QIODevice>& dataSource = connector()->getRequestDataSource( requestID );
+    QIODevice* dataSource = static_cast<QIODevice*>(dataSourceObject);
     QIODevice* device = connector()->getRequestConnection(requestID);
     QxtHttpSessionManagerPrivate::ConnectionState& state = qxt_d().connectionState[device];
     if (state.finishedTransfer)
@@ -619,13 +690,13 @@ void QxtHttpSessionManager::sendNextChunk(int requestID)
     }
     state.readyRead = false;
     if (!state.streaming && !dataSource->bytesAvailable())
-        QMetaObject::invokeMethod(this, "sendEmptyChunk", Q_ARG(int, requestID));
+        QMetaObject::invokeMethod(this, "sendEmptyChunk", Q_ARG(int, requestID), Q_ARG(QObject*, dataSource));
 }
 
 /*!
  * \internal
  */
-void QxtHttpSessionManager::sendEmptyChunk(int requestID)
+void QxtHttpSessionManager::sendEmptyChunk(int requestID, QObject* dataSource)
 {
     QIODevice* device = connector()->getRequestConnection(requestID);
     if (!qxt_d().connectionState.contains(device)) return;  // in case a disconnect signal and a bytesWritten signal get fired in the wrong order
@@ -633,13 +704,11 @@ void QxtHttpSessionManager::sendEmptyChunk(int requestID)
     if (state.finishedTransfer) return;
     state.finishedTransfer = true;
     device->write("0\r\n\r\n");
-
+    dataSource->deleteLater();
     if (state.keepAlive)
     {
         delete state.onBytesWritten;
         state.onBytesWritten = 0;
-        QSharedPointer<QIODevice>& dataSource = connector()->getRequestDataSource( requestID );
-        dataSource.clear();
         connector()->incomingData(device);
     }
     else
@@ -654,45 +723,38 @@ void QxtHttpSessionManager::sendEmptyChunk(int requestID)
 void QxtHttpSessionManager::closeConnection(int requestID)
 {
     QIODevice* device = connector()->getRequestConnection(requestID);
-    if( !device ) return; // already closing/closed
     QxtHttpSessionManagerPrivate::ConnectionState& state = qxt_d().connectionState[device];
     state.finishedTransfer = true;
-    state.onBytesWritten = NULL;
     QTcpSocket* socket = qobject_cast<QTcpSocket*>(device);
     if (socket)
         socket->disconnectFromHost();
     else
         device->close();
-
-    connector()->doneWithRequest( requestID );
 }
 
 /*!
  * \internal
  */
-void QxtHttpSessionManager::blockReadyRead(int requestID)
+void QxtHttpSessionManager::blockReadyRead(int requestID, QObject* dataSourceObject)
 {
-    const QSharedPointer<QIODevice>& dataSource = connector()->getRequestDataSource( requestID );
+    QIODevice* dataSource = static_cast<QIODevice*>(dataSourceObject);
     if (!dataSource->bytesAvailable()) return;
 
     QIODevice* device = connector()->getRequestConnection(requestID);
     if (!device->bytesToWrite() || qxt_d().connectionState[device].readyRead == false)
     {
         qxt_d().connectionState[device].readyRead = true;
-        sendNextBlock(requestID);
+        sendNextBlock(requestID, dataSourceObject);
     }
 }
 
 /*!
  * \internal
  */
-void QxtHttpSessionManager::sendNextBlock(int requestID)
+void QxtHttpSessionManager::sendNextBlock(int requestID, QObject* dataSourceObject)
 {
-    QSharedPointer<QIODevice>& dataSource = connector()->getRequestDataSource( requestID );
+    QIODevice* dataSource = static_cast<QIODevice*>(dataSourceObject);
     QIODevice* device = connector()->getRequestConnection(requestID);
-    if (!device)
-        return;
-
     if (!qxt_d().connectionState.contains(device)) return;  // in case a disconnect signal and a bytesWritten signal get fired in the wrong order
     QxtHttpSessionManagerPrivate::ConnectionState& state = qxt_d().connectionState[device];
     if (state.finishedTransfer) return;
@@ -701,11 +763,13 @@ void QxtHttpSessionManager::sendNextBlock(int requestID)
         state.readyRead = false;
         return;
     }
-    QByteArray chunk = dataSource->read(32768); // this is a good chunk size
+    QByteArray chunk = dataSource->read(32768); // empirically determined to be a good chunk size
     device->write(chunk);
     state.readyRead = false;
     if (!state.streaming && !dataSource->bytesAvailable())
     {
         closeConnection(requestID);
+        dataSource->deleteLater();
+        state.clearHandlers();
     }
 }

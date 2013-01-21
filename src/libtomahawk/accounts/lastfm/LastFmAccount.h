@@ -104,9 +104,9 @@ private slots:
 private:
     void hookupResolver();
 
-    QWeakPointer<Tomahawk::ExternalResolverGui> m_resolver;
-    QWeakPointer<Tomahawk::InfoSystem::LastFmInfoPlugin> m_infoPlugin;
-    QWeakPointer<LastFmConfig> m_configWidget;
+    QPointer<Tomahawk::ExternalResolverGui> m_resolver;
+    QPointer<Tomahawk::InfoSystem::LastFmInfoPlugin> m_infoPlugin;
+    QPointer<LastFmConfig> m_configWidget;
 };
 
 }

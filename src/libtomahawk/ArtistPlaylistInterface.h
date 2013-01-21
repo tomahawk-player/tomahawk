@@ -21,7 +21,7 @@
 #define TOMAHAWKARTISTPLAYLISTINTERFACE_H
 
 #include <QtCore/QObject>
-#include <QtCore/QSharedPointer>
+#include <QtCore/QPointer>
 
 #include "Artist.h"
 #include "Typedefs.h"
@@ -80,7 +80,7 @@ private:
     Tomahawk::ModelMode m_mode;
     Tomahawk::collection_ptr m_collection;
 
-    QWeakPointer< Tomahawk::Artist > m_artist;
+    QPointer< Tomahawk::Artist > m_artist;
 };
 
 }; // ns

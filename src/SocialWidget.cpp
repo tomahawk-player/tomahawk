@@ -41,11 +41,11 @@ SocialWidget::SocialWidget( QWidget* parent )
     , m_parentRect( parent->rect() )
 {
     ui->setupUi( this );
-#ifndef Q_OS_WIN
-    setWindowFlags( Qt::FramelessWindowHint ); //this causes ugly black shadows on Windows
-    setWindowFlags( Qt::Popup );
-#endif
+    setWindowFlags( Qt::Popup | Qt::FramelessWindowHint );
+
+    setAutoFillBackground( false );
     setAttribute( Qt::WA_TranslucentBackground, true );
+    setAttribute( Qt::WA_NoSystemBackground, true );
 
     TomahawkUtils::unmarginLayout( layout() );
 
@@ -149,20 +149,11 @@ SocialWidget::paintEvent( QPaintEvent* event )
     outline.lineTo( r.right() - ARROW_HEIGHT * 3, r.bottom()+1 + ARROW_HEIGHT );
     outline.lineTo( r.right() - ARROW_HEIGHT * 4, r.bottom()+1 );
 
-    QPainter p( this );
-    p.setRenderHint( QPainter::Antialiasing );
-    p.setBackgroundMode( Qt::TransparentMode );
-
-    QPen pen( TomahawkUtils::Colors::BORDER_LINE );
-    pen.setWidth( 2 );
-    p.setPen( pen );
-    p.drawPath( outline );
-
-    p.setOpacity( TomahawkUtils::POPUP_OPACITY );
-    p.fillPath( outline, TomahawkUtils::Colors::POPUP_BACKGROUND );
-
-    QWidget::paintEvent( event );
-    return;
+    TomahawkUtils::drawCompositedPopup( this,
+                                        outline,
+                                        TomahawkUtils::Colors::BORDER_LINE,
+                                        TomahawkUtils::Colors::POPUP_BACKGROUND,
+                                        TomahawkUtils::POPUP_OPACITY );
 }
 
 
@@ -251,9 +242,7 @@ SocialWidget::onGeometryUpdate()
 
     QPoint position( m_position - QPoint( size().width(), size().height() )
                      + QPoint( 2 + ARROW_HEIGHT * 3, 0 ) );
-#ifdef Q_OS_WIN
-    position.ry() -= 18/*margins I guess*/ + ARROW_HEIGHT;
-#endif
+
     if ( position != pos() )
     {
         move( position );

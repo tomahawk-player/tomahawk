@@ -23,7 +23,6 @@
 #include <QDir>
 
 #include "Source.h"
-#include "sip/SipHandler.h"
 #include "PlaylistInterface.h"
 
 #include "utils/Logger.h"
@@ -32,6 +31,7 @@
 #include "database/DatabaseCommand_UpdateSearchIndex.h"
 #include "database/Database.h"
 #include "playlist/PlaylistUpdaterInterface.h"
+#include "infosystem/InfoSystemCache.h"
 
 using namespace Tomahawk;
 
@@ -929,6 +929,7 @@ TomahawkSettings::setVerboseNotifications( bool notifications )
     setValue( "ui/notifications/verbose", notifications );
 }
 
+
 bool
 TomahawkSettings::menuBarVisible() const
 {
@@ -939,12 +940,27 @@ TomahawkSettings::menuBarVisible() const
 #endif
 }
 
+
 void
 TomahawkSettings::setMenuBarVisible( bool visible )
 {
 #ifndef Q_OS_MAC
     setValue( "ui/mainwindow/menuBarVisible", visible );
 #endif
+}
+
+
+bool
+TomahawkSettings::fullscreenEnabled() const
+{
+    return value( "ui/mainwindow/fullscreenEnabled", false ).toBool();
+}
+
+
+void
+TomahawkSettings::setFullscreenEnabled( bool enabled )
+{
+    setValue( "ui/mainwindow/fullscreenEnabled", enabled );
 }
 
 

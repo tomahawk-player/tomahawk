@@ -32,6 +32,9 @@
 #include "Query.h"
 #include "utils/Logger.h"
 
+#include <echonest/CatalogUpdateEntry.h>
+#include <echonest/Config.h>
+
 using namespace Tomahawk;
 
 EchonestCatalogSynchronizer* EchonestCatalogSynchronizer::s_instance = 0;

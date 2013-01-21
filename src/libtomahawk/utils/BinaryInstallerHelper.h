@@ -20,7 +20,7 @@
 
 #include "AtticaManager.h"
 
-#include <QWeakPointer>
+#include <QPointer>
 
 class QTemporaryFile;
 class BinaryInstallerHelper : public QObject
@@ -39,7 +39,7 @@ private:
     QTemporaryFile* m_tempFile;
     QString m_resolverId;
     bool m_createAccount;
-    QWeakPointer<AtticaManager> m_manager;
+    QPointer<AtticaManager> m_manager;
 };
 
 #endif

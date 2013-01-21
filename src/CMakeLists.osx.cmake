@@ -28,14 +28,17 @@ if (APPLE)
   # 9.8.0  -> 10.5/Leopard
   # 10.4.0 -> 10.6/Snow Leopard
   # 11.x.x -> Lion
+  # 12.x.x -> Mountain Lion
   string(REGEX MATCH "[0-9]+" DARWIN_VERSION ${CMAKE_HOST_SYSTEM_VERSION})
-  if (DARWIN_VERSION GREATER 10)
+  if (DARWIN_VERSION GREATER 11)
+    SET(MOUNTAIN_LION 1)
+  elseif (DARWIN_VERSION GREATER 10)
     SET(LION 1)
   elseif (DARWIN_VERSION GREATER 9)
     SET(SNOW_LEOPARD 1)
   elseif (DARWIN_VERSION GREATER 8)
     SET(LEOPARD 1)
-  endif (DARWIN_VERSION GREATER 10)
+  endif (DARWIN_VERSION GREATER 11)
 
 # Use two different sparkle update tracks for debug and release
 # We have to change the URL in the Info.plist file :-/

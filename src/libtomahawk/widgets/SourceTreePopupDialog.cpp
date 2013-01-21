@@ -49,13 +49,11 @@ SourceTreePopupDialog::SourceTreePopupDialog()
 #ifndef ENABLE_HEADLESS
     setParent( QApplication::activeWindow() );
 #endif
-#ifndef Q_OS_WIN
-    setWindowFlags( Qt::FramelessWindowHint );
-    setWindowFlags( Qt::Popup );
-#endif
+    setWindowFlags( Qt::Popup | Qt::FramelessWindowHint );
 
     setAutoFillBackground( false );
     setAttribute( Qt::WA_TranslucentBackground, true );
+    setAttribute( Qt::WA_NoSystemBackground, true );
 
     //setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
 
