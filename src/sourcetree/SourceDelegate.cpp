@@ -303,9 +303,6 @@ SourceDelegate::paintCategory( QPainter* painter, const QStyleOptionViewItem& op
 
     QTextOption to( Qt::AlignVCenter );
 
-    painter->setPen( option.palette.color( QPalette::Base ) );
-    painter->setBrush( option.palette.color( QPalette::Base ) );
-    painter->drawRect( option.rect );
     painter->setRenderHint( QPainter::Antialiasing );
 
     painter->setPen( Qt::white );
@@ -347,9 +344,6 @@ SourceDelegate::paintGroup( QPainter* painter, const QStyleOptionViewItem& optio
 
     QTextOption to( Qt::AlignBottom );
 
-    painter->setPen( option.palette.color( QPalette::Base ) );
-    painter->setBrush( option.palette.color( QPalette::Base ) );
-    painter->drawRect( option.rect );
     painter->setRenderHint( QPainter::Antialiasing );
 
     painter->setPen( Qt::white );
@@ -413,7 +407,6 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
             else
                 o3.state &= ~QStyle::State_Selected;
 
-            o.palette.setColor( QPalette::Base, QColor( 0, 0, 0, 0 ) );
             o.palette.setColor( QPalette::Text, o.palette.color( QPalette::HighlightedText ) );
             o3.palette.setColor( QPalette::Text, o.palette.color( QPalette::HighlightedText ) );
         }
