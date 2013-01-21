@@ -269,8 +269,8 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
     painter->setPen( descColor );
     painter->drawText( textRect, text, to );
 
-    if ( colItem->source() && colItem->source()->currentTrack() )
-        m_trackRects[ index ] = textRect;
+    if ( colItem->source() && colItem->source()->currentTrack() && colItem->source()->state() == DBSyncConnection::SYNCED )
+        m_trackRects[ index ] = textRect.adjusted( 0, 0, -textRect.width() + painter->fontMetrics().width( text ), 0 );
     else
         m_trackRects.remove( index );
 
