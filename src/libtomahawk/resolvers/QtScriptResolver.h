@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -144,6 +145,7 @@ public:
     virtual void reload();
 
     virtual void setIcon( const QPixmap& icon ) { m_icon = icon; }
+
 public slots:
     virtual void resolve( const Tomahawk::query_ptr& query );
     virtual void stop();
@@ -160,11 +162,13 @@ private:
     QVariant widgetData( QWidget* widget, const QString& property );
     QVariantMap loadDataFromWidgets();
     void fillDataInWidgets( const QVariantMap& data );
+    void loadCollections();
 
     // encapsulate javascript calls
     QVariantMap resolverSettings();
     QVariantMap resolverUserConfig();
     QVariantMap resolverInit();
+    QVariantMap resolverCollections();
 
     QList< Tomahawk::result_ptr > parseResultVariantList( const QVariantList& reslist );
 

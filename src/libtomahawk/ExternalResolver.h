@@ -71,6 +71,7 @@ public:
     virtual ErrorState error() const;
     virtual bool running() const = 0;
     virtual Capabilities capabilities() const = 0;
+    virtual QList< Tomahawk::collection_ptr > collections() { return m_collections; }
 
 public slots:
     virtual void start() = 0;

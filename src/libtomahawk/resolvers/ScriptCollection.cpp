@@ -25,7 +25,7 @@ using namespace Tomahawk;
 
 
 ScriptCollection::ScriptCollection( const source_ptr& source,
-                                    QtScriptResolver* resolver,
+                                    ExternalResolver* resolver,
                                     QObject* parent )
     : Collection( source, resolver->name(), parent )
 {

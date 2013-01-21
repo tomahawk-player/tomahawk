@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -23,6 +24,7 @@
 #include "Album.h"
 #include "config.h"
 #include "Pipeline.h"
+#include "ScriptCollection.h"
 #include "SourceList.h"
 
 #include "accounts/AccountConfigWidget.h"
@@ -368,6 +370,8 @@ QtScriptResolver::init()
     QVariantMap config = resolverUserConfig();
     fillDataInWidgets( config );
 
+    loadCollections();
+
     qDebug() << "JS" << filePath() << "READY," << "name" << m_name << "weight" << m_weight << "timeout" << m_timeout << "icon received" << success;
 
     m_ready = true;
@@ -504,6 +508,13 @@ void
 QtScriptResolver::stop()
 {
     m_stopped = true;
+
+    foreach ( const Tomahawk::collection_ptr& collection, m_collections )
+    {
+        emit collectionRemoved( collection );
+    }
+    m_collections.clear();
+
     Tomahawk::Pipeline::instance()->removeResolver( this );
     emit stopped();
 }
@@ -634,6 +645,22 @@ QtScriptResolver::fillDataInWidgets( const QVariantMap& data )
 }
 
 
+void
+QtScriptResolver::loadCollections()
+{
+    if ( m_capabilities.testFlag( Browsable ) )
+    {
+        m_collections.clear();
+        // at this point we assume that all the tracks browsable through a resolver belong to the local source
+        Tomahawk::collection_ptr collection( new Tomahawk::ScriptCollection( SourceList::instance()->getLocal(), this ) );
+        m_collections.append( collection );
+        emit collectionAdded( collection );
+
+        //TODO: implement multiple collections from a resolver
+    }
+}
+
+
 QVariantMap
 QtScriptResolver::resolverSettings()
 {
@@ -652,5 +679,12 @@ QVariantMap
 QtScriptResolver::resolverInit()
 {
     return m_engine->mainFrame()->evaluateJavaScript( RESOLVER_LEGACY_CODE "resolver.init();" ).toMap();
+}
+
+
+QVariantMap
+QtScriptResolver::resolverCollections()
+{
+    return QVariantMap(); //TODO: add a way to distinguish collections
 }
 

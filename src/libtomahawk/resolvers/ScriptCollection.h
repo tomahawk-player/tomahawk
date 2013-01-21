@@ -20,7 +20,7 @@
 #ifndef SCRIPTCOLLECTION_H
 #define SCRIPTCOLLECTION_H
 
-#include "resolvers/QtScriptResolver.h"
+#include "ExternalResolver.h"
 #include "Collection.h"
 
 #include "Typedefs.h"
@@ -36,12 +36,12 @@ class DLLEXPORT ScriptCollection : public Collection
 
 public:
     explicit ScriptCollection( const source_ptr& source,
-                               QtScriptResolver* resolver,
+                               ExternalResolver* resolver,
                                QObject* parent = 0 );
     virtual ~ScriptCollection();
 
 private:
-    QtScriptResolver* m_resolver;
+    ExternalResolver* m_resolver;
     
 };
 
