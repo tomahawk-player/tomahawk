@@ -686,5 +686,9 @@ QVariantMap
 QtScriptResolver::resolverCollections()
 {
     return QVariantMap(); //TODO: add a way to distinguish collections
+    // the resolver should provide a unique ID string for each collection, and then be queriable
+    // against this ID. doesn't matter what kind of ID string as long as it's unique.
+    // Then when there's callbacks from a resolver, it sends source name, collection id
+    // + data.
 }
 
