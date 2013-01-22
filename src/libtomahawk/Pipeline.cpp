@@ -26,6 +26,7 @@
 #include "resolvers/ScriptResolver.h"
 #include "resolvers/QtScriptResolver.h"
 #include "Source.h"
+#include "SourceList.h"
 
 #include "utils/Logger.h"
 
@@ -59,6 +60,11 @@ Pipeline::Pipeline( QObject* parent )
 
     m_temporaryQueryTimer.setInterval( CLEANUP_TIMEOUT );
     connect( &m_temporaryQueryTimer, SIGNAL( timeout() ), SLOT( onTemporaryQueryTimer() ) );
+
+    connect( this, SIGNAL( resolverAdded( Tomahawk::Resolver* ) ),
+             SourceList::instance(), SLOT( onResolverAdded( Tomahawk::Resolver* ) ) );
+    connect( this, SIGNAL( resolverRemoved( Tomahawk::Resolver* ) ),
+             SourceList::instance(), SLOT( onResolverRemoved( Tomahawk::Resolver* ) ) );
 }
 
 

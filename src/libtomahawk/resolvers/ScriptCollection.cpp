@@ -45,5 +45,7 @@ ScriptCollection::~ScriptCollection()
 QString
 ScriptCollection::prettyName() const
 {
-    return QString();
+    return tr( "%1 Collection",
+               "Name of a collection based on a resolver, e.g. Subsonic Collection" )
+            .arg( m_resolver->name() );
 }

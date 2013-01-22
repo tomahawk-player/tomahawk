@@ -513,7 +513,6 @@ QtScriptResolver::stop()
     {
         emit collectionRemoved( collection );
     }
-    m_collections.clear();
 
     Tomahawk::Pipeline::instance()->removeResolver( this );
     emit stopped();

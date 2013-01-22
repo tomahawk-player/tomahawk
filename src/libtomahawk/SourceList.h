@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -59,6 +60,9 @@ public slots:
     void createPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents );
     void createDynamicPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents );
 
+    void onResolverAdded( Tomahawk::Resolver* resolver );
+    void onResolverRemoved( Tomahawk::Resolver* resolver );
+
 signals:
     void ready();
 
@@ -75,11 +79,17 @@ private slots:
     void latchedOn( const Tomahawk::source_ptr& );
     void latchedOff( const Tomahawk::source_ptr& );
 
+    void addScriptCollection( const Tomahawk::collection_ptr& collection );
+    void removeScriptCollection( const Tomahawk::collection_ptr& collection );
+
 private:
     void add( const Tomahawk::source_ptr& source );
+    void matchSourceForScriptCollection( const Tomahawk::collection_ptr& collection );
 
     QMap< QString, Tomahawk::source_ptr > m_sources;
     QMap< int, QString > m_sources_id2name;
+
+    QList< Tomahawk::collection_ptr > m_scriptCollections;
 
     bool m_isReady;
     Tomahawk::source_ptr m_local;

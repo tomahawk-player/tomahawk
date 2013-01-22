@@ -315,11 +315,16 @@ SourceItem::onCollectionAdded( const collection_ptr& collection )
 void
 SourceItem::onCollectionRemoved( const collection_ptr& collection )
 {
-    delete m_collectionPages.value( collection, 0 );
-    m_collectionPages.remove( collection );
+    GenericPageItem* item = m_collectionItems.value( collection );
+    int row = model()->indexFromItem( item ).row();
 
-    m_collectionItems.value( collection )->deleteLater();
+    beginRowsRemoved( row, row );
+    removeChild( item );
+    endRowsRemoved();
+
+    m_collectionPages.remove( collection );
     m_collectionItems.remove( collection );
+    item->deleteLater();
 }
 
 

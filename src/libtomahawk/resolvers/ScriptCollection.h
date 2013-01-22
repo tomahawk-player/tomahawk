@@ -43,6 +43,8 @@ public:
     virtual QString prettyName() const;
     virtual QString type() const { return "scriptcollection"; }
 
+    virtual ExternalResolver* resolver() { return m_resolver; }
+
 private:
     ExternalResolver* m_resolver;
     
