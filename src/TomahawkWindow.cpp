@@ -154,6 +154,8 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
         // Window must be fully constructed to toggle fullscreen mode. Queue it up.
         QTimer::singleShot( 0, this, SLOT( toggleFullscreen() ) );
     }
+    QPushButton* pb = new QPushButton( "debug", this );
+    connect( pb, SIGNAL(clicked()),this,SLOT(debug()));
 }
 
 
