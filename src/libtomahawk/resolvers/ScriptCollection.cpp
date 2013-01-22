@@ -40,3 +40,10 @@ ScriptCollection::~ScriptCollection()
 {
 
 }
+
+
+QString
+ScriptCollection::prettyName() const
+{
+    return QString();
+}

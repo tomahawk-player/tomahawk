@@ -56,6 +56,13 @@ Collection::name() const
 }
 
 
+QString
+Collection::prettyName() const
+{
+    return tr( "Collection" );
+}
+
+
 const
 source_ptr& Collection::source() const
 {

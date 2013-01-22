@@ -78,6 +78,7 @@ public:
 #endif
 
     collection_ptr dbCollection() const;
+    QList< Tomahawk::collection_ptr > collections() const { return m_collections; }
     void addCollection( const Tomahawk::collection_ptr& c );
     void removeCollection( const Tomahawk::collection_ptr& c );
 
@@ -105,8 +106,8 @@ signals:
     void online();
     void offline();
 
-    void collectionAdded( const collection_ptr& collection );
-    void collectionRemoved( const collection_ptr& collection );
+    void collectionAdded( const Tomahawk::collection_ptr& collection );
+    void collectionRemoved( const Tomahawk::collection_ptr& collection );
 
     void stats( const QVariantMap& );
 
