@@ -36,6 +36,8 @@
 
 #include "DllMacro.h"
 
+class QIcon;
+
 namespace Tomahawk
 {
 
@@ -50,6 +52,7 @@ public:
     virtual QString name() const;
     virtual QString prettyName() const;
     virtual QString type() const { return QString(); }
+    virtual QIcon icon() const;
 
     virtual void loadPlaylists() { qDebug() << Q_FUNC_INFO; }
     virtual void loadAutoPlaylists() { qDebug() << Q_FUNC_INFO; }

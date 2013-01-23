@@ -20,6 +20,9 @@
 #include "ScriptCollection.h"
 
 #include "Source.h"
+#include "ExternalResolverGui.h"
+
+#include <QIcon>
 
 using namespace Tomahawk;
 
@@ -48,4 +51,16 @@ ScriptCollection::prettyName() const
     return tr( "%1 Collection",
                "Name of a collection based on a resolver, e.g. Subsonic Collection" )
             .arg( m_resolver->name() );
+}
+
+
+QIcon
+ScriptCollection::icon() const
+{
+    ExternalResolverGui* gResolver = qobject_cast< ExternalResolverGui* >( m_resolver );
+    if ( gResolver )
+    {
+        return gResolver->icon();
+    }
+    return QIcon();
 }

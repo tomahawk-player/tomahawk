@@ -42,6 +42,7 @@ public:
 
     virtual QString prettyName() const;
     virtual QString type() const { return "scriptcollection"; }
+    virtual QIcon icon() const;
 
     virtual ExternalResolver* resolver() { return m_resolver; }
 

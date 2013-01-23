@@ -23,6 +23,7 @@
 
 #include "utils/Logger.h"
 #include "playlist/PlaylistUpdaterInterface.h"
+#include "utils/ImageRegistry.h"
 
 #include <QMetaObject>
 #include <QGenericArgument>
@@ -60,6 +61,13 @@ QString
 Collection::prettyName() const
 {
     return tr( "Collection" );
+}
+
+
+QIcon
+Collection::icon() const
+{
+     return ImageRegistry::instance()->icon( RESPATH "images/collection.svg" );
 }
 
 
