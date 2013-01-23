@@ -18,7 +18,34 @@
 
 #include "AccountConfigWidget.h"
 
-AccountConfigWidget::AccountConfigWidget(QWidget *parent) :
-    QWidget(parent)
+AccountConfigWidget::AccountConfigWidget(QWidget *parent)
+    : QWidget(parent)
 {
+}
+
+
+void
+AccountConfigWidget::checkForErrors()
+{
+}
+
+
+const QStringList
+AccountConfigWidget::errors() const
+{
+    return m_errors;
+}
+
+
+void
+AccountConfigWidget::resetErrors()
+{
+    m_errors.clear();
+}
+
+
+bool
+AccountConfigWidget::settingsValid() const
+{
+    return m_errors.empty();
 }
