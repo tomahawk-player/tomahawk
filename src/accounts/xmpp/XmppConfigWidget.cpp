@@ -49,6 +49,8 @@ XmppConfigWidget::XmppConfigWidget( XmppAccount* account, QWidget *parent )
     m_ui->xmppEnforceSecureCheckbox->setChecked( account->configuration().contains( "enforcesecure" ) ? account->configuration()[ "enforcesecure" ].toBool() : false);
     m_ui->jidExistsLabel->hide();
 
+    m_ui->tabWidget->setCurrentIndex( 0 );
+
     connect( m_ui->xmppUsername, SIGNAL( textChanged( QString ) ), SLOT( onCheckJidExists( QString ) ) );
 }
 

@@ -93,7 +93,13 @@ GoogleWrapper::GoogleWrapper ( const QString& pluginID )
     config->m_ui->logoLabel->setPixmap( QPixmap( ":/gmail-logo.png" ) );
     config->m_ui->xmppServer->setText( "talk.google.com" );
     config->m_ui->xmppPort->setValue( 5222 );
-    config->m_ui->groupBoxXmppAdvanced->hide();
+
+    // hide server settings
+    QLayoutItem *child;
+    while ( ( child = config->m_ui->serverSettings->takeAt( 0 ) ) != 0) {
+        if( child->widget() )
+            child->widget()->hide();
+    }
 
     m_onlinePixmap = QPixmap( ":/gmail-logo.png" );
     m_offlinePixmap = QPixmap( ":/gmail-offline-logo.png" );
