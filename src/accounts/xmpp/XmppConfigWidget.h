@@ -49,6 +49,8 @@ public:
 
     void saveConfig();
 
+    virtual void checkForErrors();
+
 signals:
     void dataError( bool exists );
 
@@ -63,6 +65,7 @@ private:
 
     bool m_serverWasEditedByUser;
 
+    bool m_disableChecksForGoogle;
     friend class GoogleWrapper; // So google wrapper can modify the labels and text
 };
 

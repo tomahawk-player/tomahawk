@@ -33,10 +33,11 @@ namespace Tomahawk
 namespace Accounts
 {
 
-XmppConfigWidget::XmppConfigWidget( XmppAccount* account, QWidget *parent ) :
-    AccountConfigWidget( parent ),
-    m_ui( new Ui::XmppConfigWidget ),
-    m_account( account )
+XmppConfigWidget::XmppConfigWidget( XmppAccount* account, QWidget *parent )
+    : AccountConfigWidget( parent )
+    , m_ui( new Ui::XmppConfigWidget )
+    , m_account( account )
+    , m_disableChecksForGoogle( false )
 {
     m_ui->setupUi( this );
 
@@ -128,6 +129,34 @@ void
 XmppConfigWidget::onServerEdited()
 {
     m_serverWasEditedByUser = true;
+}
+
+
+XmppConfigWidget::checkForErrors()
+{
+    const QString username = m_ui->xmppUsername->text().trimmed();
+    const QStringList usernameParts = username.split( '@', QString::KeepEmptyParts );
+
+    QString errorMessage;
+    if( username.isEmpty() )
+    {
+        errorMessage.append( tr( "You forgot to enter your username!" ) );
+    }
+
+    //HACK: don't check for xmpp id being an "email address"
+    if( !m_disableChecksForGoogle )
+    {
+        if( usernameParts.count() != 2 || usernameParts.at( 0 ).isEmpty() || ( usernameParts.count() == 2 && usernameParts.at( 1 ).isEmpty() ) )
+        {
+            errorMessage.append( tr( "Your Xmpp Id should look like an email address" ) );
+        }
+    }
+
+    if( !errorMessage.isEmpty() )
+    {
+        errorMessage.append( tr( "\n\nExample:\nusername@jabber.org" ) );
+        m_errors.append( errorMessage );
+    }
 }
 
 
