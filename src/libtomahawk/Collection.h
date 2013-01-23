@@ -75,6 +75,10 @@ public:
     virtual QList< Tomahawk::dynplaylist_ptr > autoPlaylists() { return m_autoplaylists.values(); }
     virtual QList< Tomahawk::dynplaylist_ptr > stations() { return m_stations.values(); }
 
+    virtual void artists() = 0;
+    virtual void albums( const Tomahawk::artist_ptr& artist ) = 0;
+    virtual void tracks( const Tomahawk::artist_ptr& artist, const Tomahawk::album_ptr& album ) = 0;
+
     const source_ptr& source() const;
     unsigned int lastmodified() const { return m_lastmodified; }
 
