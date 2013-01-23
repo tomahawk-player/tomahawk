@@ -181,7 +181,7 @@ ResolverAccount::connectionState() const
 }
 
 
-QWidget*
+AccountConfigWidget*
 ResolverAccount::configurationWidget()
 {
     if ( m_resolver.isNull() )

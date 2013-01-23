@@ -71,7 +71,7 @@ public:
     virtual bool isAuthenticated() const;
     virtual Tomahawk::Accounts::Account::ConnectionState connectionState() const;
 
-    virtual QWidget* configurationWidget();
+    virtual AccountConfigWidget* configurationWidget();
     virtual QString errorMessage() const;
 
     virtual void saveConfig();

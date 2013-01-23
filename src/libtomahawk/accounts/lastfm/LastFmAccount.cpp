@@ -137,7 +137,7 @@ LastFmAccount::deauthenticate()
 }
 
 
-QWidget*
+AccountConfigWidget*
 LastFmAccount::configurationWidget()
 {
     if ( m_configWidget.isNull() )

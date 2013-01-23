@@ -25,6 +25,7 @@
 #include <QPixmap>
 
 class QWidget;
+class AccountConfigWidget;
 
 namespace Tomahawk
 {
@@ -41,13 +42,13 @@ Q_OBJECT
 
 public:
     ExternalResolverGui( const QString& filePath );
-    virtual QWidget* configUI() const = 0;
+    virtual AccountConfigWidget* configUI() const = 0;
 
     virtual QPixmap icon() const { return QPixmap(); }
     virtual void setIcon( const QPixmap& ) {}
 
 protected:
-    QWidget* widgetFromData( QByteArray& data, QWidget* parent = 0 );
+    AccountConfigWidget* widgetFromData( QByteArray& data, QWidget* parent = 0 );
     QVariant configMsgFromWidget( QWidget* w );
     QByteArray fixDataImagePaths( const QByteArray& data, bool compressed, const QVariantMap& images );
 

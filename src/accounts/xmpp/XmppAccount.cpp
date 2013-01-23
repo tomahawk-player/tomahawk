@@ -22,6 +22,7 @@
 #include "XmppConfigWidget.h"
 #include "sip/SipPlugin.h"
 #include "XmppInfoPlugin.h"
+#include "accounts/AccountConfigWidget.h"
 
 #include <QtPlugin>
 
@@ -44,7 +45,7 @@ XmppAccount::XmppAccount( const QString &accountId )
     setAccountServiceName( "Jabber (XMPP)" );
     setTypes( SipType );
 
-    m_configWidget = QPointer< QWidget >( new XmppConfigWidget( this, 0 ) );
+    m_configWidget = QPointer< AccountConfigWidget >( new XmppConfigWidget( this, 0 ) );
 
     m_onlinePixmap = QPixmap( ":/xmpp-icon.png" );
     m_offlinePixmap = QPixmap( ":/xmpp-offline-icon.png" );

@@ -21,7 +21,7 @@
 #define JABBERACCOUNTCONFIGWIDGET_H
 
 #include "accounts/AccountDllMacro.h"
-
+#include "accounts/AccountConfigWidget.h"
 #include <QWidget>
 
 namespace Ui
@@ -39,7 +39,7 @@ class XmppAccount;
 class GoogleWrapper;
 
 
-class ACCOUNTDLLEXPORT XmppConfigWidget : public QWidget
+class ACCOUNTDLLEXPORT XmppConfigWidget : public AccountConfigWidget
 {
     Q_OBJECT
 

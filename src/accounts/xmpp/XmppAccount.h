@@ -73,14 +73,14 @@ public:
 
     SipPlugin* sipPlugin();
 
-    QWidget* configurationWidget() { return m_configWidget.data(); }
+    AccountConfigWidget* configurationWidget() { return m_configWidget.data(); }
     QWidget* aclWidget() { return 0; }
     void saveConfig();
 
     virtual Tomahawk::Accounts::Account::ConnectionState connectionState() const;
 
 protected:
-    QPointer< QWidget > m_configWidget; // so the google wrapper can change the config dialog a bit
+    QPointer< AccountConfigWidget > m_configWidget; // so the google wrapper can change the config dialog a bit
     QPointer< XmppSipPlugin > m_xmppSipPlugin;
     QPointer< Tomahawk::InfoSystem::XmppInfoPlugin > m_xmppInfoPlugin;
 

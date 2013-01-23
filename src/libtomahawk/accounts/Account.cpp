@@ -66,7 +66,7 @@ Account::~Account()
 
 #ifndef ENABLE_HEADLESS
 
-QWidget*
+AccountConfigWidget*
 Account::configurationWidget()
 {
     return 0;

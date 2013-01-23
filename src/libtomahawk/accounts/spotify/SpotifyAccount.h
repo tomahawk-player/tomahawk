@@ -89,7 +89,7 @@ public:
     virtual ~SpotifyAccount();
     static SpotifyAccount* instance();
     virtual QPixmap icon() const;
-    virtual QWidget* configurationWidget();
+    virtual AccountConfigWidget* configurationWidget();
     virtual QWidget* aboutWidget();
     virtual void saveConfig();
     virtual Attica::Content atticaContent() const;

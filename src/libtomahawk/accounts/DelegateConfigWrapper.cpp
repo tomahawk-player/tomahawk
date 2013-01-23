@@ -16,10 +16,12 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "DelegateConfigWrapper.h"
+#include "AccountConfigWidget.h"
+
 #include <QMessageBox>
 
 
-DelegateConfigWrapper::DelegateConfigWrapper( QWidget* conf, QWidget* aboutWidget, const QString& title, QWidget* parent, Qt::WindowFlags flags )
+DelegateConfigWrapper::DelegateConfigWrapper( AccountConfigWidget* conf, QWidget* aboutWidget, const QString& title, QWidget* parent, Qt::WindowFlags flags )
     : QDialog( parent, flags )
     , m_widget( conf )
     , m_aboutW( aboutWidget )

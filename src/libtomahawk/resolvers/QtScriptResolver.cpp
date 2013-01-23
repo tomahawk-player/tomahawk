@@ -25,6 +25,8 @@
 #include "Pipeline.h"
 #include "SourceList.h"
 
+#include "accounts/AccountConfigWidget.h"
+
 #include "network/Servent.h"
 
 #include "jobview/JobStatusView.h"
@@ -527,13 +529,13 @@ QtScriptResolver::loadUi()
     if( m.contains( "images" ) )
         uiData = fixDataImagePaths( uiData, compressed, images );
 
-    m_configWidget = QPointer< QWidget >( widgetFromData( uiData, 0 ) );
+    m_configWidget = QPointer< AccountConfigWidget >( widgetFromData( uiData, 0 ) );
 
     emit changed();
 }
 
 
-QWidget*
+AccountConfigWidget*
 QtScriptResolver::configUI() const
 {
     if( m_configWidget.isNull() )

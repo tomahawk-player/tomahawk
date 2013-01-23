@@ -21,6 +21,7 @@
 
 #include "Source.h"
 #include "utils/Logger.h"
+#include "accounts/AccountConfigWidget.h"
 
 #include <QMetaProperty>
 #include <QBuffer>
@@ -28,6 +29,7 @@
 #include <QIcon>
 #include <QWidget>
 #include <QUiLoader>
+#include <QBoxLayout>
 
 Tomahawk::ExternalResolverGui::ExternalResolverGui(const QString& filePath)
     : Tomahawk::ExternalResolver(filePath)
@@ -80,22 +82,29 @@ Tomahawk::ExternalResolverGui::addChildProperties( QObject* widget, QVariantMap&
 }
 
 
-QWidget*
+AccountConfigWidget*
 Tomahawk::ExternalResolverGui::widgetFromData( QByteArray& data, QWidget* parent )
 {
     if( data.isEmpty() )
         return 0;
 
+    AccountConfigWidget* configWidget = new AccountConfigWidget( parent );
+
     QUiLoader l;
     QBuffer b( &data );
-    QWidget* w = l.load( &b, parent );
+    QWidget* w = l.load( &b, configWidget );
+
+    // HACK: proper way would be to create a designer plugin for this widget type
+    configWidget->setLayout( new QBoxLayout( QBoxLayout::TopToBottom ) );
+    configWidget->layout()->addWidget( w );
+
 #ifdef Q_OS_MAC
     w->setContentsMargins( 12, 12, 12, 12 );
 #else
     w->setContentsMargins( 6, 6, 6, 6 );
 #endif
 
-    return w;
+    return configWidget;
 }
 
 

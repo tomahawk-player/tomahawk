@@ -36,7 +36,7 @@ bool InfoSorter( const SpotifyPlaylistInfo* left, const SpotifyPlaylistInfo* rig
 }
 
 SpotifyAccountConfig::SpotifyAccountConfig( SpotifyAccount *account )
-    : QWidget( 0 )
+    : AccountConfigWidget( 0 )
     , m_ui( new Ui::SpotifyConfig )
     , m_loggedInUser( 0 )
     , m_account( account )

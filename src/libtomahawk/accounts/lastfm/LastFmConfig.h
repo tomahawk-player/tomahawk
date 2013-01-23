@@ -20,6 +20,7 @@
 #define LASTFMCONFIG_H
 
 #include "Query.h"
+#include "accounts/AccountConfigWidget.h"
 #include "database/DatabaseCommand_LoadSocialActions.h"
 
 #include <QWidget>
@@ -34,7 +35,7 @@ namespace Accounts {
 
 class LastFmAccount;
 
-class LastFmConfig : public QWidget
+class LastFmConfig : public AccountConfigWidget
 {
     Q_OBJECT
 public:
