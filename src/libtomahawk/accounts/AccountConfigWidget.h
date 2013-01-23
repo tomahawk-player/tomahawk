@@ -28,6 +28,15 @@ class DLLEXPORT AccountConfigWidget : public QWidget
     Q_OBJECT
 public:
     explicit AccountConfigWidget(QWidget *parent = 0);
+
+    virtual void checkForErrors();
+    virtual const QStringList errors() const;
+    virtual void resetErrors();
+
+    virtual bool settingsValid() const;
+
+protected:
+    QStringList m_errors;
 };
 
 #endif // ACCOUNTCONFIGWIDGET_H
