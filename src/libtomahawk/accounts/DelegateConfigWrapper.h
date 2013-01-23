@@ -24,11 +24,13 @@
 #include <QPushButton>
 #include <QDebug>
 
+class AccountConfigWidget;
+
 class DelegateConfigWrapper : public QDialog
 {
     Q_OBJECT
 public:
-    DelegateConfigWrapper( QWidget* conf, QWidget* aboutWidget, const QString& title, QWidget* parent, Qt::WindowFlags flags = 0 );
+    DelegateConfigWrapper( AccountConfigWidget* conf, QWidget* aboutWidget, const QString& title, QWidget* parent, Qt::WindowFlags flags = 0 );
 
     ~DelegateConfigWrapper() {}
 
@@ -53,7 +55,8 @@ private slots:
 
 private:
     QDialogButtonBox* m_buttons;
-    QWidget* m_widget, *m_aboutW;
+    AccountConfigWidget* m_widget;
+    QWidget* m_aboutW;
     QPushButton *m_okButton, *m_deleteButton;
     bool m_deleted;
 };

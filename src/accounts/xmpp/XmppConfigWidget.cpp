@@ -34,7 +34,7 @@ namespace Accounts
 {
 
 XmppConfigWidget::XmppConfigWidget( XmppAccount* account, QWidget *parent ) :
-    QWidget( parent ),
+    AccountConfigWidget( parent ),
     m_ui( new Ui::XmppConfigWidget ),
     m_account( account )
 {

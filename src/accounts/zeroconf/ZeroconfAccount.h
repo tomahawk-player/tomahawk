@@ -68,7 +68,7 @@ public:
     virtual Tomahawk::InfoSystem::InfoPluginPtr infoPlugin() { return Tomahawk::InfoSystem::InfoPluginPtr(); }
     SipPlugin* sipPlugin();
 
-    QWidget* configurationWidget() { return 0; }
+    AccountConfigWidget* configurationWidget() { return 0; }
     QWidget* aclWidget() { return 0; }
 
 private:

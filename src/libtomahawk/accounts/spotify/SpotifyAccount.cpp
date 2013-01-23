@@ -1110,7 +1110,7 @@ SpotifyAccount::icon() const
 }
 
 
-QWidget*
+AccountConfigWidget*
 SpotifyAccount::configurationWidget()
 {
     if ( m_configWidget.isNull() )
@@ -1124,7 +1124,7 @@ SpotifyAccount::configurationWidget()
     if ( m_spotifyResolver.isNull() || !m_spotifyResolver.data()->running() )
         return 0;
 
-    return static_cast< QWidget* >( m_configWidget.data() );
+    return static_cast< AccountConfigWidget* >( m_configWidget.data() );
 }
 
 

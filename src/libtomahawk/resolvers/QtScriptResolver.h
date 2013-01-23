@@ -134,7 +134,7 @@ public:
     virtual unsigned int weight() const  { return m_weight; }
     virtual unsigned int timeout() const { return m_timeout; }
 
-    virtual QWidget* configUI() const;
+    virtual AccountConfigWidget* configUI() const;
     virtual void saveConfig();
 
     virtual ExternalResolver::ErrorState error() const;
@@ -176,7 +176,7 @@ private:
     ExternalResolver::ErrorState m_error;
 
     QtScriptResolverHelper* m_resolverHelper;
-    QPointer< QWidget > m_configWidget;
+    QPointer< AccountConfigWidget > m_configWidget;
     QList< QVariant > m_dataWidgets;
 };
 

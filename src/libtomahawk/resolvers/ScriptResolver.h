@@ -49,7 +49,7 @@ public:
 
     virtual void setIcon( const QPixmap& icon );
 
-    virtual QWidget* configUI() const;
+    virtual AccountConfigWidget* configUI() const;
     virtual void saveConfig();
 
     virtual ExternalResolver::ErrorState error() const;
@@ -87,7 +87,7 @@ private:
     QString m_name;
     QPixmap m_icon;
     unsigned int m_weight, m_preference, m_timeout, m_num_restarts;
-    QPointer< QWidget > m_configWidget;
+    QPointer< AccountConfigWidget > m_configWidget;
 
     quint32 m_msgsize;
     QByteArray m_msg;

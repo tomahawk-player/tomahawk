@@ -39,7 +39,7 @@ using namespace Tomahawk::Accounts;
 
 
 LastFmConfig::LastFmConfig( LastFmAccount* account )
-    : QWidget( 0 )
+    : AccountConfigWidget( 0 )
     , m_account( account )
     , m_page( 1 )
     , m_lastTimeStamp( 0 )

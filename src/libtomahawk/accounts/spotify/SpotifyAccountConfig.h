@@ -19,6 +19,8 @@
 #ifndef SPOTIFYACCOUNTCONFIG_H
 #define SPOTIFYACCOUNTCONFIG_H
 
+#include "accounts/AccountConfigWidget.h"
+
 #include <QWidget>
 #include <QVariantMap>
 #include <QTimer>
@@ -40,7 +42,7 @@ namespace Accounts
 class SpotifyAccount;
 struct SpotifyPlaylistInfo;
 
-class SpotifyAccountConfig : public QWidget
+class SpotifyAccountConfig : public AccountConfigWidget
 {
     Q_OBJECT
 public:

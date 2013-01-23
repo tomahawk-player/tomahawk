@@ -81,7 +81,7 @@ public:
     virtual ConnectionState connectionState() const;
     virtual QPixmap icon() const;
     virtual QWidget* aclWidget() { return 0; }
-    virtual QWidget* configurationWidget();
+    virtual AccountConfigWidget* configurationWidget();
     virtual void saveConfig();
 
     QString username() const;
