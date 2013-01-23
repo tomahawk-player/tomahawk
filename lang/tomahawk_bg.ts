@@ -194,7 +194,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="115"/>
         <source>Enter Full Screen</source>
-        <translation type="unfinished"/>
+        <translation>Превключи в режим на цял екран</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="118"/>
@@ -1398,7 +1398,7 @@ Tomahawk създаде доклад относно това и изпращай
     <message>
         <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="222"/>
         <source>Script Resolver Error: %1 %2 %3 %4</source>
-        <translation type="unfinished"/>
+        <translation>Грешка на скриптът за извличане на данни: %1 %2 %3 %4</translation>
     </message>
 </context>
 <context>
@@ -3424,12 +3424,12 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="889"/>
         <source>Exit Full Screen</source>
-        <translation type="unfinished"/>
+        <translation>Излез от режим на цял екран</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="901"/>
         <source>Enter Full Screen</source>
-        <translation type="unfinished"/>
+        <translation>Превключи в режим на цял екран</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="963"/>
