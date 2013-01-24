@@ -132,6 +132,7 @@ XmppConfigWidget::onServerEdited()
 }
 
 
+void
 XmppConfigWidget::checkForErrors()
 {
     const QString username = m_ui->xmppUsername->text().trimmed();
