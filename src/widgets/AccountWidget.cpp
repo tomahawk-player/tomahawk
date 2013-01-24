@@ -28,6 +28,10 @@
 #include "utils/AnimatedSpinner.h"
 #include "widgets/ElidedLabel.h"
 
+#include "jobview/JobStatusView.h"
+#include "jobview/JobStatusModel.h"
+#include "sip/SipStatusMessage.h"
+
 #include <QBoxLayout>
 #include <QCheckBox>
 #include <QLabel>
@@ -264,6 +268,20 @@ AccountWidget::sendInvite()
     }
 }
 
+
+void
+AccountWidget::onInviteSentSuccess( const QString& inviteId )
+{
+    JobStatusView::instance()->model()->addJob( new SipStatusMessage( SipStatusMessage::SipInviteSuccess, inviteId ) );
+}
+
+void
+AccountWidget::onInviteSentFailure( const QString& inviteId )
+{
+    JobStatusView::instance()->model()->addJob( new SipStatusMessage( SipStatusMessage::SipInviteFailure, inviteId ) );
+}
+
+
 void
 AccountWidget::clearInviteWidgets()
 {
@@ -297,6 +315,8 @@ AccountWidget::setupConnections( const QPersistentModelIndex& idx, int accountId
                  this, SLOT( sendInvite() ) );
 
         m_inviteEdit->setPlaceholderText( account->sipPlugin()->inviteString() );
+        connect( account->sipPlugin(), SIGNAL( inviteSentSuccess( QString ) ), SLOT( onInviteSentSuccess( QString ) ) );
+        connect( account->sipPlugin(), SIGNAL( inviteSentFailure( QString ) ), SLOT( onInviteSentFailure( QString ) ) );
     }
 }
 

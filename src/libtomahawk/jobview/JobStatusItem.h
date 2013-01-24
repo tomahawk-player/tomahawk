@@ -49,7 +49,7 @@ public:
     /// Please cache this.
     virtual QPixmap icon() const = 0;
     virtual QString mainText() const = 0;
-    virtual QString rightColumnText() const = 0;
+    virtual QString rightColumnText() const { return QString(); };
 
     /**
      * If collapse item is true, sending multiple items of the same type will "collapse" them into one

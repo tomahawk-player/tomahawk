@@ -75,6 +75,8 @@ public slots:
 signals:
     void peerStatusChanged( const Tomahawk::peerinfo_ptr& );
     void dataError( bool );
+    void inviteSentSuccess( const QString& inviteId );
+    void inviteSentFailure( const QString& inviteId );
 
 #ifndef ENABLE_HEADLESS
     // new data for own source

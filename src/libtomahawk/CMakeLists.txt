@@ -210,6 +210,7 @@ list(APPEND libSources
     sip/SipPlugin.cpp
     sip/SipInfo.cpp
     sip/PeerInfo.cpp
+    sip/SipStatusMessage.cpp
 
     audio/AudioEngine.cpp
 

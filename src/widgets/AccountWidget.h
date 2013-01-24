@@ -48,6 +48,8 @@ public:
 private slots:
     void changeAccountConnectionState( bool connected );
     void sendInvite();
+    void onInviteSentSuccess( const QString& inviteId );
+    void onInviteSentFailure( const QString& inviteId );
     void clearInviteWidgets();
     void setInviteWidgetsEnabled( bool enabled );
 
