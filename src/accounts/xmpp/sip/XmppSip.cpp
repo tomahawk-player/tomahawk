@@ -239,7 +239,7 @@ XmppSipPlugin::connectPlugin()
     QTimer::singleShot( 1000, m_client, SLOT( connectToServer() ) );
 
     if ( m_client->connection() )
-        connect( m_client->connection(), SIGNAL( error( Jreen::Connection::SocketError ) ), SLOT( onError( Jreen::Connection::SocketError ) ) );
+        connect( m_client->connection(), SIGNAL( error( Jreen::Connection::SocketError ) ), SLOT( onError( Jreen::Connection::SocketError ) ), Qt::UniqueConnection );
 
     m_state = Account::Connecting;
     emit stateChanged( m_state );
