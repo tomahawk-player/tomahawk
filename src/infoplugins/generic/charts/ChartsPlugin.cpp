@@ -423,7 +423,7 @@ ChartsPlugin::chartsList()
         QVariantMap charts;
         QString chartName;
         QStringList defaultChain;
-        if ( source == "wearehunted" || source == "itunes" || source == "hotnewhiphop" )
+        if ( source == "wearehunted" || source == "itunes" || source == "hotnewhiphop" || source == "djshop.de" )
         {
             // Some charts can have an extra param, itunes has geo, WAH has emerging/mainstream
             // Itunes has geographic-area based charts. So we build a breadcrumb of
@@ -481,6 +481,8 @@ ChartsPlugin::chartsList()
 
                     if ( source == "hotnewhiphop" )
                         name = chart.value( "name" ).toString();
+                    if ( source == "djshop.de" )
+                        name = chart.value( "name" ).toString();
 
                     if ( name.isEmpty() ) // not a specific chart, an all chart
                         name = tr( "Top Overall" );
@@ -494,6 +496,8 @@ ChartsPlugin::chartsList()
 
                     /// If this item has expired, set it to 0.
                     c[ "expires" ] = ( ok ? QString::number (expires ) : QString::number( 0 ) );
+
+                    qDebug() << Q_FUNC_INFO << "Setting type to " << type << " Extra to "  << extra;
 
                     QList< Tomahawk::InfoSystem::InfoStringHash > extraTypeData = extraType[ extra ][ type ].value< QList< Tomahawk::InfoSystem::InfoStringHash > >();
                     extraTypeData.append( c );
@@ -526,6 +530,10 @@ ChartsPlugin::chartsList()
                 else if ( source == "hotnewhiphop" )
                 {
                     chartName = "HotNewHiphop";
+                }
+                else if ( source == "djshop.de" )
+                {
+                    chartName = "DjShop";
                 }
             }
         }
