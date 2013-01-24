@@ -109,8 +109,6 @@ public slots:
     void fullScreenExited();
 
 private slots:
-    void onAccountError();
-
     void onHistoryBackAvailable( bool avail );
     void onHistoryForwardAvailable( bool avail );
 

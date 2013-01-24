@@ -554,9 +554,6 @@ TomahawkWindow::setupSignals()
     connect( ac->getAction( "toggleMenuBar" ), SIGNAL( triggered() ), SLOT( toggleMenuBar() ) );
 #endif
 
-    // <AccountHandler>
-    connect( AccountManager::instance(), SIGNAL( authError( Tomahawk::Accounts::Account* ) ), SLOT( onAccountError() ) );
-
     connect( ViewManager::instance(), SIGNAL( historyBackAvailable( bool ) ), SLOT( onHistoryBackAvailable( bool ) ) );
     connect( ViewManager::instance(), SIGNAL( historyForwardAvailable( bool ) ), SLOT( onHistoryForwardAvailable( bool ) ) );
 }
@@ -1168,20 +1165,6 @@ TomahawkWindow::onPlaybackLoading( const Tomahawk::result_ptr& result )
 {
     m_currentTrack = result;
     setWindowTitle( m_windowTitle );
-}
-
-
-void
-TomahawkWindow::onAccountError()
-{
-    // TODO fix.
-//     onAccountDisconnected();
-
-    // TODO real error message from plugin kthxbbq
-    QMessageBox::warning( this,
-                          tr( "Authentication Error" ),
-                          tr( "Error connecting to SIP: Authentication failed!" ),
-                          QMessageBox::Ok );
 }
 
 

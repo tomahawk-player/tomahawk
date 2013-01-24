@@ -23,6 +23,9 @@
 #include "TomahawkSettings.h"
 #include "ResolverAccount.h"
 #include "utils/Logger.h"
+#include "sip/SipStatusMessage.h"
+#include "jobview/JobStatusView.h"
+#include "jobview/JobStatusModel.h"
 
 #include <QtCore/QLibrary>
 #include <QtCore/QDir>
@@ -444,12 +447,16 @@ AccountManager::onError( int code, const QString& msg )
 
     qWarning() << "Failed to connect to SIP:" << account->accountFriendlyName() << code << msg;
 
+    SipStatusMessage* statusMessage;
     if ( code == Account::AuthError )
     {
-        emit authError( account );
+        statusMessage = new SipStatusMessage( SipStatusMessage::SipLoginFailure, account->accountFriendlyName() );
+        JobStatusView::instance()->model()->addJob( statusMessage );
     }
     else
     {
+        statusMessage = new SipStatusMessage(SipStatusMessage::SipConnectionFailure, account->accountFriendlyName(), msg );
+        JobStatusView::instance()->model()->addJob( statusMessage );
         QTimer::singleShot( 10000, account, SLOT( authenticate() ) );
     }
 }

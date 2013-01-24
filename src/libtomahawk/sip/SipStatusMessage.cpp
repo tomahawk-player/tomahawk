@@ -23,9 +23,10 @@
 #include <QHash>
 #include <QTimer>
 
-SipStatusMessage::SipStatusMessage( SipStatusMessageType statusMessageType, const QString& contactId )
+SipStatusMessage::SipStatusMessage( SipStatusMessageType statusMessageType, const QString& contactId, const QString& message )
     : m_statusMessageType( statusMessageType )
     , m_contactId( contactId )
+    , m_message( message )
 {
     // make this temporary for now, as soon as i know how: add ack button
     m_timer = new QTimer( this );
@@ -40,6 +41,7 @@ SipStatusMessage::SipStatusMessage( SipStatusMessageType statusMessageType, cons
         TomahawkUtils::ImageType imageType;
         switch( m_statusMessageType )
         {
+            case SipLoginFailure:
             case SipInviteFailure:
                 imageType = TomahawkUtils::ProcessStop;
                 break;
@@ -79,11 +81,19 @@ SipStatusMessage::mainText() const
             text = "Received authorization from %1";
             break;
 
+        case SipLoginFailure:
+            text = "Could not login to %1. Please check your user credentials!";
+            break;
+
+        case SipConnectionFailure:
+            text = "Could not connect to %1: %2";
+            break;
+
         default:
             tLog() << Q_FUNC_INFO << "Not all status types handled";
             Q_ASSERT(false);
     }
 
-    return text.arg( m_contactId );
+    return text.arg( m_contactId ).arg( m_message );
 }
 

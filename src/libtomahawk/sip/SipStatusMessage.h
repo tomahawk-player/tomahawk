@@ -35,10 +35,12 @@ public:
     {
         SipInviteSuccess,
         SipInviteFailure,
-        SipAuthReceived
+        SipAuthReceived,
+        SipLoginFailure,
+        SipConnectionFailure
     };
 
-    explicit SipStatusMessage( SipStatusMessageType statusMessageType, const QString& contactId );
+    explicit SipStatusMessage( SipStatusMessageType statusMessageType, const QString& contactId, const QString& message = QString() );
 
     QString type() const { return "sipstatusmessage"; }
 
@@ -49,6 +51,7 @@ public:
 private:
     QString m_contactId;
     SipStatusMessageType m_statusMessageType;
+    QString m_message;
 
     QHash< SipStatusMessageType, QPixmap > s_typesPixmaps;
 
