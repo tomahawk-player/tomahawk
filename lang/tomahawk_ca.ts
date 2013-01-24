@@ -5,17 +5,17 @@
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="67"/>
         <source>Allow %1 to
 connect and stream from you?</source>
-        <translation type="unfinished"/>
+        <translation>Voleu permetre a %1 que es connecti i reprodueixi en streaming des de la vostra col·lecció?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="83"/>
         <source>Allow Streaming</source>
-        <translation type="unfinished"/>
+        <translation>Permet l&apos;streaming</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="86"/>
         <source>Deny Access</source>
-        <translation type="unfinished"/>
+        <translation>No permetis l&apos;accès</translation>
     </message>
 </context>
 <context>
@@ -23,7 +23,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="184"/>
         <source>Tomahawk needs you to decide whether %1 is allowed to connect.</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk necessita que decidiu si permeteu que %1 es connecti.</translation>
     </message>
 </context>
 <context>
@@ -57,18 +57,18 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/widgets/AccountListWidget.cpp" line="62"/>
         <source>Connections</source>
-        <translation type="unfinished"/>
+        <translation>Connexions</translation>
     </message>
     <message>
         <location filename="../src/widgets/AccountListWidget.cpp" line="70"/>
         <location filename="../src/widgets/AccountListWidget.cpp" line="231"/>
         <source>Connect &amp;All</source>
-        <translation type="unfinished"/>
+        <translation>Connect&amp;a-ho tot</translation>
     </message>
     <message>
         <location filename="../src/widgets/AccountListWidget.cpp" line="230"/>
         <source>Disconnect &amp;All</source>
-        <translation type="unfinished"/>
+        <translation>Desconnect&amp;a-ho tot</translation>
     </message>
 </context>
 <context>
@@ -76,7 +76,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/widgets/AccountWidget.cpp" line="126"/>
         <source>Invite</source>
-        <translation type="unfinished"/>
+        <translation>Convida</translation>
     </message>
 </context>
 <context>
@@ -84,7 +84,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/widgets/AccountsToolButton.cpp" line="88"/>
         <source>Configure Accounts</source>
-        <translation type="unfinished"/>
+        <translation>Configura els comptes</translation>
     </message>
 </context>
 <context>
@@ -124,12 +124,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="78"/>
         <source>&amp;Rename Playlist</source>
-        <translation>&amp;Reanomena la llista de reproducció</translation>
+        <translation>Canvia el nom la llista de &amp;reproducció</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="79"/>
         <source>&amp;Copy Playlist Link</source>
-        <translation>&amp;Copia l&apos;enllaç a la llista de reproducció</translation>
+        <translation>&amp;Copia l&apos;enllaç de la llista de reproducció</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="80"/>
@@ -159,97 +159,97 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="102"/>
         <source>Load &amp;XSPF...</source>
-        <translation type="unfinished"/>
+        <translation>Carrega un &amp;XSPF...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="103"/>
         <source>U&amp;pdate Collection</source>
-        <translation type="unfinished"/>
+        <translation>A&amp;ctualitza la col·lecció</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="104"/>
         <source>Fully &amp;Rescan Collection</source>
-        <translation type="unfinished"/>
+        <translation>Torna a escaneja&amp;r la col·lecció completament</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="105"/>
         <source>Show Offline Sources</source>
-        <translation type="unfinished"/>
+        <translation>Mostra els orígens en fora de línia</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="107"/>
         <source>&amp;Configure Tomahawk...</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Configura el Tomahawk...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="111"/>
         <source>Minimize</source>
-        <translation type="unfinished"/>
+        <translation>Minimitza</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="113"/>
         <source>Zoom</source>
-        <translation type="unfinished"/>
+        <translation>Zoom</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="115"/>
         <source>Enter Full Screen</source>
-        <translation type="unfinished"/>
+        <translation>Entra en mode de pantalla completa</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="118"/>
         <source>Hide Menu Bar</source>
-        <translation type="unfinished"/>
+        <translation>Amaga la barra de menú</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="122"/>
         <source>Diagnostics...</source>
-        <translation type="unfinished"/>
+        <translation>Diagnòstics...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="124"/>
         <source>About &amp;Tomahawk...</source>
-        <translation type="unfinished"/>
+        <translation>Quant al &amp;Tomahawk...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="127"/>
         <source>&amp;Legal Information...</source>
-        <translation type="unfinished"/>
+        <translation>Informació &amp;legal...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="129"/>
         <source>&amp;View Logfile</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Mostra el fitxer de registre</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="132"/>
         <source>Check For Updates...</source>
-        <translation type="unfinished"/>
+        <translation>Comprova si hi ha actualitzacions...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="144"/>
         <source>&amp;Controls</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Controls</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="158"/>
         <source>&amp;Settings</source>
-        <translation type="unfinished"/>
+        <translation>Paràmetre%&amp;s</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="164"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Ajuda</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="191"/>
         <source>&amp;Window</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Finestra</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="207"/>
         <source>Main Menu</source>
-        <translation type="unfinished"/>
+        <translation>Menú principal</translation>
     </message>
 </context>
 <context>
@@ -257,22 +257,22 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="108"/>
         <source>Tracklist</source>
-        <translation type="unfinished"/>
+        <translation>Llista de cançons</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="166"/>
         <source>Other Albums</source>
-        <translation type="unfinished"/>
+        <translation>Altres àlbums</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="61"/>
         <source>Sorry, we could not find any other albums for this artist!</source>
-        <translation type="unfinished"/>
+        <translation>No s&apos;ha trobat cap altre àlbum d&apos;aquest artista</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="66"/>
         <source>Sorry, we could not find any tracks for this album!</source>
-        <translation type="unfinished"/>
+        <translation>No s&apos;ha trobat cap altra cançó d&apos;aquest àlbum</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="193"/>
@@ -314,17 +314,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="68"/>
         <source>Sorry, we could not find any albums for this artist!</source>
-        <translation type="unfinished"/>
+        <translation>No s&apos;ha trobat cap àlbum d&apos;aquest artista</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="73"/>
         <source>Sorry, we could not find any related artists!</source>
-        <translation type="unfinished"/>
+        <translation>No s&apos;ha trobat cap artista relacionat</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="79"/>
         <source>Sorry, we could not find any top hits for this artist!</source>
-        <translation type="unfinished"/>
+        <translation>No s&apos;ha trobat cap gran èxit d&apos;aquest artista </translation>
     </message>
 </context>
 <context>
@@ -342,27 +342,27 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/AudioControls.cpp" line="289"/>
         <source>Time Elapsed</source>
-        <translation type="unfinished"/>
+        <translation>Temps transcorregut</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.cpp" line="290"/>
         <source>Time Remaining</source>
-        <translation type="unfinished"/>
+        <translation>Temps restant</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.cpp" line="295"/>
         <source>Playing from %1</source>
-        <translation type="unfinished"/>
+        <translation>Reproduït des de %1</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.cpp" line="293"/>
         <source>Share</source>
-        <translation type="unfinished"/>
+        <translation>Comparteix</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.cpp" line="294"/>
         <source>Love</source>
-        <translation type="unfinished"/>
+        <translation>M&apos;encanta</translation>
     </message>
 </context>
 <context>
@@ -370,17 +370,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="645"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
-        <translation type="unfinished"/>
+        <translation>No s&apos;ha trobat la cançó «%1» de «%2»</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="669"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
-        <translation type="unfinished"/>
+        <translation>No s&apos;ha trobat l&apos;artista «%1»</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="695"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
-        <translation type="unfinished"/>
+        <translation>No s&apos;ha trobat l&apos;àlbum «%1» de «%2»</translation>
     </message>
 </context>
 <context>
@@ -388,12 +388,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/items/CategoryItems.cpp" line="62"/>
         <source>Create new Playlist</source>
-        <translation>Crea una nova Llista</translation>
+        <translation>Crea una llista de reproducció nova</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/CategoryItems.cpp" line="65"/>
         <source>Create new Station</source>
-        <translation>Crea una nova Emissora</translation>
+        <translation>Crea una emissora nova</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/CategoryItems.cpp" line="183"/>
@@ -426,7 +426,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/searchlineedit/ClearButton.cpp" line="38"/>
         <source>Clear</source>
-        <translation>Suprimeix</translation>
+        <translation>Neteja</translation>
     </message>
 </context>
 <context>
@@ -453,7 +453,7 @@ connect and stream from you?</source>
     <message utf8="true">
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="80"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Sorry!&lt;/span&gt; Tomahawk crashed. Please tell us about it! Tomahawk has created an error report for you that can help improve the stability in the future. You can now send this report directly to the Tomahawk developers.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Vaja!&lt;/span&gt; Ha fallat el Tomahawk. Informeu-nos d&apos;això! El Tomahawk ha creat un informe d&apos;error que pot ajudar a millorar l&apos;estabilitt en futures versions. Podeu enviar aquest informe directament als desenvolupadors del Tomahawk.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="129"/>
@@ -528,17 +528,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/DiagnosticsDialog.ui" line="20"/>
         <source>Tomahawk Diagnostics</source>
-        <translation>Diagnòstics de Tomahawk</translation>
+        <translation>Diagnòstics del Tomahawk</translation>
     </message>
     <message>
         <location filename="../src/DiagnosticsDialog.ui" line="42"/>
         <source>&amp;Copy to Clipboard</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Copia al porta-retalls</translation>
     </message>
     <message>
         <location filename="../src/DiagnosticsDialog.ui" line="49"/>
         <source>Open &amp;Log-file</source>
-        <translation type="unfinished"/>
+        <translation>Obre e&amp;l fitxer de registre</translation>
     </message>
 </context>
 <context>
@@ -546,97 +546,97 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="59"/>
         <source>Steer this station:</source>
-        <translation type="unfinished"/>
+        <translation>Dirigeix aquesta emissora:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="82"/>
         <source>Much less</source>
-        <translation type="unfinished"/>
+        <translation>Molt menys</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="83"/>
         <source>Less</source>
-        <translation type="unfinished"/>
+        <translation>Menys</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="84"/>
         <source>A bit less</source>
-        <translation type="unfinished"/>
+        <translation>Una mica menys</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="85"/>
         <source>Keep at current</source>
-        <translation type="unfinished"/>
+        <translation>Manté a l&apos;actual</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="86"/>
         <source>A bit more</source>
-        <translation type="unfinished"/>
+        <translation>Una mica més</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="87"/>
         <source>More</source>
-        <translation type="unfinished"/>
+        <translation>Més</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="88"/>
         <source>Much more</source>
-        <translation type="unfinished"/>
+        <translation>Molt més</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="91"/>
         <source>Tempo</source>
-        <translation type="unfinished"/>
+        <translation>Tempo</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="92"/>
         <source>Loudness</source>
-        <translation type="unfinished"/>
+        <translation>Volum</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="93"/>
         <source>Danceability</source>
-        <translation type="unfinished"/>
+        <translation>Ballabilitat</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="94"/>
         <source>Energy</source>
-        <translation type="unfinished"/>
+        <translation>Energia</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="95"/>
         <source>Song Hotttnesss</source>
-        <translation type="unfinished"/>
+        <translation>Rellevància de la cançó</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="96"/>
         <source>Artist Hotttnesss</source>
-        <translation type="unfinished"/>
+        <translation>Rellevància de l&apos;artista</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="97"/>
         <source>Artist Familiarity</source>
-        <translation type="unfinished"/>
+        <translation>Semblança amb l&apos;artista</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="98"/>
         <source>By Description</source>
-        <translation type="unfinished"/>
+        <translation>Per descripció</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="106"/>
         <source>Enter a description</source>
-        <translation type="unfinished"/>
+        <translation>Introduïu una descripció</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="113"/>
         <source>Apply steering command</source>
-        <translation type="unfinished"/>
+        <translation>Aplica l&apos;ordre de direcció</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="119"/>
         <source>Reset all steering commands</source>
-        <translation type="unfinished"/>
+        <translation>Reinicia totes les ordres de direcció</translation>
     </message>
 </context>
 <context>
@@ -644,7 +644,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleHeader.cpp" line="84"/>
         <source>Filter...</source>
-        <translation type="unfinished"/>
+        <translation>Filtra...</translation>
     </message>
 </context>
 <context>
@@ -652,12 +652,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleView.cpp" line="293"/>
         <source>This playlist is currently empty.</source>
-        <translation type="unfinished"/>
+        <translation>La llista de reproducció és buida actualment.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleView.cpp" line="295"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
-        <translation type="unfinished"/>
+        <translation>La llista de reproducció és buida actualment. Afegiu-hi algunes cançons i gaudiu la música!</translation>
     </message>
 </context>
 <context>
@@ -706,7 +706,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="87"/>
         <source>Synchronize Loved Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Sincronitza les cançons més estimades </translation>
     </message>
 </context>
 <context>
@@ -722,7 +722,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/jobview/LatchedStatusItem.cpp" line="38"/>
         <source>%1 is listening along with you!</source>
-        <translation type="unfinished"/>
+        <translation>%1 està escoltant la cançó al mateix temps que tu!</translation>
     </message>
 </context>
 <context>
@@ -784,27 +784,27 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="56"/>
         <source>Top Loved Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Les cançons més estimades</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="85"/>
         <source>Sorry, we could not find any loved tracks!</source>
-        <translation type="unfinished"/>
+        <translation>No s&apos;ha trobat cap cançó estimada</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="88"/>
         <source>The most loved tracks from all your friends</source>
-        <translation type="unfinished"/>
+        <translation>Les cançons més estimades per tots els vostres amics</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="94"/>
         <source>All of your loved tracks</source>
-        <translation type="unfinished"/>
+        <translation>Totes les vostres cançons estimades</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="96"/>
         <source>All of %1&apos;s loved tracks</source>
-        <translation type="unfinished"/>
+        <translation>Totes les cançons més estimades per %1</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="58"/>
@@ -817,107 +817,107 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="30"/>
         <source>Tags</source>
-        <translation type="unfinished"/>
+        <translation>Etiquetes</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="39"/>
         <source>Title:</source>
-        <translation type="unfinished"/>
+        <translation>Títol:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="49"/>
         <source>Title...</source>
-        <translation type="unfinished"/>
+        <translation>Titol...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="56"/>
         <source>Artist:</source>
-        <translation type="unfinished"/>
+        <translation>Artista:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="66"/>
         <source>Artist...</source>
-        <translation type="unfinished"/>
+        <translation>Artista...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="73"/>
         <source>Album:</source>
-        <translation type="unfinished"/>
+        <translation>Àlbum:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="83"/>
         <source>Album...</source>
-        <translation type="unfinished"/>
+        <translation>Àlbum...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="90"/>
         <source>Track Number:</source>
-        <translation type="unfinished"/>
+        <translation>Número de pista:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="119"/>
         <source>Duration:</source>
-        <translation type="unfinished"/>
+        <translation>Durada:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="129"/>
         <source>00.00</source>
-        <translation type="unfinished"/>
+        <translation>00:00</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="136"/>
         <source>Year:</source>
-        <translation type="unfinished"/>
+        <translation>Any:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="162"/>
         <source>Bitrate:</source>
-        <translation type="unfinished"/>
+        <translation>Bitrate:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="183"/>
         <source>File</source>
-        <translation type="unfinished"/>
+        <translation>Fitxer</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="189"/>
         <source>File Name:</source>
-        <translation type="unfinished"/>
+        <translation>Nom del fitxer:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="199"/>
         <source>File Name...</source>
-        <translation type="unfinished"/>
+        <translation>Nom del fitxer...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="206"/>
         <source>File Size...</source>
-        <translation type="unfinished"/>
+        <translation>Mida del fitxer...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="212"/>
         <source>File size...</source>
-        <translation type="unfinished"/>
+        <translation>Mida del fitxer...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="219"/>
         <source>File Size:</source>
-        <translation type="unfinished"/>
+        <translation>Mida del fitxer:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="235"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Enrere</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="245"/>
         <source>Forward</source>
-        <translation type="unfinished"/>
+        <translation>Endavant</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="371"/>
         <source>Properties</source>
-        <translation type="unfinished"/>
+        <translation>Propietats</translation>
     </message>
 </context>
 <context>
@@ -930,22 +930,22 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.ui" line="37"/>
         <source>Tomahawk offers a variety of ways to help you create playlists and find music you enjoy!</source>
-        <translation>Tomahawk us ofereix diverses formes per ajudar-vos a crear llistes de reproducció i trobar la música que us agrada!</translation>
+        <translation>Tomahawk us ofereix formes diverses d&apos;ajudar-vos a crear llistes de reproducció i trobar la música que us agrada!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.ui" line="47"/>
         <source>Just enter a genre or tag name and Tomahawk will suggest a few songs to get you started with your new playlist:</source>
-        <translation>Introduïu el nom d&apos;un gènere o una etiqueta i Tomahawk us suggerirà unes quantes cançons per començar la nova llista:</translation>
+        <translation>Introduïu el nom d&apos;un gènere o una etiqueta i Tomahawk us suggerirà unes quantes cançons per començar la llista de reproducció nova:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.cpp" line="43"/>
         <source>&amp;Create Playlist</source>
-        <translation>&amp;Crea la Llista de Reproducció</translation>
+        <translation>&amp;Crea la llista de reproducció</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.h" line="50"/>
         <source>Create a new playlist</source>
-        <translation>Crea una nova llista de reproducció</translation>
+        <translation>Crea una llista de reproducció nova</translation>
     </message>
 </context>
 <context>
@@ -953,7 +953,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/NewReleasesWidget.h" line="71"/>
         <source>New Releases</source>
-        <translation>Nous llançaments</translation>
+        <translation>Llançaments nous</translation>
     </message>
 </context>
 <context>
@@ -981,7 +981,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Track</source>
-        <translation>Número</translation>
+        <translation>Pista</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
@@ -1016,42 +1016,42 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
         <source>Accuracy</source>
-        <translation type="unfinished"/>
+        <translation>Precisió</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="242"/>
         <source>Perfect match</source>
-        <translation type="unfinished"/>
+        <translation>Coincidència perfecta</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="244"/>
         <source>Very good match</source>
-        <translation type="unfinished"/>
+        <translation>Molt bona coincidència</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="246"/>
         <source>Good match</source>
-        <translation type="unfinished"/>
+        <translation>Bona coincidència</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="248"/>
         <source>Vague match</source>
-        <translation type="unfinished"/>
+        <translation>Més o menys coincident</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="250"/>
         <source>Bad match</source>
-        <translation type="unfinished"/>
+        <translation>Mala coincidència</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="252"/>
         <source>Very bad match</source>
-        <translation type="unfinished"/>
+        <translation>Coincidència molt dolenta</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="254"/>
         <source>Not available</source>
-        <translation type="unfinished"/>
+        <translation>No disponible</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
@@ -1751,52 +1751,52 @@ connect and stream from you?</source>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="75"/>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="541"/>
         <source>Latest Additions</source>
-        <translation>Darreres Novetats</translation>
+        <translation>Darreres novetats</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="79"/>
         <source>Recently Played</source>
-        <translation>Escoltades Recentment</translation>
+        <translation>Reproduïdes recentment</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="142"/>
         <source>SuperCollection</source>
-        <translation>SuperCol·lecció</translation>
+        <translation>Supercol·lecció</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="544"/>
         <source>Latest additions to your collection</source>
-        <translation>Darreres novetats a la vostra col·lecció</translation>
+        <translation>Darreres novetats a la col·lecció</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="546"/>
         <source>Latest additions to %1&apos;s collection</source>
-        <translation>Darreres novetats a la col·lecció de %1</translation>
+        <translation>Darreres novetats a la col·lecció %1</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="555"/>
         <source>Sorry, we could not find any recent additions!</source>
-        <translation type="unfinished"/>
+        <translation>No s&apos;ha trobat cap novetat recent</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="584"/>
         <source>Recently Played Tracks</source>
-        <translation>Cançons Escoltades Recentment</translation>
+        <translation>Cançons reproduïdes recentment</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="587"/>
         <source>Your recently played tracks</source>
-        <translation>Cançons Escoltades Recentment</translation>
+        <translation>Les cançons que heu reproduït recentment</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="589"/>
         <source>%1&apos;s recently played tracks</source>
-        <translation>Cançons Escoltades Recentment per %1</translation>
+        <translation>Cançons reproduïdes recentment per %1</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="596"/>
         <source>Sorry, we could not find any recent plays!</source>
-        <translation type="unfinished"/>
+        <translation>No s&apos;ha trobat cap cançó reproduïda recentment</translation>
     </message>
 </context>
 <context>
