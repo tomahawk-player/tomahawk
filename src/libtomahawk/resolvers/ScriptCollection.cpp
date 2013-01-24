@@ -48,6 +48,20 @@ ScriptCollection::~ScriptCollection()
 QString
 ScriptCollection::prettyName() const
 {
+    if ( source()->isLocal() )
+        return tr( "My %1 Collection",
+                   "Name of a collection based on a resolver, e.g. My Subsonic Collection" )
+                .arg( m_resolver->name() );
+    return tr( "%1 Collection of %2",
+               "Name of a collection based on a resolver, e.g. Subsonic Collection of Some Dude" )
+            .arg( m_resolver->name() )
+            .arg( source()->friendlyName() );
+}
+
+
+QString
+ScriptCollection::itemName() const
+{
     return tr( "%1 Collection",
                "Name of a collection based on a resolver, e.g. Subsonic Collection" )
             .arg( m_resolver->name() );

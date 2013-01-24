@@ -36,6 +36,20 @@ LocalCollection::LocalCollection( const Tomahawk::source_ptr& source, QObject* p
 }
 
 
+QString
+LocalCollection::prettyName() const
+{
+    return tr( "My Collection" );
+}
+
+
+QString
+LocalCollection::emptyText() const
+{
+    return tr( "After you have scanned your music collection you will find your tracks right here." );
+}
+
+
 Tomahawk::playlist_ptr
 LocalCollection::bookmarksPlaylist()
 {

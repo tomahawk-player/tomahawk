@@ -41,6 +41,7 @@ public:
     virtual ~ScriptCollection();
 
     virtual QString prettyName() const;
+    virtual QString itemName() const;
     virtual QString type() const { return "scriptcollection"; }
     virtual QIcon icon() const;
 

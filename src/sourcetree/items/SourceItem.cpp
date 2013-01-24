@@ -371,7 +371,7 @@ SourceItem::performAddCollectionItem( const collection_ptr& collection )
 {
     GenericPageItem* item = new GenericPageItem( model(),
                                                  this,
-                                                 collection->prettyName(),
+                                                 collection->itemName(),
                                                  collection->icon(),
                                                  boost::bind( &SourceItem::collectionClicked, this, collection ),
                                                  boost::bind( &SourceItem::getCollectionPage, this, collection ) );

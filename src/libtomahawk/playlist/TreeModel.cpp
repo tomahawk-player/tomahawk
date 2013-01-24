@@ -262,10 +262,7 @@ TreeModel::addCollection( const collection_ptr& collection )
     if ( !collection->source()->avatar().isNull() )
         setIcon( collection->source()->avatar( TomahawkUtils::RoundedCorners ) );
 
-    if ( collection->source()->isLocal() )
-        setTitle( tr( "My Collection" ) );
-    else
-        setTitle( tr( "Collection of %1" ).arg( collection->source()->friendlyName() ) );
+    setTitle( collection->prettyName() );
 }
 
 

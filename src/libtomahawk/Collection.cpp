@@ -64,10 +64,24 @@ Collection::prettyName() const
 }
 
 
+QString
+Collection::itemName() const
+{
+    return tr( "Collection" );
+}
+
+
 QIcon
 Collection::icon() const
 {
-     return ImageRegistry::instance()->icon( RESPATH "images/collection.svg" );
+    return ImageRegistry::instance()->icon( RESPATH "images/collection.svg" );
+}
+
+
+QString
+Collection::emptyText() const
+{
+    return  tr( "This collection is empty." );
 }
 
 

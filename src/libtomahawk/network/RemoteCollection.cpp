@@ -30,6 +30,13 @@ RemoteCollection::RemoteCollection( source_ptr source, QObject* parent )
 }
 
 
+QString
+RemoteCollection::prettyName() const
+{
+    return tr( "Collection of %1" ).arg( source()->friendlyName() );
+}
+
+
 // adding/removing is done by dbsyncconnection, and the dbcmd objects that modify
 // the database will make us emit the appropriate signals (tracksAdded etc.)
 void
