@@ -53,11 +53,15 @@ signals:
     void dataError( bool exists );
 
 private slots:
-    void onCheckJidExists( QString jid );
+    void onCheckJidExists( const QString& jid );
+    void onUsernameEdited();
+    void onServerEdited();
 
 private:
     Ui::XmppConfigWidget *m_ui;
     XmppAccount *m_account;
+
+    bool m_serverWasEditedByUser;
 
     friend class GoogleWrapper; // So google wrapper can modify the labels and text
 };
