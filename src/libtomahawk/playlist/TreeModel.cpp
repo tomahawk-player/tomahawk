@@ -3,6 +3,7 @@
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2012,      Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -251,12 +252,10 @@ TreeModel::addCollection( const collection_ptr& collection )
     startLoading();
 
     m_collection = collection;
-    DatabaseCommand_AllArtists* cmd = new DatabaseCommand_AllArtists( collection );
 
-    connect( cmd, SIGNAL( artists( QList<Tomahawk::artist_ptr> ) ),
-                    SLOT( onArtistsAdded( QList<Tomahawk::artist_ptr> ) ) );
-
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+    connect( m_collection.data(), SIGNAL( artistsResult( QList<Tomahawk::artist_ptr> ) ),
+             SLOT( onArtistsAdded( QList<Tomahawk::artist_ptr> ) ), Qt::UniqueConnection );
+    m_collection->artists();
 
     connect( collection.data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ), Qt::UniqueConnection );
 
@@ -270,29 +269,28 @@ TreeModel::addCollection( const collection_ptr& collection )
 }
 
 
-void
-TreeModel::addFilteredCollection( const collection_ptr& collection, unsigned int amount, DatabaseCommand_AllArtists::SortOrder order )
-{
-    qDebug() << Q_FUNC_INFO << collection->name()
-                            << collection->source()->id()
-                            << collection->source()->nodeId()
-                            << amount << order;
+//void
+//TreeModel::addFilteredCollection( const collection_ptr& collection, unsigned int amount, DatabaseCommand_AllArtists::SortOrder order )
+//{
+//    qDebug() << Q_FUNC_INFO << collection->name()
+//                            << collection->source()->id()
+//                            << collection->source()->nodeId()
+//                            << amount << order;
+//    DatabaseCommand_AllArtists* cmd = new DatabaseCommand_AllArtists( collection );
+//    cmd->setLimit( amount );
+//    cmd->setSortOrder( order );
+//    cmd->setSortDescending( true );
 
-    DatabaseCommand_AllArtists* cmd = new DatabaseCommand_AllArtists( collection );
-    cmd->setLimit( amount );
-    cmd->setSortOrder( order );
-    cmd->setSortDescending( true );
+//    connect( cmd, SIGNAL( artists( QList<Tomahawk::artist_ptr>, Tomahawk::collection_ptr ) ),
+//                    SLOT( onArtistsAdded( QList<Tomahawk::artist_ptr>, Tomahawk::collection_ptr ) ) );
 
-    connect( cmd, SIGNAL( artists( QList<Tomahawk::artist_ptr>, Tomahawk::collection_ptr ) ),
-                    SLOT( onArtistsAdded( QList<Tomahawk::artist_ptr>, Tomahawk::collection_ptr ) ) );
+//    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
-
-    if ( collection->source()->isLocal() )
-        setTitle( tr( "My Collection" ) );
-    else
-        setTitle( tr( "Collection of %1" ).arg( collection->source()->friendlyName() ) );
-}
+//    if ( collection->source()->isLocal() )
+//        setTitle( tr( "My Collection" ) );
+//    else
+//        setTitle( tr( "Collection of %1" ).arg( collection->source()->friendlyName() ) );
+//}
 
 
 void

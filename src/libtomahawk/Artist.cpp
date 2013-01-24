@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -165,13 +166,23 @@ Artist::albums( ModelMode mode, const Tomahawk::collection_ptr& collection ) con
 
     if ( ( mode == DatabaseMode || mode == Mixed ) && !dbLoaded )
     {
-        DatabaseCommand_AllAlbums* cmd = new DatabaseCommand_AllAlbums( collection, artist );
-        cmd->setData( QVariant( collection.isNull() ) );
+        if ( collection.isNull() )
+        {
+            DatabaseCommand_AllAlbums* cmd = new DatabaseCommand_AllAlbums( collection, artist );
+            cmd->setData( QVariant( collection.isNull() ) );
 
-        connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, QVariant ) ),
-                        SLOT( onAlbumsFound( QList<Tomahawk::album_ptr>, QVariant ) ) );
+            connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, QVariant ) ),
+                          SLOT( onAlbumsFound( QList<Tomahawk::album_ptr>, QVariant ) ) );
 
-        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+            Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+        }
+        else
+        {
+            //collection is *surely* not null
+            connect( collection.data(), SIGNAL( albumsResult( QList< Tomahawk::album_ptr > ) ),
+                     SLOT( onAlbumsFound( QList<Tomahawk::album_ptr> ) ), Qt::UniqueConnection );
+            collection->albums( artist );
+        }
     }
 
     if ( ( mode == InfoSystemMode || mode == Mixed ) && !infoLoaded )
@@ -376,9 +387,9 @@ Artist::playbackCount( const source_ptr& source )
 
 
 void
-Artist::onAlbumsFound( const QList< album_ptr >& albums, const QVariant& data )
+Artist::onAlbumsFound( const QList< album_ptr >& albums, const QVariant& collectionIsNull )
 {
-    if ( data.toBool() )
+    if ( collectionIsNull.toBool() )
     {
         m_databaseAlbums << albums;
         m_albumsLoaded.insert( DatabaseMode, true );

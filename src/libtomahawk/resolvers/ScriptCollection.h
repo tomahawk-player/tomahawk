@@ -46,6 +46,10 @@ public:
 
     virtual ExternalResolver* resolver() { return m_resolver; }
 
+    virtual void artists();
+    virtual void albums( const Tomahawk::artist_ptr& artist );
+    virtual void tracks( const Tomahawk::album_ptr& album );
+
 private:
     ExternalResolver* m_resolver;
     

@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -75,14 +76,19 @@ public:
     virtual QList< Tomahawk::dynplaylist_ptr > autoPlaylists() { return m_autoplaylists.values(); }
     virtual QList< Tomahawk::dynplaylist_ptr > stations() { return m_stations.values(); }
 
+    // Async requests. Emit artists/albums/tracksResult in subclasses when finished.
     virtual void artists() = 0;
     virtual void albums( const Tomahawk::artist_ptr& artist ) = 0;
-    virtual void tracks( const Tomahawk::artist_ptr& artist, const Tomahawk::album_ptr& album ) = 0;
+    virtual void tracks( const Tomahawk::album_ptr& album ) = 0;
 
     const source_ptr& source() const;
     unsigned int lastmodified() const { return m_lastmodified; }
 
 signals:
+    void artistsResult( const QList< Tomahawk::artist_ptr >& artists );
+    void albumsResult(  const QList< Tomahawk::album_ptr >&  albums );
+    void tracksResult(  const QList< Tomahawk::query_ptr >&  queries );
+
     void tracksAdded( const QList<unsigned int>& fileids );
     void tracksRemoved( const QList<unsigned int>& fileids );
 

@@ -64,3 +64,25 @@ ScriptCollection::icon() const
     }
     return QIcon();
 }
+
+
+void
+ScriptCollection::artists()
+{
+    //TODO: implement!
+    emit artistsResult( QList< Tomahawk::artist_ptr >() );
+}
+
+
+void
+ScriptCollection::albums( const Tomahawk::artist_ptr& artist )
+{
+    emit albumsResult( QList< Tomahawk::album_ptr >() );
+}
+
+
+void
+ScriptCollection::tracks( const Tomahawk::album_ptr& album )
+{
+    emit tracksResult( QList< Tomahawk::query_ptr >() );
+}

@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -132,14 +133,23 @@ AlbumPlaylistInterface::tracks() const
         }
         else if ( m_mode == DatabaseMode && !m_databaseLoaded )
         {
-            DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks( m_collection );
-            cmd->setAlbum( m_album->weakRef() );
-            cmd->setSortOrder( DatabaseCommand_AllTracks::AlbumPosition );
+            if ( m_collection.isNull() ) //we do a dbcmd directly, for the SuperCollection I guess?
+            {
+                DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks( m_collection );
+                cmd->setAlbum( m_album->weakRef() );
+                cmd->setSortOrder( DatabaseCommand_AllTracks::AlbumPosition );
+                connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),
+                                SLOT( onTracksLoaded( QList<Tomahawk::query_ptr> ) ) );
+                Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+            }
+            else
+            {
+                connect( m_collection.data(), SIGNAL( tracksResult( QList< Tomahawk::query_ptr > ) ),
+                         SLOT( onTracksLoaded( QList< Tomahawk::query_ptr > ) ), Qt::UniqueConnection );
 
-            connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),
-                            SLOT( onTracksLoaded( QList<Tomahawk::query_ptr> ) ) );
-
-            Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+                Tomahawk::album_ptr ap = Album::get( m_album->id(), m_album->name(), m_album->artist() );
+                m_collection->tracks( ap );
+            }
         }
     }
 
@@ -218,15 +228,23 @@ AlbumPlaylistInterface::infoSystemFinished( const QString& infoId )
 
     if ( m_queries.isEmpty() && m_mode == Mixed )
     {
-        DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks( m_collection );
-        cmd->setAlbum( m_album->weakRef() );
-        //this takes discnumber into account as well
-        cmd->setSortOrder( DatabaseCommand_AllTracks::AlbumPosition );
+        if ( m_collection.isNull() ) //we do a dbcmd directly, for the SuperCollection I guess?
+        {
+            DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks( m_collection );
+            cmd->setAlbum( m_album->weakRef() );
+            cmd->setSortOrder( DatabaseCommand_AllTracks::AlbumPosition );
+            connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),
+                            SLOT( onTracksLoaded( QList<Tomahawk::query_ptr> ) ) );
+            Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+        }
+        else
+        {
+            connect( m_collection.data(), SIGNAL( tracksResult( QList< Tomahawk::query_ptr > ) ),
+                     SLOT( onTracksLoaded( QList< Tomahawk::query_ptr > ) ), Qt::UniqueConnection );
 
-        connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),
-                        SLOT( onTracksLoaded( QList<Tomahawk::query_ptr> ) ) );
-
-        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+            Tomahawk::album_ptr ap = Album::get( m_album->id(), m_album->name(), m_album->artist() );
+            m_collection->tracks( ap );
+        }
     }
     else
     {

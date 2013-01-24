@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi            <lfranchi@kde.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -20,6 +21,8 @@
 #include "DatabaseCollection.h"
 
 #include "database/Database.h"
+#include "DatabaseCommand_AllArtists.h"
+#include "DatabaseCommand_AllAlbums.h"
 #include "DatabaseCommand_AllTracks.h"
 #include "DatabaseCommand_AddFiles.h"
 #include "DatabaseCommand_DeleteFiles.h"
@@ -127,6 +130,83 @@ DatabaseCollection::stations()
     }
 
     return Collection::stations();
+}
+
+
+void
+DatabaseCollection::artists()
+{
+    //FIXME: assuming there's only one dbcollection per source, and that this is the one
+    Tomahawk::collection_ptr thisCollection = source()->dbCollection();
+    if ( thisCollection->name() != this->name() )
+        return;
+
+    DatabaseCommand_AllArtists* cmd = new DatabaseCommand_AllArtists( thisCollection );
+
+    connect( cmd, SIGNAL( artists( QList< Tomahawk::artist_ptr > ) ),
+                  SLOT( onArtistsFetched( QList< Tomahawk::artist_ptr > ) ) );
+
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+}
+
+
+void
+DatabaseCollection::onArtistsFetched( const QList< Tomahawk::artist_ptr >& artists )
+{
+    emit artistsResult( artists );
+}
+
+
+void
+DatabaseCollection::albums( const Tomahawk::artist_ptr& artist )
+{
+    //FIXME: assuming there's only one dbcollection per source, and that this is the one
+    Tomahawk::collection_ptr thisCollection = source()->dbCollection();
+    if ( thisCollection->name() != this->name() )
+        return;
+
+    DatabaseCommand_AllAlbums* cmd = new DatabaseCommand_AllAlbums( thisCollection, artist );
+
+    // The QVariant might carry a bool that says whether the dbcmd was executed for a null collection
+    // but here we know for a fact that the collection is not null, so we'll happily ignore it
+    connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, QVariant ) ),
+                    SLOT( onAlbumsFetched( QList<Tomahawk::album_ptr>, QVariant ) ) );
+
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+}
+
+
+void
+DatabaseCollection::onAlbumsFetched( const QList< album_ptr >& albums, const QVariant& data )
+{
+    Q_UNUSED( data );
+    emit albumsResult( albums );
+}
+
+
+void
+DatabaseCollection::tracks( const Tomahawk::album_ptr& album )
+{
+    //FIXME: assuming there's only one dbcollection per source, and that this is the one
+    Tomahawk::collection_ptr thisCollection = source()->dbCollection();
+    if ( thisCollection->name() != this->name() )
+        return;
+
+    DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks( thisCollection );
+    cmd->setAlbum( album->weakRef() );
+    cmd->setSortOrder( DatabaseCommand_AllTracks::AlbumPosition );
+
+    connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),
+                    SLOT( onTracksFetched( QList<Tomahawk::query_ptr> ) ) );
+
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+}
+
+
+void
+DatabaseCollection::onTracksFetched( const QList< query_ptr >& tracks )
+{
+    emit tracksResult( tracks );
 }
 
 

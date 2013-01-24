@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi            <lfranchi@kde.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -49,11 +50,19 @@ public:
     virtual QList< Tomahawk::dynplaylist_ptr > autoPlaylists();
     virtual QList< Tomahawk::dynplaylist_ptr > stations();
 
+    virtual void artists();
+    virtual void albums( const Tomahawk::artist_ptr& artist );
+    virtual void tracks( const Tomahawk::album_ptr& album );
+
 public slots:
     virtual void addTracks( const QList<QVariant>& newitems );
     virtual void removeTracks( const QDir& dir );
 
 private slots:
+    void onArtistsFetched( const QList< Tomahawk::artist_ptr >& artists );
+    void onAlbumsFetched(  const QList< Tomahawk::album_ptr >&  albums, const QVariant& data );
+    void onTracksFetched(  const QList< Tomahawk::query_ptr >&  tracks );
+
     void stationCreated( const Tomahawk::source_ptr& source, const QVariantList& data );
     void autoPlaylistCreated( const Tomahawk::source_ptr& source, const QVariantList& data );
 };
