@@ -497,8 +497,6 @@ ChartsPlugin::chartsList()
                     /// If this item has expired, set it to 0.
                     c[ "expires" ] = ( ok ? QString::number (expires ) : QString::number( 0 ) );
 
-                    qDebug() << Q_FUNC_INFO << "Setting type to " << type << " Extra to "  << extra;
-
                     QList< Tomahawk::InfoSystem::InfoStringHash > extraTypeData = extraType[ extra ][ type ].value< QList< Tomahawk::InfoSystem::InfoStringHash > >();
                     extraTypeData.append( c );
                     extraType[ extra ][ type ] = QVariant::fromValue< QList< Tomahawk::InfoSystem::InfoStringHash > >( extraTypeData );
