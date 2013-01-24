@@ -417,8 +417,8 @@ AccountManager::zeroconfAccount() const
 void
 AccountManager::hookupAccount( Account* account ) const
 {
-    connect( account, SIGNAL( error( int, QString ) ), SLOT( onError( int, QString ) ) );
-    connect( account, SIGNAL( connectionStateChanged( Tomahawk::Accounts::Account::ConnectionState ) ), SLOT( onStateChanged( Tomahawk::Accounts::Account::ConnectionState ) ) );
+    connect( account, SIGNAL( error( int, QString ) ), SLOT( onError( int, QString ) ), Qt::UniqueConnection );
+    connect( account, SIGNAL( connectionStateChanged( Tomahawk::Accounts::Account::ConnectionState ) ), SLOT( onStateChanged( Tomahawk::Accounts::Account::ConnectionState ) ), Qt::UniqueConnection );
 }
 
 
