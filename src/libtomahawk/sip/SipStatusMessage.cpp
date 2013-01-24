@@ -94,6 +94,10 @@ SipStatusMessage::mainText() const
             Q_ASSERT(false);
     }
 
-    return text.arg( m_contactId ).arg( m_message );
+    text = text.arg( m_contactId );
+    if(text.contains( "%2") )
+        text = text.arg( m_message );
+
+    return text;
 }
 
