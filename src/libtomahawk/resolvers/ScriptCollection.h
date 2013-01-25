@@ -51,9 +51,13 @@ public:
     virtual void albums( const Tomahawk::artist_ptr& artist );
     virtual void tracks( const Tomahawk::album_ptr& album );
 
+private slots:
+    void onArtistsFetched( const QList< Tomahawk::artist_ptr >& artists );
+    void onAlbumsFetched(  const QList< Tomahawk::album_ptr >&  albums );
+    void onTracksFetched(  const QList< Tomahawk::query_ptr >&  tracks );
+
 private:
     ExternalResolver* m_resolver;
-    
 };
 
 } //ns

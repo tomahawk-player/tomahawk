@@ -135,6 +135,37 @@ QtScriptResolverHelper::addTrackResults( const QVariantMap& results )
 
 
 void
+QtScriptResolverHelper::addArtistResults( const QVariantMap& results )
+{
+    qDebug() << "Resolver reporting artists:" << results;
+    QList< Tomahawk::artist_ptr > artists = m_resolver->parseArtistVariantList( results.value("artists").toList() );
+
+    QString qid = results.value("qid").toString();
+
+    Tomahawk::collection_ptr collection = Tomahawk::collection_ptr();
+    foreach ( const Tomahawk::collection_ptr& coll, m_resolver->collections() )
+    {
+        if ( coll->name() == qid )
+        {
+            collection = coll;
+        }
+    }
+    if ( collection.isNull() )
+        return;
+
+    tDebug() << Q_FUNC_INFO << "about to push" << artists.count() << "artists";
+    foreach( const Tomahawk::artist_ptr& artist, artists)
+        tDebug() << artist->name();
+    QMetaObject::invokeMethod( collection.data(), "onArtistsFetched", Qt::QueuedConnection,
+                               Q_ARG( QList< Tomahawk::artist_ptr >, artists ) );
+}
+
+void QtScriptResolverHelper::addAlbumResults(const QVariantMap &results)
+{
+}
+
+
+void
 QtScriptResolverHelper::setResolverConfig( const QVariantMap& config )
 {
     m_resolverConfig = config;
@@ -389,6 +420,57 @@ QtScriptResolver::start()
 }
 
 
+void
+QtScriptResolver::artists( const Tomahawk::collection_ptr& collection )
+{
+    if ( QThread::currentThread() != thread() )
+    {
+        QMetaObject::invokeMethod( this, "artists", Qt::QueuedConnection, Q_ARG( Tomahawk::collection_ptr, collection ) );
+        return;
+    }
+
+    if ( !m_collections.contains( collection->name() ) || //if the collection doesn't belong to this resolver
+         !capabilities().testFlag( Browsable ) )          //or this resolver doesn't even support collections
+    {
+        QMetaObject::invokeMethod( collection.data(), "onArtistsFetched", Qt::QueuedConnection,
+                                   Q_ARG( QList< Tomahawk::artist_ptr >, QList< Tomahawk::artist_ptr >() ) );
+        return;
+    }
+
+    QString eval = QString( "resolver.artists( '%1' );" )
+                   .arg( collection->name().replace( "'", "\\'" ) );
+
+    QVariantMap m = m_engine->mainFrame()->evaluateJavaScript( eval ).toMap();
+    if ( m.isEmpty() )
+    {
+        // if the resolver doesn't return anything, async api is used
+        return;
+    }
+
+    qDebug() << "Artists JavaScript Result:" << m;
+
+    const QString qid = collection->name();
+    const QVariantList reslist = m.value( "artists" ).toList();
+
+    QList< Tomahawk::artist_ptr > artists = parseArtistVariantList( reslist );
+
+    QMetaObject::invokeMethod( collection.data(), "onArtistsFetched", Qt::QueuedConnection,
+                               Q_ARG( QList< Tomahawk::artist_ptr >, artists ) );
+}
+
+
+void
+QtScriptResolver::albums( const Tomahawk::collection_ptr& collection, const Tomahawk::artist_ptr& artist )
+{
+}
+
+
+void
+QtScriptResolver::tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::album_ptr& album )
+{
+}
+
+
 Tomahawk::ExternalResolver::ErrorState
 QtScriptResolver::error() const
 {
@@ -498,6 +580,24 @@ QtScriptResolver::parseResultVariantList( const QVariantList& reslist )
 
         rp->setResolvedBy( this );
         results << rp;
+    }
+
+    return results;
+}
+
+QList< Tomahawk::artist_ptr >
+QtScriptResolver::parseArtistVariantList( const QVariantList& reslist )
+{
+    QList< Tomahawk::artist_ptr > results;
+
+    foreach( const QVariant& rv, reslist )
+    {
+        if ( rv.toString().trimmed().isEmpty() )
+            continue;
+
+        Tomahawk::artist_ptr ap = Tomahawk::Artist::get( rv.toString(), false );
+
+        results << ap;
     }
 
     return results;
@@ -652,7 +752,7 @@ QtScriptResolver::loadCollections()
         m_collections.clear();
         // at this point we assume that all the tracks browsable through a resolver belong to the local source
         Tomahawk::collection_ptr collection( new Tomahawk::ScriptCollection( SourceList::instance()->getLocal(), this ) );
-        m_collections.append( collection );
+        m_collections.insert( collection->name(), collection );
         emit collectionAdded( collection );
 
         //TODO: implement multiple collections from a resolver

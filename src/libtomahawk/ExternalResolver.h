@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -71,11 +72,16 @@ public:
     virtual ErrorState error() const;
     virtual bool running() const = 0;
     virtual Capabilities capabilities() const = 0;
-    virtual QList< Tomahawk::collection_ptr > collections() { return m_collections; }
+    virtual QMap< QString, Tomahawk::collection_ptr > collections() { return m_collections; }
 
 public slots:
     virtual void start() = 0;
     virtual void stop() = 0;
+
+    // For ScriptCollection
+    virtual void artists( const Tomahawk::collection_ptr& collection ) = 0;
+    virtual void albums( const Tomahawk::collection_ptr& collection, const Tomahawk::artist_ptr& artist ) = 0;
+    virtual void tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::album_ptr& album ) = 0;
 
 signals:
     void changed(); // if config widget was added/removed, name changed, etc
@@ -84,7 +90,7 @@ signals:
 
 protected:
     void setFilePath( const QString& path ) { m_filePath = path; }
-    QList< Tomahawk::collection_ptr > m_collections;
+    QMap< QString, Tomahawk::collection_ptr > m_collections;
 
 private:
     QString m_filePath;

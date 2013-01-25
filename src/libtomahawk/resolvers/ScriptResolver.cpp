@@ -454,7 +454,7 @@ ScriptResolver::loadCollections()
         m_collections.clear();
         // at this point we assume that all the tracks browsable through a resolver belong to the local source
         Tomahawk::collection_ptr collection( new Tomahawk::ScriptCollection( SourceList::instance()->getLocal(), this ) );
-        m_collections.append( collection );
+        m_collections.insert( collection->name(), collection );
         emit collectionAdded( collection );
 
         //TODO: implement multiple collections from a resolver

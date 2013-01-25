@@ -70,6 +70,12 @@ public slots:
     virtual void resolve( const Tomahawk::query_ptr& query );
     virtual void start();
 
+    // TODO: implement. Or not. Not really an issue while Spotify doesn't do browsable personal cloud storage.
+    virtual void artists( const Tomahawk::collection_ptr& collection ){}
+    virtual void albums( const Tomahawk::collection_ptr& collection, const Tomahawk::artist_ptr& artist ) {}
+    virtual void tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::album_ptr& album ) {}
+
+
 private slots:
     void readStderr();
     void readStdout();

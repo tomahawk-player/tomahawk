@@ -72,6 +72,9 @@ public slots:
 
     void addTrackResults( const QVariantMap& results );
 
+    void addArtistResults( const QVariantMap& results );
+    void addAlbumResults( const QVariantMap& results );
+
 private:
     QString m_scriptPath, m_urlCallback;
     QVariantMap m_resolverConfig;
@@ -151,6 +154,11 @@ public slots:
     virtual void stop();
     virtual void start();
 
+    // For ScriptCollection
+    virtual void artists( const Tomahawk::collection_ptr& collection );
+    virtual void albums( const Tomahawk::collection_ptr& collection, const Tomahawk::artist_ptr& artist );
+    virtual void tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::album_ptr& album );
+
 signals:
     void stopped();
 
@@ -171,6 +179,7 @@ private:
     QVariantMap resolverCollections();
 
     QList< Tomahawk::result_ptr > parseResultVariantList( const QVariantList& reslist );
+    QList< Tomahawk::artist_ptr > parseArtistVariantList( const QVariantList& reslist );
 
     ScriptEngine* m_engine;
 

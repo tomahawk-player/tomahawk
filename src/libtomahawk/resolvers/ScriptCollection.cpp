@@ -30,10 +30,10 @@ using namespace Tomahawk;
 ScriptCollection::ScriptCollection( const source_ptr& source,
                                     ExternalResolver* resolver,
                                     QObject* parent )
-    : Collection( source, resolver->name(), parent )
+    : Collection( source, QString( "scriptcollection:" + resolver->name() + ":" + uuid() ), parent )
 {
     Q_ASSERT( resolver != 0 );
-    qDebug() << Q_FUNC_INFO << resolver->name() << source->friendlyName();
+    qDebug() << Q_FUNC_INFO << resolver->name() << name();
 
     m_resolver = resolver;
 }
@@ -83,8 +83,7 @@ ScriptCollection::icon() const
 void
 ScriptCollection::artists()
 {
-    //TODO: implement!
-    emit artistsResult( QList< Tomahawk::artist_ptr >() );
+    m_resolver->artists( m_resolver->collections().value( name() ) );
 }
 
 
@@ -99,4 +98,23 @@ void
 ScriptCollection::tracks( const Tomahawk::album_ptr& album )
 {
     emit tracksResult( QList< Tomahawk::query_ptr >() );
+}
+
+
+void
+ScriptCollection::onArtistsFetched( const QList<artist_ptr>& artists )
+{
+    emit artistsResult( artists );
+}
+
+
+void
+ScriptCollection::onAlbumsFetched( const QList<album_ptr>& albums )
+{
+}
+
+
+void
+ScriptCollection::onTracksFetched( const QList<query_ptr>& tracks )
+{
 }
