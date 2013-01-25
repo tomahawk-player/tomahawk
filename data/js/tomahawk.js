@@ -137,6 +137,24 @@ var TomahawkResolver = {
     capabilities: function()
     {
         return TomahawkResolverCapability.NullCapability;
+    },
+    artists: function( qid )
+    {
+        return {
+            qid: qid
+        };
+    },
+    albums: function( qid, artist )
+    {
+        return {
+            qid: qid
+        };
+    },
+    tracks: function( qid, artist, album )
+    {
+        return {
+            qid: qid
+        };
     }
 };
 
