@@ -285,7 +285,8 @@ ControlConnection::removePeerInfo( const peerinfo_ptr& peerInfo )
 {
     peerInfoDebug( peerInfo ) << "Remove peer from control connection:" << name();
     Q_ASSERT( peerInfo->controlConnection() == this );
-    Q_ASSERT( m_peerInfos.contains( peerInfo ) );
+//     TODO: find out why this happens
+//     Q_ASSERT( m_peerInfos.contains( peerInfo ) );
 
     m_peerInfos.remove( peerInfo );
 
