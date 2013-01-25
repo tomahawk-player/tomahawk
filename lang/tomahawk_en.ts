@@ -75,7 +75,7 @@ connect and stream from you?</translation>
 <context>
     <name>AccountWidget</name>
     <message>
-        <location filename="../src/widgets/AccountWidget.cpp" line="126"/>
+        <location filename="../src/widgets/AccountWidget.cpp" line="130"/>
         <source>Invite</source>
         <translation>Invite</translation>
     </message>
@@ -509,17 +509,22 @@ connect and stream from you?</translation>
 <context>
     <name>DelegateConfigWrapper</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="52"/>
+        <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="54"/>
         <source>About</source>
         <translation>About</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="84"/>
+        <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="86"/>
         <source>Delete Account</source>
         <translation>Delete Account</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="147"/>
+        <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="116"/>
+        <source>Config Error</source>
+        <translation>Config Error</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="170"/>
         <source>About this Account</source>
         <translation>About this Account</translation>
     </message>
@@ -1325,14 +1330,14 @@ connect and stream from you?</translation>
         <translation>Status Updaters</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/GuiHelpers.cpp" line="102"/>
-        <location filename="../src/libtomahawk/utils/GuiHelpers.cpp" line="113"/>
+        <location filename="../src/libtomahawk/utils/GuiHelpers.cpp" line="103"/>
+        <location filename="../src/libtomahawk/utils/GuiHelpers.cpp" line="114"/>
         <source>%1 Config</source>
         <translation>%1 Config</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/GuiHelpers.cpp" line="142"/>
-        <location filename="../src/libtomahawk/utils/GuiHelpers.cpp" line="157"/>
+        <location filename="../src/libtomahawk/utils/GuiHelpers.cpp" line="143"/>
+        <location filename="../src/libtomahawk/utils/GuiHelpers.cpp" line="158"/>
         <source>%1 Configuration</source>
         <translation>%1 Configuration</translation>
     </message>
@@ -1388,7 +1393,7 @@ connect and stream from you?</translation>
 <context>
     <name>ScriptEngine</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="222"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="224"/>
         <source>Script Resolver Error: %1 %2 %3 %4</source>
         <translation>Script Resolver Error: %1 %2 %3 %4</translation>
     </message>
@@ -2078,22 +2083,22 @@ connect and stream from you?</translation>
 <context>
     <name>Tomahawk::Accounts::GoogleWrapper</name>
     <message>
-        <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="88"/>
+        <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="89"/>
         <source>Configure this Google Account</source>
         <translation>Configure this Google Account</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="89"/>
+        <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="90"/>
         <source>Google Address:</source>
         <translation>Google Address:</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="90"/>
+        <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="91"/>
         <source>Enter your Google login to connect with your friends using Tomahawk!</source>
         <translation>Enter your Google login to connect with your friends using Tomahawk!</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="91"/>
+        <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="92"/>
         <source>username@gmail.com</source>
         <translation>username@gmail.com</translation>
     </message>
@@ -2421,6 +2426,30 @@ You may wish to try re-authenticating.</translation>
         <location filename="../src/accounts/xmpp/XmppAccount.h" line="51"/>
         <source>Log on to your Jabber/XMPP account to connect to your friends</source>
         <translation>Log on to your Jabber/XMPP account to connect to your friends</translation>
+    </message>
+</context>
+<context>
+    <name>Tomahawk::Accounts::XmppConfigWidget</name>
+    <message>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="144"/>
+        <source>You forgot to enter your username!</source>
+        <translation>You forgot to enter your username!</translation>
+    </message>
+    <message>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="152"/>
+        <source>Your Xmpp Id should look like an email address</source>
+        <translation>Your Xmpp Id should look like an email address</translation>
+    </message>
+    <message>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="158"/>
+        <source>
+
+Example:
+username@jabber.org</source>
+        <translation>
+
+Example:
+username@jabber.org</translation>
     </message>
 </context>
 <context>
@@ -3017,22 +3046,22 @@ Try tweaking the filters for a new set of songs to play.</translation>
 <context>
     <name>Tomahawk::InfoSystem::ChartsPlugin</name>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="486"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="488"/>
         <source>Top Overall</source>
         <translation>Top Overall</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="585"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="591"/>
         <source>Artists</source>
         <translation>Artists</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="587"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="593"/>
         <source>Albums</source>
         <translation>Albums</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="589"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="595"/>
         <source>Tracks</source>
         <translation>Tracks</translation>
     </message>
@@ -3389,13 +3418,13 @@ enter the displayed PIN number here:</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="212"/>
-        <location filename="../src/TomahawkWindow.cpp" line="1341"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1324"/>
         <source>Hide Menu Bar</source>
         <translation>Hide Menu Bar</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="212"/>
-        <location filename="../src/TomahawkWindow.cpp" line="1335"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1318"/>
         <source>Show Menu Bar</source>
         <translation>Show Menu Bar</translation>
     </message>
@@ -3410,124 +3439,114 @@ enter the displayed PIN number here:</translation>
         <translation>&amp;Main Menu</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="889"/>
+        <location filename="../src/TomahawkWindow.cpp" line="886"/>
         <source>Exit Full Screen</source>
         <translation>Exit Full Screen</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="901"/>
+        <location filename="../src/TomahawkWindow.cpp" line="898"/>
         <source>Enter Full Screen</source>
         <translation>Enter Full Screen</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="963"/>
+        <location filename="../src/TomahawkWindow.cpp" line="960"/>
         <source>XSPF Error</source>
         <translation>XSPF Error</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="963"/>
+        <location filename="../src/TomahawkWindow.cpp" line="960"/>
         <source>This is not a valid XSPF playlist.</source>
         <translation>This is not a valid XSPF playlist.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="967"/>
+        <location filename="../src/TomahawkWindow.cpp" line="964"/>
         <source>Failed to save tracks</source>
         <translation>Failed to save tracks</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="967"/>
+        <location filename="../src/TomahawkWindow.cpp" line="964"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
         <translation>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="981"/>
+        <location filename="../src/TomahawkWindow.cpp" line="978"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped. Make sure you have a suitable Phonon backend and required plugins installed.</source>
         <translation>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped. Make sure you have a suitable Phonon backend and required plugins installed.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="983"/>
+        <location filename="../src/TomahawkWindow.cpp" line="980"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped.</source>
         <translation>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped.</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1020"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1017"/>
         <source>Station</source>
         <translation>Station</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1022"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1019"/>
         <source>Create New Station</source>
         <translation>Create New Station</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1022"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1019"/>
         <source>Name:</source>
         <translation>Name:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1085"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1082"/>
         <source>Playlist</source>
         <translation>Playlist</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1107"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1104"/>
         <source>Automatic Playlist</source>
         <translation>Automatic Playlist</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1129"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1126"/>
         <source>Pause</source>
         <translation>Pause</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1151"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1148"/>
         <source>&amp;Play</source>
         <translation>&amp;Play</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1182"/>
-        <source>Authentication Error</source>
-        <translation>Authentication Error</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1183"/>
-        <source>Error connecting to SIP: Authentication failed!</source>
-        <translation>Error connecting to SIP: Authentication failed!</translation>
-    </message>
-    <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1197"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1180"/>
         <source>%1 by %2</source>
         <comment>track, artist name</comment>
         <translation>%1 by %2</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1198"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1181"/>
         <source>%1 - %2</source>
         <comment>current track, some window title</comment>
         <translation>%1 - %2</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1209"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1192"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1213"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1196"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1217"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1200"/>
         <source>Copyright 2010 - 2013</source>
         <translation>Copyright 2010 - 2013</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1218"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1201"/>
         <source>Thanks to:</source>
         <translation>Thanks to:</translation>
     </message>
     <message>
-        <location filename="../src/TomahawkWindow.cpp" line="1225"/>
+        <location filename="../src/TomahawkWindow.cpp" line="1208"/>
         <source>About Tomahawk</source>
         <translation>About Tomahawk</translation>
     </message>
@@ -4086,7 +4105,7 @@ Lyrics for &quot;%1&quot; by %2:
         <translation>Unknown</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="780"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="785"/>
         <source>Do you want to add &lt;b&gt;%1&lt;/b&gt; to your friend list?</source>
         <translation>Do you want to add &lt;b&gt;%1&lt;/b&gt; to your friend list?</translation>
     </message>
@@ -4116,32 +4135,32 @@ Lyrics for &quot;%1&quot; by %2:
         <translation>No Supported Feature</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="478"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="483"/>
         <source>Add Friend</source>
         <translation>Add Friend</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="479"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="484"/>
         <source>Enter Xmpp ID:</source>
         <translation>Enter Xmpp ID:</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="635"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="640"/>
         <source>Add Friend...</source>
         <translation>Add Friend...</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="640"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="645"/>
         <source>XML Console...</source>
         <translation>XML Console...</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="688"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="693"/>
         <source>I&apos;m sorry -- I&apos;m just an automatic presence used by Tomahawk Player (http://gettomahawk.com). If you are getting this message, the person you are trying to reach is probably not signed on, so please try again later!</source>
         <translation>I&apos;m sorry -- I&apos;m just an automatic presence used by Tomahawk Player (http://gettomahawk.com). If you are getting this message, the person you are trying to reach is probably not signed on, so please try again later!</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="779"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="784"/>
         <source>Authorize User</source>
         <translation>Authorize User</translation>
     </message>
