@@ -74,7 +74,7 @@ signals:
     void coverChanged();
 
 private slots:
-    void onTracksLoaded(Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection );
+    void onTracksLoaded( Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection );
 
     void infoSystemInfo( const Tomahawk::InfoSystem::InfoRequestData& requestData, const QVariant& output );
     void infoSystemFinished( const QString& target );

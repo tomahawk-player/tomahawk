@@ -271,45 +271,51 @@ PlayableModel::data( const QModelIndex& index, int role ) const
     if ( !entry )
         return QVariant();
 
-    if ( role == Qt::DecorationRole )
+    switch ( role )
     {
-        return QVariant();
-    }
-    else if ( role == Qt::TextAlignmentRole )
-    {
-        return QVariant( columnAlignment( index.column() ) );
-    }
-    else if ( role == PlayableProxyModel::TypeRole )
-    {
-        if ( entry->result() )
+        case Qt::TextAlignmentRole:
         {
-            return Tomahawk::TypeResult;
+            return QVariant( columnAlignment( index.column() ) );
+            break;
         }
-        else if ( entry->query() )
-        {
-            return Tomahawk::TypeQuery;
-        }
-        else if ( entry->artist() )
-        {
-            return Tomahawk::TypeArtist;
-        }
-        else if ( entry->album() )
-        {
-            return Tomahawk::TypeAlbum;
-        }
-    }
 
-    if ( !entry->query().isNull() )
-    {
-        return queryData( entry->query()->displayQuery(), index.column(), role );
-    }
-    else if ( !entry->artist().isNull() )
-    {
-        return artistData( entry->artist(), role );
-    }
-    else if ( !entry->album().isNull() )
-    {
-        return albumData( entry->album(), role );
+        case PlayableProxyModel::TypeRole:
+        {
+            if ( entry->result() )
+            {
+                return Tomahawk::TypeResult;
+            }
+            else if ( entry->query() )
+            {
+                return Tomahawk::TypeQuery;
+            }
+            else if ( entry->artist() )
+            {
+                return Tomahawk::TypeArtist;
+            }
+            else if ( entry->album() )
+            {
+                return Tomahawk::TypeAlbum;
+            }
+            break;
+        }
+
+        default:
+        {
+            if ( !entry->query().isNull() )
+            {
+                return queryData( entry->query()->displayQuery(), index.column(), role );
+            }
+            else if ( !entry->artist().isNull() )
+            {
+                return artistData( entry->artist(), role );
+            }
+            else if ( !entry->album().isNull() )
+            {
+                return albumData( entry->album(), role );
+            }
+            break;
+        }
     }
 
     return QVariant();

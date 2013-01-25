@@ -77,6 +77,7 @@ public:
     void setWeakRef( QWeakPointer< Tomahawk::Artist > weakRef ) { m_ownRef = weakRef; }
 
     void loadId( bool autoCreate );
+
 signals:
     void tracksAdded( const QList<Tomahawk::query_ptr>& tracks, Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection );
     void albumsAdded( const QList<Tomahawk::album_ptr>& albums, Tomahawk::ModelMode mode );
@@ -88,7 +89,7 @@ signals:
     void statsLoaded();
 
 private slots:
-    void onTracksLoaded(Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection );
+    void onTracksLoaded( Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection );
     void onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, const QVariant& data );
 
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
