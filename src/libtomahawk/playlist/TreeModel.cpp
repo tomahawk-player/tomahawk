@@ -259,8 +259,7 @@ TreeModel::addCollection( const collection_ptr& collection )
 
     connect( collection.data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ), Qt::UniqueConnection );
 
-    if ( !collection->source()->avatar().isNull() )
-        setIcon( collection->source()->avatar( TomahawkUtils::RoundedCorners ) );
+    setIcon( collection->bigIcon() );
 
     setTitle( collection->prettyName() );
 }

@@ -21,8 +21,10 @@
 
 #include "Source.h"
 #include "ExternalResolverGui.h"
+#include "utils/TomahawkUtilsGui.h"
 
 #include <QIcon>
+#include <QPainter>
 
 using namespace Tomahawk;
 
@@ -77,6 +79,31 @@ ScriptCollection::icon() const
         return gResolver->icon();
     }
     return QIcon();
+}
+
+
+QPixmap
+ScriptCollection::bigIcon() const
+{
+    QPixmap big = Collection::bigIcon();
+    QPixmap base = icon().pixmap( big.size() );
+
+    if ( !source()->isLocal() )
+    {
+        big = big.scaled( TomahawkUtils::defaultIconSize(),
+                          Qt::KeepAspectRatio,
+                          Qt::SmoothTransformation );
+
+        QPainter painter( &base );
+        painter.drawPixmap( base.width() - big.width(),
+                            base.height() - big.height(),
+                            big.width(),
+                            big.height(),
+                            big );
+        painter.end();
+    }
+
+    return base;
 }
 
 

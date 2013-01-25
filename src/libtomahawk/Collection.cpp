@@ -78,6 +78,15 @@ Collection::icon() const
 }
 
 
+QPixmap
+Collection::bigIcon() const
+{
+    if ( !source()->avatar().isNull() )
+        return source()->avatar( TomahawkUtils::RoundedCorners );
+    return TomahawkUtils::defaultPixmap( TomahawkUtils::SuperCollection );
+}
+
+
 QString
 Collection::emptyText() const
 {

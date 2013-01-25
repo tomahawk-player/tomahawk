@@ -44,6 +44,7 @@ public:
     virtual QString itemName() const;
     virtual QString type() const { return "scriptcollection"; }
     virtual QIcon icon() const;
+    virtual QPixmap bigIcon() const;
 
     virtual ExternalResolver* resolver() { return m_resolver; }
 

@@ -55,6 +55,7 @@ public:
     virtual QString itemName() const;
     virtual QString type() const { return QString(); }
     virtual QIcon icon() const;
+    virtual QPixmap bigIcon() const; //for the ViewPage header
     virtual QString emptyText() const;
 
     virtual void loadPlaylists() { qDebug() << Q_FUNC_INFO; }
