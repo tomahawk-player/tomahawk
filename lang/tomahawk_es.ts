@@ -64,7 +64,7 @@ conectarse a usted y transmitir música?</translation>
         <location filename="../src/widgets/AccountListWidget.cpp" line="70"/>
         <location filename="../src/widgets/AccountListWidget.cpp" line="231"/>
         <source>Connect &amp;All</source>
-        <translation>Conect&amp;artodo</translation>
+        <translation>Conect&amp;ar todo</translation>
     </message>
     <message>
         <location filename="../src/widgets/AccountListWidget.cpp" line="230"/>
@@ -165,12 +165,12 @@ conectarse a usted y transmitir música?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="103"/>
         <source>U&amp;pdate Collection</source>
-        <translation>Act&amp;ualizar colección</translation>
+        <translation>Act&amp;ualizar la colección</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="104"/>
         <source>Fully &amp;Rescan Collection</source>
-        <translation>&amp;Re-escanear colección</translation>
+        <translation>&amp;Reanalizar toda la colección</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="105"/>
@@ -521,7 +521,7 @@ conectarse a usted y transmitir música?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="116"/>
         <source>Config Error</source>
-        <translation type="unfinished"/>
+        <translation>Error de configuración</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="170"/>
@@ -544,7 +544,7 @@ conectarse a usted y transmitir música?</translation>
     <message>
         <location filename="../src/DiagnosticsDialog.ui" line="49"/>
         <source>Open &amp;Log-file</source>
-        <translation>Abrir archivo de &amp;log</translation>
+        <translation>Abrir archivo de &amp;registro</translation>
     </message>
 </context>
 <context>
@@ -800,7 +800,7 @@ conectarse a usted y transmitir música?</translation>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="88"/>
         <source>The most loved tracks from all your friends</source>
-        <translation>Pistas favoritas de tus amigos</translation>
+        <translation>Las pistas favoritas de sus amigos</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/LovedTracksItem.cpp" line="94"/>
@@ -1625,7 +1625,7 @@ y estaciones basadas en sus gustos personales.</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/SocialPlaylistWidget.ui" line="34"/>
         <source>Popular New Albums From Your Friends</source>
-        <translation>Nuevos álbumes populares de tus amigos</translation>
+        <translation>Nuevos álbumes populares de sus amigos</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/SocialPlaylistWidget.ui" line="48"/>
@@ -2433,12 +2433,12 @@ Deberá volverse a autenticar.</translation>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="144"/>
         <source>You forgot to enter your username!</source>
-        <translation type="unfinished"/>
+        <translation>Olvidó escribir su nombre de usuario.</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="152"/>
         <source>Your Xmpp Id should look like an email address</source>
-        <translation type="unfinished"/>
+        <translation>Su ID de Xmpp debería parecerse a una dirección de correo electrónico</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="158"/>
@@ -2446,7 +2446,10 @@ Deberá volverse a autenticar.</translation>
 
 Example:
 username@jabber.org</source>
-        <translation type="unfinished"/>
+        <translation>
+
+Ejemplo:
+usuario@jabber.org</translation>
     </message>
 </context>
 <context>
@@ -3401,7 +3404,7 @@ introduzca su número PIN aquí:</translation>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="276"/>
         <source>Go back one page</source>
-        <translation>Ir atrás una página</translation>
+        <translation>Ir una página hacia atrás</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="277"/>
@@ -3411,7 +3414,7 @@ introduzca su número PIN aquí:</translation>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="278"/>
         <source>Go forward one page</source>
-        <translation>Ir adelante una página</translation>
+        <translation>Ir una página hacia adelante</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="212"/>
@@ -3759,7 +3762,7 @@ Puede reenviar el mensaje de sincronización en cualquier momento simplemente en
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="344"/>
         <source>Combined libraries of all your online friends</source>
-        <translation>Bibliotecas combinadas de todos tus amigos</translation>
+        <translation>Colecciones combinadas de todos sus amigos</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="404"/>
