@@ -613,7 +613,7 @@ EchonestGenerator::sentenceSummary()
 void
 EchonestGenerator::loadStylesMoodsAndGenres()
 {
-    if( !s_styles.isEmpty() || !s_moods.isEmpty() || !s_genres.isEmpty() ) //TODO: rly? if one of those is not empty we don't try to load the others?
+    if( !s_styles.isEmpty() && !s_moods.isEmpty() && !s_genres.isEmpty() )
         return;
 
     QVariant styles = TomahawkUtils::Cache::instance()->getData( "EchonesGenerator", "styles" );
@@ -629,8 +629,7 @@ EchonestGenerator::loadStylesMoodsAndGenres()
     }
 
     QVariant moods = TomahawkUtils::Cache::instance()->getData( "EchonesGenerator", "moods" );
-    if ( moods.isValid() && moods.canConvert< QStringList >() )
-    {
+    if ( moods.isValid() && moods.canConvert< QStringList >() ) {
         s_moods = moods.toStringList();
     }
     else
@@ -651,7 +650,6 @@ EchonestGenerator::loadStylesMoodsAndGenres()
         s_genresJob = Echonest::Artist::fetchGenres();
         connect( s_genresJob, SIGNAL( finished() ), this, SLOT( genresReceived() ) );
     }
-
 }
 
 void
@@ -677,9 +675,12 @@ EchonestGenerator::moodsReceived()
     QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
     Q_ASSERT( r );
 
-    try {
+    try
+    {
         s_moods = Echonest::Artist::parseTermList( r ).toList();
-    } catch( Echonest::ParseError& e ) {
+    }
+    catch( Echonest::ParseError& e )
+    {
         qWarning() << "Echonest failed to parse moods list";
     }
     s_moodsJob = 0;
@@ -702,9 +703,12 @@ EchonestGenerator::stylesReceived()
     QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
     Q_ASSERT( r );
 
-    try {
+    try
+    {
         s_styles = Echonest::Artist::parseTermList( r ).toList();
-    } catch( Echonest::ParseError& e ) {
+    }
+    catch( Echonest::ParseError& e )
+    {
         qWarning() << "Echonest failed to parse styles list";
     }
     s_stylesJob = 0;
@@ -725,9 +729,12 @@ EchonestGenerator::genresReceived()
     QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
     Q_ASSERT( r );
 
-    try {
+    try
+    {
         s_genres = Echonest::Artist::parseGenreList( r ).toList();
-    } catch( Echonest::ParseError& e ) {
+    }
+    catch( Echonest::ParseError& e )
+    {
         qWarning() << "Echonest failed to parse genres list";
     }
     s_genresJob = 0;
