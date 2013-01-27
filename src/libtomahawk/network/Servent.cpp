@@ -254,7 +254,9 @@ void
 Servent::registerControlConnection( ControlConnection* conn )
 {
     Q_ASSERT( conn );
-    m_controlconnections.append( conn );
+    tLog( LOGVERBOSE ) << Q_FUNC_INFO << conn->name();
+    m_controlconnections << conn;
+    m_connectedNodes << conn->id();
 }
 
 
@@ -262,6 +264,7 @@ void
 Servent::unregisterControlConnection( ControlConnection* conn )
 {
     Q_ASSERT( conn );
+    tLog( LOGVERBOSE ) << Q_FUNC_INFO << conn->name();
     m_connectedNodes.removeAll( conn->id() );
     m_controlconnections.removeAll( conn );
 }
@@ -481,8 +484,7 @@ Servent::readyRead()
 
         foreach ( ControlConnection* con, m_controlconnections )
         {
-            if ( !con )
-                continue;
+            Q_ASSERT( con );
 
             tLog() << "known connection:" << con->id();
             if ( con->id() == nodeid )
@@ -493,7 +495,7 @@ Servent::readyRead()
         }
 
         // for zeroconf there might be no offer, that case is handled later
-        ControlConnection* ccMatch = qobject_cast< ControlConnection*  >( m_offers.value( key ).data() );
+        ControlConnection* ccMatch = qobject_cast< ControlConnection* >( m_offers.value( key ).data() );
         if ( dupe && ccMatch )
         {
             tLog() << "Duplicate control connection detected, dropping:" << nodeid << conntype;
@@ -517,7 +519,7 @@ Servent::readyRead()
                     tDebug() << "Add these peers now";
                     foreach ( const peerinfo_ptr& currentPeerInfo, ccMatch->peerInfos() )
                     {
-                        tDebug() << "Adding " << currentPeerInfo->id();
+                        tDebug() << "Adding" << currentPeerInfo->id();
                         keepConnection->addPeerInfo( currentPeerInfo );
                     }
                     tDebug() << "Done adding.";
@@ -529,7 +531,9 @@ Servent::readyRead()
 
     foreach ( ControlConnection* con, m_controlconnections )
     {
-        if ( con && con->id() == controlid )
+        Q_ASSERT( con );
+
+        if ( con->id() == controlid )
         {
             cc = con;
             break;
@@ -540,7 +544,7 @@ Servent::readyRead()
     if ( conntype == "accept-offer" || conntype == "push-offer" )
     {
         sock.data()->_msg.clear();
-        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << key << nodeid << "socket peer address = " << sock.data()->peerAddress() << "socket peer name = " << sock.data()->peerName();
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << key << nodeid << "socket peer address =" << sock.data()->peerAddress() << "socket peer name =" << sock.data()->peerName();
         Connection* conn = claimOffer( cc, nodeid, key, sock.data()->peerAddress() );
         if ( !conn )
         {
@@ -559,11 +563,11 @@ Servent::readyRead()
         }
         tDebug( LOGVERBOSE ) << "claimOffer OK:" << key << nodeid;
 
-        registerControlConnection( qobject_cast<ControlConnection*>(conn) );
-        
-        m_connectedNodes << nodeid;
         if ( !nodeid.isEmpty() )
+        {
             conn->setId( nodeid );
+            registerControlConnection( qobject_cast<ControlConnection*>(conn) );
+        }
 
         handoverSocket( conn, sock.data() );
         return;
@@ -619,7 +623,7 @@ Servent::socketConnected()
 {
     QTcpSocketExtra* sock = (QTcpSocketExtra*)sender();
 
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << thread() << "socket: " << sock << ", hostaddr: " << sock->peerAddress() << ", hostname: " << sock->peerName();
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << thread() << "socket:" << sock << ", hostaddr:" << sock->peerAddress() << ", hostname:" << sock->peerName();
 
     if ( sock->_conn.isNull() )
     {
@@ -693,7 +697,7 @@ Servent::connectToPeer( const peerinfo_ptr& peerInfo )
 
     SipInfo sipInfo = peerInfo->sipInfo();
 
-    peerInfoDebug( peerInfo ) << "connectToPeer: search for already established connections to the same nodeid: " << m_controlconnections.count() << "connections";
+    peerInfoDebug( peerInfo ) << "connectToPeer: search for already established connections to the same nodeid:" << m_controlconnections.count() << "connections";
 
     bool isDupe = false;
     ControlConnection* conn = 0;
@@ -749,20 +753,19 @@ Servent::connectToPeer( const peerinfo_ptr& peerInfo )
     m["nodeid"]    = Database::instance()->impl()->dbid();
 
     peerInfoDebug(peerInfo) << "No match found, creating a new ControlConnection...";
+
     conn = new ControlConnection( this );
     conn->addPeerInfo( peerInfo );
     conn->setFirstMessage( m );
 
     if ( peerInfo->id().length() )
         conn->setName( peerInfo->id() );
-
     if ( sipInfo.uniqname().length() )
         conn->setId( sipInfo.uniqname() );
 
     conn->setProperty( "nodeid", sipInfo.uniqname() );
 
     registerControlConnection( conn );
-
     connectToPeer( sipInfo.host(), sipInfo.port(), sipInfo.key(), conn );
 }
 
