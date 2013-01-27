@@ -138,7 +138,7 @@ void
 QtScriptResolverHelper::addArtistResults( const QVariantMap& results )
 {
     qDebug() << "Resolver reporting artists:" << results;
-    QList< Tomahawk::artist_ptr > artists = m_resolver->parseArtistVariantList( results.value("artists").toList() );
+    QList< Tomahawk::artist_ptr > artists = m_resolver->parseArtistVariantList( results.value( "artists" ).toList() );
 
     QString qid = results.value("qid").toString();
 
@@ -160,8 +160,35 @@ QtScriptResolverHelper::addArtistResults( const QVariantMap& results )
                                Q_ARG( QList< Tomahawk::artist_ptr >, artists ) );
 }
 
-void QtScriptResolverHelper::addAlbumResults(const QVariantMap &results)
+
+void
+QtScriptResolverHelper::addAlbumResults( const QVariantMap& results )
 {
+    qDebug() << "Resolver reporting albums:" << results;
+    QString artistName = results.value( "artist" ).toString();
+    if ( artistName.trimmed().isEmpty() )
+        return;
+    Tomahawk::artist_ptr artist = Tomahawk::Artist::get( artistName, false );
+    QList< Tomahawk::album_ptr > albums = m_resolver->parseAlbumVariantList( artist, results.value( "albums" ).toList() );
+
+    QString qid = results.value("qid").toString();
+
+    Tomahawk::collection_ptr collection = Tomahawk::collection_ptr();
+    foreach ( const Tomahawk::collection_ptr& coll, m_resolver->collections() )
+    {
+        if ( coll->name() == qid )
+        {
+            collection = coll;
+        }
+    }
+    if ( collection.isNull() )
+        return;
+
+    tDebug() << Q_FUNC_INFO << "about to push" << albums.count() << "albums";
+    foreach( const Tomahawk::album_ptr& album, albums)
+        tDebug() << album->name();
+    QMetaObject::invokeMethod( collection.data(), "onAlbumsFetched", Qt::QueuedConnection,
+                               Q_ARG( QList< Tomahawk::album_ptr >, albums ) );
 }
 
 
@@ -448,20 +475,43 @@ QtScriptResolver::artists( const Tomahawk::collection_ptr& collection )
     }
 
     qDebug() << "Artists JavaScript Result:" << m;
-
-    const QString qid = collection->name();
-    const QVariantList reslist = m.value( "artists" ).toList();
-
-    QList< Tomahawk::artist_ptr > artists = parseArtistVariantList( reslist );
-
-    QMetaObject::invokeMethod( collection.data(), "onArtistsFetched", Qt::QueuedConnection,
-                               Q_ARG( QList< Tomahawk::artist_ptr >, artists ) );
+    m_resolverHelper->addArtistResults( m );
 }
 
 
 void
 QtScriptResolver::albums( const Tomahawk::collection_ptr& collection, const Tomahawk::artist_ptr& artist )
 {
+    if ( QThread::currentThread() != thread() )
+    {
+        QMetaObject::invokeMethod( this, "albums", Qt::QueuedConnection,
+                                   Q_ARG( Tomahawk::collection_ptr, collection ),
+                                   Q_ARG( Tomahawk::artist_ptr, artist ) );
+        return;
+    }
+
+    if ( !m_collections.contains( collection->name() ) || //if the collection doesn't belong to this resolver
+         !capabilities().testFlag( Browsable ) )          //or this resolver doesn't even support collections
+    {
+        QMetaObject::invokeMethod( collection.data(), "onAlbumsFetched", Qt::QueuedConnection,
+                                   Q_ARG( QList< Tomahawk::album_ptr >, QList< Tomahawk::album_ptr >() ) );
+        return;
+    }
+
+    QString eval = QString( "resolver.albums( '%1', '%2' );" )
+                   .arg( collection->name().replace( "'", "\\'" ) )
+                   .arg( artist->name().replace( "'", "\\'" ) );
+
+    QVariantMap m = m_engine->mainFrame()->evaluateJavaScript( eval ).toMap();
+    if ( m.isEmpty() )
+    {
+        // if the resolver doesn't return anything, async api is used
+        return;
+    }
+
+    qDebug() << "Albums JavaScript Result:" << m;
+
+    m_resolverHelper->addAlbumResults( m );
 }
 
 
@@ -596,6 +646,25 @@ QtScriptResolver::parseArtistVariantList( const QVariantList& reslist )
             continue;
 
         Tomahawk::artist_ptr ap = Tomahawk::Artist::get( rv.toString(), false );
+
+        results << ap;
+    }
+
+    return results;
+}
+
+
+QList< Tomahawk::album_ptr >
+QtScriptResolver::parseAlbumVariantList( const Tomahawk::artist_ptr& artist, const QVariantList& reslist )
+{
+    QList< Tomahawk::album_ptr > results;
+
+    foreach( const QVariant& rv, reslist )
+    {
+        if ( rv.toString().trimmed().isEmpty() )
+            continue;
+
+        Tomahawk::album_ptr ap = Tomahawk::Album::get( artist, rv.toString(), false );
 
         results << ap;
     }

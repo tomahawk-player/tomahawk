@@ -180,6 +180,8 @@ private:
 
     QList< Tomahawk::result_ptr > parseResultVariantList( const QVariantList& reslist );
     QList< Tomahawk::artist_ptr > parseArtistVariantList( const QVariantList& reslist );
+    QList< Tomahawk::album_ptr >  parseAlbumVariantList(  const Tomahawk::artist_ptr& artist,
+                                                          const QVariantList& reslist );
 
     ScriptEngine* m_engine;
 
