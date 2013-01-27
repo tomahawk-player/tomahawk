@@ -1019,8 +1019,7 @@ XmppSipPlugin::onNewAvatar( const QString& jid )
 
     if ( jid == m_client->jid().bare() )
     {
-        // own avatar
-        emit avatarReceived( m_avatarManager->avatar( jid ) );
+        PeerInfo::getSelf( this, PeerInfo::AutoCreate )->setAvatar( m_avatarManager->avatar( jid ) );
     }
 #endif
 }

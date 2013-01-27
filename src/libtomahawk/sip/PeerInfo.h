@@ -63,7 +63,10 @@ public:
         Local
     };
 
-    static Tomahawk::peerinfo_ptr get( SipPlugin* parent, const QString& id, GetOptions options = None);
+    static Tomahawk::peerinfo_ptr getSelf( SipPlugin* parent, GetOptions options = None );
+    static QList< Tomahawk::peerinfo_ptr > getAllSelf();
+
+    static Tomahawk::peerinfo_ptr get( SipPlugin* parent, const QString& id, GetOptions options = None );
     static QList< Tomahawk::peerinfo_ptr > getAll();
 
     virtual ~PeerInfo();
@@ -111,6 +114,8 @@ private:
     void announce();
 
     static QHash< QString, peerinfo_ptr > s_peersByCacheKey;
+    static QHash< SipPlugin*, peerinfo_ptr > s_selfPeersBySipPlugin;
+
     QWeakPointer< Tomahawk::PeerInfo > m_ownRef;
     QPointer< ControlConnection > m_controlConnection;
 

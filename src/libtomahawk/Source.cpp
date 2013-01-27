@@ -88,8 +88,15 @@ Source::setControlConnection( ControlConnection* cc )
 const QSet<peerinfo_ptr>
 Source::peerInfos() const
 {
-    if( controlConnection() )
+    if ( controlConnection() )
+    {
         return controlConnection()->peerInfos();
+    }
+    else if ( this == SourceList::instance()->getLocal().data() )
+    {
+        return PeerInfo::getAllSelf().toSet();
+
+    }
     return QSet< Tomahawk::peerinfo_ptr >();
 }
 
@@ -135,24 +142,20 @@ Source::friendlyName() const
 QPixmap
 Source::avatar( TomahawkUtils::ImageMode style, const QSize& size )
 {
-    if( controlConnection() )
+//     tLog() << "****************************************************************************************";
+//     tLog() << peerInfos().count() << "PEERS FOR " << friendlyName();
+    QPixmap result;
+    foreach( const peerinfo_ptr& peerInfo, peerInfos() )
     {
-//        tLog() << "****************************************************************************************";
-//        tLog() << controlConnection()->peerInfos().count() << "PEERS FOR " << friendlyName();
-        QPixmap result;
-        foreach( const peerinfo_ptr& peerInfo, controlConnection()->peerInfos() )
+//         peerInfoDebug(peerInfo) << !peerInfo->avatar().isNull();
+        if( !peerInfo.isNull() && !peerInfo->avatar( style, size ).isNull() )
         {
-//             peerInfoDebug(peerInfo);
-            if( !peerInfo.isNull() && !peerInfo->avatar( style, size ).isNull() )
-            {
-                result =  peerInfo->avatar( style, size );
-            }
+            result =  peerInfo->avatar( style, size );
+            break;
         }
-//        tLog() << "****************************************************************************************";
-        return result;
     }
-
-    return QPixmap();
+//        tLog() << "****************************************************************************************";
+    return result;
 }
 #endif
 
