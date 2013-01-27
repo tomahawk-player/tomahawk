@@ -124,7 +124,7 @@ ScriptCollection::albums( const Tomahawk::artist_ptr& artist )
 void
 ScriptCollection::tracks( const Tomahawk::album_ptr& album )
 {
-    emit tracksResult( QList< Tomahawk::query_ptr >() );
+    m_resolver->tracks( m_resolver->collections().value( name() ), album );
 }
 
 
@@ -145,4 +145,5 @@ ScriptCollection::onAlbumsFetched( const QList<album_ptr>& albums )
 void
 ScriptCollection::onTracksFetched( const QList<query_ptr>& tracks )
 {
+    emit tracksResult( tracks );
 }

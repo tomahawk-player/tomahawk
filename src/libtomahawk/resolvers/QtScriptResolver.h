@@ -74,6 +74,7 @@ public slots:
 
     void addArtistResults( const QVariantMap& results );
     void addAlbumResults( const QVariantMap& results );
+    void addAlbumTrackResults( const QVariantMap& results );
 
 private:
     QString m_scriptPath, m_urlCallback;

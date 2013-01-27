@@ -193,6 +193,46 @@ QtScriptResolverHelper::addAlbumResults( const QVariantMap& results )
 
 
 void
+QtScriptResolverHelper::addAlbumTrackResults( const QVariantMap& results )
+{
+    qDebug() << "Resolver reporting album tracks:" << results;
+    QString artistName = results.value( "artist" ).toString();
+    if ( artistName.trimmed().isEmpty() )
+        return;
+    QString albumName = results.value( "album" ).toString();
+    if ( albumName.trimmed().isEmpty() )
+        return;
+
+    Tomahawk::artist_ptr artist = Tomahawk::Artist::get( artistName, false );
+    Tomahawk::album_ptr  album  = Tomahawk::Album::get( artist, albumName, false );
+
+    QList< Tomahawk::result_ptr > tracks = m_resolver->parseResultVariantList( results.value("results").toList() );
+
+    QString qid = results.value("qid").toString();
+
+    Tomahawk::collection_ptr collection = Tomahawk::collection_ptr();
+    foreach ( const Tomahawk::collection_ptr& coll, m_resolver->collections() )
+    {
+        if ( coll->name() == qid )
+        {
+            collection = coll;
+        }
+    }
+    if ( collection.isNull() )
+        return;
+
+    QList< Tomahawk::query_ptr > queries;
+    foreach ( const Tomahawk::result_ptr& result, tracks )
+        queries.append( result->toQuery() );
+
+    tDebug() << Q_FUNC_INFO << "about to push" << tracks.count() << "tracks";
+
+    QMetaObject::invokeMethod( collection.data(), "onTracksFetched", Qt::QueuedConnection,
+                               Q_ARG( QList< Tomahawk::query_ptr >, queries ) );
+}
+
+
+void
 QtScriptResolverHelper::setResolverConfig( const QVariantMap& config )
 {
     m_resolverConfig = config;
@@ -518,6 +558,37 @@ QtScriptResolver::albums( const Tomahawk::collection_ptr& collection, const Toma
 void
 QtScriptResolver::tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::album_ptr& album )
 {
+    if ( QThread::currentThread() != thread() )
+    {
+        QMetaObject::invokeMethod( this, "tracks", Qt::QueuedConnection,
+                                   Q_ARG( Tomahawk::collection_ptr, collection ),
+                                   Q_ARG( Tomahawk::album_ptr, album ) );
+        return;
+    }
+
+    if ( !m_collections.contains( collection->name() ) || //if the collection doesn't belong to this resolver
+         !capabilities().testFlag( Browsable ) )          //or this resolver doesn't even support collections
+    {
+        QMetaObject::invokeMethod( collection.data(), "onTracksFetched", Qt::QueuedConnection,
+                                   Q_ARG( QList< Tomahawk::query_ptr >, QList< Tomahawk::query_ptr >() ) );
+        return;
+    }
+
+    QString eval = QString( "resolver.tracks( '%1', '%2', '%3' );" )
+                   .arg( collection->name().replace( "'", "\\'" ) )
+                   .arg( album->artist()->name().replace( "'", "\\'" ) )
+                   .arg( album->name().replace( "'", "\\'" ) );
+
+    QVariantMap m = m_engine->mainFrame()->evaluateJavaScript( eval ).toMap();
+    if ( m.isEmpty() )
+    {
+        // if the resolver doesn't return anything, async api is used
+        return;
+    }
+
+    qDebug() << "Tracks JavaScript Result:" << m;
+
+    m_resolverHelper->addAlbumTrackResults( m );
 }
 
 
