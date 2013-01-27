@@ -177,6 +177,7 @@ private:
     QString m_externalHostname;
     bool m_ready;
     bool m_lanHack;
+    bool m_noAuth;
 
     // currently active file transfers:
     QList< StreamConnection* > m_scsessions;

@@ -70,24 +70,23 @@ Servent::Servent( QObject* parent )
     s_instance = this;
 
     m_lanHack = qApp->arguments().contains( "--lanhack" );
+    m_noAuth = qApp->arguments().contains( "--noauth" );
+
     setProxy( QNetworkProxy::NoProxy );
 
     {
-    boost::function<QSharedPointer<QIODevice>(result_ptr)> fac =
-        boost::bind( &Servent::localFileIODeviceFactory, this, _1 );
-    this->registerIODeviceFactory( "file", fac );
+        boost::function<QSharedPointer<QIODevice>(result_ptr)> fac = boost::bind( &Servent::localFileIODeviceFactory, this, _1 );
+        this->registerIODeviceFactory( "file", fac );
     }
 
     {
-    boost::function<QSharedPointer<QIODevice>(result_ptr)> fac =
-        boost::bind( &Servent::remoteIODeviceFactory, this, _1 );
-    this->registerIODeviceFactory( "servent", fac );
+        boost::function<QSharedPointer<QIODevice>(result_ptr)> fac = boost::bind( &Servent::remoteIODeviceFactory, this, _1 );
+        this->registerIODeviceFactory( "servent", fac );
     }
 
     {
-    boost::function<QSharedPointer<QIODevice>(result_ptr)> fac =
-        boost::bind( &Servent::httpIODeviceFactory, this, _1 );
-    this->registerIODeviceFactory( "http", fac );
+        boost::function<QSharedPointer<QIODevice>(result_ptr)> fac = boost::bind( &Servent::httpIODeviceFactory, this, _1 );
+        this->registerIODeviceFactory( "http", fac );
     }
 }
 
@@ -254,6 +253,7 @@ Servent::registerOffer( const QString& key, Connection* conn )
 void
 Servent::registerControlConnection( ControlConnection* conn )
 {
+    Q_ASSERT( conn );
     m_controlconnections.append( conn );
 }
 
@@ -261,20 +261,16 @@ Servent::registerControlConnection( ControlConnection* conn )
 void
 Servent::unregisterControlConnection( ControlConnection* conn )
 {
-    QList<ControlConnection*> n;
-    foreach( ControlConnection* c, m_controlconnections )
-        if( c!=conn )
-            n.append( c );
-
+    Q_ASSERT( conn );
     m_connectedNodes.removeAll( conn->id() );
-    m_controlconnections = n;
+    m_controlconnections.removeAll( conn );
 }
 
 
 ControlConnection*
 Servent::lookupControlConnection( const SipInfo& sipInfo )
 {
-    foreach( ControlConnection* c, m_controlconnections )
+    foreach ( ControlConnection* c, m_controlconnections )
     {
         tLog() << sipInfo.port() << c->peerPort() << sipInfo.host() << c->peerIpAddress().toString();
         if ( sipInfo.port() == c->peerPort() && sipInfo.host() == c->peerIpAddress().toString() )
@@ -288,11 +284,11 @@ Servent::lookupControlConnection( const SipInfo& sipInfo )
 void
 Servent::registerPeer( const Tomahawk::peerinfo_ptr& peerInfo )
 {
-    if( peerInfo->hasControlConnection() )
+    if ( peerInfo->hasControlConnection() )
     {
         peerInfoDebug( peerInfo ) << "already had control connection, not doin nuffin: " << peerInfo->controlConnection()->name();
         tLog() << "existing control connection has following peers:";
-        foreach(const peerinfo_ptr& otherPeerInfo, peerInfo->controlConnection()->peerInfos())
+        foreach ( const peerinfo_ptr& otherPeerInfo, peerInfo->controlConnection()->peerInfos() )
         {
             peerInfoDebug( otherPeerInfo );
         }
@@ -301,7 +297,7 @@ Servent::registerPeer( const Tomahawk::peerinfo_ptr& peerInfo )
         return;
     }
 
-    if( peerInfo->type() == Tomahawk::PeerInfo::Local )
+    if ( peerInfo->type() == Tomahawk::PeerInfo::Local )
     {
         peerInfoDebug(peerInfo) << "YAY, we need to establish the connection now.. thinking";
         if ( !connectedToSession( peerInfo->sipInfo().uniqname() ) )
@@ -328,7 +324,7 @@ Servent::registerPeer( const Tomahawk::peerinfo_ptr& peerInfo )
     else
     {
         SipInfo info;
-        if( visibleExternally() )
+        if ( visibleExternally() )
         {
             QString peerId = peerInfo->id();
             QString key = uuid();
@@ -366,7 +362,7 @@ Servent::onSipInfoChanged()
 {
     Tomahawk::PeerInfo* peerInfo = qobject_cast< Tomahawk::PeerInfo* >( sender() );
 
-    if( !peerInfo )
+    if ( !peerInfo )
         return;
 
     handleSipInfo( peerInfo->weakRef().toStrongRef() );
@@ -378,7 +374,7 @@ void Servent::handleSipInfo( const Tomahawk::peerinfo_ptr& peerInfo )
     tLog() << Q_FUNC_INFO << peerInfo->id() << peerInfo->sipInfo();
 
     SipInfo info = peerInfo->sipInfo();
-    if( !info.isValid() )
+    if ( !info.isValid() )
         return;
 
     /*
@@ -389,9 +385,9 @@ void Servent::handleSipInfo( const Tomahawk::peerinfo_ptr& peerInfo )
     */
     if ( info.isVisible() )
     {
-        if( !visibleExternally() ||
+        if ( !visibleExternally() ||
              externalAddress() < info.host() ||
-           ( externalAddress() == info.host() && externalPort() < info.port() ) )
+             ( externalAddress() == info.host() && externalPort() < info.port() ) )
         {
 
             tDebug() << "Initiate connection to" << peerInfo->id() << "at" << info.host() << " peer of: " << peerInfo->sipPlugin()->account()->accountFriendlyName();
@@ -419,7 +415,7 @@ Servent::incomingConnection( int sd )
     sock->moveToThread( thread() );
     sock->_disowned = false;
     sock->_outbound = false;
-    if( !sock->setSocketDescriptor( sd ) )
+    if ( !sock->setSocketDescriptor( sd ) )
     {
         Q_ASSERT( false );
         return;
@@ -436,22 +432,22 @@ Servent::readyRead()
     Q_ASSERT( this->thread() == QThread::currentThread() );
     QPointer< QTcpSocketExtra > sock = (QTcpSocketExtra*)sender();
 
-    if( sock.isNull() || sock.data()->_disowned )
+    if ( sock.isNull() || sock.data()->_disowned )
     {
         return;
     }
 
-    if( sock.data()->_msg.isNull() )
+    if ( sock.data()->_msg.isNull() )
     {
         char msgheader[ Msg::headerSize() ];
-        if( sock.data()->bytesAvailable() < Msg::headerSize() )
+        if ( sock.data()->bytesAvailable() < Msg::headerSize() )
             return;
 
         sock.data()->read( (char*) &msgheader, Msg::headerSize() );
         sock.data()->_msg = Msg::begin( (char*) &msgheader );
     }
 
-    if( sock.data()->bytesAvailable() < sock.data()->_msg->length() )
+    if ( sock.data()->bytesAvailable() < sock.data()->_msg->length() )
         return;
 
     QByteArray ba = sock.data()->read( sock.data()->_msg->length() );
@@ -462,7 +458,7 @@ Servent::readyRead()
     bool ok;
     QString key, conntype, nodeid, controlid;
     QVariantMap m = parser.parse( sock.data()->_msg->payload(), &ok ).toMap();
-    if( !ok )
+    if ( !ok )
     {
         tDebug() << "Invalid JSON on new connection, aborting";
         goto closeconnection;
@@ -474,7 +470,7 @@ Servent::readyRead()
     controlid = m.value( "controlid" ).toString();
 
     tDebug( LOGVERBOSE ) << "Incoming connection details:" << m;
-    if( !nodeid.isEmpty() ) // only control connections send nodeid
+    if ( !nodeid.isEmpty() ) // only control connections send nodeid
     {
         bool dupe = false;
         if ( m_connectedNodes.contains( nodeid ) )
@@ -483,13 +479,13 @@ Servent::readyRead()
             dupe = true;
         }
 
-        foreach( ControlConnection* con, m_controlconnections )
+        foreach ( ControlConnection* con, m_controlconnections )
         {
-            if(!con)
+            if ( !con )
                 continue;
 
             tLog() << "known connection:" << con->id();
-            if( con->id() == nodeid )
+            if ( con->id() == nodeid )
             {
                 dupe = true;
                 break;
@@ -503,25 +499,23 @@ Servent::readyRead()
             tLog() << "Duplicate control connection detected, dropping:" << nodeid << conntype;
 
             tDebug() << "PEERINFO: to be dropped connection has following peers";
-            foreach( const peerinfo_ptr& currentPeerInfo, ccMatch->peerInfos() )
+            foreach ( const peerinfo_ptr& currentPeerInfo, ccMatch->peerInfos() )
             {
                 peerInfoDebug( currentPeerInfo );
             }
 
-
-            foreach( ControlConnection* keepConnection, m_controlconnections )
+            foreach ( ControlConnection* keepConnection, m_controlconnections )
             {
-                if( !keepConnection )
-                    continue;
+                Q_ASSERT( keepConnection );
 
-                if( keepConnection->id() == nodeid )
+                if ( keepConnection->id() == nodeid )
                 {
                     tDebug() << "Keep connection" << keepConnection->name() << "with following peers";
-                    foreach( const peerinfo_ptr& currentPeerInfo, keepConnection->peerInfos() )
+                    foreach ( const peerinfo_ptr& currentPeerInfo, keepConnection->peerInfos() )
                         peerInfoDebug( currentPeerInfo );
 
                     tDebug() << "Add these peers now";
-                    foreach( const peerinfo_ptr& currentPeerInfo, ccMatch->peerInfos() )
+                    foreach ( const peerinfo_ptr& currentPeerInfo, ccMatch->peerInfos() )
                     {
                         tDebug() << "Adding " << currentPeerInfo->id();
                         keepConnection->addPeerInfo( currentPeerInfo );
@@ -533,7 +527,7 @@ Servent::readyRead()
         }
     }
 
-    foreach( ControlConnection* con, m_controlconnections )
+    foreach ( ControlConnection* con, m_controlconnections )
     {
         if ( con && con->id() == controlid )
         {
@@ -568,7 +562,7 @@ Servent::readyRead()
         registerControlConnection( qobject_cast<ControlConnection*>(conn) );
         
         m_connectedNodes << nodeid;
-        if( !nodeid.isEmpty() )
+        if ( !nodeid.isEmpty() )
             conn->setId( nodeid );
 
         handoverSocket( conn, sock.data() );
@@ -594,7 +588,7 @@ Servent::createParallelConnection( Connection* orig_conn, Connection* new_conn, 
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << ", key:" << key << thread() << orig_conn;
     // if we can connect to them directly:
-    if( orig_conn && orig_conn->outbound() )
+    if ( orig_conn && orig_conn->outbound() )
     {
         connectToPeer( orig_conn->socket()->peerAddress().toString(),
                        orig_conn->peerPort(),
@@ -704,32 +698,31 @@ Servent::connectToPeer( const peerinfo_ptr& peerInfo )
     bool isDupe = false;
     ControlConnection* conn = 0;
     // try to find a ControlConnection with the same SipInfo, then we dont need to try to connect again
-    foreach( ControlConnection* c, m_controlconnections )
+    foreach ( ControlConnection* c, m_controlconnections )
     {
-        if( !c )
+        if ( !c )
             continue;
 
-        if( c->id() == sipInfo.uniqname() )
+        if ( c->id() == sipInfo.uniqname() )
         {
             conn = c;
 
-
-           foreach( const peerinfo_ptr& currentPeerInfo, c->peerInfos() )
+           foreach ( const peerinfo_ptr& currentPeerInfo, c->peerInfos() )
            {
                peerInfoDebug( currentPeerInfo ) << "Same object: " << ( peerInfo == currentPeerInfo ) << ( peerInfo.data() == currentPeerInfo.data() ) << ( peerInfo->debugName() == currentPeerInfo->debugName() );
 
-               if(peerInfo == currentPeerInfo)
+               if ( peerInfo == currentPeerInfo )
                {
                    isDupe = true;
                    peerInfoDebug( currentPeerInfo ) << "Not adding, because it's a dupe: peerInfoCount remains the same " << conn->peerInfos().count();
                }
            }
 
-            if( !c->peerInfos().contains( peerInfo ) )
+            if ( !c->peerInfos().contains( peerInfo ) )
             {
                 c->addPeerInfo( peerInfo );
 //                peerInfoDebug(peerInfo) << "Adding " << peerInfo->debugName() << ", not a dupe... new peerInfoCount:" << c->peerInfos().count();
-//                foreach(const peerinfo_ptr& kuh, c->peerInfos())
+//                foreach ( const peerinfo_ptr& kuh, c->peerInfos() )
 //                {
 //                    peerInfoDebug(peerInfo) << " ** " << kuh->debugName();
 //                }
@@ -741,12 +734,12 @@ Servent::connectToPeer( const peerinfo_ptr& peerInfo )
 
     peerInfoDebug(peerInfo) << "connectToPeer: found a match: " << ( conn ? conn->name() : "false" ) << "dupe: " << isDupe;
 
-    if(isDupe)
+    if ( isDupe )
     {
         peerInfoDebug(peerInfo) << "it's a dupe, nothing to do here, returning and stopping processing: peerInfoCount:" << conn->peerInfos().count();
     }
 
-    if(conn)
+    if ( conn )
         return;
 
     QVariantMap m;
@@ -760,10 +753,10 @@ Servent::connectToPeer( const peerinfo_ptr& peerInfo )
     conn->addPeerInfo( peerInfo );
     conn->setFirstMessage( m );
 
-    if( peerInfo->id().length() )
+    if ( peerInfo->id().length() )
         conn->setName( peerInfo->id() );
 
-    if( sipInfo.uniqname().length() )
+    if ( sipInfo.uniqname().length() )
         conn->setId( sipInfo.uniqname() );
 
     conn->setProperty( "nodeid", sipInfo.uniqname() );
@@ -790,7 +783,7 @@ Servent::connectToPeer( const QString& ha, int port, const QString &key, Connect
         return;
     }
 
-    if( key.length() && conn->firstMessage().isNull() )
+    if ( key.length() && conn->firstMessage().isNull() )
     {
         QVariantMap m;
         m["conntype"]  = "accept-offer";
@@ -845,24 +838,23 @@ Servent::reverseOfferRequest( ControlConnection* orig_conn, const QString& their
 Connection*
 Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString &key, const QHostAddress peer )
 {
-    bool noauth = qApp->arguments().contains( "--noauth" );
-
     // magic key for stream connections:
-    if( key.startsWith( "FILE_REQUEST_KEY:" ) )
+    if ( key.startsWith( "FILE_REQUEST_KEY:" ) )
     {
         // check if the source IP matches an existing, authenticated connection
-        if ( !noauth && peer != QHostAddress::Any && !isIPWhitelisted( peer ) )
+        if ( !m_noAuth && peer != QHostAddress::Any && !isIPWhitelisted( peer ) )
         {
             bool authed = false;
-            foreach( ControlConnection* cc, m_controlconnections )
+            foreach ( ControlConnection* cc, m_controlconnections )
             {
-                if( !cc->socket().isNull() && cc->socket()->peerAddress() == peer )
+                tDebug() << Q_FUNC_INFO << "Probing:" << cc->name();
+                if ( cc->socket() && cc->socket()->peerAddress() == peer )
                 {
                     authed = true;
                     break;
                 }
             }
-            if( !authed )
+            if ( !authed )
             {
                 tLog() << "File transfer request rejected, invalid source IP";
                 return NULL;
@@ -874,9 +866,9 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
         return sc;
     }
 
-    if( key == "whitelist" ) // LAN IP address, check source IP
+    if ( key == "whitelist" ) // LAN IP address, check source IP
     {
-        if( isIPWhitelisted( peer ) )
+        if ( isIPWhitelisted( peer ) )
         {
             tDebug() << "Connection is from whitelisted IP range (LAN)";
             ControlConnection* conn = new ControlConnection( this );
@@ -902,10 +894,10 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
         }
     }
 
-    if( m_offers.contains( key ) )
+    if ( m_offers.contains( key ) )
     {
         QPointer<Connection> conn = m_offers.value( key );
-        if( conn.isNull() )
+        if ( conn.isNull() )
         {
             // This can happen if it's a streamconnection, but the audioengine has
             // already closed the iodevice, causing the connection to be deleted before
@@ -915,14 +907,14 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
         }
 
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "nodeid is: " << nodeid;
-        if( !nodeid.isEmpty() )
+        if ( !nodeid.isEmpty() )
         {
             // Used by the connection for the ACL check
             // If there isn't a nodeid it's not the first connection and will already have been stopped
             conn.data()->setProperty( "nodeid", nodeid );
         }
 
-        if( conn.data()->onceOnly() )
+        if ( conn.data()->onceOnly() )
         {
             m_offers.remove( key );
             return conn.data();
@@ -932,7 +924,7 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
             return conn.data()->clone();
         }
     }
-    else if ( noauth )
+    else if ( m_noAuth )
     {
         Connection* conn;
         conn = new ControlConnection( this );
@@ -1000,7 +992,7 @@ Servent::printCurrentTransfers()
 {
     int k = 1;
 //    qDebug() << "~~~ Active file transfer connections:" << m_scsessions.length();
-    foreach( StreamConnection* i, m_scsessions )
+    foreach ( StreamConnection* i, m_scsessions )
     {
         qDebug() << k << ") " << i->id();
     }
@@ -1016,11 +1008,11 @@ Servent::isIPWhitelisted( QHostAddress ip )
     QList< range > subnetEntries;
     
     QList< QNetworkInterface > networkInterfaces = QNetworkInterface::allInterfaces();
-    foreach( QNetworkInterface interface, networkInterfaces )
+    foreach ( QNetworkInterface interface, networkInterfaces )
     {
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Checking interface" << interface.humanReadableName();
         QList< QNetworkAddressEntry > addressEntries = interface.addressEntries();
-        foreach( QNetworkAddressEntry addressEntry, addressEntries )
+        foreach ( QNetworkAddressEntry addressEntry, addressEntries )
         {
             tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Checking address entry with ip" << addressEntry.ip().toString() << "and prefix length" << addressEntry.prefixLength();
             if ( ip.isInSubnet( addressEntry.ip(), addressEntry.prefixLength() ) )
@@ -1038,12 +1030,11 @@ Servent::isIPWhitelisted( QHostAddress ip )
 bool
 Servent::connectedToSession( const QString& session )
 {
-    foreach( ControlConnection* cc, m_controlconnections )
+    foreach ( ControlConnection* cc, m_controlconnections )
     {
-        if( !cc )
-            continue;
+        Q_ASSERT( cc );
 
-        if( cc->id() == session )
+        if ( cc->id() == session )
             return true;
     }
 
@@ -1056,7 +1047,7 @@ Servent::triggerDBSync()
 {
     // tell peers we have new stuff they should sync
     QList<source_ptr> sources = SourceList::instance()->sources();
-    foreach( const source_ptr& src, sources )
+    foreach ( const source_ptr& src, sources )
     {
         // skip local source
         if ( src.isNull() || src->isLocal() )
