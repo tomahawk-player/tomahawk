@@ -10,6 +10,7 @@ TryExec=tomahawk
 Exec=tomahawk %u
 Comment=Tomahawk - Social Music Player
 Comment[fi]=Tomahawk – sosiaalinen musiikkisoitin
+Comment[se]=Tomahawk - Den Sociala Musikspelaren
 Icon=tomahawk
 Terminal=false
 Categories=Qt;AudioVideo;Audio;Player;
