@@ -856,7 +856,7 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
             bool authed = false;
             foreach( ControlConnection* cc, m_controlconnections )
             {
-                if( cc->socket()->peerAddress() == peer )
+                if( !cc->socket().isNull() && cc->socket()->peerAddress() == peer )
                 {
                     authed = true;
                     break;
