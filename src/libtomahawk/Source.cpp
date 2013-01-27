@@ -175,6 +175,20 @@ Source::setFriendlyName( const QString& fname )
 }
 
 
+QString
+Source::dbFriendlyName() const
+{
+    return m_dbFriendlyName;
+}
+
+
+void
+Source::setDbFriendlyName( const QString& dbFriendlyName )
+{
+    m_dbFriendlyName = dbFriendlyName;
+}
+
+
 void
 Source::addCollection( const collection_ptr& c )
 {
@@ -228,7 +242,7 @@ Source::setOnline()
     if ( !isLocal() )
     {
         // ensure username is in the database
-        DatabaseCommand_addSource* cmd = new DatabaseCommand_addSource( m_nodeId, friendlyName() );
+        DatabaseCommand_addSource* cmd = new DatabaseCommand_addSource( m_nodeId, dbFriendlyName() );
         connect( cmd, SIGNAL( done( unsigned int, QString ) ),
                         SLOT( dbLoaded( unsigned int, const QString& ) ) );
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
@@ -240,7 +254,7 @@ void
 Source::dbLoaded( unsigned int id, const QString& fname )
 {
     m_id = id;
-    setFriendlyName( fname );
+    setDbFriendlyName( fname );
 
     emit syncedWithDatabase();
 }

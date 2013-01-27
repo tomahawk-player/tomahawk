@@ -62,8 +62,16 @@ public:
     bool isOnline() const { return m_online || m_isLocal; }
 
     QString nodeId() const { return m_nodeId; }
+
     QString friendlyName() const;
     void setFriendlyName( const QString& fname );
+
+
+    // fallback when the normal friendlyname from cache is not available
+    // this is usually the jabber id or whatever was used when first connected
+    QString dbFriendlyName() const;
+    void setDbFriendlyName( const QString& dbFriendlyName );
+
 
 #ifndef ENABLE_HEADLESS
     QPixmap avatar( TomahawkUtils::ImageMode style = TomahawkUtils::Original, const QSize& size = QSize() );
@@ -144,6 +152,7 @@ private:
     bool m_online;
     QString m_nodeId;
     QString m_friendlyname;
+    QString m_dbFriendlyName;
     int m_id;
     bool m_scrubFriendlyName;
     bool m_updateIndexWhenSynced;

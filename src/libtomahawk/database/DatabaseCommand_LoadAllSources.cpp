@@ -40,7 +40,7 @@ DatabaseCommand_LoadAllSources::exec( DatabaseImpl* dbi )
     while ( query.next() )
     {
         source_ptr src( new Source( query.value( 0 ).toUInt(), query.value( 1 ).toString() ) );
-        src->setFriendlyName( query.value( 2 ).toString() );
+        src->setDbFriendlyName( query.value( 2 ).toString() );
         sources << src;
     }
 

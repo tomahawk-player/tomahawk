@@ -202,14 +202,14 @@ SourceList::get( const QString& username, const QString& friendlyName, bool auto
         {
             Q_ASSERT( !friendlyName.isEmpty() );
             source = source_ptr( new Source( -1, username ) );
-            source->setFriendlyName( friendlyName );
+            source->setDbFriendlyName( friendlyName );
             add( source );
         }
     }
     else
     {
         source = m_sources.value( username );
-        source->setFriendlyName( friendlyName );
+        source->setDbFriendlyName( friendlyName );
     }
 
     return source;
