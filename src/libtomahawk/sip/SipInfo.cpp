@@ -39,7 +39,7 @@ public:
         visible(other.visible),
         host(other.host),
         port(other.port),
-        uniqname(other.uniqname),
+        nodeId(other.nodeId),
         key(other.key)
     {
     }
@@ -48,7 +48,7 @@ public:
     QVariant visible;
     QString host;
     int port;
-    QString uniqname;
+    QString nodeId;
     QString key;
 };
 
@@ -85,7 +85,7 @@ SipInfo::clear()
     d->visible.clear();
     d->host = QString();
     d->port = -1;
-    d->uniqname = QString();
+    d->nodeId = QString();
     d->key = QString();
 }
 
@@ -93,14 +93,14 @@ SipInfo::clear()
 bool
 SipInfo::isValid() const
 {
-//    qDebug() << Q_FUNC_INFO << d->visible << d->host.hostName() << d->port << d->uniqname << d->key;
+//    qDebug() << Q_FUNC_INFO << d->visible << d->host.hostName() << d->port << d->nodeId << d->key;
     if( !d->visible.isNull() )
     {
         if(
             // visible and all data available
-            (  d->visible.toBool() && !d->host.isEmpty() && ( d->port > 0 ) && !d->uniqname.isNull() && !d->key.isNull() )
+            (  d->visible.toBool() && !d->host.isEmpty() && ( d->port > 0 ) && !d->nodeId.isNull() && !d->key.isNull() )
             // invisible and no data available
-         || ( !d->visible.toBool() &&  d->host.isEmpty() && ( d->port < 0 ) && d->uniqname.isNull() &&   d->key.isNull() )
+         || ( !d->visible.toBool() &&  d->host.isEmpty() && ( d->port < 0 ) && d->nodeId.isNull() &&   d->key.isNull() )
         )
             return true;
     }
@@ -158,18 +158,18 @@ SipInfo::port() const
 
 
 void
-SipInfo::setUniqname( const QString& uniqname )
+SipInfo::setNodeId( const QString& nodeId )
 {
-    d->uniqname = uniqname;
+    d->nodeId = nodeId;
 }
 
 
 const QString
-SipInfo::uniqname() const
+SipInfo::nodeId() const
 {
     Q_ASSERT( isValid() );
 
-    return d->uniqname;
+    return d->nodeId;
 }
 
 
@@ -200,7 +200,7 @@ SipInfo::toJson() const
         m["ip"] = host();
         m["port"] = port();
         m["key"] = key();
-        m["uniqname"] = uniqname();
+        m["uniqname"] = nodeId();
     }
 
     // serialize
@@ -231,7 +231,7 @@ SipInfo::fromJson( QString json )
     {
         info.setHost( m["host"].toString() );
         info.setPort( m["port"].toInt() );
-        info.setUniqname( m["uniqname"].toString() );
+        info.setNodeId( m["uniqname"].toString() );
         info.setKey( m["key"].toString() );
     }
 
@@ -262,7 +262,7 @@ bool operator==( const SipInfo& one, const SipInfo& two )
         if ( one.isVisible() == two.isVisible()
             && one.host() == two.host()
             && one.port() == two.port()
-            && one.uniqname() == two.uniqname()
+            && one.nodeId() == two.nodeId()
             && one.key() == two.key() )
         {
             return true;
@@ -279,7 +279,7 @@ SipInfo::debugString() const
     return debugString.arg( d->visible.toBool() )
                       .arg( d->host )
                       .arg( d->port )
-                      .arg( d->uniqname )
+                      .arg( d->nodeId )
                       .arg( d->key );
 
 }

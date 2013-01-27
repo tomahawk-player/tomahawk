@@ -303,7 +303,7 @@ Servent::registerPeer( const Tomahawk::peerinfo_ptr& peerInfo )
     if ( peerInfo->type() == Tomahawk::PeerInfo::Local )
     {
         peerInfoDebug(peerInfo) << "YAY, we need to establish the connection now.. thinking";
-        if ( !connectedToSession( peerInfo->sipInfo().uniqname() ) )
+        if ( !connectedToSession( peerInfo->sipInfo().nodeId() ) )
         {
             connectToPeer( peerInfo );
         }
@@ -343,7 +343,7 @@ Servent::registerPeer( const Tomahawk::peerinfo_ptr& peerInfo )
             info.setHost( externalAddress() );
             info.setPort( externalPort() );
             info.setKey( key );
-            info.setUniqname( nodeid );
+            info.setNodeId( nodeid );
 
             tDebug() << "Asking them (" << peerInfo->id() << ") to connect to us:" << info;
         }
@@ -707,7 +707,7 @@ Servent::connectToPeer( const peerinfo_ptr& peerInfo )
         if ( !c )
             continue;
 
-        if ( c->id() == sipInfo.uniqname() )
+        if ( c->id() == sipInfo.nodeId() )
         {
             conn = c;
 
@@ -760,10 +760,10 @@ Servent::connectToPeer( const peerinfo_ptr& peerInfo )
 
     if ( peerInfo->id().length() )
         conn->setName( peerInfo->id() );
-    if ( sipInfo.uniqname().length() )
-        conn->setId( sipInfo.uniqname() );
+    if ( sipInfo.nodeId().length() )
+        conn->setId( sipInfo.nodeId() );
 
-    conn->setProperty( "nodeid", sipInfo.uniqname() );
+    conn->setProperty( "nodeid", sipInfo.nodeId() );
 
     registerControlConnection( conn );
     connectToPeer( sipInfo.host(), sipInfo.port(), sipInfo.key(), conn );

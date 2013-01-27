@@ -444,7 +444,7 @@ XmppSipPlugin::sendSipInfo( const Tomahawk::peerinfo_ptr& receiver, const SipInf
     TomahawkXmppMessage *sipMessage;
     if ( info.isVisible() )
     {
-        sipMessage = new TomahawkXmppMessage( info.host(), info.port(), info.uniqname(), info.key() );
+        sipMessage = new TomahawkXmppMessage( info.host(), info.port(), info.nodeId(), info.key() );
     }
     else
         sipMessage = new TomahawkXmppMessage();
@@ -895,7 +895,7 @@ XmppSipPlugin::onNewIq( const Jreen::IQ& iq )
             iq.accept();
 
             qDebug() << Q_FUNC_INFO << "Got SipMessage ..."
-                     << "ip" << sipMessage->ip() << "port" << sipMessage->port() << "uniqname" << sipMessage->uniqname() << "key" << sipMessage->key() << "visible" << sipMessage->visible();
+                     << "ip" << sipMessage->ip() << "port" << sipMessage->port() << "nodeId" << sipMessage->uniqname() << "key" << sipMessage->key() << "visible" << sipMessage->visible();
 
             SipInfo info;
             info.setVisible( sipMessage->visible() );
@@ -903,7 +903,7 @@ XmppSipPlugin::onNewIq( const Jreen::IQ& iq )
             {
                 info.setHost( sipMessage->ip() );
                 info.setPort( sipMessage->port() );
-                info.setUniqname( sipMessage->uniqname() );
+                info.setNodeId( sipMessage->uniqname() );
                 info.setKey( sipMessage->key() );
             }
 

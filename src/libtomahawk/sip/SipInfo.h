@@ -48,8 +48,8 @@ public:
     void setPort( int port );
     int port() const;
 
-    void setUniqname( const QString& uniqname );
-    const QString uniqname() const;
+    void setNodeId( const QString& nodeId );
+    const QString nodeId() const;
 
     void setKey( const QString& key );
     const QString key() const;

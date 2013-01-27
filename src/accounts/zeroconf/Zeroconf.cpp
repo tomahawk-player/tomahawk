@@ -147,7 +147,7 @@ ZeroconfPlugin::lanHostFound( const QString& host, int port, const QString& name
     SipInfo sipInfo;
     sipInfo.setHost( host );
     sipInfo.setPort( port );
-    sipInfo.setUniqname( nodeid );
+    sipInfo.setNodeId( nodeid );
     sipInfo.setKey( "whitelist" );
     sipInfo.setVisible( true );
 
