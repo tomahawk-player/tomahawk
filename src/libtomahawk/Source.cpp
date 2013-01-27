@@ -92,7 +92,7 @@ Source::peerInfos() const
     {
         return controlConnection()->peerInfos();
     }
-    else if ( this == SourceList::instance()->getLocal().data() )
+    else if ( isLocal() )
     {
         return PeerInfo::getAllSelf().toSet();
 
