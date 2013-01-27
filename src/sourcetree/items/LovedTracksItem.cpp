@@ -95,7 +95,7 @@ LovedTracksItem::activate()
             else
                 raModel->setDescription( tr( "All of %1's loved tracks" ).arg( par->source()->friendlyName() ) );
 
-            pv->setGuid( QString( "lovedtracks/%1" ).arg( par->source()->userName() ) );
+            pv->setGuid( QString( "lovedtracks/%1" ).arg( par->source()->nodeId() ) );
         }
 
         pv->setPlayableModel( raModel );

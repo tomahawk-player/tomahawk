@@ -140,7 +140,7 @@ DatabaseCommand_Resolve::resolve( DatabaseImpl* lib )
                 continue;
             }
 
-            url = QString( "servent://%1\t%2" ).arg( s->userName() ).arg( url );
+            url = QString( "servent://%1\t%2" ).arg( s->nodeId() ).arg( url );
         }
 
         bool cached = Tomahawk::Result::isCached( url );
@@ -279,7 +279,7 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
                 continue;
             }
 
-            url = QString( "servent://%1\t%2" ).arg( s->userName() ).arg( url );
+            url = QString( "servent://%1\t%2" ).arg( s->nodeId() ).arg( url );
         }
 
         bool cached = Tomahawk::Result::isCached( url );

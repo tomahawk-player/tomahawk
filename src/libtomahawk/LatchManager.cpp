@@ -81,7 +81,7 @@ LatchManager::playlistChanged( Tomahawk::playlistinterface_ptr )
         DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction();
         cmd->setSource( SourceList::instance()->getLocal() );
         cmd->setAction( "latchOn");
-        cmd->setComment( m_latchedOnTo->userName() );
+        cmd->setComment( m_latchedOnTo->nodeId() );
         cmd->setTimestamp( QDateTime::currentDateTime().toTime_t() );
         Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
 
@@ -101,7 +101,7 @@ LatchManager::playlistChanged( Tomahawk::playlistinterface_ptr )
     DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction();
     cmd->setSource( SourceList::instance()->getLocal() );
     cmd->setAction( "latchOff");
-    cmd->setComment( source->userName() );
+    cmd->setComment( source->nodeId() );
     cmd->setTimestamp( QDateTime::currentDateTime().toTime_t() );
     Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
 

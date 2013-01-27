@@ -246,7 +246,7 @@ TreeModel::addCollection( const collection_ptr& collection )
 {
     qDebug() << Q_FUNC_INFO << collection->name()
                             << collection->source()->id()
-                            << collection->source()->userName();
+                            << collection->source()->nodeId();
 
     startLoading();
 
@@ -275,7 +275,7 @@ TreeModel::addFilteredCollection( const collection_ptr& collection, unsigned int
 {
     qDebug() << Q_FUNC_INFO << collection->name()
                             << collection->source()->id()
-                            << collection->source()->userName()
+                            << collection->source()->nodeId()
                             << amount << order;
 
     DatabaseCommand_AllArtists* cmd = new DatabaseCommand_AllArtists( collection );

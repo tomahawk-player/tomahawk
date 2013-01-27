@@ -111,7 +111,7 @@ SourceList::setLocal( const Tomahawk::source_ptr& localSrc )
 
     {
         QMutexLocker lock( &m_mut );
-        m_sources.insert( localSrc->userName(), localSrc );
+        m_sources.insert( localSrc->nodeId(), localSrc );
         m_local = localSrc;
     }
 
@@ -127,11 +127,11 @@ SourceList::add( const source_ptr& source )
 {
     Q_ASSERT( m_isReady );
 
-//    qDebug() << "Adding to sources:" << source->userName() << source->id();
-    m_sources.insert( source->userName(), source );
+//    qDebug() << "Adding to sources:" << source->nodeId() << source->id();
+    m_sources.insert( source->nodeId(), source );
 
     if ( source->id() > 0 )
-        m_sources_id2name.insert( source->id(), source->userName() );
+        m_sources_id2name.insert( source->id(), source->nodeId() );
     connect( source.data(), SIGNAL( syncedWithDatabase() ), SLOT( sourceSynced() ) );
 
     collection_ptr coll( new RemoteCollection( source ) );
@@ -239,7 +239,7 @@ SourceList::sourceSynced()
 {
     Source* src = qobject_cast< Source* >( sender() );
 
-    m_sources_id2name.insert( src->id(), src->userName() );
+    m_sources_id2name.insert( src->id(), src->nodeId() );
 }
 
 
@@ -254,7 +254,7 @@ void
 SourceList::latchedOff( const source_ptr& to )
 {
     Source* s = qobject_cast< Source* >( sender() );
-    const source_ptr source = m_sources[ s->userName() ];
+    const source_ptr source = m_sources[ s->nodeId() ];
 
     emit sourceLatchedOff( source, to );
 }
@@ -264,7 +264,7 @@ SourceList::latchedOn( const source_ptr& to )
 {
 
     Source* s = qobject_cast< Source* >( sender() );
-    const source_ptr source = m_sources[ s->userName() ];
+    const source_ptr source = m_sources[ s->nodeId() ];
 
     emit sourceLatchedOn( source, to );
 }

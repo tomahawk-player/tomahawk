@@ -112,7 +112,7 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
                 continue;
             }
 
-            url = QString( "servent://%1\t%2" ).arg( s->userName() ).arg( url );
+            url = QString( "servent://%1\t%2" ).arg( s->nodeId() ).arg( url );
         }
 
         QString artist, track, album, composer;

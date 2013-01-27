@@ -46,11 +46,11 @@
 using namespace Tomahawk;
 
 
-Source::Source( int id, const QString& username )
+Source::Source( int id, const QString& nodeId )
     : QObject()
     , m_isLocal( false )
     , m_online( false )
-    , m_username( username )
+    , m_nodeId( nodeId )
     , m_id( id )
     , m_updateIndexWhenSynced( false )
     , m_state( DBSyncConnection::UNKNOWN )
@@ -125,7 +125,7 @@ QString
 Source::friendlyName() const
 {
     if ( m_friendlyname.isEmpty() )
-        return m_username;
+        return m_nodeId;
 
     //TODO: this is a terrible assumption, help me clean this up, mighty muesli!
     if ( m_friendlyname.contains( "@conference." ) )
@@ -228,7 +228,7 @@ Source::setOnline()
     if ( !isLocal() )
     {
         // ensure username is in the database
-        DatabaseCommand_addSource* cmd = new DatabaseCommand_addSource( m_username, friendlyName() );
+        DatabaseCommand_addSource* cmd = new DatabaseCommand_addSource( m_nodeId, friendlyName() );
         connect( cmd, SIGNAL( done( unsigned int, QString ) ),
                         SLOT( dbLoaded( unsigned int, const QString& ) ) );
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );

@@ -55,13 +55,13 @@ friend class ::DatabaseCommand_DeleteFiles;
 friend class ::MusicScanner;
 
 public:
-    explicit Source( int id, const QString& username = QString() );
+    explicit Source( int id, const QString& nodeId = QString() );
     virtual ~Source();
 
     bool isLocal() const { return m_isLocal; }
     bool isOnline() const { return m_online || m_isLocal; }
 
-    QString userName() const { return m_username; }
+    QString nodeId() const { return m_nodeId; }
     QString friendlyName() const;
     void setFriendlyName( const QString& fname );
 
@@ -101,7 +101,6 @@ signals:
     void collectionRemoved( const collection_ptr& collection );
 
     void stats( const QVariantMap& );
-    void usernameChanged( const QString& );
 
     void playbackStarted( const Tomahawk::query_ptr& query );
     void playbackFinished( const Tomahawk::query_ptr& query );
@@ -143,7 +142,7 @@ private:
 
     bool m_isLocal;
     bool m_online;
-    QString m_username;
+    QString m_nodeId;
     QString m_friendlyname;
     int m_id;
     bool m_scrubFriendlyName;

@@ -293,7 +293,7 @@ DatabaseImpl::file( int fid )
                 return r;
             }
 
-            url = QString( "servent://%1\t%2" ).arg( s->userName() ).arg( url );
+            url = QString( "servent://%1\t%2" ).arg( s->nodeId() ).arg( url );
         }
 
         r = Tomahawk::Result::get( url );
@@ -691,7 +691,7 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
                 return res;
             }
 
-            url = QString( "servent://%1\t%2" ).arg( s->userName() ).arg( url );
+            url = QString( "servent://%1\t%2" ).arg( s->nodeId() ).arg( url );
         }
 
         res = Tomahawk::Result::get( url );

@@ -51,7 +51,7 @@ AlbumModel::addCollection( const collection_ptr& collection, bool overwrite )
 {
     qDebug() << Q_FUNC_INFO << collection->name()
                             << collection->source()->id()
-                            << collection->source()->userName();
+                            << collection->source()->nodeId();
 
     DatabaseCommand_AllAlbums* cmd = new DatabaseCommand_AllAlbums( collection );
     m_overwriteOnAdd = overwrite;
@@ -88,7 +88,7 @@ AlbumModel::addFilteredCollection( const collection_ptr& collection, unsigned in
 {
 /*    qDebug() << Q_FUNC_INFO << collection->name()
                             << collection->source()->id()
-                            << collection->source()->userName()
+                            << collection->source()->nodeId()
                             << amount << order;*/
 
     DatabaseCommand_AllAlbums* cmd = new DatabaseCommand_AllAlbums( collection );
