@@ -5,6 +5,7 @@ Name=Tomahawk
 GenericName=Music Player
 GenericName[de]=Musik Player
 GenericName[fi]=Musiikkisoitin
+GenericName[se]=Musikspelare
 TryExec=tomahawk
 Exec=tomahawk %u
 Comment=Tomahawk - Social Music Player
