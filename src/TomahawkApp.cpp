@@ -51,6 +51,7 @@
 #include "Pipeline.h"
 #include "DropJob.h"
 #include "EchonestCatalogSynchronizer.h"
+#include "database/DatabaseImpl.h"
 
 #include "audio/AudioEngine.h"
 #include "utils/XspfLoader.h"
@@ -577,7 +578,8 @@ TomahawkApp::initLocalCollection()
 {
     connect( SourceList::instance(), SIGNAL( ready() ), SLOT( initServent() ) );
 
-    source_ptr src( new Source( 0, tr( "My Collection" ) ) );
+    source_ptr src( new Source( 0, Database::instance()->impl()->dbid() ) );
+    src->setFriendlyName( tr( "My Collection" ) );
     collection_ptr coll( new LocalCollection( src ) );
 
     src->addCollection( coll );
