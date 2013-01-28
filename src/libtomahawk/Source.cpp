@@ -187,6 +187,9 @@ Source::dbFriendlyName() const
 void
 Source::setDbFriendlyName( const QString& dbFriendlyName )
 {
+    if ( dbFriendlyName.isEmpty() )
+        return;
+
     m_dbFriendlyName = dbFriendlyName;
 }
 
