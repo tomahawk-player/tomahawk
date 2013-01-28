@@ -257,6 +257,10 @@ AlbumPlaylistInterface::infoSystemFinished( const QString& infoId )
 void
 AlbumPlaylistInterface::onTracksLoaded( const QList< query_ptr >& tracks )
 {
+    if ( !tracks.isEmpty() &&
+         ( tracks.first()->artist() != m_album->artist()->name() ||
+           tracks.first()->album() != m_album->name() ) )
+        return;
     if ( m_collection.isNull() )
     {
         m_databaseLoaded = true;
