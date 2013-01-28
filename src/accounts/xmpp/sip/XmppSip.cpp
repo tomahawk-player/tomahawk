@@ -120,7 +120,7 @@ XmppSipPlugin::XmppSipPlugin( Account* account )
 
 #ifndef ENABLE_HEADLESS
     // instantiate XmlConsole
-    if( readXmlConsoleEnabled() )
+    if ( readXmlConsoleEnabled() )
     {
         m_xmlConsole = new XmlConsole( m_client );
         m_xmlConsole->show();
@@ -191,6 +191,7 @@ XmppSipPlugin::~XmppSipPlugin()
 #endif
     delete m_client;
 }
+
 
 QString
 XmppSipPlugin::inviteString() const
@@ -463,7 +464,7 @@ XmppSipPlugin::addContact( const QString& jid, const QString& msg )
 {
     // Add contact to the Tomahawk group on the roster
     QStringList jidParts = jid.split( '@' );
-    if( jidParts.count() == 2 && !jidParts[0].trimmed().isEmpty() && !jidParts[1].trimmed().isEmpty() )
+    if ( jidParts.count() == 2 && !jidParts[0].trimmed().isEmpty() && !jidParts[1].trimmed().isEmpty() )
     {
         m_roster->subscribe( jid, msg, jid, QStringList() << "Tomahawk" );
         emit inviteSentSuccess( jid );
@@ -869,7 +870,7 @@ XmppSipPlugin::onNewIq( const Jreen::IQ& iq )
             QString versionString = QString( "%1 %2 %3" ).arg( softwareVersion->name(), softwareVersion->os(), softwareVersion->version() );
             qDebug() << Q_FUNC_INFO << "Received software version for" << iq.from().full() << ":" << versionString;
             Tomahawk::peerinfo_ptr peerInfo =  PeerInfo::get( this, iq.from().full() );
-            if( !peerInfo.isNull() )
+            if ( !peerInfo.isNull() )
             {
                 peerInfo->setVersionString( versionString );
             }
@@ -879,18 +880,18 @@ XmppSipPlugin::onNewIq( const Jreen::IQ& iq )
     {
         qDebug() << "Sent IQ(Set), what should be happening here?";
     }
-    else if( context == SipMessageSent )
+    else if ( context == SipMessageSent )
     {
         qDebug() << "Sent SipMessage... what now?!";
     }
-    /*else if(context == RequestedVCard )
+    /*else if ( context == RequestedVCard )
     {
         qDebug() << "Requested VCard... what now?!";
     }*/
     else
     {
         TomahawkXmppMessage::Ptr sipMessage = iq.payload< TomahawkXmppMessage >();
-        if(sipMessage)
+        if ( sipMessage )
         {
             iq.accept();
 
@@ -911,7 +912,7 @@ XmppSipPlugin::onNewIq( const Jreen::IQ& iq )
 
             qDebug() << Q_FUNC_INFO << "From:" << iq.from().full() << ":" << info;
             Tomahawk::peerinfo_ptr peerInfo = PeerInfo::get( this, iq.from().full() );
-            if( peerInfo.isNull() )
+            if ( peerInfo.isNull() )
             {
                 tDebug() << Q_FUNC_INFO << "no valid peerInfo for " << iq.from().full();
                 return;
@@ -944,7 +945,7 @@ XmppSipPlugin::handlePeerStatus( const Jreen::JID& jid, Jreen::Presence::Type pr
 {
     QString fulljid = jid.full();
 
-    if( fulljid.contains( "public.talk.google.com" ) )
+    if ( fulljid.contains( "public.talk.google.com" ) )
         return;
 
     // "going offline" event
@@ -956,7 +957,7 @@ XmppSipPlugin::handlePeerStatus( const Jreen::JID& jid, Jreen::Presence::Type pr
         m_peers[ jid ] = presenceType;
 
         Tomahawk::peerinfo_ptr peerInfo = PeerInfo::get( this, fulljid );
-        if( !peerInfo.isNull() )
+        if ( !peerInfo.isNull() )
         {
             peerInfo->setStatus( PeerInfo::Offline );
         }
@@ -1013,7 +1014,7 @@ XmppSipPlugin::onNewAvatar( const QString& jid )
         if ( peer.bare() == jid )
         {
             Tomahawk::peerinfo_ptr peerInfo = PeerInfo::get( this, peer.full() );
-            if( !peerInfo.isNull() )
+            if ( !peerInfo.isNull() )
                 peerInfo->setAvatar( m_avatarManager->avatar( jid ) );
         }
     }
