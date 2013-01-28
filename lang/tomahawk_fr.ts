@@ -1061,7 +1061,7 @@ de se connecter et streamer de vous?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="329"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="335"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
@@ -3246,43 +3246,43 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="250"/>
-        <location filename="../src/libtomahawk/Source.cpp" line="301"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="253"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="304"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Scan en cours (%L1 titres)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="252"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="255"/>
         <source>Scanning</source>
         <translation>Scan en cours</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="286"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="289"/>
         <source>Checking</source>
         <translation>Vérification</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="291"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="294"/>
         <source>Syncing</source>
         <translation>Synchronisation</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="296"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="299"/>
         <source>Importing</source>
         <translation>Importation</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="438"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="441"/>
         <source>Saving (%1%)</source>
         <translation>Enregistrement (%1%)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="519"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="522"/>
         <source>Online</source>
         <translation>En Ligne</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="523"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="526"/>
         <source>Offline</source>
         <translation>Hors ligne</translation>
     </message>
@@ -3306,7 +3306,7 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/TomahawkApp.cpp" line="580"/>
+        <location filename="../src/TomahawkApp.cpp" line="582"/>
         <source>My Collection</source>
         <translation>Ma Collection</translation>
     </message>

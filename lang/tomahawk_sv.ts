@@ -1061,7 +1061,7 @@ ansluta och strömma från dig?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="329"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="335"/>
         <source>Name</source>
         <translation>Namn</translation>
     </message>
@@ -3250,43 +3250,43 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="250"/>
-        <location filename="../src/libtomahawk/Source.cpp" line="301"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="253"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="304"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Söker igenom (%L1 spår)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="252"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="255"/>
         <source>Scanning</source>
         <translation>Skannar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="286"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="289"/>
         <source>Checking</source>
         <translation>Kontrollerar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="291"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="294"/>
         <source>Syncing</source>
         <translation>Synkroniserar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="296"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="299"/>
         <source>Importing</source>
         <translation>Importerar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="438"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="441"/>
         <source>Saving (%1%)</source>
         <translation>Sparar (%1%)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="519"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="522"/>
         <source>Online</source>
         <translation>Online</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="523"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="526"/>
         <source>Offline</source>
         <translation>Offline</translation>
     </message>
@@ -3310,7 +3310,7 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/TomahawkApp.cpp" line="580"/>
+        <location filename="../src/TomahawkApp.cpp" line="582"/>
         <source>My Collection</source>
         <translation>Min Samling</translation>
     </message>

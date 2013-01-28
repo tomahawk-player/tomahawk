@@ -520,7 +520,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="116"/>
         <source>Config Error</source>
-        <translation type="unfinished"/>
+        <translation>Errore di configurazione</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="170"/>
@@ -1060,7 +1060,7 @@ connect and stream from you?</source>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="329"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="335"/>
         <source>Name</source>
         <translation>Nome</translation>
     </message>
@@ -2425,12 +2425,12 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="144"/>
         <source>You forgot to enter your username!</source>
-        <translation type="unfinished"/>
+        <translation>Manca il tuo nome utente!</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="152"/>
         <source>Your Xmpp Id should look like an email address</source>
-        <translation type="unfinished"/>
+        <translation>Il tuo Id di Xmpp dovrebbe assomigliare ad un indirizzo email</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="158"/>
@@ -2438,7 +2438,7 @@ You may wish to try re-authenticating.</source>
 
 Example:
 username@jabber.org</source>
-        <translation type="unfinished"/>
+        <translation>⏎ ⏎ Esempio:⏎ nomeutente@jabber.org</translation>
     </message>
 </context>
 <context>
@@ -3237,43 +3237,43 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="250"/>
-        <location filename="../src/libtomahawk/Source.cpp" line="301"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="253"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="304"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Scansionando (%L1 tracce)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="252"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="255"/>
         <source>Scanning</source>
         <translation>Scansionando</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="286"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="289"/>
         <source>Checking</source>
         <translation>Controllando</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="291"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="294"/>
         <source>Syncing</source>
         <translation>Sto sincronizzando</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="296"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="299"/>
         <source>Importing</source>
         <translation>Sto importando</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="438"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="441"/>
         <source>Saving (%1%)</source>
         <translation>Salvando (%1%)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="519"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="522"/>
         <source>Online</source>
         <translation>Connesso</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="523"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="526"/>
         <source>Offline</source>
         <translation>Disconnesso</translation>
     </message>
@@ -3297,7 +3297,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/TomahawkApp.cpp" line="580"/>
+        <location filename="../src/TomahawkApp.cpp" line="582"/>
         <source>My Collection</source>
         <translation>La mia collezione</translation>
     </message>

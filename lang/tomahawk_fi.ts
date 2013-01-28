@@ -1061,7 +1061,7 @@ yhdistää ja toistaa sinulta virtaa?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="329"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="335"/>
         <source>Name</source>
         <translation>Nimi</translation>
     </message>
@@ -3255,43 +3255,43 @@ Koeta säätää suodattimia saadaksesi uuden joukon kappaleita kuunneltavaksi.<
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="250"/>
-        <location filename="../src/libtomahawk/Source.cpp" line="301"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="253"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="304"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Etsitään (%L1 kappaletta)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="252"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="255"/>
         <source>Scanning</source>
         <translation>Etsitään</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="286"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="289"/>
         <source>Checking</source>
         <translation>Tarkistetaan</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="291"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="294"/>
         <source>Syncing</source>
         <translation>Synkronoidaan</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="296"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="299"/>
         <source>Importing</source>
         <translation>Tuodaan</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="438"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="441"/>
         <source>Saving (%1%)</source>
         <translation>Tallennetaan (%1 %)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="519"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="522"/>
         <source>Online</source>
         <translation>Verkossa</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="523"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="526"/>
         <source>Offline</source>
         <translation>Ei verkossa</translation>
     </message>
@@ -3315,7 +3315,7 @@ Koeta säätää suodattimia saadaksesi uuden joukon kappaleita kuunneltavaksi.<
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/TomahawkApp.cpp" line="580"/>
+        <location filename="../src/TomahawkApp.cpp" line="582"/>
         <source>My Collection</source>
         <translation>Oma kokoelma</translation>
     </message>
