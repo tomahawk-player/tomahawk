@@ -257,10 +257,9 @@ AlbumPlaylistInterface::infoSystemFinished( const QString& infoId )
 void
 AlbumPlaylistInterface::onTracksLoaded( const QList< query_ptr >& tracks )
 {
-    if ( !tracks.isEmpty() &&
-         ( tracks.first()->artist() != m_album->artist()->name() ||
-           tracks.first()->album() != m_album->name() ) )
-        return;
+    disconnect( m_collection.data(), SIGNAL( tracksResult( QList< Tomahawk::query_ptr > ) ),
+                this, SLOT( onTracksLoaded( QList< Tomahawk::query_ptr > ) ) );
+
     if ( m_collection.isNull() )
     {
         m_databaseLoaded = true;

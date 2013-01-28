@@ -22,6 +22,7 @@
 #include "Source.h"
 #include "ExternalResolverGui.h"
 #include "utils/TomahawkUtilsGui.h"
+#include "utils/Logger.h"
 
 #include <QIcon>
 #include <QPainter>
@@ -145,5 +146,6 @@ ScriptCollection::onAlbumsFetched( const QList<album_ptr>& albums )
 void
 ScriptCollection::onTracksFetched( const QList<query_ptr>& tracks )
 {
+    tDebug() << Q_FUNC_INFO << "About to emit tracksResult";
     emit tracksResult( tracks );
 }
