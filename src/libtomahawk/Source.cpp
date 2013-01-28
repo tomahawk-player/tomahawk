@@ -120,6 +120,12 @@ Source::setStats( const QVariantMap& m )
     emit stateChanged();
 }
 
+QString
+Source::nodeId() const
+{
+    return m_nodeId;
+
+}
 
 QString
 Source::friendlyName() const

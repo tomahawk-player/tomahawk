@@ -61,7 +61,7 @@ public:
     bool isLocal() const { return m_isLocal; }
     bool isOnline() const { return m_online || m_isLocal; }
 
-    QString nodeId() const { return m_nodeId; }
+    QString nodeId() const;
 
     QString friendlyName() const;
     void setFriendlyName( const QString& fname );
