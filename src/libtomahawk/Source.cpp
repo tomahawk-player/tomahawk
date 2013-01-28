@@ -125,14 +125,7 @@ QString
 Source::friendlyName() const
 {
     if ( m_friendlyname.isEmpty() )
-        return m_nodeId;
-
-    //TODO: this is a terrible assumption, help me clean this up, mighty muesli!
-    if ( m_friendlyname.contains( "@conference." ) )
-        return QString( m_friendlyname ).remove( 0, m_friendlyname.lastIndexOf( "/" ) + 1 ).append( " via MUC" );
-
-    if ( m_friendlyname.contains( "/" ) )
-        return m_friendlyname.left( m_friendlyname.indexOf( "/" ) );
+        return dbFriendlyName();
 
     return m_friendlyname;
 }
@@ -178,6 +171,9 @@ Source::setFriendlyName( const QString& fname )
 QString
 Source::dbFriendlyName() const
 {
+    if( m_dbFriendlyName.isEmpty() )
+        return nodeId();
+
     return m_dbFriendlyName;
 }
 
