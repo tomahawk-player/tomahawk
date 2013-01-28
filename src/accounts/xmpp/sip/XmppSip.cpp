@@ -973,6 +973,7 @@ XmppSipPlugin::handlePeerStatus( const Jreen::JID& jid, Jreen::Presence::Type pr
         m_peers[ jid ] = presenceType;
 
         Tomahawk::peerinfo_ptr peerInfo = PeerInfo::get( this, fulljid, PeerInfo::AutoCreate );
+        peerInfo->setContactId( jid.bare() );
         peerInfo->setStatus( PeerInfo::Online );
 
 #ifndef ENABLE_HEADLESS

@@ -86,7 +86,13 @@ public:
     void setType( Tomahawk::PeerInfo::Type type );
     PeerInfo::Type type() const;
 
-    // actual data
+    /* actual data */
+
+    // while peerId references a certain peer, contact id references the contact
+    // e.g. a peerId might be a full jid with resource while contact id is the bare jid
+    void setContactId( const QString& contactId );
+    const QString contactId() const;
+
     void setStatus( Status status );
     Status status() const;
 
@@ -122,6 +128,7 @@ private:
     PeerInfo::Type m_type;
 
     QString m_id;
+    QString m_contactId;
     Status  m_status;
     SipInfo m_sipInfo;
     QString m_friendlyName;

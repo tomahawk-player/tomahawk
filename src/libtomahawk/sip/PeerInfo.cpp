@@ -201,6 +201,20 @@ PeerInfo::debugName() const
 }
 
 
+void
+PeerInfo::setContactId ( const QString& contactId )
+{
+    m_contactId = contactId;
+}
+
+
+const QString
+PeerInfo::contactId() const
+{
+    return m_contactId;
+}
+
+
 
 void
 PeerInfo::setStatus( PeerInfo::Status status )

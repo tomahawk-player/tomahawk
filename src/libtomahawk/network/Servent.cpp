@@ -334,7 +334,7 @@ Servent::registerPeer( const Tomahawk::peerinfo_ptr& peerInfo )
             ControlConnection* conn = new ControlConnection( this );
 
             const QString& nodeid = Database::instance()->impl()->dbid();
-            conn->setName( peerId.left( peerId.indexOf( "/" ) ) );
+            conn->setName( peerInfo->contactId() );
             conn->setId( nodeid );
             conn->addPeerInfo( peerInfo );
 
@@ -759,7 +759,7 @@ Servent::connectToPeer( const peerinfo_ptr& peerInfo )
     conn->setFirstMessage( m );
 
     if ( peerInfo->id().length() )
-        conn->setName( peerInfo->id() );
+        conn->setName( peerInfo->contactId() );
     if ( sipInfo.nodeId().length() )
         conn->setId( sipInfo.nodeId() );
 
