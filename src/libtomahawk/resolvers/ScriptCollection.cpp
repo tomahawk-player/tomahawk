@@ -146,6 +146,5 @@ ScriptCollection::onAlbumsFetched( const QList<album_ptr>& albums )
 void
 ScriptCollection::onTracksFetched( const QList<query_ptr>& tracks )
 {
-    tDebug() << Q_FUNC_INFO << "About to emit tracksResult";
     emit tracksResult( tracks );
 }

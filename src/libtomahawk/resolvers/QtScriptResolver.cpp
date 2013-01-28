@@ -223,7 +223,10 @@ QtScriptResolverHelper::addAlbumTrackResults( const QVariantMap& results )
 
     QList< Tomahawk::query_ptr > queries;
     foreach ( const Tomahawk::result_ptr& result, tracks )
+    {
+        result->setScore( 1.0 );
         queries.append( result->toQuery() );
+    }
 
     tDebug() << Q_FUNC_INFO << "about to push" << tracks.count() << "tracks";
 
