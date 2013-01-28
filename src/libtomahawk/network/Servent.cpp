@@ -360,6 +360,7 @@ Servent::registerPeer( const Tomahawk::peerinfo_ptr& peerInfo )
     }
 }
 
+
 void
 Servent::onSipInfoChanged()
 {
@@ -393,7 +394,7 @@ void Servent::handleSipInfo( const Tomahawk::peerinfo_ptr& peerInfo )
              ( externalAddress() == info.host() && externalPort() < info.port() ) )
         {
 
-            tDebug() << "Initiate connection to" << peerInfo->id() << "at" << info.host() << " peer of: " << peerInfo->sipPlugin()->account()->accountFriendlyName();
+            tDebug() << "Initiate connection to" << peerInfo->id() << "at" << info.host() << "peer of:" << peerInfo->sipPlugin()->account()->accountFriendlyName();
             connectToPeer( peerInfo );
         }
         else
@@ -704,23 +705,23 @@ Servent::connectToPeer( const peerinfo_ptr& peerInfo )
     // try to find a ControlConnection with the same SipInfo, then we dont need to try to connect again
     foreach ( ControlConnection* c, m_controlconnections )
     {
-        if ( !c )
-            continue;
+        Q_ASSERT( c );
 
         if ( c->id() == sipInfo.nodeId() )
         {
             conn = c;
 
-           foreach ( const peerinfo_ptr& currentPeerInfo, c->peerInfos() )
-           {
-               peerInfoDebug( currentPeerInfo ) << "Same object: " << ( peerInfo == currentPeerInfo ) << ( peerInfo.data() == currentPeerInfo.data() ) << ( peerInfo->debugName() == currentPeerInfo->debugName() );
+            foreach ( const peerinfo_ptr& currentPeerInfo, c->peerInfos() )
+            {
+                peerInfoDebug( currentPeerInfo ) << "Same object:" << ( peerInfo == currentPeerInfo ) << ( peerInfo.data() == currentPeerInfo.data() ) << ( peerInfo->debugName() == currentPeerInfo->debugName() );
 
-               if ( peerInfo == currentPeerInfo )
-               {
-                   isDupe = true;
-                   peerInfoDebug( currentPeerInfo ) << "Not adding, because it's a dupe: peerInfoCount remains the same " << conn->peerInfos().count();
-               }
-           }
+                if ( peerInfo == currentPeerInfo )
+                {
+                    isDupe = true;
+                    peerInfoDebug( currentPeerInfo ) << "Not adding, because it's a dupe: peerInfoCount remains the same" << conn->peerInfos().count();
+                    break;
+                }
+            }
 
             if ( !c->peerInfos().contains( peerInfo ) )
             {
@@ -736,11 +737,11 @@ Servent::connectToPeer( const peerinfo_ptr& peerInfo )
         }
     }
 
-    peerInfoDebug(peerInfo) << "connectToPeer: found a match: " << ( conn ? conn->name() : "false" ) << "dupe: " << isDupe;
+    peerInfoDebug( peerInfo ) << "connectToPeer: found a match:" << ( conn ? conn->name() : "false" ) << "dupe:" << isDupe;
 
     if ( isDupe )
     {
-        peerInfoDebug(peerInfo) << "it's a dupe, nothing to do here, returning and stopping processing: peerInfoCount:" << conn->peerInfos().count();
+        peerInfoDebug( peerInfo ) << "it's a dupe, nothing to do here, returning and stopping processing: peerInfoCount:" << conn->peerInfos().count();
     }
 
     if ( conn )
