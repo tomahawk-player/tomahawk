@@ -3249,43 +3249,43 @@ Zkuste vyladit filtry pro nové písně.</translation>
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="253"/>
-        <location filename="../src/libtomahawk/Source.cpp" line="304"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="272"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="323"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Prohledává se (%L1 skladeb)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="255"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="274"/>
         <source>Scanning</source>
         <translation>Prohledává se</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="289"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="308"/>
         <source>Checking</source>
         <translation>Přezkušuje se</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="294"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="313"/>
         <source>Syncing</source>
         <translation>Seřizuje se</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="299"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="318"/>
         <source>Importing</source>
         <translation>Zavádí se</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="441"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="460"/>
         <source>Saving (%1%)</source>
         <translation>Ukládá se (%1%)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="522"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="541"/>
         <source>Online</source>
         <translation>Připojený</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="526"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="545"/>
         <source>Offline</source>
         <translation>Nepřipojený</translation>
     </message>
