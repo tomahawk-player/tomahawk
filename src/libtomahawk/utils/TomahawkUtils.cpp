@@ -326,6 +326,7 @@ extensionToMimetype( const QString& extension )
         s_ext2mime.insert( "flac", "audio/flac" );
         s_ext2mime.insert( "aiff", "audio/aiff" );
         s_ext2mime.insert( "aif",  "audio/aiff" );
+        s_ext2mime.insert( "wv",   "audio/x-wavpack" );
     }
 
     return s_ext2mime.value( extension, "unknown" );

@@ -35,6 +35,7 @@
 #include <taglib/mpcfile.h>
 #include <taglib/asffile.h>
 #include <taglib/aifffile.h>
+#include <taglib/wavpackfile.h>
 
 #include <QStringList>
 
@@ -109,7 +110,14 @@ namespace Tomahawk
         if( file->tag() )
             t = new ASFTag( f.tag(), file->tag() );
     }
-
+    else if( TagLib::WavPack::File *file =
+        dynamic_cast< TagLib::WavPack::File * >( f.file() ) )
+    {
+        if( file->APETag() )
+            t = new APETag( f.tag(), file->APETag() );
+        else if( file->ID3v1Tag() )
+            t = new ID3v1Tag( f.tag() );
+    }
 
     return t;
 }

@@ -147,6 +147,7 @@ MusicScanner::MusicScanner( MusicScanner::ScanMode scanMode, const QStringList& 
     m_ext2mime.insert( "flac", TomahawkUtils::extensionToMimetype( "flac" ) );
     m_ext2mime.insert( "aiff", TomahawkUtils::extensionToMimetype( "aiff" ) );
     m_ext2mime.insert( "aif",  TomahawkUtils::extensionToMimetype( "aif" ) );
+    m_ext2mime.insert( "wv",   TomahawkUtils::extensionToMimetype( "wv" ) );
 }
 
 
