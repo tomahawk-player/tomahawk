@@ -391,11 +391,11 @@ AtticaManager::resolversList( BaseJob* j )
 
     fetchMissingIcons();
 
-    syncServerData();
 
     if ( ++m_resolverJobsLoaded == 2 )
     {
         qSort( m_resolvers.begin(), m_resolvers.end(), resolverSort );
+        syncServerData();
         emit resolversLoaded( m_resolvers );
     }
 }
@@ -449,6 +449,7 @@ AtticaManager::binaryResolversList( BaseJob* j )
     if ( ++m_resolverJobsLoaded == 2 )
     {
         qSort( m_resolvers.begin(), m_resolvers.end(), resolverSort );
+        syncServerData();
         emit resolversLoaded( m_resolvers );
     }
 }
