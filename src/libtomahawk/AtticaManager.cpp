@@ -705,6 +705,7 @@ AtticaManager::payloadFetched()
 
     if ( installedSuccessfully )
     {
+        tDebug( LOGVERBOSE ) << "Setting installed state to resolver:" << resolverId;
         m_resolverStates[ resolverId ].state = Installed;
         TomahawkSettingsGui::instanceGui()->setAtticaResolverStates( m_resolverStates );
         emit resolverInstalled( resolverId );
