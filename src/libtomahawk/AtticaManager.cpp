@@ -502,6 +502,7 @@ AtticaManager::syncServerData()
             }
 
             // DO we need to upgrade?
+            tDebug( LOGVERBOSE ) << "Upgrade check for" << upstream.id() << "local is" << r.version << "upstream is" << upstream.version() << "and state is: " << r.state;
             if ( ( r.state == Installed || r.state == NeedsUpgrade ) &&
                  !upstream.version().isEmpty() )
             {
