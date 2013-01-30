@@ -151,14 +151,21 @@ SourceItem::tooltip() const
 
     QString t;
 
+
     // This is kind of debug output for now.
     t.append( "<PRE>" );
+
+    QString narf("%1: %2\n");
+    t.append( narf.arg( "id" ).arg( m_source->id() ) );
+    t.append( narf.arg( "username" ).arg( m_source->nodeId() ) );
+    t.append( narf.arg( "friendlyname" ).arg( m_source->friendlyName() ) );
+    t.append( narf.arg( "dbfriendlyname" ).arg( m_source->dbFriendlyName() ) );
+
+    t.append("\n");
     foreach( Tomahawk::peerinfo_ptr p, m_source->peerInfos() )
     {
-        QString line( p->sipPlugin()->serviceName() + p->sipPlugin()->friendlyName() + ": " + p->id() );
-
-        t.append( line + "\n" );
-        t.append("\n");
+        QString line( p->sipPlugin()->serviceName() + p->sipPlugin()->friendlyName() + ": " + p->id() + " " + p->friendlyName() );
+        t.append( line + "\n\n" );
     }
     t.append( "</PRE>" );
 
