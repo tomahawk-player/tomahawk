@@ -142,6 +142,7 @@ private:
     Jreen::MUCRoom* m_room;
     Jreen::SimpleRoster* m_roster;
     QHash< Jreen::JID, Jreen::Presence::Type > m_peers;
+    QHash< QString, QString > m_jidsNames;
 
 #ifndef ENABLE_HEADLESS
     QHash< Jreen::JID, QMessageBox* > m_subscriptionConfirmBoxes;

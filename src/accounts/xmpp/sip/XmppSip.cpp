@@ -725,6 +725,24 @@ XmppSipPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr& item, const Jre
         return;
     }
 
+    // cache name
+    if( !item.isNull() && item->name() != jid.bare() && m_jidsNames.value( jid.bare() ) != item->name() )
+    {
+        tLog() << "cache name" << item->name() << "for" << jid.bare() << item << presence.subtype();
+        m_jidsNames.insert( jid.bare(), item->name() );
+
+        // find peers for the jid and update their friendlyName
+        foreach ( const Jreen::JID& peer, m_peers.keys() )
+        {
+            if ( peer.bare() == jid.bare() )
+            {
+                Tomahawk::peerinfo_ptr peerInfo = PeerInfo::get( this, peer.full() );
+                if( !peerInfo.isNull() )
+                    peerInfo->setFriendlyName( item->name() );
+            }
+        }
+    }
+
     // ignore anyone not Running tomahawk:
     Jreen::Capabilities::Ptr caps = presence.payload<Jreen::Capabilities>();
     if ( caps )
@@ -976,6 +994,7 @@ XmppSipPlugin::handlePeerStatus( const Jreen::JID& jid, Jreen::Presence::Type pr
         Tomahawk::peerinfo_ptr peerInfo = PeerInfo::get( this, fulljid, PeerInfo::AutoCreate );
         peerInfo->setContactId( jid.bare() );
         peerInfo->setStatus( PeerInfo::Online );
+        peerInfo->setFriendlyName( m_jidsNames.value( jid.bare() ) );
 
 #ifndef ENABLE_HEADLESS
         if ( !m_avatarManager->avatar( jid.bare() ).isNull() )

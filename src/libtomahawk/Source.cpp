@@ -130,6 +130,15 @@ Source::nodeId() const
 QString
 Source::friendlyName() const
 {
+    QPixmap result;
+    foreach( const peerinfo_ptr& peerInfo, peerInfos() )
+    {
+        if( !peerInfo.isNull() && !peerInfo->friendlyName().isEmpty() )
+        {
+            return peerInfo->friendlyName();
+        }
+    }
+
     if ( m_friendlyname.isEmpty() )
         return dbFriendlyName();
 
