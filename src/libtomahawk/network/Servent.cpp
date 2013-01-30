@@ -87,6 +87,7 @@ Servent::Servent( QObject* parent )
     {
         boost::function<QSharedPointer<QIODevice>(result_ptr)> fac = boost::bind( &Servent::httpIODeviceFactory, this, _1 );
         this->registerIODeviceFactory( "http", fac );
+        this->registerIODeviceFactory( "https", fac );
     }
 }
 
