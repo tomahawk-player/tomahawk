@@ -1753,7 +1753,7 @@ connect and stream from you?</source>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="75"/>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="541"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="548"/>
         <source>Latest Additions</source>
         <translation>最新加入</translation>
     </message>
@@ -1768,37 +1768,37 @@ connect and stream from you?</source>
         <translation>超級收藏</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="544"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="551"/>
         <source>Latest additions to your collection</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="546"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="553"/>
         <source>Latest additions to %1&apos;s collection</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="555"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="562"/>
         <source>Sorry, we could not find any recent additions!</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="584"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="591"/>
         <source>Recently Played Tracks</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="587"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="594"/>
         <source>Your recently played tracks</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="589"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="596"/>
         <source>%1&apos;s recently played tracks</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="596"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="603"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation type="unfinished"/>
     </message>
@@ -3237,43 +3237,43 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="272"/>
-        <location filename="../src/libtomahawk/Source.cpp" line="323"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="281"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="332"/>
         <source>Scanning (%L1 tracks)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="274"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="283"/>
         <source>Scanning</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="308"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="317"/>
         <source>Checking</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="313"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="322"/>
         <source>Syncing</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="318"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="327"/>
         <source>Importing</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="460"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="469"/>
         <source>Saving (%1%)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="541"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="550"/>
         <source>Online</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="545"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="554"/>
         <source>Offline</source>
         <translation type="unfinished"/>
     </message>
@@ -4074,7 +4074,7 @@ Lyrics for &quot;%1&quot; by %2:
         <translation>未知</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="786"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="804"/>
         <source>Do you want to add &lt;b&gt;%1&lt;/b&gt; to your friend list?</source>
         <translation type="unfinished"/>
     </message>
@@ -4129,7 +4129,7 @@ Lyrics for &quot;%1&quot; by %2:
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="785"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="803"/>
         <source>Authorize User</source>
         <translation>授權用戶</translation>
     </message>

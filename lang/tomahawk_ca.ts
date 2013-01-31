@@ -1757,7 +1757,7 @@ i emissores basades en els vostres gusts musicals.</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="75"/>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="541"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="548"/>
         <source>Latest Additions</source>
         <translation>Darreres novetats</translation>
     </message>
@@ -1772,37 +1772,37 @@ i emissores basades en els vostres gusts musicals.</translation>
         <translation>Supercol·lecció</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="544"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="551"/>
         <source>Latest additions to your collection</source>
         <translation>Darreres novetats a la col·lecció</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="546"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="553"/>
         <source>Latest additions to %1&apos;s collection</source>
         <translation>Darreres novetats a la col·lecció %1</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="555"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="562"/>
         <source>Sorry, we could not find any recent additions!</source>
         <translation>No s&apos;ha trobat cap novetat recent</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="584"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="591"/>
         <source>Recently Played Tracks</source>
         <translation>Cançons reproduïdes recentment</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="587"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="594"/>
         <source>Your recently played tracks</source>
         <translation>Les cançons que heu reproduït recentment</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="589"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="596"/>
         <source>%1&apos;s recently played tracks</source>
         <translation>Cançons reproduïdes recentment per %1</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="596"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="603"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>No s&apos;ha trobat cap cançó reproduïda recentment</translation>
     </message>
@@ -3251,43 +3251,43 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="272"/>
-        <location filename="../src/libtomahawk/Source.cpp" line="323"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="281"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="332"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Escanejant (%L1 cançons)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="274"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="283"/>
         <source>Scanning</source>
         <translation>Escanejant</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="308"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="317"/>
         <source>Checking</source>
         <translation>Comprovant</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="313"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="322"/>
         <source>Syncing</source>
         <translation>S&apos;està sincronitzant</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="318"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="327"/>
         <source>Importing</source>
         <translation>S&apos;està important</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="460"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="469"/>
         <source>Saving (%1%)</source>
         <translation>Desant (%1%)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="541"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="550"/>
         <source>Online</source>
         <translation>En línia</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="545"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="554"/>
         <source>Offline</source>
         <translation>Fora de línia</translation>
     </message>
@@ -4100,7 +4100,7 @@ Lletres de la cancó &quot;%1&quot; de %2:
         <translation>Desconegut</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="786"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="804"/>
         <source>Do you want to add &lt;b&gt;%1&lt;/b&gt; to your friend list?</source>
         <translation>Voleu afegir &lt;b&gt;%1&lt;/b&gt; a la vostra llista d&apos;amics?</translation>
     </message>
@@ -4155,7 +4155,7 @@ Lletres de la cancó &quot;%1&quot; de %2:
         <translation>Sóc una presència automàtica emprada pel Reproductor Tomahawk. (http://gettomahawk.com. Si rebeu aquest missatge, la persona amb qui intenteu contactar probablement no està en línia, intenteu-ho més tard!</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="785"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="803"/>
         <source>Authorize User</source>
         <translation>Autorització d&apos;Usuari</translation>
     </message>

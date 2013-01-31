@@ -1755,7 +1755,7 @@ de se connecter et streamer de vous?</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="75"/>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="541"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="548"/>
         <source>Latest Additions</source>
         <translation>Derniers ajouts</translation>
     </message>
@@ -1770,37 +1770,37 @@ de se connecter et streamer de vous?</translation>
         <translation>SuperCollection</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="544"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="551"/>
         <source>Latest additions to your collection</source>
         <translation>Derniers ajouts à votre collection</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="546"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="553"/>
         <source>Latest additions to %1&apos;s collection</source>
         <translation>Derniers ajouts à la collection de %1</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="555"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="562"/>
         <source>Sorry, we could not find any recent additions!</source>
         <translation>Désolé, on a pas pu trouver des dernier ajouts!</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="584"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="591"/>
         <source>Recently Played Tracks</source>
         <translation>Derniers titres joués</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="587"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="594"/>
         <source>Your recently played tracks</source>
         <translation>Les derniers titres que vous avez joués</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="589"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="596"/>
         <source>%1&apos;s recently played tracks</source>
         <translation>Derniers titres joués par %1</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="596"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="603"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>Désolé, aucune piste récemment jouée n&apos;a pu être trouvée !</translation>
     </message>
@@ -3246,43 +3246,43 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="272"/>
-        <location filename="../src/libtomahawk/Source.cpp" line="323"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="281"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="332"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Scan en cours (%L1 titres)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="274"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="283"/>
         <source>Scanning</source>
         <translation>Scan en cours</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="308"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="317"/>
         <source>Checking</source>
         <translation>Vérification</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="313"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="322"/>
         <source>Syncing</source>
         <translation>Synchronisation</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="318"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="327"/>
         <source>Importing</source>
         <translation>Importation</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="460"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="469"/>
         <source>Saving (%1%)</source>
         <translation>Enregistrement (%1%)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="541"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="550"/>
         <source>Online</source>
         <translation>En Ligne</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="545"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="554"/>
         <source>Offline</source>
         <translation>Hors ligne</translation>
     </message>
@@ -4099,7 +4099,7 @@ Paroles de &quot;%1&quot; par %2 :
         <translation>Inconnu</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="786"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="804"/>
         <source>Do you want to add &lt;b&gt;%1&lt;/b&gt; to your friend list?</source>
         <translation>Voulez-vous ajouter &lt;b&gt;%1&lt;/b&gt; à votre liste d&apos;amis?</translation>
     </message>
@@ -4154,7 +4154,7 @@ Paroles de &quot;%1&quot; par %2 :
         <translation>Désolé -- Je suis une présence automatique utilisé par le lecteur Tomahawk (http://gettomahawk.com). Si vous lisez ce message, la personne que vous essayez de joindre n&apos;est probablement pas connecter, donc essayez plus tard ! Merci !</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="785"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="803"/>
         <source>Authorize User</source>
         <translation>Autoriser l&apos;utilisateur</translation>
     </message>
