@@ -86,7 +86,7 @@ set( libGuiSources
     playlist/dynamic/widgets/CollapsibleControls.cpp
     playlist/dynamic/widgets/DynamicSetupWidget.cpp
 
-    ExternalResolverGui.cpp
+    resolvers/ExternalResolverGui.cpp
     resolvers/ScriptResolver.cpp
     resolvers/QtScriptResolver.cpp
     resolvers/ScriptCollection.cpp
@@ -183,8 +183,6 @@ list(APPEND libSources
     Playlist.cpp
     PlaylistPlaylistInterface.cpp
     MetaPlaylistInterface.cpp
-    Resolver.cpp
-    ExternalResolver.cpp
     Query.cpp
     Result.cpp
     Source.cpp
@@ -306,6 +304,9 @@ list(APPEND libSources
     playlist/dynamic/database/DatabaseGenerator.cpp
     playlist/dynamic/database/DatabaseControl.cpp
     playlist/dynamic/DynamicControl.cpp
+    
+    resolvers/Resolver.cpp
+    resolvers/ExternalResolver.cpp
 
     utils/TomahawkUtils.cpp
     utils/Logger.cpp

@@ -25,7 +25,7 @@
 #include "network/RemoteCollection.h"
 #include "network/ControlConnection.h"
 #include "infosystem/InfoSystemCache.h"
-#include "ExternalResolver.h"
+#include "resolvers/ExternalResolver.h"
 #include "resolvers/ScriptCollection.h"
 
 #include "utils/Logger.h"

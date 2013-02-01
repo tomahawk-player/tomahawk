@@ -31,7 +31,7 @@
 #include "Album.h"
 #include "Collection.h"
 #include "Pipeline.h"
-#include "Resolver.h"
+#include "resolvers/Resolver.h"
 #include "SourceList.h"
 #include "audio/AudioEngine.h"
 

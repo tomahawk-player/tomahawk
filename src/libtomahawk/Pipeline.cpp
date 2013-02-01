@@ -22,7 +22,7 @@
 
 #include "FuncTimeout.h"
 #include "database/Database.h"
-#include "ExternalResolver.h"
+#include "resolvers/ExternalResolver.h"
 #include "resolvers/ScriptResolver.h"
 #include "resolvers/QtScriptResolver.h"
 #include "Source.h"
