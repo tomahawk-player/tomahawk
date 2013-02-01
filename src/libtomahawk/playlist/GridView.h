@@ -91,6 +91,7 @@ protected:
 
     void paintEvent( QPaintEvent* event );
     void resizeEvent( QResizeEvent* event );
+    void wheelEvent( QWheelEvent* );
 
 protected slots:
     virtual void currentChanged( const QModelIndex& current, const QModelIndex& previous );
