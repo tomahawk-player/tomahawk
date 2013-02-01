@@ -177,7 +177,6 @@ list(APPEND libSources
     ArtistPlaylistInterface.cpp
     Album.cpp
     AlbumPlaylistInterface.cpp
-    Collection.cpp
     CountryUtils.cpp
     FuncTimeout.cpp
     Playlist.cpp
@@ -207,12 +206,9 @@ list(APPEND libSources
     accounts/spotify/SpotifyPlaylistUpdater.cpp
     accounts/spotify/SpotifyInfoPlugin.cpp
 
-    sip/SipPlugin.cpp
-    sip/SipInfo.cpp
-    sip/PeerInfo.cpp
-    sip/SipStatusMessage.cpp
-
     audio/AudioEngine.cpp
+
+    collection/Collection.cpp
 
     database/Database.cpp
     database/FuzzyIndex.cpp
@@ -307,6 +303,11 @@ list(APPEND libSources
     
     resolvers/Resolver.cpp
     resolvers/ExternalResolver.cpp
+
+    sip/SipPlugin.cpp
+    sip/SipInfo.cpp
+    sip/PeerInfo.cpp
+    sip/SipStatusMessage.cpp
 
     utils/TomahawkUtils.cpp
     utils/Logger.cpp

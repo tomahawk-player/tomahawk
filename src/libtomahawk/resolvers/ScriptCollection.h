@@ -21,7 +21,7 @@
 #define SCRIPTCOLLECTION_H
 
 #include "ExternalResolver.h"
-#include "Collection.h"
+#include "collection/Collection.h"
 
 #include "Typedefs.h"
 #include "DllMacro.h"

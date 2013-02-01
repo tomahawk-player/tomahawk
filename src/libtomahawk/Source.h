@@ -26,7 +26,7 @@
 
 #include "Typedefs.h"
 #include "network/DbSyncConnection.h"
-#include "Collection.h"
+#include "collection/Collection.h"
 #include "Query.h"
 #include "utils/TomahawkUtils.h"
 

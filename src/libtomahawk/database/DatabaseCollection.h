@@ -23,7 +23,7 @@
 
 #include <QDir>
 
-#include "Collection.h"
+#include "collection/Collection.h"
 #include "Source.h"
 #include "Typedefs.h"
 

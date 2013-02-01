@@ -33,7 +33,7 @@
 #include "sourcetree/items/LovedTracksItem.h"
 #include "SourceList.h"
 #include "Playlist.h"
-#include "Collection.h"
+#include "collection/Collection.h"
 #include "Source.h"
 #include "ViewManager.h"
 #include "GlobalActionManager.h"

@@ -25,7 +25,7 @@
 #include "TomahawkWindow.h"
 #include "Query.h"
 #include "Source.h"
-#include "Collection.h"
+#include "collection/Collection.h"
 #include "ActionCollection.h"
 #include "utils/Logger.h"
 #include "utils/TomahawkUtilsGui.h"

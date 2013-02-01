@@ -24,7 +24,7 @@
 
 #include "Album.h"
 #include "Artist.h"
-#include "Collection.h"
+#include "collection/Collection.h"
 #include "Typedefs.h"
 #include "DatabaseCommand.h"
 

@@ -19,7 +19,7 @@
 
 #include "Source.h"
 
-#include "Collection.h"
+#include "collection/Collection.h"
 #include "SourceList.h"
 #include "SourcePlaylistInterface.h"
 

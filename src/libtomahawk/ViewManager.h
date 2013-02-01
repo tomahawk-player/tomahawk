@@ -25,7 +25,7 @@
 #include <QStackedWidget>
 
 #include "Artist.h"
-#include "Collection.h"
+#include "collection/Collection.h"
 #include "PlaylistInterface.h"
 #include "playlist/QueueView.h"
 #include "ViewPage.h"

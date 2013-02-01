@@ -21,7 +21,7 @@
 #include <QSqlQuery>
 
 #include "DatabaseImpl.h"
-#include "Collection.h"
+#include "collection/Collection.h"
 #include "Source.h"
 #include "network/Servent.h"
 #include "utils/Logger.h"

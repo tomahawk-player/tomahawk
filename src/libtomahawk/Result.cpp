@@ -19,7 +19,7 @@
 #include "Result.h"
 
 #include "Album.h"
-#include "Collection.h"
+#include "collection/Collection.h"
 #include "resolvers/Resolver.h"
 #include "Source.h"
 #include "Pipeline.h"

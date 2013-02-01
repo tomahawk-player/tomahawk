@@ -19,7 +19,7 @@
 #include "DatabaseCommand_LoadFiles.h"
 
 #include "DatabaseImpl.h"
-#include "Collection.h"
+#include "collection/Collection.h"
 #include "utils/Logger.h"
 #include "Source.h"
 

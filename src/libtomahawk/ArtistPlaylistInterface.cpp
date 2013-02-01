@@ -20,7 +20,7 @@
 #include "ArtistPlaylistInterface.h"
 
 #include "Artist.h"
-#include "Collection.h"
+#include "collection/Collection.h"
 #include "Query.h"
 #include "database/Database.h"
 #include "database/DatabaseCommand_AllTracks.h"

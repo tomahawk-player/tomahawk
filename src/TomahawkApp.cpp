@@ -26,7 +26,7 @@
 #include "AclRegistryImpl.h"
 #include "Album.h"
 #include "Artist.h"
-#include "Collection.h"
+#include "collection/Collection.h"
 #include "infosystem/InfoSystem.h"
 #include "infosystem/InfoSystemCache.h"
 #include "accounts/AccountManager.h"

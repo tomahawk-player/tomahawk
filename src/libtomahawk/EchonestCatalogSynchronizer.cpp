@@ -21,7 +21,7 @@
 #include <echonest/CatalogUpdateEntry.h>
 #include <echonest/Config.h>
 
-#include "Collection.h"
+#include "collection/Collection.h"
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
 #include "database/DatabaseCommand_GenericSelect.h"
