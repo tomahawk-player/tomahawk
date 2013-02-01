@@ -34,6 +34,7 @@
 #include "Typedefs.h"
 #include "Playlist.h"
 #include "playlist/dynamic/DynamicPlaylist.h"
+#include "collection/ArtistsRequest.h"
 
 #include "DllMacro.h"
 
@@ -80,7 +81,7 @@ public:
     virtual QList< Tomahawk::dynplaylist_ptr > stations() { return m_stations.values(); }
 
     // Async requests. Emit artists/albums/tracksResult in subclasses when finished.
-    virtual void artists() = 0;
+    virtual Tomahawk::ArtistsRequest* requestArtists() = 0;
     virtual void albums( const Tomahawk::artist_ptr& artist ) = 0;
     virtual void tracks( const Tomahawk::album_ptr& album ) = 0;
 
@@ -88,7 +89,6 @@ public:
     unsigned int lastmodified() const { return m_lastmodified; }
 
 signals:
-    void artistsResult( const QList< Tomahawk::artist_ptr >& artists );
     void albumsResult(  const QList< Tomahawk::album_ptr >&  albums );
     void tracksResult(  const QList< Tomahawk::query_ptr >&  queries );
 

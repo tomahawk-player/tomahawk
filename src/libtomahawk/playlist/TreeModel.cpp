@@ -253,9 +253,10 @@ TreeModel::addCollection( const collection_ptr& collection )
 
     m_collection = collection;
 
-    connect( m_collection.data(), SIGNAL( artistsResult( QList<Tomahawk::artist_ptr> ) ),
-             SLOT( onArtistsAdded( QList<Tomahawk::artist_ptr> ) ), Qt::UniqueConnection );
-    m_collection->artists();
+    Tomahawk::ArtistsRequest* req = m_collection->requestArtists();
+    connect( dynamic_cast< QObject* >( req ), SIGNAL( artists( QList< Tomahawk::artist_ptr > ) ),
+             this, SLOT( onArtistsAdded( QList< Tomahawk::artist_ptr > ) ), Qt::UniqueConnection );
+    req->enqueue();
 
     connect( collection.data(), SIGNAL( changed() ), SLOT( onCollectionChanged() ), Qt::UniqueConnection );
 

@@ -23,6 +23,7 @@
 #include "ExternalResolverGui.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+#include "resolvers/ScriptCommand_AllArtists.h"
 
 #include <QIcon>
 #include <QPainter>
@@ -108,31 +109,30 @@ ScriptCollection::bigIcon() const
 }
 
 
-void
-ScriptCollection::artists()
+Tomahawk::ArtistsRequest*
+ScriptCollection::requestArtists()
 {
-    m_resolver->artists( m_resolver->collections().value( name() ) );
+    Tomahawk::collection_ptr thisCollection = m_resolver->collections().value( name() );
+    if ( thisCollection->name() != this->name() )
+        return 0;
+
+    Tomahawk::ArtistsRequest* cmd = new ScriptCommand_AllArtists( thisCollection );
+
+    return cmd;
 }
 
 
 void
 ScriptCollection::albums( const Tomahawk::artist_ptr& artist )
 {
-    m_resolver->albums( m_resolver->collections().value( name() ), artist );
+    //m_resolver->albums( m_resolver->collections().value( name() ), artist );
 }
 
 
 void
 ScriptCollection::tracks( const Tomahawk::album_ptr& album )
 {
-    m_resolver->tracks( m_resolver->collections().value( name() ), album );
-}
-
-
-void
-ScriptCollection::onArtistsFetched( const QList<artist_ptr>& artists )
-{
-    emit artistsResult( artists );
+    //m_resolver->tracks( m_resolver->collections().value( name() ), album );
 }
 
 

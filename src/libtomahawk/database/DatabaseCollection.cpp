@@ -133,27 +133,17 @@ DatabaseCollection::stations()
 }
 
 
-void
-DatabaseCollection::artists()
+Tomahawk::ArtistsRequest*
+DatabaseCollection::requestArtists()
 {
     //FIXME: assuming there's only one dbcollection per source, and that this is the one
     Tomahawk::collection_ptr thisCollection = source()->dbCollection();
     if ( thisCollection->name() != this->name() )
-        return;
+        return 0;
 
-    DatabaseCommand_AllArtists* cmd = new DatabaseCommand_AllArtists( thisCollection );
+    Tomahawk::ArtistsRequest* cmd = new DatabaseCommand_AllArtists( thisCollection );
 
-    connect( cmd, SIGNAL( artists( QList< Tomahawk::artist_ptr > ) ),
-                  SLOT( onArtistsFetched( QList< Tomahawk::artist_ptr > ) ) );
-
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
-}
-
-
-void
-DatabaseCollection::onArtistsFetched( const QList< Tomahawk::artist_ptr >& artists )
-{
-    emit artistsResult( artists );
+    return cmd;
 }
 
 

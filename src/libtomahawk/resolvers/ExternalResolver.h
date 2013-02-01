@@ -25,6 +25,8 @@
 #include "Query.h"
 #include "DllMacro.h"
 #include "Resolver.h"
+#include "ScriptCommandQueue.h"
+#include "ScriptCommand_AllArtists.h"
 
 #include <boost/function.hpp>
 
@@ -45,6 +47,9 @@ class DLLEXPORT ExternalResolver : public Resolver
 {
 Q_OBJECT
 
+    friend class ::ScriptCommandQueue;
+    friend class ::ScriptCommand_AllArtists;
+
 public:
     enum ErrorState {
         NoError,
@@ -62,7 +67,9 @@ public:
     Q_DECLARE_FLAGS( Capabilities, Capability )
     Q_FLAGS( Capabilities )
 
-    ExternalResolver( const QString& filePath ) { m_filePath = filePath; }
+    ExternalResolver( const QString& filePath )
+        : m_commandQueue( new ScriptCommandQueue( this ) )
+    { m_filePath = filePath; }
 
     virtual QString filePath() const { return m_filePath; }
 
@@ -74,23 +81,31 @@ public:
     virtual Capabilities capabilities() const = 0;
     virtual QMap< QString, Tomahawk::collection_ptr > collections() { return m_collections; }
 
+    virtual void enqueue( const QSharedPointer< ScriptCommand >& req )
+    { m_commandQueue->enqueue( req ); }
+
 public slots:
     virtual void start() = 0;
     virtual void stop() = 0;
-
-    // For ScriptCollection
-    virtual void artists( const Tomahawk::collection_ptr& collection ) = 0;
-    virtual void albums( const Tomahawk::collection_ptr& collection, const Tomahawk::artist_ptr& artist ) = 0;
-    virtual void tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::album_ptr& album ) = 0;
 
 signals:
     void changed(); // if config widget was added/removed, name changed, etc
     void collectionAdded( const Tomahawk::collection_ptr& collection );
     void collectionRemoved( const Tomahawk::collection_ptr& collection );
 
+    void artistsFound( const QList< Tomahawk::artist_ptr >& );
+    void albumsFound( const QList< Tomahawk::album_ptr >& );
+    void tracksFound( const QList< Tomahawk::query_ptr >& );
+
 protected:
     void setFilePath( const QString& path ) { m_filePath = path; }
     QMap< QString, Tomahawk::collection_ptr > m_collections;
+    ScriptCommandQueue* m_commandQueue;
+
+    // Should only be called by ScriptCommands
+    virtual void artists( const Tomahawk::collection_ptr& collection ) = 0;
+    virtual void albums( const Tomahawk::collection_ptr& collection, const Tomahawk::artist_ptr& artist ) = 0;
+    virtual void tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::album_ptr& album ) = 0;
 
 private:
     QString m_filePath;

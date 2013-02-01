@@ -89,7 +89,6 @@ set( libGuiSources
     resolvers/ExternalResolverGui.cpp
     resolvers/ScriptResolver.cpp
     resolvers/QtScriptResolver.cpp
-    resolvers/ScriptCollection.cpp
 
     utils/ImageRegistry.cpp
     utils/WidgetDragFilter.cpp
@@ -301,8 +300,11 @@ list(APPEND libSources
     playlist/dynamic/database/DatabaseControl.cpp
     playlist/dynamic/DynamicControl.cpp
     
-    resolvers/Resolver.cpp
     resolvers/ExternalResolver.cpp
+    resolvers/Resolver.cpp
+    resolvers/ScriptCollection.cpp
+    resolvers/ScriptCommand_AllArtists.cpp
+    resolvers/ScriptCommandQueue.cpp
 
     sip/SipPlugin.cpp
     sip/SipInfo.cpp

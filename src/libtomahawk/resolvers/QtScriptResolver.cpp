@@ -156,8 +156,8 @@ QtScriptResolverHelper::addArtistResults( const QVariantMap& results )
     tDebug() << Q_FUNC_INFO << "about to push" << artists.count() << "artists";
     foreach( const Tomahawk::artist_ptr& artist, artists)
         tDebug() << artist->name();
-    QMetaObject::invokeMethod( collection.data(), "onArtistsFetched", Qt::QueuedConnection,
-                               Q_ARG( QList< Tomahawk::artist_ptr >, artists ) );
+
+    emit m_resolver->artistsFound( artists );
 }
 
 
@@ -502,8 +502,7 @@ QtScriptResolver::artists( const Tomahawk::collection_ptr& collection )
     if ( !m_collections.contains( collection->name() ) || //if the collection doesn't belong to this resolver
          !capabilities().testFlag( Browsable ) )          //or this resolver doesn't even support collections
     {
-        QMetaObject::invokeMethod( collection.data(), "onArtistsFetched", Qt::QueuedConnection,
-                                   Q_ARG( QList< Tomahawk::artist_ptr >, QList< Tomahawk::artist_ptr >() ) );
+        emit artistsFound( QList< Tomahawk::artist_ptr >() );
         return;
     }
 
