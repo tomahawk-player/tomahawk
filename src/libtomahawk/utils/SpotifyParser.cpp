@@ -86,8 +86,9 @@ SpotifyParser::lookupUrl( const QString& rawLink )
         link = "spotify:" + link;
     }
     // Some spotify apps contain the link to the playlist as url-encoded in their link (e.g. ShareMyPlaylists)
-    if ( link.contains( "%3A" ) ) {
-        link = QUrl::fromPercentEncoding(link.toUtf8());
+    if ( link.contains( "%3A" ) )
+    {
+        link = QUrl::fromPercentEncoding( link.toUtf8() );
     }
     // TODO: Ignoring search and user querys atm
     // (spotify:(?:(?:artist|album|track|user:[^:]+:playlist):[a-zA-Z0-9]+|user:[^:]+|search:(?:[-\w$\.+!*'(),<>:\s]+|%[a-fA-F0-9\s]{2})+))
