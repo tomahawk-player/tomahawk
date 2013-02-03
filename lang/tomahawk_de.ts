@@ -3288,7 +3288,7 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
 <context>
     <name>Tomahawk::SpotifyParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="268"/>
+        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="273"/>
         <source>Error fetching Spotify information from the network!</source>
         <translation>Konnte Spotify-Daten nicht laden!</translation>
     </message>

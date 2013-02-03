@@ -3295,7 +3295,7 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
 <context>
     <name>Tomahawk::SpotifyParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="268"/>
+        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="273"/>
         <source>Error fetching Spotify information from the network!</source>
         <translation>Error en cercar la informació de Spotify a través de la xarxa!</translation>
     </message>

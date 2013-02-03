@@ -3296,7 +3296,7 @@ Try tweaking the filters for a new set of songs to play.</translation>
 <context>
     <name>Tomahawk::SpotifyParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="268"/>
+        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="273"/>
         <source>Error fetching Spotify information from the network!</source>
         <translation>Error fetching Spotify information from the network!</translation>
     </message>

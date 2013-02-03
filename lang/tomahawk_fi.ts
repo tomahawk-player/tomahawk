@@ -2461,7 +2461,7 @@ käyttäjätunnus@jabber.org</translation>
         <location filename="../src/accounts/zeroconf/ZeroconfAccount.cpp" line="65"/>
         <location filename="../src/accounts/zeroconf/ZeroconfAccount.cpp" line="66"/>
         <source>Local Network</source>
-        <translation>Paikallisverkko</translation>
+        <translation>Lähiverkko</translation>
     </message>
 </context>
 <context>
@@ -2469,12 +2469,12 @@ käyttäjätunnus@jabber.org</translation>
     <message>
         <location filename="../src/accounts/zeroconf/ZeroconfAccount.h" line="42"/>
         <source>Local Network</source>
-        <translation>Paikallisverkko</translation>
+        <translation>Lähiverkko</translation>
     </message>
     <message>
         <location filename="../src/accounts/zeroconf/ZeroconfAccount.h" line="43"/>
         <source>Automatically connect to Tomahawks on the local network</source>
-        <translation>Yhdistä paikallisverkon Tomahawkeihin automaattisesti</translation>
+        <translation>Yhdistä lähiverkon Tomahawkeihin automaattisesti</translation>
     </message>
 </context>
 <context>
@@ -3299,7 +3299,7 @@ Koeta säätää suodattimia saadaksesi uuden joukon kappaleita kuunneltavaksi.<
 <context>
     <name>Tomahawk::SpotifyParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="268"/>
+        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="273"/>
         <source>Error fetching Spotify information from the network!</source>
         <translation>Spotify-tietojen hakeminen verkosta epäonnistui!</translation>
     </message>
@@ -3340,7 +3340,7 @@ anna siellä näytetty PIN-koodi tähän:</translation>
     <message>
         <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="375"/>
         <source>Local Network</source>
-        <translation>Paikallisverkko</translation>
+        <translation>Lähiverkko</translation>
     </message>
 </context>
 <context>
@@ -3434,7 +3434,7 @@ anna siellä näytetty PIN-koodi tähän:</translation>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="290"/>
         <source>Search for any artist, album or song...</source>
-        <translation>Etsi mitä tahansa artistia, albumia tai kappaletta...</translation>
+        <translation>Etsi artistia, albumia tai kappaletta...</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="314"/>
@@ -4170,12 +4170,12 @@ Sanat artistin %2 kappaleelle ”%1”:
     <message>
         <location filename="../src/accounts/zeroconf/ConfigWidget.ui" line="55"/>
         <source>Local Network configuration</source>
-        <translation>Paikallisverkon asetukset</translation>
+        <translation>Lähiverkon asetukset</translation>
     </message>
     <message>
         <location filename="../src/accounts/zeroconf/ConfigWidget.ui" line="77"/>
         <source>This plugin will automatically find other users running Tomahawk on your local network</source>
-        <translation>Tämä liitännäinen löytää automaattisesti muut paikallisverkossa olevat Tomahawk-käyttäjät</translation>
+        <translation>Tämä liitännäinen löytää automaattisesti muut lähiverkossa olevat Tomahawk-käyttäjät</translation>
     </message>
     <message>
         <location filename="../src/accounts/zeroconf/ConfigWidget.ui" line="84"/>

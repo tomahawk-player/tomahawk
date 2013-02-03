@@ -3293,7 +3293,7 @@ Zkuste vyladit filtry pro nové písně.</translation>
 <context>
     <name>Tomahawk::SpotifyParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="268"/>
+        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="273"/>
         <source>Error fetching Spotify information from the network!</source>
         <translation>Nepodařilo se nahrát data Spotify. Chyba při natahování informací ze sítě!</translation>
     </message>
