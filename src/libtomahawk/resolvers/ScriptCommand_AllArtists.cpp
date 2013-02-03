@@ -60,6 +60,14 @@ ScriptCommand_AllArtists::exec()
 }
 
 
+void
+ScriptCommand_AllArtists::reportFailure()
+{
+    emit artists( QList< Tomahawk::artist_ptr >() );
+    emit done();
+}
+
+
 void ScriptCommand_AllArtists::onResolverDone( const QList< Tomahawk::artist_ptr >& a )
 {
     emit artists( a );

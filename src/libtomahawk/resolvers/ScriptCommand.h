@@ -33,6 +33,7 @@ signals:
 protected:
     friend class ScriptCommandQueue;
     virtual void exec() = 0;
+    virtual void reportFailure() = 0;
 };
 
 #endif // SCRIPTCOMMAND_H

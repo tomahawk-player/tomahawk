@@ -42,6 +42,7 @@ signals:
 
 protected:
     virtual void exec();
+    virtual void reportFailure();
 
 private slots:
     void onResolverDone( const QList< Tomahawk::artist_ptr >& );

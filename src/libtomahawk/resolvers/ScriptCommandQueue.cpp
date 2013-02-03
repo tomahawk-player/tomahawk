@@ -27,7 +27,6 @@ ScriptCommandQueue::ScriptCommandQueue( QObject* parent )
     , m_timer( new QTimer( this ) )
 {
     m_timer->setSingleShot( true );
-    connect( m_timer, SIGNAL( timeout() ), SLOT( onTimeout() ) );
 }
 
 
@@ -51,6 +50,11 @@ ScriptCommandQueue::nextCommand()
     NewClosure( req.data(), SIGNAL( done() ),
                 this, SLOT( onCommandDone( QSharedPointer< ScriptCommand > ) ), req );
 
+    NewClosure( m_timer, SIGNAL( timeout() ),
+                this, SLOT( onTimeout( QSharedPointer< ScriptCommand > ) ), req );
+
+    m_timer->start( 2000 );
+
     req->exec();
 }
 
@@ -58,8 +62,28 @@ ScriptCommandQueue::nextCommand()
 void
 ScriptCommandQueue::onCommandDone( const QSharedPointer< ScriptCommand >& req )
 {
+    disconnect( this, SLOT( onTimeout( QSharedPointer< ScriptCommand > ) ) );
+    m_timer->stop();
+
     m_queue.removeAll( req );
     req->deleteLater();
+
+    if ( m_queue.count() > 0 )
+        nextCommand();
+}
+
+
+void
+ScriptCommandQueue::onTimeout( const QSharedPointer< ScriptCommand >& req )
+{
+    disconnect( this, SLOT( onCommandDone( QSharedPointer< ScriptCommand > ) ) );
+
+    m_timer->stop();
+
+    m_queue.removeAll( req );
+    req->reportFailure();
+    req->deleteLater();
+
     if ( m_queue.count() > 0 )
         nextCommand();
 }
