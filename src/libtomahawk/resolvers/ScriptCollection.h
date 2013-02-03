@@ -52,10 +52,7 @@ public:
 
     virtual Tomahawk::ArtistsRequest* requestArtists();
     virtual Tomahawk::AlbumsRequest*  requestAlbums( const Tomahawk::artist_ptr& artist );
-    virtual void tracks( const Tomahawk::album_ptr& album );
-
-private slots:
-    void onTracksFetched(  const QList< Tomahawk::query_ptr >&  tracks );
+    virtual Tomahawk::TracksRequest*  requestTracks( const Tomahawk::album_ptr& album );
 
 private:
     ExternalResolver* m_resolver;

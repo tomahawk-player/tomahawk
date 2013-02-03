@@ -25,6 +25,7 @@
 #include "utils/Logger.h"
 #include "resolvers/ScriptCommand_AllArtists.h"
 #include "resolvers/ScriptCommand_AllAlbums.h"
+#include "resolvers/ScriptCommand_AllTracks.h"
 
 #include <QIcon>
 #include <QPainter>
@@ -136,15 +137,14 @@ ScriptCollection::requestAlbums( const Tomahawk::artist_ptr& artist )
 }
 
 
-void
-ScriptCollection::tracks( const Tomahawk::album_ptr& album )
+Tomahawk::TracksRequest*
+ScriptCollection::requestTracks( const Tomahawk::album_ptr& album )
 {
-    //m_resolver->tracks( m_resolver->collections().value( name() ), album );
-}
+    Tomahawk::collection_ptr thisCollection = m_resolver->collections().value( name() );
+    if ( thisCollection->name() != this->name() )
+        return 0;
 
+    Tomahawk::TracksRequest* cmd = new ScriptCommand_AllTracks( thisCollection, album );
 
-void
-ScriptCollection::onTracksFetched( const QList<query_ptr>& tracks )
-{
-    emit tracksResult( tracks );
+    return cmd;
 }

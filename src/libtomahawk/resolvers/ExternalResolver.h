@@ -28,6 +28,7 @@
 #include "ScriptCommandQueue.h"
 #include "ScriptCommand_AllArtists.h"
 #include "ScriptCommand_AllAlbums.h"
+#include "ScriptCommand_AllTracks.h"
 
 #include <boost/function.hpp>
 
@@ -51,6 +52,7 @@ Q_OBJECT
     friend class ::ScriptCommandQueue;
     friend class ::ScriptCommand_AllArtists;
     friend class ::ScriptCommand_AllAlbums;
+    friend class ::ScriptCommand_AllTracks;
 
 public:
     enum ErrorState {

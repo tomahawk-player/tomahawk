@@ -230,8 +230,7 @@ QtScriptResolverHelper::addAlbumTrackResults( const QVariantMap& results )
 
     tDebug() << Q_FUNC_INFO << "about to push" << tracks.count() << "tracks";
 
-    QMetaObject::invokeMethod( collection.data(), "onTracksFetched", Qt::QueuedConnection,
-                               Q_ARG( QList< Tomahawk::query_ptr >, queries ) );
+    emit m_resolver->tracksFound( queries );
 }
 
 
@@ -570,8 +569,7 @@ QtScriptResolver::tracks( const Tomahawk::collection_ptr& collection, const Toma
     if ( !m_collections.contains( collection->name() ) || //if the collection doesn't belong to this resolver
          !capabilities().testFlag( Browsable ) )          //or this resolver doesn't even support collections
     {
-        QMetaObject::invokeMethod( collection.data(), "onTracksFetched", Qt::QueuedConnection,
-                                   Q_ARG( QList< Tomahawk::query_ptr >, QList< Tomahawk::query_ptr >() ) );
+        emit tracksFound( QList< Tomahawk::query_ptr >() );
         return;
     }
 

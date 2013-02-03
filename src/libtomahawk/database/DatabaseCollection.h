@@ -52,15 +52,13 @@ public:
 
     virtual Tomahawk::ArtistsRequest* requestArtists();
     virtual Tomahawk::AlbumsRequest*  requestAlbums( const Tomahawk::artist_ptr& artist );
-    virtual void tracks( const Tomahawk::album_ptr& album );
+    virtual Tomahawk::TracksRequest*  requestTracks( const Tomahawk::album_ptr& album );
 
 public slots:
     virtual void addTracks( const QList<QVariant>& newitems );
     virtual void removeTracks( const QDir& dir );
 
 private slots:
-    void onTracksFetched(  const QList< Tomahawk::query_ptr >&  tracks );
-
     void stationCreated( const Tomahawk::source_ptr& source, const QVariantList& data );
     void autoPlaylistCreated( const Tomahawk::source_ptr& source, const QVariantList& data );
 };

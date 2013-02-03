@@ -36,6 +36,7 @@
 #include "playlist/dynamic/DynamicPlaylist.h"
 #include "collection/ArtistsRequest.h"
 #include "collection/AlbumsRequest.h"
+#include "collection/TracksRequest.h"
 
 #include "DllMacro.h"
 
@@ -84,15 +85,12 @@ public:
     // Async requests. Emit artists/albums/tracksResult in subclasses when finished.
     virtual Tomahawk::ArtistsRequest* requestArtists() = 0;
     virtual Tomahawk::AlbumsRequest* requestAlbums( const Tomahawk::artist_ptr& artist ) = 0;
-    virtual void tracks( const Tomahawk::album_ptr& album ) = 0;
+    virtual Tomahawk::TracksRequest* requestTracks( const Tomahawk::album_ptr& album ) = 0;
 
     const source_ptr& source() const;
     unsigned int lastmodified() const { return m_lastmodified; }
 
 signals:
-    void albumsResult(  const QList< Tomahawk::album_ptr >&  albums );
-    void tracksResult(  const QList< Tomahawk::query_ptr >&  queries );
-
     void tracksAdded( const QList<unsigned int>& fileids );
     void tracksRemoved( const QList<unsigned int>& fileids );
 

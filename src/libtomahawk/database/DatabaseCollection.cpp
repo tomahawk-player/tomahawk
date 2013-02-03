@@ -161,29 +161,19 @@ DatabaseCollection::requestAlbums( const Tomahawk::artist_ptr& artist )
 }
 
 
-void
-DatabaseCollection::tracks( const Tomahawk::album_ptr& album )
+Tomahawk::TracksRequest*
+DatabaseCollection::requestTracks( const Tomahawk::album_ptr& album )
 {
     //FIXME: assuming there's only one dbcollection per source, and that this is the one
     Tomahawk::collection_ptr thisCollection = source()->dbCollection();
     if ( thisCollection->name() != this->name() )
-        return;
+        return 0;
 
     DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks( thisCollection );
     cmd->setAlbum( album->weakRef() );
     cmd->setSortOrder( DatabaseCommand_AllTracks::AlbumPosition );
 
-    connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),
-                    SLOT( onTracksFetched( QList<Tomahawk::query_ptr> ) ) );
-
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
-}
-
-
-void
-DatabaseCollection::onTracksFetched( const QList< query_ptr >& tracks )
-{
-    emit tracksResult( tracks );
+    return cmd;
 }
 
 
