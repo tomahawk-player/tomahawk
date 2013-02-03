@@ -187,8 +187,8 @@ QtScriptResolverHelper::addAlbumResults( const QVariantMap& results )
     tDebug() << Q_FUNC_INFO << "about to push" << albums.count() << "albums";
     foreach( const Tomahawk::album_ptr& album, albums)
         tDebug() << album->name();
-    QMetaObject::invokeMethod( collection.data(), "onAlbumsFetched", Qt::QueuedConnection,
-                               Q_ARG( QList< Tomahawk::album_ptr >, albums ) );
+
+    emit m_resolver->albumsFound( albums );
 }
 
 
@@ -535,8 +535,7 @@ QtScriptResolver::albums( const Tomahawk::collection_ptr& collection, const Toma
     if ( !m_collections.contains( collection->name() ) || //if the collection doesn't belong to this resolver
          !capabilities().testFlag( Browsable ) )          //or this resolver doesn't even support collections
     {
-        QMetaObject::invokeMethod( collection.data(), "onAlbumsFetched", Qt::QueuedConnection,
-                                   Q_ARG( QList< Tomahawk::album_ptr >, QList< Tomahawk::album_ptr >() ) );
+        emit albumsFound( QList< Tomahawk::album_ptr >() );
         return;
     }
 

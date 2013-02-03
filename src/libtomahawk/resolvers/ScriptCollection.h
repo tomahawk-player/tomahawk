@@ -23,6 +23,7 @@
 #include "ExternalResolver.h"
 #include "collection/Collection.h"
 #include "collection/ArtistsRequest.h"
+#include "collection/AlbumsRequest.h"
 
 #include "Typedefs.h"
 #include "DllMacro.h"
@@ -50,11 +51,10 @@ public:
     virtual ExternalResolver* resolver() { return m_resolver; }
 
     virtual Tomahawk::ArtistsRequest* requestArtists();
-    virtual void albums( const Tomahawk::artist_ptr& artist );
+    virtual Tomahawk::AlbumsRequest*  requestAlbums( const Tomahawk::artist_ptr& artist );
     virtual void tracks( const Tomahawk::album_ptr& album );
 
 private slots:
-    void onAlbumsFetched(  const QList< Tomahawk::album_ptr >&  albums );
     void onTracksFetched(  const QList< Tomahawk::query_ptr >&  tracks );
 
 private:

@@ -53,7 +53,7 @@ ScriptCommandQueue::nextCommand()
     NewClosure( m_timer, SIGNAL( timeout() ),
                 this, SLOT( onTimeout( QSharedPointer< ScriptCommand > ) ), req );
 
-    m_timer->start( 2000 );
+    m_timer->start( 5000 );
 
     req->exec();
 }
@@ -66,7 +66,6 @@ ScriptCommandQueue::onCommandDone( const QSharedPointer< ScriptCommand >& req )
     m_timer->stop();
 
     m_queue.removeAll( req );
-    req->deleteLater();
 
     if ( m_queue.count() > 0 )
         nextCommand();
@@ -80,9 +79,8 @@ ScriptCommandQueue::onTimeout( const QSharedPointer< ScriptCommand >& req )
 
     m_timer->stop();
 
-    m_queue.removeAll( req );
     req->reportFailure();
-    req->deleteLater();
+    m_queue.removeAll( req );
 
     if ( m_queue.count() > 0 )
         nextCommand();

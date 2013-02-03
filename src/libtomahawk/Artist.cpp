@@ -178,10 +178,16 @@ Artist::albums( ModelMode mode, const Tomahawk::collection_ptr& collection ) con
         }
         else
         {
-            //collection is *surely* not null
-            connect( collection.data(), SIGNAL( albumsResult( QList< Tomahawk::album_ptr > ) ),
-                     SLOT( onAlbumsFound( QList<Tomahawk::album_ptr> ) ), Qt::UniqueConnection );
-            collection->albums( artist );
+            //collection is *surely* not null, and might be a ScriptCollection
+            Tomahawk::AlbumsRequest* cmd = collection->requestAlbums( artist );
+
+            // There is also a signal albums( QList, QVariant ).
+            // The QVariant might carry a bool that says whether the dbcmd was executed for a null collection
+            // but here we know for a fact that the collection is not null, so we'll happily ignore it
+            connect( dynamic_cast< QObject* >( cmd ), SIGNAL( albums( QList<Tomahawk::album_ptr> ) ),
+                     this, SLOT( onAlbumsFound( QList<Tomahawk::album_ptr> ) ) );
+
+            cmd->enqueue();
         }
     }
 

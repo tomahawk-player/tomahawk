@@ -147,30 +147,17 @@ DatabaseCollection::requestArtists()
 }
 
 
-void
-DatabaseCollection::albums( const Tomahawk::artist_ptr& artist )
+Tomahawk::AlbumsRequest*
+DatabaseCollection::requestAlbums( const Tomahawk::artist_ptr& artist )
 {
     //FIXME: assuming there's only one dbcollection per source, and that this is the one
     Tomahawk::collection_ptr thisCollection = source()->dbCollection();
     if ( thisCollection->name() != this->name() )
-        return;
+        return 0;
 
-    DatabaseCommand_AllAlbums* cmd = new DatabaseCommand_AllAlbums( thisCollection, artist );
+    Tomahawk::AlbumsRequest* cmd = new DatabaseCommand_AllAlbums( thisCollection, artist );
 
-    // The QVariant might carry a bool that says whether the dbcmd was executed for a null collection
-    // but here we know for a fact that the collection is not null, so we'll happily ignore it
-    connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, QVariant ) ),
-                    SLOT( onAlbumsFetched( QList<Tomahawk::album_ptr>, QVariant ) ) );
-
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
-}
-
-
-void
-DatabaseCollection::onAlbumsFetched( const QList< album_ptr >& albums, const QVariant& data )
-{
-    Q_UNUSED( data );
-    emit albumsResult( albums );
+    return cmd;
 }
 
 

@@ -27,6 +27,7 @@
 #include "Resolver.h"
 #include "ScriptCommandQueue.h"
 #include "ScriptCommand_AllArtists.h"
+#include "ScriptCommand_AllAlbums.h"
 
 #include <boost/function.hpp>
 
@@ -49,6 +50,7 @@ Q_OBJECT
 
     friend class ::ScriptCommandQueue;
     friend class ::ScriptCommand_AllArtists;
+    friend class ::ScriptCommand_AllAlbums;
 
 public:
     enum ErrorState {

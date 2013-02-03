@@ -34,7 +34,8 @@ DatabaseCommand_AllAlbums::DatabaseCommand_AllAlbums( const Tomahawk::collection
   , m_amount( 0 )
   , m_sortOrder( DatabaseCommand_AllAlbums::None )
   , m_sortDescending( false )
-{}
+{
+}
 
 
 DatabaseCommand_AllAlbums::~DatabaseCommand_AllAlbums()
@@ -114,6 +115,7 @@ DatabaseCommand_AllAlbums::execForArtist( DatabaseImpl* dbi )
     }
 
     emit albums( al, data() );
+    emit albums( al );
     emit done();
 }
 
@@ -162,6 +164,7 @@ DatabaseCommand_AllAlbums::execForCollection( DatabaseImpl* dbi )
     }
 
     emit albums( al, data() );
+    emit albums( al );
     emit done();
 }
 

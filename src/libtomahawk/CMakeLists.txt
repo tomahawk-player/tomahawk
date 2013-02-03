@@ -304,6 +304,7 @@ list(APPEND libSources
     resolvers/Resolver.cpp
     resolvers/ScriptCollection.cpp
     resolvers/ScriptCommand_AllArtists.cpp
+    resolvers/ScriptCommand_AllAlbums.cpp
     resolvers/ScriptCommandQueue.cpp
 
     sip/SipPlugin.cpp

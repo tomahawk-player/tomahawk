@@ -16,26 +16,30 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ScriptCommand_AllArtists.h"
+#include "ScriptCommand_AllAlbums.h"
 
 #include "ExternalResolver.h"
 #include "ScriptCollection.h"
 
-ScriptCommand_AllArtists::ScriptCommand_AllArtists( const Tomahawk::collection_ptr& collection,
-                                                    QObject* parent )
+#include "utils/Logger.h"
+
+ScriptCommand_AllAlbums::ScriptCommand_AllAlbums( const Tomahawk::collection_ptr& collection,
+                                                  const Tomahawk::artist_ptr& artist,
+                                                  QObject* parent )
     : ScriptCommand( parent )
     , m_collection( collection )
+    , m_artist( artist )
 {
 }
 
 
 void
-ScriptCommand_AllArtists::enqueue()
+ScriptCommand_AllAlbums::enqueue()
 {
     Tomahawk::ScriptCollection* collection = qobject_cast< Tomahawk::ScriptCollection* >( m_collection.data() );
     if ( collection == 0 )
     {
-        reportFailure();
+        emit albums( QList< Tomahawk::album_ptr >() );
         return;
     }
 
@@ -44,32 +48,39 @@ ScriptCommand_AllArtists::enqueue()
 
 
 void
-ScriptCommand_AllArtists::exec()
+ScriptCommand_AllAlbums::exec()
 {
     Tomahawk::ScriptCollection* collection = qobject_cast< Tomahawk::ScriptCollection* >( m_collection.data() );
     if ( collection == 0 )
     {
-        emit artists( QList< Tomahawk::artist_ptr >() );
+        reportFailure();
         return;
     }
 
-    connect( collection->resolver(), SIGNAL( artistsFound( QList< Tomahawk::artist_ptr > ) ),
-             this, SLOT( onResolverDone( QList< Tomahawk::artist_ptr > ) ) );
+    if ( m_artist.isNull() )
+    {
+        reportFailure();
+        return;
+    }
 
-    collection->resolver()->artists( m_collection );
+    connect( collection->resolver(), SIGNAL( albumsFound( QList< Tomahawk::album_ptr > ) ),
+             this, SLOT( onResolverDone( QList< Tomahawk::album_ptr > ) ) );
+
+    collection->resolver()->albums( m_collection, m_artist );
 }
 
 
 void
-ScriptCommand_AllArtists::reportFailure()
+ScriptCommand_AllAlbums::reportFailure()
 {
-    emit artists( QList< Tomahawk::artist_ptr >() );
+    emit albums( QList< Tomahawk::album_ptr >() );
     emit done();
 }
 
 
-void ScriptCommand_AllArtists::onResolverDone( const QList< Tomahawk::artist_ptr >& a )
+void
+ScriptCommand_AllAlbums::onResolverDone( const QList< Tomahawk::album_ptr >& a )
 {
-    emit artists( a );
+    emit albums( a );
     emit done();
 }

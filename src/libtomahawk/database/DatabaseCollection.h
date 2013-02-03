@@ -51,7 +51,7 @@ public:
     virtual QList< Tomahawk::dynplaylist_ptr > stations();
 
     virtual Tomahawk::ArtistsRequest* requestArtists();
-    virtual void albums( const Tomahawk::artist_ptr& artist );
+    virtual Tomahawk::AlbumsRequest*  requestAlbums( const Tomahawk::artist_ptr& artist );
     virtual void tracks( const Tomahawk::album_ptr& album );
 
 public slots:
@@ -59,7 +59,6 @@ public slots:
     virtual void removeTracks( const QDir& dir );
 
 private slots:
-    void onAlbumsFetched(  const QList< Tomahawk::album_ptr >&  albums, const QVariant& data );
     void onTracksFetched(  const QList< Tomahawk::query_ptr >&  tracks );
 
     void stationCreated( const Tomahawk::source_ptr& source, const QVariantList& data );

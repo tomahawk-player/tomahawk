@@ -16,37 +16,39 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SCRIPTCOMMAND_ALLARTISTS_H
-#define SCRIPTCOMMAND_ALLARTISTS_H
+#ifndef SCRIPTCOMMAND_ALLALBUMS_H
+#define SCRIPTCOMMAND_ALLALBUMS_H
 
-#include "collection/ArtistsRequest.h"
+#include "collection/AlbumsRequest.h"
 #include "collection/Collection.h"
 #include "resolvers/ScriptCommand.h"
 
-class ScriptCommand_AllArtists : public ScriptCommand
-                               , public Tomahawk::ArtistsRequest
+class ScriptCommand_AllAlbums : public ScriptCommand
+                              , public Tomahawk::AlbumsRequest
 {
     Q_OBJECT
 public:
-    explicit ScriptCommand_AllArtists( const Tomahawk::collection_ptr& collection,
-                                       QObject* parent = 0 );
-    virtual ~ScriptCommand_AllArtists() {}
+    explicit ScriptCommand_AllAlbums( const Tomahawk::collection_ptr& collection,
+                                      const Tomahawk::artist_ptr& artist,
+                                      QObject* parent = 0 );
+    virtual ~ScriptCommand_AllAlbums() {}
 
     virtual void enqueue();
     
 signals:
-    void artists( const QList< Tomahawk::artist_ptr >& );
+    void albums( const QList< Tomahawk::album_ptr >& );
     void done();
 
 protected:
     virtual void exec();
     virtual void reportFailure();
-
+    
 private slots:
-    void onResolverDone( const QList< Tomahawk::artist_ptr >& );
+    void onResolverDone( const QList< Tomahawk::album_ptr >& );
 
 private:
     Tomahawk::collection_ptr m_collection;
+    Tomahawk::artist_ptr m_artist;
 };
 
-#endif // SCRIPTCOMMAND_ALLARTISTS_H
+#endif // SCRIPTCOMMAND_ALLALBUMS_H
