@@ -63,6 +63,9 @@ ScriptCommandQueue::nextCommand()
 void
 ScriptCommandQueue::onCommandDone()
 {
+    if ( m_queue.isEmpty() || !m_timer->isActive() ) //the timeout already happened or some other weird thing
+        return;                                      //nothing to do here
+
     m_timer->stop();
 
     QMutexLocker locker( &m_mutex );
