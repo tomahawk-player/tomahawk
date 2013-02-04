@@ -25,6 +25,7 @@
 #include <QSharedPointer>
 #include <QTimer>
 #include <QMetaType>
+#include <QMutex>
 
 class ScriptCommandQueue : public QObject
 {
@@ -43,6 +44,7 @@ private slots:
 private:
     QQueue< QSharedPointer< ScriptCommand > > m_queue;
     QTimer* m_timer;
+    QMutex m_mutex;
 };
 
 Q_DECLARE_METATYPE( QSharedPointer< ScriptCommand > )

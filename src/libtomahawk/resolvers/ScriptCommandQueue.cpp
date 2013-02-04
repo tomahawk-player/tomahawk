@@ -19,6 +19,7 @@
 #include "ScriptCommandQueue.h"
 
 #include <QMetaType>
+#include <QMutex>
 
 ScriptCommandQueue::ScriptCommandQueue( QObject* parent )
     : QObject( parent )
@@ -31,7 +32,10 @@ ScriptCommandQueue::ScriptCommandQueue( QObject* parent )
 void
 ScriptCommandQueue::enqueue( const QSharedPointer< ScriptCommand >& req )
 {
+    QMutexLocker locker( &m_mutex );
     m_queue.append( req );
+    locker.unlock();
+
     if ( m_queue.count() == 1 )
         nextCommand();
 }
@@ -61,9 +65,10 @@ ScriptCommandQueue::onCommandDone()
 {
     m_timer->stop();
 
+    QMutexLocker locker( &m_mutex );
     const QSharedPointer< ScriptCommand > req = m_queue.first();
-
     m_queue.removeAll( req );
+    locker.unlock();
 
     disconnect( req.data(), SIGNAL( done() ),
                 this, SLOT( onCommandDone() ) );
@@ -80,10 +85,12 @@ ScriptCommandQueue::onTimeout()
 {
     m_timer->stop();
 
+    QMutexLocker locker( &m_mutex );
     const QSharedPointer< ScriptCommand > req = m_queue.first();
+    m_queue.removeAll( req );
+    locker.unlock();
 
     req->reportFailure();
-    m_queue.removeAll( req );
 
     disconnect( req.data(), SIGNAL( done() ),
                 this, SLOT( onCommandDone() ) );
