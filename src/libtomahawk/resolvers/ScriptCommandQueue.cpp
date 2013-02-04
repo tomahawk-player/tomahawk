@@ -47,7 +47,6 @@ ScriptCommandQueue::nextCommand()
 
     connect( req.data(), SIGNAL( done() ),
              this, SLOT( onCommandDone() ) );
-
     connect( m_timer, SIGNAL( timeout() ),
              this, SLOT( onTimeout() ) );
 

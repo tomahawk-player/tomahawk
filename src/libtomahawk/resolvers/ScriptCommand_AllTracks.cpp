@@ -81,5 +81,4 @@ ScriptCommand_AllTracks::onResolverDone( const QList< Tomahawk::query_ptr >& q )
 {
     emit tracks( q );
     emit done();
-    //FIXME: find a way to delete this object when its job is done
 }
