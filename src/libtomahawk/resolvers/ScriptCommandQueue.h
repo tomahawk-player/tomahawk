@@ -37,8 +37,8 @@ public:
 
 private slots:
     void nextCommand();
-    void onCommandDone( const QSharedPointer< ScriptCommand >& req );
-    void onTimeout( const QSharedPointer< ScriptCommand >& req );
+    void onCommandDone();
+    void onTimeout();
 
 private:
     QQueue< QSharedPointer< ScriptCommand > > m_queue;

@@ -73,8 +73,6 @@ ScriptCommand_AllTracks::reportFailure()
 {
     emit tracks( QList< Tomahawk::query_ptr >() );
     emit done();
-    disconnect();
-    sender()->disconnect( this );
 }
 
 
@@ -83,7 +81,5 @@ ScriptCommand_AllTracks::onResolverDone( const QList< Tomahawk::query_ptr >& q )
 {
     emit tracks( q );
     emit done();
-    disconnect();
-    sender()->disconnect( this );
     //FIXME: find a way to delete this object when its job is done
 }

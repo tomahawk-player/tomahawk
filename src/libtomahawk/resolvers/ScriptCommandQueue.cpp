@@ -18,8 +18,6 @@
 
 #include "ScriptCommandQueue.h"
 
-#include "utils/Closure.h"
-
 #include <QMetaType>
 
 ScriptCommandQueue::ScriptCommandQueue( QObject* parent )
@@ -47,11 +45,11 @@ ScriptCommandQueue::nextCommand()
 
     QSharedPointer< ScriptCommand > req = m_queue.first();
 
-    NewClosure( req.data(), SIGNAL( done() ),
-                this, SLOT( onCommandDone( QSharedPointer< ScriptCommand > ) ), req );
+    connect( req.data(), SIGNAL( done() ),
+             this, SLOT( onCommandDone() ) );
 
-    NewClosure( m_timer, SIGNAL( timeout() ),
-                this, SLOT( onTimeout( QSharedPointer< ScriptCommand > ) ), req );
+    connect( m_timer, SIGNAL( timeout() ),
+             this, SLOT( onTimeout() ) );
 
     m_timer->start( 5000 );
 
@@ -60,12 +58,18 @@ ScriptCommandQueue::nextCommand()
 
 
 void
-ScriptCommandQueue::onCommandDone( const QSharedPointer< ScriptCommand >& req )
+ScriptCommandQueue::onCommandDone()
 {
-    disconnect( this, SLOT( onTimeout( QSharedPointer< ScriptCommand > ) ) );
     m_timer->stop();
 
+    const QSharedPointer< ScriptCommand > req = m_queue.first();
+
     m_queue.removeAll( req );
+
+    disconnect( req.data(), SIGNAL( done() ),
+                this, SLOT( onCommandDone() ) );
+    disconnect( m_timer, SIGNAL( timeout() ),
+                this, SLOT( onTimeout() ) );
 
     if ( m_queue.count() > 0 )
         nextCommand();
@@ -73,14 +77,19 @@ ScriptCommandQueue::onCommandDone( const QSharedPointer< ScriptCommand >& req )
 
 
 void
-ScriptCommandQueue::onTimeout( const QSharedPointer< ScriptCommand >& req )
+ScriptCommandQueue::onTimeout()
 {
-    disconnect( this, SLOT( onCommandDone( QSharedPointer< ScriptCommand > ) ) );
-
     m_timer->stop();
+
+    const QSharedPointer< ScriptCommand > req = m_queue.first();
 
     req->reportFailure();
     m_queue.removeAll( req );
+
+    disconnect( req.data(), SIGNAL( done() ),
+                this, SLOT( onCommandDone() ) );
+    disconnect( m_timer, SIGNAL( timeout() ),
+                this, SLOT( onTimeout() ) );
 
     if ( m_queue.count() > 0 )
         nextCommand();
