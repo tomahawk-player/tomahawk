@@ -149,7 +149,7 @@ AlbumPlaylistInterface::tracks() const
 
                 Tomahawk::TracksRequest* cmd = m_collection->requestTracks( ap );
                 connect( dynamic_cast< QObject* >( cmd ), SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ),
-                         this, SLOT( onTracksLoaded( QList<Tomahawk::query_ptr> ) ) );
+                         this, SLOT( onTracksLoaded( QList<Tomahawk::query_ptr> ) ), Qt::UniqueConnection );
 
                 cmd->enqueue();
             }
@@ -246,7 +246,7 @@ AlbumPlaylistInterface::infoSystemFinished( const QString& infoId )
 
             Tomahawk::TracksRequest* cmd = m_collection->requestTracks( ap );
             connect( dynamic_cast< QObject* >( cmd ), SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ),
-                     this, SLOT( onTracksLoaded( QList<Tomahawk::query_ptr> ) ) );
+                     this, SLOT( onTracksLoaded( QList<Tomahawk::query_ptr> ) ), Qt::UniqueConnection );
 
             cmd->enqueue();
         }
@@ -262,6 +262,9 @@ AlbumPlaylistInterface::infoSystemFinished( const QString& infoId )
 void
 AlbumPlaylistInterface::onTracksLoaded( const QList< query_ptr >& tracks )
 {
+//    disconnect( m_collection.data(), SIGNAL( tracksResult( QList< Tomahawk::query_ptr > ) ),
+//                    this, SLOT( onTracksLoaded( QList< Tomahawk::query_ptr > ) ) );
+
     if ( m_collection.isNull() )
     {
         m_databaseLoaded = true;
