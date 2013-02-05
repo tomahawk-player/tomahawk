@@ -195,7 +195,7 @@ de se connecter et streamer de vous?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="115"/>
         <source>Enter Full Screen</source>
-        <translation type="unfinished"/>
+        <translation>Activer le mode plein écran</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="118"/>
@@ -220,7 +220,7 @@ de se connecter et streamer de vous?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="129"/>
         <source>&amp;View Logfile</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Voir le fichier de log</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="132"/>
@@ -353,7 +353,7 @@ de se connecter et streamer de vous?</translation>
     <message>
         <location filename="../src/AudioControls.cpp" line="295"/>
         <source>Playing from %1</source>
-        <translation type="unfinished"/>
+        <translation>Lecture depuis %1</translation>
     </message>
     <message>
         <location filename="../src/AudioControls.cpp" line="293"/>
@@ -521,7 +521,7 @@ de se connecter et streamer de vous?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="116"/>
         <source>Config Error</source>
-        <translation type="unfinished"/>
+        <translation>Erreur de configuration</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="170"/>
@@ -1085,31 +1085,31 @@ de se connecter et streamer de vous?</translation>
         <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="133"/>
         <source>played %1 by you</source>
         <comment>e.g. played 3 hours ago by you</comment>
-        <translation type="unfinished"/>
+        <translation>joué %1 par vous</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="135"/>
         <source>played %1 by %2</source>
         <comment>e.g. played 3 hours ago by SomeSource</comment>
-        <translation type="unfinished"/>
+        <translation>joué %1 par %2</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="142"/>
         <source>added %1</source>
         <comment>e.g. added 3 hours ago</comment>
-        <translation type="unfinished"/>
+        <translation>ajouté %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="203"/>
         <source>by &lt;b&gt;%1&lt;/b&gt;</source>
         <comment>e.g. by SomeArtist</comment>
-        <translation type="unfinished"/>
+        <translation>par &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="205"/>
         <source>by &lt;b&gt;%1&lt;/b&gt; on &lt;b&gt;%2&lt;/b&gt;</source>
         <comment>e.g. by SomeArtist on SomeAlbum</comment>
-        <translation type="unfinished"/>
+        <translation>par &lt;b&gt;%1&lt;/b&gt; sur &lt;b&gt;%2&lt;/b&gt;</translation>
     </message>
 </context>
 <context>
@@ -1395,7 +1395,7 @@ de se connecter et streamer de vous?</translation>
     <message>
         <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="224"/>
         <source>Script Resolver Error: %1 %2 %3 %4</source>
-        <translation type="unfinished"/>
+        <translation>Erreur du script de résolution : %1 %2 %3 %4</translation>
     </message>
 </context>
 <context>
@@ -1565,12 +1565,12 @@ de se connecter et streamer de vous?</translation>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="227"/>
         <source>Show notification when a new song starts to play</source>
-        <translation type="unfinished"/>
+        <translation>Afficher une notification quand une nouvelle piste commence</translation>
     </message>
     <message>
         <location filename="../src/Settings_Advanced.ui" line="255"/>
         <source>Clear All Access Control Entries</source>
-        <translation type="unfinished"/>
+        <translation>Supprimer toutes les entrées de contrôle d&apos;accès</translation>
     </message>
 </context>
 <context>
@@ -1977,7 +1977,7 @@ de se connecter et streamer de vous?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="154"/>
         <source>Sync Starred tracks to Loved tracks</source>
-        <translation type="unfinished"/>
+        <translation>Synchroniser les pistes favorites</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="167"/>
@@ -2430,12 +2430,12 @@ Essayez de vous authentifier de nouveau.</translation>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="144"/>
         <source>You forgot to enter your username!</source>
-        <translation type="unfinished"/>
+        <translation>Vous n&apos;avez pas rentré votre nom d&apos;utilisateur !</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="152"/>
         <source>Your Xmpp Id should look like an email address</source>
-        <translation type="unfinished"/>
+        <translation>Votre Id Xmpp devrait être une adresse email</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="158"/>
@@ -2443,7 +2443,10 @@ Essayez de vous authentifier de nouveau.</translation>
 
 Example:
 username@jabber.org</source>
-        <translation type="unfinished"/>
+        <translation>
+
+Exemple :
+utilisateur@jabber.org</translation>
     </message>
 </context>
 <context>
@@ -2503,14 +2506,14 @@ username@jabber.org</source>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="171"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="219"/>
         <source>&amp;Go to &quot;%1&quot;</source>
-        <translation type="unfinished"/>
+        <translation>Aller à &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="116"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="118"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="173"/>
         <source>Go to &quot;%1&quot;</source>
-        <translation type="unfinished"/>
+        <translation>Aller à &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="124"/>
@@ -2879,22 +2882,22 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="449"/>
         <source>is not</source>
-        <translation type="unfinished"/>
+        <translation>n&apos;est pas</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="452"/>
         <source>Studio</source>
-        <translation type="unfinished"/>
+        <translation>Studio</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="453"/>
         <source>Live</source>
-        <translation type="unfinished"/>
+        <translation>Live</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="454"/>
         <source>Christmas</source>
-        <translation type="unfinished"/>
+        <translation>Noël</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="793"/>
@@ -2936,12 +2939,12 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="824"/>
         <source>Variety</source>
-        <translation type="unfinished"/>
+        <translation>Variété</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="827"/>
         <source>Adventurousness</source>
-        <translation type="unfinished"/>
+        <translation>Audace</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="833"/>
@@ -3021,12 +3024,12 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="909"/>
         <source>where song type is %1</source>
-        <translation type="unfinished"/>
+        <translation>où le type de chanson est %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="911"/>
         <source>where song type is not %1</source>
-        <translation type="unfinished"/>
+        <translation>où le type de chanson n&apos;est pas %1</translation>
     </message>
 </context>
 <context>
@@ -3435,12 +3438,12 @@ saisissez le numéro PIN ici :</translation>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="886"/>
         <source>Exit Full Screen</source>
-        <translation type="unfinished"/>
+        <translation>Quitter le mode plein écran</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="898"/>
         <source>Enter Full Screen</source>
-        <translation type="unfinished"/>
+        <translation>Activer le mode plein écran</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="960"/>
