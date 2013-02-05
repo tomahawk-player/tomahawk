@@ -44,7 +44,7 @@ public:
 
     virtual QString prettyName() const;
     virtual QString itemName() const;
-    virtual QString type() const { return "scriptcollection"; }
+    virtual BackendType backendType() const { return ScriptCollectionType; }
     virtual QIcon icon() const;
     virtual QPixmap bigIcon() const;
 

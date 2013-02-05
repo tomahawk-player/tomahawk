@@ -53,10 +53,17 @@ public:
     Collection( const source_ptr& source, const QString& name, QObject* parent = 0 );
     virtual ~Collection();
 
+    enum BackendType
+    {
+        NullCollectionType = 0,
+        DatabaseCollectionType, //talks to a database, incl. LocalCollection
+        ScriptCollectionType    //performs operations through a resolver
+    };
+
     virtual QString name() const;
     virtual QString prettyName() const;
     virtual QString itemName() const;
-    virtual QString type() const { return QString(); }
+    virtual BackendType backendType() const { return NullCollectionType; }
     virtual QIcon icon() const;
     virtual QPixmap bigIcon() const; //for the ViewPage header
     virtual QString emptyText() const;

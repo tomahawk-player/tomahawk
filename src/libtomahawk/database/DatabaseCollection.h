@@ -40,7 +40,7 @@ public:
         qDebug() << Q_FUNC_INFO;
     }
 
-    virtual QString type() const { return "databasecollection"; }
+    virtual BackendType backendType() const { return DatabaseCollectionType; }
 
     virtual void loadPlaylists();
     virtual void loadAutoPlaylists();

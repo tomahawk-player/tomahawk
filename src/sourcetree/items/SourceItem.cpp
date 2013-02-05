@@ -376,7 +376,7 @@ SourceItem::performAddCollectionItem( const collection_ptr& collection )
                                                  boost::bind( &SourceItem::collectionClicked, this, collection ),
                                                  boost::bind( &SourceItem::getCollectionPage, this, collection ) );
 
-    if ( collection->type() == "databasecollection" )
+    if ( collection->backendType() == Collection::DatabaseCollectionType )
         item->setSortValue( -350 );
     else
         item->setSortValue( -340 );

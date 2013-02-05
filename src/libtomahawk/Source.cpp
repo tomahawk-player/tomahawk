@@ -107,7 +107,7 @@ Source::dbCollection() const
     if ( m_collections.length() )
     {
         foreach ( const collection_ptr& collection, m_collections )
-            if ( collection->type() == "databasecollection" )
+            if ( collection->backendType() == Collection::DatabaseCollectionType )
                 return collection; // We assume only one is a db collection. Now get off my lawn.
     }
 
