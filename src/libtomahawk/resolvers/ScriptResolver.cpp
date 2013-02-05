@@ -417,8 +417,6 @@ ScriptResolver::doSetup( const QVariantMap& m )
     m_configSent = false;
     m_num_restarts = 0;
 
-    loadCollections();
-
     if ( !m_stopped )
         Tomahawk::Pipeline::instance()->addResolver( this );
 
@@ -443,22 +441,6 @@ ScriptResolver::setupConfWidget( const QVariantMap& m )
     m_configWidget = QPointer< AccountConfigWidget >( widgetFromData( uiData, 0 ) );
 
     emit changed();
-}
-
-
-void
-ScriptResolver::loadCollections()
-{
-    if ( m_capabilities.testFlag( Browsable ) )
-    {
-        m_collections.clear();
-        // at this point we assume that all the tracks browsable through a resolver belong to the local source
-        Tomahawk::collection_ptr collection( new Tomahawk::ScriptCollection( SourceList::instance()->getLocal(), this ) );
-        m_collections.insert( collection->name(), collection );
-        emit collectionAdded( collection );
-
-        //TODO: implement multiple collections from a resolver
-    }
 }
 
 
