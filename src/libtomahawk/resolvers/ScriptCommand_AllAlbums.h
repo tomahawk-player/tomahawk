@@ -23,8 +23,7 @@
 #include "collection/Collection.h"
 #include "resolvers/ScriptCommand.h"
 
-class ScriptCommand_AllAlbums : public ScriptCommand
-                              , public Tomahawk::AlbumsRequest
+class ScriptCommand_AllAlbums : public ScriptCommand, public Tomahawk::AlbumsRequest
 {
     Q_OBJECT
 public:

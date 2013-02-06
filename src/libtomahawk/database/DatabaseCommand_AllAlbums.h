@@ -33,8 +33,7 @@
 
 #include "DllMacro.h"
 
-class DLLEXPORT DatabaseCommand_AllAlbums : public DatabaseCommand
-                                          , public Tomahawk::AlbumsRequest
+class DLLEXPORT DatabaseCommand_AllAlbums : public DatabaseCommand, public Tomahawk::AlbumsRequest
 {
 Q_OBJECT
 public:

@@ -32,8 +32,7 @@
 
 #include "DllMacro.h"
 
-class DLLEXPORT DatabaseCommand_AllArtists : public DatabaseCommand
-                                           , public Tomahawk::ArtistsRequest
+class DLLEXPORT DatabaseCommand_AllArtists : public DatabaseCommand, public Tomahawk::ArtistsRequest
 {
 Q_OBJECT
 public:

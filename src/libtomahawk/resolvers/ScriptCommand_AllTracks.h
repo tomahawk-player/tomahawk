@@ -23,8 +23,7 @@
 #include "collection/Collection.h"
 #include "resolvers/ScriptCommand.h"
 
-class ScriptCommand_AllTracks : public ScriptCommand
-                              , public Tomahawk::TracksRequest
+class ScriptCommand_AllTracks : public ScriptCommand, public Tomahawk::TracksRequest
 {
     Q_OBJECT
 public:

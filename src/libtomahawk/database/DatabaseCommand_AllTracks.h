@@ -33,8 +33,7 @@
 
 #include "DllMacro.h"
 
-class DLLEXPORT DatabaseCommand_AllTracks : public DatabaseCommand
-                                          , public Tomahawk::TracksRequest
+class DLLEXPORT DatabaseCommand_AllTracks : public DatabaseCommand, public Tomahawk::TracksRequest
 {
 Q_OBJECT
 public:
