@@ -515,8 +515,9 @@ QtScriptResolver::artists( const Tomahawk::collection_ptr& collection )
         return;
     }
 
-    qDebug() << "Artists JavaScript Result:" << m;
-    m_resolverHelper->addArtistResults( m );
+    QString errorMessage = tr( "Script Resolver Warning: API call %1 returned data sychronously." ).arg( eval );
+    JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( errorMessage ) );
+    tDebug() << errorMessage << m;
 }
 
 
@@ -549,9 +550,9 @@ QtScriptResolver::albums( const Tomahawk::collection_ptr& collection, const Toma
         return;
     }
 
-    qDebug() << "Albums JavaScript Result:" << m;
-
-    m_resolverHelper->addAlbumResults( m );
+    QString errorMessage = tr( "Script Resolver Warning: API call %1 returned data sychronously." ).arg( eval );
+    JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( errorMessage ) );
+    tDebug() << errorMessage << m;
 }
 
 
@@ -585,9 +586,9 @@ QtScriptResolver::tracks( const Tomahawk::collection_ptr& collection, const Toma
         return;
     }
 
-    qDebug() << "Tracks JavaScript Result:" << m;
-
-    m_resolverHelper->addAlbumTrackResults( m );
+    QString errorMessage = tr( "Script Resolver Warning: API call %1 returned data sychronously." ).arg( eval );
+    JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( errorMessage ) );
+    tDebug() << errorMessage << m;
 }
 
 
