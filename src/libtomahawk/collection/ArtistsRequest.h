@@ -30,7 +30,7 @@ namespace Tomahawk
 class DLLEXPORT ArtistsRequest
 {
 public:
-    virtual ~ArtistsRequest() {}
+    virtual ~ArtistsRequest();
 
     virtual void enqueue() = 0;
 

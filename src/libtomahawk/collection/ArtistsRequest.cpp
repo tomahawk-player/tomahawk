@@ -16,28 +16,9 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ALBUMSREQUEST_H
-#define ALBUMSREQUEST_H
 
-#include "Typedefs.h"
-#include "DllMacro.h"
+#include "ArtistsRequest.h"
 
-#include <QList>
+Tomahawk::ArtistsRequest::~ArtistsRequest()
+{}
 
-namespace Tomahawk
-{
-
-class DLLEXPORT AlbumsRequest
-{
-public:
-    virtual ~AlbumsRequest();
-
-    virtual void enqueue() = 0;
-
-protected: //signals
-    virtual void albums( const QList< Tomahawk::album_ptr >& ) = 0;
-};
-
-} //ns
-
-#endif // ALBUMSREQUEST_H

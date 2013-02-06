@@ -208,6 +208,9 @@ list(APPEND libSources
     audio/AudioEngine.cpp
 
     collection/Collection.cpp
+    collection/ArtistsRequest.cpp
+    collection/AlbumsRequest.cpp
+    collection/TracksRequest.cpp
 
     database/Database.cpp
     database/FuzzyIndex.cpp

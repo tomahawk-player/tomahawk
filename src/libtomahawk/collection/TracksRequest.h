@@ -30,7 +30,7 @@ namespace Tomahawk
 class DLLEXPORT TracksRequest
 {
 public:
-    virtual ~TracksRequest() {}
+    virtual ~TracksRequest();
 
     virtual void enqueue() = 0;
 
