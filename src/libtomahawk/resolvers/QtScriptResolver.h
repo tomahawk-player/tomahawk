@@ -76,6 +76,8 @@ public slots:
     void addAlbumResults( const QVariantMap& results );
     void addAlbumTrackResults( const QVariantMap& results );
 
+    void reportCapabilities( const QVariant& capabilities );
+
 private:
     QString m_scriptPath, m_urlCallback;
     QVariantMap m_resolverConfig;
@@ -171,6 +173,7 @@ private:
     QVariant widgetData( QWidget* widget, const QString& property );
     QVariantMap loadDataFromWidgets();
     void fillDataInWidgets( const QVariantMap& data );
+    void onCapabilitiesChanged( Capabilities capabilities );
     void loadCollections();
 
     // encapsulate javascript calls

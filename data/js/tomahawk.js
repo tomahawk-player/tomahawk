@@ -134,10 +134,6 @@ var TomahawkResolver = {
     {
         return this.resolve( qid, "", "", searchString );
     },
-    capabilities: function()
-    {
-        return TomahawkResolverCapability.NullCapability;
-    },
     artists: function( qid )
     {
         return {

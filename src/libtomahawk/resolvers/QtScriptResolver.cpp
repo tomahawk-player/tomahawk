@@ -235,6 +235,21 @@ QtScriptResolverHelper::addAlbumTrackResults( const QVariantMap& results )
 
 
 void
+QtScriptResolverHelper::reportCapabilities( const QVariant& v )
+{
+    bool ok = 0;
+    int intCap = v.toInt( &ok );
+    Tomahawk::ExternalResolver::Capabilities capabilities;
+    if ( !ok )
+        capabilities = Tomahawk::ExternalResolver::NullCapability;
+    else
+        capabilities = static_cast< Tomahawk::ExternalResolver::Capabilities >( intCap );
+
+    m_resolver->onCapabilitiesChanged( capabilities );
+}
+
+
+void
 QtScriptResolverHelper::setResolverConfig( const QVariantMap& config )
 {
     m_resolverConfig = config;
@@ -436,13 +451,6 @@ QtScriptResolver::init()
     m_timeout = m.value( "timeout", 25 ).toUInt() * 1000;
     bool compressed = m.value( "compressed", "false" ).toString() == "true";
 
-    bool ok = 0;
-    int intCap = m_engine->mainFrame()->evaluateJavaScript( "resolver.capabilities()" ).toInt( &ok );
-    if ( !ok )
-        m_capabilities = NullCapability;
-    else
-        m_capabilities = static_cast< Capabilities >( intCap );
-
     QByteArray icoData = m.value( "icon" ).toByteArray();
     if( compressed )
         icoData = qUncompress( QByteArray::fromBase64( icoData ) );
@@ -469,8 +477,6 @@ QtScriptResolver::init()
     loadUi();
     QVariantMap config = resolverUserConfig();
     fillDataInWidgets( config );
-
-    loadCollections();
 
     qDebug() << "JS" << filePath() << "READY," << "name" << m_name << "weight" << m_weight << "timeout" << m_timeout << "icon received" << success;
 
@@ -881,6 +887,14 @@ QtScriptResolver::fillDataInWidgets( const QVariantMap& data )
 
         setWidgetData( data[ name ], widget, propertyName );
     }
+}
+
+
+void
+QtScriptResolver::onCapabilitiesChanged( Tomahawk::ExternalResolver::Capabilities capabilities )
+{
+    m_capabilities = capabilities;
+    loadCollections();
 }
 
 
