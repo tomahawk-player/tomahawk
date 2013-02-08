@@ -735,8 +735,8 @@ TomahawkApp::instanceStarted( KDSingleApplicationGuard::Instance instance )
         return;
     }
 
-    QString arg1 = arguments[ 1 ];
-    if ( loadUrl( arg1 ) )
+    QString lastArg = arguments[ arguments.size() - 1 ];
+    if ( loadUrl( lastArg ) )
     {
         activate();
         return;
