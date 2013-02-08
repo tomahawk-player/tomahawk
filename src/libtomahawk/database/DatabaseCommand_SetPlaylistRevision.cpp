@@ -96,7 +96,7 @@ DatabaseCommand_SetPlaylistRevision::postCommitHook()
         orderedentriesguids << v.toString();
 
     // private, but we are a friend. will recall itself in its own thread:
-    playlist_ptr playlist = source()->collection()->playlist( m_playlistguid );
+    playlist_ptr playlist = source()->dbCollection()->playlist( m_playlistguid );
     if ( playlist.isNull() )
     {
         Q_ASSERT( !playlist.isNull() );

@@ -140,7 +140,7 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
         result->setDiscNumber( query.value( 12 ).toUInt() );
         result->setAlbumPos( query.value( 13 ).toUInt() );
         result->setScore( 1.0 );
-        result->setCollection( s->collection() );
+        result->setCollection( s->dbCollection() );
 
         TomahawkSqlQuery attrQuery = dbi->newquery();
         QVariantMap attr;
@@ -164,5 +164,6 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
     }
 
     emit tracks( ql, data() );
+    emit tracks( ql );
     emit done( m_collection );
 }

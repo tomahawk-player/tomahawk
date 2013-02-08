@@ -34,7 +34,6 @@
 #include <QString>
 #include <QStackedWidget>
 #include <QToolButton>
-
 #ifdef Q_OS_WIN
     #include <shobjidl.h>
 #endif

@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -71,6 +72,12 @@ public slots:
 
     void addTrackResults( const QVariantMap& results );
 
+    void addArtistResults( const QVariantMap& results );
+    void addAlbumResults( const QVariantMap& results );
+    void addAlbumTrackResults( const QVariantMap& results );
+
+    void reportCapabilities( const QVariant& capabilities );
+
 private:
     QString m_scriptPath, m_urlCallback;
     QVariantMap m_resolverConfig;
@@ -129,6 +136,8 @@ public:
     virtual ~QtScriptResolver();
     static ExternalResolver* factory( const QString& scriptPath );
 
+    virtual Capabilities capabilities() const { return m_capabilities; }
+
     virtual QString name() const         { return m_name; }
     virtual QPixmap icon() const         { return m_icon; }
     virtual unsigned int weight() const  { return m_weight; }
@@ -142,10 +151,16 @@ public:
     virtual void reload();
 
     virtual void setIcon( const QPixmap& icon ) { m_icon = icon; }
+
 public slots:
     virtual void resolve( const Tomahawk::query_ptr& query );
     virtual void stop();
     virtual void start();
+
+    // For ScriptCollection
+    virtual void artists( const Tomahawk::collection_ptr& collection );
+    virtual void albums( const Tomahawk::collection_ptr& collection, const Tomahawk::artist_ptr& artist );
+    virtual void tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::album_ptr& album );
 
 signals:
     void stopped();
@@ -158,19 +173,26 @@ private:
     QVariant widgetData( QWidget* widget, const QString& property );
     QVariantMap loadDataFromWidgets();
     void fillDataInWidgets( const QVariantMap& data );
+    void onCapabilitiesChanged( Capabilities capabilities );
+    void loadCollections();
 
     // encapsulate javascript calls
     QVariantMap resolverSettings();
     QVariantMap resolverUserConfig();
     QVariantMap resolverInit();
+    QVariantMap resolverCollections();
 
     QList< Tomahawk::result_ptr > parseResultVariantList( const QVariantList& reslist );
+    QList< Tomahawk::artist_ptr > parseArtistVariantList( const QVariantList& reslist );
+    QList< Tomahawk::album_ptr >  parseAlbumVariantList(  const Tomahawk::artist_ptr& artist,
+                                                          const QVariantList& reslist );
 
     ScriptEngine* m_engine;
 
     QString m_name;
     QPixmap m_icon;
     unsigned int m_weight, m_timeout;
+    Capabilities m_capabilities;
 
     bool m_ready, m_stopped;
     ExternalResolver::ErrorState m_error;

@@ -52,15 +52,15 @@ void
 DatabaseCommand_DeleteDynamicPlaylist::postCommitHook()
 {
     qDebug() << Q_FUNC_INFO << "..reporting..:" << m_playlistguid;
-    if ( source().isNull() || source()->collection().isNull() )
+    if ( source().isNull() || source()->dbCollection().isNull() )
     {
         qDebug() << "Source has gone offline, not emitting to GUI.";
         return;
     }
     // we arent sure which it is, but it can't be more th an one. so try both
-    dynplaylist_ptr playlist = source()->collection()->autoPlaylist( m_playlistguid );
+    dynplaylist_ptr playlist = source()->dbCollection()->autoPlaylist( m_playlistguid );
     if( playlist.isNull() )
-        playlist = source()->collection()->station( m_playlistguid );
+        playlist = source()->dbCollection()->station( m_playlistguid );
 
     tLog( LOGVERBOSE ) << "Just tried to load playlist for deletion:" << m_playlistguid << "Did we get a null one?" << playlist.isNull();
     Q_ASSERT( !playlist.isNull() );

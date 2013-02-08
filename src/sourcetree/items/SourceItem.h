@@ -1,6 +1,7 @@
 /*
  *    Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *    Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
+ *    Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *    This program is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -69,13 +70,16 @@ private slots:
     void latchedOff( const Tomahawk::source_ptr&, const Tomahawk::source_ptr& );
     void latchModeChanged( Tomahawk::PlaylistModes::LatchMode mode );
 
+    void onCollectionAdded( const Tomahawk::collection_ptr& ); //never call from ctor because of begin/endRowsAdded!
+    void onCollectionRemoved( const Tomahawk::collection_ptr& );
+
     void requestExpanding();
 
     Tomahawk::ViewPage* sourceInfoClicked();
     Tomahawk::ViewPage* getSourceInfoPage() const;
 
-    Tomahawk::ViewPage* collectionClicked();
-    Tomahawk::ViewPage* getCollectionPage() const;
+    Tomahawk::ViewPage* collectionClicked( const Tomahawk::collection_ptr& collection );
+    Tomahawk::ViewPage* getCollectionPage( const Tomahawk::collection_ptr& collection ) const;
 
     Tomahawk::ViewPage* coolPlaylistsClicked();
     Tomahawk::ViewPage* getCoolPlaylistsPage() const;
@@ -90,6 +94,7 @@ private:
     void playlistsAddedInternal( SourceTreeItem* parent, const QList< Tomahawk::dynplaylist_ptr >& playlists );
     template< typename T >
     void playlistDeletedInternal( SourceTreeItem* parent, const T& playlists );
+    void performAddCollectionItem( const Tomahawk::collection_ptr& collection );
 
     Tomahawk::source_ptr m_source;
     CategoryItem* m_playlists;
@@ -98,13 +103,14 @@ private:
     bool m_latchedOn;
     Tomahawk::source_ptr m_latchedOnTo;
 
-    GenericPageItem* m_collectionItem;
+    QMap< Tomahawk::collection_ptr, GenericPageItem* > m_collectionItems;
+    QMap< Tomahawk::collection_ptr, Tomahawk::ViewPage* > m_collectionPages;
+
     GenericPageItem* m_sourceInfoItem;
     GenericPageItem* m_coolPlaylistsItem;
     GenericPageItem* m_latestAdditionsItem;
     GenericPageItem* m_recentPlaysItem;
 
-    Tomahawk::ViewPage* m_collectionPage;
     Tomahawk::ViewPage* m_sourceInfoPage;
     Tomahawk::ViewPage* m_coolPlaylistsPage;
     Tomahawk::ViewPage* m_latestAdditionsPage;

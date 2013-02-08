@@ -23,6 +23,7 @@
 #include "SourceList.h"
 #include <TomahawkSettings.h>
 #include "utils/Logger.h"
+#include "utils/TomahawkUtilsGui.h"
 
 #ifndef ENABLE_HEADLESS
     #include "ViewManager.h"
@@ -33,6 +34,20 @@ LocalCollection::LocalCollection( const Tomahawk::source_ptr& source, QObject* p
     : DatabaseCollection( source, parent )
 {
 
+}
+
+
+QString
+LocalCollection::prettyName() const
+{
+    return tr( "My Collection" );
+}
+
+
+QString
+LocalCollection::emptyText() const
+{
+    return tr( "After you have scanned your music collection you will find your tracks right here." );
 }
 
 

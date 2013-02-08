@@ -53,7 +53,8 @@ public:
 
     void addAllCollections();
     void addCollection( const Tomahawk::collection_ptr& collection );
-    void addFilteredCollection( const Tomahawk::collection_ptr& collection, unsigned int amount, DatabaseCommand_AllArtists::SortOrder order );
+    //TODO: Unused, but will be useful for supporting filtered queries. - Teo 1/2013
+    //void addFilteredCollection( const Tomahawk::collection_ptr& collection, unsigned int amount, DatabaseCommand_AllArtists::SortOrder order );
 
     void addArtists( const Tomahawk::artist_ptr& artist );
     void addTracks( const Tomahawk::album_ptr& album, const QModelIndex& parent, bool autoRefetch = false );

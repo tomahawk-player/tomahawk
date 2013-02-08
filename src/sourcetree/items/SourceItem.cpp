@@ -52,7 +52,6 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
     , m_latchedOn( false )
     , m_sourceInfoItem( 0 )
     , m_coolPlaylistsItem( 0 )
-    , m_collectionPage( 0 )
     , m_sourceInfoPage( 0 )
     , m_coolPlaylistsPage( 0 )
     , m_latestAdditionsPage( 0 )
@@ -64,9 +63,15 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
         return;
     }
 
-    m_collectionItem = new GenericPageItem( model(), this, tr( "Collection" ), ImageRegistry::instance()->icon( RESPATH "images/collection.svg" ), //FIXME different icon
-                                            boost::bind( &SourceItem::collectionClicked, this ),
-                                            boost::bind( &SourceItem::getCollectionPage, this ) );
+    connect( source.data(), SIGNAL( collectionAdded( Tomahawk::collection_ptr ) ),
+             SLOT( onCollectionAdded( Tomahawk::collection_ptr ) ) );
+    connect( source.data(), SIGNAL( collectionRemoved( Tomahawk::collection_ptr ) ),
+             SLOT( onCollectionRemoved( Tomahawk::collection_ptr ) ) );
+
+    foreach ( const Tomahawk::collection_ptr& collection, source->collections() )
+    {
+        performAddCollectionItem( collection );
+    }
 
 /*    m_sourceInfoItem = new GenericPageItem( model(), this, tr( "New Additions" ), QIcon( RESPATH "images/new-additions.png" ),
                                             boost::bind( &SourceItem::sourceInfoClicked, this ),
@@ -82,15 +87,14 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
 
     new LovedTracksItem( model(), this );
 
-    m_collectionItem->setSortValue( -350 );
 //    m_sourceInfoItem->setSortValue( -300 );
     m_latestAdditionsItem->setSortValue( -250 );
     m_recentPlaysItem->setSortValue( -200 );
 
     // create category items if there are playlists to show, or stations to show
-    QList< playlist_ptr > playlists = source->collection()->playlists();
-    QList< dynplaylist_ptr > autoplaylists = source->collection()->autoPlaylists();
-    QList< dynplaylist_ptr > stations = source->collection()->stations();
+    QList< playlist_ptr > playlists = source->dbCollection()->playlists();
+    QList< dynplaylist_ptr > autoplaylists = source->dbCollection()->autoPlaylists();
+    QList< dynplaylist_ptr > stations = source->dbCollection()->stations();
 
     if ( !playlists.isEmpty() || !autoplaylists.isEmpty() || source->isLocal() )
     {
@@ -114,14 +118,15 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
     connect( source.data(), SIGNAL( stateChanged() ), SIGNAL( updated() ) );
     connect( source.data(), SIGNAL( offline() ), SIGNAL( updated() ) );
     connect( source.data(), SIGNAL( online() ), SIGNAL( updated() ) );
+
     connect( SourceList::instance(), SIGNAL( sourceLatchedOn( Tomahawk::source_ptr, Tomahawk::source_ptr ) ), SLOT( latchedOn( Tomahawk::source_ptr, Tomahawk::source_ptr ) ) );
     connect( SourceList::instance(), SIGNAL( sourceLatchedOff( Tomahawk::source_ptr, Tomahawk::source_ptr ) ), SLOT( latchedOff( Tomahawk::source_ptr, Tomahawk::source_ptr ) ) );
 
-    connect( source->collection().data(), SIGNAL( playlistsAdded( QList<Tomahawk::playlist_ptr> ) ),
+    connect( source->dbCollection().data(), SIGNAL( playlistsAdded( QList<Tomahawk::playlist_ptr> ) ),
              SLOT( onPlaylistsAdded( QList<Tomahawk::playlist_ptr> ) ), Qt::QueuedConnection );
-    connect( source->collection().data(), SIGNAL( autoPlaylistsAdded( QList< Tomahawk::dynplaylist_ptr > ) ),
+    connect( source->dbCollection().data(), SIGNAL( autoPlaylistsAdded( QList< Tomahawk::dynplaylist_ptr > ) ),
              SLOT( onAutoPlaylistsAdded( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
-    connect( source->collection().data(), SIGNAL( stationsAdded( QList<Tomahawk::dynplaylist_ptr> ) ),
+    connect( source->dbCollection().data(), SIGNAL( stationsAdded( QList<Tomahawk::dynplaylist_ptr> ) ),
              SLOT( onStationsAdded( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
 
     if ( m_source->isLocal() )
@@ -295,6 +300,35 @@ SourceItem::latchModeChanged( Tomahawk::PlaylistModes::LatchMode mode )
 
 
 void
+SourceItem::onCollectionAdded( const collection_ptr& collection )
+{
+    if ( m_collectionItems.contains( collection ) )
+        return;
+
+    beginRowsAdded( model()->rowCount( model()->indexFromItem( this ) ),
+                    model()->rowCount( model()->indexFromItem( this ) ) );
+    performAddCollectionItem( collection );
+    endRowsAdded();
+}
+
+
+void
+SourceItem::onCollectionRemoved( const collection_ptr& collection )
+{
+    GenericPageItem* item = m_collectionItems.value( collection );
+    int row = model()->indexFromItem( item ).row();
+
+    beginRowsRemoved( row, row );
+    removeChild( item );
+    endRowsRemoved();
+
+    m_collectionPages.remove( collection );
+    m_collectionItems.remove( collection );
+    item->deleteLater();
+}
+
+
+void
 SourceItem::playlistsAddedInternal( SourceTreeItem* parent, const QList< dynplaylist_ptr >& playlists )
 {
     QList< SourceTreeItem* > items;
@@ -329,6 +363,25 @@ SourceItem::playlistsAddedInternal( SourceTreeItem* parent, const QList< dynplay
         }
     }
     parent->endRowsAdded();
+}
+
+
+void
+SourceItem::performAddCollectionItem( const collection_ptr& collection )
+{
+    GenericPageItem* item = new GenericPageItem( model(),
+                                                 this,
+                                                 collection->itemName(),
+                                                 collection->icon(),
+                                                 boost::bind( &SourceItem::collectionClicked, this, collection ),
+                                                 boost::bind( &SourceItem::getCollectionPage, this, collection ) );
+
+    if ( collection->backendType() == Collection::DatabaseCollectionType )
+        item->setSortValue( -350 );
+    else
+        item->setSortValue( -340 );
+
+    m_collectionItems.insert( collection, item );
 }
 
 
@@ -498,20 +551,20 @@ SourceItem::getSourceInfoPage() const
 
 
 ViewPage*
-SourceItem::collectionClicked()
+SourceItem::collectionClicked( const Tomahawk::collection_ptr& collection )
 {
     if ( m_source.isNull() )
         return 0;
 
-    m_collectionPage = ViewManager::instance()->show( m_source->collection() );
-    return m_collectionPage;
+    m_collectionPages[ collection ] = ViewManager::instance()->show( collection );
+    return m_collectionPages[ collection ];
 }
 
 
 ViewPage*
-SourceItem::getCollectionPage() const
-{
-    return m_collectionPage;;
+SourceItem::getCollectionPage( const Tomahawk::collection_ptr& collection ) const
+{    
+    return m_collectionPages[ collection ];
 }
 
 

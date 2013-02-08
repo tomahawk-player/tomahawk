@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi            <lfranchi@kde.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -22,7 +23,7 @@
 
 #include <QDir>
 
-#include "Collection.h"
+#include "collection/Collection.h"
 #include "Source.h"
 #include "Typedefs.h"
 
@@ -39,6 +40,8 @@ public:
         qDebug() << Q_FUNC_INFO;
     }
 
+    virtual BackendType backendType() const { return DatabaseCollectionType; }
+
     virtual void loadPlaylists();
     virtual void loadAutoPlaylists();
     virtual void loadStations();
@@ -46,6 +49,10 @@ public:
     virtual QList< Tomahawk::playlist_ptr > playlists();
     virtual QList< Tomahawk::dynplaylist_ptr > autoPlaylists();
     virtual QList< Tomahawk::dynplaylist_ptr > stations();
+
+    virtual Tomahawk::ArtistsRequest* requestArtists();
+    virtual Tomahawk::AlbumsRequest*  requestAlbums( const Tomahawk::artist_ptr& artist );
+    virtual Tomahawk::TracksRequest*  requestTracks( const Tomahawk::album_ptr& album );
 
 public slots:
     virtual void addTracks( const QList<QVariant>& newitems );

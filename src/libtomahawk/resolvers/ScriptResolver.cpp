@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi            <lfranchi@kde.org>
+ *   Copyright 2013,      Teo Mrnjavac           <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -19,18 +20,20 @@
 
 #include "ScriptResolver.h"
 
-#include <QtEndian>
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkProxy>
-
 #include "Artist.h"
 #include "Album.h"
 #include "Pipeline.h"
+#include "ScriptCollection.h"
 #include "SourceList.h"
 
 #include "accounts/AccountConfigWidget.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+
+#include <QtEndian>
+#include <QFileInfo>
+#include <QNetworkAccessManager>
+#include <QNetworkProxy>
 
 #ifdef Q_OS_WIN
 #include <shlwapi.h>
@@ -379,6 +382,13 @@ ScriptResolver::doSetup( const QVariantMap& m )
     m_timeout = m.value( "timeout", 5 ).toUInt() * 1000;
     bool compressed = m.value( "compressed", "false" ).toString() == "true";
 
+    bool ok = 0;
+    int intCap = m.value( "capabilities" ).toInt( &ok );
+    if ( !ok )
+        m_capabilities = NullCapability;
+    else
+        m_capabilities = static_cast< Capabilities >( intCap );
+
     QByteArray icoData = m.value( "icon" ).toByteArray();
     if( compressed )
         icoData = qUncompress( QByteArray::fromBase64( icoData ) );
@@ -529,5 +539,12 @@ void
 ScriptResolver::stop()
 {
     m_stopped = true;
+
+    foreach ( const Tomahawk::collection_ptr& collection, m_collections )
+    {
+        emit collectionRemoved( collection );
+    }
+    m_collections.clear();
+
     Tomahawk::Pipeline::instance()->removeResolver( this );
 }

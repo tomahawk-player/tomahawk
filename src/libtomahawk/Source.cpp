@@ -19,7 +19,7 @@
 
 #include "Source.h"
 
-#include "Collection.h"
+#include "collection/Collection.h"
 #include "SourceList.h"
 #include "SourcePlaylistInterface.h"
 
@@ -102,10 +102,14 @@ Source::peerInfos() const
 
 
 collection_ptr
-Source::collection() const
+Source::dbCollection() const
 {
-    if( m_collections.length() )
-        return m_collections.first();
+    if ( m_collections.length() )
+    {
+        foreach ( const collection_ptr& collection, m_collections )
+            if ( collection->backendType() == Collection::DatabaseCollectionType )
+                return collection; // We assume only one is a db collection. Now get off my lawn.
+    }
 
     collection_ptr tmp;
     return tmp;
@@ -206,7 +210,7 @@ Source::setDbFriendlyName( const QString& dbFriendlyName )
 void
 Source::addCollection( const collection_ptr& c )
 {
-    Q_ASSERT( m_collections.length() == 0 ); // only 1 source supported atm
+    //Q_ASSERT( m_collections.length() == 0 ); // only 1 source supported atm
     m_collections.append( c );
     emit collectionAdded( c );
 }
@@ -215,7 +219,7 @@ Source::addCollection( const collection_ptr& c )
 void
 Source::removeCollection( const collection_ptr& c )
 {
-    Q_ASSERT( m_collections.length() == 1 && m_collections.first() == c ); // only 1 source supported atm
+    //Q_ASSERT( m_collections.length() == 1 && m_collections.first() == c ); // only 1 source supported atm
     m_collections.removeAll( c );
     emit collectionRemoved( c );
 }

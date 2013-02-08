@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -24,13 +25,15 @@
 
 #include "Album.h"
 #include "Artist.h"
-#include "Collection.h"
+#include "collection/Collection.h"
+#include "collection/AlbumsRequest.h"
 #include "Typedefs.h"
 #include "DatabaseCommand.h"
+#include "Database.h"
 
 #include "DllMacro.h"
 
-class DLLEXPORT DatabaseCommand_AllAlbums : public DatabaseCommand
+class DLLEXPORT DatabaseCommand_AllAlbums : public DatabaseCommand, public Tomahawk::AlbumsRequest
 {
 Q_OBJECT
 public:
@@ -39,13 +42,17 @@ public:
         ModificationTime = 1
     };
 
-    explicit DatabaseCommand_AllAlbums( const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr(), const Tomahawk::artist_ptr& artist = Tomahawk::artist_ptr(), QObject* parent = 0 );
+    explicit DatabaseCommand_AllAlbums( const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr(),
+                                        const Tomahawk::artist_ptr& artist = Tomahawk::artist_ptr(),
+                                        QObject* parent = 0 );
     virtual ~DatabaseCommand_AllAlbums();
 
     virtual void exec( DatabaseImpl* );
 
     virtual bool doesMutates() const { return false; }
     virtual QString commandname() const { return "allalbums"; }
+
+    virtual void enqueue() { Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( this ) ); }
 
     Tomahawk::collection_ptr collection() const { return m_collection; }
 
@@ -60,6 +67,7 @@ public:
 
 signals:
     void albums( const QList<Tomahawk::album_ptr>&, const QVariant& data );
+    void albums( const QList<Tomahawk::album_ptr>& );
     void done();
 
 private:

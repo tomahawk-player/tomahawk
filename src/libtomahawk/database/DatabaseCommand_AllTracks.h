@@ -23,7 +23,9 @@
 #include <QVariantMap>
 
 #include "DatabaseCommand.h"
-#include "Collection.h"
+#include "Database.h"
+#include "collection/Collection.h"
+#include "collection/TracksRequest.h"
 #include "Typedefs.h"
 #include "Query.h"
 #include "Artist.h"
@@ -31,7 +33,7 @@
 
 #include "DllMacro.h"
 
-class DLLEXPORT DatabaseCommand_AllTracks : public DatabaseCommand
+class DLLEXPORT DatabaseCommand_AllTracks : public DatabaseCommand, public Tomahawk::TracksRequest
 {
 Q_OBJECT
 public:
@@ -57,6 +59,8 @@ public:
     virtual bool doesMutates() const { return false; }
     virtual QString commandname() const { return "alltracks"; }
 
+    virtual void enqueue() { Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( this ) ); }
+
     void setArtist( const Tomahawk::artist_ptr& artist ) { m_artist = artist; }
     void setAlbum( const Tomahawk::album_ptr& album ) { m_album = album; }
 
@@ -66,6 +70,7 @@ public:
 
 signals:
     void tracks( const QList<Tomahawk::query_ptr>&, const QVariant& data );
+    void tracks( const QList<Tomahawk::query_ptr>& );
     void done( const Tomahawk::collection_ptr& );
 
 private:

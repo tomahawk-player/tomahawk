@@ -19,8 +19,8 @@
 #include "Result.h"
 
 #include "Album.h"
-#include "Collection.h"
-#include "Resolver.h"
+#include "collection/Collection.h"
+#include "resolvers/Resolver.h"
 #include "Source.h"
 #include "Pipeline.h"
 #include "database/Database.h"
@@ -31,7 +31,7 @@
 
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
-#include "ExternalResolverGui.h"
+#include "resolvers/ExternalResolverGui.h"
 
 using namespace Tomahawk;
 

@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi            <lfranchi@kde.org>
+ *   Copyright 2013,      Teo Mrnjavac           <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -41,11 +42,12 @@ public:
     virtual ~ScriptResolver();
     static ExternalResolver* factory( const QString& exe );
 
-    virtual QString name() const            { return m_name; }
-    virtual QPixmap icon() const            { return m_icon; }
-    virtual unsigned int weight() const     { return m_weight; }
-    virtual unsigned int preference() const { return m_preference; }
-    virtual unsigned int timeout() const    { return m_timeout; }
+    virtual QString name() const              { return m_name; }
+    virtual QPixmap icon() const              { return m_icon; }
+    virtual unsigned int weight() const       { return m_weight; }
+    virtual unsigned int preference() const   { return m_preference; }
+    virtual unsigned int timeout() const      { return m_timeout; }
+    virtual Capabilities capabilities() const { return m_capabilities; }
 
     virtual void setIcon( const QPixmap& icon );
 
@@ -68,6 +70,12 @@ public slots:
     virtual void resolve( const Tomahawk::query_ptr& query );
     virtual void start();
 
+    // TODO: implement. Or not. Not really an issue while Spotify doesn't do browsable personal cloud storage.
+    virtual void artists( const Tomahawk::collection_ptr& collection ){}
+    virtual void albums( const Tomahawk::collection_ptr& collection, const Tomahawk::artist_ptr& artist ) {}
+    virtual void tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::album_ptr& album ) {}
+
+
 private slots:
     void readStderr();
     void readStdout();
@@ -87,6 +95,7 @@ private:
     QString m_name;
     QPixmap m_icon;
     unsigned int m_weight, m_preference, m_timeout, m_num_restarts;
+    Capabilities m_capabilities;
     QPointer< AccountConfigWidget > m_configWidget;
 
     quint32 m_msgsize;

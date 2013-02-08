@@ -182,7 +182,7 @@ DatabaseCommand_Resolve::resolve( DatabaseImpl* lib )
         }
 
         result->setAttributes( attr );
-        result->setCollection( s->collection() );
+        result->setCollection( s->dbCollection() );
 
         res << result;
     }
@@ -330,7 +330,7 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
         }
 
         result->setAttributes( attr );
-        result->setCollection( s->collection() );
+        result->setCollection( s->dbCollection() );
 
         res << result;
     }

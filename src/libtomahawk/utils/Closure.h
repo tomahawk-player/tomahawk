@@ -74,7 +74,7 @@ class DLLEXPORT Closure : public QObject, boost::noncopyable {
    * If you don't this Closure to act on a signal, but just act like
    *  a closure in that it saves some args and delivers them on demand later
    *
-   * Only call this is you passed a null QObject* as a sender! Otherwise you
+   * Only call this if you passed a null QObject* as a sender! Otherwise you
    *  might delete your object twice :)
    */
   void forceInvoke();

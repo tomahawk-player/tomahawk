@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -24,6 +25,8 @@
 #include "network/RemoteCollection.h"
 #include "network/ControlConnection.h"
 #include "infosystem/InfoSystemCache.h"
+#include "resolvers/ExternalResolver.h"
+#include "resolvers/ScriptCollection.h"
 
 #include "utils/Logger.h"
 
@@ -258,6 +261,69 @@ SourceList::latchedOff( const source_ptr& to )
 
     emit sourceLatchedOff( source, to );
 }
+
+
+void
+SourceList::onResolverAdded( Resolver* resolver )
+{
+    ExternalResolver* r = qobject_cast< ExternalResolver* >( resolver );
+    if ( r == 0 )
+        return;
+
+    foreach ( const Tomahawk::collection_ptr& collection, r->collections() )
+    {
+        addScriptCollection( collection );
+    }
+
+    connect( r, SIGNAL( collectionAdded( Tomahawk::collection_ptr ) ),
+             this, SLOT( addScriptCollection( Tomahawk::collection_ptr ) ) );
+    connect( r, SIGNAL( collectionRemoved(Tomahawk::collection_ptr) ),
+             this, SLOT( removeScriptCollection( Tomahawk::collection_ptr ) ) );
+}
+
+
+void
+SourceList::onResolverRemoved( Resolver* resolver )
+{
+    ExternalResolver* r = qobject_cast< ExternalResolver* >( resolver );
+    if ( r == 0 )
+        return;
+
+    foreach ( const Tomahawk::collection_ptr& collection, m_scriptCollections )
+        if ( qobject_cast< ScriptCollection* >( collection.data() )->resolver() == r )
+            removeScriptCollection( collection );
+
+    disconnect( r, SIGNAL( collectionAdded( Tomahawk::collection_ptr ) ),
+                this, SLOT( addScriptCollection( Tomahawk::collection_ptr ) ) );
+    disconnect( r, SIGNAL( collectionRemoved(Tomahawk::collection_ptr) ),
+                this, SLOT( removeScriptCollection( Tomahawk::collection_ptr ) ) );
+}
+
+
+void
+SourceList::addScriptCollection( const collection_ptr& collection )
+{
+    m_scriptCollections.append( collection );
+
+    matchSourceForScriptCollection( collection );
+}
+
+
+void
+SourceList::removeScriptCollection( const collection_ptr& collection )
+{
+    getLocal()->removeCollection( collection );
+    m_scriptCollections.removeAll( collection );
+}
+
+
+void
+SourceList::matchSourceForScriptCollection( const collection_ptr& collection )
+{
+    //TODO: implement for multi-collection resolvers
+    getLocal()->addCollection( collection );
+}
+
 
 void
 SourceList::latchedOn( const source_ptr& to )

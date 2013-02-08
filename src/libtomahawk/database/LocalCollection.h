@@ -30,6 +30,9 @@ class DLLEXPORT LocalCollection : public DatabaseCollection
 public:
     explicit LocalCollection( const Tomahawk::source_ptr& source, QObject* parent = 0 );
 
+    virtual QString prettyName() const;
+    virtual QString emptyText() const;
+
     // gets the playlist used for storing stuff from the web, if it already exists. if the returned playlist
     // is invalid ask to create and listen to the signal
     Tomahawk::playlist_ptr bookmarksPlaylist();

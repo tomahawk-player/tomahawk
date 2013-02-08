@@ -130,9 +130,9 @@ DynamicPlaylist::load( const QString& guid )
 
     foreach( const Tomahawk::source_ptr& source, SourceList::instance()->sources() )
     {
-        p = source->collection()->autoPlaylist( guid );
+        p = source->dbCollection()->autoPlaylist( guid );
         if ( p.isNull() )
-            p = source->collection()->station( guid );
+            p = source->dbCollection()->station( guid );
 
         if ( !p.isNull() )
             return p;
@@ -323,14 +323,14 @@ DynamicPlaylist::reportCreated( const Tomahawk::dynplaylist_ptr& self )
 //    qDebug() << Q_FUNC_INFO;
     Q_ASSERT( self.data() == this );
     Q_ASSERT( !author().isNull() );
-    Q_ASSERT( !author()->collection().isNull() );
+    Q_ASSERT( !author()->dbCollection().isNull() );
     // will emit Collection::playlistCreated(...)
     //    qDebug() << "Creating dynplaylist belonging to:" << author().data() << author().isNull();
     //    qDebug() << "REPORTING DYNAMIC PLAYLIST CREATED:" << this << author()->friendlyName();
     if ( self->mode() == Static )
-        author()->collection()->addAutoPlaylist( self );
+        author()->dbCollection()->addAutoPlaylist( self );
     else
-        author()->collection()->addStation( self );
+        author()->dbCollection()->addStation( self );
 }
 
 
@@ -341,9 +341,9 @@ DynamicPlaylist::reportDeleted( const Tomahawk::dynplaylist_ptr& self )
     Q_ASSERT( self.data() == this );
     // will emit Collection::playlistDeleted(...)
     if ( self->mode() == Static )
-        author()->collection()->deleteAutoPlaylist( self );
+        author()->dbCollection()->deleteAutoPlaylist( self );
     else
-        author()->collection()->deleteStation( self );
+        author()->dbCollection()->deleteStation( self );
 
     emit deleted( self );
 }

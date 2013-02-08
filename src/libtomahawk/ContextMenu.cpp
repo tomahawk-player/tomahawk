@@ -25,7 +25,7 @@
 #include "ViewManager.h"
 #include "Query.h"
 #include "Result.h"
-#include "Collection.h"
+#include "collection/Collection.h"
 #include "Source.h"
 #include "Artist.h"
 #include "Album.h"

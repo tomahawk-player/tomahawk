@@ -17,12 +17,13 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Collection.h"
+#include "collection/Collection.h"
 
 #include "Source.h"
 
 #include "utils/Logger.h"
 #include "playlist/PlaylistUpdaterInterface.h"
+#include "utils/ImageRegistry.h"
 
 #include <QMetaObject>
 #include <QGenericArgument>
@@ -53,6 +54,43 @@ QString
 Collection::name() const
 {
     return m_name;
+}
+
+
+QString
+Collection::prettyName() const
+{
+    return tr( "Collection" );
+}
+
+
+QString
+Collection::itemName() const
+{
+    return tr( "Collection" );
+}
+
+
+QIcon
+Collection::icon() const
+{
+    return ImageRegistry::instance()->icon( RESPATH "images/collection.svg" );
+}
+
+
+QPixmap
+Collection::bigIcon() const
+{
+    if ( !source()->avatar().isNull() )
+        return source()->avatar( TomahawkUtils::RoundedCorners );
+    return TomahawkUtils::defaultPixmap( TomahawkUtils::SuperCollection );
+}
+
+
+QString
+Collection::emptyText() const
+{
+    return  tr( "This collection is empty." );
 }
 
 

@@ -30,7 +30,7 @@
 #include "Typedefs.h"
 #include "PlaylistInterface.h"
 #include "DllMacro.h"
-#include "Collection.h"
+#include "collection/Collection.h"
 #include "infosystem/InfoSystem.h"
 
 class IdThreadWorker;

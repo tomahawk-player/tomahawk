@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -23,13 +24,15 @@
 #include <QVariantMap>
 
 #include "Artist.h"
-#include "Collection.h"
+#include "collection/ArtistsRequest.h"
+#include "collection/Collection.h"
 #include "Typedefs.h"
 #include "DatabaseCommand.h"
+#include "Database.h"
 
 #include "DllMacro.h"
 
-class DLLEXPORT DatabaseCommand_AllArtists : public DatabaseCommand
+class DLLEXPORT DatabaseCommand_AllArtists : public DatabaseCommand, public Tomahawk::ArtistsRequest
 {
 Q_OBJECT
 public:
@@ -46,6 +49,8 @@ public:
 
     virtual bool doesMutates() const { return false; }
     virtual QString commandname() const { return "allartists"; }
+
+    virtual void enqueue() { Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( this ) ); }
 
     void setLimit( unsigned int amount ) { m_amount = amount; }
     void setSortOrder( DatabaseCommand_AllArtists::SortOrder order ) { m_sortOrder = order; }

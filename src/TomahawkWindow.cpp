@@ -1022,7 +1022,7 @@ TomahawkWindow::createStation()
 
     if ( playlistName.isEmpty() || playlistName == title )
     {
-        QList< dynplaylist_ptr > pls = SourceList::instance()->getLocal()->collection()->stations();
+        QList< dynplaylist_ptr > pls = SourceList::instance()->getLocal()->dbCollection()->stations();
         QStringList titles;
         foreach ( const playlist_ptr& pl, pls )
             titles << pl->title();
@@ -1074,7 +1074,7 @@ TomahawkWindow::playlistCreateDialogFinished( int ret )
     {
         if ( playlistName.isEmpty() )
         {
-            QList< playlist_ptr > pls = SourceList::instance()->getLocal()->collection()->playlists();
+            QList< playlist_ptr > pls = SourceList::instance()->getLocal()->dbCollection()->playlists();
             QStringList titles;
             foreach ( const playlist_ptr& pl, pls )
                 titles << pl->title();
@@ -1096,7 +1096,7 @@ TomahawkWindow::playlistCreateDialogFinished( int ret )
        // create Auto Playlist
         if ( playlistName.isEmpty() )
         {
-            QList< dynplaylist_ptr > pls = SourceList::instance()->getLocal()->collection()->autoPlaylists();
+            QList< dynplaylist_ptr > pls = SourceList::instance()->getLocal()->dbCollection()->autoPlaylists();
             QStringList titles;
             foreach ( const dynplaylist_ptr& pl, pls )
                 titles << pl->title();

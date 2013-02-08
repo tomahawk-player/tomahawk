@@ -40,6 +40,7 @@
 #include "playlist/SingleTrackPlaylistInterface.h"
 
 #include <QtCore/QUrl>
+#include <QDir>
 #include <QtNetwork/QNetworkReply>
 #include <QTemporaryFile>
 

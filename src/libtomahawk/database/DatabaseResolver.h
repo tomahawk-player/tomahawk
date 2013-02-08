@@ -19,7 +19,7 @@
 #ifndef DATABASERESOLVER_H
 #define DATABASERESOLVER_H
 
-#include "Resolver.h"
+#include "resolvers/Resolver.h"
 #include "Result.h"
 #include "Artist.h"
 #include "Album.h"

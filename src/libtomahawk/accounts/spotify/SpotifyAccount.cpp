@@ -39,12 +39,13 @@
 #include "jobview/ErrorStatusMessage.h"
 #endif
 
-#include <QPixmap>
 #include <QAction>
+#include <QCoreApplication>
+#include <QDir>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QMessageBox>
-#include <QCoreApplication>
+#include <QPixmap>
 
 using namespace Tomahawk;
 using namespace Accounts;

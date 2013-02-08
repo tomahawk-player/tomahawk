@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -27,15 +28,19 @@
 #define TOMAHAWK_COLLECTION_H
 
 #include <QHash>
-#include <QDir>
 #include <QList>
 #include <QSharedPointer>
 
 #include "Typedefs.h"
 #include "Playlist.h"
 #include "playlist/dynamic/DynamicPlaylist.h"
+#include "collection/ArtistsRequest.h"
+#include "collection/AlbumsRequest.h"
+#include "collection/TracksRequest.h"
 
 #include "DllMacro.h"
+
+class QIcon;
 
 namespace Tomahawk
 {
@@ -48,7 +53,20 @@ public:
     Collection( const source_ptr& source, const QString& name, QObject* parent = 0 );
     virtual ~Collection();
 
+    enum BackendType
+    {
+        NullCollectionType = 0,
+        DatabaseCollectionType, //talks to a database, incl. LocalCollection
+        ScriptCollectionType    //performs operations through a resolver
+    };
+
     virtual QString name() const;
+    virtual QString prettyName() const;
+    virtual QString itemName() const;
+    virtual BackendType backendType() const { return NullCollectionType; }
+    virtual QIcon icon() const;
+    virtual QPixmap bigIcon() const; //for the ViewPage header
+    virtual QString emptyText() const;
 
     virtual void loadPlaylists() { qDebug() << Q_FUNC_INFO; }
     virtual void loadAutoPlaylists() { qDebug() << Q_FUNC_INFO; }
@@ -71,6 +89,11 @@ public:
     virtual QList< Tomahawk::dynplaylist_ptr > autoPlaylists() { return m_autoplaylists.values(); }
     virtual QList< Tomahawk::dynplaylist_ptr > stations() { return m_stations.values(); }
 
+    // Async requests. Emit artists/albums/tracksResult in subclasses when finished.
+    virtual Tomahawk::ArtistsRequest* requestArtists() = 0;
+    virtual Tomahawk::AlbumsRequest* requestAlbums( const Tomahawk::artist_ptr& artist ) = 0;
+    virtual Tomahawk::TracksRequest* requestTracks( const Tomahawk::album_ptr& album ) = 0;
+
     const source_ptr& source() const;
     unsigned int lastmodified() const { return m_lastmodified; }
 
@@ -90,9 +113,6 @@ signals:
     void changed();
 
 public slots:
-    virtual void addTracks( const QList<QVariant>& newitems ) = 0;
-    virtual void removeTracks( const QDir& dir ) = 0;
-
     void setPlaylists( const QList<Tomahawk::playlist_ptr>& plists );
     void setAutoPlaylists( const QList< Tomahawk::dynplaylist_ptr >& autoplists );
     void setStations( const QList< Tomahawk::dynplaylist_ptr >& stations );

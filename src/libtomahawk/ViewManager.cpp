@@ -278,10 +278,8 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
         TreeModel* model = new TreeModel();
         view->setTreeModel( model );
 
-        if ( collection && collection->source()->isLocal() )
-            view->setEmptyTip( tr( "After you have scanned your music collection you will find your tracks right here." ) );
-        else
-            view->setEmptyTip( tr( "This collection is empty." ) );
+        if ( !collection.isNull() )
+            view->setEmptyTip( collection->emptyText() );
 
         model->addCollection( collection );
 
@@ -333,9 +331,9 @@ ViewManager::showSuperCollection()
 
     foreach( const Tomahawk::source_ptr& source, SourceList::instance()->sources() )
     {
-        if ( !m_superCollections.contains( source->collection() ) )
+        if ( !m_superCollections.contains( source->dbCollection() ) )
         {
-            m_superCollections.append( source->collection() );
+            m_superCollections.append( source->dbCollection() );
 //            m_superAlbumModel->addCollection( source->collection() );
         }
     }

@@ -20,8 +20,8 @@
 
 #include "AccountManager.h"
 #include "AtticaManager.h"
-#include "ExternalResolver.h"
-#include "ExternalResolverGui.h"
+#include "resolvers/ExternalResolver.h"
+#include "resolvers/ExternalResolverGui.h"
 #include "Pipeline.h"
 #include "TomahawkSettings.h"
 #include "Source.h"

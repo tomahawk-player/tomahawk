@@ -90,7 +90,7 @@ signals:
 
 private slots:
     void onTracksLoaded( Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection );
-    void onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, const QVariant& data );
+    void onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, const QVariant& collectionIsNull = QVariant( false ) );
 
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString target );

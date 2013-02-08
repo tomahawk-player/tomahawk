@@ -21,7 +21,7 @@
 #include <echonest/CatalogUpdateEntry.h>
 #include <echonest/Config.h>
 
-#include "Collection.h"
+#include "collection/Collection.h"
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
 #include "database/DatabaseCommand_GenericSelect.h"
@@ -47,8 +47,8 @@ EchonestCatalogSynchronizer::EchonestCatalogSynchronizer( QObject *parent )
     qRegisterMetaType<QList<QStringList> >("QList<QStringList>");
 
     connect( TomahawkSettings::instance(), SIGNAL( changed() ), this, SLOT( checkSettingsChanged() ) );
-    connect( SourceList::instance()->getLocal()->collection().data(), SIGNAL( tracksAdded( QList<unsigned int> ) ), this, SLOT( tracksAdded( QList<unsigned int> ) ), Qt::QueuedConnection );
-    connect( SourceList::instance()->getLocal()->collection().data(), SIGNAL( tracksRemoved( QList<unsigned int> ) ), this, SLOT( tracksRemoved( QList<unsigned int> ) ), Qt::QueuedConnection );
+    connect( SourceList::instance()->getLocal()->dbCollection().data(), SIGNAL( tracksAdded( QList<unsigned int> ) ), this, SLOT( tracksAdded( QList<unsigned int> ) ), Qt::QueuedConnection );
+    connect( SourceList::instance()->getLocal()->dbCollection().data(), SIGNAL( tracksRemoved( QList<unsigned int> ) ), this, SLOT( tracksRemoved( QList<unsigned int> ) ), Qt::QueuedConnection );
 
     const QByteArray artist = TomahawkSettings::instance()->value( "collection/artistCatalog" ).toByteArray();
     const QByteArray song = TomahawkSettings::instance()->value( "collection/songCatalog" ).toByteArray();

@@ -29,9 +29,9 @@
 #include "database/DatabaseCommand_SocialAction.h"
 #include "database/DatabaseCommand_TrackStats.h"
 #include "Album.h"
-#include "Collection.h"
+#include "collection/Collection.h"
 #include "Pipeline.h"
-#include "Resolver.h"
+#include "resolvers/Resolver.h"
 #include "SourceList.h"
 #include "audio/AudioEngine.h"
 

@@ -37,6 +37,8 @@ public:
         qDebug() << Q_FUNC_INFO;
     }
 
+    virtual QString prettyName() const;
+
 public slots:
     virtual void addTracks( const QList<QVariant>& newitems );
     virtual void removeTracks( const QDir& dir );

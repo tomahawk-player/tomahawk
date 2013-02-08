@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -20,7 +21,7 @@
 #include "Artist.h"
 
 #include "ArtistPlaylistInterface.h"
-#include "Collection.h"
+#include "collection/Collection.h"
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
 #include "database/DatabaseCommand_AllAlbums.h"
@@ -165,13 +166,29 @@ Artist::albums( ModelMode mode, const Tomahawk::collection_ptr& collection ) con
 
     if ( ( mode == DatabaseMode || mode == Mixed ) && !dbLoaded )
     {
-        DatabaseCommand_AllAlbums* cmd = new DatabaseCommand_AllAlbums( collection, artist );
-        cmd->setData( QVariant( collection.isNull() ) );
+        if ( collection.isNull() )
+        {
+            DatabaseCommand_AllAlbums* cmd = new DatabaseCommand_AllAlbums( collection, artist );
+            cmd->setData( QVariant( collection.isNull() ) );
 
-        connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, QVariant ) ),
-                        SLOT( onAlbumsFound( QList<Tomahawk::album_ptr>, QVariant ) ) );
+            connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, QVariant ) ),
+                          SLOT( onAlbumsFound( QList<Tomahawk::album_ptr>, QVariant ) ) );
 
-        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+            Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+        }
+        else
+        {
+            //collection is *surely* not null, and might be a ScriptCollection
+            Tomahawk::AlbumsRequest* cmd = collection->requestAlbums( artist );
+
+            // There is also a signal albums( QList, QVariant ).
+            // The QVariant might carry a bool that says whether the dbcmd was executed for a null collection
+            // but here we know for a fact that the collection is not null, so we'll happily ignore it
+            connect( dynamic_cast< QObject* >( cmd ), SIGNAL( albums( QList<Tomahawk::album_ptr> ) ),
+                     this, SLOT( onAlbumsFound( QList<Tomahawk::album_ptr> ) ) );
+
+            cmd->enqueue();
+        }
     }
 
     if ( ( mode == InfoSystemMode || mode == Mixed ) && !infoLoaded )
@@ -376,9 +393,9 @@ Artist::playbackCount( const source_ptr& source )
 
 
 void
-Artist::onAlbumsFound( const QList< album_ptr >& albums, const QVariant& data )
+Artist::onAlbumsFound( const QList< album_ptr >& albums, const QVariant& collectionIsNull )
 {
-    if ( data.toBool() )
+    if ( collectionIsNull.toBool() )
     {
         m_databaseAlbums << albums;
         m_albumsLoaded.insert( DatabaseMode, true );

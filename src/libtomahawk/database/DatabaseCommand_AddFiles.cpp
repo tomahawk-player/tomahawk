@@ -22,7 +22,7 @@
 
 #include "Artist.h"
 #include "Album.h"
-#include "Collection.h"
+#include "collection/Collection.h"
 #include "database/Database.h"
 #include "DatabaseImpl.h"
 #include "network/DbSyncConnection.h"
@@ -57,7 +57,7 @@ DatabaseCommand_AddFiles::postCommitHook()
 {
     // make the collection object emit its tracksAdded signal, so the
     // collection browser will update/fade in etc.
-    Collection* coll = source()->collection().data();
+    Collection* coll = source()->dbCollection().data();
 
     connect( this, SIGNAL( notify( QList<unsigned int> ) ),
              coll,   SLOT( setTracks( QList<unsigned int> ) ), Qt::QueuedConnection );
@@ -166,5 +166,5 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
     qDebug() << "Inserted" << added << "tracks to database";
     tDebug() << "Committing" << added << "tracks...";
 
-    emit done( m_files, source()->collection() );
+    emit done( m_files, source()->dbCollection() );
 }

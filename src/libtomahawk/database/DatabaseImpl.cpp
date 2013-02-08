@@ -311,7 +311,7 @@ DatabaseImpl::file( int fid )
         r->setComposer( composer );
         r->setTrack( query.value( 13 ).toString() );
         r->setTrackId( query.value( 9 ).toUInt() );
-        r->setCollection( s->collection() );
+        r->setCollection( s->dbCollection() );
         r->setScore( 1.0 );
         r->setFileId( fid );
     }
@@ -713,7 +713,7 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
         res->setDiscNumber( query.value( 17 ).toUInt() );
         res->setRID( uuid() );
         res->setTrackId( query.value( 9 ).toUInt() );
-        res->setCollection( s->collection() );
+        res->setCollection( s->dbCollection() );
         res->setYear( query.value( 21 ).toUInt() );
     }
 
