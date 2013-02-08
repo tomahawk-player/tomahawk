@@ -20,6 +20,7 @@
 #include "FlexibleHeader.h"
 
 #include <QBoxLayout>
+#include <QFile>
 #include <QLabel>
 #include <QPixmap>
 #include <QCheckBox>
