@@ -369,17 +369,17 @@ de se connecter et streamer de vous?</translation>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="645"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="646"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>Désolé, on a pas pu trouver la piste &apos;%1&apos; pour %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="669"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="670"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>Désolé, on a pas pu trouver l&apos;artiste &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="695"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="696"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>Désolé, on a pas pu trouver l&apos;album &apos;%1&apos; pour %2</translation>
     </message>
@@ -501,7 +501,7 @@ de se connecter et streamer de vous?</translation>
 <context>
     <name>DatabaseCommand_AllAlbums</name>
     <message>
-        <location filename="../src/libtomahawk/database/DatabaseCommand_AllAlbums.cpp" line="109"/>
+        <location filename="../src/libtomahawk/database/DatabaseCommand_AllAlbums.cpp" line="110"/>
         <source>Unknown</source>
         <translation>Inconnu</translation>
     </message>
@@ -648,7 +648,7 @@ de se connecter et streamer de vous?</translation>
 <context>
     <name>FlexibleHeader</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/FlexibleHeader.cpp" line="84"/>
+        <location filename="../src/libtomahawk/playlist/FlexibleHeader.cpp" line="85"/>
         <source>Filter...</source>
         <translation>Filtre...</translation>
     </message>
@@ -775,12 +775,22 @@ de se connecter et streamer de vous?</translation>
 <context>
     <name>LocalCollection</name>
     <message>
-        <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="54"/>
+        <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="43"/>
+        <source>My Collection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="50"/>
+        <source>After you have scanned your music collection you will find your tracks right here.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="69"/>
         <source>Bookmarks</source>
         <translation>Signets</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="54"/>
+        <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="69"/>
         <source>Saved tracks</source>
         <translation>Titres sauvegardés</translation>
     </message>
@@ -1343,6 +1353,16 @@ de se connecter et streamer de vous?</translation>
     </message>
 </context>
 <context>
+    <name>QtScriptResolver</name>
+    <message>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="524"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="559"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="595"/>
+        <source>Script Resolver Warning: API call %1 returned data sychronously.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>QuaZipFilePrivate</name>
     <message>
         <location filename="../src/libtomahawk/thirdparty/quazip/quazip/quazipfile.cpp" line="172"/>
@@ -1378,6 +1398,14 @@ de se connecter et streamer de vous?</translation>
     </message>
 </context>
 <context>
+    <name>RemoteCollection</name>
+    <message>
+        <location filename="../src/libtomahawk/network/RemoteCollection.cpp" line="36"/>
+        <source>Collection of %1</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>ResolverConfigDelegate</name>
     <message>
         <location filename="../src/ResolverConfigDelegate.cpp" line="109"/>
@@ -1393,7 +1421,7 @@ de se connecter et streamer de vous?</translation>
 <context>
     <name>ScriptEngine</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="224"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="341"/>
         <source>Script Resolver Error: %1 %2 %3 %4</source>
         <translation>Erreur du script de résolution : %1 %2 %3 %4</translation>
     </message>
@@ -1749,58 +1777,53 @@ de se connecter et streamer de vous?</translation>
 <context>
     <name>SourceItem</name>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="67"/>
-        <source>Collection</source>
-        <translation>Collection</translation>
-    </message>
-    <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="75"/>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="548"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="80"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="601"/>
         <source>Latest Additions</source>
         <translation>Derniers ajouts</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="79"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="84"/>
         <source>Recently Played</source>
         <translation>Joués récemment</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="142"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="147"/>
         <source>SuperCollection</source>
         <translation>SuperCollection</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="551"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="604"/>
         <source>Latest additions to your collection</source>
         <translation>Derniers ajouts à votre collection</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="553"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="606"/>
         <source>Latest additions to %1&apos;s collection</source>
         <translation>Derniers ajouts à la collection de %1</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="562"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="615"/>
         <source>Sorry, we could not find any recent additions!</source>
         <translation>Désolé, on a pas pu trouver des dernier ajouts!</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="591"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="644"/>
         <source>Recently Played Tracks</source>
         <translation>Derniers titres joués</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="594"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="647"/>
         <source>Your recently played tracks</source>
         <translation>Les derniers titres que vous avez joués</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="596"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="649"/>
         <source>%1&apos;s recently played tracks</source>
         <translation>Derniers titres joués par %1</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="603"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="656"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>Désolé, aucune piste récemment jouée n&apos;a pu être trouvée !</translation>
     </message>
@@ -2198,47 +2221,47 @@ de se connecter et streamer de vous?</translation>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccount</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="491"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="492"/>
         <source>Sync with Spotify</source>
         <translation>Synchroniser avec Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="495"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="496"/>
         <source>Re-enable syncing with Spotify</source>
         <translation>Réactiver la synchronisation avec Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="503"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="504"/>
         <source>Create local copy</source>
         <translation>Créer une copie localement</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="519"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="520"/>
         <source>Subscribe to playlist changes</source>
         <translation>S&apos;abonner aux modifications de la liste de lecture</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="523"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="524"/>
         <source>Re-enable playlist subscription</source>
         <translation>Réactiver l&apos;abonnement à la liste de lecture</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="527"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="528"/>
         <source>Stop subscribing to changes</source>
         <translation>Stopper l&apos;abonnement aux modifications</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="547"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="548"/>
         <source>Enable Spotify collaborations</source>
         <translation>Activer les collaborations Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="549"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="550"/>
         <source>Disable Spotify collaborations</source>
         <translation>Désactiver les collaborations Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="505"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="506"/>
         <source>Stop syncing with Spotify</source>
         <translation>Stopper la synchronisation avec Spotify</translation>
     </message>
@@ -2469,6 +2492,20 @@ utilisateur@jabber.org</translation>
         <location filename="../src/accounts/zeroconf/ZeroconfAccount.h" line="43"/>
         <source>Automatically connect to Tomahawks on the local network</source>
         <translation>Se connecter automatiquement aux Tomahawks sur le réseau local</translation>
+    </message>
+</context>
+<context>
+    <name>Tomahawk::Collection</name>
+    <message>
+        <location filename="../src/libtomahawk/collection/Collection.cpp" line="63"/>
+        <location filename="../src/libtomahawk/collection/Collection.cpp" line="70"/>
+        <source>Collection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/collection/Collection.cpp" line="93"/>
+        <source>This collection is empty.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -3231,6 +3268,27 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
     </message>
 </context>
 <context>
+    <name>Tomahawk::ScriptCollection</name>
+    <message>
+        <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="58"/>
+        <source>My %1 Collection</source>
+        <comment>Name of a collection based on a resolver, e.g. My Subsonic Collection</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="61"/>
+        <source>%1 Collection of %2</source>
+        <comment>Name of a collection based on a resolver, e.g. Subsonic Collection of Some Dude</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="71"/>
+        <source>%1 Collection</source>
+        <comment>Name of a collection based on a resolver, e.g. Subsonic Collection</comment>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Tomahawk::ShortenedLinkParser</name>
     <message>
         <location filename="../src/libtomahawk/utils/ShortenedLinkParser.cpp" line="101"/>
@@ -3249,43 +3307,43 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="281"/>
-        <location filename="../src/libtomahawk/Source.cpp" line="332"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="285"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="336"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Scan en cours (%L1 titres)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="283"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="287"/>
         <source>Scanning</source>
         <translation>Scan en cours</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="317"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="321"/>
         <source>Checking</source>
         <translation>Vérification</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="322"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="326"/>
         <source>Syncing</source>
         <translation>Synchronisation</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="327"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="331"/>
         <source>Importing</source>
         <translation>Importation</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="469"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="473"/>
         <source>Saving (%1%)</source>
         <translation>Enregistrement (%1%)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="550"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="554"/>
         <source>Online</source>
         <translation>En Ligne</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="554"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="558"/>
         <source>Offline</source>
         <translation>Hors ligne</translation>
     </message>
@@ -3628,21 +3686,9 @@ saisissez le numéro PIN ici :</translation>
 <context>
     <name>TreeModel</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="149"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="150"/>
         <source>All Artists</source>
         <translation>Tous les artistes</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="267"/>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="292"/>
-        <source>My Collection</source>
-        <translation>Ma Collection</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="269"/>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="294"/>
-        <source>Collection of %1</source>
-        <translation>Collection de %1</translation>
     </message>
 </context>
 <context>
@@ -3742,37 +3788,27 @@ Vous pouvez envoyer un message de synchronisation quand vous le souhaitez en env
         <translation>Cette liste de lecture est vide!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="282"/>
-        <source>After you have scanned your music collection you will find your tracks right here.</source>
-        <translation>Après avoir scanné votre collection musicale, vous trouverez tous vos titres ici.</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="284"/>
-        <source>This collection is empty.</source>
-        <translation>La collection est vide.</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="343"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="341"/>
         <source>SuperCollection</source>
         <translation>SuperCollection</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="344"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="342"/>
         <source>Combined libraries of all your online friends</source>
         <translation>Collections regroupant toutes celles de vos amis en ligne</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="404"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="402"/>
         <source>Recently Played Tracks</source>
         <translation>Derniers titres joués</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="405"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="403"/>
         <source>Recently played tracks from all your friends</source>
         <translation>Derniers titres joués par vos amis</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="412"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="410"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>Désolé, aucune piste récemment jouée n&apos;a pu être trouvée !</translation>
     </message>
