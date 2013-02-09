@@ -28,7 +28,7 @@
 
 #include "DllMacro.h"
 
-class DatabaseCommand_ShareTrack : public DatabaseCommandLoggable
+class DLLEXPORT DatabaseCommand_ShareTrack : public DatabaseCommandLoggable
 {
     Q_OBJECT
     Q_PROPERTY( QString artist      READ artist     WRITE setArtist )

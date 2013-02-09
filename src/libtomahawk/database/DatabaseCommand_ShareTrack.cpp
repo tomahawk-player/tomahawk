@@ -66,14 +66,14 @@ DatabaseCommand_ShareTrack::exec( DatabaseImpl* dbi )
 void
 DatabaseCommand_ShareTrack::postCommitHook()
 {
-    if ( !m_query.isNull() )
-        return;
-
     if ( source()->isLocal() )
         Servent::instance()->triggerDBSync();
 
-    QString myDbid = Database::instance()->impl()->dbid();
-    QString sourceDbid = source()->userName(); //userName is actually a dbid -_-'
+    if ( !m_query.isNull() )
+        return;
+
+    QString myDbid = SourceList::instance()->getLocal()->nodeId();
+    QString sourceDbid = source()->nodeId();
     if ( myDbid != m_recipient || sourceDbid == m_recipient )
         return;
 

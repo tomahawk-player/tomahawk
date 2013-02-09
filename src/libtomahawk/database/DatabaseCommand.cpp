@@ -29,6 +29,7 @@
 #include "DatabaseCommand_DeleteDynamicPlaylist.h"
 #include "DatabaseCommand_SetDynamicPlaylistRevision.h"
 #include "DatabaseCommand_SocialAction.h"
+#include "DatabaseCommand_ShareTrack.h"
 
 #include "utils/Logger.h"
 #include "DatabaseCommand_SetCollectionAttributes.h"
@@ -181,6 +182,13 @@ DatabaseCommand::factory( const QVariant& op, const source_ptr& source )
     else if( name == "settrackattributes" )
     {
         DatabaseCommand_SetTrackAttributes * cmd = new DatabaseCommand_SetTrackAttributes;
+        cmd->setSource( source );
+        QJson::QObjectHelper::qvariant2qobject( op.toMap(), cmd );
+        return cmd;
+    }
+    else if( name == "sharetrack" )
+    {
+        DatabaseCommand_ShareTrack * cmd = new DatabaseCommand_ShareTrack;
         cmd->setSource( source );
         QJson::QObjectHelper::qvariant2qobject( op.toMap(), cmd );
         return cmd;

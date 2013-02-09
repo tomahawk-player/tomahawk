@@ -30,8 +30,6 @@ public:
     explicit InboxModel( QObject* parent = 0 );
     virtual ~InboxModel();
 
-signals:
-
 public slots:
 
 };
