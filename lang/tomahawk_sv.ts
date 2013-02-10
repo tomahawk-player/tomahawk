@@ -777,12 +777,12 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="43"/>
         <source>My Collection</source>
-        <translation type="unfinished"/>
+        <translation>Min kollektion</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="50"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
-        <translation type="unfinished"/>
+        <translation>När du skannat din musik-kollektion kommer dina spår att finnas här</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="69"/>
@@ -1359,7 +1359,7 @@ ansluta och strömma från dig?</translation>
         <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="559"/>
         <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="595"/>
         <source>Script Resolver Warning: API call %1 returned data sychronously.</source>
-        <translation type="unfinished"/>
+        <translation>Skript-resolver-varning: API-kall %1 retunerade datan synkront</translation>
     </message>
 </context>
 <context>
@@ -1402,7 +1402,7 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/libtomahawk/network/RemoteCollection.cpp" line="36"/>
         <source>Collection of %1</source>
-        <translation type="unfinished"/>
+        <translation>%1&apos;s kollektion</translation>
     </message>
 </context>
 <context>
@@ -2501,12 +2501,12 @@ username@jabber.org</translation>
         <location filename="../src/libtomahawk/collection/Collection.cpp" line="63"/>
         <location filename="../src/libtomahawk/collection/Collection.cpp" line="70"/>
         <source>Collection</source>
-        <translation type="unfinished"/>
+        <translation>Kollektion</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/collection/Collection.cpp" line="93"/>
         <source>This collection is empty.</source>
-        <translation type="unfinished"/>
+        <translation>Denna kollektionen är tom</translation>
     </message>
 </context>
 <context>
@@ -3274,19 +3274,19 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
         <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="58"/>
         <source>My %1 Collection</source>
         <comment>Name of a collection based on a resolver, e.g. My Subsonic Collection</comment>
-        <translation type="unfinished"/>
+        <translation>Min %1-kollektion</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="61"/>
         <source>%1 Collection of %2</source>
         <comment>Name of a collection based on a resolver, e.g. Subsonic Collection of Some Dude</comment>
-        <translation type="unfinished"/>
+        <translation>%1 kollektion av %2</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="71"/>
         <source>%1 Collection</source>
         <comment>Name of a collection based on a resolver, e.g. Subsonic Collection</comment>
-        <translation type="unfinished"/>
+        <translation>%1 kollektion</translation>
     </message>
 </context>
 <context>
