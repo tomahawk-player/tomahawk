@@ -326,7 +326,7 @@ SourcesModel::appendGroups()
                                                 boost::bind( &ViewManager::newReleasesWidget, ViewManager::instance() ) );
     newReleases->setSortValue( 5 );
 
-    GenericPageItem* inbox = new GenericPageItem( this, browse, tr( "Inbox" ), ImageRegistry::instance()->icon( RESPATH "images/downloading.svg" ),
+    GenericPageItem* inbox = new GenericPageItem( this, browse, tr( "Inbox" ), ImageRegistry::instance()->icon( RESPATH "images/inbox.svg" ),
                                                   boost::bind( &ViewManager::showInboxPage, ViewManager::instance() ),
                                                   boost::bind( &ViewManager::inboxWidget, ViewManager::instance() ) );
     inbox->setSortValue( 6 );
