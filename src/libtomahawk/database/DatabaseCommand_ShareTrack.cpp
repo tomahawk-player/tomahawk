@@ -57,6 +57,13 @@ DatabaseCommand_ShareTrack::DatabaseCommand_ShareTrack( const Tomahawk::result_p
     setTrack( result->track() );
 }
 
+
+QString
+DatabaseCommand_ShareTrack::commandname() const
+{
+     return "sharetrack";
+}
+
 void
 DatabaseCommand_ShareTrack::exec( DatabaseImpl* dbi )
 {
@@ -94,4 +101,74 @@ DatabaseCommand_ShareTrack::postCommitHook()
                                "appendQuery",
                                Qt::QueuedConnection,
                                Q_ARG( const Tomahawk::query_ptr&, m_query ) );
+}
+
+
+bool
+DatabaseCommand_ShareTrack::doesMutates() const
+{
+    return false;
+}
+
+
+bool
+DatabaseCommand_ShareTrack::singletonCmd() const
+{
+    return false;
+}
+
+
+bool
+DatabaseCommand_ShareTrack::localOnly() const
+{
+    return false;
+}
+
+
+bool
+DatabaseCommand_ShareTrack::groupable() const
+{
+    return true;
+}
+
+
+QString
+DatabaseCommand_ShareTrack::artist() const
+{
+    return m_artist;
+}
+
+
+void
+DatabaseCommand_ShareTrack::setArtist( const QString& s )
+{
+    m_artist = s;
+}
+
+
+QString
+DatabaseCommand_ShareTrack::track() const
+{
+    return m_track;
+}
+
+
+void
+DatabaseCommand_ShareTrack::setTrack( const QString& s )
+{
+    m_track = s;
+}
+
+
+QString
+DatabaseCommand_ShareTrack::recipient() const
+{
+    return m_recipient;
+}
+
+
+void
+DatabaseCommand_ShareTrack::setRecipient( const QString& s )
+{
+     m_recipient = s;
 }

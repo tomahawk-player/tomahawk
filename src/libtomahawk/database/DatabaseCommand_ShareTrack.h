@@ -48,24 +48,24 @@ public:
 
     //TODO: construct from result instead?
 
-    virtual QString commandname() const { return "sharetrack"; }
+    virtual QString commandname() const;
 
     virtual void exec( DatabaseImpl* );
     virtual void postCommitHook();
 
-    virtual bool doesMutates() const { return false; }
-    virtual bool singletonCmd() const { return false; }
-    virtual bool localOnly() const { return false; }
-    virtual bool groupable() const { return true; }
+    virtual bool doesMutates() const;
+    virtual bool singletonCmd() const;
+    virtual bool localOnly() const;
+    virtual bool groupable() const;
 
-    QString artist() const { return m_artist; }
-    void setArtist( const QString& s ) { m_artist = s; }
+    QString artist() const;
+    void setArtist( const QString& s );
 
-    QString track() const { return m_track; }
-    void setTrack( const QString& s ) { m_track = s; }
+    QString track() const;
+    void setTrack( const QString& s );
 
-    QString recipient() const { return m_recipient; }
-    void setRecipient( const QString& s ) { m_recipient = s; }
+    QString recipient() const;
+    void setRecipient( const QString& s );
 
 private:
     Tomahawk::query_ptr m_query;
