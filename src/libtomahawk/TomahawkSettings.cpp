@@ -605,6 +605,13 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
             }
         }
     }
+    else if ( oldVersion == 13 )
+    {
+        //Delete old echonest_stylesandmoods.dat file
+        QFile dataFile( TomahawkUtils::appDataDir().absoluteFilePath( "echonest_stylesandmoods.dat" ) );
+        const bool removed = dataFile.remove();
+        tDebug() << "Tried to remove echonest_stylesandmoods.dat, succeeded?" << removed;
+    }
 }
 
 

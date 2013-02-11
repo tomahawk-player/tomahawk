@@ -61,7 +61,7 @@ private slots:
     void artistTextEdited( const QString& );
     void suggestFinished();
 
-    void checkForMoodsOrStylesFetched();
+    void checkForMoodsStylesOrGenresFetched();
 private:
     void updateWidgets();
     void updateWidgetsFromData();
@@ -70,7 +70,7 @@ private:
     void setupMinMaxWidgets( Echonest::DynamicPlaylist::PlaylistParam min, Echonest::DynamicPlaylist::PlaylistParam max, const QString& leftL, const QString& rightL, int maxRange );
     void updateFromComboAndSlider( bool smooth = false );
     void updateFromLabelAndCombo();
-    bool insertMoodsAndStyles();
+    bool insertMoodsStylesAndGenres();
 
     void updateToComboAndSlider( bool smooth = false );
     void updateToLabelAndCombo();
@@ -93,7 +93,7 @@ private:
 
     Echonest::DynamicPlaylist::PlaylistParamData m_data;
     QVariant m_cacheData;
-    static bool s_fetchingMoodsAndStyles;
+    static bool s_fetchingMoodsStylesAndGenres;
     static int s_stylePollCount;
 
     QSet< QNetworkReply* > m_suggestWorkers;
