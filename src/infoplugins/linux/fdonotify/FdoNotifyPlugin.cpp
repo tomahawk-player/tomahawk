@@ -46,8 +46,6 @@
 #include "utils/Logger.h"
 #include "utils/TomahawkUtilsGui.h"
 
-#include <QPainter>
-#include <QSvgRenderer>
 #include <QtDBus/QDBusConnection>
 #include <QtDBus/QDBusMessage>
 #include <QtGui/QImage>
