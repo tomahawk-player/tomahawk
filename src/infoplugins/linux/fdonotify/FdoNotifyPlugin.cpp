@@ -46,7 +46,6 @@
 #include "utils/Logger.h"
 
 #include <QtDBus/QDBusConnection>
-#include <QtDBus/QDBusMessage>
 #include <QtGui/QImage>
 
 namespace Tomahawk
@@ -167,10 +166,19 @@ FdoNotifyPlugin::nowPlaying( const QVariant &input )
     arguments << qint32( -1 ); //expire_timeout
     message.setArguments( arguments );
 
-    const QDBusMessage &reply = QDBusConnection::sessionBus().call( message );
-    const QVariantList &list = reply.arguments();
-    if ( list.count() > 0 )
-        m_nowPlayingId = list.at( 0 ).toInt();
+    // Handle reply in a callback, so that this a non-blocking call
+    QDBusConnection::sessionBus().callWithCallback( message, this, SLOT( dbusReplyReceived( QDBusMessage ) ) );
+}
+
+/**
+ * Handle the DBus reply triggered by FdoNotifyPlugin::nowPlaying
+ */
+void
+FdoNotifyPlugin::dbusReplyReceived( const QDBusMessage &reply )
+{
+  const QVariantList &list = reply.arguments();
+  if ( list.count() > 0 )
+    m_nowPlayingId = list.at( 0 ).toInt();
 }
 
 } //ns InfoSystem
