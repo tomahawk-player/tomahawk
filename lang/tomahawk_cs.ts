@@ -777,12 +777,12 @@ se s vámi spojil?</translation>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="43"/>
         <source>My Collection</source>
-        <translation type="unfinished"/>
+        <translation>Moje sbírka</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="50"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
-        <translation type="unfinished"/>
+        <translation>Poté co jste nechali prohledat svoji sbírku, naleznete své skladby právě zde.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="69"/>
@@ -1359,7 +1359,7 @@ se s vámi spojil?</translation>
         <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="559"/>
         <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="595"/>
         <source>Script Resolver Warning: API call %1 returned data sychronously.</source>
-        <translation type="unfinished"/>
+        <translation>Varování řešitele skriptu: Volání API %1 vrátilo data synchronně.</translation>
     </message>
 </context>
 <context>
@@ -1394,7 +1394,7 @@ se s vámi spojil?</translation>
     <message>
         <location filename="../src/libtomahawk/network/RemoteCollection.cpp" line="36"/>
         <source>Collection of %1</source>
-        <translation type="unfinished"/>
+        <translation>Sbírka %1</translation>
     </message>
 </context>
 <context>
@@ -2492,12 +2492,12 @@ username@jabber.org</translation>
         <location filename="../src/libtomahawk/collection/Collection.cpp" line="63"/>
         <location filename="../src/libtomahawk/collection/Collection.cpp" line="70"/>
         <source>Collection</source>
-        <translation type="unfinished"/>
+        <translation>Sbírka</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/collection/Collection.cpp" line="93"/>
         <source>This collection is empty.</source>
-        <translation type="unfinished"/>
+        <translation>Tato sbírka je prázdná.</translation>
     </message>
 </context>
 <context>
@@ -3053,7 +3053,7 @@ Zkuste vyladit filtry pro nové písně.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="990"/>
         <source>where genre is %1</source>
-        <translation type="unfinished"/>
+        <translation>kde žánr je %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1003"/>
@@ -3270,19 +3270,19 @@ Zkuste vyladit filtry pro nové písně.</translation>
         <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="58"/>
         <source>My %1 Collection</source>
         <comment>Name of a collection based on a resolver, e.g. My Subsonic Collection</comment>
-        <translation type="unfinished"/>
+        <translation>Moje %1 sbírka</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="61"/>
         <source>%1 Collection of %2</source>
         <comment>Name of a collection based on a resolver, e.g. Subsonic Collection of Some Dude</comment>
-        <translation type="unfinished"/>
+        <translation>%1 sbírka z %2</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="71"/>
         <source>%1 Collection</source>
         <comment>Name of a collection based on a resolver, e.g. Subsonic Collection</comment>
-        <translation type="unfinished"/>
+        <translation>%1 sbírka,</translation>
     </message>
 </context>
 <context>

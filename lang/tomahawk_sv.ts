@@ -3054,7 +3054,7 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="990"/>
         <source>where genre is %1</source>
-        <translation type="unfinished"/>
+        <translation>där genren är %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1003"/>

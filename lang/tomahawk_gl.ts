@@ -3055,7 +3055,7 @@ Proba a trocar os filtros para ter outra lista música para escoitar. </translat
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="990"/>
         <source>where genre is %1</source>
-        <translation type="unfinished"/>
+        <translation>onde o xénero é %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1003"/>
