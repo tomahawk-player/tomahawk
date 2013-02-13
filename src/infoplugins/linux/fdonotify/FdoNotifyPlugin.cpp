@@ -44,6 +44,7 @@
 #include "TomahawkSettings.h"
 
 #include "utils/Logger.h"
+#include "utils/TomahawkUtilsGui.h"
 
 #include <QtDBus/QDBusConnection>
 #include <QtDBus/QDBusMessage>
@@ -105,6 +106,16 @@ FdoNotifyPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
 }
 
 
+/**
+ * Determine a consistent size for the cover image depending on the default font height
+ */
+int
+FdoNotifyPlugin::getNotificationIconHeight()
+{
+     return 6*TomahawkUtils::defaultFontHeight();
+}
+
+
 void
 FdoNotifyPlugin::notifyUser( const QString &messageText )
 {
@@ -118,7 +129,7 @@ FdoNotifyPlugin::notifyUser( const QString &messageText )
     arguments << QStringList(); //actions
     QVariantMap dict;
     dict["desktop-entry"] = QString( "tomahawk" );
-    dict[ "image_data" ] = ImageConverter::variantForImage( QImage( RESPATH "icons/tomahawk-icon-128x128.png" ) );
+    dict[ "image_data" ] = ImageConverter::variantForImage( QImage( RESPATH "icons/tomahawk-icon-512x512.png" ).scaledToHeight( getNotificationIconHeight() ) );
     arguments << dict; //hints
     arguments << qint32( -1 ); //expire_timeout
     message.setArguments( arguments );
@@ -159,10 +170,16 @@ FdoNotifyPlugin::nowPlaying( const QVariant &input )
     arguments << QStringList(); //actions
     QVariantMap dict;
     dict["desktop-entry"] = QString( "tomahawk" );
+
+    // If there is a cover availble use it, else use Tomahawk logo as default.
+    QImage image;
     if ( map.contains( "coveruri" ) && map[ "coveruri" ].canConvert< QString >() )
-        dict[ "image_data" ] = ImageConverter::variantForImage( QImage( map[ "coveruri" ].toString(), "PNG" ) );
+        image = QImage( map[ "coveruri" ].toString(), "PNG" );
     else
-        dict[ "image_data" ] = ImageConverter::variantForImage( QImage( RESPATH "icons/tomahawk-icon-128x128.png" ) );
+        image = QImage( RESPATH "icons/tomahawk-icon-512x512.png" );
+    // Convert image to QVariant and scale to a consistent size.
+    dict[ "image_data" ] = ImageConverter::variantForImage( image.scaledToHeight( getNotificationIconHeight() ) );
+
     arguments << dict; //hints
     arguments << qint32( -1 ); //expire_timeout
     message.setArguments( arguments );

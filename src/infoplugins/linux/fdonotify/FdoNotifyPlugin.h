@@ -56,6 +56,8 @@ protected slots:
     }
 
 private:
+    int getNotificationIconHeight();
+
     void notifyUser( const QString &messageText );
 
     void nowPlaying( const QVariant &input );
