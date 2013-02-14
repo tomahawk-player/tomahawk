@@ -25,6 +25,7 @@
     #include <winsock2.h>
 #endif
 
+
 Portfwd::Portfwd()
     : m_urls( 0 )
     , m_data( 0 )
@@ -74,7 +75,7 @@ Portfwd::init( unsigned int timeout )
         while ( dev )
         {
             printf( "descurl: %s\n", dev->descURL );
-
+            
             bool blocked = false;
             std::list<std::string>::iterator it;
             for ( it = m_blockedips.begin(); it != m_blockedips.end(); ++it )
@@ -93,7 +94,7 @@ Portfwd::init( unsigned int timeout )
                 continue;
             }
 
-            if ( strstr( dev->st, "InternetGatewayDevice" ) )
+            if ( strstr( dev->descURL, "InternetGatewayDevice" ) )
                 break;
 
             dev = dev->pNext;
@@ -101,7 +102,7 @@ Portfwd::init( unsigned int timeout )
         if ( !dev )
             dev = devlist; /* defaulting to first device */
 
-        printf( "UPnP device :\n"
+        printf( "UPnP device:\n"
                 " desc: %s\n st: %s\n",
                 dev->descURL, dev->st );
 
@@ -165,6 +166,7 @@ Portfwd::add( unsigned short port, unsigned short internal_port )
 {
     char port_str[16], port_str_internal[16];
     int r;
+
     printf( "Portfwd::add (%s, %d)\n", m_lanip.c_str(), port );
     if ( m_urls->controlURL[0] == '\0' )
     {
@@ -190,6 +192,7 @@ bool
 Portfwd::remove( unsigned short port )
 {
    char port_str[16];
+
    printf( "Portfwd::remove(%d)\n", port );
    if ( m_urls->controlURL[0] == '\0' )
    {
