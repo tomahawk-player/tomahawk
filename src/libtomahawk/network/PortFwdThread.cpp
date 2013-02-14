@@ -38,7 +38,6 @@ PortFwdThread::PortFwdThread( unsigned int port )
 
 PortFwdThread::~PortFwdThread()
 {
-
 }
 
 

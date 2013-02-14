@@ -32,6 +32,7 @@
 using namespace Tomahawk;
 using namespace Accounts;
 
+
 ZeroconfPlugin::ZeroconfPlugin ( ZeroconfAccount* parent )
     : SipPlugin( parent )
     , m_zeroconf( 0 )
@@ -44,7 +45,11 @@ ZeroconfPlugin::ZeroconfPlugin ( ZeroconfAccount* parent )
     connect( &m_advertisementTimer, SIGNAL( timeout() ), this, SLOT( advertise() ) );
 }
 
-ZeroconfPlugin::~ZeroconfPlugin() {}
+
+ZeroconfPlugin::~ZeroconfPlugin()
+{
+}
+
 
 const QString
 ZeroconfPlugin::name() const
@@ -52,11 +57,13 @@ ZeroconfPlugin::name() const
     return QString( MYNAME );
 }
 
+
 const QString
 ZeroconfPlugin::accountName() const
 {
     return QString( MYNAME );
 }
+
 
 const QString
 ZeroconfPlugin::serviceName() const
@@ -64,11 +71,13 @@ ZeroconfPlugin::serviceName() const
     return QString( MYNAME );
 }
 
+
 const QString
 ZeroconfPlugin::friendlyName() const
 {
     return QString( MYNAME );
 }
+
 
 Account::ConnectionState
 ZeroconfPlugin::connectionState() const
