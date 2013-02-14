@@ -777,12 +777,12 @@ de se connecter et streamer de vous?</translation>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="43"/>
         <source>My Collection</source>
-        <translation type="unfinished"/>
+        <translation>Ma collection</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="50"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
-        <translation type="unfinished"/>
+        <translation>Après avoir scanné votre collection de musique, vous trouverez vos morceaux ici.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="69"/>
@@ -1359,7 +1359,7 @@ de se connecter et streamer de vous?</translation>
         <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="559"/>
         <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="595"/>
         <source>Script Resolver Warning: API call %1 returned data sychronously.</source>
-        <translation type="unfinished"/>
+        <translation>Avertissement Script de Résolution : l&apos;appel d&apos;API %1 a renvoyé des données synchrones.</translation>
     </message>
 </context>
 <context>
@@ -1394,7 +1394,7 @@ de se connecter et streamer de vous?</translation>
     <message>
         <location filename="../src/libtomahawk/network/RemoteCollection.cpp" line="36"/>
         <source>Collection of %1</source>
-        <translation type="unfinished"/>
+        <translation>Collection de %1</translation>
     </message>
 </context>
 <context>
@@ -2492,12 +2492,12 @@ utilisateur@jabber.org</translation>
         <location filename="../src/libtomahawk/collection/Collection.cpp" line="63"/>
         <location filename="../src/libtomahawk/collection/Collection.cpp" line="70"/>
         <source>Collection</source>
-        <translation type="unfinished"/>
+        <translation>Collection</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/collection/Collection.cpp" line="93"/>
         <source>This collection is empty.</source>
-        <translation type="unfinished"/>
+        <translation>Cette collection est vide.</translation>
     </message>
 </context>
 <context>
@@ -3053,7 +3053,7 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="990"/>
         <source>where genre is %1</source>
-        <translation type="unfinished"/>
+        <translation>où le genre est %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1003"/>
@@ -3100,12 +3100,12 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
 <context>
     <name>Tomahawk::InfoSystem::FdoNotifyPlugin</name>
     <message>
-        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="145"/>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="156"/>
         <source>Tomahawk is playing &quot;%1&quot; by %2%3.</source>
         <translation>Tomahawk joue &quot;%1&quot; par %2%3.</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="148"/>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="159"/>
         <source>on &quot;%1&quot;</source>
         <translation>sur &quot;%1&quot;</translation>
     </message>
@@ -3270,19 +3270,19 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
         <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="58"/>
         <source>My %1 Collection</source>
         <comment>Name of a collection based on a resolver, e.g. My Subsonic Collection</comment>
-        <translation type="unfinished"/>
+        <translation>Ma %1 Collection.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="61"/>
         <source>%1 Collection of %2</source>
         <comment>Name of a collection based on a resolver, e.g. Subsonic Collection of Some Dude</comment>
-        <translation type="unfinished"/>
+        <translation>%1 Collection de %2</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="71"/>
         <source>%1 Collection</source>
         <comment>Name of a collection based on a resolver, e.g. Subsonic Collection</comment>
-        <translation type="unfinished"/>
+        <translation>%1 Collection</translation>
     </message>
 </context>
 <context>

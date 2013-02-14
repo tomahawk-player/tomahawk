@@ -3098,12 +3098,12 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::InfoSystem::FdoNotifyPlugin</name>
     <message>
-        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="145"/>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="156"/>
         <source>Tomahawk is playing &quot;%1&quot; by %2%3.</source>
         <translation>توماهوك يلعب &quot;%1&quot; ل%2%3.</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="148"/>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="159"/>
         <source>on &quot;%1&quot;</source>
         <translation>على &quot;%1&quot;</translation>
     </message>
