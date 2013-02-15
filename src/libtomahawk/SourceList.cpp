@@ -253,6 +253,14 @@ SourceList::count() const
     return m_sources.size();
 }
 
+
+QList<collection_ptr>
+SourceList::scriptCollections() const
+{
+    return m_scriptCollections;
+}
+
+
 void
 SourceList::latchedOff( const source_ptr& to )
 {
@@ -305,23 +313,16 @@ SourceList::addScriptCollection( const collection_ptr& collection )
 {
     m_scriptCollections.append( collection );
 
-    matchSourceForScriptCollection( collection );
+    emit scriptCollectionAdded( collection );
 }
 
 
 void
 SourceList::removeScriptCollection( const collection_ptr& collection )
 {
-    getLocal()->removeCollection( collection );
+    emit scriptCollectionRemoved( collection );
+
     m_scriptCollections.removeAll( collection );
-}
-
-
-void
-SourceList::matchSourceForScriptCollection( const collection_ptr& collection )
-{
-    //TODO: implement for multi-collection resolvers
-    getLocal()->addCollection( collection );
 }
 
 

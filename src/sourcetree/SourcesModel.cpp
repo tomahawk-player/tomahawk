@@ -58,9 +58,22 @@ SourcesModel::SourcesModel( QObject* parent )
     appendGroups();
     onSourcesAdded( SourceList::instance()->sources() );
 
-    connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
-    connect( SourceList::instance(), SIGNAL( sourceRemoved( Tomahawk::source_ptr ) ), SLOT( onSourceRemoved( Tomahawk::source_ptr ) ) );
-    connect( ViewManager::instance(), SIGNAL( viewPageActivated( Tomahawk::ViewPage* ) ), this, SLOT( viewPageActivated( Tomahawk::ViewPage* ) ) );
+    connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ),
+             SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
+    connect( SourceList::instance(), SIGNAL( sourceRemoved( Tomahawk::source_ptr ) ),
+             SLOT( onSourceRemoved( Tomahawk::source_ptr ) ) );
+    connect( ViewManager::instance(), SIGNAL( viewPageActivated( Tomahawk::ViewPage* ) ),
+             this, SLOT( viewPageActivated( Tomahawk::ViewPage* ) ) );
+
+    foreach ( const collection_ptr& c, SourceList::instance()->scriptCollections() )
+    {
+        onScriptCollectionAdded( c );
+    }
+
+    connect( SourceList::instance(), SIGNAL( scriptCollectionAdded( Tomahawk::collection_ptr ) ),
+             this, SLOT( onScriptCollectionAdded( Tomahawk::collection_ptr ) ) );
+    connect( SourceList::instance(), SIGNAL( scriptCollectionRemoved( Tomahawk::collection_ptr ) ),
+             this, SLOT( onScriptCollectionRemoved( Tomahawk::collection_ptr ) ) );
 }
 
 
@@ -275,7 +288,7 @@ SourcesModel::flags( const QModelIndex& index ) const
 void
 SourcesModel::appendGroups()
 {
-    beginInsertRows( QModelIndex(), rowCount(), rowCount() + 3 );
+    beginInsertRows( QModelIndex(), rowCount(), rowCount() + 4 );
 
     GroupItem* browse = new GroupItem( this, m_rootItem, tr( "Browse" ), 0 );
     new HistoryItem( this, m_rootItem, tr( "Search History" ), 1 );
@@ -313,6 +326,8 @@ SourcesModel::appendGroups()
     newReleases->setSortValue( 5 );
 
     m_collectionsGroup = new GroupItem( this, m_rootItem, tr( "Friends" ), 4 );
+
+    m_cloudGroup = new GroupItem( this, m_rootItem, tr( "Cloud" ), 5 );
 
     endInsertRows();
 }
@@ -489,6 +504,59 @@ void
 SourcesModel::onSourceRemoved( const source_ptr& source )
 {
     removeItem( source );
+}
+
+
+void
+SourcesModel::onScriptCollectionAdded( const collection_ptr& collection )
+{
+    if ( m_scriptCollections.contains( collection ) )
+        return;
+
+    QModelIndex parent = indexFromItem( m_cloudGroup );
+    beginInsertRows( parent, rowCount( parent ), rowCount( parent ) );
+    GenericPageItem* item = new GenericPageItem( this,
+                                                 m_cloudGroup,
+                                                 collection->itemName(),
+                                                 collection->icon(),
+                                                 boost::bind( &SourcesModel::scriptCollectionClicked, this, collection ),
+                                                 boost::bind( &SourcesModel::getScriptCollectionPage, this, collection ) );
+    endInsertRows();
+
+    m_scriptCollections.insert( collection, item );
+    m_cloudGroup->checkExpandedState();
+}
+
+
+void
+SourcesModel::onScriptCollectionRemoved( const collection_ptr& collection )
+{
+    SourceTreeItem* item = m_scriptCollections.value( collection );
+    int row = indexFromItem( item ).row();
+
+    QModelIndex parent = indexFromItem( m_cloudGroup );
+    beginRemoveRows( parent, row, row );
+    m_cloudGroup->removeChild( item );
+    endRemoveRows();
+
+    m_scriptCollectionPages.remove( collection );
+    m_scriptCollections.remove( collection );
+    item->deleteLater();
+}
+
+
+ViewPage*
+SourcesModel::scriptCollectionClicked( const Tomahawk::collection_ptr& collection )
+{
+    m_scriptCollectionPages[ collection ] = ViewManager::instance()->show( collection );
+    return m_scriptCollectionPages[ collection ];
+}
+
+
+ViewPage*
+SourcesModel::getScriptCollectionPage( const Tomahawk::collection_ptr& collection ) const
+{
+    return m_scriptCollectionPages[ collection ];
 }
 
 
