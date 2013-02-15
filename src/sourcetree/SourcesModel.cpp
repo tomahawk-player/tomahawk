@@ -539,6 +539,7 @@ SourcesModel::onScriptCollectionRemoved( const collection_ptr& collection )
     m_cloudGroup->removeChild( item );
     endRemoveRows();
 
+    dynamic_cast< QObject* >( m_scriptCollectionPages.value( collection ) )->deleteLater();
     m_scriptCollectionPages.remove( collection );
     m_scriptCollections.remove( collection );
     item->deleteLater();
