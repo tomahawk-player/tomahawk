@@ -521,7 +521,7 @@ erlauben sich mit dir zu verbinden?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="116"/>
         <source>Config Error</source>
-        <translation type="unfinished"/>
+        <translation>Konfigurations Fehler</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="170"/>
@@ -777,12 +777,12 @@ erlauben sich mit dir zu verbinden?</translation>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="43"/>
         <source>My Collection</source>
-        <translation type="unfinished"/>
+        <translation>Meine Sammlung</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="50"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
-        <translation type="unfinished"/>
+        <translation>Nachdem Tomahawk deine Sammlung durchsucht hat siehst du deine Lieder hier.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="69"/>
@@ -1394,7 +1394,7 @@ erlauben sich mit dir zu verbinden?</translation>
     <message>
         <location filename="../src/libtomahawk/network/RemoteCollection.cpp" line="36"/>
         <source>Collection of %1</source>
-        <translation type="unfinished"/>
+        <translation>Sammlung von %1</translation>
     </message>
 </context>
 <context>
@@ -1892,72 +1892,77 @@ erlauben sich mit dir zu verbinden?</translation>
 <context>
     <name>SourcesModel</name>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="79"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="92"/>
         <source>Group</source>
         <translation>Gruppe</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="82"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="95"/>
         <source>Collection</source>
         <translation>Sammlung</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="85"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="98"/>
         <source>Playlist</source>
         <translation>Playlist</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="88"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="101"/>
         <source>Automatic Playlist</source>
         <translation>Automatische Playlist</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="91"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="104"/>
         <source>Station</source>
         <translation>Station</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="280"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="293"/>
         <source>Browse</source>
         <translation>Stöbern</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="281"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="294"/>
         <source>Search History</source>
         <translation>Suchverlauf</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="283"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="296"/>
         <source>My Music</source>
         <translation>Meine Musik</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="291"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="304"/>
         <source>SuperCollection</source>
         <translation>Supersammlung</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="285"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="330"/>
+        <source>Cloud</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="298"/>
         <source>Dashboard</source>
         <translation>Dashboard</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="300"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="313"/>
         <source>Recently Played</source>
         <translation>Kürzlich gehörte Lieder</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="305"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="318"/>
         <source>Charts</source>
         <translation>Charts</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="310"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="323"/>
         <source>New Releases</source>
         <translation>Neuerscheinungen</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="315"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="328"/>
         <source>Friends</source>
         <translation>Freunde</translation>
     </message>
@@ -2443,7 +2448,7 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="144"/>
         <source>You forgot to enter your username!</source>
-        <translation type="unfinished"/>
+        <translation>Du hast vergessen einen Usernamen einzugeben!</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="152"/>
@@ -2487,12 +2492,12 @@ username@jabber.org</source>
         <location filename="../src/libtomahawk/collection/Collection.cpp" line="63"/>
         <location filename="../src/libtomahawk/collection/Collection.cpp" line="70"/>
         <source>Collection</source>
-        <translation type="unfinished"/>
+        <translation>Sammlung</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/collection/Collection.cpp" line="93"/>
         <source>This collection is empty.</source>
-        <translation type="unfinished"/>
+        <translation>Diese Sammlung ist leer.</translation>
     </message>
 </context>
 <context>
@@ -3265,19 +3270,19 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
         <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="58"/>
         <source>My %1 Collection</source>
         <comment>Name of a collection based on a resolver, e.g. My Subsonic Collection</comment>
-        <translation type="unfinished"/>
+        <translation>Meine %1 Sammlung</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="61"/>
         <source>%1 Collection of %2</source>
         <comment>Name of a collection based on a resolver, e.g. Subsonic Collection of Some Dude</comment>
-        <translation type="unfinished"/>
+        <translation>%1 Sammlung von %2</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="71"/>
         <source>%1 Collection</source>
         <comment>Name of a collection based on a resolver, e.g. Subsonic Collection</comment>
-        <translation type="unfinished"/>
+        <translation>%1 Sammlung</translation>
     </message>
 </context>
 <context>

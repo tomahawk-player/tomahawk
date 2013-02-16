@@ -1897,72 +1897,77 @@ käyttäjäradion käyttöönottamiseksi</translation>
 <context>
     <name>SourcesModel</name>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="79"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="92"/>
         <source>Group</source>
         <translation>Ryhmä</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="82"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="95"/>
         <source>Collection</source>
         <translation>Kokoelma</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="85"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="98"/>
         <source>Playlist</source>
         <translation>soittolista</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="88"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="101"/>
         <source>Automatic Playlist</source>
         <translation>automaattinen soittolista</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="91"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="104"/>
         <source>Station</source>
         <translation>asema</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="280"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="293"/>
         <source>Browse</source>
         <translation>Selaa</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="281"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="294"/>
         <source>Search History</source>
         <translation>Hakuhistoria</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="283"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="296"/>
         <source>My Music</source>
         <translation>Oma musiikki</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="291"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="304"/>
         <source>SuperCollection</source>
         <translation>Superkokoelma</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="285"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="330"/>
+        <source>Cloud</source>
+        <translation>Pilvi</translation>
+    </message>
+    <message>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="298"/>
         <source>Dashboard</source>
         <translation>Kojelauta</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="300"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="313"/>
         <source>Recently Played</source>
         <translation>Viime aikoina kuunnellut</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="305"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="318"/>
         <source>Charts</source>
         <translation>Listat</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="310"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="323"/>
         <source>New Releases</source>
         <translation>Uudet julkaisut</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="315"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="328"/>
         <source>Friends</source>
         <translation>Kaverit</translation>
     </message>

@@ -1890,72 +1890,77 @@ connect and stream from you?</source>
 <context>
     <name>SourcesModel</name>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="79"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="92"/>
         <source>Group</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="82"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="95"/>
         <source>Collection</source>
         <translation>Kolekcija</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="85"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="98"/>
         <source>Playlist</source>
         <translation>Grojaraštis</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="88"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="101"/>
         <source>Automatic Playlist</source>
         <translation>Automatinis grojaraštis</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="91"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="104"/>
         <source>Station</source>
         <translation>Stotis</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="280"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="293"/>
         <source>Browse</source>
         <translation>Naršyti</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="281"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="294"/>
         <source>Search History</source>
         <translation>Paieškos istorija</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="283"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="296"/>
         <source>My Music</source>
         <translation>Mano muzika</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="291"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="304"/>
         <source>SuperCollection</source>
         <translation>Super Kolekcija</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="285"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="330"/>
+        <source>Cloud</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="298"/>
         <source>Dashboard</source>
         <translation>Skydelis</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="300"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="313"/>
         <source>Recently Played</source>
         <translation>Neseniai klausyta</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="305"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="318"/>
         <source>Charts</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="310"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="323"/>
         <source>New Releases</source>
         <translation>Nauji leidimai</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="315"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="328"/>
         <source>Friends</source>
         <translation>Draugai</translation>
     </message>
