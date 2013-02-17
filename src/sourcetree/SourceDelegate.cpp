@@ -219,14 +219,14 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
         painter->setPen( option.palette.color( QPalette::HighlightedText ) );
     }
 
-    QRect textRect = option.rect.adjusted( iconRect.width() + 8, 6, -figWidth - 28, 0 );
+    QRect textRect = option.rect.adjusted( iconRect.width() + 8, 6, -figWidth - ( figWidth ? 28 : 0 ), 0 );
     QString text = painter->fontMetrics().elidedText( name, Qt::ElideRight, textRect.width() );
     painter->drawText( textRect, text );
 
     QColor descColor = QColor( "#8d8d8d" );
 
     painter->setFont( normal );
-    textRect = option.rect.adjusted( iconRect.width() + 8, option.rect.height() / 2, -figWidth - 24, -6 );
+    textRect = option.rect.adjusted( iconRect.width() + 8, option.rect.height() / 2, -figWidth - ( figWidth ? 24 : 0 ), -6 );
 
     if ( type == SourcesModel::Collection )
     {
