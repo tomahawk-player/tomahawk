@@ -62,6 +62,7 @@ public:
 
     virtual QString name() const;
     virtual QString prettyName() const;
+    virtual QString description() const;
     virtual QString itemName() const;
     virtual BackendType backendType() const { return NullCollectionType; }
     virtual QIcon icon() const;

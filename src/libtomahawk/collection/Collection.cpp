@@ -65,6 +65,13 @@ Collection::prettyName() const
 
 
 QString
+Collection::description() const
+{
+    return QString();
+}
+
+
+QString
 Collection::itemName() const
 {
     return tr( "Collection" );
