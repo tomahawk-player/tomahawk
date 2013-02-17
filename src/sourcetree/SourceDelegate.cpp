@@ -2,8 +2,9 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2011-2012, Leo Franchi <lfranchi@kde.org>
- *   Copyright 2011, Michael Zanetti <mzanetti@kde.org>
+ *   Copyright 2011,      Michael Zanetti <mzanetti@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -26,6 +27,7 @@
 #include "items/PlaylistItems.h"
 #include "items/CategoryItems.h"
 #include "items/TemporaryPageItem.h"
+#include "items/ScriptCollectionItem.h"
 
 #include "audio/AudioEngine.h"
 #include "AnimationHelper.h"
@@ -34,6 +36,7 @@
 #include "ActionCollection.h"
 #include "ViewManager.h"
 #include "ContextMenu.h"
+#include "resolvers/ScriptCollection.h"
 
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
@@ -78,7 +81,7 @@ SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex&
     SourceTreeItem* item = index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
     SourcesModel::RowType type = static_cast< SourcesModel::RowType >( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() );
 
-    if ( type == SourcesModel::Collection )
+    if ( type == SourcesModel::Collection || type == SourcesModel::ScriptCollection )
     {
         return QSize( option.rect.width(), option.fontMetrics.height() * 3.0 );
     }
@@ -161,23 +164,54 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
     figFont.setPointSize( normal.pointSize() - 1 );
 
     SourceTreeItem* item = index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
-    SourceItem* colItem = qobject_cast< SourceItem* >( item );
-    Q_ASSERT( colItem );
-    bool status = !( !colItem || colItem->source().isNull() || !colItem->source()->isOnline() );
-
-    QString tracks;
-    QString name = index.data().toString();
-    int figWidth = 0;
-
-    if ( status && colItem && !colItem->source().isNull() )
-    {
-        tracks = QString::number( colItem->source()->trackCount() );
-        figWidth = QFontMetrics( figFont ).width( tracks );
-        name = colItem->source()->friendlyName();
-    }
+    SourcesModel::RowType type = static_cast< SourcesModel::RowType >( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() );
 
     QRect iconRect = option.rect.adjusted( 4, 6, -option.rect.width() + option.rect.height() - 12 + 4, -6 );
-    QPixmap avatar = colItem->pixmap( iconRect.size() );
+    QString name = index.data().toString();
+    QPixmap avatar;
+    int figWidth = 0;
+    bool isPlaying = false;
+    QString desc;
+    QString tracks;
+
+    if ( type == SourcesModel::Collection )
+    {
+        SourceItem* colItem = qobject_cast< SourceItem* >( item );
+        Q_ASSERT( colItem );
+        bool status = !( !colItem || colItem->source().isNull() || !colItem->source()->isOnline() );
+
+        if ( status && colItem && !colItem->source().isNull() )
+        {
+            tracks = QString::number( colItem->source()->trackCount() );
+            figWidth = QFontMetrics( figFont ).width( tracks );
+            name = colItem->source()->friendlyName();
+        }
+
+        avatar = colItem->pixmap( iconRect.size() );
+
+        if ( status || colItem->source().isNull() )
+            painter->setFont( bold );
+
+        isPlaying = !( colItem->source()->currentTrack().isNull() );
+        desc = colItem->source()->textStatus();
+        if ( colItem->source().isNull() )
+            desc = tr( "All available tracks" );
+    }
+    else if ( type == SourcesModel::ScriptCollection )
+    {
+        ScriptCollectionItem* scItem = qobject_cast< ScriptCollectionItem* >( item );
+        Q_ASSERT( scItem );
+
+        if ( !scItem->collection().isNull() )
+        {
+            name = scItem->collection()->itemName();
+        }
+
+        avatar = scItem->icon().pixmap( iconRect.size() );
+
+        desc = qobject_cast< Tomahawk::ScriptCollection* >( scItem->collection().data() )->description();
+    }
+
     painter->drawPixmap( iconRect, avatar );
 
     if ( ( option.state & QStyle::State_Selected ) == QStyle::State_Selected )
@@ -186,75 +220,75 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
     }
 
     QRect textRect = option.rect.adjusted( iconRect.width() + 8, 6, -figWidth - 28, 0 );
-    if ( status || colItem->source().isNull() )
-        painter->setFont( bold );
     QString text = painter->fontMetrics().elidedText( name, Qt::ElideRight, textRect.width() );
     painter->drawText( textRect, text );
 
-    bool isPlaying = !( colItem->source()->currentTrack().isNull() );
-    QString desc = colItem->source()->textStatus();
     QColor descColor = QColor( "#8d8d8d" );
-    if ( colItem->source().isNull() )
-        desc = tr( "All available tracks" );
 
     painter->setFont( normal );
     textRect = option.rect.adjusted( iconRect.width() + 8, option.rect.height() / 2, -figWidth - 24, -6 );
 
-    bool privacyOn = TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::FullyPrivate;
-    if ( !colItem->source().isNull() && colItem->source()->isLocal() && privacyOn )
+    if ( type == SourcesModel::Collection )
     {
-        QRect pmRect = textRect;
-        pmRect.setRight( pmRect.left() + pmRect.height() );
-        ActionCollection::instance()->getAction( "togglePrivacy" )->icon().paint( painter, pmRect );
-        textRect.adjust( pmRect.width() + 3, 0, 0, 0 );
-    }
-    if ( isPlaying || ( !colItem->source().isNull() && colItem->source()->isLocal() ) )
-    {
-        // Show a listen icon
-        TomahawkUtils::ImageType listenAlongPixmap = TomahawkUtils::Invalid;
-        TomahawkUtils::ImageType realtimeListeningAlongPixmap = TomahawkUtils::Invalid;
-        if ( index.data( SourcesModel::LatchedOnRole ).toBool() )
+        SourceItem* colItem = qobject_cast< SourceItem* >( item );
+        Q_ASSERT( colItem );
+
+        bool privacyOn = TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::FullyPrivate;
+        if ( !colItem->source().isNull() && colItem->source()->isLocal() && privacyOn )
         {
-            // Currently listening along
-            listenAlongPixmap = TomahawkUtils::HeadphonesOn;
-            if ( !colItem->source()->isLocal() )
+            QRect pmRect = textRect;
+            pmRect.setRight( pmRect.left() + pmRect.height() );
+            ActionCollection::instance()->getAction( "togglePrivacy" )->icon().paint( painter, pmRect );
+            textRect.adjust( pmRect.width() + 3, 0, 0, 0 );
+        }
+        if ( isPlaying || ( !colItem->source().isNull() && colItem->source()->isLocal() ) )
+        {
+            // Show a listen icon
+            TomahawkUtils::ImageType listenAlongPixmap = TomahawkUtils::Invalid;
+            TomahawkUtils::ImageType realtimeListeningAlongPixmap = TomahawkUtils::Invalid;
+            if ( index.data( SourcesModel::LatchedOnRole ).toBool() )
             {
-                realtimeListeningAlongPixmap =
-                    colItem->source()->playlistInterface()->latchMode() == Tomahawk::PlaylistModes::RealTime ?
-                        TomahawkUtils::PadlockClosed : TomahawkUtils::PadlockOpen;
+                // Currently listening along
+                listenAlongPixmap = TomahawkUtils::HeadphonesOn;
+                if ( !colItem->source()->isLocal() )
+                {
+                    realtimeListeningAlongPixmap =
+                        colItem->source()->playlistInterface()->latchMode() == Tomahawk::PlaylistModes::RealTime ?
+                            TomahawkUtils::PadlockClosed : TomahawkUtils::PadlockOpen;
+                }
             }
+            else if ( !colItem->source()->isLocal() )
+            {
+                listenAlongPixmap = TomahawkUtils::HeadphonesOff;
+            }
+
+            if ( listenAlongPixmap != TomahawkUtils::Invalid )
+            {
+                QRect pmRect = textRect;
+                pmRect.setRight( pmRect.left() + pmRect.height() );
+                painter->drawPixmap( pmRect, TomahawkUtils::defaultPixmap( listenAlongPixmap, TomahawkUtils::Original, pmRect.size() ) );
+                textRect.adjust( pmRect.width() + 3, 0, 0, 0 );
+
+                m_headphoneRects[ index ] = pmRect;
+            }
+            else
+                m_headphoneRects.remove( index );
+
+            if ( realtimeListeningAlongPixmap != TomahawkUtils::Invalid )
+            {
+                QRect pmRect = textRect;
+                pmRect.setRight( pmRect.left() + pmRect.height() );
+                painter->drawPixmap( pmRect, TomahawkUtils::defaultPixmap( realtimeListeningAlongPixmap, TomahawkUtils::Original, pmRect.size() ) );
+                textRect.adjust( pmRect.width() + 3, 0, 0, 0 );
+
+                m_lockRects[ index ] = pmRect;
+            }
+            else
+                m_lockRects.remove( index );
+
+            if ( isPlaying )
+                descColor = Qt::black;
         }
-        else if ( !colItem->source()->isLocal() )
-        {
-            listenAlongPixmap = TomahawkUtils::HeadphonesOff;
-        }
-
-        if ( listenAlongPixmap != TomahawkUtils::Invalid )
-        {
-            QRect pmRect = textRect;
-            pmRect.setRight( pmRect.left() + pmRect.height() );
-            painter->drawPixmap( pmRect, TomahawkUtils::defaultPixmap( listenAlongPixmap, TomahawkUtils::Original, pmRect.size() ) );
-            textRect.adjust( pmRect.width() + 3, 0, 0, 0 );
-
-            m_headphoneRects[ index ] = pmRect;
-        }
-        else
-            m_headphoneRects.remove( index );
-
-        if ( realtimeListeningAlongPixmap != TomahawkUtils::Invalid )
-        {
-            QRect pmRect = textRect;
-            pmRect.setRight( pmRect.left() + pmRect.height() );
-            painter->drawPixmap( pmRect, TomahawkUtils::defaultPixmap( realtimeListeningAlongPixmap, TomahawkUtils::Original, pmRect.size() ) );
-            textRect.adjust( pmRect.width() + 3, 0, 0, 0 );
-
-            m_lockRects[ index ] = pmRect;
-        }
-        else
-            m_lockRects.remove( index );
-
-        if ( isPlaying )
-            descColor = Qt::black;
     }
 
     if ( m_trackHovered == index )
@@ -270,26 +304,33 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
     painter->setPen( descColor );
     painter->drawText( textRect, text, to );
 
-    if ( colItem->source() && colItem->source()->currentTrack() && colItem->source()->state() == DBSyncConnection::SYNCED )
-        m_trackRects[ index ] = textRect.adjusted( 0, 0, -textRect.width() + painter->fontMetrics().width( text ), 0 );
-    else
-        m_trackRects.remove( index );
-
-    if ( status )
+    if ( type == SourcesModel::Collection )
     {
-        painter->setRenderHint( QPainter::Antialiasing );
+        SourceItem* colItem = qobject_cast< SourceItem* >( item );
+        Q_ASSERT( colItem );
+        bool status = !( !colItem || colItem->source().isNull() || !colItem->source()->isOnline() );
 
-        QRect figRect = option.rect.adjusted( option.rect.width() - figWidth - 13, 0, -14, -option.rect.height() + option.fontMetrics.height() * 1.1 );
-        int hd = ( option.rect.height() - figRect.height() ) / 2;
-        figRect.adjust( 0, hd, 0, hd );
+        if ( colItem->source() && colItem->source()->currentTrack() && colItem->source()->state() == DBSyncConnection::SYNCED )
+            m_trackRects[ index ] = textRect.adjusted( 0, 0, -textRect.width() + painter->fontMetrics().width( text ), 0 );
+        else
+            m_trackRects.remove( index );
 
-        painter->setFont( figFont );
+        if ( status )
+        {
+            painter->setRenderHint( QPainter::Antialiasing );
 
-        QColor figColor( 167, 183, 211 );
-        painter->setPen( figColor );
-        painter->setBrush( figColor );
+            QRect figRect = option.rect.adjusted( option.rect.width() - figWidth - 13, 0, -14, -option.rect.height() + option.fontMetrics.height() * 1.1 );
+            int hd = ( option.rect.height() - figRect.height() ) / 2;
+            figRect.adjust( 0, hd, 0, hd );
 
-        TomahawkUtils::drawBackgroundAndNumbers( painter, tracks, figRect );
+            painter->setFont( figFont );
+
+            QColor figColor( 167, 183, 211 );
+            painter->setPen( figColor );
+            painter->setBrush( figColor );
+
+            TomahawkUtils::drawBackgroundAndNumbers( painter, tracks, figRect );
+        }
     }
 
     painter->restore();
@@ -430,7 +471,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     if ( type != SourcesModel::Group && type != SourcesModel::Category && type != SourcesModel::Divider )
         QApplication::style()->drawControl( QStyle::CE_ItemViewItem, &o3, painter );
 
-    if ( type == SourcesModel::Collection )
+    if ( type == SourcesModel::Collection || type == SourcesModel::ScriptCollection )
     {
         paintCollection( painter, o, index );
     }

@@ -151,6 +151,10 @@ var TomahawkResolver = {
         return {
             qid: qid
         };
+    },
+    collection: function()
+    {
+        return {};
     }
 };
 

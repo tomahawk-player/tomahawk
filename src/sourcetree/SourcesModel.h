@@ -61,7 +61,9 @@ public:
 
         GenericPage = 6,
         TemporaryPage = 7,
-        LovedTracksPage = 10
+        LovedTracksPage = 10,
+
+        ScriptCollection = 11
     };
 
     enum CategoryType {

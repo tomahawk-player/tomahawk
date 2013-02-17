@@ -48,6 +48,9 @@ public:
     virtual QIcon icon() const;
     virtual QPixmap bigIcon() const;
 
+    virtual void setDescription( const QString& text );
+    virtual QString description() const;
+
     virtual ExternalResolver* resolver() { return m_resolver; }
 
     virtual Tomahawk::ArtistsRequest* requestArtists();
@@ -56,6 +59,7 @@ public:
 
 private:
     ExternalResolver* m_resolver;
+    QString m_description;
 };
 
 } //ns

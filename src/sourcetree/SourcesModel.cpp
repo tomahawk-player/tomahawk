@@ -25,6 +25,7 @@
 
 #include <boost/bind.hpp>
 
+#include "sourcetree/items/ScriptCollectionItem.h"
 #include "sourcetree/items/SourceTreeItem.h"
 #include "sourcetree/items/SourceItem.h"
 #include "sourcetree/items/GroupItem.h"
@@ -515,12 +516,9 @@ SourcesModel::onScriptCollectionAdded( const collection_ptr& collection )
 
     QModelIndex parent = indexFromItem( m_cloudGroup );
     beginInsertRows( parent, rowCount( parent ), rowCount( parent ) );
-    GenericPageItem* item = new GenericPageItem( this,
+    ScriptCollectionItem* item = new ScriptCollectionItem( this,
                                                  m_cloudGroup,
-                                                 collection->itemName(),
-                                                 collection->icon(),
-                                                 boost::bind( &SourcesModel::scriptCollectionClicked, this, collection ),
-                                                 boost::bind( &SourcesModel::getScriptCollectionPage, this, collection ) );
+                                                 collection );
     endInsertRows();
 
     m_scriptCollections.insert( collection, item );

@@ -42,6 +42,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      sourcetree/SourceTreeView.cpp
      sourcetree/SourceDelegate.cpp
      sourcetree/AnimationHelper.cpp
+     sourcetree/items/ScriptCollectionItem.cpp
      sourcetree/items/SourceTreeItem.cpp
      sourcetree/items/SourceItem.cpp
      sourcetree/items/PlaylistItems.cpp

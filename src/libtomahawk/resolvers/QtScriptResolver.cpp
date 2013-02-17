@@ -903,9 +903,20 @@ QtScriptResolver::loadCollections()
 {
     if ( m_capabilities.testFlag( Browsable ) )
     {
+        QVariantMap collectionInfo = m_engine->mainFrame()->evaluateJavaScript( "resolver.collection();" ).toMap();
+        if ( collectionInfo.isEmpty() ||
+             !collectionInfo.contains( "prettyname" ) ||
+             !collectionInfo.contains( "description" ) )
+            return;
+
+        QString desc = collectionInfo.value( "description" ).toString();
+
         m_collections.clear();
         // at this point we assume that all the tracks browsable through a resolver belong to the local source
-        Tomahawk::collection_ptr collection( new Tomahawk::ScriptCollection( SourceList::instance()->getLocal(), this ) );
+        Tomahawk::ScriptCollection* sc = new Tomahawk::ScriptCollection( SourceList::instance()->getLocal(), this );
+        sc->setDescription( desc );
+        Tomahawk::collection_ptr collection( sc );
+
         m_collections.insert( collection->name(), collection );
         emit collectionAdded( collection );
 
