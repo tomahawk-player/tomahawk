@@ -209,6 +209,8 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
 
         avatar = scItem->icon().pixmap( iconRect.size() );
 
+        painter->setFont( bold );
+
         desc = qobject_cast< Tomahawk::ScriptCollection* >( scItem->collection().data() )->description();
     }
 
@@ -224,6 +226,11 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
     painter->drawText( textRect, text );
 
     QColor descColor = QColor( "#8d8d8d" );
+    if ( type == SourcesModel::ScriptCollection && //you cannot select a non-script collection anyway
+         option.state.testFlag( QStyle::State_Selected ) )
+    {
+        descColor = option.palette.color( QPalette::HighlightedText );
+    }
 
     painter->setFont( normal );
     textRect = option.rect.adjusted( iconRect.width() + 8, option.rect.height() / 2, -figWidth - ( figWidth ? 24 : 0 ), -6 );
@@ -444,9 +451,16 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         if ( ( option.state & QStyle::State_Selected ) == QStyle::State_Selected )
         {
             if ( type != SourcesModel::Collection )
+            {
+                if ( type == SourcesModel::ScriptCollection )
+                    o.state |= QStyle::State_Selected;
+
                 o3.state |= QStyle::State_Selected;
+            }
             else
+            {
                 o3.state &= ~QStyle::State_Selected;
+            }
 
             o.palette.setColor( QPalette::Text, o.palette.color( QPalette::HighlightedText ) );
             o3.palette.setColor( QPalette::Text, o.palette.color( QPalette::HighlightedText ) );
