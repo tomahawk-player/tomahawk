@@ -24,6 +24,8 @@
 #include "Query.h"
 #include "utils/TomahawkUtils.h"
 #include "config.h"
+#include "TomahawkVersion.h"
+#include "utils/Logger.h"
 
 #include <QtCore/QDir>
 #include <QtCore/QFile>
@@ -96,6 +98,19 @@ public:
         settings()->setAttribute( QWebSettings::LocalStorageDatabaseEnabled, true );
         settings()->setAttribute( QWebSettings::LocalContentCanAccessFileUrls, true );
         settings()->setAttribute( QWebSettings::LocalContentCanAccessRemoteUrls, true );
+
+        // Tomahawk is not a user agent
+        m_header = QWebPage::userAgentForUrl( QUrl() ).replace( QString( "%1/%2" )
+                                                                .arg( TOMAHAWK_APPLICATION_NAME )
+                                                                .arg( TOMAHAWK_VERSION )
+                                                                ,"");
+        tLog() << "QtScriptResolver Using header" << m_header;
+    }
+
+    QString userAgentForUrl ( const QUrl & url ) const
+    {
+        Q_UNUSED(url);
+        return m_header;
     }
 
     void setScriptPath( const QString& scriptPath )
@@ -115,6 +130,7 @@ protected:
 private:
     QtScriptResolver* m_parent;
     QString m_scriptPath;
+    QString m_header;
 };
 
 
