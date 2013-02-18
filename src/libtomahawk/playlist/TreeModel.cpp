@@ -267,6 +267,16 @@ TreeModel::addCollection( const collection_ptr& collection )
 }
 
 
+void
+TreeModel::reloadCollection()
+{
+    if ( m_collection.isNull() )
+        return;
+
+    onCollectionChanged();
+}
+
+
 //void
 //TreeModel::addFilteredCollection( const collection_ptr& collection, unsigned int amount, DatabaseCommand_AllArtists::SortOrder order )
 //{

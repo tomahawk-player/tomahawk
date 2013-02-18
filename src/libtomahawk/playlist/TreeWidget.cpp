@@ -18,6 +18,7 @@
 
 #include "TreeWidget.h"
 
+#include "collection/Collection.h"
 #include "utils/TomahawkUtilsGui.h"
 
 #include <QBoxLayout>
@@ -25,7 +26,7 @@
 TreeWidget::TreeWidget( QWidget* parent )
     : QWidget( parent )
     , m_view( new TreeView( this ) )
-    , m_header( new FilterHeader( this ) )
+    , m_header( new ScriptCollectionHeader( this ) )
 {
     QVBoxLayout* mainLayout = new QVBoxLayout;
     mainLayout->addWidget( m_header );
@@ -37,6 +38,8 @@ TreeWidget::TreeWidget( QWidget* parent )
              this, SLOT( setFilter( QString ) ) );
     connect( m_view, SIGNAL( modelChanged() ),
              this, SLOT( onModelChanged() ) );
+    connect( m_header, SIGNAL( refreshClicked() ),
+             this, SLOT( onRefreshClicked() ) );
 }
 
 
@@ -108,6 +111,16 @@ TreeWidget::onModelChanged()
     m_header->setCaption( m_view->model()->title() );
     m_header->setDescription( m_view->model()->description() );
     m_header->setPixmap( m_view->model()->icon() );
+    if ( !m_view->model()->collection().isNull() )
+        m_header->setRefreshVisible( m_view->model()->collection()->backendType() != Tomahawk::Collection::DatabaseCollectionType );
+}
+
+
+void
+TreeWidget::onRefreshClicked()
+{
+    if ( m_view->model() && !m_view->model()->collection().isNull() )
+        m_view->model()->reloadCollection();
 }
 
 

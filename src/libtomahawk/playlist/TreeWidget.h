@@ -21,7 +21,7 @@
 
 #include "TreeView.h"
 #include "ViewPage.h"
-#include "widgets/FilterHeader.h"
+#include "widgets/ScriptCollectionHeader.h"
 
 #include <QWidget>
 
@@ -51,10 +51,11 @@ public slots:
 
 private slots:
     void onModelChanged();
+    void onRefreshClicked();
 
 private:
     TreeView* m_view;
-    BasicHeader* m_header;
+    ScriptCollectionHeader* m_header;
 };
 
 #endif // TREEWIDGET_H

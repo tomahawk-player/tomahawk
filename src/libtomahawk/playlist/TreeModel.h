@@ -71,6 +71,7 @@ public:
 
 public slots:
     void addAlbums( const QModelIndex& parent, const QList<Tomahawk::album_ptr>& albums );
+    void reloadCollection();
 
 signals:
     void modeChanged( Tomahawk::ModelMode mode );

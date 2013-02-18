@@ -119,6 +119,7 @@ set( libGuiSources
     widgets/AnimatedCounterLabel.cpp
     widgets/BasicHeader.cpp
     widgets/FilterHeader.cpp
+    widgets/ScriptCollectionHeader.cpp
     widgets/Breadcrumb.cpp
     widgets/BreadcrumbButton.cpp
     widgets/CheckDirTree.cpp

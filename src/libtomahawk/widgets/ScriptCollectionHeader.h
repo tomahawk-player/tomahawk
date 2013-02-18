@@ -16,40 +16,26 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FILTERHEADER_H
-#define FILTERHEADER_H
+#ifndef SCRIPTCOLLECTIONHEADER_H
+#define SCRIPTCOLLECTIONHEADER_H
 
-#include "widgets/BasicHeader.h"
+#include "widgets/FilterHeader.h"
 
-#include "DllMacro.h"
+class QPushButton;
 
-#include <QTimer>
-
-class QSearchField;
-
-class DLLEXPORT FilterHeader : public BasicHeader
+class DLLEXPORT ScriptCollectionHeader : public FilterHeader
 {
     Q_OBJECT
 public:
-    explicit FilterHeader( QWidget *parent = 0 );
-    virtual ~FilterHeader();
+    explicit ScriptCollectionHeader( QWidget* parent = 0 );
+
+    void setRefreshVisible( bool visible );
     
-public slots:
-    void setFilter( const QString& filter );
-
 signals:
-    void filterTextChanged( const QString& filter );
-
-private slots:
-    void onFilterEdited();
-    void applyFilter();
+    void refreshClicked();
 
 protected:
-    QSearchField* m_filterField;
-
-private:
-    QString m_filter;
-    QTimer m_filterTimer;
+    QPushButton* m_refreshButton;
 };
 
-#endif // FILTERHEADER_H
+#endif // SCRIPTCOLLECTIONHEADER_H
