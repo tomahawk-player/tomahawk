@@ -1,7 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
- *   Copyright 2012,      Teo Mrnjavac <teo@kde.org>
+ *   Copyright 2012-2013, Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -20,18 +20,14 @@
 #ifndef FLEXIBLEHEADER_H
 #define FLEXIBLEHEADER_H
 
-#include <QTimer>
-
-#include "widgets/BasicHeader.h"
-#include "DllMacro.h"
+#include "widgets/FilterHeader.h"
 #include "Artist.h"
 
 class QPaintEvent;
 class FlexibleView;
 class QRadioButton;
-class QSearchField;
 
-class DLLEXPORT FlexibleHeader : public BasicHeader
+class DLLEXPORT FlexibleHeader : public FilterHeader
 {
     Q_OBJECT
 
@@ -39,30 +35,16 @@ public:
     FlexibleHeader( FlexibleView* parent );
     ~FlexibleHeader();
 
-public slots:
-    void setFilter( const QString& filter );
-
-signals:
-    void filterTextChanged( const QString& filter );
-
 protected:
     void changeEvent( QEvent* e );
 
-private slots:
-    void onFilterEdited();
-    void applyFilter();
-
 private:
     FlexibleView* m_parent;
-
-    QString m_filter;
-    QTimer m_filterTimer;
 
     QRadioButton* m_radioCloud;
     QRadioButton* m_radioDetailed;
     QRadioButton* m_radioNormal;
 
-    QSearchField* m_filterField;
 };
 
 #endif

@@ -31,6 +31,7 @@
 #include "playlist/PlayableProxyModel.h"
 #include "playlist/PlayableModel.h"
 #include "playlist/TreeView.h"
+#include "playlist/TreeWidget.h"
 #include "playlist/GridView.h"
 #include "playlist/AlbumModel.h"
 #include "SourceList.h"
@@ -92,10 +93,10 @@ ViewManager::ViewManager( QObject* parent )
     m_widget->layout()->addWidget( m_stack );
     m_widget->layout()->addWidget( m_contextWidget );
 
-    m_superCollectionView = new TreeView();
-    m_superCollectionView->proxyModel()->setStyle( PlayableProxyModel::Collection );
+    m_superCollectionView = new TreeWidget();
+    m_superCollectionView->view()->proxyModel()->setStyle( PlayableProxyModel::Collection );
     m_superCollectionModel = new TreeModel( m_superCollectionView );
-    m_superCollectionView->setTreeModel( m_superCollectionModel );
+    m_superCollectionView->view()->setTreeModel( m_superCollectionModel );
 //    m_superCollectionView->proxyModel()->setShowOfflineResults( false );
 
     m_stack->setContentsMargins( 0, 0, 0, 0 );
@@ -270,28 +271,28 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
 {
     m_currentCollection = collection;
 
-    TreeView* view;
-    if ( !m_treeViews.contains( collection ) || m_treeViews.value( collection ).isNull() )
+    TreeWidget* widget;
+    if ( !m_treeWidgets.contains( collection ) || m_treeWidgets.value( collection ).isNull() )
     {
-        view = new TreeView();
-        view->proxyModel()->setStyle( PlayableProxyModel::Collection );
+        widget = new TreeWidget();
+        widget->view()->proxyModel()->setStyle( PlayableProxyModel::Collection );
         TreeModel* model = new TreeModel();
-        view->setTreeModel( model );
+        widget->view()->setTreeModel( model );
 
         if ( !collection.isNull() )
-            view->setEmptyTip( collection->emptyText() );
+            widget->view()->setEmptyTip( collection->emptyText() );
 
         model->addCollection( collection );
 
-        m_treeViews.insert( collection, view );
+        m_treeWidgets.insert( collection, widget );
     }
     else
     {
-        view = m_treeViews.value( collection ).data();
+        widget = m_treeWidgets.value( collection ).data();
     }
 
-    setPage( view );
-    return view;
+    setPage( widget );
+    return widget;
 }
 
 
@@ -800,7 +801,7 @@ ViewManager::recentPlaysWidget() const
 }
 
 
-TreeView*
+Tomahawk::ViewPage*
 ViewManager::superCollectionView() const
 {
     return m_superCollectionView;

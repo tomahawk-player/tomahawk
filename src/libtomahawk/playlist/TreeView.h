@@ -41,7 +41,7 @@ class AnimatedSpinner;
 class OverlayWidget;
 class TreeModel;
 
-class DLLEXPORT TreeView : public QTreeView, public Tomahawk::ViewPage
+class DLLEXPORT TreeView : public QTreeView
 {
 Q_OBJECT
 
@@ -63,15 +63,6 @@ public:
 
     void setEmptyTip( const QString& tip );
 
-    virtual QWidget* widget() { return this; }
-    virtual Tomahawk::playlistinterface_ptr playlistInterface() const { return proxyModel()->playlistInterface(); }
-
-    virtual QString title() const { return m_model->title(); }
-    virtual QString description() const { return m_model->description(); }
-    virtual QPixmap pixmap() const { return m_model->icon(); }
-
-    virtual bool showFilter() const { return true; }
-    virtual bool setFilter( const QString& filter );
     virtual bool jumpToCurrentTrack();
 
     QModelIndex hoveredIndex() const { return m_hoveredIndex; }

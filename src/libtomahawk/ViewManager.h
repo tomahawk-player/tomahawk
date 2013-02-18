@@ -37,7 +37,7 @@ class AlbumModel;
 class GridView;
 class AlbumInfoWidget;
 class ArtistInfoWidget;
-class TreeView;
+class TreeWidget;
 class CollectionModel;
 class ContextWidget;
 class FlexibleView;
@@ -91,7 +91,7 @@ public:
     Tomahawk::ViewPage* whatsHotWidget() const;
     Tomahawk::ViewPage* newReleasesWidget() const;
     Tomahawk::ViewPage* recentPlaysWidget() const;
-    TreeView* superCollectionView() const;
+    Tomahawk::ViewPage* superCollectionView() const;
 
     /// Get the view page for the given item. Not pretty...
     Tomahawk::ViewPage* pageForPlaylist( const Tomahawk::playlist_ptr& pl ) const;
@@ -175,7 +175,7 @@ private:
     AnimatedSplitter* m_splitter;
 
     TreeModel* m_superCollectionModel;
-    TreeView* m_superCollectionView;
+    TreeWidget* m_superCollectionView;
     QueueView* m_queue;
     WelcomeWidget* m_welcomeWidget;
     WhatsHotWidget* m_whatsHotWidget;
@@ -185,7 +185,7 @@ private:
     QList< Tomahawk::collection_ptr > m_superCollections;
 
     QHash< Tomahawk::dynplaylist_ptr, QPointer<Tomahawk::DynamicWidget> > m_dynamicWidgets;
-    QHash< Tomahawk::collection_ptr, QPointer<TreeView> > m_treeViews;
+    QHash< Tomahawk::collection_ptr, QPointer<TreeWidget> > m_treeWidgets;
     QHash< Tomahawk::artist_ptr, QPointer<ArtistInfoWidget> > m_artistViews;
     QHash< Tomahawk::album_ptr, QPointer<AlbumInfoWidget> > m_albumViews;
     QHash< Tomahawk::query_ptr, QPointer<TrackInfoWidget> > m_trackViews;

@@ -1,7 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
- *   Copyright 2012,      Teo Mrnjavac <teo@kde.org>
+ *   Copyright 2013, Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -17,39 +16,39 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef BASICHEADER_H
-#define BASICHEADER_H
+#ifndef FILTERHEADER_H
+#define FILTERHEADER_H
 
-#include <QWidget>
+#include "widgets/BasicHeader.h"
 
 #include "DllMacro.h"
 
-class QLabel;
-class ElidedLabel;
-class QPaintEvent;
-class QBoxLayout;
+#include <QTimer>
 
-class DLLEXPORT BasicHeader : public QWidget
+class QSearchField;
+
+class DLLEXPORT FilterHeader : public BasicHeader
 {
     Q_OBJECT
 public:
-    explicit BasicHeader( QWidget* parent = 0 );
-    virtual ~BasicHeader();
-
+    explicit FilterHeader( QWidget *parent = 0 );
+    virtual ~FilterHeader();
+    
 public slots:
-    virtual void setCaption( const QString& s );
-    virtual void setDescription( const QString& s );
-    virtual void setPixmap( const QPixmap& p );
+    void setFilter( const QString& filter );
 
-protected:
-    virtual void paintEvent( QPaintEvent* event );
+signals:
+    void filterTextChanged( const QString& filter );
 
-    QLabel* m_imageLabel;
-    ElidedLabel* m_captionLabel;
-    ElidedLabel* m_descriptionLabel;
+private slots:
+    void onFilterEdited();
+    void applyFilter();
 
-    QBoxLayout* m_mainLayout;
-    QBoxLayout* m_verticalLayout;
+private:
+    QString m_filter;
+    QTimer m_filterTimer;
+
+    QSearchField* m_filterField;
 };
 
-#endif // BASICHEADER_H
+#endif // FILTERHEADER_H

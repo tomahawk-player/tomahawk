@@ -31,8 +31,6 @@
 
 using namespace Tomahawk;
 
-QPixmap* BasicHeader::s_tiledHeader = 0;
-
 
 BasicHeader::BasicHeader( QWidget* parent )
     : QWidget( parent )
@@ -55,6 +53,7 @@ BasicHeader::BasicHeader( QWidget* parent )
     m_verticalLayout->addStretch();
 
     m_mainLayout->addSpacing( 16 );
+    m_mainLayout->setStretchFactor( m_verticalLayout, 2 );
 
     QPalette pal = palette();
     pal.setColor( QPalette::Foreground, Qt::white );

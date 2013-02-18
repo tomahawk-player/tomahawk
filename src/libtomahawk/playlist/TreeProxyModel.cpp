@@ -125,6 +125,13 @@ TreeProxyModel::setFilter( const QString& pattern )
 }
 
 
+QString
+TreeProxyModel::filter() const
+{
+    return m_filter;
+}
+
+
 void
 TreeProxyModel::onFilterArtists( const QList<Tomahawk::artist_ptr>& artists )
 {

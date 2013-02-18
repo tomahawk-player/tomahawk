@@ -1,7 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
- *   Copyright 2012,      Teo Mrnjavac <teo@kde.org>
+ *   Copyright 2012-2013, Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -30,7 +30,6 @@
 
 #include "playlist/FlexibleView.h"
 #include "ViewManager.h"
-#include "thirdparty/Qocoa/qsearchfield.h"
 #include "utils/Closure.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
@@ -41,7 +40,7 @@ using namespace Tomahawk;
 
 
 FlexibleHeader::FlexibleHeader( FlexibleView* parent )
-    : BasicHeader( parent )
+    : FilterHeader( parent )
     , m_parent( parent )
 {
     QFile f( RESPATH "stylesheets/topbar-radiobuttons.css" );
@@ -81,16 +80,8 @@ FlexibleHeader::FlexibleHeader( FlexibleView* parent )
     outerModeLayout->addWidget( modeWidget );
     outerModeLayout->addStretch();
 
-    m_filterField = new QSearchField( this );
-    m_filterField->setPlaceholderText( tr( "Filter..." ) );
-    m_filterField->setFixedWidth( 220 );
-    m_mainLayout->addWidget( m_filterField );
-
     TomahawkUtils::unmarginLayout( outerModeLayout );
     TomahawkUtils::unmarginLayout( modeLayout );
-
-    connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
-    connect( m_filterField, SIGNAL( textChanged( QString ) ), SLOT( onFilterEdited() ) );
 
     NewClosure( m_radioNormal,   SIGNAL( clicked() ), const_cast< FlexibleView* >( parent ), SLOT( setCurrentMode( FlexibleViewMode ) ), FlexibleView::Flat )->setAutoDelete( false );
     NewClosure( m_radioDetailed, SIGNAL( clicked() ), const_cast< FlexibleView* >( parent ), SLOT( setCurrentMode( FlexibleViewMode ) ), FlexibleView::Detailed )->setAutoDelete( false );
@@ -100,32 +91,6 @@ FlexibleHeader::FlexibleHeader( FlexibleView* parent )
 
 FlexibleHeader::~FlexibleHeader()
 {
-}
-
-
-void
-FlexibleHeader::setFilter( const QString& filter )
-{
-    m_filterField->setText( filter );
-}
-
-
-void
-FlexibleHeader::onFilterEdited()
-{
-    m_filter = m_filterField->text();
-
-    m_filterTimer.stop();
-    m_filterTimer.setInterval( 280 );
-    m_filterTimer.setSingleShot( true );
-    m_filterTimer.start();
-}
-
-
-void
-FlexibleHeader::applyFilter()
-{
-    emit filterTextChanged( m_filterField->text() );
 }
 
 

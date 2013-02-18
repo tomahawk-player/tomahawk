@@ -107,7 +107,7 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 
     MetaPlaylistInterface* mpl = new MetaPlaylistInterface();
     mpl->addChildInterface( ui->tracksViewLeft->playlistInterface() );
-    mpl->addChildInterface( ui->artistsViewLeft->playlistInterface() );
+    mpl->addChildInterface( ui->artistsViewLeft->proxyModel()->playlistInterface() );
     mpl->addChildInterface( ui->albumsView->playlistInterface() );
     m_playlistInterface = playlistinterface_ptr( mpl );
 }
@@ -138,7 +138,7 @@ WhatsHotWidget::playlistInterface() const
 bool
 WhatsHotWidget::isBeingPlayed() const
 {
-    if ( AudioEngine::instance()->currentTrackPlaylist() == ui->artistsViewLeft->playlistInterface() )
+    if ( AudioEngine::instance()->currentTrackPlaylist() == ui->artistsViewLeft->proxyModel()->playlistInterface() )
         return true;
 
     if ( AudioEngine::instance()->currentTrackPlaylist() == ui->tracksViewLeft->playlistInterface() )

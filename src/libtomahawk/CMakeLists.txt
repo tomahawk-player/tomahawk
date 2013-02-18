@@ -62,6 +62,7 @@ set( libGuiSources
     playlist/GridItemDelegate.cpp
     playlist/GridView.cpp
     playlist/TreeView.cpp
+    playlist/TreeWidget.cpp
     playlist/ViewHeader.cpp
     playlist/LovedTracksModel.cpp
     playlist/RecentlyAddedModel.cpp
@@ -117,6 +118,7 @@ set( libGuiSources
 
     widgets/AnimatedCounterLabel.cpp
     widgets/BasicHeader.cpp
+    widgets/FilterHeader.cpp
     widgets/Breadcrumb.cpp
     widgets/BreadcrumbButton.cpp
     widgets/CheckDirTree.cpp

@@ -147,6 +147,7 @@ TreeView::setTreeModel( TreeModel* model )
         setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
     }
 
+    connect( model, SIGNAL( changed() ), this, SIGNAL( modelChanged() ) );
     emit modelChanged();
 
 /*    setColumnHidden( PlayableModel::Score, true ); // Hide score column per default
@@ -290,9 +291,9 @@ TreeView::onFilterChangeFinished()
     if ( selectedIndexes().count() )
         scrollTo( selectedIndexes().at( 0 ), QAbstractItemView::PositionAtCenter );
 
-    if ( !filter().isEmpty() && !proxyModel()->playlistInterface()->trackCount() && model()->trackCount() )
+    if ( !proxyModel()->filter().isEmpty() && !proxyModel()->playlistInterface()->trackCount() && model()->trackCount() )
     {
-        m_overlay->setText( tr( "Sorry, your filter '%1' did not match any results." ).arg( filter() ) );
+        m_overlay->setText( tr( "Sorry, your filter '%1' did not match any results." ).arg( proxyModel()->filter() ) );
         m_overlay->show();
     }
     else
@@ -394,7 +395,7 @@ TreeView::onCustomContextMenu( const QPoint& pos )
     m_contextMenu->setQueries( queries );
     m_contextMenu->setArtists( artists );
     m_contextMenu->setAlbums( albums );
-    m_contextMenu->setPlaylistInterface( playlistInterface() );
+    m_contextMenu->setPlaylistInterface( proxyModel()->playlistInterface() );
 
     m_contextMenu->exec( viewport()->mapToGlobal( pos ) );
 }
@@ -526,13 +527,4 @@ TreeView::guid() const
     }
 
     return m_guid;
-}
-
-
-bool
-TreeView::setFilter( const QString& filter )
-{
-    ViewPage::setFilter( filter );
-    m_proxyModel->setFilter( filter );
-    return true;
 }

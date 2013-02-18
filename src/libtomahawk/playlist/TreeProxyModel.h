@@ -46,6 +46,7 @@ public:
     virtual void setSourcePlayableModel( PlayableModel* ) { Q_ASSERT( false ); }
 
     virtual void setFilter( const QString& pattern );
+    virtual QString filter() const;
 
     QModelIndex indexFromArtist( const Tomahawk::artist_ptr& artist ) const;
     QModelIndex indexFromAlbum( const Tomahawk::album_ptr& album ) const;
