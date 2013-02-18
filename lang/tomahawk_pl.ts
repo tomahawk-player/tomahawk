@@ -1691,27 +1691,27 @@ połączyć się i strumieniować od ciebie?</translation>
 <context>
     <name>SourceDelegate</name>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="59"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="62"/>
         <source>Track</source>
         <translation>Utwór</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="60"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="63"/>
         <source>Album</source>
         <translation>Album</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="61"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="64"/>
         <source>Artist</source>
         <translation>Artysta</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="62"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="65"/>
         <source>Local</source>
         <translation>Lokalny</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="63"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="66"/>
         <source>Top 10</source>
         <translation>Top 10</translation>
     </message>
@@ -1721,14 +1721,14 @@ połączyć się i strumieniować od ciebie?</translation>
         <translation>Wszystkie dostępne utwory</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="315"/>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="356"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="363"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="404"/>
         <source>Show</source>
         <translation>Pokaż</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="317"/>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="358"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="365"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="406"/>
         <source>Hide</source>
         <translation>Ukryj</translation>
     </message>
@@ -1892,77 +1892,77 @@ połączyć się i strumieniować od ciebie?</translation>
 <context>
     <name>SourcesModel</name>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="92"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="93"/>
         <source>Group</source>
         <translation>Grupa</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="95"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="96"/>
         <source>Collection</source>
         <translation>kolekcja</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="98"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="99"/>
         <source>Playlist</source>
         <translation>Lista</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="101"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="102"/>
         <source>Automatic Playlist</source>
         <translation>Automatyczna Lista</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="104"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="105"/>
         <source>Station</source>
         <translation>Stacja</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="293"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="294"/>
         <source>Browse</source>
         <translation>Przeglądaj</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="294"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="295"/>
         <source>Search History</source>
         <translation>Historia wyszukiwania</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="296"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="297"/>
         <source>My Music</source>
         <translation>Moja Muzyka</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="304"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="305"/>
         <source>SuperCollection</source>
         <translation>Superkolekcja</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="330"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="331"/>
         <source>Cloud</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="298"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="299"/>
         <source>Dashboard</source>
         <translation>Tablica kontrolna</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="313"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="314"/>
         <source>Recently Played</source>
         <translation>Ostatnio Odtworzone</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="318"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="319"/>
         <source>Charts</source>
         <translation>Listy Przebojów</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="323"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="324"/>
         <source>New Releases</source>
         <translation>Nowe Wydania</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourcesModel.cpp" line="328"/>
+        <location filename="../src/sourcetree/SourcesModel.cpp" line="329"/>
         <source>Friends</source>
         <translation>Znajomi</translation>
     </message>
@@ -2492,12 +2492,12 @@ username@jabber.org</source>
     <name>Tomahawk::Collection</name>
     <message>
         <location filename="../src/libtomahawk/collection/Collection.cpp" line="63"/>
-        <location filename="../src/libtomahawk/collection/Collection.cpp" line="70"/>
+        <location filename="../src/libtomahawk/collection/Collection.cpp" line="77"/>
         <source>Collection</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/collection/Collection.cpp" line="93"/>
+        <location filename="../src/libtomahawk/collection/Collection.cpp" line="100"/>
         <source>This collection is empty.</source>
         <translation type="unfinished"/>
     </message>
@@ -3269,19 +3269,7 @@ Spróbuj poprawić filtry aby uzyskać nowy zestaw piosenek do odtworzenia.</tra
 <context>
     <name>Tomahawk::ScriptCollection</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="58"/>
-        <source>My %1 Collection</source>
-        <comment>Name of a collection based on a resolver, e.g. My Subsonic Collection</comment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="61"/>
-        <source>%1 Collection of %2</source>
-        <comment>Name of a collection based on a resolver, e.g. Subsonic Collection of Some Dude</comment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="71"/>
+        <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="57"/>
         <source>%1 Collection</source>
         <comment>Name of a collection based on a resolver, e.g. Subsonic Collection</comment>
         <translation type="unfinished"/>
