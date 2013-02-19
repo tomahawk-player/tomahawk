@@ -46,6 +46,7 @@ ScriptCollectionHeader::ScriptCollectionHeader( QWidget* parent )
     connect( m_refreshButton, SIGNAL( clicked() ),
              this, SIGNAL( refreshClicked() ) );
     m_refreshButton->hide();
+    m_refreshButton->setToolTip( tr( "Reload Collection" ) );
 }
 
 
