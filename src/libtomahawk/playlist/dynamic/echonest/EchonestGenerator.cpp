@@ -615,40 +615,48 @@ EchonestGenerator::loadStylesMoodsAndGenres()
 {
     if( !s_styles.isEmpty() && !s_moods.isEmpty() && !s_genres.isEmpty() )
         return;
-
-    QVariant styles = TomahawkUtils::Cache::instance()->getData( "EchonesGenerator", "styles" );
-    if ( styles.isValid() && styles.canConvert< QStringList >() )
+    if ( s_styles.isEmpty() )
     {
-        s_styles = styles.toStringList();
-    }
-    else
-    {
-        tLog() << "Styles not in cache or too old, refetching styles ...";
-        s_stylesJob = Echonest::Artist::listTerms( "style" );
-        connect( s_stylesJob, SIGNAL( finished() ), this, SLOT( stylesReceived() ) );
-    }
-
-    QVariant moods = TomahawkUtils::Cache::instance()->getData( "EchonesGenerator", "moods" );
-    if ( moods.isValid() && moods.canConvert< QStringList >() ) {
-        s_moods = moods.toStringList();
-    }
-    else
-    {
-        tLog() << "Moods not in cache or too old, refetching moods ...";
-        s_moodsJob = Echonest::Artist::listTerms( "mood" );
-        connect( s_moodsJob, SIGNAL( finished() ), this, SLOT( moodsReceived() ) );
+        QVariant styles = TomahawkUtils::Cache::instance()->getData( "EchonesGenerator", "styles" );
+        if ( styles.isValid() && styles.canConvert< QStringList >() )
+        {
+            s_styles = styles.toStringList();
+        }
+        else
+        {
+            tLog() << "Styles not in cache or too old, refetching styles ...";
+            s_stylesJob = Echonest::Artist::listTerms( "style" );
+            connect( s_stylesJob, SIGNAL( finished() ), this, SLOT( stylesReceived() ) );
+        }
     }
 
-    QVariant genres = TomahawkUtils::Cache::instance()->getData( "EchonesGenerator", "genres" );
-    if ( genres.isValid() && genres.canConvert< QStringList >() )
+    if ( s_moods.isEmpty() )
     {
-        s_genres = genres.toStringList();
+        QVariant moods = TomahawkUtils::Cache::instance()->getData( "EchonesGenerator", "moods" );
+        if ( moods.isValid() && moods.canConvert< QStringList >() ) {
+            s_moods = moods.toStringList();
+        }
+        else
+        {
+            tLog() << "Moods not in cache or too old, refetching moods ...";
+            s_moodsJob = Echonest::Artist::listTerms( "mood" );
+            connect( s_moodsJob, SIGNAL( finished() ), this, SLOT( moodsReceived() ) );
+        }
     }
-    else
+
+    if ( s_genres.isEmpty() )
     {
-        tLog() << "Genres not in cache or too old, refetching genres ...";
-        s_genresJob = Echonest::Artist::fetchGenres();
-        connect( s_genresJob, SIGNAL( finished() ), this, SLOT( genresReceived() ) );
+        QVariant genres = TomahawkUtils::Cache::instance()->getData( "EchonesGenerator", "genres" );
+        if ( genres.isValid() && genres.canConvert< QStringList >() )
+        {
+            s_genres = genres.toStringList();
+        }
+        else
+        {
+            tLog() << "Genres not in cache or too old, refetching genres ...";
+            s_genresJob = Echonest::Artist::fetchGenres();
+            connect( s_genresJob, SIGNAL( finished() ), this, SLOT( genresReceived() ) );
+        }
     }
 }
 
