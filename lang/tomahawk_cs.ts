@@ -646,11 +646,11 @@ se s vámi spojil?</translation>
     </message>
 </context>
 <context>
-    <name>FlexibleHeader</name>
+    <name>FilterHeader</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/FlexibleHeader.cpp" line="85"/>
+        <location filename="../src/libtomahawk/widgets/FilterHeader.cpp" line="29"/>
         <source>Filter...</source>
-        <translation>Filtr...</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1355,9 +1355,9 @@ se s vámi spojil?</translation>
 <context>
     <name>QtScriptResolver</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="524"/>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="559"/>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="595"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="523"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="558"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="594"/>
         <source>Script Resolver Warning: API call %1 returned data sychronously.</source>
         <translation>Varování řešitele skriptu: Volání API %1 vrátilo data synchronně.</translation>
     </message>
@@ -1413,7 +1413,7 @@ se s vámi spojil?</translation>
 <context>
     <name>ScriptEngine</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="341"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="340"/>
         <source>Script Resolver Error: %1 %2 %3 %4</source>
         <translation>Chyba řešitele skriptu: %1 %2 %3 %4</translation>
     </message>
@@ -3684,7 +3684,7 @@ služby Twitter zde zadejte tam zobrazené číslo PIN:</translation>
 <context>
     <name>TreeView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeView.cpp" line="295"/>
+        <location filename="../src/libtomahawk/playlist/TreeView.cpp" line="296"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Promiňte, vašemu filtru &apos;%1&apos; se nepodařilo najít žádné výsledky.</translation>
     </message>
@@ -3772,32 +3772,32 @@ Kdykoli můžete odeslat novou seřizovací zprávu.</translation>
 <context>
     <name>ViewManager</name>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="141"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="142"/>
         <source>This playlist is empty!</source>
         <translation>Tento seznam skladeb je prázdný!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="341"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="342"/>
         <source>SuperCollection</source>
         <translation>Supersbírka</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="342"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="343"/>
         <source>Combined libraries of all your online friends</source>
         <translation>Spojená sbírka všech vašich přátel</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="402"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="403"/>
         <source>Recently Played Tracks</source>
         <translation>Nedávno poslouchané skladby</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="403"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="404"/>
         <source>Recently played tracks from all your friends</source>
         <translation>Naposledy poslouchané skladby všech vašich přátel</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="410"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="411"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>Promiňte, ale nepodařilo se najít žádné nedávno poslouchané skladby!</translation>
     </message>

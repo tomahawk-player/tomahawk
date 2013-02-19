@@ -646,11 +646,11 @@ yhdistää ja toistaa sinulta virtaa?</translation>
     </message>
 </context>
 <context>
-    <name>FlexibleHeader</name>
+    <name>FilterHeader</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/FlexibleHeader.cpp" line="85"/>
+        <location filename="../src/libtomahawk/widgets/FilterHeader.cpp" line="29"/>
         <source>Filter...</source>
-        <translation>Suodata...</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1355,9 +1355,9 @@ yhdistää ja toistaa sinulta virtaa?</translation>
 <context>
     <name>QtScriptResolver</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="524"/>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="559"/>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="595"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="523"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="558"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="594"/>
         <source>Script Resolver Warning: API call %1 returned data sychronously.</source>
         <translation>Skriptietsimen varoitus: API-kutsu %1 palautti dataa synkronisesti.</translation>
     </message>
@@ -1413,7 +1413,7 @@ yhdistää ja toistaa sinulta virtaa?</translation>
 <context>
     <name>ScriptEngine</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="341"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="340"/>
         <source>Script Resolver Error: %1 %2 %3 %4</source>
         <translation>Skriptiselvittimen virhe: %1 %2 %3 %4</translation>
     </message>
@@ -3281,7 +3281,7 @@ Koeta säätää suodattimia saadaksesi uuden joukon kappaleita kuunneltavaksi.<
         <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="57"/>
         <source>%1 Collection</source>
         <comment>Name of a collection based on a resolver, e.g. Subsonic Collection</comment>
-        <translation type="unfinished"/>
+        <translation>%1-kokoelma</translation>
     </message>
 </context>
 <context>
@@ -3690,7 +3690,7 @@ anna siellä näytetty PIN-koodi tähän:</translation>
 <context>
     <name>TreeView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeView.cpp" line="295"/>
+        <location filename="../src/libtomahawk/playlist/TreeView.cpp" line="296"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Valitettavasti suodattimesi ”%1” ei tuottanut yhtään tuloksia.</translation>
     </message>
@@ -3779,32 +3779,32 @@ Voit lähettää synkronointiviestin uudelleen millä hetkellä hyvänsä lähet
 <context>
     <name>ViewManager</name>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="141"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="142"/>
         <source>This playlist is empty!</source>
         <translation>Tämä soittolista on tyhjä!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="341"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="342"/>
         <source>SuperCollection</source>
         <translation>Superkokoelma</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="342"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="343"/>
         <source>Combined libraries of all your online friends</source>
         <translation>Kaikkien verkkokaveriesi yhdistetyt kirjastot</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="402"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="403"/>
         <source>Recently Played Tracks</source>
         <translation>Viime aikoina kuunnellut kappaleet</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="403"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="404"/>
         <source>Recently played tracks from all your friends</source>
         <translation>Kaikkien kaveriesi viime aikoina kuuntelemat kappaleet</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="410"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="411"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>Valitettavasti emme löytäneet yhtään viimeaikaisia soittoja!</translation>
     </message>

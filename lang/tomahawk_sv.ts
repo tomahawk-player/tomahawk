@@ -646,11 +646,11 @@ ansluta och strömma från dig?</translation>
     </message>
 </context>
 <context>
-    <name>FlexibleHeader</name>
+    <name>FilterHeader</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/FlexibleHeader.cpp" line="85"/>
+        <location filename="../src/libtomahawk/widgets/FilterHeader.cpp" line="29"/>
         <source>Filter...</source>
-        <translation>Filtrera</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1355,9 +1355,9 @@ ansluta och strömma från dig?</translation>
 <context>
     <name>QtScriptResolver</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="524"/>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="559"/>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="595"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="523"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="558"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="594"/>
         <source>Script Resolver Warning: API call %1 returned data sychronously.</source>
         <translation>Skript-resolver-varning: API-kall %1 retunerade datan synkront</translation>
     </message>
@@ -1413,7 +1413,7 @@ ansluta och strömma från dig?</translation>
 <context>
     <name>ScriptEngine</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="341"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="340"/>
         <source>Script Resolver Error: %1 %2 %3 %4</source>
         <translation>Skriptfel i resolvern: %1 %2 %3 %4</translation>
     </message>
@@ -3276,7 +3276,7 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
         <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="57"/>
         <source>%1 Collection</source>
         <comment>Name of a collection based on a resolver, e.g. Subsonic Collection</comment>
-        <translation type="unfinished"/>
+        <translation>%1 Kollektion</translation>
     </message>
 </context>
 <context>
@@ -3685,7 +3685,7 @@ anger du PIN-koden här:</translation>
 <context>
     <name>TreeView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeView.cpp" line="295"/>
+        <location filename="../src/libtomahawk/playlist/TreeView.cpp" line="296"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Tyvärr! Dina filter &apos;%1&apos; matchade inga resultat</translation>
     </message>
@@ -3774,32 +3774,32 @@ Du kan skicka om ett synkat meddelande när som helst genom att skicka ett tweet
 <context>
     <name>ViewManager</name>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="141"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="142"/>
         <source>This playlist is empty!</source>
         <translation>Spellistan är tom!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="341"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="342"/>
         <source>SuperCollection</source>
         <translation>Superkollektion</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="342"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="343"/>
         <source>Combined libraries of all your online friends</source>
         <translation>Kombinerat bibliotek av alla dina vänner online</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="402"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="403"/>
         <source>Recently Played Tracks</source>
         <translation>Senast spelade spår</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="403"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="404"/>
         <source>Recently played tracks from all your friends</source>
         <translation>Alla dina vänners senast spelade spår</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="410"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="411"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>Tyvärr! Det gick inte hitta några nyligen spelade spår</translation>
     </message>
