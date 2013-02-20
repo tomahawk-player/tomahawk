@@ -650,7 +650,7 @@ conectarse a usted y transmitir música?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/FilterHeader.cpp" line="29"/>
         <source>Filter...</source>
-        <translation type="unfinished"/>
+        <translation>Filtrar…</translation>
     </message>
 </context>
 <context>
@@ -777,12 +777,12 @@ conectarse a usted y transmitir música?</translation>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="43"/>
         <source>My Collection</source>
-        <translation type="unfinished"/>
+        <translation>Mi colección</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="50"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
-        <translation type="unfinished"/>
+        <translation>Después de escanear su colección musical, sus canciones aparecerán aquí.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="69"/>
@@ -1359,7 +1359,7 @@ conectarse a usted y transmitir música?</translation>
         <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="558"/>
         <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="594"/>
         <source>Script Resolver Warning: API call %1 returned data sychronously.</source>
-        <translation type="unfinished"/>
+        <translation>Aviso del resolutor de script: La llamada a la API %1 devolvió datos de manera síncrona.</translation>
     </message>
 </context>
 <context>
@@ -1394,7 +1394,7 @@ conectarse a usted y transmitir música?</translation>
     <message>
         <location filename="../src/libtomahawk/network/RemoteCollection.cpp" line="36"/>
         <source>Collection of %1</source>
-        <translation type="unfinished"/>
+        <translation>Colección de %1</translation>
     </message>
 </context>
 <context>
@@ -1408,6 +1408,14 @@ conectarse a usted y transmitir música?</translation>
         <location filename="../src/ResolverConfigDelegate.cpp" line="112"/>
         <source>Failed to load: %1</source>
         <translation>Fallo al cargar: %1</translation>
+    </message>
+</context>
+<context>
+    <name>ScriptCollectionHeader</name>
+    <message>
+        <location filename="../src/libtomahawk/widgets/ScriptCollectionHeader.cpp" line="49"/>
+        <source>Reload Collection</source>
+        <translation>Recargar la colección</translation>
     </message>
 </context>
 <context>
@@ -1942,7 +1950,7 @@ y estaciones basadas en sus gustos personales.</translation>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="331"/>
         <source>Cloud</source>
-        <translation type="unfinished"/>
+        <translation>Nube</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="299"/>
@@ -2500,12 +2508,12 @@ usuario@jabber.org</translation>
         <location filename="../src/libtomahawk/collection/Collection.cpp" line="63"/>
         <location filename="../src/libtomahawk/collection/Collection.cpp" line="77"/>
         <source>Collection</source>
-        <translation type="unfinished"/>
+        <translation>Colección</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/collection/Collection.cpp" line="100"/>
         <source>This collection is empty.</source>
-        <translation type="unfinished"/>
+        <translation>Esta colección está vacía.</translation>
     </message>
 </context>
 <context>
@@ -3061,7 +3069,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="990"/>
         <source>where genre is %1</source>
-        <translation type="unfinished"/>
+        <translation>donde el género es %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1003"/>
@@ -3278,7 +3286,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
         <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="57"/>
         <source>%1 Collection</source>
         <comment>Name of a collection based on a resolver, e.g. Subsonic Collection</comment>
-        <translation type="unfinished"/>
+        <translation>Colección de %1</translation>
     </message>
 </context>
 <context>

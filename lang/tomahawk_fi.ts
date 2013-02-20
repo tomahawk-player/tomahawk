@@ -650,7 +650,7 @@ yhdistää ja toistaa sinulta virtaa?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/FilterHeader.cpp" line="29"/>
         <source>Filter...</source>
-        <translation type="unfinished"/>
+        <translation>Suodata...</translation>
     </message>
 </context>
 <context>
@@ -1408,6 +1408,14 @@ yhdistää ja toistaa sinulta virtaa?</translation>
         <location filename="../src/ResolverConfigDelegate.cpp" line="112"/>
         <source>Failed to load: %1</source>
         <translation>Lataaminen epäonnistui: %1</translation>
+    </message>
+</context>
+<context>
+    <name>ScriptCollectionHeader</name>
+    <message>
+        <location filename="../src/libtomahawk/widgets/ScriptCollectionHeader.cpp" line="49"/>
+        <source>Reload Collection</source>
+        <translation>Päivitä kokoelma</translation>
     </message>
 </context>
 <context>

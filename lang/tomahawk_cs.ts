@@ -1411,6 +1411,14 @@ se s vámi spojil?</translation>
     </message>
 </context>
 <context>
+    <name>ScriptCollectionHeader</name>
+    <message>
+        <location filename="../src/libtomahawk/widgets/ScriptCollectionHeader.cpp" line="49"/>
+        <source>Reload Collection</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>ScriptEngine</name>
     <message>
         <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="340"/>

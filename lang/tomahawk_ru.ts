@@ -198,7 +198,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="115"/>
         <source>Enter Full Screen</source>
-        <translation type="unfinished"/>
+        <translation>Переход в полноэкранный режим</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="118"/>
@@ -524,7 +524,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="116"/>
         <source>Config Error</source>
-        <translation type="unfinished"/>
+        <translation>Неверная конфигурация</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="170"/>
@@ -653,7 +653,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/FilterHeader.cpp" line="29"/>
         <source>Filter...</source>
-        <translation type="unfinished"/>
+        <translation>Фильтр...</translation>
     </message>
 </context>
 <context>
@@ -780,12 +780,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="43"/>
         <source>My Collection</source>
-        <translation type="unfinished"/>
+        <translation>Моя Коллекция</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="50"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
-        <translation type="unfinished"/>
+        <translation>После сканирования вашей музыкальной коллекции, ваши треки будут здесь.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="69"/>
@@ -1397,7 +1397,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/network/RemoteCollection.cpp" line="36"/>
         <source>Collection of %1</source>
-        <translation type="unfinished"/>
+        <translation>Коллекция из %1</translation>
     </message>
 </context>
 <context>
@@ -1411,6 +1411,14 @@ connect and stream from you?</source>
         <location filename="../src/ResolverConfigDelegate.cpp" line="112"/>
         <source>Failed to load: %1</source>
         <translation>Ошибка при загрузке: %1</translation>
+    </message>
+</context>
+<context>
+    <name>ScriptCollectionHeader</name>
+    <message>
+        <location filename="../src/libtomahawk/widgets/ScriptCollectionHeader.cpp" line="49"/>
+        <source>Reload Collection</source>
+        <translation>Перезагрузить Коллекцию</translation>
     </message>
 </context>
 <context>
@@ -1945,7 +1953,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="331"/>
         <source>Cloud</source>
-        <translation type="unfinished"/>
+        <translation>Облако</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="299"/>
@@ -2456,12 +2464,12 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="144"/>
         <source>You forgot to enter your username!</source>
-        <translation type="unfinished"/>
+        <translation>Вы забыли указать имя пользователя!</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="152"/>
         <source>Your Xmpp Id should look like an email address</source>
-        <translation type="unfinished"/>
+        <translation>Ваша XMPP ID должен выглядеть как e-mail адрес</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="158"/>
@@ -2469,7 +2477,10 @@ You may wish to try re-authenticating.</source>
 
 Example:
 username@jabber.org</source>
-        <translation type="unfinished"/>
+        <translation>
+
+Например:
+username@jabber.org</translation>
     </message>
 </context>
 <context>
@@ -2500,12 +2511,12 @@ username@jabber.org</source>
         <location filename="../src/libtomahawk/collection/Collection.cpp" line="63"/>
         <location filename="../src/libtomahawk/collection/Collection.cpp" line="77"/>
         <source>Collection</source>
-        <translation type="unfinished"/>
+        <translation>Коллекция</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/collection/Collection.cpp" line="100"/>
         <source>This collection is empty.</source>
-        <translation type="unfinished"/>
+        <translation>Коллекция пуста.</translation>
     </message>
 </context>
 <context>
@@ -3059,7 +3070,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="990"/>
         <source>where genre is %1</source>
-        <translation type="unfinished"/>
+        <translation>где жанр %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1003"/>
@@ -3069,7 +3080,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1005"/>
         <source>where song type is not %1</source>
-        <translation type="unfinished"/>
+        <translation>где песни не типа %1</translation>
     </message>
 </context>
 <context>
@@ -3276,7 +3287,7 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="57"/>
         <source>%1 Collection</source>
         <comment>Name of a collection based on a resolver, e.g. Subsonic Collection</comment>
-        <translation type="unfinished"/>
+        <translation>%1 Коллекция</translation>
     </message>
 </context>
 <context>
@@ -3486,12 +3497,12 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="886"/>
         <source>Exit Full Screen</source>
-        <translation type="unfinished"/>
+        <translation>Выход из полноэкранного режима</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="898"/>
         <source>Enter Full Screen</source>
-        <translation type="unfinished"/>
+        <translation>Переход в полноэкранный режим</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="960"/>

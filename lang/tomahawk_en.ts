@@ -1411,6 +1411,14 @@ connect and stream from you?</translation>
     </message>
 </context>
 <context>
+    <name>ScriptCollectionHeader</name>
+    <message>
+        <location filename="../src/libtomahawk/widgets/ScriptCollectionHeader.cpp" line="49"/>
+        <source>Reload Collection</source>
+        <translation>Reload Collection</translation>
+    </message>
+</context>
+<context>
     <name>ScriptEngine</name>
     <message>
         <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="340"/>
