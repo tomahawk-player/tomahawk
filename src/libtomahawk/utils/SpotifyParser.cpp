@@ -81,7 +81,7 @@ SpotifyParser::lookupUrl( const QString& rawLink )
     QString link = rawLink;
     if ( link.contains( "open.spotify.com/" ) ) // convert to a URI
     {
-        link.replace( "http://open.spotify.com/", "" );
+        link.replace( "http://", "" ).replace( "open.spotify.com/", "" );
         link.replace( "/", ":" );
         link = "spotify:" + link;
     }
