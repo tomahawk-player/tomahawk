@@ -49,7 +49,7 @@ public:
     QString prettyName() const { return "Twitter"; }
     QString factoryId() const { return "twitteraccount"; }
     QString description() const { return tr( "Connect to your Twitter followers." ); }
-    QPixmap icon() const { return QPixmap( ":/twitter-icon.png" ); }
+    QPixmap icon() const { return QPixmap( ":/twitter-account/twitter-icon.png" ); }
     AccountTypes types() const { return AccountTypes( SipType | StatusPushType ); };
     Account* createAccount( const QString& pluginId = QString() );
 };

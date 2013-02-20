@@ -60,8 +60,8 @@ TwitterAccount::TwitterAccount( const QString &accountId )
 
     m_twitterAuth = QPointer< TomahawkOAuthTwitter >( new TomahawkOAuthTwitter( TomahawkUtils::nam(), this ) );
 
-    m_onlinePixmap = QPixmap( ":/twitter-icon.png" );
-    m_offlinePixmap = QPixmap( ":/twitter-offline-icon.png" );
+    m_onlinePixmap = QPixmap( ":/twitter-account/twitter-icon.png" );
+    m_offlinePixmap = QPixmap( ":/twitter-account/twitter-offline-icon.png" );
 }
 
 

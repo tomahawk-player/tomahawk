@@ -50,7 +50,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="resources.qrc">:/twitter-icon.png</pixmap>
+         <pixmap resource="resources.qrc">:/twitter-account/twitter-icon.png</pixmap>
        </property>
       </widget>
      </item>

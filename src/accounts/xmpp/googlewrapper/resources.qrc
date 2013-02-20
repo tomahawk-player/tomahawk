@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/">
+    <qresource prefix="/google-account">
         <file>gmail-logo.png</file>
         <file>gmail-offline-logo.png</file>
     </qresource>

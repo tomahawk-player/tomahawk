@@ -38,7 +38,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="resources.qrc">:/zeroconf-icon.png</pixmap>
+         <pixmap resource="resources.qrc">:/zeroconf-account/zeroconf-icon.png</pixmap>
        </property>
       </widget>
      </item>

@@ -35,7 +35,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="resources.qrc">:/xmpp-icon.png</pixmap>
+         <pixmap resource="resources.qrc">:/xmpp-account/xmpp-icon.png</pixmap>
        </property>
       </widget>
      </item>

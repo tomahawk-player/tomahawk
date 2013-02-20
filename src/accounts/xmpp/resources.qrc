@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/">
+    <qresource prefix="/xmpp-account">
         <file>xmpp-icon.png</file>
         <file>xmpp-offline-icon.png</file>
     </qresource>

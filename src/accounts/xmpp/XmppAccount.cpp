@@ -47,8 +47,8 @@ XmppAccount::XmppAccount( const QString &accountId )
 
     m_configWidget = QPointer< AccountConfigWidget >( new XmppConfigWidget( this, 0 ) );
 
-    m_onlinePixmap = QPixmap( ":/xmpp-icon.png" );
-    m_offlinePixmap = QPixmap( ":/xmpp-offline-icon.png" );
+    m_onlinePixmap = QPixmap( ":/xmpp-account/xmpp-icon.png" );
+    m_offlinePixmap = QPixmap( ":/xmpp-account/xmpp-offline-icon.png" );
 }
 
 

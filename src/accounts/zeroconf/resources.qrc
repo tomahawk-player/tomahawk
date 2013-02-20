@@ -1,5 +1,5 @@
 <!DOCTYPE RCC><RCC version="1.0">
-<qresource>
+<qresource prefix="/zeroconf-account">
 <file>zeroconf-icon.png</file>
 </qresource>
 </RCC>
