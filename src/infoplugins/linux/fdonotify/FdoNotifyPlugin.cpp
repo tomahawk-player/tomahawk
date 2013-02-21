@@ -45,8 +45,8 @@
 
 #include "utils/Logger.h"
 
-#include <QtDBus/QDBusConnection>
-#include <QtGui/QImage>
+#include <QDBusConnection>
+#include <QImage>
 
 namespace Tomahawk
 {
@@ -167,14 +167,14 @@ FdoNotifyPlugin::nowPlaying( const QVariant &input )
     message.setArguments( arguments );
 
     // Handle reply in a callback, so that this a non-blocking call
-    QDBusConnection::sessionBus().callWithCallback( message, this, SLOT( dbusReplyReceived( QDBusMessage ) ) );
+    QDBusConnection::sessionBus().callWithCallback( message, this, SLOT( dbusPlayingReplyReceived( QDBusMessage ) ) );
 }
 
 /**
  * Handle the DBus reply triggered by FdoNotifyPlugin::nowPlaying
  */
 void
-FdoNotifyPlugin::dbusReplyReceived( const QDBusMessage &reply )
+FdoNotifyPlugin::dbusPlayingReplyReceived( const QDBusMessage &reply )
 {
   const QVariantList &list = reply.arguments();
   if ( list.count() > 0 )
