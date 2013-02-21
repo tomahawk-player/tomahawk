@@ -173,6 +173,9 @@ private:
     QQueue< AudioState > m_stateQueue;
     QTimer m_stateQueueTimer;
 
+    uint_fast8_t m_underrunCount;
+    bool m_underrunNotified;
+
     static AudioEngine* s_instance;
 };
 

@@ -48,6 +48,8 @@ using namespace Tomahawk;
 
 #define AUDIO_VOLUME_STEP 5
 
+static const uint_fast8_t UNDERRUNTHRESHOLD = 2;
+
 static QString s_aeInfoIdentifier = QString( "AUDIOENGINE" );
 
 AudioEngine* AudioEngine::s_instance = 0;
@@ -751,6 +753,16 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
         // We don't emit this state to listeners - yet.
         m_state = Loading;
     }
+    if ( newState == Phonon::BufferingState )
+    {
+        if ( m_underrunCount > UNDERRUNTHRESHOLD && !m_underrunNotified )
+        {
+            m_underrunNotified = true;
+            //FIXME: Actually notify
+        }
+        else
+            m_underrunCount++;
+    }
     if ( newState == Phonon::ErrorState )
     {
         stop( UnknownError );
@@ -763,7 +775,11 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
     if ( newState == Phonon::PlayingState )
     {
         if ( state() != Paused && state() != Playing )
+        {
+            m_underrunCount = 0;
+            m_underrunNotified = false;
             emit started( m_currentTrack );
+        }
 
         setState( Playing );
     }
