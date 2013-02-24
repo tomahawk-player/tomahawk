@@ -71,7 +71,7 @@ public slots:
     void enqueue( const QList< QSharedPointer<DatabaseCommand> >& lc );
 
 private slots:
-    void setIsReadyTrue() { m_ready = true; }
+    void markAsReady();
 
 private:
     bool m_ready;

@@ -55,9 +55,9 @@ Database::Database( const QString& dbname, QObject* parent )
 
     tDebug() << Q_FUNC_INFO << "Using" << m_maxConcurrentThreads << "database worker threads";
 
+    connect( m_impl, SIGNAL( indexReady() ), SLOT( markAsReady() ) );
     connect( m_impl, SIGNAL( indexReady() ), SIGNAL( indexReady() ) );
     connect( m_impl, SIGNAL( indexReady() ), SIGNAL( ready() ) );
-    connect( m_impl, SIGNAL( indexReady() ), SLOT( setIsReadyTrue() ) );
 
     Q_ASSERT( m_workerRW );
     m_workerRW.data()->start();
@@ -191,4 +191,12 @@ Database::impl()
     }
 
     return m_implHash.value( thread );
+}
+
+
+void
+Database::markAsReady()
+{
+    tLog() << Q_FUNC_INFO << "Database is ready now!";
+    m_ready = true;
 }
