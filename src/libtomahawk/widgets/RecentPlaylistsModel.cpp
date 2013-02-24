@@ -44,7 +44,8 @@ RecentPlaylistsModel::RecentPlaylistsModel( unsigned int maxPlaylists, QObject* 
     connect( SourceList::instance(), SIGNAL( ready() ), SLOT( onReady() ) );
 
     // Load recent playlists initially
-    onRefresh();
+    if ( SourceList::instance()->isReady() )
+        onRefresh();
 }
 
 
