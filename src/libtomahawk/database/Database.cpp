@@ -170,7 +170,7 @@ Database::enqueue( const QSharedPointer<DatabaseCommand>& lc )
                 happyWorker = workerThread.data()->worker();
         }
 
-//        tDebug( LOGVERBOSE ) << "Enqueueing command to thread:" << happyThread << busyThreads << lc->commandname();
+        tDebug( LOGVERBOSE ) << "Enqueueing command to thread:" << happyWorker << busyThreads << lc->commandname();
         Q_ASSERT( happyWorker );
         happyWorker.data()->enqueue( lc );
     }
