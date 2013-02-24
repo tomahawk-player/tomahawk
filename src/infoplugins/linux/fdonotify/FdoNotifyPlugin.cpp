@@ -48,6 +48,8 @@
 
 #include <QDBusConnection>
 #include <QImage>
+// QTextDocument provides Qt::escape()
+#include <QTextDocument>
 
 namespace Tomahawk
 {
@@ -174,17 +176,28 @@ FdoNotifyPlugin::nowPlaying( const QVariant &input )
     if ( !hash.contains( "title" ) || !hash.contains( "artist" ) || !hash.contains( "album" ) )
         return;
 
+    QString messageText;
     // If the window manager supports notification styling then use it.
-    const char* messageTemplate = "\"%1\" by %2%3.";
-    const char* albumMessageTemplate = "on \"%1\"";
     if ( m_wmSupportsBodyMarkup ) {
-        messageTemplate = "%1<br /><i>by</i> %2%3.";
-        albumMessageTemplate = "<br /><i>on</i> %1";
+        // Remark: If using xml-based markup in notifications, the supplied strings need to be escaped.
+        QString album;
+        if ( !hash[ "album" ].isEmpty() )
+            album = tr( "<br /><i>on</i> %1" ).arg( Qt::escape( hash[ "album" ] ) );
+        messageText = tr( "%1<br /><i>by</i> %2%3." )
+                        .arg( Qt::escape( hash[ "title" ] ) )
+                        .arg( Qt::escape( hash[ "artist" ] ) )
+                        .arg( album );
     }
-    QString messageText = tr( messageTemplate )
+    else
+    {
+        QString album;
+        if ( !hash[ "album" ].isEmpty() )
+            album =  QString( " %1" ).arg( tr( "on \"%1\"" ).arg( hash[ "album" ] ) );
+        messageText = tr( "\"%1\" by %2%3." )
                         .arg( hash[ "title" ] )
                         .arg( hash[ "artist" ] )
-                        .arg( hash[ "album" ].isEmpty() ? QString() : QString( " %1" ).arg( tr( albumMessageTemplate ).arg( hash[ "album" ] ) ) );
+                        .arg( album );
+    }
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "sending message" << messageText;
 
