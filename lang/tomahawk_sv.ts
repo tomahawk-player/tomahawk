@@ -650,7 +650,7 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/FilterHeader.cpp" line="29"/>
         <source>Filter...</source>
-        <translation type="unfinished"/>
+        <translation>Filter...</translation>
     </message>
 </context>
 <context>
@@ -1415,7 +1415,7 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/ScriptCollectionHeader.cpp" line="49"/>
         <source>Reload Collection</source>
-        <translation type="unfinished"/>
+        <translation>Läs om kollektionen</translation>
     </message>
 </context>
 <context>
