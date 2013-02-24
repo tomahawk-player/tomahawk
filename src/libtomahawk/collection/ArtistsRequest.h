@@ -34,6 +34,8 @@ public:
 
     virtual void enqueue() = 0;
 
+    virtual void setFilter( const QString& filter ) = 0;
+
 protected: //signals
     virtual void artists( const QList< Tomahawk::artist_ptr >& ) = 0;
 };

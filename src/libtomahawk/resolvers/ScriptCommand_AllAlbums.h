@@ -33,6 +33,8 @@ public:
     virtual ~ScriptCommand_AllAlbums() {}
 
     virtual void enqueue();
+
+    virtual void setFilter( const QString& filter );
     
 signals:
     void albums( const QList< Tomahawk::album_ptr >& );
@@ -48,6 +50,7 @@ private slots:
 private:
     Tomahawk::collection_ptr m_collection;
     Tomahawk::artist_ptr m_artist;
+    QString m_filter;
 };
 
 #endif // SCRIPTCOMMAND_ALLALBUMS_H

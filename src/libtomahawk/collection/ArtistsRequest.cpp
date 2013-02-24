@@ -19,6 +19,7 @@
 
 #include "ArtistsRequest.h"
 
+
 Tomahawk::ArtistsRequest::~ArtistsRequest()
 {}
 

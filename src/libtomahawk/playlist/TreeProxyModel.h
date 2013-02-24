@@ -26,10 +26,9 @@
 
 #include "DllMacro.h"
 
-class DatabaseCommand_AllArtists;
-
 namespace Tomahawk
 {
+    class ArtistsRequest;
     class TreeProxyModelPlaylistInterface;
 }
 
@@ -76,7 +75,7 @@ private:
 
     QList<Tomahawk::artist_ptr> m_artistsFilter;
     QList<int> m_albumsFilter;
-    DatabaseCommand_AllArtists* m_artistsFilterCmd;
+    Tomahawk::ArtistsRequest* m_artistsFilterCmd;
 
     QString m_filter;
     TreeModel* m_model;

@@ -20,6 +20,8 @@
 
 #include "ExternalResolver.h"
 #include "ScriptCollection.h"
+#include "Album.h"
+#include "Artist.h"
 
 #include "utils/Logger.h"
 
@@ -44,6 +46,13 @@ ScriptCommand_AllAlbums::enqueue()
     }
 
     collection->resolver()->enqueue( QSharedPointer< ScriptCommand >( this ) );
+}
+
+
+void
+ScriptCommand_AllAlbums::setFilter( const QString& filter )
+{
+    m_filter = filter;
 }
 
 
@@ -81,6 +90,18 @@ ScriptCommand_AllAlbums::reportFailure()
 void
 ScriptCommand_AllAlbums::onResolverDone( const QList< Tomahawk::album_ptr >& a )
 {
-    emit albums( a );
+    if ( m_filter.isEmpty() )
+        emit albums( a );
+    else
+    {
+        QList< Tomahawk::album_ptr > filtered;
+        foreach( const Tomahawk::album_ptr& album, a )
+        {
+            if( album->name().toLower().contains( m_filter.toLower() ) ||
+                album->artist()->name().toLower().contains( m_filter.toLower() ) )
+                filtered.append( album );
+        }
+        emit albums( filtered );
+    }
     emit done();
 }

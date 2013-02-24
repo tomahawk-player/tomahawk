@@ -19,5 +19,6 @@
 
 #include "AlbumsRequest.h"
 
+
 Tomahawk::AlbumsRequest::~AlbumsRequest()
 {}

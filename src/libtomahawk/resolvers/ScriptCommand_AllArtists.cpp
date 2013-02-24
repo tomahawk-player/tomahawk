@@ -18,6 +18,7 @@
 
 #include "ScriptCommand_AllArtists.h"
 
+#include "Artist.h"
 #include "ExternalResolver.h"
 #include "ScriptCollection.h"
 
@@ -40,6 +41,13 @@ ScriptCommand_AllArtists::enqueue()
     }
 
     collection->resolver()->enqueue( QSharedPointer< ScriptCommand >( this ) );
+}
+
+
+void
+ScriptCommand_AllArtists::setFilter( const QString& filter )
+{
+    m_filter = filter;
 }
 
 
@@ -70,6 +78,17 @@ ScriptCommand_AllArtists::reportFailure()
 
 void ScriptCommand_AllArtists::onResolverDone( const QList< Tomahawk::artist_ptr >& a )
 {
-    emit artists( a );
+    if ( m_filter.isEmpty() )
+        emit artists( a );
+    else
+    {
+        QList< Tomahawk::artist_ptr > filtered;
+        foreach( const Tomahawk::artist_ptr& artist, a )
+        {
+            if ( artist->name().contains( m_filter ) )
+                filtered.append( artist );
+        }
+        emit artists( filtered );
+    }
     emit done();
 }
