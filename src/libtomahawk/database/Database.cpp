@@ -120,6 +120,12 @@ void
 Database::enqueue( const QList< QSharedPointer<DatabaseCommand> >& lc )
 {
     Q_ASSERT( m_ready );
+    if ( !m_ready )
+    {
+        tDebug() << "Can't enqueue DatabaseCommand, Database is not ready yet!";
+        return;
+    }
+
     tDebug( LOGVERBOSE ) << "Enqueueing" << lc.count() << "commands to rw thread";
     if ( m_workerRW && m_workerRW.data()->worker() )
         m_workerRW.data()->worker().data()->enqueue( lc );
@@ -130,6 +136,12 @@ void
 Database::enqueue( const QSharedPointer<DatabaseCommand>& lc )
 {
     Q_ASSERT( m_ready );
+    if ( !m_ready )
+    {
+        tDebug() << "Can't enqueue DatabaseCommand, Database is not ready yet!";
+        return;
+    }
+
     if ( lc->doesMutates() )
     {
         tDebug( LOGVERBOSE ) << "Enqueueing command to rw thread:" << lc->commandname();
