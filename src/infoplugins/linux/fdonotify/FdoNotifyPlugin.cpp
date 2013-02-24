@@ -176,13 +176,15 @@ FdoNotifyPlugin::nowPlaying( const QVariant &input )
 
     // If the window manager supports notification styling then use it.
     const char* messageTemplate = "\"%1\" by %2%3.";
+    const char* albumMessageTemplate = "on \"%1\"";
     if ( m_wmSupportsBodyMarkup ) {
         messageTemplate = "%1<br /><i>by</i> %2%3.";
+        albumMessageTemplate = "<br /><i>on</i> %1";
     }
     QString messageText = tr( messageTemplate )
                         .arg( hash[ "title" ] )
                         .arg( hash[ "artist" ] )
-                        .arg( hash[ "album" ].isEmpty() ? QString() : QString( " %1" ).arg( tr( "on \"%1\"" ).arg( hash[ "album" ] ) ) );
+                        .arg( hash[ "album" ].isEmpty() ? QString() : QString( " %1" ).arg( tr( albumMessageTemplate ).arg( hash[ "album" ] ) ) );
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "sending message" << messageText;
 
