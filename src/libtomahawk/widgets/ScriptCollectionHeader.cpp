@@ -29,6 +29,7 @@ ScriptCollectionHeader::ScriptCollectionHeader( QWidget* parent )
 {
     m_refreshButton = new QPushButton( this );
     m_refreshButton->setFlat( true );
+    m_refreshButton->setStyleSheet( "QPushButton { border: 0px; background: transparent; }" );
     QHBoxLayout* descLayout = new QHBoxLayout;
     m_verticalLayout->insertLayout( m_verticalLayout->indexOf( m_descriptionLabel ),
                                     descLayout );
