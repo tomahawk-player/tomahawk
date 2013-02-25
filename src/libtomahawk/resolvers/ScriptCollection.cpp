@@ -37,6 +37,7 @@ ScriptCollection::ScriptCollection( const source_ptr& source,
                                     ExternalResolver* resolver,
                                     QObject* parent )
     : Collection( source, QString( "scriptcollection:" + resolver->name() + ":" + uuid() ), parent )
+    , m_trackCount( -1 ) //null value
 {
     Q_ASSERT( resolver != 0 );
     qDebug() << Q_FUNC_INFO << resolver->name() << name();
@@ -154,4 +155,18 @@ ScriptCollection::requestTracks( const Tomahawk::album_ptr& album )
     Tomahawk::TracksRequest* cmd = new ScriptCommand_AllTracks( thisCollection, album );
 
     return cmd;
+}
+
+
+void
+ScriptCollection::setTrackCount( int count )
+{
+    m_trackCount = count;
+}
+
+
+int
+ScriptCollection::trackCount() const
+{
+    return m_trackCount;
 }

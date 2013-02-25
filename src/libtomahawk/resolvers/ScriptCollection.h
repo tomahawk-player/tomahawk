@@ -57,9 +57,13 @@ public:
     virtual Tomahawk::AlbumsRequest*  requestAlbums( const Tomahawk::artist_ptr& artist );
     virtual Tomahawk::TracksRequest*  requestTracks( const Tomahawk::album_ptr& album );
 
+    virtual void setTrackCount( int count );
+    virtual int trackCount() const;
+
 private:
     ExternalResolver* m_resolver;
     QString m_description;
+    int m_trackCount;
 };
 
 } //ns

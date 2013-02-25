@@ -54,6 +54,8 @@ public:
     virtual Tomahawk::AlbumsRequest*  requestAlbums( const Tomahawk::artist_ptr& artist );
     virtual Tomahawk::TracksRequest*  requestTracks( const Tomahawk::album_ptr& album );
 
+    virtual int trackCount() const;
+
 public slots:
     virtual void addTracks( const QList<QVariant>& newitems );
     virtual void removeTracks( const QDir& dir );

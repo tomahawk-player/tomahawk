@@ -914,6 +914,15 @@ QtScriptResolver::loadCollections()
         // at this point we assume that all the tracks browsable through a resolver belong to the local source
         Tomahawk::ScriptCollection* sc = new Tomahawk::ScriptCollection( SourceList::instance()->getLocal(), this );
         sc->setDescription( desc );
+
+        if ( collectionInfo.contains( "trackcount" ) ) //a resolver might not expose this
+        {
+            bool ok = false;
+            int trackCount = collectionInfo.value( "trackcount" ).toInt( &ok );
+            if ( ok )
+                sc->setTrackCount( trackCount );
+        }
+
         Tomahawk::collection_ptr collection( sc );
 
         m_collections.insert( collection->name(), collection );

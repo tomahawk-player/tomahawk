@@ -177,6 +177,13 @@ DatabaseCollection::requestTracks( const Tomahawk::album_ptr& album )
 }
 
 
+int
+DatabaseCollection::trackCount() const
+{
+    return source()->trackCount();
+}
+
+
 void
 DatabaseCollection::autoPlaylistCreated( const source_ptr& source, const QVariantList& data )
 {

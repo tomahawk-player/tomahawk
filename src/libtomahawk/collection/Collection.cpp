@@ -108,6 +108,13 @@ source_ptr& Collection::source() const
 }
 
 
+int
+Collection::trackCount() const
+{
+    return -1;
+}
+
+
 void
 Collection::addPlaylist( const Tomahawk::playlist_ptr& p )
 {

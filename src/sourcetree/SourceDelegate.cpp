@@ -204,6 +204,12 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
 
         if ( !scItem->collection().isNull() )
         {
+            int trackCount = scItem->collection()->trackCount();
+            if ( trackCount >= 0 )
+            {
+                tracks = QString::number( trackCount );
+                figWidth = QFontMetrics( figFont ).width( tracks );
+            }
             name = scItem->collection()->itemName();
         }
 
@@ -311,6 +317,7 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
     painter->setPen( descColor );
     painter->drawText( textRect, text, to );
 
+    bool shouldPaintTrackCount = false;
     if ( type == SourcesModel::Collection )
     {
         SourceItem* colItem = qobject_cast< SourceItem* >( item );
@@ -321,23 +328,30 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
             m_trackRects[ index ] = textRect.adjusted( 0, 0, -textRect.width() + painter->fontMetrics().width( text ), 0 );
         else
             m_trackRects.remove( index );
+        if ( status && !tracks.isEmpty() )
+            shouldPaintTrackCount = true;
+    }
+    else if ( type == SourcesModel::ScriptCollection )
+    {
+        if ( !tracks.isEmpty() )
+            shouldPaintTrackCount = true;
+    }
 
-        if ( status )
-        {
-            painter->setRenderHint( QPainter::Antialiasing );
+    if ( shouldPaintTrackCount )
+    {
+        painter->setRenderHint( QPainter::Antialiasing );
 
-            QRect figRect = option.rect.adjusted( option.rect.width() - figWidth - 13, 0, -14, -option.rect.height() + option.fontMetrics.height() * 1.1 );
-            int hd = ( option.rect.height() - figRect.height() ) / 2;
-            figRect.adjust( 0, hd, 0, hd );
+        QRect figRect = option.rect.adjusted( option.rect.width() - figWidth - 13, 0, -14, -option.rect.height() + option.fontMetrics.height() * 1.1 );
+        int hd = ( option.rect.height() - figRect.height() ) / 2;
+        figRect.adjust( 0, hd, 0, hd );
 
-            painter->setFont( figFont );
+        painter->setFont( figFont );
 
-            QColor figColor( 167, 183, 211 );
-            painter->setPen( figColor );
-            painter->setBrush( figColor );
+        QColor figColor( 167, 183, 211 );
+        painter->setPen( figColor );
+        painter->setBrush( figColor );
 
-            TomahawkUtils::drawBackgroundAndNumbers( painter, tracks, figRect );
-        }
+        TomahawkUtils::drawBackgroundAndNumbers( painter, tracks, figRect );
     }
 
     painter->restore();

@@ -98,6 +98,8 @@ public:
     const source_ptr& source() const;
     unsigned int lastmodified() const { return m_lastmodified; }
 
+    virtual int trackCount() const;
+
 signals:
     void tracksAdded( const QList<unsigned int>& fileids );
     void tracksRemoved( const QList<unsigned int>& fileids );
