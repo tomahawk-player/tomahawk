@@ -165,12 +165,12 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="103"/>
         <source>U&amp;pdate Collection</source>
-        <translation>Upp&amp;datera kollektion</translation>
+        <translation>Upp&amp;datera samling</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="104"/>
         <source>Fully &amp;Rescan Collection</source>
-        <translation>&amp;Skanna om hela kollektionen</translation>
+        <translation>&amp;Skanna om hela samlingen</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="105"/>
@@ -777,12 +777,12 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="43"/>
         <source>My Collection</source>
-        <translation>Min kollektion</translation>
+        <translation>Min samling</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="50"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
-        <translation>När du skannat din musik-kollektion kommer dina spår att finnas här</translation>
+        <translation>När du skannat din musiksamling kommer dina spår att finnas här</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="69"/>
@@ -1394,7 +1394,7 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/libtomahawk/network/RemoteCollection.cpp" line="36"/>
         <source>Collection of %1</source>
-        <translation>%1&apos;s kollektion</translation>
+        <translation>%1&apos;s samling</translation>
     </message>
 </context>
 <context>
@@ -1415,7 +1415,7 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/ScriptCollectionHeader.cpp" line="49"/>
         <source>Reload Collection</source>
-        <translation>Läs om kollektionen</translation>
+        <translation>Läs om samlingen</translation>
     </message>
 </context>
 <context>
@@ -1621,7 +1621,7 @@ och radiostationer baserat på din personliga profil</translation>
     <message>
         <location filename="../src/Settings_Collection.ui" line="51"/>
         <source>Upload collection list to The Echo Nest to enable user radio</source>
-        <translation>Ladda upp kollektionslistan till Echo Nest för att aktivera användar-radio</translation>
+        <translation>Ladda upp samlingslistan till Echo Nest för att aktivera användar-radio</translation>
     </message>
     <message>
         <location filename="../src/Settings_Collection.ui" line="64"/>
@@ -1792,17 +1792,17 @@ och radiostationer baserat på din personliga profil</translation>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="147"/>
         <source>SuperCollection</source>
-        <translation>SuperCollection</translation>
+        <translation>Supersamling</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="604"/>
         <source>Latest additions to your collection</source>
-        <translation>Senaste tillägget till ditt kollektion.</translation>
+        <translation>Senaste tillägget till ditt samling.</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="606"/>
         <source>Latest additions to %1&apos;s collection</source>
-        <translation>Senaste tillägget till %1&apos;s kollektion.</translation>
+        <translation>Senaste tillägget till %1&apos;s samling.</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/items/SourceItem.cpp" line="615"/>
@@ -1944,7 +1944,7 @@ och radiostationer baserat på din personliga profil</translation>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="305"/>
         <source>SuperCollection</source>
-        <translation>SuperCollection</translation>
+        <translation>Supersamling</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="331"/>
@@ -2506,12 +2506,12 @@ username@jabber.org</translation>
         <location filename="../src/libtomahawk/collection/Collection.cpp" line="63"/>
         <location filename="../src/libtomahawk/collection/Collection.cpp" line="77"/>
         <source>Collection</source>
-        <translation>Kollektion</translation>
+        <translation>Samling</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/collection/Collection.cpp" line="100"/>
         <source>This collection is empty.</source>
-        <translation>Denna kollektionen är tom</translation>
+        <translation>Denna samlingen är tom</translation>
     </message>
 </context>
 <context>
@@ -2718,7 +2718,7 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="225"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="697"/>
         <source>No users with Echo Nest Catalogs enabled. Try enabling option in Collection settings</source>
-        <translation>Inga användare med Echo nest-kataloger är aktiverade. Testa aktivera alternativet i Kollektionsinställningarna</translation>
+        <translation>Inga användare med Echo nest-kataloger är aktiverade. Testa aktivera alternativet i samlings-inställningarna</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="246"/>
@@ -2967,7 +2967,7 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="896"/>
         <source>My Collection</source>
-        <translation>Min Samling</translation>
+        <translation>Min samling</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="897"/>
@@ -3284,7 +3284,7 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
         <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="57"/>
         <source>%1 Collection</source>
         <comment>Name of a collection based on a resolver, e.g. Subsonic Collection</comment>
-        <translation>%1 Kollektion</translation>
+        <translation>%1 samling</translation>
     </message>
 </context>
 <context>
@@ -3368,7 +3368,7 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
     <message>
         <location filename="../src/TomahawkApp.cpp" line="582"/>
         <source>My Collection</source>
-        <translation>Min Samling</translation>
+        <translation>Min samling</translation>
     </message>
 </context>
 <context>
@@ -3789,7 +3789,7 @@ Du kan skicka om ett synkat meddelande när som helst genom att skicka ett tweet
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="342"/>
         <source>SuperCollection</source>
-        <translation>Superkollektion</translation>
+        <translation>Supersamling</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="343"/>

@@ -650,7 +650,7 @@ se s vámi spojil?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/FilterHeader.cpp" line="29"/>
         <source>Filter...</source>
-        <translation type="unfinished"/>
+        <translation>Filtr...</translation>
     </message>
 </context>
 <context>
@@ -1415,7 +1415,7 @@ se s vámi spojil?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/ScriptCollectionHeader.cpp" line="49"/>
         <source>Reload Collection</source>
-        <translation type="unfinished"/>
+        <translation>Nahrát sbírku znovu</translation>
     </message>
 </context>
 <context>
