@@ -1413,7 +1413,7 @@ ansluta och strömma från dig?</translation>
 <context>
     <name>ScriptCollectionHeader</name>
     <message>
-        <location filename="../src/libtomahawk/widgets/ScriptCollectionHeader.cpp" line="49"/>
+        <location filename="../src/libtomahawk/widgets/ScriptCollectionHeader.cpp" line="50"/>
         <source>Reload Collection</source>
         <translation>Läs om samlingen</translation>
     </message>

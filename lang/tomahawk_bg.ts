@@ -1422,7 +1422,7 @@ Tomahawk създаде доклад относно това и изпращай
 <context>
     <name>ScriptCollectionHeader</name>
     <message>
-        <location filename="../src/libtomahawk/widgets/ScriptCollectionHeader.cpp" line="49"/>
+        <location filename="../src/libtomahawk/widgets/ScriptCollectionHeader.cpp" line="50"/>
         <source>Reload Collection</source>
         <translation type="unfinished"/>
     </message>
