@@ -1729,14 +1729,14 @@ se conecte e faça o stream de você?</translation>
         <translation>Todas as faixas disponíveis</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="363"/>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="404"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="377"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="418"/>
         <source>Show</source>
         <translation>Mostrar</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="365"/>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="406"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="379"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="420"/>
         <source>Hide</source>
         <translation>Ocultar</translation>
     </message>
@@ -3277,7 +3277,7 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
 <context>
     <name>Tomahawk::ScriptCollection</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="57"/>
+        <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="58"/>
         <source>%1 Collection</source>
         <comment>Name of a collection based on a resolver, e.g. Subsonic Collection</comment>
         <translation type="unfinished"/>
