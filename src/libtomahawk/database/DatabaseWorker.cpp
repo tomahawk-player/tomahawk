@@ -230,7 +230,7 @@ DatabaseWorker::doWork()
 #endif
         }
     }
-    catch( const char * msg )
+    catch ( const char * msg )
     {
         tLog() << endl
                  << "*ERROR* processing databasecommand:"
@@ -245,7 +245,7 @@ DatabaseWorker::doWork()
 
         Q_ASSERT( false );
     }
-    catch(...)
+    catch (...)
     {
         qDebug() << "Uncaught exception processing dbcmd";
         if ( cmd->doesMutates() )
@@ -270,7 +270,7 @@ void
 DatabaseWorker::logOp( DatabaseCommandLoggable* command )
 {
     TomahawkSqlQuery oplogquery = Database::instance()->impl()->newquery();
-    qDebug() << "INSERTING INTO OPTLOG:" << command->source()->id() << command->guid() << command->commandname();
+    qDebug() << "INSERTING INTO OPLOG:" << command->source()->id() << command->guid() << command->commandname();
     oplogquery.prepare( "INSERT INTO oplog(source, guid, command, singleton, compressed, json) "
                         "VALUES(?, ?, ?, ?, ?, ?)" );
 
@@ -280,7 +280,7 @@ DatabaseWorker::logOp( DatabaseCommandLoggable* command )
 //     qDebug() << "OP JSON:" << ba.isNull() << ba << "from:" << variant; // debug
 
     bool compressed = false;
-    if( ba.length() >= 512 )
+    if ( ba.length() >= 512 )
     {
         // We need to compress this in this thread, since inserting into the log
         // has to happen as part of the same transaction as the dbcmd.
@@ -314,7 +314,7 @@ DatabaseWorker::logOp( DatabaseCommandLoggable* command )
     oplogquery.bindValue( 3, command->singletonCmd() );
     oplogquery.bindValue( 4, compressed );
     oplogquery.bindValue( 5, ba );
-    if( !oplogquery.exec() )
+    if ( !oplogquery.exec() )
     {
         tLog() << "Error saving to oplog";
         throw "Failed to save to oplog";
