@@ -537,7 +537,6 @@ SourcesModel::onScriptCollectionRemoved( const collection_ptr& collection )
     m_cloudGroup->removeChild( item );
     endRemoveRows();
 
-    dynamic_cast< QObject* >( m_scriptCollectionPages.value( collection ) )->deleteLater();
     m_scriptCollectionPages.remove( collection );
     m_scriptCollections.remove( collection );
     item->deleteLater();
@@ -547,7 +546,7 @@ SourcesModel::onScriptCollectionRemoved( const collection_ptr& collection )
 ViewPage*
 SourcesModel::scriptCollectionClicked( const Tomahawk::collection_ptr& collection )
 {
-    m_scriptCollectionPages[ collection ] = ViewManager::instance()->show( collection );
+    m_scriptCollectionPages.insert( collection, ViewManager::instance()->show( collection ) );
     return m_scriptCollectionPages[ collection ];
 }
 
