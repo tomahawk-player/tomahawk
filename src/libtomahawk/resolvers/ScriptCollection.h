@@ -42,6 +42,16 @@ public:
                                QObject* parent = 0 );
     virtual ~ScriptCollection();
 
+    /**
+     * @brief setServiceName sets the name of the service that provides the ScriptCollection.
+     * Please note that by default, the pretty name is the same as the resolver's name, e.g.
+     * "Ampache", thus prettyName and itemName yield "Ampache Collection" and "Ampache",
+     * respectively.
+     * However, a resolver might want to change this string to something more appropriate and
+     * different from the resolver's name, to identify the specific service rather than just the
+     * resolver.
+     */
+    virtual void setServiceName( const QString& name );
     virtual QString prettyName() const;
     virtual QString itemName() const;
     virtual BackendType backendType() const { return ScriptCollectionType; }
@@ -62,6 +72,7 @@ public:
 
 private:
     ExternalResolver* m_resolver;
+    QString m_servicePrettyName;
     QString m_description;
     int m_trackCount;
 };

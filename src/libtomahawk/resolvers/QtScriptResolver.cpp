@@ -908,11 +908,13 @@ QtScriptResolver::loadCollections()
              !collectionInfo.contains( "description" ) )
             return;
 
+        QString prettyname = collectionInfo.value( "prettyname" ).toString();
         QString desc = collectionInfo.value( "description" ).toString();
 
         m_collections.clear();
         // at this point we assume that all the tracks browsable through a resolver belong to the local source
         Tomahawk::ScriptCollection* sc = new Tomahawk::ScriptCollection( SourceList::instance()->getLocal(), this );
+        sc->setServiceName( prettyname );
         sc->setDescription( desc );
 
         if ( collectionInfo.contains( "trackcount" ) ) //a resolver might not expose this

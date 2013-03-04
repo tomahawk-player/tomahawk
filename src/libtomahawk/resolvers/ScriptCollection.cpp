@@ -43,6 +43,8 @@ ScriptCollection::ScriptCollection( const source_ptr& source,
     qDebug() << Q_FUNC_INFO << resolver->name() << name();
 
     m_resolver = resolver;
+
+    m_servicePrettyName = m_resolver->name();
 }
 
 
@@ -52,19 +54,26 @@ ScriptCollection::~ScriptCollection()
 }
 
 
+void
+ScriptCollection::setServiceName( const QString& name )
+{
+    m_servicePrettyName = name;
+}
+
+
 QString
 ScriptCollection::prettyName() const
 {
     return tr( "%1 Collection",
-                "Name of a collection based on a resolver, e.g. Subsonic Collection" )
-        .arg( m_resolver->name() );
+               "Name of a collection based on a resolver, e.g. Subsonic Collection" )
+               .arg( m_servicePrettyName );
 }
 
 
 QString
 ScriptCollection::itemName() const
 {
-    return m_resolver->name();
+    return m_servicePrettyName;
 }
 
 
