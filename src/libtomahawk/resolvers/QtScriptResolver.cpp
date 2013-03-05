@@ -912,6 +912,11 @@ QtScriptResolver::loadCollections()
         QString prettyname = collectionInfo.value( "prettyname" ).toString();
         QString desc = collectionInfo.value( "description" ).toString();
 
+        foreach ( Tomahawk::collection_ptr collection, m_collections )
+        {
+            emit collectionRemoved( collection );
+        }
+
         m_collections.clear();
         // at this point we assume that all the tracks browsable through a resolver belong to the local source
         Tomahawk::ScriptCollection* sc = new Tomahawk::ScriptCollection( SourceList::instance()->getLocal(), this );
