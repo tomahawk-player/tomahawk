@@ -27,6 +27,7 @@
 #include "network/ControlConnection.h"
 #include "database/DatabaseCommand_AddSource.h"
 #include "database/DatabaseCommand_CollectionStats.h"
+#include "database/DatabaseCommand_LoadAllSources.h"
 #include "database/DatabaseCommand_SourceOffline.h"
 #include "database/DatabaseCommand_UpdateSearchIndex.h"
 #include "database/Database.h"
@@ -412,6 +413,15 @@ Source::lastCmdGuid() const
 {
     QMutexLocker lock( &m_cmdMutex );
     return m_lastCmdGuid;
+}
+
+
+void
+Source::setLastCmdGuid( const QString& guid )
+{
+    tLog() << Q_FUNC_INFO << "name is " << friendlyName() << " and guid is " << guid;
+    QMutexLocker lock( &m_cmdMutex );
+    m_lastCmdGuid = guid;
 }
 
 

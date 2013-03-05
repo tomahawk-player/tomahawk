@@ -137,6 +137,7 @@ public:
     bool isReady() const { return m_ready; };
 
 signals:
+    void dbSyncTriggered();
     void streamStarted( StreamConnection* );
     void streamFinished( StreamConnection* );
     void ready();

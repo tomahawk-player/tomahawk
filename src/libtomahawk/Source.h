@@ -33,10 +33,11 @@
 #include "DllMacro.h"
 
 class ControlConnection;
+class DatabaseCommand_DeleteFiles;
+class DatabaseCommand_LoadAllSources;
 class DatabaseCommand_LogPlayback;
 class DatabaseCommand_SocialAction;
 class DatabaseCommand_UpdateSearchIndex;
-class DatabaseCommand_DeleteFiles;
 class MusicScanner;
 
 namespace Tomahawk
@@ -48,10 +49,11 @@ Q_OBJECT
 
 friend class ::DBSyncConnection;
 friend class ::ControlConnection;
-friend class ::DatabaseCommand_LogPlayback;
-friend class ::DatabaseCommand_SocialAction;
 friend class ::DatabaseCommand_AddFiles;
 friend class ::DatabaseCommand_DeleteFiles;
+friend class ::DatabaseCommand_LoadAllSources;
+friend class ::DatabaseCommand_LogPlayback;
+friend class ::DatabaseCommand_SocialAction;
 friend class ::MusicScanner;
 
 public:
@@ -124,10 +126,11 @@ signals:
 
 public slots:
     void setStats( const QVariantMap& m );
+    QString lastCmdGuid() const;
 
 private slots:
+    void setLastCmdGuid( const QString& guid );
     void dbLoaded( unsigned int id, const QString& fname );
-    QString lastCmdGuid() const;
     void updateIndexWhenSynced();
 
     void setOffline();

@@ -1051,7 +1051,7 @@ void
 Servent::triggerDBSync()
 {
     // tell peers we have new stuff they should sync
-    QList<source_ptr> sources = SourceList::instance()->sources();
+    QList< source_ptr > sources = SourceList::instance()->sources();
     foreach ( const source_ptr& src, sources )
     {
         // skip local source
@@ -1061,6 +1061,7 @@ Servent::triggerDBSync()
         if ( src->controlConnection() && src->controlConnection()->dbSyncConnection() ) // source online?
             src->controlConnection()->dbSyncConnection()->trigger();
     }
+    emit dbSyncTriggered();
 }
 
 
