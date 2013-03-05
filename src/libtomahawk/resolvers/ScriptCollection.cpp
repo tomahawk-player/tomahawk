@@ -27,7 +27,6 @@
 #include "resolvers/ScriptCommand_AllAlbums.h"
 #include "resolvers/ScriptCommand_AllTracks.h"
 
-#include <QIcon>
 #include <QPainter>
 
 using namespace Tomahawk;
@@ -45,6 +44,12 @@ ScriptCollection::ScriptCollection( const source_ptr& source,
     m_resolver = resolver;
 
     m_servicePrettyName = m_resolver->name();
+
+    ExternalResolverGui* gResolver = qobject_cast< ExternalResolverGui* >( m_resolver );
+    if ( gResolver )
+    {
+        m_icon = gResolver->icon();
+    }
 }
 
 
@@ -77,15 +82,18 @@ ScriptCollection::itemName() const
 }
 
 
+void
+ScriptCollection::setIcon( const QIcon& icon )
+{
+    m_icon = icon;
+    emit changed();
+}
+
+
 QIcon
 ScriptCollection::icon() const
 {
-    ExternalResolverGui* gResolver = qobject_cast< ExternalResolverGui* >( m_resolver );
-    if ( gResolver )
-    {
-        return gResolver->icon();
-    }
-    return QIcon();
+    return m_icon;
 }
 
 

@@ -28,6 +28,8 @@
 #include "Typedefs.h"
 #include "DllMacro.h"
 
+#include <QIcon>
+
 
 namespace Tomahawk
 {
@@ -55,6 +57,8 @@ public:
     virtual QString prettyName() const;
     virtual QString itemName() const;
     virtual BackendType backendType() const { return ScriptCollectionType; }
+
+    virtual void setIcon( const QIcon& icon );
     virtual QIcon icon() const;
     virtual QPixmap bigIcon() const;
 
@@ -75,6 +79,7 @@ private:
     QString m_servicePrettyName;
     QString m_description;
     int m_trackCount;
+    QIcon m_icon;
 };
 
 } //ns

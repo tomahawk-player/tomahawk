@@ -181,6 +181,9 @@ public slots:
 signals:
     void stopped();
 
+private slots:
+    void onCollectionIconFetched();
+
 private:
     void init();
 
