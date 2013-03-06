@@ -761,3 +761,10 @@ SourceItem::supportedDropTypes( const QMimeData* data ) const
 
     return DropTypesNone;
 }
+
+
+Qt::ItemFlags
+SourceItem::flags() const
+{
+    return SourceTreeItem::flags() | Qt::ItemIsDropEnabled;
+}

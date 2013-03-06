@@ -58,6 +58,7 @@ public:
     virtual bool willAcceptDrag( const QMimeData* data ) const;
     virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action );
     virtual DropTypes supportedDropTypes( const QMimeData* data ) const;
+    virtual Qt::ItemFlags flags() const;
 
 public slots:
     virtual void activate();
