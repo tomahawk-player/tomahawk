@@ -207,7 +207,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
 
     if ( oldVersion == 1 )
     {
-        qDebug() << "Migrating config from verson 1 to 2: script resolver config name";
+        qDebug() << "Migrating config from version 1 to 2: script resolver config name";
         if( contains( "script/resolvers" ) ) {
             setValue( "script/loadedresolvers", value( "script/resolvers" ) );
             remove( "script/resolvers" );
