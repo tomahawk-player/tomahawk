@@ -33,14 +33,6 @@ DatabaseCommand_LoadAllSources::exec( DatabaseImpl* dbi )
 {
     TomahawkSqlQuery query = dbi->newquery();
 
-    query.exec( QString( "SELECT guid "
-                         "FROM oplog "
-                         "WHERE source IS NULL "
-                         "ORDER BY id DESC LIMIT 1" ) );
-    if ( query.next() )
-        if ( SourceList::instance() && !SourceList::instance()->getLocal().isNull() )
-            SourceList::instance()->getLocal()->setLastCmdGuid( query.value( 0 ).toString() );
-
     query.exec( QString( "SELECT id, name, friendlyname, lastop "
                          "FROM source" ) );
 
