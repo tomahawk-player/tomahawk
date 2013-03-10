@@ -451,16 +451,51 @@ SettingsDialog::openAccountConfig( Account* account, bool showDelete )
 void
 SettingsDialog::installFromFile()
 {
-    const QString resolver = QFileDialog::getOpenFileName( 0, tr( "Install resolver from file" ), TomahawkSettings::instance()->scriptDefaultPath() );
+    QString resolver = QFileDialog::getOpenFileName( 0, tr( "Install resolver from file" ),
+                                                     TomahawkSettings::instance()->scriptDefaultPath(),
+                                                     tr( "Tomahawk Resolvers (*.axe *.js);;"
+                                                     "All files (*)" ),
+                                                     0,
+                                                     QFileDialog::ReadOnly );
 
     if( !resolver.isEmpty() )
     {
-        const QFileInfo resolverAbsoluteFilePath( resolver );
+        //I'm still a little proof of concept, refactor me into a proper class
+        QFileInfo resolverAbsoluteFilePath( resolver );
         TomahawkSettings::instance()->setScriptDefaultPath( resolverAbsoluteFilePath.absolutePath() );
+
+        if ( resolverAbsoluteFilePath.suffix() == "axe" )
+        {
+            QDir dir( TomahawkUtils::extractScriptPayload( resolverAbsoluteFilePath.filePath(),
+                                                           resolverAbsoluteFilePath.baseName(),
+                                                           "manualresolvers" ) );
+            dir.cd( "content" );
+            QFile desktopFile( dir.absoluteFilePath( "metadata.desktop" ) );
+            if ( desktopFile.open( QIODevice::ReadOnly | QIODevice::Text ) )
+            {
+                QTextStream desktopFileStream( &desktopFile );
+
+                while ( !desktopFileStream.atEnd() )
+                {
+                    QString line = desktopFileStream.readLine().trimmed();
+                    //TODO: correct baseName
+                    if ( line.startsWith( "X-Synchrotron-MainScript" ) )
+                    {
+                        line.remove( QRegExp( "^X-Synchrotron-MainScript\\s*=\\s*" ) );
+                        resolver = dir.absoluteFilePath( line ); //this is our path to the JS
+                    }
+                }
+            }
+        }
+        resolverAbsoluteFilePath = QFileInfo( resolver );
+
+        //TODO: if the new path has a metadata file in the dir structure, read it, check the config
+        //      and act accordingly for multi-account resolvers
+
 
         if ( resolverAbsoluteFilePath.baseName() == "spotify_tomahawkresolver" )
         {
-            // HACK if this is a spotify resolver, we treat is specially.
+            // HACK if this is a spotify resolver, we treat it specially.
             // usually we expect the user to just download the spotify resolver from attica,
             // however developers, those who build their own tomahawk, can't do that, or linux
             // users can't do that. However, we have an already-existing SpotifyAccount that we
