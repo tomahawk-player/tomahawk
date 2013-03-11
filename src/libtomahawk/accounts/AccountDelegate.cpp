@@ -278,11 +278,16 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
     // Draw the title and description
     // title
     QString title = index.data( Qt::DisplayRole ).toString();
+    QString author = index.data( AccountModel::AuthorRole ).toString();
+    QString desc = index.data( AccountModel::DescriptionRole ).toString();
+
     const int rightTitleEdge = rightEdge - PADDING;
     const int leftTitleEdge = pixmapRect.right() + PADDING;
     painter->setFont( titleFont );
     QRect textRect;
-    const bool canRate = index.data( AccountModel::CanRateRole ).toBool();
+    const bool canRate = index.data( AccountModel::CanRateRole ).toBool()
+                         || !author.isEmpty()
+                         || !desc.isEmpty(); // if it's Attica, or it has non-empty at least author or description
     if ( canRate )
     {
         textRect = QRect( leftTitleEdge, opt.rect.top() + PADDING, rightTitleEdge - leftTitleEdge, painter->fontMetrics().height() );
@@ -294,7 +299,6 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
     painter->drawText( textRect, Qt::AlignVCenter | Qt::AlignLeft, title );
 
     // author
-    QString author = index.data( AccountModel::AuthorRole ).toString();
     int runningBottom = textRect.bottom();
     if ( !author.isEmpty() && canRate )
     {
@@ -310,7 +314,6 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
     }
 
     // description
-    QString desc = index.data( AccountModel::DescriptionRole ).toString();
     const int descWidth = rightEdge - leftTitleEdge - PADDING;
     painter->setFont( descFont );
     const QRect descRect( leftTitleEdge, runningBottom + PADDING, descWidth, painter->fontMetrics().height() );

@@ -51,6 +51,9 @@ public:
 
     // Internal use
     static Account* createFromPath( const QString& path, const QString& factoryId, bool isAttica );
+
+private:
+    static QVariantHash metadataFromDesktopFile( const QString& path );
 };
 
 /**
@@ -80,6 +83,8 @@ public:
     QString path() const;
 
     virtual QPixmap icon() const;
+    virtual QString description() const;
+    virtual QString author() const;
 
     // Not relevant
     virtual SipPlugin* sipPlugin() { return 0; }
@@ -91,8 +96,7 @@ private slots:
 
 protected:
     // Created by factory, when user installs a new resolver
-    ResolverAccount( const QString& accountId, const QString& path );
-
+    ResolverAccount( const QString& accountId, const QString& path, const QVariantHash& initialConfiguration = QVariantHash() );
     void hookupResolver();
 
     QPointer<ExternalResolverGui> m_resolver;

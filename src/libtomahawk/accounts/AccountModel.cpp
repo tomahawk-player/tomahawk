@@ -337,7 +337,11 @@ AccountModel::data( const QModelIndex& index, int role ) const
                 case Qt::DecorationRole:
                     return acct->icon();
                 case DescriptionRole:
-                    return node->factory ? node->factory->description() : QString();
+                    return node->factory ?
+                              ( !node->factory->description().isEmpty() ? node->factory->description() : acct->description() )
+                              : acct->description();
+                case AuthorRole:
+                    return acct->author();
                 case Qt::CheckStateRole:
                     return acct->enabled() ? Qt::Checked : Qt::Unchecked;
                 case AccountData:

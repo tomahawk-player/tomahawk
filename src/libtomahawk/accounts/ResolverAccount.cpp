@@ -66,8 +66,84 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
         QFileInfo info( path );
         return new AtticaResolverAccount( generateId( factory ), path, info.baseName() );
     }
-    else
-        return new ResolverAccount( generateId( factory ), path );
+    else //on filesystem, but it could be a bundle or a legacy resolver file
+    {
+        QString realPath( path );
+        const QFileInfo pathInfo( path );
+
+        QVariantHash configuration;
+
+        if ( pathInfo.suffix() == "axe" )
+        {
+            QDir dir( TomahawkUtils::extractScriptPayload( pathInfo.filePath(),
+                                                           pathInfo.baseName(),
+                                                           "manualresolvers" ) );
+            if ( !( dir.exists() && dir.isReadable() ) ) //decompression fubar
+                return 0;
+
+            if ( !dir.cd( "content" ) ) //more fubar
+                return 0;
+
+            QString desktopFilePath = dir.absoluteFilePath( "metadata.desktop" );
+
+            configuration = metadataFromDesktopFile( desktopFilePath );
+            realPath = configuration[ "path" ].toString();
+            if ( realPath.isEmpty() )
+                return 0;
+        }
+        else //either legacy resolver or uncompressed bundle, so we look for a metadata file
+        {
+            QDir dir = pathInfo.absoluteDir();//assume we are in the code directory of a bundle
+            if ( dir.cdUp() && dir.cdUp() ) //go up twice to the content dir, if any
+            {
+                QString desktopFilePath = dir.absoluteFilePath( "metadata.desktop" );
+                configuration = metadataFromDesktopFile( desktopFilePath );
+                configuration[ "path" ] = realPath; //our initial path still overrides whatever the desktop file says
+            }
+            //else we just have empty metadata (legacy resolver without desktop file)
+        }
+
+        //TODO: handle multi-account resolvers
+
+        return new ResolverAccount( generateId( factory ), realPath, configuration );
+    }
+}
+
+
+QVariantHash
+ResolverAccountFactory::metadataFromDesktopFile( const QString& path )
+{
+    QVariantHash result;
+    QFile desktopFile( path );
+    if ( desktopFile.open( QIODevice::ReadOnly | QIODevice::Text ) )
+    {
+        QTextStream desktopFileStream( &desktopFile );
+
+        while ( !desktopFileStream.atEnd() )
+        {
+            QString line = desktopFileStream.readLine().trimmed();
+
+            if ( line.contains( QRegExp( "^X-Synchrotron-MainScript\\s*=\\s*" ) ) )
+            {
+                line.remove( QRegExp( "^X-Synchrotron-MainScript\\s*=\\s*" ) );
+                QFileInfo fi( path );
+                result[ "path" ] = fi.absoluteDir().absoluteFilePath( line ); //this is our path to the JS
+            }
+            else if ( line.contains( QRegExp( "^X-KDE-PluginInfo-Author\\s*=\\s*" ) ) )
+            {
+                line.remove( QRegExp( "^X-KDE-PluginInfo-Author\\s*=\\s*" ) );
+                result[ "author" ] = line;
+            }
+            else if ( line.contains( QRegExp( "^Comment\\s*=\\s*" ) ) )
+            {
+                line.remove( QRegExp( "^Comment\\s*=\\s*" ) );
+                result[ "description" ] = line;
+            }
+
+            //TODO: correct baseName and rename directory maybe?
+        }
+    }
+    return result;
 }
 
 
@@ -84,10 +160,10 @@ ResolverAccount::ResolverAccount( const QString& accountId )
 }
 
 
-ResolverAccount::ResolverAccount( const QString& accountId, const QString& path )
+ResolverAccount::ResolverAccount( const QString& accountId, const QString& path, const QVariantHash& initialConfiguration )
     : Account( accountId )
 {
-    QVariantHash configuration;
+    QVariantHash configuration( initialConfiguration );
     configuration[ "path" ] = path;
     setConfiguration( configuration );
 
@@ -241,6 +317,21 @@ ResolverAccount::icon() const
 
     return m_resolver.data()->icon();
 }
+
+
+QString
+ResolverAccount::description() const
+{
+    return configuration().value( "description" ).toString();
+}
+
+
+QString
+ResolverAccount::author() const
+{
+    return configuration().value( "author" ).toString();
+}
+
 
 /// AtticaResolverAccount
 
