@@ -1260,52 +1260,52 @@ connect and stream from you?</source>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="240"/>
         <source>%n year(s) ago</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="242"/>
         <source>%n year(s)</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="248"/>
         <source>%n month(s) ago</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="250"/>
         <source>%n month(s)</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="256"/>
         <source>%n week(s) ago</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="258"/>
         <source>%n week(s)</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="264"/>
         <source>%n day(s) ago</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="266"/>
         <source>%n day(s)</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="272"/>
         <source>%n hour(s) ago</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="274"/>
         <source>%n hour(s)</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="280"/>
@@ -1371,7 +1371,7 @@ connect and stream from you?</source>
     <message numerus="yes">
         <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="187"/>
         <source>Open Queue - %n item(s)</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="193"/>
@@ -3014,7 +3014,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message numerus="yes">
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="935"/>
         <source>about %n minute(s) long</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="939"/>
@@ -3244,12 +3244,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message numerus="yes">
         <location filename="../src/libtomahawk/Query.cpp" line="773"/>
         <source>%n other(s)</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/Query.cpp" line="776"/>
         <source>%n people</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="778"/>
@@ -3614,7 +3614,7 @@ enter the displayed PIN number here:</source>
     <message numerus="yes">
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="215"/>
         <source>You&apos;ve listened to this track %n time(s).</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="217"/>
@@ -3629,7 +3629,7 @@ enter the displayed PIN number here:</source>
     <message numerus="yes">
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="225"/>
         <source>You&apos;ve listened to %1 %n time(s).</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="227"/>
