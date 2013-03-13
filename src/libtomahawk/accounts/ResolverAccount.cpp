@@ -27,6 +27,7 @@
 #include "TomahawkSettings.h"
 #include "Source.h"
 #include "utils/Logger.h"
+#include "qjson/parser.h"
 
 #include <QFile>
 #include <QFileInfo>
@@ -85,9 +86,9 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
             if ( !dir.cd( "content" ) ) //more fubar
                 return 0;
 
-            QString desktopFilePath = dir.absoluteFilePath( "metadata.desktop" );
+            QString metadataFilePath = dir.absoluteFilePath( "metadata.json" );
 
-            configuration = metadataFromDesktopFile( desktopFilePath );
+            configuration = metadataFromJsonFile( metadataFilePath );
             realPath = configuration[ "path" ].toString();
             if ( realPath.isEmpty() )
                 return 0;
@@ -97,8 +98,8 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
             QDir dir = pathInfo.absoluteDir();//assume we are in the code directory of a bundle
             if ( dir.cdUp() && dir.cdUp() ) //go up twice to the content dir, if any
             {
-                QString desktopFilePath = dir.absoluteFilePath( "metadata.desktop" );
-                configuration = metadataFromDesktopFile( desktopFilePath );
+                QString metadataFilePath = dir.absoluteFilePath( "metadata.json" );
+                configuration = metadataFromJsonFile( metadataFilePath );
                 configuration[ "path" ] = realPath; //our initial path still overrides whatever the desktop file says
             }
             //else we just have empty metadata (legacy resolver without desktop file)
@@ -112,37 +113,31 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
 
 
 QVariantHash
-ResolverAccountFactory::metadataFromDesktopFile( const QString& path )
+ResolverAccountFactory::metadataFromJsonFile( const QString& path )
 {
     QVariantHash result;
-    QFile desktopFile( path );
-    if ( desktopFile.open( QIODevice::ReadOnly | QIODevice::Text ) )
+    QFile metadataFile( path );
+    if ( metadataFile.open( QIODevice::ReadOnly | QIODevice::Text ) )
     {
-        QTextStream desktopFileStream( &desktopFile );
+        QJson::Parser parser;
+        bool ok;
+        QVariantMap variant = parser.parse( metadataFile.readAll(), &ok ).toMap();
 
-        while ( !desktopFileStream.atEnd() )
+        if ( ok )
         {
-            QString line = desktopFileStream.readLine().trimmed();
-
-            if ( line.contains( QRegExp( "^X-Synchrotron-MainScript\\s*=\\s*" ) ) )
+            result[ "author" ] = variant[ "author" ];
+            result[ "description" ] = variant[ "description" ];
+            if ( !variant[ "manifest" ].isNull() )
             {
-                line.remove( QRegExp( "^X-Synchrotron-MainScript\\s*=\\s*" ) );
-                QFileInfo fi( path );
-                result[ "path" ] = fi.absoluteDir().absoluteFilePath( line ); //this is our path to the JS
+                QVariantMap manifest = variant[ "manifest" ].toMap();
+                if ( !manifest[ "main" ].isNull() )
+                {
+                    QFileInfo fi( path );
+                    result[ "path" ] = fi.absoluteDir().absoluteFilePath( manifest[ "main" ].toString() ); //this is our path to the JS
+                }
             }
-            else if ( line.contains( QRegExp( "^X-KDE-PluginInfo-Author\\s*=\\s*" ) ) )
-            {
-                line.remove( QRegExp( "^X-KDE-PluginInfo-Author\\s*=\\s*" ) );
-                result[ "author" ] = line;
-            }
-            else if ( line.contains( QRegExp( "^Comment\\s*=\\s*" ) ) )
-            {
-                line.remove( QRegExp( "^Comment\\s*=\\s*" ) );
-                result[ "description" ] = line;
-            }
-
-            //TODO: correct baseName and rename directory maybe?
         }
+        //TODO: correct baseName and rename directory maybe?
     }
     return result;
 }
