@@ -57,6 +57,7 @@
 
 QtScriptResolverHelper::QtScriptResolverHelper( const QString& scriptPath, QtScriptResolver* parent )
     : QObject( parent )
+    , m_urlCallbackIsAsync( false )
 {
     m_scriptPath = scriptPath;
     m_resolver = parent;
@@ -291,8 +292,12 @@ QtScriptResolverHelper::md5( const QByteArray& input )
 
 
 void
-QtScriptResolverHelper::addCustomUrlHandler( const QString& protocol, const QString& callbackFuncName )
+QtScriptResolverHelper::addCustomUrlHandler( const QString& protocol,
+                                             const QString& callbackFuncName,
+                                             const QString& async )
 {
+    m_urlCallbackIsAsync = ( async.toLower() == "true" ) ? true : false;
+
     boost::function< void( const Tomahawk::result_ptr&,
                            boost::function< void( QSharedPointer< QIODevice >& ) > )> fac =
             boost::bind( &QtScriptResolverHelper::customIODeviceFactory, this, _1, _2 );
@@ -320,20 +325,55 @@ void
 QtScriptResolverHelper::customIODeviceFactory( const Tomahawk::result_ptr& result,
                                                boost::function< void( QSharedPointer< QIODevice >& ) > callback )
 {
-    QString getUrl = QString( "Tomahawk.resolver.instance.%1( '%2' );" ).arg( m_urlCallback )
-                                                                        .arg( QString( QUrl( result->url() ).toEncoded() ) );
+    //can be sync or async
+    QString origResultUrl = QString( QUrl( result->url() ).toEncoded() );
 
-    QString urlStr = m_resolver->m_engine->mainFrame()->evaluateJavaScript( getUrl ).toString();
-
-    QSharedPointer< QIODevice > sp;
-    if ( urlStr.isEmpty() )
+    if ( m_urlCallbackIsAsync )
     {
+        QString qid = uuid();
+        QString getUrl = QString( "Tomahawk.resolver.instance.%1( '%2', '%3' );" ).arg( m_urlCallback )
+                                                                                  .arg( qid )
+                                                                                  .arg( origResultUrl );
 
+        m_streamCallbacks.insert( qid, callback );
+        m_resolver->m_engine->mainFrame()->evaluateJavaScript( getUrl );
+    }
+    else
+    {
+        QString getUrl = QString( "Tomahawk.resolver.instance.%1( '%2' );" ).arg( m_urlCallback )
+                                                                            .arg( origResultUrl );
+
+        QString urlStr = m_resolver->m_engine->mainFrame()->evaluateJavaScript( getUrl ).toString();
+
+        returnStreamUrl( urlStr, callback );
+    }
+}
+
+
+void
+QtScriptResolverHelper::reportStreamUrl( const QString& qid,
+                                         const QString& streamUrl )
+{
+    if ( !m_streamCallbacks.contains( qid ) )
+        return;
+
+    boost::function< void( QSharedPointer< QIODevice >& ) > callback = m_streamCallbacks.take( qid );
+
+    returnStreamUrl( streamUrl, callback );
+}
+
+
+void
+QtScriptResolverHelper::returnStreamUrl( const QString& streamUrl, boost::function< void( QSharedPointer< QIODevice >& ) > callback )
+{
+    QSharedPointer< QIODevice > sp;
+    if ( streamUrl.isEmpty() )
+    {
         callback( sp );
         return;
     }
 
-    QUrl url = QUrl::fromEncoded( urlStr.toUtf8() );
+    QUrl url = QUrl::fromEncoded( streamUrl.toUtf8() );
     QNetworkRequest req( url );
     tDebug() << "Creating a QNetowrkReply with url:" << req.url().toString();
     QNetworkReply* reply = TomahawkUtils::nam()->get( req );
