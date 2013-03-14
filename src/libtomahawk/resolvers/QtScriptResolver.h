@@ -55,7 +55,7 @@ public:
     Q_INVOKABLE QString md5( const QByteArray& input );
 
     Q_INVOKABLE void addCustomUrlHandler( const QString& protocol, const QString& callbackFuncName, const QString& isAsynchronous = "false" );
-    Q_INVOKABLE void reportStreamUrl( const QString& origResultUrl, const QString& streamUrl );
+    Q_INVOKABLE void reportStreamUrl( const QString& qid, const QString& streamUrl );
 
     Q_INVOKABLE QByteArray base64Encode( const QByteArray& input );
     Q_INVOKABLE QByteArray base64Decode( const QByteArray& input );
