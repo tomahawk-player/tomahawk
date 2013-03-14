@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -53,6 +54,9 @@ class RemoteCollectionConnection;
 class PortFwdThread;
 class PeerInfo;
 class SipInfo;
+
+typedef boost::function< void( const Tomahawk::result_ptr&,
+                               boost::function< void( QSharedPointer< QIODevice >& ) > )> IODeviceFactoryFunc;
 
 // this is used to hold a bit of state, so when a connected signal is emitted
 // from a socket, we can associate it with a Connection object etc.
@@ -121,7 +125,6 @@ public:
     QString externalAddress() const { return !m_externalHostname.isNull() ? m_externalHostname : m_externalAddress.toString(); }
     int externalPort() const { return m_externalPort; }
 
-    QSharedPointer< QIODevice > remoteIODeviceFactory( const Tomahawk::result_ptr& );
     static bool isIPWhitelisted( QHostAddress ip );
 
     bool connectedToSession( const QString& session );
@@ -129,10 +132,11 @@ public:
 
     QList< StreamConnection* > streams() const { return m_scsessions; }
 
-    QSharedPointer< QIODevice > getIODeviceForUrl( const Tomahawk::result_ptr& result );
-    void registerIODeviceFactory( const QString &proto, boost::function< QSharedPointer< QIODevice >(Tomahawk::result_ptr) > fac );
-    QSharedPointer< QIODevice > localFileIODeviceFactory( const Tomahawk::result_ptr& result );
-    QSharedPointer< QIODevice > httpIODeviceFactory( const Tomahawk::result_ptr& result );
+    void getIODeviceForUrl( const Tomahawk::result_ptr& result, boost::function< void ( QSharedPointer< QIODevice >& ) > callback );
+    void registerIODeviceFactory( const QString &proto, IODeviceFactoryFunc fac );
+    void remoteIODeviceFactory( const Tomahawk::result_ptr& result, boost::function< void ( QSharedPointer< QIODevice >& ) > callback );
+    void localFileIODeviceFactory( const Tomahawk::result_ptr& result, boost::function< void ( QSharedPointer< QIODevice >& ) > callback );
+    void httpIODeviceFactory( const Tomahawk::result_ptr& result, boost::function< void ( QSharedPointer< QIODevice >& ) > callback );
 
     bool isReady() const { return m_ready; };
 
@@ -184,7 +188,7 @@ private:
     QList< StreamConnection* > m_scsessions;
     QMutex m_ftsession_mut;
 
-    QMap< QString,boost::function< QSharedPointer< QIODevice >(Tomahawk::result_ptr) > > m_iofactories;
+    QMap< QString, IODeviceFactoryFunc > m_iofactories;
 
     QPointer< PortFwdThread > m_portfwd;
     static Servent* s_instance;

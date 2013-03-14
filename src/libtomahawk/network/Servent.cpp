@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -75,17 +76,18 @@ Servent::Servent( QObject* parent )
     setProxy( QNetworkProxy::NoProxy );
 
     {
-        boost::function<QSharedPointer<QIODevice>(result_ptr)> fac = boost::bind( &Servent::localFileIODeviceFactory, this, _1 );
+        // _1 = result, _2 = callback function for IODevice
+        IODeviceFactoryFunc fac = boost::bind( &Servent::localFileIODeviceFactory, this, _1, _2 );
         this->registerIODeviceFactory( "file", fac );
     }
 
     {
-        boost::function<QSharedPointer<QIODevice>(result_ptr)> fac = boost::bind( &Servent::remoteIODeviceFactory, this, _1 );
+        IODeviceFactoryFunc fac = boost::bind( &Servent::remoteIODeviceFactory, this, _1, _2 );
         this->registerIODeviceFactory( "servent", fac );
     }
 
     {
-        boost::function<QSharedPointer<QIODevice>(result_ptr)> fac = boost::bind( &Servent::httpIODeviceFactory, this, _1 );
+        IODeviceFactoryFunc fac = boost::bind( &Servent::httpIODeviceFactory, this, _1, _2 );
         this->registerIODeviceFactory( "http", fac );
         this->registerIODeviceFactory( "https", fac );
     }
@@ -944,8 +946,9 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
 }
 
 
-QSharedPointer<QIODevice>
-Servent::remoteIODeviceFactory( const result_ptr& result )
+void
+Servent::remoteIODeviceFactory( const Tomahawk::result_ptr& result,
+                                boost::function< void ( QSharedPointer< QIODevice >& ) > callback )
 {
     QSharedPointer<QIODevice> sp;
 
@@ -954,12 +957,18 @@ Servent::remoteIODeviceFactory( const result_ptr& result )
     const QString fileId = parts.at( 1 );
     source_ptr s = SourceList::instance()->get( sourceName );
     if ( s.isNull() || !s->controlConnection() )
-        return sp;
+    {
+        callback( sp );
+        return;
+    }
 
     ControlConnection* cc = s->controlConnection();
     StreamConnection* sc = new StreamConnection( this, cc, fileId, result );
     createParallelConnection( cc, sc, QString( "FILE_REQUEST_KEY:%1" ).arg( fileId ) );
-    return sc->iodevice();
+
+    //boost::functions cannot accept temporaries as parameters
+    sp = sc->iodevice();
+    callback( sp );
 }
 
 
@@ -1066,45 +1075,61 @@ Servent::triggerDBSync()
 
 
 void
-Servent::registerIODeviceFactory( const QString &proto, boost::function<QSharedPointer<QIODevice>(Tomahawk::result_ptr)> fac )
+Servent::registerIODeviceFactory( const QString &proto,
+                                  IODeviceFactoryFunc fac )
 {
     m_iofactories.insert( proto, fac );
 }
 
 
-QSharedPointer<QIODevice>
-Servent::getIODeviceForUrl( const Tomahawk::result_ptr& result )
+void
+Servent::getIODeviceForUrl( const Tomahawk::result_ptr& result,
+                            boost::function< void ( QSharedPointer< QIODevice >& ) > callback )
 {
     QSharedPointer<QIODevice> sp;
 
     QRegExp rx( "^([a-zA-Z0-9]+)://(.+)$" );
     if ( rx.indexIn( result->url() ) == -1 )
-        return sp;
+    {
+        callback( sp );
+        return;
+    }
 
     const QString proto = rx.cap( 1 );
     if ( !m_iofactories.contains( proto ) )
-        return sp;
+    {
+        callback( sp );
+        return;
+    }
 
-    return m_iofactories.value( proto )( result );
+    //QtScriptResolverHelper::customIODeviceFactory is async!
+    m_iofactories.value( proto )( result, callback );
 }
 
 
-QSharedPointer<QIODevice>
-Servent::localFileIODeviceFactory( const Tomahawk::result_ptr& result )
+void
+Servent::localFileIODeviceFactory( const Tomahawk::result_ptr& result,
+                                   boost::function< void ( QSharedPointer< QIODevice >& ) > callback )
 {
     // ignore "file://" at front of url
     QFile* io = new QFile( result->url().mid( QString( "file://" ).length() ) );
     if ( io )
         io->open( QIODevice::ReadOnly );
 
-    return QSharedPointer<QIODevice>( io );
+    //boost::functions cannot accept temporaries as parameters
+    QSharedPointer< QIODevice > sp = QSharedPointer<QIODevice>( io );
+    callback( sp );
 }
 
 
-QSharedPointer<QIODevice>
-Servent::httpIODeviceFactory( const Tomahawk::result_ptr& result )
+void
+Servent::httpIODeviceFactory( const Tomahawk::result_ptr& result,
+                              boost::function< void ( QSharedPointer< QIODevice >& ) > callback )
 {
     QNetworkRequest req( result->url() );
     QNetworkReply* reply = TomahawkUtils::nam()->get( req );
-    return QSharedPointer<QIODevice>( reply, &QObject::deleteLater );
+
+    //boost::functions cannot accept temporaries as parameters
+    QSharedPointer< QIODevice > sp = QSharedPointer< QIODevice >( reply, &QObject::deleteLater );
+    callback( sp );
 }

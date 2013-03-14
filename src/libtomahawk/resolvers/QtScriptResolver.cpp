@@ -293,7 +293,9 @@ QtScriptResolverHelper::md5( const QByteArray& input )
 void
 QtScriptResolverHelper::addCustomUrlHandler( const QString& protocol, const QString& callbackFuncName )
 {
-    boost::function<QSharedPointer<QIODevice>(Tomahawk::result_ptr)> fac = boost::bind( &QtScriptResolverHelper::customIODeviceFactory, this, _1 );
+    boost::function< void( const Tomahawk::result_ptr&,
+                           boost::function< void( QSharedPointer< QIODevice >& ) > )> fac =
+            boost::bind( &QtScriptResolverHelper::customIODeviceFactory, this, _1, _2 );
     Servent::instance()->registerIODeviceFactory( protocol, fac );
 
     m_urlCallback = callbackFuncName;
@@ -314,22 +316,31 @@ QtScriptResolverHelper::base64Decode( const QByteArray& input )
 }
 
 
-QSharedPointer< QIODevice >
-QtScriptResolverHelper::customIODeviceFactory( const Tomahawk::result_ptr& result )
+void
+QtScriptResolverHelper::customIODeviceFactory( const Tomahawk::result_ptr& result,
+                                               boost::function< void( QSharedPointer< QIODevice >& ) > callback )
 {
     QString getUrl = QString( "Tomahawk.resolver.instance.%1( '%2' );" ).arg( m_urlCallback )
                                                                         .arg( QString( QUrl( result->url() ).toEncoded() ) );
 
     QString urlStr = m_resolver->m_engine->mainFrame()->evaluateJavaScript( getUrl ).toString();
 
+    QSharedPointer< QIODevice > sp;
     if ( urlStr.isEmpty() )
-        return QSharedPointer< QIODevice >();
+    {
+
+        callback( sp );
+        return;
+    }
 
     QUrl url = QUrl::fromEncoded( urlStr.toUtf8() );
     QNetworkRequest req( url );
     tDebug() << "Creating a QNetowrkReply with url:" << req.url().toString();
     QNetworkReply* reply = TomahawkUtils::nam()->get( req );
-    return QSharedPointer<QIODevice>( reply, &QObject::deleteLater );
+
+    //boost::functions cannot accept temporaries as parameters
+    sp = QSharedPointer< QIODevice >( reply, &QObject::deleteLater );
+    callback( sp );
 }
 
 

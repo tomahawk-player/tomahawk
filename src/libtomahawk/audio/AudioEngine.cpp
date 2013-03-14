@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2012, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -38,6 +39,8 @@
 
 #include "utils/Logger.h"
 #include "playlist/SingleTrackPlaylistInterface.h"
+
+#include <boost/bind.hpp>
 
 #include <QtCore/QUrl>
 #include <QDir>
@@ -430,30 +433,43 @@ AudioEngine::onNowPlayingInfoReady( const Tomahawk::InfoSystem::InfoType type )
 }
 
 
-bool
+void
 AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
+{
+    if ( result.isNull() )
+    {
+        stop();
+        return;
+    }
+
+    setCurrentTrack( result );
+
+    if ( !TomahawkUtils::isHttpResult( m_currentTrack->url() ) &&
+         !TomahawkUtils::isLocalResult( m_currentTrack->url() ) )
+    {
+        boost::function< void ( QSharedPointer< QIODevice >& ) > callback =
+                boost::bind( &AudioEngine::performLoadTrack, this, result, _1 );
+        Servent::instance()->getIODeviceForUrl( m_currentTrack, callback );
+    }
+    else
+    {
+        QSharedPointer< QIODevice > io;
+        performLoadTrack( result, io );
+    }
+}
+
+
+void
+AudioEngine::performLoadTrack( const Tomahawk::result_ptr& result, QSharedPointer< QIODevice >& io )
 {
     bool err = false;
     {
-        QSharedPointer<QIODevice> io;
-
-        if ( result.isNull() )
-            err = true;
-        else
+        if ( !TomahawkUtils::isHttpResult( m_currentTrack->url() ) &&
+             !TomahawkUtils::isLocalResult( m_currentTrack->url() ) &&
+             ( !io || io.isNull() ) )
         {
-            setCurrentTrack( result );
-
-            if ( !TomahawkUtils::isHttpResult( m_currentTrack->url() ) &&
-                 !TomahawkUtils::isLocalResult( m_currentTrack->url() ) )
-            {
-                io = Servent::instance()->getIODeviceForUrl( m_currentTrack );
-
-                if ( !io || io.isNull() )
-                {
-                    tLog() << "Error getting iodevice for" << result->url();
-                    err = true;
-                }
-            }
+            tLog() << "Error getting iodevice for" << result->url();
+            err = true;
         }
 
         if ( !err )
@@ -520,11 +536,11 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
     if ( err )
     {
         stop();
-        return false;
+        return;
     }
 
     m_waitingOnNewTrack = false;
-    return true;
+    return;
 }
 
 

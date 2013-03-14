@@ -3,6 +3,7 @@
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -29,6 +30,8 @@
 #include "network/Servent.h"
 #include "Pipeline.h"
 #include "Source.h"
+
+#include <boost/bind.hpp>
 
 #include <QHash>
 
@@ -189,8 +192,16 @@ Api_v1::sid( QxtWebRequestEvent* event, QString unused )
         return send404( event );
     }
 
-    QSharedPointer<QIODevice> iodev = Servent::instance()->getIODeviceForUrl( rp );
-    if ( iodev.isNull() )
+    boost::function< void ( QSharedPointer< QIODevice >& ) > callback =
+            boost::bind( &Api_v1::processSid, this, event, rp, _1 );
+    Servent::instance()->getIODeviceForUrl( rp, callback );
+}
+
+
+void
+Api_v1::processSid( QxtWebRequestEvent* event, Tomahawk::result_ptr& rp, QSharedPointer< QIODevice >& iodev )
+{
+    if ( !iodev || iodev.isNull() )
     {
         return send404( event ); // 503?
     }

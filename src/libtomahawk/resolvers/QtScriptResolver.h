@@ -59,7 +59,8 @@ public:
     Q_INVOKABLE QByteArray base64Encode( const QByteArray& input );
     Q_INVOKABLE QByteArray base64Decode( const QByteArray& input );
 
-    QSharedPointer<QIODevice> customIODeviceFactory( const Tomahawk::result_ptr& result );
+    void customIODeviceFactory( const Tomahawk::result_ptr& result,
+                                boost::function< void( QSharedPointer< QIODevice >& ) > callback ); // async
 
 public slots:
     QByteArray readRaw( const QString& fileName );

@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -71,7 +72,8 @@ protected slots:
     virtual void handleMsg( msg_ptr msg );
 
 private slots:
-    void startSending( const Tomahawk::result_ptr& );
+    void startSending( const Tomahawk::result_ptr& result );
+    void reallyStartSending( const Tomahawk::result_ptr& result, QSharedPointer< QIODevice >& io ); //only called back from startSending
     void sendSome();
     void showStats( qint64 tx, qint64 rx );
 
