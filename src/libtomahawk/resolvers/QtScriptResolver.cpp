@@ -294,9 +294,9 @@ QtScriptResolverHelper::md5( const QByteArray& input )
 void
 QtScriptResolverHelper::addCustomUrlHandler( const QString& protocol,
                                              const QString& callbackFuncName,
-                                             const QString& async )
+                                             const QString& isAsynchronous )
 {
-    m_urlCallbackIsAsync = ( async.toLower() == "true" ) ? true : false;
+    m_urlCallbackIsAsync = ( isAsynchronous.toLower() == "true" ) ? true : false;
 
     boost::function< void( const Tomahawk::result_ptr&,
                            boost::function< void( QSharedPointer< QIODevice >& ) > )> fac =
