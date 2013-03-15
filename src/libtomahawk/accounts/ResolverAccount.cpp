@@ -63,15 +63,23 @@ Account*
 ResolverAccountFactory::createFromPath( const QString& path, const QString& factory,  bool isAttica )
 {
     qDebug() << "Creating ResolverAccount from path:" << path << "is attica" << isAttica;
+
+    const QFileInfo pathInfo( path );
+
     if ( isAttica )
     {
-        QFileInfo info( path );
-        return new AtticaResolverAccount( generateId( factory ), path, info.baseName() );
+        QVariantHash configuration;
+        QDir dir = pathInfo.absoluteDir();//assume we are in the code directory of a bundle
+        if ( dir.cdUp() && dir.cdUp() ) //go up twice to the content dir, if any
+        {
+            QString metadataFilePath = dir.absoluteFilePath( "metadata.json" );
+            configuration = metadataFromJsonFile( metadataFilePath );
+        }
+        return new AtticaResolverAccount( generateId( factory ), path, pathInfo.baseName(), configuration );
     }
     else //on filesystem, but it could be a bundle or a legacy resolver file
     {
         QString realPath( path );
-        const QFileInfo pathInfo( path );
 
         QVariantHash configuration;
 
@@ -135,6 +143,16 @@ ResolverAccountFactory::metadataFromJsonFile( const QString& path )
                     QFileInfo fi( path );
                     result[ "path" ] = fi.absoluteDir().absoluteFilePath( manifest[ "main" ].toString() ); //this is our path to the JS
                 }
+                if ( !manifest[ "scripts" ].isNull() )
+                {
+                    QStringList scripts;
+                    foreach ( QString s, manifest[ "scripts" ].toStringList() )
+                    {
+                        QFileInfo fi( path );
+                        scripts << fi.absoluteDir().absoluteFilePath( s );
+                    }
+                    result[ "scripts" ] = scripts;
+                }
             }
         }
         //TODO: correct baseName and rename directory maybe?
@@ -161,6 +179,7 @@ ResolverAccount::ResolverAccount( const QString& accountId, const QString& path,
 {
     QVariantHash configuration( initialConfiguration );
     configuration[ "path" ] = path;
+
     setConfiguration( configuration );
 
     init( path );
@@ -200,7 +219,13 @@ ResolverAccount::hookupResolver()
 {
     tDebug() << "Hooking up resolver:" << configuration().value( "path" ).toString() << enabled();
 
-    m_resolver = QPointer< ExternalResolverGui >( qobject_cast< ExternalResolverGui* >( Pipeline::instance()->addScriptResolver( configuration().value( "path" ).toString() ) ) );
+    QString mainScriptPath = configuration().value( "path" ).toString();
+    QStringList additionalPaths;
+    if ( configuration().contains( "scripts" ) )
+        additionalPaths = configuration().value( "scripts" ).toStringList();
+
+    Tomahawk::ExternalResolver* er = Pipeline::instance()->addScriptResolver( mainScriptPath, additionalPaths );
+    m_resolver = QPointer< ExternalResolverGui >( qobject_cast< ExternalResolverGui* >( er ) );
     connect( m_resolver.data(), SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
 
     // What resolver do we have here? Should only be types that are 'real' resolvers
@@ -341,8 +366,8 @@ AtticaResolverAccount::AtticaResolverAccount( const QString& accountId )
 
 }
 
-AtticaResolverAccount::AtticaResolverAccount( const QString& accountId, const QString& path, const QString& atticaId )
-    : ResolverAccount( accountId, path )
+AtticaResolverAccount::AtticaResolverAccount( const QString& accountId, const QString& path, const QString& atticaId, const QVariantHash& initialConfiguration )
+    : ResolverAccount( accountId, path, initialConfiguration )
     , m_atticaId( atticaId )
 {
     QVariantHash conf = configuration();

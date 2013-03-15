@@ -148,9 +148,9 @@ Q_OBJECT
 friend class ::QtScriptResolverHelper;
 
 public:
-    explicit QtScriptResolver( const QString& scriptPath );
+    explicit QtScriptResolver( const QString& scriptPath, const QStringList& additionalScriptPaths = QStringList() );
     virtual ~QtScriptResolver();
-    static ExternalResolver* factory( const QString& scriptPath );
+    static ExternalResolver* factory( const QString& scriptPath, const QStringList& additionalScriptPaths = QStringList() );
 
     virtual Capabilities capabilities() const { return m_capabilities; }
 
@@ -219,6 +219,7 @@ private:
     QtScriptResolverHelper* m_resolverHelper;
     QPointer< AccountConfigWidget > m_configWidget;
     QList< QVariant > m_dataWidgets;
+    QStringList m_requiredScriptPaths;
 };
 
 #endif // QTSCRIPTRESOLVER_H

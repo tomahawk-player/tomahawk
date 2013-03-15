@@ -133,7 +133,7 @@ private slots:
     void loadIcon();
 private:
     // Created by factory, when user installs a new resolver
-    AtticaResolverAccount( const QString& accountId, const QString& path, const QString& atticaId );
+    AtticaResolverAccount( const QString& accountId, const QString& path, const QString& atticaId, const QVariantHash& initialConfiguration = QVariantHash() );
 
     void init();
 
