@@ -491,6 +491,7 @@ SettingsDialog::installFromFile()
 
         Account* acct = AccountManager::instance()->accountFromPath( resolver );
 
+        Q_ASSERT( acct );
         AccountManager::instance()->addAccount( acct );
         TomahawkSettings::instance()->addAccount( acct->accountId() );
         AccountManager::instance()->enableAccount( acct );

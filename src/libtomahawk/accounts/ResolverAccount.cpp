@@ -78,7 +78,7 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
         if ( pathInfo.suffix() == "axe" )
         {
             QDir dir( TomahawkUtils::extractScriptPayload( pathInfo.filePath(),
-                                                           pathInfo.baseName(),
+                                                           pathInfo.completeBaseName(),
                                                            "manualresolvers" ) );
             if ( !( dir.exists() && dir.isReadable() ) ) //decompression fubar
                 return 0;
