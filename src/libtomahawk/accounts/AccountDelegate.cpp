@@ -371,6 +371,23 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
         painter->drawText( countRect, Qt::AlignLeft, count );
         //         runningEdge = authorRect.x();
     }
+    else //no rating, it's not attica, let's show other stuff...
+    {
+        QString versionString = index.data( AccountModel::VersionRole ).toString();
+
+        if ( !versionString.isEmpty() )
+        {
+            int runningEdge = textRect.left();
+            int pkgTop = runningBottom + PADDING;
+            int h = painter->fontMetrics().height();
+
+            QRect pkgRect( runningEdge, pkgTop, h, h );
+            painter->drawPixmap( pkgRect, TomahawkUtils::defaultPixmap( TomahawkUtils::ResolverBundle, TomahawkUtils::Original, pkgRect.size() ) );
+
+            QRect textRect( runningEdge + PADDING + h, pkgTop, painter->fontMetrics().width( versionString ), h );
+            painter->drawText( textRect, Qt::AlignLeft, versionString );
+        }
+    }
 
     // Title and description!
     return;

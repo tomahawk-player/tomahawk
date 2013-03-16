@@ -120,6 +120,7 @@ namespace TomahawkUtils
         StarHovered,
         SipPluginOnline,
         SipPluginOffline,
+        ResolverBundle,
         Invalid
     };
 

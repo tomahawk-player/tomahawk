@@ -342,6 +342,8 @@ AccountModel::data( const QModelIndex& index, int role ) const
                               : acct->description();
                 case AuthorRole:
                     return acct->author();
+                case VersionRole:
+                    return acct->version();
                 case Qt::CheckStateRole:
                     return acct->enabled() ? Qt::Checked : Qt::Unchecked;
                 case AccountData:

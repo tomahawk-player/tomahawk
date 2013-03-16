@@ -86,6 +86,7 @@ public:
     virtual QPixmap icon() const;
     virtual QString description() const;
     virtual QString author() const;
+    virtual QString version() const;
 
     // Not relevant
     virtual SipPlugin* sipPlugin() { return 0; }

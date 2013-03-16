@@ -90,6 +90,7 @@ public:
 #endif
     virtual QString description() const { return QString(); }
     virtual QString author() const { return QString(); }
+    virtual QString version() const { return QString(); }
 
     virtual void saveConfig() {} // called when the widget has been edited. save values from config widget, call sync() to write to disk account generic settings
 

@@ -154,6 +154,12 @@ ResolverAccountFactory::metadataFromJsonFile( const QString& path )
                     result[ "scripts" ] = scripts;
                 }
             }
+            if ( !variant[ "version" ].isNull() )
+                result[ "version" ] = variant[ "version" ];
+            if ( !variant[ "revision" ].isNull() )
+                result[ "revision" ] = variant[ "revision" ];
+            if ( !variant[ "timestamp" ].isNull() )
+                result[ "timestamp" ] = variant[ "timestamp" ];
         }
         //TODO: correct baseName and rename directory maybe?
     }
@@ -351,6 +357,17 @@ QString
 ResolverAccount::author() const
 {
     return configuration().value( "author" ).toString();
+}
+
+
+QString
+ResolverAccount::version() const
+{
+    QString versionString = configuration().value( "version" ).toString();
+    QString build = configuration().value( "revision" ).toString();
+    if ( !build.isEmpty() )
+        return versionString + "-" + build;
+    return versionString;
 }
 
 
