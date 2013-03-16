@@ -467,7 +467,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="136"/>
         <source>Don&apos;t send</source>
-        <translation>Не отплавлять</translation>
+        <translation>Не отправлять</translation>
     </message>
     <message>
         <location filename="../src/breakpad/CrashReporter/CrashReporter.ui" line="190"/>
