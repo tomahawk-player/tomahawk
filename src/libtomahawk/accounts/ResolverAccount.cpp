@@ -166,7 +166,6 @@ ResolverAccountFactory::metadataFromJsonFile( const QString& path )
             if ( !variant[ "timestamp" ].isNull() )
                 result[ "timestamp" ] = variant[ "timestamp" ];
         }
-        //TODO: correct baseName and rename directory maybe?
     }
     return result;
 }
