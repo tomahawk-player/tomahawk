@@ -33,6 +33,8 @@
 #include <QFileInfo>
 #include <QDir>
 
+#define MANUALRESOLVERS_DIR "manualresolvers"
+
 using namespace Tomahawk;
 using namespace Accounts;
 
@@ -85,9 +87,10 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
 
         if ( pathInfo.suffix() == "axe" )
         {
+            QString uniqueName = uuid();
             QDir dir( TomahawkUtils::extractScriptPayload( pathInfo.filePath(),
-                                                           pathInfo.completeBaseName(),
-                                                           "manualresolvers" ) );
+                                                           uniqueName,
+                                                           MANUALRESOLVERS_DIR ) );
             if ( !( dir.exists() && dir.isReadable() ) ) //decompression fubar
                 return 0;
 
@@ -95,9 +98,10 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
                 return 0;
 
             QString metadataFilePath = dir.absoluteFilePath( "metadata.json" );
-
             configuration = metadataFromJsonFile( metadataFilePath );
+
             realPath = configuration[ "path" ].toString();
+            configuration[ "bundleDir" ] = uniqueName;
             if ( realPath.isEmpty() )
                 return 0;
         }
@@ -133,6 +137,7 @@ ResolverAccountFactory::metadataFromJsonFile( const QString& path )
 
         if ( ok )
         {
+            result[ "pluginName" ] = variant[ "pluginName" ];
             result[ "author" ] = variant[ "author" ];
             result[ "description" ] = variant[ "description" ];
             if ( !variant[ "manifest" ].isNull() )
@@ -368,6 +373,22 @@ ResolverAccount::version() const
     if ( !build.isEmpty() )
         return versionString + "-" + build;
     return versionString;
+}
+
+
+void
+ResolverAccount::removeBundle()
+{
+    QString bundleDir = configuration()[ "bundleDir" ].toString();
+    if ( bundleDir.isEmpty() )
+        return;
+
+    QString expectedPath = TomahawkUtils::appDataDir().absoluteFilePath( QString( "%1/%2" ).arg( MANUALRESOLVERS_DIR ).arg( bundleDir ) );
+    QFileInfo fi( expectedPath );
+    if ( fi.exists() && fi.isDir() && fi.isWritable() )
+    {
+        TomahawkUtils::removeDirectory( expectedPath );
+    }
 }
 
 

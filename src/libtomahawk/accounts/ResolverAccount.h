@@ -93,6 +93,8 @@ public:
     virtual Tomahawk::InfoSystem::InfoPluginPtr infoPlugin() { return Tomahawk::InfoSystem::InfoPluginPtr(); }
     virtual QWidget* aclWidget() { return 0; }
 
+    virtual void removeBundle();
+
 private slots:
     void resolverChanged();
 
