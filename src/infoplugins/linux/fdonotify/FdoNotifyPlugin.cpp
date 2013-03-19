@@ -48,6 +48,8 @@
 
 #include <QDBusConnection>
 #include <QImage>
+// QTextDocument provides Qt::escape()
+#include <QTextDocument>
 
 namespace Tomahawk
 {
@@ -58,16 +60,38 @@ namespace InfoSystem
 FdoNotifyPlugin::FdoNotifyPlugin()
     : InfoPlugin()
     , m_nowPlayingId( 0 )
+    , m_wmSupportsBodyMarkup( false )
 {
     qDebug() << Q_FUNC_INFO;
     m_supportedPushTypes << InfoNotifyUser << InfoNowPlaying << InfoTrackUnresolved << InfoNowStopped;
-}
 
+    // Query the window manager for its capabilties in styling notifications.
+    QDBusMessage message = QDBusMessage::createMethodCall( "org.freedesktop.Notifications", "/org/freedesktop/Notifications", "org.freedesktop.Notifications", "GetCapabilities" );
+    QDBusConnection::sessionBus().callWithCallback( message, this, SLOT( dbusCapabiltiesReplyReceived( QDBusMessage ) ) );
+}
 
 FdoNotifyPlugin::~FdoNotifyPlugin()
 {
     qDebug() << Q_FUNC_INFO;
 }
+
+
+void
+FdoNotifyPlugin::dbusCapabiltiesReplyReceived( const QDBusMessage &reply )
+{
+    if (reply.type() != QDBusMessage::ReplyMessage ) {
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Did not receive a ReplyMessage";
+    }
+    const QStringList &list = reply.arguments().at( 0 ).toStringList();
+    QListIterator<QString> iter( list );
+    while ( iter.hasNext() ) {
+        QString capabilty = iter.next();
+        if ( capabilty.compare( "body-markup" ) == 0 ) {
+            m_wmSupportsBodyMarkup = true;
+        }
+    }
+}
+
 
 
 void
@@ -152,10 +176,28 @@ FdoNotifyPlugin::nowPlaying( const QVariant &input )
     if ( !hash.contains( "title" ) || !hash.contains( "artist" ) || !hash.contains( "album" ) )
         return;
 
-    QString messageText = tr( "Tomahawk is playing \"%1\" by %2%3." )
+    QString messageText;
+    // If the window manager supports notification styling then use it.
+    if ( m_wmSupportsBodyMarkup ) {
+        // Remark: If using xml-based markup in notifications, the supplied strings need to be escaped.
+        QString album;
+        if ( !hash[ "album" ].isEmpty() )
+            album = tr( "<br /><i>on</i> %1" ).arg( Qt::escape( hash[ "album" ] ) );
+        messageText = tr( "%1<br /><i>by</i> %2%3." )
+                        .arg( Qt::escape( hash[ "title" ] ) )
+                        .arg( Qt::escape( hash[ "artist" ] ) )
+                        .arg( album );
+    }
+    else
+    {
+        QString album;
+        if ( !hash[ "album" ].isEmpty() )
+            album =  QString( " %1" ).arg( tr( "on \"%1\"" ).arg( hash[ "album" ] ) );
+        messageText = tr( "\"%1\" by %2%3." )
                         .arg( hash[ "title" ] )
                         .arg( hash[ "artist" ] )
-                        .arg( hash[ "album" ].isEmpty() ? QString() : QString( " %1" ).arg( tr( "on \"%1\"" ).arg( hash[ "album" ] ) ) );
+                        .arg( album );
+    }
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "sending message" << messageText;
 
@@ -164,7 +206,7 @@ FdoNotifyPlugin::nowPlaying( const QVariant &input )
     arguments << QString( "Tomahawk" ); //app_name
     arguments << m_nowPlayingId; //notification_id
     arguments << QString(); //app_icon
-    arguments << QString( "Tomahawk" ); //summary
+    arguments << QString( "Tomahawk - Now Playing" ); //summary
     arguments << messageText; //body
     arguments << QStringList(); //actions
     QVariantMap dict;
