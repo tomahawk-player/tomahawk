@@ -1367,8 +1367,8 @@ Tomahawk създаде доклад относно това и изпращай
         <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="524"/>
         <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="559"/>
         <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="595"/>
-        <source>Script Resolver Warning: API call %1 returned data sychronously.</source>
-        <translation>Предупреждение на скриптът за извличане:  Заявката към %1 върна данни синхронно.</translation>
+        <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

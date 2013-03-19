@@ -1358,8 +1358,8 @@ yhdistää ja toistaa sinulta virtaa?</translation>
         <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="524"/>
         <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="559"/>
         <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="595"/>
-        <source>Script Resolver Warning: API call %1 returned data sychronously.</source>
-        <translation>Skriptietsimen varoitus: API-kutsu %1 palautti dataa synkronisesti.</translation>
+        <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
+        <translation>Skriptiselvittimen varoitus: API-kutsu %1 palautti dataa synkronisesti.</translation>
     </message>
 </context>
 <context>

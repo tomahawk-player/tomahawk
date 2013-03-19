@@ -1357,8 +1357,8 @@ connect and stream from you?</source>
         <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="524"/>
         <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="559"/>
         <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="595"/>
-        <source>Script Resolver Warning: API call %1 returned data sychronously.</source>
-        <translation>Advertencia do resolvedor de scripts: a chamada da API %1 devolveu datos de xeito sincronizado.</translation>
+        <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
