@@ -70,6 +70,7 @@ FdoNotifyPlugin::FdoNotifyPlugin()
     QDBusConnection::sessionBus().callWithCallback( message, this, SLOT( dbusCapabiltiesReplyReceived( QDBusMessage ) ) );
 }
 
+
 FdoNotifyPlugin::~FdoNotifyPlugin()
 {
     qDebug() << Q_FUNC_INFO;
@@ -77,21 +78,25 @@ FdoNotifyPlugin::~FdoNotifyPlugin()
 
 
 void
-FdoNotifyPlugin::dbusCapabiltiesReplyReceived( const QDBusMessage &reply )
+FdoNotifyPlugin::dbusCapabiltiesReplyReceived( const QDBusMessage& reply )
 {
-    if (reply.type() != QDBusMessage::ReplyMessage ) {
+    if ( reply.type() != QDBusMessage::ReplyMessage )
+    {
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Did not receive a ReplyMessage";
     }
+
     const QStringList &list = reply.arguments().at( 0 ).toStringList();
     QListIterator<QString> iter( list );
-    while ( iter.hasNext() ) {
+    while ( iter.hasNext() )
+    {
         QString capabilty = iter.next();
-        if ( capabilty.compare( "body-markup" ) == 0 ) {
+        if ( capabilty.compare( "body-markup" ) == 0 )
+        {
             m_wmSupportsBodyMarkup = true;
+            break;
         }
     }
 }
-
 
 
 void
@@ -135,14 +140,15 @@ FdoNotifyPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
 int
 FdoNotifyPlugin::getNotificationIconHeight()
 {
-     return 6*TomahawkUtils::defaultFontHeight();
+     return 6 * TomahawkUtils::defaultFontHeight();
 }
 
 
 void
-FdoNotifyPlugin::notifyUser( const QString &messageText )
+FdoNotifyPlugin::notifyUser( const QString& messageText )
 {
     QDBusMessage message = QDBusMessage::createMethodCall( "org.freedesktop.Notifications", "/org/freedesktop/Notifications", "org.freedesktop.Notifications", "Notify" );
+
     QList<QVariant> arguments;
     arguments << QString( "Tomahawk" ); //app_name
     arguments << quint32( 0 ); //notification_id
@@ -150,6 +156,7 @@ FdoNotifyPlugin::notifyUser( const QString &messageText )
     arguments << QString( "Tomahawk" ); //summary
     arguments << QString( messageText ); //body
     arguments << QStringList(); //actions
+
     QVariantMap dict;
     dict["desktop-entry"] = QString( "tomahawk" );
     dict[ "image_data" ] = ImageConverter::variantForImage( QImage( RESPATH "icons/tomahawk-icon-512x512.png" ).scaledToHeight( getNotificationIconHeight() ) );
@@ -161,7 +168,7 @@ FdoNotifyPlugin::notifyUser( const QString &messageText )
 
 
 void
-FdoNotifyPlugin::nowPlaying( const QVariant &input )
+FdoNotifyPlugin::nowPlaying( const QVariant& input )
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     if ( !input.canConvert< QVariantMap >() )
@@ -178,11 +185,13 @@ FdoNotifyPlugin::nowPlaying( const QVariant &input )
 
     QString messageText;
     // If the window manager supports notification styling then use it.
-    if ( m_wmSupportsBodyMarkup ) {
+    if ( m_wmSupportsBodyMarkup )
+    {
         // Remark: If using xml-based markup in notifications, the supplied strings need to be escaped.
         QString album;
         if ( !hash[ "album" ].isEmpty() )
             album = tr( "<br /><i>on</i> %1" ).arg( Qt::escape( hash[ "album" ] ) );
+
         messageText = tr( "%1<br /><i>by</i> %2%3." )
                         .arg( Qt::escape( hash[ "title" ] ) )
                         .arg( Qt::escape( hash[ "artist" ] ) )
@@ -192,7 +201,8 @@ FdoNotifyPlugin::nowPlaying( const QVariant &input )
     {
         QString album;
         if ( !hash[ "album" ].isEmpty() )
-            album =  QString( " %1" ).arg( tr( "on \"%1\"" ).arg( hash[ "album" ] ) );
+            album = QString( " %1" ).arg( tr( "on \"%1\"" ).arg( hash[ "album" ] ) );
+
         messageText = tr( "\"%1\" by %2%3." )
                         .arg( hash[ "title" ] )
                         .arg( hash[ "artist" ] )
@@ -229,15 +239,16 @@ FdoNotifyPlugin::nowPlaying( const QVariant &input )
     QDBusConnection::sessionBus().callWithCallback( message, this, SLOT( dbusPlayingReplyReceived( QDBusMessage ) ) );
 }
 
+
 /**
  * Handle the DBus reply triggered by FdoNotifyPlugin::nowPlaying
  */
 void
-FdoNotifyPlugin::dbusPlayingReplyReceived( const QDBusMessage &reply )
+FdoNotifyPlugin::dbusPlayingReplyReceived( const QDBusMessage& reply )
 {
-  const QVariantList &list = reply.arguments();
-  if ( list.count() > 0 )
-    m_nowPlayingId = list.at( 0 ).toInt();
+    const QVariantList& list = reply.arguments();
+    if ( list.count() > 0 )
+        m_nowPlayingId = list.at( 0 ).toInt();
 }
 
 } //ns InfoSystem
