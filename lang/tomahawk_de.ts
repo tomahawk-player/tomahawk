@@ -3108,14 +3108,28 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
 <context>
     <name>Tomahawk::InfoSystem::FdoNotifyPlugin</name>
     <message>
-        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="155"/>
-        <source>Tomahawk is playing &quot;%1&quot; by %2%3.</source>
-        <translation>Tomahawk spielt &quot;%1&quot; von %2%3.</translation>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="193"/>
+        <source>&lt;br /&gt;&lt;i&gt;on&lt;/i&gt; %1</source>
+        <comment>%1 is an album name</comment>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="158"/>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="195"/>
+        <source>%1&lt;br /&gt;&lt;i&gt;by&lt;/i&gt; %2%3.</source>
+        <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="204"/>
         <source>on &quot;%1&quot;</source>
-        <translation>auf &quot;%1&quot;</translation>
+        <comment>%1 is an album name</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="206"/>
+        <source>&quot;%1&quot; by %2%3.</source>
+        <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing</comment>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
