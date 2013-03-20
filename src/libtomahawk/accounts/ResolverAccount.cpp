@@ -76,6 +76,7 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
         {
             QString metadataFilePath = dir.absoluteFilePath( "metadata.json" );
             configuration = metadataFromJsonFile( metadataFilePath );
+            expandPaths( dir, configuration );
         }
         return new AtticaResolverAccount( generateId( factory ), path, pathInfo.baseName(), configuration );
     }
@@ -100,8 +101,35 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
             QString metadataFilePath = dir.absoluteFilePath( "metadata.json" );
             configuration = metadataFromJsonFile( metadataFilePath );
 
-            realPath = configuration[ "path" ].toString();
             configuration[ "bundleDir" ] = uniqueName;
+
+            if ( !configuration[ "pluginName" ].isNull() && !configuration[ "pluginName" ].toString().isEmpty() )
+            {
+                dir.cdUp();
+                if ( !dir.cdUp() ) //we're in MANUALRESOLVERS_DIR
+                    return 0;
+
+                QString name = configuration[ "pluginName" ].toString();
+
+                QString namePath = dir.absoluteFilePath( name );
+                QFileInfo npI( namePath );
+
+                if ( npI.exists() && npI.isDir() )
+                {
+                    TomahawkUtils::removeDirectory( namePath );
+                }
+
+                dir.rename( uniqueName, name );
+
+                configuration[ "bundleDir" ] = name;
+
+                if ( !dir.cd( QString( "%1/content" ).arg( name ) ) ) //should work if it worked once
+                    return 0;
+            }
+
+            expandPaths( dir, configuration );
+
+            realPath = configuration[ "path" ].toString();
             if ( realPath.isEmpty() )
                 return 0;
         }
@@ -112,6 +140,7 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
             {
                 QString metadataFilePath = dir.absoluteFilePath( "metadata.json" );
                 configuration = metadataFromJsonFile( metadataFilePath );
+                expandPaths( dir, configuration );
                 configuration[ "path" ] = realPath; //our initial path still overrides whatever the desktop file says
             }
             //else we just have empty metadata (legacy resolver without desktop file)
@@ -145,18 +174,11 @@ ResolverAccountFactory::metadataFromJsonFile( const QString& path )
                 QVariantMap manifest = variant[ "manifest" ].toMap();
                 if ( !manifest[ "main" ].isNull() )
                 {
-                    QFileInfo fi( path );
-                    result[ "path" ] = fi.absoluteDir().absoluteFilePath( manifest[ "main" ].toString() ); //this is our path to the JS
+                    result[ "path" ] = manifest[ "main" ]; //this is our path to the main JS script
                 }
                 if ( !manifest[ "scripts" ].isNull() )
                 {
-                    QStringList scripts;
-                    foreach ( QString s, manifest[ "scripts" ].toStringList() )
-                    {
-                        QFileInfo fi( path );
-                        scripts << fi.absoluteDir().absoluteFilePath( s );
-                    }
-                    result[ "scripts" ] = scripts;
+                    result[ "scripts" ] = manifest[ "scripts" ]; //any additional scripts to load before
                 }
             }
             if ( !variant[ "version" ].isNull() )
@@ -168,6 +190,25 @@ ResolverAccountFactory::metadataFromJsonFile( const QString& path )
         }
     }
     return result;
+}
+
+
+void
+ResolverAccountFactory::expandPaths( const QDir& contentDir, QVariantHash& configuration )
+{
+    if ( !configuration[ "path" ].isNull() )
+    {
+        configuration[ "path" ] = contentDir.absoluteFilePath( configuration[ "path" ].toString() ); //this is our path to the JS
+    }
+    if ( !configuration[ "scripts" ].isNull() )
+    {
+        QStringList scripts;
+        foreach ( QString s, configuration[ "scripts" ].toStringList() )
+        {
+            scripts << contentDir.absoluteFilePath( s );
+        }
+        configuration[ "scripts" ] = scripts;
+    }
 }
 
 

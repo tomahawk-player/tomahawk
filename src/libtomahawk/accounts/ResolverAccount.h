@@ -25,6 +25,8 @@
 
 #include <QPointer>
 
+class QDir;
+
 namespace Tomahawk {
 
 class ExternalResolverGui;
@@ -55,6 +57,7 @@ public:
 
 private:
     static QVariantHash metadataFromJsonFile( const QString& path );
+    static void expandPaths( const QDir& contentDir, QVariantHash& configuration );
 };
 
 /**
