@@ -1,5 +1,11 @@
 Version 0.7.0:
 
+Version 0.6.1:
+    * Improved stability.
+    * Improved UPnP detection and port-forwarding.
+    * Fixed scrolling behaviour of grid-views.
+    * Lots of small design tweaks and fixes.
+
 Version 0.6.0:
     * Improved icon theme with vector graphics.
     * Higher resolution artist and album images.
