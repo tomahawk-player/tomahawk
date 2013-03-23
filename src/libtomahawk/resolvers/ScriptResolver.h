@@ -40,7 +40,7 @@ Q_OBJECT
 public:
     explicit ScriptResolver( const QString& exe );
     virtual ~ScriptResolver();
-    static ExternalResolver* factory( const QString& exe );
+    static ExternalResolver* factory( const QString& exe, const QStringList& );
 
     virtual QString name() const              { return m_name; }
     virtual QPixmap icon() const              { return m_icon; }

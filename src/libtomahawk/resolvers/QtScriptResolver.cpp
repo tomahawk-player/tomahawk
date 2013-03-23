@@ -394,12 +394,13 @@ ScriptEngine::javaScriptConsoleMessage( const QString& message, int lineNumber, 
 }
 
 
-QtScriptResolver::QtScriptResolver( const QString& scriptPath )
+QtScriptResolver::QtScriptResolver( const QString& scriptPath, const QStringList& additionalScriptPaths )
     : Tomahawk::ExternalResolverGui( scriptPath )
     , m_ready( false )
     , m_stopped( true )
     , m_error( Tomahawk::ExternalResolver::NoError )
     , m_resolverHelper( new QtScriptResolverHelper( scriptPath, this ) )
+    , m_requiredScriptPaths( additionalScriptPaths )
 {
     tLog() << Q_FUNC_INFO << "Loading JS resolver:" << scriptPath;
 
@@ -430,14 +431,14 @@ QtScriptResolver::~QtScriptResolver()
 }
 
 
-Tomahawk::ExternalResolver* QtScriptResolver::factory( const QString& scriptPath )
+Tomahawk::ExternalResolver* QtScriptResolver::factory( const QString& scriptPath, const QStringList& additionalScriptPaths )
 {
     ExternalResolver* res = 0;
 
     const QFileInfo fi( scriptPath );
     if ( fi.suffix() == "js" || fi.suffix() == "script" )
     {
-        res = new QtScriptResolver( scriptPath );
+        res = new QtScriptResolver( scriptPath, additionalScriptPaths );
         tLog() << Q_FUNC_INFO << scriptPath << "Loaded.";
     }
 
@@ -488,6 +489,21 @@ QtScriptResolver::init()
     jslib.open( QIODevice::ReadOnly );
     m_engine->mainFrame()->evaluateJavaScript( jslib.readAll() );
     jslib.close();
+
+    // add resolver dependencies, if any
+    foreach ( QString s, m_requiredScriptPaths )
+    {
+        QFile reqFile( s );
+        if( !reqFile.open( QIODevice::ReadOnly ) )
+        {
+            qWarning() << "Failed to read contents of file:" << s << reqFile.errorString();
+            return;
+        }
+        const QByteArray reqContents = reqFile.readAll();
+
+        m_engine->setScriptPath( s );
+        m_engine->mainFrame()->evaluateJavaScript( reqContents );
+    }
 
     // add resolver
     m_engine->setScriptPath( filePath() );

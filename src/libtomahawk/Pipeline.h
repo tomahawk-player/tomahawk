@@ -36,7 +36,7 @@ namespace Tomahawk
 {
 class Resolver;
 class ExternalResolver;
-typedef boost::function<Tomahawk::ExternalResolver*(QString)> ResolverFactoryFunc;
+typedef boost::function<Tomahawk::ExternalResolver*( QString, QStringList )> ResolverFactoryFunc;
 
 class DLLEXPORT Pipeline : public QObject
 {
@@ -58,7 +58,7 @@ public:
     void reportArtists( QID qid, const QList< artist_ptr >& artists );
 
     void addExternalResolverFactory( ResolverFactoryFunc resolverFactory );
-    Tomahawk::ExternalResolver* addScriptResolver( const QString& scriptPath );
+    Tomahawk::ExternalResolver* addScriptResolver( const QString& scriptPath, const QStringList& additionalScriptPaths = QStringList() );
     void stopScriptResolver( const QString& scriptPath );
     void removeScriptResolver( const QString& scriptPath );
     QList< QPointer< ExternalResolver > > scriptResolvers() const { return m_scriptResolvers; }

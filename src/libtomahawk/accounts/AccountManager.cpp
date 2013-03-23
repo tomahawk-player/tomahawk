@@ -351,6 +351,10 @@ AccountManager::removeAccount( Account* account )
         m_accountsByAccountType[ type ] = accounts;
     }
 
+    ResolverAccount* raccount = qobject_cast< ResolverAccount* >( account );
+    if ( raccount )
+        raccount->removeBundle();
+
     TomahawkSettings::instance()->removeAccount( account->accountId() );
 
     account->removeFromConfig();

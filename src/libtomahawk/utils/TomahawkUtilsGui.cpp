@@ -707,6 +707,9 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
         case SoundcloudIcon:
             pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/soundcloud.svg", size );
             break;
+        case ResolverBundle:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/drop-all-songs.svg", size );
+            break;
 
         default:
             break;

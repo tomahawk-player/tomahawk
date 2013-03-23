@@ -451,7 +451,12 @@ SettingsDialog::openAccountConfig( Account* account, bool showDelete )
 void
 SettingsDialog::installFromFile()
 {
-    const QString resolver = QFileDialog::getOpenFileName( 0, tr( "Install resolver from file" ), TomahawkSettings::instance()->scriptDefaultPath() );
+    const QString resolver = QFileDialog::getOpenFileName( 0, tr( "Install resolver from file" ),
+                                                           TomahawkSettings::instance()->scriptDefaultPath(),
+                                                           tr( "Tomahawk Resolvers (*.axe *.js);;"
+                                                           "All files (*)" ),
+                                                           0,
+                                                           QFileDialog::ReadOnly );
 
     if( !resolver.isEmpty() )
     {
@@ -460,7 +465,7 @@ SettingsDialog::installFromFile()
 
         if ( resolverAbsoluteFilePath.baseName() == "spotify_tomahawkresolver" )
         {
-            // HACK if this is a spotify resolver, we treat is specially.
+            // HACK if this is a spotify resolver, we treat it specially.
             // usually we expect the user to just download the spotify resolver from attica,
             // however developers, those who build their own tomahawk, can't do that, or linux
             // users can't do that. However, we have an already-existing SpotifyAccount that we
@@ -486,6 +491,7 @@ SettingsDialog::installFromFile()
 
         Account* acct = AccountManager::instance()->accountFromPath( resolver );
 
+        Q_ASSERT( acct );
         AccountManager::instance()->addAccount( acct );
         TomahawkSettings::instance()->addAccount( acct->accountId() );
         AccountManager::instance()->enableAccount( acct );

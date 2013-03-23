@@ -911,16 +911,17 @@ verifyFile( const QString& filePath, const QString& signature )
 
 
 QString
-extractScriptPayload( const QString& filename, const QString& resolverId )
+extractScriptPayload( const QString& filename, const QString& resolverId, const QString& dirName )
 {
     // uses QuaZip to extract the temporary zip file to the user's tomahawk data/resolvers directory
     QDir resolverDir = appDataDir();
-    if ( !resolverDir.mkpath( QString( "atticaresolvers/%1" ).arg( resolverId ) ) )
+    if ( !resolverDir.mkpath( QString( "%1/%2" ).arg( dirName )
+                                                .arg( resolverId ) ) )
     {
-        tLog() << "Failed to mkdir resolver save dir:" << TomahawkUtils::appDataDir().absoluteFilePath( QString( "atticaresolvers/%1" ).arg( resolverId ) );
+        tLog() << "Failed to mkdir resolver save dir:" << TomahawkUtils::appDataDir().absoluteFilePath( QString( "%1/%2" ).arg( dirName ).arg( resolverId ) );
         return QString();
     }
-    resolverDir.cd( QString( "atticaresolvers/%1" ).arg( resolverId ) );
+    resolverDir.cd( QString( "%1/%2" ).arg( dirName ).arg( resolverId ) );
 
     if ( !unzipFileInFolder( filename, resolverDir ) )
     {
@@ -941,7 +942,8 @@ unzipFileInFolder( const QString& zipFileName, const QDir& folder )
     QuaZip zipFile( zipFileName );
     if ( !zipFile.open( QuaZip::mdUnzip ) )
     {
-        qWarning() << "Failed to QuaZip open:" << zipFile.getZipError();
+        qWarning() << "Failed to QuaZip open" << zipFileName
+                   << "with error:" << zipFile.getZipError();
         return false;
     }
 

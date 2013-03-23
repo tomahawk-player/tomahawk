@@ -89,7 +89,7 @@ namespace Tomahawk
     };
 
     class ExternalResolver;
-    typedef boost::function<Tomahawk::ExternalResolver*(QString)> ResolverFactoryFunc;
+    typedef boost::function<Tomahawk::ExternalResolver*( QString, QStringList )> ResolverFactoryFunc;
 
     namespace PlaylistModes {
         enum RepeatMode { NoRepeat, RepeatOne, RepeatAll };

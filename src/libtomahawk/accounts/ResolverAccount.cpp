@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -26,10 +27,13 @@
 #include "TomahawkSettings.h"
 #include "Source.h"
 #include "utils/Logger.h"
+#include "qjson/parser.h"
 
 #include <QFile>
 #include <QFileInfo>
 #include <QDir>
+
+#define MANUALRESOLVERS_DIR "manualresolvers"
 
 using namespace Tomahawk;
 using namespace Accounts;
@@ -61,13 +65,150 @@ Account*
 ResolverAccountFactory::createFromPath( const QString& path, const QString& factory,  bool isAttica )
 {
     qDebug() << "Creating ResolverAccount from path:" << path << "is attica" << isAttica;
+
+    const QFileInfo pathInfo( path );
+
     if ( isAttica )
     {
-        QFileInfo info( path );
-        return new AtticaResolverAccount( generateId( factory ), path, info.baseName() );
+        QVariantHash configuration;
+        QDir dir = pathInfo.absoluteDir();//assume we are in the code directory of a bundle
+        if ( dir.cdUp() && dir.cdUp() ) //go up twice to the content dir, if any
+        {
+            QString metadataFilePath = dir.absoluteFilePath( "metadata.json" );
+            configuration = metadataFromJsonFile( metadataFilePath );
+            expandPaths( dir, configuration );
+        }
+        return new AtticaResolverAccount( generateId( factory ), path, pathInfo.baseName(), configuration );
     }
-    else
-        return new ResolverAccount( generateId( factory ), path );
+    else //on filesystem, but it could be a bundle or a legacy resolver file
+    {
+        QString realPath( path );
+
+        QVariantHash configuration;
+
+        if ( pathInfo.suffix() == "axe" )
+        {
+            QString uniqueName = uuid();
+            QDir dir( TomahawkUtils::extractScriptPayload( pathInfo.filePath(),
+                                                           uniqueName,
+                                                           MANUALRESOLVERS_DIR ) );
+            if ( !( dir.exists() && dir.isReadable() ) ) //decompression fubar
+                return 0;
+
+            if ( !dir.cd( "content" ) ) //more fubar
+                return 0;
+
+            QString metadataFilePath = dir.absoluteFilePath( "metadata.json" );
+            configuration = metadataFromJsonFile( metadataFilePath );
+
+            configuration[ "bundleDir" ] = uniqueName;
+
+            if ( !configuration[ "pluginName" ].isNull() && !configuration[ "pluginName" ].toString().isEmpty() )
+            {
+                dir.cdUp();
+                if ( !dir.cdUp() ) //we're in MANUALRESOLVERS_DIR
+                    return 0;
+
+                QString name = configuration[ "pluginName" ].toString();
+
+                QString namePath = dir.absoluteFilePath( name );
+                QFileInfo npI( namePath );
+
+                if ( npI.exists() && npI.isDir() )
+                {
+                    TomahawkUtils::removeDirectory( namePath );
+                }
+
+                dir.rename( uniqueName, name );
+
+                configuration[ "bundleDir" ] = name;
+
+                if ( !dir.cd( QString( "%1/content" ).arg( name ) ) ) //should work if it worked once
+                    return 0;
+            }
+
+            expandPaths( dir, configuration );
+
+            realPath = configuration[ "path" ].toString();
+            if ( realPath.isEmpty() )
+                return 0;
+        }
+        else //either legacy resolver or uncompressed bundle, so we look for a metadata file
+        {
+            QDir dir = pathInfo.absoluteDir();//assume we are in the code directory of a bundle
+            if ( dir.cdUp() && dir.cdUp() ) //go up twice to the content dir, if any
+            {
+                QString metadataFilePath = dir.absoluteFilePath( "metadata.json" );
+                configuration = metadataFromJsonFile( metadataFilePath );
+                expandPaths( dir, configuration );
+                configuration[ "path" ] = realPath; //our initial path still overrides whatever the desktop file says
+            }
+            //else we just have empty metadata (legacy resolver without desktop file)
+        }
+
+        //TODO: handle multi-account resolvers
+
+        return new ResolverAccount( generateId( factory ), realPath, configuration );
+    }
+}
+
+
+QVariantHash
+ResolverAccountFactory::metadataFromJsonFile( const QString& path )
+{
+    QVariantHash result;
+    QFile metadataFile( path );
+    if ( metadataFile.open( QIODevice::ReadOnly | QIODevice::Text ) )
+    {
+        QJson::Parser parser;
+        bool ok;
+        QVariantMap variant = parser.parse( metadataFile.readAll(), &ok ).toMap();
+
+        if ( ok )
+        {
+            result[ "pluginName" ] = variant[ "pluginName" ];
+            result[ "author" ] = variant[ "author" ];
+            result[ "description" ] = variant[ "description" ];
+            if ( !variant[ "manifest" ].isNull() )
+            {
+                QVariantMap manifest = variant[ "manifest" ].toMap();
+                if ( !manifest[ "main" ].isNull() )
+                {
+                    result[ "path" ] = manifest[ "main" ]; //this is our path to the main JS script
+                }
+                if ( !manifest[ "scripts" ].isNull() )
+                {
+                    result[ "scripts" ] = manifest[ "scripts" ]; //any additional scripts to load before
+                }
+            }
+            if ( !variant[ "version" ].isNull() )
+                result[ "version" ] = variant[ "version" ];
+            if ( !variant[ "revision" ].isNull() )
+                result[ "revision" ] = variant[ "revision" ];
+            if ( !variant[ "timestamp" ].isNull() )
+                result[ "timestamp" ] = variant[ "timestamp" ];
+        }
+    }
+    return result;
+}
+
+
+void
+ResolverAccountFactory::expandPaths( const QDir& contentDir, QVariantHash& configuration )
+{
+    if ( !configuration[ "path" ].isNull() )
+    {
+        configuration[ "path" ] = contentDir.absoluteFilePath( configuration[ "path" ].toString() ); //this is our path to the JS
+    }
+    if ( !configuration[ "scripts" ].isNull() )
+    {
+        QStringList scripts;
+        foreach ( QString s, configuration[ "scripts" ].toStringList() )
+        {
+            scripts << contentDir.absoluteFilePath( s );
+        }
+        configuration[ "scripts" ] = scripts;
+    }
 }
 
 
@@ -84,11 +225,12 @@ ResolverAccount::ResolverAccount( const QString& accountId )
 }
 
 
-ResolverAccount::ResolverAccount( const QString& accountId, const QString& path )
+ResolverAccount::ResolverAccount( const QString& accountId, const QString& path, const QVariantHash& initialConfiguration )
     : Account( accountId )
 {
-    QVariantHash configuration;
+    QVariantHash configuration( initialConfiguration );
     configuration[ "path" ] = path;
+
     setConfiguration( configuration );
 
     init( path );
@@ -128,7 +270,13 @@ ResolverAccount::hookupResolver()
 {
     tDebug() << "Hooking up resolver:" << configuration().value( "path" ).toString() << enabled();
 
-    m_resolver = QPointer< ExternalResolverGui >( qobject_cast< ExternalResolverGui* >( Pipeline::instance()->addScriptResolver( configuration().value( "path" ).toString() ) ) );
+    QString mainScriptPath = configuration().value( "path" ).toString();
+    QStringList additionalPaths;
+    if ( configuration().contains( "scripts" ) )
+        additionalPaths = configuration().value( "scripts" ).toStringList();
+
+    Tomahawk::ExternalResolver* er = Pipeline::instance()->addScriptResolver( mainScriptPath, additionalPaths );
+    m_resolver = QPointer< ExternalResolverGui >( qobject_cast< ExternalResolverGui* >( er ) );
     connect( m_resolver.data(), SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
 
     // What resolver do we have here? Should only be types that are 'real' resolvers
@@ -242,6 +390,48 @@ ResolverAccount::icon() const
     return m_resolver.data()->icon();
 }
 
+
+QString
+ResolverAccount::description() const
+{
+    return configuration().value( "description" ).toString();
+}
+
+
+QString
+ResolverAccount::author() const
+{
+    return configuration().value( "author" ).toString();
+}
+
+
+QString
+ResolverAccount::version() const
+{
+    QString versionString = configuration().value( "version" ).toString();
+    QString build = configuration().value( "revision" ).toString();
+    if ( !build.isEmpty() )
+        return versionString + "-" + build;
+    return versionString;
+}
+
+
+void
+ResolverAccount::removeBundle()
+{
+    QString bundleDir = configuration()[ "bundleDir" ].toString();
+    if ( bundleDir.isEmpty() )
+        return;
+
+    QString expectedPath = TomahawkUtils::appDataDir().absoluteFilePath( QString( "%1/%2" ).arg( MANUALRESOLVERS_DIR ).arg( bundleDir ) );
+    QFileInfo fi( expectedPath );
+    if ( fi.exists() && fi.isDir() && fi.isWritable() )
+    {
+        TomahawkUtils::removeDirectory( expectedPath );
+    }
+}
+
+
 /// AtticaResolverAccount
 
 AtticaResolverAccount::AtticaResolverAccount( const QString& accountId )
@@ -254,8 +444,8 @@ AtticaResolverAccount::AtticaResolverAccount( const QString& accountId )
 
 }
 
-AtticaResolverAccount::AtticaResolverAccount( const QString& accountId, const QString& path, const QString& atticaId )
-    : ResolverAccount( accountId, path )
+AtticaResolverAccount::AtticaResolverAccount( const QString& accountId, const QString& path, const QString& atticaId, const QVariantHash& initialConfiguration )
+    : ResolverAccount( accountId, path, initialConfiguration )
     , m_atticaId( atticaId )
 {
     QVariantHash conf = configuration();

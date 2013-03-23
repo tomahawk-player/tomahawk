@@ -96,8 +96,10 @@ ScriptResolver::~ScriptResolver()
 
 
 Tomahawk::ExternalResolver*
-ScriptResolver::factory( const QString& exe )
+ScriptResolver::factory( const QString& exe, const QStringList& unused )
 {
+    Q_UNUSED( unused )
+
     ExternalResolver* res = 0;
 
     const QFileInfo fi( exe );
