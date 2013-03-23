@@ -90,6 +90,10 @@ public:
 signals:
     void paramsGenerated( const Echonest::DynamicPlaylist::PlaylistParams& );
 
+    void stylesSaved();
+    void moodsSaved();
+    void genresSaved();
+
 private slots:
     void staticFinished();
     void dynamicStarted();
@@ -97,6 +101,10 @@ private slots:
 
     void doGenerate( const Echonest::DynamicPlaylist::PlaylistParams& params );
     void doStartOnDemand( const Echonest::DynamicPlaylist::PlaylistParams& params );
+
+    void loadStyles();
+    void loadMoods();
+    void loadGenres();
 
     void stylesReceived();
     void moodsReceived();
@@ -113,7 +121,6 @@ private:
     bool onlyThisArtistType( Echonest::DynamicPlaylist::ArtistTypeEnum type ) const throw( std::runtime_error );
 
     void loadStylesMoodsAndGenres();
-    void saveStylesMoodsAndGenres();
 
     Echonest::DynamicPlaylist* m_dynPlaylist;
     QPixmap m_logo;
