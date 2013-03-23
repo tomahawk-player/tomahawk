@@ -5,11 +5,9 @@ SET(CMAKE_SYSTEM_NAME Windows)
 
 
 # specify the cross compiler
-SET(CMAKE_C_COMPILER ccache ${MINGW_PREFIX}-gcc)
-SET(CMAKE_C_FLAGS "-fno-keep-inline-dllexport")
-SET(CMAKE_CXX_COMPILER ccache ${MINGW_PREFIX}-g++)
-SET(CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS})
-SET(CMAKE_RC_COMPILER /usr/bin/${MINGW_PREFIX}-windres)
+SET(CMAKE_C_COMPILER ${MINGW_PREFIX}-gcc)
+SET(CMAKE_CXX_COMPILER ${MINGW_PREFIX}-g++)
+SET(CMAKE_RC_COMPILER ${MINGW_PREFIX}-windres)
 
 # where is the target environment containing libraries
 SET(CMAKE_FIND_ROOT_PATH  /usr/${MINGW_PREFIX}/sys-root/mingw)
@@ -18,6 +16,19 @@ SET(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE  ONLY)
 SET(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM  NEVER)
 
 
-# configure qt variables
-SET(QT_LIBRARY_DIR  /usr/${MINGW_PREFIX}/bin)
-SET(QT_PLUGINS_DIR  ${CMAKE_FIND_ROOT_PATH}/lib/qt4/plugins/)
+## configure qt variables
+# generic
+SET(QMAKESPEC               win32-g++-cross)
+
+# dirs
+SET(QT_LIBRARY_DIR          /usr/${MINGW_PREFIX}/bin)
+SET(QT_PLUGINS_DIR          ${CMAKE_FIND_ROOT_PATH}/lib/qt4/plugins)
+SET(QT_MKSPECS_DIR          ${CMAKE_FIND_ROOT_PATH}/share/qt4/mkspecs)
+SET(QT_QT_INCLUDE_DIR       ${CMAKE_FIND_ROOT_PATH}/include)
+
+# qt tools
+SET(QT_QMAKE_EXECUTABLE     ${MINGW_PREFIX}-qmake )
+SET(QT_MOC_EXECUTABLE       ${MINGW_PREFIX}-moc)
+SET(QT_RCC_EXECUTABLE       ${MINGW_PREFIX}-rcc)
+SET(QT_UIC_EXECUTABLE       ${MINGW_PREFIX}-uic)
+SET(QT_LRELEASE_EXECUTABLE  ${MINGW_PREFIX}-lrelease)
