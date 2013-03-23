@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -19,10 +20,7 @@
 
 #include "StreamConnection.h"
 
-#include <QFile>
-
 #include "Result.h"
-
 #include "BufferIoDevice.h"
 #include "network/ControlConnection.h"
 #include "network/Servent.h"
@@ -30,6 +28,10 @@
 #include "database/Database.h"
 #include "SourceList.h"
 #include "utils/Logger.h"
+
+#include <boost/bind.hpp>
+
+#include <QFile>
 
 using namespace Tomahawk;
 
@@ -179,8 +181,16 @@ StreamConnection::startSending( const Tomahawk::result_ptr& result )
     m_result = result;
     qDebug() << "Starting to transmit" << m_result->url();
 
-    QSharedPointer<QIODevice> io = Servent::instance()->getIODeviceForUrl( m_result );
-    if( !io )
+    boost::function< void ( QSharedPointer< QIODevice >& ) > callback =
+            boost::bind( &StreamConnection::reallyStartSending, this, result, _1 );
+    Servent::instance()->getIODeviceForUrl( m_result, callback );
+}
+
+
+void
+StreamConnection::reallyStartSending( const Tomahawk::result_ptr& result, QSharedPointer< QIODevice >& io )
+{
+    if( !io || io.isNull() )
     {
         qDebug() << "Couldn't read from source:" << m_result->url();
         shutdown();

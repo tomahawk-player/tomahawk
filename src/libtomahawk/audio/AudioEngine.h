@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2012, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -128,7 +129,8 @@ signals:
     void error( AudioEngine::AudioErrorCode errorCode );
 
 private slots:
-    bool loadTrack( const Tomahawk::result_ptr& result );
+    void loadTrack( const Tomahawk::result_ptr& result ); //async!
+    void performLoadTrack( const Tomahawk::result_ptr& result, QSharedPointer< QIODevice >& io ); //only call from loadTrack kthxbi
     void loadPreviousTrack();
     void loadNextTrack();
 
