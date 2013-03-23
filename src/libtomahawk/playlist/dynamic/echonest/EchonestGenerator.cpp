@@ -29,7 +29,7 @@
 #include "SourceList.h"
 #include <QFile>
 #include <QDir>
-#include <QMutex>
+#include <QReadWriteLock>
 #include <EchonestCatalogSynchronizer.h>
 
 using namespace Tomahawk;
@@ -42,9 +42,9 @@ QNetworkReply* EchonestGenerator::s_moodsJob = 0;
 QNetworkReply* EchonestGenerator::s_stylesJob = 0;
 QNetworkReply* EchonestGenerator::s_genresJob = 0;
 
-static QMutex s_moods_mutex;
-static QMutex s_styles_mutex;
-static QMutex s_genres_mutex;
+static QReadWriteLock s_moods_lock;
+static QReadWriteLock s_styles_lock;
+static QReadWriteLock s_genres_lock;
 
 CatalogManager* EchonestGenerator::s_catalogs = 0;
 
@@ -631,17 +631,17 @@ EchonestGenerator::loadStyles()
 {
     if ( s_styles.isEmpty() )
     {
-        if ( s_styles_mutex.tryLock() )
+        if ( s_styles_lock.tryLockForRead() )
         {
-            s_styles_mutex.unlock();
             QVariant styles = TomahawkUtils::Cache::instance()->getData( "EchonesGenerator", "styles" );
+            s_styles_lock.unlock();
             if ( styles.isValid() && styles.canConvert< QStringList >() )
             {
                 s_styles = styles.toStringList();
             }
             else
             {
-                s_styles_mutex.lock();
+                s_styles_lock.lockForWrite();
                 tLog() << "Styles not in cache or too old, refetching styles ...";
                 s_stylesJob = Echonest::Artist::listTerms( "style" );
                 connect( s_stylesJob, SIGNAL( finished() ), this, SLOT( stylesReceived() ) );
@@ -659,16 +659,16 @@ EchonestGenerator::loadMoods()
 {
     if ( s_moods.isEmpty() )
     {
-        if ( s_moods_mutex.tryLock() )
+        if ( s_moods_lock.tryLockForRead() )
         {
-            s_moods_mutex.unlock();
             QVariant moods = TomahawkUtils::Cache::instance()->getData( "EchonesGenerator", "moods" );
+            s_moods_lock.unlock();
             if ( moods.isValid() && moods.canConvert< QStringList >() ) {
                 s_moods = moods.toStringList();
             }
             else
             {
-                s_moods_mutex.lock();
+                s_moods_lock.lockForWrite();
                 tLog() << "Moods not in cache or too old, refetching moods ...";
                 s_moodsJob = Echonest::Artist::listTerms( "mood" );
                 connect( s_moodsJob, SIGNAL( finished() ), this, SLOT( moodsReceived() ) );
@@ -686,17 +686,17 @@ EchonestGenerator::loadGenres()
 {
     if ( s_genres.isEmpty() )
     {
-        if ( s_genres_mutex.tryLock() )
+        if ( s_genres_lock.tryLockForRead() )
         {
-            s_genres_mutex.unlock();
             QVariant genres = TomahawkUtils::Cache::instance()->getData( "EchonesGenerator", "genres" );
+            s_genres_lock.unlock();
             if ( genres.isValid() && genres.canConvert< QStringList >() )
             {
                 s_genres = genres.toStringList();
             }
             else
             {
-                s_genres_mutex.lock();
+                s_genres_lock.lockForWrite();
                 tLog() << "Genres not in cache or too old, refetching genres ...";
                 s_genresJob = Echonest::Artist::fetchGenres();
                 connect( s_genresJob, SIGNAL( finished() ), this, SLOT( genresReceived() ) );
@@ -733,7 +733,7 @@ EchonestGenerator::moodsReceived()
     s_moodsJob = 0;
 
     TomahawkUtils::Cache::instance()->putData( "EchonesGenerator", 1209600000 /* 2 weeks */, "moods", QVariant::fromValue< QStringList >( s_moods ) );
-    s_moods_mutex.unlock();
+    s_moods_lock.unlock();
     emit moodsSaved();
 }
 
@@ -762,7 +762,7 @@ EchonestGenerator::stylesReceived()
     s_stylesJob = 0;
 
     TomahawkUtils::Cache::instance()->putData( "EchonesGenerator", 1209600000 /* 2 weeks */, "styles", QVariant::fromValue< QStringList >( s_styles ) );
-    s_styles_mutex.unlock();
+    s_styles_lock.unlock();
     emit stylesSaved();
 }
 
@@ -789,6 +789,6 @@ EchonestGenerator::genresReceived()
     s_genresJob = 0;
 
     TomahawkUtils::Cache::instance()->putData( "EchonesGenerator", 1209600000 /* 2 weeks */, "genres", QVariant::fromValue< QStringList >( s_genres ) );
-    s_genres_mutex.unlock();
+    s_genres_lock.unlock();
     emit genresSaved();
 }
