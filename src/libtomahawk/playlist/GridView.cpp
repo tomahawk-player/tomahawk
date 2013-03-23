@@ -232,12 +232,10 @@ GridView::verifySize()
     if ( !autoResize() || !m_model )
         return;
 
-#ifdef Q_WS_X11
-//    int scrollbar = verticalScrollBar()->isVisible() ? verticalScrollBar()->width() + 16 : 0;
-    int scrollbar = 0; verticalScrollBar()->rect().width();
-#else
     int scrollbar = verticalScrollBar()->rect().width();
-#endif
+
+    if ( rect().width() - contentsRect().width() > scrollbar ) //HACK: if the contentsRect includes the scrollbar
+        scrollbar = 0; //don't count it any more
 
     const int rectWidth = contentsRect().width() - scrollbar - 3;
     const int itemWidth = 160;
@@ -274,12 +272,10 @@ GridView::layoutItems()
 {
     if ( autoFitItems() && m_model )
     {
-#ifdef Q_WS_X11
-//        int scrollbar = verticalScrollBar()->isVisible() ? verticalScrollBar()->width() + 16 : 0;
-        int scrollbar = 0; verticalScrollBar()->rect().width();
-#else
         int scrollbar = verticalScrollBar()->rect().width();
-#endif
+
+        if ( rect().width() - contentsRect().width() >= scrollbar ) //HACK: if the contentsRect includes the scrollbar
+            scrollbar = 0; //don't count it any more
 
         const int rectWidth = contentsRect().width() - scrollbar - 3;
         const int itemWidth = 160;
