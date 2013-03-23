@@ -1359,7 +1359,7 @@ ansluta och strömma från dig?</translation>
         <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="559"/>
         <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="595"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
-        <translation type="unfinished"/>
+        <translation>Skript Resolver-varning:  API-anrop %1 returnerade data synkront</translation>
     </message>
 </context>
 <context>
@@ -3117,25 +3117,25 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="193"/>
         <source>&lt;br /&gt;&lt;i&gt;on&lt;/i&gt; %1</source>
         <comment>%1 is an album name</comment>
-        <translation type="unfinished"/>
+        <translation>&lt;br/&gt;&lt;i&gt;på&lt;/i&gt; %1</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="195"/>
         <source>%1&lt;br /&gt;&lt;i&gt;by&lt;/i&gt; %2%3.</source>
         <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing</comment>
-        <translation type="unfinished"/>
+        <translation>%1&lt;br /&gt;&lt;i&gt;av&lt;/i&gt; %2%3.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="204"/>
         <source>on &quot;%1&quot;</source>
         <comment>%1 is an album name</comment>
-        <translation type="unfinished"/>
+        <translation>på &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="206"/>
         <source>&quot;%1&quot; by %2%3.</source>
         <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing</comment>
-        <translation type="unfinished"/>
+        <translation>&quot;%1&quot; av %2%3.</translation>
     </message>
 </context>
 <context>
