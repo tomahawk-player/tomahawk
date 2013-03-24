@@ -369,17 +369,17 @@ ansluta och strömma från dig?</translation>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="648"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="664"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>Tyvärr! Tomahawk kunde inte hitta spåret &apos;%1&apos; av %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="672"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="688"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>Tyvärr! Tomahawk kunde inte hitta artisten &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="698"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="714"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>Tyvärr! Tomahawk kunde inte hitta albumet &apos;%1&apos; av %2 </translation>
     </message>
@@ -1355,9 +1355,9 @@ ansluta och strömma från dig?</translation>
 <context>
     <name>QtScriptResolver</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="524"/>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="559"/>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="595"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="591"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="626"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="662"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
         <translation>Skript Resolver-varning:  API-anrop %1 returnerade data synkront</translation>
     </message>
@@ -1421,7 +1421,7 @@ ansluta och strömma från dig?</translation>
 <context>
     <name>ScriptEngine</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="341"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="392"/>
         <source>Script Resolver Error: %1 %2 %3 %4</source>
         <translation>Skriptfel i resolvern: %1 %2 %3 %4</translation>
     </message>
@@ -1500,12 +1500,17 @@ ansluta och strömma från dig?</translation>
         <translation>Installera resolver från fil</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="501"/>
+        <location filename="../src/SettingsDialog.cpp" line="456"/>
+        <source>Tomahawk Resolvers (*.axe *.js);;All files (*)</source>
+        <translation>Tomahawk Resolvers (*.axe *.js);;Alla filer (*)</translation>
+    </message>
+    <message>
+        <location filename="../src/SettingsDialog.cpp" line="507"/>
         <source>Delete all Access Control entries?</source>
         <translation>Ta bort alla åtkomstkontrollsposter</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="502"/>
+        <location filename="../src/SettingsDialog.cpp" line="508"/>
         <source>Do you really want to delete all Access Control entries? You will be asked for a decision again for each peer that you connect to.</source>
         <translation>Vill du verkligen ta bort alla åtkomstkontrollsposter? Du kommer att bli förfrågad igen för varje nod du försöker ansluta till.</translation>
     </message>
@@ -2074,22 +2079,22 @@ och radiostationer baserat på din personliga profil</translation>
         <translation>Ta bort</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="363"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="366"/>
         <source>%1 downloads</source>
         <translation>%1 nedladdningar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="549"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="569"/>
         <source>Online</source>
         <translation>Uppkopplad</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="554"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="574"/>
         <source>Connecting...</source>
         <translation>Ansluter…</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="559"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="579"/>
         <source>Offline</source>
         <translation>Nedkopplad</translation>
     </message>
@@ -2097,12 +2102,12 @@ och radiostationer baserat på din personliga profil</translation>
 <context>
     <name>Tomahawk::Accounts::AccountModel</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="540"/>
+        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="546"/>
         <source>Manual Install Required</source>
         <translation>Manuell installation krävs</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="543"/>
+        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="549"/>
         <source>Unfortunately, automatic installation of this resolver is not available or disabled for your platform.&lt;br /&gt;&lt;br /&gt;Please use &quot;Install from file&quot; above, by fetching it from your distribution or compiling it yourself. Further instructions can be found here:&lt;br /&gt;&lt;br /&gt;http://www.tomahawk-player.org/resolvers/%1</source>
         <translation>Tyvärr är inte den automatiska installationen av denna resolvern tillgänglig eller så är den inte tillgänglig för din plattform&lt;br /&gt;&lt;br /&gt;Var god och använd &quot;Installera från fil&quot; ovan genom att hämta den från din distribution, eller genom att kompilera den själv. Fler instruktioner går att finnas här:&lt;br /&gt; &lt;br /&gt;http://www.tomahawk-player.org/resolvers/%1</translation>
     </message>
@@ -3670,7 +3675,7 @@ anger du PIN-koden här:</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="574"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
-        <translation>Entschuldige, dein Filter &apos;%1&apos; erzeugte keine Ergebnisse.</translation>
+        <translation>Tyvärr, ditt filter &apos;%1&apos; gav inga träffar</translation>
     </message>
 </context>
 <context>
@@ -3709,7 +3714,7 @@ anger du PIN-koden här:</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/TreeView.cpp" line="296"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
-        <translation>Tyvärr! Dina filter &apos;%1&apos; matchade inga resultat</translation>
+        <translation>Tyvärr! Ditt filter &apos;%1&apos; gav inga träffar</translation>
     </message>
 </context>
 <context>
@@ -3722,7 +3727,7 @@ anger du PIN-koden här:</translation>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="119"/>
         <source>The Twitter plugin allows you to discover and play music from your Twitter friends running Tomahawk and post messages to your account.</source>
-        <translation>Twitter-pluginnet låter dig utforska och spela musik från dina Twitter-vänner som använder Tomahawk, samt posta meddelanden till ditt konto</translation>
+        <translation>Twitter-pluginnet låter dig utforska och spela musik från dina Twitter-vänner som använder Tomahawk, samt posta tweets till ditt konto</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="137"/>
@@ -3748,7 +3753,7 @@ If you want to connect Tomahawk to your friends using Twitter, select the type o
 
 You can re-send a sync message at any time simply by sending another tweet using the button.</source>
         <translation>
-Om du bara vill posta ett tweet så är du färdig.
+Vill posta ett tweet, är du färdig.
 
 Om du vill ansluta Tomahawk till dina vänner med Twitter så välj vilken typ av tweet och tryck på knappen nedan för att skicka ett synkat meddelande. Båda måste följa varandra då direktmeddelanden används. Var sedan (väldigt) tålmodig då det kan ta flera minuter!
 
@@ -3831,12 +3836,12 @@ Du kan skicka om ett synkat meddelande när som helst genom att skicka ett tweet
     <message>
         <location filename="../src/libtomahawk/widgets/WelcomeWidget.ui" line="34"/>
         <source>Recent Additions</source>
-        <translation>Senaste tillägg</translation>
+        <translation>Senast tillagda</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/WelcomeWidget.ui" line="55"/>
         <source>Newest Stations &amp; Playlists</source>
-        <translation>Nyaste stationer och spellistor</translation>
+        <translation>Nyaste stationer &amp; spellistor</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/WelcomeWidget.ui" line="70"/>
@@ -3846,7 +3851,7 @@ Du kan skicka om ett synkat meddelande när som helst genom att skicka ett tweet
     <message>
         <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="85"/>
         <source>Recently played tracks</source>
-        <translation>Senast uppspelade spår</translation>
+        <translation>Nyligen spelade spår</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="174"/>
