@@ -397,6 +397,7 @@ TomahawkApp::printHelp()
     echo( "  --testdb       Use a test database instead of real collection" );
     echo( "  --noupnp       Disable UPnP" );
     echo( "  --nosip        Disable SIP" );
+    echo( "  --verbose      Increase verbosity (activates debug output)" );
     echo();
     echo( "Playback Controls:" );
     echo( "  --play         Start/resume playback" );
