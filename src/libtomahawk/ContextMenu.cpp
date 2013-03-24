@@ -135,13 +135,18 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
 
     if ( m_supportedActions & ActionPage && itemCount() == 1 )
     {
+        // Ampersands need to be escaped as they indicate a keyboard shortcut
+        const QString track = m_queries.first()->track().replace( QString( "&" ), QString( "&&" ) );
         m_sigmap->setMapping( addAction( ImageRegistry::instance()->icon( RESPATH "images/track-icon.svg" ),
-                                         tr( "&Go to \"%1\"" ).arg( m_queries.first()->track() ) ), ActionTrackPage );
-        if ( !m_queries.first()->album().isEmpty() )
+                                         tr( "&Go to \"%1\"" ).arg( track ) ), ActionTrackPage );
+        if ( !m_queries.first()->album().isEmpty() ) {
+            const QString album = m_queries.first()->album().replace( QString( "&" ), QString( "&&" ) );
             m_sigmap->setMapping( addAction( ImageRegistry::instance()->icon( RESPATH "images/album-icon.svg" ),
-                                             tr( "Go to \"%1\"" ).arg( m_queries.first()->album() ) ), ActionAlbumPage );
+                                             tr( "Go to \"%1\"" ).arg( album ) ), ActionAlbumPage );
+        }
+        const QString artist = m_queries.first()->artist().replace( QString( "&" ), QString( "&&" ) );
         m_sigmap->setMapping( addAction( ImageRegistry::instance()->icon( RESPATH "images/artist-icon.svg" ),
-                                         tr( "Go to \"%1\"" ).arg( m_queries.first()->artist() ) ), ActionArtistPage );
+                                         tr( "Go to \"%1\"" ).arg( artist ) ), ActionArtistPage );
     }
 
     addSeparator();
@@ -193,10 +198,12 @@ ContextMenu::setAlbums( const QList<Tomahawk::album_ptr>& albums )
 
     if ( m_supportedActions & ActionPage && itemCount() == 1 )
     {
+        const QString album = m_albums.first()->name().replace( QString( "&" ), QString( "&&" ) );
         m_sigmap->setMapping( addAction( ImageRegistry::instance()->icon( RESPATH "images/album-icon.svg" ),
-                                         tr( "&Go to \"%1\"" ).arg( m_albums.first()->name() ) ), ActionAlbumPage );
+                                         tr( "&Go to \"%1\"" ).arg( album ) ), ActionAlbumPage );
+        const QString artist = m_albums.first()->artist()->name().replace( QString( "&" ), QString( "&&" ) );
         m_sigmap->setMapping( addAction( ImageRegistry::instance()->icon( RESPATH "images/artist-icon.svg" ),
-                                         tr( "Go to \"%1\"" ).arg( m_albums.first()->artist()->name() ) ), ActionArtistPage );
+                                         tr( "Go to \"%1\"" ).arg( artist ) ), ActionArtistPage );
     }
 
     //m_sigmap->setMapping( addAction( tr( "&Add to Playlist" ) ), ActionAddToPlaylist );
@@ -240,9 +247,11 @@ ContextMenu::setArtists( const QList<Tomahawk::artist_ptr>& artists )
 
     addSeparator();
 
-    if ( m_supportedActions & ActionPage && itemCount() == 1 )
+    if ( m_supportedActions & ActionPage && itemCount() == 1 ) {
+        const QString artist = m_artists.first()->name().replace( QString( "&" ), QString( "&&" ) );
         m_sigmap->setMapping( addAction( ImageRegistry::instance()->icon( RESPATH "images/artist-icon.svg" ),
-                                         tr( "&Go to \"%1\"" ).arg( m_artists.first()->name() ) ), ActionArtistPage );
+                                         tr( "&Go to \"%1\"" ).arg( artist ) ), ActionArtistPage );
+    }
 
     //m_sigmap->setMapping( addAction( tr( "&Add to Playlist" ) ), ActionAddToPlaylist );
 
