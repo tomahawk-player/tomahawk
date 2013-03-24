@@ -27,6 +27,7 @@
 #include "Result.h"
 #include "collection/Collection.h"
 #include "Source.h"
+#include "SourceList.h"
 #include "Artist.h"
 #include "Album.h"
 
@@ -43,7 +44,7 @@ ContextMenu::ContextMenu( QWidget* parent )
     m_sigmap = new QSignalMapper( this );
     connect( m_sigmap, SIGNAL( mapped( int ) ), SLOT( onTriggered( int ) ) );
 
-    m_supportedActions = ActionPlay | ActionQueue | ActionCopyLink | ActionLove | ActionStopAfter | ActionPage | ActionEditMetadata;
+    m_supportedActions = ActionPlay | ActionQueue | ActionPlaylist | ActionCopyLink | ActionLove | ActionStopAfter | ActionPage | ActionEditMetadata;
 }
 
 
@@ -71,6 +72,14 @@ ContextMenu::itemCount() const
 
 
 void
+ContextMenu::addToPlaylist( int playlistIdx )
+{
+    Tomahawk::playlist_ptr playlist = m_playlists.at( playlistIdx );
+    playlist->addEntries( m_queries, playlist->currentrevision() );
+}
+
+
+void
 ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
 {
     if ( queries.isEmpty() )
@@ -85,6 +94,23 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
 
     if ( m_supportedActions & ActionQueue )
         m_sigmap->setMapping( addAction( tr( "Add to &Queue" ) ), ActionQueue );
+
+    if ( m_supportedActions & ActionPlaylist ) {
+        // Get the current list of all playlists.
+        m_playlists = SourceList::instance()->getLocal()->dbCollection()->playlists();
+        m_playlists_sigmap = new QSignalMapper( this );
+
+        // Build the menu listing all available playlists
+        QMenu* playlistMenu = addMenu( tr( "Add to &Playlist" ) );
+        for ( int i = 0; i < m_playlists.length(); ++i )
+        {
+            QAction* action = new QAction( m_playlists.at(i)->title() , this );
+            playlistMenu->addAction(action);
+            m_playlists_sigmap->setMapping( action, i );
+            connect( action, SIGNAL( triggered() ), m_playlists_sigmap, SLOT( map() ));
+        }
+        connect( m_playlists_sigmap, SIGNAL( mapped( int ) ), this, SLOT( addToPlaylist( int ) ) );
+    }
 
     if ( m_supportedActions & ActionStopAfter && itemCount() == 1 )
     {
