@@ -230,6 +230,8 @@ namespace Tomahawk
             InfoUnLove = 91,
             InfoShareTrack = 92,
 
+            InfoFingerprintTrack = 95,
+
             InfoNotifyUser = 100,
 
             InfoInboxReceived = 101,

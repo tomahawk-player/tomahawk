@@ -35,7 +35,6 @@
 
 #include <QCoreApplication>
 
-
 using namespace Tomahawk;
 
 void
@@ -101,7 +100,7 @@ DirLister::scanDir( QDir dir, int depth )
 }
 
 
-DirListerThreadController::DirListerThreadController( QObject *parent )
+DirListerThreadController::DirListerThreadController( QObject* parent )
     : QThread( parent )
 {
     tDebug() << Q_FUNC_INFO;
@@ -139,6 +138,7 @@ MusicScanner::MusicScanner( MusicScanner::ScanMode scanMode, const QStringList& 
     , m_paths( paths )
     , m_batchsize( bs )
     , m_dirListerThreadController( 0 )
+    , m_fingerprint( true )
 {
     m_ext2mime.insert( "mp3",  TomahawkUtils::extensionToMimetype( "mp3" ) );
     m_ext2mime.insert( "ogg",  TomahawkUtils::extensionToMimetype( "ogg" ) );
@@ -174,8 +174,9 @@ void
 MusicScanner::startScan()
 {
     tDebug( LOGVERBOSE ) << "Loading mtimes...";
-    m_scanned = m_skipped = m_cmdQueue = 0;
+    m_scanned = m_skipped = m_fingerprinting = m_cmdQueue = 0;
     m_skippedFiles.clear();
+    m_fingerprintingFiles.clear();
 
     SourceList::instance()->getLocal()->scanningProgress( m_scanned );
 
@@ -183,9 +184,9 @@ MusicScanner::startScan()
     //FIXME: For multiple collection support make sure the right prefix gets passed in...or not...
     //bear in mind that simply passing in the top-level of a defined collection means it will not return items that need
     //to be removed that aren't in that root any longer -- might have to do the filtering in setMTimes based on strings
-    DatabaseCommand_FileMtimes *cmd = new DatabaseCommand_FileMtimes();
+    DatabaseCommand_FileMtimes* cmd = new DatabaseCommand_FileMtimes();
     connect( cmd, SIGNAL( done( QMap< QString, QMap< unsigned int, unsigned int > > ) ),
-                    SLOT( setFileMtimes( QMap< QString, QMap< unsigned int, unsigned int > > ) ) );
+             SLOT( setFileMtimes( QMap< QString, QMap< unsigned int, unsigned int > > ) ) );
 
     Database::instance()->enqueue( dbcmd_ptr( cmd ) );
     return;
@@ -207,7 +208,7 @@ MusicScanner::scan()
     tDebug( LOGEXTRA ) << "Num saved file mtimes from last scan:" << m_filemtimes.size();
 
     connect( this, SIGNAL( batchReady( QVariantList, QVariantList ) ),
-                     SLOT( commitBatch( QVariantList, QVariantList ) ), Qt::DirectConnection );
+             SLOT( commitBatch( QVariantList, QVariantList ) ), Qt::DirectConnection );
 
     if ( m_scanMode == MusicScanner::FileScan )
     {
@@ -225,7 +226,7 @@ void
 MusicScanner::scanFilePaths()
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
-    foreach( QString path, m_paths )
+    foreach ( QString path, m_paths )
     {
         QFileInfo fi( path );
         if ( fi.exists() && fi.isReadable() )
@@ -244,7 +245,7 @@ MusicScanner::postOps()
     if ( m_scanMode == MusicScanner::DirScan )
     {
         // any remaining stuff that wasnt emitted as a batch:
-        foreach( const QString& key, m_filemtimes.keys() )
+        foreach ( const QString& key, m_filemtimes.keys() )
         {
             if ( !m_filemtimes[ key ].keys().isEmpty() )
                 m_filesToDelete << m_filemtimes[ key ].keys().first();
@@ -281,8 +282,13 @@ MusicScanner::cleanup()
         m_dirListerThreadController = 0;
     }
 
-    tDebug() << Q_FUNC_INFO << "emitting finished!";
-    emit finished();
+    tDebug() << "FP: m_fingerprinting: " << m_fingerprinting;
+
+    if ( m_fingerprinting == 0 )
+    {
+        tDebug() << Q_FUNC_INFO << "emitting finished!";
+        emit finished();
+    }
 }
 
 
@@ -324,6 +330,64 @@ MusicScanner::commandFinished()
 
 
 void
+MusicScanner::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
+{
+    if ( requestData.caller != infoid() )
+        return;
+
+    QVariantMap returnedData = output.value< QVariantMap >();
+    QFileInfo fi( returnedData["file"].value< QString >() );
+
+    switch ( requestData.type )
+    {
+        case InfoSystem::InfoFingerprintTrack:
+
+            if ( --m_fingerprinting == 0 )
+            {
+                tDebug() << "FP: got info for all files, disconnecting info slots";
+
+                disconnect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+                    this, SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
+
+                disconnect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ),
+                    this, SLOT( infoSystemFinished( QString ) ) );
+            }
+
+            if ( fi.isFile() && returnedData.contains( "artist" ) && returnedData.contains( "title" ) )
+            {
+                tDebug() << "received valid metadata: " << returnedData["artist"].toString() << " - " << returnedData["title"].toString();
+                QVariantMap m = readAdditionalMetadata( fi );
+                m["artist"] = returnedData["artist"];
+                m["track"] = returnedData["title"];
+                m["album"] = returnedData["album"];
+                m["albumartist"] = returnedData["albumartist"];
+
+                commitFile( m );
+            }
+            else
+            {
+                tDebug() << "data is not valid";
+                m_skipped++;
+                m_skippedFiles << fi.canonicalFilePath();
+            }
+            break;
+        default:
+            Q_ASSERT( false );
+    }
+}
+
+
+void
+MusicScanner::infoSystemFinished( QString target )
+{
+    if ( target != infoid() )
+        return;
+
+    QMetaObject::invokeMethod( this, "postOps", Qt::QueuedConnection );
+}
+
+
+void
 MusicScanner::scanFile( const QFileInfo& fi )
 {
     if ( m_filemtimes.contains( "file://" + fi.canonicalFilePath() ) )
@@ -345,13 +409,7 @@ MusicScanner::scanFile( const QFileInfo& fi )
     if ( m.toMap().isEmpty() )
         return;
 
-    m_scannedfiles << m;
-    if ( m_batchsize != 0 && (quint32)m_scannedfiles.length() >= m_batchsize )
-    {
-        emit batchReady( m_scannedfiles, m_filesToDelete );
-        m_scannedfiles.clear();
-        m_filesToDelete.clear();
-    }
+    commitFile( m );
 }
 
 
@@ -371,31 +429,16 @@ MusicScanner::readFile( const QFileInfo& fi )
     if ( m_scanned % 100 == 0 )
         tDebug( LOGINFO ) << "Scan progress:" << m_scanned << fi.canonicalFilePath();
 
-    #ifdef COMPLEX_TAGLIB_FILENAME
-        const wchar_t *encodedName = reinterpret_cast< const wchar_t * >( fi.canonicalFilePath().utf16() );
-    #else
-        QByteArray fileName = QFile::encodeName( fi.canonicalFilePath() );
-        const char *encodedName = fileName.constData();
-    #endif
+    TagLib::FileRef f = getTagLibFileRef( fi );
 
-    TagLib::FileRef f( encodedName );
-    if ( f.isNull() || !f.tag() )
+    if ( !m_fingerprint && ( f.isNull() || !f.tag() ) )
     {
         m_skippedFiles << fi.canonicalFilePath();
         m_skipped++;
         return QVariantMap();
     }
 
-    int bitrate = 0;
-    int duration = 0;
-
     Tag *tag = Tag::fromFile( f );
-    if ( f.audioProperties() )
-    {
-        TagLib::AudioProperties *properties = f.audioProperties();
-        duration = properties->length();
-        bitrate = properties->bitrate();
-    }
 
     QString artist, album, track;
     if ( tag )
@@ -406,33 +449,129 @@ MusicScanner::readFile( const QFileInfo& fi )
     }
     if ( !tag || artist.isEmpty() || track.isEmpty() )
     {
-        // FIXME: do some clever filename guessing
-        m_skippedFiles << fi.canonicalFilePath();
-        m_skipped++;
+        if ( m_fingerprint )
+        {
+            m_fingerprintingFiles << fi.canonicalFilePath();
+            m_fingerprinting++;
+            fingerprintFile( fi );
+        }
+        else
+        {
+            m_skippedFiles << fi.canonicalFilePath();
+            m_skipped++;
+        }
         return QVariantMap();
     }
 
-    QString mimetype = m_ext2mime.value( suffix );
-    QString url( "file://%1" );
+    m_scanned++;
 
-    QVariantMap m;
-    m["url"]          = url.arg( fi.canonicalFilePath() );
-    m["mtime"]        = fi.lastModified().toUTC().toTime_t();
-    m["size"]         = (unsigned int)fi.size();
-    m["mimetype"]     = mimetype;
-    m["duration"]     = duration;
-    m["bitrate"]      = bitrate;
+    QVariantMap m = readAdditionalMetadata( fi );
+
     m["artist"]       = artist;
     m["album"]        = album;
     m["track"]        = track;
+
     m["albumpos"]     = tag->track();
     m["year"]         = tag->year();
     m["albumartist"]  = tag->albumArtist();
     m["composer"]     = tag->composer();
     m["discnumber"]   = tag->discNumber();
-    m["hash"]         = ""; // TODO
 
-    m_scanned++;
     return m;
 }
 
+
+void
+MusicScanner::commitFile( const QVariant& m )
+{
+    m_scannedfiles << m;
+    if ( m_batchsize != 0 && ( quint32 )m_scannedfiles.length() >= m_batchsize )
+    {
+        emit batchReady( m_scannedfiles, m_filesToDelete );
+        m_scannedfiles.clear();
+        m_filesToDelete.clear();
+    }
+}
+
+
+TagLib::FileRef
+MusicScanner::getTagLibFileRef(const QFileInfo& fi) const
+{
+    #ifdef COMPLEX_TAGLIB_FILENAME
+        const wchar_t* encodedName = reinterpret_cast< const wchar_t* >( fi.canonicalFilePath().utf16() );
+    #else
+        QByteArray fileName = QFile::encodeName( fi.canonicalFilePath() );
+        const char* encodedName = fileName.constData();
+    #endif
+
+    TagLib::FileRef f( encodedName );
+    return f;
+}
+
+
+void
+MusicScanner::fingerprintFile( const QFileInfo& fi )
+{
+    tDebug() << "Fingerprinting track: " << fi.canonicalFilePath();
+
+    Tomahawk::InfoSystem::InfoStringHash hash;
+    hash["file"] = fi.canonicalFilePath();
+
+    Tomahawk::InfoSystem::InfoRequestData requestData;
+    requestData.caller = infoid();
+    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( hash );
+    requestData.type = Tomahawk::InfoSystem::InfoFingerprintTrack;
+    requestData.allSources = true;
+
+    if ( m_fingerprinting == 1 )
+    {
+        connect( Tomahawk::InfoSystem::InfoSystem::instance(),
+                SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+                SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ), Qt::UniqueConnection );
+
+        connect( Tomahawk::InfoSystem::InfoSystem::instance(),
+                SIGNAL( finished( QString ) ),
+                SLOT( infoSystemFinished( QString ) ), Qt::UniqueConnection );
+    }
+
+    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+}
+
+
+QVariantMap
+MusicScanner::readAdditionalMetadata( const QFileInfo& fi ) const
+{
+    int bitrate = 0;
+    int duration = 0;
+
+    QString mimetype = m_ext2mime.value( fi.suffix().toLower() );
+    QString url( "file://%1" );
+
+    TagLib::FileRef f = getTagLibFileRef( fi );
+
+    if ( f.audioProperties() )
+    {
+        TagLib::AudioProperties* properties = f.audioProperties();
+        duration = properties->length();
+        bitrate = properties->bitrate();
+    }
+
+    QVariantMap m;
+    m["url"]          = url.arg( fi.canonicalFilePath() );
+    m["mtime"]        = fi.lastModified().toUTC().toTime_t();
+    m["size"]         = ( unsigned int )fi.size();
+    m["mimetype"]     = mimetype;
+    m["duration"]     = duration;
+    m["bitrate"]      = bitrate;
+    m["hash"]         = ""; // TODO
+
+    return m;
+}
+
+
+
+QString
+MusicScanner::infoid() const
+{
+    return "MusicScanner";
+}

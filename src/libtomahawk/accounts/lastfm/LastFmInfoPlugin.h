@@ -27,10 +27,18 @@
 #include <lastfm/Track.h>
 #include <lastfm/Audioscrobbler.h>
 #include <lastfm/ScrobblePoint.h>
+#include <lastfm/Fingerprint.h>
 
 #include <QObject>
 
 class QNetworkReply;
+class QFileInfo;
+
+/*namespace lastm
+{
+    class Fingerprint;
+    class FingerprintId;
+}*/
 
 namespace Tomahawk
 {
@@ -65,6 +73,8 @@ public slots:
     void albumInfoReturned();
     void chartReturned();
     void similarTracksReturned();
+    void fingerprintReturned();
+    void trackInfoReturned();
 
 protected slots:
     virtual void init();
@@ -81,6 +91,9 @@ private:
     void fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData );
     void fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData requestData );
     void fetchSimilarTracks( Tomahawk::InfoSystem::InfoRequestData requestData );
+    void fetchFingerprint( Tomahawk::InfoSystem::InfoRequestData requestData );
+
+    void fetchTrackInfo( Tomahawk::InfoSystem::InfoRequestData requestData, const QFileInfo& fi, int id );
 
     void createScrobbler();
     void nowPlaying( const QVariant& input );
@@ -97,6 +110,8 @@ private:
     QString m_pw;
 
     QList< QUrl > m_badUrls;
+
+    QMap< QNetworkReply* , QPair< QFileInfo, lastfm::Fingerprint* > > m_fingerprintMap;
 };
 
 }

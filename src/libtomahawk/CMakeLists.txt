@@ -371,6 +371,8 @@ IF(LIBLASTFM_FOUND)
         accounts/lastfm/LastFmAccount.cpp
         accounts/lastfm/LastFmConfig.cpp
         accounts/lastfm/LastFmInfoPlugin.cpp
+        #Temporary only - requires libmad - can we do this anyhow with libs we already use?
+        accounts/lastfm/MadSource.cpp
     )
 ENDIF(LIBLASTFM_FOUND)
 
@@ -521,6 +523,11 @@ TARGET_LINK_LIBRARIES( tomahawklib
     ${QT_QTCORE_LIBRARY}
     ${OS_SPECIFIC_LINK_LIBRARIES}
     ${CMAKE_THREAD_LIBS_INIT}
+    #Temporary only
+    ${mad_PKGCONF_LDFLAGS}
+    #CMake should also find fp library
+    lastfm_fingerprint
+
     ${LINK_LIBRARIES}
 )
 

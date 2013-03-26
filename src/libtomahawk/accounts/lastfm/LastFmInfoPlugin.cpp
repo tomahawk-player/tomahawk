@@ -36,8 +36,14 @@
 
 #include <lastfm/ws.h>
 #include <lastfm/XmlQuery.h>
+#include <lastfm/Track.h>
+#include <lastfm/Fingerprint.h>
+#include <lastfm/FingerprintableSource.h>
+
+#include "MadSource.h"
 
 #include <qjson/parser.h>
+#include <boost/concept_check.hpp>
 
 using namespace Tomahawk::Accounts;
 using namespace Tomahawk::InfoSystem;
@@ -48,7 +54,7 @@ LastFmInfoPlugin::LastFmInfoPlugin( LastFmAccount* account )
     , m_account( account )
     , m_scrobbler( 0 )
 {
-    m_supportedGetTypes << InfoAlbumCoverArt << InfoArtistImages << InfoArtistSimilars << InfoArtistSongs << InfoArtistBiography << InfoChart << InfoChartCapabilities << InfoTrackSimilars;
+    m_supportedGetTypes << InfoAlbumCoverArt << InfoArtistImages << InfoArtistSimilars << InfoArtistSongs << InfoArtistBiography << InfoChart << InfoChartCapabilities << InfoTrackSimilars << InfoFingerprintTrack;
     m_supportedPushTypes << InfoSubmitScrobble << InfoSubmitNowPlaying << InfoLove << InfoUnLove;
 }
 
@@ -135,6 +141,10 @@ LastFmInfoPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
 
         case InfoTrackSimilars:
             fetchSimilarTracks( requestData );
+            break;
+
+        case InfoFingerprintTrack:
+            fetchFingerprint( requestData );
             break;
 
         default:
@@ -406,6 +416,78 @@ LastFmInfoPlugin::fetchAlbumInfo( Tomahawk::InfoSystem::InfoRequestData requestD
     criteria["album"] = hash["album"];
 
     emit getCachedInfo( criteria, Q_INT64_C(2419200000), requestData );
+}
+
+void
+LastFmInfoPlugin::fetchFingerprint( Tomahawk::InfoSystem::InfoRequestData requestData )
+{
+    if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
+    {
+        dataError( requestData );
+        return;
+    }
+    InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
+    if ( !hash.contains( "file" ) )
+    {
+        dataError( requestData );
+        return;
+    }
+
+    QFileInfo fi( hash["file"] );
+
+    lastfm::MutableTrack track;
+    track.setUrl( QUrl::fromLocalFile( fi.canonicalFilePath() ) );
+    try
+    {
+        lastfm::Fingerprint* fp = new lastfm::Fingerprint( track );
+        if ( fp->id().isNull() )
+        {
+            //TODO: atm let's only fp mp3, make it later nicer and fp others too
+            if ( fi.fileName().endsWith( "mp3" ) || fi.fileName().endsWith( "MP3" ) )
+            {
+                lastfm::FingerprintableSource* fs = new MadSource( ); //TODO: this should become a PhononSource later
+                fp->generate( fs ); //TODO: put this into own Thread cause it could take long
+
+                QNetworkReply* reply = fp->submit();
+
+                QPair< QFileInfo, lastfm::Fingerprint* > pair;
+                pair.first = fi;
+                pair.second = fp;
+                m_fingerprintMap.insert( reply, pair );
+                reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
+
+                connect( reply, SIGNAL( finished() ), this, SLOT( fingerprintReturned() ) );
+
+            }
+        }
+        else
+        {
+            int id = fp->id();
+            delete fp;
+
+            fetchTrackInfo( requestData, fi, id );
+        }
+    }
+    catch ( lastfm::Fingerprint::Error e )
+    {
+        tDebug() << "FP Error: " << e;
+    }
+}
+
+
+void
+LastFmInfoPlugin::fetchTrackInfo( Tomahawk::InfoSystem::InfoRequestData requestData, const QFileInfo& fi, int id )
+{
+    QMap< QString, QString > query;
+    query["method"] = "track.getFingerprintMetadata";
+    query["fingerprintid"] = QString::number( id );
+    QNetworkReply* trackInfoReply = lastfm::ws::get( query );
+
+    trackInfoReply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
+    trackInfoReply->setProperty( "file", QVariant::fromValue< QString >( fi.canonicalFilePath() ) );
+
+    connect( trackInfoReply, SIGNAL( finished() ), this, SLOT( trackInfoReturned() ) );
+
 }
 
 
@@ -892,6 +974,54 @@ LastFmInfoPlugin::artistImagesReturned()
     }
 
     reply->deleteLater();
+}
+
+
+void
+LastFmInfoPlugin::fingerprintReturned()
+{
+    QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
+
+    QFileInfo fi = m_fingerprintMap.value( reply ).first;
+    lastfm::Fingerprint* fp = m_fingerprintMap.value( reply ).second;
+    m_fingerprintMap.remove( reply );
+
+    fp->decode( reply );
+    int id = fp->id();
+    delete fp;
+
+    reply->deleteLater();
+
+    fetchTrackInfo( reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), fi, id );
+}
+
+
+void
+LastFmInfoPlugin::trackInfoReturned()
+{
+    QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
+    QList< lastfm::Track > tracks = parseTrackList( reply );
+    Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
+    QFileInfo fi( reply->property( "file" ).value< QString >() );
+
+    QVariantMap returnedData;
+    returnedData["file"] = fi.canonicalFilePath();
+
+    if ( !tracks.isEmpty() )
+    {
+        lastfm::Track track = tracks.at( 0 );
+
+        returnedData["artist"] = track.artist().toString();
+        returnedData["title"] = track.title();
+        returnedData["album"] = track.album().toString();
+        returnedData["albumartist"] = track.albumArtist().toString();
+    }
+    else
+    {
+        tDebug() << "FP: we didn't find a result for " << fi.canonicalFilePath();
+    }
+
+    emit info( requestData, returnedData );
 }
 
 

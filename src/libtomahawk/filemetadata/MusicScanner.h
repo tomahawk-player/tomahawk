@@ -39,6 +39,14 @@
 #include <QTimer>
 #include <QVariantMap>
 
+namespace Tomahawk
+{
+    namespace InfoSystem
+    {
+        class InfoRequestData;
+    }
+}
+
 // descend dir tree comparing dir mtimes to last known mtime
 // emit signal for any dir with new content, so we can scan it.
 // finally, emit the list of new mtimes we observed.
@@ -113,6 +121,7 @@ signals:
 private:
     QVariant readFile( const QFileInfo& fi );
     void executeCommand( Tomahawk::dbcmd_ptr cmd );
+    void fingerprintFile ( const QFileInfo& fi );
 
 private slots:
     void postOps();
@@ -124,16 +133,27 @@ private slots:
     void commitBatch( const QVariantList& tracks, const QVariantList& deletethese );
     void commandFinished();
 
+    void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
+    void infoSystemFinished( QString target );
+
 private:
+    TagLib::FileRef getTagLibFileRef( const QFileInfo& fi ) const;
     void scanFilePaths();
+    void commitFile( const QVariant& m );
+    QString infoid() const;
+
+
+    QVariantMap readAdditionalMetadata( const QFileInfo& fi ) const; 
 
     MusicScanner::ScanMode m_scanMode;
     QStringList m_paths;
     QMap<QString, QString> m_ext2mime; // eg: mp3 -> audio/mpeg
     unsigned int m_scanned;
     unsigned int m_skipped;
+    unsigned int m_fingerprinting;
 
     QList<QString> m_skippedFiles;
+    QList<QString> m_fingerprintingFiles;
     QMap<QString, QMap< unsigned int, unsigned int > > m_filemtimes;
 
     unsigned int m_cmdQueue;
@@ -143,6 +163,8 @@ private:
     quint32 m_batchsize;
 
     DirListerThreadController* m_dirListerThreadController;
+
+    bool m_fingerprint;
 };
 
 #endif
