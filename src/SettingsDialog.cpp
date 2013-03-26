@@ -51,6 +51,9 @@
 #include "accounts/spotify/SpotifyAccount.h"
 #include "thirdparty/Qocoa/qtoolbartabdialog.h"
 #include "thirdparty/Qocoa/qbutton.h"
+#include "jobview/JobStatusView.h"
+#include "jobview/JobStatusModel.h"
+#include "jobview/ErrorStatusMessage.h"
 
 #include <QDesktopServices>
 #include <QFileDialog>
@@ -491,7 +494,18 @@ SettingsDialog::installFromFile()
 
         Account* acct = AccountManager::instance()->accountFromPath( resolver );
 
-        Q_ASSERT( acct );
+        if ( !acct )
+        {
+            QFileInfo fi( resolver );
+
+            JobStatusView::instance()->model()->addJob( new ErrorStatusMessage(
+                                    tr( "Resolver installation from file %1 failed." )
+                                    .arg( fi.fileName() ) ) );
+
+            tDebug() << "Resolver was not installed:" << resolver;
+            return;
+        }
+
         AccountManager::instance()->addAccount( acct );
         TomahawkSettings::instance()->addAccount( acct->accountId() );
         AccountManager::instance()->enableAccount( acct );

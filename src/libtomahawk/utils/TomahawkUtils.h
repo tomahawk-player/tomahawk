@@ -206,6 +206,8 @@ namespace TomahawkUtils
 
     DLLEXPORT bool whitelistedHttpResultHint( const QString& url );
 
+    DLLEXPORT int compareVersionStrings( const QString& first, const QString& second );
+
     /**
      * This helper is designed to help "update" an existing playlist with a newer revision of itself.
      * To avoid re-loading the whole playlist and re-resolving tracks that are the same in the old playlist,

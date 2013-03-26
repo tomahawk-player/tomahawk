@@ -28,6 +28,10 @@
 #include "Source.h"
 #include "utils/Logger.h"
 #include "qjson/parser.h"
+#include "jobview/JobStatusView.h"
+#include "jobview/JobStatusModel.h"
+#include "jobview/ErrorStatusMessage.h"
+#include "TomahawkVersion.h"
 
 #include <QFile>
 #include <QFileInfo>
@@ -93,10 +97,18 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
                                                            uniqueName,
                                                            MANUALRESOLVERS_DIR ) );
             if ( !( dir.exists() && dir.isReadable() ) ) //decompression fubar
+            {
+                JobStatusView::instance()->model()->addJob( new ErrorStatusMessage(
+                                        tr( "Resolver installation error: cannot open bundle." ) ) );
                 return 0;
+            }
 
             if ( !dir.cd( "content" ) ) //more fubar
+            {
+                JobStatusView::instance()->model()->addJob( new ErrorStatusMessage(
+                                        tr( "Resolver installation error: incomplete bundle." ) ) );
                 return 0;
+            }
 
             QString metadataFilePath = dir.absoluteFilePath( "metadata.json" );
             configuration = metadataFromJsonFile( metadataFilePath );
@@ -131,7 +143,11 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
 
             realPath = configuration[ "path" ].toString();
             if ( realPath.isEmpty() )
+            {
+                JobStatusView::instance()->model()->addJob( new ErrorStatusMessage(
+                                        tr( "Resolver installation error: bad metadata in bundle." ) ) );
                 return 0;
+            }
         }
         else //either legacy resolver or uncompressed bundle, so we look for a metadata file
         {
@@ -144,6 +160,46 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
                 configuration[ "path" ] = realPath; //our initial path still overrides whatever the desktop file says
             }
             //else we just have empty metadata (legacy resolver without desktop file)
+        }
+
+        //check if the bundle specifies a platform, and if so, reject the resolver if the platform is wrong
+        if ( !configuration[ "platform" ].isNull() && configuration[ "platform" ].toString() != "any" )
+        {
+            QString platform( configuration[ "platform" ].toString() );
+            QString myPlatform( "any" );
+
+#if defined( Q_OS_WIN )
+            myPlatform = "win";
+#elif defined( Q_OS_MAC )
+            myPlatform = "osx";
+#elif defined( Q_OS_LINUX )
+            if ( __WORDSIZE == 32 )
+                myPlatform = "linux-x86";
+            else if ( __WORDSIZE == 64 )
+                myPlatform = "linux-x64";
+#endif
+
+            if ( !myPlatform.contains( platform ) )
+            {
+                tDebug() << "Wrong resolver platform.";
+                JobStatusView::instance()->model()->addJob( new ErrorStatusMessage(
+                                        tr( "Resolver installation error: platform mismatch." ) ) );
+                return 0;
+            }
+        }
+
+        if ( !configuration[ "tomahawkVersion" ].isNull() )
+        {
+            QString thVer = TOMAHAWK_VERSION;
+            QString requiredVer = configuration[ "tomahawkVersion" ].toString();
+
+            if ( TomahawkUtils::compareVersionStrings( thVer, requiredVer ) < 0 )
+            {
+                JobStatusView::instance()->model()->addJob( new ErrorStatusMessage(
+                                        tr( "Resolver installation error: Tomahawk %1 or newer is required." )
+                                        .arg( requiredVer ) ) );
+                return 0;
+            }
         }
 
         //TODO: handle multi-account resolvers
@@ -187,6 +243,10 @@ ResolverAccountFactory::metadataFromJsonFile( const QString& path )
                 result[ "revision" ] = variant[ "revision" ];
             if ( !variant[ "timestamp" ].isNull() )
                 result[ "timestamp" ] = variant[ "timestamp" ];
+            if ( !variant[ "tomahawkVersion" ].isNull() )
+                result[ "tomahawkVersion" ] = variant[ "tomahawkVersion" ];
+            if ( !variant[ "platform" ].isNull() )
+                result[ "platform" ] = variant[ "platform" ];
         }
     }
     return result;

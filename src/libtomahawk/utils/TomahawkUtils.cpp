@@ -45,6 +45,7 @@
 #include <QMutex>
 #include <QCryptographicHash>
 #include <QProcess>
+#include <QStringList>
 #include <QTranslator>
 
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
@@ -1010,6 +1011,53 @@ whitelistedHttpResultHint( const QString& url )
 {
     // For now, just http/https
     return url.startsWith( "http" );
+}
+
+
+int
+compareVersionStrings( const QString& first, const QString& second )
+{
+    QStringList a = first.split( '.', QString::SkipEmptyParts );
+    QStringList b = second.split( '.', QString::SkipEmptyParts );
+
+    const int depth = qMax( a.count(), b.count() );
+
+    while ( a.count() < depth )
+        a.append( "0" );
+
+    while ( b.count() < depth )
+        b.append( "0" );
+
+    int verdict = 0;
+    for ( int i = 0; i < depth; ++i )
+    {
+        bool aOk;
+        int aNumber = a.at( i ).toInt( &aOk );
+        bool bOk;
+        int bNumber = b.at( i ).toInt( &bOk );
+
+        if ( aOk && bOk )
+        {
+            if ( aNumber < bNumber )
+            {
+                verdict = -1;
+                break;
+            }
+            if ( aNumber > bNumber )
+            {
+                verdict = 1;
+                break;
+            }
+        }
+        else //fallback: string comparison
+        {
+            verdict = a.at( i ).compare( b.at( i ) );
+            if ( verdict != 0 )
+                break;
+        }
+    }
+
+    return verdict;
 }
 
 
