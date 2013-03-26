@@ -79,17 +79,25 @@ SpotifyParser::lookupUrl( const QString& rawLink )
 {
     tLog() << "Looking up Spotify rawURI:" << rawLink;
     QString link = rawLink;
-    if ( link.contains( "open.spotify.com/" ) ) // convert to a URI
-    {
-        link.replace( "http://", "" ).replace( "open.spotify.com/", "" );
-        link.replace( "/", ":" );
-        link = "spotify:" + link;
-    }
+
+    QRegExp isHttp("(?:((play|open)\\.spotify.com))(.*)");
+
     // Some spotify apps contain the link to the playlist as url-encoded in their link (e.g. ShareMyPlaylists)
-    if ( link.contains( "%3A" ) )
+    if ( link.contains( "%253A" ) )
     {
         link = QUrl::fromPercentEncoding( link.toUtf8() );
     }
+
+    if( link.contains( "%3A" ) )
+    {
+        link = QUrl::fromPercentEncoding( link.toUtf8() );
+    }
+
+    if( isHttp.indexIn( link, 0 ) != -1 )
+    {
+        link = "spotify"+isHttp.cap(3).replace("/", ":");
+    }
+
     // TODO: Ignoring search and user querys atm
     // (spotify:(?:(?:artist|album|track|user:[^:]+:playlist):[a-zA-Z0-9]+|user:[^:]+|search:(?:[-\w$\.+!*'(),<>:\s]+|%[a-fA-F0-9\s]{2})+))
     QRegExp rx( "(spotify:(?:(?:artist|album|track|user:[^:]+:playlist):[a-zA-Z0-9]+[^:]))" );
