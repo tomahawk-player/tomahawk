@@ -1263,67 +1263,67 @@ connect and stream from you?</source>
 <context>
     <name>QObject</name>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="240"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="241"/>
         <source>%n year(s) ago</source>
         <translation><numerusform>%n год назад</numerusform><numerusform>%n года назад</numerusform><numerusform>%n лет назад</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="242"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="243"/>
         <source>%n year(s)</source>
         <translation><numerusform>%n год</numerusform><numerusform>%n года</numerusform><numerusform>%n лет</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="248"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="249"/>
         <source>%n month(s) ago</source>
         <translation><numerusform>%n месяц назад</numerusform><numerusform>%n месяца назад</numerusform><numerusform>%n месяцей назад</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="250"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="251"/>
         <source>%n month(s)</source>
         <translation><numerusform>%n месяц</numerusform><numerusform>%n месяца</numerusform><numerusform>%n месяцей</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="256"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="257"/>
         <source>%n week(s) ago</source>
         <translation><numerusform>%n неделю назад</numerusform><numerusform>%n недели назад</numerusform><numerusform>%n недель назад</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="258"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="259"/>
         <source>%n week(s)</source>
         <translation><numerusform>%n неделю</numerusform><numerusform>%n недели</numerusform><numerusform>%n недель</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="264"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="265"/>
         <source>%n day(s) ago</source>
         <translation><numerusform>%n день назад</numerusform><numerusform>%n дня назад</numerusform><numerusform>%n дней назад</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="266"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="267"/>
         <source>%n day(s)</source>
         <translation><numerusform>%n день</numerusform><numerusform>%n дня</numerusform><numerusform>%n дней</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="272"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="273"/>
         <source>%n hour(s) ago</source>
         <translation><numerusform>%n час назад</numerusform><numerusform>%n часа назад</numerusform><numerusform>%n часов назад</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="274"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="275"/>
         <source>%n hour(s)</source>
         <translation><numerusform>%n час</numerusform><numerusform>%n часа</numerusform><numerusform>%n часов</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="280"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="281"/>
         <source>%1 minutes ago</source>
         <translation>%1 минут(ы) назад</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="282"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="283"/>
         <source>%1 minutes</source>
         <translation>%1 минут(ы)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="286"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="287"/>
         <source>just now</source>
         <translation>только что</translation>
     </message>
@@ -1453,72 +1453,77 @@ connect and stream from you?</source>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="232"/>
+        <location filename="../src/SettingsDialog.cpp" line="235"/>
         <source>Collection</source>
         <translation>Коллекция</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="235"/>
+        <location filename="../src/SettingsDialog.cpp" line="238"/>
         <source>Advanced</source>
         <translation>Дополнительны</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="154"/>
+        <location filename="../src/SettingsDialog.cpp" line="157"/>
         <source>All</source>
         <translation>Все</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="282"/>
+        <location filename="../src/SettingsDialog.cpp" line="285"/>
         <source>Some changed settings will not take effect until Tomahawk is restarted</source>
         <translation>Некоторые измененные настройки не вступят в силу до перезапуска Tomahawk</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="227"/>
+        <location filename="../src/SettingsDialog.cpp" line="230"/>
         <source>Services</source>
         <translation>Сервисы</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="127"/>
+        <location filename="../src/SettingsDialog.cpp" line="130"/>
         <source>Install from file</source>
         <translation>Установить из файла</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="227"/>
+        <location filename="../src/SettingsDialog.cpp" line="230"/>
         <source>Configure the accounts and services used by Tomahawk to search and retrieve music, find your friends and update your status.</source>
         <translation>Настройка аккаунтов и сервисов используемых Tomahawk для поиска и извлечения музыки, найти друзей и обновить статус.</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="232"/>
+        <location filename="../src/SettingsDialog.cpp" line="235"/>
         <source>Manage how Tomahawk finds music on your computer.</source>
         <translation>Определить где Tomahawk искать музыку на вашем компьютере.</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="235"/>
+        <location filename="../src/SettingsDialog.cpp" line="238"/>
         <source>Configure Tomahawk&apos;s advanced settings, including network connectivity settings, browser interaction and more.</source>
         <translation>Настройка дополнительных возможносте Tomahawk в том числе подключения к сети, интеграцию с браузером, другие.</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="454"/>
+        <location filename="../src/SettingsDialog.cpp" line="457"/>
         <source>Install resolver from file</source>
         <translation>Установить resolver из файла</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="456"/>
+        <location filename="../src/SettingsDialog.cpp" line="459"/>
         <source>Tomahawk Resolvers (*.axe *.js);;All files (*)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="507"/>
+        <location filename="../src/SettingsDialog.cpp" line="502"/>
+        <source>Resolver installation from file %1 failed.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/SettingsDialog.cpp" line="521"/>
         <source>Delete all Access Control entries?</source>
         <translation>Удаление всех записей контроля доступа?</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="508"/>
+        <location filename="../src/SettingsDialog.cpp" line="522"/>
         <source>Do you really want to delete all Access Control entries? You will be asked for a decision again for each peer that you connect to.</source>
         <translation>Вы действительно хотите удалить все записи Access Control? Вас заново спросят о каждом соединении к которым вы были подключены.</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="282"/>
+        <location filename="../src/SettingsDialog.cpp" line="285"/>
         <source>Information</source>
         <translation>Инофрмация</translation>
     </message>
@@ -2232,6 +2237,34 @@ connect and stream from you?</source>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="419"/>
         <source>Synchronization Finished</source>
         <translation>Синхронизация Закончена.</translation>
+    </message>
+</context>
+<context>
+    <name>Tomahawk::Accounts::ResolverAccountFactory</name>
+    <message>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="102"/>
+        <source>Resolver installation error: cannot open bundle.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="109"/>
+        <source>Resolver installation error: incomplete bundle.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="148"/>
+        <source>Resolver installation error: bad metadata in bundle.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="186"/>
+        <source>Resolver installation error: platform mismatch.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="199"/>
+        <source>Resolver installation error: Tomahawk %1 or newer is required.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -3377,7 +3410,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::SpotifyParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="273"/>
+        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="281"/>
         <source>Error fetching Spotify information from the network!</source>
         <translation>Возникла ошибка при получении информации из Spotify!</translation>
     </message>

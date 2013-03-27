@@ -1260,67 +1260,67 @@ yhdistää ja toistaa sinulta virtaa?</translation>
 <context>
     <name>QObject</name>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="240"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="241"/>
         <source>%n year(s) ago</source>
         <translation><numerusform>%n vuosi sitten</numerusform><numerusform>%n vuotta sitten</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="242"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="243"/>
         <source>%n year(s)</source>
         <translation><numerusform>%n vuosi</numerusform><numerusform>%n vuotta</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="248"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="249"/>
         <source>%n month(s) ago</source>
         <translation><numerusform>%n kuukausi sitten</numerusform><numerusform>%n kuukautta sitten</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="250"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="251"/>
         <source>%n month(s)</source>
         <translation><numerusform>%n kuukausi</numerusform><numerusform>%n kuukautta</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="256"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="257"/>
         <source>%n week(s) ago</source>
         <translation><numerusform>%n viikko sitten</numerusform><numerusform>%n viikkoa sitten</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="258"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="259"/>
         <source>%n week(s)</source>
         <translation><numerusform>%n viikko</numerusform><numerusform>%n viikkoa</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="264"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="265"/>
         <source>%n day(s) ago</source>
         <translation><numerusform>%n päivä sitten</numerusform><numerusform>%n päivää sitten</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="266"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="267"/>
         <source>%n day(s)</source>
         <translation><numerusform>%n päivä</numerusform><numerusform>%n päivää</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="272"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="273"/>
         <source>%n hour(s) ago</source>
         <translation><numerusform>%n tunti sitten</numerusform><numerusform>%n tuntia sitten</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="274"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="275"/>
         <source>%n hour(s)</source>
         <translation><numerusform>%n tunti</numerusform><numerusform>%n tuntia</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="280"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="281"/>
         <source>%1 minutes ago</source>
         <translation>%1 minuuttia sitten</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="282"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="283"/>
         <source>%1 minutes</source>
         <translation>%1 minuuttia</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="286"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="287"/>
         <source>just now</source>
         <translation>juuri nyt</translation>
     </message>
@@ -1450,72 +1450,77 @@ yhdistää ja toistaa sinulta virtaa?</translation>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="232"/>
+        <location filename="../src/SettingsDialog.cpp" line="235"/>
         <source>Collection</source>
         <translation>Kokoelma</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="235"/>
+        <location filename="../src/SettingsDialog.cpp" line="238"/>
         <source>Advanced</source>
         <translation>Lisäasetukset</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="154"/>
+        <location filename="../src/SettingsDialog.cpp" line="157"/>
         <source>All</source>
         <translation>Kaikki</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="282"/>
+        <location filename="../src/SettingsDialog.cpp" line="285"/>
         <source>Some changed settings will not take effect until Tomahawk is restarted</source>
         <translation>Jotkin asetusmuutokset tulevat voimaan vasta, kun Tomahawk käynnistetään uudelleen.</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="227"/>
+        <location filename="../src/SettingsDialog.cpp" line="230"/>
         <source>Services</source>
         <translation>Palvelut</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="127"/>
+        <location filename="../src/SettingsDialog.cpp" line="130"/>
         <source>Install from file</source>
         <translation>Asenna tiedostosta</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="227"/>
+        <location filename="../src/SettingsDialog.cpp" line="230"/>
         <source>Configure the accounts and services used by Tomahawk to search and retrieve music, find your friends and update your status.</source>
         <translation>Aseta tilit ja palvelut, joita Tomahawk käyttää musiikin etsimiseen ja noutamiseen, kaveriesi etsimiseen sekä tilasi päivittämiseen.</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="232"/>
+        <location filename="../src/SettingsDialog.cpp" line="235"/>
         <source>Manage how Tomahawk finds music on your computer.</source>
         <translation>Hallitse Tomahawkin tapaa etsiä musiikkia tietokoneeltasi.</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="235"/>
+        <location filename="../src/SettingsDialog.cpp" line="238"/>
         <source>Configure Tomahawk&apos;s advanced settings, including network connectivity settings, browser interaction and more.</source>
         <translation>Aseta Tomahawkin lisäasetuksia, joihin kuuluu verkkoyhteysasetukset, selainyhteys ja muuta.</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="454"/>
+        <location filename="../src/SettingsDialog.cpp" line="457"/>
         <source>Install resolver from file</source>
         <translation>Asenna selvitin tiedostosta</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="456"/>
+        <location filename="../src/SettingsDialog.cpp" line="459"/>
         <source>Tomahawk Resolvers (*.axe *.js);;All files (*)</source>
+        <translation>Tomahawk-selvittimet (*.axe *.js);;Kaikki tiedostot (*)</translation>
+    </message>
+    <message>
+        <location filename="../src/SettingsDialog.cpp" line="502"/>
+        <source>Resolver installation from file %1 failed.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="507"/>
+        <location filename="../src/SettingsDialog.cpp" line="521"/>
         <source>Delete all Access Control entries?</source>
         <translation>Poistetaanko kaikki pääsynvalvontatietueet?</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="508"/>
+        <location filename="../src/SettingsDialog.cpp" line="522"/>
         <source>Do you really want to delete all Access Control entries? You will be asked for a decision again for each peer that you connect to.</source>
         <translation>Haluatko varmasti poistaa kaikki pääsynvalvontatietueet? Sinulta tullaan kysymään päätös uudelleen jokaisen sellaisen vertaisen kohdalla, johon yhdistät.</translation>
     </message>
     <message>
-        <location filename="../src/SettingsDialog.cpp" line="282"/>
+        <location filename="../src/SettingsDialog.cpp" line="285"/>
         <source>Information</source>
         <translation>Tiedoksi</translation>
     </message>
@@ -2232,6 +2237,34 @@ napsauttamalla hiiren oikealla.</translation>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="419"/>
         <source>Synchronization Finished</source>
         <translation>Synkronointi valmis</translation>
+    </message>
+</context>
+<context>
+    <name>Tomahawk::Accounts::ResolverAccountFactory</name>
+    <message>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="102"/>
+        <source>Resolver installation error: cannot open bundle.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="109"/>
+        <source>Resolver installation error: incomplete bundle.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="148"/>
+        <source>Resolver installation error: bad metadata in bundle.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="186"/>
+        <source>Resolver installation error: platform mismatch.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="199"/>
+        <source>Resolver installation error: Tomahawk %1 or newer is required.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -3379,7 +3412,7 @@ Koeta säätää suodattimia saadaksesi uuden joukon kappaleita kuunneltavaksi.<
 <context>
     <name>Tomahawk::SpotifyParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="273"/>
+        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="281"/>
         <source>Error fetching Spotify information from the network!</source>
         <translation>Spotify-tietojen hakeminen verkosta epäonnistui!</translation>
     </message>
