@@ -1507,7 +1507,7 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="502"/>
         <source>Resolver installation from file %1 failed.</source>
-        <translation type="unfinished"/>
+        <translation>Resolver-installationen från filen %1 misslyckades</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="521"/>
@@ -2240,27 +2240,27 @@ och radiostationer baserat på din personliga profil</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="102"/>
         <source>Resolver installation error: cannot open bundle.</source>
-        <translation type="unfinished"/>
+        <translation>Resolver-installationsfel: Det går inte öppna paketet</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="109"/>
         <source>Resolver installation error: incomplete bundle.</source>
-        <translation type="unfinished"/>
+        <translation>Resolver-installationsfel: Ofullständigt paket</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="148"/>
         <source>Resolver installation error: bad metadata in bundle.</source>
-        <translation type="unfinished"/>
+        <translation>Resolver-installationsfel: Felaktig metadata i paketet</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="186"/>
         <source>Resolver installation error: platform mismatch.</source>
-        <translation type="unfinished"/>
+        <translation>Resolver-installationsfel: Plattformarna stämmer inte överens</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="199"/>
         <source>Resolver installation error: Tomahawk %1 or newer is required.</source>
-        <translation type="unfinished"/>
+        <translation>Resolver-installationsfel: Tomahawk %1 eller nyare krävs</translation>
     </message>
 </context>
 <context>

@@ -1503,12 +1503,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="459"/>
         <source>Tomahawk Resolvers (*.axe *.js);;All files (*)</source>
-        <translation type="unfinished"/>
+        <translation>محللي توماهوك (*.axe *.js);;جميع الملفات (*)</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="502"/>
         <source>Resolver installation from file %1 failed.</source>
-        <translation type="unfinished"/>
+        <translation>تثبيت المحلل من الملف %1 فشل.</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="521"/>
@@ -2239,27 +2239,27 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="102"/>
         <source>Resolver installation error: cannot open bundle.</source>
-        <translation type="unfinished"/>
+        <translation>خطأ تثبيت المحلل: تعذر فتح الحزمة.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="109"/>
         <source>Resolver installation error: incomplete bundle.</source>
-        <translation type="unfinished"/>
+        <translation>خطأ تثبيت المحلل: الحزمة ناقصة.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="148"/>
         <source>Resolver installation error: bad metadata in bundle.</source>
-        <translation type="unfinished"/>
+        <translation>خطأ تثبيت المحلل: بيانات التعريف سيئة في الحزمة.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="186"/>
         <source>Resolver installation error: platform mismatch.</source>
-        <translation type="unfinished"/>
+        <translation>خطأ تثبيت المحلل: نظام التشغيل غير متطابق.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="199"/>
         <source>Resolver installation error: Tomahawk %1 or newer is required.</source>
-        <translation type="unfinished"/>
+        <translation>خطأ تثبيت المحلل: مطلوب إصدار توماهوك %1 أو أحدث.</translation>
     </message>
 </context>
 <context>
@@ -2569,7 +2569,7 @@ username@jabber.org</translation>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="104"/>
         <source>Add to &amp;Playlist</source>
-        <translation type="unfinished"/>
+        <translation>أضف إلى &amp;لوائح الأغاني</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="118"/>
