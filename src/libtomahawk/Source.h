@@ -146,6 +146,8 @@ private slots:
     void addCommand( const QSharedPointer<DatabaseCommand>& command );
 
 private:
+    static bool friendlyNamesLessThan( const QString& first, const QString& second ); //lessThan for sorting
+
     void updateTracks();
     void reportSocialAttributesChanged( DatabaseCommand_SocialAction* action );
 

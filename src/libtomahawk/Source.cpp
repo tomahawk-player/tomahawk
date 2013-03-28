@@ -33,6 +33,7 @@
 #include "database/Database.h"
 
 #include <QCoreApplication>
+#include <QtAlgorithms>
 
 #include "utils/TomahawkCache.h"
 #include "database/DatabaseCommand_SocialAction.h"
@@ -136,18 +137,86 @@ QString
 Source::friendlyName() const
 {
     QPixmap result;
+    QStringList candidateNames;
     foreach( const peerinfo_ptr& peerInfo, peerInfos() )
     {
         if( !peerInfo.isNull() && !peerInfo->friendlyName().isEmpty() )
         {
-            return peerInfo->friendlyName();
+            candidateNames.append( peerInfo->friendlyName() );
         }
+    }
+
+    if ( !candidateNames.isEmpty() )
+    {
+        if ( candidateNames.count() > 1 )
+            qSort( candidateNames.begin(), candidateNames.end(), &Source::friendlyNamesLessThan );
+
+        return candidateNames.first();
     }
 
     if ( m_friendlyname.isEmpty() )
         return dbFriendlyName();
 
     return m_friendlyname;
+}
+
+
+bool
+Source::friendlyNamesLessThan( const QString& first, const QString& second )
+{
+    //Least favored match first.
+    QList< QRegExp > penalties;
+    penalties.append( QRegExp( "\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}" ) ); //IPv4 address
+    penalties.append( QRegExp( "([\\w-\\.\\+]+)@((?:[\\w]+\\.)+)([a-zA-Z]{2,4})" ) ); //email/jabber id
+
+    //Most favored match first.
+    QList< QRegExp > favored;
+    favored.append( QRegExp( "\\b([A-Z][a-z']* ?){2,10}" ) ); //properly capitalized person's name
+    favored.append( QRegExp( "[a-zA-Z ']+" ) ); //kind of person's name
+
+    bool matchFirst = false;
+    bool matchSecond = false;
+
+    //We check if the strings match the regexps. The regexps represent friendly name patterns we do
+    //*not* want (penalties) or want (favored), prioritized. If none of the strings match a regexp,
+    //we go to the next regexp. If one of the strings matches, and we're matching penalties, we say
+    //the other one is lessThan, i.e. comes first. If one of the string matches, and we're matching
+    //favored, we say this one is lessThan, i.e. comes first. If both strings match, or if no match
+    //is found for any regexp, we go to string comparison (fallback).
+    while( !penalties.isEmpty() || !favored.isEmpty() )
+    {
+        QRegExp rx;
+        bool isPenalty;
+        if ( !penalties.isEmpty() )
+        {
+            rx = penalties.first();
+            penalties.pop_front();
+            isPenalty = true;
+        }
+        else
+        {
+            rx = favored.first();
+            favored.pop_front();
+            isPenalty = false;
+        }
+
+        matchFirst = rx.exactMatch( first );
+        matchSecond = rx.exactMatch( second );
+
+        if ( matchFirst == false && matchSecond == false )
+            continue;
+
+        if ( matchFirst == true && matchSecond == true )
+            break;
+
+        if ( matchFirst == true && matchSecond == false )
+            return isPenalty ? false : true;
+
+        if ( matchFirst == false && matchSecond == true )
+            return isPenalty ? true : false;
+    }
+
+    return ( first.compare( second ) == -1 ) ? true : false;
 }
 
 
