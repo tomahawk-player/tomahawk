@@ -190,9 +190,9 @@ FdoNotifyPlugin::nowPlaying( const QVariant& input )
         // Remark: If using xml-based markup in notifications, the supplied strings need to be escaped.
         QString album;
         if ( !hash[ "album" ].isEmpty() )
-            album = tr( "<br /><i>on</i> %1", "%1 is an album name" ).arg( Qt::escape( hash[ "album" ] ) );
+            album = tr( "\n<i>on</i> %1", "%1 is an album name" ).arg( Qt::escape( hash[ "album" ] ) );
 
-        messageText = tr( "%1<br /><i>by</i> %2%3.", "%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing" )
+        messageText = tr( "%1\n<i>by</i> %2%3.", "%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing" )
                         .arg( Qt::escape( hash[ "title" ] ) )
                         .arg( Qt::escape( hash[ "artist" ] ) )
                         .arg( album );
