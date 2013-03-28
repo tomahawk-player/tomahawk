@@ -56,8 +56,6 @@ signals:
 
 private slots:
     void onCheckJidExists( const QString& jid );
-    void onUsernameEdited();
-    void onServerEdited();
 
 private:
     Ui::XmppConfigWidget *m_ui;

@@ -43,17 +43,14 @@ XmppConfigWidget::XmppConfigWidget( XmppAccount* account, QWidget *parent )
 
     m_ui->xmppUsername->setText( account->credentials().contains( "username" ) ? account->credentials()[ "username" ].toString() : QString() );
     m_ui->xmppPassword->setText( account->credentials().contains( "password" ) ? account->credentials()[ "password" ].toString() : QString() );
+    m_ui->xmppServer->setText( account->configuration().contains( "server" ) ? account->configuration()[ "server" ].toString() : QString() );
     m_ui->xmppPort->setValue( account->configuration().contains( "port" ) ? account->configuration()[ "port" ].toInt() : 5222 );
     m_ui->xmppPublishTracksCheckbox->setChecked( account->configuration().contains( "publishtracks" ) ? account->configuration()[ "publishtracks" ].toBool() : true);
     m_ui->xmppEnforceSecureCheckbox->setChecked( account->configuration().contains( "enforcesecure" ) ? account->configuration()[ "enforcesecure" ].toBool() : false);
     m_ui->jidExistsLabel->hide();
 
-    m_ui->xmppServer->setText( account->configuration().contains( "server" ) ? account->configuration()[ "server" ].toString() : QString() );
-    m_serverWasEditedByUser = account->configuration().value( "serverWasEditedByUser", false ).toBool();
 
     connect( m_ui->xmppUsername, SIGNAL( textChanged( QString ) ), SLOT( onCheckJidExists( QString ) ) );
-    connect( m_ui->xmppUsername, SIGNAL( textChanged( QString ) ), SLOT( onUsernameEdited() ) );
-    connect( m_ui->xmppServer, SIGNAL( editingFinished() ), SLOT( onServerEdited() ) );
 }
 
 
@@ -70,13 +67,10 @@ XmppConfigWidget::saveConfig()
     credentials[ "password" ] = m_ui->xmppPassword->text().trimmed();
 
     QVariantHash configuration = m_account->configuration();
+    configuration[ "server" ] = m_ui->xmppServer->text().trimmed();
     configuration[ "port" ] = m_ui->xmppPort->text().trimmed();
     configuration[ "publishtracks"] = m_ui->xmppPublishTracksCheckbox->isChecked();
     configuration[ "enforcesecure"] = m_ui->xmppEnforceSecureCheckbox->isChecked();
-
-    configuration[ "server" ] = m_ui->xmppServer->text().trimmed();
-    configuration[ "serverWasEditedByUser" ] = m_serverWasEditedByUser;
-
 
     m_account->setAccountFriendlyName( m_ui->xmppUsername->text() );
     m_account->setCredentials( credentials );
@@ -114,21 +108,6 @@ XmppConfigWidget::onCheckJidExists( const QString &jid )
     }
     m_ui->jidExistsLabel->hide();
     emit dataError( false );
-}
-
-
-void
-XmppConfigWidget::onUsernameEdited()
-{
-    if( m_ui->xmppUsername->text().trimmed().split( '@' ).count() == 2 && !m_serverWasEditedByUser )
-        m_ui->xmppServer->setText( m_ui->xmppUsername->text().trimmed().split( '@' ).at( 1 ) );
-}
-
-
-void
-XmppConfigWidget::onServerEdited()
-{
-    m_serverWasEditedByUser = true;
 }
 
 
