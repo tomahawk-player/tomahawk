@@ -197,6 +197,9 @@ FdoNotifyPlugin::nowPlaying( const QVariant& input )
                         .arg( Qt::escape( hash[ "artist" ] ) )
                         .arg( album )
                         .arg( QString( "\n<i>%1</i>" ).arg( tr( "by", "preposition to link track and artist" ) ) );
+
+        // Dirty hack(TM) so that KNotify/QLabel recognizes the message as Rich Text
+        messageText = QString( "<i></i>%1" ).arg( messageText );
     }
     else
     {
