@@ -192,10 +192,11 @@ FdoNotifyPlugin::nowPlaying( const QVariant& input )
         if ( !hash[ "album" ].isEmpty() )
             album = QString( "\n<i>%1</i> %2" ).arg( tr( "on", "'on' is followed by an album name" ) ).arg( Qt::escape( hash[ "album" ] ) );
 
-        messageText = tr( "%1\n<i>by</i> %2%3.", "%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing" )
+        messageText = tr( "%1%4 %2%3.", "%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing, %4 is the preposition used to link track and artist ('by' in english)" )
                         .arg( Qt::escape( hash[ "title" ] ) )
                         .arg( Qt::escape( hash[ "artist" ] ) )
-                        .arg( album );
+                        .arg( album )
+                        .arg( QString( "\n<i>%1</i>" ).arg( tr( "by", "preposition to link track and artist" ) ) );
     }
     else
     {
