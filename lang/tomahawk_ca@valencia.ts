@@ -2496,17 +2496,17 @@ Torneu a autenticar-vos.</translation>
 <context>
     <name>Tomahawk::Accounts::XmppConfigWidget</name>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="144"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="123"/>
         <source>You forgot to enter your username!</source>
         <translation>Heu oblidat introduir el nom d&apos;usuari</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="152"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="131"/>
         <source>Your Xmpp Id should look like an email address</source>
         <translation>La vostra Id Xmpp hauria de ser com una adreça de correu electrònic</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="158"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="137"/>
         <source>
 
 Example:
@@ -3364,43 +3364,43 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="286"/>
-        <location filename="../src/libtomahawk/Source.cpp" line="337"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="355"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="406"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Escanejant (%L1 cançons)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="288"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="357"/>
         <source>Scanning</source>
         <translation>Escanejant</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="322"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="391"/>
         <source>Checking</source>
         <translation>Comprovant</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="327"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="396"/>
         <source>Syncing</source>
         <translation>S&apos;està sincronitzant</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="332"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="401"/>
         <source>Importing</source>
         <translation>S&apos;està important</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="483"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="552"/>
         <source>Saving (%1%)</source>
         <translation>Alçant (%1%)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="564"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="633"/>
         <source>Online</source>
         <translation>En línia</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="568"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="637"/>
         <source>Offline</source>
         <translation>Fora de línia</translation>
     </message>

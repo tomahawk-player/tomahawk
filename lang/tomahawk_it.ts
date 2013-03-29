@@ -649,7 +649,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/FilterHeader.cpp" line="29"/>
         <source>Filter...</source>
-        <translation type="unfinished"/>
+        <translation>Filtra...</translation>
     </message>
 </context>
 <context>
@@ -1413,7 +1413,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/ScriptCollectionHeader.cpp" line="50"/>
         <source>Reload Collection</source>
-        <translation type="unfinished"/>
+        <translation>Ricarica la collezione</translation>
     </message>
 </context>
 <context>
@@ -1955,7 +1955,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="331"/>
         <source>Cloud</source>
-        <translation type="unfinished"/>
+        <translation>Cloud</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="299"/>
@@ -2489,17 +2489,17 @@ You may wish to try re-authenticating.</source>
 <context>
     <name>Tomahawk::Accounts::XmppConfigWidget</name>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="144"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="123"/>
         <source>You forgot to enter your username!</source>
         <translation>Manca il tuo nome utente!</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="152"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="131"/>
         <source>Your Xmpp Id should look like an email address</source>
         <translation>Il tuo Id di Xmpp dovrebbe assomigliare ad un indirizzo email</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="158"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="137"/>
         <source>
 
 Example:
@@ -2560,7 +2560,7 @@ username@jabber.org</source>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="104"/>
         <source>Add to &amp;Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Aggiungi alla &amp;Playlist</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="118"/>
@@ -3147,25 +3147,25 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="193"/>
         <source>&lt;br /&gt;&lt;i&gt;on&lt;/i&gt; %1</source>
         <comment>%1 is an album name</comment>
-        <translation type="unfinished"/>
+        <translation>&lt;br /&gt;&lt;i&gt;su&lt;/i&gt; %1</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="195"/>
         <source>%1&lt;br /&gt;&lt;i&gt;by&lt;/i&gt; %2%3.</source>
         <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing</comment>
-        <translation type="unfinished"/>
+        <translation>%1&lt;br /&gt;&lt;i&gt;di&lt;/i&gt; %2%3.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="204"/>
         <source>on &quot;%1&quot;</source>
         <comment>%1 is an album name</comment>
-        <translation type="unfinished"/>
+        <translation>su &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="206"/>
         <source>&quot;%1&quot; by %2%3.</source>
         <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing</comment>
-        <translation type="unfinished"/>
+        <translation>&quot;%1&quot; di %2%3.</translation>
     </message>
 </context>
 <context>
@@ -3328,7 +3328,7 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="72"/>
         <source>%1 Collection</source>
         <comment>Name of a collection based on a resolver, e.g. Subsonic Collection</comment>
-        <translation type="unfinished"/>
+        <translation>%1 Collezione</translation>
     </message>
 </context>
 <context>
@@ -3350,43 +3350,43 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="286"/>
-        <location filename="../src/libtomahawk/Source.cpp" line="337"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="355"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="406"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Scansionando (%L1 tracce)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="288"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="357"/>
         <source>Scanning</source>
         <translation>Scansionando</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="322"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="391"/>
         <source>Checking</source>
         <translation>Controllando</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="327"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="396"/>
         <source>Syncing</source>
         <translation>Sto sincronizzando</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="332"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="401"/>
         <source>Importing</source>
         <translation>Sto importando</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="483"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="552"/>
         <source>Saving (%1%)</source>
         <translation>Salvando (%1%)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="564"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="633"/>
         <source>Online</source>
         <translation>Connesso</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="568"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="637"/>
         <source>Offline</source>
         <translation>Disconnesso</translation>
     </message>

@@ -195,7 +195,7 @@ erlauben sich mit dir zu verbinden?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="115"/>
         <source>Enter Full Screen</source>
-        <translation type="unfinished"/>
+        <translation>Vollbildmodus aktivieren</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="118"/>
@@ -650,7 +650,7 @@ erlauben sich mit dir zu verbinden?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/FilterHeader.cpp" line="29"/>
         <source>Filter...</source>
-        <translation type="unfinished"/>
+        <translation>Filter...</translation>
     </message>
 </context>
 <context>
@@ -1359,7 +1359,7 @@ erlauben sich mit dir zu verbinden?</translation>
         <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="626"/>
         <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="662"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
-        <translation type="unfinished"/>
+        <translation>Script Resolver Warnung: API aufruf %1 zurückgegebener Daten synchron. </translation>
     </message>
 </context>
 <context>
@@ -1415,7 +1415,7 @@ erlauben sich mit dir zu verbinden?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/ScriptCollectionHeader.cpp" line="50"/>
         <source>Reload Collection</source>
-        <translation type="unfinished"/>
+        <translation>Sammlung neuladen</translation>
     </message>
 </context>
 <context>
@@ -1502,12 +1502,12 @@ erlauben sich mit dir zu verbinden?</translation>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="459"/>
         <source>Tomahawk Resolvers (*.axe *.js);;All files (*)</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk Resolvers (*.axe *.js);;Alle Dateien (*)</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="502"/>
         <source>Resolver installation from file %1 failed.</source>
-        <translation type="unfinished"/>
+        <translation>Die Resolver Installation von der Datei %1 ist fehlgeschlagen</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="521"/>
@@ -1957,7 +1957,7 @@ erlauben sich mit dir zu verbinden?</translation>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="331"/>
         <source>Cloud</source>
-        <translation type="unfinished"/>
+        <translation>Cloud</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="299"/>
@@ -2238,27 +2238,27 @@ erlauben sich mit dir zu verbinden?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="102"/>
         <source>Resolver installation error: cannot open bundle.</source>
-        <translation type="unfinished"/>
+        <translation>Resolver Installationsfehler: cannot open bundle.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="109"/>
         <source>Resolver installation error: incomplete bundle.</source>
-        <translation type="unfinished"/>
+        <translation>Resolver Installationsfehler: incomplete bundle.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="148"/>
         <source>Resolver installation error: bad metadata in bundle.</source>
-        <translation type="unfinished"/>
+        <translation>Resolver Installationsfehler: bad metadata in bundle.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="186"/>
         <source>Resolver installation error: platform mismatch.</source>
-        <translation type="unfinished"/>
+        <translation>Resolver Installationsfehler: platform mismatch.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="199"/>
         <source>Resolver installation error: Tomahawk %1 or newer is required.</source>
-        <translation type="unfinished"/>
+        <translation>Resolver Installationsfehler: Tomahawk %1 oder neuer ist erforderlich.</translation>
     </message>
 </context>
 <context>
@@ -2492,22 +2492,22 @@ You may wish to try re-authenticating.</source>
 <context>
     <name>Tomahawk::Accounts::XmppConfigWidget</name>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="144"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="123"/>
         <source>You forgot to enter your username!</source>
         <translation>Du hast vergessen einen Usernamen einzugeben!</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="152"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="131"/>
         <source>Your Xmpp Id should look like an email address</source>
-        <translation type="unfinished"/>
+        <translation>Ihre Xmpp id sollte wie eine E-Mail Adresse aussehen</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="158"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="137"/>
         <source>
 
 Example:
 username@jabber.org</source>
-        <translation type="unfinished"/>
+        <translation>⏎ ⏎ :⏎ Beispiel:⏎  username@jabber.org</translation>
     </message>
 </context>
 <context>
@@ -2563,7 +2563,7 @@ username@jabber.org</source>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="104"/>
         <source>Add to &amp;Playlist</source>
-        <translation type="unfinished"/>
+        <translation>In die Playlist hinzufügen</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="118"/>
@@ -3104,17 +3104,17 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="990"/>
         <source>where genre is %1</source>
-        <translation type="unfinished"/>
+        <translation>der Songtyp ist %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1003"/>
         <source>where song type is %1</source>
-        <translation type="unfinished"/>
+        <translation>der Songtyp ist %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1005"/>
         <source>where song type is not %1</source>
-        <translation type="unfinished"/>
+        <translation>der Songtyp ist nicht %1</translation>
     </message>
 </context>
 <context>
@@ -3154,25 +3154,25 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="193"/>
         <source>&lt;br /&gt;&lt;i&gt;on&lt;/i&gt; %1</source>
         <comment>%1 is an album name</comment>
-        <translation type="unfinished"/>
+        <translation>&lt;br /&gt;&lt;i&gt;in&lt;/i&gt; %1</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="195"/>
         <source>%1&lt;br /&gt;&lt;i&gt;by&lt;/i&gt; %2%3.</source>
         <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing</comment>
-        <translation type="unfinished"/>
+        <translation>%1&lt;br /&gt;&lt;i&gt;in&lt;/i&gt; %2%3.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="204"/>
         <source>on &quot;%1&quot;</source>
         <comment>%1 is an album name</comment>
-        <translation type="unfinished"/>
+        <translation>in &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="206"/>
         <source>&quot;%1&quot; by %2%3.</source>
         <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing</comment>
-        <translation type="unfinished"/>
+        <translation>&quot;%1&quot; in %2%3.</translation>
     </message>
 </context>
 <context>
@@ -3335,7 +3335,7 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
         <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="72"/>
         <source>%1 Collection</source>
         <comment>Name of a collection based on a resolver, e.g. Subsonic Collection</comment>
-        <translation type="unfinished"/>
+        <translation>%1 Sammlung</translation>
     </message>
 </context>
 <context>
@@ -3357,43 +3357,43 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="286"/>
-        <location filename="../src/libtomahawk/Source.cpp" line="337"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="355"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="406"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Scanne (%L1 Stücke)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="288"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="357"/>
         <source>Scanning</source>
         <translation>Scanne</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="322"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="391"/>
         <source>Checking</source>
         <translation>Überprüfe</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="327"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="396"/>
         <source>Syncing</source>
         <translation>Synchronisiere</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="332"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="401"/>
         <source>Importing</source>
         <translation>Importiere</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="483"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="552"/>
         <source>Saving (%1%)</source>
         <translation>Speichere (%1%)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="564"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="633"/>
         <source>Online</source>
         <translation>Online</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="568"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="637"/>
         <source>Offline</source>
         <translation>Offline</translation>
     </message>
@@ -3546,12 +3546,12 @@ Tomahawk auf Twitter&apos;s Website authentifiziert hast:</translation>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="886"/>
         <source>Exit Full Screen</source>
-        <translation type="unfinished"/>
+        <translation>Vollbildmodus deaktivieren</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="898"/>
         <source>Enter Full Screen</source>
-        <translation type="unfinished"/>
+        <translation>Vollbildmodus aktivieren</translation>
     </message>
     <message>
         <location filename="../src/TomahawkWindow.cpp" line="960"/>
