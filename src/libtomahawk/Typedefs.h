@@ -57,7 +57,9 @@ namespace Tomahawk
     typedef QSharedPointer<Result> result_ptr;
     typedef QSharedPointer<Source> source_ptr;
     typedef QSharedPointer<Artist> artist_ptr;
+    typedef QWeakPointer<Artist> artist_wptr;
     typedef QSharedPointer<Album> album_ptr;
+    typedef QWeakPointer<Album> album_wptr;
     typedef QSharedPointer<PeerInfo> peerinfo_ptr;
 
     typedef QSharedPointer<DynamicControl> dyncontrol_ptr;
