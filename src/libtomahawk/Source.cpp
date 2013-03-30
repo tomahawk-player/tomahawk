@@ -136,11 +136,10 @@ Source::nodeId() const
 QString
 Source::friendlyName() const
 {
-    QPixmap result;
     QStringList candidateNames;
-    foreach( const peerinfo_ptr& peerInfo, peerInfos() )
+    foreach ( const peerinfo_ptr& peerInfo, peerInfos() )
     {
-        if( !peerInfo.isNull() && !peerInfo->friendlyName().isEmpty() )
+        if ( !peerInfo.isNull() && !peerInfo->friendlyName().isEmpty() )
         {
             candidateNames.append( peerInfo->friendlyName() );
         }
@@ -488,7 +487,8 @@ Source::lastCmdGuid() const
 void
 Source::setLastCmdGuid( const QString& guid )
 {
-    tLog() << Q_FUNC_INFO << "name is " << friendlyName() << " and guid is " << guid;
+    tLog( LOGVERBOSE ) << Q_FUNC_INFO << "name is" << friendlyName() << "and guid is" << guid;
+
     QMutexLocker lock( &m_cmdMutex );
     m_lastCmdGuid = guid;
 }
