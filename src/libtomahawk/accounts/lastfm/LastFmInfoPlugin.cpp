@@ -441,7 +441,7 @@ LastFmInfoPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::In
             QMap<QString, QString> args;
             args["method"] = criteria["chart_id"];
             args["limit"] = "100";
-            QNetworkReply* reply = lastfm::ws::get(args);
+            QNetworkReply* reply = lastfm::ws::get( args );
             reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
 
             connect( reply, SIGNAL( finished() ), SLOT( chartReturned() ) );

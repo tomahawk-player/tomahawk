@@ -657,7 +657,6 @@ Playlist::addEntries( const QList<query_ptr>& queries, const QString& oldrev )
     QString newrev = uuid();
     createNewRevision( newrev, oldrev, el );
 
-
     // We are appending at end, so notify listeners.
     // PlaylistModel also emits during appends, but since we call
     // createNewRevision, it reloads instead of appends.
