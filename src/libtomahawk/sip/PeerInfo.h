@@ -137,8 +137,9 @@ private:
 
     mutable QPixmap* m_avatar;
     mutable QPixmap* m_fancyAvatar;
+
+    mutable QByteArray m_avatarBuffer;
     mutable QByteArray m_avatarHash;
-    mutable bool m_avatarUpdated;
     mutable QHash< TomahawkUtils::ImageMode, QHash< int, QPixmap > > m_coverCache;
 };
 

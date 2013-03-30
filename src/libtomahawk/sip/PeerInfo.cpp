@@ -33,11 +33,13 @@ namespace Tomahawk
 QHash< QString, peerinfo_ptr > PeerInfo::s_peersByCacheKey = QHash< QString, peerinfo_ptr >();
 QHash< SipPlugin*, peerinfo_ptr > PeerInfo::s_selfPeersBySipPlugin = QHash< SipPlugin*, peerinfo_ptr >();
 
+
 inline QString
 peerCacheKey( SipPlugin* plugin, const QString& peerId )
 {
     return QString( "%1\t\t%2" ).arg( (quintptr) plugin ).arg( peerId );
 }
+
 
 Tomahawk::peerinfo_ptr
 PeerInfo::getSelf( SipPlugin* parent, PeerInfo::GetOptions options )
@@ -48,7 +50,7 @@ PeerInfo::getSelf( SipPlugin* parent, PeerInfo::GetOptions options )
     }
 
     // if AutoCreate isn't enabled nothing to do here
-    if( ! ( options & AutoCreate ) )
+    if ( ! ( options & AutoCreate ) )
     {
         return peerinfo_ptr();
     }
@@ -80,7 +82,7 @@ PeerInfo::get( SipPlugin* parent, const QString& id, GetOptions options )
     }
 
     // if AutoCreate isn't enabled nothing to do here
-    if( ! ( options & AutoCreate ) )
+    if ( ! ( options & AutoCreate ) )
     {
         return peerinfo_ptr();
     }
@@ -99,6 +101,7 @@ PeerInfo::getAll()
     return s_peersByCacheKey.values();
 }
 
+
 PeerInfo::PeerInfo( SipPlugin* parent, const QString& id )
     : QObject( parent )
     , m_type( External )
@@ -106,10 +109,8 @@ PeerInfo::PeerInfo( SipPlugin* parent, const QString& id )
     , m_status( Offline )
     , m_avatar( 0 )
     , m_fancyAvatar( 0 )
-    , m_avatarUpdated( true )
 {
 }
-
 
 
 PeerInfo::~PeerInfo()
@@ -147,17 +148,18 @@ PeerInfo::setControlConnection( ControlConnection* controlConnection )
     m_controlConnection = controlConnection;
 }
 
+
 ControlConnection*
 PeerInfo::controlConnection() const
 {
     return m_controlConnection;
 }
 
+
 bool PeerInfo::hasControlConnection()
 {
     return !m_controlConnection.isNull();
 }
-
 
 
 void
@@ -166,18 +168,19 @@ PeerInfo::setType( Tomahawk::PeerInfo::Type type )
     m_type = type;
 }
 
+
 PeerInfo::Type
 PeerInfo::type() const
 {
     return m_type;
 }
 
+
 const
 QString PeerInfo::id() const
 {
     return m_id;
 }
-
 
 
 SipPlugin*
@@ -215,17 +218,16 @@ PeerInfo::contactId() const
 }
 
 
-
 void
 PeerInfo::setStatus( PeerInfo::Status status )
 {
     m_status = status;
 
-    if( status == Online )
+    if ( status == Online )
     {
         announce();
     }
-    else if( status == Offline && controlConnection() )
+    else if ( status == Offline && controlConnection() )
     {
         controlConnection()->removePeerInfo( weakRef().toStrongRef() );
     }
@@ -248,7 +250,7 @@ PeerInfo::status() const
 void
 PeerInfo::setSipInfo( const SipInfo& sipInfo )
 {
-    if(sipInfo == m_sipInfo)
+    if ( sipInfo == m_sipInfo )
         return;
 
     m_sipInfo = sipInfo;
@@ -291,37 +293,38 @@ PeerInfo::setAvatar( const QPixmap& avatar )
     const QByteArray hash = QCryptographicHash::hash( ba.left( 4096 ), QCryptographicHash::Sha1 );
     if ( m_avatarHash == hash )
         return;
-    else
-        m_avatarHash = hash;
 
+    m_avatarHash = hash;
+    m_avatarBuffer = ba;
+    
     delete m_avatar;
-    m_avatar = new QPixmap( avatar );
+    delete m_fancyAvatar;
+    m_avatar = 0;
     m_fancyAvatar = 0;
 
     TomahawkUtils::Cache::instance()->putData( "Sources", 7776000000 /* 90 days */, id(), ba );
-    m_avatarUpdated = true;
 }
 
 
 const QPixmap
 PeerInfo::avatar( TomahawkUtils::ImageMode style, const QSize& size ) const
 {
-//     tLog() << "*****************************************" << Q_FUNC_INFO << id();
-
-    if ( !m_avatar && m_avatarUpdated )
+    if ( !m_avatar )
     {
-        m_avatar = new QPixmap();
-        QByteArray ba = TomahawkUtils::Cache::instance()->getData( "Sources", id() ).toByteArray();
+        if ( m_avatarBuffer.isEmpty() )
+            m_avatarBuffer = TomahawkUtils::Cache::instance()->getData( "Sources", id() ).toByteArray();
 
-        if ( ba.count() )
-            m_avatar->loadFromData( ba );
+        m_avatar = new QPixmap();
+        if ( !m_avatarBuffer.isEmpty() )
+            m_avatar->loadFromData( m_avatarBuffer );
 
         if ( m_avatar->isNull() )
         {
             delete m_avatar;
             m_avatar = 0;
         }
-        m_avatarUpdated = false;
+        
+        m_avatarBuffer.clear();
     }
 
     if ( style == TomahawkUtils::RoundedCorners && m_avatar && !m_avatar->isNull() && !m_fancyAvatar )
@@ -357,8 +360,9 @@ PeerInfo::avatar( TomahawkUtils::ImageMode style, const QSize& size ) const
     return pixmap;
 }
 
+
 void
-PeerInfo::setVersionString(const QString& versionString)
+PeerInfo::setVersionString( const QString& versionString )
 {
     m_versionString = versionString;
 }
@@ -372,7 +376,7 @@ PeerInfo::versionString() const
 
 
 void
-PeerInfo::setData(const QVariant& data)
+PeerInfo::setData( const QVariant& data )
 {
     m_data = data;
 }
