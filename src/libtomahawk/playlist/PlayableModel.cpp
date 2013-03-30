@@ -54,6 +54,8 @@ PlayableModel::PlayableModel( QObject* parent, bool loading )
 
 PlayableModel::~PlayableModel()
 {
+    tDebug() << Q_FUNC_INFO;
+    delete m_rootItem;
 }
 
 
