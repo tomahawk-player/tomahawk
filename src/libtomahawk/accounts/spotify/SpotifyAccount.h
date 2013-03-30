@@ -103,7 +103,8 @@ public:
     virtual SipPlugin* sipPlugin() { return 0; }
     virtual bool preventEnabling() const { return m_preventEnabling; }
 
-
+    bool hasPlaylist( const QString& plId );
+    Tomahawk::playlist_ptr playlistForURI( const QString& plId );
     void registerUpdaterForPlaylist( const QString& plId, SpotifyPlaylistUpdater* updater );
     void registerPlaylistInfo( const QString& name, const QString& plid, const QString &revid, const bool sync, const bool subscribed , const bool owner = false);
     void registerPlaylistInfo( SpotifyPlaylistInfo* info );

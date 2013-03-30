@@ -1396,6 +1396,18 @@ SpotifyAccount::sendMessage( const QVariantMap &m, QObject* obj, const QString& 
     return qid;
 }
 
+bool
+SpotifyAccount::hasPlaylist(const QString& plId)
+{
+    return m_updaters.contains( plId );
+}
+
+Tomahawk::playlist_ptr
+SpotifyAccount::playlistForURI(const QString& plId)
+{
+    return m_updaters[ plId ]->playlist();
+}
+
 
 void
 SpotifyAccount::registerUpdaterForPlaylist( const QString& plId, SpotifyPlaylistUpdater* updater )

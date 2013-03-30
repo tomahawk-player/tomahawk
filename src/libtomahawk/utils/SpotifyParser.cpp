@@ -401,14 +401,23 @@ SpotifyParser::checkBrowseFinished()
         if ( m_createNewPlaylist && !m_tracks.isEmpty() )
         {
             QString spotifyUsername;
+            bool spotifyAccountLoggedIn = Accounts::SpotifyAccount::instance() && Accounts::SpotifyAccount::instance()->loggedIn();
 
-            if ( Accounts::SpotifyAccount::instance() && Accounts::SpotifyAccount::instance()->loggedIn() )
+            if ( spotifyAccountLoggedIn )
             {
                 QVariantHash creds = Accounts::SpotifyAccount::instance()->credentials();
                 spotifyUsername = creds.value( "username" ).toString();
             }
 
-            m_playlist = Playlist::create( SourceList::instance()->getLocal(),
+            if ( spotifyAccountLoggedIn &&  Accounts::SpotifyAccount::instance()->hasPlaylist( m_browseUri ) )
+            {
+                // The playlist is already registered with Tomahawk, so just open it instead of adding another instance.
+                m_playlist = Accounts::SpotifyAccount::instance()->playlistForURI( m_browseUri );
+                playlistCreated();
+            }
+            else
+            {
+                m_playlist = Playlist::create( SourceList::instance()->getLocal(),
                                        uuid(),
                                        m_title,
                                        m_info,
@@ -416,29 +425,30 @@ SpotifyParser::checkBrowseFinished()
                                        false,
                                        m_tracks );
 
-            connect( m_playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( playlistCreated() ) );
+                connect( m_playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( playlistCreated() ) );
 
-            if ( Accounts::SpotifyAccount::instance() && Accounts::SpotifyAccount::instance()->loggedIn() )
-            {
-                SpotifyPlaylistUpdater* updater = new SpotifyPlaylistUpdater(
-                                                    Accounts::SpotifyAccount::instance(), m_playlist->currentrevision(), m_browseUri, m_playlist );
+                if ( spotifyAccountLoggedIn )
+                {
+                    SpotifyPlaylistUpdater* updater = new SpotifyPlaylistUpdater(
+                                                        Accounts::SpotifyAccount::instance(), m_playlist->currentrevision(), m_browseUri, m_playlist );
 
 
-                // If the user isnt dropping a playlist the he owns, its subscribeable
-                if ( !m_browseUri.contains( spotifyUsername ) )
-                    updater->setCanSubscribe( true );
-                else
-                    updater->setOwner( true );
+                    // If the user isnt dropping a playlist the he owns, its subscribeable
+                    if ( !m_browseUri.contains( spotifyUsername ) )
+                        updater->setCanSubscribe( true );
+                    else
+                        updater->setOwner( true );
 
-                updater->setCollaborative( m_collaborative );
-                updater->setSubscribers( m_subscribers );
-                // Just register the infos
-                Accounts::SpotifyAccount::instance()->registerPlaylistInfo( m_title, m_browseUri, m_browseUri, false, false, updater->owner() );
-                Accounts::SpotifyAccount::instance()->registerUpdaterForPlaylist( m_browseUri, updater );
-                // On default, set the playlist as subscribed
-                if( !updater->owner() )
-                    Accounts::SpotifyAccount::instance()->setSubscribedForPlaylist( m_playlist, true );
+                    updater->setCollaborative( m_collaborative );
+                    updater->setSubscribers( m_subscribers );
+                    // Just register the infos
+                    Accounts::SpotifyAccount::instance()->registerPlaylistInfo( m_title, m_browseUri, m_browseUri, false, false, updater->owner() );
+                    Accounts::SpotifyAccount::instance()->registerUpdaterForPlaylist( m_browseUri, updater );
+                    // On default, set the playlist as subscribed
+                    if( !updater->owner() )
+                        Accounts::SpotifyAccount::instance()->setSubscribedForPlaylist( m_playlist, true );
 
+                }
             }
             return;
         }
