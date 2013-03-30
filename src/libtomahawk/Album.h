@@ -106,8 +106,8 @@ private:
 
     QWeakPointer< Tomahawk::Album > m_ownRef;
 
-    static QHash< QString, album_ptr > s_albumsByName;
-    static QHash< unsigned int, album_ptr > s_albumsById;
+    static QHash< QString, album_wptr > s_albumsByName;
+    static QHash< unsigned int, album_wptr > s_albumsById;
 
     friend class ::IdThreadWorker;
 };
