@@ -671,7 +671,7 @@ TomahawkApp::loadUrl( const QString& url )
 #ifndef ENABLE_HEADLESS
     if ( url.startsWith( "tomahawk://" ) )
         return GlobalActionManager::instance()->parseTomahawkLink( url );
-    else if ( url.contains( "open.spotify.com" ) || url.contains( "spotify:track" ) )
+    else if ( url.contains( "open.spotify.com" ) || url.startsWith( "spotify:" ) )
         return GlobalActionManager::instance()->openSpotifyLink( url );
     else if ( url.contains( "www.rdio.com" ) )
         return GlobalActionManager::instance()->openRdioLink( url );
