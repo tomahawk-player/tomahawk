@@ -34,19 +34,17 @@
 
 #include <QReadWriteLock>
 
-#define ID_THREAD_DEBUG 0
-
 using namespace Tomahawk;
 
-QHash< QString, artist_ptr > Artist::s_artistsByName = QHash< QString, artist_ptr >();
-QHash< unsigned int, artist_ptr > Artist::s_artistsById = QHash< unsigned int, artist_ptr >();
+QHash< QString, artist_wptr > Artist::s_artistsByName = QHash< QString, artist_wptr >();
+QHash< unsigned int, artist_wptr > Artist::s_artistsById = QHash< unsigned int, artist_wptr >();
 
 static QMutex s_nameCacheMutex;
-static QMutex s_idCacheMutex;
 static QReadWriteLock s_idMutex;
 
 Artist::~Artist()
 {
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Deleting artist:" << m_name;
     m_ownRef.clear();
 
 #ifndef ENABLE_HEADLESS
@@ -61,18 +59,17 @@ Artist::get( const QString& name, bool autoCreate )
     if ( name.isEmpty() )
         return artist_ptr();
 
-    const QString sortname = name.toLower();
-
     QMutexLocker lock( &s_nameCacheMutex );
+    const QString sortname = name.toLower();
     if ( s_artistsByName.contains( sortname ) )
-        return s_artistsByName.value( sortname );
+    {
+        artist_wptr artist = s_artistsByName.value( sortname );
+        if ( !artist.isNull() )
+            return artist.toStrongRef();
+    }
 
     if ( !Database::instance() || !Database::instance()->impl() )
         return artist_ptr();
-
-#if ID_THREAD_DEBUG
-        tDebug() << "Creating artist:" << name << "( sortname:" << sortname << ")";
-#endif
 
     artist_ptr artist = artist_ptr( new Artist( name ), &QObject::deleteLater );
     artist->setWeakRef( artist.toWeakRef() );
@@ -86,25 +83,35 @@ Artist::get( const QString& name, bool autoCreate )
 artist_ptr
 Artist::get( unsigned int id, const QString& name )
 {
-    QMutexLocker lock( &s_idCacheMutex );
+    s_idMutex.lockForRead();
+    if ( s_artistsById.contains( id ) )
+    {
+        artist_wptr artist = s_artistsById.value( id );
+        s_idMutex.unlock();
 
+        if ( !artist.isNull() )
+            return artist;
+    }
+    s_idMutex.unlock();
+    
+    QMutexLocker lock( &s_nameCacheMutex );
     const QString sortname = name.toLower();
     if ( s_artistsByName.contains( sortname ) )
     {
-        return s_artistsByName.value( sortname );
-    }
-    if ( s_artistsById.contains( id ) )
-    {
-        return s_artistsById.value( id );
+        artist_wptr artist = s_artistsByName.value( sortname );
+        if ( !artist.isNull() )
+            return artist;
     }
 
     artist_ptr a = artist_ptr( new Artist( id, name ), &QObject::deleteLater );
     a->setWeakRef( a.toWeakRef() );
-
     s_artistsByName.insert( sortname, a );
+
     if ( id > 0 )
     {
+        s_idMutex.lockForWrite();
         s_artistsById.insert( id, a );
+        s_idMutex.unlock();
     }
 
     return a;
@@ -125,6 +132,7 @@ Artist::Artist( unsigned int id, const QString& name )
     , m_cover( 0 )
 #endif
 {
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Creating artist:" << id << name;
     m_sortname = DatabaseImpl::sortname( name, true );
 }
 
@@ -143,6 +151,7 @@ Artist::Artist( const QString& name )
     , m_cover( 0 )
 #endif
 {
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Creating artist:" << name;
     m_sortname = DatabaseImpl::sortname( name, true );
 }
 
@@ -286,25 +295,19 @@ Artist::id() const
 
     if ( waiting )
     {
-#if ID_THREAD_DEBUG
-        qDebug() << Q_FUNC_INFO << "Asked for artist ID and NOT loaded yet" << m_name << m_idFuture.isFinished();
-#endif
+//        qDebug() << Q_FUNC_INFO << "Asked for artist ID and NOT loaded yet" << m_name << m_idFuture.isFinished();
         m_idFuture.waitForFinished();
-#if ID_THREAD_DEBUG
-        qDebug() << "DONE WAITING:" << m_idFuture.resultCount() << m_idFuture.isResultReadyAt(0) << m_idFuture.isCanceled() << m_idFuture.isFinished() << m_idFuture.isPaused() << m_idFuture.isRunning() << m_idFuture.isStarted();
-#endif
+//        qDebug() << "DONE WAITING:" << m_idFuture.resultCount() << m_idFuture.isResultReadyAt( 0 ) << m_idFuture.isCanceled() << m_idFuture.isFinished() << m_idFuture.isPaused() << m_idFuture.isRunning() << m_idFuture.isStarted();
         finalid = m_idFuture.result();
 
-#if ID_THREAD_DEBUG
-        qDebug() << Q_FUNC_INFO << "Got loaded artist:" << m_name << finalid;
-#endif
+//        qDebug() << Q_FUNC_INFO << "Got loaded artist:" << m_name << finalid;
 
         s_idMutex.lockForWrite();
         m_id = finalid;
         m_waitingForFuture = false;
 
         if ( m_id > 0 )
-            s_artistsById[ m_id ] = m_ownRef.toStrongRef();
+            s_artistsById.insert( m_id, m_ownRef.toStrongRef() );
 
         s_idMutex.unlock();
     }

@@ -135,8 +135,8 @@ private:
 
     QWeakPointer< Tomahawk::Artist > m_ownRef;
 
-    static QHash< QString, artist_ptr > s_artistsByName;
-    static QHash< unsigned int, artist_ptr > s_artistsById;
+    static QHash< QString, artist_wptr > s_artistsByName;
+    static QHash< unsigned int, artist_wptr > s_artistsById;
 
     friend class ::IdThreadWorker;
 };
