@@ -426,8 +426,6 @@ ChartsPlugin::chartsList()
         QString chartName;
         QStringList defaultChain;
 
-        qDebug() << Q_FUNC_INFO << "FETCHING " << source;
-
         if ( m_geoChartIds.contains( source ) )
         {
             // Some charts can have an extra param, itunes has geo, WAH has emerging/mainstream
