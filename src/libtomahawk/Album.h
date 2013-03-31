@@ -68,6 +68,9 @@ public:
 
     void loadId( bool autoCreate );
 
+public slots:
+    void deleteLater();
+
 signals:
     void tracksAdded( const QList<Tomahawk::query_ptr>& tracks, Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection );
     void updated();
