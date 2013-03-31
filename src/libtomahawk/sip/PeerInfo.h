@@ -125,6 +125,7 @@ private:
     QWeakPointer< Tomahawk::PeerInfo > m_ownRef;
     QPointer< ControlConnection > m_controlConnection;
 
+    SipPlugin* m_parent;
     PeerInfo::Type m_type;
 
     QString m_id;

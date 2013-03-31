@@ -89,7 +89,7 @@ PeerInfo::get( SipPlugin* parent, const QString& id, GetOptions options )
 
     peerinfo_ptr peerInfo( new PeerInfo( parent, id ) );
     peerInfo->setWeakRef( peerInfo.toWeakRef() );
-    s_peersByCacheKey.insert( key, peerInfo);
+    s_peersByCacheKey.insert( key, peerInfo );
 
     return peerInfo;
 }
@@ -103,7 +103,8 @@ PeerInfo::getAll()
 
 
 PeerInfo::PeerInfo( SipPlugin* parent, const QString& id )
-    : QObject( parent )
+    : QObject()
+    , m_parent( parent )
     , m_type( External )
     , m_id( id )
     , m_status( Offline )
@@ -115,7 +116,7 @@ PeerInfo::PeerInfo( SipPlugin* parent, const QString& id )
 
 PeerInfo::~PeerInfo()
 {
-    tDebug() << Q_FUNC_INFO;
+//    tDebug() << Q_FUNC_INFO;
     delete m_avatar;
     delete m_fancyAvatar;
 }
@@ -186,7 +187,7 @@ QString PeerInfo::id() const
 SipPlugin*
 PeerInfo::sipPlugin() const
 {
-    return qobject_cast< SipPlugin* >( parent() );
+    return m_parent;
 }
 
 
