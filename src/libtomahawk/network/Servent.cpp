@@ -96,6 +96,11 @@ Servent::Servent( QObject* parent )
 
 Servent::~Servent()
 {
+    tDebug() << Q_FUNC_INFO;
+
+    foreach ( ControlConnection* cc, m_controlconnections )
+        delete cc;
+
     if ( m_portfwd )
     {
         m_portfwd.data()->quit();
@@ -267,6 +272,7 @@ void
 Servent::unregisterControlConnection( ControlConnection* conn )
 {
     Q_ASSERT( conn );
+
     tLog( LOGVERBOSE ) << Q_FUNC_INFO << conn->name();
     m_connectedNodes.removeAll( conn->id() );
     m_controlconnections.removeAll( conn );
@@ -459,7 +465,13 @@ Servent::readyRead()
 
     QByteArray ba = sock.data()->read( sock.data()->_msg->length() );
     sock.data()->_msg->fill( ba );
-    Q_ASSERT( sock.data()->_msg->is( Msg::JSON ) );
+    
+    if ( !sock.data()->_msg->is( Msg::JSON ) )
+    {
+        tDebug() << ba;
+        tDebug() << sock.data()->_msg->payload();
+        Q_ASSERT( sock.data()->_msg->is( Msg::JSON ) );
+    }
 
     ControlConnection* cc = 0;
     bool ok;
