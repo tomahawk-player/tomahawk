@@ -67,15 +67,8 @@ public:
     void addResolver( Resolver* r );
     void removeResolver( Resolver* r );
 
-    query_ptr query( const QID& qid ) const
-    {
-        return m_qids.value( qid );
-    }
-
-    result_ptr result( const RID& rid ) const
-    {
-        return m_rids.value( rid );
-    }
+    query_ptr query( const QID& qid ) const;
+    result_ptr result( const RID& rid ) const;
 
     bool isResolving( const query_ptr& q ) const;
 

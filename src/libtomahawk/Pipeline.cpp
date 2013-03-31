@@ -306,9 +306,13 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
     if ( !cleanResults.isEmpty() )
     {
         q->addResults( cleanResults );
-        foreach ( const result_ptr& r, cleanResults )
+        
+        if ( m_queries_temporary.contains( q ) )
         {
-            m_rids.insert( r->id(), r );
+            foreach ( const result_ptr& r, cleanResults )
+            {
+                m_rids.insert( r->id(), r );
+            }
         }
 
         if ( q->solved() && !q->isFullTextQuery() )
@@ -552,13 +556,31 @@ Pipeline::decQIDState( const Tomahawk::query_ptr& query )
 void
 Pipeline::onTemporaryQueryTimer()
 {
-    QMutexLocker lock( &m_mut );
     tDebug() << Q_FUNC_INFO;
+
+    QMutexLocker lock( &m_mut );
     m_temporaryQueryTimer.stop();
 
     for ( int i = m_queries_temporary.count() - 1; i >= 0; i-- )
     {
         query_ptr q = m_queries_temporary.takeAt( i );
+        
         m_qids.remove( q->id() );
+        foreach ( const Tomahawk::result_ptr& r, q->results() )
+            m_rids.remove( r->id() );
     }
+}
+
+
+query_ptr
+Pipeline::query( const QID& qid ) const
+{
+    return m_qids.value( qid );
+}
+
+
+result_ptr
+Pipeline::result( const RID& rid ) const
+{
+    return m_rids.value( rid );
 }
