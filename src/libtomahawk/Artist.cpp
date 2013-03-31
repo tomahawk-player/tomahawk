@@ -60,10 +60,10 @@ Artist::get( const QString& name, bool autoCreate )
         return artist_ptr();
 
     QMutexLocker lock( &s_nameCacheMutex );
-    const QString sortname = name.toLower();
-    if ( s_artistsByName.contains( sortname ) )
+    const QString key = name.toLower();
+    if ( s_artistsByName.contains( key ) )
     {
-        artist_wptr artist = s_artistsByName.value( sortname );
+        artist_wptr artist = s_artistsByName.value( key );
         if ( !artist.isNull() )
             return artist.toStrongRef();
     }
@@ -71,10 +71,10 @@ Artist::get( const QString& name, bool autoCreate )
     if ( !Database::instance() || !Database::instance()->impl() )
         return artist_ptr();
 
-    artist_ptr artist = artist_ptr( new Artist( name ), &QObject::deleteLater );
+    artist_ptr artist = artist_ptr( new Artist( name ), &Artist::deleteLater );
     artist->setWeakRef( artist.toWeakRef() );
     artist->loadId( autoCreate );
-    s_artistsByName.insert( sortname, artist );
+    s_artistsByName.insert( key, artist );
 
     return artist;
 }
@@ -93,19 +93,19 @@ Artist::get( unsigned int id, const QString& name )
             return artist;
     }
     s_idMutex.unlock();
-    
+
     QMutexLocker lock( &s_nameCacheMutex );
-    const QString sortname = name.toLower();
-    if ( s_artistsByName.contains( sortname ) )
+    const QString key = name.toLower();
+    if ( s_artistsByName.contains( key ) )
     {
-        artist_wptr artist = s_artistsByName.value( sortname );
+        artist_wptr artist = s_artistsByName.value( key );
         if ( !artist.isNull() )
             return artist;
     }
 
-    artist_ptr a = artist_ptr( new Artist( id, name ), &QObject::deleteLater );
+    artist_ptr a = artist_ptr( new Artist( id, name ), &Artist::deleteLater );
     a->setWeakRef( a.toWeakRef() );
-    s_artistsByName.insert( sortname, a );
+    s_artistsByName.insert( key, a );
 
     if ( id > 0 )
     {
@@ -153,6 +153,31 @@ Artist::Artist( const QString& name )
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Creating artist:" << name;
     m_sortname = DatabaseImpl::sortname( name, true );
+}
+
+
+void
+Artist::deleteLater()
+{
+    QMutexLocker lock( &s_nameCacheMutex );
+
+    const QString key = m_name.toLower();
+    if ( s_artistsByName.contains( key ) )
+    {
+        s_artistsByName.remove( key );
+    }
+
+    if ( m_id > 0 )
+    {
+        s_idMutex.lockForWrite();
+        if ( s_artistsById.contains( m_id ) )
+        {
+            s_artistsById.remove( m_id );
+        }
+        s_idMutex.unlock();
+    }
+
+    QObject::deleteLater();
 }
 
 
