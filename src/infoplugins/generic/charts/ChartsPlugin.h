@@ -113,6 +113,7 @@ private:
     QList< InfoRequestData > m_cachedRequests;
     QHash< QString, QString > m_cachedCountries;
     QPointer< QNetworkAccessManager > m_nam;
+    QStringList m_geoChartIds;
 };
 
 }

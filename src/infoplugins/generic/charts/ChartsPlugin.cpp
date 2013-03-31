@@ -56,6 +56,8 @@ ChartsPlugin::ChartsPlugin()
     /// If you add resource, update version aswell
     m_chartVersion = "2.6";
     m_supportedGetTypes <<  InfoChart << InfoChartCapabilities;
+    // Charts that have geo or genre types
+    m_geoChartIds << "wearehunted" << "itunes" << "hotnewhiphop" << "djshop.de" << "rdio";
 }
 
 
@@ -423,7 +425,10 @@ ChartsPlugin::chartsList()
         QVariantMap charts;
         QString chartName;
         QStringList defaultChain;
-        if ( source == "wearehunted" || source == "itunes" || source == "hotnewhiphop" || source == "djshop.de" )
+
+        qDebug() << Q_FUNC_INFO << "FETCHING " << source;
+
+        if ( m_geoChartIds.contains( source ) )
         {
             // Some charts can have an extra param, itunes has geo, WAH has emerging/mainstream
             // Itunes has geographic-area based charts. So we build a breadcrumb of
@@ -479,9 +484,7 @@ ChartsPlugin::chartsList()
                     else
                         extra = chart.value( "extra" ).toString();
 
-                    if ( source == "hotnewhiphop" )
-                        name = chart.value( "name" ).toString();
-                    if ( source == "djshop.de" )
+                    if ( source == "hotnewhiphop" || source == "djshop.de" || source == "rdio" )
                         name = chart.value( "name" ).toString();
 
                     if ( name.isEmpty() ) // not a specific chart, an all chart
@@ -532,6 +535,10 @@ ChartsPlugin::chartsList()
                 else if ( source == "djshop.de" )
                 {
                     chartName = "DjShop.de";
+                }
+                else if ( source == "rdio" )
+                {
+                    chartName = "Rdio";
                 }
             }
         }
