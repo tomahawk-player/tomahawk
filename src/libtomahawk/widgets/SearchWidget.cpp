@@ -79,6 +79,7 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
 SearchWidget::~SearchWidget()
 {
     tDebug() << Q_FUNC_INFO;
+
     delete ui;
 }
 
@@ -143,7 +144,7 @@ SearchWidget::onResultsFound( const QList<Tomahawk::result_ptr>& results )
 void
 SearchWidget::onAlbumsFound( const QList<Tomahawk::album_ptr>& albums )
 {
-    foreach ( const Tomahawk::album_ptr& album, albums)
+    foreach ( const Tomahawk::album_ptr& album, albums )
     {
         int distance = TomahawkUtils::levenshtein( m_search, album->name() );
         int maxlen = qMax( m_search.length(), album->name().length() );
@@ -153,7 +154,7 @@ SearchWidget::onAlbumsFound( const QList<Tomahawk::album_ptr>& albums )
             continue;
 
         m_albums.insert( score, album );
-        tDebug() << Q_FUNC_INFO << "found album:" << album->name() << "score:" << score;
+//        tDebug() << Q_FUNC_INFO << "found album:" << album->name() << "score:" << score;
     }
 
     updateAlbums();
@@ -173,7 +174,7 @@ SearchWidget::onArtistsFound( const QList<Tomahawk::artist_ptr>& artists )
             continue;
 
         m_artists.insert( score, artist );
-        tDebug() << Q_FUNC_INFO << "found artist:" << artist->name() << "score:" << score;
+//        tDebug() << Q_FUNC_INFO << "found artist:" << artist->name() << "score:" << score;
     }
 
     updateArtists();

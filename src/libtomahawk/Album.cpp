@@ -50,6 +50,7 @@ Album::~Album()
 #endif
 }
 
+
 inline QString
 albumCacheKey( const Tomahawk::artist_ptr& artist, const QString& albumName )
 {

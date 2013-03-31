@@ -77,7 +77,7 @@ Source::Source( int id, const QString& nodeId )
 
 Source::~Source()
 {
-    qDebug() << Q_FUNC_INFO << friendlyName();
+    tDebug() << Q_FUNC_INFO << friendlyName();
 }
 
 
@@ -86,6 +86,7 @@ Source::setControlConnection( ControlConnection* cc )
 {
     m_cc = cc;
 }
+
 
 const QSet<peerinfo_ptr>
 Source::peerInfos() const

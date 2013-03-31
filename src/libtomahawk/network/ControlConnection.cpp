@@ -53,7 +53,7 @@ ControlConnection::ControlConnection( Servent* parent )
 
 ControlConnection::~ControlConnection()
 {
-    qDebug() << "DTOR controlconnection";
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << id() << name();
 
     if ( !m_source.isNull() )
         m_source->setOffline();
@@ -258,7 +258,6 @@ ControlConnection::handleMsg( msg_ptr msg )
 }
 
 
-
 void
 ControlConnection::onPingTimer()
 {
@@ -284,6 +283,7 @@ void
 ControlConnection::removePeerInfo( const peerinfo_ptr& peerInfo )
 {
     peerInfoDebug( peerInfo ) << "Remove peer from control connection:" << name();
+
     Q_ASSERT( peerInfo->controlConnection() == this );
 //     TODO: find out why this happens
 //     Q_ASSERT( m_peerInfos.contains( peerInfo ) );
