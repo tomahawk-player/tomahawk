@@ -62,7 +62,6 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     , m_spinner( 0 )
     , m_loading( true )
 {
-    qDebug() << Q_FUNC_INFO;
     ui->setupUi( this );
 
     TomahawkUtils::unmarginLayout( layout() );
@@ -217,7 +216,7 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
     {
         case InfoSystem::InfoChartCapabilities:
         {
-            setViewData(returnedData);
+            setViewData( returnedData );
         }
         case InfoSystem::InfoChart:
         {
@@ -374,7 +373,6 @@ WhatsHotWidget::infoSystemFinished( QString target )
     {
         if ( target != s_whatsHotIdentifier )
         {
-            tDebug(LOGVERBOSE) << Q_FUNC_INFO << "Bad target" << target << s_whatsHotIdentifier;
             return;
         }
 
