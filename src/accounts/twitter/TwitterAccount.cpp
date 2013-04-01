@@ -23,7 +23,7 @@
 #include "accounts/twitter/TomahawkOAuthTwitter.h"
 #include "libtomahawk/infosystem/InfoSystem.h"
 #include "utils/Logger.h"
-//#include "sip/SipPlugin.h"
+#include "sip/SipPlugin.h"
 
 #include <QTweetLib/qtweetaccountverifycredentials.h>
 #include <QTweetLib/qtweetuser.h>
@@ -31,6 +31,7 @@
 #include <QTweetLib/qtweetusershow.h>
 
 #include <QtCore/QtPlugin>
+#include <QTimer>
 
 namespace Tomahawk
 {

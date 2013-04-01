@@ -24,7 +24,7 @@
 #include "TwitterConfigWidget.h"
 #include "TomahawkOAuthTwitter.h"
 
-#include "sip/TwitterSip.h"
+//#include "sip/TwitterSip.h"
 #include "TwitterInfoPlugin.h"
 #include "accounts/AccountDllMacro.h"
 #include "accounts/Account.h"
