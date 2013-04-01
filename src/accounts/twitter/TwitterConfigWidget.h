@@ -27,7 +27,7 @@
 #include <QTweetLib/qtweetuser.h>
 #include <QTweetLib/qtweetnetbase.h>
 
-#include <QWidget>
+#include "accounts/AccountConfigWidget.h"
 
 namespace Ui
 {
@@ -43,7 +43,7 @@ namespace Accounts
 class TwitterAccount;
 
 
-class ACCOUNTDLLEXPORT TwitterConfigWidget : public QWidget
+class ACCOUNTDLLEXPORT TwitterConfigWidget : public AccountConfigWidget
 {
     Q_OBJECT
 

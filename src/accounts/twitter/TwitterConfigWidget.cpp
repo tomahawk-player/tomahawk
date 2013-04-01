@@ -43,7 +43,7 @@ namespace Accounts
 {
 
 TwitterConfigWidget::TwitterConfigWidget( TwitterAccount* account, QWidget *parent ) :
-    QWidget( parent ),
+    AccountConfigWidget( parent ),
     m_ui( new Ui::TwitterConfigWidget ),
     m_account( account )
 {

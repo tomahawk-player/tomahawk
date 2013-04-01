@@ -138,6 +138,7 @@ AccountListWidget::insertEntries(  const QModelIndex& parent, int start, int end
         QPersistentModelIndex idx( m_model->index( i, 0, parent ) );
         int count = idx.data( Tomahawk::Accounts::AccountModel::ChildrenOfFactoryRole )
                 .value< QList< Tomahawk::Accounts::Account* > >().count();
+
         QList< AccountWidget* > entryAccounts;
         for ( int j = 0; j < count; ++j )
         {

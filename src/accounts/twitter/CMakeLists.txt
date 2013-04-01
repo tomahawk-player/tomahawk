@@ -9,7 +9,7 @@ tomahawk_add_plugin(twitter
         TwitterInfoPlugin.cpp
         TwitterConfigWidget.cpp
         TomahawkOAuthTwitter.cpp
-        sip/TwitterSip.cpp
+#        sip/TwitterSip.cpp
     UI
         TwitterConfigWidget.ui
     LINK_LIBRARIES

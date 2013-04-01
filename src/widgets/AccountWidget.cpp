@@ -314,9 +314,12 @@ AccountWidget::setupConnections( const QPersistentModelIndex& idx, int accountId
         connect( m_inviteEdit, SIGNAL( returnPressed() ),
                  this, SLOT( sendInvite() ) );
 
-        m_inviteEdit->setPlaceholderText( account->sipPlugin()->inviteString() );
-        connect( account->sipPlugin(), SIGNAL( inviteSentSuccess( QString ) ), SLOT( onInviteSentSuccess( QString ) ) );
-        connect( account->sipPlugin(), SIGNAL( inviteSentFailure( QString ) ), SLOT( onInviteSentFailure( QString ) ) );
+        if ( account->sipPlugin() )
+        {
+            m_inviteEdit->setPlaceholderText( account->sipPlugin()->inviteString() );
+            connect( account->sipPlugin(), SIGNAL( inviteSentSuccess( QString ) ), SLOT( onInviteSentSuccess( QString ) ) );
+            connect( account->sipPlugin(), SIGNAL( inviteSentFailure( QString ) ), SLOT( onInviteSentFailure( QString ) ) );
+        }
     }
 }
 

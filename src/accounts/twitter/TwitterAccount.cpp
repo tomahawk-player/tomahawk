@@ -23,7 +23,7 @@
 #include "accounts/twitter/TomahawkOAuthTwitter.h"
 #include "libtomahawk/infosystem/InfoSystem.h"
 #include "utils/Logger.h"
-#include "sip/SipPlugin.h"
+//#include "sip/SipPlugin.h"
 
 #include <QTweetLib/qtweetaccountverifycredentials.h>
 #include <QTweetLib/qtweetuser.h>
@@ -51,7 +51,7 @@ TwitterAccount::TwitterAccount( const QString &accountId )
     , m_isAuthenticating( false )
 {
     setAccountServiceName( "Twitter" );
-    setTypes( AccountTypes( StatusPushType | SipType ) );
+    setTypes( AccountTypes( StatusPushType ) );
 
     qDebug() << "Got cached peers:" << configuration() << configuration()[ "cachedpeers" ];
 
@@ -86,24 +86,25 @@ TwitterAccount::configDialogAuthedSignalSlot( bool authed )
 Account::ConnectionState
 TwitterAccount::connectionState() const
 {
-    if ( m_twitterSipPlugin.isNull() )
+//    if ( m_twitterSipPlugin.isNull() )
         return Account::Disconnected;
 
-    return m_twitterSipPlugin.data()->connectionState();
+//    return m_twitterSipPlugin.data()->connectionState();
 }
 
 SipPlugin*
 TwitterAccount::sipPlugin()
 {
-    if ( m_twitterSipPlugin.isNull() )
-    {
-        qDebug() << "CHECKING:" << configuration() << configuration()[ "cachedpeers" ];
-        m_twitterSipPlugin = QPointer< TwitterSipPlugin >( new TwitterSipPlugin( this ) );
+//    if ( m_twitterSipPlugin.isNull() )
+//    {
+//        qDebug() << "CHECKING:" << configuration() << configuration()[ "cachedpeers" ];
+//        m_twitterSipPlugin = QPointer< TwitterSipPlugin >( new TwitterSipPlugin( this ) );
 
-        connect( m_twitterSipPlugin.data(), SIGNAL( stateChanged( Tomahawk::Accounts::Account::ConnectionState ) ), this, SIGNAL( connectionStateChanged( Tomahawk::Accounts::Account::ConnectionState ) ) );
-        return m_twitterSipPlugin.data();
-    }
-    return m_twitterSipPlugin.data();
+//        connect( m_twitterSipPlugin.data(), SIGNAL( stateChanged( Tomahawk::Accounts::Account::ConnectionState ) ), this, SIGNAL( connectionStateChanged( Tomahawk::Accounts::Account::ConnectionState ) ) );
+//        return m_twitterSipPlugin.data();
+//    }
+//    return m_twitterSipPlugin.data();
+    return 0;
 }
 
 
@@ -169,8 +170,8 @@ TwitterAccount::deauthenticate()
 {
     tDebug() << Q_FUNC_INFO;
 
-    if ( m_twitterSipPlugin )
-        sipPlugin()->disconnectPlugin();
+//    if ( m_twitterSipPlugin )
+//        sipPlugin()->disconnectPlugin();
 
     if ( m_twitterInfoPlugin )
         Tomahawk::InfoSystem::InfoSystem::instance()->removeInfoPlugin( m_twitterInfoPlugin.data() );
@@ -221,7 +222,7 @@ TwitterAccount::connectAuthVerifyReply( const QTweetUser &user )
         setConfiguration( config );
         sync();
 
-        sipPlugin()->connectPlugin();
+//        sipPlugin()->connectPlugin();
 
         m_isAuthenticated = true;
         emit nowAuthenticated( m_twitterAuth, user );

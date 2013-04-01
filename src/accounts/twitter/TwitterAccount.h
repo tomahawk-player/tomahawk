@@ -50,7 +50,7 @@ public:
     QString factoryId() const { return "twitteraccount"; }
     QString description() const { return tr( "Connect to your Twitter followers." ); }
     QPixmap icon() const { return QPixmap( ":/twitter-account/twitter-icon.png" ); }
-    AccountTypes types() const { return AccountTypes( SipType | StatusPushType ); };
+    AccountTypes types() const { return AccountTypes( StatusPushType ); };
     Account* createAccount( const QString& pluginId = QString() );
 };
 
@@ -73,7 +73,7 @@ public:
     Tomahawk::InfoSystem::InfoPluginPtr infoPlugin();
     SipPlugin* sipPlugin();
 
-    QWidget* configurationWidget() { return m_configWidget.data(); }
+    AccountConfigWidget* configurationWidget() { return m_configWidget.data(); }
     QWidget* aclWidget() { return 0; }
 
     bool refreshTwitterAuth();
@@ -94,7 +94,7 @@ private:
     bool m_isAuthenticating;
     QPointer< TomahawkOAuthTwitter > m_twitterAuth;
     QPointer< TwitterConfigWidget > m_configWidget;
-    QPointer< TwitterSipPlugin > m_twitterSipPlugin;
+//    QPointer< TwitterSipPlugin > m_twitterSipPlugin;
     QPointer< Tomahawk::InfoSystem::TwitterInfoPlugin > m_twitterInfoPlugin;
 
     // for settings access
