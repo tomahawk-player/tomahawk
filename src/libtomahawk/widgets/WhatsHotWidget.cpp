@@ -59,7 +59,10 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     , ui( new Ui::WhatsHotWidget )
     , m_sortedProxy( 0 )
     , m_workerThread( 0 )
+    , m_spinner( 0 )
+    , m_loading( true )
 {
+    qDebug() << Q_FUNC_INFO;
     ui->setupUi( this );
 
     TomahawkUtils::unmarginLayout( layout() );
@@ -75,7 +78,6 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     m_sortedProxy->setFilterCaseSensitivity( Qt::CaseInsensitive );
 
     ui->breadCrumbLeft->setRootIcon( TomahawkUtils::defaultPixmap( TomahawkUtils::Charts, TomahawkUtils::Original ) );
-
     connect( ui->breadCrumbLeft, SIGNAL( activateIndex( QModelIndex ) ), SLOT( leftCrumbIndexChanged( QModelIndex ) ) );
 
     ui->tracksViewLeft->setHeaderHidden( true );
@@ -110,6 +112,12 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     mpl->addChildInterface( ui->artistsViewLeft->proxyModel()->playlistInterface() );
     mpl->addChildInterface( ui->albumsView->playlistInterface() );
     m_playlistInterface = playlistinterface_ptr( mpl );
+
+    // Lets have a spinner until loaded
+    ui->breadCrumbLeft->setVisible( false );
+    m_spinner = new AnimatedSpinner( ui->tracksViewLeft );
+    m_spinner->fadeIn();
+
 }
 
 
@@ -124,6 +132,7 @@ WhatsHotWidget::~WhatsHotWidget()
     m_workers.clear();
     m_workerThread->exit( 0 );
 
+    delete m_spinner;
     delete ui;
 }
 
@@ -208,69 +217,8 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
     {
         case InfoSystem::InfoChartCapabilities:
         {
-            QStandardItem* rootItem= m_crumbModelLeft->invisibleRootItem();
-            QVariantMap defaults;
-            if ( returnedData.contains( "defaults" ) )
-                defaults = returnedData.take( "defaults" ).toMap();
-
-            // We need to take this from data
-            QString defaultSource = returnedData.take( "defaultSource" ).toString();
-            // Here, we dont want current sessions last view, but rather what was current on previus quit
-            QString lastSeen = TomahawkSettings::instance()->lastChartIds().value( "lastseen" ).toString();
-            if ( !lastSeen.isEmpty() )
-                defaultSource = lastSeen;
-
-            // Merge defaults with current defaults, split the value in to a list
-            foreach ( const QString& key, m_currentVIds.keys() )
-                defaults[ key ] = m_currentVIds.value( key ).toString().split( "/" );
-
-            tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Defaults after merge" << defaults;
-            foreach ( const QString label, returnedData.keys() )
-            {
-                QStandardItem* childItem = parseNode( rootItem, label, returnedData[ label ] );
-                rootItem->appendRow( childItem );
-            }
-
-            // Set the default source
-            // Set the default chart for each source
-            if ( !defaults.empty() )
-            {
-                for ( int i = 0; i < rootItem->rowCount(); i++ )
-                {
-                    QStandardItem* source = rootItem->child( i, 0 );
-                    if ( defaultSource.toLower() == source->text().toLower() )
-                    {
-                        source->setData( true, Breadcrumb::DefaultRole );
-                    }
-
-                    if ( defaults.contains( source->text().toLower() ) )
-                    {
-                        QStringList defaultIndices = defaults[ source->text().toLower() ].toStringList();
-                        QStandardItem* cur = source;
-
-                        foreach ( const QString& index, defaultIndices )
-                        {
-                            // Go through the children of the current item, marking the default one as default
-                            for ( int k = 0; k < cur->rowCount(); k++ )
-                            {
-                                if ( cur->child( k, 0 )->text().toLower() == index.toLower() )
-                                {
-                                    cur = cur->child( k, 0 ); // this is the default, drill down into the default to pick the next default
-                                    cur->setData( true, Breadcrumb::DefaultRole );
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            m_sortedProxy->setSourceModel( m_crumbModelLeft );
-            m_sortedProxy->sort( 0, Qt::AscendingOrder );
-            ui->breadCrumbLeft->setModel( m_sortedProxy );
-            break;
+            setViewData(returnedData);
         }
-
         case InfoSystem::InfoChart:
         {
             if ( returnedData.contains( "chart_error" ) )
@@ -365,11 +313,79 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
     }
 }
 
+void
+WhatsHotWidget::setViewData(const QVariantMap &data)
+{
+
+    QStandardItem* rootItem = m_crumbModelLeft->invisibleRootItem();
+    QVariantMap returnedData = data;
+
+    // We need to take this from data
+    QString defaultSource = returnedData.take( "defaultSource" ).toString();
+    QVariantMap defaults = returnedData.take( "defaults" ).toMap();
+    // Here, we dont want current sessions last view, but rather what was current on previus quit
+    QString lastSeen = TomahawkSettings::instance()->lastChartIds().value( "lastseen" ).toString();
+
+    if ( !lastSeen.isEmpty() )
+        defaultSource = lastSeen;
+
+    // Merge defaults with current defaults, split the value in to a list
+    foreach ( const QString& key, m_currentVIds.keys() )
+        defaults[ key ] = m_currentVIds.value( key ).toString().split( "/" );
+
+    foreach ( const QString& label, returnedData.keys() )
+    {
+        QStandardItem* childItem = parseNode( rootItem, label, returnedData[ label ] );
+        const QString id = label.toLower();
+
+        if ( id == defaultSource.toLower() )
+        {
+            qDebug() << "Setting source as default" << id;
+            childItem->setData( true, Breadcrumb::DefaultRole );
+        }
+        if ( defaults.contains( id ) )
+        {
+            QStringList defaultIndices = defaults[ id ].toStringList();
+            QStandardItem* cur = childItem;
+
+            foreach ( const QString& index, defaultIndices )
+            {
+                // Go through the children of the current item, marking the default one as default
+                for ( int k = 0; k < cur->rowCount(); k++ )
+                {
+                    if ( cur->child( k, 0 )->text().toLower() == index.toLower() )
+                    {
+                        qDebug() << "Setting child as default" << index;
+                        cur = cur->child( k, 0 ); // this is the default, drill down into the default to pick the next default
+                        cur->setData( true, Breadcrumb::DefaultRole );
+                        break;
+                    }
+                }
+            }
+        }
+        rootItem->appendRow( childItem );
+    }
+}
 
 void
 WhatsHotWidget::infoSystemFinished( QString target )
 {
-    Q_UNUSED( target );
+    if( m_loading )
+    {
+        if ( target != s_whatsHotIdentifier )
+        {
+            tDebug(LOGVERBOSE) << Q_FUNC_INFO << "Bad target" << target << s_whatsHotIdentifier;
+            return;
+        }
+
+        m_sortedProxy->setSourceModel( m_crumbModelLeft );
+        m_sortedProxy->sort( 0, Qt::AscendingOrder );
+        ui->breadCrumbLeft->setModel( m_sortedProxy );
+
+        m_spinner->fadeOut();
+        ui->breadCrumbLeft->setVisible( true );
+        m_loading = false;
+    }
 }
 
 

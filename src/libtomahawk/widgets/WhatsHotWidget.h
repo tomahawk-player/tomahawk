@@ -96,6 +96,7 @@ private:
     void setLeftViewArtists( TreeModel* artistModel );
     void setLeftViewAlbums( PlayableModel* albumModel );
     void setLeftViewTracks( PlaylistModel* trackModel );
+    void setViewData(const QVariantMap &data);
 
     QStandardItem* parseNode( QStandardItem* parentItem, const QString& label, const QVariant& data );
 
@@ -120,6 +121,9 @@ private:
     QTimer* m_timer;
     QMap<QString, QVariant> m_currentVIds;
 
+    AnimatedSpinner *m_spinner;
+    QList<QVariantMap> m_charts;
+    bool m_loading;
     friend class Tomahawk::ChartsPlaylistInterface;
 };
 
