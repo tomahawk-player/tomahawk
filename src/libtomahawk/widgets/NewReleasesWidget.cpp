@@ -36,7 +36,7 @@
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 #include "Pipeline.h"
-
+#include "utils/AnimatedSpinner.h"
 #include <QPainter>
 #include <QStandardItemModel>
 #include <QStandardItem>
@@ -56,6 +56,8 @@ NewReleasesWidget::NewReleasesWidget( QWidget* parent )
     , ui( new Ui::NewReleasesWidget )
     , m_sortedProxy( 0 )
     , m_workerThread( 0 )
+    , m_spinner( 0 )
+    , m_loading( true )
 {
     ui->setupUi( this );
 
@@ -72,8 +74,6 @@ NewReleasesWidget::NewReleasesWidget( QWidget* parent )
 
     connect( ui->breadCrumbLeft, SIGNAL( activateIndex( QModelIndex ) ), SLOT( leftCrumbIndexChanged(QModelIndex) ) );
 
-    //m_playlistInterface = Tomahawk::playlistinterface_ptr( new ChartsPlaylistInterface( this ) );
-
     m_workerThread = new QThread( this );
     m_workerThread->start();
 
@@ -82,6 +82,10 @@ NewReleasesWidget::NewReleasesWidget( QWidget* parent )
              SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
+
+    ui->breadCrumbLeft->setVisible( false );
+    m_spinner = new AnimatedSpinner( ui->albumsView );
+    m_spinner->fadeIn();
 }
 
 
@@ -91,6 +95,7 @@ NewReleasesWidget::~NewReleasesWidget()
     m_workers.clear();
     m_workerThread->exit(0);
     m_playlistInterface.clear();
+    delete m_spinner;
     delete ui;
 }
 
@@ -152,7 +157,7 @@ NewReleasesWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData request
         case InfoSystem::InfoNewReleaseCapabilities:
         {
             tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Got InfoNewReleaseCapabilities";
-            QStandardItem *rootItem= m_crumbModelLeft->invisibleRootItem();
+            QStandardItem *rootItem = m_crumbModelLeft->invisibleRootItem();
 
             foreach ( const QString label, returnedData.keys() )
             {
@@ -160,10 +165,6 @@ NewReleasesWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData request
                 rootItem->appendRow(childItem);
                 tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "NewReleases:" << label;
             }
-
-            m_sortedProxy->setSourceModel( m_crumbModelLeft );
-            m_sortedProxy->sort( 0, Qt::AscendingOrder );
-            ui->breadCrumbLeft->setModel( m_sortedProxy );
             break;
         }
 
@@ -216,7 +217,21 @@ NewReleasesWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData request
 void
 NewReleasesWidget::infoSystemFinished( QString target )
 {
-    Q_UNUSED( target );
+    if( m_loading )
+    {
+        if ( target != s_newReleasesIdentifier )
+        {
+            return;
+        }
+
+        m_sortedProxy->setSourceModel( m_crumbModelLeft );
+        m_sortedProxy->sort( 0, Qt::AscendingOrder );
+        ui->breadCrumbLeft->setModel( m_sortedProxy );
+
+        m_spinner->fadeOut();
+        ui->breadCrumbLeft->setVisible( true );
+        m_loading = false;
+    }
 }
 
 

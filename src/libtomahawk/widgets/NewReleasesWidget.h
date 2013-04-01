@@ -40,7 +40,7 @@ class PlaylistModel;
 class TreeProxyModel;
 class AlbumModel;
 class PlayableModel;
-
+class AnimatedSpinner;
 namespace Ui
 {
     class NewReleasesWidget;
@@ -115,8 +115,8 @@ private:
     QHash< QString, PlayableModel* > m_albumModels;
     QString m_queueItemToShow;
     QSet< QString > m_queuedFetches;
-    QTimer* m_timer;
-
+    AnimatedSpinner* m_spinner;
+    bool m_loading;
     friend class Tomahawk::ChartsPlaylistInterface;
 };
 
