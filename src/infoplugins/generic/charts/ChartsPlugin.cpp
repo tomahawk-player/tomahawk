@@ -53,11 +53,13 @@ ChartsPlugin::ChartsPlugin()
     , m_chartsFetchJobs( 0 )
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << QThread::currentThread();
-    /// If you add resource, update version aswell
+
+    // If you add resource, update version aswell
     m_chartVersion = "2.6.1";
     m_supportedGetTypes <<  InfoChart << InfoChartCapabilities;
+
     // Charts that have geo or genre types
-    m_geoChartIds << "wearehunted" << "itunes" << "hotnewhiphop" << "djshop.de" << "rdio";
+    m_geoChartIds << "itunes" << "hotnewhiphop" << "djshop.de" << "rdio";
 }
 
 
@@ -432,9 +434,6 @@ ChartsPlugin::chartsList()
             // Itunes has geographic-area based charts. So we build a breadcrumb of
             // ITunes - Country - Albums - Top Chart Type
             //                  - Tracks - Top Chart Type
-            // WeAreHunted has Mainstream/Emerging
-            // WeAreHunted - Type - Artists - Chart Type
-            //                    - Tracks  - Chart Type
             QHash< QString, QVariantMap > extraType;
             QStringList processed;
             foreach ( const QVariant& chartObj, res.values() )
@@ -521,10 +520,6 @@ ChartsPlugin::chartsList()
                 else if ( source == "soundcloudwall" )
                 {
                     chartName = "SoundCloudWall";
-                }
-                else if ( source == "wearehunted" )
-                {
-                    chartName = "WeAreHunted";
                 }
                 else if ( source == "hotnewhiphop" )
                 {
