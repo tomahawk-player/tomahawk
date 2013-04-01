@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>580</width>
-    <height>390</height>
+    <width>380</width>
+    <height>180</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -18,8 +18,8 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>580</width>
-    <height>390</height>
+    <width>380</width>
+    <height>180</height>
    </size>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -50,7 +50,7 @@
         <string/>
        </property>
        <property name="pixmap">
-         <pixmap resource="resources.qrc">:/twitter-account/twitter-icon.png</pixmap>
+        <pixmap resource="resources.qrc">:/twitter-account/twitter-icon.png</pixmap>
        </property>
       </widget>
      </item>
@@ -116,7 +116,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>The Twitter plugin allows you to discover and play music from your Twitter friends running Tomahawk and post messages to your account.</string>
+        <string>The Twitter plugin allows you to post messages to your Twitter account.</string>
        </property>
        <property name="wordWrap">
         <bool>true</bool>

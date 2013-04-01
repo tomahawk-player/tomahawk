@@ -75,12 +75,13 @@ TwitterConfigWidget::TwitterConfigWidget( TwitterAccount* account, QWidget *pare
     {
         m_ui->twitterStatusLabel->setText( tr( "Status: Credentials saved for %1" ).arg( m_account->credentials()[ "username" ].toString() ) );
         m_ui->twitterAuthenticateButton->setText( tr( "De-authenticate" ) );
-        m_ui->twitterSyncGroupBox->setVisible( true );
+        //m_ui->twitterSyncGroupBox->setVisible( true );
         m_ui->twitterUserTweetLineEdit->setVisible( false );
 
         emit twitterAuthed( true );
     }
 
+    m_ui->twitterSyncGroupBox->hide();
 }
 
 TwitterConfigWidget::~TwitterConfigWidget()
@@ -137,7 +138,7 @@ TwitterConfigWidget::authenticateVerifyReply( const QTweetUser &user )
 
     m_ui->twitterStatusLabel->setText( tr( "Status: Credentials saved for %1" ).arg( user.screenName() ) );
     m_ui->twitterAuthenticateButton->setText( tr( "De-authenticate" ) );
-    m_ui->twitterSyncGroupBox->setVisible( true );
+    //m_ui->twitterSyncGroupBox->setVisible( true );
     m_ui->twitterTweetComboBox->setCurrentIndex( 0 );
     m_ui->twitterUserTweetLineEdit->setVisible( false );
     m_ui->twitterTweetGotTomahawkButton->setText( tr( "Tweet!" ) );
