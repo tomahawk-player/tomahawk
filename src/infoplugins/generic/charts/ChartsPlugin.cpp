@@ -56,7 +56,7 @@ ChartsPlugin::ChartsPlugin()
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << QThread::currentThread();
 
     // If you add resource, update version as well
-    m_chartVersion = "2.6.3";
+    m_chartVersion = "2.6.4";
     m_supportedGetTypes <<  InfoChart << InfoChartCapabilities;
 
     // Charts that have geo or genre types
