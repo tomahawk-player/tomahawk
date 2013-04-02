@@ -51,15 +51,17 @@ namespace InfoSystem
 ChartsPlugin::ChartsPlugin()
     : InfoPlugin()
     , m_chartsFetchJobs( 0 )
+    , m_fetchAll( true )
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << QThread::currentThread();
 
-    // If you add resource, update version aswell
+    // If you add resource, update version as well
     m_chartVersion = "2.6.3";
     m_supportedGetTypes <<  InfoChart << InfoChartCapabilities;
 
     // Charts that have geo or genre types
     m_geoChartIds << "itunes" << "hotnewhiphop" << "djshop.de" << "rdio";
+    m_cacheIdentifier = TomahawkUtils::md5( QString("ChartsPlugin" + m_chartVersion ).toUtf8() );
 }
 
 
@@ -72,7 +74,7 @@ ChartsPlugin::~ChartsPlugin()
 void
 ChartsPlugin::init()
 {
-    QVariant data = TomahawkUtils::Cache::instance()->getData( "ChartsPlugin", "chart_sources" );
+    QVariant data = TomahawkUtils::Cache::instance()->getData( m_cacheIdentifier, "chart_sources" );
     if ( data.canConvert< QList< Tomahawk::InfoSystem::InfoStringHash > >() )
     {
          const QList< Tomahawk::InfoSystem::InfoStringHash > sourceList = data.value< QList< Tomahawk::InfoSystem::InfoStringHash > >();
@@ -87,20 +89,27 @@ ChartsPlugin::init()
              }
              m_chartResources << sourceHash;
          }
+
+         data = TomahawkUtils::Cache::instance()->getData( m_cacheIdentifier, "allCharts" );
+
+         if ( data.canConvert< QVariantMap >() )
+         {
+             m_allChartsMap = data.toMap();
+             if ( !m_allChartsMap.empty() )
+                 m_fetchAll = false;
+         }
     }
     else
     {
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Migrating";
-        m_refetchSource << "ALL";
     }
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "total sources" << m_chartResources.size() << m_chartResources;
 
-    if( m_chartResources.size() == 0 || m_refetchSource.size() != 0 )
+    if( ( m_chartResources.size() == 0 || m_refetchSource.size() != 0 ) || m_fetchAll )
     {
-        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Will refetch on next request. Empty or Invalid CACHE" << m_chartResources.size() << m_refetchSource;
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Will refetch on next request. Empty or Invalid CACHE" << m_chartResources.size() << m_refetchSource << "fetchAll?" << m_fetchAll;
     }
-
 }
 
 
@@ -300,8 +309,6 @@ ChartsPlugin::chartSourcesList()
             return;
         }
 
-        /// This will re/fetch all sources
-        /// @todo: Fetch only requested source
         m_chartResources.clear();
 
         foreach ( const QVariant &rsource, sources )
@@ -323,27 +330,42 @@ ChartsPlugin::chartSourcesList()
                 source_expire[ "chart_source" ] = source;
                 source_expire[ "chart_expires" ] = QString::number(expires);
                 m_chartResources << source_expire;
-            }
 
-            if ( maxAge == 0 )
-            {
-                tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "MaxAge for " << source << " is  0. Fetching all";
-                reply->setProperty( "only_source_list", false );
+                if( !m_fetchAll )
+                {
+                    if ( maxAge == 0 )
+                    {
+                        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "MaxAge for " << source << " is  0. reFetching";
+                        reply->setProperty( "only_source_list", false );
+                    }
+                }
+                else
+                {
+                    m_refetchSource << source;
+                }
             }
-
         }
-
 
         /// We can store the source list for how long as we want
         /// In init, we check expiration for each source, and refetch if invalid
         /// 2 days seems fair enough though
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "storing sources in cache" << m_chartResources;
-        TomahawkUtils::Cache::instance()->putData( "ChartsPlugin", 172800000 /* 2 days */, "chart_sources", QVariant::fromValue< QList< Tomahawk::InfoSystem::InfoStringHash > > ( m_chartResources ) );
+        TomahawkUtils::Cache::instance()->putData( m_cacheIdentifier, 172800000 /* 2 days */, "chart_sources", QVariant::fromValue< QList< Tomahawk::InfoSystem::InfoStringHash > > ( m_chartResources ) );
 
         if( !reply->property( "only_source_list" ).toBool() )
         {
-            tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Fetching all sources!";
-            fetchAllChartSources();
+
+            if ( !m_fetchAll )
+            {
+                tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "reFetching" << m_refetchSource;
+                fetchExpiredSources();
+            }
+            else
+            {
+                tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Fetching all sources!" << m_refetchSource;
+                fetchAllChartSources();
+                m_fetchAll = false;
+            }
         }
     }
     else
@@ -351,26 +373,42 @@ ChartsPlugin::chartSourcesList()
 }
 
 
+void
+ChartsPlugin::fetchSource(const QString& source)
+{
+    QUrl url = QUrl( QString( CHART_URL "charts/%1" ).arg( source ) );
+    TomahawkUtils::urlAddQueryItem( url, "version", TomahawkUtils::appFriendlyVersion() );
+
+    QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
+    reply->setProperty( "chart_source", source );
+
+    tDebug() << Q_FUNC_INFO << "fetching:" << url;
+    connect( reply, SIGNAL( finished() ), SLOT( chartsList() ) );
+
+    m_chartsFetchJobs++;
+}
+
+
+void
+ChartsPlugin::fetchExpiredSources()
+{
+    if ( !m_refetchSource.isEmpty() )
+    {
+        foreach ( const QString& source, m_refetchSource )
+        {
+            fetchSource(source);
+        }
+    }
+}
 
 void
 ChartsPlugin::fetchAllChartSources()
 {
     if ( !m_chartResources.isEmpty() && m_allChartsMap.isEmpty() )
     {
-        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "InfoNewRelease fetching source data";
         foreach ( const Tomahawk::InfoSystem::InfoStringHash source, m_chartResources )
         {
-            QUrl url = QUrl( QString( CHART_URL "charts/%1" ).arg( source[ "chart_source" ] ) );
-
-            TomahawkUtils::urlAddQueryItem( url, "version", TomahawkUtils::appFriendlyVersion() );
-
-            QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
-            reply->setProperty( "chart_source", source[ "chart_source" ] );
-
-            tDebug() << Q_FUNC_INFO << "fetching:" << url;
-            connect( reply, SIGNAL( finished() ), SLOT( chartsList() ) );
-
-            m_chartsFetchJobs++;
+            fetchSource(source[ "chart_source" ]);
         }
     }
 }
@@ -608,6 +646,9 @@ ChartsPlugin::chartsList()
         m_allChartsMap[ "defaults" ] = defaultMap;
         m_allChartsMap[ "defaultSource" ] = "itunes";
         m_allChartsMap.insert( chartName , QVariant::fromValue< QVariantMap >( charts ) );
+
+        m_refetchSource.removeOne( source );
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Fetched " << source << " have " << m_refetchSource << "left";
     }
     else
     {
@@ -620,15 +661,17 @@ ChartsPlugin::chartsList()
         foreach ( InfoRequestData request, m_cachedRequests )
         {
             emit info( request, m_allChartsMap );
-            // update cache
+
             tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Updating cache with" << m_allChartsMap.size() << "charts";
             Tomahawk::InfoSystem::InfoStringHash criteria;
             criteria[ "InfoChartCapabilities" ] = "chartsplugin";
             criteria[ "InfoChartVersion" ] = m_chartVersion;
 
             /// We can cache it the lot for 2 days, it will be checked on next request
-            emit updateCache( criteria, 172800000 /* 2 days */, request.type,m_allChartsMap );
+            emit updateCache( criteria, 172800000 /* 2 days */, request.type, m_allChartsMap );
         }
+
+        TomahawkUtils::Cache::instance()->putData( m_cacheIdentifier, 172800000 /* 2 days */, "allCharts", m_allChartsMap );
         m_cachedRequests.clear();
     }
 }
@@ -782,7 +825,6 @@ ChartsPlugin::getMaxAge( const QByteArray &rawHeader ) const
     qlonglong expires = QString( rawHeader ).toLongLong( &ok );
     if ( ok )
     {
-        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Got rawheader " << QString( rawHeader ) << ":" << expires;
         return getMaxAge( expires );
     }
     return 0;

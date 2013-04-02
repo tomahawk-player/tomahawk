@@ -95,8 +95,10 @@ private:
      * Updates the cache.
      */
     void fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData, const QString& source, const QString& chart_id );
-
+    void fetchSource( const QString& source );
     void fetchChartFromCache( Tomahawk::InfoSystem::InfoRequestData requestData );
+    void fetchExpiredSources();
+
     void fetchChartCapabilitiesFromCache( Tomahawk::InfoSystem::InfoRequestData requestData );
     void dataError( Tomahawk::InfoSystem::InfoRequestData requestData );
 
@@ -114,6 +116,8 @@ private:
     QHash< QString, QString > m_cachedCountries;
     QPointer< QNetworkAccessManager > m_nam;
     QStringList m_geoChartIds;
+    bool m_fetchAll;
+    QString m_cacheIdentifier;
 };
 
 }
