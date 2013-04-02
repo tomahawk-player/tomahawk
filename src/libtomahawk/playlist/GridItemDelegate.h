@@ -68,12 +68,17 @@ private slots:
 
     void onViewChanged();
     void onPlaybackStarted( const QPersistentModelIndex& index );
+
     void onPlaybackFinished();
 
     void onPlayClicked( const QPersistentModelIndex& index );
 
     void fadingFrameChanged( const QPersistentModelIndex& );
     void fadingFrameFinished( const QPersistentModelIndex& );
+
+    void updatePlayPauseButton(ImageButton* button , bool setState = false );
+    void onPlayPauseHover( const QPersistentModelIndex& index );
+    void onPlayPausedClicked();
 
 private:
     QTimeLine* createTimeline( QTimeLine::Direction direction );
