@@ -3139,22 +3139,22 @@ Koeta säätää suodattimia saadaksesi uuden joukon kappaleita kuunneltavaksi.<
 <context>
     <name>Tomahawk::InfoSystem::ChartsPlugin</name>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="488"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="526"/>
         <source>Top Overall</source>
         <translation>Kokonaisuudessaan parhaat</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="591"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="629"/>
         <source>Artists</source>
         <translation>Artistit</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="593"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="631"/>
         <source>Albums</source>
         <translation>Albumit</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="595"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="633"/>
         <source>Tracks</source>
         <translation>Kappaleet</translation>
     </message>

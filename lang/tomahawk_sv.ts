@@ -2353,7 +2353,7 @@ och radiostationer baserat på din personliga profil</translation>
     <message>
         <location filename="../src/accounts/twitter/TwitterAccount.h" line="51"/>
         <source>Send tweets from Tomahawk.</source>
-        <translation type="unfinished"/>
+        <translation>Skicka tweets från Tomahawk.</translation>
     </message>
 </context>
 <context>
@@ -3134,22 +3134,22 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
 <context>
     <name>Tomahawk::InfoSystem::ChartsPlugin</name>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="488"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="526"/>
         <source>Top Overall</source>
         <translation>Generell topplista</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="591"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="629"/>
         <source>Artists</source>
         <translation>Artister</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="593"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="631"/>
         <source>Albums</source>
         <translation>Album</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="595"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="633"/>
         <source>Tracks</source>
         <translation>Spår</translation>
     </message>
@@ -3771,7 +3771,7 @@ anger du PIN-koden här:</translation>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="119"/>
         <source>The Twitter plugin allows you to post messages to your Twitter account.</source>
-        <translation type="unfinished"/>
+        <translation>Twitter-modulen gör att du kan skicka tweets direkt till ditt konto.</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="137"/>
