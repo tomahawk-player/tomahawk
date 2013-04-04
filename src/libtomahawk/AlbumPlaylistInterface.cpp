@@ -43,6 +43,7 @@ AlbumPlaylistInterface::AlbumPlaylistInterface( Tomahawk::Album* album, Tomahawk
     , m_mode( mode )
     , m_collection( collection )
     , m_album( QPointer< Tomahawk::Album >( album ) )
+    , m_lastQueryTimestamp( 0 )
 {
 }
 
@@ -108,7 +109,7 @@ AlbumPlaylistInterface::setCurrentTrack( unsigned int albumpos )
 QList< Tomahawk::query_ptr >
 AlbumPlaylistInterface::tracks() const
 {
-    if ( m_queries.isEmpty() && m_album )
+    if ( m_queries.isEmpty() && m_album && QDateTime::currentMSecsSinceEpoch() - m_lastQueryTimestamp > 10000 /*10s*/ )
     {
         if ( ( m_mode == Mixed || m_mode == InfoSystemMode ) && !m_infoSystemLoaded )
         {
@@ -131,6 +132,8 @@ AlbumPlaylistInterface::tracks() const
             connect( Tomahawk::InfoSystem::InfoSystem::instance(),
                     SIGNAL( finished( QString ) ),
                     SLOT( infoSystemFinished( QString ) ) );
+
+            const_cast< int& >( m_lastQueryTimestamp ) = QDateTime::currentMSecsSinceEpoch();
         }
         else if ( m_mode == DatabaseMode && !m_databaseLoaded )
         {
@@ -153,6 +156,7 @@ AlbumPlaylistInterface::tracks() const
 
                 cmd->enqueue();
             }
+            const_cast< int& >( m_lastQueryTimestamp ) = QDateTime::currentMSecsSinceEpoch();
         }
     }
 

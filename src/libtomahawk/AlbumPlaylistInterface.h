@@ -82,6 +82,8 @@ private:
     Tomahawk::collection_ptr m_collection;
 
     QPointer< Tomahawk::Album > m_album;
+
+    int m_lastQueryTimestamp; //To prevent infinite loops on empty responses. This should not happen, but let's make sure.
 };
 
 }; // ns
