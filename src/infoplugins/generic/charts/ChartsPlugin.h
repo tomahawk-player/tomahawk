@@ -49,7 +49,6 @@ public:
         Track =     0x01,
         Album =     0x02,
         Artist =    0x04
-
     };
 
     void setChartType( ChartType type ) { m_chartType = type; }
@@ -102,22 +101,23 @@ private:
     void fetchChartCapabilitiesFromCache( Tomahawk::InfoSystem::InfoRequestData requestData );
     void dataError( Tomahawk::InfoSystem::InfoRequestData requestData );
 
+    QString countryName( const QString& cc );
 
     qlonglong getMaxAge( const QByteArray &rawHeader ) const;
     qlonglong getMaxAge( const qlonglong expires ) const;
 
+    QVariantMap m_allChartsMap;
+    QHash< QString, QString > m_cachedCountries;
     QList< Tomahawk::InfoSystem::InfoStringHash > m_chartResources;
+    QList< InfoRequestData > m_cachedRequests;
     QStringList m_refetchSource;
+    QString m_cacheIdentifier;
     QString m_chartVersion;
     ChartType m_chartType;
-    QVariantMap m_allChartsMap;
+
     uint m_chartsFetchJobs;
-    QList< InfoRequestData > m_cachedRequests;
-    QHash< QString, QString > m_cachedCountries;
-    QPointer< QNetworkAccessManager > m_nam;
-    QStringList m_geoChartIds;
     bool m_fetchAll;
-    QString m_cacheIdentifier;
+
 };
 
 }
