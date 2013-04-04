@@ -2244,27 +2244,27 @@ napsauttamalla hiiren oikealla.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="102"/>
         <source>Resolver installation error: cannot open bundle.</source>
-        <translation type="unfinished"/>
+        <translation>Selvittimen asennusvirhe: pakkausta ei voi avata.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="109"/>
         <source>Resolver installation error: incomplete bundle.</source>
-        <translation type="unfinished"/>
+        <translation>Selvittimen asennusvirhe: vaillinainen pakkaus.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="148"/>
         <source>Resolver installation error: bad metadata in bundle.</source>
-        <translation type="unfinished"/>
+        <translation>Selvittimen asennusvirhe: pakkauksessa on virheellistä metatietoa.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="186"/>
         <source>Resolver installation error: platform mismatch.</source>
-        <translation type="unfinished"/>
+        <translation>Selvittimen asennusvirhe: käyttöjärjestelmäalusta ei täsmää.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="199"/>
         <source>Resolver installation error: Tomahawk %1 or newer is required.</source>
-        <translation type="unfinished"/>
+        <translation>Selvittimen asennusvirhe: Tomahawk %1 tai uudempi vaaditaan.</translation>
     </message>
 </context>
 <context>
@@ -2357,7 +2357,7 @@ napsauttamalla hiiren oikealla.</translation>
     <message>
         <location filename="../src/accounts/twitter/TwitterAccount.h" line="51"/>
         <source>Send tweets from Tomahawk.</source>
-        <translation type="unfinished"/>
+        <translation>Lähetä twiittejä Tomahawkista.</translation>
     </message>
 </context>
 <context>
@@ -2574,7 +2574,7 @@ käyttäjätunnus@jabber.org</translation>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="104"/>
         <source>Add to &amp;Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Lisää s&amp;oittolistalle</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="118"/>
@@ -3165,19 +3165,19 @@ Koeta säätää suodattimia saadaksesi uuden joukon kappaleita kuunneltavaksi.<
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="193"/>
         <source>on</source>
         <comment>'on' is followed by an album name</comment>
-        <translation type="unfinished"/>
+        <translation>albumilla</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="195"/>
         <source>%1%4 %2%3.</source>
         <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing, %4 is the preposition used to link track and artist ('by' in english)</comment>
-        <translation type="unfinished"/>
+        <translation>%1%4 %2%3.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="199"/>
         <source>by</source>
         <comment>preposition to link track and artist</comment>
-        <translation type="unfinished"/>
+        <translation>artistilta</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="208"/>
@@ -3776,7 +3776,7 @@ anna siellä näytetty PIN-koodi tähän:</translation>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="119"/>
         <source>The Twitter plugin allows you to post messages to your Twitter account.</source>
-        <translation type="unfinished"/>
+        <translation>Twitter-liitännäisellä voit lähettää viestejä Twitter-tilillesi.</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="137"/>

@@ -2351,7 +2351,7 @@ erlauben sich mit dir zu verbinden?</translation>
     <message>
         <location filename="../src/accounts/twitter/TwitterAccount.h" line="51"/>
         <source>Send tweets from Tomahawk.</source>
-        <translation>Tweets vom Tomhawk absenden.</translation>
+        <translation>Tweets von Tomahawk aus absenden.</translation>
     </message>
 </context>
 <context>
