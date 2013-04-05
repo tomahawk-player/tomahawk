@@ -204,7 +204,7 @@ PeerInfo::sipPlugin() const
 void
 PeerInfo::sendLocalSipInfo( const QList<SipInfo>& sipInfoList )
 {
-    sipPlugin()->sendSipInfoList( weakRef().toStrongRef(), sipInfoList );
+    sipPlugin()->sendSipInfo( weakRef().toStrongRef(), sipInfoList );
 }
 
 
