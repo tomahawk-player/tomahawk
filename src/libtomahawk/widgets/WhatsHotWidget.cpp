@@ -114,7 +114,8 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 
     // Lets have a spinner until loaded
     ui->breadCrumbLeft->setVisible( false );
-    m_spinner = new AnimatedSpinner( ui->tracksViewLeft );
+    ui->stackLeft->setCurrentIndex( 2 );
+    m_spinner = new AnimatedSpinner( ui->albumsView );
     m_spinner->fadeIn();
 
 }
