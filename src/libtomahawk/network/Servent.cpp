@@ -148,12 +148,14 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
                 continue; // IPv4 localhost
             if ( addr.toString() == "::1" )
                 continue; // IPv6 localhost
+            if ( addr.toString() ==  "::7F00:1" )
+                continue; // IPv4 localhost as IPv6 address
             tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Listening to " << addr.toString();
             m_externalAddresses.append( addr );
         }
 
     }
-    else if ( ( ha.toString() != "127.0.0.1" ) && ( ha.toString() != "::1" ) )
+    else if ( ( ha.toString() != "127.0.0.1" ) && ( ha.toString() != "::1" ) && ( ha.toString() ==  "::7F00:1" ) )
     {
         // We listen only to one specific Address, only announce this.
         m_externalAddresses.append( ha );
