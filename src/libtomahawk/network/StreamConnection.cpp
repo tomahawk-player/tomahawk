@@ -89,7 +89,7 @@ StreamConnection::StreamConnection( Servent* s, ControlConnection* cc, QString f
 StreamConnection::~StreamConnection()
 {
     qDebug() << Q_FUNC_INFO << "TX/RX:" << bytesSent() << bytesReceived();
-    if( m_type == RECEIVING && !m_allok )
+    if ( m_type == RECEIVING && !m_allok )
     {
         qDebug() << "FTConnection closing before last data msg received, shame.";
         //TODO log the fact that our peer was bad-mannered enough to not finish the upload
@@ -117,13 +117,14 @@ StreamConnection::id() const
 Tomahawk::source_ptr
 StreamConnection::source() const
 {
-	return m_source;
+    return m_source;
 }
+
 
 void
 StreamConnection::showStats( qint64 tx, qint64 rx )
 {
-    if( tx > 0 || rx > 0 )
+    if ( tx > 0 || rx > 0 )
     {
         qDebug() << id()
                  << QString( "Down: %L1 bytes/sec," ).arg( rx )
@@ -139,10 +140,10 @@ void
 StreamConnection::setup()
 {
     QList<source_ptr> sources = SourceList::instance()->sources();
-    foreach( const source_ptr& src, sources )
+    foreach ( const source_ptr& src, sources )
     {
         // local src doesnt have a control connection, skip it:
-        if( src.isNull() || src->isLocal() )
+        if ( src.isNull() || src->isLocal() )
             continue;
 
         if ( src->controlConnection() == m_cc )
@@ -153,7 +154,7 @@ StreamConnection::setup()
     }
 
     connect( this, SIGNAL( statsTick( qint64, qint64 ) ), SLOT( showStats( qint64, qint64 ) ) );
-    if( m_type == RECEIVING )
+    if ( m_type == RECEIVING )
     {
         qDebug() << "in RX mode";
         emit updated();
@@ -190,9 +191,11 @@ StreamConnection::startSending( const Tomahawk::result_ptr& result )
 void
 StreamConnection::reallyStartSending( const Tomahawk::result_ptr& result, QSharedPointer< QIODevice >& io )
 {
-    if( !io || io.isNull() )
+    // Note: We don't really need to pass in 'result' here, since we already have it stored
+    // as a member variable. The callback-signature of getIODeviceForUrl requires it, though.
+    if ( !io || io.isNull() )
     {
-        qDebug() << "Couldn't read from source:" << m_result->url();
+        qDebug() << "Couldn't read from source:" << result->url();
         shutdown();
         return;
     }
@@ -269,7 +272,7 @@ StreamConnection::sendSome()
     ba.append( m_readdev->read( BufferIODevice::blockSize() ) );
     m_bsent += ba.length() - 4;
 
-    if( m_readdev->atEnd() )
+    if ( m_readdev->atEnd() )
     {
         sendMsg( Msg::factory( ba, Msg::RAW ) );
         return;
