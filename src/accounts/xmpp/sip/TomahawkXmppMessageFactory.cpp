@@ -169,6 +169,8 @@ void TomahawkXmppMessageFactory::serialize(Payload *extension, QXmlStreamWriter 
 
     // </transport>
     writer->writeEndElement();
+    // </tomahawk>
+    writer->writeEndElement();
 }
 
 Payload::Ptr
