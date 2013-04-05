@@ -157,7 +157,7 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
         }
 
     }
-    else if ( ( ha.toString() != "127.0.0.1" ) && ( ha.toString() != "::1" ) && ( ha.toString() ==  "::7F00:1" ) )
+    else if ( ( ha.toString() != "127.0.0.1" ) && ( ha.toString() != "::1" ) && ( ha.toString() !=  "::7F00:1" ) )
     {
         // We listen only to one specific Address, only announce this.
         m_externalAddresses.append( ha );
