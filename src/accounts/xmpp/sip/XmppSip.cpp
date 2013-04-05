@@ -435,7 +435,7 @@ XmppSipPlugin::errorMessage( Jreen::Client::DisconnectReason reason )
 
 
 void
-XmppSipPlugin::sendSipInfoList( const Tomahawk::peerinfo_ptr& receiver, const QList<SipInfo>& info )
+XmppSipPlugin::sendSipInfo( const Tomahawk::peerinfo_ptr& receiver, const QList<SipInfo>& info )
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << receiver << info;
 
