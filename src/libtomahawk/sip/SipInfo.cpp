@@ -120,8 +120,6 @@ SipInfo::setVisible( bool visible )
 bool
 SipInfo::isVisible() const
 {
-    Q_ASSERT( isValid() );
-
     return d->visible.toBool();
 }
 
@@ -136,8 +134,6 @@ SipInfo::setHost( const QString& host )
 const QString
 SipInfo::host() const
 {
-    Q_ASSERT( isValid() );
-
     return d->host;
 }
 
@@ -152,8 +148,6 @@ SipInfo::setPort( int port )
 int
 SipInfo::port() const
 {
-    Q_ASSERT( isValid() );
-
     return d->port;
 }
 
@@ -168,8 +162,6 @@ SipInfo::setNodeId( const QString& nodeId )
 const QString
 SipInfo::nodeId() const
 {
-    Q_ASSERT( isValid() );
-
     return d->nodeId;
 }
 
@@ -184,8 +176,6 @@ SipInfo::setKey( const QString& key )
 const QString
 SipInfo::key() const
 {
-    Q_ASSERT( isValid() );
-
     return d->key;
 }
 
