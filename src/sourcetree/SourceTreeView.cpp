@@ -2,7 +2,8 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
- *   Copyright 2010-2012, Leo Franchi   <lfranchi@kde.org>
+ *   Copyright 2010-2012, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -140,6 +141,12 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     connect( this, SIGNAL( latchModeChangeRequest( Tomahawk::source_ptr, bool ) ), m_latchManager, SLOT( latchModeChangeRequest( Tomahawk::source_ptr, bool ) ) );
 
     connect( ActionCollection::instance(), SIGNAL( privacyModeChanged() ), SLOT( repaint() ) );
+
+    QAction* renamePlaylistAction = new QAction( this );
+    renamePlaylistAction->setShortcutContext( Qt::WidgetWithChildrenShortcut );
+    renamePlaylistAction->setShortcut( Qt::Key_F2 );
+    addAction( renamePlaylistAction );
+    connect( renamePlaylistAction, SIGNAL( triggered() ), SLOT( renamePlaylist() ) );
 }
 
 
@@ -649,6 +656,7 @@ SourceTreeView::onCustomContextMenu( const QPoint& pos )
         customMenu.addActions( customActions );
         customMenu.exec( mapToGlobal( pos ) );
     }
+    m_contextMenuIndex = QModelIndex(); //we invalidate it because there's no active context menu
 }
 
 
