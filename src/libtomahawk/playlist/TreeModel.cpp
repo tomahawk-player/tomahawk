@@ -273,7 +273,8 @@ TreeModel::reloadCollection()
     if ( m_collection.isNull() )
         return;
 
-    onCollectionChanged();
+    if ( !isLoading() )
+        onCollectionChanged();
 }
 
 
