@@ -610,7 +610,7 @@ TomahawkApp::initServent()
 
     bool upnp = !arguments().contains( "--noupnp" );
     int port = TomahawkSettings::instance()->externalPort();
-    if ( !Servent::instance()->startListening( QHostAddress( QHostAddress::Any ), upnp, port ) )
+    if ( !Servent::instance()->startListening( QHostAddress( QHostAddress::AnyIPv6 ), upnp, port ) )
     {
         tLog() << "Failed to start listening with servent";
         exit( 1 );
