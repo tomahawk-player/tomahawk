@@ -22,30 +22,29 @@
 
 #include <jreen/stanzaextension.h>
 
+#include "sip/SipInfo.h"
+
 #define TOMAHAWK_SIP_MESSAGE_NS QLatin1String("http://www.tomhawk-player.org/sip/transports")
 
 #include "accounts/AccountDllMacro.h"
 
-class TomahawkXmppMessagePrivate;
 class ACCOUNTDLLEXPORT TomahawkXmppMessage : public Jreen::Payload
 {
     J_PAYLOAD(TomahawkXmppMessage)
-    Q_DECLARE_PRIVATE(TomahawkXmppMessage)
     public:
-        // sets visible to true
-        TomahawkXmppMessage(const QString &ip, unsigned int port, const QString &uniqname, const QString &key);
-
-        // sets visible to false as we dont have any extra information
         TomahawkXmppMessage();
+        TomahawkXmppMessage(const QList<SipInfo>& sipInfo);
         ~TomahawkXmppMessage();
 
-        const QString ip() const;
-        unsigned int port() const;
-        const QString uniqname() const;
+        //! The SipInfo objects that are wrapped in this XmppMessage
+        const QList<SipInfo> sipInfo() const;
+        //! The name of the peer contained in this message
         const QString key() const;
-        bool visible() const;
+        //! The name of the peer contained in this message
+        const QString uniqname() const;
+
     private:
-        QScopedPointer<TomahawkXmppMessagePrivate> d_ptr;
+        QList<SipInfo> m_sipInfo;
 };
 
 #endif // ENTITYTIME_H

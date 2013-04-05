@@ -435,22 +435,15 @@ XmppSipPlugin::errorMessage( Jreen::Client::DisconnectReason reason )
 
 
 void
-XmppSipPlugin::sendSipInfo( const Tomahawk::peerinfo_ptr& receiver, const SipInfo& info )
+XmppSipPlugin::sendSipInfoList( const Tomahawk::peerinfo_ptr& receiver, const QList<SipInfo>& info )
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << receiver << info;
 
     if ( !m_client )
         return;
 
-    TomahawkXmppMessage *sipMessage;
-    if ( info.isVisible() )
-    {
-        sipMessage = new TomahawkXmppMessage( info.host(), info.port(), info.nodeId(), info.key() );
-    }
-    else
-        sipMessage = new TomahawkXmppMessage();
-
-    qDebug() << "Send sip messsage to" << receiver;
+    TomahawkXmppMessage* sipMessage = new TomahawkXmppMessage( info );
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Send sip messsage to" << receiver;
     Jreen::IQ iq( Jreen::IQ::Set, receiver->id() );
     iq.addExtension( sipMessage );
     Jreen::IQReply *reply = m_client->send( iq );
@@ -687,6 +680,7 @@ XmppSipPlugin::onNewMessage( const Jreen::Message& message )
         return;
     }
 
+    // FIXME: We do not sent SipInfo in JSON via XMPP, why do we receive it here?
     SipInfo info = SipInfo::fromJson( msg );
     if ( !info.isValid() )
     {
@@ -912,30 +906,22 @@ XmppSipPlugin::onNewIq( const Jreen::IQ& iq )
         if ( sipMessage )
         {
             iq.accept();
+            tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Received Sip Information from:" << iq.from().full();
 
-            qDebug() << Q_FUNC_INFO << "Got SipMessage ..."
-                     << "ip" << sipMessage->ip() << "port" << sipMessage->port() << "nodeId" << sipMessage->uniqname() << "key" << sipMessage->key() << "visible" << sipMessage->visible();
-
-            SipInfo info;
-            info.setVisible( sipMessage->visible() );
-            if ( sipMessage->visible() )
+            // Check that all received SipInfos are valid.
+            foreach ( SipInfo info, sipMessage->sipInfo() )
             {
-                info.setHost( sipMessage->ip() );
-                info.setPort( sipMessage->port() );
-                info.setNodeId( sipMessage->uniqname() );
-                info.setKey( sipMessage->key() );
+                Q_ASSERT( info.isValid() );
             }
 
-            Q_ASSERT( info.isValid() );
-
-            qDebug() << Q_FUNC_INFO << "From:" << iq.from().full() << ":" << info;
+            // Get the peer information for the sender.
             Tomahawk::peerinfo_ptr peerInfo = PeerInfo::get( this, iq.from().full() );
             if ( peerInfo.isNull() )
             {
                 tDebug() << Q_FUNC_INFO << "no valid peerInfo for" << iq.from().full();
                 return;
             }
-            peerInfo->setSipInfo( info );
+            peerInfo->setSipInfo( sipMessage->sipInfo() );
         }
     }
 }

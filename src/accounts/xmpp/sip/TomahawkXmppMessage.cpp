@@ -21,60 +21,39 @@
 
 #include "utils/Logger.h"
 
-
-class TomahawkXmppMessagePrivate
+TomahawkXmppMessage::TomahawkXmppMessage() : m_sipInfo()
 {
-public:
-    QString ip;
-    int port;
-    QString uniqname;
-    QString key;
-    bool visible;
-};
-
-TomahawkXmppMessage::TomahawkXmppMessage(const QString &ip, unsigned int port, const QString &uniqname, const QString &key) : d_ptr(new TomahawkXmppMessagePrivate)
-{
-    Q_D(TomahawkXmppMessage);
-    d->ip = ip;
-    d->port = port;
-    d->uniqname = uniqname;
-    d->key = key;
-    d->visible = true;
 }
 
-TomahawkXmppMessage::TomahawkXmppMessage() : d_ptr(new TomahawkXmppMessagePrivate)
+TomahawkXmppMessage::TomahawkXmppMessage( const QList<SipInfo> &sipInfo ) : m_sipInfo( sipInfo )
 {
-    Q_D(TomahawkXmppMessage);
-    d->visible = false;
-    d->port = -1;
 }
-
 
 TomahawkXmppMessage::~TomahawkXmppMessage()
 {
 }
 
-const QString TomahawkXmppMessage::ip() const
+const QList<SipInfo>
+TomahawkXmppMessage::sipInfo() const
 {
-    return d_func()->ip;
+    return m_sipInfo;
 }
 
-unsigned int TomahawkXmppMessage::port() const
+
+const QString
+TomahawkXmppMessage::key() const
 {
-    return d_func()->port;
+    if ( m_sipInfo.length() > 0 )
+        return m_sipInfo.first().key();
+    else
+        return QString();
 }
 
-const QString TomahawkXmppMessage::uniqname() const
+const QString
+TomahawkXmppMessage::uniqname() const
 {
-    return d_func()->uniqname;
-}
-
-const QString TomahawkXmppMessage::key() const
-{
-    return d_func()->key;
-}
-
-bool TomahawkXmppMessage::visible() const
-{
-    return d_func()->visible;
+    if ( m_sipInfo.length() > 0 )
+        return m_sipInfo.first().nodeId();
+    else
+        return QString();
 }

@@ -161,7 +161,9 @@ ZeroconfPlugin::lanHostFound( const QString& host, int port, const QString& name
     sipInfo.setVisible( true );
 
     Tomahawk::peerinfo_ptr peerInfo = Tomahawk::PeerInfo::get( this, host, Tomahawk::PeerInfo::AutoCreate );
-    peerInfo->setSipInfo( sipInfo );
+    QList<SipInfo> sipInfoList = QList<SipInfo>();
+    sipInfoList.append( sipInfo );
+    peerInfo->setSipInfo( sipInfoList );
     peerInfo->setContactId( host );
     peerInfo->setFriendlyName( name );
     peerInfo->setType( PeerInfo::Local );

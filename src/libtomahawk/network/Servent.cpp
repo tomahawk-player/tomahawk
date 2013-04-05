@@ -34,6 +34,7 @@
 #include "sip/SipPlugin.h"
 #include "PortFwdThread.h"
 #include "TomahawkSettings.h"
+#include "utils/Closure.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 #include "accounts/AccountManager.h"
@@ -49,6 +50,10 @@
 #include <QtNetwork/QNetworkReply>
 
 #include <boost/bind.hpp>
+
+
+typedef QPair< QList< SipInfo >, Connection* > sipConnectionPair;
+Q_DECLARE_METATYPE( sipConnectionPair )
 
 using namespace Tomahawk;
 
@@ -70,7 +75,6 @@ Servent::Servent( QObject* parent )
 {
     s_instance = this;
 
-    m_lanHack = qApp->arguments().contains( "--lanhack" );
     m_noAuth = qApp->arguments().contains( "--noauth" );
 
     setProxy( QNetworkProxy::NoProxy );
@@ -113,6 +117,7 @@ Servent::~Servent()
 bool
 Servent::startListening( QHostAddress ha, bool upnp, int port )
 {
+    m_externalAddresses = QList<QHostAddress>();
     m_port = port;
     int defPort = TomahawkSettings::instance()->defaultPort();
 
@@ -125,8 +130,8 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
         {
             if ( !listen( ha, defPort ) )
             {
-                tLog() << "Failed to listen on both port" << m_port << "and port" << defPort;
-                tLog() << "Error string is:" << errorString();
+                tLog() << Q_FUNC_INFO << "Failed to listen on both port" << m_port << "and port" << defPort;
+                tLog() << Q_FUNC_INFO << "Error string is:" << errorString();
                 return false;
             }
             else
@@ -134,42 +139,86 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
         }
     }
 
-    TomahawkSettings::ExternalAddressMode mode = TomahawkSettings::instance()->externalAddressMode();
+    if ( ha == QHostAddress::AnyIPv6 )
+    {
+        // We are listening on all available addresses, so we should send a SipInfo for all of them.
+        foreach ( QHostAddress addr, QNetworkInterface::allAddresses() )
+        {
+            if ( addr.toString() == "127.0.0.1" )
+                continue; // IPv4 localhost
+            if ( addr.toString() == "::1" )
+                continue; // IPv6 localhost
+            tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Listening to " << addr.toString();
+            m_externalAddresses.append( addr );
+        }
 
-    tLog() << "Servent listening on port" << m_port << "- servent thread:" << thread()
+    }
+    else if ( ( ha.toString() != "127.0.0.1" ) && ( ha.toString() != "::1" ) )
+    {
+        // We listen only to one specific Address, only announce this.
+        m_externalAddresses.append( ha );
+    }
+    // If we only accept connections via localhost, we'll announce nothing.
+
+    TomahawkSettings::ExternalAddressMode mode = TomahawkSettings::instance()->externalAddressMode();
+    tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Servent listening on port" << m_port << "- servent thread:" << thread()
            << "- address mode:" << (int)( mode );
 
-    // --lanhack means to advertise your LAN IP as if it were externally visible
     switch ( mode )
     {
         case TomahawkSettings::Static:
             m_externalHostname = TomahawkSettings::instance()->externalHostname();
             m_externalPort = TomahawkSettings::instance()->externalPort();
             m_ready = true;
+            // All setup is made, were done.
             emit ready();
             break;
 
         case TomahawkSettings::Lan:
-            setInternalAddress();
+            // Nothing has to be done here.
+            m_ready = true;
+            emit ready();
             break;
 
         case TomahawkSettings::Upnp:
-            if ( !upnp )
+            if ( upnp )
             {
-                setInternalAddress();
-                break;
+                // upnp could be turned of on the cli with --noupnp
+                tLog( LOGVERBOSE ) << Q_FUNC_INFO << "External address mode set to upnp...";
+                m_portfwd = QPointer< PortFwdThread >( new PortFwdThread( m_port ) );
+                Q_ASSERT( m_portfwd );
+                connect( m_portfwd.data(), SIGNAL( externalAddressDetected( QHostAddress, unsigned int ) ),
+                                      SLOT( setExternalAddress( QHostAddress, unsigned int ) ) );
+                m_portfwd.data()->start();
             }
-            // TODO check if we have a public/internet IP on this machine directly
-            tLog() << "External address mode set to upnp...";
-            m_portfwd = QPointer< PortFwdThread >( new PortFwdThread( m_port ) );
-            Q_ASSERT( m_portfwd );
-            connect( m_portfwd.data(), SIGNAL( externalAddressDetected( QHostAddress, unsigned int ) ),
-                                  SLOT( setExternalAddress( QHostAddress, unsigned int ) ) );
-            m_portfwd.data()->start();
+            else
+            {
+                m_ready = true;
+                emit ready();
+            }
             break;
     }
 
     return true;
+}
+
+
+void
+Servent::setExternalAddress( QHostAddress ha, unsigned int port )
+{
+    if ( isValidExternalIP( ha ) )
+    {
+        m_externalHostname = ha.toString();
+        m_externalPort = port;
+    }
+
+    if ( m_externalPort == 0 || !isValidExternalIP( ha ) )
+        tLog() << Q_FUNC_INFO << "UPnP failed, no further external address could be acquired!";
+    else
+        tLog( LOGVERBOSE ) << Q_FUNC_INFO << "UPnP setup successful";
+
+    m_ready = true;
+    emit ready();
 }
 
 
@@ -192,64 +241,61 @@ Servent::createConnectionKey( const QString& name, const QString &nodeid, const 
 
 
 bool
-Servent::isValidExternalIP( const QHostAddress& addr ) const
+Servent::isValidExternalIP( const QHostAddress& addr )
 {
     QString ip = addr.toString();
-    if ( !m_lanHack && ( ip.startsWith( "10." ) || ip.startsWith( "172.16." ) || ip.startsWith( "192.168." ) ) )
+    if (addr.protocol() == QAbstractSocket::IPv4Protocol)
+    {
+        // private network
+        if ( addr.isInSubnet(QHostAddress::parseSubnet("10.0.0.0/8")) )
+            return false;
+        // localhost
+        if ( addr.isInSubnet(QHostAddress::parseSubnet("127.0.0.0/8")) )
+            return false;
+        // private network
+        if ( addr.isInSubnet(QHostAddress::parseSubnet("169.254.0.0/16")) )
+            return false;
+        // private network
+        if ( addr.isInSubnet(QHostAddress::parseSubnet("172.16.0.0/12")) )
+            return false;
+        // private network
+        if ( addr.isInSubnet(QHostAddress::parseSubnet("192.168.0.0/16")) )
+            return false;
+        // multicast
+        if ( addr.isInSubnet(QHostAddress::parseSubnet("224.0.0.0/4")) )
+            return false;
+    }
+    else if (addr.protocol() == QAbstractSocket::IPv4Protocol)
+    {
+        // "unspecified address"
+        if ( addr.isInSubnet(QHostAddress::parseSubnet("::/128")) )
+            return false;
+        // link-local
+        if ( addr.isInSubnet(QHostAddress::parseSubnet("fe80::/10")) )
+            return false;
+        // unique local addresses
+        if ( addr.isInSubnet(QHostAddress::parseSubnet("fc00::/7")) )
+            return false;
+        // benchmarking only
+        if ( addr.isInSubnet(QHostAddress::parseSubnet("2001:2::/48")) )
+            return false;
+        // non-routed IPv6 addresses used for Cryptographic Hash Identifiers
+        if ( addr.isInSubnet(QHostAddress::parseSubnet("2001:10::/28")) )
+            return false;
+        // documentation prefix
+        if ( addr.isInSubnet(QHostAddress::parseSubnet("2001:db8::/32")) )
+            return false;
+        // multicast
+        if ( addr.isInSubnet(QHostAddress::parseSubnet("ff00::0/8 ")) )
+            return false;
+    }
+    else
     {
         return false;
     }
 
     return !addr.isNull();
 }
-
-
-void
-Servent::setInternalAddress()
-{
-    foreach ( QHostAddress ha, QNetworkInterface::allAddresses() )
-    {
-        if ( ha.toString() == "127.0.0.1" )
-            continue;
-        if ( ha.toString().contains( ":" ) )
-            continue; //ipv6
-
-        if ( m_lanHack && isValidExternalIP( ha ) )
-        {
-            tLog() << "LANHACK: set external address to lan address" << ha.toString();
-            setExternalAddress( ha, m_port );
-        }
-        else
-        {
-            m_ready = true;
-            emit ready();
-        }
-        break;
-    }
-}
-
-
-void
-Servent::setExternalAddress( QHostAddress ha, unsigned int port )
-{
-    if ( isValidExternalIP( ha ) )
-    {
-        m_externalAddress = ha;
-        m_externalPort = port;
-    }
-
-    if ( m_externalPort == 0 || !isValidExternalIP( ha ) )
-    {
-        tLog() << "UPnP failed, LAN and outbound connections only!";
-        setInternalAddress();
-        return;
-    }
-
-    tLog() << "UPnP setup successful";
-    m_ready = true;
-    emit ready();
-}
-
 
 void
 Servent::registerOffer( const QString& key, Connection* conn )
@@ -312,7 +358,7 @@ Servent::registerPeer( const Tomahawk::peerinfo_ptr& peerInfo )
     if ( peerInfo->type() == Tomahawk::PeerInfo::Local )
     {
         peerInfoDebug(peerInfo) << "we need to establish the connection now... thinking";
-        if ( !connectedToSession( peerInfo->sipInfo().nodeId() ) )
+        if ( !connectedToSession( peerInfo->sipInfo().first().nodeId() ) )
         {
             connectToPeer( peerInfo );
         }
@@ -335,34 +381,47 @@ Servent::registerPeer( const Tomahawk::peerinfo_ptr& peerInfo )
     }
     else
     {
-        SipInfo info;
-        QString peerId = peerInfo->id();
         QString key = uuid();
-        ControlConnection* conn = new ControlConnection( this );
-
         const QString& nodeid = Database::instance()->impl()->dbid();
+
+        ControlConnection* conn = new ControlConnection( this );
         conn->setName( peerInfo->contactId() );
         conn->setId( nodeid );
         conn->addPeerInfo( peerInfo );
 
-        if ( visibleExternally() )
+        QList<SipInfo> sipInfo = QList<SipInfo>();
+        foreach ( QHostAddress ha, m_externalAddresses )
         {
-            registerOffer( key, conn );
+            SipInfo info = SipInfo();
+            info.setHost( ha.toString() );
+            info.setPort( m_port );
+            info.setKey( key );
             info.setVisible( true );
-            info.setHost( externalAddress() );
-            info.setPort( externalPort() );
+            info.setNodeId( nodeid );
+            sipInfo.append( info );
+        }
+        if ( m_externalHostname.length() > 0)
+        {
+            SipInfo info = SipInfo();
+            info.setHost( m_externalHostname );
+            info.setPort( m_externalPort );
+            info.setKey( key );
+            info.setVisible( true );
+            info.setNodeId( nodeid );
+            sipInfo.append( info );
+        }
+
+        if ( sipInfo.length() == 0 )
+        {
+            // We are not visible via any IP, send a dummy SipInfo
+            SipInfo info = SipInfo();
+            info.setVisible( false );
             info.setKey( key );
             info.setNodeId( nodeid );
-
-            tDebug() << "Asking them (" << peerInfo->id() << ") to connect to us:" << info;
-        }
-        else
-        {
-            info.setVisible( false );
-            tDebug() << "We are not visible externally:" << info;
+            tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Only accepting connections, no usable IP to listen to found.";
         }
 
-        peerInfo->sendLocalSipInfo( info );
+        peerInfo->sendLocalSipInfo( sipInfo );
 
         handleSipInfo( peerInfo );
         connect( peerInfo.data(), SIGNAL( sipInfoChanged() ), SLOT( onSipInfoChanged() ) );
@@ -384,43 +443,29 @@ Servent::onSipInfoChanged()
 
 void Servent::handleSipInfo( const Tomahawk::peerinfo_ptr& peerInfo )
 {
-    tLog() << Q_FUNC_INFO << peerInfo->id() << peerInfo->sipInfo();
+    // FIXME: Do we need this?
+    // SipInfo info = peerInfo->sipInfo();
+    // if ( !info.isValid() )
+    //    return;
 
-    SipInfo info = peerInfo->sipInfo();
-    if ( !info.isValid() )
-        return;
-
-    /*
-        If only one party is externally visible, connection is obvious
-        If both are, peer with lowest IP address initiates the connection.
-
-        This avoids dupe connections.
-    */
-    if ( info.isVisible() )
+    foreach ( SipInfo info, peerInfo->sipInfo() )
     {
-        if ( !visibleExternally() ||
-             externalAddress() < info.host() ||
-             ( externalAddress() == info.host() && externalPort() < info.port() ) )
+        if (info.isVisible())
         {
-
-            tDebug() << "Initiate connection to" << peerInfo->id() << "at" << info.host() << "peer of:" << peerInfo->sipPlugin()->account()->accountFriendlyName();
+            // There is at least one SipInfo that may be visible. Try connecting.
+            // Duplicate Connections are checked by connectToPeer, so we do not need to take care of this
+            tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Initiate connection to" << peerInfo->id() << "at" << info.host() << "peer of:" << peerInfo->sipPlugin()->account()->accountFriendlyName();
             connectToPeer( peerInfo );
-        }
-        else
-        {
-            tDebug() << Q_FUNC_INFO << "They should be conecting to us...";
+            // We connected to the peer, so we are done here.
+            return;
         }
     }
-    else
-    {
-        tDebug() << Q_FUNC_INFO << "They are not visible, doing nothing atm";
 
-        if ( !visibleExternally() )
-        {
-            if ( peerInfo->controlConnection() )
-                delete peerInfo->controlConnection();
-        }
-    }
+    // If we reach this point none of the previous SipInfos was visible.
+    if ( peerInfo->controlConnection() )
+      delete peerInfo->controlConnection();
+
+    tDebug() << Q_FUNC_INFO << peerInfo->id() << "They are not visible, doing nothing atm";
 }
 
 void
@@ -616,10 +661,13 @@ Servent::createParallelConnection( Connection* orig_conn, Connection* new_conn, 
     // if we can connect to them directly:
     if ( orig_conn && orig_conn->outbound() )
     {
-        connectToPeer( orig_conn->socket()->peerAddress().toString(),
-                       orig_conn->peerPort(),
-                       key,
-                       new_conn );
+        QList<SipInfo> sipInfo = QList<SipInfo>();
+        SipInfo info = SipInfo();
+        info.setKey( key );
+        info.setHost( orig_conn->socket()->peerAddress().toString() );
+        info.setPort( orig_conn->peerPort() );
+        sipInfo.append( info );
+        connectToPeer( sipInfo, new_conn );
     }
     else // ask them to connect to us:
     {
@@ -631,7 +679,6 @@ Servent::createParallelConnection( Connection* orig_conn, Connection* new_conn, 
         m.insert( "conntype", "request-offer" );
         m.insert( "key", tmpkey );
         m.insert( "offer", key );
-        m.insert( "port", externalPort() );
         m.insert( "controlid", Database::instance()->impl()->dbid() );
 
         QJson::Serializer ser;
@@ -680,44 +727,10 @@ void Servent::handoverSocket( Connection* conn, QTcpSocketExtra* sock )
     conn->start( sock );
 }
 
-
-void
-Servent::socketError( QAbstractSocket::SocketError e )
-{
-    QTcpSocketExtra* sock = (QTcpSocketExtra*)sender();
-    if ( !sock )
-    {
-        tLog() << "SocketError, sock is null";
-        return;
-    }
-
-    if ( !sock->_conn.isNull() )
-    {
-        Connection* conn = sock->_conn.data();
-        tLog() << "Servent::SocketError:" << e << conn->id() << conn->name();
-
-        if ( !sock->_disowned )
-        {
-            // connection will delete if we already transferred ownership, otherwise:
-            sock->deleteLater();
-        }
-
-        conn->markAsFailed(); // will emit failed, then finished
-    }
-    else
-    {
-        tLog() << "SocketError, connection is null";
-        sock->deleteLater();
-    }
-}
-
-
 void
 Servent::connectToPeer( const peerinfo_ptr& peerInfo )
 {
     Q_ASSERT( this->thread() == QThread::currentThread() );
-
-    SipInfo sipInfo = peerInfo->sipInfo();
 
     peerInfoDebug( peerInfo ) << "connectToPeer: search for already established connections to the same nodeid:" << m_controlconnections.count() << "connections";
     if ( peerInfo->controlConnection() )
@@ -731,7 +744,7 @@ Servent::connectToPeer( const peerinfo_ptr& peerInfo )
     {
         Q_ASSERT( c );
 
-        if ( c->id() == sipInfo.nodeId() )
+        if ( c->id() == peerInfo->nodeId() )
         {
             conn = c;
 
@@ -773,8 +786,7 @@ Servent::connectToPeer( const peerinfo_ptr& peerInfo )
 
     QVariantMap m;
     m["conntype"]  = "accept-offer";
-    m["key"]       = sipInfo.key();
-    m["port"]      = externalPort();
+    m["key"]       = peerInfo->key();
     m["nodeid"]    = Database::instance()->impl()->dbid();
 
     peerInfoDebug(peerInfo) << "No match found, creating a new ControlConnection...";
@@ -784,57 +796,131 @@ Servent::connectToPeer( const peerinfo_ptr& peerInfo )
 
     if ( peerInfo->id().length() )
         conn->setName( peerInfo->contactId() );
-    if ( sipInfo.nodeId().length() )
-        conn->setId( sipInfo.nodeId() );
+    if ( peerInfo->nodeId().length() )
+        conn->setId( peerInfo->nodeId() );
 
-    conn->setProperty( "nodeid", sipInfo.nodeId() );
+    conn->setProperty( "nodeid", peerInfo->nodeId() );
 
     registerControlConnection( conn );
-    connectToPeer( sipInfo.host(), sipInfo.port(), sipInfo.key(), conn );
+    connectToPeer( peerInfo->sipInfo(), conn );
 }
 
 
 void
-Servent::connectToPeer( const QString& ha, int port, const QString& key, Connection* conn )
+Servent::connectToPeer(const QList<SipInfo>& sipInfoList, Connection* conn )
 {
-    tDebug( LOGVERBOSE ) << "Servent::connectToPeer:" << ha << ":" << port
-                         << thread() << QThread::currentThread();
-
-    Q_ASSERT( port > 0 );
-    Q_ASSERT( conn );
-
-    if ( ( ha == m_externalAddress.toString() || ha == m_externalHostname ) &&
-         ( port == m_externalPort ) )
+    if ( sipInfoList.isEmpty() )
     {
-        tDebug() << "ERROR: Tomahawk won't try to connect to" << ha << ":" << port << ": identified as ourselves.";
+        tLog( LOGVERBOSE ) << Q_FUNC_INFO << "No more possible SIP endpoints for " << conn->name() << " skipping.";
+        return;
+    }
+    QList<SipInfo> sipInfo = QList<SipInfo>(sipInfoList);
+    // Use first available SIP endpoint and remove it from the list
+    SipInfo info = sipInfo.takeFirst();
+    if ( !info.isVisible() )
+    {
+        // Try next SipInfo, we can't connect to this one
+        connectToPeer( sipInfo, conn );
         return;
     }
 
-    if ( key.length() && conn->firstMessage().isNull() )
+    tDebug( LOGVERBOSE ) << "Servent::connectToPeer:" << info.host() << ":" << info.port() << thread() << QThread::currentThread();
+
+    Q_ASSERT( info.port() > 0 );
+    Q_ASSERT( conn );
+
+    // Check that we are not connecting to ourselves
+    foreach( QHostAddress ha, m_externalAddresses )
+    {
+        if ( QHostAddress( info.host() ) == ha)
+        {
+            tDebug() << "Tomahawk won't try to connect to" << info.host() << ":" << info.port() << ": same IP as ourselves.";
+            connectToPeer( sipInfo, conn );
+            return;
+        }
+    }
+    if ( info.host() == m_externalHostname )
+    {
+        tDebug() << "Tomahawk won't try to connect to" << info.host() << ":" << info.port() << ": same IP as ourselves.";
+        connectToPeer( sipInfo, conn );
+        return;
+    }
+
+    if ( info.key().length() && conn->firstMessage().isNull() )
     {
         QVariantMap m;
         m["conntype"]  = "accept-offer";
-        m["key"]       = key;
-        m["port"]      = externalPort();
+        m["key"]       = info.key();
         m["controlid"] = Database::instance()->impl()->dbid();
         conn->setFirstMessage( m );
     }
 
     QTcpSocketExtra* sock = new QTcpSocketExtra();
+    sock->setConnectTimeout( CONNECT_TIMEOUT );
     sock->_disowned = false;
     sock->_conn = conn;
     sock->_outbound = true;
 
     connect( sock, SIGNAL( connected() ), SLOT( socketConnected() ) );
-    connect( sock, SIGNAL( error( QAbstractSocket::SocketError ) ),
-                     SLOT( socketError( QAbstractSocket::SocketError ) ) );
+    NewClosure( sock, SIGNAL( error( QAbstractSocket::SocketError ) ),
+                this, SLOT( connectToPeerFailed( QAbstractSocket::SocketError, QPair<QList<SipInfo>, Connection*> ) ),
+                QPair<QList<SipInfo>, Connection*>(sipInfo, conn) );
 
     if ( !conn->peerIpAddress().isNull() )
-        sock->connectToHost( conn->peerIpAddress(), port, QTcpSocket::ReadWrite );
+        sock->connectToHost( conn->peerIpAddress(), info.port(), QTcpSocket::ReadWrite );
     else
-        sock->connectToHost( ha, port, QTcpSocket::ReadWrite );
+        sock->connectToHost( info.host(), info.port(), QTcpSocket::ReadWrite );
     sock->moveToThread( thread() );
 }
+
+void
+Servent::connectToPeerFailed( QAbstractSocket::SocketError e, QPair<QList<SipInfo>, Connection*> pair )
+{
+    QList<SipInfo> sipInfo = pair.first;
+    Connection* conn = pair.second;
+
+    // Call default handler
+    socketError( e );
+
+    if ( e != QAbstractSocket::SocketResourceError )
+    {
+        // If we do not have run out of resource, try next SipInfo
+        connectToPeer( sipInfo, conn );
+    }
+}
+
+void
+Servent::socketError( QAbstractSocket::SocketError e )
+{
+    QTcpSocketExtra* sock = (QTcpSocketExtra*)sender();
+    if ( !sock )
+    {
+        tLog() << "SocketError, sock is null";
+        return;
+    }
+
+    if ( !sock->_conn.isNull() )
+    {
+        Connection* conn = sock->_conn.data();
+        tLog() << "Servent::SocketError:" << e << conn->id() << conn->name();
+
+        if ( !sock->_disowned )
+        {
+            // connection will delete if we already transferred ownership, otherwise:
+            sock->deleteLater();
+        }
+
+        conn->markAsFailed(); // will emit failed, then finished
+    }
+    else
+    {
+        tLog() << "SocketError, connection is null";
+        sock->deleteLater();
+    }
+}
+
+
+
 
 
 void
@@ -854,12 +940,10 @@ Servent::reverseOfferRequest( ControlConnection* orig_conn, const QString& their
     QVariantMap m;
     m["conntype"]  = "push-offer";
     m["key"]       = theirkey;
-    m["port"]      = externalPort();
     m["controlid"] = Database::instance()->impl()->dbid();
     new_conn->setFirstMessage( m );
     createParallelConnection( orig_conn, new_conn, QString() );
 }
-
 
 // return the appropriate connection for a given offer key, or NULL if invalid
 Connection*

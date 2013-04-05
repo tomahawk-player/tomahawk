@@ -74,7 +74,7 @@ public:
     const QString id() const;
     SipPlugin* sipPlugin() const;
     const QString debugName() const;
-    void sendLocalSipInfo( const SipInfo& sipInfo );
+    void sendLocalSipInfo( const QList<SipInfo>& sipInfoList );
 
     QWeakPointer< Tomahawk::PeerInfo > weakRef();
     void setWeakRef( QWeakPointer< Tomahawk::PeerInfo > weakRef );
@@ -96,8 +96,8 @@ public:
     void setStatus( Status status );
     Status status() const;
 
-    void setSipInfo( const SipInfo& sipInfo );
-    const SipInfo sipInfo() const;
+    void setSipInfo( const QList<SipInfo>& sipInfo );
+    const QList<SipInfo> sipInfo() const;
 
     void setFriendlyName( const QString& friendlyName );
     const QString friendlyName() const;
@@ -111,6 +111,12 @@ public:
     // you can store arbitrary internal data for your plugin here
     void setData( const QVariant& data );
     const QVariant data() const;
+
+    //! Get the node id of this peer
+    const QString nodeId() const;
+
+    //! Get the authentication key for this host
+    const QString key() const;
 
 signals:
     void sipInfoChanged();
@@ -131,7 +137,7 @@ private:
     QString m_id;
     QString m_contactId;
     Status  m_status;
-    SipInfo m_sipInfo;
+    QList<SipInfo> m_sipInfo;
     QString m_friendlyName;
     QString m_versionString;
     QVariant m_data;
