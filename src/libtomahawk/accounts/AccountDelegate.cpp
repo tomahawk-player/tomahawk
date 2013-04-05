@@ -242,7 +242,8 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
         {
             Q_ASSERT( accts.size() == 1 );
 
-            rightEdge = drawStatus( painter, QPointF( rightEdge, center - painter->fontMetrics().height()/2 ), accts.first(), true );
+            painter->setFont( installFont );
+            rightEdge = drawStatus( painter, QPointF( rightEdge - PADDING, center - painter->fontMetrics().height()/2 ), accts.first(), true );
         }
     }
     else if ( canDelete )
