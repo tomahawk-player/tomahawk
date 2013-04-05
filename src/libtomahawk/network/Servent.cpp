@@ -150,6 +150,8 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
                 continue; // IPv6 localhost
             if ( addr.toString() ==  "::7F00:1" )
                 continue; // IPv4 localhost as IPv6 address
+            if ( addr.isInSubnet( QHostAddress::parseSubnet( "fe80::/10" ) ) )
+                continue; // Skip link local addresses
             tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Listening to " << addr.toString();
             m_externalAddresses.append( addr );
         }
