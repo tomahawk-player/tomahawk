@@ -55,7 +55,7 @@ DLLEXPORT QString accountTypeToString( AccountType type );
 
 Q_DECLARE_FLAGS(AccountTypes, AccountType);
 
-inline QString generateId( const QString &factoryId )
+inline QString generateId( const QString& factoryId )
 {
     QString uniq = QUuid::createUuid().toString().mid( 1, 8 );
     return factoryId + "_" + uniq;
@@ -199,4 +199,5 @@ Q_DECLARE_INTERFACE( Tomahawk::Accounts::AccountFactory, "tomahawk.AccountFactor
 Q_DECLARE_METATYPE( Tomahawk::Accounts::Account* )
 Q_DECLARE_METATYPE( QList< Tomahawk::Accounts::Account* > )
 Q_DECLARE_METATYPE( Tomahawk::Accounts::AccountTypes )
+
 #endif

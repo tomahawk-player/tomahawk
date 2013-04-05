@@ -24,7 +24,6 @@
 #include "DatabaseWorker.h"
 #include "IdThreadWorker.h"
 #include "utils/Logger.h"
-#include "Source.h"
 
 #define DEFAULT_WORKER_THREADS 4
 #define MAX_WORKER_THREADS 16

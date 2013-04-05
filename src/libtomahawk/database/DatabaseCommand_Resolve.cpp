@@ -75,7 +75,6 @@ void
 DatabaseCommand_Resolve::resolve( DatabaseImpl* lib )
 {
     QList<Tomahawk::result_ptr> res;
-    typedef QPair<int, float> scorepair_t;
 
     // STEP 1
     QList< QPair<int, float> > tracks = lib->search( m_query );

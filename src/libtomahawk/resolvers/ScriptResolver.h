@@ -22,6 +22,9 @@
 #define SCRIPTRESOLVER_H
 
 #include "Query.h"
+#include "Artist.h"
+#include "Album.h"
+#include "collection/Collection.h"
 #include "ExternalResolverGui.h"
 #include "DllMacro.h"
 
@@ -71,9 +74,9 @@ public slots:
     virtual void start();
 
     // TODO: implement. Or not. Not really an issue while Spotify doesn't do browsable personal cloud storage.
-    virtual void artists( const Tomahawk::collection_ptr& collection ){}
-    virtual void albums( const Tomahawk::collection_ptr& collection, const Tomahawk::artist_ptr& artist ) {}
-    virtual void tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::album_ptr& album ) {}
+    virtual void artists( const Tomahawk::collection_ptr& ) {}
+    virtual void albums( const Tomahawk::collection_ptr&, const Tomahawk::artist_ptr& ) {}
+    virtual void tracks( const Tomahawk::collection_ptr&, const Tomahawk::album_ptr& ) {}
 
 
 private slots:

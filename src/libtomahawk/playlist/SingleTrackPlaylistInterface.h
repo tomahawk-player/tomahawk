@@ -22,8 +22,9 @@
 #include "PlaylistInterface.h"
 #include "DllMacro.h"
 #include "Query.h"
-#include "Typedefs.h"
 #include "Result.h"
+#include "Source.h"
+#include "Typedefs.h"
 
 namespace Tomahawk
 {

@@ -25,6 +25,8 @@
 #include "resolvers/ExternalResolverGui.h"
 #include "Pipeline.h"
 #include "TomahawkSettings.h"
+#include "Artist.h"
+#include "Album.h"
 #include "Source.h"
 #include "utils/Logger.h"
 #include "qjson/parser.h"
@@ -416,7 +418,8 @@ ResolverAccount::removeFromConfig()
 }
 
 
-void ResolverAccount::saveConfig()
+void
+ResolverAccount::saveConfig()
 {
     Account::saveConfig();
     if ( !m_resolver.isNull() )
@@ -440,6 +443,7 @@ ResolverAccount::resolverChanged()
     setAccountFriendlyName( m_resolver.data()->name() );
     emit connectionStateChanged( connectionState() );
 }
+
 
 QPixmap
 ResolverAccount::icon() const

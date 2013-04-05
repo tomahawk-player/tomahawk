@@ -19,6 +19,7 @@
 #ifndef SCRIPTCOMMAND_ALLARTISTS_H
 #define SCRIPTCOMMAND_ALLARTISTS_H
 
+#include "Artist.h"
 #include "collection/ArtistsRequest.h"
 #include "collection/Collection.h"
 #include "resolvers/ScriptCommand.h"
@@ -34,7 +35,7 @@ public:
     virtual void enqueue();
 
     void setFilter( const QString& filter );
-    
+
 signals:
     void artists( const QList< Tomahawk::artist_ptr >& );
     void done();

@@ -25,6 +25,7 @@
 
 #include "Artist.h"
 #include "Album.h"
+#include "Source.h"
 #include "DatabaseCommand.h"
 
 #include "DllMacro.h"

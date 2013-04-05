@@ -19,6 +19,7 @@
 #ifndef SCRIPTCOMMAND_ALLTRACKS_H
 #define SCRIPTCOMMAND_ALLTRACKS_H
 
+#include "Query.h"
 #include "collection/TracksRequest.h"
 #include "collection/Collection.h"
 #include "resolvers/ScriptCommand.h"
@@ -33,7 +34,7 @@ public:
     virtual ~ScriptCommand_AllTracks() {}
 
     virtual void enqueue();
-    
+
 signals:
     void tracks( const QList< Tomahawk::query_ptr >& );
     void done();
@@ -41,7 +42,7 @@ signals:
 protected:
     virtual void exec();
     virtual void reportFailure();
-    
+
 private slots:
     void onResolverDone( const QList< Tomahawk::query_ptr >& );
 

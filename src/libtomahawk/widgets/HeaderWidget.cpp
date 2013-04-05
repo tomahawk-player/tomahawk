@@ -37,7 +37,7 @@ HeaderWidget::~HeaderWidget()
 
 
 void
-HeaderWidget::paintEvent( QPaintEvent* e )
+HeaderWidget::paintEvent( QPaintEvent* /* event */ )
 {
     QStylePainter p( this );
     QRect r = rect();

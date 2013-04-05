@@ -34,6 +34,7 @@
 #include "MetaPlaylistInterface.h"
 #include "utils/Logger.h"
 #include "utils/AnimatedSpinner.h"
+#include "utils/PixmapDelegateFader.h"
 #include "utils/TomahawkUtilsGui.h"
 
 #include <QHeaderView>

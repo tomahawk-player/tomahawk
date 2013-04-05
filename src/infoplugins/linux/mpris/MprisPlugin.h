@@ -20,6 +20,8 @@
 #ifndef MPRISPLUGIN_H
 #define MPRISPLUGIN_H
 
+#include "Query.h"
+#include "Source.h"
 #include "audio/AudioEngine.h"
 #include "infosystem/InfoSystem.h"
 #include "infoplugins/InfoPluginDllMacro.h"
@@ -144,7 +146,7 @@ public slots:
 
 protected slots:
     virtual void init();
-    
+
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
     {
         Q_UNUSED( requestData );

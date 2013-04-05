@@ -122,10 +122,12 @@ Tomahawk::InfoSystem::XmppInfoPlugin::audioStarted( const Tomahawk::InfoSystem::
     emit publishTune( url, info );
 }
 
+
 void
 Tomahawk::InfoSystem::XmppInfoPlugin::audioPaused()
 {
 }
+
 
 void
 Tomahawk::InfoSystem::XmppInfoPlugin::audioStopped()

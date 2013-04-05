@@ -41,10 +41,9 @@ SoundcloudParser::SoundcloudParser( const QStringList& Urls, bool createNewPlayl
     , m_single( false )
     , m_trackMode( true )
     , m_createNewPlaylist( createNewPlaylist )
+    , m_getLikes( false )
     , m_browseJob( 0 )
     , m_type( DropJob::All )
-    , m_getLikes( false )
-
 {
     foreach ( const QString& url, Urls )
         lookupUrl( url );
@@ -56,9 +55,9 @@ SoundcloudParser::SoundcloudParser( const QString& Url, bool createNewPlaylist, 
     , m_single( true )
     , m_trackMode( true )
     , m_createNewPlaylist( createNewPlaylist )
+    , m_getLikes( false )
     , m_browseJob( 0 )
     , m_type( DropJob::All )
-    , m_getLikes( false )
 {
     lookupUrl( Url );
 }

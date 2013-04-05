@@ -21,7 +21,9 @@
 #ifndef EXTERNALRESOLVER_H
 #define EXTERNALRESOLVER_H
 
-
+#include "Artist.h"
+#include "Album.h"
+#include "Source.h"
 #include "Query.h"
 #include "DllMacro.h"
 #include "Resolver.h"

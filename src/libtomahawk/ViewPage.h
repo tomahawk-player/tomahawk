@@ -24,6 +24,7 @@
 #include "PlaylistInterface.h"
 #include "Artist.h"
 #include "Album.h"
+#include "Source.h"
 #include "utils/TomahawkUtils.h"
 #include "playlist/PlaylistUpdaterInterface.h"
 

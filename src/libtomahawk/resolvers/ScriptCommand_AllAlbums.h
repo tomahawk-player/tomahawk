@@ -19,6 +19,7 @@
 #ifndef SCRIPTCOMMAND_ALLALBUMS_H
 #define SCRIPTCOMMAND_ALLALBUMS_H
 
+#include "Album.h"
 #include "collection/AlbumsRequest.h"
 #include "collection/Collection.h"
 #include "resolvers/ScriptCommand.h"
@@ -35,7 +36,7 @@ public:
     virtual void enqueue();
 
     virtual void setFilter( const QString& filter );
-    
+
 signals:
     void albums( const QList< Tomahawk::album_ptr >& );
     void done();
@@ -43,7 +44,7 @@ signals:
 protected:
     virtual void exec();
     virtual void reportFailure();
-    
+
 private slots:
     void onResolverDone( const QList< Tomahawk::album_ptr >& );
 
