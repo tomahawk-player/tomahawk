@@ -174,10 +174,7 @@ void TomahawkXmppMessageFactory::serialize(Payload *extension, QXmlStreamWriter 
 Payload::Ptr
 TomahawkXmppMessageFactory::createPayload()
 {
-    if ( ( ( m_sipInfo.length() == 1 ) && ( !m_sipInfo.first().isVisible() ) ) || ( m_sipInfo.length() < 1 ) )
-        return Payload::Ptr( new TomahawkXmppMessage() );
-    else
-        return Payload::Ptr( new TomahawkXmppMessage( m_sipInfo ) );
+    return Payload::Ptr( new TomahawkXmppMessage( m_sipInfo ) );
 }
 
 void
