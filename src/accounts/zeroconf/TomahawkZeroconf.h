@@ -29,6 +29,7 @@
 #include <QList>
 #include <QHostAddress>
 #include <QHostInfo>
+#include <QNetworkInterface>
 #include <QNetworkProxy>
 #include <QUdpSocket>
 #include <QTimer>
@@ -130,6 +131,10 @@ private slots:
         quint16 senderPort;
         m_sock.readDatagram( datagram.data(), datagram.size(), &sender, &senderPort );
         qDebug() << "DATAGRAM RCVD" << QString::fromLatin1( datagram ) << sender;
+
+        // Ignore our own requests
+        if ( QNetworkInterface::allAddresses().contains( sender ) )
+            return;
 
         // only process msgs originating on the LAN:
         if ( datagram.startsWith( "TOMAHAWKADVERT:" ) &&
