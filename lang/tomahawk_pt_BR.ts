@@ -3130,22 +3130,17 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
 <context>
     <name>Tomahawk::InfoSystem::ChartsPlugin</name>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="526"/>
-        <source>Top Overall</source>
-        <translation>Classificação Geral</translation>
-    </message>
-    <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="629"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="577"/>
         <source>Artists</source>
         <translation>Artistas</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="631"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="579"/>
         <source>Albums</source>
         <translation>Álbuns</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="633"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="581"/>
         <source>Tracks</source>
         <translation>Faixas</translation>
     </message>
