@@ -195,9 +195,22 @@ SourceTreeView::setupMenus()
         }
     }
 
-    QAction* loadPlaylistAction = ActionCollection::instance()->getAction( "loadPlaylist" );
+    QAction* loadPlaylistAction;
+    QAction* renamePlaylistAction;
+
+    if ( type == SourcesModel::Station )
+    {
+        loadPlaylistAction = ActionCollection::instance()->getAction( "loadStation" );
+        renamePlaylistAction = ActionCollection::instance()->getAction( "renameStation" );
+
+    }
+    else
+    {
+        loadPlaylistAction = ActionCollection::instance()->getAction( "loadPlaylist" );
+        renamePlaylistAction = ActionCollection::instance()->getAction( "renamePlaylist" );
+    }
+
     m_playlistMenu.addAction( loadPlaylistAction );
-    QAction* renamePlaylistAction = ActionCollection::instance()->getAction( "renamePlaylist" );
     m_playlistMenu.addAction( renamePlaylistAction );
     m_playlistMenu.addSeparator();
 
