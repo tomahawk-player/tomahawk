@@ -915,14 +915,8 @@ Servent::connectToPeer(const QList<SipInfo>& sipInfoList, Connection* conn )
 void
 Servent::connectToPeerFailed( QList<SipInfo> sipInfo, Connection* conn, QTcpSocketExtra* socket )
 {
-
     cleanupSocket( socket );
 
-    if ( !socket )
-    {
-        // If we do not have run out of resource, try next SipInfo
-        connectToPeer( sipInfo, conn );
-    }
     // Try next SipInfo
     connectToPeer( sipInfo, conn );
 }
