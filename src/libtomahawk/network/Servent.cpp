@@ -358,7 +358,7 @@ Servent::registerPeer( const Tomahawk::peerinfo_ptr& peerInfo )
     if ( peerInfo->type() == Tomahawk::PeerInfo::Local )
     {
         peerInfoDebug(peerInfo) << "we need to establish the connection now... thinking";
-        if ( !connectedToSession( peerInfo->sipInfo().first().nodeId() ) )
+        if ( !connectedToSession( peerInfo->id() ) )
         {
             connectToPeer( peerInfo );
         }
