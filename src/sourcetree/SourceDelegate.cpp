@@ -695,7 +695,12 @@ SourceDelegate::updateEditorGeometry( QWidget* editor, const QStyleOptionViewIte
          type == SourcesModel::Station )
     {
         QRect newGeometry = option.rect.adjusted( 20, 0, 0, 0 ); //room for the icon
+
+#ifdef Q_OS_MAC
+        newGeometry.adjust( 3 * TREEVIEW_INDENT_ADD + 5, 0, 0, 0 );  //compensate for osx indentation
+#else
         newGeometry.adjust( 3 * TREEVIEW_INDENT_ADD, 0, 0, 0 );  //compensate for indentation
+#endif
         editor->setGeometry( newGeometry );
     }
     else
