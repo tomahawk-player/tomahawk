@@ -663,9 +663,12 @@ Servent::createParallelConnection( Connection* orig_conn, Connection* new_conn, 
     {
         QList<SipInfo> sipInfo = QList<SipInfo>();
         SipInfo info = SipInfo();
+        info.setVisible( true );
         info.setKey( key );
+        info.setNodeId( orig_conn->id() );
         info.setHost( orig_conn->socket()->peerAddress().toString() );
         info.setPort( orig_conn->peerPort() );
+        Q_ASSERT( info.isValid() );
         sipInfo.append( info );
         connectToPeer( sipInfo, new_conn );
     }
