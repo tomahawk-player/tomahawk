@@ -21,8 +21,8 @@
 #ifndef SERVENT_H
 #define SERVENT_H
 
-// time before new connection terminates if no auth received
-#define AUTH_TIMEOUT 180000
+// time before new connection terminate if it could not be established
+#define CONNECT_TIMEOUT 10000
 
 #include <QtCore/QObject>
 #include <QtCore/QMap>
@@ -40,6 +40,7 @@
 
 #include "Typedefs.h"
 #include "Msg.h"
+#include "network/QTcpSocketExtra.h"
 
 #include <boost/function.hpp>
 
@@ -58,47 +59,18 @@ class SipInfo;
 typedef boost::function< void( const Tomahawk::result_ptr&,
                                boost::function< void( QSharedPointer< QIODevice >& ) > )> IODeviceFactoryFunc;
 
-// this is used to hold a bit of state, so when a connected signal is emitted
-// from a socket, we can associate it with a Connection object etc.
-class DLLEXPORT QTcpSocketExtra : public QTcpSocket
-{
-Q_OBJECT
-
-public:
-    QTcpSocketExtra() : QTcpSocket()
-    {
-        QTimer::singleShot( AUTH_TIMEOUT, this, SLOT( authTimeout() ) ) ;
-    }
-
-    QPointer<Connection> _conn;
-    bool _outbound;
-    bool _disowned;
-    msg_ptr _msg;
-
-private slots:
-    void authTimeout()
-    {
-      if( _disowned )
-          return;
-
-      qDebug() << "Connection timed out before providing a valid offer-key";
-      this->disconnectFromHost();
-    }
-};
-
 class DLLEXPORT Servent : public QTcpServer
 {
 Q_OBJECT
 
 public:
     static Servent* instance();
+    static bool isValidExternalIP( const QHostAddress& addr );
 
     explicit Servent( QObject* parent = 0 );
     virtual ~Servent();
 
     bool startListening( QHostAddress ha, bool upnp, int port );
-
-    int port() const { return m_port; }
 
     // creates new token that allows a controlconnection to be set up
     QString createConnectionKey( const QString& name = "", const QString &nodeid = "", const QString &key = "", bool onceOnly = true );
@@ -118,12 +90,18 @@ public slots:
 
 public:
     void connectToPeer( const Tomahawk::peerinfo_ptr& ha );
-    void connectToPeer( const QString& ha, int port, const QString& key, Connection* conn );
-    void reverseOfferRequest( ControlConnection* orig_conn, const QString& theirdbid, const QString& key, const QString& theirkey );
+    void connectToPeer( const QList<SipInfo>& sipInfoList, Connection* conn );
+    void reverseOfferRequest( ControlConnection* orig_conn, const QString &theirdbid, const QString& key, const QString& theirkey );
 
-    bool visibleExternally() const { return !m_externalHostname.isNull() || (m_externalPort > 0 && !m_externalAddress.isNull()); }
-    QString externalAddress() const { return !m_externalHostname.isNull() ? m_externalHostname : m_externalAddress.toString(); }
-    int externalPort() const { return m_externalPort; }
+    bool visibleExternally() const { return (!m_externalHostname.isNull()) || (m_externalAddresses.length() > 0); }
+    //! The port this Peer listens directly (per default)
+    int port() const { return m_port; }
+    //! The IP addresses this Peer listens directly (per default)
+    QList< QHostAddress > addresses() const { return m_externalAddresses; }
+    //! An additional address this peer listens to, e.g. via UPnP.
+    QString additionalAddress() const { return m_externalHostname; }
+    //! An additional port this peer listens to, e.g. via UPnP (only in combination with additionalAddress.
+    int additionalPort() const { return m_externalPort; }
 
     static bool isIPWhitelisted( QHostAddress ip );
 
@@ -138,7 +116,7 @@ public:
     void localFileIODeviceFactory( const Tomahawk::result_ptr& result, boost::function< void ( QSharedPointer< QIODevice >& ) > callback );
     void httpIODeviceFactory( const Tomahawk::result_ptr& result, boost::function< void ( QSharedPointer< QIODevice >& ) > callback );
 
-    bool isReady() const { return m_ready; };
+    bool isReady() const { return m_ready; }
 
 signals:
     void dbSyncTriggered();
@@ -150,10 +128,10 @@ protected:
     void incomingConnection( int sd );
 
 public slots:
-    void setInternalAddress();
     void setExternalAddress( QHostAddress ha, unsigned int port );
 
-    void socketError( QAbstractSocket::SocketError );
+    void connectToPeerFailed( QAbstractSocket::SocketError e, QPair<QList<SipInfo>, Connection*> pair );
+    void socketError( QAbstractSocket::SocketError e );
     void createParallelConnection( Connection* orig_conn, Connection* new_conn, const QString& key );
 
     void registerStreamConnection( StreamConnection* );
@@ -168,7 +146,6 @@ private slots:
     Connection* claimOffer( ControlConnection* cc, const QString &nodeid, const QString &key, const QHostAddress peer = QHostAddress::Any );
 
 private:
-    bool isValidExternalIP( const QHostAddress& addr ) const;
     void handoverSocket( Connection* conn, QTcpSocketExtra* sock );
     void printCurrentTransfers();
 
@@ -177,11 +154,16 @@ private:
     QMap< QString, QPointer< Connection > > m_offers;
     QStringList m_connectedNodes;
 
-    int m_port, m_externalPort;
-    QHostAddress m_externalAddress;
+    //! The external port used by all address except those obtained via UPnP or the static configuration option
+    int m_port;
+    //! Either the static set or the UPnP set external port
+    int m_externalPort;
+    //! All available external IPs
+    QList<QHostAddress> m_externalAddresses;
+    //! Either the static set or the UPnP set external host
     QString m_externalHostname;
+
     bool m_ready;
-    bool m_lanHack;
     bool m_noAuth;
 
     // currently active file transfers:

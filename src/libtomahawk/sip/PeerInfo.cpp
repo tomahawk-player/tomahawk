@@ -202,9 +202,9 @@ PeerInfo::sipPlugin() const
 
 
 void
-PeerInfo::sendLocalSipInfo( const SipInfo& sipInfo )
+PeerInfo::sendLocalSipInfo( const QList<SipInfo>& sipInfoList )
 {
-    sipPlugin()->sendSipInfo( weakRef().toStrongRef(), sipInfo );
+    sipPlugin()->sendSipInfoList( weakRef().toStrongRef(), sipInfoList );
 }
 
 
@@ -227,6 +227,23 @@ PeerInfo::contactId() const
 {
     return m_contactId;
 }
+
+const QString
+PeerInfo::nodeId() const
+{
+    Q_ASSERT( m_sipInfo.length() > 0 );
+    // All sip infos share the same nodeId
+    return m_sipInfo.first().nodeId();
+}
+
+const QString
+PeerInfo::key() const
+{
+    Q_ASSERT( m_sipInfo.length() > 0 );
+    // All sip infos share the same key
+    return m_sipInfo.first().key();
+}
+
 
 
 void
@@ -259,19 +276,16 @@ PeerInfo::status() const
 
 
 void
-PeerInfo::setSipInfo( const SipInfo& sipInfo )
+PeerInfo::setSipInfo( const QList<SipInfo>& sipInfo )
 {
-    if ( sipInfo == m_sipInfo )
-        return;
-
-    m_sipInfo = sipInfo;
+    m_sipInfo = QList<SipInfo>(sipInfo);
 
     tLog() << "id:" << id() << "info changed" << sipInfo;
     emit sipInfoChanged();
 }
 
 
-const SipInfo
+const QList<SipInfo>
 PeerInfo::sipInfo() const
 {
     return m_sipInfo;
@@ -388,7 +402,6 @@ PeerInfo::setData( const QVariant& data )
 {
     m_data = data;
 }
-
 
 const
 QVariant PeerInfo::data() const

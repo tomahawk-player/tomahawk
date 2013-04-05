@@ -64,24 +64,26 @@ DiagnosticsDialog::updateLogView()
     log.append( QString( "TOMAHAWK DIAGNOSTICS LOG -%1 \n\n" ).arg( QDateTime::currentDateTime().toString() ) );
     log.append( "TOMAHAWK-VERSION: " TOMAHAWK_VERSION "\n" );
     log.append( "PLATFORM: " TOMAHAWK_SYSTEM "\n\n");
-    log.append( "NETWORK:\n    General:\n" );
+    log.append( "NETWORK:\n    Listening to:\n" );
 
     if ( Servent::instance()->visibleExternally() )
     {
-        log.append(
-            QString(
-                "      visible: true\n"
-                "      host: %1\n"
-                "      port: %2\n"
-                "\n"
-            ).arg( Servent::instance()->externalAddress() )
-             .arg( Servent::instance()->externalPort() )
+        foreach ( QHostAddress ha, Servent::instance()->addresses() )
+        {
+            if ( ha.protocol() == QAbstractSocket::IPv6Protocol )
+                log.append( QString( "      [%1]:%2\n" ).arg( ha.toString() ).arg( Servent::instance()->port() ) );
+            else
+                log.append( QString( "      %1:%2\n" ).arg( ha.toString() ).arg( Servent::instance()->port() ) );
+        }
+        if ( !Servent::instance()->additionalAddress().isNull() )
+        {
+            log.append( QString( "      [%1]:%2\n" ).arg( Servent::instance()->additionalAddress() ).arg( Servent::instance()->additionalPort() ) );
+        }
 
-        );
     }
     else
     {
-        log.append( "      visible: false\n" );
+        log.append( "      not listening to any interface, outgoing connections only\n" );
     }
 
     log.append( "\n\nINFOPLUGINS:\n" );
@@ -162,54 +164,17 @@ DiagnosticsDialog::accountLog( Tomahawk::Accounts::Account* account )
 
     foreach( const Tomahawk::peerinfo_ptr& peerInfo, account->sipPlugin()->peersOnline() )
     {
-        QString peerId = peerInfo->id();
-        QString versionString = peerInfo->versionString();
-        SipInfo sipInfo = peerInfo->sipInfo();
-        if ( !sipInfo.isValid() )
+        accountInfo.append( QString( "       %1: " ).arg( peerInfo->id() ) );
+        foreach ( SipInfo info, peerInfo->sipInfo() )
         {
-            accountInfo.append(
-                QString("       %1: %2 %3" /*"(%4)"*/)
-                    .arg( peerInfo->id() )
-                    .arg( "sipinfo invalid" )
-                    .arg( versionString )
-                    // .arg( connected ? "connected" : "not connected")
-            );
-        }
-        else if ( sipInfo.isVisible() )
-        {
-            accountInfo.append(
-                QString("       %1: %2:%3 %4" /*" (%5)"*/)
-                    .arg( peerId )
-                    .arg( sipInfo.host() )
-                    .arg( sipInfo.port() )
-                    .arg( versionString )
-                    // .arg( connected ? "connected" : "not connected")
-            );
-        }
-        else
-        {
-            accountInfo.append(
-                QString("       %1: visible: false %2" /*" (%3)"*/)
-                    .arg( peerId )
-                    .arg( versionString )
-                    // .arg( connected ? "connected" : "not connected")
-            );
-        }
-
-        if( sipInfo.isValid() )
-        {
-            if( !Servent::instance()->visibleExternally() ||
-                Servent::instance()->externalAddress() < sipInfo.host() ||
-            ( Servent::instance()->externalAddress() == sipInfo.host() && Servent::instance()->externalPort() < sipInfo.port() ) )
-            {
-                accountInfo.append(" (outbound)");
-            }
+            if ( info.isValid() )
+                accountInfo.append( QString( "[%1]:%2; " ).arg( info.host() ).arg( info.port() ) );
             else
-            {
-                accountInfo.append(" (inbound)");
-            }
+                accountInfo.append( "SipInfo invalid; " );
         }
-        accountInfo.append("\n");
+        if ( ( peerInfo->sipInfo().length() == 1 ) && ( !peerInfo->sipInfo().first().isVisible() ) || ( peerInfo->sipInfo().length() == 0 ) )
+            accountInfo.append( "(outbound connections only) ");
+        accountInfo.append( QString( " (%1)\n" ).arg( peerInfo->versionString() ) );
     }
     accountInfo.append( "\n" );
 

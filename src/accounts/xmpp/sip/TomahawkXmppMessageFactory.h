@@ -39,13 +39,18 @@ public:
     void serialize(Jreen::Payload *extension, QXmlStreamWriter *writer);
     Jreen::Payload::Ptr createPayload();
 private:
+    void serializeSipInfo(SipInfo& info, QXmlStreamWriter *writer);
+
     enum State { AtNowhere, AtTransport, AtCandidate } m_state;
+
+    //! All the provided Sip informations
+    QList<SipInfo> m_sipInfo;
+    //! The current parsing depth
     int m_depth;
-    QString m_ip;
-    int m_port;
+    //! The unique name of the peer
     QString m_uniqname;
+    //! The authentication key of the peer
     QString m_key;
-    bool m_visible;
 };
 
 #endif // ENTITYTIMEFACTORY_P_H
