@@ -130,7 +130,7 @@ protected:
 public slots:
     void setExternalAddress( QHostAddress ha, unsigned int port );
 
-    void connectToPeerFailed( QAbstractSocket::SocketError e, QPair<QList<SipInfo>, Connection*> pair );
+    void connectToPeerFailed(QList<SipInfo> sipInfo, Connection* conn , QTcpSocketExtra *socket);
     void socketError( QAbstractSocket::SocketError e );
     void createParallelConnection( Connection* orig_conn, Connection* new_conn, const QString& key );
 
@@ -147,6 +147,7 @@ private slots:
 
 private:
     void handoverSocket( Connection* conn, QTcpSocketExtra* sock );
+    void cleanupSocket( QTcpSocketExtra* sock );
     void printCurrentTransfers();
 
     QJson::Parser parser;

@@ -54,6 +54,9 @@
 
 typedef QPair< QList< SipInfo >, Connection* > sipConnectionPair;
 Q_DECLARE_METATYPE( sipConnectionPair )
+Q_DECLARE_METATYPE( QList< SipInfo > )
+Q_DECLARE_METATYPE( Connection* )
+Q_DECLARE_METATYPE( QTcpSocketExtra* )
 
 using namespace Tomahawk;
 
@@ -736,6 +739,34 @@ void Servent::handoverSocket( Connection* conn, QTcpSocketExtra* sock )
 }
 
 void
+Servent::cleanupSocket( QTcpSocketExtra *sock )
+{
+    if ( !sock )
+    {
+        tLog() << "SocketError, sock is null";
+        return;
+    }
+
+    if ( !sock->_conn.isNull() )
+    {
+        Connection* conn = sock->_conn.data();
+
+        if ( !sock->_disowned )
+        {
+            // connection will delete if we already transferred ownership, otherwise:
+            sock->deleteLater();
+        }
+
+        conn->markAsFailed(); // will emit failed, then finished
+    }
+    else
+    {
+        tLog() << "SocketError, connection is null";
+        sock->deleteLater();
+    }
+}
+
+void
 Servent::connectToPeer( const peerinfo_ptr& peerInfo )
 {
     Q_ASSERT( this->thread() == QThread::currentThread() );
@@ -871,8 +902,8 @@ Servent::connectToPeer(const QList<SipInfo>& sipInfoList, Connection* conn )
 
     connect( sock, SIGNAL( connected() ), SLOT( socketConnected() ) );
     NewClosure( sock, SIGNAL( error( QAbstractSocket::SocketError ) ),
-                this, SLOT( connectToPeerFailed( QAbstractSocket::SocketError, QPair<QList<SipInfo>, Connection*> ) ),
-                QPair<QList<SipInfo>, Connection*>(sipInfo, conn) );
+                this, SLOT( connectToPeerFailed( QList<SipInfo>, Connection*, QTcpSocketExtra* ) ),
+                sipInfo, conn, sock );
 
     if ( !conn->peerIpAddress().isNull() )
         sock->connectToHost( conn->peerIpAddress(), info.port(), QTcpSocket::ReadWrite );
@@ -882,54 +913,32 @@ Servent::connectToPeer(const QList<SipInfo>& sipInfoList, Connection* conn )
 }
 
 void
-Servent::connectToPeerFailed( QAbstractSocket::SocketError e, QPair<QList<SipInfo>, Connection*> pair )
+Servent::connectToPeerFailed( QList<SipInfo> sipInfo, Connection* conn, QTcpSocketExtra* socket )
 {
-    QList<SipInfo> sipInfo = pair.first;
-    Connection* conn = pair.second;
 
-    // Call default handler
-    socketError( e );
+    cleanupSocket( socket );
 
-    if ( e != QAbstractSocket::SocketResourceError )
+    if ( !socket )
     {
         // If we do not have run out of resource, try next SipInfo
         connectToPeer( sipInfo, conn );
     }
+    // Try next SipInfo
+    connectToPeer( sipInfo, conn );
 }
 
 void
 Servent::socketError( QAbstractSocket::SocketError e )
 {
     QTcpSocketExtra* sock = (QTcpSocketExtra*)sender();
-    if ( !sock )
-    {
-        tLog() << "SocketError, sock is null";
-        return;
-    }
-
     if ( !sock->_conn.isNull() )
     {
         Connection* conn = sock->_conn.data();
-        tLog() << "Servent::SocketError:" << e << conn->id() << conn->name();
-
-        if ( !sock->_disowned )
-        {
-            // connection will delete if we already transferred ownership, otherwise:
-            sock->deleteLater();
-        }
-
-        conn->markAsFailed(); // will emit failed, then finished
+        tLog() << Q_FUNC_INFO << e << conn->id() << conn->name();
     }
-    else
-    {
-        tLog() << "SocketError, connection is null";
-        sock->deleteLater();
-    }
+
+    cleanupSocket( sock );
 }
-
-
-
-
 
 void
 Servent::reverseOfferRequest( ControlConnection* orig_conn, const QString& theirdbid, const QString& key, const QString& theirkey )

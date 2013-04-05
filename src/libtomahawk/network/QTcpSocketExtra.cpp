@@ -57,7 +57,7 @@ QTcpSocketExtra::connectTimeout()
     if ( state() != ConnectedState )
     {
         // We did not manage to connect in the given timespan, so abort the attempt...
-        close();
+        abort();
         // .. and notify error handlers.
         emit error( SocketTimeoutError );
     }
