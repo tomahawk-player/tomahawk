@@ -221,7 +221,7 @@ DBSyncConnection::handleMsg( msg_ptr msg )
 
     if ( m.value( "method" ).toString() == "trigger" )
     {
-        tLog() << "Got trigger msg on dbsyncconnection, checking for new stuff.";
+        tLog( LOGVERBOSE ) << "Got trigger msg on dbsyncconnection, checking for new stuff.";
         check();
         return;
     }

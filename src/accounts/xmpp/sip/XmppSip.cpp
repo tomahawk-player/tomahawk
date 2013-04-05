@@ -714,7 +714,7 @@ XmppSipPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr& item, const Jre
     Jreen::JID jid = presence.from();
     QString fulljid( jid.full() );
 
-    qDebug() << Q_FUNC_INFO << "* New presence:" << fulljid << presence.subtype();
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "New presence:" << fulljid << presence.subtype();
 
     if ( jid == m_client->jid() )
         return;
@@ -728,7 +728,7 @@ XmppSipPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr& item, const Jre
     // cache name
     if( !item.isNull() && item->name() != jid.bare() && m_jidsNames.value( jid.bare() ) != item->name() )
     {
-        tLog() << "cache name" << item->name() << "for" << jid.bare() << item << presence.subtype();
+        tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Cache name" << item->name() << "for" << jid.bare() << item << presence.subtype();
         m_jidsNames.insert( jid.bare(), item->name() );
 
         // find peers for the jid and update their friendlyName
@@ -747,7 +747,7 @@ XmppSipPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr& item, const Jre
     Jreen::Capabilities::Ptr caps = presence.payload<Jreen::Capabilities>();
     if ( caps )
     {
-        qDebug() << Q_FUNC_INFO << fulljid << "Running tomahawk: maybe" << "caps" << caps->node() << "requesting disco...";
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << fulljid << "Running tomahawk: maybe" << "caps" << caps->node() << "requesting disco...";
 
         // request disco features
         QString node = caps->node() + '#' + caps->ver();

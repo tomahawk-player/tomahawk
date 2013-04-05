@@ -135,7 +135,7 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
     }
 
     TomahawkSettings::ExternalAddressMode mode = TomahawkSettings::instance()->externalAddressMode();
-    
+
     tLog() << "Servent listening on port" << m_port << "- servent thread:" << thread()
            << "- address mode:" << (int)( mode );
 
@@ -465,7 +465,7 @@ Servent::readyRead()
 
     QByteArray ba = sock.data()->read( sock.data()->_msg->length() );
     sock.data()->_msg->fill( ba );
-    
+
     if ( !sock.data()->_msg->is( Msg::JSON ) )
     {
         tDebug() << ba;
@@ -494,7 +494,7 @@ Servent::readyRead()
         bool dupe = false;
         if ( m_connectedNodes.contains( nodeid ) )
         {
-            tDebug() << "connected nodes contains it.";
+            tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Connected nodes contains it.";
             dupe = true;
         }
 
@@ -502,7 +502,7 @@ Servent::readyRead()
         {
             Q_ASSERT( con );
 
-            tLog() << "known connection:" << con->id();
+            tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Known connection:" << con->id();
             if ( con->id() == nodeid )
             {
                 dupe = true;
@@ -648,7 +648,7 @@ Servent::socketConnected()
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Socket's connection was null, could have timed out or been given an invalid address";
         return;
     }
-    
+
     Connection* conn = sock->_conn.data();
     handoverSocket( conn, sock );
 }
@@ -1032,7 +1032,7 @@ Servent::isIPWhitelisted( QHostAddress ip )
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Performing checks against ip" << ip.toString();
     typedef QPair< QHostAddress, int > range;
     QList< range > subnetEntries;
-    
+
     QList< QNetworkInterface > networkInterfaces = QNetworkInterface::allInterfaces();
     foreach ( QNetworkInterface interface, networkInterfaces )
     {

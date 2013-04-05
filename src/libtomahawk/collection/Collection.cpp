@@ -284,7 +284,8 @@ Collection::delTracks( const QList<unsigned int>& ids )
 void
 Collection::onSynced()
 {
-    tDebug() << Q_FUNC_INFO << m_changed;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << m_changed;
+
     if ( m_changed )
     {
         m_changed = false;
