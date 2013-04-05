@@ -389,6 +389,7 @@ Servent::registerPeer( const Tomahawk::peerinfo_ptr& peerInfo )
         conn->setId( nodeid );
         conn->addPeerInfo( peerInfo );
 
+        registerOffer( key, conn );
         QList<SipInfo> sipInfo = QList<SipInfo>();
         foreach ( QHostAddress ha, m_externalAddresses )
         {
