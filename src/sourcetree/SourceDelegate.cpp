@@ -689,12 +689,18 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 void
 SourceDelegate::updateEditorGeometry( QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    if ( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() == SourcesModel::StaticPlaylist )
-        editor->setGeometry( option.rect.adjusted( 20, 0, 0, 0 ) );
+    SourcesModel::RowType type = static_cast< SourcesModel::RowType >( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() );
+    if ( type == SourcesModel::StaticPlaylist ||
+         type == SourcesModel::AutomaticPlaylist ||
+         type == SourcesModel::Station )
+    {
+        QRect newGeometry = option.rect.adjusted( 20, 0, 0, 0 ); //room for the icon
+        newGeometry.adjust( 3 * TREEVIEW_INDENT_ADD, 0, 0, 0 );  //compensate for indentation
+        editor->setGeometry( newGeometry );
+    }
     else
         QStyledItemDelegate::updateEditorGeometry( editor, option, index );
 
-    editor->setGeometry( editor->geometry().adjusted( 2 * TREEVIEW_INDENT_ADD, 0, 0, 0 ) );
 }
 
 
