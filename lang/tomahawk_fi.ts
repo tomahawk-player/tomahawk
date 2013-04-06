@@ -107,13 +107,13 @@ yhdistää ja toistaa sinulta virtaa?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="71"/>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="320"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="322"/>
         <source>&amp;Listen Privately</source>
         <translation>&amp;Kuuntele yksityisesti</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="71"/>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="320"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="322"/>
         <source>&amp;Listen Publicly</source>
         <translation>&amp;Kuuntele julkisesti</translation>
     </message>
@@ -124,131 +124,141 @@ yhdistää ja toistaa sinulta virtaa?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="78"/>
+        <source>&amp;Load Station</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="79"/>
         <source>&amp;Rename Playlist</source>
         <translation>&amp;Muuta soittolistan nimeä</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="79"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="80"/>
+        <source>&amp;Rename Station</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="81"/>
         <source>&amp;Copy Playlist Link</source>
         <translation>&amp;Kopioi soittolistan linkki</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="80"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="82"/>
         <source>&amp;Play</source>
         <translation>&amp;Soita</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="84"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="86"/>
         <source>&amp;Stop</source>
         <translation>&amp;Pysäytä</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="85"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="87"/>
         <source>&amp;Previous Track</source>
         <translation>&amp;Edellinen kappale</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="87"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="89"/>
         <source>&amp;Next Track</source>
         <translation>S&amp;euraava kappale</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="89"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="91"/>
         <source>&amp;Quit</source>
         <translation>&amp;Lopeta</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="102"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="104"/>
         <source>Load &amp;XSPF...</source>
         <translation>Lataa &amp;XSPF...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="103"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="105"/>
         <source>U&amp;pdate Collection</source>
         <translation>&amp;Päivitä kokoelma</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="104"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="106"/>
         <source>Fully &amp;Rescan Collection</source>
         <translation>&amp;Muodosta kokoelma alusta alkaen</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="105"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="107"/>
         <source>Show Offline Sources</source>
         <translation>Näytä verkottomat lähteet</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="107"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="109"/>
         <source>&amp;Configure Tomahawk...</source>
         <translation>Tomahawkin &amp;asetukset...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="111"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="113"/>
         <source>Minimize</source>
         <translation>Pienennä</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="113"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="115"/>
         <source>Zoom</source>
         <translation>Zoomaa</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="115"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="117"/>
         <source>Enter Full Screen</source>
         <translation>Siirry koko näyttöön</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="118"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="120"/>
         <source>Hide Menu Bar</source>
         <translation>Piilota valikkorivi</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="122"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="124"/>
         <source>Diagnostics...</source>
         <translation>Diagnostiikka...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="124"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="126"/>
         <source>About &amp;Tomahawk...</source>
         <translation>Tietoa &amp;Tomahawkista...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="127"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="129"/>
         <source>&amp;Legal Information...</source>
         <translation>Lakitiet&amp;oa...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="129"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="131"/>
         <source>&amp;View Logfile</source>
         <translation>&amp;Näytä lokitiedosto</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="132"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="134"/>
         <source>Check For Updates...</source>
         <translation>Tarkista päivitykset...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="144"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="146"/>
         <source>&amp;Controls</source>
         <translation>&amp;Ohjaus</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="158"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="160"/>
         <source>&amp;Settings</source>
         <translation>&amp;Asetukset</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="164"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="166"/>
         <source>&amp;Help</source>
         <translation>O&amp;hje</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="191"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="193"/>
         <source>&amp;Window</source>
         <translation>&amp;Ikkuna</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ActionCollection.cpp" line="207"/>
+        <location filename="../src/libtomahawk/ActionCollection.cpp" line="209"/>
         <source>Main Menu</source>
         <translation>Päävalikko</translation>
     </message>
@@ -1846,68 +1856,68 @@ käyttäjäradion käyttöönottamiseksi</translation>
 <context>
     <name>SourceTreeView</name>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="204"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="224"/>
         <source>&amp;Copy Link</source>
         <translation>&amp;Kopioi linkki</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="212"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="232"/>
         <source>&amp;Delete %1</source>
         <translation>&amp;Poista %1</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="216"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="236"/>
         <source>Add to my Playlists</source>
         <translation>Lisää omiin soittolistoihin</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="218"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="238"/>
         <source>Add to my Automatic Playlists</source>
         <translation>Lisää omiin automaattisiin soittolistoihin</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="220"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="240"/>
         <source>Add to my Stations</source>
         <translation>Lisää omiin asemiin</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="208"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="228"/>
         <source>&amp;Export Playlist</source>
         <translation>&amp;Vie soittolista</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="362"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="382"/>
         <source>playlist</source>
         <translation>soittolistan</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="366"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="386"/>
         <source>automatic playlist</source>
         <translation>automaattisen soittolistan</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="370"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="390"/>
         <source>station</source>
         <translation>aseman</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="393"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="413"/>
         <source>Would you like to delete the %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
         <translation>Haluatko poistaa %1 &lt;b&gt;”%2”&lt;/b&gt;?</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="395"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="415"/>
         <source>Delete</source>
         <translation>Poista</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="475"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="495"/>
         <source>Save XSPF</source>
         <translation>Tallenna XSPF</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceTreeView.cpp" line="476"/>
+        <location filename="../src/sourcetree/SourceTreeView.cpp" line="496"/>
         <source>Playlists (*.xspf)</source>
         <translation>Soittolistat (*.xspf)</translation>
     </message>
@@ -2083,27 +2093,27 @@ napsauttamalla hiiren oikealla.</translation>
         <translation>Lisää tili</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="250"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="251"/>
         <source>Remove</source>
         <translation>Poista</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="366"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="367"/>
         <source>%1 downloads</source>
         <translation>%1 latausta</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="569"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="572"/>
         <source>Online</source>
         <translation>Verkossa</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="574"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="577"/>
         <source>Connecting...</source>
         <translation>Yhdistetään...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="579"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="582"/>
         <source>Offline</source>
         <translation>Ei verkossa</translation>
     </message>
@@ -2242,27 +2252,27 @@ napsauttamalla hiiren oikealla.</translation>
 <context>
     <name>Tomahawk::Accounts::ResolverAccountFactory</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="102"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="104"/>
         <source>Resolver installation error: cannot open bundle.</source>
         <translation>Selvittimen asennusvirhe: pakkausta ei voi avata.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="109"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="111"/>
         <source>Resolver installation error: incomplete bundle.</source>
         <translation>Selvittimen asennusvirhe: vaillinainen pakkaus.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="148"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="150"/>
         <source>Resolver installation error: bad metadata in bundle.</source>
         <translation>Selvittimen asennusvirhe: pakkauksessa on virheellistä metatietoa.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="186"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="188"/>
         <source>Resolver installation error: platform mismatch.</source>
         <translation>Selvittimen asennusvirhe: käyttöjärjestelmäalusta ei täsmää.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="199"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="201"/>
         <source>Resolver installation error: Tomahawk %1 or newer is required.</source>
         <translation>Selvittimen asennusvirhe: Tomahawk %1 tai uudempi vaaditaan.</translation>
     </message>
@@ -3361,7 +3371,7 @@ Koeta säätää suodattimia saadaksesi uuden joukon kappaleita kuunneltavaksi.<
 <context>
     <name>Tomahawk::SoundcloudParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/SoundcloudParser.cpp" line="112"/>
+        <location filename="../src/libtomahawk/utils/SoundcloudParser.cpp" line="111"/>
         <source>Track &apos;%1&apos; by %2 is not streamable.</source>
         <translation>Kappale ”%1” artistilta %2 ei voida toistaa virtana.</translation>
     </message>
