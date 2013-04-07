@@ -81,8 +81,12 @@ ResolverAccountFactory::createFromPath( const QString& path, const QString& fact
         if ( dir.cdUp() && dir.cdUp() ) //go up twice to the content dir, if any
         {
             QString metadataFilePath = dir.absoluteFilePath( "metadata.json" );
-            configuration = metadataFromJsonFile( metadataFilePath );
-            expandPaths( dir, configuration );
+            QFileInfo metadataFileInfo( metadataFilePath );
+            if ( metadataFileInfo.isFile() && metadataFileInfo.isReadable() )
+            {
+                configuration = metadataFromJsonFile( metadataFilePath );
+                expandPaths( dir, configuration );
+            }
         }
         return new AtticaResolverAccount( generateId( factory ), path, pathInfo.baseName(), configuration );
     }
