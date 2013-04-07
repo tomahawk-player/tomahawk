@@ -125,7 +125,7 @@ erlauben sich mit dir zu verbinden?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="78"/>
         <source>&amp;Load Station</source>
-        <translation type="unfinished"/>
+        <translation>Sender laden</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="79"/>
@@ -135,7 +135,7 @@ erlauben sich mit dir zu verbinden?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="80"/>
         <source>&amp;Rename Station</source>
-        <translation type="unfinished"/>
+        <translation>Sender umbenennen</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="81"/>

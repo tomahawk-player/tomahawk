@@ -124,7 +124,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="78"/>
         <source>&amp;Load Station</source>
-        <translation type="unfinished"/>
+        <translation>Φορτωση σταθμου</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="79"/>
@@ -134,7 +134,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="80"/>
         <source>&amp;Rename Station</source>
-        <translation type="unfinished"/>
+        <translation>Μετονομασια σταθμου</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="81"/>
