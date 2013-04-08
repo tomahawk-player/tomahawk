@@ -298,7 +298,7 @@ Servent::registerPeer( const Tomahawk::peerinfo_ptr& peerInfo )
 {
     if ( peerInfo->hasControlConnection() )
     {
-        peerInfoDebug( peerInfo ) << "already had control connection, not doin nuffin: " << peerInfo->controlConnection()->name();
+        peerInfoDebug( peerInfo ) << "already had control connection, doing nothing: " << peerInfo->controlConnection()->name();
         tLog() << "existing control connection has following peers:";
         foreach ( const peerinfo_ptr& otherPeerInfo, peerInfo->controlConnection()->peerInfos() )
         {
