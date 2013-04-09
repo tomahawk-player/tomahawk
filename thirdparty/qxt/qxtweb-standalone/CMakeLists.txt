@@ -7,16 +7,18 @@ ENDIF( ${CMAKE_VERSION} VERSION_GREATER 2.8.3 )
 
 setup_qt()
 
-SET(qxtweb "qxtweb")
+SET( qxtcore "core" )
+SET( qxtnet "network" )
+SET( qxtweb "web" )
 
-ADD_DEFINITIONS(-Wall -O2 -DNDEBUG)
-IF(NOT WIN32)
-	ADD_DEFINITIONS(-fPIC)
+ADD_DEFINITIONS( -Wall -O2 -DNDEBUG )
+IF( NOT WIN32 )
+        ADD_DEFINITIONS( -fPIC )
 ENDIF()
 ADD_DEFINITIONS( -DBUILD_QXT_CORE -DBUILD_QXT_WEB )
 
 
-INCLUDE_DIRECTORIES( ${qxtweb} )
+INCLUDE_DIRECTORIES( ${qxtweb} ${qxtcore} ${qxtnet} )
 
 macro(create_qxtweb_fancy_header simpleHeader fancyHeader)
     file(WRITE ${CMAKE_BINARY_DIR}/QxtWeb/${fancyHeader} "#include \"${simpleHeader}\"" )
@@ -41,24 +43,23 @@ SET( sources
         ${qxtweb}/qxtwebcontent.cpp
         ${qxtweb}/qxtwebevent.cpp
         ${qxtweb}/qxtwebservicedirectory.cpp
-        ${qxtweb}/qxtwebslotservice.cpp
-        ${qxtweb}/qxtwebcgiservice.cpp
         ${qxtweb}/qhttpheader.cpp
+        ${qxtweb}/qxtwebslotservice.cpp
 
         # Ripped bits of QxtCore:
-        ${qxtweb}/qxtmetaobject.cpp
-        ${qxtweb}/qxtnull.cpp
-        ${qxtweb}/qxtfifo.cpp
+        ${qxtcore}/qxtmetaobject.cpp
+        ${qxtcore}/qxtnull.cpp
+        ${qxtcore}/qxtfifo.cpp
 
         # QxtNetwork
-        ${qxtweb}/qxtsslserver.cpp
+        ${qxtnet}/qxtsslserver.cpp
 
         # automoc hack
-        ${qxtweb}/qxtboundfunction.h
+        ${qxtcore}/qxtboundfunction.h
 )
 
 
-ADD_LIBRARY(qxtweb-standalone STATIC
+ADD_LIBRARY( qxtweb-standalone STATIC
         ${mocstuff}
         ${headers}
         ${sources}
@@ -69,6 +70,6 @@ target_link_libraries( qxtweb-standalone
     ${QT_LIBRARIES}
 )
 
-qt5_use_modules(qxtweb-standalone Network)
+qt5_use_modules( qxtweb-standalone Network )
 
-set_target_properties(qxtweb-standalone PROPERTIES AUTOMOC TRUE)
+set_target_properties( qxtweb-standalone PROPERTIES AUTOMOC TRUE )

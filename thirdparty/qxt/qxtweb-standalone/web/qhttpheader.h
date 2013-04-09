@@ -42,11 +42,12 @@
 #ifndef QHTTP_H
 #define QHTTP_H
 
-#include <QtCore/qobject.h>
-#include <QtCore/qstringlist.h>
-#include <QtCore/qmap.h>
-#include <QtCore/qpair.h>
-#include <QtCore/qscopedpointer.h>
+#include <QObject>
+#include <QStringList>
+#include <QMap>
+#include <QPair>
+#include <QScopedPointer>
+#include <qxtglobal.h>
 
 QT_BEGIN_HEADER
 
@@ -66,7 +67,7 @@ class QSslError;
 class QHttpPrivate;
 
 class QHttpHeaderPrivate;
-class Q_NETWORK_EXPORT QHttpHeader
+class QXT_WEB_EXPORT QHttpHeader
 {
 public:
     QHttpHeader();
@@ -116,7 +117,7 @@ private:
 };
 
 class QHttpResponseHeaderPrivate;
-class Q_NETWORK_EXPORT QHttpResponseHeader : public QHttpHeader
+class QXT_WEB_EXPORT QHttpResponseHeader : public QHttpHeader
 {
 public:
     QHttpResponseHeader();
@@ -144,7 +145,7 @@ private:
 };
 
 class QHttpRequestHeaderPrivate;
-class Q_NETWORK_EXPORT QHttpRequestHeader : public QHttpHeader
+class QXT_WEB_EXPORT QHttpRequestHeader : public QHttpHeader
 {
 public:
     QHttpRequestHeader();

@@ -1,3 +1,4 @@
+
 /****************************************************************************
 ** Copyright (c) 2006 - 2011, the LibQxt project.
 ** See the Qxt AUTHORS file for a list of authors and copyright holders.
@@ -28,39 +29,43 @@
 ** <http://libqxt.org>  <foundation@libqxt.org>
 *****************************************************************************/
 
-#include "qxtwebjsonrpcservice.h"
-#include "qxtwebcontent.h"
-#include "qxtwebevent.h"
-#include <QtCore/QMetaMethod>
+#ifndef QXTSSLSERVER_H
+#define QXTSSLSERVER_H
 
-class QxtWebJsonRPCService::Private : public QObject
+#include "qxtglobal.h"
+#include <QTcpServer>
+
+#ifndef QT_NO_OPENSSL
+#include <QSslSocket>
+
+class QxtSslServerPrivate;
+class QXT_NETWORK_EXPORT QxtSslServer : public QTcpServer
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-    Private(QxtWebJsonRPCService *that);
-    QMap<QxtWebContent *, QxtWebRequestEvent*> content;
+    QxtSslServer(QObject* parent = 0);
 
-    QxtWebJsonRPCService *p;
-    void initTables(QObject *invokable);
-    bool tablesInitilized;
-    QObject *invokable;
+    virtual bool hasPendingConnections() const;
+    virtual QTcpSocket* nextPendingConnection();
 
-    struct Method
-    {
-        QMetaMethod meta;
-        QByteArray name;
-        bool returns;
-        int argCount;
-    };
-    QMap<QByteArray, Method> methods;
+    void setLocalCertificate(const QSslCertificate& cert);
+    void setLocalCertificate(const QString& path, QSsl::EncodingFormat format = QSsl::Pem);
+    QSslCertificate localCertificate() const;
 
-    QxtWebRequestEvent *currentRequest;
-    QVariant currentRequestId;
-    bool requestCanceled;
+    void setPrivateKey(const QSslKey& key);
+    void setPrivateKey(const QString& path, QSsl::KeyAlgorithm algo = QSsl::Rsa,
+            QSsl::EncodingFormat format = QSsl::Pem, const QByteArray& passPhrase = QByteArray());
+    QSslKey privateKey() const;
 
-public slots:
-    void readFinished();
-    void handle(QxtWebContent *);
-    void handle( QxtWebRequestEvent *event, QVariant id, QString method, QVariant args);
+    void setAutoEncrypt(bool on);
+    bool autoEncrypt() const;
+
+protected:
+    virtual void incomingConnection(int socketDescriptor);
+
+private:
+    QXT_DECLARE_PRIVATE(QxtSslServer)
 };
 
+#endif /* QT_NO_OPENSSL */
+#endif
