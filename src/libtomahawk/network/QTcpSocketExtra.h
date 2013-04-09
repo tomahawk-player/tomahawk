@@ -57,9 +57,14 @@ public:
     bool _disowned;
     msg_ptr _msg;
 
-    //! Set a time limit for establishing a connection.
+    /**
+     * Set a time limit for establishing a connection.
+     */
     void setConnectTimeout( qint32 timeout ) { m_connectTimeout = timeout; }
-    //! Get the current timeout for establishing a connection.
+
+    /**
+     * Get the current timeout for establishing a connection.
+     */
     qint32 connectTimeout() const { return m_connectTimeout; }
 
 private slots:
@@ -73,9 +78,14 @@ private slots:
       this->disconnectFromHost();
     }
 private:
-    //! How long we will wait for a connection to establish
+    /**
+     * How long we will wait for a connection to establish
+     */
     qint32 m_connectTimeout;
-    //! Timer to measure the connection initialisation
+
+    /**
+     * Timer to measure the connection initialisation
+     */
     QTimer* m_connectTimer;
 };
 

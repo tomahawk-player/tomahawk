@@ -36,11 +36,19 @@ class ACCOUNTDLLEXPORT TomahawkXmppMessage : public Jreen::Payload
         TomahawkXmppMessage(const QList<SipInfo>& sipInfo);
         ~TomahawkXmppMessage();
 
-        //! The SipInfo objects that are wrapped in this XmppMessage
+        /**
+         * The SipInfo objects that are wrapped in this XmppMessage
+         */
         const QList<SipInfo> sipInfo() const;
-        //! The name of the peer contained in this message
+
+        /**
+         * The name of the peer contained in this message
+         */
         const QString key() const;
-        //! The name of the peer contained in this message
+
+        /**
+         * The name of the peer contained in this message
+         */
         const QString uniqname() const;
 
     private:

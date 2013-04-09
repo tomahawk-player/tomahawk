@@ -43,13 +43,24 @@ private:
 
     enum State { AtNowhere, AtTransport, AtCandidate } m_state;
 
-    //! All the provided Sip informations
+    /**
+     * All the provided Sip informations
+     */
     QList<SipInfo> m_sipInfo;
-    //! The current parsing depth
+
+    /**
+     * The current parsing depth
+     */
     int m_depth;
-    //! The unique name of the peer
+
+    /**
+     * The unique name of the peer
+     */
     QString m_uniqname;
-    //! The authentication key of the peer
+
+    /**
+     * The authentication key of the peer
+     */
     QString m_key;
 };
 
