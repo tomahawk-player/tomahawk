@@ -22,17 +22,15 @@
 #include <QObject>
 #include <QVariantMap>
 
-#include "database/DatabaseCommandLoggable.h"
+#include "database/DatabaseCommand_SocialAction.h"
 #include "SourceList.h"
 #include "Typedefs.h"
 
 #include "DllMacro.h"
 
-class DLLEXPORT DatabaseCommand_ShareTrack : public DatabaseCommandLoggable
+class DLLEXPORT DatabaseCommand_ShareTrack : public DatabaseCommand_SocialAction
 {
     Q_OBJECT
-    Q_PROPERTY( QString artist      READ artist     WRITE setArtist )
-    Q_PROPERTY( QString track       READ track      WRITE setTrack )
     Q_PROPERTY( QString recipient   READ recipient  WRITE setRecipient )
 
 public:
@@ -58,21 +56,10 @@ public:
     virtual bool localOnly() const;
     virtual bool groupable() const;
 
-    QString artist() const;
-    void setArtist( const QString& s );
-
-    QString track() const;
-    void setTrack( const QString& s );
-
-    QString recipient() const;
-    void setRecipient( const QString& s );
+    virtual QString recipient() const;
+    virtual void setRecipient( const QString& s );
 
 private:
-    Tomahawk::query_ptr m_query;
-    Tomahawk::result_ptr m_result;
-
-    QString m_artist;
-    QString m_track;
     QString m_recipient;
 };
 

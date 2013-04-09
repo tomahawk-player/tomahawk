@@ -51,7 +51,7 @@ DatabaseCommand_SocialAction::exec( DatabaseImpl* dbi )
 
     QVariant srcid = source()->isLocal() ? QVariant( QVariant::Int ) : source()->id();
 
-    if ( m_artist.isNull() || m_track.isEmpty() )
+    if ( m_artist.isNull() || m_track.isEmpty() || m_action.isEmpty() )
         return;
 
     int artid = dbi->artistId( m_artist, true );

@@ -29,36 +29,24 @@
 #include "jobview/ErrorStatusMessage.h"
 
 DatabaseCommand_ShareTrack::DatabaseCommand_ShareTrack( QObject* parent )
-    : DatabaseCommandLoggable( parent )
+    : DatabaseCommand_SocialAction( parent )
 {}
 
 
 DatabaseCommand_ShareTrack::DatabaseCommand_ShareTrack( const Tomahawk::query_ptr& query,
                                                         const QString& recipientDbid,
                                                         QObject* parent )
-    : DatabaseCommandLoggable( parent )
-    , m_query( query )
+    : DatabaseCommand_SocialAction( query, "Inbox", "", parent )
     , m_recipient( recipientDbid )
-{
-    setSource( SourceList::instance()->getLocal() );
-
-    setArtist( query->artist() );
-    setTrack( query->track() );
-}
+{}
 
 
 DatabaseCommand_ShareTrack::DatabaseCommand_ShareTrack( const Tomahawk::result_ptr& result,
                                                         const QString& recipientDbid,
                                                         QObject* parent )
-    : DatabaseCommandLoggable( parent )
-    , m_result( result )
+    : DatabaseCommand_SocialAction( result->toQuery(), "Inbox", "", parent )
     , m_recipient( recipientDbid )
-{
-    setSource( SourceList::instance()->getLocal() );
-
-    setArtist( result->artist()->name() );
-    setTrack( result->track() );
-}
+{}
 
 
 QString
@@ -71,6 +59,21 @@ void
 DatabaseCommand_ShareTrack::exec( DatabaseImpl* dbi )
 {
     Q_ASSERT( !source().isNull() );
+
+    QString myDbid = SourceList::instance()->getLocal()->nodeId();
+    QString sourceDbid = source()->nodeId();
+    if ( myDbid != m_recipient || sourceDbid == m_recipient )
+        return;
+
+    //we store the comment field as JSON: { sender: dbid, unlistened: bool }
+    QVariantMap comment;
+    comment.insert( "sender", sourceDbid );
+    comment.insert( "unlistened", true );
+
+    QJson::Serializer serializer;
+    setComment( serializer.serialize( comment ) );
+
+    DatabaseCommand_SocialAction::exec( dbi );
 }
 
 void
@@ -88,14 +91,7 @@ DatabaseCommand_ShareTrack::postCommitHook()
         return;
 
     //From here on, everything happens only on the recipient, and only if recipient!=source
-    if ( !m_result.isNull() && m_query.isNull() )
-    {
-        m_query = m_result->toQuery();
-    }
-    else
-    {
-        m_query = Tomahawk::Query::get( m_artist, m_track, QString() );
-    }
+    m_query = Tomahawk::Query::get( artist(), track(), QString() );
 
     if ( m_query.isNull() )
         return;
@@ -118,7 +114,7 @@ DatabaseCommand_ShareTrack::postCommitHook()
 bool
 DatabaseCommand_ShareTrack::doesMutates() const
 {
-    return false;
+    return true;
 }
 
 
@@ -140,34 +136,6 @@ bool
 DatabaseCommand_ShareTrack::groupable() const
 {
     return true;
-}
-
-
-QString
-DatabaseCommand_ShareTrack::artist() const
-{
-    return m_artist;
-}
-
-
-void
-DatabaseCommand_ShareTrack::setArtist( const QString& s )
-{
-    m_artist = s;
-}
-
-
-QString
-DatabaseCommand_ShareTrack::track() const
-{
-    return m_track;
-}
-
-
-void
-DatabaseCommand_ShareTrack::setTrack( const QString& s )
-{
-    m_track = s;
 }
 
 
