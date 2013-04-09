@@ -51,6 +51,9 @@
 
 #define QXT_DLLEXPORT DO_NOT_USE_THIS_ANYMORE
 
+// Define QXT_STATIC here so that the linker of projects that include the static library use the correct call method.
+#define QXT_STATIC
+
 #if !defined(QXT_STATIC) && !defined(QXT_DOXYGEN_RUN)
 #    if defined(BUILD_QXT_CORE)
 #        define QXT_CORE_EXPORT Q_DECL_EXPORT
