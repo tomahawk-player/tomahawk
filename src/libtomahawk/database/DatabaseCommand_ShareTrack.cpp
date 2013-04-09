@@ -98,9 +98,10 @@ DatabaseCommand_ShareTrack::postCommitHook()
         return;
 
     QMetaObject::invokeMethod( ViewManager::instance()->inboxModel(),
-                               "appendQuery",
+                               "insertQuery",
                                Qt::QueuedConnection,
-                               Q_ARG( const Tomahawk::query_ptr&, m_query ) );
+                               Q_ARG( const Tomahawk::query_ptr&, m_query ),
+                               Q_ARG( int, 0 ) /*row*/ );
 }
 
 
