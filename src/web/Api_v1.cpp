@@ -201,16 +201,19 @@ Api_v1::sid( QxtWebRequestEvent* event, QString unused )
 void
 Api_v1::processSid( QxtWebRequestEvent* event, Tomahawk::result_ptr& rp, QSharedPointer< QIODevice >& iodev )
 {
-    if ( !iodev || iodev.isNull() )
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
+    if ( !iodev || !rp )
     {
         return send404( event ); // 503?
     }
+    m_ioDevice = iodev;
 
     QxtWebPageEvent* e = new QxtWebPageEvent( event->sessionID, event->requestID, iodev.data() );
     e->streaming = iodev->isSequential();
     e->contentType = rp->mimetype().toLatin1();
     if ( rp->size() > 0 )
         e->headers.insert( "Content-Length", QString::number( rp->size() ) );
+
     postEvent( e );
 }
 

@@ -78,7 +78,9 @@ public slots:
 
 private:
     void processSid( QxtWebRequestEvent* event, Tomahawk::result_ptr&, QSharedPointer< QIODevice >& );
+
     QxtWebRequestEvent* m_storedEvent;
+    QSharedPointer< QIODevice > m_ioDevice;
 };
 
 #endif
