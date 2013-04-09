@@ -24,6 +24,9 @@
 #include "network/Servent.h"
 #include "ViewManager.h"
 #include "playlist/InboxModel.h"
+#include "jobview/JobStatusView.h"
+#include "jobview/JobStatusModel.h"
+#include "jobview/ErrorStatusMessage.h"
 
 DatabaseCommand_ShareTrack::DatabaseCommand_ShareTrack( QObject* parent )
     : DatabaseCommandLoggable( parent )
@@ -102,6 +105,13 @@ DatabaseCommand_ShareTrack::postCommitHook()
                                Qt::QueuedConnection,
                                Q_ARG( const Tomahawk::query_ptr&, m_query ),
                                Q_ARG( int, 0 ) /*row*/ );
+
+    //TODO: replace with a proper JobStatusItem
+    if( ViewManager::instance()->currentPage() != ViewManager::instance()->inboxWidget() )
+        JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( tr( "%1 recommended %2 by %3" )
+                                                                            .arg( source()->friendlyName() )
+                                                                            .arg( m_query->track() )
+                                                                            .arg( m_query->artist() ) ) );
 }
 
 
