@@ -21,3 +21,4 @@ win/
 gcc/
 tags
 .DS_Store
+*.autosave
