@@ -94,13 +94,25 @@ public:
     void reverseOfferRequest( ControlConnection* orig_conn, const QString &theirdbid, const QString& key, const QString& theirkey );
 
     bool visibleExternally() const { return (!m_externalHostname.isNull()) || (m_externalAddresses.length() > 0); }
-    //! The port this Peer listens directly (per default)
+
+    /**
+     * The port this Peer listens directly (per default)
+     */
     int port() const { return m_port; }
-    //! The IP addresses this Peer listens directly (per default)
+
+    /**
+     * The IP addresses this Peer listens directly (per default)
+     */
     QList< QHostAddress > addresses() const { return m_externalAddresses; }
-    //! An additional address this peer listens to, e.g. via UPnP.
+
+    /**
+     * An additional address this peer listens to, e.g. via UPnP.
+     */
     QString additionalAddress() const { return m_externalHostname; }
-    //! An additional port this peer listens to, e.g. via UPnP (only in combination with additionalAddress.
+
+    /**
+     * An additional port this peer listens to, e.g. via UPnP (only in combination with additionalAddress.
+     */
     int additionalPort() const { return m_externalPort; }
 
     static bool isIPWhitelisted( QHostAddress ip );
@@ -155,13 +167,24 @@ private:
     QMap< QString, QPointer< Connection > > m_offers;
     QStringList m_connectedNodes;
 
-    //! The external port used by all address except those obtained via UPnP or the static configuration option
+    /**
+     * The external port used by all address except those obtained via UPnP or the static configuration option
+     */
     int m_port;
-    //! Either the static set or the UPnP set external port
+
+    /**
+     * Either the static set or the UPnP set external port
+     */
     int m_externalPort;
-    //! All available external IPs
+
+    /**
+     * All available external IPs
+     */
     QList<QHostAddress> m_externalAddresses;
-    //! Either the static set or the UPnP set external host
+
+    /**
+     * Either the static set or the UPnP set external host
+     */
     QString m_externalHostname;
 
     bool m_ready;

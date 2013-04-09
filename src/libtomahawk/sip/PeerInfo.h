@@ -112,10 +112,14 @@ public:
     void setData( const QVariant& data );
     const QVariant data() const;
 
-    //! Get the node id of this peer
+    /**
+     * Get the node id of this peer
+     */
     const QString nodeId() const;
 
-    //! Get the authentication key for this host
+    /**
+     * Get the authentication key for this host
+     */
     const QString key() const;
 
 signals:
