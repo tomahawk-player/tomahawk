@@ -52,7 +52,7 @@ QxtWeb uses QxtWebContent as an abstraction for streaming data.
 #include <QCoreApplication>
 #include <QThread>
 
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
 #include <QUrlQuery>
 #endif
 
@@ -272,13 +272,13 @@ typedef QPair<QString, QString> QxtQueryItem;
  */
 QHash<QString, QString> QxtWebContent::parseUrlEncodedQuery(const QString& data)
 {
-    QUrl post("/?" + data);
     QHash<QString, QString> rv;
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
-    foreach(const QxtQueryItem& item, QUrlQuery( post ).queryItems())
+#if QT_VERSION < QT_VERSION_CHECK(5,0,0)
+    QUrl post("/?" + data);
 #else
-    foreach(const QxtQueryItem& item, post.queryItems())
+    QUrlQuery post("/?" + data);
 #endif
+    foreach(const QxtQueryItem& item, post.queryItems())
     {
         rv.insertMulti(item.first, item.second);
     }

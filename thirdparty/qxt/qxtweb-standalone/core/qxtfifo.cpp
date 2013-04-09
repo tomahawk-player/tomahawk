@@ -137,17 +137,14 @@ QxtFifo::QxtFifo(const QByteArray &prime, QObject *parent) : QIODevice(parent)
     QXT_INIT_PRIVATE(QxtFifo);
     setOpenMode(QIODevice::ReadWrite);
     // Since we're being constructed, access to the internals is safe
-
-    QxtFifoNode *head;
-    int available;
+    QxtFifoNode* node;
 #if QT_VERSION >=  0x50000
-    head = qxt_d().head.load();
-    available = qxt_d().available.load();
+    node = qxt_d().head.load();
 #else
-    head = qxt_d().head;
-    available = qxt_d().available;
+    node = qxt_d().head;
 #endif
-
+    node->content = prime;
+    qxt_d().available.QXT_ADD( prime.size() );
 }
 
 /*!
