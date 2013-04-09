@@ -65,13 +65,7 @@ DatabaseCommand_ShareTrack::exec( DatabaseImpl* dbi )
     if ( myDbid != m_recipient || sourceDbid == m_recipient )
         return;
 
-    //we store the comment field as JSON: { sender: dbid, unlistened: bool }
-    QVariantMap comment;
-    comment.insert( "sender", sourceDbid );
-    comment.insert( "unlistened", true );
-
-    QJson::Serializer serializer;
-    setComment( serializer.serialize( comment ) );
+    setComment( "true" /*unlistened*/ );
 
     DatabaseCommand_SocialAction::exec( dbi );
 }
