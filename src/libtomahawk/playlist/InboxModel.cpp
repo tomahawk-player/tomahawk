@@ -18,10 +18,57 @@
 
 #include "InboxModel.h"
 
+#include "database/Database.h"
+#include "database/DatabaseCommand_GenericSelect.h"
+
+
 InboxModel::InboxModel( QObject* parent )
     : PlaylistModel( parent )
 {
+    loadTracks();
 }
+
 
 InboxModel::~InboxModel()
 {}
+
+
+void
+InboxModel::loadTracks()
+{
+    startLoading();
+
+    //extra fields end up in Tomahawk query objects as qt properties
+    QString sql = QString( "SELECT track.name as title, artist.name as artist, source, v as unlistened, social_attributes.timestamp "
+                           "FROM social_attributes, track, artist "
+                           "WHERE social_attributes.id = track.id AND artist.id = track.artist AND social_attributes.k = 'Inbox' "
+                           "GROUP BY track.id "
+                           "ORDER BY social_attributes.timestamp DESC" );
+
+    DatabaseCommand_GenericSelect* cmd = new DatabaseCommand_GenericSelect( sql, DatabaseCommand_GenericSelect::Track, -1, 0 );
+    connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksLoaded( QList<Tomahawk::query_ptr> ) ) );
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+}
+
+
+void
+InboxModel::tracksLoaded( QList< Tomahawk::query_ptr > newTracks )
+{
+    finishLoading();
+
+    QList< Tomahawk::query_ptr > tracks;
+
+    foreach ( const Tomahawk::plentry_ptr ple, playlistEntries() )
+        tracks << ple->query();
+
+    bool changed = false;
+    QList< Tomahawk::query_ptr > mergedTracks = TomahawkUtils::mergePlaylistChanges( tracks, newTracks, changed );
+
+    if ( changed )
+    {
+        QList< Tomahawk::plentry_ptr > el = playlist()->entriesFromQueries( mergedTracks, true );
+
+        clear();
+        appendEntries( el );
+    }
+}

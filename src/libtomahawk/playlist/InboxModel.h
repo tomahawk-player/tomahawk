@@ -30,8 +30,13 @@ public:
     explicit InboxModel( QObject* parent = 0 );
     virtual ~InboxModel();
 
-public slots:
+private slots:
+    void loadTracks();
 
+    void tracksLoaded( QList< Tomahawk::query_ptr > );
+
+private:
+    QTimer* m_smoothingTimer;
 };
 
 #endif // INBOXMODEL_H
