@@ -31,7 +31,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountFactoryWrapper.cpp" line="42"/>
         <source>Add Account</source>
-        <translation type="unfinished"/>
+        <translation>खाता जोड़ो</translation>
     </message>
 </context>
 <context>
@@ -518,7 +518,7 @@ connect and stream from you?</source>
 <context>
     <name>DatabaseCommand_ShareTrack</name>
     <message>
-        <location filename="../src/libtomahawk/database/DatabaseCommand_ShareTrack.cpp" line="111"/>
+        <location filename="../src/libtomahawk/database/DatabaseCommand_ShareTrack.cpp" line="101"/>
         <source>%1 recommended %2 by %3</source>
         <translation type="unfinished"/>
     </message>
@@ -533,7 +533,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="86"/>
         <source>Delete Account</source>
-        <translation type="unfinished"/>
+        <translation>ख़ाता हटाओ</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="116"/>
@@ -958,7 +958,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.ui" line="20"/>
         <source>Enter a title for the new playlist:</source>
-        <translation type="unfinished"/>
+        <translation>नयी गीतसूची के लिए शीर्षक दें:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.ui" line="37"/>
@@ -978,7 +978,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.h" line="50"/>
         <source>Create a new playlist</source>
-        <translation type="unfinished"/>
+        <translation>नयी गीतसूची बनाओ</translation>
     </message>
 </context>
 <context>
@@ -1244,7 +1244,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/ProxyDialog.ui" line="78"/>
         <source>User</source>
-        <translation type="unfinished"/>
+        <translation>उपभोक्ता</translation>
     </message>
     <message>
         <location filename="../src/ProxyDialog.ui" line="85"/>
@@ -1338,7 +1338,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="287"/>
         <source>just now</source>
-        <translation type="unfinished"/>
+        <translation>अभी</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/Account.cpp" line="36"/>
@@ -1447,7 +1447,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/searchlineedit/SearchLineEdit.cpp" line="58"/>
         <source>Search</source>
-        <translation type="unfinished"/>
+        <translation>खोज</translation>
     </message>
 </context>
 <context>
@@ -1468,7 +1468,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="235"/>
         <source>Collection</source>
-        <translation type="unfinished"/>
+        <translation>संग्रह</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="238"/>
@@ -1488,7 +1488,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="230"/>
         <source>Services</source>
-        <translation type="unfinished"/>
+        <translation>सेवाएं</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="130"/>
@@ -1538,7 +1538,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="285"/>
         <source>Information</source>
-        <translation type="unfinished"/>
+        <translation>सूचना</translation>
     </message>
 </context>
 <context>
@@ -2444,7 +2444,7 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="188"/>
         <source>Send Message!</source>
-        <translation type="unfinished"/>
+        <translation>संदेश भेजें!</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="189"/>
@@ -2787,7 +2787,7 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="352"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="358"/>
         <source>Less</source>
-        <translation type="unfinished"/>
+        <translation>कम</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="269"/>
@@ -2798,7 +2798,7 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="352"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="358"/>
         <source>More</source>
-        <translation type="unfinished"/>
+        <translation>अधिक</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="315"/>
@@ -3020,7 +3020,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="896"/>
         <source>My Collection</source>
-        <translation type="unfinished"/>
+        <translation>मेरा संग्रह</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="897"/>
@@ -3146,7 +3146,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="577"/>
         <source>Artists</source>
-        <translation type="unfinished"/>
+        <translation>कलाकार</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="579"/>
@@ -3249,7 +3249,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="149"/>
         <source>New Playlist</source>
-        <translation type="unfinished"/>
+        <translation>नयी गीतसूची</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="175"/>
@@ -3305,22 +3305,22 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="754"/>
         <source> and </source>
-        <translation type="unfinished"/>
+        <translation>और</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="762"/>
         <source>You</source>
-        <translation type="unfinished"/>
+        <translation>आप</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="764"/>
         <source>you</source>
-        <translation type="unfinished"/>
+        <translation>आप</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="773"/>
         <source>and</source>
-        <translation type="unfinished"/>
+        <translation>और</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/Query.cpp" line="773"/>

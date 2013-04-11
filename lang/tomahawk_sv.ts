@@ -125,7 +125,7 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="78"/>
         <source>&amp;Load Station</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Ladda station</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="79"/>
@@ -135,7 +135,7 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="80"/>
         <source>&amp;Rename Station</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Döp om station</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="81"/>
@@ -519,9 +519,9 @@ ansluta och strömma från dig?</translation>
 <context>
     <name>DatabaseCommand_ShareTrack</name>
     <message>
-        <location filename="../src/libtomahawk/database/DatabaseCommand_ShareTrack.cpp" line="111"/>
+        <location filename="../src/libtomahawk/database/DatabaseCommand_ShareTrack.cpp" line="101"/>
         <source>%1 recommended %2 by %3</source>
-        <translation type="unfinished"/>
+        <translation>%1 rekommenderade %2 med %3</translation>
     </message>
 </context>
 <context>
@@ -1977,7 +1977,7 @@ och radiostationer baserat på din personliga profil</translation>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="329"/>
         <source>Inbox</source>
-        <translation type="unfinished"/>
+        <translation>Inkorg</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="336"/>
@@ -3865,12 +3865,12 @@ Du kan skicka om ett synkat meddelande när som helst genom att skicka ett tweet
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="94"/>
         <source>Inbox</source>
-        <translation type="unfinished"/>
+        <translation>Inkorg</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="95"/>
         <source>Listening suggestions from your friends</source>
-        <translation type="unfinished"/>
+        <translation>Lyssnar-rekommendationer från dina vänner</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="150"/>
@@ -3905,7 +3905,7 @@ Du kan skicka om ett synkat meddelande när som helst genom att skicka ett tweet
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="454"/>
         <source>No listening suggestions here.</source>
-        <translation type="unfinished"/>
+        <translation>Det finns inga rekommendationer här.</translation>
     </message>
 </context>
 <context>

@@ -519,7 +519,7 @@ erlauben sich mit dir zu verbinden?</translation>
 <context>
     <name>DatabaseCommand_ShareTrack</name>
     <message>
-        <location filename="../src/libtomahawk/database/DatabaseCommand_ShareTrack.cpp" line="111"/>
+        <location filename="../src/libtomahawk/database/DatabaseCommand_ShareTrack.cpp" line="101"/>
         <source>%1 recommended %2 by %3</source>
         <translation>%1 empfohlen %2 von %3</translation>
     </message>
