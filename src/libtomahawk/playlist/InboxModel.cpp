@@ -42,7 +42,6 @@ InboxModel::loadTracks()
     QString sql = QString( "SELECT track.name as title, artist.name as artist, source, v as unlistened, social_attributes.timestamp "
                            "FROM social_attributes, track, artist "
                            "WHERE social_attributes.id = track.id AND artist.id = track.artist AND social_attributes.k = 'Inbox' "
-                           "GROUP BY track.id "
                            "ORDER BY social_attributes.timestamp DESC" );
 
     DatabaseCommand_GenericSelect* cmd = new DatabaseCommand_GenericSelect( sql, DatabaseCommand_GenericSelect::Track, -1, 0 );
