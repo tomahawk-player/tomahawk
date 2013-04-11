@@ -78,6 +78,10 @@ ContextMenu::addToPlaylist( int playlistIdx )
     playlist->addEntries( m_queries, playlist->currentrevision() );
 }
 
+bool caseInsensitiveLessThan(Tomahawk::playlist_ptr &s1, Tomahawk::playlist_ptr &s2)
+{
+    return s1->title().toLower() < s2->title().toLower();
+}
 
 void
 ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
@@ -97,7 +101,9 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
 
     if ( m_supportedActions & ActionPlaylist ) {
         // Get the current list of all playlists.
-        m_playlists = SourceList::instance()->getLocal()->dbCollection()->playlists();
+        m_playlists = QList< Tomahawk::playlist_ptr >( SourceList::instance()->getLocal()->dbCollection()->playlists() );
+        // Sort the playlist
+        qSort( m_playlists.begin(), m_playlists.end(), caseInsensitiveLessThan );
         m_playlists_sigmap = new QSignalMapper( this );
 
         // Build the menu listing all available playlists
