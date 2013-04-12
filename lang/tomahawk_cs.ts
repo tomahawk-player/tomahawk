@@ -125,7 +125,7 @@ se s vámi spojil?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="78"/>
         <source>&amp;Load Station</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Nahrát stanici</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="79"/>
@@ -135,7 +135,7 @@ se s vámi spojil?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="80"/>
         <source>&amp;Rename Station</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Přejmenovat stanici</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="81"/>
@@ -521,7 +521,7 @@ se s vámi spojil?</translation>
     <message>
         <location filename="../src/libtomahawk/database/DatabaseCommand_ShareTrack.cpp" line="101"/>
         <source>%1 recommended %2 by %3</source>
-        <translation type="unfinished"/>
+        <translation>%1 doporučeno %2 od %3</translation>
     </message>
 </context>
 <context>
@@ -1525,7 +1525,7 @@ se s vámi spojil?</translation>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="502"/>
         <source>Resolver installation from file %1 failed.</source>
-        <translation type="unfinished"/>
+        <translation>Nepodařilo se nainstalovat řešitele ze souboru %1.</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="521"/>
@@ -1975,7 +1975,7 @@ se s vámi spojil?</translation>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="329"/>
         <source>Inbox</source>
-        <translation type="unfinished"/>
+        <translation>Doručené</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="336"/>
@@ -2261,27 +2261,27 @@ se s vámi spojil?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="108"/>
         <source>Resolver installation error: cannot open bundle.</source>
-        <translation type="unfinished"/>
+        <translation>Chyba při instalaci řešitele: Nelze otevřít balík.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="115"/>
         <source>Resolver installation error: incomplete bundle.</source>
-        <translation type="unfinished"/>
+        <translation>Chyba při instalaci řešitele: Neúplný balík.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="154"/>
         <source>Resolver installation error: bad metadata in bundle.</source>
-        <translation type="unfinished"/>
+        <translation>Chyba při instalaci řešitele: Špatná popisná data v balíku.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="192"/>
         <source>Resolver installation error: platform mismatch.</source>
-        <translation type="unfinished"/>
+        <translation>Chyba při instalaci řešitele: Neodpovídající platforma.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="205"/>
         <source>Resolver installation error: Tomahawk %1 or newer is required.</source>
-        <translation type="unfinished"/>
+        <translation>Chyba při instalaci řešitele: Je požadován Tomahawk %1 nebo novější.</translation>
     </message>
 </context>
 <context>
@@ -2374,7 +2374,7 @@ se s vámi spojil?</translation>
     <message>
         <location filename="../src/accounts/twitter/TwitterAccount.h" line="51"/>
         <source>Send tweets from Tomahawk.</source>
-        <translation type="unfinished"/>
+        <translation>Poslat zprávy z Tomahawku.</translation>
     </message>
 </context>
 <context>
@@ -2577,84 +2577,84 @@ username@jabber.org</translation>
 <context>
     <name>Tomahawk::ContextMenu</name>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="93"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="97"/>
         <source>&amp;Play</source>
         <translation>&amp;Přehrát</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="96"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="195"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="246"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="100"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="201"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="252"/>
         <source>Add to &amp;Queue</source>
         <translation>Přidat do řa&amp;dy</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="104"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="110"/>
         <source>Add to &amp;Playlist</source>
         <translation>Přidat do &amp;seznamu skladeb</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="118"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="124"/>
         <source>Continue Playback after this &amp;Track</source>
         <translation>Po této skladbě &amp;pokračovat v přehrávání</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="120"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="126"/>
         <source>Stop Playback after this &amp;Track</source>
         <translation>Po této skladbě &amp;zastavit přehrávání</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="127"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="414"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="133"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="420"/>
         <source>&amp;Love</source>
         <translation>&amp;Oblíbená píseň</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="141"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="203"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="253"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="147"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="209"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="259"/>
         <source>&amp;Go to &quot;%1&quot;</source>
         <translation>&amp;Jít na &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="145"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="149"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="206"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="151"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="155"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="212"/>
         <source>Go to &quot;%1&quot;</source>
         <translation>Jít na &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="155"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="161"/>
         <source>&amp;Copy Track Link</source>
         <translation>&amp;Kopírovat odkaz pro tuto skladbu</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="214"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="220"/>
         <source>Copy Album &amp;Link</source>
         <translation>Kopírovat odkaz pro toto &amp;album</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="261"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="267"/>
         <source>Copy Artist &amp;Link</source>
         <translation>Kopírovat odkaz pro tohoto &amp;umělce</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="409"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="415"/>
         <source>Un-&amp;Love</source>
         <translation>Zrušit zařazení mezi o&amp;blíbené písně</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="163"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="169"/>
         <source>&amp;Delete Items</source>
         <translation>&amp;Odstranit položky</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="158"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="164"/>
         <source>Properties...</source>
         <translation>Vlastnosti...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="163"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="169"/>
         <source>&amp;Delete Item</source>
         <translation>Odstranit &amp;položku</translation>
     </message>
@@ -3177,19 +3177,19 @@ Zkuste vyladit filtry pro nové písně.</translation>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="193"/>
         <source>on</source>
         <comment>'on' is followed by an album name</comment>
-        <translation type="unfinished"/>
+        <translation>na</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="195"/>
         <source>%1%4 %2%3.</source>
         <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing, %4 is the preposition used to link track and artist ('by' in english)</comment>
-        <translation type="unfinished"/>
+        <translation>%1%4 %2%3.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="199"/>
         <source>by</source>
         <comment>preposition to link track and artist</comment>
-        <translation type="unfinished"/>
+        <translation>od</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="208"/>
@@ -3788,7 +3788,7 @@ služby Twitter zde zadejte tam zobrazené číslo PIN:</translation>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="119"/>
         <source>The Twitter plugin allows you to post messages to your Twitter account.</source>
-        <translation type="unfinished"/>
+        <translation>Přídavný modul pro Twitter vám umožňuje odesílat zprávy na váš účet u služby Twitter.</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="137"/>
@@ -3863,12 +3863,12 @@ Kdykoli můžete odeslat novou seřizovací zprávu.</translation>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="94"/>
         <source>Inbox</source>
-        <translation type="unfinished"/>
+        <translation>Doručené</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="95"/>
         <source>Listening suggestions from your friends</source>
-        <translation type="unfinished"/>
+        <translation>Sledování návrhů od vašich přátel</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="150"/>
@@ -3903,7 +3903,7 @@ Kdykoli můžete odeslat novou seřizovací zprávu.</translation>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="454"/>
         <source>No listening suggestions here.</source>
-        <translation type="unfinished"/>
+        <translation>Žádné sledování návrhů.</translation>
     </message>
 </context>
 <context>

@@ -2569,84 +2569,84 @@ username@jabber.org</source>
 <context>
     <name>Tomahawk::ContextMenu</name>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="93"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="97"/>
         <source>&amp;Play</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="96"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="195"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="246"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="100"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="201"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="252"/>
         <source>Add to &amp;Queue</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="104"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="110"/>
         <source>Add to &amp;Playlist</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="118"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="124"/>
         <source>Continue Playback after this &amp;Track</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="120"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="126"/>
         <source>Stop Playback after this &amp;Track</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="127"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="414"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="133"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="420"/>
         <source>&amp;Love</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="141"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="203"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="253"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="147"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="209"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="259"/>
         <source>&amp;Go to &quot;%1&quot;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="145"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="149"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="206"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="151"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="155"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="212"/>
         <source>Go to &quot;%1&quot;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="155"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="161"/>
         <source>&amp;Copy Track Link</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="214"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="220"/>
         <source>Copy Album &amp;Link</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="261"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="267"/>
         <source>Copy Artist &amp;Link</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="409"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="415"/>
         <source>Un-&amp;Love</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="163"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="169"/>
         <source>&amp;Delete Items</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="158"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="164"/>
         <source>Properties...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="163"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="169"/>
         <source>&amp;Delete Item</source>
         <translation type="unfinished"/>
     </message>
