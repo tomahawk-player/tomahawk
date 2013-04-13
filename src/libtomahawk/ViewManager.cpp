@@ -443,7 +443,7 @@ ViewManager::showInboxPage()
         TrackView* inboxView = new TrackView( m_widget );
 
         PlaylistLargeItemDelegate* delegate =
-                new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::/*Inbox*/LovedTracks,
+                new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::Inbox,
                                                inboxView,
                                                inboxView->proxyModel() );
         connect( delegate, SIGNAL( updateIndex( QModelIndex ) ),

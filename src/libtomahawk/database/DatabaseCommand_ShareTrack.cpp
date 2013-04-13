@@ -90,6 +90,16 @@ DatabaseCommand_ShareTrack::postCommitHook()
     if ( m_query.isNull() )
         return;
 
+    Tomahawk::SocialAction action;
+    action.action = "Inbox";
+    action.source = source();
+    action.value = true; //unlistened
+    action.timestamp = timestamp();
+
+    QList< Tomahawk::SocialAction > actions;
+    actions << action;
+    m_query->setAllSocialActions( actions );
+
     QMetaObject::invokeMethod( ViewManager::instance()->inboxModel(),
                                "insertQuery",
                                Qt::QueuedConnection,

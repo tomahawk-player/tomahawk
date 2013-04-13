@@ -736,6 +736,7 @@ Query::socialActionDescription( const QString& action, DescriptionMode mode ) co
         }
     }
 
+    QDateTime earliestTimestamp = QDateTime::currentDateTime();
     actionSources.clear();
     int loveCounter = 0;
     foreach ( const Tomahawk::SocialAction& sa, socialActions )
@@ -765,6 +766,10 @@ Query::socialActionDescription( const QString& action, DescriptionMode mode ) co
             }
             else
                 desc += "<b>" + sa.source->friendlyName() + "</b>";
+
+            QDateTime saTimestamp = QDateTime::fromTime_t( sa.timestamp.toInt() );
+            if ( saTimestamp < earliestTimestamp && saTimestamp.toTime_t() > 0 )
+                earliestTimestamp = saTimestamp;
         }
     }
     if ( loveCounter > 0 )
@@ -775,7 +780,12 @@ Query::socialActionDescription( const QString& action, DescriptionMode mode ) co
         if ( mode == Short )
             desc = "<b>" + tr( "%n people", "", loveCounter ) + "</b>";
 
-        desc += " " + tr( "loved this track" ); //FIXME: more action descs required
+         //FIXME: more action descs required
+        if ( action == "Love" )
+            desc += " " + tr( "loved this track" );
+        else if ( action == "Inbox" )
+            desc += " " + tr( "sent you this track %1" )
+                    .arg( TomahawkUtils::ageToString( earliestTimestamp, true ) );
     }
 
     return desc;

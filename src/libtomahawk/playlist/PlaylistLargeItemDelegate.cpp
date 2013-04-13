@@ -144,6 +144,8 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
 
     if ( m_mode == LovedTracks )
         lowerText = item->query()->socialActionDescription( "Love", Query::Detailed );
+    if ( m_mode == Inbox )
+        lowerText = item->query()->socialActionDescription( "Inbox", Query::Detailed );
 
     painter->save();
     {
