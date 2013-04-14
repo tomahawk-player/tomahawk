@@ -78,7 +78,6 @@ InboxModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int ro
           it != entries.constEnd(); ++it )
     {
         Tomahawk::plentry_ptr entry = *it;
-        bool gotDupe = false;
         for ( QList< Tomahawk::plentry_ptr >::iterator jt = toInsert.begin();
               jt != toInsert.end(); ++jt  )
         {
@@ -86,14 +85,13 @@ InboxModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int ro
             if ( entry->query()->equals( existingEntry->query(), true /*ignoreCase*/) )
             {
                 //We got a dupe, let's merge the social actions
-                existingEntry->query()->setAllSocialActions( mergeSocialActions( existingEntry->query()->allSocialActions(),
+                entry->query()->setAllSocialActions( mergeSocialActions( existingEntry->query()->allSocialActions(),
                                                                                  entry->query()->allSocialActions() ) );
-                gotDupe = true;
+                toInsert.erase( jt );
                 break;
             }
         }
-        if ( !gotDupe )
-            toInsert.append( entry );
+        toInsert.append( entry );
     }
 
     foreach ( Tomahawk::plentry_ptr plEntry, playlistEntries() )
