@@ -73,6 +73,9 @@ ChartDataLoader::go()
 
             foreach ( const Tomahawk::InfoSystem::InfoStringHash& album, m_data )
             {
+                if ( album["artist"].isEmpty() )
+                    continue;
+
                 artist_ptr artistPtr = Artist::get( album[ "artist" ], false );
                 album_ptr albumPtr = Album::get( artistPtr, album[ "album" ], false );
                 album_ptrs << albumPtr;
