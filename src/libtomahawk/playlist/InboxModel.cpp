@@ -133,7 +133,7 @@ InboxModel::loadTracks()
     QString sql = QString( "SELECT track.name as title, artist.name as artist, source, v as unlistened, social_attributes.timestamp "
                            "FROM social_attributes, track, artist "
                            "WHERE social_attributes.id = track.id AND artist.id = track.artist AND social_attributes.k = 'Inbox' "
-                           "ORDER BY social_attributes.timestamp DESC" );
+                           "ORDER BY social_attributes.timestamp" );
 
     DatabaseCommand_GenericSelect* cmd = new DatabaseCommand_GenericSelect( sql, DatabaseCommand_GenericSelect::Track, -1, 0 );
     connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksLoaded( QList<Tomahawk::query_ptr> ) ) );
@@ -142,7 +142,7 @@ InboxModel::loadTracks()
 
 
 void
-InboxModel::tracksLoaded( QList< Tomahawk::query_ptr > newTracks )
+InboxModel::tracksLoaded( QList< Tomahawk::query_ptr > incoming )
 {
     finishLoading();
 
@@ -150,6 +150,15 @@ InboxModel::tracksLoaded( QList< Tomahawk::query_ptr > newTracks )
 
     foreach ( const Tomahawk::plentry_ptr ple, playlistEntries() )
         tracks << ple->query();
+
+    //We invert the result of the SQLite query.
+    //NOTE: this operation relies on the fact that SQLite always seems to return the records in
+    //      their original order of insertion when the ORDER BY criterion is equal for some records
+    //      (i.e. a stable sort). This assumption might not be true for other things that talk SQL,
+    //      but it should work for us as long as we stick with SQLite.  -- Teo
+    QList< Tomahawk::query_ptr > newTracks;
+    while ( !incoming.isEmpty() )
+        newTracks.append( incoming.takeLast() );
 
     foreach ( Tomahawk::query_ptr newQuery, newTracks )
     {
