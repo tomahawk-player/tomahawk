@@ -39,6 +39,8 @@ public slots:
      */
     virtual void insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int row = 0 );
 
+    virtual void removeIndex( const QModelIndex &index, bool moreToCome );
+
     virtual void clear();
 
 private slots:

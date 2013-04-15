@@ -20,6 +20,7 @@
 
 #include "database/Database.h"
 #include "database/DatabaseCommand_GenericSelect.h"
+#include "database/DatabaseCommand_DeleteInboxEntry.h"
 #include "SourceList.h"
 #include "utils/Logger.h"
 #include "utils/Closure.h"
@@ -114,6 +115,20 @@ InboxModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int ro
     changed();
 
     PlaylistModel::insertEntries( toInsert, row );
+}
+
+
+void
+InboxModel::removeIndex( const QModelIndex& index, bool moreToCome )
+{
+    PlayableItem* item = itemFromIndex( index );
+    if ( item && !item->query().isNull() )
+    {
+        DatabaseCommand_DeleteInboxEntry* cmd = new DatabaseCommand_DeleteInboxEntry( item->query() );
+        Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+    }
+
+    PlaylistModel::removeIndex( index, moreToCome );
 }
 
 

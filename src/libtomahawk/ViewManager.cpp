@@ -39,6 +39,7 @@
 #include "TomahawkSettings.h"
 
 #include "playlist/InboxModel.h"
+#include "playlist/InboxView.h"
 #include "playlist/PlaylistLargeItemDelegate.h"
 #include "playlist/RecentlyPlayedModel.h"
 #include "playlist/dynamic/widgets/DynamicWidget.h"
@@ -440,7 +441,7 @@ ViewManager::showInboxPage()
 {
     if ( !m_inboxWidget )
     {
-        TrackView* inboxView = new TrackView( m_widget );
+        TrackView* inboxView = new InboxView( m_widget );
 
         PlaylistLargeItemDelegate* delegate =
                 new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::Inbox,

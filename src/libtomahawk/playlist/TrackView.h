@@ -91,7 +91,7 @@ public:
 public slots:
     virtual void onItemActivated( const QModelIndex& index );
 
-    void deleteSelectedItems();
+    virtual void deleteSelectedItems();
 
     void playItem();
     void onMenuTriggered( int action );
