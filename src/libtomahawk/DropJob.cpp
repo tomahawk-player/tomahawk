@@ -27,6 +27,7 @@
 
 #include "utils/SpotifyParser.h"
 #include "utils/ItunesParser.h"
+#include "utils/ItunesLoader.h"
 #include "utils/RdioParser.h"
 #include "utils/M3uLoader.h"
 #include "utils/ShortenedLinkParser.h"
@@ -114,6 +115,12 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
     const QString url = data->data( "text/plain" );
     if ( acceptedType.testFlag( Playlist ) )
     {
+        if ( url.contains( "xml" ) && url.contains( "iTunes") )
+            return true;
+
+        if (  data->data( "text/uri-list" ).contains( "xml" ) &&  data->data( "text/uri-list" ).contains( "iTunes") )
+            return true;
+
         if ( url.contains( "xspf" ) )
             return true;
 
@@ -204,6 +211,12 @@ DropJob::isDropType( DropJob::DropType desired, const QMimeData* data )
     const QString url = data->data( "text/plain" );
     if ( desired == Playlist )
     {
+        if ( url.contains( "xml" ) && url.contains( "iTunes") )
+            return true;
+
+        if (  data->data( "text/uri-list" ).contains( "xml" ) &&  data->data( "text/uri-list" ).contains( "iTunes") )
+            return true;
+
         if( url.contains( "xspf" ) || data->data( "text/uri-list").contains( "xspf" ) )
             return true;
 
@@ -682,7 +695,12 @@ DropJob::handleAllUrls( const QString& urls )
 void
 DropJob::handleTrackUrls( const QString& urls )
 {
-    if ( urls.contains( "itunes.apple.com") )
+
+    if ( urls.contains( "xml" ) && urls.contains( "iTunes" ) )
+    {
+        new iTunesLoader( urls, this );
+    }
+    else if ( urls.contains( "itunes.apple.com") )
     {
         QStringList tracks = urls.split( QRegExp( "\\s+" ), QString::SkipEmptyParts );
 

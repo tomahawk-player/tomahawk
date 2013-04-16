@@ -100,6 +100,7 @@ set( libGuiSources
     utils/SpotifyParser.cpp
     utils/M3uLoader.cpp
     utils/ItunesParser.cpp
+    utils/ItunesLoader.cpp
     utils/RdioParser.cpp
     utils/ShortenedLinkParser.cpp
     utils/SoundcloudParser.cpp
