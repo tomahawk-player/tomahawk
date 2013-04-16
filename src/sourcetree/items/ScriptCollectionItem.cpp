@@ -34,7 +34,6 @@ ScriptCollectionItem::~ScriptCollectionItem()
 {
     model()->removeSourceItemLink( this );
     ViewManager::instance()->destroyPage( m_page );
-    dynamic_cast< QObject* >( m_page )->deleteLater();
 }
 
 
