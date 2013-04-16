@@ -880,7 +880,7 @@ XmppSipPlugin::onNewIq( const Jreen::IQ& iq )
             handlePeerStatus( jid, Jreen::Presence::Available );
         }
     }
-    else if ( context == RequestVersion)
+    else if ( context == RequestVersion )
     {
         Jreen::SoftwareVersion::Ptr softwareVersion = iq.payload<Jreen::SoftwareVersion>();
         if ( softwareVersion )
@@ -932,7 +932,7 @@ XmppSipPlugin::onNewIq( const Jreen::IQ& iq )
             Tomahawk::peerinfo_ptr peerInfo = PeerInfo::get( this, iq.from().full() );
             if ( peerInfo.isNull() )
             {
-                tDebug() << Q_FUNC_INFO << "no valid peerInfo for " << iq.from().full();
+                tDebug() << Q_FUNC_INFO << "no valid peerInfo for" << iq.from().full();
                 return;
             }
             peerInfo->setSipInfo( info );

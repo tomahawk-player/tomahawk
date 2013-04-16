@@ -263,7 +263,7 @@ PeerInfo::setSipInfo( const SipInfo& sipInfo )
 
     m_sipInfo = sipInfo;
 
-    tLog() << "id: " << id() << " info changed" << sipInfo;
+    tLog() << "id:" << id() << "info changed" << sipInfo;
     emit sipInfoChanged();
 }
 
@@ -304,7 +304,7 @@ PeerInfo::setAvatar( const QPixmap& avatar )
 
     m_avatarHash = hash;
     m_avatarBuffer = ba;
-    
+
     delete m_avatar;
     delete m_fancyAvatar;
     m_avatar = 0;
@@ -331,7 +331,7 @@ PeerInfo::avatar( TomahawkUtils::ImageMode style, const QSize& size ) const
             delete m_avatar;
             m_avatar = 0;
         }
-        
+
         m_avatarBuffer.clear();
     }
 
