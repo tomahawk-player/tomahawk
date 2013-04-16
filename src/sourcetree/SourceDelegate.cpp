@@ -229,7 +229,11 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
 
     QRect textRect = option.rect.adjusted( iconRect.width() + 8, 6, -figWidth - ( figWidth ? 28 : 0 ), 0 );
     QString text = painter->fontMetrics().elidedText( name, Qt::ElideRight, textRect.width() );
-    painter->drawText( textRect, text );
+    {
+        QTextOption to;
+        to.setWrapMode( QTextOption::NoWrap );
+        painter->drawText( textRect, text, to );
+    }
 
     QColor descColor = option.palette.color( QPalette::HighlightedText ).lighter( 220 );
     if ( type == SourcesModel::ScriptCollection && //you cannot select a non-script collection anyway
@@ -312,10 +316,12 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
     }
     textRect.adjust( 0, 0, 0, 2 );
     text = painter->fontMetrics().elidedText( desc, Qt::ElideRight, textRect.width() - 8 );
-    QTextOption to( Qt::AlignVCenter );
-    to.setWrapMode( QTextOption::NoWrap );
-    painter->setPen( descColor );
-    painter->drawText( textRect, text, to );
+    {
+        QTextOption to( Qt::AlignVCenter );
+        to.setWrapMode( QTextOption::NoWrap );
+        painter->setPen( descColor );
+        painter->drawText( textRect, text, to );
+    }
 
     bool shouldPaintTrackCount = false;
     if ( type == SourcesModel::Collection )
