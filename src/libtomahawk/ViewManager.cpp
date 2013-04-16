@@ -549,6 +549,7 @@ ViewManager::destroyPage( ViewPage* page )
         return;
 
     tDebug() << Q_FUNC_INFO << "Deleting page:" << page->title();
+
     if ( historyPages().contains( page ) )
     {
         m_pageHistoryBack.removeAll( page );
@@ -564,6 +565,10 @@ ViewManager::destroyPage( ViewPage* page )
 
         historyBack();
     }
+
+    emit viewPageAboutToBeDestroyed( page );
+    delete page;
+    emit viewPageDestroyed();
 }
 
 
@@ -700,6 +705,7 @@ ViewManager::onWidgetDestroyed( QWidget* widget )
 
         m_pageHistoryBack.removeAll( page );
         m_pageHistoryFwd.removeAll( page );
+        break;
     }
 
     m_stack->removeWidget( widget );

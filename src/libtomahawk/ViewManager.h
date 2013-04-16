@@ -119,6 +119,8 @@ signals:
 
     void tempPageActivated( Tomahawk::ViewPage* );
     void viewPageActivated( Tomahawk::ViewPage* );
+    void viewPageAboutToBeDestroyed( Tomahawk::ViewPage* );
+    void viewPageDestroyed();
 
     void showQueueRequested();
     void hideQueueRequested();
