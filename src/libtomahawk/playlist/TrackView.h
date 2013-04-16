@@ -75,7 +75,6 @@ public:
     virtual bool setFilter( const QString& filter );
     virtual bool jumpToCurrentTrack();
 
-    QModelIndex hoveredIndex() const { return m_hoveredIndex; }
     QModelIndex contextMenuIndex() const { return m_contextMenuIndex; }
     void setContextMenuIndex( const QModelIndex& idx ) { m_contextMenuIndex = idx; }
 
@@ -112,10 +111,6 @@ protected:
     virtual void dragMoveEvent( QDragMoveEvent* event );
     virtual void dropEvent( QDropEvent* event );
 
-    virtual void wheelEvent( QWheelEvent* event );
-    virtual void mouseMoveEvent( QMouseEvent* event );
-    virtual void mousePressEvent( QMouseEvent* event );
-    virtual void leaveEvent( QEvent* event );
     virtual void paintEvent( QPaintEvent* event );
     virtual void keyPressEvent( QKeyEvent* event );
 
@@ -131,7 +126,7 @@ private slots:
     void autoPlayResolveFinished( const Tomahawk::query_ptr& query, int row );
 
     void verifySize();
-    
+
 private:
     void startAutoPlay( const QModelIndex& index );
     bool tryToPlayItem( const QModelIndex& index );
@@ -153,7 +148,6 @@ private:
     bool m_updateContextView;
     bool m_autoResize;
 
-    QModelIndex m_hoveredIndex;
     QModelIndex m_contextMenuIndex;
 
     Tomahawk::query_ptr m_autoPlaying;
