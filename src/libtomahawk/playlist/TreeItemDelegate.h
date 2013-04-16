@@ -42,6 +42,7 @@ public:
 
 protected:
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+    bool editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
 
 signals:
     void updateIndex( const QModelIndex& idx );
@@ -54,6 +55,8 @@ private:
     TreeProxyModel* m_model;
 
     mutable QHash< QPersistentModelIndex, QSharedPointer< Tomahawk::PixmapDelegateFader > > m_pixmaps;
+    mutable QHash< QPersistentModelIndex, QRect > m_infoButtonRects;
+    QPersistentModelIndex m_hoveringOver;
 };
 
 #endif // TREEITEMDELEGATE_H
