@@ -123,6 +123,7 @@ PeerInfo::PeerInfo( SipPlugin* parent, const QString& id )
 PeerInfo::~PeerInfo()
 {
 //    tDebug() << Q_FUNC_INFO;
+    s_peersByCacheKey.remove( s_peersByCacheKey.key( weakRef() ) );
     delete m_avatar;
     delete m_fancyAvatar;
 }
