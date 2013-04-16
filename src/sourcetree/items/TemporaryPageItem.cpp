@@ -126,8 +126,6 @@ TemporaryPageItem::IDValue() const
 void
 TemporaryPageItem::removeFromList()
 {
-    ViewManager::instance()->destroyPage( m_page );
-
     model()->removeSourceItemLink( this );
 
     int idx = parent()->children().indexOf( this );
@@ -137,7 +135,7 @@ TemporaryPageItem::removeFromList()
 
     emit removed();
 
-    delete m_page;
+    ViewManager::instance()->destroyPage( m_page );
     deleteLater();
 }
 
