@@ -29,18 +29,16 @@
 #include "Query.h"
 #include "Result.h"
 #include "Source.h"
-#include "audio/AudioEngine.h"
-
-#include "utils/TomahawkUtilsGui.h"
-#include "utils/PixmapDelegateFader.h"
-#include <utils/Closure.h>
-
-#include "playlist/PlayableItem.h"
-#include "playlist/PlayableProxyModel.h"
 #include "GridView.h"
 #include "ViewManager.h"
-#include "utils/AnimatedSpinner.h"
+#include "audio/AudioEngine.h"
+#include "playlist/PlayableItem.h"
+#include "playlist/PlayableProxyModel.h"
 #include "widgets/ImageButton.h"
+#include "utils/TomahawkUtilsGui.h"
+#include "utils/PixmapDelegateFader.h"
+#include "utils/Closure.h"
+#include "utils/AnimatedSpinner.h"
 #include "utils/Logger.h"
 
 namespace {
@@ -377,7 +375,6 @@ GridItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const Q
 
     if ( hoveringArtist )
     {
-
         if ( event->type() == QEvent::MouseButtonRelease )
         {
             PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
