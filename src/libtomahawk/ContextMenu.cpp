@@ -166,7 +166,7 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
     addSeparator();
 
     if ( m_supportedActions & ActionDelete )
-        m_sigmap->setMapping( addAction( queries.count() > 1 ? tr( "&Delete Items" ) : tr( "&Delete Item" ) ), ActionDelete );
+        m_sigmap->setMapping( addAction( queries.count() > 1 ? tr( "&Remove Items" ) : tr( "&Remove Item" ) ), ActionDelete );
 
     foreach ( QAction* action, actions() )
     {
