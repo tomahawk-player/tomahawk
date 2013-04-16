@@ -119,7 +119,7 @@ private:
     PeerInfo( SipPlugin* parent, const QString& id );
     void announce();
 
-    static QHash< QString, peerinfo_ptr > s_peersByCacheKey;
+    static QHash< QString, peerinfo_wptr > s_peersByCacheKey;
     static QHash< SipPlugin*, peerinfo_ptr > s_selfPeersBySipPlugin;
 
     QWeakPointer< Tomahawk::PeerInfo > m_ownRef;

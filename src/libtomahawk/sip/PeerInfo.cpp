@@ -30,7 +30,7 @@
 namespace Tomahawk
 {
 
-QHash< QString, peerinfo_ptr > PeerInfo::s_peersByCacheKey = QHash< QString, peerinfo_ptr >();
+QHash< QString, peerinfo_wptr > PeerInfo::s_peersByCacheKey = QHash< QString, peerinfo_wptr >();
 QHash< SipPlugin*, peerinfo_ptr > PeerInfo::s_selfPeersBySipPlugin = QHash< SipPlugin*, peerinfo_ptr >();
 
 
@@ -76,9 +76,9 @@ Tomahawk::peerinfo_ptr
 PeerInfo::get( SipPlugin* parent, const QString& id, GetOptions options )
 {
     const QString key = peerCacheKey( parent, id );
-    if ( s_peersByCacheKey.contains( key ) )
+    if ( s_peersByCacheKey.contains( key ) && !s_peersByCacheKey.value( key ).isNull() )
     {
-        return s_peersByCacheKey.value( key );
+        return s_peersByCacheKey.value( key ).toStrongRef();
     }
 
     // if AutoCreate isn't enabled nothing to do here
@@ -89,7 +89,7 @@ PeerInfo::get( SipPlugin* parent, const QString& id, GetOptions options )
 
     peerinfo_ptr peerInfo( new PeerInfo( parent, id ) );
     peerInfo->setWeakRef( peerInfo.toWeakRef() );
-    s_peersByCacheKey.insert( key, peerInfo );
+    s_peersByCacheKey.insert( key, peerInfo.toWeakRef() );
 
     return peerInfo;
 }
@@ -98,7 +98,13 @@ PeerInfo::get( SipPlugin* parent, const QString& id, GetOptions options )
 QList< Tomahawk::peerinfo_ptr >
 PeerInfo::getAll()
 {
-    return s_peersByCacheKey.values();
+    QList< Tomahawk::peerinfo_ptr > strongRefs;
+    foreach ( Tomahawk::peerinfo_wptr wptr, s_peersByCacheKey.values() )
+    {
+        if ( !wptr.isNull() )
+            strongRefs << wptr.toStrongRef();
+    }
+    return strongRefs;
 }
 
 
