@@ -64,7 +64,6 @@ AudioControls::AudioControls( QWidget* parent )
     ui->artistTrackLabel->setFont( font );
     ui->artistTrackLabel->setElideMode( Qt::ElideMiddle );
     ui->artistTrackLabel->setType( QueryLabel::Track );
-    ui->artistTrackLabel->setJumpLinkVisible( true );
 
     font.setPointSize( TomahawkUtils::defaultFontSize() );
     ui->albumLabel->setFont( font );
@@ -74,7 +73,7 @@ AudioControls::AudioControls( QWidget* parent )
     queryLabelsPalette.setColor( QPalette::Foreground, Qt::black );
     ui->artistTrackLabel->setPalette( queryLabelsPalette );
     ui->albumLabel->setPalette( queryLabelsPalette );
-    
+
     font.setWeight( QFont::Normal );
     ui->timeLabel->setFont( font );
     ui->timeLeftLabel->setFont( font );
@@ -136,7 +135,6 @@ AudioControls::AudioControls( QWidget* parent )
     connect( ui->loveButton,       SIGNAL( clicked( bool ) ), SLOT( onLoveButtonClicked( bool ) ) );
     connect( ui->ownerButton,      SIGNAL( clicked() ),       SLOT( onOwnerButtonClicked() ) );
 
-    // <From AudioEngine>
     connect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), SLOT( onPlaybackLoading( Tomahawk::result_ptr ) ) );
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( onPlaybackStarted( Tomahawk::result_ptr ) ) );
     connect( AudioEngine::instance(), SIGNAL( paused() ), SLOT( onPlaybackPaused() ) );
@@ -148,6 +146,8 @@ AudioControls::AudioControls( QWidget* parent )
     connect( AudioEngine::instance(), SIGNAL( controlStateChanged() ), SLOT( onControlStateChanged() ) );
     connect( AudioEngine::instance(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ), SLOT( onRepeatModeChanged( Tomahawk::PlaylistModes::RepeatMode ) ) );
     connect( AudioEngine::instance(), SIGNAL( shuffleModeChanged( bool ) ), SLOT( onShuffleModeChanged( bool ) ) );
+
+    connect( ViewManager::instance(), SIGNAL( viewPageDestroyed() ), SLOT( onControlStateChanged() ) );
 
     ui->buttonAreaLayout->setSpacing( 0 );
     ui->stackedLayout->setSpacing( 0 );
@@ -216,6 +216,10 @@ AudioControls::onControlStateChanged()
 
     ui->prevButton->setEnabled( AudioEngine::instance()->canGoPrevious() );
     ui->nextButton->setEnabled( AudioEngine::instance()->canGoNext() );
+
+    // If the ViewManager doesn't know a page for the current interface, we can't offer the jump link
+    ui->artistTrackLabel->setJumpLinkVisible( AudioEngine::instance()->currentTrackPlaylist()
+                                                && ViewManager::instance()->pageForInterface( AudioEngine::instance()->currentTrackPlaylist() ) );
 }
 
 
@@ -239,7 +243,7 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
 
     ui->timeLabel->setText( TomahawkUtils::timeToString( 0 ) );
     ui->timeLeftLabel->setText( "-" + TomahawkUtils::timeToString( 0 ) );
-    
+
     m_sliderTimeLine.setDuration( duration );
     m_sliderTimeLine.setFrameRange( 0, duration );
     m_sliderTimeLine.setCurveShape( QTimeLine::LinearCurve );
@@ -298,9 +302,6 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
     ui->seekSlider->setValue( 0 );
     ui->seekSlider->setVisible( true );
     m_sliderTimeLine.stop();
-
-    // If the ViewManager doesn't know a page for the current interface, we can't offer the jump link
-    ui->artistTrackLabel->setJumpLinkVisible( ( ViewManager::instance()->pageForInterface( AudioEngine::instance()->currentTrackPlaylist() ) ) );
 
     onControlStateChanged();
 
