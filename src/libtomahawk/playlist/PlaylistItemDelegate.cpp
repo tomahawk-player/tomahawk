@@ -203,6 +203,7 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
         text = painter->fontMetrics().elidedText( lowerText, Qt::ElideRight, r.width() );
         painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, m_bottomOption );
     }
+
     painter->restore();
 }
 
