@@ -311,7 +311,7 @@ Servent::registerPeer( const Tomahawk::peerinfo_ptr& peerInfo )
 
     if ( peerInfo->type() == Tomahawk::PeerInfo::Local )
     {
-        peerInfoDebug(peerInfo) << "YAY, we need to establish the connection now.. thinking";
+        peerInfoDebug(peerInfo) << "we need to establish the connection now... thinking";
         if ( !connectedToSession( peerInfo->sipInfo().nodeId() ) )
         {
             connectToPeer( peerInfo );
@@ -336,17 +336,17 @@ Servent::registerPeer( const Tomahawk::peerinfo_ptr& peerInfo )
     else
     {
         SipInfo info;
+        QString peerId = peerInfo->id();
+        QString key = uuid();
+        ControlConnection* conn = new ControlConnection( this );
+
+        const QString& nodeid = Database::instance()->impl()->dbid();
+        conn->setName( peerInfo->contactId() );
+        conn->setId( nodeid );
+        conn->addPeerInfo( peerInfo );
+
         if ( visibleExternally() )
         {
-            QString peerId = peerInfo->id();
-            QString key = uuid();
-            ControlConnection* conn = new ControlConnection( this );
-
-            const QString& nodeid = Database::instance()->impl()->dbid();
-            conn->setName( peerInfo->contactId() );
-            conn->setId( nodeid );
-            conn->addPeerInfo( peerInfo );
-
             registerOffer( key, conn );
             info.setVisible( true );
             info.setHost( externalAddress() );
@@ -414,6 +414,8 @@ void Servent::handleSipInfo( const Tomahawk::peerinfo_ptr& peerInfo )
     else
     {
         tDebug() << Q_FUNC_INFO << "They are not visible, doing nothing atm";
+        if ( peerInfo->controlConnection() )
+            delete peerInfo->controlConnection();
     }
 }
 
@@ -714,10 +716,13 @@ Servent::connectToPeer( const peerinfo_ptr& peerInfo )
     SipInfo sipInfo = peerInfo->sipInfo();
 
     peerInfoDebug( peerInfo ) << "connectToPeer: search for already established connections to the same nodeid:" << m_controlconnections.count() << "connections";
+    if ( peerInfo->controlConnection() )
+        delete peerInfo->controlConnection();
 
     bool isDupe = false;
     ControlConnection* conn = 0;
     // try to find a ControlConnection with the same SipInfo, then we dont need to try to connect again
+
     foreach ( ControlConnection* c, m_controlconnections )
     {
         Q_ASSERT( c );
@@ -769,7 +774,6 @@ Servent::connectToPeer( const peerinfo_ptr& peerInfo )
     m["nodeid"]    = Database::instance()->impl()->dbid();
 
     peerInfoDebug(peerInfo) << "No match found, creating a new ControlConnection...";
-
     conn = new ControlConnection( this );
     conn->addPeerInfo( peerInfo );
     conn->setFirstMessage( m );
@@ -787,7 +791,7 @@ Servent::connectToPeer( const peerinfo_ptr& peerInfo )
 
 
 void
-Servent::connectToPeer( const QString& ha, int port, const QString &key, Connection* conn )
+Servent::connectToPeer( const QString& ha, int port, const QString& key, Connection* conn )
 {
     tDebug( LOGVERBOSE ) << "Servent::connectToPeer:" << ha << ":" << port
                          << thread() << QThread::currentThread();

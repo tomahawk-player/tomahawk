@@ -35,12 +35,13 @@ public:
     {
     }
 
-    SipInfoPrivate( const SipInfoPrivate& other ) : QSharedData( other ),
-        visible(other.visible),
-        host(other.host),
-        port(other.port),
-        nodeId(other.nodeId),
-        key(other.key)
+    SipInfoPrivate( const SipInfoPrivate& other )
+        : QSharedData( other )
+        , visible( other.visible )
+        , host( other.host )
+        , port( other.port )
+        , nodeId( other.nodeId )
+        , key( other.key )
     {
     }
     ~SipInfoPrivate() { }
@@ -93,10 +94,10 @@ SipInfo::clear()
 bool
 SipInfo::isValid() const
 {
-//    qDebug() << Q_FUNC_INFO << d->visible << d->host.hostName() << d->port << d->nodeId << d->key;
-    if( !d->visible.isNull() )
+//    tDebug() << Q_FUNC_INFO << d->visible << d->host << d->port << d->nodeId << d->key;
+    if ( !d->visible.isNull() )
     {
-        if(
+        if (
             // visible and all data available
             (  d->visible.toBool() && !d->host.isEmpty() && ( d->port > 0 ) && !d->nodeId.isNull() && !d->key.isNull() )
             // invisible and no data available
@@ -112,7 +113,7 @@ SipInfo::isValid() const
 void
 SipInfo::setVisible( bool visible )
 {
-    d->visible.setValue(visible);
+    d->visible.setValue( visible );
 }
 
 
@@ -195,7 +196,7 @@ SipInfo::toJson() const
     // build variant map
     QVariantMap m;
     m["visible"] = isVisible();
-    if( isVisible() )
+    if ( isVisible() )
     {
         m["ip"] = host();
         m["port"] = port();
@@ -227,7 +228,7 @@ SipInfo::fromJson( QString json )
     QVariantMap m = v.toMap();
 
     info.setVisible( m["visible"].toBool() );
-    if( m["visible"].toBool() )
+    if ( m["visible"].toBool() )
     {
         info.setHost( m["host"].toString() );
         info.setPort( m["port"].toInt() );
@@ -242,7 +243,7 @@ SipInfo::fromJson( QString json )
 QDebug
 operator<< ( QDebug dbg, const SipInfo& info )
 {
-    if( !info.isValid() )
+    if ( !info.isValid() )
         dbg.nospace() << "info is invalid";
     else
         dbg.nospace() << info.toJson();
@@ -250,7 +251,9 @@ operator<< ( QDebug dbg, const SipInfo& info )
     return dbg.maybeSpace();
 }
 
-bool operator==( const SipInfo& one, const SipInfo& two )
+
+bool
+operator==( const SipInfo& one, const SipInfo& two )
 {
     // check valid/invalid combinations first, so we don't try to access any invalid sipInfos (->assert)
     if ( ( one.isValid() && !two.isValid() ) || ( !one.isValid() && two.isValid() ) )
@@ -272,6 +275,7 @@ bool operator==( const SipInfo& one, const SipInfo& two )
     return false;
 }
 
+
 const QString
 SipInfo::debugString() const
 {
@@ -281,6 +285,5 @@ SipInfo::debugString() const
                       .arg( d->port )
                       .arg( d->nodeId )
                       .arg( d->key );
-
 }
 
