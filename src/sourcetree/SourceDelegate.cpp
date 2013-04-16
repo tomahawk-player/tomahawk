@@ -231,7 +231,7 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
     QString text = painter->fontMetrics().elidedText( name, Qt::ElideRight, textRect.width() );
     painter->drawText( textRect, text );
 
-    QColor descColor = QColor( "#8d8d8d" );
+    QColor descColor = option.palette.color( QPalette::HighlightedText ).lighter( 220 );
     if ( type == SourcesModel::ScriptCollection && //you cannot select a non-script collection anyway
          option.state.testFlag( QStyle::State_Selected ) )
     {
