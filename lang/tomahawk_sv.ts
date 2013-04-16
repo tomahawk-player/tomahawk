@@ -519,7 +519,7 @@ ansluta och strömma från dig?</translation>
 <context>
     <name>DatabaseCommand_ShareTrack</name>
     <message>
-        <location filename="../src/libtomahawk/database/DatabaseCommand_ShareTrack.cpp" line="101"/>
+        <location filename="../src/libtomahawk/database/DatabaseCommand_ShareTrack.cpp" line="111"/>
         <source>%1 recommended %2 by %3</source>
         <translation>%1 rekommenderade %2 med %3</translation>
     </message>
@@ -1128,13 +1128,13 @@ ansluta och strömma från dig?</translation>
         <translation>La till %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="203"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="205"/>
         <source>by &lt;b&gt;%1&lt;/b&gt;</source>
         <comment>e.g. by SomeArtist</comment>
         <translation>av &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="205"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="207"/>
         <source>by &lt;b&gt;%1&lt;/b&gt; on &lt;b&gt;%2&lt;/b&gt;</source>
         <comment>e.g. by SomeArtist on SomeAlbum</comment>
         <translation>av &lt;b&gt;%1&lt;/b&gt; på &lt;b&gt;%2&lt;/b&gt;</translation>
@@ -3316,39 +3316,44 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
 <context>
     <name>Tomahawk::Query</name>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="754"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="755"/>
         <source> and </source>
         <translation>och</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="762"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="763"/>
         <source>You</source>
         <translation>Du</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="764"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="765"/>
         <source>you</source>
         <translation>du</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="773"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="778"/>
         <source>and</source>
         <translation>och</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Query.cpp" line="773"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="778"/>
         <source>%n other(s)</source>
         <translation><numerusform>%n annan</numerusform><numerusform>%n andra</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Query.cpp" line="776"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="781"/>
         <source>%n people</source>
         <translation><numerusform>%n människor</numerusform><numerusform>%n människor</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="778"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="785"/>
         <source>loved this track</source>
         <translation>älskade denna låten</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/Query.cpp" line="787"/>
+        <source>sent you this track %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -3863,47 +3868,47 @@ Du kan skicka om ett synkat meddelande när som helst genom att skicka ett tweet
 <context>
     <name>ViewManager</name>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="94"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="95"/>
         <source>Inbox</source>
         <translation>Inkorg</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="95"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="96"/>
         <source>Listening suggestions from your friends</source>
         <translation>Lyssnar-rekommendationer från dina vänner</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="150"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="151"/>
         <source>This playlist is empty!</source>
         <translation>Spellistan är tom!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="350"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="351"/>
         <source>SuperCollection</source>
         <translation>Supersamling</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="351"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="352"/>
         <source>Combined libraries of all your online friends</source>
         <translation>Kombinerat bibliotek av alla dina vänner online</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="418"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="419"/>
         <source>Recently Played Tracks</source>
         <translation>Senast spelade spår</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="419"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="420"/>
         <source>Recently played tracks from all your friends</source>
         <translation>Alla dina vänners senast spelade spår</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="426"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="427"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>Tyvärr! Det gick inte hitta några nyligen spelade spår</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="454"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="455"/>
         <source>No listening suggestions here.</source>
         <translation>Det finns inga rekommendationer här.</translation>
     </message>

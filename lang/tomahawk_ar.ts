@@ -519,7 +519,7 @@ connect and stream from you?</source>
 <context>
     <name>DatabaseCommand_ShareTrack</name>
     <message>
-        <location filename="../src/libtomahawk/database/DatabaseCommand_ShareTrack.cpp" line="101"/>
+        <location filename="../src/libtomahawk/database/DatabaseCommand_ShareTrack.cpp" line="111"/>
         <source>%1 recommended %2 by %3</source>
         <translation>%1 أوصى %2 للفنان %3</translation>
     </message>
@@ -1128,13 +1128,13 @@ connect and stream from you?</source>
         <translation>أضيفت %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="203"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="205"/>
         <source>by &lt;b&gt;%1&lt;/b&gt;</source>
         <comment>e.g. by SomeArtist</comment>
         <translation>للفنان &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="205"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="207"/>
         <source>by &lt;b&gt;%1&lt;/b&gt; on &lt;b&gt;%2&lt;/b&gt;</source>
         <comment>e.g. by SomeArtist on SomeAlbum</comment>
         <translation>للفنان &lt;b&gt;%1&lt;/b&gt; في البوم &lt;b&gt;%2&lt;/b&gt;</translation>
@@ -3316,39 +3316,44 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::Query</name>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="754"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="755"/>
         <source> and </source>
         <translation> و </translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="762"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="763"/>
         <source>You</source>
         <translation>أنت</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="764"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="765"/>
         <source>you</source>
         <translation>أنت</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="773"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="778"/>
         <source>and</source>
         <translation>و</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Query.cpp" line="773"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="778"/>
         <source>%n other(s)</source>
         <translation><numerusform>%n أخرين</numerusform><numerusform>%n أخر</numerusform><numerusform>%n أخرين</numerusform><numerusform>%n أخرين</numerusform><numerusform>%n أخرين</numerusform><numerusform>%n أخرين</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Query.cpp" line="776"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="781"/>
         <source>%n people</source>
         <translation><numerusform>%n أشخاص</numerusform><numerusform>شخص %n</numerusform><numerusform>شخصين %n</numerusform><numerusform>%n أشخاص</numerusform><numerusform>%n أشخاص</numerusform><numerusform>%n أشخاص</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="778"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="785"/>
         <source>loved this track</source>
         <translation>أحببت هذه الأغنية</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/Query.cpp" line="787"/>
+        <source>sent you this track %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -3863,47 +3868,47 @@ You can re-send a sync message at any time simply by sending another tweet using
 <context>
     <name>ViewManager</name>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="94"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="95"/>
         <source>Inbox</source>
         <translation>البريد الوارد</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="95"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="96"/>
         <source>Listening suggestions from your friends</source>
         <translation>إقتراحات للإستماع من قبل اصدقاءك</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="150"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="151"/>
         <source>This playlist is empty!</source>
         <translation>هذه المجموعة فارغة!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="350"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="351"/>
         <source>SuperCollection</source>
         <translation>سوبر كولكشن</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="351"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="352"/>
         <source>Combined libraries of all your online friends</source>
         <translation>مكتبات مجمعة لكل اصحابك المتصلين</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="418"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="419"/>
         <source>Recently Played Tracks</source>
         <translation>الأغاني التي إستمعت إليها مؤخرا</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="419"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="420"/>
         <source>Recently played tracks from all your friends</source>
         <translation>جميع الأغاني التي استمع إليها أصدقائك مؤخرا</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="426"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="427"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>نعتذر، لم نستطيع إيجاد أغاني مسموعة مؤخرا!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="454"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="455"/>
         <source>No listening suggestions here.</source>
         <translation>لا إقتراحات للإستماع هنا.</translation>
     </message>

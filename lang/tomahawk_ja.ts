@@ -519,7 +519,7 @@ connect and stream from you?</source>
 <context>
     <name>DatabaseCommand_ShareTrack</name>
     <message>
-        <location filename="../src/libtomahawk/database/DatabaseCommand_ShareTrack.cpp" line="101"/>
+        <location filename="../src/libtomahawk/database/DatabaseCommand_ShareTrack.cpp" line="111"/>
         <source>%1 recommended %2 by %3</source>
         <translation type="unfinished"/>
     </message>
@@ -1128,13 +1128,13 @@ connect and stream from you?</source>
         <translation>%1を追加しました</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="203"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="205"/>
         <source>by &lt;b&gt;%1&lt;/b&gt;</source>
         <comment>e.g. by SomeArtist</comment>
         <translation>&lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="205"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="207"/>
         <source>by &lt;b&gt;%1&lt;/b&gt; on &lt;b&gt;%2&lt;/b&gt;</source>
         <comment>e.g. by SomeArtist on SomeAlbum</comment>
         <translation>&lt;b&gt;%1&lt;/b&gt;の&lt;b&gt;%2&lt;/b&gt;</translation>
@@ -3315,39 +3315,44 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::Query</name>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="754"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="755"/>
         <source> and </source>
         <translation>と</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="762"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="763"/>
         <source>You</source>
         <translation>あなた</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="764"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="765"/>
         <source>you</source>
         <translation>あなた</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="773"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="778"/>
         <source>and</source>
         <translation>と</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Query.cpp" line="773"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="778"/>
         <source>%n other(s)</source>
         <translation><numerusform>他に%n人</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Query.cpp" line="776"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="781"/>
         <source>%n people</source>
         <translation><numerusform>%n人</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Query.cpp" line="778"/>
+        <location filename="../src/libtomahawk/Query.cpp" line="785"/>
         <source>loved this track</source>
         <translation>このトラックをLoveしました</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/Query.cpp" line="787"/>
+        <source>sent you this track %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -3862,47 +3867,47 @@ Twitterを使っている友達にTomahawkを接続したいなら、ツイー�
 <context>
     <name>ViewManager</name>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="94"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="95"/>
         <source>Inbox</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="95"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="96"/>
         <source>Listening suggestions from your friends</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="150"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="151"/>
         <source>This playlist is empty!</source>
         <translation>このプレイリストには何も入っていません。</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="350"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="351"/>
         <source>SuperCollection</source>
         <translation>スーパーコレクション</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="351"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="352"/>
         <source>Combined libraries of all your online friends</source>
         <translation>オンラインの友達全員のライブラリ</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="418"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="419"/>
         <source>Recently Played Tracks</source>
         <translation>最近再生したトラック</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="419"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="420"/>
         <source>Recently played tracks from all your friends</source>
         <translation>友達の最近再生したトラック</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="426"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="427"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>最近の再生した項目が見つかりませんでした。</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="454"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="455"/>
         <source>No listening suggestions here.</source>
         <translation type="unfinished"/>
     </message>
