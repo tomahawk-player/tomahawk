@@ -35,7 +35,7 @@ class DLLEXPORT ItunesLoader : public QObject
     Q_OBJECT
 public:
     explicit ItunesLoader( const QString& input, QObject* parent = 0 );
-    ~iTunesLoader(){}
+    ~ItunesLoader(){}
 
 private:
     void parseTracks( const QVariantMap& tracks );

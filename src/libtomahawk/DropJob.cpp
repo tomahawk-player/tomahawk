@@ -698,7 +698,7 @@ DropJob::handleTrackUrls( const QString& urls )
 
     if ( urls.contains( "xml" ) && urls.contains( "iTunes" ) )
     {
-        new iTunesLoader( urls, this );
+        new ItunesLoader( urls, this );
     }
     else if ( urls.contains( "itunes.apple.com") )
     {

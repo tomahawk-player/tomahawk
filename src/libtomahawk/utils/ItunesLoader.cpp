@@ -24,7 +24,7 @@
 
 using namespace Tomahawk;
 
-ItunesLoader::ItunesLoader( const QString& input, QObject *parent)
+ItunesLoader::ItunesLoader( const QString& input, QObject *parent )
     : QObject(parent)
     , m_itunesLibFile( input )
 {
