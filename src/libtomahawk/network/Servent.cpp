@@ -414,8 +414,12 @@ void Servent::handleSipInfo( const Tomahawk::peerinfo_ptr& peerInfo )
     else
     {
         tDebug() << Q_FUNC_INFO << "They are not visible, doing nothing atm";
-        if ( peerInfo->controlConnection() )
-            delete peerInfo->controlConnection();
+
+        if ( !visibleExternally() )
+        {
+            if ( peerInfo->controlConnection() )
+                delete peerInfo->controlConnection();
+        }
     }
 }
 
