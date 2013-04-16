@@ -107,7 +107,6 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 #endif
     , ui( new Ui::TomahawkWindow )
     , m_searchWidget( 0 )
-    , m_audioControls( new AudioControls( this ) )
     , m_trayIcon( new TomahawkTrayIcon( this ) )
     , m_settingsDialog( 0 )
     , m_audioRetryCounter( 0 )
@@ -115,6 +114,8 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
 
     ViewManager* vm = new ViewManager( this );
+    m_audioControls = new AudioControls( this );
+
     connect( vm, SIGNAL( showQueueRequested() ), SLOT( showQueue() ) );
     connect( vm, SIGNAL( hideQueueRequested() ), SLOT( hideQueue() ) );
     connect( APP, SIGNAL( tomahawkLoaded() ), vm, SLOT( setTomahawkLoaded() ) ); // Pass loaded signal into libtomahawk so components in there can connect to ViewManager
