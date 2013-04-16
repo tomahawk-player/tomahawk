@@ -415,6 +415,7 @@ TomahawkWindow::setupSideBar()
 
     ui->splitter->addWidget( sidebarWidget );
     ui->splitter->addWidget( ViewManager::instance()->widget() );
+    ui->splitter->setCollapsible( 0, false );
     ui->splitter->setCollapsible( 1, false );
 
     ActionCollection::instance()->getAction( "showOfflineSources" )
