@@ -137,6 +137,9 @@ private:
     void removeDuplicates();
     void removeRemoteSources();
 
+    static bool validateLocalFile( const QString& path, const QString& suffix = QString() );
+    static bool validateLocalFiles( const QString& paths, const QString& suffix = QString() );
+
     int m_queryCount;
     bool m_allowDuplicates;
     bool m_onlyLocal;

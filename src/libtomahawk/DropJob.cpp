@@ -20,6 +20,7 @@
  */
 
 #include "DropJob.h"
+#include <QFileInfo>
 
 #include "Artist.h"
 #include "Album.h"
@@ -113,13 +114,15 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
 
 
     const QString url = data->data( "text/plain" );
+    const QString urlList = data->data( "text/uri-list" ).trimmed();
+
     if ( acceptedType.testFlag( Playlist ) )
     {
-        if ( url.contains( "xml" ) && url.contains( "iTunes") )
-            return true;
+        if ( url.contains( "xml" ) && url.contains( "iTunes" ) )
+            return validateLocalFile( url, "xml" );
 
-        if (  data->data( "text/uri-list" ).contains( "xml" ) &&  data->data( "text/uri-list" ).contains( "iTunes") )
-            return true;
+        if (  urlList.contains( "xml" ) &&  urlList.contains( "iTunes" ) )
+            return validateLocalFiles( urlList, "xml" );
 
         if ( url.contains( "xspf" ) )
             return true;
@@ -127,10 +130,10 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
         if ( url.contains( "m3u" ) )
             return true;
 
-        if ( data->data( "text/uri-list" ).contains( "xspf" ) )
+        if ( urlList.contains( "m3u" ) )
             return true;
 
-        if ( data->data( "text/uri-list" ).contains( "m3u" ) )
+        if ( urlList.contains( "xspf" ) )
             return true;
 
         // Not the most elegant
@@ -152,7 +155,7 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
         if ( url.contains( "m3u" ) )
             return true;
 
-        if ( data->data( "text/uri-list" ).contains( "m3u" ) )
+        if ( urlList.contains( "m3u" ) )
             return true;
 
         if ( url.contains( "itunes" ) && url.contains( "album" ) ) // YES itunes is fucked up and song links have album/ in the url.
@@ -206,21 +209,44 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
 
 
 bool
+DropJob::validateLocalFile( const QString &path, const QString &suffix )
+{
+    QFileInfo info( QUrl::fromUserInput( path ).toLocalFile() );
+    if ( suffix.isEmpty() )
+        return info.exists();
+    return ( info.exists() && info.suffix() == suffix );
+}
+
+
+bool
+DropJob::validateLocalFiles(const QString &paths, const QString &suffix)
+{
+    QStringList filePaths = paths.split( QRegExp( "\\s+" ), QString::SkipEmptyParts );
+    for ( QStringList::iterator it = filePaths.begin(); it != filePaths.end(); ++it )
+        if ( !validateLocalFile( *it, suffix ) )
+            filePaths.erase( it );
+    return !filePaths.isEmpty();
+}
+
+
+bool
 DropJob::isDropType( DropJob::DropType desired, const QMimeData* data )
 {
     const QString url = data->data( "text/plain" );
+    const QString urlList = data->data( "text/uri-list" ).trimmed();
+
     if ( desired == Playlist )
     {
-        if ( url.contains( "xml" ) && url.contains( "iTunes") )
+        if ( url.contains( "xml" ) && url.contains( "iTunes" ) )
+            return validateLocalFile( url, "xml" );
+
+        if ( urlList.contains( "xml" ) && urlList.contains( "iTunes" ) )
+            return validateLocalFiles( urlList, "xml" );
+
+        if( url.contains( "xspf" ) || urlList.contains( "xspf" ) )
             return true;
 
-        if (  data->data( "text/uri-list" ).contains( "xml" ) &&  data->data( "text/uri-list" ).contains( "iTunes") )
-            return true;
-
-        if( url.contains( "xspf" ) || data->data( "text/uri-list").contains( "xspf" ) )
-            return true;
-
-        if( url.contains( "m3u" ) || data->data( "text/uri-list").contains( "m3u" ) )
+        if( url.contains( "m3u" ) || urlList.contains( "m3u" ) )
             return true;
 
         // Not the most elegant
@@ -698,7 +724,8 @@ DropJob::handleTrackUrls( const QString& urls )
 
     if ( urls.contains( "xml" ) && urls.contains( "iTunes" ) )
     {
-        new ItunesLoader( urls, this );
+        QStringList paths = urls.split( QRegExp( "\\s+" ), QString::SkipEmptyParts );
+        new ItunesLoader( paths.first(), this );
     }
     else if ( urls.contains( "itunes.apple.com") )
     {
