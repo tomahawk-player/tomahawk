@@ -53,8 +53,10 @@ public:
     virtual Tomahawk::result_ptr previousResult() const;
 
     virtual qint64 siblingIndex( int itemsAway, qint64 rootIndex = -1 ) const = 0;
+    virtual qint64 siblingResultIndex( int itemsAway, qint64 rootIndex = -1 ) const;
     virtual Tomahawk::result_ptr siblingResult( int itemsAway, qint64 rootIndex = -1 ) const;
-
+    virtual Tomahawk::result_ptr setSiblingResult( int itemsAway, qint64 rootIndex = -1 );
+    
     virtual Tomahawk::result_ptr resultAt( qint64 index ) const = 0;
     virtual Tomahawk::query_ptr queryAt( qint64 index ) const = 0;
     virtual qint64 indexOfResult( const Tomahawk::result_ptr& result ) const = 0;
