@@ -58,8 +58,8 @@ PlaylistInterface::nextResult() const
 }
 
 
-Tomahawk::result_ptr
-PlaylistInterface::siblingResult( int itemsAway, qint64 rootIndex ) const
+qint64
+PlaylistInterface::siblingResultIndex( int itemsAway, qint64 rootIndex ) const
 {
     qint64 idx = siblingIndex( itemsAway, rootIndex );
     QList< qint64 > safetyCheck;
@@ -73,10 +73,47 @@ PlaylistInterface::siblingResult( int itemsAway, qint64 rootIndex ) const
 
         if ( query && query->playable() )
         {
-            return query->results().first();
+            return idx;
         }
 
         idx = siblingIndex( itemsAway < 0 ? -1 : 1, idx );
+    }
+
+    return -1;
+}
+
+
+Tomahawk::result_ptr
+PlaylistInterface::siblingResult( int itemsAway, qint64 rootIndex ) const
+{
+    qint64 idx = siblingResultIndex( itemsAway, rootIndex );
+    if ( idx >= 0 )
+    {
+        Tomahawk::query_ptr query = queryAt( idx );
+
+        if ( query && query->playable() )
+        {
+            return query->results().first();
+        }
+    }
+
+    return Tomahawk::result_ptr();
+}
+
+
+Tomahawk::result_ptr
+PlaylistInterface::setSiblingResult( int itemsAway, qint64 rootIndex )
+{
+    qint64 idx = siblingResultIndex( itemsAway, rootIndex );
+    if ( idx >= 0 )
+    {
+        Tomahawk::query_ptr query = queryAt( idx );
+
+        if ( query && query->playable() )
+        {
+            setCurrentIndex( idx );
+            return query->results().first();
+        }
     }
 
     return Tomahawk::result_ptr();

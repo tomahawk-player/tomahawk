@@ -558,7 +558,7 @@ AudioEngine::loadPreviousTrack()
     Tomahawk::result_ptr result;
     if ( m_playlist.data()->previousResult() )
     {
-        result = m_playlist.data()->previousResult();
+        result = m_playlist.data()->setSiblingResult( -1 );
         m_currentTrackPlaylist = m_playlist;
     }
 
@@ -599,7 +599,7 @@ AudioEngine::loadNextTrack()
 
         if ( m_playlist.data()->nextResult() )
         {
-            result = m_playlist.data()->nextResult();
+            result = m_playlist.data()->setSiblingResult( 1 );
             m_currentTrackPlaylist = m_playlist;
         }
     }
@@ -1004,7 +1004,7 @@ AudioEngine::setCurrentTrack( const Tomahawk::result_ptr& result )
 
     if ( result )
     {
-        if ( m_playlist )
+        if ( m_playlist && m_playlist->currentItem() != result )
         {
             m_playlist->setCurrentIndex( m_playlist->indexOfResult( result ) );
         }
