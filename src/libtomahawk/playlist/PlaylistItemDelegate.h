@@ -47,7 +47,10 @@ protected:
     void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item ) const;
 
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
-    QWidget* createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+    bool editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
+
+    QPersistentModelIndex hoveringOver() const { return m_hoveringOver; }
+    void setInfoButtonRect( const QPersistentModelIndex& index, const QRect& rect ) const { m_infoButtonRects[ index ] = rect; }
 
 private:
     void paintDetailed( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
@@ -55,6 +58,9 @@ private:
 
     QTextOption m_topOption;
     QTextOption m_bottomOption;
+
+    mutable QHash< QPersistentModelIndex, QRect > m_infoButtonRects;
+    QPersistentModelIndex m_hoveringOver;
 
     TrackView* m_view;
     PlayableProxyModel* m_model;
