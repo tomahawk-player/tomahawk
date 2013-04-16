@@ -97,7 +97,6 @@ PlayableProxyModelPlaylistInterface::onCurrentIndexChanged()
 void
 PlayableProxyModelPlaylistInterface::setCurrentIndex( qint64 index )
 {
-    Q_ASSERT( m_proxyModel );
     if ( m_proxyModel.isNull() )
         return;
 
