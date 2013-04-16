@@ -99,16 +99,6 @@ PlaylistChartItemDelegate::sizeHint( const QStyleOptionViewItem& option, const Q
 }
 
 
-QWidget*
-PlaylistChartItemDelegate::createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const
-{
-    Q_UNUSED( parent );
-    Q_UNUSED( option );
-    Q_UNUSED( index );
-    return 0;
-}
-
-
 void
 PlaylistChartItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item ) const
 {
@@ -143,7 +133,7 @@ PlaylistChartItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
     painter->save();
     {
         QRect r = opt.rect.adjusted( 4, 6, 0, -6 );
-        
+
         // Paint Now Playing Speaker Icon
         if ( item->isPlaying() )
         {
