@@ -234,7 +234,7 @@ TreeView::onItemActivated( const QModelIndex& index )
     PlayableItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( index ) );
     if ( item )
     {
-        if ( !item->artist().isNull() )
+/*        if ( !item->artist().isNull() )
         {
             ViewManager::instance()->show( item->artist() );
         }
@@ -242,7 +242,7 @@ TreeView::onItemActivated( const QModelIndex& index )
         {
             ViewManager::instance()->show( item->album() );
         }
-        else if ( !item->result().isNull() && item->result()->isOnline() )
+        else */ if ( !item->result().isNull() && item->result()->isOnline() )
         {
             AudioEngine::instance()->playItem( m_proxyModel->playlistInterface(), item->result() );
         }
