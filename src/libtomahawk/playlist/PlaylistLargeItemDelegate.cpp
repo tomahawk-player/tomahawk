@@ -190,8 +190,31 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         smallFont.setPointSize( TomahawkUtils::defaultFontSize() - 1 );
 
         r.adjust( pixmapRect.width() + 12, 1, - 16, 0 );
-        QRect leftRect = r.adjusted( 0, 0, -48, 0 );
         QRect rightRect = r.adjusted( r.width() - smallBoldFontMetrics.width( TomahawkUtils::timeToString( duration ) ), 0, 0, 0 );
+        QRect leftRect = r.adjusted( 0, 0, -( rightRect.width() + 8 ), 0 );
+
+        const int sourceIconSize = avatarRect.width() - 6;
+
+        if ( hoveringOver() == index && !index.data().toString().isEmpty() && index.column() == 0 )
+        {
+            const QPixmap infoIcon = TomahawkUtils::defaultPixmap( TomahawkUtils::InfoIcon, TomahawkUtils::Original, QSize( sourceIconSize, sourceIconSize ) );
+            QRect arrowRect = QRect( rightRect.right() - sourceIconSize, r.center().y() - sourceIconSize / 2, infoIcon.width(), infoIcon.height() );
+            painter->drawPixmap( arrowRect, infoIcon );
+
+            setInfoButtonRect( index, arrowRect );
+            rightRect.moveLeft( rightRect.left() - infoIcon.width() - 8 );
+            leftRect.adjust( 0, 0, -( infoIcon.width() + 8 ), 0 );
+        }
+        else if ( q->numResults() && !q->results().first()->sourceIcon( TomahawkUtils::RoundedCorners, QSize( sourceIconSize, sourceIconSize ) ).isNull() )
+        {
+            const QPixmap sourceIcon = q->results().first()->sourceIcon( TomahawkUtils::RoundedCorners, QSize( sourceIconSize, sourceIconSize ) );
+            painter->setOpacity( 0.8 );
+            painter->drawPixmap( QRect( rightRect.right() - sourceIconSize, r.center().y() - sourceIconSize / 2, sourceIcon.width(), sourceIcon.height() ), sourceIcon );
+            painter->setOpacity( 1.0 );
+
+            rightRect.moveLeft( rightRect.left() - sourceIcon.width() - 8 );
+            leftRect.adjust( 0, 0, -( sourceIcon.width() + 8 ), 0 );
+        }
 
         painter->setFont( boldFont );
         QString text = painter->fontMetrics().elidedText( track, Qt::ElideRight, leftRect.width() );
@@ -207,7 +230,8 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         textDoc.setDefaultFont( painter->font() );
         textDoc.setDefaultTextOption( m_topOption );
 
-        drawRichText( painter, opt, leftRect.adjusted( 0, boldFontMetrics.height() + 1, 0, 0 ), Qt::AlignTop, textDoc );
+        if ( textDoc.idealWidth() <= leftRect.width() )
+            drawRichText( painter, opt, leftRect.adjusted( 0, boldFontMetrics.height() + 1, 0, 0 ), Qt::AlignTop, textDoc );
 
         if ( !( option.state & QStyle::State_Selected || item->isPlaying() ) )
             painter->setPen( Qt::gray );
@@ -221,16 +245,6 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
             textDoc.setHtml( item->query()->socialActionDescription( "Love", Query::Short ) );
 
         drawRichText( painter, opt, leftRect, Qt::AlignBottom, textDoc );
-
-        const int sourceIconSize = avatarRect.width() - 6;
-        if ( q->numResults() && !q->results().first()->sourceIcon( TomahawkUtils::RoundedCorners, QSize( sourceIconSize, sourceIconSize ) ).isNull() )
-        {
-            const QPixmap sourceIcon = q->results().first()->sourceIcon( TomahawkUtils::RoundedCorners, QSize( sourceIconSize, sourceIconSize ) );
-            painter->setOpacity( 0.8 );
-            painter->drawPixmap( QRect( rightRect.right() - sourceIconSize, r.center().y() - sourceIconSize / 2, sourceIcon.width(), sourceIcon.height() ), sourceIcon );
-            painter->setOpacity( 1.0 );
-            rightRect.moveLeft( rightRect.left() - sourceIcon.width() - 8 );
-        }
 
         if ( duration > 0 )
         {

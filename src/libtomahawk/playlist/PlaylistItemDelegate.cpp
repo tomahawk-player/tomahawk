@@ -21,10 +21,12 @@
 
 #include <QApplication>
 #include <QPainter>
+#include <QMouseEvent>
 
 #include "Query.h"
 #include "Result.h"
 #include "Artist.h"
+#include "Album.h"
 #include "Source.h"
 #include "SourceList.h"
 
@@ -33,6 +35,7 @@
 #include "PlayableProxyModel.h"
 #include "TrackView.h"
 #include "ViewHeader.h"
+#include "ViewManager.h"
 
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
@@ -79,16 +82,6 @@ PlaylistItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModel
     }
 
     return size;
-}
-
-
-QWidget*
-PlaylistItemDelegate::createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const
-{
-    Q_UNUSED( parent );
-    Q_UNUSED( option );
-    Q_UNUSED( index );
-    return 0;
 }
 
 
@@ -228,7 +221,7 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
     opt.text.clear();
     qApp->style()->drawControl( QStyle::CE_ItemViewItem, &opt, painter );
 
-    if ( m_view->hoveredIndex().row() == index.row() && m_view->hoveredIndex().column() == index.column() && !index.data().toString().isEmpty() &&
+    if ( m_hoveringOver == index && !index.data().toString().isEmpty() &&
        ( index.column() == PlayableModel::Artist || index.column() == PlayableModel::Album || index.column() == PlayableModel::Track ) )
     {
         opt.rect.setWidth( opt.rect.width() - opt.rect.height() - 2 );
@@ -236,6 +229,8 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
 
         QPixmap infoIcon = TomahawkUtils::defaultPixmap( TomahawkUtils::InfoIcon, TomahawkUtils::Original, arrowRect.size() );
         painter->drawPixmap( arrowRect, infoIcon );
+
+        m_infoButtonRects[ index ] = arrowRect;
     }
 
     painter->save();
@@ -288,4 +283,101 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
     }
 
     painter->restore();
+}
+
+
+bool
+PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index )
+{
+    Q_UNUSED( model );
+    Q_UNUSED( option );
+
+    if ( event->type() != QEvent::MouseButtonRelease &&
+         event->type() != QEvent::MouseMove &&
+         event->type() != QEvent::MouseButtonPress &&
+         event->type() != QEvent::Leave )
+        return false;
+
+    bool hoveringInfo = false;
+    if ( m_infoButtonRects.contains( index ) )
+    {
+        const QRect infoRect = m_infoButtonRects[ index ];
+        const QMouseEvent* ev = static_cast< QMouseEvent* >( event );
+        hoveringInfo = infoRect.contains( ev->pos() );
+    }
+
+    if ( event->type() == QEvent::MouseMove )
+    {
+        if ( hoveringInfo )
+            m_view->setCursor( Qt::PointingHandCursor );
+        else
+            m_view->setCursor( Qt::ArrowCursor );
+
+        if ( m_hoveringOver != index || ( !hoveringInfo && m_hoveringOver.isValid() ) )
+        {
+            emit updateIndex( m_hoveringOver );
+            m_hoveringOver = index;
+            emit updateIndex( index );
+        }
+
+        event->accept();
+        return true;
+    }
+
+    // reset mouse cursor. we switch to a pointing hand cursor when hovering an info button
+    m_view->setCursor( Qt::ArrowCursor );
+
+    if ( hoveringInfo )
+    {
+        if ( event->type() == QEvent::MouseButtonRelease )
+        {
+            PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
+            if ( !item )
+                return false;
+
+            if ( m_model->style() != PlayableProxyModel::Detailed )
+            {
+                if ( item->query() )
+                    ViewManager::instance()->show( item->query()->displayQuery() );
+            }
+            else
+            {
+                switch ( index.column() )
+                {
+                    case PlayableModel::Artist:
+                    {
+                        ViewManager::instance()->show( Artist::get( item->query()->displayQuery()->artist() ) );
+                        break;
+                    }
+
+                    case PlayableModel::Album:
+                    {
+                        artist_ptr artist = Artist::get( item->query()->displayQuery()->artist() );
+                        ViewManager::instance()->show( Album::get( artist, item->query()->displayQuery()->album() ) );
+                        break;
+                    }
+
+                    case PlayableModel::Track:
+                    {
+                        ViewManager::instance()->show( item->query()->displayQuery() );
+                        break;
+                    }
+
+                    default:
+                        break;
+                }
+            }
+
+            event->accept();
+            return true;
+        }
+        else if ( event->type() == QEvent::MouseButtonPress )
+        {
+            // Stop the whole item from having a down click action as we just want the info button to be clicked
+            event->accept();
+            return true;
+        }
+    }
+
+    return false;
 }
