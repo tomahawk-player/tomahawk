@@ -268,7 +268,8 @@ TreeItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const Q
 
         if ( m_hoveringOver != index )
         {
-            emit updateIndex( m_hoveringOver );
+            PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
+            item->requestRepaint();
             m_hoveringOver = index;
             emit updateIndex( m_hoveringOver );
         }
