@@ -1,4 +1,11 @@
 Version 0.7.0:
+    * Improved peer and account handling.
+    * JavaScript Resolvers can now expose collections.
+    * Introduced bundle system for JavaScript Resolvers, called "axes".
+    * Fixed playback-loop caused by duplicate tracks in a playlist.
+    * Improved spotify protocol handling.
+    * Added "Append to Playlist" context menu item.
+    * (Linux) Fixed grid issues with GTK-styles.
 
 Version 0.6.1:
     * Improved stability.
