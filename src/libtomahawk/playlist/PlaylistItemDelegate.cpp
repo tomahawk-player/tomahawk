@@ -316,7 +316,8 @@ PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, con
 
         if ( m_hoveringOver != index )
         {
-            emit updateIndex( m_hoveringOver );
+            PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
+            item->requestRepaint();
             m_hoveringOver = index;
             emit updateIndex( m_hoveringOver );
         }
