@@ -53,6 +53,7 @@ public:
     void setIsPlaying( bool b ) { m_isPlaying = b; emit dataChanged(); }
     bool fetchingMore() const { return m_fetchingMore; }
     void setFetchingMore( bool b ) { m_fetchingMore = b; }
+    void requestRepaint() { emit dataChanged(); }
 
     QString name() const;
     QString artistName() const;
