@@ -43,7 +43,7 @@ using namespace Tomahawk;
 
 
 PlaylistChartItemDelegate::PlaylistChartItemDelegate( TrackView* parent, PlayableProxyModel* proxy )
-    : QStyledItemDelegate( (QObject*)parent )
+    : PlaylistItemDelegate( parent, proxy )
     , m_view( parent )
     , m_model( proxy )
 {
@@ -59,11 +59,8 @@ PlaylistChartItemDelegate::PlaylistChartItemDelegate( TrackView* parent, Playabl
     m_bottomOption = QTextOption( Qt::AlignBottom );
     m_bottomOption.setWrapMode( QTextOption::NoWrap );
 
-    connect( this, SIGNAL( updateIndex( QModelIndex ) ), parent, SLOT( update( QModelIndex ) ) );
-
-    connect( m_model, SIGNAL( modelReset() ), this, SLOT( modelChanged() ) );
-    if ( PlaylistView* plView = qobject_cast< PlaylistView* >( parent ) )
-        connect( plView, SIGNAL( modelChanged() ), this, SLOT( modelChanged() ) );
+    connect( proxy, SIGNAL( modelReset() ), SLOT( modelChanged() ) );
+    connect( parent, SIGNAL( modelChanged() ), SLOT( modelChanged() ) );
 }
 
 
@@ -96,15 +93,6 @@ PlaylistChartItemDelegate::sizeHint( const QStyleOptionViewItem& option, const Q
     size.setHeight( rowHeight * stretch );
 
     return size;
-}
-
-
-void
-PlaylistChartItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item ) const
-{
-    initStyleOption( option, index );
-
-    TomahawkUtils::prepareStyleOption( option, index, item );
 }
 
 
@@ -204,7 +192,29 @@ PlaylistChartItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         painter->drawPixmap( pixmapRect, pixmap );
 
         r.adjust( pixmapRect.width() + figureRect.width() + 18, 1, -28, 0 );
-        QRect leftRect = r.adjusted( 0, 0, -durationFontMetrics.width( TomahawkUtils::timeToString( duration ) ) - 8, 0 );
+        QRect rightRect = r.adjusted( r.width() - durationFontMetrics.width( TomahawkUtils::timeToString( duration ) ), 0, 0, 0 );
+        QRect leftRect = r.adjusted( 0, 0, -( rightRect.width() + 8 ), 0 );
+
+/*        const int sourceIconSize = r.height();
+
+        if ( hoveringOver() == index && index.column() == 0 )
+        {
+            const QPixmap infoIcon = TomahawkUtils::defaultPixmap( TomahawkUtils::InfoIcon, TomahawkUtils::Original, QSize( sourceIconSize, sourceIconSize ) );
+            QRect arrowRect = QRect( rightRect.right() - sourceIconSize, r.center().y() - sourceIconSize / 2, infoIcon.width(), infoIcon.height() );
+            painter->drawPixmap( arrowRect, infoIcon );
+
+            setInfoButtonRect( index, arrowRect );
+            rightRect.moveLeft( rightRect.left() - infoIcon.width() - 8 );
+            leftRect.adjust( 0, 0, -( infoIcon.width() + 8 ), 0 );
+        }
+        else if ( q->numResults() && !q->results().first()->sourceIcon( TomahawkUtils::RoundedCorners, QSize( sourceIconSize, sourceIconSize ) ).isNull() )
+        {
+            const QPixmap sourceIcon = q->results().first()->sourceIcon( TomahawkUtils::RoundedCorners, QSize( sourceIconSize, sourceIconSize ) );
+            painter->setOpacity( 0.8 );
+            painter->drawPixmap( QRect( rightRect.right() - sourceIconSize, r.center().y() - sourceIconSize / 2, sourceIcon.width(), sourceIcon.height() ), sourceIcon );
+            painter->setOpacity( 1.0 );
+            rightRect.moveLeft( rightRect.left() - sourceIcon.width() - 8 );
+        }*/
 
         painter->setFont( boldFont );
         QString text = painter->fontMetrics().elidedText( track, Qt::ElideRight, leftRect.width() );
@@ -216,10 +226,9 @@ PlaylistChartItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
 
         if ( duration > 0 )
         {
+            painter->setPen( opt.palette.text().color() );
             painter->setFont( durationFont );
-            QRect rightRect = r.adjusted( r.width() - durationFontMetrics.width( TomahawkUtils::timeToString( duration ) ), 0, 0, 0 );
-            text = painter->fontMetrics().elidedText( TomahawkUtils::timeToString( duration ), Qt::ElideRight, rightRect.width() );
-            painter->drawText( rightRect, text, m_centerRightOption );
+            painter->drawText( rightRect, TomahawkUtils::timeToString( duration ), m_centerRightOption );
         }
     }
     painter->restore();
@@ -229,7 +238,8 @@ PlaylistChartItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
 void
 PlaylistChartItemDelegate::doUpdateIndex( const QPersistentModelIndex& idx )
 {
-    emit updateIndex( idx );
+    if ( idx.isValid() )
+        emit updateIndex( idx );
 }
 
 
