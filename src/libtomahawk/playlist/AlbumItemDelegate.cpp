@@ -119,21 +119,28 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
 
         painter->setFont( boldFont );
         painter->setPen( option.palette.text().color().lighter( 450 ) );
-        
+
         QRect figureRect = r.adjusted( 4, 0, 0, 0 );
         figureRect.setWidth( QFontMetrics( painter->font() ).width( "888" ) );
         painter->drawText( figureRect, QString::number( index.row() + 1 ), QTextOption( Qt::AlignCenter ) );
 
         r.adjust( figureRect.width() + 12, 0, 0, 0 );
-        QRect leftRect = r.adjusted( 0, 0, -48, 0 );
         QRect rightRect = r.adjusted( r.width() - smallBoldFontMetrics.width( TomahawkUtils::timeToString( duration ) ), 0, 0, 0 );
-
-        QString text = painter->fontMetrics().elidedText( track, Qt::ElideRight, leftRect.width() );
-        painter->setPen( opt.palette.text().color() );
-        painter->drawText( leftRect, text, m_centerOption );
+        QRect leftRect = r.adjusted( 0, 0, -( rightRect.width() + 8 ), 0 );
 
         const int sourceIconSize = r.height();
-        if ( q->numResults() && !q->results().first()->sourceIcon( TomahawkUtils::RoundedCorners, QSize( sourceIconSize, sourceIconSize ) ).isNull() )
+
+        if ( hoveringOver() == index && index.column() == 0 )
+        {
+            const QPixmap infoIcon = TomahawkUtils::defaultPixmap( TomahawkUtils::InfoIcon, TomahawkUtils::Original, QSize( sourceIconSize, sourceIconSize ) );
+            QRect arrowRect = QRect( rightRect.right() - sourceIconSize, r.center().y() - sourceIconSize / 2, infoIcon.width(), infoIcon.height() );
+            painter->drawPixmap( arrowRect, infoIcon );
+
+            setInfoButtonRect( index, arrowRect );
+            rightRect.moveLeft( rightRect.left() - infoIcon.width() - 8 );
+            leftRect.adjust( 0, 0, -( infoIcon.width() + 8 ), 0 );
+        }
+        else if ( q->numResults() && !q->results().first()->sourceIcon( TomahawkUtils::RoundedCorners, QSize( sourceIconSize, sourceIconSize ) ).isNull() )
         {
             const QPixmap sourceIcon = q->results().first()->sourceIcon( TomahawkUtils::RoundedCorners, QSize( sourceIconSize, sourceIconSize ) );
             painter->setOpacity( 0.8 );
@@ -141,6 +148,10 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
             painter->setOpacity( 1.0 );
             rightRect.moveLeft( rightRect.left() - sourceIcon.width() - 8 );
         }
+
+        QString text = painter->fontMetrics().elidedText( track, Qt::ElideRight, leftRect.width() );
+        painter->setPen( opt.palette.text().color() );
+        painter->drawText( leftRect, text, m_centerOption );
 
         if ( duration > 0 )
         {

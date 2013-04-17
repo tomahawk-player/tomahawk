@@ -19,9 +19,9 @@
 #ifndef PLAYLISTCHARTITEMDELEGATE_H
 #define PLAYLISTCHARTITEMDELEGATE_H
 
-#include <QStyledItemDelegate>
 #include <QTextOption>
 
+#include "PlaylistItemDelegate.h"
 #include "DllMacro.h"
 #include "Typedefs.h"
 
@@ -35,36 +35,32 @@ class PlayableItem;
 class PlayableProxyModel;
 class TrackView;
 
-class DLLEXPORT PlaylistChartItemDelegate : public QStyledItemDelegate
+class DLLEXPORT PlaylistChartItemDelegate : public PlaylistItemDelegate
 {
 Q_OBJECT
 
 public:
     PlaylistChartItemDelegate( TrackView* parent = 0, PlayableProxyModel* proxy = 0 );
 
-signals:
-    void updateIndex( const QModelIndex& idx );
+    virtual QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
 protected:
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
-    QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
 private slots:
-    void modelChanged();
     void doUpdateIndex( const QPersistentModelIndex& idx );
+    void modelChanged();
 
 private:
-    void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item ) const;
-
     QTextOption m_topOption;
     QTextOption m_centerOption;
     QTextOption m_centerRightOption;
     QTextOption m_bottomOption;
 
+    mutable QHash< QPersistentModelIndex, QSharedPointer< Tomahawk::PixmapDelegateFader > > m_pixmaps;
+
     TrackView* m_view;
     PlayableProxyModel* m_model;
-
-    mutable QHash< QPersistentModelIndex, QSharedPointer< Tomahawk::PixmapDelegateFader > > m_pixmaps;
 };
 
 #endif // PLAYLISTCHARTITEMDELEGATE_H
