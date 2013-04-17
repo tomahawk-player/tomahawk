@@ -17,8 +17,8 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PLAYLISTMANAGER_H
-#define PLAYLISTMANAGER_H
+#ifndef VIEWMANAGER_H
+#define VIEWMANAGER_H
 
 #include <QObject>
 #include <QHash>
@@ -208,4 +208,4 @@ private:
     static ViewManager* s_instance;
 };
 
-#endif // PLAYLISTMANAGER_H
+#endif // VIEWMANAGER_H
