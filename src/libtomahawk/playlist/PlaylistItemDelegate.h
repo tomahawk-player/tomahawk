@@ -40,6 +40,9 @@ public:
 
     virtual QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
+public slots:
+    void resetHoverIndex();
+
 signals:
     void updateIndex( const QModelIndex& idx );
 

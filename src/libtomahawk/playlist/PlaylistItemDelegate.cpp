@@ -314,11 +314,11 @@ PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, con
         else
             m_view->setCursor( Qt::ArrowCursor );
 
-        if ( m_hoveringOver != index || ( !hoveringInfo && m_hoveringOver.isValid() ) )
+        if ( m_hoveringOver != index )
         {
             emit updateIndex( m_hoveringOver );
             m_hoveringOver = index;
-            emit updateIndex( index );
+            emit updateIndex( m_hoveringOver );
         }
 
         event->accept();
@@ -381,4 +381,12 @@ PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, con
     }
 
     return false;
+}
+
+
+void
+PlaylistItemDelegate::resetHoverIndex()
+{
+    m_hoveringOver = QModelIndex();
+    m_infoButtonRects.clear();
 }

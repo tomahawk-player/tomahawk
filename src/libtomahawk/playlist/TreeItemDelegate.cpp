@@ -186,16 +186,13 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
         opt.palette.setColor( QPalette::Text, opt.palette.color( QPalette::HighlightedText ) );
     }
 
-    if ( m_hoveringOver == index.sibling( index.row(), 0 )
-        && m_view->header()->visualIndex( index.column() ) == m_view->header()->count() - 1
-        && !index.data().toString().isEmpty() )
+    QRect arrowRect( m_view->viewport()->width() - option.rect.height(), option.rect.y() + 1, option.rect.height() - 2, option.rect.height() - 2 );
+    if ( m_hoveringOver.row() == index.row() && m_hoveringOver.parent() == index.parent() )
     {
-        QRect arrowRect( m_view->viewport()->width() - option.rect.height(), option.rect.y() + 1, option.rect.height() - 2, option.rect.height() - 2 );
-
         QPixmap infoIcon = TomahawkUtils::defaultPixmap( TomahawkUtils::InfoIcon, TomahawkUtils::Original, arrowRect.size() );
         painter->drawPixmap( arrowRect, infoIcon );
 
-        m_infoButtonRects[ index.sibling( index.row(), 0 ) ] = arrowRect;
+        m_infoButtonRects[ index ] = arrowRect;
     }
 
     if ( index.column() > 0 )
@@ -255,9 +252,9 @@ TreeItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const Q
         return false;
 
     bool hoveringInfo = false;
-    if ( m_infoButtonRects.contains( index.sibling( index.row(), 0 ) ) )
+    if ( m_infoButtonRects.contains( index ) )
     {
-        const QRect infoRect = m_infoButtonRects[ index.sibling( index.row(), 0 ) ];
+        const QRect infoRect = m_infoButtonRects[ index ];
         const QMouseEvent* ev = static_cast< QMouseEvent* >( event );
         hoveringInfo = infoRect.contains( ev->pos() );
     }
@@ -269,11 +266,11 @@ TreeItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const Q
         else
             m_view->setCursor( Qt::ArrowCursor );
 
-        if ( m_hoveringOver != index || ( !hoveringInfo && m_hoveringOver.isValid() ) )
+        if ( m_hoveringOver != index )
         {
-            emit updateIndex( m_hoveringOver.sibling( index.row(), m_view->header()->logicalIndex( m_view->header()->count() ) ) );
-            m_hoveringOver = index.sibling( index.row(), 0 );
-            emit updateIndex( index.sibling( index.row(), m_view->header()->logicalIndex( m_view->header()->count() ) ) );
+            emit updateIndex( m_hoveringOver );
+            m_hoveringOver = index;
+            emit updateIndex( m_hoveringOver );
         }
 
         event->accept();
@@ -316,4 +313,12 @@ TreeItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const Q
     }
 
     return false;
+}
+
+
+void
+TreeItemDelegate::resetHoverIndex()
+{
+    m_hoveringOver = QModelIndex();
+    m_infoButtonRects.clear();
 }
