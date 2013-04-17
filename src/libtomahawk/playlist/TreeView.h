@@ -40,6 +40,7 @@ class ViewHeader;
 class AnimatedSpinner;
 class OverlayWidget;
 class TreeModel;
+class TreeItemDelegate;
 
 class DLLEXPORT TreeView : public QTreeView
 {
@@ -79,6 +80,7 @@ protected:
     virtual void resizeEvent( QResizeEvent* event );
 
     virtual void keyPressEvent( QKeyEvent* event );
+    virtual void wheelEvent( QWheelEvent* event );
 
 protected slots:
     virtual void currentChanged( const QModelIndex& current, const QModelIndex& previous );
@@ -97,6 +99,7 @@ private:
     OverlayWidget* m_overlay;
     TreeModel* m_model;
     TreeProxyModel* m_proxyModel;
+    TreeItemDelegate* m_delegate;
     AnimatedSpinner* m_loadingSpinner;
 
     bool m_updateContextView;

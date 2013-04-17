@@ -563,6 +563,16 @@ TrackView::paintEvent( QPaintEvent* event )
 
 
 void
+TrackView::wheelEvent( QWheelEvent* event )
+{
+    QTreeView::wheelEvent( event );
+
+    m_delegate->resetHoverIndex();
+    repaint();
+}
+
+
+void
 TrackView::onFilterChanged( const QString& )
 {
     if ( selectedIndexes().count() )

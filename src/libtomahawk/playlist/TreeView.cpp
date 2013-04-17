@@ -53,6 +53,7 @@ TreeView::TreeView( QWidget* parent )
     , m_overlay( new OverlayWidget( this ) )
     , m_model( 0 )
     , m_proxyModel( 0 )
+    , m_delegate( 0 )
     , m_loadingSpinner( new LoadingSpinner( this ) )
     , m_updateContextView( true )
     , m_contextMenu( new ContextMenu( this ) )
@@ -99,9 +100,9 @@ void
 TreeView::setProxyModel( TreeProxyModel* model )
 {
     m_proxyModel = model;
-    TreeItemDelegate* del = new TreeItemDelegate( this, m_proxyModel );
-    connect( del, SIGNAL( updateIndex( QModelIndex ) ), this, SLOT( update( QModelIndex ) ) );
-    setItemDelegate( del );
+    m_delegate = new TreeItemDelegate( this, m_proxyModel );
+    connect( m_delegate, SIGNAL( updateIndex( QModelIndex ) ), SLOT( update( QModelIndex ) ) );
+    setItemDelegate( m_delegate );
 
     QTreeView::setModel( m_proxyModel );
 }
@@ -282,6 +283,16 @@ TreeView::resizeEvent( QResizeEvent* event )
     {
         m_header->resizeSection( 0, event->size().width() );
     }
+}
+
+
+void
+TreeView::wheelEvent( QWheelEvent* event )
+{
+    QTreeView::wheelEvent( event );
+
+    m_delegate->resetHoverIndex();
+    repaint();
 }
 
 

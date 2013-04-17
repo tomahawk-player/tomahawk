@@ -113,6 +113,7 @@ protected:
 
     virtual void paintEvent( QPaintEvent* event );
     virtual void keyPressEvent( QKeyEvent* event );
+    virtual void wheelEvent( QWheelEvent* event );
 
 protected slots:
     virtual void currentChanged( const QModelIndex& current, const QModelIndex& previous );
