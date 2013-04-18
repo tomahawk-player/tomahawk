@@ -321,6 +321,7 @@ PeerInfo::avatar( TomahawkUtils::ImageMode style, const QSize& size ) const
 {
     if ( !m_avatar )
     {
+        tDebug() << "Avatar for:" << id();
         Q_ASSERT( !contactId().isEmpty() );
         if ( m_avatarBuffer.isEmpty() && !contactId().isEmpty() )
             m_avatarBuffer = TomahawkUtils::Cache::instance()->getData( "Sources", contactId() ).toByteArray();
@@ -328,12 +329,6 @@ PeerInfo::avatar( TomahawkUtils::ImageMode style, const QSize& size ) const
         m_avatar = new QPixmap();
         if ( !m_avatarBuffer.isEmpty() )
             m_avatar->loadFromData( m_avatarBuffer );
-
-        if ( m_avatar->isNull() )
-        {
-            delete m_avatar;
-            m_avatar = 0;
-        }
 
         m_avatarBuffer.clear();
     }
@@ -346,7 +341,7 @@ PeerInfo::avatar( TomahawkUtils::ImageMode style, const QSize& size ) const
     {
         pixmap = *m_fancyAvatar;
     }
-    else if ( m_avatar )
+    else if ( m_avatar && !m_avatar->isNull() )
     {
         pixmap = *m_avatar;
     }
