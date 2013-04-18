@@ -75,7 +75,9 @@ rm -rvf \
     stream_filter/ \
     **/libtheora_plugin* \
     **/liblibbluray_plugin* \
-    **/libdtv_plugin*
+    **/libdtv_plugin* \
+    **/*.dll.a \
+    **/*.la
 
 
 echo "Downloaded and stripped VLC"
