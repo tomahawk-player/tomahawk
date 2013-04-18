@@ -451,10 +451,10 @@ Servent::onSipInfoChanged()
 
 void Servent::handleSipInfo( const Tomahawk::peerinfo_ptr& peerInfo )
 {
-    // FIXME: Do we need this?
-    // SipInfo info = peerInfo->sipInfo();
-    // if ( !info.isValid() )
-    //    return;
+    // We do not have received the initial SipInfo for this client yet, so wait for it.
+    // Each client will have at least one non-visible SipInfo
+    if ( peerInfo->sipInfo().length() == 0 )
+        return;
 
     foreach ( SipInfo info, peerInfo->sipInfo() )
     {
