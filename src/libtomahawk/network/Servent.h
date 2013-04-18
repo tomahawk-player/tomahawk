@@ -90,7 +90,7 @@ public slots:
 
 public:
     void connectToPeer( const Tomahawk::peerinfo_ptr& ha );
-    void connectToPeer( const QList<SipInfo>& sipInfoList, Connection* conn );
+    void connectToPeer(const Tomahawk::peerinfo_ptr &peerInfo, const QList<SipInfo>& sipInfoList, Connection* conn );
     void reverseOfferRequest( ControlConnection* orig_conn, const QString &theirdbid, const QString& key, const QString& theirkey );
 
     bool visibleExternally() const { return (!m_externalHostname.isNull()) || (m_externalAddresses.length() > 0); }
@@ -142,7 +142,7 @@ protected:
 public slots:
     void setExternalAddress( QHostAddress ha, unsigned int port );
 
-    void connectToPeerFailed(QList<SipInfo> sipInfo, Connection* conn , QTcpSocketExtra *socket);
+    void connectToPeerFailed( const Tomahawk::peerinfo_ptr& peerInfo, QList<SipInfo> sipInfo, Connection* conn , QTcpSocketExtra *socket );
     void socketError( QAbstractSocket::SocketError e );
     void createParallelConnection( Connection* orig_conn, Connection* new_conn, const QString& key );
 

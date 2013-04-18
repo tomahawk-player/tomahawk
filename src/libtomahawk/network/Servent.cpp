@@ -57,6 +57,7 @@ Q_DECLARE_METATYPE( sipConnectionPair )
 Q_DECLARE_METATYPE( QList< SipInfo > )
 Q_DECLARE_METATYPE( Connection* )
 Q_DECLARE_METATYPE( QTcpSocketExtra* )
+Q_DECLARE_METATYPE( Tomahawk::peerinfo_ptr )
 
 using namespace Tomahawk;
 
@@ -678,7 +679,7 @@ Servent::createParallelConnection( Connection* orig_conn, Connection* new_conn, 
         info.setPort( orig_conn->peerPort() );
         Q_ASSERT( info.isValid() );
         sipInfo.append( info );
-        connectToPeer( sipInfo, new_conn );
+        connectToPeer( peerinfo_ptr(), sipInfo, new_conn );
     }
     else // ask them to connect to us:
     {
@@ -841,16 +842,22 @@ Servent::connectToPeer( const peerinfo_ptr& peerInfo )
     conn->setProperty( "nodeid", peerInfo->nodeId() );
 
     registerControlConnection( conn );
-    connectToPeer( peerInfo->sipInfo(), conn );
+    connectToPeer( peerInfo, peerInfo->sipInfo(), conn );
 }
 
 
 void
-Servent::connectToPeer(const QList<SipInfo>& sipInfoList, Connection* conn )
+Servent::connectToPeer(const peerinfo_ptr& peerInfo, const QList<SipInfo>& sipInfoList, Connection* conn )
 {
     if ( sipInfoList.isEmpty() )
     {
         tLog( LOGVERBOSE ) << Q_FUNC_INFO << "No more possible SIP endpoints for " << conn->name() << " skipping.";
+        // If a peerinfo was supplied and has a ControlConnection which should be destroyed, than use this
+        if ( !peerInfo.isNull() && peerInfo->controlConnection() )
+            delete peerInfo->controlConnection();
+        else
+            // Connecting failed, so destroy this connection.
+            delete conn;
         return;
     }
     QList<SipInfo> sipInfo = QList<SipInfo>(sipInfoList);
@@ -859,7 +866,7 @@ Servent::connectToPeer(const QList<SipInfo>& sipInfoList, Connection* conn )
     if ( !info.isVisible() )
     {
         // Try next SipInfo, we can't connect to this one
-        connectToPeer( sipInfo, conn );
+        connectToPeer( peerInfo, sipInfo, conn );
         return;
     }
 
@@ -874,14 +881,14 @@ Servent::connectToPeer(const QList<SipInfo>& sipInfoList, Connection* conn )
         if ( QHostAddress( info.host() ) == ha)
         {
             tDebug() << "Tomahawk won't try to connect to" << info.host() << ":" << info.port() << ": same IP as ourselves.";
-            connectToPeer( sipInfo, conn );
+            connectToPeer( peerInfo, sipInfo, conn );
             return;
         }
     }
     if ( info.host() == m_externalHostname )
     {
         tDebug() << "Tomahawk won't try to connect to" << info.host() << ":" << info.port() << ": same IP as ourselves.";
-        connectToPeer( sipInfo, conn );
+        connectToPeer( peerInfo, sipInfo, conn );
         return;
     }
 
@@ -902,8 +909,8 @@ Servent::connectToPeer(const QList<SipInfo>& sipInfoList, Connection* conn )
 
     connect( sock, SIGNAL( connected() ), SLOT( socketConnected() ) );
     NewClosure( sock, SIGNAL( error( QAbstractSocket::SocketError ) ),
-                this, SLOT( connectToPeerFailed( QList<SipInfo>, Connection*, QTcpSocketExtra* ) ),
-                sipInfo, conn, sock );
+                this, SLOT( connectToPeerFailed( Tomahawk::peerinfo_ptr, QList<SipInfo>, Connection*, QTcpSocketExtra* ) ),
+                peerInfo, sipInfo, conn, sock );
 
     if ( !conn->peerIpAddress().isNull() )
         sock->connectToHost( conn->peerIpAddress(), info.port(), QTcpSocket::ReadWrite );
@@ -913,12 +920,12 @@ Servent::connectToPeer(const QList<SipInfo>& sipInfoList, Connection* conn )
 }
 
 void
-Servent::connectToPeerFailed( QList<SipInfo> sipInfo, Connection* conn, QTcpSocketExtra* socket )
+Servent::connectToPeerFailed( const peerinfo_ptr& peerInfo, QList<SipInfo> sipInfo, Connection* conn, QTcpSocketExtra* socket )
 {
     cleanupSocket( socket );
 
     // Try next SipInfo
-    connectToPeer( sipInfo, conn );
+    connectToPeer( peerInfo, sipInfo, conn );
 }
 
 void
