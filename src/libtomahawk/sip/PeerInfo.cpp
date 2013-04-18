@@ -133,6 +133,8 @@ PeerInfo::~PeerInfo()
 void
 PeerInfo::announce()
 {
+    Q_ASSERT( !contactId().isEmpty() );
+
     Servent::instance()->registerPeer( weakRef().toStrongRef() );
 }
 
