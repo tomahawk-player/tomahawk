@@ -3741,7 +3741,7 @@ introduïu el PIN aquí:</translation>
 <context>
     <name>TrackView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="573"/>
+        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="583"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>El filtre &apos;%1&apos; no ha obtingut cap resultat.</translation>
     </message>
@@ -3780,7 +3780,7 @@ introduïu el PIN aquí:</translation>
 <context>
     <name>TreeView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeView.cpp" line="296"/>
+        <location filename="../src/libtomahawk/playlist/TreeView.cpp" line="307"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>El filtre «%1» no coincideix amb cap resultat.</translation>
     </message>

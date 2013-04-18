@@ -3736,7 +3736,7 @@ colocar o número PIN mostrado aqui:</translation>
 <context>
     <name>TrackView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="573"/>
+        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="583"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Desculpe, o seu filtro &apos;%1&apos; não encontreou nenhum resultado.</translation>
     </message>
@@ -3775,7 +3775,7 @@ colocar o número PIN mostrado aqui:</translation>
 <context>
     <name>TreeView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeView.cpp" line="296"/>
+        <location filename="../src/libtomahawk/playlist/TreeView.cpp" line="307"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Desculpe, seu filtro &apos;%1&apos; não encontrou nenhum resultado.</translation>
     </message>

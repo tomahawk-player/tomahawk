@@ -3740,7 +3740,7 @@ anger du PIN-koden här:</translation>
 <context>
     <name>TrackView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="573"/>
+        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="583"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Tyvärr, ditt filter &apos;%1&apos; gav inga träffar</translation>
     </message>
@@ -3779,7 +3779,7 @@ anger du PIN-koden här:</translation>
 <context>
     <name>TreeView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeView.cpp" line="296"/>
+        <location filename="../src/libtomahawk/playlist/TreeView.cpp" line="307"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Tyvärr! Ditt filter &apos;%1&apos; gav inga träffar</translation>
     </message>

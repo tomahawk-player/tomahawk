@@ -521,7 +521,7 @@ yhdistää ja toistaa sinulta virtaa?</translation>
     <message>
         <location filename="../src/libtomahawk/database/DatabaseCommand_ShareTrack.cpp" line="111"/>
         <source>%1 recommended %2 by %3</source>
-        <translation type="unfinished"/>
+        <translation>%1 suositteli artistin %3 kappaletta %2</translation>
     </message>
 </context>
 <context>
@@ -1980,7 +1980,7 @@ käyttäjäradion käyttöönottamiseksi</translation>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="329"/>
         <source>Inbox</source>
-        <translation type="unfinished"/>
+        <translation>Saapuneet</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="336"/>
@@ -2637,12 +2637,12 @@ käyttäjätunnus@jabber.org</translation>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="169"/>
         <source>&amp;Remove Items</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Poista kohteet</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="169"/>
         <source>&amp;Remove Item</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Poista kohde</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="220"/>
@@ -3358,7 +3358,7 @@ Koeta säätää suodattimia saadaksesi uuden joukon kappaleita kuunneltavaksi.<
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="787"/>
         <source>sent you this track %1</source>
-        <translation type="unfinished"/>
+        <translation>lähetti sinulle kappaleen %1</translation>
     </message>
 </context>
 <context>
@@ -3745,7 +3745,7 @@ anna siellä näytetty PIN-koodi tähän:</translation>
 <context>
     <name>TrackView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="573"/>
+        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="583"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Valitettavasti suodattimesi ”%1” ei tuottanut yhtään tuloksia.</translation>
     </message>
@@ -3784,7 +3784,7 @@ anna siellä näytetty PIN-koodi tähän:</translation>
 <context>
     <name>TreeView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeView.cpp" line="296"/>
+        <location filename="../src/libtomahawk/playlist/TreeView.cpp" line="307"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Valitettavasti suodattimesi ”%1” ei tuottanut yhtään tuloksia.</translation>
     </message>
@@ -3875,12 +3875,12 @@ Voit lähettää synkronointiviestin uudelleen millä hetkellä hyvänsä lähet
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="95"/>
         <source>Inbox</source>
-        <translation type="unfinished"/>
+        <translation>Saapuneet</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="96"/>
         <source>Listening suggestions from your friends</source>
-        <translation type="unfinished"/>
+        <translation>Kaveriesi lähettämät kuunteluehdotukset</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="151"/>
@@ -3915,7 +3915,7 @@ Voit lähettää synkronointiviestin uudelleen millä hetkellä hyvänsä lähet
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="455"/>
         <source>No listening suggestions here.</source>
-        <translation type="unfinished"/>
+        <translation>Ei kuunteluehdotuksia.</translation>
     </message>
 </context>
 <context>
