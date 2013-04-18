@@ -57,6 +57,7 @@ PeerInfo::getSelf( SipPlugin* parent, PeerInfo::GetOptions options )
 
     peerinfo_ptr selfPeer( new PeerInfo( parent, "local peerinfo don't use this id for anything" ) );
     selfPeer->setWeakRef( selfPeer.toWeakRef() );
+    selfPeer->setContactId( "localpeer" );
 
 //     parent->setSelfPeer( selfPeer );
     s_selfPeersBySipPlugin.insert( parent, selfPeer );
@@ -310,6 +311,7 @@ PeerInfo::setAvatar( const QPixmap& avatar )
     m_avatar = 0;
     m_fancyAvatar = 0;
 
+    Q_ASSERT( !contactId().isEmpty() );
     TomahawkUtils::Cache::instance()->putData( "Sources", 7776000000 /* 90 days */, contactId(), ba );
 }
 
@@ -319,7 +321,8 @@ PeerInfo::avatar( TomahawkUtils::ImageMode style, const QSize& size ) const
 {
     if ( !m_avatar )
     {
-        if ( m_avatarBuffer.isEmpty() )
+        Q_ASSERT( !contactId().isEmpty() );
+        if ( m_avatarBuffer.isEmpty() && !contactId().isEmpty() )
             m_avatarBuffer = TomahawkUtils::Cache::instance()->getData( "Sources", contactId() ).toByteArray();
 
         m_avatar = new QPixmap();
