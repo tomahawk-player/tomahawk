@@ -310,7 +310,7 @@ PeerInfo::setAvatar( const QPixmap& avatar )
     m_avatar = 0;
     m_fancyAvatar = 0;
 
-    TomahawkUtils::Cache::instance()->putData( "Sources", 7776000000 /* 90 days */, id(), ba );
+    TomahawkUtils::Cache::instance()->putData( "Sources", 7776000000 /* 90 days */, contactId(), ba );
 }
 
 
@@ -320,7 +320,7 @@ PeerInfo::avatar( TomahawkUtils::ImageMode style, const QSize& size ) const
     if ( !m_avatar )
     {
         if ( m_avatarBuffer.isEmpty() )
-            m_avatarBuffer = TomahawkUtils::Cache::instance()->getData( "Sources", id() ).toByteArray();
+            m_avatarBuffer = TomahawkUtils::Cache::instance()->getData( "Sources", contactId() ).toByteArray();
 
         m_avatar = new QPixmap();
         if ( !m_avatarBuffer.isEmpty() )
