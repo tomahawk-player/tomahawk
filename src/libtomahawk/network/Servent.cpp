@@ -910,6 +910,7 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
             // this is terrible, actually there should be a way to let this be created by the zeroconf plugin
             // because this way we rely on the ip being used as id in two totally different parts of the code
             Tomahawk::peerinfo_ptr peerInfo = Tomahawk::PeerInfo::get( account->sipPlugin(), peer.toString(), Tomahawk::PeerInfo::AutoCreate );
+            peerInfo->setContactId( peer.toString() );
             peerInfoDebug( peerInfo );
             conn->addPeerInfo( peerInfo );
             return conn;
