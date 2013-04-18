@@ -162,6 +162,7 @@ ZeroconfPlugin::lanHostFound( const QString& host, int port, const QString& name
 
     Tomahawk::peerinfo_ptr peerInfo = Tomahawk::PeerInfo::get( this, host, Tomahawk::PeerInfo::AutoCreate );
     peerInfo->setSipInfo( sipInfo );
+    peerInfo->setContactId( host );
     peerInfo->setFriendlyName( name );
     peerInfo->setType( PeerInfo::Local );
     peerInfo->setStatus( PeerInfo::Online );
