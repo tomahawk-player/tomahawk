@@ -40,6 +40,7 @@ set( libGuiSources
     jobview/LatchedStatusItem.cpp
     jobview/ErrorStatusMessage.cpp
     jobview/IndexingJobItem.cpp
+    jobview/InboxJobItem.cpp
 
     infobar/InfoBar.cpp
 

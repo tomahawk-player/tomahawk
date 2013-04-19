@@ -26,7 +26,7 @@
 #include "playlist/InboxModel.h"
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
-#include "jobview/ErrorStatusMessage.h"
+#include "jobview/InboxJobItem.h"
 
 DatabaseCommand_ShareTrack::DatabaseCommand_ShareTrack( QObject* parent )
     : DatabaseCommand_SocialAction( parent )
@@ -106,12 +106,9 @@ DatabaseCommand_ShareTrack::postCommitHook()
                                Q_ARG( const Tomahawk::query_ptr&, m_query ),
                                Q_ARG( int, 0 ) /*row*/ );
 
-    //TODO: replace with a proper JobStatusItem
+    QString friendlyName = source()->friendlyName();
     if( ViewManager::instance()->currentPage() != ViewManager::instance()->inboxWidget() )
-        JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( tr( "%1 recommended %2 by %3" )
-                                                                            .arg( source()->friendlyName() )
-                                                                            .arg( m_query->track() )
-                                                                            .arg( m_query->artist() ) ) );
+        JobStatusView::instance()->model()->addJob( new InboxJobItem( friendlyName, m_query ) );
 }
 
 
