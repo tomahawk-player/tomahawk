@@ -16,5 +16,4 @@ Comment[se]=Tomahawk — Den Sociala Musikspelaren
 Icon=tomahawk
 Terminal=false
 Categories=Qt;AudioVideo;Audio;Player;
-MimeType=x-scheme-handler/tomahawk;
-MimeType=x-scheme-handler/spotify;
+MimeType=x-scheme-handler/tomahawk;x-scheme-handler/spotify;
