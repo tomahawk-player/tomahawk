@@ -517,14 +517,6 @@ ansluta och strömma från dig?</translation>
     </message>
 </context>
 <context>
-    <name>DatabaseCommand_ShareTrack</name>
-    <message>
-        <location filename="../src/libtomahawk/database/DatabaseCommand_ShareTrack.cpp" line="111"/>
-        <source>%1 recommended %2 by %3</source>
-        <translation>%1 rekommenderade %2 med %3</translation>
-    </message>
-</context>
-<context>
     <name>DelegateConfigWrapper</name>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="54"/>
@@ -682,6 +674,14 @@ ansluta och strömma från dig?</translation>
         <location filename="../src/libtomahawk/playlist/FlexibleView.cpp" line="295"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
         <translation>Spellistan är för tillfället tom. Lägg till några låtar och avnjut musiken!</translation>
+    </message>
+</context>
+<context>
+    <name>InboxJobItem</name>
+    <message>
+        <location filename="../src/libtomahawk/jobview/InboxJobItem.cpp" line="54"/>
+        <source>%1 sent you %2 by %3.</source>
+        <translation>%1 skickade %2 av %3 till dig</translation>
     </message>
 </context>
 <context>
@@ -2632,12 +2632,12 @@ username@jabber.org</translation>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="169"/>
         <source>&amp;Remove Items</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Ta bort</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="169"/>
         <source>&amp;Remove Item</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Ta bort</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="220"/>
@@ -3353,7 +3353,7 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="787"/>
         <source>sent you this track %1</source>
-        <translation type="unfinished"/>
+        <translation>skickade %1 till dig</translation>
     </message>
 </context>
 <context>

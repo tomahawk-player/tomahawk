@@ -124,7 +124,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="78"/>
         <source>&amp;Load Station</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Carica Stazione</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="79"/>
@@ -134,7 +134,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="80"/>
         <source>&amp;Rename Station</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Rinomina Stazione</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="81"/>
@@ -516,14 +516,6 @@ connect and stream from you?</source>
     </message>
 </context>
 <context>
-    <name>DatabaseCommand_ShareTrack</name>
-    <message>
-        <location filename="../src/libtomahawk/database/DatabaseCommand_ShareTrack.cpp" line="111"/>
-        <source>%1 recommended %2 by %3</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
     <name>DelegateConfigWrapper</name>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="54"/>
@@ -681,6 +673,14 @@ connect and stream from you?</source>
         <location filename="../src/libtomahawk/playlist/FlexibleView.cpp" line="295"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
         <translation>Questa playlist al momento è vuota. Aggiungi qualche traccia e goditi la musica</translation>
+    </message>
+</context>
+<context>
+    <name>InboxJobItem</name>
+    <message>
+        <location filename="../src/libtomahawk/jobview/InboxJobItem.cpp" line="54"/>
+        <source>%1 sent you %2 by %3.</source>
+        <translation>%1 ti ha spedito %2 di %3.</translation>
     </message>
 </context>
 <context>
@@ -1375,7 +1375,7 @@ connect and stream from you?</source>
         <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="626"/>
         <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="662"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
-        <translation type="unfinished"/>
+        <translation>Avvertimento Script Resolver: chiamata API 1% ha restituito dati sincroni.</translation>
     </message>
 </context>
 <context>
@@ -1518,12 +1518,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="459"/>
         <source>Tomahawk Resolvers (*.axe *.js);;All files (*)</source>
-        <translation type="unfinished"/>
+        <translation>Risolutore Tomahawk (*.axe *.js);;Tutti i file (*)</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="502"/>
         <source>Resolver installation from file %1 failed.</source>
-        <translation type="unfinished"/>
+        <translation>L&apos;installazione del risolutore dal file %1 è fallita.</translation>
     </message>
     <message>
         <location filename="../src/SettingsDialog.cpp" line="521"/>
@@ -1973,7 +1973,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="329"/>
         <source>Inbox</source>
-        <translation type="unfinished"/>
+        <translation>Inbox</translation>
     </message>
     <message>
         <location filename="../src/sourcetree/SourcesModel.cpp" line="336"/>
@@ -2259,27 +2259,27 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="108"/>
         <source>Resolver installation error: cannot open bundle.</source>
-        <translation type="unfinished"/>
+        <translation>Errore di installazione del risolutore: impossibile aprire il pacchetto.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="115"/>
         <source>Resolver installation error: incomplete bundle.</source>
-        <translation type="unfinished"/>
+        <translation>Errore di installazione del risolutore: pacchetto incompleto.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="154"/>
         <source>Resolver installation error: bad metadata in bundle.</source>
-        <translation type="unfinished"/>
+        <translation>Errore di installazione del risolutore: metadata corrotta nel pacchetto.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="192"/>
         <source>Resolver installation error: platform mismatch.</source>
-        <translation type="unfinished"/>
+        <translation>Errore di installazione del risolutore: piattaforma non corrisponde.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="205"/>
         <source>Resolver installation error: Tomahawk %1 or newer is required.</source>
-        <translation type="unfinished"/>
+        <translation>Errore di installazione del risolutore: è richiesto Tomahawk %1 o superiore.</translation>
     </message>
 </context>
 <context>
@@ -2372,7 +2372,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/accounts/twitter/TwitterAccount.h" line="51"/>
         <source>Send tweets from Tomahawk.</source>
-        <translation type="unfinished"/>
+        <translation>Spedisci tweet da Tomahawk.</translation>
     </message>
 </context>
 <context>
@@ -2623,12 +2623,12 @@ username@jabber.org</source>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="169"/>
         <source>&amp;Remove Items</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Cancella elementi</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="169"/>
         <source>&amp;Remove Item</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Cancella elemento</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="220"/>
@@ -3120,7 +3120,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="990"/>
         <source>where genre is %1</source>
-        <translation type="unfinished"/>
+        <translation>che genere è %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1003"/>
@@ -3165,19 +3165,19 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="193"/>
         <source>on</source>
         <comment>'on' is followed by an album name</comment>
-        <translation type="unfinished"/>
+        <translation>su</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="195"/>
         <source>%1%4 %2%3.</source>
         <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing, %4 is the preposition used to link track and artist ('by' in english)</comment>
-        <translation type="unfinished"/>
+        <translation>%1%4 %2%3.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="199"/>
         <source>by</source>
         <comment>preposition to link track and artist</comment>
-        <translation type="unfinished"/>
+        <translation>da</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="208"/>
@@ -3340,7 +3340,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="787"/>
         <source>sent you this track %1</source>
-        <translation type="unfinished"/>
+        <translation>ti ha spedito questa traccia %1</translation>
     </message>
 </context>
 <context>
@@ -3780,7 +3780,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="119"/>
         <source>The Twitter plugin allows you to post messages to your Twitter account.</source>
-        <translation type="unfinished"/>
+        <translation>Il plugin Twitter ti permette di postare messaggi sul tuo account Twitter.</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="137"/>
@@ -3851,12 +3851,12 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="95"/>
         <source>Inbox</source>
-        <translation type="unfinished"/>
+        <translation>Inbox</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="96"/>
         <source>Listening suggestions from your friends</source>
-        <translation type="unfinished"/>
+        <translation>Suggerimenti per l&apos;ascolto dai tuoi amici.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="151"/>
@@ -3891,7 +3891,7 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="455"/>
         <source>No listening suggestions here.</source>
-        <translation type="unfinished"/>
+        <translation>Nessun suggerimento musicale qui.</translation>
     </message>
 </context>
 <context>

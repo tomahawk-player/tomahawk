@@ -517,14 +517,6 @@ se s vámi spojil?</translation>
     </message>
 </context>
 <context>
-    <name>DatabaseCommand_ShareTrack</name>
-    <message>
-        <location filename="../src/libtomahawk/database/DatabaseCommand_ShareTrack.cpp" line="111"/>
-        <source>%1 recommended %2 by %3</source>
-        <translation>%1 doporučeno %2 od %3</translation>
-    </message>
-</context>
-<context>
     <name>DelegateConfigWrapper</name>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="54"/>
@@ -682,6 +674,14 @@ se s vámi spojil?</translation>
         <location filename="../src/libtomahawk/playlist/FlexibleView.cpp" line="295"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
         <translation>Tento seznam skladeb je nyní prázdný. Přidejte do něj nějaké skladby a vychutnávejte hudbu!</translation>
+    </message>
+</context>
+<context>
+    <name>InboxJobItem</name>
+    <message>
+        <location filename="../src/libtomahawk/jobview/InboxJobItem.cpp" line="54"/>
+        <source>%1 sent you %2 by %3.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2631,12 +2631,12 @@ username@jabber.org</translation>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="169"/>
         <source>&amp;Remove Items</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Odstranit položky</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="169"/>
         <source>&amp;Remove Item</source>
-        <translation type="unfinished"/>
+        <translation>Odstranit &amp;položku</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="220"/>
@@ -3352,7 +3352,7 @@ Zkuste vyladit filtry pro nové písně.</translation>
     <message>
         <location filename="../src/libtomahawk/Query.cpp" line="787"/>
         <source>sent you this track %1</source>
-        <translation type="unfinished"/>
+        <translation>vám poslal tuto skladbu %1</translation>
     </message>
 </context>
 <context>

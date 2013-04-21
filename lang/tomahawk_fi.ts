@@ -517,14 +517,6 @@ yhdistää ja toistaa sinulta virtaa?</translation>
     </message>
 </context>
 <context>
-    <name>DatabaseCommand_ShareTrack</name>
-    <message>
-        <location filename="../src/libtomahawk/database/DatabaseCommand_ShareTrack.cpp" line="111"/>
-        <source>%1 recommended %2 by %3</source>
-        <translation>%1 suositteli artistin %3 kappaletta %2</translation>
-    </message>
-</context>
-<context>
     <name>DelegateConfigWrapper</name>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="54"/>
@@ -682,6 +674,14 @@ yhdistää ja toistaa sinulta virtaa?</translation>
         <location filename="../src/libtomahawk/playlist/FlexibleView.cpp" line="295"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
         <translation>Tämä soittolista on parhaillaan tyhjä. Lisää kappaleita ja nauti musiikista!</translation>
+    </message>
+</context>
+<context>
+    <name>InboxJobItem</name>
+    <message>
+        <location filename="../src/libtomahawk/jobview/InboxJobItem.cpp" line="54"/>
+        <source>%1 sent you %2 by %3.</source>
+        <translation>%1 lähetti sinulle artistin %3 kappaleen %2.</translation>
     </message>
 </context>
 <context>

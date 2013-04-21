@@ -516,14 +516,6 @@ connect and stream from you?</source>
     </message>
 </context>
 <context>
-    <name>DatabaseCommand_ShareTrack</name>
-    <message>
-        <location filename="../src/libtomahawk/database/DatabaseCommand_ShareTrack.cpp" line="111"/>
-        <source>%1 recommended %2 by %3</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
     <name>DelegateConfigWrapper</name>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="54"/>
@@ -680,6 +672,14 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleView.cpp" line="295"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>InboxJobItem</name>
+    <message>
+        <location filename="../src/libtomahawk/jobview/InboxJobItem.cpp" line="54"/>
+        <source>%1 sent you %2 by %3.</source>
         <translation type="unfinished"/>
     </message>
 </context>

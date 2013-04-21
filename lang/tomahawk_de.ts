@@ -517,14 +517,6 @@ erlauben sich mit dir zu verbinden?</translation>
     </message>
 </context>
 <context>
-    <name>DatabaseCommand_ShareTrack</name>
-    <message>
-        <location filename="../src/libtomahawk/database/DatabaseCommand_ShareTrack.cpp" line="111"/>
-        <source>%1 recommended %2 by %3</source>
-        <translation>%1 empfohlen %2 von %3</translation>
-    </message>
-</context>
-<context>
     <name>DelegateConfigWrapper</name>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="54"/>
@@ -682,6 +674,14 @@ erlauben sich mit dir zu verbinden?</translation>
         <location filename="../src/libtomahawk/playlist/FlexibleView.cpp" line="295"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
         <translation>Diese Playlist ist derzeit leer. Füge einige Stücke hinzu und genieße die Musik!</translation>
+    </message>
+</context>
+<context>
+    <name>InboxJobItem</name>
+    <message>
+        <location filename="../src/libtomahawk/jobview/InboxJobItem.cpp" line="54"/>
+        <source>%1 sent you %2 by %3.</source>
+        <translation>%1 gesendet an dir %2 von %3.</translation>
     </message>
 </context>
 <context>
