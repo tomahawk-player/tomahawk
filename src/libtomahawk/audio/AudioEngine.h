@@ -35,6 +35,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QTimer>
 #include <QtCore/QQueue>
+#include <QTemporaryFile>
 
 
 class DLLEXPORT AudioEngine : public QObject
@@ -177,6 +178,8 @@ private:
 
     uint_fast8_t m_underrunCount;
     bool m_underrunNotified;
+
+    QTemporaryFile* m_coverTempFile;
 
     static AudioEngine* s_instance;
 };
