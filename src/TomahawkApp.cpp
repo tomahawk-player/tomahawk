@@ -26,6 +26,7 @@
 #include "AclRegistryImpl.h"
 #include "Album.h"
 #include "Artist.h"
+#include "Track.h"
 #include "collection/Collection.h"
 #include "infosystem/InfoSystem.h"
 #include "infosystem/InfoSystemCache.h"
@@ -457,6 +458,7 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< Tomahawk::collection_ptr >("Tomahawk::collection_ptr");
     qRegisterMetaType< Tomahawk::result_ptr >("Tomahawk::result_ptr");
     qRegisterMetaType< Tomahawk::query_ptr >("Tomahawk::query_ptr");
+    qRegisterMetaType< Tomahawk::track_ptr >("Tomahawk::track_ptr");
     qRegisterMetaType< Tomahawk::album_ptr >("Tomahawk::album_ptr");
     qRegisterMetaType< Tomahawk::artist_ptr >("Tomahawk::artist_ptr");
     qRegisterMetaType< Tomahawk::source_ptr >("Tomahawk::source_ptr");
@@ -471,10 +473,12 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< QList<Tomahawk::geninterface_ptr> >("QList<Tomahawk::geninterface_ptr>");
     qRegisterMetaType< QList<Tomahawk::plentry_ptr> >("QList<Tomahawk::plentry_ptr>");
     qRegisterMetaType< QList<Tomahawk::query_ptr> >("QList<Tomahawk::query_ptr>");
+    qRegisterMetaType< QList<Tomahawk::track_ptr> >("QList<Tomahawk::track_ptr>");
     qRegisterMetaType< QList<Tomahawk::result_ptr> >("QList<Tomahawk::result_ptr>");
     qRegisterMetaType< QList<Tomahawk::artist_ptr> >("QList<Tomahawk::artist_ptr>");
     qRegisterMetaType< QList<Tomahawk::album_ptr> >("QList<Tomahawk::album_ptr>");
     qRegisterMetaType< QList<Tomahawk::source_ptr> >("QList<Tomahawk::source_ptr>");
+    qRegisterMetaType< QList<Tomahawk::PlaybackLog> >("QList<Tomahawk::PlaybackLog>");
     qRegisterMetaType< QMap< QString, Tomahawk::plentry_ptr > >("QMap< QString, Tomahawk::plentry_ptr >");
     qRegisterMetaType< Tomahawk::PlaylistRevision >("Tomahawk::PlaylistRevision");
     qRegisterMetaType< Tomahawk::DynamicPlaylistRevision >("Tomahawk::DynamicPlaylistRevision");

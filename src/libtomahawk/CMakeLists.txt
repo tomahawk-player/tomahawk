@@ -191,6 +191,7 @@ list(APPEND libSources
     Query.cpp
     Result.cpp
     Source.cpp
+    Track.cpp
     SourcePlaylistInterface.cpp
     PlaylistInterface.cpp
 
