@@ -19,7 +19,7 @@
 #ifndef LASTFMCONFIG_H
 #define LASTFMCONFIG_H
 
-#include "Query.h"
+#include "Track.h"
 #include "accounts/AccountConfigWidget.h"
 #include "database/DatabaseCommand_LoadSocialActions.h"
 
@@ -74,7 +74,7 @@ private:
 
     int m_totalLovedPages;
     bool m_doneFetchingLoved, m_doneFetchingLocal;
-    QSet< Tomahawk::query_ptr > m_lastfmLoved;
+    QSet< Tomahawk::track_ptr > m_lastfmLoved;
     DatabaseCommand_LoadSocialActions::TrackActions m_localLoved;
 };
 

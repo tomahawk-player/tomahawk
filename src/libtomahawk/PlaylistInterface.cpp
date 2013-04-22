@@ -181,10 +181,7 @@ PlaylistInterface::filterTracks( const QList<Tomahawk::query_ptr>& queries )
 
         if ( picked )
         {
-            query_ptr q = Query::get( q1->artist(), q1->track(), q1->album(), uuid(), false );
-            q->setAlbumPos( q1->results().first()->albumpos() );
-            q->setDiscNumber( q1->discnumber() );
-            result << q;
+            result << q1;
         }
     }
 
@@ -222,7 +219,7 @@ PlaylistInterface::onItemsChanged()
     Tomahawk::result_ptr nextResult = siblingResult( 1, m_currentIndex );
 
     {
-        bool avail = prevResult && prevResult->toQuery()->playable();
+        bool avail = prevResult && prevResult->playable();
         if ( avail != m_prevAvail )
         {
             m_prevAvail = avail;
@@ -231,7 +228,7 @@ PlaylistInterface::onItemsChanged()
     }
 
     {
-        bool avail = nextResult && nextResult->toQuery()->playable();
+        bool avail = nextResult && nextResult->playable();
         if ( avail != m_nextAvail )
         {
             m_nextAvail = avail;

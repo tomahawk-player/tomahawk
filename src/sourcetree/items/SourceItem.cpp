@@ -570,7 +570,7 @@ SourceItem::collectionClicked( const Tomahawk::collection_ptr& collection )
 
 ViewPage*
 SourceItem::getCollectionPage( const Tomahawk::collection_ptr& collection ) const
-{    
+{
     return m_collectionPages[ collection ];
 }
 
@@ -685,8 +685,7 @@ SourceItem::onTracksDropped( const QList< query_ptr >& queries )
 {
     foreach ( const query_ptr& query, queries )
     {
-        DatabaseCommand_ShareTrack* cmd =
-                new DatabaseCommand_ShareTrack( query, m_source->nodeId() );
+        DatabaseCommand_ShareTrack* cmd = new DatabaseCommand_ShareTrack( query->track(), m_source->nodeId() );
 
         Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
     }

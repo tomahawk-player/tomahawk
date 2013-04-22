@@ -24,6 +24,7 @@
 #include <QPersistentModelIndex>
 #include <QPixmap>
 
+#include "Track.h"
 #include "Typedefs.h"
 #include "DllMacro.h"
 
@@ -46,6 +47,9 @@ public:
     const Tomahawk::query_ptr& query() const { return m_query; }
     const Tomahawk::plentry_ptr& entry() const { return m_entry; }
     const Tomahawk::result_ptr& result() const;
+
+    Tomahawk::PlaybackLog playbackLog() const;
+    void setPlaybackLog( const Tomahawk::PlaybackLog& log );
 
     PlayableItem* parent() const { return m_parent; }
 
@@ -81,6 +85,8 @@ private:
     PlayableItem* m_parent;
     bool m_fetchingMore;
     bool m_isPlaying;
+
+    Tomahawk::PlaybackLog m_playbackLog;
 };
 
 #endif // PLAYABLEITEM_H

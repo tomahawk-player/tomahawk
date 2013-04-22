@@ -86,11 +86,11 @@ PlayableItem::PlayableItem( const Tomahawk::query_ptr& query, PlayableItem* pare
 {
     init( parent, row );
 
-    connect( query.data(), SIGNAL( socialActionsLoaded() ),
-                           SIGNAL( dataChanged() ) );
+    connect( query->track().data(), SIGNAL( socialActionsLoaded() ),
+                                    SIGNAL( dataChanged() ) );
 
-    connect( query.data(), SIGNAL( updated() ),
-                           SIGNAL( dataChanged() ) );
+    connect( query->track().data(), SIGNAL( updated() ),
+                                    SIGNAL( dataChanged() ) );
 
     connect( query.data(), SIGNAL( resultsChanged() ),
                              SLOT( onResultsChanged() ) );
@@ -104,11 +104,11 @@ PlayableItem::PlayableItem( const Tomahawk::plentry_ptr& entry, PlayableItem* pa
     m_query = entry->query();
     init( parent, row );
 
-    connect( m_query.data(), SIGNAL( socialActionsLoaded() ),
-                             SIGNAL( dataChanged() ) );
+    connect( m_query->track().data(), SIGNAL( socialActionsLoaded() ),
+                                      SIGNAL( dataChanged() ) );
 
-    connect( m_query.data(), SIGNAL( updated() ),
-                             SIGNAL( dataChanged() ) );
+    connect( m_query->track().data(), SIGNAL( updated() ),
+                                      SIGNAL( dataChanged() ) );
 
     connect( m_query.data(), SIGNAL( resultsChanged() ),
                                SLOT( onResultsChanged() ) );
@@ -167,11 +167,11 @@ PlayableItem::name() const
     }
     else if ( !m_result.isNull() )
     {
-        return m_result->track();
+        return m_result->track()->track();
     }
     else if ( !m_query.isNull() )
     {
-        return m_query->track();
+        return m_query->track()->track();
     }
 
     Q_ASSERT( false );
@@ -184,11 +184,11 @@ PlayableItem::artistName() const
 {
     if ( !m_result.isNull() )
     {
-        return m_result->artist()->name();
+        return m_result->track()->artist();
     }
     else if ( !m_query.isNull() )
     {
-        return m_query->artist();
+        return m_query->track()->artist();
     }
 
     return QString();
@@ -198,13 +198,13 @@ PlayableItem::artistName() const
 QString
 PlayableItem::albumName() const
 {
-    if ( !m_result.isNull() && !m_result->album().isNull() )
+    if ( !m_result.isNull() )
     {
-        return m_result->album()->name();
+        return m_result->track()->album();
     }
     else if ( !m_query.isNull() )
     {
-        return m_query->album();
+        return m_query->track()->album();
     }
 
     return QString();
@@ -221,4 +221,18 @@ PlayableItem::result() const
     }
 
     return m_result;
+}
+
+
+Tomahawk::PlaybackLog
+PlayableItem::playbackLog() const
+{
+    return m_playbackLog;
+}
+
+
+void
+PlayableItem::setPlaybackLog( const Tomahawk::PlaybackLog& log )
+{
+    m_playbackLog = log;
 }
