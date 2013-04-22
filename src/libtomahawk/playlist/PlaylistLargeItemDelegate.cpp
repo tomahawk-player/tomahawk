@@ -108,7 +108,31 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
     Q_ASSERT( item );
 
     QStyleOptionViewItemV4 opt = option;
-    prepareStyleOption( &opt, index, item );
+
+    bool isUnlistened = true;
+    if( m_mode == Inbox )
+    {
+        QList< Tomahawk::SocialAction > socialActions = item->query()->queryTrack()->allSocialActions();
+        foreach( const Tomahawk::SocialAction& sa, socialActions )
+        {
+            if ( sa.action.toString() == "Inbox" && sa.value.toBool() == false )
+            {
+                isUnlistened = false;
+                break;
+            }
+        }
+
+        if ( isUnlistened && ! item->isPlaying() )
+        {
+            prepareStyleOption( &opt, index, item );
+            opt.backgroundBrush = QColor( Qt::yellow ).lighter( 190 );
+        }
+        else
+            prepareStyleOption( &opt, index, item );
+    }
+    else
+        prepareStyleOption( &opt, index, item );
+
     opt.text.clear();
 
     qApp->style()->drawControl( QStyle::CE_ItemViewItem, &opt, painter );
@@ -139,7 +163,7 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
 
     if ( m_mode == LovedTracks )
         lowerText = item->query()->queryTrack()->socialActionDescription( "Love", Track::Detailed );
-    if ( m_mode == Inbox )
+    else if ( m_mode == Inbox )
         lowerText = item->query()->queryTrack()->socialActionDescription( "Inbox", Track::Detailed );
 
     painter->save();
@@ -147,12 +171,16 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         QRect r = opt.rect.adjusted( 4, 6, 0, -6 );
 
         // Paint Now Playing Speaker Icon
-        if ( item->isPlaying() )
+        if ( item->isPlaying() ||
+             ( m_mode == Inbox && isUnlistened ) )
         {
             const int pixMargin = 4;
             const int pixHeight = r.height() - pixMargin * 2;
             QRect npr = r.adjusted( pixMargin, pixMargin + 1, pixHeight - r.width() + pixMargin, -pixMargin + 1 );
-            painter->drawPixmap( npr, TomahawkUtils::defaultPixmap( TomahawkUtils::NowPlayingSpeaker, TomahawkUtils::Original, npr.size() ) );
+            if ( item->isPlaying() )
+                painter->drawPixmap( npr, TomahawkUtils::defaultPixmap( TomahawkUtils::NowPlayingSpeaker, TomahawkUtils::Original, npr.size() ) );
+            else
+                painter->drawPixmap( npr, TomahawkUtils::defaultPixmap( TomahawkUtils::NewReleases, TomahawkUtils::Original, npr.size() ) );
             r.adjust( pixHeight + 8, 0, 0, 0 );
         }
 
