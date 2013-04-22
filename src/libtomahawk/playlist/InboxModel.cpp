@@ -72,8 +72,10 @@ InboxModel::mergeSocialActions( QList<Tomahawk::SocialAction> first, QList<Tomah
 
 
 void
-InboxModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int row )
+InboxModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int row, const QList< Tomahawk::PlaybackLog >& logs )
 {
+    Q_UNUSED( logs ); // <- this is merely to silence GCC
+
     QList< Tomahawk::plentry_ptr > toInsert;
     for ( QList< Tomahawk::plentry_ptr >::const_iterator it = entries.constBegin();
           it != entries.constEnd(); ++it )
@@ -86,8 +88,8 @@ InboxModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int ro
             if ( entry->query()->equals( existingEntry->query(), true /*ignoreCase*/) )
             {
                 //We got a dupe, let's merge the social actions
-                entry->query()->setAllSocialActions( mergeSocialActions( existingEntry->query()->allSocialActions(),
-                                                                                 entry->query()->allSocialActions() ) );
+                entry->query()->track()->setAllSocialActions( mergeSocialActions( existingEntry->query()->track()->allSocialActions(),
+                                                                                  entry->query()->track()->allSocialActions() ) );
                 toInsert.erase( jt );
                 break;
             }
@@ -101,8 +103,8 @@ InboxModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int ro
         {
             if ( plEntry->query()->equals( toInsert.at( i )->query(), true ) )
             {
-                plEntry->query()->setAllSocialActions( mergeSocialActions( plEntry->query()->allSocialActions(),
-                                                                           toInsert.at( i )->query()->allSocialActions() ) );
+                plEntry->query()->track()->setAllSocialActions( mergeSocialActions( plEntry->query()->track()->allSocialActions(),
+                                                                                    toInsert.at( i )->query()->track()->allSocialActions() ) );
                 toInsert.removeAt( i );
 
                 dataChanged( index( playlistEntries().indexOf( plEntry ), 0, QModelIndex() ),
@@ -187,7 +189,7 @@ InboxModel::tracksLoaded( QList< Tomahawk::query_ptr > incoming )
 
         QList< Tomahawk::SocialAction > actions;
         actions << action;
-        newQuery->setAllSocialActions( actions );
+        newQuery->track()->setAllSocialActions( actions );
 
         newQuery->setProperty( "data", QVariant() ); //clear
     }

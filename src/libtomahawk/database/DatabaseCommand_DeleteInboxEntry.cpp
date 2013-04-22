@@ -36,7 +36,7 @@ DatabaseCommand_DeleteInboxEntry::exec( DatabaseImpl* dbi )
 
     Q_ASSERT( !m_query.isNull() );
 
-    if ( m_query->track().isEmpty() || m_query->artist().isEmpty() )
+    if ( m_query->queryTrack()->track().isEmpty() || m_query->queryTrack()->artist().isEmpty() )
     {
         emit done();
         return;
@@ -51,8 +51,8 @@ DatabaseCommand_DeleteInboxEntry::exec( DatabaseImpl* dbi )
                     ") "
                 ")" );
     query.addBindValue( "Inbox" );
-    query.addBindValue( m_query->track() );
-    query.addBindValue( m_query->artist() );
+    query.addBindValue( m_query->queryTrack()->track() );
+    query.addBindValue( m_query->queryTrack()->artist() );
 
     query.exec();
 
