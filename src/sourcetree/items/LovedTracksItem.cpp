@@ -166,5 +166,5 @@ void
 LovedTracksItem::loveDroppedTracks( QList< Tomahawk::query_ptr > qrys )
 {
     foreach( Tomahawk::query_ptr qry, qrys )
-        qry->setLoved( true );
+        qry->track()->setLoved( true );
 }

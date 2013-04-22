@@ -89,9 +89,9 @@ GlobalActionManager::~GlobalActionManager()
 QUrl
 GlobalActionManager::openLinkFromQuery( const query_ptr& query ) const
 {
-    QString title = query->displayQuery()->track();
-    QString artist = query->displayQuery()->artist();
-    QString album = query->displayQuery()->album();
+    QString title = query->track()->track();
+    QString artist = query->track()->artist();
+    QString album = query->track()->album();
 
     return openLink( title, artist, album );
 }
@@ -178,9 +178,9 @@ GlobalActionManager::getShortLink( const playlist_ptr& pl )
             continue;
 
         QVariantMap track;
-        track[ "title" ] = pl->query()->track();
-        track[ "creator" ] = pl->query()->artist();
-        track[ "album" ] = pl->query()->album();
+        track[ "title" ] = pl->query()->track()->track();
+        track[ "creator" ] = pl->query()->track()->artist();
+        track[ "album" ] = pl->query()->track()->album();
 
         tracks << track;
     }
@@ -1341,7 +1341,7 @@ GlobalActionManager::doBookmark( const playlist_ptr& pl, const query_ptr& q )
     plentry_ptr e( new PlaylistEntry );
     e->setGuid( uuid() );
 
-    e->setDuration( q->displayQuery()->duration() );
+    e->setDuration( q->track()->duration() );
     e->setLastmodified( 0 );
     QString annotation = "";
     if ( !q->property( "annotation" ).toString().isEmpty() )

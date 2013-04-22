@@ -84,7 +84,7 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::Original, QSize( 48, 48 ) );
     ui->cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::Grid, ui->cover->size() ) );
     ui->cover->setShowText( true );
-    
+
     m_scrollArea = new QScrollArea();
     m_scrollArea->setWidgetResizable( true );
     m_scrollArea->setWidget( widget );
@@ -156,28 +156,28 @@ void
 TrackInfoWidget::load( const query_ptr& query )
 {
     m_query = query;
-    m_artist = Artist::get( m_query->artist() );
-    m_title = QString( "%1 - %2" ).arg( query->artist() ).arg( query->track() );
+    m_artist = Artist::get( m_query->track()->artist() );
+    m_title = QString( "%1 - %2" ).arg( query->track()->artist() ).arg( query->track()->track() );
 
     if ( !m_query.isNull() )
     {
-        disconnect( m_query.data(), SIGNAL( lyricsLoaded() ), this, SLOT( onLyricsLoaded() ) );
-        disconnect( m_query.data(), SIGNAL( similarTracksLoaded() ), this, SLOT( onSimilarTracksLoaded() ) );
-        disconnect( m_query.data(), SIGNAL( statsLoaded() ), this, SLOT( onStatsLoaded() ) );
-        disconnect( m_query.data(), SIGNAL( updated() ), this, SLOT( onCoverUpdated() ) );
+        disconnect( m_query->track().data(), SIGNAL( lyricsLoaded() ), this, SLOT( onLyricsLoaded() ) );
+        disconnect( m_query->track().data(), SIGNAL( similarTracksLoaded() ), this, SLOT( onSimilarTracksLoaded() ) );
+        disconnect( m_query->track().data(), SIGNAL( statsLoaded() ), this, SLOT( onStatsLoaded() ) );
+        disconnect( m_query->track().data(), SIGNAL( updated() ), this, SLOT( onCoverUpdated() ) );
         disconnect( m_artist.data(), SIGNAL( statsLoaded() ), this, SLOT( onStatsLoaded() ) );
         disconnect( m_artist.data(), SIGNAL( similarArtistsLoaded() ), this, SLOT( onSimilarArtistsLoaded() ) );
     }
 
     connect( m_artist.data(), SIGNAL( similarArtistsLoaded() ), SLOT( onSimilarArtistsLoaded() ) );
     connect( m_artist.data(), SIGNAL( statsLoaded() ), SLOT( onStatsLoaded() ) );
-    connect( m_query.data(), SIGNAL( lyricsLoaded() ), SLOT( onLyricsLoaded() ) );
-    connect( m_query.data(), SIGNAL( similarTracksLoaded() ), SLOT( onSimilarTracksLoaded() ) );
-    connect( m_query.data(), SIGNAL( updated() ), SLOT( onCoverUpdated() ) );
-    connect( m_query.data(), SIGNAL( statsLoaded() ), SLOT( onStatsLoaded() ) );
+    connect( m_query->track().data(), SIGNAL( lyricsLoaded() ), SLOT( onLyricsLoaded() ) );
+    connect( m_query->track().data(), SIGNAL( similarTracksLoaded() ), SLOT( onSimilarTracksLoaded() ) );
+    connect( m_query->track().data(), SIGNAL( updated() ), SLOT( onCoverUpdated() ) );
+    connect( m_query->track().data(), SIGNAL( statsLoaded() ), SLOT( onStatsLoaded() ) );
 
     m_artist->loadStats();
-    m_query->loadStats();
+    m_query->track()->loadStats();
 //    m_query->lyrics();
     onCoverUpdated();
 
@@ -186,7 +186,7 @@ TrackInfoWidget::load( const query_ptr& query )
     m_relatedTracksModel->clear();
     m_relatedTracksModel->startLoading();
 
-    if ( !m_query->similarTracks().isEmpty() )
+    if ( !m_query->track()->similarTracks().isEmpty() )
         onSimilarTracksLoaded();
 }
 
@@ -194,10 +194,10 @@ TrackInfoWidget::load( const query_ptr& query )
 void
 TrackInfoWidget::onCoverUpdated()
 {
-    if ( m_query->cover( QSize( 0, 0 ) ).isNull() )
+    if ( m_query->track()->cover( QSize( 0, 0 ) ).isNull() )
         return;
 
-    m_pixmap = m_query->cover( ui->cover->size() );
+    m_pixmap = m_query->track()->cover( ui->cover->size() );
     ui->cover->setPixmap( TomahawkUtils::createRoundedImage( m_pixmap, QSize( 0, 0 ) ) );
 }
 
@@ -205,8 +205,8 @@ TrackInfoWidget::onCoverUpdated()
 void
 TrackInfoWidget::onStatsLoaded()
 {
-    QList< Tomahawk::PlaybackLog > history = m_query->playbackHistory( SourceList::instance()->getLocal() );
-    const unsigned int trackCounter = m_query->playbackCount( SourceList::instance()->getLocal() );
+    QList< Tomahawk::PlaybackLog > history = m_query->track()->playbackHistory( SourceList::instance()->getLocal() );
+    const unsigned int trackCounter = m_query->track()->playbackCount( SourceList::instance()->getLocal() );
     const unsigned int artistCounter = m_artist->playbackCount( SourceList::instance()->getLocal() );
 
     QString stats;
@@ -242,7 +242,7 @@ TrackInfoWidget::onSimilarArtistsLoaded()
 void
 TrackInfoWidget::onSimilarTracksLoaded()
 {
-    m_relatedTracksModel->appendQueries( m_query->similarTracks() );
+    m_relatedTracksModel->appendQueries( m_query->track()->similarTracks() );
     m_relatedTracksModel->finishLoading();
 }
 
@@ -250,22 +250,21 @@ TrackInfoWidget::onSimilarTracksLoaded()
 void
 TrackInfoWidget::onLyricsLoaded()
 {
-    ui->lyricsView->setHtml( m_query->lyrics().join( "<br/>" ) );
+    ui->lyricsView->setHtml( m_query->track()->lyrics().join( "<br/>" ) );
 }
 
 
 void
 TrackInfoWidget::onArtistClicked()
 {
-    ViewManager::instance()->show( Artist::get( m_query->artist(), false ) );
+    ViewManager::instance()->show( m_query->track()->artistPtr() );
 }
 
 
 void
 TrackInfoWidget::onAlbumClicked()
 {
-    artist_ptr artist = Artist::get( m_query->artist(), false );
-    ViewManager::instance()->show( Album::get( artist, m_query->album(), false ) );
+    ViewManager::instance()->show( m_query->track()->albumPtr() );
 }
 
 

@@ -62,7 +62,7 @@ SocialWidget::SocialWidget( QWidget* parent )
 
 
     m_timer.setSingleShot( true );
-    connect( &m_timer, SIGNAL( timeout() ), this, SLOT( hide() ) );
+    connect( &m_timer, SIGNAL( timeout() ), SLOT( hide() ) );
 
     ui->charsLeftLabel->setForegroundRole( QPalette::Text );
     ui->charsLeftLabel->setStyleSheet( "text: black" );
@@ -109,7 +109,7 @@ SocialWidget::show( int timeoutSecs )
     if ( !isEnabled() )
         return;
 
-    if( timeoutSecs > 0 )
+    if ( timeoutSecs > 0 )
         m_timer.start( timeoutSecs * 1000 );
 
     QWidget::show();
@@ -145,9 +145,9 @@ SocialWidget::paintEvent( QPaintEvent* event )
 
     QRect r = contentsRect();
     outline.addRoundedRect( r, TomahawkUtils::POPUP_ROUNDING_RADIUS, TomahawkUtils::POPUP_ROUNDING_RADIUS );
-    outline.moveTo( r.right() - ARROW_HEIGHT * 2, r.bottom()+1 );
-    outline.lineTo( r.right() - ARROW_HEIGHT * 3, r.bottom()+1 + ARROW_HEIGHT );
-    outline.lineTo( r.right() - ARROW_HEIGHT * 4, r.bottom()+1 );
+    outline.moveTo( r.right() - ARROW_HEIGHT * 2, r.bottom() + 1 );
+    outline.lineTo( r.right() - ARROW_HEIGHT * 3, r.bottom() + 1 + ARROW_HEIGHT );
+    outline.lineTo( r.right() - ARROW_HEIGHT * 4, r.bottom() + 1 );
 
     TomahawkUtils::drawCompositedPopup( this,
                                         outline,
@@ -163,10 +163,10 @@ SocialWidget::onShortLinkReady( const QUrl& longUrl, const QUrl& shortUrl, const
     Q_UNUSED( longUrl );
     Q_UNUSED( callbackObj );
 
-    if ( m_query->album().isEmpty() )
-        ui->textEdit->setText( tr( "Listening to \"%1\" by %2. %3" ).arg( m_query->track() ).arg( m_query->artist() ).arg( shortUrl.toString() ) );
+    if ( m_query->track()->album().isEmpty() )
+        ui->textEdit->setText( tr( "Listening to \"%1\" by %2. %3" ).arg( m_query->track()->track() ).arg( m_query->track()->artist() ).arg( shortUrl.toString() ) );
     else
-        ui->textEdit->setText( tr( "Listening to \"%1\" by %2 on \"%3\". %4" ).arg( m_query->track() ).arg( m_query->artist() ).arg( m_query->album() ).arg( shortUrl.toString() ) );
+        ui->textEdit->setText( tr( "Listening to \"%1\" by %2 on \"%3\". %4" ).arg( m_query->track()->track() ).arg( m_query->track()->artist() ).arg( m_query->track()->album() ).arg( shortUrl.toString() ) );
 }
 
 
@@ -174,7 +174,7 @@ void
 SocialWidget::setQuery( const Tomahawk::query_ptr& query )
 {
     m_query = query;
-    ui->coverImage->setPixmap( TomahawkUtils::addDropShadow( query->cover( ui->coverImage->size() ), ui->coverImage->size() ) );
+    ui->coverImage->setPixmap( TomahawkUtils::addDropShadow( query->track()->cover( ui->coverImage->size() ), ui->coverImage->size() ) );
     onShortLinkReady( QString(), QString(), QVariant() );
     onChanged();
 
@@ -200,9 +200,9 @@ SocialWidget::accept()
     QVariantMap shareInfo;
     Tomahawk::InfoSystem::InfoStringHash trackInfo;
 
-    trackInfo["title"] = m_query->track();
-    trackInfo["artist"] = m_query->artist();
-    trackInfo["album"] = m_query->album();
+    trackInfo["title"] = m_query->track()->track();
+    trackInfo["artist"] = m_query->track()->artist();
+    trackInfo["album"] = m_query->track()->album();
 
     shareInfo["trackinfo"] = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
     shareInfo["message"] = ui->textEdit->toPlainText();

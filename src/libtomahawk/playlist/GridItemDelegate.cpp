@@ -102,8 +102,8 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     }
     else if ( !item->query().isNull() )
     {
-        top = item->query()->track();
-        bottom = item->query()->artist();
+        top = item->query()->track()->track();
+        bottom = item->query()->track()->artist();
     }
     else
     {
@@ -381,9 +381,9 @@ GridItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const Q
             if ( !item )
                 return false;
 
-            if ( !item->query().isNull() )
-                ViewManager::instance()->show( Tomahawk::Artist::get( item->query()->artist() ) );
-            else if ( !item->album().isNull() && !item->album()->artist().isNull() )
+            if ( item->query() )
+                ViewManager::instance()->show( item->query()->track()->artistPtr() );
+            else if ( item->album() && item->album()->artist() )
                 ViewManager::instance()->show( item->album()->artist() );
 
             event->accept();

@@ -132,8 +132,8 @@ SearchWidget::onResultsFound( const QList<Tomahawk::result_ptr>& results )
 
         m_resultsModel->appendQuery( q );
 
-        artists << result->artist();
-        albums << result->album();
+        artists << result->track()->artistPtr();
+        albums << result->track()->albumPtr();
     }
 
     onArtistsFound( artists );

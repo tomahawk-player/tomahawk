@@ -123,22 +123,15 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
 
         Tomahawk::result_ptr result = Tomahawk::Result::get( url );
         Tomahawk::query_ptr qry = Tomahawk::Query::get( artist, track, album );
-        Tomahawk::artist_ptr artistptr = Tomahawk::Artist::get( query.value( 14 ).toUInt(), artist );
-        Tomahawk::artist_ptr composerptr = Tomahawk::Artist::get( query.value( 17 ).toUInt(), composer );
-        Tomahawk::album_ptr albumptr = Tomahawk::Album::get( query.value( 15 ).toUInt(), album, artistptr );
+
+        Tomahawk::track_ptr t = Tomahawk::Track::get( artist, track, album, query.value( 6 ).toUInt(), composer, query.value( 13 ).toUInt(), query.value( 12 ).toUInt() );
+        result->setTrack( t );
 
         result->setTrackId( query.value( 16 ).toUInt() );
-        result->setArtist( artistptr );
-        result->setAlbum( albumptr );
-        result->setTrack( query.value( 3 ).toString() );
-        result->setComposer( composerptr );
         result->setSize( query.value( 5 ).toUInt() );
-        result->setDuration( query.value( 6 ).toUInt() );
         result->setBitrate( query.value( 7 ).toUInt() );
         result->setModificationTime( query.value( 10 ).toUInt() );
         result->setMimetype( query.value( 11 ).toString() );
-        result->setDiscNumber( query.value( 12 ).toUInt() );
-        result->setAlbumPos( query.value( 13 ).toUInt() );
         result->setScore( 1.0 );
         result->setCollection( s->dbCollection() );
 

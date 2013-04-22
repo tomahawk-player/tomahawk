@@ -278,12 +278,9 @@ ScriptResolver::handleMsg( const QByteArray& msg )
                 continue;
 
             Tomahawk::result_ptr rp = Tomahawk::Result::get( m.value( "url" ).toString() );
-            Tomahawk::artist_ptr ap = Tomahawk::Artist::get( m.value( "artist" ).toString(), false );
-            rp->setArtist( ap );
-            rp->setAlbum( Tomahawk::Album::get( ap, m.value( "album" ).toString(), false ) );
-            rp->setAlbumPos( m.value( "albumpos" ).toUInt() );
-            rp->setTrack( m.value( "track" ).toString() );
-            rp->setDuration( m.value( "duration" ).toUInt() );
+            Tomahawk::track_ptr track = Tomahawk::Track::get( m.value( "artist" ).toString(), m.value( "track" ).toString(), m.value( "album" ).toString(), m.value( "duration" ).toUInt(), QString(), m.value( "albumpos" ).toUInt(), m.value( "discnumber" ).toUInt() );
+            rp->setTrack( track );
+
             rp->setBitrate( m.value( "bitrate" ).toUInt() );
             rp->setSize( m.value( "size" ).toUInt() );
             rp->setRID( uuid() );
@@ -291,7 +288,6 @@ ScriptResolver::handleMsg( const QByteArray& msg )
             rp->setPurchaseUrl( m.value( "purchaseUrl" ).toString() );
             rp->setLinkUrl( m.value( "linkUrl" ).toString() );
             rp->setYear( m.value( "year").toUInt() );
-            rp->setDiscNumber( m.value( "discnumber" ).toUInt() );
 
             rp->setMimetype( m.value( "mimetype" ).toString() );
             if ( rp->mimetype().isEmpty() )
@@ -355,14 +351,14 @@ ScriptResolver::resolve( const Tomahawk::query_ptr& query )
     if ( query->isFullTextQuery() )
     {
         m.insert( "fulltext", query->fullTextQuery() );
-        m.insert( "artist", query->artist() );
+        m.insert( "artist", query->queryTrack()->artist() );
         m.insert( "track", query->fullTextQuery() );
         m.insert( "qid", query->id() );
     }
     else
     {
-        m.insert( "artist", query->artist() );
-        m.insert( "track", query->track() );
+        m.insert( "artist", query->queryTrack()->artist() );
+        m.insert( "track", query->queryTrack()->track() );
         m.insert( "qid", query->id() );
 
         if ( !query->resultHint().isEmpty() )

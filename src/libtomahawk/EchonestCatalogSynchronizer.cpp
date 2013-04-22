@@ -328,9 +328,7 @@ EchonestCatalogSynchronizer::loadedResults( const QList<result_ptr>& results )
 
         qDebug() << "Metadata for item:" << result->fileId();
 
-        const QString artist = result->artist().isNull() ? QString() : result->artist()->name();
-        const QString album = result->album().isNull() ? QString() : result->album()->name();
-        rawTracks << ( QStringList() << QString::number( result->fileId() ) << result->track() << artist << album );
+        rawTracks << ( QStringList() << QString::number( result->fileId() ) << result->track()->track() << result->track()->artist() << result->track()->album() );
     }
     rawTracksAdd( rawTracks );
 }

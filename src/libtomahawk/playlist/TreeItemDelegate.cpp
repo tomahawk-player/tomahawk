@@ -291,7 +291,7 @@ TreeItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const Q
 
             if ( item->query() )
             {
-                ViewManager::instance()->show( item->query()->displayQuery() );
+                ViewManager::instance()->show( item->query()->track()->toQuery() );
             }
             else if ( item->artist() )
             {

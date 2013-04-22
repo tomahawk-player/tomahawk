@@ -702,9 +702,9 @@ mergePlaylistChanges( const QList< Tomahawk::query_ptr >& orig, const QList< Tom
     {
         foreach ( const Tomahawk::query_ptr& oldq, orig )
         {
-            if ( newquery->track() == oldq->track() &&
-                newquery->artist() == oldq->artist() &&
-                newquery->album() == oldq->album() )
+            if ( newquery->queryTrack()->track() == oldq->queryTrack()->track() &&
+                newquery->queryTrack()->artist() == oldq->queryTrack()->artist() &&
+                newquery->queryTrack()->album() == oldq->queryTrack()->album() )
             {
                 sameCount++;
                 if ( tosave.contains( newquery ) )

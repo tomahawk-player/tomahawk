@@ -85,12 +85,11 @@ PixmapDelegateFader::PixmapDelegateFader( const query_ptr& track, const QSize& s
 {
     if ( !m_track.isNull() )
     {
-        connect( m_track.data(), SIGNAL( updated() ), SLOT( trackChanged() ) );
         connect( m_track.data(), SIGNAL( resultsChanged() ), SLOT( trackChanged() ) );
-        connect( m_track->displayQuery().data(), SIGNAL( updated() ), SLOT( trackChanged() ) );
-        connect( m_track->displayQuery().data(), SIGNAL( coverChanged() ), SLOT( trackChanged() ) );
+        connect( m_track->track().data(), SIGNAL( updated() ), SLOT( trackChanged() ) );
+        connect( m_track->track().data(), SIGNAL( coverChanged() ), SLOT( trackChanged() ) );
 
-        m_currentReference = TomahawkUtils::createRoundedImage( m_track->displayQuery()->cover( size, forceLoad ), QSize( 0, 0 ), m_mode == TomahawkUtils::Grid ? 0.00 : 0.20 );
+        m_currentReference = TomahawkUtils::createRoundedImage( m_track->track()->cover( size, forceLoad ), QSize( 0, 0 ), m_mode == TomahawkUtils::Grid ? 0.00 : 0.20 );
     }
 
     init();
@@ -151,7 +150,7 @@ PixmapDelegateFader::setSize( const QSize& size )
         else if ( !m_artist.isNull() )
             m_currentReference = TomahawkUtils::createRoundedImage( m_artist->cover( m_size ), QSize( 0, 0 ), m_mode == TomahawkUtils::Grid ? 0.00 : 0.20 );
         else if ( !m_track.isNull() )
-            m_currentReference = TomahawkUtils::createRoundedImage( m_track->displayQuery()->cover( m_size ), QSize( 0, 0 ), m_mode == TomahawkUtils::Grid ? 0.00 : 0.20 );
+            m_currentReference = TomahawkUtils::createRoundedImage( m_track->track()->cover( m_size ), QSize( 0, 0 ), m_mode == TomahawkUtils::Grid ? 0.00 : 0.20 );
     }
 
     emit repaintRequest();
@@ -184,9 +183,9 @@ PixmapDelegateFader::trackChanged()
     if ( m_track.isNull() )
         return;
 
-    connect( m_track->displayQuery().data(), SIGNAL( updated() ), SLOT( trackChanged() ), Qt::UniqueConnection );
-    connect( m_track->displayQuery().data(), SIGNAL( coverChanged() ), SLOT( trackChanged() ), Qt::UniqueConnection );
-    QMetaObject::invokeMethod( this, "setPixmap", Qt::QueuedConnection, Q_ARG( QPixmap, m_track->displayQuery()->cover( m_size ) ) );
+    connect( m_track->track().data(), SIGNAL( updated() ), SLOT( trackChanged() ), Qt::UniqueConnection );
+    connect( m_track->track().data(), SIGNAL( coverChanged() ), SLOT( trackChanged() ), Qt::UniqueConnection );
+    QMetaObject::invokeMethod( this, "setPixmap", Qt::QueuedConnection, Q_ARG( QPixmap, m_track->track()->cover( m_size ) ) );
 }
 
 

@@ -360,15 +360,15 @@ DropJob::tracksFromQueryList( const QMimeData* data )
 
             if ( m_top10 )
             {
-                queries << getTopTen( query->data()->artist() );
+                queries << getTopTen( query->data()->track()->artist() );
             }
             else if ( m_getWholeArtists )
             {
-                queries << getArtist( query->data()->artist() );
+                queries << getArtist( query->data()->track()->artist() );
             }
             else if ( m_getWholeAlbums )
             {
-                queries << getAlbum( query->data()->artist(), query->data()->album() );
+                queries << getAlbum( query->data()->track()->artist(), query->data()->track()->album() );
             }
             else
             {
@@ -396,24 +396,23 @@ DropJob::tracksFromResultList( const QMimeData* data )
         result_ptr* result = reinterpret_cast<result_ptr*>(qptr);
         if ( result && !result->isNull() )
         {
-            tDebug() << "Dropped result item:" << result->data()->artist()->name() << "-" << result->data()->track();
-            query_ptr q = result->data()->toQuery();
+            tDebug() << "Dropped result item:" << result->data()->track()->artist() << "-" << result->data()->track()->track();
 
             if ( m_top10 )
             {
-                getTopTen( q->artist() );
+                getTopTen( result->data()->track()->artist() );
             }
             else if ( m_getWholeArtists )
             {
-                queries << getArtist( q->artist() );
+                queries << getArtist( result->data()->track()->artist() );
             }
             else if ( m_getWholeAlbums )
             {
-                queries << getAlbum( q->artist(), q->album() );
+                queries << getAlbum( result->data()->track()->artist(), result->data()->track()->album() );
             }
             else
             {
-                queries << q;
+                queries << result->data()->toQuery();
             }
         }
     }
@@ -488,7 +487,7 @@ DropJob::tracksFromMixedData( const QMimeData *data )
         QDataStream singleStream( &singleData, QIODevice::WriteOnly );
 
         QMimeData singleMimeData;
-        if ( mimeType == "application/tomahawk.query.list" ) 
+        if ( mimeType == "application/tomahawk.query.list" )
         {
             qlonglong query;
             stream >> query;
@@ -798,7 +797,7 @@ void
 DropJob::onTracksAdded( const QList<Tomahawk::query_ptr>& tracksList )
 {
     tDebug() << Q_FUNC_INFO << tracksList.count();
-    
+
 #ifndef ENABLE_HEADLESS
 /*    if ( results.isEmpty() )
     {
@@ -842,7 +841,7 @@ DropJob::removeDuplicates()
             m_resultList.removeOne( item );
             continue;
         }
-        
+
         foreach( const Tomahawk::query_ptr &tmpItem, list )
         {
             if ( tmpItem.isNull() )
@@ -850,10 +849,10 @@ DropJob::removeDuplicates()
                 list.removeOne( tmpItem );
                 continue;
             }
-            
-            if ( item->album() == tmpItem->album()
-                 && item->artist() == tmpItem->artist()
-                 && item->track() == tmpItem->track() )
+
+            if ( item->track()->album() == tmpItem->track()->album()
+                 && item->track()->artist() == tmpItem->track()->artist()
+                 && item->track()->track() == tmpItem->track()->track() )
             {
                 if ( item->playable() && !tmpItem->playable() )
                     list.replace( list.indexOf( tmpItem ), item );
@@ -882,7 +881,7 @@ DropJob::removeRemoteSources()
             m_resultList.removeOne( item );
             continue;
         }
-        
+
         bool hasLocalSource = false;
         foreach ( const Tomahawk::result_ptr& result, item->results() )
         {

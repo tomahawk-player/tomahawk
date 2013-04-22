@@ -111,10 +111,7 @@ PlaylistChartItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
     if ( m_view->header()->visualIndex( index.column() ) > 0 )
         return;
 
-    const query_ptr q = item->query()->displayQuery();
-    unsigned int duration = q->duration();
-    QString artist = q->artist();
-    QString track = q->track();
+    const track_ptr track = item->query()->track();
     QPixmap avatar;
     QString upperText, lowerText;
 
@@ -192,7 +189,7 @@ PlaylistChartItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         painter->drawPixmap( pixmapRect, pixmap );
 
         r.adjust( pixmapRect.width() + figureRect.width() + 18, 1, -28, 0 );
-        QRect rightRect = r.adjusted( r.width() - durationFontMetrics.width( TomahawkUtils::timeToString( duration ) ), 0, 0, 0 );
+        QRect rightRect = r.adjusted( r.width() - durationFontMetrics.width( TomahawkUtils::timeToString( track->duration() ) ), 0, 0, 0 );
         QRect leftRect = r.adjusted( 0, 0, -( rightRect.width() + 8 ), 0 );
 
 /*        const int sourceIconSize = r.height();
@@ -217,18 +214,18 @@ PlaylistChartItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         }*/
 
         painter->setFont( boldFont );
-        QString text = painter->fontMetrics().elidedText( track, Qt::ElideRight, leftRect.width() );
+        QString text = painter->fontMetrics().elidedText( track->track(), Qt::ElideRight, leftRect.width() );
         painter->drawText( leftRect, text, m_topOption );
 
         painter->setFont( smallBoldFont );
-        text = painter->fontMetrics().elidedText( artist, Qt::ElideRight, leftRect.width() );
+        text = painter->fontMetrics().elidedText( track->artist(), Qt::ElideRight, leftRect.width() );
         painter->drawText( index.row() >= 10 ? leftRect : leftRect.adjusted( 0, painter->fontMetrics().height() + 6, 0, 0 ), text, index.row() >= 10 ? m_bottomOption : m_topOption );
 
-        if ( duration > 0 )
+        if ( track->duration() > 0 )
         {
             painter->setPen( opt.palette.text().color() );
             painter->setFont( durationFont );
-            painter->drawText( rightRect, TomahawkUtils::timeToString( duration ), m_centerRightOption );
+            painter->drawText( rightRect, TomahawkUtils::timeToString( track->duration() ), m_centerRightOption );
         }
     }
     painter->restore();

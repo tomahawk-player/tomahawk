@@ -44,8 +44,15 @@
 using namespace Tomahawk;
 
 
-PlaylistEntry::PlaylistEntry() {}
-PlaylistEntry::~PlaylistEntry() {}
+PlaylistEntry::PlaylistEntry()
+{
+}
+
+
+PlaylistEntry::~PlaylistEntry()
+{
+    tDebug() << Q_FUNC_INFO << m_query->toString();
+}
 
 
 void
@@ -179,7 +186,7 @@ Playlist::create( const source_ptr& author,
     {
         plentry_ptr p( new PlaylistEntry );
         p->setGuid( uuid() );
-        p->setDuration( query->duration() );
+        p->setDuration( query->track()->duration() );
         p->setLastmodified( 0 );
         p->setAnnotation( query->property( "annotation" ).toString() );
         p->setQuery( query );
@@ -435,7 +442,7 @@ Playlist::createNewRevision( const QString& newrev, const QString& oldrev, const
     qDebug() << "Inserting ordered GUIDs:";
     foreach( const plentry_ptr& p, entries )
     {
-        qDebug() << p->guid() << p->query()->track() << p->query()->artist();
+        qDebug() << p->guid() << p->query()->track()->toString();
         orderedguids << p->guid();
     }
 
@@ -558,10 +565,9 @@ Playlist::setNewRevision( const QString& rev,
     QMap<QString, plentry_ptr> entriesmap;
     foreach ( const plentry_ptr& p, m_entries )
     {
-        qDebug() << p->guid() << p->query()->track() << p->query()->artist();
+        tDebug() << p->guid() << p->query()->toString();
         entriesmap.insert( p->guid(), p );
     }
-
 
     // re-build m_entries from neworderedguids. plentries come either from the old m_entries OR addedmap.
     m_entries.clear();
@@ -705,7 +711,7 @@ Playlist::entriesFromQueries( const QList<Tomahawk::query_ptr>& queries, bool cl
         plentry_ptr e( new PlaylistEntry() );
         e->setGuid( uuid() );
 
-        e->setDuration( query->displayQuery()->duration() );
+        e->setDuration( query->track()->duration() );
         e->setLastmodified( 0 );
         QString annotation = "";
         if ( !query->property( "annotation" ).toString().isEmpty() )

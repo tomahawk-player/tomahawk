@@ -256,8 +256,8 @@ FuzzyIndex::search( const Tomahawk::query_ptr& query )
         }
         else
         {
-            QString track = QString::fromWCharArray( parser.escape( DatabaseImpl::sortname( query->track() ).toStdWString().c_str() ) );
-            QString artist = QString::fromWCharArray( parser.escape( DatabaseImpl::sortname( query->artist() ).toStdWString().c_str() ) );
+            QString track = QString::fromWCharArray( parser.escape( DatabaseImpl::sortname( query->queryTrack()->track() ).toStdWString().c_str() ) );
+            QString artist = QString::fromWCharArray( parser.escape( DatabaseImpl::sortname( query->queryTrack()->artist() ).toStdWString().c_str() ) );
 //            QString album = QString::fromWCharArray( parser.escape( query->album().toStdWString().c_str() ) );
 
             Term* term = _CLNEW Term( _T( "track" ), track.toStdWString().c_str() );

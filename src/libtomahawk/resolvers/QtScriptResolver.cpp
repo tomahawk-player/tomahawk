@@ -686,9 +686,9 @@ QtScriptResolver::resolve( const Tomahawk::query_ptr& query )
     {
         eval = QString( RESOLVER_LEGACY_CODE2 "resolver.resolve( '%1', '%2', '%3', '%4' );" )
                   .arg( query->id().replace( "'", "\\'" ) )
-                  .arg( query->artist().replace( "'", "\\'" ) )
-                  .arg( query->album().replace( "'", "\\'" ) )
-                  .arg( query->track().replace( "'", "\\'" ) );
+                  .arg( query->queryTrack()->artist().replace( "'", "\\'" ) )
+                  .arg( query->queryTrack()->album().replace( "'", "\\'" ) )
+                  .arg( query->queryTrack()->track().replace( "'", "\\'" ) );
     }
     else
     {
@@ -736,12 +736,16 @@ QtScriptResolver::parseResultVariantList( const QVariantList& reslist )
         if ( m.value( "preview" ).toBool() == true )
             continue;
 
+        unsigned int duration = m.value( "duration", 0 ).toUInt();
+        if ( duration <= 0 && m.contains( "durationString" ) )
+        {
+            QTime time = QTime::fromString( m.value( "durationString" ).toString(), "hh:mm:ss" );
+            duration = time.secsTo( QTime( 0, 0 ) ) * -1;
+        }
+
         Tomahawk::result_ptr rp = Tomahawk::Result::get( m.value( "url" ).toString() );
-        Tomahawk::artist_ptr ap = Tomahawk::Artist::get( m.value( "artist" ).toString(), false );
-        rp->setArtist( ap );
-        rp->setAlbum( Tomahawk::Album::get( ap, m.value( "album" ).toString(), false ) );
-        rp->setTrack( m.value( "track" ).toString() );
-        rp->setAlbumPos( m.value( "albumpos" ).toUInt() );
+        Tomahawk::track_ptr track = Tomahawk::Track::get( m.value( "artist" ).toString(), m.value( "track" ).toString(), m.value( "album" ).toString(), duration, QString(), m.value( "albumpos" ).toUInt(), m.value( "discnumber" ).toUInt() );
+
         rp->setBitrate( m.value( "bitrate" ).toUInt() );
         rp->setSize( m.value( "size" ).toUInt() );
         rp->setRID( uuid() );
@@ -749,20 +753,12 @@ QtScriptResolver::parseResultVariantList( const QVariantList& reslist )
         rp->setPurchaseUrl( m.value( "purchaseUrl" ).toString() );
         rp->setLinkUrl( m.value( "linkUrl" ).toString() );
         rp->setScore( m.value( "score" ).toFloat() );
-        rp->setDiscNumber( m.value( "discnumber" ).toUInt() );
 
         if ( m.contains( "year" ) )
         {
             QVariantMap attr;
             attr[ "releaseyear" ] = m.value( "year" );
             rp->setAttributes( attr );
-        }
-
-        rp->setDuration( m.value( "duration", 0 ).toUInt() );
-        if ( rp->duration() <= 0 && m.contains( "durationString" ) )
-        {
-            QTime time = QTime::fromString( m.value( "durationString" ).toString(), "hh:mm:ss" );
-            rp->setDuration( time.secsTo( QTime( 0, 0 ) ) * -1 );
         }
 
         rp->setMimetype( m.value( "mimetype" ).toString() );
@@ -772,6 +768,7 @@ QtScriptResolver::parseResultVariantList( const QVariantList& reslist )
             Q_ASSERT( !rp->mimetype().isEmpty() );
         }
 
+        rp->setTrack( track );
         rp->setResolvedBy( this );
         results << rp;
     }

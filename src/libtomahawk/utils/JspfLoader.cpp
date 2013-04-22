@@ -178,11 +178,11 @@ JSPFLoader::gotBody()
                 continue;
             }
 
-            query_ptr q = Tomahawk::Query::get( artist, track, album, uuid() );
-            if ( q.isNull() )
+            track_ptr t = Tomahawk::Track::get( artist, track, album, duration.toInt() / 1000 );
+            query_ptr q = Tomahawk::Query::get( t );
+            if ( !q )
                 continue;
 
-            q->setDuration( duration.toInt() / 1000 );
             if ( !url.isEmpty() )
             {
                 q->setResultHint( url );

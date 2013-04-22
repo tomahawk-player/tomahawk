@@ -950,7 +950,7 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
             QList<query_ptr> qs = SpotifyPlaylistUpdater::variantToQueries( tracksList );
             foreach ( const query_ptr& query, qs )
             {
-                query->setLoved( love );
+                query->track()->setLoved( love );
             }
         }
     }

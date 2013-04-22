@@ -109,8 +109,8 @@ RecentlyPlayedPlaylistsModel::data( const QModelIndex& index, int role ) const
 
             foreach( const Tomahawk::plentry_ptr& entry, pl->entries() )
             {
-                if ( !artists.contains( entry->query()->artist() ) )
-                    artists << entry->query()->artist();
+                if ( !artists.contains( entry->query()->track()->artist() ) )
+                    artists << entry->query()->track()->artist();
             }
 
             m_artists[pl] = artists.join( ", " );

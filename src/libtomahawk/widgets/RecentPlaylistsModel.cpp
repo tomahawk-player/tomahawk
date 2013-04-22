@@ -65,7 +65,7 @@ RecentPlaylistsModel::onRefresh()
         m_timer->stop();
 
     emit loadingStarted();
-   
+
     DatabaseCommand_LoadAllSortedPlaylists* cmd = new DatabaseCommand_LoadAllSortedPlaylists( source_ptr() );
     cmd->setLimit( 15 );
     cmd->setSortOrder( DatabaseCommand_LoadAllPlaylists::ModificationTime );
@@ -145,8 +145,8 @@ RecentPlaylistsModel::data( const QModelIndex& index, int role ) const
 
             foreach( const Tomahawk::plentry_ptr& entry, pl->entries() )
             {
-                if ( !artists.contains( entry->query()->artist() ) )
-                    artists << entry->query()->artist();
+                if ( !artists.contains( entry->query()->track()->artist() ) )
+                    artists << entry->query()->track()->artist();
             }
 
             m_artists[pl] = artists.join( ", " );

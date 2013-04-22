@@ -133,7 +133,7 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
         m_loveAction = addAction( tr( "&Love" ) );
         m_sigmap->setMapping( m_loveAction, ActionLove );
 
-        connect( queries.first().data(), SIGNAL( socialActionsLoaded() ), SLOT( onSocialActionsLoaded() ) );
+        connect( queries.first()->track().data(), SIGNAL( socialActionsLoaded() ), SLOT( onSocialActionsLoaded() ) );
         onSocialActionsLoaded();
     }
 
@@ -142,15 +142,15 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
     if ( m_supportedActions & ActionPage && itemCount() == 1 )
     {
         // Ampersands need to be escaped as they indicate a keyboard shortcut
-        const QString track = m_queries.first()->track().replace( QString( "&" ), QString( "&&" ) );
+        const QString track = m_queries.first()->track()->track().replace( QString( "&" ), QString( "&&" ) );
         m_sigmap->setMapping( addAction( ImageRegistry::instance()->icon( RESPATH "images/track-icon.svg" ),
                                          tr( "&Go to \"%1\"" ).arg( track ) ), ActionTrackPage );
-        if ( !m_queries.first()->album().isEmpty() ) {
-            const QString album = m_queries.first()->album().replace( QString( "&" ), QString( "&&" ) );
+        if ( !m_queries.first()->track()->album().isEmpty() ) {
+            const QString album = m_queries.first()->track()->album().replace( QString( "&" ), QString( "&&" ) );
             m_sigmap->setMapping( addAction( ImageRegistry::instance()->icon( RESPATH "images/album-icon.svg" ),
                                              tr( "Go to \"%1\"" ).arg( album ) ), ActionAlbumPage );
         }
-        const QString artist = m_queries.first()->artist().replace( QString( "&" ), QString( "&&" ) );
+        const QString artist = m_queries.first()->track()->artist().replace( QString( "&" ), QString( "&&" ) );
         m_sigmap->setMapping( addAction( ImageRegistry::instance()->icon( RESPATH "images/artist-icon.svg" ),
                                          tr( "Go to \"%1\"" ).arg( artist ) ), ActionArtistPage );
     }
@@ -302,7 +302,7 @@ ContextMenu::onTriggered( int action )
             break;
 
         case ActionLove:
-            m_queries.first()->setLoved( !m_queries.first()->loved() );
+            m_queries.first()->track()->setLoved( !m_queries.first()->track()->loved() );
             break;
 
         case ActionStopAfter:
@@ -322,6 +322,8 @@ ContextMenu::onTriggered( int action )
         default:
             emit triggered( action );
     }
+
+    clear();
 }
 
 
@@ -375,14 +377,13 @@ ContextMenu::openPage( MenuActions action )
         }
         else
         {
-            const Tomahawk::artist_ptr artist = Artist::get( m_queries.first()->artist(), false );
             if ( action == ActionArtistPage )
             {
-                ViewManager::instance()->show( artist );
+                ViewManager::instance()->show( m_queries.first()->track()->artistPtr() );
             }
             else if ( action == ActionAlbumPage )
             {
-                ViewManager::instance()->show( Album::get( artist, m_queries.first()->album(), false ) );
+                ViewManager::instance()->show( m_queries.first()->track()->albumPtr() );
             }
         }
     }
@@ -410,7 +411,7 @@ ContextMenu::onSocialActionsLoaded()
     if ( m_queries.isEmpty() || m_queries.first().isNull() )
         return;
 
-    if ( m_loveAction && m_queries.first()->loved() )
+    if ( m_loveAction && m_queries.first()->track()->loved() )
     {
         m_loveAction->setText( tr( "Un-&Love" ) );
         m_loveAction->setIcon( ImageRegistry::instance()->icon( RESPATH "images/not-loved.svg" ) );

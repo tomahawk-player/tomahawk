@@ -297,19 +297,14 @@ DatabaseImpl::file( int fid )
         }
 
         r = Tomahawk::Result::get( url );
-        Tomahawk::artist_ptr artist = Tomahawk::Artist::get( query.value( 7 ).toUInt(), query.value( 11 ).toString() );
-        Tomahawk::album_ptr album = Tomahawk::Album::get( query.value( 8 ).toUInt(), query.value( 12 ).toString(), artist );
-        Tomahawk::artist_ptr composer = Tomahawk::Artist::get( query.value( 10 ).toUInt(), query.value( 14 ).toString() );
+
+        Tomahawk::track_ptr track = Tomahawk::Track::get( query.value( 11 ).toString(), query.value( 13 ).toString(), query.value( 12 ).toString(), query.value( 5 ).toUInt(), query.value( 14 ).toString() );
+        r->setTrack( track );
 
         r->setModificationTime( query.value( 1 ).toUInt() );
         r->setSize( query.value( 2 ).toUInt() );
         r->setMimetype( query.value( 4 ).toString() );
-        r->setDuration( query.value( 5 ).toUInt() );
         r->setBitrate( query.value( 6 ).toUInt() );
-        r->setArtist( artist );
-        r->setAlbum( album );
-        r->setComposer( composer );
-        r->setTrack( query.value( 13 ).toString() );
         r->setTrackId( query.value( 9 ).toUInt() );
         r->setCollection( s->dbCollection() );
         r->setScore( 1.0 );
@@ -626,12 +621,11 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
         res = Tomahawk::Result::get( url );
         res->setRID( uuid() );
         res->setScore( 1.0 );
-        res->setArtist( Tomahawk::Artist::get( artistId( origquery->artist(), false ), origquery->artist() ) );
-        res->setAlbum( Tomahawk::Album::get( albumId( res->artist()->id(), origquery->album(), false ), origquery->album(), res->artist() ) );
-        res->setTrack( origquery->track() );
-        res->setDuration( origquery->duration() );
         const QUrl u = QUrl::fromUserInput( url );
         res->setFriendlySource( u.host() );
+
+        Tomahawk::track_ptr track = Tomahawk::Track::get( origquery->queryTrack()->artist(), origquery->queryTrack()->track(), origquery->queryTrack()->album(), origquery->queryTrack()->duration() );
+        res->setTrack( track );
 
         return res;
     }
@@ -695,22 +689,15 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
         }
 
         res = Tomahawk::Result::get( url );
-        Tomahawk::artist_ptr artist = Tomahawk::Artist::get( query.value( 18 ).toUInt(), query.value( 11 ).toString() );
-        Tomahawk::album_ptr album = Tomahawk::Album::get( query.value( 19 ).toUInt(), query.value( 12 ).toString(), artist );
-        Tomahawk::artist_ptr composer = Tomahawk::Artist::get( query.value( 20 ).toUInt(), query.value( 14 ).toString() );
+
+        Tomahawk::track_ptr track = Tomahawk::Track::get( query.value( 11 ).toString(), query.value( 13 ).toString(), query.value( 12 ).toString(), query.value( 5 ).toInt(), query.value( 14 ).toString(), query.value( 16 ).toUInt(), query.value( 17 ).toUInt() );
+        res->setTrack( track );
 
         res->setModificationTime( query.value( 1 ).toUInt() );
         res->setSize( query.value( 2 ).toUInt() );
         res->setMimetype( query.value( 4 ).toString() );
-        res->setDuration( query.value( 5 ).toInt() );
         res->setBitrate( query.value( 6 ).toInt() );
-        res->setArtist( artist );
-        res->setAlbum( album );
-        res->setComposer( composer );
         res->setScore( 1.0 );
-        res->setTrack( query.value( 13 ).toString() );
-        res->setAlbumPos( query.value( 16 ).toUInt() );
-        res->setDiscNumber( query.value( 17 ).toUInt() );
         res->setRID( uuid() );
         res->setTrackId( query.value( 9 ).toUInt() );
         res->setCollection( s->dbCollection() );

@@ -155,14 +155,14 @@ TomahawkTrayIcon::setResult( const Tomahawk::result_ptr& result )
 {
     if ( m_currentTrack )
     {
-        disconnect( m_currentTrack->toQuery().data(), SIGNAL( socialActionsLoaded() ), this, SLOT( onSocialActionsLoaded() ) );
+        disconnect( m_currentTrack->track().data(), SIGNAL( socialActionsLoaded() ), this, SLOT( onSocialActionsLoaded() ) );
     }
 
     m_currentTrack = result;
     refreshToolTip();
 
     if ( result )
-        connect( result->toQuery().data(), SIGNAL( socialActionsLoaded() ), SLOT( onSocialActionsLoaded() ), Qt::UniqueConnection );
+        connect( result->track().data(), SIGNAL( socialActionsLoaded() ), SLOT( onSocialActionsLoaded() ), Qt::UniqueConnection );
 
     onSocialActionsLoaded();
     onStopContinueAfterTrackChanged();
@@ -172,7 +172,7 @@ TomahawkTrayIcon::setResult( const Tomahawk::result_ptr& result )
 void
 TomahawkTrayIcon::onStopContinueAfterTrackChanged()
 {
-    if ( m_currentTrack && m_currentTrack->toQuery()->equals( AudioEngine::instance()->stopAfterTrack() ) )
+    if ( m_currentTrack && AudioEngine::instance()->stopAfterTrack() && m_currentTrack->track()->equals( AudioEngine::instance()->stopAfterTrack()->track() ) )
         m_stopContinueAfterTrackAction->setText( tr( "&Continue Playback after current Track" ) );
     else
         m_stopContinueAfterTrackAction->setText( tr( "&Stop Playback after current Track" ) );
@@ -191,7 +191,7 @@ TomahawkTrayIcon::refreshToolTip()
     QString tip;
     if ( !m_currentTrack.isNull() )
     {
-        tip = m_currentTrack->artist()->name() + " " + QChar( 8211 ) /*en dash*/ + " " + m_currentTrack->track();
+        tip = m_currentTrack->track()->artist() + " " + QChar( 8211 ) /*en dash*/ + " " + m_currentTrack->track()->track();
     }
     else
     {
@@ -294,7 +294,7 @@ TomahawkTrayIcon::loveTrackTriggered()
     if ( !m_currentTrack )
         return;
 
-    m_currentTrack->toQuery()->setLoved( !m_currentTrack->toQuery()->loved() );
+    m_currentTrack->track()->setLoved( !m_currentTrack->track()->loved() );
 }
 
 
@@ -304,7 +304,7 @@ TomahawkTrayIcon::stopContinueAfterTrackActionTriggered()
     if ( !m_currentTrack )
         return;
 
-    if ( !m_currentTrack->toQuery()->equals( AudioEngine::instance()->stopAfterTrack() ) )
+    if ( !AudioEngine::instance()->stopAfterTrack() || !m_currentTrack->track()->equals( AudioEngine::instance()->stopAfterTrack()->track() ) )
         AudioEngine::instance()->setStopAfterTrack( m_currentTrack->toQuery() );
     else
         AudioEngine::instance()->setStopAfterTrack( Tomahawk::query_ptr() );
@@ -320,7 +320,7 @@ TomahawkTrayIcon::onSocialActionsLoaded()
     if ( !m_currentTrack )
         return;
 
-    if ( m_currentTrack->toQuery()->loved() )
+    if ( m_currentTrack->track()->loved() )
     {
         m_loveTrackAction->setText( tr( "Un-&Love" ) );
         m_loveTrackAction->setIcon( QIcon( RESPATH "images/not-loved.svg" ) );

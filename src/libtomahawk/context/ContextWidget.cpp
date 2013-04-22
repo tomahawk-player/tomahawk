@@ -270,7 +270,7 @@ ContextWidget::setQuery( const Tomahawk::query_ptr& query, bool force )
 {
     if ( query.isNull() )
         return;
-    if ( !force && !m_query.isNull() && query->artist() == m_query->artist() )
+    if ( !force && !m_query.isNull() && query->track()->artist() == m_query->track()->artist() )
         return;
 
     m_query = query;

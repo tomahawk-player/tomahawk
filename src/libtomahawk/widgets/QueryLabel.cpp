@@ -109,30 +109,30 @@ QueryLabel::text() const
     {
         if ( m_type & Artist )
         {
-            text += m_result->artist()->name();
+            text += m_result->track()->artist();
         }
-        if ( m_type & Album && !m_result->album()->name().isEmpty() )
+        if ( m_type & Album && !m_result->track()->album().isEmpty() )
         {
-            smartAppend( text, m_result->album()->name() );
+            smartAppend( text, m_result->track()->album() );
         }
         if ( m_type & Track )
         {
-            smartAppend( text, m_result->track() );
+            smartAppend( text, m_result->track()->track() );
         }
     }
     else if ( !m_query.isNull() )
     {
         if ( m_type & Artist )
         {
-            text += m_query->artist();
+            text += m_query->track()->artist();
         }
-        if ( m_type & Album && !m_query->album().isEmpty() )
+        if ( m_type & Album && !m_query->track()->album().isEmpty() )
         {
-            smartAppend( text, m_query->album() );
+            smartAppend( text, m_query->track()->album() );
         }
         if ( m_type & Track )
         {
-            smartAppend( text, m_query->track() );
+            smartAppend( text, m_query->track()->track() );
         }
     }
     else if ( !m_artist.isNull() )
@@ -155,9 +155,9 @@ QueryLabel::track() const
         return QString();
 
     if ( !m_result.isNull() )
-        return m_result->track();
+        return m_result->track()->track();
     else
-        return m_query->track();
+        return m_query->track()->track();
 }
 
 
@@ -183,8 +183,8 @@ void
 QueryLabel::onResultChanged()
 {
     m_query = m_result->toQuery();
-    m_artist = m_result->artist();
-    m_album = m_result->album();
+    m_artist = m_result->track()->artistPtr();
+    m_album = m_result->track()->albumPtr();
 
     updateLabel();
 
@@ -225,8 +225,8 @@ QueryLabel::setQuery( const Tomahawk::query_ptr& query )
     if ( m_query.isNull() || m_query.data() != query.data() )
     {
         m_query = query;
-        m_artist = Artist::get( query->artist() );
-        m_album = Album::get( m_artist, query->album() );
+        m_artist = Artist::get( query->track()->artist() );
+        m_album = Album::get( m_artist, query->track()->album() );
         m_result.clear();
 
         updateLabel();

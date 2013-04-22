@@ -129,27 +129,24 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
     if ( m_view->header()->visualIndex( index.column() ) > 0 )
         return;
 
-    const query_ptr q = item->query()->displayQuery();
-    QString artist = q->artist();
-    QString track = q->track();
+    const track_ptr track = item->query()->track();
     QPixmap pixmap;
     QString upperText, lowerText;
-    source_ptr source = item->query()->playedBy().first;
 
-    if ( source.isNull() )
+    if ( !item->playbackLog().source )
     {
-        upperText = track;
-        lowerText = artist;
+        upperText = track->track();
+        lowerText = track->artist();
     }
     else
     {
-        upperText = QString( "%1 - %2" ).arg( artist ).arg( track );
-        QString playtime = TomahawkUtils::ageToString( QDateTime::fromTime_t( item->query()->playedBy().second ), true );
+        upperText = QString( "%1 - %2" ).arg( track->artist() ).arg( track->track() );
+        QString playtime = TomahawkUtils::ageToString( QDateTime::fromTime_t( item->playbackLog().timestamp ), true );
 
-        if ( source == SourceList::instance()->getLocal() )
+        if ( item->playbackLog().source->isLocal() )
             lowerText = QString( tr( "played %1 by you" ) ).arg( playtime );
         else
-            lowerText = QString( tr( "played %1 by %2" ) ).arg( playtime ).arg( source->friendlyName() );
+            lowerText = QString( tr( "played %1 by %2" ) ).arg( playtime ).arg( item->playbackLog().source->friendlyName() );
     }
 
     painter->save();
@@ -172,11 +169,11 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
 
         if ( useAvatars )
         {
-            if ( !source.isNull() )
-                pixmap = source->avatar( TomahawkUtils::RoundedCorners, ir.size() );
+            if ( item->playbackLog().source )
+                pixmap = item->playbackLog().source->avatar( TomahawkUtils::RoundedCorners, ir.size() );
         }
         else
-            pixmap = item->query()->cover( ir.size(), false );
+            pixmap = item->query()->track()->cover( ir.size(), false );
 
         if ( pixmap.isNull() )
         {
@@ -340,7 +337,7 @@ PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, con
             if ( m_model->style() != PlayableProxyModel::Detailed )
             {
                 if ( item->query() )
-                    ViewManager::instance()->show( item->query()->displayQuery() );
+                    ViewManager::instance()->show( item->query()->track()->toQuery() );
             }
             else
             {
@@ -348,20 +345,19 @@ PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, con
                 {
                     case PlayableModel::Artist:
                     {
-                        ViewManager::instance()->show( Artist::get( item->query()->displayQuery()->artist() ) );
+                        ViewManager::instance()->show( item->query()->track()->artistPtr() );
                         break;
                     }
 
                     case PlayableModel::Album:
                     {
-                        artist_ptr artist = Artist::get( item->query()->displayQuery()->artist() );
-                        ViewManager::instance()->show( Album::get( artist, item->query()->displayQuery()->album() ) );
+                        ViewManager::instance()->show( item->query()->track()->albumPtr() );
                         break;
                     }
 
                     case PlayableModel::Track:
                     {
-                        ViewManager::instance()->show( item->query()->displayQuery() );
+                        ViewManager::instance()->show( item->query()->track()->toQuery() );
                         break;
                     }
 

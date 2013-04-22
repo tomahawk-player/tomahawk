@@ -433,7 +433,7 @@ TreeModel::indexFromAlbum( const Tomahawk::album_ptr& album ) const
 QModelIndex
 TreeModel::indexFromResult( const Tomahawk::result_ptr& result ) const
 {
-    QModelIndex albumIdx = indexFromAlbum( result->album() );
+    QModelIndex albumIdx = indexFromAlbum( result->track()->albumPtr() );
     for ( int i = 0; i < rowCount( albumIdx ); i++ )
     {
         QModelIndex idx = index( i, 0, albumIdx );
@@ -453,15 +453,12 @@ TreeModel::indexFromResult( const Tomahawk::result_ptr& result ) const
 QModelIndex
 TreeModel::indexFromQuery( const Tomahawk::query_ptr& query ) const
 {
-    Tomahawk::artist_ptr artist = Artist::get( query->artist(), false );
-    Tomahawk::album_ptr album = Album::get( artist, query->album(), false );
-
-    QModelIndex albumIdx = indexFromAlbum( album );
+    QModelIndex albumIdx = indexFromAlbum( query->queryTrack()->albumPtr() );
     for ( int i = 0; i < rowCount( albumIdx ); i++ )
     {
         QModelIndex idx = index( i, 0, albumIdx );
         PlayableItem* item = itemFromIndex( idx );
-        if ( item && item->result() && item->result()->toQuery()->equals( query ) )
+        if ( item && item->result() && item->result()->track()->equals( query->track() ) )
         {
             return idx;
         }
@@ -475,7 +472,7 @@ TreeModel::indexFromQuery( const Tomahawk::query_ptr& query ) const
 PlayableItem*
 TreeModel::itemFromResult( const Tomahawk::result_ptr& result ) const
 {
-    QModelIndex albumIdx = indexFromAlbum( result->album() );
+    QModelIndex albumIdx = indexFromAlbum( result->track()->albumPtr() );
     for ( int i = 0; i < rowCount( albumIdx ); i++ )
     {
         QModelIndex idx = index( i, 0, albumIdx );

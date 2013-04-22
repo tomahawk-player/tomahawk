@@ -709,7 +709,7 @@ TomahawkWindow::winEvent( MSG* msg, long* result )
                 tLog() << TB_PRESSED << "Love";
                 if ( !AudioEngine::instance()->currentTrack().isNull() )
                 {
-                    AudioEngine::instance()->currentTrack()->toQuery()->setLoved( !AudioEngine::instance()->currentTrack()->toQuery()->loved() );
+                    AudioEngine::instance()->currentTrack()->track()->setLoved( !AudioEngine::instance()->currentTrack()->track()->loved() );
                     updateWindowsLoveButton();
                 }
                 break;
@@ -756,7 +756,7 @@ TomahawkWindow::audioStateChanged( AudioState newState, AudioState oldState )
     {
         if ( !AudioEngine::instance()->currentTrack().isNull() )
         {
-            disconnect( AudioEngine::instance()->currentTrack()->toQuery().data(), SIGNAL( socialActionsLoaded() ), this, SLOT( updateWindowsLoveButton() ) );
+            disconnect( AudioEngine::instance()->currentTrack()->track().data(), SIGNAL( socialActionsLoaded() ), this, SLOT( updateWindowsLoveButton() ) );
         }
 
         m_thumbButtons[TP_PLAY_PAUSE].hIcon = thumbIcon(TomahawkUtils::PlayButton);
@@ -785,7 +785,7 @@ TomahawkWindow::updateWindowsLoveButton()
 #ifdef HAVE_THUMBBUTTON
     if ( m_taskbarList == 0 )
         return;
-    if ( !AudioEngine::instance()->currentTrack().isNull() && AudioEngine::instance()->currentTrack()->toQuery()->loved() )
+    if ( !AudioEngine::instance()->currentTrack().isNull() && AudioEngine::instance()->currentTrack()->track()->loved() )
     {
         m_thumbButtons[TP_LOVE].hIcon = thumbIcon(TomahawkUtils::Loved);
         m_thumbButtons[TP_LOVE].szTip[ tr( "Unlove" ).toWCharArray( m_thumbButtons[TP_LOVE].szTip ) ] = 0;
@@ -1129,7 +1129,7 @@ TomahawkWindow::audioStarted()
     ActionCollection::instance()->getAction( "stop" )->setEnabled( true );
 
 #ifdef Q_OS_WIN
-    connect( AudioEngine::instance()->currentTrack()->toQuery().data(), SIGNAL( socialActionsLoaded() ), SLOT( updateWindowsLoveButton() ) );
+    connect( AudioEngine::instance()->currentTrack()->track().data(), SIGNAL( socialActionsLoaded() ), SLOT( updateWindowsLoveButton() ) );
 #endif
 }
 
@@ -1138,7 +1138,7 @@ void
 TomahawkWindow::audioFinished()
 {
 #ifdef Q_OS_WIN
-    disconnect( AudioEngine::instance()->currentTrack()->toQuery().data(), SIGNAL( socialActionsLoaded() ), this, SLOT( updateWindowsLoveButton() ) );
+    disconnect( AudioEngine::instance()->currentTrack()->track().data(), SIGNAL( socialActionsLoaded() ), this, SLOT( updateWindowsLoveButton() ) );
 #endif
 }
 
@@ -1179,7 +1179,7 @@ TomahawkWindow::setWindowTitle( const QString& title )
         QMainWindow::setWindowTitle( title );
     else
     {
-        QString s = tr( "%1 by %2", "track, artist name" ).arg( m_currentTrack->track(), m_currentTrack->artist()->name() );
+        QString s = tr( "%1 by %2", "track, artist name" ).arg( m_currentTrack->track()->track(), m_currentTrack->track()->artist() );
         QMainWindow::setWindowTitle( tr( "%1 - %2", "current track, some window title" ).arg( s, title ) );
     }
 }

@@ -533,7 +533,7 @@ SpotifyPlaylistUpdater::spotifyTracksMoved( const QVariantList& tracks, const QS
                 {
                     qDebug() << "Adding moved track to playlist at pos (end:" << (iter == entries.end());
                     if ( iter != entries.end() )
-                        qDebug() << (*iter)->query()->track() << (*iter)->query()->artist();
+                        qDebug() << (*iter)->query()->queryTrack()->toString();
                     iter = entries.insert( iter, toMove.takeLast() );
                 }
 
@@ -661,7 +661,7 @@ SpotifyPlaylistUpdater::onTracksInsertedReturn( const QString& msgType, const QV
             continue;
         }
 
-        qDebug() << "Setting annotation for track:" << m_waitingForIds[ pos ]->query()->track() << m_waitingForIds[ pos ]->query()->artist() << trackIdsInserted.at( i ).toString();
+        qDebug() << "Setting annotation for track:" << m_waitingForIds[ pos ]->query()->queryTrack()->toString() << trackIdsInserted.at( i ).toString();
         m_waitingForIds[ pos ]->setAnnotation( trackIdsInserted.at( i ).toString() );
         changed << m_waitingForIds[ pos ];
     }
@@ -723,9 +723,9 @@ SpotifyPlaylistUpdater::tomahawkTracksMoved( const QList< plentry_ptr >& tracks,
     }
 
     qDebug() << Q_FUNC_INFO << "Got tracks moved at position:" << position;
-    foreach ( const plentry_ptr ple, tracks )
+    foreach ( const plentry_ptr& ple, tracks )
     {
-        qDebug() << ple->query()->track() << ple->query()->artist();
+        qDebug() << ple->query()->queryTrack()->toString();
     }
 
     qDebug() << Q_FUNC_INFO  << "updating spotify resolver with moved tracks to:" << position;
@@ -780,9 +780,9 @@ QVariant
 SpotifyPlaylistUpdater::queryToVariant( const query_ptr& query )
 {
     QVariantMap m;
-    m[ "track" ] = query->track();
-    m[ "artist" ] = query->artist();
-    m[ "album" ] = query->album();
+    m[ "track" ] = query->queryTrack()->track();
+    m[ "artist" ] = query->queryTrack()->artist();
+    m[ "album" ] = query->queryTrack()->album();
 
     if ( !query->property( "annotation" ).isNull() )
         m[ "id" ] = query->property( "annotation" );

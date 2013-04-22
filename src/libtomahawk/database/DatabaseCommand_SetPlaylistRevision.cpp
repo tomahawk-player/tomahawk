@@ -170,9 +170,9 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
             if ( !e->isValid() )
                 continue;
 
-            adde.bindValue( 0, e->query()->track() );
-            adde.bindValue( 1, e->query()->artist() );
-            adde.bindValue( 2, e->query()->album() );
+            adde.bindValue( 0, e->query()->queryTrack()->track() );
+            adde.bindValue( 1, e->query()->queryTrack()->artist() );
+            adde.bindValue( 2, e->query()->queryTrack()->album() );
             adde.bindValue( 3, e->annotation() );
             adde.bindValue( 4, (int) e->duration() );
             adde.bindValue( 5, e->lastmodified() );
@@ -203,9 +203,9 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
 
             adde.bindValue( 0, e->guid() );
             adde.bindValue( 1, m_playlistguid );
-            adde.bindValue( 2, e->query()->track() );
-            adde.bindValue( 3, e->query()->artist() );
-            adde.bindValue( 4, e->query()->album() );
+            adde.bindValue( 2, e->query()->queryTrack()->track() );
+            adde.bindValue( 3, e->query()->queryTrack()->artist() );
+            adde.bindValue( 4, e->query()->queryTrack()->album() );
             adde.bindValue( 5, e->annotation() );
             adde.bindValue( 6, (int) e->duration() );
             adde.bindValue( 7, e->lastmodified() );

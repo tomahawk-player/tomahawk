@@ -200,8 +200,8 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
             if ( cachedQuery.isNull() )
                 continue;
 
-            if ( cachedQuery->track() == item->query()->track() &&
-               ( cachedQuery->albumpos() == item->query()->albumpos() || cachedQuery->albumpos() == 0 ) )
+            if ( cachedQuery->track()->track() == item->query()->track()->track() &&
+               ( cachedQuery->track()->albumpos() == item->query()->track()->albumpos() || cachedQuery->track()->albumpos() == 0 ) )
             {
                 return ( cachedQuery.data() == item->query().data() );
             }
@@ -216,7 +216,7 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
 
             if ( ti && ti->name() == item->name() && !ti->query().isNull() )
             {
-                if ( ti->query()->albumpos() == item->query()->albumpos() || ti->query()->albumpos() == 0 || item->query()->albumpos() == 0 )
+                if ( ti->query()->track()->albumpos() == item->query()->track()->albumpos() || ti->query()->track()->albumpos() == 0 || item->query()->track()->albumpos() == 0 )
                 {
                     if ( item->result().isNull() )
                         return false;
@@ -286,27 +286,27 @@ TreeProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) co
     unsigned int discnumber2 = 0;
     if ( !p1->query().isNull() )
     {
-        albumpos1 = p1->query()->albumpos();
-        discnumber1 = p1->query()->discnumber();
+        albumpos1 = p1->query()->track()->albumpos();
+        discnumber1 = p1->query()->track()->discnumber();
     }
     if ( !p2->query().isNull() )
     {
-        albumpos2 = p2->query()->albumpos();
-        discnumber2 = p2->query()->discnumber();
+        albumpos2 = p2->query()->track()->albumpos();
+        discnumber2 = p2->query()->track()->discnumber();
     }
     if ( !p1->result().isNull() )
     {
         if ( albumpos1 == 0 )
-            albumpos1 = p1->result()->albumpos();
+            albumpos1 = p1->result()->track()->albumpos();
         if ( discnumber1 == 0 )
-            discnumber1 = p1->result()->discnumber();
+            discnumber1 = p1->result()->track()->discnumber();
     }
     if ( !p2->result().isNull() )
     {
         if ( albumpos2 == 0 )
-            albumpos2 = p2->result()->albumpos();
+            albumpos2 = p2->result()->track()->albumpos();
         if ( discnumber2 == 0 )
-            discnumber2 = p2->result()->discnumber();
+            discnumber2 = p2->result()->track()->discnumber();
     }
     discnumber1 = qMax( 1, (int)discnumber1 );
     discnumber2 = qMax( 1, (int)discnumber2 );
@@ -346,11 +346,11 @@ TreeProxyModel::textForItem( PlayableItem* item ) const
     }
     else if ( !item->result().isNull() )
     {
-        return DatabaseImpl::sortname( item->result()->track() );
+        return item->result()->track()->trackSortname();
     }
     else if ( !item->query().isNull() )
     {
-        return item->query()->track();
+        return item->query()->track()->track();
     }
 
     return QString();

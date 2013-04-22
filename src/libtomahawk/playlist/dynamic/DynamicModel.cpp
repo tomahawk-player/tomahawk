@@ -104,7 +104,7 @@ DynamicModel::newTrackGenerated( const Tomahawk::query_ptr& query )
         bool isDuplicate = false;
         for ( int i = 0; i < m_deduper.size(); i++ )
         {
-            if ( m_deduper[ i ].first == query->track() && m_deduper[ i ].second == query->artist() )
+            if ( m_deduper[ i ].first == query->track()->track() && m_deduper[ i ].second == query->track()->artist() )
                 isDuplicate = true;
         }
         if ( isDuplicate )
@@ -115,7 +115,7 @@ DynamicModel::newTrackGenerated( const Tomahawk::query_ptr& query )
         }
         else
         {
-            m_deduper.append( QPair< QString, QString >( query->track(), query->artist() ) );
+            m_deduper.append( QPair< QString, QString >( query->track()->track(), query->track()->artist() ) );
         }
 
         connect( query.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( trackResolveFinished( bool ) ) );
@@ -154,13 +154,13 @@ DynamicModel::trackResolveFinished( bool success )
 
     Query* q = qobject_cast<Query*>( sender() );
 
-    tDebug() << "Got resolveFinished in DynamicModel" << q->track() << q->artist();
+    tDebug() << "Got resolveFinished in DynamicModel" << q->track()->toString();
     if ( !m_waitingFor.contains( q ) )
         return;
 
     if ( !q->playable() )
     {
-        tDebug() << "Got not playable or resolved track:" << q->track() << q->artist() << m_lastResolvedRow << m_currentAttempts;
+        tDebug() << "Got not playable or resolved track:" << q->track()->toString() << m_lastResolvedRow << m_currentAttempts;
         m_currentAttempts++;
 
         int curAttempts = m_startingAfterFailed ? m_currentAttempts - 20 : m_currentAttempts; // if we just failed, m_currentAttempts includes those failures
@@ -174,7 +174,7 @@ DynamicModel::trackResolveFinished( bool success )
     }
     else
     {
-        qDebug() << "Got successful resolved track:" << q->track() << q->artist() << m_lastResolvedRow << m_currentAttempts;
+        qDebug() << "Got successful resolved track:" << q->track()->toString() << m_lastResolvedRow << m_currentAttempts;
 
         if ( m_currentAttempts > 0 ) {
             qDebug() << "EMITTING AN ASK FOR COLLAPSE:" << m_lastResolvedRow << m_currentAttempts;
@@ -251,7 +251,7 @@ DynamicModel::filteringTrackResolved( bool successful )
     Q_ASSERT( q );
 
     // if meantime the user began the station, abort
-    qDebug() << "Got filtering resolved finished for track, was it successful?:" << q->track() << q->artist() << successful << q->playable();
+    qDebug() << "Got filtering resolved finished for track, was it successful?:" << q->track()->toString() << successful << q->playable();
     if ( m_onDemandRunning )
     {
         m_toResolveList.clear();
@@ -294,7 +294,7 @@ DynamicModel::filteringTrackResolved( bool successful )
     }
     else
     {
-        qDebug() << "Got unsuccessful resolve request for this track" << realptr->track() << realptr->artist();
+        qDebug() << "Got unsuccessful resolve request for this track" << realptr->track()->toString();
     }
 
     if ( m_toResolveList.isEmpty() && rowCount( QModelIndex() ) == 0 ) // we failed
@@ -309,7 +309,7 @@ DynamicModel::addToPlaylist( const QList< query_ptr >& entries, bool clearFirst 
         clear();
 
     foreach ( const query_ptr& q, entries )
-        m_deduper.append( QPair< QString, QString >( q->track(), q->artist() ) );
+        m_deduper.append( QPair< QString, QString >( q->track()->track(), q->track()->artist() ) );
 
     if ( m_playlist->author()->isLocal() && m_playlist->mode() == Static )
     {

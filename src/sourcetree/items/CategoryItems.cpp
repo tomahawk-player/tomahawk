@@ -289,7 +289,7 @@ CategoryAddItem::parsedDroppedTracks( const QList< query_ptr >& tracks )
     {
         // seed the playlist with these song or artist filters
         QString name;
-        name = tracks.isEmpty() ? tr( "New Station" ) : tr( "%1 Station" ).arg( tracks.first()->track() );
+        name = tracks.isEmpty() ? tr( "New Station" ) : tr( "%1 Station" ).arg( tracks.first()->track()->track() );
 
         dynplaylist_ptr newpl = DynamicPlaylist::create( SourceList::instance()->getLocal(), uuid(), name, "", SourceList::instance()->getLocal()->friendlyName(), OnDemand, false );
         newpl->setMode( OnDemand );
@@ -299,7 +299,7 @@ CategoryAddItem::parsedDroppedTracks( const QList< query_ptr >& tracks )
         foreach ( const Tomahawk::query_ptr& q, tracks )
         {
             dyncontrol_ptr c = newpl->generator()->createControl( "Song" );
-            c->setInput( QString( "%1 %2" ).arg( q->track() ).arg( q->artist() ) );
+            c->setInput( QString( "%1 %2" ).arg( q->track()->track() ).arg( q->track()->artist() ) );
             controls << c;
         }
 

@@ -235,7 +235,7 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
     qint64 duration = AudioEngine::instance()->currentTrackTotalTime();
 
     if ( duration == -1 )
-        duration = result.data()->duration() * 1000;
+        duration = result.data()->track()->duration() * 1000;
 
     ui->seekSlider->setRange( 0, duration );
     ui->seekSlider->setValue( 0 );
@@ -263,18 +263,18 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
 {
     if ( !m_currentTrack.isNull() )
     {
-        disconnect( m_currentTrack->toQuery().data(), SIGNAL( updated() ), this, SLOT( onCoverUpdated() ) );
-        disconnect( m_currentTrack->toQuery().data(), SIGNAL( socialActionsLoaded() ), this, SLOT( onSocialActionsLoaded() ) );
+        disconnect( m_currentTrack->track().data(), SIGNAL( updated() ), this, SLOT( onCoverUpdated() ) );
+        disconnect( m_currentTrack->track().data(), SIGNAL( socialActionsLoaded() ), this, SLOT( onSocialActionsLoaded() ) );
     }
 
     m_currentTrack = result;
-    connect( m_currentTrack->toQuery().data(), SIGNAL( updated() ), SLOT( onCoverUpdated() ) );
-    connect( m_currentTrack->toQuery().data(), SIGNAL( socialActionsLoaded() ), SLOT( onSocialActionsLoaded() ) );
+    connect( m_currentTrack->track().data(), SIGNAL( updated() ), SLOT( onCoverUpdated() ) );
+    connect( m_currentTrack->track().data(), SIGNAL( socialActionsLoaded() ), SLOT( onSocialActionsLoaded() ) );
 
     ui->artistTrackLabel->setResult( result );
     ui->albumLabel->setResult( result );
 
-    const QString duration = TomahawkUtils::timeToString( result.data()->duration() );
+    const QString duration = TomahawkUtils::timeToString( result.data()->track()->duration() );
     ui->timeLabel->setFixedWidth( ui->timeLabel->fontMetrics().width( QString( duration.length(), QChar( '0' ) ) ) );
     ui->timeLabel->setText( TomahawkUtils::timeToString( 0 ) );
     ui->timeLeftLabel->setFixedWidth( ui->timeLeftLabel->fontMetrics().width( QString( duration.length() + 1, QChar( '0' ) ) ) );
@@ -340,10 +340,10 @@ AudioControls::onCoverUpdated()
 void
 AudioControls::setCover()
 {
-    if ( !m_currentTrack->toQuery()->cover( ui->coverImage->size() ).isNull() )
+    if ( !m_currentTrack->track()->cover( ui->coverImage->size() ).isNull() )
     {
         QPixmap cover;
-        cover = m_currentTrack->toQuery()->cover( ui->coverImage->size() );
+        cover = m_currentTrack->track()->cover( ui->coverImage->size() );
         ui->coverImage->setPixmap( TomahawkUtils::createRoundedImage( cover, QSize( 0, 0 ) ), false );
     }
     else
@@ -384,7 +384,7 @@ AudioControls::onInfoSystemPushTypesUpdated( InfoSystem::InfoTypeSet supportedTy
 void
 AudioControls::setSocialActions()
 {
-    if ( m_currentTrack->toQuery()->loved() )
+    if ( m_currentTrack->track()->loved() )
     {
         ui->loveButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::Loved, TomahawkUtils::Original, QSize( 20, 20 ) ) );
         ui->loveButton->setChecked( true );
@@ -479,7 +479,7 @@ AudioControls::onPlaybackTimer( qint64 msElapsed )
     if ( seconds != m_lastTextSecondShown )
     {
         ui->timeLabel->setText( TomahawkUtils::timeToString( seconds ) );
-        ui->timeLeftLabel->setText( "-" + TomahawkUtils::timeToString( m_currentTrack->duration() - seconds ) );
+        ui->timeLeftLabel->setText( "-" + TomahawkUtils::timeToString( m_currentTrack->track()->duration() - seconds ) );
         m_lastTextSecondShown = seconds;
     }
 
@@ -656,14 +656,14 @@ AudioControls::onShuffleClicked()
 void
 AudioControls::onArtistClicked()
 {
-    ViewManager::instance()->show( m_currentTrack->artist() );
+    ViewManager::instance()->show( m_currentTrack->track()->artistPtr() );
 }
 
 
 void
 AudioControls::onAlbumClicked()
 {
-    ViewManager::instance()->show( m_currentTrack->album() );
+    ViewManager::instance()->show( m_currentTrack->track()->albumPtr() );
 }
 
 
@@ -742,13 +742,13 @@ AudioControls::onLoveButtonClicked( bool checked )
     {
         ui->loveButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::Loved, TomahawkUtils::Original, QSize( 20, 20 ) ) );
 
-        m_currentTrack->toQuery()->setLoved( true );
+        m_currentTrack->track()->setLoved( true );
     }
     else
     {
         ui->loveButton->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::NotLoved, TomahawkUtils::Original, QSize( 20, 20 ) ) );
 
-        m_currentTrack->toQuery()->setLoved( false );
+        m_currentTrack->track()->setLoved( false );
     }
 }
 

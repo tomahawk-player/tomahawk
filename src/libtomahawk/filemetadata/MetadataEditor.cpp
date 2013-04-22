@@ -95,35 +95,35 @@ MetadataEditor::writeMetadata( bool closeDlg )
         TagLib::FileRef f( encodedName );
         Tomahawk::Tag* tag = Tomahawk::Tag::fromFile( f );
 
-        if ( title() != m_result->track() )
+        if ( title() != m_result->track()->track() )
         {
             tDebug() << Q_FUNC_INFO << "Track changed" << title() << m_result->track();
 
             tag->setTitle( title() );
-            m_result->setTrack( title() );
+            m_result->track()->setTrack( title() );
 
             changed = true;
         }
 
         Tomahawk::artist_ptr newArtist = Tomahawk::Artist::get( artist(), true );
-        if ( newArtist != m_result->artist() )
+        if ( newArtist != m_result->track()->artistPtr() )
         {
-            tDebug() << Q_FUNC_INFO << "Artist changed" << artist() << m_result->artist();
+            tDebug() << Q_FUNC_INFO << "Artist changed" << artist() << m_result->track()->artist();
 
             tag->setArtist( artist() );
-            m_result->setArtist( newArtist );
+            m_result->track()->setArtist( artist() );
 
             changed = true;
         }
 
         Tomahawk::album_ptr newAlbum = Tomahawk::Album::get( newArtist, album(), true );
-        if ( newAlbum != m_result->album() )
+        if ( newAlbum != m_result->track()->albumPtr() )
         {
-            tDebug() << Q_FUNC_INFO << "Album changed" << album() << newAlbum->id() << m_result->album()->name() << m_result->album()->id() << newAlbum.data() << m_result->album().data();
-            if ( newAlbum->id() != m_result->album()->id() )
+            tDebug() << Q_FUNC_INFO << "Album changed" << album() << newAlbum->id() << m_result->track()->album() << m_result->track()->albumPtr()->id() << newAlbum.data() << m_result->track()->albumPtr().data();
+            if ( newAlbum->id() != m_result->track()->albumPtr()->id() )
             {
                 tag->setAlbum( album() );
-                m_result->setAlbum( newAlbum );
+                m_result->track()->setAlbum( album() );
 
                 changed = true;
             }
@@ -132,10 +132,10 @@ MetadataEditor::writeMetadata( bool closeDlg )
         }
 
         // FIXME: Ugly workaround for the min value of 0
-        if ( albumPos() != 0 && albumPos() != (int)m_result->albumpos() )
+        if ( albumPos() != 0 && albumPos() != (int)m_result->track()->albumpos() )
         {
             tag->setTrack( albumPos() );
-            m_result->setAlbumPos( albumPos() );
+            //FIXME:m_result->track()->setAlbumPos( albumPos() );
 
             tDebug() << Q_FUNC_INFO << "Albumpos changed";
             changed = true;
@@ -158,8 +158,7 @@ MetadataEditor::writeMetadata( bool closeDlg )
             m_editFiles.append( fileName );
             m_result->doneEditing();
 
-            tDebug() << Q_FUNC_INFO << m_result->toString();
-            tDebug() << Q_FUNC_INFO << m_result->toQuery()->toString();
+            tDebug() << Q_FUNC_INFO << m_result->toString() << m_result->track()->toString();
         }
     }
 
@@ -189,18 +188,18 @@ MetadataEditor::loadQuery( const Tomahawk::query_ptr& query )
     m_query = query;
     setEditable( false );
 
-    setTitle( query->displayQuery()->track() );
-    setArtist( query->displayQuery()->artist() );
-    setAlbum( query->displayQuery()->album() );
-    setAlbumPos( query->displayQuery()->albumpos() );
-    setDuration( query->displayQuery()->duration() );
+    setTitle( query->track()->track() );
+    setArtist( query->track()->artist() );
+    setAlbum( query->track()->album() );
+    setAlbumPos( query->track()->albumpos() );
+    setDuration( query->track()->duration() );
     setYear( 0 );
     setBitrate( 0 );
 
     setFileName( QString() );
     setFileSize( 0 );
 
-    setWindowTitle( query->track() );
+    setWindowTitle( query->track()->track() );
 
     if ( m_interface )
     {
@@ -221,11 +220,11 @@ MetadataEditor::loadResult( const Tomahawk::result_ptr& result )
     m_result = result;
     setEditable( result->collection() && result->collection()->source()->isLocal() );
 
-    setTitle( result->track() );
-    setArtist( result->artist()->name() );
-    setAlbum( result->album()->name() );
-    setAlbumPos( result->albumpos() );
-    setDuration( result->duration() );
+    setTitle( result->track()->track() );
+    setArtist( result->track()->artist() );
+    setAlbum( result->track()->album() );
+    setAlbumPos( result->track()->albumpos() );
+    setDuration( result->track()->duration() );
     setYear( result->year() );
     setBitrate( result->bitrate() );
 
@@ -236,7 +235,7 @@ MetadataEditor::loadResult( const Tomahawk::result_ptr& result )
         setFileSize( TomahawkUtils::filesizeToString( fi.size() ) );
     }
 
-    setWindowTitle( result->track() );
+    setWindowTitle( result->track()->track() );
 
     if ( m_interface )
     {

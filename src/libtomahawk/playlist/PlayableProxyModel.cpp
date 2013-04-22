@@ -157,13 +157,9 @@ PlayableProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourcePa
 
     if ( pi->query() )
     {
-        const Tomahawk::query_ptr& q = pi->query()->displayQuery();
-        if ( q.isNull() ) // uh oh? filter out invalid queries i guess
-            return false;
-
         Tomahawk::result_ptr r;
-        if ( q->numResults() )
-            r = q->results().first();
+        if ( pi->query()->numResults() )
+            r = pi->query()->results().first();
 
         if ( !m_showOfflineResults && ( r.isNull() || !r->isOnline() ) )
             return false;
@@ -175,9 +171,9 @@ PlayableProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourcePa
         foreach( QString s, sl )
         {
             s = s.toLower();
-            if ( !q->artist().toLower().contains( s ) &&
-                !q->album().toLower().contains( s ) &&
-                !q->track().toLower().contains( s ) )
+            if ( !pi->query()->track()->artist().toLower().contains( s ) &&
+                !pi->query()->track()->album().toLower().contains( s ) &&
+                !pi->query()->track()->track().toLower().contains( s ) )
             {
                 return false;
             }
@@ -298,19 +294,21 @@ PlayableProxyModel::setMaxVisibleItems( int items )
 bool
 PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const Tomahawk::query_ptr& q2 ) const
 {
-    const QString artist1 = q1->artistSortname();
-    const QString artist2 = q2->artistSortname();
-    const QString album1 = q1->albumSortname();
-    const QString album2 = q2->albumSortname();
-    const QString track1 = q1->trackSortname();
-    const QString track2 = q2->trackSortname();
-    const QString composer1 = q1->composerSortname();
-    const QString composer2 = q2->composerSortname();
-    const unsigned int albumpos1 = q1->albumpos();
-    const unsigned int albumpos2 = q2->albumpos();
-    const unsigned int discnumber1 = q1->discnumber();
-    const unsigned int discnumber2 = q2->discnumber();
-    unsigned int duration1 = q1->duration(), duration2 = q2->duration();
+    const Tomahawk::track_ptr& t1 = q1->track();
+    const Tomahawk::track_ptr& t2 = q2->track();
+    const QString artist1 = t1->artistSortname();
+    const QString artist2 = t2->artistSortname();
+    const QString album1 = t1->albumSortname();
+    const QString album2 = t2->albumSortname();
+    const QString track1 = t1->trackSortname();
+    const QString track2 = t2->trackSortname();
+    const QString composer1 = t1->composerSortname();
+    const QString composer2 = t2->composerSortname();
+    const unsigned int albumpos1 = t1->albumpos();
+    const unsigned int albumpos2 = t2->albumpos();
+    const unsigned int discnumber1 = t1->discnumber();
+    const unsigned int discnumber2 = t2->discnumber();
+    unsigned int duration1 = t1->duration(), duration2 = t2->duration();
     unsigned int bitrate1 = 0, bitrate2 = 0;
     unsigned int mtime1 = 0, mtime2 = 0;
     unsigned int size1 = 0, size2 = 0;
@@ -324,7 +322,7 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
     {
         const Tomahawk::result_ptr& r = q1->results().at( 0 );
         bitrate1 = r->bitrate();
-        duration1 = r->duration();
+        duration1 = r->track()->duration();
         mtime1 = r->modificationTime();
         size1 = r->size();
         year1 = r->year();
@@ -336,7 +334,7 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
     {
         const Tomahawk::result_ptr& r = q2->results().at( 0 );
         bitrate2 = r->bitrate();
-        duration2 = r->duration();
+        duration2 = r->track()->duration();
         mtime2 = r->modificationTime();
         size2 = r->size();
         year2 = r->year();
@@ -475,8 +473,8 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
         }
     }
 
-    const QString& lefts = q1->track();
-    const QString& rights = q2->track();
+    const QString& lefts = t1->track();
+    const QString& rights = t2->track();
     if ( lefts == rights )
         return id1 < id2;
 
@@ -497,9 +495,7 @@ PlayableProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right 
 
     if ( p1->query() && p2->query() )
     {
-        const Tomahawk::query_ptr& q1 = p1->query()->displayQuery();
-        const Tomahawk::query_ptr& q2 = p2->query()->displayQuery();
-        return lessThan( left.column(), q1, q2 );
+        return lessThan( left.column(), p1->query(), p2->query() );
     }
 
     return QString::localeAwareCompare( sourceModel()->data( left ).toString(), sourceModel()->data( right ).toString() ) < 0;
@@ -611,12 +607,12 @@ PlayableProxyModel::updateDetailedInfo( const QModelIndex& index )
 
     if ( style() == PlayableProxyModel::Short || style() == PlayableProxyModel::Large )
     {
-        item->query()->displayQuery()->cover( QSize( 0, 0 ) );
+        item->query()->track()->cover( QSize( 0, 0 ) );
     }
 
     if ( style() == PlayableProxyModel::Large )
     {
-        item->query()->loadSocialActions();
+        item->query()->track()->loadSocialActions();
     }
 }
 

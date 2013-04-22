@@ -81,11 +81,11 @@ Scrobbler::trackStarted( const Tomahawk::result_ptr& track )
     }
 
     Tomahawk::InfoSystem::InfoStringHash trackInfo;
-    trackInfo["title"] = track->track();
-    trackInfo["artist"] = track->artist()->name();
-    trackInfo["album"] = track->album()->name();
-    trackInfo["duration"] = QString::number( track->duration() );
-    trackInfo["albumpos"] = QString::number( track->albumpos() );
+    trackInfo["title"] = track->track()->track();
+    trackInfo["artist"] = track->track()->artist();
+    trackInfo["album"] = track->track()->album();
+    trackInfo["duration"] = QString::number( track->track()->duration() );
+    trackInfo["albumpos"] = QString::number( track->track()->albumpos() );
 
     QVariantMap playInfo;
     playInfo["trackinfo"] = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
@@ -99,10 +99,10 @@ Scrobbler::trackStarted( const Tomahawk::result_ptr& track )
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );
 
     // liblastfm forces 0-length tracks to scrobble after 4 minutes, stupid.
-    if ( track->duration() == 0 )
+    if ( track->track()->duration() == 0 )
         m_scrobblePoint = lastfm::ScrobblePoint( 30 );
     else
-        m_scrobblePoint = lastfm::ScrobblePoint( track->duration() / 2 );
+        m_scrobblePoint = lastfm::ScrobblePoint( track->track()->duration() / 2 );
 }
 
 

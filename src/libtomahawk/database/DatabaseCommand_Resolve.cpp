@@ -81,7 +81,7 @@ DatabaseCommand_Resolve::resolve( DatabaseImpl* lib )
 
     if ( tracks.length() == 0 )
     {
-        qDebug() << "No candidates found in first pass, aborting resolve" << m_query->artist() << m_query->track();
+        qDebug() << "No candidates found in first pass, aborting resolve" << m_query->queryTrack()->toString();
         emit results( m_query->id(), res );
         return;
     }
@@ -142,32 +142,23 @@ DatabaseCommand_Resolve::resolve( DatabaseImpl* lib )
             url = QString( "servent://%1\t%2" ).arg( s->nodeId() ).arg( url );
         }
 
-        bool cached = Tomahawk::Result::isCached( url );
         Tomahawk::result_ptr result = Tomahawk::Result::get( url );
-        if ( cached )
+        if ( result->isValid() )
         {
-            qDebug() << "Result already cached:" << result->toString();
+            tDebug( LOGVERBOSE ) << "Result already cached:" << result->toString();
             res << result;
             continue;
         }
 
-        Tomahawk::artist_ptr artist = Tomahawk::Artist::get( files_query.value( 18 ).toUInt(), files_query.value( 12 ).toString() );
-        Tomahawk::album_ptr album = Tomahawk::Album::get( files_query.value( 19 ).toUInt(), files_query.value( 13 ).toString(), artist );
-        Tomahawk::artist_ptr composer = Tomahawk::Artist::get( files_query.value( 20 ).toUInt(), files_query.value( 15 ).toString() );
+        track_ptr track = Track::get( files_query.value( 12 ).toString(), files_query.value( 14 ).toString(), files_query.value( 13 ).toString(), files_query.value( 5 ).toUInt(), files_query.value( 15 ).toString(), files_query.value( 17 ).toUInt(), files_query.value( 11 ).toUInt() );
+        result->setTrack( track );
 
         result->setModificationTime( files_query.value( 1 ).toUInt() );
         result->setSize( files_query.value( 2 ).toUInt() );
         result->setMimetype( files_query.value( 4 ).toString() );
-        result->setDuration( files_query.value( 5 ).toUInt() );
         result->setBitrate( files_query.value( 6 ).toUInt() );
-        result->setArtist( artist );
-        result->setComposer( composer );
-        result->setAlbum( album );
-        result->setDiscNumber( files_query.value( 11 ).toUInt() );
-        result->setTrack( files_query.value( 14 ).toString() );
-        result->setRID( uuid() );
-        result->setAlbumPos( files_query.value( 17 ).toUInt() );
         result->setTrackId( files_query.value( 9 ).toUInt() );
+        result->setRID( uuid() );
 
         TomahawkSqlQuery attrQuery = lib->newquery();
         QVariantMap attr;
@@ -290,22 +281,14 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
             continue;
         }
 
-        Tomahawk::artist_ptr artist = Tomahawk::Artist::get( files_query.value( 18 ).toUInt(), files_query.value( 12 ).toString() );
-        Tomahawk::album_ptr album = Tomahawk::Album::get( files_query.value( 19 ).toUInt(), files_query.value( 13 ).toString(), artist );
-        Tomahawk::artist_ptr composer = Tomahawk::Artist::get( files_query.value( 20 ).toUInt(), files_query.value( 15 ).toString() );
+        track_ptr track = Track::get( files_query.value( 12 ).toString(), files_query.value( 14 ).toString(), files_query.value( 13 ).toString(), files_query.value( 5 ).toUInt(), files_query.value( 15 ).toString(), files_query.value( 17 ).toUInt(), files_query.value( 11 ).toUInt() );
+        result->setTrack( track );
 
         result->setModificationTime( files_query.value( 1 ).toUInt() );
         result->setSize( files_query.value( 2 ).toUInt() );
         result->setMimetype( files_query.value( 4 ).toString() );
-        result->setDuration( files_query.value( 5 ).toUInt() );
         result->setBitrate( files_query.value( 6 ).toUInt() );
-        result->setArtist( artist );
-        result->setComposer( composer );
-        result->setAlbum( album );
-        result->setDiscNumber( files_query.value( 11 ).toUInt() );
-        result->setTrack( files_query.value( 14 ).toString() );
         result->setRID( uuid() );
-        result->setAlbumPos( files_query.value( 17 ).toUInt() );
         result->setTrackId( files_query.value( 9 ).toUInt() );
 
         for ( int k = 0; k < trackPairs.count(); k++ )

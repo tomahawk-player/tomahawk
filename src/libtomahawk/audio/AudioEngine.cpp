@@ -191,7 +191,7 @@ AudioEngine::stop( AudioErrorCode errorCode )
     if ( !m_playlist.isNull() )
         m_playlist.data()->reset();
     if ( !m_currentTrack.isNull() )
-        emit timerPercentage( ( (double)m_timeElapsed / (double)m_currentTrack->duration() ) * 100.0 );
+        emit timerPercentage( ( (double)m_timeElapsed / (double)m_currentTrack->track()->duration() ) * 100.0 );
 
     setCurrentTrack( Tomahawk::result_ptr() );
 
@@ -365,14 +365,14 @@ AudioEngine::sendNowPlayingNotification( const Tomahawk::InfoSystem::InfoType ty
         return;
 
 #ifndef ENABLE_HEADLESS
-    if ( m_currentTrack->toQuery()->coverLoaded() )
+    if ( m_currentTrack->track()->coverLoaded() )
     {
         onNowPlayingInfoReady( type );
     }
     else
     {
-        NewClosure( m_currentTrack->toQuery().data(), SIGNAL( coverChanged() ), const_cast< AudioEngine* >( this ), SLOT( sendNowPlayingNotification( const Tomahawk::InfoSystem::InfoType ) ), type );
-        m_currentTrack->toQuery()->cover( QSize( 0, 0 ), true );
+        NewClosure( m_currentTrack->track().data(), SIGNAL( coverChanged() ), const_cast< AudioEngine* >( this ), SLOT( sendNowPlayingNotification( const Tomahawk::InfoSystem::InfoType ) ), type );
+        m_currentTrack->track()->cover( QSize( 0, 0 ), true );
     }
 #endif
 }
@@ -382,20 +382,20 @@ void
 AudioEngine::onNowPlayingInfoReady( const Tomahawk::InfoSystem::InfoType type )
 {
     if ( m_currentTrack.isNull() ||
-         m_currentTrack->track().isNull() ||
-         m_currentTrack->artist().isNull() )
+         m_currentTrack->track()->artist().isEmpty() )
         return;
 
     QVariantMap playInfo;
 
 #ifndef ENABLE_HEADLESS
     QImage cover;
-    cover = m_currentTrack->toQuery()->cover( QSize( 0, 0 ) ).toImage();
+    cover = m_currentTrack->track()->cover( QSize( 0, 0 ) ).toImage();
     if ( !cover.isNull() )
     {
         playInfo["cover"] = cover;
 
-        QTemporaryFile* coverTempFile = new QTemporaryFile( QDir::toNativeSeparators( QDir::tempPath() + "/" + m_currentTrack->artist()->name() + "_" + m_currentTrack->album()->name() + "_tomahawk_cover.png" ) );
+        //FIXME!
+        QTemporaryFile* coverTempFile = new QTemporaryFile( QDir::toNativeSeparators( QDir::tempPath() + "/" + m_currentTrack->track()->artist() + "_" + m_currentTrack->track()->album() + "_tomahawk_cover.png" ) );
         if ( !coverTempFile->open() )
         {
             tDebug() << Q_FUNC_INFO << "WARNING: could not write temporary file for cover art!";
@@ -419,11 +419,11 @@ AudioEngine::onNowPlayingInfoReady( const Tomahawk::InfoSystem::InfoType type )
 #endif
 
     Tomahawk::InfoSystem::InfoStringHash trackInfo;
-    trackInfo["title"] = m_currentTrack->track();
-    trackInfo["artist"] = m_currentTrack->artist()->name();
-    trackInfo["album"] = m_currentTrack->album()->name();
-    trackInfo["duration"] = QString::number( m_currentTrack->duration() );
-    trackInfo["albumpos"] = QString::number( m_currentTrack->albumpos() );
+    trackInfo["title"] = m_currentTrack->track()->track();
+    trackInfo["artist"] = m_currentTrack->track()->artist();
+    trackInfo["album"] = m_currentTrack->track()->album();
+    trackInfo["duration"] = QString::number( m_currentTrack->track()->duration() );
+    trackInfo["albumpos"] = QString::number( m_currentTrack->track()->albumpos() );
 
     playInfo["trackinfo"] = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
     playInfo["private"] = TomahawkSettings::instance()->privateListeningMode();
@@ -525,7 +525,7 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr& result, QSharedPointe
 
             if ( TomahawkSettings::instance()->privateListeningMode() != TomahawkSettings::FullyPrivate )
             {
-                DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_currentTrack, DatabaseCommand_LogPlayback::Started );
+                DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_currentTrack->track(), DatabaseCommand_LogPlayback::Started );
                 Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
             }
 
@@ -576,9 +576,9 @@ AudioEngine::loadNextTrack()
 
     Tomahawk::result_ptr result;
 
-    if ( !m_stopAfterTrack.isNull() && !m_currentTrack.isNull() )
+    if ( m_stopAfterTrack && m_currentTrack )
     {
-        if ( m_stopAfterTrack->equals( m_currentTrack->toQuery() ) )
+        if ( m_stopAfterTrack->track()->equals( m_currentTrack->track() ) )
         {
             m_stopAfterTrack.clear();
             stop();
@@ -661,7 +661,7 @@ AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk:
         }
 
         JobStatusView::instance()->model()->addJob(
-            new ErrorStatusMessage( tr( "Sorry, Tomahawk couldn't find the track '%1' by %2" ).arg( query->track() ).arg( query->artist() ), 15 ) );
+            new ErrorStatusMessage( tr( "Sorry, Tomahawk couldn't find the track '%1' by %2" ).arg( query->queryTrack()->track() ).arg( query->queryTrack()->artist() ), 15 ) );
 
         if ( isStopped() )
             emit stopped(); // we do this so the original caller knows we couldn't find this track
@@ -814,7 +814,7 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
             {
                 if ( m_mediaObject && m_currentTrack )
                 {
-                    qint64 duration = m_mediaObject->totalTime() > 0 ? m_mediaObject->totalTime() : m_currentTrack->duration() * 1000;
+                    qint64 duration = m_mediaObject->totalTime() > 0 ? m_mediaObject->totalTime() : m_currentTrack->track()->duration() * 1000;
                     stopped = ( duration - 1000 < m_mediaObject->currentTime() );
                 }
                 else
@@ -876,13 +876,13 @@ AudioEngine::timerTriggered( qint64 time )
 
         if ( !m_currentTrack.isNull() )
         {
-            if ( m_currentTrack->duration() == 0 )
+            if ( m_currentTrack->track()->duration() == 0 )
             {
                 emit timerPercentage( 0 );
             }
             else
             {
-                emit timerPercentage( ( (double)m_timeElapsed / (double)m_currentTrack->duration() ) * 100.0 );
+                emit timerPercentage( ( (double)m_timeElapsed / (double)m_currentTrack->track()->duration() ) * 100.0 );
             }
         }
     }
@@ -993,7 +993,7 @@ AudioEngine::setCurrentTrack( const Tomahawk::result_ptr& result )
     {
         if ( m_state != Error && TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::PublicListening )
         {
-            DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_currentTrack, DatabaseCommand_LogPlayback::Finished, m_timeElapsed );
+            DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_currentTrack->track(), DatabaseCommand_LogPlayback::Finished, m_timeElapsed );
             Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
         }
 

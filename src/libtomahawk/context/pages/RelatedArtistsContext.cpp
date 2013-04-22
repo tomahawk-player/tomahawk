@@ -83,7 +83,7 @@ RelatedArtistsContext::setQuery( const Tomahawk::query_ptr& query )
     if ( query.isNull() )
         return;
 
-    setArtist( Artist::get( query->artist(), false ) );
+    setArtist( query->track()->artistPtr() );
 }
 
 

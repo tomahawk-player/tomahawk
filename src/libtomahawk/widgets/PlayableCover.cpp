@@ -116,7 +116,7 @@ void
 PlayableCover::mouseReleaseEvent( QMouseEvent* event )
 {
     QLabel::mouseReleaseEvent( event );
-    
+
     foreach ( const QRect& rect, m_itemRects )
     {
         if ( rect.contains( event->pos() ) )
@@ -126,8 +126,8 @@ PlayableCover::mouseReleaseEvent( QMouseEvent* event )
             else if ( m_album )
                 ViewManager::instance()->show( m_album->artist() );
             else if ( m_query )
-                ViewManager::instance()->show( Tomahawk::Artist::get( m_query->artist() ) );
-            
+                ViewManager::instance()->show( m_query->queryTrack()->artistPtr() );
+
             return;
         }
     }
@@ -145,7 +145,7 @@ PlayableCover::contextMenuEvent( QContextMenuEvent* event )
         m_contextMenu->setAlbum( m_album );
     else
         m_contextMenu->setQuery( m_query );
-    
+
     m_contextMenu->exec( event->globalPos() );
 }
 
@@ -175,10 +175,10 @@ PlayableCover::paintEvent( QPaintEvent* event )
     buffer.fill( Qt::transparent );
     QPainter bufpainter( &buffer );
     bufpainter.setRenderHint( QPainter::Antialiasing );
-    
+
     QTextOption to;
     to.setWrapMode( QTextOption::NoWrap );
-    
+
     QColor c1;
     c1.setRgb( 0, 0, 0 );
     c1.setAlphaF( 0.00 );
@@ -205,34 +205,34 @@ PlayableCover::paintEvent( QPaintEvent* event )
     }
     else if ( m_query )
     {
-        top = m_query->track();
-        bottom = m_query->artist();
+        top = m_query->queryTrack()->track();
+        bottom = m_query->queryTrack()->artist();
     }
 
     int bottomHeight = QFontMetrics( font ).boundingRect( bottom ).height();
     int topHeight = QFontMetrics( boldFont ).boundingRect( top ).height();
     int frameHeight = bottomHeight + topHeight + 4;
-    
+
     QRect gradientRect = r.adjusted( 0, r.height() - frameHeight * 3, 0, 0 );
     QLinearGradient gradient( QPointF( 0, 0 ), QPointF( 0, 1 ) );
     gradient.setCoordinateMode( QGradient::ObjectBoundingMode );
     gradient.setColorAt( 0.0, c1 );
     gradient.setColorAt( 0.6, c2 );
     gradient.setColorAt( 1.0, c2 );
-    
+
     bufpainter.save();
     bufpainter.setPen( Qt::transparent );
     bufpainter.setBrush( gradient );
     bufpainter.drawRect( gradientRect );
     bufpainter.restore();
-    
+
     bufpainter.setPen( Qt::white );
-    
+
     QRect textRect = r.adjusted( 8, r.height() - frameHeight - 16, -8, -16 );
     bool oneLiner = false;
     if ( bottom.isEmpty() )
         oneLiner = true;
-    
+
     bufpainter.setFont( boldFont );
     if ( oneLiner )
     {
@@ -244,7 +244,7 @@ PlayableCover::paintEvent( QPaintEvent* event )
             f.setPointSizeF( f.pointSizeF() - 0.2 );
             bufpainter.setFont( f );
         }
-            
+
         to.setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
         text = bufpainter.fontMetrics().elidedText( top, Qt::ElideRight, textRect.width() - 3 );
         bufpainter.drawText( textRect, text, to );
@@ -256,7 +256,7 @@ PlayableCover::paintEvent( QPaintEvent* event )
         to.setAlignment( Qt::AlignHCenter | Qt::AlignTop );
         text = bufpainter.fontMetrics().elidedText( top, Qt::ElideRight, textRect.width() - 3 );
         bufpainter.drawText( textRect, text, to );
-        
+
         bufpainter.setFont( font );
 
         QRect r = textRect;
@@ -275,7 +275,7 @@ PlayableCover::paintEvent( QPaintEvent* event )
             TomahawkUtils::drawQueryBackground( &bufpainter, r );
             bufpainter.setPen( TomahawkUtils::Colors::SELECTION_FOREGROUND );
         }
-        
+
         to.setAlignment( Qt::AlignHCenter | Qt::AlignBottom );
         bufpainter.drawText( textRect.adjusted( 5, -1, -5, -1 ), text, to );
     }

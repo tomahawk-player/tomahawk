@@ -155,9 +155,10 @@ ArtistPlaylistInterface::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData r
 
                 foreach ( const QString& trackName, tracks )
                 {
-                    query_ptr query = Query::get( inputInfo[ "artist" ], trackName, inputInfo[ "album" ] );
-                    query->setAlbumPos( trackNo++ );
-                    ql << query;
+                    track_ptr track = Track::get( inputInfo[ "artist" ], trackName, inputInfo[ "album" ], 0, QString(), trackNo++ );
+                    query_ptr query = Query::get( track );
+                    if ( query )
+                        ql << query;
                 }
                 Pipeline::instance()->resolve( ql );
 

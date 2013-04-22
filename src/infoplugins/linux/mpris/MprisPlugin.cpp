@@ -267,16 +267,16 @@ MprisPlugin::metadata() const
     if ( track )
     {
         metadataMap.insert( "mpris:trackid", QVariant::fromValue(QDBusObjectPath(QString( "/track/" ) + track->id().replace( "-", "" ))) );
-        metadataMap.insert( "mpris:length", static_cast<qlonglong>(track->duration()) * 1000000 );
-        metadataMap.insert( "xesam:album", track->album()->name() );
-        metadataMap.insert( "xesam:artist", QStringList( track->artist()->name() ) );
-        metadataMap.insert( "xesam:title", track->track() );
+        metadataMap.insert( "mpris:length", static_cast<qlonglong>(track->track()->duration()) * 1000000 );
+        metadataMap.insert( "xesam:album", track->track()->album() );
+        metadataMap.insert( "xesam:artist", QStringList( track->track()->artist() ) );
+        metadataMap.insert( "xesam:title", track->track()->track() );
 
         // Only return art if tempfile exists, and if its name contains the same "artist_album_tomahawk_cover.png"
         if ( !m_coverTempFile.isEmpty() )
         {
             QFile coverFile( m_coverTempFile );
-            if ( coverFile.exists() && coverFile.fileName().contains( track->artist()->name() + "_" + track->album()->name() + "_tomahawk_cover.png" ) )
+            if ( coverFile.exists() && coverFile.fileName().contains( track->track()->artist() + "_" + track->track()->album() + "_tomahawk_cover.png" ) )
                 metadataMap.insert( "mpris:artUrl", QString( QUrl::fromLocalFile( m_coverTempFile ).toEncoded() ) );
         }
     }
