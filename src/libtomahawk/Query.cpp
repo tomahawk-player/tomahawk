@@ -114,7 +114,7 @@ Query::Query( const QString& query, const QID& qid )
 
 Query::~Query()
 {
-    tDebug() << Q_FUNC_INFO << toString();
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << toString();
 
     QMutexLocker lock( &m_mutex );
     m_ownRef.clear();

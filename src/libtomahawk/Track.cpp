@@ -91,7 +91,7 @@ Track::Track( const QString& artist, const QString& track, const QString& album,
 
 Track::~Track()
 {
-    tDebug() << Q_FUNC_INFO << toString();
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << toString();
 }
 
 
