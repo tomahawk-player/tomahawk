@@ -214,7 +214,7 @@ PlaylistModel::insertArtists( const QList< Tomahawk::artist_ptr >& artists, int 
 
 
 void
-PlaylistModel::insertQueries( const QList< Tomahawk::query_ptr >& queries, int row )
+PlaylistModel::insertQueries( const QList< Tomahawk::query_ptr >& queries, int row, const QList< Tomahawk::PlaybackLog >& logs )
 {
     QList< Tomahawk::plentry_ptr > entries;
     foreach ( const query_ptr& query, queries )
@@ -224,7 +224,7 @@ PlaylistModel::insertQueries( const QList< Tomahawk::query_ptr >& queries, int r
 
         plentry_ptr entry = plentry_ptr( new PlaylistEntry() );
 
-        entry->setDuration( query->displayQuery()->duration() );
+        entry->setDuration( query->track()->duration() );
         entry->setLastmodified( 0 );
         QString annotation = "";
         if ( !query->property( "annotation" ).toString().isEmpty() )
@@ -237,12 +237,12 @@ PlaylistModel::insertQueries( const QList< Tomahawk::query_ptr >& queries, int r
         entries << entry;
     }
 
-    insertEntries( entries, row );
+    insertEntries( entries, row, logs );
 }
 
 
 void
-PlaylistModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int row )
+PlaylistModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int row, const QList< Tomahawk::PlaybackLog >& logs )
 {
     if ( !entries.count() )
     {
@@ -271,6 +271,10 @@ PlaylistModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int
     {
         plitem = new PlayableItem( entry, rootItem(), row + i );
         plitem->index = createIndex( row + i, 0, plitem );
+
+        if ( logs.count() > i )
+            plitem->setPlaybackLog( logs.at( i ) );
+
         i++;
 
         if ( entry->query()->id() == currentItemUuid() )
@@ -434,7 +438,12 @@ void
 PlaylistModel::endPlaylistChanges()
 {
     if ( m_playlist.isNull() || !m_playlist->author()->isLocal() )
+    {
+        m_savedInsertPos = -1;
+        m_savedInsertTracks.clear();
+        m_savedRemoveTracks.clear();
         return;
+    }
 
     if ( m_changesOngoing )
     {

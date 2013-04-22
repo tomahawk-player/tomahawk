@@ -131,6 +131,7 @@ public slots:
 
     virtual void clear();
 
+    virtual void appendTracks( const QList< Tomahawk::track_ptr >& tracks, const QList< Tomahawk::PlaybackLog >& logs = QList< Tomahawk::PlaybackLog >() );
     virtual void appendQueries( const QList< Tomahawk::query_ptr >& queries );
     virtual void appendArtists( const QList< Tomahawk::artist_ptr >& artists );
     virtual void appendAlbums( const QList< Tomahawk::album_ptr >& albums );
@@ -138,7 +139,7 @@ public slots:
     virtual void appendArtist( const Tomahawk::artist_ptr& artist );
     virtual void appendAlbum( const Tomahawk::album_ptr& album );
 
-    virtual void insertQueries( const QList< Tomahawk::query_ptr >& queries, int row = 0 );
+    virtual void insertQueries( const QList< Tomahawk::query_ptr >& queries, int row = 0, const QList< Tomahawk::PlaybackLog >& logs = QList< Tomahawk::PlaybackLog >() );
     virtual void insertArtists( const QList< Tomahawk::artist_ptr >& artists, int row = 0 );
     virtual void insertAlbums( const QList< Tomahawk::album_ptr >& albums, int row = 0 );
     virtual void insertQuery( const Tomahawk::query_ptr& query, int row = 0 );
@@ -162,13 +163,13 @@ private slots:
 
     void onQueryBecamePlayable( bool playable );
     void onQueryResolved( bool hasResults );
-    
+
     void onPlaybackStarted( const Tomahawk::result_ptr& result );
     void onPlaybackStopped();
 
 private:
     template <typename T>
-    void insertInternal( const QList< T >& items, int row );
+    void insertInternal( const QList< T >& items, int row, const QList< Tomahawk::PlaybackLog >& logs = QList< Tomahawk::PlaybackLog >() );
 
     Qt::Alignment columnAlignment( int column ) const;
 

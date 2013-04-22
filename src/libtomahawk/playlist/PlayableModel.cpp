@@ -173,36 +173,36 @@ PlayableModel::queryData( const query_ptr& query, int column, int role ) const
     switch ( column )
     {
         case Artist:
-            return query->artist();
+            return query->track()->artist();
             break;
 
         case Name:
         case Track:
-            return query->track();
+            return query->track()->track();
             break;
 
         case Album:
-            return query->album();
+            return query->track()->album();
             break;
 
         case Composer:
-            return query->composer();
+            return query->track()->composer();
             break;
 
         case Duration:
-            return TomahawkUtils::timeToString( query->duration() );
+            return TomahawkUtils::timeToString( query->track()->duration() );
             break;
 
         case AlbumPos:
         {
             QString tPos;
-            if ( query->albumpos() != 0 )
+            if ( query->track()->albumpos() != 0 )
             {
-                tPos = QString::number( query->albumpos() );
-                if ( query->discnumber() == 0 )
+                tPos = QString::number( query->track()->albumpos() );
+                if ( query->track()->discnumber() == 0 )
                     return tPos;
                 else
-                    return QString( "%1.%2" ).arg( QString::number( query->discnumber() ) )
+                    return QString( "%1.%2" ).arg( QString::number( query->track()->discnumber() ) )
                                              .arg( tPos );
             }
         }
@@ -252,7 +252,7 @@ PlayableModel::queryData( const query_ptr& query, int column, int role ) const
                     return tr( "Bad match" );
                 if ( score > 0.0 )
                     return tr( "Very bad match" );
-                
+
                 return tr( "Not available" );
                 break;
             }
@@ -306,7 +306,7 @@ PlayableModel::data( const QModelIndex& index, int role ) const
         {
             if ( !entry->query().isNull() )
             {
-                return queryData( entry->query()->displayQuery(), index.column(), role );
+                return queryData( entry->query(), index.column(), role );
             }
             else if ( !entry->artist().isNull() )
             {
@@ -571,7 +571,7 @@ PlayableModel::queries() const
 
 template <typename T>
 void
-PlayableModel::insertInternal( const QList< T >& items, int row )
+PlayableModel::insertInternal( const QList< T >& items, int row, const QList< Tomahawk::PlaybackLog >& logs )
 {
     if ( !items.count() )
     {
@@ -594,6 +594,10 @@ PlayableModel::insertInternal( const QList< T >& items, int row )
     {
         plitem = new PlayableItem( item, m_rootItem, row + i );
         plitem->index = createIndex( row + i, 0, plitem );
+
+        if ( logs.count() > i )
+            plitem->setPlaybackLog( logs.at( i ) );
+
         i++;
 
 /*        if ( item->id() == currentItemUuid() )
@@ -635,7 +639,7 @@ PlayableModel::removeIndex( const QModelIndex& index, bool moreToCome )
     {
         if ( index == m_currentIndex )
             setCurrentIndex( QModelIndex() );
-            
+
         emit beginRemoveRows( index.parent(), index.row(), index.row() );
         delete item;
         emit endRemoveRows();
@@ -824,6 +828,19 @@ PlayableModel::appendQueries( const QList< Tomahawk::query_ptr >& queries )
 
 
 void
+PlayableModel::appendTracks( const QList< Tomahawk::track_ptr >& tracks, const QList< Tomahawk::PlaybackLog >& logs )
+{
+    QList< Tomahawk::query_ptr > queries;
+    foreach ( const track_ptr& track, tracks )
+    {
+        queries << track->toQuery();
+    }
+
+    insertQueries( queries, rowCount( QModelIndex() ), logs );
+}
+
+
+void
 PlayableModel::insertArtist( const Tomahawk::artist_ptr& artist, int row )
 {
     QList< artist_ptr > artists;
@@ -868,9 +885,9 @@ PlayableModel::insertAlbums( const QList< Tomahawk::album_ptr >& albums, int row
 
 
 void
-PlayableModel::insertQueries( const QList< Tomahawk::query_ptr >& queries, int row )
+PlayableModel::insertQueries( const QList< Tomahawk::query_ptr >& queries, int row, const QList< Tomahawk::PlaybackLog >& logs )
 {
-    insertInternal( queries, row );
+    insertInternal( queries, row, logs );
 }
 
 
@@ -924,17 +941,17 @@ void
 PlayableModel::onQueryResolved( bool hasResults )
 {
     Q_UNUSED( hasResults );
-    
+
     Tomahawk::Query* q = qobject_cast< Query* >( sender() );
     if ( !q )
     {
         // Track has been removed from the playlist by now
         return;
     }
-    
+
     Tomahawk::query_ptr query = q->weakRef().toStrongRef();
     PlayableItem* item = itemFromQuery( query );
-    
+
     if ( item )
     {
         emit indexResolved( item->index );
