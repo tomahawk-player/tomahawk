@@ -68,6 +68,10 @@ DatabaseCommand_LogPlayback::exec( DatabaseImpl* dbi )
 {
     Q_ASSERT( !source().isNull() );
 
+    unsigned int pt = m_playtime;
+    if ( m_playtime == 0 )
+        m_playtime = QDateTime::currentDateTimeUtc().toTime_t();
+
     if ( m_action != Finished )
         return;
     if ( m_secsPlayed < FINISHED_THRESHOLD && m_trackDuration > 0 )
@@ -78,7 +82,7 @@ DatabaseCommand_LogPlayback::exec( DatabaseImpl* dbi )
     QVariant srcid = source()->isLocal() ? QVariant( QVariant::Int ) : source()->id();
     TomahawkSqlQuery query = dbi->newquery();
 
-    if ( m_playtime > 0 && source()->isLocal() )
+    if ( pt > 0 && source()->isLocal() )
     {
         query.prepare( QString( "SELECT * FROM playback_log WHERE source %1 AND playtime = %2" ).arg( srcid.isNull() ? "IS NULL" : srcid.toString() ).arg( m_playtime ) );
         query.exec();
@@ -88,9 +92,6 @@ DatabaseCommand_LogPlayback::exec( DatabaseImpl* dbi )
             return;
         }
     }
-
-    if ( m_playtime == 0 )
-        m_playtime = QDateTime::currentDateTimeUtc().toTime_t();
 
 //    tDebug() << "Logging playback of" << m_artist << "-" << m_track << "for source" << srcid << "- timestamp:" << m_playtime;
 
