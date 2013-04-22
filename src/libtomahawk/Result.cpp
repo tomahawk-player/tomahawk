@@ -35,14 +35,15 @@
 
 using namespace Tomahawk;
 
-static QHash< QString, QWeakPointer< Result > > s_results;
+static QHash< QString, result_wptr > s_results;
 static QMutex s_mutex;
 
 typedef QMap< QString, QPixmap > SourceIconCache;
 Q_GLOBAL_STATIC( SourceIconCache, sourceIconCache );
 static QMutex s_sourceIconMutex;
 
-inline QString sourceCacheKey( Resolver* resolver, const QSize& size, TomahawkUtils::ImageMode style )
+inline QString
+sourceCacheKey( Resolver* resolver, const QSize& size, TomahawkUtils::ImageMode style )
 {
     QString str;
     QTextStream stream( &str );
@@ -78,12 +79,9 @@ Result::isCached( const QString& url )
 Result::Result( const QString& url )
     : QObject()
     , m_url( url )
-    , m_duration( 0 )
     , m_bitrate( 0 )
     , m_size( 0 )
-    , m_albumpos( 0 )
     , m_modtime( 0 )
-    , m_discnumber( 0 )
     , m_year( 0 )
     , m_score( 0 )
     , m_trackId( 0 )
@@ -95,6 +93,7 @@ Result::Result( const QString& url )
 
 Result::~Result()
 {
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << toString();
 }
 
 
@@ -112,6 +111,13 @@ Result::deleteLater()
 }
 
 
+bool
+Result::isValid() const
+{
+    return m_track && !m_track->artist().isEmpty() && !m_track->track().isEmpty();
+}
+
+
 void
 Result::onResolverRemoved( Tomahawk::Resolver* resolver )
 {
@@ -120,27 +126,6 @@ Result::onResolverRemoved( Tomahawk::Resolver* resolver )
         m_resolvedBy = 0;
         emit statusChanged();
     }
-}
-
-
-artist_ptr
-Result::artist() const
-{
-    return m_artist;
-}
-
-
-artist_ptr
-Result::composer() const
-{
-    return m_composer;
-}
-
-
-album_ptr
-Result::album() const
-{
-    return m_album;
 }
 
 
@@ -185,25 +170,39 @@ Result::isOnline() const
 }
 
 
+bool
+Result::playable() const
+{
+    if ( collection() )
+    {
+        return collection()->source()->isOnline();
+    }
+    else
+    {
+        return score() > 0.0;
+    }
+}
+
+
 QVariant
 Result::toVariant() const
 {
     QVariantMap m;
-    m.insert( "artist", artist()->name() );
-    m.insert( "album", album()->name() );
-    m.insert( "track", track() );
+    m.insert( "artist", m_track->artist() );
+    m.insert( "album", m_track->album() );
+    m.insert( "track", m_track->track() );
     m.insert( "source", friendlySource() );
     m.insert( "mimetype", mimetype() );
     m.insert( "size", size() );
     m.insert( "bitrate", bitrate() );
-    m.insert( "duration", duration() );
+    m.insert( "duration", m_track->duration() );
     m.insert( "score", score() );
     m.insert( "sid", id() );
-    m.insert( "discnumber", discnumber() );
-    m.insert( "albumpos", albumpos() );
+    m.insert( "discnumber", m_track->discnumber() );
+    m.insert( "albumpos", m_track->albumpos() );
 
-    if ( !composer().isNull() )
-        m.insert( "composer", composer()->name() );
+    if ( !m_track->composer().isEmpty() )
+        m.insert( "composer", m_track->composer() );
 
     return m;
 }
@@ -215,9 +214,9 @@ Result::toString() const
     return QString( "Result(%1, score: %2) %3 - %4%5 (%6)" )
               .arg( id() )
               .arg( score() )
-              .arg( artist().isNull() ? QString() : artist()->name() )
-              .arg( track() )
-              .arg( album().isNull() || album()->name().isEmpty() ? "" : QString( " on %1" ).arg( album()->name() ) )
+              .arg( track()->artist() )
+              .arg( track()->track() )
+              .arg( track()->album().isEmpty() ? "" : QString( " on %1" ).arg( track()->album() ) )
               .arg( url() );
 }
 
@@ -227,25 +226,21 @@ Result::toQuery()
 {
     if ( m_query.isNull() )
     {
-        m_query = Tomahawk::Query::get( artist()->name(), track(), album()->name() );
-
-        if ( m_query.isNull() )
+        query_ptr query = Tomahawk::Query::get( m_track );
+        if ( !query )
             return query_ptr();
 
-        m_query->setAlbumPos( albumpos() );
-        m_query->setDiscNumber( discnumber() );
-        m_query->setDuration( duration() );
-        if ( !composer().isNull() )
-            m_query->setComposer( composer()->name() );
+        m_query = query->weakRef();
 
         QList<Tomahawk::result_ptr> rl;
         rl << Result::get( m_url );
 
-        m_query->addResults( rl );
-        m_query->setResolveFinished( true );
+        query->addResults( rl );
+        query->setResolveFinished( true );
+        return query;
     }
 
-    return m_query;
+    return m_query.toStrongRef();
 }
 
 
@@ -270,27 +265,6 @@ void
 Result::onOffline()
 {
     emit statusChanged();
-}
-
-
-void
-Result::setArtist( const Tomahawk::artist_ptr& artist )
-{
-    m_artist = artist;
-}
-
-
-void
-Result::setComposer( const Tomahawk::artist_ptr &composer )
-{
-    m_composer = composer;
-}
-
-
-void
-Result::setAlbum( const Tomahawk::album_ptr& album )
-{
-    m_album = album;
 }
 
 
@@ -391,6 +365,13 @@ Result::setResolvedBy( Tomahawk::Resolver* resolver )
 void
 Result::doneEditing()
 {
-    m_query.clear();
+//    m_query.clear();
     emit updated();
+}
+
+
+track_ptr
+Result::track() const
+{
+    return m_track;
 }
