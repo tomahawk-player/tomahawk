@@ -75,7 +75,7 @@ public slots:
     virtual void audioPaused() { setLatchMode( PlaylistModes::StayOnSong ); }
 
 private slots:
-    void onSourcePlaybackStarted( const Tomahawk::query_ptr& query );
+    void onSourcePlaybackStarted( const Tomahawk::track_ptr& track );
     void resolvingFinished( bool hasResults );
 
 private:

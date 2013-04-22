@@ -37,7 +37,7 @@ SourcePlaylistInterface::SourcePlaylistInterface( Tomahawk::Source* source, Toma
     setLatchMode( latchMode );
 
     if ( !m_source.isNull() )
-        connect( m_source.data(), SIGNAL( playbackStarted( const Tomahawk::query_ptr& ) ), SLOT( onSourcePlaybackStarted( const Tomahawk::query_ptr& ) ) );
+        connect( m_source.data(), SIGNAL( playbackStarted( const Tomahawk::track_ptr& ) ), SLOT( onSourcePlaybackStarted( const Tomahawk::track_ptr& ) ) );
 
     if ( AudioEngine::instance() )
         connect( AudioEngine::instance(), SIGNAL( paused() ), SLOT( audioPaused() ) );
@@ -164,9 +164,11 @@ SourcePlaylistInterface::reset()
 
 
 void
-SourcePlaylistInterface::onSourcePlaybackStarted( const Tomahawk::query_ptr& query )
+SourcePlaylistInterface::onSourcePlaybackStarted( const Tomahawk::track_ptr& track )
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
+
+    query_ptr query = track->toQuery();
     connect( query.data(), SIGNAL( resolvingFinished( bool ) ), SLOT( resolvingFinished( bool ) ) );
     Pipeline::instance()->resolve( query );
     m_gotNextItem = false;

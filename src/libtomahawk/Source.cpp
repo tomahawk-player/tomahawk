@@ -227,10 +227,10 @@ Source::avatar( TomahawkUtils::ImageMode style, const QSize& size )
 //     tLog() << "****************************************************************************************";
 //     tLog() << peerInfos().count() << "PEERS FOR " << friendlyName();
     QPixmap result;
-    foreach( const peerinfo_ptr& peerInfo, peerInfos() )
+    foreach ( const peerinfo_ptr& peerInfo, peerInfos() )
     {
 //         peerInfoDebug(peerInfo) << !peerInfo->avatar().isNull();
-        if( !peerInfo.isNull() && !peerInfo->avatar( style, size ).isNull() )
+        if ( !peerInfo.isNull() && !peerInfo->avatar( style, size ).isNull() )
         {
             result =  peerInfo->avatar( style, size );
             break;
@@ -443,26 +443,26 @@ Source::playlistInterface()
 
 
 void
-Source::onPlaybackStarted( const Tomahawk::query_ptr& query, unsigned int duration )
+Source::onPlaybackStarted( const Tomahawk::track_ptr& track, unsigned int duration )
 {
-    tLog( LOGVERBOSE ) << Q_FUNC_INFO << query->toString();
+    tLog( LOGVERBOSE ) << Q_FUNC_INFO << track->toString();
 
-    m_currentTrack = query;
+    m_currentTrack = track->toQuery();
     m_currentTrackTimer.start( duration * 1000 + 900000 ); // duration comes in seconds
 
     if ( m_playlistInterface.isNull() )
         playlistInterface();
 
-    emit playbackStarted( query );
+    emit playbackStarted( track );
     emit stateChanged();
 }
 
 
 void
-Source::onPlaybackFinished( const Tomahawk::query_ptr& query )
+Source::onPlaybackFinished( const Tomahawk::track_ptr& track, unsigned int playtime, unsigned int secsPlayed )
 {
-    tDebug() << Q_FUNC_INFO << query->toString();
-    emit playbackFinished( query );
+    tDebug() << Q_FUNC_INFO << track->toString();
+    emit playbackFinished( track, playtime, secsPlayed );
 
     m_currentTrack.clear();
     emit stateChanged();
@@ -625,7 +625,7 @@ Source::textStatus() const
 
     if ( !currentTrack().isNull() )
     {
-        return currentTrack()->artist() + " - " + currentTrack()->track();
+        return currentTrack()->queryTrack()->artist() + " - " + currentTrack()->queryTrack()->track();
     }
 
     // do not use isOnline() here - it will always return true for the local source

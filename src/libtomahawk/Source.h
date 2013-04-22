@@ -113,8 +113,8 @@ signals:
 
     void stats( const QVariantMap& );
 
-    void playbackStarted( const Tomahawk::query_ptr& query );
-    void playbackFinished( const Tomahawk::query_ptr& query );
+    void playbackStarted( const Tomahawk::track_ptr& track );
+    void playbackFinished( const Tomahawk::track_ptr& track, unsigned int playtime, unsigned int secsPlayed );
 
     void stateChanged();
     void commandsFinished();
@@ -138,8 +138,8 @@ private slots:
 
     void onStateChanged( DBSyncConnection::State newstate, DBSyncConnection::State oldstate, const QString& info );
 
-    void onPlaybackStarted( const Tomahawk::query_ptr& query, unsigned int duration );
-    void onPlaybackFinished( const Tomahawk::query_ptr& query );
+    void onPlaybackStarted( const Tomahawk::track_ptr& track, unsigned int duration );
+    void onPlaybackFinished( const Tomahawk::track_ptr& track, unsigned int playtime, unsigned int secsPlayed );
     void trackTimerFired();
 
     void executeCommands();
