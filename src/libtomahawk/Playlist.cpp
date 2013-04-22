@@ -51,7 +51,7 @@ PlaylistEntry::PlaylistEntry()
 
 PlaylistEntry::~PlaylistEntry()
 {
-    tDebug() << Q_FUNC_INFO << m_query->toString();
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << m_query->toString();
 }
 
 
