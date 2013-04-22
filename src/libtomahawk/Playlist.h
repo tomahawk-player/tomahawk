@@ -188,7 +188,6 @@ public:
     void setTitle( const QString& s );
     // </IGNORE>
 
-
     QList<plentry_ptr> entriesFromQueries( const QList<Tomahawk::query_ptr>& queries, bool clearFirst = false );
 
     void addUpdater( PlaylistUpdaterInterface* updater );
@@ -249,7 +248,6 @@ public slots:
     // entries should be <= entries(), with changed metadata.
     void updateEntries( const QString& newrev, const QString& oldrev, const QList< plentry_ptr >& entries );
 
-
     void reportCreated( const Tomahawk::playlist_ptr& self );
     void reportDeleted( const Tomahawk::playlist_ptr& self );
 
@@ -263,6 +261,7 @@ public slots:
     void resolve();
 
     void setWeakSelf( QWeakPointer< Playlist > self );
+
 protected:
     // called from loadAllPlaylists DB cmd:
     explicit Playlist( const source_ptr& src,
@@ -291,12 +290,12 @@ protected:
                                      bool is_newest_rev,
                                      const QMap< QString, Tomahawk::plentry_ptr >& addedmap );
 
-
 private slots:
     void onResultsChanged();
     void onResolvingFinished();
 
     void onDeleteResult( SourceTreePopupDialog* );
+
 private:
     Playlist();
     void init();

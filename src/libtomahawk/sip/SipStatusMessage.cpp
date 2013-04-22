@@ -24,8 +24,8 @@
 #include <QTimer>
 
 SipStatusMessage::SipStatusMessage( SipStatusMessageType statusMessageType, const QString& contactId, const QString& message )
-    : m_statusMessageType( statusMessageType )
-    , m_contactId( contactId )
+    : m_contactId( contactId )
+    , m_statusMessageType( statusMessageType )
     , m_message( message )
 {
     // make this temporary for now, as soon as i know how: add ack button

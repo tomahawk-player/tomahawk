@@ -60,7 +60,7 @@ SipInfo::SipInfo()
 }
 
 
-SipInfo::SipInfo(const SipInfo& other)
+SipInfo::SipInfo( const SipInfo& other )
     : QObject()
     , d( other.d )
 {

@@ -306,7 +306,7 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
     if ( !cleanResults.isEmpty() )
     {
         q->addResults( cleanResults );
-        
+
         if ( m_queries_temporary.contains( q ) )
         {
             foreach ( const result_ptr& r, cleanResults )
@@ -564,7 +564,7 @@ Pipeline::onTemporaryQueryTimer()
     for ( int i = m_queries_temporary.count() - 1; i >= 0; i-- )
     {
         query_ptr q = m_queries_temporary.takeAt( i );
-        
+
         m_qids.remove( q->id() );
         foreach ( const Tomahawk::result_ptr& r, q->results() )
             m_rids.remove( r->id() );

@@ -661,10 +661,7 @@ TrackView::onCustomContextMenu( const QPoint& pos )
         PlayableItem* item = proxyModel()->itemFromIndex( proxyModel()->mapToSource( index ) );
         if ( item && !item->query().isNull() )
         {
-            if ( item->query()->numResults() > 0 )
-                queries << item->query()->results().first()->toQuery();
-            else
-                queries << item->query();
+            queries << item->query();
         }
     }
 
