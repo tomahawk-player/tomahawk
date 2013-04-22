@@ -45,7 +45,6 @@
 #include <QtCore/QUrl>
 #include <QDir>
 #include <QtNetwork/QNetworkReply>
-#include <QTemporaryFile>
 
 using namespace Tomahawk;
 
@@ -72,6 +71,7 @@ AudioEngine::AudioEngine()
     , m_expectStop( false )
     , m_waitingOnNewTrack( false )
     , m_state( Stopped )
+    , m_coverTempFile( 0 )
 {
     s_instance = this;
     tDebug() << "Init AudioEngine";
@@ -394,25 +394,23 @@ AudioEngine::onNowPlayingInfoReady( const Tomahawk::InfoSystem::InfoType type )
     {
         playInfo["cover"] = cover;
 
-        //FIXME!
-        QTemporaryFile* coverTempFile = new QTemporaryFile( QDir::toNativeSeparators( QDir::tempPath() + "/" + m_currentTrack->track()->artist() + "_" + m_currentTrack->track()->album() + "_tomahawk_cover.png" ) );
-        if ( !coverTempFile->open() )
+        delete m_coverTempFile;
+        m_coverTempFile = new QTemporaryFile( QDir::toNativeSeparators( QDir::tempPath() + "/" + m_currentTrack->track()->artist() + "_" + m_currentTrack->track()->album() + "_tomahawk_cover.png" ) );
+        if ( !m_coverTempFile->open() )
         {
             tDebug() << Q_FUNC_INFO << "WARNING: could not write temporary file for cover art!";
         }
         else
         {
             // Finally, save the image to the new temp file
-            coverTempFile->setAutoRemove( false );
-            if ( cover.save( coverTempFile, "PNG" ) )
+            if ( cover.save( m_coverTempFile, "PNG" ) )
             {
-                tDebug() <<  Q_FUNC_INFO << "Saving cover image to:" << QFileInfo( *coverTempFile ).absoluteFilePath();
-                playInfo["coveruri"] = QFileInfo( *coverTempFile ).absoluteFilePath();
+                tDebug() <<  Q_FUNC_INFO << "Saving cover image to:" << QFileInfo( *m_coverTempFile ).absoluteFilePath();
+                playInfo["coveruri"] = QFileInfo( *m_coverTempFile ).absoluteFilePath();
             }
             else
                 tDebug() << Q_FUNC_INFO << "Failed to save cover image!";
         }
-        delete coverTempFile;
     }
     else
         tDebug() << Q_FUNC_INFO << "Cover from query is null!";
