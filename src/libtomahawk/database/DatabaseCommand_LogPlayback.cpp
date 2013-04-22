@@ -37,37 +37,23 @@ using namespace Tomahawk;
 void
 DatabaseCommand_LogPlayback::postCommitHook()
 {
-    if ( !m_query.isNull() )
-        return;
+    connect( this, SIGNAL( trackPlaying( Tomahawk::track_ptr, unsigned int ) ),
+             source().data(), SLOT( onPlaybackStarted( Tomahawk::track_ptr, unsigned int ) ), Qt::QueuedConnection );
+    connect( this, SIGNAL( trackPlayed( Tomahawk::track_ptr, unsigned int, unsigned int ) ),
+             source().data(), SLOT( onPlaybackFinished( Tomahawk::track_ptr, unsigned int, unsigned int ) ), Qt::QueuedConnection );
 
-    connect( this, SIGNAL( trackPlaying( Tomahawk::query_ptr, unsigned int ) ),
-             source().data(), SLOT( onPlaybackStarted( Tomahawk::query_ptr, unsigned int ) ), Qt::QueuedConnection );
-    connect( this, SIGNAL( trackPlayed( Tomahawk::query_ptr ) ),
-             source().data(), SLOT( onPlaybackFinished( Tomahawk::query_ptr ) ), Qt::QueuedConnection );
-
-    if ( !m_result.isNull() && m_query.isNull() )
-    {
-        m_query = m_result->toQuery();
-    }
-    else
-    {
-        // do not auto resolve this track
-        m_query = Tomahawk::Query::get( m_artist, m_track, QString() );
-    }
-    
-    if ( m_query.isNull() )
+    track_ptr track = Track::get( m_artist, m_track, QString() );
+    if ( !track )
         return;
-    
-    m_query->setPlayedBy( source(), m_playtime );
 
     if ( m_action == Finished )
     {
-        emit trackPlayed( m_query );
+        emit trackPlayed( track, m_playtime, m_secsPlayed );
     }
     // if the play time is more than 10 minutes in the past, ignore
     else if ( m_action == Started && QDateTime::fromTime_t( playtime() ).secsTo( QDateTime::currentDateTime() ) < STARTED_THRESHOLD )
     {
-        emit trackPlaying( m_query, m_trackDuration );
+        emit trackPlaying( track, m_trackDuration );
     }
 
     if ( source()->isLocal() )
@@ -91,8 +77,8 @@ DatabaseCommand_LogPlayback::exec( DatabaseImpl* dbi )
 
     QVariant srcid = source()->isLocal() ? QVariant( QVariant::Int ) : source()->id();
     TomahawkSqlQuery query = dbi->newquery();
-    
-    if ( !m_query.isNull() )
+
+    if ( m_playtime > 0 )
     {
         query.prepare( QString( "SELECT * FROM playback_log WHERE source %1 AND playtime = %2" ).arg( srcid.isNull() ? "IS NULL" : srcid.toString() ).arg( m_playtime ) );
         query.exec();
@@ -102,6 +88,8 @@ DatabaseCommand_LogPlayback::exec( DatabaseImpl* dbi )
             return;
         }
     }
+    else
+        m_playtime = QDateTime::currentDateTimeUtc().toTime_t();
 
 //    tDebug() << "Logging playback of" << m_artist << "-" << m_track << "for source" << srcid << "- timestamp:" << m_playtime;
 

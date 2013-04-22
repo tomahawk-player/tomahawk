@@ -23,8 +23,8 @@
 #include <QVariantMap>
 
 #include "DatabaseCommand.h"
+#include "Track.h"
 #include "Typedefs.h"
-
 #include "DllMacro.h"
 
 class DLLEXPORT DatabaseCommand_PlaybackHistory : public DatabaseCommand
@@ -46,7 +46,7 @@ public:
     void setLimit( unsigned int amount ) { m_amount = amount; }
 
 signals:
-    void tracks( const QList<Tomahawk::query_ptr>& queries );
+    void tracks( const QList<Tomahawk::track_ptr>& tracks, QList<Tomahawk::PlaybackLog> logs );
 
 private:
     unsigned int m_amount;

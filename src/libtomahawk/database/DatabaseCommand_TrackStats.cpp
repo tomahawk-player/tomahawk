@@ -18,6 +18,7 @@
 
 #include "DatabaseCommand_TrackStats.h"
 
+#include "Artist.h"
 #include "DatabaseImpl.h"
 #include "SourceList.h"
 #include "utils/Logger.h"
@@ -25,9 +26,9 @@
 using namespace Tomahawk;
 
 
-DatabaseCommand_TrackStats::DatabaseCommand_TrackStats( const query_ptr& query, QObject* parent )
+DatabaseCommand_TrackStats::DatabaseCommand_TrackStats( const track_ptr& track, QObject* parent )
     : DatabaseCommand( parent )
-    , m_query( query )
+    , m_track( track )
 {
 }
 
@@ -44,13 +45,13 @@ DatabaseCommand_TrackStats::exec( DatabaseImpl* dbi )
 {
     TomahawkSqlQuery query = dbi->newquery();
 
-    if ( !m_query.isNull() )
+    if ( !m_track.isNull() )
     {
-        int artid = dbi->artistId( m_query->artist(), false );
+        int artid = dbi->artistId( m_track->artist(), false );
         if( artid < 1 )
             return;
 
-        int trkid = dbi->trackId( artid, m_query->track(), false );
+        int trkid = dbi->trackId( artid, m_track->track(), false );
         if( trkid < 1 )
             return;
 
@@ -81,8 +82,8 @@ DatabaseCommand_TrackStats::exec( DatabaseImpl* dbi )
             playbackData.append( log );
     }
 
-    if ( !m_query.isNull() )
-        m_query->setPlaybackHistory( playbackData );
+    if ( !m_track.isNull() )
+        m_track->setPlaybackHistory( playbackData );
     else
         m_artist->setPlaybackHistory( playbackData );
 

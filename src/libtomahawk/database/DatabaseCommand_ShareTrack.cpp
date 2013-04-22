@@ -33,18 +33,10 @@ DatabaseCommand_ShareTrack::DatabaseCommand_ShareTrack( QObject* parent )
 {}
 
 
-DatabaseCommand_ShareTrack::DatabaseCommand_ShareTrack( const Tomahawk::query_ptr& query,
+DatabaseCommand_ShareTrack::DatabaseCommand_ShareTrack( const Tomahawk::track_ptr& track,
                                                         const QString& recipientDbid,
                                                         QObject* parent )
-    : DatabaseCommand_SocialAction( query, "Inbox", "", parent )
-    , m_recipient( recipientDbid )
-{}
-
-
-DatabaseCommand_ShareTrack::DatabaseCommand_ShareTrack( const Tomahawk::result_ptr& result,
-                                                        const QString& recipientDbid,
-                                                        QObject* parent )
-    : DatabaseCommand_SocialAction( result->toQuery(), "Inbox", "", parent )
+    : DatabaseCommand_SocialAction( track, "Inbox", "", parent )
     , m_recipient( recipientDbid )
 {}
 
@@ -54,6 +46,7 @@ DatabaseCommand_ShareTrack::commandname() const
 {
      return "sharetrack";
 }
+
 
 void
 DatabaseCommand_ShareTrack::exec( DatabaseImpl* dbi )
@@ -70,13 +63,14 @@ DatabaseCommand_ShareTrack::exec( DatabaseImpl* dbi )
     DatabaseCommand_SocialAction::exec( dbi );
 }
 
+
 void
 DatabaseCommand_ShareTrack::postCommitHook()
 {
     if ( source()->isLocal() )
         Servent::instance()->triggerDBSync();
 
-    if ( !m_query.isNull() )
+    if ( !m_track.isNull() )
         return;
 
     QString myDbid = SourceList::instance()->getLocal()->nodeId();
@@ -85,9 +79,9 @@ DatabaseCommand_ShareTrack::postCommitHook()
         return;
 
     //From here on, everything happens only on the recipient, and only if recipient!=source
-    m_query = Tomahawk::Query::get( artist(), track(), QString() );
+    m_track = Tomahawk::Track::get( artist(), track(), QString() );
 
-    if ( m_query.isNull() )
+    if ( m_track.isNull() )
         return;
 
     Tomahawk::SocialAction action;
@@ -98,17 +92,17 @@ DatabaseCommand_ShareTrack::postCommitHook()
 
     QList< Tomahawk::SocialAction > actions;
     actions << action;
-    m_query->setAllSocialActions( actions );
+    m_track->setAllSocialActions( actions );
 
     QMetaObject::invokeMethod( ViewManager::instance()->inboxModel(),
                                "insertQuery",
                                Qt::QueuedConnection,
-                               Q_ARG( const Tomahawk::query_ptr&, m_query ),
+                               Q_ARG( const Tomahawk::query_ptr&, m_track->toQuery() ),
                                Q_ARG( int, 0 ) /*row*/ );
 
     QString friendlyName = source()->friendlyName();
     if( ViewManager::instance()->currentPage() != ViewManager::instance()->inboxWidget() )
-        JobStatusView::instance()->model()->addJob( new InboxJobItem( friendlyName, m_query ) );
+        JobStatusView::instance()->model()->addJob( new InboxJobItem( friendlyName, m_track ) );
 }
 
 

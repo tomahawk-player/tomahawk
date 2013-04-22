@@ -25,6 +25,7 @@
 #include "SourceList.h"
 #include "Typedefs.h"
 #include "Artist.h"
+#include "Track.h"
 
 #include "DllMacro.h"
 
@@ -61,20 +62,20 @@ public:
 
     /**
      * \brief Overloaded constructor for DatabaseCommand_SocialAction.
-     * \param query A Tomahawk Query object.
+     * \param track A Tomahawk Track object.
      * \param action Name of the social action to be written to the database.
      * \param comment Comment associated with this social action.
      * \param parent Parent class.
      *
      * Constructor which creates a new database command for the specified social action.
      */
-    explicit DatabaseCommand_SocialAction( const Tomahawk::query_ptr& query, QString action, QString comment = "", QObject* parent = 0 )
-        : DatabaseCommandLoggable( parent ), m_query( query ), m_action( action )
+    explicit DatabaseCommand_SocialAction( const Tomahawk::track_ptr& track, QString action, QString comment = "", QObject* parent = 0 )
+        : DatabaseCommandLoggable( parent ), m_track( track ), m_action( action )
     {
         setSource( SourceList::instance()->getLocal() );
 
-        setArtist( query->artist() );
-        setTrack( query->track() );
+        setArtist( track->artist() );
+        setTrack( track->track() );
         setComment( comment );
         setTimestamp( QDateTime::currentDateTime().toTime_t() );
     }
@@ -118,14 +119,14 @@ public:
      * \return QString containing the track name.
      * \see setTrack()
      */
-    virtual QString track() const { return m_track; }
+    virtual QString track() const { return m_title; }
 
     /**
      * \brief Sets the track name associated with this database command.
      * \param track QString containing the track name.
      * \see track()
      */
-    virtual void setTrack( const QString& track ) { m_track = track; }
+    virtual void setTrack( const QString& title ) { m_title = title; }
 
     /**
      * \brief Returns the social action for this database command instance.
@@ -173,11 +174,11 @@ public:
     virtual bool groupable() const { return true; }
 
 protected:
-    Tomahawk::query_ptr m_query;
+    Tomahawk::track_ptr m_track;
 
 private:
     QString m_artist;
-    QString m_track;
+    QString m_title;
     int m_timestamp;
     QString m_comment;
     QString m_action; //! currently used values: Love, Inbox

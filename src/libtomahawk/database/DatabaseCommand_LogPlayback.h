@@ -26,7 +26,7 @@
 #include "SourceList.h"
 #include "Typedefs.h"
 #include "Artist.h"
-#include "Query.h"
+#include "Track.h"
 
 #include "DllMacro.h"
 
@@ -48,29 +48,17 @@ public:
     };
 
     explicit DatabaseCommand_LogPlayback( QObject* parent = 0 )
-        : DatabaseCommandLoggable( parent ), m_playtime( 0 ), m_secsPlayed( 0 ), m_trackDuration( 0 )
+        : DatabaseCommandLoggable( parent ), m_secsPlayed( 0 ), m_playtime( 0 ), m_trackDuration( 0 )
     {}
 
-    explicit DatabaseCommand_LogPlayback( const Tomahawk::query_ptr& query, Action action, uint timeStamp, QObject* parent = 0 )
-        : DatabaseCommandLoggable( parent ), m_query( query ), m_secsPlayed( 0 ), m_action( action )
+    explicit DatabaseCommand_LogPlayback( const Tomahawk::track_ptr& track, Action action, unsigned int secsPlayed = 0, unsigned int timeStamp = 0, QObject* parent = 0 )
+        : DatabaseCommandLoggable( parent ), m_secsPlayed( secsPlayed ), m_playtime( timeStamp ), m_action( action )
     {
-        m_playtime = timeStamp;
-        m_trackDuration = 0;
+        m_trackDuration = track->duration();
         setSource( SourceList::instance()->getLocal() );
 
-        setArtist( query->artist() );
-        setTrack( query->track() );
-    }
-
-    explicit DatabaseCommand_LogPlayback( const Tomahawk::result_ptr& result, Action action, unsigned int secsPlayed = 0, QObject* parent = 0 )
-        : DatabaseCommandLoggable( parent ), m_result( result ), m_secsPlayed( secsPlayed ), m_action( action )
-    {
-        m_playtime = QDateTime::currentDateTimeUtc().toTime_t();
-        m_trackDuration = result->duration();
-        setSource( SourceList::instance()->getLocal() );
-
-        setArtist( result->artist()->name() );
-        setTrack( result->track() );
+        setArtist( track->artist() );
+        setTrack( track->track() );
     }
 
     virtual QString commandname() const { return "logplayback"; }
@@ -102,17 +90,14 @@ public:
     void setAction( int a ) { m_action = (Action)a; }
 
 signals:
-    void trackPlaying( const Tomahawk::query_ptr& query, unsigned int duration );
-    void trackPlayed( const Tomahawk::query_ptr& query );
+    void trackPlaying( const Tomahawk::track_ptr& track, unsigned int duration );
+    void trackPlayed( const Tomahawk::track_ptr& track, unsigned int playtime, unsigned int secsPlayed );
 
 private:
-    Tomahawk::result_ptr m_result;
-    Tomahawk::query_ptr m_query;
-
     QString m_artist;
     QString m_track;
-    unsigned int m_playtime;
     unsigned int m_secsPlayed;
+    unsigned int m_playtime;
     unsigned int m_trackDuration;
     Action m_action;
 };

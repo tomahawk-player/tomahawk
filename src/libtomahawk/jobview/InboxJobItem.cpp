@@ -29,10 +29,10 @@
 
 
 InboxJobItem::InboxJobItem( const QString& sender,
-                            const Tomahawk::query_ptr& query,
+                            const Tomahawk::track_ptr& track,
                             QObject* parent )
     : JobStatusItem()
-    , m_query( query )
+    , m_track( track )
     , m_sender( sender )
 {
     m_timer = new QTimer( this );
@@ -53,8 +53,8 @@ InboxJobItem::mainText() const
 {
     return tr( "%1 sent you %2 by %3." )
             .arg( m_sender )
-            .arg( m_query->track() )
-            .arg( m_query->artist() );
+            .arg( m_track->track() )
+            .arg( m_track->artist() );
 }
 
 

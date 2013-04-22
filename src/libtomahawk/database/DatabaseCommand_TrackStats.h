@@ -23,9 +23,7 @@
 
 #include "DatabaseCommand.h"
 #include "Typedefs.h"
-#include "Query.h"
-#include "Artist.h"
-
+#include "Track.h"
 #include "DllMacro.h"
 
 class DLLEXPORT DatabaseCommand_TrackStats : public DatabaseCommand
@@ -33,7 +31,7 @@ class DLLEXPORT DatabaseCommand_TrackStats : public DatabaseCommand
 Q_OBJECT
 
 public:
-    explicit DatabaseCommand_TrackStats( const Tomahawk::query_ptr& query, QObject* parent = 0 );
+    explicit DatabaseCommand_TrackStats( const Tomahawk::track_ptr& track, QObject* parent = 0 );
     explicit DatabaseCommand_TrackStats( const Tomahawk::artist_ptr& artist, QObject* parent = 0 );
 
     virtual void exec( DatabaseImpl* lib );
@@ -41,10 +39,10 @@ public:
     virtual QString commandname() const { return "trackstats"; }
 
 signals:
-    void done( QList< Tomahawk::PlaybackLog >& playbackData );
-    
+    void done( const QList< Tomahawk::PlaybackLog >& playbackData );
+
 private:
-    Tomahawk::query_ptr m_query;
+    Tomahawk::track_ptr m_track;
     Tomahawk::artist_ptr m_artist;
 };
 

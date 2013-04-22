@@ -39,12 +39,13 @@ DatabaseCommand_LoadSocialActions::exec( DatabaseImpl* dbi )
 
     if ( m_actionOnly.isNull() )
     {
+        //FIXME!
         // Load for just specified track
-        int artid = dbi->artistId( m_artist, false );
+        int artid = dbi->artistId( m_track->artist(), false );
         if( artid < 1 )
             return;
 
-        int trkid = dbi->trackId( artid, m_track, false );
+        int trkid = dbi->trackId( artid, m_track->track(), false );
         if( trkid < 1 )
             return;
 
@@ -72,7 +73,7 @@ DatabaseCommand_LoadSocialActions::exec( DatabaseImpl* dbi )
                 allSocialActions.append( action );
         }
 
-        m_query->setAllSocialActions( allSocialActions );
+        m_track->setAllSocialActions( allSocialActions );
     }
     else
     {
@@ -92,8 +93,7 @@ DatabaseCommand_LoadSocialActions::exec( DatabaseImpl* dbi )
                 continue;
 
             const QVariantMap artist = dbi->artist( track.value( "artist" ).toInt() );
-
-            const query_ptr trackQuery = Query::get( artist.value( "name" ).toString(), track.value( "name" ).toString(), QString(), QString(), false );
+            const track_ptr t = Track::get( artist.value( "name" ).toString(), track.value( "name" ).toString(), QString() );
 
             Tomahawk::SocialAction action;
             action.action    = m_actionOnly;  // action
@@ -101,7 +101,7 @@ DatabaseCommand_LoadSocialActions::exec( DatabaseImpl* dbi )
             action.timestamp = query.value( 2 );  // timestamp
             action.source    = source();  // source
 
-            trackActions[ trackQuery ] = action;
+            trackActions[ t ] = action;
         }
 
         emit done( trackActions );

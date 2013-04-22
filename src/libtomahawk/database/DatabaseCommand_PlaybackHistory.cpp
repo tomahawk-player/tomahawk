@@ -48,7 +48,8 @@ DatabaseCommand_PlaybackHistory::exec( DatabaseImpl* dbi )
     query.prepare( sql );
     query.exec();
 
-    QList<Tomahawk::query_ptr> ql;
+    QList<Tomahawk::track_ptr> tl;
+    QList<Tomahawk::PlaybackLog> logs;
     while ( query.next() )
     {
         TomahawkSqlQuery query_track = dbi->newquery();
@@ -65,22 +66,27 @@ DatabaseCommand_PlaybackHistory::exec( DatabaseImpl* dbi )
 
         if ( query_track.next() )
         {
-            Tomahawk::query_ptr q = Tomahawk::Query::get( query_track.value( 1 ).toString(), query_track.value( 0 ).toString(), QString() );
-            if ( q.isNull() )
+            Tomahawk::track_ptr track = Tomahawk::Track::get( query_track.value( 1 ).toString(), query_track.value( 0 ).toString(), QString() );
+            if ( !track )
                 continue;
+
+            Tomahawk::PlaybackLog log;
+            log.timestamp = query.value( 1 ).toUInt();
+            log.secsPlayed = query.value( 2 ).toUInt();
 
             if ( query.value( 3 ).toUInt() == 0 )
             {
-                q->setPlayedBy( SourceList::instance()->getLocal(), query.value( 1 ).toUInt() );
+                log.source = SourceList::instance()->getLocal();
             }
             else
             {
-                q->setPlayedBy( SourceList::instance()->get( query.value( 3 ).toUInt() ), query.value( 1 ).toUInt() );
+                log.source = SourceList::instance()->get( query.value( 3 ).toUInt() );
             }
 
-            ql << q;
+            logs << log;
+            tl << track;
         }
     }
 
-    emit tracks( ql );
+    emit tracks( tl, logs );
 }
