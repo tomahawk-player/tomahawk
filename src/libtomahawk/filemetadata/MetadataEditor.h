@@ -36,11 +36,11 @@ class MetadataEditor : public QDialog
 Q_OBJECT
 
 public:
-    MetadataEditor( const Tomahawk::query_ptr& query, const Tomahawk::playlistinterface_ptr& interface, QWidget* parent = 0 );
-    MetadataEditor( const Tomahawk::result_ptr& result, const Tomahawk::playlistinterface_ptr& interface, QWidget* parent = 0 );
+    MetadataEditor( const Tomahawk::query_ptr& query, const Tomahawk::playlistinterface_ptr& plInterface, QWidget* parent = 0 );
+    MetadataEditor( const Tomahawk::result_ptr& result, const Tomahawk::playlistinterface_ptr& plInterface, QWidget* parent = 0 );
     ~MetadataEditor() {};
 
-    void init( const Tomahawk::playlistinterface_ptr& interface );
+    void init( const Tomahawk::playlistinterface_ptr& plInterface );
 
 protected:
     QString title() const { return ui->titleLineEdit->text(); }

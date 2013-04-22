@@ -43,33 +43,33 @@
 #include <QFile>
 
 
-MetadataEditor::MetadataEditor( const Tomahawk::query_ptr& query, const Tomahawk::playlistinterface_ptr& interface, QWidget* parent )
+MetadataEditor::MetadataEditor( const Tomahawk::query_ptr& query, const Tomahawk::playlistinterface_ptr& plInterface, QWidget* parent )
     : QDialog( parent )
 {
-    init( interface );
+    init( plInterface );
 
     loadQuery( query );
 }
 
 
-MetadataEditor::MetadataEditor( const Tomahawk::result_ptr& result, const Tomahawk::playlistinterface_ptr& interface, QWidget* parent )
+MetadataEditor::MetadataEditor( const Tomahawk::result_ptr& result, const Tomahawk::playlistinterface_ptr& plInterface, QWidget* parent )
     : QDialog( parent )
 {
-    init( interface );
+    init( plInterface );
 
     loadResult( result );
 }
 
 
 void
-MetadataEditor::init( const Tomahawk::playlistinterface_ptr& interface )
+MetadataEditor::init( const Tomahawk::playlistinterface_ptr& plInterface )
 {
     ui = new Ui::MetadataEditor();
     ui->setupUi( this );
 
     setAttribute( Qt::WA_DeleteOnClose );
 
-    m_interface = interface;
+    m_interface = plInterface;
     m_index = 0;
     m_editable = false;
 
