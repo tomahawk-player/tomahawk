@@ -351,7 +351,6 @@ ScriptResolver::resolve( const Tomahawk::query_ptr& query )
     if ( query->isFullTextQuery() )
     {
         m.insert( "fulltext", query->fullTextQuery() );
-        m.insert( "artist", query->queryTrack()->artist() );
         m.insert( "track", query->fullTextQuery() );
         m.insert( "qid", query->id() );
     }
