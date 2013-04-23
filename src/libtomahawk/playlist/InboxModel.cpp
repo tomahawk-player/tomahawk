@@ -45,6 +45,28 @@ InboxModel::~InboxModel()
 {}
 
 
+int
+InboxModel::unlistenedCount() const
+{
+    int count = 0;
+    foreach ( const Tomahawk::plentry_ptr& plentry, playlistEntries() )
+    {
+        bool isUnlistened = true;
+        foreach ( Tomahawk::SocialAction sa, plentry->query()->queryTrack()->allSocialActions() )
+        {
+            if ( sa.action == "Inbox" && sa.value.toBool() == false )
+            {
+                isUnlistened = false;
+                break;
+            }
+        }
+        if ( isUnlistened )
+            count++;
+    }
+    return count;
+}
+
+
 QList<Tomahawk::SocialAction>
 InboxModel::mergeSocialActions( QList<Tomahawk::SocialAction> first, QList<Tomahawk::SocialAction> second)
 {

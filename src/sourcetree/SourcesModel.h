@@ -63,7 +63,8 @@ public:
         TemporaryPage = 7,
         LovedTracksPage = 10,
 
-        ScriptCollection = 11
+        ScriptCollection = 11,
+        Inbox = 12
     };
 
     enum CategoryType {

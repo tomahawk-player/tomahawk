@@ -31,6 +31,8 @@ public:
     explicit InboxModel( QObject* parent = 0 );
     virtual ~InboxModel();
 
+    virtual int unlistenedCount() const;
+
 public slots:
     /**
      * Reimplemented from PlaylistModel, all track insertions/appends go through this method.

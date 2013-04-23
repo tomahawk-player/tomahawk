@@ -28,6 +28,7 @@
 #include "items/CategoryItems.h"
 #include "items/TemporaryPageItem.h"
 #include "items/ScriptCollectionItem.h"
+#include "items/InboxItem.h"
 
 #include "audio/AudioEngine.h"
 #include "AnimationHelper.h"
@@ -638,7 +639,36 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         if ( !index.parent().parent().isValid() )
             o.rect.adjust( 7, 0, 0, 0 );
 
-        if ( type == SourcesModel::TemporaryPage )
+        if ( type == SourcesModel::Inbox )
+        {
+            InboxItem* ii = qobject_cast< InboxItem* >( item );
+            if ( ii && ii->unlistenedCount() )
+            {
+                painter->setRenderHint( QPainter::Antialiasing );
+
+                QFont figFont = option.font;
+                figFont.setFamily( "Arial Bold" );
+                figFont.setWeight( QFont::Black );
+                figFont.setPointSize( option.font.pointSize() - 1 );
+
+                QString count = QString::number( ii->unlistenedCount() );
+                int figWidth = QFontMetrics( figFont ).width( count );
+
+                QRect figRect = option.rect.adjusted( option.rect.width() - figWidth - 13, 0, -14, -option.rect.height() + option.fontMetrics.height() * 1.1 );
+                int hd = ( option.rect.height() - figRect.height() ) / 2;
+                figRect.adjust( 0, hd, 0, hd );
+
+                painter->setFont( figFont );
+
+                QColor figColor( 239, 140, 51 );
+                painter->setPen( figColor );
+                painter->setBrush( figColor );
+
+                TomahawkUtils::drawBackgroundAndNumbers( painter, count, figRect );
+            }
+            QStyledItemDelegate::paint( painter, o, index );
+        }
+        else if ( type == SourcesModel::TemporaryPage )
         {
             TemporaryPageItem* gpi = qobject_cast< TemporaryPageItem* >( item );
             Q_ASSERT( gpi );
