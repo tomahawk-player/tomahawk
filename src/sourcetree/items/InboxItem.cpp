@@ -31,7 +31,10 @@
 InboxItem::InboxItem( SourcesModel* model, SourceTreeItem* parent )
     : SourceTreeItem( model, parent, SourcesModel::Inbox )
     , m_sortValue( -150 )
-{}
+{
+    m_text = tr( "Inbox" );
+    m_icon = ImageRegistry::instance()->icon( RESPATH "images/inbox.svg" );
+}
 
 
 InboxItem::~InboxItem()
@@ -41,14 +44,14 @@ InboxItem::~InboxItem()
 QString
 InboxItem::text() const
 {
-    return tr( "Inbox" );
+    return m_text;
 }
 
 
 QIcon
 InboxItem::icon() const
 {
-    return ImageRegistry::instance()->icon( RESPATH "images/inbox.svg" );
+    return m_icon;
 }
 
 

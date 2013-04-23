@@ -41,6 +41,8 @@ public slots:
 
 private:
     int m_sortValue;
+    QIcon m_icon;
+    QString m_text;
 };
 
 #endif // INBOXITEM_H
