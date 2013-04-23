@@ -61,8 +61,8 @@ DatabaseCommand_DeletePlaylist::postCommitHook()
 
     playlist_ptr playlist = source()->dbCollection()->playlist( m_playlistguid );
     Q_ASSERT( !playlist.isNull() );
-
-    playlist->reportDeleted( playlist );
+    if ( playlist )
+        playlist->reportDeleted( playlist );
 
     if( source()->isLocal() )
         Servent::instance()->triggerDBSync();
