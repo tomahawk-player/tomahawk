@@ -861,12 +861,14 @@ PlayableModel::insertAlbum( const Tomahawk::album_ptr& album, int row )
 
 
 void
-PlayableModel::insertQuery( const Tomahawk::query_ptr& query, int row )
+PlayableModel::insertQuery( const Tomahawk::query_ptr& query, int row, const Tomahawk::PlaybackLog& log )
 {
     QList< query_ptr > queries;
     queries << query;
+    QList< Tomahawk::PlaybackLog > logs;
+    logs << log;
 
-    insertQueries( queries, row );
+    insertQueries( queries, row, logs );
 }
 
 

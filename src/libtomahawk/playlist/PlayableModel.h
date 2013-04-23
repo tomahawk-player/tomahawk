@@ -142,7 +142,7 @@ public slots:
     virtual void insertQueries( const QList< Tomahawk::query_ptr >& queries, int row = 0, const QList< Tomahawk::PlaybackLog >& logs = QList< Tomahawk::PlaybackLog >() );
     virtual void insertArtists( const QList< Tomahawk::artist_ptr >& artists, int row = 0 );
     virtual void insertAlbums( const QList< Tomahawk::album_ptr >& albums, int row = 0 );
-    virtual void insertQuery( const Tomahawk::query_ptr& query, int row = 0 );
+    virtual void insertQuery( const Tomahawk::query_ptr& query, int row = 0, const Tomahawk::PlaybackLog& log = Tomahawk::PlaybackLog() );
     virtual void insertArtist( const Tomahawk::artist_ptr& artist, int row = 0 );
     virtual void insertAlbum( const Tomahawk::album_ptr& album, int row = 0 );
 
