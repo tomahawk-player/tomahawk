@@ -109,6 +109,8 @@ public:
     // linked to the sidebar. call it right after creating the playlist
     FlexibleView* createPageForPlaylist( const Tomahawk::playlist_ptr& playlist );
 
+    FlexibleView* createPageForList( const QString& title, const QList< Tomahawk::query_ptr >& queries );
+
     bool isTomahawkLoaded() const { return m_loaded; }
 
 signals:
