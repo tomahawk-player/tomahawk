@@ -459,10 +459,10 @@ Source::onPlaybackStarted( const Tomahawk::track_ptr& track, unsigned int durati
 
 
 void
-Source::onPlaybackFinished( const Tomahawk::track_ptr& track, unsigned int playtime, unsigned int secsPlayed )
+Source::onPlaybackFinished( const Tomahawk::track_ptr& track, const Tomahawk::PlaybackLog& log )
 {
     tDebug() << Q_FUNC_INFO << track->toString();
-    emit playbackFinished( track, playtime, secsPlayed );
+    emit playbackFinished( track, log );
 
     m_currentTrack.clear();
     emit stateChanged();

@@ -91,7 +91,7 @@ public:
 
 signals:
     void trackPlaying( const Tomahawk::track_ptr& track, unsigned int duration );
-    void trackPlayed( const Tomahawk::track_ptr& track, unsigned int playtime, unsigned int secsPlayed );
+    void trackPlayed( const Tomahawk::track_ptr& track, const Tomahawk::PlaybackLog& log );
 
 private:
     QString m_artist;

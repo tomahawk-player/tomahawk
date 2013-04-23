@@ -467,6 +467,7 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< Tomahawk::playlistinterface_ptr >("Tomahawk::playlistinterface_ptr");
     qRegisterMetaType< Tomahawk::dynplaylist_ptr >("Tomahawk::dynplaylist_ptr");
     qRegisterMetaType< Tomahawk::geninterface_ptr >("Tomahawk::geninterface_ptr");
+    qRegisterMetaType< Tomahawk::PlaybackLog >("Tomahawk::PlaybackLog");
     qRegisterMetaType< QList<Tomahawk::playlist_ptr> >("QList<Tomahawk::playlist_ptr>");
     qRegisterMetaType< QList<Tomahawk::dynplaylist_ptr> >("QList<Tomahawk::dynplaylist_ptr>");
     qRegisterMetaType< QList<Tomahawk::dyncontrol_ptr> >("QList<Tomahawk::dyncontrol_ptr>");

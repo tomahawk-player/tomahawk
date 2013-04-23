@@ -39,8 +39,8 @@ DatabaseCommand_LogPlayback::postCommitHook()
 {
     connect( this, SIGNAL( trackPlaying( Tomahawk::track_ptr, unsigned int ) ),
              source().data(), SLOT( onPlaybackStarted( Tomahawk::track_ptr, unsigned int ) ), Qt::QueuedConnection );
-    connect( this, SIGNAL( trackPlayed( Tomahawk::track_ptr, unsigned int, unsigned int ) ),
-             source().data(), SLOT( onPlaybackFinished( Tomahawk::track_ptr, unsigned int, unsigned int ) ), Qt::QueuedConnection );
+    connect( this, SIGNAL( trackPlayed( Tomahawk::track_ptr, Tomahawk::PlaybackLog ) ),
+             source().data(), SLOT( onPlaybackFinished( Tomahawk::track_ptr, Tomahawk::PlaybackLog ) ), Qt::QueuedConnection );
 
     track_ptr track = Track::get( m_artist, m_track, QString() );
     if ( !track )
@@ -48,7 +48,12 @@ DatabaseCommand_LogPlayback::postCommitHook()
 
     if ( m_action == Finished )
     {
-        emit trackPlayed( track, m_playtime, m_secsPlayed );
+        PlaybackLog log;
+        log.source = source();
+        log.timestamp = m_playtime;
+        log.secsPlayed = m_secsPlayed;
+
+        emit trackPlayed( track, log );
     }
     // if the play time is more than 10 minutes in the past, ignore
     else if ( m_action == Started && QDateTime::fromTime_t( playtime() ).secsTo( QDateTime::currentDateTime() ) < STARTED_THRESHOLD )
