@@ -47,6 +47,7 @@ private slots:
     void loadTracks();
 
     void tracksLoaded( QList< Tomahawk::query_ptr > );
+    void onCurrentIndexChanged();
 
 private:
     static QList< Tomahawk::SocialAction > mergeSocialActions( QList< Tomahawk::SocialAction > first,

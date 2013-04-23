@@ -90,7 +90,7 @@ DatabaseCommand_ShareTrack::postCommitHook()
     action.value = true; //unlistened
     action.timestamp = timestamp();
 
-    QList< Tomahawk::SocialAction > actions;
+    QList< Tomahawk::SocialAction > actions = m_track->allSocialActions();
     actions << action;
     m_track->setAllSocialActions( actions );
 

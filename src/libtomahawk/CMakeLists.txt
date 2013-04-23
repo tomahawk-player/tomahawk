@@ -274,6 +274,7 @@ list(APPEND libSources
     database/DatabaseCommand_PlaybackCharts.cpp
     database/DatabaseCommand_ShareTrack.cpp
     database/DatabaseCommand_DeleteInboxEntry.cpp
+    database/DatabaseCommand_ModifyInboxEntry.cpp
     database/Database.cpp
     database/TomahawkSqlQuery.cpp
     database/IdThreadWorker.cpp
