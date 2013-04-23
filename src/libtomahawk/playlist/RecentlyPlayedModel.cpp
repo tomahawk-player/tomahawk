@@ -101,24 +101,25 @@ RecentlyPlayedModel::setSource( const Tomahawk::source_ptr& source )
 void
 RecentlyPlayedModel::onSourceAdded( const Tomahawk::source_ptr& source )
 {
-    connect( source.data(), SIGNAL( playbackFinished( Tomahawk::track_ptr, unsigned int, unsigned int ) ), SLOT( onPlaybackFinished( Tomahawk::track_ptr, unsigned int, unsigned int ) ), Qt::UniqueConnection );
+    connect( source.data(), SIGNAL( playbackFinished( Tomahawk::track_ptr, Tomahawk::PlaybackLog ) ),
+                              SLOT( onPlaybackFinished( Tomahawk::track_ptr, Tomahawk::PlaybackLog ) ), Qt::UniqueConnection );
 }
 
 
 void
-RecentlyPlayedModel::onPlaybackFinished( const Tomahawk::track_ptr& track, unsigned int playtime, unsigned int secsPlayed )
+RecentlyPlayedModel::onPlaybackFinished( const Tomahawk::track_ptr& track, const Tomahawk::PlaybackLog& log )
 {
     int count = trackCount();
 
     if ( count )
     {
         PlayableItem* oldestItem = itemFromIndex( index( count - 1, 0, QModelIndex() ) );
-        if ( oldestItem->playbackLog().timestamp >= playtime )
+        if ( oldestItem->playbackLog().timestamp >= log.timestamp )
             return;
 
         PlayableItem* youngestItem = itemFromIndex( index( 0, 0, QModelIndex() ) );
-        if ( youngestItem->playbackLog().timestamp <= playtime )
-            insertQuery( track->toQuery(), 0 );
+        if ( youngestItem->playbackLog().timestamp <= log.timestamp )
+            insertQuery( track->toQuery(), 0, log );
         else
         {
             for ( int i = 0; i < count - 1; i++ )
@@ -126,16 +127,16 @@ RecentlyPlayedModel::onPlaybackFinished( const Tomahawk::track_ptr& track, unsig
                 PlayableItem* item1 = itemFromIndex( index( i, 0, QModelIndex() ) );
                 PlayableItem* item2 = itemFromIndex( index( i + 1, 0, QModelIndex() ) );
 
-                if ( item1->playbackLog().timestamp >= playtime && item2->playbackLog().timestamp <= playtime )
+                if ( item1->playbackLog().timestamp >= log.timestamp && item2->playbackLog().timestamp <= log.timestamp )
                 {
-                    insertQuery( track->toQuery(), i + 1 );
+                    insertQuery( track->toQuery(), i + 1, log );
                     break;
                 }
             }
         }
     }
     else
-        insertQuery( track->toQuery(), 0 );
+        insertQuery( track->toQuery(), 0, log );
 
     if ( trackCount() > (int)m_limit )
         remove( m_limit );
