@@ -51,6 +51,8 @@ public:
 
     virtual bool showInfoBar() const { return false; }
     virtual bool jumpToCurrentTrack();
+    virtual bool isTemporaryPage() const;
+    void setTemporaryPage( bool b );
 
     TrackView* trackView() const { return m_trackView; }
     TrackView* detailedView() const { return m_detailedView; }
@@ -92,6 +94,7 @@ private:
     QStackedWidget* m_stack;
 
     FlexibleViewMode m_mode;
+    bool m_temporary;
 };
 
 Q_DECLARE_METATYPE( FlexibleView::FlexibleViewMode );

@@ -42,6 +42,7 @@ FlexibleView::FlexibleView( QWidget* parent )
     , m_detailedView( new TrackView() )
     , m_gridView( new GridView() )
     , m_model( 0 )
+    , m_temporary( false )
 {
     qRegisterMetaType< FlexibleViewMode >( "FlexibleViewMode" );
 
@@ -304,4 +305,15 @@ FlexibleView::onWidgetDestroyed( QWidget* widget )
 }
 
 
-#include "FlexibleView.moc"
+bool
+FlexibleView::isTemporaryPage() const
+{
+    return m_temporary;
+}
+
+
+void
+FlexibleView::setTemporaryPage( bool b )
+{
+    m_temporary = b;
+}
