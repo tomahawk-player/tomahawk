@@ -5,6 +5,9 @@ Version 0.7.0:
     * Fixed playback-loop caused by duplicate tracks in a playlist.
     * Improved spotify protocol handling.
     * Added "Append to Playlist" context menu item.
+    * User-friendlier collection handling: added info-buttons for artists and
+      albums. Double-clicking an item expands it now.
+    * (Windows) Smoother and more responsive audio playback.
     * (Linux) Fixed grid issues with GTK-styles.
 
 Version 0.6.1:
