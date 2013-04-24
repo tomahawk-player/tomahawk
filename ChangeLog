@@ -1,3 +1,5 @@
+Version 0.8.0:
+
 Version 0.7.0:
     * Improved peer and account handling.
     * JavaScript Resolvers can now expose collections.
