@@ -180,7 +180,7 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
             if ( item->isPlaying() )
                 painter->drawPixmap( npr, TomahawkUtils::defaultPixmap( TomahawkUtils::NowPlayingSpeaker, TomahawkUtils::Original, npr.size() ) );
             else
-                painter->drawPixmap( npr, TomahawkUtils::defaultPixmap( TomahawkUtils::NewReleases, TomahawkUtils::Original, npr.size() ) );
+                painter->drawPixmap( npr, TomahawkUtils::defaultPixmap( TomahawkUtils::InboxNewItem, TomahawkUtils::Original, npr.size() ) );
             r.adjust( pixHeight + 8, 0, 0, 0 );
         }
 

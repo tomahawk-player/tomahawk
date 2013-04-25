@@ -714,6 +714,9 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
         case Inbox:
             pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/inbox.svg", size );
             break;
+        case InboxNewItem:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/new-inbox.svg", size );
+            break;
 
         default:
             break;

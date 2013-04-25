@@ -122,7 +122,8 @@ namespace TomahawkUtils
         SipPluginOffline,
         ResolverBundle,
         Inbox,
-        Invalid
+        Invalid,
+        InboxNewItem
     };
 
     enum ImageMode
