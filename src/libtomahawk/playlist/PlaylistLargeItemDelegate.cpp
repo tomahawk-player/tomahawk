@@ -121,14 +121,6 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
                 break;
             }
         }
-
-        if ( isUnlistened && ! item->isPlaying() )
-        {
-            prepareStyleOption( &opt, index, item );
-            opt.backgroundBrush = QColor( Qt::yellow ).lighter( 185 );
-        }
-        else
-            prepareStyleOption( &opt, index, item );
     }
     else
         prepareStyleOption( &opt, index, item );
