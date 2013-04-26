@@ -215,6 +215,7 @@ TrackView::setPlayableModel( PlayableModel* model )
             setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
     }
 
+    onViewChanged();
     emit modelChanged();
 }
 
