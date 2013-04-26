@@ -261,6 +261,20 @@ PlayableModel::queryData( const query_ptr& query, int column, int role ) const
                 break;
         }
     }
+    else
+    {
+        switch ( column )
+        {
+            case Score:
+                if ( query->resolvingFinished() )
+                    return tr( "Not available" );
+                else
+                    return tr( "Searching..." );
+
+            default:
+                break;
+        }
+    }
 
     return QVariant();
 }
