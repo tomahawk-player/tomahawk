@@ -95,22 +95,23 @@ RecentPlaylistsModel::playlistsLoaded( const QList<DatabaseCommand_LoadAllSorted
     DatabaseCommand_LoadAllSortedPlaylists::SourcePlaylistPair plPair;
     foreach ( plPair, playlistGuids )
     {
-        source_ptr s = SourceList::instance()->get( plPair.first );
-        if ( s.isNull() )
+        source_ptr source = SourceList::instance()->get( plPair.first );
+        if ( !source )
             continue;
 
-        playlist_ptr pl = s->dbCollection()->playlist( plPair.second );
-        if ( pl.isNull() )
-            pl = s->dbCollection()->autoPlaylist( plPair.second );
-        if ( pl.isNull() )
-            pl = s->dbCollection()->station( plPair.second );
+        playlist_ptr pl = source->dbCollection()->playlist( plPair.second );
+        if ( !pl )
+            pl = source->dbCollection()->autoPlaylist( plPair.second );
+        if ( !pl )
+            pl = source->dbCollection()->station( plPair.second );
 
-        if ( pl.isNull() )
+        if ( !pl )
         {
-            qDebug() << "Found a playlist that is NOT LOADED FOR ANY SOURCE:" << plPair.first << plPair.second;
+            tDebug() << "ERROR: Found a playlist that is not associated with any source:" << plPair.first << plPair.second;
             continue;
         }
-        connect( pl.data(), SIGNAL( changed() ), this, SLOT( updatePlaylist() ) );
+
+        connect( pl.data(), SIGNAL( changed() ), SLOT( updatePlaylist() ) );
         m_playlists << pl;
 
         if ( !pl->loaded() )

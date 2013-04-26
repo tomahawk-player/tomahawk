@@ -63,12 +63,12 @@ RecentlyPlayedPlaylistsModel::loadFromSettings()
 //        qDebug() << "loading playlist" << playlist_guids[i];
 
         playlist_ptr pl = m_cached.value( playlist_guids[i], Tomahawk::playlist_ptr() );
-        if ( pl.isNull() )
-            pl = Tomahawk::Playlist::load( playlist_guids[i] );
-        if ( pl.isNull() )
-            pl = Tomahawk::DynamicPlaylist::load( playlist_guids[i] );
+        if ( !pl )
+            pl = Tomahawk::Playlist::get( playlist_guids[i] );
+        if ( !pl )
+            pl = Tomahawk::DynamicPlaylist::get( playlist_guids[i] );
 
-        if ( !pl.isNull() )
+        if ( pl )
         {
             m_recplaylists << pl;
 
@@ -230,16 +230,16 @@ void
 RecentlyPlayedPlaylistsModel::plAdded( const QString& plguid, int sId )
 {
     source_ptr source = SourceList::instance()->get( sId );
-    if ( source.isNull() )
+    if ( !source )
         return;
 
     playlist_ptr pl = source->dbCollection()->playlist( plguid );
-    if ( pl.isNull() )
+    if ( !pl )
         pl = source->dbCollection()->autoPlaylist( plguid );
-    if ( pl.isNull() )
+    if ( !pl )
         pl = source->dbCollection()->station( plguid );
 
-    if ( pl.isNull() )
+    if ( !pl )
         return;
 
     onPlaylistsRemoved( QList< playlist_ptr >() << pl );
@@ -256,7 +256,7 @@ void
 RecentlyPlayedPlaylistsModel::playlistChanged( Tomahawk::playlistinterface_ptr pli )
 {
     // ARG
-    if ( pli.isNull() )
+    if ( !pli )
         return;
 
     if ( Playlist *pl = dynamic_cast< Playlist* >( pli.data() ) )
@@ -269,7 +269,7 @@ RecentlyPlayedPlaylistsModel::playlistChanged( Tomahawk::playlistinterface_ptr p
                 ptr = test;
         }
 
-        if ( !ptr.isNull() && m_artists.contains( ptr ) )
+        if ( ptr && m_artists.contains( ptr ) )
         {
             m_artists[ ptr ] = QString();
         }
