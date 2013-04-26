@@ -163,6 +163,8 @@ Playlist::init()
     m_busy = false;
     m_deleted = false;
     m_locallyChanged = false;
+    m_loaded = false;
+
     connect( Pipeline::instance(), SIGNAL( idle() ), SLOT( onResolvingFinished() ) );
 }
 
@@ -536,6 +538,7 @@ Playlist::setRevision( const QString& rev,
     }
 
     setBusy( false );
+    m_loaded = true;
 
     if ( m_initEntries.count() && currentrevision().isEmpty() )
     {
@@ -656,8 +659,15 @@ Playlist::addEntry( const query_ptr& query, const QString& oldrev )
 void
 Playlist::addEntries( const QList<query_ptr>& queries, const QString& oldrev )
 {
-    QList<plentry_ptr> el = entriesFromQueries( queries );
+    if ( !m_loaded )
+    {
+        tDebug() << Q_FUNC_INFO << "Queueing addEntries call!";
+        loadRevision( oldrev );
+        m_queuedOps << NewClosure( 0, "", this, SLOT( addEntries( QList<Tomahawk::query_ptr>, QString ) ), queries, oldrev );
+        return;
+    }
 
+    const QList<plentry_ptr> el = entriesFromQueries( queries );
     const int prevSize = m_entries.size();
 
     QString newrev = uuid();
@@ -667,7 +677,7 @@ Playlist::addEntries( const QList<query_ptr>& queries, const QString& oldrev )
     // PlaylistModel also emits during appends, but since we call
     // createNewRevision, it reloads instead of appends.
     const QList<plentry_ptr> added = el.mid( prevSize );
-    qDebug() << "Playlist got" << queries.size() << "tracks added, emitting tracksInserted with:" << added.size() << "at pos:" << prevSize - 1;
+    tDebug( LOGVERBOSE ) << "Playlist got" << queries.size() << "tracks added, emitting tracksInserted with:" << added.size() << "at pos:" << prevSize - 1;
     emit tracksInserted( added, prevSize );
 }
 
@@ -675,13 +685,21 @@ Playlist::addEntries( const QList<query_ptr>& queries, const QString& oldrev )
 void
 Playlist::insertEntries( const QList< query_ptr >& queries, const int position, const QString& oldrev )
 {
+    if ( !m_loaded )
+    {
+        tDebug() << Q_FUNC_INFO << "Queueing insertEntries call!";
+        loadRevision( oldrev );
+        m_queuedOps << NewClosure( 0, "", this, SLOT( insertEntries( QList<Tomahawk::query_ptr>, int, QString ) ), queries, position, oldrev );
+        return;
+    }
+
     QList<plentry_ptr> toInsert = entriesFromQueries( queries, true );
     QList<plentry_ptr> entries = m_entries;
 
     Q_ASSERT( position <= m_entries.size() );
     if ( position > m_entries.size() )
     {
-        qWarning() << "ERROR trying to insert tracks past end of playlist! Appending!!";
+        tDebug() << "ERROR trying to insert tracks past end of playlist! Appending!";
         addEntries( queries, oldrev );
         return;
     }
@@ -787,6 +805,12 @@ Playlist::checkRevisionQueue()
             item.oldRev = currentrevision();
         }
         updateEntries( item.newRev, item.oldRev, item.entries );
+    }
+
+    if ( !m_queuedOps.isEmpty() )
+    {
+        _detail::Closure* next = m_queuedOps.dequeue();
+        next->forceInvoke();
     }
 }
 

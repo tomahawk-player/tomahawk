@@ -32,6 +32,7 @@
 #include "PlaylistInterface.h"
 #include "playlist/PlaylistUpdaterInterface.h"
 #include "Query.h"
+#include "utils/Closure.h"
 
 #include "DllMacro.h"
 
@@ -168,11 +169,9 @@ public:
     uint createdOn() const            { return m_createdOn; }
 
     bool busy() const { return m_busy; }
+    bool loaded() const { return m_loaded; }
 
     const QList< plentry_ptr >& entries() { return m_entries; }
-    virtual void addEntry( const Tomahawk::query_ptr& query, const QString& oldrev );
-    virtual void addEntries( const QList<Tomahawk::query_ptr>& queries, const QString& oldrev );
-    virtual void insertEntries( const QList<Tomahawk::query_ptr>& queries, const int position, const QString& oldrev );
 
     // <IGNORE hack="true">
     // these need to exist and be public for the json serialization stuff
@@ -248,6 +247,10 @@ public slots:
     // entries should be <= entries(), with changed metadata.
     void updateEntries( const QString& newrev, const QString& oldrev, const QList< plentry_ptr >& entries );
 
+    virtual void addEntry( const Tomahawk::query_ptr& query, const QString& oldrev );
+    virtual void addEntries( const QList<Tomahawk::query_ptr>& queries, const QString& oldrev );
+    virtual void insertEntries( const QList<Tomahawk::query_ptr>& queries, const int position, const QString& oldrev );
+
     void reportCreated( const Tomahawk::playlist_ptr& self );
     void reportDeleted( const Tomahawk::playlist_ptr& self );
 
@@ -310,7 +313,9 @@ private:
     unsigned int m_lastmodified;
     unsigned int m_createdOn;
     bool m_shared;
+    bool m_loaded;
 
+    QQueue<_detail::Closure*> m_queuedOps;
     QList< plentry_ptr > m_initEntries;
     QList< plentry_ptr > m_entries;
 
@@ -330,5 +335,6 @@ private:
 
 Q_DECLARE_METATYPE( QSharedPointer< Tomahawk::Playlist > )
 Q_DECLARE_METATYPE( QList< QSharedPointer< Tomahawk::PlaylistEntry > > )
+Q_DECLARE_METATYPE( QList< QSharedPointer< Tomahawk::Query > > )
 
 #endif // PLAYLIST_H
