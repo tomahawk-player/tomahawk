@@ -108,6 +108,7 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
     Q_ASSERT( item );
 
     QStyleOptionViewItemV4 opt = option;
+    prepareStyleOption( &opt, index, item );
 
     bool isUnlistened = true;
     if( m_mode == Inbox )
@@ -122,7 +123,6 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
             }
         }
     }
-    prepareStyleOption( &opt, index, item );
 
     opt.text.clear();
     qApp->style()->drawControl( QStyle::CE_ItemViewItem, &opt, painter );
@@ -239,6 +239,8 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
 
         painter->setFont( boldFont );
         QString text = painter->fontMetrics().elidedText( track->track(), Qt::ElideRight, leftRect.width() );
+        if ( m_mode == Inbox && isUnlistened )
+            painter->setPen( opt.palette.link().color() );
         painter->drawText( leftRect, text, m_topOption );
 
         painter->setFont( smallFont );
