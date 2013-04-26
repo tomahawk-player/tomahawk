@@ -538,7 +538,7 @@ Playlist::setRevision( const QString& rev,
     }
 
     setBusy( false );
-    m_loaded = true;
+    setLoaded( true );
 
     if ( m_initEntries.count() && currentrevision().isEmpty() )
     {
@@ -766,6 +766,13 @@ Playlist::setBusy( bool b )
 {
     m_busy = b;
     emit changed();
+}
+
+
+void
+Playlist::setLoaded( bool b )
+{
+    m_loaded = b;
 }
 
 

@@ -304,6 +304,7 @@ private:
     void init();
 
     void setBusy( bool b );
+    void setLoaded( bool b );
     void checkRevisionQueue();
 
     QWeakPointer< Playlist > m_weakSelf;
