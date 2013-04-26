@@ -1,20 +1,20 @@
-/*
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *    Copyright 2010-2012, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2010-2012, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2010-2013, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
- *    This program is free software; you can redistribute it and/or modify
- *    it under the terms of the GNU General Public License as published by
- *    the Free Software Foundation; either version 2 of the License, or
- *    (at your option) any later version.
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
  *
- *    This program is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *    GNU General Public License for more details.
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
  *
- *    You should have received a copy of the GNU General Public License along
- *    with this program; if not, write to the Free Software Foundation, Inc.,
- *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "PlaylistItems.h"
@@ -39,15 +39,14 @@ using namespace Tomahawk;
 
 PlaylistItem::PlaylistItem( SourcesModel* mdl, SourceTreeItem* parent, const playlist_ptr& pl, int index )
     : SourceTreeItem( mdl, parent, SourcesModel::StaticPlaylist, index )
-    , m_loaded( false )
     , m_canSubscribe( false )
     , m_showSubscribed( false )
     , m_playlist( pl )
 {
     connect( pl.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ),
-             SLOT( onPlaylistLoaded( Tomahawk::PlaylistRevision ) ), Qt::QueuedConnection );
+                          SLOT( onPlaylistLoaded( Tomahawk::PlaylistRevision ) ), Qt::QueuedConnection );
     connect( pl.data(), SIGNAL( changed() ),
-             SLOT( onUpdated() ), Qt::QueuedConnection );
+                          SLOT( onUpdated() ), Qt::QueuedConnection );
 
     if ( ViewManager::instance()->pageForPlaylist( pl ) )
         model()->linkSourceItemToPage( this, ViewManager::instance()->pageForPlaylist( pl ) );
@@ -76,7 +75,6 @@ PlaylistItem::onPlaylistLoaded( Tomahawk::PlaylistRevision revision )
 {
     Q_UNUSED( revision );
 
-    m_loaded = true;
     emit updated();
 }
 
@@ -123,8 +121,8 @@ PlaylistItem::flags() const
     Qt::ItemFlags flags = SourceTreeItem::flags();
     flags |= Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
 
-    if ( !m_loaded )
-        flags &= !Qt::ItemIsEnabled;
+/*    if ( !playlist()->loaded() )
+        flags &= !Qt::ItemIsEnabled;*/
     if ( playlist()->author()->isLocal() )
         flags |= Qt::ItemIsEditable;
 
@@ -158,19 +156,15 @@ PlaylistItem::doubleClicked()
 }
 
 
-void
-PlaylistItem::setLoaded( bool loaded )
-{
-    m_loaded = loaded;
-}
-
-
 bool
 PlaylistItem::willAcceptDrag( const QMimeData* data ) const
 {
-    Q_UNUSED( data );
-    return !m_playlist.isNull() && m_playlist->author()->isLocal() && DropJob::acceptsMimeData( data, DropJob::Track ) && !m_playlist->busy();
+    return m_playlist
+            && !m_playlist->busy()
+            && m_playlist->author()->isLocal()
+            && DropJob::acceptsMimeData( data, DropJob::Track );
 }
+
 
 PlaylistItem::DropTypes
 PlaylistItem::supportedDropTypes( const QMimeData* data ) const
@@ -230,8 +224,11 @@ PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
     QList< Tomahawk::query_ptr > queries;
 
     if ( data->hasFormat( "application/tomahawk.playlist.id" ) &&
-        data->data( "application/tomahawk.playlist.id" ) == m_playlist->guid() )
-        return false; // don't allow dropping on ourselves
+         data->data( "application/tomahawk.playlist.id" ) == m_playlist->guid() )
+    {
+        // don't allow dropping on ourselves
+        return false;
+    }
 
     if ( !DropJob::acceptsMimeData( data, DropJob::Track ) )
         return false;
@@ -240,7 +237,8 @@ PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
     dj->setDropTypes( DropJob::Track );
     dj->setDropAction( DropJob::Append );
 
-    connect( dj, SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), this, SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ) );
+    connect( dj, SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ),
+                   SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ) );
 
     if ( dropType() == DropTypeAllFromArtist )
         dj->setGetWholeArtists( true );
@@ -268,13 +266,14 @@ PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
 void
 PlaylistItem::parsedDroppedTracks( const QList< query_ptr >& tracks )
 {
-    qDebug() << "adding" << tracks.count() << "tracks";
-    if ( tracks.count() && !m_playlist.isNull() && m_playlist->author()->isLocal() )
+    if ( tracks.count() && m_playlist && m_playlist->author()->isLocal() )
     {
-        qDebug() << "on playlist:" << m_playlist->title() << m_playlist->guid() << m_playlist->currentrevision();
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Adding" << tracks.count() << "tracks on playlist:" << m_playlist->title() << m_playlist->guid() << m_playlist->currentrevision();
 
         m_playlist->addEntries( tracks, m_playlist->currentrevision() );
     }
+    else
+        tDebug() << "ERROR: Could not add" << tracks.count() << "to playlist!";
 }
 
 
@@ -285,9 +284,9 @@ PlaylistItem::onUpdated()
     if ( !newOverlay && !m_overlaidIcon.isNull() )
         m_overlaidIcon = QIcon();
 
-
     emit updated();
 }
+
 
 bool
 PlaylistItem::collaborative() const
@@ -301,10 +300,10 @@ PlaylistItem::collaborative() const
 
     foreach ( PlaylistUpdaterInterface* updater, m_playlist->updaters() )
     {
-        if( !updater->collaborative() )
+        if ( !updater->collaborative() )
             continue;
         /// @note:  We only care for collaborations if in sync
-        if( !updater->sync() )
+        if ( !updater->sync() )
             continue;
         collaborative = updater->collaborative();
     }
@@ -370,7 +369,6 @@ PlaylistItem::createOverlay()
         overlayRect.moveLeft( 0 );
     }
 
-
     p.end();
 
     m_overlaidIcon.addPixmap( base );
@@ -403,10 +401,11 @@ PlaylistItem::setData( const QVariant& v, bool role )
     return false;
 }
 
+
 SourceTreeItem*
 PlaylistItem::activateCurrent()
 {
-    if( ViewManager::instance()->pageForPlaylist( m_playlist ) == ViewManager::instance()->currentPage() )
+    if ( ViewManager::instance()->pageForPlaylist( m_playlist ) == ViewManager::instance()->currentPage() )
     {
         model()->linkSourceItemToPage( this, ViewManager::instance()->currentPage() );
         emit selectRequest( this );
@@ -469,7 +468,6 @@ DynamicPlaylistItem::activate()
 void
 DynamicPlaylistItem::onDynamicPlaylistLoaded( DynamicPlaylistRevision revision )
 {
-    setLoaded( true );
     checkReparentHackNeeded( revision );
     // END HACK
     emit updated();
@@ -499,15 +497,20 @@ DynamicPlaylistItem::checkReparentHackNeeded( const DynamicPlaylistRevision& rev
     CategoryItem* cat = qobject_cast< CategoryItem* >( parent() );
 
 //    qDebug() << "with category" << cat;
-//    if( cat ) qDebug() << "and cat type:" << cat->categoryType();
-    if( cat )
+//    if ( cat ) qDebug() << "and cat type:" << cat->categoryType();
+
+    if ( cat )
     {
         CategoryItem* from = cat;
         CategoryItem* to = 0;
-        if( cat->categoryType() == SourcesModel::PlaylistsCategory && revision.mode == OnDemand ) { // WRONG
+        if ( cat->categoryType() == SourcesModel::PlaylistsCategory && revision.mode == OnDemand )
+        {
+            // WRONG
             SourceItem* col = qobject_cast< SourceItem* >( cat->parent() );
             to = col->stationsCategory();
-            if( !to ) { // you have got to be fucking kidding me
+            if ( !to )
+            {
+                // you have got to be fucking kidding me
                 int fme = col->children().count();
                 col->beginRowsAdded( fme, fme );
                 to = new CategoryItem( model(), col, SourcesModel::StationsCategory, false );
@@ -515,11 +518,17 @@ DynamicPlaylistItem::checkReparentHackNeeded( const DynamicPlaylistRevision& rev
                 col->endRowsAdded();
                 col->setStationsCategory( to );
             }
-        } else if( cat->categoryType() == SourcesModel::StationsCategory && revision.mode == Static ) { // WRONG
+        }
+        else if ( cat->categoryType() == SourcesModel::StationsCategory && revision.mode == Static )
+        {
+            // WRONG
             SourceItem* col = qobject_cast< SourceItem* >( cat->parent() );
             to = col->playlistsCategory();
 //            qDebug() << "TRYING TO HACK TO:" << to;
-            if( !to ) { // you have got to be fucking kidding me
+
+            if ( !to )
+            {
+                // you have got to be fucking kidding me
                 int fme = col->children().count();
                 col->beginRowsAdded( fme, fme );
                 to = new CategoryItem( model(), col, SourcesModel::PlaylistsCategory, false );
@@ -528,7 +537,8 @@ DynamicPlaylistItem::checkReparentHackNeeded( const DynamicPlaylistRevision& rev
                 col->setPlaylistsCategory( to );
             }
         }
-        if( to ) {
+        if ( to )
+        {
 //            qDebug() << "HACKING! moving dynamic playlist from" << from->text() << "to:" << to->text();
             // remove and add
             int idx = from->children().indexOf( this );
@@ -582,10 +592,11 @@ DynamicPlaylistItem::icon() const
     }
 }
 
+
 SourceTreeItem*
 DynamicPlaylistItem::activateCurrent()
 {
-    if( ViewManager::instance()->pageForDynPlaylist( m_dynplaylist ) == ViewManager::instance()->currentPage() )
+    if ( ViewManager::instance()->pageForDynPlaylist( m_dynplaylist ) == ViewManager::instance()->currentPage() )
     {
         model()->linkSourceItemToPage( this, ViewManager::instance()->currentPage() );
         emit selectRequest( this );
@@ -595,6 +606,7 @@ DynamicPlaylistItem::activateCurrent()
 
     return 0;
 }
+
 
 bool
 DynamicPlaylistItem::isBeingPlayed() const
