@@ -36,8 +36,7 @@ DatabaseCommand_DeleteDynamicPlaylist::DatabaseCommand_DeleteDynamicPlaylist( co
 void
 DatabaseCommand_DeleteDynamicPlaylist::exec( DatabaseImpl* lib )
 {
-    qDebug() << Q_FUNC_INFO;
-    qDebug() << "deleting dynamic playlist:" << m_playlistguid;
+    qDebug() << Q_FUNC_INFO << "Deleting dynamic playlist:" << m_playlistguid;
     DatabaseCommand_DeletePlaylist::exec( lib );
     TomahawkSqlQuery cre = lib->newquery();
 
@@ -51,25 +50,27 @@ DatabaseCommand_DeleteDynamicPlaylist::exec( DatabaseImpl* lib )
 void
 DatabaseCommand_DeleteDynamicPlaylist::postCommitHook()
 {
-    qDebug() << Q_FUNC_INFO << "..reporting..:" << m_playlistguid;
-    if ( source().isNull() || source()->dbCollection().isNull() )
+    qDebug() << Q_FUNC_INFO << "Reporting:" << m_playlistguid;
+    if ( !source() || !source()->dbCollection() )
     {
-        qDebug() << "Source has gone offline, not emitting to GUI.";
+        Q_ASSERT( false );
         return;
     }
-    // we arent sure which it is, but it can't be more th an one. so try both
+
+    // we arent sure which it is, but it can't be more than one. so try both
     dynplaylist_ptr playlist = source()->dbCollection()->autoPlaylist( m_playlistguid );
-    if( playlist.isNull() )
+    if ( !playlist )
         playlist = source()->dbCollection()->station( m_playlistguid );
 
-    tLog( LOGVERBOSE ) << "Just tried to load playlist for deletion:" << m_playlistguid << "Did we get a null one?" << playlist.isNull();
-    Q_ASSERT( !playlist.isNull() );
-    if ( !playlist.isNull() )
+    if ( playlist )
     {
-        tLog( LOGVERBOSE ) << "is it a station?" << ( playlist->mode() == OnDemand );
         playlist->reportDeleted( playlist );
     }
+    else
+    {
+        tLog() << "ERROR: Just tried to load playlist for deletion:" << m_playlistguid << "Did we get a null one?" << playlist.isNull();
+    }
 
-    if( source()->isLocal() )
+    if ( source()->isLocal() )
         Servent::instance()->triggerDBSync();
 }
