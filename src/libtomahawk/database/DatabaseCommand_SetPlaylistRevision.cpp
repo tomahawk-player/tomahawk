@@ -266,6 +266,7 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
     else if ( !m_oldrev.isEmpty() )
     {
         tDebug() << "Not updating current revision, optimistic locking fail" << currentRevision << m_oldrev;
-        Q_ASSERT( false );
+
+        Q_ASSERT( !source()->isLocal() );
     }
 }
