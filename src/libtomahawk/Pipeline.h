@@ -94,7 +94,7 @@ private slots:
     void shuntNext();
 
     void onTemporaryQueryTimer();
-    void onWebResultCheckerDone();
+    void onResultUrlCheckerDone();
 
 private:
     void addResultsToQuery( const query_ptr& query, const QList< result_ptr >& results );

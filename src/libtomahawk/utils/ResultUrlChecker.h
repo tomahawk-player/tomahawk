@@ -29,12 +29,12 @@
 namespace Tomahawk
 {
 
-class WebResultHintChecker : public QObject
+class ResultUrlChecker : public QObject
 {
     Q_OBJECT
 public:
-    WebResultHintChecker( const query_ptr& query, const QList< result_ptr >& results );
-    virtual ~WebResultHintChecker();
+    ResultUrlChecker( const query_ptr& query, const QList< result_ptr >& results );
+    virtual ~ResultUrlChecker();
 
     query_ptr query() const { return m_query; }
     QList< result_ptr > results() const { return m_results; }

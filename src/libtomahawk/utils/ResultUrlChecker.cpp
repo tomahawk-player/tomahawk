@@ -17,7 +17,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "WebResultHintChecker.h"
+#include "ResultUrlChecker.h"
 
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
@@ -31,7 +31,7 @@
 using namespace Tomahawk;
 
 
-WebResultHintChecker::WebResultHintChecker( const query_ptr& query, const QList< result_ptr >& results )
+ResultUrlChecker::ResultUrlChecker( const query_ptr& query, const QList< result_ptr >& results )
     : QObject( 0 )
     , m_query( query )
     , m_results( results )
@@ -40,13 +40,13 @@ WebResultHintChecker::WebResultHintChecker( const query_ptr& query, const QList<
 }
 
 
-WebResultHintChecker::~WebResultHintChecker()
+ResultUrlChecker::~ResultUrlChecker()
 {
 }
 
 
 void
-WebResultHintChecker::check()
+ResultUrlChecker::check()
 {
     foreach ( const result_ptr& result, m_results )
     {
@@ -63,7 +63,7 @@ WebResultHintChecker::check()
 
 
 void
-WebResultHintChecker::headFinished()
+ResultUrlChecker::headFinished()
 {
     NetworkReply* r = qobject_cast<NetworkReply*>( sender() );
     r->deleteLater();

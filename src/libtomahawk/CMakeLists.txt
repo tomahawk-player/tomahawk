@@ -117,7 +117,7 @@ set( libGuiSources
     utils/BinaryInstallerHelper.cpp
     utils/BinaryExtractWorker.cpp
     utils/SharedTimeLine.cpp
-    utils/WebResultHintChecker.cpp
+    utils/ResultUrlChecker.cpp
     utils/NetworkReply.cpp
 
     widgets/AnimatedCounterLabel.cpp

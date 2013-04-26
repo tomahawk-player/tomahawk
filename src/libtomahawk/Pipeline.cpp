@@ -27,7 +27,7 @@
 #include "resolvers/QtScriptResolver.h"
 #include "Source.h"
 #include "SourceList.h"
-#include "utils/WebResultHintChecker.h"
+#include "utils/ResultUrlChecker.h"
 #include "utils/Logger.h"
 
 #include "boost/bind.hpp"
@@ -301,8 +301,8 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
             cleanResults << r;
     }
 
-    WebResultHintChecker* checker = new WebResultHintChecker( q, httpResults );
-    connect( checker, SIGNAL( done() ), SLOT( onWebResultCheckerDone() ) );
+    ResultUrlChecker* checker = new ResultUrlChecker( q, httpResults );
+    connect( checker, SIGNAL( done() ), SLOT( onResultUrlCheckerDone() ) );
 
     addResultsToQuery( q, cleanResults );
     if ( q->solved() && !q->isFullTextQuery() )
@@ -348,10 +348,10 @@ Pipeline::addResultsToQuery( const query_ptr& query, const QList< result_ptr >& 
 
 
 void
-Pipeline::onWebResultCheckerDone()
+Pipeline::onResultUrlCheckerDone()
 {
     tDebug() << Q_FUNC_INFO;
-    WebResultHintChecker* checker = qobject_cast< WebResultHintChecker* >( sender() );
+    ResultUrlChecker* checker = qobject_cast< ResultUrlChecker* >( sender() );
     if ( !checker )
         return;
 
