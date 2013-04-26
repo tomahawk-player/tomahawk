@@ -724,9 +724,8 @@ TomahawkWindow::winEvent( MSG* msg, long* result )
 
     return false;
 }
-
-
 #endif // Q_OS_WIN
+
 
 void
 TomahawkWindow::audioStateChanged( AudioState newState, AudioState oldState )

@@ -1,21 +1,21 @@
-/*
-    Copyright (C) 2011  Leo Franchi <lfranchi@kde.org>
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along
-    with this program; if not, write to the Free Software Foundation, Inc.,
-    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/
-
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2013, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "RecentPlaylistsModel.h"
 
@@ -78,7 +78,7 @@ RecentPlaylistsModel::onRefresh()
 void
 RecentPlaylistsModel::onReady()
 {
-    foreach( const source_ptr& s, SourceList::instance()->sources() )
+    foreach ( const source_ptr& s, SourceList::instance()->sources() )
         onSourceAdded( s );
 
     connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), this, SLOT( onSourceAdded( Tomahawk::source_ptr ) ), Qt::QueuedConnection );
@@ -127,7 +127,7 @@ RecentPlaylistsModel::playlistsLoaded( const QList<DatabaseCommand_LoadAllSorted
 QVariant
 RecentPlaylistsModel::data( const QModelIndex& index, int role ) const
 {
-    if( !index.isValid() || !hasIndex( index.row(), index.column(), index.parent() ) )
+    if ( !index.isValid() || !hasIndex( index.row(), index.column(), index.parent() ) )
         return QVariant();
 
     playlist_ptr pl = m_playlists[index.row()];
@@ -139,11 +139,11 @@ RecentPlaylistsModel::data( const QModelIndex& index, int role ) const
         return QVariant::fromValue< Tomahawk::playlist_ptr >( pl );
     case RecentlyPlayedPlaylistsModel::ArtistRole:
     {
-        if( m_artists.value( pl ).isEmpty() )
+        if ( m_artists.value( pl ).isEmpty() )
         {
             QStringList artists;
 
-            foreach( const Tomahawk::plentry_ptr& entry, pl->entries() )
+            foreach ( const Tomahawk::plentry_ptr& entry, pl->entries() )
             {
                 if ( !artists.contains( entry->query()->track()->artist() ) )
                     artists << entry->query()->track()->artist();
@@ -241,7 +241,7 @@ void
 RecentPlaylistsModel::onDynPlaylistsRemoved( QList< dynplaylist_ptr > playlists )
 {
     QList< playlist_ptr > pls;
-    foreach( const dynplaylist_ptr& p, playlists )
+    foreach ( const dynplaylist_ptr& p, playlists )
         pls << p;
 
     onPlaylistsRemoved( pls );
@@ -251,9 +251,9 @@ RecentPlaylistsModel::onDynPlaylistsRemoved( QList< dynplaylist_ptr > playlists 
 void
 RecentPlaylistsModel::onPlaylistsRemoved( QList< playlist_ptr > playlists )
 {
-    foreach( const playlist_ptr& pl, playlists )
+    foreach ( const playlist_ptr& pl, playlists )
     {
-        if( m_playlists.contains( pl ) )
+        if ( m_playlists.contains( pl ) )
         {
             m_artists.remove( pl );
 

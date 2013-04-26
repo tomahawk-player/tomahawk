@@ -1,22 +1,22 @@
-/*
-    Copyright (C) 2011  Leo Franchi <lfranchi@kde.org>
-    Copyright (C) 2011  Jeff Mitchell <jeff@tomahawk-player.org>
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along
-    with this program; if not, write to the Free Software Foundation, Inc.,
-    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/
-
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2011, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "RecentlyPlayedPlaylistsModel.h"
 
@@ -49,7 +49,7 @@ void
 RecentlyPlayedPlaylistsModel::loadFromSettings()
 {
 //    qDebug() << Q_FUNC_INFO;
-    if( !m_waitingForSome )
+    if ( !m_waitingForSome )
         return;
 
     beginResetModel();
@@ -63,15 +63,16 @@ RecentlyPlayedPlaylistsModel::loadFromSettings()
 //        qDebug() << "loading playlist" << playlist_guids[i];
 
         playlist_ptr pl = m_cached.value( playlist_guids[i], Tomahawk::playlist_ptr() );
-        if( pl.isNull() )
+        if ( pl.isNull() )
             pl = Tomahawk::Playlist::load( playlist_guids[i] );
-        if( pl.isNull() )
+        if ( pl.isNull() )
             pl = Tomahawk::DynamicPlaylist::load( playlist_guids[i] );
 
-        if ( !pl.isNull() ) {
+        if ( !pl.isNull() )
+        {
             m_recplaylists << pl;
 
-            if( !m_cached.contains( playlist_guids[i] ) )
+            if ( !m_cached.contains( playlist_guids[i] ) )
             {
                 if ( pl.dynamicCast< DynamicPlaylist >().isNull() )
                     connect( pl.data(), SIGNAL(revisionLoaded(Tomahawk::PlaylistRevision)), this, SLOT(playlistRevisionLoaded()) );
@@ -91,7 +92,7 @@ RecentlyPlayedPlaylistsModel::loadFromSettings()
 QVariant
 RecentlyPlayedPlaylistsModel::data( const QModelIndex& index, int role ) const
 {
-    if( !index.isValid() || !hasIndex( index.row(), index.column(), index.parent() ) )
+    if ( !index.isValid() || !hasIndex( index.row(), index.column(), index.parent() ) )
         return QVariant();
 
     playlist_ptr pl = m_recplaylists[index.row()];
@@ -103,11 +104,11 @@ RecentlyPlayedPlaylistsModel::data( const QModelIndex& index, int role ) const
         return QVariant::fromValue< Tomahawk::playlist_ptr >( pl );
     case ArtistRole:
     {
-        if( m_artists.value( pl ).isEmpty() )
+        if ( m_artists.value( pl ).isEmpty() )
         {
             QStringList artists;
 
-            foreach( const Tomahawk::plentry_ptr& entry, pl->entries() )
+            foreach ( const Tomahawk::plentry_ptr& entry, pl->entries() )
             {
                 if ( !artists.contains( entry->query()->track()->artist() ) )
                     artists << entry->query()->track()->artist();
@@ -149,6 +150,7 @@ RecentlyPlayedPlaylistsModel::data( const QModelIndex& index, int role ) const
     }
 }
 
+
 void
 RecentlyPlayedPlaylistsModel::playlistRevisionLoaded()
 {
@@ -169,10 +171,15 @@ RecentlyPlayedPlaylistsModel::playlistRevisionLoaded()
 void
 RecentlyPlayedPlaylistsModel::onSourceAdded( const Tomahawk::source_ptr& source )
 {
-    connect( source.data(), SIGNAL( online() ), this, SLOT( sourceOnline() ) );
-    connect( source->dbCollection().data(), SIGNAL( playlistsAdded( QList<Tomahawk::playlist_ptr> ) ), SLOT( loadFromSettings() ) );
-    connect( source->dbCollection().data(), SIGNAL( playlistsDeleted( QList<Tomahawk::playlist_ptr> ) ), SLOT( onPlaylistsRemoved( QList<Tomahawk::playlist_ptr> ) ) );
+    connect( source.data(), SIGNAL( online() ),
+                              SLOT( sourceOnline() ) );
+
+    connect( source->dbCollection().data(), SIGNAL( playlistsAdded( QList<Tomahawk::playlist_ptr> ) ),
+                                              SLOT( loadFromSettings() ) );
+    connect( source->dbCollection().data(), SIGNAL( playlistsDeleted( QList<Tomahawk::playlist_ptr> ) ),
+                                              SLOT( onPlaylistsRemoved( QList<Tomahawk::playlist_ptr> ) ) );
 }
+
 
 void
 RecentlyPlayedPlaylistsModel::sourceOnline()
@@ -194,8 +201,10 @@ RecentlyPlayedPlaylistsModel::sourceOnline()
 void
 RecentlyPlayedPlaylistsModel::onPlaylistsRemoved( QList< playlist_ptr > playlists )
 {
-    foreach( const playlist_ptr& pl, playlists ) {
-        if( m_recplaylists.contains( pl ) ) {
+    foreach ( const playlist_ptr& pl, playlists )
+    {
+        if ( m_recplaylists.contains( pl ) )
+        {
             m_artists.remove( pl );
             m_cached.remove( pl->guid() );
 
@@ -250,15 +259,18 @@ RecentlyPlayedPlaylistsModel::playlistChanged( Tomahawk::playlistinterface_ptr p
     if ( pli.isNull() )
         return;
 
-    if ( Playlist *pl = dynamic_cast< Playlist* >( pli.data() ) ) {
+    if ( Playlist *pl = dynamic_cast< Playlist* >( pli.data() ) )
+    {
         // look for it, qsharedpointer fail
         playlist_ptr ptr;
-        foreach( const playlist_ptr& test, m_recplaylists ) {
-            if( test.data() == pl )
+        foreach ( const playlist_ptr& test, m_recplaylists )
+        {
+            if ( test.data() == pl )
                 ptr = test;
         }
 
-        if( !ptr.isNull() && m_artists.contains( ptr ) ) {
+        if ( !ptr.isNull() && m_artists.contains( ptr ) )
+        {
             m_artists[ ptr ] = QString();
         }
 
