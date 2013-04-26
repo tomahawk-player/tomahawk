@@ -263,12 +263,12 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
 {
     if ( !m_currentTrack.isNull() )
     {
-        disconnect( m_currentTrack->track().data(), SIGNAL( updated() ), this, SLOT( onCoverUpdated() ) );
+        disconnect( m_currentTrack->track().data(), SIGNAL( coverChanged() ), this, SLOT( onCoverUpdated() ) );
         disconnect( m_currentTrack->track().data(), SIGNAL( socialActionsLoaded() ), this, SLOT( onSocialActionsLoaded() ) );
     }
 
     m_currentTrack = result;
-    connect( m_currentTrack->track().data(), SIGNAL( updated() ), SLOT( onCoverUpdated() ) );
+    connect( m_currentTrack->track().data(), SIGNAL( coverChanged() ), SLOT( onCoverUpdated() ) );
     connect( m_currentTrack->track().data(), SIGNAL( socialActionsLoaded() ), SLOT( onSocialActionsLoaded() ) );
 
     ui->artistTrackLabel->setResult( result );
@@ -329,8 +329,8 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
 void
 AudioControls::onCoverUpdated()
 {
-    Query* query = qobject_cast< Query* >( sender() );
-    if ( !query || !m_currentTrack || query != m_currentTrack->toQuery().data() )
+    Track* track = qobject_cast< Track* >( sender() );
+    if ( !track || !m_currentTrack || track != m_currentTrack->track().data() )
         return;
 
     setCover();
