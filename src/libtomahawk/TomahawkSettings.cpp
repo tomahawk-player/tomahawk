@@ -1038,6 +1038,20 @@ TomahawkSettings::removePlaylistSettings( const QString& playlistid )
 }
 
 
+QVariant
+TomahawkSettings::queueState() const
+{
+    return value( QString( "playlists/queue/state" ) );
+}
+
+
+void
+TomahawkSettings::setQueueState( const QVariant& state )
+{
+    setValue( QString( "playlists/queue/state" ), state );
+}
+
+
 void
 TomahawkSettings::setRepeatMode( const QString& playlistid, Tomahawk::PlaylistModes::RepeatMode mode )
 {

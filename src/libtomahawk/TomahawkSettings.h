@@ -108,6 +108,9 @@ public:
     // remove shuffle state and repeat state
     void removePlaylistSettings( const QString& playlistid );
 
+    QVariant queueState() const;
+    void setQueueState( const QVariant& state );
+
     /// SIP plugins
     // all plugins we know about. loaded, unloaded, enabled, disabled.
     void setSipPlugins( const QStringList& plugins );
@@ -126,7 +129,6 @@ public:
     QStringList accounts() const;
     void addAccount( const QString& accountId );
     void removeAccount( const QString& accountId );
-
 
     void setBookmarkPlaylist( const QString& guid );
     QString bookmarkPlaylist() const;
