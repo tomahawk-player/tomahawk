@@ -115,6 +115,9 @@ RecentPlaylistsModel::playlistsLoaded( const QList<DatabaseCommand_LoadAllSorted
         }
         connect( pl.data(), SIGNAL( changed() ), this, SLOT( updatePlaylist() ) );
         m_playlists << pl;
+
+        if ( !pl->loaded() )
+            pl->loadRevision();
     }
 
     endResetModel();
