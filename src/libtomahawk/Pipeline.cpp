@@ -319,7 +319,8 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
 void
 Pipeline::addResultsToQuery( const query_ptr& query, const QList< result_ptr >& results )
 {
-    tDebug() << Q_FUNC_INFO << query->toString() << results.count();
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << query->toString() << results.count();
+
     QList< result_ptr > cleanResults;
     foreach ( const result_ptr& r, results )
     {
