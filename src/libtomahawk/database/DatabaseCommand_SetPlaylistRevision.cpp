@@ -103,12 +103,17 @@ DatabaseCommand_SetPlaylistRevision::postCommitHook()
         return;
     }
 
-    playlist->setRevision( m_newrev,
-                           orderedentriesguids,
-                           m_previous_rev_orderedguids,
-                           true, // this *is* the newest revision so far
-                           m_addedmap,
-                           m_applied );
+    if ( playlist->loaded() )
+    {
+        playlist->setRevision( m_newrev,
+                            orderedentriesguids,
+                            m_previous_rev_orderedguids,
+                            true, // this *is* the newest revision so far
+                            m_addedmap,
+                            m_applied );
+    }
+    else
+        playlist->setCurrentrevision( m_newrev );
 
     if ( source()->isLocal() )
         Servent::instance()->triggerDBSync();
