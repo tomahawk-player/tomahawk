@@ -198,9 +198,9 @@ public slots:
     // entries should be <= entries(), with changed metadata.
     void updateEntries( const QString& newrev, const QString& oldrev, const QList< plentry_ptr >& entries );
 
-    virtual void addEntry( const Tomahawk::query_ptr& query, const QString& oldrev );
-    virtual void addEntries( const QList<Tomahawk::query_ptr>& queries, const QString& oldrev );
-    virtual void insertEntries( const QList<Tomahawk::query_ptr>& queries, const int position, const QString& oldrev );
+    virtual void addEntry( const Tomahawk::query_ptr& query );
+    virtual void addEntries( const QList<Tomahawk::query_ptr>& queries );
+    virtual void insertEntries( const QList<Tomahawk::query_ptr>& queries, const int position );
 
     void reportCreated( const Tomahawk::playlist_ptr& self );
     void reportDeleted( const Tomahawk::playlist_ptr& self );

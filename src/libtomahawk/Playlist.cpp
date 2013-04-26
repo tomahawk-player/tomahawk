@@ -587,23 +587,23 @@ Playlist::onResolvingFinished()
 
 
 void
-Playlist::addEntry( const query_ptr& query, const QString& oldrev )
+Playlist::addEntry( const query_ptr& query )
 {
     QList<query_ptr> queries;
     queries << query;
 
-    addEntries( queries, oldrev );
+    addEntries( queries );
 }
 
 
 void
-Playlist::addEntries( const QList<query_ptr>& queries, const QString& oldrev )
+Playlist::addEntries( const QList<query_ptr>& queries )
 {
     if ( !m_loaded )
     {
         tDebug() << Q_FUNC_INFO << "Queueing addEntries call!";
-        loadRevision( oldrev );
-        m_queuedOps << NewClosure( 0, "", this, SLOT( addEntries( QList<Tomahawk::query_ptr>, QString ) ), queries, oldrev );
+        loadRevision();
+        m_queuedOps << NewClosure( 0, "", this, SLOT( addEntries( QList<Tomahawk::query_ptr> ) ), queries );
         return;
     }
 
@@ -611,7 +611,7 @@ Playlist::addEntries( const QList<query_ptr>& queries, const QString& oldrev )
     const int prevSize = m_entries.size();
 
     QString newrev = uuid();
-    createNewRevision( newrev, oldrev, el );
+    createNewRevision( newrev, m_currentrevision, el );
 
     // We are appending at end, so notify listeners.
     // PlaylistModel also emits during appends, but since we call
@@ -623,13 +623,13 @@ Playlist::addEntries( const QList<query_ptr>& queries, const QString& oldrev )
 
 
 void
-Playlist::insertEntries( const QList< query_ptr >& queries, const int position, const QString& oldrev )
+Playlist::insertEntries( const QList< query_ptr >& queries, const int position )
 {
     if ( !m_loaded )
     {
         tDebug() << Q_FUNC_INFO << "Queueing insertEntries call!";
-        loadRevision( oldrev );
-        m_queuedOps << NewClosure( 0, "", this, SLOT( insertEntries( QList<Tomahawk::query_ptr>, int, QString ) ), queries, position, oldrev );
+        loadRevision();
+        m_queuedOps << NewClosure( 0, "", this, SLOT( insertEntries( QList<Tomahawk::query_ptr>, int ) ), queries, position );
         return;
     }
 
@@ -640,14 +640,14 @@ Playlist::insertEntries( const QList< query_ptr >& queries, const int position, 
     if ( position > m_entries.size() )
     {
         tDebug() << "ERROR trying to insert tracks past end of playlist! Appending!";
-        addEntries( queries, oldrev );
+        addEntries( queries );
         return;
     }
 
     for ( int i = toInsert.size()-1; i >= 0; --i )
         entries.insert( position, toInsert.at(i) );
 
-    createNewRevision( uuid(), oldrev, entries );
+    createNewRevision( uuid(), m_currentrevision, entries );
 
     // We are appending at end, so notify listeners.
     // PlaylistModel also emits during appends, but since we call
