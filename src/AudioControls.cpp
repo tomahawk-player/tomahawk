@@ -354,8 +354,8 @@ AudioControls::setCover()
 void
 AudioControls::onSocialActionsLoaded()
 {
-    Query* query = qobject_cast< Query* >( sender() );
-    if ( !query || !m_currentTrack || !query->equals( m_currentTrack->toQuery() ) )
+    Track* track = qobject_cast< Track* >( sender() );
+    if ( !track || !m_currentTrack || !track->equals( m_currentTrack->track() ) )
         return;
 
     setSocialActions();
