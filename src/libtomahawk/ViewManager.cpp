@@ -203,6 +203,9 @@ ViewManager::playlistForPage( ViewPage* page ) const
 Tomahawk::ViewPage*
 ViewManager::show( const Tomahawk::playlist_ptr& playlist )
 {
+    if ( !playlist->loaded() )
+        playlist->loadRevision();
+
     FlexibleView* view;
 
     if ( !m_playlistViews.contains( playlist ) || m_playlistViews.value( playlist ).isNull() )
