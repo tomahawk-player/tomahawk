@@ -256,7 +256,7 @@ Query::onResolvingFinished()
         m_resolveFinished = true;
         m_resolvers.clear();
 
-        emit resolvingFinished( m_solved );
+        emit resolvingFinished( m_playable );
     }
 }
 
