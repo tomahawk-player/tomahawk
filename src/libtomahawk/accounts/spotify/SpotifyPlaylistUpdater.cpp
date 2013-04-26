@@ -405,7 +405,7 @@ SpotifyPlaylistUpdater::spotifyTracksAdded( const QVariantList& tracks, const QS
     qDebug() << Q_FUNC_INFO << "inserting tracks at position:" << pos << "(playlist has current size:" << entries << ")";
 
     m_blockUpdatesForNextRevision = true;
-    playlist()->insertEntries( queries, pos, playlist()->currentrevision() );
+    playlist()->insertEntries( queries, pos );
 }
 
 

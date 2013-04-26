@@ -313,7 +313,7 @@ DynamicModel::addToPlaylist( const QList< query_ptr >& entries, bool clearFirst 
 
     if ( m_playlist->author()->isLocal() && m_playlist->mode() == Static )
     {
-        m_playlist->addEntries( entries, m_playlist->currentrevision() );
+        m_playlist->addEntries( entries );
     }
     else
     {

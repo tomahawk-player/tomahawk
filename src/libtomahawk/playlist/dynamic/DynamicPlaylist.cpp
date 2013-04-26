@@ -350,24 +350,24 @@ DynamicPlaylist::reportDeleted( const Tomahawk::dynplaylist_ptr& self )
 
 
 void
-DynamicPlaylist::addEntries( const QList< query_ptr >& queries, const QString& oldrev )
+DynamicPlaylist::addEntries( const QList< query_ptr >& queries )
 {
     Q_ASSERT( m_generator->mode() == Static );
 
     QList<plentry_ptr> el = entriesFromQueries( queries );
 
     QString newrev = uuid();
-    createNewRevision( newrev, oldrev, m_generator->type(), m_generator->controls(), el );
+    createNewRevision( newrev, m_currentrevision, m_generator->type(), m_generator->controls(), el );
 }
 
 
 void
-DynamicPlaylist::addEntry( const Tomahawk::query_ptr& query, const QString& oldrev )
+DynamicPlaylist::addEntry( const Tomahawk::query_ptr& query )
 {
     QList<query_ptr> queries;
     queries << query;
 
-    addEntries( queries, oldrev );
+    addEntries( queries );
 }
 
 

@@ -101,8 +101,8 @@ public:
     // mode of a playlist and want to save it to db/others.
     void createNewRevision( const QString& uuid = QString() );
 
-    virtual void addEntries( const QList< query_ptr >& queries, const QString& oldrev );
-    virtual void addEntry( const Tomahawk::query_ptr& query, const QString& oldrev );
+    virtual void addEntries( const QList< query_ptr >& queries );
+    virtual void addEntry( const Tomahawk::query_ptr& query );
 
     // <IGNORE hack="true">
     // these need to exist and be public for the json serialization stuff

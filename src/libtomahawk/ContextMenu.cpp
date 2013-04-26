@@ -75,13 +75,16 @@ void
 ContextMenu::addToPlaylist( int playlistIdx )
 {
     Tomahawk::playlist_ptr playlist = m_playlists.at( playlistIdx );
-    playlist->addEntries( m_queries, playlist->currentrevision() );
+    playlist->addEntries( m_queries );
 }
 
-bool caseInsensitiveLessThan(Tomahawk::playlist_ptr &s1, Tomahawk::playlist_ptr &s2)
+
+bool
+caseInsensitiveLessThan( Tomahawk::playlist_ptr &s1, Tomahawk::playlist_ptr &s2 )
 {
     return s1->title().toLower() < s2->title().toLower();
 }
+
 
 void
 ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )

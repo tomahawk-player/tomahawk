@@ -270,7 +270,7 @@ PlaylistItem::parsedDroppedTracks( const QList< query_ptr >& tracks )
     {
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Adding" << tracks.count() << "tracks on playlist:" << m_playlist->title() << m_playlist->guid() << m_playlist->currentrevision();
 
-        m_playlist->addEntries( tracks, m_playlist->currentrevision() );
+        m_playlist->addEntries( tracks );
     }
     else
         tDebug() << "ERROR: Could not add" << tracks.count() << "to playlist!";
