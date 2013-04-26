@@ -416,6 +416,7 @@ DynamicPlaylist::setRevision( const QString& rev,
 
     //     qDebug() << "EMITTING REVISION LOADED 1!";
     setBusy( false );
+    setLoaded( true );
     emit dynamicRevisionLoaded( dpr );
 }
 
@@ -492,6 +493,7 @@ DynamicPlaylist::setRevision( const QString& rev,
 
     //     qDebug() << "EMITTING REVISION LOADED 2!";
     setBusy( false );
+    setLoaded( true );
     emit dynamicRevisionLoaded( dpr );
 }
 
