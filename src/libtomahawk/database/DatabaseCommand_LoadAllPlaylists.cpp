@@ -47,7 +47,6 @@ DatabaseCommand_LoadAllPlaylists::exec( DatabaseImpl* dbi )
     if ( !source().isNull() )
         sourceToken = QString( "AND source %1 " ).arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) );
 
-
     query.exec( QString( "SELECT guid, title, info, creator, lastmodified, shared, currentrevision, createdOn "
                          "FROM playlist "
                          "WHERE dynplaylist = 'false' "

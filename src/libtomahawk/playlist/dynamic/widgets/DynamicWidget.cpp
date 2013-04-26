@@ -187,7 +187,7 @@ void
 DynamicWidget::onRevisionLoaded( const Tomahawk::DynamicPlaylistRevision& rev )
 {
     Q_UNUSED( rev );
-    qDebug() << "DynamicWidget::onRevisionLoaded";
+    tDebug( LOGVERBOSE ) << "DynamicWidget::onRevisionLoaded" << rev.revisionguid;
     if ( m_model->ignoreRevision( rev.revisionguid ) )
     {
         m_model->removeRevisionFromIgnore( rev.revisionguid );
