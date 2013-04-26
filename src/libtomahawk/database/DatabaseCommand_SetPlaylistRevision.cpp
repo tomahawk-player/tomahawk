@@ -158,7 +158,7 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
             if ( !e->query()->numResults() )
                 continue;
 
-            adde.bindValue( 0, hintFromQuery( e->query() ) );
+            adde.bindValue( 0, e->resultHint() );
             adde.bindValue( 1, e->guid() );
             adde.exec();
         }
@@ -204,8 +204,6 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
 
             m_addedmap.insert( e->guid(), e ); // needed in postcommithook
 
-            const QString resultHint = hintFromQuery( e->query() );
-
             adde.bindValue( 0, e->guid() );
             adde.bindValue( 1, m_playlistguid );
             adde.bindValue( 2, e->query()->queryTrack()->track() );
@@ -215,7 +213,7 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
             adde.bindValue( 6, (int) e->duration() );
             adde.bindValue( 7, e->lastmodified() );
             adde.bindValue( 8, source()->isLocal() ? QVariant(QVariant::Int) : source()->id() );
-            adde.bindValue( 9, resultHint );
+            adde.bindValue( 9, e->resultHint() );
             adde.exec();
         }
     }
@@ -272,24 +270,3 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
 //        Q_ASSERT( false );
     }
 }
-
-
-QString
-DatabaseCommand_SetPlaylistRevision::hintFromQuery( const query_ptr& query ) const
-{
-    QString resultHint, foundResult;
-    if ( !query->results().isEmpty() )
-        foundResult = query->results().first()->url();
-    else if ( !query->resultHint().isEmpty() )
-        foundResult = query->resultHint();
-
-    if ( foundResult.startsWith( "file://" ) ||
-         foundResult.startsWith( "servent://" ) || // Save resulthints for local files and peers automatically
-         ( TomahawkUtils::whitelistedHttpResultHint( foundResult ) && query->saveHTTPResultHint() ) )
-    {
-        resultHint = foundResult;
-    }
-
-    return resultHint;
-}
-

@@ -122,8 +122,6 @@ protected:
     QString m_currentRevision;
 
 private:
-    QString hintFromQuery( const query_ptr& query ) const;
-
     QVariantList m_orderedguids;
     QList<Tomahawk::plentry_ptr> m_addedentries, m_entries;
 
