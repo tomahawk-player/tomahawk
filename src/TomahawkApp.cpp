@@ -396,8 +396,8 @@ TomahawkApp::printHelp()
 //    echo( "  --headless     Run without a GUI" );
     echo( "  --hide         Hide main window on startup" );
     echo( "  --testdb       Use a test database instead of real collection" );
-    echo( "  --noupnp       Disable UPnP" );
-    echo( "  --nosip        Disable SIP" );
+    echo( "  --noupnp       Disable UPnP port-forwarding" );
+    echo( "  --nosip        Disable Session Initiation Protocol (required to find other Tomahawk clients)" );
     echo( "  --verbose      Increase verbosity (activates debug output)" );
     echo();
     echo( "Playback Controls:" );
