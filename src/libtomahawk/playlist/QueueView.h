@@ -56,12 +56,15 @@ public slots:
 
 protected:
     void changeEvent( QEvent* e );
-    
+
 private slots:
     void updateLabel();
     void onAnimationFinished();
 
 private:
+    void saveState();
+    void restoreState();
+
     Ui::QueueView* ui;
     QTimer* m_dragTimer;
 };

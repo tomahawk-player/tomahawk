@@ -26,6 +26,7 @@
 #include "utils/Logger.h"
 #include "PlaylistView.h"
 #include "Source.h"
+#include "TomahawkSettings.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "widgets/OverlayWidget.h"
 
@@ -62,12 +63,18 @@ QueueView::QueueView( AnimatedSplitter* parent )
 
     ui->toggleButton->installEventFilter( this );
     ui->toggleButton->setCursor( Qt::PointingHandCursor );
+
+    // Set initial state
+    onHidden( this, false );
+
+    restoreState();
 }
 
 
 QueueView::~QueueView()
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
+    saveState();
 }
 
 
@@ -192,4 +199,38 @@ QueueView::updateLabel()
     {
         ui->toggleButton->setText( tr( "Close Queue" ) );
     }
+}
+
+
+void
+QueueView::restoreState()
+{
+    QVariantList vl = TomahawkSettings::instance()->queueState().toList();
+    QList< query_ptr > ql;
+
+    foreach ( const QVariant& v, vl )
+    {
+        QVariantMap map = v.toMap();
+        query_ptr q = Query::get( map["artist"].toString(), map["track"].toString(), map["album"].toString() );
+        ql << q;
+    }
+
+    if ( !ql.isEmpty() )
+    {
+        queue()->model()->appendQueries( ql );
+        updateLabel();
+    }
+}
+
+
+void
+QueueView::saveState()
+{
+    QVariantList vl;
+    foreach ( const query_ptr& query, queue()->model()->queries() )
+    {
+        vl << query->toVariant();
+    }
+
+    TomahawkSettings::instance()->setQueueState( vl );
 }
