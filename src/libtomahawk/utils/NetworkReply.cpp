@@ -73,7 +73,10 @@ void
 NetworkReply::networkLoadFinished()
 {
     if ( m_reply->error() != QNetworkReply::NoError )
+    {
+        emit finished();
         return;
+    }
 
     QVariant redir = m_reply->attribute( QNetworkRequest::RedirectionTargetAttribute );
     if ( redir.isValid() && !redir.toUrl().isEmpty() )
