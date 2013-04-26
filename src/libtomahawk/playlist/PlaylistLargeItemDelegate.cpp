@@ -239,8 +239,6 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
 
         painter->setFont( boldFont );
         QString text = painter->fontMetrics().elidedText( track->track(), Qt::ElideRight, leftRect.width() );
-        if ( m_mode == Inbox && isUnlistened )
-            painter->setPen( opt.palette.link().color() );
         painter->drawText( leftRect, text, m_topOption );
 
         painter->setFont( smallFont );
