@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2012, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2012, Hugo Lindström <hugolm84@gmail.com>
+ *   Copyright 2013, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -29,9 +30,9 @@
 #include <QVariant>
 
 namespace Tomahawk {
-namespace Accounts {
-    class SpotifyAccount;
-}
+    namespace Accounts {
+        class SpotifyAccount;
+    }
 }
 
 class DLLEXPORT SpotifyPlaylistUpdater : public Tomahawk::PlaylistUpdaterInterface
@@ -54,6 +55,7 @@ public:
 
     bool sync() const;
     void setSync( bool sync );
+
     bool subscribed() const;
     // actually change the subscribed value in spotify
     void setSubscribed( bool subscribed );
@@ -64,6 +66,7 @@ public:
     void setSubscribers( int numSubscribers );
     int subscribers() const { return m_subscribers; }
     // Collaborative actions
+
     void setOwner( bool owner );
     bool owner() const;
     bool collaborative() const;
@@ -76,6 +79,7 @@ public:
     virtual void setQuestionResults( const QMap< int, bool > results );
 
     void remove( bool askToDeletePlaylist = true );
+
 public slots:
     /// Spotify callbacks when we are directly instructed from the resolver
     void spotifyTracksAdded( const QVariantList& tracks, const QString& startPosId, const QString& newRev, const QString& oldRev );
@@ -97,12 +101,13 @@ private slots:
     void unsyncOrDelete( bool toDelete );
 
     void playlistRevisionLoaded();
+
 private:
     void init();
     void saveToSettings();
 
     /// Finds the nearest spotify id from pos to the beginning of the playlist
-    QString nearestSpotifyTrack( const QList< Tomahawk::plentry_ptr >& entries,  int pos );
+    QString nearestSpotifyTrack( const QList< Tomahawk::plentry_ptr >& entries, int pos );
     QVariantList plentryToVariant( const QList< Tomahawk::plentry_ptr >& entries );
 
     static QVariantList queriesToVariant( const QList< Tomahawk::query_ptr >& queries );
