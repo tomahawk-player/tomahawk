@@ -172,13 +172,13 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
             if ( item->isPlaying() )
             {
                 painter->drawPixmap( npr, TomahawkUtils::defaultPixmap( TomahawkUtils::NowPlayingSpeaker, TomahawkUtils::Original, npr.size() ) );
-                r.adjust( pixHeight + 8, 0, 0, 0 );
+                r.adjust( pixHeight + 2*pixMargin, 0, 0, 0 );
             }
             else
             {
                 npr = npr.adjusted( 0, npr.height() / 4, -npr.width() / 2, -npr.height() / 4 );
                 painter->drawPixmap( npr, TomahawkUtils::defaultPixmap( TomahawkUtils::InboxNewItem, TomahawkUtils::Original, npr.size() ) );
-                r.adjust( npr.width() + 8, 0, 0, 0 );
+                r.adjust( npr.width() + 2*pixMargin, 0, 0, 0 );
             }
         }
 
