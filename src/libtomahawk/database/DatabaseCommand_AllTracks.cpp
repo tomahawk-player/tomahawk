@@ -96,24 +96,15 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
 
     while( query.next() )
     {
-        Tomahawk::source_ptr s;
         QString url = query.value( 8 ).toString();
-
-        if ( query.value( 9 ).toUInt() == 0 )
+        Tomahawk::source_ptr s = SourceList::instance()->get( query.value( 9 ).toUInt() );
+        if ( !s )
         {
-            s = SourceList::instance()->getLocal();
+            Q_ASSERT( false );
+            continue;
         }
-        else
-        {
-            s = SourceList::instance()->get( query.value( 9 ).toUInt() );
-            if ( s.isNull() )
-            {
-                Q_ASSERT( false );
-                continue;
-            }
-
+        if ( !s->isLocal() )
             url = QString( "servent://%1\t%2" ).arg( s->nodeId() ).arg( url );
-        }
 
         QString artist, track, album, composer;
         artist = query.value( 1 ).toString();

@@ -278,23 +278,12 @@ DatabaseImpl::file( int fid )
 
     if ( query.next() )
     {
-        Tomahawk::source_ptr s;
         QString url = query.value( 0 ).toString();
-
-        if ( query.value( 15 ).toUInt() == 0 )
-        {
-            s = SourceList::instance()->getLocal();
-        }
-        else
-        {
-            s = SourceList::instance()->get( query.value( 15 ).toUInt() );
-            if ( s.isNull() )
-            {
-                return r;
-            }
-
+        Tomahawk::source_ptr s = SourceList::instance()->get( query.value( 15 ).toUInt() );
+        if ( !s )
+            return r;
+        if ( !s->isLocal() )
             url = QString( "servent://%1\t%2" ).arg( s->nodeId() ).arg( url );
-        }
 
         r = Tomahawk::Result::get( url );
 
@@ -670,23 +659,12 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
 
     if( query.next() )
     {
-        Tomahawk::source_ptr s;
         QString url = query.value( 0 ).toString();
-
-        if ( query.value( 15 ).toUInt() == 0 )
-        {
-            s = SourceList::instance()->getLocal();
-        }
-        else
-        {
-            s = SourceList::instance()->get( query.value( 15 ).toUInt() );
-            if ( s.isNull() )
-            {
-                return res;
-            }
-
+        Tomahawk::source_ptr s = SourceList::instance()->get( query.value( 15 ).toUInt() );
+        if ( !s )
+            return res;
+        if ( !s->isLocal() )
             url = QString( "servent://%1\t%2" ).arg( s->nodeId() ).arg( url );
-        }
 
         res = Tomahawk::Result::get( url );
 

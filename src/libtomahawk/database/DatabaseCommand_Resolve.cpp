@@ -123,24 +123,15 @@ DatabaseCommand_Resolve::resolve( DatabaseImpl* lib )
 
     while ( files_query.next() )
     {
-        source_ptr s;
         QString url = files_query.value( 0 ).toString();
-
-        if ( files_query.value( 16 ).toUInt() == 0 )
+        source_ptr s = SourceList::instance()->get( files_query.value( 16 ).toUInt() );
+        if ( !s )
         {
-            s = SourceList::instance()->getLocal();
+            tDebug() << "Could not find source" << files_query.value( 16 ).toUInt();
+            continue;
         }
-        else
-        {
-            s = SourceList::instance()->get( files_query.value( 16 ).toUInt() );
-            if ( s.isNull() )
-            {
-                qDebug() << "Could not find source" << files_query.value( 16 ).toUInt();
-                continue;
-            }
-
+        if ( !s->isLocal() )
             url = QString( "servent://%1\t%2" ).arg( s->nodeId() ).arg( url );
-        }
 
         Tomahawk::result_ptr result = Tomahawk::Result::get( url );
         if ( result->isValid() )
@@ -253,24 +244,15 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
 
     while ( files_query.next() )
     {
-        source_ptr s;
         QString url = files_query.value( 0 ).toString();
-
-        if ( files_query.value( 16 ).toUInt() == 0 )
+        source_ptr s = SourceList::instance()->get( files_query.value( 16 ).toUInt() );
+        if ( !s )
         {
-            s = SourceList::instance()->getLocal();
+            tDebug() << "Could not find source" << files_query.value( 16 ).toUInt();
+            continue;
         }
-        else
-        {
-            s = SourceList::instance()->get( files_query.value( 16 ).toUInt() );
-            if ( s.isNull() )
-            {
-                qDebug() << "Could not find source" << files_query.value( 16 ).toUInt();
-                continue;
-            }
-
+        if ( !s->isLocal() )
             url = QString( "servent://%1\t%2" ).arg( s->nodeId() ).arg( url );
-        }
 
         bool cached = Tomahawk::Result::isCached( url );
         Tomahawk::result_ptr result = Tomahawk::Result::get( url );

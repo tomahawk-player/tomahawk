@@ -99,9 +99,6 @@ RecentPlaylistsModel::playlistsLoaded( const QList<DatabaseCommand_LoadAllSorted
         if ( s.isNull() )
             continue;
 
-        if ( plPair.first == 0 )
-            s = SourceList::instance()->getLocal();
-
         playlist_ptr pl = s->dbCollection()->playlist( plPair.second );
         if ( pl.isNull() )
             pl = s->dbCollection()->autoPlaylist( plPair.second );

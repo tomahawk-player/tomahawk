@@ -73,15 +73,7 @@ DatabaseCommand_PlaybackHistory::exec( DatabaseImpl* dbi )
             Tomahawk::PlaybackLog log;
             log.timestamp = query.value( 1 ).toUInt();
             log.secsPlayed = query.value( 2 ).toUInt();
-
-            if ( query.value( 3 ).toUInt() == 0 )
-            {
-                log.source = SourceList::instance()->getLocal();
-            }
-            else
-            {
-                log.source = SourceList::instance()->get( query.value( 3 ).toUInt() );
-            }
+            log.source = SourceList::instance()->get( query.value( 3 ).toUInt() );
 
             logs << log;
             tl << track;
