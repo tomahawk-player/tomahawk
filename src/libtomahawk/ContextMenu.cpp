@@ -99,7 +99,8 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
     if ( m_supportedActions & ActionQueue )
         m_sigmap->setMapping( addAction( tr( "Add to &Queue" ) ), ActionQueue );
 
-    if ( m_supportedActions & ActionPlaylist ) {
+    if ( m_supportedActions & ActionPlaylist )
+    {
         // Get the current list of all playlists.
         m_playlists = QList< Tomahawk::playlist_ptr >( SourceList::instance()->getLocal()->dbCollection()->playlists() );
         // Sort the playlist
@@ -145,7 +146,8 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
         const QString track = m_queries.first()->track()->track().replace( QString( "&" ), QString( "&&" ) );
         m_sigmap->setMapping( addAction( ImageRegistry::instance()->icon( RESPATH "images/track-icon.svg" ),
                                          tr( "&Go to \"%1\"" ).arg( track ) ), ActionTrackPage );
-        if ( !m_queries.first()->track()->album().isEmpty() ) {
+        if ( !m_queries.first()->track()->album().isEmpty() )
+        {
             const QString album = m_queries.first()->track()->album().replace( QString( "&" ), QString( "&&" ) );
             m_sigmap->setMapping( addAction( ImageRegistry::instance()->icon( RESPATH "images/album-icon.svg" ),
                                              tr( "Go to \"%1\"" ).arg( album ) ), ActionAlbumPage );
@@ -253,7 +255,8 @@ ContextMenu::setArtists( const QList<Tomahawk::artist_ptr>& artists )
 
     addSeparator();
 
-    if ( m_supportedActions & ActionPage && itemCount() == 1 ) {
+    if ( m_supportedActions & ActionPage && itemCount() == 1 )
+    {
         const QString artist = m_artists.first()->name().replace( QString( "&" ), QString( "&&" ) );
         m_sigmap->setMapping( addAction( ImageRegistry::instance()->icon( RESPATH "images/artist-icon.svg" ),
                                          tr( "&Go to \"%1\"" ).arg( artist ) ), ActionArtistPage );
