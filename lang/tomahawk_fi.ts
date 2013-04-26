@@ -1118,31 +1118,31 @@ yhdistää ja toistaa sinulta virtaa?</translation>
 <context>
     <name>PlaylistLargeItemDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="152"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="144"/>
         <source>played %1 by you</source>
         <comment>e.g. played 3 hours ago by you</comment>
         <translation>kuuntelit %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="154"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="146"/>
         <source>played %1 by %2</source>
         <comment>e.g. played 3 hours ago by SomeSource</comment>
         <translation>%2 kuunteli %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="161"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="153"/>
         <source>added %1</source>
         <comment>e.g. added 3 hours ago</comment>
         <translation>lisätty %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="251"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="243"/>
         <source>by &lt;b&gt;%1&lt;/b&gt;</source>
         <comment>e.g. by SomeArtist</comment>
         <translation>artistilta &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="253"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="245"/>
         <source>by &lt;b&gt;%1&lt;/b&gt; on &lt;b&gt;%2&lt;/b&gt;</source>
         <comment>e.g. by SomeArtist on SomeAlbum</comment>
         <translation>artistilta &lt;b&gt;%1&lt;/b&gt; albumilla &lt;b&gt;%2&lt;/b&gt;</translation>
@@ -3411,42 +3411,42 @@ Koeta säätää suodattimia saadaksesi uuden joukon kappaleita kuunneltavaksi.<
     <message>
         <location filename="../src/libtomahawk/Track.cpp" line="353"/>
         <source> and </source>
-        <translation type="unfinished"/>
+        <translation> ja </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Track.cpp" line="361"/>
         <source>You</source>
-        <translation type="unfinished"/>
+        <translation>Sinä</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Track.cpp" line="363"/>
         <source>you</source>
-        <translation type="unfinished"/>
+        <translation>sinä</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Track.cpp" line="376"/>
         <source>and</source>
-        <translation type="unfinished"/>
+        <translation>ja</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/Track.cpp" line="376"/>
         <source>%n other(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n muu</numerusform><numerusform>%n muuta</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/Track.cpp" line="379"/>
         <source>%n people</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n ihminen</numerusform><numerusform>%n ihmistä</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Track.cpp" line="383"/>
         <source>loved this track</source>
-        <translation type="unfinished"/>
+        <translation>tykkäsi tästä kappaleesta</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Track.cpp" line="385"/>
         <source>sent you this track %1</source>
-        <translation type="unfinished"/>
+        <translation>lähetti sinulle kappaleen %1</translation>
     </message>
 </context>
 <context>
