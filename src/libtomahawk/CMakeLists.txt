@@ -186,6 +186,7 @@ list(APPEND libSources
     CountryUtils.cpp
     FuncTimeout.cpp
     Playlist.cpp
+    PlaylistEntry.cpp
     PlaylistPlaylistInterface.cpp
     MetaPlaylistInterface.cpp
     Query.cpp

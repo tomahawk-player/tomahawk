@@ -29,6 +29,7 @@
 
 #include "Typedefs.h"
 #include "Result.h"
+#include "PlaylistEntry.h"
 #include "PlaylistInterface.h"
 #include "playlist/PlaylistUpdaterInterface.h"
 #include "Query.h"
@@ -47,64 +48,6 @@ namespace Tomahawk
 {
 
 class PlaylistUpdaterInterface;
-
-class DLLEXPORT PlaylistEntry : public QObject
-{
-Q_OBJECT
-Q_PROPERTY( QString guid              READ guid         WRITE setGuid )
-Q_PROPERTY( QString annotation        READ annotation   WRITE setAnnotation )
-Q_PROPERTY( unsigned int duration     READ duration     WRITE setDuration )
-Q_PROPERTY( unsigned int lastmodified READ lastmodified WRITE setLastmodified )
-Q_PROPERTY( QVariant query            READ queryVariant WRITE setQueryVariant )
-
-public:
-    PlaylistEntry();
-    virtual ~PlaylistEntry();
-
-    bool isValid() const { return !m_query.isNull(); }
-
-    void setQuery( const Tomahawk::query_ptr& q );
-    const Tomahawk::query_ptr& query() const;
-
-    void setQueryVariant( const QVariant& v );
-    QVariant queryVariant() const;
-
-    QString guid() const { return m_guid; }
-    void setGuid( const QString& s ) { m_guid = s; }
-
-    QString annotation() const { return m_annotation; }
-    void setAnnotation( const QString& s ) { m_annotation = s; }
-
-    QString resultHint() const { return m_resulthint; }
-    void setResultHint( const QString& s );
-
-    unsigned int duration() const { return m_duration; }
-    void setDuration( unsigned int i ) { m_duration = i; }
-
-    unsigned int lastmodified() const { return m_lastmodified; }
-    void setLastmodified( unsigned int i ) { m_lastmodified = i; }
-
-    source_ptr lastSource() const;
-    void setLastSource( source_ptr s );
-
-signals:
-    void resultChanged();
-
-private slots:
-    void onQueryResolved( bool hasResults );
-
-private:
-    QString hintFromQuery() const;
-
-    QString m_guid;
-    Tomahawk::query_ptr m_query;
-    QString m_annotation;
-    unsigned int m_duration;
-    unsigned int m_lastmodified;
-    source_ptr   m_lastsource;
-    QString      m_resulthint;
-};
-
 
 struct PlaylistRevision
 {
@@ -343,7 +286,6 @@ private:
 }
 
 Q_DECLARE_METATYPE( QSharedPointer< Tomahawk::Playlist > )
-Q_DECLARE_METATYPE( QList< QSharedPointer< Tomahawk::PlaylistEntry > > )
 Q_DECLARE_METATYPE( QList< QSharedPointer< Tomahawk::Query > > )
 
 #endif // PLAYLIST_H
