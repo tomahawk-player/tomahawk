@@ -477,12 +477,12 @@ ViewManager::showInboxPage()
                  inboxView, SLOT( update( QModelIndex ) ) );
         inboxView->setItemDelegate( delegate );
 
+        inboxView->proxyModel()->setStyle( PlayableProxyModel::Large );
         inboxView->setPlayableModel( m_inboxModel );
         inboxView->setEmptyTip( tr( "No listening suggestions here." ) );
 
         inboxView->setGuid( "inbox" );
 
-        inboxView->proxyModel()->setStyle( PlayableProxyModel::Large );
         inboxView->setSortingEnabled( false );
         inboxView->setHeaderHidden( true );
 
