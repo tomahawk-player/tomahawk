@@ -287,14 +287,14 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
 bool
 PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index )
 {
-    Q_UNUSED( model );
-    Q_UNUSED( option );
+    QStyledItemDelegate::editorEvent( event, model, option, index );
 
     if ( event->type() != QEvent::MouseButtonRelease &&
          event->type() != QEvent::MouseMove &&
-         event->type() != QEvent::MouseButtonPress &&
          event->type() != QEvent::Leave )
+    {
         return false;
+    }
 
     bool hoveringInfo = false;
     if ( m_infoButtonRects.contains( index ) )
@@ -319,8 +319,8 @@ PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, con
             emit updateIndex( m_hoveringOver );
         }
 
-        event->accept();
-        return true;
+        // We return false here so the view can still decide to process/trigger things like D&D events
+        return false;
     }
 
     // reset mouse cursor. we switch to a pointing hand cursor when hovering an info button
@@ -366,12 +366,6 @@ PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, con
                 }
             }
 
-            event->accept();
-            return true;
-        }
-        else if ( event->type() == QEvent::MouseButtonPress )
-        {
-            // Stop the whole item from having a down click action as we just want the info button to be clicked
             event->accept();
             return true;
         }
