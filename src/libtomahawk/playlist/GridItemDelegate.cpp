@@ -54,6 +54,8 @@ GridItemDelegate::GridItemDelegate( QAbstractItemView* parent, PlayableProxyMode
     if ( m_view && m_view->metaObject()->indexOfSignal( "modelChanged()" ) > -1 )
         connect( m_view, SIGNAL( modelChanged() ), this, SLOT( modelChanged() ) );
 
+    connect( this, SIGNAL( updateIndex( QModelIndex ) ), parent, SLOT( update( QModelIndex ) ) );
+
     connect( proxy, SIGNAL( rowsAboutToBeInserted( QModelIndex, int, int ) ), SLOT( modelChanged() ) );
     connect( proxy, SIGNAL( rowsAboutToBeRemoved( QModelIndex, int, int ) ), SLOT( modelChanged() ) );
     connect( proxy->playlistInterface().data(), SIGNAL( currentIndexChanged() ), SLOT( onCurrentIndexChanged() ), Qt::UniqueConnection );

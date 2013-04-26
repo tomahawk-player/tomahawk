@@ -55,7 +55,6 @@ FlexibleView::FlexibleView( QWidget* parent )
     m_detailedView->setColumnHidden( PlayableModel::Composer, true ); // Hide composer column per default
 
     PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LovedTracks, m_trackView, m_trackView->proxyModel() );
-    connect( del, SIGNAL( updateIndex( QModelIndex ) ), m_trackView, SLOT( update( QModelIndex ) ) );
     m_trackView->setItemDelegate( del );
     m_trackView->proxyModel()->setStyle( PlayableProxyModel::Large );
 

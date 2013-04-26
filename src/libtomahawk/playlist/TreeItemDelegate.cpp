@@ -45,6 +45,7 @@ TreeItemDelegate::TreeItemDelegate( TreeView* parent, TreeProxyModel* proxy )
     , m_view( parent )
     , m_model( proxy )
 {
+    connect( this, SIGNAL( updateIndex( QModelIndex ) ), parent, SLOT( update( QModelIndex ) ) );
 }
 
 

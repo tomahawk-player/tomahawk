@@ -48,6 +48,8 @@ PlaylistItemDelegate::PlaylistItemDelegate( TrackView* parent, PlayableProxyMode
     , m_view( parent )
     , m_model( proxy )
 {
+    connect( this, SIGNAL( updateIndex( QModelIndex ) ), parent, SLOT( update( QModelIndex ) ) );
+
     m_topOption = QTextOption( Qt::AlignTop );
     m_topOption.setWrapMode( QTextOption::NoWrap );
 

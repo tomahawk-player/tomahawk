@@ -101,7 +101,6 @@ TreeView::setProxyModel( TreeProxyModel* model )
 {
     m_proxyModel = model;
     m_delegate = new TreeItemDelegate( this, m_proxyModel );
-    connect( m_delegate, SIGNAL( updateIndex( QModelIndex ) ), SLOT( update( QModelIndex ) ) );
     setItemDelegate( m_delegate );
 
     QTreeView::setModel( m_proxyModel );

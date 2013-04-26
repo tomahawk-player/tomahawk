@@ -613,7 +613,6 @@ SourceItem::latestAdditionsClicked()
             raModel->setDescription( tr( "Latest additions to %1's collection" ).arg( m_source->friendlyName() ) );
 
         PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LatestAdditions, pv->trackView(), pv->trackView()->proxyModel() );
-        connect( del, SIGNAL( updateIndex( QModelIndex ) ), pv->trackView(), SLOT( update( QModelIndex ) ) );
         pv->trackView()->setItemDelegate( del );
 
         pv->setPlayableModel( raModel );
@@ -656,7 +655,6 @@ SourceItem::recentPlaysClicked()
             raModel->setDescription( tr( "%1's recently played tracks" ).arg( m_source->friendlyName() ) );
 
         PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::RecentlyPlayed, pv->trackView(), pv->trackView()->proxyModel() );
-        connect( del, SIGNAL( updateIndex( QModelIndex ) ), pv->trackView(), SLOT( update( QModelIndex ) ) );
         pv->trackView()->setItemDelegate( del );
 
         pv->setPlayableModel( raModel );

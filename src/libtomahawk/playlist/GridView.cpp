@@ -113,7 +113,6 @@ GridView::setProxyModel( PlayableProxyModel* model )
         delete m_delegate;
 
     m_delegate = new GridItemDelegate( this, m_proxyModel );
-    connect( m_delegate, SIGNAL( updateIndex( QModelIndex ) ), this, SLOT( update( QModelIndex ) ) );
     connect( m_delegate, SIGNAL( startedPlaying( QPersistentModelIndex ) ), this, SLOT( onDelegatePlaying( QPersistentModelIndex ) ) );
     connect( m_delegate, SIGNAL( stoppedPlaying( QPersistentModelIndex ) ), this, SLOT( onDelegateStopped( QPersistentModelIndex ) ) );
     setItemDelegate( m_delegate );

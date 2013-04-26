@@ -446,7 +446,6 @@ ViewManager::showRecentPlaysPage()
         raModel->setDescription( tr( "Recently played tracks from all your friends" ) );
 
         PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::RecentlyPlayed, pv->trackView(), pv->trackView()->proxyModel() );
-        connect( del, SIGNAL( updateIndex( QModelIndex ) ), pv->trackView(), SLOT( update( QModelIndex ) ) );
         pv->trackView()->setItemDelegate( del );
 
         pv->setPlayableModel( raModel );
@@ -473,8 +472,6 @@ ViewManager::showInboxPage()
                 new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::Inbox,
                                                inboxView,
                                                inboxView->proxyModel() );
-        connect( delegate, SIGNAL( updateIndex( QModelIndex ) ),
-                 inboxView, SLOT( update( QModelIndex ) ) );
         inboxView->setItemDelegate( delegate );
 
         inboxView->proxyModel()->setStyle( PlayableProxyModel::Large );

@@ -181,7 +181,6 @@ TrackView::setPlaylistItemDelegate( PlaylistItemDelegate* delegate )
 {
     m_delegate = delegate;
     setItemDelegate( delegate );
-    connect( delegate, SIGNAL( updateIndex( QModelIndex ) ), SLOT( update( QModelIndex ) ) );
 
     verifySize();
 }
