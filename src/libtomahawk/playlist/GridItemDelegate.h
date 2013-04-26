@@ -43,7 +43,7 @@ class DLLEXPORT GridItemDelegate : public QStyledItemDelegate
 Q_OBJECT
 
 public:
-    GridItemDelegate( QAbstractItemView* parent = 0, PlayableProxyModel* proxy = 0 );
+    GridItemDelegate( QAbstractItemView* parent, PlayableProxyModel* proxy );
 
     QSize itemSize() const { return m_itemSize; }
     void setItemSize( const QSize& size ) { m_itemSize = size; }
