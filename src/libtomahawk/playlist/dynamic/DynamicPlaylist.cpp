@@ -124,17 +124,17 @@ DynamicPlaylist::setMode( int mode )
 
 
 dynplaylist_ptr
-DynamicPlaylist::load( const QString& guid )
+DynamicPlaylist::get( const QString& guid )
 {
     dynplaylist_ptr p;
 
     foreach( const Tomahawk::source_ptr& source, SourceList::instance()->sources() )
     {
         p = source->dbCollection()->autoPlaylist( guid );
-        if ( p.isNull() )
+        if ( !p )
             p = source->dbCollection()->station( guid );
 
-        if ( !p.isNull() )
+        if ( p )
             return p;
     }
 

@@ -74,7 +74,7 @@ class DLLEXPORT DynamicPlaylist : public Tomahawk::Playlist
 public:
     virtual ~DynamicPlaylist();
 
-    static Tomahawk::dynplaylist_ptr load( const QString& guid );
+    static Tomahawk::dynplaylist_ptr get( const QString& guid );
 
     /// Generate an empty dynamic playlist with default generator
     static Tomahawk::dynplaylist_ptr create( const source_ptr& author,

@@ -161,14 +161,14 @@ Playlist::create( const source_ptr& author,
 
 
 playlist_ptr
-Playlist::load( const QString& guid )
+Playlist::get( const QString& guid )
 {
     playlist_ptr p;
 
     foreach( const Tomahawk::source_ptr& source, SourceList::instance()->sources() )
     {
         p = source->dbCollection()->playlist( guid );
-        if ( !p.isNull() )
+        if ( p )
             return p;
     }
 

@@ -93,7 +93,7 @@ friend class ::PlaylistModel;
 public:
     virtual ~Playlist();
 
-    static Tomahawk::playlist_ptr load( const QString& guid );
+    static Tomahawk::playlist_ptr get( const QString& guid );
 
     // one CTOR is private, only called by DatabaseCommand_LoadAllPlaylists
     static Tomahawk::playlist_ptr create( const source_ptr& author,
