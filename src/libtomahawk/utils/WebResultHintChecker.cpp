@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2012, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2013, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -25,25 +26,17 @@
 #include "Query.h"
 #include "Result.h"
 #include "Source.h"
-#include "Pipeline.h"
-#include "utils/NetworkReply.h"
 #include "utils/Logger.h"
 
 using namespace Tomahawk;
 
 
-WebResultHintChecker::WebResultHintChecker( const query_ptr& q )
+WebResultHintChecker::WebResultHintChecker( const query_ptr& query, const QList< result_ptr >& results )
     : QObject( 0 )
-    , m_query( q )
+    , m_query( query )
+    , m_results( results )
 {
-    Q_ASSERT( !m_query.isNull() );
-
-    m_url = q->resultHint();
-
-    if ( Pipeline::instance()->isResolving( m_query ) )
-        connect( m_query.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( onResolvingFinished( bool ) ) );
-    else
-        check( QUrl::fromUserInput( m_url ) );
+    check();
 }
 
 
@@ -53,68 +46,19 @@ WebResultHintChecker::~WebResultHintChecker()
 
 
 void
-WebResultHintChecker::checkQuery( const query_ptr& query )
+WebResultHintChecker::check()
 {
-    if ( !query->resultHint().isEmpty() && query->resultHint().startsWith( "http" ) )
-        new WebResultHintChecker( query );
-}
-
-
-void
-WebResultHintChecker::checkQueries( const QList< query_ptr >& queries )
-{
-    foreach ( const query_ptr& query, queries )
-        checkQuery( query );
-}
-
-
-void
-WebResultHintChecker::onResolvingFinished( bool hasResults )
-{
-    Q_UNUSED( hasResults );
-
-    check( QUrl::fromUserInput( m_url ) );
-}
-
-
-void
-WebResultHintChecker::check( const QUrl &url )
-{
-    // Nothing to do
-    if ( url.isEmpty() || !url.toString().startsWith( "http" ) )
+    foreach ( const result_ptr& result, m_results )
     {
-        if ( !url.isEmpty() || m_query->saveHTTPResultHint() )
-            removeHint();
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Checking http url:" << result->url();
+        QUrl url = QUrl::fromUserInput( result->url() );
+        if ( url.isEmpty() || !url.toString().startsWith( "http" ) )
+            continue;
 
-        deleteLater();
-        return;
+        NetworkReply* reply = new NetworkReply( TomahawkUtils::nam()->head( QNetworkRequest( url ) ) );
+        m_replies.insert( reply, result );
+        connect( reply, SIGNAL( finished() ), SLOT( headFinished() ) );
     }
-
-    NetworkReply* reply = new NetworkReply( TomahawkUtils::nam()->head( QNetworkRequest( url ) ) );
-    connect( reply, SIGNAL( finished() ), SLOT( headFinished() ) );
-}
-
-
-void
-WebResultHintChecker::removeHint()
-{
-    tLog() << "Removing HTTP result from query since HEAD request failed to verify it was a valid url:" << m_url;
-
-    result_ptr foundResult;
-    foreach ( const result_ptr& result, m_query->results() )
-    {
-        if ( result->url() == m_url )
-        {
-            foundResult = result;
-            break;
-        }
-    }
-
-    if ( !foundResult.isNull() )
-        m_query->removeResult( foundResult );
-    if ( m_query->resultHint() == m_url )
-        m_query->setResultHint( QString() );
-    m_query->setSaveHTTPResultHint( false );
 }
 
 
@@ -124,12 +68,20 @@ WebResultHintChecker::headFinished()
     NetworkReply* r = qobject_cast<NetworkReply*>( sender() );
     r->deleteLater();
 
-    if ( r->reply()->error() != QNetworkReply::NoError )
-    {
-        // Error getting headers for the http resulthint, remove it from the result
-        // as it's definitely not playable
-        removeHint();
-    }
+    if ( !m_replies.contains( r ) )
+        return;
 
-    deleteLater();
+    result_ptr result = m_replies.value( r );
+    m_replies.remove( r );
+
+    if ( r->reply()->error() == QNetworkReply::NoError )
+    {
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Found valid http url:" << result->url();
+        m_validResults << result;
+    }
+    else
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Found invalid http url:" << result->url() << r->reply()->error();
+
+    if ( m_replies.isEmpty() )
+        emit done();
 }

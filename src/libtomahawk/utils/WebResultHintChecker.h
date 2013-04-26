@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2012, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2013, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -15,12 +16,15 @@
  *   You should have received a copy of the GNU General Public License
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef WEB_RESULT_HINT_CHECKER_H
 #define WEB_RESULT_HINT_CHECKER_H
 
 #include "Typedefs.h"
+#include "utils/NetworkReply.h"
 
 #include <QObject>
+#include <QSet>
 
 namespace Tomahawk
 {
@@ -29,23 +33,25 @@ class WebResultHintChecker : public QObject
 {
     Q_OBJECT
 public:
-    WebResultHintChecker( const query_ptr& q );
+    WebResultHintChecker( const query_ptr& query, const QList< result_ptr >& results );
     virtual ~WebResultHintChecker();
 
-    static void checkQuery( const query_ptr& query );
-    static void checkQueries( const QList< query_ptr >& queries );
+    query_ptr query() const { return m_query; }
+    QList< result_ptr > results() const { return m_results; }
+    QList< result_ptr > validResults() const { return m_validResults; }
+
+signals:
+    void done();
 
 private slots:
+    void check();
     void headFinished();
 
-    void check( const QUrl& url );
-
-    void onResolvingFinished( bool hasResults );
 private:
-    void removeHint();
-
     query_ptr m_query;
-    QString m_url;
+    QList< result_ptr > m_results;
+    QList< result_ptr > m_validResults;
+    QHash< NetworkReply*, Tomahawk::result_ptr > m_replies;
 };
 
 }
