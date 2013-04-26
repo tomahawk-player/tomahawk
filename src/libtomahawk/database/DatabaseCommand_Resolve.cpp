@@ -52,7 +52,7 @@ DatabaseCommand_Resolve::exec( DatabaseImpl* lib )
 
     if ( !m_query->resultHint().isEmpty() )
     {
-        qDebug() << "Using result-hint to speed up resolving:" << m_query->resultHint();
+        tDebug() << "Using result-hint to speed up resolving:" << m_query->resultHint();
 
         Tomahawk::result_ptr result = lib->resultFromHint( m_query );
         if ( !result.isNull() && ( result->collection().isNull() || result->collection()->source()->isOnline() ) )
