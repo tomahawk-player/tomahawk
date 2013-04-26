@@ -76,7 +76,7 @@ public:
     void setAnnotation( const QString& s ) { m_annotation = s; }
 
     QString resultHint() const { return m_resulthint; }
-    void setResultHint( const QString& s ) { m_resulthint= s; }
+    void setResultHint( const QString& s );
 
     unsigned int duration() const { return m_duration; }
     void setDuration( unsigned int i ) { m_duration = i; }
@@ -87,7 +87,15 @@ public:
     source_ptr lastSource() const;
     void setLastSource( source_ptr s );
 
+signals:
+    void resultChanged();
+
+private slots:
+    void onQueryResolved( bool hasResults );
+
 private:
+    QString hintFromQuery() const;
+
     QString m_guid;
     Tomahawk::query_ptr m_query;
     QString m_annotation;

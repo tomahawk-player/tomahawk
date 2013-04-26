@@ -64,7 +64,7 @@ PlaylistEntry::setQueryVariant( const QVariant& v )
     QString album = m.value( "album" ).toString();
     QString track = m.value( "track" ).toString();
 
-    m_query = Tomahawk::Query::get( artist, track, album );
+    setQuery( Tomahawk::Query::get( artist, track, album ) );
 }
 
 
@@ -79,6 +79,8 @@ void
 PlaylistEntry::setQuery( const Tomahawk::query_ptr& q )
 {
     m_query = q;
+
+    connect( q.data(), SIGNAL( resolvingFinished( bool ) ), SLOT( onQueryResolved( bool ) ) );
 }
 
 
@@ -100,6 +102,48 @@ void
 PlaylistEntry::setLastSource( source_ptr s )
 {
     m_lastsource = s;
+}
+
+
+void
+PlaylistEntry::onQueryResolved( bool hasResults )
+{
+    if ( !hasResults )
+        return;
+
+    if ( resultHint().isEmpty() )
+        setResultHint( hintFromQuery() );
+}
+
+
+void
+PlaylistEntry::setResultHint( const QString& s )
+{
+    if ( m_resulthint == s )
+        return;
+
+    m_resulthint = s;
+    emit resultChanged();
+}
+
+
+QString
+PlaylistEntry::hintFromQuery() const
+{
+    QString resultHint, foundResult;
+    if ( !m_query->results().isEmpty() )
+        foundResult = m_query->results().first()->url();
+    else if ( !m_query->resultHint().isEmpty() )
+        foundResult = m_query->resultHint();
+
+    if ( foundResult.startsWith( "file://" ) ||
+        foundResult.startsWith( "servent://" ) || // Save resulthints for local files and peers automatically
+        ( TomahawkUtils::whitelistedHttpResultHint( foundResult ) && m_query->saveHTTPResultHint() ) )
+    {
+        resultHint = foundResult;
+    }
+
+    return resultHint;
 }
 
 
@@ -533,8 +577,7 @@ Playlist::setRevision( const QString& rev,
 
     foreach( const plentry_ptr& entry, m_entries )
     {
-        connect( entry->query().data(), SIGNAL( resultsChanged() ),
-                 SLOT( onResultsChanged() ), Qt::UniqueConnection );
+        connect( entry.data(), SIGNAL( resultChanged() ), SLOT( onResultsChanged() ), Qt::UniqueConnection );
     }
 
     setBusy( false );
