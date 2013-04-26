@@ -67,11 +67,11 @@ static QString s_resolverId = "spotify-unknown";
 
 
 namespace {
-enum ActionType {
-    Sync = 0,
-    Subscribe = 1,
-    Collaborate
-};
+    enum ActionType {
+        Sync = 0,
+        Subscribe = 1,
+        Collaborate
+    };
 }
 
 Account*
@@ -98,6 +98,7 @@ SpotifyAccount::instance()
 {
     return s_instance;
 }
+
 
 SpotifyAccount::SpotifyAccount( const QString& accountId )
     : CustomAtticaAccount( accountId )
@@ -185,6 +186,7 @@ SpotifyAccount::delayedInit()
     }
 }
 
+
 void
 SpotifyAccount::hookupResolver()
 {
@@ -259,6 +261,7 @@ SpotifyAccount::checkForResolver()
 
     return false;
 }
+
 
 void
 SpotifyAccount::resolverChanged()
@@ -416,6 +419,7 @@ SpotifyAccount::setManualResolverPath( const QString &resolverPath )
     }
 }
 
+
 void
 SpotifyAccount::starTrack(const QString &artist, const QString &title, const bool starred)
 {
@@ -558,7 +562,6 @@ SpotifyAccount::aboutToShow( QAction* action, const playlist_ptr& playlist )
 SpotifyPlaylistUpdater*
 SpotifyAccount::getPlaylistUpdater( const playlist_ptr plptr )
 {
-
     SpotifyPlaylistUpdater* updater = 0;
     QList<PlaylistUpdaterInterface*> updaters = plptr->updaters();
     foreach ( PlaylistUpdaterInterface* u, updaters )
@@ -570,6 +573,7 @@ SpotifyAccount::getPlaylistUpdater( const playlist_ptr plptr )
     }
     return updater;
 }
+
 
 SpotifyPlaylistUpdater*
 SpotifyAccount::getPlaylistUpdater( QObject *sender )
@@ -609,6 +613,7 @@ SpotifyAccount::getPlaylistUpdater( QObject *sender )
     }
     return updater;
 }
+
 
 void
 SpotifyAccount::subscribeActionTriggered( QAction* action )
@@ -811,7 +816,6 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
         return;
     }
 
-
     const QString qid = msg.value( "qid" ).toString();
     if ( m_qidToSlotMap.contains( qid ) )
     {
@@ -885,7 +889,7 @@ SpotifyAccount::resolverMessage( const QString &msgType, const QVariantMap &msg 
         const QString newRev = msg.value( "revid" ).toString();
         const QString oldRev = msg.value( "oldRev" ).toString();
 
-        updater->spotifyTracksAdded( tracksList, startPos, newRev, oldRev  );
+        updater->spotifyTracksAdded( tracksList, startPos, newRev, oldRev );
     }
     else if ( msgType == "tracksRemoved" )
     {
@@ -1313,6 +1317,7 @@ SpotifyAccount::startPlaylistSyncWithPlaylist( const QString& msgType, const QVa
     }
 }
 
+
 void
 SpotifyAccount::playlistCopyCreated( const QString& msgType, const QVariantMap& msg, const QVariant& )
 {
@@ -1396,11 +1401,13 @@ SpotifyAccount::sendMessage( const QVariantMap &m, QObject* obj, const QString& 
     return qid;
 }
 
+
 bool
 SpotifyAccount::hasPlaylist(const QString& plId)
 {
     return m_updaters.contains( plId );
 }
+
 
 Tomahawk::playlist_ptr
 SpotifyAccount::playlistForURI(const QString& plId)
@@ -1415,11 +1422,13 @@ SpotifyAccount::registerUpdaterForPlaylist( const QString& plId, SpotifyPlaylist
     m_updaters[ plId ] = updater;
 }
 
+
 void
 SpotifyAccount::registerPlaylistInfo( const QString& name, const QString& plid, const QString &revid, const bool sync, const bool subscribed, const bool owner )
 {
     m_allSpotifyPlaylists[ plid ] = new SpotifyPlaylistInfo( name, plid, revid, sync, subscribed, owner );
 }
+
 
 void
 SpotifyAccount::registerPlaylistInfo( SpotifyPlaylistInfo* info )
@@ -1494,7 +1503,6 @@ SpotifyAccount::stopPlaylistSync( SpotifyPlaylistInfo* playlist, bool forceDontD
         updater->save();
     }
 }
-
 
 
 void
