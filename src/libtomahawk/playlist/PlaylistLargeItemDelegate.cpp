@@ -170,10 +170,16 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
             const int pixHeight = r.height() - pixMargin * 2;
             QRect npr = r.adjusted( pixMargin, pixMargin + 1, pixHeight - r.width() + pixMargin, -pixMargin + 1 );
             if ( item->isPlaying() )
+            {
                 painter->drawPixmap( npr, TomahawkUtils::defaultPixmap( TomahawkUtils::NowPlayingSpeaker, TomahawkUtils::Original, npr.size() ) );
+                r.adjust( pixHeight + 8, 0, 0, 0 );
+            }
             else
+            {
+                npr = npr.adjusted( 0, npr.height() / 4, -npr.width() / 2, -npr.height() / 4 );
                 painter->drawPixmap( npr, TomahawkUtils::defaultPixmap( TomahawkUtils::InboxNewItem, TomahawkUtils::Original, npr.size() ) );
-            r.adjust( pixHeight + 8, 0, 0, 0 );
+                r.adjust( npr.width() + 8, 0, 0, 0 );
+            }
         }
 
         painter->setPen( opt.palette.text().color() );
