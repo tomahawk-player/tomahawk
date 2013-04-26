@@ -94,8 +94,10 @@ private slots:
     void shuntNext();
 
     void onTemporaryQueryTimer();
+    void onWebResultCheckerDone();
 
 private:
+    void addResultsToQuery( const query_ptr& query, const QList< result_ptr >& results );
     Tomahawk::Resolver* nextResolver( const Tomahawk::query_ptr& query ) const;
 
     void setQIDState( const Tomahawk::query_ptr& query, int state );

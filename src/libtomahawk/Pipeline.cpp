@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2013, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@
 #include "resolvers/QtScriptResolver.h"
 #include "Source.h"
 #include "SourceList.h"
-
+#include "utils/WebResultHintChecker.h"
 #include "utils/Logger.h"
 
 #include "boost/bind.hpp"
@@ -277,7 +277,6 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
 {
     if ( !m_running )
         return;
-
     if ( !m_qids.contains( qid ) )
     {
         tDebug() << "Result arrived too late for:" << qid;
@@ -290,14 +289,43 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
         return;
 
     QList< result_ptr > cleanResults;
+    QList< result_ptr > httpResults;
     foreach ( const result_ptr& r, results )
     {
         if ( r.isNull() )
             continue;
 
-        float score = q->howSimilar( r );
+        if ( r->url().startsWith( "http" ) && !r->url().startsWith( "http://localhost" ) )
+            httpResults << r;
+        else
+            cleanResults << r;
+    }
+
+    WebResultHintChecker* checker = new WebResultHintChecker( q, httpResults );
+    connect( checker, SIGNAL( done() ), SLOT( onWebResultCheckerDone() ) );
+
+    addResultsToQuery( q, cleanResults );
+    if ( q->solved() && !q->isFullTextQuery() )
+    {
+        setQIDState( q, 0 );
+        return;
+    }
+
+    if ( httpResults.isEmpty() )
+        decQIDState( q );
+}
+
+
+void
+Pipeline::addResultsToQuery( const query_ptr& query, const QList< result_ptr >& results )
+{
+    tDebug() << Q_FUNC_INFO << query->toString() << results.count();
+    QList< result_ptr > cleanResults;
+    foreach ( const result_ptr& r, results )
+    {
+        float score = query->howSimilar( r );
         r->setScore( score );
-        if ( !q->isFullTextQuery() && score < MINSCORE )
+        if ( !query->isFullTextQuery() && score < MINSCORE )
             continue;
 
         cleanResults << r;
@@ -305,21 +333,35 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
 
     if ( !cleanResults.isEmpty() )
     {
-        q->addResults( cleanResults );
+        query->addResults( cleanResults );
 
-        if ( m_queries_temporary.contains( q ) )
+        if ( m_queries_temporary.contains( query ) )
         {
             foreach ( const result_ptr& r, cleanResults )
             {
                 m_rids.insert( r->id(), r );
             }
         }
+    }
+}
 
-        if ( q->solved() && !q->isFullTextQuery() )
-        {
-            setQIDState( q, 0 );
-            return;
-        }
+
+void
+Pipeline::onWebResultCheckerDone()
+{
+    tDebug() << Q_FUNC_INFO;
+    WebResultHintChecker* checker = qobject_cast< WebResultHintChecker* >( sender() );
+    if ( !checker )
+        return;
+
+    checker->deleteLater();
+
+    const query_ptr q = checker->query();
+    addResultsToQuery( q, checker->validResults() );
+    if ( q && !q->isFullTextQuery() )
+    {
+        setQIDState( q, 0 );
+        return;
     }
 
     decQIDState( q );
