@@ -7,6 +7,7 @@ Version 0.7.0:
     * Added "Append to Playlist" context menu item.
     * User-friendlier collection handling: added info-buttons for artists and
       albums. Double-clicking an item expands it now.
+    * Added translations for Catalan, Czech, Galician, Greek, Italian and more.
     * (Windows) Smoother and more responsive audio playback.
     * (Linux) Fixed grid issues with GTK-styles.
 
