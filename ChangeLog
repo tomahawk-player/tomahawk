@@ -1,4 +1,7 @@
 Version 0.8.0:
+    * Playback Queue now saves its state across sessions.
+    * Added "Inbox" feature, showing incoming song recommendations. Dropping
+      a track on a user in the sidebar sends a recommendation to them.
 
 Version 0.7.0:
     * Improved peer and account handling.
