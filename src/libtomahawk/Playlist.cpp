@@ -168,6 +168,11 @@ Playlist::get( const QString& guid )
     foreach( const Tomahawk::source_ptr& source, SourceList::instance()->sources() )
     {
         p = source->dbCollection()->playlist( guid );
+        if ( !p )
+            p = source->dbCollection()->autoPlaylist( guid );
+        if ( !p )
+            p = source->dbCollection()->station( guid );
+
         if ( p )
             return p;
     }
