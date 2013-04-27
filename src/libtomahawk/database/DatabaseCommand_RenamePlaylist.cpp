@@ -58,18 +58,14 @@ DatabaseCommand_RenamePlaylist::exec( DatabaseImpl* lib )
 void
 DatabaseCommand_RenamePlaylist::postCommitHook()
 {
-    playlist_ptr playlist = source()->dbCollection()->playlist( m_playlistguid );
-    // fallback, check for auto and stations too
-    if( playlist.isNull() )
-        playlist = source()->dbCollection()->autoPlaylist( m_playlistguid );
-    if( playlist.isNull() )
-        playlist = source()->dbCollection()->station( m_playlistguid );
-
+    playlist_ptr playlist = Playlist::get( m_playlistguid );
     Q_ASSERT( !playlist.isNull() );
+    if ( !playlist )
+        return;
 
-    qDebug() << "Renaming old playlist" << playlist->title() << "to" << m_playlistTitle << m_playlistguid;
+    tDebug() << "Renaming playlist" << playlist->title() << "to" << m_playlistTitle << m_playlistguid;
     playlist->setTitle( m_playlistTitle );
 
-    if( source()->isLocal() )
+    if ( source()->isLocal() )
         Servent::instance()->triggerDBSync();
 }

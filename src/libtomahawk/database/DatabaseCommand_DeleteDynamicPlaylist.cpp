@@ -50,18 +50,14 @@ DatabaseCommand_DeleteDynamicPlaylist::exec( DatabaseImpl* lib )
 void
 DatabaseCommand_DeleteDynamicPlaylist::postCommitHook()
 {
-    qDebug() << Q_FUNC_INFO << "Reporting:" << m_playlistguid;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Reporting:" << m_playlistguid;
     if ( !source() || !source()->dbCollection() )
     {
         Q_ASSERT( false );
         return;
     }
 
-    // we arent sure which it is, but it can't be more than one. so try both
-    dynplaylist_ptr playlist = source()->dbCollection()->autoPlaylist( m_playlistguid );
-    if ( !playlist )
-        playlist = source()->dbCollection()->station( m_playlistguid );
-
+    dynplaylist_ptr playlist = DynamicPlaylist::get( m_playlistguid );
     if ( playlist )
     {
         playlist->reportDeleted( playlist );

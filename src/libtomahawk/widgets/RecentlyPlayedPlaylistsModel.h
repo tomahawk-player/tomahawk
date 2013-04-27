@@ -54,7 +54,7 @@ private slots:
     void onPlaylistsRemoved( QList<Tomahawk::playlist_ptr> );
     void loadFromSettings();
 
-    void plAdded( const QString& plid, int sid );
+    void plAdded( const QString& plguid, int sourceId );
     void playlistRevisionLoaded();
 
 private:

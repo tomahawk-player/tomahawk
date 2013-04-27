@@ -227,18 +227,10 @@ RecentlyPlayedPlaylistsModel::rowCount( const QModelIndex& ) const
 
 
 void
-RecentlyPlayedPlaylistsModel::plAdded( const QString& plguid, int sId )
+RecentlyPlayedPlaylistsModel::plAdded( const QString& plguid, int sourceId )
 {
-    source_ptr source = SourceList::instance()->get( sId );
-    if ( !source )
-        return;
-
-    playlist_ptr pl = source->dbCollection()->playlist( plguid );
-    if ( !pl )
-        pl = source->dbCollection()->autoPlaylist( plguid );
-    if ( !pl )
-        pl = source->dbCollection()->station( plguid );
-
+    Q_UNUSED( sourceId );
+    const playlist_ptr& pl = Playlist::get( plguid );
     if ( !pl )
         return;
 
