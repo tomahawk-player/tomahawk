@@ -35,8 +35,6 @@
 #include "utils/Logger.h"
 #include "taglib/fileref.h"
 
-
-
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QFileInfo>
@@ -231,7 +229,11 @@ MetadataEditor::loadResult( const Tomahawk::result_ptr& result )
 
     if ( result->collection() && result->collection()->source()->isLocal() )
     {
-        QFileInfo fi( QUrl( m_result->url() ).toLocalFile() );
+        QString furl = m_result->url();
+        if ( furl.startsWith( "file://" ) )
+            furl = furl.right( furl.length() - 7 );
+
+        QFileInfo fi( furl );
         setFileName( fi.absoluteFilePath() );
         setFileSize( TomahawkUtils::filesizeToString( fi.size() ) );
     }
