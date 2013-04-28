@@ -503,12 +503,11 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr& result, QSharedPointe
                 else
                 {
                     QString furl = m_currentTrack->url();
-#ifdef Q_WS_WIN
                     if ( furl.startsWith( "file://" ) )
                         furl = furl.right( furl.length() - 7 );
-#endif
-                    tLog( LOGVERBOSE ) << "Passing to Phonon:" << furl << furl.toLatin1();
-                    m_mediaObject->setCurrentSource( furl );
+
+                    tLog( LOGVERBOSE ) << "Passing to Phonon:" << QUrl::fromLocalFile( furl );
+                    m_mediaObject->setCurrentSource( QUrl::fromLocalFile( furl ) );
                 }
 
                 m_mediaObject->currentSource().setAutoDelete( true );
