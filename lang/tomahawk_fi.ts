@@ -3316,13 +3316,13 @@ Koeta säätää suodattimia saadaksesi uuden joukon kappaleita kuunneltavaksi.<
 <context>
     <name>Tomahawk::Playlist</name>
     <message>
-        <location filename="../src/libtomahawk/Playlist.cpp" line="294"/>
+        <location filename="../src/libtomahawk/Playlist.cpp" line="299"/>
         <source>Would you like to delete the playlist &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
         <translation>Haluatko poistaa soittolistan &lt;b&gt;”%2”&lt;/b&gt;?</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Playlist.cpp" line="296"/>
+        <location filename="../src/libtomahawk/Playlist.cpp" line="301"/>
         <source>Delete</source>
         <translation>Poista</translation>
     </message>

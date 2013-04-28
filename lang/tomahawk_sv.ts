@@ -681,7 +681,7 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/sourcetree/items/InboxItem.cpp" line="35"/>
         <source>Inbox</source>
-        <translation type="unfinished"/>
+        <translation>Inkorg</translation>
     </message>
 </context>
 <context>
@@ -1099,7 +1099,7 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="272"/>
         <source>Searching...</source>
-        <translation type="unfinished"/>
+        <translation>Söker...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
@@ -3311,13 +3311,13 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
 <context>
     <name>Tomahawk::Playlist</name>
     <message>
-        <location filename="../src/libtomahawk/Playlist.cpp" line="294"/>
+        <location filename="../src/libtomahawk/Playlist.cpp" line="299"/>
         <source>Would you like to delete the playlist &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
         <translation>Vill du ta bort spellistan &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Playlist.cpp" line="296"/>
+        <location filename="../src/libtomahawk/Playlist.cpp" line="301"/>
         <source>Delete</source>
         <translation>Ta bort</translation>
     </message>
@@ -3412,42 +3412,42 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
     <message>
         <location filename="../src/libtomahawk/Track.cpp" line="353"/>
         <source> and </source>
-        <translation type="unfinished"/>
+        <translation>och</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Track.cpp" line="361"/>
         <source>You</source>
-        <translation type="unfinished"/>
+        <translation>Du</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Track.cpp" line="363"/>
         <source>you</source>
-        <translation type="unfinished"/>
+        <translation>du</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Track.cpp" line="376"/>
         <source>and</source>
-        <translation type="unfinished"/>
+        <translation>och</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/Track.cpp" line="376"/>
         <source>%n other(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n annan</numerusform><numerusform>%n andra</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/Track.cpp" line="379"/>
         <source>%n people</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n person</numerusform><numerusform>%n personer</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Track.cpp" line="383"/>
         <source>loved this track</source>
-        <translation type="unfinished"/>
+        <translation>älskade detta spåret</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Track.cpp" line="385"/>
         <source>sent you this track %1</source>
-        <translation type="unfinished"/>
+        <translation>skickade spåret &apos;%1&apos; till dig</translation>
     </message>
 </context>
 <context>

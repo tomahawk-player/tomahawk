@@ -3310,13 +3310,13 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
 <context>
     <name>Tomahawk::Playlist</name>
     <message>
-        <location filename="../src/libtomahawk/Playlist.cpp" line="294"/>
+        <location filename="../src/libtomahawk/Playlist.cpp" line="299"/>
         <source>Would you like to delete the playlist &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
         <translation>Voulez-vous supprimer la liste de lecture &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Playlist.cpp" line="296"/>
+        <location filename="../src/libtomahawk/Playlist.cpp" line="301"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>

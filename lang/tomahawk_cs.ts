@@ -681,7 +681,7 @@ se s vámi spojil?</translation>
     <message>
         <location filename="../src/sourcetree/items/InboxItem.cpp" line="35"/>
         <source>Inbox</source>
-        <translation type="unfinished"/>
+        <translation>Doručené</translation>
     </message>
 </context>
 <context>
@@ -689,7 +689,7 @@ se s vámi spojil?</translation>
     <message>
         <location filename="../src/libtomahawk/jobview/InboxJobItem.cpp" line="54"/>
         <source>%1 sent you %2 by %3.</source>
-        <translation type="unfinished"/>
+        <translation>%1 vám poslán %2 od %3.</translation>
     </message>
 </context>
 <context>
@@ -1099,7 +1099,7 @@ se s vámi spojil?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="272"/>
         <source>Searching...</source>
-        <translation type="unfinished"/>
+        <translation>Hledá se...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
@@ -3310,13 +3310,13 @@ Zkuste vyladit filtry pro nové písně.</translation>
 <context>
     <name>Tomahawk::Playlist</name>
     <message>
-        <location filename="../src/libtomahawk/Playlist.cpp" line="294"/>
+        <location filename="../src/libtomahawk/Playlist.cpp" line="299"/>
         <source>Would you like to delete the playlist &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
         <translation>Chcete smazat seznam skladeb &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Playlist.cpp" line="296"/>
+        <location filename="../src/libtomahawk/Playlist.cpp" line="301"/>
         <source>Delete</source>
         <translation>Smazat</translation>
     </message>
@@ -3411,42 +3411,42 @@ Zkuste vyladit filtry pro nové písně.</translation>
     <message>
         <location filename="../src/libtomahawk/Track.cpp" line="353"/>
         <source> and </source>
-        <translation type="unfinished"/>
+        <translation>a</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Track.cpp" line="361"/>
         <source>You</source>
-        <translation type="unfinished"/>
+        <translation>Vy</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Track.cpp" line="363"/>
         <source>you</source>
-        <translation type="unfinished"/>
+        <translation>vy</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Track.cpp" line="376"/>
         <source>and</source>
-        <translation type="unfinished"/>
+        <translation>a</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/Track.cpp" line="376"/>
         <source>%n other(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n dalšímu</numerusform><numerusform>%n dalším</numerusform><numerusform>%n dalším</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/Track.cpp" line="379"/>
         <source>%n people</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n člověku</numerusform><numerusform>%n lidem</numerusform><numerusform>%n lidem</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Track.cpp" line="383"/>
         <source>loved this track</source>
-        <translation type="unfinished"/>
+        <translation>se tato skladba líbí</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Track.cpp" line="385"/>
         <source>sent you this track %1</source>
-        <translation type="unfinished"/>
+        <translation>vám poslal tuto skladbu %1</translation>
     </message>
 </context>
 <context>

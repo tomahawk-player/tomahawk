@@ -3307,13 +3307,13 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
 <context>
     <name>Tomahawk::Playlist</name>
     <message>
-        <location filename="../src/libtomahawk/Playlist.cpp" line="294"/>
+        <location filename="../src/libtomahawk/Playlist.cpp" line="299"/>
         <source>Would you like to delete the playlist &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
         <translation>Você gostaria de excluir a lista de reprodução &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Playlist.cpp" line="296"/>
+        <location filename="../src/libtomahawk/Playlist.cpp" line="301"/>
         <source>Delete</source>
         <translation>Excluir</translation>
     </message>
