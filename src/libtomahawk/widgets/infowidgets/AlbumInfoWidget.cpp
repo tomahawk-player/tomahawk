@@ -34,6 +34,7 @@
 #include "database/DatabaseCommand_AllTracks.h"
 #include "database/DatabaseCommand_AllAlbums.h"
 
+#include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
@@ -51,7 +52,7 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
     ui->setupUi( widget );
 
     QPalette pal = palette();
-    pal.setColor( QPalette::Window, QColor( "#272b2e" ) );
+    pal.setColor( QPalette::Window, TomahawkStyle::PAGE_BACKGROUND );
 
     widget->setPalette( pal );
     widget->setAutoFillBackground( true );

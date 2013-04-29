@@ -138,6 +138,7 @@ OverlayButton::paintEvent( QPaintEvent* event )
 
     QPen pen( palette().dark().color(), .5 );
     p.setPen( pen );
+    //FIXME const color
     p.setBrush( QColor( 30, 30, 30, 255.0 * OPACITY ) );
 
     p.drawRoundedRect( r, CORNER_ROUNDNESS, CORNER_ROUNDNESS );

@@ -19,8 +19,9 @@
 
 #include "BasicHeader.h"
 
-#include "utils/TomahawkUtilsGui.h"
 #include "ElidedLabel.h"
+#include "utils/TomahawkStyle.h"
+#include "utils/TomahawkUtilsGui.h"
 
 #include <QLabel>
 #include <QPixmap>
@@ -129,8 +130,8 @@ BasicHeader::paintEvent( QPaintEvent* event )
 
     QLinearGradient gradient( QPoint( 0, 0 ), QPoint( 0, 1 ) );
     gradient.setCoordinateMode( QGradient::ObjectBoundingMode );
-    gradient.setColorAt( 0.0, QColor( "#707070" ) );
-    gradient.setColorAt( 1.0, QColor( "#25292c" ) );
+    gradient.setColorAt( 0.0, TomahawkStyle::HEADER_LOWER );
+    gradient.setColorAt( 1.0, TomahawkStyle::HEADER_UPPER );
 
     painter.setBrush( gradient );
     painter.fillRect( rect(), gradient );

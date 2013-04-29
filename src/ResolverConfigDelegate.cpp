@@ -100,8 +100,10 @@ ResolverConfigDelegate::paint( QPainter* painter, const QStyleOptionViewItem& op
     QString pathStr = index.data( ResolversModel::ResolverPath ).toString();
     if( error )
     {
+        //FIXME const color
         painter->setPen( QColor( Qt::red ).lighter( 150 ) );
     } else {
+        //FIXME const color
         painter->setPen( Qt::gray );
     }
 

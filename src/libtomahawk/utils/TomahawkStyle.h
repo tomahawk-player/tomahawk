@@ -43,6 +43,8 @@ namespace TomahawkStyle
 
     static const QColor BORDER_LINE = QColor( "#8c8c8c" );
     static const QColor POPUP_BACKGROUND = QColor( "#ffffff" );
+    static const QColor POPUP_OSX_BACKGROUND = QColor( "#D6E3F1" );
+
     static const QColor GROUP_HEADER = QColor( "#637180" );
     static const QColor HOVER_GLOW = QColor( "#dddddd" );
 
@@ -56,8 +58,24 @@ namespace TomahawkStyle
     static const QColor HEADER_TEXT = QColor( "#eaeaea" );
     static const QColor HEADER_HIGHLIGHT = QColor( "#333" );
 
+    static const QColor PAGE_BACKGROUND = QColor( "#272b2e" );
+    static const QColor FOOTNOTES_BACKGROUND = QColor( "#272b2e" );
+    static const QColor DASHBOARD_ROUNDFIGURE_BACKGROUND = QColor( "#454e59" );
+
+    static const QColor SIDEBAR_ROUNDFIGURE_BACKGROUND = QColor( 167, 183, 211 );
+    static const QColor SIDEBAR_ROUNDFIGURE_INBOX_BACKGROUND = QColor( 239, 140, 51 );
+    static const QColor SIDEBAR_LAZYLIST_UPPER = QColor( "#ffffff" );
+    static const QColor SIDEBAR_LAZYLIST_LOWER = QColor( 0x88, 0x88, 0x88 );
+    static const QColor SIDEBAR_LAZYLIST_LOWEST = QColor( 0x99, 0x99, 0x99 );
+
+    static const QColor SLIDESWITCH_CHECKED_TOP = QColor( 8, 54, 134 );
+    static const QColor SLIDESWITCH_CHECKED_BOTTOM = QColor( 118, 172, 240 );
+    static const QColor SLIDESWITCH_UNCHECKED_TOP = QColor( 128, 128, 128 );
+    static const QColor SLIDESWITCH_UNCHECKED_BOTTOM = QColor( 179, 179, 179 );
+    static const QColor SLIDESWITCH_TEXT = QColor( "#606060" );
+
     static const int POPUP_ROUNDING_RADIUS = 6;
-    static const float POPUP_OPACITY = 0.96;
+    static const float POPUP_OPACITY = 0.93;
 }
 
 #endif // TOMAHAWKSTYLE_H

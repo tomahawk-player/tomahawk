@@ -29,6 +29,7 @@
 #include "playlist/PlayableModel.h"
 #include "audio/AudioEngine.h"
 
+#include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
@@ -44,7 +45,7 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     ui->setupUi( widget );
 
     QPalette pal = palette();
-    pal.setColor( QPalette::Window, QColor( "#272b2e" ) );
+    pal.setColor( QPalette::Window, TomahawkStyle::PAGE_BACKGROUND );
 
     widget->setPalette( pal );
     widget->setAutoFillBackground( true );

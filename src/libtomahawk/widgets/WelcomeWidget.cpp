@@ -25,17 +25,18 @@
 #include "SourceList.h"
 #include "TomahawkSettings.h"
 #include "RecentPlaylistsModel.h"
+#include "RecentlyPlayedPlaylistsModel.h"
 #include "MetaPlaylistInterface.h"
 
 #include "audio/AudioEngine.h"
 #include "playlist/AlbumModel.h"
 #include "playlist/RecentlyPlayedModel.h"
+#include "playlist/dynamic/GeneratorInterface.h"
 #include "widgets/OverlayWidget.h"
 #include "utils/AnimatedSpinner.h"
+#include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
-#include "playlist/dynamic/GeneratorInterface.h"
-#include "RecentlyPlayedPlaylistsModel.h"
 
 #include <QPainter>
 
@@ -282,7 +283,7 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
         rect.setTop( pixmapRect.bottom() - painter->fontMetrics().height() - 1 );
         rect.setBottom( pixmapRect.bottom() + 1 );
 
-        QColor figColor( "#454e59" );
+        QColor figColor( TomahawkStyle::DASHBOARD_ROUNDFIGURE_BACKGROUND );
         painter->setPen( figColor );
         painter->setBrush( figColor );
 
@@ -319,6 +320,7 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     QColor c = painter->pen().color();
     if ( !( option.state & QStyle::State_Selected && option.state & QStyle::State_Active ) )
     {
+        //FIXME const color
         painter->setPen( QColor( Qt::gray ).darker() );
     }
 

@@ -213,8 +213,8 @@ SourceTreePopupDialog::paintEvent( QPaintEvent* event )
     TomahawkUtils::drawCompositedPopup( this,
                                         outline,
                                         TomahawkStyle::BORDER_LINE,
-                                        QColor( "#D6E3F1" ),
-                                        0.93 );
+                                        TomahawkStyle::POPUP_OSX_BACKGROUND,
+                                        TomahawkStyle::POPUP_OPACITY );
 #endif
 }
 

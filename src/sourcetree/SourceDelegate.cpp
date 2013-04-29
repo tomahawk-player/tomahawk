@@ -355,7 +355,7 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
 
         painter->setFont( figFont );
 
-        QColor figColor( 167, 183, 211 );
+        QColor figColor( TomahawkStyle::SIDEBAR_ROUNDFIGURE_BACKGROUND );
         painter->setPen( figColor );
         painter->setBrush( figColor );
 
@@ -529,9 +529,9 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         if ( m_gradient.finalStop() != itemsRect.bottomLeft() )
         {
             m_gradient = QLinearGradient( itemsRect.topLeft(), itemsRect.bottomLeft() );
-            m_gradient.setColorAt( 0.0, Qt::white );
-            m_gradient.setColorAt( 0.9, QColor( 0x88, 0x88, 0x88 ) );
-            m_gradient.setColorAt( 1.0, QColor( 0x99, 0x99, 0x99 ) ); // dark grey
+            m_gradient.setColorAt( 0.0, TomahawkStyle::SIDEBAR_LAZYLIST_UPPER );
+            m_gradient.setColorAt( 0.9, TomahawkStyle::SIDEBAR_LAZYLIST_LOWER );
+            m_gradient.setColorAt( 1.0, TomahawkStyle::SIDEBAR_LAZYLIST_LOWEST );
         }
 
         QPen pen = painter->pen();
@@ -661,7 +661,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 
                 painter->setFont( figFont );
 
-                QColor figColor( 239, 140, 51 );
+                QColor figColor( TomahawkStyle::SIDEBAR_ROUNDFIGURE_INBOX_BACKGROUND );
                 painter->setPen( figColor );
                 painter->setBrush( figColor );
 

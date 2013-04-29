@@ -66,7 +66,7 @@ ACLJobDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 
     QString mainText = QString( tr( "Allow %1 to\nconnect and stream from you?" ) ).arg( item->username() );
     //tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Displaying text:" << mainText;
- 
+
     const QRect rRect( opt.rect.left() + PADDING, opt.rect.top() + 4*PADDING, opt.rect.width() - 2*PADDING, opt.rect.height() - 2*PADDING );
     painter->drawText( rRect, Qt::AlignHCenter, mainText );
 
@@ -79,7 +79,7 @@ ACLJobDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     painter->setPen( Qt::white );
 
     int minPixels = 20;
-    
+
     QString allowBtnText = tr( "Allow Streaming" );
     int allowBtnWidth = fm.width( allowBtnText ) + 2 * PADDING;
     allowBtnRect = QRect( opt.rect.left() + thirds - allowBtnWidth / 2, opt.rect.bottom() - fm.height() - 4 * PADDING,  allowBtnWidth + 2 * PADDING, fm.height() + 2 * PADDING );
@@ -113,6 +113,7 @@ ACLJobDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex&
 void
 ACLJobDelegate::drawRoundedButton( QPainter* painter, const QRect& btnRect, bool red ) const
 {
+    //FIXME const colors
     if ( !red )
         TomahawkUtils::drawRoundedButton( painter, btnRect, QColor( 54, 127, 211 ), QColor( 43, 104, 182 ), QColor( 34, 85, 159 ), QColor( 35, 79, 147 ) );
     else
@@ -175,7 +176,7 @@ void
 ACLJobItem::createDelegate( QObject* parent )
 {
     tLog() << Q_FUNC_INFO;
-    
+
     if ( m_delegate )
         return;
 

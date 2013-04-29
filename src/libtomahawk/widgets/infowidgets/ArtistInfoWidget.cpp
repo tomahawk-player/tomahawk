@@ -37,6 +37,7 @@
 #include "GlobalActionManager.h"
 #include "Pipeline.h"
 #include "MetaPlaylistInterface.h"
+#include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
@@ -52,7 +53,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->setupUi( widget );
 
     QPalette pal = palette();
-    pal.setColor( QPalette::Window, QColor( "##272b2e" ) );
+    pal.setColor( QPalette::Window, TomahawkStyle::PAGE_BACKGROUND );
 
     widget->setPalette( pal );
     widget->setAutoFillBackground( true );

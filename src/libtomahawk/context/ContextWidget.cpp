@@ -93,7 +93,7 @@ ContextWidget::ContextWidget( QWidget* parent )
 
     ensurePolished();
     QPalette pal = palette();
-    pal.setBrush( QPalette::Window, QColor( "#272b2e" ) );
+    pal.setBrush( QPalette::Window, TomahawkStyle::FOOTNOTES_BACKGROUND );
     setPalette( pal );
 
     connect( ui->toggleButton, SIGNAL( clicked() ), SLOT( toggleSize() ) );

@@ -19,6 +19,7 @@
 
 #include "SlideSwitchButton.h"
 
+#include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtils.h"
 
 #include <QMouseEvent>
@@ -66,17 +67,17 @@ SlideSwitchButton::init()
     setMouseTracking( true );
 #endif
 
-    m_backCheckedColorTop = QColor( 8, 54, 134 );
-    m_backCheckedColorBottom = QColor( 118, 172, 240 );
-    m_backUncheckedColorTop = QColor( 128, 128, 128 );
-    m_backUncheckedColorBottom = QColor( 179, 179, 179 );
+    m_backCheckedColorTop = TomahawkStyle::SLIDESWITCH_CHECKED_TOP;
+    m_backCheckedColorBottom = TomahawkStyle::SLIDESWITCH_CHECKED_BOTTOM;
+    m_backUncheckedColorTop = TomahawkStyle::SLIDESWITCH_UNCHECKED_TOP;
+    m_backUncheckedColorBottom = TomahawkStyle::SLIDESWITCH_UNCHECKED_BOTTOM;
 
     m_baseColorTop = m_backUncheckedColorTop;
     m_baseColorBottom = m_backUncheckedColorBottom;
 
-    m_textColor = QColor( "#606060" );
-    setFocusPolicy( Qt::NoFocus );
+    m_textColor = TomahawkStyle::SLIDESWITCH_TEXT;
 
+    setFocusPolicy( Qt::NoFocus );
     m_knobX = 0.;
 
     m_textFont = font();
@@ -179,8 +180,8 @@ SlideSwitchButton::paintEvent( QPaintEvent* event )
 
     QLinearGradient gradient( 0, 0, 0, 1 );
     gradient.setCoordinateMode( QGradient::ObjectBoundingMode );
-    gradient.setColorAt( 0, m_baseColorTop );
-    gradient.setColorAt( 1, m_baseColorBottom );
+    gradient.setColorAt( 0, TomahawkStyle::SLIDESWITCH_UNCHECKED_TOP );
+    gradient.setColorAt( 1, TomahawkStyle::SLIDESWITCH_UNCHECKED_BOTTOM );
     painter.setBrush( gradient );
 
     QPainterPath borderPath;
@@ -275,6 +276,7 @@ SlideSwitchButton::createKnob()
 
     QLinearGradient gradient( 0, 0, 0, 1 );
     gradient.setCoordinateMode( QGradient::ObjectBoundingMode );
+    //FIXME const colors
     gradient.setColorAt( 0, Qt::white );
     gradient.setColorAt( 1, QColor( 223, 223, 223 ) );
 
