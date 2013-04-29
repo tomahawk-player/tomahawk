@@ -379,17 +379,17 @@ połączyć się i strumieniować od ciebie?</translation>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="662"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="661"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>Przepraszamy, Tomahawk nie mógł znaleźć utworu &apos;%1&apos; wykonawcy %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="686"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="685"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>Przepraszamy, Tomahawk nie mógł znaleźć wykonawcy &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="712"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="711"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>Przepraszamy, Tomahawk nie mógł znaleźć albumu &apos;%1&apos; wykonawcy %2</translation>
     </message>
@@ -957,7 +957,7 @@ połączyć się i strumieniować od ciebie?</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="370"/>
+        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="372"/>
         <source>Properties</source>
         <translation type="unfinished"/>
     </message>
