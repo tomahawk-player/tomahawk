@@ -34,6 +34,7 @@
     #include "SourceTreePopupDialog_mac.h"
 #endif
 
+#include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/ImageRegistry.h"
 
@@ -58,7 +59,7 @@ SourceTreePopupDialog::SourceTreePopupDialog()
     m_title = new QLabel( this );
     QFont titleFont = m_title->font();
     titleFont.setBold( true );
-    m_title->setStyleSheet( "color: " + TomahawkUtils::Colors::GROUP_HEADER.name() );
+    m_title->setStyleSheet( "color: " + TomahawkStyle::GROUP_HEADER.name() );
     titleFont.setPointSize( TomahawkUtils::defaultFontSize() + 1 );
     m_title->setFont( titleFont );
     m_title->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
@@ -84,7 +85,7 @@ SourceTreePopupDialog::SourceTreePopupDialog()
     m_separatorLine->setFixedHeight( 1 );
     m_separatorLine->setContentsMargins( 0, 0, 0, 0 );
     m_separatorLine->setStyleSheet( "QWidget { border-top: 1px solid " +
-                                    TomahawkUtils::Colors::BORDER_LINE.name() + "; }" );
+                                    TomahawkStyle::BORDER_LINE.name() + "; }" );
     m_layout->addWidget( m_separatorLine );
     m_layout->addWidget( m_label );
     m_layout->addWidget( m_buttons );
@@ -185,7 +186,7 @@ SourceTreePopupDialog::paintEvent( QPaintEvent* event )
 
     // Constants for painting
     const int leftTriangleWidth = 12;
-    const int cornerRounding = TomahawkUtils::POPUP_ROUNDING_RADIUS;
+    const int cornerRounding = TomahawkStyle::POPUP_ROUNDING_RADIUS;
     const int leftEdgeOffset = 2 /*margin*/ + leftTriangleWidth / 2;
     const QRect brect = rect().adjusted( 2, 3, -2, -3 );
 
@@ -205,13 +206,13 @@ SourceTreePopupDialog::paintEvent( QPaintEvent* event )
 #ifndef Q_OS_MAC
     TomahawkUtils::drawCompositedPopup( this,
                                         outline,
-                                        TomahawkUtils::Colors::BORDER_LINE,
-                                        TomahawkUtils::Colors::POPUP_BACKGROUND,
-                                        TomahawkUtils::POPUP_OPACITY );
+                                        TomahawkStyle::BORDER_LINE,
+                                        TomahawkStyle::POPUP_BACKGROUND,
+                                        TomahawkStyle::POPUP_OPACITY );
 #else
     TomahawkUtils::drawCompositedPopup( this,
                                         outline,
-                                        TomahawkUtils::Colors::BORDER_LINE,
+                                        TomahawkStyle::BORDER_LINE,
                                         QColor( "#D6E3F1" ),
                                         0.93 );
 #endif

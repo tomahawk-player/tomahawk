@@ -25,7 +25,7 @@
 #include <QWidget>
 
 #include "utils/Logger.h"
-#include "utils/TomahawkUtilsGui.h"
+#include "utils/TomahawkStyle.h"
 
 #define ARROW_WIDTH 7
 #define ARROW_HEIGHT 7
@@ -89,7 +89,7 @@ ProxyStyle::drawControl( ControlElement ce, const QStyleOption* opt, QPainter* p
         const QSplitter* splitter = qobject_cast< const QSplitter* >( w );
         if ( !splitter->sizes().contains( 0 ) )
         {
-            p->setPen( TomahawkUtils::Colors::BORDER_LINE );
+            p->setPen( TomahawkStyle::BORDER_LINE );
             // We must special-case this because of the AnimatedSplitterHandle which has a
             // SizeHint of 0,0.
             if( splitter->orientation() == Qt::Vertical )

@@ -35,6 +35,7 @@
 #include "playlist/PlayableItem.h"
 #include "playlist/PlayableProxyModel.h"
 #include "widgets/ImageButton.h"
+#include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/PixmapDelegateFader.h"
 #include "utils/Closure.h"
@@ -198,7 +199,7 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     painter->drawRect( gradientRect );
     painter->restore();
 
-    painter->setPen( TomahawkUtils::Colors::SELECTION_FOREGROUND );
+    painter->setPen( TomahawkStyle::SELECTION_FOREGROUND );
 
     QRect textRect = option.rect.adjusted( 6, option.rect.height() - frameHeight, -6, -6 );
     bool oneLiner = false;
@@ -226,7 +227,7 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
         if ( m_hoveringOver == index )
         {
             TomahawkUtils::drawQueryBackground( painter, r );
-            painter->setPen( TomahawkUtils::Colors::SELECTION_FOREGROUND );
+            painter->setPen( TomahawkStyle::SELECTION_FOREGROUND );
         }
 
         to.setAlignment( Qt::AlignHCenter | Qt::AlignBottom );

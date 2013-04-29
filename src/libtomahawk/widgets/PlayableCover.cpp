@@ -24,6 +24,7 @@
 #include "ViewManager.h"
 #include "audio/AudioEngine.h"
 #include "widgets/ImageButton.h"
+#include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
@@ -273,7 +274,7 @@ PlayableCover::paintEvent( QPaintEvent* event )
         if ( m_hoveredRect == r )
         {
             TomahawkUtils::drawQueryBackground( &bufpainter, r );
-            bufpainter.setPen( TomahawkUtils::Colors::SELECTION_FOREGROUND );
+            bufpainter.setPen( TomahawkStyle::SELECTION_FOREGROUND );
         }
 
         to.setAlignment( Qt::AlignHCenter | Qt::AlignBottom );

@@ -22,6 +22,7 @@
 #include "accounts/AccountManager.h"
 #include "AccountWidget.h"
 #include "utils/ImageRegistry.h"
+#include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
@@ -55,14 +56,14 @@ AccountListWidget::AccountListWidget( AccountModelFactoryProxy* model, QWidget* 
     separatorLine->setFixedHeight( 1 );
     separatorLine->setContentsMargins( 0, 0, 0, 0 );
     separatorLine->setStyleSheet( "QWidget { border-top: 1px solid " +
-                                  TomahawkUtils::Colors::BORDER_LINE.name() + "; }" ); //from ProxyStyle
+                                  TomahawkStyle::BORDER_LINE.name() + "; }" ); //from ProxyStyle
     mainLayout->insertWidget( 0, separatorLine );
     mainLayout->addSpacing( 6 );
 
     QLabel *connectionsLabel = new QLabel( tr( "Connections" ).toUpper(), this );
     QFont clFont = connectionsLabel->font();
     clFont.setBold( true );
-    connectionsLabel->setStyleSheet( "color: " + TomahawkUtils::Colors::GROUP_HEADER.name() );
+    connectionsLabel->setStyleSheet( "color: " + TomahawkStyle::GROUP_HEADER.name() );
     clFont.setPointSize( TomahawkUtils::defaultFontSize() + 1 );
     connectionsLabel->setFont( clFont );
     connectionsLabel->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );

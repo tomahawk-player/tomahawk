@@ -24,6 +24,7 @@
 #include "accounts/AccountModel.h"
 #include "accounts/AccountManager.h"
 #include "sip/SipPlugin.h"
+#include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/AnimatedSpinner.h"
 #include "widgets/ElidedLabel.h"
@@ -102,7 +103,7 @@ AccountWidget::AccountWidget( QWidget* parent )
 
     m_inviteContainer = new UnstyledFrame( this );
     vLayout->addWidget( m_inviteContainer, 1, 0 );
-    m_inviteContainer->setFrameColor( TomahawkUtils::Colors::BORDER_LINE );
+    m_inviteContainer->setFrameColor( TomahawkStyle::BORDER_LINE );
     m_inviteContainer->setMinimumWidth( m_inviteContainer->logicalDpiX() * 2 );
     m_inviteContainer->setContentsMargins( 1, 1, 1, 2 );
     m_inviteContainer->setAttribute( Qt::WA_TranslucentBackground, false );

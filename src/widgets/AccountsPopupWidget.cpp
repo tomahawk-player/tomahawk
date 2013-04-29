@@ -19,6 +19,7 @@
 
 #include "AccountsPopupWidget.h"
 
+#include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 
 #include <QDebug>
@@ -92,7 +93,7 @@ void
 AccountsPopupWidget::paintEvent( QPaintEvent* )
 {
     // Constants for painting
-    const int cornerRadius = TomahawkUtils::POPUP_ROUNDING_RADIUS;   //the rounding radius of the widget
+    const int cornerRadius = TomahawkStyle::POPUP_ROUNDING_RADIUS;   //the rounding radius of the widget
     const int arrowHeight = 6;
 
     //m_arrowOffset is the distance between the far right boundary and the x value of the arrow head.
@@ -111,9 +112,9 @@ AccountsPopupWidget::paintEvent( QPaintEvent* )
 
     TomahawkUtils::drawCompositedPopup( this,
                                         outline,
-                                        TomahawkUtils::Colors::BORDER_LINE,
-                                        TomahawkUtils::Colors::POPUP_BACKGROUND,
-                                        TomahawkUtils::POPUP_OPACITY );
+                                        TomahawkStyle::BORDER_LINE,
+                                        TomahawkStyle::POPUP_BACKGROUND,
+                                        TomahawkStyle::POPUP_OPACITY );
 }
 
 

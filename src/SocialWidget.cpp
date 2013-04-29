@@ -24,6 +24,7 @@
 #include "Source.h"
 
 #include "utils/ImageRegistry.h"
+#include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
@@ -70,7 +71,7 @@ SocialWidget::SocialWidget( QWidget* parent )
     ui->buttonBox->button( QDialogButtonBox::Ok )->setIcon( ImageRegistry::instance()->icon( RESPATH "images/tweet.svg" ) );
     ui->buttonBox->button( QDialogButtonBox::Cancel )->setIcon( ImageRegistry::instance()->icon( RESPATH "images/cancel.svg" ) );
 
-    ui->textEdit->setStyleSheet( "border: 1px solid " + TomahawkUtils::Colors::BORDER_LINE.name() );
+    ui->textEdit->setStyleSheet( "border: 1px solid " + TomahawkStyle::BORDER_LINE.name() );
 
     m_parent->installEventFilter( this );
 
@@ -144,16 +145,16 @@ SocialWidget::paintEvent( QPaintEvent* event )
     QPainterPath outline;
 
     QRect r = contentsRect();
-    outline.addRoundedRect( r, TomahawkUtils::POPUP_ROUNDING_RADIUS, TomahawkUtils::POPUP_ROUNDING_RADIUS );
+    outline.addRoundedRect( r, TomahawkStyle::POPUP_ROUNDING_RADIUS, TomahawkStyle::POPUP_ROUNDING_RADIUS );
     outline.moveTo( r.right() - ARROW_HEIGHT * 2, r.bottom() + 1 );
     outline.lineTo( r.right() - ARROW_HEIGHT * 3, r.bottom() + 1 + ARROW_HEIGHT );
     outline.lineTo( r.right() - ARROW_HEIGHT * 4, r.bottom() + 1 );
 
     TomahawkUtils::drawCompositedPopup( this,
                                         outline,
-                                        TomahawkUtils::Colors::BORDER_LINE,
-                                        TomahawkUtils::Colors::POPUP_BACKGROUND,
-                                        TomahawkUtils::POPUP_OPACITY );
+                                        TomahawkStyle::BORDER_LINE,
+                                        TomahawkStyle::POPUP_BACKGROUND,
+                                        TomahawkStyle::POPUP_OPACITY );
 }
 
 

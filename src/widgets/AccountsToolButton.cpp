@@ -20,6 +20,7 @@
 
 #include "AccountListWidget.h"
 #include "accounts/AccountManager.h"
+#include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 
 #include <QLabel>
@@ -78,7 +79,7 @@ AccountsToolButton::AccountsToolButton( QWidget* parent )
     separatorLine->setFixedHeight( 1 );
     separatorLine->setContentsMargins( 0, 0, 0, 0 );
     separatorLine->setStyleSheet( "QWidget { border-top: 1px solid " +
-                                  TomahawkUtils::Colors::BORDER_LINE.name() + "; }" ); //from ProxyStyle
+                                  TomahawkStyle::BORDER_LINE.name() + "; }" ); //from ProxyStyle
     wMainLayout->addWidget( separatorLine );
 
     wMainLayout->addSpacing( 6 );

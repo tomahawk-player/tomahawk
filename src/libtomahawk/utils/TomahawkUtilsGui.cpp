@@ -26,6 +26,7 @@
 #include "Result.h"
 #include "Source.h"
 #include "ImageRegistry.h"
+#include "TomahawkStyle.h"
 #include "Logger.h"
 
 #include <QLayout>
@@ -206,8 +207,8 @@ drawQueryBackground( QPainter* p, const QRect& r )
 {
     p->save();
 
-    p->setPen( Colors::SELECTION_BACKGROUND );
-    p->setBrush( Colors::SELECTION_BACKGROUND );
+    p->setPen( TomahawkStyle::SELECTION_BACKGROUND );
+    p->setBrush( TomahawkStyle::SELECTION_BACKGROUND );
     p->drawRoundedRect( r, 4.0, 4.0 );
 
     p->restore();
@@ -739,9 +740,9 @@ prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, Pl
 
     if ( item->isPlaying() )
     {
-        option->backgroundBrush = TomahawkUtils::Colors::NOW_PLAYING_ITEM;
-        option->palette.setColor( QPalette::Highlight, TomahawkUtils::Colors::NOW_PLAYING_ITEM.lighter() );
-        option->palette.setColor( QPalette::Text, TomahawkUtils::Colors::NOW_PLAYING_ITEM_TEXT );
+        option->backgroundBrush = TomahawkStyle::NOW_PLAYING_ITEM;
+        option->palette.setColor( QPalette::Highlight, TomahawkStyle::NOW_PLAYING_ITEM.lighter() );
+        option->palette.setColor( QPalette::Text, TomahawkStyle::NOW_PLAYING_ITEM_TEXT );
 
     }
     else if ( option->state & QStyle::State_Selected )

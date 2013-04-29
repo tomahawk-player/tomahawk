@@ -22,6 +22,7 @@
 #include "Album.h"
 #include "Query.h"
 #include "ContextMenu.h"
+#include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 #include "ViewManager.h"
@@ -380,8 +381,8 @@ QueryLabel::paintEvent( QPaintEvent* event )
     {
         if ( m_hoverArea.width() )
         {
-            p.setBrush( TomahawkUtils::Colors::SELECTION_BACKGROUND );
-            p.setPen( TomahawkUtils::Colors::SELECTION_FOREGROUND );
+            p.setBrush( TomahawkStyle::SELECTION_BACKGROUND );
+            p.setPen( TomahawkStyle::SELECTION_FOREGROUND );
         }
         else
         {
@@ -405,8 +406,8 @@ QueryLabel::paintEvent( QPaintEvent* event )
 
             if ( m_hoverType == Artist )
             {
-                p.setBrush( TomahawkUtils::Colors::SELECTION_BACKGROUND );
-                p.setPen( TomahawkUtils::Colors::SELECTION_FOREGROUND );
+                p.setBrush( TomahawkStyle::SELECTION_BACKGROUND );
+                p.setPen( TomahawkStyle::SELECTION_FOREGROUND );
             }
 
             p.drawText( r, m_align, artist()->name() );
@@ -424,8 +425,8 @@ QueryLabel::paintEvent( QPaintEvent* event )
             }
             if ( m_hoverType == Album )
             {
-                p.setBrush( TomahawkUtils::Colors::SELECTION_BACKGROUND );
-                p.setPen( TomahawkUtils::Colors::SELECTION_FOREGROUND );
+                p.setBrush( TomahawkStyle::SELECTION_BACKGROUND );
+                p.setPen( TomahawkStyle::SELECTION_FOREGROUND );
             }
 
             p.drawText( r, m_align, album()->name() );
@@ -443,8 +444,8 @@ QueryLabel::paintEvent( QPaintEvent* event )
             }
             if ( m_hoverType == Track )
             {
-                p.setBrush( TomahawkUtils::Colors::SELECTION_BACKGROUND );
-                p.setPen( TomahawkUtils::Colors::SELECTION_FOREGROUND );
+                p.setBrush( TomahawkStyle::SELECTION_BACKGROUND );
+                p.setPen( TomahawkStyle::SELECTION_FOREGROUND );
             }
 
             p.drawText( r, m_align, track() );

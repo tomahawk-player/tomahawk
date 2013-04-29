@@ -28,6 +28,7 @@
 #include "Query.h"
 #include "Result.h"
 
+#include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 #include "utils/Closure.h"
@@ -122,9 +123,9 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
 
             if ( item->isPlaying() )
             {
-                textColor = TomahawkUtils::Colors::NOW_PLAYING_ITEM_TEXT;
-                o.palette.setColor( QPalette::Highlight, TomahawkUtils::Colors::NOW_PLAYING_ITEM );
-                o.palette.setColor( QPalette::Text, TomahawkUtils::Colors::NOW_PLAYING_ITEM_TEXT );
+                textColor = TomahawkStyle::NOW_PLAYING_ITEM_TEXT;
+                o.palette.setColor( QPalette::Highlight, TomahawkStyle::NOW_PLAYING_ITEM );
+                o.palette.setColor( QPalette::Text, TomahawkStyle::NOW_PLAYING_ITEM_TEXT );
                 o.state |= QStyle::State_Selected;
             }
 
