@@ -55,7 +55,10 @@ track_ptr
 Track::get( const QString& artist, const QString& track, const QString& album, int duration, const QString& composer, unsigned int albumpos, unsigned int discnumber )
 {
     if ( artist.trimmed().isEmpty() || track.trimmed().isEmpty() )
+    {
+        Q_ASSERT( false );
         return track_ptr();
+    }
 
     QMutexLocker lock( &s_mutex );
     const QString key = cacheKey( artist, track, album, duration, composer, albumpos, discnumber );
