@@ -25,27 +25,6 @@
 #include <QStyleOption>>
 
 
-QColor
-TomahawkStyle::headerUpperColor()
-{
-    return QColor( "#25292c" );
-}
-
-
-QColor
-TomahawkStyle::headerLowerColor()
-{
-    return QColor( "#707070" );
-}
-
-
-QColor
-TomahawkStyle::headerHighlightColor()
-{
-    return QColor( "#333" );
-}
-
-
 void
 TomahawkStyle::horizontalHeader( QPainter* painter, const QRect& r )
 {
@@ -57,8 +36,8 @@ TomahawkStyle::horizontalHeader( QPainter* painter, const QRect& r )
      painter->fillRect( lowerHalf, TomahawkStyle::headerLowerColor() );*/
     QLinearGradient gradient( QPoint( 0, 0 ), QPoint( 0, 1 ) );
     gradient.setCoordinateMode( QGradient::ObjectBoundingMode );
-    gradient.setColorAt( 0.0, TomahawkStyle::headerLowerColor() );
-    gradient.setColorAt( 1.0, TomahawkStyle::headerUpperColor() );
+    gradient.setColorAt( 0.0, TomahawkStyle::HEADER_LOWER );
+    gradient.setColorAt( 1.0, TomahawkStyle::HEADER_UPPER );
 
     painter->setBrush( gradient );
     painter->fillRect( r, gradient );
@@ -77,13 +56,6 @@ TomahawkStyle::horizontalHeader( QPainter* painter, const QRect& r )
      }*/
 
     painter->restore();
-}
-
-
-QColor
-TomahawkStyle::headerTextColor()
-{
-    return QColor( "#eaeaea" );
 }
 
 

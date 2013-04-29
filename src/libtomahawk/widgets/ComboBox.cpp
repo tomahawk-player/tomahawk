@@ -68,7 +68,7 @@ ComboBox::paintEvent( QPaintEvent* )
         highlightRect.setSize( hS );
         highlightRect.translate( 0, 2 );
         p.setRenderHint( QPainter::Antialiasing );
-        p.setBrush( TomahawkStyle::headerHighlightColor() );
+        p.setBrush( TomahawkStyle::HEADER_HIGHLIGHT );
         p.drawRoundedRect( highlightRect, 10.0, 10.0 );
         p.restore();
     }
@@ -77,7 +77,7 @@ ComboBox::paintEvent( QPaintEvent* )
     QTextOption to( Qt::AlignVCenter );
     r.adjust( 8, 0, -8, 0 );
     p.setPen( Qt::white );
-    p.setBrush( TomahawkStyle::headerTextColor() );
+    p.setBrush( TomahawkStyle::HEADER_TEXT );
     p.drawText( r, cb.currentText, to );
 
     bool reverse = cb.direction == Qt::RightToLeft;

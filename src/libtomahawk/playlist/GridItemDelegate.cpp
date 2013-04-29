@@ -157,8 +157,8 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     {
         painter->save();
 
-        painter->setPen( QColor( "dddddd" ) );
-        painter->setBrush( QColor( "#dddddd" ) );
+        painter->setPen( TomahawkStyle::HOVER_GLOW );
+        painter->setBrush( TomahawkStyle::HOVER_GLOW );
         painter->setOpacity( opacity );
         painter->drawRect( r );
 

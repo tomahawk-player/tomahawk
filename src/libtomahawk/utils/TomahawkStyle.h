@@ -29,23 +29,6 @@
 namespace TomahawkStyle
 {
     /**
-     * Our header BG is a two color gradient. This is the upper color.
-     */
-    DLLEXPORT QColor headerUpperColor();
-    /**
-     * Our header BG is a two color gradient. This is the lower color.
-     */
-    DLLEXPORT QColor headerLowerColor();
-    /**
-     * The color of text on a Header.
-     */
-    DLLEXPORT QColor headerTextColor();
-    /**
-     * The widget highlight color for headers
-     */
-    DLLEXPORT QColor headerHighlightColor();
-
-    /**
      * Draws a header background on a painter with the specified rectangle
      */
     DLLEXPORT void horizontalHeader( QPainter* painter, const QRect& rect );
@@ -61,11 +44,17 @@ namespace TomahawkStyle
     static const QColor BORDER_LINE = QColor( "#8c8c8c" );
     static const QColor POPUP_BACKGROUND = QColor( "#ffffff" );
     static const QColor GROUP_HEADER = QColor( "#637180" );
+    static const QColor HOVER_GLOW = QColor( "#dddddd" );
+
     static const QColor NOW_PLAYING_ITEM = QColor( "#962c26" );
     static const QColor NOW_PLAYING_ITEM_TEXT = QColor( "#ffffff" );
     static const QColor SELECTION_BACKGROUND = QColor( "#962c26" );
     static const QColor SELECTION_FOREGROUND = QColor( "#ffffff" );
-    static const QColor HEADER = QColor( "#ffffff" );
+
+    static const QColor HEADER_UPPER = QColor( "#25292c" );
+    static const QColor HEADER_LOWER = QColor( "#707070" );
+    static const QColor HEADER_TEXT = QColor( "#eaeaea" );
+    static const QColor HEADER_HIGHLIGHT = QColor( "#333" );
 
     static const int POPUP_ROUNDING_RADIUS = 6;
     static const float POPUP_OPACITY = 0.96;

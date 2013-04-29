@@ -33,8 +33,8 @@ ContextProxyPage::paint( QPainter* painter, const QStyleOptionGraphicsItem* opti
     painter->save();
 
     painter->setRenderHint( QPainter::Antialiasing, true );
-    painter->setPen( TomahawkStyle::headerHighlightColor() );
-    painter->setBrush( TomahawkStyle::headerHighlightColor() );
+    painter->setPen( TomahawkStyle::HEADER_HIGHLIGHT );
+    painter->setBrush( TomahawkStyle::HEADER_HIGHLIGHT );
     painter->drawRoundedRect( option->rect, 4.0, 4.0 );
 
     QFont f( font() );

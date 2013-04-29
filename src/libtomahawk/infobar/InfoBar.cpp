@@ -26,12 +26,13 @@
 #include <QPaintEvent>
 #include <QPainter>
 
+#include "Source.h"
 #include "ViewManager.h"
 #include "thirdparty/Qocoa/qsearchfield.h"
+#include "widgets/QueryLabel.h"
+#include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
-#include "widgets/QueryLabel.h"
-#include "Source.h"
 
 #define ANIMATION_TIME 400
 #define IMAGE_HEIGHT 64
@@ -292,8 +293,8 @@ InfoBar::paintEvent( QPaintEvent* event )
 
     QLinearGradient gradient( QPoint( 0, 0 ), QPoint( 0, 1 ) );
     gradient.setCoordinateMode( QGradient::ObjectBoundingMode );
-    gradient.setColorAt( 0.0, QColor( "#707070" ) );
-    gradient.setColorAt( 1.0, QColor( "#25292c" ) );
+    gradient.setColorAt( 0.0, TomahawkStyle::HEADER_LOWER );
+    gradient.setColorAt( 1.0, TomahawkStyle::HEADER_LOWER );
 
     painter.setBrush( gradient );
     painter.fillRect( rect(), gradient );

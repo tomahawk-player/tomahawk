@@ -107,6 +107,6 @@ HeaderLabel::paintEvent( QPaintEvent* /* event */ )
 
     QTextOption to( alignment() | Qt::AlignVCenter );
     r.adjust( 8, 0, -8, 0 );
-    p.setPen( TomahawkStyle::headerTextColor() );
+    p.setPen( TomahawkStyle::HEADER_TEXT );
     p.drawText( r, text(), to );
 }

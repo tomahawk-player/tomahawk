@@ -89,15 +89,15 @@ ToggleButton::paintEvent( QPaintEvent* event )
 
         if ( isChecked() )
         {
-            p.setBrush( TomahawkStyle::headerHighlightColor() );
+            p.setBrush( TomahawkStyle::HEADER_HIGHLIGHT );
         }
         else if ( false )
         {
-            p.setBrush( TomahawkStyle::headerLowerColor() );
+            p.setBrush( TomahawkStyle::HEADER_LOWER );
         }
         else
         {
-            p.setBrush( TomahawkStyle::headerUpperColor() );
+            p.setBrush( TomahawkStyle::HEADER_UPPER );
         }
 
         p.drawRoundedRect( highlightRect, 4.0, 4.0 );
@@ -105,7 +105,7 @@ ToggleButton::paintEvent( QPaintEvent* event )
 
     QTextOption to( Qt::AlignCenter );
     r.adjust( 8, 0, -8, 0 );
-    p.setBrush( TomahawkStyle::headerTextColor() );
+    p.setBrush( TomahawkStyle::HEADER_TEXT );
     p.drawText( r, text(), to );
 
     p.restore();
