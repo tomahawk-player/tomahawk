@@ -180,8 +180,8 @@ SlideSwitchButton::paintEvent( QPaintEvent* event )
 
     QLinearGradient gradient( 0, 0, 0, 1 );
     gradient.setCoordinateMode( QGradient::ObjectBoundingMode );
-    gradient.setColorAt( 0, TomahawkStyle::SLIDESWITCH_UNCHECKED_TOP );
-    gradient.setColorAt( 1, TomahawkStyle::SLIDESWITCH_UNCHECKED_BOTTOM );
+    gradient.setColorAt( 0, m_baseColorTop );
+    gradient.setColorAt( 1, m_baseColorBottom );
     painter.setBrush( gradient );
 
     QPainterPath borderPath;
