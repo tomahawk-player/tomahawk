@@ -76,9 +76,6 @@ namespace TomahawkUtils
     DLLEXPORT QPixmap squareCenterPixmap( const QPixmap& sourceImage );
 
     DLLEXPORT void drawCompositedPopup( QWidget* widget, const QPainterPath& outline, const QColor& lineColor, const QBrush& backgroundBrush, qreal opacity );
-
-    static const int POPUP_ROUNDING_RADIUS = 6;
-    static const float POPUP_OPACITY = 0.96;
 }
 
 #endif // TOMAHAWKUTILSGUI_H

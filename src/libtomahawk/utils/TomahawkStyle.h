@@ -16,15 +16,15 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TOMAHAWKCOLORS_H
-#define TOMAHAWKCOLORS_H
+#ifndef TOMAHAWKSTYLE_H
+#define TOMAHAWKSTYLE_H
 
 #include "TomahawkUtils.h"
 #include "DllMacro.h"
 
 #include <QColor>
 
-namespace TomahawkColors
+namespace TomahawkStyle
 {
     static const QColor BORDER_LINE = QColor( "#8c8c8c" );
     static const QColor POPUP_BACKGROUND = QColor( "#ffffff" );
@@ -33,6 +33,9 @@ namespace TomahawkColors
     static const QColor NOW_PLAYING_ITEM_TEXT = QColor( "#ffffff" );
     static const QColor SELECTION_BACKGROUND = QColor( "#962c26" );
     static const QColor SELECTION_FOREGROUND = QColor( "#ffffff" );
+
+    static const int POPUP_ROUNDING_RADIUS = 6;
+    static const float POPUP_OPACITY = 0.96;
 }
 
-#endif // TOMAHAWKCOLORS_H
+#endif // TOMAHAWKSTYLE_H
