@@ -15,11 +15,12 @@ Version 0.7.0:
       albums. Double-clicking an item expands it now.
     * Charts only load on-demand now.
     * Fixed Diagnostics information not correctly updating.
+    * Fixed issue with hidden sidebar and panels.
+    * Fixed issues with some color schemes.
+    * Fixed playing files with special characters in the filename.
+    * Improved stability.
     * Added translations for Catalan, Czech, Galician, Greek, Italian and
       Chinese.
-    * Fixed issue with hidden sidebar and panels.
-    * Improved stability.
-    * Fixed issues with some color schemes.
     * (Windows) Smoother and more responsive audio playback.
     * (Linux) Fixed grid issues with GTK-styles.
 
