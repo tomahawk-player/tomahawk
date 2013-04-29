@@ -20,7 +20,7 @@
 #include "ToggleButton.h"
 
 #include "widgets/HeaderLabel.h"
-#include "utils/StyleHelper.h"
+#include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 
 #include <QStylePainter>
@@ -71,12 +71,12 @@ void
 ToggleButton::paintEvent( QPaintEvent* event )
 {
     Q_UNUSED( event );
-    
+
     QPainter p( this );
 
     p.save();
     QRect r = contentsRect();
-    StyleHelper::horizontalHeader( &p, r );
+    TomahawkStyle::horizontalHeader( &p, r );
     p.restore();
 
     p.save();
@@ -89,15 +89,15 @@ ToggleButton::paintEvent( QPaintEvent* event )
 
         if ( isChecked() )
         {
-            p.setBrush( StyleHelper::headerHighlightColor() );
+            p.setBrush( TomahawkStyle::headerHighlightColor() );
         }
         else if ( false )
         {
-            p.setBrush( StyleHelper::headerLowerColor() );
+            p.setBrush( TomahawkStyle::headerLowerColor() );
         }
         else
         {
-            p.setBrush( StyleHelper::headerUpperColor() );
+            p.setBrush( TomahawkStyle::headerUpperColor() );
         }
 
         p.drawRoundedRect( highlightRect, 4.0, 4.0 );
@@ -105,7 +105,7 @@ ToggleButton::paintEvent( QPaintEvent* event )
 
     QTextOption to( Qt::AlignCenter );
     r.adjust( 8, 0, -8, 0 );
-    p.setBrush( StyleHelper::headerTextColor() );
+    p.setBrush( TomahawkStyle::headerTextColor() );
     p.drawText( r, text(), to );
 
     p.restore();

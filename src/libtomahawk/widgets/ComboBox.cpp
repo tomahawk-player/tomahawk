@@ -18,7 +18,7 @@
 
 #include "ComboBox.h"
 
-#include "utils/StyleHelper.h"
+#include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
@@ -56,7 +56,7 @@ ComboBox::paintEvent( QPaintEvent* )
     QRect r = cb.rect;
     r.setHeight( TomahawkUtils::defaultFontHeight() + 8 );
 
-    StyleHelper::horizontalHeader( &p, r );
+    TomahawkStyle::horizontalHeader( &p, r );
 
     if ( cb.state & QStyle::State_MouseOver )
     {
@@ -68,7 +68,7 @@ ComboBox::paintEvent( QPaintEvent* )
         highlightRect.setSize( hS );
         highlightRect.translate( 0, 2 );
         p.setRenderHint( QPainter::Antialiasing );
-        p.setBrush( StyleHelper::headerHighlightColor() );
+        p.setBrush( TomahawkStyle::headerHighlightColor() );
         p.drawRoundedRect( highlightRect, 10.0, 10.0 );
         p.restore();
     }
@@ -77,7 +77,7 @@ ComboBox::paintEvent( QPaintEvent* )
     QTextOption to( Qt::AlignVCenter );
     r.adjust( 8, 0, -8, 0 );
     p.setPen( Qt::white );
-    p.setBrush( StyleHelper::headerTextColor() );
+    p.setBrush( TomahawkStyle::headerTextColor() );
     p.drawText( r, cb.currentText, to );
 
     bool reverse = cb.direction == Qt::RightToLeft;
@@ -88,6 +88,6 @@ ComboBox::paintEvent( QPaintEvent* )
 
     QStyleOption arrowOpt = cb;
     arrowOpt.rect = arrowRect;
-    StyleHelper::drawArrow( QStyle::PE_IndicatorArrowDown, &p, &arrowOpt );
+    TomahawkStyle::drawArrow( QStyle::PE_IndicatorArrowDown, &p, &arrowOpt );
     p.restore();
 }

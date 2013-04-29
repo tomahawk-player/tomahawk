@@ -19,9 +19,9 @@
 #include "Breadcrumb.h"
 
 #include "BreadcrumbButton.h"
-#include "utils/StyleHelper.h"
-#include "utils/Logger.h"
+#include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
+#include "utils/Logger.h"
 
 #include <QStylePainter>
 #include <QPushButton>
@@ -83,7 +83,7 @@ void
 Breadcrumb::paintEvent( QPaintEvent* )
 {
     QStylePainter p( this );
-    StyleHelper::horizontalHeader( &p, rect() );
+    TomahawkStyle::horizontalHeader( &p, rect() );
 }
 
 

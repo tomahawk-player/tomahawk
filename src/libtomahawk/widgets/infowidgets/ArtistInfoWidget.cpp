@@ -37,7 +37,6 @@
 #include "GlobalActionManager.h"
 #include "Pipeline.h"
 #include "MetaPlaylistInterface.h"
-#include "utils/StyleHelper.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 

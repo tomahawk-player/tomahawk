@@ -23,7 +23,7 @@
 #include <QMouseEvent>
 
 #include "utils/Logger.h"
-#include "utils/StyleHelper.h"
+#include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 
 
@@ -59,11 +59,11 @@ void
 HeaderLabel::mousePressEvent( QMouseEvent* event )
 {
     QFrame::mousePressEvent( event );
-    
+
     if ( !m_moved )
     {
         m_time.start();
-        
+
         m_pressed = true;
         m_dragPoint = event->pos();
     }
@@ -103,10 +103,10 @@ HeaderLabel::paintEvent( QPaintEvent* /* event */ )
 {
     QPainter p( this );
     QRect r = contentsRect();
-    StyleHelper::horizontalHeader( &p, r );
+    TomahawkStyle::horizontalHeader( &p, r );
 
     QTextOption to( alignment() | Qt::AlignVCenter );
     r.adjust( 8, 0, -8, 0 );
-    p.setPen( StyleHelper::headerTextColor() );
+    p.setPen( TomahawkStyle::headerTextColor() );
     p.drawText( r, text(), to );
 }

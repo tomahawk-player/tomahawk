@@ -21,7 +21,7 @@
 
 #include "Breadcrumb.h"
 #include "ComboBox.h"
-#include "utils/StyleHelper.h"
+#include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
@@ -107,7 +107,7 @@ BreadcrumbButton::paintEvent( QPaintEvent* )
 {
     QPainter p( this );
 
-    StyleHelper::horizontalHeader( &p, rect() ); // draw the background
+    TomahawkStyle::horizontalHeader( &p, rect() ); // draw the background
     m_arrow->setVisible( hasChildren() );
 }
 

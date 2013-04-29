@@ -21,7 +21,7 @@
 #include <QGraphicsLinearLayout>
 
 #include "PlaylistInterface.h"
-#include "utils/StyleHelper.h"
+#include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 
 using namespace Tomahawk;
@@ -33,8 +33,8 @@ ContextProxyPage::paint( QPainter* painter, const QStyleOptionGraphicsItem* opti
     painter->save();
 
     painter->setRenderHint( QPainter::Antialiasing, true );
-    painter->setPen( StyleHelper::headerHighlightColor() );
-    painter->setBrush( StyleHelper::headerHighlightColor() );
+    painter->setPen( TomahawkStyle::headerHighlightColor() );
+    painter->setBrush( TomahawkStyle::headerHighlightColor() );
     painter->drawRoundedRect( option->rect, 4.0, 4.0 );
 
     QFont f( font() );

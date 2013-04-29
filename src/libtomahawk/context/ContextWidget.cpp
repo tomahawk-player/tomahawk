@@ -31,7 +31,7 @@
 
 #include "Source.h"
 
-#include "utils/StyleHelper.h"
+#include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 
 #define ANIMATION_TIME 450

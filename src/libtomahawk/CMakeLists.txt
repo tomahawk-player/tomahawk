@@ -106,7 +106,7 @@ set( libGuiSources
     utils/ShortenedLinkParser.cpp
     utils/SoundcloudParser.cpp
     utils/ExfmParser.cpp
-    utils/StyleHelper.cpp
+    utils/TomahawkStyle.cpp
     utils/DropJobNotifier.cpp
     utils/ProxyStyle.cpp
     utils/TomahawkUtilsGui.cpp
