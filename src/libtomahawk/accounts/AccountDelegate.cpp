@@ -305,6 +305,7 @@ AccountDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option, 
     {
         painter->save();
         painter->setFont( authorFont );
+        //FIXME const color
         painter->setPen( QColor( Qt::gray ).darker( 150 ) );
         const int authorWidth = authorMetrics.width( author );
         const QRect authorRect( textRect.left(),  textRect.bottom() + PADDING/2, authorWidth + 6, authorMetrics.height() );
@@ -549,6 +550,7 @@ AccountDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QS
 void
 AccountDelegate::drawRoundedButton( QPainter* painter, const QRect& btnRect, bool red ) const
 {
+    //FIXME const colors
     if ( !red )
         TomahawkUtils::drawRoundedButton( painter, btnRect, QColor(54, 127, 211), QColor(43, 104, 182), QColor(34, 85, 159), QColor(35, 79, 147) );
     else
