@@ -728,9 +728,6 @@ QtScriptResolver::parseResultVariantList( const QVariantList& reslist )
     foreach( const QVariant& rv, reslist )
     {
         QVariantMap m = rv.toMap();
-        if ( m.value( "artist" ).toString().trimmed().isEmpty() || m.value( "track" ).toString().trimmed().isEmpty() )
-            continue;
-
         // TODO we need to handle preview urls separately. they should never trump a real url, and we need to display
         // the purchaseUrl for the user to upgrade to a full stream.
         if ( m.value( "preview" ).toBool() == true )
@@ -744,7 +741,18 @@ QtScriptResolver::parseResultVariantList( const QVariantList& reslist )
         }
 
         Tomahawk::result_ptr rp = Tomahawk::Result::get( m.value( "url" ).toString() );
-        Tomahawk::track_ptr track = Tomahawk::Track::get( m.value( "artist" ).toString(), m.value( "track" ).toString(), m.value( "album" ).toString(), duration, QString(), m.value( "albumpos" ).toUInt(), m.value( "discnumber" ).toUInt() );
+        if ( !rp )
+            continue;
+
+        Tomahawk::track_ptr track = Tomahawk::Track::get( m.value( "artist" ).toString(),
+                                                          m.value( "track" ).toString(),
+                                                          m.value( "album" ).toString(),
+                                                          duration,
+                                                          QString(),
+                                                          m.value( "albumpos" ).toUInt(),
+                                                          m.value( "discnumber" ).toUInt() );
+        if ( !track )
+            continue;
 
         rp->setBitrate( m.value( "bitrate" ).toUInt() );
         rp->setSize( m.value( "size" ).toUInt() );

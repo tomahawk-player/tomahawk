@@ -274,13 +274,16 @@ ScriptResolver::handleMsg( const QByteArray& msg )
         {
             QVariantMap m = rv.toMap();
             tDebug( LOGVERBOSE ) << "Found result:" << m;
-            if ( m.value( "artist" ).toString().trimmed().isEmpty() || m.value( "track" ).toString().trimmed().isEmpty() )
-                continue;
 
             Tomahawk::result_ptr rp = Tomahawk::Result::get( m.value( "url" ).toString() );
-            Tomahawk::track_ptr track = Tomahawk::Track::get( m.value( "artist" ).toString(), m.value( "track" ).toString(), m.value( "album" ).toString(), m.value( "duration" ).toUInt(), QString(), m.value( "albumpos" ).toUInt(), m.value( "discnumber" ).toUInt() );
-            rp->setTrack( track );
+            if ( !rp )
+                continue;
 
+            Tomahawk::track_ptr track = Tomahawk::Track::get( m.value( "artist" ).toString(), m.value( "track" ).toString(), m.value( "album" ).toString(), m.value( "duration" ).toUInt(), QString(), m.value( "albumpos" ).toUInt(), m.value( "discnumber" ).toUInt() );
+            if ( !track )
+                continue;
+
+            rp->setTrack( track );
             rp->setBitrate( m.value( "bitrate" ).toUInt() );
             rp->setSize( m.value( "size" ).toUInt() );
             rp->setRID( uuid() );
