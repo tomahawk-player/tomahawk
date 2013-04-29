@@ -55,6 +55,12 @@ sourceCacheKey( Resolver* resolver, const QSize& size, TomahawkUtils::ImageMode 
 Tomahawk::result_ptr
 Result::get( const QString& url )
 {
+    if ( url.trimmed().isEmpty() )
+    {
+//        Q_ASSERT( false );
+        return result_ptr();
+    }
+
     QMutexLocker lock( &s_mutex );
     if ( s_results.contains( url ) )
     {
