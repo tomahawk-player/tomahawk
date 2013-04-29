@@ -93,7 +93,7 @@ Pipeline::databaseReady()
 void
 Pipeline::start()
 {
-    tDebug() << Q_FUNC_INFO << "Shunting this many pending queries:" << m_queries_pending.size();
+    tDebug() << Q_FUNC_INFO << "Shunting" << m_queries_pending.size() << "queries!";
     m_running = true;
 
     shuntNext();
@@ -319,7 +319,7 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
 void
 Pipeline::addResultsToQuery( const query_ptr& query, const QList< result_ptr >& results )
 {
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << query->toString() << results.count();
+//    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << query->toString() << results.count();
 
     QList< result_ptr > cleanResults;
     foreach ( const result_ptr& r, results )
@@ -349,7 +349,6 @@ Pipeline::addResultsToQuery( const query_ptr& query, const QList< result_ptr >& 
 void
 Pipeline::onResultUrlCheckerDone()
 {
-    tDebug() << Q_FUNC_INFO;
     ResultUrlChecker* checker = qobject_cast< ResultUrlChecker* >( sender() );
     if ( !checker )
         return;
