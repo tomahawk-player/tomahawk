@@ -324,9 +324,8 @@ Pipeline::addResultsToQuery( const query_ptr& query, const QList< result_ptr >& 
     QList< result_ptr > cleanResults;
     foreach ( const result_ptr& r, results )
     {
-        float score = query->howSimilar( r );
-        r->setScore( score );
-        if ( !query->isFullTextQuery() && score < MINSCORE )
+        r->setScore( query->howSimilar( r ) );
+        if ( !query->isFullTextQuery() && r->score() < MINSCORE )
             continue;
 
         cleanResults << r;
