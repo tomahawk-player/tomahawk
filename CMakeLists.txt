@@ -229,6 +229,11 @@ macro_log_feature(QTWEETLIB_FOUND "QTweetLib" "Qt Twitter Library" "https://gith
 macro_optional_find_package(LibLastFm 1.0.0)
 macro_log_feature(LIBLASTFM_FOUND "liblastfm" "Qt library for the Last.fm webservices" "https://github.com/lastfm/liblastfm" TRUE "" "liblastfm is needed for scrobbling tracks to Last.fm and fetching cover artwork")
 
+if( UNIX )
+    macro_optional_find_package(AccountsQt 1.6)
+    macro_log_feature(ACCOUNTSQT_FOUND "AccountsQt" "The Accounts-Qt library provides a storage solution for user accounts." "https://code.google.com/p/accounts-sso" TRUE "" "Accounts-Qt is needed for account creation and retrieval on platforms that use the Accounts & SSO framework as a system-wide account storage solution.")
+endif( UNIX )
+
 # we need pthreads too
 macro_optional_find_package(Threads)
 macro_log_feature(THREADS_FOUND "Threads" "Threading Library" "" TRUE "" "Platform specific library for threading")
