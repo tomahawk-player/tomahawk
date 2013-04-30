@@ -22,7 +22,7 @@ se s vámi spojil?</translation>
 <context>
     <name>ACLJobItem</name>
     <message>
-        <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="184"/>
+        <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="185"/>
         <source>Tomahawk needs you to decide whether %1 is allowed to connect.</source>
         <translation>Tomahawk chce vědět, zda se chcete spojit s %1.</translation>
     </message>
@@ -56,18 +56,18 @@ se s vámi spojil?</translation>
 <context>
     <name>AccountListWidget</name>
     <message>
-        <location filename="../src/widgets/AccountListWidget.cpp" line="62"/>
+        <location filename="../src/widgets/AccountListWidget.cpp" line="63"/>
         <source>Connections</source>
         <translation>Spojení</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AccountListWidget.cpp" line="70"/>
-        <location filename="../src/widgets/AccountListWidget.cpp" line="232"/>
+        <location filename="../src/widgets/AccountListWidget.cpp" line="71"/>
+        <location filename="../src/widgets/AccountListWidget.cpp" line="233"/>
         <source>Connect &amp;All</source>
         <translation>Spojit &amp;vše</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AccountListWidget.cpp" line="231"/>
+        <location filename="../src/widgets/AccountListWidget.cpp" line="232"/>
         <source>Disconnect &amp;All</source>
         <translation>&amp;Odpojit vše</translation>
     </message>
@@ -75,7 +75,7 @@ se s vámi spojil?</translation>
 <context>
     <name>AccountWidget</name>
     <message>
-        <location filename="../src/widgets/AccountWidget.cpp" line="130"/>
+        <location filename="../src/widgets/AccountWidget.cpp" line="131"/>
         <source>Invite</source>
         <translation>Pozvat</translation>
     </message>
@@ -83,7 +83,7 @@ se s vámi spojil?</translation>
 <context>
     <name>AccountsToolButton</name>
     <message>
-        <location filename="../src/widgets/AccountsToolButton.cpp" line="88"/>
+        <location filename="../src/widgets/AccountsToolButton.cpp" line="89"/>
         <source>Configure Accounts</source>
         <translation>Nastavit účty</translation>
     </message>
@@ -276,17 +276,17 @@ se s vámi spojil?</translation>
         <translation>Jiná alba</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="61"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="62"/>
         <source>Sorry, we could not find any other albums for this artist!</source>
         <translation>Promiňte, nepodařilo se najít žádná jiná alba tohoto umělce!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="66"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="67"/>
         <source>Sorry, we could not find any tracks for this album!</source>
         <translation>Promiňte, nepodařilo se najít žádné skladby pro toto album!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="193"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="194"/>
         <source>Other Albums by %1</source>
         <translation>Jiná alba %1</translation>
     </message>
@@ -703,7 +703,7 @@ se s vámi spojil?</translation>
 <context>
     <name>InfoBar</name>
     <message>
-        <location filename="../src/libtomahawk/infobar/InfoBar.cpp" line="91"/>
+        <location filename="../src/libtomahawk/infobar/InfoBar.cpp" line="92"/>
         <source>Filter...</source>
         <translation>Filtr...</translation>
     </message>
@@ -1432,12 +1432,12 @@ se s vámi spojil?</translation>
 <context>
     <name>ResolverConfigDelegate</name>
     <message>
-        <location filename="../src/ResolverConfigDelegate.cpp" line="109"/>
+        <location filename="../src/ResolverConfigDelegate.cpp" line="111"/>
         <source>Not found: %1</source>
         <translation>Nenalezeno: %1</translation>
     </message>
     <message>
-        <location filename="../src/ResolverConfigDelegate.cpp" line="112"/>
+        <location filename="../src/ResolverConfigDelegate.cpp" line="114"/>
         <source>Failed to load: %1</source>
         <translation>Nepodařilo se nahrát: %1</translation>
     </message>
@@ -1677,12 +1677,12 @@ se s vámi spojil?</translation>
 <context>
     <name>SlideSwitchButton</name>
     <message>
-        <location filename="../src/widgets/SlideSwitchButton.cpp" line="45"/>
+        <location filename="../src/widgets/SlideSwitchButton.cpp" line="46"/>
         <source>On</source>
         <translation>Zapnuto</translation>
     </message>
     <message>
-        <location filename="../src/widgets/SlideSwitchButton.cpp" line="46"/>
+        <location filename="../src/widgets/SlideSwitchButton.cpp" line="47"/>
         <source>Off</source>
         <translation>Vypnuto</translation>
     </message>
@@ -1718,22 +1718,22 @@ se s vámi spojil?</translation>
         <translation>Twitter</translation>
     </message>
     <message>
-        <location filename="../src/SocialWidget.cpp" line="69"/>
+        <location filename="../src/SocialWidget.cpp" line="70"/>
         <source>Tweet</source>
         <translation>Zpráva</translation>
     </message>
     <message>
-        <location filename="../src/SocialWidget.cpp" line="167"/>
+        <location filename="../src/SocialWidget.cpp" line="168"/>
         <source>Listening to &quot;%1&quot; by %2. %3</source>
         <translation>Poslouchá &quot;%1&quot; od %2, %3</translation>
     </message>
     <message>
-        <location filename="../src/SocialWidget.cpp" line="169"/>
+        <location filename="../src/SocialWidget.cpp" line="170"/>
         <source>Listening to &quot;%1&quot; by %2 on &quot;%3&quot;. %4</source>
         <translation>Poslouchá &quot;%1&quot; od %2 na &quot;%3&quot;, %4</translation>
     </message>
     <message>
-        <location filename="../src/SocialWidget.cpp" line="190"/>
+        <location filename="../src/SocialWidget.cpp" line="191"/>
         <source>%1 characters left</source>
         <translation>Zbývá %1 znaků</translation>
     </message>
@@ -1741,44 +1741,44 @@ se s vámi spojil?</translation>
 <context>
     <name>SourceDelegate</name>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="63"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="64"/>
         <source>Track</source>
         <translation>Skladba</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="64"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="65"/>
         <source>Album</source>
         <translation>Album</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="65"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="66"/>
         <source>Artist</source>
         <translation>Umělec</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="66"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="67"/>
         <source>Local</source>
         <translation>Místní</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="67"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="68"/>
         <source>Top 10</source>
         <translation>Nejlepších deset</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="199"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="200"/>
         <source>All available tracks</source>
         <translation>Všechny dostupné skladby</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="384"/>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="425"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="385"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="426"/>
         <source>Show</source>
         <translation>Ukázat</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="386"/>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="427"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="387"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="428"/>
         <source>Hide</source>
         <translation>Skrýt</translation>
     </message>
@@ -2114,22 +2114,22 @@ se s vámi spojil?</translation>
         <translation>Odstranit</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="367"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="368"/>
         <source>%1 downloads</source>
         <translation>%1 stažení</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="572"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="574"/>
         <source>Online</source>
         <translation>Připojený</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="577"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="579"/>
         <source>Connecting...</source>
         <translation>Připojuje se...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="582"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="584"/>
         <source>Offline</source>
         <translation>Nepřipojený</translation>
     </message>
@@ -3409,42 +3409,42 @@ Zkuste vyladit filtry pro nové písně.</translation>
 <context>
     <name>Tomahawk::Track</name>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="353"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="356"/>
         <source> and </source>
         <translation>a</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="361"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="364"/>
         <source>You</source>
         <translation>Vy</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="363"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="366"/>
         <source>you</source>
         <translation>vy</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="376"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="379"/>
         <source>and</source>
         <translation>a</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="376"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="379"/>
         <source>%n other(s)</source>
         <translation><numerusform>%n dalšímu</numerusform><numerusform>%n dalším</numerusform><numerusform>%n dalším</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="379"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="382"/>
         <source>%n people</source>
         <translation><numerusform>%n člověku</numerusform><numerusform>%n lidem</numerusform><numerusform>%n lidem</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="383"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="386"/>
         <source>loved this track</source>
         <translation>se tato skladba líbí</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="385"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="388"/>
         <source>sent you this track %1</source>
         <translation>vám poslal tuto skladbu %1</translation>
     </message>
@@ -3715,32 +3715,32 @@ služby Twitter zde zadejte tam zobrazené číslo PIN:</translation>
         <translation>Podobné skladby</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="82"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="83"/>
         <source>Sorry, but we could not find similar tracks for this song!</source>
         <translation>Promiňte, ale nepodařilo se najít podobné skladby pro tuto píseň!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="215"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="216"/>
         <source>You&apos;ve listened to this track %n time(s).</source>
         <translation><numerusform>Tuto píseň jste si poslechl jednou.</numerusform><numerusform>Tuto píseň jste si poslechl %n krát.</numerusform><numerusform>Tuto píseň jste si poslechl %n krát.</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="217"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="218"/>
         <source>You&apos;ve never listened to this track before.</source>
         <translation>Tuto píseň jste si ještě nikdy neposlechl.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="221"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="222"/>
         <source>You first listened to it on %1.</source>
         <translation>Tuto píseň jste si poprvé poslechl %1.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="225"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="226"/>
         <source>You&apos;ve listened to %1 %n time(s).</source>
         <translation><numerusform>%1 jste si poslechl jednou.</numerusform><numerusform>%1 jste si poslechl %n krát.</numerusform><numerusform>%1 jste si poslechl %n krát.</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="227"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="228"/>
         <source>You&apos;ve never listened to %1 before.</source>
         <translation>%1 jste si předtím ještě nikdy neposlechl.</translation>
     </message>
@@ -3771,7 +3771,7 @@ služby Twitter zde zadejte tam zobrazené číslo PIN:</translation>
 <context>
     <name>TreeItemDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeItemDelegate.cpp" line="179"/>
+        <location filename="../src/libtomahawk/playlist/TreeItemDelegate.cpp" line="180"/>
         <source>Unknown</source>
         <translation>Neznámý</translation>
     </message>
@@ -3939,12 +3939,12 @@ Kdykoli můžete odeslat novou seřizovací zprávu.</translation>
         <translation>Nedávno poslouchané skladby</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="85"/>
+        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="86"/>
         <source>Recently played tracks</source>
         <translation>Nedávno poslouchané skladby</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="174"/>
+        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="175"/>
         <source>No recently created playlists in your network.</source>
         <translation>Ve vaší síti nejsou žádné nedávno vytvořené seznamy skladeb.</translation>
     </message>

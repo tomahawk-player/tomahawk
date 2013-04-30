@@ -21,7 +21,7 @@ connect and stream from you?</source>
 <context>
     <name>ACLJobItem</name>
     <message>
-        <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="184"/>
+        <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="185"/>
         <source>Tomahawk needs you to decide whether %1 is allowed to connect.</source>
         <translation>%1からの接続を許可することが必要です。</translation>
     </message>
@@ -55,18 +55,18 @@ connect and stream from you?</source>
 <context>
     <name>AccountListWidget</name>
     <message>
-        <location filename="../src/widgets/AccountListWidget.cpp" line="62"/>
+        <location filename="../src/widgets/AccountListWidget.cpp" line="63"/>
         <source>Connections</source>
         <translation>コネクション</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AccountListWidget.cpp" line="70"/>
-        <location filename="../src/widgets/AccountListWidget.cpp" line="232"/>
+        <location filename="../src/widgets/AccountListWidget.cpp" line="71"/>
+        <location filename="../src/widgets/AccountListWidget.cpp" line="233"/>
         <source>Connect &amp;All</source>
         <translation>全部を接続する</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AccountListWidget.cpp" line="231"/>
+        <location filename="../src/widgets/AccountListWidget.cpp" line="232"/>
         <source>Disconnect &amp;All</source>
         <translation>全ての接続を切る</translation>
     </message>
@@ -74,7 +74,7 @@ connect and stream from you?</source>
 <context>
     <name>AccountWidget</name>
     <message>
-        <location filename="../src/widgets/AccountWidget.cpp" line="130"/>
+        <location filename="../src/widgets/AccountWidget.cpp" line="131"/>
         <source>Invite</source>
         <translation>招待</translation>
     </message>
@@ -82,7 +82,7 @@ connect and stream from you?</source>
 <context>
     <name>AccountsToolButton</name>
     <message>
-        <location filename="../src/widgets/AccountsToolButton.cpp" line="88"/>
+        <location filename="../src/widgets/AccountsToolButton.cpp" line="89"/>
         <source>Configure Accounts</source>
         <translation>アカウントを設定</translation>
     </message>
@@ -275,17 +275,17 @@ connect and stream from you?</source>
         <translation>他のアルバム</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="61"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="62"/>
         <source>Sorry, we could not find any other albums for this artist!</source>
         <translation>このアーティストのアルバムは他に見つかりませんでした。</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="66"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="67"/>
         <source>Sorry, we could not find any tracks for this album!</source>
         <translation>このアルバムの曲は見つかりませんでした。</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="193"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="194"/>
         <source>Other Albums by %1</source>
         <translation>%1の他のアルバム</translation>
     </message>
@@ -703,7 +703,7 @@ connect and stream from you?</source>
 <context>
     <name>InfoBar</name>
     <message>
-        <location filename="../src/libtomahawk/infobar/InfoBar.cpp" line="91"/>
+        <location filename="../src/libtomahawk/infobar/InfoBar.cpp" line="92"/>
         <source>Filter...</source>
         <translation>フィルター...</translation>
     </message>
@@ -1432,12 +1432,12 @@ connect and stream from you?</source>
 <context>
     <name>ResolverConfigDelegate</name>
     <message>
-        <location filename="../src/ResolverConfigDelegate.cpp" line="109"/>
+        <location filename="../src/ResolverConfigDelegate.cpp" line="111"/>
         <source>Not found: %1</source>
         <translation>見つかりません: %1</translation>
     </message>
     <message>
-        <location filename="../src/ResolverConfigDelegate.cpp" line="112"/>
+        <location filename="../src/ResolverConfigDelegate.cpp" line="114"/>
         <source>Failed to load: %1</source>
         <translation>ロードに失敗しました: %1</translation>
     </message>
@@ -1680,12 +1680,12 @@ connect and stream from you?</source>
 <context>
     <name>SlideSwitchButton</name>
     <message>
-        <location filename="../src/widgets/SlideSwitchButton.cpp" line="45"/>
+        <location filename="../src/widgets/SlideSwitchButton.cpp" line="46"/>
         <source>On</source>
         <translation>オン</translation>
     </message>
     <message>
-        <location filename="../src/widgets/SlideSwitchButton.cpp" line="46"/>
+        <location filename="../src/widgets/SlideSwitchButton.cpp" line="47"/>
         <source>Off</source>
         <translation>オフ</translation>
     </message>
@@ -1721,22 +1721,22 @@ connect and stream from you?</source>
         <translation>Twitter</translation>
     </message>
     <message>
-        <location filename="../src/SocialWidget.cpp" line="69"/>
+        <location filename="../src/SocialWidget.cpp" line="70"/>
         <source>Tweet</source>
         <translation>ツイート</translation>
     </message>
     <message>
-        <location filename="../src/SocialWidget.cpp" line="167"/>
+        <location filename="../src/SocialWidget.cpp" line="168"/>
         <source>Listening to &quot;%1&quot; by %2. %3</source>
         <translation>%2の&quot;%1&quot;を聴いています。%3</translation>
     </message>
     <message>
-        <location filename="../src/SocialWidget.cpp" line="169"/>
+        <location filename="../src/SocialWidget.cpp" line="170"/>
         <source>Listening to &quot;%1&quot; by %2 on &quot;%3&quot;. %4</source>
         <translation>%2の&quot;%3&quot;の&quot;%1&quot;を聴いています。%4</translation>
     </message>
     <message>
-        <location filename="../src/SocialWidget.cpp" line="190"/>
+        <location filename="../src/SocialWidget.cpp" line="191"/>
         <source>%1 characters left</source>
         <translation>残り%1文字</translation>
     </message>
@@ -1744,44 +1744,44 @@ connect and stream from you?</source>
 <context>
     <name>SourceDelegate</name>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="63"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="64"/>
         <source>Track</source>
         <translation>トラック</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="64"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="65"/>
         <source>Album</source>
         <translation>アルバム</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="65"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="66"/>
         <source>Artist</source>
         <translation>アーティスト</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="66"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="67"/>
         <source>Local</source>
         <translation>ローカル</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="67"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="68"/>
         <source>Top 10</source>
         <translation>トップ10</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="199"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="200"/>
         <source>All available tracks</source>
         <translation>利用可能トラック</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="384"/>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="425"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="385"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="426"/>
         <source>Show</source>
         <translation>表示</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="386"/>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="427"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="387"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="428"/>
         <source>Hide</source>
         <translation>隠す</translation>
     </message>
@@ -2117,22 +2117,22 @@ connect and stream from you?</source>
         <translation>削除</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="367"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="368"/>
         <source>%1 downloads</source>
         <translation>%1ダウンロード</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="572"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="574"/>
         <source>Online</source>
         <translation>オンライン</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="577"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="579"/>
         <source>Connecting...</source>
         <translation>接続中...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="582"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="584"/>
         <source>Offline</source>
         <translation>・オフライン</translation>
     </message>
@@ -3409,42 +3409,42 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::Track</name>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="353"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="356"/>
         <source> and </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="361"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="364"/>
         <source>You</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="363"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="366"/>
         <source>you</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="376"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="379"/>
         <source>and</source>
         <translation type="unfinished"/>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="376"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="379"/>
         <source>%n other(s)</source>
         <translation type="unfinished"><numerusform></numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="379"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="382"/>
         <source>%n people</source>
         <translation type="unfinished"><numerusform></numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="383"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="386"/>
         <source>loved this track</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="385"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="388"/>
         <source>sent you this track %1</source>
         <translation type="unfinished"/>
     </message>
@@ -3715,32 +3715,32 @@ enter the displayed PIN number here:</source>
         <translation>似ているトラック</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="82"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="83"/>
         <source>Sorry, but we could not find similar tracks for this song!</source>
         <translation>この曲に似ているトラックが見つかりませんでした。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="215"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="216"/>
         <source>You&apos;ve listened to this track %n time(s).</source>
         <translation><numerusform>このトラックは%n回聴いています。</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="217"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="218"/>
         <source>You&apos;ve never listened to this track before.</source>
         <translation>このトラックを一度も聴いていません。</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="221"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="222"/>
         <source>You first listened to it on %1.</source>
         <translation>初めてこの曲を聴いたのは、%1です。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="225"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="226"/>
         <source>You&apos;ve listened to %1 %n time(s).</source>
         <translation><numerusform>%1を%n回聴いています。</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="227"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="228"/>
         <source>You&apos;ve never listened to %1 before.</source>
         <translation>%1を一度も聴いていません。</translation>
     </message>
@@ -3771,7 +3771,7 @@ enter the displayed PIN number here:</source>
 <context>
     <name>TreeItemDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeItemDelegate.cpp" line="179"/>
+        <location filename="../src/libtomahawk/playlist/TreeItemDelegate.cpp" line="180"/>
         <source>Unknown</source>
         <translation>不明</translation>
     </message>
@@ -3940,12 +3940,12 @@ Twitterを使っている友達にTomahawkを接続したいなら、ツイー�
         <translation>最近再生したトラック</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="85"/>
+        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="86"/>
         <source>Recently played tracks</source>
         <translation>最近再生したトラック</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="174"/>
+        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="175"/>
         <source>No recently created playlists in your network.</source>
         <translation>ネットワークに最近作成したプレイリストはありません。</translation>
     </message>

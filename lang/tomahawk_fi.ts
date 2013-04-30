@@ -22,7 +22,7 @@ yhdistää ja toistaa sinulta virtaa?</translation>
 <context>
     <name>ACLJobItem</name>
     <message>
-        <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="184"/>
+        <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="185"/>
         <source>Tomahawk needs you to decide whether %1 is allowed to connect.</source>
         <translation>Tomahawk tarvitsee sinua päättämään, sallitaanko käyttäjän %1 yhdistää.</translation>
     </message>
@@ -56,18 +56,18 @@ yhdistää ja toistaa sinulta virtaa?</translation>
 <context>
     <name>AccountListWidget</name>
     <message>
-        <location filename="../src/widgets/AccountListWidget.cpp" line="62"/>
+        <location filename="../src/widgets/AccountListWidget.cpp" line="63"/>
         <source>Connections</source>
         <translation>Yhteydet</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AccountListWidget.cpp" line="70"/>
-        <location filename="../src/widgets/AccountListWidget.cpp" line="232"/>
+        <location filename="../src/widgets/AccountListWidget.cpp" line="71"/>
+        <location filename="../src/widgets/AccountListWidget.cpp" line="233"/>
         <source>Connect &amp;All</source>
         <translation>Yhdistä &amp;kaikki</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AccountListWidget.cpp" line="231"/>
+        <location filename="../src/widgets/AccountListWidget.cpp" line="232"/>
         <source>Disconnect &amp;All</source>
         <translation>Katkaise &amp;kaikki</translation>
     </message>
@@ -75,7 +75,7 @@ yhdistää ja toistaa sinulta virtaa?</translation>
 <context>
     <name>AccountWidget</name>
     <message>
-        <location filename="../src/widgets/AccountWidget.cpp" line="130"/>
+        <location filename="../src/widgets/AccountWidget.cpp" line="131"/>
         <source>Invite</source>
         <translation>Kutsu</translation>
     </message>
@@ -83,7 +83,7 @@ yhdistää ja toistaa sinulta virtaa?</translation>
 <context>
     <name>AccountsToolButton</name>
     <message>
-        <location filename="../src/widgets/AccountsToolButton.cpp" line="88"/>
+        <location filename="../src/widgets/AccountsToolButton.cpp" line="89"/>
         <source>Configure Accounts</source>
         <translation>Tilien asetukset</translation>
     </message>
@@ -276,17 +276,17 @@ yhdistää ja toistaa sinulta virtaa?</translation>
         <translation>Muita albumeita</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="61"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="62"/>
         <source>Sorry, we could not find any other albums for this artist!</source>
         <translation>Valitettavasti emme löytänet mitään muita albumeita tältä artistilta!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="66"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="67"/>
         <source>Sorry, we could not find any tracks for this album!</source>
         <translation>Valitettavasti emme löytäneet mitään tämän albumin kappaleita!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="193"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="194"/>
         <source>Other Albums by %1</source>
         <translation>Muita artistin %1 levyjä</translation>
     </message>
@@ -703,7 +703,7 @@ yhdistää ja toistaa sinulta virtaa?</translation>
 <context>
     <name>InfoBar</name>
     <message>
-        <location filename="../src/libtomahawk/infobar/InfoBar.cpp" line="91"/>
+        <location filename="../src/libtomahawk/infobar/InfoBar.cpp" line="92"/>
         <source>Filter...</source>
         <translation>Suodata...</translation>
     </message>
@@ -1432,12 +1432,12 @@ yhdistää ja toistaa sinulta virtaa?</translation>
 <context>
     <name>ResolverConfigDelegate</name>
     <message>
-        <location filename="../src/ResolverConfigDelegate.cpp" line="109"/>
+        <location filename="../src/ResolverConfigDelegate.cpp" line="111"/>
         <source>Not found: %1</source>
         <translation>Ei löydy: %1</translation>
     </message>
     <message>
-        <location filename="../src/ResolverConfigDelegate.cpp" line="112"/>
+        <location filename="../src/ResolverConfigDelegate.cpp" line="114"/>
         <source>Failed to load: %1</source>
         <translation>Lataaminen epäonnistui: %1</translation>
     </message>
@@ -1682,12 +1682,12 @@ käyttäjäradion käyttöönottamiseksi</translation>
 <context>
     <name>SlideSwitchButton</name>
     <message>
-        <location filename="../src/widgets/SlideSwitchButton.cpp" line="45"/>
+        <location filename="../src/widgets/SlideSwitchButton.cpp" line="46"/>
         <source>On</source>
         <translation>Päällä</translation>
     </message>
     <message>
-        <location filename="../src/widgets/SlideSwitchButton.cpp" line="46"/>
+        <location filename="../src/widgets/SlideSwitchButton.cpp" line="47"/>
         <source>Off</source>
         <translation>Pois</translation>
     </message>
@@ -1723,22 +1723,22 @@ käyttäjäradion käyttöönottamiseksi</translation>
         <translation>Twitter</translation>
     </message>
     <message>
-        <location filename="../src/SocialWidget.cpp" line="69"/>
+        <location filename="../src/SocialWidget.cpp" line="70"/>
         <source>Tweet</source>
         <translation>Twiittaa</translation>
     </message>
     <message>
-        <location filename="../src/SocialWidget.cpp" line="167"/>
+        <location filename="../src/SocialWidget.cpp" line="168"/>
         <source>Listening to &quot;%1&quot; by %2. %3</source>
         <translation>Kuuntelen ”%1” artistilta %2. %3</translation>
     </message>
     <message>
-        <location filename="../src/SocialWidget.cpp" line="169"/>
+        <location filename="../src/SocialWidget.cpp" line="170"/>
         <source>Listening to &quot;%1&quot; by %2 on &quot;%3&quot;. %4</source>
         <translation>Kuuntelen ”%1” artistilta %2, albumilta ”%3”. %4</translation>
     </message>
     <message>
-        <location filename="../src/SocialWidget.cpp" line="190"/>
+        <location filename="../src/SocialWidget.cpp" line="191"/>
         <source>%1 characters left</source>
         <translation>%1 merkkiä jäljellä</translation>
     </message>
@@ -1746,44 +1746,44 @@ käyttäjäradion käyttöönottamiseksi</translation>
 <context>
     <name>SourceDelegate</name>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="63"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="64"/>
         <source>Track</source>
         <translation>Kappale</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="64"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="65"/>
         <source>Album</source>
         <translation>Albumi</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="65"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="66"/>
         <source>Artist</source>
         <translation>Artisti</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="66"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="67"/>
         <source>Local</source>
         <translation>Paikallinen</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="67"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="68"/>
         <source>Top 10</source>
         <translation>Kymmenen kärki</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="199"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="200"/>
         <source>All available tracks</source>
         <translation>Kaikki saatavilla olevat kappaleet</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="384"/>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="425"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="385"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="426"/>
         <source>Show</source>
         <translation>Näytä</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="386"/>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="427"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="387"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="428"/>
         <source>Hide</source>
         <translation>Piilota</translation>
     </message>
@@ -2120,22 +2120,22 @@ napsauttamalla hiiren oikealla.</translation>
         <translation>Poista</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="367"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="368"/>
         <source>%1 downloads</source>
         <translation>%1 latausta</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="572"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="574"/>
         <source>Online</source>
         <translation>Verkossa</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="577"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="579"/>
         <source>Connecting...</source>
         <translation>Yhdistetään...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="582"/>
+        <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="584"/>
         <source>Offline</source>
         <translation>Ei verkossa</translation>
     </message>
@@ -3415,42 +3415,42 @@ Koeta säätää suodattimia saadaksesi uuden joukon kappaleita kuunneltavaksi.<
 <context>
     <name>Tomahawk::Track</name>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="353"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="356"/>
         <source> and </source>
         <translation> ja </translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="361"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="364"/>
         <source>You</source>
         <translation>Sinä</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="363"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="366"/>
         <source>you</source>
         <translation>sinä</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="376"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="379"/>
         <source>and</source>
         <translation>ja</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="376"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="379"/>
         <source>%n other(s)</source>
         <translation><numerusform>%n muu</numerusform><numerusform>%n muuta</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="379"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="382"/>
         <source>%n people</source>
         <translation><numerusform>%n ihminen</numerusform><numerusform>%n ihmistä</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="383"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="386"/>
         <source>loved this track</source>
         <translation>tykkäsi tästä kappaleesta</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="385"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="388"/>
         <source>sent you this track %1</source>
         <translation>lähetti sinulle kappaleen %1</translation>
     </message>
@@ -3721,32 +3721,32 @@ anna siellä näytetty PIN-koodi tähän:</translation>
         <translation>Samankaltaisia kappaleita</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="82"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="83"/>
         <source>Sorry, but we could not find similar tracks for this song!</source>
         <translation>Valitettavasti emme löytäneet tälle kappaleelle samankaltaisia kappaleita!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="215"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="216"/>
         <source>You&apos;ve listened to this track %n time(s).</source>
         <translation><numerusform>Olet kuunnellut tätä kappaletta %n kerran.</numerusform><numerusform>Olet kuunnellut tätä kappaletta %n kertaa.</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="217"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="218"/>
         <source>You&apos;ve never listened to this track before.</source>
         <translation>Et ole kuunnellut tätä kappaletta aiemmin.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="221"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="222"/>
         <source>You first listened to it on %1.</source>
         <translation>Kuuntelit sitä ensi kerran %1.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="225"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="226"/>
         <source>You&apos;ve listened to %1 %n time(s).</source>
         <translation><numerusform>Olet kuunnellut artistia %1 %n kerran.</numerusform><numerusform>Olet kuunnellut artistia %1 %n kertaa.</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="227"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="228"/>
         <source>You&apos;ve never listened to %1 before.</source>
         <translation>Et ole kuunnellut artistia %1 aiemmin.</translation>
     </message>
@@ -3777,7 +3777,7 @@ anna siellä näytetty PIN-koodi tähän:</translation>
 <context>
     <name>TreeItemDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeItemDelegate.cpp" line="179"/>
+        <location filename="../src/libtomahawk/playlist/TreeItemDelegate.cpp" line="180"/>
         <source>Unknown</source>
         <translation>Tuntematon</translation>
     </message>
@@ -3946,12 +3946,12 @@ Voit lähettää synkronointiviestin uudelleen millä hetkellä hyvänsä lähet
         <translation>Viime aikoina kuunnellut kappaleet</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="85"/>
+        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="86"/>
         <source>Recently played tracks</source>
         <translation>Viime aikoina kuunnellut kappaleet</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="174"/>
+        <location filename="../src/libtomahawk/widgets/WelcomeWidget.cpp" line="175"/>
         <source>No recently created playlists in your network.</source>
         <translation>Verkossasi ei ole viime aikoina luotuja soittolistoja.</translation>
     </message>
