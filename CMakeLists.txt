@@ -231,7 +231,7 @@ macro_log_feature(LIBLASTFM_FOUND "liblastfm" "Qt library for the Last.fm webser
 
 if( UNIX )
     macro_optional_find_package(AccountsQt 1.6)
-    macro_log_feature(ACCOUNTSQT_FOUND "AccountsQt" "The Accounts-Qt library provides a storage solution for user accounts." "https://code.google.com/p/accounts-sso" TRUE "" "Accounts-Qt is needed for account creation and retrieval on platforms that use the Accounts & SSO framework as a system-wide account storage solution.")
+    macro_log_feature(LIBACCOUNTS-QT_FOUND "AccountsQt" "The Accounts-Qt library provides a storage solution for user accounts." "https://code.google.com/p/accounts-sso" TRUE "" "Accounts-Qt is needed for account creation and retrieval on platforms that use the Accounts & SSO framework as a system-wide account storage solution.")
 endif( UNIX )
 
 # we need pthreads too
