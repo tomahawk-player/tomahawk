@@ -271,7 +271,7 @@ SourceTreeView::setupMenus()
     connect( deletePlaylistAction, SIGNAL( triggered() ), SLOT( deletePlaylist() ) );
     connect( copyPlaylistAction,   SIGNAL( triggered() ), SLOT( copyPlaylistLink() ) );
     connect( addToLocalAction,     SIGNAL( triggered() ), SLOT( addToLocal() ) );
-    connect( latchOnAction,        SIGNAL( triggered() ), SLOT( latchOnOrCatchUp() ), Qt::QueuedConnection );
+    connect( latchOnAction,        SIGNAL( triggered() ), SLOT( latchOnOrCatchUp() ) );
 }
 
 
