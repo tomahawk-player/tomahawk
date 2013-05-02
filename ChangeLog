@@ -7,7 +7,7 @@ Version 0.7.0:
     * JavaScript Resolvers can now expose collections.
     * Introduced bundle system for JavaScript Resolvers, called "axes".
     * Fixed playback-loop caused by duplicate tracks in a playlist.
-    * Improved peer handling.
+    * Improved peer handling and removed connection support through Twitter.
     * Taking an account offline now also disconnects associated peers.
     * Improved spotify protocol handling.
     * Added "Append to Playlist" context menu item.
