@@ -157,12 +157,14 @@ main( int argc, char *argv[] )
     KDSingleApplicationGuard guard( KDSingleApplicationGuard::AutoKillOtherInstances );
     QObject::connect( &guard, SIGNAL( instanceStarted( KDSingleApplicationGuard::Instance ) ), &a, SLOT( instanceStarted( KDSingleApplicationGuard::Instance ) ) );
 
-    if ( guard.isPrimaryInstance() )
-        a.init();
-
     int returnCode = 0;
     if ( guard.isPrimaryInstance() )
+    {
+        a.init();
         returnCode = a.exec();
+    }
+    else
+        qDebug() << "Tomahawk is already running, shutting down.";
 
 #ifdef Q_OS_WIN
     // clean up keyboard hook
