@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2013, Dominik Schmidt <domme@tomahawk-player.org>
+ *   Copyright 2013, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -16,20 +16,36 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-#ifndef TOMAHAWK_TESTFOO_H
-#define TOMAHAWK_TESTFOO_H
+#ifndef TOMAHAWK_TESTRESULT_H
+#define TOMAHAWK_TESTRESULT_H
 
 #include <QtTest>
 
-class TestFoo : public QObject
+#include "libtomahawk/Result.h"
+#include "libtomahawk/Source.h"
+
+class TestResult : public QObject
 {
     Q_OBJECT
 
 private slots:
-    void testBar()
+    void testIsValid()
     {
-        QVERIFY( true );
+        Tomahawk::result_ptr r = Tomahawk::Result::get( "/tmp/test.mp3" );
+        QVERIFY( !r->isValid() );
+
+        Tomahawk::track_ptr t = Tomahawk::Track::get( "Artist", "Track" );
+        r->setTrack( t );
+        QVERIFY( r->isValid() );
+    }
+
+    void testGet()
+    {
+        Tomahawk::result_ptr r = Tomahawk::Result::get( "" );
+        QVERIFY( !r );
+
+        Tomahawk::result_ptr vr = Tomahawk::Result::get( "/tmp/test.mp3" );
+        QVERIFY( vr );
     }
 };
 
