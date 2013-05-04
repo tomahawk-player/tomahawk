@@ -127,12 +127,14 @@ Source::setStats( const QVariantMap& m )
     emit stateChanged();
 }
 
+
 QString
 Source::nodeId() const
 {
     return m_nodeId;
 
 }
+
 
 QString
 Source::friendlyName() const
@@ -425,7 +427,7 @@ Source::onStateChanged( DBSyncConnection::State newstate, DBSyncConnection::Stat
 unsigned int
 Source::trackCount() const
 {
-    return m_stats.value( "numfiles" ).toUInt();
+    return m_stats.value( "numfiles", 0 ).toUInt();
 }
 
 
