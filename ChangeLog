@@ -2,6 +2,7 @@ Version 0.8.0:
     * Playback Queue now saves its state across sessions.
     * Added "Inbox" feature, showing incoming song recommendations. Dropping
       a track on a user in the sidebar sends a recommendation to them.
+    * You will now be asked whether you want to trust invalid SSL certificates.
 
 Version 0.7.0:
     * JavaScript Resolvers can now expose collections.
