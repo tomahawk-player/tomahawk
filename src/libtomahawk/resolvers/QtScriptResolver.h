@@ -99,45 +99,19 @@ class DLLEXPORT ScriptEngine : public QWebPage
 Q_OBJECT
 
 public:
-    explicit ScriptEngine( QtScriptResolver* parent )
-        : QWebPage( (QObject*) parent )
-        , m_parent( parent )
-    {
-        settings()->setAttribute( QWebSettings::OfflineStorageDatabaseEnabled, true );
-        settings()->setOfflineStoragePath( TomahawkUtils::appDataDir().path() );
-        settings()->setAttribute(QWebSettings::LocalStorageEnabled, true);
-        settings()->setLocalStoragePath( TomahawkUtils::appDataDir().path() );
-        settings()->setAttribute( QWebSettings::LocalStorageDatabaseEnabled, true );
-        settings()->setAttribute( QWebSettings::LocalContentCanAccessFileUrls, true );
-        settings()->setAttribute( QWebSettings::LocalContentCanAccessRemoteUrls, true );
+    explicit ScriptEngine( QtScriptResolver* parent );
 
-        // Tomahawk is not a user agent
-        m_header = QWebPage::userAgentForUrl( QUrl() ).replace( QString( "%1/%2" )
-                                                                .arg( TOMAHAWK_APPLICATION_NAME )
-                                                                .arg( TOMAHAWK_VERSION )
-                                                                ,"");
-        tLog() << "QtScriptResolver Using header" << m_header;
-    }
-
-    QString userAgentForUrl ( const QUrl & url ) const
-    {
-        Q_UNUSED(url);
-        return m_header;
-    }
-
-    void setScriptPath( const QString& scriptPath )
-    {
-        m_scriptPath = scriptPath;
-    }
+    QString userAgentForUrl( const QUrl& url ) const;
+    void setScriptPath( const QString& scriptPath );
 
 public slots:
-    bool shouldInterruptJavaScript()
-    {
-        return true;
-    }
+    bool shouldInterruptJavaScript();
 
 protected:
     virtual void javaScriptConsoleMessage( const QString& message, int lineNumber, const QString& sourceID );
+
+private slots:
+    void sslErrorHandler( QNetworkReply* qnr, const QList<QSslError>& errlist );
 
 private:
     QtScriptResolver* m_parent;
