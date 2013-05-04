@@ -881,6 +881,30 @@ TomahawkSettings::setAclEntries( const QVariantList &entries )
 }
 
 
+bool
+TomahawkSettings::isSslCertKnown( const QByteArray& sslDigest ) const
+{
+    return value( "network/ssl/certs" ).toMap().contains( sslDigest );
+}
+
+
+bool
+TomahawkSettings::isSslCertTrusted( const QByteArray& sslDigest ) const
+{
+    return value( "network/ssl/certs" ).toMap().value( sslDigest, false ).toBool();
+}
+
+
+void
+TomahawkSettings::setSslCertTrusted( const QByteArray& sslDigest, bool trusted )
+{
+    QVariantMap map = value( "network/ssl/certs" ).toMap();
+    map[ sslDigest ] = trusted;
+
+    setValue( "network/ssl/certs", map );
+}
+
+
 QByteArray
 TomahawkSettings::mainWindowGeometry() const
 {

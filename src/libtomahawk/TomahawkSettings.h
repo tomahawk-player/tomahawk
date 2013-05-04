@@ -155,40 +155,35 @@ public:
     void setExternalPort( int externalPort );
 
     QString proxyHost() const;
-    void setProxyHost( const QString &host );
-
+    void setProxyHost( const QString& host );
     QString proxyNoProxyHosts() const;
-    void setProxyNoProxyHosts( const QString &hosts );
-
+    void setProxyNoProxyHosts( const QString& hosts );
     qulonglong proxyPort() const;
     void setProxyPort( const qulonglong port );
-
     QString proxyUsername() const;
-    void setProxyUsername( const QString &username );
-
+    void setProxyUsername( const QString& username );
     QString proxyPassword() const;
-    void setProxyPassword( const QString &password );
-
+    void setProxyPassword( const QString& password );
     QNetworkProxy::ProxyType proxyType() const;
     void setProxyType( const QNetworkProxy::ProxyType type );
-
     bool proxyDns() const;
     void setProxyDns( bool lookupViaProxy );
 
     /// ACL settings
     QVariantList aclEntries() const;
-    void setAclEntries( const QVariantList &entries );
+    void setAclEntries( const QVariantList& entries );
+
+    bool isSslCertKnown( const QByteArray& sslDigest ) const;
+    bool isSslCertTrusted( const QByteArray& sslDigest ) const;
+    void setSslCertTrusted( const QByteArray& sslDigest, bool trusted );
 
     /// XMPP Component Settings
     QString xmppBotServer() const;
-    void setXmppBotServer( const QString &server );
-
+    void setXmppBotServer( const QString& server );
     QString xmppBotJid() const;
-    void setXmppBotJid( const QString &component );
-
+    void setXmppBotJid( const QString& component );
     QString xmppBotPassword() const;
-    void setXmppBotPassword( const QString &password );
-
+    void setXmppBotPassword( const QString& password );
     int xmppBotPort() const;
     void setXmppBotPort( const int port );
 
