@@ -1387,9 +1387,9 @@ ansluta och strömma från dig?</translation>
 <context>
     <name>QtScriptResolver</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="591"/>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="626"/>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="662"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="583"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="618"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="654"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
         <translation>Skript Resolver-varning:  API-anrop %1 returnerade data synkront</translation>
     </message>
@@ -1453,9 +1453,24 @@ ansluta och strömma från dig?</translation>
 <context>
     <name>ScriptEngine</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="392"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1124"/>
         <source>Script Resolver Error: %1 %2 %3 %4</source>
         <translation>Skriptfel i resolvern: %1 %2 %3 %4</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1143"/>
+        <source>SSL Error</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1144"/>
+        <source>You have asked Tomahawk to connect securely to &lt;b&gt;%1&lt;/b&gt;, but we can&apos;t confirm that your connection is secure:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Do you want to trust this connection?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1151"/>
+        <source>Trust certificate</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -3358,43 +3373,43 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="355"/>
-        <location filename="../src/libtomahawk/Source.cpp" line="406"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="357"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="408"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Söker igenom (%L1 spår)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="357"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="359"/>
         <source>Scanning</source>
         <translation>Skannar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="391"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="393"/>
         <source>Checking</source>
         <translation>Kontrollerar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="396"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="398"/>
         <source>Syncing</source>
         <translation>Synkroniserar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="401"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="403"/>
         <source>Importing</source>
         <translation>Importerar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="553"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="555"/>
         <source>Saving (%1%)</source>
         <translation>Sparar (%1%)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="634"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="636"/>
         <source>Online</source>
         <translation>Online</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="638"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="640"/>
         <source>Offline</source>
         <translation>Offline</translation>
     </message>
