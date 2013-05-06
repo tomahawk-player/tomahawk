@@ -82,7 +82,12 @@ log( const char *msg, unsigned int debugLevel, bool toDisk = true )
             logfile << "TSQLQUERY: ";
         #endif
 
-        logfile << QTime::currentTime().toString().toLatin1().data() << " [" << QString::number( debugLevel ).toLatin1().data() << "]: " << msg << endl;
+        logfile << QDate::currentDate().toString().toUtf8().data()
+                << " - "
+                << QTime::currentTime().toString().toUtf8().data()
+                << " [" << QString::number( debugLevel ).toUtf8().data() << "]: "
+                << msg << endl;
+
         logfile.flush();
     }
 
@@ -90,7 +95,10 @@ log( const char *msg, unsigned int debugLevel, bool toDisk = true )
     {
         QMutexLocker lock( &s_mutex );
 
-        cout << msg << endl;
+        cout << QTime::currentTime().toString().toUtf8().data()
+             << " [" << QString::number( debugLevel ).toUtf8().data() << "]: "
+             << msg << endl;
+
         cout.flush();
     }
 }
