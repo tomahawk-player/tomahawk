@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Copyright 2010-2013, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 #include <QMutex>
 
 #include "Query.h"
+#include "DatabaseCommand_UpdateSearchIndex.h"
 
 namespace lucene
 {
@@ -60,7 +61,7 @@ public:
 
     void beginIndexing();
     void endIndexing();
-    void appendFields( const QMap< unsigned int, QMap< QString, QString > >& trackData );
+    void appendFields( const IndexData& data );
 
 signals:
     void indexReady();
@@ -82,6 +83,7 @@ private:
     lucene::analysis::SimpleAnalyzer* m_analyzer;
     lucene::store::Directory* m_luceneDir;
     lucene::index::IndexReader* m_luceneReader;
+    lucene::index::IndexWriter* m_luceneWriter;
     lucene::search::IndexSearcher* m_luceneSearcher;
 };
 
