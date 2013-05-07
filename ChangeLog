@@ -1,3 +1,6 @@
+Version 0.7.1:
+    * Heavily reduced memory footprint during and after indexing the database.
+
 Version 0.7.0:
     * JavaScript Resolvers can now expose collections.
     * Introduced bundle system for JavaScript Resolvers, called "axes".
