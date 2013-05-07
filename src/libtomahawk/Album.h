@@ -102,7 +102,6 @@ private:
     mutable QByteArray m_coverBuffer;
 #ifndef ENABLE_HEADLESS
     mutable QPixmap* m_cover;
-    mutable QHash< int, QPixmap > m_coverCache;
 #endif
 
     QHash< Tomahawk::ModelMode, QHash< Tomahawk::collection_ptr, Tomahawk::playlistinterface_ptr > > m_playlistInterface;

@@ -33,6 +33,7 @@
 #include "utils/Logger.h"
 
 #include <QReadWriteLock>
+#include <QPixmapCache>
 
 using namespace Tomahawk;
 
@@ -585,15 +586,16 @@ Artist::cover( const QSize& size, bool forceLoad ) const
 
     if ( m_cover && !m_cover->isNull() && !size.isEmpty() )
     {
-        if ( m_coverCache.contains( size.width() ) )
-        {
-            return m_coverCache.value( size.width() );
-        }
+        const QString cacheKey = infoid() + "_" + size.width();
+        QPixmap cover;
 
-        QPixmap scaledCover;
-        scaledCover = m_cover->scaled( size, Qt::KeepAspectRatio, Qt::SmoothTransformation );
-        m_coverCache.insert( size.width(), scaledCover );
-        return scaledCover;
+        if ( !QPixmapCache::find( cacheKey, cover ) )
+        {
+            cover = m_cover->scaled( size, Qt::KeepAspectRatio, Qt::SmoothTransformation );
+            QPixmapCache::insert( cacheKey, cover );
+            return cover;
+        }
+        return cover;
     }
 
     if ( m_cover )
