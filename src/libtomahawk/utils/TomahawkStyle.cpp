@@ -22,7 +22,7 @@
 #include <QPainter>
 #include <QPixmapCache>
 #include <QApplication>
-#include <QStyleOption>>
+#include <QStyleOption>
 
 
 void
