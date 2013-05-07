@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2013, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2012       Leo Franchi            <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -49,6 +49,8 @@ DatabaseCommand_UpdateSearchIndex::DatabaseCommand_UpdateSearchIndex()
 
 DatabaseCommand_UpdateSearchIndex::~DatabaseCommand_UpdateSearchIndex()
 {
+    tDebug() << Q_FUNC_INFO;
+
 #ifndef ENABLE_HEADLESS
     if ( ! m_statusJob.isNull() )
         m_statusJob.data()->done();
@@ -61,35 +63,30 @@ DatabaseCommand_UpdateSearchIndex::exec( DatabaseImpl* db )
 {
     db->m_fuzzyIndex->beginIndexing();
 
-    QMap< unsigned int, QMap< QString, QString > > data;
     TomahawkSqlQuery q = db->newquery();
-
     q.exec( "SELECT track.id, track.name, artist.name, artist.id FROM track, artist WHERE artist.id = track.artist" );
     while ( q.next() )
     {
-        QMap< QString, QString > track;
-        track.insert( "track", q.value( 1 ).toString() );
-        track.insert( "artist", q.value( 2 ).toString() );
-        track.insert( "artistid", q.value( 3 ).toString() );
+        IndexData ida;
+        ida.id = q.value( 0 ).toUInt();
+        ida.artistId = q.value( 3 ).toUInt();
+        ida.track = q.value( 1 ).toString();
+        ida.artist = q.value( 2 ).toString();
 
-        data.insert( q.value( 0 ).toUInt(), track );
+        db->m_fuzzyIndex->appendFields( ida );
     }
-
-    db->m_fuzzyIndex->appendFields( data );
-    data.clear();
 
     q.exec( "SELECT album.id, album.name FROM album" );
     while ( q.next() )
     {
-        QMap< QString, QString > album;
-        album.insert( "album", q.value( 1 ).toString() );
+        IndexData ida;
+        ida.id = q.value( 0 ).toUInt();
+        ida.album = q.value( 1 ).toString();
 
-        data.insert( q.value( 0 ).toUInt(), album );
+        db->m_fuzzyIndex->appendFields( ida );
     }
 
-    db->m_fuzzyIndex->appendFields( data );
-
-    qDebug() << "Building index finished.";
+    tDebug( LOGVERBOSE ) << "Building index finished.";
 
     db->m_fuzzyIndex->endIndexing();
 }

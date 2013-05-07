@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2013, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -24,7 +24,6 @@
 #include <CLucene.h>
 #include <CLucene/queryParser/MultiFieldQueryParser.h>
 
-#include "DatabaseCommand_UpdateSearchIndex.h"
 #include "DatabaseImpl.h"
 #include "Database.h"
 #include "utils/TomahawkUtils.h"
@@ -112,10 +111,11 @@ FuzzyIndex::beginIndexing()
 
     try
     {
-        qDebug() << Q_FUNC_INFO << "Starting indexing.";
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Starting indexing.";
         if ( m_luceneReader != 0 )
         {
-            qDebug() << "Deleting old lucene stuff.";
+            tDebug( LOGVERBOSE ) << "Deleting old lucene stuff.";
+
             m_luceneSearcher->close();
             m_luceneReader->close();
             delete m_luceneSearcher;
@@ -124,8 +124,8 @@ FuzzyIndex::beginIndexing()
             m_luceneReader = 0;
         }
 
-        qDebug() << "Creating new index writer.";
-        IndexWriter luceneWriter( m_luceneDir, m_analyzer, true );
+        tDebug( LOGVERBOSE ) << "Creating new index writer.";
+        m_luceneWriter = new IndexWriter( m_luceneDir, m_analyzer, true );
     }
     catch( CLuceneError& error )
     {
@@ -138,62 +138,52 @@ FuzzyIndex::beginIndexing()
 void
 FuzzyIndex::endIndexing()
 {
+    m_luceneWriter->optimize();
+    m_luceneWriter->close();
+    delete m_luceneWriter;
+    m_luceneWriter = 0;
+
     m_mutex.unlock();
     emit indexReady();
 }
 
 
 void
-FuzzyIndex::appendFields( const QMap< unsigned int, QMap< QString, QString > >& trackData )
+FuzzyIndex::appendFields( const IndexData& data )
 {
     try
     {
-        tDebug() << "Appending to index:" << trackData.count();
-        bool create = !IndexReader::indexExists( TomahawkUtils::appDataDir().absoluteFilePath( "tomahawk.lucene" ).toStdString().c_str() );
-        IndexWriter luceneWriter( m_luceneDir, m_analyzer, create );
         Document doc;
 
-        QMapIterator< unsigned int, QMap< QString, QString > > it( trackData );
-        while ( it.hasNext() )
+        if ( !data.track.isEmpty() )
         {
-            it.next();
-            unsigned int id = it.key();
-            QMap< QString, QString > values = it.value();
+            doc.add( *( _CLNEW Field( _T( "fulltext" ), DatabaseImpl::sortname( QString( "%1 %2" ).arg( data.artist ).arg( data.track ) ).toStdWString().c_str(),
+                                      Field::STORE_NO | Field::INDEX_UNTOKENIZED ) ) );
 
-            if ( values.contains( "track" ) )
-            {
-                doc.add( *( _CLNEW Field( _T( "fulltext" ), DatabaseImpl::sortname( QString( "%1 %2" ).arg( values.value( "artist" ) ).arg( values.value( "track" ) ) ).toStdWString().c_str(),
-                                          Field::STORE_NO | Field::INDEX_UNTOKENIZED ) ) );
+            doc.add( *( _CLNEW Field( _T( "track" ), DatabaseImpl::sortname( data.track ).toStdWString().c_str(),
+                                      Field::STORE_NO | Field::INDEX_UNTOKENIZED ) ) );
 
-                doc.add( *( _CLNEW Field( _T( "track" ), DatabaseImpl::sortname( values.value( "track" ) ).toStdWString().c_str(),
-                                          Field::STORE_NO | Field::INDEX_UNTOKENIZED ) ) );
+            doc.add( *( _CLNEW Field( _T( "artist" ), DatabaseImpl::sortname( data.artist ).toStdWString().c_str(),
+                                      Field::STORE_NO | Field::INDEX_UNTOKENIZED ) ) );
 
-                doc.add( *( _CLNEW Field( _T( "artist" ), DatabaseImpl::sortname( values.value( "artist" ) ).toStdWString().c_str(),
-                                          Field::STORE_NO | Field::INDEX_UNTOKENIZED ) ) );
+            doc.add( *( _CLNEW Field( _T( "artistid" ), QString::number( data.artistId ).toStdWString().c_str(),
+                                      Field::STORE_YES | Field::INDEX_NO ) ) );
 
-                doc.add( *( _CLNEW Field( _T( "artistid" ), values.value( "artistid" ).toStdWString().c_str(),
-                                          Field::STORE_YES | Field::INDEX_NO ) ) );
-
-                doc.add( *( _CLNEW Field( _T( "trackid" ), QString::number( id ).toStdWString().c_str(),
-                                          Field::STORE_YES | Field::INDEX_NO ) ) );
-            }
-            else if ( values.contains( "album" ) )
-            {
-                doc.add( *( _CLNEW Field( _T( "album" ), DatabaseImpl::sortname( values.value( "album" ) ).toStdWString().c_str(),
-                                          Field::STORE_NO | Field::INDEX_UNTOKENIZED ) ) );
-
-                doc.add( *( _CLNEW Field( _T( "albumid" ), QString::number( id ).toStdWString().c_str(),
-                                          Field::STORE_YES | Field::INDEX_NO ) ) );
-            }
-            else
-                Q_ASSERT( false );
-
-            luceneWriter.addDocument( &doc );
-            doc.clear();
+            doc.add( *( _CLNEW Field( _T( "trackid" ), QString::number( data.id ).toStdWString().c_str(),
+                                      Field::STORE_YES | Field::INDEX_NO ) ) );
         }
+        else if ( !data.album.isEmpty() )
+        {
+            doc.add( *( _CLNEW Field( _T( "album" ), DatabaseImpl::sortname( data.album ).toStdWString().c_str(),
+                                      Field::STORE_NO | Field::INDEX_UNTOKENIZED ) ) );
 
-        luceneWriter.optimize();
-        luceneWriter.close();
+            doc.add( *( _CLNEW Field( _T( "albumid" ), QString::number( data.id ).toStdWString().c_str(),
+                                      Field::STORE_YES | Field::INDEX_NO ) ) );
+        }
+        else
+            Q_ASSERT( false );
+
+        m_luceneWriter->addDocument( &doc );
     }
     catch( CLuceneError& error )
     {
@@ -223,7 +213,7 @@ FuzzyIndex::search( const Tomahawk::query_ptr& query )
         {
             if ( !IndexReader::indexExists( TomahawkUtils::appDataDir().absoluteFilePath( "tomahawk.lucene" ).toStdString().c_str() ) )
             {
-                qDebug() << Q_FUNC_INFO << "index didn't exist.";
+                tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "index didn't exist.";
                 return resultsmap;
             }
 
@@ -314,7 +304,7 @@ FuzzyIndex::searchAlbum( const Tomahawk::query_ptr& query )
         {
             if ( !IndexReader::indexExists( TomahawkUtils::appDataDir().absoluteFilePath( "tomahawk.lucene" ).toStdString().c_str() ) )
             {
-                qDebug() << Q_FUNC_INFO << "index didn't exist.";
+                tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "index didn't exist.";
                 return resultsmap;
             }
 
