@@ -235,7 +235,7 @@ NewReleasesPlugin::fetchNRCapabilitiesFromCache( InfoRequestData requestData )
     }
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Fetching fetchNRCapabilitiesFromCache";
-    emit getCachedInfo ( criteria, 172800000 /* 2 days */, requestData );
+    emit getCachedInfo ( criteria, Q_INT64_C(172800000) /* 2 days */, requestData );
 }
 
 
@@ -620,7 +620,7 @@ NewReleasesPlugin::nrList()
             /**
              * We can cache it the lot for 2 days, it will be checked on next request
              */
-            emit updateCache( criteria, 172800000 /* 2 days */, request.type, m_allNRsMap );
+            emit updateCache( criteria, Q_INT64_C(172800000) /* 2 days */, request.type, m_allNRsMap );
         }
         m_cachedRequests.clear();
     }
@@ -712,7 +712,7 @@ NewReleasesPlugin::nrReturned()
         /**
          * If the item has expired, cache it for one hour and try and refetch later
          */
-        emit updateCache( criteria, (maxAge == 0 ? 3600000 /* One hour */ : maxAge), requestData.type, returnedData );
+        emit updateCache( criteria, (maxAge == Q_INT64_C(0) ? (3600000) /* One hour */ : maxAge), requestData.type, returnedData );
     }
     else
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Network error in fetching newrelease:" << reply->url().toString();

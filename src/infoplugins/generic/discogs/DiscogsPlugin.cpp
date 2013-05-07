@@ -67,7 +67,7 @@ DiscogsPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
             criteria["artist"] = hash["artist"];
             criteria["album"] = hash["album"];
 
-            emit getCachedInfo( criteria, 2419200000, requestData );
+            emit getCachedInfo( criteria, Q_INT64_C(2419200000), requestData );
 
             break;
         }
@@ -184,7 +184,7 @@ DiscogsPlugin::albumInfoSlot( const InfoRequestData& requestData, QNetworkReply*
     criteria["artist"] = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>()["artist"];
     criteria["album"] = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>()["album"];
 
-    emit updateCache( criteria, 0, requestData.type, returnedData );
+    emit updateCache( criteria, Q_INT64_C(0), requestData.type, returnedData );
 }
 
 

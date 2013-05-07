@@ -117,7 +117,7 @@ SpotifyInfoPlugin::getInfo( InfoRequestData requestData )
         if ( hash.contains( "artist" ) )
             criteria["artist"] = hash["artist"];
 
-        emit getCachedInfo( criteria, 2419200000, requestData );
+        emit getCachedInfo( criteria, Q_INT64_C(2419200000), requestData );
 
         return;
     }
@@ -310,5 +310,5 @@ SpotifyInfoPlugin::trackListResult( const QStringList& trackNameList, const Info
     criteria["artist"] = requestData.input.value< InfoStringHash>()["artist"];
     criteria["album"] = requestData.input.value< InfoStringHash>()["album"];
 
-    emit updateCache( criteria, 0, requestData.type, returnedData );
+    emit updateCache( criteria, Q_INT64_C(0), requestData.type, returnedData );
 }

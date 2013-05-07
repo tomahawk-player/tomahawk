@@ -277,7 +277,7 @@ LastFmInfoPlugin::fetchSimilarArtists( Tomahawk::InfoSystem::InfoRequestData req
     Tomahawk::InfoSystem::InfoStringHash criteria;
     criteria["artist"] = hash["artist"];
 
-    emit getCachedInfo( criteria, 2419200000, requestData );
+    emit getCachedInfo( criteria, Q_INT64_C(2419200000), requestData );
 }
 
 
@@ -300,7 +300,7 @@ LastFmInfoPlugin::fetchSimilarTracks( Tomahawk::InfoSystem::InfoRequestData requ
     criteria["artist"] = hash["artist"];
     criteria["track"] = hash["track"];
 
-    emit getCachedInfo( criteria, 2419200000, requestData );
+    emit getCachedInfo( criteria, Q_INT64_C(2419200000), requestData );
 }
 
 
@@ -322,7 +322,7 @@ LastFmInfoPlugin::fetchTopTracks( Tomahawk::InfoSystem::InfoRequestData requestD
     Tomahawk::InfoSystem::InfoStringHash criteria;
     criteria["artist"] = hash["artist"];
 
-    emit getCachedInfo( criteria, 2419200000, requestData );
+    emit getCachedInfo( criteria, Q_INT64_C(2419200000), requestData );
 }
 
 
@@ -344,7 +344,7 @@ LastFmInfoPlugin::fetchArtistInfo( Tomahawk::InfoSystem::InfoRequestData request
     Tomahawk::InfoSystem::InfoStringHash criteria;
     criteria["artist"] = hash["artist"];
 
-    emit getCachedInfo( criteria, 2419200000, requestData );
+    emit getCachedInfo( criteria, Q_INT64_C(2419200000), requestData );
 }
 
 
@@ -366,7 +366,7 @@ LastFmInfoPlugin::fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData 
         criteria["chart_id"] = hash["chart_id"];
     }
 
-    emit getCachedInfo( criteria, 0, requestData );
+    emit getCachedInfo( criteria, Q_INT64_C(0), requestData );
 }
 
 
@@ -381,7 +381,7 @@ LastFmInfoPlugin::fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData 
     InfoStringHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
     Tomahawk::InfoSystem::InfoStringHash criteria;
 
-    emit getCachedInfo( criteria, 0, requestData );
+    emit getCachedInfo( criteria, Q_INT64_C(0), requestData );
 }
 
 
@@ -404,7 +404,7 @@ LastFmInfoPlugin::fetchAlbumInfo( Tomahawk::InfoSystem::InfoRequestData requestD
     criteria["artist"] = hash["artist"];
     criteria["album"] = hash["album"];
 
-    emit getCachedInfo( criteria, 2419200000, requestData );
+    emit getCachedInfo( criteria, Q_INT64_C(2419200000), requestData );
 }
 
 
@@ -583,7 +583,7 @@ LastFmInfoPlugin::similarArtistsReturned()
         Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>();
         Tomahawk::InfoSystem::InfoStringHash criteria;
         criteria["artist"] = origData["artist"];
-        emit updateCache( criteria, 2419200000, requestData.type, returnedData );
+        emit updateCache( criteria, Q_INT64_C(2419200000), requestData.type, returnedData );
     }
 }
 
@@ -635,7 +635,7 @@ LastFmInfoPlugin::similarTracksReturned()
         Tomahawk::InfoSystem::InfoStringHash criteria;
         criteria["artist"] = origData["artist"];
         criteria["track"] = origData["track"];
-        emit updateCache( criteria, 2419200000, requestData.type, returnedData );
+        emit updateCache( criteria, Q_INT64_C(2419200000), requestData.type, returnedData );
     }
 }
 
@@ -704,7 +704,7 @@ LastFmInfoPlugin::topTracksReturned()
     Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>();
     Tomahawk::InfoSystem::InfoStringHash criteria;
     criteria["artist"] = origData["artist"];
-    emit updateCache( criteria, 0, requestData.type, returnedData );
+    emit updateCache( criteria, Q_INT64_C(0), requestData.type, returnedData );
 }
 
 
@@ -746,7 +746,7 @@ LastFmInfoPlugin::artistInfoReturned()
             Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>();
             Tomahawk::InfoSystem::InfoStringHash criteria;
             criteria["artist"] = origData["artist"];
-            emit updateCache( criteria, 0, requestData.type, returnedData );
+            emit updateCache( criteria, Q_INT64_C(0), requestData.type, returnedData );
         }
         emit info( requestData, returnedData );
     }
@@ -827,7 +827,7 @@ LastFmInfoPlugin::coverArtReturned()
         Tomahawk::InfoSystem::InfoStringHash criteria;
         criteria["artist"] = origData["artist"];
         criteria["album"] = origData["album"];
-        emit updateCache( criteria, 2419200000, requestData.type, returnedData );
+        emit updateCache( criteria, Q_INT64_C(2419200000), requestData.type, returnedData );
     }
     else
     {
@@ -873,7 +873,7 @@ LastFmInfoPlugin::artistImagesReturned()
         Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>();
         Tomahawk::InfoSystem::InfoStringHash criteria;
         criteria["artist"] = origData["artist"];
-        emit updateCache( criteria, 2419200000, requestData.type, returnedData );
+        emit updateCache( criteria, Q_INT64_C(2419200000), requestData.type, returnedData );
     }
     else
     {

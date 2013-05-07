@@ -238,7 +238,7 @@ ChartsPlugin::fetchChartCapabilitiesFromCache( Tomahawk::InfoSystem::InfoRequest
     }
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Checking cache for " << "InfoChartCapabilities" << m_chartVersion;
-    emit getCachedInfo( criteria, 172800000 /* 2 days */, requestData );
+    emit getCachedInfo( criteria, Q_INT64_C(172800000) /* 2 days */, requestData );
 }
 
 
@@ -611,7 +611,7 @@ ChartsPlugin::chartsList()
             criteria[ "InfoChartVersion" ] = m_chartVersion;
 
             /// We can cache it the lot for 2 days, it will be checked on next request
-            emit updateCache( criteria, 172800000 /* 2 days */, request.type, m_allChartsMap );
+            emit updateCache( criteria, Q_INT64_C(172800000) /* 2 days */, request.type, m_allChartsMap );
         }
 
         TomahawkUtils::Cache::instance()->putData( m_cacheIdentifier, 172800000 /* 2 days */, "allCharts", m_allChartsMap );
@@ -747,7 +747,7 @@ ChartsPlugin::chartReturned()
         criteria[ "chart_expires" ] = ( ok ? QString::number( expires ) : QString::number( 0 ) );
 
         /// If the item has expired, cache it for one hour and try and refetch later
-        emit updateCache( criteria, (maxAge == 0 ? 3600000 /* One hour */ : maxAge), requestData.type, returnedData );
+        emit updateCache( criteria, (maxAge == Q_INT64_C(0) ? Q_INT64_C(3600000) /* One hour */ : maxAge), requestData.type, returnedData );
     }
     else
     {

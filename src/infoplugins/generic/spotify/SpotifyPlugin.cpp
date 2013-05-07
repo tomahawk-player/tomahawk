@@ -116,7 +116,7 @@ SpotifyPlugin::fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData )
     criteria["chart_id"] = hash["chart_id"];
     criteria["chart_source"] = hash["chart_source"];
 
-    emit getCachedInfo( criteria, 86400000 /* Expire chart cache in 1 day */, requestData );
+    emit getCachedInfo( criteria, Q_INT64_C(86400000) /* Expire chart cache in 1 day */, requestData );
 }
 
 
@@ -131,7 +131,7 @@ SpotifyPlugin::fetchChartCapabilities( Tomahawk::InfoSystem::InfoRequestData req
 
     Tomahawk::InfoSystem::InfoStringHash criteria;
     criteria[ "InfoChartCapabilities" ] = "spotifyplugin";
-    emit getCachedInfo( criteria, 604800000, requestData );
+    emit getCachedInfo( criteria, Q_INT64_C(604800000), requestData );
 }
 
 
@@ -272,7 +272,7 @@ SpotifyPlugin::chartTypes()
             emit info( request, m_allChartsMap );
             Tomahawk::InfoSystem::InfoStringHash criteria;
             criteria[ "InfoChartCapabilities" ] = "spotifyplugin";
-            emit updateCache( criteria,604800000, request.type, m_allChartsMap );
+            emit updateCache( criteria, Q_INT64_C(604800000), request.type, m_allChartsMap );
         }
         m_cachedRequests.clear();
     }
@@ -379,7 +379,7 @@ SpotifyPlugin::chartReturned()
         Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash >();
         criteria[ "chart_id" ] = origData[ "chart_id" ];
         criteria[ "chart_source" ] = origData[ "chart_source" ];
-        emit updateCache( criteria, 86400000, requestData.type, returnedData );
+        emit updateCache( criteria, Q_INT64_C(86400000), requestData.type, returnedData );
     }
     else
         qDebug() << "Network error in fetching chart:" << reply->url().toString();

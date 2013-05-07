@@ -64,7 +64,7 @@ MusicBrainzPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
             Tomahawk::InfoSystem::InfoStringHash criteria;
             criteria["artist"] = hash["artist"];
 
-            emit getCachedInfo( criteria, 2419200000, requestData );
+            emit getCachedInfo( criteria, Q_INT64_C(2419200000), requestData );
             break;
         }
 
@@ -74,7 +74,7 @@ MusicBrainzPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
             criteria["artist"] = hash["artist"];
             criteria["album"] = hash["album"];
 
-            emit getCachedInfo( criteria, 2419200000, requestData );
+            emit getCachedInfo( criteria, Q_INT64_C(2419200000), requestData );
 
             break;
         }
@@ -193,7 +193,7 @@ MusicBrainzPlugin::gotReleaseGroupsSlot()
             Tomahawk::InfoSystem::InfoStringHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoStringHash>();
             Tomahawk::InfoSystem::InfoStringHash criteria;
             criteria["artist"] = origData["artist"];
-            emit updateCache( criteria, 0, requestData.type, returnedData );
+            emit updateCache( criteria, Q_INT64_C(0), requestData.type, returnedData );
             break;
         }
 
@@ -292,7 +292,7 @@ MusicBrainzPlugin::gotRecordingsSlot()
     Tomahawk::InfoSystem::InfoStringHash criteria;
     criteria["artist"] = origData["artist"];
     criteria["album"] = origData["album"];
-    emit updateCache( criteria, 0, requestData.type, returnedData );
+    emit updateCache( criteria, Q_INT64_C(0), requestData.type, returnedData );
 }
 
 Q_EXPORT_PLUGIN2( Tomahawk::InfoSystem::InfoPlugin, Tomahawk::InfoSystem::MusicBrainzPlugin )
