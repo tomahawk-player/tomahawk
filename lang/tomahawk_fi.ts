@@ -1740,7 +1740,7 @@ käyttäjäradion käyttöönottamiseksi</translation>
     <message>
         <location filename="../src/SocialWidget.cpp" line="70"/>
         <source>Tweet</source>
-        <translation>Twiittaa</translation>
+        <translation>Tviittaa</translation>
     </message>
     <message>
         <location filename="../src/SocialWidget.cpp" line="168"/>
@@ -2404,7 +2404,7 @@ napsauttamalla hiiren oikealla.</translation>
     <message>
         <location filename="../src/accounts/twitter/TwitterAccount.h" line="51"/>
         <source>Send tweets from Tomahawk.</source>
-        <translation>Lähetä twiittejä Tomahawkista.</translation>
+        <translation>Lähetä tviittejä Tomahawkista.</translation>
     </message>
 </context>
 <context>
@@ -2414,7 +2414,7 @@ napsauttamalla hiiren oikealla.</translation>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="144"/>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="192"/>
         <source>Tweet!</source>
-        <translation>Twiittaa!</translation>
+        <translation>Tviittaa!</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="68"/>
@@ -2450,7 +2450,7 @@ napsauttamalla hiiren oikealla.</translation>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="283"/>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="293"/>
         <source>Tweetin&apos; Error</source>
-        <translation>Twiittausvirhe</translation>
+        <translation>Tviittausvirhe</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="125"/>
@@ -2467,7 +2467,7 @@ Voit haluta yrittää tunnistautumista uudelleen.</translation>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="182"/>
         <source>Global Tweet</source>
-        <translation>Yleistwiitti</translation>
+        <translation>Yleistviitti</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="187"/>
@@ -2492,7 +2492,7 @@ Voit haluta yrittää tunnistautumista uudelleen.</translation>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="203"/>
         <source>You must enter a user name for this type of tweet.</source>
-        <translation>Tällaiselle twiitille pitää antaa käyttäjätunnus.</translation>
+        <translation>Tällaiselle tviitille pitää antaa käyttäjätunnus.</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="214"/>
@@ -2518,12 +2518,12 @@ Voit haluta yrittää tunnistautumista uudelleen.</translation>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="276"/>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="285"/>
         <source>Tweeted!</source>
-        <translation>Twiitattu!</translation>
+        <translation>Tviitattu!</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="276"/>
         <source>Your tweet has been posted!</source>
-        <translation>Twiittisi on lähetetty!</translation>
+        <translation>Tviittisi on lähetetty!</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="283"/>
@@ -3849,21 +3849,21 @@ If you want to connect Tomahawk to your friends using Twitter, select the type o
 
 You can re-send a sync message at any time simply by sending another tweet using the button.</source>
         <translation>
-Jos haluat vain lähettää twiittejä, olet valmis.
+Jos haluat vain lähettää tviittejä, olet valmis.
 
-Jos haluat yhdistää Tomahawkin Twitteriä käyttäviin kavereihisi, valitse twiitin tyyppi ja lähetä synkronointiviesti painamalla Lähetä. Teidän molempien pitää seurata toisianne, koska tässä käytetään yksityisviestejä. Sitten ole kärsivällinen – yhdistämisessä saattaa kestää useita minuutteja!
+Jos haluat yhdistää Tomahawkin Twitteriä käyttäviin kavereihisi, valitse tviitin tyyppi ja lähetä synkronointiviesti painamalla Lähetä. Teidän molempien pitää seurata toisianne, koska tässä käytetään yksityisviestejä. Sitten ole (erittäin) kärsivällinen – yhdistämisessä saattaa kestää useita minuutteja!
 
-Voit lähettää synkronointiviestin uudelleen millä hetkellä hyvänsä lähettämällä toisen twiitin painamalla Lähetä.</translation>
+Voit lähettää synkronointiviestin uudelleen millä hetkellä hyvänsä lähettämällä toisen tviitin painamalla Lähetä.</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="244"/>
         <source>Select the kind of tweet you would like, then press the button to post it:</source>
-        <translation>Valitse haluamasi twiitin tyyppi, ja lähetä se sitten painamalla Lähetä:</translation>
+        <translation>Valitse haluamasi tviitin tyyppi, ja lähetä se sitten painamalla Lähetä:</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="276"/>
         <source>Global Tweet</source>
-        <translation>Yleistwiitti</translation>
+        <translation>Yleistviitti</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="281"/>
