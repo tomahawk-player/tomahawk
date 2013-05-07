@@ -106,7 +106,7 @@ log( const char *msg, unsigned int debugLevel, bool toDisk = true )
 
 void
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
-TomahawkLogHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+TomahawkLogHandler( QtMsgType type, const QMessageLogContext& context, const QString& msg )
 #else
 TomahawkLogHandler( QtMsgType type, const char* msg )
 #endif
@@ -192,6 +192,6 @@ TLog::TLog( unsigned int debugLevel )
 
 TLog::~TLog()
 {
-    log( m_msg.toLocal8Bit().data(), m_debugLevel );
+    log( m_msg.toUtf8().data(), m_debugLevel );
 }
 
