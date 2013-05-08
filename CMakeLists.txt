@@ -320,7 +320,7 @@ endif()
 # Add all targets to the build-tree export set
 set(CMAKE_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/Tomahawk" CACHE PATH  "Installation directory for CMake files")
 set(CMAKE_INSTALL_FULL_CMAKEDIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_CMAKEDIR}")
-export(TARGETS tomahawklib tomahawk_portfwd
+export(TARGETS tomahawklib
   FILE "${PROJECT_BINARY_DIR}/TomahawkLibraryDepends.cmake")
 
 # Export the package for use from the build-tree

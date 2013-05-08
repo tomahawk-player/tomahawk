@@ -475,9 +475,11 @@ IF( UNIX AND NOT APPLE )
 ENDIF( UNIX AND NOT APPLE )
 
 TARGET_LINK_LIBRARIES( tomahawklib
+    LINK_PRIVATE
     # Thirdparty shipped with tomahawk
     ${LIBPORTFWD_LIBRARIES}
 
+    LINK_PUBLIC
     # External deps
     ${QJSON_LIBRARIES}
     ${PHONON_LIBS}

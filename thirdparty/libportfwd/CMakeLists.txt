@@ -46,14 +46,6 @@ IF(WIN32)
 	TARGET_LINK_LIBRARIES( tomahawk_portfwd "ws2_32.dll" "iphlpapi.a" )
 ENDIF()
 
-INSTALL( TARGETS tomahawk_portfwd
-    EXPORT TomahawkLibraryDepends
-    RUNTIME DESTINATION bin
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    BUNDLE DESTINATION library
-)
-
 #INSTALL(FILES include/portfwd/portfwddllmacro.h include/portfwd/portfwd.h DESTINATION include/portfwd)
 
 #ADD_EXECUTABLE(portfwd-demo
