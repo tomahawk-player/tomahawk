@@ -21,12 +21,16 @@
 
 #include <QtCore/qglobal.h>
 
-#ifndef PORTFWDDLLEXPORT
-# if defined (PORTFWDDLLEXPORT_PRO)
-#  define PORTFWDDLLEXPORT Q_DECL_EXPORT
+# if defined (PORTFWDDLLEXPORT_STATIC)
+#   define PORTFWDDLLEXPORT
 # else
-#  define PORTFWDDLLEXPORT Q_DECL_IMPORT
+#   ifndef PORTFWDDLLEXPORT
+#       if defined (PORTFWDDLLEXPORT_PRO)
+#           define PORTFWDDLLEXPORT Q_DECL_EXPORT
+#       else
+#           define PORTFWDDLLEXPORT Q_DECL_IMPORT
+#       endif
+#   endif
 # endif
-#endif
 
 #endif

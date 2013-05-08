@@ -167,18 +167,15 @@ qt_add_resources( RC_SRCS "../resources.qrc" )
 
 SET( final_src ${final_src} ${tomahawkUI_H} ${tomahawkMoc} ${tomahawkSources} ${RC_SRCS} )
 
-IF( UNIX AND NOT APPLE )
-    ADD_EXECUTABLE( tomahawk ${final_src} )
-ENDIF( UNIX AND NOT APPLE )
-IF( APPLE )
-    ADD_EXECUTABLE( tomahawk MACOSX_BUNDLE ${final_src} )
-    SET_TARGET_PROPERTIES(tomahawk PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_BINARY_DIR}/Info.plist")
-ENDIF( APPLE )
-IF( WIN32 )
-    ADD_EXECUTABLE( tomahawk WIN32 ${final_src} )
-ENDIF( WIN32 )
 
-SET_TARGET_PROPERTIES(tomahawk PROPERTIES AUTOMOC TRUE)
+ADD_EXECUTABLE( tomahawk WIN32 MACOSX_BUNDLE ${final_src} )
+SET_TARGET_PROPERTIES(tomahawk
+    PROPERTIES
+        AUTOMOC TRUE
+        MACOSX_BUNDLE_INFO_PLIST "${CMAKE_BINARY_DIR}/Info.plist"
+)
+
+
 qt5_use_modules(tomahawk Core Widgets Network Sql WebKitWidgets)
 
 MESSAGE( STATUS "OS_SPECIFIC_LINK_LIBRARIES: ${OS_SPECIFIC_LINK_LIBRARIES}" )

@@ -22,7 +22,6 @@
 
 #include "AclRegistry.h"
 #include "HeadlessCheck.h"
-#include "DllMacro.h"
 
 #include <QObject>
 #include <QString>

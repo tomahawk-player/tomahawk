@@ -19,14 +19,12 @@
 #ifndef CONFIGDELEGATEBASE_H
 #define CONFIGDELEGATEBASE_H
 
-#include "DllMacro.h"
-
 #include <QStyledItemDelegate>
 
 #define PADDING 4
 
 class QPainter;
-class Q_DECL_EXPORT ConfigDelegateBase : public QStyledItemDelegate
+class ConfigDelegateBase : public QStyledItemDelegate
 {
     Q_OBJECT
 public:
