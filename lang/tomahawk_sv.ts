@@ -1460,17 +1460,17 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1143"/>
         <source>SSL Error</source>
-        <translation type="unfinished"/>
+        <translation>SSL-Fel</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1144"/>
         <source>You have asked Tomahawk to connect securely to &lt;b&gt;%1&lt;/b&gt;, but we can&apos;t confirm that your connection is secure:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Do you want to trust this connection?</source>
-        <translation type="unfinished"/>
+        <translation>Du har bett Tomahawk att göra en säker uppkoppling mot &lt;b&gt;%1&lt;/b&gt;, men vi kan inte bekräfta att din uppkoppling är säker: &lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Litar du på denna uppkoppling?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1151"/>
         <source>Trust certificate</source>
-        <translation type="unfinished"/>
+        <translation>Tillförlitligt certifikat</translation>
     </message>
 </context>
 <context>
