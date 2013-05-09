@@ -97,7 +97,7 @@ DatabaseCommand_SetPlaylistRevision::postCommitHook()
 
     // private, but we are a friend. will recall itself in its own thread:
     playlist_ptr playlist = source()->dbCollection()->playlist( m_playlistguid );
-    Q_ASSERT( !playlist.isNull() );
+//    Q_ASSERT( !playlist.isNull() );
     if ( !playlist )
         return;
 
@@ -134,8 +134,8 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
     }
     else
     {
-        tDebug() << "Playlist:" << m_playlistguid << currentRevision << source()->friendlyName() << source()->id();
-        Q_ASSERT_X( false, "DatabaseCommand_SetPlaylistRevision::exec", "No such playlist, WTF?" );
+        tDebug() << "ERROR: No such playlist:" << m_playlistguid << currentRevision << source()->friendlyName() << source()->id();
+//        Q_ASSERT_X( false, "DatabaseCommand_SetPlaylistRevision::exec", "No such playlist, WTF?" );
         return;
     }
 
