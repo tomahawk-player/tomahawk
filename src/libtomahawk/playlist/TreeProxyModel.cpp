@@ -27,6 +27,7 @@
 #include "database/DatabaseImpl.h"
 #include "collection/AlbumsRequest.h"
 #include "collection/ArtistsRequest.h"
+#include "database/DatabaseCommand_AllAlbums.h"
 #include "PlayableItem.h"
 #include "utils/Logger.h"
 
@@ -73,7 +74,11 @@ TreeProxyModel::onRowsInserted( const QModelIndex& parent, int /* start */, int 
     if ( pi->artist().isNull() )
         return;
 
-    Tomahawk::AlbumsRequest* cmd = m_model->collection()->requestAlbums( pi->artist() );
+    Tomahawk::AlbumsRequest* cmd = 0;
+    if ( !m_model->collection().isNull() )
+        cmd = m_model->collection()->requestAlbums( pi->artist() );
+    else
+        cmd = new DatabaseCommand_AllAlbums( Tomahawk::collection_ptr(), pi->artist() );
 
     cmd->setFilter( m_filter );
 
@@ -115,7 +120,11 @@ TreeProxyModel::setFilter( const QString& pattern )
     }
     else
     {
-        Tomahawk::ArtistsRequest* cmd = m_model->collection()->requestArtists();
+        Tomahawk::ArtistsRequest* cmd = 0;
+        if ( !m_model->collection().isNull() )
+            cmd = m_model->collection()->requestArtists();
+        else
+            cmd = new DatabaseCommand_AllArtists(); //for SuperCollection, TODO: replace with a proper proxy-ArtistsRequest
 
         cmd->setFilter( pattern );
         m_artistsFilterCmd = cmd;
