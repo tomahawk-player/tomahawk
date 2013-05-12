@@ -229,14 +229,18 @@ macro_log_feature(QTWEETLIB_FOUND "QTweetLib" "Qt Twitter Library" "https://gith
 macro_optional_find_package(LibLastFm 1.0.0)
 macro_log_feature(LIBLASTFM_FOUND "liblastfm" "Qt library for the Last.fm webservices" "https://github.com/lastfm/liblastfm" TRUE "" "liblastfm is needed for scrobbling tracks to Last.fm and fetching cover artwork")
 
+macro_optional_find_package(QtKeychain 0.1.0)
+macro_log_feature(QTKEYCHAIN_FOUND "QtKeychain" "Provides support for secure credentials storage" "https://github.com/frankosterfeld/qtkeychain" TRUE "" "")
+
 # we need pthreads too
 macro_optional_find_package(Threads)
 macro_log_feature(THREADS_FOUND "Threads" "Threading Library" "" TRUE "" "Platform specific library for threading")
 
-IF( WIN32 )
+### QtSparkle
+if( WIN32 )
     macro_optional_find_package(QtSparkle)
     macro_log_feature(QTSPARKLE_FOUND "qtsparkle" "Library for creating auto updaters written in Qt" "https://github.com/davidsansome/qtsparkle" FALSE "" "")
-ENDIF( WIN32 )
+endif( WIN32 )
 
 #TODO: support external qxt
 set(QXTWEB_FOUND TRUE)
@@ -262,8 +266,6 @@ add_subdirectory(${THIRDPARTY_DIR}/libportfwd)
 # ENDIF()
 
 #### submodules end
-
-
 
 macro_optional_find_package(KDE4)
 macro_optional_find_package(KDE4Installed)
