@@ -224,9 +224,12 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
 
     painter->drawPixmap( iconRect, avatar );
 
-    if ( ( option.state & QStyle::State_Selected ) == QStyle::State_Selected )
+    QColor descColor = option.palette.color( QPalette::Text ).lighter( 180 );
+    if ( type == SourcesModel::ScriptCollection && //you cannot select a non-script collection anyway
+        option.state.testFlag( QStyle::State_Selected ) )
     {
         painter->setPen( option.palette.color( QPalette::HighlightedText ) );
+        descColor = option.palette.color( QPalette::HighlightedText );
     }
 
     QRect textRect = option.rect.adjusted( iconRect.width() + 8, 6, -figWidth - ( figWidth ? 28 : 0 ), 0 );
@@ -235,13 +238,6 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
         QTextOption to;
         to.setWrapMode( QTextOption::NoWrap );
         painter->drawText( textRect, text, to );
-    }
-
-    QColor descColor = option.palette.color( QPalette::Text ).lighter( 180 );
-    if ( type == SourcesModel::ScriptCollection && //you cannot select a non-script collection anyway
-         option.state.testFlag( QStyle::State_Selected ) )
-    {
-        descColor = option.palette.color( QPalette::HighlightedText );
     }
 
     painter->setFont( normal );
@@ -446,7 +442,7 @@ SourceDelegate::paintGroup( QPainter* painter, const QStyleOptionViewItem& optio
 void
 SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    QStyleOptionViewItem o = option;
+    QStyleOptionViewItemV4 o = option;
     QStyleOptionViewItemV4 o3 = option;
 
     painter->save();
@@ -462,7 +458,6 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         if ( ( option.state & QStyle::State_MouseOver ) == QStyle::State_MouseOver )
         {
             o.state |= QStyle::State_MouseOver;
-            o3.state |= QStyle::State_MouseOver;
         }
 
         if ( ( option.state & QStyle::State_Open ) == QStyle::State_Open )
@@ -476,18 +471,15 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
             {
                 if ( type == SourcesModel::ScriptCollection )
                     o.state |= QStyle::State_Selected;
-
-                o3.state |= QStyle::State_Selected;
-            }
-            else
-            {
-                o3.state &= ~QStyle::State_Selected;
             }
 
             o.palette.setColor( QPalette::Text, o.palette.color( QPalette::HighlightedText ) );
-            o3.palette.setColor( QPalette::Text, o.palette.color( QPalette::HighlightedText ) );
         }
     }
+
+    initStyleOption( &o3, index );
+    o3.icon = QIcon();
+    o3.text.clear();
 
     // shrink the indentations
     {
