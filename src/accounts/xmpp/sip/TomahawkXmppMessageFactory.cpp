@@ -142,9 +142,9 @@ void TomahawkXmppMessageFactory::serialize(Payload *extension, QXmlStreamWriter 
         if ( info.isVisible() )
         {
             QHostAddress ha = QHostAddress( info.host() );
-            if ( Servent::isValidExternalIP( ha ) && ha.protocol() == QAbstractSocket::IPv4Protocol )
+            if ( ( Servent::isValidExternalIP( ha ) && ha.protocol() == QAbstractSocket::IPv4Protocol ) || ( ha.protocol() == QAbstractSocket::UnknownNetworkLayerProtocol ) )
             {
-                // For comapability reasons, this shall be put as the last candidate
+                // For comapability reasons, this shall be put as the last candidate (this is the IP/host that would have been sent in previous versions)
                 lastInfo = QSharedPointer<SipInfo>( new SipInfo( info ) );
                 sipInfos.removeOne( info );
                 break;
