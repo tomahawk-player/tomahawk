@@ -420,7 +420,7 @@ Servent::registerPeer( const Tomahawk::peerinfo_ptr& peerInfo )
             sipInfos.append( info );
         }
 
-        if ( sipInfos.length() == 0 )
+        if ( sipInfos.isEmpty() )
         {
             // We are not visible via any IP, send a dummy SipInfo
             SipInfo info = SipInfo();
@@ -847,9 +847,9 @@ Servent::connectToPeer( const peerinfo_ptr& peerInfo )
 
 
 void
-Servent::connectToPeer(const peerinfo_ptr& peerInfo, const QList<SipInfo>& sipInfoList, Connection* conn )
+Servent::connectToPeer(const peerinfo_ptr& peerInfo, const QList<SipInfo>& sipInfos, Connection* conn )
 {
-    if ( sipInfoList.isEmpty() )
+    if ( sipInfos.isEmpty() )
     {
         tLog( LOGVERBOSE ) << Q_FUNC_INFO << "No more possible SIP endpoints for " << conn->name() << " skipping.";
         // If a peerinfo was supplied and has a ControlConnection which should be destroyed, than use this
@@ -860,7 +860,7 @@ Servent::connectToPeer(const peerinfo_ptr& peerInfo, const QList<SipInfo>& sipIn
             delete conn;
         return;
     }
-    QList<SipInfo> sipInfo = QList<SipInfo>(sipInfoList);
+    QList<SipInfo> sipInfo = QList<SipInfo>(sipInfos);
     // Use first available SIP endpoint and remove it from the list
     SipInfo info = sipInfo.takeFirst();
     if ( !info.isVisible() )

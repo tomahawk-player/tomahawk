@@ -90,7 +90,7 @@ public slots:
 
 public:
     void connectToPeer( const Tomahawk::peerinfo_ptr& ha );
-    void connectToPeer(const Tomahawk::peerinfo_ptr &peerInfo, const QList<SipInfo>& sipInfoList, Connection* conn );
+    void connectToPeer(const Tomahawk::peerinfo_ptr &peerInfo, const QList<SipInfo>& sipInfos, Connection* conn );
     void reverseOfferRequest( ControlConnection* orig_conn, const QString &theirdbid, const QString& key, const QString& theirkey );
 
     bool visibleExternally() const { return (!m_externalHostname.isNull()) || (m_externalAddresses.length() > 0); }
