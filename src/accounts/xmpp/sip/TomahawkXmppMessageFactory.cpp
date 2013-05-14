@@ -29,7 +29,8 @@
 
 using namespace Jreen;
 
-TomahawkXmppMessageFactory::TomahawkXmppMessageFactory() : m_sipInfo()
+TomahawkXmppMessageFactory::TomahawkXmppMessageFactory()
+    : m_sipInfos()
 {
     m_depth = 0;
     m_state = AtNowhere;
@@ -60,7 +61,7 @@ void TomahawkXmppMessageFactory::handleStartElement(const QStringRef &name, cons
         m_state = AtNowhere;
         m_uniqname = QString();
         m_key = QString();
-        m_sipInfo = QList<SipInfo>();
+        m_sipInfos = QList<SipInfo>();
     }
     else if ( m_depth == 2 )
     {
@@ -83,7 +84,7 @@ void TomahawkXmppMessageFactory::handleStartElement(const QStringRef &name, cons
             info.setKey( m_key );
             info.setNodeId( m_uniqname );
             Q_ASSERT( info.isValid() );
-            m_sipInfo.append( info );
+            m_sipInfos.append( info );
         }
     }
     Q_UNUSED(uri);
@@ -98,14 +99,14 @@ void TomahawkXmppMessageFactory::handleEndElement(const QStringRef &name, const 
     {
         m_state = AtNowhere;
         // Check that we have at least one SipInfo so that we provide some information about invisible peers.
-        if ( m_sipInfo.length() == 0 )
+        if ( m_sipInfos.isEmpty() )
         {
             SipInfo info = SipInfo();
             info.setVisible( false );
             info.setKey( m_key );
             info.setNodeId( m_uniqname );
             Q_ASSERT( info.isValid() );
-            m_sipInfo.append( info );
+            m_sipInfos.append( info );
         }
     }
     Q_UNUSED(name);
@@ -134,9 +135,9 @@ void TomahawkXmppMessageFactory::serialize(Payload *extension, QXmlStreamWriter 
     writer->writeDefaultNamespace( TOMAHAWK_SIP_MESSAGE_NS );
 
     // Get a copy of the list, so that we can modify it here.
-    QList<SipInfo> sipInfo = QList<SipInfo>( sipMessage->sipInfo() );
+    QList<SipInfo> sipInfos = QList<SipInfo>( sipMessage->sipInfos() );
     QSharedPointer<SipInfo> lastInfo = QSharedPointer<SipInfo>();
-    foreach ( SipInfo info, sipInfo )
+    foreach ( SipInfo info, sipInfos )
     {
         if ( info.isVisible() )
         {
@@ -145,7 +146,7 @@ void TomahawkXmppMessageFactory::serialize(Payload *extension, QXmlStreamWriter 
             {
                 // For comapability reasons, this shall be put as the last candidate
                 lastInfo = QSharedPointer<SipInfo>( new SipInfo( info ) );
-                sipInfo.removeOne( info );
+                sipInfos.removeOne( info );
                 break;
             }
         }
@@ -155,7 +156,7 @@ void TomahawkXmppMessageFactory::serialize(Payload *extension, QXmlStreamWriter 
     writer->writeAttribute( QLatin1String( "pwd" ), sipMessage->key() );
     writer->writeAttribute( QLatin1String( "uniqname" ), sipMessage->uniqname() );
 
-    foreach ( SipInfo info, sipInfo )
+    foreach ( SipInfo info, sipInfos )
     {
         if ( info.isVisible() )
             serializeSipInfo( info, writer );
@@ -176,7 +177,7 @@ void TomahawkXmppMessageFactory::serialize(Payload *extension, QXmlStreamWriter 
 Payload::Ptr
 TomahawkXmppMessageFactory::createPayload()
 {
-    return Payload::Ptr( new TomahawkXmppMessage( m_sipInfo ) );
+    return Payload::Ptr( new TomahawkXmppMessage( m_sipInfos ) );
 }
 
 void

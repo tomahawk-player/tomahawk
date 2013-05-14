@@ -435,7 +435,7 @@ XmppSipPlugin::errorMessage( Jreen::Client::DisconnectReason reason )
 
 
 void
-XmppSipPlugin::sendSipInfo( const Tomahawk::peerinfo_ptr& receiver, const QList<SipInfo>& info )
+XmppSipPlugin::sendSipInfos( const Tomahawk::peerinfo_ptr& receiver, const QList<SipInfo>& info )
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << receiver << info;
 
@@ -909,7 +909,7 @@ XmppSipPlugin::onNewIq( const Jreen::IQ& iq )
             tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Received Sip Information from:" << iq.from().full();
 
             // Check that all received SipInfos are valid.
-            foreach ( SipInfo info, sipMessage->sipInfo() )
+            foreach ( SipInfo info, sipMessage->sipInfos() )
             {
                 Q_ASSERT( info.isValid() );
             }
@@ -921,7 +921,7 @@ XmppSipPlugin::onNewIq( const Jreen::IQ& iq )
                 tDebug() << Q_FUNC_INFO << "no valid peerInfo for" << iq.from().full();
                 return;
             }
-            peerInfo->setSipInfo( sipMessage->sipInfo() );
+            peerInfo->setSipInfos( sipMessage->sipInfos() );
         }
     }
 }

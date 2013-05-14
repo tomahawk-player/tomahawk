@@ -21,11 +21,13 @@
 
 #include "utils/Logger.h"
 
-TomahawkXmppMessage::TomahawkXmppMessage() : m_sipInfo()
+TomahawkXmppMessage::TomahawkXmppMessage()
+    : m_sipInfos()
 {
 }
 
-TomahawkXmppMessage::TomahawkXmppMessage( const QList<SipInfo> &sipInfo ) : m_sipInfo( sipInfo )
+TomahawkXmppMessage::TomahawkXmppMessage( const QList<SipInfo> &sipInfos )
+    : m_sipInfos( sipInfos )
 {
 }
 
@@ -34,26 +36,26 @@ TomahawkXmppMessage::~TomahawkXmppMessage()
 }
 
 const QList<SipInfo>
-TomahawkXmppMessage::sipInfo() const
+TomahawkXmppMessage::sipInfos() const
 {
-    return m_sipInfo;
+    return m_sipInfos;
 }
 
 
 const QString
 TomahawkXmppMessage::key() const
 {
-    if ( m_sipInfo.length() > 0 )
-        return m_sipInfo.first().key();
-    else
+    if ( m_sipInfos.isEmpty() )
         return QString();
+    else
+        return m_sipInfos.first().key();
 }
 
 const QString
 TomahawkXmppMessage::uniqname() const
 {
-    if ( m_sipInfo.length() > 0 )
-        return m_sipInfo.first().nodeId();
-    else
+    if ( m_sipInfos.isEmpty() )
         return QString();
+    else
+        return m_sipInfos.first().nodeId();
 }

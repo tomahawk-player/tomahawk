@@ -74,7 +74,7 @@ public:
     const QString id() const;
     SipPlugin* sipPlugin() const;
     const QString debugName() const;
-    void sendLocalSipInfo( const QList<SipInfo>& sipInfoList );
+    void sendLocalSipInfos( const QList<SipInfo>& sipInfos );
 
     QWeakPointer< Tomahawk::PeerInfo > weakRef();
     void setWeakRef( QWeakPointer< Tomahawk::PeerInfo > weakRef );
@@ -96,8 +96,8 @@ public:
     void setStatus( Status status );
     Status status() const;
 
-    void setSipInfo( const QList<SipInfo>& sipInfo );
-    const QList<SipInfo> sipInfo() const;
+    void setSipInfos( const QList<SipInfo>& sipInfos );
+    const QList<SipInfo> sipInfos() const;
 
     void setFriendlyName( const QString& friendlyName );
     const QString friendlyName() const;
@@ -141,7 +141,7 @@ private:
     QString m_id;
     QString m_contactId;
     Status  m_status;
-    QList<SipInfo> m_sipInfo;
+    QList<SipInfo> m_sipInfos;
     QString m_friendlyName;
     QString m_versionString;
     QVariant m_data;

@@ -46,7 +46,7 @@ private:
     /**
      * All the provided Sip informations
      */
-    QList<SipInfo> m_sipInfo;
+    QList<SipInfo> m_sipInfos;
 
     /**
      * The current parsing depth
