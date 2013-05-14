@@ -851,7 +851,11 @@ Servent::connectToPeer(const peerinfo_ptr& peerInfo, const QList<SipInfo>& sipIn
 {
     if ( sipInfos.isEmpty() )
     {
-        tLog( LOGVERBOSE ) << Q_FUNC_INFO << "No more possible SIP endpoints for " << conn->name() << " skipping.";
+        if ( conn != NULL ) {
+            tLog( LOGVERBOSE ) << Q_FUNC_INFO << "No more possible SIP endpoints for " << conn->name() << " skipping.";
+        } else {
+            tLog( LOGVERBOSE ) << Q_FUNC_INFO << "No more possible SIP endpoints for <null connection> skipping.";
+        }
         // If a peerinfo was supplied and has a ControlConnection which should be destroyed, than use this
         if ( !peerInfo.isNull() && peerInfo->controlConnection() )
             delete peerInfo->controlConnection();
@@ -922,10 +926,13 @@ Servent::connectToPeer(const peerinfo_ptr& peerInfo, const QList<SipInfo>& sipIn
 void
 Servent::connectToPeerFailed( const peerinfo_ptr& peerInfo, QList<SipInfo> sipInfo, Connection* conn, QTcpSocketExtra* socket )
 {
+    bool connIsNull = socket->_conn.isNull();
     cleanupSocket( socket );
 
-    // Try next SipInfo
-    connectToPeer( peerInfo, sipInfo, conn );
+    if ( !connIsNull ) {
+        // Try next SipInfo (don't do this if the connection was destroyed in between)
+        connectToPeer( peerInfo, sipInfo, conn );
+    }
 }
 
 void
