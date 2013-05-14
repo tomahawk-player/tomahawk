@@ -398,7 +398,7 @@ Servent::registerPeer( const Tomahawk::peerinfo_ptr& peerInfo )
         conn->addPeerInfo( peerInfo );
 
         registerOffer( key, conn );
-        QList<SipInfo> sipInfo = QList<SipInfo>();
+        QList<SipInfo> sipInfos = QList<SipInfo>();
         foreach ( QHostAddress ha, m_externalAddresses )
         {
             SipInfo info = SipInfo();
@@ -407,7 +407,7 @@ Servent::registerPeer( const Tomahawk::peerinfo_ptr& peerInfo )
             info.setKey( key );
             info.setVisible( true );
             info.setNodeId( nodeid );
-            sipInfo.append( info );
+            sipInfos.append( info );
         }
         if ( m_externalHostname.length() > 0)
         {
@@ -417,10 +417,10 @@ Servent::registerPeer( const Tomahawk::peerinfo_ptr& peerInfo )
             info.setKey( key );
             info.setVisible( true );
             info.setNodeId( nodeid );
-            sipInfo.append( info );
+            sipInfos.append( info );
         }
 
-        if ( sipInfo.length() == 0 )
+        if ( sipInfos.length() == 0 )
         {
             // We are not visible via any IP, send a dummy SipInfo
             SipInfo info = SipInfo();
@@ -430,7 +430,7 @@ Servent::registerPeer( const Tomahawk::peerinfo_ptr& peerInfo )
             tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Only accepting connections, no usable IP to listen to found.";
         }
 
-        peerInfo->sendLocalSipInfo( sipInfo );
+        peerInfo->sendLocalSipInfos( sipInfos );
 
         handleSipInfo( peerInfo );
         connect( peerInfo.data(), SIGNAL( sipInfoChanged() ), SLOT( onSipInfoChanged() ) );
@@ -454,10 +454,10 @@ void Servent::handleSipInfo( const Tomahawk::peerinfo_ptr& peerInfo )
 {
     // We do not have received the initial SipInfo for this client yet, so wait for it.
     // Each client will have at least one non-visible SipInfo
-    if ( peerInfo->sipInfo().length() == 0 )
+    if ( peerInfo->sipInfos().isEmpty() )
         return;
 
-    foreach ( SipInfo info, peerInfo->sipInfo() )
+    foreach ( SipInfo info, peerInfo->sipInfos() )
     {
         if (info.isVisible())
         {
@@ -842,7 +842,7 @@ Servent::connectToPeer( const peerinfo_ptr& peerInfo )
     conn->setProperty( "nodeid", peerInfo->nodeId() );
 
     registerControlConnection( conn );
-    connectToPeer( peerInfo, peerInfo->sipInfo(), conn );
+    connectToPeer( peerInfo, peerInfo->sipInfos(), conn );
 }
 
 

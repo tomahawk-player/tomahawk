@@ -165,14 +165,14 @@ DiagnosticsDialog::accountLog( Tomahawk::Accounts::Account* account )
     foreach( const Tomahawk::peerinfo_ptr& peerInfo, account->sipPlugin()->peersOnline() )
     {
         accountInfo.append( QString( "       %1: " ).arg( peerInfo->id() ) );
-        foreach ( SipInfo info, peerInfo->sipInfo() )
+        foreach ( SipInfo info, peerInfo->sipInfos() )
         {
             if ( info.isValid() )
                 accountInfo.append( QString( "[%1]:%2; " ).arg( info.host() ).arg( info.port() ) );
             else
                 accountInfo.append( "SipInfo invalid; " );
         }
-        if ( ( peerInfo->sipInfo().length() == 1 ) && ( !peerInfo->sipInfo().first().isVisible() ) || ( peerInfo->sipInfo().length() == 0 ) )
+        if ( ( ( peerInfo->sipInfos().length() == 1 ) && ( !peerInfo->sipInfos().first().isVisible() ) ) || ( peerInfo->sipInfos().isEmpty() ) )
             accountInfo.append( "(outbound connections only) ");
         accountInfo.append( QString( " (%1)\n" ).arg( peerInfo->versionString() ) );
     }

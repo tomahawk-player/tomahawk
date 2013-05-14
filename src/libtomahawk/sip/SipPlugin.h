@@ -74,7 +74,7 @@ public slots:
     /**
      * Send a list of SipInfos to all contacts.
      */
-    virtual void sendSipInfo( const Tomahawk::peerinfo_ptr& receiver, const QList<SipInfo>& info ) = 0;
+    virtual void sendSipInfos( const Tomahawk::peerinfo_ptr& receiver, const QList<SipInfo>& infos ) = 0;
 
 signals:
     void peerStatusChanged( const Tomahawk::peerinfo_ptr& );

@@ -33,13 +33,13 @@ class ACCOUNTDLLEXPORT TomahawkXmppMessage : public Jreen::Payload
     J_PAYLOAD(TomahawkXmppMessage)
     public:
         TomahawkXmppMessage();
-        TomahawkXmppMessage(const QList<SipInfo>& sipInfo);
+        TomahawkXmppMessage(const QList<SipInfo>& sipInfos);
         ~TomahawkXmppMessage();
 
         /**
          * The SipInfo objects that are wrapped in this XmppMessage
          */
-        const QList<SipInfo> sipInfo() const;
+        const QList<SipInfo> sipInfos() const;
 
         /**
          * The name of the peer contained in this message
@@ -52,7 +52,7 @@ class ACCOUNTDLLEXPORT TomahawkXmppMessage : public Jreen::Payload
         const QString uniqname() const;
 
     private:
-        QList<SipInfo> m_sipInfo;
+        QList<SipInfo> m_sipInfos;
 };
 
 #endif // ENTITYTIME_H

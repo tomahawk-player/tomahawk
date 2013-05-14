@@ -90,7 +90,7 @@ public slots:
     virtual void configurationChanged();
     virtual void addContact( const QString& peerId, const QString& msg = QString() );
 
-    virtual void sendSipInfo( const Tomahawk::peerinfo_ptr& receiver, const QList<SipInfo>& info );
+    virtual void sendSipInfos( const Tomahawk::peerinfo_ptr& receiver, const QList<SipInfo>& info );
 
     void showAddFriendDialog();
     void publishTune( const QUrl& url, const Tomahawk::InfoSystem::InfoStringHash& trackInfo );
