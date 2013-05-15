@@ -976,7 +976,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.ui" line="47"/>
         <source>Just enter a genre or tag name and Tomahawk will suggest a few songs to get you started with your new playlist:</source>
-        <translation>Basta inserire anche solo il genere o una tag e Tomahawk ti suggerirà alcune tracce per farti iniziare la tua playlist: </translation>
+        <translation>Basta inserire anche solo il genere o una tag e Tomahawk ti suggerirà alcune tracce per farti iniziare con la tua playlist: </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.cpp" line="43"/>
@@ -1779,19 +1779,19 @@ connect and stream from you?</source>
         <translation>Top 10</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="200"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="250"/>
         <source>All available tracks</source>
         <translation>Tutte le tracce disponibili</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="385"/>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="426"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="431"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="472"/>
         <source>Show</source>
         <translation>Mostra</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="387"/>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="428"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="433"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="474"/>
         <source>Hide</source>
         <translation>Nascondi</translation>
     </message>
