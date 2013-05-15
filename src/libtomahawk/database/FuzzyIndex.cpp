@@ -181,7 +181,7 @@ FuzzyIndex::appendFields( const IndexData& data )
                                       Field::STORE_YES | Field::INDEX_NO ) ) );
         }
         else
-            Q_ASSERT( false );
+            return;
 
         m_luceneWriter->addDocument( &doc );
     }

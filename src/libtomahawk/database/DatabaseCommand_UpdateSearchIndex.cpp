@@ -83,8 +83,7 @@ DatabaseCommand_UpdateSearchIndex::exec( DatabaseImpl* db )
         ida.id = q.value( 0 ).toUInt();
         ida.album = q.value( 1 ).toString();
 
-        if ( !ida.album.isEmpty() )
-            db->m_fuzzyIndex->appendFields( ida );
+        db->m_fuzzyIndex->appendFields( ida );
     }
 
     tDebug( LOGVERBOSE ) << "Building index finished.";
