@@ -165,6 +165,7 @@ void TomahawkXmppMessageFactory::serialize(Payload *extension, QXmlStreamWriter 
     if ( !lastInfo.isNull() )
     {
         Q_ASSERT( lastInfo->isVisible() );
+        tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Using " << lastInfo->host() << ":" << lastInfo->port() << " as the host which all older clients will only detect";
         serializeSipInfo( *lastInfo, writer );
     }
 
