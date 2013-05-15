@@ -308,6 +308,8 @@ Servent::isValidExternalIP( const QHostAddress& addr )
 void
 Servent::registerOffer( const QString& key, Connection* conn )
 {
+    // The registered connection should always be != NULL
+    Q_ASSERT( conn != NULL );
     m_offers[key] = QPointer<Connection>(conn);
 }
 
@@ -926,6 +928,7 @@ Servent::connectToPeer(const peerinfo_ptr& peerInfo, const QList<SipInfo>& sipIn
 void
 Servent::connectToPeerFailed( const peerinfo_ptr& peerInfo, QList<SipInfo> sipInfo, Connection* conn, QTcpSocketExtra* socket )
 {
+    tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Connecting to " << conn->peerIpAddress() << " failed";
     bool connIsNull = socket->_conn.isNull();
     cleanupSocket( socket );
 
