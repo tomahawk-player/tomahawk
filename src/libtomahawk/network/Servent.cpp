@@ -308,7 +308,12 @@ Servent::isValidExternalIP( const QHostAddress& addr )
 void
 Servent::registerOffer( const QString& key, Connection* conn )
 {
-   m_offers[key] = QPointer<Connection>(conn);
+    m_offers[key] = QPointer<Connection>(conn);
+}
+
+void Servent::registerLazyOffer(const QString &key, const peerinfo_ptr &peerInfo, const QString &nodeid )
+{
+    m_lazyoffers[key] = QPair< peerinfo_ptr, QString >( peerInfo, nodeid );
 }
 
 
@@ -430,12 +435,12 @@ Servent::registerPeer( const Tomahawk::peerinfo_ptr& peerInfo )
         QString key = uuid();
         const QString& nodeid = Database::instance()->impl()->dbid();
 
-        ControlConnection* conn = new ControlConnection( this );
+        /*ControlConnection* conn = new ControlConnection( this );
         conn->setName( peerInfo->contactId() );
         conn->setId( nodeid );
-        conn->addPeerInfo( peerInfo );
+        conn->addPeerInfo( peerInfo );*/
 
-        registerOffer( key, conn );
+        registerLazyOffer( key, peerInfo, nodeid );
         QList<SipInfo> sipInfos = getLocalSipInfos( nodeid, key );
 
         peerInfo->sendLocalSipInfos( sipInfos );
@@ -1044,7 +1049,20 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
         }
     }
 
-    if ( m_offers.contains( key ) )
+    if ( m_lazyoffers.contains( key ) )
+    {
+        ControlConnection* conn = new ControlConnection( this );
+        conn->setName( m_lazyoffers.value( key ).first->contactId() );
+        conn->addPeerInfo( m_lazyoffers.value( key ).first );
+        conn->setId( m_lazyoffers.value( key ).second );
+
+        // Register as non-lazy offer
+        m_lazyoffers.remove( key );
+        registerOffer( key, conn );
+
+        return conn;
+    }
+    else if ( m_offers.contains( key ) )
     {
         QPointer<Connection> conn = m_offers.value( key );
         if ( conn.isNull() )
