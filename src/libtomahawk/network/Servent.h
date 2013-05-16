@@ -130,6 +130,7 @@ public:
 
     bool isReady() const { return m_ready; }
 
+    QList<SipInfo> getLocalSipInfos(const QString& nodeid, QString key);
 signals:
     void dbSyncTriggered();
     void streamStarted( StreamConnection* );
