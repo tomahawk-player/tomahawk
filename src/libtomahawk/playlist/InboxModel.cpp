@@ -114,8 +114,8 @@ InboxModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int ro
             if ( entry->query()->equals( existingEntry->query(), true /*ignoreCase*/) )
             {
                 //We got a dupe, let's merge the social actions
-                entry->query()->queryTrack()->setAllSocialActions( mergeSocialActions( existingEntry->query()->queryTrack()->allSocialActions(),
-                                                                                       entry->query()->queryTrack()->allSocialActions() ) );
+/*                entry->query()->queryTrack()->setAllSocialActions( mergeSocialActions( existingEntry->query()->queryTrack()->allSocialActions(),
+                                                                                       entry->query()->queryTrack()->allSocialActions() ) );*/
                 toInsert.erase( jt );
                 break;
             }
@@ -129,8 +129,8 @@ InboxModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int ro
         {
             if ( plEntry->query()->equals( toInsert.at( i )->query(), true ) )
             {
-                plEntry->query()->queryTrack()->setAllSocialActions( mergeSocialActions( plEntry->query()->queryTrack()->allSocialActions(),
-                                                                                    toInsert.at( i )->query()->queryTrack()->allSocialActions() ) );
+/*                plEntry->query()->queryTrack()->setAllSocialActions( mergeSocialActions( plEntry->query()->queryTrack()->allSocialActions(),
+                                                                                    toInsert.at( i )->query()->queryTrack()->allSocialActions() ) );*/
                 toInsert.removeAt( i );
 
                 dataChanged( index( playlistEntries().indexOf( plEntry ), 0, QModelIndex() ),
@@ -215,7 +215,8 @@ InboxModel::tracksLoaded( QList< Tomahawk::query_ptr > incoming )
 
         QList< Tomahawk::SocialAction > actions;
         actions << action;
-        newQuery->queryTrack()->setAllSocialActions( actions );
+        //FIXME
+//        newQuery->queryTrack()->setAllSocialActions( actions );
 
         newQuery->setProperty( "data", QVariant() ); //clear
     }
@@ -255,7 +256,8 @@ InboxModel::onCurrentIndexChanged()
                     it->value = false; //listened!
                 }
             }
-            item->query()->queryTrack()->setAllSocialActions( actions );
+            //FIXME
+//            item->query()->queryTrack()->setAllSocialActions( actions );
         }
     }
 }
