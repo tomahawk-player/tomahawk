@@ -789,8 +789,15 @@ Servent::connectToPeer( const peerinfo_ptr& peerInfo )
     peerInfoDebug( peerInfo ) << "connectToPeer: search for already established connections to the same nodeid:" << m_controlconnections.count() << "connections";
     if ( peerInfo->controlConnection() )
     {
-        peerInfoDebug( peerInfo ) << Q_FUNC_INFO << "deleting the existing Controlconnection";
-        delete peerInfo->controlConnection();
+        if ( peerInfo->controlConnection()->isReady() && peerInfo->controlConnection()->isRunning() ) {
+            peerInfoDebug( peerInfo ) << Q_FUNC_INFO << "We have a running ControlConnection, so no use to connect.";
+            return;
+        }
+        else
+        {
+            peerInfoDebug( peerInfo ) << Q_FUNC_INFO << "deleting the existing ControlConnection";
+            delete peerInfo->controlConnection();
+        }
     }
 
     bool isDupe = false;
