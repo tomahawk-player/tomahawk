@@ -23,7 +23,6 @@
 
 #include "CategoryItems.h"
 #include "database/Database.h"
-#include "database/DatabaseCommand_ShareTrack.h"
 #include "DropJob.h"
 #include "PlaylistItems.h"
 #include "ViewManager.h"
@@ -683,9 +682,7 @@ SourceItem::onTracksDropped( const QList< query_ptr >& queries )
 {
     foreach ( const query_ptr& query, queries )
     {
-        DatabaseCommand_ShareTrack* cmd = new DatabaseCommand_ShareTrack( query->track(), m_source->nodeId() );
-
-        Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+        query->track()->share( m_source );
     }
     tDebug() << "I am" << SourceList::instance()->getLocal()->nodeId();
     tDebug() << "Dropped tracks on source item" << text() << m_source->friendlyName() << m_source->nodeId();
