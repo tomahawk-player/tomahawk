@@ -35,9 +35,6 @@ InboxModel::InboxModel( QObject* parent )
     else
         NewClosure( SourceList::instance(), SIGNAL( ready() ),
                     this, SLOT( loadTracks() ) );
-
-    connect( this, SIGNAL( currentIndexChanged() ),
-             SLOT( onCurrentIndexChanged() ) );
 }
 
 
@@ -215,8 +212,7 @@ InboxModel::tracksLoaded( QList< Tomahawk::query_ptr > incoming )
 
         QList< Tomahawk::SocialAction > actions;
         actions << action;
-        //FIXME
-//        newQuery->queryTrack()->setAllSocialActions( actions );
+        newQuery->queryTrack()->loadSocialActions();
 
         newQuery->setProperty( "data", QVariant() ); //clear
     }
@@ -230,35 +226,6 @@ InboxModel::tracksLoaded( QList< Tomahawk::query_ptr > incoming )
 
         clear();
         appendEntries( el );
-    }
-}
-
-
-void
-InboxModel::onCurrentIndexChanged()
-{
-    QPersistentModelIndex idx = currentItem();
-    if ( idx.isValid() )
-    {
-        PlayableItem* item = itemFromIndex( idx );
-        if ( item && !item->query().isNull() )
-        {
-            Tomahawk::query_ptr qry = item->query();
-            DatabaseCommand_ModifyInboxEntry* cmd = new DatabaseCommand_ModifyInboxEntry( qry, false );
-            Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
-
-            QList< Tomahawk::SocialAction > actions = item->query()->queryTrack()->allSocialActions();
-            for ( QList< Tomahawk::SocialAction >::iterator it = actions.begin();
-                  it != actions.end(); ++it )
-            {
-                if ( it->action == "Inbox" )
-                {
-                    it->value = false; //listened!
-                }
-            }
-            //FIXME
-//            item->query()->queryTrack()->setAllSocialActions( actions );
-        }
     }
 }
 

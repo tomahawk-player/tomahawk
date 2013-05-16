@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2013, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2013, Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -24,6 +25,7 @@
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
 #include "database/DatabaseCommand_LogPlayback.h"
+#include "database/DatabaseCommand_ModifyInboxEntry.h"
 #include "Album.h"
 #include "collection/Collection.h"
 #include "Pipeline.h"
@@ -169,6 +171,8 @@ Track::startPlaying()
     DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( weakRef().toStrongRef(),
                                                                         DatabaseCommand_LogPlayback::Started );
     Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+
+
 }
 
 
@@ -180,6 +184,33 @@ Track::finishPlaying( int timeElapsed )
                                                                         timeElapsed );
     Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
 
+    bool isUnlistened = false;
+    foreach ( Tomahawk::SocialAction action, allSocialActions() )
+    {
+        if ( action.action == "Inbox" && action.value.toBool() == true )
+        {
+            isUnlistened = true;
+            break;
+        }
+    }
+
+    if ( isUnlistened )
+    {
+        DatabaseCommand_ModifyInboxEntry* cmd = new DatabaseCommand_ModifyInboxEntry( toQuery(), false );
+        Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+
+        // The dbcmd does this in the DB, but let's update the TrackData ASAP
+        QList< Tomahawk::SocialAction > actions = allSocialActions();
+        for ( QList< Tomahawk::SocialAction >::iterator it = actions.begin();
+              it != actions.end(); ++it )
+        {
+            if ( it->action == "Inbox" )
+            {
+                it->value = false; //listened!
+            }
+        }
+        m_trackData->setAllSocialActions( actions ); //emits socialActionsLoaded which gets propagated here
+    }
 }
 
 
