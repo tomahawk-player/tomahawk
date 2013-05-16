@@ -347,6 +347,44 @@ Servent::lookupControlConnection( const SipInfo& sipInfo )
 }
 
 
+QList<SipInfo>
+Servent::getLocalSipInfos( const QString& nodeid, QString key )
+{
+    QList<SipInfo> sipInfos = QList<SipInfo>();
+    foreach ( QHostAddress ha, m_externalAddresses )
+    {
+        SipInfo info = SipInfo();
+        info.setHost( ha.toString() );
+        info.setPort( m_port );
+        info.setKey( key );
+        info.setVisible( true );
+        info.setNodeId( nodeid );
+        sipInfos.append( info );
+    }
+    if ( m_externalHostname.length() > 0)
+    {
+        SipInfo info = SipInfo();
+        info.setHost( m_externalHostname );
+        info.setPort( m_externalPort );
+        info.setKey( key );
+        info.setVisible( true );
+        info.setNodeId( nodeid );
+        sipInfos.append( info );
+    }
+
+    if ( sipInfos.isEmpty() )
+    {
+        // We are not visible via any IP, send a dummy SipInfo
+        SipInfo info = SipInfo();
+        info.setVisible( false );
+        info.setKey( key );
+        info.setNodeId( nodeid );
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Only accepting connections, no usable IP to listen to found.";
+    }
+
+    return sipInfos;
+}
+
 void
 Servent::registerPeer( const Tomahawk::peerinfo_ptr& peerInfo )
 {
@@ -398,37 +436,7 @@ Servent::registerPeer( const Tomahawk::peerinfo_ptr& peerInfo )
         conn->addPeerInfo( peerInfo );
 
         registerOffer( key, conn );
-        QList<SipInfo> sipInfos = QList<SipInfo>();
-        foreach ( QHostAddress ha, m_externalAddresses )
-        {
-            SipInfo info = SipInfo();
-            info.setHost( ha.toString() );
-            info.setPort( m_port );
-            info.setKey( key );
-            info.setVisible( true );
-            info.setNodeId( nodeid );
-            sipInfos.append( info );
-        }
-        if ( m_externalHostname.length() > 0)
-        {
-            SipInfo info = SipInfo();
-            info.setHost( m_externalHostname );
-            info.setPort( m_externalPort );
-            info.setKey( key );
-            info.setVisible( true );
-            info.setNodeId( nodeid );
-            sipInfos.append( info );
-        }
-
-        if ( sipInfos.isEmpty() )
-        {
-            // We are not visible via any IP, send a dummy SipInfo
-            SipInfo info = SipInfo();
-            info.setVisible( false );
-            info.setKey( key );
-            info.setNodeId( nodeid );
-            tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Only accepting connections, no usable IP to listen to found.";
-        }
+        QList<SipInfo> sipInfos = getLocalSipInfos( nodeid, key );
 
         peerInfo->sendLocalSipInfos( sipInfos );
 
