@@ -68,6 +68,9 @@ public:
     QString toString() const;
     Tomahawk::query_ptr toQuery();
 
+    QString artistSortname() const { return m_artistSortname; }
+    QString trackSortname() const { return m_trackSortname; }
+
     QWeakPointer< Tomahawk::TrackData > weakRef() { return m_ownRef; }
     void setWeakRef( QWeakPointer< Tomahawk::TrackData > weakRef ) { m_ownRef = weakRef; }
 
@@ -121,9 +124,12 @@ private:
 
     void updateAttributes();
     void parseSocialActions();
+    void updateSortNames();
 
     QString m_artist;
     QString m_track;
+    QString m_artistSortname;
+    QString m_trackSortname;
 
     int m_year;
 

@@ -50,11 +50,11 @@ static QReadWriteLock s_dataidMutex;
 
 
 inline QString
-datacacheKey( const QString& artist, const QString& track )
+cacheKey( const QString& artist, const QString& track )
 {
     QString str;
     QTextStream stream( &str );
-    stream << artist << track;
+    stream << DatabaseImpl::sortname( artist ) << "\t" << DatabaseImpl::sortname( track );
     return str;
 }
 
@@ -74,7 +74,7 @@ TrackData::get( unsigned int id, const QString& artist, const QString& track )
     s_dataidMutex.unlock();
 
     QMutexLocker lock( &s_datanameCacheMutex );
-    const QString key = datacacheKey( artist, track );
+    const QString key = cacheKey( artist, track );
     if ( s_trackDatasByName.contains( key ) )
     {
         trackdata_wptr track = s_trackDatasByName.value( key );
@@ -112,6 +112,8 @@ TrackData::TrackData( unsigned int id, const QString& artist, const QString& tra
     , m_trackId( id )
 {
     m_waitingForId = ( id == 0 );
+
+    updateSortNames();
 }
 
 
@@ -126,7 +128,7 @@ TrackData::deleteLater()
 {
     QMutexLocker lock( &s_datanameCacheMutex );
 
-    const QString key = datacacheKey( m_artist, m_track );
+    const QString key = cacheKey( m_artist, m_track );
     if ( s_trackDatasByName.contains( key ) )
     {
         s_trackDatasByName.remove( key );
@@ -143,6 +145,14 @@ TrackData::deleteLater()
     }
 
     QObject::deleteLater();
+}
+
+
+void
+TrackData::updateSortNames()
+{
+    m_artistSortname = DatabaseImpl::sortname( m_artist, true );
+    m_trackSortname = DatabaseImpl::sortname( m_track );
 }
 
 
