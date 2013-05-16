@@ -98,7 +98,8 @@ MetadataEditor::writeMetadata( bool closeDlg )
             tDebug() << Q_FUNC_INFO << "Track changed" << title() << m_result->track();
 
             tag->setTitle( title() );
-            m_result->track()->setTrack( title() );
+            //FIXME
+//            m_result->track()->setTrack( title() );
 
             changed = true;
         }
@@ -109,7 +110,8 @@ MetadataEditor::writeMetadata( bool closeDlg )
             tDebug() << Q_FUNC_INFO << "Artist changed" << artist() << m_result->track()->artist();
 
             tag->setArtist( artist() );
-            m_result->track()->setArtist( artist() );
+            //FIXME
+//            m_result->track()->setArtist( artist() );
 
             changed = true;
         }
@@ -140,10 +142,15 @@ MetadataEditor::writeMetadata( bool closeDlg )
         }
 
         // FIXME: Ugly workaround for the min value of 1900
-        if ( year() != 1900 && year() != m_result->year() )
+        if ( year() != 1900 && year() != m_result->track()->year() )
         {
             tag->setYear( year() );
-            m_result->setYear( year() );
+            {
+                QVariantMap attr;
+                attr[ "releaseyear" ] = year();
+                //FIXME
+//                m_result->track()->setAttributes( attr );
+            }
 
             tDebug() << Q_FUNC_INFO << "Year changed";
             changed = true;
@@ -223,7 +230,7 @@ MetadataEditor::loadResult( const Tomahawk::result_ptr& result )
     setAlbum( result->track()->album() );
     setAlbumPos( result->track()->albumpos() );
     setDuration( result->track()->duration() );
-    setYear( result->year() );
+    setYear( result->track()->year() );
     setBitrate( result->bitrate() );
 
     if ( result->collection() && result->collection()->source()->isLocal() )
