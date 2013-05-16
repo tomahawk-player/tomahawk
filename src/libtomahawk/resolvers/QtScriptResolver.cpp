@@ -746,6 +746,7 @@ QtScriptResolver::parseResultVariantList( const QVariantList& reslist )
         if ( !track )
             continue;
 
+        rp->setTrack( track );
         rp->setBitrate( m.value( "bitrate" ).toUInt() );
         rp->setSize( m.value( "size" ).toUInt() );
         rp->setRID( uuid() );
@@ -754,11 +755,12 @@ QtScriptResolver::parseResultVariantList( const QVariantList& reslist )
         rp->setLinkUrl( m.value( "linkUrl" ).toString() );
         rp->setScore( m.value( "score" ).toFloat() );
 
+        //FIXME
         if ( m.contains( "year" ) )
         {
             QVariantMap attr;
             attr[ "releaseyear" ] = m.value( "year" );
-            rp->setAttributes( attr );
+//            rp->track()->setAttributes( attr );
         }
 
         rp->setMimetype( m.value( "mimetype" ).toString() );
@@ -768,13 +770,13 @@ QtScriptResolver::parseResultVariantList( const QVariantList& reslist )
             Q_ASSERT( !rp->mimetype().isEmpty() );
         }
 
-        rp->setTrack( track );
         rp->setResolvedBy( this );
         results << rp;
     }
 
     return results;
 }
+
 
 QList< Tomahawk::artist_ptr >
 QtScriptResolver::parseArtistVariantList( const QVariantList& reslist )

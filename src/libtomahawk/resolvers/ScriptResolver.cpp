@@ -290,7 +290,14 @@ ScriptResolver::handleMsg( const QByteArray& msg )
             rp->setFriendlySource( m_name );
             rp->setPurchaseUrl( m.value( "purchaseUrl" ).toString() );
             rp->setLinkUrl( m.value( "linkUrl" ).toString() );
-            rp->setYear( m.value( "year").toUInt() );
+
+            //FIXME
+            if ( m.contains( "year" ) )
+            {
+                QVariantMap attr;
+                attr[ "releaseyear" ] = m.value( "year" );
+//                rp->track()->setAttributes( attr );
+            }
 
             rp->setMimetype( m.value( "mimetype" ).toString() );
             if ( rp->mimetype().isEmpty() )
