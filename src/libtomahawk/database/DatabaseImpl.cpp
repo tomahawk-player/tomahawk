@@ -287,14 +287,13 @@ DatabaseImpl::file( int fid )
 
         r = Tomahawk::Result::get( url );
 
-        Tomahawk::track_ptr track = Tomahawk::Track::get( query.value( 11 ).toString(), query.value( 13 ).toString(), query.value( 12 ).toString(), query.value( 5 ).toUInt(), query.value( 14 ).toString() );
+        Tomahawk::track_ptr track = Tomahawk::Track::get( query.value( 9 ).toUInt(), query.value( 11 ).toString(), query.value( 13 ).toString(), query.value( 12 ).toString(), query.value( 5 ).toUInt(), query.value( 14 ).toString(), 0, 0 );
         r->setTrack( track );
 
         r->setModificationTime( query.value( 1 ).toUInt() );
         r->setSize( query.value( 2 ).toUInt() );
         r->setMimetype( query.value( 4 ).toString() );
         r->setBitrate( query.value( 6 ).toUInt() );
-        r->setTrackId( query.value( 9 ).toUInt() );
         r->setCollection( s->dbCollection() );
         r->setScore( 1.0 );
         r->setFileId( fid );
@@ -639,9 +638,8 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
                             "file_join.discnumber, "                                //17
                             "artist.id as artid, "                                  //18
                             "album.id as albid, "                                   //19
-                            "composer.id as cmpid, "                                //20
-                            "track_attributes.v as year "                           //21
-                            "FROM file, file_join, artist, track, track_attributes "
+                            "composer.id as cmpid "                                 //20
+                            "FROM file, file_join, artist, track "
                             "LEFT JOIN album ON album.id = file_join.album "
                             "LEFT JOIN artist AS composer on composer.id = file_join.composer "
                             "WHERE "
@@ -649,7 +647,6 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
                             "track.id = file_join.track AND "
                             "file.source %1 AND "
                             "file_join.file = file.id AND "
-                            "file.id = track_attributes.id AND "
                             "file.url = ?"
         ).arg( searchlocal ? "IS NULL" : QString( "= %1" ).arg( s->id() ) );
 
@@ -668,7 +665,8 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
 
         res = Tomahawk::Result::get( url );
 
-        Tomahawk::track_ptr track = Tomahawk::Track::get( query.value( 11 ).toString(), query.value( 13 ).toString(), query.value( 12 ).toString(), query.value( 5 ).toInt(), query.value( 14 ).toString(), query.value( 16 ).toUInt(), query.value( 17 ).toUInt() );
+        Tomahawk::track_ptr track = Tomahawk::Track::get( query.value( 9 ).toUInt(), query.value( 11 ).toString(), query.value( 13 ).toString(), query.value( 12 ).toString(), query.value( 5 ).toInt(), query.value( 14 ).toString(), query.value( 16 ).toUInt(), query.value( 17 ).toUInt() );
+        track->loadAttributes();
         res->setTrack( track );
 
         res->setModificationTime( query.value( 1 ).toUInt() );
@@ -677,9 +675,7 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
         res->setBitrate( query.value( 6 ).toInt() );
         res->setScore( 1.0 );
         res->setRID( uuid() );
-        res->setTrackId( query.value( 9 ).toUInt() );
         res->setCollection( s->dbCollection() );
-        res->setYear( query.value( 21 ).toUInt() );
     }
 
     return res;
