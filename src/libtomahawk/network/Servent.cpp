@@ -348,7 +348,7 @@ Servent::lookupControlConnection( const SipInfo& sipInfo )
 
 
 QList<SipInfo>
-Servent::getLocalSipInfos( const QString& nodeid, QString key )
+Servent::getLocalSipInfos( const QString& nodeid, const QString& key )
 {
     QList<SipInfo> sipInfos = QList<SipInfo>();
     foreach ( QHostAddress ha, m_externalAddresses )
