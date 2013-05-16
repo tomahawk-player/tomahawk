@@ -33,7 +33,7 @@ DatabaseCommand_ShareTrack::DatabaseCommand_ShareTrack( QObject* parent )
 {}
 
 
-DatabaseCommand_ShareTrack::DatabaseCommand_ShareTrack( const Tomahawk::track_ptr& track,
+DatabaseCommand_ShareTrack::DatabaseCommand_ShareTrack( const Tomahawk::trackdata_ptr& track,
                                                         const QString& recipientDbid,
                                                         QObject* parent )
     : DatabaseCommand_SocialAction( track, "Inbox", "", parent )
@@ -70,7 +70,7 @@ DatabaseCommand_ShareTrack::postCommitHook()
     if ( source()->isLocal() )
         Servent::instance()->triggerDBSync();
 
-    if ( !m_track.isNull() )
+    if ( m_track )
         return;
 
     QString myDbid = SourceList::instance()->getLocal()->nodeId();
@@ -79,9 +79,8 @@ DatabaseCommand_ShareTrack::postCommitHook()
         return;
 
     //From here on, everything happens only on the recipient, and only if recipient!=source
-    m_track = Tomahawk::Track::get( artist(), track(), QString() );
-
-    if ( m_track.isNull() )
+    m_track = Tomahawk::TrackData::get( 0, artist(), track() );
+    if ( !m_track )
         return;
 
     Tomahawk::SocialAction action;
@@ -101,7 +100,7 @@ DatabaseCommand_ShareTrack::postCommitHook()
                                Q_ARG( int, 0 ) /*row*/ );
 
     QString friendlyName = source()->friendlyName();
-    if( ViewManager::instance()->currentPage() != ViewManager::instance()->inboxWidget() )
+    if ( ViewManager::instance()->currentPage() != ViewManager::instance()->inboxWidget() )
         JobStatusView::instance()->model()->addJob( new InboxJobItem( friendlyName, m_track ) );
 }
 
