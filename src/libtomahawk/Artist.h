@@ -31,7 +31,6 @@
 #include "DllMacro.h"
 #include "Query.h"
 
-
 class IdThreadWorker;
 
 namespace Tomahawk

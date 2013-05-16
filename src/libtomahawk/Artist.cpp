@@ -43,6 +43,7 @@ QHash< unsigned int, artist_wptr > Artist::s_artistsById = QHash< unsigned int, 
 static QMutex s_nameCacheMutex;
 static QReadWriteLock s_idMutex;
 
+
 Artist::~Artist()
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Deleting artist:" << m_name;
@@ -65,7 +66,7 @@ Artist::get( const QString& name, bool autoCreate )
     if ( s_artistsByName.contains( key ) )
     {
         artist_wptr artist = s_artistsByName.value( key );
-        if ( !artist.isNull() )
+        if ( artist )
             return artist.toStrongRef();
     }
 
@@ -84,6 +85,8 @@ Artist::get( const QString& name, bool autoCreate )
 artist_ptr
 Artist::get( unsigned int id, const QString& name )
 {
+    Q_ASSERT( id > 0 );
+
     s_idMutex.lockForRead();
     if ( s_artistsById.contains( id ) )
     {
