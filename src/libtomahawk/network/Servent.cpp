@@ -504,6 +504,7 @@ Servent::readyRead()
 {
     Q_ASSERT( this->thread() == QThread::currentThread() );
     QPointer< QTcpSocketExtra > sock = (QTcpSocketExtra*)sender();
+    tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Starting to read from new incoming connection from: " << sock->peerAddress().toString();
 
     if ( sock.isNull() || sock.data()->_disowned )
     {
@@ -774,7 +775,10 @@ Servent::connectToPeer( const peerinfo_ptr& peerInfo )
 
     peerInfoDebug( peerInfo ) << "connectToPeer: search for already established connections to the same nodeid:" << m_controlconnections.count() << "connections";
     if ( peerInfo->controlConnection() )
+    {
+        peerInfoDebug( peerInfo ) << Q_FUNC_INFO << "deleting the existing Controlconnection";
         delete peerInfo->controlConnection();
+    }
 
     bool isDupe = false;
     ControlConnection* conn = 0;
