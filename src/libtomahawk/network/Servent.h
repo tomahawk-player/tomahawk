@@ -76,6 +76,7 @@ public:
     QString createConnectionKey( const QString& name = "", const QString &nodeid = "", const QString &key = "", bool onceOnly = true );
 
     void registerOffer( const QString& key, Connection* conn );
+    void registerLazyOffer( const QString& key, const Tomahawk::peerinfo_ptr& peerInfo, const QString &nodeid );
 
     void registerControlConnection( ControlConnection* conn );
     void unregisterControlConnection( ControlConnection* conn );
@@ -166,6 +167,7 @@ private:
     QJson::Parser parser;
     QList< ControlConnection* > m_controlconnections; // canonical list of authed peers
     QMap< QString, QPointer< Connection > > m_offers;
+    QMap< QString, QPair< Tomahawk::peerinfo_ptr, QString > > m_lazyoffers;
     QStringList m_connectedNodes;
 
     /**
