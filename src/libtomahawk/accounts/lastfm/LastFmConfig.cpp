@@ -395,8 +395,7 @@ LastFmConfig::syncLoved()
     foreach ( const Tomahawk::track_ptr& track, localToLove )
     {
         // Don't use the infosystem as we don't want to tweet a few hundred times :)
-        DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction( track, QString( "Love" ), QString( "true" ) );
-        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+        track->setLoved( true, false );
     }
 
     lastFmToLove.unite( lastFmToUnlove );
