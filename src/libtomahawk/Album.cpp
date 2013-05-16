@@ -41,6 +41,7 @@ QHash< unsigned int, album_wptr > Album::s_albumsById = QHash< unsigned int, alb
 static QMutex s_nameCacheMutex;
 static QReadWriteLock s_idMutex;
 
+
 Album::~Album()
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Deleting album:" << m_name << m_artist->name();
@@ -70,7 +71,7 @@ Album::get( const Tomahawk::artist_ptr& artist, const QString& name, bool autoCr
     if ( s_albumsByName.contains( key ) )
     {
         album_wptr album = s_albumsByName.value( key );
-        if ( !album.isNull() )
+        if ( album )
             return album.toStrongRef();
     }
 
@@ -92,7 +93,7 @@ Album::get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& ar
         album_wptr album = s_albumsById.value( id );
         s_idMutex.unlock();
 
-        if ( !album.isNull() )
+        if ( album )
             return album;
     }
     s_idMutex.unlock();
@@ -102,7 +103,7 @@ Album::get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& ar
     if ( s_albumsByName.contains( key ) )
     {
         album_wptr album = s_albumsByName.value( key );
-        if ( !album.isNull() )
+        if ( album )
             return album;
     }
 
@@ -141,6 +142,7 @@ Album::Album( unsigned int id, const QString& name, const Tomahawk::artist_ptr& 
 Album::Album( const QString& name, const Tomahawk::artist_ptr& artist )
     : QObject()
     , m_waitingForId( true )
+    , m_id( 0 )
     , m_name( name )
     , m_artist( artist )
     , m_coverLoaded( false )
