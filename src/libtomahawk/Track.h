@@ -25,7 +25,6 @@
 
 #include "Typedefs.h"
 #include "TrackData.h"
-#include "infosystem/InfoSystem.h"
 
 #include "DllMacro.h"
 
