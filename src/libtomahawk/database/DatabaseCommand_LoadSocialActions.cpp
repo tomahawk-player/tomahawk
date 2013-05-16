@@ -39,18 +39,12 @@ DatabaseCommand_LoadSocialActions::exec( DatabaseImpl* dbi )
 
     if ( m_actionOnly.isNull() )
     {
-        //FIXME!
         // Load for just specified track
-        int artid = dbi->artistId( m_track->artist(), false );
-        if( artid < 1 )
-            return;
-
-        int trkid = dbi->trackId( artid, m_track->track(), false );
-        if( trkid < 1 )
+        if ( m_track->trackId() == 0 )
             return;
 
         QString whereToken;
-        whereToken = QString( "WHERE id IS %1" ).arg( trkid );
+        whereToken = QString( "WHERE id IS %1" ).arg( m_track->trackId() );
 
         QString sql = QString(
                 "SELECT k, v, timestamp, source "

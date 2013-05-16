@@ -69,7 +69,7 @@ public:
      *
      * Constructor which creates a new database command for the specified social action.
      */
-    explicit DatabaseCommand_SocialAction( const Tomahawk::track_ptr& track, QString action, QString comment = "", QObject* parent = 0 )
+    explicit DatabaseCommand_SocialAction( const Tomahawk::trackdata_ptr& track, QString action, QString comment = "", QObject* parent = 0 )
         : DatabaseCommandLoggable( parent ), m_track( track ), m_action( action )
     {
         setSource( SourceList::instance()->getLocal() );
@@ -174,7 +174,7 @@ public:
     virtual bool groupable() const { return true; }
 
 protected:
-    Tomahawk::track_ptr m_track;
+    Tomahawk::trackdata_ptr m_track;
 
 private:
     QString m_artist;
