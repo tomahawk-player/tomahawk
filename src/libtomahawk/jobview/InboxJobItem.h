@@ -30,7 +30,7 @@ class DLLEXPORT InboxJobItem : public JobStatusItem
 {
     Q_OBJECT
 public:
-    explicit InboxJobItem( const QString& sender, const Tomahawk::track_ptr& track, QObject* parent = 0 );
+    explicit InboxJobItem( const QString& sender, const Tomahawk::trackdata_ptr& track, QObject* parent = 0 );
     virtual ~InboxJobItem();
 
     virtual QString rightColumnText() const { return QString(); }
@@ -41,7 +41,7 @@ public:
     bool allowMultiLine() const { return true; }
 
 private:
-    Tomahawk::track_ptr m_track;
+    Tomahawk::trackdata_ptr m_track;
     QString m_sender;
 
     QTimer* m_timer;
