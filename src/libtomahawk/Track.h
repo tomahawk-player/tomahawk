@@ -28,6 +28,7 @@
 
 #include "DllMacro.h"
 
+
 namespace Tomahawk
 {
 
@@ -106,6 +107,9 @@ public:
 
     QWeakPointer< Tomahawk::Track > weakRef() { return m_ownRef; }
     void setWeakRef( QWeakPointer< Tomahawk::Track > weakRef ) { m_ownRef = weakRef; }
+
+    void startPlaying();
+    void finishPlaying( int timeElapsed );
 
 signals:
     void coverChanged();

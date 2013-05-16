@@ -23,6 +23,7 @@
 
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
+#include "database/DatabaseCommand_LogPlayback.h"
 #include "Album.h"
 #include "collection/Collection.h"
 #include "Pipeline.h"
@@ -159,6 +160,26 @@ unsigned int
 Track::trackId() const
 {
     return m_trackData->trackId();
+}
+
+
+void
+Track::startPlaying()
+{
+    DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( weakRef().toStrongRef(),
+                                                                        DatabaseCommand_LogPlayback::Started );
+    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+}
+
+
+void
+Track::finishPlaying( int timeElapsed )
+{
+    DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( weakRef().toStrongRef(),
+                                                                        DatabaseCommand_LogPlayback::Finished,
+                                                                        timeElapsed );
+    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+
 }
 
 
