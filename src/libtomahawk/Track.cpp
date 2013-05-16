@@ -165,10 +165,8 @@ Track::trackId() const
 void
 Track::updateSortNames()
 {
-    m_artistSortname = DatabaseImpl::sortname( artist(), true );
     m_composerSortname = DatabaseImpl::sortname( m_composer, true );
     m_albumSortname = DatabaseImpl::sortname( m_album );
-    m_trackSortname = DatabaseImpl::sortname( track() );
 }
 
 
@@ -494,4 +492,18 @@ void
 Track::share( const Tomahawk::source_ptr& source )
 {
     m_trackData->share( source );
+}
+
+
+QString
+Track::artistSortname() const
+{
+    return m_trackData->artistSortname();
+}
+
+
+QString
+Track::trackSortname() const
+{
+    return m_trackData->trackSortname();
 }

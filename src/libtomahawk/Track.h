@@ -60,10 +60,10 @@ public:
     QString toString() const;
     Tomahawk::query_ptr toQuery();
 
-    QString artistSortname() const { return m_artistSortname; }
     QString composerSortname() const { return m_composerSortname; }
     QString albumSortname() const { return m_albumSortname; }
-    QString trackSortname() const { return m_trackSortname; }
+    QString artistSortname() const;
+    QString trackSortname() const;
 
     QString artist() const;
     QString track() const;
@@ -128,13 +128,10 @@ private:
 
     void updateSortNames();
 
-    QString m_artistSortname;
-    QString m_composerSortname;
-    QString m_albumSortname;
-    QString m_trackSortname;
-
     QString m_composer;
     QString m_album;
+    QString m_composerSortname;
+    QString m_albumSortname;
 
     int m_duration;
     unsigned int m_albumpos;
