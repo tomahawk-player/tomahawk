@@ -44,6 +44,7 @@ namespace Tomahawk
     class Query;
     class Result;
     class Track;
+    class TrackData;
     class Source;
     class DynamicControl;
     class GeneratorInterface;
@@ -60,6 +61,8 @@ namespace Tomahawk
     typedef QWeakPointer<Result> result_wptr;
     typedef QSharedPointer<Track> track_ptr;
     typedef QWeakPointer<Track> track_wptr;
+    typedef QSharedPointer<TrackData> trackdata_ptr;
+    typedef QWeakPointer<TrackData> trackdata_wptr;
     typedef QSharedPointer<Source> source_ptr;
     typedef QSharedPointer<Artist> artist_ptr;
     typedef QWeakPointer<Artist> artist_wptr;
