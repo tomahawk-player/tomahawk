@@ -64,36 +64,6 @@ InboxModel::unlistenedCount() const
 }
 
 
-QList<Tomahawk::SocialAction>
-InboxModel::mergeSocialActions( QList<Tomahawk::SocialAction> first, QList<Tomahawk::SocialAction> second)
-{
-    foreach ( Tomahawk::SocialAction saInSecond, second )
-    {
-        if ( saInSecond.action != "Inbox" )
-        {
-            first.append( saInSecond );
-            continue;
-        }
-
-        bool contains = false;
-        for ( int i = 0; i < first.count(); ++i )
-        {
-            Tomahawk::SocialAction &saInFirst = first[ i ];
-            if ( saInSecond.source == saInFirst.source )
-            {
-                saInFirst.timestamp = qMax( saInSecond.timestamp.toInt(), saInFirst.timestamp.toInt() );
-                saInFirst.value = saInFirst.value.toBool() && saInSecond.value.toBool();
-                contains = true;
-                break;
-            }
-        }
-        if ( !contains )
-            first.append( saInSecond );
-    }
-    return first;
-}
-
-
 void
 InboxModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int row, const QList< Tomahawk::PlaybackLog >& logs )
 {
@@ -110,9 +80,6 @@ InboxModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int ro
             Tomahawk::plentry_ptr existingEntry = *jt;
             if ( entry->query()->equals( existingEntry->query(), true /*ignoreCase*/) )
             {
-                //We got a dupe, let's merge the social actions
-/*                entry->query()->queryTrack()->setAllSocialActions( mergeSocialActions( existingEntry->query()->queryTrack()->allSocialActions(),
-                                                                                       entry->query()->queryTrack()->allSocialActions() ) );*/
                 toInsert.erase( jt );
                 break;
             }
@@ -126,8 +93,6 @@ InboxModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int ro
         {
             if ( plEntry->query()->equals( toInsert.at( i )->query(), true ) )
             {
-/*                plEntry->query()->queryTrack()->setAllSocialActions( mergeSocialActions( plEntry->query()->queryTrack()->allSocialActions(),
-                                                                                    toInsert.at( i )->query()->queryTrack()->allSocialActions() ) );*/
                 toInsert.removeAt( i );
 
                 dataChanged( index( playlistEntries().indexOf( plEntry ), 0, QModelIndex() ),
