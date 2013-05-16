@@ -88,9 +88,7 @@ Result::Result( const QString& url )
     , m_bitrate( 0 )
     , m_size( 0 )
     , m_modtime( 0 )
-    , m_year( 0 )
     , m_score( 0 )
-    , m_trackId( 0 )
     , m_fileId( 0 )
 {
     connect( Pipeline::instance(), SIGNAL( resolverRemoved( Tomahawk::Resolver* ) ), SLOT( onResolverRemoved( Tomahawk::Resolver* ) ), Qt::QueuedConnection );
@@ -247,16 +245,6 @@ Result::toQuery()
     }
 
     return m_query.toStrongRef();
-}
-
-
-void
-Result::updateAttributes()
-{
-    if ( m_attributes.contains( "releaseyear" ) )
-    {
-        m_year = m_attributes.value( "releaseyear" ).toInt();
-    }
 }
 
 
