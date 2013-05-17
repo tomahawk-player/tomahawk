@@ -390,6 +390,24 @@ Servent::getLocalSipInfos( const QString& nodeid, const QString& key )
     return sipInfos;
 }
 
+SipInfo
+Servent::getSipInfoForOldVersions( const QList<SipInfo>& sipInfos ) const
+{
+    SipInfo info = SipInfo();
+    info.setVisible( false );
+    foreach ( SipInfo _info, sipInfos )
+    {
+        QHostAddress ha = QHostAddress( _info.host() );
+        if ( ( Servent::isValidExternalIP( ha ) && ha.protocol() == QAbstractSocket::IPv4Protocol ) || ( ha.protocol() == QAbstractSocket::UnknownNetworkLayerProtocol ) )
+        {
+            info = _info;
+            break;
+        }
+    }
+
+    return info;
+}
+
 void
 Servent::registerPeer( const Tomahawk::peerinfo_ptr& peerInfo )
 {
@@ -440,17 +458,7 @@ Servent::registerPeer( const Tomahawk::peerinfo_ptr& peerInfo )
         // SipInfos were single-value before 0.7.999
         if ( !peerInfo->versionString().isEmpty() && TomahawkUtils::compareVersionStrings( peerInfo->versionString(), "Tomahawk Player EmptyOS 0.7.99" ) < 0)
         {
-            SipInfo info = SipInfo();
-            info.setVisible( false );
-            foreach ( SipInfo _info, sipInfos )
-            {
-                QHostAddress ha = QHostAddress( _info.host() );
-                if ( ( Servent::isValidExternalIP( ha ) && ha.protocol() == QAbstractSocket::IPv4Protocol ) || ( ha.protocol() == QAbstractSocket::UnknownNetworkLayerProtocol ) )
-                {
-                    info = _info;
-                    break;
-                }
-            }
+            SipInfo info = getSipInfoForOldVersions( sipInfos );
             peerInfo->sendLocalSipInfos( QList<SipInfo>() << info );
         }
         else
@@ -483,6 +491,22 @@ void Servent::handleSipInfo( const Tomahawk::peerinfo_ptr& peerInfo )
     if ( peerInfo->sipInfos().isEmpty() )
         return;
 
+    // Respect different behaviour before 0.7.99
+    if ( !peerInfo->versionString().isEmpty() && TomahawkUtils::compareVersionStrings( peerInfo->versionString(), "Tomahawk Player EmptyOS 0.7.99" ) < 0)
+    {
+        SipInfo we = getSipInfoForOldVersions( getLocalSipInfos( QString(), QString() ) );
+        SipInfo they = peerInfo->sipInfos().first();
+        if ( they.isVisible() )
+        {
+            if ( !we.isVisible() || we.host() < they.host() || (we.host() == they.host() && we.port() < they.port()))
+            {
+                tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Initiate connection to" << peerInfo->id() << "at" << they.host() << "peer of:" << peerInfo->sipPlugin()->account()->accountFriendlyName();
+                connectToPeer( peerInfo );
+                // We connected to the peer, so we are done here.
+                return;
+            }
+        }
+    }
     foreach ( SipInfo info, peerInfo->sipInfos() )
     {
         if (info.isVisible())
