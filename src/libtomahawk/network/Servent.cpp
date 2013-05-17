@@ -435,15 +435,28 @@ Servent::registerPeer( const Tomahawk::peerinfo_ptr& peerInfo )
         QString key = uuid();
         const QString& nodeid = Database::instance()->impl()->dbid();
 
-        /*ControlConnection* conn = new ControlConnection( this );
-        conn->setName( peerInfo->contactId() );
-        conn->setId( nodeid );
-        conn->addPeerInfo( peerInfo );*/
-
         registerLazyOffer( key, peerInfo, nodeid );
         QList<SipInfo> sipInfos = getLocalSipInfos( nodeid, key );
-
-        peerInfo->sendLocalSipInfos( sipInfos );
+        // SipInfos were single-value before 0.7.999
+        if ( !peerInfo->versionString().isEmpty() && TomahawkUtils::compareVersionStrings( peerInfo->versionString(), "Tomahawk Player EmptyOS 0.7.99" ) < 0)
+        {
+            SipInfo info = SipInfo();
+            info.setVisible( false );
+            foreach ( SipInfo _info, sipInfos )
+            {
+                QHostAddress ha = QHostAddress( _info.host() );
+                if ( ( Servent::isValidExternalIP( ha ) && ha.protocol() == QAbstractSocket::IPv4Protocol ) || ( ha.protocol() == QAbstractSocket::UnknownNetworkLayerProtocol ) )
+                {
+                    info = _info;
+                    break;
+                }
+            }
+            peerInfo->sendLocalSipInfos( QList<SipInfo>() << info );
+        }
+        else
+        {
+            peerInfo->sendLocalSipInfos( sipInfos );
+        }
 
         handleSipInfo( peerInfo );
         connect( peerInfo.data(), SIGNAL( sipInfoChanged() ), SLOT( onSipInfoChanged() ) );
