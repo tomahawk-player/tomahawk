@@ -995,6 +995,10 @@ Servent::connectToPeerFailed( const peerinfo_ptr& peerInfo, QList<SipInfo> sipIn
         // Try next SipInfo (don't do this if the connection was destroyed in between)
         connectToPeer( peerInfo, sipInfo, conn );
     }
+    else
+    {
+        peerInfoDebug( peerInfo ) << Q_FUNC_INFO << "Connecting stopped because Connection is null.";
+    }
 }
 
 void
