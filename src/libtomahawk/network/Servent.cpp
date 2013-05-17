@@ -799,23 +799,11 @@ Servent::cleanupSocket( QTcpSocketExtra *sock )
         return;
     }
 
-    if ( !sock->_conn.isNull() )
-    {
-        Connection* conn = sock->_conn.data();
-
-        if ( !sock->_disowned )
-        {
-            // connection will delete if we already transferred ownership, otherwise:
-            sock->deleteLater();
-        }
-
-        conn->markAsFailed(); // will emit failed, then finished
-    }
-    else
+    if ( sock->_conn.isNull() )
     {
         tLog() << "SocketError, connection is null";
-        sock->deleteLater();
     }
+    sock->deleteLater();
 }
 
 void
