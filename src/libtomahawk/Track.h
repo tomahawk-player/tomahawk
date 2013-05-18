@@ -84,6 +84,7 @@ public:
     QPixmap cover( const QSize& size, bool forceLoad = true ) const;
 #endif
     bool coverLoaded() const;
+    QString coverId() const;
 
     void setLoved( bool loved, bool postToInfoSystem = true );
     bool loved();

@@ -494,8 +494,23 @@ Track::coverLoaded() const
 
     return m_artistPtr->coverLoaded();
 }
-
 #endif
+
+
+QString
+Track::coverId() const
+{
+    if ( m_albumPtr && m_albumPtr->coverLoaded() && !m_albumPtr->cover( QSize( 0, 0 ) ).isNull() )
+    {
+        return m_albumPtr->coverId();
+    }
+    else if ( m_artistPtr )
+    {
+        return m_artistPtr->coverId();
+    }
+
+    return QString();
+}
 
 
 QList<Tomahawk::query_ptr>

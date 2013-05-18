@@ -43,12 +43,14 @@ Q_OBJECT
 public:
     static artist_ptr get( const QString& name, bool autoCreate = false );
     static artist_ptr get( unsigned int id, const QString& name );
+    static artist_ptr getByCoverId( const QString& uuid );
 
     Artist( unsigned int id, const QString& name );
     explicit Artist( const QString& name );
     virtual ~Artist();
 
     unsigned int id() const;
+    QString coverId() const;
     QString name() const { return m_name; }
     QString sortname() const { return m_sortname; }
 
@@ -117,6 +119,7 @@ private:
     bool m_biographyLoaded;
 
     mutable QString m_uuid;
+    mutable QString m_coverId;
     mutable int m_infoJobs;
 
     QList<Tomahawk::album_ptr> m_databaseAlbums;
@@ -138,6 +141,7 @@ private:
 
     static QHash< QString, artist_wptr > s_artistsByName;
     static QHash< unsigned int, artist_wptr > s_artistsById;
+    static QHash< QString, artist_ptr > s_artistsByCoverId;
 
     friend class ::IdThreadWorker;
 };
