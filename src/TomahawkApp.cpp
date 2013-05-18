@@ -39,7 +39,7 @@
 #include "database/DatabaseResolver.h"
 #include "playlist/dynamic/GeneratorFactory.h"
 #include "playlist/dynamic/echonest/EchonestGenerator.h"
-#include "playlist/dynamic/database/DatabaseGenerator.h"
+//#include "playlist/dynamic/database/DatabaseGenerator.h"
 #include "playlist/XspfUpdater.h"
 #include "network/Servent.h"
 #include "web/Api_v1.h"
@@ -219,8 +219,8 @@ TomahawkApp::init()
     tDebug() << "Init Echonest Factory.";
     GeneratorFactory::registerFactory( "echonest", new EchonestFactory );
 #endif
-    tDebug() << "Init Database Factory.";
-    GeneratorFactory::registerFactory( "database", new DatabaseFactory );
+/*    tDebug() << "Init Database Factory.";
+    GeneratorFactory::registerFactory( "database", new DatabaseFactory );*/
 
     // Register shortcut handler for this platform
 #ifdef Q_WS_MAC
