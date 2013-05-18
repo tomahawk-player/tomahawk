@@ -151,17 +151,22 @@ DynamicPlaylist::create( const Tomahawk::source_ptr& author,
                          GeneratorMode mode,
                          bool shared,
                          const QString& type,
-                         bool autoLoad
+                         bool autoLoad,
+                         bool temporary
                        )
 {
     dynplaylist_ptr dynplaylist = Tomahawk::dynplaylist_ptr( new DynamicPlaylist( author, guid, title, info, creator, type, mode, shared, autoLoad ), &QObject::deleteLater );
     dynplaylist->setWeakSelf( dynplaylist.toWeakRef() );
 
-    DatabaseCommand_CreateDynamicPlaylist* cmd = new DatabaseCommand_CreateDynamicPlaylist( author, dynplaylist, autoLoad );
-    connect( cmd, SIGNAL(finished()), dynplaylist.data(), SIGNAL(created()) );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
-    if ( autoLoad )
-        dynplaylist->reportCreated( dynplaylist );
+    if ( !temporary )
+    {
+        DatabaseCommand_CreateDynamicPlaylist* cmd = new DatabaseCommand_CreateDynamicPlaylist( author, dynplaylist, autoLoad );
+        connect( cmd, SIGNAL(finished()), dynplaylist.data(), SIGNAL(created()) );
+        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+        if ( autoLoad )
+            dynplaylist->reportCreated( dynplaylist );
+    }
+
     return dynplaylist;
 }
 

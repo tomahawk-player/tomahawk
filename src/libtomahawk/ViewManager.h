@@ -133,6 +133,7 @@ signals:
     void historyForwardAvailable( bool avail );
 
 public slots:
+    Tomahawk::ViewPage* showRadioPage();
     Tomahawk::ViewPage* showSuperCollection();
     Tomahawk::ViewPage* showWelcomePage();
     Tomahawk::ViewPage* showWhatsHotPage();
@@ -191,6 +192,7 @@ private:
     NewReleasesWidget* m_newReleasesWidget;
     Tomahawk::ViewPage* m_recentPlaysWidget;
     Tomahawk::ViewPage* m_inboxWidget;
+    Tomahawk::DynamicQmlWidget* m_radioView;
     InboxModel* m_inboxModel;
 
     QList< Tomahawk::collection_ptr > m_superCollections;

@@ -85,7 +85,8 @@ public:
                                              GeneratorMode mode,
                                              bool shared,
                                              const QString& type = QString(),
-                                             bool autoLoad = true
+                                             bool autoLoad = true,
+                                             bool temporary = false
                                            );
 
     static void remove( const dynplaylist_ptr& playlist );
