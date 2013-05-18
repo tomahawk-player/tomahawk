@@ -37,6 +37,7 @@ using namespace Tomahawk;
 
 QHash< QString, album_wptr > Album::s_albumsByName = QHash< QString, album_wptr >();
 QHash< unsigned int, album_wptr > Album::s_albumsById = QHash< unsigned int, album_wptr >();
+QHash< QString, album_ptr > Album::s_albumsByCoverId = QHash< QString, album_ptr >();
 
 static QMutex s_nameCacheMutex;
 static QReadWriteLock s_idMutex;
@@ -79,6 +80,7 @@ Album::get( const Tomahawk::artist_ptr& artist, const QString& name, bool autoCr
     album->setWeakRef( album.toWeakRef() );
     album->loadId( autoCreate );
     s_albumsByName.insert( key, album );
+    s_albumsByCoverId.insert( album->coverId(), album );
 
     return album;
 }
@@ -110,6 +112,7 @@ Album::get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& ar
     album_ptr a = album_ptr( new Album( id, name, artist ), &Album::deleteLater );
     a->setWeakRef( a.toWeakRef() );
     s_albumsByName.insert( key, a );
+    s_albumsByCoverId.insert( a->coverId(), a );
 
     if ( id > 0 )
     {
@@ -119,6 +122,18 @@ Album::get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& ar
     }
 
     return a;
+}
+
+
+album_ptr
+Album::getByCoverId( const QString& uuid )
+{
+    QMutexLocker lock( &s_nameCacheMutex );
+
+    if ( s_albumsByCoverId.contains( uuid ) )
+        return s_albumsByCoverId.value( uuid );
+
+    return album_ptr();
 }
 
 
@@ -327,6 +342,10 @@ Album::infoSystemInfo( const Tomahawk::InfoSystem::InfoRequestData& requestData,
             m_coverBuffer = ba;
         }
 
+        s_albumsByCoverId.remove( coverId() );
+        m_coverId = uuid();
+        s_albumsByCoverId.insert( m_coverId, m_ownRef.toStrongRef() );
+
         m_coverLoaded = true;
         emit coverChanged();
     }
@@ -382,4 +401,14 @@ Album::infoid() const
         m_uuid = uuid();
 
     return m_uuid;
+}
+
+
+QString
+Album::coverId() const
+{
+    if ( m_coverId.isEmpty() )
+        m_coverId = uuid();
+
+    return m_coverId;
 }

@@ -39,6 +39,7 @@ using namespace Tomahawk;
 
 QHash< QString, artist_wptr > Artist::s_artistsByName = QHash< QString, artist_wptr >();
 QHash< unsigned int, artist_wptr > Artist::s_artistsById = QHash< unsigned int, artist_wptr >();
+QHash< QString, artist_ptr > Artist::s_artistsByCoverId = QHash< QString, artist_ptr >();
 
 static QMutex s_nameCacheMutex;
 static QReadWriteLock s_idMutex;
@@ -77,6 +78,7 @@ Artist::get( const QString& name, bool autoCreate )
     artist->setWeakRef( artist.toWeakRef() );
     artist->loadId( autoCreate );
     s_artistsByName.insert( key, artist );
+    s_artistsByCoverId.insert( artist->coverId(), artist );
 
     return artist;
 }
@@ -110,6 +112,7 @@ Artist::get( unsigned int id, const QString& name )
     artist_ptr a = artist_ptr( new Artist( id, name ), &Artist::deleteLater );
     a->setWeakRef( a.toWeakRef() );
     s_artistsByName.insert( key, a );
+    s_artistsByCoverId.insert( a->coverId(), a );
 
     if ( id > 0 )
     {
@@ -119,6 +122,18 @@ Artist::get( unsigned int id, const QString& name )
     }
 
     return a;
+}
+
+
+artist_ptr
+Artist::getByCoverId( const QString& uuid )
+{
+    QMutexLocker lock( &s_nameCacheMutex );
+
+    if ( s_artistsByCoverId.contains( uuid ) )
+        return s_artistsByCoverId.value( uuid );
+
+    return artist_ptr();
 }
 
 
@@ -481,6 +496,10 @@ Artist::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVari
                     m_coverBuffer = ba;
                 }
 
+                s_artistsByCoverId.remove( coverId() );
+                m_coverId = uuid();
+                s_artistsByCoverId.insert( m_coverId, m_ownRef.toStrongRef() );
+
                 m_coverLoaded = true;
                 emit coverChanged();
             }
@@ -641,4 +660,14 @@ Artist::infoid() const
         m_uuid = uuid();
 
     return m_uuid;
+}
+
+
+QString
+Artist::coverId() const
+{
+    if ( m_coverId.isEmpty() )
+        m_coverId = uuid();
+
+    return m_coverId;
 }
