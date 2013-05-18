@@ -31,6 +31,10 @@
 class DLLEXPORT PlayableItem : public QObject
 {
 Q_OBJECT
+Q_PROPERTY(QString name READ name NOTIFY dataChanged)
+Q_PROPERTY(QString artistName READ artistName NOTIFY dataChanged)
+Q_PROPERTY(QString albumName READ albumName NOTIFY dataChanged)
+Q_PROPERTY(bool isPlaying READ isPlaying NOTIFY dataChanged)
 
 public:
     ~PlayableItem();
