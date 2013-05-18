@@ -311,15 +311,20 @@ Connection::doSetup()
 void
 Connection::socketDisconnected()
 {
+    qint64 bytesAvailable = 0;
+    if ( !m_sock.isNull() )
+    {
+        bytesAvailable = m_sock->bytesAvailable();
+    }
     tDebug( LOGVERBOSE ) << "SOCKET DISCONNECTED" << this->name() << id()
                          << "shutdown will happen after incoming queue empties."
-                         << "bytesavail:" << m_sock->bytesAvailable()
+                         << "bytesavail:" << bytesAvailable
                          << "bytesRecvd" << bytesReceived();
 
     m_peer_disconnected = true;
     emit socketClosed();
 
-    if ( m_msgprocessor_in.length() == 0 && m_sock->bytesAvailable() == 0 )
+    if ( m_msgprocessor_in.length() == 0 && bytesAvailable == 0 )
     {
         handleIncomingQueueEmpty();
         actualShutdown();
