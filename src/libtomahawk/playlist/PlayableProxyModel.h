@@ -36,7 +36,7 @@ public:
     { Detailed = 0, Short = 1, ShortWithAvatars = 2, Large = 3, Collection = 4 };
 
     enum PlayableProxyModelRole
-    { StyleRole = Qt::UserRole + 1, TypeRole };
+    { StyleRole = Qt::UserRole + 100, TypeRole };
 
     explicit PlayableProxyModel ( QObject* parent = 0 );
     virtual ~PlayableProxyModel() {}
@@ -68,6 +68,7 @@ public:
     virtual int maxVisibleItems() const { return m_maxVisibleItems; }
     virtual void setMaxVisibleItems( int items );
 
+    Q_INVOKABLE virtual PlayableItem* itemFromIndex( int itemIndex ) const;
     virtual PlayableItem* itemFromIndex( const QModelIndex& index ) const { return sourceModel()->itemFromIndex( index ); }
     virtual PlayableItem* itemFromQuery( const Tomahawk::query_ptr& query ) const { return sourceModel()->itemFromQuery( query ); }
     virtual PlayableItem* itemFromResult( const Tomahawk::result_ptr& result ) const { return sourceModel()->itemFromResult( result ); }

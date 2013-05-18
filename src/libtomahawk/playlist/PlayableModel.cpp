@@ -44,6 +44,13 @@ PlayableModel::PlayableModel( QObject* parent, bool loading )
     , m_readOnly( true )
     , m_loading( loading )
 {
+    QHash<int, QByteArray> roleNames;
+    roleNames.insert( ArtistRole, "artistName" );
+    roleNames.insert( TrackRole, "trackName" );
+    roleNames.insert( CoverIDRole, "coverID" );
+    roleNames.insert( IsPlayingRole, "isPlaying" );
+    setRoleNames( roleNames );
+
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( onPlaybackStarted( Tomahawk::result_ptr ) ), Qt::DirectConnection );
     connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( onPlaybackStopped() ), Qt::DirectConnection );
 
@@ -147,6 +154,12 @@ PlayableModel::parent( const QModelIndex& child ) const
 QVariant
 PlayableModel::artistData( const artist_ptr& artist, int role ) const
 {
+    if ( role == CoverIDRole )
+    {
+        artist->cover( QSize( 0, 0 ) );
+        return artist->coverId();
+    }
+
     if ( role != Qt::DisplayRole ) // && role != Qt::ToolTipRole )
         return QVariant();
 
@@ -157,6 +170,12 @@ PlayableModel::artistData( const artist_ptr& artist, int role ) const
 QVariant
 PlayableModel::albumData( const album_ptr& album, int role ) const
 {
+    if ( role == CoverIDRole )
+    {
+        album->cover( QSize( 0, 0 ) );
+        return album->coverId();
+    }
+
     if ( role != Qt::DisplayRole ) // && role != Qt::ToolTipRole )
         return QVariant();
 
@@ -167,6 +186,13 @@ PlayableModel::albumData( const album_ptr& album, int role ) const
 QVariant
 PlayableModel::queryData( const query_ptr& query, int column, int role ) const
 {
+    if ( role == CoverIDRole )
+    {
+        query->track()->cover( QSize( 0, 0 ) );
+        return query->track()->coverId();
+    }
+
+    tDebug() << Q_FUNC_INFO << role;
     if ( role != Qt::DisplayRole ) // && role != Qt::ToolTipRole )
         return QVariant();
 
@@ -287,11 +313,25 @@ PlayableModel::data( const QModelIndex& index, int role ) const
     if ( !entry )
         return QVariant();
 
+    int column = index.column();
+    if ( role < CoverIDRole && role >= Qt::UserRole )
+    {
+        // map role to column
+        column = role - Qt::UserRole;
+        role = Qt::DisplayRole;
+    }
+
     switch ( role )
     {
         case Qt::TextAlignmentRole:
         {
             return QVariant( columnAlignment( index.column() ) );
+            break;
+        }
+
+        case IsPlayingRole:
+        {
+            return entry->isPlaying();
             break;
         }
 
@@ -320,7 +360,7 @@ PlayableModel::data( const QModelIndex& index, int role ) const
         {
             if ( !entry->query().isNull() )
             {
-                return queryData( entry->query(), index.column(), role );
+                return queryData( entry->query(), column, role );
             }
             else if ( !entry->artist().isNull() )
             {
