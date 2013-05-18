@@ -59,7 +59,7 @@ class InboxModel;
 
 namespace Tomahawk
 {
-    class DynamicWidget;
+    class DynamicQmlWidget;
 }
 
 class DLLEXPORT ViewManager : public QObject
@@ -195,7 +195,7 @@ private:
 
     QList< Tomahawk::collection_ptr > m_superCollections;
 
-    QHash< Tomahawk::dynplaylist_ptr, QPointer<Tomahawk::DynamicWidget> > m_dynamicWidgets;
+    QHash< Tomahawk::dynplaylist_ptr, QPointer<Tomahawk::DynamicQmlWidget> > m_dynamicWidgets;
     QHash< Tomahawk::collection_ptr, QPointer<TreeWidget> > m_treeWidgets;
     QHash< Tomahawk::artist_ptr, QPointer<ArtistInfoWidget> > m_artistViews;
     QHash< Tomahawk::album_ptr, QPointer<AlbumInfoWidget> > m_albumViews;

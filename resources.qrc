@@ -90,6 +90,28 @@
         <file>data/images/star-unstarred.svg</file>
         <file>data/images/apply-check.svg</file>
         <file>data/stylesheets/topbar-radiobuttons.css</file>
+        <file>data/qml/tomahawkimports/CoverImage.qml</file>
+        <file>data/qml/tomahawkimports/ArtistView.qml</file>
+        <file>data/qml/tomahawkimports/HeaderLabel.qml</file>
+        <file>data/qml/tomahawkimports/TagCloud.qml</file>
+        <file>data/qml/tomahawkimports/ScrollBar.qml</file>
+        <file>data/qml/tomahawkimports/InputField.qml</file>  
+        <file>data/qml/tomahawkimports/Button.qml</file>
+        <file>data/qml/tomahawkimports/DoubleSlider.qml</file>
+        <file>data/qml/tomahawkimports/RoundedButton.qml</file>
+        <file>data/qml/tomahawkimports/PushButton.qml</file>
+        <file>data/qml/tomahawkimports/CoverFlip.qml</file>
+        <file>data/qml/tomahawkimports/BusyIndicator.qml</file>
+        <file>data/qml/StationView.qml</file>
+        <file>data/qml/stations/StationCreatorPage1.qml</file>
+        <file>data/qml/stations/StationCreatorPage2.qml</file>
+        <file>data/qml/stations/CreateByArtist.qml</file>
+        <file>data/qml/stations/StationConfig.qml</file>
+        <file>data/qml/QmlGridView.qml</file>
+        <file>data/qml/stations/CreateByGenre.qml</file>
+        <file>data/qml/tomahawkimports/FlexibleHeader.qml</file>
+        <file>data/qml/tomahawkimports/ToggleViewButtons.qml</file>
+        <file>data/qml/DeclarativeHeader.qml</file>
         <file>data/icons/tomahawk-icon-16x16.png</file>
         <file>data/icons/tomahawk-icon-32x32.png</file>
         <file>data/icons/tomahawk-icon-64x64.png</file>
@@ -152,5 +174,11 @@
         <file>data/images/refresh.svg</file>
         <file>data/images/inbox.svg</file>
         <file>data/images/new-inbox.svg</file>
+        <file>data/images/inputfield-border.svg</file>
+        <file>data/images/search-box-dismiss-x.svg</file>  
+        <file>data/images/loading-animation.svg</file>
+        <file>data/images/station-artist.svg</file>
+        <file>data/images/station-genre.svg</file>
+        <file>data/images/station-year.svg</file>
     </qresource>
 </RCC>

@@ -1,11 +1,11 @@
 #FIXME: this only handles qt4 and duplicates top level cmakelists: how can we reduce code duplication?
 
-find_package(Qt4 COMPONENTS QtNetwork QtCore QtGui QtSql REQUIRED)
+find_package(Qt4 COMPONENTS QtNetwork QtCore QtGui QtSql QtDeclarative REQUIRED)
 include( ${QT_USE_FILE} )
 
-set(NEEDED_QT4_COMPONENTS "QtCore" "QtXml" "QtNetwork")
+set(NEEDED_QT4_COMPONENTS "QtCore" "QtXml" "QtNetwork" "QtDeclarative")
 if(BUILD_GUI)
-    list(APPEND NEEDED_QT4_COMPONENTS "QtGui" "QtWebkit" "QtUiTools" "QtSvg")
+    list(APPEND NEEDED_QT4_COMPONENTS "QtGui" "QtWebkit" "QtUiTools" "QtSvg" "QtDeclarative")
 endif()
 
 find_package(Qt4 4.7.0 COMPONENTS ${NEEDED_QT4_COMPONENTS})

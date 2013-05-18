@@ -77,19 +77,21 @@ set( libGuiSources
     playlist/PlayableItem.cpp
     playlist/SingleTrackPlaylistInterface.cpp
 
+    playlist/dynamic/GeneratorInterface.cpp
     playlist/dynamic/DynamicPlaylist.cpp
     playlist/dynamic/DynamicView.cpp
     playlist/dynamic/DynamicModel.cpp
     playlist/dynamic/echonest/EchonestGenerator.cpp
     playlist/dynamic/echonest/EchonestControl.cpp
-    playlist/dynamic/echonest/EchonestSteerer.cpp
-    playlist/dynamic/widgets/DynamicWidget.cpp
+#    playlist/dynamic/echonest/EchonestSteerer.cpp
+#    playlist/dynamic/widgets/DynamicWidget.cpp
+    playlist/dynamic/widgets/DynamicQmlWidget.cpp
     playlist/dynamic/widgets/DynamicControlWrapper.cpp
-    playlist/dynamic/widgets/DynamicControlList.cpp
+#    playlist/dynamic/widgets/DynamicControlList.cpp
     playlist/dynamic/widgets/ReadOrWriteWidget.cpp
     playlist/dynamic/widgets/MiscControlWidgets.cpp
-    playlist/dynamic/widgets/CollapsibleControls.cpp
-    playlist/dynamic/widgets/DynamicSetupWidget.cpp
+#    playlist/dynamic/widgets/CollapsibleControls.cpp
+#    playlist/dynamic/widgets/DynamicSetupWidget.cpp
 
     resolvers/ExternalResolverGui.cpp
     resolvers/ScriptResolver.cpp
@@ -121,6 +123,8 @@ set( libGuiSources
     utils/ResultUrlChecker.cpp
     utils/NetworkReply.cpp
 
+    widgets/DeclarativeCoverArtProvider.cpp
+    widgets/DeclarativeView.cpp
     widgets/AnimatedCounterLabel.cpp
     widgets/BasicHeader.cpp
     widgets/FilterHeader.cpp
@@ -314,7 +318,7 @@ list(APPEND libSources
     playlist/dynamic/GeneratorInterface.cpp
     playlist/dynamic/DynamicPlaylistRevision.cpp
     playlist/XspfUpdater.cpp
-    playlist/dynamic/database/DatabaseGenerator.cpp
+#    playlist/dynamic/database/DatabaseGenerator.cpp
     playlist/dynamic/database/DatabaseControl.cpp
     playlist/dynamic/DynamicControl.cpp
     
@@ -497,6 +501,7 @@ TARGET_LINK_LIBRARIES( tomahawklib
     ${QT_QTXML_LIBRARY}
     ${QT_QTSVG_LIBRARY}
     ${QT_QTCORE_LIBRARY}
+    ${QT_QTDECLARATIVE_LIBRARY}
     ${OS_SPECIFIC_LINK_LIBRARIES}
     ${CMAKE_THREAD_LIBS_INIT}
     ${LINK_LIBRARIES}

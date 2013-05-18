@@ -176,6 +176,7 @@ if(NOT Qt5Core_DIR)
         set(QT_USE_QTNETWORK TRUE)
         set(QT_USE_QTXML TRUE)
         set(QT_USE_QTWEBKIT TRUE)
+        set(QT_USE_QTDECLARATIVE TRUE)
 
         include( ${QT_USE_FILE} )
     endmacro()
