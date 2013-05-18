@@ -19,23 +19,42 @@ Rectangle {
         width: parent.width
         icon: "../images/station.svg"
         title: mainView.title
-        subtitle: generator.summary
+        subtitle: ""//generator.summary
         showSearchField: false
         showBackButton: stationListView.currentIndex > 0
-        showNextButton: stationListView.currentIndex == 2
+        showNextButton: !mainView.configured && stationListView.currentIndex == 2
         nextButtonText: "Save"
+        backButtonText: mainView.configured ? "Configure" : "Back"
 
         z: 1 //cover albumcovers that may leave their area
 
-        onBackPressed: stationListView.decrementCurrentIndex()
-        onNextPressed: stationListView.incrementCurrentIndex()
+        onBackPressed: {
+            if(mainView.configured) {
+                return;
+            }
+
+            inputBubble.opacity = 0
+            stationListView.decrementCurrentIndex()
+            if(stationListView.currentIndex == 1) {
+                subtitle = modeModel.get(stationCreator.modeIndex).headerSubtitle + "..."
+            }
+            if(stationListView.currentIndex == 0) {
+                subtitle = ""
+            }
+        }
+        // In our case the next button is the save button
+        onNextPressed: {
+            inputBubble.opacity = 1
+            saveNameInput.forceActiveFocus();
+        }
     }
+
 
     ListModel {
         id: modeModel
-        ListElement { label: "By Artist"; image: "../../images/station-artist.svg"; creatorContent: "stations/CreateByArtist.qml" }
-        ListElement { label: "By Genre"; image: "../../images/station-genre.svg"; creatorContent: "stations/CreateByGenre.qml" }
-        ListElement { label: "By Year"; image: "../../images/station-year.svg"; creatorContent: "year" }
+        ListElement { label: "By Artist"; image: "../../images/station-artist.svg"; creatorContent: "stations/CreateByArtist.qml"; headerSubtitle: "by" }
+        ListElement { label: "By Genre"; image: "../../images/station-genre.svg"; creatorContent: "stations/CreateByGenre.qml"; headerSubtitle: "like" }
+        ListElement { label: "By Year"; image: "../../images/station-year.svg"; creatorContent: "stations/CreateByYear.qml"; headerSubtitle: "from" }
     }
 
     VisualItemModel {
@@ -47,8 +66,9 @@ Rectangle {
             model: modeModel
 
             onItemClicked: {
-                stationCreator.content = modeModel.get(index).creatorContent
+                stationCreator.modeIndex = index
                 stationListView.incrementCurrentIndex()
+                header.subtitle = modeModel.get(index).headerSubtitle + "..."
             }
         }
 
@@ -57,83 +77,34 @@ Rectangle {
             height: stationListView.height
             width: stationListView.width
 
-            onNext: stationListView.incrementCurrentIndex()
+            property int modeIndex
+
+            content: modeModel.get(modeIndex).creatorContent
+
+            onNext: {
+                stationListView.incrementCurrentIndex()
+                header.subtitle = modeModel.get(modeIndex).headerSubtitle + " " + text
+            }
         }
 
-        Item {
+        StationItem {
             id: stationItem
             height: stationListView.height
             width: stationListView.width
-
-            CoverFlip {
-                id: coverView
-                anchors.right: parent.right
-                anchors.top: parent.top
-                height: parent.height
-                width: parent.width
-                interactive: false
-
-                backgroundColor: scene.color
-
-                model: dynamicModel
-                currentIndex: currentlyPlayedIndex
-
-                onItemPlayPauseClicked: {
-                    mainView.playItem(index)
-                }
-
-                onItemClicked: {
-                    mainView.playItem(index)
-                }
-
-                states: [
-                    State {
-                        name: "empty"; when: mainView.loading
-                        PropertyChanges {
-                            target: coverView
-                            anchors.rightMargin: -coverView.width
-                            anchors.topMargin: - coverView.height
-                            scale: 0
-                        }
-                    }
-                ]
-                transitions: [
-                    Transition {
-                        from: "empty"
-                        to: "*"
-                        NumberAnimation {
-                            properties: "anchors.topMargin,anchors.rightMargin,scale"
-                            duration: 1000
-                            easing.type: Easing.OutQuad
-                        }
-                    }
-
-                ]
-//                Behavior on anchors.topMargin {
-//                    NumberAnimation { duration: 500 }
-//                }
-//                Behavior on anchors.rightMargin {
-//                    NumberAnimation { duration: 500 }
-//                }
-//                Behavior on scale {
-//                    NumberAnimation { duration: 500 }
-//                }
-
-            }
-            BusyIndicator {
-                id: busyIndicator
-                anchors.centerIn: parent
-                height: defaultFontHeight * 4
-                width: height
-
-                opacity: mainView.loading ? 1 : 0
-                running: mainView.loading
-            }
-
         }
-
     }
 
+
+    VisualItemModel {
+        id: configuredStationVisualModel
+
+
+        StationItem {
+            id: cfgstationItem
+            height: stationListView.height
+            width: stationListView.width
+        }
+    }
 
     ListView {
         id: stationListView
@@ -147,7 +118,7 @@ Rectangle {
         contentHeight: height
         contentWidth: width
         orientation: ListView.Horizontal
-        model: stationVisualModel
+        //model: mainView.configured ? configuredStationVisualModel : stationVisualModel
         interactive: false
         highlightMoveDuration: 300
 
@@ -157,6 +128,62 @@ Rectangle {
         onWidthChanged: {
             contentWidth = scene.width
         }
+
+        Component.onCompleted: {
+            model = mainView.configured ? configuredStationVisualModel : stationVisualModel
+        }
+        onModelChanged: print("ccccccccccccc", mainView.configured)
     }
+
+        Rectangle {
+            id: inputBubble
+            color: "black"
+            border.width: 2
+            border.color: "white"
+            height: defaultFontHeight * 3
+            width: height * 6
+            radius: defaultFontHeight / 2
+            anchors.top: header.bottom
+            anchors.right: parent.right
+            anchors.rightMargin: defaultFontHeight / 2
+            anchors.topMargin: -defaultFontHeight / 2
+            z: 2
+            opacity: 0
+            Behavior on opacity {
+                NumberAnimation { duration: 200 }
+            }
+
+            Row {
+                anchors.centerIn: parent
+                width: parent.width - defaultFontHeight
+                spacing: defaultFontHeight / 2
+
+                function saveStation(name) {
+                    mainView.title = name
+                    inputBubble.opacity = 0
+                    header.showNextButton = false
+                    header.backButtonText = "Configure"
+                }
+
+                Text {
+                    id: nameText
+                    color: "white"
+                    text: "Name:"
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+                InputField {
+                    id: saveNameInput
+                    width: parent.width - nameText.width - saveOkButton.width - parent.spacing * 2
+                    placeholderText: "Station"
+                    onAccepted: parent.saveStation(text);
+                }
+                PushButton {
+                    id: saveOkButton
+                    text: "OK"
+                    onClicked: parent.saveStation(saveNameInput.text)
+                }
+            }
+
+        }
 
 }

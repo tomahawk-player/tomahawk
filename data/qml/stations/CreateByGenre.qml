@@ -6,11 +6,11 @@ Item {
     id: root
     anchors.fill: parent
 
-    signal done()
+    signal done(string text)
 
     function createStation(genre) {
         mainView.startStationFromGenre(genre)
-        root.done()
+        root.done(genre)
     }
 
     ListModel {

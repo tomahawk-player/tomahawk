@@ -25,9 +25,6 @@ Item {
     // The border width for the cover image
     property int borderWidth: 2
 
-    // needed to adjust the shadow
-    property color backgroundColor: "black"
-
     // sets the brightness for the item and its mirror (1: brightest, 0: darkest)
     property double itemBrightness: 1
     property double mirrorBrightness: .5
@@ -55,7 +52,7 @@ Item {
 
     Rectangle {
         id: itemShadow
-        color: backgroundColor
+        color: "black"
         anchors.fill: parent
 
         //opacity: 1 - itemBrightness

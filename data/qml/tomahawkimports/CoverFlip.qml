@@ -49,8 +49,6 @@ PathView {
                 right: parent.right
             }
 
-            backgroundColor: coverView.backgroundColor
-
             showLabels: true
             showMirror: true
             artistName: model.artistName

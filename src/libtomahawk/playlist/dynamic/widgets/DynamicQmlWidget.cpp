@@ -82,7 +82,22 @@ DynamicQmlWidget::playlistInterface() const
 QString
 DynamicQmlWidget::title() const
 {
-    return m_model->title();
+    if ( !m_playlist->title().isEmpty() ) {
+        return m_playlist->title();
+    }
+    return "Listen to radio...";
+}
+
+
+void
+DynamicQmlWidget::setTitle(const QString &title)
+{
+    m_model->setTitle( title );
+    m_playlist->setTitle( title );
+    m_model->playlist()->setTitle( title );
+    m_playlist->createNewRevision( uuid(), m_playlist->currentrevision(), m_playlist->type(), m_playlist->generator()->controls() );
+    m_playlist->reportCreated( m_playlist );
+    emit titleChanged();
 }
 
 

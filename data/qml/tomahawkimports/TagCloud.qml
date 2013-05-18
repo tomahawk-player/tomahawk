@@ -16,7 +16,7 @@ Item {
     Flow {
         anchors.centerIn: parent
         width: parent.width
-        spacing: 3
+        spacing: defaultFontSize
 
         Repeater {
             id: cloudRepeater
@@ -26,7 +26,7 @@ Item {
                 id: cloudItem
                 width: delegateText.width * 1.1
                 height: delegateText.height
-                property double itemScale: Math.random() + .3
+                property double itemScale: tagCloud.randomNumber(0.5, 1.2)
                 scale: itemScale
                 Text {
                     id: delegateText
@@ -35,7 +35,7 @@ Item {
                     text: modelData
                     font.pointSize: 16
                     anchors.verticalCenter: parent.verticalCenter
-                    anchors.verticalCenterOffset: tagCloud.randomNumber(0, 15)
+                    //anchors.verticalCenterOffset: tagCloud.randomNumber(0, 15)
 
                     states: [
                         State {

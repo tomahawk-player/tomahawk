@@ -103,9 +103,11 @@
         <file>data/qml/tomahawkimports/CoverFlip.qml</file>
         <file>data/qml/tomahawkimports/BusyIndicator.qml</file>
         <file>data/qml/StationView.qml</file>
+        <file>data/qml/stations/StationItem.qml</file>
         <file>data/qml/stations/StationCreatorPage1.qml</file>
         <file>data/qml/stations/StationCreatorPage2.qml</file>
         <file>data/qml/stations/CreateByArtist.qml</file>
+        <file>data/qml/stations/CreateByYear.qml</file>
         <file>data/qml/stations/StationConfig.qml</file>
         <file>data/qml/QmlGridView.qml</file>
         <file>data/qml/stations/CreateByGenre.qml</file>
