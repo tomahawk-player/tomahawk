@@ -108,7 +108,7 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
     }
     if ( !stations.isEmpty() || source->isLocal() )
     {
-        m_stations = new CategoryItem( model(), this, SourcesModel::StationsCategory, source->isLocal() );
+        m_stations = new CategoryItem( model(), this, SourcesModel::StationsCategory, false /* source->isLocal() */ );
         onStationsAdded( stations );
     }
 
@@ -339,14 +339,14 @@ void
 SourceItem::playlistsAddedInternal( SourceTreeItem* parent, const QList< dynplaylist_ptr >& playlists )
 {
     QList< SourceTreeItem* > items;
-    int addOffset = playlists.first()->author()->isLocal() ? 1 : 0;
+    int addOffset = 0; //playlists.first()->author()->isLocal() ? 1 : 0;
 
     int from = parent->children().count() - addOffset;
     parent->beginRowsAdded( from, from + playlists.count() - 1 );
     foreach ( const dynplaylist_ptr& p, playlists )
     {
         DynamicPlaylistItem* plItem = new DynamicPlaylistItem( model(), parent, p, parent->children().count() - addOffset );
-//        qDebug() << "Dynamic Playlist added:" << p->title() << p->creator() << p->info();
+//        tDebug() << "Dynamic Playlist added:" << p->title() << p->creator() << p->info();
         p->loadRevision();
         items << plItem;
 
@@ -516,7 +516,7 @@ SourceItem::onStationsAdded( const QList< dynplaylist_ptr >& stations )
         // add the category too
         int cur = children().count();
         beginRowsAdded( cur, cur );
-        m_stations = new CategoryItem( model(), this, SourcesModel::StationsCategory, source()->isLocal() );
+        m_stations = new CategoryItem( model(), this, SourcesModel::StationsCategory, false /* source()->isLocal() */ );
         endRowsAdded();
     }
 
