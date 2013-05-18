@@ -23,7 +23,7 @@ Item {
 
         HeaderLabel {
             id: headerText
-            text: "Create station by artist..."
+            text: "Create station by year..."
         }
 
         Row {
@@ -46,24 +46,34 @@ Item {
             }
         }
 
-        Item {
-            height: parent.height - headerText.height - artistInputField.height - parent.spacing * 3
-            width: parent.width
-            ArtistView {
-                id: artistView
-                height: parent.height
-                width: parent.width
-                model: artistChartsModel
-                clip: true
-                delegateHeight: defaultFontHeight * 6
+//        Item {
+//            height: parent.height - headerText.height - artistInputField.height - parent.spacing * 3
+//            width: parent.width
+//            ArtistView {
+//                id: artistView
+//                height: parent.height
+//                width: parent.width
+//                model: artistChartsModel
+//                clip: true
+//                delegateHeight: defaultFontHeight * 6
 
-                onItemClicked: {
-                    createStation(artistChartsModel.itemFromIndex(index).artistName);
-                }
-            }
-            ScrollBar {
-                listView: artistView
-            }
+//                onItemClicked: {
+//                    createStation(artistChartsModel.itemFromIndex(index).artistName);
+//                }
+//            }
+//            ScrollBar {
+//                listView: artistView
+//            }
+//        }
+
+        DoubleSlider {
+            width: parent.width
+            height: defaultFontHeight * 2
+            min: 1960
+            max: new Date().getFullYear()
+            lowerSliderPos: 1990
+            upperSliderPos: 2010
+            minMaxLabelsVisible: false
         }
     }
 }

@@ -17,6 +17,12 @@ Rectangle {
     property int spacing: defaultFontHeight * 0.2
     signal accepted( string text )
 
+    onFocusChanged: {
+        if(focus) {
+            textInput.forceActiveFocus();
+        }
+    }
+
     Image {
         id: searchIcon
         anchors {

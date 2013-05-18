@@ -8,7 +8,7 @@ Item {
     property int margins: defaultFontHeight * 2
     property alias content: contentLoader.source
 
-    signal next()
+    signal next(string text)
 
     Loader {
         id: contentLoader
@@ -19,7 +19,7 @@ Item {
     Connections {
         target: contentLoader.item
 
-        onDone: root.next()
+        onDone: root.next(text)
     }
 
 }

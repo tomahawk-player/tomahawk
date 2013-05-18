@@ -11,6 +11,7 @@ BusyIndicator {
   anchors.horizontalCenterOffset: 200
   height: 200
   width: 200
+  count: 11
 }
 
 Image {

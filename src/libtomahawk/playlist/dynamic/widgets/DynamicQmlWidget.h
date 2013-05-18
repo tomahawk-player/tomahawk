@@ -37,7 +37,7 @@ class DynamicQmlWidget : public DeclarativeView, public Tomahawk::ViewPage
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString title READ title NOTIFY titleChanged)
+    Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
     Q_PROPERTY(bool loading READ loading NOTIFY loadingChanged)
     Q_PROPERTY(bool configured READ configured NOTIFY configuredChanged)
 
@@ -49,6 +49,7 @@ public:
     virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
 
     virtual QString title() const;
+    virtual void setTitle(const QString &title);
     virtual QString description() const;
     virtual QString iconSource() const;
 
