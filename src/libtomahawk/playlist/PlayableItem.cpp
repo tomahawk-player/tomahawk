@@ -205,6 +205,14 @@ PlayableItem::artistName() const
     {
         return m_query->track()->artist();
     }
+    else if ( !m_album.isNull() )
+    {
+        return m_album->artist()->name();
+    }
+    else if ( !m_artist.isNull() )
+    {
+        return m_artist->name();
+    }
 
     return QString();
 }
