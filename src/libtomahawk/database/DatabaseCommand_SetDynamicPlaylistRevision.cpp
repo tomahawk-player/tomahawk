@@ -37,7 +37,7 @@ DatabaseCommand_SetDynamicPlaylistRevision::DatabaseCommand_SetDynamicPlaylistRe
                                                                                 const QList<plentry_ptr>& entries,
                                                                                 const QString& type,
                                                                                 GeneratorMode mode,
-                                                                                const QList< dyncontrol_ptr >& controls )
+                                                                                const QVariantList& controls )
     : DatabaseCommand_SetPlaylistRevision( s, playlistguid, newrev, oldrev, orderedguids, addedentries, entries )
     , m_type( type )
     , m_mode( mode )
@@ -54,7 +54,7 @@ DatabaseCommand_SetDynamicPlaylistRevision::DatabaseCommand_SetDynamicPlaylistRe
                                                                                 const QString& oldrev,
                                                                                 const QString& type,
                                                                                 GeneratorMode mode,
-                                                                                const QList< dyncontrol_ptr >& controls )
+                                                                                const QVariantList& controls )
     : DatabaseCommand_SetPlaylistRevision( s, playlistguid, newrev, oldrev, QStringList(), QList< plentry_ptr >(), QList< plentry_ptr >() )
     , m_type( type )
     , m_mode( mode )
@@ -68,18 +68,7 @@ DatabaseCommand_SetDynamicPlaylistRevision::DatabaseCommand_SetDynamicPlaylistRe
 QVariantList
 DatabaseCommand_SetDynamicPlaylistRevision::controlsV()
 {
-    if ( m_controls.isEmpty() )
-        return m_controlsV;
-
-    if ( !m_controls.isEmpty() && m_controlsV.isEmpty() )
-    {
-        foreach ( const dyncontrol_ptr& control, m_controls )
-        {
-            m_controlsV << QJson::QObjectHelper::qobject2qvariant( control.data() );
-        }
-    }
-
-    return m_controlsV;
+    return m_controls;
 }
 
 
@@ -117,7 +106,7 @@ DatabaseCommand_SetDynamicPlaylistRevision::postCommitHook()
         return;
     }
 
-    if ( !m_controlsV.isEmpty() && m_controls.isEmpty() )
+/*    if ( !m_controlsV.isEmpty() && m_controls.isEmpty() )
     {
         QList<QVariantMap> controlMap;
         foreach( const QVariant& v, m_controlsV )
@@ -139,7 +128,7 @@ DatabaseCommand_SetDynamicPlaylistRevision::postCommitHook()
                                     m_addedmap,
                                     m_applied );
     }
-    else
+    else*/
     {
         if ( m_mode == OnDemand )
             rawPl->setRevision(  newrev(),
@@ -169,19 +158,9 @@ DatabaseCommand_SetDynamicPlaylistRevision::exec( DatabaseImpl* lib )
     DatabaseCommand_SetPlaylistRevision::exec( lib );
 
     QVariantList newcontrols;
-    if ( m_controlsV.isEmpty() && !m_controls.isEmpty() )
+    foreach( const QVariant& v, m_controls )
     {
-        foreach( const dyncontrol_ptr& control, m_controls )
-        {
-            newcontrols << control->id();
-        }
-    }
-    else if( !m_controlsV.isEmpty() )
-    {
-        foreach( const QVariant& v, m_controlsV )
-        {
-            newcontrols << v.toMap().value( "id" );
-        }
+        newcontrols << v.toMap().value( "id" );
     }
 
     QJson::Serializer ser;
@@ -209,34 +188,18 @@ DatabaseCommand_SetDynamicPlaylistRevision::exec( DatabaseImpl* lib )
     TomahawkSqlQuery controlsQuery = lib->newquery();
     controlsQuery.prepare( "INSERT INTO dynamic_playlist_controls( id, playlist, selectedType, match, input ) "
                             "VALUES( ?, ?, ?, ?, ? )" );
-    if ( m_controlsV.isEmpty() && !m_controls.isEmpty() )
-    {
-        foreach ( const dyncontrol_ptr& control, m_controls )
-        {
-            qDebug() << "inserting dynamic control:" << control->id() << m_playlistguid << control->selectedType() << control->match() << control->input();
-            controlsQuery.addBindValue( control->id() );
-            controlsQuery.addBindValue( m_playlistguid );
-            controlsQuery.addBindValue( control->selectedType() );
-            controlsQuery.addBindValue( control->match() );
-            controlsQuery.addBindValue( control->input() );
 
-            controlsQuery.exec();
-        }
-    }
-    else
+    foreach ( const QVariant& v, m_controls )
     {
-        foreach ( const QVariant& v, m_controlsV )
-        {
-            QVariantMap control = v.toMap();
-            qDebug() << "inserting dynamic control from JSON:" << control.value( "id" ) << m_playlistguid << control.value( "selectedType" ) << control.value( "match" ) << control.value( "input" );
-            controlsQuery.addBindValue( control.value( "id" ) );
-            controlsQuery.addBindValue( m_playlistguid );
-            controlsQuery.addBindValue( control.value( "selectedType" ) );
-            controlsQuery.addBindValue( control.value( "match" ) );
-            controlsQuery.addBindValue( control.value( "input" ) );
+        QVariantMap control = v.toMap();
+        qDebug() << "inserting dynamic control from JSON:" << control.value( "id" ) << m_playlistguid << control.value( "selectedType" ) << control.value( "match" ) << control.value( "input" );
+        controlsQuery.addBindValue( control.value( "id" ) );
+        controlsQuery.addBindValue( m_playlistguid );
+        controlsQuery.addBindValue( control.value( "selectedType" ) );
+        controlsQuery.addBindValue( control.value( "match" ) );
+        controlsQuery.addBindValue( control.value( "input" ) );
 
-            controlsQuery.exec();
-        }
+        controlsQuery.exec();
     }
 
     if ( m_applied )
@@ -251,6 +214,7 @@ DatabaseCommand_SetDynamicPlaylistRevision::exec( DatabaseImpl* lib )
         query2.exec();
     }
 }
+
 
 void
 DatabaseCommand_SetDynamicPlaylistRevision::setPlaylist( DynamicPlaylist* pl )

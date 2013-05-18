@@ -47,14 +47,14 @@ signals:
     void done( QString,
                      bool,
                      QString,
-                     QList< QVariantMap>,
+                     QVariantList,
                      bool );
     // used when loading a static playlist
     void done( QString,
                QList< QString >,
                QList< QString >,
                QString,
-               QList< QVariantMap>,
+               QVariantList,
                bool,
                QMap< QString, Tomahawk::plentry_ptr >,
                bool );
