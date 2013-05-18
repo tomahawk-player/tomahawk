@@ -40,14 +40,14 @@ GeneratorFactory::create ( const QString& type )
 }
 
 
-dyncontrol_ptr
+/*dyncontrol_ptr
 GeneratorFactory::createControl( const QString& generatorType, const QString& controlType )
 {
     if( generatorType.isEmpty() || !s_factories.contains( generatorType ) )
         return dyncontrol_ptr();
 
     return s_factories.value( generatorType )->createControl( controlType );
-}
+}*/
 
 
 void

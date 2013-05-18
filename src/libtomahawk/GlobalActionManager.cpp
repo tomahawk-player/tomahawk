@@ -225,7 +225,10 @@ GlobalActionManager::copyPlaylistToClipboard( const dynplaylist_ptr& playlist )
     TomahawkUtils::urlAddQueryItem( link, "type", "echonest" );
     TomahawkUtils::urlAddQueryItem( link, "title", playlist->title() );
 
-    QList< dyncontrol_ptr > controls = playlist->generator()->controls();
+    Q_ASSERT( false );
+    //FIXME
+/*
+    QVariantList controls = playlist->generator()->controls();
     foreach ( const dyncontrol_ptr& c, controls )
     {
         if ( c->selectedType() == "Artist" )
@@ -252,7 +255,7 @@ GlobalActionManager::copyPlaylistToClipboard( const dynplaylist_ptr& playlist )
 
             TomahawkUtils::urlAddQueryItem( link, name, c->input() );
         }
-    }
+    }*/
 
     QClipboard* cb = QApplication::clipboard();
     QByteArray data = percentEncode( link );
@@ -886,7 +889,8 @@ GlobalActionManager::loadDynamicPlaylist( const QUrl& url, bool station )
         return Tomahawk::dynplaylist_ptr();
     }
 
-    if ( parts[ 0 ] == "create" )
+    Q_ASSERT( false );
+/*    if ( parts[ 0 ] == "create" )
     {
         if ( !urlHasQueryItem( url, "title" ) || !urlHasQueryItem( url, "type" ) )
         {
@@ -1057,7 +1061,7 @@ GlobalActionManager::loadDynamicPlaylist( const QUrl& url, bool station )
 
         ViewManager::instance()->show( pl );
         return pl;
-    }
+    }*/
 
     return Tomahawk::dynplaylist_ptr();
 }

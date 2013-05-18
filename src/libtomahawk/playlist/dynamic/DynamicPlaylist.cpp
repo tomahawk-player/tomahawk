@@ -185,7 +185,7 @@ void
 DynamicPlaylist::createNewRevision( const QString& newrev,
                                     const QString& oldrev,
                                     const QString& type,
-                                    const QList< dyncontrol_ptr>& controls,
+                                    const QVariantList& controls,
                                     const QList< plentry_ptr >& entries )
 {
     Q_ASSERT( m_source->isLocal() || newrev == oldrev );
@@ -233,7 +233,7 @@ void
 DynamicPlaylist::createNewRevision( const QString& newrev,
                                     const QString& oldrev,
                                     const QString& type,
-                                    const QList< dyncontrol_ptr>& controls )
+                                    const QVariantList& controls )
 {
     Q_ASSERT( m_source->isLocal() || newrev == oldrev );
 
@@ -275,19 +275,19 @@ DynamicPlaylist::loadRevision( const QString& rev )
         connect( cmd, SIGNAL( done( QString,
                                     bool,
                                     QString,
-                                    QList< QVariantMap >,
+                                    QVariantList,
                                     bool ) ),
                  SLOT( setRevision( QString,
                                     bool,
                                     QString,
-                                    QList< QVariantMap >,
+                                    QVariantList,
                                     bool) ) );
     } else if ( m_generator->mode() == Static ) {
         connect( cmd, SIGNAL( done( QString,
                                     QList< QString >,
                                     QList< QString >,
                                     QString,
-                                    QList< QVariantMap >,
+                                    QVariantList,
                                     bool,
                                     QMap< QString, Tomahawk::plentry_ptr >,
                                     bool ) ),
@@ -295,7 +295,7 @@ DynamicPlaylist::loadRevision( const QString& rev )
                                     QList< QString >,
                                     QList< QString >,
                                     QString,
-                                    QList< QVariantMap >,
+                                    QVariantList,
                                     bool,
                                     QMap< QString, Tomahawk::plentry_ptr >,
                                     bool ) ) );
@@ -376,7 +376,7 @@ DynamicPlaylist::setRevision( const QString& rev,
                               const QList< QString >& neworderedguids,
                               const QList< QString >& oldorderedguids,
                               const QString& type,
-                              const QList< dyncontrol_ptr >& controls,
+                              const QVariantList& controls,
                               bool is_newest_rev,
                               const QMap< QString, plentry_ptr >& addedmap,
                               bool applied )
@@ -391,7 +391,7 @@ DynamicPlaylist::setRevision( const QString& rev,
                                    Q_ARG( QList<QString> , neworderedguids ),
                                    Q_ARG( QList<QString> , oldorderedguids ),
                                    Q_ARG( QString , type ),
-                                   QGenericArgument( "QList< Tomahawk::dyncontrol_ptr > " , (const void*)&controls ),
+                                   Q_ARG( QVariantList , controls ),
                                    Q_ARG( bool, is_newest_rev ),
                                    QGenericArgument( "QMap< QString,Tomahawk::plentry_ptr > " , (const void*)&addedmap ),
                                    Q_ARG( bool, applied ) );
@@ -423,40 +423,9 @@ DynamicPlaylist::setRevision( const QString& rev,
 
 void
 DynamicPlaylist::setRevision( const QString& rev,
-                              const QList< QString >& neworderedguids,
-                              const QList< QString >& oldorderedguids,
-                              const QString& type,
-                              const QList< QVariantMap>& controlsV,
-                              bool is_newest_rev,
-                              const QMap< QString, Tomahawk::plentry_ptr >& addedmap,
-                              bool applied )
-{
-    if ( QThread::currentThread() != thread() )
-    {
-        QMetaObject::invokeMethod( this,
-                                   "setRevision",
-                                   Qt::BlockingQueuedConnection,
-                                   Q_ARG( QString,  rev ),
-                                   Q_ARG( QList<QString> , neworderedguids ),
-                                   Q_ARG( QList<QString> , oldorderedguids ),
-                                   Q_ARG( QString , type ),
-                                   QGenericArgument( "QList< QVariantMap > " , (const void*)&controlsV ),
-                                   Q_ARG( bool, is_newest_rev ),
-                                   QGenericArgument( "QMap< QString,Tomahawk::plentry_ptr > " , (const void*)&addedmap ),
-                                   Q_ARG( bool, applied ) );
-        return;
-    }
-
-    QList<dyncontrol_ptr> controls = variantsToControl( controlsV );
-    setRevision( rev, neworderedguids, oldorderedguids, type, controls, is_newest_rev, addedmap, applied );
-}
-
-
-void
-DynamicPlaylist::setRevision( const QString& rev,
                               bool is_newest_rev,
                               const QString& type,
-                              const QList< dyncontrol_ptr >& controls,
+                              const QVariantList& controls,
                               bool applied )
 {
     if ( QThread::currentThread() != thread() )
@@ -498,32 +467,7 @@ DynamicPlaylist::setRevision( const QString& rev,
 }
 
 
-void
-DynamicPlaylist::setRevision( const QString& rev,
-                              bool is_newest_rev,
-                              const QString& type,
-                              const QList< QVariantMap >& controlsV,
-                              bool applied )
-{
-    if ( QThread::currentThread() != thread() )
-    {
-        QMetaObject::invokeMethod( this,
-                                   "setRevision",
-                                   Qt::BlockingQueuedConnection,
-                                   Q_ARG( QString, rev ),
-                                   Q_ARG( bool, is_newest_rev ),
-                                   Q_ARG( QString, type ),
-                                   QGenericArgument( "QList< QVariantMap >" , (const void*)&controlsV ),
-                                   Q_ARG( bool, applied ) );
-        return;
-    }
-
-    QList<dyncontrol_ptr> controls = variantsToControl( controlsV );
-    setRevision( rev, is_newest_rev, type, controls, applied );
-}
-
-
-QList< dyncontrol_ptr >
+/*QList< dyncontrol_ptr >
 DynamicPlaylist::variantsToControl( const QList< QVariantMap >& controlsV )
 {
     QList<dyncontrol_ptr> realControls;
@@ -534,7 +478,7 @@ DynamicPlaylist::variantsToControl( const QList< QVariantMap >& controlsV )
         realControls << control;
     }
     return realControls;
-}
+}*/
 
 
 void

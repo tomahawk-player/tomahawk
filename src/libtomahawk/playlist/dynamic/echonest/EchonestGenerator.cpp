@@ -61,11 +61,11 @@ EchonestFactory::create()
 }
 
 
-dyncontrol_ptr
+/*dyncontrol_ptr
 EchonestFactory::createControl( const QString& controlType )
 {
     return dyncontrol_ptr( new EchonestControl( controlType, typeSelectors() ) );
-}
+}*/
 
 
 QStringList
@@ -160,12 +160,12 @@ EchonestGenerator::setupCatalogs()
 //    qDebug() << "ECHONEST:" << m_logo.size();
 }
 
-dyncontrol_ptr
+/*dyncontrol_ptr
 EchonestGenerator::createControl( const QString& type )
 {
     m_controls << dyncontrol_ptr( new EchonestControl( type, GeneratorFactory::typeSelectors( m_type ) ) );
     return m_controls.last();
-}
+}*/
 
 
 QPixmap EchonestGenerator::logo()
@@ -176,11 +176,11 @@ QPixmap EchonestGenerator::logo()
 void
 EchonestGenerator::knownCatalogsChanged()
 {
-    // Refresh all contrls
+/*    // Refresh all contrls
     foreach( const dyncontrol_ptr& control, m_controls )
     {
         control.staticCast< EchonestControl >()->updateWidgetsFromData();
-    }
+    }*/
 }
 
 
@@ -188,7 +188,7 @@ void
 EchonestGenerator::generate( int number )
 {
     // convert to an echonest query, and fire it off
-    qDebug() << Q_FUNC_INFO;
+/*    qDebug() << Q_FUNC_INFO;
     qDebug() << "Generating playlist with" << m_controls.size();
     foreach( const dyncontrol_ptr& ctrl, m_controls )
         qDebug() << ctrl->selectedType() << ctrl->match() << ctrl->input();
@@ -202,7 +202,16 @@ EchonestGenerator::generate( int number )
     } catch( std::runtime_error& e ) {
         qWarning() << "Got invalid controls!" << e.what();
         emit error( "Filters are not valid", e.what() );
-    }
+    }*/
+
+    QList< query_ptr > queries;
+    queries << Query::get("Colour Haze", "All", QString(), uuid(), true);
+    queries << Query::get("Colour Haze", "Sun", QString(), uuid(), true);
+    queries << Query::get("Colour Haze", "Zen", QString(), uuid(), true);
+    queries << Query::get("Colour Haze", "Outside", QString(), uuid(), true);
+    queries << Query::get("Colour Haze", "Dirt", QString(), uuid(), true);
+
+    emit generated( queries );
 }
 
 
@@ -223,6 +232,81 @@ EchonestGenerator::startOnDemand()
         qWarning() << "Got invalid controls!" << e.what();
         emit error( "Filters are not valid", e.what() );
     }
+}
+
+
+bool
+EchonestGenerator::startFromTrack( const Tomahawk::query_ptr& query )
+{
+    tDebug() << "Generating station content by query:" << query->toString();
+
+    Echonest::DynamicPlaylist::PlaylistParamData data;
+    data.first = Echonest::DynamicPlaylist::SongId;
+    data.second = query->track()->artist() + " " + query->track()->track();
+
+    Echonest::DynamicPlaylist::PlaylistParams params;
+    params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::SongRadioType ) );
+    params << data;
+
+    // FIXME!
+
+    return true;
+}
+
+
+bool
+EchonestGenerator::startFromArtist( const Tomahawk::artist_ptr& artist )
+{
+    tDebug() << "Generating station content by artist:" << artist->name();
+
+    if ( !m_dynPlaylist->sessionId().isNull() )
+    {
+        // Running session, delete it
+        QNetworkReply* deleteReply = m_dynPlaylist->deleteSession();
+        connect( deleteReply, SIGNAL( finished() ), deleteReply, SLOT( deleteLater() ) );
+    }
+
+    connect( this, SIGNAL( paramsGenerated( Echonest::DynamicPlaylist::PlaylistParams ) ), this, SLOT( doStartOnDemand( Echonest::DynamicPlaylist::PlaylistParams ) ) );
+
+    Echonest::DynamicPlaylist::PlaylistParamData data;
+    data.first = Echonest::DynamicPlaylist::Artist;
+    data.second = artist->name();
+
+    Echonest::DynamicPlaylist::PlaylistParams params;
+    params << data;
+    //    params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::SongRadioType ) );
+    emit paramsGenerated( params );
+
+    return true;
+}
+
+
+bool
+EchonestGenerator::startFromGenre( const QString& genre )
+{
+    tDebug() << "Generating station content by genre:" << genre;
+
+    if ( !m_dynPlaylist->sessionId().isNull() )
+    {
+        // Running session, delete it
+        QNetworkReply* deleteReply = m_dynPlaylist->deleteSession();
+        connect( deleteReply, SIGNAL( finished() ), deleteReply, SLOT( deleteLater() ) );
+    }
+
+    connect( this, SIGNAL( paramsGenerated( Echonest::DynamicPlaylist::PlaylistParams ) ), this, SLOT( doGenerate( Echonest::DynamicPlaylist::PlaylistParams ) ) );
+
+    setProperty( "number", 20 );
+
+    Echonest::DynamicPlaylist::PlaylistParamData data;
+    data.first = Echonest::DynamicPlaylist::Description;
+    data.second = genre;
+
+    Echonest::DynamicPlaylist::PlaylistParams params;
+    params << data;
+    params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::ArtistDescriptionType ) );
+    emit paramsGenerated( params );
+
+    return true;
 }
 
 
@@ -308,7 +392,7 @@ void
 EchonestGenerator::getParams() throw( std::runtime_error )
 {
     Echonest::DynamicPlaylist::PlaylistParams params;
-    foreach( const dyncontrol_ptr& control, m_controls ) {
+/*    foreach( const dyncontrol_ptr& control, m_controls ) {
         params.append( control.dynamicCast<EchonestControl>()->toENParam() );
     }
 
@@ -343,7 +427,7 @@ EchonestGenerator::getParams() throw( std::runtime_error )
 
     } else {
         emit paramsGenerated( params );
-    }
+    }*/
 }
 
 
@@ -440,7 +524,7 @@ EchonestGenerator::userCatalogs()
     return s_catalogs->catalogs().keys();
 }
 
-bool
+/*bool
 EchonestGenerator::onlyThisArtistType( Echonest::DynamicPlaylist::ArtistTypeEnum type ) const throw( std::runtime_error )
 {
     bool only = true;
@@ -460,7 +544,7 @@ EchonestGenerator::onlyThisArtistType( Echonest::DynamicPlaylist::ArtistTypeEnum
     }
 
     return false;
-}
+}*/
 
 
 Echonest::DynamicPlaylist::ArtistTypeEnum
@@ -477,7 +561,7 @@ EchonestGenerator::appendRadioType( Echonest::DynamicPlaylist::PlaylistParams& p
     /// 3. artist-description: If all the artist entries are Description. If some were but not all, error out.
     /// 4. artist-radio: If all the artist entries are Similar To. If some were but not all, error out.
     /// 5. song-radio: If all the artist entries are Similar To. If some were but not all, error out.
-    bool someCatalog = false;
+/*    bool someCatalog = false;
     bool genreType = false;
     foreach( const dyncontrol_ptr& control, m_controls ) {
         if ( control->selectedType() == "User Radio" )
@@ -498,7 +582,7 @@ EchonestGenerator::appendRadioType( Echonest::DynamicPlaylist::PlaylistParams& p
     else if( onlyThisArtistType( Echonest::DynamicPlaylist::SongRadioType ) )
         params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::SongRadioType ) );
     else // no artist or song or description types. default to artist-description
-        params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::ArtistDescriptionType ) );
+        params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::ArtistDescriptionType ) );*/
 
     return static_cast< Echonest::DynamicPlaylist::ArtistTypeEnum >( params.last().second.toInt() );
 }
@@ -529,7 +613,7 @@ EchonestGenerator::sentenceSummary()
      *  NOTE / TODO: In order for the sentence to be grammatically correct, we must follow the EN API rules. That means we can't have multiple of some types of filters,
      *        and all Artist types must be the same. The filters aren't checked at the moment until Generate / Play is pressed. Consider doing a check on hide as well.
      */
-    QList< dyncontrol_ptr > allcontrols = m_controls;
+/*    QList< dyncontrol_ptr > allcontrols = m_controls;
     QString sentence = "Songs ";
 
     /// 1. Collect all required filters
@@ -612,7 +696,9 @@ EchonestGenerator::sentenceSummary()
         sentence += "and " + sorting.dynamicCast< EchonestControl >()->summary() + ".";
     }
 
-    return sentence;
+    return sentence;*/
+
+    return "This is a station!";
 }
 
 void

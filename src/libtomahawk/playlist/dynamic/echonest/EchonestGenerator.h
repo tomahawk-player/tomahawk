@@ -60,7 +60,7 @@ public:
     EchonestFactory();
 
     virtual GeneratorInterface* create();
-    virtual dyncontrol_ptr createControl( const QString& controlType = QString() );
+//    virtual dyncontrol_ptr createControl( const QString& controlType = QString() );
     virtual QStringList typeSelectors() const;
 };
 
@@ -71,7 +71,7 @@ public:
     explicit EchonestGenerator( QObject* parent = 0 );
     virtual ~EchonestGenerator();
 
-    virtual dyncontrol_ptr createControl( const QString& type = QString() );
+//    virtual dyncontrol_ptr createControl( const QString& type = QString() );
     virtual QPixmap logo();
     virtual void generate ( int number = -1 );
     virtual void startOnDemand();
@@ -79,6 +79,10 @@ public:
     virtual QString sentenceSummary();
     virtual bool onDemandSteerable() const { return false; }
     virtual QWidget* steeringWidget() { return 0; }
+
+    virtual bool startFromTrack( const Tomahawk::query_ptr& query );
+    virtual bool startFromArtist( const Tomahawk::artist_ptr& artist );
+    virtual bool startFromGenre( const QString& genre );
 
     static QStringList styles();
     static QStringList moods();
@@ -118,7 +122,7 @@ private:
 
     query_ptr queryFromSong( const Echonest::Song& song );
     Echonest::DynamicPlaylist::ArtistTypeEnum appendRadioType( Echonest::DynamicPlaylist::PlaylistParams& params ) const throw( std::runtime_error );
-    bool onlyThisArtistType( Echonest::DynamicPlaylist::ArtistTypeEnum type ) const throw( std::runtime_error );
+//    bool onlyThisArtistType( Echonest::DynamicPlaylist::ArtistTypeEnum type ) const throw( std::runtime_error );
 
     void loadStylesMoodsAndGenres();
 

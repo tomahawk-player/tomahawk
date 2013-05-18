@@ -52,7 +52,7 @@ DatabaseCommand_LoadDynamicPlaylistEntries::exec( DatabaseImpl* dbi )
     QString type;
     GeneratorMode mode;
 
-    QList< QVariantMap > controls;
+    QVariantList controls;
     QString playlist_guid;
 //    qDebug() << "Loading controls..." << revisionGuid();
 //    qDebug() << "SELECT playlist_revision.playlist, controls, plmode, pltype "
@@ -71,7 +71,7 @@ DatabaseCommand_LoadDynamicPlaylistEntries::exec( DatabaseImpl* dbi )
         type = controlsQuery.value( 3 ).toString();
         mode = static_cast<GeneratorMode>( controlsQuery.value( 2 ).toInt() );
 
-        QStringList controlIds = v.toStringList();
+/*        QStringList controlIds = v.toStringList();
 //        qDebug() << "Got controls in dynamic playlist, loading:" << controlIds << controlsQuery.value(1);
         foreach( const QString& controlId, controlIds )
         {
@@ -91,7 +91,7 @@ DatabaseCommand_LoadDynamicPlaylistEntries::exec( DatabaseImpl* dbi )
                 c[ "input" ] = controlQuery.value( 2 ).toString();
                 controls << c;
             }
-        }
+        }*/
     }
     else
     {

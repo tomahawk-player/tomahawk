@@ -23,7 +23,7 @@
 
 using namespace Tomahawk;
 
-DynamicPlaylistRevision::DynamicPlaylistRevision(const PlaylistRevision &other)
+DynamicPlaylistRevision::DynamicPlaylistRevision( const PlaylistRevision &other )
 {
     revisionguid = other.revisionguid;
     oldrevisionguid = other.oldrevisionguid;

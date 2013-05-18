@@ -36,10 +36,10 @@ namespace Tomahawk
         DatabaseFactory() {}
 
         virtual GeneratorInterface* create();
-        virtual dyncontrol_ptr createControl( const QString& controlType = QString() );
+//        virtual dyncontrol_ptr createControl( const QString& controlType = QString() );
 
         // TO create a special SQL resolver that consists of a pre-baked SQL query and a description of it
-        virtual dyncontrol_ptr createControl( const QString& sql, DatabaseCommand_GenericSelect::QueryType type, const QString& summary );
+//        virtual dyncontrol_ptr createControl( const QString& sql, DatabaseCommand_GenericSelect::QueryType type, const QString& summary );
 
         virtual QStringList typeSelectors() const;
     };
@@ -55,8 +55,8 @@ namespace Tomahawk
         explicit DatabaseGenerator( QObject* parent = 0 );
         virtual ~DatabaseGenerator();
 
-        virtual dyncontrol_ptr createControl( const QString& type = QString() );
-        virtual dyncontrol_ptr createControl( const QString& sql, DatabaseCommand_GenericSelect::QueryType type, const QString& summary );
+/*        virtual dyncontrol_ptr createControl( const QString& type = QString() );
+        virtual dyncontrol_ptr createControl( const QString& sql, DatabaseCommand_GenericSelect::QueryType type, const QString& summary );*/
 
         virtual QPixmap logo();
         virtual void generate ( int number = -1 );
