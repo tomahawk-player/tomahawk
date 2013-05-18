@@ -120,6 +120,7 @@ public:
 
     virtual void ensureResolved();
 
+    Q_INVOKABLE PlayableItem* itemFromIndex( int itemIndex ) const;
     virtual PlayableItem* itemFromIndex( const QModelIndex& index ) const;
     virtual PlayableItem* itemFromQuery( const Tomahawk::query_ptr& query ) const;
     virtual PlayableItem* itemFromResult( const Tomahawk::result_ptr& result ) const;

@@ -817,6 +817,13 @@ PlayableModel::finishLoading()
 
 
 PlayableItem*
+PlayableModel::itemFromIndex( int itemIndex ) const
+{
+    return itemFromIndex( index( itemIndex, 0, QModelIndex() ) );
+}
+
+
+PlayableItem*
 PlayableModel::itemFromIndex( const QModelIndex& index ) const
 {
     if ( index.isValid() )
