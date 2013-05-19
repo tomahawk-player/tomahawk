@@ -64,7 +64,7 @@ NewReleasesPlugin::NewReleasesPlugin()
     : InfoPlugin()
     , m_nrFetchJobs( 0 )
 {
-    m_nrVersion = "0.5";
+    m_nrVersion = "0.5.1";
     m_supportedGetTypes << InfoNewReleaseCapabilities << InfoNewRelease;
 }
 
