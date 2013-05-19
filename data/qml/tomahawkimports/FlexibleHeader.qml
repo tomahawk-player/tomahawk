@@ -66,8 +66,9 @@ Rectangle {
         }
 
         Column {
-            height: parent.height
+            height: childrenRect.height
             width: parent.width - iconImage.width - parent.spacing
+            anchors.verticalCenter: parent.verticalCenter
 
             Item {
                 id: titleItem
@@ -131,7 +132,30 @@ Rectangle {
                 font.pointSize:  defaultFontSize * 1.2
                 width: parent.width
                 elide: Text.ElideRight
+                height: text.length > 0 ? defaultFontHeight : 0
+                opacity: text.length > 0 ? 1 : 0
+                Behavior on height {
+                    NumberAnimation { duration: 200 }
+                }
+                Behavior on opacity {
+                    NumberAnimation { duration: 200 }
+                }
+
+                onTextChanged: {
+                    if (text.length > 0) {
+                        animationText.text = text
+                    }
+                }
+
+                Text {
+                    id: animationText
+                    color: parent.color
+                    font: parent.font
+                    elide: parent.elide
+                    anchors.fill: parent
+                }
             }
+
         }
 
     }
