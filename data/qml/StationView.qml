@@ -67,6 +67,12 @@ Rectangle {
 
             onItemClicked: {
                 stationCreator.modeIndex = index
+
+                // FIXME: This is a workaround for the ListView scrolling too slow on the first time
+                // Lets reinitialize the current index to something invalid and back to 0 (what it already is) before scrolling over to page 1
+                stationListView.currentIndex = -1
+                stationListView.currentIndex = 0
+
                 stationListView.incrementCurrentIndex()
                 header.subtitle = modeModel.get(index).headerSubtitle + "..."
             }
