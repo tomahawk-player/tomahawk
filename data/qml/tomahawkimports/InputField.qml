@@ -85,12 +85,10 @@ Rectangle {
     }
 
 
-    BorderImage {
-        source: "../../images/inputfield-border.svg"
+    Image {
+//        source: "../../images/inputfield-border.svg"
         anchors.fill: parent
         anchors.margins: root.radius * 0.1
         clip: true
-        border.left: defaultFontHeight/4; border.top: defaultFontHeight/4
-        border.right: defaultFontHeight/4; border.bottom: defaultFontHeight/4
     }
 }
