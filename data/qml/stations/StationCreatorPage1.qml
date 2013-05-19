@@ -15,6 +15,7 @@ Item {
         anchors.centerIn: parent
         width: root.width * 9 / 10
         height: cellHeight
+        interactive: false
 
         cellWidth: (width - 1) / 3
         cellHeight: cellWidth //* 10 / 16

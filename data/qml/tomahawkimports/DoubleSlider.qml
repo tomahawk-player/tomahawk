@@ -28,8 +28,8 @@ Item {
 
         property int steps: root.max - root.min + 1
 
-        property int sliderHeight: root.height
-        property int sliderWidth: root.height / 2
+        property int sliderHeight: root.height / 3
+        property int sliderWidth: sliderHeight / 2
     }
 
     Row {
@@ -47,7 +47,7 @@ Item {
 
         Item {
             id: sliderRect
-            height: root.height
+            height: root.height / 4
             property int maxWidth: parent.width - (minText.visible ? minText.width : 0) - (maxText.visible ? maxText.width : 0) - parent.spacing * 2
             width: maxWidth - (maxWidth % priv.steps)
             anchors.horizontalCenter: parent.horizontalCenter
@@ -64,7 +64,7 @@ Item {
 
             Rectangle {
                 id: sliderBase
-                height: root.height / 1.5
+                height: parent.height
                 width: parent.width + defaultFontHeight * 1.5
                 color: "white"
                 radius: height / 2
@@ -131,7 +131,7 @@ Item {
                 id: lowerSlider
                 height: priv.sliderHeight
                 width: priv.sliderWidth
-                anchors.top: root.top
+                anchors.verticalCenter: sliderBase.verticalCenter
                 radius: height/4
                 border.color: "black"
                 border.width: 2
@@ -170,9 +170,9 @@ Item {
 
             Rectangle {
                 id: upperSlider
-                height: root.height
-                width: height / 2
-                anchors.top: root.top
+                height: priv.sliderHeight
+                width: priv.sliderWidth
+                anchors.verticalCenter: sliderBase.verticalCenter
                 radius: height / 4
                 border.color: "black"
                 border.width: 2

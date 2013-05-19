@@ -8,9 +8,14 @@ Item {
 
     signal done(string text)
 
-    function createStation(artist) {
-        mainView.startStationFromArtist(artist)
-        root.done(artist)
+    function createStationFromYear(year) {
+        mainView.startStationFromYear(year)
+        root.done(year)
+    }
+
+    function createStationFromTo(yearFrom, yearTo) {
+        mainView.startStationFromTo(yearFrom, yearTo)
+        root.done(yearFrom + " to " + yearTo)
     }
 
     Column {
@@ -27,53 +32,58 @@ Item {
         }
 
         Row {
-            height: artistInputField.height
+            height: yearInputField.height
             width: parent.width
             spacing: defaultFontHeight * 0.5
 
+            Text {
+                text: "Year:"
+                color: "white"
+                anchors.verticalCenter: parent.verticalCenter
+            }
+
             InputField {
-                id: artistInputField
+                id: yearInputField
                 width: parent.width - createFromInputButton.width - parent.spacing
 
                 onAccepted: createStation(text)
             }
-
-            PushButton {
-                id: createFromInputButton
-                text: "Go!"
-                enabled: artistInputField.text.length > 2
-                onClicked: createStation(artistInputField.text)
-            }
         }
 
-//        Item {
-//            height: parent.height - headerText.height - artistInputField.height - parent.spacing * 3
-//            width: parent.width
-//            ArtistView {
-//                id: artistView
-//                height: parent.height
-//                width: parent.width
-//                model: artistChartsModel
-//                clip: true
-//                delegateHeight: defaultFontHeight * 6
-
-//                onItemClicked: {
-//                    createStation(artistChartsModel.itemFromIndex(index).artistName);
-//                }
-//            }
-//            ScrollBar {
-//                listView: artistView
-//            }
-//        }
-
         DoubleSlider {
+            id: yearSlider
             width: parent.width
-            height: defaultFontHeight * 2
+            height: defaultFontHeight * 4
             min: 1960
             max: new Date().getFullYear()
             lowerSliderPos: 1990
             upperSliderPos: 2010
             minMaxLabelsVisible: false
+            opacity: yearInputField.text.length > 0 ? 0.3 : 1
+
+            Behavior on opacity {
+                NumberAnimation { duration: 200 }
+            }
+        }
+
+        PushButton {
+            id: createFromInputButton
+            text: "Go!"
+            enabled: yearInputField.text.length == 0 || (yearInputField.text >= yearSlider.min && yearInputField.text <= yearSlider.max)
+            anchors.horizontalCenter: parent.horizontalCenter
+            onClicked: {
+                if (yearInputField.text.length > 0) {
+                    createStationFromYear(yearInputField.text)
+                } else {
+                    createStationFromTo(yearSlider.lowerSliderPos, yearSlider.upperSliderPos)
+                }
+            }
+
+            // TODO: move some disabled look/animation to the button itself
+            opacity: enabled ? 1 : 0.3
+            Behavior on opacity {
+                NumberAnimation { duration: 200 }
+            }
         }
     }
 }
