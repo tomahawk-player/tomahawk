@@ -168,6 +168,26 @@ void DynamicQmlWidget::startStationFromGenre(const QString &genre)
     emit configuredChanged();
 }
 
+void DynamicQmlWidget::startStationFromYear(int year)
+{
+    tDebug() << "should start startion from year" << year;
+    m_model->clear();
+    m_playNextResolved = true;
+    m_playlist->generator()->startFromYear( year );
+    emit loadingChanged();
+    emit configuredChanged();
+}
+
+void DynamicQmlWidget::startStationFromTo(int yearFrom, int yearTo)
+{
+    tDebug() << "should start startion from years" << yearFrom << "to" << yearTo;
+    m_model->clear();
+    m_playNextResolved = true;
+    m_playlist->generator()->startFromTo( yearFrom, yearTo );
+    emit loadingChanged();
+    emit configuredChanged();
+}
+
 void DynamicQmlWidget::currentIndexChanged()
 {
     tDebug() << "current index is" << m_model->currentItem().row();

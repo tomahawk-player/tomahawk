@@ -74,6 +74,8 @@ public slots:
     void pause();
     void startStationFromArtist(const QString &artist);
     void startStationFromGenre(const QString &genre);
+    void startStationFromYear(int year);
+    void startStationFromTo(int yearFrom, int yearTo);
 
 private slots:
     void currentIndexChanged();

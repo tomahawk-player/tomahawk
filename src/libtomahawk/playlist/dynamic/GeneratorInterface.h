@@ -114,6 +114,8 @@ public:
     virtual bool startFromTrack( const Tomahawk::query_ptr& query ) = 0;
     virtual bool startFromArtist( const Tomahawk::artist_ptr& artist ) = 0;
     virtual bool startFromGenre( const QString& genre ) = 0;
+    virtual bool startFromYear( int year ) = 0;
+    virtual bool startFromTo( int yearFrom, int yearTo) = 0;
 
 signals:
     void error( const QString& title, const QString& body);

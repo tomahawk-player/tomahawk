@@ -309,6 +309,18 @@ EchonestGenerator::startFromGenre( const QString& genre )
     return true;
 }
 
+bool EchonestGenerator::startFromYear(int year)
+{
+    //TODO: libechonest doesn't support filtering for year yet...
+    return false;
+}
+
+bool EchonestGenerator::startFromTo(int yearFrom, int yearTo)
+{
+    //TODO: libechonest doesn't support filtering for year yet...
+    return false;
+}
+
 
 void
 EchonestGenerator::doGenerate( const Echonest::DynamicPlaylist::PlaylistParams& paramsIn )

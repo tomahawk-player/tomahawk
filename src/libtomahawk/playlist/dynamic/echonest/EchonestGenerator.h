@@ -83,6 +83,8 @@ public:
     virtual bool startFromTrack( const Tomahawk::query_ptr& query );
     virtual bool startFromArtist( const Tomahawk::artist_ptr& artist );
     virtual bool startFromGenre( const QString& genre );
+    virtual bool startFromYear( int year );
+    virtual bool startFromTo( int yearFrom, int yearTo );
 
     static QStringList styles();
     static QStringList moods();

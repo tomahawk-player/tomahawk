@@ -65,6 +65,7 @@ Item {
         anchors.centerIn: parent
         height: defaultFontHeight * 4
         width: height
+//        count: 12
 
         opacity: mainView.loading ? 1 : 0
         running: mainView.loading
