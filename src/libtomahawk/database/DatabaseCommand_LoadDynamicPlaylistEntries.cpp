@@ -71,8 +71,8 @@ DatabaseCommand_LoadDynamicPlaylistEntries::exec( DatabaseImpl* dbi )
         type = controlsQuery.value( 3 ).toString();
         mode = static_cast<GeneratorMode>( controlsQuery.value( 2 ).toInt() );
 
-/*        QStringList controlIds = v.toStringList();
-//        qDebug() << "Got controls in dynamic playlist, loading:" << controlIds << controlsQuery.value(1);
+        QStringList controlIds = v.toStringList();
+        tDebug() << "Got controls in dynamic playlist, loading:" << controlIds << controlsQuery.value(1);
         foreach( const QString& controlId, controlIds )
         {
             TomahawkSqlQuery controlQuery = dbi->newquery();
@@ -91,7 +91,7 @@ DatabaseCommand_LoadDynamicPlaylistEntries::exec( DatabaseImpl* dbi )
                 c[ "input" ] = controlQuery.value( 2 ).toString();
                 controls << c;
             }
-        }*/
+        }
     }
     else
     {
