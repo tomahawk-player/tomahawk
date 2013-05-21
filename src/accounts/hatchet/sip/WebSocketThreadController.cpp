@@ -22,6 +22,7 @@
 
 WebSocketThreadController::WebSocketThreadController( QObject* sip )
     : QThread( nullptr )
+    , m_webSocket( nullptr )
     , m_sip( sip )
 {
 }

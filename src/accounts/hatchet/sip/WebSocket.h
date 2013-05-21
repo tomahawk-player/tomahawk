@@ -34,6 +34,7 @@ typedef typename websocketpp::client< websocketpp::config::hatchet_client > hatc
 class WebSocket;
 
 void onMessage( WebSocket* ws, websocketpp::connection_hdl, hatchet_client::message_ptr msg );
+void onClose( WebSocket* ws, websocketpp::connection_hdl );
 
 class DLLEXPORT WebSocket : public QObject
 {
@@ -50,14 +51,15 @@ signals:
 public slots:
     void setUrl( const QString& url );
     void connectWs();
-    void disconnectWs();
+    void disconnectWs( websocketpp::close::status::value status = websocketpp::close::status::normal, const QString& reason = QString( "Disconnecting" ) );
     void encodeMessage( const QByteArray& bytes );
 
 private slots:
     void socketStateChanged( QAbstractSocket::SocketState state );
     void sslErrors( const QList< QSslError >& errors );
+    void disconnectSocket();
+    void cleanup();
     void encrypted();
-    void reconnectWs();
     void readOutput();
     void socketReadyRead();
 
@@ -65,6 +67,7 @@ private:
     Q_DISABLE_COPY( WebSocket )
 
     friend void onMessage( WebSocket *ws, websocketpp::connection_hdl, hatchet_client::message_ptr msg );
+    friend void onClose( WebSocket *ws, websocketpp::connection_hdl );
 
     QUrl m_url;
     std::stringstream m_outputStream;

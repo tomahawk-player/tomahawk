@@ -71,8 +71,6 @@ private slots:
     void dbSyncTriggered();
     void messageReceived( const QByteArray& msg );
     void connectWebSocket();
-    void onWsFailed( const QString &msg );
-    void onWsClosed( const QString &msg );
     void oplogFetched( const QString& sinceguid, const QString& lastguid, const QList< dbop_ptr > ops ) const;
 
 private:

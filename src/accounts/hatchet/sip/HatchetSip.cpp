@@ -69,8 +69,7 @@ HatchetSipPlugin::~HatchetSipPlugin()
         m_webSocketThreadController->quit();
         m_webSocketThreadController->wait( 60000 );
 
-        delete m_webSocketThreadController;
-        m_webSocketThreadController = 0;
+        delete m_webSocketThreadController.data();
     }
 
     m_sipState = Closed;
@@ -120,6 +119,13 @@ HatchetSipPlugin::connectPlugin()
 
     m_webSocketThreadController = QPointer< WebSocketThreadController >( new WebSocketThreadController( this ) );
 
+    if ( !m_webSocketThreadController )
+    {
+        tLog() << Q_FUNC_INFO << "Could not create a new thread, bailing";
+        disconnectPlugin();
+        return;
+    }
+
     hatchetAccount()->setConnectionState( Tomahawk::Accounts::Account::Connecting );
     hatchetAccount()->fetchAccessTokens();
 }
@@ -128,19 +134,10 @@ HatchetSipPlugin::connectPlugin()
 void
 HatchetSipPlugin::disconnectPlugin()
 {
-    if ( m_webSocketThreadController )
-    {
-        m_webSocketThreadController->quit();
-        m_webSocketThreadController->wait( 60000 );
-
-        delete m_webSocketThreadController;
-        m_webSocketThreadController = 0;
-    }
-
-    m_sipState = Closed;
-    m_version = 0;
-
-    hatchetAccount()->setConnectionState( Tomahawk::Accounts::Account::Disconnected );
+    if ( m_webSocketThreadController && m_webSocketThreadController->isRunning() )
+        emit disconnectWebSocket();
+    else
+        webSocketDisconnected();
 }
 
 
@@ -189,10 +186,6 @@ HatchetSipPlugin::connectWebSocket()
         tLog() << Q_FUNC_INFO << "Connecting to Dreamcatcher endpoint at: " << url;
 
     m_webSocketThreadController->setUrl( url );
-//    connect( m_ws.data(), SIGNAL( opened() ), this, SLOT( onWsOpened() ) );
-//    connect( m_ws.data(), SIGNAL( failed( QString ) ), this, SLOT( onWsFailed( QString ) ) );
-//    connect( m_ws.data(), SIGNAL( closed( QString ) ), this, SLOT( onWsClosed( QString ) ) );
-//    connect( m_ws.data(), SIGNAL( message( QString ) ), this, SLOT( onWsMessage( QString ) ) );
     m_webSocketThreadController->start();
 }
 
@@ -229,6 +222,18 @@ void
 HatchetSipPlugin::webSocketDisconnected()
 {
     tLog() << Q_FUNC_INFO << "WebSocket disconnected";
+    if ( m_webSocketThreadController )
+    {
+        m_webSocketThreadController->quit();
+        m_webSocketThreadController->wait( 60000 );
+
+        delete m_webSocketThreadController.data();
+    }
+
+    m_sipState = Closed;
+    m_version = 0;
+
+    hatchetAccount()->setConnectionState( Tomahawk::Accounts::Account::Disconnected );
     m_sipState = Closed;
 }
 
@@ -254,22 +259,6 @@ HatchetSipPlugin::sendBytes( const QVariantMap& jsonMap ) const
     tLog() << Q_FUNC_INFO << "Sending bytes of size" << bytes.size();
     emit rawBytes( bytes );
     return true;
-}
-
-
-void
-HatchetSipPlugin::onWsFailed( const QString &msg )
-{
-    tLog() << Q_FUNC_INFO << "WebSocket failed with message: " << msg;
-    disconnectPlugin();
-}
-
-
-void
-HatchetSipPlugin::onWsClosed( const QString &msg )
-{
-    tLog() << Q_FUNC_INFO << "WebSocket closed with message: " << msg;
-    disconnectPlugin();
 }
 
 

@@ -34,6 +34,7 @@ WebSocket::WebSocket( const QString& url )
     tLog() << Q_FUNC_INFO << "WebSocket constructing";
     m_client = std::unique_ptr< hatchet_client >( new hatchet_client() );
     m_client->set_message_handler( std::bind(&onMessage, this, std::placeholders::_1, std::placeholders::_2 ) );
+    m_client->set_close_handler( std::bind(&onClose, this, std::placeholders::_1 ) );
     m_client->register_ostream( &m_outputStream );
 }
 
@@ -44,16 +45,7 @@ WebSocket::~WebSocket()
         m_connection.reset();
 
     if ( m_socket )
-    {
-        if ( m_socket->state() == QAbstractSocket::ConnectedState )
-        {
-            QObject::disconnect( m_socket, SIGNAL( stateChanged( QAbstractSocket::SocketState ) ) );
-            m_socket->disconnectFromHost();
-            QObject::connect( m_socket, SIGNAL( disconnected() ), m_socket, SLOT( deleteLater() ) );
-        }
-        else
-            m_socket->deleteLater();
-    }
+        delete m_socket.data();
 
     m_client.reset();
 }
@@ -66,8 +58,9 @@ WebSocket::setUrl( const QString &url )
     if ( m_url == url )
         return;
 
+    // We'll let automatic reconnection handle things
     if ( m_socket && m_socket->isEncrypted() )
-        reconnectWs();
+        disconnectWs();
 }
 
 
@@ -98,24 +91,45 @@ WebSocket::connectWs()
 
 
 void
-WebSocket::disconnectWs()
+WebSocket::disconnectWs( websocketpp::close::status::value status, const QString &reason )
 {
     tLog() << Q_FUNC_INFO << "Disconnecting";
-    m_outputStream.seekg( std::ios_base::end );
-    m_outputStream.seekp( std::ios_base::end );
+    error_code ec;
     if ( m_connection )
-        m_connection.reset();
-    m_queuedMessagesToSend.empty();
-    m_socket->disconnectFromHost();
+    {
+        m_connection->close( status, reason.toAscii().constData(), ec );
+        QMetaObject::invokeMethod( this, "readOutput", Qt::QueuedConnection );
+        QTimer::singleShot( 5000, this, SLOT( disconnectSocket() ) ); //safety
+        return;
+    }
+
+    disconnectSocket();
 }
 
 
 void
-WebSocket::reconnectWs()
+WebSocket::disconnectSocket()
 {
-    tLog() << Q_FUNC_INFO << "Reconnecting";
-    QMetaObject::invokeMethod( this, "disconnectWs", Qt::QueuedConnection );
-    QMetaObject::invokeMethod( this, "connectWs", Qt::QueuedConnection );
+    if ( m_socket && m_socket->state() == QAbstractSocket::ConnectedState )
+        m_socket->disconnectFromHost();
+    else
+        QMetaObject::invokeMethod( this, "cleanup", Qt::QueuedConnection );
+
+    QTimer::singleShot( 5000, this, SLOT( cleanup() ) ); //safety
+}
+
+
+void
+WebSocket::cleanup()
+{
+    tLog() << Q_FUNC_INFO << "Cleaning up";
+    m_outputStream.seekg( std::ios_base::end );
+    m_outputStream.seekp( std::ios_base::end );
+    m_queuedMessagesToSend.empty();
+    if ( m_connection )
+        m_connection.reset();
+
+    emit disconnected();
 }
 
 
@@ -132,7 +146,7 @@ WebSocket::socketStateChanged( QAbstractSocket::SocketState state )
                 tLog() << Q_FUNC_INFO << "Got a double closing state, cleaning up and emitting disconnected";
                 m_socket->deleteLater();
                 m_lastSocketState = QAbstractSocket::UnconnectedState;
-                emit disconnected();
+                QMetaObject::invokeMethod( this, "cleanup", Qt::QueuedConnection );
                 return;
             }
             break;
@@ -142,7 +156,7 @@ WebSocket::socketStateChanged( QAbstractSocket::SocketState state )
             tLog() << Q_FUNC_INFO << "Socket now unconnected, cleaning up and emitting disconnected";
             m_socket->deleteLater();
             m_lastSocketState = QAbstractSocket::UnconnectedState;
-            emit disconnected();
+            QMetaObject::invokeMethod( this, "cleanup", Qt::QueuedConnection );
             return;
         default:
             ;
@@ -164,7 +178,7 @@ WebSocket::sslErrors( const QList< QSslError >& errors )
 void
 WebSocket::encrypted()
 {
-    tLog() << Q_FUNC_INFO << "Encrypted connection to Hatchet established";
+    tLog() << Q_FUNC_INFO << "Encrypted connection to Dreamcatcher established";
     error_code ec;
     // Adjust wss:// to ws:// in the URL so it doesn't complain that the transport isn't encrypted
     QString url = m_url.toString();
@@ -288,4 +302,11 @@ onMessage( WebSocket* ws, websocketpp::connection_hdl, hatchet_client::message_p
     tLog() << Q_FUNC_INFO << "Handling message";
     std::string payload = msg->get_payload();
     ws->decodedMessage( QByteArray( payload.data(), payload.length() ) );
+}
+
+void
+onClose( WebSocket *ws, websocketpp::connection_hdl )
+{
+    tLog() << Q_FUNC_INFO << "Handling message";
+    QMetaObject::invokeMethod( ws, "disconnectSocket", Qt::QueuedConnection );
 }
