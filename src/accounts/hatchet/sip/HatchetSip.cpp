@@ -117,15 +117,6 @@ HatchetSipPlugin::connectPlugin()
         return;
     }
 
-    m_webSocketThreadController = QPointer< WebSocketThreadController >( new WebSocketThreadController( this ) );
-
-    if ( !m_webSocketThreadController )
-    {
-        tLog() << Q_FUNC_INFO << "Could not create a new thread, bailing";
-        disconnectPlugin();
-        return;
-    }
-
     hatchetAccount()->setConnectionState( Tomahawk::Accounts::Account::Connecting );
     hatchetAccount()->fetchAccessTokens();
 }
@@ -147,9 +138,17 @@ HatchetSipPlugin::disconnectPlugin()
 void
 HatchetSipPlugin::connectWebSocket()
 {
-    //Other things can request access tokens, so if we're already connected there's no need to pay attention
-//    if ( !m_ws.isNull() )
-//        return;
+    if ( m_webSocketThreadController )
+        return;
+
+    m_webSocketThreadController = QPointer< WebSocketThreadController >( new WebSocketThreadController( this ) );
+
+    if ( !m_webSocketThreadController )
+    {
+        tLog() << Q_FUNC_INFO << "Could not create a new thread, bailing";
+        disconnectPlugin();
+        return;
+    }
 
     if ( !isValid() )
     {
