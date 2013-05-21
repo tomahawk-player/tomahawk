@@ -149,6 +149,7 @@ TomahawkSqlQuery::showError()
     tLog() << endl << "*** DATABASE ERROR ***" << endl
            << lastQuery() << endl
            << "boundValues:" << boundValues() << endl
+           << lastError().number() << endl
            << lastError().text() << endl
            << lastError().databaseText() << endl;
 
