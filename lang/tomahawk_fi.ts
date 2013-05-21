@@ -379,17 +379,17 @@ yhdistää ja toistaa sinulta virtaa?</translation>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="661"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="659"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>Valitettavasti Tomahawk ei löytänyt artistin %2 kappaletta ”%1”</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="685"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="683"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>Valitettavasti Tomahawk ei löytänyt artistia ”%1”</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="711"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="709"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>Valitettavasti Tomahawk ei löytänyt artistin %2 albumia ”%1”</translation>
     </message>
@@ -957,7 +957,7 @@ yhdistää ja toistaa sinulta virtaa?</translation>
         <translation>Seuraava</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="372"/>
+        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="379"/>
         <source>Properties</source>
         <translation>Ominaisuudet</translation>
     </message>
@@ -1292,67 +1292,67 @@ yhdistää ja toistaa sinulta virtaa?</translation>
 <context>
     <name>QObject</name>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="241"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="242"/>
         <source>%n year(s) ago</source>
         <translation><numerusform>%n vuosi sitten</numerusform><numerusform>%n vuotta sitten</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="243"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="244"/>
         <source>%n year(s)</source>
         <translation><numerusform>%n vuosi</numerusform><numerusform>%n vuotta</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="249"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="250"/>
         <source>%n month(s) ago</source>
         <translation><numerusform>%n kuukausi sitten</numerusform><numerusform>%n kuukautta sitten</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="251"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="252"/>
         <source>%n month(s)</source>
         <translation><numerusform>%n kuukausi</numerusform><numerusform>%n kuukautta</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="257"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="258"/>
         <source>%n week(s) ago</source>
         <translation><numerusform>%n viikko sitten</numerusform><numerusform>%n viikkoa sitten</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="259"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="260"/>
         <source>%n week(s)</source>
         <translation><numerusform>%n viikko</numerusform><numerusform>%n viikkoa</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="265"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="266"/>
         <source>%n day(s) ago</source>
         <translation><numerusform>%n päivä sitten</numerusform><numerusform>%n päivää sitten</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="267"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="268"/>
         <source>%n day(s)</source>
         <translation><numerusform>%n päivä</numerusform><numerusform>%n päivää</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="273"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="274"/>
         <source>%n hour(s) ago</source>
         <translation><numerusform>%n tunti sitten</numerusform><numerusform>%n tuntia sitten</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="275"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="276"/>
         <source>%n hour(s)</source>
         <translation><numerusform>%n tunti</numerusform><numerusform>%n tuntia</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="281"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="282"/>
         <source>%1 minutes ago</source>
         <translation>%1 minuuttia sitten</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="283"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="284"/>
         <source>%1 minutes</source>
         <translation>%1 minuuttia</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="287"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="288"/>
         <source>just now</source>
         <translation>juuri nyt</translation>
     </message>
@@ -1453,22 +1453,22 @@ yhdistää ja toistaa sinulta virtaa?</translation>
 <context>
     <name>ScriptEngine</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1124"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1126"/>
         <source>Script Resolver Error: %1 %2 %3 %4</source>
         <translation>Skriptiselvittimen virhe: %1 %2 %3 %4</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1143"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1145"/>
         <source>SSL Error</source>
         <translation>SSL-virhe</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1144"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1146"/>
         <source>You have asked Tomahawk to connect securely to &lt;b&gt;%1&lt;/b&gt;, but we can&apos;t confirm that your connection is secure:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Do you want to trust this connection?</source>
         <translation>Olet pyytänyt Tomahawkia yhdistämään turvallisesti palvelimeen &lt;b&gt;%1&lt;/b&gt;, mutta yhteyden turvallisuutta ei voida varmistaa:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Haluatko luottaa tähän yhteyteen?</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1151"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1153"/>
         <source>Trust certificate</source>
         <translation>Luota varmenteeseen</translation>
     </message>
@@ -1786,19 +1786,19 @@ käyttäjäradion käyttöönottamiseksi</translation>
         <translation>Kymmenen kärki</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="200"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="250"/>
         <source>All available tracks</source>
         <translation>Kaikki saatavilla olevat kappaleet</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="385"/>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="426"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="431"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="472"/>
         <source>Show</source>
         <translation>Näytä</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="387"/>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="428"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="433"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="474"/>
         <source>Hide</source>
         <translation>Piilota</translation>
     </message>
@@ -1839,53 +1839,53 @@ käyttäjäradion käyttöönottamiseksi</translation>
 <context>
     <name>SourceItem</name>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="85"/>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="608"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="84"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="607"/>
         <source>Latest Additions</source>
         <translation>Viimeisimmät lisäykset</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="89"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="88"/>
         <source>Recently Played</source>
         <translation>Viime aikoina kuunnellut</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="152"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="151"/>
         <source>SuperCollection</source>
         <translation>Superkokoelma</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="611"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="610"/>
         <source>Latest additions to your collection</source>
         <translation>Viimeisimmät lisäykset kokoelmaasi</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="613"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="612"/>
         <source>Latest additions to %1&apos;s collection</source>
         <translation>Viimeisimmät lisäykset käyttäjän %1 kokoelmaan</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="621"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="620"/>
         <source>Sorry, we could not find any recent additions!</source>
         <translation>Valitettavasti emme löytäneet yhtään viimeaikaisia lisäyksiä!</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="650"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="649"/>
         <source>Recently Played Tracks</source>
         <translation>Viime aikoina kuunnellut kappaleet</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="653"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="652"/>
         <source>Your recently played tracks</source>
         <translation>Viime aikoina kuuntelemasi kappaleet</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="655"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="654"/>
         <source>%1&apos;s recently played tracks</source>
         <translation>Käyttäjän %1 viime aikoina kuuntelemat kappaleet</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="661"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="660"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>Valitettavasti emme löytäneet yhtään viimeaikaisia soittoja!</translation>
     </message>
@@ -2281,7 +2281,7 @@ napsauttamalla hiiren oikealla.</translation>
         <translation>Synkronoidaan...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="420"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="419"/>
         <source>Synchronization Finished</source>
         <translation>Synkronointi valmis</translation>
     </message>
@@ -3265,7 +3265,7 @@ Koeta säätää suodattimia saadaksesi uuden joukon kappaleita kuunneltavaksi.<
 <context>
     <name>Tomahawk::InfoSystem::NewReleasesPlugin</name>
     <message>
-        <location filename="../src/infoplugins/generic/newreleases/NewReleasesPlugin.cpp" line="592"/>
+        <location filename="../src/infoplugins/generic/newreleases/NewReleasesPlugin.cpp" line="598"/>
         <source>Albums</source>
         <translation>Albumit</translation>
     </message>
@@ -3331,13 +3331,13 @@ Koeta säätää suodattimia saadaksesi uuden joukon kappaleita kuunneltavaksi.<
 <context>
     <name>Tomahawk::Playlist</name>
     <message>
-        <location filename="../src/libtomahawk/Playlist.cpp" line="299"/>
+        <location filename="../src/libtomahawk/Playlist.cpp" line="298"/>
         <source>Would you like to delete the playlist &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
         <translation>Haluatko poistaa soittolistan &lt;b&gt;”%2”&lt;/b&gt;?</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Playlist.cpp" line="301"/>
+        <location filename="../src/libtomahawk/Playlist.cpp" line="300"/>
         <source>Delete</source>
         <translation>Poista</translation>
     </message>
@@ -3430,42 +3430,42 @@ Koeta säätää suodattimia saadaksesi uuden joukon kappaleita kuunneltavaksi.<
 <context>
     <name>Tomahawk::Track</name>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="356"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="391"/>
         <source> and </source>
         <translation> ja </translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="364"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="399"/>
         <source>You</source>
         <translation>Sinä</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="366"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="401"/>
         <source>you</source>
         <translation>sinä</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="379"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="414"/>
         <source>and</source>
         <translation>ja</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="379"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="414"/>
         <source>%n other(s)</source>
         <translation><numerusform>%n muu</numerusform><numerusform>%n muuta</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="382"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="417"/>
         <source>%n people</source>
         <translation><numerusform>%n ihminen</numerusform><numerusform>%n ihmistä</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="386"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="421"/>
         <source>loved this track</source>
         <translation>tykkäsi tästä kappaleesta</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="388"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="423"/>
         <source>sent you this track %1</source>
         <translation>lähetti sinulle kappaleen %1</translation>
     </message>
@@ -3473,7 +3473,7 @@ Koeta säätää suodattimia saadaksesi uuden joukon kappaleita kuunneltavaksi.<
 <context>
     <name>Tomahawk::XspfUpdater</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/XspfUpdater.cpp" line="60"/>
+        <location filename="../src/libtomahawk/playlist/XspfUpdater.cpp" line="61"/>
         <source>Automatically update from XSPF</source>
         <translation>Päivitä automaattisesti XSPF:stä</translation>
     </message>

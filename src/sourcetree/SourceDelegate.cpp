@@ -115,6 +115,56 @@ SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex&
 
 
 void
+SourceDelegate::paintStandardItem( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
+{
+    QStyleOptionViewItemV4 opt = option;
+    initStyleOption( &opt, index );
+    opt.showDecorationSelected = false;
+
+    const bool selected = ( option.state & QStyle::State_Selected ) == QStyle::State_Selected;
+    const bool enabled = ( option.state & QStyle::State_Enabled ) == QStyle::State_Enabled;
+
+    QIcon::Mode iconMode = QIcon::Normal;
+    if ( !enabled )
+    {
+        iconMode = QIcon::Disabled;
+    }
+    else if ( selected )
+    {
+        iconMode = QIcon::Selected;
+    }
+
+    QRect iconRect = opt.rect.adjusted( 1, 1, 0, -1 );
+    iconRect.setWidth( iconRect.height() );
+    painter->drawPixmap( iconRect, opt.icon.pixmap( iconRect.size(), iconMode ) );
+
+    QRect textRect = opt.rect.adjusted( iconRect.width() + 8, 0, 0, 0 );
+
+    QString text = painter->fontMetrics().elidedText( opt.text, Qt::ElideRight, textRect.width() );
+    {
+        QTextOption to( Qt::AlignVCenter );
+        to.setWrapMode( QTextOption::NoWrap );
+
+        if ( selected )
+        {
+            opt.palette.setColor( QPalette::Text, option.palette.color( QPalette::HighlightedText ) );
+        }
+
+        if ( !enabled )
+        {
+            painter->setPen( opt.palette.color( QPalette::Disabled, QPalette::Text ) );
+        }
+        else
+        {
+            painter->setPen( opt.palette.color( QPalette::Active, QPalette::Text ) );
+        }
+
+        painter->drawText( textRect, text, to );
+    }
+}
+
+
+void
 SourceDelegate::paintDecorations( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
     SourcesModel::RowType type = static_cast< SourcesModel::RowType >( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() );
@@ -224,9 +274,12 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
 
     painter->drawPixmap( iconRect, avatar );
 
-    if ( ( option.state & QStyle::State_Selected ) == QStyle::State_Selected )
+    QColor descColor = option.palette.color( QPalette::Text ).lighter( 180 );
+    if ( type == SourcesModel::ScriptCollection && //you cannot select a non-script collection anyway
+        option.state.testFlag( QStyle::State_Selected ) )
     {
         painter->setPen( option.palette.color( QPalette::HighlightedText ) );
+        descColor = option.palette.color( QPalette::HighlightedText );
     }
 
     QRect textRect = option.rect.adjusted( iconRect.width() + 8, 6, -figWidth - ( figWidth ? 28 : 0 ), 0 );
@@ -235,13 +288,6 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
         QTextOption to;
         to.setWrapMode( QTextOption::NoWrap );
         painter->drawText( textRect, text, to );
-    }
-
-    QColor descColor = option.palette.color( QPalette::Text ).lighter( 180 );
-    if ( type == SourcesModel::ScriptCollection && //you cannot select a non-script collection anyway
-         option.state.testFlag( QStyle::State_Selected ) )
-    {
-        descColor = option.palette.color( QPalette::HighlightedText );
     }
 
     painter->setFont( normal );
@@ -446,8 +492,8 @@ SourceDelegate::paintGroup( QPainter* painter, const QStyleOptionViewItem& optio
 void
 SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    QStyleOptionViewItem o = option;
-    QStyleOptionViewItemV4 o3 = option;
+    QStyleOptionViewItemV4 optIndentation = option;
+    QStyleOptionViewItemV4 opt = option;
 
     painter->save();
 
@@ -455,39 +501,9 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     SourceTreeItem* item = index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
     Q_ASSERT( item );
 
-    if ( ( option.state & QStyle::State_Enabled ) == QStyle::State_Enabled )
-    {
-        o.state = QStyle::State_Enabled;
-
-        if ( ( option.state & QStyle::State_MouseOver ) == QStyle::State_MouseOver )
-        {
-            o.state |= QStyle::State_MouseOver;
-            o3.state |= QStyle::State_MouseOver;
-        }
-
-        if ( ( option.state & QStyle::State_Open ) == QStyle::State_Open )
-        {
-            o.state |= QStyle::State_Open;
-        }
-
-        if ( ( option.state & QStyle::State_Selected ) == QStyle::State_Selected )
-        {
-            if ( type != SourcesModel::Collection )
-            {
-                if ( type == SourcesModel::ScriptCollection )
-                    o.state |= QStyle::State_Selected;
-
-                o3.state |= QStyle::State_Selected;
-            }
-            else
-            {
-                o3.state &= ~QStyle::State_Selected;
-            }
-
-            o.palette.setColor( QPalette::Text, o.palette.color( QPalette::HighlightedText ) );
-            o3.palette.setColor( QPalette::Text, o.palette.color( QPalette::HighlightedText ) );
-        }
-    }
+    initStyleOption( &opt, index );
+    opt.icon = QIcon();
+    opt.text.clear();
 
     // shrink the indentations
     {
@@ -499,26 +515,23 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
             counter = counter.parent();
         }
 
-        int indentDelta = o.rect.x() - m_parent->viewport()->x();
-        o.rect.setX( o.rect.x() - indentDelta + indentMult * TREEVIEW_INDENT_ADD );
-        o3.rect.setX( 0 );
+        int indentDelta = optIndentation.rect.x() - m_parent->viewport()->x();
+        optIndentation.rect.setX( optIndentation.rect.x() - indentDelta + indentMult * TREEVIEW_INDENT_ADD );
+        opt.rect.setX( 0 );
     }
 
     if ( type != SourcesModel::Group && type != SourcesModel::Category && type != SourcesModel::Divider )
-        QApplication::style()->drawControl( QStyle::CE_ItemViewItem, &o3, painter );
+        QApplication::style()->drawControl( QStyle::CE_ItemViewItem, &opt, painter );
 
     if ( type == SourcesModel::Collection || type == SourcesModel::ScriptCollection )
     {
-        paintCollection( painter, o, index );
+        paintCollection( painter, optIndentation, index );
     }
     else if ( ( type == SourcesModel::StaticPlaylist || type == SourcesModel::CategoryAdd ) &&
               m_expandedMap.contains( index ) && m_expandedMap.value( index )->partlyExpanded() && dropTypeCount( item ) > 0 )
     {
-        // Let Qt paint the original item. We add our stuff after it
-        o.state &= ~QStyle::State_Selected;
-        o.showDecorationSelected = false;
-        o.rect.adjust( 0, 0, 0, - option.rect.height() + m_expandedMap.value( index )->originalSize().height() );
-        QStyledItemDelegate::paint( painter, o, index );
+        optIndentation.rect.adjust( 0, 0, 0, - option.rect.height() + m_expandedMap.value( index )->originalSize().height() );
+        paintStandardItem( painter, optIndentation, index );
 
         // Get whole rect for the menu
         QRect itemsRect = option.rect.adjusted( -option.rect.x(), m_expandedMap.value( index )->originalSize().height(), 0, 0 );
@@ -616,18 +629,18 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     }
     else if ( type == SourcesModel::Group )
     {
-        paintGroup( painter, o3, index );
+        paintGroup( painter, opt, index );
     }
     else if ( type == SourcesModel::Category )
     {
-        paintCategory( painter, o, index );
+        paintCategory( painter, optIndentation, index );
     }
     else if ( type == SourcesModel::Divider )
     {
-        QRect middle = o.rect.adjusted( 0, 2, 0, -2 );
+        QRect middle = optIndentation.rect.adjusted( 0, 2, 0, -2 );
         painter->setRenderHint( QPainter::Antialiasing, false );
 
-        QColor bgcolor = o3.palette.color( QPalette::Base );
+        QColor bgcolor = opt.palette.color( QPalette::Base );
 
         painter->setPen( bgcolor.darker( 120 ) );
         painter->drawLine( middle.topLeft(), middle.topRight() );
@@ -636,15 +649,16 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     }
     else
     {
-        o.state &= ~QStyle::State_MouseOver;
+        optIndentation.state &= ~QStyle::State_MouseOver;
         if ( !index.parent().parent().isValid() )
-            o.rect.adjust( 7, 0, 0, 0 );
+            optIndentation.rect.adjust( 7, 0, 0, 0 );
 
         if ( type == SourcesModel::Inbox )
         {
             InboxItem* ii = qobject_cast< InboxItem* >( item );
             if ( ii && ii->unlistenedCount() )
             {
+                painter->save();
                 painter->setRenderHint( QPainter::Antialiasing );
 
                 QFont figFont = option.font;
@@ -666,58 +680,59 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
                 painter->setBrush( figColor );
 
                 TomahawkUtils::drawBackgroundAndNumbers( painter, count, figRect );
+                painter->restore();
             }
-            QStyledItemDelegate::paint( painter, o, index );
+            paintStandardItem( painter, optIndentation, index );
         }
         else if ( type == SourcesModel::TemporaryPage )
         {
             TemporaryPageItem* gpi = qobject_cast< TemporaryPageItem* >( item );
             Q_ASSERT( gpi );
 
-            if ( gpi && o3.state & QStyle::State_MouseOver )
+            if ( gpi && opt.state & QStyle::State_MouseOver )
             {
                 int padding = 3;
-                m_iconHeight = ( o3.rect.height() - 2 * padding );
+                m_iconHeight = ( opt.rect.height() - 2 * padding );
 
-                o.rect.adjust( 0, 0, -( padding + m_iconHeight ), 0 );
-                QStyledItemDelegate::paint( painter, o, index );
+                optIndentation.rect.adjust( 0, 0, -( padding + m_iconHeight ), 0 );
+                paintStandardItem( painter, optIndentation, index );
 
                 // draw close icon
-                QRect r( o3.rect.right() - padding - m_iconHeight, padding + o3.rect.y(), m_iconHeight, m_iconHeight );
+                QRect r( opt.rect.right() - padding - m_iconHeight, padding + opt.rect.y(), m_iconHeight, m_iconHeight );
                 painter->drawPixmap( r, TomahawkUtils::defaultPixmap( TomahawkUtils::ListRemove, TomahawkUtils::Original, r.size() ) );
             }
             else
-                QStyledItemDelegate::paint( painter, o, index );
+                paintStandardItem( painter, optIndentation, index );
         }
         else if ( type == SourcesModel::StaticPlaylist )
         {
-            QStyledItemDelegate::paint( painter, o, index );
+            paintStandardItem( painter, optIndentation, index );
 
             PlaylistItem* plItem = qobject_cast< PlaylistItem* >( item );
             if ( plItem->canSubscribe() && !plItem->subscribedIcon().isNull() )
             {
                 const int padding = 2;
-                const int imgWidth = o.rect.height() - 2 * padding;
+                const int imgWidth = optIndentation.rect.height() - 2 * padding;
 
                 const QPixmap icon = plItem->subscribedIcon().scaled( imgWidth, imgWidth, Qt::KeepAspectRatio, Qt::SmoothTransformation );
-                const QRect subRect( o.rect.right() - padding - imgWidth, o.rect.top() + padding, imgWidth, imgWidth );
+                const QRect subRect( optIndentation.rect.right() - padding - imgWidth, optIndentation.rect.top() + padding, imgWidth, imgWidth );
                 painter->drawPixmap( subRect, icon );
             }
 
             if ( plItem->collaborative() )
             {
                 const int padding = 2;
-                const int imgWidth = o.rect.height() - 2 * padding;
-                const QRect subRect( o.rect.left(), o.rect.top(), imgWidth, imgWidth );
+                const int imgWidth = optIndentation.rect.height() - 2 * padding;
+                const QRect subRect( optIndentation.rect.left(), optIndentation.rect.top(), imgWidth, imgWidth );
 
                 painter->drawPixmap( subRect, TomahawkUtils::defaultPixmap( TomahawkUtils::GreenDot, TomahawkUtils::Original, subRect.size() ) );
             }
         }
         else
-            QStyledItemDelegate::paint( painter, o, index );
+            paintStandardItem( painter, optIndentation, index );
     }
 
-    paintDecorations( painter, o3, index );
+    paintDecorations( painter, opt, index );
 
     painter->restore();
 }

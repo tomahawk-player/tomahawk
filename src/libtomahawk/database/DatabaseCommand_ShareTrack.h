@@ -36,7 +36,7 @@ class DLLEXPORT DatabaseCommand_ShareTrack : public DatabaseCommand_SocialAction
 public:
     explicit DatabaseCommand_ShareTrack( QObject* parent = 0 );
 
-    explicit DatabaseCommand_ShareTrack( const Tomahawk::track_ptr& track,
+    explicit DatabaseCommand_ShareTrack( const Tomahawk::trackdata_ptr& track,
                                          const QString& recipientDbid,
                                          QObject* parent = 0 );
 

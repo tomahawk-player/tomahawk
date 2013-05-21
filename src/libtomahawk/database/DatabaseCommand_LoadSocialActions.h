@@ -46,7 +46,7 @@ class DLLEXPORT DatabaseCommand_LoadSocialActions : public DatabaseCommand
 Q_OBJECT
 
 public:
-    typedef QMap<Tomahawk::track_ptr,Tomahawk::SocialAction> TrackActions;
+    typedef QMap<Tomahawk::track_ptr, Tomahawk::SocialAction> TrackActions;
     /**
      * \brief Default constructor for DatabaseCommand_LoadSocialActions.
      *
@@ -63,7 +63,7 @@ public:
      *
      * Constructor which creates a new database command for loading all social actions.
      */
-    explicit DatabaseCommand_LoadSocialActions( const Tomahawk::track_ptr& track, QObject* parent = 0 )
+    explicit DatabaseCommand_LoadSocialActions( const Tomahawk::trackdata_ptr& track, QObject* parent = 0 )
         : DatabaseCommand( parent ), m_track( track )
     {
         setSource( SourceList::instance()->getLocal() );
@@ -106,7 +106,7 @@ signals:
     void done( DatabaseCommand_LoadSocialActions::TrackActions actionsForTracks );
 
 private:
-    Tomahawk::track_ptr m_track;
+    Tomahawk::trackdata_ptr m_track;
     QString m_actionOnly;
 
 };

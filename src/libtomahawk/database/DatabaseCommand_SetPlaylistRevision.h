@@ -113,6 +113,7 @@ public:
     QVariantList orderedguids() const { return m_orderedguids; }
 
 protected:
+    bool m_failed;
     bool m_applied;
     QStringList m_previous_rev_orderedguids;
     QString m_playlistguid;

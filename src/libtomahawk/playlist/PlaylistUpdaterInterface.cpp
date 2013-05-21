@@ -106,6 +106,7 @@ PlaylistUpdaterInterface::save()
     s->setPlaylistUpdaters( allUpdaters );
 }
 
+
 void
 PlaylistUpdaterInterface::remove()
 {

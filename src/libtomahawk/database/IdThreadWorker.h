@@ -42,6 +42,7 @@ public:
 
     static void getArtistId( const Tomahawk::artist_ptr& artist, bool autoCreate = false );
     static void getAlbumId( const Tomahawk::album_ptr& album, bool autoCreate = false );
+    static void getTrackId( const Tomahawk::trackdata_ptr& trackData, bool autoCreate = false );
 
 private:
     Database* m_db;

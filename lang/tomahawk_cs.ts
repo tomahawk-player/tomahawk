@@ -379,17 +379,17 @@ se s vámi spojil?</translation>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="661"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="659"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>Promiňte,  Tomahawku se nepodařilo najít skladbu &apos;%1&apos; od %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="685"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="683"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>Promiňte,  Tomahawku se nepodařilo najít umělce &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="711"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="709"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>Promiňte,  Tomahawku se nepodařilo najít album &apos;%1&apos; od %2</translation>
     </message>
@@ -957,7 +957,7 @@ se s vámi spojil?</translation>
         <translation>Vpřed</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="372"/>
+        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="379"/>
         <source>Properties</source>
         <translation>Vlastnosti</translation>
     </message>
@@ -1292,67 +1292,67 @@ se s vámi spojil?</translation>
 <context>
     <name>QObject</name>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="241"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="242"/>
         <source>%n year(s) ago</source>
         <translation><numerusform>před %n rokem</numerusform><numerusform>před %n roky</numerusform><numerusform>před %n roky</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="243"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="244"/>
         <source>%n year(s)</source>
         <translation><numerusform>%n rok</numerusform><numerusform>%n roky</numerusform><numerusform>%n roků</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="249"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="250"/>
         <source>%n month(s) ago</source>
         <translation><numerusform>před %n měsícem</numerusform><numerusform>před %n měsíci</numerusform><numerusform>před %n měsíci</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="251"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="252"/>
         <source>%n month(s)</source>
         <translation><numerusform>%n měsíc</numerusform><numerusform>%n měsíce</numerusform><numerusform>%n měsíců</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="257"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="258"/>
         <source>%n week(s) ago</source>
         <translation><numerusform>před %n týdnem</numerusform><numerusform>před %n týdny</numerusform><numerusform>před %n týdny</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="259"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="260"/>
         <source>%n week(s)</source>
         <translation><numerusform>%n týden</numerusform><numerusform>%n týdny</numerusform><numerusform>%n týdnů</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="265"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="266"/>
         <source>%n day(s) ago</source>
         <translation><numerusform>před %n dnem</numerusform><numerusform>před %n dny</numerusform><numerusform>před %n dny</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="267"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="268"/>
         <source>%n day(s)</source>
         <translation><numerusform>%n den</numerusform><numerusform>%n dny</numerusform><numerusform>%n dnů</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="273"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="274"/>
         <source>%n hour(s) ago</source>
         <translation><numerusform>před %n hodinou</numerusform><numerusform>před %n hodinami</numerusform><numerusform>před %n hodinami</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="275"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="276"/>
         <source>%n hour(s)</source>
         <translation><numerusform>%n hodina</numerusform><numerusform>%n hodiny</numerusform><numerusform>%n hodin</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="281"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="282"/>
         <source>%1 minutes ago</source>
         <translation>před %1 minutami</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="283"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="284"/>
         <source>%1 minutes</source>
         <translation>%1 minuty</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="287"/>
+        <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="288"/>
         <source>just now</source>
         <translation>právě teď</translation>
     </message>
@@ -1453,22 +1453,22 @@ se s vámi spojil?</translation>
 <context>
     <name>ScriptEngine</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1124"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1126"/>
         <source>Script Resolver Error: %1 %2 %3 %4</source>
         <translation>Chyba řešitele skriptu: %1 %2 %3 %4</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1143"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1145"/>
         <source>SSL Error</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1144"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1146"/>
         <source>You have asked Tomahawk to connect securely to &lt;b&gt;%1&lt;/b&gt;, but we can&apos;t confirm that your connection is secure:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Do you want to trust this connection?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1151"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1153"/>
         <source>Trust certificate</source>
         <translation type="unfinished"/>
     </message>
@@ -1781,19 +1781,19 @@ se s vámi spojil?</translation>
         <translation>Nejlepších deset</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="200"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="250"/>
         <source>All available tracks</source>
         <translation>Všechny dostupné skladby</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="385"/>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="426"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="431"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="472"/>
         <source>Show</source>
         <translation>Ukázat</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="387"/>
-        <location filename="../src/sourcetree/SourceDelegate.cpp" line="428"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="433"/>
+        <location filename="../src/sourcetree/SourceDelegate.cpp" line="474"/>
         <source>Hide</source>
         <translation>Skrýt</translation>
     </message>
@@ -1834,53 +1834,53 @@ se s vámi spojil?</translation>
 <context>
     <name>SourceItem</name>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="85"/>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="608"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="84"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="607"/>
         <source>Latest Additions</source>
         <translation>Nedávné přídavky</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="89"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="88"/>
         <source>Recently Played</source>
         <translation>Nedávno poslouchané</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="152"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="151"/>
         <source>SuperCollection</source>
         <translation>Supersbírka</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="611"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="610"/>
         <source>Latest additions to your collection</source>
         <translation>Nejnovější písně ve vaší sbírce</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="613"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="612"/>
         <source>Latest additions to %1&apos;s collection</source>
         <translation>Nejnovější písně ve sbírce %1&apos;s</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="621"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="620"/>
         <source>Sorry, we could not find any recent additions!</source>
         <translation>Promiňte, ale nepodařilo se najít žádné nedávné přídavky!</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="650"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="649"/>
         <source>Recently Played Tracks</source>
         <translation>Nedávno poslouchané skladby</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="653"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="652"/>
         <source>Your recently played tracks</source>
         <translation>Vaše nedávno poslouchané skladby</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="655"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="654"/>
         <source>%1&apos;s recently played tracks</source>
         <translation>%1&apos;s nedávno poslouchaných skladeb</translation>
     </message>
     <message>
-        <location filename="../src/sourcetree/items/SourceItem.cpp" line="661"/>
+        <location filename="../src/sourcetree/items/SourceItem.cpp" line="660"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>Promiňte, ale nepodařilo se najít žádné nedávno přehrávané skladby!</translation>
     </message>
@@ -2275,7 +2275,7 @@ se s vámi spojil?</translation>
         <translation>Seřizuje se...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="420"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="419"/>
         <source>Synchronization Finished</source>
         <translation>Seřizování dokončeno</translation>
     </message>
@@ -3259,7 +3259,7 @@ Zkuste vyladit filtry pro nové písně.</translation>
 <context>
     <name>Tomahawk::InfoSystem::NewReleasesPlugin</name>
     <message>
-        <location filename="../src/infoplugins/generic/newreleases/NewReleasesPlugin.cpp" line="592"/>
+        <location filename="../src/infoplugins/generic/newreleases/NewReleasesPlugin.cpp" line="598"/>
         <source>Albums</source>
         <translation>Alba</translation>
     </message>
@@ -3325,13 +3325,13 @@ Zkuste vyladit filtry pro nové písně.</translation>
 <context>
     <name>Tomahawk::Playlist</name>
     <message>
-        <location filename="../src/libtomahawk/Playlist.cpp" line="299"/>
+        <location filename="../src/libtomahawk/Playlist.cpp" line="298"/>
         <source>Would you like to delete the playlist &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
         <translation>Chcete smazat seznam skladeb &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Playlist.cpp" line="301"/>
+        <location filename="../src/libtomahawk/Playlist.cpp" line="300"/>
         <source>Delete</source>
         <translation>Smazat</translation>
     </message>
@@ -3424,42 +3424,42 @@ Zkuste vyladit filtry pro nové písně.</translation>
 <context>
     <name>Tomahawk::Track</name>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="356"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="391"/>
         <source> and </source>
         <translation>a</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="364"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="399"/>
         <source>You</source>
         <translation>Vy</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="366"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="401"/>
         <source>you</source>
         <translation>vy</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="379"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="414"/>
         <source>and</source>
         <translation>a</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="379"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="414"/>
         <source>%n other(s)</source>
         <translation><numerusform>%n dalšímu</numerusform><numerusform>%n dalším</numerusform><numerusform>%n dalším</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="382"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="417"/>
         <source>%n people</source>
         <translation><numerusform>%n člověku</numerusform><numerusform>%n lidem</numerusform><numerusform>%n lidem</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="386"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="421"/>
         <source>loved this track</source>
         <translation>se tato skladba líbí</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="388"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="423"/>
         <source>sent you this track %1</source>
         <translation>vám poslal tuto skladbu %1</translation>
     </message>
@@ -3467,7 +3467,7 @@ Zkuste vyladit filtry pro nové písně.</translation>
 <context>
     <name>Tomahawk::XspfUpdater</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/XspfUpdater.cpp" line="60"/>
+        <location filename="../src/libtomahawk/playlist/XspfUpdater.cpp" line="61"/>
         <source>Automatically update from XSPF</source>
         <translation>Aktualizovat automaticky z XSPF</translation>
     </message>

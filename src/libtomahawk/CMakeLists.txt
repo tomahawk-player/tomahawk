@@ -194,6 +194,7 @@ list(APPEND libSources
     Result.cpp
     Source.cpp
     Track.cpp
+    TrackData.cpp
     SourcePlaylistInterface.cpp
     PlaylistInterface.cpp
 
@@ -268,6 +269,7 @@ list(APPEND libSources
     database/DatabaseCommand_ClientAuthValid.cpp
     database/DatabaseCommand_SocialAction.cpp
     database/DatabaseCommand_LoadSocialActions.cpp
+    database/DatabaseCommand_LoadTrackAttributes.cpp
     database/DatabaseCommand_GenericSelect.cpp
     database/DatabaseCommand_SetCollectionAttributes.cpp
     database/DatabaseCommand_CollectionAttributes.cpp

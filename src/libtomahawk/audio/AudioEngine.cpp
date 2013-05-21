@@ -26,7 +26,6 @@
 #include "SourcePlaylistInterface.h"
 #include "TomahawkSettings.h"
 #include "database/Database.h"
-#include "database/DatabaseCommand_LogPlayback.h"
 #include "network/Servent.h"
 #include "utils/Qnr_IoDeviceStream.h"
 #include "utils/Closure.h"
@@ -522,8 +521,7 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr& result, QSharedPointe
 
             if ( TomahawkSettings::instance()->privateListeningMode() != TomahawkSettings::FullyPrivate )
             {
-                DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_currentTrack->track(), DatabaseCommand_LogPlayback::Started );
-                Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+                m_currentTrack->track()->startPlaying();
             }
 
             sendNowPlayingNotification( Tomahawk::InfoSystem::InfoNowPlaying );
@@ -990,8 +988,7 @@ AudioEngine::setCurrentTrack( const Tomahawk::result_ptr& result )
     {
         if ( m_state != Error && TomahawkSettings::instance()->privateListeningMode() == TomahawkSettings::PublicListening )
         {
-            DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_currentTrack->track(), DatabaseCommand_LogPlayback::Finished, m_timeElapsed );
-            Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+            m_currentTrack->track()->finishPlaying( m_timeElapsed );
         }
 
         emit finished( m_currentTrack );

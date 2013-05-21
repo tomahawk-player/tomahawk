@@ -141,28 +141,15 @@ DatabaseCommand_Resolve::resolve( DatabaseImpl* lib )
             continue;
         }
 
-        track_ptr track = Track::get( files_query.value( 12 ).toString(), files_query.value( 14 ).toString(), files_query.value( 13 ).toString(), files_query.value( 5 ).toUInt(), files_query.value( 15 ).toString(), files_query.value( 17 ).toUInt(), files_query.value( 11 ).toUInt() );
+        track_ptr track = Track::get( files_query.value( 9 ).toUInt(), files_query.value( 12 ).toString(), files_query.value( 14 ).toString(), files_query.value( 13 ).toString(), files_query.value( 5 ).toUInt(), files_query.value( 15 ).toString(), files_query.value( 17 ).toUInt(), files_query.value( 11 ).toUInt() );
+        track->loadAttributes();
         result->setTrack( track );
 
         result->setModificationTime( files_query.value( 1 ).toUInt() );
         result->setSize( files_query.value( 2 ).toUInt() );
         result->setMimetype( files_query.value( 4 ).toString() );
         result->setBitrate( files_query.value( 6 ).toUInt() );
-        result->setTrackId( files_query.value( 9 ).toUInt() );
         result->setRID( uuid() );
-
-        TomahawkSqlQuery attrQuery = lib->newquery();
-        QVariantMap attr;
-
-        attrQuery.prepare( "SELECT k, v FROM track_attributes WHERE id = ?" );
-        attrQuery.bindValue( 0, result->trackId() );
-        attrQuery.exec();
-        while ( attrQuery.next() )
-        {
-            attr[ attrQuery.value( 0 ).toString() ] = attrQuery.value( 1 ).toString();
-        }
-
-        result->setAttributes( attr );
         result->setCollection( s->dbCollection() );
 
         res << result;
@@ -263,7 +250,8 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
             continue;
         }
 
-        track_ptr track = Track::get( files_query.value( 12 ).toString(), files_query.value( 14 ).toString(), files_query.value( 13 ).toString(), files_query.value( 5 ).toUInt(), files_query.value( 15 ).toString(), files_query.value( 17 ).toUInt(), files_query.value( 11 ).toUInt() );
+        track_ptr track = Track::get( files_query.value( 9 ).toUInt(), files_query.value( 12 ).toString(), files_query.value( 14 ).toString(), files_query.value( 13 ).toString(), files_query.value( 5 ).toUInt(), files_query.value( 15 ).toString(), files_query.value( 17 ).toUInt(), files_query.value( 11 ).toUInt() );
+        track->loadAttributes();
         result->setTrack( track );
 
         result->setModificationTime( files_query.value( 1 ).toUInt() );
@@ -271,30 +259,16 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
         result->setMimetype( files_query.value( 4 ).toString() );
         result->setBitrate( files_query.value( 6 ).toUInt() );
         result->setRID( uuid() );
-        result->setTrackId( files_query.value( 9 ).toUInt() );
+        result->setCollection( s->dbCollection() );
 
         for ( int k = 0; k < trackPairs.count(); k++ )
         {
-            if ( trackPairs.at( k ).first == (int)result->trackId() )
+            if ( trackPairs.at( k ).first == (int)track->trackId() )
             {
                 result->setScore( trackPairs.at( k ).second );
                 break;
             }
         }
-
-        TomahawkSqlQuery attrQuery = lib->newquery();
-        QVariantMap attr;
-
-        attrQuery.prepare( "SELECT k, v FROM track_attributes WHERE id = ?" );
-        attrQuery.bindValue( 0, result->trackId() );
-        attrQuery.exec();
-        while ( attrQuery.next() )
-        {
-            attr[ attrQuery.value( 0 ).toString() ] = attrQuery.value( 1 ).toString();
-        }
-
-        result->setAttributes( attr );
-        result->setCollection( s->dbCollection() );
 
         res << result;
     }

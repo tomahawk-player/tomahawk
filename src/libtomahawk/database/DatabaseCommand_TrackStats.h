@@ -31,7 +31,7 @@ class DLLEXPORT DatabaseCommand_TrackStats : public DatabaseCommand
 Q_OBJECT
 
 public:
-    explicit DatabaseCommand_TrackStats( const Tomahawk::track_ptr& track, QObject* parent = 0 );
+    explicit DatabaseCommand_TrackStats( const Tomahawk::trackdata_ptr& track, QObject* parent = 0 );
     explicit DatabaseCommand_TrackStats( const Tomahawk::artist_ptr& artist, QObject* parent = 0 );
 
     virtual void exec( DatabaseImpl* lib );
@@ -42,7 +42,7 @@ signals:
     void done( const QList< Tomahawk::PlaybackLog >& playbackData );
 
 private:
-    Tomahawk::track_ptr m_track;
+    Tomahawk::trackdata_ptr m_track;
     Tomahawk::artist_ptr m_artist;
 };
 

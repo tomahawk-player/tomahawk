@@ -86,6 +86,7 @@ DatabaseCommand_SetDynamicPlaylistRevision::controlsV()
 void
 DatabaseCommand_SetDynamicPlaylistRevision::postCommitHook()
 {
+    tDebug() << Q_FUNC_INFO;
     if ( source().isNull() || source()->dbCollection().isNull() )
     {
         tDebug() << "Source has gone offline, not emitting to GUI.";
@@ -101,19 +102,23 @@ DatabaseCommand_SetDynamicPlaylistRevision::postCommitHook()
     tLog() << "Postcommitting this playlist:" << playlistguid() << source().isNull();
 
     // private, but we are a friend. will recall itself in its own thread:
+    DynamicPlaylist* rawPl = 0;
     dynplaylist_ptr playlist = source()->dbCollection()->autoPlaylist( playlistguid() );
-    if ( playlist.isNull() )
+    if ( !playlist )
         playlist = source()->dbCollection()->station( playlistguid() );
-    // UGH we don't have a sharedptr from DynamicPlaylist+
 
-    DynamicPlaylist* rawPl = playlist.data();
-    if( playlist.isNull() ) // if it's neither an auto or station, it must not be auto-loaded, so we MUST have been told about it directly
-        rawPl = m_playlist;
-
-    if ( rawPl == 0 )
+    if ( playlist )
+        rawPl = playlist.data();
+    else
     {
-        tLog() <<"Got null playlist with guid:" << playlistguid() << "from source and collection:" << source()->friendlyName() << source()->dbCollection()->name() << "and mode is static?:" << (m_mode == Static);
-        Q_ASSERT( false );
+        // if it's neither an auto or station, it must not be auto-loaded, so we MUST have been told about it directly
+        rawPl = m_playlist;
+    }
+
+    if ( !rawPl )
+    {
+        tLog() << "Got null playlist with guid:" << playlistguid() << "from source and collection:" << source()->friendlyName() << source()->dbCollection()->name() << "and mode is static?:" << (m_mode == Static);
+//        Q_ASSERT( false );
         return;
     }
 
@@ -167,6 +172,8 @@ void
 DatabaseCommand_SetDynamicPlaylistRevision::exec( DatabaseImpl* lib )
 {
     DatabaseCommand_SetPlaylistRevision::exec( lib );
+    if ( m_failed )
+        return;
 
     QVariantList newcontrols;
     if ( m_controlsV.isEmpty() && !m_controls.isEmpty() )

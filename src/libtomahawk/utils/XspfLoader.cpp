@@ -293,7 +293,6 @@ XSPFLoader::gotBody()
     }
     else
     {
-
         if ( !m_entries.isEmpty() )
             emit tracks( m_entries );
     }

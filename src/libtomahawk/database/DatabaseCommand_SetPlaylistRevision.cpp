@@ -38,6 +38,7 @@ DatabaseCommand_SetPlaylistRevision::DatabaseCommand_SetPlaylistRevision(
                       const QList<plentry_ptr>& addedentries,
                       const QList<plentry_ptr>& entries )
     : DatabaseCommandLoggable( s )
+    , m_failed( false )
     , m_applied( false )
     , m_newrev( newrev )
     , m_oldrev( oldrev )
@@ -66,6 +67,7 @@ DatabaseCommand_SetPlaylistRevision::DatabaseCommand_SetPlaylistRevision(
                         const QStringList& orderedguids,
                         const QList<plentry_ptr>& entriesToUpdate )
     : DatabaseCommandLoggable( s )
+    , m_failed( false )
     , m_applied( false )
     , m_newrev( newrev )
     , m_oldrev( oldrev )
@@ -87,7 +89,7 @@ DatabaseCommand_SetPlaylistRevision::DatabaseCommand_SetPlaylistRevision(
 void
 DatabaseCommand_SetPlaylistRevision::postCommitHook()
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug() << Q_FUNC_INFO;
     if ( m_localOnly )
         return;
 
@@ -136,6 +138,7 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
     {
         tDebug() << "ERROR: No such playlist:" << m_playlistguid << currentRevision << source()->friendlyName() << source()->id();
 //        Q_ASSERT_X( false, "DatabaseCommand_SetPlaylistRevision::exec", "No such playlist, WTF?" );
+        m_failed = true;
         return;
     }
 

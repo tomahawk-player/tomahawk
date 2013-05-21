@@ -225,8 +225,8 @@ PlayableModel::queryData( const query_ptr& query, int column, int role ) const
                 break;
 
             case Year:
-                if ( query->results().first()->year() != 0 )
-                    return query->results().first()->year();
+                if ( query->results().first()->track()->year() != 0 )
+                    return query->results().first()->track()->year();
                 break;
 
             case Filesize:

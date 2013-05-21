@@ -84,10 +84,8 @@ public:
     unsigned int bitrate() const { return m_bitrate; }
     unsigned int size() const { return m_size; }
     unsigned int modificationTime() const { return m_modtime; }
-    int year() const { return m_year; }
 
     void setScore( float score ) { m_score = score; }
-    void setTrackId( unsigned int id ) { m_trackId = id; }
     void setFileId( unsigned int id ) { m_fileId = id; }
     void setRID( RID id ) { m_rid = id; }
     void setCollection( const Tomahawk::collection_ptr& collection );
@@ -98,14 +96,9 @@ public:
     void setBitrate( unsigned int bitrate ) { m_bitrate = bitrate; }
     void setSize( unsigned int size ) { m_size = size; }
     void setModificationTime( unsigned int modtime ) { m_modtime = modtime; }
-    void setYear( unsigned int year ) { m_year = year; }
 
     void setTrack( const track_ptr& track ) { m_track = track; }
 
-    QVariantMap attributes() const { return m_attributes; }
-    void setAttributes( const QVariantMap& map ) { m_attributes = map; updateAttributes(); }
-
-    unsigned int trackId() const { return m_trackId; }
     unsigned int fileId() const { return m_fileId; }
 
     track_ptr track() const;
@@ -130,8 +123,6 @@ private:
     explicit Result( const QString& url );
     explicit Result();
 
-    void updateAttributes();
-
     mutable RID m_rid;
     collection_ptr m_collection;
     QPointer< Tomahawk::Resolver > m_resolvedBy;
@@ -145,11 +136,9 @@ private:
     unsigned int m_bitrate;
     unsigned int m_size;
     unsigned int m_modtime;
-    int m_year;
     float m_score;
 
-    QVariantMap m_attributes;
-    unsigned int m_trackId, m_fileId;
+    unsigned int m_fileId;
 
     track_ptr m_track;
     query_wptr m_query;

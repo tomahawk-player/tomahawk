@@ -75,6 +75,15 @@ PlayableItem::PlayableItem( const Tomahawk::result_ptr& result, PlayableItem* pa
 {
     init( parent, row );
 
+    connect( result->track().data(), SIGNAL( socialActionsLoaded() ),
+                                     SIGNAL( dataChanged() ) );
+
+    connect( result->track().data(), SIGNAL( attributesLoaded() ),
+                                     SIGNAL( dataChanged() ) );
+
+    connect( result->track().data(), SIGNAL( updated() ),
+                                     SIGNAL( dataChanged() ) );
+
     connect( result.data(), SIGNAL( updated() ),
                             SIGNAL( dataChanged() ) );
 }
@@ -87,6 +96,9 @@ PlayableItem::PlayableItem( const Tomahawk::query_ptr& query, PlayableItem* pare
     init( parent, row );
 
     connect( query->track().data(), SIGNAL( socialActionsLoaded() ),
+                                    SIGNAL( dataChanged() ) );
+
+    connect( query->track().data(), SIGNAL( attributesLoaded() ),
                                     SIGNAL( dataChanged() ) );
 
     connect( query->track().data(), SIGNAL( updated() ),
@@ -105,6 +117,9 @@ PlayableItem::PlayableItem( const Tomahawk::plentry_ptr& entry, PlayableItem* pa
     init( parent, row );
 
     connect( m_query->track().data(), SIGNAL( socialActionsLoaded() ),
+                                      SIGNAL( dataChanged() ) );
+
+    connect( m_query->track().data(), SIGNAL( attributesLoaded() ),
                                       SIGNAL( dataChanged() ) );
 
     connect( m_query->track().data(), SIGNAL( updated() ),

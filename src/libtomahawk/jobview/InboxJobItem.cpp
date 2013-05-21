@@ -29,7 +29,7 @@
 
 
 InboxJobItem::InboxJobItem( const QString& sender,
-                            const Tomahawk::track_ptr& track,
+                            const Tomahawk::trackdata_ptr& track,
                             QObject* parent )
     : JobStatusItem()
     , m_track( track )

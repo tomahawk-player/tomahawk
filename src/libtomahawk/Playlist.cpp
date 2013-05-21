@@ -184,10 +184,9 @@ Playlist::get( const QString& guid )
 void
 Playlist::remove( const playlist_ptr& playlist )
 {
-    playlist->aboutToBeDeleted( playlist );
+    emit playlist->aboutToBeDeleted( playlist );
 
-    TomahawkSettings *s = TomahawkSettings::instance();
-    s->removePlaylistSettings( playlist->guid() );
+    TomahawkSettings::instance()->removePlaylistSettings( playlist->guid() );
 
     DatabaseCommand_DeletePlaylist* cmd = new DatabaseCommand_DeletePlaylist( playlist->author(), playlist->guid() );
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );

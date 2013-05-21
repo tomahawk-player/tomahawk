@@ -35,9 +35,6 @@ InboxModel::InboxModel( QObject* parent )
     else
         NewClosure( SourceList::instance(), SIGNAL( ready() ),
                     this, SLOT( loadTracks() ) );
-
-    connect( this, SIGNAL( currentIndexChanged() ),
-             SLOT( onCurrentIndexChanged() ) );
 }
 
 
@@ -67,36 +64,6 @@ InboxModel::unlistenedCount() const
 }
 
 
-QList<Tomahawk::SocialAction>
-InboxModel::mergeSocialActions( QList<Tomahawk::SocialAction> first, QList<Tomahawk::SocialAction> second)
-{
-    foreach ( Tomahawk::SocialAction saInSecond, second )
-    {
-        if ( saInSecond.action != "Inbox" )
-        {
-            first.append( saInSecond );
-            continue;
-        }
-
-        bool contains = false;
-        for ( int i = 0; i < first.count(); ++i )
-        {
-            Tomahawk::SocialAction &saInFirst = first[ i ];
-            if ( saInSecond.source == saInFirst.source )
-            {
-                saInFirst.timestamp = qMax( saInSecond.timestamp.toInt(), saInFirst.timestamp.toInt() );
-                saInFirst.value = saInFirst.value.toBool() && saInSecond.value.toBool();
-                contains = true;
-                break;
-            }
-        }
-        if ( !contains )
-            first.append( saInSecond );
-    }
-    return first;
-}
-
-
 void
 InboxModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int row, const QList< Tomahawk::PlaybackLog >& logs )
 {
@@ -113,9 +80,6 @@ InboxModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int ro
             Tomahawk::plentry_ptr existingEntry = *jt;
             if ( entry->query()->equals( existingEntry->query(), true /*ignoreCase*/) )
             {
-                //We got a dupe, let's merge the social actions
-                entry->query()->queryTrack()->setAllSocialActions( mergeSocialActions( existingEntry->query()->queryTrack()->allSocialActions(),
-                                                                                       entry->query()->queryTrack()->allSocialActions() ) );
                 toInsert.erase( jt );
                 break;
             }
@@ -129,8 +93,6 @@ InboxModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int ro
         {
             if ( plEntry->query()->equals( toInsert.at( i )->query(), true ) )
             {
-                plEntry->query()->queryTrack()->setAllSocialActions( mergeSocialActions( plEntry->query()->queryTrack()->allSocialActions(),
-                                                                                    toInsert.at( i )->query()->queryTrack()->allSocialActions() ) );
                 toInsert.removeAt( i );
 
                 dataChanged( index( playlistEntries().indexOf( plEntry ), 0, QModelIndex() ),
@@ -215,7 +177,7 @@ InboxModel::tracksLoaded( QList< Tomahawk::query_ptr > incoming )
 
         QList< Tomahawk::SocialAction > actions;
         actions << action;
-        newQuery->queryTrack()->setAllSocialActions( actions );
+        newQuery->queryTrack()->loadSocialActions();
 
         newQuery->setProperty( "data", QVariant() ); //clear
     }
@@ -229,34 +191,6 @@ InboxModel::tracksLoaded( QList< Tomahawk::query_ptr > incoming )
 
         clear();
         appendEntries( el );
-    }
-}
-
-
-void
-InboxModel::onCurrentIndexChanged()
-{
-    QPersistentModelIndex idx = currentItem();
-    if ( idx.isValid() )
-    {
-        PlayableItem* item = itemFromIndex( idx );
-        if ( item && !item->query().isNull() )
-        {
-            Tomahawk::query_ptr qry = item->query();
-            DatabaseCommand_ModifyInboxEntry* cmd = new DatabaseCommand_ModifyInboxEntry( qry, false );
-            Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
-
-            QList< Tomahawk::SocialAction > actions = item->query()->queryTrack()->allSocialActions();
-            for ( QList< Tomahawk::SocialAction >::iterator it = actions.begin();
-                  it != actions.end(); ++it )
-            {
-                if ( it->action == "Inbox" )
-                {
-                    it->value = false; //listened!
-                }
-            }
-            item->query()->queryTrack()->setAllSocialActions( actions );
-        }
     }
 }
 

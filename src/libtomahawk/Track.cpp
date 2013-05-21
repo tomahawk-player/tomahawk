@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2013, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2013, Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -19,14 +20,12 @@
 #include "Track.h"
 
 #include <QtAlgorithms>
+#include <QReadWriteLock>
 
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
 #include "database/DatabaseCommand_LogPlayback.h"
-#include "database/DatabaseCommand_LoadPlaylistEntries.h"
-#include "database/DatabaseCommand_LoadSocialActions.h"
-#include "database/DatabaseCommand_SocialAction.h"
-#include "database/DatabaseCommand_TrackStats.h"
+#include "database/DatabaseCommand_ModifyInboxEntry.h"
 #include "Album.h"
 #include "collection/Collection.h"
 #include "Pipeline.h"
@@ -38,8 +37,10 @@
 
 using namespace Tomahawk;
 
-static QHash< QString, track_wptr > s_tracks;
-static QMutex s_mutex;
+QHash< QString, track_wptr > Track::s_tracksByName = QHash< QString, track_wptr >();
+
+static QMutex s_nameCacheMutex;
+
 
 inline QString
 cacheKey( const QString& artist, const QString& track, const QString& album, int duration, const QString& composer, unsigned int albumpos, unsigned int discnumber )
@@ -60,35 +61,66 @@ Track::get( const QString& artist, const QString& track, const QString& album, i
         return track_ptr();
     }
 
-    QMutexLocker lock( &s_mutex );
+    QMutexLocker lock( &s_nameCacheMutex );
     const QString key = cacheKey( artist, track, album, duration, composer, albumpos, discnumber );
-    if ( s_tracks.contains( key ) )
+    if ( s_tracksByName.contains( key ) )
     {
-        return s_tracks.value( key );
+        track_wptr track = s_tracksByName.value( key );
+        if ( track )
+            return track.toStrongRef();
     }
 
     track_ptr t = track_ptr( new Track( artist, track, album, duration, composer, albumpos, discnumber ), &Track::deleteLater );
     t->setWeakRef( t.toWeakRef() );
-    s_tracks.insert( key, t );
+    s_tracksByName.insert( key, t );
 
     return t;
 }
 
 
-Track::Track( const QString& artist, const QString& track, const QString& album, int duration, const QString& composer, unsigned int albumpos, unsigned int discnumber )
-    : m_artist( artist )
-    , m_composer( composer )
+track_ptr
+Track::get( unsigned int id, const QString& artist, const QString& track, const QString& album, int duration, const QString& composer, unsigned int albumpos, unsigned int discnumber )
+{
+    QMutexLocker lock( &s_nameCacheMutex );
+    const QString key = cacheKey( artist, track, album, duration, composer, albumpos, discnumber );
+    if ( s_tracksByName.contains( key ) )
+    {
+        track_wptr track = s_tracksByName.value( key );
+        if ( track )
+            return track;
+    }
+
+    track_ptr t = track_ptr( new Track( id, artist, track, album, duration, composer, albumpos, discnumber ), &Track::deleteLater );
+    t->setWeakRef( t.toWeakRef() );
+    s_tracksByName.insert( key, t );
+
+    return t;
+}
+
+
+Track::Track( unsigned int id, const QString& artist, const QString& track, const QString& album, int duration, const QString& composer, unsigned int albumpos, unsigned int discnumber )
+    : m_composer( composer )
     , m_album( album )
-    , m_track( track )
     , m_duration( duration )
     , m_albumpos( albumpos )
     , m_discnumber( discnumber )
-    , m_socialActionsLoaded( false )
-    , m_simTracksLoaded( false )
-    , m_lyricsLoaded( false )
-    , m_infoJobs( 0 )
 {
-    updateSortNames();
+    m_trackData = TrackData::get( id, artist, track );
+
+    init();
+}
+
+
+Track::Track( const QString& artist, const QString& track, const QString& album, int duration, const QString& composer, unsigned int albumpos, unsigned int discnumber )
+    : m_composer( composer )
+    , m_album( album )
+    , m_duration( duration )
+    , m_albumpos( albumpos )
+    , m_discnumber( discnumber )
+{
+    m_trackData = TrackData::get( 0, artist, track );
+
+    init();
 }
 
 
@@ -99,27 +131,94 @@ Track::~Track()
 
 
 void
+Track::init()
+{
+    updateSortNames();
+
+    connect( m_trackData.data(), SIGNAL( attributesLoaded() ), SIGNAL( attributesLoaded() ) );
+    connect( m_trackData.data(), SIGNAL( socialActionsLoaded() ), SIGNAL( socialActionsLoaded() ) );
+    connect( m_trackData.data(), SIGNAL( statsLoaded() ), SIGNAL( statsLoaded() ) );
+    connect( m_trackData.data(), SIGNAL( similarTracksLoaded() ), SIGNAL( similarTracksLoaded() ) );
+    connect( m_trackData.data(), SIGNAL( lyricsLoaded() ), SIGNAL( lyricsLoaded() ) );
+}
+
+
+void
 Track::deleteLater()
 {
-    QMutexLocker lock( &s_mutex );
+    QMutexLocker lock( &s_nameCacheMutex );
 
-    const QString key = cacheKey( m_artist, m_track, m_album, m_duration, m_composer, m_albumpos, m_discnumber );
-    if ( s_tracks.contains( key ) )
+    const QString key = cacheKey( artist(), track(), m_album, m_duration, m_composer, m_albumpos, m_discnumber );
+    if ( s_tracksByName.contains( key ) )
     {
-        s_tracks.remove( key );
+        s_tracksByName.remove( key );
     }
 
     QObject::deleteLater();
 }
 
 
+unsigned int
+Track::trackId() const
+{
+    return m_trackData->trackId();
+}
+
+
+void
+Track::startPlaying()
+{
+    DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( weakRef().toStrongRef(),
+                                                                        DatabaseCommand_LogPlayback::Started );
+    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+
+
+}
+
+
+void
+Track::finishPlaying( int timeElapsed )
+{
+    DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( weakRef().toStrongRef(),
+                                                                        DatabaseCommand_LogPlayback::Finished,
+                                                                        timeElapsed );
+    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+
+    bool isUnlistened = false;
+    foreach ( Tomahawk::SocialAction action, allSocialActions() )
+    {
+        if ( action.action == "Inbox" && action.value.toBool() == true )
+        {
+            isUnlistened = true;
+            break;
+        }
+    }
+
+    if ( isUnlistened )
+    {
+        DatabaseCommand_ModifyInboxEntry* cmd = new DatabaseCommand_ModifyInboxEntry( toQuery(), false );
+        Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+
+        // The dbcmd does this in the DB, but let's update the TrackData ASAP
+        QList< Tomahawk::SocialAction > actions = allSocialActions();
+        for ( QList< Tomahawk::SocialAction >::iterator it = actions.begin();
+              it != actions.end(); ++it )
+        {
+            if ( it->action == "Inbox" )
+            {
+                it->value = false; //listened!
+            }
+        }
+        m_trackData->setAllSocialActions( actions ); //emits socialActionsLoaded which gets propagated here
+    }
+}
+
+
 void
 Track::updateSortNames()
 {
-    m_artistSortname = DatabaseImpl::sortname( m_artist, true );
     m_composerSortname = DatabaseImpl::sortname( m_composer, true );
     m_albumSortname = DatabaseImpl::sortname( m_album );
-    m_trackSortname = DatabaseImpl::sortname( m_track );
 }
 
 
@@ -183,138 +282,74 @@ Track::toQuery()
 void
 Track::loadStats()
 {
-    DatabaseCommand_TrackStats* cmd = new DatabaseCommand_TrackStats( m_ownRef.toStrongRef() );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+    m_trackData->loadStats();
 }
 
 
 QList< Tomahawk::PlaybackLog >
 Track::playbackHistory( const Tomahawk::source_ptr& source ) const
 {
-    QList< Tomahawk::PlaybackLog > history;
-
-    foreach ( const PlaybackLog& log, m_playbackHistory )
-    {
-        if ( source.isNull() || log.source == source )
-        {
-            history << log;
-        }
-    }
-
-    return history;
-}
-
-
-void
-Track::setPlaybackHistory( const QList< Tomahawk::PlaybackLog >& playbackData )
-{
-    m_playbackHistory = playbackData;
-    emit statsLoaded();
+    return m_trackData->playbackHistory( source );
 }
 
 
 unsigned int
 Track::playbackCount( const source_ptr& source )
 {
-    unsigned int count = 0;
-    foreach ( const PlaybackLog& log, m_playbackHistory )
-    {
-        if ( source.isNull() || log.source == source )
-            count++;
-    }
+    return m_trackData->playbackCount( source );
+}
 
-    return count;
+
+void
+Track::loadAttributes()
+{
+    m_trackData->loadAttributes();
 }
 
 
 void
 Track::loadSocialActions()
 {
-    if ( m_socialActionsLoaded )
-        return;
-
-    m_socialActionsLoaded = true;
-
-    DatabaseCommand_LoadSocialActions* cmd = new DatabaseCommand_LoadSocialActions( m_ownRef.toStrongRef() );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
-}
-
-
-void
-Track::setAllSocialActions( const QList< SocialAction >& socialActions )
-{
-    m_allSocialActions = socialActions;
-    parseSocialActions();
-
-    emit socialActionsLoaded();
+    m_trackData->loadSocialActions();
 }
 
 
 QList< SocialAction >
 Track::allSocialActions() const
 {
-    return m_allSocialActions;
-}
-
-
-void
-Track::parseSocialActions()
-{
-    QListIterator< Tomahawk::SocialAction > it( m_allSocialActions );
-    unsigned int highestTimestamp = 0;
-
-    while ( it.hasNext() )
-    {
-        Tomahawk::SocialAction socialAction;
-        socialAction = it.next();
-        if ( socialAction.timestamp.toUInt() > highestTimestamp && socialAction.source->isLocal() )
-        {
-            m_currentSocialActions[ socialAction.action.toString() ] = socialAction.value.toBool();
-        }
-    }
+    return m_trackData->allSocialActions();
 }
 
 
 bool
 Track::loved()
 {
-    if ( m_socialActionsLoaded )
-    {
-        return m_currentSocialActions[ "Love" ].toBool();
-    }
-    else
-    {
-        loadSocialActions();
-    }
-
-    return false;
+    return m_trackData->loved();
 }
 
 
 void
-Track::setLoved( bool loved )
+Track::setLoved( bool loved, bool postToInfoSystem )
 {
-    m_currentSocialActions[ "Love" ] = loved;
+    m_trackData->setLoved( loved );
 
-    QVariantMap loveInfo;
-    Tomahawk::InfoSystem::InfoStringHash trackInfo;
-    trackInfo["title"] = track();
-    trackInfo["artist"] = artist();
-    trackInfo["album"] = album();
+    if ( postToInfoSystem )
+    {
+        QVariantMap loveInfo;
+        Tomahawk::InfoSystem::InfoStringHash trackInfo;
+        trackInfo["title"] = track();
+        trackInfo["artist"] = artist();
+        trackInfo["album"] = album();
 
-    loveInfo[ "trackinfo" ] = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
+        loveInfo[ "trackinfo" ] = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
 
-    Tomahawk::InfoSystem::InfoPushData pushData ( id(),
-                                                  ( loved ? Tomahawk::InfoSystem::InfoLove : Tomahawk::InfoSystem::InfoUnLove ),
-                                                  loveInfo,
-                                                  Tomahawk::InfoSystem::PushShortUrlFlag );
+        Tomahawk::InfoSystem::InfoPushData pushData ( m_trackData->id(),
+                                                    ( loved ? Tomahawk::InfoSystem::InfoLove : Tomahawk::InfoSystem::InfoUnLove ),
+                                                    loveInfo,
+                                                    Tomahawk::InfoSystem::PushShortUrlFlag );
 
-    Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );
-
-    DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction( m_ownRef.toStrongRef(), QString( "Love" ), loved ? QString( "true" ) : QString( "false" ) );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
-
-    emit socialActionsLoaded();
+        Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );
+    }
 }
 
 
@@ -466,136 +501,61 @@ Track::coverLoaded() const
 QList<Tomahawk::query_ptr>
 Track::similarTracks() const
 {
-    if ( !m_simTracksLoaded )
-    {
-        Tomahawk::InfoSystem::InfoStringHash trackInfo;
-        trackInfo["artist"] = artist();
-        trackInfo["track"] = track();
-
-        Tomahawk::InfoSystem::InfoRequestData requestData;
-        requestData.caller = id();
-        requestData.customData = QVariantMap();
-
-        requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
-        requestData.type = Tomahawk::InfoSystem::InfoTrackSimilars;
-        requestData.requestId = TomahawkUtils::infosystemRequestId();
-
-        connect( Tomahawk::InfoSystem::InfoSystem::instance(),
-                 SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
-                 SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ), Qt::UniqueConnection );
-
-        connect( Tomahawk::InfoSystem::InfoSystem::instance(),
-                 SIGNAL( finished( QString ) ),
-                 SLOT( infoSystemFinished( QString ) ), Qt::UniqueConnection );
-
-        m_infoJobs++;
-        Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
-    }
-
-    return m_similarTracks;
+    return m_trackData->similarTracks();
 }
 
 
 QStringList
 Track::lyrics() const
 {
-    if ( !m_lyricsLoaded )
-    {
-        Tomahawk::InfoSystem::InfoStringHash trackInfo;
-        trackInfo["artist"] = artist();
-        trackInfo["track"] = track();
-
-        Tomahawk::InfoSystem::InfoRequestData requestData;
-        requestData.caller = id();
-        requestData.customData = QVariantMap();
-
-        requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
-        requestData.type = Tomahawk::InfoSystem::InfoTrackLyrics;
-        requestData.requestId = TomahawkUtils::infosystemRequestId();
-
-        connect( Tomahawk::InfoSystem::InfoSystem::instance(),
-                 SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
-                 SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ), Qt::UniqueConnection );
-
-        connect( Tomahawk::InfoSystem::InfoSystem::instance(),
-                 SIGNAL( finished( QString ) ),
-                 SLOT( infoSystemFinished( QString ) ), Qt::UniqueConnection );
-
-        m_infoJobs++;
-        Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
-    }
-
-    return m_lyrics;
-}
-
-
-void
-Track::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
-{
-    if ( requestData.caller != id() )
-        return;
-
-    QVariantMap returnedData = output.value< QVariantMap >();
-    switch ( requestData.type )
-    {
-        case InfoSystem::InfoTrackLyrics:
-        {
-            m_lyrics = output.value< QVariant >().toString().split( "\n" );
-
-            m_lyricsLoaded = true;
-            emit lyricsLoaded();
-            break;
-        }
-
-        case InfoSystem::InfoTrackSimilars:
-        {
-            const QStringList artists = returnedData["artists"].toStringList();
-            const QStringList tracks = returnedData["tracks"].toStringList();
-
-            for ( int i = 0; i < tracks.count() && i < 50; i++ )
-            {
-                m_similarTracks << Query::get( artists.at( i ), tracks.at( i ), QString(), uuid(), false );
-            }
-            Pipeline::instance()->resolve( m_similarTracks );
-
-            m_simTracksLoaded = true;
-            emit similarTracksLoaded();
-
-            break;
-        }
-
-        default:
-            Q_ASSERT( false );
-    }
-}
-
-
-void
-Track::infoSystemFinished( QString target )
-{
-    if ( target != id() )
-        return;
-
-    if ( --m_infoJobs == 0 )
-    {
-        disconnect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
-                    this, SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
-
-        disconnect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ),
-                    this, SLOT( infoSystemFinished( QString ) ) );
-    }
-
-    emit updated();
+    return m_trackData->lyrics();
 }
 
 
 QString
-Track::id() const
+Track::artist() const
 {
-    if ( m_uuid.isEmpty() )
-    {
-        m_uuid = uuid();
-    }
+    return m_trackData->artist();
+}
 
-    return m_uuid;
+
+QString
+Track::track() const
+{
+    return m_trackData->track();
+}
+
+
+QVariantMap
+Track::attributes() const
+{
+    return m_trackData->attributes();
+}
+
+
+int
+Track::year() const
+{
+    return m_trackData->year();
+}
+
+
+void
+Track::share( const Tomahawk::source_ptr& source )
+{
+    m_trackData->share( source );
+}
+
+
+QString
+Track::artistSortname() const
+{
+    return m_trackData->artistSortname();
+}
+
+
+QString
+Track::trackSortname() const
+{
+    return m_trackData->trackSortname();
 }

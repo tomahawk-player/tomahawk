@@ -26,7 +26,7 @@
 using namespace Tomahawk;
 
 
-DatabaseCommand_TrackStats::DatabaseCommand_TrackStats( const track_ptr& track, QObject* parent )
+DatabaseCommand_TrackStats::DatabaseCommand_TrackStats( const trackdata_ptr& track, QObject* parent )
     : DatabaseCommand( parent )
     , m_track( track )
 {
@@ -45,23 +45,18 @@ DatabaseCommand_TrackStats::exec( DatabaseImpl* dbi )
 {
     TomahawkSqlQuery query = dbi->newquery();
 
-    if ( !m_track.isNull() )
+    if ( m_track )
     {
-        int artid = dbi->artistId( m_track->artist(), false );
-        if( artid < 1 )
-            return;
-
-        int trkid = dbi->trackId( artid, m_track->track(), false );
-        if( trkid < 1 )
+        if ( m_track->trackId() == 0 )
             return;
 
         query.prepare( "SELECT * "
                        "FROM playback_log "
                        "WHERE track = ? ORDER BY playtime ASC" );
-        query.addBindValue( trkid );
+        query.addBindValue( m_track->trackId() );
         query.exec();
     }
-    else if ( !m_artist.isNull() )
+    else if ( m_artist )
     {
         query.prepare( "SELECT playback_log.* "
                        "FROM playback_log, track "
@@ -78,11 +73,11 @@ DatabaseCommand_TrackStats::exec( DatabaseImpl* dbi )
         log.timestamp = query.value( 3 ).toUInt();
         log.secsPlayed = query.value( 4 ).toUInt();
 
-        if ( !log.source.isNull() )
+        if ( log.source )
             playbackData.append( log );
     }
 
-    if ( !m_track.isNull() )
+    if ( m_track )
         m_track->setPlaybackHistory( playbackData );
     else
         m_artist->setPlaybackHistory( playbackData );

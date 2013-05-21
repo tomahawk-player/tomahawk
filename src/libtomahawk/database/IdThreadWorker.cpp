@@ -23,6 +23,7 @@
 #include "Database.h"
 #include "DatabaseImpl.h"
 #include "Source.h"
+#include "utils/Logger.h"
 
 #define ID_THREAD_DEBUG 0
 
@@ -33,7 +34,8 @@ using namespace Tomahawk;
 namespace {
     enum QueryType {
         ArtistType,
-        AlbumType
+        AlbumType,
+        TrackType
     };
 }
 
@@ -46,6 +48,7 @@ struct QueueItem
     QFutureInterface<unsigned int> promise;
     artist_ptr artist;
     album_ptr album;
+    trackdata_ptr track;
     QueryType type;
     bool create;
 };
@@ -80,11 +83,12 @@ IdThreadWorker::stop()
 
 
 QueueItem*
-internalGet( const artist_ptr& artist, const album_ptr& album, bool autoCreate, QueryType type )
+internalGet( const artist_ptr& artist, const album_ptr& album, const trackdata_ptr& track, bool autoCreate, QueryType type )
 {
     QueueItem* item = new QueueItem;
     item->artist = artist;
     item->album = album;
+    item->track = track;
     item->type = type;
     item->create = autoCreate;
     item->promise.reportStarted();
@@ -96,11 +100,11 @@ internalGet( const artist_ptr& artist, const album_ptr& album, bool autoCreate, 
 void
 IdThreadWorker::getArtistId( const artist_ptr& artist, bool autoCreate )
 {
-    QueueItem* item = internalGet( artist, album_ptr(), autoCreate, ArtistType );
+    QueueItem* item = internalGet( artist, album_ptr(), trackdata_ptr(), autoCreate, ArtistType );
     artist->setIdFuture( item->promise.future() );
 
 #if ID_THREAD_DEBUG
-    qDebug() << "QUEUEING ARTIST:" << artist->name();
+    tDebug() << "QUEUEING ARTIST:" << artist->name();
 #endif
 
     s_mutex.lock();
@@ -108,7 +112,7 @@ IdThreadWorker::getArtistId( const artist_ptr& artist, bool autoCreate )
     s_mutex.unlock();
     s_waitCond.wakeOne();
 #if ID_THREAD_DEBUG
-    qDebug() << "DONE WOKE UP THREAD:" << artist->name();
+    tDebug() << "DONE WOKE UP THREAD:" << artist->name();
 #endif
 }
 
@@ -116,19 +120,38 @@ IdThreadWorker::getArtistId( const artist_ptr& artist, bool autoCreate )
 void
 IdThreadWorker::getAlbumId( const album_ptr& album, bool autoCreate )
 {
-    QueueItem* item = internalGet( artist_ptr(), album, autoCreate, AlbumType );
-    album->setIdFuture(  item->promise.future() );
+    QueueItem* item = internalGet( artist_ptr(), album, trackdata_ptr(), autoCreate, AlbumType );
+    album->setIdFuture( item->promise.future() );
 
 #if ID_THREAD_DEBUG
-    qDebug() << "QUEUEING ALUBM:" << album->artist()->name() << album->name();
+    tDebug() << "QUEUEING ALUBM:" << album->artist()->name() << album->name();
 #endif
     s_mutex.lock();
     s_workQueue.enqueue( item );
     s_mutex.unlock();
     s_waitCond.wakeOne();
 #if ID_THREAD_DEBUG
-    qDebug() << "DONE WOKE UP THREAD:" << album->artist()->name() << album->name();
+    tDebug() << "DONE WOKE UP THREAD:" << album->artist()->name() << album->name();
 #endif
+}
+
+
+void
+IdThreadWorker::getTrackId( const trackdata_ptr& track, bool autoCreate )
+{
+    QueueItem* item = internalGet( artist_ptr(), album_ptr(), track, autoCreate, TrackType );
+    track->setIdFuture( item->promise.future() );
+
+    #if ID_THREAD_DEBUG
+    tDebug() << "QUEUEING TRACK:" << track->toString();
+    #endif
+    s_mutex.lock();
+    s_workQueue.enqueue( item );
+    s_mutex.unlock();
+    s_waitCond.wakeOne();
+    #if ID_THREAD_DEBUG
+    tDebug() << "DONE WOKE UP THREAD:" << track->toString();
+    #endif
 }
 
 
@@ -141,11 +164,11 @@ IdThreadWorker::run()
     {
         s_mutex.lock();
 #if ID_THREAD_DEBUG
-        qDebug() << "IdWorkerThread waiting on condition...";
+        tDebug() << "IdWorkerThread waiting on condition...";
 #endif
         s_waitCond.wait( &s_mutex );
 #if ID_THREAD_DEBUG
-        qDebug() << "IdWorkerThread WOKEN UP";
+        tDebug() << "IdWorkerThread WOKEN UP";
 #endif
 
         while ( !s_workQueue.isEmpty() )
@@ -154,12 +177,29 @@ IdThreadWorker::run()
             s_mutex.unlock();
 
 #if ID_THREAD_DEBUG
-            qDebug() << "WITH CONTENTS:" << (item->type == ArtistType ? item->artist->name() :  item->album->artist()->name() + " _ " + item->album->name());
+            switch ( item->type )
+            {
+                case ArtistType:
+                {
+                    tDebug() << "WITH CONTENTS:" << item->artist->name();
+                    break;
+                }
+                case AlbumType:
+                {
+                    tDebug() << "WITH CONTENTS:" << item->album->artist()->name() + " _ " + item->album->name();
+                    break;
+                }
+                case TrackType:
+                {
+                    tDebug() << "WITH CONTENTS:" << item->track->artist() + " _ " + item->track->track();
+                    break;
+                }
+            }
 #endif
             if ( item->type == ArtistType )
             {
                 unsigned int id = m_impl->artistId( item->artist->name(), item->create );
-		item->promise.reportFinished( &id );
+                item->promise.reportFinished( &id );
 
                 item->artist->id();
                 delete item;
@@ -168,9 +208,18 @@ IdThreadWorker::run()
             {
                 unsigned int artistId = m_impl->artistId( item->album->artist()->name(), item->create );
                 unsigned int albumId = m_impl->albumId( artistId, item->album->name(), item->create );
-		item->promise.reportFinished( &albumId );
+                item->promise.reportFinished( &albumId );
 
                 item->album->id();
+                delete item;
+            }
+            else if ( item->type == TrackType )
+            {
+                unsigned int artistId = m_impl->artistId( item->track->artist(), item->create );
+                unsigned int trackId = m_impl->trackId( artistId, item->track->track(), item->create );
+                item->promise.reportFinished( &trackId );
+
+                item->track->trackId();
                 delete item;
             }
 

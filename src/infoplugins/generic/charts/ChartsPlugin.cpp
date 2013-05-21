@@ -55,7 +55,7 @@ ChartsPlugin::ChartsPlugin()
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << QThread::currentThread();
 
-    m_chartVersion = "2.6.5";
+    m_chartVersion = "2.6.6";
     m_supportedGetTypes <<  InfoChart << InfoChartCapabilities;
     m_cacheIdentifier = TomahawkUtils::md5( QString("ChartsPlugin" + m_chartVersion ).toUtf8() );
 }
