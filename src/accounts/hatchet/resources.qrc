@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/hatchet-account">
+        <file alias="hatchet-icon-512x512.png">admin/icons/hatchet-icon-512x512.png</file>
+        <file alias="dreamcatcher.pem">admin/certs/dreamcatcher.pem</file>
+        <file alias="startcomroot.pem">admin/certs/startcomroot.pem</file>
+    </qresource>
+</RCC>
