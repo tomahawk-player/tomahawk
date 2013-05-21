@@ -43,6 +43,8 @@ HatchetAccountConfig::HatchetAccountConfig( HatchetAccount* account )
 
     m_ui->setupUi( this );
 
+    m_ui->label->setPixmap( m_ui->label->pixmap()->scaled( QSize( 128, 127 ), Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
+
     m_ui->emailLabel->hide();
     m_ui->emailEdit->hide();
 
