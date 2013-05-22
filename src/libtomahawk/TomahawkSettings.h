@@ -28,7 +28,7 @@
 #include <QtNetwork/QNetworkProxy>
 #include <QStringList>
 
-#define TOMAHAWK_SETTINGS_VERSION 14
+#define TOMAHAWK_SETTINGS_VERSION 15
 
 /**
  * Convenience wrapper around QSettings for tomahawk-specific config
