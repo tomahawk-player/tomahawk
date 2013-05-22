@@ -1385,6 +1385,19 @@ yhdistää ja toistaa sinulta virtaa?</translation>
     </message>
 </context>
 <context>
+    <name>QSQLiteResult</name>
+    <message>
+        <location filename="../src/libtomahawk/database/TomahawkSqlQuery.cpp" line="89"/>
+        <source>No query</source>
+        <translation>Ei kyselyä</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/database/TomahawkSqlQuery.cpp" line="90"/>
+        <source>Parameter count mismatch</source>
+        <translation>Parametrien määrä ei täsmää</translation>
+    </message>
+</context>
+<context>
     <name>QtScriptResolver</name>
     <message>
         <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="583"/>
