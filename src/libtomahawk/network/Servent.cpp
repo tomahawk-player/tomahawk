@@ -398,7 +398,7 @@ Servent::getSipInfoForOldVersions( const QList<SipInfo>& sipInfos ) const
     foreach ( SipInfo _info, sipInfos )
     {
         QHostAddress ha = QHostAddress( _info.host() );
-        if ( ( Servent::isValidExternalIP( ha ) && ha.protocol() == QAbstractSocket::IPv4Protocol ) || ( ha.protocol() == QAbstractSocket::UnknownNetworkLayerProtocol ) )
+        if ( ( Servent::isValidExternalIP( ha ) && ha.protocol() == QAbstractSocket::IPv4Protocol ) || ( ha.protocol() == QAbstractSocket::UnknownNetworkLayerProtocol ) || ( ha.isNull() && !_info.host().isEmpty() ))
         {
             info = _info;
             break;
@@ -931,7 +931,7 @@ Servent::connectToPeer(const peerinfo_ptr& peerInfo, const QList<SipInfo>& sipIn
     // Check that we are not connecting to ourselves
     foreach( QHostAddress ha, m_externalAddresses )
     {
-        if ( QHostAddress( info.host() ) == ha)
+        if ( info.host() == ha.toString() )
         {
             peerInfoDebug(peerInfo) << Q_FUNC_INFO << "Tomahawk won't try to connect to" << info.host() << ":" << info.port() << ": same IP as ourselves.";
             connectToPeer( peerInfo, sipInfo, conn );
