@@ -21,13 +21,13 @@
 
 #include <QObject>
 #include <QVariantHash>
+#include <QMutex>
 
 
 namespace QKeychain
 {
 class Job;
 class ReadPasswordJob;
-class WritePasswordJob;
 }
 
 
@@ -69,6 +69,7 @@ private slots:
 private:
     QHash< QString, QVariantHash > m_credentials;
     QList< QKeychain::ReadPasswordJob* > m_readJobs;
+    QMutex m_mutex;
 };
 
 } //namespace Accounts

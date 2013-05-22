@@ -24,6 +24,8 @@
 
 #include <QStringList>
 
+#define TOMAHAWK_KEYCHAINSVC QLatin1String("tomahawkaccounts")
+
 namespace Tomahawk
 {
 
@@ -43,7 +45,7 @@ CredentialsManager::loadCredentials( QStringList keys )
 {
     foreach ( QString key, keys )
     {
-        QKeychain::ReadPasswordJob* j = new QKeychain::ReadPasswordJob( QLatin1String( "tomahawkaccounts" ), this );
+        QKeychain::ReadPasswordJob* j = new QKeychain::ReadPasswordJob( TOMAHAWK_KEYCHAINSVC, this );
         j->setKey( key );
         j->setAutoDelete( false );
 #if defined( Q_OS_UNIX ) && !defined( Q_OS_MAC )
@@ -76,18 +78,46 @@ CredentialsManager::credentials( const QString& key ) const
 void
 CredentialsManager::setCredentials( const QString& key, const QVariantHash& value )
 {
+    QMutexLocker locker( &m_mutex );
+
+    QKeychain::Job* j;
     if ( value.isEmpty() )
     {
+        if ( !m_credentials.contains( key ) ) //if we don't have any credentials for this key, we bail
+            return;
+
         m_credentials.remove( key );
 
-        //TODO: delete job
+        QKeychain::DeletePasswordJob* dj = new QKeychain::DeletePasswordJob( TOMAHAWK_KEYCHAINSVC, this );
+        dj->setKey( key );
+        j = dj;
     }
     else
     {
+        if ( value == m_credentials.value( key ) ) //if the credentials haven't actually changed, we bail
+            return;
+
         m_credentials.insert( key, value );
 
-        //TODO: write job
+        QByteArray data;
+        {
+            QDataStream ds( &data, QIODevice::WriteOnly );
+            ds << value;
+        }
+
+        QKeychain::WritePasswordJob* wj = new QKeychain::WritePasswordJob( TOMAHAWK_KEYCHAINSVC, this );
+        wj->setKey( key );
+        wj->setBinaryData( data );
+        j = wj;
     }
+
+    j->setAutoDelete( false );
+#if defined( Q_OS_UNIX ) && !defined( Q_OS_MAC )
+    j->setInsecureFallback( true );
+#endif
+    connect( j, SIGNAL( finished( QKeychain::Job* ) ),
+             SLOT( keychainJobFinished( QKeychain::Job* ) ) );
+    j->start();
 }
 
 
@@ -113,14 +143,14 @@ CredentialsManager::keychainJobFinished( QKeychain::Job* j )
                 emit ready();
             }
         }
-    }
-    else if ( QKeychain::WritePasswordJob* writeJob = qobject_cast< QKeychain::WritePasswordJob* >( j ) )
-    {
-        tLog() << Q_FUNC_INFO << "QtKeychain writeJob finished";
-    }
-    else if ( QKeychain::DeletePasswordJob* deleteJob = qobject_cast< QKeychain::DeletePasswordJob* >( j ) )
-    {
-        tLog() << Q_FUNC_INFO << "QtKeychain deleteJob finished";
+        else if ( QKeychain::WritePasswordJob* writeJob = qobject_cast< QKeychain::WritePasswordJob* >( j ) )
+        {
+            tLog() << Q_FUNC_INFO << "QtKeychain writeJob for" << writeJob->key() << "finished";
+        }
+        else if ( QKeychain::DeletePasswordJob* deleteJob = qobject_cast< QKeychain::DeletePasswordJob* >( j ) )
+        {
+            tLog() << Q_FUNC_INFO << "QtKeychain deleteJob for" << deleteJob->key() << "finished";
+        }
     }
     else
     {
