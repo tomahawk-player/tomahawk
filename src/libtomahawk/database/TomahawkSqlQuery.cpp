@@ -23,6 +23,7 @@
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
+#include <QCoreApplication>
 #include <QSqlError>
 #include <QTime>
 #include <QThread>
@@ -85,8 +86,8 @@ TomahawkSqlQuery::exec()
     unsigned int retries = 0;
     while ( !QSqlQuery::exec() && ++retries < 10 )
     {
-        if ( lastError().text().toLower().contains( "no query" ) ||
-             lastError().text().toLower().contains( "parameter count mismatch" ) )
+        if ( lastError().text() == QCoreApplication::translate( "QSQLiteResult", "No query" ) ||
+             lastError().text() == QCoreApplication::translate( "QSQLiteResult", "Parameter count mismatch" ) )
         {
             tDebug() << Q_FUNC_INFO << "Re-preparing query!";
 
@@ -149,6 +150,7 @@ TomahawkSqlQuery::showError()
     tLog() << endl << "*** DATABASE ERROR ***" << endl
            << lastQuery() << endl
            << "boundValues:" << boundValues() << endl
+           << lastError().number() << endl
            << lastError().text() << endl
            << lastError().databaseText() << endl;
 
@@ -161,5 +163,5 @@ TomahawkSqlQuery::isBusyError( const QSqlError& error ) const
 {
     const QString text = error.text().trimmed().toLower();
 
-    return ( text.contains( "locked" ) || text.contains( "busy" ) );
+    return ( error.number() == 5 || error.number() == 6 || text.contains( "locked" ) || text.contains( "busy" ) );
 }

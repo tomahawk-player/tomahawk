@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -18,6 +19,8 @@
  */
 
 #include "AccountManager.h"
+
+#include "CredentialsManager.h"
 #include "config.h"
 #include "SourceList.h"
 #include "TomahawkSettings.h"
@@ -32,6 +35,7 @@
 #include <QtCore/QPluginLoader>
 #include <QtCore/QCoreApplication>
 #include <QTimer>
+
 
 namespace Tomahawk
 {
@@ -52,6 +56,7 @@ AccountManager::instance()
 
 AccountManager::AccountManager( QObject *parent )
     : QObject( parent )
+    , m_readyForSip( false )
 {
     s_instance = this;
 
@@ -86,7 +91,7 @@ AccountManager::init()
     m_accountFactories[ f->factoryId() ] = f;
     registerAccountFactoryForFilesystem( f );
 
-    emit ready();
+    emit readyForFactories(); //Notifies TomahawkApp to load the remaining AccountFactories, then Accounts from config
 }
 
 
@@ -276,7 +281,22 @@ void
 AccountManager::loadFromConfig()
 {
     QStringList accountIds = TomahawkSettings::instance()->accounts();
+
+    qDebug() << "LOADING ALL CREDENTIALS" << accountIds;
+
+    m_creds = new CredentialsManager( this );
+    connect( m_creds, SIGNAL( ready() ),
+             this, SLOT( finishLoadingFromConfig() ) );
+    m_creds->loadCredentials( accountIds );
+}
+
+
+void
+AccountManager::finishLoadingFromConfig()
+{
+    QStringList accountIds = m_creds->keys();
     qDebug() << "LOADING ALL ACCOUNTS" << accountIds;
+
     foreach ( const QString& accountId, accountIds )
     {
         QString pluginFactory = factoryFromId( accountId );
@@ -286,6 +306,9 @@ AccountManager::loadFromConfig()
             addAccount( account );
         }
     }
+
+    m_readyForSip = true;
+    emit readyForSip();
 }
 
 
@@ -498,6 +521,6 @@ AccountManager::onStateChanged( Account::ConnectionState state )
 }
 
 
-};
+}
 
-};
+}

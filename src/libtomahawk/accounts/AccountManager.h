@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -34,6 +35,8 @@ namespace Tomahawk
 namespace Accounts
 {
 
+class CredentialsManager;
+
 class DLLEXPORT AccountManager : public QObject
 {
     Q_OBJECT
@@ -45,7 +48,7 @@ public:
     virtual ~AccountManager();
 
     void loadFromConfig();
-    void initSIP();
+    void initSIP(); //only call this after isReadyForSip returns true
 
     void enableAccount( Account* account );
     void disableAccount( Account* account );
@@ -82,7 +85,10 @@ public:
 
     Account* zeroconfAccount() const;
 
-    bool isConnected() { return m_connected; }
+    bool isConnected() const { return m_connected; }
+    bool isReadyForSip() const { return m_readyForSip; }
+
+    CredentialsManager* credentialsManager() const { return m_creds; }
 
 public slots:
     void connectAll();
@@ -90,7 +96,8 @@ public slots:
     void toggleAccountsConnected();
 
 signals:
-    void ready();
+    void readyForFactories(); //this happens first, right before loading accounts from config
+    void readyForSip();       //then this, so TomahawkApp can call initSIP if Servent is ready
 
     void added( Tomahawk::Accounts::Account* );
     void removed( Tomahawk::Accounts::Account* );
@@ -105,6 +112,7 @@ private slots:
     void init();
     void onStateChanged( Tomahawk::Accounts::Account::ConnectionState state );
     void onError( int code, const QString& msg );
+    void finishLoadingFromConfig();
 
     void onSettingsChanged();
 
@@ -117,10 +125,13 @@ private:
     Account* loadPlugin( const QString &accountId );
     void hookupAccount( Account* ) const;
 
+    CredentialsManager* m_creds;
+
     QList< Account* > m_accounts;
     QList< Account* > m_enabledAccounts;
     QList< Account* > m_connectedAccounts;
     bool m_connected;
+    bool m_readyForSip;
 
     QHash< AccountType, QList< Account* > > m_accountsByAccountType;
     QHash< QString, AccountFactory* > m_accountFactories;

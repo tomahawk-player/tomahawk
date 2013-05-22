@@ -1385,6 +1385,19 @@ connect and stream from you?</translation>
     </message>
 </context>
 <context>
+    <name>QSQLiteResult</name>
+    <message>
+        <location filename="../src/libtomahawk/database/TomahawkSqlQuery.cpp" line="89"/>
+        <source>No query</source>
+        <translation>No query</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/database/TomahawkSqlQuery.cpp" line="90"/>
+        <source>Parameter count mismatch</source>
+        <translation>Parameter count mismatch</translation>
+    </message>
+</context>
+<context>
     <name>QtScriptResolver</name>
     <message>
         <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="583"/>
