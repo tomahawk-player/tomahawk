@@ -1,3 +1,4 @@
 set(TOMAHAWK_INCLUDE_DIRS
   "@PROJECT_SOURCE_DIR@/src/libtomahawk"
-  "@PROJECT_BINARY_DIR@")
+  "@PROJECT_BINARY_DIR@/src/libtomahawk"
+)
