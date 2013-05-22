@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -55,6 +56,7 @@ AccountManager::instance()
 
 AccountManager::AccountManager( QObject *parent )
     : QObject( parent )
+    , m_readyForSip( false )
 {
     s_instance = this;
 
@@ -89,7 +91,7 @@ AccountManager::init()
     m_accountFactories[ f->factoryId() ] = f;
     registerAccountFactoryForFilesystem( f );
 
-    emit ready(); //Notifies TomahawkApp to load the remaining AccountFactories, then Accounts from config
+    emit readyForFactories(); //Notifies TomahawkApp to load the remaining AccountFactories, then Accounts from config
 }
 
 
@@ -304,6 +306,9 @@ AccountManager::finishLoadingFromConfig()
             addAccount( account );
         }
     }
+
+    m_readyForSip = true;
+    emit readyForSip();
 }
 
 
