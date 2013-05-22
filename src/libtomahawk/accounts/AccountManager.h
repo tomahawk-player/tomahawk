@@ -34,6 +34,8 @@ namespace Tomahawk
 namespace Accounts
 {
 
+class CredentialsManager;
+
 class DLLEXPORT AccountManager : public QObject
 {
     Q_OBJECT
@@ -105,6 +107,7 @@ private slots:
     void init();
     void onStateChanged( Tomahawk::Accounts::Account::ConnectionState state );
     void onError( int code, const QString& msg );
+    void finishLoadingFromConfig();
 
     void onSettingsChanged();
 
@@ -116,6 +119,8 @@ private:
 
     Account* loadPlugin( const QString &accountId );
     void hookupAccount( Account* ) const;
+
+    CredentialsManager* m_creds;
 
     QList< Account* > m_accounts;
     QList< Account* > m_enabledAccounts;
