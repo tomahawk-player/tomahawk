@@ -204,6 +204,7 @@ list(APPEND libSources
     accounts/Account.cpp
     accounts/AccountModel.cpp
     accounts/AccountModelFilterProxy.cpp
+    accounts/CredentialsManager.cpp
     accounts/ResolverAccount.cpp
     accounts/AccountDelegate.cpp
     accounts/DelegateConfigWrapper.cpp
