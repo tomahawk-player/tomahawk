@@ -3,6 +3,7 @@
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -249,7 +250,8 @@ TomahawkApp::init()
 
     tDebug() << "Init AccountManager.";
     m_accountManager = QPointer< Tomahawk::Accounts::AccountManager >( new Tomahawk::Accounts::AccountManager( this ) );
-    connect( m_accountManager.data(), SIGNAL( ready() ), SLOT( accountManagerReady() ) );
+    connect( m_accountManager.data(), SIGNAL( readyForFactories() ), SLOT( initFactoriesForAccountManager() ) );
+    connect( m_accountManager.data(), SIGNAL( readyForSip() ), SLOT( initSIP() ) );
 
     Echonest::Config::instance()->setNetworkAccessManager( TomahawkUtils::nam() );
 #ifndef ENABLE_HEADLESS
@@ -616,13 +618,32 @@ TomahawkApp::initServent()
 }
 
 
-// Called after Servent emits ready()
+void
+TomahawkApp::initFactoriesForAccountManager()
+{
+#ifdef LIBLASTFM_FOUND
+    Tomahawk::Accounts::LastFmAccountFactory* lastfmFactory = new Tomahawk::Accounts::LastFmAccountFactory();
+    m_accountManager.data()->addAccountFactory( lastfmFactory );
+#endif
+
+    Tomahawk::Accounts::SpotifyAccountFactory* spotifyFactory = new Tomahawk::Accounts::SpotifyAccountFactory;
+    m_accountManager.data()->addAccountFactory( spotifyFactory );
+    m_accountManager.data()->registerAccountFactoryForFilesystem( spotifyFactory );
+
+    Tomahawk::Accounts::AccountManager::instance()->loadFromConfig();
+}
+
+
+// This method will be called twice during Tomahawk startup.
+// We don't know which is going to be ready first, AccountManager or Servent, but this goes through
+// only when both are.
 void
 TomahawkApp::initSIP()
 {
     tDebug() << Q_FUNC_INFO;
     //FIXME: jabber autoconnect is really more, now that there is sip -- should be renamed and/or split out of jabber-specific settings
-    if ( !arguments().contains( "--nosip" ) )
+    if ( !arguments().contains( "--nosip" ) &&
+         Servent::instance()->isReady() && Accounts::AccountManager::instance()->isReadyForSip() )
     {
         tDebug( LOGINFO ) << "Connecting SIP classes";
         Accounts::AccountManager::instance()->initSIP();
@@ -642,22 +663,6 @@ TomahawkApp::spotifyApiCheckFinished()
 
     DropJob::setCanParseSpotifyPlaylists( !reply->error() );
 #endif
-}
-
-
-void
-TomahawkApp::accountManagerReady()
-{
-#ifdef LIBLASTFM_FOUND
-    Tomahawk::Accounts::LastFmAccountFactory* lastfmFactory = new Tomahawk::Accounts::LastFmAccountFactory();
-    m_accountManager.data()->addAccountFactory( lastfmFactory );
-#endif
-
-    Tomahawk::Accounts::SpotifyAccountFactory* spotifyFactory = new Tomahawk::Accounts::SpotifyAccountFactory;
-    m_accountManager.data()->addAccountFactory( spotifyFactory );
-    m_accountManager.data()->registerAccountFactoryForFilesystem( spotifyFactory );
-
-    Tomahawk::Accounts::AccountManager::instance()->loadFromConfig();
 }
 
 
