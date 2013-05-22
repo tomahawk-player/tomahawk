@@ -20,6 +20,8 @@
 #include "Account.h"
 
 #include "TomahawkSettings.h"
+#include "AccountManager.h"
+#include "CredentialsManager.h"
 
 namespace Tomahawk
 {
@@ -134,12 +136,14 @@ Account::syncConfig()
     s->beginGroup( "accounts/" + m_accountId );
     s->setValue( "accountfriendlyname", m_accountFriendlyName );
     s->setValue( "enabled", m_enabled );
-    s->setValue( "credentials", m_credentials );
     s->setValue( "configuration", m_configuration );
     s->setValue( "acl", m_acl );
     s->setValue( "types", m_types );
     s->endGroup();
     s->sync();
+
+    CredentialsManager* c = AccountManager::instance()->credentialsManager();
+    c->setCredentials( m_accountId, m_credentials );
 }
 
 
@@ -151,11 +155,13 @@ Account::loadFromConfig( const QString& accountId )
     s->beginGroup( "accounts/" + m_accountId );
     m_accountFriendlyName = s->value( "accountfriendlyname", QString() ).toString();
     m_enabled = s->value( "enabled", false ).toBool();
-    m_credentials = s->value( "credentials", QVariantHash() ).toHash();
     m_configuration = s->value( "configuration", QVariantHash() ).toHash();
     m_acl = s->value( "acl", QVariantMap() ).toMap();
     m_types = s->value( "types", QStringList() ).toStringList();
     s->endGroup();
+
+    CredentialsManager* c = AccountManager::instance()->credentialsManager();
+    m_credentials = c->credentials( m_accountId );
 }
 
 
@@ -166,12 +172,14 @@ Account::removeFromConfig()
     s->beginGroup( "accounts/" + m_accountId );
     s->remove( "accountfriendlyname" );
     s->remove( "enabled" );
-    s->remove( "credentials" );
     s->remove( "configuration" );
     s->remove( "acl" );
     s->remove( "types" );
     s->endGroup();
     s->remove( "accounts/" + m_accountId );
+
+    CredentialsManager* c = AccountManager::instance()->credentialsManager();
+    c->setCredentials( m_accountId, QVariantHash() );
 }
 
 

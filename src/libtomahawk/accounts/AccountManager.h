@@ -86,8 +86,9 @@ public:
     Account* zeroconfAccount() const;
 
     bool isConnected() const { return m_connected; }
-
     bool isReadyForSip() const { return m_readyForSip; }
+
+    CredentialsManager* credentialsManager() const { return m_creds; }
 
 public slots:
     void connectAll();

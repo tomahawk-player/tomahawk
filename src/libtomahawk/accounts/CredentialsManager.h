@@ -57,6 +57,9 @@ public:
 
     QStringList keys() const;
 
+    QVariantHash credentials( const QString& key ) const;
+    void setCredentials( const QString& key, const QVariantHash& value );
+
 signals:
     void ready();
 

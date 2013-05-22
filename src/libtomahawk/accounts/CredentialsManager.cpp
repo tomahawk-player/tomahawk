@@ -66,6 +66,31 @@ CredentialsManager::keys() const
 }
 
 
+QVariantHash
+CredentialsManager::credentials( const QString& key ) const
+{
+    return m_credentials.value( key );
+}
+
+
+void
+CredentialsManager::setCredentials( const QString& key, const QVariantHash& value )
+{
+    if ( value.isEmpty() )
+    {
+        m_credentials.remove( key );
+
+        //TODO: delete job
+    }
+    else
+    {
+        m_credentials.insert( key, value );
+
+        //TODO: write job
+    }
+}
+
+
 void
 CredentialsManager::keychainJobFinished( QKeychain::Job* j )
 {
