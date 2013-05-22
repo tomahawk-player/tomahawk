@@ -27,6 +27,7 @@
 #include "ScriptCollection.h"
 #include "SourceList.h"
 #include "TomahawkSettings.h"
+#include "TomahawkVersion.h"
 
 #include "accounts/AccountConfigWidget.h"
 
@@ -47,6 +48,11 @@
 #include <QMetaProperty>
 #include <QCryptographicHash>
 #include <QSslError>
+
+#ifdef QCA2_FOUND
+#include <QtCrypto>
+#endif
+
 
 #include <boost/bind.hpp>
 

@@ -25,7 +25,6 @@
 #include "Query.h"
 #include "utils/TomahawkUtils.h"
 #include "config.h"
-#include "TomahawkVersion.h"
 #include "utils/Logger.h"
 
 #include <QDir>
@@ -33,10 +32,6 @@
 #include <QThread>
 #include <QWebPage>
 #include <QWebFrame>
-
-#ifdef QCA2_FOUND
-#include <QtCrypto>
-#endif
 
 #include "DllMacro.h"
 
@@ -89,9 +84,6 @@ private:
     bool m_urlCallbackIsAsync;
     QVariantMap m_resolverConfig;
     QtScriptResolver* m_resolver;
-#ifdef QCA2_FOUND
-    QCA::Initializer m_qcaInit;
-#endif
 };
 
 class DLLEXPORT ScriptEngine : public QWebPage
