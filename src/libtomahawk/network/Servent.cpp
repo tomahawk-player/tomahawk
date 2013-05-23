@@ -27,6 +27,7 @@
 #include "ControlConnection.h"
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
+#include "network/ConnectionManager.h"
 #include "StreamConnection.h"
 #include "SourceList.h"
 #include "sip/SipInfo.h"
@@ -247,7 +248,6 @@ Servent::createConnectionKey( const QString& name, const QString &nodeid, const 
     return _key;
 }
 
-
 bool
 Servent::isValidExternalIP( const QHostAddress& addr )
 {
@@ -351,6 +351,17 @@ Servent::lookupControlConnection( const SipInfo& sipInfo )
     return NULL;
 }
 
+ControlConnection*
+Servent::lookupControlConnection( const QString& nodeid )
+{
+    foreach ( ControlConnection* c, m_controlconnections )
+    {
+        if ( c->id() == nodeid )
+             return c;
+    }
+    return NULL;
+}
+
 
 QList<SipInfo>
 Servent::getLocalSipInfos( const QString& nodeid, const QString& key )
@@ -391,7 +402,7 @@ Servent::getLocalSipInfos( const QString& nodeid, const QString& key )
 }
 
 SipInfo
-Servent::getSipInfoForOldVersions( const QList<SipInfo>& sipInfos ) const
+Servent::getSipInfoForOldVersions( const QList<SipInfo>& sipInfos )
 {
     SipInfo info = SipInfo();
     info.setVisible( false );
@@ -429,7 +440,7 @@ Servent::registerPeer( const Tomahawk::peerinfo_ptr& peerInfo )
         peerInfoDebug(peerInfo) << "we need to establish the connection now... thinking";
         if ( !connectedToSession( peerInfo->nodeId() ) )
         {
-            connectToPeer( peerInfo );
+            ConnectionManager::getManagerForNodeId( peerInfo->nodeId() )->handleSipInfo( peerInfo );
         }
         else
         {
@@ -491,40 +502,7 @@ void Servent::handleSipInfo( const Tomahawk::peerinfo_ptr& peerInfo )
     if ( peerInfo->sipInfos().isEmpty() )
         return;
 
-    // Respect different behaviour before 0.7.99
-    if ( !peerInfo->versionString().isEmpty() && TomahawkUtils::compareVersionStrings( peerInfo->versionString(), "Tomahawk Player EmptyOS 0.7.99" ) < 0)
-    {
-        SipInfo we = getSipInfoForOldVersions( getLocalSipInfos( QString(), QString() ) );
-        SipInfo they = peerInfo->sipInfos().first();
-        if ( they.isVisible() )
-        {
-            if ( !we.isVisible() || we.host() < they.host() || (we.host() == they.host() && we.port() < they.port()))
-            {
-                tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Initiate connection to" << peerInfo->id() << "at" << they.host() << "peer of:" << peerInfo->sipPlugin()->account()->accountFriendlyName();
-                connectToPeer( peerInfo );
-                // We connected to the peer, so we are done here.
-                return;
-            }
-        }
-    }
-    foreach ( SipInfo info, peerInfo->sipInfos() )
-    {
-        if (info.isVisible())
-        {
-            // There is at least one SipInfo that may be visible. Try connecting.
-            // Duplicate Connections are checked by connectToPeer, so we do not need to take care of this
-            tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Initiate connection to" << peerInfo->id() << "at" << info.host() << "peer of:" << peerInfo->sipPlugin()->account()->accountFriendlyName();
-            connectToPeer( peerInfo );
-            // We connected to the peer, so we are done here.
-            return;
-        }
-    }
-
-    // If we reach this point none of the previous SipInfos was visible.
-    if ( peerInfo->controlConnection() )
-      delete peerInfo->controlConnection();
-
-    tDebug() << Q_FUNC_INFO << peerInfo->id() << "They are not visible, doing nothing atm";
+    ConnectionManager::getManagerForNodeId( peerInfo->nodeId() )->handleSipInfo( peerInfo );
 }
 
 void
@@ -721,7 +699,6 @@ Servent::createParallelConnection( Connection* orig_conn, Connection* new_conn, 
     // if we can connect to them directly:
     if ( orig_conn && orig_conn->outbound() )
     {
-        QList<SipInfo> sipInfo = QList<SipInfo>();
         SipInfo info = SipInfo();
         info.setVisible( true );
         info.setKey( key );
@@ -729,8 +706,7 @@ Servent::createParallelConnection( Connection* orig_conn, Connection* new_conn, 
         info.setHost( orig_conn->socket()->peerAddress().toString() );
         info.setPort( orig_conn->peerPort() );
         Q_ASSERT( info.isValid() );
-        sipInfo.append( info );
-        connectToPeer( peerinfo_ptr(), sipInfo, new_conn );
+        initiateConnection( info, new_conn );
     }
     else // ask them to connect to us:
     {
@@ -755,13 +731,13 @@ Servent::socketConnected()
 {
     QTcpSocketExtra* sock = (QTcpSocketExtra*)sender();
 
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << thread() << "socket:" << sock << ", hostaddr:" << sock->peerAddress() << ", hostname:" << sock->peerName();
+    tLog( LOGVERBOSE ) << Q_FUNC_INFO << thread() << "socket:" << sock << ", hostaddr:" << sock->peerAddress() << ", hostname:" << sock->peerName();
 
     if ( sock->_conn.isNull() )
     {
         sock->close();
         sock->deleteLater();
-        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Socket's connection was null, could have timed out or been given an invalid address";
+        tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Socket's connection was null, could have timed out or been given an invalid address";
         return;
     }
 
@@ -769,9 +745,9 @@ Servent::socketConnected()
     handoverSocket( conn, sock );
 }
 
-
 // transfers ownership of socket to the connection and inits the connection
-void Servent::handoverSocket( Connection* conn, QTcpSocketExtra* sock )
+void
+Servent::handoverSocket( Connection* conn, QTcpSocketExtra* sock )
 {
     Q_ASSERT( conn );
     Q_ASSERT( sock );
@@ -780,8 +756,7 @@ void Servent::handoverSocket( Connection* conn, QTcpSocketExtra* sock )
 
     disconnect( sock, SIGNAL( readyRead() ),    this, SLOT( readyRead() ) );
     disconnect( sock, SIGNAL( disconnected() ), sock, SLOT( deleteLater() ) );
-    disconnect( sock, SIGNAL( error( QAbstractSocket::SocketError ) ),
-                this, SLOT( socketError( QAbstractSocket::SocketError ) ) );
+    disconnect( sock, SIGNAL( error( QAbstractSocket::SocketError ) ), this, SLOT( socketError( QAbstractSocket::SocketError ) ) );
 
     sock->_disowned = true;
     conn->setOutbound( sock->_outbound );
@@ -807,149 +782,33 @@ Servent::cleanupSocket( QTcpSocketExtra *sock )
 }
 
 void
-Servent::connectToPeer( const peerinfo_ptr& peerInfo )
+Servent::initiateConnection( const SipInfo& sipInfo, Connection* conn )
 {
-    Q_ASSERT( this->thread() == QThread::currentThread() );
-
-    peerInfoDebug( peerInfo ) << "connectToPeer: search for already established connections to the same nodeid:" << m_controlconnections.count() << "connections";
-    if ( peerInfo->controlConnection() )
-    {
-        if ( peerInfo->controlConnection()->isReady() && peerInfo->controlConnection()->isRunning() ) {
-            peerInfoDebug( peerInfo ) << Q_FUNC_INFO << "We have a running ControlConnection, so no use to connect.";
-            return;
-        }
-        else
-        {
-            peerInfoDebug( peerInfo ) << Q_FUNC_INFO << "deleting the existing ControlConnection";
-            delete peerInfo->controlConnection();
-        }
-    }
-
-    bool isDupe = false;
-    ControlConnection* conn = 0;
-    // try to find a ControlConnection with the same SipInfo, then we dont need to try to connect again
-
-    foreach ( ControlConnection* c, m_controlconnections )
-    {
-        Q_ASSERT( c );
-
-        if ( c->id() == peerInfo->nodeId() )
-        {
-            conn = c;
-
-            foreach ( const peerinfo_ptr& currentPeerInfo, c->peerInfos() )
-            {
-                peerInfoDebug( currentPeerInfo ) << "Same object:" << ( peerInfo == currentPeerInfo ) << ( peerInfo.data() == currentPeerInfo.data() ) << ( peerInfo->debugName() == currentPeerInfo->debugName() );
-
-                if ( peerInfo == currentPeerInfo )
-                {
-                    isDupe = true;
-                    peerInfoDebug( currentPeerInfo ) << "Not adding, because it's a dupe: peerInfoCount remains the same" << conn->peerInfos().count();
-                    break;
-                }
-            }
-
-            if ( !c->peerInfos().contains( peerInfo ) )
-            {
-                c->addPeerInfo( peerInfo );
-//                peerInfoDebug(peerInfo) << "Adding " << peerInfo->debugName() << ", not a dupe... new peerInfoCount:" << c->peerInfos().count();
-//                foreach ( const peerinfo_ptr& kuh, c->peerInfos() )
-//                {
-//                    peerInfoDebug(peerInfo) << " ** " << kuh->debugName();
-//                }
-            }
-
-            break;
-        }
-    }
-
-    peerInfoDebug( peerInfo ) << "connectToPeer: found a match:" << ( conn ? conn->name() : "false" ) << "dupe:" << isDupe;
-
-    if ( isDupe )
-    {
-        peerInfoDebug( peerInfo ) << "it's a dupe, nothing to do here, returning and stopping processing: peerInfoCount:" << conn->peerInfos().count();
-    }
-
-    if ( conn )
-        return;
-
-    QVariantMap m;
-    m["conntype"]  = "accept-offer";
-    m["key"]       = peerInfo->key();
-    m["nodeid"]    = Database::instance()->impl()->dbid();
-
-    peerInfoDebug(peerInfo) << "No match found, creating a new ControlConnection...";
-    conn = new ControlConnection( this );
-    conn->addPeerInfo( peerInfo );
-    conn->setFirstMessage( m );
-
-    if ( peerInfo->id().length() )
-        conn->setName( peerInfo->contactId() );
-    if ( peerInfo->nodeId().length() )
-        conn->setId( peerInfo->nodeId() );
-
-    conn->setProperty( "nodeid", peerInfo->nodeId() );
-
-    registerControlConnection( conn );
-    connectToPeer( peerInfo, peerInfo->sipInfos(), conn );
-}
-
-
-void
-Servent::connectToPeer(const peerinfo_ptr& peerInfo, const QList<SipInfo>& sipInfos, Connection* conn )
-{
-    if ( sipInfos.isEmpty() )
-    {
-        if ( conn != NULL ) {
-            peerInfoDebug(peerInfo) <<  Q_FUNC_INFO << "No more possible SIP endpoints for " << conn->name() << " skipping.";
-        } else {
-            peerInfoDebug(peerInfo) <<  Q_FUNC_INFO << "No more possible SIP endpoints for <null connection> skipping.";
-        }
-        // If a peerinfo was supplied and has a ControlConnection which should be destroyed, than use this
-        if ( !peerInfo.isNull() && peerInfo->controlConnection() )
-            delete peerInfo->controlConnection();
-        else
-            // Connecting failed, so destroy this connection.
-            delete conn;
-        return;
-    }
-    QList<SipInfo> sipInfo = QList<SipInfo>( sipInfos );
-    // Use first available SIP endpoint and remove it from the list
-    SipInfo info = sipInfo.takeFirst();
-    if ( !info.isVisible() )
-    {
-        peerInfoDebug(peerInfo) << Q_FUNC_INFO << "Try next SipInfo, we can't connect to this one";
-        connectToPeer( peerInfo, sipInfo, conn );
-        return;
-    }
-
-    peerInfoDebug(peerInfo) << Q_FUNC_INFO << info.host() << ":" << info.port() << thread() << QThread::currentThread();
-
-    Q_ASSERT( info.port() > 0 );
+    Q_ASSERT( sipInfo.isValid() );
+    Q_ASSERT( sipInfo.isVisible() );
+    Q_ASSERT( sipInfo.port() > 0 );
     Q_ASSERT( conn );
 
     // Check that we are not connecting to ourselves
     foreach( QHostAddress ha, m_externalAddresses )
     {
-        if ( info.host() == ha.toString() )
+        if ( sipInfo.host() == ha.toString() )
         {
-            peerInfoDebug(peerInfo) << Q_FUNC_INFO << "Tomahawk won't try to connect to" << info.host() << ":" << info.port() << ": same IP as ourselves.";
-            connectToPeer( peerInfo, sipInfo, conn );
+            tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Tomahawk won't try to connect to" << sipInfo.host() << ":" << sipInfo.port() << ": same IP as ourselves.";
             return;
         }
     }
-    if ( info.host() == m_externalHostname )
+    if ( sipInfo.host() == m_externalHostname )
     {
-        peerInfoDebug(peerInfo) << Q_FUNC_INFO << "Tomahawk won't try to connect to" << info.host() << ":" << info.port() << ": same IP as ourselves.";
-        connectToPeer( peerInfo, sipInfo, conn );
+        tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Tomahawk won't try to connect to" << sipInfo.host() << ":" << sipInfo.port() << ": same IP as ourselves.";
         return;
     }
 
-    if ( info.key().length() && conn->firstMessage().isNull() )
+    if ( !sipInfo.key().isEmpty() && conn->firstMessage().isNull() )
     {
         QVariantMap m;
         m["conntype"]  = "accept-offer";
-        m["key"]       = info.key();
+        m["key"]       = sipInfo.key();
         m["controlid"] = Database::instance()->impl()->dbid();
         conn->setFirstMessage( m );
     }
@@ -961,45 +820,43 @@ Servent::connectToPeer(const peerinfo_ptr& peerInfo, const QList<SipInfo>& sipIn
     sock->_outbound = true;
 
     connect( sock, SIGNAL( connected() ), SLOT( socketConnected() ) );
-    NewClosure( sock, SIGNAL( error( QAbstractSocket::SocketError ) ),
-                this, SLOT( connectToPeerFailed( Tomahawk::peerinfo_ptr, QList<SipInfo>, Connection*, QTcpSocketExtra* ) ),
-                peerInfo, sipInfo, conn, sock );
+    connect( sock, SIGNAL( error( QAbstractSocket::SocketError ) ), this, SLOT( socketError( QAbstractSocket::SocketError ) ) );
 
     if ( !conn->peerIpAddress().isNull() )
-        sock->connectToHost( conn->peerIpAddress(), info.port(), QTcpSocket::ReadWrite );
+        sock->connectToHost( conn->peerIpAddress(), sipInfo.port(), QTcpSocket::ReadWrite );
     else
-        sock->connectToHost( info.host(), info.port(), QTcpSocket::ReadWrite );
+        sock->connectToHost( sipInfo.host(), sipInfo.port(), QTcpSocket::ReadWrite );
     sock->moveToThread( thread() );
-}
-
-void
-Servent::connectToPeerFailed( const peerinfo_ptr& peerInfo, QList<SipInfo> sipInfo, Connection* conn, QTcpSocketExtra* socket )
-{
-    peerInfoDebug(peerInfo) << Q_FUNC_INFO << "Connecting to " << socket->peerAddress().toString() << " failed: " << socket->errorString();
-    bool connIsNull = socket->_conn.isNull();
-    cleanupSocket( socket );
-
-    if ( !connIsNull ) {
-        // Try next SipInfo (don't do this if the connection was destroyed in between)
-        connectToPeer( peerInfo, sipInfo, conn );
-    }
-    else
-    {
-        peerInfoDebug( peerInfo ) << Q_FUNC_INFO << "Connecting stopped because Connection is null.";
-    }
 }
 
 void
 Servent::socketError( QAbstractSocket::SocketError e )
 {
     QTcpSocketExtra* sock = (QTcpSocketExtra*)sender();
+    if ( !sock )
+    {
+        tLog() << "SocketError, sock is null";
+        return;
+    }
+
     if ( !sock->_conn.isNull() )
     {
         Connection* conn = sock->_conn.data();
-        tLog() << Q_FUNC_INFO << e << conn->id() << conn->name();
-    }
+        tLog() << "Servent::SocketError:" << e << conn->id() << conn->name();
 
-    cleanupSocket( sock );
+        if ( !sock->_disowned )
+        {
+            // connection will delete if we already transferred ownership, otherwise:
+            sock->deleteLater();
+        }
+
+        conn->markAsFailed(); // will emit failed, then finished
+    }
+    else
+    {
+        tLog() << "SocketError, connection is null";
+        sock->deleteLater();
+    }
 }
 
 void

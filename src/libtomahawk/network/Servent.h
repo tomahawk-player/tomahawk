@@ -66,6 +66,7 @@ Q_OBJECT
 public:
     static Servent* instance();
     static bool isValidExternalIP( const QHostAddress& addr );
+    static SipInfo getSipInfoForOldVersions( const QList<SipInfo> &sipInfos );
 
     explicit Servent( QObject* parent = 0 );
     virtual ~Servent();
@@ -81,6 +82,7 @@ public:
     void registerControlConnection( ControlConnection* conn );
     void unregisterControlConnection( ControlConnection* conn );
     ControlConnection* lookupControlConnection( const SipInfo& sipInfo );
+    ControlConnection* lookupControlConnection( const QString& nodeid );
 
     // you may call this method as often as you like for the same peerInfo, dupe checking is done inside
     void registerPeer( const Tomahawk::peerinfo_ptr& peerInfo );
@@ -90,8 +92,7 @@ public slots:
     void onSipInfoChanged();
 
 public:
-    void connectToPeer( const Tomahawk::peerinfo_ptr& ha );
-    void connectToPeer(const Tomahawk::peerinfo_ptr &peerInfo, const QList<SipInfo>& sipInfos, Connection* conn );
+    void initiateConnection( const SipInfo& sipInfo, Connection* conn );
     void reverseOfferRequest( ControlConnection* orig_conn, const QString &theirdbid, const QString& key, const QString& theirkey );
 
     bool visibleExternally() const { return (!m_externalHostname.isNull()) || (m_externalAddresses.length() > 0); }
@@ -132,7 +133,6 @@ public:
     bool isReady() const { return m_ready; }
 
     QList<SipInfo> getLocalSipInfos(const QString& nodeid, const QString &key);
-    SipInfo getSipInfoForOldVersions( const QList<SipInfo> &sipInfos ) const;
 signals:
     void dbSyncTriggered();
     void streamStarted( StreamConnection* );
@@ -145,7 +145,6 @@ protected:
 public slots:
     void setExternalAddress( QHostAddress ha, unsigned int port );
 
-    void connectToPeerFailed( const Tomahawk::peerinfo_ptr& peerInfo, QList<SipInfo> sipInfo, Connection* conn , QTcpSocketExtra *socket );
     void socketError( QAbstractSocket::SocketError e );
     void createParallelConnection( Connection* orig_conn, Connection* new_conn, const QString& key );
 
