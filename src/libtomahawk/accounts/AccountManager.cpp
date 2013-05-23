@@ -57,6 +57,7 @@ AccountManager::instance()
 AccountManager::AccountManager( QObject *parent )
     : QObject( parent )
     , m_readyForSip( false )
+    , m_completelyReady( false )
 {
     s_instance = this;
 
@@ -307,7 +308,7 @@ AccountManager::finishLoadingFromConfig( const QStringList& accountIds )
     }
 
     m_readyForSip = true;
-    emit readyForSip();
+    emit readyForSip(); //we have to yield to TomahawkApp because we don't know if Servent is ready
 }
 
 
@@ -319,6 +320,9 @@ AccountManager::initSIP()
     {
         hookupAndEnable( account, true );
     }
+
+    m_completelyReady = true;
+    emit ready();
 }
 
 
