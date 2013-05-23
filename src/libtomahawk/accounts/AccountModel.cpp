@@ -35,7 +35,7 @@
 using namespace Tomahawk;
 using namespace Accounts;
 
-#define ACCOUNTMODEL_DEBUG 0
+#define ACCOUNTMODEL_DEBUG 1
 
 AccountModel::AccountModel( QObject* parent )
     : QAbstractListModel( parent )
@@ -74,6 +74,7 @@ AccountModel::loadData()
     QList< AccountFactory* > factories = AccountManager::instance()->factories();
     QList< Account* > allAccounts = AccountManager::instance()->accounts();
 #if ACCOUNTMODEL_DEBUG
+    qDebug() << Q_FUNC_INFO;
     qDebug() << "All accounts:";
     foreach ( Account* acct, allAccounts )
         qDebug() << acct->accountFriendlyName() << "\t" << acct->accountId();
