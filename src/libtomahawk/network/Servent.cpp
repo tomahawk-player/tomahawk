@@ -316,6 +316,7 @@ Servent::registerLazyOffer(const QString &key, const peerinfo_ptr &peerInfo, con
 {
     m_lazyoffers[key] = QPair< peerinfo_ptr, QString >( peerInfo, nodeid );
     QTimer* timer = new QTimer( this );
+    timer->setInterval( timeout );
     timer->setSingleShot( true );
     NewClosure( timer, SIGNAL( timeout() ), this, SLOT( deleteLazyOffer( const QString& ) ), key );
     timer->start();
