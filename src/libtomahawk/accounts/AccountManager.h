@@ -112,7 +112,7 @@ private slots:
     void init();
     void onStateChanged( Tomahawk::Accounts::Account::ConnectionState state );
     void onError( int code, const QString& msg );
-    void finishLoadingFromConfig();
+    void finishLoadingFromConfig( const QStringList& accountIds );
 
     void onSettingsChanged();
 
