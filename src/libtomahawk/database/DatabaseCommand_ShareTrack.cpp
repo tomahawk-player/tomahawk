@@ -70,11 +70,19 @@ DatabaseCommand_ShareTrack::postCommitHook()
     if ( source()->isLocal() )
         Servent::instance()->triggerDBSync();
 
+    QString myDbid = SourceList::instance()->getLocal()->nodeId();
+    QString sourceDbid = source()->nodeId();
+
+    if ( source()->isLocal() || sourceDbid != m_recipient ) //if I just sent a track
+    {
+        JobStatusView::instance()->model()->addJob( new InboxJobItem( InboxJobItem::Sending,
+                                                                      SourceList::instance()->get( m_recipient )->friendlyName(),
+                                                                      m_track ) );
+    }
+
     if ( m_track )
         return;
 
-    QString myDbid = SourceList::instance()->getLocal()->nodeId();
-    QString sourceDbid = source()->nodeId();
     if ( myDbid != m_recipient || sourceDbid == m_recipient )
         return;
 
@@ -101,7 +109,9 @@ DatabaseCommand_ShareTrack::postCommitHook()
 
     QString friendlyName = source()->friendlyName();
     if ( ViewManager::instance()->currentPage() != ViewManager::instance()->inboxWidget() )
-        JobStatusView::instance()->model()->addJob( new InboxJobItem( friendlyName, m_track ) );
+        JobStatusView::instance()->model()->addJob( new InboxJobItem( InboxJobItem::Receiving,
+                                                                      friendlyName,
+                                                                      m_track ) );
 }
 
 

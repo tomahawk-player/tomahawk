@@ -30,7 +30,16 @@ class DLLEXPORT InboxJobItem : public JobStatusItem
 {
     Q_OBJECT
 public:
-    explicit InboxJobItem( const QString& sender, const Tomahawk::trackdata_ptr& track, QObject* parent = 0 );
+    enum Side
+    {
+        Sending = 0,
+        Receiving
+    };
+
+    explicit InboxJobItem( Side side,
+                           const QString& prettyName,
+                           const Tomahawk::trackdata_ptr& track,
+                           QObject* parent = 0 );
     virtual ~InboxJobItem();
 
     virtual QString rightColumnText() const { return QString(); }
@@ -42,10 +51,11 @@ public:
 
 private:
     Tomahawk::trackdata_ptr m_track;
-    QString m_sender;
+    QString m_prettyName;
 
     QTimer* m_timer;
     static QPixmap* s_pixmap;
+    Side m_side;
 };
 
 #endif // INBOXJOBITEM_H
