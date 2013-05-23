@@ -21,8 +21,8 @@
 
 #include "infosystem/InfoSystem.h"
 #include "LastFmInfoPlugin.h"
+#include "resolvers/ExternalResolverGui.h"
 #include "utils/TomahawkUtilsGui.h"
-#include "resolvers/QtScriptResolver.h"
 #include "AtticaManager.h"
 #include "Pipeline.h"
 #include "accounts/AccountManager.h"
