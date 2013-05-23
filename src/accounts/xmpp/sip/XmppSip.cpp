@@ -879,12 +879,22 @@ XmppSipPlugin::onNewIq( const Jreen::IQ& iq )
         Jreen::SoftwareVersion::Ptr softwareVersion = iq.payload<Jreen::SoftwareVersion>();
         if ( softwareVersion )
         {
+            QMutexLocker locker( &peerQueueMutex );
             QString versionString = QString( "%1 %2 %3" ).arg( softwareVersion->name(), softwareVersion->os(), softwareVersion->version() );
             qDebug() << Q_FUNC_INFO << "Received software version for" << iq.from().full() << ":" << versionString;
             Tomahawk::peerinfo_ptr peerInfo =  PeerInfo::get( this, iq.from().full() );
             if ( !peerInfo.isNull() )
             {
                 peerInfo->setVersionString( versionString );
+                if ( sipinfosQueue.contains( iq.from().full() ) )
+                {
+                    peerInfo->setSipInfos( sipinfosQueue.value( iq.from().full() ) );
+                    sipinfosQueue.remove( iq.from().full() );
+                }
+                if ( peersWaitingForVersionString.contains( iq.from().full() ) )
+                {
+                    peersWaitingForVersionString.remove( iq.from().full() );
+                }
             }
         }
     }
@@ -905,6 +915,7 @@ XmppSipPlugin::onNewIq( const Jreen::IQ& iq )
         TomahawkXmppMessage::Ptr sipMessage = iq.payload< TomahawkXmppMessage >();
         if ( sipMessage )
         {
+            QMutexLocker locker( &peerQueueMutex );
             iq.accept();
             tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Received Sip Information from:" << iq.from().full();
 
@@ -921,7 +932,15 @@ XmppSipPlugin::onNewIq( const Jreen::IQ& iq )
                 tDebug() << Q_FUNC_INFO << "no valid peerInfo for" << iq.from().full();
                 return;
             }
-            peerInfo->setSipInfos( sipMessage->sipInfos() );
+            if ( peerInfo->versionString().isEmpty() )
+            {
+                // If we do not have a version string, this peerInfo is still queued. So we queue its SipInfo until we have a valid version string.
+                sipinfosQueue[iq.from().full()] = sipMessage->sipInfos();
+            }
+            else
+            {
+                peerInfo->setSipInfos( sipMessage->sipInfos() );
+            }
             // If we stored a reference for this peer in our sip-waiting-queue, remove it.
             if ( peersWaitingForSip.contains( iq.from().full() ) )
             {
@@ -968,11 +987,20 @@ XmppSipPlugin::handlePeerStatus( const Jreen::JID& jid, Jreen::Presence::Type pr
         Tomahawk::peerinfo_ptr peerInfo = PeerInfo::get( this, fulljid );
         if ( !peerInfo.isNull() )
         {
+            QMutexLocker locker( &peerQueueMutex );
             peerInfo->setStatus( PeerInfo::Offline );
             // If we stored a reference for this peer in our sip-waiting-queue, remove it.
             if ( peersWaitingForSip.contains( fulljid ) )
             {
                 peersWaitingForSip.remove( fulljid );
+            }
+            if ( peersWaitingForVersionString.contains( fulljid ) )
+            {
+                peersWaitingForVersionString.remove( fulljid );
+            }
+            if ( sipinfosQueue.contains( fulljid ) )
+            {
+                sipinfosQueue.remove( fulljid );
             }
         }
 
@@ -985,6 +1013,7 @@ XmppSipPlugin::handlePeerStatus( const Jreen::JID& jid, Jreen::Presence::Type pr
     {
         qDebug() << Q_FUNC_INFO << "* Peer goes online:" << fulljid;
 
+        QMutexLocker locker( &peerQueueMutex );
         m_peers[ jid ] = presenceType;
 
         Tomahawk::peerinfo_ptr peerInfo = PeerInfo::get( this, fulljid, PeerInfo::AutoCreate );
@@ -992,6 +1021,7 @@ XmppSipPlugin::handlePeerStatus( const Jreen::JID& jid, Jreen::Presence::Type pr
         peerInfo->setStatus( PeerInfo::Online );
         peerInfo->setFriendlyName( m_jidsNames.value( jid.bare() ) );
         peersWaitingForSip[fulljid] = peerInfo;
+        peersWaitingForVersionString[fulljid] = peerInfo;
 
 #ifndef ENABLE_HEADLESS
         if ( !m_avatarManager->avatar( jid.bare() ).isNull() )
