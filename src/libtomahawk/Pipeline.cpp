@@ -24,7 +24,7 @@
 #include "database/Database.h"
 #include "resolvers/ExternalResolver.h"
 #include "resolvers/ScriptResolver.h"
-#include "resolvers/QtScriptResolver.h"
+#include "resolvers/JSResolver.h"
 #include "Source.h"
 #include "SourceList.h"
 #include "utils/ResultUrlChecker.h"

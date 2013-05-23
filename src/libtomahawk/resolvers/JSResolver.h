@@ -18,8 +18,8 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef QTSCRIPTRESOLVER_H
-#define QTSCRIPTRESOLVER_H
+#ifndef JSRESOLVER_H
+#define JSRESOLVER_H
 
 #include "ExternalResolverGui.h"
 #include "Query.h"
@@ -35,14 +35,14 @@
 
 #include "DllMacro.h"
 
-class QtScriptResolver;
+class JSResolver;
 
-class DLLEXPORT QtScriptResolverHelper : public QObject
+class DLLEXPORT JSResolverHelper : public QObject
 {
 Q_OBJECT
 
 public:
-    QtScriptResolverHelper( const QString& scriptPath, QtScriptResolver* parent );
+    JSResolverHelper( const QString& scriptPath, JSResolver* parent );
     void setResolverConfig( const QVariantMap& config );
 
     // Return a HMAC (md5) signature of the input text with the desired key
@@ -83,7 +83,7 @@ private:
     QHash< QString, boost::function< void( QSharedPointer< QIODevice >& ) > > m_streamCallbacks;
     bool m_urlCallbackIsAsync;
     QVariantMap m_resolverConfig;
-    QtScriptResolver* m_resolver;
+    JSResolver* m_resolver;
 };
 
 class DLLEXPORT ScriptEngine : public QWebPage
@@ -91,7 +91,7 @@ class DLLEXPORT ScriptEngine : public QWebPage
 Q_OBJECT
 
 public:
-    explicit ScriptEngine( QtScriptResolver* parent );
+    explicit ScriptEngine( JSResolver* parent );
 
     QString userAgentForUrl( const QUrl& url ) const;
     void setScriptPath( const QString& scriptPath );
@@ -106,21 +106,21 @@ private slots:
     void sslErrorHandler( QNetworkReply* qnr, const QList<QSslError>& errlist );
 
 private:
-    QtScriptResolver* m_parent;
+    JSResolver* m_parent;
     QString m_scriptPath;
     QString m_header;
 };
 
 
-class DLLEXPORT QtScriptResolver : public Tomahawk::ExternalResolverGui
+class DLLEXPORT JSResolver : public Tomahawk::ExternalResolverGui
 {
 Q_OBJECT
 
-friend class ::QtScriptResolverHelper;
+friend class ::JSResolverHelper;
 
 public:
-    explicit QtScriptResolver( const QString& scriptPath, const QStringList& additionalScriptPaths = QStringList() );
-    virtual ~QtScriptResolver();
+    explicit JSResolver( const QString& scriptPath, const QStringList& additionalScriptPaths = QStringList() );
+    virtual ~JSResolver();
     static ExternalResolver* factory( const QString& scriptPath, const QStringList& additionalScriptPaths = QStringList() );
 
     virtual Capabilities capabilities() const { return m_capabilities; }
@@ -187,10 +187,10 @@ private:
     bool m_ready, m_stopped;
     ExternalResolver::ErrorState m_error;
 
-    QtScriptResolverHelper* m_resolverHelper;
+    JSResolverHelper* m_resolverHelper;
     QPointer< AccountConfigWidget > m_configWidget;
     QList< QVariant > m_dataWidgets;
     QStringList m_requiredScriptPaths;
 };
 
-#endif // QTSCRIPTRESOLVER_H
+#endif // JSRESOLVER_H

@@ -66,7 +66,7 @@
 #include "utils/TomahawkCache.h"
 
 #ifndef ENABLE_HEADLESS
-    #include "resolvers/QtScriptResolver.h"
+    #include "resolvers/JSResolver.h"
     #include "resolvers/ScriptResolver.h"
     #include "utils/SpotifyParser.h"
     #include "AtticaManager.h"
@@ -203,7 +203,7 @@ TomahawkApp::init()
     m_scanManager = QPointer<ScanManager>( new ScanManager( this ) );
 
 #ifndef ENABLE_HEADLESS
-    Pipeline::instance()->addExternalResolverFactory( boost::bind( &QtScriptResolver::factory, _1, _2 ) );
+    Pipeline::instance()->addExternalResolverFactory( boost::bind( &JSResolver::factory, _1, _2 ) );
     Pipeline::instance()->addExternalResolverFactory( boost::bind( &ScriptResolver::factory, _1, _2 ) );
 
     new ActionCollection( this );
