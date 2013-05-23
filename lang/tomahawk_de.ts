@@ -1357,17 +1357,17 @@ erlauben sich mit dir zu verbinden?</translation>
         <translation>gerade eben</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/Account.cpp" line="36"/>
+        <location filename="../src/libtomahawk/accounts/Account.cpp" line="38"/>
         <source>Friend Finders</source>
         <translation>Freundefinder</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/Account.cpp" line="38"/>
+        <location filename="../src/libtomahawk/accounts/Account.cpp" line="40"/>
         <source>Music Finders</source>
         <translation>Musikfinder</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/Account.cpp" line="41"/>
+        <location filename="../src/libtomahawk/accounts/Account.cpp" line="43"/>
         <source>Status Updaters</source>
         <translation>Status-Updater</translation>
     </message>
@@ -1400,9 +1400,9 @@ erlauben sich mit dir zu verbinden?</translation>
 <context>
     <name>QtScriptResolver</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="583"/>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="618"/>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="654"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="589"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="624"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="660"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
         <translation>Script Resolver Warnung: API aufruf %1 zurückgegebener Daten synchron. </translation>
     </message>
@@ -1466,22 +1466,22 @@ erlauben sich mit dir zu verbinden?</translation>
 <context>
     <name>ScriptEngine</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1126"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1132"/>
         <source>Script Resolver Error: %1 %2 %3 %4</source>
         <translation>Script Resolver Fehler: %1 %2 %3 %4</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1145"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1151"/>
         <source>SSL Error</source>
         <translation>SSL Fehler</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1146"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1152"/>
         <source>You have asked Tomahawk to connect securely to &lt;b&gt;%1&lt;/b&gt;, but we can&apos;t confirm that your connection is secure:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Do you want to trust this connection?</source>
         <translation>Sie wurden gebeten, Tomahawk sicher zu &lt;b&gt;%1&lt;/b&gt; verbinden, aber wir können nicht bestätigen, dass die Verbindung sicher ist:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt; Möchten Sie dieser Verbindung vertrauen?</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1153"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1159"/>
         <source>Trust certificate</source>
         <translation>Zertifikat vertrauen </translation>
     </message>
@@ -3483,7 +3483,7 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/TomahawkApp.cpp" line="588"/>
+        <location filename="../src/TomahawkApp.cpp" line="590"/>
         <source>My Collection</source>
         <translation>Meine Sammlung</translation>
     </message>
@@ -3506,7 +3506,7 @@ Tomahawk auf Twitter&apos;s Website authentifiziert hast:</translation>
 <context>
     <name>TomahawkSettings</name>
     <message>
-        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="375"/>
+        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="376"/>
         <source>Local Network</source>
         <translation>Lokales Netzwerk</translation>
     </message>

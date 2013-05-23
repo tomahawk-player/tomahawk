@@ -1357,17 +1357,17 @@ ansluta och strömma från dig?</translation>
         <translation>precis nyss</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/Account.cpp" line="36"/>
+        <location filename="../src/libtomahawk/accounts/Account.cpp" line="38"/>
         <source>Friend Finders</source>
         <translation>Hitta vänner</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/Account.cpp" line="38"/>
+        <location filename="../src/libtomahawk/accounts/Account.cpp" line="40"/>
         <source>Music Finders</source>
         <translation>Hitta musik</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/Account.cpp" line="41"/>
+        <location filename="../src/libtomahawk/accounts/Account.cpp" line="43"/>
         <source>Status Updaters</source>
         <translation>Status uppdaterare</translation>
     </message>
@@ -1400,9 +1400,9 @@ ansluta och strömma från dig?</translation>
 <context>
     <name>QtScriptResolver</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="583"/>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="618"/>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="654"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="589"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="624"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="660"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
         <translation>Skript Resolver-varning:  API-anrop %1 returnerade data synkront</translation>
     </message>
@@ -1466,22 +1466,22 @@ ansluta och strömma från dig?</translation>
 <context>
     <name>ScriptEngine</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1126"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1132"/>
         <source>Script Resolver Error: %1 %2 %3 %4</source>
         <translation>Skriptfel i resolvern: %1 %2 %3 %4</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1145"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1151"/>
         <source>SSL Error</source>
         <translation>SSL-Fel</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1146"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1152"/>
         <source>You have asked Tomahawk to connect securely to &lt;b&gt;%1&lt;/b&gt;, but we can&apos;t confirm that your connection is secure:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Do you want to trust this connection?</source>
         <translation>Du har bett Tomahawk att göra en säker uppkoppling mot &lt;b&gt;%1&lt;/b&gt;, men vi kan inte bekräfta att din uppkoppling är säker: &lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Litar du på denna uppkoppling?</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1153"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1159"/>
         <source>Trust certificate</source>
         <translation>Tillförlitligt certifikat</translation>
     </message>
@@ -3489,7 +3489,7 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/TomahawkApp.cpp" line="588"/>
+        <location filename="../src/TomahawkApp.cpp" line="590"/>
         <source>My Collection</source>
         <translation>Min samling</translation>
     </message>
@@ -3512,7 +3512,7 @@ anger du PIN-koden här:</translation>
 <context>
     <name>TomahawkSettings</name>
     <message>
-        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="375"/>
+        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="376"/>
         <source>Local Network</source>
         <translation>Lokalt nätverk</translation>
     </message>

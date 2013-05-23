@@ -1355,17 +1355,17 @@ connect and stream from you?</source>
         <translation>ką tik</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/Account.cpp" line="36"/>
+        <location filename="../src/libtomahawk/accounts/Account.cpp" line="38"/>
         <source>Friend Finders</source>
         <translation>Draugų ieškyklės</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/Account.cpp" line="38"/>
+        <location filename="../src/libtomahawk/accounts/Account.cpp" line="40"/>
         <source>Music Finders</source>
         <translation>Muzikos ieškyklės</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/Account.cpp" line="41"/>
+        <location filename="../src/libtomahawk/accounts/Account.cpp" line="43"/>
         <source>Status Updaters</source>
         <translation>Būsenos atnaujintojai</translation>
     </message>
@@ -1398,9 +1398,9 @@ connect and stream from you?</source>
 <context>
     <name>QtScriptResolver</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="583"/>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="618"/>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="654"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="589"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="624"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="660"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
         <translation type="unfinished"/>
     </message>
@@ -1464,22 +1464,22 @@ connect and stream from you?</source>
 <context>
     <name>ScriptEngine</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1126"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1132"/>
         <source>Script Resolver Error: %1 %2 %3 %4</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1145"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1151"/>
         <source>SSL Error</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1146"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1152"/>
         <source>You have asked Tomahawk to connect securely to &lt;b&gt;%1&lt;/b&gt;, but we can&apos;t confirm that your connection is secure:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Do you want to trust this connection?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1153"/>
+        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1159"/>
         <source>Trust certificate</source>
         <translation type="unfinished"/>
     </message>
@@ -3476,7 +3476,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/TomahawkApp.cpp" line="588"/>
+        <location filename="../src/TomahawkApp.cpp" line="590"/>
         <source>My Collection</source>
         <translation>Mano kolekcija</translation>
     </message>
@@ -3498,7 +3498,7 @@ enter the displayed PIN number here:</source>
 <context>
     <name>TomahawkSettings</name>
     <message>
-        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="375"/>
+        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="376"/>
         <source>Local Network</source>
         <translation type="unfinished"/>
     </message>
