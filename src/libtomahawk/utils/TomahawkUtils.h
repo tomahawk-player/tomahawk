@@ -123,7 +123,8 @@ namespace TomahawkUtils
         ResolverBundle,
         Inbox,
         Invalid,
-        InboxNewItem
+        InboxNewItem,
+        Outbox
     };
 
     enum ImageMode

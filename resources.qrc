@@ -182,5 +182,6 @@
         <file>data/images/station-artist.svg</file>
         <file>data/images/station-genre.svg</file>
         <file>data/images/station-year.svg</file>
+        <file>data/images/outbox.svg</file>
     </qresource>
 </RCC>

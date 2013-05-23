@@ -73,5 +73,12 @@ InboxJobItem::mainText() const
 QPixmap
 InboxJobItem::icon() const
 {
-    return TomahawkUtils::defaultPixmap( TomahawkUtils::Inbox, TomahawkUtils::Original, QSize( 64, 64 ) );
+    switch ( m_side )
+    {
+    case Sending:
+        return TomahawkUtils::defaultPixmap( TomahawkUtils::Outbox, TomahawkUtils::Original, QSize( 64, 64 ) );
+    case Receiving:
+        return TomahawkUtils::defaultPixmap( TomahawkUtils::Inbox, TomahawkUtils::Original, QSize( 64, 64 ) );
+    }
+    return QPixmap();
 }
