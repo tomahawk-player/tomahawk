@@ -285,16 +285,15 @@ AccountManager::loadFromConfig()
     qDebug() << "LOADING ALL CREDENTIALS" << accountIds;
 
     m_creds = new CredentialsManager( this );
-    connect( m_creds, SIGNAL( ready() ),
-             this, SLOT( finishLoadingFromConfig() ) );
+    NewClosure( m_creds, SIGNAL( ready() ),
+                this, SLOT( finishLoadingFromConfig( QStringList ) ), accountIds );
     m_creds->loadCredentials( accountIds );
 }
 
 
 void
-AccountManager::finishLoadingFromConfig()
+AccountManager::finishLoadingFromConfig( const QStringList& accountIds )
 {
-    QStringList accountIds = m_creds->keys();
     qDebug() << "LOADING ALL ACCOUNTS" << accountIds;
 
     foreach ( const QString& accountId, accountIds )
