@@ -24,7 +24,7 @@
 
 #include <QStringList>
 
-#define TOMAHAWK_KEYCHAINSVC QLatin1String("tomahawkaccounts")
+#define TOMAHAWK_KEYCHAINSVC QLatin1String("Tomahawk")
 
 namespace Tomahawk
 {
