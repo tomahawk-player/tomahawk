@@ -661,7 +661,7 @@ AccountModel::accountAdded( Account* account )
     // Ok, just a plain resolver. add it at the end
     if ( ResolverAccount* resolver = qobject_cast< ResolverAccount* >( account ) )
     {
-        qDebug() << "Plain old manual resolver added, appending at end";
+        qDebug() << "Plain old manual resolver added, appending at end" << resolver->accountId() << resolver->accountServiceName() << resolver->accountFriendlyName();
         if ( !m_waitingForAtticaLoaded )
             Q_ASSERT( qobject_cast< AtticaResolverAccount* >( account ) == 0 ); // should NOT get attica accounts here, should be caught above
         const int count = m_accounts.size();
