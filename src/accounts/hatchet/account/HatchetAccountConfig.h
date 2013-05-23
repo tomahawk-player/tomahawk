@@ -16,8 +16,8 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TOMAHAWK_ACCOUNT_CONFIG_H
-#define TOMAHAWK_ACCOUNT_CONFIG_H
+#ifndef HATCHET_ACCOUNT_CONFIG_H
+#define HATCHET_ACCOUNT_CONFIG_H
 
 #include <accounts/AccountConfigWidget.h>
 
@@ -28,7 +28,7 @@ class QNetworkReply;
 
 namespace Ui {
     class HatchetAccountConfig;
-};
+}
 
 namespace Tomahawk {
 namespace Accounts {
@@ -43,10 +43,7 @@ public:
     virtual ~HatchetAccountConfig();
 
 private slots:
-    void registerClicked();
-    void loginOrRegister();
-
-    void registerFinished( bool success, const QString& error );
+    void login();
 
     void fieldsChanged();
 
@@ -54,6 +51,13 @@ private slots:
     void showLoggedOut();
 
     void accountInfoUpdated();
+
+    void authError( const QString& error );
+
+protected:
+    //virtual void changeEvent( QEvent* event );
+    virtual void showEvent( QShowEvent* event );
+
 private:
     Ui::HatchetAccountConfig* m_ui;
     HatchetAccount* m_account;

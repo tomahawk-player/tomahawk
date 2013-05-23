@@ -20,7 +20,7 @@
       <string/>
      </property>
      <property name="pixmap">
-       <pixmap resource="../resources.qrc">:/hatchet-account/hatchet-icon-512x512.png</pixmap>
+      <pixmap resource="../resources.qrc">:/hatchet-account/hatchet-icon-512x512.png</pixmap>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -28,19 +28,12 @@
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="label_2">
+    <widget class="QLabel" name="instructionLabel">
      <property name="text">
       <string>Connect to your Hatchet account</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="registerbutton">
-     <property name="text">
-      <string>Register for a free account</string>
      </property>
     </widget>
    </item>
@@ -63,17 +56,11 @@
    </item>
    <item>
     <layout class="QFormLayout" name="credentialsLayout">
-     <item row="0" column="0">
-      <widget class="QLabel" name="emailLabel">
+     <item row="3" column="0">
+      <widget class="QLabel" name="otpLabel">
        <property name="text">
-        <string>Email:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="emailEdit">
-       <property name="placeholderText">
-        <string>Enter email to use</string>
+        <string>One-time
+Password</string>
        </property>
       </widget>
      </item>
@@ -100,8 +87,21 @@
      </item>
      <item row="2" column="1">
       <widget class="QLineEdit" name="passwordEdit">
+       <property name="text">
+        <string/>
+       </property>
        <property name="echoMode">
         <enum>QLineEdit::Password</enum>
+       </property>
+       <property name="placeholderText">
+        <string>Hatchet password</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLineEdit" name="otpEdit">
+       <property name="placeholderText">
+        <string>(Only if configured)</string>
        </property>
       </widget>
      </item>
@@ -133,7 +133,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="loginOrRegisterButton">
+      <widget class="QPushButton" name="loginButton">
        <property name="text">
         <string>Login</string>
        </property>
@@ -144,7 +144,7 @@
   </layout>
  </widget>
  <resources>
-   <include location="../resources.qrc"/>
+  <include location="../resources.qrc"/>
  </resources>
  <connections/>
 </ui>

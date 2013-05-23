@@ -33,13 +33,12 @@
 
 #include <QFile>
 #include <QUuid>
-#include <QtCrypto>
 
 HatchetSipPlugin::HatchetSipPlugin( Tomahawk::Accounts::Account *account )
     : SipPlugin( account )
     , m_sipState( Closed )
     , m_version( 0 )
-    , m_publicKey( 0 )
+    , m_publicKey( nullptr )
 {
     tLog() << Q_FUNC_INFO;
 

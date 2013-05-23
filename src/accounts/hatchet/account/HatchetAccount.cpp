@@ -25,10 +25,12 @@
 #include "utils/TomahawkUtils.h"
 
 #include <QtPlugin>
+#include <QFile>
 #include <QNetworkRequest>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QUrl>
+#include <QUuid>
 
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
@@ -39,7 +41,8 @@ using namespace Accounts;
 static QPixmap* s_icon = 0;
 HatchetAccount* HatchetAccount::s_instance  = 0;
 
-#define AUTH_SERVER "http://auth.toma.hk"
+const QString c_loginServer("https://mandella.hatchet.is/v1");
+const QString c_accessTokenServer("https://mandella.hatchet.is");
 
 HatchetAccountFactory::HatchetAccountFactory()
 {
@@ -74,8 +77,23 @@ HatchetAccountFactory::createAccount( const QString& pluginId )
 
 HatchetAccount::HatchetAccount( const QString& accountId )
     : Account( accountId )
+    , m_publicKey( nullptr )
 {
     s_instance = this;
+
+    QFile pemFile( ":/hatchet-account/mandella.pem" );
+    pemFile.open( QIODevice::ReadOnly );
+    tLog() << Q_FUNC_INFO << "certs/mandella.pem: " << pemFile.readAll();
+    pemFile.close();
+    pemFile.open( QIODevice::ReadOnly );
+    QCA::ConvertResult conversionResult;
+    QCA::PublicKey publicKey = QCA::PublicKey::fromPEM(pemFile.readAll(), &conversionResult);
+    if ( QCA::ConvertGood != conversionResult )
+    {
+        tLog() << Q_FUNC_INFO << "INVALID PUBKEY READ";
+        return;
+    }
+    m_publicKey = new QCA::PublicKey( publicKey );
 }
 
 
@@ -190,39 +208,36 @@ HatchetAccount::authToken() const
 }
 
 
-void
-HatchetAccount::doRegister( const QString& username, const QString& password, const QString& email )
+uint
+HatchetAccount::authTokenExpiration() const
 {
-    if ( username.isEmpty() || password.isEmpty() || email.isEmpty() )
-    {
-        return;
-    }
-
-    QVariantMap registerCmd;
-    registerCmd[ "command" ] = "register";
-    registerCmd[ "email" ] = email;
-    registerCmd[ "password" ] = password;
-    registerCmd[ "username" ] = username;
-
-    QNetworkReply* reply = buildRequest( "signup", registerCmd );
-    connect( reply, SIGNAL( finished() ), this, SLOT( onRegisterFinished() ) );
+    bool ok;
+    return credentials().value( "expiration" ).toUInt( &ok );
 }
 
 
 void
-HatchetAccount::loginWithPassword( const QString& username, const QString& password )
+HatchetAccount::loginWithPassword( const QString& username, const QString& password, const QString &otp )
 {
-    if ( username.isEmpty() || password.isEmpty() )
+    if ( username.isEmpty() || password.isEmpty() || !m_publicKey )
     {
-        tLog() << "No tomahawk account username or pw, not logging in";
+        tLog() << "No tomahawk account username or pw or public key, not logging in";
         return;
     }
+
+    m_uuid = QUuid::createUuid().toString();
+    QCA::SecureArray sa( m_uuid.toLatin1() );
+    QCA::SecureArray result = m_publicKey->encrypt( sa, QCA::EME_PKCS1_OAEP );
 
     QVariantMap params;
     params[ "password" ] = password;
     params[ "username" ] = username;
+    if ( !otp.isEmpty() )
+        params[ "otp" ] = otp;
+    params[ "client" ] = "Tomahawk (" + QHostInfo::localHostName() + ")";
+    params[ "nonce" ] = QString( result.toByteArray().toBase64() );
 
-    QNetworkReply* reply = buildRequest( "login", params );
+    QNetworkReply* reply = buildRequest( c_loginServer, "auth/credentials", params );
     NewClosure( reply, SIGNAL( finished() ), this, SLOT( onPasswordLoginFinished( QNetworkReply*, const QString& ) ), reply, username );
 }
 
@@ -236,30 +251,16 @@ HatchetAccount::fetchAccessTokens()
         return;
     }
 
+    if ( authTokenExpiration() < ( QDateTime::currentMSecsSinceEpoch() / 1000 ) )
+        tLog() << "Auth token has expired, but may still be valid on the server";
+
     QVariantMap params;
     params[ "authtoken" ] = authToken();
     params[ "username" ] = username();
 
     tLog() << "Fetching access tokens";
-    QNetworkReply* reply = buildRequest( "tokens", params );
+    QNetworkReply* reply = buildRequest( c_accessTokenServer, "tokens", params );
     connect( reply, SIGNAL( finished() ), this, SLOT( onFetchAccessTokensFinished() ) );
-}
-
-
-void
-HatchetAccount::onRegisterFinished()
-{
-    QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
-    Q_ASSERT( reply );
-    bool ok;
-    const QVariantMap resp = parseReply( reply, ok );
-    if ( !ok )
-    {
-        emit registerFinished( false, resp.value( "errormsg" ).toString() );
-        return;
-    }
-
-    emit registerFinished( true, QString() );
 }
 
 
@@ -270,16 +271,40 @@ HatchetAccount::onPasswordLoginFinished( QNetworkReply* reply, const QString& us
     bool ok;
     const QVariantMap resp = parseReply( reply, ok );
     if ( !ok )
+    {
+        tLog() << Q_FUNC_INFO << "Error getting parsed reply from auth server";
+        emit authError( "An error occurred reading the reply from the server");
+        deauthenticate();
         return;
+    }
 
-    const QByteArray authenticationToken = resp.value( "message" ).toMap().value( "authtoken" ).toMap().value("token").toByteArray();
+    if ( !resp.value( "error" ).toString().isEmpty() )
+    {
+        tLog() << Q_FUNC_INFO << "Auth server returned an error";
+        emit authError( resp.value( "error" ).toString() );
+        deauthenticate();
+        return;
+    }
+
+    const QString nonce = resp.value( "data" ).toMap().value( "nonce" ).toString();
+    if ( nonce != m_uuid )
+    {
+        tLog() << Q_FUNC_INFO << "Auth server nonce value does not match!";
+        emit authError( "The nonce value was incorrect. YOUR ACCOUNT MAY BE COMPROMISED." );
+        deauthenticate();
+        return;
+    }
+
+    const QByteArray authenticationToken = resp.value( "data" ).toMap().value( "token" ).toByteArray();
+    uint expiration = resp.value( "data" ).toMap().value( "expiration" ).toUInt( &ok );
 
     QVariantHash creds = credentials();
     creds[ "username" ] = username;
     creds[ "authtoken" ] = authenticationToken;
+    creds[ "expiration" ] = expiration;
     setCredentials( creds );
     syncConfig();
-    
+
     if ( !authenticationToken.isEmpty() )
     {
         // We're succesful! Now log in with our authtoken for access
@@ -334,12 +359,12 @@ HatchetAccount::authUrlDiscovered( Service service, const QString &authUrl )
 
 
 QNetworkReply*
-HatchetAccount::buildRequest( const QString& command, const QVariantMap& params ) const
+HatchetAccount::buildRequest( const QString& server, const QString& command, const QVariantMap& params ) const
 {
     QJson::Serializer s;
     const QByteArray msgJson = s.serialize( params );
 
-    QNetworkRequest req( QUrl( QString( "%1/%2" ).arg( AUTH_SERVER ).arg( command ) ) );
+    QNetworkRequest req( QUrl( QString( "%1/%2" ).arg( server ).arg( command ) ) );
     req.setHeader( QNetworkRequest::ContentTypeHeader, "application/json; charset=utf-8" );
     QNetworkReply* reply = TomahawkUtils::nam()->post( req, msgJson );
 
@@ -354,26 +379,32 @@ HatchetAccount::parseReply( QNetworkReply* reply, bool& okRet ) const
 
     reply->deleteLater();
 
-    if ( reply->error() != QNetworkReply::NoError )
+    bool ok;
+    int statusCode = reply->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt( &ok );
+    if ( reply->error() != QNetworkReply::NoError && statusCode != 400 && statusCode != 500 )
     {
-        tLog() << "Network error in command:" << reply->error() << reply->errorString();
+        tLog() << Q_FUNC_INFO << "Network error in command:" << reply->error() << reply->errorString();
         okRet = false;
         return resp;
     }
 
     QJson::Parser p;
-    bool ok;
     resp = p.parse( reply, &ok ).toMap();
 
-    if ( !ok || resp.value( "error", false ).toBool() )
+    if ( !ok )
     {
-        tLog() << "Error from tomahawk server response, or in parsing from json:" << resp.value( "errormsg" ) << resp;
+        tLog() << Q_FUNC_INFO << "Error parsing JSON from server";
         okRet = false;
         return resp;
     }
 
-    tLog() << "Got reply" << resp.keys();
-    tLog() << "Got reply" << resp.values();
+    if ( !resp.value( "error", "" ).toString().isEmpty() )
+    {
+        tLog() << "Error from tomahawk server response, or in parsing from json:" << resp.value( "error" ).toString() << resp;
+    }
+
+    tLog() << Q_FUNC_INFO << "Got reply" << resp.keys();
+    tLog() << Q_FUNC_INFO << "Got reply" << resp.values();
     okRet = true;
     return resp;
 }

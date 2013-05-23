@@ -16,12 +16,14 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TOMAHAWK_ACCOUNT_H
-#define TOMAHAWK_ACCOUNT_H
+#ifndef HATCHET_ACCOUNT_H
+#define HATCHET_ACCOUNT_H
 
 
 #include <accounts/Account.h>
 #include <accounts/AccountDllMacro.h>
+
+#include <QtCrypto>
 
 class QNetworkReply;
 
@@ -92,23 +94,22 @@ public:
     QString authUrlForService( const Service& service ) const;
 
 signals:
+    void authError( QString error );
     void deauthenticated();
     void accessTokensFetched();
-    void registerFinished( bool successful, const QString& msg );
 
 private slots:
-    void onRegisterFinished();
     void onPasswordLoginFinished( QNetworkReply*, const QString& username );
     void onFetchAccessTokensFinished();
-
     void authUrlDiscovered( Tomahawk::Accounts::HatchetAccount::Service service, const QString& authUrl );
+
 private:
     QByteArray authToken() const;
+    uint authTokenExpiration() const;
 
-    void doRegister( const QString& username, const QString& password, const QString& email );
-    void loginWithPassword( const QString& username, const QString& password );
+    void loginWithPassword( const QString& username, const QString& password, const QString &otp );
 
-    QNetworkReply* buildRequest( const QString& command, const QVariantMap& params ) const;
+    QNetworkReply* buildRequest( const QString& server, const QString& command, const QVariantMap& params ) const;
     QVariantMap parseReply( QNetworkReply* reply, bool& ok ) const;
 
     QWeakPointer<HatchetAccountConfig> m_configWidget;
@@ -120,6 +121,9 @@ private:
 
     static HatchetAccount* s_instance;
     friend class HatchetAccountConfig;
+
+    QCA::PublicKey* m_publicKey;
+    QString m_uuid;
 };
 
 }

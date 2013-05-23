@@ -23,6 +23,8 @@
 
 #include "ui_HatchetAccountConfig.h"
 
+#include <QMessageBox>
+
 using namespace Tomahawk;
 using namespace Accounts;
 
@@ -45,17 +47,14 @@ HatchetAccountConfig::HatchetAccountConfig( HatchetAccount* account )
 
     m_ui->label->setPixmap( m_ui->label->pixmap()->scaled( QSize( 128, 127 ), Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
 
-    m_ui->emailLabel->hide();
-    m_ui->emailEdit->hide();
-
-    connect( m_ui->registerbutton, SIGNAL( clicked( bool ) ), this, SLOT( registerClicked() ) );
-    connect( m_ui->loginOrRegisterButton, SIGNAL( clicked( bool ) ), this, SLOT( loginOrRegister() ) );
+    m_ui->loginButton->setDefault( true );
+    connect( m_ui->loginButton, SIGNAL( clicked( bool ) ), this, SLOT( login() ) );
 
     connect( m_ui->usernameEdit, SIGNAL( textChanged( QString ) ), this, SLOT( fieldsChanged() ) );
     connect( m_ui->passwordEdit, SIGNAL( textChanged( QString ) ), this, SLOT( fieldsChanged() ) );
-    connect( m_ui->emailEdit, SIGNAL( textChanged( QString ) ), this, SLOT( fieldsChanged() ) );
+    connect( m_ui->otpEdit, SIGNAL( textChanged( QString ) ), this, SLOT( fieldsChanged() ) );
 
-    connect( m_account, SIGNAL( registerFinished( bool, QString ) ), this, SLOT( registerFinished( bool, QString ) ) );
+    connect( m_account, SIGNAL( authError( QString ) ), this, SLOT( authError( QString ) ) );
     connect( m_account, SIGNAL( deauthenticated() ), this, SLOT( showLoggedOut() ) );
     connect( m_account, SIGNAL( accessTokensFetched() ), this, SLOT( accountInfoUpdated() ) );
 
@@ -75,41 +74,21 @@ HatchetAccountConfig::~HatchetAccountConfig()
 
 
 void
-HatchetAccountConfig::registerClicked()
+HatchetAccountConfig::login()
 {
-    m_ui->registerbutton->hide();
-
-    m_ui->emailLabel->show();
-    m_ui->emailEdit->show();
-    m_ui->loginOrRegisterButton->setText( tr( "Register" ) );
-    m_ui->loginOrRegisterButton->setProperty( "action", Register );
-
-}
-
-
-void
-HatchetAccountConfig::loginOrRegister()
-{
-    const ButtonAction action = static_cast< ButtonAction>( m_ui->loginOrRegisterButton->property( "action" ).toInt() );
+    const ButtonAction action = static_cast< ButtonAction>( m_ui->loginButton->property( "action" ).toInt() );
 
     if ( action == Login )
     {
         // Log in mode
-        m_account->loginWithPassword( m_ui->usernameEdit->text(), m_ui->passwordEdit->text() );
-    }
-    else if ( action == Register )
-    {
-        // Register since the use clicked register and just entered his info
-        const QString username = m_ui->usernameEdit->text();
-        const QString password = m_ui->passwordEdit->text();
-        const QString email = m_ui->emailEdit->text();
-        m_account->doRegister( username, password, email );
+        m_account->loginWithPassword( m_ui->usernameEdit->text(), m_ui->passwordEdit->text(), m_ui->otpEdit->text() );
     }
     else if ( action == Logout )
     {
         // TODO
         m_ui->usernameEdit->clear();
         m_ui->passwordEdit->clear();
+        m_ui->otpEdit->clear();
 
         QVariantHash creds = m_account->credentials();
         creds.clear();
@@ -125,46 +104,25 @@ HatchetAccountConfig::fieldsChanged()
 {
     const QString username = m_ui->usernameEdit->text();
     const QString password = m_ui->passwordEdit->text();
-    const QString email = m_ui->emailEdit->text();
 
-    const ButtonAction action = static_cast< ButtonAction>( m_ui->loginOrRegisterButton->property( "action" ).toInt() );
+    const ButtonAction action = static_cast< ButtonAction>( m_ui->loginButton->property( "action" ).toInt() );
 
-    m_ui->loginOrRegisterButton->setEnabled( !username.isEmpty() && !password.isEmpty() && ( action == Login || !email.isEmpty() ) );
+    m_ui->loginButton->setEnabled( !username.isEmpty() && !password.isEmpty() && action == Login );
 
     m_ui->errorLabel->clear();
 
     if ( action == Login )
-        m_ui->loginOrRegisterButton->setText( tr( "Login" ) );
-    else if ( action == Register )
-        m_ui->loginOrRegisterButton->setText( tr( "Register" ) );
-}
-
-
-void
-HatchetAccountConfig::registerFinished( bool success, const QString& error )
-{
-    if ( success )
-    {
-        showLoggedOut();
-        m_ui->errorLabel->setText( tr( "An email has been sent to activate your account" ) );
-    }
-    else
-    {
-        m_ui->loginOrRegisterButton->setText( "Failed" );
-        m_ui->loginOrRegisterButton->setEnabled( false );
-        m_ui->errorLabel->setText( error );
-    }
+        m_ui->loginButton->setText( tr( "Login" ) );
 }
 
 
 void
 HatchetAccountConfig::showLoggedIn()
 {
-    m_ui->registerbutton->hide();
     m_ui->usernameLabel->hide();
     m_ui->usernameEdit->hide();
-    m_ui->emailLabel->hide();
-    m_ui->emailEdit->hide();
+    m_ui->otpLabel->hide();
+    m_ui->otpEdit->hide();
     m_ui->passwordLabel->hide();
     m_ui->passwordEdit->hide();
 
@@ -174,30 +132,30 @@ HatchetAccountConfig::showLoggedIn()
     m_ui->errorLabel->clear();
     m_ui->errorLabel->hide();
 
-    m_ui->loginOrRegisterButton->setText( "Log out" );
-    m_ui->loginOrRegisterButton->setProperty( "action", Logout );
+    m_ui->loginButton->setText( "Log out" );
+    m_ui->loginButton->setProperty( "action", Logout );
+    m_ui->loginButton->setDefault( true );
 }
 
 
 void
 HatchetAccountConfig::showLoggedOut()
 {
-    m_ui->emailEdit->hide();
-    m_ui->emailLabel->hide();
-
-    m_ui->registerbutton->show();
     m_ui->usernameLabel->show();
     m_ui->usernameEdit->show();
     m_ui->passwordLabel->show();
     m_ui->passwordEdit->show();
+    m_ui->otpEdit->show();
+    m_ui->otpLabel->show();
 
     m_ui->loggedInLabel->clear();
     m_ui->loggedInLabel->hide();
 
     m_ui->errorLabel->clear();
 
-    m_ui->loginOrRegisterButton->setText( "Login" );
-    m_ui->loginOrRegisterButton->setProperty( "action", Login );
+    m_ui->loginButton->setText( "Login" );
+    m_ui->loginButton->setProperty( "action", Login );
+    m_ui->loginButton->setDefault( true );
 }
 
 
@@ -206,4 +164,19 @@ HatchetAccountConfig::accountInfoUpdated()
 {
     showLoggedIn();
     return;
+}
+
+
+void
+HatchetAccountConfig::authError( const QString &error )
+{
+    QMessageBox::critical( this, "An error was encountered logging in:", error );
+}
+
+
+void
+HatchetAccountConfig::showEvent( QShowEvent *event )
+{
+    AccountConfigWidget::showEvent( event );
+    m_ui->loginButton->setDefault( true );
 }
