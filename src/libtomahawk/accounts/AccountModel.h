@@ -100,6 +100,8 @@ signals:
     void errorInstalling( const QPersistentModelIndex& idx );
 
 private slots:
+    void init();
+
     void atticaLoaded();
     void loadData();
 

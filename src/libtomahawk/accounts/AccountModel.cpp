@@ -41,6 +41,19 @@ AccountModel::AccountModel( QObject* parent )
     : QAbstractListModel( parent )
     , m_waitingForAtticaLoaded( true )
 {
+    tDebug() << "Creating AccountModel";
+    if ( !AccountManager::instance()->isReady() )
+    {
+        connect( AccountManager::instance(), SIGNAL( ready() ), SLOT( init() ) );
+    }
+    else
+        init();
+}
+
+
+void
+AccountModel::init()
+{
     connect( AtticaManager::instance(), SIGNAL( resolversLoaded( Attica::Content::List ) ), this, SLOT( atticaLoaded() ) );
     connect( AtticaManager::instance(), SIGNAL( startedInstalling( QString ) ), this, SLOT( onStartedInstalling( QString ) ) );
     connect( AtticaManager::instance(), SIGNAL( resolverInstalled( QString ) ), this, SLOT( onFinishedInstalling( QString ) ) );
