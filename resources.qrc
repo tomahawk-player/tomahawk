@@ -152,5 +152,6 @@
         <file>data/images/refresh.svg</file>
         <file>data/images/inbox.svg</file>
         <file>data/images/new-inbox.svg</file>
+        <file>data/images/outbox.svg</file>
     </qresource>
 </RCC>
