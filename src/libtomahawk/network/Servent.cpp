@@ -311,11 +311,28 @@ Servent::registerOffer( const QString& key, Connection* conn )
     m_offers[key] = QPointer<Connection>(conn);
 }
 
-void Servent::registerLazyOffer(const QString &key, const peerinfo_ptr &peerInfo, const QString &nodeid )
+void
+Servent::registerLazyOffer(const QString &key, const peerinfo_ptr &peerInfo, const QString &nodeid, const int timeout )
 {
     m_lazyoffers[key] = QPair< peerinfo_ptr, QString >( peerInfo, nodeid );
+    QTimer* timer = new QTimer( this );
+    timer->setSingleShot( true );
+    NewClosure( timer, SIGNAL( timeout() ), this, SLOT( deleteLazyOffer( const QString& ) ), key );
+    timer->start();
 }
 
+void
+Servent::deleteLazyOffer( const QString& key )
+{
+    m_lazyoffers.remove( key );
+
+    // Cleanup.
+    QTimer* timer = (QTimer*)sender();
+    if ( timer )
+    {
+        timer->deleteLater();
+    }
+}
 
 void
 Servent::registerControlConnection( ControlConnection* conn )
@@ -464,8 +481,9 @@ Servent::registerPeer( const Tomahawk::peerinfo_ptr& peerInfo )
         QString key = uuid();
         const QString& nodeid = Database::instance()->impl()->dbid();
 
-        registerLazyOffer( key, peerInfo, nodeid );
         QList<SipInfo> sipInfos = getLocalSipInfos( nodeid, key );
+        // The offer should be removed after some time or we will build up a heap of unused PeerInfos
+        registerLazyOffer( key, peerInfo, nodeid, sipInfos.length() * 1.5 * CONNECT_TIMEOUT );
         // SipInfos were single-value before 0.7.999
         if ( !peerInfo->versionString().isEmpty() && TomahawkUtils::compareVersionStrings( peerInfo->versionString(), "Tomahawk Player EmptyOS 0.7.99" ) < 0)
         {

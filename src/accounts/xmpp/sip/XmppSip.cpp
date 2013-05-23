@@ -922,6 +922,11 @@ XmppSipPlugin::onNewIq( const Jreen::IQ& iq )
                 return;
             }
             peerInfo->setSipInfos( sipMessage->sipInfos() );
+            // If we stored a reference for this peer in our sip-waiting-queue, remove it.
+            if ( peersWaitingForSip.contains( iq.from().full() ) )
+            {
+                peersWaitingForSip.remove( iq.from().full() );
+            }
         }
     }
 }
@@ -964,6 +969,11 @@ XmppSipPlugin::handlePeerStatus( const Jreen::JID& jid, Jreen::Presence::Type pr
         if ( !peerInfo.isNull() )
         {
             peerInfo->setStatus( PeerInfo::Offline );
+            // If we stored a reference for this peer in our sip-waiting-queue, remove it.
+            if ( peersWaitingForSip.contains( fulljid ) )
+            {
+                peersWaitingForSip.remove( fulljid );
+            }
         }
 
         return;
@@ -981,6 +991,7 @@ XmppSipPlugin::handlePeerStatus( const Jreen::JID& jid, Jreen::Presence::Type pr
         peerInfo->setContactId( jid.bare() );
         peerInfo->setStatus( PeerInfo::Online );
         peerInfo->setFriendlyName( m_jidsNames.value( jid.bare() ) );
+        peersWaitingForSip[fulljid] = peerInfo;
 
 #ifndef ENABLE_HEADLESS
         if ( !m_avatarManager->avatar( jid.bare() ).isNull() )

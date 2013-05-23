@@ -77,7 +77,7 @@ public:
     QString createConnectionKey( const QString& name = "", const QString &nodeid = "", const QString &key = "", bool onceOnly = true );
 
     void registerOffer( const QString& key, Connection* conn );
-    void registerLazyOffer( const QString& key, const Tomahawk::peerinfo_ptr& peerInfo, const QString &nodeid );
+    void registerLazyOffer( const QString& key, const Tomahawk::peerinfo_ptr& peerInfo, const QString &nodeid , const int timeout );
 
     void registerControlConnection( ControlConnection* conn );
     void unregisterControlConnection( ControlConnection* conn );
@@ -156,6 +156,7 @@ public slots:
 
 private slots:
     void readyRead();
+    void deleteLazyOffer( const QString& key );
 
     Connection* claimOffer( ControlConnection* cc, const QString &nodeid, const QString &key, const QHostAddress peer = QHostAddress::Any );
 
