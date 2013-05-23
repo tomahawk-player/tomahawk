@@ -230,7 +230,6 @@ ConnectionManager::handoverSocket( QTcpSocketExtra* sock )
     Q_ASSERT( m_controlConnection->socket().isNull() );
     Q_ASSERT( sock->isValid() );
 
-    disconnect( sock, SIGNAL( readyRead() ),    this, SLOT( readyRead() ) );
     disconnect( sock, SIGNAL( disconnected() ), sock, SLOT( deleteLater() ) );
     disconnect( sock, SIGNAL( error( QAbstractSocket::SocketError ) ), this, SLOT( socketError( QAbstractSocket::SocketError ) ) );
 
