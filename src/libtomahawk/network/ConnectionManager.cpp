@@ -46,10 +46,11 @@ ConnectionManager::handleSipInfoPrivate( const Tomahawk::peerinfo_ptr &peerInfo 
 {
     m_mutex.lock();
     // Respect different behaviour before 0.7.99
-    if ( !peerInfo->versionString().isEmpty() && TomahawkUtils::compareVersionStrings( peerInfo->versionString(), "Tomahawk Player EmptyOS 0.7.99" ) < 0)
+    peerInfoDebug( peerInfo ) << Q_FUNC_INFO << "Trying to connect to client with version " << peerInfo->versionString().split(' ').last() << TomahawkUtils::compareVersionStrings( peerInfo->versionString().split(' ').last(), "0.7.99" );
+    if ( !peerInfo->versionString().isEmpty() && TomahawkUtils::compareVersionStrings( peerInfo->versionString().split(' ').last(), "0.7.99" ) < 0)
     {
         peerInfoDebug( peerInfo ) << Q_FUNC_INFO << "Using old-style (<0.7.99) connection order.";
-        SipInfo we = Servent::getSipInfoForOldVersions( Servent::instance()->getLocalSipInfos( QString(), QString() ) );
+        SipInfo we = Servent::getSipInfoForOldVersions( Servent::instance()->getLocalSipInfos( QString( "default" ), QString( "default" ) ) );
         SipInfo they = peerInfo->sipInfos().first();
         if ( they.isVisible() )
         {

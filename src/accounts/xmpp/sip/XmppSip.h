@@ -153,7 +153,10 @@ private:
     enum IqContext { NoContext, RequestDisco, RequestedDisco, SipMessageSent, RequestedVCard, RequestVersion, RequestedVersion };
     AvatarManager* m_avatarManager;
     Jreen::PubSub::Manager* m_pubSubManager;
-    QMap<QString, Tomahawk::peerinfo_ptr> peersWaitingForSip;
+    QMap< QString, Tomahawk::peerinfo_ptr > peersWaitingForSip;
+    QMap< QString, Tomahawk::peerinfo_ptr > peersWaitingForVersionString;
+    QMap< QString, QList< SipInfo > > sipinfosQueue;
+    QMutex peerQueueMutex;
 };
 
 #endif

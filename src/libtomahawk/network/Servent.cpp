@@ -485,7 +485,7 @@ Servent::registerPeer( const Tomahawk::peerinfo_ptr& peerInfo )
         // The offer should be removed after some time or we will build up a heap of unused PeerInfos
         registerLazyOffer( key, peerInfo, nodeid, sipInfos.length() * 1.5 * CONNECT_TIMEOUT );
         // SipInfos were single-value before 0.7.999
-        if ( !peerInfo->versionString().isEmpty() && TomahawkUtils::compareVersionStrings( peerInfo->versionString(), "Tomahawk Player EmptyOS 0.7.99" ) < 0)
+        if ( !peerInfo->versionString().isEmpty() && TomahawkUtils::compareVersionStrings( peerInfo->versionString().split(' ').last(), "0.7.99" ) < 0)
         {
             SipInfo info = getSipInfoForOldVersions( sipInfos );
             peerInfo->sendLocalSipInfos( QList<SipInfo>() << info );
