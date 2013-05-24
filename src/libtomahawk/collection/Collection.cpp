@@ -24,6 +24,7 @@
 #include "utils/Logger.h"
 #include "playlist/PlaylistUpdaterInterface.h"
 #include "utils/ImageRegistry.h"
+#include "accounts/AccountManager.h"
 
 #include <QMetaObject>
 #include <QGenericArgument>
@@ -231,9 +232,22 @@ Collection::setPlaylists( const QList<Tomahawk::playlist_ptr>& plists )
 //        qDebug() << "Batch inserting playlist:" << p->guid();
         m_playlists.insert( p->guid(), p );
         if ( !m_source.isNull() && m_source->isLocal() )
-            PlaylistUpdaterInterface::loadForPlaylist( p );
+        {
+            if ( Tomahawk::Accounts::AccountManager::instance()->isReady() )
+                doLoadPlaylistUpdater( p );
+            else
+                NewClosure( Tomahawk::Accounts::AccountManager::instance(), SIGNAL( ready() ),
+                            this, SLOT( doLoadPlaylistUpdater( playlist_ptr ) ), p );
+        }
     }
     emit playlistsAdded( plists );
+}
+
+
+void
+Collection::doLoadPlaylistUpdater( const playlist_ptr& p )
+{
+    PlaylistUpdaterInterface::loadForPlaylist( p );
 }
 
 

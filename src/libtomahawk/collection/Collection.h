@@ -129,6 +129,7 @@ protected:
 
 private slots:
     void onSynced();
+    void doLoadPlaylistUpdater( const playlist_ptr& p );
 
 private:
     bool m_changed;
