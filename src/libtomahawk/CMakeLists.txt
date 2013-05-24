@@ -93,7 +93,7 @@ set( libGuiSources
 
     resolvers/ExternalResolverGui.cpp
     resolvers/ScriptResolver.cpp
-    resolvers/QtScriptResolver.cpp
+    resolvers/JSResolver.cpp
 
     utils/ImageRegistry.cpp
     utils/WidgetDragFilter.cpp
@@ -482,6 +482,7 @@ TARGET_LINK_LIBRARIES( tomahawklib
     LINK_PRIVATE
     # Thirdparty shipped with tomahawk
     ${LIBPORTFWD_LIBRARIES}
+    ${QTKEYCHAIN_LIBRARIES}
 
     LINK_PUBLIC
     # External deps
@@ -490,7 +491,6 @@ TARGET_LINK_LIBRARIES( tomahawklib
     ${TAGLIB_LIBRARIES}
     ${CLUCENE_LIBRARIES}
     ${ECHONEST_LIBRARIES}
-    ${QTKEYCHAIN_LIBRARIES}
     ${QT_QTSQL_LIBRARY}
     ${QT_QTUITOOLS_LIBRARY}
     ${QT_QTGUI_LIBRARY}

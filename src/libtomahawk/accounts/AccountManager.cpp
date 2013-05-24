@@ -57,6 +57,7 @@ AccountManager::instance()
 AccountManager::AccountManager( QObject *parent )
     : QObject( parent )
     , m_readyForSip( false )
+    , m_completelyReady( false )
 {
     s_instance = this;
 
@@ -285,16 +286,15 @@ AccountManager::loadFromConfig()
     qDebug() << "LOADING ALL CREDENTIALS" << accountIds;
 
     m_creds = new CredentialsManager( this );
-    connect( m_creds, SIGNAL( ready() ),
-             this, SLOT( finishLoadingFromConfig() ) );
+    NewClosure( m_creds, SIGNAL( ready() ),
+                this, SLOT( finishLoadingFromConfig( QStringList ) ), accountIds );
     m_creds->loadCredentials( accountIds );
 }
 
 
 void
-AccountManager::finishLoadingFromConfig()
+AccountManager::finishLoadingFromConfig( const QStringList& accountIds )
 {
-    QStringList accountIds = m_creds->keys();
     qDebug() << "LOADING ALL ACCOUNTS" << accountIds;
 
     foreach ( const QString& accountId, accountIds )
@@ -308,7 +308,7 @@ AccountManager::finishLoadingFromConfig()
     }
 
     m_readyForSip = true;
-    emit readyForSip();
+    emit readyForSip(); //we have to yield to TomahawkApp because we don't know if Servent is ready
 }
 
 
@@ -320,6 +320,9 @@ AccountManager::initSIP()
     {
         hookupAndEnable( account, true );
     }
+
+    m_completelyReady = true;
+    emit ready();
 }
 
 

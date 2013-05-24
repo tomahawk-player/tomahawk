@@ -1123,7 +1123,7 @@ Servent::getIODeviceForUrl( const Tomahawk::result_ptr& result,
         return;
     }
 
-    //QtScriptResolverHelper::customIODeviceFactory is async!
+    //JSResolverHelper::customIODeviceFactory is async!
     m_iofactories.value( proto )( result, callback );
 }
 

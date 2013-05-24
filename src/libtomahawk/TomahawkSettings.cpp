@@ -627,7 +627,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
             tDebug() << "creds:" << creds;
             if ( !creds.isEmpty() )
             {
-                QKeychain::WritePasswordJob* j = new QKeychain::WritePasswordJob( QLatin1String( "tomahawkaccounts" ), this );
+                QKeychain::WritePasswordJob* j = new QKeychain::WritePasswordJob( QLatin1String( "Tomahawk" ), this );
                 j->setKey( account );
                 j->setAutoDelete( true );
 

@@ -28,12 +28,14 @@
 #include <QTimer>
 
 
-InboxJobItem::InboxJobItem( const QString& sender,
+InboxJobItem::InboxJobItem( Side side,
+                            const QString& prettyName,
                             const Tomahawk::trackdata_ptr& track,
                             QObject* parent )
     : JobStatusItem()
     , m_track( track )
-    , m_sender( sender )
+    , m_prettyName( prettyName )
+    , m_side( side )
 {
     m_timer = new QTimer( this );
     m_timer->setInterval( 8000 );
@@ -51,15 +53,32 @@ InboxJobItem::~InboxJobItem()
 QString
 InboxJobItem::mainText() const
 {
-    return tr( "%1 sent you %2 by %3." )
-            .arg( m_sender )
-            .arg( m_track->track() )
-            .arg( m_track->artist() );
+    switch ( m_side )
+    {
+    case Sending:
+        return tr( "Sent %1 by %2 to %3." )
+                .arg( m_track->track() )
+                .arg( m_track->artist() )
+                .arg( m_prettyName );
+    case Receiving:
+        return tr( "%1 sent you %2 by %3." )
+                .arg( m_prettyName )
+                .arg( m_track->track() )
+                .arg( m_track->artist() );
+    }
+    return QString();
 }
 
 
 QPixmap
 InboxJobItem::icon() const
 {
-    return TomahawkUtils::defaultPixmap( TomahawkUtils::Inbox, TomahawkUtils::Original, QSize( 64, 64 ) );
+    switch ( m_side )
+    {
+    case Sending:
+        return TomahawkUtils::defaultPixmap( TomahawkUtils::Outbox, TomahawkUtils::Original, QSize( 64, 64 ) );
+    case Receiving:
+        return TomahawkUtils::defaultPixmap( TomahawkUtils::Inbox, TomahawkUtils::Original, QSize( 64, 64 ) );
+    }
+    return QPixmap();
 }

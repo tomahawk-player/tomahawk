@@ -18,7 +18,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QtScriptResolver.h"
+#include "JSResolver.h"
 
 #include "Artist.h"
 #include "Album.h"
@@ -63,7 +63,7 @@
 #define RESOLVER_LEGACY_CODE2 "var resolver = Tomahawk.resolver.instance ? Tomahawk.resolver.instance : window;"
 
 
-QtScriptResolverHelper::QtScriptResolverHelper( const QString& scriptPath, QtScriptResolver* parent )
+JSResolverHelper::JSResolverHelper( const QString& scriptPath, JSResolver* parent )
     : QObject( parent )
     , m_urlCallbackIsAsync( false )
 {
@@ -73,7 +73,7 @@ QtScriptResolverHelper::QtScriptResolverHelper( const QString& scriptPath, QtScr
 
 
 QByteArray
-QtScriptResolverHelper::readRaw( const QString& fileName )
+JSResolverHelper::readRaw( const QString& fileName )
 {
     QString path = QFileInfo( m_scriptPath ).absolutePath();
     // remove directories
@@ -93,7 +93,7 @@ QtScriptResolverHelper::readRaw( const QString& fileName )
 
 
 QString
-QtScriptResolverHelper::compress( const QString& data )
+JSResolverHelper::compress( const QString& data )
 {
     QByteArray comp = qCompress( data.toLatin1(), 9 );
     return comp.toBase64();
@@ -101,21 +101,21 @@ QtScriptResolverHelper::compress( const QString& data )
 
 
 QString
-QtScriptResolverHelper::readCompressed( const QString& fileName )
+JSResolverHelper::readCompressed( const QString& fileName )
 {
     return compress( readRaw( fileName ) );
 }
 
 
 QString
-QtScriptResolverHelper::readBase64( const QString& fileName )
+JSResolverHelper::readBase64( const QString& fileName )
 {
     return readRaw( fileName ).toBase64();
 }
 
 
 QVariantMap
-QtScriptResolverHelper::resolverData()
+JSResolverHelper::resolverData()
 {
     QVariantMap resolver;
     resolver["config"] = m_resolverConfig;
@@ -125,14 +125,14 @@ QtScriptResolverHelper::resolverData()
 
 
 void
-QtScriptResolverHelper::log( const QString& message )
+JSResolverHelper::log( const QString& message )
 {
     tLog() << m_scriptPath << ":" << message;
 }
 
 
 void
-QtScriptResolverHelper::addTrackResults( const QVariantMap& results )
+JSResolverHelper::addTrackResults( const QVariantMap& results )
 {
     qDebug() << "Resolver reporting results:" << results;
     QList< Tomahawk::result_ptr > tracks = m_resolver->parseResultVariantList( results.value("results").toList() );
@@ -144,7 +144,7 @@ QtScriptResolverHelper::addTrackResults( const QVariantMap& results )
 
 
 void
-QtScriptResolverHelper::addArtistResults( const QVariantMap& results )
+JSResolverHelper::addArtistResults( const QVariantMap& results )
 {
     qDebug() << "Resolver reporting artists:" << results;
     QList< Tomahawk::artist_ptr > artists = m_resolver->parseArtistVariantList( results.value( "artists" ).toList() );
@@ -171,7 +171,7 @@ QtScriptResolverHelper::addArtistResults( const QVariantMap& results )
 
 
 void
-QtScriptResolverHelper::addAlbumResults( const QVariantMap& results )
+JSResolverHelper::addAlbumResults( const QVariantMap& results )
 {
     qDebug() << "Resolver reporting albums:" << results;
     QString artistName = results.value( "artist" ).toString();
@@ -202,7 +202,7 @@ QtScriptResolverHelper::addAlbumResults( const QVariantMap& results )
 
 
 void
-QtScriptResolverHelper::addAlbumTrackResults( const QVariantMap& results )
+JSResolverHelper::addAlbumTrackResults( const QVariantMap& results )
 {
     qDebug() << "Resolver reporting album tracks:" << results;
     QString artistName = results.value( "artist" ).toString();
@@ -244,7 +244,7 @@ QtScriptResolverHelper::addAlbumTrackResults( const QVariantMap& results )
 
 
 void
-QtScriptResolverHelper::reportCapabilities( const QVariant& v )
+JSResolverHelper::reportCapabilities( const QVariant& v )
 {
     bool ok = 0;
     int intCap = v.toInt( &ok );
@@ -259,14 +259,14 @@ QtScriptResolverHelper::reportCapabilities( const QVariant& v )
 
 
 void
-QtScriptResolverHelper::setResolverConfig( const QVariantMap& config )
+JSResolverHelper::setResolverConfig( const QVariantMap& config )
 {
     m_resolverConfig = config;
 }
 
 
 QString
-QtScriptResolverHelper::hmac( const QByteArray& key, const QByteArray &input )
+JSResolverHelper::hmac( const QByteArray& key, const QByteArray &input )
 {
 #ifdef QCA2_FOUND
     if ( !QCA::isSupported( "hmac(md5)" ) )
@@ -292,7 +292,7 @@ QtScriptResolverHelper::hmac( const QByteArray& key, const QByteArray &input )
 
 
 QString
-QtScriptResolverHelper::md5( const QByteArray& input )
+JSResolverHelper::md5( const QByteArray& input )
 {
     QByteArray const digest = QCryptographicHash::hash( input, QCryptographicHash::Md5 );
     return QString::fromLatin1( digest.toHex() );
@@ -300,7 +300,7 @@ QtScriptResolverHelper::md5( const QByteArray& input )
 
 
 void
-QtScriptResolverHelper::addCustomUrlHandler( const QString& protocol,
+JSResolverHelper::addCustomUrlHandler( const QString& protocol,
                                              const QString& callbackFuncName,
                                              const QString& isAsynchronous )
 {
@@ -308,7 +308,7 @@ QtScriptResolverHelper::addCustomUrlHandler( const QString& protocol,
 
     boost::function< void( const Tomahawk::result_ptr&,
                            boost::function< void( QSharedPointer< QIODevice >& ) > )> fac =
-            boost::bind( &QtScriptResolverHelper::customIODeviceFactory, this, _1, _2 );
+            boost::bind( &JSResolverHelper::customIODeviceFactory, this, _1, _2 );
     Servent::instance()->registerIODeviceFactory( protocol, fac );
 
     m_urlCallback = callbackFuncName;
@@ -316,21 +316,21 @@ QtScriptResolverHelper::addCustomUrlHandler( const QString& protocol,
 
 
 QByteArray
-QtScriptResolverHelper::base64Encode( const QByteArray& input )
+JSResolverHelper::base64Encode( const QByteArray& input )
 {
     return input.toBase64();
 }
 
 
 QByteArray
-QtScriptResolverHelper::base64Decode( const QByteArray& input )
+JSResolverHelper::base64Decode( const QByteArray& input )
 {
     return QByteArray::fromBase64( input );
 }
 
 
 void
-QtScriptResolverHelper::customIODeviceFactory( const Tomahawk::result_ptr& result,
+JSResolverHelper::customIODeviceFactory( const Tomahawk::result_ptr& result,
                                                boost::function< void( QSharedPointer< QIODevice >& ) > callback )
 {
     //can be sync or async
@@ -359,7 +359,7 @@ QtScriptResolverHelper::customIODeviceFactory( const Tomahawk::result_ptr& resul
 
 
 void
-QtScriptResolverHelper::reportStreamUrl( const QString& qid,
+JSResolverHelper::reportStreamUrl( const QString& qid,
                                          const QString& streamUrl )
 {
     if ( !m_streamCallbacks.contains( qid ) )
@@ -372,7 +372,7 @@ QtScriptResolverHelper::reportStreamUrl( const QString& qid,
 
 
 void
-QtScriptResolverHelper::returnStreamUrl( const QString& streamUrl, boost::function< void( QSharedPointer< QIODevice >& ) > callback )
+JSResolverHelper::returnStreamUrl( const QString& streamUrl, boost::function< void( QSharedPointer< QIODevice >& ) > callback )
 {
     QSharedPointer< QIODevice > sp;
     if ( streamUrl.isEmpty() )
@@ -392,12 +392,12 @@ QtScriptResolverHelper::returnStreamUrl( const QString& streamUrl, boost::functi
 }
 
 
-QtScriptResolver::QtScriptResolver( const QString& scriptPath, const QStringList& additionalScriptPaths )
+JSResolver::JSResolver( const QString& scriptPath, const QStringList& additionalScriptPaths )
     : Tomahawk::ExternalResolverGui( scriptPath )
     , m_ready( false )
     , m_stopped( true )
     , m_error( Tomahawk::ExternalResolver::NoError )
-    , m_resolverHelper( new QtScriptResolverHelper( scriptPath, this ) )
+    , m_resolverHelper( new JSResolverHelper( scriptPath, this ) )
     , m_requiredScriptPaths( additionalScriptPaths )
 {
     tLog() << Q_FUNC_INFO << "Loading JS resolver:" << scriptPath;
@@ -420,7 +420,7 @@ QtScriptResolver::QtScriptResolver( const QString& scriptPath, const QStringList
 }
 
 
-QtScriptResolver::~QtScriptResolver()
+JSResolver::~JSResolver()
 {
     if ( !m_stopped )
         stop();
@@ -429,14 +429,14 @@ QtScriptResolver::~QtScriptResolver()
 }
 
 
-Tomahawk::ExternalResolver* QtScriptResolver::factory( const QString& scriptPath, const QStringList& additionalScriptPaths )
+Tomahawk::ExternalResolver* JSResolver::factory( const QString& scriptPath, const QStringList& additionalScriptPaths )
 {
     ExternalResolver* res = 0;
 
     const QFileInfo fi( scriptPath );
     if ( fi.suffix() == "js" || fi.suffix() == "script" )
     {
-        res = new QtScriptResolver( scriptPath, additionalScriptPaths );
+        res = new JSResolver( scriptPath, additionalScriptPaths );
         tLog() << Q_FUNC_INFO << scriptPath << "Loaded.";
     }
 
@@ -445,14 +445,14 @@ Tomahawk::ExternalResolver* QtScriptResolver::factory( const QString& scriptPath
 
 
 bool
-QtScriptResolver::running() const
+JSResolver::running() const
 {
     return m_ready && !m_stopped;
 }
 
 
 void
-QtScriptResolver::reload()
+JSResolver::reload()
 {
     if ( QFile::exists( filePath() ) )
     {
@@ -466,7 +466,7 @@ QtScriptResolver::reload()
 
 
 void
-QtScriptResolver::init()
+JSResolver::init()
 {
     QFile scriptFile( filePath() );
     if( !scriptFile.open( QIODevice::ReadOnly ) )
@@ -550,7 +550,7 @@ QtScriptResolver::init()
 
 
 void
-QtScriptResolver::start()
+JSResolver::start()
 {
     m_stopped = false;
     if ( m_ready )
@@ -561,7 +561,7 @@ QtScriptResolver::start()
 
 
 void
-QtScriptResolver::artists( const Tomahawk::collection_ptr& collection )
+JSResolver::artists( const Tomahawk::collection_ptr& collection )
 {
     if ( QThread::currentThread() != thread() )
     {
@@ -593,7 +593,7 @@ QtScriptResolver::artists( const Tomahawk::collection_ptr& collection )
 
 
 void
-QtScriptResolver::albums( const Tomahawk::collection_ptr& collection, const Tomahawk::artist_ptr& artist )
+JSResolver::albums( const Tomahawk::collection_ptr& collection, const Tomahawk::artist_ptr& artist )
 {
     if ( QThread::currentThread() != thread() )
     {
@@ -628,7 +628,7 @@ QtScriptResolver::albums( const Tomahawk::collection_ptr& collection, const Toma
 
 
 void
-QtScriptResolver::tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::album_ptr& album )
+JSResolver::tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::album_ptr& album )
 {
     if ( QThread::currentThread() != thread() )
     {
@@ -664,14 +664,14 @@ QtScriptResolver::tracks( const Tomahawk::collection_ptr& collection, const Toma
 
 
 Tomahawk::ExternalResolver::ErrorState
-QtScriptResolver::error() const
+JSResolver::error() const
 {
     return m_error;
 }
 
 
 void
-QtScriptResolver::resolve( const Tomahawk::query_ptr& query )
+JSResolver::resolve( const Tomahawk::query_ptr& query )
 {
     if ( QThread::currentThread() != thread() )
     {
@@ -719,7 +719,7 @@ QtScriptResolver::resolve( const Tomahawk::query_ptr& query )
 
 
 QList< Tomahawk::result_ptr >
-QtScriptResolver::parseResultVariantList( const QVariantList& reslist )
+JSResolver::parseResultVariantList( const QVariantList& reslist )
 {
     QList< Tomahawk::result_ptr > results;
 
@@ -785,7 +785,7 @@ QtScriptResolver::parseResultVariantList( const QVariantList& reslist )
 
 
 QList< Tomahawk::artist_ptr >
-QtScriptResolver::parseArtistVariantList( const QVariantList& reslist )
+JSResolver::parseArtistVariantList( const QVariantList& reslist )
 {
     QList< Tomahawk::artist_ptr > results;
 
@@ -804,7 +804,7 @@ QtScriptResolver::parseArtistVariantList( const QVariantList& reslist )
 
 
 QList< Tomahawk::album_ptr >
-QtScriptResolver::parseAlbumVariantList( const Tomahawk::artist_ptr& artist, const QVariantList& reslist )
+JSResolver::parseAlbumVariantList( const Tomahawk::artist_ptr& artist, const QVariantList& reslist )
 {
     QList< Tomahawk::album_ptr > results;
 
@@ -823,7 +823,7 @@ QtScriptResolver::parseAlbumVariantList( const Tomahawk::artist_ptr& artist, con
 
 
 void
-QtScriptResolver::stop()
+JSResolver::stop()
 {
     m_stopped = true;
 
@@ -838,7 +838,7 @@ QtScriptResolver::stop()
 
 
 void
-QtScriptResolver::loadUi()
+JSResolver::loadUi()
 {
     QVariantMap m = m_engine->mainFrame()->evaluateJavaScript( RESOLVER_LEGACY_CODE  "resolver.getConfigUi();" ).toMap();
     m_dataWidgets = m["fields"].toList();
@@ -871,7 +871,7 @@ QtScriptResolver::loadUi()
 
 
 AccountConfigWidget*
-QtScriptResolver::configUI() const
+JSResolver::configUI() const
 {
     if( m_configWidget.isNull() )
         return 0;
@@ -881,7 +881,7 @@ QtScriptResolver::configUI() const
 
 
 void
-QtScriptResolver::saveConfig()
+JSResolver::saveConfig()
 {
     QVariant saveData = loadDataFromWidgets();
 //    qDebug() << Q_FUNC_INFO << saveData;
@@ -892,7 +892,7 @@ QtScriptResolver::saveConfig()
 
 
 QVariant
-QtScriptResolver::widgetData(QWidget* widget, const QString& property)
+JSResolver::widgetData(QWidget* widget, const QString& property)
 {
     for( int i = 0; i < widget->metaObject()->propertyCount(); i++ )
     {
@@ -907,7 +907,7 @@ QtScriptResolver::widgetData(QWidget* widget, const QString& property)
 
 
 void
-QtScriptResolver::setWidgetData(const QVariant& value, QWidget* widget, const QString& property)
+JSResolver::setWidgetData(const QVariant& value, QWidget* widget, const QString& property)
 {
     for( int i = 0; i < widget->metaObject()->propertyCount(); i++ )
     {
@@ -921,7 +921,7 @@ QtScriptResolver::setWidgetData(const QVariant& value, QWidget* widget, const QS
 
 
 QVariantMap
-QtScriptResolver::loadDataFromWidgets()
+JSResolver::loadDataFromWidgets()
 {
     QVariantMap saveData;
     foreach( const QVariant& dataWidget, m_dataWidgets )
@@ -941,7 +941,7 @@ QtScriptResolver::loadDataFromWidgets()
 
 
 void
-QtScriptResolver::fillDataInWidgets( const QVariantMap& data )
+JSResolver::fillDataInWidgets( const QVariantMap& data )
 {
     foreach(const QVariant& dataWidget, m_dataWidgets)
     {
@@ -963,7 +963,7 @@ QtScriptResolver::fillDataInWidgets( const QVariantMap& data )
 
 
 void
-QtScriptResolver::onCapabilitiesChanged( Tomahawk::ExternalResolver::Capabilities capabilities )
+JSResolver::onCapabilitiesChanged( Tomahawk::ExternalResolver::Capabilities capabilities )
 {
     m_capabilities = capabilities;
     loadCollections();
@@ -971,7 +971,7 @@ QtScriptResolver::onCapabilitiesChanged( Tomahawk::ExternalResolver::Capabilitie
 
 
 void
-QtScriptResolver::loadCollections()
+JSResolver::loadCollections()
 {
     if ( m_capabilities.testFlag( Browsable ) )
     {
@@ -1045,7 +1045,7 @@ QtScriptResolver::loadCollections()
 
 
 void
-QtScriptResolver::onCollectionIconFetched()
+JSResolver::onCollectionIconFetched()
 {
     QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
     if ( reply != 0 )
@@ -1069,28 +1069,28 @@ QtScriptResolver::onCollectionIconFetched()
 
 
 QVariantMap
-QtScriptResolver::resolverSettings()
+JSResolver::resolverSettings()
 {
     return m_engine->mainFrame()->evaluateJavaScript( RESOLVER_LEGACY_CODE "if(resolver.settings) resolver.settings; else getSettings(); " ).toMap();
 }
 
 
 QVariantMap
-QtScriptResolver::resolverUserConfig()
+JSResolver::resolverUserConfig()
 {
     return m_engine->mainFrame()->evaluateJavaScript( RESOLVER_LEGACY_CODE "resolver.getUserConfig();" ).toMap();
 }
 
 
 QVariantMap
-QtScriptResolver::resolverInit()
+JSResolver::resolverInit()
 {
     return m_engine->mainFrame()->evaluateJavaScript( RESOLVER_LEGACY_CODE "resolver.init();" ).toMap();
 }
 
 
 QVariantMap
-QtScriptResolver::resolverCollections()
+JSResolver::resolverCollections()
 {
     return QVariantMap(); //TODO: add a way to distinguish collections
     // the resolver should provide a unique ID string for each collection, and then be queriable
@@ -1100,7 +1100,7 @@ QtScriptResolver::resolverCollections()
 }
 
 
-ScriptEngine::ScriptEngine( QtScriptResolver* parent )
+ScriptEngine::ScriptEngine( JSResolver* parent )
     : QWebPage( (QObject*) parent )
     , m_parent( parent )
 {
@@ -1117,7 +1117,7 @@ ScriptEngine::ScriptEngine( QtScriptResolver* parent )
                .arg( TOMAHAWK_APPLICATION_NAME )
                .arg( TOMAHAWK_VERSION )
                ,"");
-    tLog( LOGVERBOSE ) << "QtScriptResolver Using header" << m_header;
+    tLog( LOGVERBOSE ) << "JSResolver Using header" << m_header;
 
     connect( networkAccessManager(), SIGNAL( sslErrors( QNetworkReply*, QList<QSslError> ) ),
                                        SLOT( sslErrorHandler( QNetworkReply*, QList<QSslError> ) ) );

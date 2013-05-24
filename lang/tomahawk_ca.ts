@@ -686,7 +686,12 @@ connect and stream from you?</source>
 <context>
     <name>InboxJobItem</name>
     <message>
-        <location filename="../src/libtomahawk/jobview/InboxJobItem.cpp" line="54"/>
+        <location filename="../src/libtomahawk/jobview/InboxJobItem.cpp" line="59"/>
+        <source>Sent %1 by %2 to %3.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/jobview/InboxJobItem.cpp" line="64"/>
         <source>%1 sent you %2 by %3.</source>
         <translation type="unfinished"/>
     </message>
@@ -705,6 +710,16 @@ connect and stream from you?</source>
         <location filename="../src/libtomahawk/infobar/InfoBar.cpp" line="92"/>
         <source>Filter...</source>
         <translation>Filtra...</translation>
+    </message>
+</context>
+<context>
+    <name>JSResolver</name>
+    <message>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="589"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="624"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="660"/>
+        <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1356,17 +1371,17 @@ connect and stream from you?</source>
         <translation>ara mateix</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/Account.cpp" line="36"/>
+        <location filename="../src/libtomahawk/accounts/Account.cpp" line="38"/>
         <source>Friend Finders</source>
         <translation>Cercadors d&apos;Amics</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/Account.cpp" line="38"/>
+        <location filename="../src/libtomahawk/accounts/Account.cpp" line="40"/>
         <source>Music Finders</source>
         <translation>Cercadors de Música</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/Account.cpp" line="41"/>
+        <location filename="../src/libtomahawk/accounts/Account.cpp" line="43"/>
         <source>Status Updaters</source>
         <translation>Actualitzadors d&apos;Estat</translation>
     </message>
@@ -1393,16 +1408,6 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/database/TomahawkSqlQuery.cpp" line="90"/>
         <source>Parameter count mismatch</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>QtScriptResolver</name>
-    <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="583"/>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="618"/>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="654"/>
-        <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -1465,22 +1470,22 @@ connect and stream from you?</source>
 <context>
     <name>ScriptEngine</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1126"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="1132"/>
         <source>Script Resolver Error: %1 %2 %3 %4</source>
         <translation>Error de resolució de l&apos;script: %1 %2 %3 %4 </translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1145"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="1151"/>
         <source>SSL Error</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1146"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="1152"/>
         <source>You have asked Tomahawk to connect securely to &lt;b&gt;%1&lt;/b&gt;, but we can&apos;t confirm that your connection is secure:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Do you want to trust this connection?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1153"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="1159"/>
         <source>Trust certificate</source>
         <translation type="unfinished"/>
     </message>
@@ -2167,12 +2172,12 @@ i emissores basades en els vostres gusts musicals.</translation>
 <context>
     <name>Tomahawk::Accounts::AccountModel</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="546"/>
+        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="560"/>
         <source>Manual Install Required</source>
         <translation>Es requereix una instal·lació manual</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="549"/>
+        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="563"/>
         <source>Unfortunately, automatic installation of this resolver is not available or disabled for your platform.&lt;br /&gt;&lt;br /&gt;Please use &quot;Install from file&quot; above, by fetching it from your distribution or compiling it yourself. Further instructions can be found here:&lt;br /&gt;&lt;br /&gt;http://www.tomahawk-player.org/resolvers/%1</source>
         <translation>La instal·lació automàtica d&apos;aquest resoludor no està disponible o està desactivada per a la vostra plataforma.&lt;br /&gt;&lt;br /&gt;Feu servir «Instal·la des d&apos;un fitxer», obtenint-lo des de la vostra distribució o compilant-lo. Trobareu més instruccions aquí:&lt;br /&gt;&lt;br /&gt;http://www.tomahawk-player.org/resolvers/%1</translation>
     </message>
@@ -3490,7 +3495,7 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/TomahawkApp.cpp" line="588"/>
+        <location filename="../src/TomahawkApp.cpp" line="590"/>
         <source>My Collection</source>
         <translation>La meva Col·lecció</translation>
     </message>
@@ -3513,7 +3518,7 @@ introduïu el PIN aquí:</translation>
 <context>
     <name>TomahawkSettings</name>
     <message>
-        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="375"/>
+        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="376"/>
         <source>Local Network</source>
         <translation>Xarxa local</translation>
     </message>

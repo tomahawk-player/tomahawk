@@ -91,8 +91,9 @@ public:
 
     Account* zeroconfAccount() const;
 
-    bool isConnected() const { return m_connected; }
-    bool isReadyForSip() const { return m_readyForSip; }
+    bool isConnected() const { return m_connected; }        //for use by TomahawkApp during startup
+    bool isReadyForSip() const { return m_readyForSip; }    //for use by TomahawkApp during startup
+    bool isReady() const { return m_completelyReady; }
 
     CredentialsManager* credentialsManager() const { return m_creds; }
 
@@ -104,6 +105,7 @@ public slots:
 signals:
     void readyForFactories(); //this happens first, right before loading accounts from config
     void readyForSip();       //then this, so TomahawkApp can call initSIP if Servent is ready
+    void ready();             //finally, when everything is done
 
     void added( Tomahawk::Accounts::Account* );
     void removed( Tomahawk::Accounts::Account* );
@@ -118,7 +120,7 @@ private slots:
     void init();
     void onStateChanged( Tomahawk::Accounts::Account::ConnectionState state );
     void onError( int code, const QString& msg );
-    void finishLoadingFromConfig();
+    void finishLoadingFromConfig( const QStringList& accountIds );
 
     void onSettingsChanged();
 
@@ -138,6 +140,7 @@ private:
     QList< Account* > m_connectedAccounts;
     bool m_connected;
     bool m_readyForSip;
+    bool m_completelyReady;
 
     QHash< AccountType, QList< Account* > > m_accountsByAccountType;
     QHash< QString, AccountFactory* > m_accountFactories;

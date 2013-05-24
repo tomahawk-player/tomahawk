@@ -24,7 +24,7 @@
 
 #include <QStringList>
 
-#define TOMAHAWK_KEYCHAINSVC QLatin1String("tomahawkaccounts")
+#define TOMAHAWK_KEYCHAINSVC QLatin1String("Tomahawk")
 
 namespace Tomahawk
 {
@@ -36,13 +36,14 @@ namespace Accounts
 CredentialsManager::CredentialsManager( QObject* parent )
     : QObject( parent )
 {
-
+    tDebug() << Q_FUNC_INFO;
 }
 
 
 void
 CredentialsManager::loadCredentials( QStringList keys )
 {
+    tDebug() << Q_FUNC_INFO << "keys:" << keys;
     foreach ( QString key, keys )
     {
         QKeychain::ReadPasswordJob* j = new QKeychain::ReadPasswordJob( TOMAHAWK_KEYCHAINSVC, this );
@@ -55,6 +56,7 @@ CredentialsManager::loadCredentials( QStringList keys )
                  SLOT( keychainJobFinished( QKeychain::Job* ) ) );
         m_readJobs << j;
         j->start();
+        tDebug()  << "Launching QtKeychain readJob for" << key;
     }
 
 }
@@ -124,9 +126,10 @@ CredentialsManager::setCredentials( const QString& key, const QVariantHash& valu
 void
 CredentialsManager::keychainJobFinished( QKeychain::Job* j )
 {
-    if ( j->error() == QKeychain::NoError )
+    tDebug() << Q_FUNC_INFO;
+    if ( QKeychain::ReadPasswordJob* readJob = qobject_cast< QKeychain::ReadPasswordJob* >( j ) )
     {
-        if ( QKeychain::ReadPasswordJob* readJob = qobject_cast< QKeychain::ReadPasswordJob* >( j ) )
+        if ( readJob->error() == QKeychain::NoError )
         {
             tDebug() << "QtKeychain readJob for" << readJob->key() << "finished without errors";
 
@@ -135,26 +138,28 @@ CredentialsManager::keychainJobFinished( QKeychain::Job* j )
             dataStream >> creds;
 
             m_credentials.insert( readJob->key(), creds );
-
-            m_readJobs.removeAll( readJob );
-
-            if ( m_readJobs.isEmpty() )
-            {
-                emit ready();
-            }
         }
-        else if ( QKeychain::WritePasswordJob* writeJob = qobject_cast< QKeychain::WritePasswordJob* >( j ) )
+        else
         {
-            tLog() << Q_FUNC_INFO << "QtKeychain writeJob for" << writeJob->key() << "finished";
+            tDebug() << "QtKeychain readJob finished with error:" << j->error() << j->errorString();
         }
-        else if ( QKeychain::DeletePasswordJob* deleteJob = qobject_cast< QKeychain::DeletePasswordJob* >( j ) )
+
+        m_readJobs.removeAll( readJob );
+
+        if ( m_readJobs.isEmpty() )
         {
-            tLog() << Q_FUNC_INFO << "QtKeychain deleteJob for" << deleteJob->key() << "finished";
+            emit ready();
         }
     }
-    else
+    else if ( QKeychain::WritePasswordJob* writeJob = qobject_cast< QKeychain::WritePasswordJob* >( j ) )
     {
-        tDebug() << "QtKeychain job finished with error:" << j->error() << j->errorString();
+        tLog() << Q_FUNC_INFO << "QtKeychain writeJob for" << writeJob->key() << "finished"
+               << ( ( j->error() == QKeychain::NoError ) ? "without error" : j->errorString() );
+    }
+    else if ( QKeychain::DeletePasswordJob* deleteJob = qobject_cast< QKeychain::DeletePasswordJob* >( j ) )
+    {
+        tLog() << Q_FUNC_INFO << "QtKeychain deleteJob for" << deleteJob->key() << "finished"
+               << ( ( j->error() == QKeychain::NoError ) ? "without error" : j->errorString() );
     }
     j->deleteLater();
 }
