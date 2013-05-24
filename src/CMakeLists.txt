@@ -1,13 +1,13 @@
 setup_qt()
 
-add_subdirectory( libtomahawk )
-
 include_directories( ${CMAKE_CURRENT_BINARY_DIR}/libtomahawk )
 include_directories( ${CMAKE_CURRENT_LIST_DIR}/libtomahawk )
 
-add_subdirectory( tomahawk )
+file(GLOB SUBDIRECTORIES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*")
 
-add_subdirectory( breakpad/CrashReporter/ )
-
-add_subdirectory( accounts )
-add_subdirectory( infoplugins )
+foreach(SUBDIRECTORY ${SUBDIRECTORIES})
+    if(IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${SUBDIRECTORY}" AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${SUBDIRECTORY}/CMakeLists.txt")
+        message(STATUS "build: " ${SUBDIRECTORY})
+        add_subdirectory( ${SUBDIRECTORY} )
+    endif()
+endforeach()
