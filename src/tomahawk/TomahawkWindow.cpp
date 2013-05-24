@@ -34,6 +34,7 @@
 #include <QMessageBox>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include <QShortcut>
 #include <QTimer>
 #include <QToolBar>
 #include <QToolButton>
@@ -253,7 +254,6 @@ TomahawkWindow::applyPlatformTweaks()
 #endif
 }
 
-
 void
 TomahawkWindow::setupToolBar()
 {
@@ -292,6 +292,9 @@ TomahawkWindow::setupToolBar()
     m_searchWidget->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred );
     m_searchWidget->setFixedWidth( 340 );
     connect( m_searchWidget, SIGNAL( returnPressed() ), this, SLOT( onFilterEdited() ) );
+    // Use Ctrl+F to focus the searchWidget
+    QShortcut *shortcut = new QShortcut( QKeySequence( QKeySequence::Find ), this );
+    QObject::connect( shortcut, SIGNAL( activated() ), m_searchWidget, SLOT( setFocus() ) );
 
     m_toolbar->addWidget( m_searchWidget )->setProperty( "kind", QString( "search" ) );
 
