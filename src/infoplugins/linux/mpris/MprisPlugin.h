@@ -24,7 +24,9 @@
 #include "Source.h"
 #include "audio/AudioEngine.h"
 #include "infosystem/InfoSystem.h"
-#include "infoplugins/InfoPluginDllMacro.h"
+
+#include "../../InfoPluginDllMacro.h"
+
 
 #include <QObject>
 #include <QVariant>

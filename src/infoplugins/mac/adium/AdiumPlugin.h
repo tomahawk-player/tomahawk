@@ -20,7 +20,8 @@
 #ifndef ADIUMPLUGIN_H
 #define ADIUMPLUGIN_H
 
-#include "infoplugins/InfoPluginDllMacro.h"
+#include "../../InfoPluginDllMacro.h"
+
 #include "infosystem/InfoSystem.h"
 
 #include <QNetworkAccessManager>
