@@ -25,6 +25,7 @@
 #include <QtCore/QVariantMap>
 
 #include "Typedefs.h"
+#include "accounts/AccountManager.h"
 #include "network/DbSyncConnection.h"
 #include "collection/Collection.h"
 #include "Query.h"
@@ -133,6 +134,7 @@ private slots:
     void dbLoaded( unsigned int id, const QString& fname );
     void updateIndexWhenSynced();
 
+    void handleDisconnect( Tomahawk::Accounts::Account*, Tomahawk::Accounts::AccountManager::DisconnectReason reason );
     void setOffline();
     void setOnline();
 

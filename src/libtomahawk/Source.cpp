@@ -69,8 +69,12 @@ Source::Source( int id, const QString& nodeId )
 
     if ( m_isLocal )
     {
-        connect( Accounts::AccountManager::instance(), SIGNAL( connected( Tomahawk::Accounts::Account* ) ), SLOT( setOnline() ) );
-        connect( Accounts::AccountManager::instance(), SIGNAL( disconnected( Tomahawk::Accounts::Account* ) ), SLOT( setOffline() ) );
+        connect( Accounts::AccountManager::instance(),
+                 SIGNAL( connected( Tomahawk::Accounts::Account* ) ),
+                 SLOT( setOnline() ) );
+        connect( Accounts::AccountManager::instance(),
+                 SIGNAL( disconnected( Tomahawk::Accounts::Account*, Tomahawk::Accounts::AccountManager::DisconnectReason ) ),
+                 SLOT( handleDisconnect( Tomahawk::Accounts::Account*, Tomahawk::Accounts::AccountManager::DisconnectReason ) ) );
     }
 }
 
@@ -294,6 +298,13 @@ Source::removeCollection( const collection_ptr& c )
     //Q_ASSERT( m_collections.length() == 1 && m_collections.first() == c ); // only 1 source supported atm
     m_collections.removeAll( c );
     emit collectionRemoved( c );
+}
+
+void
+Source::handleDisconnect( Tomahawk::Accounts::Account*, Tomahawk::Accounts::AccountManager::DisconnectReason reason )
+{
+    if ( reason == Tomahawk::Accounts::AccountManager::Disabled )
+        setOffline();
 }
 
 

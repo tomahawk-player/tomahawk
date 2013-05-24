@@ -21,7 +21,8 @@
 #ifndef ACCOUNTMANAGER_H
 #define ACCOUNTMANAGER_H
 
-#include <QtCore/QObject>
+#include <QFlags>
+#include <QObject>
 
 #include "Typedefs.h"
 #include "DllMacro.h"
@@ -42,6 +43,11 @@ class DLLEXPORT AccountManager : public QObject
     Q_OBJECT
 
 public:
+    enum DisconnectReason {
+        Disconnected,
+        Disabled
+    };
+
     static AccountManager* instance();
 
     explicit AccountManager( QObject *parent );
@@ -61,7 +67,7 @@ public:
     void hookupAndEnable( Account* account, bool startup = false ); /// Hook up signals and start the plugin
     void removeAccount( Account* account );
 
-    QList< Account* > accounts() const { return m_accounts; };
+    QList< Account* > accounts() const { return m_accounts; }
     QList< Account* > accounts( Tomahawk::Accounts::AccountType type ) const { return m_accountsByAccountType[ type ]; }
 
     QList< Account* > accountsFromFactory( Tomahawk::Accounts::AccountFactory* factory ) const;
@@ -103,7 +109,7 @@ signals:
     void removed( Tomahawk::Accounts::Account* );
 
     void connected( Tomahawk::Accounts::Account* );
-    void disconnected( Tomahawk::Accounts::Account* );
+    void disconnected( Tomahawk::Accounts::Account*, Tomahawk::Accounts::AccountManager::DisconnectReason );
     void authError( Tomahawk::Accounts::Account* );
 
     void stateChanged( Account* p, Accounts::Account::ConnectionState state );
