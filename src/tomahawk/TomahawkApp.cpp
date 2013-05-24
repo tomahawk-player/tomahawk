@@ -46,7 +46,7 @@
 #include "web/Api_v1.h"
 #include "SourceList.h"
 #include "ShortcutHandler.h"
-#include "libtomahawk/filemetadata/ScanManager.h"
+#include "filemetadata/ScanManager.h"
 #include "TomahawkSettings.h"
 #include "GlobalActionManager.h"
 #include "database/LocalCollection.h"

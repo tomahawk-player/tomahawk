@@ -20,7 +20,8 @@
 #ifndef ECHONESTPLUGIN_H
 #define ECHONESTPLUGIN_H
 
-#include "infoplugins/InfoPluginDllMacro.h"
+#include "../../InfoPluginDllMacro.h"
+
 #include "infosystem/InfoSystem.h"
 #include "infosystem/InfoSystemWorker.h"
 #include "echonest/Artist.h"

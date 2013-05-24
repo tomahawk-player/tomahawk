@@ -20,7 +20,8 @@
 #ifndef FDONOTIFYPLUGIN_H
 #define FDONOTIFYPLUGIN_H
 
-#include "infoplugins/InfoPluginDllMacro.h"
+#include "../../InfoPluginDllMacro.h"
+
 #include "infosystem/InfoSystem.h"
 
 #include <QDBusMessage>

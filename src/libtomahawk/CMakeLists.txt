@@ -1,16 +1,14 @@
 project( tomahawklib )
 
-setup_qt()
-
 add_definitions( ${QT_DEFINITIONS} )
 add_definitions( -DQT_SHARED )
 add_definitions( -DDLLEXPORT_PRO )
 add_definitions( -DQT_SHAREDPOINTER_TRACK_POINTERS )
 add_definitions( -DPORTFWDDLLEXPORT_STATIC )
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../Config.h.in
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../tomahawk/Config.h.in
                ${CMAKE_CURRENT_BINARY_DIR}/config.h)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../TomahawkVersion.h.in
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../tomahawk/TomahawkVersion.h.in
                ${CMAKE_CURRENT_BINARY_DIR}/TomahawkVersion.h)
 
 set( libGuiSources

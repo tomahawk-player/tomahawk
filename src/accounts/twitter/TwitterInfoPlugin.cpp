@@ -20,7 +20,7 @@
 
 #include "TwitterInfoPlugin.h"
 
-#include "accounts/twitter/TwitterAccount.h"
+#include "TwitterAccount.h"
 
 #include "GlobalActionManager.h"
 #include "utils/Logger.h"

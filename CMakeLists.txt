@@ -311,7 +311,6 @@ SET( TOMAHAWK_LIBRARIES tomahawklib )
 
 ADD_SUBDIRECTORY( thirdparty )
 ADD_SUBDIRECTORY( src )
-ADD_SUBDIRECTORY( src/libtomahawk )
 ADD_SUBDIRECTORY( admin )
 
 if( BUILD_TESTS )

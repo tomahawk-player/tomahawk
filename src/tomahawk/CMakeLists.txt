@@ -1,9 +1,6 @@
 PROJECT( tomahawk )
 CMAKE_MINIMUM_REQUIRED( VERSION 2.8 )
 
-
-setup_qt()
-
 include( AddAppIconMacro )
 
 # SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
@@ -93,10 +90,10 @@ SET( tomahawkUI ${tomahawkUI}
 INCLUDE_DIRECTORIES(
     .
     ${CMAKE_CURRENT_BINARY_DIR}
-    ${CMAKE_CURRENT_BINARY_DIR}/libtomahawk
+    ${CMAKE_CURRENT_BINARY_DIR}/../libtomahawk
 
     sourcetree
-    libtomahawk
+    ../libtomahawk
     mac
 
     ${THIRDPARTY_DIR}/breakpad
@@ -132,9 +129,6 @@ IF( APPLE )
     SET( tomahawkSources ${tomahawkSources} mac/TomahawkApp_Mac.mm mac/MacShortcutHandler.cpp )
 ENDIF( APPLE )
 
-ADD_SUBDIRECTORY( accounts )
-ADD_SUBDIRECTORY( infoplugins )
-
 IF(QCA2_FOUND)
     INCLUDE_DIRECTORIES( ${QCA2_INCLUDE_DIR} )
 ENDIF(QCA2_FOUND)
@@ -156,14 +150,10 @@ SET( final_src ${final_src} ${tomahawkMoc} ${tomahawkSources} ${trans_outfile})
 IF( BUILD_GUI )
     LIST(APPEND tomahawkSources ${tomahawkSourcesGui})
     qt_wrap_ui( tomahawkUI_H ${tomahawkUI} )
-
-    IF( WITH_CRASHREPORTER )
-        ADD_SUBDIRECTORY( breakpad/CrashReporter )
-    ENDIF()
 ENDIF()
 
 kde4_add_app_icon( tomahawkSources "${CMAKE_SOURCE_DIR}/data/icons/tomahawk-icon-*.png" )
-qt_add_resources( RC_SRCS "../resources.qrc" )
+qt_add_resources( RC_SRCS "../../resources.qrc" )
 
 SET( final_src ${final_src} ${tomahawkUI_H} ${tomahawkMoc} ${tomahawkSources} ${RC_SRCS} )
 
