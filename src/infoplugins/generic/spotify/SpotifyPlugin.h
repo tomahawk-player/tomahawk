@@ -22,7 +22,9 @@
 
 #include "infosystem/InfoSystem.h"
 #include "infosystem/InfoSystemWorker.h"
-#include "infoplugins/InfoPluginDllMacro.h"
+
+#include "../../InfoPluginDllMacro.h"
+
 
 #include <QNetworkReply>
 #include <QObject>

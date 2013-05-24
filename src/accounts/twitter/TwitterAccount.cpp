@@ -20,8 +20,8 @@
 
 #include "TwitterAccount.h"
 #include "TwitterConfigWidget.h"
-#include "accounts/twitter/TomahawkOAuthTwitter.h"
-#include "libtomahawk/infosystem/InfoSystem.h"
+#include "TomahawkOAuthTwitter.h"
+#include "infosystem/InfoSystem.h"
 #include "utils/Logger.h"
 #include "sip/SipPlugin.h"
 

@@ -21,7 +21,9 @@
 #define ROVIPLUGIN_H
 
 #include "infosystem/InfoSystem.h"
-#include "infoplugins/InfoPluginDllMacro.h"
+
+#include "../../InfoPluginDllMacro.h"
+
 
 #include <QNetworkReply>
 

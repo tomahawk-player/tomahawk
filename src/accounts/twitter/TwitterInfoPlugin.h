@@ -21,7 +21,7 @@
 #define TWITTERINFOPLUGIN_H
 
 #include "infosystem/InfoSystem.h"
-#include "accounts/twitter/TomahawkOAuthTwitter.h"
+#include "TomahawkOAuthTwitter.h"
 
 #include <QTweetLib/qtweetuser.h>
 #include <QTweetLib/qtweetstatus.h>
