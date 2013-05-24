@@ -25,6 +25,7 @@
 #include <QtCore/QVariantMap>
 
 #include "Typedefs.h"
+#include "network/ControlConnection.h"
 #include "network/DbSyncConnection.h"
 #include "collection/Collection.h"
 #include "Query.h"
@@ -32,7 +33,6 @@
 
 #include "DllMacro.h"
 
-class ControlConnection;
 class DatabaseCommand_DeleteFiles;
 class DatabaseCommand_LoadAllSources;
 class DatabaseCommand_LogPlayback;
@@ -85,7 +85,7 @@ public:
     void removeCollection( const Tomahawk::collection_ptr& c );
 
     int id() const { return m_id; }
-    ControlConnection* controlConnection() const { return m_cc; }
+    ControlConnection* controlConnection() const { return m_cc.data(); }
     void setControlConnection( ControlConnection* cc );
 
     const QSet< Tomahawk::peerinfo_ptr > peerInfos() const;
@@ -168,7 +168,7 @@ private:
     DBSyncConnection::State m_state;
     QTimer m_currentTrackTimer;
 
-    ControlConnection* m_cc;
+    QPointer<ControlConnection> m_cc;
     QList< QSharedPointer<DatabaseCommand> > m_cmds;
     int m_commandCount;
     QString m_lastCmdGuid;
