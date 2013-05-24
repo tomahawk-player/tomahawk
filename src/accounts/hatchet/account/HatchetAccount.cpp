@@ -307,8 +307,8 @@ HatchetAccount::onPasswordLoginFinished( QNetworkReply* reply, const QString& us
 
     if ( !authenticationToken.isEmpty() )
     {
-        // We're succesful! Now log in with our authtoken for access
-        fetchAccessTokens();
+        if ( sipPlugin() )
+            sipPlugin()->connectPlugin();
     }
 }
 
@@ -316,6 +316,7 @@ HatchetAccount::onPasswordLoginFinished( QNetworkReply* reply, const QString& us
 void
 HatchetAccount::onFetchAccessTokensFinished()
 {
+    tLog() << Q_FUNC_INFO;
     QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
     Q_ASSERT( reply );
     bool ok;
@@ -324,14 +325,14 @@ HatchetAccount::onFetchAccessTokensFinished()
     {
         if ( resp["code"].toInt() == 140 )
         {
-            tLog() << "Expired credentials, need to reauthenticate with password";
+            tLog() << Q_FUNC_INFO << "Expired credentials, need to reauthenticate with password";
             QVariantHash creds = credentials();
             creds.remove( "authtoken" );
             setCredentials( creds );
             syncConfig();
         }
         else
-            tLog() << "Unable to fetch access tokens";
+            tLog() << Q_FUNC_INFO << "Unable to fetch access tokens";
         return;
     }
 
@@ -339,6 +340,8 @@ HatchetAccount::onFetchAccessTokensFinished()
     creds[ "accesstokens" ] = resp[ "message" ].toMap()[ "accesstokens" ];
     setCredentials( creds );
     syncConfig();
+
+    tLog() << Q_FUNC_INFO << "Access tokens fetched successfully";
 
     emit accessTokensFetched();
 }
@@ -403,8 +406,8 @@ HatchetAccount::parseReply( QNetworkReply* reply, bool& okRet ) const
         tLog() << "Error from tomahawk server response, or in parsing from json:" << resp.value( "error" ).toString() << resp;
     }
 
-    tLog() << Q_FUNC_INFO << "Got reply" << resp.keys();
-    tLog() << Q_FUNC_INFO << "Got reply" << resp.values();
+    tLog() << Q_FUNC_INFO << "Got keys" << resp.keys();
+    tLog() << Q_FUNC_INFO << "Got values" << resp.values();
     okRet = true;
     return resp;
 }

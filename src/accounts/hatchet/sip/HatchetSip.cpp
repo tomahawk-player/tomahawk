@@ -110,8 +110,10 @@ HatchetSipPlugin::hatchetAccount() const
 void
 HatchetSipPlugin::connectPlugin()
 {
+    tLog() << Q_FUNC_INFO;
     if ( !m_account->isAuthenticated() )
     {
+        tLog() << Q_FUNC_INFO << "Account not authenticated, not continuing";
         //FIXME: Prompt user for password?
         return;
     }
@@ -124,6 +126,7 @@ HatchetSipPlugin::connectPlugin()
 void
 HatchetSipPlugin::disconnectPlugin()
 {
+    tLog() << Q_FUNC_INFO;
     if ( m_webSocketThreadController && m_webSocketThreadController->isRunning() )
         emit disconnectWebSocket();
     else
@@ -137,8 +140,12 @@ HatchetSipPlugin::disconnectPlugin()
 void
 HatchetSipPlugin::connectWebSocket()
 {
+    tLog() << Q_FUNC_INFO;
     if ( m_webSocketThreadController )
+    {
+        tLog() << Q_FUNC_INFO << "Already have a thread running, bailing";
         return;
+    }
 
     m_webSocketThreadController = QPointer< WebSocketThreadController >( new WebSocketThreadController( this ) );
 
