@@ -687,7 +687,12 @@ erlauben sich mit dir zu verbinden?</translation>
 <context>
     <name>InboxJobItem</name>
     <message>
-        <location filename="../src/libtomahawk/jobview/InboxJobItem.cpp" line="54"/>
+        <location filename="../src/libtomahawk/jobview/InboxJobItem.cpp" line="59"/>
+        <source>Sent %1 by %2 to %3.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/jobview/InboxJobItem.cpp" line="64"/>
         <source>%1 sent you %2 by %3.</source>
         <translation>%1 gesendet an dir %2 von %3.</translation>
     </message>
@@ -706,6 +711,16 @@ erlauben sich mit dir zu verbinden?</translation>
         <location filename="../src/libtomahawk/infobar/InfoBar.cpp" line="92"/>
         <source>Filter...</source>
         <translation>Filter...</translation>
+    </message>
+</context>
+<context>
+    <name>JSResolver</name>
+    <message>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="589"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="624"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="660"/>
+        <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1398,16 +1413,6 @@ erlauben sich mit dir zu verbinden?</translation>
     </message>
 </context>
 <context>
-    <name>QtScriptResolver</name>
-    <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="589"/>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="624"/>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="660"/>
-        <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
-        <translation>Script Resolver Warnung: API aufruf %1 zurückgegebener Daten synchron. </translation>
-    </message>
-</context>
-<context>
     <name>QueueView</name>
     <message>
         <location filename="../src/libtomahawk/playlist/QueueView.ui" line="41"/>
@@ -1466,22 +1471,22 @@ erlauben sich mit dir zu verbinden?</translation>
 <context>
     <name>ScriptEngine</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1132"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="1132"/>
         <source>Script Resolver Error: %1 %2 %3 %4</source>
         <translation>Script Resolver Fehler: %1 %2 %3 %4</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1151"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="1151"/>
         <source>SSL Error</source>
         <translation>SSL Fehler</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1152"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="1152"/>
         <source>You have asked Tomahawk to connect securely to &lt;b&gt;%1&lt;/b&gt;, but we can&apos;t confirm that your connection is secure:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Do you want to trust this connection?</source>
         <translation>Sie wurden gebeten, Tomahawk sicher zu &lt;b&gt;%1&lt;/b&gt; verbinden, aber wir können nicht bestätigen, dass die Verbindung sicher ist:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt; Möchten Sie dieser Verbindung vertrauen?</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1159"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="1159"/>
         <source>Trust certificate</source>
         <translation>Zertifikat vertrauen </translation>
     </message>
@@ -2165,12 +2170,12 @@ erlauben sich mit dir zu verbinden?</translation>
 <context>
     <name>Tomahawk::Accounts::AccountModel</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="546"/>
+        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="560"/>
         <source>Manual Install Required</source>
         <translation>Manuelle Installation benötigt</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="549"/>
+        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="563"/>
         <source>Unfortunately, automatic installation of this resolver is not available or disabled for your platform.&lt;br /&gt;&lt;br /&gt;Please use &quot;Install from file&quot; above, by fetching it from your distribution or compiling it yourself. Further instructions can be found here:&lt;br /&gt;&lt;br /&gt;http://www.tomahawk-player.org/resolvers/%1</source>
         <translation>Leider ist die automatische Installation dieses Resolvers nicht auf deinem System möglich.&lt;br/&gt;&lt;br/&gt;Bitte benutze &quot;Installiere Datei&quot; und installiere ihn manuell. Weitere Informationen findest du hier:&lt;br/&gt;&lt;br/&gt;http://www.tomahawk-player.org/resolvers/%1</translation>
     </message>

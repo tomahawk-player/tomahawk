@@ -687,7 +687,12 @@ yhdistää ja toistaa sinulta virtaa?</translation>
 <context>
     <name>InboxJobItem</name>
     <message>
-        <location filename="../src/libtomahawk/jobview/InboxJobItem.cpp" line="54"/>
+        <location filename="../src/libtomahawk/jobview/InboxJobItem.cpp" line="59"/>
+        <source>Sent %1 by %2 to %3.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/jobview/InboxJobItem.cpp" line="64"/>
         <source>%1 sent you %2 by %3.</source>
         <translation>%1 lähetti sinulle artistin %3 kappaleen %2.</translation>
     </message>
@@ -706,6 +711,16 @@ yhdistää ja toistaa sinulta virtaa?</translation>
         <location filename="../src/libtomahawk/infobar/InfoBar.cpp" line="92"/>
         <source>Filter...</source>
         <translation>Suodata...</translation>
+    </message>
+</context>
+<context>
+    <name>JSResolver</name>
+    <message>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="589"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="624"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="660"/>
+        <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
+        <translation>Skriptiselvittimen varoitus: API-kutsu %1 palautti dataa synkronisesti.</translation>
     </message>
 </context>
 <context>
@@ -1398,16 +1413,6 @@ yhdistää ja toistaa sinulta virtaa?</translation>
     </message>
 </context>
 <context>
-    <name>QtScriptResolver</name>
-    <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="589"/>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="624"/>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="660"/>
-        <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
-        <translation>Skriptiselvittimen varoitus: API-kutsu %1 palautti dataa synkronisesti.</translation>
-    </message>
-</context>
-<context>
     <name>QueueView</name>
     <message>
         <location filename="../src/libtomahawk/playlist/QueueView.ui" line="41"/>
@@ -1466,22 +1471,22 @@ yhdistää ja toistaa sinulta virtaa?</translation>
 <context>
     <name>ScriptEngine</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1132"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="1132"/>
         <source>Script Resolver Error: %1 %2 %3 %4</source>
         <translation>Skriptiselvittimen virhe: %1 %2 %3 %4</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1151"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="1151"/>
         <source>SSL Error</source>
         <translation>SSL-virhe</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1152"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="1152"/>
         <source>You have asked Tomahawk to connect securely to &lt;b&gt;%1&lt;/b&gt;, but we can&apos;t confirm that your connection is secure:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Do you want to trust this connection?</source>
         <translation>Olet pyytänyt Tomahawkia yhdistämään turvallisesti palvelimeen &lt;b&gt;%1&lt;/b&gt;, mutta yhteyden turvallisuutta ei voida varmistaa:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Haluatko luottaa tähän yhteyteen?</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/QtScriptResolver.cpp" line="1159"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="1159"/>
         <source>Trust certificate</source>
         <translation>Luota varmenteeseen</translation>
     </message>
@@ -2171,12 +2176,12 @@ napsauttamalla hiiren oikealla.</translation>
 <context>
     <name>Tomahawk::Accounts::AccountModel</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="546"/>
+        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="560"/>
         <source>Manual Install Required</source>
         <translation>Manuaalinen asennus tarvitaan</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="549"/>
+        <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="563"/>
         <source>Unfortunately, automatic installation of this resolver is not available or disabled for your platform.&lt;br /&gt;&lt;br /&gt;Please use &quot;Install from file&quot; above, by fetching it from your distribution or compiling it yourself. Further instructions can be found here:&lt;br /&gt;&lt;br /&gt;http://www.tomahawk-player.org/resolvers/%1</source>
         <translation>Valitettavasti tämän selvittimen automaattinen asennus ei ole saatavilla tai on poissa käytöstä alustallasi.&lt;br /&gt;&lt;br /&gt;Hae selvitin jakelusi kautta tai kääntämällä se itse, ja käytä sitten Asenna tiedostosta -painiketta. Lisäohjeita on osoitteessa:&lt;br /&gt;&lt;br /&gt;http://www.tomahawk-player.org/resolvers/%1</translation>
     </message>
