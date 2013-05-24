@@ -25,6 +25,7 @@
 #include "SourceList.h"
 #include "utils/Logger.h"
 #include "utils/Closure.h"
+#include "jobview/JobStatusModel.h"
 
 
 InboxModel::InboxModel( QObject* parent )
@@ -126,6 +127,28 @@ void
 InboxModel::clear()
 {
     PlaylistModel::clear();
+}
+
+
+void
+InboxModel::showNotification( InboxJobItem::Side side,
+                              const Tomahawk::source_ptr& src,
+                              const Tomahawk::trackdata_ptr& track )
+{
+    JobStatusView::instance()->model()->addJob( new InboxJobItem( side,
+                                                                  src->friendlyName(),
+                                                                  track ) );
+}
+
+
+void
+InboxModel::showNotification( InboxJobItem::Side side,
+                              const QString& dbid,
+                              const Tomahawk::trackdata_ptr& track )
+{
+    Tomahawk::source_ptr src = SourceList::instance()->get( dbid );
+    if ( !src.isNull() )
+        showNotification( side, src, track );
 }
 
 
