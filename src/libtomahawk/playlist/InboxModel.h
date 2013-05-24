@@ -22,6 +22,7 @@
 #include "PlaylistModel.h"
 #include "Typedefs.h"
 #include "DllMacro.h"
+#include "jobview/InboxJobItem.h"
 
 
 class DLLEXPORT InboxModel : public PlaylistModel
@@ -44,6 +45,14 @@ public slots:
     virtual void removeIndex( const QModelIndex &index, bool moreToCome );
 
     virtual void clear();
+
+    virtual void showNotification( InboxJobItem::Side side,
+                                   const Tomahawk::source_ptr& src,
+                                   const Tomahawk::trackdata_ptr& track ); //for lack of a better place to put this
+    virtual void showNotification( InboxJobItem::Side side,
+                                   const QString& dbid,
+                                   const Tomahawk::trackdata_ptr& track );
+
 
 private slots:
     void loadTracks();
