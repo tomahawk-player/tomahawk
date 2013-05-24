@@ -52,7 +52,7 @@ SpotifyUpdaterFactory::create( const Tomahawk::playlist_ptr& pl, const QVariantH
 
     if ( m_account.isNull() )
     {
-        qWarning() << "Found a spotify updater with no spotify account... ignoreing for now!!";
+        qWarning() << "Found a spotify updater with no spotify account... ignoring for now!!";
         return 0;
     }
 
