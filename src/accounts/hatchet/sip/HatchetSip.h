@@ -84,7 +84,6 @@ private:
 
     QPointer< WebSocketThreadController > m_webSocketThreadController;
     QString m_token;
-    QString m_userid;
     QString m_uuid;
     SipState m_sipState;
     int m_version;

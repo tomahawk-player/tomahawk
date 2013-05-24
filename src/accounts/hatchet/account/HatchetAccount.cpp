@@ -42,7 +42,7 @@ static QPixmap* s_icon = 0;
 HatchetAccount* HatchetAccount::s_instance  = 0;
 
 const QString c_loginServer("https://mandella.hatchet.is/v1");
-const QString c_accessTokenServer("https://mandella.hatchet.is");
+const QString c_accessTokenServer("https://mandella.hatchet.is/v1");
 
 HatchetAccountFactory::HatchetAccountFactory()
 {
@@ -237,13 +237,19 @@ HatchetAccount::loginWithPassword( const QString& username, const QString& passw
     params[ "client" ] = "Tomahawk (" + QHostInfo::localHostName() + ")";
     params[ "nonce" ] = QString( result.toByteArray().toBase64() );
 
-    QNetworkReply* reply = buildRequest( c_loginServer, "auth/credentials", params );
+    QJson::Serializer s;
+    const QByteArray msgJson = s.serialize( params );
+
+    QNetworkRequest req( QUrl( c_loginServer + "/auth/credentials") );
+    req.setHeader( QNetworkRequest::ContentTypeHeader, "application/json; charset=utf-8" );
+    QNetworkReply* reply = TomahawkUtils::nam()->post( req, msgJson );
+
     NewClosure( reply, SIGNAL( finished() ), this, SLOT( onPasswordLoginFinished( QNetworkReply*, const QString& ) ), reply, username );
 }
 
 
 void
-HatchetAccount::fetchAccessTokens()
+HatchetAccount::fetchAccessTokens( const QString& type )
 {
     if ( username().isEmpty() || authToken().isEmpty() )
     {
@@ -254,12 +260,11 @@ HatchetAccount::fetchAccessTokens()
     if ( authTokenExpiration() < ( QDateTime::currentMSecsSinceEpoch() / 1000 ) )
         tLog() << "Auth token has expired, but may still be valid on the server";
 
-    QVariantMap params;
-    params[ "authtoken" ] = authToken();
-    params[ "username" ] = username();
-
     tLog() << "Fetching access tokens";
-    QNetworkReply* reply = buildRequest( c_accessTokenServer, "tokens", params );
+    QNetworkRequest req( QUrl( c_accessTokenServer + "/tokens/" + type + "?authtoken=" + authToken() ) );
+
+    QNetworkReply* reply = TomahawkUtils::nam()->get( req );
+
     connect( reply, SIGNAL( finished() ), this, SLOT( onFetchAccessTokensFinished() ) );
 }
 
@@ -321,23 +326,34 @@ HatchetAccount::onFetchAccessTokensFinished()
     Q_ASSERT( reply );
     bool ok;
     const QVariantMap resp = parseReply( reply, ok );
-    if ( !ok )
+    if ( !ok || !resp.value( "error" ).toString().isEmpty() )
     {
-        if ( resp["code"].toInt() == 140 )
-        {
-            tLog() << Q_FUNC_INFO << "Expired credentials, need to reauthenticate with password";
-            QVariantHash creds = credentials();
-            creds.remove( "authtoken" );
-            setCredentials( creds );
-            syncConfig();
-        }
-        else
-            tLog() << Q_FUNC_INFO << "Unable to fetch access tokens";
+        tLog() << Q_FUNC_INFO << "Auth server returned an error";
+        if ( ok )
+            emit authError( resp.value( "error" ).toString() );
+        deauthenticate();
         return;
     }
 
     QVariantHash creds = credentials();
-    creds[ "accesstokens" ] = resp[ "message" ].toMap()[ "accesstokens" ];
+    QStringList tokenTypesFound;
+
+    tLog() << Q_FUNC_INFO << "resp: " << resp;
+
+    foreach( QVariant tokenVariant, resp[ "data" ].toMap()[ "tokens" ].toList() )
+    {
+        QVariantMap tokenMap = tokenVariant.toMap();
+        QString tokenTypeName = tokenMap[ "type" ].toString() + "tokens";
+        if ( !tokenTypesFound.contains( tokenTypeName ) )
+        {
+            creds[ tokenTypeName ] = QVariantList();
+            tokenTypesFound.append( tokenTypeName );
+        }
+        creds[ tokenTypeName ] = creds[ tokenTypeName ].toList() << tokenMap;
+    }
+
+    tLog() << Q_FUNC_INFO << "Creds: " << creds;
+
     setCredentials( creds );
     syncConfig();
 
@@ -358,20 +374,6 @@ void
 HatchetAccount::authUrlDiscovered( Service service, const QString &authUrl )
 {
     m_extraAuthUrls[ service ] = authUrl;
-}
-
-
-QNetworkReply*
-HatchetAccount::buildRequest( const QString& server, const QString& command, const QVariantMap& params ) const
-{
-    QJson::Serializer s;
-    const QByteArray msgJson = s.serialize( params );
-
-    QNetworkRequest req( QUrl( QString( "%1/%2" ).arg( server ).arg( command ) ) );
-    req.setHeader( QNetworkRequest::ContentTypeHeader, "application/json; charset=utf-8" );
-    QNetworkReply* reply = TomahawkUtils::nam()->post( req, msgJson );
-
-    return reply;
 }
 
 

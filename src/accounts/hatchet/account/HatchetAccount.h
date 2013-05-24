@@ -89,7 +89,7 @@ public:
 
     QString username() const;
 
-    void fetchAccessTokens();
+    void fetchAccessTokens( const QString& type = "dreamcatcher" );
 
     QString authUrlForService( const Service& service ) const;
 
@@ -109,7 +109,6 @@ private:
 
     void loginWithPassword( const QString& username, const QString& password, const QString &otp );
 
-    QNetworkReply* buildRequest( const QString& server, const QString& command, const QVariantMap& params ) const;
     QVariantMap parseReply( QNetworkReply* reply, bool& ok ) const;
 
     QWeakPointer<HatchetAccountConfig> m_configWidget;

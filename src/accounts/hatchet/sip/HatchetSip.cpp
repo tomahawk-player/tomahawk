@@ -167,8 +167,11 @@ HatchetSipPlugin::connectWebSocket()
       return;
     }
 
-    QVariantList tokensCreds = m_account->credentials()[ "accesstokens" ].toList();
-    //FIXME: Don't blindly pick the first one that matches?
+    m_token.clear();
+
+    QVariantList tokensCreds = m_account->credentials()[ "dreamcatchertokens" ].toList();
+
+    //FIXME: Don't blindly pick the first one that matches? Most likely, cycle through if the first one fails
     QVariantMap connectVals;
     foreach ( QVariant credObj, tokensCreds )
     {
@@ -176,17 +179,23 @@ HatchetSipPlugin::connectWebSocket()
         if ( creds.contains( "type" ) && creds[ "type" ].toString() == "dreamcatcher" )
         {
             connectVals = creds;
-            m_userid = creds["userid"].toString();
-            m_token = creds["token"].toString();
+            m_token = creds[ "token" ].toString();
             break;
         }
     }
 
     QString url;
     if ( !connectVals.isEmpty() )
-        url = connectVals[ "host" ].toString() + ':' + connectVals[ "port" ].toString();
+    {
+        QString port = connectVals[ "port" ].toString();
+        if ( port == "443" )
+            url = "wss://";
+        else
+            url = "ws://";
+        url += connectVals[ "host" ].toString() + ':' + connectVals[ "port" ].toString();
+    }
 
-    if ( url.isEmpty() )
+    if ( url.isEmpty() || m_token.isEmpty() )
     {
         tLog() << Q_FUNC_INFO << "Unable to find a proper connection endpoint; bailing";
         disconnectPlugin();
@@ -329,7 +338,6 @@ HatchetSipPlugin::messageReceived( const QByteArray &msg )
 
         QVariantMap registerMap;
         registerMap[ "command" ] = "register";
-        registerMap[ "userid" ] = m_userid;
         registerMap[ "host" ] = Servent::instance()->externalAddress();
         registerMap[ "port" ] = Servent::instance()->externalPort();
         registerMap[ "token" ] = m_token;
