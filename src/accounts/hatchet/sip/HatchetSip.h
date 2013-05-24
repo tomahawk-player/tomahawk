@@ -25,6 +25,7 @@
 #include "account/HatchetAccount.h"
 
 #include <QPointer>
+#include <QTimer>
 #include <QtCrypto>
 
 class WebSocketThreadController;
@@ -88,6 +89,7 @@ private:
     SipState m_sipState;
     int m_version;
     QCA::PublicKey* m_publicKey;
+    QTimer m_reconnectTimer;
 };
 
 #endif

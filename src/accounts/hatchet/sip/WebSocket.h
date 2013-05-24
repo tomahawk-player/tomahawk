@@ -25,6 +25,7 @@
 
 #include <QPointer>
 #include <QSslSocket>
+#include <QTimer>
 #include <QUrl>
 
 #include <memory>
@@ -69,6 +70,7 @@ private:
     friend void onMessage( WebSocket *ws, websocketpp::connection_hdl, hatchet_client::message_ptr msg );
     friend void onClose( WebSocket *ws, websocketpp::connection_hdl );
 
+    bool m_disconnecting;
     QUrl m_url;
     std::stringstream m_outputStream;
     std::unique_ptr< hatchet_client > m_client;
@@ -76,6 +78,7 @@ private:
     QPointer< QSslSocket > m_socket;
     QAbstractSocket::SocketState m_lastSocketState;
     QList< QByteArray > m_queuedMessagesToSend;
+    QTimer m_connectionTimer;
 };
 
 #endif

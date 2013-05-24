@@ -39,6 +39,7 @@ HatchetSipPlugin::HatchetSipPlugin( Tomahawk::Accounts::Account *account )
     , m_sipState( Closed )
     , m_version( 0 )
     , m_publicKey( nullptr )
+    , m_reconnectTimer( this )
 {
     tLog() << Q_FUNC_INFO;
 
@@ -58,6 +59,10 @@ HatchetSipPlugin::HatchetSipPlugin( Tomahawk::Accounts::Account *account )
         return;
     }
     m_publicKey = new QCA::PublicKey( publicKey );
+
+    m_reconnectTimer.setInterval( 0 );
+    m_reconnectTimer.setSingleShot( true );
+    connect( &m_reconnectTimer, SIGNAL( timeout() ), SLOT( connectPlugin() ) );
 }
 
 
@@ -227,6 +232,9 @@ void
 HatchetSipPlugin::webSocketDisconnected()
 {
     tLog() << Q_FUNC_INFO << "WebSocket disconnected";
+
+    m_reconnectTimer.stop();
+
     if ( m_webSocketThreadController )
     {
         m_webSocketThreadController->quit();
@@ -239,7 +247,16 @@ HatchetSipPlugin::webSocketDisconnected()
     m_version = 0;
 
     hatchetAccount()->setConnectionState( Tomahawk::Accounts::Account::Disconnected );
-    m_sipState = Closed;
+
+    if ( hatchetAccount()->enabled() )
+    {
+        // Work on the assumption that we were disconnected because Dreamcatcher shut down
+        // Reconnect after a time; use reasonable backoff + random
+        int interval = m_reconnectTimer.interval() <= 25000 ? m_reconnectTimer.interval() + 5000 : 30000;
+        interval += QCA::Random::randomInt() % 30;
+        m_reconnectTimer.setInterval( interval );
+        m_reconnectTimer.start();
+    }
 }
 
 
@@ -337,6 +354,7 @@ HatchetSipPlugin::messageReceived( const QByteArray &msg )
             tLog() << Q_FUNC_INFO << "Registered successfully";
             m_sipState = Connected;
             hatchetAccount()->setConnectionState( Tomahawk::Accounts::Account::Connected );
+            m_reconnectTimer.setInterval( 0 );
             QTimer::singleShot(0, this, SLOT( dbSyncTriggered() ) );
             return;
         }

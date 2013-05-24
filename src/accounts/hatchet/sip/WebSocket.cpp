@@ -19,23 +19,27 @@
 
 #include "utils/Logger.h"
 
-#include <QTimer>
-
 #include <functional>
 
 typedef typename websocketpp::lib::error_code error_code;
 
 WebSocket::WebSocket( const QString& url )
     : QObject( nullptr )
+    , m_disconnecting( false )
     , m_url( url )
     , m_outputStream()
     , m_lastSocketState( QAbstractSocket::UnconnectedState )
+    , m_connectionTimer( this )
 {
     tLog() << Q_FUNC_INFO << "WebSocket constructing";
     m_client = std::unique_ptr< hatchet_client >( new hatchet_client() );
     m_client->set_message_handler( std::bind(&onMessage, this, std::placeholders::_1, std::placeholders::_2 ) );
     m_client->set_close_handler( std::bind(&onClose, this, std::placeholders::_1 ) );
     m_client->register_ostream( &m_outputStream );
+
+    m_connectionTimer.setSingleShot( true );
+    m_connectionTimer.setInterval( 30000 );
+    connect( &m_connectionTimer, SIGNAL( timeout() ), SLOT( disconnectWs() ) );
 }
 
 
@@ -68,6 +72,7 @@ void
 WebSocket::connectWs()
 {
     tLog() << Q_FUNC_INFO << "Connecting";
+    m_disconnecting = false;
     if ( m_socket )
     {
         if ( m_socket->isEncrypted() )
@@ -87,6 +92,7 @@ WebSocket::connectWs()
     QObject::connect( m_socket, SIGNAL( encrypted() ), SLOT( encrypted() ) );
     QObject::connect( m_socket, SIGNAL( readyRead() ), SLOT( socketReadyRead() ) );
     m_socket->connectToHostEncrypted( m_url.host(), m_url.port() );
+    m_connectionTimer.start();
 }
 
 
@@ -94,6 +100,8 @@ void
 WebSocket::disconnectWs( websocketpp::close::status::value status, const QString &reason )
 {
     tLog() << Q_FUNC_INFO << "Disconnecting";
+    m_disconnecting = true;
+
     error_code ec;
     if ( m_connection )
     {
@@ -233,10 +241,13 @@ WebSocket::readOutput()
 
             m_queuedMessagesToSend.clear();
             QMetaObject::invokeMethod( this, "readOutput", Qt::QueuedConnection );
+            m_connectionTimer.stop();
         }
-        else
+        else if ( !m_disconnecting )
             QTimer::singleShot( 200, this, SLOT( readOutput() ) );
     }
+    else
+        m_connectionTimer.stop();
 }
 
 void
@@ -289,6 +300,7 @@ WebSocket::encodeMessage( const QByteArray &bytes )
     {
         tLog() << Q_FUNC_INFO << "Connection not yet open/upgraded, queueing work to send";
         m_queuedMessagesToSend.append( bytes );
+        m_connectionTimer.start();
     }
     else
         m_connection->send( std::string( bytes.constData() ), websocketpp::frame::opcode::TEXT );
