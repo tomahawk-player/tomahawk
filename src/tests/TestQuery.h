@@ -16,37 +16,21 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TOMAHAWK_TESTRESULT_H
-#define TOMAHAWK_TESTRESULT_H
+#ifndef TOMAHAWK_TESTQUERY_H
+#define TOMAHAWK_TESTQUERY_H
 
-#include <QtTest>
-
-#include "libtomahawk/Result.h"
-#include "libtomahawk/Track.h"
+#include "libtomahawk/Query.h"
 #include "libtomahawk/Source.h"
 
-class TestResult : public QObject
+class TestQuery : public QObject
 {
     Q_OBJECT
 
 private slots:
-    void testIsValid()
-    {
-        Tomahawk::result_ptr r = Tomahawk::Result::get( "/tmp/test.mp3" );
-        QVERIFY( !r->isValid() );
-
-        Tomahawk::track_ptr t = Tomahawk::Track::get( "Artist", "Track" );
-        r->setTrack( t );
-        QVERIFY( r->isValid() );
-    }
-
     void testGet()
     {
-        Tomahawk::result_ptr r = Tomahawk::Result::get( "" );
-        QVERIFY( !r );
-
-        Tomahawk::result_ptr vr = Tomahawk::Result::get( "/tmp/test.mp3" );
-        QVERIFY( vr );
+        Tomahawk::query_ptr q = Tomahawk::Query::get( "", "", "" );
+        QVERIFY( !q );
     }
 };
 
