@@ -71,6 +71,4 @@ private:
 
 } //namespace Tomahawk
 
-Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoSystemCache* );
-
 #endif //TOMAHAWK_INFOSYSTEMCACHE_H
