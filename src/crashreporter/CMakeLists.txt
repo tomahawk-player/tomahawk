@@ -1,4 +1,5 @@
-PROJECT( CrashReporter )
+if( BUILD_WITH_QT4 )
+project( CrashReporter )
 cmake_policy(SET CMP0017 NEW)
 
 setup_qt()
@@ -29,3 +30,4 @@ set_target_properties(tomahawk_crash_reporter PROPERTIES AUTOMOC ON)
 install(TARGETS tomahawk_crash_reporter RUNTIME DESTINATION ${CMAKE_INSTALL_LIBEXECDIR})
 
 qt5_use_modules(tomahawk_crash_reporter Widgets Network)
+endif()
