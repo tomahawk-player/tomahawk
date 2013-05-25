@@ -41,7 +41,7 @@ CrashReporter::CrashReporter( const QStringList& args )
     ui.progressBar->setValue( 0 );
     ui.progressLabel->setPalette( Qt::gray );
 
-  #ifdef Q_WS_MAC
+  #ifdef Q_OS_MAC
     QFont f = ui.bottomLabel->font();
     f.setPointSize( 10 );
     ui.bottomLabel->setFont( f );
@@ -55,7 +55,7 @@ CrashReporter::CrashReporter( const QStringList& args )
     ui.progressLabel->setIndent( 1 );
     ui.bottomLabel->setDisabled( true );
     ui.bottomLabel->setIndent( 1 );
-  #endif //Q_WS_MAC
+  #endif //Q_OS_MAC
 
     m_http = new QHttp( "oops.tomahawk-player.org", 80, this );
 

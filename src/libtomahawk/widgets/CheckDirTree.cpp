@@ -132,7 +132,7 @@ CheckDirModel::flags( const QModelIndex& index ) const
 QVariant
 CheckDirModel::data( const QModelIndex& index, int role ) const
 {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     // return the 'My Computer' icon for the /Volumes folder
     if ( index.column() == 0 && filePath( index ) == s_macVolumePath )
     {

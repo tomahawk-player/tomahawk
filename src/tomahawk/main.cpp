@@ -26,7 +26,7 @@
 #include "config.h"
 #include "utils/Logger.h"
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     #include "TomahawkApp_Mac.h"
     #include </System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/AE.framework/Versions/A/Headers/AppleEvents.h>
     static pascal OSErr appleEventHandler( const AppleEvent*, AppleEvent*, long );
@@ -121,7 +121,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine
 int
 main( int argc, char *argv[] )
 {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     // Do Mac specific startup to get media keys working.
     // This must go before QApplication initialisation.
     Tomahawk::macMain();
@@ -133,7 +133,7 @@ main( int argc, char *argv[] )
     // used for url handler
     AEEventHandlerUPP h = AEEventHandlerUPP( appleEventHandler );
     AEInstallEventHandler( 'GURL', 'GURL', h, 0, false );
-    #endif // Q_WS_MAC
+    #endif // Q_OS_MAC
 #endif //Q_OS_WIN
 
     TomahawkApp a( argc, argv );
@@ -179,7 +179,7 @@ main( int argc, char *argv[] )
 }
 
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 static pascal OSErr
 appleEventHandler( const AppleEvent* e, AppleEvent*, long )
 {

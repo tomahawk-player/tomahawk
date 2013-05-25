@@ -28,7 +28,7 @@ DelegateConfigWrapper::DelegateConfigWrapper( AccountConfigWidget* conf, QWidget
     , m_deleted( false )
 {
     m_widget->setWindowFlags( Qt::Sheet );
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     m_widget->setVisible( true );
 #endif
     setWindowTitle( title );
@@ -65,7 +65,7 @@ DelegateConfigWrapper::DelegateConfigWrapper( AccountConfigWidget* conf, QWidget
 
     setLayout( v );
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     setSizeGripEnabled( false );
     setMinimumSize( sizeHint() );
     setMaximumSize( sizeHint() ); // to remove the resize grip on osx this is the only way

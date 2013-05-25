@@ -30,7 +30,7 @@ LoadXSPFDialog::LoadXSPFDialog( QWidget* parent, Qt::WindowFlags f )
 {
     m_ui->setupUi( this );
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     m_ui->horizontalLayout->setContentsMargins( 0, 0, 0, 0 );
     m_ui->horizontalLayout->setSpacing( 5 );
     m_ui->verticalLayout->setContentsMargins( 0, 10, 0, 0 );

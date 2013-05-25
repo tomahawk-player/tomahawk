@@ -39,7 +39,7 @@ TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
     , m_stopContinueAfterTrackAction( 0 )
     , m_loveTrackAction( 0 )
 {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     QIcon icon( RESPATH "icons/tomahawk-icon-128x128-grayscale.png" );
 #else
     QIcon icon( RESPATH "icons/tomahawk-icon-128x128.png" );
@@ -67,7 +67,7 @@ TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
     m_contextMenu->addSeparator();
     m_contextMenu->addAction( ActionCollection::instance()->getAction( "togglePrivacy" ) );
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     // On mac you can close the windows while leaving the app open. We then need a way to show the main window again
     m_contextMenu->addSeparator();
     m_showWindowAction = m_contextMenu->addAction( tr( "Hide Tomahawk Window" ) );
@@ -182,7 +182,7 @@ TomahawkTrayIcon::onStopContinueAfterTrackChanged()
 void
 TomahawkTrayIcon::refreshToolTip()
 {
-    #ifdef Q_WS_MAC
+    #ifdef Q_OS_MAC
     // causes issues with OS X menubar, also none
     // of the other OS X menubar icons have a tooltip
     return;
@@ -221,7 +221,7 @@ TomahawkTrayIcon::onAnimationTimer()
 void
 TomahawkTrayIcon::onActivated( QSystemTrayIcon::ActivationReason reason )
 {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     return;
 #endif
 

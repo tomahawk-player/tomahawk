@@ -58,7 +58,7 @@ QSearchField::QSearchField(QWidget *parent) : QWidget(parent)
     lineEdit->setMinimumHeight(27);
     setFixedHeight(27);
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     lineEdit->setContentsMargins(0, 0, 0, 0);
 #else
     lineEdit->setContentsMargins(2, 2, 2, 2);
