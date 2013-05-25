@@ -426,10 +426,21 @@ IF( APPLE )
     SET( libSources ${libSources}
       utils/TomahawkUtils_Mac.mm
       mac/FileHelpers.mm
-      thirdparty/Qocoa/qbutton_mac.mm
-      thirdparty/Qocoa/qsearchfield_mac.mm
-      thirdparty/Qocoa/qtoolbartabdialog_mac.mm
       widgets/SourceTreePopupDialog_mac.mm )
+
+    if( BUILD_WITH_QT4 )
+        list(APPEND libSources
+            thirdparty/Qocoa/qbutton_mac.mm
+            thirdparty/Qocoa/qsearchfield_mac.mm
+            thirdparty/Qocoa/qtoolbartabdialog_mac.mm
+        )
+    else()
+        list(APPEND libSources
+            thirdparty/Qocoa/qbutton.cpp
+            thirdparty/Qocoa/qsearchfield.cpp
+            thirdparty/Qocoa/qtoolbartabdialog.cpp
+        )
+    endif()
 
     SET_SOURCE_FILES_PROPERTIES(utils/TomahawkUtils_Mac.mm PROPERTIES COMPILE_FLAGS "-fvisibility=default")
 
