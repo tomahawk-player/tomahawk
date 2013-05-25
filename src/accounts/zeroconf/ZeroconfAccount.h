@@ -32,8 +32,10 @@ namespace Accounts
 
 class ACCOUNTDLLEXPORT ZeroconfFactory : public AccountFactory
 {
+    Q_PLUGIN_METADATA( IID "org.tomahawk-player.Player.AccountFactory" )
     Q_OBJECT
     Q_INTERFACES( Tomahawk::Accounts::AccountFactory )
+
 public:
     ZeroconfFactory();
     virtual ~ZeroconfFactory();
