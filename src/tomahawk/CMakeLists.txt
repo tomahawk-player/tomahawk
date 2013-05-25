@@ -22,8 +22,6 @@ ENDIF()
 SET( tomahawkSources ${tomahawkSources}
      AclRegistryImpl.cpp
      ShortcutHandler.cpp
-     GnomeShortcutHandler.cpp
-     GnomeSettingsDaemonMediaKeysProxy.cpp
      UbuntuUnityHack.cpp
      TomahawkApp.cpp
      main.cpp
