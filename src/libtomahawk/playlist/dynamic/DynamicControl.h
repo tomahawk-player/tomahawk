@@ -120,4 +120,6 @@ private:
 
 };
 
+Q_DECLARE_METATYPE( Tomahawk::dyncontrol_ptr );
+
 #endif
