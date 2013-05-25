@@ -46,6 +46,7 @@
 #include "web/Api_v1.h"
 #include "SourceList.h"
 #include "ShortcutHandler.h"
+#include "GnomeShortcutHandler.h"
 #include "filemetadata/ScanManager.h"
 #include "TomahawkSettings.h"
 #include "GlobalActionManager.h"
@@ -230,6 +231,12 @@ TomahawkApp::init()
 
     Tomahawk::setApplicationHandler( this );
     increaseMaxFileDescriptors();
+#endif
+
+#if !defined(Q_WS_MAC) && !defined(Q_WS_WIN)
+    GnomeShortcutHandler *gnomeShortcutHandler = new GnomeShortcutHandler( this );
+    gnomeShortcutHandler->DoRegister();
+    m_shortcutHandler = QPointer<Tomahawk::ShortcutHandler>( gnomeShortcutHandler );
 #endif
 
     // Connect up shortcuts
