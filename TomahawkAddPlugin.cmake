@@ -40,7 +40,7 @@ ENDMACRO(CDR)
 
 macro(tomahawk_add_plugin)
     parse_arguments(PLUGIN
-        "SOURCES;UI;LINK_LIBRARIES;TYPE;EXPORT_MACRO;COMPILE_DEFINITIONS"
+        "SOURCES;UI;LINK_LIBRARIES;QT5_MODULES;TYPE;EXPORT_MACRO;COMPILE_DEFINITIONS"
         "NO_INSTALL;SHARED_LIB"
         ${ARGN}
         )
@@ -77,7 +77,10 @@ macro(tomahawk_add_plugin)
     endif()
 
     # add qt modules
-    qt5_use_modules(${target} Core Network Widgets Sql Xml DBus)
+    qt5_use_modules(${target} Core Network Widgets Sql Xml)
+    if( PLUGIN_QT5_MODULES )
+        qt5_use_modules(${target} ${PLUGIN_QT5_MODULES})
+    endif()
 
     # definitions - can this be moved into set_target_properties below?
     add_definitions(${QT_DEFINITIONS})

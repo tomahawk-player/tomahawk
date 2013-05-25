@@ -27,4 +27,5 @@ SET(mpris_srcs
 tomahawk_add_plugin(mpris
     TYPE infoplugin EXPORT_MACRO INFOPLUGINDLLEXPORT_PRO
     SOURCES "${mpris_srcs}"
+    QT5_MODULES "DBus"
     )
