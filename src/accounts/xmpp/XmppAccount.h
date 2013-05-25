@@ -38,6 +38,7 @@ namespace Accounts
 
 class ACCOUNTDLLEXPORT XmppAccountFactory : public AccountFactory
 {
+    Q_PLUGIN_METADATA( IID "org.tomahawk-player.Player.AccountFactory" )
     Q_OBJECT
     Q_INTERFACES( Tomahawk::Accounts::AccountFactory )
 

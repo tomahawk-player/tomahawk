@@ -100,7 +100,7 @@ XmppSipPlugin::XmppSipPlugin( Account* account )
     , m_pubSubManager( 0 )
 #endif
 {
-    Jreen::Logger::addHandler( JreenMessageHandler );
+//     Jreen::Logger::addHandler( JreenMessageHandler );
 
     m_currentUsername = readUsername();
     m_currentServer = readServer();
@@ -115,7 +115,7 @@ XmppSipPlugin::XmppSipPlugin( Account* account )
     setupClientHelper();
 
     m_client->registerPayload( new TomahawkXmppMessageFactory );
-    m_currentResource = QString::fromAscii( "tomahawk%1" ).arg( QString::number( qrand() % 10000 ) );
+    m_currentResource = QString::fromLatin1( "tomahawk%1" ).arg( QString::number( qrand() % 10000 ) );
     m_client->setResource( m_currentResource );
 
 #ifndef ENABLE_HEADLESS
