@@ -34,10 +34,7 @@
 #include <QSharedPointer>
 #include <QtEndian>
 #include <QIODevice>
-
-#include <qjson/parser.h>
-#include <qjson/serializer.h>
-#include <qjson/qobjecthelper.h>
+#include <QVariant>
 
 class Msg;
 typedef QSharedPointer<Msg> msg_ptr;
@@ -111,20 +108,7 @@ public:
         return m_payload;
     }
 
-    QVariant& json()
-    {
-        Q_ASSERT( is(JSON) );
-        Q_ASSERT( !is(COMPRESSED) );
-
-        if( !m_json_parsed )
-        {
-            QJson::Parser p;
-            bool ok;
-            m_json = p.parse( m_payload, &ok );
-            m_json_parsed = true;
-        }
-        return m_json;
-    }
+    QVariant& json();
 
     char flags() const { return m_flags; }
 

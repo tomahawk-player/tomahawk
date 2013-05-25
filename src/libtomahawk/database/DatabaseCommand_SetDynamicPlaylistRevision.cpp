@@ -26,6 +26,8 @@
 #include "network/Servent.h"
 #include "utils/Logger.h"
 
+#include <qjson/serializer.h>
+
 #include <QSqlQuery>
 
 DatabaseCommand_SetDynamicPlaylistRevision::DatabaseCommand_SetDynamicPlaylistRevision( const Tomahawk::source_ptr& s,

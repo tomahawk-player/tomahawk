@@ -26,6 +26,9 @@
 #include "network/Servent.h"
 #include "utils/Logger.h"
 
+#include <qjson/serializer.h>
+#include <qjson/parser.h>
+
 using namespace Tomahawk;
 
 

@@ -38,6 +38,8 @@
 #include "utils/Logger.h"
 #include "accounts/AccountManager.h"
 
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QMutexLocker>
@@ -67,6 +69,7 @@ Servent::Servent( QObject* parent )
     , m_port( 0 )
     , m_externalPort( 0 )
     , m_ready( false )
+    , m_parser( new QJson::Parser() )
 {
     s_instance = this;
 
@@ -107,6 +110,8 @@ Servent::~Servent()
         m_portfwd.data()->wait( 60000 );
         delete m_portfwd.data();
     }
+
+    delete m_parser;
 }
 
 
@@ -482,7 +487,7 @@ Servent::readyRead()
     ControlConnection* cc = 0;
     bool ok;
     QString key, conntype, nodeid, controlid;
-    QVariantMap m = parser.parse( sock.data()->_msg->payload(), &ok ).toMap();
+    QVariantMap m = m_parser->parse( sock.data()->_msg->payload(), &ok ).toMap();
     if ( !ok )
     {
         tDebug() << "Invalid JSON on new connection, aborting";

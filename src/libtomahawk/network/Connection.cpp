@@ -23,6 +23,8 @@
 #include "utils/Logger.h"
 #include "Source.h"
 
+#include <qjson/serializer.h>
+
 #include <QtCore/QTime>
 #include <QtCore/QThread>
 

@@ -26,10 +26,6 @@
 
 #include "DllMacro.h"
 
-#include <qjson/parser.h>
-#include <qjson/serializer.h>
-#include <qjson/qobjecthelper.h>
-
 #include <QSharedPointer>
 #include <QTcpSocket>
 #include <QHostAddress>
@@ -130,7 +126,6 @@ protected:
     QPointer<QTcpSocket> m_sock;
     int m_peerport;
     msg_ptr m_msg;
-    QJson::Parser parser;
     Servent* m_servent;
     bool m_outbound, m_ready, m_onceonly;
     msg_ptr m_firstmsg;

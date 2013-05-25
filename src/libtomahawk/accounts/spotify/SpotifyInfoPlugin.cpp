@@ -22,6 +22,8 @@
 #include "utils/Closure.h"
 #include "utils/Logger.h"
 
+#include <qjson/parser.h>
+
 
 using namespace Tomahawk;
 using namespace Tomahawk::InfoSystem;

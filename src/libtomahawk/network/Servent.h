@@ -33,10 +33,7 @@
 #include <QtNetwork/QTcpServer>
 #include <QtNetwork/QTcpSocket>
 #include <QtNetwork/QHostInfo>
-
-#include <qjson/parser.h>
-#include <qjson/serializer.h>
-#include <qjson/qobjecthelper.h>
+#include <QStringList>
 
 #include "Typedefs.h"
 #include "Msg.h"
@@ -44,6 +41,12 @@
 #include <boost/function.hpp>
 
 #include "DllMacro.h"
+
+namespace QJson
+{
+    class Parser;
+}
+
 
 class Connection;
 class Connector;
@@ -172,7 +175,7 @@ private:
     void handoverSocket( Connection* conn, QTcpSocketExtra* sock );
     void printCurrentTransfers();
 
-    QJson::Parser parser;
+    QJson::Parser* m_parser;
     QList< ControlConnection* > m_controlconnections; // canonical list of authed peers
     QMap< QString, QPointer< Connection > > m_offers;
     QStringList m_connectedNodes;
