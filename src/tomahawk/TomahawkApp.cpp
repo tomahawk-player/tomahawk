@@ -94,6 +94,10 @@
 #include <sys/sysctl.h>
 #endif
 
+#ifdef WITH_GNOMESHORTCUTHANDLER
+#include "GnomeShortcutHandler.h"
+#endif
+
 #include <QPluginLoader>
 #include <QDir>
 #include <QMetaType>
@@ -235,6 +239,12 @@ TomahawkApp::init()
 
     Tomahawk::setApplicationHandler( this );
     increaseMaxFileDescriptors();
+#endif
+
+#ifdef WITH_GNOMESHORTCUTHANDLER
+    GnomeShortcutHandler *gnomeShortcutHandler = new GnomeShortcutHandler( this );
+    gnomeShortcutHandler->DoRegister();
+    m_shortcutHandler = QPointer<Tomahawk::ShortcutHandler>( gnomeShortcutHandler );
 #endif
 
     // Connect up shortcuts
