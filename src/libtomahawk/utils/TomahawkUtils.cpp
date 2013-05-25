@@ -128,7 +128,7 @@ appConfigDir()
         return QDir( "/tmp" );
     }
 
-#elif defined(Q_WS_WIN)
+#elif defined(Q_OS_WIN)
     throw "TODO";
     return QDir( "c:\\" ); //TODO refer to Qt documentation to get code to do this
 
@@ -163,7 +163,7 @@ appDataDir()
 {
     QString path;
 
-    #ifdef Q_WS_WIN
+    #ifdef Q_OS_WIN
         if ( ( QSysInfo::WindowsVersion & QSysInfo::WV_DOS_based ) == 0 )
         {
             // Use this for non-DOS-based Windowses

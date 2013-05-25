@@ -81,7 +81,7 @@
 
 #include "config.h"
 
-#if defined( Q_WS_WIN )
+#if defined( Q_OS_WIN )
     #if defined ( WITH_QtSparkle )
         #include <qtsparkle/Updater>
     #endif
@@ -433,7 +433,7 @@ TomahawkWindow::setupUpdateCheck()
 #if defined( Q_OS_MAC ) && defined( HAVE_SPARKLE )
     connect( ActionCollection::instance()->getAction( "checkForUpdates" ), SIGNAL( triggered( bool ) ),
              SLOT( checkForUpdates() ) );
-    #elif defined( Q_WS_WIN ) && defined( WITH_QtSparkle )
+    #elif defined( Q_OS_WIN ) && defined( WITH_QtSparkle )
     QUrl updaterUrl;
 
     if ( qApp->arguments().contains( "--debug" ) )
