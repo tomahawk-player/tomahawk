@@ -19,8 +19,6 @@
 #ifndef TOMAHAWK_TESTRESULT_H
 #define TOMAHAWK_TESTRESULT_H
 
-#include <QtTest>
-
 #include "libtomahawk/Result.h"
 #include "libtomahawk/Source.h"
 

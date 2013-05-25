@@ -16,8 +16,8 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QtCore>
 #include <QtTest>
+#include <QtCore>
 
 #include "Test@TOMAHAWK_TEST_CLASS@.h"
 #include "moc_Test@TOMAHAWK_TEST_CLASS@.cpp"

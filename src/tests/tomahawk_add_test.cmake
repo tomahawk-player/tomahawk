@@ -17,4 +17,7 @@ macro(tomahawk_add_test test_class)
     )
 
     add_test(NAME ${TOMAHAWK_TEST_TARGET} COMMAND ${TOMAHAWK_TEST_TARGET})
+
+    qt5_use_modules(${TOMAHAWK_TEST_TARGET} Core Network Widgets Sql Xml Test)
+
 endmacro()

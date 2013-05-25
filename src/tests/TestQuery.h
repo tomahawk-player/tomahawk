@@ -19,8 +19,6 @@
 #ifndef TOMAHAWK_TESTQUERY_H
 #define TOMAHAWK_TESTQUERY_H
 
-#include <QtTest>
-
 #include "libtomahawk/Query.h"
 #include "libtomahawk/Source.h"
 
