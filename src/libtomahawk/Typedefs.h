@@ -216,7 +216,9 @@ namespace Tomahawk
 
             InfoNotifyUser = 100,
 
-            InfoLastInfo = 101 //WARNING: *ALWAYS* keep this last!
+            InfoInboxReceived = 101,
+
+            InfoLastInfo = 102 //WARNING: *ALWAYS* keep this last!
         };
 
         class InfoPlugin;

@@ -23,6 +23,7 @@
 #include "database/DatabaseCommand_DeleteInboxEntry.h"
 #include "database/DatabaseCommand_ModifyInboxEntry.h"
 #include "SourceList.h"
+#include "TomahawkSettings.h"
 #include "utils/Logger.h"
 #include "utils/Closure.h"
 #include "jobview/JobStatusModel.h"
@@ -138,6 +139,24 @@ InboxModel::showNotification( InboxJobItem::Side side,
     JobStatusView::instance()->model()->addJob( new InboxJobItem( side,
                                                                   src->friendlyName(),
                                                                   track ) );
+
+    if ( side == InboxJobItem::Receiving )
+    {
+        Tomahawk::InfoSystem::InfoStringHash trackInfo;
+        trackInfo["title"] = track->track();
+        trackInfo["artist"] = track->artist();
+
+        Tomahawk::InfoSystem::InfoStringHash sourceInfo;
+        sourceInfo["friendlyname"] = src->friendlyName();
+
+        QVariantMap playInfo;
+        playInfo["trackinfo"] = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( trackInfo );
+        playInfo["private"] = TomahawkSettings::instance()->privateListeningMode();
+        playInfo["sourceinfo"] = QVariant::fromValue< Tomahawk::InfoSystem::InfoStringHash >( sourceInfo );
+
+        Tomahawk::InfoSystem::InfoPushData pushData ( "InboxModel", Tomahawk::InfoSystem::InfoInboxReceived, playInfo, Tomahawk::InfoSystem::PushShortUrlFlag );
+        Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );
+    }
 }
 
 

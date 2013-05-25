@@ -65,6 +65,7 @@ private:
     int getNotificationIconHeight();
 
     void notifyUser( const QString& messageText );
+    void inboxReceived( const QVariant& input );
     void nowPlaying( const QVariant& input );
 
     quint32 m_nowPlayingId;
