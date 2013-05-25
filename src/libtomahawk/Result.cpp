@@ -90,6 +90,7 @@ Result::Result( const QString& url )
     , m_modtime( 0 )
     , m_score( 0 )
     , m_fileId( 0 )
+    , m_checked( false )
 {
     connect( Pipeline::instance(), SIGNAL( resolverRemoved( Tomahawk::Resolver* ) ), SLOT( onResolverRemoved( Tomahawk::Resolver* ) ), Qt::QueuedConnection );
 }
