@@ -17,6 +17,9 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "InfoSystemCache.h"
+
+
 #include <QtDebug>
 
 
@@ -24,7 +27,6 @@
     #include <QDesktopServices>
 #endif
 
-#include "InfoSystemCache.h"
 #include "TomahawkSettings.h"
 #include "utils/Logger.h"
 #include "Source.h"
