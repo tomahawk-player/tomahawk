@@ -186,8 +186,8 @@ if(BUILD_GUI AND UNIX AND NOT APPLE)
 endif()
 
 macro_optional_find_package(Phonon 4.5.0)
-macro_log_feature(PHONON_FOUND "Phonon" "The Phonon multimedia library" "http://phonon.kde.org" TRUE "" "")
-if(PHONON_FOUND)
+macro_log_feature(Phonon_FOUND "Phonon" "The Phonon multimedia library" "http://phonon.kde.org" TRUE "" "")
+if(Phonon_FOUND)
     message(STATUS "Phonon found; ensure that phonon-vlc is at least 0.4")
 endif()
 
