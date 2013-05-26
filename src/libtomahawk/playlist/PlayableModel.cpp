@@ -629,10 +629,10 @@ PlayableModel::insertInternal( const QList< T >& items, int row, const QList< To
     {
         plitem = new PlayableItem( item, m_rootItem, row + i );
         plitem->index = createIndex( row + i, 0, plitem );
-        if ( item->query() )
+        if ( plitem->query() )
         {
-            connect( item->query().data(), SIGNAL( playableStateChanged( bool ) ), SLOT( onQueryBecamePlayable( bool ) ), Qt::UniqueConnection );
-            connect( item->query().data(), SIGNAL( resolvingFinished( bool ) ), SLOT( onQueryResolved( bool ) ), Qt::UniqueConnection );
+            connect( plitem->query().data(), SIGNAL( playableStateChanged( bool ) ), SLOT( onQueryBecamePlayable( bool ) ), Qt::UniqueConnection );
+            connect( plitem->query().data(), SIGNAL( resolvingFinished( bool ) ), SLOT( onQueryResolved( bool ) ), Qt::UniqueConnection );
         }
 
         if ( logs.count() > i )
