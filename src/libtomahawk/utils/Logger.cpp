@@ -114,7 +114,8 @@ TomahawkLogHandler( QtMsgType type, const char* msg )
     static QMutex s_mutex;
 
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
-    const char* message = msg.toLatin1().constData();
+    QByteArray ba = msg.toUtf8();
+    const char* message = ba.constData();
 #else
     const char* message = msg;
 #endif
