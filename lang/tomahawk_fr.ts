@@ -379,17 +379,17 @@ de se connecter et streamer de vous?</translation>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="659"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="797"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>Désolé, on a pas pu trouver la piste &apos;%1&apos; pour %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="683"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="821"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>Désolé, on a pas pu trouver l&apos;artiste &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="709"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="847"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>Désolé, on a pas pu trouver l&apos;album &apos;%1&apos; pour %2</translation>
     </message>
@@ -1471,22 +1471,22 @@ de se connecter et streamer de vous?</translation>
 <context>
     <name>ScriptEngine</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="1132"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="1133"/>
         <source>Script Resolver Error: %1 %2 %3 %4</source>
         <translation>Erreur du script de résolution : %1 %2 %3 %4</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="1151"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="1152"/>
         <source>SSL Error</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="1152"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="1153"/>
         <source>You have asked Tomahawk to connect securely to &lt;b&gt;%1&lt;/b&gt;, but we can&apos;t confirm that your connection is secure:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Do you want to trust this connection?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="1159"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="1160"/>
         <source>Trust certificate</source>
         <translation type="unfinished"/>
     </message>
@@ -3216,31 +3216,45 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
 <context>
     <name>Tomahawk::InfoSystem::FdoNotifyPlugin</name>
     <message>
-        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="193"/>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="264"/>
         <source>on</source>
         <comment>'on' is followed by an album name</comment>
         <translation>sur</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="195"/>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="266"/>
         <source>%1%4 %2%3.</source>
         <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing, %4 is the preposition used to link track and artist ('by' in english)</comment>
         <translation>%1%4 %2%3.</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="199"/>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="204"/>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="270"/>
         <source>by</source>
         <comment>preposition to link track and artist</comment>
         <translation>par</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="208"/>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="200"/>
+        <source>%1 sent you
+%2%4 %3.</source>
+        <comment>%1 is a nickname, %2 is a title, %3 is an artist, %4 is the preposition used to link track and artist ('by' in english)</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="211"/>
+        <source>%1 sent you &quot;%2&quot; by %3.</source>
+        <comment>%1 is a nickname, %2 is a title, %3 is an artist</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="279"/>
         <source>on &quot;%1&quot;</source>
         <comment>%1 is an album name</comment>
         <translation>sur &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="210"/>
+        <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="281"/>
         <source>&quot;%1&quot; by %2%3.</source>
         <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing</comment>
         <translation>&quot;%1&quot; par %2%3.</translation>
@@ -3516,7 +3530,7 @@ saisissez le numéro PIN ici :</translation>
 <context>
     <name>TomahawkSettings</name>
     <message>
-        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="376"/>
+        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="375"/>
         <source>Local Network</source>
         <translation>Réseau local</translation>
     </message>
