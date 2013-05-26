@@ -43,6 +43,7 @@ namespace InfoSystem
 
 InfoSystemWorker::InfoSystemWorker()
     : QObject()
+    , m_cache( 0 )
 {
     tDebug() << Q_FUNC_INFO;
 
