@@ -729,6 +729,7 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
                 {
                     case SourcesModel::StaticPlaylist:
                     case SourcesModel::CategoryAdd:
+                    case SourcesModel::Collection: //drop to send tracks to peers
                         m_delegate->hovered( index, event->mimeData() );
                         dataChanged( index, index );
                         break;

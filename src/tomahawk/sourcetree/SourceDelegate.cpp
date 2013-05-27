@@ -218,7 +218,8 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
     SourceTreeItem* item = index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
     SourcesModel::RowType type = static_cast< SourcesModel::RowType >( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() );
 
-    QRect iconRect = option.rect.adjusted( 4, 6, -option.rect.width() + option.rect.height() - 12 + 4, -6 );
+    const int iconRectVertMargin = 6;
+    QRect iconRect = option.rect.adjusted( 4, iconRectVertMargin, -option.rect.width() + option.rect.height() - 12 + 4, -iconRectVertMargin );
     QString name = index.data().toString();
     QPixmap avatar;
     int figWidth = 0;
@@ -226,16 +227,30 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
     QString desc;
     QString tracks;
 
+    bool shouldDrawDropHint = false;
+
     if ( type == SourcesModel::Collection )
     {
+        // If the user is about to drop a track on a peer
+        QRect itemsRect = option.rect;
+        QPoint cursorPos = m_parent->mapFromGlobal( QCursor::pos() );
+        bool cursorInRect = itemsRect.contains( cursorPos );
+        if ( cursorInRect && m_dropHoverIndex.isValid() && m_dropHoverIndex == index )
+            shouldDrawDropHint = true;
+
         SourceItem* colItem = qobject_cast< SourceItem* >( item );
         Q_ASSERT( colItem );
         bool status = !( !colItem || colItem->source().isNull() || !colItem->source()->isOnline() );
+
+        if ( !colItem->source().isNull() && colItem->source()->isLocal() )
+            shouldDrawDropHint = false; //can't send tracks to our own inbox
 
         if ( status && colItem && !colItem->source().isNull() )
         {
             tracks = QString::number( colItem->source()->trackCount() );
             figWidth = QFontMetrics( figFont ).width( tracks );
+            if ( shouldDrawDropHint )
+                figWidth = iconRect.width();
             name = colItem->source()->friendlyName();
         }
 
@@ -306,7 +321,7 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
             ActionCollection::instance()->getAction( "togglePrivacy" )->icon().paint( painter, pmRect );
             textRect.adjust( pmRect.width() + 3, 0, 0, 0 );
         }
-        if ( isPlaying || ( !colItem->source().isNull() && colItem->source()->isLocal() ) )
+        if ( ( isPlaying || ( !colItem->source().isNull() && colItem->source()->isLocal() ) ) && !shouldDrawDropHint )
         {
             // Show a listen icon
             TomahawkUtils::ImageType listenAlongPixmap = TomahawkUtils::Invalid;
@@ -363,10 +378,19 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
         painter->setFont( font );
     }
     textRect.adjust( 0, 0, 0, 2 );
+
+    if ( shouldDrawDropHint )
+    {
+        descColor = option.palette.color( QPalette::Text ).lighter( 180 );
+        desc = tr( "Drop to send tracks" );
+    }
+
     text = painter->fontMetrics().elidedText( desc, Qt::ElideRight, textRect.width() - 8 );
     {
         QTextOption to( Qt::AlignVCenter );
+
         to.setWrapMode( QTextOption::NoWrap );
+
         painter->setPen( descColor );
         painter->drawText( textRect, text, to );
     }
@@ -391,21 +415,32 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
             shouldPaintTrackCount = true;
     }
 
-    if ( shouldPaintTrackCount )
+    if ( shouldPaintTrackCount || shouldDrawDropHint )
     {
         painter->setRenderHint( QPainter::Antialiasing );
 
-        QRect figRect = option.rect.adjusted( option.rect.width() - figWidth - 13, 0, -14, -option.rect.height() + option.fontMetrics.height() * 1.1 );
-        int hd = ( option.rect.height() - figRect.height() ) / 2;
-        figRect.adjust( 0, hd, 0, hd );
+        if ( shouldDrawDropHint )
+        {
+            QRect figRect = option.rect.adjusted( option.rect.width() - figWidth - iconRectVertMargin, iconRectVertMargin, -iconRectVertMargin, -iconRectVertMargin );
+            painter->drawPixmap( figRect, TomahawkUtils::defaultPixmap( TomahawkUtils::Inbox,
+                                                                        TomahawkUtils::Original,
+                                                                        figRect.size() ) );
+        }
+        else
+        {
+            QRect figRect = option.rect.adjusted( option.rect.width() - figWidth - 13, 0, -14, -option.rect.height() + option.fontMetrics.height() * 1.1 );
 
-        painter->setFont( figFont );
+            int hd = ( option.rect.height() - figRect.height() ) / 2;
+            figRect.adjust( 0, hd, 0, hd );
 
-        QColor figColor( TomahawkStyle::SIDEBAR_ROUNDFIGURE_BACKGROUND );
-        painter->setPen( figColor );
-        painter->setBrush( figColor );
+            painter->setFont( figFont );
 
-        TomahawkUtils::drawBackgroundAndNumbers( painter, tracks, figRect );
+            QColor figColor( TomahawkStyle::SIDEBAR_ROUNDFIGURE_BACKGROUND );
+            painter->setPen( figColor );
+            painter->setBrush( figColor );
+
+            TomahawkUtils::drawBackgroundAndNumbers( painter, tracks, figRect );
+        }
     }
 
     painter->restore();
@@ -964,6 +999,8 @@ SourceDelegate::hoveredDropType() const
 void
 SourceDelegate::hovered( const QModelIndex& index, const QMimeData* mimeData )
 {
+    SourcesModel::RowType type = static_cast< SourcesModel::RowType >( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() );
+
     if ( !index.isValid() )
     {
         foreach ( AnimationHelper* helper, m_expandedMap )
@@ -972,8 +1009,8 @@ SourceDelegate::hovered( const QModelIndex& index, const QMimeData* mimeData )
         }
         return;
     }
-
-    if ( !m_expandedMap.contains( index ) )
+    if ( ( type == SourcesModel::StaticPlaylist || type == SourcesModel::CategoryAdd ) &&
+         !m_expandedMap.contains( index ) )
     {
         foreach ( AnimationHelper* helper, m_expandedMap )
         {
@@ -990,6 +1027,15 @@ SourceDelegate::hovered( const QModelIndex& index, const QMimeData* mimeData )
         m_expandedMap.insert( m_newDropHoverIndex, new AnimationHelper( m_newDropHoverIndex ) );
         connect( m_expandedMap.value( m_newDropHoverIndex ), SIGNAL( finished( QModelIndex ) ), SLOT( animationFinished( QModelIndex ) ) );
     }
+    else if ( type == SourcesModel::Collection )
+    {
+        m_dropMimeData->clear();
+        foreach ( const QString& mimeDataFormat, mimeData->formats() )
+        {
+            m_dropMimeData->setData( mimeDataFormat, mimeData->data( mimeDataFormat ) );
+        }
+        m_dropHoverIndex = index;
+    }
     else
         qDebug() << "expandedMap already contains index" << index;
 }
@@ -1002,6 +1048,7 @@ SourceDelegate::dragLeaveEvent()
     {
         helper->collapse( true );
     }
+    m_dropHoverIndex = QModelIndex();
 }
 
 
