@@ -34,7 +34,7 @@ namespace Tomahawk
 namespace InfoSystem
 {
 
-class InfoSystemCache : public QObject
+class DLLEXPORT InfoSystemCache : public QObject
 {
 Q_OBJECT
 
@@ -70,5 +70,7 @@ private:
 } //namespace InfoSystem
 
 } //namespace Tomahawk
+
+Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoSystemCache* );
 
 #endif //TOMAHAWK_INFOSYSTEMCACHE_H

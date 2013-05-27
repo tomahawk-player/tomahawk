@@ -404,6 +404,7 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< Tomahawk::DynamicPlaylistRevision >("Tomahawk::DynamicPlaylistRevision");
     qRegisterMetaType< Tomahawk::QID >("Tomahawk::QID");
 
+    qRegisterMetaType< Tomahawk::InfoSystem::InfoSystemCache* >( "Tomahawk::InfoSystem::InfoSystemCache*" );
     qRegisterMetaType< Tomahawk::InfoSystem::InfoStringHash >( "Tomahawk::InfoSystem::InfoStringHash" );
     qRegisterMetaType< Tomahawk::InfoSystem::InfoType >( "Tomahawk::InfoSystem::InfoType" );
     qRegisterMetaType< Tomahawk::InfoSystem::PushInfoFlags >( "Tomahawk::InfoSystem::PushInfoFlags" );
