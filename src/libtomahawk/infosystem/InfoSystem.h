@@ -214,7 +214,6 @@ signals:
     void info( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void finished( QString target );
     void finished( QString target, Tomahawk::InfoSystem::InfoType type );
-    void ready();
 
     void updatedSupportedGetTypes( Tomahawk::InfoSystem::InfoTypeSet supportedTypes );
     void updatedSupportedPushTypes( Tomahawk::InfoSystem::InfoTypeSet supportedTypes );

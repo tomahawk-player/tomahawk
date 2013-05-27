@@ -182,6 +182,7 @@ TomahawkApp::init()
 #endif
 
     TomahawkUtils::setHeadless( m_headless );
+    TomahawkSettings* s = TomahawkSettings::instance();
     new ACLRegistryImpl( this );
 
     tDebug( LOGINFO ) << "Setting NAM.";
@@ -247,7 +248,89 @@ TomahawkApp::init()
     tDebug() << "Init InfoSystem.";
     m_infoSystem = QPointer<Tomahawk::InfoSystem::InfoSystem>( Tomahawk::InfoSystem::InfoSystem::instance() );
 
-    connect( m_infoSystem, SIGNAL( ready() ), SLOT( initAccountManager() ) );
+    tDebug() << "Init AccountManager.";
+    m_accountManager = QPointer< Tomahawk::Accounts::AccountManager >( new Tomahawk::Accounts::AccountManager( this ) );
+    connect( m_accountManager.data(), SIGNAL( readyForFactories() ), SLOT( initFactoriesForAccountManager() ) );
+    connect( m_accountManager.data(), SIGNAL( readyForSip() ), SLOT( initSIP() ) );
+
+    Echonest::Config::instance()->setNetworkAccessManager( TomahawkUtils::nam() );
+#ifndef ENABLE_HEADLESS
+    EchonestGenerator::setupCatalogs();
+
+    if ( !m_headless )
+    {
+        tDebug() << "Init MainWindow.";
+        m_mainwindow = new TomahawkWindow();
+        m_mainwindow->setWindowTitle( "Tomahawk" );
+        m_mainwindow->setObjectName( "TH_Main_Window" );
+        if ( !arguments().contains( "--hide" ) )
+        {
+            m_mainwindow->show();
+        }
+    }
+#endif
+
+    tDebug() << "Init Local Collection.";
+    initLocalCollection();
+    tDebug() << "Init Pipeline.";
+    initPipeline();
+
+#ifndef ENABLE_HEADLESS
+    // load remote list of resolvers able to be installed
+    AtticaManager::instance();
+#endif
+
+    if ( arguments().contains( "--http" ) || TomahawkSettings::instance()->value( "network/http", true ).toBool() )
+    {
+        initHTTP();
+    }
+    connect( TomahawkSettings::instance(), SIGNAL( changed() ), SLOT( initHTTP() ) );
+
+#ifndef ENABLE_HEADLESS
+    if ( !s->hasScannerPaths() )
+    {
+        m_mainwindow->showSettingsDialog();
+    }
+#endif
+
+#ifdef LIBLASTFM_FOUND
+    tDebug() << "Init Scrobbler.";
+    m_scrobbler = new Scrobbler( this );
+#endif
+
+    if ( arguments().contains( "--filescan" ) )
+    {
+        m_scanManager.data()->runFullRescan();
+    }
+
+    // Set up echonest catalog synchronizer
+    Tomahawk::EchonestCatalogSynchronizer::instance();
+
+    PlaylistUpdaterInterface::registerUpdaterFactory( new XspfUpdaterFactory );
+    PlaylistUpdaterInterface::registerUpdaterFactory( new SpotifyUpdaterFactory );
+
+    // Following work-around/fix taken from Clementine rev. 13e13ccd9a95 and courtesy of David Sansome
+    // A bug in Qt means the wheel_scroll_lines setting gets ignored and replaced
+    // with the default value of 3 in QApplicationPrivate::initialize.
+    {
+        QSettings qt_settings( QSettings::UserScope, "Trolltech" );
+        qt_settings.beginGroup( "Qt" );
+        QApplication::setWheelScrollLines( qt_settings.value( "wheelScrollLines", QApplication::wheelScrollLines() ).toInt() );
+    }
+
+#ifndef ENABLE_HEADLESS
+    // Make sure to init GAM in the gui thread
+    GlobalActionManager::instance();
+
+    // check if our spotify playlist api server is up and running, and enable spotify playlist drops if so
+    QNetworkReply* r = TomahawkUtils::nam()->get( QNetworkRequest( QUrl( SPOTIFY_PLAYLIST_API_URL "/pong" ) ) );
+    connect( r, SIGNAL( finished() ), this, SLOT( spotifyApiCheckFinished() ) );
+#endif
+
+#ifdef Q_OS_MAC
+    // Make sure to do this after main window is inited
+    Tomahawk::enableFullscreen( m_mainwindow );
+#endif
 }
 
 
@@ -487,97 +570,6 @@ TomahawkApp::initHTTP()
 
     tLog() << "Starting HTTPd on" << m_session.data()->listenInterface().toString() << m_session.data()->port();
     m_session.data()->start();
-}
-
-
-void
-TomahawkApp::initAccountManager()
-{
-    tDebug() << "Init AccountManager.";
-    m_accountManager = QPointer< Tomahawk::Accounts::AccountManager >( new Tomahawk::Accounts::AccountManager( this ) );
-    connect( m_accountManager.data(), SIGNAL( readyForFactories() ), SLOT( initFactoriesForAccountManager() ) );
-    connect( m_accountManager.data(), SIGNAL( readyForSip() ), SLOT( initSIP() ) );
-
-    TomahawkSettings* s = TomahawkSettings::instance();
-
-    Echonest::Config::instance()->setNetworkAccessManager( TomahawkUtils::nam() );
-#ifndef ENABLE_HEADLESS
-    EchonestGenerator::setupCatalogs();
-
-    if ( !m_headless )
-    {
-        tDebug() << "Init MainWindow.";
-        m_mainwindow = new TomahawkWindow();
-        m_mainwindow->setWindowTitle( "Tomahawk" );
-        m_mainwindow->setObjectName( "TH_Main_Window" );
-        if ( !arguments().contains( "--hide" ) )
-        {
-            m_mainwindow->show();
-        }
-    }
-#endif
-
-    tDebug() << "Init Local Collection.";
-    initLocalCollection();
-    tDebug() << "Init Pipeline.";
-    initPipeline();
-
-#ifndef ENABLE_HEADLESS
-    // load remote list of resolvers able to be installed
-    AtticaManager::instance();
-#endif
-
-    if ( arguments().contains( "--http" ) || TomahawkSettings::instance()->value( "network/http", true ).toBool() )
-    {
-        initHTTP();
-    }
-    connect( TomahawkSettings::instance(), SIGNAL( changed() ), SLOT( initHTTP() ) );
-
-#ifndef ENABLE_HEADLESS
-    if ( !s->hasScannerPaths() )
-    {
-        m_mainwindow->showSettingsDialog();
-    }
-#endif
-
-#ifdef LIBLASTFM_FOUND
-    tDebug() << "Init Scrobbler.";
-    m_scrobbler = new Scrobbler( this );
-#endif
-
-    if ( arguments().contains( "--filescan" ) )
-    {
-        m_scanManager.data()->runFullRescan();
-    }
-
-    // Set up echonest catalog synchronizer
-    Tomahawk::EchonestCatalogSynchronizer::instance();
-
-    PlaylistUpdaterInterface::registerUpdaterFactory( new XspfUpdaterFactory );
-    PlaylistUpdaterInterface::registerUpdaterFactory( new SpotifyUpdaterFactory );
-
-    // Following work-around/fix taken from Clementine rev. 13e13ccd9a95 and courtesy of David Sansome
-    // A bug in Qt means the wheel_scroll_lines setting gets ignored and replaced
-    // with the default value of 3 in QApplicationPrivate::initialize.
-    {
-        QSettings qt_settings( QSettings::UserScope, "Trolltech" );
-        qt_settings.beginGroup( "Qt" );
-        QApplication::setWheelScrollLines( qt_settings.value( "wheelScrollLines", QApplication::wheelScrollLines() ).toInt() );
-    }
-
-#ifndef ENABLE_HEADLESS
-    // Make sure to init GAM in the gui thread
-    GlobalActionManager::instance();
-
-    // check if our spotify playlist api server is up and running, and enable spotify playlist drops if so
-    QNetworkReply* r = TomahawkUtils::nam()->get( QNetworkRequest( QUrl( SPOTIFY_PLAYLIST_API_URL "/pong" ) ) );
-    connect( r, SIGNAL( finished() ), this, SLOT( spotifyApiCheckFinished() ) );
-#endif
-
-#ifdef Q_OS_MAC
-    // Make sure to do this after main window is inited
-    Tomahawk::enableFullscreen( m_mainwindow );
-#endif
 }
 
 

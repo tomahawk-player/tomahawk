@@ -112,7 +112,6 @@ private slots:
     void initSIP();
     void initHTTP();
     void initFactoriesForAccountManager();
-    void initAccountManager();
 
     void spotifyApiCheckFinished();
 
