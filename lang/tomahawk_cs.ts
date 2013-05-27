@@ -3239,13 +3239,14 @@ Zkuste vyladit filtry pro nové písně.</translation>
         <source>%1 sent you
 %2%4 %3.</source>
         <comment>%1 is a nickname, %2 is a title, %3 is an artist, %4 is the preposition used to link track and artist ('by' in english)</comment>
-        <translation type="unfinished"/>
+        <translation>%1 vám poslán⏎
+%2%4 %3.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="211"/>
         <source>%1 sent you &quot;%2&quot; by %3.</source>
         <comment>%1 is a nickname, %2 is a title, %3 is an artist</comment>
-        <translation type="unfinished"/>
+        <translation>%1 vám poslán &quot;%2&quot; od %3.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="279"/>
@@ -3404,43 +3405,43 @@ Zkuste vyladit filtry pro nové písně.</translation>
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="357"/>
-        <location filename="../src/libtomahawk/Source.cpp" line="408"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="370"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="421"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Prohledává se (%L1 skladeb)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="359"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="372"/>
         <source>Scanning</source>
         <translation>Prohledává se</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="393"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="406"/>
         <source>Checking</source>
         <translation>Přezkušuje se</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="398"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="411"/>
         <source>Syncing</source>
         <translation>Seřizuje se</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="403"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="416"/>
         <source>Importing</source>
         <translation>Zavádí se</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="555"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="568"/>
         <source>Saving (%1%)</source>
         <translation>Ukládá se (%1%)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="636"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="649"/>
         <source>Online</source>
         <translation>Připojený</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="640"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="653"/>
         <source>Offline</source>
         <translation>Nepřipojený</translation>
     </message>
