@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -39,12 +40,14 @@ using namespace Tomahawk;
 
 ContextMenu::ContextMenu( QWidget* parent )
     : QMenu( parent )
+    , m_playlists_sigmap( 0 )
+    , m_sources_sigmap( 0 )
     , m_loveAction( 0 )
 {
     m_sigmap = new QSignalMapper( this );
     connect( m_sigmap, SIGNAL( mapped( int ) ), SLOT( onTriggered( int ) ) );
 
-    m_supportedActions = ActionPlay | ActionQueue | ActionPlaylist | ActionCopyLink | ActionLove | ActionStopAfter | ActionPage | ActionEditMetadata;
+    m_supportedActions = ActionPlay | ActionQueue | ActionPlaylist | ActionCopyLink | ActionLove | ActionStopAfter | ActionPage | ActionEditMetadata | ActionSend;
 }
 
 
@@ -79,10 +82,28 @@ ContextMenu::addToPlaylist( int playlistIdx )
 }
 
 
+void
+ContextMenu::sendToSource( int sourceIdx )
+{
+    const Tomahawk::source_ptr &src = m_sources.at( sourceIdx );
+    foreach ( Tomahawk::query_ptr query, m_queries )
+    {
+        query->queryTrack()->share( src );
+    }
+}
+
+
 bool
-caseInsensitiveLessThan( Tomahawk::playlist_ptr &s1, Tomahawk::playlist_ptr &s2 )
+playlistsLessThan( const Tomahawk::playlist_ptr& s1, const Tomahawk::playlist_ptr& s2 )
 {
     return s1->title().toLower() < s2->title().toLower();
+}
+
+
+bool
+sourcesLessThan( const Tomahawk::source_ptr& s1, const Tomahawk::source_ptr& s2 )
+{
+    return s1->friendlyName().toLower() < s2->friendlyName().toLower();
 }
 
 
@@ -107,19 +128,42 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
         // Get the current list of all playlists.
         m_playlists = QList< Tomahawk::playlist_ptr >( SourceList::instance()->getLocal()->dbCollection()->playlists() );
         // Sort the playlist
-        qSort( m_playlists.begin(), m_playlists.end(), caseInsensitiveLessThan );
+        qSort( m_playlists.begin(), m_playlists.end(), playlistsLessThan );
+        if ( m_playlists_sigmap != 0 )
+            m_playlists_sigmap->deleteLater();
         m_playlists_sigmap = new QSignalMapper( this );
 
         // Build the menu listing all available playlists
         QMenu* playlistMenu = addMenu( tr( "Add to &Playlist" ) );
         for ( int i = 0; i < m_playlists.length(); ++i )
         {
-            QAction* action = new QAction( m_playlists.at(i)->title() , this );
+            QAction* action = new QAction( m_playlists.at( i )->title() , this );
             playlistMenu->addAction(action);
             m_playlists_sigmap->setMapping( action, i );
-            connect( action, SIGNAL( triggered() ), m_playlists_sigmap, SLOT( map() ));
+            connect( action, SIGNAL( triggered() ), m_playlists_sigmap, SLOT( map() ) );
         }
         connect( m_playlists_sigmap, SIGNAL( mapped( int ) ), this, SLOT( addToPlaylist( int ) ) );
+    }
+
+    if ( m_supportedActions & ActionSend ) //Send to someone's Inbox!
+    {
+        // Get the buddies list
+        m_sources = SourceList::instance()->sources( true );
+        qSort( m_sources.begin(), m_sources.end(), sourcesLessThan );
+
+        if ( m_sources_sigmap != 0 )
+            m_sources_sigmap->deleteLater();
+        m_sources_sigmap = new QSignalMapper( this );
+
+        QMenu* sourcesMenu = addMenu( tr( "Send to &Friend" ) );
+        for ( int i = 0; i < m_sources.length(); ++i )
+        {
+            QAction* action = new QAction( m_sources.at( i )->friendlyName(), this );
+            sourcesMenu->addAction( action );
+            m_sources_sigmap->setMapping( action, i );
+            connect( action, SIGNAL( triggered() ), m_sources_sigmap, SLOT( map() ) );
+        }
+        connect( m_sources_sigmap, SIGNAL( mapped( int ) ), this, SLOT( sendToSource( int ) ) );
     }
 
     if ( m_supportedActions & ActionStopAfter && itemCount() == 1 )
