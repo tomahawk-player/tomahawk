@@ -87,7 +87,7 @@ public:
 
     int id() const { return m_id; }
     ControlConnection* controlConnection() const { return m_cc.data(); }
-    void setControlConnection( ControlConnection* cc );
+    bool setControlConnection( ControlConnection* cc );
 
     const QSet< Tomahawk::peerinfo_ptr > peerInfos() const;
 
