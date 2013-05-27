@@ -174,6 +174,7 @@ private:
     int m_commandCount;
     QString m_lastCmdGuid;
     mutable QMutex m_cmdMutex;
+    QMutex m_setControlConnectionMutex;
 
     Tomahawk::playlistinterface_ptr m_playlistInterface;
 };

@@ -85,6 +85,7 @@ Source::~Source()
 bool
 Source::setControlConnection( ControlConnection* cc )
 {
+    QMutexLocker locker( &m_setControlConnectionMutex );
     if ( !m_cc.isNull() && m_cc->isReady() && m_cc->isRunning() )
     {
         const QString& nodeid = Database::instance()->impl()->dbid();
