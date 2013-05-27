@@ -182,7 +182,6 @@ InfoSystem::init()
     QMetaObject::invokeMethod( worker, "init", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoSystemCache*, cache ) );
 
     m_inited = true;
-    emit ready();
 }
 
 
