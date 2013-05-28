@@ -18,8 +18,6 @@
 
 #include "DatabaseCommand_AddFiles.h"
 
-#include <QSqlQuery>
-
 #include "Artist.h"
 #include "Album.h"
 #include "collection/Collection.h"
@@ -28,6 +26,8 @@
 #include "network/DbSyncConnection.h"
 #include "network/Servent.h"
 #include "SourceList.h"
+
+#include "database/TomahawkSqlQuery.h"
 
 #include "utils/Logger.h"
 

@@ -43,6 +43,7 @@
 #include "utils/Logger.h"
 #include "utils/Closure.h"
 #include "widgets/SourceTreePopupDialog.h"
+#include "PlaylistEntry.h"
 
 #include <QAction>
 #include <QApplication>

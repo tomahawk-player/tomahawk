@@ -21,9 +21,6 @@
 #include "TrackInfoWidget.h"
 #include "ui_TrackInfoWidget.h"
 
-#include <QScrollArea>
-#include <QScrollBar>
-
 #include "ViewManager.h"
 #include "SourceList.h"
 #include "playlist/PlayableModel.h"
@@ -32,6 +29,13 @@
 #include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+
+#include "Query.h"
+#include "Track.h"
+
+#include <QScrollArea>
+#include <QScrollBar>
+#include <QDateTime>
 
 using namespace Tomahawk;
 

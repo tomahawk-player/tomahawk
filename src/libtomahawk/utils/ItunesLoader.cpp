@@ -17,10 +17,13 @@
  */
 
 #include "ItunesLoader.h"
-#include <QUrl>
-#include <QSettings>
+
 #include "Playlist.h"
 #include "SourceList.h"
+#include "utils/Uuid.h"
+
+#include <QUrl>
+#include <QSettings>
 
 using namespace Tomahawk;
 

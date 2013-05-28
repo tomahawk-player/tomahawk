@@ -22,6 +22,8 @@
 #include "utils/Logger.h"
 #include "ViewManager.h"
 #include "audio/AudioEngine.h"
+#include "ViewPage.h"
+#include "PlaylistInterface.h"
 
 using namespace Tomahawk;
 

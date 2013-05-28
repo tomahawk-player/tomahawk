@@ -20,15 +20,22 @@
 #ifndef GLOBALACTIONMANAGER_H
 #define GLOBALACTIONMANAGER_H
 
-#include "Query.h"
-#include "Playlist.h"
-#include "playlist/dynamic/DynamicPlaylist.h"
-#include "DllMacro.h"
+#include "artist_ptr.h"
+#include "album_ptr.h"
+#include "dynplaylist_ptr.h"
+#include "playlist_ptr.h"
+#include "query_ptr.h"
 
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QObject>
-#include <QUrl>
+// #include "Query.h"
+// #include "Playlist.h"
+// #include "playlist/dynamic/DynamicPlaylist.h"
+//
+// #include <QNetworkAccessManager>
+#include <QNetworkReply> // private slot meh -_-
+// #include <QObject>
+// #include <QUrl>
+
+#include "DllMacro.h"
 
 /**
  * Handles global actions such as parsing and creation of links, mime data handling, etc

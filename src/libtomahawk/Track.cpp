@@ -19,9 +19,6 @@
 
 #include "Track.h"
 
-#include <QtAlgorithms>
-#include <QReadWriteLock>
-
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
 #include "database/DatabaseCommand_LogPlayback.h"
@@ -32,8 +29,15 @@
 #include "resolvers/Resolver.h"
 #include "SourceList.h"
 #include "audio/AudioEngine.h"
+#include "TrackData.h"
+#include "SocialAction.h"
+#include "infosystem/InfoSystem.h"
 
 #include "utils/Logger.h"
+
+#include <QPixmap>
+#include <QtAlgorithms>
+#include <QReadWriteLock>
 
 using namespace Tomahawk;
 

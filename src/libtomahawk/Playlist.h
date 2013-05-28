@@ -21,19 +21,26 @@
 #ifndef PLAYLIST_H
 #define PLAYLIST_H
 
-#include <QObject>
-#include <QList>
-#include <QVariant>
-#include <QSharedPointer>
-#include <QQueue>
-
-#include "Typedefs.h"
-#include "Result.h"
-#include "PlaylistEntry.h"
-#include "PlaylistInterface.h"
-#include "playlist/PlaylistUpdaterInterface.h"
-#include "Query.h"
+#include "Typedefs.h" // ModelMode
+// #include "Result.h"
+// #include "PlaylistEntry.h"
+// #include "PlaylistInterface.h"
+// #include "playlist/PlaylistUpdaterInterface.h"
+// #include "Query.h"
+#include "PlaylistRevision.h"
 #include "utils/Closure.h"
+
+#include "playlist_ptr.h"
+#include "plentry_ptr.h"
+#include "source_ptr.h"
+#include "query_ptr.h"
+#include "playlistinterface_ptr.h"
+
+// #include <QObject>
+// #include <QList>
+// #include <QVariant>
+// #include <QSharedPointer>
+#include <QQueue>
 
 #include "DllMacro.h"
 
@@ -48,29 +55,7 @@ namespace Tomahawk
 {
 
 class PlaylistUpdaterInterface;
-
-struct PlaylistRevision
-{
-    QString revisionguid;
-    QString oldrevisionguid;
-    QList<plentry_ptr> newlist;
-    QList<plentry_ptr> added;
-    QList<plentry_ptr> removed;
-    bool applied; // false if conflict
-};
-
-struct RevisionQueueItem
-{
-public:
-    QString newRev;
-    QString oldRev;
-    QList< plentry_ptr > entries;
-    bool applyToTip;
-
-    RevisionQueueItem( const QString& nRev, const QString& oRev, const QList< plentry_ptr >& e, bool latest ) :
-        newRev( nRev ), oldRev( oRev), entries( e ), applyToTip( latest ) {}
-};
-
+struct RevisionQueueItem;
 
 class DLLEXPORT Playlist : public QObject
 {

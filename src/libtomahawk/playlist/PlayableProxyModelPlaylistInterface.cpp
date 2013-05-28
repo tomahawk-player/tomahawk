@@ -26,6 +26,7 @@
 #include "PlayableItem.h"
 #include "Source.h"
 #include "utils/Logger.h"
+#include "Result.h"
 
 using namespace Tomahawk;
 

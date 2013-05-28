@@ -20,7 +20,9 @@
 #ifndef COLLAPSIBLE_CONTROLS_H
 #define COLLAPSIBLE_CONTROLS_H
 
-#include "Typedefs.h"
+// #include "Typedefs.h"
+#include "dynplaylist_ptr.h"
+#include "dyncontrol_ptr.h"
 
 #include <QWidget>
 

@@ -21,16 +21,21 @@
 #ifndef GROOVESHARKPARSER_H
 #define GROOVESHARKPARSER_H
 
-#include "DllMacro.h"
-#include "Typedefs.h"
-#include "Query.h"
-#include "jobview/JobStatusItem.h"
+// #include "Typedefs.h"
+// #include "Query.h"
+// #include "jobview/JobStatusItem.h"
+//
+//
+#include "query_ptr.h"
+#include "playlist_ptr.h"
 
 #include <qca_basic.h>
 
 #include <QObject>
 #include <QSet>
-#include <QtCore/QStringList>
+// #include <QtCore/QStringList>
+
+#include "DllMacro.h"
 
 /**
  * Small class to parse grooveshark links into query_ptrs

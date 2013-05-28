@@ -19,10 +19,12 @@
 #ifndef SCRIPTCOMMAND_ALLTRACKS_H
 #define SCRIPTCOMMAND_ALLTRACKS_H
 
-#include "Query.h"
 #include "collection/TracksRequest.h"
-#include "collection/Collection.h"
 #include "resolvers/ScriptCommand.h"
+
+#include "query_ptr.h"
+#include "album_ptr.h"
+#include "collection_ptr.h"
 
 class ScriptCommand_AllTracks : public ScriptCommand, public Tomahawk::TracksRequest
 {

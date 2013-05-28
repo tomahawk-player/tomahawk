@@ -22,6 +22,7 @@
 #include "utils/Logger.h"
 #include "Source.h"
 
+#include <QPixmap>
 
 Tomahawk::GeneratorInterface::GeneratorInterface( QObject* parent )
     : QObject( parent )

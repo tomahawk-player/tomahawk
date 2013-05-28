@@ -1,3 +1,4 @@
+
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
@@ -30,10 +31,13 @@
 #include "Playlist.h"
 #include "playlist/XspfUpdater.h"
 #include "Pipeline.h"
+#include "Track.h"
+#include "Query.h"
 
 #include "utils/NetworkReply.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
+#include "utils/Uuid.h"
 
 #include <QDomDocument>
 

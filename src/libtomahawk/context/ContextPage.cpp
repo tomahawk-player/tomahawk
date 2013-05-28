@@ -102,3 +102,9 @@ ContextProxyPage::sceneEvent( QEvent* event )
 
     return QGraphicsWidget::sceneEvent( event );
 }
+namespace Tomahawk {
+QPixmap ContextPage::pixmap() const {
+    return QPixmap( RESPATH "icons/tomahawk-icon-128x128.png" );
+}
+}
+

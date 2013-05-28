@@ -19,14 +19,14 @@
 
 #include "DatabaseCommand_AllTracks.h"
 
-#include <QSqlQuery>
-
 #include "DatabaseImpl.h"
 #include "Artist.h"
 #include "Album.h"
 #include "SourceList.h"
 #include "utils/Logger.h"
-
+#include "database/TomahawkSqlQuery.h"
+#include "Result.h"
+#include "Track.h"
 
 void
 DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )

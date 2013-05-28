@@ -20,15 +20,23 @@
 #ifndef SOURCE_H
 #define SOURCE_H
 
-#include <QtCore/QObject>
-#include <QtCore/QSharedPointer>
-#include <QtCore/QVariantMap>
-
-#include "Typedefs.h"
+// #include "Typedefs.h"
 #include "network/DbSyncConnection.h"
-#include "collection/Collection.h"
-#include "Query.h"
+// #include "collection/Collection.h"
+// #include "Query.h"
 #include "utils/TomahawkUtils.h"
+//
+// #include <QObject>
+// #include <QSharedPointer>
+// #include <QVariantMap>
+
+#include "collection_ptr.h"
+#include "peerinfo_ptr.h"
+#include "playlistinterface_ptr.h"
+#include "track_ptr.h"
+
+#include <QSize>
+#include <QMutex>
 
 #include "DllMacro.h"
 
@@ -38,10 +46,16 @@ class DatabaseCommand_LoadAllSources;
 class DatabaseCommand_LogPlayback;
 class DatabaseCommand_SocialAction;
 class DatabaseCommand_UpdateSearchIndex;
+class DatabaseCommand_AddFiles;
 class MusicScanner;
+
+
+// class DBSyncConnection;
 
 namespace Tomahawk
 {
+
+struct PlaybackLog;
 
 class DLLEXPORT Source : public QObject
 {

@@ -30,6 +30,8 @@
 #include "network/Servent.h"
 #include "Pipeline.h"
 #include "Source.h"
+#include "Result.h"
+#include "Query.h"
 
 #include <boost/bind.hpp>
 

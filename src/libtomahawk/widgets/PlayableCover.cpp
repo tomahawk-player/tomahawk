@@ -27,6 +27,8 @@
 #include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+#include "Query.h"
+#include "Track.h"
 
 #include <QPainter>
 

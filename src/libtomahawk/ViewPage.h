@@ -20,18 +20,26 @@
 #ifndef VIEWPAGE_H
 #define VIEWPAGE_H
 
-#include "Typedefs.h"
-#include "PlaylistInterface.h"
-#include "Artist.h"
-#include "Album.h"
-#include "Source.h"
-#include "utils/TomahawkUtils.h"
-#include "playlist/PlaylistUpdaterInterface.h"
+// #include "Typedefs.h"
+// #include "PlaylistInterface.h"
+// #include "Artist.h"
+// #include "Album.h"
+// #include "Source.h"
+// #include "utils/TomahawkUtils.h"
+// #include "playlist/PlaylistUpdaterInterface.h"
+//
+// #include <QPixmap>
+#include "playlistinterface_ptr.h"
+#include "artist_ptr.h"
+#include "album_ptr.h"
 
-#include <QtGui/QPixmap>
+#include "DllMacro.h"
+
+class QWidget;
 
 namespace Tomahawk
 {
+class PlaylistUpdaterInterface;
 
 
 class DLLEXPORT ViewPage
@@ -57,7 +65,7 @@ public:
     virtual Tomahawk::album_ptr descriptionAlbum() const { return Tomahawk::album_ptr(); }
 
     virtual QString longDescription() const { return QString(); }
-    virtual QPixmap pixmap() const { return QPixmap( RESPATH "icons/tomahawk-icon-128x128.png" ); }
+    virtual QPixmap pixmap() const;
 
     virtual bool showInfoBar() const { return true; }
     virtual bool showFilter() const { return false; }

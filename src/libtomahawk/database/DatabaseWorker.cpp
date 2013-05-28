@@ -30,6 +30,8 @@
 #include "TomahawkSqlQuery.h"
 #include "utils/Logger.h"
 
+#include <QSqlError>
+
 #ifndef QT_NO_DEBUG
     //#define DEBUG_TIMING TRUE
 #endif

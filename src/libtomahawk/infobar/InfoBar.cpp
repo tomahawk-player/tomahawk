@@ -20,12 +20,6 @@
 #include "InfoBar.h"
 #include "ui_InfoBar.h"
 
-#include <QLabel>
-#include <QPixmap>
-#include <QCheckBox>
-#include <QPaintEvent>
-#include <QPainter>
-
 #include "Source.h"
 #include "ViewManager.h"
 #include "thirdparty/Qocoa/qsearchfield.h"
@@ -33,6 +27,13 @@
 #include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+#include "playlist/PlaylistUpdaterInterface.h"
+
+#include <QLabel>
+#include <QPixmap>
+#include <QCheckBox>
+#include <QPaintEvent>
+#include <QPainter>
 
 #define ANIMATION_TIME 400
 #define IMAGE_HEIGHT 64

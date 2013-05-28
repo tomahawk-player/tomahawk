@@ -22,6 +22,7 @@
 #include "playlist/PlaylistModel.h"
 #include "playlist/PlaylistView.h"
 #include "Source.h"
+#include "Track.h"
 
 using namespace Tomahawk;
 

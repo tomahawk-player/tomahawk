@@ -20,10 +20,12 @@
 #ifndef LATCHMANAGER_H
 #define LATCHMANAGER_H
 
-#include "DllMacro.h"
-#include "Source.h"
+#include "source_ptr.h"
+#include "playlistinterface_ptr.h"
 
-#include <QtCore/QObject>
+#include <QObject>
+
+#include "DllMacro.h"
 
 class QState;
 class QStateMachine;

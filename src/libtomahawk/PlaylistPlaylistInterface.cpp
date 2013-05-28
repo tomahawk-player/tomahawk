@@ -21,6 +21,7 @@
 
 #include "Playlist.h"
 #include "SourceList.h"
+#include "PlaylistEntry.h"
 
 #include "utils/Logger.h"
 

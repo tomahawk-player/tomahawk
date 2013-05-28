@@ -18,9 +18,6 @@
 
 #include "LovedTracksModel.h"
 
-#include <QMimeData>
-#include <QTreeView>
-
 #include "Source.h"
 #include "SourceList.h"
 #include "database/Database.h"
@@ -28,8 +25,11 @@
 #include "PlayableItem.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
+#include "PlaylistEntry.h"
 
 #include <QTimer>
+#include <QMimeData>
+#include <QTreeView>
 
 #define LOVED_TRACK_ITEMS 25
 

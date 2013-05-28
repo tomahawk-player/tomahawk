@@ -19,13 +19,21 @@
 #ifndef TRACKDATA_H
 #define TRACKDATA_H
 
-#include <QObject>
-#include <QList>
-#include <QFuture>
-#include <QVariant>
+#include "PlaybackLog.h"
+#include "SocialAction.h"
 
-#include "Typedefs.h"
-#include "infosystem/InfoSystem.h"
+// #include "Typedefs.h"
+#include "trackdata_wptr.h"
+#include "trackdata_ptr.h"
+#include "query_ptr.h"
+
+// #include "infosystem/InfoSystem.h"
+//
+
+// #include <QObject>
+// #include <QList>
+#include <QFuture>
+#include <QStringList>
 
 #include "DllMacro.h"
 
@@ -35,21 +43,10 @@ class IdThreadWorker;
 
 namespace Tomahawk
 {
-
-struct SocialAction
-{
-    QVariant action;
-    QVariant value;
-    QVariant timestamp;
-    Tomahawk::source_ptr source;
-};
-
-struct PlaybackLog
-{
-    Tomahawk::source_ptr source;
-    unsigned int timestamp;
-    unsigned int secsPlayed;
-};
+    namespace InfoSystem
+    {
+        class InfoRequestData;
+    }
 
 class DLLEXPORT TrackData : public QObject
 {

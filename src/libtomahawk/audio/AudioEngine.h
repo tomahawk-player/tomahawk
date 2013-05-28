@@ -21,9 +21,15 @@
 #ifndef AUDIOENGINE_H
 #define AUDIOENGINE_H
 
-#include "../Typedefs.h"
+#include "../Typedefs.h" // PlaylistModes
 
-#include <QStringList>
+#include "playlistinterface_ptr.h"
+#include "result_ptr.h"
+#include "query_ptr.h"
+#include "artist_ptr.h"
+#include "album_ptr.h"
+
+// #include <QStringList>
 
 #include "DllMacro.h"
 

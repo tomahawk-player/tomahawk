@@ -24,6 +24,8 @@
 #include "Query.h"
 #include "Source.h"
 #include "audio/AudioEngine.h"
+#include "playlist/dynamic/DynamicPlaylist.h"
+#include "Track.h"
 
 #include "utils/Logger.h"
 

@@ -20,11 +20,17 @@
 #ifndef DYNAMIC_WIDGET_H
 #define DYNAMIC_WIDGET_H
 
+// #include "Typedefs.h"
+#include "ViewPage.h"
+// #include "playlist/dynamic/DynamicPlaylistRevision.h"
+
+#include "query_ptr.h"
+
+#include "dynplaylist_ptr.h"
+#include "dyncontrol_ptr.h"
+
 #include <QWidget>
 
-#include "Typedefs.h"
-#include "ViewPage.h"
-#include "playlist/dynamic/DynamicPlaylistRevision.h"
 
 class AnimatedSpinner;
 class QShowEvent;
@@ -42,7 +48,7 @@ class ReadOrWriteWidget;
 
 namespace Tomahawk
 {
-
+class DynamicPlaylistRevision;
 class DynamicModel;
 class DynamicControl;
 class DynamicSetupWidget;

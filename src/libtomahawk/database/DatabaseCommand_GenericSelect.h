@@ -19,13 +19,18 @@
 #ifndef DATABASECOMMAND_GENERICSELECT_H
 #define DATABASECOMMAND_GENERICSELECT_H
 
-#include <QVariantMap>
+// #include <QVariantMap>
 
 #include "DatabaseCommand.h"
-#include "Typedefs.h"
+// #include "Typedefs.h"
+#include "query_ptr.h"
+#include "artist_ptr.h"
+#include "album_ptr.h"
 
-#include <QStringList>
-#include <QMetaType>
+#include "database/TomahawkSqlQuery.h"
+
+// #include <QStringList>
+// #include <QMetaType>
 
 #include "DllMacro.h"
 

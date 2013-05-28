@@ -37,6 +37,7 @@
 #include "utils/AnimatedSpinner.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+#include "playlist/dynamic/DynamicPlaylistRevision.h"
 
 #include <QVBoxLayout>
 #include <QLabel>

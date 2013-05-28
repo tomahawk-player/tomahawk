@@ -22,6 +22,8 @@
 
 #include "DatabaseCommand.h"
 
+#include "query_ptr.h"
+
 class DatabaseCommand_DeleteInboxEntry : public DatabaseCommand
 {
     Q_OBJECT

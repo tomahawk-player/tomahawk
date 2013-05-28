@@ -31,9 +31,9 @@
 #include "database/DatabaseCommand_SourceOffline.h"
 #include "database/DatabaseCommand_UpdateSearchIndex.h"
 #include "database/Database.h"
-
-#include <QCoreApplication>
-#include <QtAlgorithms>
+#include "Query.h"
+#include "utils/Logger.h"
+#include "sip/PeerInfo.h"
 
 #include "utils/TomahawkCache.h"
 #include "database/DatabaseCommand_SocialAction.h"
@@ -42,8 +42,9 @@
     #include "utils/TomahawkUtilsGui.h"
 #endif
 
-#include "utils/Logger.h"
-#include "sip/PeerInfo.h"
+#include <QCoreApplication>
+#include <QtAlgorithms>
+
 
 using namespace Tomahawk;
 

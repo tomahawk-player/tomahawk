@@ -24,6 +24,8 @@
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
+#include "dynplaylist_ptr.h"
+
 #include <echonest/Playlist.h>
 
 #include <QPaintEvent>

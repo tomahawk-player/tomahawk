@@ -32,6 +32,8 @@
 #include "SpotifyInfoPlugin.h"
 #include "infosystem/InfoSystem.h"
 #include "utils/Logger.h"
+#include "PlaylistEntry.h"
+#include "Track.h"
 
 #ifndef ENABLE_HEADLESS
 #include "jobview/JobStatusView.h"

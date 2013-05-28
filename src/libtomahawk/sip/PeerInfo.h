@@ -19,17 +19,22 @@
 #ifndef PEERINFO_H
 #define PEERINFO_H
 
-
-
-#include "DllMacro.h"
-
-#include "SipInfo.h"
+/*
 #include "accounts/Account.h"
-#include "utils/TomahawkUtils.h"
 
 #include <QString>
-#include <QPixmap>
+#include <QPixmap>*/
 
+#include "utils/TomahawkUtils.h"
+#include "SipInfo.h"
+
+#include "peerinfo_wptr.h"
+#include "peerinfo_ptr.h"
+
+#include <QPointer>
+#include <QSize>
+
+#include "DllMacro.h"
 
 #define peerInfoDebug(peerInfo) tDebug() << "PEERINFO:" << ( !peerInfo.isNull() ? peerInfo->debugName() : "Invalid PeerInfo" ).toLatin1().constData()
 

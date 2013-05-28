@@ -26,6 +26,7 @@
 #include "network/ControlConnection.h"
 #include "infosystem/InfoSystemCache.h"
 #include "resolvers/ExternalResolver.h"
+#include "playlist/dynamic/DynamicPlaylist.h"
 #include "resolvers/ScriptCollection.h"
 
 #include "utils/Logger.h"

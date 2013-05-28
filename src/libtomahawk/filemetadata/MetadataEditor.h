@@ -20,14 +20,18 @@
 #ifndef METADATAEDITOR_H
 #define METADATAEDITOR_H
 
-#include <QDialog>
-#include <QLineEdit>
-#include <QSpinBox>
-
 #include "ui_MetadataEditor.h"
-#include "Query.h"
-#include "Result.h"
-#include "Typedefs.h"
+
+// #include "Query.h"
+// #include "Result.h"
+// #include "Typedefs.h"
+#include "query_ptr.h"
+#include "result_ptr.h"
+#include "playlistinterface_ptr.h"
+
+#include <QDialog>
+// #include <QLineEdit>
+// #include <QSpinBox>
 
 class QString;
 

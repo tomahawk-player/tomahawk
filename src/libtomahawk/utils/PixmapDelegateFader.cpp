@@ -20,14 +20,18 @@
 
 #include "PixmapDelegateFader.h"
 
+#include "Source.h"
+#include "TomahawkUtilsGui.h"
+#include "Logger.h"
+#include "Artist.h"
+#include "Album.h"
+#include "Query.h"
+#include "Track.h"
+
 #include <QPainter>
 #include <QBuffer>
 #include <QPaintEngine>
 #include <QTimer>
-
-#include "Source.h"
-#include "TomahawkUtilsGui.h"
-#include "Logger.h"
 
 using namespace Tomahawk;
 

@@ -21,11 +21,20 @@
 #ifndef PLAYABLEMODEL_H
 #define PLAYABLEMODEL_H
 
-#include <QAbstractItemModel>
-#include <QPixmap>
+//
+// #include "PlaylistInterface.h"
+#include "PlaybackLog.h"
 
-#include "PlaylistInterface.h"
-#include "Typedefs.h"
+#include "Typedefs.h" // QID, PlaylistModes
+#include "artist_ptr.h"
+#include "track_ptr.h"
+#include "query_ptr.h"
+#include "result_ptr.h"
+#include "album_ptr.h"
+
+#include <QPixmap>
+#include <QAbstractItemModel>
+
 
 #include "DllMacro.h"
 

@@ -29,6 +29,7 @@
 #include "ActionCollection.h"
 #include "utils/Logger.h"
 #include "utils/TomahawkUtilsGui.h"
+#include "Track.h"
 
 #include <QWheelEvent>
 

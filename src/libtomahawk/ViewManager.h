@@ -20,46 +20,59 @@
 #ifndef VIEWMANAGER_H
 #define VIEWMANAGER_H
 
+// #include "Artist.h"
+// #include "collection/Collection.h"
+// #include "PlaylistInterface.h"
+// #include "playlist/QueueView.h"
+// #include "ViewPage.h"
+#include "playlist_ptr.h"
+#include "dynplaylist_ptr.h"
+#include "collection_ptr.h"
+#include "playlistinterface_ptr.h"
+#include "query_ptr.h"
+#include "artist_ptr.h"
+#include "album_ptr.h"
+#include "source_ptr.h"
+//
 #include <QObject>
-#include <QHash>
-#include <QStackedWidget>
-
-#include "Artist.h"
-#include "collection/Collection.h"
-#include "PlaylistInterface.h"
-#include "playlist/QueueView.h"
-#include "ViewPage.h"
+#include <QTimer>
+// #include <QHash>
+// #include <QStackedWidget>
 
 #include "DllMacro.h"
 
 class AnimatedSplitter;
-class AlbumModel;
-class GridView;
+// class AlbumModel;
+// class GridView;
 class AlbumInfoWidget;
 class ArtistInfoWidget;
 class TreeWidget;
-class CollectionModel;
+// class CollectionModel;
 class ContextWidget;
 class FlexibleView;
-class PlaylistModel;
+// class PlaylistModel;
 class PlaylistView;
-class TrackProxyModel;
-class TrackModel;
-class TreeProxyModel;
+// class TrackProxyModel;
+// class TrackModel;
+// class TreeProxyModel;
 class TreeModel;
-class TrackView;
+// class TrackView;
 class SourceInfoWidget;
 class InfoBar;
 class TrackInfoWidget;
 class NewReleasesWidget;
 class WelcomeWidget;
 class WhatsHotWidget;
-class QPushButton;
+// class QPushButton;
 class InboxModel;
+class QueueView;
+
+class QStackedWidget;
 
 namespace Tomahawk
 {
     class DynamicWidget;
+    class ViewPage;
 }
 
 class DLLEXPORT ViewManager : public QObject
@@ -76,7 +89,7 @@ public:
     InfoBar* infobar() const { return m_infobar; }
     ContextWidget* context() const { return m_contextWidget; }
 
-    PlaylistView* queue() const { return m_queue->queue(); }
+    PlaylistView* queue() const;
     void setQueue( QueueView* queue ) { m_queue = queue; }
 
     bool isSuperCollectionVisible() const;

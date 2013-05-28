@@ -18,13 +18,15 @@
 
 #include "DatabaseCommand_CreatePlaylist.h"
 
-#include <QSqlQuery>
-
 #include "SourceList.h"
 #include "DatabaseImpl.h"
-#include "TomahawkSqlQuery.h"
 #include "network/Servent.h"
 #include "utils/Logger.h"
+#include "database/TomahawkSqlQuery.h"
+#include "Source.h"
+#include "Playlist.h"
+
+#include <qjson/qobjecthelper.h>
 
 using namespace Tomahawk;
 

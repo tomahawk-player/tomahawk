@@ -25,6 +25,9 @@
 #include "ViewManager.h"
 #include "Source.h"
 #include "utils/Logger.h"
+#include "Query.h"
+#include "Track.h"
+#include "Result.h"
 
 using namespace Tomahawk;
 

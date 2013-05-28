@@ -20,13 +20,14 @@
 #ifndef DYNAMIC_PLAYLIST_CONTROL
 #define DYNAMIC_PLAYLIST_CONTROL
 
-#include "Typedefs.h"
-
-
-#include <QObject>
-#include <QSharedPointer>
+#include "dyncontrol_ptr.h"
+// #include "Typedefs.h"
+//
+//
+// #include <QObject>
+// #include <QSharedPointer>
 #include <QStringList>
-#include <QWidget>
+// #include <QWidget>
 
 namespace Tomahawk
 {
@@ -87,11 +88,7 @@ public:
     /// All the potential type selectors for this control
     QStringList typeSelectors() const { return m_typeSelectors; }
 
-    QString id() {
-        if( m_id.isEmpty() )
-            m_id = uuid();
-        return m_id;
-    };
+    QString id();
     void setId( const QString& id ) { m_id = id; }
 
     void setType( const QString& type ) { m_type = type; }

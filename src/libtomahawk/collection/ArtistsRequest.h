@@ -19,10 +19,12 @@
 #ifndef ARTISTSREQUEST_H
 #define ARTISTSREQUEST_H
 
-#include "Typedefs.h"
-#include "DllMacro.h"
+// #include "Typedefs.h"
+#include "artist_ptr.h"
 
 #include <QList>
+
+#include "DllMacro.h"
 
 namespace Tomahawk
 {

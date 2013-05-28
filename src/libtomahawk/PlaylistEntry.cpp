@@ -21,6 +21,8 @@
 #include "PlaylistEntry.h"
 
 #include "Source.h"
+#include "Query.h"
+#include "Result.h"
 #include "utils/Logger.h"
 
 using namespace Tomahawk;

@@ -26,6 +26,7 @@
 #include "database/IdThreadWorker.h"
 #include "Query.h"
 #include "Source.h"
+#include "infosystem/InfoSystem.h"
 
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"

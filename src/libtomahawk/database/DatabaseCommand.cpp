@@ -30,11 +30,13 @@
 #include "DatabaseCommand_SetDynamicPlaylistRevision.h"
 #include "DatabaseCommand_SocialAction.h"
 #include "DatabaseCommand_ShareTrack.h"
-
-#include "utils/Logger.h"
 #include "DatabaseCommand_SetCollectionAttributes.h"
 #include "DatabaseCommand_SetTrackAttributes.h"
 
+#include "utils/Logger.h"
+#include "utils/Uuid.h"
+
+#include <boost/function.hpp>
 
 DatabaseCommand::DatabaseCommand( QObject* parent )
     : QObject( parent )
@@ -197,4 +199,12 @@ DatabaseCommand::factory( const QVariant& op, const source_ptr& source )
     qDebug() << "Unknown database command" << name;
 //    Q_ASSERT( false );
     return NULL;
+}
+
+QString DatabaseCommand::guid() const
+{
+    if( m_guid.isEmpty() )
+        m_guid = ::uuid();
+
+    return m_guid;
 }

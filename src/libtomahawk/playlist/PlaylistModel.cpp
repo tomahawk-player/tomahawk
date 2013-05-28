@@ -20,9 +20,6 @@
 
 #include "PlaylistModel.h"
 
-#include <QMimeData>
-#include <QTreeView>
-
 #include "Artist.h"
 #include "Album.h"
 #include "Pipeline.h"
@@ -35,6 +32,13 @@
 #include "PlayableItem.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
+#include "PlaylistEntry.h"
+#include "PlaylistRevision.h"
+
+#include "playlist/dynamic/DynamicPlaylist.h"
+
+#include <QMimeData>
+#include <QTreeView>
 
 using namespace Tomahawk;
 

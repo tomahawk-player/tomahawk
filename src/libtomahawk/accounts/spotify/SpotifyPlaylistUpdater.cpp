@@ -23,6 +23,10 @@
 #include "accounts/AccountManager.h"
 #include "SpotifyAccount.h"
 #include "utils/TomahawkUtils.h"
+#include "PlaylistEntry.h"
+#include "utils/Uuid.h"
+#include "Query.h"
+#include "Track.h"
 
 #include <QMessageBox>
 #include <QApplication>

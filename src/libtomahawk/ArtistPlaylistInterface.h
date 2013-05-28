@@ -23,13 +23,22 @@
 #include <QtCore/QObject>
 #include <QtCore/QPointer>
 
-#include "Artist.h"
-#include "Typedefs.h"
+// #include "Artist.h"
+// #include "Typedefs.h"
 #include "PlaylistInterface.h"
+
+#include "collection_ptr.h"
+
 #include "DllMacro.h"
 
 namespace Tomahawk
 {
+    class Artist;
+    namespace InfoSystem
+    {
+        class InfoRequestData;
+    }
+
 
 class DLLEXPORT ArtistPlaylistInterface : public Tomahawk::PlaylistInterface
 {

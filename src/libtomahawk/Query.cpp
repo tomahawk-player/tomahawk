@@ -29,6 +29,7 @@
 #include "database/DatabaseCommand_SocialAction.h"
 #include "database/DatabaseCommand_TrackStats.h"
 #include "Album.h"
+#include "Result.h"
 #include "collection/Collection.h"
 #include "Pipeline.h"
 #include "resolvers/Resolver.h"

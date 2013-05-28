@@ -18,13 +18,12 @@
 
 #include "DatabaseCommand_PlaybackHistory.h"
 
-#include <QSqlQuery>
-
 #include "DatabaseImpl.h"
 #include "SourceList.h"
+#include "Source.h"
+#include "database/TomahawkSqlQuery.h"
 
 #include "utils/Logger.h"
-
 
 void
 DatabaseCommand_PlaybackHistory::exec( DatabaseImpl* dbi )

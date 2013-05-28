@@ -19,6 +19,9 @@
 
 #include "CountryUtils.h"
 
+#include <QString>
+#include <QLocale>
+
 QString Tomahawk::CountryUtils::fullCountryFromCode(const QString& countryCode)
 {
     ushort uc1 = countryCode[0].toUpper().unicode();

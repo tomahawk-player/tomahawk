@@ -20,10 +20,11 @@
 #ifndef DATABASECOMMAND_LOADALLPLAYLIST_H
 #define DATABASECOMMAND_LOADALLPLAYLIST_H
 
-#include <QObject>
-#include <QVariantMap>
+// #include <QObject>
+// #include <QVariantMap>
 
-#include "Typedefs.h"
+// #include "Typedefs.h"
+#include "playlist_ptr.h"
 #include "DatabaseCommand.h"
 
 #include "DllMacro.h"

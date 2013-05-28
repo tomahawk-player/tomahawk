@@ -21,10 +21,17 @@
 #ifndef TOMAHAWKACTIONCOLLECTION_H
 #define TOMAHAWKACTIONCOLLECTION_H
 
+
+// #include <QAction>
+// #include <QMenuBar>
+#include <QObject>
+#include <QHash>
+
 #include "DllMacro.h"
 
-#include <QAction>
-#include <QMenuBar>
+class QMenuBar;
+class QAction;
+class QMenu;
 
 class DLLEXPORT ActionCollection : public QObject
 {
@@ -47,7 +54,7 @@ public:
     /**
      * This method returns a main menu bar, suitable for Windows, Mac and X11.
      */
-    QMenuBar *createMenuBar( QWidget *parent );
+    QMenuBar* createMenuBar( QWidget* parent );
 
     /**
      * Returns a QMenu with all the entries that would normally be in the main menu,
@@ -55,7 +62,7 @@ public:
      * and fairly little sense on Unity and other X11 desktop configurations which pull
      * out the menu bar from the window.
      */
-    QMenu *createCompactMenu( QWidget *parent );
+    QMenu* createCompactMenu( QWidget* parent );
 
     QAction* getAction( const QString& name );
     QList< QAction* > getAction( ActionDestination category );

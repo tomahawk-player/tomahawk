@@ -19,18 +19,22 @@
 
 #ifndef CONTEXTPAGE_H
 #define CONTEXTPAGE_H
+//
+// #include "Typedefs.h"
+// #include "utils/TomahawkUtils.h"
 
-#include <QGraphicsProxyWidget>
-#include <QGraphicsWebView>
-#include <QStyleOptionGraphicsItem>
+// #include <QGraphicsProxyWidget>
+// #include <QGraphicsWebView>
+// #include <QStyleOptionGraphicsItem>
 
-#include "Typedefs.h"
-#include "utils/TomahawkUtils.h"
+#include "playlistinterface_ptr.h"
+#include "artist_ptr.h"
+#include "album_ptr.h"
+#include "query_ptr.h"
 
 #include "DllMacro.h"
-#include <signal.h>
 
-class PlaylistInterface;
+#include <QGraphicsWidget>
 
 namespace Tomahawk
 {
@@ -48,7 +52,7 @@ public:
 
     virtual QString title() const = 0;
     virtual QString description() const = 0;
-    virtual QPixmap pixmap() const { return QPixmap( RESPATH "icons/tomahawk-icon-128x128.png" ); }
+    virtual QPixmap pixmap() const;
 
     virtual bool jumpToCurrentTrack() = 0;
 

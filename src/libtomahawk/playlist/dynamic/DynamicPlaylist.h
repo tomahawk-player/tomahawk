@@ -20,14 +20,19 @@
 #ifndef DYNAMIC_PLAYLIST_H
 #define DYNAMIC_PLAYLIST_H
 
-#include <QObject>
-#include <QList>
-#include <QSharedPointer>
-
-#include "Typedefs.h"
+// #include "Typedefs.h"
+#include "RevisionQueueItem.h"
+#include "DynamicPlaylistRevision.h"
 #include "Playlist.h"
-#include "playlist/dynamic/DynamicControl.h"
-#include "playlist/dynamic/DynamicPlaylistRevision.h"
+// #include "playlist/dynamic/DynamicControl.h"
+// #include <QObject>
+// #include <QList>
+// #include <QSharedPointer>
+//
+#include "dyncontrol_ptr.h"
+#include "dynplaylist_ptr.h"
+#include "geninterface_ptr.h"
+
 
 #include "DllMacro.h"
 

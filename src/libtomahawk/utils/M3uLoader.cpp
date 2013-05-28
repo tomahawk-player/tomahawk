@@ -25,6 +25,9 @@
 #include "Playlist.h"
 #include "DropJob.h"
 #include "ViewManager.h"
+#include "utils/Uuid.h"
+
+
 #include <QFileInfo>
 #include <QFile>
 

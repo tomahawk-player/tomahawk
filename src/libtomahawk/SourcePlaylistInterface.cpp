@@ -21,6 +21,9 @@
 
 #include "Source.h"
 #include "Pipeline.h"
+#include "Query.h"
+#include "Result.h"
+#include "Track.h"
 #include "audio/AudioEngine.h"
 
 #include "utils/Logger.h"

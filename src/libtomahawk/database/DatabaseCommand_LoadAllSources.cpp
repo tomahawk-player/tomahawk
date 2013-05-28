@@ -18,12 +18,12 @@
 
 #include "DatabaseCommand_LoadAllSources.h"
 
-#include <QSqlQuery>
-
 #include "network/Servent.h"
 #include "SourceList.h"
 #include "DatabaseImpl.h"
 #include "utils/Logger.h"
+#include "database/TomahawkSqlQuery.h"
+#include "Source.h"
 
 using namespace Tomahawk;
 

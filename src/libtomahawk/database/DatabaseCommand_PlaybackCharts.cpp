@@ -18,14 +18,12 @@
 
 #include "DatabaseCommand_PlaybackCharts.h"
 
-#include <QSqlQuery>
-
 #include "Artist.h"
 #include "DatabaseImpl.h"
 #include "Source.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
-
+#include "database/TomahawkSqlQuery.h"
 
 DatabaseCommand_PlaybackCharts::DatabaseCommand_PlaybackCharts( const Tomahawk::source_ptr& source, QObject* parent )
     : DatabaseCommand( parent )

@@ -22,6 +22,8 @@
 
 #include "Artist.h"
 #include "Album.h"
+#include "Result.h"
+#include "Track.h"
 #include "Pipeline.h"
 #include "ScriptCollection.h"
 #include "SourceList.h"

@@ -20,9 +20,14 @@
 
 #include "Artist.h"
 #include "Album.h"
+#include "Query.h"
 #include "Pipeline.h"
 #include "SourceList.h"
 #include "utils/Logger.h"
+#include "collection/Collection.h"
+#include "Source.h"
+#include "Track.h"
+#include "database/TomahawkSqlQuery.h"
 
 using namespace Tomahawk;
 

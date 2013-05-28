@@ -19,6 +19,7 @@
 #include "DynamicControl.h"
 
 #include "utils/Logger.h"
+#include "utils/Uuid.h"
 
 
 Tomahawk::DynamicControl::DynamicControl( const QStringList& typeSelectors )
@@ -38,3 +39,10 @@ Tomahawk::DynamicControl::DynamicControl(const QString& selectedType, const QStr
     , m_typeSelectors( typeSelectors )
 {
 }
+
+QString Tomahawk::DynamicControl::id() {
+    if( m_id.isEmpty() )
+        m_id = uuid();
+    return m_id;
+}
+

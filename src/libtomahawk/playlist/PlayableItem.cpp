@@ -22,8 +22,12 @@
 #include "Artist.h"
 #include "Album.h"
 #include "Query.h"
+#include "Result.h"
 #include "Source.h"
+#include "Track.h"
+#include "PlaylistEntry.h"
 #include "utils/Logger.h"
+
 
 using namespace Tomahawk;
 

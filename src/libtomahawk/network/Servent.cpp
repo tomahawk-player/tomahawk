@@ -41,14 +41,15 @@
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 
-#include <QtCore/QCoreApplication>
-#include <QtCore/QMutexLocker>
-#include <QtNetwork/QNetworkInterface>
-#include <QtCore/QFile>
-#include <QtCore/QThread>
-#include <QtNetwork/QNetworkProxy>
-#include <QtNetwork/QNetworkRequest>
-#include <QtNetwork/QNetworkReply>
+#include <QCoreApplication>
+#include <QMutexLocker>
+#include <QNetworkInterface>
+#include <QFile>
+#include <QThread>
+#include <QNetworkProxy>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QTimer>
 
 #include <boost/bind.hpp>
 
@@ -1158,4 +1159,9 @@ Servent::httpIODeviceFactory( const Tomahawk::result_ptr& result,
     //boost::functions cannot accept temporaries as parameters
     QSharedPointer< QIODevice > sp = QSharedPointer< QIODevice >( reply, &QObject::deleteLater );
     callback( sp );
+}
+QTcpSocketExtra::QTcpSocketExtra()
+    : QTcpSocket()
+{
+    QTimer::singleShot( AUTH_TIMEOUT, this, SLOT( authTimeout() ) ) ;
 }

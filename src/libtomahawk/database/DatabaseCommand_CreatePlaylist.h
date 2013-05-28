@@ -19,9 +19,11 @@
 #ifndef DATABASECOMMAND_CREATEPLAYLIST_H
 #define DATABASECOMMAND_CREATEPLAYLIST_H
 
-#include "Typedefs.h"
+// #include "Typedefs.h"
 #include "DatabaseCommandLoggable.h"
-#include "qjson/qobjecthelper.h"
+// #include "qjson/qobjecthelper.h"
+
+#include "playlist_ptr.h"
 
 #include "DllMacro.h"
 

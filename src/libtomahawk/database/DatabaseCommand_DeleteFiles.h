@@ -20,15 +20,17 @@
 #ifndef DATABASECOMMAND_DELETEFILES_H
 #define DATABASECOMMAND_DELETEFILES_H
 
-#include <QtCore/QObject>
-#include <QtCore/QDir>
-#include <QtCore/QVariantMap>
-
 #include "database/DatabaseCommandLoggable.h"
-#include "Typedefs.h"
+
+#include "collection_ptr.h"
+// #include "Typedefs.h"
+//
+//
+// #include <QtCore/QObject>
+#include <QDir>
+// #include <QtCore/QVariantMap>
 
 #include "DllMacro.h"
-
 
 class DLLEXPORT DatabaseCommand_DeleteFiles : public DatabaseCommandLoggable
 {

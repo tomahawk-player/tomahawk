@@ -21,12 +21,14 @@
 
 #include "accounts/Account.h"
 #include "AtticaManager.h"
+
+// #include <attica/content.h>
+
+// #include <QObject>
+// #include <QSet>
+#include <QPointer>
+
 #include "DllMacro.h"
-
-#include <attica/content.h>
-
-#include <QObject>
-#include <QSet>
 
 namespace Tomahawk
 {

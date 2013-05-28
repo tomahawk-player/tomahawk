@@ -20,13 +20,15 @@
 #define DBSYNCCONNECTION_H
 
 #include "network/Connection.h"
-#include "database/Op.h"
-#include "Typedefs.h"
 
-#include <QObject>
-#include <QTimer>
-#include <QSharedPointer>
-#include <QIODevice>
+#include "source_ptr.h"
+
+#include "database/Op.h"
+//
+// #include <QObject>
+// #include <QTimer>
+// #include <QSharedPointer>
+// #include <QIODevice>
 
 
 

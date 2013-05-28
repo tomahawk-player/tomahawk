@@ -1,0 +1,7 @@
+#include <QSharedPointer> // can we forward declare this?!
+
+namespace Tomahawk
+{
+    class @TOMAHAWK_SHAREDPOINTER_DECLARATION_CLASS@;
+    typedef QSharedPointer< @TOMAHAWK_SHAREDPOINTER_DECLARATION_CLASS@ > @TOMAHAWK_SHAREDPOINTER_DECLARATION_SHORTNAME@_ptr;
+};

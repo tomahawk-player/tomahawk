@@ -24,6 +24,8 @@
 #include "utils/XspfLoader.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
+#include "PlaylistEntry.h"
+#include "Track.h"
 
 #include <QTimer>
 

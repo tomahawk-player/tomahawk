@@ -23,6 +23,7 @@
 #include "utils/TomahawkUtilsGui.h"
 #include "Pipeline.h"
 #include "Source.h"
+#include "Track.h"
 
 #ifndef ENABLE_HEADLESS
 #include "JobStatusModel.h"

@@ -20,11 +20,6 @@
 
 #include "ItunesParser.h"
 
-#include <QtNetwork/QNetworkAccessManager>
-#include <QRegExp>
-
-#include <qjson/parser.h>
-
 #include "Query.h"
 #include "SourceList.h"
 #include "jobview/JobStatusView.h"
@@ -33,6 +28,13 @@
 #include "utils/NetworkReply.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
+#include "utils/Uuid.h"
+#include "utils/DropJobNotifier.h"
+
+#include <qjson/parser.h>
+
+#include <QNetworkAccessManager>
+#include <QRegExp>
 
 using namespace Tomahawk;
 

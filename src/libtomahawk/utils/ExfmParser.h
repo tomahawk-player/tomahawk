@@ -20,13 +20,20 @@
 #ifndef Exfm_PARSER_H
 #define Exfm_PARSER_H
 
-#include "DllMacro.h"
-#include "Typedefs.h"
-#include "Query.h"
+// #include "Typedefs.h"
+// #include "Query.h"
 #include "DropJob.h"
-#include "jobview/JobStatusItem.h"
-#include <QObject>
-#include <QtCore/QStringList>
+// #include "jobview/JobStatusItem.h"
+
+#include "playlist_ptr.h"
+#include "query_ptr.h"
+//
+//
+// #include <QObject>
+// #include <QStringList>
+#include <QSet>
+
+#include "DllMacro.h"
 
 /**
  * Small class to parse Exfm links into query_ptrs

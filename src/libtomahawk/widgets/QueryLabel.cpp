@@ -27,6 +27,7 @@
 #include "utils/Logger.h"
 #include "ViewManager.h"
 #include "Source.h"
+#include "Track.h"
 
 #include <QApplication>
 #include <QEvent>

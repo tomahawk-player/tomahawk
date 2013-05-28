@@ -19,12 +19,14 @@
 #ifndef DATABASECOMMAND_LOADTRACKATTRIBUTES_H
 #define DATABASECOMMAND_LOADTRACKATTRIBUTES_H
 
-#include <QDateTime>
-#include <QList>
+// #include <QDateTime>
+// #include <QList>
 #include "database/DatabaseCommand.h"
 
-#include "SourceList.h"
-#include "Typedefs.h"
+// #include "SourceList.h"
+// #include "Typedefs.h"
+
+#include "trackdata_ptr.h"
 
 #include "DllMacro.h"
 
@@ -48,11 +50,7 @@ public:
      *
      * Constructor which creates a new database command for loading all track attributes.
      */
-    explicit DatabaseCommand_LoadTrackAttributes( const Tomahawk::trackdata_ptr& track, QObject* parent = 0 )
-        : DatabaseCommand( parent ), m_track( track )
-    {
-        setSource( SourceList::instance()->getLocal() );
-    }
+    explicit DatabaseCommand_LoadTrackAttributes( const Tomahawk::trackdata_ptr& track, QObject* parent = 0 );
 
     /**
      * \brief Returns the name of this database command.

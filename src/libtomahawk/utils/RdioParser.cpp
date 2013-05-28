@@ -31,6 +31,8 @@
 #include "utils/NetworkReply.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
+#include "utils/Uuid.h"
+#include "PlaylistRevision.h"
 
 
 #include <qjson/parser.h>

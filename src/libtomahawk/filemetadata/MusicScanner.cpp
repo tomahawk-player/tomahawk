@@ -431,4 +431,13 @@ MusicScanner::readFile( const QFileInfo& fi )
     m_scanned++;
     return m;
 }
+DirLister::DirLister(const QStringList& dirs)
+    : QObject(), m_dirs( dirs ), m_opcount( 0 ), m_deleting( false )
+{
+    qDebug() << Q_FUNC_INFO;
+}
+DirLister::~DirLister()
+{
+    qDebug() << Q_FUNC_INFO;
+}
 

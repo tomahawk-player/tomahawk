@@ -19,6 +19,7 @@
 
 #include "DatabaseImpl.h"
 #include "Source.h"
+#include "database/TomahawkSqlQuery.h"
 
 DatabaseCommand_CollectionAttributes::DatabaseCommand_CollectionAttributes( DatabaseCommand_SetCollectionAttributes::AttributeType type )
     : DatabaseCommand()

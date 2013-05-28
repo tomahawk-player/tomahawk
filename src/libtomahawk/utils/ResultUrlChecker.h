@@ -20,11 +20,15 @@
 #ifndef WEB_RESULT_HINT_CHECKER_H
 #define WEB_RESULT_HINT_CHECKER_H
 
-#include "Typedefs.h"
-#include "utils/NetworkReply.h"
+// #include "Typedefs.h"
+#include "query_ptr.h"
+#include "result_ptr.h"
+// #include "utils/NetworkReply.h"
+//
+// #include <QObject>
+// #include <QSet>
 
-#include <QObject>
-#include <QSet>
+class NetworkReply;
 
 namespace Tomahawk
 {

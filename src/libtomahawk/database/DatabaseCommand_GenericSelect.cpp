@@ -24,6 +24,7 @@
 #include "Album.h"
 #include "Pipeline.h"
 #include "utils/Logger.h"
+#include "Query.h"
 
 using namespace Tomahawk;
 

@@ -21,20 +21,24 @@
 #ifndef ITUNES_PARSER_H
 #define ITUNES_PARSER_H
 
-#include "DllMacro.h"
-#include "Typedefs.h"
-#include "Query.h"
-#include "DropJobNotifier.h"
+// #include "Typedefs.h"
+// #include "Query.h"
+#include "DropJob.h"
+#include "playlist_ptr.h"
+#include "query_ptr.h"
 
-#include <QObject>
+// #include <QObject>
 #include <QSet>
-#include <QtCore/QStringList>
+// #include <QStringList>
+
+#include "DllMacro.h"
 
 class NetworkReply;
 class TrackModel;
 
 namespace Tomahawk
 {
+class DropJobNotifier;
 
 /**
  * Small class to parse itunes links into query_ptrs

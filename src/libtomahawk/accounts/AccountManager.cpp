@@ -29,6 +29,7 @@
 #include "sip/SipStatusMessage.h"
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
+#include "utils/Closure.h"
 
 #include <QtCore/QLibrary>
 #include <QtCore/QDir>

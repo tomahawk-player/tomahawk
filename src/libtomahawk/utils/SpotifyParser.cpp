@@ -19,10 +19,6 @@
 
 #include "SpotifyParser.h"
 
-#include <QtNetwork/QNetworkAccessManager>
-
-#include <qjson/parser.h>
-
 #include "Query.h"
 #include "SourceList.h"
 #include "DropJob.h"
@@ -34,6 +30,12 @@
 #include "utils/NetworkReply.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
+#include "utils/Uuid.h"
+
+#include <qjson/parser.h>
+
+#include <QNetworkAccessManager>
+
 
 using namespace Tomahawk;
 

@@ -19,10 +19,12 @@
 #ifndef TRACKSREQUEST_H
 #define TRACKSREQUEST_H
 
-#include "Typedefs.h"
-#include "DllMacro.h"
+// #include "Typedefs.h"
+#include "query_ptr.h"
 
 #include <QList>
+
+#include "DllMacro.h"
 
 namespace Tomahawk
 {

@@ -18,13 +18,15 @@
 
 #include "DatabaseCommand_LoadSocialActions.h"
 
-#include <QSqlQuery>
-
 #include "database/Database.h"
 #include "DatabaseImpl.h"
 #include "network/Servent.h"
 #include "Result.h"
 #include "utils/Logger.h"
+#include "database/TomahawkSqlQuery.h"
+#include "TrackData.h"
+#include "SourceList.h"
+#include "Track.h"
 
 using namespace Tomahawk;
 
@@ -100,5 +102,19 @@ DatabaseCommand_LoadSocialActions::exec( DatabaseImpl* dbi )
 
         emit done( trackActions );
     }
+}
+
+
+DatabaseCommand_LoadSocialActions::DatabaseCommand_LoadSocialActions(const QString& action, const Tomahawk::source_ptr& source, QObject* parent)
+    : DatabaseCommand( parent ), m_actionOnly( action )
+{
+    setSource( source );
+    qRegisterMetaType<TrackActions>( "DatabaseCommand_LoadSocialActions::TrackActions" );
+}
+
+DatabaseCommand_LoadSocialActions::DatabaseCommand_LoadSocialActions(const Tomahawk::trackdata_ptr& track, QObject* parent)
+        : DatabaseCommand( parent ), m_track( track )
+{
+    setSource( SourceList::instance()->getLocal() );
 }
 

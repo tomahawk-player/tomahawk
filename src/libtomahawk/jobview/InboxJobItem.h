@@ -21,10 +21,14 @@
 #ifndef INBOXJOBITEM_H
 #define INBOXJOBITEM_H
 
-#include "DllMacro.h"
-#include "jobview/JobStatusView.h"
+#include "trackdata_ptr.h"
+
+// #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusItem.h"
 
+#include "DllMacro.h"
+
+class QTimer;
 
 class DLLEXPORT InboxJobItem : public JobStatusItem
 {

@@ -22,6 +22,9 @@
 
 #include "GlobalActionManager.h"
 #include "Source.h"
+#include "Track.h"
+
+#include "infosystem/InfoSystem.h"
 
 #include "utils/ImageRegistry.h"
 #include "utils/TomahawkStyle.h"

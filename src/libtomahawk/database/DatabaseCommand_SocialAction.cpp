@@ -18,12 +18,12 @@
 
 #include "DatabaseCommand_SocialAction.h"
 
-#include <QSqlQuery>
-
 #include "database/Database.h"
 #include "DatabaseImpl.h"
 #include "network/Servent.h"
 #include "utils/Logger.h"
+#include "database/TomahawkSqlQuery.h"
+#include "TrackData.h"
 
 using namespace Tomahawk;
 
@@ -89,5 +89,16 @@ DatabaseCommand_SocialAction::exec( DatabaseImpl* dbi )
     }
 
     query.exec();
+}
+
+DatabaseCommand_SocialAction::DatabaseCommand_SocialAction( const Tomahawk::trackdata_ptr& track, QString action, QString comment, QObject* parent)
+    : DatabaseCommandLoggable( parent ), m_track( track ), m_action( action )
+{
+    setSource( SourceList::instance()->getLocal() );
+
+    setArtist( track->artist() );
+    setTrack( track->track() );
+    setComment( comment );
+    setTimestamp( QDateTime::currentDateTime().toTime_t() );
 }
 

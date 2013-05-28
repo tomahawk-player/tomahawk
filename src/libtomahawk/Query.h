@@ -20,15 +20,23 @@
 #ifndef QUERY_H
 #define QUERY_H
 
-#include <QObject>
-#include <QMutex>
-#include <QList>
-#include <QVariant>
+#include "query_ptr.h"
 
-#include "Typedefs.h"
-#include "Result.h"
-#include "Track.h"
-#include "infosystem/InfoSystem.h"
+#include "Typedefs.h" // QID
+#include "track_ptr.h"
+#include "result_ptr.h"
+#include "album_ptr.h"
+#include "artist_ptr.h"
+
+// #include "Result.h"
+// #include "Track.h"
+// #include "infosystem/InfoSystem.h"
+//
+// #include <QObject>
+#include <QMutex>
+#include <QPointer>
+// #include <QList>
+// #include <QVariant>
 
 #include "DllMacro.h"
 

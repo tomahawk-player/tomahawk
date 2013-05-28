@@ -35,6 +35,8 @@
 #include "playlist/TreeWidget.h"
 #include "playlist/GridView.h"
 #include "playlist/AlbumModel.h"
+#include "playlist/dynamic/DynamicPlaylist.h"
+#include "playlist/QueueView.h"
 #include "SourceList.h"
 #include "TomahawkSettings.h"
 
@@ -58,6 +60,7 @@
 
 #include <QVBoxLayout>
 #include <QMetaMethod>
+#include <QStackedWidget>
 
 
 #define FILTER_TIMEOUT 280
@@ -893,4 +896,7 @@ InboxModel*
 ViewManager::inboxModel()
 {
     return m_inboxModel;
+}
+PlaylistView* ViewManager::queue() const {
+    return m_queue->queue();
 }

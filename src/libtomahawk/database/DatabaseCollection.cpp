@@ -30,6 +30,8 @@
 #include "DatabaseCommand_LoadAllAutoPlaylists.h"
 #include "DatabaseCommand_LoadAllStations.h"
 
+#include "playlist/dynamic/DynamicPlaylist.h"
+
 #include "utils/Logger.h"
 
 using namespace Tomahawk;

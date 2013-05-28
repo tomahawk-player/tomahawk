@@ -28,6 +28,7 @@
 #include "database/DatabaseCommand_TrackStats.h"
 #include "database/IdThreadWorker.h"
 #include "Source.h"
+#include "infosystem/InfoSystem.h"
 
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"

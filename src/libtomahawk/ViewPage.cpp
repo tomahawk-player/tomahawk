@@ -19,6 +19,9 @@
 #include "ViewPage.h"
 
 #include "utils/Logger.h"
+#include "utils/TomahawkUtils.h"
+
+#include <QPixmap>
 
 using namespace Tomahawk;
 
@@ -35,3 +38,9 @@ ViewPage::setFilter( const QString& filter )
     m_filter = filter;
     return false;
 }
+namespace Tomahawk {
+QPixmap ViewPage::pixmap() const {
+    return QPixmap( RESPATH "icons/tomahawk-icon-128x128.png" );
+}
+}
+

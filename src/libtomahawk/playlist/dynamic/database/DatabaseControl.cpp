@@ -19,6 +19,8 @@
 
 #include "DatabaseControl.h"
 
+#include <QWidget>
+
 using namespace Tomahawk;
 
 DatabaseControl::DatabaseControl( const QString& selectedType, const QStringList& typeSelectors, QObject* parent )

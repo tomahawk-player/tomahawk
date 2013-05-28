@@ -19,9 +19,6 @@
 #include "NewPlaylistWidget.h"
 #include "ui_NewPlaylistWidget.h"
 
-#include <QPushButton>
-#include <QDialogButtonBox>
-
 #include "SourceList.h"
 #include "ViewManager.h"
 #include "playlist/PlaylistModel.h"
@@ -30,6 +27,10 @@
 #include "utils/XspfLoader.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
+#include "utils/Uuid.h"
+
+#include <QPushButton>
+#include <QDialogButtonBox>
 
 #define FILTER_TIMEOUT 280
 

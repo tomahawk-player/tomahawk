@@ -22,6 +22,7 @@
 #include "Artist.h"
 #include "Album.h"
 #include "Source.h"
+#include "Track.h"
 #include "Typedefs.h"
 #include "TomahawkSettings.h"
 

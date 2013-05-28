@@ -22,6 +22,7 @@
 
 #include "Typedefs.h"
 #include "SourcePlaylistInterface.h"
+#include "source_ptr.h"
 
 #include <QTreeView>
 #include <QMenu>

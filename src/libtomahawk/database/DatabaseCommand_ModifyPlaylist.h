@@ -19,13 +19,20 @@
 #ifndef DATABASECOMMAND_MODIFYPLAYLIST_H
 #define DATABASECOMMAND_MODIFYPLAYLIST_H
 
-#include <QObject>
-#include <QVariantMap>
+// #include <QObject>
+// #include <QVariantMap>
+//
+// #include "Typedefs.h"
+#include "plentry_ptr.h"
 
-#include "Typedefs.h"
 #include "DatabaseCommand.h"
 
 #include "DllMacro.h"
+
+namespace Tomahawk
+{
+    class Playlist;
+};
 
 class DLLEXPORT DatabaseCommand_ModifyPlaylist : public DatabaseCommand
 {

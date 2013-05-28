@@ -20,6 +20,9 @@
 
 #include "audio/AudioEngine.h"
 #include "ViewManager.h"
+#include "collection/Collection.h"
+#include "ViewPage.h"
+#include "PlaylistInterface.h"
 
 ScriptCollectionItem::ScriptCollectionItem( SourcesModel* model,
                                             SourceTreeItem* parent,

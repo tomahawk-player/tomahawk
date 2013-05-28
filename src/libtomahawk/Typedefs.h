@@ -20,59 +20,62 @@
 #ifndef TYPEDEFS_H
 #define TYPEDEFS_H
 
-#include <QSharedPointer>
-#include <QPointer>
-#include <QUuid>
-#include <QPair>
+#include <QSharedPointer> // can't we forward declare this?!
+
+// #include <QPointer>
+// #include <QUuid>
+// #include <QPair>
 #include <QPersistentModelIndex>
+#include <QNetworkReply>
+
 
 #include <boost/function.hpp>
 
-//template <typename T> class QSharedPointer;
 
-#include <QNetworkReply>
+class QPersistentModelIndex;
+class QNetworkReply;
+class QNetworkProxy;
 
 namespace Tomahawk
 {
-    class Artist;
-    class Album;
-    class Collection;
-    class Playlist;
-    class PlaylistEntry;
-    class PlaylistInterface;
-    class DynamicPlaylist;
-    class Query;
-    class Result;
-    class Track;
-    class TrackData;
-    class Source;
-    class DynamicControl;
-    class GeneratorInterface;
-    class PeerInfo;
-
-    typedef QSharedPointer<Collection> collection_ptr;
-    typedef QSharedPointer<Playlist> playlist_ptr;
-    typedef QSharedPointer<PlaylistEntry> plentry_ptr;
-    typedef QSharedPointer<PlaylistInterface> playlistinterface_ptr;
-    typedef QSharedPointer<DynamicPlaylist> dynplaylist_ptr;
-    typedef QSharedPointer<Query> query_ptr;
-    typedef QWeakPointer<Query> query_wptr;
-    typedef QSharedPointer<Result> result_ptr;
-    typedef QWeakPointer<Result> result_wptr;
-    typedef QSharedPointer<Track> track_ptr;
-    typedef QWeakPointer<Track> track_wptr;
-    typedef QSharedPointer<TrackData> trackdata_ptr;
-    typedef QWeakPointer<TrackData> trackdata_wptr;
-    typedef QSharedPointer<Source> source_ptr;
-    typedef QSharedPointer<Artist> artist_ptr;
-    typedef QWeakPointer<Artist> artist_wptr;
-    typedef QSharedPointer<Album> album_ptr;
-    typedef QWeakPointer<Album> album_wptr;
-    typedef QSharedPointer<PeerInfo> peerinfo_ptr;
-    typedef QWeakPointer<PeerInfo> peerinfo_wptr;
-
-    typedef QSharedPointer<DynamicControl> dyncontrol_ptr;
-    typedef QSharedPointer<GeneratorInterface> geninterface_ptr;
+//     class Artist;
+//     class Album;
+//     class Collection;
+//     class Playlist;
+//     class PlaylistEntry;
+//     class PlaylistInterface;
+//     class DynamicPlaylist;
+//     class Query;
+//     class Result;
+//     class Track;
+//     class TrackData;
+//     class Source;
+//     class DynamicControl;
+//     class GeneratorInterface;
+//     class PeerInfo;
+// 
+//     typedef QSharedPointer<Collection> collection_ptr;
+//     typedef QSharedPointer<Playlist> playlist_ptr;
+//     typedef QSharedPointer<PlaylistEntry> plentry_ptr;
+//     typedef QSharedPointer<PlaylistInterface> playlistinterface_ptr;
+//     typedef QSharedPointer<DynamicPlaylist> dynplaylist_ptr;
+//     typedef QSharedPointer<Query> query_ptr;
+//     typedef QWeakPointer<Query> query_wptr;
+//     typedef QSharedPointer<Result> result_ptr;
+//     typedef QWeakPointer<Result> result_wptr;
+//     typedef QSharedPointer<Track> track_ptr;
+//     typedef QWeakPointer<Track> track_wptr;
+//     typedef QSharedPointer<TrackData> trackdata_ptr;
+//     typedef QWeakPointer<TrackData> trackdata_wptr;
+//     typedef QSharedPointer<Artist> artist_ptr;
+//     typedef QWeakPointer<Artist> artist_wptr;
+//     typedef QSharedPointer<Album> album_ptr;
+//     typedef QWeakPointer<Album> album_wptr;
+//     typedef QSharedPointer<PeerInfo> peerinfo_ptr;
+//     typedef QWeakPointer<PeerInfo> peerinfo_wptr;
+// 
+//     typedef QSharedPointer<DynamicControl> dyncontrol_ptr;
+//     typedef QSharedPointer<GeneratorInterface> geninterface_ptr;
 
     // let's keep these typesafe, they are different kinds of GUID:
     typedef QString QID; //query id
@@ -234,16 +237,6 @@ namespace Tomahawk
 typedef int AudioErrorCode;
 typedef int AudioState;
 typedef QList< QPair< QString, QString > > PairList;
-
-// creates 36char ascii guid without {} around it
-inline static QString uuid()
-{
-    // kinda lame, but
-    QString q = QUuid::createUuid().toString();
-    q.remove( 0, 1 );
-    q.chop( 1 );
-    return q;
-}
 
 Q_DECLARE_METATYPE( QModelIndex )
 Q_DECLARE_METATYPE( QPersistentModelIndex )

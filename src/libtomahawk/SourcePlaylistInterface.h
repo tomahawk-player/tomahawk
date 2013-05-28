@@ -20,16 +20,21 @@
 #ifndef TOMAHAWKSOURCEPLAYLISTINTERFACE_H
 #define TOMAHAWKSOURCEPLAYLISTINTERFACE_H
 
-#include <QObject>
-#include <QPointer>
+// #include "Typedefs.h"
 
-#include "Typedefs.h"
 #include "PlaylistInterface.h"
+
+#include "track_ptr.h"
+
+//
+// #include <QObject>
+#include <QPointer>
 
 #include "DllMacro.h"
 
 namespace Tomahawk
 {
+class Source;
 
 class DLLEXPORT SourcePlaylistInterface : public Tomahawk::PlaylistInterface
 {

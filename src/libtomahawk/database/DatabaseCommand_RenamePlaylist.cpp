@@ -18,13 +18,13 @@
 
 #include "DatabaseCommand_RenamePlaylist.h"
 
-#include <QSqlQuery>
-
 #include "DatabaseImpl.h"
 #include "collection/Collection.h"
 #include "Source.h"
 #include "network/Servent.h"
 #include "utils/Logger.h"
+#include "database/TomahawkSqlQuery.h"
+#include "Playlist.h"
 
 using namespace Tomahawk;
 

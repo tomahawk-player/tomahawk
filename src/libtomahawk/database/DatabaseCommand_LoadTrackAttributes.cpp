@@ -18,13 +18,14 @@
 
 #include "DatabaseCommand_LoadTrackAttributes.h"
 
-#include <QSqlQuery>
-
 #include "database/Database.h"
 #include "DatabaseImpl.h"
 #include "network/Servent.h"
 #include "Result.h"
 #include "utils/Logger.h"
+#include "database/TomahawkSqlQuery.h"
+#include "SourceList.h"
+#include "TrackData.h"
 
 using namespace Tomahawk;
 
@@ -51,5 +52,10 @@ DatabaseCommand_LoadTrackAttributes::exec( DatabaseImpl* dbi )
     m_track->setAttributes( attr );
 
     emit done();
+}
+DatabaseCommand_LoadTrackAttributes::DatabaseCommand_LoadTrackAttributes(const trackdata_ptr& track, QObject* parent)
+    : DatabaseCommand( parent ), m_track( track )
+{
+    setSource( SourceList::instance()->getLocal() );
 }
 

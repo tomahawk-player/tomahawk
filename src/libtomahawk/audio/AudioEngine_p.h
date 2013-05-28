@@ -25,6 +25,7 @@
 #include <QTimer>
 #include <QQueue>
 #include <QTemporaryFile>
+#include <QStringList>
 
 class AudioEnginePrivate : public QObject
 {

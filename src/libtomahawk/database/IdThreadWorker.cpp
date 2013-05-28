@@ -24,10 +24,13 @@
 #include "DatabaseImpl.h"
 #include "Source.h"
 #include "utils/Logger.h"
+#include "TrackData.h"
 
 #define ID_THREAD_DEBUG 0
 
-#include <QtCore/qfutureinterface.h>
+#include <qfutureinterface.h>
+#include <QWaitCondition>
+#include <QQueue>
 
 using namespace Tomahawk;
 

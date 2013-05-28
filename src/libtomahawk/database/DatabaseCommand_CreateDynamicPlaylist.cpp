@@ -27,13 +27,13 @@
 #include "SourceList.h"
 #include "network/Servent.h"
 #include "utils/Logger.h"
+#include "Source.h"
 
 #ifndef ENABLE_HEADLESS
     #include "ViewManager.h"
 #endif
 
-#include <QSqlQuery>
-#include <QSqlDriver>
+#include <qjson/qobjecthelper.h>
 
 using namespace Tomahawk;
 

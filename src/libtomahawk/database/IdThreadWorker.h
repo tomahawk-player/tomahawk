@@ -18,13 +18,16 @@
 #ifndef IDTHREADWORKER_H
 #define IDTHREADWORKER_H
 
-#include "DllMacro.h"
-#include "Typedefs.h"
+#include "trackdata_ptr.h"
+#include "artist_ptr.h"
+#include "album_ptr.h"
 
 #include <QThread>
-#include <QQueue>
-#include <QWaitCondition>
-#include <QMutex>
+// #include <QQueue>
+// #include <QWaitCondition>
+// #include <QMutex>
+
+#include "DllMacro.h"
 
 struct QueueItem;
 class Database;

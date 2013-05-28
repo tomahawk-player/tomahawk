@@ -21,13 +21,15 @@
 #ifndef PLAYLISTENTRY_H
 #define PLAYLISTENTRY_H
 
+// #include "Typedefs.h"
+#include "query_ptr.h"
+#include "source_ptr.h"
+// #include "Query.h"
+//
 #include <QObject>
-#include <QList>
-#include <QVariant>
-#include <QSharedPointer>
-
-#include "Typedefs.h"
-#include "Query.h"
+// #include <QList>
+// #include <QVariant>
+// #include <QSharedPointer>
 
 #include "DllMacro.h"
 

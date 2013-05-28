@@ -20,23 +20,36 @@
 #ifndef TOMAHAWKALBUM_H
 #define TOMAHAWKALBUM_H
 
-#include <QtCore/QObject>
-#include <QtCore/QSharedPointer>
-#ifndef ENABLE_HEADLESS
-    #include <QtGui/QPixmap>
-#endif
+// #include <QtCore/QObject>
+// #include <QtCore/QSharedPointer>
+// #ifndef ENABLE_HEADLESS
+//     #include <QtGui/QPixmap>
+// #endif
+//
+#include "Typedefs.h" // ModelMode
+// #include "PlaylistInterface.h"
+// #include "collection/Collection.h"
+// #include "infosystem/InfoSystem.h"
+#include "album_ptr.h"
+#include "album_wptr.h"
+#include "artist_ptr.h"
+#include "query_ptr.h"
+#include "collection_ptr.h"
+#include "playlist_ptr.h"
+#include "playlistinterface_ptr.h"
+
 #include <QFuture>
 
-#include "Typedefs.h"
-#include "PlaylistInterface.h"
 #include "DllMacro.h"
-#include "collection/Collection.h"
-#include "infosystem/InfoSystem.h"
 
 class IdThreadWorker;
 
 namespace Tomahawk
 {
+    namespace InfoSystem 
+    {
+        struct InfoRequestData;
+    }
 
 class DLLEXPORT Album : public QObject
 {

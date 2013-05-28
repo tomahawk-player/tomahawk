@@ -29,6 +29,12 @@
 #include "database/DatabaseCommand_DeleteDynamicPlaylist.h"
 #include "TomahawkSettings.h"
 #include "utils/Logger.h"
+#include "collection/Collection.h"
+#include "PlaylistEntry.h"
+#include "PlaylistRevision.h"
+#include "DynamicPlaylistRevision.h"
+
+#include <QThread>
 
 using namespace Tomahawk;
 

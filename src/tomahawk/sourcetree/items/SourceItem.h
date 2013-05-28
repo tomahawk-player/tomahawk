@@ -24,6 +24,9 @@
 
 #include "SourceTreeItem.h"
 
+#include "playlist_ptr.h"
+#include "dynplaylist_ptr.h"
+
 class TemporaryPageItem;
 class GenericPageItem;
 class CategoryItem;

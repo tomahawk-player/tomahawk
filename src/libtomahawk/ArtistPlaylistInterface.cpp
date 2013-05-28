@@ -26,6 +26,8 @@
 #include "database/DatabaseCommand_AllTracks.h"
 #include "Source.h"
 #include "Pipeline.h"
+#include "infosystem/InfoSystem.h"
+#include "Track.h"
 
 #include "utils/Logger.h"
 

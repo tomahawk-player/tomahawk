@@ -30,6 +30,7 @@
 #include "playlist/PlaylistView.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+#include "playlist/PlaylistUpdaterInterface.h"
 
 #include <QMimeData>
 #include <QPainter>

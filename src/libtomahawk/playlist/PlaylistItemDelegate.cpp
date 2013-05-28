@@ -19,16 +19,13 @@
 
 #include "PlaylistItemDelegate.h"
 
-#include <QApplication>
-#include <QPainter>
-#include <QMouseEvent>
-
 #include "Query.h"
 #include "Result.h"
 #include "Artist.h"
 #include "Album.h"
 #include "Source.h"
 #include "SourceList.h"
+#include "Track.h"
 
 #include "PlayableModel.h"
 #include "PlayableItem.h"
@@ -39,6 +36,10 @@
 
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+
+#include <QApplication>
+#include <QPainter>
+#include <QMouseEvent>
 
 using namespace Tomahawk;
 

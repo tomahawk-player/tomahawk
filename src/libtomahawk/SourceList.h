@@ -20,12 +20,20 @@
 #ifndef SOURCELIST_H
 #define SOURCELIST_H
 
+// #include "Typedefs.h"
+// #include "Source.h"
+//
+#include "source_ptr.h"
+#include "collection_ptr.h"
+
 #include <QObject>
 #include <QMutex>
 #include <QMap>
 
-#include "Typedefs.h"
-#include "Source.h"
+namespace Tomahawk
+{
+    class Resolver;
+};
 
 #include "DllMacro.h"
 

@@ -28,6 +28,10 @@
 #include "database/DatabaseCommand_LoadAllSortedPlaylists.h"
 #include "RecentlyPlayedPlaylistsModel.h"
 #include "network/Servent.h"
+#include "PlaylistEntry.h"
+#include "collection/Collection.h"
+#include "Query.h"
+#include "Track.h"
 
 #define REFRESH_TIMEOUT 1000
 

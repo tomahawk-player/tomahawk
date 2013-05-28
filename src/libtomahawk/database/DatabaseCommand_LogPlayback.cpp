@@ -19,13 +19,13 @@
 
 #include "DatabaseCommand_LogPlayback.h"
 
-#include <QSqlQuery>
-
 #include "collection/Collection.h"
 #include "database/Database.h"
 #include "DatabaseImpl.h"
 #include "network/Servent.h"
 #include "utils/Logger.h"
+
+#include "database/TomahawkSqlQuery.h"
 
 #define STARTED_THRESHOLD 600   // Don't advertise tracks older than X seconds as currently playing
 #define FINISHED_THRESHOLD 10   // Don't store tracks played less than X seconds in the playback log

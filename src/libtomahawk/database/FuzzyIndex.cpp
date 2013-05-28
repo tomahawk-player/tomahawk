@@ -18,17 +18,20 @@
 
 #include "FuzzyIndex.h"
 
+#include "DatabaseImpl.h"
+#include "Database.h"
+#include "utils/TomahawkUtils.h"
+#include "utils/Logger.h"
+#include "Source.h"
+#include "Track.h"
+
 #include <QDir>
 #include <QTime>
 
 #include <CLucene.h>
 #include <CLucene/queryParser/MultiFieldQueryParser.h>
 
-#include "DatabaseImpl.h"
-#include "Database.h"
-#include "utils/TomahawkUtils.h"
-#include "utils/Logger.h"
-#include "Source.h"
+
 
 using namespace lucene::analysis;
 using namespace lucene::analysis::standard;

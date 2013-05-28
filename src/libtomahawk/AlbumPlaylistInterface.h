@@ -20,17 +20,28 @@
 #ifndef TOMAHAWKALBUMPLAYLISTINTERFACE_H
 #define TOMAHAWKALBUMPLAYLISTINTERFACE_H
 
-#include <QtCore/QObject>
-#include <QtCore/QPointer>
-
-#include "Album.h"
-#include "Typedefs.h"
+// #include <QtCore/QObject>
+// #include <QtCore/QPointer>
+//
+// #include "Album.h"
+// #include "Typedefs.h"
+#include "infosystem/InfoSystem.h" // inforequestdata signal/slot
 #include "PlaylistInterface.h"
-#include "infosystem/InfoSystem.h"
+
+#include "collection_ptr.h"
+
+#include <QPointer>
+
 #include "DllMacro.h"
 
 namespace Tomahawk
 {
+    namespace InfoSystem
+    {
+        class InfoRequestData;
+    }
+class Album;
+
 
 class DLLEXPORT AlbumPlaylistInterface : public Tomahawk::PlaylistInterface
 {

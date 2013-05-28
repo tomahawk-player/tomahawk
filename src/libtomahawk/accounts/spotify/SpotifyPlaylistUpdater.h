@@ -22,12 +22,14 @@
 #define SPOTIFYPLAYLISTUPDATER_H
 
 #include "playlist/PlaylistUpdaterInterface.h"
-#include "utils/Closure.h"
-#include "DllMacro.h"
-#include "Typedefs.h"
+// #include "utils/Closure.h"
+// #include "Typedefs.h"
 
-#include <QQueue>
-#include <QVariant>
+// #include <QQueue>
+// #include <QVariant>
+#include <QPointer>
+
+#include "DllMacro.h"
 
 namespace Tomahawk {
     namespace Accounts {

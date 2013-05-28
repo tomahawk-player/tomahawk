@@ -21,6 +21,8 @@
 
 #include "DatabaseCommand.h"
 
+#include "query_ptr.h"
+
 class DatabaseCommand_ModifyInboxEntry : public DatabaseCommand
 {
     Q_OBJECT

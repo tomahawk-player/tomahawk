@@ -19,10 +19,12 @@
 #ifndef ALBUMSREQUEST_H
 #define ALBUMSREQUEST_H
 
-#include "Typedefs.h"
-#include "DllMacro.h"
+// #include "Typedefs.h"
+#include "album_ptr.h"
 
 #include <QList>
+
+#include "DllMacro.h"
 
 namespace Tomahawk
 {

@@ -27,6 +27,7 @@
 #include "Result.h"
 #include "Source.h"
 #include "Artist.h"
+#include "Track.h"
 #include "network/StreamConnection.h"
 #include "network/Servent.h"
 #include "utils/TomahawkUtilsGui.h"

@@ -29,6 +29,9 @@
 #include "Query.h"
 #include "Source.h"
 #include "SourceList.h"
+#include "infosystem/InfoSystem.h"
+#include "Track.h"
+
 
 #include "utils/Logger.h"
 

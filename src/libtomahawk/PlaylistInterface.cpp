@@ -23,6 +23,9 @@
 #include "Pipeline.h"
 #include "Source.h"
 #include "utils/Logger.h"
+#include "Query.h"
+
+#include <QThread>
 
 using namespace Tomahawk;
 

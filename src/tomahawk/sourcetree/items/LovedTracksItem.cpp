@@ -18,6 +18,8 @@
 
 #include "LovedTracksItem.h"
 
+#include "Track.h"
+
 #include "SourceTreeItem.h"
 #include "SourceItem.h"
 
@@ -30,6 +32,8 @@
 #include "playlist/PlaylistLargeItemDelegate.h"
 
 #include "utils/ImageRegistry.h"
+
+#include <QMimeData>
 
 using namespace Tomahawk;
 

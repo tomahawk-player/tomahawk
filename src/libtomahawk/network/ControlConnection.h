@@ -27,8 +27,10 @@
 #ifndef CONTROLCONNECTION_H
 #define CONTROLCONNECTION_H
 
-#include "Typedefs.h"
 #include "Connection.h"
+
+#include "peerinfo_ptr.h"
+#include "source_ptr.h"
 
 #include "DllMacro.h"
 

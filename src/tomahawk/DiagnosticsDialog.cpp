@@ -40,6 +40,7 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QDebug>
+#include <QDateTime>
 
 
 DiagnosticsDialog::DiagnosticsDialog( QWidget *parent )

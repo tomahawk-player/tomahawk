@@ -20,16 +20,6 @@
 
 #include "GroovesharkParser.h"
 
-#include <QtCrypto>
-
-#include <QCoreApplication>
-#include <QtNetwork/QNetworkAccessManager>
-
-#include <QWebPage>
-#include <QWebFrame>
-#include <QWebElement>
-
-#include <qjson/parser.h>
 
 #include "Query.h"
 #include "SourceList.h"
@@ -42,6 +32,20 @@
 #include "utils/NetworkReply.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
+#include "utils/Uuid.h"
+#include "Playlist.h"
+
+#include <qjson/parser.h>
+
+#include <QtCrypto>
+
+#include <QWebPage>
+#include <QWebFrame>
+#include <QWebElement>
+
+#include <QCoreApplication>
+#include <QNetworkAccessManager>
+
 
 using namespace Tomahawk;
 

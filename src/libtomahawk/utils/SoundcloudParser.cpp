@@ -28,6 +28,8 @@
 #include "utils/NetworkReply.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+#include "utils/Uuid.h"
+#include "Playlist.h"
 
 #include <qjson/parser.h>
 

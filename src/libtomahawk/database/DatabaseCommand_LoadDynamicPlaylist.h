@@ -19,11 +19,9 @@
 #ifndef DATABASECOMMAND_LOADDYNAMICPLAYLIST_H
 #define DATABASECOMMAND_LOADDYNAMICPLAYLIST_H
 
-#include <QObject>
-#include <QVariantMap>
-
 #include "DatabaseCommand.h"
-#include "Typedefs.h"
+// #include "Typedefs.h"
+#include "dynplaylist_ptr.h"
 
 namespace Tomahawk
 {

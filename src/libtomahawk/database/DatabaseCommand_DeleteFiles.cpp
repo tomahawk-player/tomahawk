@@ -19,8 +19,6 @@
 
 #include "DatabaseCommand_DeleteFiles.h"
 
-#include <QtSql/QSqlQuery>
-
 #include "Artist.h"
 #include "Album.h"
 #include "collection/Collection.h"
@@ -30,6 +28,7 @@
 #include "network/Servent.h"
 #include "utils/Logger.h"
 #include "utils/TomahawkUtils.h"
+#include "database/TomahawkSqlQuery.h"
 
 using namespace Tomahawk;
 

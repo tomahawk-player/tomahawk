@@ -22,6 +22,7 @@
 #include "network/Servent.h"
 #include "SourceList.h"
 #include "EchonestCatalogSynchronizer.h"
+#include "database/TomahawkSqlQuery.h"
 
 DatabaseCommand_SetCollectionAttributes::DatabaseCommand_SetCollectionAttributes( AttributeType type, const QByteArray& id )
     : DatabaseCommandLoggable( )

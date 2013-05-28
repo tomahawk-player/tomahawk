@@ -19,13 +19,16 @@
 #ifndef ECHONEST_GENERATOR_H
 #define ECHONEST_GENERATOR_H
 
-#include <stdexcept>
-#include <echonest/Playlist.h>
+#include "Typedefs.h" // PairList
 
 #include "playlist/dynamic/GeneratorInterface.h"
 #include "playlist/dynamic/GeneratorFactory.h"
-#include "playlist/dynamic/DynamicControl.h"
-#include "database/DatabaseCommand_CollectionAttributes.h"
+// #include "playlist/dynamic/DynamicControl.h"
+// #include "database/DatabaseCommand_CollectionAttributes.h"
+
+#include <echonest/Playlist.h>
+
+#include <QPixmap>
 
 #include "DllMacro.h"
 

@@ -20,15 +20,20 @@
 #ifndef RESULT_H
 #define RESULT_H
 
-#include <QObject>
-#include <QPixmap>
-#include <QPointer>
-#include <QVariant>
-#include <QMutex>
-
 #include "utils/TomahawkUtils.h"
-#include "Track.h"
-#include "Typedefs.h"
+// #include "Track.h"
+#include "Typedefs.h" // RID
+#include "query_wptr.h"
+#include "collection_ptr.h"
+#include "track_ptr.h"
+#include "result_ptr.h"
+//
+// #include <QObject>
+// #include <QPixmap>
+#include <QPointer>
+#include <QSize>
+// #include <QVariant>
+// #include <QMutex>
 
 #include "DllMacro.h"
 

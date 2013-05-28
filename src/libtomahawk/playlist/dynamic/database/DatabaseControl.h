@@ -22,6 +22,7 @@
 #include "playlist/dynamic/DynamicControl.h"
 
 #include <QTimer>
+#include <QPointer>
 
 namespace Tomahawk
 {

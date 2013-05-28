@@ -1,0 +1,7 @@
+#include <QWeakPointer> // can we forward declare this?!
+
+namespace Tomahawk
+{
+    class @TOMAHAWK_SHAREDPOINTER_DECLARATION_CLASS@;
+    typedef QWeakPointer< @TOMAHAWK_SHAREDPOINTER_DECLARATION_CLASS@ > @TOMAHAWK_SHAREDPOINTER_DECLARATION_SHORTNAME@_wptr;
+};

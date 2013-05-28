@@ -19,10 +19,10 @@
 #ifndef DATABASECOMMAND_DELETEPLAYLIST_H
 #define DATABASECOMMAND_DELETEPLAYLIST_H
 
-#include "DatabaseImpl.h"
+// #include "DatabaseImpl.h"
 #include "DatabaseCommandLoggable.h"
-#include "Source.h"
-#include "Typedefs.h"
+// #include "Source.h"
+// #include "Typedefs.h"
 
 #include "DllMacro.h"
 

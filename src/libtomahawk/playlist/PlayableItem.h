@@ -19,13 +19,23 @@
 #ifndef PLAYABLEITEM_H
 #define PLAYABLEITEM_H
 
-#include <QAbstractItemModel>
-#include <QHash>
-#include <QPersistentModelIndex>
-#include <QPixmap>
+// #include "Track.h"
+// #include "Typedefs.h"
+#include "PlaybackLog.h"
 
-#include "Track.h"
-#include "Typedefs.h"
+
+#include "artist_ptr.h"
+#include "album_ptr.h"
+#include "result_ptr.h"
+#include "plentry_ptr.h"
+#include "query_ptr.h"
+
+// #include <QAbstractItemModel>
+// #include <QHash>
+#include <QPersistentModelIndex>
+// #include <QPixmap>
+
+
 #include "DllMacro.h"
 
 class DLLEXPORT PlayableItem : public QObject

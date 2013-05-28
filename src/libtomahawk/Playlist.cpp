@@ -32,14 +32,21 @@
 #include "Source.h"
 #include "SourceList.h"
 #include "PlaylistPlaylistInterface.h"
+#include "PlaylistEntry.h"
+#include "Query.h"
+#include "Track.h"
+#include "collection/Collection.h"
+#include "playlist/dynamic/DynamicPlaylist.h"
+#include "PlaylistRevision.h"
 
 #include "utils/Logger.h"
 #include "utils/Closure.h"
 #include "playlist/PlaylistUpdaterInterface.h"
 #include "widgets/SourceTreePopupDialog.h"
 
-#include <QtXml/QDomDocument>
-#include <QtXml/QDomElement>
+#include <QDomDocument>
+#include <QDomElement>
+#include <QThread>
 
 using namespace Tomahawk;
 

@@ -20,21 +20,34 @@
 #ifndef TOMAHAWKARTIST_H
 #define TOMAHAWKARTIST_H
 
-#include <QtCore/QObject>
-#ifndef ENABLE_HEADLESS
-    #include <QtGui/QPixmap>
-#endif
-
-#include <QFuture>
-
 #include "Typedefs.h"
+
+#include "PlaybackLog.h"
+
+#include "artist_ptr.h"
+#include "artist_wptr.h"
+#include "album_ptr.h"
+#include "query_ptr.h"
+#include "playlistinterface_ptr.h"
+#include "collection_ptr.h"
+
+// #include <QtCore/QObject>
+// #ifndef ENABLE_HEADLESS
+//     #include <QtGui/QPixmap>
+// #endif
+//
+#include <QFuture> // forward declare template foo?!
+
 #include "DllMacro.h"
-#include "Query.h"
 
 class IdThreadWorker;
 
 namespace Tomahawk
 {
+    namespace InfoSystem
+    {
+        struct InfoRequestData;
+    }
 
 class DLLEXPORT Artist : public QObject
 {

@@ -19,13 +19,13 @@
 
 #include "PlaylistView.h"
 
-#include <QKeyEvent>
-
 #include "ViewManager.h"
 #include "PlaylistUpdaterInterface.h"
 #include "Source.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+
+#include <QKeyEvent>
 
 using namespace Tomahawk;
 

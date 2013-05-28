@@ -19,7 +19,12 @@
 #ifndef DYNAMIC_PLAYLIST_REVISION_H
 #define DYNAMIC_PLAYLIST_REVISION_H
 
-#include "Playlist.h"
+#include "PlaylistRevision.h"
+
+#include "Typedefs.h" // GeneratorMode
+
+#include "dyncontrol_ptr.h"
+
 #include "DllMacro.h"
 
 namespace Tomahawk

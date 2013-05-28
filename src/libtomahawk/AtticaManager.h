@@ -19,21 +19,22 @@
 #ifndef ATTICAMANAGER_H
 #define ATTICAMANAGER_H
 
-#include <QObject>
-#include <QHash>
-#include <QPixmap>
-#include <QNetworkReply>
-
-#include "DllMacro.h"
 #include "accounts/Account.h"
-
+//
 #include <attica/provider.h>
 #include <attica/providermanager.h>
 #include <attica/content.h>
+// //
+// #include <QObject>
+// #include <QHash>
+// #include <QPixmap>
+// #include <QNetworkReply>
+
+#include "DllMacro.h"
 
 namespace Tomahawk {
 namespace Accounts {
-class AtticaResolverAccount;
+    class AtticaResolverAccount;
 }
 }
 

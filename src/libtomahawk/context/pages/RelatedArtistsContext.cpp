@@ -19,11 +19,14 @@
 
 #include "RelatedArtistsContext.h"
 
-#include <QHeaderView>
 
 #include "playlist/TreeView.h"
 #include "playlist/TreeModel.h"
 #include "Source.h"
+#include "Track.h"
+
+#include <QHeaderView>
+
 
 using namespace Tomahawk;
 

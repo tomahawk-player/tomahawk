@@ -29,10 +29,12 @@
 #include "utils/Closure.h"
 #include "Artist.h"
 #include "Album.h"
+#include "Track.h"
 #include "Pipeline.h"
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
 #include "jobview/ErrorStatusMessage.h"
+#include "infosystem/InfoSystem.h"
 
 #include "utils/Logger.h"
 #include "playlist/SingleTrackPlaylistInterface.h"

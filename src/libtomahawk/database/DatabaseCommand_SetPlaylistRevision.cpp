@@ -18,13 +18,17 @@
 
 #include "DatabaseCommand_SetPlaylistRevision.h"
 
-#include <QSqlQuery>
-
 #include "Source.h"
 #include "DatabaseImpl.h"
 #include "TomahawkSqlQuery.h"
 #include "network/Servent.h"
 #include "utils/Logger.h"
+#include "PlaylistEntry.h"
+#include "collection/Collection.h"
+#include "Query.h"
+#include "Track.h"
+#include "database/TomahawkSqlQuery.h"
+
 
 #include <qjson/serializer.h>
 #include <qjson/parser.h>
@@ -276,3 +280,31 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
         Q_ASSERT( !source()->isLocal() );
     }
 }
+
+void DatabaseCommand_SetPlaylistRevision::setAddedentriesV(const QVariantList& vlist)
+{
+    m_addedentries.clear();
+    foreach( const QVariant& v, vlist )
+    {
+        PlaylistEntry* pep = new PlaylistEntry;
+        QJson::QObjectHelper::qvariant2qobject( v.toMap(), pep );
+
+        if ( pep->isValid() )
+            m_addedentries << plentry_ptr( pep );
+    }
+}
+
+QVariantList DatabaseCommand_SetPlaylistRevision::addedentriesV() const
+{
+    QVariantList vlist;
+    foreach( const plentry_ptr& pe, m_addedentries )
+    {
+        if ( !pe->isValid() )
+            continue;
+
+        QVariant v = QJson::QObjectHelper::qobject2qvariant( pe.data() );
+        vlist << v;
+    }
+    return vlist;
+}
+

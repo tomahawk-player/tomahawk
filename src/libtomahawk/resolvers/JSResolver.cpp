@@ -41,6 +41,9 @@
 
 #include "config.h"
 
+#include "Result.h"
+#include "Track.h"
+
 #include <QImageReader>
 #include <QMessageBox>
 #include <QNetworkRequest>

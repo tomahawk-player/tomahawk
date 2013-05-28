@@ -20,21 +20,27 @@
 #ifndef DATABASEIMPL_H
 #define DATABASEIMPL_H
 
-#include <QObject>
-#include <QList>
+#include "result_ptr.h"
+#include "query_ptr.h"
+
+// #include <QObject>
+// #include <QList>
 #include <QMutex>
-#include <QPair>
-#include <QVariant>
-#include <QVariantMap>
+// #include <QPair>
+// #include <QVariant>
+// #include <QVariantMap>
 #include <QSqlDatabase>
-#include <QSqlError>
-#include <QSqlQuery>
-#include <QHash>
-#include <QThread>
+// #include <QSqlError>
+// #include <QSqlQuery>
+// #include <QHash>
+// #include <QThread>
+
+#include <QObject>
 
 #include "DllMacro.h"
-#include "TomahawkSqlQuery.h"
-#include "Typedefs.h"
+// #include "TomahawkSqlQuery.h"
+
+class TomahawkSqlQuery;
 
 class Database;
 class FuzzyIndex;

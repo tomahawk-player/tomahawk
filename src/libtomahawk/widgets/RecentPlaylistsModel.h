@@ -20,12 +20,15 @@
 #ifndef RECENTLPLAYLISTSMODEL_H
 #define RECENTLPLAYLISTSMODEL_H
 
-#include <QModelIndex>
-#include <QTimer>
+// #include "Playlist.h"
+// #include "Source.h"
+#include "database/DatabaseCommand_LoadAllSortedPlaylists.h" // private slot
 
-#include "Playlist.h"
-#include "Source.h"
-#include "database/DatabaseCommand_LoadAllSortedPlaylists.h"
+#include "dynplaylist_ptr.h"
+
+#include <QModelIndex>
+
+class QTimer;
 
 class RecentPlaylistsModel : public QAbstractListModel
 {

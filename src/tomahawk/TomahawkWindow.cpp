@@ -22,23 +22,6 @@
 #include "TomahawkWindow.h"
 #include "ui_TomahawkWindow.h"
 
-#include <QAction>
-#include <QCloseEvent>
-#include <QDesktopServices>
-#include <QShowEvent>
-#include <QHideEvent>
-#include <QInputDialog>
-#include <QPixmap>
-#include <QPropertyAnimation>
-#include <QLineEdit>
-#include <QMessageBox>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QShortcut>
-#include <QTimer>
-#include <QToolBar>
-#include <QToolButton>
-
 #include "accounts/AccountManager.h"
 #include "sourcetree/SourceTreeView.h"
 #include "network/Servent.h"
@@ -66,6 +49,7 @@
 #include "Playlist.h"
 #include "Query.h"
 #include "Artist.h"
+#include "Source.h"
 #include "ViewManager.h"
 #include "ActionCollection.h"
 #include "AudioControls.h"
@@ -78,8 +62,30 @@
 #include "LoadXSPFDialog.h"
 #include "utils/ImageRegistry.h"
 #include "utils/Logger.h"
+#include "utils/Uuid.h"
+#include "playlist/dynamic/DynamicPlaylist.h"
+#include "collection/Collection.h"
+#include "Track.h"
 
 #include "config.h"
+
+#include <QAction>
+#include <QCloseEvent>
+#include <QDesktopServices>
+#include <QShowEvent>
+#include <QHideEvent>
+#include <QInputDialog>
+#include <QPixmap>
+#include <QPropertyAnimation>
+#include <QLineEdit>
+#include <QMessageBox>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QShortcut>
+#include <QTimer>
+#include <QToolBar>
+#include <QToolButton>
+#include <QMenuBar>
 
 #if defined( Q_OS_WIN )
     #if defined ( WITH_QtSparkle )

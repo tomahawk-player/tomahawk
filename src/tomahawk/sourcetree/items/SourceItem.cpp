@@ -43,6 +43,10 @@
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 #include "TomahawkApp.h"
+#include "collection/Collection.h"
+#include "Track.h"
+
+#include <QMimeData>
 
 /// SourceItem
 

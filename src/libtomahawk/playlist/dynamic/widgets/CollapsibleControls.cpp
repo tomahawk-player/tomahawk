@@ -35,6 +35,7 @@
 #include <QTimeLine>
 #include <QPaintEvent>
 #include <QPainter>
+#include <QTimeLine>
 
 #include "utils/Logger.h"
 

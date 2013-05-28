@@ -21,12 +21,14 @@
 #ifndef TOMAHAWK_SETTINGS_H
 #define TOMAHAWK_SETTINGS_H
 
-#include "DllMacro.h"
-#include "Typedefs.h"
+#include "Typedefs.h" // RepeatMode
+
+#include <QNetworkProxy>
+// #include <QStringList>
 
 #include <QSettings>
-#include <QtNetwork/QNetworkProxy>
-#include <QStringList>
+
+#include "DllMacro.h"
 
 #define TOMAHAWK_SETTINGS_VERSION 15
 

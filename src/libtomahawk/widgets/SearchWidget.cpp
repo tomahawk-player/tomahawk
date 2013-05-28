@@ -20,9 +20,9 @@
 #include "SearchWidget.h"
 #include "ui_SearchWidget.h"
 
-#include <QPushButton>
-#include <QDialogButtonBox>
-
+#include "Track.h"
+#include "Album.h"
+#include "Artist.h"
 #include "SourceList.h"
 #include "ViewManager.h"
 #include "playlist/PlayableModel.h"
@@ -31,7 +31,10 @@
 
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+#include "utils/Uuid.h"
 
+#include <QPushButton>
+#include <QDialogButtonBox>
 
 SearchWidget::SearchWidget( const QString& search, QWidget* parent )
     : QWidget( parent )

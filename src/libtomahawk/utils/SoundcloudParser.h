@@ -20,13 +20,20 @@
 #ifndef Soundcloud_PARSER_H
 #define Soundcloud_PARSER_H
 
-#include <QObject>
-#include <QtCore/QStringList>
 
-#include "Typedefs.h"
-#include "Query.h"
+
+// #include "Query.h"
 #include "DropJob.h"
-#include "jobview/JobStatusItem.h"
+// #include "jobview/JobStatusItem.h"
+
+// #include "Typedefs.h"
+#include "query_ptr.h"
+#include "playlist_ptr.h"
+
+#include <QObject>
+#include <QMap>
+#include <QSet>
+// #include <QStringList>
 
 #include "DllMacro.h"
 
@@ -40,7 +47,6 @@ class NetworkReply;
 
 namespace Tomahawk
 {
-
 class DropJobNotifier;
 
 class DLLEXPORT SoundcloudParser : public QObject

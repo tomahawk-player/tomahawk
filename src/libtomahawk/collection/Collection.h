@@ -27,23 +27,35 @@
 #ifndef TOMAHAWK_COLLECTION_H
 #define TOMAHAWK_COLLECTION_H
 
-#include <QHash>
-#include <QList>
-#include <QSharedPointer>
 
-#include "Typedefs.h"
-#include "Playlist.h"
-#include "playlist/dynamic/DynamicPlaylist.h"
-#include "collection/ArtistsRequest.h"
-#include "collection/AlbumsRequest.h"
-#include "collection/TracksRequest.h"
+// #include "Typedefs.h"
+#include "dynplaylist_ptr.h"
+#include "playlist_ptr.h"
+#include "artist_ptr.h"
+#include "album_ptr.h"
+#include "source_ptr.h"
+
+// #include "Playlist.h"
+// #include "playlist/dynamic/DynamicPlaylist.h"
+// #include "collection/ArtistsRequest.h"
+// #include "collection/AlbumsRequest.h"
+// #include "collection/TracksRequest.h"
+//
+// #include <QHash>
+// #include <QList>
+// #include <QSharedPointer>
+
 
 #include "DllMacro.h"
 
+class DatabaseCommand_SetDynamicPlaylistRevision;
 class QIcon;
 
 namespace Tomahawk
 {
+class ArtistsRequest;
+class AlbumsRequest;
+class TracksRequest;
 
 class DLLEXPORT Collection : public QObject
 {
@@ -69,9 +81,9 @@ public:
     virtual QPixmap bigIcon() const; //for the ViewPage header
     virtual QString emptyText() const;
 
-    virtual void loadPlaylists() { qDebug() << Q_FUNC_INFO; }
-    virtual void loadAutoPlaylists() { qDebug() << Q_FUNC_INFO; }
-    virtual void loadStations() { qDebug() << Q_FUNC_INFO; }
+    virtual void loadPlaylists();
+    virtual void loadAutoPlaylists();
+    virtual void loadStations();
 
     virtual Tomahawk::playlist_ptr playlist( const QString& guid );
     virtual Tomahawk::dynplaylist_ptr autoPlaylist( const QString& guid );

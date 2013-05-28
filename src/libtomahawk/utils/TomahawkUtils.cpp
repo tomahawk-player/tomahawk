@@ -24,7 +24,8 @@
 #include "TomahawkVersion.h"
 #include "config.h"
 #include "TomahawkSettings.h"
-
+#include "Query.h"
+#include "Track.h"
 #include "Source.h"
 #include "BinaryExtractWorker.h"
 #include "SharedTimeLine.h"
@@ -68,6 +69,7 @@
 #endif
 
 #include "Logger.h"
+
 
 namespace TomahawkUtils
 {

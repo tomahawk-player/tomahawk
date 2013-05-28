@@ -30,6 +30,7 @@
 #include "database/DatabaseCommand_AllAlbums.h"
 #include "PlayableItem.h"
 #include "utils/Logger.h"
+#include "Track.h"
 
 #include <QListView>
 

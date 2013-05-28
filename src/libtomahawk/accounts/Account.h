@@ -20,17 +20,20 @@
 #ifndef ACCOUNT_H
 #define ACCOUNT_H
 
-#include "Typedefs.h"
-#include "DllMacro.h"
+// #include "Typedefs.h"
+//
+#include "infosystem/InfoSystem.h"
 
-#include <QObject>
+// #include <QObject>
 #include <QVariantMap>
-#include <QWidget>
-#include <QIcon>
-#include <QString>
+// #include <QWidget>
+// #include <QIcon>
+// #include <QString>
 #include <QUuid>
 #include <QMutex>
+#include <QPixmap>
 
+#include "DllMacro.h"
 
 class SipPlugin;
 class AccountConfigWidget;

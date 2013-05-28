@@ -20,15 +20,21 @@
 #ifndef PIXMAPDELEGATEFADER_H
 #define PIXMAPDELEGATEFADER_H
 
-#include "Artist.h"
-#include "Album.h"
-#include "Query.h"
+// #include "Artist.h"
+// #include "Album.h"
+// #include "Query.h"
 #include "utils/SharedTimeLine.h"
+#include "utils/TomahawkUtils.h"
+
+#include "artist_ptr.h"
+#include "album_ptr.h"
 
 #include <QObject>
-#include <QTimeLine>
+// #include <QTimeLine>
 #include <QQueue>
-#include <QPointer>
+// #include <QPointer>
+#include <QSize>
+#include <QPixmap>
 
 namespace Tomahawk
 {

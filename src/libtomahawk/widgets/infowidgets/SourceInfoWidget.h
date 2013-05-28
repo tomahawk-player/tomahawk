@@ -20,10 +20,14 @@
 #ifndef SOURCEINFOWIDGET_H
 #define SOURCEINFOWIDGET_H
 
-#include <QWidget>
 
-#include "PlaylistInterface.h"
+// #include "PlaylistInterface.h"
+
 #include "ViewPage.h"
+
+#include "source_ptr.h"
+
+#include <QWidget>
 
 #include "DllMacro.h"
 

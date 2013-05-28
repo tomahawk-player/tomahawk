@@ -20,10 +20,13 @@
 #ifndef PLAYLISTINTERFACE_H
 #define PLAYLISTINTERFACE_H
 
-#include <QtCore/QModelIndex>
+#include "Typedefs.h" // PlaylistModes
 
-#include "playlist/PlayableItem.h"
-#include "Typedefs.h"
+#include "playlistinterface_ptr.h"
+#include "result_ptr.h"
+#include "query_ptr.h"
+// #include <QModelIndex>
+
 #include "DllMacro.h"
 
 namespace Tomahawk

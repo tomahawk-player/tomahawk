@@ -1,3 +1,4 @@
+
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
@@ -25,10 +26,11 @@
 #include "playlist/dynamic/DynamicControl.h"
 #include "network/Servent.h"
 #include "utils/Logger.h"
+#include "PlaylistEntry.h"
+#include "collection/Collection.h"
 
 #include <qjson/serializer.h>
 
-#include <QSqlQuery>
 
 DatabaseCommand_SetDynamicPlaylistRevision::DatabaseCommand_SetDynamicPlaylistRevision( const Tomahawk::source_ptr& s,
                                                                                 const QString& playlistguid,

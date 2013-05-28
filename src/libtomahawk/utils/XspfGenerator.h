@@ -20,9 +20,10 @@
 #ifndef XSPFGENERATOR_H
 #define XSPFGENERATOR_H
 
-#include "Typedefs.h"
+// #include "Typedefs.h"
+#include "playlist_ptr.h"
 
-#include <QtCore/qobject.h>
+#include <QObject>
 
 
 class XSPFGenerator : public QObject

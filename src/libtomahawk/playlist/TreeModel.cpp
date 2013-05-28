@@ -21,10 +21,9 @@
 
 #include "TreeModel.h"
 
-#include <QMimeData>
-
 #include "Pipeline.h"
 #include "Source.h"
+#include "Track.h"
 #include "SourceList.h"
 #include "audio/AudioEngine.h"
 #include "database/DatabaseCommand_AllAlbums.h"
@@ -34,6 +33,9 @@
 #include "PlayableItem.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+
+#include <QMimeData>
+
 
 using namespace Tomahawk;
 

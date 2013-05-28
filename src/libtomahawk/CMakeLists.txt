@@ -11,6 +11,63 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../tomahawk/Config.h.in
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../tomahawk/TomahawkVersion.h.in
                ${CMAKE_CURRENT_BINARY_DIR}/TomahawkVersion.h)
 
+macro(TomahawkAddSharedPointerDeclarationHeader class shortname)
+    set(TOMAHAWK_SHAREDPOINTER_DECLARATION_CLASS ${class})
+    set(TOMAHAWK_SHAREDPOINTER_DECLARATION_SHORTNAME ${shortname})
+    message(STATUS "Create SharedPointerHeader for ${class} with shortname ${shortname}")
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/SharedPointerDeclarationHeader.h.in
+               ${CMAKE_CURRENT_BINARY_DIR}/${shortname}_ptr.h)
+endmacro()
+
+
+list(APPEND regularlyNamedSharedPointers
+    Source
+    Collection
+    Playlist
+    PlaylistInterface
+    Query
+    Result
+    Track
+    TrackData
+    Artist
+    Album
+    PeerInfo
+)
+foreach(class ${regularlyNamedSharedPointers})
+    string(TOLOWER ${class} shortname)
+    TomahawkAddSharedPointerDeclarationHeader(${class} ${shortname})
+endforeach()
+
+TomahawkAddSharedPointerDeclarationHeader(PlaylistEntry plentry)
+TomahawkAddSharedPointerDeclarationHeader(DynamicPlaylist dynplaylist)
+TomahawkAddSharedPointerDeclarationHeader(DynamicControl dyncontrol)
+TomahawkAddSharedPointerDeclarationHeader(GeneratorInterface geninterface)
+
+macro(TomahawkAddWeakPointerDeclarationHeader class shortname)
+    set(TOMAHAWK_SHAREDPOINTER_DECLARATION_CLASS ${class})
+    set(TOMAHAWK_SHAREDPOINTER_DECLARATION_SHORTNAME ${shortname})
+    message(STATUS "Create WeakPointerHeader for ${class} with shortname ${shortname}")
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/WeakPointerDeclarationHeader.h.in
+               ${CMAKE_CURRENT_BINARY_DIR}/${shortname}_wptr.h)
+endmacro()
+
+
+list(APPEND regularlyNamedWeakPointers
+    Query
+    Result
+    Track
+    TrackData
+    Artist
+    Album
+    PeerInfo
+)
+foreach(class ${regularlyNamedSharedPointers})
+    string(TOLOWER ${class} shortname)
+    TomahawkAddWeakPointerDeclarationHeader(${class} ${shortname})
+endforeach()
+
+
+
 set( libGuiSources
     ActionCollection.cpp
 

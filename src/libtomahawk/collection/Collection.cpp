@@ -25,6 +25,7 @@
 #include "playlist/PlaylistUpdaterInterface.h"
 #include "utils/ImageRegistry.h"
 #include "accounts/AccountManager.h"
+#include "playlist/dynamic/DynamicPlaylist.h"
 
 #include <QMetaObject>
 #include <QGenericArgument>
@@ -322,3 +323,15 @@ Collection::moveStationToAuto( const QString& guid )
     if ( m_stations.contains( guid ) )
         m_autoplaylists.insert( guid, m_stations.take( guid ) );
 }
+namespace Tomahawk {
+void Collection::loadPlaylists() {
+    qDebug() << Q_FUNC_INFO;
+}
+void Collection::loadAutoPlaylists() {
+    qDebug() << Q_FUNC_INFO;
+}
+void Collection::loadStations() {
+    qDebug() << Q_FUNC_INFO;
+}
+}
+

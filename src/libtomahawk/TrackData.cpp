@@ -37,6 +37,7 @@
 #include "resolvers/Resolver.h"
 #include "SourceList.h"
 #include "audio/AudioEngine.h"
+#include "infosystem/InfoSystem.h"
 
 #include "utils/Logger.h"
 

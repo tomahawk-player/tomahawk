@@ -32,6 +32,7 @@
 #include "playlist/AlbumModel.h"
 #include "playlist/RecentlyPlayedModel.h"
 #include "playlist/dynamic/GeneratorInterface.h"
+#include "playlist/dynamic/DynamicPlaylist.h"
 #include "widgets/OverlayWidget.h"
 #include "utils/AnimatedSpinner.h"
 #include "utils/TomahawkStyle.h"

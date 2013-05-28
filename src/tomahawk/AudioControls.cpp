@@ -34,12 +34,15 @@
 #include "widgets/ImageButton.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+#include "Track.h"
+#include "infosystem/InfoSystem.h"
 
 #include <QNetworkReply>
 #include <QDropEvent>
 #include <QMouseEvent>
 #include <QDesktopServices>
 #include <QGraphicsDropShadowEffect>
+#include <QMimeData>
 
 const static int ALLOWED_MAX_DIVERSION = 300;
 

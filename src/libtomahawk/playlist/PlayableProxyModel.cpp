@@ -19,8 +19,6 @@
 
 #include "PlayableProxyModel.h"
 
-#include <QTreeView>
-
 #include "PlayableProxyModelPlaylistInterface.h"
 #include "Artist.h"
 #include "Album.h"
@@ -28,6 +26,11 @@
 #include "Source.h"
 #include "PlayableItem.h"
 #include "utils/Logger.h"
+#include "Result.h"
+#include "Track.h"
+
+#include <QTreeView>
+
 
 
 PlayableProxyModel::PlayableProxyModel( QObject* parent )

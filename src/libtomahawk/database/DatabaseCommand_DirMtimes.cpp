@@ -19,12 +19,11 @@
 
 #include "DatabaseCommand_DirMtimes.h"
 
-#include <QSqlQuery>
 
 #include "DatabaseImpl.h"
 #include "utils/Logger.h"
 #include "Source.h"
-
+#include "database/TomahawkSqlQuery.h"
 
 void
 DatabaseCommand_DirMtimes::exec( DatabaseImpl* dbi )

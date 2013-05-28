@@ -19,14 +19,9 @@
 
 #include "TreeItemDelegate.h"
 
-#include <QApplication>
-#include <QPainter>
-#include <QAbstractItemView>
-#include <QHeaderView>
-#include <QMouseEvent>
-
 #include "Query.h"
 #include "Result.h"
+#include "Track.h"
 
 #include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
@@ -40,6 +35,11 @@
 #include "ViewManager.h"
 #include "Typedefs.h"
 
+#include <QApplication>
+#include <QPainter>
+#include <QAbstractItemView>
+#include <QHeaderView>
+#include <QMouseEvent>
 
 TreeItemDelegate::TreeItemDelegate( TreeView* parent, TreeProxyModel* proxy )
     : QStyledItemDelegate( (QObject*)parent )

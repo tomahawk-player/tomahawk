@@ -19,12 +19,13 @@
 #ifndef CHARTSPLUGIN_DATA_P_H
 #define CHARTSPLUGIN_DATA_P_H
 
+// #include <QChar>
+// #include <QLocale>
+
 #include "DllMacro.h"
 
-#include <QtCore/qchar.h>
-#include <QLocale>
-
 namespace Tomahawk {
+
 namespace CountryUtils {
 
 static const unsigned char country_code_list[] =

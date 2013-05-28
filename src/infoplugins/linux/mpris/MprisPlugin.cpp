@@ -33,6 +33,8 @@
 #include "utils/TomahawkUtils.h"
 #include "audio/AudioEngine.h"
 #include "Source.h"
+#include "PlaylistInterface.h"
+#include "Track.h"
 
 #include "MprisPlugin.h"
 #include "MprisPluginRootAdaptor.h"

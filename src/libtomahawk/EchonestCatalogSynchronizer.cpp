@@ -27,9 +27,11 @@
 #include "database/DatabaseCommand_GenericSelect.h"
 #include "database/DatabaseCommand_SetCollectionAttributes.h"
 #include "database/DatabaseCommand_LoadFiles.h"
+#include "database/DatabaseCommand_SetTrackAttributes.h"
 #include "TomahawkSettings.h"
 #include "SourceList.h"
 #include "Query.h"
+#include "Track.h"
 #include "utils/Logger.h"
 
 #include <echonest/CatalogUpdateEntry.h>

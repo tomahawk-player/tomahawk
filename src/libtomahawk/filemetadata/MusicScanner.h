@@ -20,23 +20,33 @@
 #ifndef MUSICSCANNER_H
 #define MUSICSCANNER_H
 
-#include "TomahawkSettings.h"
-#include "database/DatabaseCommand.h"
+// #include "TomahawkSettings.h"
+// #include "database/DatabaseCommand.h"
 
 /* taglib */
-#include <taglib/fileref.h>
-#include <taglib/tag.h>
+// #include <taglib/fileref.h>
+// #include <taglib/tag.h>
 
-#include <QVariantMap>
-#include <QDir>
-#include <QFileInfo>
-#include <QString>
-#include <QDateTime>
-#include <QTimer>
+// #include <QVariantMap>
+// #include <QDir>
+// #include <QFileInfo>
+// #include <QString>
+// #include <QDateTime>
+// #include <QTimer>
 #include <QMutex>
-#include <QMutexLocker>
+// #include <QMutexLocker>
+// #include <QPointer>
+// #include <database/Database.h>
+#include <QMap>
+#include <QStringList>
+#include <QObject>
+#include <QThread>
 #include <QPointer>
-#include <database/Database.h>
+
+class DatabaseCommand;
+
+class QFileInfo;
+class QDir;
 
 // descend dir tree comparing dir mtimes to last known mtime
 // emit signal for any dir with new content, so we can scan it.
@@ -47,16 +57,9 @@ Q_OBJECT
 
 public:
 
-    DirLister( const QStringList& dirs )
-        : QObject(), m_dirs( dirs ), m_opcount( 0 ), m_deleting( false )
-    {
-        qDebug() << Q_FUNC_INFO;
-    }
+    DirLister( const QStringList& dirs );
 
-    ~DirLister()
-    {
-        qDebug() << Q_FUNC_INFO;
-    }
+    ~DirLister();
 
     bool isDeleting() { QMutexLocker locker( &m_deletingMutex ); return m_deleting; };
     void setIsDeleting() { QMutexLocker locker( &m_deletingMutex ); m_deleting = true; };

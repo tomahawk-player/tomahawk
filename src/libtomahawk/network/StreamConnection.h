@@ -21,12 +21,16 @@
 #ifndef STREAMCONNECTION_H
 #define STREAMCONNECTION_H
 
-#include <QObject>
-#include <QSharedPointer>
-#include <QIODevice>
-
 #include "network/Connection.h"
-#include "Result.h"
+// #include "Result.h"
+
+#include "result_ptr.h"
+#include "source_ptr.h"
+//
+//
+// #include <QObject>
+// #include <QSharedPointer>
+// #include <QIODevice>
 
 #include "DllMacro.h"
 

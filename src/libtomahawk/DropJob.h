@@ -20,11 +20,20 @@
 #ifndef DROPJOB_H
 #define DROPJOB_H
 
-#include "Query.h"
+#include "query_ptr.h"
+#include "album_ptr.h"
+#include "artist_ptr.h"
+
+#include "Typedefs.h" // ModelMode
 
 #include <QObject>
-#include <QStringList>
-#include <QMimeData>
+#include <QSet>
+// #include <QStringList>
+// #include <QMimeData>
+
+#include "DllMacro.h"
+
+class QMimeData;
 
 namespace Tomahawk {
 class DropJobNotifier;

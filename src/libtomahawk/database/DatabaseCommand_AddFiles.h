@@ -19,12 +19,13 @@
 #ifndef DATABASECOMMAND_ADDFILES_H
 #define DATABASECOMMAND_ADDFILES_H
 
-#include <QObject>
-#include <QVariantMap>
-
 #include "database/DatabaseCommandLoggable.h"
-#include "Typedefs.h"
-#include "Query.h"
+// #include "Typedefs.h"
+// #include "Query.h"
+#include "collection_ptr.h"
+
+// #include <QObject>
+// #include <QVariantMap>
 
 #include "DllMacro.h"
 

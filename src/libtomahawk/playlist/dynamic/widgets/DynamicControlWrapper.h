@@ -19,10 +19,13 @@
 #ifndef DYNAMIC_CONTROL_WRAPPER_H
 #define DYNAMIC_CONTROL_WRAPPER_H
 
-#include <QWidget>
-#include <QPointer>
 
-#include "Typedefs.h"
+
+// #include "Typedefs.h"
+#include "dyncontrol_ptr.h"
+
+// #include <QWidget>
+#include <QPointer>
 
 class QGridLayout;
 class QStackedLayout;

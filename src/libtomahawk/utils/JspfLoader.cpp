@@ -19,18 +19,23 @@
 
 #include "JspfLoader.h"
 
-#include <QApplication>
-#include <QDomDocument>
-#include <QMessageBox>
-
-#include <qjson/parser.h>
-
+#include "Query.h"
 #include "SourceList.h"
 #include "Playlist.h"
+#include "Track.h"
 
 #include "utils/NetworkReply.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
+#include "utils/Uuid.h"
+
+#include "track_ptr.h"
+
+#include <qjson/parser.h>
+
+#include <QApplication>
+#include <QDomDocument>
+#include <QMessageBox>
 
 using namespace Tomahawk;
 

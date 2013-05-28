@@ -21,6 +21,7 @@
 
 #include "libtomahawk/Result.h"
 #include "libtomahawk/Source.h"
+#include "libtomahawk/Track.h"
 
 class TestResult : public QObject
 {

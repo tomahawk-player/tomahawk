@@ -19,13 +19,8 @@
 
 #include "GridItemDelegate.h"
 
-#include <QApplication>
-#include <QPainter>
-#include <QAbstractItemView>
-#include <QMouseEvent>
-#include <QTimeLine>
-
 #include "Artist.h"
+#include "Album.h"
 #include "Query.h"
 #include "Result.h"
 #include "Source.h"
@@ -41,6 +36,13 @@
 #include "utils/Closure.h"
 #include "utils/AnimatedSpinner.h"
 #include "utils/Logger.h"
+#include "Track.h"
+
+#include <QApplication>
+#include <QPainter>
+#include <QAbstractItemView>
+#include <QMouseEvent>
+#include <QTimeLine>
 
 namespace {
     static const int FADE_DURATION = 200;

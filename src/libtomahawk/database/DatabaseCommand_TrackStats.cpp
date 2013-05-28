@@ -22,6 +22,10 @@
 #include "DatabaseImpl.h"
 #include "SourceList.h"
 #include "utils/Logger.h"
+#include "TrackData.h"
+
+#include "database/TomahawkSqlQuery.h"
+
 
 using namespace Tomahawk;
 

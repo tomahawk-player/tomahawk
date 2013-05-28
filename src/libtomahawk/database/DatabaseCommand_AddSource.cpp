@@ -18,11 +18,11 @@
 
 #include "DatabaseCommand_AddSource.h"
 
-#include <QSqlQuery>
-
 #include "DatabaseImpl.h"
 #include "utils/Logger.h"
 #include "Source.h"
+
+#include "database/TomahawkSqlQuery.h"
 
 
 DatabaseCommand_addSource::DatabaseCommand_addSource( const QString& username, const QString& fname, QObject* parent )

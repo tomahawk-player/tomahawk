@@ -19,14 +19,21 @@
 #ifndef PIPELINE_H
 #define PIPELINE_H
 
-#include "Typedefs.h"
-#include "Query.h"
+#include "Typedefs.h" // QID
+// #include "Query.h"
 
+#include "result_ptr.h"
+#include "album_ptr.h"
+#include "artist_ptr.h"
+#include "query_ptr.h"
+//
 #include <QObject>
-#include <QList>
-#include <QMap>
+// #include <QList>
+// #include <QMap>
 #include <QMutex>
 #include <QTimer>
+#include <QStringList>
+#include <QPointer>
 
 #include <boost/function.hpp>
 

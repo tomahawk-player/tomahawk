@@ -20,7 +20,8 @@
 #define DYNAMIC_SETUP_WIDGET_H
 
 #include <QWidget>
-#include <Typedefs.h>
+// #include <Typedefs.h>
+#include "dynplaylist_ptr.h"
 
 class QPropertyAnimation;
 class QPaintEvent;

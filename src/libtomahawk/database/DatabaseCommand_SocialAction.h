@@ -69,16 +69,7 @@ public:
      *
      * Constructor which creates a new database command for the specified social action.
      */
-    explicit DatabaseCommand_SocialAction( const Tomahawk::trackdata_ptr& track, QString action, QString comment = "", QObject* parent = 0 )
-        : DatabaseCommandLoggable( parent ), m_track( track ), m_action( action )
-    {
-        setSource( SourceList::instance()->getLocal() );
-
-        setArtist( track->artist() );
-        setTrack( track->track() );
-        setComment( comment );
-        setTimestamp( QDateTime::currentDateTime().toTime_t() );
-    }
+    explicit DatabaseCommand_SocialAction( const Tomahawk::trackdata_ptr& track, QString action, QString comment = "", QObject* parent = 0 );
 
     /**
      * \brief Returns the name of this database command.

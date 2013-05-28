@@ -24,6 +24,7 @@
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 #include "audio/AudioEngine.h"
+#include "TrackData.h"
 
 #include <QTimer>
 

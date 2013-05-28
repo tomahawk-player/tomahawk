@@ -22,7 +22,6 @@
 #include "Typedefs.h"
 #include "DatabaseCommand.h"
 #include "DatabaseCommand_SetCollectionAttributes.h"
-#include <QByteArray>
 
 class DatabaseCommand_CollectionAttributes : public DatabaseCommand
 {

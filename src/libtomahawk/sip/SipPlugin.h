@@ -37,6 +37,8 @@
 
 class SipPlugin;
 
+#include "peerinfo_ptr.h"
+
 class DLLEXPORT SipPlugin : public QObject
 {
     Q_OBJECT

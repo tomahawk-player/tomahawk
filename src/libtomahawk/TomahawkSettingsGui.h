@@ -21,8 +21,8 @@
 
 #include "TomahawkSettings.h"
 #include "AtticaManager.h"
-
-#include <QSettings>
+//
+// #include <QSettings>
 
 #include "DllMacro.h"
 

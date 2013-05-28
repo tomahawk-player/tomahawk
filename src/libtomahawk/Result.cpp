@@ -19,6 +19,7 @@
 #include "Result.h"
 
 #include "Album.h"
+#include "Track.h"
 #include "collection/Collection.h"
 #include "resolvers/Resolver.h"
 #include "Source.h"
@@ -32,6 +33,8 @@
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 #include "resolvers/ExternalResolverGui.h"
+
+#include "result_wptr.h"
 
 using namespace Tomahawk;
 

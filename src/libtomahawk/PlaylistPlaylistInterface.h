@@ -20,19 +20,20 @@
 #ifndef PLAYLISTPLAYLISTINTERFACE_H
 #define PLAYLISTPLAYLISTINTERFACE_H
 
-#include <QObject>
-#include <QList>
-#include <QPointer>
-
-#include "Typedefs.h"
-#include "Result.h"
+// #include "Typedefs.h"
+// #include "Result.h"
 #include "PlaylistInterface.h"
-#include "Query.h"
+// #include "Query.h"
+//
+// #include <QObject>
+// #include <QList>
+#include <QPointer>
 
 #include "DllMacro.h"
 
 namespace Tomahawk
 {
+    class Playlist;
 
 class DLLEXPORT PlaylistPlaylistInterface : public Tomahawk::PlaylistInterface
 {

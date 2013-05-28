@@ -35,6 +35,8 @@
 #include "widgets/NewPlaylistWidget.h"
 #include "utils/ImageRegistry.h"
 #include "utils/Logger.h"
+#include "playlist/dynamic/DynamicPlaylist.h"
+#include "Track.h"
 
 using namespace Tomahawk;
 

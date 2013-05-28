@@ -19,14 +19,15 @@
 
 #include "ResultUrlChecker.h"
 
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
-#include <QUrl>
-
 #include "Query.h"
 #include "Result.h"
 #include "Source.h"
 #include "utils/Logger.h"
+#include "utils/NetworkReply.h"
+
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QUrl>
 
 using namespace Tomahawk;
 

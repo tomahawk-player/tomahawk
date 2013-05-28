@@ -18,7 +18,6 @@
 
 #include "Pipeline.h"
 
-#include <QMutexLocker>
 
 #include "FuncTimeout.h"
 #include "database/Database.h"
@@ -27,8 +26,12 @@
 #include "resolvers/JSResolver.h"
 #include "Source.h"
 #include "SourceList.h"
+#include "Result.h"
 #include "utils/ResultUrlChecker.h"
 #include "utils/Logger.h"
+
+
+#include <QMutexLocker>
 
 #include "boost/bind.hpp"
 

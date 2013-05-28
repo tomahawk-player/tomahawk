@@ -20,10 +20,15 @@
 #define INBOXMODEL_H
 
 #include "PlaylistModel.h"
-#include "Typedefs.h"
-#include "DllMacro.h"
+// #include "Typedefs.h"
 #include "jobview/InboxJobItem.h"
 
+#include "DllMacro.h"
+
+namespace Tomahawk
+{
+    class SocialAction;
+};
 
 class DLLEXPORT InboxModel : public PlaylistModel
 {

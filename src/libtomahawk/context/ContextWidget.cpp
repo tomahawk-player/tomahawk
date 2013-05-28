@@ -19,20 +19,21 @@
 #include "ContextWidget.h"
 #include "ui_ContextWidget.h"
 
-#include <QGraphicsProxyWidget>
-#include <QGraphicsScene>
-#include <QPropertyAnimation>
-#include <QTimeLine>
-
 #include "context/ContextPage.h"
 #include "context/pages/RelatedArtistsContext.h"
 #include "context/pages/TopTracksContext.h"
 #include "context/pages/WikipediaContext.h"
 
 #include "Source.h"
+#include "Track.h"
 
 #include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
+
+#include <QGraphicsProxyWidget>
+#include <QGraphicsScene>
+#include <QPropertyAnimation>
+#include <QTimeLine>
 
 #define ANIMATION_TIME 450
 #define SLIDE_TIME 350

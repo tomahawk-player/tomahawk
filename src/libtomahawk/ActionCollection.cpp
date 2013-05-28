@@ -29,6 +29,9 @@
 #include "utils/Logger.h"
 
 #include <QCoreApplication>
+#include <QAction>
+#include <QMenu>
+#include <QMenuBar>
 
 ActionCollection* ActionCollection::s_instance = 0;
 ActionCollection* ActionCollection::instance()

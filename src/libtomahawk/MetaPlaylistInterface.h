@@ -19,11 +19,13 @@
 #ifndef METAPLAYLISTINTERFACE_H
 #define METAPLAYLISTINTERFACE_H
 
-#include <QtCore/QModelIndex>
 
 #include "PlaylistInterface.h"
-#include "playlist/PlayableItem.h"
-#include "Typedefs.h"
+// #include "playlist/PlayableItem.h"
+// #include "Typedefs.h"
+
+#include <QModelIndex>
+
 #include "DllMacro.h"
 
 namespace Tomahawk

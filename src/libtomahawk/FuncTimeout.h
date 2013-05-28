@@ -19,11 +19,11 @@
 #ifndef FUNCTIMEOUT_H
 #define FUNCTIMEOUT_H
 
-#include <QObject>
+// #include <QObject>
 #include <QPointer>
-
+//
 #include "boost/function.hpp"
-#include "boost/bind.hpp"
+// #include "boost/bind.hpp"
 
 #include "DllMacro.h"
 

@@ -23,8 +23,7 @@
 #include "Source.h"
 #include "playlist/dynamic/DynamicPlaylist.h"
 #include "utils/Logger.h"
-
-#include <QSqlQuery>
+#include "database/TomahawkSqlQuery.h"
 
 using namespace Tomahawk;
 

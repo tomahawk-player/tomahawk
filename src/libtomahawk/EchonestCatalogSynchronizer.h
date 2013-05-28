@@ -19,14 +19,20 @@
 #ifndef ECHONESTCATALOGSYNCHRONIZER_H
 #define ECHONESTCATALOGSYNCHRONIZER_H
 
-#include "DllMacro.h"
-#include "Query.h"
-#include "database/DatabaseCommand_TrackAttributes.h"
+// #include "Query.h"
+// #include "database/DatabaseCommand_TrackAttributes.h"
+//
+
+#include "result_ptr.h"
 
 #include <echonest/Catalog.h>
-
+//
 #include <QObject>
 #include <QQueue>
+
+#include "DllMacro.h"
+
+class DatabaseCommand_SetCollectionAttributes;
 
 namespace Tomahawk
 {

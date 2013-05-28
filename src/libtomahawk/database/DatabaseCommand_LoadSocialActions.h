@@ -20,13 +20,19 @@
 #ifndef DATABASECOMMAND_LOADSOCIALACTIONS_H
 #define DATABASECOMMAND_LOADSOCIALACTIONS_H
 
-#include <QDateTime>
-#include <QList>
+
 #include "database/DatabaseCommand.h"
 
-#include "SourceList.h"
-#include "Typedefs.h"
-#include "Artist.h"
+// #include "SourceList.h"
+// #include "Typedefs.h"
+#include "track_ptr.h"
+#include "trackdata_ptr.h"
+// #include "Artist.h"
+#include "SocialAction.h" // MetaType
+
+// #include <QMap>
+// #include <QDateTime>
+// #include <QList>
 
 #include "DllMacro.h"
 
@@ -47,6 +53,7 @@ Q_OBJECT
 
 public:
     typedef QMap<Tomahawk::track_ptr, Tomahawk::SocialAction> TrackActions;
+
     /**
      * \brief Default constructor for DatabaseCommand_LoadSocialActions.
      *
@@ -63,21 +70,12 @@ public:
      *
      * Constructor which creates a new database command for loading all social actions.
      */
-    explicit DatabaseCommand_LoadSocialActions( const Tomahawk::trackdata_ptr& track, QObject* parent = 0 )
-        : DatabaseCommand( parent ), m_track( track )
-    {
-        setSource( SourceList::instance()->getLocal() );
-    }
+    explicit DatabaseCommand_LoadSocialActions( const Tomahawk::trackdata_ptr& track, QObject* parent = 0 );
 
     /**
      * Load all tracks with a specific social action
      */
-    explicit DatabaseCommand_LoadSocialActions( const QString& action, const Tomahawk::source_ptr& source, QObject* parent = 0 )
-        : DatabaseCommand( parent ), m_actionOnly( action )
-    {
-        setSource( source );
-        qRegisterMetaType<TrackActions>( "DatabaseCommand_LoadSocialActions::TrackActions" );
-    }
+    explicit DatabaseCommand_LoadSocialActions( const QString& action, const Tomahawk::source_ptr& source, QObject* parent = 0 );
 
     /**
      * \brief Returns the name of this database command.
@@ -111,7 +109,6 @@ private:
 
 };
 
-//FIXME: Qt5: this fails with Qt5, is it needed at all? It compiles fine without in Qt4 as well
-// Q_DECLARE_METATYPE( DatabaseCommand_LoadSocialActions::TrackActions )
+Q_DECLARE_METATYPE( DatabaseCommand_LoadSocialActions::TrackActions )
 
 #endif // DATABASECOMMAND_LOADSOCIALACTIONS_H

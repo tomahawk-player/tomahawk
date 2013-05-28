@@ -22,12 +22,15 @@
 
 #include "Artist.h"
 #include "Album.h"
+#include "Track.h"
+#include "PlaylistEntry.h"
 #include "SourceList.h"
 #include "Pipeline.h"
 #include "TomahawkSettings.h"
 #include "audio/AudioEngine.h"
 #include "database/LocalCollection.h"
 #include "playlist/dynamic/GeneratorInterface.h"
+#include "playlist/dynamic/DynamicPlaylist.h"
 
 #include "echonest/Playlist.h"
 

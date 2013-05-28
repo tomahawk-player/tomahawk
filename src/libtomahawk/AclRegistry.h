@@ -20,17 +20,20 @@
 #ifndef TOMAHAWK_ACLREGISTRY_H
 #define TOMAHAWK_ACLREGISTRY_H
 
-#include "DllMacro.h"
 
-#include <QObject>
-#include <QString>
-#include <QHash>
-#include <QTimer>
-#include <QMutex>
-#include <QVariant>
-#include <QQueue>
+// #include <QObject>
+// #include <QString>
+// #include <QHash>
+// #include <QTimer>
+// #include <QMutex>
+// #include <QVariant>
+// #include <QQueue>
+
+#include "utils/Uuid.h"
+
 #include <QStringList>
-#include <QUuid>
+
+#include "DllMacro.h"
 
 #define ACLUSERVERSION 1
 
@@ -58,7 +61,7 @@ public:
         ACLRegistry::ACL acl;
 
         User()
-            : uuid( QUuid::createUuid().toString() )
+            : uuid( ::uuid() ) // ALRIGHT?!?!?!?!
             , friendlyName()
             , knownDbids()
             , knownAccountIds()

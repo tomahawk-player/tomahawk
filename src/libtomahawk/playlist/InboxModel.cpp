@@ -26,6 +26,11 @@
 #include "utils/Logger.h"
 #include "utils/Closure.h"
 #include "jobview/JobStatusModel.h"
+#include "PlaylistEntry.h"
+#include "Track.h"
+#include "SocialAction.h"
+#include "PlayableItem.h"
+#include "jobview/JobStatusView.h"
 
 
 InboxModel::InboxModel( QObject* parent )

@@ -21,12 +21,14 @@
 #ifndef TOMAHAWKUTILS_H
 #define TOMAHAWKUTILS_H
 
-#include "DllMacro.h"
+#include "query_ptr.h"
 
-#include <QtCore/QThread>
-#include <QtNetwork/QNetworkProxy>
-#include <QtCore/QStringList>
-#include <Typedefs.h>
+// #include <QtCore/QThread>
+#include <QNetworkProxy>
+#include <QStringList>
+// #include <Typedefs.h>
+
+#include "DllMacro.h"
 
 #define RESPATH ":/data/"
 

@@ -18,15 +18,12 @@
 
 #include "AlbumItemDelegate.h"
 
-#include <QApplication>
-#include <QPainter>
-#include <QAbstractTextDocumentLayout>
-
 #include "Query.h"
 #include "Result.h"
 #include "Artist.h"
 #include "Source.h"
 #include "SourceList.h"
+#include "Track.h"
 
 #include "PlaylistView.h"
 #include "PlayableModel.h"
@@ -37,8 +34,12 @@
 
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
-#include <utils/PixmapDelegateFader.h>
-#include <utils/Closure.h>
+#include "utils/PixmapDelegateFader.h"
+#include "utils/Closure.h"
+
+#include <QApplication>
+#include <QPainter>
+#include <QAbstractTextDocumentLayout>
 
 using namespace Tomahawk;
 

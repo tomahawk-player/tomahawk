@@ -27,6 +27,7 @@
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
 #include "jobview/InboxJobItem.h"
+#include "TrackData.h"
 
 DatabaseCommand_ShareTrack::DatabaseCommand_ShareTrack( QObject* parent )
     : DatabaseCommand_SocialAction( parent )

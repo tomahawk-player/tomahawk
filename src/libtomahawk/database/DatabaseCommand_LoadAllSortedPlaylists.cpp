@@ -21,6 +21,9 @@
 
 #include "Playlist.h"
 #include "SourceList.h"
+#include "Source.h"
+
+#include "database/TomahawkSqlQuery.h"
 
 using namespace Tomahawk;
 

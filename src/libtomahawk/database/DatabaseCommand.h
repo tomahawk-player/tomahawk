@@ -20,14 +20,17 @@
 #ifndef DATABASECOMMAND_H
 #define DATABASECOMMAND_H
 
-#include <QObject>
-#include <QMetaType>
-#include <QTime>
-#include <QSqlQuery>
-#include <QVariant>
 
-#include "Typedefs.h"
-#include "database/Op.h"
+
+// #include "Typedefs.h"
+#include "source_ptr.h"
+// #include "database/Op.h"
+
+// #include <QObject>
+// #include <QMetaType>
+// #include <QTime>
+// #include <QSqlQuery>
+#include <QVariant>
 
 #include "DllMacro.h"
 
@@ -78,13 +81,7 @@ public:
     virtual QVariant data() const { return m_data; }
     virtual void setData( const QVariant& data ) { m_data = data; }
 
-    QString guid() const
-    {
-        if( m_guid.isEmpty() )
-            m_guid = uuid();
-
-        return m_guid;
-    }
+    QString guid() const;
     void setGuid( const QString& g ) { m_guid = g; }
 
     void emitFinished() { emit finished(); }

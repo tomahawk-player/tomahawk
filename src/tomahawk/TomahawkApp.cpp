@@ -64,6 +64,10 @@
 #include "accounts/spotify/SpotifyAccount.h"
 #include "accounts/spotify/SpotifyPlaylistUpdater.h"
 #include "utils/TomahawkCache.h"
+#include "PlaylistEntry.h"
+#include "playlist/dynamic/DynamicPlaylist.h"
+#include "playlist/dynamic/DynamicPlaylistRevision.h"
+#include "PlaylistInterface.h"
 
 #ifndef ENABLE_HEADLESS
     #include "resolvers/JSResolver.h"

@@ -20,11 +20,14 @@
  */
 
 #include "DropJob.h"
-#include <QFileInfo>
 
 #include "Artist.h"
 #include "Album.h"
 #include "Source.h"
+#include "Track.h"
+#include "Result.h"
+#include "collection/Collection.h"
+#include "PlaylistInterface.h"
 
 #include "utils/SpotifyParser.h"
 #include "utils/ItunesParser.h"
@@ -42,11 +45,14 @@
 #include "jobview/JobStatusModel.h"
 #include "jobview/ErrorStatusMessage.h"
 #include "Pipeline.h"
+#include "utils/DropJobNotifier.h"
 
 #ifdef QCA2_FOUND
 #include "utils/GroovesharkParser.h"
 #endif //QCA2_FOUND
 
+#include <QFileInfo>
+#include <QMimeData>
 
 using namespace Tomahawk;
 
