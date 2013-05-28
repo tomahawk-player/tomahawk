@@ -477,6 +477,11 @@ Source::playlistInterface()
     return m_playlistInterface;
 }
 
+QSharedPointer<QMutex> Source::acquireLock()
+{
+    return QSharedPointer<QMutexLocker>( new QMutexLocker( &m_mutex ) );
+}
+
 
 void
 Source::onPlaybackStarted( const Tomahawk::track_ptr& track, unsigned int duration )

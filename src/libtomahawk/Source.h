@@ -102,6 +102,8 @@ public:
 
     Tomahawk::playlistinterface_ptr playlistInterface();
 
+    QSharedPointer<QMutex> acquireLock();
+
 signals:
     void syncedWithDatabase();
     void synced();
@@ -175,6 +177,7 @@ private:
     QString m_lastCmdGuid;
     mutable QMutex m_cmdMutex;
     QMutex m_setControlConnectionMutex;
+    QMutex m_mutex;
 
     Tomahawk::playlistinterface_ptr m_playlistInterface;
 };
