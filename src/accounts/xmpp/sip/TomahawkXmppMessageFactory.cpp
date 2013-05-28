@@ -137,7 +137,7 @@ void TomahawkXmppMessageFactory::serialize(Payload *extension, QXmlStreamWriter 
 
     // Get a copy of the list, so that we can modify it here.
     QList<SipInfo> sipInfos = QList<SipInfo>( sipMessage->sipInfos() );
-    QSharedPointer<SipInfo> lastInfo = QSharedPointer<SipInfo>();
+    SipInfo lastInfo;
     foreach ( SipInfo info, sipInfos )
     {
         if ( info.isVisible() )
@@ -146,7 +146,7 @@ void TomahawkXmppMessageFactory::serialize(Payload *extension, QXmlStreamWriter 
             if ( ( Servent::isValidExternalIP( ha ) && ha.protocol() == QAbstractSocket::IPv4Protocol ) || ( ha.protocol() == QAbstractSocket::UnknownNetworkLayerProtocol ) || ( ha.isNull() && !info.host().isEmpty() ) )
             {
                 // For comapability reasons, this shall be put as the last candidate (this is the IP/host that would have been sent in previous versions)
-                lastInfo = QSharedPointer<SipInfo>( new SipInfo( info ) );
+                lastInfo = info;
                 sipInfos.removeOne( info );
                 break;
             }
@@ -163,11 +163,11 @@ void TomahawkXmppMessageFactory::serialize(Payload *extension, QXmlStreamWriter 
             serializeSipInfo( info, writer );
     }
 
-    if ( !lastInfo.isNull() )
+    if ( lastInfo.isValid() )
     {
-        Q_ASSERT( lastInfo->isVisible() );
-        tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Using " << lastInfo->host() << ":" << lastInfo->port() << " as the host which all older clients will only detect";
-        serializeSipInfo( *lastInfo, writer );
+        Q_ASSERT( lastInfo.isVisible() );
+        tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Using " << lastInfo.host() << ":" << lastInfo.port() << " as the host which all older clients will only detect";
+        serializeSipInfo( lastInfo, writer );
     }
 
     // </transport>
