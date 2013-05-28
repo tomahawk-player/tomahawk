@@ -102,7 +102,7 @@ public:
 
     Tomahawk::playlistinterface_ptr playlistInterface();
 
-    QSharedPointer<QMutex> acquireLock();
+    QSharedPointer<QMutexLocker> acquireLock();
 
 signals:
     void syncedWithDatabase();
