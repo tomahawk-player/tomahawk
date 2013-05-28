@@ -760,6 +760,7 @@ JSResolver::parseResultVariantList( const QVariantList& reslist )
         rp->setPurchaseUrl( m.value( "purchaseUrl" ).toString() );
         rp->setLinkUrl( m.value( "linkUrl" ).toString() );
         rp->setScore( m.value( "score" ).toFloat() );
+        rp->setChecked( m.value( "checked" ).toBool() );
 
         //FIXME
         if ( m.contains( "year" ) )

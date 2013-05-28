@@ -21,22 +21,13 @@
 #ifndef AUDIOENGINE_H
 #define AUDIOENGINE_H
 
-#include "infosystem/InfoSystem.h"
-#include "Typedefs.h"
-#include "Result.h"
-#include "PlaylistInterface.h"
+#include "../Typedefs.h"
+
+#include <QStringList>
 
 #include "DllMacro.h"
 
-#include <phonon/MediaObject>
-#include <phonon/AudioOutput>
-#include <phonon/BackendCapabilities>
-
-#include <QtCore/QObject>
-#include <QtCore/QTimer>
-#include <QtCore/QQueue>
-#include <QTemporaryFile>
-
+class AudioEnginePrivate;
 
 class DLLEXPORT AudioEngine : public QObject
 {
@@ -52,24 +43,24 @@ public:
     ~AudioEngine();
 
     QStringList supportedMimeTypes() const;
-    unsigned int volume() const { return m_audioOutput->volume() * 100.0; } // in percent
+    unsigned int volume() const; // in percent
 
-    AudioState state() const { return m_state; }
-    bool isPlaying() const { return m_state == Playing; }
-    bool isPaused() const { return m_state == Paused; }
-    bool isStopped() const { return m_state == Stopped; }
+    AudioState state() const;
+    bool isPlaying() const;
+    bool isPaused() const;
+    bool isStopped() const;
 
     /* Returns the PlaylistInterface of the currently playing track. Note: This might be different to the current playlist! */
-    Tomahawk::playlistinterface_ptr currentTrackPlaylist() const { return m_currentTrackPlaylist; }
+    Tomahawk::playlistinterface_ptr currentTrackPlaylist() const;
 
     /* Returns the PlaylistInterface of the current playlist. Note: The currently playing track might still be from a different playlist! */
-    Tomahawk::playlistinterface_ptr playlist() const { return m_playlist; }
+    Tomahawk::playlistinterface_ptr playlist() const;
 
-    Tomahawk::result_ptr currentTrack() const { return m_currentTrack; }
-    Tomahawk::query_ptr stopAfterTrack() const  { return m_stopAfterTrack; }
+    Tomahawk::result_ptr currentTrack() const;
+    Tomahawk::query_ptr stopAfterTrack() const;
 
-    qint64 currentTime() const { return m_mediaObject->currentTime(); }
-    qint64 currentTrackTotalTime() const { return m_mediaObject->totalTime(); }
+    qint64 currentTime() const;
+    qint64 currentTrackTotalTime() const;
 
 public slots:
     void playPause();
@@ -136,8 +127,7 @@ private slots:
     void loadNextTrack();
 
     void onAboutToFinish();
-    void onStateChanged( Phonon::State newState, Phonon::State oldState );
-    void onVolumeChanged( qreal volume ) { emit volumeChanged( volume * 100 ); }
+    void onVolumeChanged( qreal volume );
     void timerTriggered( qint64 time );
 
     void setCurrentTrack( const Tomahawk::result_ptr& result );
@@ -152,36 +142,10 @@ private slots:
 private:
     void checkStateQueue();
     void queueState( AudioState state );
-
     void setState( AudioState state );
 
-    QSharedPointer<QIODevice> m_input;
-
-    Tomahawk::query_ptr m_stopAfterTrack;
-    Tomahawk::result_ptr m_currentTrack;
-    Tomahawk::playlistinterface_ptr m_playlist;
-    Tomahawk::playlistinterface_ptr m_currentTrackPlaylist;
-    Tomahawk::playlistinterface_ptr m_queue;
-
-    Phonon::MediaObject* m_mediaObject;
-    Phonon::AudioOutput* m_audioOutput;
-
-    unsigned int m_timeElapsed;
-    bool m_expectStop;
-    bool m_waitingOnNewTrack;
-
-    mutable QStringList m_supportedMimeTypes;
-
-    AudioState m_state;
-    QQueue< AudioState > m_stateQueue;
-    QTimer m_stateQueueTimer;
-
-    uint_fast8_t m_underrunCount;
-    bool m_underrunNotified;
-
-    QTemporaryFile* m_coverTempFile;
-
-    static AudioEngine* s_instance;
+    Q_DECLARE_PRIVATE( AudioEngine );
+    AudioEnginePrivate* d_ptr;
 };
 
 #endif // AUDIOENGINE_H

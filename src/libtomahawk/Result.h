@@ -74,6 +74,12 @@ public:
 
     collection_ptr collection() const;
     QString url() const { return m_url; }
+    /**
+     * Has the given url been checked that it is accessible/valid.
+     *
+     * Results marked as true will bypass the ResultUrlChecker.
+     */
+    bool checked() const { return m_checked; }
     QString mimetype() const { return m_mimetype; }
     QString friendlySource() const;
     QString purchaseUrl() const { return m_purchaseUrl; }
@@ -92,6 +98,7 @@ public:
     void setFriendlySource( const QString& s ) { m_friendlySource = s; }
     void setPurchaseUrl( const QString& u ) { m_purchaseUrl = u; }
     void setLinkUrl( const QString& u ) { m_linkUrl = u; }
+    void setChecked( bool checked ) { m_checked = checked; }
     void setMimetype( const QString& mimetype ) { m_mimetype = mimetype; }
     void setBitrate( unsigned int bitrate ) { m_bitrate = bitrate; }
     void setSize( unsigned int size ) { m_size = size; }
@@ -133,6 +140,7 @@ private:
     QString m_mimetype;
     QString m_friendlySource;
 
+    bool m_checked;
     unsigned int m_bitrate;
     unsigned int m_size;
     unsigned int m_modtime;

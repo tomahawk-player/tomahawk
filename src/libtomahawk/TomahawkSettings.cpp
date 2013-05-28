@@ -190,7 +190,6 @@ TomahawkSettings::createSpotifyAccount()
     beginGroup( "accounts/" + accountKey );
     setValue( "enabled", false );
     setValue( "types", QStringList() << "ResolverType" );
-    setValue( "credentials", QVariantHash() );
     setValue( "configuration", QVariantHash() );
     setValue( "accountfriendlyname", "Spotify" );
     endGroup();

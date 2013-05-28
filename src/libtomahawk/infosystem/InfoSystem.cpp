@@ -225,7 +225,7 @@ InfoSystem::getInfo( const QString &caller, const QVariantMap &customData, const
 bool
 InfoSystem::pushInfo( InfoPushData pushData )
 {
-    tDebug() << Q_FUNC_INFO << "type is " << pushData.type;
+    tDebug() << Q_FUNC_INFO << "type is" << pushData.type;
     if ( !m_inited || !m_infoSystemWorkerThreadController->worker() )
     {
         init();

@@ -63,7 +63,7 @@ FdoNotifyPlugin::FdoNotifyPlugin()
     , m_wmSupportsBodyMarkup( false )
 {
     qDebug() << Q_FUNC_INFO;
-    m_supportedPushTypes << InfoNotifyUser << InfoNowPlaying << InfoTrackUnresolved << InfoNowStopped;
+    m_supportedPushTypes << InfoNotifyUser << InfoNowPlaying << InfoTrackUnresolved << InfoNowStopped << InfoInboxReceived;
 
     // Query the window manager for its capabilties in styling notifications.
     QDBusMessage message = QDBusMessage::createMethodCall( "org.freedesktop.Notifications", "/org/freedesktop/Notifications", "org.freedesktop.Notifications", "GetCapabilities" );
@@ -127,6 +127,10 @@ FdoNotifyPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
             nowPlaying( pushData.infoPair.second );
             return;
 
+        case Tomahawk::InfoSystem::InfoInboxReceived:
+            inboxReceived( pushData.infoPair.second );
+            return;
+
         default:
             return;
     }
@@ -166,6 +170,73 @@ FdoNotifyPlugin::notifyUser( const QString& messageText )
     QDBusConnection::sessionBus().send( message );
 }
 
+void FdoNotifyPlugin::inboxReceived(const QVariant &input)
+{
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
+    if ( !input.canConvert< QVariantMap >() )
+        return;
+
+    QVariantMap map = input.toMap();
+
+    if ( !map.contains( "trackinfo" ) || !map[ "trackinfo" ].canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
+        return;
+
+    if ( !map.contains( "sourceinfo" ) || !map[ "sourceinfo" ].canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
+        return;
+
+    InfoStringHash hash = map[ "trackinfo" ].value< Tomahawk::InfoSystem::InfoStringHash >();
+    if ( !hash.contains( "title" ) || !hash.contains( "artist" ) )
+        return;
+
+    InfoStringHash src = map[ "sourceinfo" ].value< Tomahawk::InfoSystem::InfoStringHash >();
+    if ( !src.contains( "friendlyname" ) )
+        return;
+
+    QString messageText;
+    // If the window manager supports notification styling then use it.
+    if ( m_wmSupportsBodyMarkup )
+    {
+        // Remark: If using xml-based markup in notifications, the supplied strings need to be escaped.
+        messageText = tr( "%1 sent you\n%2%4 %3.", "%1 is a nickname, %2 is a title, %3 is an artist, %4 is the preposition used to link track and artist ('by' in english)" )
+                        .arg( Qt::escape( src["friendlyname"] ) )
+                        .arg( Qt::escape( hash[ "title" ] ) )
+                        .arg( Qt::escape( hash[ "artist" ] ) )
+                        .arg( QString( "\n<i>%1</i>" ).arg( tr( "by", "preposition to link track and artist" ) ) );
+
+        // Dirty hack(TM) so that KNotify/QLabel recognizes the message as Rich Text
+        messageText = QString( "<i></i>%1" ).arg( messageText );
+    }
+    else
+    {
+        messageText = tr( "%1 sent you \"%2\" by %3.", "%1 is a nickname, %2 is a title, %3 is an artist" )
+                        .arg( src["friendlyname"] )
+                        .arg( hash[ "title" ] )
+                        .arg( hash[ "artist" ] );
+    }
+
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "sending message" << messageText;
+
+    QDBusMessage message = QDBusMessage::createMethodCall( "org.freedesktop.Notifications", "/org/freedesktop/Notifications", "org.freedesktop.Notifications", "Notify" );
+    QList<QVariant> arguments;
+    arguments << QString( "Tomahawk" ); //app_name
+    arguments << m_nowPlayingId; //notification_id
+    arguments << QString(); //app_icon
+    arguments << QString( "Tomahawk - Track received" ); //summary
+    arguments << messageText; //body
+    arguments << QStringList(); //actions
+    QVariantMap dict;
+    dict["desktop-entry"] = QString( "tomahawk" );
+
+    // Convert image to QVariant and scale to a consistent size.
+    dict[ "image_data" ] = ImageConverter::variantForImage( QImage( RESPATH "images/inbox-512x512.png" ).scaledToHeight( getNotificationIconHeight() ) );
+
+    arguments << dict; //hints
+    arguments << qint32( -1 ); //expire_timeout
+    message.setArguments( arguments );
+
+    // Handle reply in a callback, so that this a non-blocking call
+    QDBusConnection::sessionBus().send( message );
+}
 
 void
 FdoNotifyPlugin::nowPlaying( const QVariant& input )

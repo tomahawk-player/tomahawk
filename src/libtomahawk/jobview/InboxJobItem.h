@@ -33,7 +33,7 @@ public:
     enum Side
     {
         Sending = 0,
-        Receiving
+        Receiving = 1
     };
 
     explicit InboxJobItem( Side side,

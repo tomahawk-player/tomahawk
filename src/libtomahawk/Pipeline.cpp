@@ -295,7 +295,7 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
         if ( r.isNull() )
             continue;
 
-        if ( r->url().startsWith( "http" ) && !r->url().startsWith( "http://localhost" ) )
+        if ( !r->checked() && ( r->url().startsWith( "http" ) && !r->url().startsWith( "http://localhost" ) ) )
             httpResults << r;
         else
             cleanResults << r;
