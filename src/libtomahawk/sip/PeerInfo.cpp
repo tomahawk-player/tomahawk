@@ -279,7 +279,7 @@ PeerInfo::status() const
 void
 PeerInfo::setSipInfos( const QList<SipInfo>& sipInfos )
 {
-    m_sipInfos = QList<SipInfo>( sipInfos );
+    m_sipInfos = sipInfos;
 
     tLog() << "id:" << id() << "info changed" << sipInfos;
     emit sipInfoChanged();
