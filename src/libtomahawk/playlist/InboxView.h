@@ -33,6 +33,8 @@ public slots:
      * Reimplemented in order to ignore PlayableModel::isReadOnly()
      */
     virtual void deleteSelectedItems();
+
+    virtual void onMenuTriggered( int action );
 };
 
 #endif // INBOXVIEW_H

@@ -34,6 +34,7 @@
 #include "utils/Closure.h"
 #include "utils/AnimatedSpinner.h"
 #include "utils/Logger.h"
+#include "InboxModel.h"
 
 
 #include <QKeyEvent>
@@ -44,7 +45,6 @@
 #define SCROLL_TIMEOUT 280
 
 using namespace Tomahawk;
-
 
 TrackView::TrackView( QWidget* parent )
     : QTreeView( parent )
@@ -651,6 +651,9 @@ TrackView::onCustomContextMenu( const QPoint& pos )
 
     if ( model() && !model()->isReadOnly() )
         m_contextMenu->setSupportedActions( m_contextMenu->supportedActions() | ContextMenu::ActionDelete );
+    if ( model() && qobject_cast< InboxModel* >( model() ) )
+        m_contextMenu->setSupportedActions( m_contextMenu->supportedActions() | ContextMenu::ActionMarkListened
+                                                                              | ContextMenu::ActionDelete );
 
     QList<query_ptr> queries;
     foreach ( const QModelIndex& index, selectedIndexes() )

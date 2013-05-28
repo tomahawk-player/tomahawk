@@ -93,7 +93,7 @@ public slots:
     virtual void deleteSelectedItems();
 
     void playItem();
-    void onMenuTriggered( int action );
+    virtual void onMenuTriggered( int action );
 
     void onViewChanged();
     void onScrollTimeout();

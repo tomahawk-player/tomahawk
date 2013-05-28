@@ -172,6 +172,20 @@ InboxModel::showNotification( InboxJobItem::Side side,
 
 
 void
+InboxModel::markAsListened( const QModelIndexList& indexes )
+{
+    foreach ( QModelIndex index, indexes )
+    {
+        PlayableItem* item = itemFromIndex( index );
+        if ( item && !item->query().isNull() )
+        {
+            item->query()->queryTrack()->markAsListened();
+        }
+    }
+}
+
+
+void
 InboxModel::loadTracks()
 {
     startLoading();

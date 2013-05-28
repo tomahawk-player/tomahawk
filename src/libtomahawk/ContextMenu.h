@@ -49,7 +49,8 @@ public:
         ActionAlbumPage =    67,
         ActionEditMetadata = 128,
         ActionPlaylist =     256,
-        ActionSend =         512
+        ActionSend =         512,
+        ActionMarkListened = 1024
     };
 
     explicit ContextMenu( QWidget* parent = 0 );

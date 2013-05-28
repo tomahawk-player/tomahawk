@@ -172,7 +172,7 @@ Track::startPlaying()
                                                                         DatabaseCommand_LogPlayback::Started );
     Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
 
-
+    markAsListened();
 }
 
 
@@ -183,7 +183,12 @@ Track::finishPlaying( int timeElapsed )
                                                                         DatabaseCommand_LogPlayback::Finished,
                                                                         timeElapsed );
     Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+}
 
+
+void
+Track::markAsListened()
+{
     bool isUnlistened = false;
     foreach ( Tomahawk::SocialAction action, allSocialActions() )
     {
