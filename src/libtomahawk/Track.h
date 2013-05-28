@@ -112,6 +112,7 @@ public:
 
     void startPlaying();
     void finishPlaying( int timeElapsed );
+    void markAsListened();
 
 signals:
     void coverChanged();
