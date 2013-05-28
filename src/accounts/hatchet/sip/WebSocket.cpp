@@ -188,12 +188,12 @@ WebSocket::encrypted()
 {
     tLog() << Q_FUNC_INFO << "Encrypted connection to Dreamcatcher established";
     error_code ec;
-    // Adjust wss:// to ws:// in the URL so it doesn't complain that the transport isn't encrypted
-    QString url = m_url.toString();
-    if ( url.startsWith( "wss") )
-        url.remove( 2, 1 );
-    m_connection = m_client->get_connection( url.toStdString(), ec );
-    if ( !m_connection )
+
+    QUrl url(m_url);
+    websocketpp::uri_ptr uri(new websocketpp::uri(false, url.host().toStdString(), url.port(), "/"));
+
+    m_connection = m_client->get_connection( uri, ec );
+    if ( !m_connection || ec.value() != 0 )
     {
         tLog() << Q_FUNC_INFO << "Got error creating WS connection, error is:" << QString::fromStdString( ec.message() );
         disconnectWs();
