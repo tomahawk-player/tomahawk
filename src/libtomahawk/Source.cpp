@@ -477,7 +477,8 @@ Source::playlistInterface()
     return m_playlistInterface;
 }
 
-QSharedPointer<QMutex> Source::acquireLock()
+QSharedPointer<QMutexLocker>
+Source::acquireLock()
 {
     return QSharedPointer<QMutexLocker>( new QMutexLocker( &m_mutex ) );
 }
