@@ -48,10 +48,10 @@ WebSocket::~WebSocket()
     if ( m_connection )
         m_connection.reset();
 
+    m_client.reset();
+
     if ( m_socket )
         delete m_socket.data();
-
-    m_client.reset();
 }
 
 
