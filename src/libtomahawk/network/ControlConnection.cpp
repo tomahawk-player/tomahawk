@@ -290,11 +290,7 @@ void
 ControlConnection::addPeerInfo( const peerinfo_ptr& peerInfo )
 {
     peerInfo->setControlConnection( this );
-    // Check if we already have added this peerInfo
-    if ( !m_peerInfos.contains( peerInfo ) )
-    {
-        m_peerInfos.insert( peerInfo );
-    }
+    m_peerInfos.insert( peerInfo );
 }
 
 
