@@ -146,7 +146,6 @@ protected:
 public slots:
     void setExternalAddress( QHostAddress ha, unsigned int port );
 
-    void socketError( QAbstractSocket::SocketError e );
     void createParallelConnection( Connection* orig_conn, Connection* new_conn, const QString& key );
 
     void registerStreamConnection( StreamConnection* );
@@ -156,8 +155,9 @@ public slots:
     void triggerDBSync();
 
 private slots:
-    void readyRead();
     void deleteLazyOffer( const QString& key );
+    void readyRead();
+    void socketError( QAbstractSocket::SocketError e );
 
     Connection* claimOffer( ControlConnection* cc, const QString &nodeid, const QString &key, const QHostAddress peer = QHostAddress::Any );
 
