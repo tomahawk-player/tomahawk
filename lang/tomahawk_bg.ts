@@ -2645,8 +2645,8 @@ username@jabber.org</source>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="124"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="250"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="301"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="253"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="304"/>
         <source>Add to &amp;Queue</source>
         <translation>Добави към &amp;опашката</translation>
     </message>
@@ -2672,21 +2672,21 @@ username@jabber.org</source>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="181"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="471"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="474"/>
         <source>&amp;Love</source>
         <translation>&amp;Харесай</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="195"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="258"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="309"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="261"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="312"/>
         <source>&amp;Go to &quot;%1&quot;</source>
         <translation>&amp;Иди на &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="200"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="204"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="261"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="264"/>
         <source>Go to &quot;%1&quot;</source>
         <translation>Иди на &quot;%1&quot;</translation>
     </message>
@@ -2697,26 +2697,31 @@ username@jabber.org</source>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="218"/>
+        <source>Mark as &amp;Listened</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="221"/>
         <source>&amp;Remove Items</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="218"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="221"/>
         <source>&amp;Remove Item</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="269"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="272"/>
         <source>Copy Album &amp;Link</source>
         <translation>Копирай адреса на албума</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="317"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="320"/>
         <source>Copy Artist &amp;Link</source>
         <translation>Копирай адреса на изпълнителя</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="466"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="469"/>
         <source>Un-&amp;Love</source>
         <translation>Не-&amp;харесай</translation>
     </message>
@@ -3481,42 +3486,42 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::Track</name>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="391"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="396"/>
         <source> and </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="399"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="404"/>
         <source>You</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="401"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="406"/>
         <source>you</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="414"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="419"/>
         <source>and</source>
         <translation type="unfinished"/>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="414"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="419"/>
         <source>%n other(s)</source>
         <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="417"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="422"/>
         <source>%n people</source>
         <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="421"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="426"/>
         <source>loved this track</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="423"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="428"/>
         <source>sent you this track %1</source>
         <translation type="unfinished"/>
     </message>
