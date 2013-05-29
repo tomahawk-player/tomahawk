@@ -689,7 +689,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/jobview/InboxJobItem.cpp" line="59"/>
         <source>Sent %1 by %2 to %3.</source>
-        <translation type="unfinished"/>
+        <translation>ارسلت %1 للفنان %2 إلى %3.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/InboxJobItem.cpp" line="64"/>
@@ -720,7 +720,7 @@ connect and stream from you?</source>
         <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="624"/>
         <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="660"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
-        <translation type="unfinished"/>
+        <translation>تحذير المحلل النصي: إستدعاء API %1 إرجاع البيانات بشكل متزامن.</translation>
     </message>
 </context>
 <context>
@@ -1405,12 +1405,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/database/TomahawkSqlQuery.cpp" line="89"/>
         <source>No query</source>
-        <translation type="unfinished"/>
+        <translation>لا استعلام</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/database/TomahawkSqlQuery.cpp" line="90"/>
         <source>Parameter count mismatch</source>
-        <translation type="unfinished"/>
+        <translation>عدم تطابق عدد المعلمات</translation>
     </message>
 </context>
 <context>
@@ -1479,17 +1479,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="1152"/>
         <source>SSL Error</source>
-        <translation type="unfinished"/>
+        <translation>خطأ SSL</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="1153"/>
         <source>You have asked Tomahawk to connect securely to &lt;b&gt;%1&lt;/b&gt;, but we can&apos;t confirm that your connection is secure:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Do you want to trust this connection?</source>
-        <translation type="unfinished"/>
+        <translation>لقد طلبت من توماهوك الإتصال بشكل أمن إلى &lt;b&gt;%1&lt;/b&gt; ولكن لا يمكننا التأكد من أن اتصالك آمن: &lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;/br&gt;&lt;/br&gt; هل تريد أن تثق بهذا الإتصال؟</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="1160"/>
         <source>Trust certificate</source>
-        <translation type="unfinished"/>
+        <translation>شهادة الثقة</translation>
     </message>
 </context>
 <context>
@@ -1807,7 +1807,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="385"/>
         <source>Drop to send tracks</source>
-        <translation type="unfinished"/>
+        <translation>أنزل لإرسال الأغاني</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="466"/>
@@ -2631,8 +2631,8 @@ username@jabber.org</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="124"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="250"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="301"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="253"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="304"/>
         <source>Add to &amp;Queue</source>
         <translation>أضف إلى &amp;قائمة الانتظار</translation>
     </message>
@@ -2644,7 +2644,7 @@ username@jabber.org</translation>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="158"/>
         <source>Send to &amp;Friend</source>
-        <translation type="unfinished"/>
+        <translation>أرسل &amp;لصديق</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="172"/>
@@ -2658,21 +2658,21 @@ username@jabber.org</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="181"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="471"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="474"/>
         <source>&amp;Love</source>
         <translation>&amp;أحب</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="195"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="258"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="309"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="261"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="312"/>
         <source>&amp;Go to &quot;%1&quot;</source>
         <translation>ا&amp;ذهب إلى &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="200"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="204"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="261"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="264"/>
         <source>Go to &quot;%1&quot;</source>
         <translation>اذهب إلى &quot;%1&quot;</translation>
     </message>
@@ -2683,26 +2683,31 @@ username@jabber.org</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="218"/>
+        <source>Mark as &amp;Listened</source>
+        <translation>ضع علامة على أنها &amp;سمعت</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="221"/>
         <source>&amp;Remove Items</source>
         <translation>&amp;إزالة البنود</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="218"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="221"/>
         <source>&amp;Remove Item</source>
         <translation>&amp;إزالة البند</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="269"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="272"/>
         <source>Copy Album &amp;Link</source>
         <translation>نسخ &amp;رابط الالبوم</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="317"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="320"/>
         <source>Copy Artist &amp;Link</source>
         <translation>نسخ &amp;رابط قائمة الأغاني</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="466"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="469"/>
         <source>Un-&amp;Love</source>
         <translation>لا &amp;أحب</translation>
     </message>
@@ -3250,13 +3255,13 @@ Try tweaking the filters for a new set of songs to play.</source>
         <source>%1 sent you
 %2%4 %3.</source>
         <comment>%1 is a nickname, %2 is a title, %3 is an artist, %4 is the preposition used to link track and artist ('by' in english)</comment>
-        <translation type="unfinished"/>
+        <translation>%1 أرسل لك %2%4 %3.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="211"/>
         <source>%1 sent you &quot;%2&quot; by %3.</source>
         <comment>%1 is a nickname, %2 is a title, %3 is an artist</comment>
-        <translation type="unfinished"/>
+        <translation>%1 أرسل لك &quot;%2&quot; للفنان %3.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="279"/>
@@ -3467,42 +3472,42 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::Track</name>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="391"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="396"/>
         <source> and </source>
         <translation> و </translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="399"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="404"/>
         <source>You</source>
         <translation>أنت</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="401"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="406"/>
         <source>you</source>
         <translation>أنت</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="414"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="419"/>
         <source>and</source>
         <translation>و</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="414"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="419"/>
         <source>%n other(s)</source>
         <translation><numerusform>%n آخر</numerusform><numerusform>%n آخر</numerusform><numerusform>%n آخرين</numerusform><numerusform>%n آخرين</numerusform><numerusform>%n آخرين</numerusform><numerusform>%n آخرين</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="417"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="422"/>
         <source>%n people</source>
         <translation><numerusform>%n شخص</numerusform><numerusform>شخص</numerusform><numerusform>شخصين</numerusform><numerusform>%n أشخاص</numerusform><numerusform>%n شخص</numerusform><numerusform>%n شخص</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="421"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="426"/>
         <source>loved this track</source>
         <translation>أحب هذه الأغنية</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="423"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="428"/>
         <source>sent you this track %1</source>
         <translation>%1 أرسل لك هذه الأغنية</translation>
     </message>
