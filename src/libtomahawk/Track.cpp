@@ -189,17 +189,7 @@ Track::finishPlaying( int timeElapsed )
 void
 Track::markAsListened()
 {
-    bool isUnlistened = false;
-    foreach ( Tomahawk::SocialAction action, allSocialActions() )
-    {
-        if ( action.action == "Inbox" && action.value.toBool() == true )
-        {
-            isUnlistened = true;
-            break;
-        }
-    }
-
-    if ( isUnlistened )
+    if ( !isListened() )
     {
         DatabaseCommand_ModifyInboxEntry* cmd = new DatabaseCommand_ModifyInboxEntry( toQuery(), false );
         Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
@@ -214,8 +204,26 @@ Track::markAsListened()
                 it->value = false; //listened!
             }
         }
+        m_trackData->blockSignals( true );
         m_trackData->setAllSocialActions( actions ); //emits socialActionsLoaded which gets propagated here
+        m_trackData->blockSignals( false );
     }
+}
+
+
+bool
+Track::isListened() const
+{
+    bool isUnlistened = false;
+    foreach ( Tomahawk::SocialAction action, allSocialActions() )
+    {
+        if ( action.action == "Inbox" && action.value.toBool() == true )
+        {
+            isUnlistened = true;
+            break;
+        }
+    }
+    return !isUnlistened;
 }
 
 
