@@ -19,7 +19,7 @@
 #include "InboxModel.h"
 
 #include "database/Database.h"
-#include "database/DatabaseCommand_GenericSelect.h"
+#include "database/DatabaseCommand_LoadInboxEntries.h"
 #include "database/DatabaseCommand_DeleteInboxEntry.h"
 #include "database/DatabaseCommand_ModifyInboxEntry.h"
 #include "SourceList.h"
@@ -190,13 +190,7 @@ InboxModel::loadTracks()
 {
     startLoading();
 
-    //extra fields end up in Tomahawk query objects as qt properties
-    QString sql = QString( "SELECT track.name as title, artist.name as artist, source, v as unlistened, social_attributes.timestamp "
-                           "FROM social_attributes, track, artist "
-                           "WHERE social_attributes.id = track.id AND artist.id = track.artist AND social_attributes.k = 'Inbox' "
-                           "ORDER BY social_attributes.timestamp" );
-
-    DatabaseCommand_GenericSelect* cmd = new DatabaseCommand_GenericSelect( sql, DatabaseCommand_GenericSelect::Track, -1, 0 );
+    DatabaseCommand_LoadInboxEntries* cmd = new DatabaseCommand_LoadInboxEntries();
     connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksLoaded( QList<Tomahawk::query_ptr> ) ) );
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
@@ -223,19 +217,7 @@ InboxModel::tracksLoaded( QList< Tomahawk::query_ptr > incoming )
 
     foreach ( Tomahawk::query_ptr newQuery, newTracks )
     {
-        QVariantList extraData = newQuery->property( "data" ).toList();
-
-        Tomahawk::SocialAction action;
-        action.action = "Inbox";
-        action.source = SourceList::instance()->get( extraData.at( 0 ).toInt() );
-        action.value = extraData.at( 1 ).toBool(); //unlistened
-        action.timestamp = extraData.at( 2 ).toUInt();
-
-        QList< Tomahawk::SocialAction > actions;
-        actions << action;
         newQuery->queryTrack()->loadSocialActions();
-
-        newQuery->setProperty( "data", QVariant() ); //clear
     }
 
     bool changed = false;
