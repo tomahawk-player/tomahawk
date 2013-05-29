@@ -246,6 +246,7 @@ list(APPEND libSources
     database/DatabaseCommand_CollectionStats.cpp
     database/DatabaseCommand_TrackStats.cpp
     database/DatabaseCommand_LoadPlaylistEntries.cpp
+    database/DatabaseCommand_LoadInboxEntries.cpp
     database/DatabaseCommand_ModifyPlaylist.cpp
     database/DatabaseCommand_PlaybackHistory.cpp
     database/DatabaseCommand_SetPlaylistRevision.cpp

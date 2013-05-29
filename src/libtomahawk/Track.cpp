@@ -227,6 +227,13 @@ Track::updateSortNames()
 }
 
 
+void
+Track::setAllSocialActions( const QList< SocialAction >& socialActions )
+{
+    m_trackData->setAllSocialActions( socialActions );
+}
+
+
 bool
 Track::equals( const Tomahawk::track_ptr& other, bool ignoreCase ) const
 {
