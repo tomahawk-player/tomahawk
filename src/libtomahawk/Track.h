@@ -29,6 +29,7 @@
 
 #include "DllMacro.h"
 
+class DatabaseCommand_LoadInboxEntries;
 
 namespace Tomahawk
 {
@@ -38,6 +39,7 @@ class DLLEXPORT Track : public QObject
 Q_OBJECT
 
 friend class Pipeline;
+friend class ::DatabaseCommand_LoadInboxEntries; // for setAllSocialActions
 
 public:
     enum DescriptionMode
@@ -111,6 +113,7 @@ public:
 
     void startPlaying();
     void finishPlaying( int timeElapsed );
+    void markAsListened();
 
 signals:
     void coverChanged();
@@ -132,6 +135,8 @@ private:
     void init();
 
     void updateSortNames();
+
+    void setAllSocialActions( const QList< SocialAction >& socialActions );
 
     QString m_composer;
     QString m_album;

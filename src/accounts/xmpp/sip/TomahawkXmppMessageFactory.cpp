@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013, Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -19,6 +20,7 @@
 
 #include "TomahawkXmppMessageFactory.h"
 
+#include "network/Servent.h"
 #include "utils/Logger.h"
 
 #include <QStringList>
@@ -29,6 +31,7 @@
 using namespace Jreen;
 
 TomahawkXmppMessageFactory::TomahawkXmppMessageFactory()
+    : m_sipInfos()
 {
     m_depth = 0;
     m_state = AtNowhere;
@@ -54,31 +57,35 @@ void TomahawkXmppMessageFactory::handleStartElement(const QStringRef &name, cons
                                             const QXmlStreamAttributes &attributes)
 {
     m_depth++;
-    if (m_depth == 1) {
+    if ( m_depth == 1 )
+    {
         m_state = AtNowhere;
-        m_ip = QString();
-        m_port = -1;
         m_uniqname = QString();
         m_key = QString();
-        m_visible = false;
-    } else if (m_depth == 2) {
-        if (name == QLatin1String("transport"))
+        m_sipInfos = QList<SipInfo>();
+    }
+    else if ( m_depth == 2 )
+    {
+        if ( name == QLatin1String( "transport" ) )
         {
-//            qDebug() << "Found Transport";
             m_state = AtTransport;
-
-            m_uniqname = attributes.value(QLatin1String("uniqname")).toString();
-            m_key = attributes.value(QLatin1String("pwd")).toString();
+            m_uniqname = attributes.value( QLatin1String( "uniqname" ) ).toString();
+            m_key = attributes.value( QLatin1String( "pwd" ) ).toString();
         }
-    } else if(m_depth == 3) {
-        if (name == QLatin1String("candidate"))
+    }
+    else if(m_depth == 3)
+    {
+        if ( name == QLatin1String( "candidate" ) )
         {
             m_state = AtCandidate;
-//            qDebug() << "Found candidate";
-            m_ip = attributes.value(QLatin1String("ip")).toString();
-            m_port = attributes.value(QLatin1String("port")).toString().toInt();
-
-            m_visible = true;
+            SipInfo info = SipInfo();
+            info.setVisible( true );
+            info.setHost( attributes.value( QLatin1String( "ip" ) ).toString() );
+            info.setPort( attributes.value( QLatin1String( "port" ) ).toString().toInt() );
+            info.setKey( m_key );
+            info.setNodeId( m_uniqname );
+            Q_ASSERT( info.isValid() );
+            m_sipInfos.append( info );
         }
     }
     Q_UNUSED(uri);
@@ -87,8 +94,22 @@ void TomahawkXmppMessageFactory::handleStartElement(const QStringRef &name, cons
 
 void TomahawkXmppMessageFactory::handleEndElement(const QStringRef &name, const QStringRef &uri)
 {
-    if (m_depth == 3)
+    if ( m_depth == 3 )
+        m_state = AtTransport;
+    else if ( m_depth == 2 )
+    {
         m_state = AtNowhere;
+        // Check that we have at least one SipInfo so that we provide some information about invisible peers.
+        if ( m_sipInfos.isEmpty() )
+        {
+            SipInfo info = SipInfo();
+            info.setVisible( false );
+            info.setKey( m_key );
+            info.setNodeId( m_uniqname );
+            Q_ASSERT( info.isValid() );
+            m_sipInfos.append( info );
+        }
+    }
     Q_UNUSED(name);
     Q_UNUSED(uri);
     m_depth--;
@@ -111,38 +132,69 @@ void TomahawkXmppMessageFactory::serialize(Payload *extension, QXmlStreamWriter 
 {
     TomahawkXmppMessage *sipMessage = se_cast<TomahawkXmppMessage*>(extension);
 
-        writer->writeStartElement(QLatin1String("tomahawk"));
-        writer->writeDefaultNamespace(TOMAHAWK_SIP_MESSAGE_NS);
+    writer->writeStartElement( QLatin1String( "tomahawk" ) );
+    writer->writeDefaultNamespace( TOMAHAWK_SIP_MESSAGE_NS );
 
-        if(sipMessage->visible())
+    // Get a copy of the list, so that we can modify it here.
+    QList<SipInfo> sipInfos = QList<SipInfo>( sipMessage->sipInfos() );
+    SipInfo lastInfo;
+    foreach ( SipInfo info, sipInfos )
+    {
+        if ( info.isVisible() )
         {
-            // add transport tag
-            writer->writeStartElement(QLatin1String("transport"));
-            writer->writeAttribute(QLatin1String("pwd"), sipMessage->key());
-            writer->writeAttribute(QLatin1String("uniqname"), sipMessage->uniqname());
+            QHostAddress ha = QHostAddress( info.host() );
+            if ( ( Servent::isValidExternalIP( ha ) && ha.protocol() == QAbstractSocket::IPv4Protocol ) || ( ha.protocol() == QAbstractSocket::UnknownNetworkLayerProtocol ) || ( ha.isNull() && !info.host().isEmpty() ) )
+            {
+                // For comapability reasons, this shall be put as the last candidate (this is the IP/host that would have been sent in previous versions)
+                lastInfo = info;
+                sipInfos.removeOne( info );
+                break;
+            }
+        }
+    }
 
-            writer->writeEmptyElement(QLatin1String("candidate"));
-            writer->writeAttribute(QLatin1String("component"), "1");
-            writer->writeAttribute(QLatin1String("id"), "el0747fg11"); // FIXME
-            writer->writeAttribute(QLatin1String("ip"), sipMessage->ip());
-            writer->writeAttribute(QLatin1String("network"), "1");
-            writer->writeAttribute(QLatin1String("port"), QVariant(sipMessage->port()).toString());
-            writer->writeAttribute(QLatin1String("priority"), "1"); //TODO
-            writer->writeAttribute(QLatin1String("protocol"), "tcp");
-            writer->writeAttribute(QLatin1String("type"), "host"); //FIXME: correct?!
-            writer->writeEndElement();
-        }
-        else
-        {
-            writer->writeEmptyElement(QLatin1String("transport"));
-        }
-        writer->writeEndElement();
+    writer->writeStartElement( QLatin1String( "transport" ) );
+    writer->writeAttribute( QLatin1String( "pwd" ), sipMessage->key() );
+    writer->writeAttribute( QLatin1String( "uniqname" ), sipMessage->uniqname() );
+
+    foreach ( SipInfo info, sipInfos )
+    {
+        if ( info.isVisible() )
+            serializeSipInfo( info, writer );
+    }
+
+    if ( lastInfo.isValid() )
+    {
+        Q_ASSERT( lastInfo.isVisible() );
+        tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Using " << lastInfo.host() << ":" << lastInfo.port() << " as the host which all older clients will only detect";
+        serializeSipInfo( lastInfo, writer );
+    }
+
+    // </transport>
+    writer->writeEndElement();
+    // </tomahawk>
+    writer->writeEndElement();
 }
 
-Payload::Ptr TomahawkXmppMessageFactory::createPayload()
+Payload::Ptr
+TomahawkXmppMessageFactory::createPayload()
 {
-    if(m_visible)
-        return Payload::Ptr(new TomahawkXmppMessage(m_ip, m_port, m_uniqname, m_key));
-    else
-        return Payload::Ptr(new TomahawkXmppMessage());
+    return Payload::Ptr( new TomahawkXmppMessage( m_sipInfos ) );
+}
+
+void
+TomahawkXmppMessageFactory::serializeSipInfo(SipInfo &info, QXmlStreamWriter *writer)
+{
+    if ( info.isVisible() )
+    {
+        writer->writeEmptyElement( QLatin1String( "candidate" ) );
+        writer->writeAttribute( QLatin1String( "component" ), "1" );
+        writer->writeAttribute( QLatin1String( "id" ), "el0747fg11" ); // FIXME
+        writer->writeAttribute( QLatin1String( "ip" ), info.host() );
+        writer->writeAttribute( QLatin1String( "network" ), "1" );
+        writer->writeAttribute( QLatin1String( "port" ), QVariant( info.port() ).toString() );
+        writer->writeAttribute( QLatin1String( "priority" ), "1" ); //TODO
+        writer->writeAttribute( QLatin1String( "protocol" ), "tcp" );
+        writer->writeAttribute( QLatin1String( "type" ), "host" ); //FIXME: correct?!
+    }
 }

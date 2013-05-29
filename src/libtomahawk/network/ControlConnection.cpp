@@ -100,20 +100,29 @@ ControlConnection::setup()
 
     // setup source and remote collection for this peer
     m_source = SourceList::instance()->get( id(), friendlyName, true );
-    m_source->setControlConnection( this );
+    QSharedPointer<QMutexLocker> locker = m_source->acquireLock();
+    if ( m_source->setControlConnection( this ) )
+    {
+        // We are the new ControlConnection for this source
 
-    // delay setting up collection/etc until source is synced.
-    // we need it DB synced so it has an ID + exists in DB.
-    connect( m_source.data(), SIGNAL( syncedWithDatabase() ),
-                                SLOT( registerSource() ), Qt::QueuedConnection );
+        // delay setting up collection/etc until source is synced.
+        // we need it DB synced so it has an ID + exists in DB.
+        connect( m_source.data(), SIGNAL( syncedWithDatabase() ),
+                                    SLOT( registerSource() ), Qt::QueuedConnection );
 
-    m_source->setOnline();
+        m_source->setOnline();
 
-    m_pingtimer = new QTimer;
-    m_pingtimer->setInterval( 5000 );
-    connect( m_pingtimer, SIGNAL( timeout() ), SLOT( onPingTimer() ) );
-    m_pingtimer->start();
-    m_pingtimer_mark.start();
+        m_pingtimer = new QTimer;
+        m_pingtimer->setInterval( 5000 );
+        connect( m_pingtimer, SIGNAL( timeout() ), SLOT( onPingTimer() ) );
+        m_pingtimer->start();
+        m_pingtimer_mark.start();
+    }
+    else
+    {
+        // There is already another ControlConnection in use, we are useless.
+        deleteLater();
+    }
 }
 
 
@@ -121,13 +130,18 @@ ControlConnection::setup()
 void
 ControlConnection::registerSource()
 {
-    qDebug() << Q_FUNC_INFO << m_source->id();
-    Source* source = (Source*) sender();
-    Q_UNUSED( source )
-    Q_ASSERT( source == m_source.data() );
+    QSharedPointer<QMutexLocker> locker = m_source->acquireLock();
+    // Only continue if we are still the ControlConnection associated with this source.
+    if ( m_source->controlConnection() == this )
+    {
+        qDebug() << Q_FUNC_INFO << m_source->id();
+        Source* source = (Source*) sender();
+        Q_UNUSED( source )
+        Q_ASSERT( source == m_source.data() );
 
-    m_registered = true;
-    setupDbSyncConnection();
+        m_registered = true;
+        setupDbSyncConnection();
+    }
 }
 
 
@@ -221,6 +235,7 @@ ControlConnection::handleMsg( msg_ptr msg )
     if ( !msg->is( Msg::JSON ) )
     {
         Q_ASSERT( msg->is( Msg::JSON ) );
+        tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Received message was not in JSON format";
         markAsFailed();
         return;
     }

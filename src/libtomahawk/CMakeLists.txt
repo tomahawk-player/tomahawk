@@ -246,6 +246,7 @@ list(APPEND libSources
     database/DatabaseCommand_CollectionStats.cpp
     database/DatabaseCommand_TrackStats.cpp
     database/DatabaseCommand_LoadPlaylistEntries.cpp
+    database/DatabaseCommand_LoadInboxEntries.cpp
     database/DatabaseCommand_ModifyPlaylist.cpp
     database/DatabaseCommand_PlaybackHistory.cpp
     database/DatabaseCommand_SetPlaylistRevision.cpp
@@ -306,6 +307,8 @@ list(APPEND libSources
     network/Servent.cpp
     network/Connection.cpp
     network/ControlConnection.cpp
+    network/QTcpSocketExtra.cpp
+    network/ConnectionManager.cpp
 
     playlist/PlaylistUpdaterInterface.cpp
     playlist/dynamic/DynamicPlaylist.cpp

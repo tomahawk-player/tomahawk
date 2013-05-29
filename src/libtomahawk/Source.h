@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013, Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -26,6 +27,7 @@
 
 #include "Typedefs.h"
 #include "accounts/AccountManager.h"
+#include "network/ControlConnection.h"
 #include "network/DbSyncConnection.h"
 #include "collection/Collection.h"
 #include "Query.h"
@@ -33,7 +35,6 @@
 
 #include "DllMacro.h"
 
-class ControlConnection;
 class DatabaseCommand_DeleteFiles;
 class DatabaseCommand_LoadAllSources;
 class DatabaseCommand_LogPlayback;
@@ -86,8 +87,8 @@ public:
     void removeCollection( const Tomahawk::collection_ptr& c );
 
     int id() const { return m_id; }
-    ControlConnection* controlConnection() const { return m_cc; }
-    void setControlConnection( ControlConnection* cc );
+    ControlConnection* controlConnection() const { return m_cc.data(); }
+    bool setControlConnection( ControlConnection* cc );
 
     const QSet< Tomahawk::peerinfo_ptr > peerInfos() const;
 
@@ -101,6 +102,8 @@ public:
     DBSyncConnection::State state() const { return m_state; }
 
     Tomahawk::playlistinterface_ptr playlistInterface();
+
+    QSharedPointer<QMutexLocker> acquireLock();
 
 signals:
     void syncedWithDatabase();
@@ -170,11 +173,13 @@ private:
     DBSyncConnection::State m_state;
     QTimer m_currentTrackTimer;
 
-    ControlConnection* m_cc;
+    QPointer<ControlConnection> m_cc;
     QList< QSharedPointer<DatabaseCommand> > m_cmds;
     int m_commandCount;
     QString m_lastCmdGuid;
     mutable QMutex m_cmdMutex;
+    QMutex m_setControlConnectionMutex;
+    QMutex m_mutex;
 
     Tomahawk::playlistinterface_ptr m_playlistInterface;
 };

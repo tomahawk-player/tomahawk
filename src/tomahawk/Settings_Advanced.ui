@@ -32,7 +32,7 @@
       <item>
        <widget class="QRadioButton" name="lanOnlyRadioButton">
         <property name="text">
-         <string>None (outgoing connections only)</string>
+         <string>Active (your host needs to be directly reachable)</string>
         </property>
        </widget>
       </item>

@@ -53,6 +53,8 @@ public slots:
                                    const QString& dbid,
                                    const Tomahawk::trackdata_ptr& track );
 
+    virtual void markAsListened( const QModelIndexList& indexes );
+
 
 private slots:
     void loadTracks();

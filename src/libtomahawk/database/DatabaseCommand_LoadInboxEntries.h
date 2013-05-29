@@ -16,25 +16,23 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef DATABASECOMMAND_LOADINBOXENTRIES_H
+#define DATABASECOMMAND_LOADINBOXENTRIES_H
 
-#ifndef INBOXVIEW_H
-#define INBOXVIEW_H
+#include "DatabaseCommand.h"
 
-#include "TrackView.h"
-
-class InboxView : public TrackView
+class DatabaseCommand_LoadInboxEntries : public DatabaseCommand
 {
     Q_OBJECT
 public:
-    explicit InboxView( QWidget* parent = 0 );
+    explicit DatabaseCommand_LoadInboxEntries( QObject* parent = 0 );
 
-public slots:
-    /**
-     * Reimplemented in order to ignore PlayableModel::isReadOnly()
-     */
-    virtual void deleteSelectedItems();
+    virtual void exec( DatabaseImpl* );
+    virtual bool doesMutates() const { return false; }
+    virtual QString commandname() const { return "loadinboxentries"; }
 
-    virtual void onMenuTriggered( int action );
+signals:
+    void tracks( QList< Tomahawk::query_ptr > );
 };
 
-#endif // INBOXVIEW_H
+#endif // DATABASECOMMAND_LOADINBOXENTRIES_H

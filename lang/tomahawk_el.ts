@@ -688,7 +688,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/jobview/InboxJobItem.cpp" line="59"/>
         <source>Sent %1 by %2 to %3.</source>
-        <translation type="unfinished"/>
+        <translation>%1 αποστελθηκε σε εσενα %2 απο %3.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/InboxJobItem.cpp" line="64"/>
@@ -719,7 +719,7 @@ connect and stream from you?</source>
         <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="624"/>
         <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="660"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
-        <translation type="unfinished"/>
+        <translation>Σριπτ προειδοποίηση αναλυτή: API κλήση% 1 επέστρεψε δεδομένα συγχρονισμένα.</translation>
     </message>
 </context>
 <context>
@@ -1403,12 +1403,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/database/TomahawkSqlQuery.cpp" line="89"/>
         <source>No query</source>
-        <translation type="unfinished"/>
+        <translation>Δεν υπαρχει ερώτημα </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/database/TomahawkSqlQuery.cpp" line="90"/>
         <source>Parameter count mismatch</source>
-        <translation type="unfinished"/>
+        <translation>Παράμετρος αναντιστοιχία μετράει</translation>
     </message>
 </context>
 <context>
@@ -1806,7 +1806,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="385"/>
         <source>Drop to send tracks</source>
-        <translation type="unfinished"/>
+        <translation>Πτώση για αποστολή κομμάτιων</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="466"/>
@@ -2631,8 +2631,8 @@ username@jabber.org</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="124"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="250"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="301"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="253"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="304"/>
         <source>Add to &amp;Queue</source>
         <translation>Προσθήκη στην &amp;Σειρά</translation>
     </message>
@@ -2644,7 +2644,7 @@ username@jabber.org</translation>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="158"/>
         <source>Send to &amp;Friend</source>
-        <translation type="unfinished"/>
+        <translation>Αποστολή σε εναν φίλο</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="172"/>
@@ -2658,21 +2658,21 @@ username@jabber.org</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="181"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="471"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="474"/>
         <source>&amp;Love</source>
         <translation>&amp;Αγάπησε</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="195"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="258"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="309"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="261"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="312"/>
         <source>&amp;Go to &quot;%1&quot;</source>
         <translation>&amp;Πήγαινε στο &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="200"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="204"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="261"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="264"/>
         <source>Go to &quot;%1&quot;</source>
         <translation>Πήγαινε στο &quot;%1&quot;</translation>
     </message>
@@ -2683,26 +2683,31 @@ username@jabber.org</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="218"/>
+        <source>Mark as &amp;Listened</source>
+        <translation>Επισήμανση ως &amp;Ακρόαση</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="221"/>
         <source>&amp;Remove Items</source>
         <translation>&amp;Διαγραφή Αντικειμένων</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="218"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="221"/>
         <source>&amp;Remove Item</source>
         <translation>&amp;Διαγραφή Αντικειμένου</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="269"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="272"/>
         <source>Copy Album &amp;Link</source>
         <translation>Αντιγραφη Λινκ του Αλμπουμ</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="317"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="320"/>
         <source>Copy Artist &amp;Link</source>
         <translation>Αντιγραφη του Λινκ του Καλλιτεχνη</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="466"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="469"/>
         <source>Un-&amp;Love</source>
         <translation>&amp;Μίσησε</translation>
     </message>
@@ -3250,13 +3255,14 @@ Try tweaking the filters for a new set of songs to play.</source>
         <source>%1 sent you
 %2%4 %3.</source>
         <comment>%1 is a nickname, %2 is a title, %3 is an artist, %4 is the preposition used to link track and artist ('by' in english)</comment>
-        <translation type="unfinished"/>
+        <translation>%1 αποστελθηκε σε εσενα %2 απο %3.
+%2%4 %3.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="211"/>
         <source>%1 sent you &quot;%2&quot; by %3.</source>
         <comment>%1 is a nickname, %2 is a title, %3 is an artist</comment>
-        <translation type="unfinished"/>
+        <translation>%1 αποστελθηκε σε εσενα %2 απο %3.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="279"/>
@@ -3467,42 +3473,42 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::Track</name>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="391"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="396"/>
         <source> and </source>
         <translation>και</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="399"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="404"/>
         <source>You</source>
         <translation>Εσυ</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="401"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="406"/>
         <source>you</source>
         <translation>εσυ</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="414"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="419"/>
         <source>and</source>
         <translation>και</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="414"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="419"/>
         <source>%n other(s)</source>
         <translation><numerusform>%n άλλοι</numerusform><numerusform>%n άλλοι</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="417"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="422"/>
         <source>%n people</source>
         <translation><numerusform>%n άτομα</numerusform><numerusform>%n άτομα</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="421"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="426"/>
         <source>loved this track</source>
         <translation>Αγαπημένο τραγούδι</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="423"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="428"/>
         <source>sent you this track %1</source>
         <translation>αυτο το τραγουδι σταλθηκε %1</translation>
     </message>

@@ -623,7 +623,6 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
             beginGroup( QString( "accounts/%1" ).arg( account ) );
             const QVariantHash creds = value( "credentials" ).toHash();
 
-            tDebug() << "creds:" << creds;
             if ( !creds.isEmpty() )
             {
                 QKeychain::WritePasswordJob* j = new QKeychain::WritePasswordJob( QLatin1String( "Tomahawk" ), this );
@@ -636,8 +635,6 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
 
                 j->setBinaryData( data );
                 j->start();
-
-                qDebug() << "Migrating account credentials for account:" << account;
             }
 
             remove( "credentials" );

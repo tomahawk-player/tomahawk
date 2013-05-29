@@ -30,6 +30,7 @@
 #include "database/DatabaseCommand_LoadAllSources.h"
 #include "database/DatabaseCommand_SourceOffline.h"
 #include "database/DatabaseCommand_UpdateSearchIndex.h"
+#include "database/DatabaseImpl.h"
 #include "database/Database.h"
 
 #include <QCoreApplication>
@@ -85,10 +86,30 @@ Source::~Source()
 }
 
 
-void
+bool
 Source::setControlConnection( ControlConnection* cc )
 {
-    m_cc = cc;
+    QMutexLocker locker( &m_setControlConnectionMutex );
+    if ( !m_cc.isNull() && m_cc->isReady() && m_cc->isRunning() )
+    {
+        const QString& nodeid = Database::instance()->impl()->dbid();
+        if ( cc->id() < nodeid && m_cc->outbound() )
+        {
+            m_cc = cc;
+            // This ControlConnection is not needed anymore, get rid of it!
+            m_cc->deleteLater();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else
+    {
+        m_cc = cc;
+        return true;
+    }
 }
 
 
@@ -465,6 +486,12 @@ Source::playlistInterface()
     }
 
     return m_playlistInterface;
+}
+
+QSharedPointer<QMutexLocker>
+Source::acquireLock()
+{
+    return QSharedPointer<QMutexLocker>( new QMutexLocker( &m_mutex ) );
 }
 
 

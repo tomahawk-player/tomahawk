@@ -172,7 +172,7 @@ Track::startPlaying()
                                                                         DatabaseCommand_LogPlayback::Started );
     Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
 
-
+    markAsListened();
 }
 
 
@@ -183,7 +183,12 @@ Track::finishPlaying( int timeElapsed )
                                                                         DatabaseCommand_LogPlayback::Finished,
                                                                         timeElapsed );
     Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+}
 
+
+void
+Track::markAsListened()
+{
     bool isUnlistened = false;
     foreach ( Tomahawk::SocialAction action, allSocialActions() )
     {
@@ -219,6 +224,13 @@ Track::updateSortNames()
 {
     m_composerSortname = DatabaseImpl::sortname( m_composer, true );
     m_albumSortname = DatabaseImpl::sortname( m_album );
+}
+
+
+void
+Track::setAllSocialActions( const QList< SocialAction >& socialActions )
+{
+    m_trackData->setAllSocialActions( socialActions );
 }
 
 

@@ -214,6 +214,9 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
 
     addSeparator();
 
+    if ( m_supportedActions & ActionMarkListened )
+        m_sigmap->setMapping( addAction( tr( "Mark as &Listened" ) ), ActionMarkListened );
+
     if ( m_supportedActions & ActionDelete )
         m_sigmap->setMapping( addAction( queries.count() > 1 ? tr( "&Remove Items" ) : tr( "&Remove Item" ) ), ActionDelete );
 
