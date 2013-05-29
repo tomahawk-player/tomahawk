@@ -60,28 +60,28 @@ public:
 
     void setFirstMessage( const QVariant& m );
     void setFirstMessage( msg_ptr m );
-    msg_ptr firstMessage() const { return m_firstmsg; };
+    msg_ptr firstMessage() const { return m_firstmsg; }
 
-    const QPointer<QTcpSocket>& socket() { return m_sock; };
+    const QPointer<QTcpSocket>& socket() { return m_sock; }
 
-    void setOutbound( bool o ) { m_outbound = o; };
+    void setOutbound( bool o ) { m_outbound = o; }
     bool outbound() const { return m_outbound; }
 
-    Servent* servent() { return m_servent; };
+    Servent* servent() { return m_servent; }
 
     // get public port of remote peer:
-    int peerPort() { return m_peerport; };
-    void setPeerPort( int p ) { m_peerport = p; };
+    int peerPort() { return m_peerport; }
+    void setPeerPort( int p ) { m_peerport = p; }
 
     void markAsFailed();
 
-    void setName( const QString& n ) { m_name = n; };
-    QString name() const { return m_name; };
+    void setName( const QString& n ) { m_name = n; }
+    QString name() const { return m_name; }
 
-    void setOnceOnly( bool b ) { m_onceonly = b; };
-    bool onceOnly() const { return m_onceonly; };
+    void setOnceOnly( bool b ) { m_onceonly = b; }
+    bool onceOnly() const { return m_onceonly; }
 
-    bool isReady() const { return m_ready; } ;
+    bool isReady() const { return m_ready; }
     bool isRunning() const { return m_sock != 0; }
 
     qint64 bytesSent() const { return m_tx_bytes; }

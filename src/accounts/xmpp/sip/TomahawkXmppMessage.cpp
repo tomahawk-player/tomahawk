@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013, Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -21,60 +22,41 @@
 
 #include "utils/Logger.h"
 
-
-class TomahawkXmppMessagePrivate
+TomahawkXmppMessage::TomahawkXmppMessage()
+    : m_sipInfos()
 {
-public:
-    QString ip;
-    int port;
-    QString uniqname;
-    QString key;
-    bool visible;
-};
-
-TomahawkXmppMessage::TomahawkXmppMessage(const QString &ip, unsigned int port, const QString &uniqname, const QString &key) : d_ptr(new TomahawkXmppMessagePrivate)
-{
-    Q_D(TomahawkXmppMessage);
-    d->ip = ip;
-    d->port = port;
-    d->uniqname = uniqname;
-    d->key = key;
-    d->visible = true;
 }
 
-TomahawkXmppMessage::TomahawkXmppMessage() : d_ptr(new TomahawkXmppMessagePrivate)
+TomahawkXmppMessage::TomahawkXmppMessage( const QList<SipInfo> &sipInfos )
+    : m_sipInfos( sipInfos )
 {
-    Q_D(TomahawkXmppMessage);
-    d->visible = false;
-    d->port = -1;
 }
-
 
 TomahawkXmppMessage::~TomahawkXmppMessage()
 {
 }
 
-const QString TomahawkXmppMessage::ip() const
+const QList<SipInfo>
+TomahawkXmppMessage::sipInfos() const
 {
-    return d_func()->ip;
+    return m_sipInfos;
 }
 
-unsigned int TomahawkXmppMessage::port() const
+
+const QString
+TomahawkXmppMessage::key() const
 {
-    return d_func()->port;
+    if ( m_sipInfos.isEmpty() )
+        return QString();
+    else
+        return m_sipInfos.first().key();
 }
 
-const QString TomahawkXmppMessage::uniqname() const
+const QString
+TomahawkXmppMessage::uniqname() const
 {
-    return d_func()->uniqname;
-}
-
-const QString TomahawkXmppMessage::key() const
-{
-    return d_func()->key;
-}
-
-bool TomahawkXmppMessage::visible() const
-{
-    return d_func()->visible;
+    if ( m_sipInfos.isEmpty() )
+        return QString();
+    else
+        return m_sipInfos.first().nodeId();
 }

@@ -4,6 +4,7 @@
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013, Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -90,7 +91,7 @@ public slots:
     virtual void configurationChanged();
     virtual void addContact( const QString& peerId, const QString& msg = QString() );
 
-    virtual void sendSipInfo( const Tomahawk::peerinfo_ptr& receiver, const SipInfo& info );
+    virtual void sendSipInfos( const Tomahawk::peerinfo_ptr& receiver, const QList<SipInfo>& info );
 
     void showAddFriendDialog();
     void publishTune( const QUrl& url, const Tomahawk::InfoSystem::InfoStringHash& trackInfo );
@@ -153,6 +154,10 @@ private:
     enum IqContext { NoContext, RequestDisco, RequestedDisco, SipMessageSent, RequestedVCard, RequestVersion, RequestedVersion };
     AvatarManager* m_avatarManager;
     Jreen::PubSub::Manager* m_pubSubManager;
+    QMap< QString, Tomahawk::peerinfo_ptr > peersWaitingForSip;
+    QMap< QString, Tomahawk::peerinfo_ptr > peersWaitingForVersionString;
+    QMap< QString, QList< SipInfo > > sipinfosQueue;
+    QMutex peerQueueMutex;
 };
 
 #endif

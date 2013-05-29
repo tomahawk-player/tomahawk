@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013, Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -216,14 +217,19 @@ void
 Connection::checkACLResult( const QString &nodeid, const QString &username, ACLRegistry::ACL peerStatus )
 {
     QString bareName = name().contains( '/' ) ? name().left( name().indexOf( "/" ) ) : name();
-    if ( nodeid != property( "nodeid" ).toString() || username != bareName )
+    if ( nodeid != property( "nodeid" ).toString() )
     {
-        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "nodeid not ours, or username not our barename";
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << QString( "nodeid (%1) not ours (%2) for user %3" ).arg( nodeid ).arg( property( "nodeid" ).toString() ).arg( username );
+        return;
+    }
+    if ( username != bareName )
+    {
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "username not our barename";
         return;
     }
 
     disconnect( ACLRegistry::instance(), SIGNAL( aclResult( QString, QString, ACLRegistry::ACL ) ) );
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "ACL status is" << peerStatus;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << QString( "ACL status for user %1 is" ).arg( username ) << peerStatus;
     if ( peerStatus == ACLRegistry::Stream )
     {
         QTimer::singleShot( 0, this, SLOT( doSetup() ) );
@@ -306,15 +312,20 @@ Connection::doSetup()
 void
 Connection::socketDisconnected()
 {
+    qint64 bytesAvailable = 0;
+    if ( !m_sock.isNull() )
+    {
+        bytesAvailable = m_sock->bytesAvailable();
+    }
     tDebug( LOGVERBOSE ) << "SOCKET DISCONNECTED" << this->name() << id()
                          << "shutdown will happen after incoming queue empties."
-                         << "bytesavail:" << m_sock->bytesAvailable()
+                         << "bytesavail:" << bytesAvailable
                          << "bytesRecvd" << bytesReceived();
 
     m_peer_disconnected = true;
     emit socketClosed();
 
-    if ( m_msgprocessor_in.length() == 0 && m_sock->bytesAvailable() == 0 )
+    if ( m_msgprocessor_in.length() == 0 && bytesAvailable == 0 )
     {
         handleIncomingQueueEmpty();
         actualShutdown();

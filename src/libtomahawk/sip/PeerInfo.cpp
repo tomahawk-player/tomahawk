@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2012, Dominik Schmidt <dev@dominik-schmidt.de>
+ *   Copyright 2013, Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -202,9 +203,9 @@ PeerInfo::sipPlugin() const
 
 
 void
-PeerInfo::sendLocalSipInfo( const SipInfo& sipInfo )
+PeerInfo::sendLocalSipInfos( const QList<SipInfo>& sipInfos )
 {
-    sipPlugin()->sendSipInfo( weakRef().toStrongRef(), sipInfo );
+    sipPlugin()->sendSipInfos( weakRef().toStrongRef(), sipInfos );
 }
 
 
@@ -227,6 +228,23 @@ PeerInfo::contactId() const
 {
     return m_contactId;
 }
+
+const QString
+PeerInfo::nodeId() const
+{
+    Q_ASSERT( !m_sipInfos.isEmpty() );
+    // All sip infos share the same nodeId
+    return m_sipInfos.first().nodeId();
+}
+
+const QString
+PeerInfo::key() const
+{
+    Q_ASSERT( !m_sipInfos.isEmpty() );
+    // All sip infos share the same key
+    return m_sipInfos.first().key();
+}
+
 
 
 void
@@ -259,22 +277,19 @@ PeerInfo::status() const
 
 
 void
-PeerInfo::setSipInfo( const SipInfo& sipInfo )
+PeerInfo::setSipInfos( const QList<SipInfo>& sipInfos )
 {
-    if ( sipInfo == m_sipInfo )
-        return;
+    m_sipInfos = sipInfos;
 
-    m_sipInfo = sipInfo;
-
-    tLog() << "id:" << id() << "info changed" << sipInfo;
+    tLog() << "id:" << id() << "info changed" << sipInfos;
     emit sipInfoChanged();
 }
 
 
-const SipInfo
-PeerInfo::sipInfo() const
+const QList<SipInfo>
+PeerInfo::sipInfos() const
 {
-    return m_sipInfo;
+    return m_sipInfos;
 }
 
 
@@ -388,7 +403,6 @@ PeerInfo::setData( const QVariant& data )
 {
     m_data = data;
 }
-
 
 const
 QVariant PeerInfo::data() const
