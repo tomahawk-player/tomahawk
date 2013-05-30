@@ -90,16 +90,21 @@ HatchetSipPlugin::isValid() const
 
 
 void
-HatchetSipPlugin::sendSipInfo(const Tomahawk::peerinfo_ptr& receiver, const SipInfo& info)
+HatchetSipPlugin::sendSipInfos(const Tomahawk::peerinfo_ptr& receiver, const QList< SipInfo >& infos)
 {
+    if ( infos.size() == 0 )
+    {
+        tLog() << Q_FUNC_INFO << "Got no sipinfo data (list size 0)";
+        return;
+    }
+
     const QString dbid = receiver->data().toMap().value( "dbid" ).toString();
-    tLog() << Q_FUNC_INFO << "Send local info to " << receiver->friendlyName() << "(" << dbid << ") we are" << info.nodeId() << "with offerkey " << info.key();
+    tLog() << Q_FUNC_INFO << "Send local info to " << receiver->friendlyName() << "(" << dbid << ") we are" << infos[ 0 ].nodeId() << "with offerkey " << infos[ 0 ].key();
 
     QVariantMap sendMap;
     sendMap[ "command" ] = "authorize-peer";
     sendMap[ "dbid" ] = dbid;
-    sendMap[ "offerkey" ] = info.key();
-
+    sendMap[ "offerkey" ] = infos[ 0 ].key();
 
     if ( !sendBytes( sendMap ) )
         tLog() << Q_FUNC_INFO << "Failed sending message";
@@ -338,11 +343,21 @@ HatchetSipPlugin::messageReceived( const QByteArray &msg )
 
         QVariantMap registerMap;
         registerMap[ "command" ] = "register";
-        registerMap[ "host" ] = Servent::instance()->externalAddress();
-        registerMap[ "port" ] = Servent::instance()->externalPort();
         registerMap[ "token" ] = m_token;
         registerMap[ "dbid" ] = Database::instance()->impl()->dbid();
         registerMap[ "alias" ] = QHostInfo::localHostName();
+
+        QList< SipInfo > sipinfos = Servent::instance()->getLocalSipInfos( "default", "default" );
+        QVariantList hostinfos;
+        foreach ( SipInfo sipinfo, sipinfos )
+        {
+            QVariantMap hostinfo;
+            hostinfo[ "host" ] = sipinfo.host();
+            hostinfo[ "port" ] = sipinfo.port();
+            hostinfos << hostinfo;
+        }
+
+        registerMap[ "hostinfo" ] = hostinfos;
 
         if ( !sendBytes( registerMap ) )
         {
@@ -419,13 +434,12 @@ void
 HatchetSipPlugin::newPeer( const QVariantMap& valMap )
 {
     const QString username = valMap[ "username" ].toString();
+    const QVariantList hostinfo = valMap[ "hostinfo" ].toList();
     const QString dbid = valMap[ "dbid" ].toString();
-    const QString host = valMap[ "host" ].toString();
-    unsigned int port = valMap[ "port" ].toUInt();
 
     tLog() << Q_FUNC_INFO << "username:" << username << "dbid" << dbid;
 
-    QStringList keys( QStringList() << "command" << "username" << "host" << "port" << "dbid" );
+    QStringList keys( QStringList() << "command" << "username" << "hostinfo" << "dbid" );
     if ( !checkKeys( keys, valMap ) )
         return;
 
@@ -436,20 +450,33 @@ HatchetSipPlugin::newPeer( const QVariantMap& valMap )
     data.insert( "dbid", QVariant::fromValue< QString >( dbid ) );
     peerInfo->setData( data );
 
+    QList< SipInfo > sipInfos;
 
-    SipInfo sipInfo;
-    sipInfo.setNodeId( dbid );
-    if( !host.isEmpty() && port != 0 )
+    foreach ( const QVariant listItem, hostinfo )
     {
-        sipInfo.setHost( valMap[ "host" ].toString() );
-        sipInfo.setPort( valMap[ "port" ].toUInt() );
+        if ( !listItem.canConvert< QVariantMap >() )
+            continue;
+
+        QVariantMap hostpair = listItem.toMap();
+
+        if ( !hostpair.contains( "host" ) || !hostpair.contains( "port" ) )
+            continue;
+
+        const QString host = hostpair[ "host" ].toString();
+        unsigned int port = hostpair[ "port" ].toUInt();
+
+        if ( host.isEmpty() || port == 0 )
+            continue;
+
+        SipInfo sipInfo;
+        sipInfo.setNodeId( dbid );
+        sipInfo.setHost( host );
+        sipInfo.setPort( port );
         sipInfo.setVisible( true );
+        sipInfos << sipInfo;
     }
-    else
-    {
-        sipInfo.setVisible( false );
-    }
-    peerInfo->setSipInfo( sipInfo );
+
+    peerInfo->setSipInfos( sipInfos );
 
     peerInfo->setStatus( Tomahawk::PeerInfo::Online );
 }
@@ -472,9 +499,10 @@ HatchetSipPlugin::peerAuthorization( const QVariantMap& valMap )
         return;
     }
 
-    SipInfo sipInfo = peerInfo->sipInfo();
-    sipInfo.setKey( valMap[ "offerkey" ].toString() );
-    peerInfo->setSipInfo( sipInfo );
+    QList< SipInfo > sipInfos = peerInfo->sipInfos();
+    for (int i = 0; i < sipInfos.size(); i++)
+        sipInfos[i].setKey( valMap[ "offerkey" ].toString() );
+    peerInfo->setSipInfos( sipInfos );
 }
 
 

@@ -50,7 +50,7 @@ public:
 
     virtual bool isValid() const;
 
-    virtual void sendSipInfo( const Tomahawk::peerinfo_ptr& receiver, const SipInfo& info );
+    virtual void sendSipInfos( const Tomahawk::peerinfo_ptr& receiver, const QList< SipInfo >& infos );
 
 public slots:
     virtual void connectPlugin();
