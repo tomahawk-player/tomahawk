@@ -89,27 +89,6 @@ HatchetSipPlugin::isValid() const
 }
 
 
-void
-HatchetSipPlugin::sendSipInfos(const Tomahawk::peerinfo_ptr& receiver, const QList< SipInfo >& infos)
-{
-    if ( infos.size() == 0 )
-    {
-        tLog() << Q_FUNC_INFO << "Got no sipinfo data (list size 0)";
-        return;
-    }
-
-    const QString dbid = receiver->data().toMap().value( "dbid" ).toString();
-    tLog() << Q_FUNC_INFO << "Send local info to " << receiver->friendlyName() << "(" << dbid << ") we are" << infos[ 0 ].nodeId() << "with offerkey " << infos[ 0 ].key();
-
-    QVariantMap sendMap;
-    sendMap[ "command" ] = "authorize-peer";
-    sendMap[ "dbid" ] = dbid;
-    sendMap[ "offerkey" ] = infos[ 0 ].key();
-
-    if ( !sendBytes( sendMap ) )
-        tLog() << Q_FUNC_INFO << "Failed sending message";
-}
-
 Tomahawk::Accounts::HatchetAccount*
 HatchetSipPlugin::hatchetAccount() const
 {
@@ -447,7 +426,7 @@ HatchetSipPlugin::newPeer( const QVariantMap& valMap )
     peerInfo->setContactId( username );
     peerInfo->setFriendlyName( username );
     QVariantMap data;
-    data.insert( "dbid", QVariant::fromValue< QString >( dbid ) );
+    data.insert( "dbid", dbid );
     peerInfo->setData( data );
 
     QList< SipInfo > sipInfos;
@@ -476,9 +455,31 @@ HatchetSipPlugin::newPeer( const QVariantMap& valMap )
         sipInfos << sipInfo;
     }
 
-    peerInfo->setSipInfos( sipInfos );
+    m_sipInfoHash[ dbid ] = sipInfos;
 
     peerInfo->setStatus( Tomahawk::PeerInfo::Online );
+}
+
+
+void
+HatchetSipPlugin::sendSipInfos(const Tomahawk::peerinfo_ptr& receiver, const QList< SipInfo >& infos)
+{
+    if ( infos.size() == 0 )
+    {
+        tLog() << Q_FUNC_INFO << "Got no sipinfo data (list size 0)";
+        return;
+    }
+
+    const QString dbid = receiver->data().toMap().value( "dbid" ).toString();
+    tLog() << Q_FUNC_INFO << "Send local info to " << receiver->friendlyName() << "(" << dbid << ") we are" << infos[ 0 ].nodeId() << "with offerkey " << infos[ 0 ].key();
+
+    QVariantMap sendMap;
+    sendMap[ "command" ] = "authorize-peer";
+    sendMap[ "dbid" ] = dbid;
+    sendMap[ "offerkey" ] = infos[ 0 ].key();
+
+    if ( !sendBytes( sendMap ) )
+        tLog() << Q_FUNC_INFO << "Failed sending message";
 }
 
 
@@ -491,18 +492,20 @@ HatchetSipPlugin::peerAuthorization( const QVariantMap& valMap )
     if ( !checkKeys( keys, valMap ) )
         return;
 
+    QString dbid = valMap[ "dbid" ].toString();
 
-    Tomahawk::peerinfo_ptr peerInfo = Tomahawk::PeerInfo::get( this, valMap[ "dbid" ].toString() );
+    Tomahawk::peerinfo_ptr peerInfo = Tomahawk::PeerInfo::get( this, dbid );
     if( peerInfo.isNull() )
     {
         tLog() << Q_FUNC_INFO << "Received a peer-authorization for a peer we don't know about";
         return;
     }
 
-    QList< SipInfo > sipInfos = peerInfo->sipInfos();
+    QList< SipInfo > sipInfos = m_sipInfoHash[ dbid ];
     for (int i = 0; i < sipInfos.size(); i++)
         sipInfos[i].setKey( valMap[ "offerkey" ].toString() );
     peerInfo->setSipInfos( sipInfos );
+    m_sipInfoHash.remove( dbid );
 }
 
 

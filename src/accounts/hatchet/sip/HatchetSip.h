@@ -89,6 +89,7 @@ private:
     int m_version;
     QCA::PublicKey* m_publicKey;
     QTimer m_reconnectTimer;
+    QHash< QString, QList< SipInfo > > m_sipInfoHash;
 };
 
 #endif
