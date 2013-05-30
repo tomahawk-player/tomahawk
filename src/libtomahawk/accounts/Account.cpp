@@ -143,7 +143,7 @@ Account::syncConfig()
     s->sync();
 
     CredentialsManager* c = AccountManager::instance()->credentialsManager();
-    c->setCredentials( m_accountId, m_credentials );
+    c->setCredentials( "Tomahawk", m_accountId, m_credentials );
 }
 
 
@@ -161,7 +161,7 @@ Account::loadFromConfig( const QString& accountId )
     s->endGroup();
 
     CredentialsManager* c = AccountManager::instance()->credentialsManager();
-    m_credentials = c->credentials( m_accountId );
+    m_credentials = c->credentials( "Tomahawk", m_accountId );
 }
 
 
@@ -179,7 +179,7 @@ Account::removeFromConfig()
     s->remove( "accounts/" + m_accountId );
 
     CredentialsManager* c = AccountManager::instance()->credentialsManager();
-    c->setCredentials( m_accountId, QVariantHash() );
+    c->setCredentials( "Tomahawk", m_accountId, QVariantHash() );
 }
 
 

@@ -291,7 +291,13 @@ AccountManager::loadFromConfig()
     m_creds = new CredentialsManager( this );
     NewClosure( m_creds, SIGNAL( ready() ),
                 this, SLOT( finishLoadingFromConfig( QStringList ) ), accountIds );
-    m_creds->loadCredentials( accountIds );
+
+    CredentialsManager::Service tomahawkSvc;
+    tomahawkSvc.name = "Tomahawk"; //the string where we store in QtKeychain
+    tomahawkSvc.keys = accountIds;
+    QList< CredentialsManager::Service > svcs;
+    svcs << tomahawkSvc;
+    m_creds->loadCredentials( svcs );
 }
 
 
