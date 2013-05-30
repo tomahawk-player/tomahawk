@@ -121,6 +121,8 @@ protected slots:
 private slots:
     void onItemResized( const QModelIndex& index );
     void onFilterChanged( const QString& filter );
+    void onModelFilling();
+    void onModelEmptyCheck();
 
     void onCustomContextMenu( const QPoint& pos );
 

@@ -113,7 +113,9 @@ public:
 
     void startPlaying();
     void finishPlaying( int timeElapsed );
+
     void markAsListened();
+    bool isListened() const;
 
 signals:
     void coverChanged();

@@ -1606,8 +1606,8 @@ connect and stream from you?</source>
     </message>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="35"/>
-        <source>None (outgoing connections only)</source>
-        <translation>Καμμια (μονο εξαρχομενες συνδεσεις)</translation>
+        <source>Active (your host needs to be directly reachable)</source>
+        <translation>Ενεργό (ο host σας πρέπει να είναι απευθείας προσβάσιμος)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="42"/>
@@ -2631,8 +2631,8 @@ username@jabber.org</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="124"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="253"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="304"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="266"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="317"/>
         <source>Add to &amp;Queue</source>
         <translation>Προσθήκη στην &amp;Σειρά</translation>
     </message>
@@ -2658,21 +2658,21 @@ username@jabber.org</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="181"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="474"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="487"/>
         <source>&amp;Love</source>
         <translation>&amp;Αγάπησε</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="195"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="261"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="312"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="274"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="325"/>
         <source>&amp;Go to &quot;%1&quot;</source>
         <translation>&amp;Πήγαινε στο &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="200"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="204"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="264"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="277"/>
         <source>Go to &quot;%1&quot;</source>
         <translation>Πήγαινε στο &quot;%1&quot;</translation>
     </message>
@@ -2682,32 +2682,32 @@ username@jabber.org</translation>
         <translation>&amp;Αντιγραφή Συνδέσμου Κομματιού</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="218"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="230"/>
         <source>Mark as &amp;Listened</source>
         <translation>Επισήμανση ως &amp;Ακρόαση</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="221"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="234"/>
         <source>&amp;Remove Items</source>
         <translation>&amp;Διαγραφή Αντικειμένων</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="221"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="234"/>
         <source>&amp;Remove Item</source>
         <translation>&amp;Διαγραφή Αντικειμένου</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="272"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="285"/>
         <source>Copy Album &amp;Link</source>
         <translation>Αντιγραφη Λινκ του Αλμπουμ</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="320"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="333"/>
         <source>Copy Artist &amp;Link</source>
         <translation>Αντιγραφη του Λινκ του Καλλιτεχνη</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="469"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="482"/>
         <source>Un-&amp;Love</source>
         <translation>&amp;Μίσησε</translation>
     </message>
@@ -3421,43 +3421,43 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="370"/>
-        <location filename="../src/libtomahawk/Source.cpp" line="421"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="391"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="442"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Σάρωση (%L1 τραγούδια)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="372"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="393"/>
         <source>Scanning</source>
         <translation>Σάρωση</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="406"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="427"/>
         <source>Checking</source>
         <translation>Έλεγχος</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="411"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="432"/>
         <source>Syncing</source>
         <translation>Συγχρονισμος</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="416"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="437"/>
         <source>Importing</source>
         <translation>Εισαγωγη</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="568"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="595"/>
         <source>Saving (%1%)</source>
         <translation>Αποθήκευση (%1%)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="649"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="676"/>
         <source>Online</source>
         <translation>Συνδεδεμένος</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="653"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="680"/>
         <source>Offline</source>
         <translation>Εκτός Σύνδεσης</translation>
     </message>
@@ -3473,42 +3473,42 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::Track</name>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="396"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="411"/>
         <source> and </source>
         <translation>και</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="404"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="419"/>
         <source>You</source>
         <translation>Εσυ</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="406"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="421"/>
         <source>you</source>
         <translation>εσυ</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="419"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="434"/>
         <source>and</source>
         <translation>και</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="419"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="434"/>
         <source>%n other(s)</source>
         <translation><numerusform>%n άλλοι</numerusform><numerusform>%n άλλοι</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="422"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="437"/>
         <source>%n people</source>
         <translation><numerusform>%n άτομα</numerusform><numerusform>%n άτομα</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="426"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="441"/>
         <source>loved this track</source>
         <translation>Αγαπημένο τραγούδι</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="428"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="443"/>
         <source>sent you this track %1</source>
         <translation>αυτο το τραγουδι σταλθηκε %1</translation>
     </message>
@@ -4254,113 +4254,113 @@ Lyrics for &quot;%1&quot; by %2:
 <context>
     <name>XmppSipPlugin</name>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="382"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="383"/>
         <source>User Interaction</source>
         <translation>Αλληλεπίδραση χρήστη </translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="385"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="386"/>
         <source>Host is unknown</source>
         <translation>Ο ξενιστής είναι άγνωστος</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="388"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="389"/>
         <source>Item not found</source>
         <translation>Το στοιχείο δεν βρέθηκε</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="391"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="392"/>
         <source>Authorization Error</source>
         <translation>Σφάλμα Πιστοποίησης</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="394"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="395"/>
         <source>Remote Stream Error</source>
         <translation>Remote Stream Σφάλμα</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="397"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="398"/>
         <source>Remote Connection failed</source>
         <translation>Η παρακολουθούμενη σύνδεση απέτυχε</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="400"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="401"/>
         <source>Internal Server Error</source>
         <translation>Εσωτερικό σφάλμα του διακομιστή</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="403"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="404"/>
         <source>System shutdown</source>
         <translation>Διακοπή λειτουργίας του συστήματος </translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="406"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="407"/>
         <source>Conflict</source>
         <translation>Σύγκρουση </translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="421"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="422"/>
         <source>Unknown</source>
         <translation>Άγνωστο</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="804"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="799"/>
         <source>Do you want to add &lt;b&gt;%1&lt;/b&gt; to your friend list?</source>
         <translation>Θέλετε να προσθέσετε τον &lt;b&gt;%1&lt;/b&gt; στην λίστα φίλων σας;</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="409"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="410"/>
         <source>No Compression Support</source>
         <translation>Καμία υποστήριξη συμπίεσης</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="199"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="200"/>
         <source>Enter Jabber ID</source>
         <translation>Εισαγωγη του Jabber ID</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="412"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="413"/>
         <source>No Encryption Support</source>
         <translation>Καμία υποστήριξη κρυπτογράφησης</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="415"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="416"/>
         <source>No Authorization Support</source>
         <translation>Καμία υποστήριξη πιστοποίησης</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="418"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="419"/>
         <source>No Supported Feature</source>
         <translation>Κανένα υποστηριζόμενο χαρακτηριστικό</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="484"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="478"/>
         <source>Add Friend</source>
         <translation>Προσθήκη φίλου</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="485"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="479"/>
         <source>Enter Xmpp ID:</source>
         <translation>Εισαγωγη του Xmpp ID:</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="641"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="635"/>
         <source>Add Friend...</source>
         <translation>Προσθήκη Φίλου...</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="646"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="640"/>
         <source>XML Console...</source>
         <translation>XML Κονσολα...</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="694"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="689"/>
         <source>I&apos;m sorry -- I&apos;m just an automatic presence used by Tomahawk Player (http://gettomahawk.com). If you are getting this message, the person you are trying to reach is probably not signed on, so please try again later!</source>
         <translation>Λυπάμαι - Είμαι μια αυτόματο παρουσία που χρησιμοποιείται από τον Tomahawk Player 
 (http://gettomahawk.com). Αν παίρνετε αυτό το μήνυμα, το πρόσωπο που προσπαθείτε να φτάσετε δεν είναι πιθανόν να υπογραφεί, οπότε δοκιμάστε ξανά αργότερα ! </translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="803"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="798"/>
         <source>Authorize User</source>
         <translation>Πιστοποιηση χρηστη</translation>
     </message>
