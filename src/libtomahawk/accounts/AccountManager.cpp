@@ -512,7 +512,8 @@ AccountManager::onStateChanged( Account::ConnectionState state )
     if ( account->connectionState() == Account::Disconnected )
     {
         m_connectedAccounts.removeAll( account );
-        emit disconnected( account );
+        DisconnectReason reason = account->enabled() ? Disconnected : Disabled;
+        emit disconnected( account, reason );
     }
     else if ( account->connectionState() == Account::Connected )
     {
