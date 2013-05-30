@@ -1606,8 +1606,8 @@ connect and stream from you?</source>
     </message>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="35"/>
-        <source>None (outgoing connections only)</source>
-        <translation>Cap (només connexions d&apos;eixida)</translation>
+        <source>Active (your host needs to be directly reachable)</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="42"/>
@@ -2632,8 +2632,8 @@ nomdusuari@jabber.org</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="124"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="253"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="304"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="266"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="317"/>
         <source>Add to &amp;Queue</source>
         <translation>&amp;Afig a la Cua</translation>
     </message>
@@ -2659,21 +2659,21 @@ nomdusuari@jabber.org</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="181"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="474"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="487"/>
         <source>&amp;Love</source>
         <translation>&amp;M&apos;encanta</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="195"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="261"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="312"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="274"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="325"/>
         <source>&amp;Go to &quot;%1&quot;</source>
         <translation>&amp;Ves a «%1»</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="200"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="204"/>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="264"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="277"/>
         <source>Go to &quot;%1&quot;</source>
         <translation>Vés a «%1»</translation>
     </message>
@@ -2683,32 +2683,32 @@ nomdusuari@jabber.org</translation>
         <translation>&amp;Copia l&apos;Enllaç de la Cançó</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="218"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="230"/>
         <source>Mark as &amp;Listened</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="221"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="234"/>
         <source>&amp;Remove Items</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="221"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="234"/>
         <source>&amp;Remove Item</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="272"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="285"/>
         <source>Copy Album &amp;Link</source>
         <translation>Copia l&apos;enllaç de &amp;l&apos;àlbum</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="320"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="333"/>
         <source>Copy Artist &amp;Link</source>
         <translation>Copia l&apos;enllça de &amp;l&apos;artista</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ContextMenu.cpp" line="469"/>
+        <location filename="../src/libtomahawk/ContextMenu.cpp" line="482"/>
         <source>Un-&amp;Love</source>
         <translation>&amp;Treu de les preferides</translation>
     </message>
@@ -3421,43 +3421,43 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="370"/>
-        <location filename="../src/libtomahawk/Source.cpp" line="421"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="391"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="442"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Escanejant (%L1 cançons)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="372"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="393"/>
         <source>Scanning</source>
         <translation>Escanejant</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="406"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="427"/>
         <source>Checking</source>
         <translation>Comprovant</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="411"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="432"/>
         <source>Syncing</source>
         <translation>S&apos;està sincronitzant</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="416"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="437"/>
         <source>Importing</source>
         <translation>S&apos;està important</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="568"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="595"/>
         <source>Saving (%1%)</source>
         <translation>Alçant (%1%)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="649"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="676"/>
         <source>Online</source>
         <translation>En línia</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="653"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="680"/>
         <source>Offline</source>
         <translation>Fora de línia</translation>
     </message>
@@ -3473,42 +3473,42 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
 <context>
     <name>Tomahawk::Track</name>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="396"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="411"/>
         <source> and </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="404"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="419"/>
         <source>You</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="406"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="421"/>
         <source>you</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="419"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="434"/>
         <source>and</source>
         <translation type="unfinished"/>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="419"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="434"/>
         <source>%n other(s)</source>
         <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="422"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="437"/>
         <source>%n people</source>
         <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="426"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="441"/>
         <source>loved this track</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="428"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="443"/>
         <source>sent you this track %1</source>
         <translation type="unfinished"/>
     </message>
@@ -4257,112 +4257,112 @@ Lletres de la cancó &quot;%1&quot; de %2:
 <context>
     <name>XmppSipPlugin</name>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="382"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="383"/>
         <source>User Interaction</source>
         <translation>Interacció d&apos;usuari</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="385"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="386"/>
         <source>Host is unknown</source>
         <translation>El nom de l&apos;ordinador és desconegut</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="388"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="389"/>
         <source>Item not found</source>
         <translation>No s&apos;ha trobat l&apos;element</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="391"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="392"/>
         <source>Authorization Error</source>
         <translation>Error d&apos;autorització</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="394"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="395"/>
         <source>Remote Stream Error</source>
         <translation>Error de flux remot</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="397"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="398"/>
         <source>Remote Connection failed</source>
         <translation>Ha fallat la connexió remota</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="400"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="401"/>
         <source>Internal Server Error</source>
         <translation>Error del servidor intern</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="403"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="404"/>
         <source>System shutdown</source>
         <translation>Sistema apagat</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="406"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="407"/>
         <source>Conflict</source>
         <translation>Conflicte</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="421"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="422"/>
         <source>Unknown</source>
         <translation>Desconegut</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="804"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="799"/>
         <source>Do you want to add &lt;b&gt;%1&lt;/b&gt; to your friend list?</source>
         <translation>Voleu afegir &lt;b&gt;%1&lt;/b&gt; a la vostra llista d&apos;amics?</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="409"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="410"/>
         <source>No Compression Support</source>
         <translation>Compressió no suportada</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="199"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="200"/>
         <source>Enter Jabber ID</source>
         <translation>Introduïu l&apos;identificador Jabber</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="412"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="413"/>
         <source>No Encryption Support</source>
         <translation>Encriptació no suportada</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="415"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="416"/>
         <source>No Authorization Support</source>
         <translation>Autorització no suportada</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="418"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="419"/>
         <source>No Supported Feature</source>
         <translation>Característica no suportada</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="484"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="478"/>
         <source>Add Friend</source>
         <translation>Afig un Amic</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="485"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="479"/>
         <source>Enter Xmpp ID:</source>
         <translation>Introduiu la ID XMPP:</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="641"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="635"/>
         <source>Add Friend...</source>
         <translation>Afig un Amic...</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="646"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="640"/>
         <source>XML Console...</source>
         <translation>Consola XML...</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="694"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="689"/>
         <source>I&apos;m sorry -- I&apos;m just an automatic presence used by Tomahawk Player (http://gettomahawk.com). If you are getting this message, the person you are trying to reach is probably not signed on, so please try again later!</source>
         <translation>Sóc una presència automàtica emprada pel Reproductor Tomahawk. (http://gettomahawk.com. Si rebeu este missatge, la persona amb qui intenteu contactar probablement no està en línia, intenteu-ho més tard!</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="803"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="798"/>
         <source>Authorize User</source>
         <translation>Autorització d&apos;Usuari</translation>
     </message>
