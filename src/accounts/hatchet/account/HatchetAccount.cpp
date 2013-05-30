@@ -83,7 +83,7 @@ HatchetAccount::HatchetAccount( const QString& accountId )
 
     QFile pemFile( ":/hatchet-account/mandella.pem" );
     pemFile.open( QIODevice::ReadOnly );
-    tLog() << Q_FUNC_INFO << "certs/mandella.pem: " << pemFile.readAll();
+    tDebug() << Q_FUNC_INFO << "certs/mandella.pem: " << pemFile.readAll();
     pemFile.close();
     pemFile.open( QIODevice::ReadOnly );
     QCA::ConvertResult conversionResult;
@@ -338,7 +338,7 @@ HatchetAccount::onFetchAccessTokensFinished()
     QVariantHash creds = credentials();
     QStringList tokenTypesFound;
 
-    tLog() << Q_FUNC_INFO << "resp: " << resp;
+    tDebug() << Q_FUNC_INFO << "resp: " << resp;
 
     foreach( QVariant tokenVariant, resp[ "data" ].toMap()[ "tokens" ].toList() )
     {
@@ -352,7 +352,7 @@ HatchetAccount::onFetchAccessTokensFinished()
         creds[ tokenTypeName ] = creds[ tokenTypeName ].toList() << tokenMap;
     }
 
-    tLog() << Q_FUNC_INFO << "Creds: " << creds;
+    tDebug() << Q_FUNC_INFO << "Creds: " << creds;
 
     setCredentials( creds );
     syncConfig();
@@ -408,8 +408,8 @@ HatchetAccount::parseReply( QNetworkReply* reply, bool& okRet ) const
         tLog() << "Error from tomahawk server response, or in parsing from json:" << resp.value( "error" ).toString() << resp;
     }
 
-    tLog() << Q_FUNC_INFO << "Got keys" << resp.keys();
-    tLog() << Q_FUNC_INFO << "Got values" << resp.values();
+    tDebug() << Q_FUNC_INFO << "Got keys" << resp.keys();
+    tDebug() << Q_FUNC_INFO << "Got values" << resp.values();
     okRet = true;
     return resp;
 }

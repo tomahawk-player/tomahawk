@@ -72,7 +72,7 @@ private slots:
     void dbSyncTriggered();
     void messageReceived( const QByteArray& msg );
     void connectWebSocket();
-    void oplogFetched( const QString& sinceguid, const QString& lastguid, const QList< dbop_ptr > ops ) const;
+    void oplogFetched( const QString& sinceguid, const QString& lastguid, const QList< dbop_ptr > ops );
 
 private:
     bool sendBytes( const QVariantMap& jsonMap ) const;

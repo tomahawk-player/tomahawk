@@ -48,7 +48,7 @@ HatchetSipPlugin::HatchetSipPlugin( Tomahawk::Accounts::Account *account )
 
     QFile pemFile( ":/hatchet-account/dreamcatcher.pem" );
     pemFile.open( QIODevice::ReadOnly );
-    tLog() << Q_FUNC_INFO << "certs/dreamcatcher.pem: " << pemFile.readAll();
+    tDebug() << Q_FUNC_INFO << "certs/dreamcatcher.pem: " << pemFile.readAll();
     pemFile.close();
     pemFile.open( QIODevice::ReadOnly );
     QCA::ConvertResult conversionResult;
@@ -212,7 +212,7 @@ HatchetSipPlugin::webSocketConnected()
     QCA::SecureArray sa( m_uuid.toLatin1() );
     QCA::SecureArray result = m_publicKey->encrypt( sa, QCA::EME_PKCS1_OAEP );
 
-    tLog() << Q_FUNC_INFO << "uuid:" << m_uuid << ", size of uuid:" << m_uuid.size() << ", size of sa:" << sa.size() << ", size of result:" << result.size();
+    tDebug() << Q_FUNC_INFO << "uuid:" << m_uuid << ", size of uuid:" << m_uuid.size() << ", size of sa:" << sa.size() << ", size of result:" << result.size();
 
     QVariantMap nonceVerMap;
     nonceVerMap[ "version" ] = VERSION;
@@ -271,7 +271,7 @@ HatchetSipPlugin::sendBytes( const QVariantMap& jsonMap ) const
         return false;
     }
 
-    tLog() << Q_FUNC_INFO << "Sending bytes of size" << bytes.size();
+    tDebug() << Q_FUNC_INFO << "Sending bytes of size" << bytes.size();
     emit rawBytes( bytes );
     return true;
 }
@@ -280,7 +280,7 @@ HatchetSipPlugin::sendBytes( const QVariantMap& jsonMap ) const
 void
 HatchetSipPlugin::messageReceived( const QByteArray &msg )
 {
-    tLog() << Q_FUNC_INFO << "WebSocket message: " << msg;
+    tDebug() << Q_FUNC_INFO << "WebSocket message: " << msg;
 
     QJson::Parser parser;
     bool ok;
@@ -376,7 +376,7 @@ HatchetSipPlugin::messageReceived( const QByteArray &msg )
     else if ( !retMap.contains( "command" ) ||
                 !retMap[ "command" ].canConvert< QString >() )
     {
-        tLog() << Q_FUNC_INFO << "Unable to convert and/or interepret command from server";
+        tDebug() << Q_FUNC_INFO << "Unable to convert and/or interepret command from server";
         return;
     }
 
@@ -416,7 +416,7 @@ HatchetSipPlugin::newPeer( const QVariantMap& valMap )
     const QVariantList hostinfo = valMap[ "hostinfo" ].toList();
     const QString dbid = valMap[ "dbid" ].toString();
 
-    tLog() << Q_FUNC_INFO << "username:" << username << "dbid" << dbid;
+    tDebug() << Q_FUNC_INFO << "username:" << username << "dbid" << dbid;
 
     QStringList keys( QStringList() << "command" << "username" << "hostinfo" << "dbid" );
     if ( !checkKeys( keys, valMap ) )
@@ -471,7 +471,7 @@ HatchetSipPlugin::sendSipInfos(const Tomahawk::peerinfo_ptr& receiver, const QLi
     }
 
     const QString dbid = receiver->data().toMap().value( "dbid" ).toString();
-    tLog() << Q_FUNC_INFO << "Send local info to " << receiver->friendlyName() << "(" << dbid << ") we are" << infos[ 0 ].nodeId() << "with offerkey " << infos[ 0 ].key();
+    tDebug() << Q_FUNC_INFO << "Send local info to " << receiver->friendlyName() << "(" << dbid << ") we are" << infos[ 0 ].nodeId() << "with offerkey " << infos[ 0 ].key();
 
     QVariantMap sendMap;
     sendMap[ "command" ] = "authorize-peer";
@@ -486,7 +486,7 @@ HatchetSipPlugin::sendSipInfos(const Tomahawk::peerinfo_ptr& receiver, const QLi
 void
 HatchetSipPlugin::peerAuthorization( const QVariantMap& valMap )
 {
-    tLog() << Q_FUNC_INFO << "dbid:" << valMap[ "dbid" ].toString() << "offerkey" << valMap[ "offerkey" ].toString();
+    tDebug() << Q_FUNC_INFO << "dbid:" << valMap[ "dbid" ].toString() << "offerkey" << valMap[ "offerkey" ].toString();
 
     QStringList keys( QStringList() << "command" << "dbid" << "offerkey" );
     if ( !checkKeys( keys, valMap ) )
@@ -538,7 +538,7 @@ HatchetSipPlugin::dbSyncTriggered()
 void
 HatchetSipPlugin::sendOplog( const QVariantMap& valMap ) const
 {
-    tLog() << Q_FUNC_INFO;
+    tDebug() << Q_FUNC_INFO;
     DatabaseCommand_loadOps* cmd = new DatabaseCommand_loadOps( SourceList::instance()->getLocal(), valMap[ "lastrevision" ].toString() );
     connect( cmd, SIGNAL( done( QString, QString, QList< dbop_ptr > ) ), SLOT( oplogFetched( QString, QString, QList< dbop_ptr > ) ) );
     Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
@@ -546,9 +546,9 @@ HatchetSipPlugin::sendOplog( const QVariantMap& valMap ) const
 
 
 void
-HatchetSipPlugin::oplogFetched( const QString& sinceguid, const QString& /* lastguid */, const QList< dbop_ptr > ops ) const
+HatchetSipPlugin::oplogFetched( const QString& sinceguid, const QString& /* lastguid */, const QList< dbop_ptr > ops )
 {
-    tLog() << Q_FUNC_INFO;
+    tDebug() << Q_FUNC_INFO;
     const uint_fast32_t byteMax = 1 << 25;
     int currBytes = 0;
     QVariantMap commandMap;
@@ -556,7 +556,7 @@ HatchetSipPlugin::oplogFetched( const QString& sinceguid, const QString& /* last
     commandMap[ "startingrevision" ] = sinceguid;
     currBytes += 60; //baseline for quotes, keys, commas, colons, etc.
     QVariantList revisions;
-    tLog() << Q_FUNC_INFO << "Found" << ops.size() << "ops";
+    tDebug() << Q_FUNC_INFO << "Found" << ops.size() << "ops";
     foreach( const dbop_ptr op, ops )
     {
         currBytes += 80; //baseline for quotes, keys, commas, colons, etc.
@@ -586,7 +586,7 @@ HatchetSipPlugin::oplogFetched( const QString& sinceguid, const QString& /* last
         else
           revisions << revMap;
     }
-    tLog() << Q_FUNC_INFO << "Sending" << revisions.size() << "revisions";
+    tDebug() << Q_FUNC_INFO << "Sending" << revisions.size() << "revisions";
     commandMap[ "revisions" ] = revisions;
 
     if ( !sendBytes( commandMap ) )
@@ -596,8 +596,8 @@ HatchetSipPlugin::oplogFetched( const QString& sinceguid, const QString& /* last
         rescueMap[ "command" ] = "oplog";
         if ( !sendBytes( rescueMap ) )
         {
-            tLog() << Q_FUNC_INFO << "Failed to send rescue map; state may be out-of-sync with server";
-            //FIXME: Do we want to disconnect and reconnect at this point to try to get sending working and clear the server state?
+            tLog() << Q_FUNC_INFO << "Failed to send rescue map; state may be out-of-sync with server; reconnecting";
+            disconnectPlugin();
         }
     }
 }

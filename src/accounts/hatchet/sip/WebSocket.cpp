@@ -211,16 +211,16 @@ WebSocket::readOutput()
     if ( !m_connection )
         return;
 
-    tLog() << Q_FUNC_INFO;
+    tDebug() << Q_FUNC_INFO;
 
     std::string outputString = m_outputStream.str();
     if ( outputString.size() > 0 )
     {
         m_outputStream.str("");
 
-        tLog() << Q_FUNC_INFO << "Got string of size" << outputString.size() << "from ostream";
+        tDebug() << Q_FUNC_INFO << "Got string of size" << outputString.size() << "from ostream";
         qint64 sizeWritten = m_socket->write( outputString.data(), outputString.size() );
-        tLog() << Q_FUNC_INFO << "Wrote" << sizeWritten << "bytes to the socket";
+        tDebug() << Q_FUNC_INFO << "Wrote" << sizeWritten << "bytes to the socket";
         if ( sizeWritten == -1 )
         {
             tLog() << Q_FUNC_INFO << "Error during writing, closing connection";
@@ -235,7 +235,7 @@ WebSocket::readOutput()
         {
             foreach( QByteArray message, m_queuedMessagesToSend )
             {
-                tLog() << Q_FUNC_INFO << "Sending queued message of size" << message.size();
+                tDebug() << Q_FUNC_INFO << "Sending queued message of size" << message.size();
                 m_connection->send( std::string( message.constData(), message.size() ), websocketpp::frame::opcode::TEXT );
             }
 
@@ -253,7 +253,7 @@ WebSocket::readOutput()
 void
 WebSocket::socketReadyRead()
 {
-    tLog() << Q_FUNC_INFO;
+    tDebug() << Q_FUNC_INFO;
 
     if ( !m_socket || !m_socket->isEncrypted() )
         return;
@@ -267,11 +267,11 @@ WebSocket::socketReadyRead()
 
     if ( qint64 bytes = m_socket->bytesAvailable() )
     {
-        tLog() << Q_FUNC_INFO << "Bytes available:" << bytes;
+        tDebug() << Q_FUNC_INFO << "Bytes available:" << bytes;
         QByteArray buf;
         buf.resize( bytes );
         qint64 bytesRead = m_socket->read( buf.data(), bytes );
-        tLog() << Q_FUNC_INFO << "Bytes read:" << bytesRead; // << ", content is" << websocketpp::utility::to_hex( buf.constData(), bytesRead ).data();
+        tDebug() << Q_FUNC_INFO << "Bytes read:" << bytesRead; // << ", content is" << websocketpp::utility::to_hex( buf.constData(), bytesRead ).data();
         if ( bytesRead != bytes )
         {
             tLog() << Q_FUNC_INFO << "Error occurred during socket read. Something is wrong; disconnecting";
@@ -289,7 +289,7 @@ WebSocket::socketReadyRead()
 void
 WebSocket::encodeMessage( const QByteArray &bytes )
 {
-    tLog() << Q_FUNC_INFO << "Encoding message"; //, message is" << bytes.constData();
+    tDebug() << Q_FUNC_INFO << "Encoding message"; //, message is" << bytes.constData();
     if ( !m_connection )
     {
         tLog() << Q_FUNC_INFO << "Asked to send message but do not have a valid connection!";
@@ -311,7 +311,7 @@ WebSocket::encodeMessage( const QByteArray &bytes )
 void
 onMessage( WebSocket* ws, websocketpp::connection_hdl, hatchet_client::message_ptr msg )
 {
-    tLog() << Q_FUNC_INFO << "Handling message";
+    tDebug() << Q_FUNC_INFO << "Handling message";
     std::string payload = msg->get_payload();
     ws->decodedMessage( QByteArray( payload.data(), payload.length() ) );
 }
@@ -319,6 +319,6 @@ onMessage( WebSocket* ws, websocketpp::connection_hdl, hatchet_client::message_p
 void
 onClose( WebSocket *ws, websocketpp::connection_hdl )
 {
-    tLog() << Q_FUNC_INFO << "Handling message";
+    tDebug() << Q_FUNC_INFO << "Handling message";
     QMetaObject::invokeMethod( ws, "disconnectSocket", Qt::QueuedConnection );
 }
