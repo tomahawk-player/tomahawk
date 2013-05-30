@@ -64,7 +64,6 @@ TrackView::TrackView( QWidget* parent )
 
     setContentsMargins( 0, 0, 0, 0 );
     setMouseTracking( true );
-    setAlternatingRowColors( true );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     setSelectionBehavior( QAbstractItemView::SelectRows );
     setDragEnabled( true );
@@ -147,6 +146,8 @@ TrackView::setProxyModel( PlayableProxyModel* model )
 {
     if ( m_proxyModel )
     {
+        disconnect( m_proxyModel, SIGNAL( rowsAboutToBeInserted( QModelIndex, int, int ) ), this, SLOT( onModelFilling() ) );
+        disconnect( m_proxyModel, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), this, SLOT( onModelEmptyCheck() ) );
         disconnect( m_proxyModel, SIGNAL( filterChanged( QString ) ), this, SLOT( onFilterChanged( QString ) ) );
         disconnect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), this, SLOT( onViewChanged() ) );
         disconnect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), this, SLOT( verifySize() ) );
@@ -155,6 +156,8 @@ TrackView::setProxyModel( PlayableProxyModel* model )
 
     m_proxyModel = model;
 
+    connect( m_proxyModel, SIGNAL( rowsAboutToBeInserted( QModelIndex, int, int ) ), SLOT( onModelFilling() ) );
+    connect( m_proxyModel, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), SLOT( onModelEmptyCheck() ) );
     connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
     connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onViewChanged() ) );
     connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( verifySize() ) );
@@ -224,6 +227,21 @@ TrackView::setEmptyTip( const QString& tip )
 {
     m_emptyTip = tip;
     m_overlay->setText( tip );
+}
+
+
+void
+TrackView::onModelFilling()
+{
+    setAlternatingRowColors( true );
+}
+
+
+void
+TrackView::onModelEmptyCheck()
+{
+    if ( !m_proxyModel->rowCount( QModelIndex() ) )
+        setAlternatingRowColors( false );
 }
 
 
