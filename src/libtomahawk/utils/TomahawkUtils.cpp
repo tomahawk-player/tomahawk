@@ -1120,5 +1120,3 @@ urlSetQuery( QUrl& url, const QString& query )
 
 
 } // ns
-
-#include "TomahawkUtils.moc"
