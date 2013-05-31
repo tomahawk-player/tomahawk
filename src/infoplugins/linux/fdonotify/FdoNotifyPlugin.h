@@ -23,8 +23,9 @@
 #include "../../InfoPluginDllMacro.h"
 
 #include "infosystem/InfoSystem.h"
+#include "FreedesktopNotificationsProxy.h"
 
-#include <QDBusMessage>
+#include <QtDBus>
 
 namespace Tomahawk
 {
@@ -45,8 +46,8 @@ public:
 protected slots:
     virtual void init() {}
 
-    virtual void dbusPlayingReplyReceived( const QDBusMessage& reply );
-    virtual void dbusCapabiltiesReplyReceived( const QDBusMessage& reply );
+    virtual void dbusPlayingReplyReceived( QDBusPendingCallWatcher* watcher );
+    virtual void dbusCapabilitiesReplyReceived( QDBusPendingCallWatcher* watcher );
 
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
     {
@@ -72,6 +73,7 @@ private:
 
     // Does the window manger support basic XML-based markup (a small HTML subset), see Desktop Notifications specification
     bool m_wmSupportsBodyMarkup;
+    org::freedesktop::Notifications* notifications_interface;
 };
 
 }
