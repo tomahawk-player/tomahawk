@@ -3,7 +3,7 @@ Version 0.8.0:
     * Added "Inbox" feature, showing incoming song recommendations. Dropping
       a track on a user in the sidebar sends a recommendation to them.
     * You will now be asked whether you want to trust invalid SSL certificates.
-    * Improve connecting between Tomahawk peers and support having multiple IPs
+    * Improved connecting between Tomahawk peers and support having multiple IPs
       (including IPv6)
 
 Version 0.7.1:
