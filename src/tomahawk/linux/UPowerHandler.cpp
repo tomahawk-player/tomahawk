@@ -20,6 +20,10 @@
 #include "UPowerHandler.h"
 #include "utils/Logger.h"
 
+#include <QTimer>
+
+#define UPOWER_RESUME_DELAY 2000
+
 using namespace Tomahawk;
 
 const char* UPowerHandler::UPowerService = "org.freedesktop.UPower";
@@ -61,7 +65,15 @@ UPowerHandler::handleSleep()
 void
 UPowerHandler::handleResume()
 {
-    QMutexLocker locker( &m_mutex );
+    m_mutex.lock();
+    // Delay resuming for other wakeup actions, e.g. reconnecting to the network, to take place.
+    QTimer::singleShot( UPOWER_RESUME_DELAY, this, SLOT( actualResume() ) );
+}
+
+void
+UPowerHandler::actualResume()
+{
     tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Awake from sleep so connecting all accounts";
     Tomahawk::Accounts::AccountManager::instance()->connectAll();
+    m_mutex.unlock();
 }

@@ -44,6 +44,7 @@ private:
 private slots:
     void handleSleep();
     void handleResume();
+    void actualResume();
 };
 
 }
