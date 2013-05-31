@@ -9,6 +9,8 @@ if(NOT Qt5Core_DIR)
             ${THIRDPARTY_DIR}/libqnetwm/libqnetwm/netwm.cpp
         )
         SET(FDO_LINK_LIBRARIES ${LINK_LIBRARIES} ${X11_LIBRARIES})
+        qt4_add_dbus_interface(fdo_srcs fdonotify/org.freedesktop.Notifications.xml
+                               FreedesktopNotificationsProxy)
 
         tomahawk_add_plugin(fdonotify
             TYPE infoplugin EXPORT_MACRO INFOPLUGINDLLEXPORT_PRO
