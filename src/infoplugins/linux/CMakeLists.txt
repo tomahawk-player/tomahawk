@@ -18,11 +18,15 @@ if(NOT Qt5Core_DIR)
 
 endif()
 
+INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR} )
 SET(mpris_srcs
-    mpris/MprisPluginRootAdaptor.cpp
-    mpris/MprisPluginPlayerAdaptor.cpp
     mpris/MprisPlugin.cpp
     )
+
+qt4_add_dbus_adaptor(mpris_srcs mpris/MprisPluginRootAdaptor.xml
+                     mpris/MprisPlugin.h Tomahawk::InfoSystem::MprisPlugin MprisPluginRootAdaptor MprisPluginRootAdaptor)
+qt4_add_dbus_adaptor(mpris_srcs mpris/MprisPluginPlayerAdaptor.xml
+                     mpris/MprisPlugin.h Tomahawk::InfoSystem::MprisPlugin MprisPluginPlayerAdaptor MprisPluginPlayerAdaptor)
 
 tomahawk_add_plugin(mpris
     TYPE infoplugin EXPORT_MACRO INFOPLUGINDLLEXPORT_PRO
