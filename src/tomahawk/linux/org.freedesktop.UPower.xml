@@ -1,0 +1,395 @@
+<!DOCTYPE node PUBLIC
+"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node name="/" xmlns:doc="http://www.freedesktop.org/dbus/1.0/doc.dtd">
+
+  <interface name="org.freedesktop.UPower">
+    <doc:doc>
+      <doc:description>
+        <doc:para>
+          The UPower service is available via the system message
+          bus. To access the service, use
+          the <doc:tt>org.freedesktop.UPower</doc:tt> interface on
+          the <doc:tt>/org/freedesktop/UPower</doc:tt> object on
+          the D-Bus system bus service with the well-known
+          name <doc:tt>org.freedesktop.UPower</doc:tt>.
+        </doc:para>
+        <doc:para>
+          <doc:example language="shell" title="simple example">
+            <doc:code>
+$ dbus-send --print-reply \
+            --system \
+            --dest=org.freedesktop.UPower \
+            /org/freedesktop/UPower \
+            org.freedesktop.UPower.EnumerateDevices
+
+method return sender=:1.386 -> dest=:1.451 reply_serial=2
+   array [
+      object path "/org/freedesktop/UPower/devices/line_power_AC"
+      object path "/org/freedesktop/UPower/devices/battery_BAT0"
+   ]
+            </doc:code>
+          </doc:example>
+        </doc:para>
+      </doc:description>
+    </doc:doc>
+
+    <!-- ************************************************************ -->
+
+    <method name="EnumerateDevices">
+      <annotation name="org.freedesktop.DBus.GLib.Async" value=""/>
+      <arg name="devices" direction="out" type="ao">
+        <doc:doc><doc:summary>An array of object paths for devices.</doc:summary></doc:doc>
+      </arg>
+
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Enumerate all power objects on the system.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </method>
+
+    <!-- ************************************************************ -->
+
+    <signal name="DeviceAdded">
+      <arg name="device" type="o">
+        <doc:doc><doc:summary>Object path of device that was added.</doc:summary></doc:doc>
+      </arg>
+
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Emitted when a device is added.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </signal>
+
+    <!-- ************************************************************ -->
+
+    <signal name="DeviceRemoved">
+      <arg name="device" type="o">
+        <doc:doc><doc:summary>Object path of device that was removed.</doc:summary></doc:doc>
+      </arg>
+
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Emitted when a device is removed.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </signal>
+
+    <!-- ************************************************************ -->
+
+    <signal name="DeviceChanged">
+      <arg name="device" type="o">
+        <doc:doc><doc:summary>Object path of device that was changed.</doc:summary></doc:doc>
+      </arg>
+
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Emitted when a device changed.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </signal>
+
+    <!-- ************************************************************ -->
+
+    <signal name="Changed">
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Emitted when one or more properties on the object changes.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </signal>
+
+    <!-- ************************************************************ -->
+
+    <signal name="Sleeping">
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            This signal is sent when the session is about to be suspended or
+            hibernated.
+          </doc:para>
+          <doc:para>
+            This signal is DEPRECATED. Use NotifySleep() instead.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </signal>
+
+    <!-- ************************************************************ -->
+
+    <signal name="NotifySleep">
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            This signal is sent when the session is about to be suspended or
+            hibernated.
+            Session and system programs have one second to do anything required
+            before the sleep action is taken (such as sending out Avahi or
+            Jabber messages).
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg name="action" direction="out" type="s">
+        <doc:doc>
+          <doc:summary>
+            The sleep action type, e.g. <doc:tt>suspend</doc:tt>,
+            <doc:tt>hibernate</doc:tt> or <doc:tt>hybrid</doc:tt>.
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </signal>
+
+    <!-- ************************************************************ -->
+
+    <signal name="Resuming">
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            This signal is sent when the session has just returned from
+            Suspend() or Hibernate().
+          </doc:para>
+          <doc:para>
+            This signal is DEPRECATED. Use NotifyResume() instead.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </signal>
+
+    <!-- ************************************************************ -->
+
+    <signal name="NotifyResume">
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            This signal is sent when the session has just returned from
+            Suspend() or Hibernate().
+            Session and system programs can then do anything required (such as
+            sending out Avahi or Jabber messages).
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg name="action" direction="out" type="s">
+        <doc:doc>
+          <doc:summary>
+            The sleep action type, e.g. <doc:tt>suspend</doc:tt>,
+            <doc:tt>hibernate</doc:tt> or <doc:tt>hybrid</doc:tt>.
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </signal>
+
+    <!-- ************************************************************ -->
+
+    <method name="AboutToSleep">
+      <annotation name="org.freedesktop.DBus.GLib.Async" value=""/>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            This method tells UPower that the Suspend() or Hibernate() method
+            is about to be called.
+            This allows UPower to emit the Suspending signal whilst
+            session activities are happening that have to be done before the
+            suspend process is started.
+          </doc:para>
+          <doc:para>
+            This method would typically be called by the session power
+            management daemon, before it locks the screen and waits for the
+            screen to fade to black.
+            The session power management component would then call Suspend() or
+            Hibernate() when these syncronous tasks have completed.
+          </doc:para>
+          <doc:para>
+            If this method is not called than nothing bad will happen and
+            Suspend() or Hibernate() will block for the required second.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg name="action" direction="in" type="s">
+        <doc:doc>
+          <doc:summary>
+            The sleep action type, e.g. <doc:tt>suspend</doc:tt> or
+            <doc:tt>hibernate</doc:tt>.
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </method>
+
+    <!-- ************************************************************ -->
+
+    <method name="Suspend">
+      <annotation name="org.freedesktop.DBus.GLib.Async" value=""/>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Suspends the computer into a low power state.
+            System state is not preserved if the power is lost.
+          </doc:para>
+          <doc:para>
+            If AboutToSleep() has not been called then UPower will send
+            the Sleeping() signal and block for one second.
+          </doc:para>
+          <doc:para>
+            If AboutToSleep() has been called less than one second
+            before this method is called then UPower will block for the
+            remaining time to complete one second of delay.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </method>
+
+    <!-- ************************************************************ -->
+
+    <method name="SuspendAllowed">
+      <annotation name="org.freedesktop.DBus.GLib.Async" value=""/>
+      <arg name="allowed" direction="out" type="b">
+        <doc:doc><doc:summary>TRUE if allowed, otherwise FALSE</doc:summary></doc:doc>
+      </arg>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Check if the caller has (or can get) the PolicyKit privilege to call
+            <doc:ref type="method" to="Power.Suspend">Suspend</doc:ref>.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </method>
+
+    <!-- ************************************************************ -->
+
+    <method name="Hibernate">
+      <annotation name="org.freedesktop.DBus.GLib.Async" value=""/>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Hibernates the computer into a low power state.
+            System state is preserved if the power is lost.
+          </doc:para>
+          <doc:para>
+            If AboutToSleep() has not been called then UPower will send
+            the Sleeping() signal and block for one second.
+          </doc:para>
+          <doc:para>
+            If AboutToSleep() has been called less than one second
+            before this method is called then UPower will block for the
+            remaining time to complete one second of delay.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </method>
+
+    <!-- ************************************************************ -->
+
+    <method name="HibernateAllowed">
+      <annotation name="org.freedesktop.DBus.GLib.Async" value=""/>
+      <arg name="allowed" direction="out" type="b">
+        <doc:doc><doc:summary>TRUE if allowed, otherwise FALSE</doc:summary></doc:doc>
+      </arg>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Check if the caller has (or can get) the PolicyKit privilege to call
+            <doc:ref type="method" to="Power.Hibernate">Hibernate</doc:ref>.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </method>
+
+    <!-- ************************************************************ -->
+
+    <property name="DaemonVersion" type="s" access="read">
+      <doc:doc><doc:description><doc:para>
+            Version of the running daemon, e.g. <doc:tt>002</doc:tt>.
+      </doc:para></doc:description></doc:doc>
+    </property>
+
+    <property name="CanSuspend" type="b" access="read">
+      <doc:doc><doc:description><doc:para>
+            Whether the system is able to suspend.
+      </doc:para></doc:description></doc:doc>
+    </property>
+
+    <property name="CanHibernate" type="b" access="read">
+      <doc:doc><doc:description><doc:para>
+            Whether the system is able to hibernate.
+      </doc:para></doc:description></doc:doc>
+    </property>
+
+    <property name="OnBattery" type="b" access="read">
+      <doc:doc><doc:description><doc:para>
+            Indicates whether the system is running on battery power.
+            This property is provided for convenience.
+      </doc:para></doc:description></doc:doc>
+    </property>
+
+    <property name="OnLowBattery" type="b" access="read">
+      <doc:doc><doc:description><doc:para>
+            Indicates whether the system is running on battery power and if the battery is critically low.
+            This property is provided for convenience.
+      </doc:para></doc:description></doc:doc>
+    </property>
+
+    <property name="LidIsClosed" type="b" access="read">
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Indicates if the laptop lid is closed where the display cannot be seen.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <property name="LidIsPresent" type="b" access="read">
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            If the system has a lid device.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <property name="LidForceSleep" type="b" access="read">
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            If the system really has to sleep when the lid is closed.
+            Some laptops actually melt (!) if the lid is closed and the
+            computer keeps running. We blacklist those, and do something
+            sane for the other machines.
+          </doc:para>
+          <doc:para>
+            This allows us to set the default session policy to not
+            suspend on lid close if the laptop is docked, and be sure
+            the machine is not going to melt.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <property name="IsDocked" type="b" access="read">
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            If the system is currently docked.
+            Note: the "is-docked" value is the result of a heuristic,
+            which may involve testing the display output.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+  </interface>
+
+</node>

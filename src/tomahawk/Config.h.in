@@ -18,6 +18,7 @@
 #cmakedefine WITH_CRASHREPORTER
 #cmakedefine WITH_BINARY_ATTICA
 #cmakedefine WITH_QtSparkle
+#cmakedefine WITH_UPOWER
 
 
 #cmakedefine LIBLASTFM_FOUND
