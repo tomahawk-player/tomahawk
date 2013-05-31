@@ -79,6 +79,10 @@
 
 #include "config.h"
 
+#ifdef WITH_UPOWER
+    #include "linux/UPowerHandler.h"
+#endif
+
 #ifndef ENABLE_HEADLESS
     #include <QMessageBox>
 #endif
@@ -148,6 +152,7 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     setOrganizationDomain( QLatin1String( TOMAHAWK_ORGANIZATION_DOMAIN ) );
     setApplicationName( QLatin1String( TOMAHAWK_APPLICATION_NAME ) );
     setApplicationVersion( QLatin1String( TOMAHAWK_VERSION ) );
+    connect( this, SIGNAL( tomahawkLoaded() ), SLOT( initEnergyEventHandler() ) );
 
     registerMetaTypes();
     TomahawkUtils::installTranslator( this );
@@ -631,6 +636,15 @@ TomahawkApp::initFactoriesForAccountManager()
     m_accountManager.data()->registerAccountFactoryForFilesystem( spotifyFactory );
 
     Tomahawk::Accounts::AccountManager::instance()->loadFromConfig();
+}
+
+void
+TomahawkApp::initEnergyEventHandler()
+{
+#ifdef WITH_UPOWER
+    UPowerHandler* upower = new UPowerHandler( this );
+    upower->registerHandler();
+#endif // WITH_UPOWER
 }
 
 

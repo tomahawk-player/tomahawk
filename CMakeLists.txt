@@ -43,6 +43,7 @@ option(WITH_BREAKPAD "Build with breakpad integration" ON)
 option(WITH_CRASHREPORTER "Build with CrashReporter" ON)
 option(WITH_BINARY_ATTICA "Enable support for downloading binary resolvers automatically" ON)
 option(LEGACY_KDE_INTEGRATION "Install tomahawk.protocol file, deprecated since 4.6.0" OFF)
+OPTION(WITH_UPOWER "Build with support for UPower events" OFF)
 
 IF( CMAKE_SYSTEM_PROCESSOR MATCHES "arm" )
     message(STATUS "Build of breakpad library disabled on this platform.")
@@ -185,6 +186,10 @@ endif()
 if(BUILD_GUI AND UNIX AND NOT APPLE)
     find_package( X11 )
 endif()
+
+IF( UNIX AND NOT APPLE AND QT_QTDBUS_FOUND )
+    SET( WITH_UPOWER ON )
+ENDIF( UNIX AND NOT APPLE AND QT_QTDBUS_FOUND  )
 
 macro_optional_find_package(Phonon 4.5.0)
 macro_log_feature(PHONON_FOUND "Phonon" "The Phonon multimedia library" "http://phonon.kde.org" TRUE "" "")
