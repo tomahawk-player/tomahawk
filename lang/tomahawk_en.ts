@@ -677,6 +677,56 @@ connect and stream from you?</translation>
     </message>
 </context>
 <context>
+    <name>HatchetAccountConfig</name>
+    <message>
+        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="14"/>
+        <source>Form</source>
+        <translation>Form</translation>
+    </message>
+    <message>
+        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="33"/>
+        <source>Connect to your Hatchet account</source>
+        <translation>Connect to your Hatchet account</translation>
+    </message>
+    <message>
+        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="62"/>
+        <source>One-time
+Password</source>
+        <translation>One-time
+Password</translation>
+    </message>
+    <message>
+        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="70"/>
+        <source>Username</source>
+        <translation>Username</translation>
+    </message>
+    <message>
+        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="77"/>
+        <source>Hatchet username</source>
+        <translation>Hatchet username</translation>
+    </message>
+    <message>
+        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="84"/>
+        <source>Password:</source>
+        <translation>Password:</translation>
+    </message>
+    <message>
+        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="97"/>
+        <source>Hatchet password</source>
+        <translation>Hatchet password</translation>
+    </message>
+    <message>
+        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="104"/>
+        <source>(Only if configured)</source>
+        <translation>(Only if configured)</translation>
+    </message>
+    <message>
+        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="138"/>
+        <source>Login</source>
+        <translation>Login</translation>
+    </message>
+</context>
+<context>
     <name>InboxItem</name>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/InboxItem.cpp" line="35"/>
@@ -2238,6 +2288,27 @@ connect and stream from you?</translation>
     </message>
 </context>
 <context>
+    <name>Tomahawk::Accounts::HatchetAccountConfig</name>
+    <message>
+        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="115"/>
+        <source>Login</source>
+        <translation>Login</translation>
+    </message>
+    <message>
+        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="129"/>
+        <source>Logged in as: %1</source>
+        <translation>Logged in as: %1</translation>
+    </message>
+</context>
+<context>
+    <name>Tomahawk::Accounts::HatchetAccountFactory</name>
+    <message>
+        <location filename="../src/accounts/hatchet/account/HatchetAccount.h" line="49"/>
+        <source>Connect to your Hatchet account</source>
+        <translation>Connect to your Hatchet account</translation>
+    </message>
+</context>
+<context>
     <name>Tomahawk::Accounts::LastFmAccountFactory</name>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmAccount.h" line="52"/>
@@ -3423,43 +3494,43 @@ Try tweaking the filters for a new set of songs to play.</translation>
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="391"/>
-        <location filename="../src/libtomahawk/Source.cpp" line="442"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="402"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="453"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Scanning (%L1 tracks)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="393"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="404"/>
         <source>Scanning</source>
         <translation>Scanning</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="427"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="438"/>
         <source>Checking</source>
         <translation>Checking</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="432"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="443"/>
         <source>Syncing</source>
         <translation>Syncing</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="437"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="448"/>
         <source>Importing</source>
         <translation>Importing</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="595"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="606"/>
         <source>Saving (%1%)</source>
         <translation>Saving (%1%)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="676"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="687"/>
         <source>Online</source>
         <translation>Online</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="680"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="691"/>
         <source>Offline</source>
         <translation>Offline</translation>
     </message>
@@ -3814,7 +3885,7 @@ enter the displayed PIN number here:</translation>
 <context>
     <name>TrackView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="583"/>
+        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="601"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Sorry, your filter &apos;%1&apos; did not match any results.</translation>
     </message>
