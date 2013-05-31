@@ -419,6 +419,3 @@ GridView::setPlaylistInterface( const Tomahawk::playlistinterface_ptr& playlistI
 {
     proxyModel()->setPlaylistInterface( playlistInterface );
 }
-
-
-#include "GridView.moc"
