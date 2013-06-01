@@ -85,12 +85,12 @@ Result::isCached( const QString& url )
 Result::Result( const QString& url )
     : QObject()
     , m_url( url )
+    , m_checked( false )
     , m_bitrate( 0 )
     , m_size( 0 )
     , m_modtime( 0 )
     , m_score( 0 )
     , m_fileId( 0 )
-    , m_checked( false )
 {
     connect( Pipeline::instance(), SIGNAL( resolverRemoved( Tomahawk::Resolver* ) ), SLOT( onResolverRemoved( Tomahawk::Resolver* ) ), Qt::QueuedConnection );
 }

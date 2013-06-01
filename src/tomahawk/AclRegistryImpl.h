@@ -44,9 +44,6 @@ public:
     ACLRegistryImpl( QObject *parent = 0 );
     virtual ~ACLRegistryImpl();
 
-signals:
-    void aclResult( QString nodeid, QString username, ACLRegistry::ACL peerStatus );
-
 public slots:
     /**
      * @brief Checks if peer is authorized; optionally, can authorize peer with given type if not found

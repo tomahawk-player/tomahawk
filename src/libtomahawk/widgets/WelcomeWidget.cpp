@@ -356,5 +356,3 @@ PlaylistWidget::setModel( QAbstractItemModel* model )
     QListView::setModel( model );
     emit modelChanged();
 }
-
-#include "WelcomeWidget.moc"
