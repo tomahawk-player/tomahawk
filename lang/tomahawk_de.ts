@@ -3587,7 +3587,7 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="590"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="595"/>
         <source>My Collection</source>
         <translation>Meine Sammlung</translation>
     </message>
