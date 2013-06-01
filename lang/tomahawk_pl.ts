@@ -3589,7 +3589,7 @@ Spróbuj poprawić filtry aby uzyskać nowy zestaw piosenek do odtworzenia.</tra
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="590"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="595"/>
         <source>My Collection</source>
         <translation>Moja Kolekcja</translation>
     </message>

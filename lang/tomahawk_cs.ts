@@ -681,48 +681,49 @@ se s vámi spojil?</translation>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>Formulář</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="33"/>
         <source>Connect to your Hatchet account</source>
-        <translation type="unfinished"/>
+        <translation>Spojit se s účtem u Hatchet</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="62"/>
         <source>One-time
 Password</source>
-        <translation type="unfinished"/>
+        <translation>Jednorázové
+heslo</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="70"/>
         <source>Username</source>
-        <translation type="unfinished"/>
+        <translation>Uživatelské jméno</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="77"/>
         <source>Hatchet username</source>
-        <translation type="unfinished"/>
+        <translation>Uživatelské jméno u Hatchet</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="84"/>
         <source>Password:</source>
-        <translation type="unfinished"/>
+        <translation>Heslo:</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="97"/>
         <source>Hatchet password</source>
-        <translation type="unfinished"/>
+        <translation>Heslo pro Hatchet</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="104"/>
         <source>(Only if configured)</source>
-        <translation type="unfinished"/>
+        <translation>(Pouze je-li nastaveno)</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="138"/>
         <source>Login</source>
-        <translation type="unfinished"/>
+        <translation>Přihlášení</translation>
     </message>
 </context>
 <context>
@@ -1657,7 +1658,7 @@ Password</source>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="35"/>
         <source>Active (your host needs to be directly reachable)</source>
-        <translation type="unfinished"/>
+        <translation>Činný (váš hostitel musí být přímo dosažitelný)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="42"/>
@@ -2288,12 +2289,12 @@ Password</source>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="115"/>
         <source>Login</source>
-        <translation type="unfinished"/>
+        <translation>Přihlášení</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="129"/>
         <source>Logged in as: %1</source>
-        <translation type="unfinished"/>
+        <translation>Přihlášen jako: %1</translation>
     </message>
 </context>
 <context>
@@ -2301,7 +2302,7 @@ Password</source>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccount.h" line="49"/>
         <source>Connect to your Hatchet account</source>
-        <translation type="unfinished"/>
+        <translation>Spojit se s účtem u Hatchet</translation>
     </message>
 </context>
 <context>
@@ -2713,7 +2714,7 @@ username@jabber.org</translation>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="158"/>
         <source>Send to &amp;Friend</source>
-        <translation type="unfinished"/>
+        <translation>Poslat &amp;příteli</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="172"/>
@@ -2753,7 +2754,7 @@ username@jabber.org</translation>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="230"/>
         <source>Mark as &amp;Listened</source>
-        <translation type="unfinished"/>
+        <translation>Označit jako &amp;poslechnuté</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="234"/>
@@ -3593,7 +3594,7 @@ Zkuste vyladit filtry pro nové písně.</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="590"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="595"/>
         <source>My Collection</source>
         <translation>Moje sbírka</translation>
     </message>
