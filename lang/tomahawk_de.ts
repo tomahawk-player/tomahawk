@@ -681,48 +681,49 @@ erlauben sich mit dir zu verbinden?</translation>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>Form</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="33"/>
         <source>Connect to your Hatchet account</source>
-        <translation type="unfinished"/>
+        <translation>Eine Verbindung zu Ihrem Hatchet Konto aufbauen</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="62"/>
         <source>One-time
 Password</source>
-        <translation type="unfinished"/>
+        <translation>Einmal⏎
+Passwort</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="70"/>
         <source>Username</source>
-        <translation type="unfinished"/>
+        <translation>Benutzername</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="77"/>
         <source>Hatchet username</source>
-        <translation type="unfinished"/>
+        <translation>Hatchet benutzername</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="84"/>
         <source>Password:</source>
-        <translation type="unfinished"/>
+        <translation>Passwort:</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="97"/>
         <source>Hatchet password</source>
-        <translation type="unfinished"/>
+        <translation>Hatchet Passwort</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="104"/>
         <source>(Only if configured)</source>
-        <translation type="unfinished"/>
+        <translation>(Nur falls konfiguriert)</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="138"/>
         <source>Login</source>
-        <translation type="unfinished"/>
+        <translation>Anmelden</translation>
     </message>
 </context>
 <context>
@@ -738,7 +739,7 @@ Password</source>
     <message>
         <location filename="../src/libtomahawk/jobview/InboxJobItem.cpp" line="59"/>
         <source>Sent %1 by %2 to %3.</source>
-        <translation type="unfinished"/>
+        <translation>%1 gesendet an dir %2 von %3.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/InboxJobItem.cpp" line="64"/>
@@ -769,7 +770,7 @@ Password</source>
         <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="624"/>
         <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="660"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
-        <translation type="unfinished"/>
+        <translation>Script Resolver Warnung: API aufruf %1 zurückgegebener Daten synchron. </translation>
     </message>
 </context>
 <context>
@@ -1453,12 +1454,12 @@ Password</source>
     <message>
         <location filename="../src/libtomahawk/database/TomahawkSqlQuery.cpp" line="89"/>
         <source>No query</source>
-        <translation type="unfinished"/>
+        <translation>Κeine Abfrage</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/database/TomahawkSqlQuery.cpp" line="90"/>
         <source>Parameter count mismatch</source>
-        <translation type="unfinished"/>
+        <translation>Nicht übereinstimmende Parameter</translation>
     </message>
 </context>
 <context>
@@ -1657,7 +1658,7 @@ Password</source>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="35"/>
         <source>Active (your host needs to be directly reachable)</source>
-        <translation type="unfinished"/>
+        <translation>Aktiv (der Host muss direkt erreichbar sein)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="42"/>
@@ -1855,7 +1856,7 @@ Password</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="385"/>
         <source>Drop to send tracks</source>
-        <translation type="unfinished"/>
+        <translation>Ziehen um Titel zu senden</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="466"/>
@@ -2288,12 +2289,12 @@ Password</source>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="115"/>
         <source>Login</source>
-        <translation type="unfinished"/>
+        <translation>Anmelden</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="129"/>
         <source>Logged in as: %1</source>
-        <translation type="unfinished"/>
+        <translation>Angemeldet als %1</translation>
     </message>
 </context>
 <context>
@@ -2301,7 +2302,7 @@ Password</source>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccount.h" line="49"/>
         <source>Connect to your Hatchet account</source>
-        <translation type="unfinished"/>
+        <translation>Eine Verbindung zu Ihrem Hatchet Konto aufbauen</translation>
     </message>
 </context>
 <context>
@@ -2708,7 +2709,7 @@ username@jabber.org</source>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="158"/>
         <source>Send to &amp;Friend</source>
-        <translation type="unfinished"/>
+        <translation>An Freund senden</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="172"/>
@@ -2748,7 +2749,7 @@ username@jabber.org</source>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="230"/>
         <source>Mark as &amp;Listened</source>
-        <translation type="unfinished"/>
+        <translation>Markieren als &amp;gehört</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="234"/>
@@ -3319,13 +3320,14 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
         <source>%1 sent you
 %2%4 %3.</source>
         <comment>%1 is a nickname, %2 is a title, %3 is an artist, %4 is the preposition used to link track and artist ('by' in english)</comment>
-        <translation type="unfinished"/>
+        <translation>%1 gesendet an dir⏎
+%2%4 %3.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="211"/>
         <source>%1 sent you &quot;%2&quot; by %3.</source>
         <comment>%1 is a nickname, %2 is a title, %3 is an artist</comment>
-        <translation type="unfinished"/>
+        <translation>%1 gesendet an dir %2 von %3.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="279"/>
@@ -3587,7 +3589,7 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="595"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="605"/>
         <source>My Collection</source>
         <translation>Meine Sammlung</translation>
     </message>
