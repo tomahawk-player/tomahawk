@@ -3595,7 +3595,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="595"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="605"/>
         <source>My Collection</source>
         <translation>Mi colección</translation>
     </message>

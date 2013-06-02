@@ -3594,7 +3594,7 @@ Proba a trocar os filtros para ter outra lista música para escoitar. </translat
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="595"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="605"/>
         <source>My Collection</source>
         <translation>A miña colección</translation>
     </message>

@@ -3580,7 +3580,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="595"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="605"/>
         <source>My Collection</source>
         <translation>我的收藏</translation>
     </message>

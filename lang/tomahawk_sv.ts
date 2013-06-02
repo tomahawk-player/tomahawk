@@ -3595,7 +3595,7 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="595"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="605"/>
         <source>My Collection</source>
         <translation>Min samling</translation>
     </message>
