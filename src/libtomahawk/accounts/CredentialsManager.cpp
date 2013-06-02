@@ -66,14 +66,26 @@ CredentialsManager::CredentialsManager( QObject* parent )
 
 
 void
-CredentialsManager::loadCredentials( QList< Service > keysByService )
+CredentialsManager::addService( const QString& service , const QStringList& accountIds )
 {
-    foreach ( const Service svc, keysByService )
+    if ( m_services.contains( service ) )
+        m_services.remove( service );
+    m_services.insert( service, accountIds );
+}
+
+
+void
+CredentialsManager::loadCredentials()
+{
+    for ( QHash< QString, QStringList >::const_iterator it = m_services.constBegin();
+          it != m_services.constEnd(); ++it )
     {
-        tDebug() << Q_FUNC_INFO << "keys for service" << svc.name << ":" << svc.keys;
-        foreach ( QString key, svc.keys )
+        const QString& svcName = it.key();
+        const QStringList& accountIds = it.value();
+        tDebug() << Q_FUNC_INFO << "keys for service" << svcName << ":" << accountIds;
+        foreach ( QString key, accountIds )
         {
-            QKeychain::ReadPasswordJob* j = new QKeychain::ReadPasswordJob( svc.name, this );
+            QKeychain::ReadPasswordJob* j = new QKeychain::ReadPasswordJob( svcName, this );
             j->setKey( key );
             j->setAutoDelete( false );
 #if defined( Q_OS_UNIX ) && !defined( Q_OS_MAC )

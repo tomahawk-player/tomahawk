@@ -52,7 +52,7 @@ public:
     QString description() const { return tr( "Log on to your Jabber/XMPP account to connect to your friends" ); }
     QString factoryId() const { return "xmppaccount"; }
     QPixmap icon() const { return QPixmap( ":/xmpp-account/xmpp-icon.png" ); }
-    AccountTypes types() const { return AccountTypes( SipType | StatusPushType ); };
+    AccountTypes types() const { return AccountTypes( SipType | StatusPushType ); }
     Account* createAccount( const QString& pluginId = QString() );
 };
 

@@ -2,6 +2,7 @@
  *
  *   Copyright 2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2013, Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -19,9 +20,9 @@
 
 #include "Account.h"
 
-#include "TomahawkSettings.h"
 #include "AccountManager.h"
 #include "CredentialsManager.h"
+#include "ConfigStorage.h"
 
 namespace Tomahawk
 {
@@ -51,10 +52,11 @@ accountTypeToString( AccountType type )
 
 Account::Account( const QString& accountId )
     : QObject()
-    , m_enabled( false )
     , m_accountId( accountId )
 {
-    connect( this, SIGNAL( error( int, QString ) ), this, SLOT( onError( int,QString ) ) );
+    m_cfg.enabled = false;
+
+    connect( this, SIGNAL( error( int, QString ) ), this, SLOT( onError( int, QString ) ) );
     connect( this, SIGNAL( connectionStateChanged( Tomahawk::Accounts::Account::ConnectionState ) ) , this, SLOT( onConnectionStateChanged( Tomahawk::Accounts::Account::ConnectionState ) ) );
 
     loadFromConfig( accountId );
@@ -132,18 +134,7 @@ Account::onConnectionStateChanged( Account::ConnectionState )
 void
 Account::syncConfig()
 {
-    TomahawkSettings* s = TomahawkSettings::instance();
-    s->beginGroup( "accounts/" + m_accountId );
-    s->setValue( "accountfriendlyname", m_accountFriendlyName );
-    s->setValue( "enabled", m_enabled );
-    s->setValue( "configuration", m_configuration );
-    s->setValue( "acl", m_acl );
-    s->setValue( "types", m_types );
-    s->endGroup();
-    s->sync();
-
-    CredentialsManager* c = AccountManager::instance()->credentialsManager();
-    c->setCredentials( "Tomahawk", m_accountId, m_credentials );
+    AccountManager::instance()->configStorageForAccount( m_accountId )->save( m_accountId, m_cfg );
 }
 
 
@@ -151,35 +142,15 @@ void
 Account::loadFromConfig( const QString& accountId )
 {
     m_accountId = accountId;
-    TomahawkSettings* s = TomahawkSettings::instance();
-    s->beginGroup( "accounts/" + m_accountId );
-    m_accountFriendlyName = s->value( "accountfriendlyname", QString() ).toString();
-    m_enabled = s->value( "enabled", false ).toBool();
-    m_configuration = s->value( "configuration", QVariantHash() ).toHash();
-    m_acl = s->value( "acl", QVariantMap() ).toMap();
-    m_types = s->value( "types", QStringList() ).toStringList();
-    s->endGroup();
 
-    CredentialsManager* c = AccountManager::instance()->credentialsManager();
-    m_credentials = c->credentials( "Tomahawk", m_accountId );
+    AccountManager::instance()->configStorageForAccount( m_accountId )->load( m_accountId, m_cfg );
 }
 
 
 void
 Account::removeFromConfig()
 {
-    TomahawkSettings* s = TomahawkSettings::instance();
-    s->beginGroup( "accounts/" + m_accountId );
-    s->remove( "accountfriendlyname" );
-    s->remove( "enabled" );
-    s->remove( "configuration" );
-    s->remove( "acl" );
-    s->remove( "types" );
-    s->endGroup();
-    s->remove( "accounts/" + m_accountId );
-
-    CredentialsManager* c = AccountManager::instance()->credentialsManager();
-    c->setCredentials( "Tomahawk", m_accountId, QVariantHash() );
+    AccountManager::instance()->configStorageForAccount( m_accountId )->remove( m_accountId );
 }
 
 
@@ -187,15 +158,15 @@ void
 Account::setTypes( AccountTypes types )
 {
     QMutexLocker locker( &m_mutex );
-    m_types = QStringList();
+    m_cfg.types = QStringList();
     if ( types & InfoType )
-        m_types << "InfoType";
+        m_cfg.types << "InfoType";
     if ( types & SipType )
-        m_types << "SipType";
+        m_cfg.types << "SipType";
     if ( types & ResolverType )
-        m_types << "ResolverType";
+        m_cfg.types << "ResolverType";
     if ( types & StatusPushType )
-        m_types << "StatusPushType";
+        m_cfg.types << "StatusPushType";
     syncConfig();
 }
 
@@ -205,13 +176,13 @@ Account::types() const
 {
     QMutexLocker locker( &m_mutex );
     AccountTypes types;
-    if ( m_types.contains( "InfoType" ) )
+    if ( m_cfg.types.contains( "InfoType" ) )
         types |= InfoType;
-    if ( m_types.contains( "SipType" ) )
+    if ( m_cfg.types.contains( "SipType" ) )
         types |= SipType;
-    if ( m_types.contains( "ResolverType" ) )
+    if ( m_cfg.types.contains( "ResolverType" ) )
         types |= ResolverType;
-    if ( m_types.contains( "StatusPushType" ) )
+    if ( m_cfg.types.contains( "StatusPushType" ) )
         types |= StatusPushType;
 
     return types;

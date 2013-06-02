@@ -64,15 +64,11 @@ class CredentialsManager : public QObject
 {
     Q_OBJECT
 public:
-    struct Service
-    {
-        QString name;
-        QStringList keys;
-    };
-
     explicit CredentialsManager( QObject* parent = 0 );
     
-    void loadCredentials( QList< Service > keysByService );
+    void addService( const QString& service, const QStringList& accountIds );
+
+    void loadCredentials();
 
     QList< CredentialsStorageKey > keys() const;
 
@@ -88,6 +84,7 @@ private slots:
     void keychainJobFinished( QKeychain::Job* );
 
 private:
+    QHash< QString, QStringList > m_services;
     QHash< CredentialsStorageKey, QVariantHash > m_credentials;
     QList< QKeychain::ReadPasswordJob* > m_readJobs;
     QMutex m_mutex;

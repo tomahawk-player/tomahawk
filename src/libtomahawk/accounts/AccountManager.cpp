@@ -32,6 +32,7 @@
 #include "ResolverAccount.h"
 #include "SourceList.h"
 #include "TomahawkSettings.h"
+#include "LocalConfigStorage.h"
 
 #include <QtCore/QLibrary>
 #include <QtCore/QDir>
@@ -284,38 +285,42 @@ AccountManager::toggleAccountsConnected()
 void
 AccountManager::loadFromConfig()
 {
-    QStringList accountIds = TomahawkSettings::instance()->accounts();
+    m_creds = new CredentialsManager( this );
+    ConfigStorage* configStorage = new LocalConfigStorage( this ); //registers with CredentialsManager in the ctor
+    m_configStorageById.insert( configStorage->id(), configStorage );
 
+
+    QStringList accountIds;
+    foreach ( ConfigStorage* cs, m_configStorageById )
+        accountIds << cs->accountIds();
     qDebug() << "LOADING ALL CREDENTIALS" << accountIds;
 
-    m_creds = new CredentialsManager( this );
     NewClosure( m_creds, SIGNAL( ready() ),
-                this, SLOT( finishLoadingFromConfig( QStringList ) ), accountIds );
-
-    CredentialsManager::Service tomahawkSvc;
-    tomahawkSvc.name = "Tomahawk"; //the string where we store in QtKeychain
-    tomahawkSvc.keys = accountIds;
-    QList< CredentialsManager::Service > svcs;
-    svcs << tomahawkSvc;
-    m_creds->loadCredentials( svcs );
+                this, SLOT( finishLoadingFromConfig() ) );
+    m_creds->loadCredentials();
 }
 
 
 void
-AccountManager::finishLoadingFromConfig( const QStringList& accountIds )
+AccountManager::finishLoadingFromConfig()
 {
-    qDebug() << "LOADING ALL ACCOUNTS" << accountIds;
-
-    foreach ( const QString& accountId, accountIds )
+    foreach ( ConfigStorage* cs, m_configStorageById )
     {
-        QString pluginFactory = factoryFromId( accountId );
-        if ( m_accountFactories.contains( pluginFactory ) )
+        QStringList accountIds = cs->accountIds();
+
+        qDebug() << "LOADING ALL ACCOUNTS FOR STORAGE" << cs->metaObject()->className()
+                 << ":" << accountIds;
+
+        foreach ( const QString& accountId, accountIds )
         {
-            Account* account = loadPlugin( accountId );
-            addAccount( account );
+            QString pluginFactory = factoryFromId( accountId );
+            if ( m_accountFactories.contains( pluginFactory ) )
+            {
+                Account* account = loadPlugin( accountId );
+                addAccount( account );
+            }
         }
     }
-
     m_readyForSip = true;
     emit readyForSip(); //we have to yield to TomahawkApp because we don't know if Servent is ready
 }
@@ -449,6 +454,18 @@ AccountManager::zeroconfAccount() const
             return account;
     }
 
+    return 0;
+}
+
+
+ConfigStorage*
+AccountManager::configStorageForAccount( const QString& accountId )
+{
+    foreach ( ConfigStorage* cs, m_configStorageById )
+    {
+        if ( cs->accountIds().contains( accountId ) )
+            return cs;
+    }
     return 0;
 }
 

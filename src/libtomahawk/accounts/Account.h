@@ -2,6 +2,7 @@
  *
  *   Copyright 2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2013, Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -41,6 +42,8 @@ namespace Tomahawk
 namespace Accounts
 {
 
+class ConfigStorage;
+
 enum AccountType
 {
     NoType = 0x00,
@@ -66,18 +69,28 @@ class DLLEXPORT Account : public QObject
     Q_OBJECT
 
 public:
+    struct Configuration
+    {
+        QString accountFriendlyName;
+        bool enabled;
+        QVariantHash configuration;
+        QVariantMap acl;
+        QStringList types;
+        QVariantHash credentials;
+    };
+
     enum AuthErrorCode { AuthError, ConnectionError };
     enum ConnectionState { Disconnected, Connecting, Connected, Disconnecting };
 
-    explicit Account( const QString &accountId );
+    explicit Account(const QString &accountId);
     virtual ~Account();
 
     QString accountServiceName() const { QMutexLocker locker( &m_mutex ); return m_accountServiceName; } // e.g. "Twitter", "Last.fm"
-    QString accountFriendlyName() const { QMutexLocker locker( &m_mutex ); return m_accountFriendlyName; } // e.g. screen name on the service, JID, etc.
-    bool enabled() const { QMutexLocker locker( &m_mutex ); return m_enabled; }
+    QString accountFriendlyName() const { QMutexLocker locker( &m_mutex ); return m_cfg.accountFriendlyName; } // e.g. screen name on the service, JID, etc.
+    bool enabled() const { QMutexLocker locker( &m_mutex ); return m_cfg.enabled; }
     QString accountId() const { QMutexLocker locker( &m_mutex ); return m_accountId; }
 
-    QVariantHash configuration() const { QMutexLocker locker( &m_mutex ); return m_configuration; }
+    QVariantHash configuration() const { QMutexLocker locker( &m_mutex ); return m_cfg.configuration; }
 
     /**
      * Configuration widgets can have a "dataError( bool )" signal to enable/disable the OK button in their wrapper dialogs.
@@ -94,9 +107,9 @@ public:
 
     virtual void saveConfig() {} // called when the widget has been edited. save values from config widget, call sync() to write to disk account generic settings
 
-    QVariantHash credentials() const { QMutexLocker locker( &m_mutex ); return m_credentials; }
+    QVariantHash credentials() const { QMutexLocker locker( &m_mutex ); return m_cfg.credentials; }
 
-    QVariantMap acl() const { QMutexLocker locker( &m_mutex ); return m_acl; }
+    QVariantMap acl() const { QMutexLocker locker( &m_mutex ); return m_cfg.acl; }
 
     virtual ConnectionState connectionState() const = 0;
     virtual bool isAuthenticated() const = 0;
@@ -113,15 +126,16 @@ public:
     AccountTypes types() const;
 
     void setAccountServiceName( const QString &serviceName ) { QMutexLocker locker( &m_mutex ); m_accountServiceName = serviceName; }
-    void setAccountFriendlyName( const QString &friendlyName )  { QMutexLocker locker( &m_mutex ); m_accountFriendlyName = friendlyName; }
-    void setEnabled( bool enabled ) { QMutexLocker locker( &m_mutex ); m_enabled = enabled; }
+    void setAccountFriendlyName( const QString &friendlyName )  { QMutexLocker locker( &m_mutex ); m_cfg.accountFriendlyName = friendlyName; }
+    void setEnabled( bool enabled ) { QMutexLocker locker( &m_mutex ); m_cfg.enabled = enabled; }
     void setAccountId( const QString &accountId )  { QMutexLocker locker( &m_mutex ); m_accountId = accountId; }
-    void setCredentials( const QVariantHash &credentialHash ) { QMutexLocker locker( &m_mutex ); m_credentials = credentialHash; }
-    void setConfiguration( const QVariantHash &configuration ) { QMutexLocker locker( &m_mutex ); m_configuration = configuration; }
-    void setAcl( const QVariantMap &acl ) { QMutexLocker locker( &m_mutex ); m_acl = acl; }
+    void setCredentials( const QVariantHash &credentialHash ) { QMutexLocker locker( &m_mutex ); m_cfg.credentials = credentialHash; }
+    void setConfiguration( const QVariantHash &configuration ) { QMutexLocker locker( &m_mutex ); m_cfg.configuration = configuration; }
+    void setAcl( const QVariantMap &acl ) { QMutexLocker locker( &m_mutex ); m_cfg.acl = acl; }
+
     void setTypes( AccountTypes types );
 
-    void sync() { QMutexLocker locker( &m_mutex ); syncConfig(); };
+    void sync() { QMutexLocker locker( &m_mutex ); syncConfig(); }
 
     /**
      * Removes all the settings held in the config file for this account instance
@@ -150,15 +164,12 @@ private slots:
 
 private:
     QString m_accountServiceName;
-    QString m_accountFriendlyName;
     QString m_cachedError;
-    bool m_enabled;
     QString m_accountId;
-    QVariantHash m_credentials;
-    QVariantHash m_configuration;
-    QVariantMap m_acl;
-    QStringList m_types;
+
     mutable QMutex m_mutex;
+
+    Account::Configuration m_cfg;
 };
 
 class DLLEXPORT AccountFactory : public QObject
