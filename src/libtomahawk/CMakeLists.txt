@@ -154,6 +154,7 @@ set( libGuiSources
     widgets/PlayableCover.cpp
     widgets/SocialPlaylistWidget.cpp
     widgets/SourceTreePopupDialog.cpp
+    widgets/NetworkActivityWidget.cpp
     widgets/infowidgets/SourceInfoWidget.cpp
     widgets/infowidgets/ArtistInfoWidget.cpp
     widgets/infowidgets/AlbumInfoWidget.cpp
@@ -368,6 +369,7 @@ set( libUI ${libUI}
     widgets/WhatsHotWidget.ui
     widgets/NewReleasesWidget.ui
     widgets/SocialPlaylistWidget.ui
+    widgets/NetworkActivityWidget.ui
     widgets/infowidgets/SourceInfoWidget.ui
     widgets/infowidgets/ArtistInfoWidget.ui
     widgets/infowidgets/AlbumInfoWidget.ui

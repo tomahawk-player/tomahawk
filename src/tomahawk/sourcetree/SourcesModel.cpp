@@ -317,6 +317,11 @@ SourcesModel::appendGroups()
     LovedTracksItem* loved = new LovedTracksItem( this, browse );
     loved->setSortValue( 3 );
 
+    GenericPageItem* networkActivity = new GenericPageItem( this, browse, tr( "Network Activity" ), TomahawkUtils::defaultPixmap( TomahawkUtils::NetworkActivity, TomahawkUtils::Original ),
+                                                boost::bind( &ViewManager::showNetworkActivityPage, ViewManager::instance() ),
+                                                boost::bind( &ViewManager::networkActivityWidget, ViewManager::instance() ) );
+    networkActivity->setSortValue( 3 );
+
     GenericPageItem* recent = new GenericPageItem( this, browse, tr( "Recently Played" ), ImageRegistry::instance()->icon( RESPATH "images/recently-played.svg" ),
                                                    boost::bind( &ViewManager::showRecentPlaysPage, ViewManager::instance() ),
                                                    boost::bind( &ViewManager::recentPlaysWidget, ViewManager::instance() ) );
