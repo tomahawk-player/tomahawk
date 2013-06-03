@@ -99,7 +99,7 @@ PlaylistItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, const 
 void
 PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    int style = index.data( PlayableProxyModel::StyleRole ).toInt();
+    const int style = index.data( PlayableProxyModel::StyleRole ).toInt();
     switch ( style )
     {
         case PlayableProxyModel::Detailed:
@@ -160,7 +160,7 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
         {
             const int pixMargin = 2;
             const int pixHeight = r.height() - pixMargin * 2;
-            QRect npr = r.adjusted( pixMargin, pixMargin + 1, pixHeight - r.width() + pixMargin, -pixMargin + 1 );
+            const QRect npr = r.adjusted( pixMargin, pixMargin + 1, pixHeight - r.width() + pixMargin, -pixMargin + 1 );
             painter->drawPixmap( npr, TomahawkUtils::defaultPixmap( TomahawkUtils::NowPlayingSpeaker, TomahawkUtils::Original, npr.size() ) );
             r.adjust( pixHeight + 8, 0, 0, 0 );
         }
@@ -225,10 +225,8 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
        ( index.column() == PlayableModel::Artist || index.column() == PlayableModel::Album || index.column() == PlayableModel::Track ) )
     {
         opt.rect.setWidth( opt.rect.width() - opt.rect.height() - 2 );
-        QRect arrowRect( opt.rect.x() + opt.rect.width(), opt.rect.y() + 1, opt.rect.height() - 2, opt.rect.height() - 2 );
-
-        QPixmap infoIcon = TomahawkUtils::defaultPixmap( TomahawkUtils::InfoIcon, TomahawkUtils::Original, arrowRect.size() );
-        painter->drawPixmap( arrowRect, infoIcon );
+        const QRect arrowRect( opt.rect.x() + opt.rect.width(), opt.rect.y() + 1, opt.rect.height() - 2, opt.rect.height() - 2 );
+        painter->drawPixmap( arrowRect, TomahawkUtils::defaultPixmap( TomahawkUtils::InfoIcon, TomahawkUtils::Original, arrowRect.size() ) );
 
         m_infoButtonRects[ index ] = arrowRect;
     }
@@ -257,7 +255,8 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
 
         painter->drawRect( fillR );
     }
-    else */ if ( item->isPlaying() )
+    else */
+    if ( item->isPlaying() )
     {
         QRect r = opt.rect.adjusted( 3, 0, 0, 0 );
 
@@ -266,19 +265,19 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
         {
             const int pixMargin = 1;
             const int pixHeight = r.height() - pixMargin * 2;
-            QRect npr = r.adjusted( pixMargin, pixMargin, pixHeight - r.width() + pixMargin, -pixMargin );
+            const QRect npr = r.adjusted( pixMargin, pixMargin, pixHeight - r.width() + pixMargin, -pixMargin );
             painter->drawPixmap( npr, TomahawkUtils::defaultPixmap( TomahawkUtils::NowPlayingSpeaker, TomahawkUtils::Original, npr.size() ) );
             r.adjust( pixHeight + 6, 0, 0, 0 );
         }
 
         painter->setPen( opt.palette.text().color() );
-        QString text = painter->fontMetrics().elidedText( index.data().toString(), Qt::ElideRight, r.width() - 3 );
+        const QString text = painter->fontMetrics().elidedText( index.data().toString(), Qt::ElideRight, r.width() - 3 );
         painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, textOption );
     }
     else
     {
         painter->setPen( opt.palette.text().color() );
-        QString text = painter->fontMetrics().elidedText( index.data().toString(), Qt::ElideRight, opt.rect.width() - 6 );
+        const QString text = painter->fontMetrics().elidedText( index.data().toString(), Qt::ElideRight, opt.rect.width() - 6 );
         painter->drawText( opt.rect.adjusted( 3, 1, -3, 0 ), text, textOption );
     }
 
