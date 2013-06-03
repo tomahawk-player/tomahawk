@@ -25,7 +25,7 @@
 #include "infosystem/InfoSystem.h"
 #include "FreedesktopNotificationsProxy.h"
 
-#include <QtDBus>
+class QDBusPendingCallWatcher;
 
 namespace Tomahawk
 {

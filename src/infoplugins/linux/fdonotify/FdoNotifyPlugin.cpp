@@ -38,16 +38,18 @@
  */
 
 #include "FdoNotifyPlugin.h"
-#include "utils/TomahawkUtils.h"
+
 #include "ImageConverter.h"
 #include "FreedesktopNotificationsProxy.h"
 
 #include "TomahawkSettings.h"
 
+#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 #include "utils/TomahawkUtilsGui.h"
 
 #include <QDBusConnection>
+#include <QDBusPendingCallWatcher>
 #include <QImage>
 // QTextDocument provides Qt::escape()
 #include <QTextDocument>
@@ -63,22 +65,22 @@ FdoNotifyPlugin::FdoNotifyPlugin()
     , m_nowPlayingId( 0 )
     , m_wmSupportsBodyMarkup( false )
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     m_supportedPushTypes << InfoNotifyUser << InfoNowPlaying << InfoTrackUnresolved << InfoNowStopped << InfoInboxReceived;
 
     // Query the window manager for its capabilties in styling notifications.
-    notifications_interface = new org::freedesktop::Notifications("org.freedesktop.Notifications", "/org/freedesktop/Notifications",
-                                                                  QDBusConnection::sessionBus(), this);
+    notifications_interface = new org::freedesktop::Notifications( "org.freedesktop.Notifications", "/org/freedesktop/Notifications",
+                                                                   QDBusConnection::sessionBus(), this );
     QDBusPendingReply<QStringList> reply = notifications_interface->GetCapabilities();
 
-    QDBusPendingCallWatcher* watcher = new QDBusPendingCallWatcher(reply, this);
-    connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher*)), this, SLOT(dbusCapabilitiesReplyReceived(QDBusPendingCallWatcher*)));
+    QDBusPendingCallWatcher* watcher = new QDBusPendingCallWatcher( reply, this );
+    connect( watcher, SIGNAL( finished( QDBusPendingCallWatcher* ) ), SLOT( dbusCapabilitiesReplyReceived( QDBusPendingCallWatcher* ) ) );
 }
 
 
 FdoNotifyPlugin::~FdoNotifyPlugin()
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
 }
 
 
@@ -88,19 +90,20 @@ FdoNotifyPlugin::dbusCapabilitiesReplyReceived( QDBusPendingCallWatcher* watcher
     QDBusMessage reply = watcher->reply();
     watcher->deleteLater();
 
-    if (reply.type() == QDBusMessage::ErrorMessage) {
+    if ( reply.type() == QDBusMessage::ErrorMessage )
+    {
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Failed to request capabilities of notifications";
     }
 
-    const QStringList &capability_list = reply.arguments().at( 0 ).toStringList();
-    m_wmSupportsBodyMarkup = capability_list.contains("body-markup");
+    const QStringList& capability_list = reply.arguments().first().toStringList();
+    m_wmSupportsBodyMarkup = capability_list.contains( "body-markup" );
 }
 
 
 void
 FdoNotifyPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
 {
-    qDebug() << Q_FUNC_INFO << "showing notification: " << TomahawkSettings::instance()->songChangeNotificationEnabled();
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "showing notification:" << TomahawkSettings::instance()->songChangeNotificationEnabled();
 
     if ( !TomahawkSettings::instance()->songChangeNotificationEnabled() )
         return;
@@ -154,17 +157,18 @@ FdoNotifyPlugin::notifyUser( const QString& messageText )
     hints[ "image_data" ] = ImageConverter::variantForImage( QImage( RESPATH "icons/tomahawk-icon-512x512.png" ).scaledToHeight( getNotificationIconHeight() ) );
     notifications_interface->Notify(
         "Tomahawk",    // app_name
-	0,             // notification_id
-	"",            // app_icon
-	"Tomahawk",    // summary
-	messageText,   // body
-	QStringList(), // actions
-	hints,         // hints
-	-1             // expire_timeout
-	);
+        0,             // notification_id
+        "",            // app_icon
+        "Tomahawk",    // summary
+        messageText,   // body
+        QStringList(), // actions
+        hints,         // hints
+        -1             // expire_timeout
+    );
 }
 
-void FdoNotifyPlugin::inboxReceived(const QVariant &input)
+
+void FdoNotifyPlugin::inboxReceived( const QVariant& input )
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     if ( !input.canConvert< QVariantMap >() )
@@ -174,7 +178,6 @@ void FdoNotifyPlugin::inboxReceived(const QVariant &input)
 
     if ( !map.contains( "trackinfo" ) || !map[ "trackinfo" ].canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
         return;
-
     if ( !map.contains( "sourceinfo" ) || !map[ "sourceinfo" ].canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
         return;
 
@@ -217,15 +220,16 @@ void FdoNotifyPlugin::inboxReceived(const QVariant &input)
     hints[ "image_data" ] = ImageConverter::variantForImage( QImage( RESPATH "images/inbox-512x512.png" ).scaledToHeight( getNotificationIconHeight() ) );
     notifications_interface->Notify(
         "Tomahawk",                  // app_name
-	m_nowPlayingId,              // notification_id
-	"",                          // app_icon
-	"Tomahawk - Track received", // summary
-	messageText,                 // body
-	QStringList(),               // actions
-	hints,                       // hints
-	-1                           // expire_timeout
-	);
+        m_nowPlayingId,              // notification_id
+        "",                          // app_icon
+        "Tomahawk - Track received", // summary
+        messageText,                 // body
+        QStringList(),               // actions
+        hints,                       // hints
+        -1                           // expire_timeout
+    );
 }
+
 
 void
 FdoNotifyPlugin::nowPlaying( const QVariant& input )
@@ -235,7 +239,6 @@ FdoNotifyPlugin::nowPlaying( const QVariant& input )
         return;
 
     QVariantMap map = input.toMap();
-
     if ( !map.contains( "trackinfo" ) || !map[ "trackinfo" ].canConvert< Tomahawk::InfoSystem::InfoStringHash >() )
         return;
 
@@ -290,18 +293,17 @@ FdoNotifyPlugin::nowPlaying( const QVariant& input )
 
     QDBusPendingReply<> reply = notifications_interface->Notify(
         "Tomahawk",                  // app_name
-	m_nowPlayingId,              // notification_id
-	"",                          // app_icon
-	"Tomahawk - Now Playing",    // summary
-	messageText,                 // body
-	QStringList(),               // actions
-	hints,                       // hints
-	-1                           // expire_timeout
-	);
+        m_nowPlayingId,              // notification_id
+        "",                          // app_icon
+        "Tomahawk - Now Playing",    // summary
+        messageText,                 // body
+        QStringList(),               // actions
+        hints,                       // hints
+        -1                           // expire_timeout
+    );
 
-    QDBusPendingCallWatcher* watcher = new QDBusPendingCallWatcher(reply, this);
-    connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher*)),
-            this,    SLOT(RegisterFinished(dbusPlayingReplyReceived*)));
+    QDBusPendingCallWatcher* watcher = new QDBusPendingCallWatcher( reply, this );
+    connect( watcher, SIGNAL( finished( QDBusPendingCallWatcher* ) ), SLOT( RegisterFinished( dbusPlayingReplyReceived* ) ) );
 
 }
 
@@ -314,14 +316,16 @@ FdoNotifyPlugin::dbusPlayingReplyReceived( QDBusPendingCallWatcher* watcher )
 {
     QDBusMessage reply = watcher->reply();
     watcher->deleteLater();
-    if (reply.type() == QDBusMessage::ErrorMessage) {
+
+    if ( reply.type() == QDBusMessage::ErrorMessage )
+    {
         tLog(LOGVERBOSE) << "Failed to grab media keys" << reply.errorName() << reply.errorMessage();
-	return;
+        return;
     }
 
     const QVariantList& list = reply.arguments();
-    if ( list.count() > 0 )
-        m_nowPlayingId = list.at( 0 ).toInt();
+    if ( !list.isEmpty() )
+        m_nowPlayingId = list.first().toInt();
 }
 
 } //ns InfoSystem
