@@ -56,6 +56,7 @@ class WelcomeWidget;
 class WhatsHotWidget;
 class QPushButton;
 class InboxModel;
+class NetworkActivityWidget;
 
 namespace Tomahawk
 {
@@ -94,6 +95,7 @@ public:
     Tomahawk::ViewPage* recentPlaysWidget() const;
     Tomahawk::ViewPage* superCollectionView() const;
     Tomahawk::ViewPage* inboxWidget() const;
+    Tomahawk::ViewPage* networkActivityWidget() const;
 
     InboxModel* inboxModel();
 
@@ -139,6 +141,7 @@ public slots:
     Tomahawk::ViewPage* showNewReleasesPage();
     Tomahawk::ViewPage* showRecentPlaysPage();
     Tomahawk::ViewPage* showInboxPage();
+    Tomahawk::ViewPage* showNetworkActivityPage();
     void showCurrentTrack();
 
     // Returns the shown viewpage
@@ -192,6 +195,7 @@ private:
     Tomahawk::ViewPage* m_recentPlaysWidget;
     Tomahawk::ViewPage* m_inboxWidget;
     InboxModel* m_inboxModel;
+    NetworkActivityWidget* m_networkActivityWidget;
 
     QList< Tomahawk::collection_ptr > m_superCollections;
 

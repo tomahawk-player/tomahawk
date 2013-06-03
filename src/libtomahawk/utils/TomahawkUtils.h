@@ -124,7 +124,8 @@ namespace TomahawkUtils
         Inbox,
         Invalid,
         InboxNewItem,
-        Outbox
+        Outbox,
+        NetworkActivity
     };
 
     enum ImageMode

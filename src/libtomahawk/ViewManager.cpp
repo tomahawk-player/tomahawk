@@ -47,6 +47,7 @@
 #include "widgets/NewReleasesWidget.h"
 #include "widgets/WelcomeWidget.h"
 #include "widgets/WhatsHotWidget.h"
+#include "widgets/NetworkActivityWidget.h"
 #include "widgets/infowidgets/SourceInfoWidget.h"
 #include "widgets/infowidgets/ArtistInfoWidget.h"
 #include "widgets/infowidgets/AlbumInfoWidget.h"
@@ -82,6 +83,7 @@ ViewManager::ViewManager( QObject* parent )
     , m_newReleasesWidget( 0 )
     , m_recentPlaysWidget( 0 )
     , m_inboxWidget( 0 )
+    , m_networkActivityWidget( 0 )
     , m_currentPage( 0 )
     , m_loaded( false )
 {
@@ -129,6 +131,7 @@ ViewManager::ViewManager( QObject* parent )
 
 ViewManager::~ViewManager()
 {
+    delete m_networkActivityWidget;
     delete m_whatsHotWidget;
     delete m_newReleasesWidget;
     delete m_welcomeWidget;
@@ -487,6 +490,17 @@ ViewManager::showInboxPage()
     }
 
     return show( m_inboxWidget );
+}
+
+ViewPage *ViewManager::showNetworkActivityPage()
+{
+    if ( !m_networkActivityWidget )
+    {
+        m_networkActivityWidget = new NetworkActivityWidget( m_widget );
+        m_networkActivityWidget->fetchData();
+    }
+
+    return show( m_networkActivityWidget );
 }
 
 
@@ -880,6 +894,11 @@ Tomahawk::ViewPage*
 ViewManager::inboxWidget() const
 {
     return m_inboxWidget;
+}
+
+ViewPage *ViewManager::networkActivityWidget() const
+{
+    return m_networkActivityWidget;
 }
 
 
