@@ -33,6 +33,8 @@
 #include "utils/Logger.h"
 #include "infosystem/InfoSystem.h"
 #include "infosystem/InfoSystemWorker.h"
+#include "database/Database.h"
+#include "database/DatabaseImpl.h"
 
 #include <QLabel>
 #include <QTextEdit>
@@ -64,7 +66,8 @@ DiagnosticsDialog::updateLogView()
 
     log.append( QString( "TOMAHAWK DIAGNOSTICS LOG -%1 \n\n" ).arg( QDateTime::currentDateTime().toString() ) );
     log.append( "TOMAHAWK-VERSION: " TOMAHAWK_VERSION "\n" );
-    log.append( "PLATFORM: " TOMAHAWK_SYSTEM "\n\n");
+    log.append( "PLATFORM: " TOMAHAWK_SYSTEM "\n");
+    log.append( QString( "DBID: %1\n\n" ).arg( Database::instance()->impl()->dbid() ) );
     log.append( "NETWORK:\n    Listening to:\n" );
 
     if ( Servent::instance()->visibleExternally() )
