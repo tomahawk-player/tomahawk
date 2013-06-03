@@ -824,7 +824,7 @@ Servent::initiateConnection( const SipInfo& sipInfo, Connection* conn )
         return;
     }
 
-    if ( !sipInfo.key().isEmpty() && conn->firstMessage().isNull() )
+    if ( conn->firstMessage().isNull() )
     {
         QVariantMap m;
         m["conntype"]  = "accept-offer";
@@ -898,7 +898,7 @@ Servent::reverseOfferRequest( ControlConnection* orig_conn, const QString& their
     m["key"]       = theirkey;
     m["controlid"] = Database::instance()->impl()->dbid();
     new_conn->setFirstMessage( m );
-    createParallelConnection( orig_conn, new_conn, QString() );
+    createParallelConnection( orig_conn, new_conn, theirkey );
 }
 
 // return the appropriate connection for a given offer key, or NULL if invalid
