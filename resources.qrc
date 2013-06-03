@@ -154,5 +154,6 @@
         <file>data/images/new-inbox.svg</file>
         <file>data/images/outbox.svg</file>
         <file>data/images/inbox-512x512.png</file>
+        <file>data/images/network-activity.svg</file>
     </qresource>
 </RCC>
