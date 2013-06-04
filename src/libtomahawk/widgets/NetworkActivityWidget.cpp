@@ -20,6 +20,7 @@
 #include "ui_NetworkActivityWidget.h"
 
 #include "Pipeline.h"
+#include "audio/AudioEngine.h"
 #include "database/Database.h"
 #include "database/DatabaseCommand_NetworkCharts.h"
 #include "playlist/PlaylistChartItemDelegate.h"
@@ -79,6 +80,15 @@ Tomahawk::playlistinterface_ptr
 NetworkActivityWidget::playlistInterface() const
 {
     return m_playlistInterface;
+}
+
+bool
+NetworkActivityWidget::isBeingPlayed() const
+{
+    if ( AudioEngine::instance()->currentTrackPlaylist() == ui->tracksViewLeft->playlistInterface() )
+        return true;
+
+    return false;
 }
 
 bool
