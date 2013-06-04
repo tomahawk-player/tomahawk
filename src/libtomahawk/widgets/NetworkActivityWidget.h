@@ -44,6 +44,9 @@ public:
     virtual QString title() const { return tr( "Network Activity" ); }
     virtual QString description() const { return QString(); }
 
+    virtual bool showInfoBar() const { return false; }
+    virtual bool isBeingPlayed() const;
+
     virtual bool jumpToCurrentTrack();
 
     void fetchData();
