@@ -39,6 +39,7 @@ ControlConnection::ControlConnection( Servent* parent )
     , m_dbsyncconn( 0 )
     , m_registered( false )
     , m_pingtimer( 0 )
+    , m_shutdownOnEmptyPeerInfos( true )
 {
     qDebug() << "CTOR controlconnection";
     setId("ControlConnection()");
@@ -305,7 +306,17 @@ ControlConnection::removePeerInfo( const peerinfo_ptr& peerInfo )
 
     m_peerInfos.remove( peerInfo );
 
-    if ( m_peerInfos.isEmpty() )
+    if ( m_peerInfos.isEmpty() && m_shutdownOnEmptyPeerInfos )
+    {
+        shutdown( true );
+    }
+}
+
+void
+ControlConnection::setShutdownOnEmptyPeerInfos( bool shutdownOnEmptyPeerInfos )
+{
+    m_shutdownOnEmptyPeerInfos = shutdownOnEmptyPeerInfos;
+    if ( m_peerInfos.isEmpty() && m_shutdownOnEmptyPeerInfos )
     {
         shutdown( true );
     }
