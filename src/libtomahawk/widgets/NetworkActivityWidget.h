@@ -22,6 +22,10 @@
 #include "ViewPage.h"
 
 class AnimatedSpinner;
+class PlaylistModel;
+class QModelIndex;
+class QStandardItemModel;
+class QSortFilterProxyModel;
 namespace Ui
 {
     class NetworkActivityWidget;
@@ -45,14 +49,29 @@ public:
     void fetchData();
 signals:
     
-public slots:
+private slots:
+    void weeklyCharts( const QList<Tomahawk::track_ptr>& );
+    void monthlyCharts( const QList<Tomahawk::track_ptr>& );
+    void yearlyCharts( const QList<Tomahawk::track_ptr>& );
+
+    void leftCrumbIndexChanged( QModelIndex );
 
 private:
     void actualFetchData();
+    void checkDone( QSharedPointer<QMutexLocker> );
 
-    Ui::NetworkActivityWidget* ui;
+    QMutex m_retrieveMutex;
+
+    QSharedPointer<Ui::NetworkActivityWidget> ui;
     Tomahawk::playlistinterface_ptr m_playlistInterface;
-    QSharedPointer<AnimatedSpinner> m_spinner;
+    AnimatedSpinner* m_spinner;
+    QStandardItemModel* m_crumbModelLeft;
+    QSortFilterProxyModel* m_sortedProxy;
+
+    QPointer<PlaylistModel> m_weeklyChartsModel;
+    QPointer<PlaylistModel> m_monthlyChartsModel;
+    QPointer<PlaylistModel> m_yearlyChartsModel;
+
 };
 
 #endif // NETWORKACTIVITYWIDGET_H
