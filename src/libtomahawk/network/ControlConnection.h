@@ -50,6 +50,7 @@ public:
 
     void addPeerInfo( const Tomahawk::peerinfo_ptr& peerInfo );
     void removePeerInfo( const Tomahawk::peerinfo_ptr& peerInfo );
+    void setShutdownOnEmptyPeerInfos( bool shutdownOnEmptyPeerInfos );
     const QSet< Tomahawk::peerinfo_ptr > peerInfos() const;
 
 protected:
@@ -71,6 +72,7 @@ private:
 
     QString m_dbconnkey;
     bool m_registered;
+    bool m_shutdownOnEmptyPeerInfos;
 
     QTimer* m_pingtimer;
     QTime m_pingtimer_mark;

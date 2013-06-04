@@ -116,6 +116,7 @@ ConnectionManager::connectToPeer( const Tomahawk::peerinfo_ptr &peerInfo, bool l
     m["nodeid"]    = Database::instance()->impl()->dbid();
 
     m_controlConnection = QPointer<ControlConnection>( new ControlConnection( Servent::instance() ) );
+    m_controlConnection->setShutdownOnEmptyPeerInfos( false );
     m_controlConnection->addPeerInfo( peerInfo );
     m_controlConnection->setFirstMessage( m );
 
@@ -238,6 +239,8 @@ ConnectionManager::handoverSocket( QTcpSocketExtra* sock )
     m_controlConnection->setPeerPort( sock->peerPort() );
 
     m_controlConnection->start( sock );
+    // ControlConntection is now connected, now it can be destroyed if the PeerInfos disappear
+    m_controlConnection->setShutdownOnEmptyPeerInfos( true );
     m_currentPeerInfo.clear();
     m_mutex.unlock();
 }
