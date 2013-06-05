@@ -57,6 +57,7 @@ Source::Source( int id, const QString& nodeId )
     , m_id( id )
     , m_updateIndexWhenSynced( false )
     , m_state( DBSyncConnection::UNKNOWN )
+    , m_avatarLoaded( false )
     , m_cc( 0 )
     , m_commandCount( 0 )
 {
@@ -251,33 +252,31 @@ Source::friendlyNamesLessThan( const QString& first, const QString& second )
 QPixmap
 Source::avatar( TomahawkUtils::ImageMode style, const QSize& size )
 {
-//     tLog() << "****************************************************************************************";
-//     tLog() << peerInfos().count() << "PEERS FOR " << friendlyName();
-    QPixmap result;
     foreach ( const peerinfo_ptr& peerInfo, peerInfos() )
     {
-//         peerInfoDebug(peerInfo) << !peerInfo->avatar().isNull();
-        if ( !peerInfo.isNull() && !peerInfo->avatar( style, size ).isNull() )
+        if ( peerInfo && !peerInfo->avatar( style, size ).isNull() )
         {
-            result =  peerInfo->avatar( style, size );
-            break;
+            return peerInfo->avatar( style, size );
         }
     }
-    if ( result.isNull() )
+
+    if ( m_avatarLoaded )
+        return m_avatar;
+
+    // Try to get the avatar from the cache
+    // Hint: We store the avatar for each xmpp peer using its contactId, the dbFriendlyName is a contactId of a peer
+    m_avatarLoaded = true;
+    QByteArray avatarBuffer = TomahawkUtils::Cache::instance()->getData( "Sources", dbFriendlyName() ).toByteArray();
+    if ( !avatarBuffer.isNull() )
     {
-        // Try to get the avatar from the cache
-        // Hint: We store the avatar for each xmpp peer using its contactId, the dbFriendlyName is a contactId of a peer
-        QByteArray avatarBuffer = TomahawkUtils::Cache::instance()->getData( "Sources", dbFriendlyName() ).toByteArray();
-        if ( !avatarBuffer.isNull() )
-        {
-            QPixmap avatar;
-            avatar.loadFromData( avatarBuffer );
-            avatarBuffer.clear();
-            result = QPixmap( TomahawkUtils::createRoundedImage( avatar, QSize( 0, 0 ) ) );
-        }
+        QPixmap avatar;
+        avatar.loadFromData( avatarBuffer );
+        avatarBuffer.clear();
+
+        m_avatar = QPixmap( TomahawkUtils::createRoundedImage( avatar, QSize( 0, 0 ) ) );
     }
-//        tLog() << "****************************************************************************************";
-    return result;
+
+    return m_avatar;
 }
 #endif
 
