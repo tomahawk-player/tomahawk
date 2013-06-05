@@ -35,9 +35,9 @@ class NetworkActivityWidget : public QWidget, public Tomahawk::ViewPage
 {
     Q_OBJECT
 public:
-    NetworkActivityWidget(QWidget *parent = 0);
+    NetworkActivityWidget(QWidget* parent = 0);
     ~NetworkActivityWidget();
-    
+
     virtual QWidget* widget() { return this; }
     virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
 
@@ -51,13 +51,13 @@ public:
 
     void fetchData();
 signals:
-    
+
 private slots:
     void weeklyCharts( const QList<Tomahawk::track_ptr>& );
     void monthlyCharts( const QList<Tomahawk::track_ptr>& );
     void yearlyCharts( const QList<Tomahawk::track_ptr>& );
 
-    void leftCrumbIndexChanged( QModelIndex );
+    void leftCrumbIndexChanged( const QModelIndex& );
 
 private:
     void actualFetchData();
