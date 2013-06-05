@@ -34,7 +34,9 @@
 
 #ifndef ENABLE_HEADLESS
     #include "TomahawkSettingsGui.h"
-    #include "breakpad/BreakPad.h"
+    #ifdef WITH_BREAKPAD
+        #include "breakpad/BreakPad.h"
+    #endif
 #endif
 
 
