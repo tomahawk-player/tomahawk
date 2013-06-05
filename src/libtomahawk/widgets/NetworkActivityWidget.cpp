@@ -116,42 +116,39 @@ NetworkActivityWidget::fetchData()
 void
 NetworkActivityWidget::weeklyCharts( const QList<Tomahawk::track_ptr>& tracks )
 {
-    QSharedPointer<QMutexLocker> locker = QSharedPointer<QMutexLocker>( new QMutexLocker( &m_retrieveMutex ) );
     m_weeklyChartsModel = new PlaylistModel( ui->tracksViewLeft );
     m_weeklyChartsModel->startLoading();
     // Pipeline::instance()->resolve( tracks );
     m_weeklyChartsModel->appendTracks( tracks );
     m_weeklyChartsModel->finishLoading();
 
-    checkDone( locker );
+    checkDone();
 }
 
 
 void
 NetworkActivityWidget::monthlyCharts( const QList<Tomahawk::track_ptr>& tracks )
 {
-    QSharedPointer<QMutexLocker> locker = QSharedPointer<QMutexLocker>( new QMutexLocker( &m_retrieveMutex ) );
     m_monthlyChartsModel = new PlaylistModel( ui->tracksViewLeft );
     m_monthlyChartsModel->startLoading();
     // Pipeline::instance()->resolve( tracks );
     m_monthlyChartsModel->appendTracks( tracks );
     m_monthlyChartsModel->finishLoading();
 
-    checkDone( locker );
+    checkDone();
 }
 
 
 void
 NetworkActivityWidget::yearlyCharts( const QList<Tomahawk::track_ptr>& tracks )
 {
-    QSharedPointer<QMutexLocker> locker = QSharedPointer<QMutexLocker>( new QMutexLocker( &m_retrieveMutex ) );
     m_yearlyChartsModel = new PlaylistModel( ui->tracksViewLeft );
     m_yearlyChartsModel->startLoading();
     // Pipeline::instance()->resolve( tracks );
     m_yearlyChartsModel->appendTracks( tracks );
     m_yearlyChartsModel->finishLoading();
 
-    checkDone( locker );
+    checkDone();
 }
 
 
@@ -215,7 +212,7 @@ NetworkActivityWidget::actualFetchData()
 
 
 void
-NetworkActivityWidget::checkDone( QSharedPointer<QMutexLocker> )
+NetworkActivityWidget::checkDone()
 {
     if ( !m_weeklyChartsModel.isNull() && !m_yearlyChartsModel.isNull() && !m_monthlyChartsModel.isNull() )
     {
