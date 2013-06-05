@@ -16,14 +16,14 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
 )
 
 
-if (APPLE)
+if( APPLE )
 #  find_library(GROWL Growl)
   option(ENABLE_SPARKLE "Sparkle updating" ON)
   find_library(SPARKLE Sparkle)
-  if (ENABLE_SPARKLE AND SPARKLE)
+  if( ENABLE_SPARKLE AND SPARKLE )
     set(HAVE_SPARKLE ON)
     set( OS_SPECIFIC_LINK_LIBRARIES ${OS_SPECIFIC_LINK_LIBRARIES} ${SPARKLE} )
-  endif(ENABLE_SPARKLE AND SPARKLE)
+  endif( ENABLE_SPARKLE AND SPARKLE )
   # Uses Darwin kernel version.
   # 9.8.0  -> 10.5/Leopard
   # 10.4.0 -> 10.6/Snow Leopard
