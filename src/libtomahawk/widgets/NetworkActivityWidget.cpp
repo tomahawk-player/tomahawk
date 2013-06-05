@@ -38,7 +38,7 @@
 
 using namespace Tomahawk;
 
-NetworkActivityWidget::NetworkActivityWidget( QWidget *parent )
+NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
     : QWidget( parent )
     , ui( new Ui::NetworkActivityWidget )
     , m_sortedProxy( 0 )
@@ -72,15 +72,18 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget *parent )
     m_spinner->fadeIn();
 }
 
+
 NetworkActivityWidget::~NetworkActivityWidget()
 {
 }
+
 
 Tomahawk::playlistinterface_ptr
 NetworkActivityWidget::playlistInterface() const
 {
     return m_playlistInterface;
 }
+
 
 bool
 NetworkActivityWidget::isBeingPlayed() const
@@ -91,6 +94,7 @@ NetworkActivityWidget::isBeingPlayed() const
     return false;
 }
 
+
 bool
 NetworkActivityWidget::jumpToCurrentTrack()
 {
@@ -100,12 +104,14 @@ NetworkActivityWidget::jumpToCurrentTrack()
     return false;
 }
 
+
 void
 NetworkActivityWidget::fetchData()
 {
     // Do not block the UI thread
     QtConcurrent::run( this, &NetworkActivityWidget::actualFetchData );
 }
+
 
 void
 NetworkActivityWidget::weeklyCharts( const QList<Tomahawk::track_ptr>& tracks )
@@ -120,6 +126,7 @@ NetworkActivityWidget::weeklyCharts( const QList<Tomahawk::track_ptr>& tracks )
     checkDone( locker );
 }
 
+
 void
 NetworkActivityWidget::monthlyCharts( const QList<Tomahawk::track_ptr>& tracks )
 {
@@ -132,6 +139,7 @@ NetworkActivityWidget::monthlyCharts( const QList<Tomahawk::track_ptr>& tracks )
 
     checkDone( locker );
 }
+
 
 void
 NetworkActivityWidget::yearlyCharts( const QList<Tomahawk::track_ptr>& tracks )
@@ -146,8 +154,9 @@ NetworkActivityWidget::yearlyCharts( const QList<Tomahawk::track_ptr>& tracks )
     checkDone( locker );
 }
 
+
 void
-NetworkActivityWidget::leftCrumbIndexChanged( QModelIndex index )
+NetworkActivityWidget::leftCrumbIndexChanged( const QModelIndex& index )
 {
     QStandardItem* item = m_crumbModelLeft->itemFromIndex( m_sortedProxy->mapToSource( index ) );
     if ( !item )
@@ -176,6 +185,7 @@ NetworkActivityWidget::leftCrumbIndexChanged( QModelIndex index )
     }
 }
 
+
 void
 NetworkActivityWidget::actualFetchData()
 {
@@ -202,6 +212,7 @@ NetworkActivityWidget::actualFetchData()
     connect( yearCharts, SIGNAL( done( QList<Tomahawk::track_ptr> ) ), SLOT( yearlyCharts( QList<Tomahawk::track_ptr> ) ) );
     Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( yearCharts ) );
 }
+
 
 void
 NetworkActivityWidget::checkDone( QSharedPointer<QMutexLocker> )
