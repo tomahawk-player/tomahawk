@@ -41,13 +41,13 @@ Cache* Cache::instance()
 
 
 Cache::Cache()
-    : QObject ( 0 )
-    , m_cacheBaseDir ( TomahawkSettings::instance()->storageCacheLocation() + "/GenericCache/" )
-    , m_cacheManifest ( m_cacheBaseDir + "cachemanifest.ini", QSettings::IniFormat )
+    : QObject( 0 )
+    , m_cacheBaseDir( TomahawkSettings::instance()->storageCacheLocation() + "/GenericCache/" )
+    , m_cacheManifest( m_cacheBaseDir + "cachemanifest.ini", QSettings::IniFormat )
 {
-    m_pruneTimer.setInterval ( 300000 );
-    m_pruneTimer.setSingleShot ( false );
-    connect ( &m_pruneTimer, SIGNAL ( timeout() ), SLOT ( pruneTimerFired() ) );
+    m_pruneTimer.setInterval( 300000 );
+    m_pruneTimer.setSingleShot( false );
+    connect( &m_pruneTimer, SIGNAL( timeout() ), SLOT( pruneTimerFired() ) );
     m_pruneTimer.start();
 }
 
@@ -65,26 +65,26 @@ Cache::pruneTimerFired()
     qDebug() << Q_FUNC_INFO << "Pruning tomahawkcache";
     qlonglong currentMSecsSinceEpoch = QDateTime::currentMSecsSinceEpoch();
 
-    QVariantList clients = m_cacheManifest.value ( "clients" ).toList();
+    QVariantList clients = m_cacheManifest.value( "clients" ).toList();
     foreach ( const QVariant& client, clients )
     {
         const QString client_identifier = client.toString();
         const QString cache_dir = m_cacheBaseDir + client_identifier;
 
-        QSettings cached_settings ( cache_dir, QSettings::IniFormat );
+        QSettings cached_settings( cache_dir, QSettings::IniFormat );
         const QStringList keys = cached_settings.allKeys();
         foreach ( const QString& key, keys )
         {
-            CacheData data = cached_settings.value ( key ).value<TomahawkUtils::CacheData>();
+            CacheData data = cached_settings.value( key ).value<TomahawkUtils::CacheData>();
             if ( data.maxAge < currentMSecsSinceEpoch )
             {
-                cached_settings.remove ( key );
+                cached_settings.remove( key );
                 tLog() << Q_FUNC_INFO << "Removed stale entry: " << client_identifier << key;
             }
         }
         cached_settings.sync();
         if ( cached_settings.allKeys().size() == 0 )
-            removeClient ( client_identifier );
+            removeClient( client_identifier );
     }
 }
 
@@ -95,23 +95,23 @@ Cache::getData( const QString& identifier, const QString& key )
     QMutexLocker mutex_locker( &m_mutex );
 
     const QString cacheDir = m_cacheBaseDir + identifier;
-    QSettings cached_settings ( cacheDir, QSettings::IniFormat );
+    QSettings cached_settings( cacheDir, QSettings::IniFormat );
 
-    if ( cached_settings.contains ( key ) )
+    if ( cached_settings.contains( key ) )
     {
-        CacheData data = cached_settings.value ( key ).value<TomahawkUtils::CacheData>();
+        CacheData data = cached_settings.value( key ).value<TomahawkUtils::CacheData>();
 
         if ( data.maxAge < QDateTime::currentMSecsSinceEpoch() )
         {
-            cached_settings.remove ( key );
+            cached_settings.remove( key );
             tLog() << Q_FUNC_INFO << "Removed stale entry:" << identifier << key;
             return QVariant();
         }
-//        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Fetched data for" << identifier << key;
+        tDebug() << Q_FUNC_INFO << "Fetched data for" << identifier << key;
         return data.data;
 
     }
-//    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "No such key" << key;
+    tDebug() << Q_FUNC_INFO << "No such key" << key;
     return QVariant();
 }
 
@@ -122,9 +122,9 @@ Cache::putData( const QString& identifier, qint64 maxAge, const QString& key, co
     QMutexLocker mutex_locker( &m_mutex );
 
     const QString cacheDir = m_cacheBaseDir + identifier;
-    addClient ( identifier );
-    QSettings cached_settings ( cacheDir, QSettings::IniFormat );
-    cached_settings.setValue ( key, QVariant::fromValue ( CacheData ( QDateTime::currentMSecsSinceEpoch() + maxAge, value ) ) );
+    addClient( identifier );
+    QSettings cached_settings( cacheDir, QSettings::IniFormat );
+    cached_settings.setValue( key, QVariant::fromValue( CacheData( QDateTime::currentMSecsSinceEpoch() + maxAge, value ) ) );
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Storing from client" << identifier << maxAge << key << value;
 }
 
@@ -132,16 +132,17 @@ Cache::putData( const QString& identifier, qint64 maxAge, const QString& key, co
 void
 Cache::addClient( const QString& identifier )
 {
-    QVariantList clients = m_cacheManifest.value ( "clients" ).toList();
+    QVariantList clients = m_cacheManifest.value( "clients" ).toList();
     foreach ( const QVariant& client, clients )
     {
         const QString client_identifier = client.toString();
-        if ( identifier == client_identifier ) return;
+        if ( identifier == client_identifier )
+            return;
     }
 
     tLog() << Q_FUNC_INFO << "adding client" << identifier;
-    clients.append ( identifier );
-    m_cacheManifest.setValue ( "clients", clients );
+    clients.append( identifier );
+    m_cacheManifest.setValue( "clients", clients );
     m_cacheManifest.sync();
 }
 
@@ -149,7 +150,7 @@ Cache::addClient( const QString& identifier )
 void
 Cache::removeClient( const QString& identifier )
 {
-    QVariantList clients = m_cacheManifest.value ( "clients" ).toList();
+    QVariantList clients = m_cacheManifest.value( "clients" ).toList();
     QVariantList::iterator it = clients.begin();
     while ( it != clients.end() )
     {
@@ -157,7 +158,7 @@ Cache::removeClient( const QString& identifier )
         if ( identifier == client_identifier )
         {
             tLog() << Q_FUNC_INFO << "removing client" << identifier;
-            clients.erase ( it );
+            clients.erase( it );
             break;
         }
         ++it;
