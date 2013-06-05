@@ -32,11 +32,11 @@ IF( WITH_GNOMESHORTCUTHANDLER )
     qt4_add_dbus_interface(tomahawkSources GnomeSettingsDaemonMediaKeys.xml GnomeSettingsDaemonMediaKeysProxy)
 ENDIF( WITH_GNOMESHORTCUTHANDLER )
 
-IF(LIBLASTFM_FOUND)
+IF( LIBLASTFM_FOUND )
     SET(tomahawkSources ${tomahawkSources}
         Scrobbler.cpp
     )
-ENDIF(LIBLASTFM_FOUND)
+ENDIF( LIBLASTFM_FOUND )
 
 SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      sourcetree/SourcesModel.cpp
@@ -111,7 +111,7 @@ INCLUDE_DIRECTORIES(
     ${LIBLASTFM_INCLUDE_DIRS}
 )
 
-IF(QXTWEB_FOUND)
+IF( QXTWEB_FOUND )
     LIST(APPEND tomahawkSources web/Api_v1.cpp)
     LIST(APPEND LINK_LIBRARIES ${QXTWEB_LIBRARIES})
     INCLUDE_DIRECTORIES(${QXTWEB_INCLUDE_DIRS})
@@ -134,9 +134,9 @@ IF( APPLE )
     SET( tomahawkSources ${tomahawkSources} mac/TomahawkApp_Mac.mm mac/MacShortcutHandler.cpp )
 ENDIF( APPLE )
 
-IF(QCA2_FOUND)
+IF( QCA2_FOUND )
     INCLUDE_DIRECTORIES( ${QCA2_INCLUDE_DIR} )
-ENDIF(QCA2_FOUND)
+ENDIF( QCA2_FOUND )
 
 INCLUDE(GNUInstallDirs)
 
@@ -175,13 +175,13 @@ qt5_use_modules(tomahawk Core Widgets Network Sql WebKitWidgets)
 
 MESSAGE( STATUS "OS_SPECIFIC_LINK_LIBRARIES: ${OS_SPECIFIC_LINK_LIBRARIES}" )
 
-IF(LIBLASTFM_FOUND)
+IF( LIBLASTFM_FOUND )
     LIST(APPEND LINK_LIBRARIES ${LINK_LIBRARIES} ${LIBLASTFM_LIBRARIES} )
-ENDIF(LIBLASTFM_FOUND)
-IF(QCA2_FOUND)
+ENDIF( LIBLASTFM_FOUND )
+IF( QCA2_FOUND )
     LIST(APPEND LINK_LIBRARIES ${LINK_LIBRARIES} ${QCA2_LIBRARIES} )
-ENDIF(QCA2_FOUND)
-IF(WITH_BREAKPAD)
+ENDIF( QCA2_FOUND )
+IF( WITH_BREAKPAD )
     LIST(APPEND LINK_LIBRARIES ${LINK_LIBRARIES} tomahawk_breakpad )
 ENDIF()
 
@@ -198,11 +198,11 @@ TARGET_LINK_LIBRARIES( tomahawk
 )
 
 IF( APPLE )
-  IF(HAVE_SPARKLE)
+  IF( HAVE_SPARKLE )
     MESSAGE("Sparkle Found, installing framekwork in bundle")
     INSTALL(DIRECTORY "${SPARKLE}/Versions/Current/Resources" DESTINATION "${CMAKE_BINARY_DIR}/tomahawk.app/Contents/Frameworks/Sparkle.framework")
 
-  ENDIF(HAVE_SPARKLE)
+  ENDIF( HAVE_SPARKLE )
 ENDIF( APPLE )
 
 INSTALL( TARGETS tomahawk BUNDLE DESTINATION . RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} )
