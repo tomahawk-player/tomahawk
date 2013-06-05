@@ -1026,6 +1026,34 @@ Password</source>
     </message>
 </context>
 <context>
+    <name>NetworkActivityWidget</name>
+    <message>
+        <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="215"/>
+        <source>Charts</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="217"/>
+        <source>Last Week</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="220"/>
+        <source>Last Month</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="223"/>
+        <source>Last Year</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.h" line="44"/>
+        <source>Network Activity</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>NewPlaylistWidget</name>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.ui" line="20"/>
@@ -2074,7 +2102,12 @@ Password</source>
         <translation>超级收藏</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="335"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="315"/>
+        <source>Network Activity</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="340"/>
         <source>Cloud</source>
         <translation type="unfinished"/>
     </message>
@@ -2084,22 +2117,22 @@ Password</source>
         <translation>概览</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="315"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="320"/>
         <source>Recently Played</source>
         <translation>最近播放</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="320"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="325"/>
         <source>Charts</source>
         <translation>排行榜</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="325"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="330"/>
         <source>New Releases</source>
         <translation>新专辑</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="333"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="338"/>
         <source>Friends</source>
         <translation>朋友们</translation>
     </message>
@@ -4005,48 +4038,48 @@ You can re-send a sync message at any time simply by sending another tweet using
 <context>
     <name>ViewManager</name>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="95"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="97"/>
         <source>Inbox</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="96"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="98"/>
         <source>Listening suggestions from your friends</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="151"/>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="173"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="154"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="176"/>
         <source>This playlist is empty!</source>
         <translation>当前播放列表为空！</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="377"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="380"/>
         <source>SuperCollection</source>
         <translation>超级收藏</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="378"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="381"/>
         <source>Combined libraries of all your online friends</source>
         <translation>当前在线的朋友的音乐库集合</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="445"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="448"/>
         <source>Recently Played Tracks</source>
         <translation>最近播放歌曲</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="446"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="449"/>
         <source>Recently played tracks from all your friends</source>
         <translation>所有朋友最近播放的歌曲</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="452"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="455"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>对不起，找不到任何最近播放项目！</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="479"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="482"/>
         <source>No listening suggestions here.</source>
         <translation type="unfinished"/>
     </message>
