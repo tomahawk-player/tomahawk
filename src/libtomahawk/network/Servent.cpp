@@ -723,7 +723,7 @@ Servent::createParallelConnection( Connection* orig_conn, Connection* new_conn, 
         info.setVisible( true );
         info.setKey( key );
         info.setNodeId( orig_conn->id() );
-        info.setHost( orig_conn->socket()->peerAddress().toString() );
+        info.setHost( orig_conn->socket()->peerName() );
         info.setPort( orig_conn->peerPort() );
         Q_ASSERT( info.isValid() );
         initiateConnection( info, new_conn );
