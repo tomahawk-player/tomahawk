@@ -27,12 +27,14 @@
 #include <QObject>
 #include <QTimer>
 
-namespace TomahawkUtils {
+namespace TomahawkUtils
+{
 
 /**
  * Internal data structure. Don't use.
  */
-struct CacheData {
+struct CacheData
+{
     CacheData(){}
     CacheData( qint64 maxAg, QVariant dat )
     : maxAge( maxAg )
@@ -67,7 +69,7 @@ public:
      * @param key the key to store the data
      * @param value the data to store
      */
-    void putData( const QString &identifier, qint64 maxAge, const QString &key, const QVariant& value );
+    void putData( const QString& identifier, qint64 maxAge, const QString& key, const QVariant& value );
 
     /**
      * Retrieve data from the cache.
@@ -75,7 +77,7 @@ public:
      * @param key the key to store the data
      * @return the data, if found, if not found an invalid QVariant is returned.
      */
-    QVariant getData( const QString &identifier, const QString &key );
+    QVariant getData( const QString& identifier, const QString& key );
 
 private slots:
     void pruneTimerFired();
@@ -88,13 +90,13 @@ private:
      * Adds a client to the manifest.
      * Does not lock the mutex.
      */
-    void addClient( const QString &identifier );
+    void addClient( const QString& identifier );
 
     /**
      * Removes a client to the manifest.
      * Does not lock the mutex.
      */
-    void removeClient( const QString &identifier );
+    void removeClient( const QString& identifier );
 
     QString m_cacheBaseDir;
     QSettings m_cacheManifest;
