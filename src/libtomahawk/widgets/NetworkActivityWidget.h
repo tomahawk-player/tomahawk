@@ -61,9 +61,7 @@ private slots:
 
 private:
     void actualFetchData();
-    void checkDone( QSharedPointer<QMutexLocker> );
-
-    QMutex m_retrieveMutex;
+    void checkDone();
 
     QSharedPointer<Ui::NetworkActivityWidget> ui;
     Tomahawk::playlistinterface_ptr m_playlistInterface;
