@@ -1030,22 +1030,22 @@ Password</translation>
 <context>
     <name>NetworkActivityWidget</name>
     <message>
-        <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="215"/>
+        <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="223"/>
         <source>Charts</source>
         <translation>Charts</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="217"/>
+        <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="225"/>
         <source>Last Week</source>
         <translation>Last Week</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="220"/>
+        <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="228"/>
         <source>Last Month</source>
         <translation>Last Month</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="223"/>
+        <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="231"/>
         <source>Last Year</source>
         <translation>Last Year</translation>
     </message>
@@ -3526,43 +3526,43 @@ Try tweaking the filters for a new set of songs to play.</translation>
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="402"/>
-        <location filename="../src/libtomahawk/Source.cpp" line="453"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="401"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="452"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Scanning (%L1 tracks)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="404"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="403"/>
         <source>Scanning</source>
         <translation>Scanning</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="438"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="437"/>
         <source>Checking</source>
         <translation>Checking</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="443"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="442"/>
         <source>Syncing</source>
         <translation>Syncing</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="448"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="447"/>
         <source>Importing</source>
         <translation>Importing</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="606"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="605"/>
         <source>Saving (%1%)</source>
         <translation>Saving (%1%)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="687"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="686"/>
         <source>Online</source>
         <translation>Online</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="691"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="690"/>
         <source>Offline</source>
         <translation>Offline</translation>
     </message>

@@ -1029,29 +1029,29 @@ Password</source>
 <context>
     <name>NetworkActivityWidget</name>
     <message>
-        <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="215"/>
-        <source>Charts</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="217"/>
-        <source>Last Week</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="220"/>
-        <source>Last Month</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="223"/>
+        <source>Charts</source>
+        <translation>Γραφήματα</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="225"/>
+        <source>Last Week</source>
+        <translation>Τελευταία εβδομάδα</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="228"/>
+        <source>Last Month</source>
+        <translation>Τελευταίος μήνας</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="231"/>
         <source>Last Year</source>
-        <translation type="unfinished"/>
+        <translation>Τελευταίο ετος</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.h" line="44"/>
         <source>Network Activity</source>
-        <translation type="unfinished"/>
+        <translation>Δραστηριότητα δικτύου</translation>
     </message>
 </context>
 <context>
@@ -2104,7 +2104,7 @@ Password</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="315"/>
         <source>Network Activity</source>
-        <translation type="unfinished"/>
+        <translation>Δραστηριότητα δικτύου</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="340"/>
@@ -3524,43 +3524,43 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="402"/>
-        <location filename="../src/libtomahawk/Source.cpp" line="453"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="401"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="452"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Σάρωση (%L1 τραγούδια)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="404"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="403"/>
         <source>Scanning</source>
         <translation>Σάρωση</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="438"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="437"/>
         <source>Checking</source>
         <translation>Έλεγχος</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="443"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="442"/>
         <source>Syncing</source>
         <translation>Συγχρονισμος</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="448"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="447"/>
         <source>Importing</source>
         <translation>Εισαγωγη</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="606"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="605"/>
         <source>Saving (%1%)</source>
         <translation>Αποθήκευση (%1%)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="687"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="686"/>
         <source>Online</source>
         <translation>Συνδεδεμένος</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="691"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="690"/>
         <source>Offline</source>
         <translation>Εκτός Σύνδεσης</translation>
     </message>
