@@ -1030,29 +1030,29 @@ heslo</translation>
 <context>
     <name>NetworkActivityWidget</name>
     <message>
-        <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="215"/>
-        <source>Charts</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="217"/>
-        <source>Last Week</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="220"/>
-        <source>Last Month</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="223"/>
+        <source>Charts</source>
+        <translation>Žebříčky</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="225"/>
+        <source>Last Week</source>
+        <translation>Poslední týden</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="228"/>
+        <source>Last Month</source>
+        <translation>Poslední měsíc</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="231"/>
         <source>Last Year</source>
-        <translation type="unfinished"/>
+        <translation>Poslední rok</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.h" line="44"/>
         <source>Network Activity</source>
-        <translation type="unfinished"/>
+        <translation>Činnost sítě</translation>
     </message>
 </context>
 <context>
@@ -1883,7 +1883,7 @@ heslo</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="385"/>
         <source>Drop to send tracks</source>
-        <translation type="unfinished"/>
+        <translation>Upustit pro poslání skladeb</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="466"/>
@@ -2104,7 +2104,7 @@ heslo</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="315"/>
         <source>Network Activity</source>
-        <translation type="unfinished"/>
+        <translation>Činnost sítě</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="340"/>
@@ -3523,43 +3523,43 @@ Zkuste vyladit filtry pro nové písně.</translation>
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="402"/>
-        <location filename="../src/libtomahawk/Source.cpp" line="453"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="401"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="452"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Prohledává se (%L1 skladeb)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="404"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="403"/>
         <source>Scanning</source>
         <translation>Prohledává se</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="438"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="437"/>
         <source>Checking</source>
         <translation>Přezkušuje se</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="443"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="442"/>
         <source>Syncing</source>
         <translation>Seřizuje se</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="448"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="447"/>
         <source>Importing</source>
         <translation>Zavádí se</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="606"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="605"/>
         <source>Saving (%1%)</source>
         <translation>Ukládá se (%1%)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="687"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="686"/>
         <source>Online</source>
         <translation>Připojený</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="691"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="690"/>
         <source>Offline</source>
         <translation>Nepřipojený</translation>
     </message>
