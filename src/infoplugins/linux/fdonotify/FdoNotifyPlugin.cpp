@@ -303,7 +303,7 @@ FdoNotifyPlugin::nowPlaying( const QVariant& input )
     );
 
     QDBusPendingCallWatcher* watcher = new QDBusPendingCallWatcher( reply, this );
-    connect( watcher, SIGNAL( finished( QDBusPendingCallWatcher* ) ), SLOT( RegisterFinished( dbusPlayingReplyReceived* ) ) );
+    connect( watcher, SIGNAL( finished( QDBusPendingCallWatcher* ) ), SLOT( dbusPlayingReplyReceived( QDBusPendingCallWatcher* ) ) );
 
 }
 
