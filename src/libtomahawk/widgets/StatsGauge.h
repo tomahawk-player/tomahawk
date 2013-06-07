@@ -34,6 +34,8 @@ public:
     virtual QSize sizeHint() const { return m_sizeHint; }
     QString text() const { return m_text; }
 
+    void setInvertedGauge( bool inverted );
+
 public slots:
     void setValue( int value );
     void setText( const QString& text );
@@ -44,6 +46,7 @@ protected:
 private:
     QSize m_sizeHint;
     QString m_text;
+    bool m_inverted;
 };
 
 #endif //STATS_GAUGE_H
