@@ -16,7 +16,8 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ConnectionManager.h"
+#include "ConnectionManager_p.h"
+
 #include "ControlConnection.h"
 #include "QTcpSocketExtra.h"
 #include "Servent.h"
@@ -30,9 +31,14 @@
 #include <qtconcurrentrun.h>
 
 ConnectionManager::ConnectionManager( const QString &nodeid )
-    : m_nodeid( nodeid )
+    : d_ptr( new ConnectionManagerPrivate( this, nodeid ) )
 {
     // TODO sth?
+}
+
+ConnectionManager::~ConnectionManager()
+{
+    delete d_ptr;
 }
 
 void
@@ -45,7 +51,7 @@ ConnectionManager::handleSipInfo( const Tomahawk::peerinfo_ptr &peerInfo )
 void
 ConnectionManager::handleSipInfoPrivate( const Tomahawk::peerinfo_ptr &peerInfo )
 {
-    m_mutex.lock();
+    d_func()->mutex.lock();
     // Respect different behaviour before 0.7.100
     peerInfoDebug( peerInfo ) << Q_FUNC_INFO << "Trying to connect to client with version " << peerInfo->versionString().split(' ').last() << TomahawkUtils::compareVersionStrings( peerInfo->versionString().split(' ').last(), "0.7.99" );
     if ( !peerInfo->versionString().isEmpty() && TomahawkUtils::compareVersionStrings( peerInfo->versionString().split(' ').last(), "0.7.100" ) < 0)
@@ -63,7 +69,7 @@ ConnectionManager::handleSipInfoPrivate( const Tomahawk::peerinfo_ptr &peerInfo 
                 // We connected to the peer, so we are done here.
             }
         }
-        m_mutex.unlock();
+        d_func()->mutex.unlock();
         return;
     }
     foreach ( SipInfo info, peerInfo->sipInfos() )
@@ -78,7 +84,7 @@ ConnectionManager::handleSipInfoPrivate( const Tomahawk::peerinfo_ptr &peerInfo 
             return;
         }
     }
-    m_mutex.unlock();
+    d_func()->mutex.unlock();
 }
 
 void
@@ -87,78 +93,78 @@ ConnectionManager::connectToPeer( const Tomahawk::peerinfo_ptr &peerInfo, bool l
     // Lock, so that we will not attempt to do two parallell connects.
     if (lock)
     {
-        m_mutex.lock();
+        d_func()->mutex.lock();
     }
     // Check that we are not already connected to this peer
     ControlConnection* cconn = Servent::instance()->lookupControlConnection( peerInfo->nodeId() );
-    if ( cconn != NULL || !m_controlConnection.isNull() )
+    if ( cconn != NULL || !d_func()->controlConnection.isNull() )
     {
         // We are already connected to this peer, so just add some more details.
         peerInfoDebug( peerInfo ) << "Existing connection found, not connecting.";
         cconn->addPeerInfo( peerInfo );
         if ( cconn != NULL )
         {
-            m_controlConnection = QPointer<ControlConnection>(cconn);
+            d_func()->controlConnection = QPointer<ControlConnection>(cconn);
         }
-        m_mutex.unlock();
+        d_func()->mutex.unlock();
         return;
         // TODO: Keep the peerInfo in mind for reconnecting
         // FIXME: Do we need this for reconnecting if the connection drops?
     }
 
     // If we are not connected, try to connect
-    m_currentPeerInfo = peerInfo;
+    d_func()->currentPeerInfo = peerInfo;
     peerInfoDebug( peerInfo ) << "No existing connection found, trying to connect.";
-    m_sipCandidates.append( peerInfo->sipInfos() );
+    d_func()->sipCandidates.append( peerInfo->sipInfos() );
 
     QVariantMap m;
     m["conntype"]  = "accept-offer";
     m["key"]       = peerInfo->key();
     m["nodeid"]    = Database::instance()->impl()->dbid();
 
-    m_controlConnection = QPointer<ControlConnection>( new ControlConnection( Servent::instance() ) );
-    m_controlConnection->setShutdownOnEmptyPeerInfos( false );
-    m_controlConnection->addPeerInfo( peerInfo );
-    m_controlConnection->setFirstMessage( m );
+    d_func()->controlConnection = QPointer<ControlConnection>( new ControlConnection( Servent::instance() ) );
+    d_func()->controlConnection->setShutdownOnEmptyPeerInfos( false );
+    d_func()->controlConnection->addPeerInfo( peerInfo );
+    d_func()->controlConnection->setFirstMessage( m );
 
     if ( peerInfo->id().length() )
-        m_controlConnection->setName( peerInfo->contactId() );
+        d_func()->controlConnection->setName( peerInfo->contactId() );
     if ( peerInfo->nodeId().length() )
-        m_controlConnection->setId( peerInfo->nodeId() );
+        d_func()->controlConnection->setId( peerInfo->nodeId() );
 
-    m_controlConnection->setProperty( "nodeid", peerInfo->nodeId() );
+    d_func()->controlConnection->setProperty( "nodeid", peerInfo->nodeId() );
 
-    Servent::instance()->registerControlConnection( m_controlConnection.data() );
+    Servent::instance()->registerControlConnection( d_func()->controlConnection.data() );
     tryConnect();
 }
 
 void ConnectionManager::tryConnect()
 {
     // ATTENTION: mutex should be already locked by the calling function.
-    Q_ASSERT( !m_controlConnection.isNull() );
+    Q_ASSERT( !d_func()->controlConnection.isNull() );
 
-    if ( m_sipCandidates.isEmpty() )
+    if ( d_func()->sipCandidates.isEmpty() )
     {
         // No more possibilities to connect.
-        peerInfoDebug( m_currentPeerInfo ) << Q_FUNC_INFO << "No more possible SIP endpoints for " << m_controlConnection->name() << " skipping.";
+        peerInfoDebug( d_func()->currentPeerInfo ) << Q_FUNC_INFO << "No more possible SIP endpoints for " << d_func()->controlConnection->name() << " skipping.";
 
         // Clean up.
-        m_currentPeerInfo.clear();
-        delete m_controlConnection.data();
-        m_mutex.unlock();
+        d_func()->currentPeerInfo.clear();
+        delete d_func()->controlConnection.data();
+        d_func()->mutex.unlock();
         return;
     }
 
     // Use first available SIP endpoint and remove it from the list
-    SipInfo info = m_sipCandidates.takeFirst();
+    SipInfo info = d_func()->sipCandidates.takeFirst();
     if ( !info.isVisible() )
     {
-        peerInfoDebug( m_currentPeerInfo ) << Q_FUNC_INFO << "Try next SipInfo, we can't connect to this one";
+        peerInfoDebug( d_func()->currentPeerInfo ) << Q_FUNC_INFO << "Try next SipInfo, we can't connect to this one";
         tryConnect();
         return;
     }
 
-    peerInfoDebug( m_currentPeerInfo ) << Q_FUNC_INFO << "Connecting to " << info.host() << ":" << info.port();
+    peerInfoDebug( d_func()->currentPeerInfo ) << Q_FUNC_INFO << "Connecting to " << info.host() << ":" << info.port();
     Q_ASSERT( info.port() > 0 );
 
     // Check that we are not connecting to ourselves
@@ -166,31 +172,31 @@ void ConnectionManager::tryConnect()
     {
         if ( info.host() == ha.toString() && info.port() == Servent::instance()->port() )
         {
-            peerInfoDebug( m_currentPeerInfo ) << Q_FUNC_INFO << "Tomahawk won't try to connect to" << info.host() << ":" << info.port() << ": same ip:port as ourselves.";
+            peerInfoDebug( d_func()->currentPeerInfo ) << Q_FUNC_INFO << "Tomahawk won't try to connect to" << info.host() << ":" << info.port() << ": same ip:port as ourselves.";
             tryConnect();
             return;
         }
     }
     if ( info.host() == Servent::instance()->additionalAddress() && info.port() == Servent::instance()->additionalPort() )
     {
-        peerInfoDebug( m_currentPeerInfo ) << Q_FUNC_INFO << "Tomahawk won't try to connect to" << info.host() << ":" << info.port() << ": same ip:port as ourselves.";
+        peerInfoDebug( d_func()->currentPeerInfo ) << Q_FUNC_INFO << "Tomahawk won't try to connect to" << info.host() << ":" << info.port() << ": same ip:port as ourselves.";
         tryConnect();
         return;
     }
 
     // We should have already setup a first message in connectToPeer
-    Q_ASSERT( !m_controlConnection->firstMessage().isNull() );
+    Q_ASSERT( !d_func()->controlConnection->firstMessage().isNull() );
 
     QTcpSocketExtra* sock = new QTcpSocketExtra();
     sock->setConnectTimeout( CONNECT_TIMEOUT );
     sock->_disowned = false;
-    sock->_conn = m_controlConnection.data();
+    sock->_conn = d_func()->controlConnection.data();
     sock->_outbound = true;
 
     connect( sock, SIGNAL( connected() ), this, SLOT( socketConnected() ) );
     connect( sock, SIGNAL( error( QAbstractSocket::SocketError ) ), this, SLOT( socketError( QAbstractSocket::SocketError ) ) );
 
-    peerInfoDebug( m_currentPeerInfo ) << Q_FUNC_INFO << "Connecting socket to " << info.host() << ":" << info.port();
+    peerInfoDebug( d_func()->currentPeerInfo ) << Q_FUNC_INFO << "Connecting socket to " << info.host() << ":" << info.port();
     sock->connectToHost( info.host(), info.port(), QTcpSocket::ReadWrite );
     sock->moveToThread( thread() );
 }
@@ -199,10 +205,10 @@ void
 ConnectionManager::socketError( QAbstractSocket::SocketError error )
 {
     Q_UNUSED( error );
-    Q_ASSERT( !m_controlConnection.isNull() );
+    Q_ASSERT( !d_func()->controlConnection.isNull() );
 
     QTcpSocketExtra* sock = (QTcpSocketExtra*)sender();
-    peerInfoDebug( m_currentPeerInfo ) << Q_FUNC_INFO << "Connecting to " << sock->peerAddress().toString() << " failed: " << sock->errorString();
+    peerInfoDebug( d_func()->currentPeerInfo ) << Q_FUNC_INFO << "Connecting to " << sock->peerAddress().toString() << " failed: " << sock->errorString();
     sock->deleteLater();
 
     // Try to connect with the next available SipInfo.
@@ -215,35 +221,35 @@ ConnectionManager::socketConnected()
 {
     QTcpSocketExtra* sock = (QTcpSocketExtra*)sender();
 
-    peerInfoDebug( m_currentPeerInfo ) << Q_FUNC_INFO << "Connected to hostaddr: " << sock->peerAddress() << ", hostname:" << sock->peerName();
+    peerInfoDebug( d_func()->currentPeerInfo ) << Q_FUNC_INFO << "Connected to hostaddr: " << sock->peerAddress() << ", hostname:" << sock->peerName();
 
     Q_ASSERT( !sock->_conn.isNull() );
 
     handoverSocket( sock );
-    m_currentPeerInfo.clear();
-    m_mutex.unlock();
+    d_func()->currentPeerInfo.clear();
+    d_func()->mutex.unlock();
 }
 
 void
 ConnectionManager::handoverSocket( QTcpSocketExtra* sock )
 {
-    Q_ASSERT( !m_controlConnection.isNull() );
+    Q_ASSERT( !d_func()->controlConnection.isNull() );
     Q_ASSERT( sock );
-    Q_ASSERT( m_controlConnection->socket().isNull() );
+    Q_ASSERT( d_func()->controlConnection->socket().isNull() );
     Q_ASSERT( sock->isValid() );
 
     disconnect( sock, SIGNAL( disconnected() ), sock, SLOT( deleteLater() ) );
     disconnect( sock, SIGNAL( error( QAbstractSocket::SocketError ) ), this, SLOT( socketError( QAbstractSocket::SocketError ) ) );
 
     sock->_disowned = true;
-    m_controlConnection->setOutbound( sock->_outbound );
-    m_controlConnection->setPeerPort( sock->peerPort() );
+    d_func()->controlConnection->setOutbound( sock->_outbound );
+    d_func()->controlConnection->setPeerPort( sock->peerPort() );
 
-    m_controlConnection->start( sock );
+    d_func()->controlConnection->start( sock );
     // ControlConntection is now connected, now it can be destroyed if the PeerInfos disappear
-    m_controlConnection->setShutdownOnEmptyPeerInfos( true );
-    m_currentPeerInfo.clear();
-    m_mutex.unlock();
+    d_func()->controlConnection->setShutdownOnEmptyPeerInfos( true );
+    d_func()->currentPeerInfo.clear();
+    d_func()->mutex.unlock();
 }
 
 
