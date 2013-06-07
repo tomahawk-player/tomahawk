@@ -171,7 +171,7 @@ drawBackgroundAndNumbers( QPainter* painter, const QString& text, const QRect& f
         figRect.adjust( -painter->fontMetrics().averageCharWidth(), 0, 0, 0 );
 
     QPen origpen = painter->pen();
-    QPen pen = origpen;
+    QPen pen = painter->brush().color();
     pen.setWidth( 1.0 );
     painter->setPen( pen );
     painter->drawRect( figRect );
@@ -195,7 +195,6 @@ drawBackgroundAndNumbers( QPainter* painter, const QString& text, const QRect& f
     figRect.adjust( -1, 0, 0, 0 );
 
     painter->setPen( origpen );
-    painter->setPen( Qt::white );
     painter->drawText( figRect.adjusted( -5, 2, 6, 0 ), text, QTextOption( Qt::AlignCenter ) );
 
     painter->restore();
