@@ -116,6 +116,8 @@ Servent::~Servent()
         d_func()->portfwd.data()->wait( 60000 );
         delete d_func()->portfwd.data();
     }
+
+    delete d_ptr;
 }
 
 
