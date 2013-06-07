@@ -19,25 +19,22 @@
 #ifndef PEERINFO_H
 #define PEERINFO_H
 
-
-
 #include "DllMacro.h"
-
-#include "SipInfo.h"
-#include "accounts/Account.h"
 #include "utils/TomahawkUtils.h"
 
 #include <QString>
 #include <QPixmap>
 
-
 #define peerInfoDebug(peerInfo) tDebug() << "PEERINFO:" << ( !peerInfo.isNull() ? peerInfo->debugName() : "Invalid PeerInfo" ).toLatin1().constData()
 
-class SipPlugin;
 class ControlConnection;
+class SipPlugin;
+class SipInfo;
 
 namespace Tomahawk
 {
+
+class PeerInfoPrivate;
 
 class DLLEXPORT PeerInfo : public QObject
 {
@@ -129,22 +126,11 @@ private:
     PeerInfo( SipPlugin* parent, const QString& id );
     void announce();
 
+    Q_DECLARE_PRIVATE( Tomahawk::PeerInfo )
+    Tomahawk::PeerInfoPrivate* d_ptr;
+
     static QHash< QString, peerinfo_wptr > s_peersByCacheKey;
     static QHash< SipPlugin*, peerinfo_ptr > s_selfPeersBySipPlugin;
-
-    QWeakPointer< Tomahawk::PeerInfo > m_ownRef;
-    QPointer< ControlConnection > m_controlConnection;
-
-    SipPlugin* m_parent;
-    PeerInfo::Type m_type;
-
-    QString m_id;
-    QString m_contactId;
-    Status  m_status;
-    QList<SipInfo> m_sipInfos;
-    QString m_friendlyName;
-    QString m_versionString;
-    QVariant m_data;
 
     mutable QPixmap* m_avatar;
     mutable QPixmap* m_fancyAvatar;
