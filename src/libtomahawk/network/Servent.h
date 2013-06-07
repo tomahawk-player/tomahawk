@@ -32,18 +32,10 @@
 #include <QtCore/QTimer>
 #include <QtCore/QPointer>
 #include <QtNetwork/QTcpServer>
-#include <QtNetwork/QTcpSocket>
 #include <QtNetwork/QHostInfo>
-
-#include <qjson/parser.h>
-#include <qjson/serializer.h>
-#include <qjson/qobjecthelper.h>
 
 #include "Typedefs.h"
 #include "Msg.h"
-#include "network/QTcpSocketExtra.h"
-
-#include <boost/function.hpp>
 
 #include "DllMacro.h"
 
@@ -52,13 +44,21 @@ class Connector;
 class ControlConnection;
 class StreamConnection;
 class ProxyConnection;
+class QTcpSocketExtra;
 class RemoteCollectionConnection;
 class PortFwdThread;
 class PeerInfo;
 class SipInfo;
 
+namespace boost
+{
+    template <class T> class function;
+} // boost
+
 typedef boost::function< void( const Tomahawk::result_ptr&,
                                boost::function< void( QSharedPointer< QIODevice >& ) > )> IODeviceFactoryFunc;
+
+class ServentPrivate;
 
 class DLLEXPORT Servent : public QTcpServer
 {
@@ -96,34 +96,34 @@ public:
     void initiateConnection( const SipInfo& sipInfo, Connection* conn );
     void reverseOfferRequest( ControlConnection* orig_conn, const QString &theirdbid, const QString& key, const QString& theirkey );
 
-    bool visibleExternally() const { return (!m_externalHostname.isNull()) || (m_externalAddresses.length() > 0); }
+    bool visibleExternally() const;
 
     /**
      * The port this Peer listens directly (per default)
      */
-    int port() const { return m_port; }
+    int port() const;
 
     /**
      * The IP addresses this Peer listens directly (per default)
      */
-    QList< QHostAddress > addresses() const { return m_externalAddresses; }
+    QList< QHostAddress > addresses() const;
 
     /**
      * An additional address this peer listens to, e.g. via UPnP.
      */
-    QString additionalAddress() const { return m_externalHostname; }
+    QString additionalAddress() const;
 
     /**
      * An additional port this peer listens to, e.g. via UPnP (only in combination with additionalAddress.
      */
-    int additionalPort() const { return m_externalPort; }
+    int additionalPort() const;
 
     static bool isIPWhitelisted( QHostAddress ip );
 
     bool connectedToSession( const QString& session );
-    unsigned int numConnectedPeers() const { return m_controlconnections.length(); }
+    unsigned int numConnectedPeers() const;
 
-    QList< StreamConnection* > streams() const { return m_scsessions; }
+    QList< StreamConnection* > streams() const;
 
     void getIODeviceForUrl( const Tomahawk::result_ptr& result, boost::function< void ( QSharedPointer< QIODevice >& ) > callback );
     void registerIODeviceFactory( const QString &proto, IODeviceFactoryFunc fac );
@@ -131,7 +131,7 @@ public:
     void localFileIODeviceFactory( const Tomahawk::result_ptr& result, boost::function< void ( QSharedPointer< QIODevice >& ) > callback );
     void httpIODeviceFactory( const Tomahawk::result_ptr& result, boost::function< void ( QSharedPointer< QIODevice >& ) > callback );
 
-    bool isReady() const { return m_ready; }
+    bool isReady() const;
 
     QList<SipInfo> getLocalSipInfos(const QString& nodeid, const QString &key);
 signals:
@@ -162,46 +162,13 @@ private slots:
     Connection* claimOffer( ControlConnection* cc, const QString &nodeid, const QString &key, const QHostAddress peer = QHostAddress::Any );
 
 private:
+    Q_DECLARE_PRIVATE( Servent )
+    ServentPrivate* d_ptr;
+
     void handoverSocket( Connection* conn, QTcpSocketExtra* sock );
     void cleanupSocket( QTcpSocketExtra* sock );
     void printCurrentTransfers();
 
-    QJson::Parser parser;
-    QList< ControlConnection* > m_controlconnections; // canonical list of authed peers
-    QMap< QString, QPointer< Connection > > m_offers;
-    QMap< QString, QPair< Tomahawk::peerinfo_ptr, QString > > m_lazyoffers;
-    QStringList m_connectedNodes;
-
-    /**
-     * The external port used by all address except those obtained via UPnP or the static configuration option
-     */
-    int m_port;
-
-    /**
-     * Either the static set or the UPnP set external port
-     */
-    int m_externalPort;
-
-    /**
-     * All available external IPs
-     */
-    QList<QHostAddress> m_externalAddresses;
-
-    /**
-     * Either the static set or the UPnP set external host
-     */
-    QString m_externalHostname;
-
-    bool m_ready;
-    bool m_noAuth;
-
-    // currently active file transfers:
-    QList< StreamConnection* > m_scsessions;
-    QMutex m_ftsession_mut;
-
-    QMap< QString, IODeviceFactoryFunc > m_iofactories;
-
-    QPointer< PortFwdThread > m_portfwd;
     static Servent* s_instance;
 };
 

@@ -19,13 +19,14 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Servent.h"
+#include "Servent_p.h"
 
 #include "Result.h"
 #include "Source.h"
 #include "BufferIoDevice.h"
 #include "Connection.h"
 #include "ControlConnection.h"
+#include "QTcpSocketExtra.h"
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
 #include "network/ConnectionManager.h"
@@ -74,14 +75,12 @@ Servent::instance()
 
 
 Servent::Servent( QObject* parent )
-    : QTcpServer( parent )
-    , m_port( 0 )
-    , m_externalPort( 0 )
-    , m_ready( false )
+    : QTcpServer( parent ),
+      d_ptr( new ServentPrivate( this ) )
 {
     s_instance = this;
 
-    m_noAuth = qApp->arguments().contains( "--noauth" );
+    d_func()->noAuth = qApp->arguments().contains( "--noauth" );
 
     setProxy( QNetworkProxy::NoProxy );
 
@@ -108,14 +107,14 @@ Servent::~Servent()
 {
     tDebug() << Q_FUNC_INFO;
 
-    foreach ( ControlConnection* cc, m_controlconnections )
+    foreach ( ControlConnection* cc, d_func()->controlconnections )
         delete cc;
 
-    if ( m_portfwd )
+    if ( d_func()->portfwd )
     {
-        m_portfwd.data()->quit();
-        m_portfwd.data()->wait( 60000 );
-        delete m_portfwd.data();
+        d_func()->portfwd.data()->quit();
+        d_func()->portfwd.data()->wait( 60000 );
+        delete d_func()->portfwd.data();
     }
 }
 
@@ -123,25 +122,25 @@ Servent::~Servent()
 bool
 Servent::startListening( QHostAddress ha, bool upnp, int port )
 {
-    m_externalAddresses = QList<QHostAddress>();
-    m_port = port;
+    d_func()->externalAddresses = QList<QHostAddress>();
+    d_func()->port = port;
     int defPort = TomahawkSettings::instance()->defaultPort();
 
     // Listen on both the selected port and, if not the same, the default port -- the latter sometimes necessary for zeroconf
     // TODO: only listen on both when zeroconf sip is enabled
     // TODO: use a real zeroconf system instead of a simple UDP broadcast?
-    if ( !listen( ha, m_port ) )
+    if ( !listen( ha, d_func()->port ) )
     {
-        if ( m_port != defPort )
+        if ( d_func()->port != defPort )
         {
             if ( !listen( ha, defPort ) )
             {
-                tLog() << Q_FUNC_INFO << "Failed to listen on both port" << m_port << "and port" << defPort;
+                tLog() << Q_FUNC_INFO << "Failed to listen on both port" << d_func()->port << "and port" << defPort;
                 tLog() << Q_FUNC_INFO << "Error string is:" << errorString();
                 return false;
             }
             else
-                m_port = defPort;
+                d_func()->port = defPort;
         }
     }
 
@@ -159,34 +158,34 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
             if ( addr.isInSubnet( QHostAddress::parseSubnet( "fe80::/10" ) ) )
                 continue; // Skip link local addresses
             tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Listening to " << addr.toString();
-            m_externalAddresses.append( addr );
+            d_func()->externalAddresses.append( addr );
         }
 
     }
     else if ( ( ha.toString() != "127.0.0.1" ) && ( ha.toString() != "::1" ) && ( ha.toString() !=  "::7F00:1" ) )
     {
         // We listen only to one specific Address, only announce this.
-        m_externalAddresses.append( ha );
+        d_func()->externalAddresses.append( ha );
     }
     // If we only accept connections via localhost, we'll announce nothing.
 
     TomahawkSettings::ExternalAddressMode mode = TomahawkSettings::instance()->externalAddressMode();
-    tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Servent listening on port" << m_port << "- servent thread:" << thread()
+    tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Servent listening on port" << d_func()->port << "- servent thread:" << thread()
            << "- address mode:" << (int)( mode );
 
     switch ( mode )
     {
         case TomahawkSettings::Static:
-            m_externalHostname = TomahawkSettings::instance()->externalHostname();
-            m_externalPort = TomahawkSettings::instance()->externalPort();
-            m_ready = true;
+            d_func()->externalHostname = TomahawkSettings::instance()->externalHostname();
+            d_func()->externalPort = TomahawkSettings::instance()->externalPort();
+            d_func()->ready = true;
             // All setup is made, were done.
             emit ready();
             break;
 
         case TomahawkSettings::Lan:
             // Nothing has to be done here.
-            m_ready = true;
+            d_func()->ready = true;
             emit ready();
             break;
 
@@ -195,15 +194,15 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
             {
                 // upnp could be turned of on the cli with --noupnp
                 tLog( LOGVERBOSE ) << Q_FUNC_INFO << "External address mode set to upnp...";
-                m_portfwd = QPointer< PortFwdThread >( new PortFwdThread( m_port ) );
-                Q_ASSERT( m_portfwd );
-                connect( m_portfwd.data(), SIGNAL( externalAddressDetected( QHostAddress, unsigned int ) ),
+                d_func()->portfwd = QPointer< PortFwdThread >( new PortFwdThread( d_func()->port ) );
+                Q_ASSERT( d_func()->portfwd );
+                connect( d_func()->portfwd.data(), SIGNAL( externalAddressDetected( QHostAddress, unsigned int ) ),
                                       SLOT( setExternalAddress( QHostAddress, unsigned int ) ) );
-                m_portfwd.data()->start();
+                d_func()->portfwd.data()->start();
             }
             else
             {
-                m_ready = true;
+                d_func()->ready = true;
                 emit ready();
             }
             break;
@@ -218,16 +217,16 @@ Servent::setExternalAddress( QHostAddress ha, unsigned int port )
 {
     if ( isValidExternalIP( ha ) )
     {
-        m_externalHostname = ha.toString();
-        m_externalPort = port;
+        d_func()->externalHostname = ha.toString();
+        d_func()->externalPort = port;
     }
 
-    if ( m_externalPort == 0 || !isValidExternalIP( ha ) )
+    if ( d_func()->externalPort == 0 || !isValidExternalIP( ha ) )
         tLog() << Q_FUNC_INFO << "UPnP failed, no further external address could be acquired!";
     else
         tLog( LOGVERBOSE ) << Q_FUNC_INFO << "UPnP setup successful";
 
-    m_ready = true;
+    d_func()->ready = true;
     emit ready();
 }
 
@@ -309,13 +308,13 @@ Servent::isValidExternalIP( const QHostAddress& addr )
 void
 Servent::registerOffer( const QString& key, Connection* conn )
 {
-    m_offers[key] = QPointer<Connection>(conn);
+    d_func()->offers[key] = QPointer<Connection>(conn);
 }
 
 void
 Servent::registerLazyOffer(const QString &key, const peerinfo_ptr &peerInfo, const QString &nodeid, const int timeout )
 {
-    m_lazyoffers[key] = QPair< peerinfo_ptr, QString >( peerInfo, nodeid );
+    d_func()->lazyoffers[key] = QPair< peerinfo_ptr, QString >( peerInfo, nodeid );
     QTimer* timer = new QTimer( this );
     timer->setInterval( timeout );
     timer->setSingleShot( true );
@@ -326,7 +325,7 @@ Servent::registerLazyOffer(const QString &key, const peerinfo_ptr &peerInfo, con
 void
 Servent::deleteLazyOffer( const QString& key )
 {
-    m_lazyoffers.remove( key );
+    d_func()->lazyoffers.remove( key );
 
     // Cleanup.
     QTimer* timer = (QTimer*)sender();
@@ -341,8 +340,8 @@ Servent::registerControlConnection( ControlConnection* conn )
 {
     Q_ASSERT( conn );
     tLog( LOGVERBOSE ) << Q_FUNC_INFO << conn->name();
-    m_controlconnections << conn;
-    m_connectedNodes << conn->id();
+    d_func()->controlconnections << conn;
+    d_func()->connectedNodes << conn->id();
 }
 
 
@@ -352,15 +351,15 @@ Servent::unregisterControlConnection( ControlConnection* conn )
     Q_ASSERT( conn );
 
     tLog( LOGVERBOSE ) << Q_FUNC_INFO << conn->name();
-    m_connectedNodes.removeAll( conn->id() );
-    m_controlconnections.removeAll( conn );
+    d_func()->connectedNodes.removeAll( conn->id() );
+    d_func()->controlconnections.removeAll( conn );
 }
 
 
 ControlConnection*
 Servent::lookupControlConnection( const SipInfo& sipInfo )
 {
-    foreach ( ControlConnection* c, m_controlconnections )
+    foreach ( ControlConnection* c, d_func()->controlconnections )
     {
         tLog() << sipInfo.port() << c->peerPort() << sipInfo.host() << c->peerIpAddress().toString();
         if ( sipInfo.port() == c->peerPort() && sipInfo.host() == c->peerIpAddress().toString() )
@@ -373,7 +372,7 @@ Servent::lookupControlConnection( const SipInfo& sipInfo )
 ControlConnection*
 Servent::lookupControlConnection( const QString& nodeid )
 {
-    foreach ( ControlConnection* c, m_controlconnections )
+    foreach ( ControlConnection* c, d_func()->controlconnections )
     {
         if ( c->id() == nodeid )
              return c;
@@ -386,21 +385,21 @@ QList<SipInfo>
 Servent::getLocalSipInfos( const QString& nodeid, const QString& key )
 {
     QList<SipInfo> sipInfos = QList<SipInfo>();
-    foreach ( QHostAddress ha, m_externalAddresses )
+    foreach ( QHostAddress ha, d_func()->externalAddresses )
     {
         SipInfo info = SipInfo();
         info.setHost( ha.toString() );
-        info.setPort( m_port );
+        info.setPort( d_func()->port );
         info.setKey( key );
         info.setVisible( true );
         info.setNodeId( nodeid );
         sipInfos.append( info );
     }
-    if ( m_externalHostname.length() > 0)
+    if ( d_func()->externalHostname.length() > 0)
     {
         SipInfo info = SipInfo();
-        info.setHost( m_externalHostname );
-        info.setPort( m_externalPort );
+        info.setHost( d_func()->externalHostname );
+        info.setPort( d_func()->externalPort );
         info.setKey( key );
         info.setVisible( true );
         info.setNodeId( nodeid );
@@ -585,7 +584,7 @@ Servent::readyRead()
     ControlConnection* cc = 0;
     bool ok;
     QString key, conntype, nodeid, controlid;
-    QVariantMap m = parser.parse( sock.data()->_msg->payload(), &ok ).toMap();
+    QVariantMap m = d_func()->parser.parse( sock.data()->_msg->payload(), &ok ).toMap();
     if ( !ok )
     {
         tDebug() << "Invalid JSON on new connection, aborting";
@@ -601,13 +600,13 @@ Servent::readyRead()
     if ( !nodeid.isEmpty() ) // only control connections send nodeid
     {
         bool dupe = false;
-        if ( m_connectedNodes.contains( nodeid ) )
+        if ( d_func()->connectedNodes.contains( nodeid ) )
         {
             tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Connected nodes contains it.";
             dupe = true;
         }
 
-        foreach ( ControlConnection* con, m_controlconnections )
+        foreach ( ControlConnection* con, d_func()->controlconnections )
         {
             Q_ASSERT( con );
 
@@ -620,7 +619,7 @@ Servent::readyRead()
         }
 
         // for zeroconf there might be no offer, that case is handled later
-        ControlConnection* ccMatch = qobject_cast< ControlConnection* >( m_offers.value( key ).data() );
+        ControlConnection* ccMatch = qobject_cast< ControlConnection* >( d_func()->offers.value( key ).data() );
         if ( dupe && ccMatch )
         {
             tLog() << "Duplicate control connection detected, dropping:" << nodeid << conntype;
@@ -631,7 +630,7 @@ Servent::readyRead()
                 peerInfoDebug( currentPeerInfo );
             }
 
-            foreach ( ControlConnection* keepConnection, m_controlconnections )
+            foreach ( ControlConnection* keepConnection, d_func()->controlconnections )
             {
                 Q_ASSERT( keepConnection );
 
@@ -654,7 +653,7 @@ Servent::readyRead()
         }
     }
 
-    foreach ( ControlConnection* con, m_controlconnections )
+    foreach ( ControlConnection* con, d_func()->controlconnections )
     {
         Q_ASSERT( con );
 
@@ -810,7 +809,7 @@ Servent::initiateConnection( const SipInfo& sipInfo, Connection* conn )
     Q_ASSERT( conn );
 
     // Check that we are not connecting to ourselves
-    foreach( QHostAddress ha, m_externalAddresses )
+    foreach( QHostAddress ha, d_func()->externalAddresses )
     {
         if ( sipInfo.host() == ha.toString() )
         {
@@ -818,7 +817,7 @@ Servent::initiateConnection( const SipInfo& sipInfo, Connection* conn )
             return;
         }
     }
-    if ( sipInfo.host() == m_externalHostname )
+    if ( sipInfo.host() == d_func()->externalHostname )
     {
         tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Tomahawk won't try to connect to" << sipInfo.host() << ":" << sipInfo.port() << ": same IP as ourselves.";
         return;
@@ -901,6 +900,36 @@ Servent::reverseOfferRequest( ControlConnection* orig_conn, const QString& their
     createParallelConnection( orig_conn, new_conn, theirkey );
 }
 
+bool
+Servent::visibleExternally() const
+{
+    return (!d_func()->externalHostname.isNull()) || (d_func()->externalAddresses.length() > 0);
+}
+
+int
+Servent::port() const
+{
+    return d_func()->port;
+}
+
+QList<QHostAddress>
+Servent::addresses() const
+{
+    return d_func()->externalAddresses;
+}
+
+QString
+Servent::additionalAddress() const
+{
+    return d_func()->externalHostname;
+}
+
+int
+Servent::additionalPort() const
+{
+    return d_func()->externalPort;
+}
+
 // return the appropriate connection for a given offer key, or NULL if invalid
 Connection*
 Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString &key, const QHostAddress peer )
@@ -909,10 +938,10 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
     if ( key.startsWith( "FILE_REQUEST_KEY:" ) )
     {
         // check if the source IP matches an existing, authenticated connection
-        if ( !m_noAuth && peer != QHostAddress::Any && !isIPWhitelisted( peer ) )
+        if ( !d_func()->noAuth && peer != QHostAddress::Any && !isIPWhitelisted( peer ) )
         {
             bool authed = false;
-            foreach ( ControlConnection* cc, m_controlconnections )
+            foreach ( ControlConnection* cc, d_func()->controlconnections )
             {
                 tDebug() << Q_FUNC_INFO << "Probing:" << cc->name();
                 if ( cc->socket() && cc->socket()->peerAddress() == peer )
@@ -962,22 +991,22 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
         }
     }
 
-    if ( m_lazyoffers.contains( key ) )
+    if ( d_func()->lazyoffers.contains( key ) )
     {
         ControlConnection* conn = new ControlConnection( this );
-        conn->setName( m_lazyoffers.value( key ).first->contactId() );
-        conn->addPeerInfo( m_lazyoffers.value( key ).first );
-        conn->setId( m_lazyoffers.value( key ).second );
+        conn->setName( d_func()->lazyoffers.value( key ).first->contactId() );
+        conn->addPeerInfo( d_func()->lazyoffers.value( key ).first );
+        conn->setId( d_func()->lazyoffers.value( key ).second );
 
         // Register as non-lazy offer
-        m_lazyoffers.remove( key );
+        d_func()->lazyoffers.remove( key );
         registerOffer( key, conn );
 
         return conn;
     }
-    else if ( m_offers.contains( key ) )
+    else if ( d_func()->offers.contains( key ) )
     {
-        QPointer<Connection> conn = m_offers.value( key );
+        QPointer<Connection> conn = d_func()->offers.value( key );
         if ( conn.isNull() )
         {
             // This can happen if it's a streamconnection, but the audioengine has
@@ -997,7 +1026,7 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
 
         if ( conn.data()->onceOnly() )
         {
-            m_offers.remove( key );
+            d_func()->offers.remove( key );
             return conn.data();
         }
         else
@@ -1005,7 +1034,7 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
             return conn.data()->clone();
         }
     }
-    else if ( m_noAuth )
+    else if ( d_func()->noAuth )
     {
         Connection* conn;
         conn = new ControlConnection( this );
@@ -1049,11 +1078,11 @@ Servent::remoteIODeviceFactory( const Tomahawk::result_ptr& result,
 void
 Servent::registerStreamConnection( StreamConnection* sc )
 {
-    Q_ASSERT( !m_scsessions.contains( sc ) );
-    tDebug( LOGVERBOSE ) << "Registering Stream" << m_scsessions.length() + 1;
+    Q_ASSERT( !d_func()->scsessions.contains( sc ) );
+    tDebug( LOGVERBOSE ) << "Registering Stream" << d_func()->scsessions.length() + 1;
 
-    QMutexLocker lock( &m_ftsession_mut );
-    m_scsessions.append( sc );
+    QMutexLocker lock( &d_func()->ftsession_mut );
+    d_func()->scsessions.append( sc );
 
     printCurrentTransfers();
     emit streamStarted( sc );
@@ -1066,8 +1095,8 @@ Servent::onStreamFinished( StreamConnection* sc )
     Q_ASSERT( sc );
     tDebug( LOGVERBOSE ) << "Stream Finished, unregistering" << sc->id();
 
-    QMutexLocker lock( &m_ftsession_mut );
-    m_scsessions.removeAll( sc );
+    QMutexLocker lock( &d_func()->ftsession_mut );
+    d_func()->scsessions.removeAll( sc );
 
     printCurrentTransfers();
     emit streamFinished( sc );
@@ -1080,7 +1109,7 @@ Servent::printCurrentTransfers()
 {
     int k = 1;
 //    qDebug() << "~~~ Active file transfer connections:" << m_scsessions.length();
-    foreach ( StreamConnection* i, m_scsessions )
+    foreach ( StreamConnection* i, d_func()->scsessions )
     {
         qDebug() << k << ") " << i->id();
     }
@@ -1118,7 +1147,7 @@ Servent::isIPWhitelisted( QHostAddress ip )
 bool
 Servent::connectedToSession( const QString& session )
 {
-    foreach ( ControlConnection* cc, m_controlconnections )
+    foreach ( ControlConnection* cc, d_func()->controlconnections )
     {
         Q_ASSERT( cc );
 
@@ -1127,6 +1156,18 @@ Servent::connectedToSession( const QString& session )
     }
 
     return false;
+}
+
+unsigned int
+Servent::numConnectedPeers() const
+{
+    return d_func()->controlconnections.length();
+}
+
+QList<StreamConnection *>
+Servent::streams() const
+{
+    return d_func()->scsessions;
 }
 
 
@@ -1152,7 +1193,7 @@ void
 Servent::registerIODeviceFactory( const QString &proto,
                                   IODeviceFactoryFunc fac )
 {
-    m_iofactories.insert( proto, fac );
+    d_func()->iofactories.insert( proto, fac );
 }
 
 
@@ -1170,14 +1211,14 @@ Servent::getIODeviceForUrl( const Tomahawk::result_ptr& result,
     }
 
     const QString proto = rx.cap( 1 );
-    if ( !m_iofactories.contains( proto ) )
+    if ( !d_func()->iofactories.contains( proto ) )
     {
         callback( sp );
         return;
     }
 
     //JSResolverHelper::customIODeviceFactory is async!
-    m_iofactories.value( proto )( result, callback );
+    d_func()->iofactories.value( proto )( result, callback );
 }
 
 
@@ -1206,4 +1247,10 @@ Servent::httpIODeviceFactory( const Tomahawk::result_ptr& result,
     //boost::functions cannot accept temporaries as parameters
     QSharedPointer< QIODevice > sp = QSharedPointer< QIODevice >( reply, &QObject::deleteLater );
     callback( sp );
+}
+
+bool
+Servent::isReady() const
+{
+    return d_func()->ready;
 }

@@ -20,6 +20,7 @@
 
 #include "Connection.h"
 
+#include "QTcpSocketExtra.h"
 #include "network/Servent.h"
 #include "utils/Logger.h"
 #include "Source.h"
