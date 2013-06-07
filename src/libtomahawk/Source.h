@@ -171,7 +171,7 @@ private:
     DBSyncConnection::State m_state;
     QTimer m_currentTrackTimer;
 
-    QPixmap m_avatar;
+    QPixmap* m_avatar;
     bool m_avatarLoaded;
 
     QPointer<ControlConnection> m_cc;

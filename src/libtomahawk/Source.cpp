@@ -57,6 +57,7 @@ Source::Source( int id, const QString& nodeId )
     , m_id( id )
     , m_updateIndexWhenSynced( false )
     , m_state( DBSyncConnection::UNKNOWN )
+    , m_avatar( 0 )
     , m_avatarLoaded( false )
     , m_cc( 0 )
     , m_commandCount( 0 )
@@ -261,7 +262,12 @@ Source::avatar( TomahawkUtils::ImageMode style, const QSize& size )
     }
 
     if ( m_avatarLoaded )
-        return m_avatar;
+    {
+        if ( m_avatar )
+            return *m_avatar;
+        else
+            return QPixmap();
+    }
 
     // Try to get the avatar from the cache
     // Hint: We store the avatar for each xmpp peer using its contactId, the dbFriendlyName is a contactId of a peer
@@ -269,14 +275,16 @@ Source::avatar( TomahawkUtils::ImageMode style, const QSize& size )
     QByteArray avatarBuffer = TomahawkUtils::Cache::instance()->getData( "Sources", dbFriendlyName() ).toByteArray();
     if ( !avatarBuffer.isNull() )
     {
+        tDebug() << Q_FUNC_INFO << QThread::currentThread();
         QPixmap avatar;
         avatar.loadFromData( avatarBuffer );
         avatarBuffer.clear();
 
-        m_avatar = QPixmap( TomahawkUtils::createRoundedImage( avatar, QSize( 0, 0 ) ) );
+        m_avatar = new QPixmap( TomahawkUtils::createRoundedImage( avatar, QSize( 0, 0 ) ) );
+        return *m_avatar;
     }
 
-    return m_avatar;
+    return QPixmap();
 }
 #endif
 
