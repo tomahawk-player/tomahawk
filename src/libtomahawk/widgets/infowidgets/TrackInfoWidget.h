@@ -40,6 +40,7 @@
 #include <QWidget>
 
 class PlayableModel;
+class StatsGauge;
 class QScrollArea;
 
 namespace Ui
@@ -94,6 +95,7 @@ private:
     Tomahawk::query_ptr m_query;
     Tomahawk::artist_ptr m_artist;
 
+    StatsGauge* m_playStatsGauge;
     PlayableModel* m_relatedTracksModel;
     QString m_title;
     QPixmap m_pixmap;
