@@ -40,6 +40,7 @@
 
 class PlayableModel;
 class PlaylistModel;
+class StatsGauge;
 
 namespace Ui
 {
@@ -91,6 +92,7 @@ protected:
     void changeEvent( QEvent* e );
 
 private slots:
+    void onArtistStatsLoaded();
     void onArtistImageUpdated();
     void onBiographyLoaded();
 
@@ -109,6 +111,8 @@ private:
     PlayableModel* m_albumsModel;
     PlaylistModel* m_topHitsModel;
     Tomahawk::playlistinterface_ptr m_plInterface;
+
+    StatsGauge* m_playStatsGauge;
 
     QString m_title;
     QString m_description;

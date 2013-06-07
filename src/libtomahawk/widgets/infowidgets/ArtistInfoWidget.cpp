@@ -36,7 +36,9 @@
 #include "Source.h"
 #include "GlobalActionManager.h"
 #include "Pipeline.h"
+#include "SourceList.h"
 #include "MetaPlaylistInterface.h"
+#include "widgets/StatsGauge.h"
 #include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
@@ -52,11 +54,8 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     QWidget* widget = new QWidget;
     ui->setupUi( widget );
 
-    QPalette pal = palette();
-    pal.setColor( QPalette::Window, TomahawkStyle::PAGE_BACKGROUND );
-
-    widget->setPalette( pal );
-    widget->setAutoFillBackground( true );
+    artist->loadStats();
+    connect( artist.data(), SIGNAL( statsLoaded() ), SLOT( onArtistStatsLoaded() ) );
 
 /*    TomahawkUtils::unmarginLayout( ui->layoutWidget->layout() );
     TomahawkUtils::unmarginLayout( ui->layoutWidget1->layout() );
@@ -82,10 +81,10 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     AlbumItemDelegate* del = new AlbumItemDelegate( ui->topHits, ui->topHits->proxyModel() );
     ui->topHits->setPlaylistItemDelegate( del );
 
-    ui->relatedArtists->setAutoFitItems( false );
+/*    ui->relatedArtists->setAutoFitItems( true );
     ui->relatedArtists->setWrapping( false );
     ui->relatedArtists->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-    ui->relatedArtists->setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
+    ui->relatedArtists->setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );*/
     ui->relatedArtists->delegate()->setItemSize( QSize( 170, 170 ) );
 
     ui->albums->setAutoFitItems( false );
@@ -95,15 +94,32 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->albums->delegate()->setItemSize( QSize( 170, 170 ) );
     ui->albums->proxyModel()->setHideDupeItems( true );
 
-    ui->topHits->setFrameShape( QFrame::StyledPanel );
+    QPalette trackViewPal = ui->topHits->palette();
+    trackViewPal.setColor( QPalette::Foreground, Qt::white );
+    trackViewPal.setColor( QPalette::Text, Qt::white );
+    trackViewPal.setColor( QPalette::Highlight, QColor( "#252020" ) );
+    trackViewPal.setColor( QPalette::HighlightedText, Qt::white );
+
+    ui->topHits->setPalette( trackViewPal );
+    ui->topHits->setAlternatingRowColors( false );
+    ui->topHits->setFrameShape( QFrame::NoFrame );
     ui->topHits->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
+    QHBoxLayout* l = new QHBoxLayout( ui->statsWidget );
+    m_playStatsGauge = new StatsGauge( ui->statsWidget );
+    m_playStatsGauge->setText( tr( "CHART #" ) );
+
+    l->addSpacerItem( new QSpacerItem( 0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding ) );
+    l->addWidget( m_playStatsGauge );
+    l->addSpacerItem( new QSpacerItem( 0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding ) );
+    ui->statsWidget->setLayout( l );
 
     m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::Original, QSize( 48, 48 ) );
     ui->cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::Grid, ui->cover->size() ) );
     ui->cover->setShowText( true );
 
     QFont f = font();
-    f.setPointSize( f.pointSize() + 1 );
+    f.setPointSize( f.pointSize() + 3 );
     ui->biography->setOpenLinks( false );
     ui->biography->setOpenExternalLinks( true );
     ui->biography->setFrameShape( QFrame::NoFrame );
@@ -125,7 +141,10 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     area->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
     area->setWidget( widget );
 
-    area->setStyleSheet( "QScrollArea { background-color: #454e59; }" );
+    QPalette pal = palette();
+    pal.setBrush( backgroundRole(), QColor( "#1e1e1e" ) ); //QBrush( QImage( ":/data/images/grey_wash_wall.png" ) ) );
+    area->setPalette( pal );
+    area->setAutoFillBackground( true );
     area->setFrameShape( QFrame::NoFrame );
     area->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
@@ -152,7 +171,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
                                "border-image: url(" RESPATH "images/widget-border.png) 3 3 3 3 stretch stretch;"
                                "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }" );
 
-//    ui->topHits->setStyleSheet( "QTreeView#topHits { background-color: transparent; }" );
+    ui->topHits->setStyleSheet( "QTreeView#topHits { background-color: transparent; }" );
     ui->trackFrame->setStyleSheet( "QFrame#trackFrame { background-color: transparent; }"
                                "QFrame#trackFrame { "
                                "border-image: url(" RESPATH "images/widget-border.png) 3 3 3 3 stretch stretch;"
@@ -306,6 +325,17 @@ ArtistInfoWidget::onBiographyLoaded()
     emit longDescriptionChanged( m_longDescription );
 
     ui->biography->setHtml( m_artist->biography().replace( '\n', "<br>" ) );
+}
+
+
+void
+ArtistInfoWidget::onArtistStatsLoaded()
+{
+/*    m_playStatsGauge->setValue( m_artist->playbackCount( SourceList::instance()->getLocal() ) );
+    m_playStatsGauge->setMaximum( SourceList::instance()->getLocal()->playbackCount() ); */
+
+    m_playStatsGauge->setMaximum( m_artist->chartCount() );
+    m_playStatsGauge->setValue( m_artist->chartPosition() );
 }
 
 
