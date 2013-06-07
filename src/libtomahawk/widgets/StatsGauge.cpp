@@ -33,7 +33,8 @@
 
 StatsGauge::StatsGauge( QWidget* parent )
     : QProgressBar( parent )
-    , m_inverted( false )
+    , m_percentage( 0 )
+    , m_targetValue( 0 )
 {
     QProgressBar::setValue( 0 );
     QProgressBar::setMaximum( 0 );
@@ -58,9 +59,8 @@ StatsGauge::paintEvent( QPaintEvent* event )
     p.setPen( pen );
 
     int fullCircle = 16 * 360;
-    float pct = m_inverted ? ( 1.0 - (float)value() / (float)maximum() ) : (float)value() / (float)maximum();
-
-    p.drawArc( QRect( 12, 12, gaugeSize.width() - 24, gaugeSize.height() - 24 ), 4*360, (int)( -1.0 * (float)fullCircle * pct ) );
+    p.drawArc( QRect( 12, 12, gaugeSize.width() - 24, gaugeSize.height() - 24 ),
+               4*360, (int)( -1.0 * (float)fullCircle * ( invertedAppearance() ? ( 1.0 - m_percentage ) : m_percentage ) ) );
 
     pen = QPen( TomahawkStyle::NOW_PLAYING_ITEM.darker() );
     pen.setWidth( 6 );
@@ -116,15 +116,30 @@ StatsGauge::setValue( int v )
 {
     if ( maximum() == 0 || v == 0 )
         return;
+    if ( v == m_targetValue )
+        return;
 
-    QPropertyAnimation* a = new QPropertyAnimation( (QProgressBar*)this, "value" );
-    a->setEasingCurve( QEasingCurve( QEasingCurve::OutQuad ) );
-    a->setStartValue( value() > 0 ? value() : 1 );
-    a->setEndValue( v );
-    a->setDuration( 2000 );
+    m_targetValue = v;
+    {
+        QPropertyAnimation* a = new QPropertyAnimation( (QProgressBar*)this, "value" );
+        a->setEasingCurve( QEasingCurve( QEasingCurve::OutQuad ) );
+        a->setStartValue( value() > 0 ? value() : 1 );
+        a->setEndValue( v );
+        a->setDuration( 2000 );
 
-    connect( a, SIGNAL( finished() ), a, SLOT( deleteLater() ) );
-    a->start();
+        connect( a, SIGNAL( finished() ), a, SLOT( deleteLater() ) );
+        a->start();
+    }
+    {
+        QPropertyAnimation* a = new QPropertyAnimation( (QProgressBar*)this, "percentage" );
+        a->setEasingCurve( QEasingCurve( QEasingCurve::OutQuad ) );
+        a->setStartValue( (float)0 );
+        a->setEndValue( (float)v / (float)maximum() );
+        a->setDuration( 2000 );
+
+        connect( a, SIGNAL( finished() ), a, SLOT( deleteLater() ) );
+        a->start();
+    }
 }
 
 
@@ -137,8 +152,8 @@ StatsGauge::setText( const QString& text )
 
 
 void
-StatsGauge::setInvertedGauge( bool inverted )
+StatsGauge::setPercentage( float percentage )
 {
-    m_inverted = inverted;
+    m_percentage = percentage;
     repaint();
 }

@@ -26,6 +26,7 @@
 class DLLEXPORT StatsGauge : public QProgressBar
 {
 Q_OBJECT
+Q_PROPERTY( float percentage READ percentage WRITE setPercentage )
 
 public:
     /** this pixmap becomes the rest state pixmap and defines the size of the eventual widget */
@@ -34,11 +35,12 @@ public:
     virtual QSize sizeHint() const { return m_sizeHint; }
     QString text() const { return m_text; }
 
-    void setInvertedGauge( bool inverted );
+    float percentage() const { return m_percentage; }
 
 public slots:
     void setValue( int value );
     void setText( const QString& text );
+    void setPercentage( float percentage );
 
 protected:
     virtual void paintEvent( QPaintEvent* event );
@@ -46,7 +48,8 @@ protected:
 private:
     QSize m_sizeHint;
     QString m_text;
-    bool m_inverted;
+    float m_percentage;
+    int m_targetValue;
 };
 
 #endif //STATS_GAUGE_H
