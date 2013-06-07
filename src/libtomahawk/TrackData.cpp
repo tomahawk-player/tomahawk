@@ -46,8 +46,8 @@ QHash< QString, trackdata_wptr > TrackData::s_trackDatasByName = QHash< QString,
 QHash< unsigned int, trackdata_wptr > TrackData::s_trackDatasById = QHash< unsigned int, trackdata_wptr >();
 
 static QMutex s_datanameCacheMutex;
+static QMutex s_memberMutex;
 static QReadWriteLock s_dataidMutex;
-
 
 inline QString
 cacheKey( const QString& artist, const QString& track )
@@ -257,8 +257,11 @@ TrackData::loadSocialActions()
 void
 TrackData::setAllSocialActions( const QList< SocialAction >& socialActions )
 {
-    m_allSocialActions = socialActions;
-    parseSocialActions();
+    {
+        QMutexLocker locker( &s_memberMutex );
+        m_allSocialActions = socialActions;
+        parseSocialActions();
+    }
 
     emit socialActionsLoaded();
 }
@@ -267,6 +270,7 @@ TrackData::setAllSocialActions( const QList< SocialAction >& socialActions )
 QList< SocialAction >
 TrackData::allSocialActions() const
 {
+    QMutexLocker locker( &s_memberMutex );
     return m_allSocialActions;
 }
 
@@ -292,6 +296,8 @@ TrackData::parseSocialActions()
 bool
 TrackData::loved()
 {
+    QMutexLocker locker( &s_memberMutex );
+
     if ( m_socialActionsLoaded )
     {
         return m_currentSocialActions[ "Love" ].toBool();
@@ -341,8 +347,9 @@ TrackData::loadStats()
 QList< Tomahawk::PlaybackLog >
 TrackData::playbackHistory( const Tomahawk::source_ptr& source ) const
 {
-    QList< Tomahawk::PlaybackLog > history;
+    QMutexLocker locker( &s_memberMutex );
 
+    QList< Tomahawk::PlaybackLog > history;
     foreach ( const PlaybackLog& log, m_playbackHistory )
     {
         if ( source.isNull() || log.source == source )
@@ -358,7 +365,10 @@ TrackData::playbackHistory( const Tomahawk::source_ptr& source ) const
 void
 TrackData::setPlaybackHistory( const QList< Tomahawk::PlaybackLog >& playbackData )
 {
-    m_playbackHistory = playbackData;
+    {
+        QMutexLocker locker( &s_memberMutex );
+        m_playbackHistory = playbackData;
+    }
     emit statsLoaded();
 }
 
@@ -366,6 +376,8 @@ TrackData::setPlaybackHistory( const QList< Tomahawk::PlaybackLog >& playbackDat
 unsigned int
 TrackData::playbackCount( const source_ptr& source )
 {
+    QMutexLocker locker( &s_memberMutex );
+
     unsigned int count = 0;
     foreach ( const PlaybackLog& log, m_playbackHistory )
     {
