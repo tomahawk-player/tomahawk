@@ -80,6 +80,7 @@ InfoPlugin::setFriendlyName( const QString& friendlyName )
     m_friendlyName = friendlyName;
 }
 
+
 const QString
 InfoPlugin::friendlyName() const
 {
@@ -99,7 +100,7 @@ InfoSystem::instance()
 }
 
 
-InfoSystem::InfoSystem( QObject *parent )
+InfoSystem::InfoSystem( QObject* parent )
     : QObject( parent )
     , m_inited( false )
     , m_infoSystemCacheThreadController( 0 )
@@ -121,7 +122,7 @@ InfoSystem::InfoSystem( QObject *parent )
 
 InfoSystem::~InfoSystem()
 {
-    tDebug() << Q_FUNC_INFO << " beginning";
+    tDebug() << Q_FUNC_INFO << "beginning";
 
     if ( m_infoSystemWorkerThreadController )
     {
@@ -131,9 +132,9 @@ InfoSystem::~InfoSystem()
         delete m_infoSystemWorkerThreadController;
         m_infoSystemWorkerThreadController = 0;
     }
-    tDebug() << Q_FUNC_INFO << " done deleting worker";
+    tDebug() << Q_FUNC_INFO << "done deleting worker";
 
-    if( m_infoSystemCacheThreadController )
+    if ( m_infoSystemCacheThreadController )
     {
         m_infoSystemCacheThreadController->quit();
         m_infoSystemCacheThreadController->wait( 60000 );
@@ -142,7 +143,7 @@ InfoSystem::~InfoSystem()
         m_infoSystemCacheThreadController = 0;
     }
 
-    tDebug() << Q_FUNC_INFO << " done deleting cache";
+    tDebug() << Q_FUNC_INFO << "done deleting cache";
 }
 
 
@@ -182,11 +183,12 @@ InfoSystem::init()
     QMetaObject::invokeMethod( worker, "init", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoSystemCache*, cache ) );
 
     m_inited = true;
+    emit ready();
 }
 
 
 bool
-InfoSystem::getInfo( const InfoRequestData &requestData )
+InfoSystem::getInfo( const InfoRequestData& requestData )
 {
     //qDebug() << Q_FUNC_INFO;
     if ( !m_inited || !m_infoSystemWorkerThreadController->worker() )
@@ -200,7 +202,7 @@ InfoSystem::getInfo( const InfoRequestData &requestData )
 
 
 bool
-InfoSystem::getInfo( const QString &caller, const QVariantMap &customData, const InfoTypeMap &inputMap, const InfoTimeoutMap &timeoutMap, bool allSources )
+InfoSystem::getInfo( const QString& caller, const QVariantMap& customData, const InfoTypeMap& inputMap, const InfoTimeoutMap& timeoutMap, bool allSources )
 {
     if ( !m_inited || !m_infoSystemWorkerThreadController->worker() )
     {
@@ -211,7 +213,7 @@ InfoSystem::getInfo( const QString &caller, const QVariantMap &customData, const
     requestData.caller = caller;
     requestData.customData = customData;
     requestData.allSources = allSources;
-    Q_FOREACH( InfoType type, inputMap.keys() )
+    foreach ( InfoType type, inputMap.keys() )
     {
         requestData.type = type;
         requestData.input = inputMap[ type ];
@@ -241,7 +243,7 @@ InfoSystem::pushInfo( InfoPushData pushData )
 
 
 bool
-InfoSystem::pushInfo( const QString &caller, const InfoTypeMap &input, const PushInfoFlags pushFlags )
+InfoSystem::pushInfo( const QString& caller, const InfoTypeMap& input, const PushInfoFlags pushFlags )
 {
     if ( !m_inited || !m_infoSystemWorkerThreadController->worker() )
     {
@@ -249,7 +251,7 @@ InfoSystem::pushInfo( const QString &caller, const InfoTypeMap &input, const Pus
         return false;
     }
 
-    Q_FOREACH( InfoType type, input.keys() )
+    foreach ( InfoType type, input.keys() )
     {
         InfoPushData pushData( caller, type, input[ type ], pushFlags );
         pushData.infoPair = PushInfoPair( QVariantMap(), pushData.input );
@@ -341,7 +343,7 @@ InfoSystem::workerThread() const
 }
 
 
-InfoSystemCacheThread::InfoSystemCacheThread( QObject *parent )
+InfoSystemCacheThread::InfoSystemCacheThread( QObject* parent )
     : QThread( parent )
 {
     tDebug() << Q_FUNC_INFO;
@@ -373,25 +375,28 @@ InfoSystemCacheThread::cache() const
 }
 
 
-InfoSystemWorkerThread::InfoSystemWorkerThread( QObject *parent )
+InfoSystemWorkerThread::InfoSystemWorkerThread( QObject* parent )
     : QThread( parent )
 {
     tDebug() << Q_FUNC_INFO;
 }
+
 
 InfoSystemWorkerThread::~InfoSystemWorkerThread()
 {
     tDebug() << Q_FUNC_INFO;
 }
 
+
 void
 InfoSystemWorkerThread::InfoSystemWorkerThread::run()
 {
     m_worker = QPointer< InfoSystemWorker >( new InfoSystemWorker() );
     exec();
-    if( !m_worker.isNull() )
+    if ( !m_worker.isNull() )
         delete m_worker.data();
 }
+
 
 InfoSystemWorker*
 InfoSystemWorkerThread::worker() const
@@ -400,7 +405,6 @@ InfoSystemWorkerThread::worker() const
         return 0;
     return m_worker.data();
 }
-
 
 } //namespace InfoSystem
 

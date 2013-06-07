@@ -43,6 +43,7 @@ namespace InfoSystem
 
 InfoSystemWorker::InfoSystemWorker()
     : QObject()
+    , m_cache( 0 )
 {
     tDebug() << Q_FUNC_INFO;
 
@@ -128,7 +129,7 @@ InfoSystemWorker::addInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin )
             SLOT( updateCacheSlot( Tomahawk::InfoSystem::InfoStringHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) ),
             Qt::QueuedConnection
     );
-    
+
     QMetaObject::invokeMethod( plugin.data(), "init", Qt::QueuedConnection );
 
     emit updatedSupportedGetTypes( QSet< InfoType >::fromList( m_infoGetMap.keys() ) );
