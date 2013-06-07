@@ -284,7 +284,7 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
         rect.setBottom( pixmapRect.bottom() + 1 );
 
         QColor figColor( TomahawkStyle::DASHBOARD_ROUNDFIGURE_BACKGROUND );
-        painter->setPen( figColor );
+        painter->setPen( Qt::white );
         painter->setBrush( figColor );
 
         TomahawkUtils::drawBackgroundAndNumbers( painter, tracks, rect );

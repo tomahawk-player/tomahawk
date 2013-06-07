@@ -436,7 +436,7 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
             painter->setFont( figFont );
 
             QColor figColor( TomahawkStyle::SIDEBAR_ROUNDFIGURE_BACKGROUND );
-            painter->setPen( figColor );
+            painter->setPen( Qt::white );
             painter->setBrush( figColor );
 
             TomahawkUtils::drawBackgroundAndNumbers( painter, tracks, figRect );
