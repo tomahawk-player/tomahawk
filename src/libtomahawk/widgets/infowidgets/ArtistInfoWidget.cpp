@@ -108,7 +108,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     QHBoxLayout* l = new QHBoxLayout( ui->statsWidget );
     m_playStatsGauge = new StatsGauge( ui->statsWidget );
     m_playStatsGauge->setText( tr( "CHART #" ) );
-    m_playStatsGauge->setInvertedGauge( true );
+    m_playStatsGauge->setInvertedAppearance( true );
 
     l->addSpacerItem( new QSpacerItem( 0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding ) );
     l->addWidget( m_playStatsGauge );
