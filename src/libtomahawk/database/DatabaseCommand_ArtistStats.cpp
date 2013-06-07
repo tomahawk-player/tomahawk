@@ -1,0 +1,68 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2013, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include "DatabaseCommand_ArtistStats.h"
+
+#include "Artist.h"
+#include "DatabaseImpl.h"
+#include "SourceList.h"
+#include "utils/Logger.h"
+
+using namespace Tomahawk;
+
+
+DatabaseCommand_ArtistStats::DatabaseCommand_ArtistStats( const artist_ptr& artist, QObject* parent )
+    : DatabaseCommand( parent )
+    , m_artist( artist )
+{
+}
+
+
+void
+DatabaseCommand_ArtistStats::exec( DatabaseImpl* dbi )
+{
+    TomahawkSqlQuery query = dbi->newquery();
+
+    query.prepare( "SELECT COUNT(*) AS counter, artist.id "
+                   "FROM playback_log, track, artist "
+                   "WHERE playback_log.source IS NULL AND track.id = playback_log.track AND artist.id = track.artist "
+                   "GROUP BY track.artist "
+                   "ORDER BY counter DESC" );
+    query.exec();
+
+    unsigned int plays = 0;
+    unsigned int chartPos = 0;
+    unsigned int chartCount = 0;
+
+    QHash< QString, unsigned int > charts;
+    while ( query.next() )
+    {
+        chartCount++;
+
+        if ( query.value( 1 ).toUInt() == m_artist->id() )
+        {
+            chartPos = chartCount;
+            plays = query.value( 0 ).toUInt();
+        }
+    }
+
+    if ( plays == 0 )
+        chartPos = chartCount;
+
+    emit done( plays, chartPos, chartCount );
+}

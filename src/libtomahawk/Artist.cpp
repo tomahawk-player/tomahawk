@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2013, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
@@ -25,6 +25,7 @@
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
 #include "database/DatabaseCommand_AllAlbums.h"
+#include "database/DatabaseCommand_ArtistStats.h"
 #include "database/DatabaseCommand_TrackStats.h"
 #include "database/IdThreadWorker.h"
 #include "Source.h"
@@ -42,6 +43,7 @@ QHash< unsigned int, artist_wptr > Artist::s_artistsById = QHash< unsigned int, 
 
 static QMutex s_nameCacheMutex;
 static QReadWriteLock s_idMutex;
+static QMutex s_memberMutex;
 
 
 Artist::~Artist()
@@ -132,6 +134,8 @@ Artist::Artist( unsigned int id, const QString& name )
     , m_simArtistsLoaded( false )
     , m_biographyLoaded( false )
     , m_infoJobs( 0 )
+    , m_chartPosition( 0 )
+    , m_chartCount( 0 )
 #ifndef ENABLE_HEADLESS
     , m_cover( 0 )
 #endif
@@ -182,6 +186,16 @@ Artist::deleteLater()
     }
 
     QObject::deleteLater();
+}
+
+
+void
+Artist::onArtistStatsLoaded( unsigned int /* plays */, unsigned int chartPos, unsigned int chartCount )
+{
+    m_chartPosition = chartPos;
+    m_chartCount = chartCount;
+
+    emit statsLoaded();
 }
 
 
@@ -380,8 +394,16 @@ Artist::loadStats()
 {
     artist_ptr a = m_ownRef.toStrongRef();
 
-    DatabaseCommand_TrackStats* cmd = new DatabaseCommand_TrackStats( a );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+    {
+        DatabaseCommand_TrackStats* cmd = new DatabaseCommand_TrackStats( a );
+        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+    }
+
+    {
+        DatabaseCommand_ArtistStats* cmd = new DatabaseCommand_ArtistStats( a );
+        connect( cmd, SIGNAL( done( unsigned int, unsigned int, unsigned int ) ), SLOT( onArtistStatsLoaded( unsigned int, unsigned int, unsigned int ) ) );
+        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+    }
 }
 
 
@@ -405,14 +427,20 @@ Artist::playbackHistory( const Tomahawk::source_ptr& source ) const
 void
 Artist::setPlaybackHistory( const QList< Tomahawk::PlaybackLog >& playbackData )
 {
-    m_playbackHistory = playbackData;
+    {
+        QMutexLocker locker( &s_memberMutex );
+        m_playbackHistory = playbackData;
+    }
+
     emit statsLoaded();
 }
 
 
 unsigned int
-Artist::playbackCount( const source_ptr& source )
+Artist::playbackCount( const source_ptr& source ) const
 {
+    QMutexLocker locker( &s_memberMutex );
+
     unsigned int count = 0;
     foreach ( const PlaybackLog& log, m_playbackHistory )
     {
@@ -421,6 +449,20 @@ Artist::playbackCount( const source_ptr& source )
     }
 
     return count;
+}
+
+
+unsigned int
+Artist::chartPosition() const
+{
+    return m_chartPosition;
+}
+
+
+unsigned int
+Artist::chartCount() const
+{
+    return m_chartCount;
 }
 
 
