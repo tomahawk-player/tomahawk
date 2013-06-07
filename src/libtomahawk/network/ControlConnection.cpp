@@ -38,8 +38,8 @@ ControlConnection::ControlConnection( Servent* parent )
     : Connection( parent )
     , m_dbsyncconn( 0 )
     , m_registered( false )
-    , m_pingtimer( 0 )
     , m_shutdownOnEmptyPeerInfos( true )
+    , m_pingtimer( 0 )
 {
     qDebug() << "CTOR controlconnection";
     setId("ControlConnection()");

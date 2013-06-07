@@ -32,6 +32,7 @@
 using namespace Tomahawk;
 using namespace Accounts;
 
+#define MYNAME "zeroconf"
 
 ZeroconfPlugin::ZeroconfPlugin ( ZeroconfAccount* parent )
     : SipPlugin( parent )

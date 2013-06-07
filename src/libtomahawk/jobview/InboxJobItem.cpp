@@ -31,7 +31,7 @@
 InboxJobItem::InboxJobItem( Side side,
                             const QString& prettyName,
                             const Tomahawk::trackdata_ptr& track,
-                            QObject* parent )
+                            QObject* /* parent */ )
     : JobStatusItem()
     , m_track( track )
     , m_prettyName( prettyName )
