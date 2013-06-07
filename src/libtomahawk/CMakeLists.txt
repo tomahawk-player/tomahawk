@@ -128,6 +128,7 @@ set( libGuiSources
     widgets/CheckDirTree.cpp
     widgets/QueryLabel.cpp
     widgets/ImageButton.cpp
+    widgets/StatsGauge.cpp
     widgets/AnimatedSplitter.cpp
     widgets/ElidedLabel.cpp
     widgets/NewPlaylistWidget.cpp
@@ -246,6 +247,7 @@ list(APPEND libSources
     database/DatabaseCommand_SourceOffline.cpp
     database/DatabaseCommand_CollectionStats.cpp
     database/DatabaseCommand_TrackStats.cpp
+    database/DatabaseCommand_ArtistStats.cpp
     database/DatabaseCommand_LoadPlaylistEntries.cpp
     database/DatabaseCommand_LoadInboxEntries.cpp
     database/DatabaseCommand_ModifyPlaylist.cpp
