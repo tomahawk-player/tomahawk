@@ -711,7 +711,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
                 painter->setFont( figFont );
 
                 QColor figColor( TomahawkStyle::SIDEBAR_ROUNDFIGURE_INBOX_BACKGROUND );
-                painter->setPen( figColor );
+                painter->setPen( Qt::white );
                 painter->setBrush( figColor );
 
                 TomahawkUtils::drawBackgroundAndNumbers( painter, count, figRect );
