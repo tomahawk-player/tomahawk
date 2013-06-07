@@ -681,48 +681,49 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>استمارة</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="33"/>
         <source>Connect to your Hatchet account</source>
-        <translation type="unfinished"/>
+        <translation>الإتصال بحساب هاتشت الخاص</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="62"/>
         <source>One-time
 Password</source>
-        <translation type="unfinished"/>
+        <translation>لمرة واحدة
+كلمة السر</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="70"/>
         <source>Username</source>
-        <translation type="unfinished"/>
+        <translation>اسم المستخدم</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="77"/>
         <source>Hatchet username</source>
-        <translation type="unfinished"/>
+        <translation>إسم المستخدم على هاتشت</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="84"/>
         <source>Password:</source>
-        <translation type="unfinished"/>
+        <translation>كلمة السر:</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="97"/>
         <source>Hatchet password</source>
-        <translation type="unfinished"/>
+        <translation>كلمة سر هاتشت</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="104"/>
         <source>(Only if configured)</source>
-        <translation type="unfinished"/>
+        <translation>(فقط إذا كان مكون)</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="138"/>
         <source>Login</source>
-        <translation type="unfinished"/>
+        <translation>تسجيل الدخول</translation>
     </message>
 </context>
 <context>
@@ -1031,27 +1032,27 @@ Password</source>
     <message>
         <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="223"/>
         <source>Charts</source>
-        <translation type="unfinished"/>
+        <translation>الرسوم البيانية</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="225"/>
         <source>Last Week</source>
-        <translation type="unfinished"/>
+        <translation>الأسبوع الماضي</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="228"/>
         <source>Last Month</source>
-        <translation type="unfinished"/>
+        <translation>الشهر الماضي</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="231"/>
         <source>Last Year</source>
-        <translation type="unfinished"/>
+        <translation>العام الماضي</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.h" line="44"/>
         <source>Network Activity</source>
-        <translation type="unfinished"/>
+        <translation>نشاط الشبكة</translation>
     </message>
 </context>
 <context>
@@ -1685,7 +1686,7 @@ Password</source>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="35"/>
         <source>Active (your host needs to be directly reachable)</source>
-        <translation type="unfinished"/>
+        <translation>ناشط (على مضيفك أن يكون قابل للوصول إليه مباشرةً)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="42"/>
@@ -2104,7 +2105,7 @@ Password</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="315"/>
         <source>Network Activity</source>
-        <translation type="unfinished"/>
+        <translation>نشاط الشبكة</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="340"/>
@@ -2321,12 +2322,12 @@ Password</source>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="115"/>
         <source>Login</source>
-        <translation type="unfinished"/>
+        <translation>تسجيل الدخول</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="129"/>
         <source>Logged in as: %1</source>
-        <translation type="unfinished"/>
+        <translation>مسجل تحت اسم: %1</translation>
     </message>
 </context>
 <context>
@@ -2334,7 +2335,7 @@ Password</source>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccount.h" line="49"/>
         <source>Connect to your Hatchet account</source>
-        <translation type="unfinished"/>
+        <translation>الإتصال بحساب هاتشت الخاص</translation>
     </message>
 </context>
 <context>
