@@ -30,6 +30,7 @@
 #include "utils/Logger.h"
 
 #include <boost/bind.hpp>
+#include <boost/function.hpp>
 
 #include <QFile>
 

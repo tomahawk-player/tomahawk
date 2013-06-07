@@ -26,8 +26,6 @@
 #include <QPair>
 #include <QPersistentModelIndex>
 
-#include <boost/function.hpp>
-
 //template <typename T> class QSharedPointer;
 
 #include <QNetworkReply>
@@ -100,7 +98,6 @@ namespace Tomahawk
     };
 
     class ExternalResolver;
-    typedef boost::function<Tomahawk::ExternalResolver*( QString, QStringList )> ResolverFactoryFunc;
 
     namespace PlaylistModes {
         enum RepeatMode { NoRepeat, RepeatOne, RepeatAll };

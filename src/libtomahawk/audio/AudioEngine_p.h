@@ -3,6 +3,8 @@
 #include <phonon/AudioOutput>
 #include <phonon/BackendCapabilities>
 
+#include <stdint.h>
+
 #include <QObject>
 #include <QTimer>
 #include <QQueue>
@@ -46,7 +48,7 @@ private:
     QQueue< AudioState > stateQueue;
     QTimer stateQueueTimer;
 
-    uint_fast8_t underrunCount;
+    quint8 underrunCount;
     bool underrunNotified;
 
     QTemporaryFile* coverTempFile;

@@ -30,7 +30,7 @@
 #include "utils/ResultUrlChecker.h"
 #include "utils/Logger.h"
 
-#include "boost/bind.hpp"
+#include <boost/bind.hpp>
 
 #define DEFAULT_CONCURRENT_QUERIES 4
 #define MAX_CONCURRENT_QUERIES 16

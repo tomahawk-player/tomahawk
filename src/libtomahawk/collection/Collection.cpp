@@ -25,6 +25,7 @@
 #include "playlist/PlaylistUpdaterInterface.h"
 #include "utils/ImageRegistry.h"
 #include "accounts/AccountManager.h"
+#include "utils/Closure.h"
 
 #include <QMetaObject>
 #include <QGenericArgument>

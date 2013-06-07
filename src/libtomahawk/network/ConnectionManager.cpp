@@ -18,6 +18,7 @@
 
 #include "ConnectionManager.h"
 #include "ControlConnection.h"
+#include "QTcpSocketExtra.h"
 #include "Servent.h"
 
 #include "database/Database.h"
