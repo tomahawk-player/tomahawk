@@ -91,8 +91,8 @@ StatsGauge::paintEvent( QPaintEvent* event )
         pen = QPen( Qt::white );
         p.setPen( pen );
         font = p.font();
-        font.setWeight( QFont::Black );
-        font.setPixelSize( 18 );
+        font.setWeight( QFont::DemiBold );
+        font.setPixelSize( 16 );
         p.setFont( font );
 
         QColor figColor( "#3e3e3e" );
@@ -112,7 +112,7 @@ StatsGauge::setValue( int v )
 {
     QPropertyAnimation* a = new QPropertyAnimation( (QProgressBar*)this, "value" );
     a->setEasingCurve( QEasingCurve( QEasingCurve::InOutQuad ) );
-    a->setStartValue( value() );
+    a->setStartValue( value() > 0 ? value() : 1 );
     a->setEndValue( v );
     a->setDuration( 2000 );
 
