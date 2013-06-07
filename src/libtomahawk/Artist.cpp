@@ -170,6 +170,8 @@ Artist::Artist( const QString& name )
     , m_simArtistsLoaded( false )
     , m_biographyLoaded( false )
     , m_infoJobs( 0 )
+    , m_chartPosition( 0 )
+    , m_chartCount( 0 )
 #ifndef ENABLE_HEADLESS
     , m_cover( 0 )
 #endif
