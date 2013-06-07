@@ -33,6 +33,7 @@
 
 StatsGauge::StatsGauge( QWidget* parent )
     : QProgressBar( parent )
+    , m_inverted( false )
 {
     QProgressBar::setValue( 0 );
     QProgressBar::setMaximum( 0 );
@@ -57,7 +58,9 @@ StatsGauge::paintEvent( QPaintEvent* event )
     p.setPen( pen );
 
     int fullCircle = 16 * 360;
-    p.drawArc( QRect( 12, 12, gaugeSize.width() - 24, gaugeSize.height() - 24 ), 4*360, (int)( -1.0 * (float)fullCircle * ( 1.0 - (float)value() / (float)maximum() ) ) );
+    float pct = m_inverted ? ( 1.0 - (float)value() / (float)maximum() ) : (float)value() / (float)maximum();
+
+    p.drawArc( QRect( 12, 12, gaugeSize.width() - 24, gaugeSize.height() - 24 ), 4*360, (int)( -1.0 * (float)fullCircle * pct ) );
 
     pen = QPen( TomahawkStyle::NOW_PLAYING_ITEM.darker() );
     pen.setWidth( 6 );
@@ -85,7 +88,7 @@ StatsGauge::paintEvent( QPaintEvent* event )
     p.setFont( font );
 
     textRect = QRect( 0, gaugeSize.height() / 2 - 32, gaugeSize.width(), 20 );
-    p.drawText( textRect, Qt::AlignCenter, maximum() > 0 ? QString( "out of %1" ).arg( maximum() ) : "-" );
+    p.drawText( textRect, Qt::AlignCenter, maximum() > 0 ? tr( "out of %1" ).arg( maximum() ) : "-" );
 
     if ( !m_text.isEmpty() )
     {
@@ -111,7 +114,7 @@ StatsGauge::paintEvent( QPaintEvent* event )
 void
 StatsGauge::setValue( int v )
 {
-    if ( maximum() == 0 )
+    if ( maximum() == 0 || v == 0 )
         return;
 
     QPropertyAnimation* a = new QPropertyAnimation( (QProgressBar*)this, "value" );
@@ -129,5 +132,13 @@ void
 StatsGauge::setText( const QString& text )
 {
     m_text = text;
+    repaint();
+}
+
+
+void
+StatsGauge::setInvertedGauge( bool inverted )
+{
+    m_inverted = inverted;
     repaint();
 }
