@@ -84,6 +84,8 @@ public:
     bool autoResize() const { return m_autoResize; }
     void setAutoResize( bool b );
 
+    void setAlternatingRowColors( bool enable );
+
     // Starts playing from the beginning if resolved, or waits until a track is playable
     void startPlayingFromStart();
 
@@ -150,6 +152,7 @@ private:
 
     bool m_updateContextView;
     bool m_autoResize;
+    bool m_alternatingRowColors;
 
     QModelIndex m_contextMenuIndex;
 

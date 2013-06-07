@@ -57,6 +57,7 @@ TrackView::TrackView( QWidget* parent )
     , m_resizing( false )
     , m_dragging( false )
     , m_updateContextView( true )
+    , m_alternatingRowColors( true )
     , m_contextMenu( new ContextMenu( this ) )
 {
     setFrameShape( QFrame::NoFrame );
@@ -233,7 +234,7 @@ TrackView::setEmptyTip( const QString& tip )
 void
 TrackView::onModelFilling()
 {
-    setAlternatingRowColors( true );
+    QTreeView::setAlternatingRowColors( m_alternatingRowColors );
 }
 
 
@@ -241,7 +242,7 @@ void
 TrackView::onModelEmptyCheck()
 {
     if ( !m_proxyModel->rowCount( QModelIndex() ) )
-        setAlternatingRowColors( false );
+        QTreeView::setAlternatingRowColors( false );
 }
 
 
@@ -429,7 +430,7 @@ TrackView::resizeEvent( QResizeEvent* event )
     int sortSection = m_header->sortIndicatorSection();
     Qt::SortOrder sortOrder = m_header->sortIndicatorOrder();
 
-    tDebug() << Q_FUNC_INFO << width();
+//    tDebug() << Q_FUNC_INFO << width();
 
     if ( m_header->checkState() && sortSection >= 0 )
     {
@@ -794,4 +795,12 @@ TrackView::setAutoResize( bool b )
 
     if ( m_autoResize )
         setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+}
+
+
+void
+TrackView::setAlternatingRowColors( bool enable )
+{
+    m_alternatingRowColors = enable;
+    QTreeView::setAlternatingRowColors( enable );
 }
