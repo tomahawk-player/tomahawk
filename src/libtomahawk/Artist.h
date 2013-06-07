@@ -63,7 +63,10 @@ public:
     void loadStats();
     QList< Tomahawk::PlaybackLog > playbackHistory( const Tomahawk::source_ptr& source = Tomahawk::source_ptr() ) const;
     void setPlaybackHistory( const QList< Tomahawk::PlaybackLog >& playbackData );
-    unsigned int playbackCount( const Tomahawk::source_ptr& source = Tomahawk::source_ptr() );
+    unsigned int playbackCount( const Tomahawk::source_ptr& source = Tomahawk::source_ptr() ) const;
+
+    unsigned int chartPosition() const;
+    unsigned int chartCount() const;
 
     QString biography() const;
 
@@ -93,6 +96,7 @@ signals:
     void statsLoaded();
 
 private slots:
+    void onArtistStatsLoaded( unsigned int plays, unsigned int chartPos, unsigned int chartCount );
     void onTracksLoaded( Tomahawk::ModelMode mode, const Tomahawk::collection_ptr& collection );
     void onAlbumsFound( const QList<Tomahawk::album_ptr>& albums, const QVariant& collectionIsNull = QVariant( false ) );
 
@@ -127,8 +131,9 @@ private:
     QList<Tomahawk::artist_ptr> m_similarArtists;
     QString m_biography;
 
-    bool m_playbackHistoryLoaded;
     QList< PlaybackLog > m_playbackHistory;
+    unsigned int m_chartPosition;
+    unsigned int m_chartCount;
 
     mutable QByteArray m_coverBuffer;
 #ifndef ENABLE_HEADLESS
