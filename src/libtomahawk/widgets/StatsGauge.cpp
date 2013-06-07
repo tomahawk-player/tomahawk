@@ -28,6 +28,7 @@
 #include <QPropertyAnimation>
 #include <QLayout>
 #include <QString>
+#include <boost/concept_check.hpp>
 
 
 StatsGauge::StatsGauge( QWidget* parent )
@@ -110,8 +111,11 @@ StatsGauge::paintEvent( QPaintEvent* event )
 void
 StatsGauge::setValue( int v )
 {
+    if ( maximum() == 0 )
+        return;
+
     QPropertyAnimation* a = new QPropertyAnimation( (QProgressBar*)this, "value" );
-    a->setEasingCurve( QEasingCurve( QEasingCurve::InOutQuad ) );
+    a->setEasingCurve( QEasingCurve( QEasingCurve::OutQuad ) );
     a->setStartValue( value() > 0 ? value() : 1 );
     a->setEndValue( v );
     a->setDuration( 2000 );
