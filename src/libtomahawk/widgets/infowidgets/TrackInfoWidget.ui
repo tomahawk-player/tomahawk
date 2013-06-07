@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string notr="true" extracomment="not translatable because not shown to the user">Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,1">
    <property name="spacing">
     <number>16</number>
    </property>
@@ -82,6 +82,22 @@
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QWidget" name="statsWidget" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>220</width>
+         <height>240</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>220</width>
+         <height>16777215</height>
+        </size>
        </property>
       </widget>
      </item>

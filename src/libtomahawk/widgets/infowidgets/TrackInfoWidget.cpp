@@ -28,7 +28,7 @@
 #include "SourceList.h"
 #include "playlist/PlayableModel.h"
 #include "audio/AudioEngine.h"
-
+#include "widgets/StatsGauge.h"
 #include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
@@ -43,12 +43,6 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
 {
     QWidget* widget = new QWidget;
     ui->setupUi( widget );
-
-    QPalette pal = palette();
-    pal.setColor( QPalette::Window, TomahawkStyle::PAGE_BACKGROUND );
-
-    widget->setPalette( pal );
-    widget->setAutoFillBackground( true );
 
     ui->statsLabel->setStyleSheet( "QLabel { background-image:url(); border: 2px solid #dddddd; background-color: #faf9f9; border-radius: 4px; padding: 12px; }" );
     ui->lyricsView->setStyleSheet( "QTextBrowser#lyricsView { background-color: transparent; }" );
@@ -91,9 +85,22 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     m_scrollArea->setWidget( widget );
     m_scrollArea->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
 
-    m_scrollArea->setStyleSheet( "QScrollArea { background-color: #454e59 }" );
+    QPalette pal = palette();
+    pal.setBrush( backgroundRole(), TomahawkStyle::PAGE_BACKGROUND );
+    m_scrollArea->setPalette( pal );
+    m_scrollArea->setAutoFillBackground( true );
     m_scrollArea->setFrameShape( QFrame::NoFrame );
     m_scrollArea->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
+    QHBoxLayout* l = new QHBoxLayout( ui->statsWidget );
+    m_playStatsGauge = new StatsGauge( ui->statsWidget );
+    m_playStatsGauge->setText( tr( "PLAYS" ) );
+
+    l->addSpacerItem( new QSpacerItem( 0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding ) );
+    l->addWidget( m_playStatsGauge );
+    l->addSpacerItem( new QSpacerItem( 0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding ) );
+    ui->statsWidget->setLayout( l );
+    ui->statsLabel->setVisible( false );
 
     QVBoxLayout* layout = new QVBoxLayout();
     layout->addWidget( m_scrollArea );
@@ -223,7 +230,12 @@ TrackInfoWidget::onStatsLoaded()
     }
 
     if ( artistCounter )
+    {
         stats += "\n" + tr( "You've listened to %1 %n time(s).", "", artistCounter ).arg( m_artist->name() );
+
+        m_playStatsGauge->setMaximum( artistCounter );
+        m_playStatsGauge->setValue( trackCounter );
+    }
     else
         stats += "\n" + tr( "You've never listened to %1 before." ).arg( m_artist->name() );
 
