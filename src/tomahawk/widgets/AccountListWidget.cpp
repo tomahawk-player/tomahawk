@@ -73,7 +73,7 @@ AccountListWidget::AccountListWidget( AccountModelFactoryProxy* model, QWidget* 
     connect( m_toggleOnlineButton, SIGNAL( clicked() ),
              this, SLOT( toggleOnlineStateForAll() ) );
 
-    QHBoxLayout *headerLayout = new QHBoxLayout( this );
+    QHBoxLayout *headerLayout = new QHBoxLayout();
     headerLayout->addWidget( connectionsLabel );
     headerLayout->addSpacing( 30 );
     headerLayout->addWidget( m_toggleOnlineButton );

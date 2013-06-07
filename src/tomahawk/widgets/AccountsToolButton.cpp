@@ -89,7 +89,7 @@ AccountsToolButton::AccountsToolButton( QWidget* parent )
     settingsButton->setText( tr( "Configure Accounts" ) );
     connect( settingsButton, SIGNAL( clicked() ), window(), SLOT( showSettingsDialog() ) );
 
-    QHBoxLayout *bottomLayout = new QHBoxLayout( w );
+    QHBoxLayout *bottomLayout = new QHBoxLayout();
     TomahawkUtils::unmarginLayout( bottomLayout );
     bottomLayout->addStretch();
     bottomLayout->addWidget( settingsButton );
