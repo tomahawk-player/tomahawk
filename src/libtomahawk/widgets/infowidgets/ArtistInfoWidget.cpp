@@ -108,6 +108,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     QHBoxLayout* l = new QHBoxLayout( ui->statsWidget );
     m_playStatsGauge = new StatsGauge( ui->statsWidget );
     m_playStatsGauge->setText( tr( "CHART #" ) );
+    m_playStatsGauge->setInvertedGauge( true );
 
     l->addSpacerItem( new QSpacerItem( 0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding ) );
     l->addWidget( m_playStatsGauge );
@@ -142,7 +143,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     area->setWidget( widget );
 
     QPalette pal = palette();
-    pal.setBrush( backgroundRole(), QColor( "#1e1e1e" ) ); //QBrush( QImage( ":/data/images/grey_wash_wall.png" ) ) );
+    pal.setBrush( backgroundRole(), TomahawkStyle::PAGE_BACKGROUND );
     area->setPalette( pal );
     area->setAutoFillBackground( true );
     area->setFrameShape( QFrame::NoFrame );
