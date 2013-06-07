@@ -25,8 +25,8 @@
 
 #include <QAbstractSocket>
 #include <QObject>
-#include <QMutex>
 
+class ConnectionManagerPrivate;
 class QTcpSocketExtra;
 
 class DLLEXPORT ConnectionManager : public QObject
@@ -36,6 +36,7 @@ class DLLEXPORT ConnectionManager : public QObject
 public:
     static QSharedPointer<ConnectionManager> getManagerForNodeId( const QString& nodeid );
     ConnectionManager( const QString& nodeid );
+    ~ConnectionManager();
 
     void handleSipInfo( const Tomahawk::peerinfo_ptr& peerInfo );
 
@@ -44,6 +45,9 @@ private slots:
     void socketError( QAbstractSocket::SocketError error );
 
 private:
+    Q_DECLARE_PRIVATE( ConnectionManager )
+    ConnectionManagerPrivate* d_ptr;
+
     void connectToPeer(const Tomahawk::peerinfo_ptr& peerInfo , bool lock);
     void handleSipInfoPrivate( const Tomahawk::peerinfo_ptr& peerInfo );
 
@@ -56,13 +60,6 @@ private:
      * Attempt to connect to the peer using the current stored information.
      */
     void tryConnect();
-
-    // We just keep this for debug purposes and only during connection attempts.
-    Tomahawk::peerinfo_ptr m_currentPeerInfo;
-    QString m_nodeid;
-    QPointer<ControlConnection> m_controlConnection;
-    QList<SipInfo> m_sipCandidates;
-    QMutex m_mutex;
 };
 
 #endif // CONNECTIONMANAGER_H
