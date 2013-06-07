@@ -22,6 +22,7 @@
 #include "ViewPage.h"
 
 class AnimatedSpinner;
+class NetworkActivityWidgetPrivate;
 class PlaylistModel;
 class QModelIndex;
 class QStandardItemModel;
@@ -63,16 +64,8 @@ private:
     void actualFetchData();
     void checkDone();
 
-    QSharedPointer<Ui::NetworkActivityWidget> ui;
-    Tomahawk::playlistinterface_ptr m_playlistInterface;
-    AnimatedSpinner* m_spinner;
-    QStandardItemModel* m_crumbModelLeft;
-    QSortFilterProxyModel* m_sortedProxy;
-
-    QPointer<PlaylistModel> m_weeklyChartsModel;
-    QPointer<PlaylistModel> m_monthlyChartsModel;
-    QPointer<PlaylistModel> m_yearlyChartsModel;
-
+    Q_DECLARE_PRIVATE( NetworkActivityWidget )
+    NetworkActivityWidgetPrivate* d_ptr;
 };
 
 #endif // NETWORKACTIVITYWIDGET_H

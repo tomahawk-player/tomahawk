@@ -16,8 +16,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "NetworkActivityWidget.h"
-#include "ui_NetworkActivityWidget.h"
+#include "NetworkActivityWidget_p.h"
 
 #include "Pipeline.h"
 #include "audio/AudioEngine.h"
@@ -40,55 +39,56 @@ using namespace Tomahawk;
 
 NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
     : QWidget( parent )
-    , ui( new Ui::NetworkActivityWidget )
-    , m_sortedProxy( 0 )
+    , d_ptr( new NetworkActivityWidgetPrivate ( this ) )
 {
-    ui->setupUi( this );
+    d_func()->ui->setupUi( this );
 
     TomahawkUtils::unmarginLayout( layout() );
-    TomahawkUtils::unmarginLayout( ui->stackLeft->layout() );
-    TomahawkUtils::unmarginLayout( ui->horizontalLayout->layout() );
-    TomahawkUtils::unmarginLayout( ui->breadCrumbLeft->layout() );
+    TomahawkUtils::unmarginLayout( d_func()->ui->stackLeft->layout() );
+    TomahawkUtils::unmarginLayout( d_func()->ui->verticalLayout_2->layout() );
+    TomahawkUtils::unmarginLayout( d_func()->ui->horizontalLayout->layout() );
+    TomahawkUtils::unmarginLayout( d_func()->ui->breadCrumbLeft->layout() );
 
-    m_crumbModelLeft = new QStandardItemModel( this );
-    m_sortedProxy = new QSortFilterProxyModel( this );
-    m_sortedProxy->setDynamicSortFilter( true );
-    m_sortedProxy->setFilterCaseSensitivity( Qt::CaseInsensitive );
+    d_func()->crumbModelLeft = new QStandardItemModel( this );
+    d_func()->sortedProxy = new QSortFilterProxyModel( this );
+    d_func()->sortedProxy->setDynamicSortFilter( true );
+    d_func()->sortedProxy->setFilterCaseSensitivity( Qt::CaseInsensitive );
 
-    ui->breadCrumbLeft->setRootIcon( TomahawkUtils::defaultPixmap( TomahawkUtils::NetworkActivity, TomahawkUtils::Original ) );
-    connect( ui->breadCrumbLeft, SIGNAL( activateIndex( QModelIndex ) ), SLOT( leftCrumbIndexChanged( QModelIndex ) ) );
+    d_func()->ui->breadCrumbLeft->setRootIcon( TomahawkUtils::defaultPixmap( TomahawkUtils::NetworkActivity, TomahawkUtils::Original ) );
+    connect( d_func()->ui->breadCrumbLeft, SIGNAL( activateIndex( QModelIndex ) ), SLOT( leftCrumbIndexChanged( QModelIndex ) ) );
 
-    ui->tracksViewLeft->setHeaderHidden( true );
-    ui->tracksViewLeft->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-    PlaylistChartItemDelegate* del = new PlaylistChartItemDelegate( ui->tracksViewLeft, ui->tracksViewLeft->proxyModel() );
-    ui->tracksViewLeft->setItemDelegate( del );
-    ui->tracksViewLeft->setUniformRowHeights( false );
+    d_func()->ui->tracksViewLeft->setHeaderHidden( true );
+    d_func()->ui->tracksViewLeft->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+    PlaylistChartItemDelegate* del = new PlaylistChartItemDelegate( d_func()->ui->tracksViewLeft, d_func()->ui->tracksViewLeft->proxyModel() );
+    d_func()->ui->tracksViewLeft->setItemDelegate( del );
+    d_func()->ui->tracksViewLeft->setUniformRowHeights( false );
 
-    m_playlistInterface = ui->tracksViewLeft->playlistInterface();
+    d_func()->playlistInterface = d_func()->ui->tracksViewLeft->playlistInterface();
 
     // Lets have a spinner until loaded
-    ui->breadCrumbLeft->setVisible( false );
-    m_spinner = new AnimatedSpinner( ui->tracksViewLeft );
-    m_spinner->fadeIn();
+    d_func()->ui->breadCrumbLeft->setVisible( false );
+    d_func()->spinner = new AnimatedSpinner( d_func()->ui->tracksViewLeft );
+    d_func()->spinner->fadeIn();
 }
 
 
 NetworkActivityWidget::~NetworkActivityWidget()
 {
+    delete d_ptr;
 }
 
 
 Tomahawk::playlistinterface_ptr
 NetworkActivityWidget::playlistInterface() const
 {
-    return m_playlistInterface;
+    return d_func()->playlistInterface;
 }
 
 
 bool
 NetworkActivityWidget::isBeingPlayed() const
 {
-    if ( AudioEngine::instance()->currentTrackPlaylist() == ui->tracksViewLeft->playlistInterface() )
+    if ( AudioEngine::instance()->currentTrackPlaylist() == d_func()->ui->tracksViewLeft->playlistInterface() )
         return true;
 
     return false;
@@ -98,7 +98,7 @@ NetworkActivityWidget::isBeingPlayed() const
 bool
 NetworkActivityWidget::jumpToCurrentTrack()
 {
-    if ( ui->tracksViewLeft->model() && ui->tracksViewLeft->jumpToCurrentTrack() )
+    if ( d_func()->ui->tracksViewLeft->model() && d_func()->ui->tracksViewLeft->jumpToCurrentTrack() )
         return true;
 
     return false;
@@ -116,11 +116,11 @@ NetworkActivityWidget::fetchData()
 void
 NetworkActivityWidget::weeklyCharts( const QList<Tomahawk::track_ptr>& tracks )
 {
-    m_weeklyChartsModel = new PlaylistModel( ui->tracksViewLeft );
-    m_weeklyChartsModel->startLoading();
+    d_func()->weeklyChartsModel = new PlaylistModel( d_func()->ui->tracksViewLeft );
+    d_func()->weeklyChartsModel->startLoading();
     // Pipeline::instance()->resolve( tracks );
-    m_weeklyChartsModel->appendTracks( tracks );
-    m_weeklyChartsModel->finishLoading();
+    d_func()->weeklyChartsModel->appendTracks( tracks );
+    d_func()->weeklyChartsModel->finishLoading();
 
     checkDone();
 }
@@ -129,11 +129,11 @@ NetworkActivityWidget::weeklyCharts( const QList<Tomahawk::track_ptr>& tracks )
 void
 NetworkActivityWidget::monthlyCharts( const QList<Tomahawk::track_ptr>& tracks )
 {
-    m_monthlyChartsModel = new PlaylistModel( ui->tracksViewLeft );
-    m_monthlyChartsModel->startLoading();
+    d_func()->monthlyChartsModel = new PlaylistModel( d_func()->ui->tracksViewLeft );
+    d_func()->monthlyChartsModel->startLoading();
     // Pipeline::instance()->resolve( tracks );
-    m_monthlyChartsModel->appendTracks( tracks );
-    m_monthlyChartsModel->finishLoading();
+    d_func()->monthlyChartsModel->appendTracks( tracks );
+    d_func()->monthlyChartsModel->finishLoading();
 
     checkDone();
 }
@@ -142,11 +142,11 @@ NetworkActivityWidget::monthlyCharts( const QList<Tomahawk::track_ptr>& tracks )
 void
 NetworkActivityWidget::yearlyCharts( const QList<Tomahawk::track_ptr>& tracks )
 {
-    m_yearlyChartsModel = new PlaylistModel( ui->tracksViewLeft );
-    m_yearlyChartsModel->startLoading();
+    d_func()->yearlyChartsModel = new PlaylistModel( d_func()->ui->tracksViewLeft );
+    d_func()->yearlyChartsModel->startLoading();
     // Pipeline::instance()->resolve( tracks );
-    m_yearlyChartsModel->appendTracks( tracks );
-    m_yearlyChartsModel->finishLoading();
+    d_func()->yearlyChartsModel->appendTracks( tracks );
+    d_func()->yearlyChartsModel->finishLoading();
 
     checkDone();
 }
@@ -155,7 +155,7 @@ NetworkActivityWidget::yearlyCharts( const QList<Tomahawk::track_ptr>& tracks )
 void
 NetworkActivityWidget::leftCrumbIndexChanged( const QModelIndex& index )
 {
-    QStandardItem* item = m_crumbModelLeft->itemFromIndex( m_sortedProxy->mapToSource( index ) );
+    QStandardItem* item = d_func()->crumbModelLeft->itemFromIndex( d_func()->sortedProxy->mapToSource( index ) );
     if ( !item )
         return;
     if ( !item->data( Breadcrumb::ChartIdRole ).isValid() )
@@ -164,21 +164,21 @@ NetworkActivityWidget::leftCrumbIndexChanged( const QModelIndex& index )
     const QString chartId = item->data( Breadcrumb::ChartIdRole ).toString();
     if ( chartId == NETWORKCHARTS_WEEK_CHARTS )
     {
-        ui->tracksViewLeft->proxyModel()->setStyle( PlayableProxyModel::Large );
-        ui->tracksViewLeft->setPlaylistModel( m_weeklyChartsModel );
-        ui->tracksViewLeft->proxyModel()->sort( -1 );
+        d_func()->ui->tracksViewLeft->proxyModel()->setStyle( PlayableProxyModel::Large );
+        d_func()->ui->tracksViewLeft->setPlaylistModel( d_func()->weeklyChartsModel );
+        d_func()->ui->tracksViewLeft->proxyModel()->sort( -1 );
     }
     else if ( chartId == NETWORKCHARTS_MONTH_CHARTS )
     {
-        ui->tracksViewLeft->proxyModel()->setStyle( PlayableProxyModel::Large );
-        ui->tracksViewLeft->setPlaylistModel( m_monthlyChartsModel );
-        ui->tracksViewLeft->proxyModel()->sort( -1 );
+        d_func()->ui->tracksViewLeft->proxyModel()->setStyle( PlayableProxyModel::Large );
+        d_func()->ui->tracksViewLeft->setPlaylistModel( d_func()->monthlyChartsModel );
+        d_func()->ui->tracksViewLeft->proxyModel()->sort( -1 );
     }
     else if ( chartId == NETWORKCHARTS_YEAR_CHARTS )
     {
-        ui->tracksViewLeft->proxyModel()->setStyle( PlayableProxyModel::Large );
-        ui->tracksViewLeft->setPlaylistModel( m_yearlyChartsModel );
-        ui->tracksViewLeft->proxyModel()->sort( -1 );
+        d_func()->ui->tracksViewLeft->proxyModel()->setStyle( PlayableProxyModel::Large );
+        d_func()->ui->tracksViewLeft->setPlaylistModel( d_func()->yearlyChartsModel );
+        d_func()->ui->tracksViewLeft->proxyModel()->sort( -1 );
     }
 }
 
@@ -214,12 +214,12 @@ NetworkActivityWidget::actualFetchData()
 void
 NetworkActivityWidget::checkDone()
 {
-    if ( !m_weeklyChartsModel.isNull() && !m_yearlyChartsModel.isNull() && !m_monthlyChartsModel.isNull() )
+    if ( !d_func()->weeklyChartsModel.isNull() && !d_func()->yearlyChartsModel.isNull() && !d_func()->monthlyChartsModel.isNull() )
     {
         // All charts are loaded, do the remaining work UI work.
 
         // Build up breadcrumb
-        QStandardItem* rootItem = m_crumbModelLeft->invisibleRootItem();
+        QStandardItem* rootItem = d_func()->crumbModelLeft->invisibleRootItem();
         QStandardItem* chartItem = new QStandardItem( tr( "Charts" ) );
         rootItem->appendRow( chartItem );
         QStandardItem* weekItem = new QStandardItem( tr( "Last Week" ) );
@@ -231,11 +231,11 @@ NetworkActivityWidget::checkDone()
         QStandardItem* yearItem = new QStandardItem( tr( "Last Year" ) );
         yearItem->setData( NETWORKCHARTS_YEAR_CHARTS, Breadcrumb::ChartIdRole );
         chartItem->appendRow( yearItem );
-        m_sortedProxy->setSourceModel( m_crumbModelLeft );
-        m_sortedProxy->sort( 0, Qt::AscendingOrder );
-        ui->breadCrumbLeft->setModel( m_sortedProxy );
+        d_func()->sortedProxy->setSourceModel( d_func()->crumbModelLeft );
+        d_func()->sortedProxy->sort( 0, Qt::AscendingOrder );
+        d_func()->ui->breadCrumbLeft->setModel( d_func()->sortedProxy );
 
-        m_spinner->fadeOut();
-        ui->breadCrumbLeft->setVisible( true );
+        d_func()->spinner->fadeOut();
+        d_func()->ui->breadCrumbLeft->setVisible( true );
     }
 }
