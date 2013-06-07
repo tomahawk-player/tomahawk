@@ -115,6 +115,7 @@ private slots:
     void initEnergyEventHandler();
 
     void spotifyApiCheckFinished();
+    void onInfoSystemReady();
 
 private:
     void registerMetaTypes();
