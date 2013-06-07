@@ -58,7 +58,7 @@ namespace TomahawkStyle
     static const QColor HEADER_TEXT = QColor( "#eaeaea" );
     static const QColor HEADER_HIGHLIGHT = QColor( "#333" );
 
-    static const QColor PAGE_BACKGROUND = QColor( "#272b2e" );
+    static const QColor PAGE_BACKGROUND = QColor( "#1e1e1e" );
     static const QColor FOOTNOTES_BACKGROUND = QColor( "#272b2e" );
     static const QColor DASHBOARD_ROUNDFIGURE_BACKGROUND = QColor( "#454e59" );
 
