@@ -32,7 +32,7 @@ class DLLEXPORT RecentlyPlayedModel : public PlaylistModel
 Q_OBJECT
 
 public:
-    explicit RecentlyPlayedModel( QObject* parent = 0 );
+    explicit RecentlyPlayedModel( QObject* parent = 0, unsigned int maxItems = 0 );
     ~RecentlyPlayedModel();
 
     unsigned int limit() const { return m_limit; }
