@@ -26,11 +26,13 @@
 #include "playlist/RecentlyPlayedModel.h"
 #include "playlist/TrackView.h"
 #include "playlist/PlaylistLargeItemDelegate.h"
+#include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
 #include <QCalendarWidget>
 #include <QDateEdit>
+#include <QLabel>
 #include <QHBoxLayout>
 
 using namespace Tomahawk;
@@ -48,9 +50,26 @@ HistoryWidget::HistoryWidget( const source_ptr& source, QWidget* parent )
     m_calendarFrom->setDisplayFormat( "yyyy MMMM dd" );
     m_calendarTo->setDisplayFormat( "yyyy MMMM dd" );
 
+    // setting an empty style-sheet prevents the QDateEdits from adopting their parent's QPalette
+    QString calSheet = QString( "QDateEdit { }" ).arg( TomahawkStyle::PAGE_BACKGROUND.name() );
+    m_calendarFrom->setStyleSheet( calSheet );
+    m_calendarTo->setStyleSheet( calSheet );
+
+    QPalette pal = m_header->palette();
+    pal.setColor( QPalette::Foreground, Qt::white );
+    pal.setColor( QPalette::Text, Qt::white );
+    pal.setBrush( backgroundRole(), TomahawkStyle::PAGE_BACKGROUND );
+    m_header->setPalette( pal );
+    m_header->setAutoFillBackground( true );
+
     QHBoxLayout* layout = new QHBoxLayout( m_header );
+    layout->addSpacerItem( new QSpacerItem( 1, 0, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum ) );
+    layout->addWidget( new QLabel( tr( "From:" ) ) );
     layout->addWidget( m_calendarFrom );
+    layout->addSpacerItem( new QSpacerItem( 16, 0, QSizePolicy::Fixed, QSizePolicy::Minimum ) );
+    layout->addWidget( new QLabel( tr( "To:" ) ) );
     layout->addWidget( m_calendarTo );
+    layout->addSpacerItem( new QSpacerItem( 1, 0, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum ) );
     m_header->setLayout( layout );
 
     setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::RecentlyPlayed ) );
