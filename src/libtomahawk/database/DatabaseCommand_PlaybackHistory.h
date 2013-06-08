@@ -44,12 +44,16 @@ public:
     virtual QString commandname() const { return "playbackhistory"; }
 
     void setLimit( unsigned int amount ) { m_amount = amount; }
+    void setDateFrom( const QDate& date ) { m_dateFrom = date; }
+    void setDateTo( const QDate& date ) { m_dateTo = date; }
 
 signals:
     void tracks( const QList<Tomahawk::track_ptr>& tracks, QList<Tomahawk::PlaybackLog> logs );
 
 private:
     unsigned int m_amount;
+    QDate m_dateFrom;
+    QDate m_dateTo;
 };
 
 #endif // DATABASECOMMAND_PLAYBACKHISTORY_H
