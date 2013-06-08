@@ -32,9 +32,6 @@
 #include <QtConcurrentRun>
 
 #define NETWORKCHARTS_NUM_TRACKS 100
-#define NETWORKCHARTS_WEEK_CHARTS "week"
-#define NETWORKCHARTS_MONTH_CHARTS "month"
-#define NETWORKCHARTS_YEAR_CHARTS "year"
 
 using namespace Tomahawk;
 
