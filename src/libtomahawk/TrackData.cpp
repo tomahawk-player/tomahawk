@@ -105,6 +105,8 @@ TrackData::TrackData( unsigned int id, const QString& artist, const QString& tra
     , m_attributesLoaded( false )
     , m_socialActionsLoaded( false )
     , m_playbackHistoryLoaded( false )
+    , m_chartPosition( 0 )
+    , m_chartCount( 0 )
     , m_simTracksLoaded( false )
     , m_lyricsLoaded( false )
     , m_infoJobs( 0 )
@@ -339,6 +341,7 @@ TrackData::loadStats()
     m_playbackHistoryLoaded = true;
 
     DatabaseCommand_TrackStats* cmd = new DatabaseCommand_TrackStats( m_ownRef.toStrongRef() );
+    connect( cmd, SIGNAL( trackStats( unsigned int, unsigned int ) ), SLOT( onTrackStatsLoaded( unsigned int, unsigned int ) ) );
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
 }
 
@@ -385,6 +388,30 @@ TrackData::playbackCount( const source_ptr& source )
     }
 
     return count;
+}
+
+
+void
+TrackData::onTrackStatsLoaded( unsigned int chartPos, unsigned int chartCount )
+{
+    m_chartPosition = chartPos;
+    m_chartCount = chartCount;
+
+    emit statsLoaded();
+}
+
+
+unsigned int
+TrackData::chartPosition() const
+{
+    return m_chartPosition;
+}
+
+
+unsigned int
+TrackData::chartCount() const
+{
+    return m_chartCount;
 }
 
 

@@ -100,6 +100,9 @@ public:
     QList< Tomahawk::PlaybackLog > playbackHistory( const Tomahawk::source_ptr& source = Tomahawk::source_ptr() ) const;
     unsigned int playbackCount( const Tomahawk::source_ptr& source = Tomahawk::source_ptr() );
 
+    unsigned int chartPosition() const;
+    unsigned int chartCount() const;
+
     void loadSocialActions();
     QList< Tomahawk::SocialAction > allSocialActions() const;
     QString socialActionDescription( const QString& action, DescriptionMode mode ) const;
