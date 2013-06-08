@@ -52,7 +52,7 @@ class SourceInfoWidget;
 class InfoBar;
 class TrackInfoWidget;
 class NewReleasesWidget;
-class WelcomeWidget;
+class Dashboard;
 class WhatsHotWidget;
 class QPushButton;
 class InboxModel;
@@ -89,7 +89,7 @@ public:
 
     Tomahawk::ViewPage* show( Tomahawk::ViewPage* page );
 
-    Tomahawk::ViewPage* welcomeWidget() const;
+    Tomahawk::ViewPage* dashboard() const;
     Tomahawk::ViewPage* whatsHotWidget() const;
     Tomahawk::ViewPage* newReleasesWidget() const;
     Tomahawk::ViewPage* recentPlaysWidget() const;
@@ -136,7 +136,7 @@ signals:
 
 public slots:
     Tomahawk::ViewPage* showSuperCollection();
-    Tomahawk::ViewPage* showWelcomePage();
+    Tomahawk::ViewPage* showDashboard();
     Tomahawk::ViewPage* showWhatsHotPage();
     Tomahawk::ViewPage* showNewReleasesPage();
     Tomahawk::ViewPage* showRecentPlaysPage();
@@ -189,7 +189,7 @@ private:
     TreeModel* m_superCollectionModel;
     TreeWidget* m_superCollectionView;
     QueueView* m_queue;
-    WelcomeWidget* m_welcomeWidget;
+    Dashboard* m_dashboard;
     WhatsHotWidget* m_whatsHotWidget;
     NewReleasesWidget* m_newReleasesWidget;
     Tomahawk::ViewPage* m_recentPlaysWidget;

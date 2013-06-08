@@ -45,7 +45,7 @@
 #include "playlist/dynamic/widgets/DynamicWidget.h"
 
 #include "widgets/NewReleasesWidget.h"
-#include "widgets/WelcomeWidget.h"
+#include "widgets/Dashboard.h"
 #include "widgets/WhatsHotWidget.h"
 #include "widgets/NetworkActivityWidget.h"
 #include "widgets/infowidgets/SourceInfoWidget.h"
@@ -78,7 +78,7 @@ ViewManager::instance()
 ViewManager::ViewManager( QObject* parent )
     : QObject( parent )
     , m_widget( new QWidget() )
-    , m_welcomeWidget( new WelcomeWidget() )
+    , m_dashboard( new Dashboard() )
     , m_whatsHotWidget( 0 )
     , m_newReleasesWidget( 0 )
     , m_recentPlaysWidget( 0 )
@@ -121,7 +121,7 @@ ViewManager::ViewManager( QObject* parent )
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
     connect( m_infobar, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
 
-    connect( this, SIGNAL( tomahawkLoaded() ), m_welcomeWidget, SLOT( loadData() ) );
+    connect( this, SIGNAL( tomahawkLoaded() ), m_dashboard, SLOT( loadData() ) );
 
 /*    connect( m_infobar, SIGNAL( flatMode() ), SLOT( setTableMode() ) );
     connect( m_infobar, SIGNAL( artistMode() ), SLOT( setTreeMode() ) );
@@ -134,7 +134,7 @@ ViewManager::~ViewManager()
     delete m_networkActivityWidget;
     delete m_whatsHotWidget;
     delete m_newReleasesWidget;
-    delete m_welcomeWidget;
+    delete m_dashboard;
     delete m_recentPlaysWidget;
     delete m_inboxWidget;
     delete m_contextWidget;
@@ -403,9 +403,9 @@ ViewManager::playlistInterfaceChanged( Tomahawk::playlistinterface_ptr interface
 
 
 Tomahawk::ViewPage*
-ViewManager::showWelcomePage()
+ViewManager::showDashboard()
 {
-    return show( m_welcomeWidget );
+    return show( m_dashboard );
 }
 
 
@@ -864,9 +864,9 @@ ViewManager::showCurrentTrack()
 
 
 Tomahawk::ViewPage*
-ViewManager::welcomeWidget() const
+ViewManager::dashboard() const
 {
-    return m_welcomeWidget;
+    return m_dashboard;
 }
 
 
