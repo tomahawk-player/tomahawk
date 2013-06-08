@@ -25,7 +25,6 @@
 #include "database/Database.h"
 #include "database/DatabaseCommand_AllTracks.h"
 #include "Source.h"
-#include "Pipeline.h"
 
 #include "utils/Logger.h"
 
@@ -55,7 +54,7 @@ ArtistPlaylistInterface::setCurrentIndex( qint64 index )
 {
     PlaylistInterface::setCurrentIndex( index );
 
-   m_currentItem = m_queries.at( index )->results().first();
+    m_currentItem = m_queries.at( index )->results().first();
 }
 
 
