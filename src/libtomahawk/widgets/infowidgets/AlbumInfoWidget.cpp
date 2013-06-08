@@ -119,7 +119,7 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
     TomahawkUtils::unmarginLayout( layout );
 
     TomahawkUtils::styleScrollBar( ui->tracks->horizontalScrollBar() );
-    TomahawkUtils::styleScrollBar( ui->albums->horizontalScrollBar() );
+    TomahawkUtils::styleScrollBar( ui->albums->verticalScrollBar() );
 
     ui->biography->setStyleSheet( "QTextBrowser#biography { background-color: transparent; }" );
 
