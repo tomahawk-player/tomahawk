@@ -95,9 +95,14 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     QHBoxLayout* l = new QHBoxLayout( ui->statsWidget );
     m_playStatsGauge = new StatsGauge( ui->statsWidget );
     m_playStatsGauge->setText( tr( "# PLAYS / ARTIST" ) );
+    m_playStatsTotalGauge = new StatsGauge( ui->statsWidget );
+    m_playStatsTotalGauge->setText( tr( "# IN YOUR CHARTS" ) );
+    m_playStatsTotalGauge->setInvertedAppearance( true );
 
     l->addSpacerItem( new QSpacerItem( 0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding ) );
     l->addWidget( m_playStatsGauge );
+    l->addSpacerItem( new QSpacerItem( 0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding ) );
+    l->addWidget( m_playStatsTotalGauge );
     l->addSpacerItem( new QSpacerItem( 0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding ) );
     ui->statsWidget->setLayout( l );
     ui->statsLabel->setVisible( false );
@@ -213,11 +218,10 @@ TrackInfoWidget::onCoverUpdated()
 void
 TrackInfoWidget::onStatsLoaded()
 {
+    QString stats;
     QList< Tomahawk::PlaybackLog > history = m_query->track()->playbackHistory( SourceList::instance()->getLocal() );
     const unsigned int trackCounter = m_query->track()->playbackCount( SourceList::instance()->getLocal() );
     const unsigned int artistCounter = m_artist->playbackCount( SourceList::instance()->getLocal() );
-
-    QString stats;
 
     if ( trackCounter )
         stats = tr( "You've listened to this track %n time(s).", "", trackCounter );
@@ -240,6 +244,8 @@ TrackInfoWidget::onStatsLoaded()
         stats += "\n" + tr( "You've never listened to %1 before." ).arg( m_artist->name() );
 
     ui->statsLabel->setText( stats );
+    m_playStatsTotalGauge->setMaximum( m_query->track()->chartCount() );
+    m_playStatsTotalGauge->setValue( m_query->track()->chartPosition() );
 }
 
 

@@ -89,7 +89,7 @@
       <widget class="QWidget" name="statsWidget" native="true">
        <property name="minimumSize">
         <size>
-         <width>220</width>
+         <width>450</width>
          <height>240</height>
         </size>
        </property>
