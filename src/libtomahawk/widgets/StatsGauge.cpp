@@ -74,9 +74,13 @@ StatsGauge::paintEvent( QPaintEvent* event )
     p.setPen( pen );
     QFont font = p.font();
     font.setWeight( QFont::Black );
-    font.setPixelSize( 60 );
-    p.setFont( font );
 
+    if ( value() <= 999 )
+        font.setPixelSize( 60 );
+    else
+        font.setPixelSize( 44 );
+
+    p.setFont( font );
     QRect textRect( 0, gaugeSize.height() / 2 - 14, gaugeSize.width(), 62 );
     p.drawText( textRect, Qt::AlignCenter, value() > 0 ? QString::number( value() ) : "-" );
 
