@@ -44,6 +44,11 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     QWidget* widget = new QWidget;
     ui->setupUi( widget );
 
+    ui->artistLabel->setContentsMargins( 6, 2, 6, 2 );
+    ui->artistLabel->setElideMode( Qt::ElideMiddle );
+    ui->artistLabel->setType( QueryLabel::Artist );
+    connect( ui->artistLabel, SIGNAL( clickedArtist() ), SLOT( onArtistClicked() ) );
+
     ui->statsLabel->setStyleSheet( "QLabel { background-image:url(); border: 2px solid #dddddd; background-color: #faf9f9; border-radius: 4px; padding: 12px; }" );
     ui->lyricsView->setStyleSheet( "QTextBrowser#lyricsView { background-color: transparent; }" );
 
@@ -69,7 +74,8 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
 
     ui->lyricsView->setPalette( p );
     ui->label->setPalette( p );
-//    ui->similarTracksLabel->setPalette( p );
+    ui->artistLabel->setPalette( p );
+    ui->trackLabel->setPalette( p );
 
     m_relatedTracksModel = new PlayableModel( ui->similarTracksView );
     ui->similarTracksView->setPlayableModel( m_relatedTracksModel );
@@ -78,7 +84,7 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
 
     m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::Original, QSize( 48, 48 ) );
     ui->cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::Grid, ui->cover->size() ) );
-    ui->cover->setShowText( true );
+    ui->cover->setShowText( false );
 
     m_scrollArea = new QScrollArea();
     m_scrollArea->setWidgetResizable( true );
@@ -171,6 +177,8 @@ TrackInfoWidget::load( const query_ptr& query )
     m_query = query;
     m_artist = Artist::get( m_query->track()->artist() );
     m_title = QString( "%1 - %2" ).arg( query->track()->artist() ).arg( query->track()->track() );
+    ui->trackLabel->setText( m_query->track()->track() );
+    ui->artistLabel->setArtist( m_query->track()->artistPtr() );
 
     if ( !m_query.isNull() )
     {
