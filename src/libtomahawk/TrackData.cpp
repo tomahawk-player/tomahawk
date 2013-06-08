@@ -33,7 +33,6 @@
 #include "database/IdThreadWorker.h"
 #include "Album.h"
 #include "collection/Collection.h"
-#include "Pipeline.h"
 #include "resolvers/Resolver.h"
 #include "SourceList.h"
 #include "audio/AudioEngine.h"
@@ -482,7 +481,6 @@ TrackData::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QV
             {
                 m_similarTracks << Query::get( artists.at( i ), tracks.at( i ), QString(), uuid(), false );
             }
-            Pipeline::instance()->resolve( m_similarTracks );
 
             m_simTracksLoaded = true;
             emit similarTracksLoaded();
