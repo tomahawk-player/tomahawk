@@ -61,9 +61,10 @@ private slots:
     void updateLabel();
     void onAnimationFinished();
 
+    void restoreState();
+
 private:
     void saveState();
-    void restoreState();
 
     Ui::QueueView* ui;
     QTimer* m_dragTimer;

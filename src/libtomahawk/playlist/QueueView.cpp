@@ -24,6 +24,7 @@
 #include "widgets/HeaderLabel.h"
 #include "playlist/QueueProxyModel.h"
 #include "utils/Logger.h"
+#include "Pipeline.h"
 #include "PlaylistView.h"
 #include "Source.h"
 #include "TomahawkSettings.h"
@@ -67,7 +68,14 @@ QueueView::QueueView( AnimatedSplitter* parent )
     // Set initial state
     onHidden( this, false );
 
-    restoreState();
+    if ( Pipeline::instance()->isRunning() )
+    {
+        restoreState();
+    }
+    else
+    {
+        connect( Pipeline::instance(), SIGNAL( running() ), SLOT( restoreState() ) );
+    }
 }
 
 
