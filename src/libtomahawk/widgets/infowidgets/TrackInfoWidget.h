@@ -96,6 +96,8 @@ private:
     Tomahawk::artist_ptr m_artist;
 
     StatsGauge* m_playStatsGauge;
+    StatsGauge* m_playStatsTotalGauge;
+
     PlayableModel* m_relatedTracksModel;
     QString m_title;
     QPixmap m_pixmap;
