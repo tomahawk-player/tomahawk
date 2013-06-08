@@ -36,6 +36,7 @@ class NetworkActivityWidget : public QWidget, public Tomahawk::ViewPage
 {
     Q_OBJECT
 public:
+    enum ViewType { WeekChart = 1, MonthChart = 2, YearChart = 3, OverallChart = 4 };
     NetworkActivityWidget(QWidget* parent = 0);
     ~NetworkActivityWidget();
 
@@ -49,20 +50,26 @@ public:
     virtual bool isBeingPlayed() const;
 
     virtual bool jumpToCurrentTrack();
-
-    void fetchData();
 signals:
 
 private slots:
     void weeklyCharts( const QList<Tomahawk::track_ptr>& );
     void monthlyCharts( const QList<Tomahawk::track_ptr>& );
     void yearlyCharts( const QList<Tomahawk::track_ptr>& );
+    void overallCharts( const QList<Tomahawk::track_ptr>& );
 
     void leftCrumbIndexChanged( const QModelIndex& );
 
 private:
-    void actualFetchData();
-    void checkDone();
+    void fetchWeekCharts();
+    void fetchMonthCharts();
+    void fetchYearCharts();
+    void fetchOverallCharts();
+
+    void showWeekCharts();
+    void showMonthCharts();
+    void showYearCharts();
+    void showOverallCharts();
 
     Q_DECLARE_PRIVATE( NetworkActivityWidget )
     NetworkActivityWidgetPrivate* d_ptr;

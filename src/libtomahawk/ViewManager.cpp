@@ -515,7 +515,6 @@ ViewPage *ViewManager::showNetworkActivityPage()
     if ( !m_networkActivityWidget )
     {
         m_networkActivityWidget = new NetworkActivityWidget( m_widget );
-        m_networkActivityWidget->fetchData();
     }
 
     return show( m_networkActivityWidget );

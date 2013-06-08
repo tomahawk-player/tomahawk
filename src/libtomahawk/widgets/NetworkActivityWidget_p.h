@@ -37,13 +37,14 @@ public:
 private:
     QSharedPointer<Ui::NetworkActivityWidget> ui;
     Tomahawk::playlistinterface_ptr playlistInterface;
-    AnimatedSpinner* spinner;
     QStandardItemModel* crumbModelLeft;
     QSortFilterProxyModel* sortedProxy;
 
     QPointer<PlaylistModel> weeklyChartsModel;
     QPointer<PlaylistModel> monthlyChartsModel;
     QPointer<PlaylistModel> yearlyChartsModel;
+    QPointer<PlaylistModel> overallChartsModel;
+    NetworkActivityWidget::ViewType activeView;
 };
 
 #endif // NETWORKACTIVITYWIDGET_P_H

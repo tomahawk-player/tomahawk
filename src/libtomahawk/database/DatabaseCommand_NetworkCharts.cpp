@@ -30,6 +30,12 @@ DatabaseCommand_NetworkCharts::DatabaseCommand_NetworkCharts( const QDateTime &f
 {
 }
 
+DatabaseCommand_NetworkCharts::DatabaseCommand_NetworkCharts( QObject *parent )
+    : DatabaseCommand( parent )
+    , m_amount( 0 )
+{
+}
+
 DatabaseCommand_NetworkCharts::~DatabaseCommand_NetworkCharts()
 {
 }
@@ -44,17 +50,23 @@ DatabaseCommand_NetworkCharts::exec( DatabaseImpl * dbi )
     {
         limit = QString( "LIMIT 0, %1" ).arg( m_amount );
     }
+    QString timespan;
+    if ( m_from.isValid() && m_to.isValid() )
+    {
+        timespan = QString(
+                    " AND playback_log.playtime >= %1 AND playback_log.playtime <= %2 "
+                    ).arg( m_from.toTime_t() ).arg( m_to.toTime_t() );
+    }
 
     QString sql = QString(
                 "SELECT COUNT(*) as counter, track.name, artist.name "
                 " FROM playback_log, track, artist "
                 " WHERE track.id = playback_log.track AND artist.id = track.artist "
-                " AND playback_log.playtime >= %1 AND playback_log.playtime <= %2 " // incorportrate timespan
-                " AND playback_log.source IS NOT NULL " // exclude self
+                " AND playback_log.source IS NOT NULL %1 " // exclude self
                 " GROUP BY playback_log.track "
                 " ORDER BY counter DESC "
-                " %3"
-                ).arg( m_from.toTime_t() ).arg( m_to.toTime_t() ).arg( limit );
+                " %2"
+                ).arg( timespan ).arg( limit );
 
     query.prepare( sql );
     query.exec();
@@ -71,4 +83,3 @@ DatabaseCommand_NetworkCharts::exec( DatabaseImpl * dbi )
 
     emit done( tracks );
 }
-

@@ -24,6 +24,7 @@
 #include "database/DatabaseCommand_NetworkCharts.h"
 #include "playlist/PlaylistChartItemDelegate.h"
 #include "utils/AnimatedSpinner.h"
+#include "utils/Logger.h"
 #include "utils/TomahawkUtilsGui.h"
 
 #include <QDateTime>
@@ -65,10 +66,26 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
 
     d_func()->playlistInterface = d_func()->ui->tracksViewLeft->playlistInterface();
 
-    // Lets have a spinner until loaded
-    d_func()->ui->breadCrumbLeft->setVisible( false );
-    d_func()->spinner = new AnimatedSpinner( d_func()->ui->tracksViewLeft );
-    d_func()->spinner->fadeIn();
+    // Build up breadcrumb
+    QStandardItem* rootItem = d_func()->crumbModelLeft->invisibleRootItem();
+    QStandardItem* chartItem = new QStandardItem( tr( "Charts" ) );
+    rootItem->appendRow( chartItem );
+    QStandardItem* weekItem = new QStandardItem( tr( "Last Week" ) );
+    weekItem->setData( WeekChart, Breadcrumb::DefaultRole );
+    chartItem->appendRow( weekItem );
+    QStandardItem* monthItem = new QStandardItem( tr( "Last Month" ) );
+    monthItem->setData( MonthChart, Breadcrumb::DefaultRole );
+    chartItem->appendRow( monthItem );
+    QStandardItem* yearItem = new QStandardItem( tr( "Last Year" ) );
+    yearItem->setData( YearChart, Breadcrumb::DefaultRole );
+    chartItem->appendRow( yearItem );
+    QStandardItem* overallItem = new QStandardItem( tr( "Overall" ) );
+    overallItem->setData( OverallChart, Breadcrumb::DefaultRole );
+    chartItem->appendRow( overallItem );
+    d_func()->sortedProxy->setSourceModel( d_func()->crumbModelLeft );
+    d_func()->sortedProxy->sort( 0, Qt::AscendingOrder );
+    d_func()->ui->breadCrumbLeft->setModel( d_func()->sortedProxy );
+    d_func()->ui->breadCrumbLeft->setVisible( true );
 }
 
 
@@ -106,23 +123,17 @@ NetworkActivityWidget::jumpToCurrentTrack()
 
 
 void
-NetworkActivityWidget::fetchData()
-{
-    // Do not block the UI thread
-    QtConcurrent::run( this, &NetworkActivityWidget::actualFetchData );
-}
-
-
-void
 NetworkActivityWidget::weeklyCharts( const QList<Tomahawk::track_ptr>& tracks )
 {
     d_func()->weeklyChartsModel = new PlaylistModel( d_func()->ui->tracksViewLeft );
     d_func()->weeklyChartsModel->startLoading();
-    // Pipeline::instance()->resolve( tracks );
     d_func()->weeklyChartsModel->appendTracks( tracks );
     d_func()->weeklyChartsModel->finishLoading();
 
-    checkDone();
+    if ( d_func()->activeView == WeekChart )
+    {
+        showWeekCharts();
+    }
 }
 
 
@@ -131,11 +142,13 @@ NetworkActivityWidget::monthlyCharts( const QList<Tomahawk::track_ptr>& tracks )
 {
     d_func()->monthlyChartsModel = new PlaylistModel( d_func()->ui->tracksViewLeft );
     d_func()->monthlyChartsModel->startLoading();
-    // Pipeline::instance()->resolve( tracks );
     d_func()->monthlyChartsModel->appendTracks( tracks );
     d_func()->monthlyChartsModel->finishLoading();
 
-    checkDone();
+    if ( d_func()->activeView == MonthChart )
+    {
+        showMonthCharts();
+    }
 }
 
 
@@ -144,11 +157,27 @@ NetworkActivityWidget::yearlyCharts( const QList<Tomahawk::track_ptr>& tracks )
 {
     d_func()->yearlyChartsModel = new PlaylistModel( d_func()->ui->tracksViewLeft );
     d_func()->yearlyChartsModel->startLoading();
-    // Pipeline::instance()->resolve( tracks );
     d_func()->yearlyChartsModel->appendTracks( tracks );
     d_func()->yearlyChartsModel->finishLoading();
 
-    checkDone();
+    if ( d_func()->activeView == YearChart )
+    {
+        showYearCharts();
+    }
+}
+
+void
+NetworkActivityWidget::overallCharts( const QList<track_ptr>& tracks )
+{
+    d_func()->overallChartsModel = new PlaylistModel( d_func()->ui->tracksViewLeft );
+    d_func()->overallChartsModel->startLoading();
+    d_func()->overallChartsModel->appendTracks( tracks );
+    d_func()->overallChartsModel->finishLoading();
+
+    if ( d_func()->activeView == OverallChart )
+    {
+        showOverallCharts();
+    }
 }
 
 
@@ -158,51 +187,33 @@ NetworkActivityWidget::leftCrumbIndexChanged( const QModelIndex& index )
     QStandardItem* item = d_func()->crumbModelLeft->itemFromIndex( d_func()->sortedProxy->mapToSource( index ) );
     if ( !item )
         return;
-    if ( !item->data( Breadcrumb::ChartIdRole ).isValid() )
+    if ( !item->data( Breadcrumb::DefaultRole ).isValid() )
         return;
 
-    const QString chartId = item->data( Breadcrumb::ChartIdRole ).toString();
-    if ( chartId == NETWORKCHARTS_WEEK_CHARTS )
+    int chartId = item->data( Breadcrumb::DefaultRole ).toInt();
+    tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Showing chart" << chartId;
+    switch ( chartId )
     {
-        d_func()->ui->tracksViewLeft->proxyModel()->setStyle( PlayableProxyModel::Large );
-        d_func()->ui->tracksViewLeft->setPlaylistModel( d_func()->weeklyChartsModel );
-        d_func()->ui->tracksViewLeft->proxyModel()->sort( -1 );
-    }
-    else if ( chartId == NETWORKCHARTS_MONTH_CHARTS )
-    {
-        d_func()->ui->tracksViewLeft->proxyModel()->setStyle( PlayableProxyModel::Large );
-        d_func()->ui->tracksViewLeft->setPlaylistModel( d_func()->monthlyChartsModel );
-        d_func()->ui->tracksViewLeft->proxyModel()->sort( -1 );
-    }
-    else if ( chartId == NETWORKCHARTS_YEAR_CHARTS )
-    {
-        d_func()->ui->tracksViewLeft->proxyModel()->setStyle( PlayableProxyModel::Large );
-        d_func()->ui->tracksViewLeft->setPlaylistModel( d_func()->yearlyChartsModel );
-        d_func()->ui->tracksViewLeft->proxyModel()->sort( -1 );
+    case WeekChart:
+        showWeekCharts();
+        break;
+    case MonthChart:
+        showMonthCharts();
+        break;
+    case YearChart:
+        showYearCharts();
+        break;
+    case OverallChart:
+        showOverallCharts();
+        break;
     }
 }
 
 
 void
-NetworkActivityWidget::actualFetchData()
+NetworkActivityWidget::fetchYearCharts()
 {
     QDateTime to = QDateTime::currentDateTime();
-
-    // Weekly charts
-    QDateTime weekAgo = to.addDays( -7 );
-    DatabaseCommand_NetworkCharts* weekCharts = new DatabaseCommand_NetworkCharts( weekAgo, to );
-    weekCharts->setLimit( NETWORKCHARTS_NUM_TRACKS );
-    connect( weekCharts, SIGNAL( done( QList<Tomahawk::track_ptr> ) ), SLOT( weeklyCharts( QList<Tomahawk::track_ptr> ) ) );
-    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( weekCharts ) );
-
-    // Monthly charts
-    QDateTime monthAgo = to.addMonths( -1 );
-    DatabaseCommand_NetworkCharts* monthCharts = new DatabaseCommand_NetworkCharts( monthAgo, to );
-    monthCharts->setLimit( NETWORKCHARTS_NUM_TRACKS );
-    connect( monthCharts, SIGNAL( done( QList<Tomahawk::track_ptr> ) ), SLOT( monthlyCharts( QList<Tomahawk::track_ptr> ) ) );
-    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( monthCharts ) );
-
-    // Yearly charts
     QDateTime yearAgo = to.addYears( -1 );
     DatabaseCommand_NetworkCharts* yearCharts = new DatabaseCommand_NetworkCharts( yearAgo, to );
     yearCharts->setLimit( NETWORKCHARTS_NUM_TRACKS );
@@ -210,32 +221,98 @@ NetworkActivityWidget::actualFetchData()
     Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( yearCharts ) );
 }
 
+void
+NetworkActivityWidget::fetchOverallCharts()
+{
+    DatabaseCommand_NetworkCharts* overallCharts = new DatabaseCommand_NetworkCharts();
+    overallCharts->setLimit( NETWORKCHARTS_NUM_TRACKS );
+    connect( overallCharts, SIGNAL( done( QList<Tomahawk::track_ptr> ) ), SLOT( overallCharts( QList<Tomahawk::track_ptr> ) ) );
+    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( overallCharts ) );
+}
+
 
 void
-NetworkActivityWidget::checkDone()
+NetworkActivityWidget::fetchWeekCharts()
 {
-    if ( !d_func()->weeklyChartsModel.isNull() && !d_func()->yearlyChartsModel.isNull() && !d_func()->monthlyChartsModel.isNull() )
+    QDateTime to = QDateTime::currentDateTime();
+    QDateTime weekAgo = to.addDays( -7 );
+    DatabaseCommand_NetworkCharts* weekCharts = new DatabaseCommand_NetworkCharts( weekAgo, to );
+    weekCharts->setLimit( NETWORKCHARTS_NUM_TRACKS );
+    connect( weekCharts, SIGNAL( done( QList<Tomahawk::track_ptr> ) ), SLOT( weeklyCharts( QList<Tomahawk::track_ptr> ) ) );
+    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( weekCharts ) );
+}
+
+void
+NetworkActivityWidget::fetchMonthCharts()
+{
+    QDateTime to = QDateTime::currentDateTime();
+    QDateTime monthAgo = to.addMonths( -1 );
+    DatabaseCommand_NetworkCharts* monthCharts = new DatabaseCommand_NetworkCharts( monthAgo, to );
+    monthCharts->setLimit( NETWORKCHARTS_NUM_TRACKS );
+    connect( monthCharts, SIGNAL( done( QList<Tomahawk::track_ptr> ) ), SLOT( monthlyCharts( QList<Tomahawk::track_ptr> ) ) );
+    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( monthCharts ) );
+}
+
+
+void
+NetworkActivityWidget::showWeekCharts()
+{
+    d_func()->activeView = WeekChart;
+    if ( !d_func()->weeklyChartsModel.isNull() )
     {
-        // All charts are loaded, do the remaining work UI work.
+        d_func()->ui->tracksViewLeft->proxyModel()->setStyle( PlayableProxyModel::Large );
+        d_func()->ui->tracksViewLeft->setPlaylistModel( d_func()->weeklyChartsModel );
+        d_func()->ui->tracksViewLeft->proxyModel()->sort( -1 );
+    }
+    else
+    {
+        fetchWeekCharts();
+    }
+}
 
-        // Build up breadcrumb
-        QStandardItem* rootItem = d_func()->crumbModelLeft->invisibleRootItem();
-        QStandardItem* chartItem = new QStandardItem( tr( "Charts" ) );
-        rootItem->appendRow( chartItem );
-        QStandardItem* weekItem = new QStandardItem( tr( "Last Week" ) );
-        weekItem->setData( NETWORKCHARTS_WEEK_CHARTS, Breadcrumb::ChartIdRole );
-        chartItem->appendRow( weekItem );
-        QStandardItem* monthItem = new QStandardItem( tr( "Last Month" ) );
-        monthItem->setData( NETWORKCHARTS_MONTH_CHARTS, Breadcrumb::ChartIdRole );
-        chartItem->appendRow( monthItem );
-        QStandardItem* yearItem = new QStandardItem( tr( "Last Year" ) );
-        yearItem->setData( NETWORKCHARTS_YEAR_CHARTS, Breadcrumb::ChartIdRole );
-        chartItem->appendRow( yearItem );
-        d_func()->sortedProxy->setSourceModel( d_func()->crumbModelLeft );
-        d_func()->sortedProxy->sort( 0, Qt::AscendingOrder );
-        d_func()->ui->breadCrumbLeft->setModel( d_func()->sortedProxy );
+void
+NetworkActivityWidget::showMonthCharts()
+{
+    d_func()->activeView = MonthChart;
+    if ( !d_func()->monthlyChartsModel.isNull() )
+    {
+        d_func()->ui->tracksViewLeft->proxyModel()->setStyle( PlayableProxyModel::Large );
+        d_func()->ui->tracksViewLeft->setPlaylistModel( d_func()->monthlyChartsModel );
+        d_func()->ui->tracksViewLeft->proxyModel()->sort( -1 );
+    }
+    else
+    {
+        fetchMonthCharts();
+    }
+}
 
-        d_func()->spinner->fadeOut();
-        d_func()->ui->breadCrumbLeft->setVisible( true );
+void
+NetworkActivityWidget::showYearCharts()
+{
+    d_func()->activeView = YearChart;
+    if ( !d_func()->yearlyChartsModel.isNull() )
+    {
+        d_func()->ui->tracksViewLeft->proxyModel()->setStyle( PlayableProxyModel::Large );
+        d_func()->ui->tracksViewLeft->setPlaylistModel( d_func()->yearlyChartsModel );
+        d_func()->ui->tracksViewLeft->proxyModel()->sort( -1 );
+    }
+    else
+    {
+        fetchYearCharts();
+    }
+}
+
+void NetworkActivityWidget::showOverallCharts()
+{
+    d_func()->activeView = OverallChart;
+    if ( !d_func()->overallChartsModel.isNull() )
+    {
+        d_func()->ui->tracksViewLeft->proxyModel()->setStyle( PlayableProxyModel::Large );
+        d_func()->ui->tracksViewLeft->setPlaylistModel( d_func()->overallChartsModel );
+        d_func()->ui->tracksViewLeft->proxyModel()->sort( -1 );
+    }
+    else
+    {
+        fetchOverallCharts();
     }
 }

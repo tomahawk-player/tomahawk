@@ -31,6 +31,7 @@ class DLLEXPORT DatabaseCommand_NetworkCharts : public DatabaseCommand
 {
 Q_OBJECT
 public:
+    explicit DatabaseCommand_NetworkCharts( QObject* parent = 0 );
     explicit DatabaseCommand_NetworkCharts( const QDateTime& from, const QDateTime& to, QObject* parent = 0 );
     virtual ~DatabaseCommand_NetworkCharts();
 
