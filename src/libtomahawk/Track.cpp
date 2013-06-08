@@ -320,6 +320,20 @@ Track::playbackCount( const source_ptr& source )
 }
 
 
+unsigned int
+Track::chartPosition() const
+{
+    return m_trackData->chartPosition();
+}
+
+
+unsigned int
+Track::chartCount() const
+{
+    return m_trackData->chartCount();
+}
+
+
 void
 Track::loadAttributes()
 {
