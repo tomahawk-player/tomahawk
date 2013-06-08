@@ -298,8 +298,8 @@ SourcesModel::appendGroups()
     m_myMusicGroup = new GroupItem( this, m_rootItem, tr( "My Music" ), 3 );
 
     GenericPageItem* dashboard = new GenericPageItem( this, browse, tr( "Dashboard" ), ImageRegistry::instance()->icon( RESPATH "images/dashboard.svg" ),
-                                                      boost::bind( &ViewManager::showWelcomePage, ViewManager::instance() ),
-                                                      boost::bind( &ViewManager::welcomeWidget, ViewManager::instance() ) );
+                                                      boost::bind( &ViewManager::showDashboard, ViewManager::instance() ),
+                                                      boost::bind( &ViewManager::dashboard, ViewManager::instance() ) );
     dashboard->setSortValue( 0 );
 
     // super collection
