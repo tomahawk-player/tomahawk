@@ -75,6 +75,7 @@ TrackView::TrackView( QWidget* parent )
     setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
     setRootIsDecorated( false );
     setUniformRowHeights( true );
+    setAlternatingRowColors( true );
     setAutoResize( false );
 
     setHeader( m_header );
