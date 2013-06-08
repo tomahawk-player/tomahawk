@@ -111,7 +111,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
     m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::Original, QSize( 48, 48 ) );
     ui->cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::Grid, ui->cover->size() ) );
-    ui->cover->setShowText( true );
+    ui->cover->setShowText( false );
 
     QFont f = font();
     f.setPointSize( f.pointSize() + 3 );
@@ -127,6 +127,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     p.setColor( QPalette::Text, Qt::gray );
 
     ui->biography->setPalette( p );
+    ui->artistLabel->setPalette( p );
     ui->label->setPalette( p );
     ui->label_2->setPalette( p );
     ui->label_3->setPalette( p );
@@ -245,7 +246,7 @@ ArtistInfoWidget::jumpToCurrentTrack()
 void
 ArtistInfoWidget::load( const artist_ptr& artist )
 {
-    if ( !m_artist.isNull() )
+    if ( m_artist )
     {
         disconnect( m_artist.data(), SIGNAL( updated() ), this, SLOT( onArtistImageUpdated() ) );
         disconnect( m_artist.data(), SIGNAL( similarArtistsLoaded() ), this, SLOT( onSimilarArtistsLoaded() ) );
@@ -258,6 +259,7 @@ ArtistInfoWidget::load( const artist_ptr& artist )
 
     m_artist = artist;
     m_title = artist->name();
+    ui->artistLabel->setText( artist->name() );
 
     connect( m_artist.data(), SIGNAL( biographyLoaded() ), SLOT( onBiographyLoaded() ) );
     connect( m_artist.data(), SIGNAL( similarArtistsLoaded() ), SLOT( onSimilarArtistsLoaded() ) );
