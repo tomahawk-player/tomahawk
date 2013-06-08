@@ -48,20 +48,21 @@ DatabaseCommand_ArtistStats::exec( DatabaseImpl* dbi )
     unsigned int plays = 0;
     unsigned int chartPos = 0;
     unsigned int chartCount = 0;
+    const unsigned int artistId = m_artist->id();
 
     QHash< QString, unsigned int > charts;
     while ( query.next() )
     {
         chartCount++;
 
-        if ( query.value( 1 ).toUInt() == m_artist->id() )
+        if ( chartPos == 0 && query.value( 1 ).toUInt() == artistId )
         {
             chartPos = chartCount;
             plays = query.value( 0 ).toUInt();
         }
     }
 
-    if ( plays == 0 )
+    if ( chartPos == 0 )
         chartPos = chartCount;
 
     emit done( plays, chartPos, chartCount );
