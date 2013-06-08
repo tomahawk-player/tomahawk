@@ -266,27 +266,27 @@ ansluta och strömma från dig?</translation>
 <context>
     <name>AlbumInfoWidget</name>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="108"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="113"/>
         <source>Tracklist</source>
         <translation>Spårlista</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="166"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="171"/>
         <source>Other Albums</source>
         <translation>Andra album</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="62"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="56"/>
         <source>Sorry, we could not find any other albums for this artist!</source>
         <translation>Tyvärr! Det gick inte hitta några andra album av denna artisten</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="67"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="70"/>
         <source>Sorry, we could not find any tracks for this album!</source>
         <translation>Tyvärr! Det gick inte hitta några spår från detta albumet!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="194"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="201"/>
         <source>Other Albums by %1</source>
         <translation>Andra album av %1</translation>
     </message>
@@ -308,34 +308,39 @@ ansluta och strömma från dig?</translation>
 <context>
     <name>ArtistInfoWidget</name>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="108"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="129"/>
         <source>Top Hits</source>
         <translation>Största hits</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="227"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="187"/>
         <source>Related Artists</source>
         <translation>Relaterade artister</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="166"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="250"/>
         <source>Albums</source>
         <translation>Album</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="68"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="67"/>
         <source>Sorry, we could not find any albums for this artist!</source>
         <translation>Tyvärr! Det gick inte hitta några album av denna artisten!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="73"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="72"/>
         <source>Sorry, we could not find any related artists!</source>
         <translation>Tyvärr! Det gick inte hitta några relaterade artister!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="79"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="78"/>
         <source>Sorry, we could not find any top hits for this artist!</source>
         <translation>Tyvärr! Det gick inte hitta några tophits av denna artisten</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="110"/>
+        <source>CHART #</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1050,7 +1055,7 @@ Password</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.h" line="44"/>
+        <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.h" line="45"/>
         <source>Network Activity</source>
         <translation type="unfinished"/>
     </message>
@@ -1154,48 +1159,48 @@ Password</source>
         <translation>Exakthet</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="747"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="746"/>
         <source>Perfect match</source>
         <translation>Perfekt matchning</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="748"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="747"/>
         <source>Very good match</source>
         <translation>Mycket bra matchning</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="749"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="748"/>
         <source>Good match</source>
         <translation>Bra matchning</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="750"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="749"/>
         <source>Vague match</source>
         <translation>Svag matchning</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="751"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="750"/>
         <source>Bad match</source>
         <translation>Dålig matchning</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="752"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="751"/>
         <source>Very bad match</source>
         <translation>Väldigt dålig matchning</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="753"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="752"/>
         <source>Not available</source>
         <translation>Inte tillgänglig</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="754"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="753"/>
         <source>Searching...</source>
         <translation>Söker...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="338"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="332"/>
         <source>Name</source>
         <translation>Namn</translation>
     </message>
@@ -2206,6 +2211,14 @@ och radiostationer baserat på din personliga profil</translation>
     </message>
 </context>
 <context>
+    <name>StatsGauge</name>
+    <message>
+        <location filename="../src/libtomahawk/widgets/StatsGauge.cpp" line="91"/>
+        <source>out of %1</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>TemporaryPageItem</name>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/TemporaryPageItem.cpp" line="52"/>
@@ -2714,13 +2727,13 @@ username@jabber.org</translation>
 <context>
     <name>Tomahawk::Collection</name>
     <message>
-        <location filename="../src/libtomahawk/collection/Collection.cpp" line="64"/>
-        <location filename="../src/libtomahawk/collection/Collection.cpp" line="78"/>
+        <location filename="../src/libtomahawk/collection/Collection.cpp" line="65"/>
+        <location filename="../src/libtomahawk/collection/Collection.cpp" line="79"/>
         <source>Collection</source>
         <translation>Samling</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/collection/Collection.cpp" line="101"/>
+        <location filename="../src/libtomahawk/collection/Collection.cpp" line="102"/>
         <source>This collection is empty.</source>
         <translation>Denna samlingen är tom</translation>
     </message>
@@ -3524,43 +3537,43 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="401"/>
-        <location filename="../src/libtomahawk/Source.cpp" line="452"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="409"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="460"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Söker igenom (%L1 spår)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="403"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="411"/>
         <source>Scanning</source>
         <translation>Skannar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="437"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="445"/>
         <source>Checking</source>
         <translation>Kontrollerar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="442"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="450"/>
         <source>Syncing</source>
         <translation>Synkroniserar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="447"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="455"/>
         <source>Importing</source>
         <translation>Importerar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="605"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="613"/>
         <source>Saving (%1%)</source>
         <translation>Sparar (%1%)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="686"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="694"/>
         <source>Online</source>
         <translation>Online</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="690"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="698"/>
         <source>Offline</source>
         <translation>Offline</translation>
     </message>
@@ -3627,7 +3640,7 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="605"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="521"/>
         <source>My Collection</source>
         <translation>Min samling</translation>
     </message>
@@ -3877,37 +3890,42 @@ anger du PIN-koden här:</translation>
 <context>
     <name>TrackInfoWidget</name>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="150"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="166"/>
         <source>Similar Tracks</source>
         <translation>Liknande spår</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="83"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="77"/>
         <source>Sorry, but we could not find similar tracks for this song!</source>
         <translation>Tyvärr! Det gick inte hitta några spår som liknande denna låten!</translation>
     </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="97"/>
+        <source>PLAYS</source>
+        <translation type="unfinished"/>
+    </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="216"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="223"/>
         <source>You&apos;ve listened to this track %n time(s).</source>
         <translation><numerusform>Du har lyssnat på detta spåret %n gånger.</numerusform><numerusform>Du har lyssnat på detta spåret %n gånger</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="218"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="225"/>
         <source>You&apos;ve never listened to this track before.</source>
         <translation>Du har inte lyssnat på detta spåret tidigare.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="222"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="229"/>
         <source>You first listened to it on %1.</source>
         <translation>Du har lyssnat på det på %1.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="226"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="234"/>
         <source>You&apos;ve listened to %1 %n time(s).</source>
         <translation><numerusform>Du har lyssnat på %1 %n gång.</numerusform><numerusform>Du har lyssnat på %1 %n gånger.</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="228"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="240"/>
         <source>You&apos;ve never listened to %1 before.</source>
         <translation>Du har inte lyssnat på %1 tidigare.</translation>
     </message>
@@ -3915,7 +3933,7 @@ anger du PIN-koden här:</translation>
 <context>
     <name>TrackView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="601"/>
+        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="602"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Tyvärr, ditt filter &apos;%1&apos; gav inga träffar</translation>
     </message>
