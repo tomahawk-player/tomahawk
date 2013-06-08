@@ -56,6 +56,8 @@ RecentlyPlayedModel::loadHistory()
     startLoading();
 
     DatabaseCommand_PlaybackHistory* cmd = new DatabaseCommand_PlaybackHistory( m_source );
+    cmd->setDateFrom( m_dateFrom );
+    cmd->setDateTo( m_dateTo );
     cmd->setLimit( m_limit );
 
     connect( cmd, SIGNAL( tracks( QList<Tomahawk::track_ptr>, QList<Tomahawk::PlaybackLog> ) ),
@@ -149,4 +151,19 @@ bool
 RecentlyPlayedModel::isTemporary() const
 {
     return true;
+}
+
+
+void
+RecentlyPlayedModel::setDateFrom( const QDate& date )
+{
+    m_dateFrom = date;
+}
+
+
+void
+RecentlyPlayedModel::setDateTo( const QDate& date )
+{
+    m_dateTo = date;
+    loadHistory();
 }

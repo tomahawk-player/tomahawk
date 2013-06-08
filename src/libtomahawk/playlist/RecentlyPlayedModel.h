@@ -20,6 +20,7 @@
 #define RECENTLYPLAYEDMODEL_H
 
 #include <QList>
+#include <QDate>
 #include <QHash>
 
 #include "Typedefs.h"
@@ -42,6 +43,8 @@ public:
 
 public slots:
     void setSource( const Tomahawk::source_ptr& source );
+    void setDateFrom( const QDate& date );
+    void setDateTo( const QDate& date );
 
 private slots:
     void onSourcesReady();
@@ -53,6 +56,8 @@ private slots:
 private:
     Tomahawk::source_ptr m_source;
     unsigned int m_limit;
+    QDate m_dateFrom;
+    QDate m_dateTo;
 };
 
 #endif // RECENTLYPLAYEDMODEL_H
