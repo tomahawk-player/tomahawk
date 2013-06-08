@@ -17,8 +17,8 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef WELCOMEWIDGET_H
-#define WELCOMEWIDGET_H
+#ifndef DASHBOARD_H
+#define DASHBOARD_H
 
 #include <QWidget>
 #include <QListWidgetItem>
@@ -37,11 +37,10 @@
 class AlbumModel;
 class RecentlyPlayedModel;
 class OverlayWidget;
-class WelcomeWidgetInterface;
 
 namespace Ui
 {
-    class WelcomeWidget;
+    class Dashboard;
 }
 
 class DLLEXPORT PlaylistDelegate : public QStyledItemDelegate
@@ -78,13 +77,13 @@ private:
 };
 
 
-class DLLEXPORT WelcomeWidget : public QWidget, public Tomahawk::ViewPage
+class DLLEXPORT Dashboard : public QWidget, public Tomahawk::ViewPage
 {
 Q_OBJECT
 
 public:
-    WelcomeWidget( QWidget* parent = 0 );
-    virtual ~WelcomeWidget();
+    Dashboard( QWidget* parent = 0 );
+    virtual ~Dashboard();
 
     virtual QWidget* widget() { return this; }
     virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
@@ -115,13 +114,11 @@ private slots:
     void onPlaylistActivated( const QModelIndex& );
 
 private:
-    Ui::WelcomeWidget *ui;
+    Ui::Dashboard *ui;
 
     RecentlyPlayedModel* m_tracksModel;
     AlbumModel* m_recentAlbumsModel;
     Tomahawk::playlistinterface_ptr m_playlistInterface;
-
-    friend class ::WelcomeWidgetInterface;
 };
 
-#endif // WELCOMEWIDGET_H
+#endif // DASHBOARD_H
