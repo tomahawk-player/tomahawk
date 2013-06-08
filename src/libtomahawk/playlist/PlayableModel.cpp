@@ -746,13 +746,16 @@ PlayableModel::onPlaybackStopped()
 void
 PlayableModel::ensureResolved()
 {
-    for( int i = 0; i < rowCount( QModelIndex() ); i++ )
+    QList< query_ptr > ql;
+    for ( int i = 0; i < rowCount( QModelIndex() ); i++ )
     {
         query_ptr query = itemFromIndex( index( i, 0, QModelIndex() ) )->query();
 
         if ( !query->resolvingFinished() )
-            Pipeline::instance()->resolve( query );
+            ql << query;
     }
+
+    Pipeline::instance()->resolve( ql );
 }
 
 
