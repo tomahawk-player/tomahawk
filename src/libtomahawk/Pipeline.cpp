@@ -95,6 +95,7 @@ Pipeline::start()
 {
     tDebug() << Q_FUNC_INFO << "Shunting" << m_queries_pending.size() << "queries!";
     m_running = true;
+    emit running();
 
     shuntNext();
 }
