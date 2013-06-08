@@ -39,6 +39,7 @@
 #include "playlist/PlaylistLargeItemDelegate.h"
 #include "sip/PeerInfo.h"
 #include "sip/SipPlugin.h"
+#include "widgets/HistoryWidget.h"
 #include "utils/ImageRegistry.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
@@ -62,10 +63,8 @@ SourceItem::SourceItem( SourcesModel* mdl, SourceTreeItem* parent, const Tomahaw
     , m_recentPlaysPage( 0 )
     , m_whatsHotPage( 0 )
 {
-    if ( m_source.isNull() )
-    {
+    if ( !m_source )
         return;
-    }
 
     connect( source.data(), SIGNAL( collectionAdded( Tomahawk::collection_ptr ) ),
              SLOT( onCollectionAdded( Tomahawk::collection_ptr ) ) );
@@ -642,27 +641,7 @@ SourceItem::recentPlaysClicked()
 {
     if ( !m_recentPlaysPage )
     {
-        FlexibleView* pv = new FlexibleView( ViewManager::instance()->widget() );
-        pv->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::RecentlyPlayed ) );
-
-        RecentlyPlayedModel* raModel = new RecentlyPlayedModel( pv );
-        raModel->setTitle( tr( "Recently Played Tracks" ) );
-
-        if ( m_source->isLocal() )
-            raModel->setDescription( tr( "Your recently played tracks" ) );
-        else
-            raModel->setDescription( tr( "%1's recently played tracks" ).arg( m_source->friendlyName() ) );
-
-        PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::RecentlyPlayed, pv->trackView(), pv->trackView()->proxyModel() );
-        pv->trackView()->setItemDelegate( del );
-
-        pv->setPlayableModel( raModel );
-        pv->setEmptyTip( tr( "Sorry, we could not find any recent plays!" ) );
-        raModel->setSource( m_source );
-
-        pv->setGuid( QString( "recentplays/%1" ).arg( m_source->nodeId() ) );
-
-        m_recentPlaysPage = pv;
+        m_recentPlaysPage = new HistoryWidget( m_source, ViewManager::instance()->widget() );
     }
 
     ViewManager::instance()->show( m_recentPlaysPage );
