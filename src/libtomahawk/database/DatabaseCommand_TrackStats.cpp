@@ -50,6 +50,33 @@ DatabaseCommand_TrackStats::exec( DatabaseImpl* dbi )
         if ( m_track->trackId() == 0 )
             return;
 
+        query.prepare( "SELECT COUNT(*) AS counter, track.id "
+                       "FROM playback_log, track "
+                       "WHERE playback_log.source IS NULL AND track.id = playback_log.track "
+                       "GROUP BY track.id "
+                       "ORDER BY counter DESC" );
+        query.exec();
+
+        unsigned int chartPos = 0;
+        unsigned int chartCount = 0;
+        const unsigned int trackId = m_track->trackId();
+
+        QHash< QString, unsigned int > charts;
+        while ( query.next() )
+        {
+            chartCount++;
+
+            if ( chartPos == 0 && query.value( 1 ).toUInt() == trackId )
+            {
+                chartPos = chartCount;
+            }
+        }
+
+        if ( chartPos == 0 )
+            chartPos = chartCount;
+
+        emit trackStats( chartPos, chartCount );
+
         query.prepare( "SELECT * "
                        "FROM playback_log "
                        "WHERE track = ? ORDER BY playtime ASC" );

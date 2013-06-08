@@ -39,6 +39,7 @@ public:
     virtual QString commandname() const { return "trackstats"; }
 
 signals:
+    void trackStats( unsigned int totalPlays, unsigned int chartPosition );
     void done( const QList< Tomahawk::PlaybackLog >& playbackData );
 
 private:
