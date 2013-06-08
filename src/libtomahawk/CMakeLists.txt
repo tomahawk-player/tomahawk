@@ -140,6 +140,7 @@ set( libGuiSources
     widgets/SeekSlider.cpp
     widgets/PlaylistTypeSelectorDialog.cpp
     widgets/Dashboard.cpp
+    widgets/HistoryWidget.cpp
     widgets/WhatsHotWidget.cpp
     widgets/NewReleasesWidget.cpp
     widgets/ChartDataLoader.cpp
