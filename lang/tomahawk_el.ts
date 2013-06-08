@@ -265,27 +265,27 @@ connect and stream from you?</source>
 <context>
     <name>AlbumInfoWidget</name>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="108"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="113"/>
         <source>Tracklist</source>
         <translation>Λιστα τραγουδιων</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="166"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="171"/>
         <source>Other Albums</source>
         <translation>Αλλα Αλμπουμ</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="62"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="56"/>
         <source>Sorry, we could not find any other albums for this artist!</source>
         <translation>Συγνωμη, δεν βρεθηκαν αλλα αλμπουμ αυτου του καλλιτεχνη!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="67"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="70"/>
         <source>Sorry, we could not find any tracks for this album!</source>
         <translation>Συγνωμη, δεν βρεθηκαν αλλα τραγουδια αυτου του αλμπουμ!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="194"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="201"/>
         <source>Other Albums by %1</source>
         <translation>Άλλα Άλμπουμ από %1</translation>
     </message>
@@ -307,34 +307,39 @@ connect and stream from you?</source>
 <context>
     <name>ArtistInfoWidget</name>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="108"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="129"/>
         <source>Top Hits</source>
         <translation>Κορυφαία τραγούδια</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="227"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="187"/>
         <source>Related Artists</source>
         <translation>Παρόμοιοι Καλλιτέχνες</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="166"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="250"/>
         <source>Albums</source>
         <translation>Άλμπουμ</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="68"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="67"/>
         <source>Sorry, we could not find any albums for this artist!</source>
         <translation>Συγνωμη, δεν βρεθηκαν αλμπουμ αυτου του καλλιτεχνη!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="73"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="72"/>
         <source>Sorry, we could not find any related artists!</source>
         <translation>Συγνωμη, δεν βρεθηκαν καλλιτεχνες!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="79"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="78"/>
         <source>Sorry, we could not find any top hits for this artist!</source>
         <translation>Συγνωμη, δεν βρεθηκαν κορυφαια τραγουδια αυτου του καλλιτεχνη!</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="110"/>
+        <source>CHART #</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1049,7 +1054,7 @@ Password</source>
         <translation>Τελευταίο ετος</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.h" line="44"/>
+        <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.h" line="45"/>
         <source>Network Activity</source>
         <translation>Δραστηριότητα δικτύου</translation>
     </message>
@@ -1153,48 +1158,48 @@ Password</source>
         <translation>Ακρίβεια</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="747"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="746"/>
         <source>Perfect match</source>
         <translation>Τέλειο ταίριασμα</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="748"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="747"/>
         <source>Very good match</source>
         <translation>Πολύ καλό ταίριασμα</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="749"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="748"/>
         <source>Good match</source>
         <translation>Καλό ταίριασμα</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="750"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="749"/>
         <source>Vague match</source>
         <translation>Ασαφές ταίριασμα</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="751"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="750"/>
         <source>Bad match</source>
         <translation>Κακό ταίριασμα</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="752"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="751"/>
         <source>Very bad match</source>
         <translation>Πολύ κακό ταίριασμα</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="753"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="752"/>
         <source>Not available</source>
         <translation>Μη διαθέσιμο</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="754"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="753"/>
         <source>Searching...</source>
         <translation>Αναζήτηση...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="338"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="332"/>
         <source>Name</source>
         <translation>Όνομα</translation>
     </message>
@@ -2204,6 +2209,14 @@ Password</source>
     </message>
 </context>
 <context>
+    <name>StatsGauge</name>
+    <message>
+        <location filename="../src/libtomahawk/widgets/StatsGauge.cpp" line="91"/>
+        <source>out of %1</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>TemporaryPageItem</name>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/TemporaryPageItem.cpp" line="52"/>
@@ -2714,13 +2727,13 @@ username@jabber.org</translation>
 <context>
     <name>Tomahawk::Collection</name>
     <message>
-        <location filename="../src/libtomahawk/collection/Collection.cpp" line="64"/>
-        <location filename="../src/libtomahawk/collection/Collection.cpp" line="78"/>
+        <location filename="../src/libtomahawk/collection/Collection.cpp" line="65"/>
+        <location filename="../src/libtomahawk/collection/Collection.cpp" line="79"/>
         <source>Collection</source>
         <translation>Συλλογή</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/collection/Collection.cpp" line="101"/>
+        <location filename="../src/libtomahawk/collection/Collection.cpp" line="102"/>
         <source>This collection is empty.</source>
         <translation>Αυτή η συλλογή ειναι άδεια.</translation>
     </message>
@@ -3524,43 +3537,43 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="401"/>
-        <location filename="../src/libtomahawk/Source.cpp" line="452"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="409"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="460"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Σάρωση (%L1 τραγούδια)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="403"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="411"/>
         <source>Scanning</source>
         <translation>Σάρωση</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="437"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="445"/>
         <source>Checking</source>
         <translation>Έλεγχος</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="442"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="450"/>
         <source>Syncing</source>
         <translation>Συγχρονισμος</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="447"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="455"/>
         <source>Importing</source>
         <translation>Εισαγωγη</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="605"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="613"/>
         <source>Saving (%1%)</source>
         <translation>Αποθήκευση (%1%)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="686"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="694"/>
         <source>Online</source>
         <translation>Συνδεδεμένος</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="690"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="698"/>
         <source>Offline</source>
         <translation>Εκτός Σύνδεσης</translation>
     </message>
@@ -3627,7 +3640,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="605"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="521"/>
         <source>My Collection</source>
         <translation>Η Συλλογή μου</translation>
     </message>
@@ -3876,37 +3889,42 @@ enter the displayed PIN number here:</source>
 <context>
     <name>TrackInfoWidget</name>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="150"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="166"/>
         <source>Similar Tracks</source>
         <translation>Παρόμοια Κομμάτια</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="83"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="77"/>
         <source>Sorry, but we could not find similar tracks for this song!</source>
         <translation>Συγγνωμη, δεν βρεθηκαν παρόμοια κομμάτια για αυτό το τραγούδι!</translation>
     </message>
+    <message>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="97"/>
+        <source>PLAYS</source>
+        <translation type="unfinished"/>
+    </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="216"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="223"/>
         <source>You&apos;ve listened to this track %n time(s).</source>
         <translation><numerusform>Έχετε ακούσει το κομμάτι %n φορά.</numerusform><numerusform>Έχετε ακούσει το κομμάτι %n φορές.</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="218"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="225"/>
         <source>You&apos;ve never listened to this track before.</source>
         <translation>Δεν έχετε ακούσει αυτό το κομμάτι παλιότερα.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="222"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="229"/>
         <source>You first listened to it on %1.</source>
         <translation>Το ακούσατε για πρώτη φορά στις %1.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="226"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="234"/>
         <source>You&apos;ve listened to %1 %n time(s).</source>
         <translation><numerusform>Ακούσατε το %1 %n φορά.</numerusform><numerusform>Ακούσατε το %1 %n φορές.</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="228"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="240"/>
         <source>You&apos;ve never listened to %1 before.</source>
         <translation>Δεν έχετε ακούσει το %1 ποτέ πριν.</translation>
     </message>
@@ -3914,7 +3932,7 @@ enter the displayed PIN number here:</source>
 <context>
     <name>TrackView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="601"/>
+        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="602"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Συγγνώμη, το φίλτρο «%1» δεν αντιστοίχισε αποτελέσματα.</translation>
     </message>
