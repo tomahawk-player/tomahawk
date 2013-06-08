@@ -57,11 +57,6 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     artist->loadStats();
     connect( artist.data(), SIGNAL( statsLoaded() ), SLOT( onArtistStatsLoaded() ) );
 
-/*    TomahawkUtils::unmarginLayout( ui->layoutWidget->layout() );
-    TomahawkUtils::unmarginLayout( ui->layoutWidget1->layout() );
-    TomahawkUtils::unmarginLayout( ui->layoutWidget2->layout() );
-    TomahawkUtils::unmarginLayout( ui->albumHeader->layout() );*/
-
     m_albumsModel = new PlayableModel( ui->albums );
     ui->albums->setPlayableModel( m_albumsModel );
     ui->albums->setEmptyTip( tr( "Sorry, we could not find any albums for this artist!" ) );
@@ -99,7 +94,6 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     trackViewPal.setColor( QPalette::Text, Qt::white );
     trackViewPal.setColor( QPalette::Highlight, QColor( "#252020" ) );
     trackViewPal.setColor( QPalette::HighlightedText, Qt::white );
-
     ui->topHits->setPalette( trackViewPal );
     ui->topHits->setAlternatingRowColors( false );
     ui->topHits->setFrameShape( QFrame::NoFrame );
@@ -155,7 +149,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     TomahawkUtils::unmarginLayout( layout );
 
     TomahawkUtils::styleScrollBar( ui->albums->horizontalScrollBar() );
-    TomahawkUtils::styleScrollBar( ui->relatedArtists->horizontalScrollBar() );
+    TomahawkUtils::styleScrollBar( ui->relatedArtists->verticalScrollBar() );
 
     ui->biography->setStyleSheet( "QTextBrowser#biography { background-color: transparent; }" );
     ui->biography->document()->setDefaultStyleSheet( "a { text-decoration: none; font-weight: bold; color: #ffffff; }" );
