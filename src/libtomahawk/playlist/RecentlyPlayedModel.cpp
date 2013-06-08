@@ -34,9 +34,9 @@
 using namespace Tomahawk;
 
 
-RecentlyPlayedModel::RecentlyPlayedModel( QObject* parent )
+RecentlyPlayedModel::RecentlyPlayedModel( QObject* parent, unsigned int maxItems )
     : PlaylistModel( parent )
-    , m_limit( HISTORY_TRACK_ITEMS )
+    , m_limit( maxItems > 0 ? maxItems : HISTORY_TRACK_ITEMS )
 {
 }
 
