@@ -53,8 +53,10 @@ DatabaseCommand_ArtistStats::exec( DatabaseImpl* dbi )
     QHash< QString, unsigned int > charts;
     while ( query.next() )
     {
-        chartCount++;
+        if ( query.value( 0 ).toUInt() < 2 )
+            break;
 
+        chartCount++;
         if ( chartPos == 0 && query.value( 1 ).toUInt() == artistId )
         {
             chartPos = chartCount;
