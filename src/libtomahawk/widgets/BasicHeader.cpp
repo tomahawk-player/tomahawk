@@ -58,6 +58,7 @@ BasicHeader::BasicHeader( QWidget* parent )
 
     QPalette pal = palette();
     pal.setColor( QPalette::Foreground, Qt::white );
+    pal.setBrush( backgroundRole(), TomahawkStyle::PAGE_BACKGROUND );
 
     m_captionLabel->setPalette( pal );
     m_descriptionLabel->setPalette( pal );
@@ -90,6 +91,7 @@ BasicHeader::BasicHeader( QWidget* parent )
     setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
     setFixedHeight( 80 );
 
+    setAutoFillBackground( true );
     setPalette( pal );
 }
 
@@ -125,7 +127,7 @@ BasicHeader::paintEvent( QPaintEvent* event )
 {
     QWidget::paintEvent( event );
 
-    QPainter painter( this );
+/*    QPainter painter( this );
     painter.setRenderHint( QPainter::Antialiasing );
 
     QLinearGradient gradient( QPoint( 0, 0 ), QPoint( 0, 1 ) );
@@ -134,5 +136,5 @@ BasicHeader::paintEvent( QPaintEvent* event )
     gradient.setColorAt( 1.0, TomahawkStyle::HEADER_UPPER );
 
     painter.setBrush( gradient );
-    painter.fillRect( rect(), gradient );
+    painter.fillRect( rect(), gradient );*/
 }

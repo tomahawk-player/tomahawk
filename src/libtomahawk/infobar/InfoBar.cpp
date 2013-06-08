@@ -90,13 +90,15 @@ InfoBar::InfoBar( QWidget* parent )
 
     m_searchWidget = new QSearchField( this );
     m_searchWidget->setPlaceholderText( tr( "Filter..." ) );
-    m_searchWidget->setMinimumWidth( 180 );
+    m_searchWidget->setMinimumWidth( 220 );
     connect( m_searchWidget, SIGNAL( textChanged( QString ) ), this, SLOT( onFilterEdited() ) );
 
     ui->horizontalLayout->addWidget( m_searchWidget );
 
-    QPalette pal = palette();
+    QPalette pal = m_whitePal;
+    pal.setBrush( backgroundRole(), TomahawkStyle::PAGE_BACKGROUND );
 
+    setAutoFillBackground( true );
     setPalette( pal );
     setFixedHeight( 80 );
 
@@ -288,7 +290,7 @@ InfoBar::paintEvent( QPaintEvent* event )
 {
     QWidget::paintEvent( event );
 
-    QPainter painter( this );
+/*    QPainter painter( this );
     painter.setRenderHint( QPainter::Antialiasing );
 
     QLinearGradient gradient( QPoint( 0, 0 ), QPoint( 0, 1 ) );
@@ -297,7 +299,7 @@ InfoBar::paintEvent( QPaintEvent* event )
     gradient.setColorAt( 1.0, TomahawkStyle::HEADER_UPPER );
 
     painter.setBrush( gradient );
-    painter.fillRect( rect(), gradient );
+    painter.fillRect( rect(), gradient );*/
 }
 
 
