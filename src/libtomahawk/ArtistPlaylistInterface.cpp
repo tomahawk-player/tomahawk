@@ -160,7 +160,6 @@ ArtistPlaylistInterface::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData r
                     if ( query )
                         ql << query;
                 }
-                Pipeline::instance()->resolve( ql );
 
                 m_queries << ql;
                 checkQueries();
