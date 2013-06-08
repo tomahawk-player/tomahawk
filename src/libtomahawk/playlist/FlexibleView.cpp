@@ -35,7 +35,7 @@
 using namespace Tomahawk;
 
 
-FlexibleView::FlexibleView( QWidget* parent )
+FlexibleView::FlexibleView( QWidget* parent, QWidget* extraHeader )
     : QWidget( parent )
     , m_header( new FlexibleHeader( this ) )
     , m_trackView( new TrackView() )
@@ -63,6 +63,8 @@ FlexibleView::FlexibleView( QWidget* parent )
     TomahawkUtils::unmarginLayout( layout() );
 
     layout()->addWidget( m_header );
+    if ( extraHeader )
+        layout()->addWidget( extraHeader );
     layout()->addWidget( m_stack );
 
     m_stack->addWidget( m_trackView );

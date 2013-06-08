@@ -39,7 +39,7 @@ public:
     enum FlexibleViewMode
     { Flat = 0, Detailed = 1, Grid = 2 };
 
-    explicit FlexibleView( QWidget* parent = 0 );
+    explicit FlexibleView( QWidget* parent = 0, QWidget* extraHeader = 0 );
     ~FlexibleView();
 
     virtual QWidget* widget() { return this; }
