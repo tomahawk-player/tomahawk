@@ -32,14 +32,14 @@
 
 /* Management of ConnectionManagers */
 
-static QMutex* nodeMapMutex = new QMutex();
+static QMutex nodeMapMutex;
 static QMap< QString, QWeakPointer< ConnectionManager > > connectionManagers;
 static QMap< QString, QSharedPointer< ConnectionManager > > activeConnectionManagers;
 
 QSharedPointer<ConnectionManager>
 ConnectionManager::getManagerForNodeId( const QString &nodeid )
 {
-    QMutexLocker locker( nodeMapMutex );
+    QMutexLocker locker( &nodeMapMutex );
     if ( connectionManagers.contains( nodeid ) && !connectionManagers.value( nodeid ).isNull() ) {
         return connectionManagers.value( nodeid ).toStrongRef();
     }
@@ -54,7 +54,7 @@ ConnectionManager::getManagerForNodeId( const QString &nodeid )
 void
 ConnectionManager::setActive( bool active, const QString& nodeid, const QSharedPointer<ConnectionManager>& manager )
 {
-    QMutexLocker locker( nodeMapMutex );
+    QMutexLocker locker( &nodeMapMutex );
     if ( active )
     {
         activeConnectionManagers[ nodeid ] = manager;
