@@ -207,23 +207,27 @@ Connection::checkACL()
     }
 
     QString nodeid = property( "nodeid" ).toString();
-    QString bareName = name().contains( '/' ) ? name().left( name().indexOf( "/" ) ) : name();
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Checking ACL for" << name();
     connect( ACLRegistry::instance(), SIGNAL( aclResult( QString, QString, ACLRegistry::ACL ) ), this, SLOT( checkACLResult( QString, QString, ACLRegistry::ACL ) ), Qt::QueuedConnection );
-    QMetaObject::invokeMethod( ACLRegistry::instance(), "isAuthorizedUser", Qt::QueuedConnection, Q_ARG( QString, nodeid ), Q_ARG( QString, bareName ), Q_ARG( ACLRegistry::ACL, ACLRegistry::NotFound ) );
+    QMetaObject::invokeMethod( ACLRegistry::instance(), "isAuthorizedUser", Qt::QueuedConnection, Q_ARG( QString, nodeid ), Q_ARG( QString, bareName() ), Q_ARG( ACLRegistry::ACL, ACLRegistry::NotFound ) );
 }
 
+
+QString
+Connection::bareName() const
+{
+    return name().contains( '/' ) ? name().left( name().indexOf( "/" ) ) : name();
+}
 
 void
 Connection::checkACLResult( const QString &nodeid, const QString &username, ACLRegistry::ACL peerStatus )
 {
-    QString bareName = name().contains( '/' ) ? name().left( name().indexOf( "/" ) ) : name();
     if ( nodeid != property( "nodeid" ).toString() )
     {
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << QString( "nodeid (%1) not ours (%2) for user %3" ).arg( nodeid ).arg( property( "nodeid" ).toString() ).arg( username );
         return;
     }
-    if ( username != bareName )
+    if ( username != bareName() )
     {
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "username not our barename";
         return;

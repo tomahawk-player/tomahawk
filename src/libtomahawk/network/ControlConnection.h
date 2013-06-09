@@ -58,6 +58,7 @@ protected:
 
 protected slots:
     virtual void handleMsg( msg_ptr msg );
+    virtual void authCheckTimeout();
 
 private slots:
     void dbSyncConnFinished( QObject* c );

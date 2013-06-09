@@ -83,6 +83,8 @@ private:
     // currently active file transfers:
     QList< StreamConnection* > scsessions;
     QMutex ftsession_mut;
+    // username -> nodeid -> PeerInfos
+    QMap<QString, QMap<QString, QSet<Tomahawk::peerinfo_ptr> > > queuedForACLResult;
 
     QPointer< PortFwdThread > portfwd;
 };
