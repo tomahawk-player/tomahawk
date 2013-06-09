@@ -82,7 +82,7 @@ void
 ConnectionManager::handleSipInfo( const Tomahawk::peerinfo_ptr &peerInfo )
 {
     // Start handling in a separate thread so that we do not block the event loop.
-    QtConcurrent::run( this, &ConnectionManager::handleSipInfoPrivate, peerInfo );
+    QtConcurrent::run( &ConnectionManager::handleSipInfoPrivateS, peerInfo, weakRef().toStrongRef() );
 }
 
 QWeakPointer<ConnectionManager>
@@ -262,6 +262,12 @@ ConnectionManager::socketError( QAbstractSocket::SocketError error )
 
     // Try to connect with the next available SipInfo.
     tryConnect();
+}
+
+void
+ConnectionManager::handleSipInfoPrivateS( const Tomahawk::peerinfo_ptr &peerInfo, const QSharedPointer<ConnectionManager> &connectionManager )
+{
+    connectionManager->handleSipInfoPrivate( peerInfo );
 }
 
 void
