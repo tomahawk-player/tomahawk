@@ -43,6 +43,7 @@ private:
     QPointer<ControlConnection> controlConnection;
     QList<SipInfo> sipCandidates;
     QMutex mutex;
+    QWeakPointer< ConnectionManager > ownRef;
 };
 
 #endif // CONNECTIONMANAGER_P_H
