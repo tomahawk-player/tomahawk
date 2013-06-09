@@ -32,7 +32,7 @@ WeakPeerHash::WeakPeerHash( const WeakPeerHash &hash )
     : QObject( hash.parent() )
     , d_ptr( new WeakPeerHashPrivate( this ) )
 {
-    d_func()->hash = hash.hash();
+    d_func()->hash = hash.d_func()->hash;
 }
 
 void
