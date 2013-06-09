@@ -30,6 +30,7 @@
 class ControlConnection;
 class SipPlugin;
 class SipInfo;
+class WeakPeerHash;
 
 namespace Tomahawk
 {
@@ -129,7 +130,7 @@ private:
     Q_DECLARE_PRIVATE( Tomahawk::PeerInfo )
     Tomahawk::PeerInfoPrivate* d_ptr;
 
-    static QHash< QString, peerinfo_wptr > s_peersByCacheKey;
+    static WeakPeerHash s_peersByCacheKey;
     static QHash< SipPlugin*, peerinfo_ptr > s_selfPeersBySipPlugin;
 
     mutable QPixmap* m_avatar;

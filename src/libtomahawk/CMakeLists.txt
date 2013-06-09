@@ -341,6 +341,7 @@ list(APPEND libSources
     sip/SipInfo.cpp
     sip/PeerInfo.cpp
     sip/SipStatusMessage.cpp
+    sip/WeakPeerHash.cpp
 
     utils/TomahawkUtils.cpp
     utils/Logger.cpp
