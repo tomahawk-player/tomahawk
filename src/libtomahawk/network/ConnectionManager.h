@@ -53,6 +53,9 @@ private:
     Q_DECLARE_PRIVATE( ConnectionManager )
     ConnectionManagerPrivate* d_ptr;
 
+    // Proxy to hand over a strong reference to the connectionManager
+    static void handleSipInfoPrivateS( const Tomahawk::peerinfo_ptr& peerInfo, const QSharedPointer<ConnectionManager>& connectionManager );
+
     void activate();
     void deactivate();
     void connectToPeer(const Tomahawk::peerinfo_ptr& peerInfo , bool lock);
