@@ -1191,19 +1191,22 @@ AudioEngine::playlist() const
 }
 
 
-result_ptr AudioEngine::currentTrack() const
+result_ptr
+AudioEngine::currentTrack() const
 {
     return d_func()->currentTrack;
 }
 
 
-query_ptr AudioEngine::stopAfterTrack() const
+query_ptr
+AudioEngine::stopAfterTrack() const
 {
     return d_func()->stopAfterTrack;
 }
 
 
 void
-AudioEngine::onVolumeChanged(qreal volume) {
+AudioEngine::onVolumeChanged( qreal volume )
+{
     emit volumeChanged( volume * 100 );
 }
