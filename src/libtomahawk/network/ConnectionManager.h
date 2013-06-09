@@ -35,10 +35,15 @@ class DLLEXPORT ConnectionManager : public QObject
 
 public:
     static QSharedPointer<ConnectionManager> getManagerForNodeId( const QString& nodeid );
+    static void setActive( bool active, const QString& nodeid, const QSharedPointer<ConnectionManager>& manager );
+
     ConnectionManager( const QString& nodeid );
     ~ConnectionManager();
 
     void handleSipInfo( const Tomahawk::peerinfo_ptr& peerInfo );
+
+    QWeakPointer< ConnectionManager > weakRef() const;
+    void setWeakRef( QWeakPointer< ConnectionManager > weakRef );
 
 private slots:
     void socketConnected();
@@ -48,6 +53,8 @@ private:
     Q_DECLARE_PRIVATE( ConnectionManager )
     ConnectionManagerPrivate* d_ptr;
 
+    void activate();
+    void deactivate();
     void connectToPeer(const Tomahawk::peerinfo_ptr& peerInfo , bool lock);
     void handleSipInfoPrivate( const Tomahawk::peerinfo_ptr& peerInfo );
 

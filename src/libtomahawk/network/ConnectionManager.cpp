@@ -30,6 +30,43 @@
 #include <boost/bind.hpp>
 #include <qtconcurrentrun.h>
 
+/* Management of ConnectionManagers */
+
+static QMutex* nodeMapMutex = new QMutex();
+static QMap< QString, QWeakPointer< ConnectionManager > > connectionManagers;
+static QMap< QString, QSharedPointer< ConnectionManager > > activeConnectionManagers;
+
+QSharedPointer<ConnectionManager>
+ConnectionManager::getManagerForNodeId( const QString &nodeid )
+{
+    QMutexLocker locker( nodeMapMutex );
+    if ( connectionManagers.contains( nodeid ) && !connectionManagers.value( nodeid ).isNull() ) {
+        return connectionManagers.value( nodeid ).toStrongRef();
+    }
+
+    // There exists no connection for this nodeid
+    QSharedPointer< ConnectionManager > manager( new ConnectionManager( nodeid ) );
+    manager->setWeakRef( manager.toWeakRef() );
+    connectionManagers[nodeid] = manager->weakRef();
+    return manager;
+}
+
+void
+ConnectionManager::setActive( bool active, const QString& nodeid, const QSharedPointer<ConnectionManager>& manager )
+{
+    QMutexLocker locker( nodeMapMutex );
+    if ( active )
+    {
+        activeConnectionManagers[ nodeid ] = manager;
+    }
+    else
+    {
+        activeConnectionManagers.remove( nodeid );
+    }
+}
+
+/* ConnectionManager Implementation */
+
 ConnectionManager::ConnectionManager( const QString &nodeid )
     : d_ptr( new ConnectionManagerPrivate( this, nodeid ) )
 {
@@ -48,10 +85,22 @@ ConnectionManager::handleSipInfo( const Tomahawk::peerinfo_ptr &peerInfo )
     QtConcurrent::run( this, &ConnectionManager::handleSipInfoPrivate, peerInfo );
 }
 
+QWeakPointer<ConnectionManager>
+ConnectionManager::weakRef() const
+{
+    return d_func()->ownRef;
+}
+
+void
+ConnectionManager::setWeakRef( QWeakPointer<ConnectionManager> weakRef )
+{
+    d_func()->ownRef = weakRef;
+}
+
 void
 ConnectionManager::handleSipInfoPrivate( const Tomahawk::peerinfo_ptr &peerInfo )
 {
-    d_func()->mutex.lock();
+    activate();
     // Respect different behaviour before 0.7.100
     peerInfoDebug( peerInfo ) << Q_FUNC_INFO << "Trying to connect to client with version " << peerInfo->versionString().split(' ').last() << TomahawkUtils::compareVersionStrings( peerInfo->versionString().split(' ').last(), "0.7.99" );
     if ( !peerInfo->versionString().isEmpty() && TomahawkUtils::compareVersionStrings( peerInfo->versionString().split(' ').last(), "0.7.100" ) < 0)
@@ -69,7 +118,7 @@ ConnectionManager::handleSipInfoPrivate( const Tomahawk::peerinfo_ptr &peerInfo 
                 // We connected to the peer, so we are done here.
             }
         }
-        d_func()->mutex.unlock();
+        deactivate();
         return;
     }
     foreach ( SipInfo info, peerInfo->sipInfos() )
@@ -84,7 +133,7 @@ ConnectionManager::handleSipInfoPrivate( const Tomahawk::peerinfo_ptr &peerInfo 
             return;
         }
     }
-    d_func()->mutex.unlock();
+    deactivate();
 }
 
 void
@@ -93,7 +142,7 @@ ConnectionManager::connectToPeer( const Tomahawk::peerinfo_ptr &peerInfo, bool l
     // Lock, so that we will not attempt to do two parallell connects.
     if (lock)
     {
-        d_func()->mutex.lock();
+        activate();
     }
     // Check that we are not already connected to this peer
     ControlConnection* cconn = Servent::instance()->lookupControlConnection( peerInfo->nodeId() );
@@ -106,7 +155,7 @@ ConnectionManager::connectToPeer( const Tomahawk::peerinfo_ptr &peerInfo, bool l
         {
             d_func()->controlConnection = QPointer<ControlConnection>(cconn);
         }
-        d_func()->mutex.unlock();
+        deactivate();
         return;
         // TODO: Keep the peerInfo in mind for reconnecting
         // FIXME: Do we need this for reconnecting if the connection drops?
@@ -151,7 +200,7 @@ void ConnectionManager::tryConnect()
         // Clean up.
         d_func()->currentPeerInfo.clear();
         delete d_func()->controlConnection.data();
-        d_func()->mutex.unlock();
+        deactivate();
         return;
     }
 
@@ -215,6 +264,20 @@ ConnectionManager::socketError( QAbstractSocket::SocketError error )
     tryConnect();
 }
 
+void
+ConnectionManager::activate()
+{
+    d_func()->mutex.lock();
+    setActive( true, d_func()->nodeid, weakRef().toStrongRef() );
+}
+
+void
+ConnectionManager::deactivate()
+{
+    setActive( false, d_func()->nodeid, weakRef().toStrongRef() );
+    d_func()->mutex.unlock();
+}
+
 
 void
 ConnectionManager::socketConnected()
@@ -227,7 +290,7 @@ ConnectionManager::socketConnected()
 
     handoverSocket( sock );
     d_func()->currentPeerInfo.clear();
-    d_func()->mutex.unlock();
+    deactivate();
 }
 
 void
@@ -249,23 +312,4 @@ ConnectionManager::handoverSocket( QTcpSocketExtra* sock )
     // ControlConntection is now connected, now it can be destroyed if the PeerInfos disappear
     d_func()->controlConnection->setShutdownOnEmptyPeerInfos( true );
     d_func()->currentPeerInfo.clear();
-    d_func()->mutex.unlock();
-}
-
-
-static QMutex* nodeMapMutex = new QMutex();
-static QMap< QString, QSharedPointer< ConnectionManager > > connectionManagers;
-
-QSharedPointer<ConnectionManager>
-ConnectionManager::getManagerForNodeId( const QString &nodeid )
-{
-    QMutexLocker locker( nodeMapMutex );
-    if ( connectionManagers.contains( nodeid ) && !connectionManagers.value( nodeid ).isNull() ) {
-        return connectionManagers.value( nodeid );
-    }
-
-    // There exists no connection for this nodeid
-    QSharedPointer< ConnectionManager > manager( new ConnectionManager( nodeid ) );
-    connectionManagers[nodeid] = manager;
-    return manager;
 }
