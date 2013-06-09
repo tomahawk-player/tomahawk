@@ -36,6 +36,7 @@
 
 #include "Typedefs.h"
 #include "Msg.h"
+#include "AclRegistry.h"
 
 #include "DllMacro.h"
 
@@ -134,6 +135,8 @@ public:
     bool isReady() const;
 
     QList<SipInfo> getLocalSipInfos(const QString& nodeid, const QString &key);
+
+    void queueForAclResult( const QString& username, const QSet<Tomahawk::peerinfo_ptr>& peerInfos );
 signals:
     void dbSyncTriggered();
     void streamStarted( StreamConnection* );
@@ -158,6 +161,7 @@ private slots:
     void deleteLazyOffer( const QString& key );
     void readyRead();
     void socketError( QAbstractSocket::SocketError e );
+    void checkACLResult( const QString &nodeid, const QString &username, ACLRegistry::ACL peerStatus );
 
     Connection* claimOffer( ControlConnection* cc, const QString &nodeid, const QString &key, const QHostAddress peer = QHostAddress::Any );
 

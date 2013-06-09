@@ -210,6 +210,8 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
             break;
     }
 
+    connect( ACLRegistry::instance(), SIGNAL( aclResult( QString, QString, ACLRegistry::ACL ) ), this, SLOT( checkACLResult( QString, QString, ACLRegistry::ACL ) ), Qt::QueuedConnection );
+
     return true;
 }
 
@@ -419,6 +421,22 @@ Servent::getLocalSipInfos( const QString& nodeid, const QString& key )
     }
 
     return sipInfos;
+}
+
+void
+Servent::queueForAclResult( const QString& username, const QSet<peerinfo_ptr>& peerInfos )
+{
+    if ( peerInfos.isEmpty() )
+    {
+        // If all peerInfos disappeared, do not queue.
+        return;
+    }
+
+    if ( !d_func()->queuedForACLResult.contains( username ) )
+    {
+        d_func()->queuedForACLResult[username] = QMap<QString, QSet<Tomahawk::peerinfo_ptr> >();
+    }
+    d_func()->queuedForACLResult[username][ (*peerInfos.begin())->nodeId() ] = QSet<Tomahawk::peerinfo_ptr>( peerInfos );
 }
 
 SipInfo
@@ -878,6 +896,33 @@ Servent::socketError( QAbstractSocket::SocketError e )
         tLog() << "SocketError, connection is null";
         sock->deleteLater();
     }
+}
+
+void
+Servent::checkACLResult( const QString& nodeid, const QString& username, ACLRegistry::ACL peerStatus )
+{
+
+    if ( !d_func()->queuedForACLResult.contains( username ) )
+    {
+        return;
+    }
+    if ( !d_func()->queuedForACLResult.value( username ).contains( nodeid ) )
+    {
+        return;
+    }
+
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << QString( "ACL status for user %1 is" ).arg( username ) << peerStatus;
+    QSet<Tomahawk::peerinfo_ptr> peerInfos = d_func()->queuedForACLResult.value( username ).value( nodeid );
+    if ( peerStatus == ACLRegistry::Stream )
+    {
+        foreach ( Tomahawk::peerinfo_ptr peerInfo, peerInfos )
+        {
+            registerPeer( peerInfo );
+        }
+
+    }
+    // We have a result, so remove from queue
+    d_func()->queuedForACLResult[username].remove( nodeid );
 }
 
 void

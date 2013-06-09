@@ -92,6 +92,7 @@ public:
 
     const QHostAddress peerIpAddress() const { return m_peerIpAddress; }
 
+    QString bareName() const;
 signals:
     void ready();
     void failed();
@@ -105,6 +106,7 @@ protected:
 
 protected slots:
     virtual void handleMsg( msg_ptr msg ) = 0;
+    virtual void authCheckTimeout();
 
 public slots:
     virtual void start( QTcpSocket* sock );
@@ -122,7 +124,6 @@ private slots:
     void doSetup();
     void checkACL();
     void checkACLResult( const QString &nodeid, const QString &username, ACLRegistry::ACL peerStatus );
-    void authCheckTimeout();
     void bytesWritten( qint64 );
     void calcStats();
 

@@ -273,6 +273,18 @@ ControlConnection::handleMsg( msg_ptr msg )
     tDebug() << id() << "Invalid msg:" << QString::fromLatin1( msg->payload() );
 }
 
+void
+ControlConnection::authCheckTimeout()
+{
+    if ( m_ready )
+        return;
+
+    Servent::instance()->queueForAclResult( bareName(), m_peerInfos );
+
+    tDebug( LOGVERBOSE ) << "Closing connection, not authed in time.";
+    shutdown();
+}
+
 
 void
 ControlConnection::onPingTimer()
