@@ -22,6 +22,7 @@
 #include <QApplication>
 #include <QPainter>
 #include <QMouseEvent>
+#include <boost/concept_check.hpp>
 
 #include "Query.h"
 #include "Result.h"
@@ -37,6 +38,8 @@
 #include "ViewHeader.h"
 #include "ViewManager.h"
 
+#include "utils/PixmapDelegateFader.h"
+#include "utils/Closure.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
@@ -45,16 +48,42 @@ using namespace Tomahawk;
 
 PlaylistItemDelegate::PlaylistItemDelegate( TrackView* parent, PlayableProxyModel* proxy )
     : QStyledItemDelegate( (QObject*)parent )
+    , m_smallBoldFontMetrics( QFontMetrics( parent->font() ) )
+    , m_bigBoldFontMetrics( QFontMetrics( parent->font() ) )
     , m_view( parent )
     , m_model( proxy )
 {
-    connect( this, SIGNAL( updateIndex( QModelIndex ) ), parent, SLOT( update( QModelIndex ) ) );
-
     m_topOption = QTextOption( Qt::AlignTop );
     m_topOption.setWrapMode( QTextOption::NoWrap );
-
     m_bottomOption = QTextOption( Qt::AlignBottom );
     m_bottomOption.setWrapMode( QTextOption::NoWrap );
+
+    m_centerOption = QTextOption( Qt::AlignVCenter );
+    m_centerOption.setWrapMode( QTextOption::NoWrap );
+    m_centerRightOption = QTextOption( Qt::AlignVCenter | Qt::AlignRight );
+    m_centerRightOption.setWrapMode( QTextOption::NoWrap );
+
+    m_bigBoldFont = parent->font();
+    m_bigBoldFont.setPointSize( TomahawkUtils::defaultFontSize() + 2 );
+    m_bigBoldFont.setWeight( 99 );
+
+    m_boldFont = parent->font();
+    m_boldFont.setBold( true );
+
+    m_smallBoldFont = parent->font();
+    m_smallBoldFont.setPointSize( TomahawkUtils::defaultFontSize() - 1 );
+    m_smallBoldFont.setBold( true );
+    m_smallBoldFont.setWeight( 60 );
+
+    m_smallFont = parent->font();
+    m_smallFont.setPointSize( TomahawkUtils::defaultFontSize() - 1 );
+
+    m_bigBoldFontMetrics = QFontMetrics( m_bigBoldFont );
+    m_smallBoldFontMetrics = QFontMetrics( m_smallBoldFont );
+
+    connect( this, SIGNAL( updateIndex( QModelIndex ) ), parent, SLOT( update( QModelIndex ) ) );
+    connect( proxy, SIGNAL( modelReset() ), SLOT( modelChanged() ) );
+    connect( parent, SIGNAL( modelChanged() ), SLOT( modelChanged() ) );
 }
 
 
@@ -187,11 +216,8 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
 
         painter->drawPixmap( ir, pixmap );
 
-        QFont boldFont = opt.font;
-        boldFont.setBold( true );
-
         r.adjust( ir.width() + 12, 0, -12, 0 );
-        painter->setFont( boldFont );
+        painter->setFont( m_boldFont );
         QString text = painter->fontMetrics().elidedText( upperText, Qt::ElideRight, r.width() );
         painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, m_topOption );
 
@@ -226,9 +252,7 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
     {
         opt.rect.setWidth( opt.rect.width() - opt.rect.height() - 2 );
         const QRect arrowRect( opt.rect.x() + opt.rect.width(), opt.rect.y() + 1, opt.rect.height() - 2, opt.rect.height() - 2 );
-        painter->drawPixmap( arrowRect, TomahawkUtils::defaultPixmap( TomahawkUtils::InfoIcon, TomahawkUtils::Original, arrowRect.size() ) );
-
-        m_infoButtonRects[ index ] = arrowRect;
+        drawInfoButton( painter, arrowRect, index, 0.9 );
     }
 
     painter->save();
@@ -285,6 +309,58 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
 }
 
 
+QRect
+PlaylistItemDelegate::drawInfoButton( QPainter* painter, const QRect& rect, const QModelIndex& index, float height ) const
+{
+    const int iconSize = rect.height() * height;
+    QRect pixmapRect = QRect( ( rect.height() - iconSize ) / 2 + rect.left(), rect.center().y() - iconSize / 2, iconSize, iconSize );
+
+    painter->drawPixmap( pixmapRect, TomahawkUtils::defaultPixmap( TomahawkUtils::InfoIcon, TomahawkUtils::Original, pixmapRect.size() ) );
+    m_infoButtonRects[ index ] = pixmapRect;
+
+    return rect.adjusted( rect.height(), 0, 0, 0 );
+}
+
+
+QRect
+PlaylistItemDelegate::drawCover( QPainter* painter, const QRect& rect, PlayableItem* item, const QModelIndex& index ) const
+{
+    QRect pixmapRect = rect;
+    pixmapRect.setWidth( pixmapRect.height() );
+
+    if ( !m_pixmaps.contains( index ) )
+    {
+        m_pixmaps.insert( index, QSharedPointer< Tomahawk::PixmapDelegateFader >( new Tomahawk::PixmapDelegateFader( item->query(), pixmapRect.size(), TomahawkUtils::RoundedCorners, false ) ) );
+        _detail::Closure* closure = NewClosure( m_pixmaps[ index ], SIGNAL( repaintRequest() ), const_cast<PlaylistItemDelegate*>(this), SLOT( doUpdateIndex( const QPersistentModelIndex& ) ), QPersistentModelIndex( index ) );
+        closure->setAutoDelete( false );
+    }
+
+    const QPixmap pixmap = m_pixmaps[ index ]->currentPixmap();
+    painter->drawPixmap( pixmapRect, pixmap );
+
+    return rect.adjusted( pixmapRect.width(), 0, 0, 0 );
+}
+
+
+QRect
+PlaylistItemDelegate::drawSourceIcon( QPainter* painter, const QRect& rect, PlayableItem* item, float height ) const
+{
+    if ( item->query()->numResults() == 0 )
+        return rect;
+
+    const int sourceIconSize = rect.height() * height;
+    const QPixmap sourceIcon = item->query()->results().first()->sourceIcon( TomahawkUtils::RoundedCorners, QSize( sourceIconSize, sourceIconSize ) );
+    if ( sourceIcon.isNull() )
+        return rect;
+
+    painter->setOpacity( 0.8 );
+    painter->drawPixmap( QRect( rect.right() - sourceIconSize, rect.center().y() - sourceIconSize / 2, sourceIcon.width(), sourceIcon.height() ), sourceIcon );
+    painter->setOpacity( 1.0 );
+
+    return rect.adjusted( 0, 0, -( sourceIcon.width() + 8 ), 0 );
+}
+
+
 bool
 PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index )
 {
@@ -314,9 +390,11 @@ PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, con
 
         if ( m_hoveringOver != index )
         {
-            PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
-            item->requestRepaint();
+            QPersistentModelIndex ti = m_hoveringOver;
             m_hoveringOver = index;
+
+            PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( ti ) );
+            item->requestRepaint();
             emit updateIndex( m_hoveringOver );
         }
 
@@ -379,6 +457,33 @@ PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, con
 void
 PlaylistItemDelegate::resetHoverIndex()
 {
+    if ( !m_model )
+        return;
+
+    QPersistentModelIndex idx = m_hoveringOver;
+
     m_hoveringOver = QModelIndex();
     m_infoButtonRects.clear();
+
+    PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( idx ) );
+    if ( item )
+        item->requestRepaint();
+
+    emit updateIndex( idx );
+    m_view->repaint();
+}
+
+
+void
+PlaylistItemDelegate::modelChanged()
+{
+    m_pixmaps.clear();
+}
+
+
+void
+PlaylistItemDelegate::doUpdateIndex( const QPersistentModelIndex& index )
+{
+    if ( index.isValid() )
+        emit updateIndex( index );
 }
