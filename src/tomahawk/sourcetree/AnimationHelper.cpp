@@ -28,12 +28,12 @@ AnimationHelper::AnimationHelper( const QModelIndex& index, QObject *parent )
     , m_expandAnimation( 0 )
 {
     m_expandTimer.setSingleShot( true );
-    m_expandTimer.setInterval( 600 );
-    connect( &m_expandTimer, SIGNAL( timeout() ), SLOT(expandTimeout() ) );
+    m_expandTimer.setInterval( 1000 );
+    connect( &m_expandTimer, SIGNAL( timeout() ), SLOT( expandTimeout() ) );
 
     m_collapseTimer.setSingleShot( true );
-    m_collapseTimer.setInterval( 600 );
-    connect( &m_collapseTimer, SIGNAL( timeout() ), SLOT(collapseTimeout() ) );
+    m_collapseTimer.setInterval( 0 );
+    connect( &m_collapseTimer, SIGNAL( timeout() ), SLOT( collapseTimeout() ) );
 }
 
 
