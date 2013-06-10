@@ -51,6 +51,7 @@ private slots:
 
 private:
     Ui::DiagnosticsDialog* ui;
+    QString peerLog( const QString& nodeid, const QList<Tomahawk::peerinfo_ptr>& peerInfos );
 };
 
 #endif // DIAGNOSTICSDIALOG_H
