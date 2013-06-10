@@ -112,6 +112,7 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     l->addSpacerItem( new QSpacerItem( 0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding ) );
     ui->statsWidget->setLayout( l );
     ui->statsLabel->setVisible( false );
+    TomahawkUtils::unmarginLayout( l );
 
     QVBoxLayout* layout = new QVBoxLayout();
     layout->addWidget( m_scrollArea );
@@ -308,4 +309,14 @@ TrackInfoWidget::changeEvent( QEvent* e )
         default:
             break;
     }
+}
+
+
+QPixmap
+TrackInfoWidget::pixmap() const
+{
+    if ( m_pixmap.isNull() )
+        return Tomahawk::ViewPage::pixmap();
+    else
+        return m_pixmap;
 }
