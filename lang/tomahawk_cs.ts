@@ -340,7 +340,7 @@ se s vámi spojil?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="104"/>
         <source># IN YOUR CHARTS</source>
-        <translation type="unfinished"/>
+        <translation># VE VAŠICH ŽEBŘÍČCÍCH</translation>
     </message>
 </context>
 <context>
@@ -518,32 +518,32 @@ se s vámi spojil?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/Dashboard.ui" line="62"/>
         <source>Recently Played Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Nedávno poslouchané skladby</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/Dashboard.ui" line="120"/>
         <source>Recent Additions</source>
-        <translation type="unfinished"/>
+        <translation>Nedávné přídavky</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/Dashboard.ui" line="183"/>
         <source>Newest Stations &amp; Playlists</source>
-        <translation type="unfinished"/>
+        <translation>Nejnovější stanice a seznamy skladeb</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/Dashboard.cpp" line="115"/>
         <source>Recently played tracks</source>
-        <translation type="unfinished"/>
+        <translation>Nedávno poslouchané skladby</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/Dashboard.cpp" line="226"/>
         <source>No recently created playlists in your network.</source>
-        <translation type="unfinished"/>
+        <translation>Ve vaší síti nejsou žádné nedávno vytvořené seznamy skladeb.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/Dashboard.h" line="91"/>
         <source>Welcome to Tomahawk</source>
-        <translation type="unfinished"/>
+        <translation>Vítejte v Tomahawku</translation>
     </message>
 </context>
 <context>
@@ -769,32 +769,32 @@ heslo</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="67"/>
         <source>From:</source>
-        <translation type="unfinished"/>
+        <translation>Od:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="70"/>
         <source>To:</source>
-        <translation type="unfinished"/>
+        <translation>Do:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="78"/>
         <source>Recently Played Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Nedávno poslouchané skladby</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="81"/>
         <source>Your recently played tracks</source>
-        <translation type="unfinished"/>
+        <translation>Vaše nedávno poslouchané skladby</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="83"/>
         <source>%1&apos;s recently played tracks</source>
-        <translation type="unfinished"/>
+        <translation>%1&apos;s nedávno poslouchaných skladeb</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="89"/>
         <source>Sorry, we could not find any recent plays!</source>
-        <translation type="unfinished"/>
+        <translation>Promiňte, ale nepodařilo se najít žádné nedávno poslouchané skladby!</translation>
     </message>
 </context>
 <context>
@@ -1123,7 +1123,7 @@ heslo</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="79"/>
         <source>Overall</source>
-        <translation type="unfinished"/>
+        <translation>Celkový</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.h" line="46"/>
@@ -2264,7 +2264,7 @@ heslo</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/StatsGauge.cpp" line="95"/>
         <source>out of %1</source>
-        <translation type="unfinished"/>
+        <translation>kromě %1</translation>
     </message>
 </context>
 <context>
@@ -3952,12 +3952,12 @@ služby Twitter zde zadejte tam zobrazené číslo PIN:</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="103"/>
         <source># PLAYS / ARTIST</source>
-        <translation type="unfinished"/>
+        <translation># HRAJE / UMĚLEC</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="105"/>
         <source># IN YOUR CHARTS</source>
-        <translation type="unfinished"/>
+        <translation># VE VAŠICH ŽEBŘÍČCÍCH</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="235"/>

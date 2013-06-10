@@ -339,7 +339,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="104"/>
         <source># IN YOUR CHARTS</source>
-        <translation type="unfinished"/>
+        <translation># ΣΤΑ ΔΙΚΑ ΣΑΣ CHART</translation>
     </message>
 </context>
 <context>
@@ -517,32 +517,32 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/Dashboard.ui" line="62"/>
         <source>Recently Played Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Πρόσφατες αναπαραγωγές</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/Dashboard.ui" line="120"/>
         <source>Recent Additions</source>
-        <translation type="unfinished"/>
+        <translation>Τελευταίες Προσθήκες</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/Dashboard.ui" line="183"/>
         <source>Newest Stations &amp; Playlists</source>
-        <translation type="unfinished"/>
+        <translation>Τελευταίοι Σταθμοί &amp; Λίστες Αναπαραγωγής</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/Dashboard.cpp" line="115"/>
         <source>Recently played tracks</source>
-        <translation type="unfinished"/>
+        <translation>Τελευταίες αναπαραγωγές κομματιών</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/Dashboard.cpp" line="226"/>
         <source>No recently created playlists in your network.</source>
-        <translation type="unfinished"/>
+        <translation>Δεν δημιουργηθηκαν πρόσφατα λίστες αναπαραγωγής στο δίκτυό σας. </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/Dashboard.h" line="91"/>
         <source>Welcome to Tomahawk</source>
-        <translation type="unfinished"/>
+        <translation>Καλως ήρθατε στο Tomahawk</translation>
     </message>
 </context>
 <context>
@@ -768,32 +768,32 @@ Password</source>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="67"/>
         <source>From:</source>
-        <translation type="unfinished"/>
+        <translation>Από:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="70"/>
         <source>To:</source>
-        <translation type="unfinished"/>
+        <translation>Σε:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="78"/>
         <source>Recently Played Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Πρόσφατες αναπαραγωγές</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="81"/>
         <source>Your recently played tracks</source>
-        <translation type="unfinished"/>
+        <translation>Οι τελευταίες σας αναπαραγωγές</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="83"/>
         <source>%1&apos;s recently played tracks</source>
-        <translation type="unfinished"/>
+        <translation>%1&apos;s τελευταίες αναπαραγωγές τραγουδιων</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="89"/>
         <source>Sorry, we could not find any recent plays!</source>
-        <translation type="unfinished"/>
+        <translation>Συγγνωμη, δεν βρεθηκαν προσφατες αναπαραγωγες!</translation>
     </message>
 </context>
 <context>
@@ -1122,7 +1122,7 @@ Password</source>
     <message>
         <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="79"/>
         <source>Overall</source>
-        <translation type="unfinished"/>
+        <translation>Συνολικά </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.h" line="46"/>
@@ -3952,12 +3952,12 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="103"/>
         <source># PLAYS / ARTIST</source>
-        <translation type="unfinished"/>
+        <translation># ΑΝΑΠΑΡΑΓΩΓΕΣ / ΚΑΛΛΙΤΕΧΝΗΣ</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="105"/>
         <source># IN YOUR CHARTS</source>
-        <translation type="unfinished"/>
+        <translation># ΣΤΑ ΔΙΚΑ ΣΑΣ CHARTS</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="235"/>
