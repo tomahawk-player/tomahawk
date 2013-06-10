@@ -53,6 +53,7 @@ public:
     bool highQuality() const;
     bool deleteOnUnsync() const;
     bool loveSync() const;
+    bool persitentPrivacy() const;
 
     void setPlaylists( const QList< SpotifyPlaylistInfo* >& playlists );
 
@@ -66,6 +67,7 @@ public:
 signals:
     void login( const QString& username, const QString& pw );
     void logout();
+    void updatePrivacy( bool );
 
 protected:
     void showEvent( QShowEvent* event );
@@ -74,7 +76,7 @@ private slots:
     void doLogin();
     void resetLoginButton();
     void selectAllPlaylists();
-    void showStarredPlaylist(bool);
+    void showStarredPlaylist( bool );
 
 private:
     void showLoggedIn();
