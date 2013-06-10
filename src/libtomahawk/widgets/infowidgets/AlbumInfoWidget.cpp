@@ -269,3 +269,13 @@ AlbumInfoWidget::changeEvent( QEvent* e )
             break;
     }
 }
+
+
+QPixmap
+AlbumInfoWidget::pixmap() const
+{
+    if ( m_pixmap.isNull() )
+        return Tomahawk::ViewPage::pixmap();
+    else
+        return m_pixmap;
+}

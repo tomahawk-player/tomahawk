@@ -108,6 +108,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     l->addWidget( m_playStatsGauge );
     l->addSpacerItem( new QSpacerItem( 0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding ) );
     ui->statsWidget->setLayout( l );
+    TomahawkUtils::unmarginLayout( l );
 
     m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::Original, QSize( 48, 48 ) );
     ui->cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultArtistImage, TomahawkUtils::Grid, ui->cover->size() ) );
@@ -378,4 +379,14 @@ ArtistInfoWidget::changeEvent( QEvent* e )
         default:
             break;
     }
+}
+
+
+QPixmap
+ArtistInfoWidget::pixmap() const
+{
+    if ( m_pixmap.isNull() )
+        return Tomahawk::ViewPage::pixmap();
+    else
+        return m_pixmap;
 }

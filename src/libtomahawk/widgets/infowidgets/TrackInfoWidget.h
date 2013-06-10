@@ -64,7 +64,7 @@ public:
     virtual QString title() const { return m_title; }
     virtual QString description() const { return QString(); }
     virtual QString longDescription() const { return QString(); }
-    virtual QPixmap pixmap() const { if ( m_pixmap.isNull() ) return Tomahawk::ViewPage::pixmap(); else return m_pixmap; }
+    virtual QPixmap pixmap() const;
 
     virtual bool isBeingPlayed() const;
     virtual bool isTemporaryPage() const { return true; }
