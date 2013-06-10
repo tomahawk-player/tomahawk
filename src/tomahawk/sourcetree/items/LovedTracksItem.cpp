@@ -79,7 +79,7 @@ LovedTracksItem::activate()
         raModel->setTitle( text() );
 
         PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LovedTracks, pv->trackView(), pv->trackView()->proxyModel() );
-        pv->trackView()->setItemDelegate( del );
+        pv->trackView()->setPlaylistItemDelegate( del );
 
         pv->setEmptyTip( tr( "Sorry, we could not find any loved tracks!" ) );
         if ( !par )

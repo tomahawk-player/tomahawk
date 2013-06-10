@@ -467,7 +467,7 @@ ViewManager::showRecentPlaysPage()
         raModel->setDescription( tr( "Recently played tracks from all your friends" ) );
 
         PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::RecentlyPlayed, pv->trackView(), pv->trackView()->proxyModel() );
-        pv->trackView()->setItemDelegate( del );
+        pv->trackView()->setPlaylistItemDelegate( del );
 
         pv->setPlayableModel( raModel );
         pv->setEmptyTip( tr( "Sorry, we could not find any recent plays!" ) );
@@ -493,7 +493,7 @@ ViewManager::showInboxPage()
                 new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::Inbox,
                                                inboxView,
                                                inboxView->proxyModel() );
-        inboxView->setItemDelegate( delegate );
+        inboxView->setPlaylistItemDelegate( delegate );
 
         inboxView->proxyModel()->setStyle( PlayableProxyModel::Large );
         inboxView->setPlayableModel( m_inboxModel );
@@ -509,6 +509,7 @@ ViewManager::showInboxPage()
 
     return show( m_inboxWidget );
 }
+
 
 ViewPage *ViewManager::showNetworkActivityPage()
 {
