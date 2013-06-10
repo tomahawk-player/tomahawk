@@ -544,6 +544,20 @@ GridItemDelegate::onCurrentIndexChanged()
 
 
 void
+GridItemDelegate::resetHoverIndex()
+{
+    foreach ( ImageButton* button, m_playButton )
+        button->deleteLater();
+    m_playButton.clear();
+
+    QModelIndex idx = m_hoveringOver;
+    m_hoveringOver = QPersistentModelIndex();
+    m_hoverIndex = QPersistentModelIndex();
+    doUpdateIndex( idx );
+}
+
+
+void
 GridItemDelegate::createPauseButton( const QPersistentModelIndex& index )
 {
     ImageButton* button = new ImageButton( m_view );
