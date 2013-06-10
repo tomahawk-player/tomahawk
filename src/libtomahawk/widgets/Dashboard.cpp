@@ -371,8 +371,7 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     QColor c = painter->pen().color();
     if ( !( option.state & QStyle::State_Selected && option.state & QStyle::State_Active ) )
     {
-        //FIXME const color
-        painter->setPen( QColor( Qt::gray ).darker() );
+        painter->setPen( opt.palette.text().color().darker() );
     }
 
     QRect rectText = option.rect.adjusted( option.fontMetrics.height() * 4.5, boldFontMetrics.height() + 6, -leftEdge - 10, -8 );
@@ -397,7 +396,7 @@ PlaylistWidget::PlaylistWidget( QWidget* parent )
     : QListView( parent )
 {
     m_overlay = new OverlayWidget( this );
-    /* LoadingSpinner* spinner = */ new LoadingSpinner( this );
+    new LoadingSpinner( this );
 }
 
 

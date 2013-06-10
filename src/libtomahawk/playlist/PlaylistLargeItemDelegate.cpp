@@ -255,7 +255,7 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
             drawRichText( painter, opt, leftRect.adjusted( 0, boldFontMetrics.height() + 1, 0, 0 ), Qt::AlignTop, textDoc );
 
         if ( !( option.state & QStyle::State_Selected || item->isPlaying() ) )
-            painter->setPen( Qt::gray );
+            painter->setPen( opt.palette.text().color().darker() );
 
         textDoc.setHtml( lowerText );
         textDoc.setDocumentMargin( 0 );
