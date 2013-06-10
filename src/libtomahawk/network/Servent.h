@@ -100,6 +100,13 @@ public:
     bool visibleExternally() const;
 
     /**
+     * Is the probality that this host supports IPv6 high?
+     *
+     * Though we cannot fully test for IPv6 connectivity, some guesses based on non-localhost addresses are done.
+     */
+    bool ipv6ConnectivityLikely() const;
+
+    /**
      * The port this Peer listens directly (per default)
      */
     int port() const;

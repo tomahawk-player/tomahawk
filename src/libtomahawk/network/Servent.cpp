@@ -953,6 +953,20 @@ Servent::visibleExternally() const
     return (!d_func()->externalHostname.isNull()) || (d_func()->externalAddresses.length() > 0);
 }
 
+bool
+Servent::ipv6ConnectivityLikely() const
+{
+    foreach ( QHostAddress ha, d_func()->externalAddresses )
+    {
+        if ( ha.protocol() == QAbstractSocket::IPv6Protocol && Servent::isValidExternalIP( ha ) )
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 int
 Servent::port() const
 {

@@ -164,7 +164,69 @@ ConnectionManager::connectToPeer( const Tomahawk::peerinfo_ptr &peerInfo, bool l
     // If we are not connected, try to connect
     d_func()->currentPeerInfo = peerInfo;
     peerInfoDebug( peerInfo ) << "No existing connection found, trying to connect.";
-    d_func()->sipCandidates.append( peerInfo->sipInfos() );
+    // Sort SipInfos
+    QList< SipInfo > anyOther;
+    QList< SipInfo > publicIPv4;
+    QList< SipInfo > publicIPv6;
+    QList< SipInfo > privateIPv4;
+    QList< SipInfo > privateIPv6;
+    foreach ( SipInfo sipInfo, peerInfo->sipInfos() )
+    {
+        if ( !sipInfo.isVisible() )
+        {
+            continue;
+        }
+
+        QHostAddress ha;
+        if ( ha.setAddress( sipInfo.host() ) )
+        {
+            if ( Servent::isValidExternalIP( ha ) )
+            {
+                if ( ha.protocol() == QAbstractSocket::IPv6Protocol )
+                {
+                    publicIPv6.append( sipInfo );
+                }
+                else
+                {
+                    publicIPv4.append( sipInfo );
+                }
+            }
+            else
+            {
+                if ( ha.protocol() == QAbstractSocket::IPv6Protocol )
+                {
+                    privateIPv6.append( sipInfo );
+                }
+                else
+                {
+                    privateIPv4.append( sipInfo );
+                }
+            }
+        }
+        else
+        {
+            anyOther.append( sipInfo );
+        }
+
+    }
+    if ( Servent::instance()->ipv6ConnectivityLikely() && !publicIPv6.isEmpty() )
+    {
+        // Prefer IPv6 over IPv4
+        d_func()->sipCandidates.append( anyOther );
+        d_func()->sipCandidates.append( publicIPv6 );
+        d_func()->sipCandidates.append( publicIPv4 );
+        d_func()->sipCandidates.append( privateIPv6 );
+        d_func()->sipCandidates.append( privateIPv4 );
+    }
+    else
+    {
+        // First try all IPv4 before trying IPv6
+        d_func()->sipCandidates.append( anyOther );
+        d_func()->sipCandidates.append( publicIPv4 );
+        d_func()->sipCandidates.append( privateIPv4 );
+        d_func()->sipCandidates.append( publicIPv6 );
+        d_func()->sipCandidates.append( privateIPv6 );
+    }
 
     QVariantMap m;
     m["conntype"]  = "accept-offer";
