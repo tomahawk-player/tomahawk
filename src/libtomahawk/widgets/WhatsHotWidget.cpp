@@ -313,10 +313,10 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
     }
 }
 
-void
-WhatsHotWidget::setViewData(const QVariantMap &data)
-{
 
+void
+WhatsHotWidget::setViewData( const QVariantMap& data )
+{
     QStandardItem* rootItem = m_crumbModelLeft->invisibleRootItem();
     QVariantMap returnedData = data;
 
@@ -367,10 +367,11 @@ WhatsHotWidget::setViewData(const QVariantMap &data)
     }
 }
 
+
 void
 WhatsHotWidget::infoSystemFinished( QString target )
 {
-    if( m_loading )
+    if ( m_loading )
     {
         if ( target != s_whatsHotIdentifier )
         {
