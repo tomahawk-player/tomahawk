@@ -29,17 +29,31 @@
 class ConnectionManagerPrivate;
 class QTcpSocketExtra;
 
+/**
+ * Handle all (outgoing) connection attempts to a specific nodeid.
+ */
 class DLLEXPORT ConnectionManager : public QObject
 {
     Q_OBJECT
 
 public:
+    /**
+     * Get the ConnectionManager responsible for the given nodeid, if there is none yet, create a new instance.
+     */
     static QSharedPointer<ConnectionManager> getManagerForNodeId( const QString& nodeid );
+
+    /**
+     * Activate/Deactivate the ConnectionManager for a specific nodeid.
+     *
+     * A strong reference is held for every active ConnectionManagers so that they are not automatically deleted while in operation.
+     */
     static void setActive( bool active, const QString& nodeid, const QSharedPointer<ConnectionManager>& manager );
 
-    ConnectionManager( const QString& nodeid );
     ~ConnectionManager();
 
+    /**
+     * Receive incoming SipInfos and start a new thread to connect to this peer.
+     */
     void handleSipInfo( const Tomahawk::peerinfo_ptr& peerInfo );
 
     QWeakPointer< ConnectionManager > weakRef() const;
@@ -53,12 +67,37 @@ private:
     Q_DECLARE_PRIVATE( ConnectionManager )
     ConnectionManagerPrivate* d_ptr;
 
-    // Proxy to hand over a strong reference to the connectionManager
+    /**
+     * Create a new ConnectionManager.
+     *
+     * This should only be done internally so that we do not have more than one ConnectionManager for a nodeid.
+     */
+    ConnectionManager( const QString& nodeid );
+
+    /**
+     * Proxy handleSipInfoPrivate to hand over a strong reference to the connectionManager
+     * so that the refcount is >0 while transferring the context of operation to another thread.
+     */
     static void handleSipInfoPrivateS( const Tomahawk::peerinfo_ptr& peerInfo, const QSharedPointer<ConnectionManager>& connectionManager );
 
+    /**
+     * Acquire the object lock and register this ConnectionManager as active.
+     */
     void activate();
+
+    /**
+     * Release the object lock and register this ConnectionManager as inactive.
+     */
     void deactivate();
+
+    /**
+     * Try to connect to a peer with a given SipInfo.
+     */
     void connectToPeer(const Tomahawk::peerinfo_ptr& peerInfo , bool lock);
+
+    /**
+     * Look for existing connections and try to connect if there is none.
+     */
     void handleSipInfoPrivate( const Tomahawk::peerinfo_ptr& peerInfo );
 
     /**
