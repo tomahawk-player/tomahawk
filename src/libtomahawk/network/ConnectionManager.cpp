@@ -309,7 +309,7 @@ void ConnectionManager::tryConnect()
 
     peerInfoDebug( d_func()->currentPeerInfo ) << Q_FUNC_INFO << "Connecting socket to " << info.host() << ":" << info.port();
     sock->connectToHost( info.host(), info.port(), QTcpSocket::ReadWrite );
-    sock->moveToThread( thread() );
+    sock->moveToThread( Servent::instance()->thread() );
 }
 
 void
