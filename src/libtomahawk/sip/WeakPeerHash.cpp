@@ -52,6 +52,20 @@ WeakPeerHash::hash()
 void
 WeakPeerHash::remove( QObject *value )
 {
-    const QString key = value->property( WEAKPEERHASH_KEY ).toString();
-    d_func()->hash.remove( key );
+    if ( value )
+    {
+        const QString key = value->property( WEAKPEERHASH_KEY ).toString();
+        d_func()->hash.remove( key );
+    }
+    else
+    {
+        // Scan for null-Pointers
+        foreach ( QString key, d_func()->hash.keys() )
+        {
+            if ( d_func()->hash.value( key ).isNull() )
+            {
+                d_func()->hash.remove( key );
+            }
+        }
+    }
 }
