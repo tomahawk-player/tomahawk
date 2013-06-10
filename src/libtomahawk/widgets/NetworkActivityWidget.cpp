@@ -163,6 +163,7 @@ NetworkActivityWidget::yearlyCharts( const QList<Tomahawk::track_ptr>& tracks )
     }
 }
 
+
 void
 NetworkActivityWidget::overallCharts( const QList<track_ptr>& tracks )
 {
@@ -218,6 +219,7 @@ NetworkActivityWidget::fetchYearCharts()
     Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( yearCharts ) );
 }
 
+
 void
 NetworkActivityWidget::fetchOverallCharts()
 {
@@ -238,6 +240,7 @@ NetworkActivityWidget::fetchWeekCharts()
     connect( weekCharts, SIGNAL( done( QList<Tomahawk::track_ptr> ) ), SLOT( weeklyCharts( QList<Tomahawk::track_ptr> ) ) );
     Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( weekCharts ) );
 }
+
 
 void
 NetworkActivityWidget::fetchMonthCharts()
@@ -267,6 +270,7 @@ NetworkActivityWidget::showWeekCharts()
     }
 }
 
+
 void
 NetworkActivityWidget::showMonthCharts()
 {
@@ -282,6 +286,7 @@ NetworkActivityWidget::showMonthCharts()
         fetchMonthCharts();
     }
 }
+
 
 void
 NetworkActivityWidget::showYearCharts()
@@ -299,7 +304,9 @@ NetworkActivityWidget::showYearCharts()
     }
 }
 
-void NetworkActivityWidget::showOverallCharts()
+
+void
+NetworkActivityWidget::showOverallCharts()
 {
     d_func()->activeView = OverallChart;
     if ( !d_func()->overallChartsModel.isNull() )
