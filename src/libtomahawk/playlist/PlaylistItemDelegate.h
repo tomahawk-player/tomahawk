@@ -29,6 +29,10 @@ class PlayableItem;
 class PlayableProxyModel;
 class TrackView;
 
+namespace Tomahawk {
+    class PixmapDelegateFader;
+}
+
 class DLLEXPORT PlaylistItemDelegate : public QStyledItemDelegate
 {
 Q_OBJECT
@@ -46,6 +50,9 @@ public slots:
 signals:
     void updateIndex( const QModelIndex& idx );
 
+private slots:
+    void doUpdateIndex( const QPersistentModelIndex& index );
+
 protected:
     void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item ) const;
 
@@ -53,15 +60,32 @@ protected:
     bool editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
 
     QPersistentModelIndex hoveringOver() const { return m_hoveringOver; }
-    void setInfoButtonRect( const QPersistentModelIndex& index, const QRect& rect ) const { m_infoButtonRects[ index ] = rect; }
 
-private:
+    QRect drawInfoButton( QPainter* painter, const QRect& rect, const QModelIndex& index, float height ) const;
+    QRect drawSourceIcon( QPainter* painter, const QRect& rect, PlayableItem* item, float height ) const;
+    QRect drawCover( QPainter* painter, const QRect& rect, PlayableItem* item, const QModelIndex& index ) const;
+
     void paintDetailed( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     void paintShort( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index, bool useAvatars = false ) const;
 
     QTextOption m_topOption;
     QTextOption m_bottomOption;
+    QTextOption m_centerOption;
+    QTextOption m_centerRightOption;
 
+    QFont m_smallFont;
+    QFont m_smallBoldFont;
+    QFont m_boldFont;
+    QFont m_bigBoldFont;
+
+    QFontMetrics m_smallBoldFontMetrics;
+    QFontMetrics m_bigBoldFontMetrics;
+
+protected slots:
+    virtual void modelChanged();
+
+private:
+    mutable QHash< QPersistentModelIndex, QSharedPointer< Tomahawk::PixmapDelegateFader > > m_pixmaps;
     mutable QHash< QPersistentModelIndex, QRect > m_infoButtonRects;
     QPersistentModelIndex m_hoveringOver;
 
