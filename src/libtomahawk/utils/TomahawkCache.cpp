@@ -125,7 +125,7 @@ Cache::putData( const QString& identifier, qint64 maxAge, const QString& key, co
     addClient( identifier );
     QSettings cached_settings( cacheDir, QSettings::IniFormat );
     cached_settings.setValue( key, QVariant::fromValue( CacheData( QDateTime::currentMSecsSinceEpoch() + maxAge, value ) ) );
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Storing from client" << identifier << maxAge << key << value;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Storing from client" << identifier << maxAge << key;
 }
 
 
