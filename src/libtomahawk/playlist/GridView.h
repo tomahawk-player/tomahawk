@@ -89,6 +89,7 @@ protected:
     virtual void startDrag( Qt::DropActions supportedActions );
     virtual void scrollContentsBy( int dx, int dy );
 
+    void leaveEvent( QEvent* event );
     void paintEvent( QPaintEvent* event );
     void resizeEvent( QResizeEvent* event );
     void wheelEvent( QWheelEvent* );
