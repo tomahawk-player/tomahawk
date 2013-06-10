@@ -169,6 +169,12 @@ DiagnosticsDialog::accountLog( Tomahawk::Accounts::Account* account )
     QMap< QString, QList< Tomahawk::peerinfo_ptr > > nodes;
     foreach ( const Tomahawk::peerinfo_ptr& peerInfo, account->sipPlugin()->peersOnline() )
     {
+        if ( peerInfo->nodeId().isEmpty() )
+        {
+            QList< Tomahawk::peerinfo_ptr> infos;
+            infos.append( peerInfo );
+            accountInfo.append( peerLog( peerInfo->nodeId(), infos ) );
+        }
         if ( !nodes.contains( peerInfo->nodeId() ) )
         {
             nodes[peerInfo->nodeId()] = QList< Tomahawk::peerinfo_ptr >();
@@ -177,32 +183,39 @@ DiagnosticsDialog::accountLog( Tomahawk::Accounts::Account* account )
     }
     foreach ( const QString& nodeid, nodes.keys() )
     {
-        accountInfo.append( QString( "       " ) );
-        QStringList peerIds;
-        foreach ( const Tomahawk::peerinfo_ptr& peerInfo, nodes.value( nodeid ) )
-        {
-            peerIds << peerInfo->id();
-        }
-        accountInfo.append( peerIds.join( QChar( ',' ) ) );
-        accountInfo.append( QString( ": %1 @ ").arg( nodeid ) );
-        QStringList sipInfos;
-        foreach ( const Tomahawk::peerinfo_ptr& peerInfo, nodes.value( nodeid ) )
-        {
-            foreach ( SipInfo info, peerInfo->sipInfos() )
-            {
-                if ( info.isValid() )
-                    sipInfos << QString( "[%1]:%2" ).arg( info.host() ).arg( info.port() ) ;
-                else
-                    sipInfos << QString( "SipInfo invalid" );
-            }
-        }
-        sipInfos.removeDuplicates();
-        accountInfo.append( sipInfos.join( QChar( ';' ) ) );
-        if ( ( ( nodes.value( nodeid ).first()->sipInfos().length() == 1 ) && ( !nodes.value( nodeid ).first()->sipInfos().first().isVisible() ) ) || ( nodes.value( nodeid ).first()->sipInfos().isEmpty() ) )
-            accountInfo.append( "(outbound connections only) ");
-        accountInfo.append( QString( " (%1)\n" ).arg( nodes.value( nodeid ).first()->versionString() ) );
+        accountInfo.append( peerLog( nodeid, nodes.value( nodeid ) ) );
     }
     accountInfo.append( "\n" );
 
     return accountInfo;
+}
+
+QString
+DiagnosticsDialog::peerLog( const QString& nodeid, const QList<Tomahawk::peerinfo_ptr> &peerInfos )
+{
+    QString peerLine( "       " );
+    QStringList peerIds;
+    foreach ( const Tomahawk::peerinfo_ptr& peerInfo, peerInfos )
+    {
+        peerIds << peerInfo->id();
+    }
+    peerLine.append( peerIds.join( QChar( ',' ) ) );
+    peerLine.append( QString( ": %1 @ ").arg( nodeid ) );
+    QStringList sipInfos;
+    foreach ( const Tomahawk::peerinfo_ptr& peerInfo, peerInfos )
+    {
+        foreach ( SipInfo info, peerInfo->sipInfos() )
+        {
+            if ( info.isValid() )
+                sipInfos << QString( "[%1]:%2" ).arg( info.host() ).arg( info.port() ) ;
+            else
+                sipInfos << QString( "SipInfo invalid" );
+        }
+    }
+    sipInfos.removeDuplicates();
+    peerLine.append( sipInfos.join( QChar( ';' ) ) );
+    if ( ( ( peerInfos.first()->sipInfos().length() == 1 ) && ( !peerInfos.first()->sipInfos().first().isVisible() ) ) || ( peerInfos.first()->sipInfos().isEmpty() ) )
+        peerLine.append( "(outbound connections only) ");
+    peerLine.append( QString( " (%1)\n" ).arg( peerInfos.first()->versionString() ) );
+    return peerLine;
 }
