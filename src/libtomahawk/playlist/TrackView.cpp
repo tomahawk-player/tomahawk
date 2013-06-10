@@ -166,8 +166,7 @@ TrackView::setProxyModel( PlayableProxyModel* model )
     connect( m_proxyModel, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), SLOT( verifySize() ) );
 
     m_delegate = new PlaylistItemDelegate( this, m_proxyModel );
-    setItemDelegate( m_delegate );
-
+    QTreeView::setItemDelegate( m_delegate );
     QTreeView::setModel( m_proxyModel );
 }
 
@@ -184,8 +183,11 @@ TrackView::setModel( QAbstractItemModel* model )
 void
 TrackView::setPlaylistItemDelegate( PlaylistItemDelegate* delegate )
 {
+    if ( m_delegate )
+        delete m_delegate;
+
     m_delegate = delegate;
-    setItemDelegate( delegate );
+    QTreeView::setItemDelegate( delegate );
 
     verifySize();
 }
@@ -511,7 +513,6 @@ TrackView::dragMoveEvent( QDragMoveEvent* event )
 void
 TrackView::dragLeaveEvent( QDragLeaveEvent* event )
 {
-    tDebug() << Q_FUNC_INFO;
     QTreeView::dragLeaveEvent( event );
 
     m_dragging = false;
@@ -547,6 +548,15 @@ TrackView::dropEvent( QDropEvent* event )
     }
 
     m_dragging = false;
+}
+
+
+void
+TrackView::leaveEvent( QEvent* event )
+{
+    QTreeView::leaveEvent( event );
+
+    m_delegate->resetHoverIndex();
 }
 
 

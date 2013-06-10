@@ -113,6 +113,7 @@ protected:
     virtual void dragMoveEvent( QDragMoveEvent* event );
     virtual void dropEvent( QDropEvent* event );
 
+    virtual void leaveEvent( QEvent* event );
     virtual void paintEvent( QPaintEvent* event );
     virtual void keyPressEvent( QKeyEvent* event );
     virtual void wheelEvent( QWheelEvent* event );
