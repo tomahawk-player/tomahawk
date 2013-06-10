@@ -103,7 +103,7 @@ SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex&
             int dropTypes = dropTypeCount( item );
             QSize originalSize = QSize( option.rect.width(), option.fontMetrics.height() * 1.4 );
             QSize targetSize = originalSize + QSize( 0, dropTypes == 0 ? 0 : 38 + option.fontMetrics.height() * 1.4 );
-            m_expandedMap.value( index )->initialize( originalSize, targetSize, 300 );
+            m_expandedMap.value( index )->initialize( originalSize, targetSize, 600 );
             m_expandedMap.value( index )->expand();
         }
         QMetaObject::invokeMethod( m_parent, "update", Qt::QueuedConnection, Q_ARG( QModelIndex, index ) );
@@ -1005,7 +1005,7 @@ SourceDelegate::hovered( const QModelIndex& index, const QMimeData* mimeData )
     {
         foreach ( AnimationHelper* helper, m_expandedMap )
         {
-            helper->collapse();
+            helper->collapse( true );
         }
         return;
     }
@@ -1014,7 +1014,7 @@ SourceDelegate::hovered( const QModelIndex& index, const QMimeData* mimeData )
     {
         foreach ( AnimationHelper* helper, m_expandedMap )
         {
-            helper->collapse();
+            helper->collapse( true );
         }
 
         m_newDropHoverIndex = index;
