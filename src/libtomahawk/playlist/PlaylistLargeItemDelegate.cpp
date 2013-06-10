@@ -37,8 +37,6 @@
 
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
-#include <utils/PixmapDelegateFader.h>
-#include <utils/Closure.h>
 
 using namespace Tomahawk;
 
@@ -49,17 +47,6 @@ PlaylistLargeItemDelegate::PlaylistLargeItemDelegate( DisplayMode mode, TrackVie
     , m_model( proxy )
     , m_mode( mode )
 {
-    m_topOption = QTextOption( Qt::AlignTop );
-    m_topOption.setWrapMode( QTextOption::NoWrap );
-
-    m_centerRightOption = QTextOption( Qt::AlignVCenter | Qt::AlignRight );
-    m_centerRightOption.setWrapMode( QTextOption::NoWrap );
-
-    m_bottomOption = QTextOption( Qt::AlignBottom );
-    m_bottomOption.setWrapMode( QTextOption::NoWrap );
-
-    connect( proxy, SIGNAL( modelReset() ), SLOT( modelChanged() ) );
-    connect( parent, SIGNAL( modelChanged() ), SLOT( modelChanged() ) );
 }
 
 
@@ -91,7 +78,6 @@ PlaylistLargeItemDelegate::drawRichText( QPainter* painter, const QStyleOptionVi
         y += ( rect.height() - height ) / 2;
 
     QAbstractTextDocumentLayout::PaintContext context;
-
     context.palette.setColor( QPalette::Text, painter->pen().color() );
 
     painter->save();
@@ -111,10 +97,10 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
     prepareStyleOption( &opt, index, item );
 
     bool isUnlistened = true;
-    if( m_mode == Inbox )
+    if ( m_mode == Inbox )
     {
         QList< Tomahawk::SocialAction > socialActions = item->query()->queryTrack()->allSocialActions();
-        foreach( const Tomahawk::SocialAction& sa, socialActions )
+        foreach ( const Tomahawk::SocialAction& sa, socialActions )
         {
             if ( sa.action.toString() == "Inbox" && sa.value.toBool() == false )
             {
@@ -132,8 +118,8 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
 
     const track_ptr track = item->query()->track();
     QString lowerText;
-
     QSize avatarSize( 32, 32 );
+
     if ( m_mode == RecentlyPlayed && item->playbackLog().source )
     {
         QString playtime = TomahawkUtils::ageToString( QDateTime::fromTime_t( item->playbackLog().timestamp ), true );
@@ -147,7 +133,6 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
     if ( m_mode == LatestAdditions && item->query()->numResults() )
     {
         QString playtime = TomahawkUtils::ageToString( QDateTime::fromTime_t( item->query()->results().first()->modificationTime() ), true );
-
         lowerText = QString( tr( "added %1", "e.g. added 3 hours ago" ) ).arg( playtime );
     }
 
@@ -170,78 +155,43 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
             if ( item->isPlaying() )
             {
                 painter->drawPixmap( npr, TomahawkUtils::defaultPixmap( TomahawkUtils::NowPlayingSpeaker, TomahawkUtils::Original, npr.size() ) );
-                r.adjust( pixHeight + 2*pixMargin, 0, 0, 0 );
+                r.adjust( pixHeight + 2 * pixMargin, 0, 0, 0 );
             }
             else
             {
                 npr = npr.adjusted( 0, npr.height() / 4, -npr.width() / 2, -npr.height() / 4 );
                 painter->drawPixmap( npr, TomahawkUtils::defaultPixmap( TomahawkUtils::InboxNewItem, TomahawkUtils::Original, npr.size() ) );
-                r.adjust( npr.width() + 2*pixMargin, 0, 0, 0 );
+                r.adjust( npr.width() + 2 * pixMargin, 0, 0, 0 );
             }
         }
 
         painter->setPen( opt.palette.text().color() );
 
-        QRect pixmapRect = r.adjusted( 6, 0, -option.rect.width() + option.rect.height() - 6 + r.left(), 0 );
-        QRect avatarRect = r.adjusted( option.rect.width() - r.left() - 12 - avatarSize.width(), ( option.rect.height() - avatarSize.height() ) / 2 - 5, 0, 0 );
-        avatarRect.setSize( avatarSize );
-
-        if ( !m_pixmaps.contains( index ) )
-        {
-            m_pixmaps.insert( index, QSharedPointer< Tomahawk::PixmapDelegateFader >( new Tomahawk::PixmapDelegateFader( item->query(), pixmapRect.size(), TomahawkUtils::RoundedCorners, false ) ) );
-            _detail::Closure* closure = NewClosure( m_pixmaps[ index ], SIGNAL( repaintRequest() ), const_cast<PlaylistLargeItemDelegate*>(this), SLOT( doUpdateIndex( const QPersistentModelIndex& ) ), QPersistentModelIndex( index ) );
-            closure->setAutoDelete( false );
-        }
-
-        const QPixmap pixmap = m_pixmaps[ index ]->currentPixmap();
-        painter->drawPixmap( pixmapRect, pixmap );
-
-        QFont boldFont = opt.font;
-        boldFont.setPointSize( TomahawkUtils::defaultFontSize() + 2 );
-        boldFont.setWeight( 99 );
-        QFontMetrics boldFontMetrics( boldFont );
-
-        QFont smallBoldFont = opt.font;
-        smallBoldFont.setPointSize( TomahawkUtils::defaultFontSize() - 1 );
-        smallBoldFont.setBold( true );
-        smallBoldFont.setWeight( 60 );
-        QFontMetrics smallBoldFontMetrics( smallBoldFont );
-
-        QFont smallFont = opt.font;
-        smallFont.setPointSize( TomahawkUtils::defaultFontSize() - 1 );
-
-        r.adjust( pixmapRect.width() + 12, 1, - 16, 0 );
-        QRect rightRect = r.adjusted( r.width() - smallBoldFontMetrics.width( TomahawkUtils::timeToString( track->duration() ) ), 0, 0, 0 );
-        QRect leftRect = r.adjusted( 0, 0, -( rightRect.width() + 8 ), 0 );
-
-        const int sourceIconSize = avatarRect.width() - 6;
+        r.adjust( 4, 0, -16, 0 );
+        QRect leftRect;
 
         if ( hoveringOver() == index && !index.data().toString().isEmpty() && index.column() == 0 )
         {
-            const QPixmap infoIcon = TomahawkUtils::defaultPixmap( TomahawkUtils::InfoIcon, TomahawkUtils::Original, QSize( sourceIconSize, sourceIconSize ) );
-            QRect arrowRect = QRect( rightRect.right() - sourceIconSize, r.center().y() - sourceIconSize / 2, infoIcon.width(), infoIcon.height() );
-            painter->drawPixmap( arrowRect, infoIcon );
-
-            setInfoButtonRect( index, arrowRect );
-            rightRect.moveLeft( rightRect.left() - infoIcon.width() - 8 );
-            leftRect.adjust( 0, 0, -( infoIcon.width() + 8 ), 0 );
+            leftRect = drawInfoButton( painter, r, index, 0.9 );
         }
-        else if ( item->query()->numResults() && !item->query()->results().first()->sourceIcon( TomahawkUtils::RoundedCorners, QSize( sourceIconSize, sourceIconSize ) ).isNull() )
+        else
         {
-            const QPixmap sourceIcon = item->query()->results().first()->sourceIcon( TomahawkUtils::RoundedCorners, QSize( sourceIconSize, sourceIconSize ) );
-            painter->setOpacity( 0.8 );
-            painter->drawPixmap( QRect( rightRect.right() - sourceIconSize, r.center().y() - sourceIconSize / 2, sourceIcon.width(), sourceIcon.height() ), sourceIcon );
-            painter->setOpacity( 1.0 );
-
-            rightRect.moveLeft( rightRect.left() - sourceIcon.width() - 8 );
-            leftRect.adjust( 0, 0, -( sourceIcon.width() + 8 ), 0 );
+            leftRect = drawCover( painter, r, item, index );
         }
 
-        painter->setFont( boldFont );
-        QString text = painter->fontMetrics().elidedText( track->track(), Qt::ElideRight, leftRect.width() );
+        leftRect.setX( leftRect.left() + 8 );
+        QRect rightRect = r.adjusted( r.width() - m_smallBoldFontMetrics.width( TomahawkUtils::timeToString( track->duration() ) ), 0, 0, 0 );
+        {
+            const QRect leftRectBefore = leftRect;
+            leftRect = drawSourceIcon( painter, leftRect, item, 0.5 );
+            rightRect.moveLeft( rightRect.left() - ( leftRectBefore.width() - leftRect.width() ) );
+        }
+
+        painter->setFont( m_bigBoldFont );
+        const QString text = painter->fontMetrics().elidedText( track->track(), Qt::ElideRight, leftRect.width() );
         painter->drawText( leftRect, text, m_topOption );
 
-        painter->setFont( smallFont );
+        painter->setFont( m_smallFont );
         QTextDocument textDoc;
         if ( track->album().isEmpty() )
             textDoc.setHtml( tr( "by <b>%1</b>", "e.g. by SomeArtist" ).arg( track->artist() ) );
@@ -252,7 +202,7 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         textDoc.setDefaultTextOption( m_topOption );
 
         if ( textDoc.idealWidth() <= leftRect.width() )
-            drawRichText( painter, opt, leftRect.adjusted( 0, boldFontMetrics.height() + 1, 0, 0 ), Qt::AlignTop, textDoc );
+            drawRichText( painter, opt, leftRect.adjusted( 0, m_bigBoldFontMetrics.height() + 1, 0, 0 ), Qt::AlignTop, textDoc );
 
         if ( !( option.state & QStyle::State_Selected || item->isPlaying() ) )
             painter->setPen( opt.palette.text().color().darker() );
@@ -270,7 +220,7 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         if ( track->duration() > 0 )
         {
             painter->setPen( opt.palette.text().color() );
-            painter->setFont( smallBoldFont );
+            painter->setFont( m_smallBoldFont );
             painter->drawText( rightRect, TomahawkUtils::timeToString( track->duration() ), m_centerRightOption );
         }
     }
@@ -279,15 +229,7 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
 
 
 void
-PlaylistLargeItemDelegate::doUpdateIndex( const QPersistentModelIndex& idx )
-{
-    if ( idx.isValid() )
-        emit updateIndex( idx );
-}
-
-
-void
 PlaylistLargeItemDelegate::modelChanged()
 {
-    m_pixmaps.clear();
+    PlaylistItemDelegate::modelChanged();
 }
