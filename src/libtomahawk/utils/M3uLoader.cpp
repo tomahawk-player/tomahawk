@@ -139,8 +139,6 @@ M3uLoader::parseM3u( const QString& fileLink )
         return;
     }
 
-    m_title = fileInfo.baseName();
-
     QTextStream stream( &file );
     QString singleLine;
 
@@ -179,6 +177,7 @@ M3uLoader::parseM3u( const QString& fileLink )
 
     if ( m_createNewPlaylist )
     {
+        m_title = QUrl::fromPercentEncoding( fileInfo.baseName().toUtf8() );
         m_playlist = Playlist::create( SourceList::instance()->getLocal(),
                                         uuid(),
                                         m_title,
