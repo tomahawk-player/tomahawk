@@ -81,18 +81,17 @@ ViewHeader::checkState()
     disconnect( this, SIGNAL( sectionResized( int, int, int ) ), this, SLOT( onSectionsChanged() ) );
 
     QByteArray state;
-    tDebug( LOGVERBOSE ) << "Restoring columns state for view:" << m_guid;
-
     if ( !m_guid.isEmpty() )
         state = TomahawkSettings::instance()->playlistColumnSizes( m_guid );
 
     if ( !state.isEmpty() )
     {
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Restoring columns state for view:" << m_guid;
         restoreState( state );
     }
     else
     {
-        tDebug( LOGVERBOSE ) << "Giving columns initial weighting:" << m_columnWeights;
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Giving columns of view" << m_guid << "initial weighting:" << m_columnWeights << "for" << count() << "columns";
         for ( int i = 0; i < count() - 1; i++ )
         {
             if ( isSectionHidden( i ) )
