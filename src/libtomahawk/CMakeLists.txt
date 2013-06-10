@@ -365,6 +365,8 @@ list(APPEND libSources
     thirdparty/kdsingleapplicationguard/kdlockedsharedmemorypointer.cpp
 )
 
+add_subdirectory( accounts/configstorage )
+
 IF(LIBLASTFM_FOUND)
     include_directories( ${LIBLASTFM_INCLUDE_DIRS} )
     list(APPEND LINK_LIBRARIES ${LIBLASTFM_LIBRARIES} )

@@ -286,9 +286,10 @@ void
 AccountManager::loadFromConfig()
 {
     m_creds = new CredentialsManager( this );
-    ConfigStorage* configStorage = new LocalConfigStorage( this ); //registers with CredentialsManager in the ctor
-    m_configStorageById.insert( configStorage->id(), configStorage );
+    ConfigStorage* configStorage;
 
+    configStorage = new LocalConfigStorage( this ); //registers with CredentialsManager in the ctor
+    m_configStorageById.insert( configStorage->id(), configStorage );
 
     QStringList accountIds;
     foreach ( ConfigStorage* cs, m_configStorageById )

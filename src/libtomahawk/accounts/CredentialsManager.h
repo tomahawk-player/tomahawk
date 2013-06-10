@@ -19,6 +19,8 @@
 #ifndef CREDENTIALSMANAGER_H
 #define CREDENTIALSMANAGER_H
 
+#include "DllMacro.h"
+
 #include <QObject>
 #include <QVariantHash>
 #include <QMutex>
@@ -60,7 +62,7 @@ private:
  * This ensures an illusion of synchronous operations for Tomahawk's Account classes, even though all
  * QtKeychain jobs are async.
  */
-class CredentialsManager : public QObject
+class DLLEXPORT CredentialsManager : public QObject
 {
     Q_OBJECT
 public:

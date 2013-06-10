@@ -263,6 +263,11 @@ macro_log_feature(LIBLASTFM_FOUND "liblastfm" "Qt library for the Last.fm webser
 macro_optional_find_package(QtKeychain 0.1.0)
 macro_log_feature(QTKEYCHAIN_FOUND "QtKeychain" "Provides support for secure credentials storage" "https://github.com/frankosterfeld/qtkeychain" TRUE "" "")
 
+if( UNIX AND NOT APPLE )
+    macro_optional_find_package(TelepathyQt 0.9.3)
+    macro_log_feature(TelepathyQt4_FOUND "Telepathy-Qt" "Telepathy-Qt is a Qt high-level binding for Telepathy, a D-Bus framework for unifying real time communication." FALSE "" "Telepathy-Qt is needed for sharing Jabber/GTalk accounts with Telepathy.\n")
+endif()
+
 # we need pthreads too
 macro_optional_find_package(Threads)
 macro_log_feature(THREADS_FOUND "Threads" "Threading Library" "" TRUE "" "Platform specific library for threading")
