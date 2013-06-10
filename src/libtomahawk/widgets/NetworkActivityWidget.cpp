@@ -58,7 +58,7 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
     d_func()->ui->tracksViewLeft->setHeaderHidden( true );
     d_func()->ui->tracksViewLeft->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     PlaylistChartItemDelegate* del = new PlaylistChartItemDelegate( d_func()->ui->tracksViewLeft, d_func()->ui->tracksViewLeft->proxyModel() );
-    d_func()->ui->tracksViewLeft->setItemDelegate( del );
+    d_func()->ui->tracksViewLeft->setPlaylistItemDelegate( del );
     d_func()->ui->tracksViewLeft->setUniformRowHeights( false );
 
     d_func()->playlistInterface = d_func()->ui->tracksViewLeft->playlistInterface();

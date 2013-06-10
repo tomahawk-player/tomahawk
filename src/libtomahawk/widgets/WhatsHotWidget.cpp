@@ -82,7 +82,7 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     ui->tracksViewLeft->setHeaderHidden( true );
     ui->tracksViewLeft->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     PlaylistChartItemDelegate* del = new PlaylistChartItemDelegate( ui->tracksViewLeft, ui->tracksViewLeft->proxyModel() );
-    ui->tracksViewLeft->setItemDelegate( del );
+    ui->tracksViewLeft->setPlaylistItemDelegate( del );
     ui->tracksViewLeft->setUniformRowHeights( false );
 
     TreeProxyModel* artistsProxy = new TreeProxyModel( ui->artistsViewLeft );
