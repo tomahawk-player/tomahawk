@@ -95,11 +95,13 @@ Source::setControlConnection( ControlConnection* cc )
     if ( !m_cc.isNull() && m_cc->isReady() && m_cc->isRunning() )
     {
         const QString& nodeid = Database::instance()->impl()->dbid();
+        peerInfoDebug( (*cc->peerInfos().begin()) ) << Q_FUNC_INFO << "Comparing" << cc->id() << "and" << nodeid << "to detect duplicate connection, outbound:" << cc->outbound();
         if ( cc->id() < nodeid && m_cc->outbound() )
         {
-            m_cc = cc;
             // This ControlConnection is not needed anymore, get rid of it!
             m_cc->deleteLater();
+            // Use new ControlConnection
+            m_cc = cc;
             return true;
         }
         else
