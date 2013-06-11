@@ -55,10 +55,6 @@ private:
 /**
  * @brief The CredentialsManager class holds an in-memory cache of whatever credentials are stored
  * in the system's QtKeychain-accessible credentials storage.
- * After instantiating the class, loadCredentials should be called, and this is the only time a read
- * operation from QtKeychain is performed. When CredentialsManager emits ready(), it can be used for
- * all other operations. The only QtKeychain operations performed at any time after startup are
- * write and delete.
  * This ensures an illusion of synchronous operations for Tomahawk's Account classes, even though all
  * QtKeychain jobs are async.
  */
@@ -70,25 +66,28 @@ public:
     
     void addService( const QString& service, const QStringList& accountIds );
 
-    void loadCredentials();
+    QStringList keys( const QString& service ) const;
+    QStringList services() const;
 
-    QList< CredentialsStorageKey > keys() const;
-
-    QVariantHash credentials( const CredentialsStorageKey& key ) const;
     QVariantHash credentials( const QString& serviceName, const QString& key ) const;
-    void setCredentials( const CredentialsStorageKey& key, const QVariantHash& value );
     void setCredentials( const QString& serviceName, const QString& key, const QVariantHash& value );
 
 signals:
-    void ready();
+    void serviceReady( const QString& service );
 
 private slots:
+    void loadCredentials( const QString& service );
+
     void keychainJobFinished( QKeychain::Job* );
+
+protected:
+    QVariantHash credentials( const CredentialsStorageKey& key ) const;
+    void setCredentials( const CredentialsStorageKey& key, const QVariantHash& value );
 
 private:
     QHash< QString, QStringList > m_services;
     QHash< CredentialsStorageKey, QVariantHash > m_credentials;
-    QList< QKeychain::ReadPasswordJob* > m_readJobs;
+    QHash< QString, QList< QKeychain::ReadPasswordJob* > > m_readJobs;
     QMutex m_mutex;
 };
 

@@ -286,19 +286,13 @@ void
 AccountManager::loadFromConfig()
 {
     m_creds = new CredentialsManager( this );
-    ConfigStorage* configStorage;
 
-    configStorage = new LocalConfigStorage( this ); //registers with CredentialsManager in the ctor
+    ConfigStorage* configStorage = new LocalConfigStorage( this ); //registers with CredentialsManager in the ctor
     m_configStorageById.insert( configStorage->id(), configStorage );
 
-    QStringList accountIds;
-    foreach ( ConfigStorage* cs, m_configStorageById )
-        accountIds << cs->accountIds();
-    qDebug() << "LOADING ALL CREDENTIALS" << accountIds;
-
-    NewClosure( m_creds, SIGNAL( ready() ),
+    //TODO: when we get more than one CS, hook them all up to continue with account loading
+    NewClosure( configStorage, SIGNAL( ready() ),
                 this, SLOT( finishLoadingFromConfig() ) );
-    m_creds->loadCredentials();
 }
 
 

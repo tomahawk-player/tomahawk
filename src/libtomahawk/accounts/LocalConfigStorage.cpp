@@ -21,6 +21,7 @@
 #include "Account.h"
 #include "AccountManager.h"
 #include "CredentialsManager.h"
+#include "utils/Logger.h"
 
 namespace Tomahawk
 {
@@ -36,9 +37,27 @@ LocalConfigStorage::LocalConfigStorage( QObject* parent )
     m_accountIds = TomahawkSettings::instance()->accounts();
 
     // tell CredentialsManager which account ids it will be writing credentials for and in which svc
-    // so it can preload them when we call CM::loadCredentials()
+
+    CredentialsManager* cm = AccountManager::instance()->credentialsManager();
+    connect( cm, SIGNAL( serviceReady( QString ) ),
+             this, SLOT( onCredentialsManagerReady( QString ) ) );
     AccountManager::instance()->credentialsManager()->addService( m_credentialsServiceName,
                                                                   m_accountIds );
+
+    tDebug() << Q_FUNC_INFO << "LOADING ALL CREDENTIALS FOR SERVICE" << m_credentialsServiceName << m_accountIds;
+}
+
+
+void
+LocalConfigStorage::onCredentialsManagerReady( const QString& service )
+{
+    if ( service != m_credentialsServiceName )
+        return;
+
+    //no need to listen for it any more
+    disconnect( this, SLOT( onCredentialsManagerReady( QString ) ) );
+
+    emit ready();
 }
 
 

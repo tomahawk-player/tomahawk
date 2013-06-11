@@ -37,7 +37,6 @@ TelepathyConfigStorage::TelepathyConfigStorage( QObject* parent )
 {
     tDebug() << Q_FUNC_INFO;
 
-
     // tell CredentialsManager which account ids it will be writing credentials for and in which svc
     // so it can preload them when we call CM::loadCredentials()
     AccountManager::instance()->credentialsManager()->addService( m_credentialsServiceName,

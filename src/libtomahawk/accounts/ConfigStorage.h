@@ -29,14 +29,13 @@ namespace Tomahawk
 namespace Accounts
 {
 
-class ConfigStorage : public QObject
+class DLLEXPORT ConfigStorage : public QObject
 {
+    Q_OBJECT
 public:
-    explicit ConfigStorage( QObject* parent )
-        : QObject( parent )
-    {}
+    explicit ConfigStorage( QObject* parent = 0 );
 
-    virtual ~ConfigStorage() {}
+    virtual ~ConfigStorage();
 
     virtual QString id() const = 0;
 
@@ -46,6 +45,8 @@ public:
     virtual void load( const QString& accountId, Account::Configuration& cfg ) = 0;
     virtual void remove( const QString& accountId ) = 0;
 
+signals:
+    void ready(); //emit this when done with whatever it is that needs to be initialized
 };
 
 } //namespace Accounts

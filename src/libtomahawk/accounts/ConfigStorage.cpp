@@ -16,10 +16,9 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LOCALCONFIGSTORAGE_H
-#define LOCALCONFIGSTORAGE_H
-
 #include "ConfigStorage.h"
+
+
 
 namespace Tomahawk
 {
@@ -27,33 +26,16 @@ namespace Tomahawk
 namespace Accounts
 {
 
-class LocalConfigStorage : public ConfigStorage
+ConfigStorage::ConfigStorage( QObject* parent )
+    : QObject( parent )
 {
-    Q_OBJECT
-public:
-    explicit LocalConfigStorage( QObject* parent = 0 );
-
-    QString id() const { return "localconfigstorage"; }
-
-    QStringList accountIds() const;
-
-    virtual void save( const QString& accountId, const Account::Configuration& cfg );
-    virtual void load( const QString& accountId, Account::Configuration& cfg );
-    virtual void remove( const QString& accountId );
+}
 
 
-private slots:
-    void onCredentialsManagerReady( const QString& service );
+ConfigStorage::~ConfigStorage()
+{
+}
 
-private:
-    const QString m_credentialsServiceName;
-    QStringList m_accountIds;
 
-    static LocalConfigStorage* s_instance;
-};
-
-} //namespace Accounts
-
-} //namespace Tomahawk
-
-#endif // LOCALCONFIGSTORAGE_H
+} //ns
+} //ns

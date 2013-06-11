@@ -71,41 +71,50 @@ CredentialsManager::addService( const QString& service , const QStringList& acco
     if ( m_services.contains( service ) )
         m_services.remove( service );
     m_services.insert( service, accountIds );
+    loadCredentials( service );
 }
 
 
 void
-CredentialsManager::loadCredentials()
+CredentialsManager::loadCredentials( const QString &service )
 {
-    for ( QHash< QString, QStringList >::const_iterator it = m_services.constBegin();
-          it != m_services.constEnd(); ++it )
+
+    const QStringList& accountIds = m_services.value( service );
+    tDebug() << Q_FUNC_INFO << "keys for service" << service << ":" << accountIds;
+    foreach ( QString key, accountIds )
     {
-        const QString& svcName = it.key();
-        const QStringList& accountIds = it.value();
-        tDebug() << Q_FUNC_INFO << "keys for service" << svcName << ":" << accountIds;
-        foreach ( QString key, accountIds )
-        {
-            QKeychain::ReadPasswordJob* j = new QKeychain::ReadPasswordJob( svcName, this );
-            j->setKey( key );
-            j->setAutoDelete( false );
+        QKeychain::ReadPasswordJob* j = new QKeychain::ReadPasswordJob( service, this );
+        j->setKey( key );
+        j->setAutoDelete( false );
 #if defined( Q_OS_UNIX ) && !defined( Q_OS_MAC )
-            j->setInsecureFallback( true );
+        j->setInsecureFallback( true );
 #endif
-            connect( j, SIGNAL( finished( QKeychain::Job* ) ),
-                     SLOT( keychainJobFinished( QKeychain::Job* ) ) );
-            m_readJobs << j;
-            j->start();
-            tDebug()  << "Launching QtKeychain readJob for" << key;
-        }
+        connect( j, SIGNAL( finished( QKeychain::Job* ) ),
+                    SLOT( keychainJobFinished( QKeychain::Job* ) ) );
+        m_readJobs[ service ] << j;
+        j->start();
+        tDebug()  << "Launching QtKeychain readJob for" << key;
     }
 }
 
 
-QList< CredentialsStorageKey >
-CredentialsManager::keys() const
+QStringList
+CredentialsManager::keys( const QString& service ) const
 {
-    QList< CredentialsStorageKey > keys = m_credentials.keys();
+    QStringList keys;
+    foreach ( const CredentialsStorageKey& k, m_credentials.keys() )
+    {
+        if ( k.service() == service )
+            keys << k.key();
+    }
     return keys;
+}
+
+
+QStringList
+CredentialsManager::services() const
+{
+    return m_services.keys();
 }
 
 
@@ -197,11 +206,11 @@ CredentialsManager::keychainJobFinished( QKeychain::Job* j )
             tDebug() << "QtKeychain readJob for" << readJob->key() << "finished with error:" << j->error() << j->errorString();
         }
 
-        m_readJobs.removeOne( readJob );
+        m_readJobs[ readJob->service() ].removeOne( readJob );
 
-        if ( m_readJobs.isEmpty() )
+        if ( m_readJobs[ readJob->service() ].isEmpty() )
         {
-            emit ready();
+            emit serviceReady( readJob->service() );
         }
     }
     else if ( QKeychain::WritePasswordJob* writeJob = qobject_cast< QKeychain::WritePasswordJob* >( j ) )
