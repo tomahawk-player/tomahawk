@@ -340,7 +340,7 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="104"/>
         <source># IN YOUR CHARTS</source>
-        <translation type="unfinished"/>
+        <translation># I DINA LISTOR</translation>
     </message>
 </context>
 <context>
@@ -518,32 +518,32 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/Dashboard.ui" line="62"/>
         <source>Recently Played Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Nyligen uppspelade spår</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/Dashboard.ui" line="120"/>
         <source>Recent Additions</source>
-        <translation type="unfinished"/>
+        <translation>Nyligen tillagda</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/Dashboard.ui" line="183"/>
         <source>Newest Stations &amp; Playlists</source>
-        <translation type="unfinished"/>
+        <translation>Nyaste Stationer och Spellistor</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/Dashboard.cpp" line="115"/>
         <source>Recently played tracks</source>
-        <translation type="unfinished"/>
+        <translation>Nyligen uppspelade spår</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/Dashboard.cpp" line="226"/>
         <source>No recently created playlists in your network.</source>
-        <translation type="unfinished"/>
+        <translation>Det finns inga nyligen skapade spellistor på ditt nätverk</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/Dashboard.h" line="91"/>
         <source>Welcome to Tomahawk</source>
-        <translation type="unfinished"/>
+        <translation>Välkommen till Tomahawk</translation>
     </message>
 </context>
 <context>
@@ -769,32 +769,32 @@ Password</source>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="67"/>
         <source>From:</source>
-        <translation type="unfinished"/>
+        <translation>Från: </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="70"/>
         <source>To:</source>
-        <translation type="unfinished"/>
+        <translation>Till: </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="78"/>
         <source>Recently Played Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Nyligen uppspelade spår</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="81"/>
         <source>Your recently played tracks</source>
-        <translation type="unfinished"/>
+        <translation>Dina nyligen uppspelade spår</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="83"/>
         <source>%1&apos;s recently played tracks</source>
-        <translation type="unfinished"/>
+        <translation>%1&apos;s nyligen uppspelade spår</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="89"/>
         <source>Sorry, we could not find any recent plays!</source>
-        <translation type="unfinished"/>
+        <translation>Tyvärr kunde vi inte hitta några nyligen uppspelningar</translation>
     </message>
 </context>
 <context>
@@ -1103,32 +1103,32 @@ Password</source>
     <message>
         <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="68"/>
         <source>Charts</source>
-        <translation type="unfinished"/>
+        <translation>Listor</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="70"/>
         <source>Last Week</source>
-        <translation type="unfinished"/>
+        <translation>Förra veckan</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="73"/>
         <source>Last Month</source>
-        <translation type="unfinished"/>
+        <translation>Förra månaden</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="76"/>
         <source>Last Year</source>
-        <translation type="unfinished"/>
+        <translation>Förra året</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.cpp" line="79"/>
         <source>Overall</source>
-        <translation type="unfinished"/>
+        <translation>Generell</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/NetworkActivityWidget.h" line="46"/>
         <source>Network Activity</source>
-        <translation type="unfinished"/>
+        <translation>Nätverksaktivitet</translation>
     </message>
 </context>
 <context>
@@ -1279,12 +1279,12 @@ Password</source>
 <context>
     <name>PlaylistItemDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="149"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="178"/>
         <source>played %1 by you</source>
         <translation>%1 spelades av dig</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="151"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="180"/>
         <source>played %1 by %2</source>
         <translation>%1 spelades av %2</translation>
     </message>
@@ -1292,31 +1292,31 @@ Password</source>
 <context>
     <name>PlaylistLargeItemDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="142"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="128"/>
         <source>played %1 by you</source>
         <comment>e.g. played 3 hours ago by you</comment>
         <translation>spelade %1 av dig</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="144"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="130"/>
         <source>played %1 by %2</source>
         <comment>e.g. played 3 hours ago by SomeSource</comment>
         <translation>Spelade %1 av %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="151"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="136"/>
         <source>added %1</source>
         <comment>e.g. added 3 hours ago</comment>
         <translation>La till %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="247"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="197"/>
         <source>by &lt;b&gt;%1&lt;/b&gt;</source>
         <comment>e.g. by SomeArtist</comment>
         <translation>av &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="249"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="199"/>
         <source>by &lt;b&gt;%1&lt;/b&gt; on &lt;b&gt;%2&lt;/b&gt;</source>
         <comment>e.g. by SomeArtist on SomeAlbum</comment>
         <translation>av &lt;b&gt;%1&lt;/b&gt; på &lt;b&gt;%2&lt;/b&gt;</translation>
@@ -2162,7 +2162,7 @@ och radiostationer baserat på din personliga profil</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="315"/>
         <source>Network Activity</source>
-        <translation type="unfinished"/>
+        <translation>Nätverksaktivitet</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="340"/>
@@ -2233,6 +2233,16 @@ och radiostationer baserat på din personliga profil</translation>
         <translation>Högkvalitetsström</translation>
     </message>
     <message>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="184"/>
+        <source>Use this to force Spotify to never announce listening data to Social Networks</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="187"/>
+        <source>Always run in Private Mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="134"/>
         <source>Spotify playlists to keep in sync:</source>
         <translation>Spotify-spellistor att syncronisera</translation>
@@ -2266,7 +2276,7 @@ och radiostationer baserat på din personliga profil</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/StatsGauge.cpp" line="95"/>
         <source>out of %1</source>
-        <translation type="unfinished"/>
+        <translation>ur %1</translation>
     </message>
 </context>
 <context>
@@ -2503,47 +2513,47 @@ och radiostationer baserat på din personliga profil</translation>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccount</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="496"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="508"/>
         <source>Sync with Spotify</source>
         <translation>Synkronisera med Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="500"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="512"/>
         <source>Re-enable syncing with Spotify</source>
         <translation>Återaktivera syncronisering mot Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="508"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="520"/>
         <source>Create local copy</source>
         <translation>Skapa lokal kopia</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="524"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="536"/>
         <source>Subscribe to playlist changes</source>
         <translation>Prenummerera på spellist-ändringar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="528"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="540"/>
         <source>Re-enable playlist subscription</source>
         <translation>Återaktivera spellisteprenummeration</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="532"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="544"/>
         <source>Stop subscribing to changes</source>
         <translation>Sluta prenummerera på ändringar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="552"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="564"/>
         <source>Enable Spotify collaborations</source>
         <translation>Aktivera Spotify-samverkare</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="554"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="566"/>
         <source>Disable Spotify collaborations</source>
         <translation>Avaktivera Spotify-samverkare</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="510"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="522"/>
         <source>Stop syncing with Spotify</source>
         <translation>Sluta syncronisera med Spotify</translation>
     </message>
@@ -2551,28 +2561,28 @@ och radiostationer baserat på din personliga profil</translation>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccountConfig</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="183"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="193"/>
         <source>Logging in...</source>
         <translation>Loggar in...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="220"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="230"/>
         <source>Failed: %1</source>
         <translation>Misslyckade: %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="262"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="273"/>
         <source>Logged in as %1</source>
         <translation>Inloggad som %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="264"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="275"/>
         <source>Log Out</source>
         <translation>Logga ut</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="280"/>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="290"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="291"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="301"/>
         <source>Log In</source>
         <translation>Logga in</translation>
     </message>
@@ -3588,43 +3598,43 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="409"/>
-        <location filename="../src/libtomahawk/Source.cpp" line="460"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="411"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="462"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Söker igenom (%L1 spår)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="411"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="413"/>
         <source>Scanning</source>
         <translation>Skannar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="445"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="447"/>
         <source>Checking</source>
         <translation>Kontrollerar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="450"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="452"/>
         <source>Syncing</source>
         <translation>Synkroniserar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="455"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="457"/>
         <source>Importing</source>
         <translation>Importerar</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="613"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="615"/>
         <source>Saving (%1%)</source>
         <translation>Sparar (%1%)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="694"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="696"/>
         <source>Online</source>
         <translation>Online</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="698"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="700"/>
         <source>Offline</source>
         <translation>Offline</translation>
     </message>
@@ -3953,35 +3963,35 @@ anger du PIN-koden här:</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="103"/>
         <source># PLAYS / ARTIST</source>
-        <translation type="unfinished"/>
+        <translation># UPPSPELNINGAR / ARTIST</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="105"/>
         <source># IN YOUR CHARTS</source>
-        <translation type="unfinished"/>
+        <translation># I DINA LISTOR</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="235"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="236"/>
         <source>You&apos;ve listened to this track %n time(s).</source>
         <translation><numerusform>Du har lyssnat på detta spåret %n gånger.</numerusform><numerusform>Du har lyssnat på detta spåret %n gånger</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="237"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="238"/>
         <source>You&apos;ve never listened to this track before.</source>
         <translation>Du har inte lyssnat på detta spåret tidigare.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="241"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="242"/>
         <source>You first listened to it on %1.</source>
         <translation>Du har lyssnat på det på %1.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="246"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="247"/>
         <source>You&apos;ve listened to %1 %n time(s).</source>
         <translation><numerusform>Du har lyssnat på %1 %n gång.</numerusform><numerusform>Du har lyssnat på %1 %n gånger.</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="252"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="253"/>
         <source>You&apos;ve never listened to %1 before.</source>
         <translation>Du har inte lyssnat på %1 tidigare.</translation>
     </message>
@@ -3989,7 +3999,7 @@ anger du PIN-koden här:</translation>
 <context>
     <name>TrackView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="603"/>
+        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="613"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Tyvärr, ditt filter &apos;%1&apos; gav inga träffar</translation>
     </message>
