@@ -38,6 +38,7 @@
 #include <QtCore/QDir>
 #include <QtCore/QPluginLoader>
 #include <QtCore/QCoreApplication>
+#include <QSet>
 #include <QTimer>
 
 
@@ -287,19 +288,31 @@ AccountManager::loadFromConfig()
 {
     m_creds = new CredentialsManager( this );
 
-    ConfigStorage* configStorage = new LocalConfigStorage( this ); //registers with CredentialsManager in the ctor
+    QSharedPointer< ConfigStorage > configStorage;
+    configStorage = QSharedPointer< ConfigStorage >( new LocalConfigStorage( this ) );
     m_configStorageById.insert( configStorage->id(), configStorage );
 
-    //TODO: when we get more than one CS, hook them all up to continue with account loading
-    NewClosure( configStorage, SIGNAL( ready() ),
-                this, SLOT( finishLoadingFromConfig() ) );
+
+    foreach ( const QSharedPointer< ConfigStorage >& cs, m_configStorageById )
+    {
+        m_configStorageLoading.insert( cs->id() );
+        NewClosure( cs.data(), SIGNAL( ready() ),
+                    this, SLOT( finishLoadingFromConfig( QSharedPointer< ConfigStorage > ) ), cs );
+        cs->init();
+    }
 }
 
 
 void
-AccountManager::finishLoadingFromConfig()
+AccountManager::finishLoadingFromConfig( const QSharedPointer< ConfigStorage >& cs )
 {
-    foreach ( ConfigStorage* cs, m_configStorageById )
+    if ( m_configStorageLoading.contains( cs->id() ) )
+        m_configStorageLoading.remove( cs->id() );
+
+    if ( !m_configStorageLoading.isEmpty() )
+        return;
+
+    foreach ( const QSharedPointer< ConfigStorage >& cs, m_configStorageById )
     {
         QStringList accountIds = cs->accountIds();
 
@@ -453,15 +466,15 @@ AccountManager::zeroconfAccount() const
 }
 
 
-ConfigStorage*
+QSharedPointer< ConfigStorage >
 AccountManager::configStorageForAccount( const QString& accountId )
 {
-    foreach ( ConfigStorage* cs, m_configStorageById )
+    foreach ( const QSharedPointer< ConfigStorage >& cs, m_configStorageById )
     {
         if ( cs->accountIds().contains( accountId ) )
             return cs;
     }
-    return 0;
+    return QSharedPointer< ConfigStorage >();
 }
 
 

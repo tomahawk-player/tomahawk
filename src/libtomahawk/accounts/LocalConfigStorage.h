@@ -33,6 +33,8 @@ class LocalConfigStorage : public ConfigStorage
 public:
     explicit LocalConfigStorage( QObject* parent = 0 );
 
+    virtual void init();
+
     QString id() const { return "localconfigstorage"; }
 
     QStringList accountIds() const;

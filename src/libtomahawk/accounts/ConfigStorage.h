@@ -22,6 +22,7 @@
 #include "TomahawkSettings.h"
 #include "Account.h"
 
+#include <QObject>
 
 namespace Tomahawk
 {
@@ -37,6 +38,8 @@ public:
 
     virtual ~ConfigStorage();
 
+    virtual void init() = 0;
+
     virtual QString id() const = 0;
 
     virtual QStringList accountIds() const = 0;
@@ -51,5 +54,7 @@ signals:
 
 } //namespace Accounts
 } //namespace Tomahawk
+
+Q_DECLARE_METATYPE( QSharedPointer< Tomahawk::Accounts::ConfigStorage > )
 
 #endif // CONFIGSTORAGE_H

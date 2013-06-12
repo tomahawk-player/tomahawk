@@ -35,7 +35,12 @@ LocalConfigStorage::LocalConfigStorage( QObject* parent )
     , m_credentialsServiceName( "Tomahawk" )
 {
     m_accountIds = TomahawkSettings::instance()->accounts();
+}
 
+
+void
+LocalConfigStorage::init()
+{
     // tell CredentialsManager which account ids it will be writing credentials for and in which svc
 
     CredentialsManager* cm = AccountManager::instance()->credentialsManager();

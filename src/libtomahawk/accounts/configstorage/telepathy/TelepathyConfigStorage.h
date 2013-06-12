@@ -34,6 +34,8 @@ class CONFIGSTORAGEDLLEXPORT TelepathyConfigStorage : public ConfigStorage
 public:
     explicit TelepathyConfigStorage( QObject* parent = 0 );
 
+    void init();
+
     QString id() const { return "telepathyconfigstorage"; }
 
     QStringList accountIds() const;

@@ -95,7 +95,7 @@ public:
     bool isReady() const { return m_completelyReady; }
 
     CredentialsManager* credentialsManager() const { return m_creds; }
-    ConfigStorage* configStorageForAccount( const QString& accountId );
+    QSharedPointer< ConfigStorage > configStorageForAccount( const QString& accountId );
 
 public slots:
     void connectAll();
@@ -120,7 +120,7 @@ private slots:
     void init();
     void onStateChanged( Tomahawk::Accounts::Account::ConnectionState state );
     void onError( int code, const QString& msg );
-    void finishLoadingFromConfig();
+    void finishLoadingFromConfig( const QSharedPointer< ConfigStorage >& cs );
 
     void onSettingsChanged();
 
@@ -146,7 +146,8 @@ private:
     QHash< QString, AccountFactory* > m_accountFactories;
     QList< AccountFactory* > m_factoriesForFilesytem;
 
-    QMap< QString, ConfigStorage* > m_configStorageById;
+    QMap< QString, QSharedPointer< ConfigStorage > > m_configStorageById;
+    QSet< QString > m_configStorageLoading;
 
     static AccountManager* s_instance;
 };
