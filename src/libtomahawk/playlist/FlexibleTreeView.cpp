@@ -69,14 +69,6 @@ FlexibleTreeView::FlexibleTreeView( QWidget* parent, QWidget* extraHeader )
     setLayout( new QVBoxLayout() );
     TomahawkUtils::unmarginLayout( layout() );
 
-    QFrame* lineAbove = new QFrame( this );
-    lineAbove->setStyleSheet( QString( "QFrame { border: 1px solid %1; }" ).arg( TomahawkStyle::HEADER_UPPER.name() ) );
-    lineAbove->setFrameShape( QFrame::HLine );
-    lineAbove->setMaximumHeight( 1 );
-    QFrame* lineAbove2 = new QFrame( this );
-    lineAbove2->setStyleSheet( QString( "QFrame { border: 1px solid black; }" ) );
-    lineAbove2->setFrameShape( QFrame::HLine );
-    lineAbove2->setMaximumHeight( 1 );
     QFrame* lineBelow = new QFrame( this );
     lineBelow->setStyleSheet( QString( "QFrame { border: 1px solid %1; }" ).arg( TomahawkStyle::HEADER_UPPER.name() ) );
     lineBelow->setFrameShape( QFrame::HLine );
@@ -87,8 +79,6 @@ FlexibleTreeView::FlexibleTreeView( QWidget* parent, QWidget* extraHeader )
     lineBelow2->setMaximumHeight( 1 );
 
     layout()->addWidget( m_header );
-    layout()->addWidget( lineAbove );
-    layout()->addWidget( lineAbove2 );
     layout()->addWidget( m_modeHeader );
     if ( extraHeader )
         layout()->addWidget( extraHeader );
