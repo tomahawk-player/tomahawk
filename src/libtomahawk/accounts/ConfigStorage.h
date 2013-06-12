@@ -55,6 +55,6 @@ signals:
 } //namespace Accounts
 } //namespace Tomahawk
 
-Q_DECLARE_METATYPE( QSharedPointer< Tomahawk::Accounts::ConfigStorage > )
+Q_DECLARE_INTERFACE( Tomahawk::Accounts::ConfigStorage, "tomahawk.ConfigStorage/1.0" )
 
 #endif // CONFIGSTORAGE_H

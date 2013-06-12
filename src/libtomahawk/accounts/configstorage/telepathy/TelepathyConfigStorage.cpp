@@ -23,6 +23,8 @@
 #include "accounts/CredentialsManager.h"
 #include "utils/Logger.h"
 
+#include <QTimer>
+
 
 namespace Tomahawk
 {
@@ -46,7 +48,7 @@ TelepathyConfigStorage::init()
     // so it can preload them when we call CM::loadCredentials()
     AccountManager::instance()->credentialsManager()->addService( m_credentialsServiceName,
                                                                   m_accountIds );
-    emit ready();
+    QTimer::singleShot( 0, this, SIGNAL( ready() ) );
 }
 
 
@@ -118,3 +120,5 @@ TelepathyConfigStorage::remove( const QString& accountId )
 
 }
 }
+
+Q_EXPORT_PLUGIN2( Tomahawk::Accounts::ConfigStorage, Tomahawk::Accounts::TelepathyConfigStorage )

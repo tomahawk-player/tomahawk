@@ -34,10 +34,10 @@
 #include "TomahawkSettings.h"
 #include "LocalConfigStorage.h"
 
-#include <QtCore/QLibrary>
-#include <QtCore/QDir>
-#include <QtCore/QPluginLoader>
-#include <QtCore/QCoreApplication>
+#include <QLibrary>
+#include <QDir>
+#include <QPluginLoader>
+#include <QCoreApplication>
 #include <QSet>
 #include <QTimer>
 
@@ -101,10 +101,9 @@ AccountManager::init()
 }
 
 
-QStringList
-AccountManager::findPluginFactories()
+QList< QDir >
+AccountManager::findPluginDirs() const
 {
-    QStringList paths;
     QList< QDir > pluginDirs;
 
     QDir appDir( qApp->applicationDirPath() );
@@ -125,10 +124,21 @@ AccountManager::findPluginFactories()
     lib64Dir.cd( "lib64" );
 
     pluginDirs << appDir << libDir << lib64Dir << QDir( qApp->applicationDirPath() );
-    foreach ( const QDir& pluginDir, pluginDirs )
+    return pluginDirs;
+}
+
+
+QStringList
+AccountManager::findPluginFactories()
+{
+    QStringList paths;
+
+    foreach ( const QDir& pluginDir, findPluginDirs() )
     {
-        tDebug() << Q_FUNC_INFO << "Checking directory for plugins:" << pluginDir;
-        foreach ( QString fileName, pluginDir.entryList( QStringList() << "*tomahawk_account_*.so" << "*tomahawk_account_*.dylib" << "*tomahawk_account_*.dll", QDir::Files ) )
+        tDebug() << Q_FUNC_INFO << "Checking directory for account plugins:" << pluginDir;
+        foreach ( QString fileName, pluginDir.entryList( QStringList() << "*tomahawk_account_*.so"
+                                                                       << "*tomahawk_account_*.dylib"
+                                                                       << "*tomahawk_account_*.dll", QDir::Files ) )
         {
             if ( fileName.startsWith( "libtomahawk_account" ) )
             {
@@ -138,6 +148,33 @@ AccountManager::findPluginFactories()
             }
         }
     }
+
+    return paths;
+}
+
+
+QStringList
+AccountManager::findConfigStoragePlugins()
+{
+    QStringList paths;
+
+    foreach( const QDir& pluginDir, findPluginDirs() )
+    {
+        tDebug() << Q_FUNC_INFO << "Checking directory for ConfigStorage plugins:" << pluginDir;
+        foreach ( QString fileName, pluginDir.entryList( QStringList() << "*tomahawk_configstorage_*.so"
+                                                                       << "*tomahawk_configstorage_*.dylib"
+                                                                       << "*tomahawk_configstorage_*.dll", QDir::Files ) )
+        {
+            if ( fileName.startsWith( "libtomahawk_configstorage" ) )
+            {
+                const QString path = pluginDir.absoluteFilePath( fileName );
+                if ( !paths.contains( path ) )
+                    paths << path;
+            }
+        }
+    }
+
+    tDebug() << Q_FUNC_INFO << "ConfigStorage plugin file paths:" << paths;
 
     return paths;
 }
@@ -288,31 +325,50 @@ AccountManager::loadFromConfig()
 {
     m_creds = new CredentialsManager( this );
 
-    QSharedPointer< ConfigStorage > configStorage;
-    configStorage = QSharedPointer< ConfigStorage >( new LocalConfigStorage( this ) );
-    m_configStorageById.insert( configStorage->id(), configStorage );
+    ConfigStorage* localCS = new LocalConfigStorage( this );
+    m_configStorageById.insert( localCS->id(), localCS );
 
+    QStringList configStoragePlugins = findConfigStoragePlugins();
+    foreach( const QString& pluginPath, configStoragePlugins )
+    {
+        QPluginLoader loader;
+        if ( !QLibrary::isLibrary( pluginPath ) )
+            continue;
 
-    foreach ( const QSharedPointer< ConfigStorage >& cs, m_configStorageById )
+        loader.setFileName( pluginPath );
+        if ( !loader.load() )
+        {
+            tDebug() << "Error loading ConfigStorage plugin" << loader.errorString() << loader.staticInstances().count();
+            continue;
+        }
+
+        ConfigStorage* cs = qobject_cast< ConfigStorage* >( loader.instance() );
+        if ( !cs )
+            continue;
+
+        m_configStorageById.insert( cs->id(), cs );
+    }
+
+    foreach ( ConfigStorage* cs, m_configStorageById )
     {
         m_configStorageLoading.insert( cs->id() );
-        NewClosure( cs.data(), SIGNAL( ready() ),
-                    this, SLOT( finishLoadingFromConfig( QSharedPointer< ConfigStorage > ) ), cs );
+        NewClosure( cs, SIGNAL( ready() ),
+                    this, SLOT( finishLoadingFromConfig( QString ) ), cs->id() );
         cs->init();
     }
 }
 
 
 void
-AccountManager::finishLoadingFromConfig( const QSharedPointer< ConfigStorage >& cs )
+AccountManager::finishLoadingFromConfig( const QString& csid )
 {
-    if ( m_configStorageLoading.contains( cs->id() ) )
-        m_configStorageLoading.remove( cs->id() );
+    if ( m_configStorageLoading.contains( csid ) )
+        m_configStorageLoading.remove( csid );
 
     if ( !m_configStorageLoading.isEmpty() )
         return;
 
-    foreach ( const QSharedPointer< ConfigStorage >& cs, m_configStorageById )
+    foreach ( const ConfigStorage* cs, m_configStorageById )
     {
         QStringList accountIds = cs->accountIds();
 
@@ -466,15 +522,15 @@ AccountManager::zeroconfAccount() const
 }
 
 
-QSharedPointer< ConfigStorage >
+ConfigStorage*
 AccountManager::configStorageForAccount( const QString& accountId )
 {
-    foreach ( const QSharedPointer< ConfigStorage >& cs, m_configStorageById )
+    foreach ( ConfigStorage* cs, m_configStorageById )
     {
         if ( cs->accountIds().contains( accountId ) )
             return cs;
     }
-    return QSharedPointer< ConfigStorage >();
+    return 0;
 }
 
 

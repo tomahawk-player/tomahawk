@@ -31,6 +31,7 @@ namespace Accounts
 class CONFIGSTORAGEDLLEXPORT TelepathyConfigStorage : public ConfigStorage
 {
     Q_OBJECT
+    Q_INTERFACES( Tomahawk::Accounts::ConfigStorage )
 public:
     explicit TelepathyConfigStorage( QObject* parent = 0 );
 
