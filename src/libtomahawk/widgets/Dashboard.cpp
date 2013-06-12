@@ -33,9 +33,11 @@
 #include "playlist/RecentlyPlayedModel.h"
 #include "playlist/dynamic/GeneratorInterface.h"
 #include "widgets/OverlayWidget.h"
+#include "widgets/BasicHeader.h"
+#include "utils/ImageRegistry.h"
 #include "utils/AnimatedSpinner.h"
 #include "utils/TomahawkStyle.h"
-#include "utils/TomahawkUtils.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
 #include <QPainter>
@@ -51,9 +53,14 @@ using namespace Tomahawk;
 Dashboard::Dashboard( QWidget* parent )
     : QWidget( parent )
     , ui( new Ui::Dashboard )
+    , m_header( new BasicHeader( this ) )
 {
     QWidget* widget = new QWidget;
     ui->setupUi( widget );
+
+    m_header->setPixmap( ImageRegistry::instance()->pixmap( RESPATH "images/dashboard.svg", QSize( 0, 0 ) ) );
+    m_header->setCaption( tr( "Dashboard" ) );
+    m_header->setDescription( tr( "An overview of your recent activity" ) );
 
     RecentPlaylistsModel* model = new RecentPlaylistsModel( HISTORY_PLAYLIST_ITEMS, this );
 
@@ -102,6 +109,7 @@ Dashboard::Dashboard( QWidget* parent )
     area->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
     QVBoxLayout* layout = new QVBoxLayout();
+    layout->addWidget( m_header );
     layout->addWidget( area );
     setLayout( layout );
     TomahawkUtils::unmarginLayout( layout );

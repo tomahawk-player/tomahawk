@@ -37,6 +37,7 @@
 class AlbumModel;
 class RecentlyPlayedModel;
 class OverlayWidget;
+class BasicHeader;
 
 namespace Ui
 {
@@ -116,6 +117,7 @@ private slots:
 private:
     Ui::Dashboard *ui;
 
+    BasicHeader* m_header;
     RecentlyPlayedModel* m_tracksModel;
     AlbumModel* m_recentAlbumsModel;
     Tomahawk::playlistinterface_ptr m_playlistInterface;
