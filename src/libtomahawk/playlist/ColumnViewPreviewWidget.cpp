@@ -93,7 +93,7 @@ ColumnViewPreviewWidget::setQuery( const Tomahawk::query_ptr& query )
     if ( query->numResults() )
     {
         ui->yearValue->setText( QString::number( query->track()->year() ) );
-        ui->bitrateValue->setText( QString::number( query->results().first()->bitrate() ) );
+        ui->bitrateValue->setText( tr( "%1 kbps" ).arg( query->results().first()->bitrate() ) );
         ui->durationValue->setText( TomahawkUtils::timeToString( query->track()->duration() ) );
         ui->ageValue->setText( TomahawkUtils::ageToString( QDateTime::fromTime_t( query->results().first()->modificationTime() ) ) );
 
