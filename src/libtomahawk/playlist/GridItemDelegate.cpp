@@ -146,11 +146,11 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     if ( m_hoverFaders.contains( index ) )
     {
         const qreal pct = ( m_hoverFaders[ index ]->currentFrame() / 100.0 );
-        opacity = 0.35 - pct * 0.35;
+        opacity = 0.15 - pct * 0.15;
     }
     else if ( m_hoverIndex == index )
     {
-        opacity = 0.35;
+        opacity = 0.15;
     }
 
     if ( opacity > -1.0 )
