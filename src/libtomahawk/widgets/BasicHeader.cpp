@@ -40,9 +40,9 @@ BasicHeader::BasicHeader( QWidget* parent )
     setLayout( m_mainLayout );
 
     m_imageLabel = new QLabel( this );
-    m_imageLabel->setFixedSize( 64, 64 );
+    m_imageLabel->setFixedSize( 48, 48 );
     m_mainLayout->addWidget( m_imageLabel );
-    m_mainLayout->addSpacing( 16 );
+    m_mainLayout->addSpacing( 8 );
 
     m_verticalLayout = new QVBoxLayout;
     m_mainLayout->addLayout( m_verticalLayout );
@@ -53,7 +53,7 @@ BasicHeader::BasicHeader( QWidget* parent )
     m_verticalLayout->addWidget( m_descriptionLabel );
     m_verticalLayout->addStretch();
 
-    m_mainLayout->addSpacing( 16 );
+    m_mainLayout->addSpacing( 8 );
     m_mainLayout->setStretchFactor( m_verticalLayout, 2 );
 
     QPalette pal = palette();
@@ -89,7 +89,7 @@ BasicHeader::BasicHeader( QWidget* parent )
     TomahawkUtils::unmarginLayout( layout() );
     layout()->setContentsMargins( 8, 4, 8, 4 );
     setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
-    setFixedHeight( 80 );
+    setFixedHeight( 56 );
 
     setAutoFillBackground( true );
     setPalette( pal );
