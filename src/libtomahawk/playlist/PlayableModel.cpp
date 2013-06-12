@@ -268,6 +268,34 @@ PlayableModel::data( const QModelIndex& index, int role ) const
     if ( !entry )
         return QVariant();
 
+    if ( role == PlayableProxyModel::TypeRole )
+    {
+        if ( entry->result() )
+        {
+            return Tomahawk::TypeResult;
+        }
+        else if ( entry->query() )
+        {
+            return Tomahawk::TypeQuery;
+        }
+        else if ( entry->artist() )
+        {
+            return Tomahawk::TypeArtist;
+        }
+        else if ( entry->album() )
+        {
+            return Tomahawk::TypeAlbum;
+        }
+    }
+
+    int column = index.column();
+    if ( role < CoverIDRole && role >= Qt::UserRole )
+    {
+        // map role to column
+        column = role - Qt::UserRole;
+        role = Qt::DisplayRole;
+    }
+
     switch ( role )
     {
         case Qt::TextAlignmentRole:
@@ -276,32 +304,11 @@ PlayableModel::data( const QModelIndex& index, int role ) const
             break;
         }
 
-        case PlayableProxyModel::TypeRole:
-        {
-            if ( entry->result() )
-            {
-                return Tomahawk::TypeResult;
-            }
-            else if ( entry->query() )
-            {
-                return Tomahawk::TypeQuery;
-            }
-            else if ( entry->artist() )
-            {
-                return Tomahawk::TypeArtist;
-            }
-            else if ( entry->album() )
-            {
-                return Tomahawk::TypeAlbum;
-            }
-            break;
-        }
-
         default:
         {
             if ( !entry->query().isNull() )
             {
-                return queryData( entry->query(), index.column(), role );
+                return queryData( entry->query(), column, role );
             }
             else if ( !entry->artist().isNull() )
             {

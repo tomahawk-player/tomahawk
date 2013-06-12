@@ -55,6 +55,25 @@ public:
         Name = 12
     };
 
+    enum PlayableRoles
+    {
+        ArtistRole = Qt::UserRole,
+        TrackRole,
+        ComposerRole,
+        AlbumRole,
+        AlbumPosRole,
+        DurationRole,
+        BitrateRole,
+        AgeRole,
+        YearRole,
+        FilesizeRole,
+        OriginRole,
+        ScoreRole,
+        NameRole,
+        CoverIDRole,
+        IsPlayingRole
+    };
+
     explicit PlayableModel( QObject* parent = 0, bool loading = true );
     virtual ~PlayableModel();
 
