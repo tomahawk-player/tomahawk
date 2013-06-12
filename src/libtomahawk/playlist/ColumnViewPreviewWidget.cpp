@@ -37,9 +37,7 @@ ColumnViewPreviewWidget::ColumnViewPreviewWidget( ColumnView* parent )
     setVisible( false );
     ui->setupUi( this );
 
-    ui->cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::Grid, ui->cover->size() ) );
     ui->cover->setShowText( false );
-
     ui->artistLabel->setContentsMargins( 6, 2, 6, 2 );
     ui->artistLabel->setElideMode( Qt::ElideMiddle );
     ui->artistLabel->setType( QueryLabel::Artist );
@@ -126,7 +124,10 @@ void
 ColumnViewPreviewWidget::onCoverUpdated()
 {
     if ( m_query->track()->cover( QSize( 0, 0 ) ).isNull() )
+    {
+        ui->cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::Grid, ui->cover->size() ) );
         return;
+    }
 
     ui->cover->setPixmap( TomahawkUtils::createRoundedImage( m_query->track()->cover( ui->cover->size() ), QSize( 0, 0 ) ) );
 }
