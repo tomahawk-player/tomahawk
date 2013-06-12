@@ -73,6 +73,9 @@ public:
 signals:
     void modelChanged();
 
+private slots:
+    void verifySize();
+
 private:
     OverlayWidget* m_overlay;
 };
