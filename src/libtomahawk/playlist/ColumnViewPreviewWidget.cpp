@@ -83,10 +83,36 @@ ColumnViewPreviewWidget::setQuery( const Tomahawk::query_ptr& query )
     onCoverUpdated();
     ui->cover->setQuery( query );
 
+    setVisible( true );
+
     ui->trackLabel->setText( query->track()->track() );
     ui->artistLabel->setArtist( query->track()->artistPtr() );
+    ui->composerValue->setText( query->track()->composer() );
 
-    setVisible( true );
+    ui->composerValue->setVisible( !query->track()->composerPtr().isNull() );
+    ui->composerLabel->setVisible( !query->track()->composerPtr().isNull() );
+
+    if ( query->numResults() )
+    {
+        ui->yearValue->setText( QString::number( query->track()->year() ) );
+        ui->bitrateValue->setText( QString::number( query->results().first()->bitrate() ) );
+        ui->durationValue->setText( TomahawkUtils::timeToString( query->track()->duration() ) );
+        ui->ageValue->setText( TomahawkUtils::ageToString( QDateTime::fromTime_t( query->results().first()->modificationTime() ) ) );
+
+        ui->yearValue->setVisible( query->track()->year() > 0 );
+        ui->yearLabel->setVisible( query->track()->year() > 0 );
+    }
+    else
+    {
+        ui->yearLabel->setVisible( false );
+        ui->yearValue->setVisible( false );
+        ui->bitrateLabel->setVisible( false );
+        ui->bitrateValue->setVisible( false );
+        ui->durationLabel->setVisible( false );
+        ui->durationValue->setVisible( false );
+        ui->ageLabel->setVisible( false );
+        ui->ageValue->setVisible( false );
+    }
 }
 
 
