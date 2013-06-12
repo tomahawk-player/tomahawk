@@ -101,6 +101,12 @@ ColumnViewPreviewWidget::setQuery( const Tomahawk::query_ptr& query )
 
         ui->yearValue->setVisible( query->track()->year() > 0 );
         ui->yearLabel->setVisible( query->track()->year() > 0 );
+        ui->bitrateLabel->setVisible( query->results().first()->bitrate() > 0 );
+        ui->bitrateValue->setVisible( query->results().first()->bitrate() > 0 );
+        ui->durationLabel->setVisible( query->track()->duration() > 0 );
+        ui->durationValue->setVisible( query->track()->duration() > 0 );
+        ui->ageLabel->setVisible( query->results().first()->modificationTime() > 0 );
+        ui->ageValue->setVisible( query->results().first()->modificationTime() > 0 );
     }
     else
     {
