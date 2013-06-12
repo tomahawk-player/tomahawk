@@ -43,6 +43,8 @@ FlexibleHeader::FlexibleHeader( FlexibleView* parent )
     : FilterHeader( parent )
     , m_parent( parent )
 {
+    setFixedHeight( 80 );
+
     QFile f( RESPATH "stylesheets/topbar-radiobuttons.css" );
     f.open( QFile::ReadOnly );
     QString css = QString::fromLatin1( f.readAll() );
