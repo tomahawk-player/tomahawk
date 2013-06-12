@@ -26,11 +26,13 @@
 #include "infobar/InfoBar.h"
 
 #include "playlist/FlexibleView.h"
+#include "playlist/FlexibleTreeView.h"
 #include "playlist/TreeModel.h"
 #include "playlist/PlaylistModel.h"
 #include "playlist/PlaylistView.h"
 #include "playlist/PlayableProxyModel.h"
 #include "playlist/PlayableModel.h"
+#include "playlist/ColumnView.h"
 #include "playlist/TreeView.h"
 #include "playlist/TreeWidget.h"
 #include "playlist/GridView.h"
@@ -309,28 +311,31 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
 {
     m_currentCollection = collection;
 
-    TreeWidget* widget;
-    if ( !m_treeWidgets.contains( collection ) || m_treeWidgets.value( collection ).isNull() )
+    FlexibleTreeView* view;
+    if ( !m_collectionViews.contains( collection ) || m_collectionViews.value( collection ).isNull() )
     {
-        widget = new TreeWidget();
-        widget->view()->proxyModel()->setStyle( PlayableProxyModel::Collection );
+        view = new FlexibleTreeView();
+
+        view->columnView()->proxyModel()->setStyle( PlayableProxyModel::Collection );
         TreeModel* model = new TreeModel();
-        widget->view()->setTreeModel( model );
+
+        view->setTreeModel( model );
 
         if ( !collection.isNull() )
-            widget->view()->setEmptyTip( collection->emptyText() );
+            view->setEmptyTip( collection->emptyText() );
 
         model->addCollection( collection );
+        setPage( view );
 
-        m_treeWidgets.insert( collection, widget );
+        m_collectionViews.insert( collection, view );
     }
     else
     {
-        widget = m_treeWidgets.value( collection ).data();
+        view = m_collectionViews.value( collection ).data();
     }
 
-    setPage( widget );
-    return widget;
+    setPage( view );
+    return view;
 }
 
 
