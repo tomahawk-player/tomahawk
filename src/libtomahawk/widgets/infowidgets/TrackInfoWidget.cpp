@@ -175,12 +175,6 @@ TrackInfoWidget::jumpToCurrentTrack()
 void
 TrackInfoWidget::load( const query_ptr& query )
 {
-    m_query = query;
-    m_artist = Artist::get( m_query->track()->artist() );
-    m_title = QString( "%1 - %2" ).arg( query->track()->artist() ).arg( query->track()->track() );
-    ui->trackLabel->setText( m_query->track()->track() );
-    ui->artistLabel->setArtist( m_query->track()->artistPtr() );
-
     if ( !m_query.isNull() )
     {
         disconnect( m_query->track().data(), SIGNAL( lyricsLoaded() ), this, SLOT( onLyricsLoaded() ) );
@@ -190,6 +184,12 @@ TrackInfoWidget::load( const query_ptr& query )
         disconnect( m_artist.data(), SIGNAL( statsLoaded() ), this, SLOT( onStatsLoaded() ) );
         disconnect( m_artist.data(), SIGNAL( similarArtistsLoaded() ), this, SLOT( onSimilarArtistsLoaded() ) );
     }
+
+    m_query = query;
+    m_artist = Artist::get( m_query->track()->artist() );
+    m_title = QString( "%1 - %2" ).arg( query->track()->artist() ).arg( query->track()->track() );
+    ui->trackLabel->setText( m_query->track()->track() );
+    ui->artistLabel->setArtist( m_query->track()->artistPtr() );
 
     connect( m_artist.data(), SIGNAL( similarArtistsLoaded() ), SLOT( onSimilarArtistsLoaded() ) );
     connect( m_artist.data(), SIGNAL( statsLoaded() ), SLOT( onStatsLoaded() ) );
