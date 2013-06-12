@@ -2233,12 +2233,12 @@ Password</source>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="184"/>
         <source>Use this to force Spotify to never announce listening data to Social Networks</source>
-        <translation type="unfinished"/>
+        <translation>Χρησιμοποιήστε αυτο για να αναγκάσει το Spotify να μην ανακοινώνει την ακρόαση των δεδομένων στα κοινωνικά δίκτυα</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="187"/>
         <source>Always run in Private Mode</source>
-        <translation type="unfinished"/>
+        <translation>Πάντα εκτέλεση με ιδιωτικό τρόπο</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="134"/>
