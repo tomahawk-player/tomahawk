@@ -41,7 +41,7 @@ using namespace Tomahawk;
 
 FlexibleTreeView::FlexibleTreeView( QWidget* parent, QWidget* extraHeader )
     : QWidget( parent )
-    , m_header( new FilterHeader( 0 ) )
+    , m_header( new FilterHeader( this ) )
     , m_modeHeader( new ModeHeader( this ) )
     , m_columnView( new ColumnView() )
     , m_treeView( new TreeView() )
