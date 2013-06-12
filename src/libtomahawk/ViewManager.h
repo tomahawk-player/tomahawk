@@ -41,6 +41,7 @@ class TreeWidget;
 class CollectionModel;
 class ContextWidget;
 class FlexibleView;
+class FlexibleTreeView;
 class PlaylistModel;
 class PlaylistView;
 class TrackProxyModel;
@@ -202,7 +203,7 @@ private:
     QList< Tomahawk::collection_ptr > m_superCollections;
 
     QHash< Tomahawk::dynplaylist_ptr, QPointer<Tomahawk::DynamicQmlWidget> > m_dynamicWidgets;
-    QHash< Tomahawk::collection_ptr, QPointer<TreeWidget> > m_treeWidgets;
+    QHash< Tomahawk::collection_ptr, QPointer<FlexibleTreeView> > m_collectionViews;
     QHash< Tomahawk::artist_ptr, QPointer<ArtistInfoWidget> > m_artistViews;
     QHash< Tomahawk::album_ptr, QPointer<AlbumInfoWidget> > m_albumViews;
     QHash< Tomahawk::query_ptr, QPointer<TrackInfoWidget> > m_trackViews;
