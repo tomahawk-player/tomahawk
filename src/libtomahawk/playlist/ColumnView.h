@@ -98,7 +98,6 @@ private slots:
     void onMenuTriggered( int action );
 
 private:
-    ViewHeader* m_header;
     OverlayWidget* m_overlay;
     TreeModel* m_model;
     TreeProxyModel* m_proxyModel;
