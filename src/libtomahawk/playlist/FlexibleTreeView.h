@@ -27,10 +27,12 @@ class QStackedWidget;
 
 class GridView;
 class TrackView;
+class TreeView;
 class ColumnView;
 class TreeModel;
+class ModeHeader;
 class PlaylistModel;
-class FlexibleHeader;
+class FilterHeader;
 
 class DLLEXPORT FlexibleTreeView : public QWidget, public Tomahawk::ViewPage
 {
@@ -56,13 +58,13 @@ public:
     void setTemporaryPage( bool b );
 
     ColumnView* columnView() const { return m_columnView; }
-    GridView* gridView() const { return m_gridView; }
+    TreeView* treeView() const { return m_treeView; }
     TrackView* trackView() const { return m_trackView; }
 
     void setGuid( const QString& guid );
 
     void setColumnView( ColumnView* view );
-    void setGridView( GridView* view );
+    void setTreeView( TreeView* view );
     void setTrackView( TrackView* view );
 
     void setTreeModel( TreeModel* model );
@@ -83,11 +85,12 @@ private slots:
     void onWidgetDestroyed( QWidget* widget );
 
 private:
-    FlexibleHeader* m_header;
+    FilterHeader* m_header;
+    ModeHeader* m_modeHeader;
     QPixmap m_pixmap;
 
     ColumnView* m_columnView;
-    GridView* m_gridView;
+    TreeView* m_treeView;
     TrackView* m_trackView;
 
     TreeModel* m_model;

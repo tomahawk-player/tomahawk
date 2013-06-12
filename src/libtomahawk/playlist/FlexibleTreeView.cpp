@@ -22,14 +22,18 @@
 #include <QStackedWidget>
 #include <QVBoxLayout>
 
-#include "playlist/FlexibleHeader.h"
+#include "widgets/FilterHeader.h"
 #include "playlist/TreeModel.h"
 #include "playlist/ColumnView.h"
 #include "playlist/TrackView.h"
+#include "playlist/TreeView.h"
 #include "playlist/GridView.h"
+#include "playlist/ModeHeader.h"
 #include "playlist/PlaylistLargeItemDelegate.h"
 #include "PlayableProxyModelPlaylistInterface.h"
+#include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
+#include "utils/Closure.h"
 #include "utils/Logger.h"
 
 using namespace Tomahawk;
@@ -37,14 +41,17 @@ using namespace Tomahawk;
 
 FlexibleTreeView::FlexibleTreeView( QWidget* parent, QWidget* extraHeader )
     : QWidget( parent )
-    , m_header( new FlexibleHeader( 0 ) )
+    , m_header( new FilterHeader( 0 ) )
+    , m_modeHeader( new ModeHeader( this ) )
     , m_columnView( new ColumnView() )
-//    , m_gridView( new GridView() )
-//    , m_trackView( new TrackView() )
+    , m_treeView( new TreeView() )
+    , m_trackView( 0 )
     , m_model( 0 )
     , m_temporary( false )
 {
     qRegisterMetaType< FlexibleTreeViewMode >( "FlexibleTreeViewMode" );
+
+    m_treeView->proxyModel()->setStyle( PlayableProxyModel::Collection );
 
 //    m_trackView->setPlaylistInterface( m_playlistInterface );
 //    m_columnView->setPlaylistInterface( m_trackView->proxyModel()->playlistInterface() );
@@ -62,18 +69,45 @@ FlexibleTreeView::FlexibleTreeView( QWidget* parent, QWidget* extraHeader )
     setLayout( new QVBoxLayout() );
     TomahawkUtils::unmarginLayout( layout() );
 
+    QFrame* lineAbove = new QFrame( this );
+    lineAbove->setStyleSheet( QString( "QFrame { border: 1px solid %1; }" ).arg( TomahawkStyle::HEADER_UPPER.name() ) );
+    lineAbove->setFrameShape( QFrame::HLine );
+    lineAbove->setMaximumHeight( 1 );
+    QFrame* lineAbove2 = new QFrame( this );
+    lineAbove2->setStyleSheet( QString( "QFrame { border: 1px solid black; }" ) );
+    lineAbove2->setFrameShape( QFrame::HLine );
+    lineAbove2->setMaximumHeight( 1 );
+    QFrame* lineBelow = new QFrame( this );
+    lineBelow->setStyleSheet( QString( "QFrame { border: 1px solid %1; }" ).arg( TomahawkStyle::HEADER_UPPER.name() ) );
+    lineBelow->setFrameShape( QFrame::HLine );
+    lineBelow->setMaximumHeight( 1 );
+    QFrame* lineBelow2 = new QFrame( this );
+    lineBelow2->setStyleSheet( QString( "QFrame { border: 1px solid black; }" ) );
+    lineBelow2->setFrameShape( QFrame::HLine );
+    lineBelow2->setMaximumHeight( 1 );
+
     layout()->addWidget( m_header );
+    layout()->addWidget( lineAbove );
+    layout()->addWidget( lineAbove2 );
+    layout()->addWidget( m_modeHeader );
     if ( extraHeader )
         layout()->addWidget( extraHeader );
+    layout()->addWidget( lineBelow );
+    layout()->addWidget( lineBelow2 );
     layout()->addWidget( m_stack );
 
     m_stack->addWidget( m_columnView );
-/*    m_stack->addWidget( m_gridView );
+    m_stack->addWidget( m_treeView );
+    /*    m_stack->addWidget( m_gridView );
     m_stack->addWidget( m_trackView );*/
 
     setCurrentMode( Columns );
 
     connect( m_header, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
+
+    NewClosure( m_modeHeader, SIGNAL( flatClicked() ), const_cast< FlexibleTreeView* >( this ), SLOT( setCurrentMode( FlexibleTreeViewMode ) ), FlexibleTreeView::Columns )->setAutoDelete( false );
+    NewClosure( m_modeHeader, SIGNAL( detailedClicked() ), const_cast< FlexibleTreeView* >( this ), SLOT( setCurrentMode( FlexibleTreeViewMode ) ), FlexibleTreeView::Flat )->setAutoDelete( false );
+    NewClosure( m_modeHeader, SIGNAL( gridClicked() ), const_cast< FlexibleTreeView* >( this ), SLOT( setCurrentMode( FlexibleTreeViewMode ) ), FlexibleTreeView::Albums )->setAutoDelete( false );
 }
 
 
@@ -86,7 +120,7 @@ FlexibleTreeView::~FlexibleTreeView()
 void
 FlexibleTreeView::setGuid( const QString& guid )
 {
-//    m_trackView->setGuid( guid );
+    m_treeView->setGuid( guid );
     m_columnView->setGuid( guid );
 }
 
@@ -126,17 +160,17 @@ FlexibleTreeView::setColumnView( ColumnView* view )
 
 
 void
-FlexibleTreeView::setGridView( GridView* view )
+FlexibleTreeView::setTreeView( TreeView* view )
 {
-    if ( m_gridView )
+    if ( m_treeView )
     {
-        m_stack->removeWidget( m_gridView );
-        delete m_gridView;
+        m_stack->removeWidget( m_treeView );
+        delete m_treeView;
     }
 
-    view->setPlaylistInterface( m_trackView->proxyModel()->playlistInterface() );
+//    view->setPlaylistInterface( m_columnView->proxyModel()->playlistInterface() );
 
-    m_gridView = view;
+    m_treeView = view;
     m_stack->addWidget( view );
 }
 
@@ -154,7 +188,8 @@ FlexibleTreeView::setTreeModel( TreeModel* model )
 
 //    m_trackView->setPlayableModel( model );
     m_columnView->setTreeModel( model );
-//    m_gridView->setPlayableModel( model );
+    m_treeView->setTreeModel( model );
+    //    m_gridView->setPlayableModel( model );
 
 /*    m_trackView->setSortingEnabled( false );
     m_trackView->sortByColumn( -1 );
@@ -176,8 +211,7 @@ FlexibleTreeView::setCurrentMode( FlexibleTreeViewMode mode )
     {
         case Flat:
         {
-            tDebug() << "m_trackView:" << m_trackView << m_stack->indexOf( m_trackView );
-            m_stack->setCurrentWidget( m_trackView );
+            m_stack->setCurrentWidget( m_treeView );
             break;
         }
 
@@ -189,7 +223,7 @@ FlexibleTreeView::setCurrentMode( FlexibleTreeViewMode mode )
 
         case Albums:
         {
-            m_stack->setCurrentWidget( m_gridView );
+//            m_stack->setCurrentWidget( m_gridView );
             break;
         }
     }
@@ -201,8 +235,7 @@ FlexibleTreeView::setCurrentMode( FlexibleTreeViewMode mode )
 Tomahawk::playlistinterface_ptr
 FlexibleTreeView::playlistInterface() const
 {
-    return Tomahawk::playlistinterface_ptr();
-    return m_trackView->proxyModel()->playlistInterface();
+    return m_columnView->proxyModel()->playlistInterface();
 }
 
 
@@ -235,9 +268,9 @@ FlexibleTreeView::jumpToCurrentTrack()
     bool b = false;
 
     // note: the order of comparison is important here, if we'd write "b || foo" then foo will not be executed if b is already true!
-    b = m_trackView->jumpToCurrentTrack() || b;
     b = m_columnView->jumpToCurrentTrack() || b;
-    b = m_gridView->jumpToCurrentTrack() || b;
+//    b = m_trackView->jumpToCurrentTrack() || b;
+    b = m_treeView->jumpToCurrentTrack() || b;
 
     return b;
 }
@@ -249,7 +282,8 @@ FlexibleTreeView::setFilter( const QString& pattern )
     ViewPage::setFilter( pattern );
 
     m_columnView->setFilter( pattern );
-/*    m_gridView->setFilter( pattern );
+    m_treeView->proxyModel()->setFilter( pattern );
+    /*    m_gridView->setFilter( pattern );
     m_trackView->setFilter( pattern );*/
 
     return true;
@@ -260,7 +294,8 @@ void
 FlexibleTreeView::setEmptyTip( const QString& tip )
 {
     m_columnView->setEmptyTip( tip );
-/*    m_gridView->setEmptyTip( tip );
+    m_treeView->setEmptyTip( tip );
+    /*    m_gridView->setEmptyTip( tip );
     m_trackView->setEmptyTip( tip );*/
 }
 
