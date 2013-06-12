@@ -43,7 +43,6 @@
 #include <QPainter>
 #include <QScrollArea>
 
-
 #define HISTORY_PLAYLIST_ITEMS 10
 #define HISTORY_TRACK_ITEMS 15
 
@@ -243,7 +242,7 @@ void
 Dashboard::onPlaylistActivated( const QModelIndex& item )
 {
     Tomahawk::playlist_ptr pl = item.data( RecentlyPlayedPlaylistsModel::PlaylistRole ).value< Tomahawk::playlist_ptr >();
-    if( Tomahawk::dynplaylist_ptr dynplaylist = pl.dynamicCast< Tomahawk::DynamicPlaylist >() )
+    if ( Tomahawk::dynplaylist_ptr dynplaylist = pl.dynamicCast< Tomahawk::DynamicPlaylist >() )
         ViewManager::instance()->show( dynplaylist );
     else
         ViewManager::instance()->show( pl );
@@ -412,5 +411,22 @@ void
 PlaylistWidget::setModel( QAbstractItemModel* model )
 {
     QListView::setModel( model );
+
+    connect( model, SIGNAL( modelReset() ), SLOT( verifySize() ) );
+    connect( model, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( verifySize() ) );
+    connect( model, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), SLOT( verifySize() ) );
+
     emit modelChanged();
+    verifySize();
+}
+
+
+void
+PlaylistWidget::verifySize()
+{
+    if ( !model() )
+        return;
+
+    if ( model()->rowCount() > 0 )
+        setFixedHeight( model()->rowCount() * itemDelegate()->sizeHint( QStyleOptionViewItem(), model()->index( 0, 0 ) ).height() + frameWidth() * 2 );
 }
