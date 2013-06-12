@@ -67,7 +67,7 @@ RecentPlaylistsModel::onRefresh()
     emit loadingStarted();
 
     DatabaseCommand_LoadAllSortedPlaylists* cmd = new DatabaseCommand_LoadAllSortedPlaylists( source_ptr() );
-    cmd->setLimit( 15 );
+    cmd->setLimit( m_maxPlaylists );
     cmd->setSortOrder( DatabaseCommand_LoadAllPlaylists::ModificationTime );
     cmd->setSortAscDesc( DatabaseCommand_LoadAllPlaylists::Descending );
     connect( cmd, SIGNAL( done( QList<DatabaseCommand_LoadAllSortedPlaylists::SourcePlaylistPair> ) ), this, SLOT( playlistsLoaded( QList<DatabaseCommand_LoadAllSortedPlaylists::SourcePlaylistPair> ) ) );
