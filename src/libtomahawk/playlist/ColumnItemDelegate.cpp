@@ -222,7 +222,7 @@ ColumnItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option
     painter->setRenderHint( QPainter::Antialiasing );
     painter->setPen( opt.palette.color( QPalette::Text ) );
 
-    QRect r = option.rect.adjusted( 4, 4, -option.rect.width() + option.rect.height() - 4, -4 );
+    QRect r = option.rect.adjusted( 8, 2, -option.rect.width() + option.rect.height() + 4, -2 );
 //    painter->drawPixmap( r, QPixmap( RESPATH "images/cover-shadow.png" ) );
 
     if ( !m_pixmaps.contains( index ) )
@@ -244,7 +244,12 @@ ColumnItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option
     const QPixmap cover = m_pixmaps[ index ]->currentPixmap();
     painter->drawPixmap( r, cover );
 
-    r = option.rect.adjusted( option.rect.height(), 6, -4, -option.rect.height() + 22 );
+    QFont font = painter->font();
+//    font.setWeight( 58 );
+    font.setPointSize( TomahawkUtils::defaultFontSize() + 2 );
+    painter->setFont( font );
+
+    r = option.rect.adjusted( option.rect.height() + 16, 6, -4, -6 );
     text = painter->fontMetrics().elidedText( text, Qt::ElideRight, r.width() );
     painter->drawText( r, text, textOption );
 
