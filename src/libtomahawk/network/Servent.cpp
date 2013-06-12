@@ -252,6 +252,7 @@ Servent::createConnectionKey( const QString& name, const QString &nodeid, const 
     return _key;
 }
 
+
 bool
 Servent::isValidExternalIP( const QHostAddress& addr )
 {
@@ -309,11 +310,13 @@ Servent::isValidExternalIP( const QHostAddress& addr )
     return !addr.isNull();
 }
 
+
 void
 Servent::registerOffer( const QString& key, Connection* conn )
 {
     d_func()->offers[key] = QPointer<Connection>(conn);
 }
+
 
 void
 Servent::registerLazyOffer(const QString &key, const peerinfo_ptr &peerInfo, const QString &nodeid, const int timeout )
@@ -325,6 +328,7 @@ Servent::registerLazyOffer(const QString &key, const peerinfo_ptr &peerInfo, con
     NewClosure( timer, SIGNAL( timeout() ), this, SLOT( deleteLazyOffer( const QString& ) ), key );
     timer->start();
 }
+
 
 void
 Servent::deleteLazyOffer( const QString& key )
@@ -372,6 +376,7 @@ Servent::lookupControlConnection( const SipInfo& sipInfo )
 
     return NULL;
 }
+
 
 ControlConnection*
 Servent::lookupControlConnection( const QString& nodeid )
@@ -423,6 +428,7 @@ Servent::getLocalSipInfos( const QString& nodeid, const QString& key )
     return sipInfos;
 }
 
+
 void
 Servent::queueForAclResult( const QString& username, const QSet<peerinfo_ptr>& peerInfos )
 {
@@ -438,6 +444,7 @@ Servent::queueForAclResult( const QString& username, const QSet<peerinfo_ptr>& p
     }
     d_func()->queuedForACLResult[username][ (*peerInfos.begin())->nodeId() ] = QSet<Tomahawk::peerinfo_ptr>( peerInfos );
 }
+
 
 SipInfo
 Servent::getSipInfoForOldVersions( const QList<SipInfo>& sipInfos )
@@ -456,6 +463,7 @@ Servent::getSipInfoForOldVersions( const QList<SipInfo>& sipInfos )
 
     return info;
 }
+
 
 void
 Servent::registerPeer( const Tomahawk::peerinfo_ptr& peerInfo )
@@ -534,7 +542,8 @@ Servent::onSipInfoChanged()
 }
 
 
-void Servent::handleSipInfo( const Tomahawk::peerinfo_ptr& peerInfo )
+void
+Servent::handleSipInfo( const Tomahawk::peerinfo_ptr& peerInfo )
 {
     // We do not have received the initial SipInfo for this client yet, so wait for it.
     // Each client will have at least one non-visible SipInfo
@@ -543,6 +552,7 @@ void Servent::handleSipInfo( const Tomahawk::peerinfo_ptr& peerInfo )
 
     ConnectionManager::getManagerForNodeId( peerInfo->nodeId() )->handleSipInfo( peerInfo );
 }
+
 
 void
 Servent::incomingConnection( int sd )
@@ -784,6 +794,7 @@ Servent::socketConnected()
     handoverSocket( conn, sock );
 }
 
+
 // transfers ownership of socket to the connection and inits the connection
 void
 Servent::handoverSocket( Connection* conn, QTcpSocketExtra* sock )
@@ -804,6 +815,7 @@ Servent::handoverSocket( Connection* conn, QTcpSocketExtra* sock )
     conn->start( sock );
 }
 
+
 void
 Servent::cleanupSocket( QTcpSocketExtra *sock )
 {
@@ -819,6 +831,7 @@ Servent::cleanupSocket( QTcpSocketExtra *sock )
     }
     sock->deleteLater();
 }
+
 
 void
 Servent::initiateConnection( const SipInfo& sipInfo, Connection* conn )
@@ -868,6 +881,7 @@ Servent::initiateConnection( const SipInfo& sipInfo, Connection* conn )
     sock->moveToThread( thread() );
 }
 
+
 void
 Servent::socketError( QAbstractSocket::SocketError e )
 {
@@ -898,6 +912,7 @@ Servent::socketError( QAbstractSocket::SocketError e )
     }
 }
 
+
 void
 Servent::checkACLResult( const QString& nodeid, const QString& username, ACLRegistry::ACL peerStatus )
 {
@@ -925,6 +940,7 @@ Servent::checkACLResult( const QString& nodeid, const QString& username, ACLRegi
     d_func()->queuedForACLResult[username].remove( nodeid );
 }
 
+
 void
 Servent::reverseOfferRequest( ControlConnection* orig_conn, const QString& theirdbid, const QString& key, const QString& theirkey )
 {
@@ -947,11 +963,13 @@ Servent::reverseOfferRequest( ControlConnection* orig_conn, const QString& their
     createParallelConnection( orig_conn, new_conn, theirkey );
 }
 
+
 bool
 Servent::visibleExternally() const
 {
     return (!d_func()->externalHostname.isNull()) || (d_func()->externalAddresses.length() > 0);
 }
+
 
 bool
 Servent::ipv6ConnectivityLikely() const
@@ -967,11 +985,13 @@ Servent::ipv6ConnectivityLikely() const
     return false;
 }
 
+
 int
 Servent::port() const
 {
     return d_func()->port;
 }
+
 
 QList<QHostAddress>
 Servent::addresses() const
@@ -979,17 +999,20 @@ Servent::addresses() const
     return d_func()->externalAddresses;
 }
 
+
 QString
 Servent::additionalAddress() const
 {
     return d_func()->externalHostname;
 }
 
+
 int
 Servent::additionalPort() const
 {
     return d_func()->externalPort;
 }
+
 
 // return the appropriate connection for a given offer key, or NULL if invalid
 Connection*
@@ -1219,11 +1242,13 @@ Servent::connectedToSession( const QString& session )
     return false;
 }
 
+
 unsigned int
 Servent::numConnectedPeers() const
 {
     return d_func()->controlconnections.length();
 }
+
 
 QList<StreamConnection *>
 Servent::streams() const
@@ -1309,6 +1334,7 @@ Servent::httpIODeviceFactory( const Tomahawk::result_ptr& result,
     QSharedPointer< QIODevice > sp = QSharedPointer< QIODevice >( reply, &QObject::deleteLater );
     callback( sp );
 }
+
 
 bool
 Servent::isReady() const
