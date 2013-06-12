@@ -36,8 +36,11 @@ using namespace Tomahawk;
 BasicHeader::BasicHeader( QWidget* parent )
     : QWidget( parent )
 {
+    QLayout* l = new QVBoxLayout;
+    TomahawkUtils::unmarginLayout( l );
+    setLayout( l );
+
     m_mainLayout = new QHBoxLayout;
-    setLayout( m_mainLayout );
 
     m_imageLabel = new QLabel( this );
     m_imageLabel->setFixedSize( 48, 48 );
@@ -58,7 +61,7 @@ BasicHeader::BasicHeader( QWidget* parent )
 
     QPalette pal = palette();
     pal.setColor( QPalette::Foreground, Qt::white );
-    pal.setBrush( backgroundRole(), TomahawkStyle::PAGE_BACKGROUND );
+    pal.setBrush( backgroundRole(), TomahawkStyle::HEADER_LOWER );
 
     m_captionLabel->setPalette( pal );
     m_descriptionLabel->setPalette( pal );
@@ -86,10 +89,23 @@ BasicHeader::BasicHeader( QWidget* parent )
     m_captionLabel->setGraphicsEffect( effect );*/
 //    m_descriptionLabel->setGraphicsEffect( effect );
 
-    TomahawkUtils::unmarginLayout( layout() );
-    layout()->setContentsMargins( 8, 4, 8, 4 );
+    QFrame* lineAbove = new QFrame( this );
+    lineAbove->setStyleSheet( QString( "QFrame { border: 1px solid %1; }" ).arg( TomahawkStyle::HEADER_UPPER.name() ) );
+    lineAbove->setFrameShape( QFrame::HLine );
+    lineAbove->setMaximumHeight( 1 );
+    QFrame* lineAbove2 = new QFrame( this );
+    lineAbove2->setStyleSheet( QString( "QFrame { border: 1px solid black; }" ) );
+    lineAbove2->setFrameShape( QFrame::HLine );
+    lineAbove2->setMaximumHeight( 1 );
+
+    l->addItem( m_mainLayout );
+    l->addWidget( lineAbove );
+    l->addWidget( lineAbove2 );
+
+    TomahawkUtils::unmarginLayout( m_mainLayout );
+    m_mainLayout->setContentsMargins( 8, 4, 8, 4 );
     setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
-    setFixedHeight( 56 );
+    setFixedHeight( 58 );
 
     setAutoFillBackground( true );
     setPalette( pal );
