@@ -531,9 +531,7 @@ QVariant
 PlayableProxyModel::data( const QModelIndex& index, int role ) const
 {
     if ( role == StyleRole )
-    {
         return m_style;
-    }
 
     if ( !sourceModel() )
         return QVariant();
