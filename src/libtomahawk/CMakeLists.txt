@@ -47,10 +47,13 @@ set( libGuiSources
     playlist/InboxView.cpp
     playlist/FlexibleHeader.cpp
     playlist/FlexibleView.cpp
+    playlist/FlexibleTreeView.cpp
     playlist/TreeModel.cpp
     playlist/TreeProxyModel.cpp
     playlist/TreeProxyModelPlaylistInterface.cpp
     playlist/TreeItemDelegate.cpp
+    playlist/ColumnItemDelegate.cpp
+    playlist/ColumnViewPreviewWidget.cpp
     playlist/PlaylistModel.cpp
     playlist/PlaylistView.cpp
     playlist/PlaylistItemDelegate.cpp
@@ -64,6 +67,7 @@ set( libGuiSources
     playlist/GridItemDelegate.cpp
     playlist/GridView.cpp
     playlist/TreeView.cpp
+    playlist/ColumnView.cpp
     playlist/TreeWidget.cpp
     playlist/ViewHeader.cpp
     playlist/LovedTracksModel.cpp
@@ -376,6 +380,7 @@ set( libUI ${libUI}
     widgets/infowidgets/AlbumInfoWidget.ui
     widgets/infowidgets/TrackInfoWidget.ui
     playlist/QueueView.ui
+    playlist/ColumnViewPreviewWidget.ui
     filemetadata/MetadataEditor.ui
     context/ContextWidget.ui
     infobar/InfoBar.ui
