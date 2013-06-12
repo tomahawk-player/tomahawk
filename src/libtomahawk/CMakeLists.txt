@@ -46,6 +46,7 @@ set( libGuiSources
     playlist/InboxModel.cpp
     playlist/InboxView.cpp
     playlist/FlexibleHeader.cpp
+    playlist/ModeHeader.cpp
     playlist/FlexibleView.cpp
     playlist/FlexibleTreeView.cpp
     playlist/TreeModel.cpp
