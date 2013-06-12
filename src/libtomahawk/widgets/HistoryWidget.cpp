@@ -51,14 +51,14 @@ HistoryWidget::HistoryWidget( const source_ptr& source, QWidget* parent )
     m_calendarTo->setDisplayFormat( "yyyy MMMM dd" );
 
     // setting an empty style-sheet prevents the QDateEdits from adopting their parent's QPalette
-    QString calSheet = QString( "QDateEdit { }" ).arg( TomahawkStyle::PAGE_BACKGROUND.name() );
+    QString calSheet = QString( "QDateEdit { }" );
     m_calendarFrom->setStyleSheet( calSheet );
     m_calendarTo->setStyleSheet( calSheet );
 
     QPalette pal = m_header->palette();
     pal.setColor( QPalette::Foreground, Qt::white );
     pal.setColor( QPalette::Text, Qt::white );
-    pal.setBrush( backgroundRole(), TomahawkStyle::PAGE_BACKGROUND );
+    pal.setBrush( backgroundRole(), TomahawkStyle::PAGE_BACKGROUND.lighter() );
     m_header->setPalette( pal );
     m_header->setAutoFillBackground( true );
 
