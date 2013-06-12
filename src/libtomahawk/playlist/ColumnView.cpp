@@ -240,7 +240,15 @@ ColumnView::onItemActivated( const QModelIndex& index )
     PlayableItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( index ) );
     if ( item )
     {
-        if ( !item->result().isNull() && item->result()->isOnline() )
+        if ( !item->artist().isNull() )
+        {
+            ViewManager::instance()->show( item->artist() );
+        }
+        else if ( !item->album().isNull() )
+        {
+            ViewManager::instance()->show( item->album() );
+        }
+        else if ( !item->result().isNull() && item->result()->isOnline() )
         {
             AudioEngine::instance()->playItem( m_proxyModel->playlistInterface(), item->result() );
         }
