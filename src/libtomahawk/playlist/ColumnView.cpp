@@ -50,7 +50,6 @@ using namespace Tomahawk;
 
 ColumnView::ColumnView( QWidget* parent )
     : QColumnView( parent )
-    , m_header( new ViewHeader( this ) )
     , m_overlay( new OverlayWidget( this ) )
     , m_model( 0 )
     , m_proxyModel( 0 )
@@ -133,7 +132,6 @@ ColumnView::setTreeModel( TreeModel* model )
 
     guid(); // this will set the guid on the header
 
-    m_header->setDefaultColumnWeights( m_proxyModel->columnWeights() );
     if ( m_proxyModel->style() == PlayableProxyModel::Large )
     {
         setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
@@ -154,7 +152,7 @@ ColumnView::setTreeModel( TreeModel* model )
     sortByColumn( PlayableModel::Artist, Qt::AscendingOrder );*/
 
     QList< int > widths;
-    widths << 320;
+    widths << m_previewWidget->minimumSize().width() + 32;
     setColumnWidths( widths );
 }
 
@@ -273,15 +271,6 @@ void
 ColumnView::resizeEvent( QResizeEvent* event )
 {
     QColumnView::resizeEvent( event );
-    m_header->checkState();
-
-    if ( !model() )
-        return;
-
-    if ( model()->columnCount( QModelIndex() ) == 1 )
-    {
-        m_header->resizeSection( 0, event->size().width() );
-    }
 }
 
 
@@ -450,7 +439,6 @@ ColumnView::guid() const
     if ( m_guid.isEmpty() )
     {
         m_guid = QString( "columnview/%1" ).arg( m_model->columnCount( QModelIndex() ) );
-        m_header->setGuid( m_guid );
     }
 
     return m_guid;
@@ -467,7 +455,7 @@ ColumnView::onUpdatePreviewWidget( const QModelIndex& index )
         QList< int > finalWidths;
         foreach ( int w, widths )
         {
-            finalWidths << qMax( 320, w );
+            finalWidths << qMax( m_previewWidget->minimumSize().width() + 32, w );
         }
         setColumnWidths( finalWidths );
 
