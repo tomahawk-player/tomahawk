@@ -23,6 +23,8 @@
 #include <QPixmapCache>
 #include <QApplication>
 #include <QStyleOption>
+#include <QFrame>
+#include <QScrollBar>
 
 
 void
@@ -156,4 +158,37 @@ TomahawkStyle::drawArrow( QStyle::PrimitiveElement element, QPainter* p, const Q
     int xOffset = r.x() + ( r.width() - size ) / 2;
     int yOffset = r.y() + ( r.height() - size ) / 2;
     p->drawPixmap( xOffset, yOffset, pixmap );
+}
+
+
+void
+TomahawkStyle::stylePageFrame( QFrame* frame )
+{
+    frame->setStyleSheet( QString( "QFrame#%1 { background-color: %2; border: 1px solid white; border-radius: 3px; }" )
+                             .arg( frame->objectName() )
+                             .arg( TomahawkStyle::PAGE_ITEM_BACKGROUND.name() ) );
+}
+
+
+void
+TomahawkStyle::styleScrollBar( QScrollBar* scrollBar )
+{
+    scrollBar->setStyleSheet(
+        "QScrollBar:horizontal { background-color: transparent; }"
+        "QScrollBar::handle:horizontal { border-height: 9px; margin-bottom: 6px;"
+            "border-image: url(" RESPATH "images/scrollbar-horizontal-handle.png) 3 3 3 3 stretch stretch;"
+            "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }"
+        "QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal { width: 0px; height: 0px; background: none; }"
+        "QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal { width: 0px; height: 0px; background: none; }"
+        "QScrollBar:left-arrow:horizontal, QScrollBar::right-arrow:horizontal {"
+            "border: 0px; width: 0px; height: 0px; background: none; background-color: transparent; }"
+
+        "QScrollBar:vertical { background-color: transparent; }"
+        "QScrollBar::handle:vertical { border-width: 9px; margin-right: 6px;"
+            "border-image: url(" RESPATH "images/scrollbar-vertical-handle.png) 3 3 3 3 stretch stretch;"
+            "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }"
+        "QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical { width: 0px; height: 0px; background: none; }"
+        "QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical { width: 0px; height: 0px; background: none; }"
+        "QScrollBar:up-arrow:vertical, QScrollBar::down-arrow:vertical {"
+            "border: 0px; width: 0px; height: 0px; background: none; background-color: transparent; }" );
 }
