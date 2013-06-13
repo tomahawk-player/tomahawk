@@ -60,7 +60,7 @@ BasicHeader::BasicHeader( QWidget* parent )
     m_mainLayout->setStretchFactor( m_verticalLayout, 2 );
 
     QPalette pal = palette();
-    pal.setColor( QPalette::Foreground, Qt::white );
+    pal.setColor( QPalette::Foreground, TomahawkStyle::HEADER_TEXT );
     pal.setBrush( backgroundRole(), TomahawkStyle::HEADER_LOWER );
 
     m_captionLabel->setPalette( pal );

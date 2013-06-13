@@ -130,7 +130,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     TomahawkStyle::styleScrollBar( ui->biography->verticalScrollBar() );
 
     QPalette p = ui->biography->palette();
-    p.setColor( QPalette::Foreground, TomahawkStyle::PAGE_FOREGROUND );
+    p.setColor( QPalette::Foreground, TomahawkStyle::HEADER_TEXT );
     p.setColor( QPalette::Text, TomahawkStyle::PAGE_TEXT );
 
     ui->biography->setPalette( p );
