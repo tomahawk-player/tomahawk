@@ -42,6 +42,7 @@
 #include "accounts/AccountManager.h"
 #include "sourcetree/SourceTreeView.h"
 #include "network/Servent.h"
+#include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/ProxyStyle.h"
 #include "utils/WidgetDragFilter.h"
@@ -112,6 +113,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     , m_settingsDialog( 0 )
     , m_audioRetryCounter( 0 )
 {
+    TomahawkStyle::loadFonts();
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
 
     ViewManager* vm = new ViewManager( this );
