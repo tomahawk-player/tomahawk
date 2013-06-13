@@ -29,7 +29,6 @@
 #include "SourceDelegate.h"
 #include "sourcetree/items/PlaylistItems.h"
 #include "sourcetree/items/SourceItem.h"
-#include "audio/AudioEngine.h"
 #include "SourcePlaylistInterface.h"
 #include "TomahawkSettings.h"
 #include "GlobalActionManager.h"
@@ -870,10 +869,11 @@ SourceTreeView::drawRow( QPainter* painter, const QStyleOptionViewItem& option, 
     QTreeView::drawRow( painter, option, index );
 }
 
+
 void
-SourceTreeView::drawBranches( QPainter *painter, const QRect &rect, const QModelIndex &index ) const
+SourceTreeView::drawBranches( QPainter* painter, const QRect& rect, const QModelIndex& index ) const
 {
-    if( !QString( qApp->style()->metaObject()->className() ).toLower().contains( "qtcurve" ) )
+    if ( !QString( qApp->style()->metaObject()->className() ).toLower().contains( "qtcurve" ) )
         QTreeView::drawBranches( painter, rect, index );
 }
 
@@ -891,7 +891,7 @@ SourceTreeView::itemFromIndex( const QModelIndex& index ) const
 
 
 void
-SourceTreeView::update( const QModelIndex &index )
+SourceTreeView::update( const QModelIndex& index )
 {
     dataChanged( index, index );
 }
