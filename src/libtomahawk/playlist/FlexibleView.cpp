@@ -68,7 +68,7 @@ FlexibleView::FlexibleView( QWidget* parent, QWidget* extraHeader )
     TomahawkUtils::unmarginLayout( layout() );
 
     QFrame* lineBelow = new QFrame( this );
-    lineBelow->setStyleSheet( QString( "QFrame { border: 1px solid %1; }" ).arg( TomahawkStyle::HEADER_UPPER.name() ) );
+    lineBelow->setStyleSheet( QString( "QFrame { border: 1px solid %1; }" ).arg( TomahawkStyle::HEADER_BACKGROUND.name() ) );
     lineBelow->setFrameShape( QFrame::HLine );
     lineBelow->setMaximumHeight( 1 );
     QFrame* lineBelow2 = new QFrame( this );
