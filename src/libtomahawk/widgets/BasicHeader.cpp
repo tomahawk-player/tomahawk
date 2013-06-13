@@ -93,14 +93,14 @@ BasicHeader::BasicHeader( QWidget* parent )
     lineAbove->setStyleSheet( QString( "QFrame { border: 1px solid %1; }" ).arg( TomahawkStyle::HEADER_UPPER.name() ) );
     lineAbove->setFrameShape( QFrame::HLine );
     lineAbove->setMaximumHeight( 1 );
-    QFrame* lineAbove2 = new QFrame( this );
-    lineAbove2->setStyleSheet( QString( "QFrame { border: 1px solid black; }" ) );
-    lineAbove2->setFrameShape( QFrame::HLine );
-    lineAbove2->setMaximumHeight( 1 );
+    QFrame* lineBelow = new QFrame( this );
+    lineBelow->setStyleSheet( QString( "QFrame { border: 1px solid black; }" ) );
+    lineBelow->setFrameShape( QFrame::HLine );
+    lineBelow->setMaximumHeight( 1 );
 
     l->addItem( m_mainLayout );
     l->addWidget( lineAbove );
-    l->addWidget( lineAbove2 );
+    l->addWidget( lineBelow );
 
     TomahawkUtils::unmarginLayout( m_mainLayout );
     m_mainLayout->setContentsMargins( 8, 4, 8, 4 );
