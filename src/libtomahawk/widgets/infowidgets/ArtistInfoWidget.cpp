@@ -90,8 +90,8 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->albums->proxyModel()->setHideDupeItems( true );
 
     QPalette trackViewPal = ui->topHits->palette();
-    trackViewPal.setColor( QPalette::Foreground, Qt::white );
-    trackViewPal.setColor( QPalette::Text, Qt::white );
+    trackViewPal.setColor( QPalette::Foreground, TomahawkStyle::PAGE_FOREGROUND );
+    trackViewPal.setColor( QPalette::Text, TomahawkStyle::PAGE_FOREGROUND );
     trackViewPal.setColor( QPalette::Highlight, QColor( "#252020" ) );
     trackViewPal.setColor( QPalette::HighlightedText, Qt::white );
     ui->topHits->setPalette( trackViewPal );
@@ -121,11 +121,11 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->biography->setFrameShape( QFrame::NoFrame );
     ui->biography->setAttribute( Qt::WA_MacShowFocusRect, 0 );
     ui->biography->setFont( f );
-    TomahawkUtils::styleScrollBar( ui->biography->verticalScrollBar() );
+    TomahawkStyle::styleScrollBar( ui->biography->verticalScrollBar() );
 
     QPalette p = ui->biography->palette();
-    p.setColor( QPalette::Foreground, Qt::white );
-    p.setColor( QPalette::Text, Qt::gray );
+    p.setColor( QPalette::Foreground, TomahawkStyle::PAGE_FOREGROUND );
+    p.setColor( QPalette::Text, TomahawkStyle::PAGE_TEXT );
 
     ui->biography->setPalette( p );
     ui->artistLabel->setPalette( p );
@@ -150,29 +150,20 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     setLayout( layout );
     TomahawkUtils::unmarginLayout( layout );
 
-    TomahawkUtils::styleScrollBar( ui->albums->horizontalScrollBar() );
-    TomahawkUtils::styleScrollBar( ui->relatedArtists->verticalScrollBar() );
+    TomahawkStyle::styleScrollBar( ui->albums->horizontalScrollBar() );
+    TomahawkStyle::styleScrollBar( ui->relatedArtists->verticalScrollBar() );
 
     ui->biography->setStyleSheet( "QTextBrowser#biography { background-color: transparent; }" );
     ui->biography->document()->setDefaultStyleSheet( "a { text-decoration: none; font-weight: bold; color: #ffffff; }" );
 
     ui->albums->setStyleSheet( "QListView { background-color: transparent; }" );
-    ui->albumFrame->setStyleSheet( "QFrame#albumFrame { background-color: transparent; }"
-                               "QFrame#albumFrame { "
-                               "border-image: url(" RESPATH "images/widget-border.png) 3 3 3 3 stretch stretch;"
-                               "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }" );
+    TomahawkStyle::stylePageFrame( ui->albumFrame );
 
     ui->relatedArtists->setStyleSheet( "QListView { background-color: transparent; }" );
-    ui->artistFrame->setStyleSheet( "QFrame#artistFrame { background-color: transparent; }"
-                               "QFrame#artistFrame { "
-                               "border-image: url(" RESPATH "images/widget-border.png) 3 3 3 3 stretch stretch;"
-                               "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }" );
+    TomahawkStyle::stylePageFrame( ui->artistFrame );
 
     ui->topHits->setStyleSheet( "QTreeView#topHits { background-color: transparent; }" );
-    ui->trackFrame->setStyleSheet( "QFrame#trackFrame { background-color: transparent; }"
-                               "QFrame#trackFrame { "
-                               "border-image: url(" RESPATH "images/widget-border.png) 3 3 3 3 stretch stretch;"
-                               "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }" );
+    TomahawkStyle::stylePageFrame( ui->trackFrame );
 
     connect( ui->biography, SIGNAL( anchorClicked( QUrl ) ), SLOT( onBiographyLinkClicked( QUrl ) ) );
 

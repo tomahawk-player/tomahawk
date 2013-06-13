@@ -59,7 +59,7 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     ui->similarTracksView->setAutoResize( true );
     ui->similarTracksView->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
 //    TomahawkUtils::styleScrollBar( ui->similarTracksView->verticalScrollBar() );
-    TomahawkUtils::styleScrollBar( ui->lyricsView->verticalScrollBar() );
+    TomahawkStyle::styleScrollBar( ui->lyricsView->verticalScrollBar() );
 
 //    ui->similarTracksView->setStyleSheet( "QListView { background-color: transparent; } QListView::item { background-color: transparent; }" );
 
@@ -69,8 +69,8 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     ui->statsLabel->setFont( f );
 
     QPalette p = ui->lyricsView->palette();
-    p.setColor( QPalette::Foreground, Qt::white );
-    p.setColor( QPalette::Text, Qt::white );
+    p.setColor( QPalette::Foreground, TomahawkStyle::PAGE_FOREGROUND );
+    p.setColor( QPalette::Text, TomahawkStyle::PAGE_FOREGROUND );
 
     ui->lyricsView->setPalette( p );
     ui->label->setPalette( p );
@@ -120,10 +120,7 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     TomahawkUtils::unmarginLayout( layout );
 
     ui->similarTracksView->setStyleSheet( "QListView { background-color: transparent; }" );
-    ui->frame->setStyleSheet( "QFrame#frame { background-color: transparent; }"
-                              "QFrame#frame { "
-                              "border-image: url(" RESPATH "images/widget-border.png) 3 3 3 3 stretch stretch;"
-                              "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }" );
+    TomahawkStyle::stylePageFrame( ui->frame );
 
     load( query );
 }
