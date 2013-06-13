@@ -155,5 +155,6 @@
         <file>data/images/inbox-512x512.png</file>
         <file>data/images/network-activity.svg</file>
         <file>data/fonts/TitilliumWeb-Bold.ttf</file>
+        <file>data/fonts/FaunaOne-Regular.ttf</file>
     </qresource>
 </RCC>

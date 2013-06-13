@@ -98,7 +98,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     QPalette trackViewPal = ui->topHits->palette();
     trackViewPal.setColor( QPalette::Foreground, TomahawkStyle::PAGE_FOREGROUND );
     trackViewPal.setColor( QPalette::Text, TomahawkStyle::PAGE_FOREGROUND );
-    trackViewPal.setColor( QPalette::Highlight, QColor( "#252020" ) );
+    trackViewPal.setColor( QPalette::Highlight, QColor( "#292f34" ) );
     trackViewPal.setColor( QPalette::HighlightedText, Qt::white );
     ui->topHits->setPalette( trackViewPal );
     ui->topHits->setAlternatingRowColors( false );
@@ -121,7 +121,8 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->cover->setShowText( false );
 
     QFont f = font();
-    f.setPointSize( f.pointSize() + 3 );
+    f.setPointSize( f.pointSize() + 1 );
+    f.setFamily( "Fauna One" );
     ui->biography->setOpenLinks( false );
     ui->biography->setOpenExternalLinks( true );
     ui->biography->setFrameShape( QFrame::NoFrame );
@@ -140,8 +141,8 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->label_3->setPalette( p );
 
     QFont font = ui->label->font();
-    font.setBold( true );
-    font.setFamily( "Titillium Web" );
+    font.setBold( false );
+    font.setFamily( "Fauna One" );
     ui->label->setFont( font );
     ui->label_2->setFont( font );
     ui->label_3->setFont( font );
