@@ -19,12 +19,16 @@
 
 #include "TomahawkStyle.h"
 
+#include "utils/Logger.h"
+
+#include <QDir>
 #include <QPainter>
 #include <QPixmapCache>
 #include <QApplication>
 #include <QStyleOption>
 #include <QFrame>
 #include <QScrollBar>
+#include <QFontDatabase>
 
 
 void
@@ -190,4 +194,17 @@ TomahawkStyle::styleScrollBar( QScrollBar* scrollBar )
         "QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical { width: 0px; height: 0px; background: none; }"
         "QScrollBar:up-arrow:vertical, QScrollBar::down-arrow:vertical {"
             "border: 0px; width: 0px; height: 0px; background: none; background-color: transparent; }" );
+}
+
+
+void
+TomahawkStyle::loadFonts()
+{
+    QDir dir( ":/data/fonts" );
+    foreach ( const QString& fileName, dir.entryList() )
+    {
+        tDebug() << "Trying to add font resource:" << fileName;
+        const int id = QFontDatabase::addApplicationFont( ":/data/fonts/" + fileName );
+        tDebug() << "Added font:" << id << QFontDatabase::applicationFontFamilies( id ).first();
+    }
 }
