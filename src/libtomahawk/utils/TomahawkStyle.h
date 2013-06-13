@@ -26,6 +26,9 @@
 #include <QPainter>
 #include <QStyle>
 
+class QFrame;
+class QScrollBar;
+
 namespace TomahawkStyle
 {
     /**
@@ -40,6 +43,9 @@ namespace TomahawkStyle
      *               Contact: Nokia Corporation (qt-info@nokia.com) }
      */
     DLLEXPORT void drawArrow( QStyle::PrimitiveElement, QPainter* painter, const QStyleOption* opt );
+
+    DLLEXPORT void stylePageFrame( QFrame* frame );
+    DLLEXPORT void styleScrollBar( QScrollBar* scrollBar );
 
     static const QColor BORDER_LINE = QColor( "#8c8c8c" );
     static const QColor POPUP_BACKGROUND = QColor( "#ffffff" );
@@ -58,6 +64,9 @@ namespace TomahawkStyle
     static const QColor HEADER_TEXT = QColor( "#eaeaea" );
     static const QColor HEADER_HIGHLIGHT = QColor( "#333" );
 
+    static const QColor PAGE_TEXT = Qt::gray;
+    static const QColor PAGE_ITEM_BACKGROUND = QColor( "#1e1e1e" ).lighter( 290 );
+    static const QColor PAGE_FOREGROUND = QColor( "#ffffff" );
     static const QColor PAGE_BACKGROUND = QColor( "#1e1e1e" ).lighter();
     static const QColor FOOTNOTES_BACKGROUND = QColor( "#272b2e" );
     static const QColor DASHBOARD_ROUNDFIGURE_BACKGROUND = QColor( "#454e59" );

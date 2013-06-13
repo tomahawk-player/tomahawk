@@ -39,7 +39,6 @@ class QPixmap;
 class QLayout;
 class QPalette;
 class QRect;
-class QScrollBar;
 
 namespace TomahawkUtils
 {
@@ -68,7 +67,6 @@ namespace TomahawkUtils
     DLLEXPORT void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, PlayableItem* item );
 
     DLLEXPORT void drawRoundedButton( QPainter* painter, const QRect& btnRect, const QColor& color, const QColor &gradient1bottom = QColor(), const QColor& gradient2top = QColor(), const QColor& gradient2bottom = QColor() );
-    DLLEXPORT void styleScrollBar( QScrollBar* scrollBar );
 
     DLLEXPORT QPixmap defaultPixmap( ImageType type, ImageMode mode = TomahawkUtils::Original, const QSize& size = QSize( 0, 0 ) );
     DLLEXPORT QPixmap createTiledPixmap( int width, int height, const QImage& src );
