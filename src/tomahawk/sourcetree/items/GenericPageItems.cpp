@@ -35,7 +35,7 @@ GenericPageItem::GenericPageItem( SourcesModel* model, SourceTreeItem* parent, c
     , m_show( show )
     , m_get( get )
 {
-    if( ViewPage* p = m_get() )
+    if ( ViewPage* p = m_get() )
         model->linkSourceItemToPage( this, p );
 }
 
@@ -76,11 +76,12 @@ GenericPageItem::willAcceptDrag(const QMimeData* data) const
 
 
 void
-GenericPageItem::setText( const QString &text )
+GenericPageItem::setText( const QString& text )
 {
     m_text = text;
     emit updated();
 }
+
 
 bool
 GenericPageItem::isBeingPlayed() const
@@ -90,10 +91,10 @@ GenericPageItem::isBeingPlayed() const
         if ( m_get()->isBeingPlayed() )
             return true;
 
-        if ( !m_get()->playlistInterface().isNull() && m_get()->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+        if ( m_get()->playlistInterface() && m_get()->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
             return true;
 
-        if ( !m_get()->playlistInterface().isNull() && m_get()->playlistInterface()->hasChildInterface( AudioEngine::instance()->currentTrackPlaylist() ) )
+        if ( m_get()->playlistInterface() && m_get()->playlistInterface()->hasChildInterface( AudioEngine::instance()->currentTrackPlaylist() ) )
             return true;
     }
 
@@ -109,7 +110,7 @@ GenericPageItem::peerSortValue() const
 
 
 void
-GenericPageItem::setSortValue(int value)
+GenericPageItem::setSortValue( int value )
 {
     m_sortValue = value;
 }
