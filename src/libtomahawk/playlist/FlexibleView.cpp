@@ -22,6 +22,7 @@
 #include <QStackedWidget>
 #include <QVBoxLayout>
 
+#include "audio/AudioEngine.h"
 #include "widgets/FilterHeader.h"
 #include "playlist/ModeHeader.h"
 #include "playlist/PlayableModel.h"
@@ -337,4 +338,20 @@ void
 FlexibleView::setTemporaryPage( bool b )
 {
     m_temporary = b;
+}
+
+
+bool
+FlexibleView::isBeingPlayed() const
+{
+    if ( !playlistInterface() )
+        return false;
+
+    if ( playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+        return true;
+
+    if ( playlistInterface()->hasChildInterface( AudioEngine::instance()->currentTrackPlaylist() ) )
+        return true;
+
+    return false;
 }
