@@ -57,10 +57,6 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     artist->loadStats();
     connect( artist.data(), SIGNAL( statsLoaded() ), SLOT( onArtistStatsLoaded() ) );
 
-    m_albumsModel = new PlayableModel( ui->albums );
-    ui->albums->setPlayableModel( m_albumsModel );
-    ui->albums->setEmptyTip( tr( "Sorry, we could not find any albums for this artist!" ) );
-
     m_relatedModel = new PlayableModel( ui->relatedArtists );
     ui->relatedArtists->setPlayableModel( m_relatedModel );
     ui->relatedArtists->proxyModel()->sort( -1 );
@@ -82,12 +78,22 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->relatedArtists->setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );*/
     ui->relatedArtists->delegate()->setItemSize( QSize( 170, 170 ) );
 
-    ui->albums->setAutoFitItems( false );
-    ui->albums->setWrapping( false );
+    ui->albums->setAutoResize( true );
     ui->albums->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-    ui->albums->setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
+/*    ui->albums->setWrapping( false );
+    ui->albums->setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );*/
     ui->albums->delegate()->setItemSize( QSize( 170, 170 ) );
     ui->albums->proxyModel()->setHideDupeItems( true );
+
+    m_albumsModel = new PlayableModel( ui->albums );
+    ui->albums->setPlayableModel( m_albumsModel );
+    ui->albums->proxyModel()->sort( -1 );
+    ui->albums->setEmptyTip( tr( "Sorry, we could not find any albums for this artist!" ) );
+
+    ui->lineAbove->setStyleSheet( QString( "QFrame { border: 1px solid %1; }" ).arg( TomahawkStyle::HEADER_UPPER.name() ) );
+    ui->lineBelow->setStyleSheet( QString( "QFrame { border: 1px solid black; }" ) );
+    ui->lineAbove2->setStyleSheet( QString( "QFrame { border: 1px solid black; }" ) );
+    ui->lineBelow2->setStyleSheet( QString( "QFrame { border: 1px solid %1; }" ).arg( TomahawkStyle::HEADER_UPPER.name() ) );
 
     QPalette trackViewPal = ui->topHits->palette();
     trackViewPal.setColor( QPalette::Foreground, TomahawkStyle::PAGE_FOREGROUND );
@@ -139,18 +145,22 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     area->setWidget( widget );
 
     QPalette pal = palette();
-    pal.setBrush( backgroundRole(), TomahawkStyle::PAGE_BACKGROUND );
+    pal.setBrush( backgroundRole(), TomahawkStyle::HEADER_LOWER );
     area->setPalette( pal );
     area->setAutoFillBackground( true );
     area->setFrameShape( QFrame::NoFrame );
     area->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
+    pal.setBrush( backgroundRole(), TomahawkStyle::PAGE_BACKGROUND );
+    ui->widget->setPalette( pal );
+    ui->widget->setAutoFillBackground( true );
 
     QVBoxLayout* layout = new QVBoxLayout();
     layout->addWidget( area );
     setLayout( layout );
     TomahawkUtils::unmarginLayout( layout );
 
-    TomahawkStyle::styleScrollBar( ui->albums->horizontalScrollBar() );
+    TomahawkStyle::styleScrollBar( ui->albums->verticalScrollBar() );
     TomahawkStyle::styleScrollBar( ui->relatedArtists->verticalScrollBar() );
 
     ui->biography->setStyleSheet( "QTextBrowser#biography { background-color: transparent; }" );
