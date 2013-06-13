@@ -117,6 +117,7 @@ signals:
     void timerPercentage( unsigned int percentage );
 
     void playlistChanged( Tomahawk::playlistinterface_ptr playlist );
+    void currentTrackPlaylistChanged( Tomahawk::playlistinterface_ptr playlist );
 
     void error( AudioEngine::AudioErrorCode errorCode );
 
@@ -143,6 +144,7 @@ private:
     void checkStateQueue();
     void queueState( AudioState state );
     void setState( AudioState state );
+    void setCurrentTrackPlaylist( const Tomahawk::playlistinterface_ptr& playlist );
 
     Q_DECLARE_PRIVATE( AudioEngine );
     AudioEnginePrivate* d_ptr;

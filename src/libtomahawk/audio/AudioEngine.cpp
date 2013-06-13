@@ -688,7 +688,7 @@ AudioEngine::loadPreviousTrack()
     if ( d->playlist.data()->previousResult() )
     {
         result = d->playlist.data()->setSiblingResult( -1 );
-        d->currentTrackPlaylist = d->playlist;
+        setCurrentTrackPlaylist( d->playlist );
     }
 
     if ( !result.isNull() )
@@ -731,7 +731,7 @@ AudioEngine::loadNextTrack()
         if ( d->playlist.data()->nextResult() )
         {
             result = d->playlist.data()->setSiblingResult( 1 );
-            d->currentTrackPlaylist = d->playlist;
+            setCurrentTrackPlaylist( d->playlist );
         }
     }
 
@@ -763,9 +763,13 @@ AudioEngine::playItem( Tomahawk::playlistinterface_ptr playlist, const Tomahawk:
     setPlaylist( playlist );
 
     if ( playlist.isNull() && !fromQuery.isNull() )
-        d->currentTrackPlaylist = playlistinterface_ptr( new SingleTrackPlaylistInterface( fromQuery ) );
+    {
+        setCurrentTrackPlaylist( playlistinterface_ptr( new SingleTrackPlaylistInterface( fromQuery ) ) );
+    }
     else
-        d->currentTrackPlaylist = playlist;
+    {
+        setCurrentTrackPlaylist( playlist );
+    }
 
     if ( !result.isNull() )
     {
@@ -1209,4 +1213,17 @@ void
 AudioEngine::onVolumeChanged( qreal volume )
 {
     emit volumeChanged( volume * 100 );
+}
+
+
+void
+AudioEngine::setCurrentTrackPlaylist( const playlistinterface_ptr& playlist )
+{
+    Q_D( AudioEngine );
+
+    if ( d->currentTrackPlaylist != playlist )
+    {
+        d->currentTrackPlaylist = playlist;
+        emit currentTrackPlaylistChanged( d->currentTrackPlaylist );
+    }
 }
