@@ -42,8 +42,8 @@ TomahawkStyle::horizontalHeader( QPainter* painter, const QRect& r )
      painter->fillRect( lowerHalf, TomahawkStyle::headerLowerColor() );*/
     QLinearGradient gradient( QPoint( 0, 0 ), QPoint( 0, 1 ) );
     gradient.setCoordinateMode( QGradient::ObjectBoundingMode );
-    gradient.setColorAt( 0.0, TomahawkStyle::HEADER_LOWER );
-    gradient.setColorAt( 1.0, TomahawkStyle::HEADER_UPPER );
+    gradient.setColorAt( 0.0, TomahawkStyle::HEADER_BACKGROUND );
+    gradient.setColorAt( 1.0, TomahawkStyle::HEADER_BACKGROUND );
 
     painter->setBrush( gradient );
     painter->fillRect( r, gradient );
