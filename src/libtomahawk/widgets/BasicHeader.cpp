@@ -61,7 +61,7 @@ BasicHeader::BasicHeader( QWidget* parent )
 
     QPalette pal = palette();
     pal.setColor( QPalette::Foreground, TomahawkStyle::HEADER_TEXT );
-    pal.setBrush( backgroundRole(), TomahawkStyle::HEADER_LOWER );
+    pal.setBrush( backgroundRole(), TomahawkStyle::HEADER_BACKGROUND );
 
     m_captionLabel->setPalette( pal );
     m_descriptionLabel->setPalette( pal );
@@ -90,7 +90,7 @@ BasicHeader::BasicHeader( QWidget* parent )
 //    m_descriptionLabel->setGraphicsEffect( effect );
 
     QFrame* lineAbove = new QFrame( this );
-    lineAbove->setStyleSheet( QString( "QFrame { border: 1px solid %1; }" ).arg( TomahawkStyle::HEADER_UPPER.name() ) );
+    lineAbove->setStyleSheet( QString( "QFrame { border: 1px solid %1; }" ).arg( TomahawkStyle::HEADER_BACKGROUND.name() ) );
     lineAbove->setFrameShape( QFrame::HLine );
     lineAbove->setMaximumHeight( 1 );
     QFrame* lineBelow = new QFrame( this );

@@ -89,15 +89,11 @@ ToggleButton::paintEvent( QPaintEvent* event )
 
         if ( isChecked() )
         {
-            p.setBrush( TomahawkStyle::HEADER_HIGHLIGHT );
-        }
-        else if ( false )
-        {
-            p.setBrush( TomahawkStyle::HEADER_LOWER );
+            p.setBrush( TomahawkStyle::TOGGLEBUTTON_HIGHLIGHT );
         }
         else
         {
-            p.setBrush( TomahawkStyle::HEADER_UPPER );
+            p.setBrush( TomahawkStyle::TOGGLEBUTTON_BACKGROUND );
         }
 
         p.drawRoundedRect( highlightRect, 4.0, 4.0 );
@@ -105,7 +101,7 @@ ToggleButton::paintEvent( QPaintEvent* event )
 
     QTextOption to( Qt::AlignCenter );
     r.adjust( 8, 0, -8, 0 );
-    p.setBrush( TomahawkStyle::HEADER_TEXT );
+    p.setBrush( TomahawkStyle::TOGGLEBUTTON_TEXT );
     p.drawText( r, text(), to );
 
     p.restore();
