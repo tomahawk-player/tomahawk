@@ -121,8 +121,8 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->cover->setShowText( false );
 
     QFont f = font();
-    f.setPointSize( f.pointSize() + 1 );
-    f.setFamily( "Fauna One" );
+    f.setPointSize( f.pointSize() + 2 );
+    f.setFamily( "Titillium Web" );
     ui->biography->setOpenLinks( false );
     ui->biography->setOpenExternalLinks( true );
     ui->biography->setFrameShape( QFrame::NoFrame );
@@ -141,8 +141,8 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->label_3->setPalette( p );
 
     QFont font = ui->label->font();
-    font.setBold( false );
-    font.setFamily( "Fauna One" );
+    font.setBold( true );
+    font.setFamily( "Titillium Web" );
     ui->label->setFont( font );
     ui->label_2->setFont( font );
     ui->label_3->setFont( font );
