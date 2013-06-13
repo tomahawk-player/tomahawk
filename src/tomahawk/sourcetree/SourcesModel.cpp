@@ -178,7 +178,7 @@ SourcesModel::columnCount( const QModelIndex& ) const
 int
 SourcesModel::rowCount( const QModelIndex& parent ) const
 {
-    if( !parent.isValid() )
+    if ( !parent.isValid() )
     {
         return m_rootItem->children().count();
     }
@@ -190,14 +190,14 @@ SourcesModel::rowCount( const QModelIndex& parent ) const
 QModelIndex
 SourcesModel::parent( const QModelIndex& child ) const
 {
-    if( !child.isValid() )
+    if ( !child.isValid() )
     {
         return QModelIndex();
     }
 
     SourceTreeItem* node = itemFromIndex( child );
     SourceTreeItem* parent = node->parent();
-    if( parent == m_rootItem )
+    if ( parent == m_rootItem )
         return QModelIndex();
 
     return createIndex( rowForItem( parent ), 0, parent );
@@ -207,10 +207,10 @@ SourcesModel::parent( const QModelIndex& child ) const
 QModelIndex
 SourcesModel::index( int row, int column, const QModelIndex& parent ) const
 {
-    if( row < 0 || column < 0 )
+    if ( row < 0 || column < 0 )
         return QModelIndex();
 
-    if( hasIndex( row, column, parent ) )
+    if ( hasIndex( row, column, parent ) )
     {
         SourceTreeItem *parentNode = itemFromIndex( parent );
         SourceTreeItem *childNode = parentNode->children().at( row );
@@ -250,11 +250,11 @@ SourcesModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int ro
 {
     SourceTreeItem* item = 0;
 //    qDebug() << "Got mime data dropped:" << row << column << parent << itemFromIndex( parent )->text();
-    if( row == -1 && column == -1 )
+    if ( row == -1 && column == -1 )
         item = itemFromIndex( parent );
-    else if( column == 0 )
+    else if ( column == 0 )
         item = itemFromIndex( index( row, column, parent ) );
-    else if( column == -1 ) // column is -1, that means the drop is happening "below" the indices. that means we actually want the one before it
+    else if ( column == -1 ) // column is -1, that means the drop is happening "below" the indices. that means we actually want the one before it
         item = itemFromIndex( index( row - 1, 0, parent ) );
 
     Q_ASSERT( item );
@@ -467,17 +467,17 @@ SourcesModel::viewPageActivated( Tomahawk::ViewPage* page )
 SourceTreeItem*
 SourcesModel::activatePlaylistPage( ViewPage* p, SourceTreeItem* i )
 {
-    if( !i )
+    if ( !i )
         return 0;
 
-    if( qobject_cast< PlaylistItem* >( i ) &&
+    if ( qobject_cast< PlaylistItem* >( i ) &&
         qobject_cast< PlaylistItem* >( i )->activateCurrent() )
         return i;
 
     SourceTreeItem* ret = 0;
-    for( int k = 0; k < i->children().size(); k++ )
+    for ( int k = 0; k < i->children().size(); k++ )
     {
-        if( SourceTreeItem* retItem = activatePlaylistPage( p, i->children().at( k ) ) )
+        if ( SourceTreeItem* retItem = activatePlaylistPage( p, i->children().at( k ) ) )
             ret = retItem;
     }
 
@@ -490,7 +490,7 @@ SourcesModel::loadSources()
 {
     QList<source_ptr> sources = SourceList::instance()->sources();
 
-    foreach( const source_ptr& source, sources )
+    foreach ( const source_ptr& source, sources )
         appendItem( source );
 }
 
@@ -498,7 +498,7 @@ SourcesModel::loadSources()
 void
 SourcesModel::onSourcesAdded( const QList<source_ptr>& sources )
 {
-    foreach( const source_ptr& source, sources )
+    foreach ( const source_ptr& source, sources )
         appendItem( source );
 }
 
@@ -573,11 +573,11 @@ SourcesModel::itemUpdated()
     Q_ASSERT( qobject_cast< SourceTreeItem* >( sender() ) );
     SourceTreeItem* item = qobject_cast< SourceTreeItem* >( sender() );
 
-    if( !item )
+    if ( !item )
         return;
 
     QModelIndex idx = indexFromItem( item );
-    if( idx.isValid() )
+    if ( idx.isValid() )
         emit dataChanged( idx, idx );
 }
 
@@ -588,7 +588,7 @@ SourcesModel::onItemRowsAddedBegin( int first, int last )
     Q_ASSERT( qobject_cast< SourceTreeItem* >( sender() ) );
     SourceTreeItem* item = qobject_cast< SourceTreeItem* >( sender() );
 
-    if( !item )
+    if ( !item )
         return;
 
     QModelIndex idx = indexFromItem( item );
@@ -611,7 +611,7 @@ SourcesModel::onItemRowsRemovedBegin( int first, int last )
     Q_ASSERT( qobject_cast< SourceTreeItem* >( sender() ) );
     SourceTreeItem* item = qobject_cast< SourceTreeItem* >( sender() );
 
-    if( !item )
+    if ( !item )
         return;
 
     QModelIndex idx = indexFromItem( item );
@@ -639,7 +639,7 @@ SourcesModel::linkSourceItemToPage( SourceTreeItem* item, ViewPage* p )
 
     if ( QObject* obj = dynamic_cast< QObject* >( p ) )
     {
-        if( obj->metaObject()->indexOfSignal( "destroyed(QWidget*)" ) > -1 )
+        if ( obj->metaObject()->indexOfSignal( "destroyed(QWidget*)" ) > -1 )
             connect( obj, SIGNAL( destroyed( QWidget* ) ), SLOT( onWidgetDestroyed( QWidget* ) ), Qt::UniqueConnection );
     }
     m_viewPageDelayedCacheItem = 0;
@@ -658,7 +658,7 @@ void
 SourcesModel::removeSourceItemLink( SourceTreeItem* item )
 {
     QList< ViewPage* > pages = m_sourceTreeLinks.keys( item );
-    foreach( ViewPage* p, pages )
+    foreach ( ViewPage* p, pages )
         m_sourceTreeLinks.remove( p );
 }
 
@@ -666,7 +666,7 @@ SourcesModel::removeSourceItemLink( SourceTreeItem* item )
 SourceTreeItem*
 SourcesModel::itemFromIndex( const QModelIndex& idx ) const
 {
-    if( !idx.isValid() )
+    if ( !idx.isValid() )
         return m_rootItem;
 
     Q_ASSERT( idx.internalPointer() );
@@ -678,7 +678,7 @@ SourcesModel::itemFromIndex( const QModelIndex& idx ) const
 QModelIndex
 SourcesModel::indexFromItem( SourceTreeItem* item ) const
 {
-    if( !item || !item->parent() ) // should never happen..
+    if ( !item || !item->parent() ) // should never happen..
         return QModelIndex();
 
     // reconstructs a modelindex from a sourcetreeitem that is somewhere in the tree
@@ -699,9 +699,9 @@ SourcesModel::indexFromItem( SourceTreeItem* item ) const
      **/
     QList< int > childIndexList;
     SourceTreeItem* curItem = item;
-    while( curItem != m_rootItem ) {
+    while ( curItem != m_rootItem ) {
         int row  = rowForItem( curItem );
-        if( row < 0 ) // something went wrong, bail
+        if ( row < 0 ) // something went wrong, bail
             return QModelIndex();
 
         childIndexList << row;
@@ -711,7 +711,8 @@ SourcesModel::indexFromItem( SourceTreeItem* item ) const
 //     qDebug() << "build child index list:" << childIndexList;
     // now rebuild the qmodelindex we need
     QModelIndex idx;
-    for( int i = childIndexList.size() - 1; i >= 0 ; i-- ) {
+    for ( int i = childIndexList.size() - 1; i >= 0 ; i-- )
+    {
         idx = index( childIndexList[ i ], 0, idx );
     }
 //     qDebug() << "Got index from item:" << idx << idx.data( Qt::DisplayRole ).toString();
