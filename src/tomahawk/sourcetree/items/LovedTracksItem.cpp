@@ -30,6 +30,7 @@
 #include "playlist/PlaylistLargeItemDelegate.h"
 
 #include "utils/ImageRegistry.h"
+#include "utils/Logger.h"
 
 using namespace Tomahawk;
 
@@ -97,7 +98,7 @@ LovedTracksItem::activate()
             pv->setGuid( QString( "lovedtracks/%1" ).arg( par->source()->nodeId() ) );
         }
 
-        pv->setPlayableModel( raModel );
+        pv->setPlaylistModel( raModel );
         raModel->setSource( !par ? source_ptr() : par->source() );
 
         m_lovedTracksPage = pv;
@@ -166,4 +167,11 @@ LovedTracksItem::loveDroppedTracks( QList< Tomahawk::query_ptr > qrys )
 {
     foreach( Tomahawk::query_ptr qry, qrys )
         qry->track()->setLoved( true );
+}
+
+
+bool
+LovedTracksItem::isBeingPlayed() const
+{
+    return m_lovedTracksPage && m_lovedTracksPage->isBeingPlayed();
 }

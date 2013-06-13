@@ -44,6 +44,8 @@ public:
 
     void setSortValue( int value );
 
+    virtual bool isBeingPlayed() const;
+
 private slots:
     void loveDroppedTracks( QList< Tomahawk::query_ptr > qrys );
 
