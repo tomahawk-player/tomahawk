@@ -22,6 +22,7 @@
 #include <QStackedWidget>
 #include <QVBoxLayout>
 
+#include "audio/AudioEngine.h"
 #include "widgets/FilterHeader.h"
 #include "playlist/TreeModel.h"
 #include "playlist/ColumnView.h"
@@ -52,6 +53,8 @@ FlexibleTreeView::FlexibleTreeView( QWidget* parent, QWidget* extraHeader )
     qRegisterMetaType< FlexibleTreeViewMode >( "FlexibleTreeViewMode" );
 
     m_treeView->proxyModel()->setStyle( PlayableProxyModel::Collection );
+
+    m_treeView->proxyModel()->setPlaylistInterface( m_columnView->proxyModel()->playlistInterface() );
 
 //    m_trackView->setPlaylistInterface( m_playlistInterface );
 //    m_columnView->setPlaylistInterface( m_trackView->proxyModel()->playlistInterface() );
@@ -331,4 +334,20 @@ void
 FlexibleTreeView::setTemporaryPage( bool b )
 {
     m_temporary = b;
+}
+
+
+bool
+FlexibleTreeView::isBeingPlayed() const
+{
+    if ( !playlistInterface() )
+        return false;
+
+    if ( playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+        return true;
+
+    if ( playlistInterface()->hasChildInterface( AudioEngine::instance()->currentTrackPlaylist() ) )
+        return true;
+
+    return false;
 }

@@ -55,6 +55,7 @@ public:
     virtual bool showInfoBar() const { return false; }
     virtual bool jumpToCurrentTrack();
     virtual bool isTemporaryPage() const;
+    virtual bool isBeingPlayed() const;
     void setTemporaryPage( bool b );
 
     ColumnView* columnView() const { return m_columnView; }

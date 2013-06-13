@@ -53,6 +53,7 @@ public:
     virtual bool showInfoBar() const { return false; }
     virtual bool jumpToCurrentTrack();
     virtual bool isTemporaryPage() const;
+    virtual bool isBeingPlayed() const;
     void setTemporaryPage( bool b );
 
     TrackView* trackView() const { return m_trackView; }
