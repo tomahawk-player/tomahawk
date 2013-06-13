@@ -164,9 +164,8 @@ TomahawkStyle::drawArrow( QStyle::PrimitiveElement element, QPainter* p, const Q
 void
 TomahawkStyle::stylePageFrame( QFrame* frame )
 {
-    frame->setStyleSheet( QString( "QFrame#%1 { background-color: %2; border: 1px solid white; border-radius: 3px; }" )
-                             .arg( frame->objectName() )
-                             .arg( TomahawkStyle::PAGE_ITEM_BACKGROUND.name() ) );
+    frame->setStyleSheet( QString( "QFrame#%1 { background-color: transparent; border: 0px solid white; border-radius: 0px; }" )
+                             .arg( frame->objectName() ) );
 }
 
 
