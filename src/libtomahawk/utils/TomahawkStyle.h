@@ -31,6 +31,8 @@ class QScrollBar;
 
 namespace TomahawkStyle
 {
+    DLLEXPORT void loadFonts();
+
     /**
      * Draws a header background on a painter with the specified rectangle
      */
