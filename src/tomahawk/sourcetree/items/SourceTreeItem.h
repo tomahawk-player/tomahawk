@@ -98,6 +98,9 @@ protected:
     void setRowType( SourcesModel::RowType t );
     void setParentItem( SourceTreeItem* item );
 
+private slots:
+    void checkPlayingStatus();
+
 private:
     SourcesModel::RowType m_type;
 

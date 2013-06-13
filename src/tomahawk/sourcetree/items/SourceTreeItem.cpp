@@ -18,6 +18,7 @@
 
 #include "SourceTreeItem.h"
 
+#include "audio/AudioEngine.h"
 #include "utils/Logger.h"
 
 using namespace Tomahawk;
@@ -30,6 +31,8 @@ SourceTreeItem::SourceTreeItem( SourcesModel* model, SourceTreeItem* parent, Sou
     , m_model( model )
     , m_peerSortValue( peerSortValue )
 {
+    connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( checkPlayingStatus() ) );
+
     connect( this, SIGNAL( beginChildRowsAdded( int, int ) ), m_model, SLOT( onItemRowsAddedBegin( int, int ) ) );
     connect( this, SIGNAL( beginChildRowsRemoved( int, int ) ), m_model, SLOT( onItemRowsRemovedBegin( int, int ) ) );
     connect( this, SIGNAL( childRowsAdded() ), m_model, SLOT( onItemRowsAddedDone() ) );
@@ -53,6 +56,14 @@ SourceTreeItem::SourceTreeItem( SourcesModel* model, SourceTreeItem* parent, Sou
 SourceTreeItem::~SourceTreeItem()
 {
     qDeleteAll( m_children );
+}
+
+
+void
+SourceTreeItem::checkPlayingStatus()
+{
+    if ( isBeingPlayed() )
+        emit updated();
 }
 
 
