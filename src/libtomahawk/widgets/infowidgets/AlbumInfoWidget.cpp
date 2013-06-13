@@ -59,8 +59,8 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
     m_tracksModel->setMode( Mixed );
 
     QPalette trackViewPal = ui->tracks->palette();
-    trackViewPal.setColor( QPalette::Foreground, Qt::white );
-    trackViewPal.setColor( QPalette::Text, Qt::white );
+    trackViewPal.setColor( QPalette::Foreground, TomahawkStyle::PAGE_FOREGROUND );
+    trackViewPal.setColor( QPalette::Text, TomahawkStyle::PAGE_FOREGROUND );
     trackViewPal.setColor( QPalette::Highlight, QColor( "#252020" ) );
     trackViewPal.setColor( QPalette::HighlightedText, Qt::white );
 
@@ -91,11 +91,11 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
 
     ui->biography->setFrameShape( QFrame::NoFrame );
     ui->biography->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    TomahawkUtils::styleScrollBar( ui->biography->verticalScrollBar() );
+    TomahawkStyle::styleScrollBar( ui->biography->verticalScrollBar() );
 
     QPalette p = ui->biography->palette();
-    p.setColor( QPalette::Foreground, Qt::white );
-    p.setColor( QPalette::Text, Qt::white );
+    p.setColor( QPalette::Foreground, TomahawkStyle::PAGE_FOREGROUND );
+    p.setColor( QPalette::Text, TomahawkStyle::PAGE_TEXT );
 
     ui->biography->setPalette( p );
     ui->label->setPalette( p );
@@ -118,22 +118,16 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
     setLayout( layout );
     TomahawkUtils::unmarginLayout( layout );
 
-    TomahawkUtils::styleScrollBar( ui->tracks->horizontalScrollBar() );
-    TomahawkUtils::styleScrollBar( ui->albums->verticalScrollBar() );
+    TomahawkStyle::styleScrollBar( ui->tracks->horizontalScrollBar() );
+    TomahawkStyle::styleScrollBar( ui->albums->verticalScrollBar() );
 
     ui->biography->setStyleSheet( "QTextBrowser#biography { background-color: transparent; }" );
 
     ui->albums->setStyleSheet( "QListView { background-color: transparent; }" );
-    ui->albumFrame->setStyleSheet( "QFrame#albumFrame { background-color: transparent; }"
-                               "QFrame#albumFrame { "
-                               "border-image: url(" RESPATH "images/widget-border.png) 3 3 3 3 stretch stretch;"
-                               "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }" );
+    TomahawkStyle::stylePageFrame( ui->albumFrame );
 
     ui->tracks->setStyleSheet( "QTreeView#tracks { background-color: transparent; }" );
-    ui->trackFrame->setStyleSheet( "QFrame#trackFrame { background-color: transparent; }"
-                               "QFrame#trackFrame { "
-                               "border-image: url(" RESPATH "images/widget-border.png) 3 3 3 3 stretch stretch;"
-                               "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }" );
+    TomahawkStyle::stylePageFrame( ui->trackFrame );
 
     MetaPlaylistInterface* mpl = new MetaPlaylistInterface();
     mpl->addChildInterface( ui->tracks->playlistInterface() );

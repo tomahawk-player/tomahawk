@@ -64,8 +64,8 @@ Dashboard::Dashboard( QWidget* parent )
     RecentPlaylistsModel* model = new RecentPlaylistsModel( HISTORY_PLAYLIST_ITEMS, this );
 
     QPalette trackViewPal = ui->tracksView->palette();
-    trackViewPal.setColor( QPalette::Foreground, Qt::white );
-    trackViewPal.setColor( QPalette::Text, Qt::white );
+    trackViewPal.setColor( QPalette::Foreground, TomahawkStyle::PAGE_FOREGROUND );
+    trackViewPal.setColor( QPalette::Text, TomahawkStyle::PAGE_FOREGROUND );
     trackViewPal.setColor( QPalette::Highlight, QColor( "#252020" ) );
     trackViewPal.setColor( QPalette::HighlightedText, Qt::white );
 
@@ -101,6 +101,7 @@ Dashboard::Dashboard( QWidget* parent )
     area->setWidget( widget );
 
     QPalette pal = palette();
+    // background: qradialgradient(cx: 0.5, cy: -1.8, fx: 0.5, fy: 0, radius: 2, stop: 0 %1, stop: 1 %2);
     pal.setBrush( backgroundRole(), TomahawkStyle::PAGE_BACKGROUND );
     area->setPalette( pal );
     area->setAutoFillBackground( true );
@@ -113,8 +114,8 @@ Dashboard::Dashboard( QWidget* parent )
     setLayout( layout );
     TomahawkUtils::unmarginLayout( layout );
 
-    TomahawkUtils::styleScrollBar( ui->playlistWidget->verticalScrollBar() );
-    TomahawkUtils::styleScrollBar( ui->additionsView->verticalScrollBar() );
+    TomahawkStyle::styleScrollBar( ui->playlistWidget->verticalScrollBar() );
+    TomahawkStyle::styleScrollBar( ui->additionsView->verticalScrollBar() );
 
     QFont f;
     f.setBold( true );
@@ -122,30 +123,21 @@ Dashboard::Dashboard( QWidget* parent )
     ui->tracksView->setMinimumWidth( fm.width( tr( "Recently played tracks" ) ) * 2 );
 
     QPalette p = ui->label->palette();
-    p.setColor( QPalette::Foreground, Qt::white );
-    p.setColor( QPalette::Text, Qt::gray );
+    p.setColor( QPalette::Foreground, TomahawkStyle::PAGE_FOREGROUND );
+    p.setColor( QPalette::Text, TomahawkStyle::PAGE_TEXT );
 
     ui->label->setPalette( p );
     ui->label_2->setPalette( p );
     ui->label_3->setPalette( p );
 
     ui->playlistWidget->setStyleSheet( "QListView { background-color: transparent; }" );
-    ui->playlistFrame->setStyleSheet( "QFrame#playlistFrame { background-color: transparent; }"
-                               "QFrame#playlistFrame { "
-                               "border-image: url(" RESPATH "images/widget-border.png) 3 3 3 3 stretch stretch;"
-                               "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }" );
+    TomahawkStyle::stylePageFrame( ui->playlistFrame );
 
     ui->additionsView->setStyleSheet( "QListView { background-color: transparent; }" );
-    ui->additionsFrame->setStyleSheet( "QFrame#additionsFrame { background-color: transparent; }"
-                               "QFrame#additionsFrame { "
-                               "border-image: url(" RESPATH "images/widget-border.png) 3 3 3 3 stretch stretch;"
-                               "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }" );
+    TomahawkStyle::stylePageFrame( ui->additionsFrame );
 
-    ui->tracksView->setStyleSheet( "QTreeView#tracksView { background-color: transparent; }" );
-    ui->trackFrame->setStyleSheet( "QFrame#trackFrame { background-color: transparent; }"
-                               "QFrame#trackFrame { "
-                               "border-image: url(" RESPATH "images/widget-border.png) 3 3 3 3 stretch stretch;"
-                               "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }" );
+    ui->tracksView->setStyleSheet( "QTreeView { background-color: transparent; }" );
+    TomahawkStyle::stylePageFrame( ui->trackFrame );
 
     MetaPlaylistInterface* mpl = new MetaPlaylistInterface();
     mpl->addChildInterface( ui->tracksView->playlistInterface() );
