@@ -139,6 +139,13 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->label_2->setPalette( p );
     ui->label_3->setPalette( p );
 
+    QFont font = ui->label->font();
+    font.setBold( true );
+    font.setFamily( "Titillium Web" );
+    ui->label->setFont( font );
+    ui->label_2->setFont( font );
+    ui->label_3->setFont( font );
+
     QScrollArea* area = new QScrollArea();
     area->setWidgetResizable( true );
     area->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
