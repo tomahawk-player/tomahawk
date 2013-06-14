@@ -126,7 +126,6 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
         f.setFamily( "Titillium Web" );
 
         QPalette p = ui->biography->palette();
-        p.setColor( QPalette::Foreground, TomahawkStyle::HEADER_LINK );
         p.setColor( QPalette::Text, TomahawkStyle::HEADER_TEXT );
 
         ui->biography->setFont( f );
@@ -137,7 +136,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
         ui->biography->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
         ui->biography->setStyleSheet( "QTextBrowser#biography { background-color: transparent; }" );
-        ui->biography->document()->setDefaultStyleSheet( "a { text-decoration: none; font-weight: bold; color: #ffffff; }" );
+        ui->biography->document()->setDefaultStyleSheet( QString( "a { text-decoration: none; font-weight: bold; color: %1; }" ).arg( TomahawkStyle::HEADER_LINK.name() ) );
         TomahawkStyle::styleScrollBar( ui->biography->verticalScrollBar() );
 
         connect( ui->biography, SIGNAL( anchorClicked( QUrl ) ), SLOT( onBiographyLinkClicked( QUrl ) ) );
