@@ -342,8 +342,9 @@ ConnectionManager::activate()
 void
 ConnectionManager::deactivate()
 {
-    setActive( false, d_func()->nodeid, weakRef().toStrongRef() );
-    d_func()->mutex.unlock();
+    QSharedPointer<ConnectionManager> strongRef = weakRef().toStrongRef();
+    setActive( false, d_func()->nodeid, strongRef );
+    strongRef->d_func()->mutex.unlock();
 }
 
 
