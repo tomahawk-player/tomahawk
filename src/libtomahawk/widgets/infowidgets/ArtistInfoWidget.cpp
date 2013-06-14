@@ -95,15 +95,19 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->lineAbove2->setStyleSheet( QString( "QFrame { border: 1px solid black; }" ) );
     ui->lineBelow2->setStyleSheet( QString( "QFrame { border: 1px solid %1; }" ).arg( TomahawkStyle::HEADER_BACKGROUND.name() ) );
 
-    QPalette trackViewPal = ui->topHits->palette();
-    trackViewPal.setColor( QPalette::Foreground, TomahawkStyle::PAGE_FOREGROUND );
-    trackViewPal.setColor( QPalette::Text, TomahawkStyle::PAGE_FOREGROUND );
-    trackViewPal.setColor( QPalette::Highlight, QColor( "#292f34" ) );
-    trackViewPal.setColor( QPalette::HighlightedText, Qt::white );
-    ui->topHits->setPalette( trackViewPal );
-    ui->topHits->setAlternatingRowColors( false );
-    ui->topHits->setFrameShape( QFrame::NoFrame );
-    ui->topHits->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+    {
+        QPalette p = ui->topHits->palette();
+        p.setColor( QPalette::Text, TomahawkStyle::PAGE_TRACKLIST_TRACK_SOLVED );
+        p.setColor( QPalette::BrightText, TomahawkStyle::PAGE_TRACKLIST_TRACK_UNRESOLVED );
+        p.setColor( QPalette::Foreground, TomahawkStyle::PAGE_TRACKLIST_NUMBER );
+        p.setColor( QPalette::Highlight, QColor( "#292f34" ) );
+        p.setColor( QPalette::HighlightedText, Qt::white );
+
+        ui->topHits->setPalette( p );
+        ui->topHits->setAlternatingRowColors( false );
+        ui->topHits->setFrameShape( QFrame::NoFrame );
+        ui->topHits->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+    }
 
     QHBoxLayout* l = new QHBoxLayout( ui->statsWidget );
     m_playStatsGauge = new StatsGauge( ui->statsWidget );
