@@ -83,6 +83,8 @@ namespace TomahawkStyle
     static const QColor PAGE_TRACKLIST_TRACK_SOLVED = QColor( "#292F34" );
     static const QColor PAGE_TRACKLIST_TRACK_UNRESOLVED = QColor( "#8597A6" );
     static const QColor PAGE_TRACKLIST_NUMBER = QColor( "#8DBF2D" ).darker( 400 );
+    static const QColor PAGE_TRACKLIST_HIGHLIGHT = QColor( "#292f34" );
+    static const QColor PAGE_TRACKLIST_HIGHLIGHT_TEXT = QColor( "#ffffff" );
 
     static const QColor FOOTNOTES_BACKGROUND = QColor( "#272b2e" );
     static const QColor DASHBOARD_ROUNDFIGURE_BACKGROUND = QColor( "#454e59" );
