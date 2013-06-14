@@ -77,7 +77,7 @@
          </property>
          <property name="font">
           <font>
-           <pointsize>18</pointsize>
+           <pointsize>20</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -218,7 +218,7 @@
             <widget class="QLabel" name="label">
              <property name="font">
               <font>
-               <pointsize>18</pointsize>
+               <pointsize>20</pointsize>
                <weight>75</weight>
                <bold>true</bold>
               </font>
@@ -275,8 +275,7 @@
             <widget class="QLabel" name="label_2">
              <property name="font">
               <font>
-               <family>Arial</family>
-               <pointsize>18</pointsize>
+               <pointsize>20</pointsize>
                <weight>75</weight>
                <bold>true</bold>
               </font>
@@ -385,8 +384,7 @@
           <widget class="QLabel" name="albumLabel">
            <property name="font">
             <font>
-             <family>Arial</family>
-             <pointsize>18</pointsize>
+             <pointsize>20</pointsize>
              <weight>75</weight>
              <bold>true</bold>
             </font>

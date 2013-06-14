@@ -121,7 +121,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->cover->setShowText( false );
 
     {
-        QFont f = font();
+        QFont f = ui->biography->font();
         f.setPointSize( f.pointSize() + 1 );
         f.setFamily( "Titillium Web" );
 
@@ -143,10 +143,10 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     }
 
     {
-        QFont f = ui->biography->font();
-        f.setPointSize( f.pointSize() + 2 );
+        QFont f = ui->artistLabel->font();
+        f.setFamily( "Titillium Web" );
 
-        QPalette p = ui->biography->palette();
+        QPalette p = ui->artistLabel->palette();
         p.setColor( QPalette::Foreground, TomahawkStyle::HEADER_TEXT );
 
         ui->artistLabel->setFont( f );
@@ -157,9 +157,8 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
         QFont f = ui->label->font();
         f.setBold( false );
         f.setFamily( "Fauna One" );
-        f.setPointSize( f.pointSize() + 2 );
 
-        QPalette p = ui->biography->palette();
+        QPalette p = ui->label->palette();
         p.setColor( QPalette::Foreground, TomahawkStyle::PAGE_CAPTION );
 
         ui->label->setFont( f );
@@ -172,7 +171,6 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
         QFont f = ui->albumLabel->font();
         f.setBold( false );
         f.setFamily( "Fauna One" );
-        f.setPointSize( f.pointSize() + 2 );
 
         QPalette p = ui->biography->palette();
         p.setColor( QPalette::Foreground, TomahawkStyle::HEADER_TEXT );
