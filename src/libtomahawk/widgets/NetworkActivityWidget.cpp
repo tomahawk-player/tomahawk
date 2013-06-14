@@ -49,8 +49,6 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
 
     d_func()->crumbModelLeft = new QStandardItemModel( this );
     d_func()->sortedProxy = new QSortFilterProxyModel( this );
-    d_func()->sortedProxy->setDynamicSortFilter( true );
-    d_func()->sortedProxy->setFilterCaseSensitivity( Qt::CaseInsensitive );
 
     d_func()->ui->breadCrumbLeft->setRootIcon( TomahawkUtils::defaultPixmap( TomahawkUtils::NetworkActivity, TomahawkUtils::Original ) );
     connect( d_func()->ui->breadCrumbLeft, SIGNAL( activateIndex( QModelIndex ) ), SLOT( leftCrumbIndexChanged( QModelIndex ) ) );
@@ -74,14 +72,14 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
     monthItem->setData( MonthChart, Breadcrumb::DefaultRole );
     chartItem->appendRow( monthItem );
     QStandardItem* yearItem = new QStandardItem( tr( "Last Year" ) );
-    yearItem->setData( YearChart, Breadcrumb::DefaultRole );
+    yearItem->setData( YearChart, Breadcrumb::DefaultRole);
     chartItem->appendRow( yearItem );
     QStandardItem* overallItem = new QStandardItem( tr( "Overall" ) );
     overallItem->setData( OverallChart, Breadcrumb::DefaultRole );
     chartItem->appendRow( overallItem );
     d_func()->sortedProxy->setSourceModel( d_func()->crumbModelLeft );
-    d_func()->sortedProxy->sort( 0, Qt::AscendingOrder );
     d_func()->ui->breadCrumbLeft->setModel( d_func()->sortedProxy );
+
     d_func()->ui->breadCrumbLeft->setVisible( true );
 }
 
