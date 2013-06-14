@@ -54,23 +54,23 @@ StatsGauge::paintEvent( QPaintEvent* event )
 
     QSize gaugeSize = m_sizeHint - QSize( 0, 40 );
 
-    QPen pen( TomahawkStyle::NOW_PLAYING_ITEM.lighter() );
+    QPen pen( TomahawkStyle::HEADER_GAUGE_HIGHLIGHT );
     pen.setWidth( 16 );
     p.setPen( pen );
 
     int fullCircle = 16 * 360;
     p.drawArc( QRect( 12, 12, gaugeSize.width() - 24, gaugeSize.height() - 24 ),
-               4*360, (int)( -1.0 * (float)fullCircle * ( invertedAppearance() ? ( 1.0 - m_percentage ) : m_percentage ) ) );
+               4 * 360, (int)( -1.0 * (float)fullCircle * ( invertedAppearance() ? ( 1.0 - m_percentage ) : m_percentage ) ) );
 
-    pen = QPen( TomahawkStyle::NOW_PLAYING_ITEM.darker() );
+    pen = QPen( TomahawkStyle::HEADER_GAUGE_HIGHLIGHT.darker() );
     pen.setWidth( 6 );
     p.setPen( pen );
 
-    QBrush brush( QColor( "#252020" ) );
+    QBrush brush( TomahawkStyle::HEADER_GAUGE_BACKGROUND );
     p.setBrush( brush );
     p.drawEllipse( QRect( 28, 28, gaugeSize.width() - 56, gaugeSize.height() - 56 ) );
 
-    pen = QPen( Qt::white );
+    pen = QPen( TomahawkStyle::HEADER_GAUGE_TEXT );
     p.setPen( pen );
     QFont font = p.font();
     font.setWeight( QFont::Black );
@@ -84,7 +84,7 @@ StatsGauge::paintEvent( QPaintEvent* event )
     QRect textRect( 0, gaugeSize.height() / 2 - 14, gaugeSize.width(), 62 );
     p.drawText( textRect, Qt::AlignCenter, value() > 0 ? QString::number( value() ) : "-" );
 
-    pen = QPen( QColor( "#8b8b8b" ) );
+    pen = QPen( TomahawkStyle::HEADER_GAUGE_TEXT.darker() );
     p.setPen( pen );
     font = p.font();
     font.setWeight( QFont::Black );
@@ -96,14 +96,14 @@ StatsGauge::paintEvent( QPaintEvent* event )
 
     if ( !m_text.isEmpty() )
     {
-        pen = QPen( Qt::white );
+        pen = QPen( TomahawkStyle::HEADER_GAUGE_TEXT );
         p.setPen( pen );
         font = p.font();
         font.setWeight( QFont::DemiBold );
         font.setPixelSize( 16 );
         p.setFont( font );
 
-        QColor figColor( "#3e3e3e" );
+        QColor figColor( TomahawkStyle::HEADER_GAUGE_LABEL_BACKGROUND );
         p.setBrush( figColor );
 
         QFontMetrics fm( font );
