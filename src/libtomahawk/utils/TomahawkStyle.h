@@ -62,9 +62,9 @@ namespace TomahawkStyle
     static const QColor SELECTION_FOREGROUND = QColor( "#ffffff" );
 
     static const QColor HEADER_GAUGE_HIGHLIGHT = QColor( "#7DC4FF" );
-    static const QColor HEADER_GAUGE_BACKGROUND = QColor( "#DBDBDB" );
-    static const QColor HEADER_GAUGE_TEXT = QColor( "#292f34" );
-    static const QColor HEADER_GAUGE_LABEL_BACKGROUND = QColor( "#DBDBDB" );
+    static const QColor HEADER_GAUGE_BACKGROUND = QColor( "#0B0A0A" );
+    static const QColor HEADER_GAUGE_TEXT = QColor( "#FFFFFF" );
+    static const QColor HEADER_GAUGE_LABEL_BACKGROUND = QColor( "#0B0A0A" );
 
     static const QColor HEADER_BACKGROUND = QColor( "#292f34" );
     static const QColor HEADER_LABEL = QColor( "#FFFFFF" );
