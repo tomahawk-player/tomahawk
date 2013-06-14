@@ -17,6 +17,7 @@
  */
 
 #include "HatchetAccount.h"
+#include <QHostInfo>
 
 #include "HatchetAccountConfig.h"
 #include "utils/Closure.h"
