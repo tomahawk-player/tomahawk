@@ -37,7 +37,7 @@ public:
 signals:
     
 private slots:
-    void remove( QObject* value );
+    void remove( const QString& key );
 private:
     Q_DECLARE_PRIVATE( WeakPeerHash )
     WeakPeerHashPrivate* d_ptr;

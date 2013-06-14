@@ -19,11 +19,12 @@
 #include "WeakPeerHash_p.h"
 
 #include "PeerInfo.h"
+#include "utils/Closure.h"
 
 #define WEAKPEERHASH_KEY "WeakPeerHashKey"
 
-WeakPeerHash::WeakPeerHash(QObject *parent)
-    : QObject(parent)
+WeakPeerHash::WeakPeerHash( QObject *parent )
+    : QObject( parent )
     , d_ptr( new WeakPeerHashPrivate( this ) )
 {
 }
@@ -36,10 +37,10 @@ WeakPeerHash::WeakPeerHash( const WeakPeerHash &hash )
 }
 
 void
-WeakPeerHash::insert(const QString &key, const Tomahawk::peerinfo_ptr &value)
+WeakPeerHash::insert( const QString &key, const Tomahawk::peerinfo_ptr &value )
 {
-    value->setProperty( WEAKPEERHASH_KEY, key );
-    connect( value.data(), SIGNAL( destroyed( QObject* ) ), SLOT( remove( QObject* ) ) );
+    _detail::Closure* cl = NewClosure( value, SIGNAL( destroyed( QObject* ) ), this, SLOT( remove( QString ) ), key );
+    cl->setAutoDelete( true );
     d_func()->hash.insert( key, value.toWeakRef() );
 }
 
@@ -50,22 +51,7 @@ WeakPeerHash::hash()
 }
 
 void
-WeakPeerHash::remove( QObject *value )
+WeakPeerHash::remove( const QString& key )
 {
-    if ( value )
-    {
-        const QString key = value->property( WEAKPEERHASH_KEY ).toString();
-        d_func()->hash.remove( key );
-    }
-    else
-    {
-        // Scan for null-Pointers
-        foreach ( QString key, d_func()->hash.keys() )
-        {
-            if ( d_func()->hash.value( key ).isNull() )
-            {
-                d_func()->hash.remove( key );
-            }
-        }
-    }
+    d_func()->hash.remove( key );
 }
