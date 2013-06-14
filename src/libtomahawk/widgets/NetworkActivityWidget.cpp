@@ -72,7 +72,7 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
     monthItem->setData( MonthChart, Breadcrumb::DefaultRole );
     chartItem->appendRow( monthItem );
     QStandardItem* yearItem = new QStandardItem( tr( "Last Year" ) );
-    yearItem->setData( YearChart, Breadcrumb::DefaultRole);
+    yearItem->setData( YearChart, Breadcrumb::DefaultRole );
     chartItem->appendRow( yearItem );
     QStandardItem* overallItem = new QStandardItem( tr( "Overall" ) );
     overallItem->setData( OverallChart, Breadcrumb::DefaultRole );
