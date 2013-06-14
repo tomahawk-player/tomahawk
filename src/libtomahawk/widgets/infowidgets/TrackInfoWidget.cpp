@@ -70,7 +70,8 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
 
     {
         QFont f = ui->trackLabel->font();
-        f.setFamily( "Titillium Web" );
+        f.setFamily( "Fauna One" );
+        f.setPointSize( TomahawkUtils::defaultFontSize() + 12 );
 
         QPalette p = ui->trackLabel->palette();
         p.setColor( QPalette::Foreground, TomahawkStyle::HEADER_TEXT );
@@ -81,7 +82,7 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
 
     {
         QFont f = ui->artistLabel->font();
-        f.setFamily( "Titillium Web" );
+        f.setFamily( "Fauna One" );
 
         QPalette p = ui->artistLabel->palette();
         p.setColor( QPalette::Foreground, TomahawkStyle::HEADER_TEXT );
