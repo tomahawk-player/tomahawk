@@ -87,7 +87,7 @@ ModeHeader::ModeHeader( QWidget* parent )
 
     QPalette pal = palette();
     pal.setColor( QPalette::Foreground, Qt::white );
-    pal.setBrush( backgroundRole(), TomahawkStyle::PAGE_BACKGROUND.lighter() );
+    pal.setBrush( backgroundRole(), TomahawkStyle::HEADER_BACKGROUND.lighter() );
 
     setAutoFillBackground( true );
     setPalette( pal );
