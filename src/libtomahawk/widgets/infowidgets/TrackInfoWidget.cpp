@@ -71,9 +71,11 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     {
         QFont f = ui->trackLabel->font();
         f.setFamily( "Titillium Web" );
+        f.setPointSize( TomahawkUtils::defaultFontSize() + 20 );
+         f.setBold( true );
 
         QPalette p = ui->trackLabel->palette();
-        p.setColor( QPalette::Foreground, TomahawkStyle::HEADER_TEXT );
+        p.setColor( QPalette::Foreground, TomahawkStyle::HEADER_LABEL );
 
         ui->trackLabel->setFont( f );
         ui->trackLabel->setPalette( p );
@@ -82,6 +84,7 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     {
         QFont f = ui->artistLabel->font();
         f.setFamily( "Titillium Web" );
+        f.setPointSize( TomahawkUtils::defaultFontSize() + 10 );
 
         QPalette p = ui->artistLabel->palette();
         p.setColor( QPalette::Foreground, TomahawkStyle::HEADER_TEXT );
@@ -145,7 +148,7 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     m_playStatsGauge = new StatsGauge( ui->statsWidget );
     m_playStatsGauge->setText( tr( "# PLAYS / ARTIST" ) );
     m_playStatsTotalGauge = new StatsGauge( ui->statsWidget );
-    m_playStatsTotalGauge->setText( tr( "# IN YOUR CHARTS" ) );
+    m_playStatsTotalGauge->setText( tr( "YOUR CHART RANK" ) );
     m_playStatsTotalGauge->setInvertedAppearance( true );
 
     l->addSpacerItem( new QSpacerItem( 0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding ) );

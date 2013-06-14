@@ -3,24 +3,8 @@
     <title>album-placeholder-grid</title>
     <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
     <defs>
-        <radialGradient cx="50%" cy="50%" fx="50%" fy="50%" r="70.6690133%" id="radialGradient-1">
-            <stop stop-color="#BBBFBA" offset="0%"></stop>
-            <stop stop-color="#D6D4D2" offset="0.923389476%"></stop>
-            <stop stop-color="#F2F1F1" offset="100%"></stop>
-        </radialGradient>
+        <path d="M177.5,219 C200.419818,219 219,200.419818 219,177.5 C219,154.580182 200.419818,136 177.5,136 C154.580182,136 136,154.580182 136,177.5 C136,200.419818 154.580182,219 177.5,219 Z M177.5,355 C79.4694521,355 0,275.530548 0,177.5 C0,79.4694521 79.4694521,0 177.5,0 C275.530548,0 355,79.4694521 355,177.5 C355,275.530548 275.530548,355 177.5,355 Z M177.5,355" id="path-1"></path>
         <filter x="-20%" y="-20%" width="140%" height="140%" filterUnits="objectBoundingBox" id="filter-2">
-            <feMorphology radius="2" in="SourceAlpha" operator="dilate" result="shadowSpreadInner1"></feMorphology>
-            <feOffset dx="0" dy="1" in="shadowSpreadInner1" result="shadowOffsetInner1"></feOffset>
-            <feGaussianBlur stdDeviation="0" in="shadowOffsetInner1" result="shadowBlurInner1"></feGaussianBlur>
-            <feComposite in="shadowBlurInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
-            <feColorMatrix values="0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.7 0" in="shadowInnerInner1" type="matrix" result="shadowMatrixInner1"></feColorMatrix>
-            <feMerge>
-                <feMergeNode in="SourceGraphic"></feMergeNode>
-                <feMergeNode in="shadowMatrixInner1"></feMergeNode>
-            </feMerge>
-        </filter>
-        <path d="M178,238 C211.137087,238 238,211.137087 238,178 C238,144.862913 211.137087,118 178,118 C144.862913,118 118,144.862913 118,178 C118,211.137087 144.862913,238 178,238 Z M177.5,355 C79.4694521,355 0,275.530548 0,177.5 C0,79.4694521 79.4694521,0 177.5,0 C275.530548,0 355,79.4694521 355,177.5 C355,275.530548 275.530548,355 177.5,355 Z M177.5,355" id="path-3"></path>
-        <filter x="-20%" y="-20%" width="140%" height="140%" filterUnits="objectBoundingBox" id="filter-4">
             <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetInner1"></feOffset>
             <feGaussianBlur stdDeviation="1.5" in="shadowOffsetInner1" result="shadowBlurInner1"></feGaussianBlur>
             <feComposite in="shadowBlurInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
@@ -33,12 +17,10 @@
     </defs>
     <g id="Page 1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
         <rect d="M-23,-22 L-23,378 L377,378 L377,-22 L-23,-22 Z M-23,-22" id="Rectangle 1" sketch:type="MSShapeGroup" x="-23" y="-22" width="400" height="400"></rect>
-        <g id="Group" sketch:type="MSLayerGroup">
-            <g id="Oval 1" filter="url(#filter-2)">
-                <use fill="url(#radialGradient-1)" fill-rule="evenodd" sketch:type="MSShapeGroup" xlink:href="#path-3"></use>
-                <use fill="none" xlink:href="#path-3"></use>
-            </g>
-            <path d="M178,238 C144.862913,238 118,211.137087 118,178 C118,144.862913 144.862913,118 178,118 C211.137087,118 238,144.862913 238,178 C238,211.137087 211.137087,238 178,238 Z M178.5,204 C193.135547,204 205,192.359404 205,178 C205,163.640596 193.135547,152 178.5,152 C163.864453,152 152,163.640596 152,178 C152,192.359404 163.864453,204 178.5,204 Z M178.5,204" id="Oval 2" stroke="#979797" fill="#898989" filter="url(#filter-4)" sketch:type="MSShapeGroup"></path>
+        <g id="Oval 1">
+            <use fill="#0B0A0A" fill-rule="evenodd" sketch:type="MSShapeGroup" xlink:href="#path-1"></use>
+            <use fill="none" xlink:href="#path-1"></use>
         </g>
+        <circle d="M177.5,191 C184.40356,191 190,185.40356 190,178.5 C190,171.59644 184.40356,166 177.5,166 C170.59644,166 165,171.59644 165,178.5 C165,185.40356 170.59644,191 177.5,191 Z M177.5,191" id="Oval 2" stroke="#979797" fill-opacity="0.496897978" fill="#898989" filter="url(#filter-2)" sketch:type="MSShapeGroup" cx="177.5" cy="178.5" r="12.5"></circle>
     </g>
 </svg>
