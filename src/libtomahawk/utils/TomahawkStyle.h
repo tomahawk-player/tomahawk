@@ -58,7 +58,7 @@ namespace TomahawkStyle
 
     static const QColor NOW_PLAYING_ITEM = QColor( "#962c26" );
     static const QColor NOW_PLAYING_ITEM_TEXT = QColor( "#ffffff" );
-    static const QColor SELECTION_BACKGROUND = QColor( "#962c26" );
+    static const QColor SELECTION_BACKGROUND = QColor( "#7DC4FF" );
     static const QColor SELECTION_FOREGROUND = QColor( "#ffffff" );
 
     static const QColor HEADER_GAUGE_HIGHLIGHT = QColor( "#7DC4FF" );
@@ -83,7 +83,7 @@ namespace TomahawkStyle
 
     static const QColor PAGE_TRACKLIST_TRACK_SOLVED = QColor( "#292F34" );
     static const QColor PAGE_TRACKLIST_TRACK_UNRESOLVED = QColor( "#8597A6" ).lighter( 150 );
-    static const QColor PAGE_TRACKLIST_NUMBER = QColor( "#8DBF2D" ).darker( 400 );
+    static const QColor PAGE_TRACKLIST_NUMBER = QColor( "#292f34" );
     static const QColor PAGE_TRACKLIST_HIGHLIGHT = QColor( "#292f34" );
     static const QColor PAGE_TRACKLIST_HIGHLIGHT_TEXT = QColor( "#ffffff" );
 
