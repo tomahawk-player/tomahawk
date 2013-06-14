@@ -148,8 +148,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
     {
         QFont f = ui->artistLabel->font();
-        f.setPointSize( f.pointSize() + 12 );
-        f.setFamily( "Fauna One" );
+        f.setFamily( "Titillium Web" );
 
         QPalette p = ui->artistLabel->palette();
         p.setColor( QPalette::Foreground, TomahawkStyle::HEADER_TEXT );
