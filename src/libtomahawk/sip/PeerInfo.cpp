@@ -58,7 +58,7 @@ PeerInfo::getSelf( SipPlugin* parent, PeerInfo::GetOptions options )
         return peerinfo_ptr();
     }
 
-    peerinfo_ptr selfPeer( new PeerInfo( parent, "local peerinfo don't use this id for anything" ) );
+    peerinfo_ptr selfPeer( new PeerInfo( parent, "local peerinfo don't use this id for anything" ), &QObject::deleteLater );
     selfPeer->setWeakRef( selfPeer.toWeakRef() );
     selfPeer->setContactId( "localpeer" );
 
@@ -91,7 +91,7 @@ PeerInfo::get( SipPlugin* parent, const QString& id, GetOptions options )
         return peerinfo_ptr();
     }
 
-    peerinfo_ptr peerInfo( new PeerInfo( parent, id ) );
+    peerinfo_ptr peerInfo( new PeerInfo( parent, id ), &QObject::deleteLater );
     peerInfo->setWeakRef( peerInfo.toWeakRef() );
     s_peersByCacheKey.insert( key, peerInfo );
 
