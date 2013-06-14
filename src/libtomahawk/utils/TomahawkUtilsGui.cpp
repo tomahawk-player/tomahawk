@@ -748,10 +748,11 @@ prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, Pl
         option->backgroundBrush = TomahawkStyle::NOW_PLAYING_ITEM;
         option->palette.setColor( QPalette::Highlight, TomahawkStyle::NOW_PLAYING_ITEM.lighter() );
         option->palette.setColor( QPalette::Text, TomahawkStyle::NOW_PLAYING_ITEM_TEXT );
-
+        option->palette.setColor( QPalette::Foreground, TomahawkStyle::NOW_PLAYING_ITEM_TEXT );
     }
     else if ( option->state & QStyle::State_Selected )
     {
+        option->palette.setColor( QPalette::Foreground, option->palette.color( QPalette::HighlightedText ) );
         option->palette.setColor( QPalette::Text, option->palette.color( QPalette::HighlightedText ) );
     }
     else
