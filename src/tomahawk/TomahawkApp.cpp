@@ -269,10 +269,10 @@ TomahawkApp::~TomahawkApp()
 {
     tDebug( LOGVERBOSE ) << "Shutting down Tomahawk...";
 
-    if ( !m_session.isNull() )
-        delete m_session.data();
-    if ( !m_connector.isNull() )
-        delete m_connector.data();
+    if ( !m_httpv1_session.isNull() )
+        delete m_httpv1_session.data();
+    if ( !m_httpv1_connector.isNull() )
+        delete m_httpv1_connector.data();
 
     if ( Pipeline::instance() )
         Pipeline::instance()->stop();
@@ -468,40 +468,40 @@ TomahawkApp::initHTTP()
     if ( !TomahawkSettings::instance()->httpEnabled() )
     {
         tLog() << "Stopping HTTPd, not enabled";
-        if ( !m_session.isNull() )
-            delete m_session.data();
-        if ( !m_connector.isNull() )
-            delete m_connector.data();
+        if ( !m_httpv1_session.isNull() )
+            delete m_httpv1_session.data();
+        if ( !m_httpv1_connector.isNull() )
+            delete m_httpv1_connector.data();
         return;
     }
 
-    if ( m_session )
+    if ( m_httpv1_session )
     {
         tLog() << "HTTPd session already exists, returning";
         return;
     }
 
-    m_session = QPointer< QxtHttpSessionManager >( new QxtHttpSessionManager() );
-    m_connector = QPointer< QxtHttpServerConnector >( new QxtHttpServerConnector );
-    if ( m_session.isNull() || m_connector.isNull() )
+    m_httpv1_session = QPointer< QxtHttpSessionManager >( new QxtHttpSessionManager() );
+    m_httpv1_connector = QPointer< QxtHttpServerConnector >( new QxtHttpServerConnector );
+    if ( m_httpv1_session.isNull() || m_httpv1_connector.isNull() )
     {
-        if ( !m_session.isNull() )
-            delete m_session.data();
-        if ( !m_connector.isNull() )
-            delete m_connector.data();
+        if ( !m_httpv1_session.isNull() )
+            delete m_httpv1_session.data();
+        if ( !m_httpv1_connector.isNull() )
+            delete m_httpv1_connector.data();
         tLog() << "Failed to start HTTPd, could not create object";
         return;
     }
 
-    m_session.data()->setPort( 60210 ); //TODO config
-    m_session.data()->setListenInterface( QHostAddress::LocalHost );
-    m_session.data()->setConnector( m_connector.data() );
+    m_httpv1_session.data()->setPort( 60210 ); //TODO config
+    m_httpv1_session.data()->setListenInterface( QHostAddress::LocalHost );
+    m_httpv1_session.data()->setConnector( m_httpv1_connector.data() );
 
-    Api_v1* api = new Api_v1( m_session.data() );
-    m_session.data()->setStaticContentService( api );
+    Api_v1* api = new Api_v1( m_httpv1_session.data() );
+    m_httpv1_session.data()->setStaticContentService( api );
 
-    tLog() << "Starting HTTPd on" << m_session.data()->listenInterface().toString() << m_session.data()->port();
-    m_session.data()->start();
+    tLog() << "Starting HTTPd on" << m_httpv1_session.data()->listenInterface().toString() << m_httpv1_session.data()->port();
+    m_httpv1_session.data()->start();
 }
 
 
