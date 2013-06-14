@@ -31,6 +31,7 @@ using std::tr1::function;
 
 #include <QMetaMethod>
 #include <QObject>
+#include <QPointer>
 #include <QSharedPointer>
 
 #include <boost/noncopyable.hpp>
@@ -95,7 +96,7 @@ class DLLEXPORT Closure : public QObject, boost::noncopyable {
   QMetaMethod slot_;
   function<void()> callback_;
   bool autoDelete_;
-  QObject* outOfThreadReceiver_;
+  QPointer<QObject> outOfThreadReceiver_;
 
   boost::scoped_ptr<const ClosureArgumentWrapper> val0_;
   boost::scoped_ptr<const ClosureArgumentWrapper> val1_;
