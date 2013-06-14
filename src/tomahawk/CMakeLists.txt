@@ -107,7 +107,11 @@ INCLUDE_DIRECTORIES(
 )
 
 IF( QXTWEB_FOUND )
-    LIST(APPEND tomahawkSources web/Api_v1.cpp)
+    LIST(APPEND tomahawkSources
+        web/Api_v1.cpp
+        web/Api_v2.cpp
+        web/Api_v2_0.cpp
+    )
     LIST(APPEND LINK_LIBRARIES ${QXTWEB_LIBRARIES})
     INCLUDE_DIRECTORIES(${QXTWEB_INCLUDE_DIRS})
 ENDIF()

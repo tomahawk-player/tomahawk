@@ -4,6 +4,7 @@
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
+ *   Copyright 2013,      Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -38,6 +39,7 @@
 #include "network/Servent.h"
 #include "network/DbSyncConnection.h"
 #include "web/Api_v1.h"
+#include "web/Api_v2.h"
 #include "SourceList.h"
 #include "ViewManager.h"
 #include "ShortcutHandler.h"
@@ -490,36 +492,80 @@ TomahawkApp::initHTTP()
             delete m_httpv1_session.data();
         if ( !m_httpv1_connector.isNull() )
             delete m_httpv1_connector.data();
+        if ( !m_httpv2_session.isNull() )
+            delete m_httpv2_session.data();
+        if ( !m_httpv2_connector.isNull() )
+            delete m_httpv2_connector.data();
         return;
     }
 
     if ( m_httpv1_session )
     {
-        tLog() << "HTTPd session already exists, returning";
-        return;
+        tLog() << "HTTPd session for API v1.0 already exists, not starting again";
     }
-
-    m_httpv1_session = QPointer< QxtHttpSessionManager >( new QxtHttpSessionManager() );
-    m_httpv1_connector = QPointer< QxtHttpServerConnector >( new QxtHttpServerConnector );
-    if ( m_httpv1_session.isNull() || m_httpv1_connector.isNull() )
+    else
     {
-        if ( !m_httpv1_session.isNull() )
-            delete m_httpv1_session.data();
-        if ( !m_httpv1_connector.isNull() )
-            delete m_httpv1_connector.data();
-        tLog() << "Failed to start HTTPd, could not create object";
-        return;
+        m_httpv1_session = QPointer< QxtHttpSessionManager >( new QxtHttpSessionManager() );
+        m_httpv1_connector = QPointer< QxtHttpServerConnector >( new QxtHttpServerConnector );
+        if ( m_httpv1_session.isNull() || m_httpv1_connector.isNull() )
+        {
+            if ( !m_httpv1_session.isNull() )
+                delete m_httpv1_session.data();
+            if ( !m_httpv1_connector.isNull() )
+                delete m_httpv1_connector.data();
+            tLog() << "Failed to start HTTPd for API v1.0, could not create object";
+        }
+        else
+        {
+            m_httpv1_session.data()->setPort( 60210 ); //TODO config
+            m_httpv1_session.data()->setListenInterface( QHostAddress::LocalHost );
+            m_httpv1_session.data()->setConnector( m_httpv1_connector.data() );
+
+            Api_v1* api = new Api_v1( m_httpv1_session.data() );
+            m_httpv1_session.data()->setStaticContentService( api );
+
+            tLog() << "Starting HTTPd for API v1.0 on" << m_httpv1_session.data()->listenInterface().toString() << m_httpv1_session.data()->port();
+            m_httpv1_session.data()->start();
+        }
     }
 
-    m_httpv1_session.data()->setPort( 60210 ); //TODO config
-    m_httpv1_session.data()->setListenInterface( QHostAddress::LocalHost );
-    m_httpv1_session.data()->setConnector( m_httpv1_connector.data() );
+    if ( !m_httpv2_session.isNull() )
+    {
+        tLog() << "HTTPd session for API v2.0 already exists, not starting again";
+    }
+    else
+    {
+        m_httpv2_session = QPointer< QxtHttpSessionManager >( new QxtHttpSessionManager() );
+        m_httpv2_connector = QPointer< QxtHttpServerConnector >( new QxtHttpServerConnector );
+        if ( m_httpv2_session.isNull() || m_httpv2_connector.isNull() )
+        {
+            if ( !m_httpv2_session.isNull() )
+                delete m_httpv2_session.data();
+            if ( !m_httpv2_connector.isNull() )
+                delete m_httpv2_connector.data();
+            tLog() << "Failed to start HTTPd for API v2.0, could not create object";
+        }
+        else
+        {
+            m_httpv2_session->setPort( 60211 ); //TODO config
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+            m_httpv2_session.data()->setListenInterface( QHostAddress::Any );
+#else
+            m_httpv2_session.data()->setListenInterface( QHostAddress::AnyIPv6 );
+#endif
 
-    Api_v1* api = new Api_v1( m_httpv1_session.data() );
-    m_httpv1_session.data()->setStaticContentService( api );
+            m_httpv2_session->setConnector( m_httpv2_connector.data() );
 
-    tLog() << "Starting HTTPd on" << m_httpv1_session.data()->listenInterface().toString() << m_httpv1_session.data()->port();
-    m_httpv1_session.data()->start();
+            Api_v2* api = new Api_v2( m_httpv2_session.data() );
+            m_httpv2_session->setStaticContentService( api );
+
+            tLog() << "Starting HTTPd for API v2.0 on" << m_httpv2_session->listenInterface().toString() << m_httpv2_session->port();
+            if ( !m_httpv2_session->start() )
+            {
+                tLog() << "Failed to start HTTPd for API v2.0, could not bind to interface/port";
+            }
+        }
+    }
 }
 
 
