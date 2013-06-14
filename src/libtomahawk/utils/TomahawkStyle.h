@@ -61,6 +61,11 @@ namespace TomahawkStyle
     static const QColor SELECTION_BACKGROUND = QColor( "#962c26" );
     static const QColor SELECTION_FOREGROUND = QColor( "#ffffff" );
 
+    static const QColor HEADER_GAUGE_HIGHLIGHT = QColor( "#8dbf2d" );
+    static const QColor HEADER_GAUGE_BACKGROUND = QColor( "#252020" );
+    static const QColor HEADER_GAUGE_TEXT = QColor( "#ffffff" );
+    static const QColor HEADER_GAUGE_LABEL_BACKGROUND = QColor( "#3e3e3e" );
+
     static const QColor HEADER_BACKGROUND = QColor( "#292f34" );
     static const QColor HEADER_TEXT = QColor( "#ffffff" );
     static const QColor HEADER_LINK = QColor( "#8dbf2d" );
@@ -74,6 +79,10 @@ namespace TomahawkStyle
     static const QColor PAGE_TEXT = QColor( "#ABCCE8" );
     static const QColor PAGE_FOREGROUND = QColor( "#292f34" );
     static const QColor PAGE_BACKGROUND = QColor( "#DBDBDB" );
+
+    static const QColor PAGE_TRACKLIST_TRACK_SOLVED = QColor( "#292F34" );
+    static const QColor PAGE_TRACKLIST_TRACK_UNRESOLVED = QColor( "#8597A6" );
+    static const QColor PAGE_TRACKLIST_NUMBER = QColor( "#8DBF2D" ).darker( 400 );
 
     static const QColor FOOTNOTES_BACKGROUND = QColor( "#272b2e" );
     static const QColor DASHBOARD_ROUNDFIGURE_BACKGROUND = QColor( "#454e59" );
