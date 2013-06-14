@@ -80,20 +80,31 @@ void Closure::Connect(QObject* sender, const char* signal) {
   Q_UNUSED(success);
 }
 
-void Closure::Invoked() {
-  if (callback_) {
-    callback_();
-  } else {
-    slot_.invoke(
-        parent() ? parent() : outOfThreadReceiver_,
-        val0_ ? val0_->arg() : QGenericArgument(),
-        val1_ ? val1_->arg() : QGenericArgument(),
-        val2_ ? val2_->arg() : QGenericArgument(),
-        val3_ ? val3_->arg() : QGenericArgument());
-  }
+void
+Closure::Invoked() {
+    if ( callback_ )
+    {
+        callback_();
+    }
+    else
+    {
+        // Only invoke the closure if the receiver still exists
+        // Hint: If parent was destroyed, this closure would also be destroyed
+        if ( parent() || !outOfThreadReceiver_.isNull() )
+        {
+            slot_.invoke(
+                parent() ? parent() : outOfThreadReceiver_.data(),
+                val0_ ? val0_->arg() : QGenericArgument(),
+                val1_ ? val1_->arg() : QGenericArgument(),
+                val2_ ? val2_->arg() : QGenericArgument(),
+                val3_ ? val3_->arg() : QGenericArgument());
+        }
+    }
 
-  if ( autoDelete_ )
-    deleteLater();
+    if ( autoDelete_ )
+    {
+        deleteLater();
+    }
 }
 
 void Closure::Cleanup() {
