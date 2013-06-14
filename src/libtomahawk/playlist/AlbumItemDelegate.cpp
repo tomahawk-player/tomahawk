@@ -94,7 +94,7 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
         }
 
         painter->setFont( m_bigBoldFont );
-        painter->setPen( option.palette.text().color().lighter( 450 ) );
+        painter->setPen( opt.palette.foreground().color() );
 
         QRect leftRect = r;
         QRect figureRect = r.adjusted( 4, 0, 0, 0 );
