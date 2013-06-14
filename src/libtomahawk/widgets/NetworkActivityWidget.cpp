@@ -79,7 +79,6 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
     chartItem->appendRow( overallItem );
     d_func()->sortedProxy->setSourceModel( d_func()->crumbModelLeft );
     d_func()->ui->breadCrumbLeft->setModel( d_func()->sortedProxy );
-
     d_func()->ui->breadCrumbLeft->setVisible( true );
 }
 
