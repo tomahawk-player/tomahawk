@@ -144,8 +144,8 @@ private:
 
     bool m_headless;
 
-    QPointer< QxtHttpServerConnector > m_connector;
-    QPointer< QxtHttpSessionManager > m_session;
+    QPointer< QxtHttpServerConnector > m_httpv1_connector;
+    QPointer< QxtHttpSessionManager > m_httpv1_session;
 };
 
 Q_DECLARE_METATYPE( PairList )
