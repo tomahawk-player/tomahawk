@@ -111,7 +111,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
     QHBoxLayout* l = new QHBoxLayout( ui->statsWidget );
     m_playStatsGauge = new StatsGauge( ui->statsWidget );
-    m_playStatsGauge->setText( tr( "# IN YOUR CHARTS" ) );
+    m_playStatsGauge->setText( tr( "YOUR ARTIST RANK" ) );
     m_playStatsGauge->setInvertedAppearance( true );
 
     l->addSpacerItem( new QSpacerItem( 0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding ) );
@@ -126,7 +126,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
     {
         QFont f = ui->biography->font();
-        f.setPointSize( f.pointSize() + 2 );
+        f.setPointSize( f.pointSize() + 4 );
         f.setFamily( "Titillium Web" );
 
         QPalette p = ui->biography->palette();
@@ -149,9 +149,11 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     {
         QFont f = ui->artistLabel->font();
         f.setFamily( "Titillium Web" );
+        f.setPointSize( TomahawkUtils::defaultFontSize() + 20 );
+        f.setBold( true );
 
         QPalette p = ui->artistLabel->palette();
-        p.setColor( QPalette::Foreground, TomahawkStyle::HEADER_TEXT );
+        p.setColor( QPalette::Foreground, TomahawkStyle::HEADER_LABEL );
 
         ui->artistLabel->setFont( f );
         ui->artistLabel->setPalette( p );
