@@ -169,17 +169,24 @@ DiagnosticsDialog::accountLog( Tomahawk::Accounts::Account* account )
     QMap< QString, QList< Tomahawk::peerinfo_ptr > > nodes;
     foreach ( const Tomahawk::peerinfo_ptr& peerInfo, account->sipPlugin()->peersOnline() )
     {
-        if ( peerInfo->nodeId().isEmpty() )
+        if ( peerInfo->sipInfos().isEmpty() )
+        {
+            accountInfo.append( QString( "       %1: waiting for SIP information\n" ).arg( peerInfo->id() ) );
+        }
+        else if ( peerInfo->nodeId().isEmpty() )
         {
             QList< Tomahawk::peerinfo_ptr> infos;
             infos.append( peerInfo );
             accountInfo.append( peerLog( peerInfo->nodeId(), infos ) );
         }
-        if ( !nodes.contains( peerInfo->nodeId() ) )
+        else
         {
-            nodes[peerInfo->nodeId()] = QList< Tomahawk::peerinfo_ptr >();
+            if ( !nodes.contains( peerInfo->nodeId() ) )
+            {
+                nodes[peerInfo->nodeId()] = QList< Tomahawk::peerinfo_ptr >();
+            }
+            nodes[peerInfo->nodeId()].append( peerInfo);
         }
-        nodes[peerInfo->nodeId()].append( peerInfo);
     }
     foreach ( const QString& nodeid, nodes.keys() )
     {
