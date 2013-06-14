@@ -111,7 +111,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
     QHBoxLayout* l = new QHBoxLayout( ui->statsWidget );
     m_playStatsGauge = new StatsGauge( ui->statsWidget );
-    m_playStatsGauge->setText( tr( "YOUR CHART RANK" ) );
+    m_playStatsGauge->setText( tr( "YOUR ARTIST RANK" ) );
     m_playStatsGauge->setInvertedAppearance( true );
 
     l->addSpacerItem( new QSpacerItem( 0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding ) );
@@ -126,7 +126,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
     {
         QFont f = ui->biography->font();
-        f.setPointSize( f.pointSize() + 2 );
+        f.setPointSize( f.pointSize() + 4 );
         f.setFamily( "Titillium Web" );
 
         QPalette p = ui->biography->palette();

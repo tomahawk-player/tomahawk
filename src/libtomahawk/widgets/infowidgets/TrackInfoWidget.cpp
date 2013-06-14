@@ -148,7 +148,7 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     m_playStatsGauge = new StatsGauge( ui->statsWidget );
     m_playStatsGauge->setText( tr( "# PLAYS / ARTIST" ) );
     m_playStatsTotalGauge = new StatsGauge( ui->statsWidget );
-    m_playStatsTotalGauge->setText( tr( "YOUR CHART RANK" ) );
+    m_playStatsTotalGauge->setText( tr( "YOUR SONG RANK" ) );
     m_playStatsTotalGauge->setInvertedAppearance( true );
 
     l->addSpacerItem( new QSpacerItem( 0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding ) );
