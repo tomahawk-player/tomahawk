@@ -107,7 +107,9 @@ void QxtWebSlotService::pageRequestedEvent(QxtWebRequestEvent* event)
     QByteArray action = "index";
     if (args.count())
     {
-        action = args.at(0).toUtf8();
+        // Substitute hyphens for underscores to be able
+        // to dispatch hyphenated paths.
+        action = args.at(0).toUtf8().replace('-', '_');
         if (action.trimmed().isEmpty())
             action = "index";
         args.removeFirst();
