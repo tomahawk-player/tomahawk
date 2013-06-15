@@ -137,7 +137,6 @@
             <widget class="QLabel" name="label_2">
              <property name="font">
               <font>
-               <family>Arial</family>
                <pointsize>20</pointsize>
                <weight>75</weight>
                <bold>true</bold>
@@ -247,7 +246,6 @@
           <widget class="QLabel" name="playlistLabel">
            <property name="font">
             <font>
-             <family>Arial</family>
              <pointsize>20</pointsize>
              <weight>75</weight>
              <bold>true</bold>
