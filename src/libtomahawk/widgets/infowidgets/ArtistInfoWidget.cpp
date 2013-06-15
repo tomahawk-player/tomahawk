@@ -188,7 +188,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
         f.setBold( false );
         f.setFamily( "Fauna One" );
 
-        QPalette p = ui->biography->palette();
+        QPalette p = ui->albumLabel->palette();
         p.setColor( QPalette::Foreground, TomahawkStyle::HEADER_TEXT );
 
         ui->albumLabel->setFont( f );
