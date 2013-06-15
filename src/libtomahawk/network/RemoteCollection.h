@@ -21,8 +21,9 @@
 
 #include "Typedefs.h"
 
-#include "network/ControlConnection.h"
 #include "database/DatabaseCollection.h"
+
+class ControlConnection;
 
 class RemoteCollection : public DatabaseCollection
 {
