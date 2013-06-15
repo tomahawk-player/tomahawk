@@ -37,7 +37,7 @@
        <enum>Qt::Horizontal</enum>
       </property>
       <property name="handleWidth">
-       <number>1</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="sidebarWidget" native="true"/>
       <widget class="QWidget" name="playlistWidget" native="true"/>

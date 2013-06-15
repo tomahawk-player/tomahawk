@@ -198,6 +198,7 @@ TomahawkWindow::loadSettings()
     // Always set stretch factor. If user hasn't manually set splitter sizes,
     // this will ensure a sane default on all startups. If the user has, the manual
     // size will override the default stretching
+    ui->splitter->setHandleWidth( 3 );
     ui->splitter->setStretchFactor( 0, 0 );
     ui->splitter->setStretchFactor( 1, 1 );
 
