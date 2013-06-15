@@ -21,6 +21,7 @@
 #include <QApplication>
 #include <QPainter>
 #include <QAbstractTextDocumentLayout>
+#include <QDateTime>
 
 #include "Query.h"
 #include "Result.h"

@@ -168,7 +168,7 @@ private slots:
     void deleteLazyOffer( const QString& key );
     void readyRead();
     void socketError( QAbstractSocket::SocketError e );
-    void checkACLResult( const QString &nodeid, const QString &username, ACLRegistry::ACL peerStatus );
+    void checkACLResult( const QString &nodeid, const QString &username, Tomahawk::ACL peerStatus );
 
     Connection* claimOffer( ControlConnection* cc, const QString &nodeid, const QString &key, const QHostAddress peer = QHostAddress::Any );
 

@@ -41,6 +41,9 @@
 #include "utils/ShortenedLinkParser.h"
 #include "utils/RdioParser.h"
 
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
+
 #ifndef ENABLE_HEADLESS
     #include "ViewManager.h"
     #include "playlist/PlaylistView.h"

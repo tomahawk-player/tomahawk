@@ -53,14 +53,14 @@ ACLRegistryImpl::~ACLRegistryImpl()
 }
 
 
-ACLRegistry::ACL
-ACLRegistryImpl::isAuthorizedUser( const QString& dbid, const QString &username, ACLRegistry::ACL globalType, bool skipEmission )
+Tomahawk::ACL
+ACLRegistryImpl::isAuthorizedUser( const QString& dbid, const QString &username, Tomahawk::ACL globalType, bool skipEmission )
 {
     if ( QThread::currentThread() != TOMAHAWK_APPLICATION::instance()->thread() )
     {
         if ( !skipEmission )
-            QMetaObject::invokeMethod( this, "isAuthorizedUser", Qt::QueuedConnection, Q_ARG( const QString&, dbid ), Q_ARG( const QString &, username ), Q_ARG( ACLRegistry::ACL, globalType ), Q_ARG( bool, skipEmission ) );
-        return ACLRegistry::NotFound;
+            QMetaObject::invokeMethod( this, "isAuthorizedUser", Qt::QueuedConnection, Q_ARG( const QString&, dbid ), Q_ARG( const QString &, username ), Q_ARG( Tomahawk::ACL, globalType ), Q_ARG( bool, skipEmission ) );
+        return Tomahawk::NotFound;
     }
 
 #ifndef ENABLE_HEADLESS
@@ -77,8 +77,8 @@ ACLRegistryImpl::isAuthorizedUser( const QString& dbid, const QString &username,
             if ( account->accountFriendlyName() == username )
             {
                 if ( !skipEmission )
-                    emit aclResult( dbid, username, ACLRegistry::Stream );
-                return ACLRegistry::Stream;
+                    emit aclResult( dbid, username, Tomahawk::Stream );
+                return Tomahawk::Stream;
             }
         }
     }
@@ -119,24 +119,24 @@ ACLRegistryImpl::isAuthorizedUser( const QString& dbid, const QString &username,
     }
 
     if ( skipEmission )
-        return ACLRegistry::NotFound;
+        return Tomahawk::NotFound;
 
     // User was not found, create a new user entry
     ACLRegistry::User user;
     user.knownDbids.append( dbid );
     user.knownAccountIds.append( username );
-    if ( globalType != ACLRegistry::NotFound )
+    if ( globalType != Tomahawk::NotFound )
         user.acl = globalType;
 #ifdef ENABLE_HEADLESS
-    user.acl = ACLRegistry::Stream;
+    user.acl = Tomahawk::Stream;
 #else
     if ( !TomahawkUtils::headless() )
     {
         getUserDecision( user, username );
-        return ACLRegistry::NotFound;
+        return Tomahawk::NotFound;
     }
     else
-        user.acl = ACLRegistry::Stream;
+        user.acl = Tomahawk::Stream;
 #endif
     m_cache.append( user );
     save();
@@ -200,8 +200,8 @@ ACLRegistryImpl::queueNextJob()
         bool found = false;
         foreach( QString dbid, user.knownDbids )
         {
-            ACLRegistry::ACL acl = isAuthorizedUser( dbid, job->username(), ACLRegistry::NotFound, true );
-            if ( acl != ACLRegistry::NotFound )
+            Tomahawk::ACL acl = isAuthorizedUser( dbid, job->username(), Tomahawk::NotFound, true );
+            if ( acl != Tomahawk::NotFound )
             {
                 tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Found existing acl entry for =" << user.knownAccountIds.first();
                 found = true;

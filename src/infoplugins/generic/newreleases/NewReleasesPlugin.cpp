@@ -34,6 +34,8 @@
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 
+#include <QDate>
+#include <QDateTime>
 #include <QDir>
 #include <QSettings>
 #include <QNetworkConfiguration>

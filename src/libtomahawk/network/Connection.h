@@ -21,23 +21,14 @@
 #ifndef CONNECTION_H
 #define CONNECTION_H
 
-#include "Msg.h"
-#include "MsgProcessor.h"
-#include "AclRegistry.h"
-
+#include "Typedefs.h"
 #include "DllMacro.h"
 
-#include <QSharedPointer>
-#include <QTcpSocket>
 #include <QHostAddress>
-#include <QVariant>
-#include <QVariantMap>
-#include <QString>
-#include <QDataStream>
-#include <QtEndian>
-#include <QTimer>
-#include <QTime>
 #include <QPointer>
+#include <QString>
+#include <QTcpSocket>
+#include <QVariant>
 
 class ConnectionPrivate;
 class Servent;
@@ -69,7 +60,9 @@ public:
 
     Servent* servent() const;
 
-    // get public port of remote peer:
+    /**
+     * Get public port of remote peer.
+     */
     int peerPort() const;
     void setPeerPort( int p );
 
@@ -123,7 +116,7 @@ private slots:
     void readyRead();
     void doSetup();
     void checkACL();
-    void checkACLResult( const QString &nodeid, const QString &username, ACLRegistry::ACL peerStatus );
+    void checkACLResult( const QString &nodeid, const QString &username, Tomahawk::ACL peerStatus );
     void bytesWritten( qint64 );
     void calcStats();
 

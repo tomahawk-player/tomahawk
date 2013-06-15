@@ -21,6 +21,7 @@
 
 #include "utils/TomahawkUtils.h"
 
+#include "Query.h"
 #include "TomahawkVersion.h"
 #include "config.h"
 #include "TomahawkSettings.h"

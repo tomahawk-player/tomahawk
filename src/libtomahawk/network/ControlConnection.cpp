@@ -24,6 +24,7 @@
 #include "database/DatabaseCommand_CollectionStats.h"
 #include "DbSyncConnection.h"
 #include "SourceList.h"
+#include "MsgProcessor.h"
 #include "network/DbSyncConnection.h"
 #include "network/Servent.h"
 #include "sip/PeerInfo.h"
