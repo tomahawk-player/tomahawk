@@ -85,11 +85,6 @@ Dashboard::Dashboard( QWidget* parent )
         ui->tracksView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
         ui->tracksView->setStyleSheet( "QTreeView { background-color: transparent; }" );
         TomahawkStyle::stylePageFrame( ui->trackFrame );
-
-        QFont f;
-        f.setBold( true );
-        QFontMetrics fm( f );
-        ui->tracksView->setMinimumWidth( fm.width( tr( "Recently played tracks" ) ) * 2 );
     }
 
     {
@@ -132,7 +127,6 @@ Dashboard::Dashboard( QWidget* parent )
 
     {
         QFont f = ui->label->font();
-        f.setBold( false );
         f.setFamily( "Fauna One" );
 
         QPalette p = ui->label->palette();
@@ -146,7 +140,6 @@ Dashboard::Dashboard( QWidget* parent )
 
     {
         QFont f = ui->playlistLabel->font();
-        f.setBold( false );
         f.setFamily( "Fauna One" );
 
         QPalette p = ui->playlistLabel->palette();
