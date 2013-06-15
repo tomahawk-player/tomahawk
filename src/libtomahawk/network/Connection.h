@@ -127,7 +127,6 @@ protected:
     Servent* m_servent;
     bool m_outbound, m_ready, m_onceonly;
     msg_ptr m_firstmsg;
-    QString m_name;
 
 private:
     Q_DECLARE_PRIVATE( Connection )

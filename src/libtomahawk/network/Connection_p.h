@@ -59,6 +59,7 @@ private:
     qint64 tx_bytes_requested;
     qint64 rx_bytes;
     QString id;
+    QString name;
     QString nodeid;
 
     QTimer* statstimer;
