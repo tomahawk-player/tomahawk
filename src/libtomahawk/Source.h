@@ -61,8 +61,8 @@ public:
     explicit Source( int id, const QString& nodeId = QString() );
     virtual ~Source();
 
-    bool isLocal() const { return m_isLocal; }
-    bool isOnline() const { return m_online || m_isLocal; }
+    bool isLocal() const;
+    bool isOnline() const;
 
     QString nodeId() const;
 
@@ -79,12 +79,12 @@ public:
 #endif
 
     collection_ptr dbCollection() const;
-    QList< Tomahawk::collection_ptr > collections() const { return m_collections; }
+    QList< Tomahawk::collection_ptr > collections() const;
     void addCollection( const Tomahawk::collection_ptr& c );
     void removeCollection( const Tomahawk::collection_ptr& c );
 
-    int id() const { return m_id; }
-    ControlConnection* controlConnection() const { return m_cc.data(); }
+    int id() const;
+    ControlConnection* controlConnection() const;
     bool setControlConnection( ControlConnection* cc );
 
     const QSet< Tomahawk::peerinfo_ptr > peerInfos() const;
@@ -94,9 +94,9 @@ public:
 
     unsigned int trackCount() const;
 
-    Tomahawk::query_ptr currentTrack() const { return m_currentTrack; }
+    Tomahawk::query_ptr currentTrack() const;
     QString textStatus() const;
-    DBSyncConnection::State state() const { return m_state; }
+    DBSyncConnection::State state() const;
 
     Tomahawk::playlistinterface_ptr playlistInterface();
 
