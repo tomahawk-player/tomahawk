@@ -20,17 +20,17 @@
 #include "SearchWidget.h"
 #include "ui_SearchWidget.h"
 
-#include <QPushButton>
-#include <QDialogButtonBox>
-
 #include "SourceList.h"
 #include "ViewManager.h"
 #include "playlist/PlayableModel.h"
 #include "playlist/PlaylistModel.h"
 #include "utils/AnimatedSpinner.h"
-
+#include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+
+#include <QPushButton>
+#include <QScrollArea>
 
 
 SearchWidget::SearchWidget( const QString& search, QWidget* parent )
@@ -38,33 +38,120 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
     , ui( new Ui::SearchWidget )
     , m_search( search )
 {
-    ui->setupUi( this );
+    QWidget* widget = new QWidget;
+    ui->setupUi( widget );
 
-    ui->resultsView->setGuid( "searchwidget" );
-    m_resultsModel = new PlaylistModel( ui->resultsView );
-    ui->resultsView->setPlaylistModel( m_resultsModel );
-    ui->resultsView->sortByColumn( PlaylistModel::Score, Qt::DescendingOrder );
+    ui->lineAbove->setStyleSheet( QString( "QFrame { border: 1px solid black; }" ) );
+    ui->lineBelow->setStyleSheet( QString( "QFrame { border: 1px solid %1; }" ).arg( TomahawkStyle::HEADER_BACKGROUND.name() ) );
 
-    m_albumsModel = new PlayableModel( ui->albumView );
-    ui->albumView->setPlayableModel( m_albumsModel );
+    {
+        ui->resultsView->setGuid( "searchwidget" );
+        m_resultsModel = new PlaylistModel( ui->resultsView );
 
-    m_artistsModel = new PlayableModel( ui->artistView );
-    ui->artistView->setPlayableModel( m_artistsModel );
+        QPalette p = ui->resultsView->palette();
+        p.setColor( QPalette::Text, TomahawkStyle::PAGE_TRACKLIST_TRACK_SOLVED );
+        p.setColor( QPalette::BrightText, TomahawkStyle::PAGE_TRACKLIST_TRACK_UNRESOLVED );
+        p.setColor( QPalette::Foreground, TomahawkStyle::PAGE_TRACKLIST_NUMBER );
+        p.setColor( QPalette::Highlight, TomahawkStyle::PAGE_TRACKLIST_HIGHLIGHT );
+        p.setColor( QPalette::HighlightedText, TomahawkStyle::PAGE_TRACKLIST_HIGHLIGHT_TEXT );
 
-    ui->artistView->proxyModel()->sort( -1 );
-    ui->albumView->proxyModel()->sort( -1 );
-    ui->artistView->proxyModel()->setHideDupeItems( true );
-    ui->albumView->proxyModel()->setHideDupeItems( true );
+        ui->resultsView->setPalette( p );
+        ui->resultsView->setFrameShape( QFrame::Panel );
+        ui->resultsView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+        ui->resultsView->setStyleSheet( "QTreeView { background-color: transparent; }" );
+        TomahawkStyle::stylePageFrame( ui->resultsFrame );
 
-    TomahawkUtils::unmarginLayout( ui->verticalLayout );
+        ui->resultsView->setAlternatingRowColors( false );
+        ui->resultsView->setAutoResize( true );
+        ui->resultsView->setPlaylistModel( m_resultsModel );
+        ui->resultsView->sortByColumn( PlaylistModel::Score, Qt::DescendingOrder );
+        ui->resultsView->setEmptyTip( tr( "Sorry, we could not find any tracks!" ) );
+    }
+
+    {
+        m_albumsModel = new PlayableModel( ui->albumView );
+        ui->albumView->setPlayableModel( m_albumsModel );
+
+        ui->albumView->setFrameShape( QFrame::NoFrame );
+        ui->albumView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+        ui->albumView->proxyModel()->sort( -1 );
+        ui->albumView->proxyModel()->setHideDupeItems( true );
+
+        ui->albumView->setAutoResize( true );
+        ui->albumView->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+        ui->albumView->setStyleSheet( "QListView { background-color: transparent; }" );
+        TomahawkStyle::stylePageFrame( ui->albumFrame );
+    }
+
+    {
+        m_artistsModel = new PlayableModel( ui->artistView );
+        ui->artistView->setPlayableModel( m_artistsModel );
+
+        ui->artistView->setFrameShape( QFrame::NoFrame );
+        ui->artistView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+        ui->artistView->proxyModel()->sort( -1 );
+        ui->artistView->proxyModel()->setHideDupeItems( true );
+
+        ui->artistView->setAutoResize( true );
+        ui->artistView->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+        ui->artistView->setStyleSheet( "QListView { background-color: transparent; }" );
+        TomahawkStyle::stylePageFrame( ui->artistFrame );
+    }
+
+    {
+        QFont f = ui->label->font();
+        f.setFamily( "Fauna One" );
+
+        QPalette p = ui->label->palette();
+        p.setColor( QPalette::Foreground, TomahawkStyle::PAGE_CAPTION );
+
+        ui->label->setFont( f );
+        ui->label->setPalette( p );
+    }
+
+    {
+        QFont f = ui->label_2->font();
+        f.setFamily( "Fauna One" );
+
+        QPalette p = ui->label_2->palette();
+        p.setColor( QPalette::Foreground, TomahawkStyle::HEADER_TEXT );
+
+        ui->label_2->setFont( f );
+        ui->label_3->setFont( f );
+        ui->label_2->setPalette( p );
+        ui->label_3->setPalette( p );
+    }
+
+    {
+        QScrollArea* area = new QScrollArea();
+        area->setWidgetResizable( true );
+        area->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
+        area->setWidget( widget );
+
+        QPalette pal = palette();
+        pal.setBrush( backgroundRole(), TomahawkStyle::HEADER_BACKGROUND );
+        area->setPalette( pal );
+        area->setAutoFillBackground( true );
+        area->setFrameShape( QFrame::NoFrame );
+        area->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
+        QVBoxLayout* layout = new QVBoxLayout();
+        layout->addWidget( area );
+        setLayout( layout );
+        TomahawkUtils::unmarginLayout( layout );
+    }
+
+    {
+        QPalette pal = palette();
+        pal.setBrush( backgroundRole(), TomahawkStyle::PAGE_BACKGROUND );
+        ui->resultsContainer->setPalette( pal );
+        ui->resultsContainer->setAutoFillBackground( true );
+    }
 
     m_artistsModel->startLoading();
     m_albumsModel->startLoading();
     m_resultsModel->startLoading();
     m_queries << Tomahawk::Query::get( search, uuid() );
-
-    ui->splitter_2->setStretchFactor( 0, 0 );
-    ui->splitter_2->setStretchFactor( 1, 1 );
 
     foreach ( const Tomahawk::query_ptr& query, m_queries )
     {
