@@ -44,11 +44,6 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     QWidget* widget = new QWidget;
     ui->setupUi( widget );
 
-    ui->artistLabel->setContentsMargins( 6, 2, 6, 2 );
-    ui->artistLabel->setElideMode( Qt::ElideMiddle );
-    ui->artistLabel->setType( QueryLabel::Artist );
-    connect( ui->artistLabel, SIGNAL( clickedArtist() ), SLOT( onArtistClicked() ) );
-
     ui->statsLabel->setStyleSheet( "QLabel { background-image:url(); border: 2px solid #dddddd; background-color: #faf9f9; border-radius: 4px; padding: 12px; }" );
     ui->statsLabel->setVisible( false );
 
@@ -56,17 +51,43 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     ui->lyricsView->setFrameShape( QFrame::NoFrame );
     ui->lyricsView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
     ui->lyricsView->setVisible( false ); // FIXME eventually
-
-    ui->similarTracksView->setAutoResize( true );
-    ui->similarTracksView->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+    TomahawkStyle::styleScrollBar( ui->lyricsView->verticalScrollBar() );
 
     ui->lineAbove->setStyleSheet( QString( "QFrame { border: 1px solid %1; }" ).arg( TomahawkStyle::HEADER_BACKGROUND.name() ) );
     ui->lineBelow->setStyleSheet( QString( "QFrame { border: 1px solid black; }" ) );
 
-//    TomahawkUtils::styleScrollBar( ui->similarTracksView->verticalScrollBar() );
-    TomahawkStyle::styleScrollBar( ui->lyricsView->verticalScrollBar() );
+    m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::Original, QSize( 48, 48 ) );
+    ui->cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::Grid, ui->cover->size() ) );
+    ui->cover->setShowText( false );
 
-//    ui->similarTracksView->setStyleSheet( "QListView { background-color: transparent; } QListView::item { background-color: transparent; }" );
+    QHBoxLayout* l = new QHBoxLayout( ui->statsWidget );
+    m_playStatsGauge = new StatsGauge( ui->statsWidget );
+    m_playStatsGauge->setText( tr( "# PLAYS / ARTIST" ) );
+    m_playStatsTotalGauge = new StatsGauge( ui->statsWidget );
+    m_playStatsTotalGauge->setText( tr( "YOUR SONG RANK" ) );
+    m_playStatsTotalGauge->setInvertedAppearance( true );
+
+    l->addSpacerItem( new QSpacerItem( 0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding ) );
+    l->addWidget( m_playStatsGauge );
+    l->addSpacerItem( new QSpacerItem( 0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding ) );
+    l->addWidget( m_playStatsTotalGauge );
+    l->addSpacerItem( new QSpacerItem( 0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding ) );
+    ui->statsWidget->setLayout( l );
+    TomahawkUtils::unmarginLayout( l );
+
+    {
+        m_relatedTracksModel = new PlayableModel( ui->similarTracksView );
+        ui->similarTracksView->setPlayableModel( m_relatedTracksModel );
+        ui->similarTracksView->proxyModel()->sort( -1 );
+        ui->similarTracksView->setEmptyTip( tr( "Sorry, but we could not find similar tracks for this song!" ) );
+        ui->similarTracksView->setAutoResize( true );
+        ui->similarTracksView->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+        ui->similarTracksView->setStyleSheet( "QListView { background-color: transparent; }" );
+        //    TomahawkUtils::styleScrollBar( ui->similarTracksView->verticalScrollBar() );
+        //    ui->similarTracksView->setStyleSheet( "QListView { background-color: transparent; } QListView::item { background-color: transparent; }" );
+
+        TomahawkStyle::stylePageFrame( ui->frame );
+}
 
     {
         QFont f = ui->trackLabel->font();
@@ -80,6 +101,11 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     }
 
     {
+        ui->artistLabel->setContentsMargins( 6, 2, 6, 2 );
+        ui->artistLabel->setElideMode( Qt::ElideMiddle );
+        ui->artistLabel->setType( QueryLabel::Artist );
+        connect( ui->artistLabel, SIGNAL( clickedArtist() ), SLOT( onArtistClicked() ) );
+
         QFont f = ui->artistLabel->font();
         f.setFamily( "Titillium Web" );
 
@@ -116,53 +142,31 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
         ui->lyricsView->setPalette( p );
     }
 
-    m_relatedTracksModel = new PlayableModel( ui->similarTracksView );
-    ui->similarTracksView->setPlayableModel( m_relatedTracksModel );
-    ui->similarTracksView->proxyModel()->sort( -1 );
-    ui->similarTracksView->setEmptyTip( tr( "Sorry, but we could not find similar tracks for this song!" ) );
+    {
+        m_scrollArea = new QScrollArea();
+        m_scrollArea->setWidgetResizable( true );
+        m_scrollArea->setWidget( widget );
+        m_scrollArea->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
 
-    m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::Original, QSize( 48, 48 ) );
-    ui->cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::Grid, ui->cover->size() ) );
-    ui->cover->setShowText( false );
+        QPalette pal = palette();
+        pal.setBrush( backgroundRole(), TomahawkStyle::HEADER_BACKGROUND );
+        m_scrollArea->setPalette( pal );
+        m_scrollArea->setAutoFillBackground( true );
+        m_scrollArea->setFrameShape( QFrame::NoFrame );
+        m_scrollArea->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
-    m_scrollArea = new QScrollArea();
-    m_scrollArea->setWidgetResizable( true );
-    m_scrollArea->setWidget( widget );
-    m_scrollArea->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
+        QVBoxLayout* layout = new QVBoxLayout();
+        layout->addWidget( m_scrollArea );
+        setLayout( layout );
+        TomahawkUtils::unmarginLayout( layout );
+    }
 
-    QPalette pal = palette();
-    pal.setBrush( backgroundRole(), TomahawkStyle::HEADER_BACKGROUND );
-    m_scrollArea->setPalette( pal );
-    m_scrollArea->setAutoFillBackground( true );
-    m_scrollArea->setFrameShape( QFrame::NoFrame );
-    m_scrollArea->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-
-    pal.setBrush( backgroundRole(), TomahawkStyle::PAGE_BACKGROUND );
-    ui->widget->setPalette( pal );
-    ui->widget->setAutoFillBackground( true );
-
-    QHBoxLayout* l = new QHBoxLayout( ui->statsWidget );
-    m_playStatsGauge = new StatsGauge( ui->statsWidget );
-    m_playStatsGauge->setText( tr( "# PLAYS / ARTIST" ) );
-    m_playStatsTotalGauge = new StatsGauge( ui->statsWidget );
-    m_playStatsTotalGauge->setText( tr( "YOUR SONG RANK" ) );
-    m_playStatsTotalGauge->setInvertedAppearance( true );
-
-    l->addSpacerItem( new QSpacerItem( 0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding ) );
-    l->addWidget( m_playStatsGauge );
-    l->addSpacerItem( new QSpacerItem( 0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding ) );
-    l->addWidget( m_playStatsTotalGauge );
-    l->addSpacerItem( new QSpacerItem( 0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding ) );
-    ui->statsWidget->setLayout( l );
-    TomahawkUtils::unmarginLayout( l );
-
-    QVBoxLayout* layout = new QVBoxLayout();
-    layout->addWidget( m_scrollArea );
-    setLayout( layout );
-    TomahawkUtils::unmarginLayout( layout );
-
-    ui->similarTracksView->setStyleSheet( "QListView { background-color: transparent; }" );
-    TomahawkStyle::stylePageFrame( ui->frame );
+    {
+        QPalette pal = palette();
+        pal.setBrush( backgroundRole(), TomahawkStyle::PAGE_BACKGROUND );
+        ui->widget->setPalette( pal );
+        ui->widget->setAutoFillBackground( true );
+    }
 
     load( query );
 }
