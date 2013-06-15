@@ -126,7 +126,6 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
 
     {
         QFont f = ui->label->font();
-        f.setBold( false );
         f.setFamily( "Fauna One" );
 
         QPalette p = ui->label->palette();
