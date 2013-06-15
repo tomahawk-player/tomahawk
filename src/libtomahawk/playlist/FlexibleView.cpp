@@ -76,6 +76,8 @@ FlexibleView::FlexibleView( QWidget* parent, QWidget* extraHeader )
     lineBelow2->setFrameShape( QFrame::HLine );
     lineBelow2->setMaximumHeight( 1 );
 
+    m_gridView->setStyleSheet( QString( "QListView { background-color: black; }" ) );
+
     layout()->addWidget( m_header );
     layout()->addWidget( m_modeHeader );
     if ( extraHeader )
