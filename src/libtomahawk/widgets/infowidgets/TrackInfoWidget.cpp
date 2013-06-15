@@ -118,7 +118,6 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
 
     {
         QFont f = ui->label->font();
-        f.setBold( false );
         f.setFamily( "Fauna One" );
 
         QPalette p = ui->label->palette();
@@ -131,7 +130,6 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     {
         QFont f = ui->statsLabel->font();
         f.setPointSize( TomahawkUtils::defaultFontSize() + 2 );
-        f.setBold( true );
         ui->statsLabel->setFont( f );
     }
 
