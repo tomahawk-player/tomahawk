@@ -4,6 +4,7 @@
  *             2011, Dominik Schmidt <dev@dominik-schmidt.de>
  *             2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013, Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -22,20 +23,26 @@
 #ifndef SIPPLUGIN_H
 #define SIPPLUGIN_H
 
-#include "SipInfo.h"
+#include "Typedefs.h"
 
 #include <QObject>
 #include <QString>
-#include <QNetworkProxy>
 
-#include "accounts/Account.h"
 #ifndef ENABLE_HEADLESS
     #include <QMenu>
 #endif
 
 #include "DllMacro.h"
 
-class SipPlugin;
+class SipInfo;
+namespace Tomahawk
+{
+    namespace Accounts
+    {
+        class Account;
+    }
+    class PeerInfo;
+}
 
 class DLLEXPORT SipPlugin : public QObject
 {

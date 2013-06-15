@@ -20,16 +20,18 @@
 
 #include "AccountManager.h"
 
-#include "CredentialsManager.h"
-#include "config.h"
-#include "SourceList.h"
-#include "TomahawkSettings.h"
-#include "ResolverAccount.h"
-#include "utils/Logger.h"
+#include "sip/SipPlugin.h"
 #include "sip/SipStatusMessage.h"
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
 #include "utils/Closure.h"
+#include "utils/Logger.h"
+
+#include "CredentialsManager.h"
+#include "config.h"
+#include "ResolverAccount.h"
+#include "SourceList.h"
+#include "TomahawkSettings.h"
 
 #include <QtCore/QLibrary>
 #include <QtCore/QDir>

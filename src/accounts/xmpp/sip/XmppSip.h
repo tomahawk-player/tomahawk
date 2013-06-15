@@ -32,6 +32,7 @@
 #endif
 
 #include "accounts/AccountDllMacro.h"
+#include "accounts/Account.h"
 
 #include "../XmppInfoPlugin.h"
 

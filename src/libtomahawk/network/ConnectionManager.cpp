@@ -24,6 +24,7 @@
 
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
+#include "sip/SipInfo.h"
 #include "sip/SipPlugin.h"
 #include "utils/Logger.h"
 

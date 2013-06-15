@@ -27,7 +27,6 @@
 #include "Typedefs.h"
 #include "DllMacro.h"
 #include "infosystem/InfoSystem.h"
-#include "sip/SipPlugin.h"
 #include "Account.h"
 
 namespace Tomahawk
