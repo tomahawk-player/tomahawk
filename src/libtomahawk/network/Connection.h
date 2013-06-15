@@ -122,11 +122,8 @@ private slots:
 
 protected:
     QPointer<QTcpSocket> m_sock;
-    int m_peerport;
-    msg_ptr m_msg;
     Servent* m_servent;
     bool m_outbound, m_ready, m_onceonly;
-    msg_ptr m_firstmsg;
 
 private:
     Q_DECLARE_PRIVATE( Connection )

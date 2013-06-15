@@ -34,7 +34,6 @@
 Connection::Connection( Servent* parent )
     : QObject()
     , m_sock( 0 )
-    , m_peerport( 0 )
     , m_servent( parent )
     , m_ready( false )
     , m_onceonly( true )
@@ -99,7 +98,9 @@ Connection::setFirstMessage( const QVariant& m )
 void
 Connection::setFirstMessage( msg_ptr m )
 {
-    m_firstmsg = m;
+    Q_D( Connection );
+
+    d->firstmsg = m;
     //qDebug() << id() << " first msg set to " << QString::fromAscii(m_firstmsg->payload())
     //        << "msg len:" << m_firstmsg->length() ;
 }
@@ -107,7 +108,9 @@ Connection::setFirstMessage( msg_ptr m )
 msg_ptr
 Connection::firstMessage() const
 {
-    return m_firstmsg;
+    Q_D( const Connection );
+
+    return d->firstmsg;
 }
 
 const QPointer<QTcpSocket>&
@@ -137,13 +140,17 @@ Connection::servent() const
 int
 Connection::peerPort() const
 {
-    return m_peerport;
+    Q_D( const Connection );
+
+    return d->peerport;
 }
 
 void
 Connection::setPeerPort(int p)
 {
-    m_peerport = p;
+    Q_D( Connection );
+
+    d->peerport = p;
 }
 
 
@@ -363,6 +370,8 @@ Connection::authCheckTimeout()
 void
 Connection::doSetup()
 {
+    Q_D( Connection );
+
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << thread();
     /*
         New connections can be created from other thread contexts, such as
@@ -404,8 +413,8 @@ Connection::doSetup()
 
     if ( outbound() )
     {
-        Q_ASSERT( !m_firstmsg.isNull() );
-        sendMsg( m_firstmsg );
+        Q_ASSERT( !d->firstmsg.isNull() );
+        sendMsg( d->firstmsg );
     }
     else
     {
@@ -489,8 +498,9 @@ void
 Connection::readyRead()
 {
 //    qDebug() << "readyRead, bytesavail:" << m_sock->bytesAvailable();
+    Q_D( Connection );
 
-    if ( m_msg.isNull() )
+    if ( d->msg.isNull() )
     {
         if ( m_sock->bytesAvailable() < Msg::headerSize() )
             return;
@@ -503,22 +513,22 @@ Connection::readyRead()
             return;
         }
 
-        m_msg = Msg::begin( (char*) &msgheader );
-        d_func()->rx_bytes += Msg::headerSize();
+        d->msg = Msg::begin( (char*) &msgheader );
+        d->rx_bytes += Msg::headerSize();
     }
 
-    if ( m_sock->bytesAvailable() < m_msg->length() )
+    if ( m_sock->bytesAvailable() < d->msg->length() )
         return;
 
-    QByteArray ba = m_sock->read( m_msg->length() );
-    if ( ba.length() != (qint32)m_msg->length() )
+    QByteArray ba = m_sock->read( d->msg->length() );
+    if ( ba.length() != (qint32)d->msg->length() )
     {
         tDebug() << "Failed to read full msg payload";
         this->markAsFailed();
         return;
     }
-    m_msg->fill( ba );
-    d_func()->rx_bytes += ba.length();
+    d->msg->fill( ba );
+    d->rx_bytes += ba.length();
 
     handleReadMsg(); // process m_msg and clear() it
 
@@ -533,9 +543,11 @@ Connection::readyRead()
 void
 Connection::handleReadMsg()
 {
+    Q_D( Connection );
+
     if ( outbound() == false &&
-        m_msg->is( Msg::SETUP ) &&
-        m_msg->payload() == "ok" )
+        d->msg->is( Msg::SETUP ) &&
+        d->msg->payload() == "ok" )
     {
         m_ready = true;
         tDebug( LOGVERBOSE ) << "Connection" << id() << "READY";
@@ -544,9 +556,9 @@ Connection::handleReadMsg()
     }
     else if ( !m_ready &&
              outbound() &&
-             m_msg->is( Msg::SETUP ) )
+             d->msg->is( Msg::SETUP ) )
     {
-        if ( m_msg->payload() == PROTOVER )
+        if ( d->msg->payload() == PROTOVER )
         {
             sendMsg( Msg::factory( "ok", Msg::SETUP ) );
             m_ready = true;
@@ -562,17 +574,19 @@ Connection::handleReadMsg()
     }
     else
     {
-        d_func()->msgprocessor_in.append( m_msg );
+        d->msgprocessor_in.append( d->msg );
     }
 
-    m_msg.clear();
+    d->msg.clear();
 }
 
 
 void
 Connection::sendMsg( QVariant j )
 {
-    if ( d_func()->do_shutdown )
+    Q_D( Connection );
+
+    if ( d->do_shutdown )
         return;
 
     QJson::Serializer serializer;

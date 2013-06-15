@@ -36,6 +36,7 @@ public:
         , do_shutdown( false )
         , actually_shutting_down( false )
         , peer_disconnected( false )
+        , peerport( 0 )
         , tx_bytes( 0 )
         , tx_bytes_requested( 0 )
         , rx_bytes( 0 )
@@ -61,6 +62,9 @@ private:
     QString id;
     QString name;
     QString nodeid;
+    msg_ptr msg;
+    msg_ptr firstmsg;
+    int peerport;
 
     QTimer* statstimer;
     QTime statstimer_mark;
