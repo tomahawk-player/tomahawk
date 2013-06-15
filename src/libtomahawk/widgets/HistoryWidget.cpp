@@ -58,7 +58,7 @@ HistoryWidget::HistoryWidget( const source_ptr& source, QWidget* parent )
     QPalette pal = m_header->palette();
     pal.setColor( QPalette::Foreground, Qt::white );
     pal.setColor( QPalette::Text, Qt::white );
-    pal.setBrush( backgroundRole(), TomahawkStyle::PAGE_BACKGROUND.lighter() );
+    pal.setBrush( backgroundRole(), TomahawkStyle::HEADER_BACKGROUND.lighter() );
     m_header->setPalette( pal );
     m_header->setAutoFillBackground( true );
 
