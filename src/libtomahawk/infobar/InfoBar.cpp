@@ -96,7 +96,7 @@ InfoBar::InfoBar( QWidget* parent )
     ui->horizontalLayout->addWidget( m_searchWidget );
 
     QPalette pal = m_whitePal;
-    pal.setBrush( backgroundRole(), TomahawkStyle::PAGE_BACKGROUND );
+    pal.setBrush( backgroundRole(), TomahawkStyle::HEADER_BACKGROUND );
 
     setAutoFillBackground( true );
     setPalette( pal );
