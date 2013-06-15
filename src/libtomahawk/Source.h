@@ -30,7 +30,6 @@
 #include "network/ControlConnection.h"
 #include "network/DbSyncConnection.h"
 #include "collection/Collection.h"
-#include "Query.h"
 #include "utils/TomahawkUtils.h"
 
 #include "DllMacro.h"
