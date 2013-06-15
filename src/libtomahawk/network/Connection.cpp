@@ -206,13 +206,17 @@ Connection::markAsFailed()
 void
 Connection::setName( const QString& n )
 {
-    m_name = n;
+    Q_D( Connection );
+
+    d->name = n;
 }
 
 QString
 Connection::name() const
 {
-    return m_name;
+    Q_D( const Connection );
+
+    return d->name;
 }
 
 void
@@ -273,15 +277,16 @@ Connection::peerIpAddress() const
 void
 Connection::start( QTcpSocket* sock )
 {
+    Q_D( Connection );
     Q_ASSERT( m_sock.isNull() );
     Q_ASSERT( sock );
     Q_ASSERT( sock->isValid() );
 
     m_sock = sock;
 
-    if ( m_name.isEmpty() )
+    if ( d->name.isEmpty() )
     {
-        m_name = QString( "peer[%1]" ).arg( m_sock->peerAddress().toString() );
+        d->name = QString( "peer[%1]" ).arg( m_sock->peerAddress().toString() );
     }
 
     QTimer::singleShot( 0, this, SLOT( checkACL() ) );
