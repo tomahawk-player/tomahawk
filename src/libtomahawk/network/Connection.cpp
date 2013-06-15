@@ -193,7 +193,7 @@ Connection::start( QTcpSocket* sock )
 void
 Connection::checkACL()
 {
-    if ( !property( "nodeid" ).isValid() )
+    if ( m_nodeid.isEmpty() )
     {
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Not checking ACL, nodeid is empty";
         QTimer::singleShot( 0, this, SLOT( doSetup() ) );
@@ -206,10 +206,9 @@ Connection::checkACL()
         return;
     }
 
-    QString nodeid = property( "nodeid" ).toString();
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Checking ACL for" << name();
     connect( ACLRegistry::instance(), SIGNAL( aclResult( QString, QString, ACLRegistry::ACL ) ), this, SLOT( checkACLResult( QString, QString, ACLRegistry::ACL ) ), Qt::QueuedConnection );
-    QMetaObject::invokeMethod( ACLRegistry::instance(), "isAuthorizedUser", Qt::QueuedConnection, Q_ARG( QString, nodeid ), Q_ARG( QString, bareName() ), Q_ARG( ACLRegistry::ACL, ACLRegistry::NotFound ) );
+    QMetaObject::invokeMethod( ACLRegistry::instance(), "isAuthorizedUser", Qt::QueuedConnection, Q_ARG( QString, m_nodeid ), Q_ARG( QString, bareName() ), Q_ARG( ACLRegistry::ACL, ACLRegistry::NotFound ) );
 }
 
 
@@ -222,9 +221,9 @@ Connection::bareName() const
 void
 Connection::checkACLResult( const QString &nodeid, const QString &username, ACLRegistry::ACL peerStatus )
 {
-    if ( nodeid != property( "nodeid" ).toString() )
+    if ( nodeid != m_nodeid )
     {
-        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << QString( "nodeid (%1) not ours (%2) for user %3" ).arg( nodeid ).arg( property( "nodeid" ).toString() ).arg( username );
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << QString( "nodeid (%1) not ours (%2) for user %3" ).arg( nodeid ).arg( m_nodeid ).arg( username );
         return;
     }
     if ( username != bareName() )
@@ -366,6 +365,18 @@ void
 Connection::setId( const QString& id )
 {
     m_id = id;
+}
+
+QString
+Connection::nodeId() const
+{
+    return m_nodeid;
+}
+
+void
+Connection::setNodeId( const QString& nodeid )
+{
+    m_nodeid = nodeid;
 }
 
 

@@ -243,7 +243,7 @@ ConnectionManager::connectToPeer( const Tomahawk::peerinfo_ptr &peerInfo, bool l
     if ( peerInfo->nodeId().length() )
         d_func()->controlConnection->setId( peerInfo->nodeId() );
 
-    d_func()->controlConnection->setProperty( "nodeid", peerInfo->nodeId() );
+    d_func()->controlConnection->setNodeId( peerInfo->nodeId() );
 
     Servent::instance()->registerControlConnection( d_func()->controlConnection.data() );
     tryConnect();

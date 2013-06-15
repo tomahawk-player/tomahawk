@@ -1105,7 +1105,7 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
         {
             // Used by the connection for the ACL check
             // If there isn't a nodeid it's not the first connection and will already have been stopped
-            conn.data()->setProperty( "nodeid", nodeid );
+            conn->setNodeId( nodeid );
         }
 
         if ( conn.data()->onceOnly() )
