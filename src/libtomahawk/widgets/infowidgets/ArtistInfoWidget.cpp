@@ -365,7 +365,7 @@ ArtistInfoWidget::onBiographyLoaded()
     m_longDescription = m_artist->biography();
     emit longDescriptionChanged( m_longDescription );
 
-    ui->biography->setHtml( m_artist->biography().replace( '\n', "<br>" ) );
+    ui->biography->setHtml( m_artist->biography().trimmed().replace( '\n', "<br>" ) );
 }
 
 
