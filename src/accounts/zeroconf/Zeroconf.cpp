@@ -24,6 +24,7 @@
 #include "ZeroconfAccount.h"
 #include "Source.h"
 #include "sip/PeerInfo.h"
+#include "sip/SipInfo.h"
 #include "network/ControlConnection.h"
 
 #include <QtPlugin>

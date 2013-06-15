@@ -19,13 +19,16 @@
 
 #include "PeerInfo_p.h"
 
-#include "SipPlugin.h"
-#include "WeakPeerHash.h"
-#include "utils/TomahawkCache.h"
-#include "utils/TomahawkUtilsGui.h"
+#include "accounts/Account.h"
 #include "network/ControlConnection.h"
 #include "network/Servent.h"
 #include "utils/Logger.h"
+#include "utils/TomahawkCache.h"
+#include "utils/TomahawkUtilsGui.h"
+
+#include "SipInfo.h"
+#include "SipPlugin.h"
+#include "WeakPeerHash.h"
 
 #include <QCryptographicHash>
 #include <QBuffer>

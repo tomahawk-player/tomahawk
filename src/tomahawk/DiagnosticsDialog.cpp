@@ -27,14 +27,16 @@
 #include "SourceList.h"
 
 #include "accounts/AccountManager.h"
-#include "network/Servent.h"
-#include "sip/PeerInfo.h"
-#include "utils/TomahawkUtilsGui.h"
-#include "utils/Logger.h"
-#include "infosystem/InfoSystem.h"
-#include "infosystem/InfoSystemWorker.h"
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
+#include "infosystem/InfoSystem.h"
+#include "infosystem/InfoSystemWorker.h"
+#include "network/Servent.h"
+#include "sip/PeerInfo.h"
+#include "sip/SipInfo.h"
+#include "sip/SipPlugin.h"
+#include "utils/TomahawkUtilsGui.h"
+#include "utils/Logger.h"
 
 #include <QLabel>
 #include <QTextEdit>
