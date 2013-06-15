@@ -71,7 +71,7 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     {
         QFont f = ui->trackLabel->font();
         f.setFamily( "Titillium Web" );
-        f.setPointSize( TomahawkUtils::defaultFontSize() + 20 );
+        f.setPointSize( TomahawkUtils::defaultFontSize() + 16 );
          f.setBold( true );
 
         QPalette p = ui->trackLabel->palette();
