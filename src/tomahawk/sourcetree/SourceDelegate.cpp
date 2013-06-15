@@ -38,11 +38,13 @@
 #include "ViewManager.h"
 #include "ContextMenu.h"
 #include "resolvers/ScriptCollection.h"
+#include "network/DBSyncConnectionState.h"
 
 #include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
+#include <QDateTime>
 #include <QMimeData>
 #include <QPainter>
 #include <QMouseEvent>
@@ -402,7 +404,7 @@ SourceDelegate::paintCollection( QPainter* painter, const QStyleOptionViewItem& 
         Q_ASSERT( colItem );
         bool status = !( !colItem || colItem->source().isNull() || !colItem->source()->isOnline() );
 
-        if ( colItem->source() && colItem->source()->currentTrack() && colItem->source()->state() == DBSyncConnection::SYNCED )
+        if ( colItem->source() && colItem->source()->currentTrack() && colItem->source()->state() == Tomahawk::SYNCED )
             m_trackRects[ index ] = textRect.adjusted( 0, 0, -textRect.width() + painter->fontMetrics().width( text ), 0 );
         else
             m_trackRects.remove( index );

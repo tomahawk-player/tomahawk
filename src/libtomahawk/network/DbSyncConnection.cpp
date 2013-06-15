@@ -35,6 +35,7 @@
 #include "database/DatabaseCommand.h"
 #include "database/DatabaseCommand_CollectionStats.h"
 #include "database/DatabaseCommand_LoadOps.h"
+#include "MsgProcessor.h"
 #include "RemoteCollection.h"
 #include "Source.h"
 #include "SourceList.h"
@@ -51,8 +52,8 @@ DBSyncConnection::DBSyncConnection( Servent* s, const source_ptr& src )
 {
     qDebug() << Q_FUNC_INFO << src->id() << thread();
 
-    connect( this,            SIGNAL( stateChanged( DBSyncConnection::State, DBSyncConnection::State, QString ) ),
-             m_source.data(),   SLOT( onStateChanged( DBSyncConnection::State, DBSyncConnection::State, QString ) ) );
+    connect( this,            SIGNAL( stateChanged( Tomahawk::DBSyncConnectionState, Tomahawk::DBSyncConnectionState, QString ) ),
+             m_source.data(),   SLOT( onStateChanged( Tomahawk::DBSyncConnectionState, Tomahawk::DBSyncConnectionState, QString ) ) );
     connect( m_source.data(), SIGNAL( commandsFinished() ),
              this,              SLOT( lastOpApplied() ) );
 
@@ -71,12 +72,12 @@ DBSyncConnection::~DBSyncConnection()
 
 
 void
-DBSyncConnection::changeState( State newstate )
+DBSyncConnection::changeState( DBSyncConnectionState newstate )
 {
     if ( m_state == SHUTDOWN )
         return;
 
-    State s = m_state;
+    DBSyncConnectionState s = m_state;
     m_state = newstate;
     qDebug() << "DBSYNC State changed from" << s << "to" << newstate << "- source:" << m_source->id();
     emit stateChanged( newstate, s, "" );

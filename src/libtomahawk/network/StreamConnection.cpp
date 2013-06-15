@@ -26,6 +26,7 @@
 #include "network/Servent.h"
 #include "database/DatabaseCommand_LoadFiles.h"
 #include "database/Database.h"
+#include "MsgProcessor.h"
 #include "SourceList.h"
 #include "utils/Logger.h"
 

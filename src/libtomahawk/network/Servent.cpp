@@ -30,6 +30,7 @@
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
 #include "network/ConnectionManager.h"
+#include "network/DbSyncConnection.h"
 #include "StreamConnection.h"
 #include "SourceList.h"
 #include "sip/SipInfo.h"
@@ -210,7 +211,7 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
             break;
     }
 
-    connect( ACLRegistry::instance(), SIGNAL( aclResult( QString, QString, ACLRegistry::ACL ) ), this, SLOT( checkACLResult( QString, QString, ACLRegistry::ACL ) ), Qt::QueuedConnection );
+    connect( ACLRegistry::instance(), SIGNAL( aclResult( QString, QString, Tomahawk::ACL ) ), this, SLOT( checkACLResult( QString, QString, Tomahawk::ACL ) ), Qt::QueuedConnection );
 
     return true;
 }
@@ -914,7 +915,7 @@ Servent::socketError( QAbstractSocket::SocketError e )
 
 
 void
-Servent::checkACLResult( const QString& nodeid, const QString& username, ACLRegistry::ACL peerStatus )
+Servent::checkACLResult( const QString& nodeid, const QString& username, Tomahawk::ACL peerStatus )
 {
 
     if ( !d_func()->queuedForACLResult.contains( username ) )
@@ -928,7 +929,7 @@ Servent::checkACLResult( const QString& nodeid, const QString& username, ACLRegi
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << QString( "ACL status for user %1 is" ).arg( username ) << peerStatus;
     QSet<Tomahawk::peerinfo_ptr> peerInfos = d_func()->queuedForACLResult.value( username ).value( nodeid );
-    if ( peerStatus == ACLRegistry::Stream )
+    if ( peerStatus == Tomahawk::Stream )
     {
         foreach ( Tomahawk::peerinfo_ptr peerInfo, peerInfos )
         {

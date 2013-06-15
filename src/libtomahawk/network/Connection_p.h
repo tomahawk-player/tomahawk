@@ -23,10 +23,13 @@
 
 #include "Connection.h"
 
-class ConnectionPrivate : public QObject
-{
-Q_OBJECT
+#include "MsgProcessor.h"
 
+#include <QTime>
+#include <QTimer>
+
+class ConnectionPrivate
+{
 public:
     ConnectionPrivate( Connection* q )
         : q_ptr ( q )

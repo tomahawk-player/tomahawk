@@ -305,8 +305,8 @@ Connection::checkACL()
     }
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Checking ACL for" << name();
-    connect( ACLRegistry::instance(), SIGNAL( aclResult( QString, QString, ACLRegistry::ACL ) ), this, SLOT( checkACLResult( QString, QString, ACLRegistry::ACL ) ), Qt::QueuedConnection );
-    QMetaObject::invokeMethod( ACLRegistry::instance(), "isAuthorizedUser", Qt::QueuedConnection, Q_ARG( QString, d_func()->nodeid ), Q_ARG( QString, bareName() ), Q_ARG( ACLRegistry::ACL, ACLRegistry::NotFound ) );
+    connect( ACLRegistry::instance(), SIGNAL( aclResult( QString, QString, Tomahawk::ACL ) ), this, SLOT( checkACLResult( QString, QString, Tomahawk::ACL ) ), Qt::QueuedConnection );
+    QMetaObject::invokeMethod( ACLRegistry::instance(), "isAuthorizedUser", Qt::QueuedConnection, Q_ARG( QString, d_func()->nodeid ), Q_ARG( QString, bareName() ), Q_ARG( Tomahawk::ACL, Tomahawk::NotFound ) );
 }
 
 
@@ -317,7 +317,7 @@ Connection::bareName() const
 }
 
 void
-Connection::checkACLResult( const QString &nodeid, const QString &username, ACLRegistry::ACL peerStatus )
+Connection::checkACLResult( const QString &nodeid, const QString &username, Tomahawk::ACL peerStatus )
 {
     if ( nodeid != d_func()->nodeid )
     {
@@ -330,9 +330,9 @@ Connection::checkACLResult( const QString &nodeid, const QString &username, ACLR
         return;
     }
 
-    disconnect( ACLRegistry::instance(), SIGNAL( aclResult( QString, QString, ACLRegistry::ACL ) ) );
+    disconnect( ACLRegistry::instance(), SIGNAL( aclResult( QString, QString, Tomahawk::ACL ) ) );
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << QString( "ACL status for user %1 is" ).arg( username ) << peerStatus;
-    if ( peerStatus == ACLRegistry::Stream )
+    if ( peerStatus == Tomahawk::Stream )
     {
         QTimer::singleShot( 0, this, SLOT( doSetup() ) );
         return;

@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2013,      Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -20,6 +21,7 @@
 #define DBSYNCCONNECTION_H
 
 #include "network/Connection.h"
+#include "network/DBSyncConnectionState.h"
 #include "database/Op.h"
 #include "Typedefs.h"
 
@@ -37,18 +39,6 @@ class DBSyncConnection : public Connection
 Q_OBJECT
 
 public:
-    enum State
-    {
-        UNKNOWN,
-        CHECKING,
-        FETCHING,
-        PARSING,
-        SAVING,
-        SYNCED,
-        SCANNING,
-        SHUTDOWN
-    };
-
     explicit DBSyncConnection( Servent* s, const Tomahawk::source_ptr& src );
     virtual ~DBSyncConnection();
 
@@ -56,7 +46,7 @@ public:
     Connection* clone();
 
 signals:
-    void stateChanged( DBSyncConnection::State newstate, DBSyncConnection::State oldstate, const QString& info );
+    void stateChanged( Tomahawk::DBSyncConnectionState newstate, Tomahawk::DBSyncConnectionState oldstate, const QString& info );
 
 protected slots:
     virtual void handleMsg( msg_ptr msg );
@@ -77,7 +67,7 @@ private slots:
 
 private:
     void synced();
-    void changeState( State newstate );
+    void changeState( Tomahawk::DBSyncConnectionState newstate );
 
     int m_fetchCount;
     Tomahawk::source_ptr m_source;
@@ -85,7 +75,7 @@ private:
 
     QString m_lastSentOp;
 
-    State m_state;
+    Tomahawk::DBSyncConnectionState m_state;
 };
 
 #endif // DBSYNCCONNECTION_H

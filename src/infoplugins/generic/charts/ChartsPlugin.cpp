@@ -38,6 +38,7 @@
 #include <QSettings>
 #include <QNetworkConfiguration>
 #include <QNetworkReply>
+#include <QDateTime>
 
 #define CHART_URL "http://charts.tomahawk-player.org/"
 //#define CHART_URL "http://localhost:8080/"

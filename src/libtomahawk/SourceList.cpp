@@ -30,6 +30,8 @@
 
 #include "utils/Logger.h"
 
+#include <qjson/qobjecthelper.h>
+
 using namespace Tomahawk;
 
 SourceList* SourceList::s_instance = 0;

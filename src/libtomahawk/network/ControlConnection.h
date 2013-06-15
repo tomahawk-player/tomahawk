@@ -32,6 +32,9 @@
 
 #include "DllMacro.h"
 
+#include <QTime>
+#include <QTimer>
+
 class Servent;
 class DBSyncConnection;
 

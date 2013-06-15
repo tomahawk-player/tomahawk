@@ -22,6 +22,8 @@
 #include <QApplication>
 #include <QPainter>
 #include <QMouseEvent>
+#include <QDateTime>
+
 #include <boost/concept_check.hpp>
 
 #include "Query.h"

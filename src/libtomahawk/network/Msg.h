@@ -30,6 +30,8 @@
 #ifndef MSG_H
 #define MSG_H
 
+#include "Typedefs.h"
+
 #include <QByteArray>
 #include <QSharedPointer>
 #include <QtEndian>
@@ -38,9 +40,6 @@
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 #include <qjson/qobjecthelper.h>
-
-class Msg;
-typedef QSharedPointer<Msg> msg_ptr;
 
 class Msg
 {

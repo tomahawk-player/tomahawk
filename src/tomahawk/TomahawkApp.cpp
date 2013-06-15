@@ -43,6 +43,7 @@
 //#include "playlist/dynamic/database/DatabaseGenerator.h"
 #include "playlist/XspfUpdater.h"
 #include "network/Servent.h"
+#include "network/DbSyncConnection.h"
 #include "web/Api_v1.h"
 #include "SourceList.h"
 #include "ShortcutHandler.h"
@@ -361,7 +362,7 @@ void
 TomahawkApp::registerMetaTypes()
 {
     qRegisterMetaType< QSharedPointer<DatabaseCommand> >("QSharedPointer<DatabaseCommand>");
-    qRegisterMetaType< DBSyncConnection::State >("DBSyncConnection::State");
+    qRegisterMetaType< DBSyncConnectionState >("DBSyncConnectionState");
     qRegisterMetaType< msg_ptr >("msg_ptr");
     qRegisterMetaType< QList<dbop_ptr> >("QList<dbop_ptr>");
     qRegisterMetaType< QList<QVariantMap> >("QList<QVariantMap>");

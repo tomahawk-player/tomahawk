@@ -18,13 +18,15 @@
 
 #include "DatabaseCommand_SetDynamicPlaylistRevision.h"
 
-#include "Source.h"
-#include "DatabaseImpl.h"
-#include "TomahawkSqlQuery.h"
+#include "collection/Collection.h"
 #include "playlist/dynamic/DynamicPlaylist.h"
 #include "playlist/dynamic/DynamicControl.h"
 #include "network/Servent.h"
 #include "utils/Logger.h"
+
+#include "DatabaseImpl.h"
+#include "Source.h"
+#include "TomahawkSqlQuery.h"
 
 #include <QSqlQuery>
 

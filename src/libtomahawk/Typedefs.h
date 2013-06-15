@@ -30,6 +30,10 @@
 
 #include <QNetworkReply>
 
+// TODO: Move into Tomahawk namespace
+class Msg;
+typedef QSharedPointer<Msg> msg_ptr;
+
 namespace Tomahawk
 {
     class Artist;
@@ -76,6 +80,13 @@ namespace Tomahawk
     typedef QString QID; //query id
     typedef QString RID; //result id
 
+    enum ACL {
+        NotFound = 0,
+        Deny = 1,
+        Read = 2,
+        Stream = 3
+    };
+
     enum GeneratorMode
     {
         OnDemand = 0,
@@ -86,7 +97,7 @@ namespace Tomahawk
     {
         Mixed = 0,
         DatabaseMode,
-        InfoSystemMode,
+        InfoSystemMode
     };
 
     enum ModelTypes
@@ -228,7 +239,7 @@ namespace Tomahawk
 
         typedef QPointer< InfoPlugin > InfoPluginPtr;
     }
-}; // ns
+} // ns
 
 typedef int AudioErrorCode;
 typedef int AudioState;
@@ -246,6 +257,7 @@ inline static QString uuid()
 
 Q_DECLARE_METATYPE( QModelIndex )
 Q_DECLARE_METATYPE( QPersistentModelIndex )
-Q_DECLARE_METATYPE( QNetworkReply* );
+Q_DECLARE_METATYPE( QNetworkReply* )
+Q_DECLARE_METATYPE( Tomahawk::ACL )
 
 #endif // TYPEDEFS_H
