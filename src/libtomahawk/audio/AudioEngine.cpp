@@ -81,14 +81,17 @@ AudioEnginePrivate::onStateChanged( Phonon::State newState, Phonon::State oldSta
     }
     if ( newState == Phonon::PlayingState )
     {
+        bool emitSignal = false;
         if ( q_ptr->state() != AudioEngine::Paused && q_ptr->state() != AudioEngine::Playing )
         {
             underrunCount = 0;
             underrunNotified = false;
-            emit q_ptr->started( currentTrack );
+            emitSignal = true;
         }
-
         q_ptr->setState( AudioEngine::Playing );
+
+        if ( emitSignal )
+            emit q_ptr->started( currentTrack );
     }
     if ( newState == Phonon::StoppedState && oldState == Phonon::PausedState )
     {
