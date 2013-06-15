@@ -58,6 +58,9 @@ public:
     QString id() const;
     void setId( const QString& );
 
+    QString nodeId() const;
+    void setNodeId( const QString& );
+
     void setFirstMessage( const QVariant& m );
     void setFirstMessage( msg_ptr m );
     msg_ptr firstMessage() const { return m_firstmsg; }
@@ -145,6 +148,7 @@ private:
     qint64 m_tx_bytes, m_tx_bytes_requested;
     qint64 m_rx_bytes;
     QString m_id;
+    QString m_nodeid;
 
     QTimer* m_statstimer;
     QTime m_statstimer_mark;
