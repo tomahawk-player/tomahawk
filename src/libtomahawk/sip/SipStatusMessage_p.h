@@ -17,40 +17,38 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SIPSTATUSMESSAGE_H
-#define SIPSTATUSMESSAGE_H
+#ifndef SIPSTATUSMESSAGE_P_H
+#define SIPSTATUSMESSAGE_P_H
 
-#include "jobview/JobStatusItem.h"
-#include "DllMacro.h"
+#include "SipStatusMessage.h"
 
-#include <QPixmap>
+#include <QHash>
 
-class SipStatusMessagePrivate;
+class QTimer;
 
-class DLLEXPORT SipStatusMessage : public JobStatusItem
+class SipStatusMessagePrivate
 {
-    Q_OBJECT
 public:
-    enum SipStatusMessageType
+    SipStatusMessagePrivate( SipStatusMessage* q, SipStatusMessage::SipStatusMessageType _statusMessageType, const QString& _contactId, const QString& _message )
+        : q_ptr ( q )
+        , contactId( _contactId )
+        , statusMessageType( _statusMessageType )
+        , message( _message )
+
     {
-        SipInviteSuccess,
-        SipInviteFailure,
-        SipAuthReceived,
-        SipLoginFailure,
-        SipConnectionFailure
-    };
+    }
+    SipStatusMessage* q_ptr;
+    Q_DECLARE_PUBLIC ( SipStatusMessage )
 
-    explicit SipStatusMessage( SipStatusMessageType statusMessageType, const QString& contactId, const QString& message = QString() );
-
-    QString type() const { return "sipstatusmessage"; }
-
-    QPixmap icon() const;
-    QString mainText() const;
-
-    bool allowMultiLine() const { return true; }
 private:
-    Q_DECLARE_PRIVATE( SipStatusMessage )
-    SipStatusMessagePrivate* d_ptr;
+    QString contactId;
+    SipStatusMessage::SipStatusMessageType statusMessageType;
+    QString message;
+
+    static QHash< SipStatusMessage::SipStatusMessageType, QPixmap > s_typesPixmaps;
+
+    QTimer* timer;
 };
 
-#endif // SIPSTATUSMESSAGE_H
+
+#endif // SIPSTATUSMESSAGE_P_H
