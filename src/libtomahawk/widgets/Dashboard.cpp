@@ -61,83 +61,127 @@ Dashboard::Dashboard( QWidget* parent )
     m_header->setCaption( tr( "Dashboard" ) );
     m_header->setDescription( tr( "An overview of your recent activity" ) );
 
-    RecentPlaylistsModel* model = new RecentPlaylistsModel( HISTORY_PLAYLIST_ITEMS, this );
+    ui->lineAbove->setStyleSheet( QString( "QFrame { border: 1px solid black; }" ) );
+    ui->lineBelow->setStyleSheet( QString( "QFrame { border: 1px solid %1; }" ).arg( TomahawkStyle::HEADER_BACKGROUND.name() ) );
 
-    QPalette trackViewPal = ui->tracksView->palette();
-    trackViewPal.setColor( QPalette::Foreground, TomahawkStyle::PAGE_FOREGROUND );
-    trackViewPal.setColor( QPalette::Text, TomahawkStyle::PAGE_FOREGROUND );
-    trackViewPal.setColor( QPalette::Highlight, QColor( "#252020" ) );
-    trackViewPal.setColor( QPalette::HighlightedText, Qt::white );
+    {
+        m_tracksModel = new RecentlyPlayedModel( ui->tracksView, HISTORY_TRACK_ITEMS );
+        ui->tracksView->proxyModel()->setStyle( PlayableProxyModel::ShortWithAvatars );
+        ui->tracksView->overlay()->setEnabled( false );
+        ui->tracksView->setPlaylistModel( m_tracksModel );
+        ui->tracksView->setAutoResize( true );
+        ui->tracksView->setAlternatingRowColors( false );
+        m_tracksModel->setSource( source_ptr() );
 
-    ui->playlistWidget->setFrameShape( QFrame::NoFrame );
-    ui->playlistWidget->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    ui->playlistWidget->setItemDelegate( new PlaylistDelegate() );
-    ui->playlistWidget->setModel( model );
-    ui->playlistWidget->overlay()->resize( 380, 86 );
-    ui->playlistWidget->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
-    ui->playlistWidget->setPalette( trackViewPal );
-    ui->playlistWidget->setMinimumHeight( 400 );
-    updatePlaylists();
+        QPalette p = ui->tracksView->palette();
+        p.setColor( QPalette::Text, TomahawkStyle::PAGE_TRACKLIST_TRACK_SOLVED );
+        p.setColor( QPalette::BrightText, TomahawkStyle::PAGE_TRACKLIST_TRACK_UNRESOLVED );
+        p.setColor( QPalette::Foreground, TomahawkStyle::PAGE_TRACKLIST_NUMBER );
+        p.setColor( QPalette::Highlight, TomahawkStyle::PAGE_TRACKLIST_HIGHLIGHT );
+        p.setColor( QPalette::HighlightedText, TomahawkStyle::PAGE_TRACKLIST_HIGHLIGHT_TEXT );
 
-    m_tracksModel = new RecentlyPlayedModel( ui->tracksView, HISTORY_TRACK_ITEMS );
-    ui->tracksView->proxyModel()->setStyle( PlayableProxyModel::ShortWithAvatars );
-    ui->tracksView->overlay()->setEnabled( false );
-    ui->tracksView->setPlaylistModel( m_tracksModel );
-    ui->tracksView->setAutoResize( true );
-    m_tracksModel->setSource( source_ptr() );
+        ui->tracksView->setPalette( p );
+        ui->tracksView->setFrameShape( QFrame::NoFrame );
+        ui->tracksView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+        ui->tracksView->setStyleSheet( "QTreeView { background-color: transparent; }" );
+        TomahawkStyle::stylePageFrame( ui->trackFrame );
 
-    ui->tracksView->setPalette( trackViewPal );
-    ui->tracksView->setAlternatingRowColors( false );
-    ui->tracksView->setFrameShape( QFrame::NoFrame );
-    ui->tracksView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+        QFont f;
+        f.setBold( true );
+        QFontMetrics fm( f );
+        ui->tracksView->setMinimumWidth( fm.width( tr( "Recently played tracks" ) ) * 2 );
+    }
 
-    m_recentAlbumsModel = new AlbumModel( ui->additionsView );
-    ui->additionsView->setPlayableModel( m_recentAlbumsModel );
-    ui->additionsView->proxyModel()->sort( -1 );
+    {
+        RecentPlaylistsModel* model = new RecentPlaylistsModel( HISTORY_PLAYLIST_ITEMS, this );
 
-    QScrollArea* area = new QScrollArea();
-    area->setWidgetResizable( true );
-    area->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
-    area->setWidget( widget );
+        ui->playlistWidget->setFrameShape( QFrame::NoFrame );
+        ui->playlistWidget->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+        ui->playlistWidget->setItemDelegate( new PlaylistDelegate() );
+        ui->playlistWidget->setModel( model );
+        ui->playlistWidget->overlay()->resize( 380, 86 );
+        ui->playlistWidget->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
 
-    QPalette pal = palette();
-    // background: qradialgradient(cx: 0.5, cy: -1.8, fx: 0.5, fy: 0, radius: 2, stop: 0 %1, stop: 1 %2);
-    pal.setBrush( backgroundRole(), TomahawkStyle::PAGE_BACKGROUND );
-    area->setPalette( pal );
-    area->setAutoFillBackground( true );
-    area->setFrameShape( QFrame::NoFrame );
-    area->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+        QPalette p = ui->playlistWidget->palette();
+        p.setColor( QPalette::Text, TomahawkStyle::HEADER_TEXT );
+        p.setColor( QPalette::BrightText, TomahawkStyle::HEADER_TEXT );
+        p.setColor( QPalette::Foreground, TomahawkStyle::HEADER_TEXT );
+        p.setColor( QPalette::Highlight, TomahawkStyle::HEADER_TEXT );
+        p.setColor( QPalette::HighlightedText, TomahawkStyle::HEADER_BACKGROUND );
 
-    QVBoxLayout* layout = new QVBoxLayout();
-    layout->addWidget( m_header );
-    layout->addWidget( area );
-    setLayout( layout );
-    TomahawkUtils::unmarginLayout( layout );
+        ui->playlistWidget->setPalette( p );
+        ui->playlistWidget->setMinimumHeight( 400 );
+        ui->playlistWidget->setStyleSheet( "QListView { background-color: transparent; }" );
+        TomahawkStyle::styleScrollBar( ui->playlistWidget->verticalScrollBar() );
+        TomahawkStyle::stylePageFrame( ui->playlistFrame );
 
-    TomahawkStyle::styleScrollBar( ui->playlistWidget->verticalScrollBar() );
-    TomahawkStyle::styleScrollBar( ui->additionsView->verticalScrollBar() );
+        updatePlaylists();
+        connect( ui->playlistWidget, SIGNAL( activated( QModelIndex ) ), SLOT( onPlaylistActivated( QModelIndex ) ) );
+        connect( model, SIGNAL( emptinessChanged( bool ) ), this, SLOT( updatePlaylists() ) );
+    }
 
-    QFont f;
-    f.setBold( true );
-    QFontMetrics fm( f );
-    ui->tracksView->setMinimumWidth( fm.width( tr( "Recently played tracks" ) ) * 2 );
+    {
+        m_recentAlbumsModel = new AlbumModel( ui->additionsView );
+        ui->additionsView->setPlayableModel( m_recentAlbumsModel );
+        ui->additionsView->proxyModel()->sort( -1 );
 
-    QPalette p = ui->label->palette();
-    p.setColor( QPalette::Foreground, TomahawkStyle::PAGE_FOREGROUND );
-    p.setColor( QPalette::Text, TomahawkStyle::PAGE_TEXT );
+        ui->additionsView->setStyleSheet( "QListView { background-color: transparent; }" );
+        TomahawkStyle::stylePageFrame( ui->additionsFrame );
+        TomahawkStyle::styleScrollBar( ui->additionsView->verticalScrollBar() );
+    }
 
-    ui->label->setPalette( p );
-    ui->label_2->setPalette( p );
-    ui->label_3->setPalette( p );
+    {
+        QFont f = ui->label->font();
+        f.setBold( false );
+        f.setFamily( "Fauna One" );
 
-    ui->playlistWidget->setStyleSheet( "QListView { background-color: transparent; }" );
-    TomahawkStyle::stylePageFrame( ui->playlistFrame );
+        QPalette p = ui->label->palette();
+        p.setColor( QPalette::Foreground, TomahawkStyle::PAGE_CAPTION );
 
-    ui->additionsView->setStyleSheet( "QListView { background-color: transparent; }" );
-    TomahawkStyle::stylePageFrame( ui->additionsFrame );
+        ui->label->setFont( f );
+        ui->label_2->setFont( f );
+        ui->label->setPalette( p );
+        ui->label_2->setPalette( p );
+    }
 
-    ui->tracksView->setStyleSheet( "QTreeView { background-color: transparent; }" );
-    TomahawkStyle::stylePageFrame( ui->trackFrame );
+    {
+        QFont f = ui->playlistLabel->font();
+        f.setBold( false );
+        f.setFamily( "Fauna One" );
+
+        QPalette p = ui->playlistLabel->palette();
+        p.setColor( QPalette::Foreground, TomahawkStyle::HEADER_TEXT );
+
+        ui->playlistLabel->setFont( f );
+        ui->playlistLabel->setPalette( p );
+    }
+
+    {
+        QScrollArea* area = new QScrollArea();
+        area->setWidgetResizable( true );
+        area->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
+        area->setWidget( widget );
+
+        QPalette pal = palette();
+        pal.setBrush( backgroundRole(), TomahawkStyle::HEADER_BACKGROUND );
+        area->setPalette( pal );
+        area->setAutoFillBackground( true );
+        area->setFrameShape( QFrame::NoFrame );
+        area->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
+        QVBoxLayout* layout = new QVBoxLayout();
+        layout->addWidget( m_header );
+        layout->addWidget( area );
+        setLayout( layout );
+        TomahawkUtils::unmarginLayout( layout );
+    }
+
+    {
+        QPalette pal = palette();
+        pal.setBrush( backgroundRole(), TomahawkStyle::PAGE_BACKGROUND );
+        ui->widget->setPalette( pal );
+        ui->widget->setAutoFillBackground( true );
+    }
 
     MetaPlaylistInterface* mpl = new MetaPlaylistInterface();
     mpl->addChildInterface( ui->tracksView->playlistInterface() );
@@ -146,8 +190,6 @@ Dashboard::Dashboard( QWidget* parent )
 
     connect( SourceList::instance(), SIGNAL( ready() ), SLOT( onSourcesReady() ) );
     connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
-    connect( ui->playlistWidget, SIGNAL( activated( QModelIndex ) ), SLOT( onPlaylistActivated( QModelIndex ) ) );
-    connect( model, SIGNAL( emptinessChanged( bool ) ), this, SLOT( updatePlaylists() ) );
 }
 
 
