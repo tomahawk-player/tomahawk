@@ -281,12 +281,12 @@ se s vámi spojil?</translation>
         <translation>Promiňte, nepodařilo se najít žádná jiná alba tohoto umělce!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="70"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="71"/>
         <source>Sorry, we could not find any tracks for this album!</source>
         <translation>Promiňte, nepodařilo se najít žádné skladby pro toto album!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="195"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="196"/>
         <source>Other Albums by %1</source>
         <translation>Jiná alba %1</translation>
     </message>
@@ -313,12 +313,12 @@ se s vámi spojil?</translation>
         <translation>Nejlepší písně</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="285"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="284"/>
         <source>Related Artists</source>
         <translation>Podobní umělci</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="395"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="393"/>
         <source>Albums</source>
         <translation>Alba</translation>
     </message>
@@ -338,9 +338,9 @@ se s vámi spojil?</translation>
         <translation>Sorry, wir konnten keine Lieder für diesen Künstler finden!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="110"/>
-        <source># IN YOUR CHARTS</source>
-        <translation># VE VAŠICH ŽEBŘÍČCÍCH</translation>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="114"/>
+        <source>YOUR ARTIST RANK</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -450,7 +450,7 @@ se s vámi spojil?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnItemDelegate.cpp" line="191"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>Neznámý</translation>
     </message>
 </context>
 <context>
@@ -458,7 +458,7 @@ se s vámi spojil?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnView.cpp" line="303"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
-        <translation type="unfinished"/>
+        <translation>Promiňte, vašemu filtru &apos;%1&apos; se nepodařilo najít žádné výsledky.</translation>
     </message>
 </context>
 <context>
@@ -466,57 +466,57 @@ se s vámi spojil?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="192"/>
         <source>Composer</source>
-        <translation type="unfinished"/>
+        <translation>Skladatel</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="204"/>
         <source>Age</source>
-        <translation type="unfinished"/>
+        <translation>Stáří</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="216"/>
         <source>Year</source>
-        <translation type="unfinished"/>
+        <translation>Rok</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="228"/>
         <source>Duration</source>
-        <translation type="unfinished"/>
+        <translation>Doba trvání</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="240"/>
         <source>Bitrate</source>
-        <translation type="unfinished"/>
+        <translation>Datový tok</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="255"/>
         <source>Composer:</source>
-        <translation type="unfinished"/>
+        <translation>Skladatel:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="273"/>
         <source>Duration:</source>
-        <translation type="unfinished"/>
+        <translation>Doba trvání:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="291"/>
         <source>Bitrate:</source>
-        <translation type="unfinished"/>
+        <translation>Datový tok:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="309"/>
         <source>Year:</source>
-        <translation type="unfinished"/>
+        <translation>Rok:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="327"/>
         <source>Age:</source>
-        <translation type="unfinished"/>
+        <translation>Stáří:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.cpp" line="96"/>
         <source>%1 kbps</source>
-        <translation type="unfinished"/>
+        <translation>%1 kb/s</translation>
     </message>
 </context>
 <context>
@@ -607,12 +607,12 @@ se s vámi spojil?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/Dashboard.cpp" line="61"/>
         <source>Dashboard</source>
-        <translation type="unfinished"/>
+        <translation>Nástěnka</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/Dashboard.cpp" line="62"/>
         <source>An overview of your recent activity</source>
-        <translation type="unfinished"/>
+        <translation>Přehled vaší poslední činnosti</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/Dashboard.cpp" line="123"/>
@@ -790,12 +790,12 @@ se s vámi spojil?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="312"/>
         <source>This playlist is currently empty.</source>
-        <translation type="unfinished"/>
+        <translation>Tento seznam skladeb je nyní prázdný.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="314"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
-        <translation type="unfinished"/>
+        <translation>Tento seznam skladeb je nyní prázdný. Přidejte do něj nějaké skladby a vychutnávejte hudbu!</translation>
     </message>
 </context>
 <context>
@@ -2267,7 +2267,7 @@ heslo</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="300"/>
         <source>Dashboard</source>
-        <translation>Přístrojová deska</translation>
+        <translation>Nástěnka</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="320"/>
@@ -4047,47 +4047,47 @@ služby Twitter zde zadejte tam zobrazené číslo PIN:</translation>
 <context>
     <name>TrackInfoWidget</name>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="226"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="269"/>
         <source>Similar Tracks</source>
         <translation>Podobné skladby</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="83"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="125"/>
         <source>Sorry, but we could not find similar tracks for this song!</source>
         <translation>Promiňte, ale nepodařilo se najít podobné skladby pro tuto píseň!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="103"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="149"/>
         <source># PLAYS / ARTIST</source>
         <translation># HRAJE / UMĚLEC</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="105"/>
-        <source># IN YOUR CHARTS</source>
-        <translation># VE VAŠICH ŽEBŘÍČCÍCH</translation>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="151"/>
+        <source>YOUR SONG RANK</source>
+        <translation type="unfinished"/>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="233"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="278"/>
         <source>You&apos;ve listened to this track %n time(s).</source>
         <translation><numerusform>Tuto píseň jste si poslechl jednou.</numerusform><numerusform>Tuto píseň jste si poslechl %n krát.</numerusform><numerusform>Tuto píseň jste si poslechl %n krát.</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="235"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="280"/>
         <source>You&apos;ve never listened to this track before.</source>
         <translation>Tuto píseň jste si ještě nikdy neposlechl.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="239"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="284"/>
         <source>You first listened to it on %1.</source>
         <translation>Tuto píseň jste si poprvé poslechl %1.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="244"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="289"/>
         <source>You&apos;ve listened to %1 %n time(s).</source>
         <translation><numerusform>%1 jste si poslechl jednou.</numerusform><numerusform>%1 jste si poslechl %n krát.</numerusform><numerusform>%1 jste si poslechl %n krát.</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="250"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="295"/>
         <source>You&apos;ve never listened to %1 before.</source>
         <translation>%1 jste si předtím ještě nikdy neposlechl.</translation>
     </message>

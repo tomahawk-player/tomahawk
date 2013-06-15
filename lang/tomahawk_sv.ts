@@ -281,12 +281,12 @@ ansluta och strömma från dig?</translation>
         <translation>Tyvärr! Det gick inte hitta några andra album av denna artisten</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="70"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="71"/>
         <source>Sorry, we could not find any tracks for this album!</source>
         <translation>Tyvärr! Det gick inte hitta några spår från detta albumet!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="195"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="196"/>
         <source>Other Albums by %1</source>
         <translation>Andra album av %1</translation>
     </message>
@@ -313,12 +313,12 @@ ansluta och strömma från dig?</translation>
         <translation>Största hits</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="285"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="284"/>
         <source>Related Artists</source>
         <translation>Relaterade artister</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="395"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="393"/>
         <source>Albums</source>
         <translation>Album</translation>
     </message>
@@ -338,9 +338,9 @@ ansluta och strömma från dig?</translation>
         <translation>Tyvärr! Det gick inte hitta några tophits av denna artisten</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="110"/>
-        <source># IN YOUR CHARTS</source>
-        <translation># I DINA LISTOR</translation>
+        <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="114"/>
+        <source>YOUR ARTIST RANK</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -450,7 +450,7 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnItemDelegate.cpp" line="191"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>Okänd</translation>
     </message>
 </context>
 <context>
@@ -458,7 +458,7 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnView.cpp" line="303"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
-        <translation type="unfinished"/>
+        <translation>Tyvärr kunde inte ditt filter &apos;%1&apos; matcha några resultat</translation>
     </message>
 </context>
 <context>
@@ -466,57 +466,57 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="192"/>
         <source>Composer</source>
-        <translation type="unfinished"/>
+        <translation>Kompositör</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="204"/>
         <source>Age</source>
-        <translation type="unfinished"/>
+        <translation>Ålder</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="216"/>
         <source>Year</source>
-        <translation type="unfinished"/>
+        <translation>År</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="228"/>
         <source>Duration</source>
-        <translation type="unfinished"/>
+        <translation>Längd</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="240"/>
         <source>Bitrate</source>
-        <translation type="unfinished"/>
+        <translation>Bitrate</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="255"/>
         <source>Composer:</source>
-        <translation type="unfinished"/>
+        <translation>Kompositör:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="273"/>
         <source>Duration:</source>
-        <translation type="unfinished"/>
+        <translation>Längd:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="291"/>
         <source>Bitrate:</source>
-        <translation type="unfinished"/>
+        <translation>Bitrate:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="309"/>
         <source>Year:</source>
-        <translation type="unfinished"/>
+        <translation>År:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="327"/>
         <source>Age:</source>
-        <translation type="unfinished"/>
+        <translation>Ålder:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.cpp" line="96"/>
         <source>%1 kbps</source>
-        <translation type="unfinished"/>
+        <translation>%1 kbps</translation>
     </message>
 </context>
 <context>
@@ -607,12 +607,12 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/Dashboard.cpp" line="61"/>
         <source>Dashboard</source>
-        <translation type="unfinished"/>
+        <translation>Dashboard</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/Dashboard.cpp" line="62"/>
         <source>An overview of your recent activity</source>
-        <translation type="unfinished"/>
+        <translation>Överblick över din senaste aktivitet</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/Dashboard.cpp" line="123"/>
@@ -790,12 +790,12 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="312"/>
         <source>This playlist is currently empty.</source>
-        <translation type="unfinished"/>
+        <translation>Denna spellistan är för närvarande tom</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="314"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
-        <translation type="unfinished"/>
+        <translation>Denna spellistan är för närvarande tom. Lägg till några spår och njut av musiken!</translation>
     </message>
 </context>
 <context>
@@ -2332,12 +2332,12 @@ och radiostationer baserat på din personliga profil</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="184"/>
         <source>Use this to force Spotify to never announce listening data to Social Networks</source>
-        <translation type="unfinished"/>
+        <translation>Använder detta för att tvinga Spotify att aldrig tlilkännage lyssningsinformation på sociala nätverk</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="187"/>
         <source>Always run in Private Mode</source>
-        <translation type="unfinished"/>
+        <translation>Kör alltid i Privat läge</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="134"/>
@@ -2934,7 +2934,7 @@ username@jabber.org</translation>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="181"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="487"/>
         <source>&amp;Love</source>
-        <translation>&amp;Kärlek</translation>
+        <translation>&amp;Älska</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="195"/>
@@ -4048,47 +4048,47 @@ anger du PIN-koden här:</translation>
 <context>
     <name>TrackInfoWidget</name>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="226"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="269"/>
         <source>Similar Tracks</source>
         <translation>Liknande spår</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="83"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="125"/>
         <source>Sorry, but we could not find similar tracks for this song!</source>
         <translation>Tyvärr! Det gick inte hitta några spår som liknande denna låten!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="103"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="149"/>
         <source># PLAYS / ARTIST</source>
         <translation># UPPSPELNINGAR / ARTIST</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="105"/>
-        <source># IN YOUR CHARTS</source>
-        <translation># I DINA LISTOR</translation>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="151"/>
+        <source>YOUR SONG RANK</source>
+        <translation type="unfinished"/>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="233"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="278"/>
         <source>You&apos;ve listened to this track %n time(s).</source>
         <translation><numerusform>Du har lyssnat på detta spåret %n gånger.</numerusform><numerusform>Du har lyssnat på detta spåret %n gånger</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="235"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="280"/>
         <source>You&apos;ve never listened to this track before.</source>
         <translation>Du har inte lyssnat på detta spåret tidigare.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="239"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="284"/>
         <source>You first listened to it on %1.</source>
         <translation>Du har lyssnat på det på %1.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="244"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="289"/>
         <source>You&apos;ve listened to %1 %n time(s).</source>
         <translation><numerusform>Du har lyssnat på %1 %n gång.</numerusform><numerusform>Du har lyssnat på %1 %n gånger.</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="250"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="295"/>
         <source>You&apos;ve never listened to %1 before.</source>
         <translation>Du har inte lyssnat på %1 tidigare.</translation>
     </message>
