@@ -49,20 +49,20 @@ public:
         QString friendlyName;
         QStringList knownDbids;
         QStringList knownAccountIds;
-        Tomahawk::ACL::Type acl;
+        Tomahawk::ACLStatus::Type acl;
 
         User()
             : uuid( QUuid::createUuid().toString() )
             , friendlyName()
             , knownDbids()
             , knownAccountIds()
-            , acl( Tomahawk::ACL::NotFound )
+            , acl( Tomahawk::ACLStatus::NotFound )
             {}
 
         ~User()
             {}
 
-        User( QString p_uuid, QString p_friendlyName, QStringList p_knownDbids, QStringList p_knownAccountIds, Tomahawk::ACL::Type p_acl )
+        User( QString p_uuid, QString p_friendlyName, QStringList p_knownDbids, QStringList p_knownAccountIds, Tomahawk::ACLStatus::Type p_acl )
             : uuid( p_uuid )
             , friendlyName( p_friendlyName )
             , knownDbids( p_knownDbids )
@@ -83,7 +83,7 @@ public:
     virtual ~ACLRegistry();
 
 signals:
-    void aclResult( QString nodeid, QString username, Tomahawk::ACL::Type peerStatus );
+    void aclResult( QString nodeid, QString username, Tomahawk::ACLStatus::Type peerStatus );
 
 public slots:
     /**
@@ -92,9 +92,9 @@ public slots:
      * @param dbid DBID of peer
      * @param globalType Global ACL to store if peer not found; if ACLRegistry::NotFound, does not store the peer Defaults to ACLRegistry::NotFound.
      * @param username If not empty, will store the given username along with the new ACL value. Defaults to QString().
-     * @return Tomahawk::ACL::Type
+     * @return Tomahawk::ACLStatus::Type
      **/
-    virtual Tomahawk::ACL::Type isAuthorizedUser( const QString &dbid, const QString &username, Tomahawk::ACL::Type globalType = Tomahawk::ACL::NotFound, bool skipEmission = false ) = 0;
+    virtual Tomahawk::ACLStatus::Type isAuthorizedUser( const QString &dbid, const QString &username, Tomahawk::ACLStatus::Type globalType = Tomahawk::ACLStatus::NotFound, bool skipEmission = false ) = 0;
     virtual void wipeEntries();
 
 protected:

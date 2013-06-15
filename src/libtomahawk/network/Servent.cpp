@@ -211,8 +211,8 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
             break;
     }
 
-    connect( ACLRegistry::instance(), SIGNAL( aclResult( QString, QString, Tomahawk::ACL::Type ) ),
-             this, SLOT( checkACLResult( QString, QString, Tomahawk::ACL::Type ) ),
+    connect( ACLRegistry::instance(), SIGNAL( aclResult( QString, QString, Tomahawk::ACLStatus::Type ) ),
+             this, SLOT( checkACLResult( QString, QString, Tomahawk::ACLStatus::Type ) ),
              Qt::QueuedConnection );
 
     return true;
@@ -917,7 +917,7 @@ Servent::socketError( QAbstractSocket::SocketError e )
 
 
 void
-Servent::checkACLResult( const QString& nodeid, const QString& username, Tomahawk::ACL::Type peerStatus )
+Servent::checkACLResult( const QString& nodeid, const QString& username, Tomahawk::ACLStatus::Type peerStatus )
 {
 
     if ( !d_func()->queuedForACLResult.contains( username ) )
@@ -931,7 +931,7 @@ Servent::checkACLResult( const QString& nodeid, const QString& username, Tomahaw
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << QString( "ACL status for user %1 is" ).arg( username ) << peerStatus;
     QSet<Tomahawk::peerinfo_ptr> peerInfos = d_func()->queuedForACLResult.value( username ).value( nodeid );
-    if ( peerStatus == Tomahawk::ACL::Stream )
+    if ( peerStatus == Tomahawk::ACLStatus::Stream )
     {
         foreach ( Tomahawk::peerinfo_ptr peerInfo, peerInfos )
         {
