@@ -92,10 +92,11 @@ public:
     virtual QWidget* widget() { return this; }
     virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
 
-    virtual QString title() const { return tr( "Welcome to Tomahawk" ); }
-    virtual QString description() const { return QString(); }
+    virtual QString title() const { return tr( "Dashboard" ); }
+    virtual QString description() const { return tr( "An overview of your recent activity" ); }
+    virtual QPixmap pixmap() const;
 
-    virtual bool showInfoBar() const { return false; }
+    virtual bool showInfoBar() const { return true; }
     virtual bool isBeingPlayed() const;
 
     virtual bool jumpToCurrentTrack();
@@ -120,7 +121,6 @@ private slots:
 private:
     Ui::Dashboard *ui;
 
-    BasicHeader* m_header;
     RecentlyPlayedModel* m_tracksModel;
     AlbumModel* m_recentAlbumsModel;
     Tomahawk::playlistinterface_ptr m_playlistInterface;

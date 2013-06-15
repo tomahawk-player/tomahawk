@@ -52,14 +52,9 @@ using namespace Tomahawk;
 Dashboard::Dashboard( QWidget* parent )
     : QWidget( parent )
     , ui( new Ui::Dashboard )
-    , m_header( new BasicHeader( this ) )
 {
     QWidget* widget = new QWidget;
     ui->setupUi( widget );
-
-    m_header->setPixmap( ImageRegistry::instance()->pixmap( RESPATH "images/dashboard.svg", QSize( 0, 0 ) ) );
-    m_header->setCaption( tr( "Dashboard" ) );
-    m_header->setDescription( tr( "An overview of your recent activity" ) );
 
     ui->lineAbove->setStyleSheet( QString( "QFrame { border: 1px solid black; }" ) );
     ui->lineBelow->setStyleSheet( QString( "QFrame { border: 1px solid %1; }" ).arg( TomahawkStyle::HEADER_BACKGROUND.name() ) );
@@ -163,7 +158,6 @@ Dashboard::Dashboard( QWidget* parent )
         area->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
         QVBoxLayout* layout = new QVBoxLayout();
-        layout->addWidget( m_header );
         layout->addWidget( area );
         setLayout( layout );
         TomahawkUtils::unmarginLayout( layout );
@@ -289,6 +283,13 @@ Dashboard::changeEvent( QEvent* e )
         default:
             break;
     }
+}
+
+
+QPixmap
+Dashboard::pixmap() const
+{
+    return ImageRegistry::instance()->pixmap( RESPATH "images/dashboard.svg", QSize( 0, 0 ) );
 }
 
 
