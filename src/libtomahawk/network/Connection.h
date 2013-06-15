@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013,      Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -42,7 +43,7 @@
 #include <QTime>
 #include <QPointer>
 
-
+class ConnectionPrivate;
 class Servent;
 
 class DLLEXPORT Connection : public QObject
@@ -63,37 +64,37 @@ public:
 
     void setFirstMessage( const QVariant& m );
     void setFirstMessage( msg_ptr m );
-    msg_ptr firstMessage() const { return m_firstmsg; }
+    msg_ptr firstMessage() const;
 
-    const QPointer<QTcpSocket>& socket() { return m_sock; }
+    const QPointer<QTcpSocket>& socket();
 
-    void setOutbound( bool o ) { m_outbound = o; }
-    bool outbound() const { return m_outbound; }
+    void setOutbound( bool o );
+    bool outbound() const;
 
-    Servent* servent() { return m_servent; }
+    Servent* servent() const;
 
     // get public port of remote peer:
-    int peerPort() { return m_peerport; }
-    void setPeerPort( int p ) { m_peerport = p; }
+    int peerPort() const;
+    void setPeerPort( int p );
 
     void markAsFailed();
 
-    void setName( const QString& n ) { m_name = n; }
-    QString name() const { return m_name; }
+    void setName( const QString& n );
+    QString name() const;
 
-    void setOnceOnly( bool b ) { m_onceonly = b; }
-    bool onceOnly() const { return m_onceonly; }
+    void setOnceOnly( bool b );
+    bool onceOnly() const;
 
-    bool isReady() const { return m_ready; }
-    bool isRunning() const { return m_sock != 0; }
+    bool isReady() const;
+    bool isRunning() const;
 
-    qint64 bytesSent() const { return m_tx_bytes; }
-    qint64 bytesReceived() const { return m_rx_bytes; }
+    qint64 bytesSent() const;
+    qint64 bytesReceived() const;
 
-    void setMsgProcessorModeOut( quint32 m ) { m_msgprocessor_out.setMode( m ); }
-    void setMsgProcessorModeIn( quint32 m ) { m_msgprocessor_in.setMode( m ); }
+    void setMsgProcessorModeOut( quint32 m );
+    void setMsgProcessorModeIn( quint32 m );
 
-    const QHostAddress peerIpAddress() const { return m_peerIpAddress; }
+    const QHostAddress peerIpAddress() const;
 
     QString bareName() const;
 signals:
@@ -139,23 +140,13 @@ protected:
     bool m_outbound, m_ready, m_onceonly;
     msg_ptr m_firstmsg;
     QString m_name;
-    QHostAddress m_peerIpAddress;
 
 private:
+    Q_DECLARE_PRIVATE( Connection )
+    ConnectionPrivate* d_ptr;
+
     void handleReadMsg();
     void actualShutdown();
-    bool m_do_shutdown, m_actually_shutting_down, m_peer_disconnected;
-    qint64 m_tx_bytes, m_tx_bytes_requested;
-    qint64 m_rx_bytes;
-    QString m_id;
-    QString m_nodeid;
-
-    QTimer* m_statstimer;
-    QTime m_statstimer_mark;
-    qint64 m_stats_tx_bytes_per_sec, m_stats_rx_bytes_per_sec;
-    qint64 m_rx_bytes_last, m_tx_bytes_last;
-
-    MsgProcessor m_msgprocessor_in, m_msgprocessor_out;
 };
 
 #endif // CONNECTION_H
