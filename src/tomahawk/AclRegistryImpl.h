@@ -51,9 +51,9 @@ public slots:
      * @param dbid DBID of peer
      * @param globalType Global ACL to store if peer not found; if ACLRegistry::NotFound, does not store the peer Defaults to ACLRegistry::NotFound.
      * @param username If not empty, will store the given username along with the new ACL value. Defaults to QString().
-     * @return Tomahawk::ACL::Type
+     * @return Tomahawk::ACLStatus::Type
      **/
-    virtual Tomahawk::ACL::Type isAuthorizedUser( const QString &dbid, const QString &username, Tomahawk::ACL::Type globalType = Tomahawk::ACL::NotFound, bool skipEmission = false );
+    virtual Tomahawk::ACLStatus::Type isAuthorizedUser( const QString &dbid, const QString &username, Tomahawk::ACLStatus::Type globalType = Tomahawk::ACLStatus::NotFound, bool skipEmission = false );
     virtual void wipeEntries();
 
 protected:

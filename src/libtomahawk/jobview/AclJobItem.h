@@ -43,7 +43,7 @@ public:
 
 signals:
     void update( const QModelIndex& idx );
-    void aclResult( Tomahawk::ACL::Type result );
+    void aclResult( Tomahawk::ACLStatus::Type result );
 
 protected:
     virtual bool editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
@@ -84,7 +84,7 @@ signals:
     void userDecision( ACLRegistry::User user );
 
 public slots:
-    void aclResult( Tomahawk::ACL::Type result );
+    void aclResult( Tomahawk::ACLStatus::Type result );
     
 private:
     QStyledItemDelegate* m_delegate;

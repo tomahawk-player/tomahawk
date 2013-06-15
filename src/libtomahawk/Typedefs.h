@@ -80,7 +80,7 @@ namespace Tomahawk
     typedef QString QID; //query id
     typedef QString RID; //result id
 
-    namespace ACL {
+    namespace ACLStatus {
         enum Type {
             NotFound = 0,
             Deny = 1,
@@ -260,6 +260,6 @@ inline static QString uuid()
 Q_DECLARE_METATYPE( QModelIndex )
 Q_DECLARE_METATYPE( QPersistentModelIndex )
 Q_DECLARE_METATYPE( QNetworkReply* )
-Q_DECLARE_METATYPE( Tomahawk::ACL::Type )
+Q_DECLARE_METATYPE( Tomahawk::ACLStatus::Type )
 
 #endif // TYPEDEFS_H
