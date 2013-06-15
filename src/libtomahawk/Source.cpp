@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013,      Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -87,6 +88,18 @@ Source::~Source()
     tDebug() << Q_FUNC_INFO << friendlyName();
 }
 
+bool
+Source::isLocal() const
+{
+    return m_isLocal;
+}
+
+bool
+Source::isOnline() const
+{
+    return m_online || m_isLocal;
+}
+
 
 bool
 Source::setControlConnection( ControlConnection* cc )
@@ -145,6 +158,12 @@ Source::dbCollection() const
 
     collection_ptr tmp;
     return tmp;
+}
+
+QList<collection_ptr>
+Source::collections() const
+{
+    return m_collections;
 }
 
 
@@ -343,6 +362,18 @@ Source::removeCollection( const collection_ptr& c )
     emit collectionRemoved( c );
 }
 
+int
+Source::id() const
+{
+    return m_id;
+}
+
+ControlConnection*
+Source::controlConnection() const
+{
+    return m_cc.data();
+}
+
 void
 Source::handleDisconnect( Tomahawk::Accounts::Account*, Tomahawk::Accounts::AccountManager::DisconnectReason reason )
 {
@@ -482,6 +513,12 @@ unsigned int
 Source::trackCount() const
 {
     return m_stats.value( "numfiles", 0 ).toUInt();
+}
+
+query_ptr
+Source::currentTrack() const
+{
+    return m_currentTrack;
 }
 
 
@@ -699,4 +736,10 @@ Source::textStatus() const
     {
         return tr( "Offline" );
     }
+}
+
+DBSyncConnection::State
+Source::state() const
+{
+    return m_state;
 }
