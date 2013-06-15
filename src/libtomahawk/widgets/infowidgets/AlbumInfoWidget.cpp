@@ -51,84 +51,118 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
     QWidget* widget = new QWidget;
     ui->setupUi( widget );
 
-    m_albumsModel = new PlayableModel( ui->albums );
-    ui->albums->setPlayableModel( m_albumsModel );
-    ui->albums->setEmptyTip( tr( "Sorry, we could not find any other albums for this artist!" ) );
-    
-
-    m_tracksModel = new TreeModel( ui->tracks );
-    m_tracksModel->setMode( Mixed );
-
-    QPalette trackViewPal = ui->tracks->palette();
-    trackViewPal.setColor( QPalette::Foreground, TomahawkStyle::PAGE_FOREGROUND );
-    trackViewPal.setColor( QPalette::Text, TomahawkStyle::PAGE_FOREGROUND );
-    trackViewPal.setColor( QPalette::Highlight, QColor( "#252020" ) );
-    trackViewPal.setColor( QPalette::HighlightedText, Qt::white );
-
-    ui->tracks->setPalette( trackViewPal );
-    ui->tracks->setAlternatingRowColors( false );
-    ui->tracks->setRootIsDecorated( false );
-    ui->tracks->setEmptyTip( tr( "Sorry, we could not find any tracks for this album!" ) );
-    ui->tracks->proxyModel()->setStyle( PlayableProxyModel::Large );
-    ui->tracks->setAutoResize( true );
-    ui->tracks->setPlayableModel( m_tracksModel );
-
-    AlbumItemDelegate* del = new AlbumItemDelegate( ui->tracks, ui->tracks->proxyModel() );
-    ui->tracks->setPlaylistItemDelegate( del );
-
-/*    ui->albums->setAutoFitItems( false );
-    ui->albums->setWrapping( false );
-    ui->albums->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-    ui->albums->setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );*/
-    ui->albums->delegate()->setItemSize( QSize( 170, 170 ) );
-    ui->albums->proxyModel()->setHideDupeItems( true );
-
-    ui->tracks->setFrameShape( QFrame::NoFrame );
-    ui->tracks->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-
     m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::Original, QSize( 48, 48 ) );
     ui->cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::Grid, ui->cover->size() ) );
     ui->cover->setShowText( true );
 
-    ui->biography->setFrameShape( QFrame::NoFrame );
-    ui->biography->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    TomahawkStyle::styleScrollBar( ui->biography->verticalScrollBar() );
+    ui->lineAbove->setStyleSheet( QString( "QFrame { border: 1px solid %1; }" ).arg( TomahawkStyle::HEADER_BACKGROUND.name() ) );
+    ui->lineBelow->setStyleSheet( QString( "QFrame { border: 1px solid black; }" ) );
 
-    QPalette p = ui->biography->palette();
-    p.setColor( QPalette::Foreground, TomahawkStyle::PAGE_FOREGROUND );
-    p.setColor( QPalette::Text, TomahawkStyle::PAGE_TEXT );
+    {
+        m_tracksModel = new TreeModel( ui->tracks );
+        m_tracksModel->setMode( Mixed );
 
-    ui->biography->setPalette( p );
-    ui->label->setPalette( p );
-    ui->label_2->setPalette( p );
+        AlbumItemDelegate* del = new AlbumItemDelegate( ui->tracks, ui->tracks->proxyModel() );
+        ui->tracks->setPlaylistItemDelegate( del );
+        ui->tracks->setEmptyTip( tr( "Sorry, we could not find any tracks for this album!" ) );
+        ui->tracks->proxyModel()->setStyle( PlayableProxyModel::Large );
+        ui->tracks->setAutoResize( true );
+        ui->tracks->setPlayableModel( m_tracksModel );
+        ui->tracks->setAlternatingRowColors( false );
 
-    QScrollArea* area = new QScrollArea();
-    area->setWidgetResizable( true );
-    area->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
-    area->setWidget( widget );
+        QPalette p = ui->tracks->palette();
+        p.setColor( QPalette::Text, TomahawkStyle::PAGE_TRACKLIST_TRACK_SOLVED );
+        p.setColor( QPalette::BrightText, TomahawkStyle::PAGE_TRACKLIST_TRACK_UNRESOLVED );
+        p.setColor( QPalette::Foreground, TomahawkStyle::PAGE_TRACKLIST_NUMBER );
+        p.setColor( QPalette::Highlight, TomahawkStyle::PAGE_TRACKLIST_HIGHLIGHT );
+        p.setColor( QPalette::HighlightedText, TomahawkStyle::PAGE_TRACKLIST_HIGHLIGHT_TEXT );
 
-    QPalette pal = palette();
-    pal.setBrush( backgroundRole(), TomahawkStyle::PAGE_BACKGROUND );
-    area->setPalette( pal );
-    area->setAutoFillBackground( true );
-    area->setFrameShape( QFrame::NoFrame );
-    area->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+        ui->tracks->setPalette( p );
+        ui->tracks->setFrameShape( QFrame::NoFrame );
+        ui->tracks->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+        ui->tracks->setStyleSheet( "QTreeView#tracks { background-color: transparent; }" );
 
-    QVBoxLayout* layout = new QVBoxLayout();
-    layout->addWidget( area );
-    setLayout( layout );
-    TomahawkUtils::unmarginLayout( layout );
+        TomahawkStyle::styleScrollBar( ui->tracks->horizontalScrollBar() );
+        TomahawkStyle::stylePageFrame( ui->trackFrame );
+    }
 
-    TomahawkStyle::styleScrollBar( ui->tracks->horizontalScrollBar() );
-    TomahawkStyle::styleScrollBar( ui->albums->verticalScrollBar() );
+    {
+        m_albumsModel = new PlayableModel( ui->albums );
+        ui->albums->setPlayableModel( m_albumsModel );
+        ui->albums->setEmptyTip( tr( "Sorry, we could not find any other albums for this artist!" ) );
 
-    ui->biography->setStyleSheet( "QTextBrowser#biography { background-color: transparent; }" );
+        /*    ui->albums->setAutoFitItems( true );
+         *    ui->albums->setWrapping( false );
+         *    ui->albums->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+         *    ui->albums->setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );*/
+        ui->albums->delegate()->setItemSize( QSize( 170, 170 ) );
+        ui->albums->proxyModel()->setHideDupeItems( true );
 
-    ui->albums->setStyleSheet( "QListView { background-color: transparent; }" );
-    TomahawkStyle::stylePageFrame( ui->albumFrame );
+        ui->albums->setStyleSheet( "QListView { background-color: transparent; }" );
+        TomahawkStyle::styleScrollBar( ui->albums->verticalScrollBar() );
+        TomahawkStyle::stylePageFrame( ui->albumFrame );
+    }
 
-    ui->tracks->setStyleSheet( "QTreeView#tracks { background-color: transparent; }" );
-    TomahawkStyle::stylePageFrame( ui->trackFrame );
+    {
+        QFont f = ui->biography->font();
+        f.setFamily( "Titillium Web" );
+
+        QPalette p = ui->biography->palette();
+        p.setColor( QPalette::Text, TomahawkStyle::HEADER_TEXT );
+
+        ui->biography->setFont( f );
+        ui->biography->setPalette( p );
+        ui->biography->setOpenLinks( false );
+        ui->biography->setOpenExternalLinks( true );
+        ui->biography->setFrameShape( QFrame::NoFrame );
+        ui->biography->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
+        ui->biography->setStyleSheet( "QTextBrowser#biography { background-color: transparent; }" );
+        ui->biography->document()->setDefaultStyleSheet( QString( "a { text-decoration: none; font-weight: bold; color: %1; }" ).arg( TomahawkStyle::HEADER_LINK.name() ) );
+        TomahawkStyle::styleScrollBar( ui->biography->verticalScrollBar() );
+
+//        connect( ui->biography, SIGNAL( anchorClicked( QUrl ) ), SLOT( onBiographyLinkClicked( QUrl ) ) );
+    }
+
+    {
+        QFont f = ui->label->font();
+        f.setBold( false );
+        f.setFamily( "Fauna One" );
+
+        QPalette p = ui->label->palette();
+        p.setColor( QPalette::Foreground, TomahawkStyle::PAGE_CAPTION );
+
+        ui->label->setFont( f );
+        ui->label_2->setFont( f );
+        ui->label->setPalette( p );
+        ui->label_2->setPalette( p );
+    }
+
+    {
+        QScrollArea* area = new QScrollArea();
+        area->setWidgetResizable( true );
+        area->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
+        area->setWidget( widget );
+
+        QPalette pal = palette();
+        pal.setBrush( backgroundRole(), TomahawkStyle::HEADER_BACKGROUND );
+        area->setPalette( pal );
+        area->setAutoFillBackground( true );
+        area->setFrameShape( QFrame::NoFrame );
+        area->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
+        QVBoxLayout* layout = new QVBoxLayout();
+        layout->addWidget( area );
+        setLayout( layout );
+        TomahawkUtils::unmarginLayout( layout );
+    }
+
+    {
+        QPalette pal = palette();
+        pal.setBrush( backgroundRole(), TomahawkStyle::PAGE_BACKGROUND );
+        ui->widget->setPalette( pal );
+        ui->widget->setAutoFillBackground( true );
+    }
 
     MetaPlaylistInterface* mpl = new MetaPlaylistInterface();
     mpl->addChildInterface( ui->tracks->playlistInterface() );
