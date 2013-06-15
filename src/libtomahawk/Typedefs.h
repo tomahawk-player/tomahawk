@@ -80,12 +80,14 @@ namespace Tomahawk
     typedef QString QID; //query id
     typedef QString RID; //result id
 
-    enum ACL {
-        NotFound = 0,
-        Deny = 1,
-        Read = 2,
-        Stream = 3
-    };
+    namespace ACL {
+        enum Type {
+            NotFound = 0,
+            Deny = 1,
+            Read = 2,
+            Stream = 3
+        };
+    }
 
     enum GeneratorMode
     {
@@ -258,6 +260,6 @@ inline static QString uuid()
 Q_DECLARE_METATYPE( QModelIndex )
 Q_DECLARE_METATYPE( QPersistentModelIndex )
 Q_DECLARE_METATYPE( QNetworkReply* )
-Q_DECLARE_METATYPE( Tomahawk::ACL )
+Q_DECLARE_METATYPE( Tomahawk::ACL::Type )
 
 #endif // TYPEDEFS_H

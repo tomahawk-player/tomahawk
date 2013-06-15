@@ -49,20 +49,20 @@ public:
         QString friendlyName;
         QStringList knownDbids;
         QStringList knownAccountIds;
-        Tomahawk::ACL acl;
+        Tomahawk::ACL::Type acl;
 
         User()
             : uuid( QUuid::createUuid().toString() )
             , friendlyName()
             , knownDbids()
             , knownAccountIds()
-            , acl( Tomahawk::NotFound )
+            , acl( Tomahawk::ACL::NotFound )
             {}
 
         ~User()
             {}
 
-        User( QString p_uuid, QString p_friendlyName, QStringList p_knownDbids, QStringList p_knownAccountIds, Tomahawk::ACL p_acl )
+        User( QString p_uuid, QString p_friendlyName, QStringList p_knownDbids, QStringList p_knownAccountIds, Tomahawk::ACL::Type p_acl )
             : uuid( p_uuid )
             , friendlyName( p_friendlyName )
             , knownDbids( p_knownDbids )
@@ -83,7 +83,7 @@ public:
     virtual ~ACLRegistry();
 
 signals:
-    void aclResult( QString nodeid, QString username, Tomahawk::ACL peerStatus );
+    void aclResult( QString nodeid, QString username, Tomahawk::ACL::Type peerStatus );
 
 public slots:
     /**
@@ -92,9 +92,9 @@ public slots:
      * @param dbid DBID of peer
      * @param globalType Global ACL to store if peer not found; if ACLRegistry::NotFound, does not store the peer Defaults to ACLRegistry::NotFound.
      * @param username If not empty, will store the given username along with the new ACL value. Defaults to QString().
-     * @return Tomahawk::ACL
+     * @return Tomahawk::ACL::Type
      **/
-    virtual Tomahawk::ACL isAuthorizedUser( const QString &dbid, const QString &username, Tomahawk::ACL globalType = Tomahawk::NotFound, bool skipEmission = false ) = 0;
+    virtual Tomahawk::ACL::Type isAuthorizedUser( const QString &dbid, const QString &username, Tomahawk::ACL::Type globalType = Tomahawk::ACL::NotFound, bool skipEmission = false ) = 0;
     virtual void wipeEntries();
 
 protected:

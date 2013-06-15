@@ -146,9 +146,9 @@ ACLJobDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QSt
     {
         QMouseEvent* me = static_cast< QMouseEvent* >( event );
         if ( m_savedAcceptRect.contains( me->pos() ) )
-            emit aclResult( Tomahawk::Stream );
+            emit aclResult( Tomahawk::ACL::Stream );
         else if ( m_savedDenyRect.contains( me->pos() ) )
-            emit aclResult( Tomahawk::Deny );
+            emit aclResult( Tomahawk::ACL::Deny );
         return true;
     }
 
@@ -195,7 +195,7 @@ ACLJobDelegate::emitSizeHintChanged( const QModelIndex& index )
 
 
 void
-ACLJobItem::aclResult( Tomahawk::ACL result )
+ACLJobItem::aclResult( Tomahawk::ACL::Type result )
 {
     tLog() << Q_FUNC_INFO;
     m_user.acl = result;
