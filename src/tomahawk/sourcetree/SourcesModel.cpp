@@ -350,13 +350,14 @@ SourcesModel::appendGroups()
 void
 SourcesModel::appendPageItem( const QIcon& pageIcon, const QString& pageTitle, const QString& pageName )
 {
-
-//     beginInsertRows();
+    QModelIndex parentIndex = indexFromItem( m_browse );
+    beginInsertRows( parentIndex, rowCount( parentIndex ), rowCount( parentIndex ) );
     GenericPageItem* pageItem = new GenericPageItem( this, m_browse, pageTitle, pageIcon,
                                             boost::bind( &ViewManager::showDynamicPage, ViewManager::instance(), pageName ),
                                             boost::bind( &ViewManager::dynamicPageWidget, ViewManager::instance(), pageName ) );
-    m_browse;
-//     endInsertRows();
+    pageItem->setSortValue( rowCount( parentIndex ) );
+
+    endInsertRows();
 }
 
 
