@@ -313,6 +313,7 @@ list(APPEND libSources
     filemetadata/MetadataEditor.cpp
 
     network/BufferIoDevice.cpp
+    network/Msg.cpp
     network/MsgProcessor.cpp
     network/StreamConnection.cpp
     network/DbSyncConnection.cpp

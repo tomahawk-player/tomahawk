@@ -18,8 +18,6 @@
 
 #include "DatabaseCommand_SetPlaylistRevision.h"
 
-#include <QSqlQuery>
-
 #include "collection/Collection.h"
 #include "network/Servent.h"
 #include "utils/Logger.h"
@@ -27,6 +25,11 @@
 #include "DatabaseImpl.h"
 #include "Source.h"
 #include "TomahawkSqlQuery.h"
+
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
+
+#include <QSqlQuery>
 
 using namespace Tomahawk;
 

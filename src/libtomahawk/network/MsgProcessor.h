@@ -30,7 +30,8 @@
 #ifndef MSGPROCESSOR_H
 #define MSGPROCESSOR_H
 
-#include "Msg.h"
+#include "Typedefs.h"
+#include "Msg.h" // Needed because we have msg_ptr in a slot
 
 #include <QObject>
 

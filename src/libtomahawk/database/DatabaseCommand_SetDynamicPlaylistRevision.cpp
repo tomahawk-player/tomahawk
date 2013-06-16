@@ -28,6 +28,8 @@
 #include "Source.h"
 #include "TomahawkSqlQuery.h"
 
+#include <qjson/serializer.h>
+
 #include <QSqlQuery>
 
 DatabaseCommand_SetDynamicPlaylistRevision::DatabaseCommand_SetDynamicPlaylistRevision( const Tomahawk::source_ptr& s,

@@ -19,6 +19,7 @@
 #include "ConnectionManager_p.h"
 
 #include "ControlConnection.h"
+#include "network/Msg.h"
 #include "QTcpSocketExtra.h"
 #include "Servent.h"
 

@@ -35,11 +35,13 @@
 #include "database/DatabaseCommand.h"
 #include "database/DatabaseCommand_CollectionStats.h"
 #include "database/DatabaseCommand_LoadOps.h"
+#include "utils/Logger.h"
+
+#include "Msg.h"
 #include "MsgProcessor.h"
 #include "RemoteCollection.h"
 #include "Source.h"
 #include "SourceList.h"
-#include "utils/Logger.h"
 
 using namespace Tomahawk;
 

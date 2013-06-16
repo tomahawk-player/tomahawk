@@ -21,11 +21,14 @@
 #include "Connection_p.h"
 
 #include "network/Servent.h"
+#include "network/Msg.h"
 #include "utils/Logger.h"
 
 #include "AclRegistry.h"
 #include "QTcpSocketExtra.h"
 #include "Source.h"
+
+#include <qjson/serializer.h>
 
 #include <QTime>
 #include <QThread>

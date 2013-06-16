@@ -30,10 +30,8 @@
 #include <QSharedPointer>
 #include <QTcpServer>
 
-#include "Typedefs.h"
-#include "Msg.h"
-
 #include "DllMacro.h"
+#include "Typedefs.h"
 
 class Connection;
 class Connector;
