@@ -19,7 +19,6 @@
 #cmakedefine WITH_UPOWER
 #cmakedefine WITH_GNOMESHORTCUTHANDLER
 
-#cmakedefine TELEPATHY_QT_FOUND
 #cmakedefine LIBLASTFM_FOUND
 #cmakedefine QCA2_FOUND
 
