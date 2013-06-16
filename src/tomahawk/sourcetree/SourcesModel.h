@@ -103,6 +103,11 @@ public:
 
     void appendGroups();
 
+    /*
+     *  pageIcon and pageTitle are visible in the source tree, pageName is the internal name in the ViewManager
+     */
+    void appendPageItem( const QIcon& pageIcon, const QString& pageTitle, const QString& pageName );
+
     void appendItem( const Tomahawk::source_ptr& source );
     bool removeItem( const Tomahawk::source_ptr& source );
 
@@ -152,6 +157,7 @@ private:
     SourceTreeItem* activatePlaylistPage( Tomahawk::ViewPage* p, SourceTreeItem* i );
 
     SourceTreeItem* m_rootItem;
+    GroupItem* m_browse;
     GroupItem* m_collectionsGroup;
     GroupItem* m_myMusicGroup;
     GroupItem* m_cloudGroup;
