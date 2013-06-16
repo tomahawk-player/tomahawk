@@ -24,10 +24,8 @@
 #include <QPixmap>
 #include <QPointer>
 #include <QVariant>
-#include <QMutex>
 
 #include "utils/TomahawkUtils.h"
-#include "Track.h"
 #include "Typedefs.h"
 
 #include "DllMacro.h"
