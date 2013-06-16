@@ -27,6 +27,7 @@
 #include <database/DatabaseCommand_LoadOps.h>
 #include <network/ControlConnection.h>
 #include <network/Servent.h>
+#include <sip/SipInfo.h>
 #include <sip/PeerInfo.h>
 #include <utils/Logger.h>
 #include <SourceList.h>
