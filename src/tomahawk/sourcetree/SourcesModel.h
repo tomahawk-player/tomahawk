@@ -151,6 +151,8 @@ private slots:
 
     void onWidgetDestroyed( QWidget* w );
 
+    void onViewPageAdded( const QString& name );
+
 private:
     SourceTreeItem* itemFromIndex( const QModelIndex& idx ) const;
     int rowForItem( SourceTreeItem* item ) const;

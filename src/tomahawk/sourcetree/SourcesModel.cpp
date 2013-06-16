@@ -59,9 +59,6 @@ SourcesModel::SourcesModel( QObject* parent )
 
     appendGroups();
 
-    // Add stub page
-    appendPageItem( ImageRegistry::instance()->icon( RESPATH "images/new-releases.svg" ), "Stub Page", "stub");
-
     onSourcesAdded( SourceList::instance()->sources() );
 
     connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ),
@@ -80,6 +77,9 @@ SourcesModel::SourcesModel( QObject* parent )
              this, SLOT( onScriptCollectionAdded( Tomahawk::collection_ptr ) ) );
     connect( SourceList::instance(), SIGNAL( scriptCollectionRemoved( Tomahawk::collection_ptr ) ),
              this, SLOT( onScriptCollectionRemoved( Tomahawk::collection_ptr ) ) );
+
+
+    connect( ViewManager::instance(), SIGNAL( viewPageAdded( QString ) ), SLOT( onViewPageAdded( QString ) ) );
 }
 
 
@@ -673,6 +673,13 @@ SourcesModel::onWidgetDestroyed( QWidget* w )
 {
     int ret = m_sourceTreeLinks.remove( dynamic_cast< Tomahawk::ViewPage* > ( w ) );
     qDebug() << "REMOVED STALE SOURCE PAGE?" << ret;
+}
+
+
+void
+SourcesModel::onViewPageAdded( const QString& name )
+{
+    appendPageItem( ImageRegistry::instance()->icon( RESPATH "images/new-releases.svg" ), name, name);
 }
 
 
