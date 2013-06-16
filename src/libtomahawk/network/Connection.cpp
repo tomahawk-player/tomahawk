@@ -311,7 +311,10 @@ Connection::start( QTcpSocket* sock )
 void
 Connection::checkACL()
 {
-    if ( d_func()->nodeid.isEmpty() )
+    Q_D( Connection );
+    QReadLocker nodeidLocker( &d->nodeidLock );
+
+    if ( d->nodeid.isEmpty() )
     {
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Not checking ACL, nodeid is empty";
         QTimer::singleShot( 0, this, SLOT( doSetup() ) );
@@ -328,7 +331,7 @@ Connection::checkACL()
     connect( ACLRegistry::instance(), SIGNAL( aclResult( QString, QString, Tomahawk::ACLStatus::Type ) ),
              this, SLOT( checkACLResult( QString, QString, Tomahawk::ACLStatus::Type ) ),
              Qt::QueuedConnection );
-    QMetaObject::invokeMethod( ACLRegistry::instance(), "isAuthorizedUser", Qt::QueuedConnection, Q_ARG( QString, d_func()->nodeid ), Q_ARG( QString, bareName() ), Q_ARG( Tomahawk::ACLStatus::Type, Tomahawk::ACLStatus::NotFound ) );
+    QMetaObject::invokeMethod( ACLRegistry::instance(), "isAuthorizedUser", Qt::QueuedConnection, Q_ARG( QString, d->nodeid ), Q_ARG( QString, bareName() ), Q_ARG( Tomahawk::ACLStatus::Type, Tomahawk::ACLStatus::NotFound ) );
 }
 
 
@@ -341,9 +344,12 @@ Connection::bareName() const
 void
 Connection::checkACLResult( const QString &nodeid, const QString &username, Tomahawk::ACLStatus::Type peerStatus )
 {
-    if ( nodeid != d_func()->nodeid )
+    Q_D( Connection );
+    QReadLocker nodeidLocker( &d->nodeidLock );
+
+    if ( nodeid != d->nodeid )
     {
-        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << QString( "nodeid (%1) not ours (%2) for user %3" ).arg( nodeid ).arg( d_func()->nodeid ).arg( username );
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << QString( "nodeid (%1) not ours (%2) for user %3" ).arg( nodeid ).arg( d->nodeid ).arg( username );
         return;
     }
     if ( username != bareName() )
@@ -494,13 +500,17 @@ Connection::setId( const QString& id )
 QString
 Connection::nodeId() const
 {
-    return d_func()->nodeid;
+    Q_D( const Connection );
+    QReadLocker locker( &d->nodeidLock );
+    return d->nodeid;
 }
 
 void
 Connection::setNodeId( const QString& nodeid )
 {
-    d_func()->nodeid = nodeid;
+    Q_D( Connection );
+    QWriteLocker locker( &d->nodeidLock );
+    d->nodeid = nodeid;
 }
 
 
