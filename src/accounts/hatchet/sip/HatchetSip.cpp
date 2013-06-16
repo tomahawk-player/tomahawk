@@ -32,7 +32,11 @@
 #include <utils/Logger.h>
 #include <SourceList.h>
 
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
+
 #include <QFile>
+#include <QHostInfo>
 #include <QUuid>
 
 HatchetSipPlugin::HatchetSipPlugin( Tomahawk::Accounts::Account *account )
