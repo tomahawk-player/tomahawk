@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013, Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -55,10 +56,13 @@ ControlConnection::ControlConnection( Servent* parent )
 
 ControlConnection::~ControlConnection()
 {
+    QReadLocker locker( &m_sourceLock );
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << id() << name();
 
     if ( !m_source.isNull() )
+    {
         m_source->setOffline();
+    }
 
     delete m_pingtimer;
     m_servent->unregisterControlConnection( this );
@@ -70,7 +74,16 @@ ControlConnection::~ControlConnection()
 source_ptr
 ControlConnection::source() const
 {
+    // We return a copy of the shared pointer, no need for a longer lock
+    QReadLocker locker( &m_sourceLock );
     return m_source;
+}
+
+void
+ControlConnection::unbindFromSource()
+{
+    QWriteLocker locker( &m_sourceLock );
+    m_source.clear();
 }
 
 
@@ -88,6 +101,7 @@ void
 ControlConnection::setup()
 {
     qDebug() << Q_FUNC_INFO << id() << name();
+    QWriteLocker sourceLocker( &m_sourceLock );
 
     if ( !m_source.isNull() )
     {
@@ -132,9 +146,10 @@ ControlConnection::setup()
 void
 ControlConnection::registerSource()
 {
+    QReadLocker sourceLocker( &m_sourceLock );
     QSharedPointer<QMutexLocker> locker = m_source->acquireLock();
     // Only continue if we are still the ControlConnection associated with this source.
-    if ( m_source->controlConnection() == this )
+    if ( !m_source.isNull() &&  m_source->controlConnection() == this )
     {
         qDebug() << Q_FUNC_INFO << m_source->id();
         Source* source = (Source*) sender();
@@ -150,6 +165,13 @@ ControlConnection::registerSource()
 void
 ControlConnection::setupDbSyncConnection( bool ondemand )
 {
+    QReadLocker locker( &m_sourceLock );
+    if ( m_source.isNull() )
+    {
+        // We were unbind from the Source, nothing to do here, just waiting to be deleted.
+        return;
+    }
+
     qDebug() << Q_FUNC_INFO << ondemand << m_source->id() << m_dbconnkey << m_dbsyncconn << m_registered;
 
     if ( m_dbsyncconn || !m_registered )
@@ -206,7 +228,6 @@ ControlConnection::dbSyncConnFinished( QObject* c )
 DBSyncConnection*
 ControlConnection::dbSyncConnection()
 {
-    qDebug() << Q_FUNC_INFO << m_source->id();
     if ( !m_dbsyncconn )
     {
         setupDbSyncConnection( true );
@@ -292,6 +313,7 @@ ControlConnection::onPingTimer()
 {
     if ( m_pingtimer_mark.elapsed() >= TCP_TIMEOUT * 1000 )
     {
+        QReadLocker locker( &m_sourceLock );
         qDebug() << "Timeout reached! Shutting down connection to" << m_source->friendlyName();
         shutdown( true );
     }

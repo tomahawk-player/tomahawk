@@ -32,6 +32,7 @@
 
 #include "DllMacro.h"
 
+#include <QReadWriteLock>
 #include <QTime>
 #include <QTimer>
 
@@ -50,6 +51,11 @@ public:
     DBSyncConnection* dbSyncConnection();
 
     Tomahawk::source_ptr source() const;
+
+    /**
+     * Tell this ControlConnection that is no longer controlling the source and should not do any actions on it.
+     */
+    void unbindFromSource();
 
     void addPeerInfo( const Tomahawk::peerinfo_ptr& peerInfo );
     void removePeerInfo( const Tomahawk::peerinfo_ptr& peerInfo );
@@ -72,6 +78,10 @@ private:
     void setupDbSyncConnection( bool ondemand = false );
 
     Tomahawk::source_ptr m_source;
+    /**
+     * Lock acces to the source member. A "write" access is only if we change the value of source, not if doing a non-const call.
+     */
+    mutable QReadWriteLock m_sourceLock;
     DBSyncConnection* m_dbsyncconn;
 
     QString m_dbconnkey;
