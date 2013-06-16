@@ -21,37 +21,38 @@
 
 #include "Servent_p.h"
 
-#include "Result.h"
-#include "Source.h"
-#include "BufferIoDevice.h"
-#include "Connection.h"
-#include "ControlConnection.h"
-#include "QTcpSocketExtra.h"
+#include "accounts/AccountManager.h"
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
 #include "network/ConnectionManager.h"
 #include "network/DbSyncConnection.h"
-#include "StreamConnection.h"
-#include "SourceList.h"
 #include "sip/SipInfo.h"
 #include "sip/PeerInfo.h"
 #include "sip/SipPlugin.h"
-#include "PortFwdThread.h"
-#include "TomahawkSettings.h"
 #include "utils/Closure.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
-#include "accounts/AccountManager.h"
 
+#include "AclRegistry.h"
+#include "BufferIoDevice.h"
+#include "Connection.h"
+#include "ControlConnection.h"
+#include "PortFwdThread.h"
+#include "QTcpSocketExtra.h"
+#include "Result.h"
+#include "Source.h"
+#include "SourceList.h"
+#include "StreamConnection.h"
+#include "TomahawkSettings.h"
 
-#include <QtCore/QCoreApplication>
-#include <QtCore/QMutexLocker>
-#include <QtNetwork/QNetworkInterface>
-#include <QtCore/QFile>
-#include <QtCore/QThread>
-#include <QtNetwork/QNetworkProxy>
-#include <QtNetwork/QNetworkRequest>
-#include <QtNetwork/QNetworkReply>
+#include <QCoreApplication>
+#include <QMutexLocker>
+#include <QNetworkInterface>
+#include <QFile>
+#include <QThread>
+#include <QNetworkProxy>
+#include <QNetworkRequest>
+#include <QNetworkReply>
 
 #include <boost/bind.hpp>
 

@@ -24,6 +24,8 @@
 
 #include "Servent.h"
 
+#include <QMutex>
+
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 #include <qjson/qobjecthelper.h>
