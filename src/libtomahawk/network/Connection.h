@@ -53,7 +53,7 @@ public:
     void setFirstMessage( msg_ptr m );
     msg_ptr firstMessage() const;
 
-    const QPointer<QTcpSocket>& socket();
+    const QPointer<QTcpSocket>& socket() const;
 
     void setOutbound( bool o );
     bool outbound() const;
@@ -119,10 +119,6 @@ private slots:
     void checkACLResult( const QString &nodeid, const QString &username, Tomahawk::ACLStatus::Type peerStatus );
     void bytesWritten( qint64 );
     void calcStats();
-
-protected:
-    QPointer<QTcpSocket> m_sock;
-    Servent* m_servent;
 
 private:
     Q_DECLARE_PRIVATE( Connection )
