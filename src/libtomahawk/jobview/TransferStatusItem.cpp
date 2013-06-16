@@ -18,23 +18,19 @@
 
 #include "TransferStatusItem.h"
 
-
-#include "JobStatusView.h"
-#include "JobStatusModel.h"
 #include "network/StreamConnection.h"
 #include "network/Servent.h"
 #include "utils/TomahawkUtils.h"
-#include "Result.h"
-#include "Source.h"
-#include "Artist.h"
-#include "network/StreamConnection.h"
-#include "network/Servent.h"
 #include "utils/TomahawkUtilsGui.h"
 
+#include "Artist.h"
+#include "Result.h"
+#include "Source.h"
+#include "Track.h"
 
 #ifndef ENABLE_HEADLESS
-#include "JobStatusModel.h"
-#include "JobStatusView.h"
+    #include "JobStatusModel.h"
+    #include "JobStatusView.h"
 #endif
 
 TransferStatusItem::TransferStatusItem( TransferStatusManager* p, StreamConnection* sc )

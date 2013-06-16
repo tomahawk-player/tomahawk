@@ -20,20 +20,22 @@
 
 #include "PlayableModel.h"
 
-#include <QDateTime>
-#include <QMimeData>
-#include <QTreeView>
+#include "audio/AudioEngine.h"
+#include "utils/TomahawkUtils.h"
+#include "utils/Logger.h"
 
 #include "Artist.h"
 #include "Album.h"
 #include "Pipeline.h"
 #include "PlayableItem.h"
 #include "PlayableProxyModel.h"
+#include "Result.h"
 #include "Source.h"
 #include "Typedefs.h"
-#include "audio/AudioEngine.h"
-#include "utils/TomahawkUtils.h"
-#include "utils/Logger.h"
+
+#include <QDateTime>
+#include <QMimeData>
+#include <QTreeView>
 
 using namespace Tomahawk;
 

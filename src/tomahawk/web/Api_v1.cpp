@@ -21,21 +21,20 @@
 
 #include "Api_v1.h"
 
-#include "utils/Logger.h"
-
-#include "utils/TomahawkUtils.h"
 #include "database/Database.h"
 #include "database/DatabaseCommand_AddClientAuth.h"
 #include "database/DatabaseCommand_ClientAuthValid.h"
 #include "network/Servent.h"
+#include "utils/Logger.h"
+#include "utils/TomahawkUtils.h"
+
 #include "Pipeline.h"
+#include "Result.h"
 #include "Source.h"
 
 #include <boost/bind.hpp>
 
 #include <QHash>
-
-
 
 using namespace Tomahawk;
 using namespace TomahawkUtils;

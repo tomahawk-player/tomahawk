@@ -28,7 +28,6 @@
 #include <QQueue>
 
 #include "Typedefs.h"
-#include "Result.h"
 #include "PlaylistEntry.h"
 #include "PlaylistInterface.h"
 #include "playlist/PlaylistUpdaterInterface.h"

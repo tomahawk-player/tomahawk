@@ -19,13 +19,15 @@
 
 #include "PlayableProxyModelPlaylistInterface.h"
 
-#include "PlayableProxyModel.h"
-#include "Artist.h"
-#include "Album.h"
-#include "Query.h"
-#include "PlayableItem.h"
-#include "Source.h"
 #include "utils/Logger.h"
+
+#include "Album.h"
+#include "Artist.h"
+#include "PlayableItem.h"
+#include "PlayableProxyModel.h"
+#include "Query.h"
+#include "Result.h"
+#include "Source.h"
 
 using namespace Tomahawk;
 

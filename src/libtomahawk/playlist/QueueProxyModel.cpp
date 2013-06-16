@@ -21,10 +21,12 @@
 
 #include "audio/AudioEngine.h"
 #include "playlist/TrackView.h"
-#include "PlayableItem.h"
-#include "ViewManager.h"
-#include "Source.h"
 #include "utils/Logger.h"
+
+#include "PlayableItem.h"
+#include "Result.h"
+#include "Source.h"
+#include "ViewManager.h"
 
 using namespace Tomahawk;
 

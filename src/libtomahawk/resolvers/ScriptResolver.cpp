@@ -23,6 +23,7 @@
 #include "Artist.h"
 #include "Album.h"
 #include "Pipeline.h"
+#include "Result.h"
 #include "ScriptCollection.h"
 #include "SourceList.h"
 
