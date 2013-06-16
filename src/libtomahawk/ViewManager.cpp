@@ -926,30 +926,29 @@ ViewPage *ViewManager::networkActivityWidget() const
 }
 
 
-class StubWidget : public ViewPage
-{
-public:
-    StubWidget(QObject* parent)
-//         : ViewPage(parent)
-    {
-        m_widget = (QWidget*) (new QLabel("Foobar"));
-    }
-
-    virtual QWidget* widget() { return m_widget; }
-    virtual Tomahawk::playlistinterface_ptr playlistInterface() const { return Tomahawk::playlistinterface_ptr(); }
-    virtual QString title() const { return QString("Great title"); }
-    virtual QString description() const { return QString("Great description"); }
-    virtual bool jumpToCurrentTrack() { return false; }
-
-private:
-    QWidget* m_widget;
-};
-
-
 ViewPage*
 ViewManager::dynamicPageWidget( const QString& pageName ) const
 {
-    return m_dynamicPages.value( pageName );
+    if( m_dynamicPages.contains( pageName ) )
+        return m_dynamicPages.value( pageName );
+
+    return 0;
+}
+
+
+void
+ViewManager::addDynamicPage(const QString& pageName, ViewPage* page )
+{
+    tLog() << Q_FUNC_INFO << "Trying to add " << pageName;
+
+    if( dynamicPageWidget( pageName ) )
+    {
+        tLog() << "Not adding a second ViewPage with name " << pageName;
+        Q_ASSERT( false );
+    }
+
+    m_dynamicPages.insert( pageName, page );
+    emit viewPageAdded( pageName );
 }
 
 
@@ -957,12 +956,6 @@ ViewPage*
 ViewManager::showDynamicPage( const QString& pageName )
 {
     tLog() << Q_FUNC_INFO << "pageName: " << pageName;
-
-    //HACK: this should be initialized somewhere else
-    if ( !dynamicPageWidget( pageName ) )
-    {
-        m_dynamicPages.insert( pageName, new StubWidget( m_widget ) );
-    }
 
     return show( dynamicPageWidget( pageName ) );
 }
