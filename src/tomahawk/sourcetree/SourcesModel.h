@@ -146,12 +146,18 @@ private slots:
 
     void onWidgetDestroyed( QWidget* w );
 
+    /*
+     *  pageIcon and pageTitle are visible in the source tree, pageName is the internal name in the ViewManager
+     */
+    void appendPageItem( const QString& name, const QString& text, const QIcon& icon );
+
 private:
     SourceTreeItem* itemFromIndex( const QModelIndex& idx ) const;
     int rowForItem( SourceTreeItem* item ) const;
     SourceTreeItem* activatePlaylistPage( Tomahawk::ViewPage* p, SourceTreeItem* i );
 
     SourceTreeItem* m_rootItem;
+    GroupItem* m_browse;
     GroupItem* m_collectionsGroup;
     GroupItem* m_myMusicGroup;
     GroupItem* m_cloudGroup;

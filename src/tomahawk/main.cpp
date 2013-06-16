@@ -37,6 +37,10 @@
     #ifdef WITH_BREAKPAD
         #include "breakpad/BreakPad.h"
     #endif
+
+    #ifdef Q_WS_X11 // This is probably a very bad idea with Qt5 anyway... because (if at all) X lives in a QPA plugin
+        #include <X11/Xlib.h>
+    #endif
 #endif
 
 
@@ -137,6 +141,10 @@ main( int argc, char *argv[] )
     AEInstallEventHandler( 'GURL', 'GURL', h, 0, false );
     #endif // Q_WS_MAC
 #endif //Q_OS_WIN
+
+    #ifdef Q_WS_X11
+        XInitThreads();
+    #endif
 
     TomahawkApp a( argc, argv );
 

@@ -672,7 +672,13 @@ ViewManager::setPage( ViewPage* page, bool trackHistory )
             connect( obj, SIGNAL( destroyed( QWidget* ) ), SLOT( onWidgetDestroyed( QWidget* ) ), Qt::UniqueConnection );
     }
 
+    QWidget *previousPage = m_stack->currentWidget();
+
     m_stack->setCurrentWidget( page->widget() );
+
+    //This should save the CPU cycles, especially with pages like the visualizer
+    if(previousPage && previousPage != page->widget())
+        previousPage->hide();
 
     updateView();
 }
@@ -904,6 +910,53 @@ ViewManager::inboxWidget() const
 ViewPage *ViewManager::networkActivityWidget() const
 {
     return m_networkActivityWidget;
+}
+
+
+ViewPage*
+ViewManager::dynamicPageWidget( const QString& pageName ) const
+{
+    if( m_dynamicPages.contains( pageName ) )
+        return m_dynamicPages.value( pageName );
+
+    return 0;
+}
+
+
+void
+ViewManager::addDynamicPage( const QString& pageName, const QString& text, const QIcon& icon, boost::function<Tomahawk::ViewPage*()> instanceLoader )
+{
+    tLog() << Q_FUNC_INFO << "Trying to add " << pageName;
+
+    if( m_dynamicPages.contains( pageName ) )
+    {
+        tLog() << "Not adding a second ViewPage with name " << pageName;
+        Q_ASSERT( false );
+    }
+
+    m_dynamicPagesInstanceLoaders.insert( pageName, instanceLoader );
+    emit viewPageAdded( pageName, text, icon );
+}
+
+
+ViewPage*
+ViewManager::showDynamicPage( const QString& pageName )
+{
+    tLog() << Q_FUNC_INFO << "pageName: " << pageName;
+
+    if( !m_dynamicPages.contains( pageName ) )
+    {
+        if( !m_dynamicPagesInstanceLoaders.contains( pageName ) )
+        {
+           tLog() << "Trying to show a page that does not exist and does not have a registered loader";
+           Q_ASSERT(false);
+           return 0;
+        }
+        m_dynamicPages.insert( pageName, m_dynamicPagesInstanceLoaders.value( pageName )() );
+        m_dynamicPagesInstanceLoaders.remove( pageName );
+    }
+
+    return show( dynamicPageWidget( pageName ) );
 }
 
 
