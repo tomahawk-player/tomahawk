@@ -25,6 +25,9 @@
 
 #include <QCoreApplication>
 #include <QProcess>
+#ifdef Q_OS_MAC
+    #include <QTimer>
+#endif
 
 static QString s_macVolumePath = "/Volumes";
 
