@@ -100,6 +100,7 @@ bool
 Source::setControlConnection( ControlConnection* cc )
 {
     Q_D( Source );
+
     QMutexLocker locker( &d->setControlConnectionMutex );
     if ( !d->cc.isNull() && d->cc->isReady() && d->cc->isRunning() )
     {
@@ -107,6 +108,8 @@ Source::setControlConnection( ControlConnection* cc )
         peerInfoDebug( (*cc->peerInfos().begin()) ) << Q_FUNC_INFO << "Comparing" << cc->id() << "and" << nodeid << "to detect duplicate connection, outbound:" << cc->outbound();
         if ( cc->id() < nodeid && d->cc->outbound() )
         {
+            // Tell the ControlConnection it is not anymore responsible for us.
+            d->cc->unbindFromSource();
             // This ControlConnection is not needed anymore, get rid of it!
             d->cc->deleteLater();
             // Use new ControlConnection
