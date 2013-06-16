@@ -69,7 +69,7 @@ Tomahawk::Accounts::TelepathyConfigStorage::onTpAccountManagerReady( Tp::Pending
     {
         if ( acc->protocolName() == "jabber" )
         {
-            m_accountIds << acc->objectPath();
+            m_accountIds << telepathyPathToAccountId( acc->objectPath() );
             keychainIds << acc->uniqueIdentifier();
         }
     }
@@ -93,11 +93,6 @@ Tomahawk::Accounts::TelepathyConfigStorage::onCredentialsManagerReady( const QSt
 
     //no need to listen for it any more
     disconnect( this, SLOT( onCredentialsManagerReady( QString ) ) );
-
-    for ( int i = 0; i < m_accountIds.length(); ++i )
-    {
-        m_accountIds[ i ] = telepathyPathToAccountId( m_accountIds[ i ] );
-    }
 
     emit ready();
 }
