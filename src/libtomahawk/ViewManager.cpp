@@ -673,7 +673,13 @@ ViewManager::setPage( ViewPage* page, bool trackHistory )
             connect( obj, SIGNAL( destroyed( QWidget* ) ), SLOT( onWidgetDestroyed( QWidget* ) ), Qt::UniqueConnection );
     }
 
+    QWidget *previousPage = m_stack->currentWidget();
+
     m_stack->setCurrentWidget( page->widget() );
+
+    //This should save the CPU cycles, especially with pages like the visualizer
+    if(previousPage && previousPage != page->widget())
+        previousPage->hide();
 
     updateView();
 }
