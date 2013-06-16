@@ -22,6 +22,7 @@
 #include <QtTest>
 
 #include "libtomahawk/Result.h"
+#include "libtomahawk/Track.h"
 #include "libtomahawk/Source.h"
 
 class TestResult : public QObject
