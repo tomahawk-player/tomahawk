@@ -23,10 +23,8 @@
 
 #include <QMutex>
 
-class ConnectionManagerPrivate : public QObject
+class ConnectionManagerPrivate
 {
-Q_OBJECT
-
 public:
     ConnectionManagerPrivate( ConnectionManager* q, const QString& _nodeid )
         : q_ptr ( q )
