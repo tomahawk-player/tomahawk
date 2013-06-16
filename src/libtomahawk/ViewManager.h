@@ -58,7 +58,6 @@ class WhatsHotWidget;
 class QPushButton;
 class InboxModel;
 class NetworkActivityWidget;
-class StubWidget;
 
 namespace Tomahawk
 {

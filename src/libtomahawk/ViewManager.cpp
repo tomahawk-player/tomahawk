@@ -60,7 +60,6 @@
 #include "utils/Logger.h"
 
 #include <QVBoxLayout>
-#include <QLabel>
 #include <QMetaMethod>
 
 
