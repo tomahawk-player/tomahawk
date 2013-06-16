@@ -71,40 +71,40 @@ public:
     bool playable() const;
 
     collection_ptr collection() const;
-    QString url() const { return m_url; }
+    QString url() const;
     /**
      * Has the given url been checked that it is accessible/valid.
      *
      * Results marked as true will bypass the ResultUrlChecker.
      */
-    bool checked() const { return m_checked; }
-    QString mimetype() const { return m_mimetype; }
+    bool checked() const;
+    QString mimetype() const;
     QString friendlySource() const;
-    QString purchaseUrl() const { return m_purchaseUrl; }
-    QString linkUrl() const { return m_linkUrl; }
+    QString purchaseUrl() const;
+    QString linkUrl() const;
 
     QPixmap sourceIcon( TomahawkUtils::ImageMode style, const QSize& desiredSize = QSize() ) const;
 
-    unsigned int bitrate() const { return m_bitrate; }
-    unsigned int size() const { return m_size; }
-    unsigned int modificationTime() const { return m_modtime; }
+    unsigned int bitrate() const;
+    unsigned int size() const;
+    unsigned int modificationTime() const;
 
-    void setScore( float score ) { m_score = score; }
-    void setFileId( unsigned int id ) { m_fileId = id; }
+    void setScore( float score );
+    void setFileId( unsigned int id );
     void setRID( RID id ) { m_rid = id; }
     void setCollection( const Tomahawk::collection_ptr& collection );
-    void setFriendlySource( const QString& s ) { m_friendlySource = s; }
-    void setPurchaseUrl( const QString& u ) { m_purchaseUrl = u; }
-    void setLinkUrl( const QString& u ) { m_linkUrl = u; }
-    void setChecked( bool checked ) { m_checked = checked; }
-    void setMimetype( const QString& mimetype ) { m_mimetype = mimetype; }
-    void setBitrate( unsigned int bitrate ) { m_bitrate = bitrate; }
-    void setSize( unsigned int size ) { m_size = size; }
-    void setModificationTime( unsigned int modtime ) { m_modtime = modtime; }
+    void setFriendlySource( const QString& s );
+    void setPurchaseUrl( const QString& u );
+    void setLinkUrl( const QString& u );
+    void setChecked( bool checked );
+    void setMimetype( const QString& mimetype );
+    void setBitrate( unsigned int bitrate );
+    void setSize( unsigned int size );
+    void setModificationTime( unsigned int modtime );
 
-    void setTrack( const track_ptr& track ) { m_track = track; }
+    void setTrack( const track_ptr& track );
 
-    unsigned int fileId() const { return m_fileId; }
+    unsigned int fileId() const;
 
     track_ptr track() const;
 
