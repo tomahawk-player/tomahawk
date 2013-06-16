@@ -103,11 +103,6 @@ public:
 
     void appendGroups();
 
-    /*
-     *  pageIcon and pageTitle are visible in the source tree, pageName is the internal name in the ViewManager
-     */
-    void appendPageItem( const QIcon& pageIcon, const QString& pageTitle, const QString& pageName );
-
     void appendItem( const Tomahawk::source_ptr& source );
     bool removeItem( const Tomahawk::source_ptr& source );
 
@@ -151,7 +146,10 @@ private slots:
 
     void onWidgetDestroyed( QWidget* w );
 
-    void onViewPageAdded( const QString& name );
+    /*
+     *  pageIcon and pageTitle are visible in the source tree, pageName is the internal name in the ViewManager
+     */
+    void appendPageItem( const QString& name, const QString& text, const QIcon& icon );
 
 private:
     SourceTreeItem* itemFromIndex( const QModelIndex& idx ) const;
