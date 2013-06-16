@@ -65,7 +65,7 @@ ControlConnection::~ControlConnection()
     }
 
     delete m_pingtimer;
-    m_servent->unregisterControlConnection( this );
+    servent()->unregisterControlConnection( this );
     if ( m_dbsyncconn )
         m_dbsyncconn->deleteLater();
 }
@@ -112,7 +112,7 @@ ControlConnection::setup()
 
     QString friendlyName = name();
 
-    tDebug() << "Detected name:" << name() << friendlyName << m_sock->peerAddress();
+    tDebug() << "Detected name:" << name() << friendlyName;
 
     // setup source and remote collection for this peer
     m_source = SourceList::instance()->get( id(), friendlyName, true );
@@ -182,18 +182,18 @@ ControlConnection::setupDbSyncConnection( bool ondemand )
     if ( !m_dbconnkey.isEmpty() )
     {
         qDebug() << "Connecting to DBSync offer from peer...";
-        m_dbsyncconn = new DBSyncConnection( m_servent, m_source );
+        m_dbsyncconn = new DBSyncConnection( servent(), m_source );
 
-        m_servent->createParallelConnection( this, m_dbsyncconn, m_dbconnkey );
+        servent()->createParallelConnection( this, m_dbsyncconn, m_dbconnkey );
         m_dbconnkey.clear();
     }
     else if ( !outbound() || ondemand ) // only one end makes the offer
     {
         qDebug() << "Offering a DBSync key to peer...";
-        m_dbsyncconn = new DBSyncConnection( m_servent, m_source );
+        m_dbsyncconn = new DBSyncConnection( servent(), m_source );
 
         QString key = uuid();
-        m_servent->registerOffer( key, m_dbsyncconn );
+        servent()->registerOffer( key, m_dbsyncconn );
         QVariantMap m;
         m.insert( "method", "dbsync-offer" );
         m.insert( "key", key );

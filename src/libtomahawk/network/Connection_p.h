@@ -32,8 +32,10 @@
 class ConnectionPrivate
 {
 public:
-    ConnectionPrivate( Connection* q )
+    ConnectionPrivate( Connection* q, Servent* _servent )
         : q_ptr ( q )
+        , servent( _servent )
+        , sock( 0 )
         , do_shutdown( false )
         , actually_shutting_down( false )
         , peer_disconnected( false )
@@ -55,6 +57,8 @@ public:
     Q_DECLARE_PUBLIC ( Connection )
 
 private:
+    Servent* servent;
+    QPointer<QTcpSocket> sock;
     QHostAddress peerIpAddress;
     bool do_shutdown;
     bool actually_shutting_down;
