@@ -138,6 +138,8 @@ signals:
     void historyBackAvailable( bool avail );
     void historyForwardAvailable( bool avail );
 
+    void viewPageAdded( const QString& pageName );
+
 public slots:
     Tomahawk::ViewPage* showSuperCollection();
     Tomahawk::ViewPage* showDashboard();
@@ -147,6 +149,7 @@ public slots:
     Tomahawk::ViewPage* showInboxPage();
     Tomahawk::ViewPage* showNetworkActivityPage();
 
+    void addDynamicPage( const QString& pageName, Tomahawk::ViewPage* page );
     Tomahawk::ViewPage* showDynamicPage( const QString& pageName );
 
     void showCurrentTrack();
