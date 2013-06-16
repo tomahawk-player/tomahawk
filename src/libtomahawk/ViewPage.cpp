@@ -28,11 +28,6 @@ ViewPage::~ViewPage()
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
 }
 
-QIcon ViewPage::icon() const
-{
-    return QIcon();
-}
-
 
 bool
 ViewPage::setFilter( const QString& filter )
