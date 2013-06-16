@@ -22,6 +22,8 @@
 
 #include "BufferIoDevice.h"
 
+#include <QMutex>
+
 class BufferIODevicePrivate
 {
 public:

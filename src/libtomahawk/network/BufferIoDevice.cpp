@@ -21,6 +21,7 @@
 #include "BufferIoDevice_p.h"
 
 #include <QCoreApplication>
+#include <QMutexLocker>
 #include <QThread>
 
 #include "utils/Logger.h"
