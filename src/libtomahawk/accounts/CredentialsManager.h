@@ -69,8 +69,9 @@ public:
     QStringList keys( const QString& service ) const;
     QStringList services() const;
 
-    QVariantHash credentials( const QString& serviceName, const QString& key ) const;
+    QVariant credentials( const QString& serviceName, const QString& key ) const; //returns QString or QVH
     void setCredentials( const QString& serviceName, const QString& key, const QVariantHash& value );
+    void setCredentials( const QString& serviceName, const QString& key, const QString& value );
 
 signals:
     void serviceReady( const QString& service );
@@ -81,12 +82,12 @@ private slots:
     void keychainJobFinished( QKeychain::Job* );
 
 protected:
-    QVariantHash credentials( const CredentialsStorageKey& key ) const;
-    void setCredentials( const CredentialsStorageKey& key, const QVariantHash& value );
+    QVariant credentials( const CredentialsStorageKey& key ) const;
+    void setCredentials( const CredentialsStorageKey& key, const QVariant& value, bool tryToWriteAsString = false );
 
 private:
     QHash< QString, QStringList > m_services;
-    QHash< CredentialsStorageKey, QVariantHash > m_credentials;
+    QHash< CredentialsStorageKey, QVariant > m_credentials;
     QHash< QString, QList< QKeychain::ReadPasswordJob* > > m_readJobs;
     QMutex m_mutex;
 };

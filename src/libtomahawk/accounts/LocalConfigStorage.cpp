@@ -107,7 +107,9 @@ LocalConfigStorage::load( const QString& accountId, Account::Configuration& cfg 
     s->endGroup();
 
     CredentialsManager* c = AccountManager::instance()->credentialsManager();
-    cfg.credentials =         c->credentials( m_credentialsServiceName, accountId );
+    QVariant credentials = c->credentials( m_credentialsServiceName, accountId );
+    if ( credentials.type() == QVariant::Hash )
+        cfg.credentials = credentials.toHash();
 }
 
 

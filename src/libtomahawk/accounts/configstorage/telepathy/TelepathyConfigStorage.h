@@ -22,6 +22,13 @@
 #include "accounts/ConfigStorageDllMacro.h"
 #include "accounts/ConfigStorage.h"
 
+#include <TelepathyQt/AccountManager>
+
+namespace Tp
+{
+class PendingOperation;
+}
+
 namespace Tomahawk
 {
 
@@ -45,9 +52,17 @@ public:
     virtual void load( const QString& accountId, Account::Configuration& cfg );
     virtual void remove( const QString& accountId );
 
+private slots:
+    void onTpAccountManagerReady( Tp::PendingOperation* op );
+    void onCredentialsManagerReady( const QString& service );
+
 private:
+    QString telepathyPathToAccountId( const QString& objectPath );
+    QString accountIdToTelepathyPath( const QString& accountId );
+
     const QString m_credentialsServiceName;
     QStringList m_accountIds;
+    Tp::AccountManagerPtr m_tpam;
 
     static TelepathyConfigStorage* s_instance;
 };

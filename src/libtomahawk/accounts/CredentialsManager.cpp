@@ -118,14 +118,14 @@ CredentialsManager::services() const
 }
 
 
-QVariantHash
+QVariant
 CredentialsManager::credentials( const CredentialsStorageKey& key ) const
 {
     return m_credentials.value( key );
 }
 
 
-QVariantHash
+QVariant
 CredentialsManager::credentials( const QString& serviceName, const QString& key ) const
 {
     return credentials( CredentialsStorageKey( serviceName, key ) );
@@ -133,12 +133,14 @@ CredentialsManager::credentials( const QString& serviceName, const QString& key 
 
 
 void
-CredentialsManager::setCredentials( const CredentialsStorageKey& csKey, const QVariantHash& value )
+CredentialsManager::setCredentials( const CredentialsStorageKey& csKey, const QVariant& value, bool tryToWriteAsString )
 {
     QMutexLocker locker( &m_mutex );
 
     QKeychain::Job* j;
-    if ( value.isEmpty() )
+    if ( value.isNull() ||
+         ( value.type() == QVariant::Hash && value.toHash().isEmpty() ) ||
+         ( value.type() == QVariant::String && value.toString().isEmpty() ) )
     {
         if ( !m_credentials.contains( csKey ) ) //if we don't have any credentials for this key, we bail
             return;
@@ -156,15 +158,26 @@ CredentialsManager::setCredentials( const CredentialsStorageKey& csKey, const QV
 
         m_credentials.insert( csKey, value );
 
-        QByteArray data;
-        {
-            QDataStream ds( &data, QIODevice::WriteOnly );
-            ds << value;
-        }
-
         QKeychain::WritePasswordJob* wj = new QKeychain::WritePasswordJob( csKey.service(), this );
         wj->setKey( csKey.key() );
-        wj->setBinaryData( data );
+
+        Q_ASSERT( value.type() == QVariant::String || value.type() == QVariant::Hash );
+
+        if ( tryToWriteAsString && value.type() == QVariant::String )
+        {
+            wj->setTextData( value.toString() );
+        }
+        else if ( value.type() == QVariant::Hash )
+        {
+            QByteArray data;
+            {
+                QDataStream ds( &data, QIODevice::WriteOnly );
+                ds << value.toHash();
+            }
+
+            wj->setBinaryData( data );
+        }
+
         j = wj;
     }
 
@@ -181,7 +194,14 @@ CredentialsManager::setCredentials( const CredentialsStorageKey& csKey, const QV
 void
 CredentialsManager::setCredentials( const QString& serviceName, const QString& key, const QVariantHash& value )
 {
-    setCredentials( CredentialsStorageKey( serviceName, key ), value );
+    setCredentials( CredentialsStorageKey( serviceName, key ), QVariant( value ) );
+}
+
+
+void
+CredentialsManager::setCredentials( const QString& serviceName, const QString& key, const QString& value )
+{
+    setCredentials( CredentialsStorageKey( serviceName, key ), QVariant( value ), true );
 }
 
 
@@ -195,9 +215,18 @@ CredentialsManager::keychainJobFinished( QKeychain::Job* j )
         {
             tDebug() << "QtKeychain readJob for" << readJob->key() << "finished without errors";
 
-            QVariantHash creds;
-            QDataStream dataStream( readJob->binaryData() );
-            dataStream >> creds;
+            QVariant creds;
+            if ( !readJob->textData().isEmpty() )
+            {
+                creds = QVariant( readJob->textData() );
+            }
+            else //must be a QVH
+            {
+                QDataStream dataStream( readJob->binaryData() );
+                QVariantHash hash;
+                dataStream >> hash;
+                creds = QVariant( hash );
+            }
 
             m_credentials.insert( CredentialsStorageKey( readJob->service(), readJob->key() ), creds );
         }
