@@ -19,6 +19,7 @@
 #include "DatabaseCommand_DeleteInboxEntry.h"
 #include "DatabaseImpl.h"
 #include "Query.h"
+#include "Track.h"
 
 
 DatabaseCommand_DeleteInboxEntry::DatabaseCommand_DeleteInboxEntry( const Tomahawk::query_ptr& query,

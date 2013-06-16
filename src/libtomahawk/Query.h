@@ -26,8 +26,6 @@
 #include <QVariant>
 
 #include "Typedefs.h"
-#include "Result.h"
-#include "Track.h"
 #include "infosystem/InfoSystem.h"
 
 #include "DllMacro.h"
