@@ -20,26 +20,22 @@
 
 #include "JSResolver.h"
 
+#include "accounts/AccountConfigWidget.h"
+#include "network/Servent.h"
+#include "jobview/JobStatusView.h"
+#include "jobview/JobStatusModel.h"
+#include "jobview/ErrorStatusMessage.h"
+#include "utils/TomahawkUtilsGui.h"
+
 #include "Artist.h"
 #include "Album.h"
 #include "config.h"
 #include "Pipeline.h"
+#include "Result.h"
 #include "ScriptCollection.h"
 #include "SourceList.h"
 #include "TomahawkSettings.h"
 #include "TomahawkVersion.h"
-
-#include "accounts/AccountConfigWidget.h"
-
-#include "network/Servent.h"
-
-#include "jobview/JobStatusView.h"
-#include "jobview/JobStatusModel.h"
-#include "jobview/ErrorStatusMessage.h"
-
-#include "utils/TomahawkUtilsGui.h"
-
-#include "config.h"
 
 #include <QImageReader>
 #include <QMessageBox>

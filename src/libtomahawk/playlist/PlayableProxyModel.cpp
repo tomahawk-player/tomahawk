@@ -19,16 +19,17 @@
 
 #include "PlayableProxyModel.h"
 
-#include <QTreeView>
-
-#include "PlayableProxyModelPlaylistInterface.h"
-#include "Artist.h"
-#include "Album.h"
-#include "Query.h"
-#include "Source.h"
-#include "PlayableItem.h"
 #include "utils/Logger.h"
 
+#include "Artist.h"
+#include "Album.h"
+#include "PlayableItem.h"
+#include "PlayableProxyModelPlaylistInterface.h"
+#include "Query.h"
+#include "Result.h"
+#include "Source.h"
+
+#include <QTreeView>
 
 PlayableProxyModel::PlayableProxyModel( QObject* parent )
     : QSortFilterProxyModel( parent )

@@ -20,15 +20,17 @@
 
 #include <QMutexLocker>
 
-#include "FuncTimeout.h"
 #include "database/Database.h"
 #include "resolvers/ExternalResolver.h"
 #include "resolvers/ScriptResolver.h"
 #include "resolvers/JSResolver.h"
-#include "Source.h"
-#include "SourceList.h"
 #include "utils/ResultUrlChecker.h"
 #include "utils/Logger.h"
+
+#include "FuncTimeout.h"
+#include "Result.h"
+#include "Source.h"
+#include "SourceList.h"
 
 #include <boost/bind.hpp>
 
