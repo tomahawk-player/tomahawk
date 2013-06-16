@@ -25,18 +25,13 @@
 // time before new connection terminate if it could not be established
 #define CONNECT_TIMEOUT 10000
 
-#include <QtCore/QObject>
-#include <QtCore/QMap>
-#include <QtCore/QMutex>
-#include <QtCore/QSharedPointer>
-#include <QtCore/QTimer>
-#include <QtCore/QPointer>
-#include <QtNetwork/QTcpServer>
-#include <QtNetwork/QHostInfo>
+#include <QObject>
+#include <QMap>
+#include <QSharedPointer>
+#include <QTcpServer>
 
 #include "Typedefs.h"
 #include "Msg.h"
-#include "AclRegistry.h"
 
 #include "DllMacro.h"
 

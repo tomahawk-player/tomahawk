@@ -20,13 +20,15 @@
 
 #include "Connection_p.h"
 
-#include "QTcpSocketExtra.h"
 #include "network/Servent.h"
 #include "utils/Logger.h"
+
+#include "AclRegistry.h"
+#include "QTcpSocketExtra.h"
 #include "Source.h"
 
-#include <QtCore/QTime>
-#include <QtCore/QThread>
+#include <QTime>
+#include <QThread>
 
 #define PROTOVER "4" // must match remote peer, or we can't talk.
 
