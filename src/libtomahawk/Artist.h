@@ -27,6 +27,7 @@
 
 #include <QFuture>
 
+#include "TrackData.h"
 #include "Typedefs.h"
 #include "DllMacro.h"
 #include "Query.h"

@@ -20,10 +20,12 @@
 
 #include "InboxJobItem.h"
 
-#include "Query.h"
+#include "audio/AudioEngine.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
-#include "audio/AudioEngine.h"
+
+#include "Query.h"
+#include "TrackData.h"
 
 #include <QTimer>
 

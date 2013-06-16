@@ -19,6 +19,7 @@
 #include "DatabaseCommand_ModifyInboxEntry.h"
 #include "DatabaseImpl.h"
 #include "Query.h"
+#include "Track.h"
 
 
 DatabaseCommand_ModifyInboxEntry::DatabaseCommand_ModifyInboxEntry( const Tomahawk::query_ptr& query,

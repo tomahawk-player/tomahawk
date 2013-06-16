@@ -23,6 +23,8 @@
 #include "Query.h"
 #include "SourceList.h"
 #include "TomahawkSqlQuery.h"
+#include "Track.h"
+#include "TrackData.h"
 
 
 DatabaseCommand_LoadInboxEntries::DatabaseCommand_LoadInboxEntries( QObject* parent )

@@ -19,11 +19,12 @@
 
 #include "SourcePlaylistInterface.h"
 
-#include "Source.h"
-#include "Pipeline.h"
 #include "audio/AudioEngine.h"
-
 #include "utils/Logger.h"
+
+#include "Pipeline.h"
+#include "Result.h"
+#include "Source.h"
 
 using namespace Tomahawk;
 
