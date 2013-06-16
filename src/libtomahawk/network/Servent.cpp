@@ -24,6 +24,7 @@
 #include "accounts/AccountManager.h"
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
+#include "network/Msg.h"
 #include "network/ConnectionManager.h"
 #include "network/DbSyncConnection.h"
 #include "sip/SipInfo.h"

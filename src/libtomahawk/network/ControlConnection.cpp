@@ -20,16 +20,17 @@
 
 #include "ControlConnection.h"
 
-#include "StreamConnection.h"
 #include "database/Database.h"
 #include "database/DatabaseCommand_CollectionStats.h"
-#include "DbSyncConnection.h"
-#include "SourceList.h"
-#include "MsgProcessor.h"
 #include "network/DbSyncConnection.h"
+#include "network/Msg.h"
+#include "network/MsgProcessor.h"
 #include "network/Servent.h"
 #include "sip/PeerInfo.h"
 #include "utils/Logger.h"
+
+#include "StreamConnection.h"
+#include "SourceList.h"
 
 #define TCP_TIMEOUT 600
 

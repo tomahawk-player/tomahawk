@@ -30,8 +30,8 @@
 #include <QTcpSocket>
 #include <QTimer>
 
-#include "Msg.h"
 #include "DllMacro.h"
+#include "Typedefs.h"
 
 class Connection;
 

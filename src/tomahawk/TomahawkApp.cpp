@@ -55,6 +55,7 @@
 #include "DropJob.h"
 #include "EchonestCatalogSynchronizer.h"
 #include "database/DatabaseImpl.h"
+#include "network/Msg.h"
 
 #include "audio/AudioEngine.h"
 #include "utils/XspfLoader.h"
