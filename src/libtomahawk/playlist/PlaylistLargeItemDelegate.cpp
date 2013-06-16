@@ -39,6 +39,12 @@
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
+// Forward Declarations breaking QSharedPointer
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+    #include "utils/PixmapDelegateFader.h"
+#endif
+
+
 using namespace Tomahawk;
 
 

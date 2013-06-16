@@ -22,6 +22,12 @@
 #include "DatabaseImpl.h"
 #include "TomahawkSqlQuery.h"
 
+// Forward Declarations breaking QSharedPointer
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+    #include "Source.h"
+#endif
+
+
 DatabaseCommand_NetworkCharts::DatabaseCommand_NetworkCharts( const QDateTime &from, const QDateTime &to, QObject *parent )
     : DatabaseCommand( parent )
     , m_amount( 0 )

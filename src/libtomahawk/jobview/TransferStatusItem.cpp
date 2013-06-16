@@ -33,6 +33,12 @@
     #include "JobStatusView.h"
 #endif
 
+// Forward Declarations breaking QSharedPointer
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+    #include "collection/Collection.h"
+#endif
+
+
 TransferStatusItem::TransferStatusItem( TransferStatusManager* p, StreamConnection* sc )
     : m_parent( p )
     , m_stream( QPointer< StreamConnection >( sc ) )
