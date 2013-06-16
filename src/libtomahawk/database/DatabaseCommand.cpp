@@ -18,6 +18,8 @@
 
 #include "DatabaseCommand.h"
 
+#include "utils/Logger.h"
+
 #include "DatabaseCommand_AddFiles.h"
 #include "DatabaseCommand_CreatePlaylist.h"
 #include "DatabaseCommand_DeleteFiles.h"
@@ -30,10 +32,13 @@
 #include "DatabaseCommand_SetDynamicPlaylistRevision.h"
 #include "DatabaseCommand_SocialAction.h"
 #include "DatabaseCommand_ShareTrack.h"
-
-#include "utils/Logger.h"
 #include "DatabaseCommand_SetCollectionAttributes.h"
 #include "DatabaseCommand_SetTrackAttributes.h"
+
+// Forward Declarations breaking QSharedPointer
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+    #include "collection/Collection.h"
+#endif
 
 
 DatabaseCommand::DatabaseCommand( QObject* parent )

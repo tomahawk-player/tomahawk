@@ -29,6 +29,12 @@
 
 #include <QAction>
 
+// Forward Declarations breaking QSharedPointer
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+    #include "Result.h"
+#endif
+
+
 using namespace Tomahawk;
 
 LatchManager::LatchManager( QObject* parent )

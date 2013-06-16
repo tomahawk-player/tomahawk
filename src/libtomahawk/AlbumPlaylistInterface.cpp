@@ -20,17 +20,23 @@
 
 #include "AlbumPlaylistInterface.h"
 
-#include "Artist.h"
+#include "utils/Logger.h"
 #include "collection/TracksRequest.h"
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
 #include "database/DatabaseCommand_AllTracks.h"
+
+#include "Artist.h"
 #include "Pipeline.h"
 #include "Query.h"
 #include "Source.h"
 #include "SourceList.h"
 
-#include "utils/Logger.h"
+// Forward Declarations breaking QSharedPointer
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+    #include "Result.h"
+#endif
+
 
 using namespace Tomahawk;
 

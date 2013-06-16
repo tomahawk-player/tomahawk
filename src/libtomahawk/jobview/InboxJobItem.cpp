@@ -29,6 +29,12 @@
 
 #include <QTimer>
 
+// Forward Declarations breaking QSharedPointer
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+    #include "Source.h"
+#endif
+
+
 
 InboxJobItem::InboxJobItem( Side side,
                             const QString& prettyName,

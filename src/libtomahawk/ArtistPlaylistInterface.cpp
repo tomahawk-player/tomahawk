@@ -19,14 +19,19 @@
 
 #include "ArtistPlaylistInterface.h"
 
-#include "Artist.h"
 #include "collection/Collection.h"
-#include "Query.h"
 #include "database/Database.h"
 #include "database/DatabaseCommand_AllTracks.h"
+#include "utils/Logger.h"
+
+#include "Artist.h"
+#include "Query.h"
 #include "Source.h"
 
-#include "utils/Logger.h"
+// Forward Declarations breaking QSharedPointer
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+    #include "Result.h"
+#endif
 
 using namespace Tomahawk;
 
