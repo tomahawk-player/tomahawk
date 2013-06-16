@@ -25,6 +25,7 @@
 
 #include "MsgProcessor.h"
 
+#include <QReadWriteLock>
 #include <QTime>
 #include <QTimer>
 
@@ -67,6 +68,7 @@ private:
     QString id;
     QString name;
     QString nodeid;
+    mutable QReadWriteLock nodeidLock;
     msg_ptr msg;
     msg_ptr firstmsg;
     int peerport;
