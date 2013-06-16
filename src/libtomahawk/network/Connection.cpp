@@ -35,8 +35,6 @@ Connection::Connection( Servent* parent )
     : QObject()
     , m_sock( 0 )
     , m_servent( parent )
-    , m_ready( false )
-    , m_onceonly( true )
     , d_ptr( new ConnectionPrivate( this ) )
 {
     moveToThread( m_servent->thread() );
@@ -120,15 +118,19 @@ Connection::socket()
 }
 
 void
-Connection::setOutbound(bool o)
+Connection::setOutbound( bool o )
 {
-    m_outbound = o;
+    Q_D( Connection );
+
+    d->outbound = o;
 }
 
 bool
 Connection::outbound() const
 {
-    return m_outbound;
+    Q_D( const Connection );
+
+    return d->outbound;
 }
 
 Servent*
@@ -229,19 +231,25 @@ Connection::name() const
 void
 Connection::setOnceOnly( bool b )
 {
-    m_onceonly = b;
+    Q_D( Connection );
+
+    d->onceonly = b;
 }
 
 bool
 Connection::onceOnly() const
 {
-    return m_onceonly;
+    Q_D( const Connection );
+
+    return d->onceonly;
 }
 
 bool
 Connection::isReady() const
 {
-    return m_ready;
+    Q_D( const Connection );
+
+    return d->ready;
 }
 
 bool
@@ -359,7 +367,9 @@ Connection::checkACLResult( const QString &nodeid, const QString &username, Toma
 void
 Connection::authCheckTimeout()
 {
-    if ( m_ready )
+    Q_D( Connection );
+
+    if ( d->ready )
         return;
 
     tDebug( LOGVERBOSE ) << "Closing connection, not authed in time.";
@@ -549,19 +559,19 @@ Connection::handleReadMsg()
         d->msg->is( Msg::SETUP ) &&
         d->msg->payload() == "ok" )
     {
-        m_ready = true;
+        d->ready = true;
         tDebug( LOGVERBOSE ) << "Connection" << id() << "READY";
         setup();
         emit ready();
     }
-    else if ( !m_ready &&
+    else if ( !d->ready &&
              outbound() &&
              d->msg->is( Msg::SETUP ) )
     {
         if ( d->msg->payload() == PROTOVER )
         {
             sendMsg( Msg::factory( "ok", Msg::SETUP ) );
-            m_ready = true;
+            d->ready = true;
             tDebug( LOGVERBOSE ) << "Connection" << id() << "READY";
             setup();
             emit ready();

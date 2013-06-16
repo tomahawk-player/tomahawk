@@ -277,7 +277,7 @@ ControlConnection::handleMsg( msg_ptr msg )
 void
 ControlConnection::authCheckTimeout()
 {
-    if ( m_ready )
+    if ( isReady() )
         return;
 
     Servent::instance()->queueForAclResult( bareName(), m_peerInfos );

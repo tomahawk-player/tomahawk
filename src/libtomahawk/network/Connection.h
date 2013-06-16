@@ -123,7 +123,6 @@ private slots:
 protected:
     QPointer<QTcpSocket> m_sock;
     Servent* m_servent;
-    bool m_outbound, m_ready, m_onceonly;
 
 private:
     Q_DECLARE_PRIVATE( Connection )
