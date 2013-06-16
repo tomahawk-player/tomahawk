@@ -36,11 +36,13 @@ public:
         , do_shutdown( false )
         , actually_shutting_down( false )
         , peer_disconnected( false )
-        , peerport( 0 )
+        , ready( false )
+        , onceonly( true )
         , tx_bytes( 0 )
         , tx_bytes_requested( 0 )
         , rx_bytes( 0 )
         , id( "Connection()" )
+        , peerport( 0 )
         , statstimer( 0 )
         , stats_tx_bytes_per_sec( 0 )
         , stats_rx_bytes_per_sec( 0 )
@@ -56,6 +58,9 @@ private:
     bool do_shutdown;
     bool actually_shutting_down;
     bool peer_disconnected;
+    bool outbound;
+    bool ready;
+    bool onceonly;
     qint64 tx_bytes;
     qint64 tx_bytes_requested;
     qint64 rx_bytes;
