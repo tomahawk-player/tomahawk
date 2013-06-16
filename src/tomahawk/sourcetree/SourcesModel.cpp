@@ -58,6 +58,10 @@ SourcesModel::SourcesModel( QObject* parent )
     m_rootItem = new SourceTreeItem( this, 0, Invalid );
 
     appendGroups();
+
+    // Add stub page
+    appendPageItem( ImageRegistry::instance()->icon( RESPATH "images/new-releases.svg" ), "Stub Page", "stub");
+
     onSourcesAdded( SourceList::instance()->sources() );
 
     connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ),
@@ -292,56 +296,48 @@ SourcesModel::appendGroups()
 {
     beginInsertRows( QModelIndex(), rowCount(), rowCount() + 4 );
 
-    GroupItem* browse = new GroupItem( this, m_rootItem, tr( "Browse" ), 0 );
+    m_browse = new GroupItem( this, m_rootItem, tr( "Browse" ), 0 );
     new HistoryItem( this, m_rootItem, tr( "Search History" ), 1 );
 //    new SourceTreeItem( this, m_rootItem, SourcesModel::Divider, 2 );
     m_myMusicGroup = new GroupItem( this, m_rootItem, tr( "My Music" ), 3 );
 
-    GenericPageItem* dashboard = new GenericPageItem( this, browse, tr( "Dashboard" ), ImageRegistry::instance()->icon( RESPATH "images/dashboard.svg" ),
+    GenericPageItem* dashboard = new GenericPageItem( this, m_browse, tr( "Dashboard" ), ImageRegistry::instance()->icon( RESPATH "images/dashboard.svg" ),
                                                       boost::bind( &ViewManager::showDashboard, ViewManager::instance() ),
                                                       boost::bind( &ViewManager::dashboard, ViewManager::instance() ) );
     dashboard->setSortValue( 0 );
 
     // super collection
-    GenericPageItem* sc = new GenericPageItem( this, browse, tr( "SuperCollection" ), ImageRegistry::instance()->icon( RESPATH "images/supercollection.svg" ),
+    GenericPageItem* sc = new GenericPageItem( this, m_browse, tr( "SuperCollection" ), ImageRegistry::instance()->icon( RESPATH "images/supercollection.svg" ),
                                                   boost::bind( &ViewManager::showSuperCollection, ViewManager::instance() ),
                                                   boost::bind( &ViewManager::superCollectionView, ViewManager::instance() ) );
     sc->setSortValue( 1 );
 
     // browse section
-    LovedTracksItem* loved = new LovedTracksItem( this, browse );
+    LovedTracksItem* loved = new LovedTracksItem( this, m_browse );
     loved->setSortValue( 2 );
 
-    GenericPageItem* networkActivity = new GenericPageItem( this, browse, tr( "Network Activity" ), TomahawkUtils::defaultPixmap( TomahawkUtils::NetworkActivity, TomahawkUtils::Original ),
+    GenericPageItem* networkActivity = new GenericPageItem( this, m_browse, tr( "Network Activity" ), TomahawkUtils::defaultPixmap( TomahawkUtils::NetworkActivity, TomahawkUtils::Original ),
                                                 boost::bind( &ViewManager::showNetworkActivityPage, ViewManager::instance() ),
                                                 boost::bind( &ViewManager::networkActivityWidget, ViewManager::instance() ) );
     networkActivity->setSortValue( 3 );
 
-    GenericPageItem* recent = new GenericPageItem( this, browse, tr( "Recently Played" ), ImageRegistry::instance()->icon( RESPATH "images/recently-played.svg" ),
+    GenericPageItem* recent = new GenericPageItem( this, m_browse, tr( "Recently Played" ), ImageRegistry::instance()->icon( RESPATH "images/recently-played.svg" ),
                                                    boost::bind( &ViewManager::showRecentPlaysPage, ViewManager::instance() ),
                                                    boost::bind( &ViewManager::recentPlaysWidget, ViewManager::instance() ) );
     recent->setSortValue( 4 );
 
-    GenericPageItem* hot = new GenericPageItem( this, browse, tr( "Charts" ), ImageRegistry::instance()->icon( RESPATH "images/charts.svg" ),
+    GenericPageItem* hot = new GenericPageItem( this, m_browse, tr( "Charts" ), ImageRegistry::instance()->icon( RESPATH "images/charts.svg" ),
                                                 boost::bind( &ViewManager::showWhatsHotPage, ViewManager::instance() ),
                                                 boost::bind( &ViewManager::whatsHotWidget, ViewManager::instance() ) );
     hot->setSortValue( 5 );
 
-    GenericPageItem* newReleases = new GenericPageItem( this, browse, tr( "New Releases" ), ImageRegistry::instance()->icon( RESPATH "images/new-releases.svg" ),
+    GenericPageItem* newReleases = new GenericPageItem( this, m_browse, tr( "New Releases" ), ImageRegistry::instance()->icon( RESPATH "images/new-releases.svg" ),
                                                 boost::bind( &ViewManager::showNewReleasesPage, ViewManager::instance() ),
                                                 boost::bind( &ViewManager::newReleasesWidget, ViewManager::instance() ) );
     newReleases->setSortValue( 6 );
 
 
-    GenericPageItem* stub = new GenericPageItem( this, browse, tr( "Stub page" ), ImageRegistry::instance()->icon( RESPATH "images/new-releases.svg" ),
-                                                boost::bind( &ViewManager::showDynamicPage, ViewManager::instance(), QString( "stub" )),
-                                                boost::bind( &ViewManager::dynamicPageWidget, ViewManager::instance(), QString( "stub" ) ) );
-
-    stub->setSortValue( 7 );
-
-
-
-    InboxItem* inbox = new InboxItem( this, browse );
+    InboxItem* inbox = new InboxItem( this, m_browse );
     inbox->setSortValue( 7 );
 
     m_collectionsGroup = new GroupItem( this, m_rootItem, tr( "Friends" ), 4 );
@@ -349,6 +345,18 @@ SourcesModel::appendGroups()
     m_cloudGroup = new GroupItem( this, m_rootItem, tr( "Cloud" ), 5 );
 
     endInsertRows();
+}
+
+void
+SourcesModel::appendPageItem( const QIcon& pageIcon, const QString& pageTitle, const QString& pageName )
+{
+
+//     beginInsertRows();
+    GenericPageItem* pageItem = new GenericPageItem( this, m_browse, pageTitle, pageIcon,
+                                            boost::bind( &ViewManager::showDynamicPage, ViewManager::instance(), pageName ),
+                                            boost::bind( &ViewManager::dynamicPageWidget, ViewManager::instance(), pageName ) );
+    m_browse;
+//     endInsertRows();
 }
 
 
