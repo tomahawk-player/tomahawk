@@ -21,8 +21,6 @@
 #define BUFFERIODEVICE_H
 
 #include <QIODevice>
-#include <QMutexLocker>
-#include <QFile>
 
 class BufferIODevicePrivate;
 
