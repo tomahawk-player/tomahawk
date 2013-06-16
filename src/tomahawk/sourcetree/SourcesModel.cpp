@@ -348,13 +348,17 @@ SourcesModel::appendGroups()
 }
 
 void
-SourcesModel::appendPageItem( const QIcon& pageIcon, const QString& pageTitle, const QString& pageName )
+SourcesModel::appendPageItem( const QString& pageName )
 {
     QModelIndex parentIndex = indexFromItem( m_browse );
     beginInsertRows( parentIndex, rowCount( parentIndex ), rowCount( parentIndex ) );
-    GenericPageItem* pageItem = new GenericPageItem( this, m_browse, pageTitle, pageIcon,
-                                            boost::bind( &ViewManager::showDynamicPage, ViewManager::instance(), pageName ),
-                                            boost::bind( &ViewManager::dynamicPageWidget, ViewManager::instance(), pageName ) );
+    GenericPageItem* pageItem = new GenericPageItem( this,
+                                                     m_browse,
+                                                     ViewManager::instance()->dynamicPageWidget( pageName )->title(),
+                                                     ViewManager::instance()->dynamicPageWidget( pageName )->icon(),
+                                                     boost::bind( &ViewManager::showDynamicPage, ViewManager::instance(), pageName ),
+                                                     boost::bind( &ViewManager::dynamicPageWidget, ViewManager::instance(), pageName ) );
+
     pageItem->setSortValue( rowCount( parentIndex ) );
 
     endInsertRows();
@@ -673,9 +677,9 @@ SourcesModel::onWidgetDestroyed( QWidget* w )
 
 
 void
-SourcesModel::onViewPageAdded( const QString& name )
+SourcesModel::onViewPageAdded( const QString& pageName )
 {
-    appendPageItem( ImageRegistry::instance()->icon( RESPATH "images/new-releases.svg" ), name, name);
+    appendPageItem( pageName );
 }
 
 
