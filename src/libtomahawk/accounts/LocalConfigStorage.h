@@ -35,7 +35,7 @@ public:
 
     virtual void init();
 
-    QString id() const { return "localconfigstorage"; }
+    QString id() const;
 
     QStringList accountIds() const;
 

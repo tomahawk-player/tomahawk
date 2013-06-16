@@ -44,7 +44,7 @@ public:
 
     void init();
 
-    QString id() const { return "telepathyconfigstorage"; }
+    QString id() const;
 
     QStringList accountIds() const;
 

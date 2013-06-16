@@ -53,6 +53,13 @@ LocalConfigStorage::init()
 }
 
 
+QString
+LocalConfigStorage::id() const
+{
+    return "localconfigstorage";
+}
+
+
 void
 LocalConfigStorage::onCredentialsManagerReady( const QString& service )
 {

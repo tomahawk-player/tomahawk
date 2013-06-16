@@ -53,6 +53,13 @@ Tomahawk::Accounts::TelepathyConfigStorage::init()
 }
 
 
+QString
+Tomahawk::Accounts::TelepathyConfigStorage::id() const
+{
+    return "telepathyconfigstorage";
+}
+
+
 void
 Tomahawk::Accounts::TelepathyConfigStorage::onTpAccountManagerReady( Tp::PendingOperation* op )
 {
