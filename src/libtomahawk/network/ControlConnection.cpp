@@ -18,7 +18,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ControlConnection.h"
+#include "ControlConnection_p.h"
 
 #include "database/Database.h"
 #include "database/DatabaseCommand_CollectionStats.h"
@@ -39,10 +39,7 @@ using namespace Tomahawk;
 
 ControlConnection::ControlConnection( Servent* parent )
     : Connection( parent )
-    , m_dbsyncconn( 0 )
-    , m_registered( false )
-    , m_shutdownOnEmptyPeerInfos( true )
-    , m_pingtimer( 0 )
+    , d_ptr( new ControlConnectionPrivate( this ) )
 {
     qDebug() << "CTOR controlconnection";
     setId("ControlConnection()");
@@ -57,34 +54,39 @@ ControlConnection::ControlConnection( Servent* parent )
 
 ControlConnection::~ControlConnection()
 {
-    QReadLocker locker( &m_sourceLock );
+    Q_D( ControlConnection );
+    QReadLocker locker( &d->sourceLock );
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << id() << name();
 
-    if ( !m_source.isNull() )
+    if ( !d->source.isNull() )
     {
-        m_source->setOffline();
+        d->source->setOffline();
     }
 
-    delete m_pingtimer;
+    delete d->pingtimer;
     servent()->unregisterControlConnection( this );
-    if ( m_dbsyncconn )
-        m_dbsyncconn->deleteLater();
+    if ( d->dbsyncconn )
+        d->dbsyncconn->deleteLater();
+    delete d_ptr;
 }
 
 
 source_ptr
 ControlConnection::source() const
 {
+    Q_D( const ControlConnection );
     // We return a copy of the shared pointer, no need for a longer lock
-    QReadLocker locker( &m_sourceLock );
-    return m_source;
+    QReadLocker locker( &d->sourceLock );
+    return d->source;
 }
+
 
 void
 ControlConnection::unbindFromSource()
 {
-    QWriteLocker locker( &m_sourceLock );
-    m_source.clear();
+    Q_D( ControlConnection );
+    QWriteLocker locker( &d->sourceLock );
+    d->source.clear();
 }
 
 
@@ -101,10 +103,11 @@ ControlConnection::clone()
 void
 ControlConnection::setup()
 {
+    Q_D( ControlConnection );
     qDebug() << Q_FUNC_INFO << id() << name();
-    QWriteLocker sourceLocker( &m_sourceLock );
+    QWriteLocker sourceLocker( &d->sourceLock );
 
-    if ( !m_source.isNull() )
+    if ( !d->source.isNull() )
     {
         qDebug() << "This source seems to be online already.";
         Q_ASSERT( false );
@@ -116,24 +119,24 @@ ControlConnection::setup()
     tDebug() << "Detected name:" << name() << friendlyName;
 
     // setup source and remote collection for this peer
-    m_source = SourceList::instance()->get( id(), friendlyName, true );
-    QSharedPointer<QMutexLocker> locker = m_source->acquireLock();
-    if ( m_source->setControlConnection( this ) )
+    d->source = SourceList::instance()->get( id(), friendlyName, true );
+    QSharedPointer<QMutexLocker> locker = d->source->acquireLock();
+    if ( d->source->setControlConnection( this ) )
     {
         // We are the new ControlConnection for this source
 
         // delay setting up collection/etc until source is synced.
         // we need it DB synced so it has an ID + exists in DB.
-        connect( m_source.data(), SIGNAL( syncedWithDatabase() ),
+        connect( d->source.data(), SIGNAL( syncedWithDatabase() ),
                                     SLOT( registerSource() ), Qt::QueuedConnection );
 
-        m_source->setOnline();
+        d->source->setOnline();
 
-        m_pingtimer = new QTimer;
-        m_pingtimer->setInterval( 5000 );
-        connect( m_pingtimer, SIGNAL( timeout() ), SLOT( onPingTimer() ) );
-        m_pingtimer->start();
-        m_pingtimer_mark.start();
+        d->pingtimer = new QTimer;
+        d->pingtimer->setInterval( 5000 );
+        connect( d->pingtimer, SIGNAL( timeout() ), SLOT( onPingTimer() ) );
+        d->pingtimer->start();
+        d->pingtimer_mark.start();
     }
     else
     {
@@ -147,17 +150,18 @@ ControlConnection::setup()
 void
 ControlConnection::registerSource()
 {
-    QReadLocker sourceLocker( &m_sourceLock );
-    QSharedPointer<QMutexLocker> locker = m_source->acquireLock();
+    Q_D( ControlConnection );
+    QReadLocker sourceLocker( &d->sourceLock );
+    QSharedPointer<QMutexLocker> locker = d->source->acquireLock();
     // Only continue if we are still the ControlConnection associated with this source.
-    if ( !m_source.isNull() &&  m_source->controlConnection() == this )
+    if ( !d->source.isNull() &&  d->source->controlConnection() == this )
     {
-        qDebug() << Q_FUNC_INFO << m_source->id();
+        qDebug() << Q_FUNC_INFO << d->source->id();
         Source* source = (Source*) sender();
         Q_UNUSED( source )
-        Q_ASSERT( source == m_source.data() );
+        Q_ASSERT( source == d->source.data() );
 
-        m_registered = true;
+        d->registered = true;
         setupDbSyncConnection();
     }
 }
@@ -166,47 +170,48 @@ ControlConnection::registerSource()
 void
 ControlConnection::setupDbSyncConnection( bool ondemand )
 {
-    QReadLocker locker( &m_sourceLock );
-    if ( m_source.isNull() )
+    Q_D( ControlConnection );
+    QReadLocker locker( &d->sourceLock );
+    if ( d->source.isNull() )
     {
         // We were unbind from the Source, nothing to do here, just waiting to be deleted.
         return;
     }
 
-    qDebug() << Q_FUNC_INFO << ondemand << m_source->id() << m_dbconnkey << m_dbsyncconn << m_registered;
+    qDebug() << Q_FUNC_INFO << ondemand << d->source->id() << d->dbconnkey << d->dbsyncconn << d->registered;
 
-    if ( m_dbsyncconn || !m_registered )
+    if ( d->dbsyncconn || !d->registered )
         return;
 
-    Q_ASSERT( m_source->id() > 0 );
+    Q_ASSERT( d->source->id() > 0 );
 
-    if ( !m_dbconnkey.isEmpty() )
+    if ( !d->dbconnkey.isEmpty() )
     {
         qDebug() << "Connecting to DBSync offer from peer...";
-        m_dbsyncconn = new DBSyncConnection( servent(), m_source );
+        d->dbsyncconn = new DBSyncConnection( servent(), d->source );
 
-        servent()->createParallelConnection( this, m_dbsyncconn, m_dbconnkey );
-        m_dbconnkey.clear();
+        servent()->createParallelConnection( this, d->dbsyncconn, d->dbconnkey );
+        d->dbconnkey.clear();
     }
     else if ( !outbound() || ondemand ) // only one end makes the offer
     {
         qDebug() << "Offering a DBSync key to peer...";
-        m_dbsyncconn = new DBSyncConnection( servent(), m_source );
+        d->dbsyncconn = new DBSyncConnection( servent(), d->source );
 
         QString key = uuid();
-        servent()->registerOffer( key, m_dbsyncconn );
+        servent()->registerOffer( key, d->dbsyncconn );
         QVariantMap m;
         m.insert( "method", "dbsync-offer" );
         m.insert( "key", key );
         sendMsg( m );
     }
 
-    if ( m_dbsyncconn )
+    if ( d->dbsyncconn )
     {
-        connect( m_dbsyncconn, SIGNAL( finished() ),
-                 m_dbsyncconn,   SLOT( deleteLater() ) );
+        connect( d->dbsyncconn, SIGNAL( finished() ),
+                 d->dbsyncconn,   SLOT( deleteLater() ) );
 
-        connect( m_dbsyncconn, SIGNAL( destroyed( QObject* ) ),
+        connect( d->dbsyncconn, SIGNAL( destroyed( QObject* ) ),
                                  SLOT( dbSyncConnFinished( QObject* ) ), Qt::DirectConnection );
     }
 }
@@ -215,11 +220,12 @@ ControlConnection::setupDbSyncConnection( bool ondemand )
 void
 ControlConnection::dbSyncConnFinished( QObject* c )
 {
+    Q_D( ControlConnection );
     qDebug() << Q_FUNC_INFO << "DBSync connection closed (for now)";
-    if ( (DBSyncConnection*)c == m_dbsyncconn )
+    if ( (DBSyncConnection*)c == d->dbsyncconn )
     {
         //qDebug() << "Setting m_dbsyncconn to NULL";
-        m_dbsyncconn = NULL;
+        d->dbsyncconn = NULL;
     }
     else
         qDebug() << "Old DbSyncConn destroyed?!";
@@ -229,23 +235,25 @@ ControlConnection::dbSyncConnFinished( QObject* c )
 DBSyncConnection*
 ControlConnection::dbSyncConnection()
 {
-    if ( !m_dbsyncconn )
+    Q_D( ControlConnection );
+    if ( !d->dbsyncconn )
     {
         setupDbSyncConnection( true );
 //        Q_ASSERT( m_dbsyncconn );
     }
 
-    return m_dbsyncconn;
+    return d->dbsyncconn;
 }
 
 
 void
 ControlConnection::handleMsg( msg_ptr msg )
 {
+    Q_D( ControlConnection );
     if ( msg->is( Msg::PING ) )
     {
         // qDebug() << "Received Connection PING, nice." << m_pingtimer_mark.elapsed();
-        m_pingtimer_mark.restart();
+        d->pingtimer_mark.restart();
         return;
     }
 
@@ -276,7 +284,7 @@ ControlConnection::handleMsg( msg_ptr msg )
         }
         else if ( m.value( "method" ).toString() == "dbsync-offer" )
         {
-            m_dbconnkey = m.value( "key" ).toString() ;
+            d->dbconnkey = m.value( "key" ).toString() ;
             setupDbSyncConnection();
         }
         else if ( m.value( "method" ) == "protovercheckfail" )
@@ -302,7 +310,8 @@ ControlConnection::authCheckTimeout()
     if ( isReady() )
         return;
 
-    Servent::instance()->queueForAclResult( bareName(), m_peerInfos );
+    Q_D( ControlConnection );
+    Servent::instance()->queueForAclResult( bareName(), d->peerInfos );
 
     tDebug( LOGVERBOSE ) << "Closing connection, not authed in time.";
     shutdown();
@@ -312,10 +321,11 @@ ControlConnection::authCheckTimeout()
 void
 ControlConnection::onPingTimer()
 {
-    if ( m_pingtimer_mark.elapsed() >= TCP_TIMEOUT * 1000 )
+    Q_D( ControlConnection );
+    if ( d->pingtimer_mark.elapsed() >= TCP_TIMEOUT * 1000 )
     {
-        QReadLocker locker( &m_sourceLock );
-        qDebug() << "Timeout reached! Shutting down connection to" << m_source->friendlyName();
+        QReadLocker locker( &d->sourceLock );
+        qDebug() << "Timeout reached! Shutting down connection to" << d->source->friendlyName();
         shutdown( true );
     }
 
@@ -326,23 +336,26 @@ ControlConnection::onPingTimer()
 void
 ControlConnection::addPeerInfo( const peerinfo_ptr& peerInfo )
 {
+    Q_D( ControlConnection );
+
     peerInfo->setControlConnection( this );
-    m_peerInfos.insert( peerInfo );
+    d->peerInfos.insert( peerInfo );
 }
 
 
 void
 ControlConnection::removePeerInfo( const peerinfo_ptr& peerInfo )
 {
+    Q_D( ControlConnection );
     peerInfoDebug( peerInfo ) << "Remove peer from control connection:" << name();
 
     Q_ASSERT( peerInfo->controlConnection() == this );
 //     TODO: find out why this happens
 //     Q_ASSERT( m_peerInfos.contains( peerInfo ) );
 
-    m_peerInfos.remove( peerInfo );
+    d->peerInfos.remove( peerInfo );
 
-    if ( m_peerInfos.isEmpty() && m_shutdownOnEmptyPeerInfos )
+    if ( d->peerInfos.isEmpty() && d->shutdownOnEmptyPeerInfos )
     {
         shutdown( true );
     }
@@ -351,8 +364,9 @@ ControlConnection::removePeerInfo( const peerinfo_ptr& peerInfo )
 void
 ControlConnection::setShutdownOnEmptyPeerInfos( bool shutdownOnEmptyPeerInfos )
 {
-    m_shutdownOnEmptyPeerInfos = shutdownOnEmptyPeerInfos;
-    if ( m_peerInfos.isEmpty() && m_shutdownOnEmptyPeerInfos )
+    Q_D( ControlConnection );
+    d->shutdownOnEmptyPeerInfos = shutdownOnEmptyPeerInfos;
+    if ( d->peerInfos.isEmpty() && d->shutdownOnEmptyPeerInfos )
     {
         shutdown( true );
     }
@@ -362,5 +376,6 @@ ControlConnection::setShutdownOnEmptyPeerInfos( bool shutdownOnEmptyPeerInfos )
 const QSet< peerinfo_ptr >
 ControlConnection::peerInfos() const
 {
-    return m_peerInfos;
+    Q_D( const ControlConnection );
+    return d->peerInfos;
 }

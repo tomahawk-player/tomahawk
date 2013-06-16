@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013,      Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -27,17 +28,13 @@
 #ifndef CONTROLCONNECTION_H
 #define CONTROLCONNECTION_H
 
-#include "Typedefs.h"
 #include "Connection.h"
-
 #include "DllMacro.h"
+#include "Typedefs.h"
 
-#include <QReadWriteLock>
-#include <QTime>
-#include <QTimer>
-
-class Servent;
+class ControlConnectionPrivate;
 class DBSyncConnection;
+class Servent;
 
 class DLLEXPORT ControlConnection : public Connection
 {
@@ -75,23 +72,10 @@ private slots:
     void onPingTimer();
 
 private:
+    Q_DECLARE_PRIVATE( ControlConnection )
+    ControlConnectionPrivate* d_ptr;
+
     void setupDbSyncConnection( bool ondemand = false );
-
-    Tomahawk::source_ptr m_source;
-    /**
-     * Lock acces to the source member. A "write" access is only if we change the value of source, not if doing a non-const call.
-     */
-    mutable QReadWriteLock m_sourceLock;
-    DBSyncConnection* m_dbsyncconn;
-
-    QString m_dbconnkey;
-    bool m_registered;
-    bool m_shutdownOnEmptyPeerInfos;
-
-    QTimer* m_pingtimer;
-    QTime m_pingtimer_mark;
-
-    QSet< Tomahawk::peerinfo_ptr > m_peerInfos;
 };
 
 #endif // CONTROLCONNECTION_H
