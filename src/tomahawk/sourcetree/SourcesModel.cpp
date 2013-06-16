@@ -339,8 +339,9 @@ SourcesModel::appendGroups()
 
 
     GenericPageItem* stub = new GenericPageItem( this, browse, tr( "Stub page" ), ImageRegistry::instance()->icon( RESPATH "images/new-releases.svg" ),
-                                                boost::bind( &ViewManager::showStub, ViewManager::instance() ),
-                                                boost::bind( &ViewManager::stubWidget, ViewManager::instance() ) );
+                                                boost::bind( &ViewManager::showDynamicPage, ViewManager::instance(), QString( "stub" )),
+                                                boost::bind( &ViewManager::dynamicPageWidget, ViewManager::instance(), QString( "stub" ) ) );
+
     stub->setSortValue( 7 );
 
 

@@ -98,7 +98,8 @@ public:
     Tomahawk::ViewPage* superCollectionView() const;
     Tomahawk::ViewPage* inboxWidget() const;
     Tomahawk::ViewPage* networkActivityWidget() const;
-    Tomahawk::ViewPage* stubWidget() const;
+
+    Tomahawk::ViewPage* dynamicPageWidget( const QString& pageName ) const;
 
     InboxModel* inboxModel();
 
@@ -147,7 +148,7 @@ public slots:
     Tomahawk::ViewPage* showInboxPage();
     Tomahawk::ViewPage* showNetworkActivityPage();
 
-    Tomahawk::ViewPage* showStub();
+    Tomahawk::ViewPage* showDynamicPage( const QString& pageName );
 
     void showCurrentTrack();
 
@@ -205,7 +206,7 @@ private:
     InboxModel* m_inboxModel;
     NetworkActivityWidget* m_networkActivityWidget;
 
-    StubWidget* m_stubWidget;
+    QHash< QString, Tomahawk::ViewPage* > m_dynamicPages;
 
     QList< Tomahawk::collection_ptr > m_superCollections;
 
