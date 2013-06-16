@@ -61,6 +61,7 @@
 #include "utils/Logger.h"
 
 #include <QVBoxLayout>
+#include <QLabel>
 #include <QMetaMethod>
 
 
@@ -89,6 +90,7 @@ ViewManager::ViewManager( QObject* parent )
     , m_radioView( 0 )
     , m_networkActivityWidget( 0 )
     , m_currentPage( 0 )
+    , m_stubWidget( 0 )
     , m_loaded( false )
 {
     s_instance = this;
@@ -922,6 +924,42 @@ ViewManager::inboxWidget() const
 ViewPage *ViewManager::networkActivityWidget() const
 {
     return m_networkActivityWidget;
+}
+
+
+class StubWidget : public ViewPage
+{
+public:
+    StubWidget(QObject* parent)
+//         : ViewPage(parent)
+    {
+        m_widget = (QWidget*) (new QLabel("Foobar"));
+    }
+
+    virtual QWidget* widget() { return m_widget; }
+    virtual Tomahawk::playlistinterface_ptr playlistInterface() const { return Tomahawk::playlistinterface_ptr(); }
+    virtual QString title() const { return QString("Great title"); }
+    virtual QString description() const { return QString("Great description"); }
+    virtual bool jumpToCurrentTrack() { return false; }
+
+private:
+    QWidget* m_widget;
+};
+
+ViewPage* ViewManager::stubWidget() const
+{
+    return m_stubWidget;
+}
+
+
+ViewPage* ViewManager::showStub()
+{
+    if ( !m_stubWidget )
+    {
+        m_stubWidget = new StubWidget( m_widget );
+    }
+
+    return show( m_stubWidget );
 }
 
 
