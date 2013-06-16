@@ -332,6 +332,14 @@ SourcesModel::appendGroups()
                                                 boost::bind( &ViewManager::newReleasesWidget, ViewManager::instance() ) );
     newReleases->setSortValue( 6 );
 
+
+    GenericPageItem* stub = new GenericPageItem( this, browse, tr( "Stub page" ), ImageRegistry::instance()->icon( RESPATH "images/new-releases.svg" ),
+                                                boost::bind( &ViewManager::showStub, ViewManager::instance() ),
+                                                boost::bind( &ViewManager::stubWidget, ViewManager::instance() ) );
+    stub->setSortValue( 7 );
+
+
+
     InboxItem* inbox = new InboxItem( this, browse );
     inbox->setSortValue( 7 );
 
