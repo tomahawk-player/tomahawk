@@ -20,15 +20,18 @@
 #ifndef VIEWMANAGER_H
 #define VIEWMANAGER_H
 
-#include <QObject>
-#include <QHash>
-#include <QStackedWidget>
-
 #include "Artist.h"
 #include "collection/Collection.h"
 #include "PlaylistInterface.h"
 #include "playlist/QueueView.h"
 #include "ViewPage.h"
+
+#include <QObject>
+#include <QHash>
+#include <QStackedWidget>
+
+// best regards to you, mr. pimple aka xhochy :)
+#include <boost/function.hpp>
 
 #include "DllMacro.h"
 
@@ -137,7 +140,7 @@ signals:
     void historyBackAvailable( bool avail );
     void historyForwardAvailable( bool avail );
 
-    void viewPageAdded( const QString& pageName );
+    void viewPageAdded( const QString& pageName, const QString& text, const QIcon& icon );
 
 public slots:
     Tomahawk::ViewPage* showSuperCollection();
@@ -148,7 +151,7 @@ public slots:
     Tomahawk::ViewPage* showInboxPage();
     Tomahawk::ViewPage* showNetworkActivityPage();
 
-    void addDynamicPage( const QString& pageName, Tomahawk::ViewPage* page );
+    void addDynamicPage( const QString& pageName, const QString& text, const QIcon& icon, boost::function< Tomahawk::ViewPage*() > instanceLoader );
     Tomahawk::ViewPage* showDynamicPage( const QString& pageName );
 
     void showCurrentTrack();
@@ -207,6 +210,7 @@ private:
     NetworkActivityWidget* m_networkActivityWidget;
 
     QHash< QString, Tomahawk::ViewPage* > m_dynamicPages;
+    QHash< QString, boost::function< Tomahawk::ViewPage*() > > m_dynamicPagesInstanceLoaders;
 
     QList< Tomahawk::collection_ptr > m_superCollections;
 

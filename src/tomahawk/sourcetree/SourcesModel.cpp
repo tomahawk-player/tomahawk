@@ -79,7 +79,7 @@ SourcesModel::SourcesModel( QObject* parent )
              this, SLOT( onScriptCollectionRemoved( Tomahawk::collection_ptr ) ) );
 
 
-    connect( ViewManager::instance(), SIGNAL( viewPageAdded( QString ) ), SLOT( onViewPageAdded( QString ) ) );
+    connect( ViewManager::instance(), SIGNAL( viewPageAdded( QString, QString, QIcon ) ), SLOT( appendPageItem( QString, QString, QIcon ) ) );
 }
 
 
@@ -348,13 +348,13 @@ SourcesModel::appendGroups()
 }
 
 void
-SourcesModel::appendPageItem( const QIcon& pageIcon, const QString& pageTitle, const QString& pageName )
+SourcesModel::appendPageItem( const QString& name, const QString& text, const QIcon& icon )
 {
     QModelIndex parentIndex = indexFromItem( m_browse );
     beginInsertRows( parentIndex, rowCount( parentIndex ), rowCount( parentIndex ) );
-    GenericPageItem* pageItem = new GenericPageItem( this, m_browse, pageTitle, pageIcon,
-                                            boost::bind( &ViewManager::showDynamicPage, ViewManager::instance(), pageName ),
-                                            boost::bind( &ViewManager::dynamicPageWidget, ViewManager::instance(), pageName ) );
+    GenericPageItem* pageItem = new GenericPageItem( this, m_browse, text, icon,
+                                            boost::bind( &ViewManager::showDynamicPage, ViewManager::instance(), name ),
+                                            boost::bind( &ViewManager::dynamicPageWidget, ViewManager::instance(), name ) );
     pageItem->setSortValue( rowCount( parentIndex ) );
 
     endInsertRows();
@@ -669,13 +669,6 @@ SourcesModel::onWidgetDestroyed( QWidget* w )
 {
     int ret = m_sourceTreeLinks.remove( dynamic_cast< Tomahawk::ViewPage* > ( w ) );
     qDebug() << "REMOVED STALE SOURCE PAGE?" << ret;
-}
-
-
-void
-SourcesModel::onViewPageAdded( const QString& name )
-{
-    appendPageItem( ImageRegistry::instance()->icon( RESPATH "images/new-releases.svg" ), name, name);
 }
 
 
