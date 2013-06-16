@@ -88,7 +88,6 @@ ViewManager::ViewManager( QObject* parent )
     , m_inboxWidget( 0 )
     , m_networkActivityWidget( 0 )
     , m_currentPage( 0 )
-    , m_stubWidget( 0 )
     , m_loaded( false )
 {
     s_instance = this;
@@ -928,20 +927,26 @@ private:
     QWidget* m_widget;
 };
 
-ViewPage* ViewManager::stubWidget() const
+
+ViewPage*
+ViewManager::dynamicPageWidget( const QString& pageName ) const
 {
-    return m_stubWidget;
+    return m_dynamicPages.value( pageName );
 }
 
 
-ViewPage* ViewManager::showStub()
+ViewPage*
+ViewManager::showDynamicPage( const QString& pageName )
 {
-    if ( !m_stubWidget )
+    tLog() << Q_FUNC_INFO << "pageName: " << pageName;
+
+    //HACK: this should be initialized somewhere else
+    if ( !dynamicPageWidget( pageName ) )
     {
-        m_stubWidget = new StubWidget( m_widget );
+        m_dynamicPages.insert( pageName, new StubWidget( m_widget ) );
     }
 
-    return show( m_stubWidget );
+    return show( dynamicPageWidget( pageName ) );
 }
 
 
