@@ -249,6 +249,7 @@ SettingsDialog::SettingsDialog(QObject *parent )
     connect( m_advancedWidgetUi->staticIpRadioButton, SIGNAL( toggled(bool) ), SLOT( toggleRemoteMode() ) );
     connect( m_advancedWidgetUi->upnpRadioButton, SIGNAL( toggled(bool) ), SLOT( toggleRemoteMode() ) );
     connect( m_advancedWidgetUi->enableProxyCheckBox, SIGNAL( toggled(bool) ), SLOT( toggleProxyEnabled() ) );
+    connect( m_advancedWidgetUi->enableProxyCheckBox, SIGNAL( toggled(bool) ), SLOT( requiresRestart() ) );
 
     connect( m_dialog, SIGNAL( accepted() ), SLOT( saveSettings() ) );
     connect( m_dialog, SIGNAL( rejected() ), SLOT( onRejected() ) );
@@ -359,7 +360,10 @@ SettingsDialog::showProxySettings()
 {
     m_proxySettings.exec();
     if ( m_proxySettings.result() == QDialog::Accepted )
+    {
+        requiresRestart();
         m_proxySettings.saveSettings();
+    }
 }
 
 
