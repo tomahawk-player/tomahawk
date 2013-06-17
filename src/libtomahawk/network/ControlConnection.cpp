@@ -55,12 +55,14 @@ ControlConnection::ControlConnection( Servent* parent )
 ControlConnection::~ControlConnection()
 {
     Q_D( ControlConnection );
-    QReadLocker locker( &d->sourceLock );
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << id() << name();
 
-    if ( !d->source.isNull() )
     {
-        d->source->setOffline();
+        QReadLocker locker( &d->sourceLock );
+        if ( !d->source.isNull() )
+        {
+            d->source->setOffline();
+        }
     }
 
     delete d->pingtimer;
@@ -86,7 +88,7 @@ ControlConnection::unbindFromSource()
 {
     Q_D( ControlConnection );
     QWriteLocker locker( &d->sourceLock );
-    d->source.clear();
+    d->source = Tomahawk::source_ptr();
 }
 
 
@@ -105,12 +107,14 @@ ControlConnection::setup()
 {
     Q_D( ControlConnection );
     qDebug() << Q_FUNC_INFO << id() << name();
-    QWriteLocker sourceLocker( &d->sourceLock );
+    // We need to manually lock, so that we can release before the end of the function
+    d->sourceLock.lockForWrite();
 
     if ( !d->source.isNull() )
     {
         qDebug() << "This source seems to be online already.";
         Q_ASSERT( false );
+        d->sourceLock.unlock();
         return;
     }
 
@@ -137,9 +141,12 @@ ControlConnection::setup()
         connect( d->pingtimer, SIGNAL( timeout() ), SLOT( onPingTimer() ) );
         d->pingtimer->start();
         d->pingtimer_mark.start();
+        d->sourceLock.unlock();
     }
     else
     {
+        // Unlock before we delete ourselves
+        d->sourceLock.unlock();
         // There is already another ControlConnection in use, we are useless.
         deleteLater();
     }

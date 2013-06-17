@@ -111,7 +111,8 @@ Source::setControlConnection( ControlConnection* cc )
             // Tell the ControlConnection it is not anymore responsible for us.
             d->cc->unbindFromSource();
             // This ControlConnection is not needed anymore, get rid of it!
-            d->cc->deleteLater();
+            // (But decouple the deletion it from the current activity)
+            QMetaObject::invokeMethod( d->cc.data(), "deleteLater", Qt::QueuedConnection);
             // Use new ControlConnection
             d->cc = cc;
             return true;
