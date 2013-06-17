@@ -122,7 +122,7 @@ Dashboard::Dashboard( QWidget* parent )
 
     {
         QFont f = ui->label->font();
-        f.setFamily( "Fauna One" );
+        f.setFamily( "Pathway Gothic One" );
 
         QPalette p = ui->label->palette();
         p.setColor( QPalette::Foreground, TomahawkStyle::PAGE_CAPTION );
@@ -135,7 +135,7 @@ Dashboard::Dashboard( QWidget* parent )
 
     {
         QFont f = ui->playlistLabel->font();
-        f.setFamily( "Fauna One" );
+        f.setFamily( "Pathway Gothic One" );
 
         QPalette p = ui->playlistLabel->palette();
         p.setColor( QPalette::Foreground, TomahawkStyle::HEADER_TEXT );

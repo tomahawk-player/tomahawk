@@ -118,7 +118,7 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
 
     {
         QFont f = ui->label->font();
-        f.setFamily( "Fauna One" );
+        f.setFamily( "Pathway Gothic One" );
 
         QPalette p = ui->label->palette();
         p.setColor( QPalette::Foreground, TomahawkStyle::PAGE_CAPTION );
