@@ -54,8 +54,9 @@ DBSyncConnection::DBSyncConnection( Servent* s, const source_ptr& src )
 {
     qDebug() << Q_FUNC_INFO << src->id() << thread();
 
+    // Be aware of namespaces in these signals/slots!
     connect( this,            SIGNAL( stateChanged( Tomahawk::DBSyncConnectionState, Tomahawk::DBSyncConnectionState, QString ) ),
-             m_source.data(),   SLOT( onStateChanged( Tomahawk::DBSyncConnectionState, Tomahawk::DBSyncConnectionState, QString ) ) );
+             m_source.data(),   SLOT( onStateChanged( DBSyncConnectionState, DBSyncConnectionState, QString ) ) );
     connect( m_source.data(), SIGNAL( commandsFinished() ),
              this,              SLOT( lastOpApplied() ) );
 
