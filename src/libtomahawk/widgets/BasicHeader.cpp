@@ -67,13 +67,16 @@ BasicHeader::BasicHeader( QWidget* parent )
     m_descriptionLabel->setPalette( pal );
 
     QFont font = m_captionLabel->font();
-    font.setPointSize( TomahawkUtils::defaultFontSize() + 4 );
+    
+    font.setPointSize( TomahawkUtils::defaultFontSize() + 10 );
     font.setBold( true );
+    font.setFamily( "Titillium Web" );
+    
     m_captionLabel->setFont( font );
     m_captionLabel->setElideMode( Qt::ElideRight );
     m_captionLabel->setAlignment( Qt::AlignTop | Qt::AlignLeft );
 
-    font.setPointSize( TomahawkUtils::defaultFontSize() + 1 );
+    font.setPointSize( TomahawkUtils::defaultFontSize() + 2 );
     font.setBold( false );
     m_descriptionLabel->setFont( font );
     m_descriptionLabel->setAlignment( Qt::AlignTop | Qt::AlignLeft );

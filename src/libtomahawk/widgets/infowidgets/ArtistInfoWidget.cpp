@@ -171,7 +171,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
     {
         QFont f = ui->label->font();
-        f.setFamily( "Fauna One" );
+        f.setFamily( "Pathway Gothic One" );
 
         QPalette p = ui->label->palette();
         p.setColor( QPalette::Foreground, TomahawkStyle::PAGE_CAPTION );
@@ -184,8 +184,8 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
     {
         QFont f = ui->albumLabel->font();
-        f.setFamily( "Fauna One" );
-
+        f.setFamily( "Pathway Gothic One" );
+        
         QPalette p = ui->albumLabel->palette();
         p.setColor( QPalette::Foreground, TomahawkStyle::HEADER_TEXT );
 
