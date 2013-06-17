@@ -46,7 +46,7 @@ class MusicScanner;
 namespace Tomahawk
 {
 
-class PlaybackLog;
+struct PlaybackLog;
 class Resolver;
 class SourcePrivate;
 
