@@ -48,6 +48,12 @@ public slots:
      */
     void playback( QxtWebRequestEvent* event, const QString& command );
 private:
+    /**
+     * Send a simple reply to a (write-only) method call.
+     *
+     * On failure send a custom error message.
+     */
+    void jsonReply( QxtWebRequestEvent* event, const char* funcInfo, const QString& errorMessage, bool isError );
     Api_v2* m_service;
 };
 

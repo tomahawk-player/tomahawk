@@ -27,7 +27,8 @@
 #include <QxtWeb/QxtWebPageEvent>
 #include <QxtWeb/QxtWebSlotService>
 
-#define JSON_ERROR( event, message ) { tLog( LOGVERBOSE ) << Q_FUNC_INFO << message; m_service->sendJsonError( event, message ); }
+// Assumptions: QxtWebRequestEvent instance is called event and result is true on success
+#define JSON_REPLY( result, message ) jsonReply( event, Q_FUNC_INFO, message, !result )
 
 Api_v2_0::Api_v2_0( Api_v2* parent )
     : QObject( parent )
@@ -48,90 +49,53 @@ Api_v2_0::playback( QxtWebRequestEvent* event, const QString& command )
 {
     if ( command == "next ")
     {
-        if ( QMetaObject::invokeMethod( AudioEngine::instance(), "next", Qt::QueuedConnection ) )
-        {
-            m_service->sendJsonOk( event );
-        }
-        else
-        {
-            JSON_ERROR( event, "Skipping to the next track failed." );
-        }
+        JSON_REPLY( QMetaObject::invokeMethod( AudioEngine::instance(), "next", Qt::QueuedConnection ) , "Skipping to the next track failed." );
     }
     else if ( command == "previous" )
     {
-        if ( QMetaObject::invokeMethod( AudioEngine::instance(), "previous", Qt::QueuedConnection ) )
-        {
-            m_service->sendJsonOk( event );
-        }
-        else
-        {
-            JSON_ERROR( event, "Rewinding to the previous track failed." );
-        }
+        JSON_REPLY( QMetaObject::invokeMethod( AudioEngine::instance(), "previous", Qt::QueuedConnection ), "Rewinding to the previous track failed." );
     }
     else if ( command == "playpause" )
     {
-        if ( QMetaObject::invokeMethod( AudioEngine::instance(), "playpause", Qt::QueuedConnection ) )
-        {
-            m_service->sendJsonOk( event );
-        }
-        else
-        {
-            JSON_ERROR( event, "Play/Pause failed." );
-        }
+        JSON_REPLY( QMetaObject::invokeMethod( AudioEngine::instance(), "playpause", Qt::QueuedConnection ), "Play/Pause failed." );
     }
     else if ( command == "play" )
     {
-        if ( QMetaObject::invokeMethod( AudioEngine::instance(), "play", Qt::QueuedConnection ) )
-        {
-            m_service->sendJsonOk( event );
-        }
-        else
-        {
-            JSON_ERROR( event, "Starting the playback failed." );
-        }
+        JSON_REPLY( QMetaObject::invokeMethod( AudioEngine::instance(), "play", Qt::QueuedConnection ), "Starting the playback failed." );
     }
     else if ( command == "pause" )
     {
-        if ( QMetaObject::invokeMethod( AudioEngine::instance(), "pause", Qt::QueuedConnection ) )
-        {
-            m_service->sendJsonOk( event );
-        }
-        else
-        {
-            JSON_ERROR( event, "Pausing the current track failed." );
-        }
+        JSON_REPLY( QMetaObject::invokeMethod( AudioEngine::instance(), "pause", Qt::QueuedConnection ), "Pausing the current track failed." );
     }
     else if ( command == "stop" )
     {
-        if ( QMetaObject::invokeMethod( AudioEngine::instance(), "stop", Qt::QueuedConnection ) )
-        {
-            m_service->sendJsonOk( event );
-        }
-        else
-        {
-            JSON_ERROR( event, "Stopping the current track failed." );
-        }
+        JSON_REPLY( QMetaObject::invokeMethod( AudioEngine::instance(), "stop", Qt::QueuedConnection ), "Stopping the current track failed." );
     }
     else if ( command == "lowervolume" )
     {
-        if ( QMetaObject::invokeMethod( AudioEngine::instance(), "lowerVolume", Qt::QueuedConnection ) )
-        {
-            m_service->sendJsonOk( event );
-        }
-        else
-        {
-            JSON_ERROR( event, "Lowering volume failed." );
-        }
+        JSON_REPLY( QMetaObject::invokeMethod( AudioEngine::instance(), "lowerVolume", Qt::QueuedConnection ), "Lowering volume failed." );
     }
     else if ( command == "raisevolume" )
     {
-        if ( QMetaObject::invokeMethod( AudioEngine::instance(), "raiseVolume", Qt::QueuedConnection ) )
-        {
-            m_service->sendJsonOk( event );
-        }
-        else
-        {
-            JSON_ERROR( event, "Raising volume failed." );
-        }
+        JSON_REPLY( QMetaObject::invokeMethod( AudioEngine::instance(), "raiseVolume", Qt::QueuedConnection ), "Raising volume failed." );
+    }
+    else
+    {
+        m_service->sendJsonError( event, "No such playback command." );
+    }
+}
+
+
+void Api_v2_0::jsonReply( QxtWebRequestEvent* event, const char* funcInfo, const QString& errorMessage, bool isError )
+{
+    if ( isError )
+    {
+        tLog( LOGVERBOSE ) << funcInfo << errorMessage;
+        m_service->sendJsonError( event, errorMessage );
+    }
+    else
+    {
+        m_service->sendJsonOk( event );
+
     }
 }
