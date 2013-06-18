@@ -57,7 +57,7 @@ private slots:
     void onCredentialsManagerReady( const QString& service );
 
 private:
-    QString telepathyPathToAccountId( const QString& objectPath );
+    QString telepathyPathToAccountId( const QString& objectPath, const QString& telepathyServiceName );
     QString accountIdToTelepathyPath( const QString& accountId );
 
     const QString m_credentialsServiceName;

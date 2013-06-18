@@ -76,7 +76,7 @@ Tomahawk::Accounts::TelepathyConfigStorage::onTpAccountManagerReady( Tp::Pending
     {
         if ( acc->protocolName() == "jabber" )
         {
-            m_accountIds << telepathyPathToAccountId( acc->objectPath() );
+            m_accountIds << telepathyPathToAccountId( acc->objectPath(), acc->serviceName() );
             keychainIds << acc->uniqueIdentifier();
         }
     }
@@ -106,8 +106,10 @@ Tomahawk::Accounts::TelepathyConfigStorage::onCredentialsManagerReady( const QSt
 
 
 QString
-Tomahawk::Accounts::TelepathyConfigStorage::telepathyPathToAccountId( const QString& objectPath )
+Tomahawk::Accounts::TelepathyConfigStorage::telepathyPathToAccountId( const QString& objectPath, const QString& telepathyServiceName )
 {
+    if ( telepathyServiceName == "google-talk" )
+        return QString( "googleaccount_" ) + objectPath;
     return QString( "xmppaccount_" ) + objectPath;
 }
 
@@ -115,10 +117,15 @@ Tomahawk::Accounts::TelepathyConfigStorage::telepathyPathToAccountId( const QStr
 QString
 Tomahawk::Accounts::TelepathyConfigStorage::accountIdToTelepathyPath( const QString& accountId )
 {
-    QString prefix( "xmppaccount_" );
+    QStringList allowedPrefixes;
+    allowedPrefixes << "xmppaccount_"
+                    << "googleaccount_";
     QString r = accountId;
-    if ( r.startsWith( prefix ) )
-        r.remove( 0, prefix.length() );
+    foreach ( QString prefix, allowedPrefixes )
+    {
+        if ( r.startsWith( prefix ) )
+            r.remove( 0, prefix.length() );
+    }
     return r;
 }
 
@@ -174,10 +181,11 @@ Tomahawk::Accounts::TelepathyConfigStorage::load( const QString& accountId, Acco
     types << "SipType";
     cfg.types = types;
 
-    if ( !account->parameters()[ "port" ].isNull() )
-        cfg.configuration[ "port" ] = account->parameters()[ "port" ].toString();
-    else
+    if ( account->serviceName() == "google-talk" ||
+         account->parameters()[ "port" ].isNull() )
         cfg.configuration[ "port" ] = "5222";
+    else
+        cfg.configuration[ "port" ] = account->parameters()[ "port" ].toString();
 
     if ( !account->parameters()[ "server" ].isNull() )
         cfg.configuration[ "server" ] = account->parameters()[ "server" ].toString();
