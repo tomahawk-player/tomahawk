@@ -87,7 +87,7 @@ Api_v2_0::playback( QxtWebRequestEvent* event, const QString& command )
         }
         else
         {
-            JSON_ERROR( event, "Skipping to the next track failed." );
+            JSON_ERROR( event, "Starting the playback failed." );
         }
     }
     else if ( command == "pause" )
@@ -98,7 +98,7 @@ Api_v2_0::playback( QxtWebRequestEvent* event, const QString& command )
         }
         else
         {
-            JSON_ERROR( event, "Skipping to the next track failed." );
+            JSON_ERROR( event, "Pausing the current track failed." );
         }
     }
     else if ( command == "stop" )
@@ -109,7 +109,7 @@ Api_v2_0::playback( QxtWebRequestEvent* event, const QString& command )
         }
         else
         {
-            JSON_ERROR( event, "Skipping to the next track failed." );
+            JSON_ERROR( event, "Stopping the current track failed." );
         }
     }
     else if ( command == "lowervolume" )
@@ -120,7 +120,7 @@ Api_v2_0::playback( QxtWebRequestEvent* event, const QString& command )
         }
         else
         {
-            JSON_ERROR( event, "Skipping to the next track failed." );
+            JSON_ERROR( event, "Lowering volume failed." );
         }
     }
     else if ( command == "raisevolume" )
@@ -131,7 +131,7 @@ Api_v2_0::playback( QxtWebRequestEvent* event, const QString& command )
         }
         else
         {
-            JSON_ERROR( event, "Skipping to the next track failed." );
+            JSON_ERROR( event, "Raising volume failed." );
         }
     }
 }
