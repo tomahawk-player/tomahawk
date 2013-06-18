@@ -30,16 +30,24 @@ class Api_v2 : public QxtWebSlotService
     Q_OBJECT
 public:
     Api_v2( QxtAbstractWebSessionManager* sm, QObject* parent = 0 );
-    
+
+    void sendJsonOk( QxtWebRequestEvent* event );
+    void sendJsonError( QxtWebRequestEvent* event, const QString& message );
+    void sendPlain404( QxtWebRequestEvent* event, const QString& message, const QString& statusmessage );
+
 signals:
     
 public slots:
     /**
      * All api (non-UI) calls with go to /api/<version>/method
      */
-    void api( QxtWebRequestEvent* event, const QString& version, const QString& method );
+    void api( QxtWebRequestEvent* event, const QString& version, const QString& method, const QString& arg1 = QString(), const QString& arg2 = QString(), const QString& arg3 = QString() );
+
 private:
-    void sendPlain404( QxtWebRequestEvent* event, const QString& message, const QString& statusmessage );
+    /**
+     * Method call failed, report failure.
+     */
+    void apiCallFailed( QxtWebRequestEvent* event, const QString& method);
     Api_v2_0 m_apiv2_0;
 };
 

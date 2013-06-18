@@ -18,19 +18,120 @@
 
 #include "Api_v2_0.h"
 
+#include "audio/AudioEngine.h"
+#include "utils/Logger.h"
+
+#include "Api_v2.h"
+#include "Query.h"
+
 #include <QxtWeb/QxtWebPageEvent>
 #include <QxtWeb/QxtWebSlotService>
 
-Api_v2_0::Api_v2_0( QxtWebSlotService *parent )
+#define JSON_ERROR( event, message ) { tLog( LOGVERBOSE ) << Q_FUNC_INFO << message; m_service->sendJsonError( event, message ); }
+
+Api_v2_0::Api_v2_0( Api_v2* parent )
     : QObject( parent )
     , m_service( parent )
 {
 }
 
 void
-Api_v2_0::ping( QxtWebRequestEvent *event )
+Api_v2_0::ping( QxtWebRequestEvent* event )
 {
     QxtWebPageEvent * e = new QxtWebPageEvent( event->sessionID, event->requestID, "pong" );
     e->contentType = "text/plain";
     m_service->postEvent( e );
+}
+
+void
+Api_v2_0::playback( QxtWebRequestEvent* event, const QString& command )
+{
+    if ( command == "next ")
+    {
+        if ( QMetaObject::invokeMethod( AudioEngine::instance(), "next", Qt::QueuedConnection ) )
+        {
+            m_service->sendJsonOk( event );
+        }
+        else
+        {
+            JSON_ERROR( event, "Skipping to the next track failed." );
+        }
+    }
+    else if ( command == "previous" )
+    {
+        if ( QMetaObject::invokeMethod( AudioEngine::instance(), "previous", Qt::QueuedConnection ) )
+        {
+            m_service->sendJsonOk( event );
+        }
+        else
+        {
+            JSON_ERROR( event, "Rewinding to the previous track failed." );
+        }
+    }
+    else if ( command == "playpause" )
+    {
+        if ( QMetaObject::invokeMethod( AudioEngine::instance(), "playpause", Qt::QueuedConnection ) )
+        {
+            m_service->sendJsonOk( event );
+        }
+        else
+        {
+            JSON_ERROR( event, "Play/Pause failed." );
+        }
+    }
+    else if ( command == "play" )
+    {
+        if ( QMetaObject::invokeMethod( AudioEngine::instance(), "play", Qt::QueuedConnection ) )
+        {
+            m_service->sendJsonOk( event );
+        }
+        else
+        {
+            JSON_ERROR( event, "Skipping to the next track failed." );
+        }
+    }
+    else if ( command == "pause" )
+    {
+        if ( QMetaObject::invokeMethod( AudioEngine::instance(), "pause", Qt::QueuedConnection ) )
+        {
+            m_service->sendJsonOk( event );
+        }
+        else
+        {
+            JSON_ERROR( event, "Skipping to the next track failed." );
+        }
+    }
+    else if ( command == "stop" )
+    {
+        if ( QMetaObject::invokeMethod( AudioEngine::instance(), "stop", Qt::QueuedConnection ) )
+        {
+            m_service->sendJsonOk( event );
+        }
+        else
+        {
+            JSON_ERROR( event, "Skipping to the next track failed." );
+        }
+    }
+    else if ( command == "lowervolume" )
+    {
+        if ( QMetaObject::invokeMethod( AudioEngine::instance(), "lowerVolume", Qt::QueuedConnection ) )
+        {
+            m_service->sendJsonOk( event );
+        }
+        else
+        {
+            JSON_ERROR( event, "Skipping to the next track failed." );
+        }
+    }
+    else if ( command == "raisevolume" )
+    {
+        if ( QMetaObject::invokeMethod( AudioEngine::instance(), "raiseVolume", Qt::QueuedConnection ) )
+        {
+            m_service->sendJsonOk( event );
+        }
+        else
+        {
+            JSON_ERROR( event, "Skipping to the next track failed." );
+        }
+    }
 }

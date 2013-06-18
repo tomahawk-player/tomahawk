@@ -21,6 +21,7 @@
 
 #include <QObject>
 
+class Api_v2;
 class QxtWebRequestEvent;
 class QxtWebSlotService;
 
@@ -28,7 +29,7 @@ class Api_v2_0 : public QObject
 {
     Q_OBJECT
 public:
-    Api_v2_0( QxtWebSlotService *parent = 0 );
+    Api_v2_0( Api_v2* parent = 0 );
     
 signals:
     
@@ -39,8 +40,15 @@ public slots:
      * This call needs no authentication.
      */
     void ping( QxtWebRequestEvent* event );
+
+    /**
+     * Control playback.
+     *
+     * This call needs to be authenticated.
+     */
+    void playback( QxtWebRequestEvent* event, const QString& command );
 private:
-    QxtWebSlotService* m_service;
+    Api_v2* m_service;
 };
 
 #endif // API_V2_0_H
