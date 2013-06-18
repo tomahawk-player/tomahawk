@@ -24,6 +24,12 @@ macro(create_qxtweb_fancy_header simpleHeader fancyHeader)
     file(WRITE ${CMAKE_BINARY_DIR}/QxtWeb/${fancyHeader} "#include \"${simpleHeader}\"" )
 endmacro()
 
+macro(create_qxtnetwork_fancy_header simpleHeader fancyHeader)
+    file(WRITE ${CMAKE_BINARY_DIR}/QxtNetwork/${fancyHeader} "#include \"${simpleHeader}\"" )
+endmacro()
+
+create_qxtnetwork_fancy_header("qxtsslserver.h" "QxtSslServer")
+
 create_qxtweb_fancy_header("qxtabstracthttpconnector.h" "QxtHttpServerConnector")
 create_qxtweb_fancy_header("qxthttpsessionmanager.h" "HttpSessionManager")
 create_qxtweb_fancy_header("qxthttpsessionmanager.h" "QxtHttpSessionManager")
