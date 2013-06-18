@@ -481,7 +481,7 @@ se s vámi spojil?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="228"/>
         <source>Duration</source>
-        <translation>Doba trvání</translation>
+        <translation>Délka</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="240"/>
@@ -496,7 +496,7 @@ se s vámi spojil?</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="273"/>
         <source>Duration:</source>
-        <translation>Doba trvání:</translation>
+        <translation>Délka:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="291"/>
@@ -1122,7 +1122,7 @@ heslo</translation>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="119"/>
         <source>Duration:</source>
-        <translation>Doba trvání:</translation>
+        <translation>Délka:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="129"/>
@@ -1284,7 +1284,7 @@ heslo</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="52"/>
         <source>Duration</source>
-        <translation>Doba trvání</translation>
+        <translation>Délka</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="53"/>
@@ -1658,17 +1658,17 @@ heslo</translation>
         <location filename="../src/libtomahawk/playlist/QueueView.ui" line="41"/>
         <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="204"/>
         <source>Open Queue</source>
-        <translation>Otevřít čekací řadu</translation>
+        <translation>Otevřít řadu</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="202"/>
         <source>Open Queue - %n item(s)</source>
-        <translation><numerusform>Otevřít čekací řadu - jedna píseň</numerusform><numerusform>Otevřít čekací řadu - %n písně</numerusform><numerusform>Otevřít čekací řadu - %n písní</numerusform></translation>
+        <translation><numerusform>Otevřít řadu - jedna píseň</numerusform><numerusform>Otevřít řadu - %n písně</numerusform><numerusform>Otevřít řadu - %n písní</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="208"/>
         <source>Close Queue</source>
-        <translation>Zavřít čekací řadu</translation>
+        <translation>Zavřít řadu</translation>
     </message>
 </context>
 <context>
@@ -1790,7 +1790,7 @@ heslo</translation>
         <translation>Vše</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="285"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="286"/>
         <source>Some changed settings will not take effect until Tomahawk is restarted</source>
         <translation>Některá změněná nastavení se neprojeví, dokud Tomahawk nebude spuštěn znovu</translation>
     </message>
@@ -1820,32 +1820,32 @@ heslo</translation>
         <translation>Nastavit pokročilá nastavení Tomahawku, jako jsou volby pro síť, interakci prohlížeče a další.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="457"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="461"/>
         <source>Install resolver from file</source>
         <translation>Instalovat řešitele ze souboru</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="459"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="463"/>
         <source>Tomahawk Resolvers (*.axe *.js);;All files (*)</source>
         <translation>Řešitelé Tomahawk (*.axe *.js);;Všechny soubory (*)</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="502"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="506"/>
         <source>Resolver installation from file %1 failed.</source>
         <translation>Nepodařilo se nainstalovat řešitele ze souboru %1.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="521"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="525"/>
         <source>Delete all Access Control entries?</source>
         <translation>Smazat všechna udělená přístupová oprávnění?</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="522"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="526"/>
         <source>Do you really want to delete all Access Control entries? You will be asked for a decision again for each peer that you connect to.</source>
         <translation>Opravdu chcete smazat všechna nastavení přístupových práv? Budete znovu dotazován na nastavení přístupových oprávnění pro každé spojení.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="285"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="286"/>
         <source>Information</source>
         <translation>Informace</translation>
     </message>
@@ -3271,7 +3271,7 @@ Zkuste vyladit filtry pro nové písně.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="436"/>
         <source>Duration</source>
-        <translation>Doba trvání</translation>
+        <translation>Délka</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="437"/>
@@ -3704,43 +3704,43 @@ Zkuste vyladit filtry pro nové písně.</translation>
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="481"/>
-        <location filename="../src/libtomahawk/Source.cpp" line="536"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="482"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="537"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Prohledává se (%L1 skladeb)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="483"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="484"/>
         <source>Scanning</source>
         <translation>Prohledává se</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="521"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="522"/>
         <source>Checking</source>
         <translation>Přezkušuje se</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="526"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="527"/>
         <source>Syncing</source>
         <translation>Seřizuje se</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="531"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="532"/>
         <source>Importing</source>
         <translation>Zavádí se</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="719"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="720"/>
         <source>Saving (%1%)</source>
         <translation>Ukládá se (%1%)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="806"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="807"/>
         <source>Online</source>
         <translation>Připojený</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="810"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="811"/>
         <source>Offline</source>
         <translation>Nepřipojený</translation>
     </message>
