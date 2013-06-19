@@ -41,6 +41,11 @@ public:
     virtual void init() = 0;
 
     virtual QString id() const = 0;
+    virtual QString prettyName() const;
+
+    virtual QPixmap icon() const;
+
+    virtual bool execConfigDialog();
 
     virtual QStringList accountIds() const = 0;
 

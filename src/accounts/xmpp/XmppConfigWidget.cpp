@@ -23,7 +23,9 @@
 
 
 #include "accounts/AccountManager.h"
+#include "accounts/ConfigStorage.h"
 #include "utils/Logger.h"
+#include "utils/TomahawkUtilsGui.h"
 
 #include <QMessageBox>
 
@@ -48,9 +50,41 @@ XmppConfigWidget::XmppConfigWidget( XmppAccount* account, QWidget *parent )
     m_ui->xmppPublishTracksCheckbox->setChecked( account->configuration().contains( "publishtracks" ) ? account->configuration()[ "publishtracks" ].toBool() : true);
     m_ui->xmppEnforceSecureCheckbox->setChecked( account->configuration().contains( "enforcesecure" ) ? account->configuration()[ "enforcesecure" ].toBool() : false);
     m_ui->jidExistsLabel->hide();
+    m_ui->xmppConfigFrame->hide();
 
 
     connect( m_ui->xmppUsername, SIGNAL( textChanged( QString ) ), SLOT( onCheckJidExists( QString ) ) );
+
+    if ( m_account->configuration()[ "read-only" ].toBool() )
+    {
+        m_ui->xmppUsername->setEnabled( false );
+        m_ui->xmppPassword->setEnabled( false );
+        m_ui->xmppServer->setEnabled( false );
+        m_ui->xmppPort->setEnabled( false );
+        m_ui->xmppEnforceSecureCheckbox->setEnabled( false );
+        m_ui->xmppPublishTracksCheckbox->setEnabled( false );
+    }
+
+    ConfigStorage* cs = AccountManager::instance()->configStorageForAccount( m_account->accountId() );
+    if ( cs->id() != "localconfigstorage" )
+    {
+        m_ui->xmppBlurb->hide();
+        m_ui->xmppConfigFrame->show();
+        m_ui->xmppConfigLabel->setText( tr( "Account provided by %1." )
+            .arg( cs->prettyName() ) );
+        m_ui->xmppConfigIcon->setPixmap( cs->icon().scaled( TomahawkUtils::defaultIconSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
+        m_ui->xmppConfigLaunchDialog->setIcon( TomahawkUtils::defaultPixmap( TomahawkUtils::Configure ) );
+        connect( m_ui->xmppConfigLaunchDialog, SIGNAL( clicked() ),
+                 this, SLOT( launchExternalConfigDialog() ) );
+    }
+}
+
+
+void
+XmppConfigWidget::launchExternalConfigDialog()
+{
+    ConfigStorage* cs = AccountManager::instance()->configStorageForAccount( m_account->accountId() );
+    cs->execConfigDialog();
 }
 
 

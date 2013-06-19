@@ -28,6 +28,7 @@
 #include <TelepathyQt/PendingOperation>
 #include <TelepathyQt/AccountSet>
 
+#include <QProcess>
 #include <QTimer>
 
 
@@ -57,6 +58,37 @@ QString
 Tomahawk::Accounts::TelepathyConfigStorage::id() const
 {
     return "telepathyconfigstorage";
+}
+
+
+QString
+Tomahawk::Accounts::TelepathyConfigStorage::prettyName() const
+{
+    return tr( "the KDE instant messaging framework" );
+}
+
+
+QPixmap
+Tomahawk::Accounts::TelepathyConfigStorage::icon() const
+{
+    return QPixmap( ":/telepathy/kde.png" );
+}
+
+
+bool
+Tomahawk::Accounts::TelepathyConfigStorage::execConfigDialog()
+{
+    QProcess kcm;
+    kcm.start( "kcmshell4 kcm_ktp_accounts" );
+    if ( !kcm.waitForStarted() )
+        return false;
+
+    if ( !kcm.waitForFinished( 600000 ) )
+        return false;
+
+    //TODO: this should probably be async
+
+    return true;
 }
 
 
@@ -172,7 +204,7 @@ Tomahawk::Accounts::TelepathyConfigStorage::load( const QString& accountId, Acco
 
     Tp::AccountPtr account = m_tpam->accountForObjectPath( accountIdToTelepathyPath( accountId ) );
 
-    cfg.accountFriendlyName = account->normalizedName();
+    cfg.accountFriendlyName = "Tp:" + account->normalizedName();
 
     cfg.enabled = true;
     cfg.acl = QVariantMap();
@@ -206,6 +238,8 @@ Tomahawk::Accounts::TelepathyConfigStorage::load( const QString& accountId, Acco
     QVariant credentials = c->credentials( m_credentialsServiceName, account->uniqueIdentifier() );
     if ( credentials.type() == QVariant::String )
         cfg.credentials[ "password" ] = credentials.toString();
+
+    cfg.configuration[ "read-only" ] = true;
 }
 
 

@@ -45,6 +45,10 @@ public:
     void init();
 
     QString id() const;
+    QString prettyName() const;
+    QPixmap icon() const;
+
+    bool execConfigDialog();
 
     QStringList accountIds() const;
 

@@ -37,5 +37,26 @@ ConfigStorage::~ConfigStorage()
 }
 
 
+QString
+ConfigStorage::prettyName() const
+{
+    return QString();
+}
+
+
+QPixmap
+ConfigStorage::icon() const
+{
+    return QPixmap();
+}
+
+
+bool
+ConfigStorage::execConfigDialog()
+{
+    return false;
+}
+
+
 } //ns
 } //ns
