@@ -162,10 +162,7 @@ Result::mimetype() const
 float
 Result::score() const
 {
-    if ( isOnline() )
-        return m_score;
-    else
-        return 0.0;
+    return m_score;
 }
 
 
