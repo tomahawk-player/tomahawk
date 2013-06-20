@@ -103,7 +103,7 @@ ColumnItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option
     }
     else if ( !item->result().isNull() || !item->query().isNull() )
     {
-        float opacity = item->result().isNull() ? 0.0 : item->result()->score();
+        float opacity = item->result() && item->result()->isOnline() ? item->result()->score() : 0.0;
         opacity = qMax( (float)0.3, opacity );
         QColor textColor = TomahawkUtils::alphaBlend( option.palette.color( QPalette::Foreground ), option.palette.color( QPalette::Background ), opacity );
 
