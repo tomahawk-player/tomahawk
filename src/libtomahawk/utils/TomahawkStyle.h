@@ -89,8 +89,6 @@ namespace TomahawkStyle
 
     static const QColor FOOTNOTES_BACKGROUND = QColor( "#272b2e" );
     static const QColor DASHBOARD_ROUNDFIGURE_BACKGROUND = QColor( "#454e59" );
-    static const QColor DASHBOARD_ROUNDFIGURE_KNOCKOUT = QColor( "#DBDBDB" );
-    static const QColor DASHBOARD_ROUNDFIGURE_KNOCKOUT_TEXT = QColor( "#292F34" );
 
     static const QColor SIDEBAR_ROUNDFIGURE_BACKGROUND = QColor( 167, 183, 211 );
     static const QColor SIDEBAR_ROUNDFIGURE_INBOX_BACKGROUND = QColor( 239, 140, 51 );

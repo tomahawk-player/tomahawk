@@ -38,7 +38,7 @@ HeaderLabel::HeaderLabel( QWidget* parent )
     f.setPointSize( TomahawkUtils::defaultFontSize() );
     setFont( f );
 
-    setFixedHeight( TomahawkUtils::defaultFontHeight() * 2 );
+    setFixedHeight( TomahawkUtils::defaultFontHeight() * 1.4 );
     setMouseTracking( true );
 }
 
