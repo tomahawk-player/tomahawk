@@ -92,6 +92,7 @@ Dashboard::Dashboard( QWidget* parent )
         ui->playlistWidget->overlay()->resize( 380, 86 );
         ui->playlistWidget->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
 
+
         QPalette p = ui->playlistWidget->palette();
         p.setColor( QPalette::Text, TomahawkStyle::HEADER_TEXT );
         p.setColor( QPalette::BrightText, TomahawkStyle::HEADER_TEXT );
@@ -335,15 +336,17 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     font.setPointSize( TomahawkUtils::defaultFontSize() - 1 );
 
     QFont boldFont = font;
+    boldFont.setFamily( "Titillium Web" );
     boldFont.setBold( true );
-    boldFont.setPointSize( TomahawkUtils::defaultFontSize() );
+    boldFont.setPointSize( TomahawkUtils::defaultFontSize() + 2 );
     QFontMetrics boldFontMetrics( boldFont );
 
     QFont figFont = boldFont;
+    figFont.setFamily( "Titillium Web" );
     figFont.setPointSize( TomahawkUtils::defaultFontSize() - 1 );
 
     QPixmap icon;
-    QRect pixmapRect = option.rect.adjusted( 10, 14, -option.rect.width() + option.rect.height() - 18, -14 );
+    QRect pixmapRect = option.rect.adjusted( 10, 14, -option.rect.width() + option.rect.height() - 27, - 21 );
     RecentlyPlayedPlaylistsModel::PlaylistTypes type = (RecentlyPlayedPlaylistsModel::PlaylistTypes)index.data( RecentlyPlayedPlaylistsModel::PlaylistTypeRole ).toInt();
 
     if ( type == RecentlyPlayedPlaylistsModel::StaticPlaylist )
@@ -366,11 +369,11 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
         // bottom edge flush with bottom of pixmap
         QRect rect( pixmapRect.right() - width, 0, width - 8, 0 );
         rect.adjust( -2, 0, 0, 0 );
-        rect.setTop( pixmapRect.bottom() - painter->fontMetrics().height() - 1 );
+        rect.setTop( pixmapRect.bottom() - painter->fontMetrics().height() - 2 );
         rect.setBottom( pixmapRect.bottom() + 1 );
 
-        QColor figColor( TomahawkStyle::DASHBOARD_ROUNDFIGURE_BACKGROUND );
-        painter->setPen( Qt::white );
+        QColor figColor( TomahawkStyle::DASHBOARD_ROUNDFIGURE_KNOCKOUT );
+        painter->setPen( TomahawkStyle::DASHBOARD_ROUNDFIGURE_KNOCKOUT_TEXT );
         painter->setBrush( figColor );
 
         TomahawkUtils::drawBackgroundAndNumbers( painter, tracks, rect );
