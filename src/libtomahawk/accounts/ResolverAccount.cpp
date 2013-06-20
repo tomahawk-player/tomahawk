@@ -552,9 +552,9 @@ AtticaResolverAccount::loadIcon()
     if ( m_resolver.isNull() )
         return;
 
-
     m_icon = AtticaManager::instance()->iconForResolver( AtticaManager::instance()->resolverForId( m_atticaId ) );
-    m_resolver.data()->setIcon( m_icon );
+    if ( !m_icon.isNull() )
+        m_resolver.data()->setIcon( m_icon );
 }
 
 
