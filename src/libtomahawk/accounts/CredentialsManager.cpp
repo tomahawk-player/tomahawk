@@ -141,7 +141,7 @@ CredentialsManager::keychainJobFinished( QKeychain::Job* j )
         }
         else
         {
-            tDebug() << "QtKeychain readJob finished with error:" << j->error() << j->errorString();
+            tDebug() << "QtKeychain readJob for" << readJob->key() << "finished with error:" << j->error() << j->errorString();
         }
 
         m_readJobs.removeOne( readJob );

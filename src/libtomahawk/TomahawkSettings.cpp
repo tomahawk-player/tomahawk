@@ -622,6 +622,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
             tDebug() << "beginGroup" << QString( "accounts/%1" ).arg( account );
             beginGroup( QString( "accounts/%1" ).arg( account ) );
             const QVariantHash creds = value( "credentials" ).toHash();
+            tDebug() << creds;
 
             if ( !creds.isEmpty() )
             {
