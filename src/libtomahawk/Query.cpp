@@ -304,8 +304,8 @@ Query::id() const
 bool
 Query::resultSorter( const result_ptr& left, const result_ptr& right )
 {
-    const float ls = left->score();
-    const float rs = right->score();
+    const float ls = left->isOnline() ? left->score() : 0.0;
+    const float rs = right->isOnline() ? right->score() : 0.0;
 
     if ( ls == rs )
     {
@@ -368,7 +368,7 @@ Query::checkResults()
             if ( rp->playable() )
                 playable = true;
 
-            if ( rp->score() > 0.99 )
+            if ( rp->isOnline() && rp->score() > 0.99 )
             {
                 solved = true;
             }
