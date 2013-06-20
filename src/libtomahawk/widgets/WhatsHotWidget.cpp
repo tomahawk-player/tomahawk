@@ -93,6 +93,8 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     ui->artistsViewLeft->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     ui->artistsViewLeft->header()->setVisible( true );
 
+//    ui->albumsView->setStyleSheet( QString( "QListView { background-color: black; }" ) );
+
     m_workerThread = new QThread( this );
     m_workerThread->start();
 
@@ -117,7 +119,6 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     ui->stackLeft->setCurrentIndex( 2 );
     m_spinner = new AnimatedSpinner( ui->albumsView );
     m_spinner->fadeIn();
-
 }
 
 

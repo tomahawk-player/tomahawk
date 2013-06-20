@@ -429,11 +429,13 @@ Result::sourceIcon( TomahawkUtils::ImageMode style, const QSize& desiredSize ) c
     }
 }
 
+
 unsigned int
 Result::bitrate() const
 {
     return m_bitrate;
 }
+
 
 unsigned int
 Result::size() const
@@ -441,11 +443,13 @@ Result::size() const
     return m_size;
 }
 
+
 unsigned int
 Result::modificationTime() const
 {
     return m_modtime;
 }
+
 
 void
 Result::setScore( float score )
@@ -453,11 +457,13 @@ Result::setScore( float score )
     m_score = score;
 }
 
+
 void
-Result::setFileId(unsigned int id)
+Result::setFileId( unsigned int id )
 {
     m_fileId = id;
 }
+
 
 Tomahawk::Resolver*
 Result::resolvedBy() const
