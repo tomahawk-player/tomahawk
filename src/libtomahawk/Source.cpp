@@ -508,7 +508,7 @@ Source::scanningFinished( bool updateGUI )
 
 
 void
-Source::onStateChanged( DBSyncConnectionState newstate, DBSyncConnectionState oldstate, const QString& info )
+Source::onStateChanged( Tomahawk::DBSyncConnectionState newstate, Tomahawk::DBSyncConnectionState oldstate, const QString& info )
 {
     Q_D( Source );
 
