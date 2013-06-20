@@ -24,6 +24,7 @@
 #include "DatabaseWorker.h"
 #include "IdThreadWorker.h"
 #include "utils/Logger.h"
+#include <boost/concept_check.hpp>
 
 #define DEFAULT_WORKER_THREADS 4
 #define MAX_WORKER_THREADS 16
@@ -56,7 +57,6 @@ Database::Database( const QString& dbname, QObject* parent )
 
     connect( m_impl, SIGNAL( indexReady() ), SLOT( markAsReady() ) );
     connect( m_impl, SIGNAL( indexReady() ), SIGNAL( indexReady() ) );
-    connect( m_impl, SIGNAL( indexReady() ), SIGNAL( ready() ) );
 
     Q_ASSERT( m_workerRW );
     m_workerRW.data()->start();
@@ -196,6 +196,10 @@ Database::impl()
 void
 Database::markAsReady()
 {
+    if ( m_ready )
+        return;
+
     tLog() << Q_FUNC_INFO << "Database is ready now!";
     m_ready = true;
+    emit ready();
 }
