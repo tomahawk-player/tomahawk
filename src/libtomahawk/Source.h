@@ -144,7 +144,7 @@ private slots:
     void setOffline();
     void setOnline();
 
-    void onStateChanged( DBSyncConnectionState newstate, DBSyncConnectionState oldstate, const QString& info );
+    void onStateChanged( Tomahawk::DBSyncConnectionState newstate, Tomahawk::DBSyncConnectionState oldstate, const QString& info );
 
     void onPlaybackStarted( const Tomahawk::track_ptr& track, unsigned int duration );
     void onPlaybackFinished( const Tomahawk::track_ptr& track, const Tomahawk::PlaybackLog& log );

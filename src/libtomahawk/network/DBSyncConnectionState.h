@@ -37,5 +37,6 @@ enum DBSyncConnectionState
 
 }
 
+Q_DECLARE_METATYPE( Tomahawk::DBSyncConnectionState )
 
 #endif // DBSYNCCONNECTIONSTATE_H
