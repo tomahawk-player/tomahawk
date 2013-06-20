@@ -513,7 +513,7 @@ JSResolver::init()
     bool compressed = m.value( "compressed", "false" ).toString() == "true";
 
     QByteArray icoData = m.value( "icon" ).toByteArray();
-    if( compressed )
+    if ( compressed )
         icoData = qUncompress( QByteArray::fromBase64( icoData ) );
     else
         icoData = QByteArray::fromBase64( icoData );
@@ -532,6 +532,11 @@ JSResolver::init()
     {
         QString iconPath = QFileInfo( filePath() ).path() + "/" + m.value( "icon" ).toString();
         success = m_icon.load( iconPath );
+    }
+    // if we still couldn't load the cover, set the default resolver icon
+    if ( m_icon.isNull() )
+    {
+        m_icon = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultResolver, TomahawkUtils::Original, QSize( 128, 128 ) );
     }
 
     // load config widget and apply settings
