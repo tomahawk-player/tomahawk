@@ -87,7 +87,7 @@ Pipeline::~Pipeline()
 void
 Pipeline::databaseReady()
 {
-    connect( Database::instance(), SIGNAL( indexReady() ), this, SLOT( start() ), Qt::QueuedConnection );
+    connect( Database::instance(), SIGNAL( ready() ), this, SLOT( start() ), Qt::QueuedConnection );
     Database::instance()->loadIndex();
 }
 
