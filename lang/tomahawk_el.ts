@@ -923,9 +923,9 @@ Password</source>
 <context>
     <name>JSResolver</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="585"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="620"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="656"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="590"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="625"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="661"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
         <translation>Σριπτ προειδοποίηση αναλυτή: API κλήση% 1 επέστρεψε δεδομένα συγχρονισμένα.</translation>
     </message>
@@ -1710,22 +1710,22 @@ Password</source>
 <context>
     <name>ScriptEngine</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="1129"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="1134"/>
         <source>Script Resolver Error: %1 %2 %3 %4</source>
         <translation>Σφάλμα Script Resolver: %1 %2 %3 %4</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="1148"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="1153"/>
         <source>SSL Error</source>
         <translation>SSL Σφάλμα</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="1149"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="1154"/>
         <source>You have asked Tomahawk to connect securely to &lt;b&gt;%1&lt;/b&gt;, but we can&apos;t confirm that your connection is secure:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Do you want to trust this connection?</source>
         <translation>Έχετε ζητήσει το Tomahawk να συνδεθεί με ασφάλεια στο &lt;b&gt;%1&lt;/b&gt;, αλλά δεν μπορούμε να επιβεβαιώσουμε ότι η σύνδεσή σας είναι ασφαλής:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Θέλετε να εμπιστεύθειτε αυτή τη σύνδεση; </translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="1156"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="1161"/>
         <source>Trust certificate</source>
         <translation>Εμπιστοσύνη πιστοποιητικόυ</translation>
     </message>
