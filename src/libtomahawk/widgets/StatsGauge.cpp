@@ -81,7 +81,7 @@ StatsGauge::paintEvent( QPaintEvent* event )
         font.setPixelSize( 44 );
 
     p.setFont( font );
-    QRect textRect( 0, gaugeSize.height() / 2 - 44, gaugeSize.width(), 62 );
+    QRect textRect( 0, gaugeSize.height() / 2 - 14, gaugeSize.width(), 62 );
     p.drawText( textRect, Qt::AlignCenter, value() > 0 ? QString::number( value() ) : "-" );
 
     pen = QPen( TomahawkStyle::HEADER_GAUGE_TEXT.darker() );
@@ -91,7 +91,7 @@ StatsGauge::paintEvent( QPaintEvent* event )
     font.setPixelSize( 16 );
     p.setFont( font );
 
-    textRect = QRect( 0, gaugeSize.height() / 2 + 22, gaugeSize.width(), 20 );
+    textRect = QRect( 0, gaugeSize.height() / 2 - 32, gaugeSize.width(), 20 );
     p.drawText( textRect, Qt::AlignCenter, maximum() > 0 ? tr( "out of %1" ).arg( maximum() ) : "-" );
 
     if ( !m_text.isEmpty() )
