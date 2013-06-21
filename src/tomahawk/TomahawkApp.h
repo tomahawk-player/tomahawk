@@ -150,7 +150,7 @@ private:
 
     QPointer< QxtHttpServerConnector > m_httpv1_connector;
     QPointer< QxtHttpSessionManager > m_httpv1_session;
-    QPointer< QxtHttpServerConnector > m_httpv2_connector;
+    QPointer< QxtHttpsServerConnector > m_httpv2_connector;
     QPointer< QxtHttpSessionManager > m_httpv2_session;
 };
 

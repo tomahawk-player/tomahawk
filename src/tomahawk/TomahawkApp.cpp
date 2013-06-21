@@ -114,6 +114,11 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QTranslator>
+#include <QUuid>
+
+#include <QtCrypto>
+#include <QSslKey>
+#include <QxtNetwork/QxtSslServer>
 
 #include <iostream>
 
@@ -536,7 +541,7 @@ TomahawkApp::initHTTP()
     else
     {
         m_httpv2_session = QPointer< QxtHttpSessionManager >( new QxtHttpSessionManager() );
-        m_httpv2_connector = QPointer< QxtHttpServerConnector >( new QxtHttpServerConnector );
+        m_httpv2_connector = QPointer< QxtHttpsServerConnector >( new QxtHttpsServerConnector );
         if ( m_httpv2_session.isNull() || m_httpv2_connector.isNull() )
         {
             if ( !m_httpv2_session.isNull() )
@@ -558,6 +563,24 @@ TomahawkApp::initHTTP()
 
             Api_v2* api = new Api_v2( m_httpv2_session.data() );
             m_httpv2_session->setStaticContentService( api );
+            QCA::KeyGenerator generator;
+            QCA::PrivateKey key = generator.createRSA( 4096 );
+            // TODO: Store and load this key with qtkeychain
+            QCA::CertificateOptions certOpts;
+            QCA::CertificateInfo certInfo;
+            certInfo.insert( QCA::CommonName, QString( "tomahawk-%1" ).arg( Database::instance()->impl()->dbid() ) );
+            certInfo.insert( QCA::Organization, "Tomahawk Player" );
+            certInfo.insert( QCA::OrganizationalUnit, "HTTP API" );
+            certOpts.setInfo( certInfo );
+            certOpts.setSerialNumber( QCA::BigInteger( QCA::SecureArray( QUuid::createUuid().toByteArray() ) ) );
+            // TODO: Check for validity of ceritifcate and renew if needed
+            certOpts.setValidityPeriod( QDateTime::currentDateTime(), QDateTime::currentDateTime().addYears( 3 ) );
+            QCA::Certificate cert( certOpts, key );
+            QSslCertificate qcert( cert.toDER(), QSsl::Der);
+            QSslKey qkey( key.toDER().toByteArray(), QSsl::Rsa, QSsl::Der );
+            QxtSslServer* sslServer = m_httpv2_connector->tcpServer();
+            sslServer->setPrivateKey(qkey);
+            sslServer->setLocalCertificate(qcert);
 
             tLog() << "Starting HTTPd for API v2.0 on" << m_httpv2_session->listenInterface().toString() << m_httpv2_session->port();
             if ( !m_httpv2_session->start() )
