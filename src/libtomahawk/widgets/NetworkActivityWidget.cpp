@@ -49,8 +49,6 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
 
     d_func()->crumbModelLeft = new QStandardItemModel( this );
     d_func()->sortedProxy = new QSortFilterProxyModel( this );
-    d_func()->sortedProxy->setDynamicSortFilter( true );
-    d_func()->sortedProxy->setFilterCaseSensitivity( Qt::CaseInsensitive );
 
     d_func()->ui->breadCrumbLeft->setRootIcon( TomahawkUtils::defaultPixmap( TomahawkUtils::NetworkActivity, TomahawkUtils::Original ) );
     connect( d_func()->ui->breadCrumbLeft, SIGNAL( activateIndex( QModelIndex ) ), SLOT( leftCrumbIndexChanged( QModelIndex ) ) );
@@ -80,7 +78,6 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
     overallItem->setData( OverallChart, Breadcrumb::DefaultRole );
     chartItem->appendRow( overallItem );
     d_func()->sortedProxy->setSourceModel( d_func()->crumbModelLeft );
-    d_func()->sortedProxy->sort( 0, Qt::AscendingOrder );
     d_func()->ui->breadCrumbLeft->setModel( d_func()->sortedProxy );
     d_func()->ui->breadCrumbLeft->setVisible( true );
 }
