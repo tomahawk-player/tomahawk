@@ -437,9 +437,10 @@ Servent::getLocalSipInfos( const QString& nodeid, const QString& key )
 void
 Servent::queueForAclResult( const QString& username, const QSet<peerinfo_ptr>& peerInfos )
 {
-    if ( peerInfos.isEmpty() )
+    if ( peerInfos.isEmpty() || (*peerInfos.begin())->sipInfos().isEmpty() )
     {
         // If all peerInfos disappeared, do not queue.
+        // If the peerInfo has not got a sipInfo anymore, do not queue either.
         return;
     }
 
