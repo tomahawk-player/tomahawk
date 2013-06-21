@@ -47,6 +47,10 @@ Api_v2_0::ping( QxtWebRequestEvent* event )
 void
 Api_v2_0::playback( QxtWebRequestEvent* event, const QString& command )
 {
+    if ( !checkAuthentication( event ) )
+    {
+        return;
+    }
     if ( command == "next ")
     {
         JSON_REPLY( QMetaObject::invokeMethod( AudioEngine::instance(), "next", Qt::QueuedConnection ) , "Skipping to the next track failed." );
@@ -86,7 +90,8 @@ Api_v2_0::playback( QxtWebRequestEvent* event, const QString& command )
 }
 
 
-void Api_v2_0::jsonReply( QxtWebRequestEvent* event, const char* funcInfo, const QString& errorMessage, bool isError )
+void
+Api_v2_0::jsonReply( QxtWebRequestEvent* event, const char* funcInfo, const QString& errorMessage, bool isError )
 {
     if ( isError )
     {
@@ -98,4 +103,27 @@ void Api_v2_0::jsonReply( QxtWebRequestEvent* event, const char* funcInfo, const
         m_service->sendJsonOk( event );
 
     }
+}
+
+
+void
+Api_v2_0::jsonUnauthenticated( QxtWebRequestEvent *event )
+{
+    QxtWebPageEvent * e = new QxtWebPageEvent( event->sessionID, event->requestID, "{ result: \"error\", error: \"Method call needs to be authenticated.\" }" );
+    e->contentType = "application/json";
+    e->status = 401;
+    e->statusMessage = "Method call needs to be authenticated.";
+    m_service->postEvent( e );
+}
+
+
+bool
+Api_v2_0::checkAuthentication( QxtWebRequestEvent* event )
+{
+    // TODO: Auth!
+    // * SSL client certificate
+    // * Shared secret between two clients when talking via SSL
+    // * sth else when connecting without httpS
+    // * a more secure version of digest auth
+    return true;
 }
