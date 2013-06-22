@@ -87,7 +87,6 @@ ViewManager::ViewManager( QObject* parent )
     , m_inboxWidget( 0 )
     , m_networkActivityWidget( 0 )
     , m_currentPage( 0 )
-    , m_loaded( false )
 {
     s_instance = this;
 
@@ -122,8 +121,6 @@ ViewManager::ViewManager( QObject* parent )
 
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
     connect( m_infobar, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
-
-    connect( this, SIGNAL( tomahawkLoaded() ), m_dashboard, SLOT( loadData() ) );
 
 /*    connect( m_infobar, SIGNAL( flatMode() ), SLOT( setTableMode() ) );
     connect( m_infobar, SIGNAL( artistMode() ), SLOT( setTreeMode() ) );
@@ -763,14 +760,6 @@ ViewManager::onWidgetDestroyed( QWidget* widget )
         m_currentPage = 0;
         historyBack();
     }
-}
-
-
-void
-ViewManager::setTomahawkLoaded()
-{
-    m_loaded = true;
-    emit tomahawkLoaded();
 }
 
 

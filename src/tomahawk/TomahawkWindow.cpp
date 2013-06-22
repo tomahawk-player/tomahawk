@@ -121,7 +121,6 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 
     connect( vm, SIGNAL( showQueueRequested() ), SLOT( showQueue() ) );
     connect( vm, SIGNAL( hideQueueRequested() ), SLOT( hideQueue() ) );
-    connect( APP, SIGNAL( tomahawkLoaded() ), vm, SLOT( setTomahawkLoaded() ) ); // Pass loaded signal into libtomahawk so components in there can connect to ViewManager
 
 #ifdef Q_OS_WIN
     connect( AudioEngine::instance(), SIGNAL( stateChanged( AudioState, AudioState) ), SLOT( audioStateChanged( AudioState, AudioState) ) );
