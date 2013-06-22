@@ -27,7 +27,7 @@
 #include "utils/Logger.h"
 
 
-DatabaseCommand_AllAlbums::DatabaseCommand_AllAlbums( const Tomahawk::collection_ptr &collection, const Tomahawk::artist_ptr &artist, QObject *parent )
+DatabaseCommand_AllAlbums::DatabaseCommand_AllAlbums( const Tomahawk::collection_ptr& collection, const Tomahawk::artist_ptr& artist, QObject* parent )
   : DatabaseCommand( parent )
   , m_collection( collection )
   , m_artist( artist )
@@ -39,11 +39,12 @@ DatabaseCommand_AllAlbums::DatabaseCommand_AllAlbums( const Tomahawk::collection
 
 
 DatabaseCommand_AllAlbums::~DatabaseCommand_AllAlbums()
-{}
+{
+}
 
 
 void
-DatabaseCommand_AllAlbums::setArtist( const Tomahawk::artist_ptr &artist )
+DatabaseCommand_AllAlbums::setArtist( const Tomahawk::artist_ptr& artist )
 {
     m_artist = artist;
 }
@@ -54,7 +55,7 @@ DatabaseCommand_AllAlbums::execForArtist( DatabaseImpl* dbi )
 {
     TomahawkSqlQuery query = dbi->newquery();
     QList<Tomahawk::album_ptr> al;
-    QString orderToken, sourceToken, filterToken, tables;
+    QString orderToken, sourceToken, filterToken, timeToken, tables;
 
     switch ( m_sortOrder )
     {
@@ -63,10 +64,11 @@ DatabaseCommand_AllAlbums::execForArtist( DatabaseImpl* dbi )
 
         case ModificationTime:
             orderToken = "file.mtime";
+            timeToken = QString( "AND file.mtime <= %1" ).arg( QDateTime::currentDateTimeUtc().toTime_t() );
     }
 
     if ( !m_collection.isNull() )
-        sourceToken = QString( "AND file.source %1 " ).arg( m_collection->source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( m_collection->source()->id() ) );
+        sourceToken = QString( "AND file.source %1" ).arg( m_collection->source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( m_collection->source()->id() ) );
 
     if ( !m_filter.isEmpty() )
     {
@@ -89,10 +91,11 @@ DatabaseCommand_AllAlbums::execForArtist( DatabaseImpl* dbi )
         "LEFT OUTER JOIN album ON file_join.album = album.id "
         "WHERE file.id = file_join.file "
         "AND file_join.artist = %2 "
-        "%3 %4 %5 %6 %7"
+        "%3 %4 %5 %6 %7 %8"
         ).arg( tables )
          .arg( m_artist->id() )
          .arg( sourceToken )
+         .arg( timeToken )
          .arg( filterToken )
          .arg( m_sortOrder > 0 ? QString( "ORDER BY %1" ).arg( orderToken ) : QString() )
          .arg( m_sortDescending ? "DESC" : QString() )
