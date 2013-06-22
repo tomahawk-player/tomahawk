@@ -111,6 +111,7 @@ IF( QXTWEB_FOUND )
         web/Api_v1.cpp
         web/Api_v2.cpp
         web/Api_v2_0.cpp
+        web/Api2HttpsServerConnector.cpp
     )
     LIST(APPEND LINK_LIBRARIES ${QXTWEB_LIBRARIES})
     INCLUDE_DIRECTORIES(${QXTWEB_INCLUDE_DIRS})
