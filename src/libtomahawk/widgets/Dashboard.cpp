@@ -186,13 +186,6 @@ Dashboard::~Dashboard()
 }
 
 
-void
-Dashboard::loadData()
-{
-    m_recentAlbumsModel->addFilteredCollection( collection_ptr(), 20, DatabaseCommand_AllAlbums::ModificationTime, true );
-}
-
-
 Tomahawk::playlistinterface_ptr
 Dashboard::playlistInterface() const
 {
@@ -228,6 +221,8 @@ Dashboard::onSourcesReady()
 {
     foreach ( const source_ptr& source, SourceList::instance()->sources() )
         onSourceAdded( source );
+
+    updateRecentAdditions();
 }
 
 

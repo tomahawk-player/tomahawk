@@ -111,8 +111,6 @@ public slots:
     void updatePlaylists();
     void updateRecentAdditions();
 
-    void loadData();
-
 private slots:
     void onSourcesReady();
     void onSourceAdded( const Tomahawk::source_ptr& source );
