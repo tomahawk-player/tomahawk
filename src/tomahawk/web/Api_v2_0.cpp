@@ -51,7 +51,7 @@ Api_v2_0::playback( QxtWebRequestEvent* event, const QString& command )
     {
         return;
     }
-    if ( command == "next ")
+    if ( command == "next")
     {
         JSON_REPLY( QMetaObject::invokeMethod( AudioEngine::instance(), "next", Qt::QueuedConnection ) , "Skipping to the next track failed." );
     }
