@@ -119,8 +119,6 @@ public:
 
     FlexibleView* createPageForList( const QString& title, const QList< Tomahawk::query_ptr >& queries );
 
-    bool isTomahawkLoaded() const { return m_loaded; }
-
 signals:
     void filterAvailable( bool b );
 
@@ -134,8 +132,6 @@ signals:
 
     void showQueueRequested();
     void hideQueueRequested();
-
-    void tomahawkLoaded();
 
     void historyBackAvailable( bool avail );
     void historyForwardAvailable( bool avail );
@@ -177,8 +173,6 @@ public slots:
     void hideQueue() { emit hideQueueRequested(); }
 
     void playlistInterfaceChanged( Tomahawk::playlistinterface_ptr );
-
-    void setTomahawkLoaded();
 
 private slots:
     void setFilter( const QString& filter );
@@ -232,8 +226,6 @@ private:
 
     QTimer m_filterTimer;
     QString m_filter;
-
-    bool m_loaded;
 
     static ViewManager* s_instance;
 };
