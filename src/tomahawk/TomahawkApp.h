@@ -95,8 +95,6 @@ public:
     // PlatformInterface
     virtual bool loadUrl( const QString& url );
 
-    bool isTomahawkLoaded() const;
-
     // reimplemented from QApplication/QCoreApplication
     virtual bool notify( QObject* receiver, QEvent* e );
 
@@ -144,7 +142,7 @@ private:
     TomahawkWindow* m_mainwindow;
 #endif
 
-    bool m_headless, m_loaded;
+    bool m_headless;
 
     QPointer< QxtHttpServerConnector > m_connector;
     QPointer< QxtHttpSessionManager > m_session;

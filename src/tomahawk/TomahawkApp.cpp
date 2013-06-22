@@ -146,7 +146,6 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     , m_mainwindow( 0 )
 #endif
     , m_headless( false )
-    , m_loaded( false )
 {
     if ( arguments().contains( "--help" ) || arguments().contains( "-h" ) )
     {
@@ -158,7 +157,6 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     setOrganizationDomain( QLatin1String( TOMAHAWK_ORGANIZATION_DOMAIN ) );
     setApplicationName( QLatin1String( TOMAHAWK_APPLICATION_NAME ) );
     setApplicationVersion( QLatin1String( TOMAHAWK_VERSION ) );
-    connect( this, SIGNAL( tomahawkLoaded() ), SLOT( initEnergyEventHandler() ) );
 
     registerMetaTypes();
     TomahawkUtils::installTranslator( this );
@@ -566,6 +564,7 @@ TomahawkApp::initFactoriesForAccountManager()
     Tomahawk::Accounts::AccountManager::instance()->loadFromConfig();
 }
 
+
 void
 TomahawkApp::initEnergyEventHandler()
 {
@@ -590,9 +589,6 @@ TomahawkApp::initSIP()
         tDebug( LOGINFO ) << "Connecting SIP classes";
         Accounts::AccountManager::instance()->initSIP();
     }
-
-    m_loaded = true;
-    emit tomahawkLoaded();
 }
 
 
@@ -684,6 +680,9 @@ TomahawkApp::onInfoSystemReady()
     // Make sure to do this after main window is inited
     Tomahawk::enableFullscreen( m_mainwindow );
 #endif
+
+    initEnergyEventHandler();
+    emit tomahawkLoaded();
 }
 
 
@@ -811,11 +810,4 @@ TomahawkWindow*
 TomahawkApp::mainWindow() const
 {
     return m_mainwindow;
-}
-
-
-bool
-TomahawkApp::isTomahawkLoaded() const
-{
-    return m_loaded;
 }
