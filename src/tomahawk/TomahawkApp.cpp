@@ -285,15 +285,16 @@ TomahawkApp::~TomahawkApp()
     if ( !m_scanManager.isNull() )
         delete m_scanManager.data();
 
-    if ( !m_audioEngine.isNull() )
-        delete m_audioEngine.data();
-
     delete Tomahawk::Accounts::AccountManager::instance();
 
 #ifndef ENABLE_HEADLESS
     delete AtticaManager::instance();
     delete m_mainwindow;
 #endif
+
+    // Main Window uses the AudioEngine, so delete it later.
+    if ( !m_audioEngine.isNull() )
+        delete m_audioEngine.data();
 
     if ( !m_database.isNull() )
         delete m_database.data();
