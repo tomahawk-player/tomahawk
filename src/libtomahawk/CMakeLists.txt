@@ -99,6 +99,7 @@ set( libGuiSources
     resolvers/ExternalResolverGui.cpp
     resolvers/ScriptResolver.cpp
     resolvers/JSResolver.cpp
+    resolvers/ScriptEngine.cpp
 
     utils/ImageRegistry.cpp
     utils/WidgetDragFilter.cpp
