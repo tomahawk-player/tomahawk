@@ -25,6 +25,7 @@
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
 #include "jobview/ErrorStatusMessage.h"
+#include "utils/Logger.h"
 #include "utils/TomahawkUtilsGui.h"
 
 #include "Artist.h"
@@ -39,6 +40,8 @@
 #include "TomahawkSettings.h"
 #include "TomahawkVersion.h"
 
+#include <QFile>
+#include <QFileInfo>
 #include <QImageReader>
 #include <QMessageBox>
 #include <QNetworkRequest>
@@ -46,6 +49,7 @@
 #include <QMetaProperty>
 #include <QCryptographicHash>
 #include <QSslError>
+#include <QWebFrame>
 
 #ifdef QCA2_FOUND
 #include <QtCrypto>
