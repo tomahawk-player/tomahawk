@@ -38,6 +38,7 @@ option(BUILD_GUI "Build Tomahawk with GUI" ON)
 option(BUILD_RELEASE "Generate TOMAHAWK_VERSION without GIT info" OFF)
 option(BUILD_TESTS "Build Tomahawk with unit tests" ON)
 option(BUILD_HATCHET "Build the Hatchet plugin" OFF)
+option(BUILD_WITH_QT4 "Build Tomahawk with Qt4 no matter if Qt5 was found" ON)
 
 option(WITH_BREAKPAD "Build with breakpad integration" ON)
 option(WITH_CRASHREPORTER "Build with CrashReporter" ON)
