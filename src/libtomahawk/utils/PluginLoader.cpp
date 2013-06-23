@@ -29,6 +29,8 @@
 
 #include <QDir>
 #include <QCoreApplication>
+#include <QLibrary>
+#include <QPluginLoader>
 
 #include "DllMacro.h"
 
@@ -52,6 +54,40 @@ PluginLoader::PluginLoader( const QString& type )
 PluginLoader::~PluginLoader()
 {
     delete d_ptr;
+}
+
+
+const QHash< QString, QObject* > PluginLoader::loadPlugins() const
+{
+    tLog() << "Load plugins of type" << d_ptr->type;
+
+    const QString errorMessage("Error loading plugin: %1: %2");
+
+    QHash< QString, QObject* > plugins;
+
+    foreach( const QString& pluginPath, pluginPaths() )
+    {
+//        tDebug() << Q_FUNC_INFO << "Trying to load plugin:" << pluginPath;
+
+        if ( !QLibrary::isLibrary( pluginPath ) )
+        {
+            tLog() << Q_FUNC_INFO << errorMessage.arg( pluginPath, "Not a library" );
+            continue;
+        }
+
+        QPluginLoader loader( pluginPath );
+
+        QObject* plugin = loader.instance();
+        if ( !plugin )
+        {
+            tLog() << Q_FUNC_INFO << errorMessage.arg( pluginPath, loader.errorString() );
+            continue;
+        }
+
+        plugins.insert( loader.fileName(), plugin );
+    }
+
+    return plugins;
 }
 
 

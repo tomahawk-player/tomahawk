@@ -35,9 +35,6 @@
 #include "TomahawkSettings.h"
 #include "LocalConfigStorage.h"
 
-#include <QLibrary>
-#include <QDir>
-#include <QPluginLoader>
 #include <QCoreApplication>
 #include <QSet>
 #include <QTimer>
@@ -91,7 +88,7 @@ AccountManager::init()
 
     connect( TomahawkSettings::instance(), SIGNAL( changed() ), SLOT( onSettingsChanged() ) );
 
-    loadPluginFactories( Tomahawk::Utils::PluginLoader( "account" ).pluginPaths() );
+    loadPluginFactories();
 
     // We include the resolver factory manually, not in a plugin
     ResolverAccountFactory* f = new ResolverAccountFactory();
@@ -103,15 +100,20 @@ AccountManager::init()
 
 
 void
-AccountManager::loadPluginFactories( const QStringList& paths )
+AccountManager::loadPluginFactories()
 {
-    foreach ( QString fileName, paths )
+    QHash< QString, QObject* > plugins = Tomahawk::Utils::PluginLoader( "account" ).loadPlugins();
+    foreach ( QObject* plugin, plugins.values() )
     {
-        if ( !QLibrary::isLibrary( fileName ) )
-            continue;
-
-        tDebug() << Q_FUNC_INFO << "Trying to load plugin:" << fileName;
-        loadPluginFactory( fileName );
+        AccountFactory* accountfactory = qobject_cast<AccountFactory*>( plugin );
+        if ( accountfactory )
+        {
+            tDebug() << Q_FUNC_INFO << "Loaded plugin factory:" << plugins.key( plugin ) << accountfactory->factoryId() << accountfactory->prettyName();
+            m_accountFactories[ accountfactory->factoryId() ] = accountfactory;
+        } else
+        {
+            tDebug() << Q_FUNC_INFO << "Loaded invalid plugin.." << plugins.key( plugin );
+        }
     }
 }
 
@@ -142,29 +144,6 @@ AccountManager::factoryForAccount( Account* account ) const
     const QString factoryId = factoryFromId( account->accountId() );
     return m_accountFactories.value( factoryId, 0 );
 }
-
-
-void
-AccountManager::loadPluginFactory( const QString& path )
-{
-    QPluginLoader loader( path );
-    QObject* plugin = loader.instance();
-    if ( !plugin )
-    {
-        tDebug() << Q_FUNC_INFO << "Error loading plugin:" << loader.errorString();
-    }
-
-    AccountFactory* accountfactory = qobject_cast<AccountFactory*>( plugin );
-    if ( accountfactory )
-    {
-        tDebug() << Q_FUNC_INFO << "Loaded plugin factory:" << loader.fileName() << accountfactory->factoryId() << accountfactory->prettyName();
-        m_accountFactories[ accountfactory->factoryId() ] = accountfactory;
-    } else
-    {
-        tDebug() << Q_FUNC_INFO << "Loaded invalid plugin.." << loader.fileName();
-    }
-}
-
 
 
 void
@@ -250,21 +229,10 @@ AccountManager::loadFromConfig()
     ConfigStorage* localCS = new LocalConfigStorage( this );
     m_configStorageById.insert( localCS->id(), localCS );
 
-    QStringList configStoragePlugins = Tomahawk::Utils::PluginLoader( "configstorage" ).pluginPaths();
-    foreach( const QString& pluginPath, configStoragePlugins )
+    QList< QObject* > configStoragePlugins = Tomahawk::Utils::PluginLoader( "configstorage" ).loadPlugins().values();
+    foreach( QObject* plugin, configStoragePlugins )
     {
-        QPluginLoader loader;
-        if ( !QLibrary::isLibrary( pluginPath ) )
-            continue;
-
-        loader.setFileName( pluginPath );
-        if ( !loader.load() )
-        {
-            tDebug() << "Error loading ConfigStorage plugin" << loader.errorString() << loader.staticInstances().count();
-            continue;
-        }
-
-        ConfigStorage* cs = qobject_cast< ConfigStorage* >( loader.instance() );
+        ConfigStorage* cs = qobject_cast< ConfigStorage* >( plugin );
         if ( !cs )
             continue;
 

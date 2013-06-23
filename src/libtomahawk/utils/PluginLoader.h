@@ -38,12 +38,14 @@ public:
     PluginLoader( const QString& type );
     virtual ~PluginLoader();
 
+    const QHash< QString, QObject* > loadPlugins() const;
+
+private:
     const QStringList pluginFilenames( const QString& name = "*" ) const;
     const QStringList pluginPaths( const QString& name = "*" ) const;
 
     static const QList< QDir > pluginDirs();
 
-private:
     Q_DECLARE_PRIVATE( PluginLoader );
     PluginLoaderPrivate* d_ptr;
 };

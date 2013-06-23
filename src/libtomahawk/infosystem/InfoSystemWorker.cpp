@@ -32,13 +32,9 @@
 #include "utils/PluginLoader.h"
 #include "Source.h"
 
-
 #include <QCoreApplication>
-#include <QDir>
-#include <QLibrary>
 #include <QNetworkConfiguration>
 #include <QNetworkProxy>
-#include <QPluginLoader>
 
 namespace Tomahawk
 {
@@ -85,7 +81,7 @@ InfoSystemWorker::init( Tomahawk::InfoSystem::InfoSystemCache* cache )
     m_shortLinksWaiting = 0;
     m_cache = cache;
 
-    loadInfoPlugins( Tomahawk::Utils::PluginLoader( "infoplugin" ).pluginPaths() );
+    loadInfoPlugins();
 }
 
 
@@ -169,37 +165,22 @@ InfoSystemWorker::removeInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin )
 
 
 void
-InfoSystemWorker::loadInfoPlugins( const QStringList& pluginPaths )
+InfoSystemWorker::loadInfoPlugins()
 {
-    tDebug() << Q_FUNC_INFO << "Attempting to load the following plugin paths:" << pluginPaths;
-
-    if ( pluginPaths.isEmpty() )
-        return;
-
-    foreach ( const QString fileName, pluginPaths )
+    QHash< QString, QObject* > plugins = Tomahawk::Utils::PluginLoader( "infoplugin" ).loadPlugins();
+    foreach ( QObject* plugin, plugins.values() )
     {
-        if ( !QLibrary::isLibrary( fileName ) )
-            continue;
-
-        tDebug() << Q_FUNC_INFO << "Trying to load plugin:" << fileName;
-
-        QPluginLoader loader( fileName );
-        QObject* plugin = loader.instance();
-        if ( !plugin )
-        {
-            tDebug() << Q_FUNC_INFO << "Error loading plugin:" << loader.errorString();
-            continue;
-        }
-
         InfoPlugin* infoPlugin = qobject_cast< InfoPlugin* >( plugin );
         if ( infoPlugin )
         {
-            tDebug() << Q_FUNC_INFO << "Loaded info plugin:" << loader.fileName();
-            infoPlugin->setFriendlyName( loader.fileName() );
+            tDebug() << Q_FUNC_INFO << "Loaded info plugin:" << plugins.key( plugin );
+            infoPlugin->setFriendlyName( plugins.key( plugin ) );
             addInfoPlugin( InfoPluginPtr( infoPlugin ) );
         }
         else
-            tDebug() << Q_FUNC_INFO << "Loaded invalid plugin:" << loader.fileName();
+        {
+            tDebug() << Q_FUNC_INFO << "Loaded invalid plugin:" << plugins.key( plugin );
+        }
     }
 }
 
