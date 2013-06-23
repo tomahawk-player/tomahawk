@@ -25,7 +25,7 @@
 #include "network/Servent.h"
 #include "utils/Logger.h"
 #include "config.h"
-#include "JSResolver.h"
+#include "JSResolver_p.h"
 #include "Pipeline.h"
 #include "Result.h"
 
@@ -315,14 +315,14 @@ JSResolverHelper::customIODeviceFactory( const Tomahawk::result_ptr& result,
                                                                                   .arg( origResultUrl );
 
         m_streamCallbacks.insert( qid, callback );
-        m_resolver->m_engine->mainFrame()->evaluateJavaScript( getUrl );
+        m_resolver->d_func()->engine->mainFrame()->evaluateJavaScript( getUrl );
     }
     else
     {
         QString getUrl = QString( "Tomahawk.resolver.instance.%1( '%2' );" ).arg( m_urlCallback )
                                                                             .arg( origResultUrl );
 
-        QString urlStr = m_resolver->m_engine->mainFrame()->evaluateJavaScript( getUrl ).toString();
+        QString urlStr = m_resolver->d_func()->engine->mainFrame()->evaluateJavaScript( getUrl ).toString();
 
         returnStreamUrl( urlStr, callback );
     }

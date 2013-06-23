@@ -28,6 +28,7 @@
 #include "Typedefs.h"
 
 class JSResolverHelper;
+class JSResolverPrivate;
 class ScriptEngine;
 
 class DLLEXPORT JSResolver : public Tomahawk::ExternalResolverGui
@@ -95,20 +96,9 @@ private:
     QList< Tomahawk::album_ptr >  parseAlbumVariantList(  const Tomahawk::artist_ptr& artist,
                                                           const QVariantList& reslist );
 
-    ScriptEngine* m_engine;
+    Q_DECLARE_PRIVATE( JSResolver )
+    JSResolverPrivate* d_ptr;
 
-    QString m_name;
-    QPixmap m_icon;
-    unsigned int m_weight, m_timeout;
-    Capabilities m_capabilities;
-
-    bool m_ready, m_stopped;
-    ExternalResolver::ErrorState m_error;
-
-    JSResolverHelper* m_resolverHelper;
-    QPointer< AccountConfigWidget > m_configWidget;
-    QList< QVariant > m_dataWidgets;
-    QStringList m_requiredScriptPaths;
 };
 
 #endif // JSRESOLVER_H

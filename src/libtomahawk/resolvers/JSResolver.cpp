@@ -19,7 +19,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "JSResolver.h"
+#include "JSResolver_p.h"
 
 #include "accounts/AccountConfigWidget.h"
 #include "network/Servent.h"
@@ -68,24 +68,21 @@
 
 JSResolver::JSResolver( const QString& scriptPath, const QStringList& additionalScriptPaths )
     : Tomahawk::ExternalResolverGui( scriptPath )
-    , m_ready( false )
-    , m_stopped( true )
-    , m_error( Tomahawk::ExternalResolver::NoError )
-    , m_resolverHelper( new JSResolverHelper( scriptPath, this ) )
-    , m_requiredScriptPaths( additionalScriptPaths )
+    , d_ptr( new JSResolverPrivate( this, scriptPath, additionalScriptPaths ) )
 {
+    Q_D( JSResolver );
     tLog() << Q_FUNC_INFO << "Loading JS resolver:" << scriptPath;
 
-    m_engine = new ScriptEngine( this );
-    m_name = QFileInfo( filePath() ).baseName();
+    d->engine = new ScriptEngine( this );
+    d->name = QFileInfo( filePath() ).baseName();
 
     // set the icon, if we launch properly we'll get the icon the resolver reports
-    m_icon = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultResolver, TomahawkUtils::Original, QSize( 128, 128 ) );
+    d->icon = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultResolver, TomahawkUtils::Original, QSize( 128, 128 ) );
 
     if ( !QFile::exists( filePath() ) )
     {
         tLog() << Q_FUNC_INFO << "Failed loading JavaScript resolver:" << scriptPath;
-        m_error = Tomahawk::ExternalResolver::FileNotFound;
+        d->error = Tomahawk::ExternalResolver::FileNotFound;
     }
     else
     {
@@ -96,10 +93,12 @@ JSResolver::JSResolver( const QString& scriptPath, const QStringList& additional
 
 JSResolver::~JSResolver()
 {
-    if ( !m_stopped )
+    Q_D( JSResolver );
+    if ( !d->stopped )
         stop();
 
-    delete m_engine;
+    delete d->engine;
+    delete d_ptr;
 }
 
 
@@ -121,53 +120,67 @@ Tomahawk::ExternalResolver* JSResolver::factory( const QString& scriptPath, cons
 Tomahawk::ExternalResolver::Capabilities
 JSResolver::capabilities() const
 {
-    return m_capabilities;
+    Q_D( const JSResolver );
+
+    return d->capabilities;
 }
 
 
 QString
 JSResolver::name() const
 {
-    return m_name;
+    Q_D( const JSResolver );
+
+    return d->name;
 }
 
 
 QPixmap
 JSResolver::icon() const
 {
-    return m_icon;
+    Q_D( const JSResolver );
+
+    return d->icon;
 }
 
 unsigned int
 JSResolver::weight() const
 {
-    return m_weight;
+    Q_D( const JSResolver );
+
+    return d->weight;
 }
 
 unsigned int
 JSResolver::timeout() const
 {
-    return m_timeout;
+    Q_D( const JSResolver );
+
+    return d->timeout;
 }
 
 
 bool
 JSResolver::running() const
 {
-    return m_ready && !m_stopped;
+    Q_D( const JSResolver );
+
+    return d->ready && !d->stopped;
 }
 
 
 void
 JSResolver::reload()
 {
+    Q_D( JSResolver );
+
     if ( QFile::exists( filePath() ) )
     {
         init();
-        m_error = Tomahawk::ExternalResolver::NoError;
+        d->error = Tomahawk::ExternalResolver::NoError;
     } else
     {
-        m_error = Tomahawk::ExternalResolver::FileNotFound;
+        d->error = Tomahawk::ExternalResolver::FileNotFound;
     }
 }
 
@@ -175,13 +188,17 @@ JSResolver::reload()
 void
 JSResolver::setIcon( const QPixmap &icon )
 {
-    m_icon = icon;
+    Q_D( JSResolver );
+
+    d->icon = icon;
 }
 
 
 void
 JSResolver::init()
 {
+    Q_D( JSResolver );
+
     QFile scriptFile( filePath() );
     if( !scriptFile.open( QIODevice::ReadOnly ) )
     {
@@ -190,20 +207,20 @@ JSResolver::init()
     }
     const QByteArray scriptContents = scriptFile.readAll();
 
-    m_engine->mainFrame()->setHtml( "<html><body></body></html>", QUrl( "file:///invalid/file/for/security/policy" ) );
+    d->engine->mainFrame()->setHtml( "<html><body></body></html>", QUrl( "file:///invalid/file/for/security/policy" ) );
 
     // add c++ part of tomahawk javascript library
-    m_engine->mainFrame()->addToJavaScriptWindowObject( "Tomahawk", m_resolverHelper );
+    d->engine->mainFrame()->addToJavaScriptWindowObject( "Tomahawk", d->resolverHelper );
 
     // add rest of it
-    m_engine->setScriptPath( "tomahawk.js" );
+    d->engine->setScriptPath( "tomahawk.js" );
     QFile jslib( RESPATH "js/tomahawk.js" );
     jslib.open( QIODevice::ReadOnly );
-    m_engine->mainFrame()->evaluateJavaScript( jslib.readAll() );
+    d->engine->mainFrame()->evaluateJavaScript( jslib.readAll() );
     jslib.close();
 
     // add resolver dependencies, if any
-    foreach ( QString s, m_requiredScriptPaths )
+    foreach ( QString s, d->requiredScriptPaths )
     {
         QFile reqFile( s );
         if( !reqFile.open( QIODevice::ReadOnly ) )
@@ -213,21 +230,21 @@ JSResolver::init()
         }
         const QByteArray reqContents = reqFile.readAll();
 
-        m_engine->setScriptPath( s );
-        m_engine->mainFrame()->evaluateJavaScript( reqContents );
+        d->engine->setScriptPath( s );
+        d->engine->mainFrame()->evaluateJavaScript( reqContents );
     }
 
     // add resolver
-    m_engine->setScriptPath( filePath() );
-    m_engine->mainFrame()->evaluateJavaScript( scriptContents );
+    d->engine->setScriptPath( filePath() );
+    d->engine->mainFrame()->evaluateJavaScript( scriptContents );
 
     // init resolver
     resolverInit();
 
     QVariantMap m = resolverSettings();
-    m_name    = m.value( "name" ).toString();
-    m_weight  = m.value( "weight", 0 ).toUInt();
-    m_timeout = m.value( "timeout", 25 ).toUInt() * 1000;
+    d->name    = m.value( "name" ).toString();
+    d->weight  = m.value( "weight", 0 ).toUInt();
+    d->timeout = m.value( "timeout", 25 ).toUInt() * 1000;
     bool compressed = m.value( "compressed", "false" ).toString() == "true";
 
     QByteArray icoData = m.value( "icon" ).toByteArray();
@@ -241,7 +258,7 @@ JSResolver::init()
     bool success = false;
     if ( !ico.isNull() )
     {
-        m_icon = ico.scaled( m_icon.size(), Qt::IgnoreAspectRatio );
+        d->icon = ico.scaled( d->icon.size(), Qt::IgnoreAspectRatio );
         success = true;
     }
     // see if the resolver sent an icon path to not break the old (unofficial) api.
@@ -249,12 +266,12 @@ JSResolver::init()
     if ( !success )
     {
         QString iconPath = QFileInfo( filePath() ).path() + "/" + m.value( "icon" ).toString();
-        success = m_icon.load( iconPath );
+        success = d->icon.load( iconPath );
     }
     // if we still couldn't load the cover, set the default resolver icon
-    if ( m_icon.isNull() )
+    if ( d->icon.isNull() )
     {
-        m_icon = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultResolver, TomahawkUtils::Original, QSize( 128, 128 ) );
+        d->icon = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultResolver, TomahawkUtils::Original, QSize( 128, 128 ) );
     }
 
     // load config widget and apply settings
@@ -262,17 +279,19 @@ JSResolver::init()
     QVariantMap config = resolverUserConfig();
     fillDataInWidgets( config );
 
-    qDebug() << "JS" << filePath() << "READY," << "name" << m_name << "weight" << m_weight << "timeout" << m_timeout << "icon received" << success;
+    qDebug() << "JS" << filePath() << "READY," << "name" << d->name << "weight" << d->weight << "timeout" << d->timeout << "icon received" << success;
 
-    m_ready = true;
+    d->ready = true;
 }
 
 
 void
 JSResolver::start()
 {
-    m_stopped = false;
-    if ( m_ready )
+    Q_D( JSResolver );
+
+    d->stopped = false;
+    if ( d->ready )
         Tomahawk::Pipeline::instance()->addResolver( this );
     else
         init();
@@ -282,6 +301,8 @@ JSResolver::start()
 void
 JSResolver::artists( const Tomahawk::collection_ptr& collection )
 {
+    Q_D( JSResolver );
+
     if ( QThread::currentThread() != thread() )
     {
         QMetaObject::invokeMethod( this, "artists", Qt::QueuedConnection, Q_ARG( Tomahawk::collection_ptr, collection ) );
@@ -298,7 +319,7 @@ JSResolver::artists( const Tomahawk::collection_ptr& collection )
     QString eval = QString( "resolver.artists( '%1' );" )
                    .arg( collection->name().replace( "'", "\\'" ) );
 
-    QVariantMap m = m_engine->mainFrame()->evaluateJavaScript( eval ).toMap();
+    QVariantMap m = d->engine->mainFrame()->evaluateJavaScript( eval ).toMap();
     if ( m.isEmpty() )
     {
         // if the resolver doesn't return anything, async api is used
@@ -314,6 +335,8 @@ JSResolver::artists( const Tomahawk::collection_ptr& collection )
 void
 JSResolver::albums( const Tomahawk::collection_ptr& collection, const Tomahawk::artist_ptr& artist )
 {
+    Q_D( JSResolver );
+
     if ( QThread::currentThread() != thread() )
     {
         QMetaObject::invokeMethod( this, "albums", Qt::QueuedConnection,
@@ -333,7 +356,7 @@ JSResolver::albums( const Tomahawk::collection_ptr& collection, const Tomahawk::
                    .arg( collection->name().replace( "'", "\\'" ) )
                    .arg( artist->name().replace( "'", "\\'" ) );
 
-    QVariantMap m = m_engine->mainFrame()->evaluateJavaScript( eval ).toMap();
+    QVariantMap m = d->engine->mainFrame()->evaluateJavaScript( eval ).toMap();
     if ( m.isEmpty() )
     {
         // if the resolver doesn't return anything, async api is used
@@ -349,6 +372,8 @@ JSResolver::albums( const Tomahawk::collection_ptr& collection, const Tomahawk::
 void
 JSResolver::tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::album_ptr& album )
 {
+    Q_D( JSResolver );
+
     if ( QThread::currentThread() != thread() )
     {
         QMetaObject::invokeMethod( this, "tracks", Qt::QueuedConnection,
@@ -369,7 +394,7 @@ JSResolver::tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::
                    .arg( album->artist()->name().replace( "'", "\\'" ) )
                    .arg( album->name().replace( "'", "\\'" ) );
 
-    QVariantMap m = m_engine->mainFrame()->evaluateJavaScript( eval ).toMap();
+    QVariantMap m = d->engine->mainFrame()->evaluateJavaScript( eval ).toMap();
     if ( m.isEmpty() )
     {
         // if the resolver doesn't return anything, async api is used
@@ -385,13 +410,17 @@ JSResolver::tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::
 Tomahawk::ExternalResolver::ErrorState
 JSResolver::error() const
 {
-    return m_error;
+    Q_D( const JSResolver );
+
+    return d->error;
 }
 
 
 void
 JSResolver::resolve( const Tomahawk::query_ptr& query )
 {
+    Q_D( JSResolver );
+
     if ( QThread::currentThread() != thread() )
     {
         QMetaObject::invokeMethod( this, "resolve", Qt::QueuedConnection, Q_ARG(Tomahawk::query_ptr, query) );
@@ -419,7 +448,7 @@ JSResolver::resolve( const Tomahawk::query_ptr& query )
                   .arg( query->fullTextQuery().replace( "'", "\\'" ) );
     }
 
-    QVariantMap m = m_engine->mainFrame()->evaluateJavaScript( eval ).toMap();
+    QVariantMap m = d->engine->mainFrame()->evaluateJavaScript( eval ).toMap();
     if ( m.isEmpty() )
     {
         // if the resolver doesn't return anything, async api is used
@@ -545,7 +574,9 @@ JSResolver::parseAlbumVariantList( const Tomahawk::artist_ptr& artist, const QVa
 void
 JSResolver::stop()
 {
-    m_stopped = true;
+    Q_D( JSResolver );
+
+    d->stopped = true;
 
     foreach ( const Tomahawk::collection_ptr& collection, m_collections )
     {
@@ -560,8 +591,10 @@ JSResolver::stop()
 void
 JSResolver::loadUi()
 {
-    QVariantMap m = m_engine->mainFrame()->evaluateJavaScript( RESOLVER_LEGACY_CODE  "resolver.getConfigUi();" ).toMap();
-    m_dataWidgets = m["fields"].toList();
+    Q_D( JSResolver );
+
+    QVariantMap m = d->engine->mainFrame()->evaluateJavaScript( RESOLVER_LEGACY_CODE  "resolver.getConfigUi();" ).toMap();
+    d->dataWidgets = m["fields"].toList();
 
     bool compressed = m.value( "compressed", "false" ).toBool();
     qDebug() << "Resolver has a preferences widget! compressed?" << compressed;
@@ -584,7 +617,7 @@ JSResolver::loadUi()
     if( m.contains( "images" ) )
         uiData = fixDataImagePaths( uiData, compressed, images );
 
-    m_configWidget = QPointer< AccountConfigWidget >( widgetFromData( uiData, 0 ) );
+    d->configWidget = QPointer< AccountConfigWidget >( widgetFromData( uiData, 0 ) );
 
     emit changed();
 }
@@ -593,21 +626,25 @@ JSResolver::loadUi()
 AccountConfigWidget*
 JSResolver::configUI() const
 {
-    if( m_configWidget.isNull() )
+    Q_D( const JSResolver );
+
+    if( d->configWidget.isNull() )
         return 0;
     else
-        return m_configWidget.data();
+        return d->configWidget.data();
 }
 
 
 void
 JSResolver::saveConfig()
 {
+    Q_D( JSResolver );
+
     QVariant saveData = loadDataFromWidgets();
 //    qDebug() << Q_FUNC_INFO << saveData;
 
-    m_resolverHelper->setResolverConfig( saveData.toMap() );
-    m_engine->mainFrame()->evaluateJavaScript( RESOLVER_LEGACY_CODE "resolver.saveUserConfig();" );
+    d->resolverHelper->setResolverConfig( saveData.toMap() );
+    d->engine->mainFrame()->evaluateJavaScript( RESOLVER_LEGACY_CODE "resolver.saveUserConfig();" );
 }
 
 
@@ -643,13 +680,15 @@ JSResolver::setWidgetData(const QVariant& value, QWidget* widget, const QString&
 QVariantMap
 JSResolver::loadDataFromWidgets()
 {
+    Q_D( JSResolver );
+
     QVariantMap saveData;
-    foreach( const QVariant& dataWidget, m_dataWidgets )
+    foreach( const QVariant& dataWidget, d->dataWidgets )
     {
         QVariantMap data = dataWidget.toMap();
 
         QString widgetName = data["widget"].toString();
-        QWidget* widget= m_configWidget.data()->findChild<QWidget*>( widgetName );
+        QWidget* widget= d->configWidget.data()->findChild<QWidget*>( widgetName );
 
         QVariant value = widgetData( widget, data["property"].toString() );
 
@@ -663,10 +702,12 @@ JSResolver::loadDataFromWidgets()
 void
 JSResolver::fillDataInWidgets( const QVariantMap& data )
 {
-    foreach(const QVariant& dataWidget, m_dataWidgets)
+    Q_D( JSResolver );
+
+    foreach(const QVariant& dataWidget, d->dataWidgets)
     {
         QString widgetName = dataWidget.toMap()["widget"].toString();
-        QWidget* widget= m_configWidget.data()->findChild<QWidget*>( widgetName );
+        QWidget* widget= d->configWidget.data()->findChild<QWidget*>( widgetName );
         if( !widget )
         {
             tLog() << Q_FUNC_INFO << "Widget specified in resolver was not found:" << widgetName;
@@ -685,7 +726,9 @@ JSResolver::fillDataInWidgets( const QVariantMap& data )
 void
 JSResolver::onCapabilitiesChanged( Tomahawk::ExternalResolver::Capabilities capabilities )
 {
-    m_capabilities = capabilities;
+    Q_D( JSResolver );
+
+    d->capabilities = capabilities;
     loadCollections();
 }
 
@@ -693,9 +736,11 @@ JSResolver::onCapabilitiesChanged( Tomahawk::ExternalResolver::Capabilities capa
 void
 JSResolver::loadCollections()
 {
-    if ( m_capabilities.testFlag( Browsable ) )
+    Q_D( JSResolver );
+
+    if ( d->capabilities.testFlag( Browsable ) )
     {
-        QVariantMap collectionInfo = m_engine->mainFrame()->evaluateJavaScript( "resolver.collection();" ).toMap();
+        QVariantMap collectionInfo = d->engine->mainFrame()->evaluateJavaScript( "resolver.collection();" ).toMap();
         if ( collectionInfo.isEmpty() ||
              !collectionInfo.contains( "prettyname" ) ||
              !collectionInfo.contains( "description" ) )
@@ -791,21 +836,27 @@ JSResolver::onCollectionIconFetched()
 QVariantMap
 JSResolver::resolverSettings()
 {
-    return m_engine->mainFrame()->evaluateJavaScript( RESOLVER_LEGACY_CODE "if(resolver.settings) resolver.settings; else getSettings(); " ).toMap();
+    Q_D( JSResolver );
+
+    return d->engine->mainFrame()->evaluateJavaScript( RESOLVER_LEGACY_CODE "if(resolver.settings) resolver.settings; else getSettings(); " ).toMap();
 }
 
 
 QVariantMap
 JSResolver::resolverUserConfig()
 {
-    return m_engine->mainFrame()->evaluateJavaScript( RESOLVER_LEGACY_CODE "resolver.getUserConfig();" ).toMap();
+    Q_D( JSResolver );
+
+    return d->engine->mainFrame()->evaluateJavaScript( RESOLVER_LEGACY_CODE "resolver.getUserConfig();" ).toMap();
 }
 
 
 QVariantMap
 JSResolver::resolverInit()
 {
-    return m_engine->mainFrame()->evaluateJavaScript( RESOLVER_LEGACY_CODE "resolver.init();" ).toMap();
+    Q_D( JSResolver );
+
+    return d->engine->mainFrame()->evaluateJavaScript( RESOLVER_LEGACY_CODE "resolver.init();" ).toMap();
 }
 
 
