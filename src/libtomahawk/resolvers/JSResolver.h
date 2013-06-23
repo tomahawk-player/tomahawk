@@ -36,57 +36,8 @@
 
 #include "DllMacro.h"
 
-class JSResolver;
+class JSResolverHelper;
 class ScriptEngine;
-
-class DLLEXPORT JSResolverHelper : public QObject
-{
-Q_OBJECT
-
-public:
-    JSResolverHelper( const QString& scriptPath, JSResolver* parent );
-    void setResolverConfig( const QVariantMap& config );
-
-    // Return a HMAC (md5) signature of the input text with the desired key
-    Q_INVOKABLE QString hmac( const QByteArray& key, const QByteArray& input );
-    Q_INVOKABLE QString md5( const QByteArray& input );
-
-    Q_INVOKABLE void addCustomUrlHandler( const QString& protocol, const QString& callbackFuncName, const QString& isAsynchronous = "false" );
-    Q_INVOKABLE void reportStreamUrl( const QString& qid, const QString& streamUrl );
-
-    Q_INVOKABLE QByteArray base64Encode( const QByteArray& input );
-    Q_INVOKABLE QByteArray base64Decode( const QByteArray& input );
-
-    void customIODeviceFactory( const Tomahawk::result_ptr& result,
-                                boost::function< void( QSharedPointer< QIODevice >& ) > callback ); // async
-
-public slots:
-    QByteArray readRaw( const QString& fileName );
-    QString readBase64( const QString& fileName );
-    QString readCompressed( const QString& fileName );
-
-    QString compress( const QString& data );
-    QVariantMap resolverData();
-
-    void log( const QString& message );
-    bool fakeEnv() { return false; }
-
-    void addTrackResults( const QVariantMap& results );
-
-    void addArtistResults( const QVariantMap& results );
-    void addAlbumResults( const QVariantMap& results );
-    void addAlbumTrackResults( const QVariantMap& results );
-
-    void reportCapabilities( const QVariant& capabilities );
-
-private:
-    void returnStreamUrl( const QString& streamUrl, boost::function< void( QSharedPointer< QIODevice >& ) > callback );
-    QString m_scriptPath, m_urlCallback;
-    QHash< QString, boost::function< void( QSharedPointer< QIODevice >& ) > > m_streamCallbacks;
-    bool m_urlCallbackIsAsync;
-    QVariantMap m_resolverConfig;
-    JSResolver* m_resolver;
-};
 
 class DLLEXPORT JSResolver : public Tomahawk::ExternalResolverGui
 {
