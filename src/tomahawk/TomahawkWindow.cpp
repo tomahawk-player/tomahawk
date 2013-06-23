@@ -1207,7 +1207,7 @@ TomahawkWindow::showAboutTomahawk()
     const QString thanksto( tr( "Thanks to:" ) );
 
     desc = QString( "%1<br/>Christian Muehlhaeuser &lt;muesli@tomahawk-player.org&gt;<br/><br/>"
-    "%2 Leo Franchi, Jeff Mitchell, Dominik Schmidt, Jason Herskowitz, Alejandro Wainzinger, Hugo Lindstr&ouml;m, Syd Lawrence, Michael Zanetti, Teo Mrnjavac, Christopher Reichert, Harald Sitter" )
+    "%2 Leo Franchi, Jeff Mitchell, Dominik Schmidt, Jason Herskowitz, Alejandro Wainzinger, Hugo Lindstr&ouml;m, Michael Zanetti, Teo Mrnjavac, Christopher Reichert, Uwe L. Korn, Harald Sitter, Syd Lawrence" )
               .arg( copyright )
               .arg( thanksto );
 
