@@ -23,13 +23,17 @@
 
 #include "resolvers/ScriptEngine.h"
 #include "network/Servent.h"
+#include "utils/Logger.h"
 #include "config.h"
 #include "JSResolver.h"
 #include "Pipeline.h"
 #include "Result.h"
 
 #include <boost/bind.hpp>
+#include <QFile>
+#include <QFileInfo>
 #include <QtCrypto>
+#include <QWebFrame>
 
 JSResolverHelper::JSResolverHelper( const QString& scriptPath, JSResolver* parent )
     : QObject( parent )

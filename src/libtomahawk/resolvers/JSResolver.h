@@ -22,19 +22,10 @@
 #ifndef JSRESOLVER_H
 #define JSRESOLVER_H
 
-#include "ExternalResolverGui.h"
-#include "Query.h"
-#include "utils/TomahawkUtils.h"
 #include "config.h"
-#include "utils/Logger.h"
-
-#include <QDir>
-#include <QFile>
-#include <QThread>
-#include <QWebPage>
-#include <QWebFrame>
-
 #include "DllMacro.h"
+#include "ExternalResolverGui.h"
+#include "Typedefs.h"
 
 class JSResolverHelper;
 class ScriptEngine;
