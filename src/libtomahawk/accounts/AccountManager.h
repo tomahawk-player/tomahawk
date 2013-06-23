@@ -125,14 +125,10 @@ private slots:
     void onSettingsChanged();
 
 private:
-    QList< QDir > findPluginDirs() const;
-
-    QStringList findPluginFactories();
     void loadPluginFactories( const QStringList &paths );
     void loadPluginFactory( const QString &path );
     QString factoryFromId( const QString& accountId ) const;
 
-    QStringList findConfigStoragePlugins();
 
     Account* loadPlugin( const QString& accountId );
     void hookupAccount( Account* ) const;

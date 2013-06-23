@@ -26,6 +26,7 @@
 #include "jobview/JobStatusModel.h"
 #include "utils/Closure.h"
 #include "utils/Logger.h"
+#include "utils/PluginLoader.h"
 
 #include "CredentialsManager.h"
 #include "config.h"
@@ -90,7 +91,7 @@ AccountManager::init()
 
     connect( TomahawkSettings::instance(), SIGNAL( changed() ), SLOT( onSettingsChanged() ) );
 
-    loadPluginFactories( findPluginFactories() );
+    loadPluginFactories( Tomahawk::Utils::PluginLoader( "account" ).pluginPaths() );
 
     // We include the resolver factory manually, not in a plugin
     ResolverAccountFactory* f = new ResolverAccountFactory();
@@ -98,85 +99,6 @@ AccountManager::init()
     registerAccountFactoryForFilesystem( f );
 
     emit readyForFactories(); //Notifies TomahawkApp to load the remaining AccountFactories, then Accounts from config
-}
-
-
-QList< QDir >
-AccountManager::findPluginDirs() const
-{
-    QList< QDir > pluginDirs;
-
-    QDir appDir( qApp->applicationDirPath() );
-#ifdef Q_WS_MAC
-    if ( appDir.dirName() == "MacOS" )
-    {
-        // Development convenience-hack
-        appDir.cdUp();
-        appDir.cdUp();
-        appDir.cdUp();
-    }
-#endif
-
-    QDir libDir( CMAKE_INSTALL_PREFIX "/lib" );
-
-    QDir lib64Dir( appDir );
-    lib64Dir.cdUp();
-    lib64Dir.cd( "lib64" );
-
-    pluginDirs << appDir << libDir << lib64Dir << QDir( qApp->applicationDirPath() );
-    return pluginDirs;
-}
-
-
-QStringList
-AccountManager::findPluginFactories()
-{
-    QStringList paths;
-
-    foreach ( const QDir& pluginDir, findPluginDirs() )
-    {
-        tDebug() << Q_FUNC_INFO << "Checking directory for account plugins:" << pluginDir;
-        foreach ( QString fileName, pluginDir.entryList( QStringList() << "*tomahawk_account_*.so"
-                                                                       << "*tomahawk_account_*.dylib"
-                                                                       << "*tomahawk_account_*.dll", QDir::Files ) )
-        {
-            if ( fileName.startsWith( "libtomahawk_account" ) )
-            {
-                const QString path = pluginDir.absoluteFilePath( fileName );
-                if ( !paths.contains( path ) )
-                    paths << path;
-            }
-        }
-    }
-
-    return paths;
-}
-
-
-QStringList
-AccountManager::findConfigStoragePlugins()
-{
-    QStringList paths;
-
-    foreach( const QDir& pluginDir, findPluginDirs() )
-    {
-        tDebug() << Q_FUNC_INFO << "Checking directory for ConfigStorage plugins:" << pluginDir;
-        foreach ( QString fileName, pluginDir.entryList( QStringList() << "*tomahawk_configstorage_*.so"
-                                                                       << "*tomahawk_configstorage_*.dylib"
-                                                                       << "*tomahawk_configstorage_*.dll", QDir::Files ) )
-        {
-            if ( fileName.startsWith( "libtomahawk_configstorage" ) )
-            {
-                const QString path = pluginDir.absoluteFilePath( fileName );
-                if ( !paths.contains( path ) )
-                    paths << path;
-            }
-        }
-    }
-
-    tDebug() << Q_FUNC_INFO << "ConfigStorage plugin file paths:" << paths;
-
-    return paths;
 }
 
 
@@ -328,7 +250,7 @@ AccountManager::loadFromConfig()
     ConfigStorage* localCS = new LocalConfigStorage( this );
     m_configStorageById.insert( localCS->id(), localCS );
 
-    QStringList configStoragePlugins = findConfigStoragePlugins();
+    QStringList configStoragePlugins = Tomahawk::Utils::PluginLoader( "configstorage" ).pluginPaths();
     foreach( const QString& pluginPath, configStoragePlugins )
     {
         QPluginLoader loader;

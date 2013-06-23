@@ -27,6 +27,9 @@
 #include "GlobalActionManager.h"
 #include "InfoSystemCache.h"
 #include "PlaylistEntry.h"
+#include "utils/TomahawkUtils.h"
+#include "utils/Logger.h"
+#include "utils/PluginLoader.h"
 #include "Source.h"
 
 
@@ -82,7 +85,7 @@ InfoSystemWorker::init( Tomahawk::InfoSystem::InfoSystemCache* cache )
     m_shortLinksWaiting = 0;
     m_cache = cache;
 
-    loadInfoPlugins( findInfoPlugins() );
+    loadInfoPlugins( Tomahawk::Utils::PluginLoader( "infoplugin" ).pluginPaths() );
 }
 
 
@@ -162,48 +165,6 @@ InfoSystemWorker::removeInfoPlugin( Tomahawk::InfoSystem::InfoPluginPtr plugin )
     m_plugins.removeOne( plugin );
     deregisterInfoTypes( plugin, plugin.data()->supportedGetTypes(), plugin.data()->supportedPushTypes() );
     delete plugin.data();
-}
-
-
-QStringList
-InfoSystemWorker::findInfoPlugins()
-{
-    QStringList paths;
-    QList< QDir > pluginDirs;
-
-    QDir appDir( qApp->applicationDirPath() );
-#ifdef Q_WS_MAC
-    if ( appDir.dirName() == "MacOS" )
-    {
-        // Development convenience-hack
-        appDir.cdUp();
-        appDir.cdUp();
-        appDir.cdUp();
-    }
-#endif
-
-    QDir libDir( CMAKE_INSTALL_PREFIX "/lib" );
-
-    QDir lib64Dir( appDir );
-    lib64Dir.cdUp();
-    lib64Dir.cd( "lib64" );
-
-    pluginDirs << appDir << libDir << lib64Dir << QDir( qApp->applicationDirPath() );
-    foreach ( const QDir& pluginDir, pluginDirs )
-    {
-        tDebug() << Q_FUNC_INFO << "Checking directory for plugins:" << pluginDir;
-        foreach ( QString fileName, pluginDir.entryList( QStringList() << "*tomahawk_infoplugin_*.so" << "*tomahawk_infoplugin_*.dylib" << "*tomahawk_infoplugin_*.dll", QDir::Files ) )
-        {
-            if ( fileName.startsWith( "libtomahawk_infoplugin" ) )
-            {
-                const QString path = pluginDir.absoluteFilePath( fileName );
-                if ( !paths.contains( path ) )
-                    paths << path;
-            }
-        }
-    }
-
-    return paths;
 }
 
 
