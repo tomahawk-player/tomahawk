@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2013, Teo Mrnjavac <teo@kde.org>
+ *   Copyright 2013, Dominik Schmidt <domme@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -18,10 +19,14 @@
 
 #include "TelepathyConfigStorage.h"
 
+#include "TelepathyConfigStorageConfigWidgetPlugin.h"
+
+
 #include "accounts/Account.h"
 #include "accounts/AccountManager.h"
 #include "accounts/CredentialsManager.h"
 #include "utils/Logger.h"
+#include "utils/PluginLoader.h"
 
 #include <TelepathyQt/Account>
 #include <TelepathyQt/PendingReady>
@@ -41,6 +46,7 @@ Tomahawk::Accounts::TelepathyConfigStorage::TelepathyConfigStorage( QObject* par
     , m_credentialsServiceName( "telepathy-kde" )
 {
     tDebug() << Q_FUNC_INFO;
+    loadConfigWidgetPlugins();
 }
 
 
@@ -134,6 +140,24 @@ Tomahawk::Accounts::TelepathyConfigStorage::onCredentialsManagerReady( const QSt
     disconnect( this, SLOT( onCredentialsManagerReady( QString ) ) );
 
     emit ready();
+}
+
+
+void
+Tomahawk::Accounts::TelepathyConfigStorage::loadConfigWidgetPlugins()
+{
+    tDebug() << Q_FUNC_INFO;
+    foreach( QObject* plugin, Tomahawk::Utils::PluginLoader( "configstorage_telepathy" ).loadPlugins().values() )
+    {
+        TelepathyConfigStorageConfigWidgetPlugin* configWidgetPlugin = qobject_cast< TelepathyConfigStorageConfigWidgetPlugin* >( plugin );
+        if( !configWidgetPlugin )
+        {
+            tLog() << "Tried to load invalid TelepathyConfigStorageConfigWidgetPlugin";
+            continue;
+        }
+
+        m_configWidgetPlugins << configWidgetPlugin;
+    }
 }
 
 

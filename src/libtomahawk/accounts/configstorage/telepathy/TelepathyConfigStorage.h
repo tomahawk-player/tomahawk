@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2013, Teo Mrnjavac <teo@kde.org>
+ *   Copyright 2013, Dominik Schmidt <domme@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -28,6 +29,8 @@ namespace Tp
 {
 class PendingOperation;
 }
+
+class TelepathyConfigStorageConfigWidgetPlugin;
 
 namespace Tomahawk
 {
@@ -61,12 +64,15 @@ private slots:
     void onCredentialsManagerReady( const QString& service );
 
 private:
+    void loadConfigWidgetPlugins();
+
     QString telepathyPathToAccountId( const QString& objectPath, const QString& telepathyServiceName );
     QString accountIdToTelepathyPath( const QString& accountId );
 
     const QString m_credentialsServiceName;
     QStringList m_accountIds;
     Tp::AccountManagerPtr m_tpam;
+    QList< TelepathyConfigStorageConfigWidgetPlugin* > m_configWidgetPlugins;
 
     static TelepathyConfigStorage* s_instance;
 };
