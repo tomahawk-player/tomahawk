@@ -21,9 +21,9 @@
 
 #include <QObject>
 
-#include "Query.h"
-
 #include "DllMacro.h"
+#include "Typedefs.h"
+
 
 // implement this if you can resolve queries to content
 
@@ -52,6 +52,6 @@ public slots:
     virtual void resolve( const Tomahawk::query_ptr& query ) = 0;
 };
 
-}; //ns
+} //ns
 
 #endif // RESOLVER_H
