@@ -41,12 +41,12 @@ public:
     virtual ~JSResolver();
     static ExternalResolver* factory( const QString& scriptPath, const QStringList& additionalScriptPaths = QStringList() );
 
-    virtual Capabilities capabilities() const { return m_capabilities; }
+    virtual Capabilities capabilities() const;
 
-    virtual QString name() const         { return m_name; }
-    virtual QPixmap icon() const         { return m_icon; }
-    virtual unsigned int weight() const  { return m_weight; }
-    virtual unsigned int timeout() const { return m_timeout; }
+    virtual QString name() const;
+    virtual QPixmap icon() const;
+    virtual unsigned int weight() const;
+    virtual unsigned int timeout() const;
 
     virtual AccountConfigWidget* configUI() const;
     virtual void saveConfig();
@@ -55,7 +55,7 @@ public:
     virtual bool running() const;
     virtual void reload();
 
-    virtual void setIcon( const QPixmap& icon ) { m_icon = icon; }
+    virtual void setIcon( const QPixmap& icon );
 
 public slots:
     virtual void resolve( const Tomahawk::query_ptr& query );
