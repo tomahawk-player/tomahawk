@@ -3,6 +3,7 @@
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
+ *   Copyright 2013,      Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -117,6 +118,39 @@ Tomahawk::ExternalResolver* JSResolver::factory( const QString& scriptPath, cons
 }
 
 
+Tomahawk::ExternalResolver::Capabilities
+JSResolver::capabilities() const
+{
+    return m_capabilities;
+}
+
+
+QString
+JSResolver::name() const
+{
+    return m_name;
+}
+
+
+QPixmap
+JSResolver::icon() const
+{
+    return m_icon;
+}
+
+unsigned int
+JSResolver::weight() const
+{
+    return m_weight;
+}
+
+unsigned int
+JSResolver::timeout() const
+{
+    return m_timeout;
+}
+
+
 bool
 JSResolver::running() const
 {
@@ -135,6 +169,13 @@ JSResolver::reload()
     {
         m_error = Tomahawk::ExternalResolver::FileNotFound;
     }
+}
+
+
+void
+JSResolver::setIcon( const QPixmap &icon )
+{
+    m_icon = icon;
 }
 
 
