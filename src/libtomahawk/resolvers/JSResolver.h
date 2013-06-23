@@ -3,6 +3,7 @@
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
+ *   Copyright 2013,      Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -36,6 +37,7 @@
 #include "DllMacro.h"
 
 class JSResolver;
+class ScriptEngine;
 
 class DLLEXPORT JSResolverHelper : public QObject
 {
@@ -85,32 +87,6 @@ private:
     QVariantMap m_resolverConfig;
     JSResolver* m_resolver;
 };
-
-class DLLEXPORT ScriptEngine : public QWebPage
-{
-Q_OBJECT
-
-public:
-    explicit ScriptEngine( JSResolver* parent );
-
-    QString userAgentForUrl( const QUrl& url ) const;
-    void setScriptPath( const QString& scriptPath );
-
-public slots:
-    bool shouldInterruptJavaScript();
-
-protected:
-    virtual void javaScriptConsoleMessage( const QString& message, int lineNumber, const QString& sourceID );
-
-private slots:
-    void sslErrorHandler( QNetworkReply* qnr, const QList<QSslError>& errlist );
-
-private:
-    JSResolver* m_parent;
-    QString m_scriptPath;
-    QString m_header;
-};
-
 
 class DLLEXPORT JSResolver : public Tomahawk::ExternalResolverGui
 {
