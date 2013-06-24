@@ -60,13 +60,8 @@ log( const char *msg, unsigned int debugLevel, bool toDisk = true )
             #endif
     }
 
-    #ifdef QT_NO_DEBUG
-    if ( debugLevel > RELEASE_LEVEL_THRESHOLD )
+    if ( debugLevel > LOGTHIRDPARTY )
         toDisk = false;
-    #else
-    if ( debugLevel > DEBUG_LEVEL_THRESHOLD )
-        toDisk = false;
-    #endif
 
     #ifdef LOG_SQL_QUERIES
     if ( debugLevel == LOGSQL )
