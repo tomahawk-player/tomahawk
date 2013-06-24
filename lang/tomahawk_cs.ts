@@ -924,9 +924,9 @@ heslo</translation>
 <context>
     <name>JSResolver</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="590"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="625"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="661"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="329"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="366"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="404"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
         <translation>Varování řešitele skriptu: Volání API %1 vrátilo data synchronně.</translation>
     </message>
@@ -1711,22 +1711,22 @@ heslo</translation>
 <context>
     <name>ScriptEngine</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="1134"/>
+        <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="65"/>
         <source>Script Resolver Error: %1 %2 %3 %4</source>
         <translation>Chyba řešitele skriptu: %1 %2 %3 %4</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="1153"/>
+        <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="84"/>
         <source>SSL Error</source>
         <translation>Chyba SSL</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="1154"/>
+        <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="85"/>
         <source>You have asked Tomahawk to connect securely to &lt;b&gt;%1&lt;/b&gt;, but we can&apos;t confirm that your connection is secure:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Do you want to trust this connection?</source>
         <translation>Požádal jste Tomahawk o to, aby se bezpečně připojil k &lt;b&gt;%1&lt;/b&gt;, ale nelze potvrdit, že je vaše připojení bezpečné:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Chcete tomuto připojení důvěřovat?</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="1161"/>
+        <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="92"/>
         <source>Trust certificate</source>
         <translation>Důvěřovat certifikátu</translation>
     </message>
