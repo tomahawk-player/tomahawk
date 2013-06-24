@@ -1031,6 +1031,7 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
         if ( !d_func()->noAuth && peer != QHostAddress::Any && !isIPWhitelisted( peer ) )
         {
             bool authed = false;
+            tDebug() << Q_FUNC_INFO << "Checking for ControlConnection with IP" << peer;
             foreach ( ControlConnection* cc, d_func()->controlconnections )
             {
                 tDebug() << Q_FUNC_INFO << "Probing:" << cc->name();
