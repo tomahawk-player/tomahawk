@@ -27,7 +27,18 @@
 QWidget*
 KdeTelepathyConfigWidget::configWidget()
 {
-    return new KCModuleProxy( "kcm_ktp_accounts" );
+    KCModuleProxy* proxy = new KCModuleProxy( "kcm_ktp_accounts" );
+
+    if ( !proxy->aboutData() )
+    {
+        qWarning() << "Could not load kcm_ktp_accounts... ";
+
+        delete proxy;
+
+        return 0;
+    }
+
+   return proxy;
 }
 
 Q_EXPORT_PLUGIN2( TelepathyConfigStorageConfigWidgetPlugin, KdeTelepathyConfigWidget )
