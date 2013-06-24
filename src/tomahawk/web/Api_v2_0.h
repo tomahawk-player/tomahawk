@@ -19,7 +19,11 @@
 #ifndef API_V2_0_H
 #define API_V2_0_H
 
+#include <QMap>
 #include <QObject>
+#include <QSharedPointer>
+
+#include "Api2User.h"
 
 class Api_v2;
 class QxtWebRequestEvent;
@@ -47,6 +51,16 @@ public slots:
      * This call needs to be authenticated.
      */
     void playback( QxtWebRequestEvent* event, const QString& command );
+
+    /**
+     * Request that the client should be authorized.
+     *
+     * The request can be made via 2 methods:
+     *   - If using SSL, the client sends his certificate as a standard peercerificate and supplies a shared secret.
+     *   - Without SSL, the client encrypts a shared secret with the certificate from the server and signs it with its secret.
+     *     The client certificate is supplied as another parameter
+     */
+    void requestauth( QxtWebRequestEvent* event );
 private:
     /**
      * Check the current HTTP request is correctly authenticated via any of the possible authentication schemes.
@@ -66,6 +80,7 @@ private:
     void jsonUnauthenticated( QxtWebRequestEvent* event );
 
     Api_v2* m_service;
+    QMap< QString, QSharedPointer< Api2User > > m_users;
 };
 
 #endif // API_V2_0_H

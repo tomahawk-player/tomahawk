@@ -19,11 +19,15 @@
 #include "Api_v2_0.h"
 
 #include "audio/AudioEngine.h"
+#include "jobview/JobStatusModel.h"
+#include "jobview/JobStatusView.h"
 #include "utils/Logger.h"
+#include "web/apiv2/ACLJobStatusItem.h"
 
 #include "Api_v2.h"
 #include "Query.h"
 
+#include <QSslKey>
 #include <QxtWeb/QxtWebPageEvent>
 #include <QxtWeb/QxtWebSlotService>
 
@@ -91,6 +95,47 @@ Api_v2_0::playback( QxtWebRequestEvent* event, const QString& command )
 
 
 void
+Api_v2_0::requestauth( QxtWebRequestEvent *event )
+{
+    tLog() << Q_FUNC_INFO;
+    if ( checkAuthentication( event ) )
+    {
+        // A decision was already made.
+        m_service->sendJsonOk( event );
+        return;
+    }
+
+    if ( event->isSecure && !event->clientCertificate.isNull() )
+    {
+        tLog() << Q_FUNC_INFO;
+        QSslCertificate certificate = event->clientCertificate;
+        QString clientName = certificate.subjectInfo( QSslCertificate::CommonName );
+
+        if ( m_users.contains( clientName ) && m_users.value( clientName )->aclDecision() == Api2User::Deny )
+        {
+            // Access was already denied
+            jsonUnauthenticated( event );
+            return;
+        }
+
+        QSharedPointer<Api2User> user( new Api2User( clientName ) );
+        user->setClientDescription( certificate.subjectInfo( QSslCertificate::OrganizationalUnitName ) );
+        user->setClientName( certificate.subjectInfo( QSslCertificate::Organization ) );
+        user->setPubkey( certificate.publicKey() );
+        // TODO: Do not readd users
+        m_users[ clientName ] = user;
+        // TODO: ACL decision
+        Tomahawk::APIv2::ACLJobStatusItem* job = new Tomahawk::APIv2::ACLJobStatusItem( user );
+        JobStatusView::instance()->model()->addJob( job );
+    }
+    else
+    {
+        // TODO
+    }
+}
+
+
+void
 Api_v2_0::jsonReply( QxtWebRequestEvent* event, const char* funcInfo, const QString& errorMessage, bool isError )
 {
     if ( isError )
@@ -120,10 +165,23 @@ Api_v2_0::jsonUnauthenticated( QxtWebRequestEvent *event )
 bool
 Api_v2_0::checkAuthentication( QxtWebRequestEvent* event )
 {
+    if ( event->isSecure && !event->clientCertificate.isNull() )
+    {
+        // Using SSL Certificate authentication
+        QString clientName = event->clientCertificate.subjectInfo( QSslCertificate::CommonName );
+        QSslKey pubkey = event->clientCertificate.publicKey();
+        if ( m_users.contains( clientName ) )
+        {
+            const QSharedPointer<Api2User> user = m_users.value( clientName );
+            if ( user->aclDecision() == Api2User::FullAccess && user->pubkey() == pubkey )
+            {
+                return true;
+            }
+        }
+    }
     // TODO: Auth!
-    // * SSL client certificate
     // * Shared secret between two clients when talking via SSL
     // * sth else when connecting without httpS
     // * a more secure version of digest auth
-    return true;
+    return false;
 }
