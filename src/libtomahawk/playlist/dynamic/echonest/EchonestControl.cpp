@@ -496,6 +496,8 @@ Tomahawk::EchonestControl::updateWidgets()
         QComboBox* combo = new QComboBox();
         combo->addItem( tr( "Studio" ), "studio" );
         combo->addItem( tr( "Live" ), "live" );
+        combo->addItem( tr( "Acoustic" ), "acoustic" );
+        combo->addItem( tr( "Electric" ), "electric" );
         combo->addItem( tr( "Christmas" ), "christmas" );
 
         connect( match, SIGNAL( activated( int ) ), this, SLOT( updateData() ) );
