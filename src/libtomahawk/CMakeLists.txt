@@ -345,7 +345,6 @@ list(APPEND libSources
     sip/SipInfo.cpp
     sip/PeerInfo.cpp
     sip/SipStatusMessage.cpp
-    sip/WeakPeerHash.cpp
 
     utils/TomahawkUtils.cpp
     utils/Logger.cpp
@@ -353,6 +352,8 @@ list(APPEND libSources
     utils/XspfLoader.cpp
     utils/TomahawkCache.cpp
     utils/GuiHelpers.cpp
+    utils/WeakObjectHash.cpp
+
 
     thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.cpp
     thirdparty/kdsingleapplicationguard/kdsharedmemorylocker.cpp

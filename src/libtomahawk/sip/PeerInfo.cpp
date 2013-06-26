@@ -28,7 +28,6 @@
 
 #include "SipInfo.h"
 #include "SipPlugin.h"
-#include "WeakPeerHash.h"
 
 #include <QCryptographicHash>
 #include <QBuffer>
@@ -36,7 +35,7 @@
 namespace Tomahawk
 {
 
-WeakPeerHash PeerInfo::s_peersByCacheKey = WeakPeerHash();
+Tomahawk::Utils::WeakObjectHash< PeerInfo > PeerInfoPrivate::s_peersByCacheKey = Tomahawk::Utils::WeakObjectHash< PeerInfo >();
 QHash< SipPlugin*, peerinfo_ptr > PeerInfo::s_selfPeersBySipPlugin = QHash< SipPlugin*, peerinfo_ptr >();
 
 
@@ -83,9 +82,9 @@ Tomahawk::peerinfo_ptr
 PeerInfo::get( SipPlugin* parent, const QString& id, GetOptions options )
 {
     const QString key = peerCacheKey( parent, id );
-    if ( s_peersByCacheKey.hash().contains( key ) && !s_peersByCacheKey.hash().value( key ).isNull() )
+    if ( PeerInfoPrivate::s_peersByCacheKey.hash().contains( key ) && !PeerInfoPrivate::s_peersByCacheKey.hash().value( key ).isNull() )
     {
-        return s_peersByCacheKey.hash().value( key ).toStrongRef();
+        return PeerInfoPrivate::s_peersByCacheKey.hash().value( key ).toStrongRef();
     }
 
     // if AutoCreate isn't enabled nothing to do here
@@ -96,7 +95,7 @@ PeerInfo::get( SipPlugin* parent, const QString& id, GetOptions options )
 
     peerinfo_ptr peerInfo( new PeerInfo( parent, id ), &QObject::deleteLater );
     peerInfo->setWeakRef( peerInfo.toWeakRef() );
-    s_peersByCacheKey.insert( key, peerInfo );
+    PeerInfoPrivate::s_peersByCacheKey.insert( key, peerInfo );
 
     return peerInfo;
 }
@@ -106,7 +105,7 @@ QList< Tomahawk::peerinfo_ptr >
 PeerInfo::getAll()
 {
     QList< Tomahawk::peerinfo_ptr > strongRefs;
-    foreach ( Tomahawk::peerinfo_wptr wptr, s_peersByCacheKey.hash().values() )
+    foreach ( Tomahawk::peerinfo_wptr wptr, PeerInfoPrivate::s_peersByCacheKey.hash().values() )
     {
         if ( !wptr.isNull() )
             strongRefs << wptr.toStrongRef();
