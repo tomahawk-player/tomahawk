@@ -230,12 +230,12 @@ JSResolver::init()
         }
         const QByteArray reqContents = reqFile.readAll();
 
-        d->engine->setScriptPath( QFileInfo( s ).fileName() );
+        d->engine->setScriptPath( s );
         d->engine->mainFrame()->evaluateJavaScript( reqContents );
     }
 
     // add resolver
-    d->engine->setScriptPath( QFileInfo( filePath() ).fileName() );
+    d->engine->setScriptPath( filePath() );
     d->engine->mainFrame()->evaluateJavaScript( scriptContents );
 
     // init resolver
