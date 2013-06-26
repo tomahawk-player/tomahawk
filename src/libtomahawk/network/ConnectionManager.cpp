@@ -28,6 +28,7 @@
 #include "sip/SipInfo.h"
 #include "sip/SipPlugin.h"
 #include "utils/Logger.h"
+#include "utils/WeakObjectHash.h"
 
 #include <boost/bind.hpp>
 #include <qtconcurrentrun.h>
@@ -35,21 +36,21 @@
 /* Management of ConnectionManagers */
 
 static QMutex nodeMapMutex;
-static QMap< QString, QWeakPointer< ConnectionManager > > connectionManagers;
-static QMap< QString, QSharedPointer< ConnectionManager > > activeConnectionManagers;
+static Tomahawk::Utils::WeakObjectHash< ConnectionManager > connectionManagers;
+static QHash< QString, QSharedPointer< ConnectionManager > > activeConnectionManagers;
 
 QSharedPointer<ConnectionManager>
 ConnectionManager::getManagerForNodeId( const QString &nodeid )
 {
     QMutexLocker locker( &nodeMapMutex );
-    if ( connectionManagers.contains( nodeid ) && !connectionManagers.value( nodeid ).isNull() ) {
-        return connectionManagers.value( nodeid ).toStrongRef();
+    if ( connectionManagers.hash().contains( nodeid ) && !connectionManagers.hash().value( nodeid ).isNull() ) {
+        return connectionManagers.hash().value( nodeid ).toStrongRef();
     }
 
     // There exists no connection for this nodeid
     QSharedPointer< ConnectionManager > manager( new ConnectionManager( nodeid ) );
     manager->setWeakRef( manager.toWeakRef() );
-    connectionManagers[nodeid] = manager->weakRef();
+    connectionManagers.insert( nodeid, manager.toWeakRef() );
     return manager;
 }
 

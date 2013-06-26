@@ -492,7 +492,7 @@ Servent::registerPeer( const Tomahawk::peerinfo_ptr& peerInfo )
         peerInfoDebug(peerInfo) << "we need to establish the connection now... thinking";
         if ( !connectedToSession( peerInfo->nodeId() ) )
         {
-            ConnectionManager::getManagerForNodeId( peerInfo->nodeId() )->handleSipInfo( peerInfo );
+            handleSipInfo( peerInfo );
         }
         else
         {
@@ -556,7 +556,8 @@ Servent::handleSipInfo( const Tomahawk::peerinfo_ptr& peerInfo )
     if ( peerInfo->sipInfos().isEmpty() )
         return;
 
-    ConnectionManager::getManagerForNodeId( peerInfo->nodeId() )->handleSipInfo( peerInfo );
+    QSharedPointer<ConnectionManager> manager = ConnectionManager::getManagerForNodeId( peerInfo->nodeId() );
+    manager->handleSipInfo( peerInfo );
 }
 
 
