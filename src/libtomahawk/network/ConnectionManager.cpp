@@ -50,7 +50,7 @@ ConnectionManager::getManagerForNodeId( const QString &nodeid )
     // There exists no connection for this nodeid
     QSharedPointer< ConnectionManager > manager( new ConnectionManager( nodeid ) );
     manager->setWeakRef( manager.toWeakRef() );
-    connectionManagers.insert( nodeid, manager.toWeakRef() );
+    connectionManagers.insert( nodeid, manager );
     return manager;
 }
 
