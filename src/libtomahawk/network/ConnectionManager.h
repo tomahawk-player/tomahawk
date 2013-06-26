@@ -49,7 +49,7 @@ public:
      */
     static void setActive( bool active, const QString& nodeid, const QSharedPointer<ConnectionManager>& manager );
 
-    ~ConnectionManager();
+    virtual ~ConnectionManager();
 
     /**
      * Receive incoming SipInfos and start a new thread to connect to this peer.
