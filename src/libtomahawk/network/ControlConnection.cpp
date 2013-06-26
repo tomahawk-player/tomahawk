@@ -159,9 +159,15 @@ ControlConnection::registerSource()
 {
     Q_D( ControlConnection );
     QReadLocker sourceLocker( &d->sourceLock );
+    if ( d->source.isNull() )
+    {
+        // Not connected to a source anymore, nothing to do.
+        return;
+    }
+
     QSharedPointer<QMutexLocker> locker = d->source->acquireLock();
     // Only continue if we are still the ControlConnection associated with this source.
-    if ( !d->source.isNull() &&  d->source->controlConnection() == this )
+    if ( d->source->controlConnection() == this )
     {
         qDebug() << Q_FUNC_INFO << d->source->id();
         Source* source = (Source*) sender();
