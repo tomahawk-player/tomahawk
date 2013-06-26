@@ -66,6 +66,7 @@ public:
 
     void insert( const QString& key, const QSharedPointer<T>& value )
     {
+        // Do not pass the QSharedPointer to the closure as this will prevent the object from being destroyed.
         _detail::Closure* cl = NewClosure( value.data(), SIGNAL( destroyed( QObject* ) ), &m_private, SLOT( remove( QString ) ), key );
         cl->setAutoDelete( true );
         m_hash.insert( key, value.toWeakRef() );
