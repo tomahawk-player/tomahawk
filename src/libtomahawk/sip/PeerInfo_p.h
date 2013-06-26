@@ -22,6 +22,8 @@
 
 #include "PeerInfo.h"
 
+#include "utils/WeakObjectHash.h"
+
 namespace Tomahawk
 {
 
@@ -39,6 +41,8 @@ public:
     }
     PeerInfo* q_ptr;
     Q_DECLARE_PUBLIC ( PeerInfo )
+
+    static Tomahawk::Utils::WeakObjectHash<PeerInfo> s_peersByCacheKey;
 
 private:
     QWeakPointer< Tomahawk::PeerInfo > ownRef;

@@ -16,32 +16,33 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef WEAKPEERHASH_H
-#define WEAKPEERHASH_H
+#include "WeakObjectHash.h"
 
-#include "Typedefs.h"
 
-#include <QObject>
-
-class WeakPeerHashPrivate;
-
-class WeakPeerHash : public QObject
+Tomahawk::Utils::WeakObjectHashPrivate::WeakObjectHashPrivate(Tomahawk::Utils::WeakObjectHashBase *parent)
+    : QObject( 0 )
+    , m_parent( parent )
 {
-    Q_OBJECT
-public:
-    WeakPeerHash( QObject *parent = 0 );
-    WeakPeerHash( const WeakPeerHash& hash );
-    void insert( const QString& key, const Tomahawk::peerinfo_ptr& value );
-    const QHash< QString, Tomahawk::peerinfo_wptr>& hash();
+}
 
-signals:
-    
-private slots:
-    void remove( const QString& key );
-private:
-    Q_DECLARE_PRIVATE( WeakPeerHash )
-    WeakPeerHashPrivate* d_ptr;
 
-};
+void
+Tomahawk::Utils::WeakObjectHashPrivate::remove( const QString& key )
+{
+    m_parent->remove( key );
+}
 
-#endif // WEAKPEERHASH_H
+
+void
+Tomahawk::Utils::WeakObjectHashBase::remove( const QString& key )
+{
+    Q_UNUSED( key );
+    // Does nothing but needs to be implemented for linking
+}
+
+
+Tomahawk::Utils::WeakObjectHashBase::~WeakObjectHashBase()
+{
+}
+
+
