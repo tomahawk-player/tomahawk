@@ -5,6 +5,7 @@ Version 0.8.0:
     * You will now be asked whether you want to trust invalid SSL certificates.
     * Improved connecting between Tomahawk peers and support having multiple IPs
       (including IPv6)
+    * Added Network Activity showing you the most played tracks of your friends.
 
 Version 0.7.1:
     * Heavily reduced memory footprint during and after indexing the database.
