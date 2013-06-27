@@ -3720,43 +3720,43 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="482"/>
-        <location filename="../src/libtomahawk/Source.cpp" line="537"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="483"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="538"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Сканиране (%L1 изпълнения)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="484"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="485"/>
         <source>Scanning</source>
         <translation>Сканирам</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="522"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="523"/>
         <source>Checking</source>
         <translation>Проверявам</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="527"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="528"/>
         <source>Syncing</source>
         <translation>Синхронизиране</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="532"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="533"/>
         <source>Importing</source>
         <translation>Импортиране</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="720"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="721"/>
         <source>Saving (%1%)</source>
         <translation>Запазвам (%1%)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="807"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="808"/>
         <source>Online</source>
         <translation>На линия</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="811"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="812"/>
         <source>Offline</source>
         <translation>Извън линия</translation>
     </message>

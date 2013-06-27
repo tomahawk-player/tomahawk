@@ -3699,43 +3699,43 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
 <context>
     <name>Tomahawk::Source</name>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="482"/>
-        <location filename="../src/libtomahawk/Source.cpp" line="537"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="483"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="538"/>
         <source>Scanning (%L1 tracks)</source>
         <translation>Scanne (%L1 Stücke)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="484"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="485"/>
         <source>Scanning</source>
         <translation>Scanne</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="522"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="523"/>
         <source>Checking</source>
         <translation>Überprüfe</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="527"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="528"/>
         <source>Syncing</source>
         <translation>Synchronisiere</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="532"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="533"/>
         <source>Importing</source>
         <translation>Importiere</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="720"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="721"/>
         <source>Saving (%1%)</source>
         <translation>Speichere (%1%)</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="807"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="808"/>
         <source>Online</source>
         <translation>Online</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Source.cpp" line="811"/>
+        <location filename="../src/libtomahawk/Source.cpp" line="812"/>
         <source>Offline</source>
         <translation>Offline</translation>
     </message>
