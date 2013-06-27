@@ -137,7 +137,7 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
     if ( chkq.exec() && chkq.next() )
     {
         currentRevision = chkq.value( 0 ).toString();
-        tDebug() << Q_FUNC_INFO << "pl guid" << m_playlistguid << "- curr rev" << currentRevision;
+        tDebug() << Q_FUNC_INFO << "pl guid" << m_playlistguid << "- curr rev" << currentRevision << source()->friendlyName() << source()->id();
     }
     else
     {
