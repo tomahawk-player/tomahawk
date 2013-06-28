@@ -145,6 +145,8 @@ ControlConnection::setup()
     }
     else
     {
+        // We are not responsible for this source anymore, so do not keep a reference.
+        d->source = Tomahawk::source_ptr();
         // Unlock before we delete ourselves
         d->sourceLock.unlock();
         // There is already another ControlConnection in use, we are useless.
