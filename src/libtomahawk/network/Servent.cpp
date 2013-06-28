@@ -1090,6 +1090,13 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
         conn->addPeerInfo( d_func()->lazyoffers.value( key ).first );
         conn->setId( d_func()->lazyoffers.value( key ).second );
 
+        if ( !nodeid.isEmpty() )
+        {
+            // Used by the connection for the ACL check
+            // If there isn't a nodeid it's not the first connection and will already have been stopped
+            conn->setNodeId( nodeid );
+        }
+
         // Register as non-lazy offer
         d_func()->lazyoffers.remove( key );
         registerOffer( key, conn );
