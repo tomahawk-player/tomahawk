@@ -648,7 +648,8 @@ Servent::readyRead()
             Q_ASSERT( con );
 
             tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Known connection:" << con->id();
-            if ( con->id() == nodeid )
+            // Only check for known inboud ControlConnections
+            if ( con->id() == nodeid && !con->outbound() )
             {
                 dupe = true;
                 break;
@@ -671,7 +672,8 @@ Servent::readyRead()
             {
                 Q_ASSERT( keepConnection );
 
-                if ( keepConnection->id() == nodeid )
+                // Only check for known inboud ControlConnections
+                if ( keepConnection->id() == nodeid && !keepConnection->outbound() )
                 {
                     tDebug() << "Keep connection" << keepConnection->name() << "with following peers";
                     foreach ( const peerinfo_ptr& currentPeerInfo, keepConnection->peerInfos() )
@@ -694,7 +696,8 @@ Servent::readyRead()
     {
         Q_ASSERT( con );
 
-        if ( con->id() == controlid )
+        // Only check for known inboud ControlConnections
+        if ( con->id() == controlid && !con->outbound() )
         {
             cc = con;
             break;
