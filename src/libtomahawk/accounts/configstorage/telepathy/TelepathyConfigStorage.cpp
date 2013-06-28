@@ -27,14 +27,18 @@
 #include "accounts/CredentialsManager.h"
 #include "utils/Logger.h"
 #include "utils/PluginLoader.h"
+#include "utils/TomahawkUtilsGui.h"
 
 #include <TelepathyQt/Account>
 #include <TelepathyQt/PendingReady>
 #include <TelepathyQt/PendingOperation>
 #include <TelepathyQt/AccountSet>
 
+#include <QDialog>
+#include <QDialogButtonBox>
 #include <QProcess>
 #include <QTimer>
+#include <QBoxLayout>
 
 
 
@@ -82,19 +86,22 @@ Tomahawk::Accounts::TelepathyConfigStorage::icon() const
 
 
 bool
-Tomahawk::Accounts::TelepathyConfigStorage::execConfigDialog()
+Tomahawk::Accounts::TelepathyConfigStorage::execConfigDialog( QWidget* parent )
 {
-    QProcess kcm;
-    kcm.start( "kcmshell4 kcm_ktp_accounts" );
-    if ( !kcm.waitForStarted() )
-        return false;
+    if ( !m_configWidgetPlugins.isEmpty() )
+    {
+        QDialog dialog( parent );
+        dialog.resize( parent->logicalDpiX() * 3.0, parent->logicalDpiY() * 2.2 );
+        dialog.setLayout( new QVBoxLayout );
+        dialog.layout()->addWidget( m_configWidgetPlugins.first()->configWidget() );
 
-    if ( !kcm.waitForFinished( 600000 ) )
-        return false;
+        QDialogButtonBox* box = new QDialogButtonBox( QDialogButtonBox::Close, Qt::Horizontal );
+        dialog.layout()->addWidget( box );
+        connect( box, SIGNAL( clicked( QAbstractButton* ) ), &dialog, SLOT( accept() ) );
+        return dialog.exec();
+    }
 
-    //TODO: this should probably be async
-
-    return true;
+    return false;
 }
 
 

@@ -52,7 +52,7 @@ ConfigStorage::icon() const
 
 
 bool
-ConfigStorage::execConfigDialog()
+ConfigStorage::execConfigDialog( QWidget* parent )
 {
     return false;
 }

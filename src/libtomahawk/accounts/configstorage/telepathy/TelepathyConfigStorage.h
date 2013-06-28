@@ -51,7 +51,7 @@ public:
     QString prettyName() const;
     QPixmap icon() const;
 
-    bool execConfigDialog();
+    bool execConfigDialog( QWidget* parent );
 
     QStringList accountIds() const;
 

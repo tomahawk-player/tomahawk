@@ -84,7 +84,7 @@ void
 XmppConfigWidget::launchExternalConfigDialog()
 {
     ConfigStorage* cs = AccountManager::instance()->configStorageForAccount( m_account->accountId() );
-    cs->execConfigDialog();
+    cs->execConfigDialog( this );
 }
 
 

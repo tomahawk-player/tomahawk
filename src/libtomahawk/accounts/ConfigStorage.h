@@ -45,7 +45,7 @@ public:
 
     virtual QPixmap icon() const;
 
-    virtual bool execConfigDialog();
+    virtual bool execConfigDialog( QWidget* parent );
 
     virtual QStringList accountIds() const = 0;
 
