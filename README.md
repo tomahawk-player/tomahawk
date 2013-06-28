@@ -48,6 +48,7 @@ Required dependencies:
 * Attica 0.4.0 - ftp://ftp.kde.org/pub/kde/stable/attica/
 * QuaZip 0.4.3 - http://quazip.sourceforge.net/
 * liblastfm 1.0.1 - https://github.com/lastfm/liblastfm/
+* QtKeychain 0.1 - https://github.com/frankosterfeld/qtkeychain/
 
 The following dependencies are optional, but recommended:
 
