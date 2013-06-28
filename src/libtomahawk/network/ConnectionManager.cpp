@@ -380,7 +380,7 @@ ConnectionManager::handoverSocket( QTcpSocketExtra* sock )
     d_func()->controlConnection->setOutbound( sock->_outbound );
     d_func()->controlConnection->setPeerPort( sock->peerPort() );
 
-    d_func()->controlConnection->start( sock );
+    QMetaObject::invokeMethod( d_func()->controlConnection, "start", Qt::QueuedConnection, Q_ARG( QTcpSocket*, sock ) );
     // ControlConntection is now connected, now it can be destroyed if the PeerInfos disappear
     d_func()->controlConnection->setShutdownOnEmptyPeerInfos( true );
     d_func()->currentPeerInfo.clear();
