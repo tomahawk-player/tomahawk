@@ -22,9 +22,9 @@ Rectangle {
         subtitle: ""//generator.summary
         showSearchField: false
         showBackButton: stationListView.currentIndex > 0
-        showNextButton: !mainView.configured && stationListView.currentIndex == 2
+        showNextButton: !mainView.configured
         nextButtonText: "Save"
-        backButtonText: mainView.configured ? "Configure" : "Back"
+        backButtonText: "Back"
 
         z: 1 //cover albumcovers that may leave their area
 
