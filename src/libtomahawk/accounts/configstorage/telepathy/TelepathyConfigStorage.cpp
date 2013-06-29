@@ -91,6 +91,7 @@ Tomahawk::Accounts::TelepathyConfigStorage::execConfigDialog( QWidget* parent )
     if ( !m_configWidgetPlugins.isEmpty() )
     {
         QDialog dialog( parent );
+        dialog.setWindowTitle( tr( "KDE Instant Messaging Accounts" ) );
         dialog.resize( parent->logicalDpiX() * 3.0, parent->logicalDpiY() * 2.2 );
         dialog.setLayout( new QVBoxLayout );
         dialog.layout()->addWidget( m_configWidgetPlugins.first()->configWidget() );
