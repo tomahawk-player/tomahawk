@@ -19,7 +19,7 @@ Rectangle {
         width: parent.width
         icon: "../images/station.svg"
         title: mainView.title
-        subtitle: ""//generator.summary
+        subtitle: generator.summary
         showSearchField: false
         showBackButton: stationListView.currentIndex > 0
         showNextButton: mainView.configured
@@ -29,10 +29,6 @@ Rectangle {
         z: 1 //cover albumcovers that may leave their area
 
         onBackPressed: {
-            if(mainView.configured) {
-                return;
-            }
-
             inputBubble.opacity = 0
             stationListView.decrementCurrentIndex()
             if(stationListView.currentIndex == 1) {

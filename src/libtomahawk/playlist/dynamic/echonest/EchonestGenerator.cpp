@@ -275,7 +275,7 @@ EchonestGenerator::startFromArtist( const Tomahawk::artist_ptr& artist )
     controlsList[ "selectedType" ] = "echonest";
     controlsList[ "match" ] = QString::number( data.first );
     controlsList[ "input" ] = data.second;
-    controlsList[ "summary" ] = "";
+    controlsList[ "summary" ] = tr("Songs from %1").arg(data.second.toString());
     setControls( QVariantList() << controlsList );
 
     //    params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::SongRadioType ) );
@@ -666,6 +666,9 @@ EchonestGenerator::sentenceSummary()
      *  NOTE / TODO: In order for the sentence to be grammatically correct, we must follow the EN API rules. That means we can't have multiple of some types of filters,
      *        and all Artist types must be the same. The filters aren't checked at the moment until Generate / Play is pressed. Consider doing a check on hide as well.
      */
+
+    // Keeping this for now to make stuff backwards compatible
+
 /*    QList< dyncontrol_ptr > allcontrols = m_controls;
     QString sentence = "Songs ";
 
@@ -751,7 +754,10 @@ EchonestGenerator::sentenceSummary()
 
     return sentence;*/
 
-    return "This is a station!";
+    if (m_controls.isEmpty()) {
+        return "";
+    }
+    return m_controls.first().toMap().value("summary").toString();
 }
 
 void
