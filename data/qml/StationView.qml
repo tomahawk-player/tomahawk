@@ -22,7 +22,7 @@ Rectangle {
         subtitle: ""//generator.summary
         showSearchField: false
         showBackButton: stationListView.currentIndex > 0
-        showNextButton: !mainView.configured
+        showNextButton: mainView.configured
         nextButtonText: "Save"
         backButtonText: "Back"
 
