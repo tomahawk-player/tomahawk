@@ -23,7 +23,7 @@ Item {
 
         HeaderLabel {
             id: headerText
-            text: "Create station by artist..."
+            text: "Enter or pick an artist"
         }
 
         Row {

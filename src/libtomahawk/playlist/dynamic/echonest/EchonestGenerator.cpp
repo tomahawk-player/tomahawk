@@ -315,7 +315,7 @@ EchonestGenerator::startFromGenre( const QString& genre )
     controlsMap[ "selectedType" ] = "echonest";
     controlsMap[ "match" ] = QString::number( data.first );
     controlsMap[ "input" ] = data.second;
-    controlsMap[ "summary" ] = data.second;
+    controlsMap[ "summary" ] = tr("Songs of genre %1").arg(data.second.toString());
     controlsList << controlsMap;
 
     params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::ArtistDescriptionType ) );

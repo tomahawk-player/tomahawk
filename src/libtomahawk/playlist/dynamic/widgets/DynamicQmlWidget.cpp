@@ -83,7 +83,7 @@ DynamicQmlWidget::title() const
     if ( !m_playlist->title().isEmpty() ) {
         return m_playlist->title();
     }
-    return "Listen to radio...";
+    return "Listen to radio";
 }
 
 
