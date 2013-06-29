@@ -400,7 +400,7 @@ Connection::doSetup()
 {
     Q_D( Connection );
 
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << thread();
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << thread() << d->id;
     /*
         New connections can be created from other thread contexts, such as
         when AudioEngine calls getIODevice.. - we need to ensure that connections
@@ -414,39 +414,49 @@ Connection::doSetup()
         moveToThread( d->servent->thread() );
     }
 
-    //stats timer calculates BW used by this connection
-    d->statstimer = new QTimer;
-    d->statstimer->moveToThread( this->thread() );
-    d->statstimer->setInterval( 1000 );
-    connect( d->statstimer, SIGNAL( timeout() ), SLOT( calcStats() ) );
-    d->statstimer->start();
-    d->statstimer_mark.start();
-
-    d->sock->moveToThread( thread() );
-
-    connect( d->sock.data(), SIGNAL( bytesWritten( qint64 ) ),
-                              SLOT( bytesWritten( qint64 ) ), Qt::QueuedConnection );
-
-    connect( d->sock.data(), SIGNAL( disconnected() ),
-                              SLOT( socketDisconnected() ), Qt::QueuedConnection );
-
-    connect( d->sock.data(), SIGNAL( error( QAbstractSocket::SocketError ) ),
-                              SLOT( socketDisconnectedError( QAbstractSocket::SocketError ) ), Qt::QueuedConnection );
-
-    connect( d->sock.data(), SIGNAL( readyRead() ),
-                              SLOT( readyRead() ), Qt::QueuedConnection );
-
-    // if connection not authed/setup fast enough, kill it:
-    QTimer::singleShot( AUTH_TIMEOUT, this, SLOT( authCheckTimeout() ) );
-
-    if ( outbound() )
+    if ( !d->setup )
     {
-        Q_ASSERT( !d->firstmsg.isNull() );
-        sendMsg( d->firstmsg );
+        // We only want to setup this connection once
+        d->setup = true;
+
+        //stats timer calculates BW used by this connection
+        d->statstimer = new QTimer;
+        d->statstimer->moveToThread( this->thread() );
+        d->statstimer->setInterval( 1000 );
+        connect( d->statstimer, SIGNAL( timeout() ), SLOT( calcStats() ) );
+        d->statstimer->start();
+        d->statstimer_mark.start();
+
+        d->sock->moveToThread( thread() );
+
+        connect( d->sock.data(), SIGNAL( bytesWritten( qint64 ) ),
+                                  SLOT( bytesWritten( qint64 ) ), Qt::QueuedConnection );
+
+        connect( d->sock.data(), SIGNAL( disconnected() ),
+                                  SLOT( socketDisconnected() ), Qt::QueuedConnection );
+
+        connect( d->sock.data(), SIGNAL( error( QAbstractSocket::SocketError ) ),
+                                  SLOT( socketDisconnectedError( QAbstractSocket::SocketError ) ), Qt::QueuedConnection );
+
+        connect( d->sock.data(), SIGNAL( readyRead() ),
+                                  SLOT( readyRead() ), Qt::QueuedConnection );
+
+        // if connection not authed/setup fast enough, kill it:
+        QTimer::singleShot( AUTH_TIMEOUT, this, SLOT( authCheckTimeout() ) );
+
+        if ( outbound() )
+        {
+            Q_ASSERT( !d->firstmsg.isNull() );
+            sendMsg( d->firstmsg );
+        }
+        else
+        {
+            sendMsg( Msg::factory( PROTOVER, Msg::SETUP ) );
+        }
     }
     else
     {
-        sendMsg( Msg::factory( PROTOVER, Msg::SETUP ) );
+        tLog() << Q_FUNC_INFO << QThread::currentThread() << d->id << "Duplicate doSetup call";
     }
 
     // call readyRead incase we missed the signal in between the servent disconnecting and us
