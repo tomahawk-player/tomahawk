@@ -274,6 +274,22 @@ EchonestGenerator::startFromArtist( const Tomahawk::artist_ptr& artist )
 
     Echonest::DynamicPlaylist::PlaylistParams params;
     params << data;
+
+/*    Q_PROPERTY( QString type READ type WRITE setType ) // the generator type associated with this control
+    Q_PROPERTY( QString id READ id WRITE setId )
+    Q_PROPERTY( QString selectedType READ selectedType WRITE setSelectedType )
+    Q_PROPERTY( QString match READ match WRITE setMatch )
+    Q_PROPERTY( QString input READ input WRITE setInput )
+    Q_PROPERTY( QString summary READ summary ) // a summary of the control in phrase form*/
+
+    QVariantMap controlsList;
+    controlsList[ "id" ] = uuid();
+    controlsList[ "selectedType" ] = "echonest";
+    controlsList[ "match" ] = QString::number( data.first );
+    controlsList[ "input" ] = data.second;
+    controlsList[ "summary" ] = "";
+    setControls( QVariantList() << controlsList );
+
     //    params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::SongRadioType ) );
     emit paramsGenerated( params );
 
