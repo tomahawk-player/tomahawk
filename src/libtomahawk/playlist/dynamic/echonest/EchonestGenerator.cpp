@@ -188,10 +188,7 @@ void
 EchonestGenerator::generate( int number )
 {
     // convert to an echonest query, and fire it off
-/*    qDebug() << Q_FUNC_INFO;
-    qDebug() << "Generating playlist with" << m_controls.size();
-    foreach( const dyncontrol_ptr& ctrl, m_controls )
-        qDebug() << ctrl->selectedType() << ctrl->match() << ctrl->input();
+    tDebug() << "Generating playlist with" << m_controls.size();
 
     setProperty( "number", number ); //HACK
 
@@ -202,16 +199,7 @@ EchonestGenerator::generate( int number )
     } catch( std::runtime_error& e ) {
         qWarning() << "Got invalid controls!" << e.what();
         emit error( "Filters are not valid", e.what() );
-    }*/
-
-    QList< query_ptr > queries;
-    queries << Query::get("Colour Haze", "All", QString(), uuid(), true);
-    queries << Query::get("Colour Haze", "Sun", QString(), uuid(), true);
-    queries << Query::get("Colour Haze", "Zen", QString(), uuid(), true);
-    queries << Query::get("Colour Haze", "Outside", QString(), uuid(), true);
-    queries << Query::get("Colour Haze", "Dirt", QString(), uuid(), true);
-
-    emit generated( queries );
+    }
 }
 
 
