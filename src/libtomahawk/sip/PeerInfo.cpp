@@ -232,9 +232,16 @@ PeerInfo::contactId() const
 const QString
 PeerInfo::nodeId() const
 {
-    Q_ASSERT( !d_func()->sipInfos.isEmpty() );
+    Q_D( const PeerInfo );
+
+    if ( d->sipInfos.isEmpty() )
+    {
+        // Return an empty nodeId if we have not yet received the acutal nodeId.
+        return QString();
+    }
+
     // All sip infos share the same nodeId
-    return d_func()->sipInfos.first().nodeId();
+    return d->sipInfos.first().nodeId();
 }
 
 const QString
