@@ -313,7 +313,7 @@ SourcesModel::appendGroups()
     sc->setSortValue( 1 );
 
     // browse section
-    GenericPageItem* radio = new GenericPageItem( this, browse, tr( "Radio" ), ImageRegistry::instance()->icon( RESPATH "images/station.svg" ),
+    GenericPageItem* radio = new GenericPageItem( this, m_browse, tr( "Radio" ), ImageRegistry::instance()->icon( RESPATH "images/station.svg" ),
                                                   boost::bind( &ViewManager::showRadioPage, ViewManager::instance() ),
                                                   boost::bind( &ViewManager::recentPlaysWidget, ViewManager::instance() ) );
     radio->setSortValue( 2 );
