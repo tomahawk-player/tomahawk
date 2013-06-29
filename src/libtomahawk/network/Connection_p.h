@@ -41,6 +41,7 @@ public:
         , peer_disconnected( false )
         , ready( false )
         , onceonly( true )
+        , setup( false )
         , tx_bytes( 0 )
         , tx_bytes_requested( 0 )
         , rx_bytes( 0 )
@@ -66,6 +67,7 @@ private:
     bool outbound;
     bool ready;
     bool onceonly;
+    bool setup;
     qint64 tx_bytes;
     qint64 tx_bytes_requested;
     qint64 rx_bytes;
