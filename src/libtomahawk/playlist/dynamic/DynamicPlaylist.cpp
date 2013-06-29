@@ -276,7 +276,8 @@ DynamicPlaylist::loadRevision( const QString& rev )
     setBusy( true );
     DatabaseCommand_LoadDynamicPlaylistEntries* cmd = new DatabaseCommand_LoadDynamicPlaylistEntries( rev.isEmpty() ? currentrevision() : rev );
 
-    if ( m_generator->mode() == OnDemand ) {
+    if ( m_generator->mode() == OnDemand )
+    {
         connect( cmd, SIGNAL( done( QString,
                                     bool,
                                     QString,
@@ -287,7 +288,9 @@ DynamicPlaylist::loadRevision( const QString& rev )
                                     QString,
                                     QVariantList,
                                     bool) ) );
-    } else if ( m_generator->mode() == Static ) {
+    }
+    else if ( m_generator->mode() == Static )
+    {
         connect( cmd, SIGNAL( done( QString,
                                     QList< QString >,
                                     QList< QString >,
@@ -407,6 +410,7 @@ DynamicPlaylist::setRevision( const QString& rev,
         m_generator = GeneratorFactory::create( type );
     }
 
+    tDebug() << Q_FUNC_INFO << controls;
     m_generator->setControls( controls );
     m_generator->setMode( Static );
 
@@ -452,6 +456,7 @@ DynamicPlaylist::setRevision( const QString& rev,
         m_generator = geninterface_ptr( GeneratorFactory::create( type ) );
     }
 
+    tDebug() << Q_FUNC_INFO << controls;
     m_generator->setControls( controls );
     m_generator->setMode( OnDemand );
 
