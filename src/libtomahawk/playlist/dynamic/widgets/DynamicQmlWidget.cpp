@@ -10,6 +10,7 @@
 #include "SourceList.h"
 #include "audio/AudioEngine.h"
 #include "database/Database.h"
+#include "database/DatabaseCommand_CreateDynamicPlaylist.h"
 #include "database/DatabaseCommand_PlaybackCharts.h"
 #include "widgets/DeclarativeCoverArtProvider.h"
 #include "utils/TomahawkUtilsGui.h"
@@ -89,14 +90,23 @@ DynamicQmlWidget::title() const
 
 
 void
-DynamicQmlWidget::setTitle(const QString &title)
+DynamicQmlWidget::setTitle( const QString& title )
 {
     m_model->setTitle( title );
     m_playlist->setTitle( title );
     m_model->playlist()->setTitle( title );
-    m_playlist->createNewRevision( uuid(), m_playlist->currentrevision(), m_playlist->type(), m_playlist->generator()->controls() );
-    m_playlist->reportCreated( m_playlist );
-    emit titleChanged();
+
+    if ( !m_playlist->loaded() )
+    {
+        DatabaseCommand_CreateDynamicPlaylist* cmd = new DatabaseCommand_CreateDynamicPlaylist( SourceList::instance()->getLocal(), m_playlist, true );
+//        connect( cmd, SIGNAL(finished()), dynplaylist.data(), SIGNAL(created()) );
+        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+        m_playlist->reportCreated( m_playlist );
+
+        m_playlist->createNewRevision( uuid(), m_playlist->currentrevision(), m_playlist->type(), m_playlist->generator()->controls() );
+//        m_playlist->reportCreated( m_playlist );
+        emit titleChanged();
+    }
 }
 
 
@@ -134,6 +144,7 @@ bool DynamicQmlWidget::loading()
 
 bool DynamicQmlWidget::configured()
 {
+//    return true;
     return !m_playlist->generator()->controls().isEmpty();
 }
 
@@ -202,6 +213,7 @@ DynamicQmlWidget::tracksGenerated( const QList< query_ptr >& queries )
 
 void DynamicQmlWidget::nextTrackGenerated(const query_ptr &track)
 {
+    tDebug() << Q_FUNC_INFO << track->toString();
     m_model->tracksGenerated( QList<query_ptr>() << track );
     m_playlist->resolve();
 
