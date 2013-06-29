@@ -26,8 +26,6 @@ namespace Tomahawk
 DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* parent )
     : DeclarativeView( parent )
     , m_playlist( playlist )
-    , m_runningOnDemand( false )
-    , m_activePlaylist( false )
     , m_playNextResolved( false )
 {
     m_model = new DynamicModel( this );
@@ -62,8 +60,12 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), this, SLOT( trackStarted() ) );
     connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::playlistinterface_ptr ) ), this, SLOT( playlistChanged( Tomahawk::playlistinterface_ptr ) ) );
 
-    //    m_playlist->generator()->generate( 20 );
-    loadArtistCharts();
+    if (configured()) {
+        m_playlist->generator()->generate( 20 );
+    } else {
+        // TODO: only load if needed, i.e. the user clicks on start station by artist
+        loadArtistCharts();
+    }
 }
 
 
@@ -212,10 +214,7 @@ void DynamicQmlWidget::nextTrackGenerated(const query_ptr &track)
 
 void DynamicQmlWidget::error(const QString &title, const QString &body)
 {
-    qDebug() << "got a generator error:" << title << body;
-
-//    m_playlist->generator()->fetchNext();
-
+    tDebug() << "got a generator error:" << title << body;
 }
 
 void DynamicQmlWidget::onRevisionLoaded(DynamicPlaylistRevision)
@@ -226,9 +225,9 @@ void DynamicQmlWidget::onRevisionLoaded(DynamicPlaylistRevision)
 void DynamicQmlWidget::resolvingFinished(bool hasResults)
 {
     Q_UNUSED(hasResults)
-    qDebug() << "next track generated" << m_proxyModel->rowCount() << m_proxyModel->currentIndex().row();
+    tDebug() << "next track generated" << m_proxyModel->rowCount() << m_proxyModel->currentIndex().row();
     if( m_proxyModel->rowCount() <= m_proxyModel->currentIndex().row() + 8 ) {
-        qDebug() << "fetching next one";
+        tDebug() << "fetching next one";
         m_playlist->generator()->fetchNext();
     }
 
@@ -240,28 +239,14 @@ void DynamicQmlWidget::resolvingFinished(bool hasResults)
 
 void DynamicQmlWidget::trackStarted()
 {
-    if ( m_activePlaylist && !m_playlist.isNull() &&
-        m_playlist->mode() == OnDemand && !m_runningOnDemand )
-    {
-
-        startStation();
-    }
+    startStation();
 }
 
 void
 DynamicQmlWidget::playlistChanged( Tomahawk::playlistinterface_ptr pl )
 {
-    if ( pl == m_proxyModel->playlistInterface() ) // same playlist
-        m_activePlaylist = true;
-    else
-    {
-        m_activePlaylist = false;
-
-        // user started playing something somewhere else, so give it a rest
-        if ( m_runningOnDemand )
-        {
-            stopStation( false );
-        }
+    if ( pl != m_proxyModel->playlistInterface() ) {
+        stopStation( false );
     }
 }
 
@@ -269,14 +254,11 @@ void
 DynamicQmlWidget::stopStation( bool stopPlaying )
 {
     m_model->stopOnDemand( stopPlaying );
-    m_runningOnDemand = false;
-
 }
 
 void
 DynamicQmlWidget::startStation()
 {
-    m_runningOnDemand = true;
     m_model->startOnDemand();
 }
 

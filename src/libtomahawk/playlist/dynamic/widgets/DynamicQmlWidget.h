@@ -102,8 +102,6 @@ private:
 
     PlayableModel* m_artistChartsModel;
 
-    bool m_runningOnDemand;
-    bool m_activePlaylist;
     bool m_playNextResolved;
 };
 
