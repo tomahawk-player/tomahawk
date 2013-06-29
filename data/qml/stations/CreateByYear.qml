@@ -28,7 +28,7 @@ Item {
 
         HeaderLabel {
             id: headerText
-            text: "Create station by year..."
+            text: "Enter a year or pick a range"
         }
 
         Row {

@@ -48,9 +48,9 @@ Rectangle {
 
     ListModel {
         id: modeModel
-        ListElement { label: "By Artist"; image: "../../images/station-artist.svg"; creatorContent: "stations/CreateByArtist.qml"; headerSubtitle: "by" }
-        ListElement { label: "By Genre"; image: "../../images/station-genre.svg"; creatorContent: "stations/CreateByGenre.qml"; headerSubtitle: "like" }
-        ListElement { label: "By Year"; image: "../../images/station-year.svg"; creatorContent: "stations/CreateByYear.qml"; headerSubtitle: "from" }
+        ListElement { label: "By Artist"; image: "../../images/station-artist.svg"; creatorContent: "stations/CreateByArtist.qml"; headerSubtitle: "Songs from" }
+        ListElement { label: "By Genre"; image: "../../images/station-genre.svg"; creatorContent: "stations/CreateByGenre.qml"; headerSubtitle: "Songs of genre" }
+        ListElement { label: "By Year"; image: "../../images/station-year.svg"; creatorContent: "stations/CreateByYear.qml"; headerSubtitle: "Songs from" }
     }
 
     VisualItemModel {

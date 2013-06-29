@@ -46,7 +46,7 @@ Item {
         HeaderLabel {
             id: headerText
             anchors.horizontalCenter: parent.horizontalCenter
-            text: "Create station by genre..."
+            text: "Enter or pick a genre"
         }
 
         Row {
