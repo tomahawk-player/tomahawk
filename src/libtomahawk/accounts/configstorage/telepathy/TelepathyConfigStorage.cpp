@@ -225,15 +225,6 @@ Tomahawk::Accounts::TelepathyConfigStorage::save( const QString& accountId, cons
 void
 Tomahawk::Accounts::TelepathyConfigStorage::load( const QString& accountId, Account::Configuration& cfg )
 {
-//    TomahawkSettings* s = TomahawkSettings::instance();
-//    s->beginGroup( "accounts/" + accountId );
-//    cfg.accountFriendlyName = s->value( "accountfriendlyname", QString() ).toString();
-//    cfg.enabled =             s->value( "enabled", false ).toBool();
-//    cfg.configuration =       s->value( "configuration", QVariantHash() ).toHash();
-//    cfg.acl =                 s->value( "acl", QVariantMap() ).toMap();
-//    cfg.types =               s->value( "types", QStringList() ).toStringList();
-//    s->endGroup();
-
     Tp::AccountPtr account = m_tpam->accountForObjectPath( accountIdToTelepathyPath( accountId ) );
 
     if ( !account->normalizedName().isEmpty() )
