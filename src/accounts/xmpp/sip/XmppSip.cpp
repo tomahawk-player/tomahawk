@@ -4,6 +4,7 @@
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013, Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -435,22 +436,15 @@ XmppSipPlugin::errorMessage( Jreen::Client::DisconnectReason reason )
 
 
 void
-XmppSipPlugin::sendSipInfo( const Tomahawk::peerinfo_ptr& receiver, const SipInfo& info )
+XmppSipPlugin::sendSipInfos( const Tomahawk::peerinfo_ptr& receiver, const QList<SipInfo>& info )
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << receiver << info;
 
     if ( !m_client )
         return;
 
-    TomahawkXmppMessage *sipMessage;
-    if ( info.isVisible() )
-    {
-        sipMessage = new TomahawkXmppMessage( info.host(), info.port(), info.nodeId(), info.key() );
-    }
-    else
-        sipMessage = new TomahawkXmppMessage();
-
-    qDebug() << "Send sip messsage to" << receiver;
+    TomahawkXmppMessage* sipMessage = new TomahawkXmppMessage( info );
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Send sip messsage to" << receiver;
     Jreen::IQ iq( Jreen::IQ::Set, receiver->id() );
     iq.addExtension( sipMessage );
     Jreen::IQReply *reply = m_client->send( iq );
@@ -687,6 +681,7 @@ XmppSipPlugin::onNewMessage( const Jreen::Message& message )
         return;
     }
 
+    // FIXME: We do not sent SipInfo in JSON via XMPP, why do we receive it here?
     SipInfo info = SipInfo::fromJson( msg );
     if ( !info.isValid() )
     {
@@ -885,12 +880,22 @@ XmppSipPlugin::onNewIq( const Jreen::IQ& iq )
         Jreen::SoftwareVersion::Ptr softwareVersion = iq.payload<Jreen::SoftwareVersion>();
         if ( softwareVersion )
         {
+            QMutexLocker locker( &peerQueueMutex );
             QString versionString = QString( "%1 %2 %3" ).arg( softwareVersion->name(), softwareVersion->os(), softwareVersion->version() );
             qDebug() << Q_FUNC_INFO << "Received software version for" << iq.from().full() << ":" << versionString;
             Tomahawk::peerinfo_ptr peerInfo =  PeerInfo::get( this, iq.from().full() );
             if ( !peerInfo.isNull() )
             {
                 peerInfo->setVersionString( versionString );
+                if ( sipinfosQueue.contains( iq.from().full() ) )
+                {
+                    peerInfo->setSipInfos( sipinfosQueue.value( iq.from().full() ) );
+                    sipinfosQueue.remove( iq.from().full() );
+                }
+                if ( peersWaitingForVersionString.contains( iq.from().full() ) )
+                {
+                    peersWaitingForVersionString.remove( iq.from().full() );
+                }
             }
         }
     }
@@ -911,31 +916,37 @@ XmppSipPlugin::onNewIq( const Jreen::IQ& iq )
         TomahawkXmppMessage::Ptr sipMessage = iq.payload< TomahawkXmppMessage >();
         if ( sipMessage )
         {
+            QMutexLocker locker( &peerQueueMutex );
             iq.accept();
+            tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Received Sip Information from:" << iq.from().full();
 
-            qDebug() << Q_FUNC_INFO << "Got SipMessage ..."
-                     << "ip" << sipMessage->ip() << "port" << sipMessage->port() << "nodeId" << sipMessage->uniqname() << "key" << sipMessage->key() << "visible" << sipMessage->visible();
-
-            SipInfo info;
-            info.setVisible( sipMessage->visible() );
-            if ( sipMessage->visible() )
+            // Check that all received SipInfos are valid.
+            foreach ( SipInfo info, sipMessage->sipInfos() )
             {
-                info.setHost( sipMessage->ip() );
-                info.setPort( sipMessage->port() );
-                info.setNodeId( sipMessage->uniqname() );
-                info.setKey( sipMessage->key() );
+                Q_ASSERT( info.isValid() );
             }
 
-            Q_ASSERT( info.isValid() );
-
-            qDebug() << Q_FUNC_INFO << "From:" << iq.from().full() << ":" << info;
+            // Get the peer information for the sender.
             Tomahawk::peerinfo_ptr peerInfo = PeerInfo::get( this, iq.from().full() );
             if ( peerInfo.isNull() )
             {
                 tDebug() << Q_FUNC_INFO << "no valid peerInfo for" << iq.from().full();
                 return;
             }
-            peerInfo->setSipInfo( info );
+            if ( peerInfo->versionString().isEmpty() )
+            {
+                // If we do not have a version string, this peerInfo is still queued. So we queue its SipInfo until we have a valid version string.
+                sipinfosQueue[iq.from().full()] = sipMessage->sipInfos();
+            }
+            else
+            {
+                peerInfo->setSipInfos( sipMessage->sipInfos() );
+            }
+            // If we stored a reference for this peer in our sip-waiting-queue, remove it.
+            if ( peersWaitingForSip.contains( iq.from().full() ) )
+            {
+                peersWaitingForSip.remove( iq.from().full() );
+            }
         }
     }
 }
@@ -977,7 +988,21 @@ XmppSipPlugin::handlePeerStatus( const Jreen::JID& jid, Jreen::Presence::Type pr
         Tomahawk::peerinfo_ptr peerInfo = PeerInfo::get( this, fulljid );
         if ( !peerInfo.isNull() )
         {
+            QMutexLocker locker( &peerQueueMutex );
             peerInfo->setStatus( PeerInfo::Offline );
+            // If we stored a reference for this peer in our sip-waiting-queue, remove it.
+            if ( peersWaitingForSip.contains( fulljid ) )
+            {
+                peersWaitingForSip.remove( fulljid );
+            }
+            if ( peersWaitingForVersionString.contains( fulljid ) )
+            {
+                peersWaitingForVersionString.remove( fulljid );
+            }
+            if ( sipinfosQueue.contains( fulljid ) )
+            {
+                sipinfosQueue.remove( fulljid );
+            }
         }
 
         return;
@@ -989,12 +1014,15 @@ XmppSipPlugin::handlePeerStatus( const Jreen::JID& jid, Jreen::Presence::Type pr
     {
         qDebug() << Q_FUNC_INFO << "* Peer goes online:" << fulljid;
 
+        QMutexLocker locker( &peerQueueMutex );
         m_peers[ jid ] = presenceType;
 
         Tomahawk::peerinfo_ptr peerInfo = PeerInfo::get( this, fulljid, PeerInfo::AutoCreate );
         peerInfo->setContactId( jid.bare() );
         peerInfo->setStatus( PeerInfo::Online );
         peerInfo->setFriendlyName( m_jidsNames.value( jid.bare() ) );
+        peersWaitingForSip[fulljid] = peerInfo;
+        peersWaitingForVersionString[fulljid] = peerInfo;
 
 #ifndef ENABLE_HEADLESS
         if ( !m_avatarManager->avatar( jid.bare() ).isNull() )

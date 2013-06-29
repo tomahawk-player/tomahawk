@@ -26,6 +26,11 @@
 #include <QPainter>
 #include <QPropertyAnimation>
 
+// Forward Declarations breaking QSharedPointer
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+    #include "Source.h"
+#endif
+
 
 #define CORNER_ROUNDNESS 8.0
 #define FADING_DURATION 500
@@ -48,13 +53,7 @@ OverlayWidget::OverlayWidget( QAbstractItemView* parent )
 {
     init();
 
-    if ( m_itemView->model() )
-    {
-        connect( m_itemView->model(), SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onViewChanged() ), Qt::UniqueConnection );
-        connect( m_itemView->model(), SIGNAL( rowsRemoved( QModelIndex, int, int ) ), SLOT( onViewChanged() ), Qt::UniqueConnection );
-        connect( m_itemView->model(), SIGNAL( loadingStarted() ), SLOT( onViewChanged() ), Qt::UniqueConnection );
-        connect( m_itemView->model(), SIGNAL( loadingFinished() ), SLOT( onViewChanged() ), Qt::UniqueConnection );
-    }
+    onViewModelChanged();
     connect( m_itemView, SIGNAL( modelChanged() ), SLOT( onViewModelChanged() ) );
 }
 
@@ -203,7 +202,6 @@ OverlayWidget::paintEvent( QPaintEvent* event )
     if ( center != pos() )
     {
         move( center );
-        return;
     }
 
     QPainter p( this );
@@ -213,12 +211,11 @@ OverlayWidget::paintEvent( QPaintEvent* event )
     p.setRenderHint( QPainter::Antialiasing );
     p.setOpacity( m_opacity );
 
-    QPen pen( palette().dark().color(), .5 );
+/*    QPen pen( palette().dark().color(), .5 );
     p.setPen( pen );
     //FIXME const color
     p.setBrush( QColor( 30, 30, 30, 255.0 * OPACITY ) );
-
-    p.drawRoundedRect( r, CORNER_ROUNDNESS, CORNER_ROUNDNESS );
+    p.drawRoundedRect( r, CORNER_ROUNDNESS, CORNER_ROUNDNESS );*/
 
     QTextOption to( Qt::AlignCenter );
     to.setWrapMode( QTextOption::WrapAtWordBoundaryOrAnywhere );
@@ -233,9 +230,9 @@ OverlayWidget::paintEvent( QPaintEvent* event )
 
     QFontMetricsF fm( f );
     qreal textHeight = fm.boundingRect( textRect, Qt::AlignCenter | Qt::TextWordWrap, text() ).height();
-    while( textHeight > availHeight )
+    while ( textHeight > availHeight )
     {
-        if( f.pointSize() <= 4 ) // don't try harder
+        if ( f.pointSize() <= 4 ) // don't try harder
             break;
 
         f.setPointSize( f.pointSize() - 1 );
@@ -244,7 +241,10 @@ OverlayWidget::paintEvent( QPaintEvent* event )
     }
 
     p.setFont( f );
-//    p.setPen( palette().highlightedText().color() );
-    p.setPen( Qt::white );
+#ifdef Q_OS_MAC
+    p.setPen( Qt::gray );
+#else
+    p.setPen( palette().text().color().lighter( 100 ) );
+#endif
     p.drawText( r.adjusted( 8, 8, -8, -8 ), text(), to );
 }

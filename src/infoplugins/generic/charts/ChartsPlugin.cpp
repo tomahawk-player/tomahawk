@@ -38,6 +38,7 @@
 #include <QSettings>
 #include <QNetworkConfiguration>
 #include <QNetworkReply>
+#include <QDateTime>
 
 #define CHART_URL "http://charts.tomahawk-player.org/"
 //#define CHART_URL "http://localhost:8080/"
@@ -55,7 +56,7 @@ ChartsPlugin::ChartsPlugin()
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << QThread::currentThread();
 
-    m_chartVersion = "2.6.5";
+    m_chartVersion = "2.6.6";
     m_supportedGetTypes <<  InfoChart << InfoChartCapabilities;
     m_cacheIdentifier = TomahawkUtils::md5( QString("ChartsPlugin" + m_chartVersion ).toUtf8() );
 }

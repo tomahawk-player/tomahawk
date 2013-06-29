@@ -146,11 +146,11 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     if ( m_hoverFaders.contains( index ) )
     {
         const qreal pct = ( m_hoverFaders[ index ]->currentFrame() / 100.0 );
-        opacity = 0.35 - pct * 0.35;
+        opacity = 0.15 - pct * 0.15;
     }
     else if ( m_hoverIndex == index )
     {
-        opacity = 0.35;
+        opacity = 0.15;
     }
 
     if ( opacity > -1.0 )
@@ -179,23 +179,13 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     int topHeight = QFontMetrics( boldFont ).boundingRect( top ).height();
     int frameHeight = bottomHeight + topHeight + 10;
 
-    QColor c1;
-    c1.setRgb( 0, 0, 0 );
-    c1.setAlphaF( 0.00 );
-    QColor c2;
-    c2.setRgb( 0, 0, 0 );
-    c2.setAlphaF( 0.88 );
-
-    QRect gradientRect = r.adjusted( 0, r.height() - frameHeight * 2, 0, 0 );
-    QLinearGradient gradient( QPointF( 0, 0 ), QPointF( 0, 1 ) );
-    gradient.setCoordinateMode( QGradient::ObjectBoundingMode );
-    gradient.setColorAt( 0.0, c1 );
-    gradient.setColorAt( 0.6, c2 );
-    gradient.setColorAt( 1.0, c2 );
+    QRect gradientRect = r.adjusted( 0, r.height() - frameHeight * 1.2, 0, 0 );
+    QColor gradientColor = opt.palette.background().color();
+    gradientColor.setAlphaF( 0.66 );
 
     painter->save();
     painter->setPen( Qt::transparent );
-    painter->setBrush( gradient );
+    painter->setBrush( gradientColor );
     painter->drawRect( gradientRect );
     painter->restore();
 
@@ -540,6 +530,20 @@ GridItemDelegate::onCurrentIndexChanged()
     }
     else
         onPlaybackFinished();
+}
+
+
+void
+GridItemDelegate::resetHoverIndex()
+{
+    foreach ( ImageButton* button, m_playButton )
+        button->deleteLater();
+    m_playButton.clear();
+
+    QModelIndex idx = m_hoveringOver;
+    m_hoveringOver = QPersistentModelIndex();
+    m_hoverIndex = QPersistentModelIndex();
+    doUpdateIndex( idx );
 }
 
 

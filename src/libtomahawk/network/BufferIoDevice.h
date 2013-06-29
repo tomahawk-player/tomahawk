@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2013, Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -20,8 +21,8 @@
 #define BUFFERIODEVICE_H
 
 #include <QIODevice>
-#include <QMutexLocker>
-#include <QFile>
+
+class BufferIODevicePrivate;
 
 class BufferIODevice : public QIODevice
 {
@@ -29,6 +30,7 @@ Q_OBJECT
 
 public:
     explicit BufferIODevice( unsigned int size = 0, QObject* parent = 0 );
+    ~BufferIODevice();
 
     virtual bool open( OpenMode mode );
     virtual void close();
@@ -39,16 +41,16 @@ public:
     virtual qint64 bytesAvailable() const;
     virtual qint64 size() const;
     virtual bool atEnd() const;
-    virtual qint64 pos() const { return m_pos; }
+    virtual qint64 pos() const;
 
     void addData( int block, const QByteArray& ba );
     void clear();
 
-    OpenMode openMode() const { return QIODevice::ReadOnly | QIODevice::Unbuffered; }
+    OpenMode openMode() const;
 
     void inputComplete( const QString& errmsg = "" );
 
-    virtual bool isSequential() const { return false; }
+    virtual bool isSequential() const;
 
     static unsigned int blockSize();
 
@@ -68,11 +70,9 @@ private:
     int offsetForPos( qint64 pos ) const;
     QByteArray getData( qint64 pos, qint64 size );
 
-    QList<QByteArray> m_buffer;
-    mutable QMutex m_mut; //const methods need to lock
-    unsigned int m_size, m_received;
+    Q_DECLARE_PRIVATE( BufferIODevice )
+    BufferIODevicePrivate* d_ptr;
 
-    unsigned int m_pos;
 };
 
 #endif // BUFFERIODEVICE_H

@@ -3,6 +3,9 @@ Version 0.8.0:
     * Added "Inbox" feature, showing incoming song recommendations. Dropping
       a track on a user in the sidebar sends a recommendation to them.
     * You will now be asked whether you want to trust invalid SSL certificates.
+    * Improved connecting between Tomahawk peers and support having multiple IPs
+      (including IPv6)
+    * Added Network Activity showing you the most played tracks of your friends.
 
 Version 0.7.1:
     * Heavily reduced memory footprint during and after indexing the database.

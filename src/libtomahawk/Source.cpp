@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013,      Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -17,7 +18,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Source.h"
+#include "Source_p.h"
 
 #include "collection/Collection.h"
 #include "SourceList.h"
@@ -30,6 +31,7 @@
 #include "database/DatabaseCommand_LoadAllSources.h"
 #include "database/DatabaseCommand_SourceOffline.h"
 #include "database/DatabaseCommand_UpdateSearchIndex.h"
+#include "database/DatabaseImpl.h"
 #include "database/Database.h"
 
 #include <QCoreApplication>
@@ -50,27 +52,25 @@ using namespace Tomahawk;
 
 Source::Source( int id, const QString& nodeId )
     : QObject()
-    , m_isLocal( false )
-    , m_online( false )
-    , m_nodeId( nodeId )
-    , m_id( id )
-    , m_updateIndexWhenSynced( false )
-    , m_state( DBSyncConnection::UNKNOWN )
-    , m_cc( 0 )
-    , m_commandCount( 0 )
+    , d_ptr( new SourcePrivate( this, id, nodeId ) )
 {
-    m_scrubFriendlyName = qApp->arguments().contains( "--demo" );
+    Q_D( Source );
+    d->scrubFriendlyName = qApp->arguments().contains( "--demo" );
 
     if ( id == 0 )
-        m_isLocal = true;
+        d->isLocal = true;
 
-    m_currentTrackTimer.setSingleShot( true );
-    connect( &m_currentTrackTimer, SIGNAL( timeout() ), this, SLOT( trackTimerFired() ) );
+    d->currentTrackTimer.setSingleShot( true );
+    connect( &d->currentTrackTimer, SIGNAL( timeout() ), this, SLOT( trackTimerFired() ) );
 
-    if ( m_isLocal )
+    if ( d->isLocal )
     {
-        connect( Accounts::AccountManager::instance(), SIGNAL( connected( Tomahawk::Accounts::Account* ) ), SLOT( setOnline() ) );
-        connect( Accounts::AccountManager::instance(), SIGNAL( disconnected( Tomahawk::Accounts::Account* ) ), SLOT( setOffline() ) );
+        connect( Accounts::AccountManager::instance(),
+                 SIGNAL( connected( Tomahawk::Accounts::Account* ) ),
+                 SLOT( setOnline() ) );
+        connect( Accounts::AccountManager::instance(),
+                 SIGNAL( disconnected( Tomahawk::Accounts::Account*, Tomahawk::Accounts::AccountManager::DisconnectReason ) ),
+                 SLOT( handleDisconnect( Tomahawk::Accounts::Account*, Tomahawk::Accounts::AccountManager::DisconnectReason ) ) );
     }
 }
 
@@ -78,13 +78,56 @@ Source::Source( int id, const QString& nodeId )
 Source::~Source()
 {
     tDebug() << Q_FUNC_INFO << friendlyName();
+    delete d_ptr;
+}
+
+bool
+Source::isLocal() const
+{
+    Q_D( const Source );
+    return d->isLocal;
+}
+
+bool
+Source::isOnline() const
+{
+    Q_D( const Source );
+    return d->online || d->isLocal;
 }
 
 
-void
+bool
 Source::setControlConnection( ControlConnection* cc )
 {
-    m_cc = cc;
+    Q_D( Source );
+
+    QMutexLocker locker( &d->setControlConnectionMutex );
+    if ( !d->cc.isNull() && d->cc->isReady() && d->cc->isRunning() )
+    {
+        const QString& nodeid = Database::instance()->impl()->dbid();
+        peerInfoDebug( (*cc->peerInfos().begin()) ) << Q_FUNC_INFO << "Comparing" << cc->id() << "and" << nodeid << "to detect duplicate connection, outbound:" << cc->outbound();
+        // If our nodeid is "higher" than the other, we prefer inbound connection, else outbound.
+        if ( ( cc->id() < nodeid && d->cc->outbound() ) || ( cc->id() > nodeid && !d->cc->outbound() ) )
+        {
+            // Tell the ControlConnection it is not anymore responsible for us.
+            d->cc->unbindFromSource();
+            // This ControlConnection is not needed anymore, get rid of it!
+            // (But decouple the deletion it from the current activity)
+            QMetaObject::invokeMethod( d->cc.data(), "deleteLater", Qt::QueuedConnection);
+            // Use new ControlConnection
+            d->cc = cc;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else
+    {
+        d->cc = cc;
+        return true;
+    }
 }
 
 
@@ -107,23 +150,35 @@ Source::peerInfos() const
 collection_ptr
 Source::dbCollection() const
 {
-    if ( m_collections.length() )
+    Q_D( const Source );
+    if ( d->collections.length() )
     {
-        foreach ( const collection_ptr& collection, m_collections )
+        foreach ( const collection_ptr& collection, d->collections )
+        {
             if ( collection->backendType() == Collection::DatabaseCollectionType )
+            {
                 return collection; // We assume only one is a db collection. Now get off my lawn.
+            }
+        }
     }
 
     collection_ptr tmp;
     return tmp;
 }
 
+QList<collection_ptr>
+Source::collections() const
+{
+    return d_func()->collections;
+}
+
 
 void
 Source::setStats( const QVariantMap& m )
 {
-    m_stats = m;
-    emit stats( m_stats );
+    Q_D( Source );
+    d->stats = m;
+    emit stats( d->stats );
     emit stateChanged();
 }
 
@@ -131,7 +186,7 @@ Source::setStats( const QVariantMap& m )
 QString
 Source::nodeId() const
 {
-    return m_nodeId;
+    return d_func()->nodeId;
 
 }
 
@@ -139,6 +194,8 @@ Source::nodeId() const
 QString
 Source::friendlyName() const
 {
+    Q_D( const Source );
+
     QStringList candidateNames;
     foreach ( const peerinfo_ptr& peerInfo, peerInfos() )
     {
@@ -156,10 +213,12 @@ Source::friendlyName() const
         return candidateNames.first();
     }
 
-    if ( m_friendlyname.isEmpty() )
+    if ( d->friendlyname.isEmpty() )
+    {
         return dbFriendlyName();
+    }
 
-    return m_friendlyname;
+    return d->friendlyname;
 }
 
 
@@ -226,20 +285,40 @@ Source::friendlyNamesLessThan( const QString& first, const QString& second )
 QPixmap
 Source::avatar( TomahawkUtils::ImageMode style, const QSize& size )
 {
-//     tLog() << "****************************************************************************************";
-//     tLog() << peerInfos().count() << "PEERS FOR " << friendlyName();
-    QPixmap result;
+    Q_D( Source );
+
     foreach ( const peerinfo_ptr& peerInfo, peerInfos() )
     {
-//         peerInfoDebug(peerInfo) << !peerInfo->avatar().isNull();
-        if ( !peerInfo.isNull() && !peerInfo->avatar( style, size ).isNull() )
+        if ( peerInfo && !peerInfo->avatar( style, size ).isNull() )
         {
-            result =  peerInfo->avatar( style, size );
-            break;
+            return peerInfo->avatar( style, size );
         }
     }
-//        tLog() << "****************************************************************************************";
-    return result;
+
+    if ( d->avatarLoaded )
+    {
+        if ( d->avatar )
+            return *d->avatar;
+        else
+            return QPixmap();
+    }
+
+    // Try to get the avatar from the cache
+    // Hint: We store the avatar for each xmpp peer using its contactId, the dbFriendlyName is a contactId of a peer
+    d->avatarLoaded = true;
+    QByteArray avatarBuffer = TomahawkUtils::Cache::instance()->getData( "Sources", dbFriendlyName() ).toByteArray();
+    if ( !avatarBuffer.isNull() )
+    {
+        tDebug() << Q_FUNC_INFO << QThread::currentThread();
+        QPixmap avatar;
+        avatar.loadFromData( avatarBuffer );
+        avatarBuffer.clear();
+
+        d->avatar = new QPixmap( TomahawkUtils::createRoundedImage( avatar, QSize( 0, 0 ) ) );
+        return *d->avatar;
+    }
+
+    return QPixmap();
 }
 #endif
 
@@ -247,14 +326,20 @@ Source::avatar( TomahawkUtils::ImageMode style, const QSize& size )
 void
 Source::setFriendlyName( const QString& fname )
 {
-    if ( fname.isEmpty() )
-        return;
+    Q_D( Source );
 
-    m_friendlyname = fname;
-    if ( m_scrubFriendlyName )
+    if ( fname.isEmpty() )
     {
-        if ( m_friendlyname.indexOf( "@" ) > 0 )
-            m_friendlyname = m_friendlyname.split( "@" ).first();
+        return;
+    }
+
+    d->friendlyname = fname;
+    if ( d->scrubFriendlyName )
+    {
+        if ( d->friendlyname.indexOf( "@" ) > 0 )
+        {
+            d->friendlyname = d->friendlyname.split( "@" ).first();
+        }
     }
 }
 
@@ -262,28 +347,36 @@ Source::setFriendlyName( const QString& fname )
 QString
 Source::dbFriendlyName() const
 {
-    if( m_dbFriendlyName.isEmpty() )
-        return nodeId();
+    Q_D( const Source );
 
-    return m_dbFriendlyName;
+    if( d->dbFriendlyName.isEmpty() )
+    {
+        return nodeId();
+    }
+
+    return d->dbFriendlyName;
 }
 
 
 void
 Source::setDbFriendlyName( const QString& dbFriendlyName )
 {
+    Q_D( Source );
+
     if ( dbFriendlyName.isEmpty() )
         return;
 
-    m_dbFriendlyName = dbFriendlyName;
+    d->dbFriendlyName = dbFriendlyName;
 }
 
 
 void
 Source::addCollection( const collection_ptr& c )
 {
+    Q_D( Source );
+
     //Q_ASSERT( m_collections.length() == 0 ); // only 1 source supported atm
-    m_collections.append( c );
+    d->collections.append( c );
     emit collectionAdded( c );
 }
 
@@ -291,28 +384,55 @@ Source::addCollection( const collection_ptr& c )
 void
 Source::removeCollection( const collection_ptr& c )
 {
+    Q_D( Source );
+
     //Q_ASSERT( m_collections.length() == 1 && m_collections.first() == c ); // only 1 source supported atm
-    m_collections.removeAll( c );
+    d->collections.removeAll( c );
     emit collectionRemoved( c );
+}
+
+int
+Source::id() const
+{
+    Q_D( const Source );
+
+    return d->id;
+}
+
+ControlConnection*
+Source::controlConnection() const
+{
+    Q_D( const Source );
+
+    return d->cc.data();
+}
+
+void
+Source::handleDisconnect( Tomahawk::Accounts::Account*, Tomahawk::Accounts::AccountManager::DisconnectReason reason )
+{
+    if ( reason == Tomahawk::Accounts::AccountManager::Disabled )
+        setOffline();
 }
 
 
 void
 Source::setOffline()
 {
+    Q_D( Source );
+
     qDebug() << Q_FUNC_INFO << friendlyName();
-    if ( !m_online )
+    if ( !d->online )
         return;
 
-    m_online = false;
+    d->online = false;
     emit offline();
 
     if ( !isLocal() )
     {
-        m_currentTrack.clear();
+        d->currentTrack.clear();
         emit stateChanged();
 
-        m_cc = 0;
+        d->cc = 0;
         DatabaseCommand_SourceOffline* cmd = new DatabaseCommand_SourceOffline( id() );
         Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
     }
@@ -322,17 +442,19 @@ Source::setOffline()
 void
 Source::setOnline()
 {
+    Q_D( Source );
+
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << friendlyName();
-    if ( m_online )
+    if ( d->online )
         return;
 
-    m_online = true;
+    d->online = true;
     emit online();
 
     if ( !isLocal() )
     {
         // ensure username is in the database
-        DatabaseCommand_addSource* cmd = new DatabaseCommand_addSource( m_nodeId, dbFriendlyName() );
+        DatabaseCommand_addSource* cmd = new DatabaseCommand_addSource( d->nodeId, dbFriendlyName() );
         connect( cmd, SIGNAL( done( unsigned int, QString ) ),
                         SLOT( dbLoaded( unsigned int, const QString& ) ) );
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
@@ -343,7 +465,9 @@ Source::setOnline()
 void
 Source::dbLoaded( unsigned int id, const QString& fname )
 {
-    m_id = id;
+    Q_D( Source );
+
+    d->id = id;
     setDbFriendlyName( fname );
 
     emit syncedWithDatabase();
@@ -353,10 +477,12 @@ Source::dbLoaded( unsigned int id, const QString& fname )
 void
 Source::scanningProgress( unsigned int files )
 {
+    Q_D( Source );
+
     if ( files )
-        m_textStatus = tr( "Scanning (%L1 tracks)" ).arg( files );
+        d->textStatus = tr( "Scanning (%L1 tracks)" ).arg( files );
     else
-        m_textStatus = tr( "Scanning" );
+        d->textStatus = tr( "Scanning" );
 
     emit stateChanged();
 }
@@ -365,11 +491,13 @@ Source::scanningProgress( unsigned int files )
 void
 Source::scanningFinished( bool updateGUI )
 {
-    m_textStatus = QString();
+    Q_D( Source );
 
-    if ( m_updateIndexWhenSynced )
+    d->textStatus = QString();
+
+    if ( d->updateIndexWhenSynced )
     {
-        m_updateIndexWhenSynced = false;
+        d->updateIndexWhenSynced = false;
         updateTracks();
     }
 
@@ -381,34 +509,36 @@ Source::scanningFinished( bool updateGUI )
 
 
 void
-Source::onStateChanged( DBSyncConnection::State newstate, DBSyncConnection::State oldstate, const QString& info )
+Source::onStateChanged( Tomahawk::DBSyncConnectionState newstate, Tomahawk::DBSyncConnectionState oldstate, const QString& info )
 {
+    Q_D( Source );
+
     Q_UNUSED( oldstate );
 
     QString msg;
     switch( newstate )
     {
-        case DBSyncConnection::CHECKING:
+        case CHECKING:
         {
             msg = tr( "Checking" );
             break;
         }
-        case DBSyncConnection::FETCHING:
+        case FETCHING:
         {
             msg = tr( "Syncing" );
             break;
         }
-        case DBSyncConnection::PARSING:
+        case PARSING:
         {
             msg = tr( "Importing" );
             break;
         }
-        case DBSyncConnection::SCANNING:
+        case SCANNING:
         {
             msg = tr( "Scanning (%L1 tracks)" ).arg( info );
             break;
         }
-        case DBSyncConnection::SYNCED:
+        case SYNCED:
         {
             msg = QString();
             break;
@@ -418,8 +548,8 @@ Source::onStateChanged( DBSyncConnection::State newstate, DBSyncConnection::Stat
             msg = QString();
     }
 
-    m_state = newstate;
-    m_textStatus = msg;
+    d->state = newstate;
+    d->textStatus = msg;
     emit stateChanged();
 }
 
@@ -427,32 +557,54 @@ Source::onStateChanged( DBSyncConnection::State newstate, DBSyncConnection::Stat
 unsigned int
 Source::trackCount() const
 {
-    return m_stats.value( "numfiles", 0 ).toUInt();
+    Q_D( const Source );
+
+    return d->stats.value( "numfiles", 0 ).toUInt();
+}
+
+query_ptr
+Source::currentTrack() const
+{
+    Q_D( const Source );
+
+    return d->currentTrack;
 }
 
 
 Tomahawk::playlistinterface_ptr
 Source::playlistInterface()
 {
-    if ( m_playlistInterface.isNull() )
+    Q_D( Source );
+
+    if ( d->playlistInterface.isNull() )
     {
         Tomahawk::source_ptr source = SourceList::instance()->get( id() );
-        m_playlistInterface = Tomahawk::playlistinterface_ptr( new Tomahawk::SourcePlaylistInterface( source.data() ) );
+        d->playlistInterface = Tomahawk::playlistinterface_ptr( new Tomahawk::SourcePlaylistInterface( source.data() ) );
     }
 
-    return m_playlistInterface;
+    return d->playlistInterface;
+}
+
+QSharedPointer<QMutexLocker>
+Source::acquireLock()
+{
+    Q_D( Source );
+
+    return QSharedPointer<QMutexLocker>( new QMutexLocker( &d->mutex ) );
 }
 
 
 void
 Source::onPlaybackStarted( const Tomahawk::track_ptr& track, unsigned int duration )
 {
+    Q_D( Source );
+
     tLog( LOGVERBOSE ) << Q_FUNC_INFO << track->toString();
 
-    m_currentTrack = track->toQuery();
-    m_currentTrackTimer.start( duration * 1000 + 900000 ); // duration comes in seconds
+    d->currentTrack = track->toQuery();
+    d->currentTrackTimer.start( duration * 1000 + 900000 ); // duration comes in seconds
 
-    if ( m_playlistInterface.isNull() )
+    if ( d->playlistInterface.isNull() )
         playlistInterface();
 
     emit playbackStarted( track );
@@ -463,10 +615,12 @@ Source::onPlaybackStarted( const Tomahawk::track_ptr& track, unsigned int durati
 void
 Source::onPlaybackFinished( const Tomahawk::track_ptr& track, const Tomahawk::PlaybackLog& log )
 {
+    Q_D( Source );
+
     tDebug() << Q_FUNC_INFO << track->toString();
     emit playbackFinished( track, log );
 
-    m_currentTrack.clear();
+    d->currentTrack.clear();
     emit stateChanged();
 }
 
@@ -474,7 +628,9 @@ Source::onPlaybackFinished( const Tomahawk::track_ptr& track, const Tomahawk::Pl
 void
 Source::trackTimerFired()
 {
-    m_currentTrack.clear();
+    Q_D( Source );
+
+    d->currentTrack.clear();
     emit stateChanged();
 }
 
@@ -482,37 +638,47 @@ Source::trackTimerFired()
 QString
 Source::lastCmdGuid() const
 {
-    QMutexLocker lock( &m_cmdMutex );
-    return m_lastCmdGuid;
+    Q_D( const Source );
+
+    QMutexLocker lock( &d->cmdMutex );
+    return d->lastCmdGuid;
 }
 
 
 void
 Source::setLastCmdGuid( const QString& guid )
 {
+    Q_D( Source );
+
     tLog( LOGVERBOSE ) << Q_FUNC_INFO << "name is" << friendlyName() << "and guid is" << guid;
 
-    QMutexLocker lock( &m_cmdMutex );
-    m_lastCmdGuid = guid;
+    QMutexLocker lock( &d->cmdMutex );
+    d->lastCmdGuid = guid;
 }
 
 
 void
 Source::addCommand( const QSharedPointer<DatabaseCommand>& command )
 {
-    QMutexLocker lock( &m_cmdMutex );
+    Q_D( Source );
 
-    m_cmds << command;
+    QMutexLocker lock( &d->cmdMutex );
+
+    d->cmds << command;
     if ( !command->singletonCmd() )
-        m_lastCmdGuid = command->guid();
+    {
+        d->lastCmdGuid = command->guid();
+    }
 
-    m_commandCount = m_cmds.count();
+    d->commandCount = d->cmds.count();
 }
 
 
 void
 Source::executeCommands()
 {
+    Q_D( Source );
+
     if ( QThread::currentThread() != thread() )
     {
         QMetaObject::invokeMethod( this, "executeCommands", Qt::QueuedConnection );
@@ -521,20 +687,20 @@ Source::executeCommands()
 
     bool commandsAvail = false;
     {
-        QMutexLocker lock( &m_cmdMutex );
-        commandsAvail = !m_cmds.isEmpty();
+        QMutexLocker lock( &d->cmdMutex );
+        commandsAvail = !d->cmds.isEmpty();
     }
 
     if ( commandsAvail )
     {
-        QMutexLocker lock( &m_cmdMutex );
+        QMutexLocker lock( &d->cmdMutex );
         QList< QSharedPointer<DatabaseCommand> > cmdGroup;
-        QSharedPointer<DatabaseCommand> cmd = m_cmds.takeFirst();
+        QSharedPointer<DatabaseCommand> cmd = d->cmds.takeFirst();
         while ( cmd->groupable() )
         {
             cmdGroup << cmd;
-            if ( !m_cmds.isEmpty() && m_cmds.first()->groupable() && m_cmds.first()->commandname() == cmd->commandname() )
-                cmd = m_cmds.takeFirst();
+            if ( !d->cmds.isEmpty() && d->cmds.first()->groupable() && d->cmds.first()->commandname() == cmd->commandname() )
+                cmd = d->cmds.takeFirst();
             else
                 break;
         }
@@ -551,20 +717,20 @@ Source::executeCommands()
             Database::instance()->enqueue( cmd );
         }
 
-        int percentage = ( float( m_commandCount - m_cmds.count() ) / (float)m_commandCount ) * 100.0;
-        m_textStatus = tr( "Saving (%1%)" ).arg( percentage );
+        int percentage = ( float( d->commandCount - d->cmds.count() ) / (float)d->commandCount ) * 100.0;
+        d->textStatus = tr( "Saving (%1%)" ).arg( percentage );
         emit stateChanged();
     }
     else
     {
-        if ( m_updateIndexWhenSynced )
+        if ( d->updateIndexWhenSynced )
         {
-            m_updateIndexWhenSynced = false;
+            d->updateIndexWhenSynced = false;
             updateTracks();
         }
 
-        m_textStatus = QString();
-        m_state = DBSyncConnection::SYNCED;
+        d->textStatus = QString();
+        d->state = SYNCED;
 
         emit commandsFinished();
         emit stateChanged();
@@ -615,15 +781,21 @@ Source::updateTracks()
 void
 Source::updateIndexWhenSynced()
 {
-    m_updateIndexWhenSynced = true;
+    Q_D( Source );
+
+    d->updateIndexWhenSynced = true;
 }
 
 
 QString
 Source::textStatus() const
 {
-    if ( !m_textStatus.isEmpty() )
-        return m_textStatus;
+    Q_D( const Source );
+
+    if ( !d->textStatus.isEmpty() )
+    {
+        return d->textStatus;
+    }
 
     if ( !currentTrack().isNull() )
     {
@@ -631,7 +803,7 @@ Source::textStatus() const
     }
 
     // do not use isOnline() here - it will always return true for the local source
-    if ( m_online )
+    if ( d->online )
     {
         return tr( "Online" );
     }
@@ -639,4 +811,12 @@ Source::textStatus() const
     {
         return tr( "Offline" );
     }
+}
+
+DBSyncConnectionState
+Source::state() const
+{
+    Q_D( const Source );
+
+    return d->state;
 }

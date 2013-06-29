@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013, Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -17,77 +18,70 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Connection.h"
+#include "Connection_p.h"
 
 #include "network/Servent.h"
+#include "network/Msg.h"
 #include "utils/Logger.h"
+
+#include "AclRegistry.h"
+#include "QTcpSocketExtra.h"
 #include "Source.h"
 
-#include <QtCore/QTime>
-#include <QtCore/QThread>
+#include <qjson/serializer.h>
+
+#include <QTime>
+#include <QThread>
 
 #define PROTOVER "4" // must match remote peer, or we can't talk.
 
 
 Connection::Connection( Servent* parent )
     : QObject()
-    , m_sock( 0 )
-    , m_peerport( 0 )
-    , m_servent( parent )
-    , m_ready( false )
-    , m_onceonly( true )
-    , m_do_shutdown( false )
-    , m_actually_shutting_down( false )
-    , m_peer_disconnected( false )
-    , m_tx_bytes( 0 )
-    , m_tx_bytes_requested( 0 )
-    , m_rx_bytes( 0 )
-    , m_id( "Connection()" )
-    , m_statstimer( 0 )
-    , m_stats_tx_bytes_per_sec( 0 )
-    , m_stats_rx_bytes_per_sec( 0 )
-    , m_rx_bytes_last( 0 )
-    , m_tx_bytes_last( 0 )
+    , d_ptr( new ConnectionPrivate( this, parent ) )
 {
-    moveToThread( m_servent->thread() );
+    moveToThread( parent->thread() );
     tDebug( LOGVERBOSE ) << "CTOR Connection (super)" << thread();
 
-    connect( &m_msgprocessor_out, SIGNAL( ready( msg_ptr ) ),
+    connect( &d_func()->msgprocessor_out, SIGNAL( ready( msg_ptr ) ),
              SLOT( sendMsg_now( msg_ptr ) ), Qt::QueuedConnection );
 
-    connect( &m_msgprocessor_in,  SIGNAL( ready( msg_ptr ) ),
+    connect( &d_func()->msgprocessor_in,  SIGNAL( ready( msg_ptr ) ),
              SLOT( handleMsg( msg_ptr ) ), Qt::QueuedConnection );
 
-    connect( &m_msgprocessor_in, SIGNAL( empty() ),
+    connect( &d_func()->msgprocessor_in, SIGNAL( empty() ),
              SLOT( handleIncomingQueueEmpty() ), Qt::QueuedConnection );
 }
 
 
 Connection::~Connection()
 {
-    tDebug( LOGVERBOSE ) << "DTOR connection (super)" << id() << thread() << m_sock.isNull();
-    if ( !m_sock.isNull() )
+    Q_D( Connection );
+    tDebug( LOGVERBOSE ) << "DTOR connection (super)" << id() << thread() << d->sock.isNull();
+    if ( !d->sock.isNull() )
     {
-        m_sock->deleteLater();
+        d->sock->deleteLater();
     }
 
-    delete m_statstimer;
+    delete d->statstimer;
+    delete d_ptr;
 }
 
 
 void
 Connection::handleIncomingQueueEmpty()
 {
+    Q_D( Connection );
     //qDebug() << Q_FUNC_INFO << "bavail" << m_sock->bytesAvailable()
     //         << "isopen" << m_sock->isOpen()
     //         << "m_peer_disconnected" << m_peer_disconnected
     //         << "bytes rx" << bytesReceived();
 
-    if ( !m_sock.isNull() && m_sock->bytesAvailable() == 0 && m_peer_disconnected )
+    if ( !d->sock.isNull() && d->sock->bytesAvailable() == 0 && d->peer_disconnected )
     {
         tDebug( LOGVERBOSE ) << "No more data to read, peer disconnected. shutting down connection."
-                             << "bytesavail" << m_sock->bytesAvailable()
-                             << "bytesrx" << m_rx_bytes;
+                             << "bytesavail" << d->sock->bytesAvailable()
+                             << "bytesrx" << d->rx_bytes;
         shutdown();
     }
 }
@@ -107,9 +101,67 @@ Connection::setFirstMessage( const QVariant& m )
 void
 Connection::setFirstMessage( msg_ptr m )
 {
-    m_firstmsg = m;
+    Q_D( Connection );
+
+    d->firstmsg = m;
     //qDebug() << id() << " first msg set to " << QString::fromAscii(m_firstmsg->payload())
     //        << "msg len:" << m_firstmsg->length() ;
+}
+
+msg_ptr
+Connection::firstMessage() const
+{
+    Q_D( const Connection );
+
+    return d->firstmsg;
+}
+
+const QPointer<QTcpSocket>&
+Connection::socket() const
+{
+    Q_D( const Connection );
+
+    return d->sock;
+}
+
+void
+Connection::setOutbound( bool o )
+{
+    Q_D( Connection );
+
+    d->outbound = o;
+}
+
+bool
+Connection::outbound() const
+{
+    Q_D( const Connection );
+
+    return d->outbound;
+}
+
+Servent*
+Connection::servent() const
+{
+    Q_D( const Connection );
+
+    return d->servent;
+}
+
+int
+Connection::peerPort() const
+{
+    Q_D( const Connection );
+
+    return d->peerport;
+}
+
+void
+Connection::setPeerPort(int p)
+{
+    Q_D( Connection );
+
+    d->peerport = p;
 }
 
 
@@ -117,13 +169,13 @@ void
 Connection::shutdown( bool waitUntilSentAll )
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << waitUntilSentAll << id();
-    if ( m_do_shutdown )
+    if ( d_func()->do_shutdown )
     {
         //qDebug() << id() << " already shutting down";
         return;
     }
 
-    m_do_shutdown = true;
+    d_func()->do_shutdown = true;
     if ( !waitUntilSentAll )
     {
 //        qDebug() << "Shutting down immediately " << id();
@@ -132,7 +184,7 @@ Connection::shutdown( bool waitUntilSentAll )
     else
     {
         tDebug( LOGVERBOSE ) << "Shutting down after transfer complete " << id()
-                             << "Actual/Desired" << m_tx_bytes << m_tx_bytes_requested;
+                             << "Actual/Desired" << d_func()->tx_bytes << d_func()->tx_bytes_requested;
 
         bytesWritten( 0 ); // trigger shutdown if we've already sent everything
         // otherwise the bytesWritten slot will call actualShutdown()
@@ -144,16 +196,17 @@ Connection::shutdown( bool waitUntilSentAll )
 void
 Connection::actualShutdown()
 {
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << m_actually_shutting_down << id();
-    if ( m_actually_shutting_down )
+    Q_D( Connection );
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << d->actually_shutting_down << id();
+    if ( d->actually_shutting_down )
     {
         return;
     }
-    m_actually_shutting_down = true;
+    d->actually_shutting_down = true;
 
-    if ( !m_sock.isNull() && m_sock->isOpen() )
+    if ( !d->sock.isNull() && d->sock->isOpen() )
     {
-        m_sock->disconnectFromHost();
+        d->sock->disconnectFromHost();
     }
 
 //    qDebug() << "EMITTING finished()";
@@ -169,19 +222,98 @@ Connection::markAsFailed()
     shutdown();
 }
 
+void
+Connection::setName( const QString& n )
+{
+    Q_D( Connection );
+
+    d->name = n;
+}
+
+QString
+Connection::name() const
+{
+    Q_D( const Connection );
+
+    return d->name;
+}
+
+void
+Connection::setOnceOnly( bool b )
+{
+    Q_D( Connection );
+
+    d->onceonly = b;
+}
+
+bool
+Connection::onceOnly() const
+{
+    Q_D( const Connection );
+
+    return d->onceonly;
+}
+
+bool
+Connection::isReady() const
+{
+    Q_D( const Connection );
+
+    return d->ready;
+}
+
+bool
+Connection::isRunning() const
+{
+    Q_D( const Connection );
+
+    return d->sock != 0;
+}
+
+qint64
+Connection::bytesSent() const
+{
+    return d_func()->tx_bytes;
+}
+
+qint64
+Connection::bytesReceived() const
+{
+    return d_func()->rx_bytes;
+}
+
+void
+Connection::setMsgProcessorModeOut(quint32 m)
+{
+    d_func()->msgprocessor_out.setMode( m );
+}
+
+void
+Connection::setMsgProcessorModeIn(quint32 m)
+{
+    d_func()->msgprocessor_in.setMode( m );
+}
+
+const QHostAddress
+Connection::peerIpAddress() const
+{
+    return d_func()->peerIpAddress;
+}
+
 
 void
 Connection::start( QTcpSocket* sock )
 {
-    Q_ASSERT( m_sock.isNull() );
+    Q_D( Connection );
+    Q_ASSERT( d->sock.isNull() );
     Q_ASSERT( sock );
     Q_ASSERT( sock->isValid() );
 
-    m_sock = sock;
+    d->sock = sock;
 
-    if ( m_name.isEmpty() )
+    if ( d->name.isEmpty() )
     {
-        m_name = QString( "peer[%1]" ).arg( m_sock->peerAddress().toString() );
+        d->name = QString( "peer[%1]" ).arg( d->sock->peerAddress().toString() );
     }
 
     QTimer::singleShot( 0, this, SLOT( checkACL() ) );
@@ -191,40 +323,56 @@ Connection::start( QTcpSocket* sock )
 void
 Connection::checkACL()
 {
-    if ( !property( "nodeid" ).isValid() )
+    Q_D( Connection );
+    QReadLocker nodeidLocker( &d->nodeidLock );
+
+    if ( d->nodeid.isEmpty() )
     {
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Not checking ACL, nodeid is empty";
         QTimer::singleShot( 0, this, SLOT( doSetup() ) );
         return;
     }
 
-    if ( Servent::isIPWhitelisted( m_peerIpAddress ) )
+    if ( Servent::isIPWhitelisted( d_func()->peerIpAddress ) )
     {
         QTimer::singleShot( 0, this, SLOT( doSetup() ) );
         return;
     }
 
-    QString nodeid = property( "nodeid" ).toString();
-    QString bareName = name().contains( '/' ) ? name().left( name().indexOf( "/" ) ) : name();
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Checking ACL for" << name();
-    connect( ACLRegistry::instance(), SIGNAL( aclResult( QString, QString, ACLRegistry::ACL ) ), this, SLOT( checkACLResult( QString, QString, ACLRegistry::ACL ) ), Qt::QueuedConnection );
-    QMetaObject::invokeMethod( ACLRegistry::instance(), "isAuthorizedUser", Qt::QueuedConnection, Q_ARG( QString, nodeid ), Q_ARG( QString, bareName ), Q_ARG( ACLRegistry::ACL, ACLRegistry::NotFound ) );
+    connect( ACLRegistry::instance(), SIGNAL( aclResult( QString, QString, Tomahawk::ACLStatus::Type ) ),
+             this, SLOT( checkACLResult( QString, QString, Tomahawk::ACLStatus::Type ) ),
+             Qt::QueuedConnection );
+    QMetaObject::invokeMethod( ACLRegistry::instance(), "isAuthorizedUser", Qt::QueuedConnection, Q_ARG( QString, d->nodeid ), Q_ARG( QString, bareName() ), Q_ARG( Tomahawk::ACLStatus::Type, Tomahawk::ACLStatus::NotFound ) );
 }
 
 
-void
-Connection::checkACLResult( const QString &nodeid, const QString &username, ACLRegistry::ACL peerStatus )
+QString
+Connection::bareName() const
 {
-    QString bareName = name().contains( '/' ) ? name().left( name().indexOf( "/" ) ) : name();
-    if ( nodeid != property( "nodeid" ).toString() || username != bareName )
+    return name().contains( '/' ) ? name().left( name().indexOf( "/" ) ) : name();
+}
+
+void
+Connection::checkACLResult( const QString &nodeid, const QString &username, Tomahawk::ACLStatus::Type peerStatus )
+{
+    Q_D( Connection );
+    QReadLocker nodeidLocker( &d->nodeidLock );
+
+    if ( nodeid != d->nodeid )
     {
-        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "nodeid not ours, or username not our barename";
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << QString( "nodeid (%1) not ours (%2) for user %3" ).arg( nodeid ).arg( d->nodeid ).arg( username );
+        return;
+    }
+    if ( username != bareName() )
+    {
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "username not our barename";
         return;
     }
 
-    disconnect( ACLRegistry::instance(), SIGNAL( aclResult( QString, QString, ACLRegistry::ACL ) ) );
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "ACL status is" << peerStatus;
-    if ( peerStatus == ACLRegistry::Stream )
+    disconnect( ACLRegistry::instance(), SIGNAL( aclResult( QString, QString, Tomahawk::ACLStatus::Type ) ) );
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << QString( "ACL status for user %1 is" ).arg( username ) << peerStatus;
+    if ( peerStatus == Tomahawk::ACLStatus::Stream )
     {
         QTimer::singleShot( 0, this, SLOT( doSetup() ) );
         return;
@@ -237,7 +385,9 @@ Connection::checkACLResult( const QString &nodeid, const QString &username, ACLR
 void
 Connection::authCheckTimeout()
 {
-    if ( m_ready )
+    Q_D( Connection );
+
+    if ( d->ready )
         return;
 
     tDebug( LOGVERBOSE ) << "Closing connection, not authed in time.";
@@ -248,7 +398,9 @@ Connection::authCheckTimeout()
 void
 Connection::doSetup()
 {
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << thread();
+    Q_D( Connection );
+
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << thread() << d->id;
     /*
         New connections can be created from other thread contexts, such as
         when AudioEngine calls getIODevice.. - we need to ensure that connections
@@ -256,45 +408,55 @@ Connection::doSetup()
 
         HINT: export QT_FATAL_WARNINGS=1 helps to catch these kind of errors.
      */
-    if ( QThread::currentThread() != m_servent->thread() )
+    if ( QThread::currentThread() != d->servent->thread() )
     {
         // Connections should always be in the same thread as the servent.
-        moveToThread( m_servent->thread() );
+        moveToThread( d->servent->thread() );
     }
 
-    //stats timer calculates BW used by this connection
-    m_statstimer = new QTimer;
-    m_statstimer->moveToThread( this->thread() );
-    m_statstimer->setInterval( 1000 );
-    connect( m_statstimer, SIGNAL( timeout() ), SLOT( calcStats() ) );
-    m_statstimer->start();
-    m_statstimer_mark.start();
-
-    m_sock->moveToThread( thread() );
-
-    connect( m_sock.data(), SIGNAL( bytesWritten( qint64 ) ),
-                              SLOT( bytesWritten( qint64 ) ), Qt::QueuedConnection );
-
-    connect( m_sock.data(), SIGNAL( disconnected() ),
-                              SLOT( socketDisconnected() ), Qt::QueuedConnection );
-
-    connect( m_sock.data(), SIGNAL( error( QAbstractSocket::SocketError ) ),
-                              SLOT( socketDisconnectedError( QAbstractSocket::SocketError ) ), Qt::QueuedConnection );
-
-    connect( m_sock.data(), SIGNAL( readyRead() ),
-                              SLOT( readyRead() ), Qt::QueuedConnection );
-
-    // if connection not authed/setup fast enough, kill it:
-    QTimer::singleShot( AUTH_TIMEOUT, this, SLOT( authCheckTimeout() ) );
-
-    if ( outbound() )
+    if ( !d->setup )
     {
-        Q_ASSERT( !m_firstmsg.isNull() );
-        sendMsg( m_firstmsg );
+        // We only want to setup this connection once
+        d->setup = true;
+
+        //stats timer calculates BW used by this connection
+        d->statstimer = new QTimer;
+        d->statstimer->moveToThread( this->thread() );
+        d->statstimer->setInterval( 1000 );
+        connect( d->statstimer, SIGNAL( timeout() ), SLOT( calcStats() ) );
+        d->statstimer->start();
+        d->statstimer_mark.start();
+
+        d->sock->moveToThread( thread() );
+
+        connect( d->sock.data(), SIGNAL( bytesWritten( qint64 ) ),
+                                  SLOT( bytesWritten( qint64 ) ), Qt::QueuedConnection );
+
+        connect( d->sock.data(), SIGNAL( disconnected() ),
+                                  SLOT( socketDisconnected() ), Qt::QueuedConnection );
+
+        connect( d->sock.data(), SIGNAL( error( QAbstractSocket::SocketError ) ),
+                                  SLOT( socketDisconnectedError( QAbstractSocket::SocketError ) ), Qt::QueuedConnection );
+
+        connect( d->sock.data(), SIGNAL( readyRead() ),
+                                  SLOT( readyRead() ), Qt::QueuedConnection );
+
+        // if connection not authed/setup fast enough, kill it:
+        QTimer::singleShot( AUTH_TIMEOUT, this, SLOT( authCheckTimeout() ) );
+
+        if ( outbound() )
+        {
+            Q_ASSERT( !d->firstmsg.isNull() );
+            sendMsg( d->firstmsg );
+        }
+        else
+        {
+            sendMsg( Msg::factory( PROTOVER, Msg::SETUP ) );
+        }
     }
     else
     {
-        sendMsg( Msg::factory( PROTOVER, Msg::SETUP ) );
+        tLog() << Q_FUNC_INFO << QThread::currentThread() << d->id << "Duplicate doSetup call";
     }
 
     // call readyRead incase we missed the signal in between the servent disconnecting and us
@@ -306,15 +468,22 @@ Connection::doSetup()
 void
 Connection::socketDisconnected()
 {
+    Q_D( Connection );
+
+    qint64 bytesAvailable = 0;
+    if ( !d->sock.isNull() )
+    {
+        bytesAvailable = d->sock->bytesAvailable();
+    }
     tDebug( LOGVERBOSE ) << "SOCKET DISCONNECTED" << this->name() << id()
                          << "shutdown will happen after incoming queue empties."
-                         << "bytesavail:" << m_sock->bytesAvailable()
+                         << "bytesavail:" << bytesAvailable
                          << "bytesRecvd" << bytesReceived();
 
-    m_peer_disconnected = true;
+    d->peer_disconnected = true;
     emit socketClosed();
 
-    if ( m_msgprocessor_in.length() == 0 && m_sock->bytesAvailable() == 0 )
+    if ( d->msgprocessor_in.length() == 0 && bytesAvailable == 0 )
     {
         handleIncomingQueueEmpty();
         actualShutdown();
@@ -330,7 +499,7 @@ Connection::socketDisconnectedError( QAbstractSocket::SocketError e )
     if ( e == QAbstractSocket::RemoteHostClosedError )
         return;
 
-    m_peer_disconnected = true;
+    d_func()->peer_disconnected = true;
 
     emit socketErrored(e);
     emit socketClosed();
@@ -342,14 +511,30 @@ Connection::socketDisconnectedError( QAbstractSocket::SocketError e )
 QString
 Connection::id() const
 {
-    return m_id;
+    return d_func()->id;
 }
 
 
 void
 Connection::setId( const QString& id )
 {
-    m_id = id;
+    d_func()->id = id;
+}
+
+QString
+Connection::nodeId() const
+{
+    Q_D( const Connection );
+    QReadLocker locker( &d->nodeidLock );
+    return d->nodeid;
+}
+
+void
+Connection::setNodeId( const QString& nodeid )
+{
+    Q_D( Connection );
+    QWriteLocker locker( &d->nodeidLock );
+    d->nodeid = nodeid;
 }
 
 
@@ -357,41 +542,42 @@ void
 Connection::readyRead()
 {
 //    qDebug() << "readyRead, bytesavail:" << m_sock->bytesAvailable();
+    Q_D( Connection );
 
-    if ( m_msg.isNull() )
+    if ( d->msg.isNull() )
     {
-        if ( m_sock->bytesAvailable() < Msg::headerSize() )
+        if ( d->sock->bytesAvailable() < Msg::headerSize() )
             return;
 
         char msgheader[ Msg::headerSize() ];
-        if ( m_sock->read( (char*) &msgheader, Msg::headerSize() ) != Msg::headerSize() )
+        if ( d->sock->read( (char*) &msgheader, Msg::headerSize() ) != Msg::headerSize() )
         {
             tDebug() << "Failed reading msg header";
             this->markAsFailed();
             return;
         }
 
-        m_msg = Msg::begin( (char*) &msgheader );
-        m_rx_bytes += Msg::headerSize();
+        d->msg = Msg::begin( (char*) &msgheader );
+        d->rx_bytes += Msg::headerSize();
     }
 
-    if ( m_sock->bytesAvailable() < m_msg->length() )
+    if ( d->sock->bytesAvailable() < d->msg->length() )
         return;
 
-    QByteArray ba = m_sock->read( m_msg->length() );
-    if ( ba.length() != (qint32)m_msg->length() )
+    QByteArray ba = d->sock->read( d->msg->length() );
+    if ( ba.length() != (qint32)d->msg->length() )
     {
         tDebug() << "Failed to read full msg payload";
         this->markAsFailed();
         return;
     }
-    m_msg->fill( ba );
-    m_rx_bytes += ba.length();
+    d->msg->fill( ba );
+    d->rx_bytes += ba.length();
 
     handleReadMsg(); // process m_msg and clear() it
 
     // since there is no explicit threading, use the event loop to schedule this:
-    if ( m_sock->bytesAvailable() )
+    if ( d->sock->bytesAvailable() )
     {
         QTimer::singleShot( 0, this, SLOT( readyRead() ) );
     }
@@ -401,23 +587,25 @@ Connection::readyRead()
 void
 Connection::handleReadMsg()
 {
+    Q_D( Connection );
+
     if ( outbound() == false &&
-        m_msg->is( Msg::SETUP ) &&
-        m_msg->payload() == "ok" )
+        d->msg->is( Msg::SETUP ) &&
+        d->msg->payload() == "ok" )
     {
-        m_ready = true;
+        d->ready = true;
         tDebug( LOGVERBOSE ) << "Connection" << id() << "READY";
         setup();
         emit ready();
     }
-    else if ( !m_ready &&
+    else if ( !d->ready &&
              outbound() &&
-             m_msg->is( Msg::SETUP ) )
+             d->msg->is( Msg::SETUP ) )
     {
-        if ( m_msg->payload() == PROTOVER )
+        if ( d->msg->payload() == PROTOVER )
         {
             sendMsg( Msg::factory( "ok", Msg::SETUP ) );
-            m_ready = true;
+            d->ready = true;
             tDebug( LOGVERBOSE ) << "Connection" << id() << "READY";
             setup();
             emit ready();
@@ -430,17 +618,19 @@ Connection::handleReadMsg()
     }
     else
     {
-        m_msgprocessor_in.append( m_msg );
+        d->msgprocessor_in.append( d->msg );
     }
 
-    m_msg.clear();
+    d->msg.clear();
 }
 
 
 void
 Connection::sendMsg( QVariant j )
 {
-    if ( m_do_shutdown )
+    Q_D( Connection );
+
+    if ( d->do_shutdown )
         return;
 
     QJson::Serializer serializer;
@@ -453,32 +643,33 @@ Connection::sendMsg( QVariant j )
 void
 Connection::sendMsg( msg_ptr msg )
 {
-    if ( m_do_shutdown )
+    if ( d_func()->do_shutdown )
     {
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "SHUTTING DOWN, NOT SENDING msg flags:"
                              << (int)msg->flags() << "length:" << msg->length() << id();
         return;
     }
 
-    m_tx_bytes_requested += msg->length() + Msg::headerSize();
-    m_msgprocessor_out.append( msg );
+    d_func()->tx_bytes_requested += msg->length() + Msg::headerSize();
+    d_func()->msgprocessor_out.append( msg );
 }
 
 
 void
 Connection::sendMsg_now( msg_ptr msg )
 {
+    Q_D( Connection );
     Q_ASSERT( QThread::currentThread() == thread() );
 //    Q_ASSERT( this->isRunning() );
 
-    if ( m_sock.isNull() || !m_sock->isOpen() || !m_sock->isWritable() )
+    if ( d->sock.isNull() || !d->sock->isOpen() || !d->sock->isWritable() )
     {
         tDebug() << "***** Socket problem, whilst in sendMsg(). Cleaning up. *****";
         shutdown( false );
         return;
     }
 
-    if ( !msg->write( m_sock.data() ) )
+    if ( !msg->write( d->sock.data() ) )
     {
         //qDebug() << "Error writing to socket in sendMsg() *************";
         shutdown( false );
@@ -490,9 +681,9 @@ Connection::sendMsg_now( msg_ptr msg )
 void
 Connection::bytesWritten( qint64 i )
 {
-    m_tx_bytes += i;
+    d_func()->tx_bytes += i;
     // if we are waiting to shutdown, and have sent all queued data, do actual shutdown:
-    if ( m_do_shutdown && m_tx_bytes == m_tx_bytes_requested )
+    if ( d_func()->do_shutdown && d_func()->tx_bytes == d_func()->tx_bytes_requested )
         actualShutdown();
 }
 
@@ -500,13 +691,14 @@ Connection::bytesWritten( qint64 i )
 void
 Connection::calcStats()
 {
-    int elapsed = m_statstimer_mark.restart(); // ms since last calc
+    Q_D( Connection );
+    int elapsed = d->statstimer_mark.restart(); // ms since last calc
 
-    m_stats_tx_bytes_per_sec = (float)1000 * ( (m_tx_bytes - m_tx_bytes_last) / (float)elapsed );
-    m_stats_rx_bytes_per_sec = (float)1000 * ( (m_rx_bytes - m_rx_bytes_last) / (float)elapsed );
+    d->stats_tx_bytes_per_sec = (float)1000 * ( (d->tx_bytes - d->tx_bytes_last) / (float)elapsed );
+    d->stats_rx_bytes_per_sec = (float)1000 * ( (d->rx_bytes - d->rx_bytes_last) / (float)elapsed );
 
-    m_rx_bytes_last = m_rx_bytes;
-    m_tx_bytes_last = m_tx_bytes;
+    d->rx_bytes_last = d->rx_bytes;
+    d->tx_bytes_last = d->tx_bytes;
 
-    emit statsTick( m_stats_tx_bytes_per_sec, m_stats_rx_bytes_per_sec );
+    emit statsTick( d->stats_tx_bytes_per_sec, d->stats_rx_bytes_per_sec );
 }

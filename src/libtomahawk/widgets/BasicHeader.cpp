@@ -36,13 +36,16 @@ using namespace Tomahawk;
 BasicHeader::BasicHeader( QWidget* parent )
     : QWidget( parent )
 {
+    QLayout* l = new QVBoxLayout;
+    TomahawkUtils::unmarginLayout( l );
+    setLayout( l );
+
     m_mainLayout = new QHBoxLayout;
-    setLayout( m_mainLayout );
 
     m_imageLabel = new QLabel( this );
-    m_imageLabel->setFixedSize( 64, 64 );
+    m_imageLabel->setFixedSize( 48, 48 );
     m_mainLayout->addWidget( m_imageLabel );
-    m_mainLayout->addSpacing( 16 );
+    m_mainLayout->addSpacing( 8 );
 
     m_verticalLayout = new QVBoxLayout;
     m_mainLayout->addLayout( m_verticalLayout );
@@ -53,23 +56,27 @@ BasicHeader::BasicHeader( QWidget* parent )
     m_verticalLayout->addWidget( m_descriptionLabel );
     m_verticalLayout->addStretch();
 
-    m_mainLayout->addSpacing( 16 );
+    m_mainLayout->addSpacing( 8 );
     m_mainLayout->setStretchFactor( m_verticalLayout, 2 );
 
     QPalette pal = palette();
-    pal.setColor( QPalette::Foreground, Qt::white );
+    pal.setColor( QPalette::Foreground, TomahawkStyle::HEADER_TEXT );
+    pal.setBrush( backgroundRole(), TomahawkStyle::HEADER_BACKGROUND );
 
     m_captionLabel->setPalette( pal );
     m_descriptionLabel->setPalette( pal );
 
     QFont font = m_captionLabel->font();
-    font.setPointSize( TomahawkUtils::defaultFontSize() + 4 );
+    
+    font.setPointSize( TomahawkUtils::defaultFontSize() + 10 );
     font.setBold( true );
+    font.setFamily( "Titillium Web" );
+    
     m_captionLabel->setFont( font );
     m_captionLabel->setElideMode( Qt::ElideRight );
     m_captionLabel->setAlignment( Qt::AlignTop | Qt::AlignLeft );
 
-    font.setPointSize( TomahawkUtils::defaultFontSize() + 1 );
+    font.setPointSize( TomahawkUtils::defaultFontSize() + 2 );
     font.setBold( false );
     m_descriptionLabel->setFont( font );
     m_descriptionLabel->setAlignment( Qt::AlignTop | Qt::AlignLeft );
@@ -85,11 +92,25 @@ BasicHeader::BasicHeader( QWidget* parent )
     m_captionLabel->setGraphicsEffect( effect );*/
 //    m_descriptionLabel->setGraphicsEffect( effect );
 
-    TomahawkUtils::unmarginLayout( layout() );
-    layout()->setContentsMargins( 8, 4, 8, 4 );
-    setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
-    setFixedHeight( 80 );
+    QFrame* lineAbove = new QFrame( this );
+    lineAbove->setStyleSheet( QString( "QFrame { border: 1px solid %1; }" ).arg( TomahawkStyle::HEADER_BACKGROUND.name() ) );
+    lineAbove->setFrameShape( QFrame::HLine );
+    lineAbove->setMaximumHeight( 1 );
+    QFrame* lineBelow = new QFrame( this );
+    lineBelow->setStyleSheet( QString( "QFrame { border: 1px solid black; }" ) );
+    lineBelow->setFrameShape( QFrame::HLine );
+    lineBelow->setMaximumHeight( 1 );
 
+    l->addItem( m_mainLayout );
+    l->addWidget( lineAbove );
+    l->addWidget( lineBelow );
+
+    TomahawkUtils::unmarginLayout( m_mainLayout );
+    m_mainLayout->setContentsMargins( 8, 4, 8, 4 );
+    setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
+    setFixedHeight( 58 );
+
+    setAutoFillBackground( true );
     setPalette( pal );
 }
 
@@ -125,7 +146,7 @@ BasicHeader::paintEvent( QPaintEvent* event )
 {
     QWidget::paintEvent( event );
 
-    QPainter painter( this );
+/*    QPainter painter( this );
     painter.setRenderHint( QPainter::Antialiasing );
 
     QLinearGradient gradient( QPoint( 0, 0 ), QPoint( 0, 1 ) );
@@ -134,5 +155,5 @@ BasicHeader::paintEvent( QPaintEvent* event )
     gradient.setColorAt( 1.0, TomahawkStyle::HEADER_UPPER );
 
     painter.setBrush( gradient );
-    painter.fillRect( rect(), gradient );
+    painter.fillRect( rect(), gradient );*/
 }

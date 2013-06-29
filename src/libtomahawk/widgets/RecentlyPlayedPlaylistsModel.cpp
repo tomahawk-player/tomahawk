@@ -20,11 +20,13 @@
 
 #include "RecentlyPlayedPlaylistsModel.h"
 
-#include "TomahawkSettings.h"
 #include "audio/AudioEngine.h"
-#include "SourceList.h"
-#include "utils/Logger.h"
+#include "collection/Collection.h"
 #include "playlist/dynamic/DynamicPlaylist.h"
+#include "utils/Logger.h"
+
+#include "TomahawkSettings.h"
+#include "SourceList.h"
 #include "Playlist.h"
 
 using namespace Tomahawk;

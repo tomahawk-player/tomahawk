@@ -82,6 +82,7 @@ public slots:
     void databaseReady();
 
 signals:
+    void running();
     void idle();
     void resolving( const Tomahawk::query_ptr& query );
 

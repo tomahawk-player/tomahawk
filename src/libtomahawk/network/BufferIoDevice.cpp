@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013, Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -17,9 +18,10 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "BufferIoDevice.h"
+#include "BufferIoDevice_p.h"
 
 #include <QCoreApplication>
+#include <QMutexLocker>
 #include <QThread>
 
 #include "utils/Logger.h"
@@ -30,18 +32,23 @@
 
 BufferIODevice::BufferIODevice( unsigned int size, QObject* parent )
     : QIODevice( parent )
-    , m_size( size )
-    , m_received( 0 )
-    , m_pos( 0 )
+    , d_ptr( new BufferIODevicePrivate( this, size ) )
 {
+}
+
+
+BufferIODevice::~BufferIODevice()
+{
+    delete d_ptr;
 }
 
 
 bool
 BufferIODevice::open( OpenMode mode )
 {
+    Q_D( BufferIODevice );
     Q_UNUSED( mode );
-    QMutexLocker lock( &m_mut );
+    QMutexLocker lock( &d->mut );
 
     qDebug() << Q_FUNC_INFO;
     QIODevice::open( QIODevice::ReadOnly | QIODevice::Unbuffered ); // FIXME?
@@ -52,7 +59,8 @@ BufferIODevice::open( OpenMode mode )
 void
 BufferIODevice::close()
 {
-    QMutexLocker lock( &m_mut );
+    Q_D( BufferIODevice );
+    QMutexLocker lock( &d->mut );
 
     qDebug() << Q_FUNC_INFO;
     QIODevice::close();
@@ -62,16 +70,17 @@ BufferIODevice::close()
 bool
 BufferIODevice::seek( qint64 pos )
 {
-    qDebug() << Q_FUNC_INFO << pos << m_size;
+    Q_D( BufferIODevice );
+    qDebug() << Q_FUNC_INFO << pos << d->size;
 
-    if ( pos >= m_size )
+    if ( pos >= d->size )
         return false;
 
     int block = blockForPos( pos );
     if ( isBlockEmpty( block ) )
         emit blockRequest( block );
 
-    m_pos = pos;
+    d->pos = pos;
     qDebug() << "Finished seeking";
 
     return true;
@@ -81,30 +90,40 @@ BufferIODevice::seek( qint64 pos )
 void
 BufferIODevice::seeked( int block )
 {
-    qDebug() << Q_FUNC_INFO << block << m_size;
+    Q_D( BufferIODevice );
+    qDebug() << Q_FUNC_INFO << block << d->size;
 }
 
 
 void
 BufferIODevice::inputComplete( const QString& errmsg )
 {
+    Q_D( BufferIODevice );
     qDebug() << Q_FUNC_INFO;
     setErrorString( errmsg );
-    m_size = m_received;
+    d->size = d->received;
     emit readChannelFinished();
+}
+
+
+bool
+BufferIODevice::isSequential() const
+{
+    return false;
 }
 
 
 void
 BufferIODevice::addData( int block, const QByteArray& ba )
 {
+    Q_D( BufferIODevice );
     {
-        QMutexLocker lock( &m_mut );
+        QMutexLocker lock( &d->mut );
 
-        while ( m_buffer.count() <= block )
-            m_buffer << QByteArray();
+        while ( d->buffer.count() <= block )
+            d->buffer << QByteArray();
 
-        m_buffer.replace( block, ba );
+        d->buffer.replace( block, ba );
     }
 
     // If this was the last block of the transfer, check if we need to fill up gaps
@@ -116,7 +135,7 @@ BufferIODevice::addData( int block, const QByteArray& ba )
         }
     }
 
-    m_received += ba.count();
+    d->received += ba.count();
     emit bytesWritten( ba.count() );
     emit readyRead();
 }
@@ -125,21 +144,24 @@ BufferIODevice::addData( int block, const QByteArray& ba )
 qint64
 BufferIODevice::bytesAvailable() const
 {
-    return m_size - m_pos;
+    Q_D( const BufferIODevice );
+
+    return d->size - d->pos;
 }
 
 
 qint64
 BufferIODevice::readData( char* data, qint64 maxSize )
 {
+    Q_D( BufferIODevice );
 //    qDebug() << Q_FUNC_INFO << m_pos << maxSize << 1;
 
     if ( atEnd() )
         return 0;
 
     QByteArray ba;
-    ba.append( getData( m_pos, maxSize ) );
-    m_pos += ba.count();
+    ba.append( getData( d->pos, maxSize ) );
+    d->pos += ba.count();
 
 //    qDebug() << Q_FUNC_INFO << maxSize << ba.count() << 2;
     memcpy( data, ba.data(), ba.count() );
@@ -162,26 +184,44 @@ BufferIODevice::writeData( const char* data, qint64 maxSize )
 qint64
 BufferIODevice::size() const
 {
-    qDebug() << Q_FUNC_INFO << m_size;
-    return m_size;
+    Q_D( const BufferIODevice );
+    qDebug() << Q_FUNC_INFO << d->size;
+    return d->size;
 }
 
 
 bool
 BufferIODevice::atEnd() const
 {
+    Q_D( const BufferIODevice );
 //    qDebug() << Q_FUNC_INFO << ( m_size <= m_pos );
-    return ( m_size <= m_pos );
+    return ( d->size <= d->pos );
+}
+
+
+qint64
+BufferIODevice::pos() const
+{
+    Q_D( const BufferIODevice );
+    return d->pos;
 }
 
 
 void
 BufferIODevice::clear()
 {
-    QMutexLocker lock( &m_mut );
+    Q_D( BufferIODevice );
+    QMutexLocker lock( &d->mut );
 
-    m_pos = 0;
-    m_buffer.clear();
+    d->pos = 0;
+    d->buffer.clear();
+}
+
+
+QIODevice::OpenMode
+BufferIODevice::openMode() const
+{
+    return QIODevice::ReadOnly | QIODevice::Unbuffered;
 }
 
 
@@ -217,8 +257,10 @@ BufferIODevice::offsetForPos( qint64 pos ) const
 int
 BufferIODevice::nextEmptyBlock() const
 {
+    Q_D( const BufferIODevice );
+
     int i = 0;
-    foreach( const QByteArray& ba, m_buffer )
+    foreach( const QByteArray& ba, d->buffer )
     {
         if ( ba.isEmpty() )
             return i;
@@ -236,9 +278,11 @@ BufferIODevice::nextEmptyBlock() const
 int
 BufferIODevice::maxBlocks() const
 {
-    int i = m_size / BLOCKSIZE;
+    Q_D( const BufferIODevice );
 
-    if ( ( m_size % BLOCKSIZE ) > 0 )
+    int i = d->size / BLOCKSIZE;
+
+    if ( ( d->size % BLOCKSIZE ) > 0 )
         i++;
 
     return i;
@@ -248,22 +292,24 @@ BufferIODevice::maxBlocks() const
 bool
 BufferIODevice::isBlockEmpty( int block ) const
 {
-    if ( block >= m_buffer.count() )
+    Q_D( const BufferIODevice );
+    if ( block >= d->buffer.count() )
         return true;
 
-    return m_buffer.at( block ).isEmpty();
+    return d->buffer.at( block ).isEmpty();
 }
 
 
 QByteArray
 BufferIODevice::getData( qint64 pos, qint64 size )
 {
+    Q_D( BufferIODevice );
 //    qDebug() << Q_FUNC_INFO << pos << size << 1;
     QByteArray ba;
     int block = blockForPos( pos );
     int offset = offsetForPos( pos );
 
-    QMutexLocker lock( &m_mut );
+    QMutexLocker lock( &d->mut );
     while( ba.count() < size )
     {
         if ( block > maxBlocks() )
@@ -272,7 +318,7 @@ BufferIODevice::getData( qint64 pos, qint64 size )
         if ( isBlockEmpty( block ) )
             break;
 
-        ba.append( m_buffer.at( block++ ).mid( offset ) );
+        ba.append( d->buffer.at( block++ ).mid( offset ) );
     }
 
 //    qDebug() << Q_FUNC_INFO << pos << size << 2;

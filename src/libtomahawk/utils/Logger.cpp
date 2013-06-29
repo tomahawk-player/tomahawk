@@ -60,13 +60,8 @@ log( const char *msg, unsigned int debugLevel, bool toDisk = true )
             #endif
     }
 
-    #ifdef QT_NO_DEBUG
-    if ( debugLevel > RELEASE_LEVEL_THRESHOLD )
+    if ( debugLevel > LOGTHIRDPARTY )
         toDisk = false;
-    #else
-    if ( debugLevel > DEBUG_LEVEL_THRESHOLD )
-        toDisk = false;
-    #endif
 
     #ifdef LOG_SQL_QUERIES
     if ( debugLevel == LOGSQL )
@@ -114,7 +109,8 @@ TomahawkLogHandler( QtMsgType type, const char* msg )
     static QMutex s_mutex;
 
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
-    const char* message = msg.toLatin1().constData();
+    QByteArray ba = msg.toUtf8();
+    const char* message = ba.constData();
 #else
     const char* message = msg;
 #endif

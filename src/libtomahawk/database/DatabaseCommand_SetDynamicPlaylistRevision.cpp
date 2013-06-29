@@ -18,13 +18,17 @@
 
 #include "DatabaseCommand_SetDynamicPlaylistRevision.h"
 
-#include "Source.h"
-#include "DatabaseImpl.h"
-#include "TomahawkSqlQuery.h"
+#include "collection/Collection.h"
 #include "playlist/dynamic/DynamicPlaylist.h"
 #include "playlist/dynamic/DynamicControl.h"
 #include "network/Servent.h"
 #include "utils/Logger.h"
+
+#include "DatabaseImpl.h"
+#include "Source.h"
+#include "TomahawkSqlQuery.h"
+
+#include <qjson/serializer.h>
 
 #include <QSqlQuery>
 
@@ -75,6 +79,7 @@ DatabaseCommand_SetDynamicPlaylistRevision::controlsV()
 void
 DatabaseCommand_SetDynamicPlaylistRevision::postCommitHook()
 {
+    tDebug() << Q_FUNC_INFO;
     if ( source().isNull() || source()->dbCollection().isNull() )
     {
         tDebug() << "Source has gone offline, not emitting to GUI.";
@@ -90,19 +95,23 @@ DatabaseCommand_SetDynamicPlaylistRevision::postCommitHook()
     tLog() << "Postcommitting this playlist:" << playlistguid() << source().isNull();
 
     // private, but we are a friend. will recall itself in its own thread:
+    DynamicPlaylist* rawPl = 0;
     dynplaylist_ptr playlist = source()->dbCollection()->autoPlaylist( playlistguid() );
-    if ( playlist.isNull() )
+    if ( !playlist )
         playlist = source()->dbCollection()->station( playlistguid() );
-    // UGH we don't have a sharedptr from DynamicPlaylist+
 
-    DynamicPlaylist* rawPl = playlist.data();
-    if( playlist.isNull() ) // if it's neither an auto or station, it must not be auto-loaded, so we MUST have been told about it directly
-        rawPl = m_playlist;
-
-    if ( rawPl == 0 )
+    if ( playlist )
+        rawPl = playlist.data();
+    else
     {
-        tLog() <<"Got null playlist with guid:" << playlistguid() << "from source and collection:" << source()->friendlyName() << source()->dbCollection()->name() << "and mode is static?:" << (m_mode == Static);
-        Q_ASSERT( false );
+        // if it's neither an auto or station, it must not be auto-loaded, so we MUST have been told about it directly
+        rawPl = m_playlist;
+    }
+
+    if ( !rawPl )
+    {
+        tLog() << "Got null playlist with guid:" << playlistguid() << "from source and collection:" << source()->friendlyName() << source()->dbCollection()->name() << "and mode is static?:" << (m_mode == Static);
+//        Q_ASSERT( false );
         return;
     }
 
@@ -156,6 +165,8 @@ void
 DatabaseCommand_SetDynamicPlaylistRevision::exec( DatabaseImpl* lib )
 {
     DatabaseCommand_SetPlaylistRevision::exec( lib );
+    if ( m_failed )
+        return;
 
     QVariantList newcontrols;
     foreach( const QVariant& v, m_controls )

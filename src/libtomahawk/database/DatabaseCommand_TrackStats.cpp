@@ -23,6 +23,11 @@
 #include "SourceList.h"
 #include "utils/Logger.h"
 
+// Forward Declarations breaking QSharedPointer
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+    #include "collection/Collection.h"
+#endif
+
 using namespace Tomahawk;
 
 
@@ -49,6 +54,35 @@ DatabaseCommand_TrackStats::exec( DatabaseImpl* dbi )
     {
         if ( m_track->trackId() == 0 )
             return;
+
+        query.prepare( "SELECT COUNT(*) AS counter, track.id "
+                       "FROM playback_log, track "
+                       "WHERE playback_log.source IS NULL AND track.id = playback_log.track "
+                       "GROUP BY track.id "
+                       "ORDER BY counter DESC" );
+        query.exec();
+
+        unsigned int chartPos = 0;
+        unsigned int chartCount = 0;
+        const unsigned int trackId = m_track->trackId();
+
+        QHash< QString, unsigned int > charts;
+        while ( query.next() )
+        {
+            if ( query.value( 0 ).toUInt() < 2 )
+                break;
+
+            chartCount++;
+            if ( chartPos == 0 && query.value( 1 ).toUInt() == trackId )
+            {
+                chartPos = chartCount;
+            }
+        }
+
+        if ( chartPos == 0 )
+            chartPos = chartCount;
+
+        emit trackStats( chartPos, chartCount );
 
         query.prepare( "SELECT * "
                        "FROM playback_log "

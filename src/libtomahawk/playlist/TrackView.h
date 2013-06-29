@@ -84,6 +84,8 @@ public:
     bool autoResize() const { return m_autoResize; }
     void setAutoResize( bool b );
 
+    void setAlternatingRowColors( bool enable );
+
     // Starts playing from the beginning if resolved, or waits until a track is playable
     void startPlayingFromStart();
 
@@ -93,7 +95,7 @@ public slots:
     virtual void deleteSelectedItems();
 
     void playItem();
-    void onMenuTriggered( int action );
+    virtual void onMenuTriggered( int action );
 
     void onViewChanged();
     void onScrollTimeout();
@@ -111,6 +113,7 @@ protected:
     virtual void dragMoveEvent( QDragMoveEvent* event );
     virtual void dropEvent( QDropEvent* event );
 
+    virtual void leaveEvent( QEvent* event );
     virtual void paintEvent( QPaintEvent* event );
     virtual void keyPressEvent( QKeyEvent* event );
     virtual void wheelEvent( QWheelEvent* event );
@@ -121,6 +124,8 @@ protected slots:
 private slots:
     void onItemResized( const QModelIndex& index );
     void onFilterChanged( const QString& filter );
+    void onModelFilling();
+    void onModelEmptyCheck();
 
     void onCustomContextMenu( const QPoint& pos );
 
@@ -148,6 +153,7 @@ private:
 
     bool m_updateContextView;
     bool m_autoResize;
+    bool m_alternatingRowColors;
 
     QModelIndex m_contextMenuIndex;
 

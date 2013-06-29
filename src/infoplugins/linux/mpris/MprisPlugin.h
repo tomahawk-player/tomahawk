@@ -24,7 +24,14 @@
 #include "Source.h"
 #include "audio/AudioEngine.h"
 #include "infosystem/InfoSystem.h"
-#include "infoplugins/InfoPluginDllMacro.h"
+
+#include "../../InfoPluginDllMacro.h"
+
+// Forward Declarations breaking QSharedPointer
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+    #include "PlaylistInterface.h"
+#endif
+
 
 #include <QObject>
 #include <QVariant>

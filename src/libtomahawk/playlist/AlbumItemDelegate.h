@@ -43,18 +43,11 @@ public:
     AlbumItemDelegate( TrackView* parent = 0, PlayableProxyModel* proxy = 0 );
 
     virtual QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
-    
+
 protected:
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
-private slots:
-    void doUpdateIndex( const QPersistentModelIndex& idx );
-    void modelChanged();
-
 private:
-    QTextOption m_centerOption;
-    QTextOption m_centerRightOption;
-
     TrackView* m_view;
     PlayableProxyModel* m_model;
 };

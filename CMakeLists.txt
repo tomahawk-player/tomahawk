@@ -23,7 +23,7 @@ ENDIF()
 
 SET( TOMAHAWK_VERSION_MAJOR 0 )
 SET( TOMAHAWK_VERSION_MINOR 7 )
-SET( TOMAHAWK_VERSION_PATCH 99 )
+SET( TOMAHAWK_VERSION_PATCH 100 )
 #SET( TOMAHAWK_VERSION_RC 0 )
 
 SET( TOMAHAWK_TRANSLATION_LANGUAGES ar bg bn_IN ca cs de en el es fi fr hi_IN hu gl it ja lt pl pt_BR ru sv tr zh_CN zh_TW )
@@ -37,11 +37,14 @@ add_definitions( "-DQT_STRICT_ITERATORS" )
 option(BUILD_GUI "Build Tomahawk with GUI" ON)
 option(BUILD_RELEASE "Generate TOMAHAWK_VERSION without GIT info" OFF)
 option(BUILD_TESTS "Build Tomahawk with unit tests" ON)
+option(BUILD_HATCHET "Build the Hatchet plugin" OFF)
 
 option(WITH_BREAKPAD "Build with breakpad integration" ON)
 option(WITH_CRASHREPORTER "Build with CrashReporter" ON)
 option(WITH_BINARY_ATTICA "Enable support for downloading binary resolvers automatically" ON)
 option(LEGACY_KDE_INTEGRATION "Install tomahawk.protocol file, deprecated since 4.6.0" OFF)
+option(WITH_UPOWER "Build with support for UPower events" OFF)
+option(WITH_GNOMESHORTCUTHANDLER "Build with shortcut handler for GNOME" OFF)
 
 IF( CMAKE_SYSTEM_PROCESSOR MATCHES "arm" )
     message(STATUS "Build of breakpad library disabled on this platform.")
@@ -72,7 +75,7 @@ ENDIF()
 IF( NOT BUILD_RELEASE AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.git/" )
     INCLUDE( CMakeDateStamp )
     SET( TOMAHAWK_VERSION_DATE "${CMAKE_DATESTAMP_YEAR}${CMAKE_DATESTAMP_MONTH}${CMAKE_DATESTAMP_DAY}" )
-    IF( TOMAHAWK_VERSION_DATE GREATER 0)
+    IF( TOMAHAWK_VERSION_DATE GREATER 0 )
         SET( TOMAHAWK_VERSION ${TOMAHAWK_VERSION}.${TOMAHAWK_VERSION_DATE} )
     ENDIF()
 
@@ -108,9 +111,9 @@ else()
 endif()
 
 
-if(NOT BUILD_WITH_QT4)
+if( NOT BUILD_WITH_QT4 )
     find_package(Qt5Core QUIET)
-    if(Qt5Core_DIR)
+    if( Qt5Core_DIR )
         find_package(Qt5Widgets QUIET)
         message(STATUS "Found Qt5! Be aware that Qt5-support is still experimental and not officially supported!")
 
@@ -136,7 +139,7 @@ if(NOT BUILD_WITH_QT4)
         set(WITH_BREAKPAD OFF)
     endif()
 endif()
-if(NOT Qt5Core_DIR)
+if( NOT Qt5Core_DIR )
     message(STATUS "Could not find Qt5, searching for Qt4 instead...")
 
     set(NEEDED_QT4_COMPONENTS "QtCore" "QtXml" "QtNetwork")
@@ -166,10 +169,10 @@ if(NOT Qt5Core_DIR)
     endmacro()
 
     macro(setup_qt)
-        if(NOT BUILD_GUI)
+        if( NOT BUILD_GUI )
             set(QT_DONT_USE_QTGUI TRUE)
         endif()
-        if(UNIX AND NOT APPLE)
+        if( UNIX AND NOT APPLE )
             set(QT_USE_QTDBUS TRUE)
         endif()
         set(QT_USE_QTSQL TRUE)
@@ -182,18 +185,24 @@ if(NOT Qt5Core_DIR)
     endmacro()
 endif()
 
-if(BUILD_GUI AND UNIX AND NOT APPLE)
+if( BUILD_GUI AND UNIX AND NOT APPLE )
     find_package( X11 )
 endif()
 
+IF( UNIX AND NOT APPLE AND QT_QTDBUS_FOUND )
+    SET( WITH_UPOWER ON )
+    SET( WITH_GNOMESHORTCUTHANDLER ON )
+ENDIF( UNIX AND NOT APPLE AND QT_QTDBUS_FOUND  )
+
+
 macro_optional_find_package(Phonon 4.5.0)
 macro_log_feature(PHONON_FOUND "Phonon" "The Phonon multimedia library" "http://phonon.kde.org" TRUE "" "")
-if(PHONON_FOUND)
+if( PHONON_FOUND )
     message(STATUS "Phonon found; ensure that phonon-vlc is at least 0.4")
 endif()
 
-macro_optional_find_package(Echonest 2.0.3)
-macro_log_feature(ECHONEST_FOUND "Echonest" "Qt library for communicating with The Echo Nest" "http://projects.kde.org/libechonest" TRUE "" "libechonest 2.0.3 is needed for dynamic playlists and the infosystem")
+macro_optional_find_package(Echonest 2.1.0)
+macro_log_feature(ECHONEST_FOUND "Echonest" "Qt library for communicating with The Echo Nest" "http://projects.kde.org/libechonest" TRUE "" "libechonest 2.1.0 is needed for dynamic playlists and the infosystem")
 
 macro_optional_find_package(CLucene 0.9.23)
 macro_log_feature(CLucene_FOUND "CLucene" "The open-source, C++ search engine" "http://clucene.sf.net" TRUE "" "CLucene is used for indexing the collection")
@@ -220,7 +229,7 @@ macro_log_feature(QuaZip_FOUND "QuaZip" "Provides support for extracting downloa
 
 macro_optional_find_package(Jreen 1.0.5)
 macro_log_feature(JREEN_FOUND "Jreen" "Qt XMPP Library" "http://qutim.org/jreen / https://github.com/euroelessar/jreen" FALSE "" "Jreen is needed for the Jabber SIP plugin.\n")
-if(PC_JREEN_VERSION STREQUAL "1.1.0")
+if( PC_JREEN_VERSION STREQUAL "1.1.0" )
     message(FATAL_ERROR "Jreen 1.1.0 has a very annoying bug that breaks accepting auth requests in Tomahawk. Please upgrade to 1.1.1 or downgrade to 1.0.5.")
 endif()
 
@@ -230,14 +239,18 @@ macro_log_feature(QTWEETLIB_FOUND "QTweetLib" "Qt Twitter Library" "https://gith
 macro_optional_find_package(LibLastFm 1.0.0)
 macro_log_feature(LIBLASTFM_FOUND "liblastfm" "Qt library for the Last.fm webservices" "https://github.com/lastfm/liblastfm" TRUE "" "liblastfm is needed for scrobbling tracks to Last.fm and fetching cover artwork")
 
+macro_optional_find_package(QtKeychain 0.1.0)
+macro_log_feature(QTKEYCHAIN_FOUND "QtKeychain" "Provides support for secure credentials storage" "https://github.com/frankosterfeld/qtkeychain" TRUE "" "")
+
 # we need pthreads too
 macro_optional_find_package(Threads)
 macro_log_feature(THREADS_FOUND "Threads" "Threading Library" "" TRUE "" "Platform specific library for threading")
 
-IF( WIN32 )
+### QtSparkle
+if( WIN32 )
     macro_optional_find_package(QtSparkle)
     macro_log_feature(QTSPARKLE_FOUND "qtsparkle" "Library for creating auto updaters written in Qt" "https://github.com/davidsansome/qtsparkle" FALSE "" "")
-ENDIF( WIN32 )
+endif( WIN32 )
 
 #TODO: support external qxt
 set(QXTWEB_FOUND TRUE)
@@ -264,8 +277,6 @@ add_subdirectory(${THIRDPARTY_DIR}/libportfwd)
 
 #### submodules end
 
-
-
 macro_optional_find_package(KDE4)
 macro_optional_find_package(KDE4Installed)
 
@@ -273,7 +284,7 @@ macro_optional_find_package(KDE4Installed)
 # for future kde integration
 
 # macro_optional_find_package(KDE4)
-IF(KDE4_FOUND)
+IF( KDE4_FOUND )
     IF( CMAKE_C_FLAGS )
         # KDE4 adds and removes some compiler flags that we don't like
         # (only for gcc not for clang e.g.)
@@ -309,7 +320,6 @@ SET( TOMAHAWK_LIBRARIES tomahawklib )
 
 ADD_SUBDIRECTORY( thirdparty )
 ADD_SUBDIRECTORY( src )
-ADD_SUBDIRECTORY( src/libtomahawk )
 ADD_SUBDIRECTORY( admin )
 
 if( BUILD_TESTS )

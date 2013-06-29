@@ -19,6 +19,12 @@
 #include "DatabaseCommand_ModifyInboxEntry.h"
 #include "DatabaseImpl.h"
 #include "Query.h"
+#include "Track.h"
+
+// Forward Declarations breaking QSharedPointer
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+    #include "Source.h"
+#endif
 
 
 DatabaseCommand_ModifyInboxEntry::DatabaseCommand_ModifyInboxEntry( const Tomahawk::query_ptr& query,

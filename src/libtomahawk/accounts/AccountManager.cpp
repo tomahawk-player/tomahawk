@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -18,20 +19,26 @@
  */
 
 #include "AccountManager.h"
-#include "config.h"
-#include "SourceList.h"
-#include "TomahawkSettings.h"
-#include "ResolverAccount.h"
-#include "utils/Logger.h"
+
+#include "sip/SipPlugin.h"
 #include "sip/SipStatusMessage.h"
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
+#include "utils/Closure.h"
+#include "utils/Logger.h"
+
+#include "CredentialsManager.h"
+#include "config.h"
+#include "ResolverAccount.h"
+#include "SourceList.h"
+#include "TomahawkSettings.h"
 
 #include <QtCore/QLibrary>
 #include <QtCore/QDir>
 #include <QtCore/QPluginLoader>
 #include <QtCore/QCoreApplication>
 #include <QTimer>
+
 
 namespace Tomahawk
 {
@@ -52,6 +59,8 @@ AccountManager::instance()
 
 AccountManager::AccountManager( QObject *parent )
     : QObject( parent )
+    , m_readyForSip( false )
+    , m_completelyReady( false )
 {
     s_instance = this;
 
@@ -86,7 +95,7 @@ AccountManager::init()
     m_accountFactories[ f->factoryId() ] = f;
     registerAccountFactoryForFilesystem( f );
 
-    emit ready();
+    emit readyForFactories(); //Notifies TomahawkApp to load the remaining AccountFactories, then Accounts from config
 }
 
 
@@ -276,7 +285,21 @@ void
 AccountManager::loadFromConfig()
 {
     QStringList accountIds = TomahawkSettings::instance()->accounts();
+
+    qDebug() << "LOADING ALL CREDENTIALS" << accountIds;
+
+    m_creds = new CredentialsManager( this );
+    NewClosure( m_creds, SIGNAL( ready() ),
+                this, SLOT( finishLoadingFromConfig( QStringList ) ), accountIds );
+    m_creds->loadCredentials( accountIds );
+}
+
+
+void
+AccountManager::finishLoadingFromConfig( const QStringList& accountIds )
+{
     qDebug() << "LOADING ALL ACCOUNTS" << accountIds;
+
     foreach ( const QString& accountId, accountIds )
     {
         QString pluginFactory = factoryFromId( accountId );
@@ -286,6 +309,9 @@ AccountManager::loadFromConfig()
             addAccount( account );
         }
     }
+
+    m_readyForSip = true;
+    emit readyForSip(); //we have to yield to TomahawkApp because we don't know if Servent is ready
 }
 
 
@@ -297,6 +323,9 @@ AccountManager::initSIP()
     {
         hookupAndEnable( account, true );
     }
+
+    m_completelyReady = true;
+    emit ready();
 }
 
 
@@ -486,7 +515,8 @@ AccountManager::onStateChanged( Account::ConnectionState state )
     if ( account->connectionState() == Account::Disconnected )
     {
         m_connectedAccounts.removeAll( account );
-        emit disconnected( account );
+        DisconnectReason reason = account->enabled() ? Disconnected : Disabled;
+        emit disconnected( account, reason );
     }
     else if ( account->connectionState() == Account::Connected )
     {
@@ -498,6 +528,6 @@ AccountManager::onStateChanged( Account::ConnectionState state )
 }
 
 
-};
+}
 
-};
+}

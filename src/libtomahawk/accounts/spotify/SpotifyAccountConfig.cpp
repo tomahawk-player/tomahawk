@@ -49,7 +49,9 @@ SpotifyAccountConfig::SpotifyAccountConfig( SpotifyAccount *account )
     m_ui->loginButton->setDefault( true );
 
     connect( m_ui->loginButton, SIGNAL( clicked( bool ) ), this, SLOT( doLogin() ) );
-    connect( m_ui->loveSync, SIGNAL( toggled(bool) ), this, SLOT( showStarredPlaylist(bool) ) );
+    connect( m_ui->loveSync, SIGNAL( toggled( bool ) ), this, SLOT( showStarredPlaylist( bool ) ) );
+    connect( m_ui->persitentPrivacy, SIGNAL( toggled( bool ) ), this, SIGNAL( updatePrivacy( bool ) ) );
+
     connect( m_ui->usernameEdit, SIGNAL( textEdited( QString ) ), this, SLOT( resetLoginButton() ) );
     connect( m_ui->passwordEdit, SIGNAL( textEdited( QString ) ), this, SLOT( resetLoginButton() ) );
     connect( m_ui->selectAllCheckbox, SIGNAL( stateChanged( int ) ), this, SLOT( selectAllPlaylists() ) );
@@ -78,6 +80,7 @@ SpotifyAccountConfig::loadFromConfig()
     m_ui->streamingCheckbox->setChecked( m_account->credentials().value( "highQuality" ).toBool() );
     m_ui->deleteOnUnsync->setChecked( m_account->deleteOnUnsync() );
     m_ui->loveSync->setChecked( m_account->loveSync() );
+    m_ui->persitentPrivacy->setChecked( m_account->persitentPrivacy() );
 
     if ( m_account->loggedIn() )
     {
@@ -146,6 +149,13 @@ bool
 SpotifyAccountConfig::loveSync() const
 {
     return m_ui->loveSync->isChecked();
+}
+
+
+bool
+SpotifyAccountConfig::persitentPrivacy() const
+{
+    return m_ui->persitentPrivacy->isChecked();
 }
 
 
@@ -222,6 +232,7 @@ SpotifyAccountConfig::loginResponse( bool success, const QString& msg, const QSt
     }
 
 }
+
 
 void
 SpotifyAccountConfig::showStarredPlaylist( bool hide )

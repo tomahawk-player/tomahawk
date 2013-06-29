@@ -21,10 +21,17 @@
 
 #include "DllMacro.h"
 
+#ifdef _WEBSOCKETPP_CPP11_STL_
+#include <functional>
+using std::function;
+#else
 #include <tr1/functional>
+using std::tr1::function;
+#endif
 
 #include <QMetaMethod>
 #include <QObject>
+#include <QPointer>
 #include <QSharedPointer>
 
 #include <boost/noncopyable.hpp>
@@ -64,7 +71,7 @@ class DLLEXPORT Closure : public QObject, boost::noncopyable {
           const ClosureArgumentWrapper* val3 = 0);
 
   Closure(QObject* sender, const char* signal,
-          std::tr1::function<void()> callback);
+          function<void()> callback);
 
   void setAutoDelete( bool autoDelete ) { autoDelete_ = autoDelete; }
 
@@ -87,9 +94,9 @@ class DLLEXPORT Closure : public QObject, boost::noncopyable {
   void Connect(QObject* sender, const char* signal);
 
   QMetaMethod slot_;
-  std::tr1::function<void()> callback_;
+  function<void()> callback_;
   bool autoDelete_;
-  QObject* outOfThreadReceiver_;
+  QPointer<QObject> outOfThreadReceiver_;
 
   boost::scoped_ptr<const ClosureArgumentWrapper> val0_;
   boost::scoped_ptr<const ClosureArgumentWrapper> val1_;

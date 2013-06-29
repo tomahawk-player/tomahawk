@@ -22,12 +22,13 @@
 #include <QObject>
 #include <QPointer>
 
-#include "boost/function.hpp"
-#include "boost/bind.hpp"
+#include <boost/function.hpp>
 
 #include "DllMacro.h"
 
 /*
+#include <boost/bind.hpp>
+
     I want to do:
         QTimer::singleShot(1000, this, SLOT(doSomething(x)));
     instead, I'm doing:

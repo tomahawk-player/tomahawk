@@ -112,6 +112,8 @@ public:
 
     bool deleteOnUnsync() const;
     bool loveSync() const;
+    bool persitentPrivacy() const;
+
     void starTrack( const QString& artist, const QString& title, const bool starred );
     void setManualResolverPath( const QString& resolverPath );
 
@@ -131,6 +133,7 @@ private slots:
     void resolverInstalled( const QString& resolverId );
 
     void resolverMessage( const QString& msgType, const QVariantMap& msg );
+    void privateModeChanged();
 
     void login( const QString& username, const QString& password );
     void logout();

@@ -27,10 +27,6 @@
 #include "DllMacro.h"
 #include "Typedefs.h"
 
-namespace Tomahawk {
-class PixmapDelegateFader;
-}
-
 class PlayableItem;
 class PlayableProxyModel;
 class TrackView;
@@ -50,18 +46,11 @@ public:
 protected:
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
-private slots:
-    void doUpdateIndex( const QPersistentModelIndex& idx );
-    void modelChanged();
+protected slots:
+    virtual void modelChanged();
 
 private:
     void drawRichText( QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, int flags, QTextDocument& text ) const;
-
-    QTextOption m_topOption;
-    QTextOption m_centerRightOption;
-    QTextOption m_bottomOption;
-
-    mutable QHash< QPersistentModelIndex, QSharedPointer< Tomahawk::PixmapDelegateFader > > m_pixmaps;
 
     TrackView* m_view;
     PlayableProxyModel* m_model;

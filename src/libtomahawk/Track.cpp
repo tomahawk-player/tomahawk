@@ -172,7 +172,7 @@ Track::startPlaying()
                                                                         DatabaseCommand_LogPlayback::Started );
     Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
 
-
+    markAsListened();
 }
 
 
@@ -183,18 +183,13 @@ Track::finishPlaying( int timeElapsed )
                                                                         DatabaseCommand_LogPlayback::Finished,
                                                                         timeElapsed );
     Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+}
 
-    bool isUnlistened = false;
-    foreach ( Tomahawk::SocialAction action, allSocialActions() )
-    {
-        if ( action.action == "Inbox" && action.value.toBool() == true )
-        {
-            isUnlistened = true;
-            break;
-        }
-    }
 
-    if ( isUnlistened )
+void
+Track::markAsListened()
+{
+    if ( !isListened() )
     {
         DatabaseCommand_ModifyInboxEntry* cmd = new DatabaseCommand_ModifyInboxEntry( toQuery(), false );
         Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
@@ -209,8 +204,26 @@ Track::finishPlaying( int timeElapsed )
                 it->value = false; //listened!
             }
         }
+        m_trackData->blockSignals( true );
         m_trackData->setAllSocialActions( actions ); //emits socialActionsLoaded which gets propagated here
+        m_trackData->blockSignals( false );
     }
+}
+
+
+bool
+Track::isListened() const
+{
+    bool isUnlistened = false;
+    foreach ( Tomahawk::SocialAction action, allSocialActions() )
+    {
+        if ( action.action == "Inbox" && action.value.toBool() == true )
+        {
+            isUnlistened = true;
+            break;
+        }
+    }
+    return !isUnlistened;
 }
 
 
@@ -219,6 +232,13 @@ Track::updateSortNames()
 {
     m_composerSortname = DatabaseImpl::sortname( m_composer, true );
     m_albumSortname = DatabaseImpl::sortname( m_album );
+}
+
+
+void
+Track::setAllSocialActions( const QList< SocialAction >& socialActions )
+{
+    m_trackData->setAllSocialActions( socialActions );
 }
 
 
@@ -297,6 +317,20 @@ unsigned int
 Track::playbackCount( const source_ptr& source )
 {
     return m_trackData->playbackCount( source );
+}
+
+
+unsigned int
+Track::chartPosition() const
+{
+    return m_trackData->chartPosition();
+}
+
+
+unsigned int
+Track::chartCount() const
+{
+    return m_trackData->chartCount();
 }
 
 

@@ -19,6 +19,8 @@
 #ifndef JOB_STATUS_ITEM
 #define JOB_STATUS_ITEM
 
+#include "DllMacro.h"
+
 #include <QObject>
 #include <QMetaType>
 
@@ -36,7 +38,7 @@ class QPixmap;
  * The right column may be empty.
  *
  */
-class JobStatusItem : public QObject
+class DLLEXPORT JobStatusItem : public QObject
 {
     Q_OBJECT
 public:

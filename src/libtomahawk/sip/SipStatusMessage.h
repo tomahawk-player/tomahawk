@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2013, Dominik Schmidt <domme@tomahawk-player.org>
+ *   Copyright 2013, Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -23,9 +24,8 @@
 #include "DllMacro.h"
 
 #include <QPixmap>
-#include <QHash>
 
-class QTimer;
+class SipStatusMessagePrivate;
 
 class DLLEXPORT SipStatusMessage : public JobStatusItem
 {
@@ -49,13 +49,8 @@ public:
 
     bool allowMultiLine() const { return true; }
 private:
-    QString m_contactId;
-    SipStatusMessageType m_statusMessageType;
-    QString m_message;
-
-    QHash< SipStatusMessageType, QPixmap > s_typesPixmaps;
-
-    QTimer* m_timer;
+    Q_DECLARE_PRIVATE( SipStatusMessage )
+    SipStatusMessagePrivate* d_ptr;
 };
 
 #endif // SIPSTATUSMESSAGE_H

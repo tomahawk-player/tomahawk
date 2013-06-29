@@ -24,6 +24,7 @@
 #include "ZeroconfAccount.h"
 #include "Source.h"
 #include "sip/PeerInfo.h"
+#include "sip/SipInfo.h"
 #include "network/ControlConnection.h"
 
 #include <QtPlugin>
@@ -32,6 +33,7 @@
 using namespace Tomahawk;
 using namespace Accounts;
 
+#define MYNAME "zeroconf"
 
 ZeroconfPlugin::ZeroconfPlugin ( ZeroconfAccount* parent )
     : SipPlugin( parent )
@@ -161,7 +163,9 @@ ZeroconfPlugin::lanHostFound( const QString& host, int port, const QString& name
     sipInfo.setVisible( true );
 
     Tomahawk::peerinfo_ptr peerInfo = Tomahawk::PeerInfo::get( this, host, Tomahawk::PeerInfo::AutoCreate );
-    peerInfo->setSipInfo( sipInfo );
+    QList<SipInfo> sipInfos = QList<SipInfo>();
+    sipInfos.append( sipInfo );
+    peerInfo->setSipInfos( sipInfos );
     peerInfo->setContactId( host );
     peerInfo->setFriendlyName( name );
     peerInfo->setType( PeerInfo::Local );

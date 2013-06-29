@@ -21,6 +21,8 @@
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
+#include <QNetworkAccessManager>
+
 using namespace Tomahawk;
 
 
@@ -61,7 +63,19 @@ NetworkReply::load( const QUrl& url )
     QNetworkRequest request( url );
 
     Q_ASSERT( TomahawkUtils::nam() != 0 );
-    m_reply = TomahawkUtils::nam()->get( request );
+
+    QNetworkAccessManager::Operation op = m_reply->operation();
+    m_reply->deleteLater();
+
+    switch ( op )
+    {
+        case QNetworkAccessManager::HeadOperation:
+            m_reply = TomahawkUtils::nam()->head( request );
+            break;
+
+        default:
+            m_reply = TomahawkUtils::nam()->get( request );
+    }
 
     connect( m_reply, SIGNAL( finished() ), SLOT( networkLoadFinished() ) );
     connect( m_reply, SIGNAL( error( QNetworkReply::NetworkError ) ), SIGNAL( error( QNetworkReply::NetworkError ) ) );
@@ -82,7 +96,6 @@ NetworkReply::networkLoadFinished()
     if ( redir.isValid() && !redir.toUrl().isEmpty() )
     {
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Redirected HTTP request to" << redir;
-        m_reply->deleteLater();
         load( redir.toUrl() );
         emit redirected();
     }

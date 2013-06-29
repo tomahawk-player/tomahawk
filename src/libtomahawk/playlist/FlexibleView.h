@@ -29,7 +29,8 @@ class GridView;
 class TrackView;
 class PlayableModel;
 class PlaylistModel;
-class FlexibleHeader;
+class FilterHeader;
+class ModeHeader;
 
 class DLLEXPORT FlexibleView : public QWidget, public Tomahawk::ViewPage
 {
@@ -39,7 +40,7 @@ public:
     enum FlexibleViewMode
     { Flat = 0, Detailed = 1, Grid = 2 };
 
-    explicit FlexibleView( QWidget* parent = 0 );
+    explicit FlexibleView( QWidget* parent = 0, QWidget* extraHeader = 0 );
     ~FlexibleView();
 
     virtual QWidget* widget() { return this; }
@@ -52,6 +53,7 @@ public:
     virtual bool showInfoBar() const { return false; }
     virtual bool jumpToCurrentTrack();
     virtual bool isTemporaryPage() const;
+    virtual bool isBeingPlayed() const;
     void setTemporaryPage( bool b );
 
     TrackView* trackView() const { return m_trackView; }
@@ -83,7 +85,8 @@ private slots:
     void onWidgetDestroyed( QWidget* widget );
 
 private:
-    FlexibleHeader* m_header;
+    FilterHeader* m_header;
+    ModeHeader* m_modeHeader;
     QPixmap m_pixmap;
 
     TrackView* m_trackView;

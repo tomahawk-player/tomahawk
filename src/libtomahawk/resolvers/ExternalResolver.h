@@ -21,16 +21,14 @@
 #ifndef EXTERNALRESOLVER_H
 #define EXTERNALRESOLVER_H
 
-#include "Artist.h"
-#include "Album.h"
 #include "Source.h"
-#include "Query.h"
 #include "DllMacro.h"
 #include "Resolver.h"
 #include "ScriptCommandQueue.h"
 #include "ScriptCommand_AllArtists.h"
 #include "ScriptCommand_AllAlbums.h"
 #include "ScriptCommand_AllTracks.h"
+#include "Typedefs.h"
 
 #include <boost/function.hpp>
 
@@ -119,6 +117,6 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS( ExternalResolver::Capabilities )
 
-}; //ns
+} //ns
 
 #endif // EXTERNALESOLVER_H

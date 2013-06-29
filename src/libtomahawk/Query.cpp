@@ -21,6 +21,8 @@
 
 #include <QtAlgorithms>
 
+#include "audio/AudioEngine.h"
+#include "collection/Collection.h"
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
 #include "database/DatabaseCommand_LogPlayback.h"
@@ -28,12 +30,12 @@
 #include "database/DatabaseCommand_LoadSocialActions.h"
 #include "database/DatabaseCommand_SocialAction.h"
 #include "database/DatabaseCommand_TrackStats.h"
-#include "Album.h"
-#include "collection/Collection.h"
-#include "Pipeline.h"
 #include "resolvers/Resolver.h"
+
+#include "Album.h"
+#include "Pipeline.h"
+#include "Result.h"
 #include "SourceList.h"
-#include "audio/AudioEngine.h"
 
 #include "utils/Logger.h"
 
@@ -302,8 +304,8 @@ Query::id() const
 bool
 Query::resultSorter( const result_ptr& left, const result_ptr& right )
 {
-    const float ls = left->score();
-    const float rs = right->score();
+    const float ls = left->isOnline() ? left->score() : 0.0;
+    const float rs = right->isOnline() ? right->score() : 0.0;
 
     if ( ls == rs )
     {
@@ -366,7 +368,7 @@ Query::checkResults()
             if ( rp->playable() )
                 playable = true;
 
-            if ( rp->score() > 0.99 )
+            if ( rp->isOnline() && rp->score() > 0.99 )
             {
                 solved = true;
             }

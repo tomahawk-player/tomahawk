@@ -92,26 +92,46 @@ ProxyStyle::drawControl( ControlElement ce, const QStyleOption* opt, QPainter* p
             p->setPen( TomahawkStyle::BORDER_LINE );
             // We must special-case this because of the AnimatedSplitterHandle which has a
             // SizeHint of 0,0.
-            if( splitter->orientation() == Qt::Vertical )
+            if ( splitter->orientation() == Qt::Vertical )
+            {
                 p->drawLine( opt->rect.topLeft(), opt->rect.topRight() );
+            }
             else
-                p->drawLine( opt->rect.topLeft(), opt->rect.bottomRight() );
+            {
+                if ( splitter->handleWidth() == 1 )
+                {
+                    p->setPen( TomahawkStyle::BORDER_LINE );
+                    p->drawLine( opt->rect.topLeft(), opt->rect.bottomLeft() );
+                }
+                else if ( splitter->handleWidth() == 3 )
+                {
+                    p->setPen( TomahawkStyle::BORDER_LINE );
+                    p->drawLine( opt->rect.topLeft(), opt->rect.bottomLeft() );
+                    p->setPen( TomahawkStyle::BORDER_LINE.darker() );
+                    p->drawLine( opt->rect.topLeft() + QPoint( 1, 0 ), opt->rect.bottomLeft() + QPoint( 1, 0 ) );
+                    p->setPen( TomahawkStyle::BORDER_LINE );
+                    p->drawLine( opt->rect.topLeft() + QPoint( 2, 0 ), opt->rect.bottomLeft() + QPoint( 2, 0 ) );
+                }
+                else
+                    Q_ASSERT( false );
+            }
         }
     }
     else
         QProxyStyle::drawControl( ce, opt, p, w );
 }
 
+
 QSize
 ProxyStyle::sizeFromContents( QStyle::ContentsType type, const QStyleOption *option, const QSize &size, const QWidget *widget ) const
 {
-    if( type == CT_Splitter )
+    if ( type == CT_Splitter )
     {
         const QSplitter* splitter = qobject_cast< const QSplitter* >( widget );
-        if( splitter->orientation() == Qt::Horizontal )
-            return QSize( 1, size.height() );
+        if ( splitter->orientation() == Qt::Horizontal )
+            return QSize( 2, size.height() );
         else
-            return QSize( size.width(), 1 );
+            return QSize( size.width(), 2 );
     }
     else
         return QProxyStyle::sizeFromContents( type, option, size, widget );

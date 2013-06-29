@@ -33,7 +33,6 @@
 #include "database/IdThreadWorker.h"
 #include "Album.h"
 #include "collection/Collection.h"
-#include "Pipeline.h"
 #include "resolvers/Resolver.h"
 #include "SourceList.h"
 #include "audio/AudioEngine.h"
@@ -46,8 +45,8 @@ QHash< QString, trackdata_wptr > TrackData::s_trackDatasByName = QHash< QString,
 QHash< unsigned int, trackdata_wptr > TrackData::s_trackDatasById = QHash< unsigned int, trackdata_wptr >();
 
 static QMutex s_datanameCacheMutex;
+static QMutex s_memberMutex;
 static QReadWriteLock s_dataidMutex;
-
 
 inline QString
 cacheKey( const QString& artist, const QString& track )
@@ -106,6 +105,8 @@ TrackData::TrackData( unsigned int id, const QString& artist, const QString& tra
     , m_attributesLoaded( false )
     , m_socialActionsLoaded( false )
     , m_playbackHistoryLoaded( false )
+    , m_chartPosition( 0 )
+    , m_chartCount( 0 )
     , m_simTracksLoaded( false )
     , m_lyricsLoaded( false )
     , m_infoJobs( 0 )
@@ -257,8 +258,11 @@ TrackData::loadSocialActions()
 void
 TrackData::setAllSocialActions( const QList< SocialAction >& socialActions )
 {
-    m_allSocialActions = socialActions;
-    parseSocialActions();
+    {
+        QMutexLocker locker( &s_memberMutex );
+        m_allSocialActions = socialActions;
+        parseSocialActions();
+    }
 
     emit socialActionsLoaded();
 }
@@ -267,6 +271,7 @@ TrackData::setAllSocialActions( const QList< SocialAction >& socialActions )
 QList< SocialAction >
 TrackData::allSocialActions() const
 {
+    QMutexLocker locker( &s_memberMutex );
     return m_allSocialActions;
 }
 
@@ -292,6 +297,8 @@ TrackData::parseSocialActions()
 bool
 TrackData::loved()
 {
+    QMutexLocker locker( &s_memberMutex );
+
     if ( m_socialActionsLoaded )
     {
         return m_currentSocialActions[ "Love" ].toBool();
@@ -334,6 +341,7 @@ TrackData::loadStats()
     m_playbackHistoryLoaded = true;
 
     DatabaseCommand_TrackStats* cmd = new DatabaseCommand_TrackStats( m_ownRef.toStrongRef() );
+    connect( cmd, SIGNAL( trackStats( unsigned int, unsigned int ) ), SLOT( onTrackStatsLoaded( unsigned int, unsigned int ) ) );
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
 }
 
@@ -341,8 +349,9 @@ TrackData::loadStats()
 QList< Tomahawk::PlaybackLog >
 TrackData::playbackHistory( const Tomahawk::source_ptr& source ) const
 {
-    QList< Tomahawk::PlaybackLog > history;
+    QMutexLocker locker( &s_memberMutex );
 
+    QList< Tomahawk::PlaybackLog > history;
     foreach ( const PlaybackLog& log, m_playbackHistory )
     {
         if ( source.isNull() || log.source == source )
@@ -358,7 +367,10 @@ TrackData::playbackHistory( const Tomahawk::source_ptr& source ) const
 void
 TrackData::setPlaybackHistory( const QList< Tomahawk::PlaybackLog >& playbackData )
 {
-    m_playbackHistory = playbackData;
+    {
+        QMutexLocker locker( &s_memberMutex );
+        m_playbackHistory = playbackData;
+    }
     emit statsLoaded();
 }
 
@@ -366,6 +378,8 @@ TrackData::setPlaybackHistory( const QList< Tomahawk::PlaybackLog >& playbackDat
 unsigned int
 TrackData::playbackCount( const source_ptr& source )
 {
+    QMutexLocker locker( &s_memberMutex );
+
     unsigned int count = 0;
     foreach ( const PlaybackLog& log, m_playbackHistory )
     {
@@ -374,6 +388,30 @@ TrackData::playbackCount( const source_ptr& source )
     }
 
     return count;
+}
+
+
+void
+TrackData::onTrackStatsLoaded( unsigned int chartPos, unsigned int chartCount )
+{
+    m_chartPosition = chartPos;
+    m_chartCount = chartCount;
+
+    emit statsLoaded();
+}
+
+
+unsigned int
+TrackData::chartPosition() const
+{
+    return m_chartPosition;
+}
+
+
+unsigned int
+TrackData::chartCount() const
+{
+    return m_chartCount;
 }
 
 
@@ -470,7 +508,6 @@ TrackData::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QV
             {
                 m_similarTracks << Query::get( artists.at( i ), tracks.at( i ), QString(), uuid(), false );
             }
-            Pipeline::instance()->resolve( m_similarTracks );
 
             m_simTracksLoaded = true;
             emit similarTracksLoaded();

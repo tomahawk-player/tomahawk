@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2013, Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -29,6 +30,7 @@
 #include <QList>
 #include <QHostAddress>
 #include <QHostInfo>
+#include <QNetworkInterface>
 #include <QNetworkProxy>
 #include <QUdpSocket>
 #include <QTimer>
@@ -130,6 +132,10 @@ private slots:
         quint16 senderPort;
         m_sock.readDatagram( datagram.data(), datagram.size(), &sender, &senderPort );
         qDebug() << "DATAGRAM RCVD" << QString::fromLatin1( datagram ) << sender;
+
+        // Ignore our own requests
+        if ( QNetworkInterface::allAddresses().contains( sender ) )
+            return;
 
         // only process msgs originating on the LAN:
         if ( datagram.startsWith( "TOMAHAWKADVERT:" ) &&

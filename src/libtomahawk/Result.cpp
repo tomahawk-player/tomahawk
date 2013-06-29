@@ -85,6 +85,7 @@ Result::isCached( const QString& url )
 Result::Result( const QString& url )
     : QObject()
     , m_url( url )
+    , m_checked( false )
     , m_bitrate( 0 )
     , m_size( 0 )
     , m_modtime( 0 )
@@ -139,14 +140,29 @@ Result::collection() const
     return m_collection;
 }
 
+QString
+Result::url() const
+{
+    return m_url;
+}
+
+bool
+Result::checked() const
+{
+    return m_checked;
+}
+
+QString
+Result::mimetype() const
+{
+    return m_mimetype;
+}
+
 
 float
 Result::score() const
 {
-    if ( isOnline() )
-        return m_score;
-    else
-        return 0.0;
+    return m_score;
 }
 
 
@@ -270,6 +286,66 @@ Result::setCollection( const Tomahawk::collection_ptr& collection )
     connect( m_collection->source().data(), SIGNAL( offline() ), SLOT( onOffline() ), Qt::QueuedConnection );
 }
 
+void
+Result::setFriendlySource(const QString &s)
+{
+    m_friendlySource = s;
+}
+
+void
+Result::setPurchaseUrl(const QString &u)
+{
+    m_purchaseUrl = u;
+}
+
+void
+Result::setLinkUrl(const QString &u)
+{
+    m_linkUrl = u;
+}
+
+void
+Result::setChecked( bool checked )
+{
+    m_checked = checked;
+}
+
+void
+Result::setMimetype( const QString &mimetype )
+{
+    m_mimetype = mimetype;
+}
+
+void
+Result::setBitrate( unsigned int bitrate )
+{
+    m_bitrate = bitrate;
+}
+
+void
+Result::setSize( unsigned int size )
+{
+    m_size = size;
+}
+
+void
+Result::setModificationTime( unsigned int modtime )
+{
+    m_modtime = modtime;
+}
+
+void
+Result::setTrack(const track_ptr &track)
+{
+    m_track = track;
+}
+
+unsigned int
+Result::fileId() const
+{
+    return m_fileId;
+}
+
 
 QString
 Result::friendlySource() const
@@ -280,6 +356,18 @@ Result::friendlySource() const
     }
     else
         return collection()->source()->friendlyName();
+}
+
+QString
+Result::purchaseUrl() const
+{
+    return m_purchaseUrl;
+}
+
+QString
+Result::linkUrl() const
+{
+    return m_linkUrl;
 }
 
 
@@ -336,6 +424,41 @@ Result::sourceIcon( TomahawkUtils::ImageMode style, const QSize& desiredSize ) c
         }
         return avatar;
     }
+}
+
+
+unsigned int
+Result::bitrate() const
+{
+    return m_bitrate;
+}
+
+
+unsigned int
+Result::size() const
+{
+    return m_size;
+}
+
+
+unsigned int
+Result::modificationTime() const
+{
+    return m_modtime;
+}
+
+
+void
+Result::setScore( float score )
+{
+    m_score = score;
+}
+
+
+void
+Result::setFileId( unsigned int id )
+{
+    m_fileId = id;
 }
 
 

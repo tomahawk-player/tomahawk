@@ -121,7 +121,6 @@ bool
 SipInfo::isVisible() const
 {
     Q_ASSERT( isValid() );
-
     return d->visible.toBool();
 }
 
@@ -137,7 +136,6 @@ const QString
 SipInfo::host() const
 {
     Q_ASSERT( isValid() );
-
     return d->host;
 }
 
@@ -153,7 +151,6 @@ int
 SipInfo::port() const
 {
     Q_ASSERT( isValid() );
-
     return d->port;
 }
 
@@ -169,7 +166,6 @@ const QString
 SipInfo::nodeId() const
 {
     Q_ASSERT( isValid() );
-
     return d->nodeId;
 }
 
@@ -185,7 +181,6 @@ const QString
 SipInfo::key() const
 {
     Q_ASSERT( isValid() );
-
     return d->key;
 }
 

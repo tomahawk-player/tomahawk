@@ -18,12 +18,14 @@
 
 #include "PlayableItem.h"
 
+#include "utils/Logger.h"
 #include "utils/TomahawkUtils.h"
+
 #include "Artist.h"
 #include "Album.h"
 #include "Query.h"
+#include "Result.h"
 #include "Source.h"
-#include "utils/Logger.h"
 
 using namespace Tomahawk;
 

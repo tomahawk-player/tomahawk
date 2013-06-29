@@ -77,9 +77,11 @@ M3uLoader::getTags( const QFileInfo& info )
     TagLib::FileRef f( encodedName );
     if( f.isNull() )
         return;
+
     TagLib::Tag *tag = f.tag();
     if( !tag )
         return;
+
     QString artist = TStringToQString( tag->artist() ).trimmed();
     QString album  = TStringToQString( tag->album() ).trimmed();
     QString track  = TStringToQString( tag->title() ).trimmed();
@@ -103,6 +105,7 @@ M3uLoader::getTags( const QFileInfo& info )
     }
 }
 
+
 void
 M3uLoader::parseLine( const QString& line, const QFile& file )
 {
@@ -114,7 +117,7 @@ M3uLoader::parseLine( const QString& line, const QFile& file )
     }
     else
     {
-        QUrl fileUrl = QUrl::fromUserInput( QString( QFileInfo(file).canonicalPath() + "/" + line.simplified() ) );
+        QUrl fileUrl = QUrl::fromUserInput( QString( QFileInfo( file ).canonicalPath() + "/" + line.simplified() ) );
         QFileInfo tmpFile( fileUrl.toLocalFile() );
         if ( tmpFile.exists() )
         {
@@ -122,6 +125,7 @@ M3uLoader::parseLine( const QString& line, const QFile& file )
         }
     }
 }
+
 
 void
 M3uLoader::parseM3u( const QString& fileLink )
@@ -135,8 +139,6 @@ M3uLoader::parseM3u( const QString& fileLink )
         return;
     }
 
-    m_title = fileInfo.baseName();
-
     QTextStream stream( &file );
     QString singleLine;
 
@@ -145,7 +147,7 @@ M3uLoader::parseM3u( const QString& fileLink )
         QString line = stream.readLine().trimmed();
 
         /// Fallback solution for, (drums) itunes!
-        singleLine.append(line);
+        singleLine.append( line );
 
         /// If anyone wants to take on the regex for parsing EXT, go ahead
         /// But the notion that users does not tag by a common rule. that seems hard
@@ -161,7 +163,7 @@ M3uLoader::parseM3u( const QString& fileLink )
     {
         if ( !singleLine.isEmpty() )
         {
-            QStringList m3uList = singleLine.split("\r");
+            QStringList m3uList = singleLine.split( "\r" );
             foreach( const QString& line, m3uList )
                 parseLine( line, file );
         }
@@ -175,6 +177,7 @@ M3uLoader::parseM3u( const QString& fileLink )
 
     if ( m_createNewPlaylist )
     {
+        m_title = QUrl::fromPercentEncoding( fileInfo.baseName().toUtf8() );
         m_playlist = Playlist::create( SourceList::instance()->getLocal(),
                                         uuid(),
                                         m_title,
@@ -189,6 +192,7 @@ M3uLoader::parseM3u( const QString& fileLink )
         emit tracks( m_tracks );
     m_tracks.clear();
 }
+
 
 void
 M3uLoader::playlistCreated()

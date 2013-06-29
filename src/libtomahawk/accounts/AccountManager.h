@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -20,12 +21,12 @@
 #ifndef ACCOUNTMANAGER_H
 #define ACCOUNTMANAGER_H
 
-#include <QtCore/QObject>
+#include <QFlags>
+#include <QObject>
 
 #include "Typedefs.h"
 #include "DllMacro.h"
 #include "infosystem/InfoSystem.h"
-#include "sip/SipPlugin.h"
 #include "Account.h"
 
 namespace Tomahawk
@@ -34,18 +35,25 @@ namespace Tomahawk
 namespace Accounts
 {
 
+class CredentialsManager;
+
 class DLLEXPORT AccountManager : public QObject
 {
     Q_OBJECT
 
 public:
+    enum DisconnectReason {
+        Disconnected,
+        Disabled
+    };
+
     static AccountManager* instance();
 
     explicit AccountManager( QObject *parent );
     virtual ~AccountManager();
 
     void loadFromConfig();
-    void initSIP();
+    void initSIP(); //only call this after isReadyForSip returns true
 
     void enableAccount( Account* account );
     void disableAccount( Account* account );
@@ -58,7 +66,7 @@ public:
     void hookupAndEnable( Account* account, bool startup = false ); /// Hook up signals and start the plugin
     void removeAccount( Account* account );
 
-    QList< Account* > accounts() const { return m_accounts; };
+    QList< Account* > accounts() const { return m_accounts; }
     QList< Account* > accounts( Tomahawk::Accounts::AccountType type ) const { return m_accountsByAccountType[ type ]; }
 
     QList< Account* > accountsFromFactory( Tomahawk::Accounts::AccountFactory* factory ) const;
@@ -82,7 +90,11 @@ public:
 
     Account* zeroconfAccount() const;
 
-    bool isConnected() { return m_connected; }
+    bool isConnected() const { return m_connected; }        //for use by TomahawkApp during startup
+    bool isReadyForSip() const { return m_readyForSip; }    //for use by TomahawkApp during startup
+    bool isReady() const { return m_completelyReady; }
+
+    CredentialsManager* credentialsManager() const { return m_creds; }
 
 public slots:
     void connectAll();
@@ -90,13 +102,15 @@ public slots:
     void toggleAccountsConnected();
 
 signals:
-    void ready();
+    void readyForFactories(); //this happens first, right before loading accounts from config
+    void readyForSip();       //then this, so TomahawkApp can call initSIP if Servent is ready
+    void ready();             //finally, when everything is done
 
     void added( Tomahawk::Accounts::Account* );
     void removed( Tomahawk::Accounts::Account* );
 
     void connected( Tomahawk::Accounts::Account* );
-    void disconnected( Tomahawk::Accounts::Account* );
+    void disconnected( Tomahawk::Accounts::Account*, Tomahawk::Accounts::AccountManager::DisconnectReason );
     void authError( Tomahawk::Accounts::Account* );
 
     void stateChanged( Account* p, Accounts::Account::ConnectionState state );
@@ -105,6 +119,7 @@ private slots:
     void init();
     void onStateChanged( Tomahawk::Accounts::Account::ConnectionState state );
     void onError( int code, const QString& msg );
+    void finishLoadingFromConfig( const QStringList& accountIds );
 
     void onSettingsChanged();
 
@@ -117,10 +132,14 @@ private:
     Account* loadPlugin( const QString &accountId );
     void hookupAccount( Account* ) const;
 
+    CredentialsManager* m_creds;
+
     QList< Account* > m_accounts;
     QList< Account* > m_enabledAccounts;
     QList< Account* > m_connectedAccounts;
     bool m_connected;
+    bool m_readyForSip;
+    bool m_completelyReady;
 
     QHash< AccountType, QList< Account* > > m_accountsByAccountType;
     QHash< QString, AccountFactory* > m_accountFactories;

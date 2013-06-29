@@ -28,12 +28,10 @@
 #include <QQueue>
 
 #include "Typedefs.h"
-#include "Result.h"
 #include "PlaylistEntry.h"
 #include "PlaylistInterface.h"
 #include "playlist/PlaylistUpdaterInterface.h"
 #include "Query.h"
-#include "utils/Closure.h"
 
 #include "DllMacro.h"
 
@@ -43,6 +41,11 @@ class DatabaseCommand_LoadAllSortedPlaylists;
 class DatabaseCommand_SetPlaylistRevision;
 class DatabaseCommand_CreatePlaylist;
 class PlaylistModel;
+
+namespace _detail
+{
+    class Closure;
+}
 
 namespace Tomahawk
 {

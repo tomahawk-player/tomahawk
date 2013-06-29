@@ -21,13 +21,15 @@
 
 #include "utils/TomahawkUtils.h"
 
-#include "TomahawkVersion.h"
 #include "config.h"
-#include "TomahawkSettings.h"
 
-#include "Source.h"
 #include "BinaryExtractWorker.h"
+#include "Query.h"
 #include "SharedTimeLine.h"
+#include "Source.h"
+#include "TomahawkSettings.h"
+#include "TomahawkVersion.h"
+#include "Track.h"
 
 #ifdef LIBLASTFM_FOUND
     #include <lastfm/ws.h>
@@ -1120,5 +1122,3 @@ urlSetQuery( QUrl& url, const QString& query )
 
 
 } // ns
-
-#include "TomahawkUtils.moc"

@@ -48,14 +48,6 @@ AlbumItemDelegate::AlbumItemDelegate( TrackView* parent, PlayableProxyModel* pro
     , m_view( parent )
     , m_model( proxy )
 {
-    m_centerOption = QTextOption( Qt::AlignVCenter );
-    m_centerOption.setWrapMode( QTextOption::NoWrap );
-
-    m_centerRightOption = QTextOption( Qt::AlignVCenter | Qt::AlignRight );
-    m_centerRightOption.setWrapMode( QTextOption::NoWrap );
-
-    connect( proxy, SIGNAL( modelReset() ), this, SLOT( modelChanged() ) );
-    connect( parent, SIGNAL( modelChanged() ), this, SLOT( modelChanged() ) );
 }
 
 
@@ -82,11 +74,10 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
     opt.text.clear();
 
     qApp->style()->drawControl( QStyle::CE_ItemViewItem, &opt, painter );
-
     if ( m_view->header()->visualIndex( index.column() ) > 0 )
         return;
 
-    const track_ptr track = item->query()->track();
+    const track_ptr& track = item->query()->track();
     QString lowerText;
 
     painter->save();
@@ -102,73 +93,41 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
             r.adjust( pixHeight, 0, 0, 0 );
         }
 
-        QFont boldFont = opt.font;
-        boldFont.setPointSize( TomahawkUtils::defaultFontSize() + 2 );
-        boldFont.setWeight( 99 );
-        QFontMetrics boldFontMetrics( boldFont );
+        painter->setFont( m_bigBoldFont );
+        painter->setPen( opt.palette.foreground().color() );
 
-        QFont smallBoldFont = opt.font;
-        smallBoldFont.setPointSize( TomahawkUtils::defaultFontSize() - 1 );
-        smallBoldFont.setBold( true );
-        smallBoldFont.setWeight( 60 );
-        QFontMetrics smallBoldFontMetrics( smallBoldFont );
-
-        painter->setFont( boldFont );
-        painter->setPen( option.palette.text().color().lighter( 450 ) );
-
+        QRect leftRect = r;
         QRect figureRect = r.adjusted( 4, 0, 0, 0 );
         figureRect.setWidth( QFontMetrics( painter->font() ).width( "888" ) );
-        painter->drawText( figureRect, QString::number( index.row() + 1 ), QTextOption( Qt::AlignCenter ) );
-
-        r.adjust( figureRect.width() + 12, 0, 0, 0 );
-        QRect rightRect = r.adjusted( r.width() - smallBoldFontMetrics.width( TomahawkUtils::timeToString( track->duration() ) ), 0, 0, 0 );
-        QRect leftRect = r.adjusted( 0, 0, -( rightRect.width() + 8 ), 0 );
-
-        const int sourceIconSize = r.height();
 
         if ( hoveringOver() == index && index.column() == 0 )
         {
-            const QPixmap infoIcon = TomahawkUtils::defaultPixmap( TomahawkUtils::InfoIcon, TomahawkUtils::Original, QSize( sourceIconSize, sourceIconSize ) );
-            QRect arrowRect = QRect( rightRect.right() - sourceIconSize, r.center().y() - sourceIconSize / 2, infoIcon.width(), infoIcon.height() );
-            painter->drawPixmap( arrowRect, infoIcon );
-
-            setInfoButtonRect( index, arrowRect );
-            rightRect.moveLeft( rightRect.left() - infoIcon.width() - 8 );
-            leftRect.adjust( 0, 0, -( infoIcon.width() + 8 ), 0 );
+            drawInfoButton( painter, figureRect.adjusted( 1, 0, 0, 0 ), index, 1.0 );
         }
-        else if ( item->query()->numResults() && !item->query()->results().first()->sourceIcon( TomahawkUtils::RoundedCorners, QSize( sourceIconSize, sourceIconSize ) ).isNull() )
+        else
         {
-            const QPixmap sourceIcon = item->query()->results().first()->sourceIcon( TomahawkUtils::RoundedCorners, QSize( sourceIconSize, sourceIconSize ) );
-            painter->setOpacity( 0.8 );
-            painter->drawPixmap( QRect( rightRect.right() - sourceIconSize, r.center().y() - sourceIconSize / 2, sourceIcon.width(), sourceIcon.height() ), sourceIcon );
-            painter->setOpacity( 1.0 );
-            rightRect.moveLeft( rightRect.left() - sourceIcon.width() - 8 );
+            painter->drawText( figureRect, QString::number( index.row() + 1 ), QTextOption( Qt::AlignCenter ) );
         }
 
-        QString text = painter->fontMetrics().elidedText( track->track(), Qt::ElideRight, leftRect.width() );
+        leftRect = r;
+        leftRect.adjust( figureRect.width() + 12, 0, 0, 0 );
+        QRect rightRect = r.adjusted( r.width() - m_smallBoldFontMetrics.width( TomahawkUtils::timeToString( track->duration() ) ), 0, 0, 0 );
+        {
+            const QRect leftRectBefore = leftRect;
+            leftRect = drawSourceIcon( painter, leftRect, item, 1.0 );
+            rightRect.moveLeft( rightRect.left() - ( leftRectBefore.width() - leftRect.width() ) );
+            leftRect.setWidth( leftRect.width() - rightRect.width() );
+        }
+
+        const QString text = painter->fontMetrics().elidedText( track->track(), Qt::ElideRight, leftRect.width() );
         painter->setPen( opt.palette.text().color() );
         painter->drawText( leftRect, text, m_centerOption );
 
         if ( track->duration() > 0 )
         {
-            painter->setPen( opt.palette.text().color() );
-            painter->setFont( smallBoldFont );
+            painter->setFont( m_smallBoldFont );
             painter->drawText( rightRect, TomahawkUtils::timeToString( track->duration() ), m_centerRightOption );
         }
     }
     painter->restore();
-}
-
-
-void
-AlbumItemDelegate::doUpdateIndex( const QPersistentModelIndex& idx )
-{
-    if ( idx.isValid() )
-        emit updateIndex( idx );
-}
-
-
-void
-AlbumItemDelegate::modelChanged()
-{
 }

@@ -20,10 +20,12 @@
 #ifndef FDONOTIFYPLUGIN_H
 #define FDONOTIFYPLUGIN_H
 
-#include "infoplugins/InfoPluginDllMacro.h"
-#include "infosystem/InfoSystem.h"
+#include "../../InfoPluginDllMacro.h"
 
-#include <QDBusMessage>
+#include "infosystem/InfoSystem.h"
+#include "FreedesktopNotificationsProxy.h"
+
+class QDBusPendingCallWatcher;
 
 namespace Tomahawk
 {
@@ -44,8 +46,8 @@ public:
 protected slots:
     virtual void init() {}
 
-    virtual void dbusPlayingReplyReceived( const QDBusMessage& reply );
-    virtual void dbusCapabiltiesReplyReceived( const QDBusMessage& reply );
+    virtual void dbusPlayingReplyReceived( QDBusPendingCallWatcher* watcher );
+    virtual void dbusCapabilitiesReplyReceived( QDBusPendingCallWatcher* watcher );
 
     virtual void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
     {
@@ -64,12 +66,14 @@ private:
     int getNotificationIconHeight();
 
     void notifyUser( const QString& messageText );
+    void inboxReceived( const QVariant& input );
     void nowPlaying( const QVariant& input );
 
     quint32 m_nowPlayingId;
 
     // Does the window manger support basic XML-based markup (a small HTML subset), see Desktop Notifications specification
     bool m_wmSupportsBodyMarkup;
+    org::freedesktop::Notifications* notifications_interface;
 };
 
 }

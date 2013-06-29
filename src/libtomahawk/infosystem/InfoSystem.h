@@ -65,7 +65,7 @@ struct DLLEXPORT InfoRequestData {
 
     InfoRequestData();
 
-    InfoRequestData( const quint64 rId, const QString &callr, const Tomahawk::InfoSystem::InfoType typ, const QVariant &inputvar, const QVariantMap &custom );
+    InfoRequestData( const quint64 rId, const QString& callr, const Tomahawk::InfoSystem::InfoType typ, const QVariant& inputvar, const QVariantMap& custom );
 
 private:
     void init( const QString& callr, const InfoType typ, const QVariant& inputvar, const QVariantMap& custom);
@@ -87,7 +87,7 @@ struct InfoPushData {
         , infoPair( Tomahawk::InfoSystem::PushInfoPair( QVariantMap(), QVariant() ) )
         {}
 
-    InfoPushData( const QString &callr, const Tomahawk::InfoSystem::InfoType typ, const QVariant &inputvar, const Tomahawk::InfoSystem::PushInfoFlags pflags )
+    InfoPushData( const QString& callr, const Tomahawk::InfoSystem::InfoType typ, const QVariant& inputvar, const Tomahawk::InfoSystem::PushInfoFlags pflags )
         : caller( callr )
         , type( typ )
         , input( inputvar )
@@ -152,7 +152,7 @@ class DLLEXPORT InfoSystemCacheThread : public QThread
     Q_OBJECT
 
 public:
-    InfoSystemCacheThread( QObject *parent );
+    InfoSystemCacheThread( QObject* parent );
     virtual ~InfoSystemCacheThread();
 
     void run();
@@ -170,7 +170,7 @@ class DLLEXPORT InfoSystemWorkerThread : public QThread
     Q_OBJECT
 
 public:
-    InfoSystemWorkerThread( QObject *parent );
+    InfoSystemWorkerThread( QObject* parent );
     virtual ~InfoSystemWorkerThread();
 
     void run();
@@ -196,7 +196,7 @@ public:
 
     bool getInfo( const InfoRequestData& requestData );
     //WARNING: if changing timeoutMillis above, also change in below function in .cpp file
-    bool getInfo( const QString &caller, const QVariantMap& customData, const InfoTypeMap& inputMap, const InfoTimeoutMap& timeoutMap = InfoTimeoutMap(), bool allSources = false );
+    bool getInfo( const QString& caller, const QVariantMap& customData, const InfoTypeMap& inputMap, const InfoTimeoutMap& timeoutMap = InfoTimeoutMap(), bool allSources = false );
     bool pushInfo( InfoPushData pushData );
     bool pushInfo( const QString& caller, const InfoTypeMap& input, const PushInfoFlags pushFlags );
 
@@ -214,6 +214,7 @@ signals:
     void info( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void finished( QString target );
     void finished( QString target, Tomahawk::InfoSystem::InfoType type );
+    void ready();
 
     void updatedSupportedGetTypes( Tomahawk::InfoSystem::InfoTypeSet supportedTypes );
     void updatedSupportedPushTypes( Tomahawk::InfoSystem::InfoTypeSet supportedTypes );

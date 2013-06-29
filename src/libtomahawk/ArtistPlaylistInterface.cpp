@@ -19,15 +19,19 @@
 
 #include "ArtistPlaylistInterface.h"
 
-#include "Artist.h"
 #include "collection/Collection.h"
-#include "Query.h"
 #include "database/Database.h"
 #include "database/DatabaseCommand_AllTracks.h"
-#include "Source.h"
-#include "Pipeline.h"
-
 #include "utils/Logger.h"
+
+#include "Artist.h"
+#include "Query.h"
+#include "Source.h"
+
+// Forward Declarations breaking QSharedPointer
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+    #include "Result.h"
+#endif
 
 using namespace Tomahawk;
 
@@ -55,7 +59,7 @@ ArtistPlaylistInterface::setCurrentIndex( qint64 index )
 {
     PlaylistInterface::setCurrentIndex( index );
 
-   m_currentItem = m_queries.at( index )->results().first();
+    m_currentItem = m_queries.at( index )->results().first();
 }
 
 
@@ -160,7 +164,6 @@ ArtistPlaylistInterface::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData r
                     if ( query )
                         ql << query;
                 }
-                Pipeline::instance()->resolve( ql );
 
                 m_queries << ql;
                 checkQueries();

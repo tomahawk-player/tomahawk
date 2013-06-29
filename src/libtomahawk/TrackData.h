@@ -100,6 +100,9 @@ public:
     void setPlaybackHistory( const QList< Tomahawk::PlaybackLog >& playbackData );
     unsigned int playbackCount( const Tomahawk::source_ptr& source = Tomahawk::source_ptr() );
 
+    unsigned int chartPosition() const;
+    unsigned int chartCount() const;
+
     QList<Tomahawk::query_ptr> similarTracks() const;
     QStringList lyrics() const;
 
@@ -114,6 +117,8 @@ signals:
     void lyricsLoaded();
 
 private slots:
+    void onTrackStatsLoaded( unsigned int chartPos, unsigned int chartCount );
+
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString target );
 
@@ -142,6 +147,8 @@ private:
 
     bool m_playbackHistoryLoaded;
     QList< PlaybackLog > m_playbackHistory;
+    unsigned int m_chartPosition;
+    unsigned int m_chartCount;
 
     bool m_simTracksLoaded;
     QList<Tomahawk::query_ptr> m_similarTracks;

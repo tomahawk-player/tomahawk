@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013,      Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -27,13 +28,13 @@
 #ifndef CONTROLCONNECTION_H
 #define CONTROLCONNECTION_H
 
-#include "Typedefs.h"
 #include "Connection.h"
-
 #include "DllMacro.h"
+#include "Typedefs.h"
 
-class Servent;
+class ControlConnectionPrivate;
 class DBSyncConnection;
+class Servent;
 
 class DLLEXPORT ControlConnection : public Connection
 {
@@ -48,8 +49,14 @@ public:
 
     Tomahawk::source_ptr source() const;
 
+    /**
+     * Tell this ControlConnection that is no longer controlling the source and should not do any actions on it.
+     */
+    void unbindFromSource();
+
     void addPeerInfo( const Tomahawk::peerinfo_ptr& peerInfo );
     void removePeerInfo( const Tomahawk::peerinfo_ptr& peerInfo );
+    void setShutdownOnEmptyPeerInfos( bool shutdownOnEmptyPeerInfos );
     const QSet< Tomahawk::peerinfo_ptr > peerInfos() const;
 
 protected:
@@ -57,6 +64,7 @@ protected:
 
 protected slots:
     virtual void handleMsg( msg_ptr msg );
+    virtual void authCheckTimeout();
 
 private slots:
     void dbSyncConnFinished( QObject* c );
@@ -64,18 +72,10 @@ private slots:
     void onPingTimer();
 
 private:
+    Q_DECLARE_PRIVATE( ControlConnection )
+    ControlConnectionPrivate* d_ptr;
+
     void setupDbSyncConnection( bool ondemand = false );
-
-    Tomahawk::source_ptr m_source;
-    DBSyncConnection* m_dbsyncconn;
-
-    QString m_dbconnkey;
-    bool m_registered;
-
-    QTimer* m_pingtimer;
-    QTime m_pingtimer_mark;
-
-    QSet< Tomahawk::peerinfo_ptr > m_peerInfos;
 };
 
 #endif // CONTROLCONNECTION_H

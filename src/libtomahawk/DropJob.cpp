@@ -22,10 +22,9 @@
 #include "DropJob.h"
 #include <QFileInfo>
 
-#include "Artist.h"
-#include "Album.h"
-#include "Source.h"
-
+#include "jobview/JobStatusView.h"
+#include "jobview/JobStatusModel.h"
+#include "jobview/ErrorStatusMessage.h"
 #include "utils/SpotifyParser.h"
 #include "utils/ItunesParser.h"
 #include "utils/ItunesLoader.h"
@@ -36,12 +35,14 @@
 #include "utils/ExfmParser.h"
 #include "utils/Logger.h"
 #include "utils/TomahawkUtils.h"
-#include "GlobalActionManager.h"
 #include "utils/XspfLoader.h"
-#include "jobview/JobStatusView.h"
-#include "jobview/JobStatusModel.h"
-#include "jobview/ErrorStatusMessage.h"
+
+#include "Artist.h"
+#include "Album.h"
+#include "GlobalActionManager.h"
 #include "Pipeline.h"
+#include "Result.h"
+#include "Source.h"
 
 #ifdef QCA2_FOUND
 #include "utils/GroovesharkParser.h"

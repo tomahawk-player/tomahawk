@@ -56,6 +56,7 @@ public:
     void setPlaybackLog( const Tomahawk::PlaybackLog& log );
 
     PlayableItem* parent() const { return m_parent; }
+    void forceUpdate() { emit dataChanged(); }
 
     bool isPlaying() const { return m_isPlaying; }
     void setIsPlaying( bool b ) { m_isPlaying = b; emit dataChanged(); }

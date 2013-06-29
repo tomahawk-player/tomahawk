@@ -124,7 +124,6 @@ AnimatedSpinner::paintEvent( QPaintEvent* event )
         if ( center != pos() )
         {
             move( center );
-            return;
         }
     }
 

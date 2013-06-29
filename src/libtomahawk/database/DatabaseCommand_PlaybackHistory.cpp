@@ -30,11 +30,17 @@ void
 DatabaseCommand_PlaybackHistory::exec( DatabaseImpl* dbi )
 {
     TomahawkSqlQuery query = dbi->newquery();
-    QString whereToken;
+    QString whereToken( "WHERE 1" );
 
     if ( !source().isNull() )
     {
-        whereToken = QString( "WHERE source %1" ).arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) );
+        whereToken += QString( " AND source %1" ).arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) );
+    }
+    if ( m_dateFrom.year() > 1900 && m_dateTo.year() > 1900 )
+    {
+        whereToken += QString( " AND playtime >= %1 AND playtime <= %2" )
+                         .arg( QDateTime( m_dateFrom ).toUTC().toTime_t() )
+                         .arg( QDateTime( m_dateTo.addDays( 1 ) ).toUTC().toTime_t() );
     }
 
     QString sql = QString(

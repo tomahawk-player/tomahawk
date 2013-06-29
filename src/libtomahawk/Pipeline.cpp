@@ -20,17 +20,19 @@
 
 #include <QMutexLocker>
 
-#include "FuncTimeout.h"
 #include "database/Database.h"
 #include "resolvers/ExternalResolver.h"
 #include "resolvers/ScriptResolver.h"
-#include "resolvers/QtScriptResolver.h"
-#include "Source.h"
-#include "SourceList.h"
+#include "resolvers/JSResolver.h"
 #include "utils/ResultUrlChecker.h"
 #include "utils/Logger.h"
 
-#include "boost/bind.hpp"
+#include "FuncTimeout.h"
+#include "Result.h"
+#include "Source.h"
+#include "SourceList.h"
+
+#include <boost/bind.hpp>
 
 #define DEFAULT_CONCURRENT_QUERIES 4
 #define MAX_CONCURRENT_QUERIES 16
@@ -85,7 +87,7 @@ Pipeline::~Pipeline()
 void
 Pipeline::databaseReady()
 {
-    connect( Database::instance(), SIGNAL( indexReady() ), this, SLOT( start() ), Qt::QueuedConnection );
+    connect( Database::instance(), SIGNAL( ready() ), this, SLOT( start() ), Qt::QueuedConnection );
     Database::instance()->loadIndex();
 }
 
@@ -95,6 +97,7 @@ Pipeline::start()
 {
     tDebug() << Q_FUNC_INFO << "Shunting" << m_queries_pending.size() << "queries!";
     m_running = true;
+    emit running();
 
     shuntNext();
 }
@@ -295,7 +298,7 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
         if ( r.isNull() )
             continue;
 
-        if ( r->url().startsWith( "http" ) && !r->url().startsWith( "http://localhost" ) )
+        if ( !r->checked() && ( r->url().startsWith( "http" ) && !r->url().startsWith( "http://localhost" ) ) )
             httpResults << r;
         else
             cleanResults << r;

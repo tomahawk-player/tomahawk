@@ -34,6 +34,8 @@
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 
+#include <QDate>
+#include <QDateTime>
 #include <QDir>
 #include <QSettings>
 #include <QNetworkConfiguration>
@@ -48,15 +50,21 @@ using namespace Tomahawk::InfoSystem;
 bool
 newReleaseSort( const InfoStringHash& left, const InfoStringHash& right )
 {
-    if ( !left.contains( "date" ) || !right.contains( "date" ) )
+    if ( left.contains( "rank" ) && right.contains( "rank" ) )
     {
-        return true;
+        const int lRank = left[ "rank" ].toInt();
+        const int rRank = right[ "rank" ].toInt();
+        return lRank < rRank;
     }
 
-    const QDate lDate = QDate::fromString( left[ "date" ], "yyyy-MM-dd" );
-    const QDate rDate = QDate::fromString( right[ "date" ], "yyyy-MM-dd" );
+    if ( left.contains( "date" ) && right.contains( "date" ) )
+    {
+        const QDate lDate = QDate::fromString( left[ "date" ], "yyyy-MM-dd" );
+        const QDate rDate = QDate::fromString( right[ "date" ], "yyyy-MM-dd" );
+        return lDate > rDate;
+    }
 
-    return lDate > rDate;
+    return true;
 }
 
 
@@ -64,7 +72,7 @@ NewReleasesPlugin::NewReleasesPlugin()
     : InfoPlugin()
     , m_nrFetchJobs( 0 )
 {
-    m_nrVersion = "0.5";
+    m_nrVersion = "0.5.2";
     m_supportedGetTypes << InfoNewReleaseCapabilities << InfoNewRelease;
 }
 
@@ -685,11 +693,12 @@ NewReleasesPlugin::nrReturned()
                 const QString album = albumMap.value( "album" ).toString();
                 const QString artist = albumMap.value( "artist" ).toString();
                 const QString date = albumMap.value( "date" ).toString();
-
+                const QString rank = albumMap.value( "rank" ).toString();
                 Tomahawk::InfoSystem::InfoStringHash pair;
                 pair[ "artist" ] = artist;
                 pair[ "album" ] = album;
                 pair[ "date" ] = date;
+                pair[ "rank" ] = rank;
                 newreleases.append( pair );
             }
         }

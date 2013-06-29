@@ -22,22 +22,27 @@
 #include <QStackedWidget>
 #include <QVBoxLayout>
 
-#include "playlist/FlexibleHeader.h"
+#include "audio/AudioEngine.h"
+#include "widgets/FilterHeader.h"
+#include "playlist/ModeHeader.h"
 #include "playlist/PlayableModel.h"
 #include "playlist/PlaylistModel.h"
 #include "playlist/TrackView.h"
 #include "playlist/GridView.h"
 #include "playlist/PlaylistLargeItemDelegate.h"
 #include "PlayableProxyModelPlaylistInterface.h"
+#include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
+#include "utils/Closure.h"
 #include "utils/Logger.h"
 
 using namespace Tomahawk;
 
 
-FlexibleView::FlexibleView( QWidget* parent )
+FlexibleView::FlexibleView( QWidget* parent, QWidget* extraHeader )
     : QWidget( parent )
-    , m_header( new FlexibleHeader( this ) )
+    , m_header( new FilterHeader( this ) )
+    , m_modeHeader( new ModeHeader( this ) )
     , m_trackView( new TrackView() )
     , m_detailedView( new TrackView() )
     , m_gridView( new GridView() )
@@ -55,14 +60,30 @@ FlexibleView::FlexibleView( QWidget* parent )
     m_detailedView->setColumnHidden( PlayableModel::Composer, true ); // Hide composer column per default
 
     PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LovedTracks, m_trackView, m_trackView->proxyModel() );
-    m_trackView->setItemDelegate( del );
+    m_trackView->setPlaylistItemDelegate( del );
     m_trackView->proxyModel()->setStyle( PlayableProxyModel::Large );
 
     m_stack = new QStackedWidget();
     setLayout( new QVBoxLayout() );
     TomahawkUtils::unmarginLayout( layout() );
 
+    QFrame* lineBelow = new QFrame( this );
+    lineBelow->setStyleSheet( QString( "QFrame { border: 1px solid %1; }" ).arg( TomahawkStyle::HEADER_BACKGROUND.name() ) );
+    lineBelow->setFrameShape( QFrame::HLine );
+    lineBelow->setMaximumHeight( 1 );
+    QFrame* lineBelow2 = new QFrame( this );
+    lineBelow2->setStyleSheet( QString( "QFrame { border: 1px solid black; }" ) );
+    lineBelow2->setFrameShape( QFrame::HLine );
+    lineBelow2->setMaximumHeight( 1 );
+
+    m_gridView->setStyleSheet( QString( "QListView { background-color: black; }" ) );
+
     layout()->addWidget( m_header );
+    layout()->addWidget( m_modeHeader );
+    if ( extraHeader )
+        layout()->addWidget( extraHeader );
+    layout()->addWidget( lineBelow );
+    layout()->addWidget( lineBelow2 );
     layout()->addWidget( m_stack );
 
     m_stack->addWidget( m_trackView );
@@ -72,6 +93,10 @@ FlexibleView::FlexibleView( QWidget* parent )
     setCurrentMode( Flat );
 
     connect( m_header, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
+
+    NewClosure( m_modeHeader, SIGNAL( flatClicked() ), const_cast< FlexibleView* >( this ), SLOT( setCurrentMode( FlexibleViewMode ) ), FlexibleView::Flat )->setAutoDelete( false );
+    NewClosure( m_modeHeader, SIGNAL( detailedClicked() ), const_cast< FlexibleView* >( this ), SLOT( setCurrentMode( FlexibleViewMode ) ), FlexibleView::Detailed )->setAutoDelete( false );
+    NewClosure( m_modeHeader, SIGNAL( gridClicked() ), const_cast< FlexibleView* >( this ), SLOT( setCurrentMode( FlexibleViewMode ) ), FlexibleView::Grid )->setAutoDelete( false );
 }
 
 
@@ -315,4 +340,20 @@ void
 FlexibleView::setTemporaryPage( bool b )
 {
     m_temporary = b;
+}
+
+
+bool
+FlexibleView::isBeingPlayed() const
+{
+    if ( !playlistInterface() )
+        return false;
+
+    if ( playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+        return true;
+
+    if ( playlistInterface()->hasChildInterface( AudioEngine::instance()->currentTrackPlaylist() ) )
+        return true;
+
+    return false;
 }

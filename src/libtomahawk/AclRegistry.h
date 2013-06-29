@@ -21,6 +21,7 @@
 #define TOMAHAWK_ACLREGISTRY_H
 
 #include "DllMacro.h"
+#include "Typedefs.h"
 
 #include <QObject>
 #include <QString>
@@ -43,32 +44,25 @@ public:
     static ACLRegistry* instance();
     static void setInstance( ACLRegistry* instance );
 
-    enum ACL {
-        NotFound = 0,
-        Deny = 1,
-        Read = 2,
-        Stream = 3
-    };
-
     struct User {
         QString uuid;
         QString friendlyName;
         QStringList knownDbids;
         QStringList knownAccountIds;
-        ACLRegistry::ACL acl;
+        Tomahawk::ACLStatus::Type acl;
 
         User()
             : uuid( QUuid::createUuid().toString() )
             , friendlyName()
             , knownDbids()
             , knownAccountIds()
-            , acl( ACLRegistry::NotFound )
+            , acl( Tomahawk::ACLStatus::NotFound )
             {}
 
         ~User()
             {}
 
-        User( QString p_uuid, QString p_friendlyName, QStringList p_knownDbids, QStringList p_knownAccountIds, ACLRegistry::ACL p_acl )
+        User( QString p_uuid, QString p_friendlyName, QStringList p_knownDbids, QStringList p_knownAccountIds, Tomahawk::ACLStatus::Type p_acl )
             : uuid( p_uuid )
             , friendlyName( p_friendlyName )
             , knownDbids( p_knownDbids )
@@ -89,7 +83,7 @@ public:
     virtual ~ACLRegistry();
 
 signals:
-    void aclResult( QString nodeid, QString username, ACLRegistry::ACL peerStatus );
+    void aclResult( QString nodeid, QString username, Tomahawk::ACLStatus::Type peerStatus );
 
 public slots:
     /**
@@ -98,9 +92,9 @@ public slots:
      * @param dbid DBID of peer
      * @param globalType Global ACL to store if peer not found; if ACLRegistry::NotFound, does not store the peer Defaults to ACLRegistry::NotFound.
      * @param username If not empty, will store the given username along with the new ACL value. Defaults to QString().
-     * @return ACLRegistry::ACL
+     * @return Tomahawk::ACLStatus::Type
      **/
-    virtual ACLRegistry::ACL isAuthorizedUser( const QString &dbid, const QString &username, ACLRegistry::ACL globalType = ACLRegistry::NotFound, bool skipEmission = false ) = 0;
+    virtual Tomahawk::ACLStatus::Type isAuthorizedUser( const QString &dbid, const QString &username, Tomahawk::ACLStatus::Type globalType = Tomahawk::ACLStatus::NotFound, bool skipEmission = false ) = 0;
     virtual void wipeEntries();
 
 protected:
@@ -117,7 +111,6 @@ protected:
     static ACLRegistry* s_instance;
 };
 
-Q_DECLARE_METATYPE( ACLRegistry::ACL );
-Q_DECLARE_METATYPE( ACLRegistry::User );
+Q_DECLARE_METATYPE( ACLRegistry::User )
 
 #endif // TOMAHAWK_ACLREGISTRY_H

@@ -43,6 +43,8 @@ FlexibleHeader::FlexibleHeader( FlexibleView* parent )
     : FilterHeader( parent )
     , m_parent( parent )
 {
+    setFixedHeight( 80 );
+
     QFile f( RESPATH "stylesheets/topbar-radiobuttons.css" );
     f.open( QFile::ReadOnly );
     QString css = QString::fromLatin1( f.readAll() );
@@ -83,9 +85,12 @@ FlexibleHeader::FlexibleHeader( FlexibleView* parent )
     TomahawkUtils::unmarginLayout( outerModeLayout );
     TomahawkUtils::unmarginLayout( modeLayout );
 
-    NewClosure( m_radioNormal,   SIGNAL( clicked() ), const_cast< FlexibleView* >( parent ), SLOT( setCurrentMode( FlexibleViewMode ) ), FlexibleView::Flat )->setAutoDelete( false );
-    NewClosure( m_radioDetailed, SIGNAL( clicked() ), const_cast< FlexibleView* >( parent ), SLOT( setCurrentMode( FlexibleViewMode ) ), FlexibleView::Detailed )->setAutoDelete( false );
-    NewClosure( m_radioCloud,    SIGNAL( clicked() ), const_cast< FlexibleView* >( parent ), SLOT( setCurrentMode( FlexibleViewMode ) ), FlexibleView::Grid )->setAutoDelete( false );
+    if ( parent )
+    {
+        NewClosure( m_radioNormal,   SIGNAL( clicked() ), const_cast< FlexibleView* >( parent ), SLOT( setCurrentMode( FlexibleViewMode ) ), FlexibleView::Flat )->setAutoDelete( false );
+        NewClosure( m_radioDetailed, SIGNAL( clicked() ), const_cast< FlexibleView* >( parent ), SLOT( setCurrentMode( FlexibleViewMode ) ), FlexibleView::Detailed )->setAutoDelete( false );
+        NewClosure( m_radioCloud,    SIGNAL( clicked() ), const_cast< FlexibleView* >( parent ), SLOT( setCurrentMode( FlexibleViewMode ) ), FlexibleView::Grid )->setAutoDelete( false );
+    }
 }
 
 

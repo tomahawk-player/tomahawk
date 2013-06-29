@@ -191,6 +191,7 @@ private:
     template <typename T>
     void insertInternal( const QList< T >& items, int row, const QList< Tomahawk::PlaybackLog >& logs = QList< Tomahawk::PlaybackLog >() );
 
+    QString scoreText( float score ) const;
     Qt::Alignment columnAlignment( int column ) const;
 
     PlayableItem* m_rootItem;

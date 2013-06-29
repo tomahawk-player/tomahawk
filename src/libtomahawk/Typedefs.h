@@ -26,11 +26,13 @@
 #include <QPair>
 #include <QPersistentModelIndex>
 
-#include <boost/function.hpp>
-
 //template <typename T> class QSharedPointer;
 
 #include <QNetworkReply>
+
+// TODO: Move into Tomahawk namespace
+class Msg;
+typedef QSharedPointer<Msg> msg_ptr;
 
 namespace Tomahawk
 {
@@ -78,6 +80,15 @@ namespace Tomahawk
     typedef QString QID; //query id
     typedef QString RID; //result id
 
+    namespace ACLStatus {
+        enum Type {
+            NotFound = 0,
+            Deny = 1,
+            Read = 2,
+            Stream = 3
+        };
+    }
+
     enum GeneratorMode
     {
         OnDemand = 0,
@@ -88,7 +99,7 @@ namespace Tomahawk
     {
         Mixed = 0,
         DatabaseMode,
-        InfoSystemMode,
+        InfoSystemMode
     };
 
     enum ModelTypes
@@ -100,7 +111,6 @@ namespace Tomahawk
     };
 
     class ExternalResolver;
-    typedef boost::function<Tomahawk::ExternalResolver*( QString, QStringList )> ResolverFactoryFunc;
 
     namespace PlaylistModes {
         enum RepeatMode { NoRepeat, RepeatOne, RepeatAll };
@@ -216,7 +226,9 @@ namespace Tomahawk
 
             InfoNotifyUser = 100,
 
-            InfoLastInfo = 101 //WARNING: *ALWAYS* keep this last!
+            InfoInboxReceived = 101,
+
+            InfoLastInfo = 102 //WARNING: *ALWAYS* keep this last!
         };
 
         class InfoPlugin;
@@ -229,7 +241,7 @@ namespace Tomahawk
 
         typedef QPointer< InfoPlugin > InfoPluginPtr;
     }
-}; // ns
+} // ns
 
 typedef int AudioErrorCode;
 typedef int AudioState;
@@ -247,6 +259,7 @@ inline static QString uuid()
 
 Q_DECLARE_METATYPE( QModelIndex )
 Q_DECLARE_METATYPE( QPersistentModelIndex )
-Q_DECLARE_METATYPE( QNetworkReply* );
+Q_DECLARE_METATYPE( QNetworkReply* )
+Q_DECLARE_METATYPE( Tomahawk::ACLStatus::Type )
 
 #endif // TYPEDEFS_H

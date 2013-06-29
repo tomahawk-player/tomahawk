@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2013, Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -30,17 +31,13 @@
 #ifndef MSG_H
 #define MSG_H
 
-#include <QByteArray>
+#include "Typedefs.h"
+
 #include <QSharedPointer>
-#include <QtEndian>
-#include <QIODevice>
 
-#include <qjson/parser.h>
-#include <qjson/serializer.h>
-#include <qjson/qobjecthelper.h>
-
-class Msg;
-typedef QSharedPointer<Msg> msg_ptr;
+class MsgPrivate;
+class QByteArray;
+class QIODevice;
 
 class Msg
 {
@@ -59,101 +56,54 @@ public:
         SETUP = 128 // used to handshake/auth the connection prior to handing over to Connection subclass
     };
 
-    virtual ~Msg()
-    {
-        //qDebug() << Q_FUNC_INFO;
-    }
+    virtual ~Msg();
 
-    /// constructs new msg you wish to send
-    static msg_ptr factory( const QByteArray& ba, char f )
-    {
-        return msg_ptr( new Msg( ba, f ) );
-    }
+    /**
+     * constructs new msg you wish to send
+     */
+    static msg_ptr factory( const QByteArray& ba, char f );
 
-    /// constructs an incomplete new msg that is missing the payload data
-    static msg_ptr begin( char* headerToParse )
-    {
-        quint32 lenBE = *( (quint32*) headerToParse );
-        quint8 flags = *( (quint8*) (headerToParse+4) );
-        return msg_ptr( new Msg( qFromBigEndian(lenBE), flags ) );
-    }
+    /**
+     * constructs an incomplete new msg that is missing the payload data
+     */
+    static msg_ptr begin( char* headerToParse );
 
-    /// completes msg construction by providing payload data
-    void fill( const QByteArray& ba )
-    {
-        Q_ASSERT( m_incomplete );
-        Q_ASSERT( ba.length() == (qint32)m_length );
-        m_payload = ba;
-        m_incomplete = false;
-    }
+    /**
+     * completes msg construction by providing payload data
+     */
+    void fill( const QByteArray& ba );
 
-    /// frames the msg and writes to the wire:
-    bool write( QIODevice * device )
-    {
-        quint32 size  = qToBigEndian( m_length );
-        quint8  flags = m_flags;
-        if( device->write( (const char*) &size,  sizeof(quint32) ) != sizeof(quint32) ) return false;
-        if( device->write( (const char*) &flags, sizeof(quint8) )  != sizeof(quint8)  ) return false;
-        if( device->write( (const char*) m_payload.data(), m_length ) != m_length ) return false;
-        return true;
-    }
+    /**
+     * frames the msg and writes to the wire:
+     */
+    bool write( QIODevice * device );
 
     // len(4) + flags(1)
-    static quint8 headerSize() { return sizeof(quint32) + sizeof(quint8); }
+    static quint8 headerSize();
 
-    quint32 length() const { return m_length; }
+    quint32 length() const;
 
-    bool is( Flag flag ) { return m_flags & flag; }
+    bool is( Flag flag );
 
-    const QByteArray& payload() const
-    {
-        Q_ASSERT( m_incomplete == false );
-        return m_payload;
-    }
+    const QByteArray& payload() const;
 
-    QVariant& json()
-    {
-        Q_ASSERT( is(JSON) );
-        Q_ASSERT( !is(COMPRESSED) );
+    QVariant& json();
 
-        if( !m_json_parsed )
-        {
-            QJson::Parser p;
-            bool ok;
-            m_json = p.parse( m_payload, &ok );
-            m_json_parsed = true;
-        }
-        return m_json;
-    }
-
-    char flags() const { return m_flags; }
+    char flags() const;
 
 private:
-    /// used when constructing Msg you wish to send
-    Msg( const QByteArray& ba, char f )
-        :   m_payload( ba ),
-            m_length( ba.length() ),
-            m_flags( f ),
-            m_incomplete( false ),
-            m_json_parsed( false)
-    {
-    }
+    /**
+     * Used when constructing Msg you wish to send
+     */
+    Msg( const QByteArray& ba, char f );
 
-    /// used when constructung Msg off the wire:
-    Msg( quint32 len, quint8 flags )
-        :   m_length( len ),
-            m_flags( flags ),
-            m_incomplete( true ),
-            m_json_parsed( false)
-    {
-    }
+    /**
+     * used when constructung Msg off the wire:
+     */
+    Msg( quint32 len, quint8 flags );
 
-    QByteArray m_payload;
-    quint32 m_length;
-    char m_flags;
-    bool m_incomplete;
-    QVariant m_json;
-    bool m_json_parsed;
+    Q_DECLARE_PRIVATE( Msg )
+    MsgPrivate* d_ptr;
 };
 
 #endif // MSG_H

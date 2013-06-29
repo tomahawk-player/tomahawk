@@ -66,7 +66,7 @@ QDataStream& operator>>( QDataStream &in, ACLRegistry::User &user )
         }
         int aclIn;
         in >> aclIn;
-        user.acl = (ACLRegistry::ACL)( aclIn );
+        user.acl = (Tomahawk::ACLStatus::Type)( aclIn );
     }
     return in;
 }
@@ -91,7 +91,7 @@ ACLRegistry::setInstance( ACLRegistry* instance )
 ACLRegistry::ACLRegistry( QObject* parent )
     : QObject( parent )
 {
-    qRegisterMetaType< ACLRegistry::ACL >( "ACLRegistry::ACL" );
+    qRegisterMetaType< Tomahawk::ACLStatus::Type >( "Tomahawk::ACLStatus::Type" );
     qRegisterMetaType< ACLRegistry::User >( "ACLRegistry::User" );
     qRegisterMetaTypeStreamOperators< ACLRegistry::User >( "ACLRegistry::User" );
 }

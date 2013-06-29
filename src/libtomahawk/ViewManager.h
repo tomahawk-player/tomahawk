@@ -20,15 +20,18 @@
 #ifndef VIEWMANAGER_H
 #define VIEWMANAGER_H
 
-#include <QObject>
-#include <QHash>
-#include <QStackedWidget>
-
 #include "Artist.h"
 #include "collection/Collection.h"
 #include "PlaylistInterface.h"
 #include "playlist/QueueView.h"
 #include "ViewPage.h"
+
+#include <QObject>
+#include <QHash>
+#include <QStackedWidget>
+
+// best regards to you, mr. pimple aka xhochy :)
+#include <boost/function.hpp>
 
 #include "DllMacro.h"
 
@@ -41,6 +44,7 @@ class TreeWidget;
 class CollectionModel;
 class ContextWidget;
 class FlexibleView;
+class FlexibleTreeView;
 class PlaylistModel;
 class PlaylistView;
 class TrackProxyModel;
@@ -52,10 +56,11 @@ class SourceInfoWidget;
 class InfoBar;
 class TrackInfoWidget;
 class NewReleasesWidget;
-class WelcomeWidget;
+class Dashboard;
 class WhatsHotWidget;
 class QPushButton;
 class InboxModel;
+class NetworkActivityWidget;
 
 namespace Tomahawk
 {
@@ -88,12 +93,15 @@ public:
 
     Tomahawk::ViewPage* show( Tomahawk::ViewPage* page );
 
-    Tomahawk::ViewPage* welcomeWidget() const;
+    Tomahawk::ViewPage* dashboard() const;
     Tomahawk::ViewPage* whatsHotWidget() const;
     Tomahawk::ViewPage* newReleasesWidget() const;
     Tomahawk::ViewPage* recentPlaysWidget() const;
     Tomahawk::ViewPage* superCollectionView() const;
     Tomahawk::ViewPage* inboxWidget() const;
+    Tomahawk::ViewPage* networkActivityWidget() const;
+
+    Tomahawk::ViewPage* dynamicPageWidget( const QString& pageName ) const;
 
     InboxModel* inboxModel();
 
@@ -111,8 +119,6 @@ public:
 
     FlexibleView* createPageForList( const QString& title, const QList< Tomahawk::query_ptr >& queries );
 
-    bool isTomahawkLoaded() const { return m_loaded; }
-
 signals:
     void filterAvailable( bool b );
 
@@ -127,19 +133,24 @@ signals:
     void showQueueRequested();
     void hideQueueRequested();
 
-    void tomahawkLoaded();
-
     void historyBackAvailable( bool avail );
     void historyForwardAvailable( bool avail );
+
+    void viewPageAdded( const QString& pageName, const QString& text, const QIcon& icon );
 
 public slots:
     Tomahawk::ViewPage* showRadioPage();
     Tomahawk::ViewPage* showSuperCollection();
-    Tomahawk::ViewPage* showWelcomePage();
+    Tomahawk::ViewPage* showDashboard();
     Tomahawk::ViewPage* showWhatsHotPage();
     Tomahawk::ViewPage* showNewReleasesPage();
     Tomahawk::ViewPage* showRecentPlaysPage();
     Tomahawk::ViewPage* showInboxPage();
+    Tomahawk::ViewPage* showNetworkActivityPage();
+
+    void addDynamicPage( const QString& pageName, const QString& text, const QIcon& icon, boost::function< Tomahawk::ViewPage*() > instanceLoader );
+    Tomahawk::ViewPage* showDynamicPage( const QString& pageName );
+
     void showCurrentTrack();
 
     // Returns the shown viewpage
@@ -163,8 +174,6 @@ public slots:
 
     void playlistInterfaceChanged( Tomahawk::playlistinterface_ptr );
 
-    void setTomahawkLoaded();
-
 private slots:
     void setFilter( const QString& filter );
     void applyFilter();
@@ -187,18 +196,22 @@ private:
     TreeModel* m_superCollectionModel;
     TreeWidget* m_superCollectionView;
     QueueView* m_queue;
-    WelcomeWidget* m_welcomeWidget;
+    Dashboard* m_dashboard;
     WhatsHotWidget* m_whatsHotWidget;
     NewReleasesWidget* m_newReleasesWidget;
     Tomahawk::ViewPage* m_recentPlaysWidget;
     Tomahawk::ViewPage* m_inboxWidget;
     Tomahawk::DynamicQmlWidget* m_radioView;
     InboxModel* m_inboxModel;
+    NetworkActivityWidget* m_networkActivityWidget;
+
+    QHash< QString, Tomahawk::ViewPage* > m_dynamicPages;
+    QHash< QString, boost::function< Tomahawk::ViewPage*() > > m_dynamicPagesInstanceLoaders;
 
     QList< Tomahawk::collection_ptr > m_superCollections;
 
     QHash< Tomahawk::dynplaylist_ptr, QPointer<Tomahawk::DynamicQmlWidget> > m_dynamicWidgets;
-    QHash< Tomahawk::collection_ptr, QPointer<TreeWidget> > m_treeWidgets;
+    QHash< Tomahawk::collection_ptr, QPointer<FlexibleTreeView> > m_collectionViews;
     QHash< Tomahawk::artist_ptr, QPointer<ArtistInfoWidget> > m_artistViews;
     QHash< Tomahawk::album_ptr, QPointer<AlbumInfoWidget> > m_albumViews;
     QHash< Tomahawk::query_ptr, QPointer<TrackInfoWidget> > m_trackViews;
@@ -213,8 +226,6 @@ private:
 
     QTimer m_filterTimer;
     QString m_filter;
-
-    bool m_loaded;
 
     static ViewManager* s_instance;
 };

@@ -18,13 +18,18 @@
 
 #include "DatabaseCommand_SetPlaylistRevision.h"
 
-#include <QSqlQuery>
-
-#include "Source.h"
-#include "DatabaseImpl.h"
-#include "TomahawkSqlQuery.h"
+#include "collection/Collection.h"
 #include "network/Servent.h"
 #include "utils/Logger.h"
+
+#include "DatabaseImpl.h"
+#include "Source.h"
+#include "TomahawkSqlQuery.h"
+
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
+
+#include <QSqlQuery>
 
 using namespace Tomahawk;
 
@@ -38,6 +43,7 @@ DatabaseCommand_SetPlaylistRevision::DatabaseCommand_SetPlaylistRevision(
                       const QList<plentry_ptr>& addedentries,
                       const QList<plentry_ptr>& entries )
     : DatabaseCommandLoggable( s )
+    , m_failed( false )
     , m_applied( false )
     , m_newrev( newrev )
     , m_oldrev( oldrev )
@@ -66,6 +72,7 @@ DatabaseCommand_SetPlaylistRevision::DatabaseCommand_SetPlaylistRevision(
                         const QStringList& orderedguids,
                         const QList<plentry_ptr>& entriesToUpdate )
     : DatabaseCommandLoggable( s )
+    , m_failed( false )
     , m_applied( false )
     , m_newrev( newrev )
     , m_oldrev( oldrev )
@@ -87,7 +94,7 @@ DatabaseCommand_SetPlaylistRevision::DatabaseCommand_SetPlaylistRevision(
 void
 DatabaseCommand_SetPlaylistRevision::postCommitHook()
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug() << Q_FUNC_INFO;
     if ( m_localOnly )
         return;
 
@@ -130,12 +137,13 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
     if ( chkq.exec() && chkq.next() )
     {
         currentRevision = chkq.value( 0 ).toString();
-        tDebug() << Q_FUNC_INFO << "pl guid" << m_playlistguid << "- curr rev" << currentRevision;
+        tDebug() << Q_FUNC_INFO << "pl guid" << m_playlistguid << "- curr rev" << currentRevision << source()->friendlyName() << source()->id();
     }
     else
     {
         tDebug() << "ERROR: No such playlist:" << m_playlistguid << currentRevision << source()->friendlyName() << source()->id();
 //        Q_ASSERT_X( false, "DatabaseCommand_SetPlaylistRevision::exec", "No such playlist, WTF?" );
+        m_failed = true;
         return;
     }
 

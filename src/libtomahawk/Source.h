@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013, Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -20,28 +21,34 @@
 #ifndef SOURCE_H
 #define SOURCE_H
 
-#include <QtCore/QObject>
-#include <QtCore/QSharedPointer>
-#include <QtCore/QVariantMap>
+#include <QObject>
+#include <QSharedPointer>
+#include <QVariantMap>
 
 #include "Typedefs.h"
-#include "network/DbSyncConnection.h"
-#include "collection/Collection.h"
-#include "Query.h"
+#include "accounts/AccountManager.h"
+#include "network/DBSyncConnectionState.h"
 #include "utils/TomahawkUtils.h"
 
 #include "DllMacro.h"
 
 class ControlConnection;
+class DatabaseCommand;
+class DatabaseCommand_AddFiles;
 class DatabaseCommand_DeleteFiles;
 class DatabaseCommand_LoadAllSources;
 class DatabaseCommand_LogPlayback;
 class DatabaseCommand_SocialAction;
 class DatabaseCommand_UpdateSearchIndex;
+class DBSyncConnection;
 class MusicScanner;
 
 namespace Tomahawk
 {
+
+struct PlaybackLog;
+class Resolver;
+class SourcePrivate;
 
 class DLLEXPORT Source : public QObject
 {
@@ -60,33 +67,31 @@ public:
     explicit Source( int id, const QString& nodeId = QString() );
     virtual ~Source();
 
-    bool isLocal() const { return m_isLocal; }
-    bool isOnline() const { return m_online || m_isLocal; }
+    bool isLocal() const;
+    bool isOnline() const;
 
     QString nodeId() const;
 
     QString friendlyName() const;
     void setFriendlyName( const QString& fname );
 
-
     // fallback when the normal friendlyname from cache is not available
     // this is usually the jabber id or whatever was used when first connected
     QString dbFriendlyName() const;
     void setDbFriendlyName( const QString& dbFriendlyName );
-
 
 #ifndef ENABLE_HEADLESS
     QPixmap avatar( TomahawkUtils::ImageMode style = TomahawkUtils::Original, const QSize& size = QSize() );
 #endif
 
     collection_ptr dbCollection() const;
-    QList< Tomahawk::collection_ptr > collections() const { return m_collections; }
+    QList< Tomahawk::collection_ptr > collections() const;
     void addCollection( const Tomahawk::collection_ptr& c );
     void removeCollection( const Tomahawk::collection_ptr& c );
 
-    int id() const { return m_id; }
-    ControlConnection* controlConnection() const { return m_cc; }
-    void setControlConnection( ControlConnection* cc );
+    int id() const;
+    ControlConnection* controlConnection() const;
+    bool setControlConnection( ControlConnection* cc );
 
     const QSet< Tomahawk::peerinfo_ptr > peerInfos() const;
 
@@ -95,11 +100,13 @@ public:
 
     unsigned int trackCount() const;
 
-    Tomahawk::query_ptr currentTrack() const { return m_currentTrack; }
+    Tomahawk::query_ptr currentTrack() const;
     QString textStatus() const;
-    DBSyncConnection::State state() const { return m_state; }
+    Tomahawk::DBSyncConnectionState state() const;
 
     Tomahawk::playlistinterface_ptr playlistInterface();
+
+    QSharedPointer<QMutexLocker> acquireLock();
 
 signals:
     void syncedWithDatabase();
@@ -133,10 +140,11 @@ private slots:
     void dbLoaded( unsigned int id, const QString& fname );
     void updateIndexWhenSynced();
 
+    void handleDisconnect( Tomahawk::Accounts::Account*, Tomahawk::Accounts::AccountManager::DisconnectReason reason );
     void setOffline();
     void setOnline();
 
-    void onStateChanged( DBSyncConnection::State newstate, DBSyncConnection::State oldstate, const QString& info );
+    void onStateChanged( Tomahawk::DBSyncConnectionState newstate, Tomahawk::DBSyncConnectionState oldstate, const QString& info );
 
     void onPlaybackStarted( const Tomahawk::track_ptr& track, unsigned int duration );
     void onPlaybackFinished( const Tomahawk::track_ptr& track, const Tomahawk::PlaybackLog& log );
@@ -146,35 +154,13 @@ private slots:
     void addCommand( const QSharedPointer<DatabaseCommand>& command );
 
 private:
+    Q_DECLARE_PRIVATE( Source )
+    SourcePrivate* d_ptr;
+
     static bool friendlyNamesLessThan( const QString& first, const QString& second ); //lessThan for sorting
 
     void updateTracks();
     void reportSocialAttributesChanged( DatabaseCommand_SocialAction* action );
-
-    QList< QSharedPointer<Collection> > m_collections;
-    QVariantMap m_stats;
-
-    bool m_isLocal;
-    bool m_online;
-    QString m_nodeId;
-    QString m_friendlyname;
-    QString m_dbFriendlyName;
-    int m_id;
-    bool m_scrubFriendlyName;
-    bool m_updateIndexWhenSynced;
-
-    Tomahawk::query_ptr m_currentTrack;
-    QString m_textStatus;
-    DBSyncConnection::State m_state;
-    QTimer m_currentTrackTimer;
-
-    ControlConnection* m_cc;
-    QList< QSharedPointer<DatabaseCommand> > m_cmds;
-    int m_commandCount;
-    QString m_lastCmdGuid;
-    mutable QMutex m_cmdMutex;
-
-    Tomahawk::playlistinterface_ptr m_playlistInterface;
 };
 
 } //ns

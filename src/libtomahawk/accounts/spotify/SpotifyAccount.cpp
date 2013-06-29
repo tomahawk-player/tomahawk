@@ -32,6 +32,7 @@
 #include "SpotifyInfoPlugin.h"
 #include "infosystem/InfoSystem.h"
 #include "utils/Logger.h"
+#include "TomahawkSettings.h"
 
 #ifndef ENABLE_HEADLESS
 #include "jobview/JobStatusView.h"
@@ -226,7 +227,7 @@ SpotifyAccount::hookupResolver()
 
     connect( m_spotifyResolver.data(), SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
     connect( m_spotifyResolver.data(), SIGNAL( customMessage( QString,QVariantMap ) ), this, SLOT( resolverMessage( QString, QVariantMap ) ) );
-
+    connect( ActionCollection::instance(), SIGNAL( privacyModeChanged() ), SLOT( privateModeChanged() ) );
     // Always get logged in status
     QVariantMap msg;
     msg[ "_msgtype" ] = "getCredentials";
@@ -429,6 +430,17 @@ SpotifyAccount::starTrack(const QString &artist, const QString &title, const boo
     msg[ "starred" ] = starred;
     msg[ "artist" ] = artist;
     msg[ "title" ] = title;
+    sendMessage( msg );
+}
+
+
+void
+SpotifyAccount::privateModeChanged()
+{
+    qDebug() << Q_FUNC_INFO << "Sending privateMode";
+    QVariantMap msg;
+    msg[ "_msgtype" ] = "setPrivacyMode";
+    msg[ "private" ] = ( m_configWidget.data()->persitentPrivacy() || TomahawkSettings::instance()->privateListeningMode() != TomahawkSettings::PublicListening );
     sendMessage( msg );
 }
 
@@ -1123,6 +1135,7 @@ SpotifyAccount::configurationWidget()
         m_configWidget = QPointer< SpotifyAccountConfig >( new SpotifyAccountConfig( this ) );
         connect( m_configWidget.data(), SIGNAL( login( QString,QString ) ), this, SLOT( login( QString,QString ) ) );
         connect( m_configWidget.data(), SIGNAL( logout() ), this, SLOT( logout() ) );
+        connect( m_configWidget.data(), SIGNAL( updatePrivacy( bool ) ), this, SLOT( privateModeChanged() ) );
         m_configWidget.data()->setPlaylists( m_allSpotifyPlaylists.values() );
     }
 
@@ -1178,6 +1191,8 @@ SpotifyAccount::saveConfig()
     QVariantHash config = configuration();
     config[ "deleteOnUnsync" ] = m_configWidget.data()->deleteOnUnsync();
     config[ "loveSync" ] = m_configWidget.data()->loveSync();
+    config[ "persitentPrivacy" ] = m_configWidget.data()->persitentPrivacy();
+
     setConfiguration( config );
 
     m_configWidget.data()->saveSettings();
@@ -1214,7 +1229,7 @@ SpotifyAccount::login( const QString& username, const QString& password )
     msg[ "_msgtype" ] = "login";
     msg[ "username" ] = username;
     msg[ "password" ] = password;
-
+    msg[ "privateSession" ] = ( m_configWidget.data()->persitentPrivacy() || TomahawkSettings::instance()->privateListeningMode() != TomahawkSettings::PublicListening );
     msg[ "highQuality" ] = m_configWidget.data()->highQuality();
 
     m_spotifyResolver.data()->sendMessage( msg );
@@ -1462,6 +1477,13 @@ bool
 SpotifyAccount::loveSync() const
 {
     return configuration().value( "loveSync", false ).toBool();
+}
+
+
+bool
+SpotifyAccount::persitentPrivacy() const
+{
+    return configuration().value( "persitentPrivacy", false ).toBool();
 }
 
 

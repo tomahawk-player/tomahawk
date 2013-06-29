@@ -35,7 +35,6 @@
 #include <QBitmap>
 #include <QPalette>
 #include <QApplication>
-#include <QScrollBar>
 #include <QWidget>
 #include <QStyleOption>
 #include <QDesktopServices>
@@ -171,7 +170,7 @@ drawBackgroundAndNumbers( QPainter* painter, const QString& text, const QRect& f
         figRect.adjust( -painter->fontMetrics().averageCharWidth(), 0, 0, 0 );
 
     QPen origpen = painter->pen();
-    QPen pen = origpen;
+    QPen pen = painter->brush().color();
     pen.setWidth( 1.0 );
     painter->setPen( pen );
     painter->drawRect( figRect );
@@ -195,7 +194,6 @@ drawBackgroundAndNumbers( QPainter* painter, const QString& text, const QRect& f
     figRect.adjust( -1, 0, 0, 0 );
 
     painter->setPen( origpen );
-    painter->setPen( Qt::white );
     painter->drawText( figRect.adjusted( -5, 2, 6, 0 ), text, QTextOption( Qt::AlignCenter ) );
 
     painter->restore();
@@ -718,6 +716,13 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
         case InboxNewItem:
             pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/new-inbox.svg", size );
             break;
+        case Outbox:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/outbox.svg", size );
+            break;
+
+        case NetworkActivity:
+            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/network-activity.svg", size );
+            break;
 
         default:
             break;
@@ -743,16 +748,17 @@ prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, Pl
         option->backgroundBrush = TomahawkStyle::NOW_PLAYING_ITEM;
         option->palette.setColor( QPalette::Highlight, TomahawkStyle::NOW_PLAYING_ITEM.lighter() );
         option->palette.setColor( QPalette::Text, TomahawkStyle::NOW_PLAYING_ITEM_TEXT );
-
+        option->palette.setColor( QPalette::Foreground, TomahawkStyle::NOW_PLAYING_ITEM_TEXT );
     }
     else if ( option->state & QStyle::State_Selected )
     {
+        option->palette.setColor( QPalette::Foreground, option->palette.color( QPalette::HighlightedText ) );
         option->palette.setColor( QPalette::Text, option->palette.color( QPalette::HighlightedText ) );
     }
     else
     {
         float opacity = 0.0;
-        if ( !item->query()->results().isEmpty() )
+        if ( !item->query()->results().isEmpty() && item->query()->results().first()->isOnline() )
             opacity = item->query()->results().first()->score();
 
         opacity = qMax( (float)0.3, opacity );
@@ -809,30 +815,6 @@ drawRoundedButton( QPainter* painter, const QRect& btnRect, const QColor& color,
     else
         painter->fillPath( btnPath, color );
 
-}
-
-
-void
-styleScrollBar( QScrollBar* scrollBar )
-{
-    scrollBar->setStyleSheet(
-        "QScrollBar:horizontal { background-color: transparent; }"
-        "QScrollBar::handle:horizontal { border-height: 9px; margin-bottom: 6px;"
-            "border-image: url(" RESPATH "images/scrollbar-horizontal-handle.png) 3 3 3 3 stretch stretch;"
-            "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }"
-        "QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal { width: 0px; height: 0px; background: none; }"
-        "QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal { width: 0px; height: 0px; background: none; }"
-        "QScrollBar:left-arrow:horizontal, QScrollBar::right-arrow:horizontal {"
-            "border: 0px; width: 0px; height: 0px; background: none; background-color: transparent; }"
-
-        "QScrollBar:vertical { background-color: transparent; }"
-        "QScrollBar::handle:vertical { border-width: 9px; margin-right: 6px;"
-            "border-image: url(" RESPATH "images/scrollbar-vertical-handle.png) 3 3 3 3 stretch stretch;"
-            "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }"
-        "QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical { width: 0px; height: 0px; background: none; }"
-        "QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical { width: 0px; height: 0px; background: none; }"
-        "QScrollBar:up-arrow:vertical, QScrollBar::down-arrow:vertical {"
-            "border: 0px; width: 0px; height: 0px; background: none; background-color: transparent; }" );
 }
 
 

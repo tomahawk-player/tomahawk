@@ -19,16 +19,17 @@
 
 #include "PlayableProxyModel.h"
 
-#include <QTreeView>
-
-#include "PlayableProxyModelPlaylistInterface.h"
-#include "Artist.h"
-#include "Album.h"
-#include "Query.h"
-#include "Source.h"
-#include "PlayableItem.h"
 #include "utils/Logger.h"
 
+#include "Artist.h"
+#include "Album.h"
+#include "PlayableItem.h"
+#include "PlayableProxyModelPlaylistInterface.h"
+#include "Query.h"
+#include "Result.h"
+#include "Source.h"
+
+#include <QTreeView>
 
 PlayableProxyModel::PlayableProxyModel( QObject* parent )
     : QSortFilterProxyModel( parent )
@@ -320,25 +321,25 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
 
     if ( q1->numResults() )
     {
-        const Tomahawk::result_ptr& r = q1->results().at( 0 );
+        Tomahawk::result_ptr r = q1->results().first();
         bitrate1 = r->bitrate();
         duration1 = r->track()->duration();
         mtime1 = r->modificationTime();
         size1 = r->size();
         year1 = r->track()->year();
-        score1 = r->score();
+        score1 = r->isOnline() ? r->score() : 0.0;
         origin1 = r->friendlySource().toLower();
         id1 = (qint64)&r;
     }
     if ( q2->numResults() )
     {
-        const Tomahawk::result_ptr& r = q2->results().at( 0 );
+        Tomahawk::result_ptr r = q2->results().first();
         bitrate2 = r->bitrate();
         duration2 = r->track()->duration();
         mtime2 = r->modificationTime();
         size2 = r->size();
         year2 = r->track()->year();
-        score2 = r->score();
+        score2 = r->isOnline() ? r->score() : 0.0;
         origin2 = r->friendlySource().toLower();
         id2 = (qint64)&r;
     }
@@ -531,9 +532,7 @@ QVariant
 PlayableProxyModel::data( const QModelIndex& index, int role ) const
 {
     if ( role == StyleRole )
-    {
         return m_style;
-    }
 
     if ( !sourceModel() )
         return QVariant();

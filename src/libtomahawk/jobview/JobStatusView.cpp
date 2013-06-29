@@ -104,7 +104,7 @@ JobStatusView::customDelegateJobInserted( int row, JobStatusItem* item )
     if ( delegate )
     {
         connect( delegate, SIGNAL( update( const QModelIndex& ) ), m_view, SLOT( update( const QModelIndex & ) ) );
-        connect( delegate, SIGNAL( aclResult( ACLRegistry::ACL ) ), item, SLOT( aclResult( ACLRegistry::ACL ) ) );
+        connect( delegate, SIGNAL( aclResult( Tomahawk::ACLStatus::Type ) ), item, SLOT( aclResult( Tomahawk::ACLStatus::Type ) ) );
         delegate->emitSizeHintChanged( m_model->index( row, 0 ) );
     }
     else

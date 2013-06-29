@@ -19,6 +19,7 @@
 
 #include "playlist/dynamic/DynamicModel.h"
 
+#include "DynamicPlaylist.h"
 #include "GeneratorInterface.h"
 #include "Pipeline.h"
 #include "Query.h"

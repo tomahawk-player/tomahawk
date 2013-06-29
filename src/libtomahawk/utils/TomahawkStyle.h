@@ -26,8 +26,13 @@
 #include <QPainter>
 #include <QStyle>
 
+class QFrame;
+class QScrollBar;
+
 namespace TomahawkStyle
 {
+    DLLEXPORT void loadFonts();
+
     /**
      * Draws a header background on a painter with the specified rectangle
      */
@@ -41,6 +46,9 @@ namespace TomahawkStyle
      */
     DLLEXPORT void drawArrow( QStyle::PrimitiveElement, QPainter* painter, const QStyleOption* opt );
 
+    DLLEXPORT void stylePageFrame( QFrame* frame );
+    DLLEXPORT void styleScrollBar( QScrollBar* scrollBar );
+
     static const QColor BORDER_LINE = QColor( "#8c8c8c" );
     static const QColor POPUP_BACKGROUND = QColor( "#ffffff" );
     static const QColor POPUP_OSX_BACKGROUND = QColor( "#D6E3F1" );
@@ -50,15 +58,35 @@ namespace TomahawkStyle
 
     static const QColor NOW_PLAYING_ITEM = QColor( "#962c26" );
     static const QColor NOW_PLAYING_ITEM_TEXT = QColor( "#ffffff" );
-    static const QColor SELECTION_BACKGROUND = QColor( "#962c26" );
+    static const QColor SELECTION_BACKGROUND = QColor( "#7DC4FF" );
     static const QColor SELECTION_FOREGROUND = QColor( "#ffffff" );
 
-    static const QColor HEADER_UPPER = QColor( "#25292c" );
-    static const QColor HEADER_LOWER = QColor( "#707070" );
-    static const QColor HEADER_TEXT = QColor( "#eaeaea" );
+    static const QColor HEADER_GAUGE_HIGHLIGHT = QColor( "#7DC4FF" );
+    static const QColor HEADER_GAUGE_BACKGROUND = QColor( "#0B0A0A" );
+    static const QColor HEADER_GAUGE_TEXT = QColor( "#FFFFFF" );
+    static const QColor HEADER_GAUGE_LABEL_BACKGROUND = QColor( "#0B0A0A" );
+
+    static const QColor HEADER_BACKGROUND = QColor( "#292f34" );
+    static const QColor HEADER_LABEL = QColor( "#FFFFFF" );
+    static const QColor HEADER_TEXT = QColor( "#DBDBDB" );
+    static const QColor HEADER_LINK = QColor( "#7DC4FF" );
     static const QColor HEADER_HIGHLIGHT = QColor( "#333" );
 
-    static const QColor PAGE_BACKGROUND = QColor( "#272b2e" );
+    static const QColor TOGGLEBUTTON_BACKGROUND = QColor( "#292f34" );
+    static const QColor TOGGLEBUTTON_TEXT = QColor( "#ffffff" );
+    static const QColor TOGGLEBUTTON_HIGHLIGHT = QColor( "#333" );
+
+    static const QColor PAGE_CAPTION = QColor( "#292F34" );
+    static const QColor PAGE_TEXT = QColor( "#ABCCE8" );
+    static const QColor PAGE_FOREGROUND = QColor( "#292f34" );
+    static const QColor PAGE_BACKGROUND = QColor( "#DBDBDB" );
+
+    static const QColor PAGE_TRACKLIST_TRACK_SOLVED = QColor( "#292F34" );
+    static const QColor PAGE_TRACKLIST_TRACK_UNRESOLVED = QColor( "#8597A6" ).lighter( 150 );
+    static const QColor PAGE_TRACKLIST_NUMBER = QColor( "#292f34" );
+    static const QColor PAGE_TRACKLIST_HIGHLIGHT = QColor( "#292f34" );
+    static const QColor PAGE_TRACKLIST_HIGHLIGHT_TEXT = QColor( "#ffffff" );
+
     static const QColor FOOTNOTES_BACKGROUND = QColor( "#272b2e" );
     static const QColor DASHBOARD_ROUNDFIGURE_BACKGROUND = QColor( "#454e59" );
 

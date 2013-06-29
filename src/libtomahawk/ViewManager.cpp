@@ -26,11 +26,13 @@
 #include "infobar/InfoBar.h"
 
 #include "playlist/FlexibleView.h"
+#include "playlist/FlexibleTreeView.h"
 #include "playlist/TreeModel.h"
 #include "playlist/PlaylistModel.h"
 #include "playlist/PlaylistView.h"
 #include "playlist/PlayableProxyModel.h"
 #include "playlist/PlayableModel.h"
+#include "playlist/ColumnView.h"
 #include "playlist/TreeView.h"
 #include "playlist/TreeWidget.h"
 #include "playlist/GridView.h"
@@ -46,8 +48,9 @@
 #include "playlist/dynamic/widgets/DynamicQmlWidget.h"
 
 #include "widgets/NewReleasesWidget.h"
-#include "widgets/WelcomeWidget.h"
+#include "widgets/Dashboard.h"
 #include "widgets/WhatsHotWidget.h"
+#include "widgets/NetworkActivityWidget.h"
 #include "widgets/infowidgets/SourceInfoWidget.h"
 #include "widgets/infowidgets/ArtistInfoWidget.h"
 #include "widgets/infowidgets/AlbumInfoWidget.h"
@@ -78,14 +81,14 @@ ViewManager::instance()
 ViewManager::ViewManager( QObject* parent )
     : QObject( parent )
     , m_widget( new QWidget() )
-    , m_welcomeWidget( new WelcomeWidget() )
+    , m_dashboard( new Dashboard() )
     , m_whatsHotWidget( 0 )
     , m_newReleasesWidget( 0 )
     , m_recentPlaysWidget( 0 )
     , m_inboxWidget( 0 )
     , m_radioView( 0 )
+    , m_networkActivityWidget( 0 )
     , m_currentPage( 0 )
-    , m_loaded( false )
 {
     s_instance = this;
 
@@ -121,8 +124,6 @@ ViewManager::ViewManager( QObject* parent )
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
     connect( m_infobar, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
 
-    connect( this, SIGNAL( tomahawkLoaded() ), m_welcomeWidget, SLOT( loadData() ) );
-
 /*    connect( m_infobar, SIGNAL( flatMode() ), SLOT( setTableMode() ) );
     connect( m_infobar, SIGNAL( artistMode() ), SLOT( setTreeMode() ) );
     connect( m_infobar, SIGNAL( albumMode() ), SLOT( setAlbumMode() ) );*/
@@ -131,9 +132,10 @@ ViewManager::ViewManager( QObject* parent )
 
 ViewManager::~ViewManager()
 {
+    delete m_networkActivityWidget;
     delete m_whatsHotWidget;
     delete m_newReleasesWidget;
-    delete m_welcomeWidget;
+    delete m_dashboard;
     delete m_recentPlaysWidget;
     delete m_inboxWidget;
     delete m_contextWidget;
@@ -308,28 +310,31 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
 {
     m_currentCollection = collection;
 
-    TreeWidget* widget;
-    if ( !m_treeWidgets.contains( collection ) || m_treeWidgets.value( collection ).isNull() )
+    FlexibleTreeView* view;
+    if ( !m_collectionViews.contains( collection ) || m_collectionViews.value( collection ).isNull() )
     {
-        widget = new TreeWidget();
-        widget->view()->proxyModel()->setStyle( PlayableProxyModel::Collection );
+        view = new FlexibleTreeView();
+
+        view->columnView()->proxyModel()->setStyle( PlayableProxyModel::Collection );
         TreeModel* model = new TreeModel();
-        widget->view()->setTreeModel( model );
+
+        view->setTreeModel( model );
 
         if ( !collection.isNull() )
-            widget->view()->setEmptyTip( collection->emptyText() );
+            view->setEmptyTip( collection->emptyText() );
 
         model->addCollection( collection );
+        setPage( view );
 
-        m_treeWidgets.insert( collection, widget );
+        m_collectionViews.insert( collection, view );
     }
     else
     {
-        widget = m_treeWidgets.value( collection ).data();
+        view = m_collectionViews.value( collection ).data();
     }
 
-    setPage( widget );
-    return widget;
+    setPage( view );
+    return view;
 }
 
 
@@ -418,9 +423,9 @@ ViewManager::playlistInterfaceChanged( Tomahawk::playlistinterface_ptr interface
 
 
 Tomahawk::ViewPage*
-ViewManager::showWelcomePage()
+ViewManager::showDashboard()
 {
-    return show( m_welcomeWidget );
+    return show( m_dashboard );
 }
 
 
@@ -464,7 +469,7 @@ ViewManager::showRecentPlaysPage()
         raModel->setDescription( tr( "Recently played tracks from all your friends" ) );
 
         PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::RecentlyPlayed, pv->trackView(), pv->trackView()->proxyModel() );
-        pv->trackView()->setItemDelegate( del );
+        pv->trackView()->setPlaylistItemDelegate( del );
 
         pv->setPlayableModel( raModel );
         pv->setEmptyTip( tr( "Sorry, we could not find any recent plays!" ) );
@@ -490,7 +495,7 @@ ViewManager::showInboxPage()
                 new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::Inbox,
                                                inboxView,
                                                inboxView->proxyModel() );
-        inboxView->setItemDelegate( delegate );
+        inboxView->setPlaylistItemDelegate( delegate );
 
         inboxView->proxyModel()->setStyle( PlayableProxyModel::Large );
         inboxView->setPlayableModel( m_inboxModel );
@@ -505,6 +510,17 @@ ViewManager::showInboxPage()
     }
 
     return show( m_inboxWidget );
+}
+
+
+ViewPage *ViewManager::showNetworkActivityPage()
+{
+    if ( !m_networkActivityWidget )
+    {
+        m_networkActivityWidget = new NetworkActivityWidget( m_widget );
+    }
+
+    return show( m_networkActivityWidget );
 }
 
 
@@ -671,7 +687,13 @@ ViewManager::setPage( ViewPage* page, bool trackHistory )
             connect( obj, SIGNAL( destroyed( QWidget* ) ), SLOT( onWidgetDestroyed( QWidget* ) ), Qt::UniqueConnection );
     }
 
+    QWidget *previousPage = m_stack->currentWidget();
+
     m_stack->setCurrentWidget( page->widget() );
+
+    //This should save the CPU cycles, especially with pages like the visualizer
+    if(previousPage && previousPage != page->widget())
+        previousPage->hide();
 
     updateView();
 }
@@ -756,14 +778,6 @@ ViewManager::onWidgetDestroyed( QWidget* widget )
         m_currentPage = 0;
         historyBack();
     }
-}
-
-
-void
-ViewManager::setTomahawkLoaded()
-{
-    m_loaded = true;
-    emit tomahawkLoaded();
 }
 
 
@@ -868,9 +882,9 @@ ViewManager::showCurrentTrack()
 
 
 Tomahawk::ViewPage*
-ViewManager::welcomeWidget() const
+ViewManager::dashboard() const
 {
-    return m_welcomeWidget;
+    return m_dashboard;
 }
 
 
@@ -898,6 +912,58 @@ Tomahawk::ViewPage*
 ViewManager::inboxWidget() const
 {
     return m_inboxWidget;
+}
+
+ViewPage *ViewManager::networkActivityWidget() const
+{
+    return m_networkActivityWidget;
+}
+
+
+ViewPage*
+ViewManager::dynamicPageWidget( const QString& pageName ) const
+{
+    if( m_dynamicPages.contains( pageName ) )
+        return m_dynamicPages.value( pageName );
+
+    return 0;
+}
+
+
+void
+ViewManager::addDynamicPage( const QString& pageName, const QString& text, const QIcon& icon, boost::function<Tomahawk::ViewPage*()> instanceLoader )
+{
+    tLog() << Q_FUNC_INFO << "Trying to add " << pageName;
+
+    if( m_dynamicPages.contains( pageName ) )
+    {
+        tLog() << "Not adding a second ViewPage with name " << pageName;
+        Q_ASSERT( false );
+    }
+
+    m_dynamicPagesInstanceLoaders.insert( pageName, instanceLoader );
+    emit viewPageAdded( pageName, text, icon );
+}
+
+
+ViewPage*
+ViewManager::showDynamicPage( const QString& pageName )
+{
+    tLog() << Q_FUNC_INFO << "pageName: " << pageName;
+
+    if( !m_dynamicPages.contains( pageName ) )
+    {
+        if( !m_dynamicPagesInstanceLoaders.contains( pageName ) )
+        {
+           tLog() << "Trying to show a page that does not exist and does not have a registered loader";
+           Q_ASSERT(false);
+           return 0;
+        }
+        m_dynamicPages.insert( pageName, m_dynamicPagesInstanceLoaders.value( pageName )() );
+        m_dynamicPagesInstanceLoaders.remove( pageName );
+    }
+
+    return show( dynamicPageWidget( pageName ) );
 }
 
 

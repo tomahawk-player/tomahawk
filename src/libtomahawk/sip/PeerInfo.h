@@ -19,25 +19,22 @@
 #ifndef PEERINFO_H
 #define PEERINFO_H
 
-
-
 #include "DllMacro.h"
-
-#include "SipInfo.h"
-#include "accounts/Account.h"
 #include "utils/TomahawkUtils.h"
 
 #include <QString>
 #include <QPixmap>
 
-
 #define peerInfoDebug(peerInfo) tDebug() << "PEERINFO:" << ( !peerInfo.isNull() ? peerInfo->debugName() : "Invalid PeerInfo" ).toLatin1().constData()
 
-class SipPlugin;
 class ControlConnection;
+class SipPlugin;
+class SipInfo;
 
 namespace Tomahawk
 {
+
+class PeerInfoPrivate;
 
 class DLLEXPORT PeerInfo : public QObject
 {
@@ -74,7 +71,7 @@ public:
     const QString id() const;
     SipPlugin* sipPlugin() const;
     const QString debugName() const;
-    void sendLocalSipInfo( const SipInfo& sipInfo );
+    void sendLocalSipInfos( const QList<SipInfo>& sipInfos );
 
     QWeakPointer< Tomahawk::PeerInfo > weakRef();
     void setWeakRef( QWeakPointer< Tomahawk::PeerInfo > weakRef );
@@ -96,8 +93,8 @@ public:
     void setStatus( Status status );
     Status status() const;
 
-    void setSipInfo( const SipInfo& sipInfo );
-    const SipInfo sipInfo() const;
+    void setSipInfos( const QList<SipInfo>& sipInfos );
+    const QList<SipInfo> sipInfos() const;
 
     void setFriendlyName( const QString& friendlyName );
     const QString friendlyName() const;
@@ -112,6 +109,16 @@ public:
     void setData( const QVariant& data );
     const QVariant data() const;
 
+    /**
+     * Get the node id of this peer
+     */
+    const QString nodeId() const;
+
+    /**
+     * Get the authentication key for this host
+     */
+    const QString key() const;
+
 signals:
     void sipInfoChanged();
 
@@ -119,22 +126,10 @@ private:
     PeerInfo( SipPlugin* parent, const QString& id );
     void announce();
 
-    static QHash< QString, peerinfo_wptr > s_peersByCacheKey;
+    Q_DECLARE_PRIVATE( Tomahawk::PeerInfo )
+    Tomahawk::PeerInfoPrivate* d_ptr;
+
     static QHash< SipPlugin*, peerinfo_ptr > s_selfPeersBySipPlugin;
-
-    QWeakPointer< Tomahawk::PeerInfo > m_ownRef;
-    QPointer< ControlConnection > m_controlConnection;
-
-    SipPlugin* m_parent;
-    PeerInfo::Type m_type;
-
-    QString m_id;
-    QString m_contactId;
-    Status  m_status;
-    SipInfo m_sipInfo;
-    QString m_friendlyName;
-    QString m_versionString;
-    QVariant m_data;
 
     mutable QPixmap* m_avatar;
     mutable QPixmap* m_fancyAvatar;

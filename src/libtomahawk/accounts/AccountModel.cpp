@@ -35,11 +35,24 @@
 using namespace Tomahawk;
 using namespace Accounts;
 
-#define ACCOUNTMODEL_DEBUG 0
+#define ACCOUNTMODEL_DEBUG 1
 
 AccountModel::AccountModel( QObject* parent )
     : QAbstractListModel( parent )
     , m_waitingForAtticaLoaded( true )
+{
+    tDebug() << "Creating AccountModel";
+    if ( !AccountManager::instance()->isReady() )
+    {
+        connect( AccountManager::instance(), SIGNAL( ready() ), SLOT( init() ) );
+    }
+    else
+        init();
+}
+
+
+void
+AccountModel::init()
 {
     connect( AtticaManager::instance(), SIGNAL( resolversLoaded( Attica::Content::List ) ), this, SLOT( atticaLoaded() ) );
     connect( AtticaManager::instance(), SIGNAL( startedInstalling( QString ) ), this, SLOT( onStartedInstalling( QString ) ) );
@@ -74,6 +87,7 @@ AccountModel::loadData()
     QList< AccountFactory* > factories = AccountManager::instance()->factories();
     QList< Account* > allAccounts = AccountManager::instance()->accounts();
 #if ACCOUNTMODEL_DEBUG
+    qDebug() << Q_FUNC_INFO;
     qDebug() << "All accounts:";
     foreach ( Account* acct, allAccounts )
         qDebug() << acct->accountFriendlyName() << "\t" << acct->accountId();
@@ -660,7 +674,7 @@ AccountModel::accountAdded( Account* account )
     // Ok, just a plain resolver. add it at the end
     if ( ResolverAccount* resolver = qobject_cast< ResolverAccount* >( account ) )
     {
-        qDebug() << "Plain old manual resolver added, appending at end";
+        qDebug() << "Plain old manual resolver added, appending at end" << resolver->accountId() << resolver->accountServiceName() << resolver->accountFriendlyName();
         if ( !m_waitingForAtticaLoaded )
             Q_ASSERT( qobject_cast< AtticaResolverAccount* >( account ) == 0 ); // should NOT get attica accounts here, should be caught above
         const int count = m_accounts.size();

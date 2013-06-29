@@ -19,10 +19,16 @@
 
 #include "TomahawkStyle.h"
 
+#include "utils/Logger.h"
+
+#include <QDir>
 #include <QPainter>
 #include <QPixmapCache>
 #include <QApplication>
 #include <QStyleOption>
+#include <QFrame>
+#include <QScrollBar>
+#include <QFontDatabase>
 
 
 void
@@ -36,8 +42,8 @@ TomahawkStyle::horizontalHeader( QPainter* painter, const QRect& r )
      painter->fillRect( lowerHalf, TomahawkStyle::headerLowerColor() );*/
     QLinearGradient gradient( QPoint( 0, 0 ), QPoint( 0, 1 ) );
     gradient.setCoordinateMode( QGradient::ObjectBoundingMode );
-    gradient.setColorAt( 0.0, TomahawkStyle::HEADER_LOWER );
-    gradient.setColorAt( 1.0, TomahawkStyle::HEADER_UPPER );
+    gradient.setColorAt( 0.0, TomahawkStyle::HEADER_BACKGROUND );
+    gradient.setColorAt( 1.0, TomahawkStyle::HEADER_BACKGROUND );
 
     painter->setBrush( gradient );
     painter->fillRect( r, gradient );
@@ -156,4 +162,49 @@ TomahawkStyle::drawArrow( QStyle::PrimitiveElement element, QPainter* p, const Q
     int xOffset = r.x() + ( r.width() - size ) / 2;
     int yOffset = r.y() + ( r.height() - size ) / 2;
     p->drawPixmap( xOffset, yOffset, pixmap );
+}
+
+
+void
+TomahawkStyle::stylePageFrame( QFrame* frame )
+{
+    frame->setStyleSheet( QString( "QFrame#%1 { background-color: transparent; border: 0px solid white; border-radius: 0px; }" )
+                             .arg( frame->objectName() ) );
+}
+
+
+void
+TomahawkStyle::styleScrollBar( QScrollBar* scrollBar )
+{
+    scrollBar->setStyleSheet(
+        "QScrollBar:horizontal { background-color: transparent; }"
+        "QScrollBar::handle:horizontal { border-height: 9px; margin-bottom: 6px;"
+            "border-image: url(" RESPATH "images/scrollbar-horizontal-handle.png) 3 3 3 3 stretch stretch;"
+            "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }"
+        "QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal { width: 0px; height: 0px; background: none; }"
+        "QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal { width: 0px; height: 0px; background: none; }"
+        "QScrollBar:left-arrow:horizontal, QScrollBar::right-arrow:horizontal {"
+            "border: 0px; width: 0px; height: 0px; background: none; background-color: transparent; }"
+
+        "QScrollBar:vertical { background-color: transparent; }"
+        "QScrollBar::handle:vertical { border-width: 9px; margin-right: 6px;"
+            "border-image: url(" RESPATH "images/scrollbar-vertical-handle.png) 3 3 3 3 stretch stretch;"
+            "border-top: 3px transparent; border-bottom: 3px transparent; border-right: 3px transparent; border-left: 3px transparent; }"
+        "QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical { width: 0px; height: 0px; background: none; }"
+        "QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical { width: 0px; height: 0px; background: none; }"
+        "QScrollBar:up-arrow:vertical, QScrollBar::down-arrow:vertical {"
+            "border: 0px; width: 0px; height: 0px; background: none; background-color: transparent; }" );
+}
+
+
+void
+TomahawkStyle::loadFonts()
+{
+    QDir dir( ":/data/fonts" );
+    foreach ( const QString& fileName, dir.entryList() )
+    {
+        tDebug() << "Trying to add font resource:" << fileName;
+        const int id = QFontDatabase::addApplicationFont( ":/data/fonts/" + fileName );
+        tDebug() << "Added font:" << id << QFontDatabase::applicationFontFamilies( id ).first();
+    }
 }

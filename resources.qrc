@@ -172,7 +172,6 @@
         <file>data/images/delete.svg</file>
         <file>data/images/ok.svg</file>
         <file>data/images/tweet.svg</file>
-        <file>data/images/widget-border.png</file>
         <file>data/images/refresh.svg</file>
         <file>data/images/inbox.svg</file>
         <file>data/images/new-inbox.svg</file>
@@ -182,5 +181,12 @@
         <file>data/images/station-artist.svg</file>
         <file>data/images/station-genre.svg</file>
         <file>data/images/station-year.svg</file>
+        <file>data/images/outbox.svg</file>
+        <file>data/images/inbox-512x512.png</file>
+        <file>data/images/network-activity.svg</file>
+        <file>data/fonts/TitilliumWeb-Bold.ttf</file>
+        <file>data/fonts/TitilliumWeb-Regular.ttf</file>
+        <file>data/fonts/FaunaOne-Regular.ttf</file>
+        <file>data/fonts/PathwayGothicOne-Regular.ttf</file>
     </qresource>
 </RCC>

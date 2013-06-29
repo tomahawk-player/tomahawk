@@ -40,6 +40,7 @@
 #include <QWidget>
 
 class PlayableModel;
+class StatsGauge;
 class QScrollArea;
 
 namespace Ui
@@ -63,7 +64,7 @@ public:
     virtual QString title() const { return m_title; }
     virtual QString description() const { return QString(); }
     virtual QString longDescription() const { return QString(); }
-    virtual QPixmap pixmap() const { if ( m_pixmap.isNull() ) return Tomahawk::ViewPage::pixmap(); else return m_pixmap; }
+    virtual QPixmap pixmap() const;
 
     virtual bool isBeingPlayed() const;
     virtual bool isTemporaryPage() const { return true; }
@@ -93,6 +94,9 @@ private:
 
     Tomahawk::query_ptr m_query;
     Tomahawk::artist_ptr m_artist;
+
+    StatsGauge* m_playStatsGauge;
+    StatsGauge* m_playStatsTotalGauge;
 
     PlayableModel* m_relatedTracksModel;
     QString m_title;

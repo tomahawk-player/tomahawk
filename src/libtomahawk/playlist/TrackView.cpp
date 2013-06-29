@@ -34,6 +34,13 @@
 #include "utils/Closure.h"
 #include "utils/AnimatedSpinner.h"
 #include "utils/Logger.h"
+#include "InboxModel.h"
+
+// Forward Declarations breaking QSharedPointer
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+    #include "collection/Collection.h"
+    #include "utils/PixmapDelegateFader.h"
+#endif
 
 
 #include <QKeyEvent>
@@ -44,7 +51,6 @@
 #define SCROLL_TIMEOUT 280
 
 using namespace Tomahawk;
-
 
 TrackView::TrackView( QWidget* parent )
     : QTreeView( parent )
@@ -57,6 +63,7 @@ TrackView::TrackView( QWidget* parent )
     , m_resizing( false )
     , m_dragging( false )
     , m_updateContextView( true )
+    , m_alternatingRowColors( true )
     , m_contextMenu( new ContextMenu( this ) )
 {
     setFrameShape( QFrame::NoFrame );
@@ -64,7 +71,6 @@ TrackView::TrackView( QWidget* parent )
 
     setContentsMargins( 0, 0, 0, 0 );
     setMouseTracking( true );
-    setAlternatingRowColors( true );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     setSelectionBehavior( QAbstractItemView::SelectRows );
     setDragEnabled( true );
@@ -75,6 +81,7 @@ TrackView::TrackView( QWidget* parent )
     setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
     setRootIsDecorated( false );
     setUniformRowHeights( true );
+    setAlternatingRowColors( true );
     setAutoResize( false );
 
     setHeader( m_header );
@@ -147,6 +154,8 @@ TrackView::setProxyModel( PlayableProxyModel* model )
 {
     if ( m_proxyModel )
     {
+        disconnect( m_proxyModel, SIGNAL( rowsAboutToBeInserted( QModelIndex, int, int ) ), this, SLOT( onModelFilling() ) );
+        disconnect( m_proxyModel, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), this, SLOT( onModelEmptyCheck() ) );
         disconnect( m_proxyModel, SIGNAL( filterChanged( QString ) ), this, SLOT( onFilterChanged( QString ) ) );
         disconnect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), this, SLOT( onViewChanged() ) );
         disconnect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), this, SLOT( verifySize() ) );
@@ -155,14 +164,15 @@ TrackView::setProxyModel( PlayableProxyModel* model )
 
     m_proxyModel = model;
 
+    connect( m_proxyModel, SIGNAL( rowsAboutToBeInserted( QModelIndex, int, int ) ), SLOT( onModelFilling() ) );
+    connect( m_proxyModel, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), SLOT( onModelEmptyCheck() ) );
     connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
     connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onViewChanged() ) );
     connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( verifySize() ) );
     connect( m_proxyModel, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), SLOT( verifySize() ) );
 
     m_delegate = new PlaylistItemDelegate( this, m_proxyModel );
-    setItemDelegate( m_delegate );
-
+    QTreeView::setItemDelegate( m_delegate );
     QTreeView::setModel( m_proxyModel );
 }
 
@@ -179,8 +189,11 @@ TrackView::setModel( QAbstractItemModel* model )
 void
 TrackView::setPlaylistItemDelegate( PlaylistItemDelegate* delegate )
 {
+    if ( m_delegate )
+        delete m_delegate;
+
     m_delegate = delegate;
-    setItemDelegate( delegate );
+    QTreeView::setItemDelegate( delegate );
 
     verifySize();
 }
@@ -224,6 +237,21 @@ TrackView::setEmptyTip( const QString& tip )
 {
     m_emptyTip = tip;
     m_overlay->setText( tip );
+}
+
+
+void
+TrackView::onModelFilling()
+{
+    QTreeView::setAlternatingRowColors( m_alternatingRowColors );
+}
+
+
+void
+TrackView::onModelEmptyCheck()
+{
+    if ( !m_proxyModel->rowCount( QModelIndex() ) )
+        QTreeView::setAlternatingRowColors( false );
 }
 
 
@@ -411,7 +439,7 @@ TrackView::resizeEvent( QResizeEvent* event )
     int sortSection = m_header->sortIndicatorSection();
     Qt::SortOrder sortOrder = m_header->sortIndicatorOrder();
 
-    tDebug() << Q_FUNC_INFO << width();
+//    tDebug() << Q_FUNC_INFO << width();
 
     if ( m_header->checkState() && sortSection >= 0 )
     {
@@ -491,7 +519,6 @@ TrackView::dragMoveEvent( QDragMoveEvent* event )
 void
 TrackView::dragLeaveEvent( QDragLeaveEvent* event )
 {
-    tDebug() << Q_FUNC_INFO;
     QTreeView::dragLeaveEvent( event );
 
     m_dragging = false;
@@ -527,6 +554,15 @@ TrackView::dropEvent( QDropEvent* event )
     }
 
     m_dragging = false;
+}
+
+
+void
+TrackView::leaveEvent( QEvent* event )
+{
+    QTreeView::leaveEvent( event );
+
+    m_delegate->resetHoverIndex();
 }
 
 
@@ -651,6 +687,9 @@ TrackView::onCustomContextMenu( const QPoint& pos )
 
     if ( model() && !model()->isReadOnly() )
         m_contextMenu->setSupportedActions( m_contextMenu->supportedActions() | ContextMenu::ActionDelete );
+    if ( model() && qobject_cast< InboxModel* >( model() ) )
+        m_contextMenu->setSupportedActions( m_contextMenu->supportedActions() | ContextMenu::ActionMarkListened
+                                                                              | ContextMenu::ActionDelete );
 
     QList<query_ptr> queries;
     foreach ( const QModelIndex& index, selectedIndexes() )
@@ -773,4 +812,12 @@ TrackView::setAutoResize( bool b )
 
     if ( m_autoResize )
         setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+}
+
+
+void
+TrackView::setAlternatingRowColors( bool enable )
+{
+    m_alternatingRowColors = enable;
+    QTreeView::setAlternatingRowColors( enable );
 }

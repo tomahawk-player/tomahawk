@@ -1,16 +1,14 @@
 project( tomahawklib )
 
-setup_qt()
-
 add_definitions( ${QT_DEFINITIONS} )
 add_definitions( -DQT_SHARED )
 add_definitions( -DDLLEXPORT_PRO )
 add_definitions( -DQT_SHAREDPOINTER_TRACK_POINTERS )
 add_definitions( -DPORTFWDDLLEXPORT_STATIC )
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../Config.h.in
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../tomahawk/Config.h.in
                ${CMAKE_CURRENT_BINARY_DIR}/config.h)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../TomahawkVersion.h.in
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../tomahawk/TomahawkVersion.h.in
                ${CMAKE_CURRENT_BINARY_DIR}/TomahawkVersion.h)
 
 set( libGuiSources
@@ -48,11 +46,15 @@ set( libGuiSources
     playlist/InboxModel.cpp
     playlist/InboxView.cpp
     playlist/FlexibleHeader.cpp
+    playlist/ModeHeader.cpp
     playlist/FlexibleView.cpp
+    playlist/FlexibleTreeView.cpp
     playlist/TreeModel.cpp
     playlist/TreeProxyModel.cpp
     playlist/TreeProxyModelPlaylistInterface.cpp
     playlist/TreeItemDelegate.cpp
+    playlist/ColumnItemDelegate.cpp
+    playlist/ColumnViewPreviewWidget.cpp
     playlist/PlaylistModel.cpp
     playlist/PlaylistView.cpp
     playlist/PlaylistItemDelegate.cpp
@@ -66,6 +68,7 @@ set( libGuiSources
     playlist/GridItemDelegate.cpp
     playlist/GridView.cpp
     playlist/TreeView.cpp
+    playlist/ColumnView.cpp
     playlist/TreeWidget.cpp
     playlist/ViewHeader.cpp
     playlist/LovedTracksModel.cpp
@@ -95,7 +98,9 @@ set( libGuiSources
 
     resolvers/ExternalResolverGui.cpp
     resolvers/ScriptResolver.cpp
-    resolvers/QtScriptResolver.cpp
+    resolvers/JSResolver.cpp
+    resolvers/JSResolverHelper.cpp
+    resolvers/ScriptEngine.cpp
 
     utils/ImageRegistry.cpp
     utils/WidgetDragFilter.cpp
@@ -134,13 +139,15 @@ set( libGuiSources
     widgets/CheckDirTree.cpp
     widgets/QueryLabel.cpp
     widgets/ImageButton.cpp
+    widgets/StatsGauge.cpp
     widgets/AnimatedSplitter.cpp
     widgets/ElidedLabel.cpp
     widgets/NewPlaylistWidget.cpp
     widgets/SearchWidget.cpp
     widgets/SeekSlider.cpp
     widgets/PlaylistTypeSelectorDialog.cpp
-    widgets/WelcomeWidget.cpp
+    widgets/Dashboard.cpp
+    widgets/HistoryWidget.cpp
     widgets/WhatsHotWidget.cpp
     widgets/NewReleasesWidget.cpp
     widgets/ChartDataLoader.cpp
@@ -156,6 +163,7 @@ set( libGuiSources
     widgets/PlayableCover.cpp
     widgets/SocialPlaylistWidget.cpp
     widgets/SourceTreePopupDialog.cpp
+    widgets/NetworkActivityWidget.cpp
     widgets/infowidgets/SourceInfoWidget.cpp
     widgets/infowidgets/ArtistInfoWidget.cpp
     widgets/infowidgets/AlbumInfoWidget.cpp
@@ -208,6 +216,7 @@ list(APPEND libSources
     accounts/Account.cpp
     accounts/AccountModel.cpp
     accounts/AccountModelFilterProxy.cpp
+    accounts/CredentialsManager.cpp
     accounts/ResolverAccount.cpp
     accounts/AccountDelegate.cpp
     accounts/DelegateConfigWrapper.cpp
@@ -250,7 +259,9 @@ list(APPEND libSources
     database/DatabaseCommand_SourceOffline.cpp
     database/DatabaseCommand_CollectionStats.cpp
     database/DatabaseCommand_TrackStats.cpp
+    database/DatabaseCommand_ArtistStats.cpp
     database/DatabaseCommand_LoadPlaylistEntries.cpp
+    database/DatabaseCommand_LoadInboxEntries.cpp
     database/DatabaseCommand_ModifyPlaylist.cpp
     database/DatabaseCommand_PlaybackHistory.cpp
     database/DatabaseCommand_SetPlaylistRevision.cpp
@@ -283,6 +294,7 @@ list(APPEND libSources
     database/DatabaseCommand_ShareTrack.cpp
     database/DatabaseCommand_DeleteInboxEntry.cpp
     database/DatabaseCommand_ModifyInboxEntry.cpp
+    database/DatabaseCommand_NetworkCharts.cpp
     database/Database.cpp
     database/TomahawkSqlQuery.cpp
     database/IdThreadWorker.cpp
@@ -303,6 +315,7 @@ list(APPEND libSources
     filemetadata/MetadataEditor.cpp
 
     network/BufferIoDevice.cpp
+    network/Msg.cpp
     network/MsgProcessor.cpp
     network/StreamConnection.cpp
     network/DbSyncConnection.cpp
@@ -311,6 +324,8 @@ list(APPEND libSources
     network/Servent.cpp
     network/Connection.cpp
     network/ControlConnection.cpp
+    network/QTcpSocketExtra.cpp
+    network/ConnectionManager.cpp
 
     playlist/PlaylistUpdaterInterface.cpp
     playlist/dynamic/DynamicPlaylist.cpp
@@ -341,6 +356,8 @@ list(APPEND libSources
     utils/XspfLoader.cpp
     utils/TomahawkCache.cpp
     utils/GuiHelpers.cpp
+    utils/WeakObjectHash.cpp
+
 
     thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.cpp
     thirdparty/kdsingleapplicationguard/kdsharedmemorylocker.cpp
@@ -362,15 +379,17 @@ set( libUI ${libUI}
     widgets/PlaylistTypeSelectorDialog.ui
     widgets/NewPlaylistWidget.ui
     widgets/SearchWidget.ui
-    widgets/WelcomeWidget.ui
+    widgets/Dashboard.ui
     widgets/WhatsHotWidget.ui
     widgets/NewReleasesWidget.ui
     widgets/SocialPlaylistWidget.ui
+    widgets/NetworkActivityWidget.ui
     widgets/infowidgets/SourceInfoWidget.ui
     widgets/infowidgets/ArtistInfoWidget.ui
     widgets/infowidgets/AlbumInfoWidget.ui
     widgets/infowidgets/TrackInfoWidget.ui
     playlist/QueueView.ui
+    playlist/ColumnViewPreviewWidget.ui
     filemetadata/MetadataEditor.ui
     context/ContextWidget.ui
     infobar/InfoBar.ui
@@ -388,9 +407,11 @@ include_directories(
     ${ECHONEST_INCLUDE_DIR}
     ${CLUCENE_INCLUDE_DIRS}
     ${PHONON_INCLUDES}
+    ${Boost_INCLUDE_DIR}
 
     ${LIBPORTFWD_INCLUDE_DIR}
     ${QuaZip_INCLUDE_DIR}
+    ${QTKEYCHAIN_INCLUDE_DIRS}
 )
 
 IF(QCA2_FOUND)
@@ -484,6 +505,7 @@ TARGET_LINK_LIBRARIES( tomahawklib
     LINK_PRIVATE
     # Thirdparty shipped with tomahawk
     ${LIBPORTFWD_LIBRARIES}
+    ${QTKEYCHAIN_LIBRARIES}
 
     LINK_PUBLIC
     # External deps

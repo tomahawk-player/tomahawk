@@ -82,7 +82,7 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     ui->tracksViewLeft->setHeaderHidden( true );
     ui->tracksViewLeft->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     PlaylistChartItemDelegate* del = new PlaylistChartItemDelegate( ui->tracksViewLeft, ui->tracksViewLeft->proxyModel() );
-    ui->tracksViewLeft->setItemDelegate( del );
+    ui->tracksViewLeft->setPlaylistItemDelegate( del );
     ui->tracksViewLeft->setUniformRowHeights( false );
 
     TreeProxyModel* artistsProxy = new TreeProxyModel( ui->artistsViewLeft );
@@ -92,6 +92,8 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     ui->artistsViewLeft->setProxyModel( artistsProxy );
     ui->artistsViewLeft->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     ui->artistsViewLeft->header()->setVisible( true );
+
+//    ui->albumsView->setStyleSheet( QString( "QListView { background-color: black; }" ) );
 
     m_workerThread = new QThread( this );
     m_workerThread->start();
@@ -117,7 +119,6 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     ui->stackLeft->setCurrentIndex( 2 );
     m_spinner = new AnimatedSpinner( ui->albumsView );
     m_spinner->fadeIn();
-
 }
 
 
@@ -313,10 +314,10 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
     }
 }
 
-void
-WhatsHotWidget::setViewData(const QVariantMap &data)
-{
 
+void
+WhatsHotWidget::setViewData( const QVariantMap& data )
+{
     QStandardItem* rootItem = m_crumbModelLeft->invisibleRootItem();
     QVariantMap returnedData = data;
 
@@ -367,10 +368,11 @@ WhatsHotWidget::setViewData(const QVariantMap &data)
     }
 }
 
+
 void
 WhatsHotWidget::infoSystemFinished( QString target )
 {
-    if( m_loading )
+    if ( m_loading )
     {
         if ( target != s_whatsHotIdentifier )
         {

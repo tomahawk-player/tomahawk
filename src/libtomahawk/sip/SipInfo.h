@@ -20,7 +20,6 @@
 #define SIPINFO_H
 
 #include <QSharedPointer>
-#include <QHostInfo>
 
 #include "DllMacro.h"
 

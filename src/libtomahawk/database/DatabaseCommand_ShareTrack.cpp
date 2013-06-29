@@ -70,11 +70,24 @@ DatabaseCommand_ShareTrack::postCommitHook()
     if ( source()->isLocal() )
         Servent::instance()->triggerDBSync();
 
+    QString myDbid = SourceList::instance()->getLocal()->nodeId();
+    QString sourceDbid = source()->nodeId();
+
+    qRegisterMetaType< InboxJobItem::Side >("InboxJobItem::Side");
+    qRegisterMetaType< Tomahawk::trackdata_ptr >("Tomahawk::trackdata_ptr");
+    if ( source()->isLocal() && sourceDbid != m_recipient ) //if I just sent a track
+    {
+        QMetaObject::invokeMethod( ViewManager::instance()->inboxModel(),
+                                   "showNotification",
+                                   Qt::QueuedConnection,
+                                   Q_ARG( InboxJobItem::Side, InboxJobItem::Sending ),
+                                   Q_ARG( const QString&, m_recipient ),
+                                   Q_ARG( const Tomahawk::trackdata_ptr&, m_track ) );
+    }
+
     if ( m_track )
         return;
 
-    QString myDbid = SourceList::instance()->getLocal()->nodeId();
-    QString sourceDbid = source()->nodeId();
     if ( myDbid != m_recipient || sourceDbid == m_recipient )
         return;
 
@@ -99,9 +112,15 @@ DatabaseCommand_ShareTrack::postCommitHook()
                                Q_ARG( const Tomahawk::query_ptr&, m_track->toQuery() ),
                                Q_ARG( int, 0 ) /*row*/ );
 
-    QString friendlyName = source()->friendlyName();
     if ( ViewManager::instance()->currentPage() != ViewManager::instance()->inboxWidget() )
-        JobStatusView::instance()->model()->addJob( new InboxJobItem( friendlyName, m_track ) );
+    {
+        QMetaObject::invokeMethod( ViewManager::instance()->inboxModel(),
+                                   "showNotification",
+                                   Qt::QueuedConnection,
+                                   Q_ARG( InboxJobItem::Side, InboxJobItem::Receiving ),
+                                   Q_ARG( const Tomahawk::source_ptr&, source() ),
+                                   Q_ARG( const Tomahawk::trackdata_ptr&, m_track ) );
+    }
 }
 
 

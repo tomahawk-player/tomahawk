@@ -196,6 +196,15 @@ GridView::scrollContentsBy( int dx, int dy )
 
 
 void
+GridView::leaveEvent( QEvent* event )
+{
+    QListView::leaveEvent( event );
+
+    m_delegate->resetHoverIndex();
+}
+
+
+void
 GridView::paintEvent( QPaintEvent* event )
 {
     if ( !autoFitItems() || m_inited || !m_proxyModel->rowCount() )
@@ -419,6 +428,3 @@ GridView::setPlaylistInterface( const Tomahawk::playlistinterface_ptr& playlistI
 {
     proxyModel()->setPlaylistInterface( playlistInterface );
 }
-
-
-#include "GridView.moc"

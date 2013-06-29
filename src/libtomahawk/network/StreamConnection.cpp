@@ -20,16 +20,20 @@
 
 #include "StreamConnection.h"
 
-#include "Result.h"
-#include "BufferIoDevice.h"
-#include "network/ControlConnection.h"
-#include "network/Servent.h"
 #include "database/DatabaseCommand_LoadFiles.h"
 #include "database/Database.h"
-#include "SourceList.h"
+#include "network/ControlConnection.h"
+#include "network/Servent.h"
 #include "utils/Logger.h"
 
+#include "BufferIoDevice.h"
+#include "Msg.h"
+#include "MsgProcessor.h"
+#include "Result.h"
+#include "SourceList.h"
+
 #include <boost/bind.hpp>
+#include <boost/function.hpp>
 
 #include <QFile>
 

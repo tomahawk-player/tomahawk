@@ -35,7 +35,7 @@
 #include "utils/Logger.h"
 
 #define ANIMATION_TIME 400
-#define IMAGE_HEIGHT 64
+#define IMAGE_HEIGHT 48
 
 using namespace Tomahawk;
 
@@ -46,12 +46,9 @@ InfoBar::InfoBar( QWidget* parent )
     , m_queryLabel( 0 )
 {
     ui->setupUi( this );
-    TomahawkUtils::unmarginLayout( layout() );
-    layout()->setContentsMargins( 8, 4, 8, 4 );
 
     QFont boldFont = ui->captionLabel->font();
     boldFont.setPointSize( TomahawkUtils::defaultFontSize() + 4 );
-    boldFont.setBold( true );
     ui->captionLabel->setFont( boldFont );
     ui->captionLabel->setElideMode( Qt::ElideRight );
 
@@ -66,20 +63,26 @@ InfoBar::InfoBar( QWidget* parent )
     ui->longDescriptionLabel->setFont( regFont );
 
     m_whitePal = ui->captionLabel->palette();
-    m_whitePal.setColor( QPalette::Foreground, Qt::white );
+    m_whitePal.setColor( QPalette::Foreground, TomahawkStyle::HEADER_TEXT );
+    m_whitePal.setBrush( backgroundRole(), TomahawkStyle::HEADER_BACKGROUND );
 
     ui->captionLabel->setPalette( m_whitePal );
     ui->descriptionLabel->setPalette( m_whitePal );
     ui->longDescriptionLabel->setPalette( m_whitePal );
 
     ui->captionLabel->setMargin( 2 );
-    ui->descriptionLabel->setMargin( 1 );
+    ui->descriptionLabel->setMargin( 2 );
     ui->longDescriptionLabel->setMargin( 4 );
 
     ui->captionLabel->setText( QString() );
     ui->descriptionLabel->setText( QString() );
     ui->longDescriptionLabel->setText( QString() );
     ui->imageLabel->setText( QString() );
+
+    ui->lineAbove->setStyleSheet( QString( "QFrame { border: 1px solid %1; }" ).arg( TomahawkStyle::HEADER_BACKGROUND.name() ) );
+    ui->lineAbove->setFrameShape( QFrame::HLine );
+    ui->lineBelow->setStyleSheet( QString( "QFrame { border: 1px solid black; }" ) );
+    ui->lineBelow->setFrameShape( QFrame::HLine );
 
     m_queryLabel = new QueryLabel( this );
     m_queryLabel->setType( QueryLabel::Artist );
@@ -90,15 +93,18 @@ InfoBar::InfoBar( QWidget* parent )
 
     m_searchWidget = new QSearchField( this );
     m_searchWidget->setPlaceholderText( tr( "Filter..." ) );
-    m_searchWidget->setMinimumWidth( 180 );
+    m_searchWidget->setMinimumWidth( 220 );
     connect( m_searchWidget, SIGNAL( textChanged( QString ) ), this, SLOT( onFilterEdited() ) );
 
     ui->horizontalLayout->addWidget( m_searchWidget );
 
-    QPalette pal = palette();
+    QPalette pal = m_whitePal;
+    pal.setBrush( backgroundRole(), TomahawkStyle::HEADER_BACKGROUND );
 
+    setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
+    setFixedHeight( 58 );
+    setAutoFillBackground( true );
     setPalette( pal );
-    setFixedHeight( 80 );
 
     connect( ViewManager::instance(), SIGNAL( filterAvailable( bool ) ), SLOT( setFilterAvailable( bool ) ) );
 }
@@ -288,7 +294,7 @@ InfoBar::paintEvent( QPaintEvent* event )
 {
     QWidget::paintEvent( event );
 
-    QPainter painter( this );
+/*    QPainter painter( this );
     painter.setRenderHint( QPainter::Antialiasing );
 
     QLinearGradient gradient( QPoint( 0, 0 ), QPoint( 0, 1 ) );
@@ -297,7 +303,7 @@ InfoBar::paintEvent( QPaintEvent* event )
     gradient.setColorAt( 1.0, TomahawkStyle::HEADER_UPPER );
 
     painter.setBrush( gradient );
-    painter.fillRect( rect(), gradient );
+    painter.fillRect( rect(), gradient );*/
 }
 
 

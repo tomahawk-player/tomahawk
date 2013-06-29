@@ -20,7 +20,8 @@
 #ifndef ChartsPlugin_H
 #define ChartsPlugin_H
 
-#include "infoplugins/InfoPluginDllMacro.h"
+#include "../../InfoPluginDllMacro.h"
+
 #include "infosystem/InfoSystem.h"
 #include "infosystem/InfoSystemWorker.h"
 #include <QNetworkReply>

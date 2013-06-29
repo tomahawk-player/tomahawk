@@ -20,8 +20,6 @@
 
 #include "TomahawkSettings.h"
 
-#include <QDir>
-
 #include "Source.h"
 #include "PlaylistInterface.h"
 
@@ -32,6 +30,9 @@
 #include "database/Database.h"
 #include "playlist/PlaylistUpdaterInterface.h"
 #include "infosystem/InfoSystemCache.h"
+
+#include <qtkeychain/keychain.h>
+#include <QDir>
 
 using namespace Tomahawk;
 
@@ -189,7 +190,6 @@ TomahawkSettings::createSpotifyAccount()
     beginGroup( "accounts/" + accountKey );
     setValue( "enabled", false );
     setValue( "types", QStringList() << "ResolverType" );
-    setValue( "credentials", QVariantHash() );
     setValue( "configuration", QVariantHash() );
     setValue( "accountfriendlyname", "Spotify" );
     endGroup();
@@ -611,6 +611,40 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
         QFile dataFile( TomahawkUtils::appDataDir().absoluteFilePath( "echonest_stylesandmoods.dat" ) );
         const bool removed = dataFile.remove();
         tDebug() << "Tried to remove echonest_stylesandmoods.dat, succeeded?" << removed;
+    }
+    else if ( oldVersion == 14 )
+    {
+        const QStringList accounts = value( "accounts/allaccounts" ).toStringList();
+        tDebug() << "About to move these accounts to QtKeychain:" << accounts;
+        //Move storage of Credentials from QSettings to QtKeychain
+        foreach ( const QString& account, accounts )
+        {
+            tDebug() << "beginGroup" << QString( "accounts/%1" ).arg( account );
+            beginGroup( QString( "accounts/%1" ).arg( account ) );
+            const QVariantHash creds = value( "credentials" ).toHash();
+            tDebug() << creds[ "username" ]
+                     << ( creds[ "password" ].isNull() ? ", no password" : ", has password" );
+
+            if ( !creds.isEmpty() )
+            {
+                QKeychain::WritePasswordJob* j = new QKeychain::WritePasswordJob( QLatin1String( "Tomahawk" ), this );
+                j->setKey( account );
+                j->setAutoDelete( true );
+#if defined( Q_OS_UNIX ) && !defined( Q_OS_MAC )
+                j->setInsecureFallback( true );
+#endif
+                QByteArray data;
+                QDataStream ds( &data, QIODevice::WriteOnly );
+                ds << creds;
+
+                j->setBinaryData( data );
+                j->start();
+            }
+
+            remove( "credentials" );
+
+            endGroup();
+        }
     }
 }
 

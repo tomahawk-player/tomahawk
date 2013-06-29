@@ -21,11 +21,13 @@
 
 #include <QSqlQuery>
 
-#include "DatabaseImpl.h"
-#include "Artist.h"
-#include "Album.h"
-#include "SourceList.h"
 #include "utils/Logger.h"
+
+#include "Album.h"
+#include "Artist.h"
+#include "DatabaseImpl.h"
+#include "Result.h"
+#include "SourceList.h"
 
 
 void

@@ -20,20 +20,22 @@
 
 #include "PlayableModel.h"
 
-#include <QDateTime>
-#include <QMimeData>
-#include <QTreeView>
+#include "audio/AudioEngine.h"
+#include "utils/TomahawkUtils.h"
+#include "utils/Logger.h"
 
 #include "Artist.h"
 #include "Album.h"
 #include "Pipeline.h"
 #include "PlayableItem.h"
 #include "PlayableProxyModel.h"
+#include "Result.h"
 #include "Source.h"
 #include "Typedefs.h"
-#include "audio/AudioEngine.h"
-#include "utils/TomahawkUtils.h"
-#include "utils/Logger.h"
+
+#include <QDateTime>
+#include <QMimeData>
+#include <QTreeView>
 
 using namespace Tomahawk;
 
@@ -69,12 +71,6 @@ PlayableModel::~PlayableModel()
 QModelIndex
 PlayableModel::createIndex( int row, int column, PlayableItem* item ) const
 {
-    if ( item->query() )
-    {
-        connect( item->query().data(), SIGNAL( playableStateChanged( bool ) ), SLOT( onQueryBecamePlayable( bool ) ), Qt::UniqueConnection );
-        connect( item->query().data(), SIGNAL( resolvingFinished( bool ) ), SLOT( onQueryResolved( bool ) ), Qt::UniqueConnection );
-    }
-
     return QAbstractItemModel::createIndex( row, column, item );
 }
 
@@ -266,20 +262,7 @@ PlayableModel::queryData( const query_ptr& query, int column, int role ) const
             case Score:
             {
                 float score = query->results().first()->score();
-                if ( score == 1.0 )
-                    return tr( "Perfect match" );
-                if ( score > 0.9 )
-                    return tr( "Very good match" );
-                if ( score > 0.7 )
-                    return tr( "Good match" );
-                if ( score > 0.5 )
-                    return tr( "Vague match" );
-                if ( score > 0.3 )
-                    return tr( "Bad match" );
-                if ( score > 0.0 )
-                    return tr( "Very bad match" );
-
-                return tr( "Not available" );
+                return scoreText( score );
                 break;
             }
 
@@ -293,9 +276,9 @@ PlayableModel::queryData( const query_ptr& query, int column, int role ) const
         {
             case Score:
                 if ( query->resolvingFinished() )
-                    return tr( "Not available" );
+                    return scoreText( 0.0 );
                 else
-                    return tr( "Searching..." );
+                    return scoreText( -1.0 );
 
             default:
                 break;
@@ -313,6 +296,27 @@ PlayableModel::data( const QModelIndex& index, int role ) const
     if ( !entry )
         return QVariant();
 
+    switch ( role )
+    if ( role == PlayableProxyModel::TypeRole )
+    {
+        if ( entry->result() )
+        {
+            return Tomahawk::TypeResult;
+        }
+        else if ( entry->query() )
+        {
+            return Tomahawk::TypeQuery;
+        }
+        else if ( entry->artist() )
+        {
+            return Tomahawk::TypeArtist;
+        }
+        else if ( entry->album() )
+        {
+            return Tomahawk::TypeAlbum;
+        }
+    }
+
     int column = index.column();
     if ( role < CoverIDRole && role >= Qt::UserRole )
     {
@@ -323,36 +327,15 @@ PlayableModel::data( const QModelIndex& index, int role ) const
 
     switch ( role )
     {
-        case Qt::TextAlignmentRole:
-        {
-            return QVariant( columnAlignment( index.column() ) );
-            break;
-        }
-
         case IsPlayingRole:
         {
             return entry->isPlaying();
             break;
         }
 
-        case PlayableProxyModel::TypeRole:
+        case Qt::TextAlignmentRole:
         {
-            if ( entry->result() )
-            {
-                return Tomahawk::TypeResult;
-            }
-            else if ( entry->query() )
-            {
-                return Tomahawk::TypeQuery;
-            }
-            else if ( entry->artist() )
-            {
-                return Tomahawk::TypeArtist;
-            }
-            else if ( entry->album() )
-            {
-                return Tomahawk::TypeAlbum;
-            }
+            return QVariant( columnAlignment( index.column() ) );
             break;
         }
 
@@ -648,6 +631,11 @@ PlayableModel::insertInternal( const QList< T >& items, int row, const QList< To
     {
         plitem = new PlayableItem( item, m_rootItem, row + i );
         plitem->index = createIndex( row + i, 0, plitem );
+        if ( plitem->query() )
+        {
+            connect( plitem->query().data(), SIGNAL( playableStateChanged( bool ) ), SLOT( onQueryBecamePlayable( bool ) ), Qt::UniqueConnection );
+            connect( plitem->query().data(), SIGNAL( resolvingFinished( bool ) ), SLOT( onQueryResolved( bool ) ), Qt::UniqueConnection );
+        }
 
         if ( logs.count() > i )
             plitem->setPlaybackLog( logs.at( i ) );
@@ -760,13 +748,16 @@ PlayableModel::onPlaybackStopped()
 void
 PlayableModel::ensureResolved()
 {
-    for( int i = 0; i < rowCount( QModelIndex() ); i++ )
+    QList< query_ptr > ql;
+    for ( int i = 0; i < rowCount( QModelIndex() ); i++ )
     {
         query_ptr query = itemFromIndex( index( i, 0, QModelIndex() ) )->query();
 
         if ( !query->resolvingFinished() )
-            Pipeline::instance()->resolve( query );
+            ql << query;
     }
+
+    Pipeline::instance()->resolve( ql );
 }
 
 
@@ -788,6 +779,41 @@ PlayableModel::columnAlignment( int column ) const
         default:
             return Qt::AlignLeft;
     }
+}
+
+
+QString
+PlayableModel::scoreText( float score ) const
+{
+    static QMap<float, QString> texts;
+    if ( texts.isEmpty() )
+    {
+        texts[ 1.0 ] = tr( "Perfect match" );
+        texts[ 0.9 ] = tr( "Very good match" );
+        texts[ 0.7 ] = tr( "Good match" );
+        texts[ 0.5 ] = tr( "Vague match" );
+        texts[ 0.3 ] = tr( "Bad match" );
+        texts[ 0.1 ] = tr( "Very bad match" );
+        texts[ 0.0 ] = tr( "Not available" );
+        texts[ -1.0 ] = tr( "Searching..." );
+    }
+
+    if ( score == 1.0 )
+        return texts[ 1.0 ];
+    if ( score > 0.9 )
+        return texts[ 0.9 ];
+    if ( score > 0.7 )
+        return texts[ 0.7 ];
+    if ( score > 0.5 )
+        return texts[ 0.5 ];
+    if ( score > 0.3 )
+        return texts[ 0.3 ];
+    if ( score > 0.0 )
+        return texts[ 0.1 ];
+    if ( score == 0.0 )
+        return texts[ 0.0 ];
+
+    return texts[ -1.0 ];
 }
 
 

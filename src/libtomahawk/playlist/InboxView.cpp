@@ -20,6 +20,8 @@
 #include "InboxView.h"
 #include "InboxModel.h"
 #include "PlayableProxyModel.h"
+#include "ContextMenu.h"
+#include "utils/Logger.h"
 
 InboxView::InboxView(QWidget *parent) :
     TrackView(parent)
@@ -35,4 +37,29 @@ InboxView::deleteSelectedItems()
     {
         proxyModel()->removeIndexes( selectedIndexes() );
     }
+}
+
+
+void
+InboxView::onMenuTriggered( int action )
+{
+    if ( action == Tomahawk::ContextMenu::ActionMarkListened )
+    {
+        tDebug() << Q_FUNC_INFO << "Mark as Listened";
+        InboxModel* inboxModel = qobject_cast< InboxModel* >( model() );
+        if ( inboxModel != 0 )
+        {
+            QModelIndexList sourceIndexes;
+            foreach ( const QModelIndex& index, selectedIndexes() )
+            {
+                if ( index.column() )
+                    continue;
+
+                sourceIndexes << proxyModel()->mapToSource( index );
+            }
+            inboxModel->markAsListened( sourceIndexes );
+        }
+    }
+    else
+        TrackView::onMenuTriggered( action );
 }

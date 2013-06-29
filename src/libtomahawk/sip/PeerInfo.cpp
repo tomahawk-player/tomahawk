@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2012, Dominik Schmidt <dev@dominik-schmidt.de>
+ *   Copyright 2013, Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -16,13 +17,17 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "PeerInfo.h"
-#include "SipPlugin.h"
-#include "utils/TomahawkCache.h"
-#include "utils/TomahawkUtilsGui.h"
+#include "PeerInfo_p.h"
+
+#include "accounts/Account.h"
 #include "network/ControlConnection.h"
 #include "network/Servent.h"
 #include "utils/Logger.h"
+#include "utils/TomahawkCache.h"
+#include "utils/TomahawkUtilsGui.h"
+
+#include "SipInfo.h"
+#include "SipPlugin.h"
 
 #include <QCryptographicHash>
 #include <QBuffer>
@@ -30,7 +35,7 @@
 namespace Tomahawk
 {
 
-QHash< QString, peerinfo_wptr > PeerInfo::s_peersByCacheKey = QHash< QString, peerinfo_wptr >();
+Tomahawk::Utils::WeakObjectHash< PeerInfo > PeerInfoPrivate::s_peersByCacheKey = Tomahawk::Utils::WeakObjectHash< PeerInfo >();
 QHash< SipPlugin*, peerinfo_ptr > PeerInfo::s_selfPeersBySipPlugin = QHash< SipPlugin*, peerinfo_ptr >();
 
 
@@ -55,7 +60,7 @@ PeerInfo::getSelf( SipPlugin* parent, PeerInfo::GetOptions options )
         return peerinfo_ptr();
     }
 
-    peerinfo_ptr selfPeer( new PeerInfo( parent, "local peerinfo don't use this id for anything" ) );
+    peerinfo_ptr selfPeer( new PeerInfo( parent, "local peerinfo don't use this id for anything" ), &QObject::deleteLater );
     selfPeer->setWeakRef( selfPeer.toWeakRef() );
     selfPeer->setContactId( "localpeer" );
 
@@ -77,9 +82,9 @@ Tomahawk::peerinfo_ptr
 PeerInfo::get( SipPlugin* parent, const QString& id, GetOptions options )
 {
     const QString key = peerCacheKey( parent, id );
-    if ( s_peersByCacheKey.contains( key ) && !s_peersByCacheKey.value( key ).isNull() )
+    if ( PeerInfoPrivate::s_peersByCacheKey.hash().contains( key ) && !PeerInfoPrivate::s_peersByCacheKey.hash().value( key ).isNull() )
     {
-        return s_peersByCacheKey.value( key ).toStrongRef();
+        return PeerInfoPrivate::s_peersByCacheKey.hash().value( key ).toStrongRef();
     }
 
     // if AutoCreate isn't enabled nothing to do here
@@ -88,9 +93,9 @@ PeerInfo::get( SipPlugin* parent, const QString& id, GetOptions options )
         return peerinfo_ptr();
     }
 
-    peerinfo_ptr peerInfo( new PeerInfo( parent, id ) );
+    peerinfo_ptr peerInfo( new PeerInfo( parent, id ), &QObject::deleteLater );
     peerInfo->setWeakRef( peerInfo.toWeakRef() );
-    s_peersByCacheKey.insert( key, peerInfo.toWeakRef() );
+    PeerInfoPrivate::s_peersByCacheKey.insert( key, peerInfo );
 
     return peerInfo;
 }
@@ -100,7 +105,7 @@ QList< Tomahawk::peerinfo_ptr >
 PeerInfo::getAll()
 {
     QList< Tomahawk::peerinfo_ptr > strongRefs;
-    foreach ( Tomahawk::peerinfo_wptr wptr, s_peersByCacheKey.values() )
+    foreach ( Tomahawk::peerinfo_wptr wptr, PeerInfoPrivate::s_peersByCacheKey.hash().values() )
     {
         if ( !wptr.isNull() )
             strongRefs << wptr.toStrongRef();
@@ -111,10 +116,7 @@ PeerInfo::getAll()
 
 PeerInfo::PeerInfo( SipPlugin* parent, const QString& id )
     : QObject()
-    , m_parent( parent )
-    , m_type( External )
-    , m_id( id )
-    , m_status( Offline )
+    , d_ptr( new Tomahawk::PeerInfoPrivate ( this, parent, id ) )
     , m_avatar( 0 )
     , m_fancyAvatar( 0 )
 {
@@ -123,10 +125,9 @@ PeerInfo::PeerInfo( SipPlugin* parent, const QString& id )
 
 PeerInfo::~PeerInfo()
 {
-//    tDebug() << Q_FUNC_INFO;
-    s_peersByCacheKey.remove( s_peersByCacheKey.key( weakRef() ) );
     delete m_avatar;
     delete m_fancyAvatar;
+    delete d_ptr;
 }
 
 
@@ -142,69 +143,69 @@ PeerInfo::announce()
 QWeakPointer< PeerInfo >
 PeerInfo::weakRef()
 {
-    return m_ownRef;
+    return d_func()->ownRef;
 }
 
 
 void
 PeerInfo::setWeakRef( QWeakPointer< PeerInfo > weakRef )
 {
-    m_ownRef = weakRef;
+    d_func()->ownRef = weakRef;
 }
 
 
 void
 PeerInfo::setControlConnection( ControlConnection* controlConnection )
 {
-    m_controlConnection = controlConnection;
+    d_func()->controlConnection = controlConnection;
 }
 
 
 ControlConnection*
 PeerInfo::controlConnection() const
 {
-    return m_controlConnection;
+    return d_func()->controlConnection;
 }
 
 
 bool PeerInfo::hasControlConnection()
 {
-    return !m_controlConnection.isNull();
+    return !d_func()->controlConnection.isNull();
 }
 
 
 void
 PeerInfo::setType( Tomahawk::PeerInfo::Type type )
 {
-    m_type = type;
+    d_func()->type = type;
 }
 
 
 PeerInfo::Type
 PeerInfo::type() const
 {
-    return m_type;
+    return d_func()->type;
 }
 
 
 const
 QString PeerInfo::id() const
 {
-    return m_id;
+    return d_func()->id;
 }
 
 
 SipPlugin*
 PeerInfo::sipPlugin() const
 {
-    return m_parent;
+    return d_func()->parent;
 }
 
 
 void
-PeerInfo::sendLocalSipInfo( const SipInfo& sipInfo )
+PeerInfo::sendLocalSipInfos( const QList<SipInfo>& sipInfos )
 {
-    sipPlugin()->sendSipInfo( weakRef().toStrongRef(), sipInfo );
+    sipPlugin()->sendSipInfos( weakRef().toStrongRef(), sipInfos );
 }
 
 
@@ -218,21 +219,38 @@ PeerInfo::debugName() const
 void
 PeerInfo::setContactId ( const QString& contactId )
 {
-    m_contactId = contactId;
+    d_func()->contactId = contactId;
 }
 
 
 const QString
 PeerInfo::contactId() const
 {
-    return m_contactId;
+    return d_func()->contactId;
 }
+
+const QString
+PeerInfo::nodeId() const
+{
+    Q_ASSERT( !d_func()->sipInfos.isEmpty() );
+    // All sip infos share the same nodeId
+    return d_func()->sipInfos.first().nodeId();
+}
+
+const QString
+PeerInfo::key() const
+{
+    Q_ASSERT( !d_func()->sipInfos.isEmpty() );
+    // All sip infos share the same key
+    return d_func()->sipInfos.first().key();
+}
+
 
 
 void
 PeerInfo::setStatus( PeerInfo::Status status )
 {
-    m_status = status;
+    d_func()->status = status;
 
     if ( status == Online )
     {
@@ -254,41 +272,38 @@ PeerInfo::setStatus( PeerInfo::Status status )
 PeerInfo::Status
 PeerInfo::status() const
 {
-    return m_status;
+    return d_func()->status;
 }
 
 
 void
-PeerInfo::setSipInfo( const SipInfo& sipInfo )
+PeerInfo::setSipInfos( const QList<SipInfo>& sipInfos )
 {
-    if ( sipInfo == m_sipInfo )
-        return;
+    d_func()->sipInfos = sipInfos;
 
-    m_sipInfo = sipInfo;
-
-    tLog() << "id:" << id() << "info changed" << sipInfo;
+    tLog() << "id:" << id() << "info changed" << sipInfos;
     emit sipInfoChanged();
 }
 
 
-const SipInfo
-PeerInfo::sipInfo() const
+const QList<SipInfo>
+PeerInfo::sipInfos() const
 {
-    return m_sipInfo;
+    return d_func()->sipInfos;
 }
 
 
 void
 PeerInfo::setFriendlyName( const QString& friendlyName )
 {
-    m_friendlyName = friendlyName;
+    d_func()->friendlyName = friendlyName;
 }
 
 
 const QString
 PeerInfo::friendlyName() const
 {
-    return m_friendlyName;
+    return d_func()->friendlyName;
 }
 
 
@@ -372,28 +387,27 @@ PeerInfo::avatar( TomahawkUtils::ImageMode style, const QSize& size ) const
 void
 PeerInfo::setVersionString( const QString& versionString )
 {
-    m_versionString = versionString;
+    d_func()->versionString = versionString;
 }
 
 
 const QString
 PeerInfo::versionString() const
 {
-    return m_versionString;
+    return d_func()->versionString;
 }
 
 
 void
 PeerInfo::setData( const QVariant& data )
 {
-    m_data = data;
+    d_func()->data = data;
 }
 
-
-const
-QVariant PeerInfo::data() const
+const QVariant
+PeerInfo::data() const
 {
-    return m_data;
+    return d_func()->data;
 }
 
 
