@@ -1100,10 +1100,6 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
             conn->setNodeId( nodeid );
         }
 
-        // Register as non-lazy offer
-        d_func()->lazyoffers.remove( key );
-        registerOffer( key, conn );
-
         return conn;
     }
     else if ( d_func()->offers.contains( key ) )
