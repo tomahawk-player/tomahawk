@@ -143,7 +143,8 @@ Account::loadFromConfig( const QString& accountId )
 {
     m_accountId = accountId;
 
-    AccountManager::instance()->configStorageForAccount( m_accountId )->load( m_accountId, m_cfg );
+    if ( AccountManager::instance()->configStorageForAccount( m_accountId ) != 0 ) //could be 0 if we are installing the account right now
+        AccountManager::instance()->configStorageForAccount( m_accountId )->load( m_accountId, m_cfg );
 }
 
 

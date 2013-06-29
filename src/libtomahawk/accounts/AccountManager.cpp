@@ -424,6 +424,13 @@ AccountManager::configStorageForAccount( const QString& accountId )
 }
 
 
+ConfigStorage*
+AccountManager::localConfigStorage()
+{
+    return m_configStorageById.value( "localconfigstorage" );
+}
+
+
 void
 AccountManager::hookupAccount( Account* account ) const
 {

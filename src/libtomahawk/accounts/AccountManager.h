@@ -96,6 +96,7 @@ public:
 
     CredentialsManager* credentialsManager() const { return m_creds; }
     ConfigStorage* configStorageForAccount( const QString& accountId );
+    ConfigStorage* localConfigStorage();
 
 public slots:
     void connectAll();
