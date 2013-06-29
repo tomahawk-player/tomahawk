@@ -394,7 +394,7 @@ ViewManager::showRadioPage()
 {
     if ( !m_radioView )
     {
-        dynplaylist_ptr playlist = DynamicPlaylist::create( SourceList::instance()->getLocal(), uuid(), QString(), "", SourceList::instance()->getLocal()->friendlyName(), OnDemand, false, QString(), false, false );
+        dynplaylist_ptr playlist = DynamicPlaylist::create( SourceList::instance()->getLocal(), uuid(), QString(), "", SourceList::instance()->getLocal()->friendlyName(), OnDemand, false, QString(), false, true );
         playlist->setMode( OnDemand );
 
         m_radioView = new Tomahawk::DynamicQmlWidget( playlist, m_stack );
