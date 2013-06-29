@@ -84,13 +84,8 @@ private slots:
     void error( const QString& title, const QString& body);
 
     void onRevisionLoaded( Tomahawk::DynamicPlaylistRevision );
-    void playlistChanged( Tomahawk::playlistinterface_ptr pl );
 
     void resolvingFinished( bool hasResults );
-
-    void trackStarted();
-    void startStation();
-    void stopStation( bool stopPlaying );
 
     void loadArtistCharts();
     void onArtistCharts( const QList< Tomahawk::artist_ptr >& artists );
