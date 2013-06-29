@@ -70,6 +70,8 @@ public slots:
     void addAlbumResults( const QVariantMap& results );
     void addAlbumTrackResults( const QVariantMap& results );
 
+    void addUrlResult( const QString& url, const QVariantMap& result );
+
     void reportCapabilities( const QVariant& capabilities );
 
 private:

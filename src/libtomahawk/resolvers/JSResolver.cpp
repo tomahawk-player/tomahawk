@@ -406,6 +406,65 @@ JSResolver::tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::
     tDebug() << errorMessage << m;
 }
 
+bool JSResolver::canParseUrl( const QString& url )
+{
+    Q_D( JSResolver );
+
+    // FIXME: How can we do this?
+    /*if ( QThread::currentThread() != thread() )
+    {
+        QMetaObject::invokeMethod( this, "canParseUrl", Qt::QueuedConnection,
+                                   Q_ARG( QString, url ) );
+        return;
+    }*/
+
+    if ( d->capabilities.testFlag( UrlLookup ) )
+    {
+        QString eval = QString( "resolver.canParseUrl( '%1' );" )
+                       .arg( QString( url ).replace( "'", "\\'" ) );
+        return d->engine->mainFrame()->evaluateJavaScript( eval ).toBool();
+    }
+    else
+    {
+        // We cannot do URL lookup.
+        return false;
+    }
+}
+
+
+void
+JSResolver::lookupUrl( const QString& url )
+{
+    Q_D( JSResolver );
+
+    if ( QThread::currentThread() != thread() )
+    {
+        QMetaObject::invokeMethod( this, "lookupUrl", Qt::QueuedConnection,
+                                   Q_ARG( QString, url ) );
+        return;
+    }
+
+    if ( !capabilities().testFlag( UrlLookup ) )
+    {
+        emit informationFound( url, QSharedPointer<QObject>() );
+        return;
+    }
+
+    QString eval = QString( "resolver.lookupUrl( '%1' );" )
+                   .arg( QString( url ).replace( "'", "\\'" ) );
+
+    QVariantMap m = d->engine->mainFrame()->evaluateJavaScript( eval ).toMap();
+    if ( m.isEmpty() )
+    {
+        // if the resolver doesn't return anything, async api is used
+        return;
+    }
+
+    QString errorMessage = tr( "Script Resolver Warning: API call %1 returned data synchronously." ).arg( eval );
+    JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( errorMessage ) );
+    tDebug() << errorMessage << m;
+}
+
 
 Tomahawk::ExternalResolver::ErrorState
 JSResolver::error() const

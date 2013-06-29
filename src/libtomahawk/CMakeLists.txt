@@ -336,6 +336,7 @@ list(APPEND libSources
     resolvers/ScriptCommand_AllArtists.cpp
     resolvers/ScriptCommand_AllAlbums.cpp
     resolvers/ScriptCommand_AllTracks.cpp
+    resolvers/ScriptCommand_LookupUrl.cpp
     resolvers/ScriptCommandQueue.cpp
 
     sip/SipPlugin.cpp

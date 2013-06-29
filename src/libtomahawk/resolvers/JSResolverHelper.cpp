@@ -216,6 +216,40 @@ JSResolverHelper::addAlbumTrackResults( const QVariantMap& results )
 
 
 void
+JSResolverHelper::addUrlResult( const QString& url, const QVariantMap& result )
+{
+    QString type = result.value( "type" ).toString();
+    if ( type == "track" )
+    {
+        QString title = result.value( "title" ).toString();
+        QString artist = result.value( "artist" ).toString();
+        QString album = result.value( "album" ).toString();
+        tLog( LOGVERBOSE ) << m_resolver->name() << "Got track for url" << url << title << artist << album;
+        if ( title.isEmpty() || artist.isEmpty() )
+        {
+            // A valid track result shoud have non-empty title and artist.
+            tLog() << Q_FUNC_INFO << m_resolver->name() << "Got empty track information for " << url;
+            emit m_resolver->informationFound( url, QSharedPointer<QObject>() );
+        }
+
+        Tomahawk::query_ptr query = Tomahawk::Query::get( artist, title, album );
+        QString resultHint = result.value( "hint" ).toString();
+        if ( !resultHint.isEmpty() )
+        {
+            query->setResultHint( resultHint );
+            query->setSaveHTTPResultHint( true );
+        }
+        emit m_resolver->informationFound( url, query.objectCast<QObject>() );
+    }
+    else
+    {
+        tLog( LOGVERBOSE ) << Q_FUNC_INFO << m_resolver->name() << "No usable information found for " << url;
+        emit m_resolver->informationFound( url, QSharedPointer<QObject>() );
+    }
+}
+
+
+void
 JSResolverHelper::reportCapabilities( const QVariant& v )
 {
     bool ok = 0;

@@ -39,6 +39,7 @@
 #include "network/DbSyncConnection.h"
 #include "web/Api_v1.h"
 #include "SourceList.h"
+#include "ViewManager.h"
 #include "ShortcutHandler.h"
 #include "filemetadata/ScanManager.h"
 #include "TomahawkSettings.h"
@@ -707,6 +708,67 @@ TomahawkApp::ipDetectionFailed( QNetworkReply::NetworkError error, QString error
 
 
 void
+TomahawkApp::informationForUrl( const QString& url, const QSharedPointer<QObject>& information )
+{
+    tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Got Information for URL:" << url;
+    if ( m_queuedUrl != url )
+    {
+        // This url is not anymore active, result was too late.
+        return;
+    }
+    if ( information.isNull() )
+    {
+        // No information was transmitted, nothing to do.
+        tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Empty information received.";
+        return;
+    }
+
+    // If we reach this point, we found information that can be parsed.
+    // So invalidate queued Url
+    m_queuedUrl = "";
+
+    // Try to interpret as Artist
+    Tomahawk::artist_ptr artist = information.objectCast<Tomahawk::Artist>();
+    if ( !artist.isNull() )
+    {
+        // The Url describes an artist
+        ViewManager::instance()->show( artist );
+        return;
+    }
+
+    // Try to interpret as Album
+    Tomahawk::album_ptr album = information.objectCast<Tomahawk::Album>();
+    if ( !album.isNull() )
+    {
+        // The Url describes an album
+        ViewManager::instance()->show( album );
+        return;
+    }
+
+    // Try to interpret as Track/Query
+    Tomahawk::query_ptr query = information.objectCast<Tomahawk::Query>();
+    if ( !query.isNull() )
+    {
+        // The Url describes a track
+        ViewManager::instance()->show( query );
+        return;
+    }
+
+    // Try to interpret as Playlist
+    Tomahawk::playlist_ptr playlist = information.objectCast<Tomahawk::Playlist>();
+    if ( !playlist.isNull() )
+    {
+        // The url describes a playlist
+        ViewManager::instance()->show( playlist );
+        return;
+    }
+
+    // Could not cast to a known type.
+    tLog() << Q_FUNC_INFO << "Can't load parsed information for " << url;
+}
+
+
+void
 TomahawkApp::spotifyApiCheckFinished()
 {
 #ifndef ENABLE_HEADLESS
@@ -758,6 +820,30 @@ TomahawkApp::loadUrl( const QString& url )
             return true;
         }
     }
+    // Can we parse the Url using a ScriptResolver?
+    bool canParse = false;
+    QList< QPointer< ExternalResolver > > possibleResolvers;
+    foreach ( QPointer<ExternalResolver> resolver, Pipeline::instance()->scriptResolvers() )
+    {
+        if ( resolver->canParseUrl( url ) )
+        {
+            canParse = true;
+            possibleResolvers << resolver;
+        }
+    }
+    if ( canParse )
+    {
+        m_queuedUrl = url;
+        foreach ( QPointer<ExternalResolver> resolver, possibleResolvers )
+        {
+            ScriptCommand_LookupUrl* cmd = new ScriptCommand_LookupUrl( resolver, url );
+            connect( cmd, SIGNAL( information( QString, QSharedPointer<QObject> ) ), this, SLOT( informationForUrl( QString, QSharedPointer<QObject> ) ) );
+            cmd->enqueue();
+        }
+
+        return true;
+    }
+
 #endif
     return false;
 }

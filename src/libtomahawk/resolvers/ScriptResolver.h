@@ -64,6 +64,8 @@ public:
 
     void sendMessage( const QVariantMap& map );
 
+    virtual bool canParseUrl( const QString& ) { return false; }
+
 signals:
     void terminated();
     void customMessage( const QString& msgType, const QVariantMap& msg );
@@ -77,6 +79,7 @@ public slots:
     virtual void artists( const Tomahawk::collection_ptr& ) {}
     virtual void albums( const Tomahawk::collection_ptr&, const Tomahawk::artist_ptr& ) {}
     virtual void tracks( const Tomahawk::collection_ptr&, const Tomahawk::album_ptr& ) {}
+    virtual void lookupUrl( const QString&  ) {}
 
 
 private slots:

@@ -58,6 +58,8 @@ public:
 
     virtual void setIcon( const QPixmap& icon );
 
+    virtual bool canParseUrl( const QString& url );
+
 public slots:
     virtual void resolve( const Tomahawk::query_ptr& query );
     virtual void stop();
@@ -67,6 +69,8 @@ public slots:
     virtual void artists( const Tomahawk::collection_ptr& collection );
     virtual void albums( const Tomahawk::collection_ptr& collection, const Tomahawk::artist_ptr& artist );
     virtual void tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::album_ptr& album );
+    // For UrlLookup
+    virtual void lookupUrl( const QString& url );
 
 signals:
     void stopped();

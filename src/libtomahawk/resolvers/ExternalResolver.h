@@ -28,6 +28,7 @@
 #include "ScriptCommand_AllArtists.h"
 #include "ScriptCommand_AllAlbums.h"
 #include "ScriptCommand_AllTracks.h"
+#include "ScriptCommand_LookupUrl.h"
 #include "Typedefs.h"
 
 #include <boost/function.hpp>
@@ -53,6 +54,7 @@ Q_OBJECT
     friend class ::ScriptCommand_AllArtists;
     friend class ::ScriptCommand_AllAlbums;
     friend class ::ScriptCommand_AllTracks;
+    friend class ::ScriptCommand_LookupUrl;
 
 public:
     enum ErrorState {
@@ -66,7 +68,8 @@ public:
         NullCapability = 0x0,
         Browsable = 0x1,        // can be represented in one or more collection tree views
         PlaylistSync = 0x2,     // can sync playlists
-        AccountFactory = 0x4    // can configure multiple accounts at the same time
+        AccountFactory = 0x4,   // can configure multiple accounts at the same time
+        UrlLookup = 0x8         // can be queried for information on an Url
     };
     Q_DECLARE_FLAGS( Capabilities, Capability )
     Q_FLAGS( Capabilities )
@@ -85,6 +88,9 @@ public:
     virtual Capabilities capabilities() const = 0;
     virtual QMap< QString, Tomahawk::collection_ptr > collections() { return m_collections; }
 
+    // UrlLookup, sync call
+    virtual bool canParseUrl( const QString& url ) = 0;
+
     virtual void enqueue( const QSharedPointer< ScriptCommand >& req )
     { m_commandQueue->enqueue( req ); }
 
@@ -100,6 +106,7 @@ signals:
     void artistsFound( const QList< Tomahawk::artist_ptr >& );
     void albumsFound( const QList< Tomahawk::album_ptr >& );
     void tracksFound( const QList< Tomahawk::query_ptr >& );
+    void informationFound( const QString&, const QSharedPointer<QObject>& );
 
 protected:
     void setFilePath( const QString& path ) { m_filePath = path; }
@@ -107,9 +114,12 @@ protected:
     ScriptCommandQueue* m_commandQueue;
 
     // Should only be called by ScriptCommands
+    // ScriptCollection
     virtual void artists( const Tomahawk::collection_ptr& collection ) = 0;
     virtual void albums( const Tomahawk::collection_ptr& collection, const Tomahawk::artist_ptr& artist ) = 0;
     virtual void tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::album_ptr& album ) = 0;
+    // UrlLookup
+    virtual void lookupUrl( const QString& url ) = 0;
 
 private:
     QString m_filePath;
