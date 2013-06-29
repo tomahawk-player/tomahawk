@@ -419,22 +419,40 @@ EchonestGenerator::staticFinished()
 void
 EchonestGenerator::getParams() throw( std::runtime_error )
 {
+    /*Echonest::DynamicPlaylist::PlaylistParamData data;
+    data.first = Echonest::DynamicPlaylist::Artist;
+    data.second = artist->name();
+
     Echonest::DynamicPlaylist::PlaylistParams params;
-/*    foreach( const dyncontrol_ptr& control, m_controls ) {
-        params.append( control.dynamicCast<EchonestControl>()->toENParam() );
+    params << data;
+    */
+
+    Echonest::DynamicPlaylist::PlaylistParams params;
+    foreach( const QVariant& control, m_controls )
+    {
+        QVariantMap controlMap = control.toMap();
+        Echonest::DynamicPlaylist::PlaylistParamData data;
+        data.first = (Echonest::DynamicPlaylist::PlaylistParam)controlMap[ "match" ].toUInt();
+        data.second = controlMap[ "input" ].toString();
+
+        params.append( data );
     }
 
-    if( appendRadioType( params ) == Echonest::DynamicPlaylist::SongRadioType ) {
+    if ( appendRadioType( params ) == Echonest::DynamicPlaylist::SongRadioType )
+    {
         // we need to do another pass, converting all song queries to song-ids.
         m_storedParams = params;
         qDeleteAll( m_waiting );
         m_waiting.clear();
 
         // one query per track
-        for( int i = 0; i < params.count(); i++ ) {
+        for( int i = 0; i < params.count(); i++ )
+        {
             const Echonest::DynamicPlaylist::PlaylistParamData param = params.value( i );
 
-            if( param.first == Echonest::DynamicPlaylist::SongId ) { // this is a song type enum
+            if ( param.first == Echonest::DynamicPlaylist::SongId )
+            {
+                // this is a song type enum
                 QString text = param.second.toString();
 
                 Echonest::Song::SearchParams q;
@@ -448,14 +466,16 @@ EchonestGenerator::getParams() throw( std::runtime_error )
             }
         }
 
-        if( m_waiting.isEmpty() ) {
+        if ( m_waiting.isEmpty() )
+        {
             m_storedParams.clear();
             emit paramsGenerated( params );
         }
-
-    } else {
+    }
+    else
+    {
         emit paramsGenerated( params );
-    }*/
+    }
 }
 
 
