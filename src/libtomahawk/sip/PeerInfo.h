@@ -130,13 +130,6 @@ private:
     Tomahawk::PeerInfoPrivate* d_ptr;
 
     static QHash< SipPlugin*, peerinfo_ptr > s_selfPeersBySipPlugin;
-
-    mutable QPixmap* m_avatar;
-    mutable QPixmap* m_fancyAvatar;
-
-    mutable QByteArray m_avatarBuffer;
-    mutable QByteArray m_avatarHash;
-    mutable QHash< TomahawkUtils::ImageMode, QHash< int, QPixmap > > m_coverCache;
 };
 
 

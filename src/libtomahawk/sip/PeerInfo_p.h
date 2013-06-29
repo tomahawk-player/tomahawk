@@ -36,7 +36,8 @@ public:
         , type( PeerInfo::External )
         , id( id )
         , status( PeerInfo::Offline )
-
+        , avatar( 0 )
+        , fancyAvatar( 0 )
     {
     }
     PeerInfo* q_ptr;
@@ -58,6 +59,13 @@ private:
     QString friendlyName;
     QString versionString;
     QVariant data;
+
+    mutable QPixmap* avatar;
+    mutable QPixmap* fancyAvatar;
+
+    mutable QByteArray avatarBuffer;
+    mutable QByteArray avatarHash;
+    mutable QHash< TomahawkUtils::ImageMode, QHash< int, QPixmap > > coverCache;
 };
 
 }

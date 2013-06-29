@@ -117,16 +117,16 @@ PeerInfo::getAll()
 PeerInfo::PeerInfo( SipPlugin* parent, const QString& id )
     : QObject()
     , d_ptr( new Tomahawk::PeerInfoPrivate ( this, parent, id ) )
-    , m_avatar( 0 )
-    , m_fancyAvatar( 0 )
 {
 }
 
 
 PeerInfo::~PeerInfo()
 {
-    delete m_avatar;
-    delete m_fancyAvatar;
+    Q_D( PeerInfo );
+
+    delete d->avatar;
+    delete d->fancyAvatar;
     delete d_ptr;
 }
 
@@ -310,6 +310,8 @@ PeerInfo::friendlyName() const
 void
 PeerInfo::setAvatar( const QPixmap& avatar )
 {
+    Q_D( PeerInfo );
+
     QByteArray ba;
     QBuffer buffer( &ba );
     buffer.open( QIODevice::WriteOnly );
@@ -317,16 +319,16 @@ PeerInfo::setAvatar( const QPixmap& avatar )
 
     // Check if the avatar is different by comparing a hash of the first 4096 bytes
     const QByteArray hash = QCryptographicHash::hash( ba.left( 4096 ), QCryptographicHash::Sha1 );
-    if ( m_avatarHash == hash )
+    if ( d->avatarHash == hash )
         return;
 
-    m_avatarHash = hash;
-    m_avatarBuffer = ba;
+    d->avatarHash = hash;
+    d->avatarBuffer = ba;
 
-    delete m_avatar;
-    delete m_fancyAvatar;
-    m_avatar = 0;
-    m_fancyAvatar = 0;
+    delete d->avatar;
+    delete d->fancyAvatar;
+    d->avatar = 0;
+    d->fancyAvatar = 0;
 
     Q_ASSERT( !contactId().isEmpty() );
     TomahawkUtils::Cache::instance()->putData( "Sources", 7776000000 /* 90 days */, contactId(), ba );
@@ -336,46 +338,48 @@ PeerInfo::setAvatar( const QPixmap& avatar )
 const QPixmap
 PeerInfo::avatar( TomahawkUtils::ImageMode style, const QSize& size ) const
 {
-    if ( !m_avatar )
+    Q_D( const PeerInfo );
+
+    if ( !d->avatar )
     {
         tDebug() << "Avatar for:" << id();
         Q_ASSERT( !contactId().isEmpty() );
-        if ( m_avatarBuffer.isEmpty() && !contactId().isEmpty() )
-            m_avatarBuffer = TomahawkUtils::Cache::instance()->getData( "Sources", contactId() ).toByteArray();
+        if ( d->avatarBuffer.isEmpty() && !contactId().isEmpty() )
+            d->avatarBuffer = TomahawkUtils::Cache::instance()->getData( "Sources", contactId() ).toByteArray();
 
-        m_avatar = new QPixmap();
-        if ( !m_avatarBuffer.isEmpty() )
-            m_avatar->loadFromData( m_avatarBuffer );
+        d->avatar = new QPixmap();
+        if ( !d->avatarBuffer.isEmpty() )
+            d->avatar->loadFromData( d->avatarBuffer );
 
-        m_avatarBuffer.clear();
+        d->avatarBuffer.clear();
     }
 
-    if ( style == TomahawkUtils::RoundedCorners && m_avatar && !m_avatar->isNull() && !m_fancyAvatar )
-        m_fancyAvatar = new QPixmap( TomahawkUtils::createRoundedImage( QPixmap( *m_avatar ), QSize( 0, 0 ) ) );
+    if ( style == TomahawkUtils::RoundedCorners && d->avatar && !d->avatar->isNull() && !d->fancyAvatar )
+        d->fancyAvatar = new QPixmap( TomahawkUtils::createRoundedImage( QPixmap( *d->avatar ), QSize( 0, 0 ) ) );
 
     QPixmap pixmap;
-    if ( style == TomahawkUtils::RoundedCorners && m_fancyAvatar )
+    if ( style == TomahawkUtils::RoundedCorners && d->fancyAvatar )
     {
-        pixmap = *m_fancyAvatar;
+        pixmap = *d->fancyAvatar;
     }
-    else if ( m_avatar && !m_avatar->isNull() )
+    else if ( d->avatar && !d->avatar->isNull() )
     {
-        pixmap = *m_avatar;
+        pixmap = *d->avatar;
     }
 
     if ( !pixmap.isNull() && !size.isEmpty() )
     {
-        if ( m_coverCache[ style ].contains( size.width() ) )
+        if ( d->coverCache[ style ].contains( size.width() ) )
         {
-            return m_coverCache[ style ].value( size.width() );
+            return d->coverCache[ style ].value( size.width() );
         }
 
         QPixmap scaledCover;
         scaledCover = pixmap.scaled( size, Qt::KeepAspectRatio, Qt::SmoothTransformation );
 
-        QHash< int, QPixmap > innerCache = m_coverCache[ style ];
+        QHash< int, QPixmap > innerCache = d->coverCache[ style ];
         innerCache.insert( size.width(), scaledCover );
-        m_coverCache[ style ] = innerCache;
+        d->coverCache[ style ] = innerCache;
 
         return scaledCover;
     }
