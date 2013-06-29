@@ -57,9 +57,6 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
     connect( m_playlist.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ), this, SLOT( onRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ) );
     connect( m_playlist->generator().data(), SIGNAL( error( QString, QString )), SLOT( error(QString,QString) ) );
 
-    connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), this, SLOT( trackStarted() ) );
-    connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::playlistinterface_ptr ) ), this, SLOT( playlistChanged( Tomahawk::playlistinterface_ptr ) ) );
-
     if (configured()) {
         m_playlist->generator()->generate( 20 );
     } else {
@@ -236,32 +233,6 @@ void DynamicQmlWidget::resolvingFinished(bool hasResults)
         m_playNextResolved = false;
     }
 }
-
-void DynamicQmlWidget::trackStarted()
-{
-    startStation();
-}
-
-void
-DynamicQmlWidget::playlistChanged( Tomahawk::playlistinterface_ptr pl )
-{
-    if ( pl != m_proxyModel->playlistInterface() ) {
-        stopStation( false );
-    }
-}
-
-void
-DynamicQmlWidget::stopStation( bool stopPlaying )
-{
-    m_model->stopOnDemand( stopPlaying );
-}
-
-void
-DynamicQmlWidget::startStation()
-{
-    m_model->startOnDemand();
-}
-
 
 void
 DynamicQmlWidget::loadArtistCharts()
