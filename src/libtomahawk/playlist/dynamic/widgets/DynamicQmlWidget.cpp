@@ -50,8 +50,6 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
     setSource( QUrl( "qrc" RESPATH "qml/StationView.qml" ) );
 
     connect( m_model, SIGNAL( currentIndexChanged()), SLOT( currentIndexChanged() ) );
-    connect( m_model, SIGNAL( loadingStarted() ), SIGNAL(loadingChanged() ) );
-    connect( m_model, SIGNAL( loadingFinished() ), SIGNAL(loadingChanged() ) );
     connect( m_model, SIGNAL( changed() ), SIGNAL( titleChanged() ) );
     connect( m_playlist->generator().data(), SIGNAL( generated( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
     connect( m_playlist->generator().data(), SIGNAL( nextTrackGenerated( Tomahawk::query_ptr ) ), this, SLOT( nextTrackGenerated( Tomahawk::query_ptr ) ) );
@@ -241,6 +239,7 @@ void DynamicQmlWidget::resolvingFinished(bool hasResults)
     }
 
     if( m_playNextResolved && m_proxyModel->rowCount() > 0 ) {
+        emit loadingChanged();
         playItem( 0 );
         m_playNextResolved = false;
     }
