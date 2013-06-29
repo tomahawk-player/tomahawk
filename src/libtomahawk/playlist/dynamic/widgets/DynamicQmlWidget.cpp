@@ -98,13 +98,13 @@ DynamicQmlWidget::setTitle( const QString& title )
 
     if ( !m_playlist->loaded() )
     {
+        tDebug() << "CONTROLS ARE SAVED:" << m_playlist->generator()->controls();
         DatabaseCommand_CreateDynamicPlaylist* cmd = new DatabaseCommand_CreateDynamicPlaylist( SourceList::instance()->getLocal(), m_playlist, true );
-//        connect( cmd, SIGNAL(finished()), dynplaylist.data(), SIGNAL(created()) );
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
-        m_playlist->reportCreated( m_playlist );
 
+        m_playlist->reportCreated( m_playlist );
         m_playlist->createNewRevision( uuid(), m_playlist->currentrevision(), m_playlist->type(), m_playlist->generator()->controls() );
-//        m_playlist->reportCreated( m_playlist );
+
         emit titleChanged();
     }
 }
