@@ -236,7 +236,13 @@ Tomahawk::Accounts::TelepathyConfigStorage::load( const QString& accountId, Acco
 
     Tp::AccountPtr account = m_tpam->accountForObjectPath( accountIdToTelepathyPath( accountId ) );
 
-    cfg.accountFriendlyName = "Tp:" + account->normalizedName();
+    if ( !account->normalizedName().isEmpty() )
+        cfg.accountFriendlyName = account->normalizedName();
+    else if ( !account->parameters()[ "account" ].isNull() )
+        cfg.accountFriendlyName = account->parameters()[ "account" ].toString();
+
+    if ( cfg.accountFriendlyName.isEmpty() ) //this should never happen
+        cfg.accountFriendlyName = accountId;
 
     cfg.enabled = true;
     cfg.acl = QVariantMap();
