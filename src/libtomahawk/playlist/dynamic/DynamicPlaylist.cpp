@@ -445,7 +445,7 @@ DynamicPlaylist::setRevision( const QString& rev,
                                    Q_ARG( QString, rev ),
                                    Q_ARG( bool, is_newest_rev ),
                                    Q_ARG( QString, type ),
-                                   QGenericArgument( "QList< Tomahawk::dyncontrol_ptr >" , (const void*)&controls ),
+                                   Q_ARG( QVariantList, controls ),
                                    Q_ARG( bool, applied ) );
         return;
     }
