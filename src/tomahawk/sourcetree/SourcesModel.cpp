@@ -34,6 +34,7 @@
 #include "Source.h"
 #include "ViewManager.h"
 #include "widgets/NetworkActivityWidget.h"
+#include "widgets/Dashboard.h"
 #include "GlobalActionManager.h"
 #include "DropJob.h"
 #include "items/PlaylistItems.h"
@@ -302,10 +303,6 @@ SourcesModel::appendGroups()
 //    new SourceTreeItem( this, m_rootItem, SourcesModel::Divider, 2 );
     m_myMusicGroup = new GroupItem( this, m_rootItem, tr( "My Music" ), 3 );
 
-    GenericPageItem* dashboard = new GenericPageItem( this, m_browse, tr( "Dashboard" ), ImageRegistry::instance()->icon( RESPATH "images/dashboard.svg" ),
-                                                      boost::bind( &ViewManager::showDashboard, ViewManager::instance() ),
-                                                      boost::bind( &ViewManager::dashboard, ViewManager::instance() ) );
-    dashboard->setSortValue( 0 );
 
     // super collection
     GenericPageItem* sc = new GenericPageItem( this, m_browse, tr( "SuperCollection" ), ImageRegistry::instance()->icon( RESPATH "images/supercollection.svg" ),
@@ -343,6 +340,15 @@ SourcesModel::appendGroups()
     endInsertRows();
 
     // addDynamicPage takes care of begin/endInsertRows itself
+    ViewManager::instance()->addDynamicPage("dashboard",
+                                            tr( "Dashboard" ),
+                                            ImageRegistry::instance()->icon( RESPATH "images/dashboard.svg" ),
+                                            boost::lambda::bind( boost::lambda::new_ptr< Tomahawk::Widgets::Dashboard >() )
+    );
+    //HACK: this may not belong here, but adding the pages probably doesn't belong here either
+    //TODO: find a good place for this
+    ViewManager::instance()->showDynamicPage("dashboard");
+
     ViewManager::instance()->addDynamicPage("network_activity",
                                             tr( "Network Activity" ),
                                             TomahawkUtils::defaultPixmap( TomahawkUtils::NetworkActivity, TomahawkUtils::Original ),

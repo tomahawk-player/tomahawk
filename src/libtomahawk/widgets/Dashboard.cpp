@@ -47,6 +47,7 @@
 #define HISTORY_TRACK_ITEMS 15
 
 using namespace Tomahawk;
+using namespace Tomahawk::Widgets;
 
 
 Dashboard::Dashboard( QWidget* parent )

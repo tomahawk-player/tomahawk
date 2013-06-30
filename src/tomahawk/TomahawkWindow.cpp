@@ -150,7 +150,6 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     audioStopped();
 
     vm->setQueue( m_queueView );
-    vm->showDashboard();
 
     if ( TomahawkSettings::instance()->fullscreenEnabled() )
     {

@@ -261,7 +261,7 @@
           </widget>
          </item>
          <item>
-          <widget class="PlaylistWidget" name="playlistWidget"/>
+          <widget class="Tomahawk::Widgets::PlaylistWidget" name="playlistWidget"/>
          </item>
         </layout>
        </widget>
@@ -296,7 +296,7 @@
    <header location="global">playlist/GridView.h</header>
   </customwidget>
   <customwidget>
-   <class>PlaylistWidget</class>
+   <class>Tomahawk::Widgets::PlaylistWidget</class>
    <extends>QListWidget</extends>
    <header>widgets/Dashboard.h</header>
   </customwidget>

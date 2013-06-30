@@ -47,7 +47,6 @@
 #include "playlist/dynamic/widgets/DynamicWidget.h"
 
 #include "widgets/NewReleasesWidget.h"
-#include "widgets/Dashboard.h"
 #include "widgets/WhatsHotWidget.h"
 #include "widgets/infowidgets/SourceInfoWidget.h"
 #include "widgets/infowidgets/ArtistInfoWidget.h"
@@ -57,6 +56,7 @@
 #include "widgets/AnimatedSplitter.h"
 
 #include "utils/Logger.h"
+#include "utils/TomahawkUtilsGui.h"
 
 #include <QVBoxLayout>
 #include <QMetaMethod>
@@ -79,7 +79,6 @@ ViewManager::instance()
 ViewManager::ViewManager( QObject* parent )
     : QObject( parent )
     , m_widget( new QWidget() )
-    , m_dashboard( new Dashboard() )
     , m_whatsHotWidget( 0 )
     , m_newReleasesWidget( 0 )
     , m_recentPlaysWidget( 0 )
@@ -130,7 +129,6 @@ ViewManager::~ViewManager()
 {
     delete m_whatsHotWidget;
     delete m_newReleasesWidget;
-    delete m_dashboard;
     delete m_recentPlaysWidget;
     delete m_inboxWidget;
     delete m_contextWidget;
@@ -398,13 +396,6 @@ ViewManager::playlistInterfaceChanged( Tomahawk::playlistinterface_ptr interface
         if ( !pl.isNull() )
             TomahawkSettings::instance()->appendRecentlyPlayedPlaylist( pl->guid(), pl->author()->id() );
     }
-}
-
-
-Tomahawk::ViewPage*
-ViewManager::showDashboard()
-{
-    return show( m_dashboard );
 }
 
 
@@ -846,13 +837,6 @@ ViewManager::showCurrentTrack()
         setPage( page );
         page->jumpToCurrentTrack();
     }
-}
-
-
-Tomahawk::ViewPage*
-ViewManager::dashboard() const
-{
-    return m_dashboard;
 }
 
 

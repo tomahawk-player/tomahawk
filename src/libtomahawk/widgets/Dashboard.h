@@ -44,6 +44,11 @@ namespace Ui
     class Dashboard;
 }
 
+namespace Tomahawk
+{
+namespace Widgets
+{
+
 class DLLEXPORT PlaylistDelegate : public QStyledItemDelegate
 {
 Q_OBJECT
@@ -124,4 +129,6 @@ private:
     Tomahawk::playlistinterface_ptr m_playlistInterface;
 };
 
+}; // Widgets
+}; // Tomahawk
 #endif // DASHBOARD_H
