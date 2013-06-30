@@ -696,7 +696,6 @@ TomahawkApp::onInfoSystemReady()
 void
 TomahawkApp::ipDetectionFailed( QNetworkReply::NetworkError error, QString errorString )
 {
-    tLog() << Q_FUNC_INFO;
     Q_UNUSED( error );
 #ifdef QT_NO_DEBUG
     Q_UNUSED( errorString );
