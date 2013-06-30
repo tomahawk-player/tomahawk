@@ -27,6 +27,7 @@
 
 #include <QObject>
 #include <QMap>
+#include <QNetworkReply>
 #include <QSharedPointer>
 #include <QTcpServer>
 
@@ -83,10 +84,6 @@ public:
     void registerPeer( const Tomahawk::peerinfo_ptr& peerInfo );
     void handleSipInfo( const Tomahawk::peerinfo_ptr& peerInfo );
 
-public slots:
-    void onSipInfoChanged();
-
-public:
     void initiateConnection( const SipInfo& sipInfo, Connection* conn );
     void reverseOfferRequest( ControlConnection* orig_conn, const QString &theirdbid, const QString& key, const QString& theirkey );
 
@@ -139,6 +136,14 @@ public:
     void queueForAclResult( const QString& username, const QSet<Tomahawk::peerinfo_ptr>& peerInfos );
 signals:
     void dbSyncTriggered();
+
+    /**
+     * @brief ipDetectionFailed Emitted when the automatic external IP detection failed.
+     * @param error If the failure was caused by a network error, this is its error code.
+     *              If the error wasn't network related, QNetworkReply::NoError will be returned.
+     * @param errorString A string explaining the error.
+     */
+    void ipDetectionFailed( QNetworkReply::NetworkError error, QString errorString );
     void streamStarted( StreamConnection* );
     void streamFinished( StreamConnection* );
     void ready();
@@ -156,6 +161,8 @@ public slots:
 
     void socketConnected();
     void triggerDBSync();
+
+    void onSipInfoChanged();
 
 private slots:
     void deleteLazyOffer( const QString& key );

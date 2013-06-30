@@ -31,13 +31,6 @@
 #include "collection/Collection.h"
 #include "infosystem/InfoSystem.h"
 #include "infosystem/InfoSystemCache.h"
-#include "accounts/AccountManager.h"
-#include "accounts/spotify/SpotifyAccount.h"
-#include "accounts/lastfm/LastFmAccount.h"
-#include "database/Database.h"
-#include "database/DatabaseCollection.h"
-#include "database/DatabaseCommand_CollectionStats.h"
-#include "database/DatabaseResolver.h"
 #include "playlist/dynamic/GeneratorFactory.h"
 #include "playlist/dynamic/echonest/EchonestGenerator.h"
 #include "playlist/dynamic/database/DatabaseGenerator.h"
@@ -57,14 +50,22 @@
 #include "database/DatabaseImpl.h"
 #include "network/Msg.h"
 
+#include "accounts/lastfm/LastFmAccount.h"
+#include "accounts/spotify/SpotifyAccount.h"
+#include "accounts/spotify/SpotifyPlaylistUpdater.h"
+#include "accounts/AccountManager.h"
+#include "database/Database.h"
+#include "database/DatabaseCollection.h"
+#include "database/DatabaseCommand_CollectionStats.h"
+#include "database/DatabaseResolver.h"
 #include "audio/AudioEngine.h"
+#include "jobview/ErrorStatusMessage.h"
+#include "jobview/JobStatusModel.h"
+#include "jobview/JobStatusView.h"
 #include "utils/XspfLoader.h"
 #include "utils/JspfLoader.h"
 #include "utils/Logger.h"
 #include "utils/TomahawkUtilsGui.h"
-#include "accounts/lastfm/LastFmAccount.h"
-#include "accounts/spotify/SpotifyAccount.h"
-#include "accounts/spotify/SpotifyPlaylistUpdater.h"
 #include "utils/TomahawkCache.h"
 
 #ifndef ENABLE_HEADLESS
@@ -542,6 +543,7 @@ TomahawkApp::initServent()
 
     bool upnp = !arguments().contains( "--noupnp" );
     int port = TomahawkSettings::instance()->externalPort();
+    connect( Servent::instance(), SIGNAL( ipDetectionFailed( QNetworkReply::NetworkError, QString ) ), this, SLOT( ipDetectionFailed( QNetworkReply::NetworkError, QString ) ) );
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     if ( !Servent::instance()->startListening( QHostAddress( QHostAddress::Any ), upnp, port ) )
 #else
@@ -688,6 +690,20 @@ TomahawkApp::onInfoSystemReady()
 
     initEnergyEventHandler();
     emit tomahawkLoaded();
+}
+
+
+void
+TomahawkApp::ipDetectionFailed( QNetworkReply::NetworkError error, QString errorString )
+{
+    tLog() << Q_FUNC_INFO;
+    Q_UNUSED( error );
+#ifdef QT_NO_DEBUG
+    Q_UNUSED( errorString );
+    JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( tr( "Automatically detecting external IP failed." ) ) );
+#else
+    JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( errorString ) );
+#endif
 }
 
 

@@ -976,6 +976,7 @@ Servent::ipDetected()
         {
             tLog() << Q_FUNC_INFO << "Failed parsing ip-autodetection response";
             d->externalPort = -1;
+            emit ipDetectionFailed( QNetworkReply::NoError, tr( "Automatically detecting external IP failed: Could not parse JSON response." ) );
         }
         else
         {
@@ -988,6 +989,7 @@ Servent::ipDetected()
     {
         d->externalPort = -1;
         tLog() << Q_FUNC_INFO << "ip-autodetection returned an error:" << reply->errorString();
+        emit ipDetectionFailed( reply->error(), tr( "Automatically detecting external IP failed: %1" ).arg( reply->errorString() ) );
     }
 
     d->ready = true;

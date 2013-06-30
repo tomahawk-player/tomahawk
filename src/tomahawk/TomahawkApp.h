@@ -115,6 +115,8 @@ private slots:
     void spotifyApiCheckFinished();
     void onInfoSystemReady();
 
+    void ipDetectionFailed( QNetworkReply::NetworkError error, QString errorString );
+
 private:
     void registerMetaTypes();
 
