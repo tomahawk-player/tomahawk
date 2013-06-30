@@ -34,6 +34,11 @@ namespace Ui
     class NetworkActivityWidget;
 }
 
+namespace Tomahawk
+{
+namespace Widgets
+{
+
 class TOMAHAWK_WIDGETS_EXPORT NetworkActivityWidget : public QWidget, public Tomahawk::ViewPage
 {
     Q_OBJECT
@@ -76,5 +81,9 @@ private:
     Q_DECLARE_PRIVATE( NetworkActivityWidget )
     NetworkActivityWidgetPrivate* d_ptr;
 };
+
+}; // Widgets
+
+}; // Tomahawk
 
 #endif // NETWORKACTIVITYWIDGET_H

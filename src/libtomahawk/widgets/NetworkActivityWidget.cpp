@@ -34,6 +34,7 @@
 #define NETWORKCHARTS_NUM_TRACKS 100
 
 using namespace Tomahawk;
+using namespace Tomahawk::Widgets;
 
 NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
     : QWidget( parent )

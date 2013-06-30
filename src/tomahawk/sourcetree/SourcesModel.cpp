@@ -352,7 +352,7 @@ SourcesModel::appendGroups()
     ViewManager::instance()->addDynamicPage("network_activity",
                                             tr( "Network Activity" ),
                                             TomahawkUtils::defaultPixmap( TomahawkUtils::NetworkActivity, TomahawkUtils::Original ),
-                                            boost::lambda::bind( boost::lambda::new_ptr< NetworkActivityWidget >() )
+                                            boost::lambda::bind( boost::lambda::new_ptr< Tomahawk::Widgets::NetworkActivityWidget >() )
     );
 }
 

@@ -25,14 +25,14 @@
 class NetworkActivityWidgetPrivate
 {
 public:
-    NetworkActivityWidgetPrivate( NetworkActivityWidget* q )
+    NetworkActivityWidgetPrivate( Tomahawk::Widgets::NetworkActivityWidget* q )
         : q_ptr ( q )
         , ui( new Ui::NetworkActivityWidget )
         , sortedProxy( 0 )
     {
     }
-    NetworkActivityWidget* q_ptr;
-    Q_DECLARE_PUBLIC ( NetworkActivityWidget )
+    Tomahawk::Widgets::NetworkActivityWidget* q_ptr;
+    Q_DECLARE_PUBLIC ( Tomahawk::Widgets::NetworkActivityWidget )
 
 private:
     QSharedPointer<Ui::NetworkActivityWidget> ui;
@@ -44,7 +44,7 @@ private:
     QPointer<PlaylistModel> monthlyChartsModel;
     QPointer<PlaylistModel> yearlyChartsModel;
     QPointer<PlaylistModel> overallChartsModel;
-    NetworkActivityWidget::ViewType activeView;
+    Tomahawk::Widgets::NetworkActivityWidget::ViewType activeView;
 };
 
 #endif // NETWORKACTIVITYWIDGET_P_H
