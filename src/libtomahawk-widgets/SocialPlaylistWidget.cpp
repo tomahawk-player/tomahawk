@@ -30,6 +30,8 @@
 #include "database/DatabaseCommand_GenericSelect.h"
 #include "widgets/OverlayWidget.h"
 
+#include "utils/TomahawkUtilsGui.h"
+
 using namespace Tomahawk;
 
 QString SocialPlaylistWidget::s_popularAlbumsQuery = "SELECT * from album";

@@ -20,6 +20,9 @@
 
 #include "sourcetree/SourcesModel.h"
 
+#include <libtomahawk-widgets/NetworkActivityWidget.h>
+#include <libtomahawk-widgets/Dashboard.h>
+
 #include "sourcetree/items/ScriptCollectionItem.h"
 #include "sourcetree/items/SourceTreeItem.h"
 #include "sourcetree/items/SourceItem.h"
@@ -33,8 +36,6 @@
 #include "collection/Collection.h"
 #include "Source.h"
 #include "ViewManager.h"
-#include "widgets/NetworkActivityWidget.h"
-#include "widgets/Dashboard.h"
 #include "GlobalActionManager.h"
 #include "DropJob.h"
 #include "items/PlaylistItems.h"

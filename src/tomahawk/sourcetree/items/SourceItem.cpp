@@ -21,6 +21,8 @@
 
 #include "SourceItem.h"
 
+#include <libtomahawk-widgets/SocialPlaylistWidget.h>
+
 #include "CategoryItems.h"
 #include "database/Database.h"
 #include "DropJob.h"
@@ -31,7 +33,6 @@
 #include "LovedTracksItem.h"
 #include "Source.h"
 #include "SourceList.h"
-#include "widgets/SocialPlaylistWidget.h"
 #include "playlist/FlexibleView.h"
 #include "playlist/PlaylistView.h"
 #include "playlist/RecentlyAddedModel.h"

@@ -93,7 +93,7 @@ private:
 };
 
 
-class LoadingSpinner : public AnimatedSpinner
+class DLLEXPORT LoadingSpinner : public AnimatedSpinner
 {
     Q_OBJECT
 

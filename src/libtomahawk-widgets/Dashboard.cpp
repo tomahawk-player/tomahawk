@@ -24,10 +24,10 @@
 #include "ViewManager.h"
 #include "SourceList.h"
 #include "TomahawkSettings.h"
-#include "RecentPlaylistsModel.h"
-#include "RecentlyPlayedPlaylistsModel.h"
+#include "widgets/RecentPlaylistsModel.h"
+#include "widgets/RecentlyPlayedPlaylistsModel.h"
 #include "MetaPlaylistInterface.h"
-
+#include "PlaylistDelegate.h"
 #include "audio/AudioEngine.h"
 #include "playlist/AlbumModel.h"
 #include "playlist/RecentlyPlayedModel.h"
@@ -420,37 +420,4 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     painter->drawText( option.rect.adjusted( option.fontMetrics.height() * 4, 6, -100, -option.rect.height() + boldFontMetrics.height() + 6 ), index.data().toString() );
 
     painter->restore();
-}
-
-
-PlaylistWidget::PlaylistWidget( QWidget* parent )
-    : QListView( parent )
-{
-    m_overlay = new OverlayWidget( this );
-    new LoadingSpinner( this );
-}
-
-
-void
-PlaylistWidget::setModel( QAbstractItemModel* model )
-{
-    QListView::setModel( model );
-
-    connect( model, SIGNAL( modelReset() ), SLOT( verifySize() ) );
-    connect( model, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( verifySize() ) );
-    connect( model, SIGNAL( rowsRemoved( QModelIndex, int, int ) ), SLOT( verifySize() ) );
-
-    emit modelChanged();
-    verifySize();
-}
-
-
-void
-PlaylistWidget::verifySize()
-{
-    if ( !model() )
-        return;
-
-    if ( model()->rowCount() > 0 )
-        setFixedHeight( model()->rowCount() * itemDelegate()->sizeHint( QStyleOptionViewItem(), model()->index( 0, 0 ) ).height() + frameWidth() * 2 );
 }

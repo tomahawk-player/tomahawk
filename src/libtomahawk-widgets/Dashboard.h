@@ -32,7 +32,7 @@
 
 #include "utils/TomahawkUtilsGui.h"
 
-#include "DllMacro.h"
+#include "WidgetsDllMacro.h"
 
 class AlbumModel;
 class RecentlyPlayedModel;
@@ -49,44 +49,7 @@ namespace Tomahawk
 namespace Widgets
 {
 
-class DLLEXPORT PlaylistDelegate : public QStyledItemDelegate
-{
-Q_OBJECT
-
-public:
-    PlaylistDelegate()
-    {
-    }
-
-protected:
-    void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
-    QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
-};
-
-
-class DLLEXPORT PlaylistWidget : public QListView
-{
-Q_OBJECT
-
-public:
-    PlaylistWidget( QWidget* parent = 0 );
-
-    OverlayWidget* overlay() const { return m_overlay; }
-
-    virtual void setModel( QAbstractItemModel* model );
-
-signals:
-    void modelChanged();
-
-private slots:
-    void verifySize();
-
-private:
-    OverlayWidget* m_overlay;
-};
-
-
-class DLLEXPORT Dashboard : public QWidget, public Tomahawk::ViewPage
+class TOMAHAWK_WIDGETS_EXPORT Dashboard : public QWidget, public Tomahawk::ViewPage
 {
 Q_OBJECT
 

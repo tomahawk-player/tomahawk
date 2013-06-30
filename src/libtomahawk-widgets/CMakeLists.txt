@@ -2,11 +2,19 @@
 set(TOMAHAWK_WIDGETS_LIBRARY_TARGET tomahawk-widgets)
 
 list(APPEND ${TOMAHAWK_WIDGETS_LIBRARY_TARGET}_SOURCES
+    PlaylistDelegate.cpp
+    PlaylistWidget.cpp
+
+    # ViewPages
+    Dashboard.cpp
     NetworkActivityWidget.cpp
+    SocialPlaylistWidget.cpp
 )
 
 list(APPEND ${TOMAHAWK_WIDGETS_LIBRARY_TARGET}_UI
+    Dashboard.ui
     NetworkActivityWidget.ui
+    SocialPlaylistWidget.ui
 )
 
 tomahawk_add_library(${TOMAHAWK_WIDGETS_LIBRARY_TARGET}
