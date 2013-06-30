@@ -1194,7 +1194,7 @@ TomahawkWindow::showAboutTomahawk()
 {
     QString head, desc;
 
-#ifdef DEBUG_BUILD
+#ifdef QT_DEBUG
     head = tr( "<h2><b>Tomahawk %1<br/>(%2)</h2>" )
          .arg( TomahawkUtils::appFriendlyVersion() )
          .arg( qApp->applicationVersion() );

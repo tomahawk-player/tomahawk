@@ -61,7 +61,7 @@ void
 ScriptEngine::javaScriptConsoleMessage( const QString& message, int lineNumber, const QString& sourceID )
 {
     tLog() << "JAVASCRIPT:" << m_scriptPath << message << lineNumber << sourceID;
-    #ifndef DEBUG_BUILD
+    #ifdef QT_DEBUG
     JobStatusView::instance()->model()->addJob( new ErrorStatusMessage( tr( "Script Resolver Error: %1 %2 %3 %4" ).arg( m_scriptPath ).arg( message ).arg( lineNumber ).arg( sourceID ) ) );
     #endif
 }

@@ -8,7 +8,6 @@ include( AddAppIconMacro )
 # SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
 IF( NOT CMAKE_BUILD_TYPE STREQUAL "Release" )
     MESSAGE( "Building in debug mode, enabling all debug updates" )
-    SET( DEBUG_BUILD ON )
 ENDIF()
 
 # build plugins
