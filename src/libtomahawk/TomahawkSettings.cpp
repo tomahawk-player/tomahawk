@@ -782,6 +782,20 @@ TomahawkSettings::setSongChangeNotificationEnabled(bool enable)
 }
 
 
+bool
+TomahawkSettings::autoDetectExternalIp() const
+{
+    return value( "network/auto-detect-external-ip" ).toBool();
+}
+
+
+void
+TomahawkSettings::setAutoDetectExternalIp( bool autoDetect )
+{
+    setValue( "network/auto-detect-external-ip", autoDetect );
+}
+
+
 unsigned int
 TomahawkSettings::volume() const
 {

@@ -162,6 +162,7 @@ private slots:
     void readyRead();
     void socketError( QAbstractSocket::SocketError e );
     void checkACLResult( const QString &nodeid, const QString &username, Tomahawk::ACLStatus::Type peerStatus );
+    void ipDetected();
 
     Connection* claimOffer( ControlConnection* cc, const QString &nodeid, const QString &key, const QHostAddress peer = QHostAddress::Any );
 

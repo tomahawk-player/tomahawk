@@ -147,6 +147,9 @@ public:
     bool songChangeNotificationEnabled() const; /// true by default
     void setSongChangeNotificationEnabled( bool enable );
 
+    bool autoDetectExternalIp() const;
+    void setAutoDetectExternalIp( bool autoDetect );
+
     QString externalHostname() const;
     void setExternalHostname( const QString& externalHostname );
 

@@ -39,16 +39,16 @@ class QToolbarTabDialog;
 
 namespace Ui
 {
-    class ProxyDialog;
+class ProxyDialog;
 }
 
 namespace Tomahawk
 {
-    namespace Accounts
-    {
-        class AccountModel;
-        class Account;
-        class AccountFactory;
+namespace Accounts
+{
+class AccountModel;
+class Account;
+class AccountFactory;
 class Account;
 class AccountModelFilterProxy;
 }
@@ -60,7 +60,7 @@ Q_OBJECT
 
 public:
     explicit ProxyDialog( QWidget* parent = 0 );
-    ~ProxyDialog() {};
+    ~ProxyDialog() {}
 
     void saveSettings();
 
@@ -85,6 +85,7 @@ private slots:
 
     void toggleRemoteMode();
     void toggleProxyEnabled();
+    void toggleAutoDetectIp( bool checked );
     void showProxySettings();
 
     void accountsFilterChanged( int );

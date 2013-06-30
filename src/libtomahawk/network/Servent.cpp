@@ -127,6 +127,8 @@ Servent::~Servent()
 bool
 Servent::startListening( QHostAddress ha, bool upnp, int port )
 {
+    Q_D( Servent );
+
     d_func()->externalAddresses = QList<QHostAddress>();
     d_func()->port = port;
     int defPort = TomahawkSettings::instance()->defaultPort();
@@ -181,11 +183,20 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
     switch ( mode )
     {
         case TomahawkSettings::Static:
-            d_func()->externalHostname = TomahawkSettings::instance()->externalHostname();
-            d_func()->externalPort = TomahawkSettings::instance()->externalPort();
-            d_func()->ready = true;
-            // All setup is made, were done.
-            emit ready();
+            d->externalPort = TomahawkSettings::instance()->externalPort();
+            if ( TomahawkSettings::instance()->autoDetectExternalIp() )
+            {
+                QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( QUrl( "http://toma.hk/?stat=1" ) ) );
+                connect( reply, SIGNAL( finished() ), SLOT( ipDetected() ) );
+                // Not emitting ready here as we are not done.
+            }
+            else
+            {
+                d->externalHostname = TomahawkSettings::instance()->externalHostname();
+                d->ready = true;
+                // All setup is made, were done.
+                emit ready();
+            }
             break;
 
         case TomahawkSettings::Lan:
@@ -948,6 +959,39 @@ Servent::checkACLResult( const QString& nodeid, const QString& username, Tomahaw
     }
     // We have a result, so remove from queue
     d_func()->queuedForACLResult[username].remove( nodeid );
+}
+
+void
+Servent::ipDetected()
+{
+    Q_D( Servent );
+    QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
+
+    if ( reply->error() == QNetworkReply::NoError )
+    {
+        QJson::Parser p;
+        bool ok;
+        const QVariantMap res = p.parse( reply, &ok ).toMap();
+        if ( !ok )
+        {
+            tLog() << Q_FUNC_INFO << "Failed parsing ip-autodetection response";
+            d->externalPort = -1;
+        }
+        else
+        {
+            QString externalIP = res.value( "ip" ).toString();
+            tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Found external IP:" << externalIP;
+            d->externalHostname = externalIP;
+        }
+    }
+    else
+    {
+        d->externalPort = -1;
+        tLog() << Q_FUNC_INFO << "ip-autodetection returned an error:" << reply->errorString();
+    }
+
+    d->ready = true;
+    emit ready();
 }
 
 
