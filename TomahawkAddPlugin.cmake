@@ -1,5 +1,5 @@
 include( CMakeParseArguments )
-
+include( ${TOMAHAWK_CMAKE_DIR}/TomahawkAddLibrary.cmake )
 
 function(tomahawk_add_plugin)
     # parse arguments (name needs to be saved before passing ARGN into the macro)
@@ -21,51 +21,27 @@ function(tomahawk_add_plugin)
     # create target name once for convenience
     set(target "tomahawk_${PLUGIN_TYPE}_${PLUGIN_NAME}")
 
-    # qt stuff
-    include_directories(${CMAKE_CURRENT_BINARY_DIR})
-    if(PLUGIN_UI)
-        qt_wrap_ui(PLUGIN_UI_SOURCES ${PLUGIN_UI})
-        list(APPEND PLUGIN_SOURCES ${PLUGIN_UI_SOURCES})
-    endif()
-
-    if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/resources.qrc")
-        qt_add_resources(PLUGIN_RC_SOURCES "resources.qrc")
-        list(APPEND PLUGIN_SOURCES ${PLUGIN_RC_SOURCES})
-        unset(PLUGIN_RC_SOURCES)
-    endif()
-
-    # add target
+    # determine target type
     if(NOT ${PLUGIN_SHARED_LIB})
-        add_library(${target} MODULE ${PLUGIN_SOURCES})
+        set(target_type "MODULE")
     else()
-        add_library(${target} SHARED ${PLUGIN_SOURCES})
+        set(target_type "SHARED")
     endif()
 
-    # add qt modules
-    qt5_use_modules(${target} Core Network Widgets Sql Xml DBus)
+    list(APPEND tomahawk_add_library_args
+      "${target}"
+      "EXPORT_MACRO" "${PLUGIN_EXPORT_MACRO}"
+      "TARGET_TYPE" "${target_type}"
+      "SOURCES" "${PLUGIN_SOURCES}"
+    )
 
-    # definitions - can this be moved into set_target_properties below?
-    add_definitions(${QT_DEFINITIONS})
-    set_target_properties(${target} PROPERTIES AUTOMOC TRUE COMPILE_DEFINITIONS ${PLUGIN_EXPORT_MACRO})
-    if(PLUGIN_COMPILE_DEFINITIONS)
-        # Dear CMake, i hate you! Sincerely, domme
-        # At least in CMake 2.8.8, you CANNOT set more than one COMPILE_DEFINITIONS value
-        # only takes the first one if called multiple times or bails out with wrong number of arguments
-        # when passing in a list, thus i redefine the export macro here in hope it won't mess up other targets
-        add_definitions( "-D${PLUGIN_EXPORT_MACRO}" )
-
-        set_target_properties(${target} PROPERTIES COMPILE_DEFINITIONS ${PLUGIN_COMPILE_DEFINITIONS})
+    if(PLUGIN_UI)
+        list(APPEND tomahawk_add_library_args "UI" "${PLUGIN_UI}")
     endif()
 
-    # add link targets
-    target_link_libraries(${target} ${TOMAHAWK_LIBRARIES})
     if(PLUGIN_LINK_LIBRARIES)
-        target_link_libraries(${target} ${PLUGIN_LINK_LIBRARIES})
+        list(APPEND tomahawk_add_library_args "LINK_LIBRARIES" "${PLUGIN_LINK_LIBRARIES}")
     endif()
 
-    # make installation optional, maybe useful for dummy plugins one day
-    if(NOT PLUGIN_NO_INSTALL)
-        include(GNUInstallDirs)
-        install(TARGETS ${target} DESTINATION ${CMAKE_INSTALL_LIBDIR})
-    endif()
+    tomahawk_add_library(${tomahawk_add_library_args})
 endfunction()

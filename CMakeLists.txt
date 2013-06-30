@@ -345,9 +345,10 @@ file(RELATIVE_PATH CONF_REL_INCLUDE_DIR "${CMAKE_INSTALL_FULL_CMAKEDIR}" "${CMAK
 
 configure_file(TomahawkConfig.cmake.in "${PROJECT_BINARY_DIR}/TomahawkConfig.cmake" @ONLY)
 configure_file(TomahawkConfigVersion.cmake.in "${PROJECT_BINARY_DIR}/TomahawkConfigVersion.cmake" @ONLY)
+
 file(COPY TomahawkUse.cmake DESTINATION "${PROJECT_BINARY_DIR}")
 file(COPY TomahawkAddPlugin.cmake DESTINATION "${PROJECT_BINARY_DIR}")
-
+file(COPY TomahawkAddLibrary.cmake DESTINATION "${PROJECT_BINARY_DIR}")
 
 # Install the cmake files
 install(
@@ -356,6 +357,7 @@ install(
         "${PROJECT_BINARY_DIR}/TomahawkConfigVersion.cmake"
         "${PROJECT_BINARY_DIR}/TomahawkUse.cmake"
         "${PROJECT_BINARY_DIR}/TomahawkAddPlugin.cmake"
+        "${PROJECT_BINARY_DIR}/TomahawkAddLibrary.cmake"
     DESTINATION
         "${CMAKE_INSTALL_CMAKEDIR}"
 )

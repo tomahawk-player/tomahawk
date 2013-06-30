@@ -31,4 +31,5 @@ if(NOT TOMAHAWK_CMAKE_DIR)
     set(TOMAHAWK_CMAKE_DIR ${CMAKE_CURRENT_LIST_DIR})
 endif()
 
+include( "${TOMAHAWK_CMAKE_DIR}/TomahawkAddLibrary.cmake" )
 include( "${TOMAHAWK_CMAKE_DIR}/TomahawkAddPlugin.cmake" )
