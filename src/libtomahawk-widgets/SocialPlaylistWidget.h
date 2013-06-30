@@ -27,16 +27,19 @@
  *
  */
 
-#ifndef SOCIALPLAYLISTWIDGET_H
-#define SOCIALPLAYLISTWIDGET_H
-
-#include <QWidget>
+#ifndef TOMAHAWK_WIDGETS_SOCIALPLAYLISTWIDGET_H
+#define TOMAHAWK_WIDGETS_SOCIALPLAYLISTWIDGET_H
 
 #include "ViewPage.h"
-#include "DllMacro.h"
 #include "Typedefs.h"
 #include "Album.h"
 #include "Query.h"
+
+#include <QWidget>
+
+#include "WidgetsDllMacro.h"
+#include "Dashboard.h"
+
 
 class PlayableModel;
 class PlaylistModel;
@@ -47,7 +50,10 @@ class Ui_SocialPlaylistWidget;
 namespace Tomahawk
 {
 
-class DLLEXPORT SocialPlaylistWidget : public QWidget, public Tomahawk::ViewPage
+namespace Widgets
+{
+
+class TOMAHAWK_WIDGETS_EXPORT SocialPlaylistWidget : public QWidget, public Tomahawk::ViewPage
 {
     Q_OBJECT
 
@@ -90,6 +96,8 @@ private:
     static QString s_topForeignTracksQuery;
 };
 
-}
+} // Widgets
 
-#endif // SOCIALPLAYLISTWIDGET_H
+} // Tomahawk
+
+#endif // TOMAHAWK_WIDGETS_SOCIALPLAYLISTWIDGET_H

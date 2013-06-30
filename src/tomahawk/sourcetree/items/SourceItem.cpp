@@ -581,7 +581,7 @@ SourceItem::coolPlaylistsClicked()
         return 0;
 
     if ( !m_coolPlaylistsPage )
-        m_coolPlaylistsPage = new SocialPlaylistWidget( ViewManager::instance()->widget() );
+        m_coolPlaylistsPage = new Tomahawk::Widgets::SocialPlaylistWidget( ViewManager::instance()->widget() );
 
     ViewManager::instance()->show( m_coolPlaylistsPage );
     return m_coolPlaylistsPage;

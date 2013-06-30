@@ -33,6 +33,7 @@
 #include "utils/TomahawkUtilsGui.h"
 
 using namespace Tomahawk;
+using namespace Tomahawk::Widgets;
 
 QString SocialPlaylistWidget::s_popularAlbumsQuery = "SELECT * from album";
 QString SocialPlaylistWidget::s_mostPlayedPlaylistsQuery = "asd";
