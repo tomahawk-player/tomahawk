@@ -21,6 +21,8 @@
 
 #include "ViewPage.h"
 
+#include "WidgetsDllMacro.h"
+
 class AnimatedSpinner;
 class NetworkActivityWidgetPrivate;
 class PlaylistModel;
@@ -32,7 +34,7 @@ namespace Ui
     class NetworkActivityWidget;
 }
 
-class NetworkActivityWidget : public QWidget, public Tomahawk::ViewPage
+class TOMAHAWK_WIDGETS_EXPORT NetworkActivityWidget : public QWidget, public Tomahawk::ViewPage
 {
     Q_OBJECT
 public:

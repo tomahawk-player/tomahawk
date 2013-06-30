@@ -39,7 +39,11 @@ class BreadcrumbButton;
  * Items that have a DefaultRole set will automatically select the default unless the user has
  *  made a previous selection, which is saved in the UserSelection role
  */
-class Breadcrumb : public QWidget
+
+//HACK: I'm exporting this, so I can move view pages to libtomahawk-widgets one by one
+//TODO: In the end this class should go there too (and be made private again?)
+#include "../DllMacro.h"
+class DLLEXPORT Breadcrumb : public QWidget
 {
     Q_OBJECT
 public:

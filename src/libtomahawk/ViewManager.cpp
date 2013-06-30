@@ -49,7 +49,6 @@
 #include "widgets/NewReleasesWidget.h"
 #include "widgets/Dashboard.h"
 #include "widgets/WhatsHotWidget.h"
-#include "widgets/NetworkActivityWidget.h"
 #include "widgets/infowidgets/SourceInfoWidget.h"
 #include "widgets/infowidgets/ArtistInfoWidget.h"
 #include "widgets/infowidgets/AlbumInfoWidget.h"
@@ -85,7 +84,6 @@ ViewManager::ViewManager( QObject* parent )
     , m_newReleasesWidget( 0 )
     , m_recentPlaysWidget( 0 )
     , m_inboxWidget( 0 )
-    , m_networkActivityWidget( 0 )
     , m_currentPage( 0 )
 {
     s_instance = this;
@@ -130,7 +128,6 @@ ViewManager::ViewManager( QObject* parent )
 
 ViewManager::~ViewManager()
 {
-    delete m_networkActivityWidget;
     delete m_whatsHotWidget;
     delete m_newReleasesWidget;
     delete m_dashboard;
@@ -492,17 +489,6 @@ ViewManager::showInboxPage()
     }
 
     return show( m_inboxWidget );
-}
-
-
-ViewPage *ViewManager::showNetworkActivityPage()
-{
-    if ( !m_networkActivityWidget )
-    {
-        m_networkActivityWidget = new NetworkActivityWidget( m_widget );
-    }
-
-    return show( m_networkActivityWidget );
 }
 
 
@@ -896,11 +882,6 @@ ViewManager::inboxWidget() const
     return m_inboxWidget;
 }
 
-ViewPage *ViewManager::networkActivityWidget() const
-{
-    return m_networkActivityWidget;
-}
-
 
 ViewPage*
 ViewManager::dynamicPageWidget( const QString& pageName ) const
@@ -941,7 +922,11 @@ ViewManager::showDynamicPage( const QString& pageName )
            Q_ASSERT(false);
            return 0;
         }
-        m_dynamicPages.insert( pageName, m_dynamicPagesInstanceLoaders.value( pageName )() );
+
+        ViewPage* viewPage = m_dynamicPagesInstanceLoaders.value( pageName )();
+        Q_ASSERT(viewPage);
+        m_dynamicPages.insert( pageName, viewPage );
+
         m_dynamicPagesInstanceLoaders.remove( pageName );
     }
 

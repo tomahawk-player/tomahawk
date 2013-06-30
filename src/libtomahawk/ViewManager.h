@@ -60,7 +60,6 @@ class Dashboard;
 class WhatsHotWidget;
 class QPushButton;
 class InboxModel;
-class NetworkActivityWidget;
 
 namespace Tomahawk
 {
@@ -99,7 +98,6 @@ public:
     Tomahawk::ViewPage* recentPlaysWidget() const;
     Tomahawk::ViewPage* superCollectionView() const;
     Tomahawk::ViewPage* inboxWidget() const;
-    Tomahawk::ViewPage* networkActivityWidget() const;
 
     Tomahawk::ViewPage* dynamicPageWidget( const QString& pageName ) const;
 
@@ -145,7 +143,6 @@ public slots:
     Tomahawk::ViewPage* showNewReleasesPage();
     Tomahawk::ViewPage* showRecentPlaysPage();
     Tomahawk::ViewPage* showInboxPage();
-    Tomahawk::ViewPage* showNetworkActivityPage();
 
     void addDynamicPage( const QString& pageName, const QString& text, const QIcon& icon, boost::function< Tomahawk::ViewPage*() > instanceLoader );
     Tomahawk::ViewPage* showDynamicPage( const QString& pageName );
@@ -201,7 +198,6 @@ private:
     Tomahawk::ViewPage* m_recentPlaysWidget;
     Tomahawk::ViewPage* m_inboxWidget;
     InboxModel* m_inboxModel;
-    NetworkActivityWidget* m_networkActivityWidget;
 
     QHash< QString, Tomahawk::ViewPage* > m_dynamicPages;
     QHash< QString, boost::function< Tomahawk::ViewPage*() > > m_dynamicPagesInstanceLoaders;

@@ -20,11 +20,6 @@
 
 #include "sourcetree/SourcesModel.h"
 
-#include <QMimeData>
-#include <QSize>
-
-#include <boost/bind.hpp>
-
 #include "sourcetree/items/ScriptCollectionItem.h"
 #include "sourcetree/items/SourceTreeItem.h"
 #include "sourcetree/items/SourceItem.h"
@@ -38,6 +33,7 @@
 #include "collection/Collection.h"
 #include "Source.h"
 #include "ViewManager.h"
+#include "widgets/NetworkActivityWidget.h"
 #include "GlobalActionManager.h"
 #include "DropJob.h"
 #include "items/PlaylistItems.h"
@@ -46,6 +42,13 @@
 #include "playlist/dynamic/widgets/DynamicWidget.h"
 #include "utils/ImageRegistry.h"
 #include "utils/Logger.h"
+
+#include <QMimeData>
+#include <QSize>
+
+#include <boost/bind.hpp>
+#include <boost/lambda/construct.hpp>
+#include <boost/lambda/bind.hpp>
 
 using namespace Tomahawk;
 
@@ -57,6 +60,7 @@ SourcesModel::SourcesModel( QObject* parent )
 {
     m_rootItem = new SourceTreeItem( this, 0, Invalid );
 
+    connect( ViewManager::instance(), SIGNAL( viewPageAdded( QString, QString, QIcon ) ), SLOT( appendPageItem( QString, QString, QIcon ) ) );
     appendGroups();
 
     onSourcesAdded( SourceList::instance()->sources() );
@@ -77,9 +81,6 @@ SourcesModel::SourcesModel( QObject* parent )
              this, SLOT( onScriptCollectionAdded( Tomahawk::collection_ptr ) ) );
     connect( SourceList::instance(), SIGNAL( scriptCollectionRemoved( Tomahawk::collection_ptr ) ),
              this, SLOT( onScriptCollectionRemoved( Tomahawk::collection_ptr ) ) );
-
-
-    connect( ViewManager::instance(), SIGNAL( viewPageAdded( QString, QString, QIcon ) ), SLOT( appendPageItem( QString, QString, QIcon ) ) );
 }
 
 
@@ -316,11 +317,6 @@ SourcesModel::appendGroups()
     LovedTracksItem* loved = new LovedTracksItem( this, m_browse );
     loved->setSortValue( 2 );
 
-    GenericPageItem* networkActivity = new GenericPageItem( this, m_browse, tr( "Network Activity" ), TomahawkUtils::defaultPixmap( TomahawkUtils::NetworkActivity, TomahawkUtils::Original ),
-                                                boost::bind( &ViewManager::showNetworkActivityPage, ViewManager::instance() ),
-                                                boost::bind( &ViewManager::networkActivityWidget, ViewManager::instance() ) );
-    networkActivity->setSortValue( 3 );
-
     GenericPageItem* recent = new GenericPageItem( this, m_browse, tr( "Recently Played" ), ImageRegistry::instance()->icon( RESPATH "images/recently-played.svg" ),
                                                    boost::bind( &ViewManager::showRecentPlaysPage, ViewManager::instance() ),
                                                    boost::bind( &ViewManager::recentPlaysWidget, ViewManager::instance() ) );
@@ -345,6 +341,13 @@ SourcesModel::appendGroups()
     m_cloudGroup = new GroupItem( this, m_rootItem, tr( "Cloud" ), 5 );
 
     endInsertRows();
+
+    // addDynamicPage takes care of begin/endInsertRows itself
+    ViewManager::instance()->addDynamicPage("network_activity",
+                                            tr( "Network Activity" ),
+                                            TomahawkUtils::defaultPixmap( TomahawkUtils::NetworkActivity, TomahawkUtils::Original ),
+                                            boost::lambda::bind( boost::lambda::new_ptr< NetworkActivityWidget >() )
+    );
 }
 
 void
