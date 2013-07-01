@@ -29,6 +29,7 @@
 #include "sip/PeerInfo.h"
 #include "utils/Logger.h"
 
+#include "PlaylistEntry.h"
 #include "StreamConnection.h"
 #include "SourceList.h"
 

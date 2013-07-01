@@ -18,17 +18,18 @@
 
 #include "ConnectionManager_p.h"
 
-#include "ControlConnection.h"
-#include "network/Msg.h"
-#include "QTcpSocketExtra.h"
-#include "Servent.h"
-
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
+#include "network/Msg.h"
 #include "sip/SipInfo.h"
 #include "sip/SipPlugin.h"
 #include "utils/Logger.h"
 #include "utils/WeakObjectHash.h"
+
+#include "ControlConnection.h"
+#include "PlaylistEntry.h"
+#include "QTcpSocketExtra.h"
+#include "Servent.h"
 
 #include <boost/bind.hpp>
 #include <qtconcurrentrun.h>

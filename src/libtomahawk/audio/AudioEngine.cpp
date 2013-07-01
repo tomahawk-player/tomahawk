@@ -23,19 +23,20 @@
 
 #include "config.h"
 
-#include "TomahawkSettings.h"
-#include "network/Servent.h"
-#include "utils/Qnr_IoDeviceStream.h"
-#include "utils/Closure.h"
-#include "Artist.h"
-#include "Album.h"
-#include "Pipeline.h"
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
 #include "jobview/ErrorStatusMessage.h"
-
-#include "utils/Logger.h"
+#include "network/Servent.h"
 #include "playlist/SingleTrackPlaylistInterface.h"
+#include "utils/Closure.h"
+#include "utils/Logger.h"
+#include "utils/Qnr_IoDeviceStream.h"
+
+#include "Album.h"
+#include "Artist.h"
+#include "Pipeline.h"
+#include "PlaylistEntry.h"
+#include "TomahawkSettings.h"
 
 #include <QDir>
 

@@ -19,16 +19,18 @@
 
 #include "DatabaseWorker.h"
 
-#include <QTimer>
-#include <QTime>
-#include <QSqlQuery>
+#include "utils/Logger.h"
 
-#include "Source.h"
 #include "Database.h"
 #include "DatabaseImpl.h"
 #include "DatabaseCommandLoggable.h"
+#include "PlaylistEntry.h"
+#include "Source.h"
 #include "TomahawkSqlQuery.h"
-#include "utils/Logger.h"
+
+#include <QTimer>
+#include <QTime>
+#include <QSqlQuery>
 
 #ifndef QT_NO_DEBUG
     //#define DEBUG_TIMING TRUE

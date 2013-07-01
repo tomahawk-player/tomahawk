@@ -20,16 +20,16 @@
 
 #include "TomahawkSettings.h"
 
-#include "Source.h"
-#include "PlaylistInterface.h"
-
+#include "database/DatabaseCommand_UpdateSearchIndex.h"
+#include "database/Database.h"
+#include "infosystem/InfoSystemCache.h"
+#include "playlist/PlaylistUpdaterInterface.h"
 #include "utils/Logger.h"
 #include "utils/TomahawkUtils.h"
 
-#include "database/DatabaseCommand_UpdateSearchIndex.h"
-#include "database/Database.h"
-#include "playlist/PlaylistUpdaterInterface.h"
-#include "infosystem/InfoSystemCache.h"
+#include "PlaylistEntry.h"
+#include "PlaylistInterface.h"
+#include "Source.h"
 
 #include <qtkeychain/keychain.h>
 #include <QDir>

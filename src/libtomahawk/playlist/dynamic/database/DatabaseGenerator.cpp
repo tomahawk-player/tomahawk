@@ -18,11 +18,13 @@
 
 #include "DatabaseGenerator.h"
 
-#include "DatabaseControl.h"
-#include "utils/Logger.h"
-#include "Source.h"
 #include "database/DatabaseCommand_GenericSelect.h"
 #include "database/Database.h"
+#include "utils/Logger.h"
+
+#include "DatabaseControl.h"
+#include "PlaylistEntry.h"
+#include "Source.h"
 
 using namespace Tomahawk;
 

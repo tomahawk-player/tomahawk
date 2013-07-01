@@ -18,20 +18,23 @@
  */
 
 #include "SpotifyAccount.h"
-#include "Playlist.h"
+
+#include "accounts/AccountManager.h"
+#include "infosystem/InfoSystem.h"
 #include "playlist/PlaylistUpdaterInterface.h"
-#include "SourceList.h"
-#include "SpotifyAccountConfig.h"
-#include "SpotifyPlaylistUpdater.h"
 #include "resolvers/ScriptResolver.h"
+#include "utils/Closure.h"
+#include "utils/Logger.h"
 #include "utils/TomahawkUtilsGui.h"
+
 #include "ActionCollection.h"
 #include "Pipeline.h"
-#include "accounts/AccountManager.h"
-#include "utils/Closure.h"
+#include "Playlist.h"
+#include "PlaylistEntry.h"
+#include "SourceList.h"
+#include "SpotifyAccountConfig.h"
 #include "SpotifyInfoPlugin.h"
-#include "infosystem/InfoSystem.h"
-#include "utils/Logger.h"
+#include "SpotifyPlaylistUpdater.h"
 #include "TomahawkSettings.h"
 
 #ifndef ENABLE_HEADLESS

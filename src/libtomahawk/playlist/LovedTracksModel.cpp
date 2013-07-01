@@ -21,13 +21,15 @@
 #include <QMimeData>
 #include <QTreeView>
 
-#include "Source.h"
-#include "SourceList.h"
 #include "database/Database.h"
 #include "database/DatabaseCommand_GenericSelect.h"
-#include "PlayableItem.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
+
+#include "PlayableItem.h"
+#include "PlaylistEntry.h"
+#include "Source.h"
+#include "SourceList.h"
 
 #include <QTimer>
 

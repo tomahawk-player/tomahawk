@@ -18,6 +18,7 @@
 
 #include "ExternalResolver.h"
 
+#include "PlaylistEntry.h"
 #include "utils/Logger.h"
 
 Tomahawk::ExternalResolver::ErrorState

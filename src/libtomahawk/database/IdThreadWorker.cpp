@@ -18,12 +18,14 @@
 
 #include "IdThreadWorker.h"
 
+#include "utils/Logger.h"
+
 #include "Artist.h"
 #include "Album.h"
 #include "Database.h"
 #include "DatabaseImpl.h"
+#include "PlaylistEntry.h"
 #include "Source.h"
-#include "utils/Logger.h"
 
 #define ID_THREAD_DEBUG 0
 

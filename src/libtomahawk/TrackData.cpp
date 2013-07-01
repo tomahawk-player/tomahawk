@@ -21,6 +21,8 @@
 #include <QtAlgorithms>
 #include <QReadWriteLock>
 
+#include "audio/AudioEngine.h"
+#include "collection/Collection.h"
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
 #include "database/DatabaseCommand_LogPlayback.h"
@@ -31,13 +33,12 @@
 #include "database/DatabaseCommand_SocialAction.h"
 #include "database/DatabaseCommand_TrackStats.h"
 #include "database/IdThreadWorker.h"
-#include "Album.h"
-#include "collection/Collection.h"
 #include "resolvers/Resolver.h"
-#include "SourceList.h"
-#include "audio/AudioEngine.h"
-
 #include "utils/Logger.h"
+
+#include "Album.h"
+#include "PlaylistEntry.h"
+#include "SourceList.h"
 
 using namespace Tomahawk;
 

@@ -19,16 +19,16 @@
 
 #include "ScanManager.h"
 
-#include "MusicScanner.h"
-#include "TomahawkSettings.h"
-#include "utils/TomahawkUtils.h"
-#include "SourceList.h"
-
 #include "database/Database.h"
 #include "database/DatabaseCommand_FileMTimes.h"
 #include "database/DatabaseCommand_DeleteFiles.h"
-
 #include "utils/Logger.h"
+#include "utils/TomahawkUtils.h"
+
+#include "MusicScanner.h"
+#include "PlaylistEntry.h"
+#include "SourceList.h"
+#include "TomahawkSettings.h"
 
 #include <QThread>
 #include <QCoreApplication>

@@ -21,16 +21,17 @@
 #include "DatabaseCollection.h"
 
 #include "database/Database.h"
-#include "DatabaseCommand_AllArtists.h"
-#include "DatabaseCommand_AllAlbums.h"
-#include "DatabaseCommand_AllTracks.h"
-#include "DatabaseCommand_AddFiles.h"
-#include "DatabaseCommand_DeleteFiles.h"
-#include "DatabaseCommand_LoadAllPlaylists.h"
-#include "DatabaseCommand_LoadAllAutoPlaylists.h"
-#include "DatabaseCommand_LoadAllStations.h"
-
+#include "database/DatabaseCommand_AllArtists.h"
+#include "database/DatabaseCommand_AllAlbums.h"
+#include "database/DatabaseCommand_AllTracks.h"
+#include "database/DatabaseCommand_AddFiles.h"
+#include "database/DatabaseCommand_DeleteFiles.h"
+#include "database/DatabaseCommand_LoadAllPlaylists.h"
+#include "database/DatabaseCommand_LoadAllAutoPlaylists.h"
+#include "database/DatabaseCommand_LoadAllStations.h"
 #include "utils/Logger.h"
+
+#include "PlaylistEntry.h"
 
 using namespace Tomahawk;
 

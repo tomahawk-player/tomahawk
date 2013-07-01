@@ -19,13 +19,14 @@
 
 #include "collection/Collection.h"
 
-#include "Source.h"
-
-#include "utils/Logger.h"
-#include "playlist/PlaylistUpdaterInterface.h"
-#include "utils/ImageRegistry.h"
 #include "accounts/AccountManager.h"
+#include "playlist/PlaylistUpdaterInterface.h"
 #include "utils/Closure.h"
+#include "utils/ImageRegistry.h"
+#include "utils/Logger.h"
+
+#include "PlaylistEntry.h"
+#include "Source.h"
 
 #include <QMetaObject>
 #include <QGenericArgument>

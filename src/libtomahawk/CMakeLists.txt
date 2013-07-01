@@ -79,6 +79,7 @@ set( libGuiSources
     playlist/PlaylistChartItemDelegate.cpp
     playlist/PlayableItem.cpp
     playlist/SingleTrackPlaylistInterface.cpp
+    playlist/RevisionQueueItem.cpp
 
     playlist/dynamic/DynamicPlaylist.cpp
     playlist/dynamic/DynamicView.cpp

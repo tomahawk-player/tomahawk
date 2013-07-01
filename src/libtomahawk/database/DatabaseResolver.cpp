@@ -18,13 +18,14 @@
 
 #include "DatabaseResolver.h"
 
-#include "Pipeline.h"
-#include "network/Servent.h"
 #include "database/Database.h"
 #include "database/DatabaseCommand_Resolve.h"
-#include "Source.h"
-
+#include "network/Servent.h"
 #include "utils/Logger.h"
+
+#include "Pipeline.h"
+#include "PlaylistEntry.h"
+#include "Source.h"
 
 
 DatabaseResolver::DatabaseResolver( int weight )

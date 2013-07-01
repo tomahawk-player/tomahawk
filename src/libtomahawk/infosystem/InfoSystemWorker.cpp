@@ -20,11 +20,13 @@
 
 #include "InfoSystemWorker.h"
 
+#include "utils/TomahawkUtils.h"
+#include "utils/Logger.h"
+
 #include "config.h"
 #include "InfoSystemCache.h"
 #include "GlobalActionManager.h"
-#include "utils/TomahawkUtils.h"
-#include "utils/Logger.h"
+#include "PlaylistEntry.h"
 #include "Source.h"
 
 

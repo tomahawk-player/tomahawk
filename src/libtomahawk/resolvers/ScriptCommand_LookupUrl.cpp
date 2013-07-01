@@ -18,6 +18,8 @@
 
 #include "ScriptCommand_LookupUrl_p.h"
 
+#include "PlaylistEntry.h"
+
 ScriptCommand_LookupUrl::ScriptCommand_LookupUrl( Tomahawk::ExternalResolver* resolver, const QString& url, QObject* parent )
     : ScriptCommand( parent )
     , d_ptr( new ScriptCommand_LookupUrlPrivate( this, resolver, url ) )

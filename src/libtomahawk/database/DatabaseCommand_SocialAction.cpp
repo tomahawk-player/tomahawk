@@ -18,12 +18,14 @@
 
 #include "DatabaseCommand_SocialAction.h"
 
-#include <QSqlQuery>
-
 #include "database/Database.h"
-#include "DatabaseImpl.h"
 #include "network/Servent.h"
 #include "utils/Logger.h"
+
+#include "DatabaseImpl.h"
+#include "PlaylistEntry.h"
+
+#include <QSqlQuery>
 
 using namespace Tomahawk;
 

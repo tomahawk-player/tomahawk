@@ -19,10 +19,11 @@
 
 #include "PlaylistPlaylistInterface.h"
 
-#include "Playlist.h"
-#include "SourceList.h"
-
 #include "utils/Logger.h"
+
+#include "Playlist.h"
+#include "PlaylistEntry.h"
+#include "SourceList.h"
 
 using namespace Tomahawk;
 

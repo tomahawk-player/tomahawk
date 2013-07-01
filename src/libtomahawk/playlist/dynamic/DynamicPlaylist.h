@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013, Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -20,16 +21,17 @@
 #ifndef DYNAMIC_PLAYLIST_H
 #define DYNAMIC_PLAYLIST_H
 
-#include <QObject>
-#include <QList>
-#include <QSharedPointer>
-
-#include "Typedefs.h"
-#include "Playlist.h"
 #include "playlist/dynamic/DynamicControl.h"
 #include "playlist/dynamic/DynamicPlaylistRevision.h"
 
 #include "DllMacro.h"
+#include "Playlist.h"
+#include "Typedefs.h"
+
+#include <QObject>
+#include <QList>
+#include <QSharedPointer>
+
 
 class DatabaseCommand_LoadAllDynamicPlaylists;
 class DatabaseCommand_SetDynamicPlaylistRevision;
@@ -40,21 +42,7 @@ class DatabaseCollection;
 namespace Tomahawk {
 
 class DatabaseCommand_LoadDynamicPlaylist;
-
-/**
- * Subclass of playlist that adds the information needed to store a dynamic playlist.
- *  It uses normal PlaylistEntries but also has a mode, a generator, and a list of controls
-*/
-
-struct DynQueueItem : RevisionQueueItem
-{
-    QString type;
-    QList <dyncontrol_ptr> controls;
-    int mode;
-
-    DynQueueItem( const QString& nRev, const QString& oRev, const QString& typ, const QList< dyncontrol_ptr >& ctrls,  int m, const QList< plentry_ptr >& e, bool latest ) :
-        RevisionQueueItem( nRev, oRev, e, latest ), type( typ ), controls( ctrls ), mode( m ) {}
-};
+class DynamicPlaylistPrivate;
 
 class DLLEXPORT DynamicPlaylist : public Tomahawk::Playlist
 {
@@ -95,7 +83,7 @@ public:
     int mode() const;
     QString type() const;
     geninterface_ptr generator() const;
-    bool autoLoad() const  { return m_autoLoad; }
+    bool autoLoad() const;
 
     // Creates a new revision from the playlist in memory. Use this is you change the controls or
     // mode of a playlist and want to save it to db/others.
@@ -194,13 +182,10 @@ private:
 
     QList< dyncontrol_ptr > variantsToControl( const QList< QVariantMap >& controlsV );
 
-    geninterface_ptr m_generator;
-    bool m_autoLoad;
-
-    QQueue<DynQueueItem> m_revisionQueue;
+    Q_DECLARE_PRIVATE( DynamicPlaylist )
 };
 
-}; // namespace
+} // namespace
 
 Q_DECLARE_METATYPE( QSharedPointer< Tomahawk::DynamicPlaylist > )
 

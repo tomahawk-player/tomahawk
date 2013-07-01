@@ -26,6 +26,7 @@
 #include "utils/Logger.h"
 
 #include "Playlist.h"
+#include "PlaylistEntry.h"
 #include "PlaylistInterface.h"
 #include "SourceList.h"
 #include "TomahawkSettings.h"

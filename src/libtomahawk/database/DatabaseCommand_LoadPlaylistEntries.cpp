@@ -18,13 +18,16 @@
 
 #include "DatabaseCommand_LoadPlaylistEntries.h"
 
-#include <QSqlQuery>
+#include "utils/Logger.h"
 
 #include "DatabaseImpl.h"
+#include "PlaylistEntry.h"
 #include "Query.h"
-#include "qjson/parser.h"
-#include "utils/Logger.h"
 #include "Source.h"
+
+#include "qjson/parser.h"
+
+#include <QSqlQuery>
 
 using namespace Tomahawk;
 
@@ -130,4 +133,11 @@ DatabaseCommand_LoadPlaylistEntries::generateEntries( DatabaseImpl* dbi )
     }
 
 //    qDebug() << Q_FUNC_INFO << "entrymap:" << m_entrymap;
+}
+
+DatabaseCommand_LoadPlaylistEntries::DatabaseCommand_LoadPlaylistEntries( QString revision_guid, QObject *parent )
+    : DatabaseCommand( parent )
+    , m_islatest( true )
+    , m_revguid( revision_guid )
+{
 }

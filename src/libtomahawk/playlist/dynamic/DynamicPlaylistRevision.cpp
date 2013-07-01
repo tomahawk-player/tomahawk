@@ -19,6 +19,8 @@
 #include "DynamicPlaylistRevision.h"
 
 #include "playlist/dynamic/DynamicControl.h"
+
+#include "PlaylistEntry.h"
 #include "Source.h"
 
 using namespace Tomahawk;

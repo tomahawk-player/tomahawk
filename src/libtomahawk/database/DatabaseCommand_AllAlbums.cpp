@@ -20,11 +20,13 @@
 
 #include <QSqlQuery>
 
-#include "Artist.h"
-#include "DatabaseImpl.h"
-#include "Source.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
+
+#include "Artist.h"
+#include "DatabaseImpl.h"
+#include "PlaylistEntry.h"
+#include "Source.h"
 
 
 DatabaseCommand_AllAlbums::DatabaseCommand_AllAlbums( const Tomahawk::collection_ptr& collection, const Tomahawk::artist_ptr& artist, QObject* parent )

@@ -18,12 +18,13 @@
 
 #include "ScriptCommand_AllAlbums.h"
 
-#include "ExternalResolver.h"
-#include "ScriptCollection.h"
+#include "utils/Logger.h"
+
 #include "Album.h"
 #include "Artist.h"
-
-#include "utils/Logger.h"
+#include "ExternalResolver.h"
+#include "PlaylistEntry.h"
+#include "ScriptCollection.h"
 
 ScriptCommand_AllAlbums::ScriptCommand_AllAlbums( const Tomahawk::collection_ptr& collection,
                                                   const Tomahawk::artist_ptr& artist,

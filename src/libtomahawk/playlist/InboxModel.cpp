@@ -22,11 +22,13 @@
 #include "database/DatabaseCommand_LoadInboxEntries.h"
 #include "database/DatabaseCommand_DeleteInboxEntry.h"
 #include "database/DatabaseCommand_ModifyInboxEntry.h"
-#include "SourceList.h"
-#include "TomahawkSettings.h"
+#include "jobview/JobStatusModel.h"
 #include "utils/Logger.h"
 #include "utils/Closure.h"
-#include "jobview/JobStatusModel.h"
+
+#include "PlaylistEntry.h"
+#include "SourceList.h"
+#include "TomahawkSettings.h"
 
 
 InboxModel::InboxModel( QObject* parent )

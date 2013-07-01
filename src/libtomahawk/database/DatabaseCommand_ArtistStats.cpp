@@ -18,10 +18,12 @@
 
 #include "DatabaseCommand_ArtistStats.h"
 
+#include "utils/Logger.h"
+
 #include "Artist.h"
 #include "DatabaseImpl.h"
+#include "PlaylistEntry.h"
 #include "SourceList.h"
-#include "utils/Logger.h"
 
 // Forward Declarations breaking QSharedPointer
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )

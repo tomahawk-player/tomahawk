@@ -18,10 +18,11 @@
 
 #include "DatabaseCommand_LoadDynamicPlaylist.h"
 
-#include "DatabaseImpl.h"
-#include "Source.h"
 #include "playlist/dynamic/DynamicPlaylist.h"
 #include "utils/Logger.h"
+
+#include "DatabaseImpl.h"
+#include "PlaylistEntry.h"
 #include "Source.h"
 
 #include <QSqlQuery>

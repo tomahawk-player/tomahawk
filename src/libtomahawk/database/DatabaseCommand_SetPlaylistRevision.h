@@ -72,32 +72,9 @@ public:
     virtual bool localOnly() const { return m_localOnly; }
     virtual bool groupable() const { return true; }
 
-    void setAddedentriesV( const QVariantList& vlist )
-    {
-        m_addedentries.clear();
-        foreach( const QVariant& v, vlist )
-        {
-            PlaylistEntry* pep = new PlaylistEntry;
-            QJson::QObjectHelper::qvariant2qobject( v.toMap(), pep );
+    void setAddedentriesV( const QVariantList& vlist );
 
-            if ( pep->isValid() )
-                m_addedentries << plentry_ptr( pep );
-        }
-    }
-
-    QVariantList addedentriesV() const
-    {
-        QVariantList vlist;
-        foreach( const plentry_ptr& pe, m_addedentries )
-        {
-            if ( !pe->isValid() )
-                continue;
-
-            QVariant v = QJson::QObjectHelper::qobject2qvariant( pe.data() );
-            vlist << v;
-        }
-        return vlist;
-    }
+    QVariantList addedentriesV() const;
 
     void setPlaylistguid( const QString& s ) { m_playlistguid = s; }
 

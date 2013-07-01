@@ -18,14 +18,17 @@
 
 #include "DatabaseCommand_LoadDynamicPlaylistEntries.h"
 
-#include "DatabaseImpl.h"
-#include "TomahawkSqlQuery.h"
 #include "playlist/dynamic/DynamicControl.h"
 #include "playlist/dynamic/GeneratorInterface.h"
 #include "playlist/dynamic/GeneratorFactory.h"
-#include "qjson/parser.h"
 #include "utils/Logger.h"
+
+#include "DatabaseImpl.h"
+#include "PlaylistEntry.h"
 #include "Source.h"
+#include "TomahawkSqlQuery.h"
+
+#include "qjson/parser.h"
 
 #include <QSqlQuery>
 #include <QString>

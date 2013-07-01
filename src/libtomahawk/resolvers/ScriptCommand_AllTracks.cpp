@@ -19,6 +19,7 @@
 #include "ScriptCommand_AllTracks.h"
 
 #include "ExternalResolver.h"
+#include "PlaylistEntry.h"
 #include "ScriptCollection.h"
 
 ScriptCommand_AllTracks::ScriptCommand_AllTracks( const Tomahawk::collection_ptr& collection,

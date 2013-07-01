@@ -23,18 +23,20 @@
 #include <QMimeData>
 #include <QTreeView>
 
-#include "Artist.h"
-#include "Album.h"
-#include "Pipeline.h"
-#include "Source.h"
-#include "SourceList.h"
 #include "database/Database.h"
 #include "database/DatabaseCommand_PlaybackHistory.h"
-#include "dynamic/GeneratorInterface.h"
-#include "DropJob.h"
-#include "PlayableItem.h"
-#include "utils/TomahawkUtils.h"
+#include "playlist/dynamic/GeneratorInterface.h"
 #include "utils/Logger.h"
+#include "utils/TomahawkUtils.h"
+
+#include "Album.h"
+#include "Artist.h"
+#include "DropJob.h"
+#include "Pipeline.h"
+#include "PlayableItem.h"
+#include "PlaylistEntry.h"
+#include "Source.h"
+#include "SourceList.h"
 
 using namespace Tomahawk;
 

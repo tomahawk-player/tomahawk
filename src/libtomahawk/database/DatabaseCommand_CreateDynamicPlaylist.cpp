@@ -18,15 +18,16 @@
 
 #include "DatabaseCommand_CreateDynamicPlaylist.h"
 
-#include "DatabaseImpl.h"
-#include "TomahawkSqlQuery.h"
 #include "playlist/dynamic/DynamicPlaylist.h"
 #include "playlist/dynamic/DynamicControl.h"
 #include "playlist/dynamic/GeneratorInterface.h"
-
-#include "SourceList.h"
 #include "network/Servent.h"
 #include "utils/Logger.h"
+
+#include "DatabaseImpl.h"
+#include "PlaylistEntry.h"
+#include "SourceList.h"
+#include "TomahawkSqlQuery.h"
 
 #ifndef ENABLE_HEADLESS
     #include "ViewManager.h"

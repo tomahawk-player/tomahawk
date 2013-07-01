@@ -20,21 +20,23 @@
 
 #include "DatabaseImpl.h"
 
+#include "database/Database.h"
+#include "utils/TomahawkUtils.h"
+#include "utils/Logger.h"
+
+#include "Album.h"
+#include "Artist.h"
+#include "FuzzyIndex.h"
+#include "PlaylistEntry.h"
+#include "Result.h"
+#include "SourceList.h"
+
 #include <QtAlgorithms>
 #include <QCoreApplication>
 #include <QFile>
 #include <QRegExp>
 #include <QStringList>
 #include <QTimer>
-
-#include "database/Database.h"
-#include "utils/TomahawkUtils.h"
-#include "utils/Logger.h"
-#include "Album.h"
-#include "Artist.h"
-#include "FuzzyIndex.h"
-#include "Result.h"
-#include "SourceList.h"
 
 /* !!!! You need to manually generate Schema.sql.h when the schema changes:
     cd src/libtomahawk/database

@@ -20,11 +20,6 @@
 
 #include "GlobalActionManager.h"
 
-#include "Artist.h"
-#include "Album.h"
-#include "SourceList.h"
-#include "Pipeline.h"
-#include "TomahawkSettings.h"
 #include "audio/AudioEngine.h"
 #include "database/LocalCollection.h"
 #include "playlist/dynamic/GeneratorInterface.h"
@@ -40,6 +35,13 @@
 #include "utils/SpotifyParser.h"
 #include "utils/ShortenedLinkParser.h"
 #include "utils/RdioParser.h"
+
+#include "Album.h"
+#include "Artist.h"
+#include "Pipeline.h"
+#include "PlaylistEntry.h"
+#include "SourceList.h"
+#include "TomahawkSettings.h"
 
 #include <qjson/parser.h>
 #include <qjson/serializer.h>

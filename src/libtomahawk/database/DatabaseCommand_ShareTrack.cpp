@@ -18,15 +18,18 @@
 
 #include "DatabaseCommand_ShareTrack.h"
 
-#include "Artist.h"
-#include "Database.h"
-#include "DatabaseImpl.h"
-#include "network/Servent.h"
-#include "ViewManager.h"
-#include "playlist/InboxModel.h"
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
 #include "jobview/InboxJobItem.h"
+#include "playlist/InboxModel.h"
+#include "network/Servent.h"
+
+#include "Artist.h"
+#include "Database.h"
+#include "DatabaseImpl.h"
+#include "PlaylistEntry.h"
+#include "ViewManager.h"
+
 
 DatabaseCommand_ShareTrack::DatabaseCommand_ShareTrack( QObject* parent )
     : DatabaseCommand_SocialAction( parent )

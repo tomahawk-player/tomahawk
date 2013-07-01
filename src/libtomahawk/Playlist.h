@@ -3,6 +3,7 @@
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013     , Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -48,6 +49,7 @@ namespace _detail
 namespace Tomahawk
 {
 
+class PlaylistPrivate;
 class PlaylistUpdaterInterface;
 
 struct PlaylistRevision
@@ -58,18 +60,6 @@ struct PlaylistRevision
     QList<plentry_ptr> added;
     QList<plentry_ptr> removed;
     bool applied; // false if conflict
-};
-
-struct RevisionQueueItem
-{
-public:
-    QString newRev;
-    QString oldRev;
-    QList< plentry_ptr > entries;
-    bool applyToTip;
-
-    RevisionQueueItem( const QString& nRev, const QString& oRev, const QList< plentry_ptr >& e, bool latest ) :
-        newRev( nRev ), oldRev( oRev), entries( e ), applyToTip( latest ) {}
 };
 
 
@@ -246,7 +236,14 @@ protected:
                        const QString& info,
                        const QString& creator,
                        bool shared,
-                       const QList< Tomahawk::plentry_ptr >& entries = QList< Tomahawk::plentry_ptr >() );
+                       const QList< Tomahawk::plentry_ptr >& entries );
+
+    explicit Playlist( const source_ptr& author,
+                       const QString& guid,
+                       const QString& title,
+                       const QString& info,
+                       const QString& creator,
+                       bool shared);
 
     QList< plentry_ptr > newEntries( const QList< plentry_ptr >& entries );
     PlaylistRevision setNewRevision( const QString& rev,
@@ -254,7 +251,9 @@ protected:
                                      const QList<QString>& oldorderedguids,
                                      bool is_newest_rev,
                                      const QMap< QString, Tomahawk::plentry_ptr >& addedmap );
+    Playlist( PlaylistPrivate* d );
 
+    Tomahawk::PlaylistPrivate* d_ptr;
 private slots:
     void onResultsChanged();
     void onResolvingFinished();
@@ -269,29 +268,7 @@ private:
     void setLoaded( bool b );
     void checkRevisionQueue();
 
-    QWeakPointer< Playlist > m_weakSelf;
-    source_ptr m_source;
-    QString m_currentrevision;
-    QString m_guid, m_title, m_info, m_creator;
-    unsigned int m_lastmodified;
-    unsigned int m_createdOn;
-    bool m_shared;
-    bool m_loaded;
-
-    QQueue<_detail::Closure*> m_queuedOps;
-    QList< plentry_ptr > m_initEntries;
-    QList< plentry_ptr > m_entries;
-
-    QQueue<RevisionQueueItem> m_revisionQueue;
-    QQueue<RevisionQueueItem> m_updateQueue;
-
-    QList<PlaylistUpdaterInterface*> m_updaters;
-
-    bool m_locallyChanged;
-    bool m_deleted;
-    bool m_busy;
-
-    Tomahawk::playlistinterface_ptr m_playlistInterface;
+    Q_DECLARE_PRIVATE( Tomahawk::Playlist )
 };
 
 }

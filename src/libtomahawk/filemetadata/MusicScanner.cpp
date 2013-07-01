@@ -19,11 +19,6 @@
 
 #include "MusicScanner.h"
 
-#include <QtCore/QCoreApplication>
-
-#include "utils/TomahawkUtils.h"
-#include "TomahawkSettings.h"
-#include "SourceList.h"
 #include "database/Database.h"
 #include "database/DatabaseCommand_DirMtimes.h"
 #include "database/DatabaseCommand_FileMTimes.h"
@@ -31,8 +26,15 @@
 #include "database/DatabaseCommand_AddFiles.h"
 #include "database/DatabaseCommand_DeleteFiles.h"
 #include "taghandlers/tag.h"
-
 #include "utils/Logger.h"
+#include "utils/TomahawkUtils.h"
+
+#include "PlaylistEntry.h"
+#include "SourceList.h"
+#include "TomahawkSettings.h"
+
+#include <QCoreApplication>
+
 
 void
 DirLister::go()

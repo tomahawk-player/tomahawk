@@ -20,20 +20,22 @@
 #include "MetadataEditor.h"
 #include "ui_MetadataEditor.h"
 
-#include "Source.h"
-#include "Result.h"
-#include "Artist.h"
-#include "Album.h"
-#include "Typedefs.h"
-#include "ScanManager.h"
-#include "PlaylistInterface.h"
-#include "AlbumPlaylistInterface.h"
-
 #include "filemetadata/taghandlers/tag.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Closure.h"
 #include "utils/Logger.h"
 #include "taglib/fileref.h"
+
+#include "Album.h"
+#include "AlbumPlaylistInterface.h"
+#include "Artist.h"
+#include "PlaylistEntry.h"
+#include "PlaylistInterface.h"
+#include "Result.h"
+#include "ScanManager.h"
+#include "Source.h"
+#include "Typedefs.h"
+
 
 #include <QDialog>
 #include <QDialogButtonBox>

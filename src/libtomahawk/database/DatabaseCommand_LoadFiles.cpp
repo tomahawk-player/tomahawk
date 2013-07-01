@@ -18,9 +18,11 @@
 
 #include "DatabaseCommand_LoadFiles.h"
 
-#include "DatabaseImpl.h"
 #include "collection/Collection.h"
 #include "utils/Logger.h"
+
+#include "DatabaseImpl.h"
+#include "PlaylistEntry.h"
 #include "Source.h"
 
 

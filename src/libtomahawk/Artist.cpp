@@ -20,7 +20,6 @@
 
 #include "Artist.h"
 
-#include "ArtistPlaylistInterface.h"
 #include "collection/Collection.h"
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
@@ -28,10 +27,12 @@
 #include "database/DatabaseCommand_ArtistStats.h"
 #include "database/DatabaseCommand_TrackStats.h"
 #include "database/IdThreadWorker.h"
-#include "Source.h"
-
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+
+#include "ArtistPlaylistInterface.h"
+#include "PlaylistEntry.h"
+#include "Source.h"
 
 #include <QReadWriteLock>
 #include <QPixmapCache>

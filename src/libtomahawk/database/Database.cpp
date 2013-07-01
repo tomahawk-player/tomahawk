@@ -19,11 +19,14 @@
 
 #include "Database.h"
 
+#include "utils/Logger.h"
+
 #include "DatabaseCommand.h"
 #include "DatabaseImpl.h"
 #include "DatabaseWorker.h"
 #include "IdThreadWorker.h"
-#include "utils/Logger.h"
+#include "PlaylistEntry.h"
+
 #include <boost/concept_check.hpp>
 
 #define DEFAULT_WORKER_THREADS 4

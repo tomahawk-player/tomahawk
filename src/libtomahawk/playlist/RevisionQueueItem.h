@@ -1,7 +1,9 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
- *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013     , Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -17,30 +19,24 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "DatabaseCommand_ModifyPlaylist.h"
+#ifndef REVISIONQUEUEITEM_H
+#define REVISIONQUEUEITEM_H
 
-#include "utils/Logger.h"
+#include "Typedefs.h"
 
-#include "Playlist.h"
-#include "PlaylistEntry.h"
-#include "Source.h"
+namespace Tomahawk {
 
-using namespace Tomahawk;
-
-
-DatabaseCommand_ModifyPlaylist::DatabaseCommand_ModifyPlaylist( Playlist* playlist, const QList< plentry_ptr >& entries, Mode mode )
-    : DatabaseCommand()
-    , m_playlist( playlist )
-    , m_entries( entries )
-    , m_mode( mode )
+struct RevisionQueueItem
 {
-}
+public:
+    QString newRev;
+    QString oldRev;
+    QList< plentry_ptr > entries;
+    bool applyToTip;
 
-DatabaseCommand_ModifyPlaylist::~DatabaseCommand_ModifyPlaylist()
-{}
+    RevisionQueueItem( const QString& nRev, const QString& oRev, const QList< plentry_ptr >& e, bool latest );
+};
 
-void
-DatabaseCommand_ModifyPlaylist::exec( DatabaseImpl* lib )
-{
-    Q_UNUSED( lib );
-}
+} // Tomahawk
+
+#endif // REVISIONQUEUEITEM_H

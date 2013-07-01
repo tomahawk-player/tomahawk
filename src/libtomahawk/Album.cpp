@@ -19,16 +19,17 @@
 
 #include "Album.h"
 
-#include "Artist.h"
-#include "AlbumPlaylistInterface.h"
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
 #include "database/IdThreadWorker.h"
-#include "Query.h"
-#include "Source.h"
-
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+
+#include "Artist.h"
+#include "AlbumPlaylistInterface.h"
+#include "PlaylistEntry.h"
+#include "Query.h"
+#include "Source.h"
 
 #include <QReadWriteLock>
 #include <QPixmapCache>

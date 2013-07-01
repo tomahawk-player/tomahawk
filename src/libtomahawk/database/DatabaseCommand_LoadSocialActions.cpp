@@ -21,10 +21,12 @@
 #include <QSqlQuery>
 
 #include "database/Database.h"
-#include "DatabaseImpl.h"
 #include "network/Servent.h"
-#include "Result.h"
 #include "utils/Logger.h"
+
+#include "DatabaseImpl.h"
+#include "PlaylistEntry.h"
+#include "Result.h"
 
 using namespace Tomahawk;
 

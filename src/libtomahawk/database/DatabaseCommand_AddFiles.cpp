@@ -18,18 +18,19 @@
 
 #include "DatabaseCommand_AddFiles.h"
 
-#include <QSqlQuery>
-
-#include "Artist.h"
-#include "Album.h"
 #include "collection/Collection.h"
 #include "database/Database.h"
-#include "DatabaseImpl.h"
 #include "network/DbSyncConnection.h"
 #include "network/Servent.h"
+#include "utils/Logger.h"
+
+#include "Album.h"
+#include "Artist.h"
+#include "DatabaseImpl.h"
+#include "PlaylistEntry.h"
 #include "SourceList.h"
 
-#include "utils/Logger.h"
+#include <QSqlQuery>
 
 using namespace Tomahawk;
 

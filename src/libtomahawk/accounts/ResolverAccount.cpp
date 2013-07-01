@@ -19,21 +19,24 @@
 
 #include "ResolverAccount.h"
 
-#include "AccountManager.h"
-#include "AtticaManager.h"
-#include "resolvers/ExternalResolver.h"
-#include "resolvers/ExternalResolverGui.h"
-#include "Pipeline.h"
-#include "TomahawkSettings.h"
-#include "Artist.h"
-#include "Album.h"
-#include "Source.h"
-#include "utils/Logger.h"
-#include "qjson/parser.h"
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
 #include "jobview/ErrorStatusMessage.h"
+#include "resolvers/ExternalResolver.h"
+#include "resolvers/ExternalResolverGui.h"
+#include "utils/Logger.h"
+
+#include "Album.h"
+#include "Artist.h"
+#include "AccountManager.h"
+#include "AtticaManager.h"
+#include "Pipeline.h"
+#include "PlaylistEntry.h"
+#include "Source.h"
+#include "TomahawkSettings.h"
 #include "TomahawkVersion.h"
+
+#include "qjson/parser.h"
 
 #include <QFile>
 #include <QFileInfo>

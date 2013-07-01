@@ -18,14 +18,15 @@
 
 #include "DatabaseCommand_AllArtists.h"
 
-#include <QSqlQuery>
-
-#include "Artist.h"
-#include "DatabaseImpl.h"
-#include "Source.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
+#include "Artist.h"
+#include "DatabaseImpl.h"
+#include "PlaylistEntry.h"
+#include "Source.h"
+
+#include <QSqlQuery>
 
 DatabaseCommand_AllArtists::DatabaseCommand_AllArtists( const Tomahawk::collection_ptr& collection, QObject* parent )
     : DatabaseCommand( parent )
