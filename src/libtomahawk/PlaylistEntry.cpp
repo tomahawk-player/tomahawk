@@ -18,7 +18,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "PlaylistEntry.h"
+#include "PlaylistEntry_p.h"
 
 #include "utils/Logger.h"
 
@@ -35,7 +35,6 @@ PlaylistEntry::PlaylistEntry()
 
 PlaylistEntry::~PlaylistEntry()
 {
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << m_query->toString();
 }
 
 
@@ -55,14 +54,16 @@ PlaylistEntry::setQueryVariant( const QVariant& v )
 QVariant
 PlaylistEntry::queryVariant() const
 {
-    return m_query->toVariant();
+    Q_D( const PlaylistEntry );
+    return d->query->toVariant();
 }
 
 
 void
 PlaylistEntry::setQuery( const Tomahawk::query_ptr& q )
 {
-    m_query = q;
+    Q_D( PlaylistEntry );
+    d->query = q;
 
     connect( q.data(), SIGNAL( resolvingFinished( bool ) ), SLOT( onQueryResolved( bool ) ) );
 }
@@ -71,21 +72,24 @@ PlaylistEntry::setQuery( const Tomahawk::query_ptr& q )
 const Tomahawk::query_ptr&
 PlaylistEntry::query() const
 {
-    return m_query;
+    Q_D( const PlaylistEntry );
+    return d->query;
 }
 
 
 source_ptr
 PlaylistEntry::lastSource() const
 {
-    return m_lastsource;
+    Q_D( const PlaylistEntry );
+    return d->lastsource;
 }
 
 
 void
 PlaylistEntry::setLastSource( source_ptr s )
 {
-    m_lastsource = s;
+    Q_D( PlaylistEntry );
+    d->lastsource = s;
 }
 
 
@@ -103,10 +107,11 @@ PlaylistEntry::onQueryResolved( bool hasResults )
 void
 PlaylistEntry::setResultHint( const QString& s )
 {
-    if ( m_resulthint == s )
+    Q_D( PlaylistEntry );
+    if ( d->resulthint == s )
         return;
 
-    m_resulthint = s;
+    d->resulthint = s;
     emit resultChanged();
 }
 
@@ -114,18 +119,99 @@ PlaylistEntry::setResultHint( const QString& s )
 QString
 PlaylistEntry::hintFromQuery() const
 {
+    Q_D( const PlaylistEntry );
+
     QString resultHint, foundResult;
-    if ( !m_query->results().isEmpty() )
-        foundResult = m_query->results().first()->url();
-    else if ( !m_query->resultHint().isEmpty() )
-        foundResult = m_query->resultHint();
+    if ( !d->query->results().isEmpty() )
+        foundResult = d->query->results().first()->url();
+    else if ( !d->query->resultHint().isEmpty() )
+        foundResult = d->query->resultHint();
 
     if ( foundResult.startsWith( "file://" ) ||
         foundResult.startsWith( "servent://" ) || // Save resulthints for local files and peers automatically
-        ( TomahawkUtils::whitelistedHttpResultHint( foundResult ) && m_query->saveHTTPResultHint() ) )
+        ( TomahawkUtils::whitelistedHttpResultHint( foundResult ) && d->query->saveHTTPResultHint() ) )
     {
         resultHint = foundResult;
     }
 
     return resultHint;
+}
+
+bool
+PlaylistEntry::isValid() const
+{
+    Q_D( const PlaylistEntry );
+
+    return !d->query.isNull();
+}
+
+
+QString
+PlaylistEntry::guid() const
+{
+    Q_D( const PlaylistEntry );
+    return d->guid;
+}
+
+
+void
+PlaylistEntry::setGuid( const QString& s )
+{
+    Q_D( PlaylistEntry );
+    d->guid = s;
+}
+
+
+QString
+PlaylistEntry::annotation() const
+{
+    Q_D( const PlaylistEntry );
+    return d->annotation;
+}
+
+
+void
+PlaylistEntry::setAnnotation( const QString& s )
+{
+    Q_D( PlaylistEntry );
+    d->annotation = s;
+}
+
+
+QString
+PlaylistEntry::resultHint() const
+{
+    Q_D( const PlaylistEntry );
+    return d->resulthint;
+}
+
+
+unsigned int
+PlaylistEntry::duration() const
+{
+    Q_D( const PlaylistEntry );
+    return d->duration;
+}
+
+
+void
+PlaylistEntry::setDuration( unsigned int i )
+{
+    Q_D( PlaylistEntry );
+    d->duration = i;
+}
+
+
+unsigned int
+PlaylistEntry::lastmodified() const
+{
+    Q_D( const PlaylistEntry );
+    return d->lastmodified;
+}
+
+void
+PlaylistEntry::setLastmodified( unsigned int i )
+{
+    Q_D( PlaylistEntry );
+    d->lastmodified = i;
 }

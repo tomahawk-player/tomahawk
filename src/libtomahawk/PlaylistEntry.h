@@ -3,6 +3,7 @@
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013,      Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -34,6 +35,8 @@
 namespace Tomahawk
 {
 
+class PlaylistEntryPrivate;
+
 class DLLEXPORT PlaylistEntry : public QObject
 {
 Q_OBJECT
@@ -47,7 +50,7 @@ public:
     PlaylistEntry();
     virtual ~PlaylistEntry();
 
-    bool isValid() const { return !m_query.isNull(); }
+    bool isValid() const;
 
     void setQuery( const Tomahawk::query_ptr& q );
     const Tomahawk::query_ptr& query() const;
@@ -55,20 +58,20 @@ public:
     void setQueryVariant( const QVariant& v );
     QVariant queryVariant() const;
 
-    QString guid() const { return m_guid; }
-    void setGuid( const QString& s ) { m_guid = s; }
+    QString guid() const;
+    void setGuid( const QString& s );
 
-    QString annotation() const { return m_annotation; }
-    void setAnnotation( const QString& s ) { m_annotation = s; }
+    QString annotation() const;
+    void setAnnotation( const QString& s );
 
-    QString resultHint() const { return m_resulthint; }
+    QString resultHint() const;
     void setResultHint( const QString& s );
 
-    unsigned int duration() const { return m_duration; }
-    void setDuration( unsigned int i ) { m_duration = i; }
+    unsigned int duration() const;
+    void setDuration( unsigned int i );
 
-    unsigned int lastmodified() const { return m_lastmodified; }
-    void setLastmodified( unsigned int i ) { m_lastmodified = i; }
+    unsigned int lastmodified() const;
+    void setLastmodified( unsigned int i );
 
     source_ptr lastSource() const;
     void setLastSource( source_ptr s );
@@ -80,15 +83,10 @@ private slots:
     void onQueryResolved( bool hasResults );
 
 private:
-    QString hintFromQuery() const;
+    Q_DECLARE_PRIVATE( PlaylistEntry )
+    PlaylistEntryPrivate* d_ptr;
 
-    QString m_guid;
-    Tomahawk::query_ptr m_query;
-    QString m_annotation;
-    unsigned int m_duration;
-    unsigned int m_lastmodified;
-    source_ptr   m_lastsource;
-    QString      m_resulthint;
+    QString hintFromQuery() const;
 };
 
 }
