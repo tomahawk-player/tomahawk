@@ -25,10 +25,8 @@
 #include <QList>
 #include <QVariant>
 
-#include "Typedefs.h"
-#include "infosystem/InfoSystem.h"
-
 #include "DllMacro.h"
+#include "Typedefs.h"
 
 class DatabaseCommand_LoadPlaylistEntries;
 
@@ -153,8 +151,8 @@ private:
     QWeakPointer< Tomahawk::Query > m_ownRef;
 };
 
-}; //ns
+} //ns
 
-Q_DECLARE_METATYPE( Tomahawk::query_ptr );
+Q_DECLARE_METATYPE( Tomahawk::query_ptr )
 
 #endif // QUERY_H

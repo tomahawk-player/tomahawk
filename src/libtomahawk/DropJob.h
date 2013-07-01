@@ -20,7 +20,9 @@
 #ifndef DROPJOB_H
 #define DROPJOB_H
 
-#include "Query.h"
+#include "Album.h"
+#include "DllMacro.h"
+#include "Typedefs.h"
 
 #include <QObject>
 #include <QStringList>

@@ -26,6 +26,7 @@
 #include <QList>
 #include <QMap>
 #include <QMutex>
+#include <QStringList>
 #include <QTimer>
 
 #include <boost/function.hpp>
