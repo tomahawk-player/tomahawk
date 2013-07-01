@@ -323,3 +323,24 @@ Collection::moveStationToAuto( const QString& guid )
     if ( m_stations.contains( guid ) )
         m_autoplaylists.insert( guid, m_stations.take( guid ) );
 }
+
+
+void
+Collection::loadPlaylists()
+{
+    qDebug() << Q_FUNC_INFO;
+}
+
+
+void
+Collection::loadAutoPlaylists()
+{
+    qDebug() << Q_FUNC_INFO;
+}
+
+
+void
+Collection::loadStations()
+{
+    qDebug() << Q_FUNC_INFO;
+}

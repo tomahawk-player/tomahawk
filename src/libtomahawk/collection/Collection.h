@@ -69,9 +69,9 @@ public:
     virtual QPixmap bigIcon() const; //for the ViewPage header
     virtual QString emptyText() const;
 
-    virtual void loadPlaylists() { qDebug() << Q_FUNC_INFO; }
-    virtual void loadAutoPlaylists() { qDebug() << Q_FUNC_INFO; }
-    virtual void loadStations() { qDebug() << Q_FUNC_INFO; }
+    virtual void loadPlaylists();
+    virtual void loadAutoPlaylists();
+    virtual void loadStations();
 
     virtual Tomahawk::playlist_ptr playlist( const QString& guid );
     virtual Tomahawk::dynplaylist_ptr autoPlaylist( const QString& guid );
@@ -145,7 +145,7 @@ private:
     friend class ::DatabaseCommand_SetDynamicPlaylistRevision;
 };
 
-}; // ns
+} // ns
 
 inline uint qHash( const QSharedPointer<Tomahawk::Collection>& key )
 {
