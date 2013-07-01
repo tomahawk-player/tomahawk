@@ -2,6 +2,7 @@ import QtQuick 1.1
 import tomahawk 1.0
 import "tomahawkimports"
 import "stations"
+
 Rectangle {
     id: scene
     color: "black"
@@ -22,7 +23,7 @@ Rectangle {
         subtitle: generator.summary
         showSearchField: false
         showBackButton: stationListView.currentIndex > 0
-        showNextButton: mainView.configured
+        showNextButton: mainView.configured && stationListView.currentIndex > 0
         nextButtonText: "Save"
         backButtonText: "Back"
 
@@ -41,7 +42,7 @@ Rectangle {
         // In our case the next button is the save button
         onNextPressed: {
             inputBubble.opacity = 1
-            saveNameInput.forceActiveFocus();
+            inputBubble.forceActiveFocus();
         }
     }
 
@@ -137,55 +138,25 @@ Rectangle {
         onModelChanged: print("ccccccccccccc", mainView.configured)
     }
 
-        Rectangle {
-            id: inputBubble
-            color: "black"
-            border.width: 2
-            border.color: "white"
-            height: defaultFontHeight * 3
-            width: height * 6
-            radius: defaultFontHeight / 2
-            anchors.top: header.bottom
-            anchors.right: parent.right
-            anchors.rightMargin: defaultFontHeight / 2
-            anchors.topMargin: -defaultFontHeight / 2
-            z: 2
-            opacity: 0
-            Behavior on opacity {
-                NumberAnimation { duration: 200 }
-            }
+    InputBubble {
+        id: inputBubble
+        text: "Station name:"
+        width: defaultFontHeight * 18
+        anchors.top: header.bottom
+        anchors.right: parent.right
+        anchors.rightMargin: defaultFontHeight / 2
+        anchors.topMargin: -defaultFontHeight / 2
+        z: 2
+        opacity: 0
 
-            Row {
-                anchors.centerIn: parent
-                width: parent.width - defaultFontHeight
-                spacing: defaultFontHeight / 2
-
-                function saveStation(name) {
-                    mainView.title = name
-                    inputBubble.opacity = 0
-                    header.showNextButton = false
-                    header.backButtonText = "Configure"
-                }
-
-                Text {
-                    id: nameText
-                    color: "white"
-                    text: "Name:"
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-                InputField {
-                    id: saveNameInput
-                    width: parent.width - nameText.width - saveOkButton.width - parent.spacing * 2
-                    placeholderText: "Station"
-                    onAccepted: parent.saveStation(text);
-                }
-                PushButton {
-                    id: saveOkButton
-                    text: "OK"
-                    onClicked: parent.saveStation(saveNameInput.text)
-                }
-            }
-
+        onAccepted: {
+            mainView.title = inputBubble.inputText
+            inputBubble.opacity = 0
+            header.showNextButton = false
+            header.showBackButton = false
+            inputBubble.opacity = 0
         }
 
+        onRejected: inputBubble.opacity = 0
+    }
 }
