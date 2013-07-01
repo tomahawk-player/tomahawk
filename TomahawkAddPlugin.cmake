@@ -43,6 +43,10 @@ function(tomahawk_add_plugin)
         list(APPEND tomahawk_add_library_args "LINK_LIBRARIES" "${PLUGIN_LINK_LIBRARIES}")
     endif()
 
+    if(PLUGIN_COMPILE_DEFINITIONS)
+        list(APPEND tomahawk_add_library_args "COMPILE_DEFINITIONS" ${PLUGIN_COMPILE_DEFINITIONS})
+    endif()
+
     list(APPEND tomahawk_add_library_args "NO_VERSION")
 
     tomahawk_add_library(${tomahawk_add_library_args})
