@@ -29,8 +29,6 @@
 
 #include "Typedefs.h"
 #include "PlaylistEntry.h"
-#include "PlaylistInterface.h"
-#include "playlist/PlaylistUpdaterInterface.h"
 #include "Query.h"
 
 #include "DllMacro.h"
@@ -113,31 +111,31 @@ public:
     virtual void loadRevision( const QString& rev = "" );
 
     source_ptr author() const;
-    QString currentrevision() const   { return m_currentrevision; }
-    QString title() const             { return m_title; }
-    QString info() const              { return m_info; }
-    QString creator() const           { return m_creator; }
-    QString guid() const              { return m_guid; }
-    bool shared() const               { return m_shared; }
-    unsigned int lastmodified() const { return m_lastmodified; }
-    uint createdOn() const            { return m_createdOn; }
+    QString currentrevision() const;
+    QString title() const;
+    QString info() const;
+    QString creator() const;
+    QString guid() const;
+    bool shared() const;
+    unsigned int lastmodified() const;
+    uint createdOn() const;
 
-    bool busy() const { return m_busy; }
-    bool loaded() const { return m_loaded; }
+    bool busy() const;
+    bool loaded() const;
 
-    const QList< plentry_ptr >& entries() { return m_entries; }
+    const QList< plentry_ptr >& entries();
 
     // <IGNORE hack="true">
     // these need to exist and be public for the json serialization stuff
     // you SHOULD NOT call them.  They are used for an alternate CTOR method from json.
     // maybe friend QObjectHelper and make them private?
     explicit Playlist( const source_ptr& author );
-    void setCurrentrevision( const QString& s ) { m_currentrevision = s; }
-    void setInfo( const QString& s )            { m_info = s; }
-    void setCreator( const QString& s )         { m_creator = s; }
-    void setGuid( const QString& s )            { m_guid = s; }
-    void setShared( bool b )                    { m_shared = b; }
-    void setCreatedOn( uint createdOn )         { m_createdOn = createdOn; }
+    void setCurrentrevision( const QString& s );
+    void setInfo( const QString& s );
+    void setCreator( const QString& s );
+    void setGuid( const QString& s );
+    void setShared( bool b );
+    void setCreatedOn( uint createdOn );
     void setTitle( const QString& s );
     // </IGNORE>
 
@@ -145,7 +143,7 @@ public:
 
     void addUpdater( PlaylistUpdaterInterface* updater );
     void removeUpdater( PlaylistUpdaterInterface* updater );
-    QList<PlaylistUpdaterInterface*> updaters() const { return m_updaters; }
+    QList<PlaylistUpdaterInterface*> updaters() const;
 
     /**
      * Some updaters might have custom deleters in order to perform more actions that require
@@ -162,10 +160,14 @@ public:
     Tomahawk::playlistinterface_ptr playlistInterface();
 
 signals:
-    /// emitted when the playlist revision changes (whenever the playlist changes)
+    /**
+     * emitted when the playlist revision changes (whenever the playlist changes)
+     */
     void revisionLoaded( Tomahawk::PlaylistRevision );
 
-    /// watch for this to see when newly created playlist is synced to DB (if you care)
+    /**
+     * watch for this to see when newly created playlist is synced to DB (if you care)
+     */
     void created();
 
     /// renamed etc.
@@ -173,23 +175,29 @@ signals:
     void renamed( const QString& newTitle, const QString& oldTitle );
 
     /**
-     *   delete command is scheduled but not completed. Do not call remove() again once this
-     *   is emitted.
+     * Delete command is scheduled but not completed. Do not call remove() again once this
+     * is emitted.
      */
     void aboutToBeDeleted( const Tomahawk::playlist_ptr& pl );
 
     /// was deleted, eh?
     void deleted( const Tomahawk::playlist_ptr& pl );
 
-    /// Notification for tracks being inserted at a specific point
-    /// Contiguous range from startPosition
+    /**
+     * Notification for tracks being inserted at a specific point
+     * Contiguous range from startPosition
+     */
     void tracksInserted( const QList< Tomahawk::plentry_ptr >& tracks, int startPosition );
 
-    /// Notification for tracks being removed from playlist
+    /**
+     * Notification for tracks being removed from PlaylistModel
+     */
     void tracksRemoved( const QList< Tomahawk::query_ptr >& tracks );
 
-    /// Notification for tracks being moved in a playlist. List is of new tracks, and new position of first track
-    /// Contiguous range from startPosition
+    /**
+     * Notification for tracks being moved in a playlist. List is of new tracks, and new position of first track
+     * Contiguous range from startPosition
+     */
     void tracksMoved( const QList< Tomahawk::plentry_ptr >& tracks, int startPosition );
 
 public slots:

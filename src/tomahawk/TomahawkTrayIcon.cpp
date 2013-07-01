@@ -19,16 +19,18 @@
 
 #include "TomahawkTrayIcon.h"
 
-#include "Artist.h"
 #include "audio/AudioEngine.h"
-#include "TomahawkApp.h"
-#include "TomahawkWindow.h"
-#include "Query.h"
-#include "Source.h"
 #include "collection/Collection.h"
-#include "ActionCollection.h"
 #include "utils/Logger.h"
 #include "utils/TomahawkUtilsGui.h"
+
+#include "ActionCollection.h"
+#include "Artist.h"
+#include "Query.h"
+#include "Source.h"
+#include "TomahawkApp.h"
+#include "TomahawkWindow.h"
+#include "Track.h"
 
 #include <QWheelEvent>
 

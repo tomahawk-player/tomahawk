@@ -19,14 +19,15 @@
 
 #include "XspfGenerator.h"
 
+#include "utils/Logger.h"
+#include "Playlist.h"
+#include "Query.h"
+#include "Source.h"
+#include "Track.h"
+
 #include <QXmlStreamWriter>
 #include <QDateTime>
 #include <QTimer>
-
-#include "Playlist.h"
-#include "Query.h"
-#include "utils/Logger.h"
-#include "Source.h"
 
 using namespace Tomahawk;
 

@@ -20,13 +20,13 @@
 #ifndef DATABASECOMMAND_LOADPLAYLIST_H
 #define DATABASECOMMAND_LOADPLAYLIST_H
 
-#include <QObject>
-#include <QVariantMap>
-
 #include "DatabaseCommand.h"
+#include "DllMacro.h"
 #include "Playlist.h"
 
-#include "DllMacro.h"
+#include <QObject>
+#include <QStringList>
+#include <QVariantMap>
 
 class DLLEXPORT DatabaseCommand_LoadPlaylistEntries : public DatabaseCommand
 {

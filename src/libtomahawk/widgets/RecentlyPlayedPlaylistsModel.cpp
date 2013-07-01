@@ -25,9 +25,11 @@
 #include "playlist/dynamic/DynamicPlaylist.h"
 #include "utils/Logger.h"
 
-#include "TomahawkSettings.h"
-#include "SourceList.h"
 #include "Playlist.h"
+#include "PlaylistInterface.h"
+#include "SourceList.h"
+#include "TomahawkSettings.h"
+#include "Track.h"
 
 using namespace Tomahawk;
 

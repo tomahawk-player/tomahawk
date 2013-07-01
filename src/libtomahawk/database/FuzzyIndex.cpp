@@ -20,6 +20,7 @@
 
 #include <QDir>
 #include <QTime>
+#include <QTimer>
 
 #include <CLucene.h>
 #include <CLucene/queryParser/MultiFieldQueryParser.h>

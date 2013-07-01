@@ -20,13 +20,14 @@
 #include "SocialWidget.h"
 #include "ui_SocialWidget.h"
 
-#include "GlobalActionManager.h"
-#include "Source.h"
-
 #include "utils/ImageRegistry.h"
 #include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+
+#include "GlobalActionManager.h"
+#include "Source.h"
+#include "Track.h"
 
 #include <QPainter>
 #include <QDialog>

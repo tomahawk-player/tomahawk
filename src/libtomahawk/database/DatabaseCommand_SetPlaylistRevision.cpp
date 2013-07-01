@@ -25,6 +25,7 @@
 #include "DatabaseImpl.h"
 #include "Source.h"
 #include "TomahawkSqlQuery.h"
+#include "Track.h"
 
 #include <qjson/parser.h>
 #include <qjson/serializer.h>

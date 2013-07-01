@@ -26,14 +26,15 @@
 #include "jobview/ErrorStatusMessage.h"
 #endif
 
-#include "SourceList.h"
-#include "Playlist.h"
 #include "playlist/XspfUpdater.h"
-#include "Pipeline.h"
-
 #include "utils/NetworkReply.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
+
+#include "Pipeline.h"
+#include "Playlist.h"
+#include "SourceList.h"
+#include "Track.h"
 
 #include <QDomDocument>
 

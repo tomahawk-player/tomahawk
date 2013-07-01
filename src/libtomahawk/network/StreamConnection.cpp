@@ -36,6 +36,7 @@
 #include <boost/function.hpp>
 
 #include <QFile>
+#include <QTimer>
 
 using namespace Tomahawk;
 

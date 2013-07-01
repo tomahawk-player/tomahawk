@@ -21,11 +21,12 @@
 #include "SpotifyPlaylistUpdater.h"
 
 #include "accounts/AccountManager.h"
-#include "SpotifyAccount.h"
 #include "utils/TomahawkUtils.h"
+#include "SpotifyAccount.h"
+#include "Track.h"
 
-#include <QMessageBox>
 #include <QApplication>
+#include <QMessageBox>
 
 using namespace Tomahawk;
 using namespace Accounts;

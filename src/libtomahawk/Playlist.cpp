@@ -783,3 +783,129 @@ Playlist::playlistInterface()
 
     return m_playlistInterface;
 }
+
+
+QString
+Playlist::currentrevision() const
+{
+    return m_currentrevision;
+}
+
+
+QString
+Playlist::title() const
+{
+    return m_title;
+}
+
+
+QString
+Playlist::info() const
+{
+    return m_info;
+}
+
+
+QString
+Playlist::creator() const
+{
+    return m_creator;
+}
+
+
+QString
+Playlist::guid() const
+{
+    return m_guid;
+}
+
+
+bool
+Playlist::shared() const
+{
+    return m_shared;
+}
+
+
+unsigned int
+Playlist::lastmodified() const
+{
+    return m_lastmodified;
+}
+
+
+uint
+Playlist::createdOn() const
+{
+    return m_createdOn;
+}
+
+
+bool
+Playlist::busy() const
+{
+    return m_busy;
+}
+
+
+bool
+Playlist::loaded() const
+{
+    return m_loaded;
+}
+
+
+const QList<plentry_ptr>&
+Playlist::entries()
+{
+    return m_entries;
+}
+
+
+void
+Playlist::setCurrentrevision( const QString& s )
+{
+    m_currentrevision = s;
+}
+
+
+void
+Playlist::setInfo( const QString& s )
+{
+    m_info = s;
+}
+
+
+void
+Playlist::setCreator( const QString& s )
+{
+    m_creator = s;
+}
+
+
+void
+Playlist::setGuid( const QString& s )
+{
+    m_guid = s;
+}
+
+
+void
+Playlist::setShared( bool b )
+{
+    m_shared = b;
+}
+
+
+void
+Playlist::setCreatedOn( uint createdOn )
+{
+    m_createdOn = createdOn;
+}
+
+
+QList<PlaylistUpdaterInterface *>
+Playlist::updaters() const
+{
+    return m_updaters;
+}

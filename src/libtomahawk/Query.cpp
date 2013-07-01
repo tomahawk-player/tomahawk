@@ -19,8 +19,6 @@
 
 #include "Query.h"
 
-#include <QtAlgorithms>
-
 #include "audio/AudioEngine.h"
 #include "collection/Collection.h"
 #include "database/Database.h"
@@ -31,13 +29,15 @@
 #include "database/DatabaseCommand_SocialAction.h"
 #include "database/DatabaseCommand_TrackStats.h"
 #include "resolvers/Resolver.h"
+#include "utils/Logger.h"
 
 #include "Album.h"
 #include "Pipeline.h"
 #include "Result.h"
 #include "SourceList.h"
 
-#include "utils/Logger.h"
+#include <QtAlgorithms>
+#include <QDebug>
 
 using namespace Tomahawk;
 
