@@ -25,6 +25,7 @@
 #include "sip/XmppSip.h"
 #include "accounts/AccountDllMacro.h"
 #include "accounts/Account.h"
+#include "accounts/AccountConfigWidget.h"
 
 #define MYNAME "ACCOUNTJABBER"
 

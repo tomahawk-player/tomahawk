@@ -135,6 +135,4 @@ XmppAccount::sipPlugin()
 
 }
 
-#ifndef GOOGLE_WRAPPER
 Q_EXPORT_PLUGIN2( Tomahawk::Accounts::AccountFactory, Tomahawk::Accounts::XmppAccountFactory )
-#endif

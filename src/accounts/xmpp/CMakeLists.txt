@@ -18,6 +18,5 @@ tomahawk_add_plugin(xmpp
     LINK_LIBRARIES
         ${TOMAHAWK_LIBRARIES}
         ${JREEN_LIBRARIES}
+    SHARED_LIB
 )
-
-add_subdirectory(googlewrapper)

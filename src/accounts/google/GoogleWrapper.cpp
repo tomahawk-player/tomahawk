@@ -19,7 +19,7 @@
 
 
 #include "GoogleWrapper.h"
-#include "../XmppConfigWidget.h"
+#include "../xmpp/XmppConfigWidget.h"
 #include "ui_XmppConfigWidget.h"
 
 #include "utils/TomahawkUtilsGui.h"
@@ -121,6 +121,4 @@ GoogleWrapper::sipPlugin()
 }
 
 
-#ifdef GOOGLE_WRAPPER
 Q_EXPORT_PLUGIN2( Tomahawk::Accounts::AccountFactory, Tomahawk::Accounts::GoogleWrapperFactory )
-#endif
