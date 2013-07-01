@@ -30,6 +30,7 @@ using namespace Tomahawk;
 
 PlaylistEntry::PlaylistEntry()
 {
+    d_ptr = new PlaylistEntryPrivate( this );
 }
 
 
