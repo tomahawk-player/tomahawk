@@ -420,7 +420,8 @@ AccountManager::configStorageForAccount( const QString& accountId )
         if ( cs->accountIds().contains( accountId ) )
             return cs;
     }
-    return 0;
+    tLog() << "Warning: defaulting to LocalConfigStorage for account" << accountId;
+    return localConfigStorage();
 }
 
 
