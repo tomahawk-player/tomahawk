@@ -384,17 +384,17 @@ se s vámi spojil?</translation>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="804"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="805"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>Promiňte,  Tomahawku se nepodařilo najít skladbu &apos;%1&apos; od %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="828"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="829"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>Promiňte,  Tomahawku se nepodařilo najít umělce &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="854"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="855"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>Promiňte,  Tomahawku se nepodařilo najít album &apos;%1&apos; od %2</translation>
     </message>
@@ -608,7 +608,7 @@ se s vámi spojil?</translation>
 <context>
     <name>DatabaseCommand_AllAlbums</name>
     <message>
-        <location filename="../src/libtomahawk/database/DatabaseCommand_AllAlbums.cpp" line="113"/>
+        <location filename="../src/libtomahawk/database/DatabaseCommand_AllAlbums.cpp" line="115"/>
         <source>Unknown</source>
         <translation>Neznámý</translation>
     </message>
@@ -912,6 +912,7 @@ heslo</translation>
         <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="329"/>
         <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="366"/>
         <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="404"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="463"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
         <translation>Varování řešitele skriptu: Volání API %1 vrátilo data synchronně.</translation>
     </message>
@@ -1009,22 +1010,22 @@ heslo</translation>
 <context>
     <name>LocalCollection</name>
     <message>
-        <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="43"/>
+        <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="45"/>
         <source>My Collection</source>
         <translation>Moje sbírka</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="50"/>
+        <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="52"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
         <translation>Poté co jste nechali prohledat svoji sbírku, naleznete své skladby právě zde.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="69"/>
+        <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="71"/>
         <source>Bookmarks</source>
         <translation>Záložky</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="69"/>
+        <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="71"/>
         <source>Saved tracks</source>
         <translation>Uložené písně</translation>
     </message>
@@ -1165,7 +1166,7 @@ heslo</translation>
         <translation>Vpřed</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="379"/>
+        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="381"/>
         <source>Properties</source>
         <translation>Vlastnosti</translation>
     </message>
@@ -1364,23 +1365,23 @@ heslo</translation>
 <context>
     <name>PlaylistModel</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="124"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="126"/>
         <source>A playlist you created %1.</source>
         <translation>Seznam skladeb, který jste vytvořil %1.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="129"/>
-        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="136"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="131"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="138"/>
         <source>A playlist by %1, created %2.</source>
         <translation>Seznam skladeb od %1, vytvořen %2.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="183"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="185"/>
         <source>All tracks by %1 on album %2</source>
         <translation>Seznam skladeb od %1 na albu. %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="209"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="211"/>
         <source>All tracks by %1</source>
         <translation>Všechny skladby od %1</translation>
     </message>
@@ -1981,22 +1982,22 @@ heslo</translation>
         <translation>Twitter</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SocialWidget.cpp" line="70"/>
+        <location filename="../src/tomahawk/SocialWidget.cpp" line="71"/>
         <source>Tweet</source>
         <translation>Zpráva</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SocialWidget.cpp" line="168"/>
+        <location filename="../src/tomahawk/SocialWidget.cpp" line="169"/>
         <source>Listening to &quot;%1&quot; by %2. %3</source>
         <translation>Poslouchá &quot;%1&quot; od %2, %3</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SocialWidget.cpp" line="170"/>
+        <location filename="../src/tomahawk/SocialWidget.cpp" line="171"/>
         <source>Listening to &quot;%1&quot; by %2 on &quot;%3&quot;. %4</source>
         <translation>Poslouchá &quot;%1&quot; od %2 na &quot;%3&quot;, %4</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SocialWidget.cpp" line="191"/>
+        <location filename="../src/tomahawk/SocialWidget.cpp" line="192"/>
         <source>%1 characters left</source>
         <translation>Zbývá %1 znaků</translation>
     </message>
@@ -2121,68 +2122,68 @@ heslo</translation>
 <context>
     <name>SourceTreeView</name>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="223"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="224"/>
         <source>&amp;Copy Link</source>
         <translation>&amp;Kopírovat odkaz</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="231"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="232"/>
         <source>&amp;Delete %1</source>
         <translation>&amp;Smazat %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="235"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="236"/>
         <source>Add to my Playlists</source>
         <translation>Přidat do mých seznamů skladeb</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="237"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="238"/>
         <source>Add to my Automatic Playlists</source>
         <translation>Přidat do mých automatických seznamů skladeb</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="239"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="240"/>
         <source>Add to my Stations</source>
         <translation>Přidat do mých stanic</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="227"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="228"/>
         <source>&amp;Export Playlist</source>
         <translation>&amp;Vyvést seznam skladeb</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="381"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="382"/>
         <source>playlist</source>
         <translation>Seznam skladeb</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="385"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="386"/>
         <source>automatic playlist</source>
         <translation>Automatický seznam skladeb</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="389"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="390"/>
         <source>station</source>
         <translation>Stanice</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="412"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="413"/>
         <source>Would you like to delete the %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
         <translation>Chcete smazat %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="414"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="415"/>
         <source>Delete</source>
         <translation>Smazat</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="494"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="495"/>
         <source>Save XSPF</source>
         <translation>Uložit XSPF</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="495"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="496"/>
         <source>Playlists (*.xspf)</source>
         <translation>Seznamy skladeb (*.xspf)</translation>
     </message>
@@ -2341,7 +2342,7 @@ heslo</translation>
 <context>
     <name>SpotifyPlaylistUpdater</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="353"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyPlaylistUpdater.cpp" line="354"/>
         <source>Delete associated Spotify playlist?</source>
         <translation>Chcete smazat příslušný seznam skladeb Spotify?</translation>
     </message>
@@ -2421,22 +2422,22 @@ heslo</translation>
 <context>
     <name>Tomahawk::Accounts::GoogleWrapper</name>
     <message>
-        <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="89"/>
+        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="89"/>
         <source>Configure this Google Account</source>
         <translation>Nastavit tento účet u služby Google</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="90"/>
+        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="90"/>
         <source>Google Address:</source>
         <translation>Adresa Google:</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="91"/>
+        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="91"/>
         <source>Enter your Google login to connect with your friends using Tomahawk!</source>
         <translation>Zadejte své přihlášení Google a spojte se pomocí Tomahawku s vašimi přáteli!</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="92"/>
+        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="92"/>
         <source>username@gmail.com</source>
         <translation>uživatel@gmail.com</translation>
     </message>
@@ -2444,7 +2445,7 @@ heslo</translation>
 <context>
     <name>Tomahawk::Accounts::GoogleWrapperFactory</name>
     <message>
-        <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.h" line="42"/>
+        <location filename="../src/accounts/google/GoogleWrapper.h" line="42"/>
         <source>Connect to Google Talk to find your friends</source>
         <translation>Spojit se s Google Talk kvůli nalezení přátel</translation>
     </message>
@@ -2452,17 +2453,17 @@ heslo</translation>
 <context>
     <name>Tomahawk::Accounts::GoogleWrapperSip</name>
     <message>
-        <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="59"/>
+        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="59"/>
         <source>Enter Google Address</source>
         <translation>Zadat adresu Google</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="67"/>
+        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="67"/>
         <source>Add Friend</source>
         <translation>Přidat přítele</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/googlewrapper/GoogleWrapper.cpp" line="68"/>
+        <location filename="../src/accounts/google/GoogleWrapper.cpp" line="68"/>
         <source>Enter Google Address:</source>
         <translation>Adresa Google:</translation>
     </message>
@@ -2560,27 +2561,27 @@ heslo</translation>
 <context>
     <name>Tomahawk::Accounts::ResolverAccountFactory</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="108"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="111"/>
         <source>Resolver installation error: cannot open bundle.</source>
         <translation>Chyba při instalaci řešitele: Nelze otevřít balík.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="115"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="118"/>
         <source>Resolver installation error: incomplete bundle.</source>
         <translation>Chyba při instalaci řešitele: Neúplný balík.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="154"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="157"/>
         <source>Resolver installation error: bad metadata in bundle.</source>
         <translation>Chyba při instalaci řešitele: Špatná popisná data v balíku.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="192"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="195"/>
         <source>Resolver installation error: platform mismatch.</source>
         <translation>Chyba při instalaci řešitele: Neodpovídající platforma.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="205"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="208"/>
         <source>Resolver installation error: Tomahawk %1 or newer is required.</source>
         <translation>Chyba při instalaci řešitele: Je požadován Tomahawk %1 nebo novější.</translation>
     </message>
@@ -2588,47 +2589,47 @@ heslo</translation>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccount</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="508"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="511"/>
         <source>Sync with Spotify</source>
         <translation>Seřídit se Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="512"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="515"/>
         <source>Re-enable syncing with Spotify</source>
         <translation>Zapnout znovu seřizování se Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="520"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="523"/>
         <source>Create local copy</source>
         <translation>Vytvořit místní kopii</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="536"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="539"/>
         <source>Subscribe to playlist changes</source>
         <translation>Odebírat změny seznamu skladeb</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="540"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="543"/>
         <source>Re-enable playlist subscription</source>
         <translation>Zapnout znovu odběr seznamu skladeb</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="544"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="547"/>
         <source>Stop subscribing to changes</source>
         <translation>Zastavit odběr změn</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="564"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="567"/>
         <source>Enable Spotify collaborations</source>
         <translation>Zapnout spolupráci se Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="566"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="569"/>
         <source>Disable Spotify collaborations</source>
         <translation>Vypnout spolupráci se Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="522"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="525"/>
         <source>Stop syncing with Spotify</source>
         <translation>Zastavit seřizování se Spotify</translation>
     </message>
@@ -2810,7 +2811,7 @@ Měl byste ještě jednou zkusit ověření pravosti.</translation>
 <context>
     <name>Tomahawk::Accounts::XmppAccountFactory</name>
     <message>
-        <location filename="../src/accounts/xmpp/XmppAccount.h" line="51"/>
+        <location filename="../src/accounts/xmpp/XmppAccount.h" line="52"/>
         <source>Log on to your Jabber/XMPP account to connect to your friends</source>
         <translation>Přihlašte se a použijte svůj účet u služby Jabber/XMPP pro spojení se s vašimi přáteli</translation>
     </message>
@@ -2864,13 +2865,13 @@ username@jabber.org</translation>
 <context>
     <name>Tomahawk::Collection</name>
     <message>
-        <location filename="../src/libtomahawk/collection/Collection.cpp" line="65"/>
-        <location filename="../src/libtomahawk/collection/Collection.cpp" line="79"/>
+        <location filename="../src/libtomahawk/collection/Collection.cpp" line="66"/>
+        <location filename="../src/libtomahawk/collection/Collection.cpp" line="80"/>
         <source>Collection</source>
         <translation>Sbírka</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/collection/Collection.cpp" line="102"/>
+        <location filename="../src/libtomahawk/collection/Collection.cpp" line="103"/>
         <source>This collection is empty.</source>
         <translation>Tato sbírka je prázdná.</translation>
     </message>
@@ -3585,27 +3586,27 @@ Zkuste vyladit filtry pro nové písně.</translation>
 <context>
     <name>Tomahawk::JSPFLoader</name>
     <message>
-        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="149"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="150"/>
         <source>New Playlist</source>
         <translation>Nový seznam skladeb</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="175"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="176"/>
         <source>Failed to save tracks</source>
         <translation>Nepodařilo se uložit skladby</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="175"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="176"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
         <translation>Některé skladby v seznamu skladeb neobsahují ani umělce ani název. Tyto budou přehlíženy.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="200"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="201"/>
         <source>XSPF Error</source>
         <translation>Chyba XSPF</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="200"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="201"/>
         <source>This is not a valid XSPF playlist.</source>
         <translation>Toto není platný seznam skladeb XSPF.</translation>
     </message>
@@ -3627,13 +3628,13 @@ Zkuste vyladit filtry pro nové písně.</translation>
 <context>
     <name>Tomahawk::Playlist</name>
     <message>
-        <location filename="../src/libtomahawk/Playlist.cpp" line="298"/>
+        <location filename="../src/libtomahawk/Playlist.cpp" line="308"/>
         <source>Would you like to delete the playlist &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
         <translation>Chcete smazat seznam skladeb &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Playlist.cpp" line="300"/>
+        <location filename="../src/libtomahawk/Playlist.cpp" line="310"/>
         <source>Delete</source>
         <translation>Smazat</translation>
     </message>
@@ -3726,42 +3727,42 @@ Zkuste vyladit filtry pro nové písně.</translation>
 <context>
     <name>Tomahawk::Track</name>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="425"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="427"/>
         <source> and </source>
         <translation>a</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="433"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="435"/>
         <source>You</source>
         <translation>Vy</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="435"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="437"/>
         <source>you</source>
         <translation>vy</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="448"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="450"/>
         <source>and</source>
         <translation>a</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="448"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="450"/>
         <source>%n other(s)</source>
         <translation><numerusform>%n dalšímu</numerusform><numerusform>%n dalším</numerusform><numerusform>%n dalším</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="451"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="453"/>
         <source>%n people</source>
         <translation><numerusform>%n člověku</numerusform><numerusform>%n lidem</numerusform><numerusform>%n lidem</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="455"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="457"/>
         <source>loved this track</source>
         <translation>se tato skladba líbí</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="457"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="459"/>
         <source>sent you this track %1</source>
         <translation>vám poslal tuto skladbu %1</translation>
     </message>
@@ -3820,7 +3821,7 @@ Zkuste vyladit filtry pro nové písně.</translation>
 <context>
     <name>Tomahawk::XspfUpdater</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/XspfUpdater.cpp" line="61"/>
+        <location filename="../src/libtomahawk/playlist/XspfUpdater.cpp" line="63"/>
         <source>Automatically update from XSPF</source>
         <translation>Aktualizovat automaticky z XSPF</translation>
     </message>
@@ -3828,12 +3829,12 @@ Zkuste vyladit filtry pro nové písně.</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="523"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="524"/>
         <source>My Collection</source>
         <translation>Moje sbírka</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="702"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="703"/>
         <source>Automatically detecting external IP failed.</source>
         <translation type="unfinished"/>
     </message>
@@ -3864,48 +3865,48 @@ služby Twitter zde zadejte tam zobrazené číslo PIN:</translation>
 <context>
     <name>TomahawkTrayIcon</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkTrayIcon.cpp" line="178"/>
+        <location filename="../src/tomahawk/TomahawkTrayIcon.cpp" line="180"/>
         <source>&amp;Stop Playback after current Track</source>
         <translation>Po této skladbě &amp;zastavit přehrávání</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkTrayIcon.cpp" line="73"/>
-        <location filename="../src/tomahawk/TomahawkTrayIcon.cpp" line="112"/>
+        <location filename="../src/tomahawk/TomahawkTrayIcon.cpp" line="75"/>
+        <location filename="../src/tomahawk/TomahawkTrayIcon.cpp" line="114"/>
         <source>Hide Tomahawk Window</source>
         <translation>Skrýt okno s Tomahawkem</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkTrayIcon.cpp" line="117"/>
+        <location filename="../src/tomahawk/TomahawkTrayIcon.cpp" line="119"/>
         <source>Show Tomahawk Window</source>
         <translation>Ukázat okno s Tomahawkem</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkTrayIcon.cpp" line="198"/>
+        <location filename="../src/tomahawk/TomahawkTrayIcon.cpp" line="200"/>
         <source>Currently not playing.</source>
         <translation>Nyní se nic nepřehrává.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkTrayIcon.cpp" line="259"/>
+        <location filename="../src/tomahawk/TomahawkTrayIcon.cpp" line="261"/>
         <source>Play</source>
         <translation>Přehrát</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkTrayIcon.cpp" line="287"/>
+        <location filename="../src/tomahawk/TomahawkTrayIcon.cpp" line="289"/>
         <source>Pause</source>
         <translation>Pozastavit</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkTrayIcon.cpp" line="317"/>
+        <location filename="../src/tomahawk/TomahawkTrayIcon.cpp" line="319"/>
         <source>&amp;Love</source>
         <translation>&amp;Označit za oblíbenou píseň</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkTrayIcon.cpp" line="325"/>
+        <location filename="../src/tomahawk/TomahawkTrayIcon.cpp" line="327"/>
         <source>Un-&amp;Love</source>
         <translation>Zrušit zařazení mezi o&amp;blíbené písně</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkTrayIcon.cpp" line="176"/>
+        <location filename="../src/tomahawk/TomahawkTrayIcon.cpp" line="178"/>
         <source>&amp;Continue Playback after current Track</source>
         <translation>Po této skladbě &amp;pokračovat v přehrávání</translation>
     </message>
@@ -4368,22 +4369,22 @@ Lyrics for &quot;%1&quot; by %2:
 <context>
     <name>XSPFLoader</name>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="49"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="50"/>
         <source>Failed to parse contents of XSPF playlist</source>
         <translation>Nepodařilo se přečíst obsah seznamu skladeb XSPF</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="51"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="52"/>
         <source>Some playlist entries were found without artist and track name, they will be omitted</source>
         <translation>Nekteré záznamy v seznamu skladeb byly nalezeny bez umělce nebo názvu skladby, a proto se přehlíží</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="53"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="54"/>
         <source>Failed to fetch the desired playlist from the network, or the desired file does not exist</source>
         <translation>Chyba při nahrávání požadovaného seznamu skladeb ze sítě, nebo požadovaný soubor neexistuje</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="199"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="200"/>
         <source>New Playlist</source>
         <translation>Nový seznam skladeb</translation>
     </message>
