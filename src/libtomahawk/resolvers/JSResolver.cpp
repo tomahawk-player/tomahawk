@@ -212,12 +212,22 @@ JSResolver::init()
     // add c++ part of tomahawk javascript library
     d->engine->mainFrame()->addToJavaScriptWindowObject( "Tomahawk", d->resolverHelper );
 
-    // add rest of it
-    d->engine->setScriptPath( "tomahawk.js" );
-    QFile jslib( RESPATH "js/tomahawk.js" );
-    jslib.open( QIODevice::ReadOnly );
-    d->engine->mainFrame()->evaluateJavaScript( jslib.readAll() );
-    jslib.close();
+    {
+        // Load a JavaScript SHA256 implementation
+        d->engine->setScriptPath( "sha256.js" );
+        QFile jslib( RESPATH "js/sha256.js" );
+        jslib.open( QIODevice::ReadOnly );
+        d->engine->mainFrame()->evaluateJavaScript( jslib.readAll() );
+        jslib.close();
+    }
+    {
+        // Load the tomahawk javascript utilities
+        d->engine->setScriptPath( "tomahawk.js" );
+        QFile jslib( RESPATH "js/tomahawk.js" );
+        jslib.open( QIODevice::ReadOnly );
+        d->engine->mainFrame()->evaluateJavaScript( jslib.readAll() );
+        jslib.close();
+    }
 
     // add resolver dependencies, if any
     foreach ( QString s, d->requiredScriptPaths )

@@ -158,5 +158,6 @@
         <file>data/fonts/TitilliumWeb-Regular.ttf</file>
         <file>data/fonts/FaunaOne-Regular.ttf</file>
         <file>data/fonts/PathwayGothicOne-Regular.ttf</file>
+        <file>data/js/sha256.js</file>
     </qresource>
 </RCC>
