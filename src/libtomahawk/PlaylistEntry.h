@@ -84,7 +84,7 @@ private slots:
 
 private:
     Q_DECLARE_PRIVATE( PlaylistEntry )
-    PlaylistEntryPrivate* d_ptr;
+    QScopedPointer<PlaylistEntryPrivate> d_ptr;
 
     QString hintFromQuery() const;
 };
