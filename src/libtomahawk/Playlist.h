@@ -140,12 +140,6 @@ public:
      * user prompting on delete.
      */
     bool hasCustomDeleter() const;
-    /**
-     * If this playlist has a custom deleter, let it do the deleting itself.
-     *
-     * If it needs user prompting, use the \param customDeleter as the right-most center point.
-     */
-    void customDelete( const QPoint& rightCenter );
 
     Tomahawk::playlistinterface_ptr playlistInterface();
 
@@ -257,8 +251,6 @@ protected:
 private slots:
     void onResultsChanged();
     void onResolvingFinished();
-
-    void onDeleteResult( SourceTreePopupDialog* );
 
 private:
     Playlist();
