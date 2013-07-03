@@ -38,18 +38,12 @@ ScriptCollection::ScriptCollection( const source_ptr& source,
     : Collection( source, QString( "scriptcollection:" + resolver->name() + ":" + uuid() ), parent )
     , m_trackCount( -1 ) //null value
 {
-    Q_ASSERT( resolver != 0 );
+    Q_ASSERT( resolver );
     qDebug() << Q_FUNC_INFO << resolver->name() << name();
 
     m_resolver = resolver;
 
     m_servicePrettyName = m_resolver->name();
-
-    ExternalResolverGui* gResolver = qobject_cast< ExternalResolverGui* >( m_resolver );
-    if ( gResolver )
-    {
-        m_icon = gResolver->icon();
-    }
 }
 
 
@@ -93,7 +87,10 @@ ScriptCollection::setIcon( const QIcon& icon )
 QIcon
 ScriptCollection::icon() const
 {
-    return m_icon;
+    if( !m_icon.isNull() )
+        return m_icon;
+
+    return m_resolver->icon();
 }
 
 
