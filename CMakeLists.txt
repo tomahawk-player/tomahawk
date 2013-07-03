@@ -130,6 +130,14 @@ if( NOT BUILD_WITH_QT4 )
             qt5_add_translation(${ARGN})
         endmacro()
 
+        macro(qt_add_dbus_interface)
+            qt5_add_dbus_interface(${ARGN})
+        endmacro()
+
+        macro(qt_add_dbus_adaptor)
+            qt5_add_dbus_adaptor(${ARGN})
+        endmacro()
+
         macro(setup_qt)
         endmacro()
 
@@ -166,6 +174,14 @@ if( NOT Qt5Core_DIR )
 
     macro(qt_add_translation)
         qt4_add_translation(${ARGN})
+    endmacro()
+
+    macro(qt_add_dbus_interface)
+      qt4_add_dbus_interface(${ARGN})
+    endmacro()
+
+    macro(qt_add_dbus_adaptor)
+        qt4_add_dbus_adaptor(${ARGN})
     endmacro()
 
     macro(setup_qt)

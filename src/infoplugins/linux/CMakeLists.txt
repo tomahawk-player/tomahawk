@@ -9,7 +9,7 @@ if(NOT Qt5Core_DIR)
             ${THIRDPARTY_DIR}/libqnetwm/libqnetwm/netwm.cpp
         )
         SET(FDO_LINK_LIBRARIES ${LINK_LIBRARIES} ${X11_LIBRARIES})
-        qt4_add_dbus_interface(fdo_srcs fdonotify/org.freedesktop.Notifications.xml
+        qt_add_dbus_interface(fdo_srcs fdonotify/org.freedesktop.Notifications.xml
                                FreedesktopNotificationsProxy)
 
         tomahawk_add_plugin(fdonotify
@@ -25,9 +25,9 @@ SET(mpris_srcs
     mpris/MprisPlugin.cpp
     )
 
-qt4_add_dbus_adaptor(mpris_srcs mpris/MprisPluginRootAdaptor.xml
+qt_add_dbus_adaptor(mpris_srcs mpris/MprisPluginRootAdaptor.xml
                      mpris/MprisPlugin.h Tomahawk::InfoSystem::MprisPlugin MprisPluginRootAdaptor MprisPluginRootAdaptor)
-qt4_add_dbus_adaptor(mpris_srcs mpris/MprisPluginPlayerAdaptor.xml
+qt_add_dbus_adaptor(mpris_srcs mpris/MprisPluginPlayerAdaptor.xml
                      mpris/MprisPlugin.h Tomahawk::InfoSystem::MprisPlugin MprisPluginPlayerAdaptor MprisPluginPlayerAdaptor)
 
 tomahawk_add_plugin(mpris
