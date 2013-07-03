@@ -43,24 +43,8 @@ namespace InfoSystem
 InfoSystemCache::InfoSystemCache( QObject* parent )
     : QObject( parent )
     , m_cacheBaseDir( TomahawkSettings::instance()->storageCacheLocation() + "/InfoSystemCache/" )
-    , m_cacheVersion( 3 )
 {
     tDebug() << Q_FUNC_INFO;
-    TomahawkSettings *s = TomahawkSettings::instance();
-    if ( s->infoSystemCacheVersion() != m_cacheVersion )
-    {
-        tLog() << "Cache version outdated, old:" << s->infoSystemCacheVersion()
-               << "new:" << m_cacheVersion
-               << "Doing upgrade, if any...";
-
-        uint current = s->infoSystemCacheVersion();
-        while( current < m_cacheVersion )
-        {
-            doUpgrade( current, current + 1 );
-            current++;
-        }
-        s->setInfoSystemCacheVersion( m_cacheVersion );
-    }
 
     m_pruneTimer.setInterval( 300000 );
     m_pruneTimer.setSingleShot( false );
@@ -72,49 +56,6 @@ InfoSystemCache::InfoSystemCache( QObject* parent )
 InfoSystemCache::~InfoSystemCache()
 {
     tDebug() << Q_FUNC_INFO;
-}
-
-
-void
-InfoSystemCache::performWipe( QString directory )
-{
-    QDir dir;
-    for ( int i = InfoNoInfo; i <= InfoLastInfo; i++ )
-    {
-        InfoType type = (InfoType)(i);
-        const QString cacheDirName = directory + QString::number( (int)type );
-        QFileInfoList fileList = QDir( cacheDirName ).entryInfoList( QDir::Files | QDir::NoDotAndDotDot );
-        foreach ( QFileInfo file, fileList )
-        {
-            if ( !QFile::remove( file.canonicalFilePath() ) )
-                tLog() << "During upgrade, failed to remove cache file " << file.canonicalFilePath();
-        }
-        dir.rmdir( cacheDirName );
-    }
-    dir.rmdir( directory );
-}
-
-
-void
-InfoSystemCache::doUpgrade( uint oldVersion, uint newVersion )
-{
-    Q_UNUSED( newVersion );
-    qDebug() << Q_FUNC_INFO;
-    if ( oldVersion == 0 || oldVersion == 1  )
-    {
-        qDebug() << Q_FUNC_INFO << "Wiping cache";
-
-        performWipe( m_cacheBaseDir );
-    }
-
-    if ( oldVersion == 2 )
-    {
-        qDebug() << Q_FUNC_INFO << "Wiping cache";
-
-        performWipe( m_cacheBaseDir );
-
-        performWipe( m_cacheBaseDir + "/InfoSystemCache/" );
-    }
 }
 
 

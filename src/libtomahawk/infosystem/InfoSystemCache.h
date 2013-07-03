@@ -55,16 +55,12 @@ private slots:
 
 private:
     void notInCache( QObject *receiver, Tomahawk::InfoSystem::InfoStringHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
-    void doUpgrade( uint oldVersion, uint newVersion );
-    void performWipe( QString directory );
     const QString criteriaMd5( const Tomahawk::InfoSystem::InfoStringHash &criteria, Tomahawk::InfoSystem::InfoType type = Tomahawk::InfoSystem::InfoNoInfo ) const;
 
     QString m_cacheBaseDir;
     QHash< InfoType, QHash< QString, QString > > m_fileLocationCache;
     QTimer m_pruneTimer;
     QCache< QString, QVariant > m_dataCache;
-
-    uint m_cacheVersion;
 };
 
 } //namespace InfoSystem
