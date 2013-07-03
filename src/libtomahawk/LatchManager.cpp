@@ -42,6 +42,7 @@ LatchManager::LatchManager( QObject* parent )
     , m_state( NotLatched )
 {
     connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::playlistinterface_ptr ) ), this, SLOT( playlistChanged( Tomahawk::playlistinterface_ptr ) ) );
+    connect( AudioEngine::instance(), SIGNAL( paused() ), SLOT( audioPaused() ) );
 }
 
 LatchManager::~LatchManager()
@@ -66,7 +67,6 @@ LatchManager::latchRequest( const source_ptr& source )
 
     m_state = Latching;
     m_waitingForLatch = source;
-    connect( AudioEngine::instance(), SIGNAL( paused() ), source->playlistInterface().data(), SLOT( audioPaused() ) );
     AudioEngine::instance()->playItem( source->playlistInterface(), source->playlistInterface()->nextResult() );
 }
 
@@ -132,6 +132,18 @@ LatchManager::playlistChanged( Tomahawk::playlistinterface_ptr )
     QAction *latchOnAction = ActionCollection::instance()->getAction( "latchOn" );
     latchOnAction->setText( tr( "&Listen Along" ) );
     latchOnAction->setIcon( QIcon( RESPATH "images/headphones-sidebar.png" ) );
+}
+
+
+void
+LatchManager::audioPaused()
+{
+    if ( !m_latchedOnTo.isNull() )
+    {
+        SourcePlaylistInterface* plInterface = qobject_cast< SourcePlaylistInterface* >( m_latchedOnTo->playlistInterface().data() );
+        Q_ASSERT( plInterface );
+        plInterface->audioPaused();
+    }
 }
 
 
