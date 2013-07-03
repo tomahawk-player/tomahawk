@@ -39,9 +39,6 @@ SourcePlaylistInterface::SourcePlaylistInterface( Tomahawk::Source* source, Toma
 
     if ( !m_source.isNull() )
         connect( m_source.data(), SIGNAL( playbackStarted( const Tomahawk::track_ptr& ) ), SLOT( onSourcePlaybackStarted( const Tomahawk::track_ptr& ) ) );
-
-    if ( AudioEngine::instance() )
-        connect( AudioEngine::instance(), SIGNAL( paused() ), SLOT( audioPaused() ) );
 }
 
 

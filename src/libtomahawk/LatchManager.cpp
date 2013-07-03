@@ -66,6 +66,7 @@ LatchManager::latchRequest( const source_ptr& source )
 
     m_state = Latching;
     m_waitingForLatch = source;
+    connect( AudioEngine::instance(), SIGNAL( paused() ), source->playlistInterface().data(), SLOT( audioPaused() ) );
     AudioEngine::instance()->playItem( source->playlistInterface(), source->playlistInterface()->nextResult() );
 }
 
