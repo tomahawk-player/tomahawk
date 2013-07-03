@@ -84,8 +84,6 @@ private slots:
     void shortenLinkRequestFinished();
     void shortenLinkRequestError( QNetworkReply::NetworkError );
 
-    void bookmarkPlaylistCreated( const Tomahawk::playlist_ptr& pl );
-
 #ifndef ENABLE_HEADLESS
     void postShortenFinished();
     void showPlaylist();
@@ -101,7 +99,6 @@ private slots:
 
 private:
     explicit GlobalActionManager( QObject* parent = 0 );
-    void doBookmark( const Tomahawk::playlist_ptr& pl, const Tomahawk::query_ptr& q );
 
     /// handle opening of urls
 #ifndef ENABLE_HEADLESS
@@ -122,7 +119,6 @@ private:
 
     bool handleCollectionCommand( const QUrl& url );
     bool handlePlayCommand( const QUrl& url );
-    bool handleBookmarkCommand( const QUrl& url );
     bool handleOpenCommand( const QUrl& url );
 
     void createPlaylistFromUrl( const QString& type, const QString& url, const QString& title );
@@ -132,7 +128,6 @@ private:
     inline QByteArray percentEncode( const QUrl& url ) const;
 
     Tomahawk::playlist_ptr m_toShow;
-    Tomahawk::query_ptr m_waitingToBookmark;
     Tomahawk::query_ptr m_waitingToPlay;
     QUrl m_clipboardLongUrl;
 

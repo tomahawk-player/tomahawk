@@ -1176,63 +1176,6 @@ GlobalActionManager::playRdio( const QUrl& url )
 #endif
 
 
-bool GlobalActionManager::handleBookmarkCommand(const QUrl& url)
-{
-    QStringList parts = url.path().split( "/" ).mid( 1 ); // get the rest of the command
-    if ( parts.isEmpty() )
-    {
-        tLog() << "No specific bookmark command:" << url.toString();
-        return false;
-    }
-
-    if ( parts[ 0 ] == "track" )
-    {
-        QPair< QString, QString > pair;
-        QString title, artist, album, urlStr;
-        foreach ( pair, urlQueryItems( url ) )
-        {
-            if ( pair.first == "title" )
-                title = pair.second;
-            else if ( pair.first == "artist" )
-                artist = pair.second;
-            else if ( pair.first == "album" )
-                album = pair.second;
-            else if ( pair.first == "url" )
-                urlStr = pair.second;
-        }
-        query_ptr q = Query::get( artist, title, album );
-        if ( q.isNull() )
-            return false;
-
-        if ( !urlStr.isEmpty() )
-        {
-            q->setResultHint( urlStr );
-            q->setSaveHTTPResultHint( true );
-        }
-        Pipeline::instance()->resolve( q, true );
-
-        // now we add it to the special "bookmarks" playlist, creating it if it doesn't exist. if nothing is playing, start playing the track
-        QSharedPointer< LocalCollection > col = SourceList::instance()->getLocal()->dbCollection().dynamicCast< LocalCollection >();
-        playlist_ptr bookmarkpl = col->bookmarksPlaylist();
-        if ( bookmarkpl.isNull() )
-        {
-            // create it and do the deed then
-            m_waitingToBookmark = q;
-            col->createBookmarksPlaylist();
-            connect( col.data(), SIGNAL( bookmarkPlaylistCreated( Tomahawk::playlist_ptr ) ), this, SLOT( bookmarkPlaylistCreated( Tomahawk::playlist_ptr ) ), Qt::UniqueConnection );
-        }
-        else
-        {
-            doBookmark( bookmarkpl, q );
-        }
-
-        return true;
-    }
-
-    return false;
-}
-
-
 void
 GlobalActionManager::shortenLinkRequestFinished()
 {
@@ -1329,37 +1272,6 @@ GlobalActionManager::shortenLinkRequestError( QNetworkReply::NetworkError error 
         callbackMap = reply->property( "callbackMap" ).toMap();
     reply->deleteLater();
     emit shortLinkReady( QUrl( "" ), QUrl( "" ), callbackMap );
-}
-
-
-void
-GlobalActionManager::bookmarkPlaylistCreated( const playlist_ptr& pl )
-{
-    Q_ASSERT( !m_waitingToBookmark.isNull() );
-    doBookmark( pl, m_waitingToBookmark );
-}
-
-
-void
-GlobalActionManager::doBookmark( const playlist_ptr& pl, const query_ptr& q )
-{
-    plentry_ptr e( new PlaylistEntry );
-    e->setGuid( uuid() );
-
-    e->setDuration( q->track()->duration() );
-    e->setLastmodified( 0 );
-    QString annotation = "";
-    if ( !q->property( "annotation" ).toString().isEmpty() )
-        annotation = q->property( "annotation" ).toString();
-    e->setAnnotation( annotation );
-    e->setQuery( q );
-
-    pl->createNewRevision( uuid(), pl->currentrevision(), QList< plentry_ptr >( pl->entries() ) << e );
-    connect( pl.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( showPlaylist() ) );
-
-    m_toShow = pl;
-
-    m_waitingToBookmark.clear();
 }
 
 

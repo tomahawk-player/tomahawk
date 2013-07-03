@@ -32,18 +32,6 @@ public:
 
     virtual QString prettyName() const;
     virtual QString emptyText() const;
-
-    // gets the playlist used for storing stuff from the web, if it already exists. if the returned playlist
-    // is invalid ask to create and listen to the signal
-    Tomahawk::playlist_ptr bookmarksPlaylist();
-    void createBookmarksPlaylist();
-
-signals:
-    void bookmarkPlaylistCreated( const Tomahawk::playlist_ptr& p );
-
-private slots:
-    void created();
-
 };
 
 #endif // LOCALCOLLECTION_H

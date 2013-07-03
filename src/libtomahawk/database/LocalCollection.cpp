@@ -51,38 +51,3 @@ LocalCollection::emptyText() const
 {
     return tr( "After you have scanned your music collection you will find your tracks right here." );
 }
-
-
-Tomahawk::playlist_ptr
-LocalCollection::bookmarksPlaylist()
-{
-    if( TomahawkSettings::instance()->bookmarkPlaylist().isEmpty() )
-        return Tomahawk::playlist_ptr();
-
-    return playlist( TomahawkSettings::instance()->bookmarkPlaylist() );
-}
-
-
-void
-LocalCollection::createBookmarksPlaylist()
-{
-    if( bookmarksPlaylist().isNull() ) {
-        QString guid = uuid();
-        Tomahawk::playlist_ptr p = Tomahawk::Playlist::create( SourceList::instance()->getLocal(), guid, tr( "Bookmarks" ), tr( "Saved tracks" ), QString(), false );
-
-#ifndef ENABLE_HEADLESS
-        ViewManager::instance()->createPageForPlaylist( p );
-//         connect( p.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( loaded( Tomahawk::PlaylistRevision ) ), Qt::QueuedConnection );
-        connect( p.data(), SIGNAL( created() ), this, SLOT( created() ) );
-#endif
-        TomahawkSettings::instance()->setBookmarkPlaylist( guid );
-//         p->createNewRevision( uuid(), p->currentrevision(), QList< Tomahawk::plentry_ptr >() );
-    }
-}
-
-
-void
-LocalCollection::created()
-{
-    emit bookmarkPlaylistCreated( bookmarksPlaylist() );
-}
