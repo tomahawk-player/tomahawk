@@ -18,26 +18,20 @@
  */
 
 // if run in phantomjs add fake Tomahawk environment
-if(window.Tomahawk === undefined)
-{
-//    alert("PHANTOMJS ENVIRONMENT");
+if (window.Tomahawk === undefined) {
     var Tomahawk = {
-        fakeEnv: function()
-        {
+        fakeEnv: function () {
             return true;
         },
-        resolverData: function()
-        {
+        resolverData: function () {
             return {
-                scriptPath: function()
-                {
+                scriptPath: function () {
                     return "/home/tomahawk/resolver.js";
                 }
             };
         },
-        log: function( message )
-        {
-            console.log( message );
+        log: function (message) {
+            console.log(message);
         }
     };
 }
@@ -47,30 +41,28 @@ Tomahawk.resolver = {
     scriptPath: Tomahawk.resolverData().scriptPath
 };
 
-Tomahawk.timestamp = function() {
-    return Math.round( new Date()/1000 );
+Tomahawk.timestamp = function () {
+    return Math.round(new Date() / 1000);
 };
 
-Tomahawk.dumpResult = function( result ) {
-    var results = result.results;
+Tomahawk.dumpResult = function (result) {
+    var results = result.results,
+        i = 0;
     Tomahawk.log("Dumping " + results.length + " results for query " + result.qid + "...");
-    for(var i=0; i<results.length;i++)
-    {
-        var result1 = results[i];
-        Tomahawk.log( result1.artist + " - " + result1.track + " | " + result1.url );
+    for (i = 0; i < results.length; i++) {
+        Tomahawk.log(results[i].artist + " - " + results[i].track + " | " + results[i].url);
     }
 
     Tomahawk.log("Done.");
 };
 
 // javascript part of Tomahawk-Object API
-Tomahawk.extend = function(object, members) {
-    var F = function() {};
+Tomahawk.extend = function (object, members) {
+    var F = function () {};
     F.prototype = object;
-    var newObject = new F;
+    var newObject = new F();
 
-    for(var key in members)
-    {
+    for (var key in members) {
         newObject[key] = members[key];
     }
 
@@ -89,71 +81,48 @@ var TomahawkResolverCapability = {
 
 // Resolver BaseObject, inherit it to implement your own resolver
 var TomahawkResolver = {
-    init: function()
-    {
+    init: function() {
     },
-    scriptPath: function()
-    {
+    scriptPath: function () {
         return Tomahawk.resolverData().scriptPath;
     },
-    getConfigUi: function()
-    {
+    getConfigUi: function () {
         return {};
     },
-    getUserConfig: function()
-    {
-        var configJson = window.localStorage[ this.scriptPath() ];
-        if( configJson === undefined )
-	{
-            configJson = "{}";
-	}
-
-        var config = JSON.parse( configJson );
-
-        return config;
+    getUserConfig: function () {
+        return JSON.parse(window.localStorage[this.scriptPath()] || "{}");
     },
-    saveUserConfig: function()
-    {
-        var config = Tomahawk.resolverData().config;
-        var configJson = JSON.stringify( config );
-
+    saveUserConfig: function () {
+        var configJson = JSON.stringify(Tomahawk.resolverData().config);
         window.localStorage[ this.scriptPath() ] = configJson;
-
         this.newConfigSaved();
     },
-    newConfigSaved: function()
-    {
+    newConfigSaved: function () {
     },
-    resolve: function( qid, artist, album, title )
-    {
+    resolve: function (qid, artist, album, title) {
         return {
             qid: qid
         };
     },
-    search: function( qid, searchString )
-    {
+    search: function (qid, searchString) {
         return this.resolve( qid, "", "", searchString );
     },
-    artists: function( qid )
-    {
+    artists: function (qid) {
         return {
             qid: qid
         };
     },
-    albums: function( qid, artist )
-    {
+    albums: function (qid, artist) {
         return {
             qid: qid
         };
     },
-    tracks: function( qid, artist, album )
-    {
+    tracks: function (qid, artist, album) {
         return {
             qid: qid
         };
     },
-    collection: function()
-    {
+    collection: function () {
         return {};
     }
 };
@@ -206,16 +175,13 @@ var TomahawkResolver = {
 
 // help functions
 
-Tomahawk.valueForSubNode = function(node, tag)
-{
-    if(node === undefined)
-    {
+Tomahawk.valueForSubNode = function (node, tag) {
+    if (node === undefined) {
         throw new Error("Tomahawk.valueForSubnode: node is undefined!");
     }
 
     var element = node.getElementsByTagName(tag)[0];
-    if( element === undefined )
-    {
+    if (element === undefined) {
         return undefined;
     }
 
@@ -223,33 +189,31 @@ Tomahawk.valueForSubNode = function(node, tag)
 };
 
 
-Tomahawk.syncRequest = function(url)
-{
+Tomahawk.syncRequest = function (url) {
 	var xmlHttpRequest = new XMLHttpRequest();
 	xmlHttpRequest.open('GET', url, false);
 	xmlHttpRequest.send(null);
-	if (xmlHttpRequest.status == 200){
+    if (xmlHttpRequest.status == 200) {
 		return xmlHttpRequest.responseText;
 	}
 };
 
-Tomahawk.asyncRequest = function(url, callback, extraHeaders)
-{
+Tomahawk.asyncRequest = function (url, callback, extraHeaders) {
     var xmlHttpRequest = new XMLHttpRequest();
     xmlHttpRequest.open('GET', url, true);
     if (extraHeaders) {
-        for(var headerName in extraHeaders) {
+        for (var headerName in extraHeaders) {
             xmlHttpRequest.setRequestHeader(headerName, extraHeaders[headerName]);
         }
     }
-    xmlHttpRequest.onreadystatechange = function() {
+    xmlHttpRequest.onreadystatechange = function () {
         if (xmlHttpRequest.readyState == 4 && xmlHttpRequest.status == 200) {
             callback.call(window, xmlHttpRequest);
         } else if (xmlHttpRequest.readyState === 4) {
             Tomahawk.log("Failed to do GET request: to: " + url);
             Tomahawk.log("Status Code was: " + xmlHttpRequest.status);
         }
-    }
+    };
     xmlHttpRequest.send(null);
 };
 
