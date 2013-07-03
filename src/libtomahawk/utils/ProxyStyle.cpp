@@ -112,8 +112,6 @@ ProxyStyle::drawControl( ControlElement ce, const QStyleOption* opt, QPainter* p
                     p->setPen( TomahawkStyle::BORDER_LINE );
                     p->drawLine( opt->rect.topLeft() + QPoint( 2, 0 ), opt->rect.bottomLeft() + QPoint( 2, 0 ) );
                 }
-                else
-                    Q_ASSERT( false );
             }
         }
     }
