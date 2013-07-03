@@ -376,9 +376,11 @@ Result::sourceIcon( TomahawkUtils::ImageMode style, const QSize& desiredSize ) c
 {
     if ( collection().isNull() )
     {
-        const ExternalResolverGui* guiResolver = qobject_cast< ExternalResolverGui* >( m_resolvedBy.data() );
-        if ( !guiResolver )
+        const ExternalResolver* resolver = qobject_cast< ExternalResolver* >( m_resolvedBy.data() );
+        if ( !resolver )
         {
+            tLog() << "Result was not resolved by an ExternalResolver but the collection is empty too. What is going on?";
+            Q_ASSERT( resolver );
             return QPixmap();
         }
         else
@@ -388,7 +390,7 @@ Result::sourceIcon( TomahawkUtils::ImageMode style, const QSize& desiredSize ) c
             const QString key = sourceCacheKey( m_resolvedBy.data(), desiredSize, style );
             if ( !sourceIconCache()->contains( key ) )
             {
-                QPixmap pixmap = guiResolver->icon();
+                QPixmap pixmap = resolver->icon();
                 if ( !desiredSize.isEmpty() )
                     pixmap = pixmap.scaled( desiredSize, Qt::KeepAspectRatio, Qt::SmoothTransformation );
 

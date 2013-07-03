@@ -44,9 +44,6 @@ public:
     ExternalResolverGui( const QString& filePath );
     virtual AccountConfigWidget* configUI() const = 0;
 
-    virtual QPixmap icon() const { return QPixmap(); }
-    virtual void setIcon( const QPixmap& ) {}
-
 protected:
     AccountConfigWidget* widgetFromData( QByteArray& data, QWidget* parent = 0 );
     QVariant configMsgFromWidget( QWidget* w );

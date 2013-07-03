@@ -79,6 +79,8 @@ public:
     { m_filePath = filePath; }
 
     virtual QString filePath() const { return m_filePath; }
+    virtual QPixmap icon() const { return QPixmap(); }
+    virtual void setIcon( const QPixmap& ) {}
 
     virtual void saveConfig() = 0;
 
