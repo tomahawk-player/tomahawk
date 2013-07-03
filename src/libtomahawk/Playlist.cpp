@@ -29,7 +29,6 @@
 #include "playlist/PlaylistUpdaterInterface.h"
 #include "utils/Logger.h"
 #include "utils/Closure.h"
-#include "widgets/SourceTreePopupDialog.h"
 
 #include "Pipeline.h"
 #include "PlaylistEntry.h"
