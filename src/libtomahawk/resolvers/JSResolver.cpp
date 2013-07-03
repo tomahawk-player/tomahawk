@@ -213,9 +213,17 @@ JSResolver::init()
     d->engine->mainFrame()->addToJavaScriptWindowObject( "Tomahawk", d->resolverHelper );
 
     {
-        // Load a JavaScript SHA256 implementation
-        d->engine->setScriptPath( "sha256.js" );
-        QFile jslib( RESPATH "js/sha256.js" );
+        // Load CrytoJS core
+        d->engine->setScriptPath( "cryptojs-core.js" );
+        QFile jslib( RESPATH "js/cryptojs-core.js" );
+        jslib.open( QIODevice::ReadOnly );
+        d->engine->mainFrame()->evaluateJavaScript( jslib.readAll() );
+        jslib.close();
+    }
+    {
+        // Load a SHA256 implementation from CryptoJS
+        d->engine->setScriptPath( "cryptojs-sha256.js" );
+        QFile jslib( RESPATH "js/cryptojs-sha256.js" );
         jslib.open( QIODevice::ReadOnly );
         d->engine->mainFrame()->evaluateJavaScript( jslib.readAll() );
         jslib.close();
