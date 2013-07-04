@@ -1025,16 +1025,6 @@ Password</source>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
         <translation>След като приключи сканирането, ще откриеш музиката ти тук.</translation>
     </message>
-    <message>
-        <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="71"/>
-        <source>Bookmarks</source>
-        <translation>Отметки</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="71"/>
-        <source>Saved tracks</source>
-        <translation>Запаметени изпълнения</translation>
-    </message>
 </context>
 <context>
     <name>LovedTracksItem</name>
@@ -2181,23 +2171,23 @@ Password</source>
         <translation>станция</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="413"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="419"/>
         <source>Would you like to delete the %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
         <translation>Наистина ли желаеш да изтриеш %1 &lt;b&gt;&apos;&apos;%2&quot; &lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="415"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="421"/>
         <source>Delete</source>
         <translation>Изтрий</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="495"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="515"/>
         <source>Save XSPF</source>
         <translation>Запази XSPF</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="496"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="516"/>
         <source>Playlists (*.xspf)</source>
         <translation>Списъци (*.xspf)</translation>
     </message>
@@ -3630,29 +3620,15 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::LatchManager</name>
     <message>
-        <location filename="../src/libtomahawk/LatchManager.cpp" line="95"/>
+        <location filename="../src/libtomahawk/LatchManager.cpp" line="96"/>
         <source>&amp;Catch Up</source>
         <translation>&amp;Последвай</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/LatchManager.cpp" line="132"/>
-        <location filename="../src/libtomahawk/LatchManager.cpp" line="153"/>
+        <location filename="../src/libtomahawk/LatchManager.cpp" line="133"/>
+        <location filename="../src/libtomahawk/LatchManager.cpp" line="166"/>
         <source>&amp;Listen Along</source>
         <translation>&amp;Слушай заедно</translation>
-    </message>
-</context>
-<context>
-    <name>Tomahawk::Playlist</name>
-    <message>
-        <location filename="../src/libtomahawk/Playlist.cpp" line="308"/>
-        <source>Would you like to delete the playlist &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
-        <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
-        <translation>Желаеш ли да изтриеш списъка с име &lt;b&gt; &quot;%2&quot; &lt;/b&gt;</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/Playlist.cpp" line="310"/>
-        <source>Delete</source>
-        <translation>Изтрий</translation>
     </message>
 </context>
 <context>

@@ -1019,16 +1019,6 @@ salasana</translation>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
         <translation>Löydät kappaleesi tästä, kunhan musiikkikokoelmasi haku on valmistunut.</translation>
     </message>
-    <message>
-        <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="71"/>
-        <source>Bookmarks</source>
-        <translation>Kirjanmerkit</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="71"/>
-        <source>Saved tracks</source>
-        <translation>Tallennetut kappaleet</translation>
-    </message>
 </context>
 <context>
     <name>LovedTracksItem</name>
@@ -2172,23 +2162,23 @@ käyttäjäradion käyttöönottamiseksi</translation>
         <translation>aseman</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="413"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="419"/>
         <source>Would you like to delete the %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
         <translation>Haluatko poistaa %1 &lt;b&gt;”%2”&lt;/b&gt;?</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="415"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="421"/>
         <source>Delete</source>
         <translation>Poista</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="495"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="515"/>
         <source>Save XSPF</source>
         <translation>Tallenna XSPF</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="496"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="516"/>
         <source>Playlists (*.xspf)</source>
         <translation>Soittolistat (*.xspf)</translation>
     </message>
@@ -3620,29 +3610,15 @@ kappaleen %2%4 %3.</translation>
 <context>
     <name>Tomahawk::LatchManager</name>
     <message>
-        <location filename="../src/libtomahawk/LatchManager.cpp" line="95"/>
+        <location filename="../src/libtomahawk/LatchManager.cpp" line="96"/>
         <source>&amp;Catch Up</source>
         <translation>&amp;Ota kiinni</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/LatchManager.cpp" line="132"/>
-        <location filename="../src/libtomahawk/LatchManager.cpp" line="153"/>
+        <location filename="../src/libtomahawk/LatchManager.cpp" line="133"/>
+        <location filename="../src/libtomahawk/LatchManager.cpp" line="166"/>
         <source>&amp;Listen Along</source>
         <translation>Kuuntele &amp;mukana</translation>
-    </message>
-</context>
-<context>
-    <name>Tomahawk::Playlist</name>
-    <message>
-        <location filename="../src/libtomahawk/Playlist.cpp" line="308"/>
-        <source>Would you like to delete the playlist &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
-        <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
-        <translation>Haluatko poistaa soittolistan &lt;b&gt;”%2”&lt;/b&gt;?</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/Playlist.cpp" line="310"/>
-        <source>Delete</source>
-        <translation>Poista</translation>
     </message>
 </context>
 <context>
