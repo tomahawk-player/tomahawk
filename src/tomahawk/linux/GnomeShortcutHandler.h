@@ -20,7 +20,7 @@
 #define GNOMESHORTCUTHANDLER_H
 
 #include "ShortcutHandler.h"
-#include "linux/GnomeSettingsDaemonMediaKeysProxy.h"
+#include "GnomeSettingsDaemonMediaKeysProxy.h"
 
 #include <QObject>
 

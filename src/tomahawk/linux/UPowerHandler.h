@@ -19,7 +19,7 @@
 #ifndef UPOWERHANDLER_H
 #define UPOWERHANDLER_H
 
-#include "linux/UPowerProxy.h"
+#include "UPowerProxy.h"
 
 #include <QObject>
 #include <QMutex>
