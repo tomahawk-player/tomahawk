@@ -26,11 +26,6 @@ SET( tomahawkSources ${tomahawkSources}
      main.cpp
 )
 
-IF( WITH_GNOMESHORTCUTHANDLER )
-    SET( tomahawkSources ${tomahawkSources} GnomeShortcutHandler.cpp )
-    qt_add_dbus_interface(tomahawkSources GnomeSettingsDaemonMediaKeys.xml GnomeSettingsDaemonMediaKeysProxy)
-ENDIF( WITH_GNOMESHORTCUTHANDLER )
-
 IF( LIBLASTFM_FOUND )
     SET(tomahawkSources ${tomahawkSources}
         Scrobbler.cpp

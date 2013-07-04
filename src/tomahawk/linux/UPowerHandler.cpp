@@ -17,8 +17,8 @@
  */
 
 #include "accounts/AccountManager.h"
-#include "UPowerHandler.h"
 #include "utils/Logger.h"
+#include "UPowerHandler.h"
 
 #include <QTimer>
 

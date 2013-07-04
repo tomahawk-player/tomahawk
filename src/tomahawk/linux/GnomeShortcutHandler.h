@@ -20,7 +20,7 @@
 #define GNOMESHORTCUTHANDLER_H
 
 #include "ShortcutHandler.h"
-#include "GnomeSettingsDaemonMediaKeysProxy.h"
+#include "linux/GnomeSettingsDaemonMediaKeysProxy.h"
 
 #include <QObject>
 
@@ -37,7 +37,6 @@ public:
     static const char* kGsdService;
     static const char* kGsdPath;
     static const char* kGsdInterface;
-
 
 public slots:
     void RegisterFinished(QDBusPendingCallWatcher* watcher);

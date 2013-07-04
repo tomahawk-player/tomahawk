@@ -7,7 +7,14 @@ ENDFOREACH( _file )
 
 IF( WITH_UPOWER )
     qt_add_dbus_interface(tomahawkSources "${CMAKE_CURRENT_SOURCE_DIR}/linux/org.freedesktop.UPower.xml" linux/UPowerProxy)
+    SET( tomahawkSources ${tomahawkSources} linux/UPowerHandler.cpp  )
 ENDIF( WITH_UPOWER )
+
+IF( WITH_GNOMESHORTCUTHANDLER )
+    qt_add_dbus_interface(tomahawkSources "${CMAKE_CURRENT_SOURCE_DIR}/linux/GnomeSettingsDaemonMediaKeys.xml" linux/GnomeSettingsDaemonMediaKeysProxy)
+    SET( tomahawkSources ${tomahawkSources} linux/GnomeShortcutHandler.cpp )
+ENDIF( WITH_GNOMESHORTCUTHANDLER )
+
 ADD_SUBDIRECTORY( "${CMAKE_CURRENT_SOURCE_DIR}/linux" )
 
 INSTALL( FILES ${CMAKE_SOURCE_DIR}/data/icons/tomahawk-icon.svg RENAME tomahawk.svg  DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps )

@@ -87,6 +87,10 @@
     #include "linux/UPowerHandler.h"
 #endif
 
+#ifdef WITH_GNOMESHORTCUTHANDLER
+    #include "linux/GnomeShortcutHandler.h"
+#endif
+
 #ifndef ENABLE_HEADLESS
     #include <QMessageBox>
 #endif
@@ -96,10 +100,6 @@
 
 #include <sys/resource.h>
 #include <sys/sysctl.h>
-#endif
-
-#ifdef WITH_GNOMESHORTCUTHANDLER
-#include "GnomeShortcutHandler.h"
 #endif
 
 #include <QPluginLoader>
