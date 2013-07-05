@@ -1,8 +1,9 @@
 
 #include <phonon/MediaObject>
 #include <phonon/AudioOutput>
-#include <phonon/Path>
+#include <phonon/AudioDataOutput>
 #include <phonon/BackendCapabilities>
+#include <phonon/Path>
 #include <phonon/Effect>
 #include <phonon/EffectParameter>
 
@@ -28,6 +29,7 @@ public:
 
 public slots:
     void onStateChanged( Phonon::State newState, Phonon::State oldState );
+    void onAudioDataArrived( QMap< Phonon::AudioDataOutput::Channel, QVector<qint16> > data );
 
 private:
     QSharedPointer<QIODevice> input;
@@ -40,8 +42,13 @@ private:
 
     Phonon::MediaObject* mediaObject;
     Phonon::AudioOutput* audioOutput;
+
     Phonon::Path audioPath;
     Phonon::Effect* audioEffect;
+
+    Phonon::AudioDataOutput* audioDataOutput;
+    Phonon::Path audioDataPath;
+
 
     unsigned int timeElapsed;
     bool expectStop;

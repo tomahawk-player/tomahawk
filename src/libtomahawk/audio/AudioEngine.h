@@ -36,6 +36,7 @@ Q_OBJECT
 public:
     enum AudioErrorCode { StreamReadError, AudioDeviceError, DecodeError, UnknownError, NoError };
     enum AudioState { Stopped = 0, Playing = 1, Paused = 2, Error = 3, Loading = 4 };
+    enum AudioChannel { LeftChannel, LeftSurroundChannel, RightChannel , RightSurroundChannel, CenterChannel , SubwooferChannel };
 
     static AudioEngine* instance();
 
@@ -71,6 +72,9 @@ public slots:
     void pause();
     void stop( AudioErrorCode errorCode = NoError );
 
+    bool activateDataOutput();
+    bool deactivateDataOutput();
+
     void previous();
     void next();
 
@@ -104,6 +108,8 @@ signals:
     void stopped();
     void paused();
     void resumed();
+
+    void audioDataReady( QMap< AudioEngine::AudioChannel, QVector<qint16> > data );
 
     void stopAfterTrackChanged();
 
@@ -147,8 +153,11 @@ private:
     void checkStateQueue();
     void queueState( AudioState state );
     void setState( AudioState state );
-    void setCurrentTrackPlaylist( const Tomahawk::playlistinterface_ptr& playlist );
+    void setCurrentTrackPlaylist( const Tomahawk::playlistinterface_ptr& playlist );\
+
     void initEqualizer();
+    void audioDataArrived( QMap< AudioEngine::AudioChannel, QVector<qint16> >& data );
+
 
     Q_DECLARE_PRIVATE( AudioEngine );
     AudioEnginePrivate* d_ptr;

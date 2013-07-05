@@ -159,6 +159,39 @@ AudioEnginePrivate::onStateChanged( Phonon::State newState, Phonon::State oldSta
 }
 
 
+void
+AudioEnginePrivate::onAudioDataArrived( QMap<Phonon::AudioDataOutput::Channel, QVector<qint16> > data )
+{
+    QMap< AudioEngine::AudioChannel, QVector<qint16> > result;
+
+    if(data.contains(Phonon::AudioDataOutput::LeftChannel))
+    {
+        result[AudioEngine::LeftChannel] = QVector<qint16>(data[Phonon::AudioDataOutput::LeftChannel]);
+    }
+     if(data.contains(Phonon::AudioDataOutput::LeftSurroundChannel))
+     {
+        result[AudioEngine::LeftChannel] = QVector<qint16>(data[Phonon::AudioDataOutput::LeftSurroundChannel]);
+     }
+    if(data.contains(Phonon::AudioDataOutput::RightChannel))
+    {
+        result[AudioEngine::RightChannel]=  QVector<qint16>(data[Phonon::AudioDataOutput::RightChannel]);
+    }
+    if(data.contains(Phonon::AudioDataOutput::RightSurroundChannel))
+    {
+        result[AudioEngine::LeftChannel] = QVector<qint16>(data[Phonon::AudioDataOutput::RightSurroundChannel]);
+    }
+    if(data.contains(Phonon::AudioDataOutput::CenterChannel))
+    {
+        result[AudioEngine::LeftChannel] = QVector<qint16>(data[Phonon::AudioDataOutput::CenterChannel]);
+    }
+    if(data.contains(Phonon::AudioDataOutput::SubwooferChannel))
+    {
+        result[AudioEngine::LeftChannel] = QVector<qint16>(data[Phonon::AudioDataOutput::SubwooferChannel]);
+    }
+
+    s_instance->audioDataArrived(result);
+}
+
 
 
 AudioEngine* AudioEnginePrivate::s_instance = 0;
@@ -192,6 +225,8 @@ AudioEngine::AudioEngine()
 
     d->mediaObject = new Phonon::MediaObject( this );
     d->audioOutput = new Phonon::AudioOutput( Phonon::MusicCategory, this );
+    d->audioDataOutput = new Phonon::AudioDataOutput(this);
+
     d->audioPath = Phonon::createPath( d->mediaObject, d->audioOutput );
 
     d->mediaObject->setTickInterval( 150 );
@@ -211,7 +246,6 @@ AudioEngine::AudioEngine()
 
     initEqualizer();
 }
-
 
 AudioEngine::~AudioEngine()
 {
@@ -320,6 +354,32 @@ AudioEngine::stop( AudioErrorCode errorCode )
 
     Tomahawk::InfoSystem::InfoPushData pushData( s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowStopped, QVariant(), Tomahawk::InfoSystem::PushNoFlag );
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( pushData );
+}
+
+
+bool AudioEngine::activateDataOutput()
+{
+    Q_D(AudioEngine);
+
+    d->audioDataPath = Phonon::createPath(d->mediaObject, d->audioDataOutput);
+    connect(d->audioDataOutput, SIGNAL( dataReady(QMap<Phonon::AudioDataOutput::Channel,QVector<qint16> >) ),
+            d_func(), SLOT(onAudioDataArrived(QMap<Phonon::AudioDataOutput::Channel,QVector<qint16> >)));
+
+    return d->audioDataPath.isValid();
+
+}
+
+
+bool AudioEngine::deactivateDataOutput()
+{
+    Q_D(AudioEngine);
+
+    return  d->audioDataPath.disconnect();
+}
+
+void AudioEngine::audioDataArrived(QMap< AudioEngine::AudioChannel, QVector< qint16 > >& data)
+{
+    emit audioDataReady(data);
 }
 
 
