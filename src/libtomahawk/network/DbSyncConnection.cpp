@@ -199,7 +199,7 @@ DBSyncConnection::handleMsg( msg_ptr msg )
     // a db sync op msg
     if ( msg->is( Msg::DBOP ) )
     {
-        DatabaseCommand* cmd = Database::commandFactory( m, m_source );
+        DatabaseCommand* cmd = Database::instance()->createCommandInstance( m, m_source );
         if ( cmd )
         {
             QSharedPointer<DatabaseCommand> cmdsp = QSharedPointer<DatabaseCommand>(cmd);
