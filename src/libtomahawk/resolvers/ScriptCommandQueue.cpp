@@ -54,7 +54,7 @@ ScriptCommandQueue::nextCommand()
     connect( m_timer, SIGNAL( timeout() ),
              this, SLOT( onTimeout() ) );
 
-    m_timer->start( 10000 );
+    m_timer->start( 20000 );
 
     req->exec();
 }
