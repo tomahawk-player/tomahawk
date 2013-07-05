@@ -22,6 +22,8 @@
 #include "ExternalResolver.h"
 #include "ScriptCollection.h"
 
+#include "utils/Logger.h"
+
 ScriptCommand_AllArtists::ScriptCommand_AllArtists( const Tomahawk::collection_ptr& collection,
                                                     QObject* parent )
     : ScriptCommand( parent )
@@ -71,6 +73,7 @@ ScriptCommand_AllArtists::exec()
 void
 ScriptCommand_AllArtists::reportFailure()
 {
+    tDebug() << Q_FUNC_INFO << "for collection" << m_collection->name();
     emit artists( QList< Tomahawk::artist_ptr >() );
     emit done();
 }

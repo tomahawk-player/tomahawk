@@ -22,6 +22,8 @@
 #include "PlaylistEntry.h"
 #include "ScriptCollection.h"
 
+#include "utils/Logger.h"
+
 ScriptCommand_AllTracks::ScriptCommand_AllTracks( const Tomahawk::collection_ptr& collection,
                                                   const Tomahawk::album_ptr& album,
                                                   QObject* parent )
@@ -72,6 +74,7 @@ ScriptCommand_AllTracks::exec()
 void
 ScriptCommand_AllTracks::reportFailure()
 {
+    tDebug() << Q_FUNC_INFO << "for collection" << m_collection->name() << " artist" << m_album->artist()->name() << " album" << m_album->name();
     emit tracks( QList< Tomahawk::query_ptr >() );
     emit done();
 }

@@ -83,6 +83,7 @@ ScriptCommand_AllAlbums::exec()
 void
 ScriptCommand_AllAlbums::reportFailure()
 {
+    tDebug() << Q_FUNC_INFO << "for collection" << m_collection->name() << "and artist" << m_artist->name();
     emit albums( QList< Tomahawk::album_ptr >() );
     emit done();
 }
