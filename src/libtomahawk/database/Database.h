@@ -60,6 +60,8 @@ public:
 
     DatabaseImpl* impl();
 
+    static DatabaseCommand* commandFactory( const QVariant& op, const Tomahawk::source_ptr& source );
+
 signals:
     void indexReady(); // search index
     void ready();
