@@ -52,6 +52,18 @@
 #define DEFAULT_WORKER_THREADS 4
 #define MAX_WORKER_THREADS 16
 
+
+DatabaseCommand*
+DatabaseCommandFactory::newInstance()
+{
+    DatabaseCommand* command = create();
+    emit created( command );
+    return command;
+}
+
+
+
+
 Database* Database::s_instance = 0;
 
 
@@ -248,9 +260,12 @@ void
 Database::registerCommand( DatabaseCommandFactory* commandFactory )
 {
     // this is ugly, but we don't have virtual static methods in C++ :(
-    QScopedPointer<DatabaseCommand> command( commandFactory->create() );
+    QScopedPointer<DatabaseCommand> command( commandFactory->newInstance() );
 
     const QString commandName = command->commandname();
+    const QString className = command->metaObject()->className();
+
+    tDebug() << "Registering command" << commandName << "from class" << className;
 
     if( m_commandFactories.keys().contains( commandName ) )
     {
@@ -258,14 +273,31 @@ Database::registerCommand( DatabaseCommandFactory* commandFactory )
     }
     Q_ASSERT( !m_commandFactories.keys().contains( commandName ) );
 
+    m_commandNameClassNameMapping.insert( commandName, className );
     m_commandFactories.insert( commandName, commandFactory );
 }
+
+
+DatabaseCommandFactory*
+Database::commandFactoryByClassName(const QString& className)
+{
+    const QString commandName = m_commandNameClassNameMapping.key( className );
+    return commandFactoryByCommandName( commandName );
+}
+
+
+DatabaseCommandFactory*
+Database::commandFactoryByCommandName(const QString& commandName )
+{
+    return m_commandFactories.value( commandName );
+}
+
 
 
 DatabaseCommand*
 Database::createCommandInstance( const QString& commandName )
 {
-    DatabaseCommandFactory* factory = m_commandFactories.value( commandName );
+    DatabaseCommandFactory* factory = commandFactoryByCommandName( commandName );
 
     if( !factory )
     {
@@ -273,7 +305,7 @@ Database::createCommandInstance( const QString& commandName )
          return 0;
     }
 
-    return factory->create();
+    return factory->newInstance();
 }
 
 
