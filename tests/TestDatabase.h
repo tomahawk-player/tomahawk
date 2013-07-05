@@ -50,7 +50,14 @@ private slots:
         QVERIFY( lpCmd );
 
         // try to handle a third party database command
+
+        // test no command factory is available until now
+        QVERIFY( !db->commandFactory<TestDatabaseCommand>() );
+
+        // register it
         db->registerCommand<TestDatabaseCommand>();
+
+        // make sure it's available now
         command = db->commandFactory<TestDatabaseCommand>()->newInstance();
         TestDatabaseCommand* tCmd = qobject_cast< TestDatabaseCommand* >( command );
         QVERIFY( tCmd );
