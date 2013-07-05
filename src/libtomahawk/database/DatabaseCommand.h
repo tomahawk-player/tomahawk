@@ -89,8 +89,6 @@ public:
 
     void emitFinished() { emit finished(); }
 
-    static DatabaseCommand* factory( const QVariant& op, const Tomahawk::source_ptr& source );
-
 signals:
     void running();
     void finished();
