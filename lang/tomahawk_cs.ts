@@ -909,10 +909,10 @@ heslo</translation>
 <context>
     <name>JSResolver</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="329"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="366"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="404"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="463"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="347"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="384"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="422"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="481"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
         <translation>Varování řešitele skriptu: Volání API %1 vrátilo data synchronně.</translation>
     </message>

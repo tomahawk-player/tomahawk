@@ -908,10 +908,10 @@ Password</source>
 <context>
     <name>JSResolver</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="329"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="366"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="404"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="463"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="347"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="384"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="422"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="481"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
         <translation>Σριπτ προειδοποίηση αναλυτή: API κλήση% 1 επέστρεψε δεδομένα συγχρονισμένα.</translation>
     </message>
@@ -3749,17 +3749,17 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk-widgets/Dashboard.cpp" line="250"/>
         <source>No recently created playlists in your network.</source>
-        <translation type="unfinished"/>
+        <translation>Δεν δημιουργηθηκαν πρόσφατα λίστες αναπαραγωγής στο δίκτυό σας. </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/Dashboard.h" line="63"/>
         <source>Dashboard</source>
-        <translation type="unfinished"/>
+        <translation>Πίνακας Ελέγχου</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/Dashboard.h" line="64"/>
         <source>An overview of your recent activity</source>
-        <translation type="unfinished"/>
+        <translation>Μια ανασκόπηση της πρόσφατης δραστηριότητάς σας</translation>
     </message>
 </context>
 <context>
@@ -3767,32 +3767,32 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="67"/>
         <source>Charts</source>
-        <translation type="unfinished"/>
+        <translation>Γραφήματα</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="69"/>
         <source>Last Week</source>
-        <translation type="unfinished"/>
+        <translation>Τελευταία εβδομάδα</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="72"/>
         <source>Last Month</source>
-        <translation type="unfinished"/>
+        <translation>Τελευταίος μήνας</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="75"/>
         <source>Last Year</source>
-        <translation type="unfinished"/>
+        <translation>Τελευταίο ετος</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="78"/>
         <source>Overall</source>
-        <translation type="unfinished"/>
+        <translation>Συνολικά </translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.h" line="53"/>
         <source>Network Activity</source>
-        <translation type="unfinished"/>
+        <translation>Δραστηριότητα δικτύου</translation>
     </message>
 </context>
 <context>
