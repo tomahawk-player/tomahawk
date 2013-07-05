@@ -35,6 +35,18 @@ class DatabaseWorkerThread;
 class DatabaseWorker;
 class IdThreadWorker;
 
+
+struct DLLEXPORT DatabaseCommandFactory {
+  virtual ~DatabaseCommandFactory() {};
+  virtual DatabaseCommand* create() const = 0;
+};
+
+template <class COMMAND>
+struct DatabaseCommandFactoryImplementation : public DatabaseCommandFactory
+{
+  virtual COMMAND* create() const { return new COMMAND(); };
+};
+
 /*
     This class is really a firewall/pimpl - the public functions of LibraryImpl
     are the ones that operate on the database, without any locks.
@@ -60,7 +72,13 @@ public:
 
     DatabaseImpl* impl();
 
-    static DatabaseCommand* commandFactory( const QVariant& op, const Tomahawk::source_ptr& source );
+    DatabaseCommand* createCommandInstance( const QVariant& op, const Tomahawk::source_ptr& source );
+
+    // Template implementations need to stay in header!
+    template<typename T> void registerCommand()
+    {
+        registerCommand( new DatabaseCommandFactoryImplementation<T>() );
+    }
 
 signals:
     void indexReady(); // search index
@@ -77,6 +95,9 @@ private slots:
     void markAsReady();
 
 private:
+    void registerCommand( DatabaseCommandFactory* commandFactory );
+    DatabaseCommand* createCommandInstance( const QString& commandName );
+
     bool m_ready;
 
     DatabaseImpl* m_impl;
@@ -84,6 +105,7 @@ private:
     QList< QPointer< DatabaseWorkerThread > > m_workerThreads;
     IdThreadWorker* m_idWorker;
     int m_maxConcurrentThreads;
+    QHash< QString, DatabaseCommandFactory* > m_commandFactories;
 
     QHash< QThread*, DatabaseImpl* > m_implHash;
     QMutex m_mutex;

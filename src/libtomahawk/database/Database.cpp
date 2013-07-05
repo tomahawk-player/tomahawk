@@ -71,6 +71,22 @@ Database::Database( const QString& dbname, QObject* parent )
 {
     s_instance = this;
 
+    // register commands
+    registerCommand<DatabaseCommand_AddFiles>();
+    registerCommand<DatabaseCommand_DeleteFiles>();
+    registerCommand<DatabaseCommand_CreatePlaylist>();
+    registerCommand<DatabaseCommand_DeletePlaylist>();
+    registerCommand<DatabaseCommand_LogPlayback>();
+    registerCommand<DatabaseCommand_RenamePlaylist>();
+    registerCommand<DatabaseCommand_SetPlaylistRevision>();
+    registerCommand<DatabaseCommand_CreateDynamicPlaylist>();
+    registerCommand<DatabaseCommand_DeleteDynamicPlaylist>();
+    registerCommand<DatabaseCommand_SetDynamicPlaylistRevision>();
+    registerCommand<DatabaseCommand_SocialAction>();
+    registerCommand<DatabaseCommand_SetCollectionAttributes>();
+    registerCommand<DatabaseCommand_SetTrackAttributes>();
+    registerCommand<DatabaseCommand_ShareTrack>();
+
     if ( MAX_WORKER_THREADS < DEFAULT_WORKER_THREADS )
         m_maxConcurrentThreads = MAX_WORKER_THREADS;
     else
@@ -228,113 +244,47 @@ Database::markAsReady()
 }
 
 
-DatabaseCommand*
-Database::commandFactory( const QVariant& op, const Tomahawk::source_ptr& source )
+void
+Database::registerCommand( DatabaseCommandFactory* commandFactory )
 {
-    const QString name = op.toMap().value( "command" ).toString();
+    // this is ugly, but we don't have virtual static methods in C++ :(
+    QScopedPointer<DatabaseCommand> command( commandFactory->create() );
 
-    if( name == "addfiles" )
+    const QString commandName = command->commandname();
+
+    if( m_commandFactories.keys().contains( commandName ) )
     {
-        DatabaseCommand_AddFiles * cmd = new DatabaseCommand_AddFiles;
-        cmd->setSource( source );
-        QJson::QObjectHelper::qvariant2qobject( op.toMap(), cmd );
-        return cmd;
+        tLog() << commandName << "is already in " << m_commandFactories.keys();
     }
-    else if( name == "deletefiles" )
+    Q_ASSERT( !m_commandFactories.keys().contains( commandName ) );
+
+    m_commandFactories.insert( commandName, commandFactory );
+}
+
+
+DatabaseCommand*
+Database::createCommandInstance( const QString& commandName )
+{
+    DatabaseCommandFactory* factory = m_commandFactories.value( commandName );
+
+    if( !factory )
     {
-        DatabaseCommand_DeleteFiles * cmd = new DatabaseCommand_DeleteFiles;
-        cmd->setSource( source );
-        QJson::QObjectHelper::qvariant2qobject( op.toMap(), cmd );
-        return cmd;
-    }
-    else if( name == "createplaylist" )
-    {
-        DatabaseCommand_CreatePlaylist * cmd = new DatabaseCommand_CreatePlaylist;
-        cmd->setSource( source );
-        QJson::QObjectHelper::qvariant2qobject( op.toMap(), cmd );
-        return cmd;
-    }
-    else if( name == "deleteplaylist" )
-    {
-        DatabaseCommand_DeletePlaylist * cmd = new DatabaseCommand_DeletePlaylist;
-        cmd->setSource( source );
-        QJson::QObjectHelper::qvariant2qobject( op.toMap(), cmd );
-        return cmd;
-    }
-    else if( name == "logplayback" )
-    {
-        DatabaseCommand_LogPlayback * cmd = new DatabaseCommand_LogPlayback;
-        cmd->setSource( source );
-        QJson::QObjectHelper::qvariant2qobject( op.toMap(), cmd );
-        return cmd;
-    }
-    else if( name == "renameplaylist" )
-    {
-        DatabaseCommand_RenamePlaylist * cmd = new DatabaseCommand_RenamePlaylist;
-        cmd->setSource( source );
-        QJson::QObjectHelper::qvariant2qobject( op.toMap(), cmd );
-        return cmd;
-    }
-    else if( name == "setplaylistrevision" )
-    {
-        DatabaseCommand_SetPlaylistRevision * cmd = new DatabaseCommand_SetPlaylistRevision;
-        cmd->setSource( source );
-        QJson::QObjectHelper::qvariant2qobject( op.toMap(), cmd );
-        return cmd;
-    }
-    else if( name == "createdynamicplaylist" )
-    {
-        DatabaseCommand_CreateDynamicPlaylist * cmd = new DatabaseCommand_CreateDynamicPlaylist;
-        cmd->setSource( source );
-        QJson::QObjectHelper::qvariant2qobject( op.toMap(), cmd );
-        return cmd;
-    }
-    else if( name == "deletedynamicplaylist" )
-    {
-        DatabaseCommand_DeleteDynamicPlaylist * cmd = new DatabaseCommand_DeleteDynamicPlaylist;
-        cmd->setSource( source );
-        QJson::QObjectHelper::qvariant2qobject( op.toMap(), cmd );
-        return cmd;
-    }
-    else if( name == "setdynamicplaylistrevision" )
-    {
-        qDebug() << "SETDYN CONTENT:" << op;
-        DatabaseCommand_SetDynamicPlaylistRevision * cmd = new DatabaseCommand_SetDynamicPlaylistRevision;
-        cmd->setSource( source );
-        QJson::QObjectHelper::qvariant2qobject( op.toMap(), cmd );
-        return cmd;
-    }
-    else if( name == "socialaction" )
-    {
-        DatabaseCommand_SocialAction * cmd = new DatabaseCommand_SocialAction;
-        cmd->setSource( source );
-        QJson::QObjectHelper::qvariant2qobject( op.toMap(), cmd );
-        return cmd;
-    }
-    else if( name == "setcollectionattributes" )
-    {
-        DatabaseCommand_SetCollectionAttributes * cmd = new DatabaseCommand_SetCollectionAttributes;
-        cmd->setSource( source );
-        QJson::QObjectHelper::qvariant2qobject( op.toMap(), cmd );
-        return cmd;
-    }
-    else if( name == "settrackattributes" )
-    {
-        DatabaseCommand_SetTrackAttributes * cmd = new DatabaseCommand_SetTrackAttributes;
-        cmd->setSource( source );
-        QJson::QObjectHelper::qvariant2qobject( op.toMap(), cmd );
-        return cmd;
-    }
-    else if( name == "sharetrack" )
-    {
-        DatabaseCommand_ShareTrack * cmd = new DatabaseCommand_ShareTrack;
-        cmd->setSource( source );
-        QJson::QObjectHelper::qvariant2qobject( op.toMap(), cmd );
-        return cmd;
+         tLog() << "Unknown database command" << commandName;
+         return 0;
     }
 
-    qDebug() << "Unknown database command" << name;
-//    Q_ASSERT( false );
-    return NULL;
+    return factory->create();
+}
+
+
+DatabaseCommand*
+Database::createCommandInstance(const QVariant& op, const source_ptr& source)
+{
+    const QString commandName = op.toMap().value( "command" ).toString();
+
+    DatabaseCommand* command = createCommandInstance( commandName );
+    command->setSource( source );
+    QJson::QObjectHelper::qvariant2qobject( op.toMap(), command );
+    return command;
 }
 
