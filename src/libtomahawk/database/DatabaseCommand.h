@@ -64,7 +64,7 @@ public:
 
     // stuff to do once transaction applied ok.
     // Don't change the database from in here, duh.
-    void postCommit() { postCommitHook(); emit committed(); }
+    void postCommit() { postCommitHook(); emitCommitted(); }
     virtual void postCommitHook(){};
 
     void setSource( const Tomahawk::source_ptr& s );
@@ -87,12 +87,19 @@ public:
     }
     void setGuid( const QString& g ) { m_guid = g; }
 
-    void emitFinished() { emit finished(); }
+    void emitFinished() { emit finished(this); emit finished(); }
+    void emitCommitted() { emit committed(this); emit committed(); }
+    void emitRunning() { emit running(this); emit running(); }
 
 signals:
     void running();
+    void running(DatabaseCommand*);
+
     void finished();
+    void finished(DatabaseCommand*);
+
     void committed();
+    void committed(DatabaseCommand*);
 
 private:
     State m_state;

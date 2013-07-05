@@ -36,14 +36,25 @@ class DatabaseWorker;
 class IdThreadWorker;
 
 
-struct DLLEXPORT DatabaseCommandFactory {
-  virtual ~DatabaseCommandFactory() {};
-  virtual DatabaseCommand* create() const = 0;
+class DLLEXPORT DatabaseCommandFactory : public QObject
+{
+Q_OBJECT
+
+public:
+    virtual ~DatabaseCommandFactory() {};
+    DatabaseCommand* newInstance();
+
+signals:
+    void created( DatabaseCommand* command );
+
+protected:
+    virtual DatabaseCommand* create() const = 0;
 };
 
 template <class COMMAND>
-struct DatabaseCommandFactoryImplementation : public DatabaseCommandFactory
+class DatabaseCommandFactoryImplementation : public DatabaseCommandFactory
 {
+protected:
   virtual COMMAND* create() const { return new COMMAND(); };
 };
 
@@ -80,6 +91,11 @@ public:
         registerCommand( new DatabaseCommandFactoryImplementation<T>() );
     }
 
+    template<typename T> DatabaseCommandFactory* commandFactory()
+    {
+        return commandFactoryByClassName( T::staticMetaObject.className() );
+    }
+
 signals:
     void indexReady(); // search index
     void ready();
@@ -96,6 +112,8 @@ private slots:
 
 private:
     void registerCommand( DatabaseCommandFactory* commandFactory );
+    DatabaseCommandFactory* commandFactoryByClassName( const QString& className );
+    DatabaseCommandFactory* commandFactoryByCommandName( const QString& commandName );
     DatabaseCommand* createCommandInstance( const QString& commandName );
 
     bool m_ready;
@@ -105,7 +123,9 @@ private:
     QList< QPointer< DatabaseWorkerThread > > m_workerThreads;
     IdThreadWorker* m_idWorker;
     int m_maxConcurrentThreads;
+
     QHash< QString, DatabaseCommandFactory* > m_commandFactories;
+    QHash< QString, QString> m_commandNameClassNameMapping;
 
     QHash< QThread*, DatabaseImpl* > m_implHash;
     QMutex m_mutex;
