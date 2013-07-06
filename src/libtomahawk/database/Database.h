@@ -36,16 +36,19 @@ class DatabaseWorker;
 class IdThreadWorker;
 
 
+typedef QSharedPointer< DatabaseCommand> dbcmd_ptr;
+
+
 class DLLEXPORT DatabaseCommandFactory : public QObject
 {
 Q_OBJECT
 
 public:
     virtual ~DatabaseCommandFactory() {};
-    DatabaseCommand* newInstance();
+    dbcmd_ptr newInstance();
 
 signals:
-    void created( DatabaseCommand* command );
+    void created( const dbcmd_ptr& command );
 
 protected:
     virtual DatabaseCommand* create() const = 0;
@@ -55,7 +58,7 @@ template <class COMMAND>
 class DatabaseCommandFactoryImplementation : public DatabaseCommandFactory
 {
 protected:
-  virtual COMMAND* create() const { return new COMMAND(); };
+    virtual COMMAND* create() const { return new COMMAND(); };
 };
 
 /*
@@ -83,7 +86,7 @@ public:
 
     DatabaseImpl* impl();
 
-    DatabaseCommand* createCommandInstance( const QVariant& op, const Tomahawk::source_ptr& source );
+    dbcmd_ptr createCommandInstance( const QVariant& op, const Tomahawk::source_ptr& source );
 
     // Template implementations need to stay in header!
     template<typename T> void registerCommand()
@@ -114,7 +117,7 @@ private:
     void registerCommand( DatabaseCommandFactory* commandFactory );
     DatabaseCommandFactory* commandFactoryByClassName( const QString& className );
     DatabaseCommandFactory* commandFactoryByCommandName( const QString& commandName );
-    DatabaseCommand* createCommandInstance( const QString& commandName );
+    dbcmd_ptr createCommandInstance( const QString& commandName );
 
     bool m_ready;
 

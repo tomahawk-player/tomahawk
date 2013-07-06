@@ -53,15 +53,14 @@
 #define MAX_WORKER_THREADS 16
 
 
-DatabaseCommand*
+dbcmd_ptr
 DatabaseCommandFactory::newInstance()
 {
-    DatabaseCommand* command = create();
+    dbcmd_ptr command = dbcmd_ptr( create() );
+
     emit created( command );
     return command;
 }
-
-
 
 
 Database* Database::s_instance = 0;
@@ -260,7 +259,7 @@ void
 Database::registerCommand( DatabaseCommandFactory* commandFactory )
 {
     // this is ugly, but we don't have virtual static methods in C++ :(
-    QScopedPointer<DatabaseCommand> command( commandFactory->newInstance() );
+    dbcmd_ptr command = commandFactory->newInstance();
 
     const QString commandName = command->commandname();
     const QString className = command->metaObject()->className();
@@ -294,7 +293,7 @@ Database::commandFactoryByCommandName(const QString& commandName )
 
 
 
-DatabaseCommand*
+dbcmd_ptr
 Database::createCommandInstance( const QString& commandName )
 {
     DatabaseCommandFactory* factory = commandFactoryByCommandName( commandName );
@@ -302,21 +301,21 @@ Database::createCommandInstance( const QString& commandName )
     if( !factory )
     {
          tLog() << "Unknown database command" << commandName;
-         return 0;
+         return dbcmd_ptr();
     }
 
     return factory->newInstance();
 }
 
 
-DatabaseCommand*
+dbcmd_ptr
 Database::createCommandInstance(const QVariant& op, const source_ptr& source)
 {
     const QString commandName = op.toMap().value( "command" ).toString();
 
-    DatabaseCommand* command = createCommandInstance( commandName );
+    dbcmd_ptr command = createCommandInstance( commandName );
     command->setSource( source );
-    QJson::QObjectHelper::qvariant2qobject( op.toMap(), command );
+    QJson::QObjectHelper::qvariant2qobject( op.toMap(), command.data() );
     return command;
 }
 

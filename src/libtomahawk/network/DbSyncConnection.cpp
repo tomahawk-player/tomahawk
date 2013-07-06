@@ -199,11 +199,10 @@ DBSyncConnection::handleMsg( msg_ptr msg )
     // a db sync op msg
     if ( msg->is( Msg::DBOP ) )
     {
-        DatabaseCommand* cmd = Database::instance()->createCommandInstance( m, m_source );
-        if ( cmd )
+        dbcmd_ptr cmd = Database::instance()->createCommandInstance( m, m_source );
+        if ( !cmd.isNull() )
         {
-            QSharedPointer<DatabaseCommand> cmdsp = QSharedPointer<DatabaseCommand>(cmd);
-            m_source->addCommand( cmdsp );
+            m_source->addCommand( cmd );
         }
 
         if ( !msg->is( Msg::FRAGMENT ) ) // last msg in this batch
