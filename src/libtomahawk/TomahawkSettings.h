@@ -21,11 +21,13 @@
 #ifndef TOMAHAWK_SETTINGS_H
 #define TOMAHAWK_SETTINGS_H
 
+#include "network/Enums.h"
+
 #include "DllMacro.h"
 #include "Typedefs.h"
 
 #include <QSettings>
-#include <QtNetwork/QNetworkProxy>
+#include <QNetworkProxy>
 #include <QStringList>
 
 #define TOMAHAWK_SETTINGS_VERSION 15
@@ -134,9 +136,8 @@ public:
     QString bookmarkPlaylist() const;
 
     /// Network settings
-    enum ExternalAddressMode { Lan, Upnp, Static };
-    ExternalAddressMode externalAddressMode();
-    void setExternalAddressMode( ExternalAddressMode externalAddressMode );
+    Tomahawk::Network::ExternalAddress::Mode externalAddressMode();
+    void setExternalAddressMode( Tomahawk::Network::ExternalAddress::Mode externalAddressMode );
 
     bool httpEnabled() const; /// true by default
     void setHttpEnabled( bool enable );

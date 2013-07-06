@@ -1286,20 +1286,20 @@ TomahawkSettings::removeAccount( const QString& accountId )
 }
 
 
-TomahawkSettings::ExternalAddressMode
+Tomahawk::Network::ExternalAddress::Mode
 TomahawkSettings::externalAddressMode()
 {
     if ( value( "network/prefer-static-host-and-port", false ).toBool() )
     {
         remove( "network/prefer-static-host-and-port" );
-        setValue( "network/external-address-mode", TomahawkSettings::Static );
+        setValue( "network/external-address-mode", Tomahawk::Network::ExternalAddress::Static );
     }
-    return (TomahawkSettings::ExternalAddressMode) value( "network/external-address-mode", TomahawkSettings::Upnp ).toInt();
+    return (Tomahawk::Network::ExternalAddress::Mode) value( "network/external-address-mode", Tomahawk::Network::ExternalAddress::Upnp ).toInt();
 }
 
 
 void
-TomahawkSettings::setExternalAddressMode( ExternalAddressMode externalAddressMode )
+TomahawkSettings::setExternalAddressMode( Tomahawk::Network::ExternalAddress::Mode externalAddressMode )
 {
     setValue( "network/external-address-mode", externalAddressMode );
 }

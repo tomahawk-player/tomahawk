@@ -25,14 +25,16 @@
 // time before new connection terminate if it could not be established
 #define CONNECT_TIMEOUT 10000
 
+#include "network/Enums.h"
+
+#include "DllMacro.h"
+#include "Typedefs.h"
+
 #include <QObject>
 #include <QMap>
 #include <QNetworkReply>
 #include <QSharedPointer>
 #include <QTcpServer>
-
-#include "DllMacro.h"
-#include "Typedefs.h"
 
 class Connection;
 class Connector;
@@ -67,7 +69,7 @@ public:
     explicit Servent( QObject* parent = 0 );
     virtual ~Servent();
 
-    bool startListening( QHostAddress ha, bool upnp, int port );
+    bool startListening( QHostAddress ha, bool upnp, int port, Tomahawk::Network::ExternalAddress::Mode mode, int defaultPort, bool autoDetectExternalIp = false, const QString& externalHost = "", int externalPort = -1 );
 
     // creates new token that allows a controlconnection to be set up
     QString createConnectionKey( const QString& name = "", const QString &nodeid = "", const QString &key = "", bool onceOnly = true );

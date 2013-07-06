@@ -99,10 +99,10 @@ SettingsDialog::SettingsDialog(QObject *parent )
     #endif
 
     //Network settings
-    TomahawkSettings::ExternalAddressMode mode = TomahawkSettings::instance()->externalAddressMode();
-    if ( mode == TomahawkSettings::Lan )
+    Tomahawk::Network::ExternalAddress::Mode mode = TomahawkSettings::instance()->externalAddressMode();
+    if ( mode == Tomahawk::Network::ExternalAddress::Lan )
         m_advancedWidgetUi->lanOnlyRadioButton->setChecked( true );
-    else if ( mode == TomahawkSettings::Static )
+    else if ( mode == Tomahawk::Network::ExternalAddress::Static )
         m_advancedWidgetUi->staticIpRadioButton->setChecked( true );
     else
         m_advancedWidgetUi->upnpRadioButton->setChecked( true );
@@ -269,7 +269,7 @@ SettingsDialog::saveSettings()
     s->setHttpEnabled( m_advancedWidgetUi->checkBoxHttp->checkState() == Qt::Checked );
     s->setSongChangeNotificationEnabled( m_advancedWidgetUi->checkBoxSongChangeNotifications->checkState() == Qt::Checked );
     s->setProxyType( m_advancedWidgetUi->enableProxyCheckBox->isChecked() ? QNetworkProxy::Socks5Proxy : QNetworkProxy::NoProxy );
-    s->setExternalAddressMode( m_advancedWidgetUi->upnpRadioButton->isChecked() ? TomahawkSettings::Upnp : ( m_advancedWidgetUi->lanOnlyRadioButton->isChecked() ? TomahawkSettings::Lan : TomahawkSettings::Static ) );
+    s->setExternalAddressMode( m_advancedWidgetUi->upnpRadioButton->isChecked() ? Tomahawk::Network::ExternalAddress::Upnp : ( m_advancedWidgetUi->lanOnlyRadioButton->isChecked() ? Tomahawk::Network::ExternalAddress::Lan : Tomahawk::Network::ExternalAddress::Static ) );
     s->setAutoDetectExternalIp( m_advancedWidgetUi->autoDetectIpCheckBox->isChecked() );
 
     s->setExternalHostname( m_advancedWidgetUi->staticHostName->text() );

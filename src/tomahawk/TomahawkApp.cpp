@@ -545,10 +545,15 @@ TomahawkApp::initServent()
     bool upnp = !arguments().contains( "--noupnp" );
     int port = TomahawkSettings::instance()->externalPort();
     connect( Servent::instance(), SIGNAL( ipDetectionFailed( QNetworkReply::NetworkError, QString ) ), this, SLOT( ipDetectionFailed( QNetworkReply::NetworkError, QString ) ) );
+    int defaultPort = TomahawkSettings::instance()->defaultPort();
+    Tomahawk::Network::ExternalAddress::Mode mode = TomahawkSettings::instance()->externalAddressMode();
+    const QString externalHostname = TomahawkSettings::instance()->externalHostname();
+    int externalPort = TomahawkSettings::instance()->externalPort();
+    bool autodetectIp = TomahawkSettings::instance()->autoDetectExternalIp();
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
-    if ( !Servent::instance()->startListening( QHostAddress( QHostAddress::Any ), upnp, port ) )
+    if ( !Servent::instance()->startListening( QHostAddress( QHostAddress::Any ), upnp, port, mode, defaultPort, autodetectIp, externalHostname, externalPort ) )
 #else
-    if ( !Servent::instance()->startListening( QHostAddress( QHostAddress::AnyIPv6 ), upnp, port ) )
+    if ( !Servent::instance()->startListening( QHostAddress( QHostAddress::AnyIPv6 ), upnp, port, mode, defaultPort, autodetectIp, externalHostname, externalPort ) )
 #endif
     {
         tLog() << "Failed to start listening with servent";
