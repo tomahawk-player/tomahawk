@@ -379,8 +379,6 @@ Result::sourceIcon( TomahawkUtils::ImageMode style, const QSize& desiredSize ) c
         const ExternalResolver* resolver = qobject_cast< ExternalResolver* >( m_resolvedBy.data() );
         if ( !resolver )
         {
-            tLog() << "Result was not resolved by an ExternalResolver but the collection is empty too. What is going on?";
-            Q_ASSERT( resolver );
             return QPixmap();
         }
         else
