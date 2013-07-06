@@ -32,7 +32,10 @@
 
 // TODO: Move into Tomahawk namespace
 class Msg;
+class DatabaseCommand;
+
 typedef QSharedPointer<Msg> msg_ptr;
+typedef QSharedPointer< DatabaseCommand> dbcmd_ptr;
 
 namespace Tomahawk
 {
