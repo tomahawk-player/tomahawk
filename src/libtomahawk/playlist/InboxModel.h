@@ -61,6 +61,9 @@ private slots:
 
     void tracksLoaded( QList< Tomahawk::query_ptr > );
 
+    void onDbcmdCreated( const Tomahawk::dbcmd_ptr& cmd );
+    void onDbcmdCommitted( const Tomahawk::dbcmd_ptr& cmd );
+
 private:
     static QList< Tomahawk::SocialAction > mergeSocialActions( QList< Tomahawk::SocialAction > first,
                                                                QList< Tomahawk::SocialAction > second );

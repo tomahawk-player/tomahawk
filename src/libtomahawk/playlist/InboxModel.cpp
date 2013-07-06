@@ -22,9 +22,11 @@
 #include "database/DatabaseCommand_LoadInboxEntries.h"
 #include "database/DatabaseCommand_DeleteInboxEntry.h"
 #include "database/DatabaseCommand_ModifyInboxEntry.h"
+#include "database/DatabaseCommand_ShareTrack.h"
 #include "jobview/JobStatusModel.h"
 #include "utils/Logger.h"
 #include "utils/Closure.h"
+#include "ViewManager.h"
 
 #include "PlaylistEntry.h"
 #include "SourceList.h"
@@ -39,6 +41,12 @@ InboxModel::InboxModel( QObject* parent )
     else
         NewClosure( SourceList::instance(), SIGNAL( ready() ),
                     this, SLOT( loadTracks() ) );
+
+    // Every time a ShareTrack dbcmd is created, we keep track of it until it's committed,
+    // so we can react with post-commit changes in the UI
+    Tomahawk::DatabaseCommandFactory* factory = Tomahawk::Database::instance()->commandFactory<Tomahawk::DatabaseCommand_ShareTrack>();
+    connect( factory, SIGNAL(created(Tomahawk::dbcmd_ptr)),
+             this, SLOT(onDbcmdCreated(Tomahawk::dbcmd_ptr)));
 }
 
 
@@ -231,6 +239,57 @@ InboxModel::tracksLoaded( QList< Tomahawk::query_ptr > incoming )
 
         clear();
         appendEntries( el );
+    }
+}
+
+
+void
+InboxModel::onDbcmdCreated( const Tomahawk::dbcmd_ptr& cmd )
+{
+    connect( cmd.data(), SIGNAL( committed( Tomahawk::dbcmd_ptr ) ),
+             this, SLOT( onDbcmdCommitted( Tomahawk::dbcmd_ptr ) ) );
+}
+
+
+void
+InboxModel::onDbcmdCommitted( const Tomahawk::dbcmd_ptr& cmd )
+{
+    Tomahawk::DatabaseCommand_ShareTrack* c = qobject_cast< Tomahawk::DatabaseCommand_ShareTrack* >( cmd.data() );
+    Q_ASSERT( c );
+
+    QString myDbid = SourceList::instance()->getLocal()->nodeId();
+    QString sourceDbid = c->source()->nodeId();
+
+    if ( myDbid != c->recipient() || sourceDbid == c->recipient() ) // if I'm not receiving, or if I'm sending to myself, bail out
+        return;
+
+    Tomahawk::trackdata_ptr td = Tomahawk::TrackData::get( 0, c->artist(), c->track() );
+    if ( td.isNull() )
+        return;
+
+    if ( c->source()->isLocal() && sourceDbid != c->recipient() ) //if I just sent a track
+    {
+        showNotification( InboxJobItem::Sending, c->recipient(), td );
+        return;
+    }
+
+    //From here on, everything happens only on the recipient, and only if recipient!=source
+
+    Tomahawk::SocialAction action;
+    action.action = "Inbox";
+    action.source = c->source();
+    action.value = true; //unlistened
+    action.timestamp = c->timestamp();
+
+    QList< Tomahawk::SocialAction > actions = td->allSocialActions();
+    actions << action;
+    td->setAllSocialActions( actions );
+
+    insertQuery( td->toQuery(), 0 );
+
+    if ( ViewManager::instance()->currentPage() != ViewManager::instance()->inboxWidget() )
+    {
+        showNotification( InboxJobItem::Receiving, c->source(), td );
     }
 }
 

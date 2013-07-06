@@ -49,7 +49,7 @@ public:
     dbcmd_ptr newInstance();
 
 signals:
-    void created( const dbcmd_ptr& command );
+    void created( const Tomahawk::dbcmd_ptr& command );
 
 protected:
     virtual DatabaseCommand* create() const = 0;

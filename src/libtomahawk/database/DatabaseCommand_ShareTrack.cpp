@@ -74,58 +74,6 @@ DatabaseCommand_ShareTrack::postCommitHook()
 {
     if ( source()->isLocal() )
         Servent::instance()->triggerDBSync();
-
-    QString myDbid = SourceList::instance()->getLocal()->nodeId();
-    QString sourceDbid = source()->nodeId();
-
-    qRegisterMetaType< InboxJobItem::Side >("InboxJobItem::Side");
-    qRegisterMetaType< Tomahawk::trackdata_ptr >("Tomahawk::trackdata_ptr");
-    if ( source()->isLocal() && sourceDbid != m_recipient ) //if I just sent a track
-    {
-        QMetaObject::invokeMethod( ViewManager::instance()->inboxModel(),
-                                   "showNotification",
-                                   Qt::QueuedConnection,
-                                   Q_ARG( InboxJobItem::Side, InboxJobItem::Sending ),
-                                   Q_ARG( const QString&, m_recipient ),
-                                   Q_ARG( const Tomahawk::trackdata_ptr&, m_track ) );
-    }
-
-    if ( m_track )
-        return;
-
-    if ( myDbid != m_recipient || sourceDbid == m_recipient )
-        return;
-
-    //From here on, everything happens only on the recipient, and only if recipient!=source
-    m_track = Tomahawk::TrackData::get( 0, artist(), track() );
-    if ( !m_track )
-        return;
-
-    Tomahawk::SocialAction action;
-    action.action = "Inbox";
-    action.source = source();
-    action.value = true; //unlistened
-    action.timestamp = timestamp();
-
-    QList< Tomahawk::SocialAction > actions = m_track->allSocialActions();
-    actions << action;
-    m_track->setAllSocialActions( actions );
-
-    QMetaObject::invokeMethod( ViewManager::instance()->inboxModel(),
-                               "insertQuery",
-                               Qt::QueuedConnection,
-                               Q_ARG( const Tomahawk::query_ptr&, m_track->toQuery() ),
-                               Q_ARG( int, 0 ) /*row*/ );
-
-    if ( ViewManager::instance()->currentPage() != ViewManager::instance()->inboxWidget() )
-    {
-        QMetaObject::invokeMethod( ViewManager::instance()->inboxModel(),
-                                   "showNotification",
-                                   Qt::QueuedConnection,
-                                   Q_ARG( InboxJobItem::Side, InboxJobItem::Receiving ),
-                                   Q_ARG( const Tomahawk::source_ptr&, source() ),
-                                   Q_ARG( const Tomahawk::trackdata_ptr&, m_track ) );
-    }
 }
 
 
