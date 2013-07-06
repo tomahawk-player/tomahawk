@@ -20,6 +20,8 @@
 
 #include "utils/Logger.h"
 
+#include "Source.h"
+
 
 namespace Tomahawk
 {
