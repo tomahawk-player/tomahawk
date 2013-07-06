@@ -40,10 +40,12 @@ DatabaseCommand::DatabaseCommand( const Tomahawk::source_ptr& src, QObject* pare
     //qDebug() << Q_FUNC_INFO;
 }
 
+
 DatabaseCommand::DatabaseCommand( const DatabaseCommand& other )
     : QObject( other.parent() )
 {
 }
+
 
 DatabaseCommand::~DatabaseCommand()
 {
@@ -74,6 +76,20 @@ const Tomahawk::source_ptr&
 DatabaseCommand::source() const
 {
     return m_source;
+}
+
+
+QWeakPointer< DatabaseCommand >
+DatabaseCommand::weakRef()
+{
+    return m_ownRef;
+}
+
+
+void
+DatabaseCommand::setWeakRef( QWeakPointer< DatabaseCommand > weakRef )
+{
+    m_ownRef = weakRef;
 }
 
 }

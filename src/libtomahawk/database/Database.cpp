@@ -60,8 +60,18 @@ DatabaseCommandFactory::newInstance()
 {
     dbcmd_ptr command = dbcmd_ptr( create() );
 
-    emit created( command );
+    notifyCreated( command );
+
     return command;
+}
+
+
+void
+DatabaseCommandFactory::notifyCreated( const dbcmd_ptr& command )
+{
+    command->setWeakRef( command.toWeakRef() );
+
+    emit created( command );
 }
 
 
@@ -177,6 +187,15 @@ Database::enqueue( const QList< Tomahawk::dbcmd_ptr >& lc )
         return;
     }
 
+    foreach ( const Tomahawk::dbcmd_ptr& cmd, lc )
+    {
+        DatabaseCommandFactory* factory = commandFactoryByCommandName( cmd->commandname() );
+        if ( factory )
+        {
+            factory->notifyCreated( cmd );
+        }
+    }
+
     tDebug( LOGVERBOSE ) << "Enqueueing" << lc.count() << "commands to rw thread";
     if ( m_workerRW && m_workerRW.data()->worker() )
         m_workerRW.data()->worker().data()->enqueue( lc );
@@ -191,6 +210,12 @@ Database::enqueue( const Tomahawk::dbcmd_ptr& lc )
     {
         tDebug() << "Can't enqueue DatabaseCommand, Database is not ready yet!";
         return;
+    }
+
+    DatabaseCommandFactory* factory = commandFactoryByCommandName( lc->commandname() );
+    if ( factory )
+    {
+        factory->notifyCreated( lc );
     }
 
     if ( lc->doesMutates() )

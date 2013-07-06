@@ -43,6 +43,7 @@ class DatabaseImpl;
 class DLLEXPORT DatabaseCommandFactory : public QObject
 {
 Q_OBJECT
+    friend class Database;
 
 public:
     virtual ~DatabaseCommandFactory() {};
@@ -52,6 +53,8 @@ signals:
     void created( const Tomahawk::dbcmd_ptr& command );
 
 protected:
+    void notifyCreated( const Tomahawk::dbcmd_ptr& command );
+
     virtual DatabaseCommand* create() const = 0;
 };
 

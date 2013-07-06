@@ -260,7 +260,10 @@ InboxModel::onDbcmdCommitted( const Tomahawk::dbcmd_ptr& cmd )
     QString myDbid = SourceList::instance()->getLocal()->nodeId();
     QString sourceDbid = c->source()->nodeId();
 
-    if ( myDbid != c->recipient() || sourceDbid == c->recipient() ) // if I'm not receiving, or if I'm sending to myself, bail out
+    if ( sourceDbid == c->recipient() ) // if I'm sending to myself, bail out
+        return;
+
+    if ( myDbid != c->recipient() && !c->source()->isLocal() ) // if I'm not the sender and not the receiver, bail out
         return;
 
     Tomahawk::trackdata_ptr td = Tomahawk::TrackData::get( 0, c->artist(), c->track() );

@@ -51,7 +51,7 @@ public:
     explicit DatabaseCommand( QObject* parent = 0 );
     explicit DatabaseCommand( const Tomahawk::source_ptr& src, QObject* parent = 0 );
 
-    DatabaseCommand( const DatabaseCommand &other );
+    DatabaseCommand( const DatabaseCommand &other ); //needed for QMetaType
 
     virtual ~DatabaseCommand();
 
@@ -90,19 +90,22 @@ public:
     }
     void setGuid( const QString& g ) { m_guid = g; }
 
-    void emitFinished() { emit finished(this); emit finished(); }
-    void emitCommitted() { emit committed(this); emit committed(); }
-    void emitRunning() { emit running(this); emit running(); }
+    void emitFinished() { emit finished(m_ownRef.toStrongRef()); emit finished(); }
+    void emitCommitted() { emit committed(m_ownRef.toStrongRef()); emit committed(); }
+    void emitRunning() { emit running(m_ownRef.toStrongRef()); emit running(); }
+
+    QWeakPointer< Tomahawk::DatabaseCommand > weakRef();
+    void setWeakRef( QWeakPointer< Tomahawk::DatabaseCommand > weakRef );
 
 signals:
     void running();
-    void running(DatabaseCommand*);
+    void running( const Tomahawk::dbcmd_ptr& );
 
     void finished();
-    void finished(DatabaseCommand*);
+    void finished( const Tomahawk::dbcmd_ptr& );
 
     void committed();
-    void committed(DatabaseCommand*);
+    void committed( const Tomahawk::dbcmd_ptr& );
 
 private:
     State m_state;
@@ -110,6 +113,8 @@ private:
     mutable QString m_guid;
 
     QVariant m_data;
+
+    QWeakPointer< Tomahawk::DatabaseCommand > m_ownRef;
 };
 
 }
