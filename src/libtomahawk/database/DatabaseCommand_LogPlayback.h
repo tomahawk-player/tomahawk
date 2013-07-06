@@ -30,6 +30,9 @@
 
 #include "DllMacro.h"
 
+namespace Tomahawk
+{
+
 class DLLEXPORT DatabaseCommand_LogPlayback : public DatabaseCommandLoggable
 {
 Q_OBJECT
@@ -101,5 +104,7 @@ private:
     unsigned int m_trackDuration;
     Action m_action;
 };
+
+}
 
 #endif // DATABASECOMMAND_LOGPLAYBACK_H

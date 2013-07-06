@@ -328,7 +328,7 @@ HatchetSipPlugin::messageReceived( const QByteArray &msg )
         QVariantMap registerMap;
         registerMap[ "command" ] = "register";
         registerMap[ "token" ] = m_token;
-        registerMap[ "dbid" ] = Database::instance()->impl()->dbid();
+        registerMap[ "dbid" ] = Tomahawk::Database::instance()->impl()->dbid();
         registerMap[ "alias" ] = QHostInfo::localHostName();
 
         QList< SipInfo > sipinfos = Servent::instance()->getLocalSipInfos( "default", "default" );
@@ -544,9 +544,9 @@ void
 HatchetSipPlugin::sendOplog( const QVariantMap& valMap ) const
 {
     tDebug() << Q_FUNC_INFO;
-    DatabaseCommand_loadOps* cmd = new DatabaseCommand_loadOps( SourceList::instance()->getLocal(), valMap[ "lastrevision" ].toString() );
+    Tomahawk::DatabaseCommand_loadOps* cmd = new Tomahawk::DatabaseCommand_loadOps( SourceList::instance()->getLocal(), valMap[ "lastrevision" ].toString() );
     connect( cmd, SIGNAL( done( QString, QString, QList< dbop_ptr > ) ), SLOT( oplogFetched( QString, QString, QList< dbop_ptr > ) ) );
-    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+    Tomahawk::Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
 
 

@@ -43,7 +43,7 @@ public:
     Tomahawk::collection_ptr collection() const { return m_collection; }
 
     void addCollection( const Tomahawk::collection_ptr& collection, bool overwrite = false );
-    void addFilteredCollection( const Tomahawk::collection_ptr& collection, unsigned int amount, DatabaseCommand_AllAlbums::SortOrder order, bool overwrite = false );
+    void addFilteredCollection( const Tomahawk::collection_ptr& collection, unsigned int amount, Tomahawk::DatabaseCommand_AllAlbums::SortOrder order, bool overwrite = false );
 
     PlayableItem* findItem( const Tomahawk::artist_ptr& artist ) const;
     PlayableItem* findItem( const Tomahawk::album_ptr& album ) const;

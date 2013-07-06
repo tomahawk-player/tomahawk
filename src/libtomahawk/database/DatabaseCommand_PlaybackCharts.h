@@ -29,6 +29,10 @@
 
 #include "DllMacro.h"
 
+
+namespace Tomahawk
+{
+
 class DLLEXPORT DatabaseCommand_PlaybackCharts : public DatabaseCommand
 {
 Q_OBJECT
@@ -50,5 +54,7 @@ signals:
 private:
     unsigned int m_amount;
 };
+
+}
 
 #endif // DATABASECOMMAND_PLAYBACKCHARTS_H

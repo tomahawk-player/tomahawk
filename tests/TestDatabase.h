@@ -25,7 +25,7 @@
 #include "database/DatabaseCommand_LogPlayback.h"
 
 
-class TestDatabaseCommand : public DatabaseCommand
+class TestDatabaseCommand : public Tomahawk::DatabaseCommand
 {
 Q_OBJECT
     virtual QString commandname() const { return "TestCommand"; }
@@ -38,15 +38,15 @@ class TestDatabase : public QObject
 private slots:
     void testFactories()
     {
-        Database* db = new Database("test");
-        dbcmd_ptr command;
+        Tomahawk::Database* db = new Tomahawk::Database("test");
+        Tomahawk::dbcmd_ptr command;
 
         // can we check that his ASSERTs?, it's a build in type, one must not register it again
         // db->registerCommand<DatabaseCommand_LogPlayback>();
 
         // check that if we request a factory for LogPlayback it really creates a LogPlayback object
-        command = db->commandFactory<DatabaseCommand_LogPlayback>()->newInstance();
-        DatabaseCommand_LogPlayback* lpCmd =  qobject_cast< DatabaseCommand_LogPlayback* >( command.data() );
+        command = db->commandFactory<Tomahawk::DatabaseCommand_LogPlayback>()->newInstance();
+        Tomahawk::DatabaseCommand_LogPlayback* lpCmd =  qobject_cast< Tomahawk::DatabaseCommand_LogPlayback* >( command.data() );
         QVERIFY( lpCmd );
 
         // try to handle a third party database command

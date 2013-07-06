@@ -24,6 +24,9 @@
 #include "DllMacro.h"
 #include "Playlist.h"
 
+namespace Tomahawk
+{
+
 class DLLEXPORT LocalCollection : public DatabaseCollection
 {
     Q_OBJECT
@@ -33,5 +36,7 @@ public:
     virtual QString prettyName() const;
     virtual QString emptyText() const;
 };
+
+}
 
 #endif // LOCALCOLLECTION_H

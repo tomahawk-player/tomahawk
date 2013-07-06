@@ -27,6 +27,9 @@
 #include "DatabaseCommand_LoadPlaylistEntries.h"
 #include "Playlist.h"
 
+namespace Tomahawk
+{
+
 class DatabaseCommand_LoadDynamicPlaylistEntries : public DatabaseCommand_LoadPlaylistEntries
 {
     Q_OBJECT
@@ -61,5 +64,7 @@ signals:
 
 private:
 };
+
+}
 
 #endif // DATABASECOMMAND_LOADDYNAMICPLAYLIST_H

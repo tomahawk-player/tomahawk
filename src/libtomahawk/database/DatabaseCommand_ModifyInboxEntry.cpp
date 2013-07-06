@@ -27,6 +27,9 @@
 #endif
 
 
+namespace Tomahawk
+{
+
 DatabaseCommand_ModifyInboxEntry::DatabaseCommand_ModifyInboxEntry( const Tomahawk::query_ptr& query,
                                                                     bool newValue,
                                                                     QObject* parent )
@@ -67,4 +70,6 @@ DatabaseCommand_ModifyInboxEntry::exec( DatabaseImpl* dbi )
     query.exec();
 
     emit done();
+}
+
 }

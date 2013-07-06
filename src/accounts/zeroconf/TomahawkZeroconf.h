@@ -104,14 +104,14 @@ public slots:
         // Keep newer versions first
         QByteArray advert = QString( "TOMAHAWKADVERT:%1:%2:%3" )
                                .arg( m_port )
-                               .arg( Database::instance()->impl()->dbid() )
+                               .arg( Tomahawk::Database::instance()->impl()->dbid() )
                                .arg( QHostInfo::localHostName() )
                                .toLatin1();
         m_sock.writeDatagram( advert.data(), advert.size(), QHostAddress::Broadcast, ZCONF_PORT );
 
         advert = QString( "TOMAHAWKADVERT:%1:%2" )
                     .arg( m_port )
-                    .arg( Database::instance()->impl()->dbid() )
+                    .arg( Tomahawk::Database::instance()->impl()->dbid() )
                     .toLatin1();
         m_sock.writeDatagram( advert.data(), advert.size(), QHostAddress::Broadcast, ZCONF_PORT );
     }
@@ -146,7 +146,7 @@ private slots:
             {
                 bool ok;
                 int port = parts.at(1).toInt( &ok );
-                if ( ok && Database::instance()->impl()->dbid() != parts.at( 2 ) )
+                if ( ok && Tomahawk::Database::instance()->impl()->dbid() != parts.at( 2 ) )
                 {
                     emit tomahawkHostFound( sender.toString(), port, parts.at( 3 ), parts.at( 2 ) );
                 }
@@ -155,7 +155,7 @@ private slots:
             {
                 bool ok;
                 int port = parts.at(1).toInt( &ok );
-                if ( ok && Database::instance()->impl()->dbid() != parts.at( 2 ) )
+                if ( ok && Tomahawk::Database::instance()->impl()->dbid() != parts.at( 2 ) )
                 {
                     qDebug() << "ADVERT received:" << sender << port;
                     Node *n = new Node( sender.toString(), parts.at( 2 ), port );

@@ -23,6 +23,9 @@
 #include "DatabaseCommandLoggable.h"
 #include <QByteArray>
 
+namespace Tomahawk
+{
+
 class DatabaseCommand_SetCollectionAttributes : public DatabaseCommandLoggable
 {
     Q_OBJECT
@@ -59,5 +62,7 @@ private:
     AttributeType m_type;
     QByteArray m_id;
 };
+
+}
 
 #endif // DATABASECOMMAND_SETCOLLECTIONATTRIBUTES

@@ -28,6 +28,9 @@
 
 #include <QSqlQuery>
 
+namespace Tomahawk
+{
+
 DatabaseCommand_PlaybackCharts::DatabaseCommand_PlaybackCharts( const Tomahawk::source_ptr& source, QObject* parent )
     : DatabaseCommand( parent )
     , m_amount( 0 )
@@ -74,4 +77,6 @@ DatabaseCommand_PlaybackCharts::exec( DatabaseImpl* dbi )
 
     emit artists( al );
     emit done();
+}
+
 }

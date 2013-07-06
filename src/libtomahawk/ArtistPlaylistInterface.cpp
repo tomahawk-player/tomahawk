@@ -124,7 +124,7 @@ ArtistPlaylistInterface::tracks() const
             connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),
                             SLOT( onTracksLoaded( QList<Tomahawk::query_ptr> ) ) );
 
-            Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+            Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
         }
     }
 
@@ -207,7 +207,7 @@ ArtistPlaylistInterface::infoSystemFinished( const QString &infoId )
         connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),
                         SLOT( onTracksLoaded( QList<Tomahawk::query_ptr> ) ) );
 
-        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+        Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
     }
     else
     {

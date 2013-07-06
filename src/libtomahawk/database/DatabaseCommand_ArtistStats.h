@@ -26,12 +26,15 @@
 #include "Track.h"
 #include "DllMacro.h"
 
+namespace Tomahawk
+{
+
 class DLLEXPORT DatabaseCommand_ArtistStats : public DatabaseCommand
 {
 Q_OBJECT
 
 public:
-    explicit DatabaseCommand_ArtistStats( const Tomahawk::artist_ptr& artist, QObject* parent = 0 );
+    explicit DatabaseCommand_ArtistStats( const artist_ptr& artist, QObject* parent = 0 );
 
     virtual void exec( DatabaseImpl* lib );
     virtual bool doesMutates() const { return false; }
@@ -41,8 +44,10 @@ signals:
     void done( unsigned int totalPlays, unsigned int chartPosition, unsigned int chartCount );
 
 private:
-    Tomahawk::trackdata_ptr m_track;
-    Tomahawk::artist_ptr m_artist;
+    trackdata_ptr m_track;
+    artist_ptr m_artist;
 };
+
+}
 
 #endif // DATABASECOMMAND_ARTISTSTATS_H

@@ -24,6 +24,9 @@
 
 #include <QByteArray>
 
+namespace Tomahawk
+{
+
 class DatabaseCommand_SetTrackAttributes : public DatabaseCommandLoggable
 {
     Q_OBJECT
@@ -53,5 +56,7 @@ private:
     AttributeType m_type;
     QList< QPair< Tomahawk::QID, QString > > m_tracks;
 };
+
+}
 
 #endif // DATABASECOMMAND_SETTRACKATTRIBUTES

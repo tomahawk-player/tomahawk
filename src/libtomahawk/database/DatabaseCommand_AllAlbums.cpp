@@ -28,6 +28,8 @@
 #include "PlaylistEntry.h"
 #include "Source.h"
 
+namespace Tomahawk
+{
 
 DatabaseCommand_AllAlbums::DatabaseCommand_AllAlbums( const Tomahawk::collection_ptr& collection, const Tomahawk::artist_ptr& artist, QObject* parent )
   : DatabaseCommand( parent )
@@ -185,4 +187,6 @@ DatabaseCommand_AllAlbums::exec( DatabaseImpl* dbi )
     {
         execForCollection( dbi );
     }
+}
+
 }

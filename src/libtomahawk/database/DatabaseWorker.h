@@ -31,6 +31,9 @@
 
 #include "DatabaseCommand.h"
 
+namespace Tomahawk
+{
+
 class Database;
 class DatabaseCommandLoggable;
 
@@ -46,8 +49,8 @@ public:
     unsigned int outstandingJobs() const { return m_outstanding; }
 
 public slots:
-    void enqueue( const QSharedPointer<DatabaseCommand>& );
-    void enqueue( const QList< QSharedPointer<DatabaseCommand> >& );
+    void enqueue( const Tomahawk::dbcmd_ptr& );
+    void enqueue( const QList< Tomahawk::dbcmd_ptr >& );
 
 private slots:
     void doWork();
@@ -57,7 +60,7 @@ private:
 
     QMutex m_mut;
     Database* m_db;
-    QList< QSharedPointer<DatabaseCommand> > m_commands;
+    QList< Tomahawk::dbcmd_ptr > m_commands;
     int m_outstanding;
 
     QJson::Serializer m_serializer;
@@ -81,5 +84,7 @@ private:
     Database* m_db;
     bool m_mutates;
 };
+
+}
 
 #endif // DATABASEWORKER_H

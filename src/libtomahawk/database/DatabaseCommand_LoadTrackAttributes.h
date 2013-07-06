@@ -28,6 +28,9 @@
 
 #include "DllMacro.h"
 
+namespace Tomahawk
+{
+
 /**
  * \class DatabaseCommand_LoadTrackAttributes
  * \brief Database command used to load track attributes from the database.
@@ -79,5 +82,7 @@ signals:
 private:
     Tomahawk::trackdata_ptr m_track;
 };
+
+}
 
 #endif // DATABASECOMMAND_LOADTRACKATTRIBUTES_H

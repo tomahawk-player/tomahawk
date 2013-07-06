@@ -32,6 +32,9 @@
 
 #include <QSqlQuery>
 
+namespace Tomahawk
+{
+
 DatabaseCommand_SetDynamicPlaylistRevision::DatabaseCommand_SetDynamicPlaylistRevision( const Tomahawk::source_ptr& s,
                                                                                 const QString& playlistguid,
                                                                                 const QString& newrev,
@@ -267,4 +270,6 @@ void
 DatabaseCommand_SetDynamicPlaylistRevision::setPlaylist( DynamicPlaylist* pl )
 {
     m_playlist = pl;
+}
+
 }

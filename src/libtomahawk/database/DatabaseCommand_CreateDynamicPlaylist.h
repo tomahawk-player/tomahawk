@@ -22,6 +22,9 @@
 #include "Typedefs.h"
 #include "DatabaseCommand_CreatePlaylist.h"
 
+namespace Tomahawk
+{
+
 /**
  * Create a new dynamic playlist in the database, based on an existing playlist.
  *
@@ -61,5 +64,7 @@ private:
     Tomahawk::dynplaylist_ptr m_playlist;
     bool m_autoLoad;
 };
+
+}
 
 #endif // DATABASECOMMAND_CREATEDYNAMICPLAYLIST_H

@@ -50,7 +50,7 @@ signals:
 
 private slots:
     void onRefresh();
-    void playlistsLoaded( const QList<DatabaseCommand_LoadAllSortedPlaylists::SourcePlaylistPair>& playlistGuids );
+    void playlistsLoaded( const QList<Tomahawk::DatabaseCommand_LoadAllSortedPlaylists::SourcePlaylistPair>& playlistGuids );
 
     void onPlaylistsRemoved( QList< Tomahawk::playlist_ptr > playlists );
     void onDynPlaylistsRemoved( QList< Tomahawk::dynplaylist_ptr > playlists );

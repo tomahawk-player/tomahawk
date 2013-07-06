@@ -25,6 +25,9 @@
 
 class IndexingJobItem;
 
+namespace Tomahawk
+{
+
 struct IndexData
 {
     unsigned int id;
@@ -48,5 +51,7 @@ public:
 private:
     QPointer<IndexingJobItem> m_statusJob;
 };
+
+}
 
 #endif // DATABASECOMMAND_UPDATESEARCHINDEX_H

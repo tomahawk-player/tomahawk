@@ -35,6 +35,7 @@
 #include <QTimer>
 #include <QSet>
 
+using namespace Tomahawk;
 
 MusicScannerThreadController::MusicScannerThreadController( QObject* parent )
     : QThread( parent )
@@ -201,14 +202,14 @@ ScanManager::runNormalScan( bool manualFull )
     {
         DatabaseCommand_DeleteFiles *cmd = new DatabaseCommand_DeleteFiles( SourceList::instance()->getLocal() );
         connect( cmd, SIGNAL( finished() ), SLOT( filesDeleted() ) );
-        Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+        Database::instance()->enqueue( dbcmd_ptr( cmd ) );
         return;
     }
 
     DatabaseCommand_FileMtimes *cmd = new DatabaseCommand_FileMtimes( true );
     connect( cmd, SIGNAL( done( const QMap< QString, QMap< unsigned int, unsigned int > >& ) ),
                     SLOT( fileMtimesCheck( const QMap< QString, QMap< unsigned int, unsigned int > >& ) ) );
-    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+    Database::instance()->enqueue( dbcmd_ptr( cmd ) );
 }
 
 
@@ -256,7 +257,7 @@ ScanManager::fileMtimesCheck( const QMap< QString, QMap< unsigned int, unsigned 
     {
         DatabaseCommand_DeleteFiles *cmd = new DatabaseCommand_DeleteFiles( SourceList::instance()->getLocal() );
         connect( cmd, SIGNAL( finished() ), SLOT( filesDeleted() ) );
-        Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+        Database::instance()->enqueue( dbcmd_ptr( cmd ) );
         return;
     }
 

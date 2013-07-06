@@ -22,6 +22,9 @@
 #include "DatabaseCommand.h"
 #include "DatabaseCommand_LoadAllPlaylists.h"
 
+namespace Tomahawk
+{
+
 /**
  * Loads *all* playlists, automatic playlists, and stations. Another dbcmd because otherwise loading them all
  * is fragmented across 3 dbcmds with a different interface.
@@ -41,7 +44,7 @@ public:
         , m_sortOrder( DatabaseCommand_LoadAllPlaylists::None )
         , m_sortAscDesc( DatabaseCommand_LoadAllPlaylists::NoOrder )
     {
-        qRegisterMetaType<QList<DatabaseCommand_LoadAllSortedPlaylists::SourcePlaylistPair> >("QList<DatabaseCommand_LoadAllSortedPlaylists::SourcePlaylistPair>");
+        qRegisterMetaType<QList<Tomahawk::DatabaseCommand_LoadAllSortedPlaylists::SourcePlaylistPair> >("QList<Tomahawk::DatabaseCommand_LoadAllSortedPlaylists::SourcePlaylistPair>");
     }
 
     virtual void exec( DatabaseImpl* );
@@ -53,13 +56,15 @@ public:
     void setSortAscDesc( DatabaseCommand_LoadAllPlaylists::SortAscDesc asc  ) { m_sortAscDesc = asc; }
 
 signals:
-    void done( const QList<DatabaseCommand_LoadAllSortedPlaylists::SourcePlaylistPair>& playlistGuids ); // QPair< sourceid, playlistguid>
+    void done( const QList<Tomahawk::DatabaseCommand_LoadAllSortedPlaylists::SourcePlaylistPair>& playlistGuids ); // QPair< sourceid, playlistguid>
 
 private:
     unsigned int m_limitAmount;
     DatabaseCommand_LoadAllPlaylists::SortOrder m_sortOrder;
     DatabaseCommand_LoadAllPlaylists::SortAscDesc m_sortAscDesc;
 };
+
+}
 
 //FIXME: Qt5: this fails with Qt5, is it needed at all? It compiles fine without in Qt4 as well
 // Q_DECLARE_METATYPE(QList<DatabaseCommand_LoadAllSortedPlaylists::SourcePlaylistPair>)

@@ -28,6 +28,9 @@
 #endif
 
 
+namespace Tomahawk
+{
+
 DatabaseCommand_NetworkCharts::DatabaseCommand_NetworkCharts( const QDateTime &from, const QDateTime &to, QObject *parent )
     : DatabaseCommand( parent )
     , m_amount( 0 )
@@ -88,4 +91,6 @@ DatabaseCommand_NetworkCharts::exec( DatabaseImpl * dbi )
     }
 
     emit done( tracks );
+}
+
 }

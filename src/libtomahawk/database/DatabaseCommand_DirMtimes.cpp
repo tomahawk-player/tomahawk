@@ -25,6 +25,8 @@
 #include "utils/Logger.h"
 #include "Source.h"
 
+namespace Tomahawk
+{
 
 void
 DatabaseCommand_DirMtimes::exec( DatabaseImpl* dbi )
@@ -92,4 +94,6 @@ DatabaseCommand_DirMtimes::execUpdate( DatabaseImpl* dbi )
 
     qDebug() << "Saved mtimes for" << m_tosave.size() << "dirs.";
     emit done( QMap< QString, unsigned int >() );
+}
+
 }

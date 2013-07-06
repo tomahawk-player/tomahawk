@@ -24,6 +24,9 @@
 #include "DatabaseCommand_SetCollectionAttributes.h"
 #include <QByteArray>
 
+namespace Tomahawk
+{
+
 class DatabaseCommand_CollectionAttributes : public DatabaseCommand
 {
     Q_OBJECT
@@ -41,5 +44,7 @@ signals:
 private:
     DatabaseCommand_SetCollectionAttributes::AttributeType m_type;
 };
+
+}
 
 #endif

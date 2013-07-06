@@ -38,7 +38,7 @@ DatabaseResolver::DatabaseResolver( int weight )
 void
 DatabaseResolver::resolve( const Tomahawk::query_ptr& query )
 {
-    DatabaseCommand_Resolve* cmd = new DatabaseCommand_Resolve( query );
+    Tomahawk::DatabaseCommand_Resolve* cmd = new Tomahawk::DatabaseCommand_Resolve( query );
 
     connect( cmd, SIGNAL( results( Tomahawk::QID, QList< Tomahawk::result_ptr > ) ),
                     SLOT( gotResults( Tomahawk::QID, QList< Tomahawk::result_ptr > ) ), Qt::QueuedConnection );
@@ -47,7 +47,7 @@ DatabaseResolver::resolve( const Tomahawk::query_ptr& query )
     connect( cmd, SIGNAL( artists( Tomahawk::QID, QList< Tomahawk::artist_ptr > ) ),
                     SLOT( gotArtists( Tomahawk::QID, QList< Tomahawk::artist_ptr > ) ), Qt::QueuedConnection );
 
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+    Tomahawk::Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 
 }
 

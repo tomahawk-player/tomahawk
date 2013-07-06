@@ -235,7 +235,7 @@ ConnectionManager::connectToPeer( const Tomahawk::peerinfo_ptr &peerInfo, bool l
     QVariantMap m;
     m["conntype"]  = "accept-offer";
     m["key"]       = peerInfo->key();
-    m["nodeid"]    = Database::instance()->impl()->dbid();
+    m["nodeid"]    = Tomahawk::Database::instance()->impl()->dbid();
 
     d_func()->controlConnection = QPointer<ControlConnection>( new ControlConnection( Servent::instance() ) );
     d_func()->controlConnection->setShutdownOnEmptyPeerInfos( false );

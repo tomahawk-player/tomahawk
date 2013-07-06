@@ -37,6 +37,9 @@
 #endif
 
 
+namespace Tomahawk
+{
+
 DatabaseWorkerThread::DatabaseWorkerThread( Database* db, bool mutates )
     : QThread()
     , m_db( db )
@@ -85,7 +88,7 @@ DatabaseWorker::~DatabaseWorker()
 
     if ( m_outstanding )
     {
-        foreach ( const QSharedPointer<DatabaseCommand>& cmd, m_commands )
+        foreach ( const Tomahawk::dbcmd_ptr& cmd, m_commands )
         {
             tDebug() << "Outstanding db command to finish:" << cmd->guid() << cmd->commandname();
         }
@@ -94,7 +97,7 @@ DatabaseWorker::~DatabaseWorker()
 
 
 void
-DatabaseWorker::enqueue( const QList< QSharedPointer<DatabaseCommand> >& cmds )
+DatabaseWorker::enqueue( const QList< Tomahawk::dbcmd_ptr >& cmds )
 {
     QMutexLocker lock( &m_mut );
     m_outstanding += cmds.count();
@@ -106,7 +109,7 @@ DatabaseWorker::enqueue( const QList< QSharedPointer<DatabaseCommand> >& cmds )
 
 
 void
-DatabaseWorker::enqueue( const QSharedPointer<DatabaseCommand>& cmd )
+DatabaseWorker::enqueue( const Tomahawk::dbcmd_ptr& cmd )
 {
     QMutexLocker lock( &m_mut );
     m_outstanding++;
@@ -133,8 +136,8 @@ DatabaseWorker::doWork()
     timer.start();
 #endif
 
-    QList< QSharedPointer<DatabaseCommand> > cmdGroup;
-    QSharedPointer<DatabaseCommand> cmd;
+    QList< Tomahawk::dbcmd_ptr > cmdGroup;
+    Tomahawk::dbcmd_ptr cmd;
     {
         QMutexLocker lock( &m_mut );
         cmd = m_commands.takeFirst();
@@ -224,7 +227,7 @@ DatabaseWorker::doWork()
             tDebug() << "DBCmd Duration:" << duration << "ms, now running postcommit for" << cmd->commandname();
 #endif
 
-            foreach ( QSharedPointer<DatabaseCommand> c, cmdGroup )
+            foreach ( Tomahawk::dbcmd_ptr c, cmdGroup )
                 c->postCommit();
 
 #ifdef DEBUG_TIMING
@@ -257,7 +260,7 @@ DatabaseWorker::doWork()
         throw;
     }
 
-    foreach ( QSharedPointer<DatabaseCommand> c, cmdGroup )
+    foreach ( Tomahawk::dbcmd_ptr c, cmdGroup )
         c->emitFinished();
 
     QMutexLocker lock( &m_mut );
@@ -321,4 +324,6 @@ DatabaseWorker::logOp( DatabaseCommandLoggable* command )
         tLog() << "Error saving to oplog";
         throw "Failed to save to oplog";
     }
+}
+
 }

@@ -28,10 +28,11 @@
 #include "DllMacro.h"
 #include "Typedefs.h"
 
-class DatabaseCommand_LoadPlaylistEntries;
 
 namespace Tomahawk
 {
+
+class DatabaseCommand_LoadPlaylistEntries;
 
 class Resolver;
 
@@ -39,7 +40,7 @@ class DLLEXPORT Query : public QObject
 {
 Q_OBJECT
 
-friend class ::DatabaseCommand_LoadPlaylistEntries;
+friend class DatabaseCommand_LoadPlaylistEntries;
 friend class Pipeline;
 
 public:

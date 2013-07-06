@@ -24,6 +24,9 @@
 
 #include <QObject>
 
+namespace Tomahawk
+{
+
 class DatabaseImpl;
 
 class DLLEXPORT DatabaseCommand_AddClientAuth : public DatabaseCommand
@@ -44,5 +47,7 @@ public:
 private:
     QString m_clientToken, m_website, m_name, m_userAgent;
 };
+
+}
 
 #endif // DATABASECOMMAND_ADDCLIENTAUTH_H

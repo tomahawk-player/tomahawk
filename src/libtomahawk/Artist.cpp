@@ -229,7 +229,7 @@ Artist::albums( ModelMode mode, const Tomahawk::collection_ptr& collection ) con
             connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, QVariant ) ),
                           SLOT( onAlbumsFound( QList<Tomahawk::album_ptr>, QVariant ) ) );
 
-            Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+            Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
         }
         else
         {
@@ -399,13 +399,13 @@ Artist::loadStats()
 
     {
         DatabaseCommand_TrackStats* cmd = new DatabaseCommand_TrackStats( a );
-        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+        Database::instance()->enqueue( Tomahawk::dbcmd_ptr(cmd) );
     }
 
     {
         DatabaseCommand_ArtistStats* cmd = new DatabaseCommand_ArtistStats( a );
         connect( cmd, SIGNAL( done( unsigned int, unsigned int, unsigned int ) ), SLOT( onArtistStatsLoaded( unsigned int, unsigned int, unsigned int ) ) );
-        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+        Database::instance()->enqueue( Tomahawk::dbcmd_ptr(cmd) );
     }
 }
 

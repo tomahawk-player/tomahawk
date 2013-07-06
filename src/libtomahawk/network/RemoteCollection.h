@@ -25,6 +25,9 @@
 
 class ControlConnection;
 
+namespace Tomahawk
+{
+
 class RemoteCollection : public DatabaseCollection
 {
 Q_OBJECT
@@ -44,5 +47,7 @@ public slots:
     virtual void addTracks( const QList<QVariant>& newitems );
     virtual void removeTracks( const QDir& dir );
 };
+
+}
 
 #endif // REMOTECOLLECTION_H

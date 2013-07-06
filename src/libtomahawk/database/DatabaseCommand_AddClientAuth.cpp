@@ -24,6 +24,9 @@
 #include "Source.h"
 
 
+namespace Tomahawk
+{
+
 DatabaseCommand_AddClientAuth::DatabaseCommand_AddClientAuth( const QString& clientToken,
                                                               const QString& website,
                                                               const QString& name,
@@ -53,4 +56,6 @@ void DatabaseCommand_AddClientAuth::exec( DatabaseImpl* lib )
     {
         qWarning() << "Failed to insert http client into auth table!";
     }
+}
+
 }

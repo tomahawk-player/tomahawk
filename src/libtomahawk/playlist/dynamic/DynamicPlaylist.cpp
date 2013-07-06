@@ -166,7 +166,7 @@ DynamicPlaylist::create( const Tomahawk::source_ptr& author,
 
     DatabaseCommand_CreateDynamicPlaylist* cmd = new DatabaseCommand_CreateDynamicPlaylist( author, dynplaylist, autoLoad );
     connect( cmd, SIGNAL(finished()), dynplaylist.data(), SIGNAL(created()) );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr(cmd) );
     if ( autoLoad )
         dynplaylist->reportCreated( dynplaylist );
     return dynplaylist;
@@ -232,7 +232,7 @@ DynamicPlaylist::createNewRevision( const QString& newrev,
     if ( !d->autoLoad )
         cmd->setPlaylist( this );
 
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
 
 
@@ -268,7 +268,7 @@ DynamicPlaylist::createNewRevision( const QString& newrev,
     if ( !d->autoLoad )
         cmd->setPlaylist( this );
 
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
 
 
@@ -311,7 +311,7 @@ DynamicPlaylist::loadRevision( const QString& rev )
                                     bool ) ) );
 
     }
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
 
 
@@ -323,7 +323,7 @@ DynamicPlaylist::remove( const Tomahawk::dynplaylist_ptr& playlist )
     TomahawkSettings::instance()->removePlaylistSettings( playlist->guid() );
 
     DatabaseCommand_DeletePlaylist* cmd = new DatabaseCommand_DeleteDynamicPlaylist( playlist->author(), playlist->guid() );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr(cmd) );
 }
 
 

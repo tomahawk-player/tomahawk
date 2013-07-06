@@ -72,8 +72,9 @@ RecentPlaylistsModel::onRefresh()
     cmd->setLimit( m_maxPlaylists );
     cmd->setSortOrder( DatabaseCommand_LoadAllPlaylists::ModificationTime );
     cmd->setSortAscDesc( DatabaseCommand_LoadAllPlaylists::Descending );
-    connect( cmd, SIGNAL( done( QList<DatabaseCommand_LoadAllSortedPlaylists::SourcePlaylistPair> ) ), this, SLOT( playlistsLoaded( QList<DatabaseCommand_LoadAllSortedPlaylists::SourcePlaylistPair> ) ) );
-    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+    connect( cmd, SIGNAL( done( QList<Tomahawk::DatabaseCommand_LoadAllSortedPlaylists::SourcePlaylistPair> ) ),
+             this, SLOT( playlistsLoaded( QList<Tomahawk::DatabaseCommand_LoadAllSortedPlaylists::SourcePlaylistPair> ) ) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
 
 

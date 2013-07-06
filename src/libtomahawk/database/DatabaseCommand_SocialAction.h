@@ -29,6 +29,9 @@
 
 #include "DllMacro.h"
 
+namespace Tomahawk
+{
+
 /**
  * \class DatabaseCommand_SocialAction
  * \brief Database command used to write social actions to database.
@@ -183,5 +186,7 @@ private:
     QString m_comment;
     QString m_action; //! currently used values: Love, Inbox
 };
+
+}
 
 #endif // DATABASECOMMAND_SOCIALACTION_H

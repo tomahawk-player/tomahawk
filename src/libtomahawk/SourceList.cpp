@@ -70,8 +70,8 @@ SourceList::setWebSource( const source_ptr& websrc )
 }
 
 
-const
-source_ptr SourceList::webSource() const
+const source_ptr
+SourceList::webSource() const
 {
     return m_dummy;
 }
@@ -80,12 +80,12 @@ source_ptr SourceList::webSource() const
 void
 SourceList::loadSources()
 {
-    DatabaseCommand_LoadAllSources* cmd = new DatabaseCommand_LoadAllSources();
+    Tomahawk::DatabaseCommand_LoadAllSources* cmd = new Tomahawk::DatabaseCommand_LoadAllSources();
 
     connect( cmd, SIGNAL( done( QList<Tomahawk::source_ptr> ) ),
                     SLOT( setSources( QList<Tomahawk::source_ptr> ) ) );
 
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
 
 

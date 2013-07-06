@@ -23,6 +23,8 @@
 #include "Source.h"
 #include "utils/Logger.h"
 
+namespace Tomahawk
+{
 
 void
 DatabaseCommand_loadOps::exec( DatabaseImpl* dbi )
@@ -73,4 +75,6 @@ DatabaseCommand_loadOps::exec( DatabaseImpl* dbi )
 
 //    qDebug() << "Loaded" << ops.length() << "ops from db";
     emit done( m_since, lastguid, ops );
+}
+
 }

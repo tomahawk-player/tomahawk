@@ -36,6 +36,8 @@
 #include <QCoreApplication>
 
 
+using namespace Tomahawk;
+
 void
 DirLister::go()
 {
@@ -185,7 +187,7 @@ MusicScanner::startScan()
     connect( cmd, SIGNAL( done( QMap< QString, QMap< unsigned int, unsigned int > > ) ),
                     SLOT( setFileMtimes( QMap< QString, QMap< unsigned int, unsigned int > > ) ) );
 
-    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+    Database::instance()->enqueue( dbcmd_ptr( cmd ) );
     return;
 }
 
@@ -290,19 +292,19 @@ MusicScanner::commitBatch( const QVariantList& tracks, const QVariantList& delet
     if ( deletethese.length() )
     {
         tDebug( LOGINFO ) << Q_FUNC_INFO << "deleting" << deletethese.length() << "tracks";
-        executeCommand( QSharedPointer<DatabaseCommand>( new DatabaseCommand_DeleteFiles( deletethese, SourceList::instance()->getLocal() ) ) );
+        executeCommand( dbcmd_ptr( new DatabaseCommand_DeleteFiles( deletethese, SourceList::instance()->getLocal() ) ) );
     }
 
     if ( tracks.length() )
     {
         tDebug( LOGINFO ) << Q_FUNC_INFO << "adding" << tracks.length() << "tracks";
-        executeCommand( QSharedPointer<DatabaseCommand>( new DatabaseCommand_AddFiles( tracks, SourceList::instance()->getLocal() ) ) );
+        executeCommand( dbcmd_ptr( new DatabaseCommand_AddFiles( tracks, SourceList::instance()->getLocal() ) ) );
     }
 }
 
 
 void
-MusicScanner::executeCommand( QSharedPointer< DatabaseCommand > cmd )
+MusicScanner::executeCommand( dbcmd_ptr cmd )
 {
     tDebug() << Q_FUNC_INFO << m_cmdQueue;
     m_cmdQueue++;
@@ -387,7 +389,7 @@ MusicScanner::readFile( const QFileInfo& fi )
     int bitrate = 0;
     int duration = 0;
 
-    Tomahawk::Tag *tag = Tomahawk::Tag::fromFile( f );
+    Tag *tag = Tag::fromFile( f );
     if ( f.audioProperties() )
     {
         TagLib::AudioProperties *properties = f.audioProperties();

@@ -31,13 +31,13 @@
 #include "DllMacro.h"
 
 class MetadataEditor;
+
+namespace Tomahawk
+{
 class DatabaseCommand_Resolve;
 class DatabaseCommand_AllTracks;
 class DatabaseCommand_AddFiles;
 class DatabaseCommand_LoadFile;
-
-namespace Tomahawk
-{
 
 class Resolver;
 
@@ -46,10 +46,10 @@ class DLLEXPORT Result : public QObject
 Q_OBJECT
 
 friend class ::MetadataEditor;
-friend class ::DatabaseCommand_Resolve;
-friend class ::DatabaseCommand_AllTracks;
-friend class ::DatabaseCommand_AddFiles;
-friend class ::DatabaseCommand_LoadFile;
+friend class DatabaseCommand_Resolve;
+friend class DatabaseCommand_AllTracks;
+friend class DatabaseCommand_AddFiles;
+friend class DatabaseCommand_LoadFile;
 
 public:
     static Tomahawk::result_ptr get( const QString& url );

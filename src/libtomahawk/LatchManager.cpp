@@ -90,7 +90,7 @@ LatchManager::playlistChanged( Tomahawk::playlistinterface_ptr )
         cmd->setAction( "latchOn");
         cmd->setComment( m_latchedOnTo->nodeId() );
         cmd->setTimestamp( QDateTime::currentDateTime().toTime_t() );
-        Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+        Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 
         QAction *latchOnAction = ActionCollection::instance()->getAction( "latchOn" );
         latchOnAction->setText( tr( "&Catch Up" ) );
@@ -110,7 +110,7 @@ LatchManager::playlistChanged( Tomahawk::playlistinterface_ptr )
     cmd->setAction( "latchOff");
     cmd->setComment( source->nodeId() );
     cmd->setTimestamp( QDateTime::currentDateTime().toTime_t() );
-    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 
     if ( !m_waitingForLatch.isNull() &&
           m_waitingForLatch != m_latchedOnTo )

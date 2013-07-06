@@ -159,7 +159,7 @@ LastFmConfig::onHistoryLoaded()
             m_lastTimeStamp = e["date"].attribute( "uts" ).toUInt();
 
             DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( track, DatabaseCommand_LogPlayback::Finished, 0, m_lastTimeStamp );
-            Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+            Database::instance()->enqueue( Tomahawk::dbcmd_ptr(cmd) );
         }
 
         if ( !lfm.children( "recenttracks" ).isEmpty() )
@@ -267,7 +267,7 @@ LastFmConfig::syncLovedTracks( uint page )
     DatabaseCommand_LoadSocialActions* cmd = new DatabaseCommand_LoadSocialActions( "Love", SourceList::instance()->getLocal() );
     connect( cmd, SIGNAL( done( DatabaseCommand_LoadSocialActions::TrackActions ) ), this, SLOT( localLovedLoaded( DatabaseCommand_LoadSocialActions::TrackActions ) ) );
 
-    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
 
 

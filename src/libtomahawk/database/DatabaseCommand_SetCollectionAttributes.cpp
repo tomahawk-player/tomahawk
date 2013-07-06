@@ -23,6 +23,9 @@
 #include "SourceList.h"
 #include "EchonestCatalogSynchronizer.h"
 
+namespace Tomahawk
+{
+
 DatabaseCommand_SetCollectionAttributes::DatabaseCommand_SetCollectionAttributes( AttributeType type, const QByteArray& id )
     : DatabaseCommandLoggable( )
     , m_delete( false )
@@ -79,4 +82,6 @@ DatabaseCommand_SetCollectionAttributes::postCommitHook()
 
     if ( source()->isLocal() )
         Servent::instance()->triggerDBSync();
+}
+
 }

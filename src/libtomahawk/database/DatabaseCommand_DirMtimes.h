@@ -31,6 +31,9 @@
 
 // Not loggable, mtimes only used to speed up our local scanner.
 
+namespace Tomahawk
+{
+
 class DLLEXPORT DatabaseCommand_DirMtimes : public DatabaseCommand
 {
 Q_OBJECT
@@ -67,5 +70,7 @@ private:
     bool m_update;
     QMap<QString, unsigned int> m_tosave;
 };
+
+}
 
 #endif // DATABASECOMMAND_DIRMTIMES_H

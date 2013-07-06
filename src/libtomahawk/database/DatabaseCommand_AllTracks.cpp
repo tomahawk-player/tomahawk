@@ -29,6 +29,8 @@
 #include "Result.h"
 #include "SourceList.h"
 
+namespace Tomahawk
+{
 
 void
 DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
@@ -139,4 +141,6 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
     emit tracks( ql, data() );
     emit tracks( ql );
     emit done( m_collection );
+}
+
 }

@@ -32,10 +32,10 @@
 #include "DllMacro.h"
 #include "Query.h"
 
-class IdThreadWorker;
-
 namespace Tomahawk
 {
+
+class IdThreadWorker;
 
 class DLLEXPORT Artist : public QObject
 {
@@ -53,8 +53,8 @@ public:
     QString name() const { return m_name; }
     QString sortname() const { return m_sortname; }
 
-    QList<Tomahawk::album_ptr> albums( ModelMode mode = Mixed, const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr() ) const;
-    QList<Tomahawk::artist_ptr> similarArtists() const;
+    QList<album_ptr> albums( ModelMode mode = Mixed, const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr() ) const;
+    QList<artist_ptr> similarArtists() const;
 
     QList<Tomahawk::query_ptr> tracks( ModelMode mode = Mixed, const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr() );
     Tomahawk::playlistinterface_ptr playlistInterface( ModelMode mode, const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr() );
@@ -145,7 +145,7 @@ private:
     static QHash< QString, artist_wptr > s_artistsByName;
     static QHash< unsigned int, artist_wptr > s_artistsById;
 
-    friend class ::IdThreadWorker;
+    friend class IdThreadWorker;
 };
 
 } // ns

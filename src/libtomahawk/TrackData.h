@@ -29,12 +29,12 @@
 
 #include "DllMacro.h"
 
+namespace Tomahawk
+{
+
 class DatabaseCommand_LogPlayback;
 class DatabaseCommand_PlaybackHistory;
 class IdThreadWorker;
-
-namespace Tomahawk
-{
 
 struct SocialAction
 {
@@ -168,9 +168,9 @@ private:
     static QHash< QString, trackdata_wptr > s_trackDatasByName;
     static QHash< unsigned int, trackdata_wptr > s_trackDatasById;
 
-    friend class ::IdThreadWorker;
-    friend class ::DatabaseCommand_LogPlayback;
-    friend class ::DatabaseCommand_PlaybackHistory;
+    friend class IdThreadWorker;
+    friend class DatabaseCommand_LogPlayback;
+    friend class DatabaseCommand_PlaybackHistory;
 };
 
 }; //ns

@@ -214,7 +214,7 @@ NetworkActivityWidget::fetchYearCharts()
     DatabaseCommand_NetworkCharts* yearCharts = new DatabaseCommand_NetworkCharts( yearAgo, to );
     yearCharts->setLimit( NETWORKCHARTS_NUM_TRACKS );
     connect( yearCharts, SIGNAL( done( QList<Tomahawk::track_ptr> ) ), SLOT( yearlyCharts( QList<Tomahawk::track_ptr> ) ) );
-    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( yearCharts ) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( yearCharts ) );
 }
 
 
@@ -224,7 +224,7 @@ NetworkActivityWidget::fetchOverallCharts()
     DatabaseCommand_NetworkCharts* overallCharts = new DatabaseCommand_NetworkCharts();
     overallCharts->setLimit( NETWORKCHARTS_NUM_TRACKS );
     connect( overallCharts, SIGNAL( done( QList<Tomahawk::track_ptr> ) ), SLOT( overallCharts( QList<Tomahawk::track_ptr> ) ) );
-    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( overallCharts ) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( overallCharts ) );
 }
 
 
@@ -236,7 +236,7 @@ NetworkActivityWidget::fetchWeekCharts()
     DatabaseCommand_NetworkCharts* weekCharts = new DatabaseCommand_NetworkCharts( weekAgo, to );
     weekCharts->setLimit( NETWORKCHARTS_NUM_TRACKS );
     connect( weekCharts, SIGNAL( done( QList<Tomahawk::track_ptr> ) ), SLOT( weeklyCharts( QList<Tomahawk::track_ptr> ) ) );
-    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( weekCharts ) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( weekCharts ) );
 }
 
 
@@ -248,7 +248,7 @@ NetworkActivityWidget::fetchMonthCharts()
     DatabaseCommand_NetworkCharts* monthCharts = new DatabaseCommand_NetworkCharts( monthAgo, to );
     monthCharts->setLimit( NETWORKCHARTS_NUM_TRACKS );
     connect( monthCharts, SIGNAL( done( QList<Tomahawk::track_ptr> ) ), SLOT( monthlyCharts( QList<Tomahawk::track_ptr> ) ) );
-    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( monthCharts ) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( monthCharts ) );
 }
 
 

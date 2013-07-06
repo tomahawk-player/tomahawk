@@ -63,7 +63,7 @@ RecentlyPlayedModel::loadHistory()
     connect( cmd, SIGNAL( tracks( QList<Tomahawk::track_ptr>, QList<Tomahawk::PlaybackLog> ) ),
                     SLOT( appendTracks( QList<Tomahawk::track_ptr>, QList<Tomahawk::PlaybackLog> ) ), Qt::QueuedConnection );
 
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
 
 

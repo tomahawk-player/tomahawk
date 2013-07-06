@@ -111,7 +111,7 @@ signals:
 
 private:
     QVariant readFile( const QFileInfo& fi );
-    void executeCommand( QSharedPointer< DatabaseCommand > cmd );
+    void executeCommand( Tomahawk::dbcmd_ptr cmd );
 
 private slots:
     void postOps();

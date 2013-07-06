@@ -27,6 +27,9 @@
 #include "TrackData.h"
 
 
+namespace Tomahawk
+{
+
 DatabaseCommand_LoadInboxEntries::DatabaseCommand_LoadInboxEntries( QObject* parent )
     : DatabaseCommand( parent )
 {
@@ -74,4 +77,6 @@ void DatabaseCommand_LoadInboxEntries::exec( DatabaseImpl* dbi )
     }
 
     emit tracks( queries );
+}
+
 }

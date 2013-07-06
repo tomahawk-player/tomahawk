@@ -27,6 +27,9 @@
 #include "Typedefs.h"
 #include "DllMacro.h"
 
+namespace Tomahawk
+{
+
 class DLLEXPORT DatabaseCommand_PlaybackHistory : public DatabaseCommand
 {
 Q_OBJECT
@@ -55,5 +58,7 @@ private:
     QDate m_dateFrom;
     QDate m_dateTo;
 };
+
+}
 
 #endif // DATABASECOMMAND_PLAYBACKHISTORY_H

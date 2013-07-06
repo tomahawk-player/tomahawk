@@ -34,6 +34,8 @@
 
 #include "utils/Logger.h"
 
+namespace Tomahawk
+{
 
 DatabaseCommand_UpdateSearchIndex::DatabaseCommand_UpdateSearchIndex()
     : DatabaseCommand()
@@ -89,4 +91,6 @@ DatabaseCommand_UpdateSearchIndex::exec( DatabaseImpl* db )
     tDebug( LOGVERBOSE ) << "Building index finished.";
 
     db->m_fuzzyIndex->endIndexing();
+}
+
 }

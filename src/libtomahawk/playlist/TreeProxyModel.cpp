@@ -78,7 +78,7 @@ TreeProxyModel::onRowsInserted( const QModelIndex& parent, int /* start */, int 
     if ( !m_model->collection().isNull() )
         cmd = m_model->collection()->requestAlbums( pi->artist() );
     else
-        cmd = new DatabaseCommand_AllAlbums( Tomahawk::collection_ptr(), pi->artist() );
+        cmd = new Tomahawk::DatabaseCommand_AllAlbums( Tomahawk::collection_ptr(), pi->artist() );
 
     cmd->setFilter( m_filter );
 
@@ -125,7 +125,7 @@ TreeProxyModel::setFilter( const QString& pattern )
         if ( !m_model->collection().isNull() )
             cmd = m_model->collection()->requestArtists();
         else
-            cmd = new DatabaseCommand_AllArtists(); //for SuperCollection, TODO: replace with a proper proxy-ArtistsRequest
+            cmd = new Tomahawk::DatabaseCommand_AllArtists(); //for SuperCollection, TODO: replace with a proper proxy-ArtistsRequest
 
         cmd->setFilter( pattern );
         m_artistsFilterCmd = cmd;
@@ -352,7 +352,7 @@ TreeProxyModel::textForItem( PlayableItem* item ) const
     }
     else if ( !item->album().isNull() )
     {
-        return DatabaseImpl::sortname( item->album()->name() );
+        return Tomahawk::DatabaseImpl::sortname( item->album()->name() );
     }
     else if ( !item->result().isNull() )
     {

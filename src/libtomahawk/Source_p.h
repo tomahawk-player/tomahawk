@@ -70,7 +70,7 @@ private:
     bool avatarLoaded;
 
     QPointer<ControlConnection> cc;
-    QList< QSharedPointer<DatabaseCommand> > cmds;
+    QList< Tomahawk::dbcmd_ptr > cmds;
     int commandCount;
     QString lastCmdGuid;
     QMutex setControlConnectionMutex;

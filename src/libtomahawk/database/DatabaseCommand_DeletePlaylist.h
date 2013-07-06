@@ -26,6 +26,9 @@
 
 #include "DllMacro.h"
 
+namespace Tomahawk
+{
+
 class DLLEXPORT DatabaseCommand_DeletePlaylist : public DatabaseCommandLoggable
 {
 Q_OBJECT
@@ -50,5 +53,7 @@ public:
 protected:
     QString m_playlistguid;
 };
+
+}
 
 #endif // DATABASECOMMAND_DELETEPLAYLIST_H

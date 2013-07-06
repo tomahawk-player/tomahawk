@@ -25,6 +25,9 @@
 
 #include "DllMacro.h"
 
+namespace Tomahawk
+{
+
 class DLLEXPORT DatabaseCommand_CreatePlaylist : public DatabaseCommandLoggable
 {
 Q_OBJECT
@@ -61,5 +64,7 @@ private:
     Tomahawk::playlist_ptr m_playlist;
     bool m_report; // call Playlist::reportCreated?
 };
+
+}
 
 #endif // DATABASECOMMAND_CREATEPLAYLIST_H

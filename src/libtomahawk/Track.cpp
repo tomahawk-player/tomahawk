@@ -172,7 +172,7 @@ Track::startPlaying()
 {
     DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( weakRef().toStrongRef(),
                                                                         DatabaseCommand_LogPlayback::Started );
-    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 
     markAsListened();
 }
@@ -184,7 +184,7 @@ Track::finishPlaying( int timeElapsed )
     DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( weakRef().toStrongRef(),
                                                                         DatabaseCommand_LogPlayback::Finished,
                                                                         timeElapsed );
-    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
 
 
@@ -194,7 +194,7 @@ Track::markAsListened()
     if ( !isListened() )
     {
         DatabaseCommand_ModifyInboxEntry* cmd = new DatabaseCommand_ModifyInboxEntry( toQuery(), false );
-        Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+        Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 
         // The dbcmd does this in the DB, but let's update the TrackData ASAP
         QList< Tomahawk::SocialAction > actions = allSocialActions();

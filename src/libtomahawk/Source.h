@@ -33,6 +33,11 @@
 #include "DllMacro.h"
 
 class ControlConnection;
+class DBSyncConnection;
+class MusicScanner;
+
+namespace Tomahawk
+{
 class DatabaseCommand;
 class DatabaseCommand_AddFiles;
 class DatabaseCommand_DeleteFiles;
@@ -40,11 +45,6 @@ class DatabaseCommand_LoadAllSources;
 class DatabaseCommand_LogPlayback;
 class DatabaseCommand_SocialAction;
 class DatabaseCommand_UpdateSearchIndex;
-class DBSyncConnection;
-class MusicScanner;
-
-namespace Tomahawk
-{
 
 struct PlaybackLog;
 class Resolver;
@@ -56,11 +56,11 @@ Q_OBJECT
 
 friend class ::DBSyncConnection;
 friend class ::ControlConnection;
-friend class ::DatabaseCommand_AddFiles;
-friend class ::DatabaseCommand_DeleteFiles;
-friend class ::DatabaseCommand_LoadAllSources;
-friend class ::DatabaseCommand_LogPlayback;
-friend class ::DatabaseCommand_SocialAction;
+friend class DatabaseCommand_AddFiles;
+friend class DatabaseCommand_DeleteFiles;
+friend class DatabaseCommand_LoadAllSources;
+friend class DatabaseCommand_LogPlayback;
+friend class DatabaseCommand_SocialAction;
 friend class ::MusicScanner;
 
 public:
@@ -151,7 +151,7 @@ private slots:
     void trackTimerFired();
 
     void executeCommands();
-    void addCommand( const QSharedPointer<DatabaseCommand>& command );
+    void addCommand( const dbcmd_ptr& command );
 
 private:
     Q_DECLARE_PRIVATE( Source )

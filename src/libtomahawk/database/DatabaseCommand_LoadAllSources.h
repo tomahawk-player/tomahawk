@@ -27,6 +27,9 @@
 
 #include "DllMacro.h"
 
+namespace Tomahawk
+{
+
 class DLLEXPORT DatabaseCommand_LoadAllSources : public DatabaseCommand
 {
 Q_OBJECT
@@ -41,7 +44,9 @@ public:
     virtual QString commandname() const { return "loadallsources"; }
 
 signals:
-    void done( const QList<Tomahawk::source_ptr>& sources );
+    void done( const QList< Tomahawk::source_ptr >& sources );
 };
+
+}
 
 #endif // DATABASECOMMAND_LOADALLSOURCES_H

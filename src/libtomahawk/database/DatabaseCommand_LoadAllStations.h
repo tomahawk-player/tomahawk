@@ -26,6 +26,9 @@
 #include "Typedefs.h"
 #include "DatabaseCommand_LoadAllPlaylists.h"
 
+namespace Tomahawk
+{
+
 class DatabaseCommand_LoadAllStations : public DatabaseCommand
 {
     Q_OBJECT
@@ -55,5 +58,7 @@ private:
     DatabaseCommand_LoadAllPlaylists::SortOrder m_sortOrder;
     bool m_sortDescending;
 };
+
+}
 
 #endif

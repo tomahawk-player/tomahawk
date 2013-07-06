@@ -21,7 +21,8 @@
 #include "utils/Logger.h"
 
 
-
+namespace Tomahawk
+{
 
 DatabaseCommand::DatabaseCommand( QObject* parent )
     : QObject( parent )
@@ -73,4 +74,6 @@ const Tomahawk::source_ptr&
 DatabaseCommand::source() const
 {
     return m_source;
+}
+
 }

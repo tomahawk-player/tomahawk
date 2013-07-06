@@ -60,7 +60,7 @@ AlbumModel::addCollection( const collection_ptr& collection, bool overwrite )
     connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, QVariant ) ),
                     SLOT( addAlbums( QList<Tomahawk::album_ptr> ) ) );
 
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 
     setTitle( tr( "All albums from %1" ).arg( collection->source()->friendlyName() ) );
 
@@ -101,7 +101,7 @@ AlbumModel::addFilteredCollection( const collection_ptr& collection, unsigned in
     connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, QVariant ) ),
                     SLOT( addAlbums( QList<Tomahawk::album_ptr> ) ) );
 
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 
     if ( !collection.isNull() )
         setTitle( tr( "All albums from %1" ).arg( collection->source()->friendlyName() ) );

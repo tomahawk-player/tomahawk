@@ -23,6 +23,7 @@
 #include "utils/Logger.h"
 #include "Source.h"
 
+using namespace Tomahawk;
 
 DatabaseCommand_SourceOffline::DatabaseCommand_SourceOffline( int id )
     : DatabaseCommand()

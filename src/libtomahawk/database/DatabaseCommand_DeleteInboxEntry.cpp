@@ -27,6 +27,9 @@
 #endif
 
 
+namespace Tomahawk
+{
+
 DatabaseCommand_DeleteInboxEntry::DatabaseCommand_DeleteInboxEntry( const Tomahawk::query_ptr& query,
                                                                     QObject* parent )
     : DatabaseCommand( parent )
@@ -63,4 +66,6 @@ DatabaseCommand_DeleteInboxEntry::exec( DatabaseImpl* dbi )
     query.exec();
 
     emit done();
+}
+
 }

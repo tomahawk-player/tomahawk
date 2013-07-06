@@ -20,6 +20,9 @@
 #include "DatabaseImpl.h"
 #include "Source.h"
 
+namespace Tomahawk
+{
+
 DatabaseCommand_CollectionAttributes::DatabaseCommand_CollectionAttributes( DatabaseCommand_SetCollectionAttributes::AttributeType type )
     : DatabaseCommand()
     , m_type( type )
@@ -55,4 +58,6 @@ DatabaseCommand_CollectionAttributes::exec( DatabaseImpl *lib )
         data << part;
     }
     emit collectionAttributes( data );
+}
+
 }

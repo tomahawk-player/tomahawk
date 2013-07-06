@@ -118,8 +118,8 @@ InboxModel::removeIndex( const QModelIndex& index, bool moreToCome )
     PlayableItem* item = itemFromIndex( index );
     if ( item && !item->query().isNull() )
     {
-        DatabaseCommand_DeleteInboxEntry* cmd = new DatabaseCommand_DeleteInboxEntry( item->query() );
-        Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+        Tomahawk::DatabaseCommand_DeleteInboxEntry* cmd = new Tomahawk::DatabaseCommand_DeleteInboxEntry( item->query() );
+        Tomahawk::Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
     }
 
     PlaylistModel::removeIndex( index, moreToCome );
@@ -192,9 +192,9 @@ InboxModel::loadTracks()
 {
     startLoading();
 
-    DatabaseCommand_LoadInboxEntries* cmd = new DatabaseCommand_LoadInboxEntries();
+    Tomahawk::DatabaseCommand_LoadInboxEntries* cmd = new Tomahawk::DatabaseCommand_LoadInboxEntries();
     connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksLoaded( QList<Tomahawk::query_ptr> ) ) );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+    Tomahawk::Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
 
 

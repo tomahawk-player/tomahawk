@@ -227,7 +227,7 @@ TrackData::loadAttributes()
     m_attributesLoaded = true;
 
     DatabaseCommand_LoadTrackAttributes* cmd = new DatabaseCommand_LoadTrackAttributes( m_ownRef.toStrongRef() );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr(cmd) );
 }
 
 
@@ -252,7 +252,7 @@ TrackData::loadSocialActions()
     m_socialActionsLoaded = true;
 
     DatabaseCommand_LoadSocialActions* cmd = new DatabaseCommand_LoadSocialActions( m_ownRef.toStrongRef() );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr(cmd) );
 }
 
 
@@ -319,7 +319,7 @@ TrackData::setLoved( bool loved )
     m_currentSocialActions[ "Love" ] = loved;
 
     DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction( m_ownRef.toStrongRef(), QString( "Love" ), loved ? QString( "true" ) : QString( "false" ) );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr(cmd) );
 
     emit socialActionsLoaded();
 }
@@ -329,7 +329,7 @@ void
 TrackData::share( const Tomahawk::source_ptr& source )
 {
     DatabaseCommand_ShareTrack* cmd = new DatabaseCommand_ShareTrack( m_ownRef.toStrongRef(), source->nodeId() );
-    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
 
 
@@ -343,7 +343,7 @@ TrackData::loadStats()
 
     DatabaseCommand_TrackStats* cmd = new DatabaseCommand_TrackStats( m_ownRef.toStrongRef() );
     connect( cmd, SIGNAL( trackStats( unsigned int, unsigned int ) ), SLOT( onTrackStatsLoaded( unsigned int, unsigned int ) ) );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr(cmd) );
 }
 
 

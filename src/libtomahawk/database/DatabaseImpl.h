@@ -36,8 +36,12 @@
 #include "TomahawkSqlQuery.h"
 #include "Typedefs.h"
 
-class Database;
 class FuzzyIndex;
+
+namespace Tomahawk
+{
+
+class Database;
 
 class DLLEXPORT DatabaseImpl : public QObject
 {
@@ -104,5 +108,7 @@ private:
     FuzzyIndex* m_fuzzyIndex;
     mutable QMutex m_mutex;
 };
+
+}
 
 #endif // DATABASEIMPL_H

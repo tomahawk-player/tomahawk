@@ -31,6 +31,9 @@
 
 // Not loggable, mtimes only used to speed up our local scanner.
 
+namespace Tomahawk
+{
+
 class DLLEXPORT DatabaseCommand_FileMtimes : public DatabaseCommand
 {
 Q_OBJECT
@@ -65,5 +68,7 @@ private:
     QStringList m_prefixes;
     bool m_checkonly;
 };
+
+}
 
 #endif // DATABASECOMMAND_FILEMTIMES_H

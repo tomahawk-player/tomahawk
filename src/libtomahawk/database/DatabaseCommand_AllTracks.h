@@ -33,6 +33,9 @@
 
 #include "DllMacro.h"
 
+namespace Tomahawk
+{
+
 class DLLEXPORT DatabaseCommand_AllTracks : public DatabaseCommand, public Tomahawk::TracksRequest
 {
 Q_OBJECT
@@ -59,7 +62,7 @@ public:
     virtual bool doesMutates() const { return false; }
     virtual QString commandname() const { return "alltracks"; }
 
-    virtual void enqueue() { Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( this ) ); }
+    virtual void enqueue() { Database::instance()->enqueue( Tomahawk::dbcmd_ptr( this ) ); }
 
     void setArtist( const Tomahawk::artist_ptr& artist ) { m_artist = artist; }
     void setAlbum( const Tomahawk::album_ptr& album ) { m_album = album; }
@@ -83,5 +86,7 @@ private:
     DatabaseCommand_AllTracks::SortOrder m_sortOrder;
     bool m_sortDescending;
 };
+
+}
 
 #endif // DATABASECOMMAND_ALLTRACKS_H

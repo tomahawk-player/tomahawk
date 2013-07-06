@@ -49,8 +49,6 @@ namespace lucene
     }
 }
 
-class DatabaseImpl;
-
 class FuzzyIndex : public QObject
 {
 Q_OBJECT
@@ -61,7 +59,7 @@ public:
 
     void beginIndexing();
     void endIndexing();
-    void appendFields( const IndexData& data );
+    void appendFields( const Tomahawk::IndexData& data );
 
 signals:
     void indexReady();

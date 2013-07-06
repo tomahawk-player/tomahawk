@@ -363,7 +363,7 @@ TomahawkApp::audioControls()
 void
 TomahawkApp::registerMetaTypes()
 {
-    qRegisterMetaType< QSharedPointer<DatabaseCommand> >("QSharedPointer<DatabaseCommand>");
+    qRegisterMetaType< Tomahawk::dbcmd_ptr >("Tomahawk::dbcmd_ptr");
     qRegisterMetaType< DBSyncConnectionState >("DBSyncConnectionState");
     qRegisterMetaType< msg_ptr >("msg_ptr");
     qRegisterMetaType< QList<dbop_ptr> >("QList<dbop_ptr>");
@@ -459,7 +459,7 @@ TomahawkApp::initDatabase()
     }
 
     tDebug( LOGEXTRA ) << "Using database:" << dbpath;
-    m_database = QPointer<Database>( new Database( dbpath, this ) );
+    m_database = QPointer<Tomahawk::Database>( new Tomahawk::Database( dbpath, this ) );
     Pipeline::instance()->databaseReady();
 }
 
@@ -533,7 +533,7 @@ TomahawkApp::initLocalCollection()
     DatabaseCommand_CollectionStats* cmd = new DatabaseCommand_CollectionStats( src );
     connect( cmd,       SIGNAL( done( const QVariantMap& ) ),
              src.data(),  SLOT( setStats( const QVariantMap& ) ), Qt::QueuedConnection );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
 
 

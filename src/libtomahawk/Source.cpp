@@ -434,7 +434,7 @@ Source::setOffline()
 
         d->cc = 0;
         DatabaseCommand_SourceOffline* cmd = new DatabaseCommand_SourceOffline( id() );
-        Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+        Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
     }
 }
 
@@ -457,7 +457,7 @@ Source::setOnline()
         DatabaseCommand_addSource* cmd = new DatabaseCommand_addSource( d->nodeId, dbFriendlyName() );
         connect( cmd, SIGNAL( done( unsigned int, QString ) ),
                         SLOT( dbLoaded( unsigned int, const QString& ) ) );
-        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+        Database::instance()->enqueue( Tomahawk::dbcmd_ptr(cmd) );
     }
 }
 
@@ -658,7 +658,7 @@ Source::setLastCmdGuid( const QString& guid )
 
 
 void
-Source::addCommand( const QSharedPointer<DatabaseCommand>& command )
+Source::addCommand( const dbcmd_ptr& command )
 {
     Q_D( Source );
 
@@ -694,8 +694,8 @@ Source::executeCommands()
     if ( commandsAvail )
     {
         QMutexLocker lock( &d->cmdMutex );
-        QList< QSharedPointer<DatabaseCommand> > cmdGroup;
-        QSharedPointer<DatabaseCommand> cmd = d->cmds.takeFirst();
+        QList< Tomahawk::dbcmd_ptr > cmdGroup;
+        Tomahawk::dbcmd_ptr cmd = d->cmds.takeFirst();
         while ( cmd->groupable() )
         {
             cmdGroup << cmd;
@@ -766,14 +766,14 @@ Source::updateTracks()
 {
     {
         DatabaseCommand* cmd = new DatabaseCommand_UpdateSearchIndex();
-        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+        Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
     }
 
     {
         // Re-calculate local db stats
         DatabaseCommand_CollectionStats* cmd = new DatabaseCommand_CollectionStats( SourceList::instance()->get( id() ) );
         connect( cmd, SIGNAL( done( QVariantMap ) ), SLOT( setStats( QVariantMap ) ), Qt::QueuedConnection );
-        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+        Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
     }
 }
 

@@ -33,13 +33,15 @@
 #include <QSharedPointer>
 
 
+
+namespace Tomahawk
+{
+
+class DatabaseCollection;
 class DatabaseCommand_LoadAllDynamicPlaylists;
 class DatabaseCommand_SetDynamicPlaylistRevision;
 class DatabaseCommand_CreateDynamicPlaylist;
 class DatabaseCommand_LoadAllSortedPlaylists;
-class DatabaseCollection;
-
-namespace Tomahawk {
 
 class DatabaseCommand_LoadDynamicPlaylist;
 class DynamicPlaylistPrivate;
@@ -53,11 +55,11 @@ class DLLEXPORT DynamicPlaylist : public Tomahawk::Playlist
     Q_PROPERTY( QString type                  WRITE setType   READ type )
     Q_PROPERTY( bool    autoLoad                              READ autoLoad )
 
-    friend class ::DatabaseCommand_SetDynamicPlaylistRevision;
-    friend class ::DatabaseCommand_CreateDynamicPlaylist;
+    friend class DatabaseCommand_SetDynamicPlaylistRevision;
+    friend class DatabaseCommand_CreateDynamicPlaylist;
     friend class Tomahawk::DatabaseCommand_LoadDynamicPlaylist;
-    friend class ::DatabaseCommand_LoadAllSortedPlaylists;
-    friend class ::DatabaseCollection; /// :-(
+    friend class DatabaseCommand_LoadAllSortedPlaylists;
+    friend class DatabaseCollection; /// :-(
 
 public:
     virtual ~DynamicPlaylist();

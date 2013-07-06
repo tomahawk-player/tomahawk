@@ -22,7 +22,8 @@
 #include "DatabaseCommand_SetPlaylistRevision.h"
 #include "playlist/dynamic/GeneratorInterface.h"
 
-using namespace Tomahawk;
+namespace Tomahawk
+{
 
 class DatabaseCommand_SetDynamicPlaylistRevision : public DatabaseCommand_SetPlaylistRevision
 {
@@ -86,5 +87,7 @@ private:
     // ARG i hate sharedpointers sometimes
     DynamicPlaylist* m_playlist; // Only used if setting revision of a non-autoloaded playlist, as those aren't able to be looked up by guid
 };
+
+}
 
 #endif // DATABASECOMMAND_SETDYNAMICPLAYLISTREVISION_H

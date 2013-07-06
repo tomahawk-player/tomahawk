@@ -26,6 +26,9 @@
 #include "utils/Logger.h"
 
 
+namespace Tomahawk
+{
+
 void
 DatabaseCommand_PlaybackHistory::exec( DatabaseImpl* dbi )
 {
@@ -87,4 +90,6 @@ DatabaseCommand_PlaybackHistory::exec( DatabaseImpl* dbi )
     }
 
     emit tracks( tl, logs );
+}
+
 }

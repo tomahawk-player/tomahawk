@@ -27,6 +27,9 @@
 
 #include "DllMacro.h"
 
+namespace Tomahawk
+{
+
 class DLLEXPORT DatabaseCommand_ModifyPlaylist : public DatabaseCommand
 {
 Q_OBJECT
@@ -55,5 +58,7 @@ private:
     QList< Tomahawk::plentry_ptr > m_entries;
     Mode m_mode;
 };
+
+}
 
 #endif // DATABASECOMMAND_MODIFYPLAYLIST_H

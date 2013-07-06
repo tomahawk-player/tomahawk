@@ -26,6 +26,9 @@
 
 #include "DllMacro.h"
 
+namespace Tomahawk
+{
+
 class DLLEXPORT DatabaseCommand_addSource : public DatabaseCommand
 {
 Q_OBJECT
@@ -42,5 +45,7 @@ signals:
 private:
     QString m_username, m_fname;
 };
+
+}
 
 #endif // DATABASECOMMAND_ADDSOURCE_H

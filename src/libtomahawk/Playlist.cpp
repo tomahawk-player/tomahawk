@@ -150,7 +150,7 @@ Playlist::create( const source_ptr& author,
 
     DatabaseCommand_CreatePlaylist* cmd = new DatabaseCommand_CreatePlaylist( author, playlist );
     connect( cmd, SIGNAL( finished() ), playlist.data(), SIGNAL( created() ) );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+    Database::instance()->enqueue( dbcmd_ptr(cmd) );
     playlist->reportCreated( playlist );
 
     return playlist;
@@ -186,7 +186,7 @@ Playlist::remove( const playlist_ptr& playlist )
     TomahawkSettings::instance()->removePlaylistSettings( playlist->guid() );
 
     DatabaseCommand_DeletePlaylist* cmd = new DatabaseCommand_DeletePlaylist( playlist->author(), playlist->guid() );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr(cmd) );
 }
 
 
@@ -194,7 +194,7 @@ void
 Playlist::rename( const QString& title )
 {
     DatabaseCommand_RenamePlaylist* cmd = new DatabaseCommand_RenamePlaylist( author(), guid(), title );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr(cmd) );
 }
 
 
@@ -307,7 +307,7 @@ Playlist::loadRevision( const QString& rev )
                                        const QMap< QString, Tomahawk::plentry_ptr >&,
                                        bool ) ) );
 
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
 
 
@@ -353,7 +353,7 @@ Playlist::createNewRevision( const QString& newrev, const QString& oldrev, const
                                                      added,
                                                      entries );
 
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
 
 
@@ -388,7 +388,7 @@ Playlist::updateEntries( const QString& newrev, const QString& oldrev, const QLi
                                              orderedguids,
                                              entries );
 
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
 
 

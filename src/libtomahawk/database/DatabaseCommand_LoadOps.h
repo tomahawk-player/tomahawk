@@ -26,6 +26,9 @@
 
 #include "DllMacro.h"
 
+namespace Tomahawk
+{
+
 class DLLEXPORT DatabaseCommand_loadOps : public DatabaseCommand
 {
 Q_OBJECT
@@ -46,5 +49,7 @@ signals:
 private:
     QString m_since; // guid to load from
 };
+
+}
 
 #endif // DATABASECOMMAND_LOADOPS_H

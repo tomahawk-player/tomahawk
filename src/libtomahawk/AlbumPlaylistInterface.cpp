@@ -150,7 +150,7 @@ AlbumPlaylistInterface::tracks() const
                 cmd->setSortOrder( DatabaseCommand_AllTracks::AlbumPosition );
                 connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),
                                 SLOT( onTracksLoaded( QList<Tomahawk::query_ptr> ) ) );
-                Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+                Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
             }
             else
             {
@@ -246,7 +246,7 @@ AlbumPlaylistInterface::infoSystemFinished( const QString& infoId )
             cmd->setSortOrder( DatabaseCommand_AllTracks::AlbumPosition );
             connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),
                             SLOT( onTracksLoaded( QList<Tomahawk::query_ptr> ) ) );
-            Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+            Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
         }
         else
         {

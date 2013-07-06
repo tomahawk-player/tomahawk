@@ -25,6 +25,9 @@
 #include "DatabaseCommand_SetTrackAttributes.h"
 #include <QByteArray>
 
+namespace Tomahawk
+{
+
 class DatabaseCommand_TrackAttributes : public DatabaseCommand
 {
     Q_OBJECT
@@ -47,5 +50,7 @@ private:
     DatabaseCommand_SetTrackAttributes::AttributeType m_type;
     QList< Tomahawk::QID > m_ids;
 };
+
+}
 
 #endif

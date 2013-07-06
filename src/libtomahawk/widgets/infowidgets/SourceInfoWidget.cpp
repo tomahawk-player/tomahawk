@@ -95,7 +95,7 @@ SourceInfoWidget::onCollectionChanged()
 void
 SourceInfoWidget::loadRecentAdditions()
 {
-    m_recentAlbumModel->addFilteredCollection( m_source->dbCollection(), 20, DatabaseCommand_AllAlbums::ModificationTime, true );
+    m_recentAlbumModel->addFilteredCollection( m_source->dbCollection(), 20, Tomahawk::DatabaseCommand_AllAlbums::ModificationTime, true );
 }
 
 

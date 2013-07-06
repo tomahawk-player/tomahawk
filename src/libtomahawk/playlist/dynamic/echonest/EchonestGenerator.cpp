@@ -114,7 +114,7 @@ CatalogManager::collectionAttributes( const PairList& data )
 void
 CatalogManager::doCatalogUpdate()
 {
-    QSharedPointer< DatabaseCommand > cmd( new DatabaseCommand_CollectionAttributes( DatabaseCommand_SetCollectionAttributes::EchonestSongCatalog ) );
+    Tomahawk::dbcmd_ptr cmd( new DatabaseCommand_CollectionAttributes( DatabaseCommand_SetCollectionAttributes::EchonestSongCatalog ) );
     connect( cmd.data(), SIGNAL( collectionAttributes( PairList ) ), this, SLOT( collectionAttributes( PairList ) ) );
     Database::instance()->enqueue( cmd );
 }

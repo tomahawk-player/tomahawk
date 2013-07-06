@@ -62,7 +62,7 @@ RecentlyAddedModel::loadHistory()
     connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),
                     SLOT( appendQueries( QList<Tomahawk::query_ptr> ) ), Qt::QueuedConnection );
 
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
 
 

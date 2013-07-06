@@ -29,6 +29,9 @@
 
 #include "DllMacro.h"
 
+namespace Tomahawk
+{
+
 /**
  * This dbcmd takes a generic SELECT command that operates on the database and returns a list of query_ptrs
  *  that match.
@@ -81,6 +84,8 @@ private:
     int m_limit;
     bool m_raw;
 };
+
+}
 
 Q_DECLARE_METATYPE(QList<QStringList>);
 

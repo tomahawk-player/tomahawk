@@ -24,6 +24,9 @@
 
 #include "DllMacro.h"
 
+namespace Tomahawk
+{
+
 class DatabaseImpl;
 
 class DLLEXPORT DatabaseCommand_RenamePlaylist : public DatabaseCommandLoggable
@@ -55,5 +58,7 @@ private:
     QString m_playlistguid;
     QString m_playlistTitle;
 };
+
+}
 
 #endif // DATABASECOMMAND_RENAMEPLAYLIST_H

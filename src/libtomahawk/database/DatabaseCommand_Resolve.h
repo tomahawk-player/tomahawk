@@ -29,6 +29,9 @@
 
 #include "DllMacro.h"
 
+namespace Tomahawk
+{
+
 class DLLEXPORT DatabaseCommand_Resolve : public DatabaseCommand
 {
 Q_OBJECT
@@ -54,5 +57,7 @@ private:
 
     Tomahawk::query_ptr m_query;
 };
+
+}
 
 #endif // DATABASECOMMAND_RESOLVE_H

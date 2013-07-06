@@ -31,6 +31,7 @@
     #include "ViewManager.h"
 #endif
 
+using namespace Tomahawk;
 
 LocalCollection::LocalCollection( const Tomahawk::source_ptr& source, QObject* parent )
     : DatabaseCollection( source, parent )

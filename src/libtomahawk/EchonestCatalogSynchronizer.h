@@ -84,8 +84,9 @@ private:
 
     static EchonestCatalogSynchronizer* s_instance;
 
-    friend class ::DatabaseCommand_SetCollectionAttributes;
+    friend class DatabaseCommand_SetCollectionAttributes;
 };
 
 }
+
 #endif // ECHONESTCATALOGSYNCHRONIZER_H

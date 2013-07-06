@@ -28,6 +28,9 @@
 
 #include <QSqlQuery>
 
+namespace Tomahawk
+{
+
 DatabaseCommand_AllArtists::DatabaseCommand_AllArtists( const Tomahawk::collection_ptr& collection, QObject* parent )
     : DatabaseCommand( parent )
     , m_collection( collection )
@@ -104,4 +107,6 @@ DatabaseCommand_AllArtists::exec( DatabaseImpl* dbi )
 
     emit artists( al );
     emit done();
+}
+
 }

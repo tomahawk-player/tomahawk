@@ -24,6 +24,9 @@
 
 #include <QObject>
 
+namespace Tomahawk
+{
+
 class DLLEXPORT DatabaseCommand_ClientAuthValid : public DatabaseCommand
 {
     Q_OBJECT
@@ -46,5 +49,7 @@ signals:
 private:
     QString m_clientToken;
 };
+
+}
 
 #endif // DATABASECOMMAND_CLIENTAUTHVALID_H

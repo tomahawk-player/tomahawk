@@ -102,8 +102,8 @@ FuzzyIndex::wipeIndex()
 void
 FuzzyIndex::updateIndex()
 {
-    DatabaseCommand* cmd = new DatabaseCommand_UpdateSearchIndex();
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+    Tomahawk::DatabaseCommand* cmd = new Tomahawk::DatabaseCommand_UpdateSearchIndex();
+    Tomahawk::Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
 
 
@@ -152,7 +152,7 @@ FuzzyIndex::endIndexing()
 
 
 void
-FuzzyIndex::appendFields( const IndexData& data )
+FuzzyIndex::appendFields( const Tomahawk::IndexData& data )
 {
     try
     {
@@ -160,13 +160,13 @@ FuzzyIndex::appendFields( const IndexData& data )
 
         if ( !data.track.isEmpty() )
         {
-            doc.add( *( _CLNEW Field( _T( "fulltext" ), DatabaseImpl::sortname( QString( "%1 %2" ).arg( data.artist ).arg( data.track ) ).toStdWString().c_str(),
+            doc.add( *( _CLNEW Field( _T( "fulltext" ), Tomahawk::DatabaseImpl::sortname( QString( "%1 %2" ).arg( data.artist ).arg( data.track ) ).toStdWString().c_str(),
                                       Field::STORE_NO | Field::INDEX_UNTOKENIZED ) ) );
 
-            doc.add( *( _CLNEW Field( _T( "track" ), DatabaseImpl::sortname( data.track ).toStdWString().c_str(),
+            doc.add( *( _CLNEW Field( _T( "track" ), Tomahawk::DatabaseImpl::sortname( data.track ).toStdWString().c_str(),
                                       Field::STORE_NO | Field::INDEX_UNTOKENIZED ) ) );
 
-            doc.add( *( _CLNEW Field( _T( "artist" ), DatabaseImpl::sortname( data.artist ).toStdWString().c_str(),
+            doc.add( *( _CLNEW Field( _T( "artist" ), Tomahawk::DatabaseImpl::sortname( data.artist ).toStdWString().c_str(),
                                       Field::STORE_NO | Field::INDEX_UNTOKENIZED ) ) );
 
             doc.add( *( _CLNEW Field( _T( "artistid" ), QString::number( data.artistId ).toStdWString().c_str(),
@@ -177,7 +177,7 @@ FuzzyIndex::appendFields( const IndexData& data )
         }
         else if ( !data.album.isEmpty() )
         {
-            doc.add( *( _CLNEW Field( _T( "album" ), DatabaseImpl::sortname( data.album ).toStdWString().c_str(),
+            doc.add( *( _CLNEW Field( _T( "album" ), Tomahawk::DatabaseImpl::sortname( data.album ).toStdWString().c_str(),
                                       Field::STORE_NO | Field::INDEX_UNTOKENIZED ) ) );
 
             doc.add( *( _CLNEW Field( _T( "albumid" ), QString::number( data.id ).toStdWString().c_str(),
@@ -231,7 +231,7 @@ FuzzyIndex::search( const Tomahawk::query_ptr& query )
 
         if ( query->isFullTextQuery() )
         {
-            QString escapedQuery = QString::fromWCharArray( parser.escape( DatabaseImpl::sortname( query->fullTextQuery() ).toStdWString().c_str() ) );
+            QString escapedQuery = QString::fromWCharArray( parser.escape( Tomahawk::DatabaseImpl::sortname( query->fullTextQuery() ).toStdWString().c_str() ) );
 
             Term* term = _CLNEW Term( _T( "track" ), escapedQuery.toStdWString().c_str() );
             Query* fqry = _CLNEW FuzzyQuery( term );
@@ -249,8 +249,8 @@ FuzzyIndex::search( const Tomahawk::query_ptr& query )
         }
         else
         {
-            QString track = QString::fromWCharArray( parser.escape( DatabaseImpl::sortname( query->queryTrack()->track() ).toStdWString().c_str() ) );
-            QString artist = QString::fromWCharArray( parser.escape( DatabaseImpl::sortname( query->queryTrack()->artist() ).toStdWString().c_str() ) );
+            QString track = QString::fromWCharArray( parser.escape( Tomahawk::DatabaseImpl::sortname( query->queryTrack()->track() ).toStdWString().c_str() ) );
+            QString artist = QString::fromWCharArray( parser.escape( Tomahawk::DatabaseImpl::sortname( query->queryTrack()->artist() ).toStdWString().c_str() ) );
 //            QString album = QString::fromWCharArray( parser.escape( query->album().toStdWString().c_str() ) );
 
             Term* term = _CLNEW Term( _T( "track" ), track.toStdWString().c_str() );
@@ -316,7 +316,7 @@ FuzzyIndex::searchAlbum( const Tomahawk::query_ptr& query )
         }
 
         QueryParser parser( _T( "album" ), m_analyzer );
-        QString escapedName = QString::fromWCharArray( parser.escape( DatabaseImpl::sortname( query->fullTextQuery() ).toStdWString().c_str() ) );
+        QString escapedName = QString::fromWCharArray( parser.escape( Tomahawk::DatabaseImpl::sortname( query->fullTextQuery() ).toStdWString().c_str() ) );
 
         Query* qry = _CLNEW FuzzyQuery( _CLNEW Term( _T( "album" ), escapedName.toStdWString().c_str() ) );
         Hits* hits = m_luceneSearcher->search( qry );

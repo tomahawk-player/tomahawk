@@ -45,7 +45,7 @@ namespace {
 static QWaitCondition s_waitCond;
 static QMutex s_mutex;
 
-struct QueueItem
+struct Tomahawk::QueueItem
 {
     QFutureInterface<unsigned int> promise;
     artist_ptr artist;

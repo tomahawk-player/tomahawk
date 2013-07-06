@@ -29,17 +29,18 @@
 
 #include "DllMacro.h"
 
-class DatabaseCommand_LoadInboxEntries;
 
 namespace Tomahawk
 {
+
+class DatabaseCommand_LoadInboxEntries;
 
 class DLLEXPORT Track : public QObject
 {
 Q_OBJECT
 
 friend class Pipeline;
-friend class ::DatabaseCommand_LoadInboxEntries; // for setAllSocialActions
+friend class DatabaseCommand_LoadInboxEntries; // for setAllSocialActions
 
 public:
     enum DescriptionMode

@@ -28,6 +28,9 @@
 
 #include "DllMacro.h"
 
+namespace Tomahawk
+{
+
 class DLLEXPORT DatabaseCommand_LoadAllPlaylists : public DatabaseCommand
 {
     Q_OBJECT
@@ -66,5 +69,7 @@ private:
     SortOrder m_sortOrder;
     bool m_sortDescending;
 };
+
+}
 
 #endif // DATABASECOMMAND_LOADALLPLAYLIST_H

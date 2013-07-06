@@ -42,7 +42,6 @@
 #include <QPointer>
 
 class AudioEngine;
-class Database;
 class ScanManager;
 class Servent;
 class SipHandler;
@@ -52,6 +51,7 @@ class AudioControls;
 namespace Tomahawk
 {
     class ShortcutHandler;
+    class Database;
     namespace InfoSystem
     {
         class InfoSystem;
@@ -128,7 +128,7 @@ private:
     void initLocalCollection();
     void initPipeline();
 
-    QPointer<Database> m_database;
+    QPointer<Tomahawk::Database> m_database;
     QPointer<ScanManager> m_scanManager;
     QPointer<AudioEngine> m_audioEngine;
     QPointer<Servent> m_servent;

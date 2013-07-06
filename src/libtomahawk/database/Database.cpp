@@ -52,6 +52,8 @@
 #define DEFAULT_WORKER_THREADS 4
 #define MAX_WORKER_THREADS 16
 
+namespace Tomahawk
+{
 
 dbcmd_ptr
 DatabaseCommandFactory::newInstance()
@@ -166,7 +168,7 @@ Database::loadIndex()
 
 
 void
-Database::enqueue( const QList< QSharedPointer<DatabaseCommand> >& lc )
+Database::enqueue( const QList< Tomahawk::dbcmd_ptr >& lc )
 {
     Q_ASSERT( m_ready );
     if ( !m_ready )
@@ -182,7 +184,7 @@ Database::enqueue( const QList< QSharedPointer<DatabaseCommand> >& lc )
 
 
 void
-Database::enqueue( const QSharedPointer<DatabaseCommand>& lc )
+Database::enqueue( const Tomahawk::dbcmd_ptr& lc )
 {
     Q_ASSERT( m_ready );
     if ( !m_ready )
@@ -317,5 +319,7 @@ Database::createCommandInstance(const QVariant& op, const source_ptr& source)
     command->setSource( source );
     QJson::QObjectHelper::qvariant2qobject( op.toMap(), command.data() );
     return command;
+}
+
 }
 

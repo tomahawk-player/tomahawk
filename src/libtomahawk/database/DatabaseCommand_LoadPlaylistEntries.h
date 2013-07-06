@@ -28,6 +28,9 @@
 #include <QStringList>
 #include <QVariantMap>
 
+namespace Tomahawk
+{
+
 class DLLEXPORT DatabaseCommand_LoadPlaylistEntries : public DatabaseCommand
 {
 Q_OBJECT
@@ -60,5 +63,7 @@ protected:
 private:
     QString m_revguid;
 };
+
+}
 
 #endif

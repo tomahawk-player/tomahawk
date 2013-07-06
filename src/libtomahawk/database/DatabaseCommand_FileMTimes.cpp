@@ -26,6 +26,9 @@
 #include "Source.h"
 
 
+namespace Tomahawk
+{
+
 void
 DatabaseCommand_FileMtimes::exec( DatabaseImpl* dbi )
 {
@@ -81,4 +84,6 @@ DatabaseCommand_FileMtimes::execSelectPath( DatabaseImpl *dbi, const QDir& path,
         map.insert( query.value( 1 ).toUInt(), query.value( 2 ).toUInt() );
         mtimes.insert( query.value( 0 ).toString(), map );
     }
+}
+
 }

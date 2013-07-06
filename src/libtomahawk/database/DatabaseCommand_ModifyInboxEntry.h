@@ -21,6 +21,9 @@
 
 #include "DatabaseCommand.h"
 
+namespace Tomahawk
+{
+
 class DatabaseCommand_ModifyInboxEntry : public DatabaseCommand
 {
     Q_OBJECT
@@ -40,5 +43,7 @@ private:
     Tomahawk::query_ptr m_query;
     bool m_newValue;
 };
+
+}
 
 #endif // DATABASECOMMAND_MODIFYINBOXENTRY_H

@@ -137,7 +137,7 @@ TreeModel::addAllCollections()
     connect( cmd, SIGNAL( artists( QList<Tomahawk::artist_ptr> ) ),
                     SLOT( onArtistsAdded( QList<Tomahawk::artist_ptr> ) ) );
 
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 
     connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ), Qt::UniqueConnection );
 
@@ -293,7 +293,7 @@ TreeModel::reloadCollection()
 //    connect( cmd, SIGNAL( artists( QList<Tomahawk::artist_ptr>, Tomahawk::collection_ptr ) ),
 //                    SLOT( onArtistsAdded( QList<Tomahawk::artist_ptr>, Tomahawk::collection_ptr ) ) );
 
-//    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+//    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 
 //    if ( collection->source()->isLocal() )
 //        setTitle( tr( "My Collection" ) );

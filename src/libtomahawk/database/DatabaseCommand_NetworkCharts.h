@@ -27,6 +27,9 @@
 
 #include "DllMacro.h"
 
+namespace Tomahawk
+{
+
 class DLLEXPORT DatabaseCommand_NetworkCharts : public DatabaseCommand
 {
 Q_OBJECT
@@ -50,5 +53,7 @@ private:
     QDateTime m_from;
     QDateTime m_to;
 };
+
+}
 
 #endif // DATABASECOMMAND_NETWORKCHARTS_H

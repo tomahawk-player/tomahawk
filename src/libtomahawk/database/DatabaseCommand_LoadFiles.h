@@ -28,6 +28,9 @@
 #include "Result.h"
 #include "DllMacro.h"
 
+namespace Tomahawk
+{
+
 /**
   Loads a result_ptr from the database from a track dbid.
 
@@ -53,5 +56,7 @@ private:
     bool m_single;
     QList<unsigned int> m_ids;
 };
+
+}
 
 #endif // DATABASECOMMAND_LOADFILE_H

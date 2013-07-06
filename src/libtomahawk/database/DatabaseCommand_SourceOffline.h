@@ -22,6 +22,9 @@
 #include "DatabaseCommand.h"
 #include "DllMacro.h"
 
+namespace Tomahawk
+{
+
 class DLLEXPORT DatabaseCommand_SourceOffline : public DatabaseCommand
 {
 Q_OBJECT
@@ -37,5 +40,7 @@ public:
 private:
     int m_id;
 };
+
+}
 
 #endif // DATABASECOMMAND_SOURCEOFFLINE_H

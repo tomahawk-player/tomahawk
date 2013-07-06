@@ -30,6 +30,9 @@
 
 #include "DllMacro.h"
 
+namespace Tomahawk
+{
+
 /**
  * \class DatabaseCommand_LoadSocialActions
  * \brief Database command used to load social actions from the database.
@@ -110,6 +113,8 @@ private:
     QString m_actionOnly;
 
 };
+
+}
 
 //FIXME: Qt5: this fails with Qt5, is it needed at all? It compiles fine without in Qt4 as well
 // Q_DECLARE_METATYPE( DatabaseCommand_LoadSocialActions::TrackActions )

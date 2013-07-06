@@ -32,10 +32,8 @@
 
 // TODO: Move into Tomahawk namespace
 class Msg;
-class DatabaseCommand;
 
 typedef QSharedPointer<Msg> msg_ptr;
-typedef QSharedPointer< DatabaseCommand> dbcmd_ptr;
 
 namespace Tomahawk
 {
@@ -54,6 +52,7 @@ namespace Tomahawk
     class DynamicControl;
     class GeneratorInterface;
     class PeerInfo;
+    class DatabaseCommand;
 
     typedef QSharedPointer<Collection> collection_ptr;
     typedef QSharedPointer<Playlist> playlist_ptr;
@@ -75,6 +74,7 @@ namespace Tomahawk
     typedef QWeakPointer<Album> album_wptr;
     typedef QSharedPointer<PeerInfo> peerinfo_ptr;
     typedef QWeakPointer<PeerInfo> peerinfo_wptr;
+    typedef QSharedPointer< DatabaseCommand> dbcmd_ptr;
 
     typedef QSharedPointer<DynamicControl> dyncontrol_ptr;
     typedef QSharedPointer<GeneratorInterface> geninterface_ptr;

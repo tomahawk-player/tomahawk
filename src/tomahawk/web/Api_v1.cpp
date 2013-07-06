@@ -152,7 +152,7 @@ Api_v1::auth_2( QxtWebRequestEvent* event, QString arg )
     }
 
     DatabaseCommand_AddClientAuth* dbcmd = new DatabaseCommand_AddClientAuth( authtoken, website, name, event->headers.key( "ua" ) );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(dbcmd) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr(dbcmd) );
 }
 
 
@@ -242,7 +242,7 @@ Api_v1::stat( QxtWebRequestEvent* event )
         // check for auth status
         DatabaseCommand_ClientAuthValid* dbcmd = new DatabaseCommand_ClientAuthValid( urlQueryItemValue( event->url, "auth" ) );
         connect( dbcmd, SIGNAL( authValid( QString, QString, bool ) ), this, SLOT( statResult( QString, QString, bool ) ) );
-        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(dbcmd) );
+        Database::instance()->enqueue( Tomahawk::dbcmd_ptr(dbcmd) );
     }
     else
     {

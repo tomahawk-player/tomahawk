@@ -26,12 +26,15 @@
 
 #include "DllMacro.h"
 
+namespace Tomahawk
+{
+
 class DLLEXPORT DatabaseCommand_CollectionStats : public DatabaseCommand
 {
 Q_OBJECT
 
 public:
-    explicit DatabaseCommand_CollectionStats( const Tomahawk::source_ptr& source, QObject* parent = 0 );
+    explicit DatabaseCommand_CollectionStats( const source_ptr& source, QObject* parent = 0 );
     virtual void exec( DatabaseImpl* lib );
     virtual bool doesMutates() const { return false; }
     virtual QString commandname() const { return "collectionstats"; }
@@ -39,5 +42,7 @@ public:
 signals:
     void done( const QVariantMap& );
 };
+
+}
 
 #endif // DATABASECOMMAND_COLLECTIONSTATS_H

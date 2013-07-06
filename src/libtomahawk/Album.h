@@ -33,10 +33,10 @@
 #include "collection/Collection.h"
 #include "infosystem/InfoSystem.h"
 
-class IdThreadWorker;
 
 namespace Tomahawk
 {
+class IdThreadWorker;
 
 class DLLEXPORT Album : public QObject
 {
@@ -111,7 +111,7 @@ private:
     static QHash< QString, album_wptr > s_albumsByName;
     static QHash< unsigned int, album_wptr > s_albumsById;
 
-    friend class ::IdThreadWorker;
+    friend class IdThreadWorker;
 };
 
 } // ns

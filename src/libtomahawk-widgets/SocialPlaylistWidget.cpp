@@ -103,15 +103,15 @@ SocialPlaylistWidget::fetchFromDB()
     // Load the pre-baked custom playlists that we are going to show.
     QSharedPointer<DatabaseCommand_GenericSelect> albumsCmd = QSharedPointer<DatabaseCommand_GenericSelect>( new DatabaseCommand_GenericSelect( s_popularAlbumsQuery, DatabaseCommand_GenericSelect::Album, 30, 0 ) );
     connect( albumsCmd.data(), SIGNAL( albums( QList<Tomahawk::album_ptr> ) ), this, SLOT( popularAlbumsFetched( QList<Tomahawk::album_ptr> ) ) );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( albumsCmd ) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( albumsCmd ) );
 
 //     QSharedPointer<DatabaseCommand_GenericSelect> plCmd = QSharedPointer<DatabaseCommand_GenericSelect>( new DatabaseCommand_GenericSelect( s_mostPlayedPlaylistsQuery, DatabaseCommand_GenericSelect::, 30, 0 ) );
 //     connect( albumsCmd.data(), SIGNAL( albums( QList<Tomahawk::album_ptr> ) ), this, SLOT( popularAlbumsFetched( QList<Tomahawk::album_ptr> ) ) );
-//     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( albumsCmd ) );
+//     Database::instance()->enqueue( Tomahawk::dbcmd_ptr( albumsCmd ) );
 
     QSharedPointer<DatabaseCommand_GenericSelect> trackCmd = QSharedPointer<DatabaseCommand_GenericSelect>( new DatabaseCommand_GenericSelect( s_topForeignTracksQuery, DatabaseCommand_GenericSelect::Track, 50, 0 ) );
     connect( trackCmd.data(), SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( topForeignTracksFetched( QList<Tomahawk::query_ptr> ) ) );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( trackCmd ) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( trackCmd ) );
 }
 
 

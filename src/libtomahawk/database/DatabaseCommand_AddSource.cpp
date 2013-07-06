@@ -24,6 +24,8 @@
 #include "utils/Logger.h"
 #include "Source.h"
 
+namespace Tomahawk
+{
 
 DatabaseCommand_addSource::DatabaseCommand_addSource( const QString& username, const QString& fname, QObject* parent )
     : DatabaseCommand( parent )
@@ -64,4 +66,6 @@ DatabaseCommand_addSource::exec( DatabaseImpl* dbi )
     tDebug() << "Inserted new source to DB, id:" << id << "friendlyname" << m_username;
 
     emit done( id, m_fname );
+}
+
 }

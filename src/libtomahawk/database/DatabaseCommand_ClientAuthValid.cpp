@@ -24,6 +24,9 @@
 #include "Source.h"
 
 
+namespace Tomahawk
+{
+
 DatabaseCommand_ClientAuthValid::DatabaseCommand_ClientAuthValid( const QString& clientToken, QObject* parent )
     : DatabaseCommand( parent )
     , m_clientToken( clientToken )
@@ -53,4 +56,6 @@ void DatabaseCommand_ClientAuthValid::exec( DatabaseImpl* lib )
     {
         qWarning() << "Failed to query http auth table for client:" << m_clientToken;
     }
+}
+
 }

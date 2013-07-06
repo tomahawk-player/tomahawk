@@ -131,7 +131,7 @@ DBSyncConnection::check()
         tDebug( LOGVERBOSE ) << "Fetching lastCmdGuid from database!";
         DatabaseCommand_CollectionStats* cmd_them = new DatabaseCommand_CollectionStats( m_source );
         connect( cmd_them, SIGNAL( done( QVariantMap ) ), SLOT( gotThem( QVariantMap ) ) );
-        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd_them) );
+        Database::instance()->enqueue( dbcmd_ptr(cmd_them) );
     }
     else
     {
@@ -182,7 +182,7 @@ DBSyncConnection::handleMsg( msg_ptr msg )
         DatabaseCommand_CollectionStats* cmd = new DatabaseCommand_CollectionStats( m_source );
         connect( cmd,           SIGNAL( done( const QVariantMap & ) ),
                  m_source.data(), SLOT( setStats( const QVariantMap& ) ), Qt::QueuedConnection );
-        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+        Database::instance()->enqueue( Tomahawk::dbcmd_ptr(cmd) );
         return;
     }
 
@@ -257,7 +257,7 @@ DBSyncConnection::sendOps()
 
     m_uscache.clear();
 
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
 
 

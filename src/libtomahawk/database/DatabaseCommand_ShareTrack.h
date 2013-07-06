@@ -28,6 +28,9 @@
 
 #include "DllMacro.h"
 
+namespace Tomahawk
+{
+
 class DLLEXPORT DatabaseCommand_ShareTrack : public DatabaseCommand_SocialAction
 {
     Q_OBJECT
@@ -56,5 +59,7 @@ public:
 private:
     QString m_recipient;
 };
+
+}
 
 #endif // DATABASECOMMAND_SHARETRACK_H

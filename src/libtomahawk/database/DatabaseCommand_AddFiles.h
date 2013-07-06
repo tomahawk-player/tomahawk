@@ -28,6 +28,9 @@
 
 #include "DllMacro.h"
 
+namespace Tomahawk
+{
+
 class DLLEXPORT DatabaseCommand_AddFiles : public DatabaseCommandLoggable
 {
 Q_OBJECT
@@ -61,5 +64,7 @@ private:
     QVariantList m_files;
     QList<unsigned int> m_ids;
 };
+
+}
 
 #endif // DATABASECOMMAND_ADDFILES_H

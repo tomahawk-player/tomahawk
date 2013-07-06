@@ -25,6 +25,8 @@
 #include "PlaylistEntry.h"
 #include "Source.h"
 
+namespace Tomahawk
+{
 
 DatabaseCommand_LoadFiles::DatabaseCommand_LoadFiles( unsigned int id, QObject* parent )
     : DatabaseCommand( parent )
@@ -58,4 +60,6 @@ DatabaseCommand_LoadFiles::exec( DatabaseImpl* dbi )
         emit result( resultList.first() );
     else
         emit results( resultList );
+}
+
 }

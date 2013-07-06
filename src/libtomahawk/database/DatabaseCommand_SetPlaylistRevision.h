@@ -25,7 +25,8 @@
 
 #include "DllMacro.h"
 
-using namespace Tomahawk;
+namespace Tomahawk
+{
 
 class DLLEXPORT DatabaseCommand_SetPlaylistRevision : public DatabaseCommandLoggable
 {
@@ -103,5 +104,7 @@ private:
 
     bool m_localOnly, m_metadataUpdate;
 };
+
+}
 
 #endif // DATABASECOMMAND_SETPLAYLISTREVISION_H

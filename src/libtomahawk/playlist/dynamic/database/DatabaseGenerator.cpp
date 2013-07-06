@@ -136,7 +136,7 @@ DatabaseGenerator::generate( int number )
                                                                               );
 
         connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
-        Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+        Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 
         return;
     }

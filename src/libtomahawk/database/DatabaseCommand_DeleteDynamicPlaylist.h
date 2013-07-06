@@ -22,6 +22,9 @@
 #include "DatabaseCommand_DeletePlaylist.h"
 #include "Typedefs.h"
 
+namespace Tomahawk
+{
+
 class DatabaseCommand_DeleteDynamicPlaylist : public DatabaseCommand_DeletePlaylist
 {
     Q_OBJECT
@@ -39,5 +42,7 @@ public:
     virtual bool doesMutates() const { return true; }
 
 };
+
+}
 
 #endif // DATABASECOMMAND_DELETEDYNAMICPLAYLIST_H

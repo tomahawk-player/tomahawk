@@ -31,6 +31,9 @@
 
 #include "DllMacro.h"
 
+namespace Tomahawk
+{
+
 class DatabaseImpl;
 
 class DLLEXPORT DatabaseCommand : public QObject
@@ -65,7 +68,7 @@ public:
     // stuff to do once transaction applied ok.
     // Don't change the database from in here, duh.
     void postCommit() { postCommitHook(); emitCommitted(); }
-    virtual void postCommitHook(){};
+    virtual void postCommitHook(){}
 
     void setSource( const Tomahawk::source_ptr& s );
     const Tomahawk::source_ptr& source() const;
@@ -109,6 +112,8 @@ private:
     QVariant m_data;
 };
 
-Q_DECLARE_METATYPE( DatabaseCommand )
+}
+
+Q_DECLARE_METATYPE( Tomahawk::DatabaseCommand )
 
 #endif // DATABASECOMMAND_H

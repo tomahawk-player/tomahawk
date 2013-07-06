@@ -35,10 +35,6 @@
 #include "DllMacro.h"
 
 class SourceTreePopupDialog;
-class DatabaseCommand_LoadAllPlaylists;
-class DatabaseCommand_LoadAllSortedPlaylists;
-class DatabaseCommand_SetPlaylistRevision;
-class DatabaseCommand_CreatePlaylist;
 class PlaylistModel;
 
 namespace _detail
@@ -48,6 +44,10 @@ namespace _detail
 
 namespace Tomahawk
 {
+class DatabaseCommand_LoadAllPlaylists;
+class DatabaseCommand_LoadAllSortedPlaylists;
+class DatabaseCommand_SetPlaylistRevision;
+class DatabaseCommand_CreatePlaylist;
 
 class PlaylistPrivate;
 class PlaylistUpdaterInterface;
@@ -74,10 +74,10 @@ class DLLEXPORT Playlist : public QObject
     Q_PROPERTY( unsigned int createdon  READ createdOn          WRITE setCreatedOn )
     Q_PROPERTY( bool    shared          READ shared             WRITE setShared )
 
-friend class ::DatabaseCommand_LoadAllPlaylists;
-friend class ::DatabaseCommand_LoadAllSortedPlaylists;
-friend class ::DatabaseCommand_SetPlaylistRevision;
-friend class ::DatabaseCommand_CreatePlaylist;
+friend class DatabaseCommand_LoadAllPlaylists;
+friend class DatabaseCommand_LoadAllSortedPlaylists;
+friend class DatabaseCommand_SetPlaylistRevision;
+friend class DatabaseCommand_CreatePlaylist;
 friend class DynamicPlaylist;
 friend class ::PlaylistModel;
 

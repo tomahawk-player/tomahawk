@@ -27,16 +27,17 @@
 #include "Album.h"
 #include "Source.h"
 #include "DatabaseCommand.h"
+#include "Typedefs.h"
 
 #include "DllMacro.h"
 
-class DatabaseImpl;
+namespace Tomahawk
+{
 class DatabaseWorkerThread;
 class DatabaseWorker;
+
 class IdThreadWorker;
-
-
-typedef QSharedPointer< DatabaseCommand> dbcmd_ptr;
+class DatabaseImpl;
 
 
 class DLLEXPORT DatabaseCommandFactory : public QObject
@@ -103,12 +104,12 @@ signals:
     void indexReady(); // search index
     void ready();
 
-    void newJobRO( QSharedPointer<DatabaseCommand> );
-    void newJobRW( QSharedPointer<DatabaseCommand> );
+    void newJobRO( Tomahawk::dbcmd_ptr );
+    void newJobRW( Tomahawk::dbcmd_ptr );
 
 public slots:
-    void enqueue( const QSharedPointer<DatabaseCommand>& lc );
-    void enqueue( const QList< QSharedPointer<DatabaseCommand> >& lc );
+    void enqueue( const Tomahawk::dbcmd_ptr& lc );
+    void enqueue( const QList< Tomahawk::dbcmd_ptr >& lc );
 
 private slots:
     void markAsReady();
@@ -138,5 +139,7 @@ private:
     friend class Tomahawk::Artist;
     friend class Tomahawk::Album;
 };
+
+}
 
 #endif // DATABASE_H

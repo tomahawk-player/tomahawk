@@ -21,6 +21,9 @@
 
 #include "DatabaseCommand.h"
 
+namespace Tomahawk
+{
+
 class DatabaseCommand_LoadInboxEntries : public DatabaseCommand
 {
     Q_OBJECT
@@ -34,5 +37,7 @@ public:
 signals:
     void tracks( QList< Tomahawk::query_ptr > );
 };
+
+}
 
 #endif // DATABASECOMMAND_LOADINBOXENTRIES_H

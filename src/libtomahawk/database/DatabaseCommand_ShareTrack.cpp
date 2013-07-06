@@ -30,6 +30,8 @@
 #include "PlaylistEntry.h"
 #include "ViewManager.h"
 
+namespace Tomahawk
+{
 
 DatabaseCommand_ShareTrack::DatabaseCommand_ShareTrack( QObject* parent )
     : DatabaseCommand_SocialAction( parent )
@@ -166,4 +168,6 @@ void
 DatabaseCommand_ShareTrack::setRecipient( const QString& s )
 {
      m_recipient = s;
+}
+
 }

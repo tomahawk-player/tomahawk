@@ -142,7 +142,7 @@ private:
     // HACK see line 99 in the dbcmd for why we need this for backwards-compatibility
     void moveAutoToStation( const QString& guid );
     void moveStationToAuto( const QString& guid );
-    friend class ::DatabaseCommand_SetDynamicPlaylistRevision;
+    friend class DatabaseCommand_SetDynamicPlaylistRevision;
 };
 
 } // ns

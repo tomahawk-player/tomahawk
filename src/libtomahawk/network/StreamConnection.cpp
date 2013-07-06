@@ -170,7 +170,7 @@ StreamConnection::setup()
 
     DatabaseCommand_LoadFiles* cmd = new DatabaseCommand_LoadFiles( m_fid.toUInt() );
     connect( cmd, SIGNAL( result( Tomahawk::result_ptr ) ), SLOT( startSending( Tomahawk::result_ptr ) ) );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
 
 

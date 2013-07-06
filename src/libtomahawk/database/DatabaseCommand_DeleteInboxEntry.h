@@ -22,6 +22,9 @@
 
 #include "DatabaseCommand.h"
 
+namespace Tomahawk
+{
+
 class DatabaseCommand_DeleteInboxEntry : public DatabaseCommand
 {
     Q_OBJECT
@@ -40,5 +43,7 @@ signals:
 private:
     Tomahawk::query_ptr m_query;
 };
+
+}
 
 #endif // DATABASECOMMAND_DELETEINBOXENTRY_H

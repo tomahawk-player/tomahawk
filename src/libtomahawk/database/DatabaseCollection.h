@@ -29,6 +29,10 @@
 
 #include "DllMacro.h"
 
+
+namespace Tomahawk
+{
+
 class DLLEXPORT DatabaseCollection : public Tomahawk::Collection
 {
 Q_OBJECT
@@ -64,5 +68,7 @@ private slots:
     void stationCreated( const Tomahawk::source_ptr& source, const QVariantList& data );
     void autoPlaylistCreated( const Tomahawk::source_ptr& source, const QVariantList& data );
 };
+
+}
 
 #endif // DATABASECOLLECTION_H
