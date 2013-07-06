@@ -39,14 +39,14 @@ private slots:
     void testFactories()
     {
         Database* db = new Database("test");
-        DatabaseCommand* command = 0;
+        dbcmd_ptr command;
 
         // can we check that his ASSERTs?, it's a build in type, one must not register it again
         // db->registerCommand<DatabaseCommand_LogPlayback>();
 
         // check that if we request a factory for LogPlayback it really creates a LogPlayback object
         command = db->commandFactory<DatabaseCommand_LogPlayback>()->newInstance();
-        DatabaseCommand_LogPlayback* lpCmd =  qobject_cast< DatabaseCommand_LogPlayback* >( command );
+        DatabaseCommand_LogPlayback* lpCmd =  qobject_cast< DatabaseCommand_LogPlayback* >( command.data() );
         QVERIFY( lpCmd );
 
         // try to handle a third party database command
@@ -59,7 +59,7 @@ private slots:
 
         // make sure it's available now
         command = db->commandFactory<TestDatabaseCommand>()->newInstance();
-        TestDatabaseCommand* tCmd = qobject_cast< TestDatabaseCommand* >( command );
+        TestDatabaseCommand* tCmd = qobject_cast< TestDatabaseCommand* >( command.data() );
         QVERIFY( tCmd );
 
         delete db;
