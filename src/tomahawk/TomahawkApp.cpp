@@ -55,11 +55,12 @@
 #include "accounts/spotify/SpotifyAccount.h"
 #include "accounts/spotify/SpotifyPlaylistUpdater.h"
 #include "accounts/AccountManager.h"
+#include "audio/AudioEngine.h"
 #include "database/Database.h"
 #include "database/DatabaseCollection.h"
 #include "database/DatabaseCommand_CollectionStats.h"
 #include "database/DatabaseResolver.h"
-#include "audio/AudioEngine.h"
+#include "playlist/PlaylistTemplate.h"
 #include "jobview/ErrorStatusMessage.h"
 #include "jobview/JobStatusModel.h"
 #include "jobview/JobStatusView.h"
@@ -401,6 +402,7 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< Tomahawk::dyncontrol_ptr >("Tomahawk::dyncontrol_ptr");
     qRegisterMetaType< Tomahawk::playlist_ptr >("Tomahawk::playlist_ptr");
     qRegisterMetaType< Tomahawk::playlistinterface_ptr >("Tomahawk::playlistinterface_ptr");
+    qRegisterMetaType< Tomahawk::playlisttemplate_ptr >("Tomahawk::playlisttemplate_ptr");
     qRegisterMetaType< Tomahawk::dynplaylist_ptr >("Tomahawk::dynplaylist_ptr");
     qRegisterMetaType< Tomahawk::geninterface_ptr >("Tomahawk::geninterface_ptr");
     qRegisterMetaType< Tomahawk::PlaybackLog >("Tomahawk::PlaybackLog");
@@ -747,6 +749,13 @@ TomahawkApp::informationForUrl( const QString& url, const QSharedPointer<QObject
     {
         // The Url describes an album
         ViewManager::instance()->show( album );
+        return;
+    }
+
+    Tomahawk::playlisttemplate_ptr pltemplate = information.objectCast<Tomahawk::PlaylistTemplate>();
+    if ( !pltemplate.isNull() )
+    {
+        ViewManager::instance()->show( pltemplate->get() );
         return;
     }
 

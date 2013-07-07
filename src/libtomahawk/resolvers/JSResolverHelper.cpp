@@ -21,19 +21,26 @@
 
 #include "JSResolverHelper.h"
 
+#include "database/Database.h"
+#include "database/DatabaseImpl.h"
+#include "playlist/PlaylistTemplate.h"
 #include "resolvers/ScriptEngine.h"
 #include "network/Servent.h"
 #include "utils/Logger.h"
+
 #include "config.h"
 #include "JSResolver_p.h"
 #include "Pipeline.h"
 #include "Result.h"
+#include "SourceList.h"
 
 #include <boost/bind.hpp>
 #include <QFile>
 #include <QFileInfo>
 #include <QtCrypto>
 #include <QWebFrame>
+
+using namespace Tomahawk;
 
 JSResolverHelper::JSResolverHelper( const QString& scriptPath, JSResolver* parent )
     : QObject( parent )
@@ -215,31 +222,81 @@ JSResolverHelper::addAlbumTrackResults( const QVariantMap& results )
 }
 
 
+query_ptr
+JSResolverHelper::parseTrack( const QVariantMap& track )
+{
+    QString title = track.value( "title" ).toString();
+    QString artist = track.value( "artist" ).toString();
+    QString album = track.value( "album" ).toString();
+    if ( title.isEmpty() || artist.isEmpty() )
+    {
+        return query_ptr();
+    }
+
+    Tomahawk::query_ptr query = Tomahawk::Query::get( artist, title, album );
+    QString resultHint = track.value( "hint" ).toString();
+    if ( !resultHint.isEmpty() )
+    {
+        query->setResultHint( resultHint );
+        query->setSaveHTTPResultHint( true );
+    }
+
+    return query;
+}
+
 void
 JSResolverHelper::addUrlResult( const QString& url, const QVariantMap& result )
 {
     QString type = result.value( "type" ).toString();
     if ( type == "track" )
     {
-        QString title = result.value( "title" ).toString();
-        QString artist = result.value( "artist" ).toString();
-        QString album = result.value( "album" ).toString();
-        tLog( LOGVERBOSE ) << m_resolver->name() << "Got track for url" << url << title << artist << album;
-        if ( title.isEmpty() || artist.isEmpty() )
+        Tomahawk::query_ptr query = parseTrack( result );
+        if ( query.isNull() )
         {
             // A valid track result shoud have non-empty title and artist.
             tLog() << Q_FUNC_INFO << m_resolver->name() << "Got empty track information for " << url;
             emit m_resolver->informationFound( url, QSharedPointer<QObject>() );
         }
-
-        Tomahawk::query_ptr query = Tomahawk::Query::get( artist, title, album );
-        QString resultHint = result.value( "hint" ).toString();
-        if ( !resultHint.isEmpty() )
+        else
         {
-            query->setResultHint( resultHint );
-            query->setSaveHTTPResultHint( true );
+            emit m_resolver->informationFound( url, query.objectCast<QObject>() );
         }
-        emit m_resolver->informationFound( url, query.objectCast<QObject>() );
+    }
+    else if ( type == "playlist" )
+    {
+        QString guid = result.value( "guid" ).toString();
+        Q_ASSERT( !guid.isEmpty() );
+        // Append nodeid to guid to make it globally unique.
+        guid += Tomahawk::Database::instance()->impl()->dbid();
+
+        // Do we already have this playlist loaded?
+        {
+            playlist_ptr playlist = Playlist::get( guid );
+            if ( !playlist.isNull() )
+            {
+                emit m_resolver->informationFound( url, playlist.objectCast<QObject>() );
+                return;
+            }
+        }
+
+        // Get all information to build a new playlist but do not build it until we know,
+        // if it is really handled as a playlist and not as a set of tracks.
+        Tomahawk::source_ptr source = SourceList::instance()->getLocal();
+        const QString title = result.value( "title" ).toString();
+        const QString info = result.value( "info" ).toString();
+        const QString creator = result.value( "creator" ).toString();
+        QList<query_ptr> queries;
+        foreach( QVariant track, result.value( "tracks" ).toList() )
+        {
+            query_ptr query = parseTrack( track.toMap() );
+            if ( !query.isNull() )
+            {
+                queries << query;
+            }
+        }
+        tLog( LOGVERBOSE ) << Q_FUNC_INFO << m_resolver->name() << "Got playlist for " << url;
+        playlisttemplate_ptr pltemplate( new PlaylistTemplate( source, guid, title, info, creator, false, queries ) );
+        emit m_resolver->informationFound( url, pltemplate.objectCast<QObject>() );
     }
     else
     {

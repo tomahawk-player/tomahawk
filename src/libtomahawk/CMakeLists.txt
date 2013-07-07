@@ -322,6 +322,7 @@ list(APPEND libSources
     network/ConnectionManager.cpp
 
     playlist/PlaylistUpdaterInterface.cpp
+    playlist/PlaylistTemplate.cpp
     playlist/dynamic/DynamicPlaylist.cpp
     playlist/dynamic/GeneratorFactory.cpp
     playlist/dynamic/GeneratorInterface.cpp

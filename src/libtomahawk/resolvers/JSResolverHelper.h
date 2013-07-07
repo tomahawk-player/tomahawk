@@ -75,7 +75,9 @@ public slots:
     void reportCapabilities( const QVariant& capabilities );
 
 private:
+    Tomahawk::query_ptr parseTrack( const QVariantMap& track );
     void returnStreamUrl( const QString& streamUrl, boost::function< void( QSharedPointer< QIODevice >& ) > callback );
+
     QString m_scriptPath, m_urlCallback;
     QHash< QString, boost::function< void( QSharedPointer< QIODevice >& ) > > m_streamCallbacks;
     bool m_urlCallbackIsAsync;
