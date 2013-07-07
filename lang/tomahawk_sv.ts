@@ -606,14 +606,6 @@ ansluta och strömma från dig?</translation>
     </message>
 </context>
 <context>
-    <name>DatabaseCommand_AllAlbums</name>
-    <message>
-        <location filename="../src/libtomahawk/database/DatabaseCommand_AllAlbums.cpp" line="115"/>
-        <source>Unknown</source>
-        <translation>Okänt</translation>
-    </message>
-</context>
-<context>
     <name>DelegateConfigWrapper</name>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="54"/>
@@ -1005,19 +997,6 @@ Password</source>
         <location filename="../src/tomahawk/LoadXSPFDialog.cpp" line="51"/>
         <source>XSPF Files (*.xspf)</source>
         <translation>XSPF Filer (*.xspf)</translation>
-    </message>
-</context>
-<context>
-    <name>LocalCollection</name>
-    <message>
-        <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="45"/>
-        <source>My Collection</source>
-        <translation>Min samling</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="52"/>
-        <source>After you have scanned your music collection you will find your tracks right here.</source>
-        <translation>När du skannat din musiksamling kommer dina spår att finnas här</translation>
     </message>
 </context>
 <context>
@@ -1623,14 +1602,6 @@ Password</source>
     </message>
 </context>
 <context>
-    <name>RemoteCollection</name>
-    <message>
-        <location filename="../src/libtomahawk/network/RemoteCollection.cpp" line="36"/>
-        <source>Collection of %1</source>
-        <translation>%1&apos;s samling</translation>
-    </message>
-</context>
-<context>
     <name>ResolverConfigDelegate</name>
     <message>
         <location filename="../src/tomahawk/ResolverConfigDelegate.cpp" line="111"/>
@@ -1718,12 +1689,12 @@ Password</source>
 <context>
     <name>Servent</name>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="979"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="976"/>
         <source>Automatically detecting external IP failed: Could not parse JSON response.</source>
         <translation>Automatisk IP-adress-upptäckt misslyckades: JSON-responsen kunde inte parsas</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="992"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="989"/>
         <source>Automatically detecting external IP failed: %1</source>
         <translation>Automatisk extern IP-upptäckt misslyckades: %1</translation>
     </message>
@@ -2963,6 +2934,14 @@ username@jabber.org</translation>
     </message>
 </context>
 <context>
+    <name>Tomahawk::DatabaseCommand_AllAlbums</name>
+    <message>
+        <location filename="../src/libtomahawk/database/DatabaseCommand_AllAlbums.cpp" line="117"/>
+        <source>Unknown</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Tomahawk::DropJobNotifier</name>
     <message>
         <location filename="../src/libtomahawk/utils/DropJobNotifier.cpp" line="75"/>
@@ -3617,6 +3596,19 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
     </message>
 </context>
 <context>
+    <name>Tomahawk::LocalCollection</name>
+    <message>
+        <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="46"/>
+        <source>My Collection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="53"/>
+        <source>After you have scanned your music collection you will find your tracks right here.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Tomahawk::RdioParser</name>
     <message>
         <location filename="../src/libtomahawk/utils/RdioParser.cpp" line="204"/>
@@ -3625,9 +3617,17 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
     </message>
 </context>
 <context>
+    <name>Tomahawk::RemoteCollection</name>
+    <message>
+        <location filename="../src/libtomahawk/network/RemoteCollection.cpp" line="36"/>
+        <source>Collection of %1</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Tomahawk::ScriptCollection</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="72"/>
+        <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="66"/>
         <source>%1 Collection</source>
         <comment>Name of a collection based on a resolver, e.g. Subsonic Collection</comment>
         <translation>%1 samling</translation>
@@ -3806,12 +3806,12 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="524"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="526"/>
         <source>My Collection</source>
         <translation>Min samling</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="703"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="710"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>Automatisk extern IP-upptäckt misslyckades</translation>
     </message>
