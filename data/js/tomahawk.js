@@ -78,6 +78,14 @@ var TomahawkResolverCapability = {
     UrlLookup:      8
 };
 
+var TomahawkUrlType = {
+    Any: 0,
+    Playlist: 1,
+    Track: 2,
+    Album: 4,
+    Artist: 8
+};
+
 
 // Resolver BaseObject, inherit it to implement your own resolver
 var TomahawkResolver = {

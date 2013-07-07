@@ -74,6 +74,15 @@ public:
     Q_DECLARE_FLAGS( Capabilities, Capability )
     Q_FLAGS( Capabilities )
 
+    enum UrlType
+    {
+        Any =       0x00,
+        Playlist =  0x01,
+        Track =     0x02,
+        Album =     0x04,
+        Artist =    0x08
+    };
+
     ExternalResolver( const QString& filePath )
         : m_commandQueue( new ScriptCommandQueue( this ) )
     { m_filePath = filePath; }
