@@ -64,7 +64,7 @@ public:
 
     void sendMessage( const QVariantMap& map );
 
-    virtual bool canParseUrl( const QString& ) { return false; }
+    virtual bool canParseUrl( const QString&, UrlType ) { return false; }
 
 signals:
     void terminated();

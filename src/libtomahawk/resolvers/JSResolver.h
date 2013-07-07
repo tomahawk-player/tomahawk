@@ -58,7 +58,7 @@ public:
 
     virtual void setIcon( const QPixmap& icon );
 
-    virtual bool canParseUrl( const QString& url );
+    virtual bool canParseUrl( const QString& url, UrlType type );
 
 public slots:
     virtual void resolve( const Tomahawk::query_ptr& query );

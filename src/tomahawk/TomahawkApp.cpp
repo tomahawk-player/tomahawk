@@ -839,7 +839,7 @@ TomahawkApp::loadUrl( const QString& url )
     QList< QPointer< ExternalResolver > > possibleResolvers;
     foreach ( QPointer<ExternalResolver> resolver, Pipeline::instance()->scriptResolvers() )
     {
-        if ( resolver->canParseUrl( url ) )
+        if ( resolver->canParseUrl( url, ExternalResolver::Any ) )
         {
             canParse = true;
             possibleResolvers << resolver;

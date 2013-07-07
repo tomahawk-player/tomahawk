@@ -424,7 +424,7 @@ JSResolver::tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::
     tDebug() << errorMessage << m;
 }
 
-bool JSResolver::canParseUrl( const QString& url )
+bool JSResolver::canParseUrl( const QString& url, UrlType type )
 {
     Q_D( JSResolver );
 
@@ -438,8 +438,9 @@ bool JSResolver::canParseUrl( const QString& url )
 
     if ( d->capabilities.testFlag( UrlLookup ) )
     {
-        QString eval = QString( "resolver.canParseUrl( '%1' );" )
-                       .arg( QString( url ).replace( "'", "\\'" ) );
+        QString eval = QString( "resolver.canParseUrl( '%1', %2 );" )
+                       .arg( QString( url ).replace( "'", "\\'" ) )
+                       .arg( (int) type );
         return d->engine->mainFrame()->evaluateJavaScript( eval ).toBool();
     }
     else

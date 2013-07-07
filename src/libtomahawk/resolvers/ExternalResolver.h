@@ -100,7 +100,7 @@ public:
     virtual QMap< QString, Tomahawk::collection_ptr > collections() { return m_collections; }
 
     // UrlLookup, sync call
-    virtual bool canParseUrl( const QString& url ) = 0;
+    virtual bool canParseUrl( const QString& url, UrlType type ) = 0;
 
     virtual void enqueue( const QSharedPointer< ScriptCommand >& req )
     { m_commandQueue->enqueue( req ); }
