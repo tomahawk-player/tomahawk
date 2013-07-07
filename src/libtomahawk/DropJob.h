@@ -120,6 +120,7 @@ signals:
 
 private slots:
     void expandedUrls( QStringList );
+    void informationForUrl( const QString& url, const QSharedPointer<QObject>& information );
     void onTracksAdded( const QList<Tomahawk::query_ptr>& );
 
 private:
