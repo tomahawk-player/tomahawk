@@ -467,9 +467,13 @@ PlaylistItemDelegate::resetHoverIndex()
     m_hoveringOver = QModelIndex();
     m_infoButtonRects.clear();
 
-    PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( idx ) );
-    if ( item )
-        item->requestRepaint();
+    QModelIndex itemIdx = m_model->mapToSource( idx );
+    if ( itemIdx.isValid() )
+    {
+        PlayableItem* item = m_model->sourceModel()->itemFromIndex( itemIdx );
+        if ( item )
+            item->requestRepaint();
+    }
 
     emit updateIndex( idx );
     m_view->repaint();
