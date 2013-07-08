@@ -68,7 +68,9 @@ BasicHeader::BasicHeader( QWidget* parent )
 
     QFont font = m_captionLabel->font();
     
-    font.setPointSize( TomahawkUtils::defaultFontSize() + 10 );
+    // TODO: This should be in stylesheet?
+    int captionFontSize = TomahawkUtils::defaultFontSize() + 10;
+    font.setPointSize( captionFontSize );
     font.setBold( true );
     font.setFamily( "Titillium Web" );
     
@@ -76,7 +78,9 @@ BasicHeader::BasicHeader( QWidget* parent )
     m_captionLabel->setElideMode( Qt::ElideRight );
     m_captionLabel->setAlignment( Qt::AlignTop | Qt::AlignLeft );
 
-    font.setPointSize( TomahawkUtils::defaultFontSize() + 2 );
+    // TODO: This should be in stylesheet?
+    int descriptionFontSize = TomahawkUtils::defaultFontSize() + 2;
+    font.setPointSize( descriptionFontSize );
     font.setBold( false );
     m_descriptionLabel->setFont( font );
     m_descriptionLabel->setAlignment( Qt::AlignTop | Qt::AlignLeft );
@@ -108,7 +112,8 @@ BasicHeader::BasicHeader( QWidget* parent )
     TomahawkUtils::unmarginLayout( m_mainLayout );
     m_mainLayout->setContentsMargins( 8, 4, 8, 4 );
     setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
-    setFixedHeight( 58 );
+    // top-margin + header + bottom-margin + top-margin + subheader + bottom-margin
+    setFixedHeight( 2 + 2 * captionFontSize + 2 + 2 + 2 * descriptionFontSize + 2 );
 
     setAutoFillBackground( true );
     setPalette( pal );
