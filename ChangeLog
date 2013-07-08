@@ -6,6 +6,8 @@ Version 0.8.0:
     * Improved connecting between Tomahawk peers and support having multiple IPs
       (including IPv6)
     * Added Network Activity showing you the most played tracks of your friends.
+    * JavaScript-Resolver can now handle URLs (e.g. when dropped from a browser)
+      and resolve them to Playlists/Tracks/Artists/Albums
 
 Version 0.7.1:
     * Heavily reduced memory footprint during and after indexing the database.
