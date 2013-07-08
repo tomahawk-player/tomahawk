@@ -82,6 +82,8 @@ public:
         Album =     0x04,
         Artist =    0x08
     };
+    Q_DECLARE_FLAGS( UrlTypes, UrlType )
+    Q_FLAGS( UrlTypes )
 
     ExternalResolver( const QString& filePath )
         : m_commandQueue( new ScriptCommandQueue( this ) )
