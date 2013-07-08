@@ -53,3 +53,10 @@ Tomahawk::PlaylistTemplate::get()
 
     return d->playlist;
 }
+
+QList<Tomahawk::query_ptr> Tomahawk::PlaylistTemplate::tracks() const
+{
+    Q_D( const PlaylistTemplate );
+
+    return d->queries;
+}

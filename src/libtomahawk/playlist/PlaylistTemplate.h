@@ -45,6 +45,8 @@ public:
      */
     Tomahawk::playlist_ptr get();
 
+    QList<Tomahawk::query_ptr> tracks() const;
+
 protected:
     PlaylistTemplatePrivate* d_ptr;
 

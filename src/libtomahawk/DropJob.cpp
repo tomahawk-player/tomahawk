@@ -25,6 +25,7 @@
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
 #include "jobview/ErrorStatusMessage.h"
+#include "playlist/PlaylistTemplate.h"
 #include "resolvers/ExternalResolver.h"
 #include "utils/SpotifyParser.h"
 #include "utils/ItunesParser.h"
@@ -43,6 +44,7 @@
 #include "Pipeline.h"
 #include "Result.h"
 #include "Source.h"
+#include "ViewManager.h"
 
 #ifdef QCA2_FOUND
 #include "utils/GroovesharkParser.h"
@@ -820,6 +822,66 @@ DropJob::informationForUrl( const QString&, const QSharedPointer<QObject>& infor
     {
         // No information was transmitted, nothing to do.
         tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Empty information received.";
+        return;
+    }
+
+
+    // Try to interpret as Album
+    Tomahawk::album_ptr album = information.objectCast<Tomahawk::Album>();
+    if ( !album.isNull() )
+    {
+        if ( m_dropAction == Append )
+        {
+            onTracksAdded( album->tracks() );
+        }
+        else
+        {
+            // The Url describes an album
+            ViewManager::instance()->show( album );
+            // We're done.
+            deleteLater();
+        }
+
+        return;
+    }
+
+    Tomahawk::playlisttemplate_ptr pltemplate = information.objectCast<Tomahawk::PlaylistTemplate>();
+    if ( !pltemplate.isNull() )
+    {
+        if ( m_dropAction == Create )
+        {
+            ViewManager::instance()->show( pltemplate->get() );
+            // We're done.
+            deleteLater();
+        }
+        else
+        {
+            onTracksAdded( pltemplate->tracks() );
+        }
+        return;
+    }
+
+    // Try to interpret as Playlist
+    Tomahawk::playlist_ptr playlist = information.objectCast<Tomahawk::Playlist>();
+    if ( !playlist.isNull() )
+    {
+        if ( m_dropAction == Create )
+        {
+            QList<Tomahawk::query_ptr> tracks;
+            foreach( Tomahawk::plentry_ptr entry, playlist->entries() )
+            {
+                tracks.append( entry->query() );
+            }
+            onTracksAdded( tracks );
+        }
+        else
+        {
+            // The url describes a playlist
+            ViewManager::instance()->show( playlist );
+            // We're done.
+            deleteLater();
+        }\
+
         return;
     }
 
