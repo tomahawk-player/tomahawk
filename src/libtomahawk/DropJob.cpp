@@ -94,6 +94,34 @@ DropJob::mimeTypes()
 }
 
 
+void
+DropJob::setDropTypes( DropTypes types )
+{
+    m_dropTypes = types;
+}
+
+
+void
+DropJob::setDropAction( DropJob::DropAction action )
+{
+    m_dropAction = action;
+}
+
+
+DropJob::DropTypes
+DropJob::dropTypes() const
+{
+    return m_dropTypes;
+}
+
+
+DropJob::DropAction
+DropJob::dropAction() const
+{
+    return m_dropAction;
+}
+
+
 bool
 DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType, DropJob::DropAction acceptedAction )
 {
@@ -701,6 +729,20 @@ DropJob::handleGroovesharkUrls ( const QString& urlsRaw )
 #else
     tLog() << "Tomahawk compiled without QCA support, cannot use groovesharkparser";
 #endif
+}
+
+
+bool
+DropJob::canParseSpotifyPlaylists()
+{
+    return s_canParseSpotifyPlaylists;
+}
+
+
+void
+DropJob::setCanParseSpotifyPlaylists( bool parseable )
+{
+    s_canParseSpotifyPlaylists = parseable;
 }
 
 

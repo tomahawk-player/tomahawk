@@ -86,14 +86,21 @@ public:
 
     static QStringList mimeTypes();
 
-    /// Set the drop types that should be extracted from this drop
-    void setDropTypes( DropTypes types ) { m_dropTypes = types; }
+    /**
+     * Set the drop types that should be extracted from this drop
+     */
+    void setDropTypes( DropTypes types );
 
-    /// Set the action that the drop should do. For example, if dropping a playlist, Create will create a new playlist but Append will generate the raw tracks
-    void setDropAction( DropAction action ) { m_dropAction = action; }
+    /**
+     * Set the action that the drop should do.
+     *
+     * For example, if dropping a playlist, Create will create a new playlist
+     * but Append will generate the raw tracks
+     */
+    void setDropAction( DropAction action );
 
-    DropTypes dropTypes() const { return m_dropTypes; }
-    DropAction dropAction() const { return m_dropAction; }
+    DropTypes dropTypes() const;
+    DropAction dropAction() const;
 
     /**
      * Begin the parsing of the mime data. The resulting tracks are exposed in the various signals
@@ -110,8 +117,8 @@ public:
     void handleExfmUrls( const QString& urls );
     void handleGroovesharkUrls( const QString& urls );
 
-    static bool canParseSpotifyPlaylists() { return s_canParseSpotifyPlaylists; }
-    static void setCanParseSpotifyPlaylists( bool parseable ) { s_canParseSpotifyPlaylists = parseable; }
+    static bool canParseSpotifyPlaylists();
+    static void setCanParseSpotifyPlaylists( bool parseable );
 
 signals:
     /// QMimeData parsing results
