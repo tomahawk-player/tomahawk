@@ -20,7 +20,6 @@
 #ifndef GLOBALACTIONMANAGER_H
 #define GLOBALACTIONMANAGER_H
 
-#include "Query.h"
 #include "Playlist.h"
 #include "playlist/dynamic/DynamicPlaylist.h"
 #include "DllMacro.h"
