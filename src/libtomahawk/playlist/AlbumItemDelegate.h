@@ -40,7 +40,7 @@ class DLLEXPORT AlbumItemDelegate : public PlaylistItemDelegate
 Q_OBJECT
 
 public:
-    AlbumItemDelegate( TrackView* parent = 0, PlayableProxyModel* proxy = 0 );
+    AlbumItemDelegate( TrackView* parent = 0, PlayableProxyModel* proxy = 0, bool showArtist = false );
 
     virtual QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
@@ -50,6 +50,7 @@ protected:
 private:
     TrackView* m_view;
     PlayableProxyModel* m_model;
+    bool m_showArtist;
 };
 
 #endif // ALBUMITEMDELEGATE_H

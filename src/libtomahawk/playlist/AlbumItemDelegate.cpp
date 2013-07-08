@@ -43,10 +43,11 @@
 using namespace Tomahawk;
 
 
-AlbumItemDelegate::AlbumItemDelegate( TrackView* parent, PlayableProxyModel* proxy )
+AlbumItemDelegate::AlbumItemDelegate( TrackView* parent, PlayableProxyModel* proxy, bool showArtist )
     : PlaylistItemDelegate( parent, proxy )
     , m_view( parent )
     , m_model( proxy )
+    , m_showArtist( showArtist )
 {
 }
 
@@ -119,7 +120,12 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
             leftRect.setWidth( leftRect.width() - rightRect.width() );
         }
 
-        const QString text = painter->fontMetrics().elidedText( track->track(), Qt::ElideRight, leftRect.width() );
+        QString rawText = track->track();
+        if ( m_showArtist )
+        {
+            rawText = QString( "%1 - %2" ).arg( track->artist() ).arg( rawText );
+        }
+        const QString text = painter->fontMetrics().elidedText( rawText, Qt::ElideRight, leftRect.width() );
         painter->setPen( opt.palette.text().color() );
         painter->drawText( leftRect, text, m_centerOption );
 
