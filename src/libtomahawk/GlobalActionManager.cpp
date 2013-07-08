@@ -1,40 +1,44 @@
-/*
-    Copyright (C) 2011  Leo Franchi <lfranchi@kde.org>
-    Copyright (C) 2011, Jeff Mitchell <jeff@tomahawk-player.org>
-    Copyright (C) 2011-2012, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright (C) 2011  Leo Franchi <lfranchi@kde.org>
+ *   Copyright (C) 2011, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright (C) 2011-2012, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright (C) 2013, Uwe L. Korn <uwelk@xhochy.com>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 2 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along
-    with this program; if not, write to the Free Software Foundation, Inc.,
-    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/
 
 #include "GlobalActionManager.h"
 
 #include "audio/AudioEngine.h"
 #include "database/LocalCollection.h"
-#include "playlist/dynamic/GeneratorInterface.h"
-
 #include "echonest/Playlist.h"
-
+#include "playlist/dynamic/GeneratorInterface.h"
+#include "playlist/PlaylistTemplate.h"
+#include "playlist/PlaylistView.h"
+#include "resolvers/ExternalResolver.h"
+#include "resolvers/ScriptCommand_LookupUrl.h"
+#include "utils/JspfLoader.h"
+#include "utils/Logger.h"
+#include "utils/RdioParser.h"
+#include "utils/ShortenedLinkParser.h"
+#include "utils/SpotifyParser.h"
+#include "utils/TomahawkUtils.h"
 #include "utils/XspfLoader.h"
 #include "utils/XspfGenerator.h"
-#include "utils/Logger.h"
-#include "utils/TomahawkUtils.h"
-
-#include "utils/JspfLoader.h"
-#include "utils/SpotifyParser.h"
-#include "utils/ShortenedLinkParser.h"
-#include "utils/RdioParser.h"
+#include "widgets/SearchWidget.h"
 
 #include "Album.h"
 #include "Artist.h"
@@ -42,25 +46,18 @@
 #include "PlaylistEntry.h"
 #include "SourceList.h"
 #include "TomahawkSettings.h"
+#include "ViewManager.h"
 
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 
-#ifndef ENABLE_HEADLESS
-    #include "ViewManager.h"
-    #include "playlist/PlaylistView.h"
-    #include "widgets/SearchWidget.h"
-
-    #include <QApplication>
-    #include <QClipboard>
-#endif
-
+#include <QApplication>
+#include <QClipboard>
+#include <QMimeData>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkConfiguration>
 #include <QNetworkProxy>
-
-#include <QMimeData>
 #include <QUrl>
 
 
@@ -165,6 +162,45 @@ GlobalActionManager::shortenLink( const QUrl& url, const QVariant& callbackObj )
         reply->setProperty( "callbackobj", callbackObj );
     connect( reply, SIGNAL( finished() ), SLOT( shortenLinkRequestFinished() ) );
     connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), SLOT( shortenLinkRequestError( QNetworkReply::NetworkError ) ) );
+}
+
+
+bool
+GlobalActionManager::openUrl( const QString& url )
+{
+    // Native Implementations
+    if ( url.startsWith( "tomahawk://" ) )
+        return parseTomahawkLink( url );
+    else if ( url.contains( "open.spotify.com" ) || url.startsWith( "spotify:" ) )
+        return openSpotifyLink( url );
+    else if ( url.contains( "www.rdio.com" ) )
+        return openRdioLink( url );
+
+    // Can we parse the Url using a ScriptResolver?
+    bool canParse = false;
+    QList< QPointer< ExternalResolver > > possibleResolvers;
+    foreach ( QPointer<ExternalResolver> resolver, Pipeline::instance()->scriptResolvers() )
+    {
+        if ( resolver->canParseUrl( url, ExternalResolver::Any ) )
+        {
+            canParse = true;
+            possibleResolvers << resolver;
+        }
+    }
+    if ( canParse )
+    {
+        m_queuedUrl = url;
+        foreach ( QPointer<ExternalResolver> resolver, possibleResolvers )
+        {
+            ScriptCommand_LookupUrl* cmd = new ScriptCommand_LookupUrl( resolver, url );
+            connect( cmd, SIGNAL( information( QString, QSharedPointer<QObject> ) ), this, SLOT( informationForUrl( QString, QSharedPointer<QObject> ) ) );
+            cmd->enqueue();
+        }
+
+        return true;
+    }
+
+    return false;
 }
 
 
@@ -592,6 +628,74 @@ void
 GlobalActionManager::handlePlayTrack( const query_ptr& qry )
 {
     playNow( qry );
+}
+
+
+void
+GlobalActionManager::informationForUrl(const QString& url, const QSharedPointer<QObject>& information)
+{
+    tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Got Information for URL:" << url;
+    if ( m_queuedUrl != url )
+    {
+        // This url is not anymore active, result was too late.
+        return;
+    }
+    if ( information.isNull() )
+    {
+        // No information was transmitted, nothing to do.
+        tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Empty information received.";
+        return;
+    }
+
+    // If we reach this point, we found information that can be parsed.
+    // So invalidate queued Url
+    m_queuedUrl = "";
+
+    // Try to interpret as Artist
+    Tomahawk::artist_ptr artist = information.objectCast<Tomahawk::Artist>();
+    if ( !artist.isNull() )
+    {
+        // The Url describes an artist
+        ViewManager::instance()->show( artist );
+        return;
+    }
+
+    // Try to interpret as Album
+    Tomahawk::album_ptr album = information.objectCast<Tomahawk::Album>();
+    if ( !album.isNull() )
+    {
+        // The Url describes an album
+        ViewManager::instance()->show( album );
+        return;
+    }
+
+    Tomahawk::playlisttemplate_ptr pltemplate = information.objectCast<Tomahawk::PlaylistTemplate>();
+    if ( !pltemplate.isNull() )
+    {
+        ViewManager::instance()->show( pltemplate->get() );
+        return;
+    }
+
+    // Try to interpret as Track/Query
+    Tomahawk::query_ptr query = information.objectCast<Tomahawk::Query>();
+    if ( !query.isNull() )
+    {
+        // The Url describes a track
+        ViewManager::instance()->show( query );
+        return;
+    }
+
+    // Try to interpret as Playlist
+    Tomahawk::playlist_ptr playlist = information.objectCast<Tomahawk::Playlist>();
+    if ( !playlist.isNull() )
+    {
+        // The url describes a playlist
+        ViewManager::instance()->show( playlist );
+        return;
+    }
+
+    // Could not cast to a known type.
+    tLog() << Q_FUNC_INFO << "Can't load parsed information for " << url;
 }
 
 

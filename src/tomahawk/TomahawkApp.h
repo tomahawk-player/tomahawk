@@ -114,7 +114,6 @@ private slots:
 
     void spotifyApiCheckFinished();
     void onInfoSystemReady();
-    void informationForUrl( const QString& url, const QSharedPointer<QObject>& information );
 
     void ipDetectionFailed( QNetworkReply::NetworkError error, QString errorString );
 

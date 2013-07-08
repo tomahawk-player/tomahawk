@@ -52,6 +52,11 @@ public slots:
 
 #ifndef ENABLE_HEADLESS
 
+    /**
+     * Try to open a URL as Playlist/Album/Artist/Track
+     */
+    bool openUrl( const QString& url );
+
     /// Takes a spotify link and performs the default open action on it
     bool openSpotifyLink( const QString& link );
 
@@ -81,6 +86,8 @@ signals:
     void shortLinkReady( const QUrl& longUrl, const QUrl& shortUrl, const QVariant& callbackObj );
 
 private slots:
+    void informationForUrl( const QString& url, const QSharedPointer<QObject>& information );
+
     void shortenLinkRequestFinished();
     void shortenLinkRequestError( QNetworkReply::NetworkError );
 
@@ -130,6 +137,7 @@ private:
     Tomahawk::playlist_ptr m_toShow;
     Tomahawk::query_ptr m_waitingToPlay;
     QUrl m_clipboardLongUrl;
+    QString m_queuedUrl;
 
     static GlobalActionManager* s_instance;
 };

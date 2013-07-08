@@ -715,74 +715,6 @@ TomahawkApp::ipDetectionFailed( QNetworkReply::NetworkError error, QString error
 
 
 void
-TomahawkApp::informationForUrl( const QString& url, const QSharedPointer<QObject>& information )
-{
-    tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Got Information for URL:" << url;
-    if ( m_queuedUrl != url )
-    {
-        // This url is not anymore active, result was too late.
-        return;
-    }
-    if ( information.isNull() )
-    {
-        // No information was transmitted, nothing to do.
-        tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Empty information received.";
-        return;
-    }
-
-    // If we reach this point, we found information that can be parsed.
-    // So invalidate queued Url
-    m_queuedUrl = "";
-
-    // Try to interpret as Artist
-    Tomahawk::artist_ptr artist = information.objectCast<Tomahawk::Artist>();
-    if ( !artist.isNull() )
-    {
-        // The Url describes an artist
-        ViewManager::instance()->show( artist );
-        return;
-    }
-
-    // Try to interpret as Album
-    Tomahawk::album_ptr album = information.objectCast<Tomahawk::Album>();
-    if ( !album.isNull() )
-    {
-        // The Url describes an album
-        ViewManager::instance()->show( album );
-        return;
-    }
-
-    Tomahawk::playlisttemplate_ptr pltemplate = information.objectCast<Tomahawk::PlaylistTemplate>();
-    if ( !pltemplate.isNull() )
-    {
-        ViewManager::instance()->show( pltemplate->get() );
-        return;
-    }
-
-    // Try to interpret as Track/Query
-    Tomahawk::query_ptr query = information.objectCast<Tomahawk::Query>();
-    if ( !query.isNull() )
-    {
-        // The Url describes a track
-        ViewManager::instance()->show( query );
-        return;
-    }
-
-    // Try to interpret as Playlist
-    Tomahawk::playlist_ptr playlist = information.objectCast<Tomahawk::Playlist>();
-    if ( !playlist.isNull() )
-    {
-        // The url describes a playlist
-        ViewManager::instance()->show( playlist );
-        return;
-    }
-
-    // Could not cast to a known type.
-    tLog() << Q_FUNC_INFO << "Can't load parsed information for " << url;
-}
-
-
-void
 TomahawkApp::spotifyApiCheckFinished()
 {
 #ifndef ENABLE_HEADLESS
@@ -806,60 +738,26 @@ TomahawkApp::activate()
 bool
 TomahawkApp::loadUrl( const QString& url )
 {
-#ifndef ENABLE_HEADLESS
-    if ( url.startsWith( "tomahawk://" ) )
-        return GlobalActionManager::instance()->parseTomahawkLink( url );
-    else if ( url.contains( "open.spotify.com" ) || url.startsWith( "spotify:" ) )
-        return GlobalActionManager::instance()->openSpotifyLink( url );
-    else if ( url.contains( "www.rdio.com" ) )
-        return GlobalActionManager::instance()->openRdioLink( url );
-    else
+    QFile f( url );
+    QFileInfo info( f );
+    if ( info.suffix() == "xspf" )
     {
-        QFile f( url );
-        QFileInfo info( f );
-        if ( info.suffix() == "xspf" )
-        {
-            XSPFLoader* l = new XSPFLoader( true, this );
-            tDebug( LOGINFO ) << "Loading spiff:" << url;
-            l->load( QUrl::fromUserInput( url ) );
+        XSPFLoader* l = new XSPFLoader( true, this );
+        tDebug( LOGINFO ) << "Loading spiff:" << url;
+        l->load( QUrl::fromUserInput( url ) );
 
-            return true;
-        }
-        else if ( info.suffix() == "jspf" )
-        {
-            JSPFLoader* l = new JSPFLoader( true, this );
-            tDebug( LOGINFO ) << "Loading j-spiff:" << url;
-            l->load( QUrl::fromUserInput( url ) );
-
-            return true;
-        }
+        return true;
     }
-    // Can we parse the Url using a ScriptResolver?
-    bool canParse = false;
-    QList< QPointer< ExternalResolver > > possibleResolvers;
-    foreach ( QPointer<ExternalResolver> resolver, Pipeline::instance()->scriptResolvers() )
+    else if ( info.suffix() == "jspf" )
     {
-        if ( resolver->canParseUrl( url, ExternalResolver::Any ) )
-        {
-            canParse = true;
-            possibleResolvers << resolver;
-        }
-    }
-    if ( canParse )
-    {
-        m_queuedUrl = url;
-        foreach ( QPointer<ExternalResolver> resolver, possibleResolvers )
-        {
-            ScriptCommand_LookupUrl* cmd = new ScriptCommand_LookupUrl( resolver, url );
-            connect( cmd, SIGNAL( information( QString, QSharedPointer<QObject> ) ), this, SLOT( informationForUrl( QString, QSharedPointer<QObject> ) ) );
-            cmd->enqueue();
-        }
+        JSPFLoader* l = new JSPFLoader( true, this );
+        tDebug( LOGINFO ) << "Loading j-spiff:" << url;
+        l->load( QUrl::fromUserInput( url ) );
 
         return true;
     }
 
-#endif
-    return false;
+    return GlobalActionManager::instance()->openUrl( url );
 }
 
 
