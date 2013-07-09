@@ -904,7 +904,7 @@ Password</source>
         <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="347"/>
         <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="384"/>
         <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="422"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="481"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="482"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
         <translation>Resovler-skriptvarning: API-kall %1 returnerade data synkront</translation>
     </message>
@@ -3639,14 +3639,6 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
         <location filename="../src/libtomahawk/utils/ShortenedLinkParser.cpp" line="101"/>
         <source>Network error parsing shortened link!</source>
         <translation>Nätverksfel vid kortlänks-analys</translation>
-    </message>
-</context>
-<context>
-    <name>Tomahawk::SoundcloudParser</name>
-    <message>
-        <location filename="../src/libtomahawk/utils/SoundcloudParser.cpp" line="111"/>
-        <source>Track &apos;%1&apos; by %2 is not streamable.</source>
-        <translation>Spår &apos;%1&apos; by %2 går inte strömma</translation>
     </message>
 </context>
 <context>

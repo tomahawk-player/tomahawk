@@ -904,7 +904,7 @@ Passwort</translation>
         <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="347"/>
         <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="384"/>
         <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="422"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="481"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="482"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
         <translation>Script Resolver Warnung: API aufruf %1 zurückgegebener Daten synchron. </translation>
     </message>
@@ -3633,14 +3633,6 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
         <location filename="../src/libtomahawk/utils/ShortenedLinkParser.cpp" line="101"/>
         <source>Network error parsing shortened link!</source>
         <translation>Konnte den Kurzlink nicht auflösen!</translation>
-    </message>
-</context>
-<context>
-    <name>Tomahawk::SoundcloudParser</name>
-    <message>
-        <location filename="../src/libtomahawk/utils/SoundcloudParser.cpp" line="111"/>
-        <source>Track &apos;%1&apos; by %2 is not streamable.</source>
-        <translation>Lied &apos;%1&apos; von %2 ist nicht abspielbar.</translation>
     </message>
 </context>
 <context>

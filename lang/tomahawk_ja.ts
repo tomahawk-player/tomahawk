@@ -903,7 +903,7 @@ Password</source>
         <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="347"/>
         <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="384"/>
         <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="422"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="481"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="482"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
         <translation type="unfinished"/>
     </message>
@@ -3636,14 +3636,6 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/utils/ShortenedLinkParser.cpp" line="101"/>
         <source>Network error parsing shortened link!</source>
         <translation>短縮リンクの解析中にネットワークエラーが発生しました！</translation>
-    </message>
-</context>
-<context>
-    <name>Tomahawk::SoundcloudParser</name>
-    <message>
-        <location filename="../src/libtomahawk/utils/SoundcloudParser.cpp" line="111"/>
-        <source>Track &apos;%1&apos; by %2 is not streamable.</source>
-        <translation>&apos;%1&apos;の&apos;%2&apos;が配信できません。</translation>
     </message>
 </context>
 <context>
