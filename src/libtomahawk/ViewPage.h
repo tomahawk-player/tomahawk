@@ -66,6 +66,9 @@ public:
     virtual QString filter() const { return m_filter; }
     virtual bool setFilter( const QString& filter );
 
+    virtual bool willAcceptDrag( const QMimeData* data ) const;
+    virtual bool dropMimeData( const QMimeData*, Qt::DropAction );
+
     virtual bool jumpToCurrentTrack() = 0;
 
     virtual bool isTemporaryPage() const { return false; }

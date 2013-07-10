@@ -35,3 +35,20 @@ ViewPage::setFilter( const QString& filter )
     m_filter = filter;
     return false;
 }
+
+
+bool
+ViewPage::willAcceptDrag( const QMimeData* data ) const
+{
+    Q_UNUSED( data );
+    return false;
+}
+
+
+bool
+ViewPage::dropMimeData( const QMimeData* data, Qt::DropAction action )
+{
+    Q_UNUSED( data );
+    Q_UNUSED( action );
+    return false;
+}
