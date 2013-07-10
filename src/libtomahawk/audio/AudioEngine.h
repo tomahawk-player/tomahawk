@@ -110,7 +110,7 @@ public:
     qint64 currentTrackTotalTime() const;
 
     int equalizerBandCount();
-    bool setEqualizerBand( int band, int value );
+    bool setEqualizerBand(int band, int value);
 
 public slots:
     void playPause();
@@ -200,6 +200,7 @@ private slots:
 private:
     void setState( AudioState state );
     void setCurrentTrackPlaylist( const Tomahawk::playlistinterface_ptr& playlist );
+    void initEqualizer();
 
     void initEqualizer();
     void audioDataArrived( QMap< AudioEngine::AudioChannel, QVector< qint16 > >& data );

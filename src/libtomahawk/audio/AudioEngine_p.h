@@ -1,9 +1,8 @@
 
 #include <phonon/MediaObject>
 #include <phonon/AudioOutput>
-#include <phonon/AudioDataOutput>
-#include <phonon/BackendCapabilities>
 #include <phonon/Path>
+#include <phonon/BackendCapabilities>
 #include <phonon/Effect>
 #include <phonon/EffectParameter>
 
@@ -44,6 +43,8 @@ private:
 
     Phonon::MediaObject* mediaObject;
     Phonon::AudioOutput* audioOutput;
+    Phonon::Path audioPath;
+	Phonon::Effect* audioEffect;
 
     Phonon::Path audioPath;
     Phonon::Effect* audioEffect;
