@@ -110,7 +110,7 @@ public:
     qint64 currentTrackTotalTime() const;
 
     int equalizerBandCount();
-    bool setEqualizerBand(int band, int value);
+    bool setEqualizerBand( int band, int value );
 
 public slots:
     void playPause();

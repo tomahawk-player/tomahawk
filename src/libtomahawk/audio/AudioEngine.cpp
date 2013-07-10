@@ -1388,13 +1388,13 @@ AudioEngine::initEqualizer()
 {
     Q_D( AudioEngine );
 
-    QList<Phonon::EffectDescription> effectDescriptions = Phonon::BackendCapabilities::availableAudioEffects();
-    foreach(Phonon::EffectDescription effectDesc, effectDescriptions)
+    QList< Phonon::EffectDescription > effectDescriptions = Phonon::BackendCapabilities::availableAudioEffects();
+    foreach ( Phonon::EffectDescription effectDesc, effectDescriptions )
     {
-        if(effectDesc.name().toLower().contains("eq"))
+        if ( effectDesc.name().toLower().contains( "eq" ) )
         {
-            d->audioEffect = new Phonon::Effect(effectDesc);
-            d->audioPath.insertEffect(d->audioEffect);
+            d->audioEffect = new Phonon::Effect( effectDesc );
+            d->audioPath.insertEffect( d->audioEffect );
             break;
         }
     }
@@ -1406,9 +1406,9 @@ AudioEngine::equalizerBandCount()
 {
     Q_D( AudioEngine );
 
-    if (d->audioEffect)
+    if ( d->audioEffect )
     {
-        QList<Phonon::EffectParameter> params = d->audioEffect->parameters();
+        QList< Phonon::EffectParameter > params = d->audioEffect->parameters();
         return params.size();
     }
 
@@ -1417,16 +1417,16 @@ AudioEngine::equalizerBandCount()
 
 
 bool
-AudioEngine::setEqualizerBand(int band, int value)
+AudioEngine::setEqualizerBand( int band, int value )
 {
     Q_D( AudioEngine );
 
-    if (d->audioEffect)
+    if ( d->audioEffect )
     {
-        QList<Phonon::EffectParameter> params = d->audioEffect->parameters();
-        if (band < params.size())
+        QList< Phonon::EffectParameter > params = d->audioEffect->parameters();
+        if ( band < params.size() )
         {
-            d->audioEffect->setParameterValue(params.at(band), value);
+            d->audioEffect->setParameterValue( params.at(band), value );
             return true;
         }
     }
