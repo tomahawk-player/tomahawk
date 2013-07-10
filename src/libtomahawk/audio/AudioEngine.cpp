@@ -1389,10 +1389,9 @@ AudioEngine::initEqualizer()
     Q_D( AudioEngine );
 
     QList<Phonon::EffectDescription> effectDescriptions = Phonon::BackendCapabilities::availableAudioEffects();
-    d->audioEffect = NULL;
     foreach(Phonon::EffectDescription effectDesc, effectDescriptions)
     {
-        if(effectDesc.name().contains("Eq") || effectDesc.name().contains("eq"))
+        if(effectDesc.name().toLower().contains("eq"))
         {
             d->audioEffect = new Phonon::Effect(effectDesc);
             d->audioPath.insertEffect(d->audioEffect);

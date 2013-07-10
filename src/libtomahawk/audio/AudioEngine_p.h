@@ -44,7 +44,7 @@ private:
     Phonon::MediaObject* mediaObject;
     Phonon::AudioOutput* audioOutput;
     Phonon::Path audioPath;
-	Phonon::Effect* audioEffect;
+    Phonon::Effect* audioEffect;
 
     Phonon::Path audioPath;
     Phonon::Effect* audioEffect;
