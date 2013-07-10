@@ -384,17 +384,17 @@ yhdistää ja toistaa sinulta virtaa?</translation>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="805"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="808"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>Valitettavasti Tomahawk ei löytänyt artistin %2 kappaletta ”%1”</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="829"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="832"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>Valitettavasti Tomahawk ei löytänyt artistia ”%1”</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="855"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="858"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>Valitettavasti Tomahawk ei löytänyt artistin %2 albumia ”%1”</translation>
     </message>

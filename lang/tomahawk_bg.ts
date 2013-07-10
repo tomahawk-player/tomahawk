@@ -383,17 +383,17 @@ connect and stream from you?</source>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="805"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="808"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>Съжалявам. Не успявам да открия изпълнение &apos;%1&apos; от &apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="829"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="832"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>Съжалявам, но не откривам &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="855"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="858"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>Съжалявам, но не откривам албум с име &apos;%1&apos; от &apos;%2&apos;</translation>
     </message>
@@ -449,7 +449,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnItemDelegate.cpp" line="191"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>Неизвестно</translation>
     </message>
 </context>
 <context>
@@ -1701,12 +1701,12 @@ Password</source>
     <message>
         <location filename="../src/libtomahawk/network/Servent.cpp" line="976"/>
         <source>Automatically detecting external IP failed: Could not parse JSON response.</source>
-        <translation type="unfinished"/>
+        <translation>Автоматичното откриване на външния IP не успя: Неуспех при обработката на JSON отговора.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/network/Servent.cpp" line="989"/>
         <source>Automatically detecting external IP failed: %1</source>
-        <translation type="unfinished"/>
+        <translation>Автоматичното откриване на външен IP не успя: %1</translation>
     </message>
 </context>
 <context>
@@ -1838,7 +1838,7 @@ Password</source>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="133"/>
         <source>Automatically detect external IP address</source>
-        <translation type="unfinished"/>
+        <translation>Открий автоматично външния IP адрес</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="161"/>
@@ -2953,7 +2953,7 @@ username@jabber.org</source>
     <message>
         <location filename="../src/libtomahawk/database/DatabaseCommand_AllAlbums.cpp" line="117"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>Неизвестно</translation>
     </message>
 </context>
 <context>
@@ -3615,12 +3615,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="46"/>
         <source>My Collection</source>
-        <translation type="unfinished"/>
+        <translation>Моята колекция</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="53"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
-        <translation type="unfinished"/>
+        <translation>След като приключи сканирането на музикалната ти колекция, ще откриеш твоята музика тук.</translation>
     </message>
 </context>
 <context>
@@ -3636,7 +3636,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/network/RemoteCollection.cpp" line="36"/>
         <source>Collection of %1</source>
-        <translation type="unfinished"/>
+        <translation>Колекцията на %1</translation>
     </message>
 </context>
 <context>
@@ -3756,17 +3756,17 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk-widgets/Dashboard.cpp" line="250"/>
         <source>No recently created playlists in your network.</source>
-        <translation type="unfinished"/>
+        <translation>Няма наскоро създавани списъзи в твоята мрежа</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/Dashboard.h" line="63"/>
         <source>Dashboard</source>
-        <translation type="unfinished"/>
+        <translation>Табло</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/Dashboard.h" line="64"/>
         <source>An overview of your recent activity</source>
-        <translation type="unfinished"/>
+        <translation>Изглед на скорошната ти активност</translation>
     </message>
 </context>
 <context>
@@ -3774,32 +3774,32 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="67"/>
         <source>Charts</source>
-        <translation type="unfinished"/>
+        <translation>Класации</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="69"/>
         <source>Last Week</source>
-        <translation type="unfinished"/>
+        <translation>Миналата седмица</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="72"/>
         <source>Last Month</source>
-        <translation type="unfinished"/>
+        <translation>Миналия месец</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="75"/>
         <source>Last Year</source>
-        <translation type="unfinished"/>
+        <translation>Миналата година</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="78"/>
         <source>Overall</source>
-        <translation type="unfinished"/>
+        <translation>Изцяло</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.h" line="53"/>
         <source>Network Activity</source>
-        <translation type="unfinished"/>
+        <translation>Мрежова активност</translation>
     </message>
 </context>
 <context>
@@ -3820,7 +3820,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="710"/>
         <source>Automatically detecting external IP failed.</source>
-        <translation type="unfinished"/>
+        <translation>Автоматичното откриване на външен IP не успя.</translation>
     </message>
 </context>
 <context>
