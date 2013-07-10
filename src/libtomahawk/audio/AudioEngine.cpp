@@ -182,6 +182,7 @@ AudioEngine::AudioEngine()
     d->waitingOnNewTrack = false;
     d->state = Stopped;
     d->coverTempFile = 0;
+    d->audioEffect = 0;
 
     d->s_instance = this;
     tDebug() << "Init AudioEngine";
@@ -191,7 +192,7 @@ AudioEngine::AudioEngine()
 
     d->mediaObject = new Phonon::MediaObject( this );
     d->audioOutput = new Phonon::AudioOutput( Phonon::MusicCategory, this );
-    Phonon::createPath( d->mediaObject, d->audioOutput );
+    d->audioPath = Phonon::createPath( d->mediaObject, d->audioOutput );
 
     d->mediaObject->setTickInterval( 150 );
     connect( d->mediaObject, SIGNAL( stateChanged( Phonon::State, Phonon::State ) ), d_func(), SLOT( onStateChanged( Phonon::State, Phonon::State ) ) );
@@ -207,6 +208,8 @@ AudioEngine::AudioEngine()
     onVolumeChanged( d->audioOutput->volume() );
 
     setVolume( TomahawkSettings::instance()->volume() );
+
+    initEqualizer();
 }
 
 
@@ -1230,4 +1233,56 @@ AudioEngine::setCurrentTrackPlaylist( const playlistinterface_ptr& playlist )
         d->currentTrackPlaylist = playlist;
         emit currentTrackPlaylistChanged( d->currentTrackPlaylist );
     }
+}
+
+
+void
+AudioEngine::initEqualizer()
+{
+    Q_D( AudioEngine );
+
+    QList< Phonon::EffectDescription > effectDescriptions = Phonon::BackendCapabilities::availableAudioEffects();
+    foreach ( Phonon::EffectDescription effectDesc, effectDescriptions )
+    {
+        if ( effectDesc.name().toLower().contains( "eq" ) )
+        {
+            d->audioEffect = new Phonon::Effect( effectDesc );
+            d->audioPath.insertEffect( d->audioEffect );
+            break;
+        }
+    }
+}
+
+
+int
+AudioEngine::equalizerBandCount()
+{
+    Q_D( AudioEngine );
+
+    if ( d->audioEffect )
+    {
+        QList< Phonon::EffectParameter > params = d->audioEffect->parameters();
+        return params.size();
+    }
+
+    return 0;
+}
+
+
+bool
+AudioEngine::setEqualizerBand( int band, int value )
+{
+    Q_D( AudioEngine );
+
+    if ( d->audioEffect )
+    {
+        QList< Phonon::EffectParameter > params = d->audioEffect->parameters();
+        if ( band < params.size() )
+        {
+            d->audioEffect->setParameterValue( params.at( band ), value );
+            return true;
+        }
+    }
+
+    return false;
 }

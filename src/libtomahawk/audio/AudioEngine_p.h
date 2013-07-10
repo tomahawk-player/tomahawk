@@ -1,7 +1,10 @@
 
 #include <phonon/MediaObject>
 #include <phonon/AudioOutput>
+#include <phonon/Path>
 #include <phonon/BackendCapabilities>
+#include <phonon/Effect>
+#include <phonon/EffectParameter>
 
 #include <stdint.h>
 
@@ -37,6 +40,8 @@ private:
 
     Phonon::MediaObject* mediaObject;
     Phonon::AudioOutput* audioOutput;
+    Phonon::Path audioPath;
+    Phonon::Effect* audioEffect;
 
     unsigned int timeElapsed;
     bool expectStop;
