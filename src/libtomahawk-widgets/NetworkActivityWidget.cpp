@@ -22,16 +22,24 @@
 #include "audio/AudioEngine.h"
 #include "database/Database.h"
 #include "database/DatabaseCommand_NetworkCharts.h"
-#include "playlist/PlaylistChartItemDelegate.h"
+#include "database/DatabaseCommand_TrendingTracks.h"
+#include "playlist/AlbumItemDelegate.h"
+// #include "playlist/PlaylistChartItemDelegate.h"
+#include "playlist/ViewHeader.h"
 #include "utils/AnimatedSpinner.h"
+#include "utils/ImageRegistry.h"
 #include "utils/Logger.h"
+#include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
+#include "widgets/OverlayWidget.h"
 
 #include <QDateTime>
 #include <QStandardItemModel>
+#include <QScrollArea>
 #include <QtConcurrentRun>
 
-#define NETWORKCHARTS_NUM_TRACKS 100
+#define NETWORKCHARTS_NUM_TRACKS 20
+#define TRENDING_TRACKS_NUM 3
 
 using namespace Tomahawk;
 using namespace Tomahawk::Widgets;
@@ -40,27 +48,16 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
     : QWidget( parent )
     , d_ptr( new NetworkActivityWidgetPrivate ( this ) )
 {
-    d_func()->ui->setupUi( this );
+    Q_D( NetworkActivityWidget );
+    QWidget* widget = new QWidget();
 
-    TomahawkUtils::unmarginLayout( layout() );
-    TomahawkUtils::unmarginLayout( d_func()->ui->stackLeft->layout() );
-    TomahawkUtils::unmarginLayout( d_func()->ui->verticalLayout_2->layout() );
-    TomahawkUtils::unmarginLayout( d_func()->ui->horizontalLayout->layout() );
-    TomahawkUtils::unmarginLayout( d_func()->ui->breadCrumbLeft->layout() );
+    d->ui->setupUi( widget );
 
-    d_func()->crumbModelLeft = new QStandardItemModel( this );
-    d_func()->sortedProxy = new QSortFilterProxyModel( this );
+    d->crumbModelLeft = new QStandardItemModel( this );
+    d->sortedProxy = new QSortFilterProxyModel( this );
 
-    d_func()->ui->breadCrumbLeft->setRootIcon( TomahawkUtils::defaultPixmap( TomahawkUtils::NetworkActivity, TomahawkUtils::Original ) );
+    // d_func()->ui->breadCrumbLeft->setRootIcon( TomahawkUtils::defaultPixmap( TomahawkUtils::NetworkActivity, TomahawkUtils::Original ) );
     connect( d_func()->ui->breadCrumbLeft, SIGNAL( activateIndex( QModelIndex ) ), SLOT( leftCrumbIndexChanged( QModelIndex ) ) );
-
-    d_func()->ui->tracksViewLeft->setHeaderHidden( true );
-    d_func()->ui->tracksViewLeft->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-    PlaylistChartItemDelegate* del = new PlaylistChartItemDelegate( d_func()->ui->tracksViewLeft, d_func()->ui->tracksViewLeft->proxyModel() );
-    d_func()->ui->tracksViewLeft->setPlaylistItemDelegate( del );
-    d_func()->ui->tracksViewLeft->setUniformRowHeights( false );
-
-    d_func()->playlistInterface = d_func()->ui->tracksViewLeft->playlistInterface();
 
     // Build up breadcrumb
     QStandardItem* rootItem = d_func()->crumbModelLeft->invisibleRootItem();
@@ -81,6 +78,111 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
     d_func()->sortedProxy->setSourceModel( d_func()->crumbModelLeft );
     d_func()->ui->breadCrumbLeft->setModel( d_func()->sortedProxy );
     d_func()->ui->breadCrumbLeft->setVisible( true );
+
+
+    {
+        // d->ui->tracksViewLeft->setHeaderHidden( true );
+        // d->ui->tracksViewLeft->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+        // PlaylistChartItemDelegate* del = new PlaylistChartItemDelegate( d->ui->tracksViewLeft, d->ui->tracksViewLeft->proxyModel() );
+        AlbumItemDelegate* del = new AlbumItemDelegate( d->ui->tracksViewLeft, d->ui->tracksViewLeft->proxyModel(), true );
+        d->ui->tracksViewLeft->setPlaylistItemDelegate( del );
+        // d->ui->tracksViewLeft->setUniformRowHeights( false );
+        // d->ui->tracksViewLeft->overlay()->setEnabled( false );
+        d->ui->tracksViewLeft->proxyModel()->setStyle( PlayableProxyModel::Short );
+        d->ui->tracksViewLeft->setAutoResize( true );
+        d->ui->tracksViewLeft->setAlternatingRowColors( false );
+        d->ui->tracksViewLeft->setSortingEnabled( false );
+        d->ui->tracksViewLeft->setEmptyTip( tr( "Sorry, we could not find any top hits for this artist!" ) );
+
+        d->playlistInterface = d->ui->tracksViewLeft->playlistInterface();
+
+        QPalette p = d->ui->tracksViewLeft->palette();
+        p.setColor( QPalette::Text, TomahawkStyle::PAGE_TRACKLIST_TRACK_SOLVED );
+        p.setColor( QPalette::BrightText, TomahawkStyle::PAGE_TRACKLIST_TRACK_UNRESOLVED );
+        p.setColor( QPalette::Foreground, TomahawkStyle::PAGE_TRACKLIST_NUMBER );
+        p.setColor( QPalette::Highlight, TomahawkStyle::PAGE_TRACKLIST_HIGHLIGHT );
+        p.setColor( QPalette::HighlightedText, TomahawkStyle::PAGE_TRACKLIST_HIGHLIGHT_TEXT );
+
+        d->ui->tracksViewLeft->setPalette( p );
+        d->ui->tracksViewLeft->setFrameShape( QFrame::NoFrame );
+        d->ui->tracksViewLeft->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+        d->ui->tracksViewLeft->setStyleSheet( "QTreeView { background-color: transparent; }" );
+
+        TomahawkStyle::stylePageFrame( d->ui->chartsFrame );
+    }
+
+
+    // Trending Tracks
+    {
+        d->trendingTracksModel = new PlaylistModel( d->ui->trendingTracksView );
+        // TODO:
+        // m_tracksModel = new RecentlyPlayedModel( ui->tracksView, HISTORY_TRACK_ITEMS );
+        d->ui->trendingTracksView->proxyModel()->setStyle( PlayableProxyModel::Short );
+        d->ui->trendingTracksView->overlay()->setEnabled( false );
+        d->ui->trendingTracksView->setPlaylistModel( d->trendingTracksModel );
+        d->ui->trendingTracksView->setAutoResize( true );
+        d->ui->trendingTracksView->setAlternatingRowColors( false );
+
+        QPalette p = d->ui->trendingTracksView->palette();
+        p.setColor( QPalette::Text, TomahawkStyle::PAGE_TRACKLIST_TRACK_SOLVED );
+        p.setColor( QPalette::BrightText, TomahawkStyle::PAGE_TRACKLIST_TRACK_UNRESOLVED );
+        p.setColor( QPalette::Foreground, TomahawkStyle::PAGE_TRACKLIST_NUMBER );
+        p.setColor( QPalette::Highlight, TomahawkStyle::PAGE_TRACKLIST_HIGHLIGHT );
+        p.setColor( QPalette::HighlightedText, TomahawkStyle::PAGE_TRACKLIST_HIGHLIGHT_TEXT );
+
+        d->ui->trendingTracksView->setPalette( p );
+        d->ui->trendingTracksView->setFrameShape( QFrame::NoFrame );
+        d->ui->trendingTracksView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+        d->ui->trendingTracksView->setStyleSheet( "QTreeView { background-color: transparent; }" );
+
+        TomahawkStyle::stylePageFrame( d->ui->trendingTracksFrame );
+    }
+    {
+        QFont f = d->ui->trendingTracksLabel->font();
+        f.setFamily( "Pathway Gothic One" );
+
+        QPalette p = d->ui->trendingTracksLabel->palette();
+        p.setColor( QPalette::Foreground, TomahawkStyle::PAGE_CAPTION );
+
+        d->ui->trendingTracksLabel->setFont( f );
+        d->ui->trendingTracksLabel->setPalette( p );
+    }
+
+    // Hot Playlists
+    {
+        TomahawkStyle::stylePageFrame( d->ui->hotPlaylistsFrame );
+
+        QFont f = d->ui->hotPlaylistsLabel->font();
+        f.setFamily( "Pathway Gothic One" );
+
+        QPalette p = d->ui->hotPlaylistsLabel->palette();
+        p.setColor( QPalette::Foreground, TomahawkStyle::PAGE_CAPTION );
+
+        d->ui->hotPlaylistsLabel->setFont( f );
+        d->ui->hotPlaylistsLabel->setPalette( p );
+    }
+
+    {
+        QScrollArea* area = new QScrollArea();
+        area->setWidgetResizable( true );
+        area->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
+        area->setWidget( widget );
+
+        QVBoxLayout* layout = new QVBoxLayout();
+        layout->addWidget( area );
+        setLayout( layout );
+        TomahawkUtils::unmarginLayout( layout );
+    }
+
+    {
+        // Load trending tracks
+        qRegisterMetaType< QList< QPair< double,Tomahawk::track_ptr > > >("QList< QPair< double,Tomahawk::track_ptr > >");
+        DatabaseCommand_TrendingTracks* dbcmd = new DatabaseCommand_TrendingTracks();
+        dbcmd->setLimit( TRENDING_TRACKS_NUM );
+        connect( dbcmd, SIGNAL( done( QList< QPair< double,Tomahawk::track_ptr > >) ),
+                 SLOT( trendingTracks( QList< QPair< double,Tomahawk::track_ptr > > ) ) );
+        Database::instance()->enqueue( dbcmd_ptr( dbcmd ) );
+    }
 }
 
 
@@ -94,6 +196,13 @@ Tomahawk::playlistinterface_ptr
 NetworkActivityWidget::playlistInterface() const
 {
     return d_func()->playlistInterface;
+}
+
+
+QPixmap
+NetworkActivityWidget::pixmap() const
+{
+    return ImageRegistry::instance()->pixmap( RESPATH "images/network-activity.svg", QSize( 0, 0 ) );
 }
 
 
@@ -174,6 +283,25 @@ NetworkActivityWidget::overallCharts( const QList<track_ptr>& tracks )
     {
         showOverallCharts();
     }
+}
+
+
+void
+NetworkActivityWidget::trendingTracks( const QList<QPair<double, track_ptr> >& _tracks )
+{
+    Q_D( NetworkActivityWidget );
+
+    d->trendingTracksModel->startLoading();
+    QList<track_ptr> tracks;
+    QList< QPair< double, track_ptr > >::const_iterator iter = _tracks.constBegin();
+    const QList< QPair< double, track_ptr > >::const_iterator end = _tracks.constEnd();
+    for(; iter != end; ++iter)
+    {
+        tracks << iter->second;
+    }
+
+    d->trendingTracksModel->appendTracks( tracks );
+    d->trendingTracksModel->finishLoading();
 }
 
 
@@ -309,9 +437,11 @@ NetworkActivityWidget::showOverallCharts()
     d_func()->activeView = OverallChart;
     if ( !d_func()->overallChartsModel.isNull() )
     {
-        d_func()->ui->tracksViewLeft->proxyModel()->setStyle( PlayableProxyModel::Large );
+        // d_func()->ui->tracksViewLeft->proxyModel()->setStyle( PlayableProxyModel::Large );
         d_func()->ui->tracksViewLeft->setPlaylistModel( d_func()->overallChartsModel );
-        d_func()->ui->tracksViewLeft->proxyModel()->sort( -1 );
+        d_func()->ui->tracksViewLeft->setAutoResize( true );
+        // d_func()->ui->tracksViewLeft->proxyModel()->sort( -1 );
+        // d_func()->ui->tracksViewLeft->setAutoResize( true );
     }
     else
     {

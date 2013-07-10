@@ -44,6 +44,9 @@ private:
     QPointer<PlaylistModel> monthlyChartsModel;
     QPointer<PlaylistModel> yearlyChartsModel;
     QPointer<PlaylistModel> overallChartsModel;
+
+    QPointer<PlaylistModel> trendingTracksModel;
+
     Tomahawk::Widgets::NetworkActivityWidget::ViewType activeView;
 };
 

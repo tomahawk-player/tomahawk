@@ -51,9 +51,10 @@ public:
     virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
 
     virtual QString title() const { return tr( "Network Activity" ); }
-    virtual QString description() const { return QString(); }
+    virtual QString description() const { return QString("Listening activity among your friends"); }
+    virtual QPixmap pixmap() const;
 
-    virtual bool showInfoBar() const { return false; }
+    virtual bool showInfoBar() const { return true; }
     virtual bool isBeingPlayed() const;
 
     virtual bool jumpToCurrentTrack();
@@ -64,6 +65,8 @@ private slots:
     void monthlyCharts( const QList<Tomahawk::track_ptr>& );
     void yearlyCharts( const QList<Tomahawk::track_ptr>& );
     void overallCharts( const QList<Tomahawk::track_ptr>& );
+
+    void trendingTracks( const QList< QPair< double,Tomahawk::track_ptr > >& tracks );
 
     void leftCrumbIndexChanged( const QModelIndex& );
 

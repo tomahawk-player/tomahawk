@@ -237,60 +237,60 @@ list(APPEND libSources
     database/DatabaseImpl.cpp
     database/DatabaseResolver.cpp
     database/DatabaseCommand.cpp
-    database/DatabaseCommandLoggable.cpp
-    database/DatabaseCommand_Resolve.cpp
-    database/DatabaseCommand_AllArtists.cpp
-    database/DatabaseCommand_AllAlbums.cpp
-    database/DatabaseCommand_AllTracks.cpp
+    database/DatabaseCommand_AddClientAuth.cpp
     database/DatabaseCommand_AddFiles.cpp
+    database/DatabaseCommand_AddSource.cpp
+    database/DatabaseCommand_AllAlbums.cpp
+    database/DatabaseCommand_AllArtists.cpp
+    database/DatabaseCommand_AllTracks.cpp
+    database/DatabaseCommand_ArtistStats.cpp
+    database/DatabaseCommand_ClientAuthValid.cpp
+    database/DatabaseCommand_CollectionAttributes.cpp
+    database/DatabaseCommand_CollectionStats.cpp
+    database/DatabaseCommand_CreateDynamicPlaylist.cpp
+    database/DatabaseCommand_CreatePlaylist.cpp
+    database/DatabaseCommand_DeleteDynamicPlaylist.cpp
     database/DatabaseCommand_DeleteFiles.cpp
+    database/DatabaseCommand_DeleteInboxEntry.cpp
+    database/DatabaseCommand_DeletePlaylist.cpp
     database/DatabaseCommand_DirMtimes.cpp
     database/DatabaseCommand_FileMTimes.cpp
-    database/DatabaseCommand_LoadFiles.cpp
-    database/DatabaseCommand_LogPlayback.cpp
-    database/DatabaseCommand_AddSource.cpp
-    database/DatabaseCommand_SourceOffline.cpp
-    database/DatabaseCommand_CollectionStats.cpp
-    database/DatabaseCommand_TrackStats.cpp
-    database/DatabaseCommand_ArtistStats.cpp
-    database/DatabaseCommand_LoadPlaylistEntries.cpp
-    database/DatabaseCommand_LoadInboxEntries.cpp
-    database/DatabaseCommand_ModifyPlaylist.cpp
-    database/DatabaseCommand_PlaybackHistory.cpp
-    database/DatabaseCommand_SetPlaylistRevision.cpp
+    database/DatabaseCommand_GenericSelect.cpp
+    database/DatabaseCommand_LoadAllAutoPlaylists.cpp
     database/DatabaseCommand_LoadAllPlaylists.cpp
     database/DatabaseCommand_LoadAllSortedPlaylists.cpp
     database/DatabaseCommand_LoadAllSources.cpp
-    database/DatabaseCommand_CreatePlaylist.cpp
-    database/DatabaseCommand_DeletePlaylist.cpp
-    database/DatabaseCommand_RenamePlaylist.cpp
-    database/DatabaseCommand_LoadOps.cpp
-    database/DatabaseCommand_UpdateSearchIndex.cpp
-    database/DatabaseCommand_SetDynamicPlaylistRevision.cpp
-    database/DatabaseCommand_CreateDynamicPlaylist.cpp
+    database/DatabaseCommand_LoadAllStations.cpp
     database/DatabaseCommand_LoadDynamicPlaylist.cpp
     database/DatabaseCommand_LoadDynamicPlaylistEntries.cpp
-    database/DatabaseCommand_LoadAllAutoPlaylists.cpp
-    database/DatabaseCommand_LoadAllStations.cpp
-    database/DatabaseCommand_DeleteDynamicPlaylist.cpp
-    database/DatabaseCommand_AddClientAuth.cpp
-    database/DatabaseCommand_ClientAuthValid.cpp
-    database/DatabaseCommand_SocialAction.cpp
+    database/DatabaseCommand_LoadFiles.cpp
+    database/DatabaseCommand_LoadInboxEntries.cpp
+    database/DatabaseCommand_LoadOps.cpp
+    database/DatabaseCommand_LoadPlaylistEntries.cpp
     database/DatabaseCommand_LoadSocialActions.cpp
     database/DatabaseCommand_LoadTrackAttributes.cpp
-    database/DatabaseCommand_GenericSelect.cpp
-    database/DatabaseCommand_SetCollectionAttributes.cpp
-    database/DatabaseCommand_CollectionAttributes.cpp
-    database/DatabaseCommand_TrackAttributes.cpp
-    database/DatabaseCommand_SetTrackAttributes.cpp
-    database/DatabaseCommand_PlaybackCharts.cpp
-    database/DatabaseCommand_ShareTrack.cpp
-    database/DatabaseCommand_DeleteInboxEntry.cpp
+    database/DatabaseCommand_LogPlayback.cpp
     database/DatabaseCommand_ModifyInboxEntry.cpp
+    database/DatabaseCommand_ModifyPlaylist.cpp
     database/DatabaseCommand_NetworkCharts.cpp
-    database/Database.cpp
-    database/TomahawkSqlQuery.cpp
+    database/DatabaseCommand_PlaybackCharts.cpp
+    database/DatabaseCommand_PlaybackHistory.cpp
+    database/DatabaseCommand_RenamePlaylist.cpp
+    database/DatabaseCommand_Resolve.cpp
+    database/DatabaseCommand_SetCollectionAttributes.cpp
+    database/DatabaseCommand_SetDynamicPlaylistRevision.cpp
+    database/DatabaseCommand_SetPlaylistRevision.cpp
+    database/DatabaseCommand_SetTrackAttributes.cpp
+    database/DatabaseCommand_ShareTrack.cpp
+    database/DatabaseCommand_SocialAction.cpp
+    database/DatabaseCommand_SourceOffline.cpp
+    database/DatabaseCommand_TrackAttributes.cpp
+    database/DatabaseCommand_TrackStats.cpp
+    database/DatabaseCommand_TrendingTracks.cpp
+    database/DatabaseCommand_UpdateSearchIndex.cpp
+    database/DatabaseCommandLoggable.cpp
     database/IdThreadWorker.cpp
+    database/TomahawkSqlQuery.cpp
 
     infosystem/InfoSystem.cpp
     infosystem/InfoSystemCache.cpp
