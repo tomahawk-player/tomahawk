@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013,      Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -27,13 +28,14 @@
 #include <QVariant>
 
 #include "Typedefs.h"
-#include "database/Op.h"
+// #include "database/Op.h"
 
 #include "DllMacro.h"
 
 namespace Tomahawk
 {
 
+class DatabaseCommandPrivate;
 class DatabaseImpl;
 
 class DLLEXPORT DatabaseCommand : public QObject
@@ -57,7 +59,7 @@ public:
 
     virtual QString commandname() const { return "DatabaseCommand"; }
     virtual bool doesMutates() const { return true; }
-    State state() const { return m_state; }
+    State state() const;
 
     // if i make this pure virtual, i get compile errors in qmetatype.h.
     // we need Q_DECLARE_METATYPE to use in queued sig/slot connections.
@@ -78,23 +80,17 @@ public:
     virtual bool singletonCmd() const { return false; }
     virtual bool localOnly() const { return false; }
 
-    virtual QVariant data() const { return m_data; }
-    virtual void setData( const QVariant& data ) { m_data = data; }
+    virtual QVariant data() const;
+    virtual void setData( const QVariant& data );
 
-    QString guid() const
-    {
-        if( m_guid.isEmpty() )
-            m_guid = uuid();
+    QString guid() const;
+    void setGuid( const QString& g );
 
-        return m_guid;
-    }
-    void setGuid( const QString& g ) { m_guid = g; }
+    void emitFinished();
+    void emitCommitted();
+    void emitRunning();
 
-    void emitFinished() { emit finished(m_ownRef.toStrongRef()); emit finished(); }
-    void emitCommitted() { emit committed(m_ownRef.toStrongRef()); emit committed(); }
-    void emitRunning() { emit running(m_ownRef.toStrongRef()); emit running(); }
-
-    QWeakPointer< Tomahawk::DatabaseCommand > weakRef();
+    QWeakPointer< Tomahawk::DatabaseCommand > weakRef() const;
     void setWeakRef( QWeakPointer< Tomahawk::DatabaseCommand > weakRef );
 
 signals:
@@ -106,15 +102,13 @@ signals:
 
     void committed();
     void committed( const Tomahawk::dbcmd_ptr& );
+protected:
+    explicit DatabaseCommand( QObject* parent, DatabaseCommandPrivate* d );
+
+    QScopedPointer<DatabaseCommandPrivate> d_ptr;
 
 private:
-    State m_state;
-    Tomahawk::source_ptr m_source;
-    mutable QString m_guid;
-
-    QVariant m_data;
-
-    QWeakPointer< Tomahawk::DatabaseCommand > m_ownRef;
+    Q_DECLARE_PRIVATE( DatabaseCommand )
 };
 
 }
