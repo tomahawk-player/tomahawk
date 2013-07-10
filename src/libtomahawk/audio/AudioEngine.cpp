@@ -1426,7 +1426,7 @@ AudioEngine::setEqualizerBand( int band, int value )
         QList< Phonon::EffectParameter > params = d->audioEffect->parameters();
         if ( band < params.size() )
         {
-            d->audioEffect->setParameterValue( params.at(band), value );
+            d->audioEffect->setParameterValue( params.at( band ), value );
             return true;
         }
     }
