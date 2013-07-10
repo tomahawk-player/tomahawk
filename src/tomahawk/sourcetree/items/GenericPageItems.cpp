@@ -70,6 +70,10 @@ GenericPageItem::icon() const
 bool
 GenericPageItem::willAcceptDrag( const QMimeData* data ) const
 {
+    if ( m_get() == NULL )
+    {
+        return false;
+    }
     return m_get()->willAcceptDrag(data);
 }
 
@@ -77,6 +81,10 @@ GenericPageItem::willAcceptDrag( const QMimeData* data ) const
 bool
 GenericPageItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
 {
+    if ( m_get() == NULL )
+    {
+        return false;
+    }
     return m_get()->dropMimeData(data, action);
 }
 
