@@ -22,6 +22,8 @@
 #include "database/TomahawkSqlQuery.h"
 #include "Track.h"
 
+#include <algorithm>
+
 namespace Tomahawk {
 
 DatabaseCommand_TrendingTracks::DatabaseCommand_TrendingTracks( QObject* parent )
@@ -39,7 +41,6 @@ void
 DatabaseCommand_TrendingTracks::exec( DatabaseImpl* dbi )
 {
     Q_D( DatabaseCommand_TrendingTracks );
-    TomahawkSqlQuery query = dbi->newquery();
 
     QString limit;
     if ( d->amount > 0 )
@@ -50,10 +51,28 @@ DatabaseCommand_TrendingTracks::exec( DatabaseImpl* dbi )
     QDateTime now = QDateTime::currentDateTime();
     QDateTime _1WeekAgo = now.addDays( -7 );
     QDateTime _2WeeksAgo = now.addDays( -14 );
-    QDateTime _3WeeksAgo = now.addDays( -21 );
 
-    // TODO:
-    // -> Look at absolute playcount, an increase from 1 to 4 plays per week is currently considered very high
+    uint peersLastWeek = 1; // Use a default of 1 to be able to do certain mathematical computations without Div-by-0 Errors.
+    {
+        // Get the number of active peers in the last week.
+        // We could just use the number of peers instead but that would include old peers that may have been inactive for a long while.
+
+        QString peersLastWeekSql = QString(
+                    " SELECT COUNT(DISTINCT source ) "
+                    " FROM playback_log "
+                    " WHERE playback_log.source IS NOT NULL " // exclude self
+                    " AND playback_log.playtime >= %1 "
+                    ).arg( _1WeekAgo.toTime_t() );
+        TomahawkSqlQuery query = dbi->newquery();
+        query.prepare( peersLastWeekSql );
+        query.exec();
+        while ( query.next() )
+        {
+            peersLastWeek = std::max( 1u, query.value( 0 ).toUInt() );
+        }
+    }
+
+
     QString timespanSql = QString(
                 " SELECT COUNT(*) as counter, track "
                 " FROM playback_log "
@@ -63,16 +82,20 @@ DatabaseCommand_TrendingTracks::exec( DatabaseImpl* dbi )
                 );
     QString lastWeekSql = timespanSql.arg( _1WeekAgo.toTime_t() ).arg( now.toTime_t() );
     QString _1BeforeLastWeekSql = timespanSql.arg( _2WeeksAgo.toTime_t() ).arg( _1WeekAgo.toTime_t() );
-    QString _2BeforeLastWeekSql = timespanSql.arg( _3WeeksAgo.toTime_t() ).arg( _2WeeksAgo.toTime_t() );
+    QString formula = QString(
+                " (  lastweek.counter /  weekbefore.counter ) "
+                " * "
+                " max(0, 1 - (%1 / (4*min(lastweek.counter, weekbefore.counter )) ) )"
+                ).arg( peersLastWeek );
     QString sql = QString(
-                " SELECT track.name, artist.name, ( lastweek.counter - weekbefore.counter ) as slope1, max( weekbefore.counter - week2before.counter, 1 ) as slope2, ( ( lastweek.counter - weekbefore.counter ) / max( weekbefore.counter - week2before.counter, 1 ) ) as trending "
-                " FROM ( %1 ) lastweek, ( %2 ) weekbefore, ( %3 ) week2before, track, artist "
-                " WHERE lastweek.track = weekbefore.track AND weekbefore.track = week2before.track "
+                " SELECT track.name, artist.name, ( %4 ) as trending "
+                " FROM ( %1 ) lastweek, ( %2 ) weekbefore, track, artist "
+                " WHERE lastweek.track = weekbefore.track "
                 " AND track.id = lastweek.track AND artist.id = track.artist "
                 " AND ( lastweek.counter - weekbefore.counter ) > 0"
-                " ORDER BY slope1 DESC %4 "
-                ).arg( lastWeekSql ).arg( _1BeforeLastWeekSql ).arg( _2BeforeLastWeekSql ).arg( limit );
-
+                " ORDER BY trending DESC %3 "
+                ).arg( lastWeekSql ).arg( _1BeforeLastWeekSql ).arg( limit ).arg( formula );
+    TomahawkSqlQuery query = dbi->newquery();
     query.prepare( sql );
     query.exec();
 
@@ -85,7 +108,7 @@ DatabaseCommand_TrendingTracks::exec( DatabaseImpl* dbi )
             if ( !track )
                 continue;
 
-            tracks << QPair< double, track_ptr >( query.value( 4 ).toDouble(), track );
+            tracks << QPair< double, track_ptr >( query.value( 2 ).toDouble(), track );
     }
 
     emit done( tracks );

@@ -29,7 +29,15 @@ class DatabaseCommand_TrendingTracksPrivate;
  * Find tracks that trend among your friends.
  *
  * At the moment the most trending tracks are those with the highest quotient of
- * plays in the last week and the week before.
+ * plays in the last week and the week before with a penalty applied to those with
+ * a low playcount.
+ *
+ * The exact calculation is done as follows:
+ *
+ * w_1(t) := playcount this week of track t
+ * w_2(t) := playcount one week before of track t
+ * p := active peers (with at least one play) in the last week
+ * trending(track) = (w_1(t) / w_2(t)) * (1 - p / (4 * min(w_1(t), w_2(t))))
  */
 class DLLEXPORT DatabaseCommand_TrendingTracks : public Tomahawk::DatabaseCommand
 {
