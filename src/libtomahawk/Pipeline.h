@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2013,      Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -16,25 +17,24 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#pragma once
 #ifndef PIPELINE_H
 #define PIPELINE_H
 
+#include "DllMacro.h"
 #include "Typedefs.h"
 #include "Query.h"
 
 #include <QObject>
 #include <QList>
-#include <QMap>
-#include <QMutex>
 #include <QStringList>
-#include <QTimer>
 
 #include <boost/function.hpp>
 
-#include "DllMacro.h"
-
 namespace Tomahawk
 {
+
+class PipelinePrivate;
 class Resolver;
 class ExternalResolver;
 typedef boost::function<Tomahawk::ExternalResolver*( QString, QStringList )> ResolverFactoryFunc;
@@ -49,10 +49,10 @@ public:
     explicit Pipeline( QObject* parent = 0 );
     virtual ~Pipeline();
 
-    bool isRunning() const { return m_running; }
+    bool isRunning() const;
 
-    unsigned int pendingQueryCount() const { return m_queries_pending.count(); }
-    unsigned int activeQueryCount() const { return m_qidsState.count(); }
+    unsigned int pendingQueryCount() const;
+    unsigned int activeQueryCount() const;
 
     void reportResults( QID qid, const QList< result_ptr >& results );
     void reportAlbums( QID qid, const QList< album_ptr >& albums );
@@ -62,7 +62,7 @@ public:
     Tomahawk::ExternalResolver* addScriptResolver( const QString& scriptPath, const QStringList& additionalScriptPaths = QStringList() );
     void stopScriptResolver( const QString& scriptPath );
     void removeScriptResolver( const QString& scriptPath );
-    QList< QPointer< ExternalResolver > > scriptResolvers() const { return m_scriptResolvers; }
+    QList< QPointer< ExternalResolver > > scriptResolvers() const;
     Tomahawk::ExternalResolver* resolverForPath( const QString& scriptPath );
 
     void addResolver( Resolver* r );
@@ -90,6 +90,9 @@ signals:
     void resolverAdded( Tomahawk::Resolver* );
     void resolverRemoved( Tomahawk::Resolver* );
 
+protected:
+    QScopedPointer<PipelinePrivate> d_ptr;
+
 private slots:
     void timeoutShunt( const query_ptr& q );
     void shunt( const query_ptr& q );
@@ -99,35 +102,16 @@ private slots:
     void onResultUrlCheckerDone();
 
 private:
+    Q_DECLARE_PRIVATE( Pipeline )
+
     void addResultsToQuery( const query_ptr& query, const QList< result_ptr >& results );
     Tomahawk::Resolver* nextResolver( const Tomahawk::query_ptr& query ) const;
 
     void setQIDState( const Tomahawk::query_ptr& query, int state );
     int incQIDState( const Tomahawk::query_ptr& query );
     int decQIDState( const Tomahawk::query_ptr& query );
-
-    QList< Resolver* > m_resolvers;
-    QList< QPointer<Tomahawk::ExternalResolver> > m_scriptResolvers;
-    QList< ResolverFactoryFunc > m_resolverFactories;
-    QMap< QID, bool > m_qidsTimeout;
-    QMap< QID, unsigned int > m_qidsState;
-    QMap< QID, query_ptr > m_qids;
-    QMap< RID, result_ptr > m_rids;
-
-    QMutex m_mut; // for m_qids, m_rids
-
-    // store queries here until DB index is loaded, then shunt them all
-    QList< query_ptr > m_queries_pending;
-    // store temporary queries here and clean up after timeout threshold
-    QList< query_ptr > m_queries_temporary;
-
-    int m_maxConcurrentQueries;
-    bool m_running;
-    QTimer m_temporaryQueryTimer;
-
-    static Pipeline* s_instance;
 };
 
-}; //ns
+} // Tomahawk
 
 #endif // PIPELINE_H
