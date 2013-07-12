@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013,      Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -17,7 +18,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Query.h"
+#include "Query_p.h"
 
 #include "audio/AudioEngine.h"
 #include "collection/Collection.h"
@@ -87,8 +88,7 @@ Query::get( const QString& query, const QID& qid )
 
 
 Query::Query( const track_ptr& track, const QID& qid, bool autoResolve )
-    : m_qid( qid )
-    , m_queryTrack( track )
+    : d_ptr( new QueryPrivate( this, track, qid ) )
 {
     init();
 
@@ -102,8 +102,7 @@ Query::Query( const track_ptr& track, const QID& qid, bool autoResolve )
 
 
 Query::Query( const QString& query, const QID& qid )
-    : m_qid( qid )
-    , m_fullTextQuery( query )
+    : d_ptr( new QueryPrivate( this, query, qid ) )
 {
     init();
 
@@ -116,46 +115,51 @@ Query::Query( const QString& query, const QID& qid )
 
 Query::~Query()
 {
+    Q_D( Query );
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << toString();
 
-    QMutexLocker lock( &m_mutex );
-    m_ownRef.clear();
-    m_results.clear();
+    QMutexLocker lock( &d->mutex );
+    d->ownRef.clear();
+    d->results.clear();
 }
 
 
 void
 Query::init()
 {
-    m_resolveFinished = false;
-    m_solved = false;
-    m_playable = false;
-    m_saveResultHint = false;
+    Q_D( Query );
+    d->resolveFinished = false;
+    d->solved = false;
+    d->playable = false;
+    d->saveResultHint = false;
 }
 
 
 track_ptr
 Query::queryTrack() const
 {
-    return m_queryTrack;
+    Q_D( const Query );
+    return d->queryTrack;
 }
 
 
 track_ptr
 Query::track() const
 {
+    Q_D( const Query );
     if ( !results().isEmpty() )
         return results().first()->track();
 
-    return m_queryTrack;
+    return d->queryTrack;
 }
 
 
 void
 Query::addResults( const QList< Tomahawk::result_ptr >& newresults )
 {
+    Q_D( Query );
     {
-        QMutexLocker lock( &m_mutex );
+        QMutexLocker lock( &d->mutex );
 
 /*        const QStringList smt = AudioEngine::instance()->supportedMimeTypes();
         foreach ( const Tomahawk::result_ptr& result, newresults )
@@ -168,8 +172,8 @@ Query::addResults( const QList< Tomahawk::result_ptr >& newresults )
                 m_results.append( result );
         }*/
 
-        m_results << newresults;
-        qStableSort( m_results.begin(), m_results.end(), Query::resultSorter );
+        d->results << newresults;
+        qStableSort( d->results.begin(), d->results.end(), Query::resultSorter );
 
         // hook up signals, and check solved status
         foreach( const result_ptr& rp, newresults )
@@ -188,8 +192,9 @@ void
 Query::addAlbums( const QList< Tomahawk::album_ptr >& newalbums )
 {
     {
-        QMutexLocker lock( &m_mutex );
-        m_albums << newalbums;
+        Q_D( Query );
+        QMutexLocker lock( &d->mutex );
+        d->albums << newalbums;
     }
 
     emit albumsAdded( newalbums );
@@ -200,8 +205,9 @@ void
 Query::addArtists( const QList< Tomahawk::artist_ptr >& newartists )
 {
     {
-        QMutexLocker lock( &m_mutex );
-        m_artists << newartists;
+        Q_D( Query );
+        QMutexLocker lock( &d->mutex );
+        d->artists << newartists;
     }
 
     emit artistsAdded( newartists );
@@ -211,13 +217,20 @@ Query::addArtists( const QList< Tomahawk::artist_ptr >& newartists )
 void
 Query::refreshResults()
 {
-    if ( m_resolveFinished )
+    Q_D( Query );
+    if ( d->resolveFinished )
     {
-        m_resolveFinished = false;
-        query_ptr q = m_ownRef.toStrongRef();
+        d->resolveFinished = false;
+        query_ptr q = d->ownRef.toStrongRef();
         if ( q )
             Pipeline::instance()->resolve( q );
     }
+}
+
+
+Query::Query()
+    : d_ptr( new QueryPrivate( this ) )
+{
 }
 
 
@@ -225,9 +238,10 @@ void
 Query::onResultStatusChanged()
 {
     {
-        QMutexLocker lock( &m_mutex );
-        if ( m_results.count() )
-            qStableSort( m_results.begin(), m_results.end(), Query::resultSorter );
+        Q_D( Query );
+        QMutexLocker lock( &d->mutex );
+        if ( d->results.count() )
+            qStableSort( d->results.begin(), d->results.end(), Query::resultSorter );
     }
 
     checkResults();
@@ -239,8 +253,9 @@ void
 Query::removeResult( const Tomahawk::result_ptr& result )
 {
     {
-        QMutexLocker lock( &m_mutex );
-        m_results.removeAll( result );
+        Q_D( Query );
+        QMutexLocker lock( &d->mutex );
+        d->results.removeAll( result );
     }
 
     emit resultsRemoved( result );
@@ -252,13 +267,14 @@ Query::removeResult( const Tomahawk::result_ptr& result )
 void
 Query::onResolvingFinished()
 {
+    Q_D( Query );
     tDebug( LOGVERBOSE ) << "Finished resolving:" << toString();
-    if ( !m_resolveFinished )
+    if ( !d->resolveFinished )
     {
-        m_resolveFinished = true;
-        m_resolvers.clear();
+        d->resolveFinished = true;
+        d->resolvers.clear();
 
-        emit resolvingFinished( m_playable );
+        emit resolvingFinished( d->playable );
     }
 }
 
@@ -276,28 +292,55 @@ Query::onResolverAdded()
 QList< result_ptr >
 Query::results() const
 {
-    QMutexLocker lock( &m_mutex );
-    return m_results;
+    Q_D( const Query );
+    QMutexLocker lock( &d->mutex );
+    return d->results;
 }
 
 
 unsigned int
 Query::numResults() const
 {
-    QMutexLocker lock( &m_mutex );
-    return m_results.length();
+    Q_D( const Query );
+    QMutexLocker lock( &d->mutex );
+    return d->results.length();
+}
+
+
+bool
+Query::resolvingFinished() const
+{
+    Q_D( const Query );
+    return d->resolveFinished;
+}
+
+
+bool
+Query::solved() const
+{
+    Q_D( const Query );
+    return d->solved;
+}
+
+
+bool
+Query::playable() const
+{
+    Q_D( const Query );
+    return d->playable;
 }
 
 
 QID
 Query::id() const
 {
-    if ( m_qid.isEmpty() )
+    Q_D( const Query );
+    if ( d->qid.isEmpty() )
     {
-        m_qid = uuid();
+        d->qid = uuid();
     }
 
-    return m_qid;
+    return d->qid;
 }
 
 
@@ -322,17 +365,19 @@ Query::resultSorter( const result_ptr& left, const result_ptr& right )
 void
 Query::setCurrentResolver( Tomahawk::Resolver* resolver )
 {
-    m_resolvers << resolver;
+    Q_D( Query );
+    d->resolvers << resolver;
 }
 
 
 Tomahawk::Resolver*
 Query::currentResolver() const
 {
-    int x = m_resolvers.count();
+    Q_D( const Query );
+    int x = d->resolvers.count();
     while ( --x )
     {
-        QPointer< Resolver > r = m_resolvers.at( x );
+        QPointer< Resolver > r = d->resolvers.at( x );
         if ( r.isNull() )
             continue;
 
@@ -340,6 +385,38 @@ Query::currentResolver() const
     }
 
     return 0;
+}
+
+
+QList< QPointer<Resolver> >
+Query::resolvedBy() const
+{
+    Q_D( const Query );
+    return d->resolvers;
+}
+
+
+QString
+Query::fullTextQuery() const
+{
+    Q_D( const Query );
+    return d->fullTextQuery;
+}
+
+
+bool
+Query::isFullTextQuery() const
+{
+    Q_D( const Query );
+    return !d->fullTextQuery.isEmpty();
+}
+
+
+void
+Query::setResolveFinished( bool resolved )
+{
+    Q_D( Query );
+    d->resolveFinished = resolved;
 }
 
 
@@ -356,14 +433,15 @@ Query::clearResults()
 void
 Query::checkResults()
 {
+    Q_D( Query );
     bool playable = false;
     bool solved = false;
 
     {
-        QMutexLocker lock( &m_mutex );
+        QMutexLocker lock( &d->mutex );
 
         // hook up signals, and check solved status
-        foreach( const result_ptr& rp, m_results )
+        foreach( const result_ptr& rp, d->results )
         {
             if ( rp->playable() )
                 playable = true;
@@ -378,19 +456,19 @@ Query::checkResults()
         }
     }
 
-    if ( m_solved && !solved )
+    if ( d->solved && !solved )
     {
         refreshResults();
     }
-    if ( m_playable != playable )
+    if ( d->playable != playable )
     {
-        m_playable = playable;
-        emit playableStateChanged( m_playable );
+        d->playable = playable;
+        emit playableStateChanged( d->playable );
     }
-    if ( m_solved != solved )
+    if ( d->solved != solved )
     {
-        m_solved = solved;
-        emit solvedStateChanged( m_solved );
+        d->solved = solved;
+        emit solvedStateChanged( d->solved );
     }
 }
 
@@ -450,6 +528,7 @@ Query::toString() const
 float
 Query::howSimilar( const Tomahawk::result_ptr& r )
 {
+    Q_D( Query );
     // result values
     const QString rArtistname = r->track()->artistSortname();
     const QString rAlbumname  = r->track()->albumSortname();
@@ -461,8 +540,8 @@ Query::howSimilar( const Tomahawk::result_ptr& r )
 
     if ( isFullTextQuery() )
     {
-        qArtistname = DatabaseImpl::sortname( m_fullTextQuery, true );
-        qAlbumname = DatabaseImpl::sortname( m_fullTextQuery );
+        qArtistname = DatabaseImpl::sortname( d->fullTextQuery, true );
+        qAlbumname = DatabaseImpl::sortname( d->fullTextQuery );
         qTrackname = qAlbumname;
     }
     else
@@ -516,5 +595,47 @@ Query::howSimilar( const Tomahawk::result_ptr& r )
 void
 Query::setSaveHTTPResultHint( bool saveResultHint )
 {
-    m_saveResultHint = saveResultHint;
+    Q_D( Query );
+    d->saveResultHint = saveResultHint;
 }
+
+
+bool
+Query::saveHTTPResultHint() const
+{
+    Q_D( const Query );
+    return d->saveResultHint;
+}
+
+
+QString
+Query::resultHint() const
+{
+    Q_D( const Query );
+    return d->resultHint;
+}
+
+
+void
+Query::setResultHint( const QString& resultHint )
+{
+    Q_D( Query );
+    d->resultHint = resultHint;
+}
+
+
+QWeakPointer<Query>
+Query::weakRef()
+{
+    Q_D( Query );
+    return d->ownRef;
+}
+
+
+void
+Query::setWeakRef( QWeakPointer<Query> weakRef )
+{
+    Q_D( Query );
+    d->ownRef = weakRef;
+}
+

@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013,      Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -17,11 +18,11 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#pragma once
 #ifndef QUERY_H
 #define QUERY_H
 
 #include <QObject>
-#include <QMutex>
 #include <QList>
 #include <QVariant>
 
@@ -33,8 +34,8 @@ namespace Tomahawk
 {
 
 class DatabaseCommand_LoadPlaylistEntries;
-
 class Resolver;
+class QueryPrivate;
 
 class DLLEXPORT Query : public QObject
 {
@@ -67,28 +68,28 @@ public:
     /// how many results found so far?
     unsigned int numResults() const;
 
-    bool resolvingFinished() const { return m_resolveFinished; }
+    bool resolvingFinished() const;
     /// true when a perfect result has been found (score of 1.0)
-    bool solved() const { return m_solved; }
+    bool solved() const;
     /// true when any result has been found (score may be less than 1.0)
-    bool playable() const { return m_playable; }
+    bool playable() const;
 
     Tomahawk::Resolver* currentResolver() const;
-    QList< QPointer< Tomahawk::Resolver > > resolvedBy() const { return m_resolvers; }
+    QList< QPointer< Tomahawk::Resolver > > resolvedBy() const;
 
-    QString fullTextQuery() const { return m_fullTextQuery; }
-    bool isFullTextQuery() const { return !m_fullTextQuery.isEmpty(); }
+    QString fullTextQuery() const;
+    bool isFullTextQuery() const;
 
-    void setResolveFinished( bool resolved ) { m_resolveFinished = resolved; }
+    void setResolveFinished( bool resolved );
 
     void setSaveHTTPResultHint( bool saveResultHint );
-    bool saveHTTPResultHint() const { return m_saveResultHint; }
+    bool saveHTTPResultHint() const;
 
-    QString resultHint() const { return m_resultHint; }
-    void setResultHint( const QString& resultHint ) { m_resultHint = resultHint; }
+    QString resultHint() const;
+    void setResultHint( const QString& resultHint );
 
-    QWeakPointer< Tomahawk::Query > weakRef() { return m_ownRef; }
-    void setWeakRef( QWeakPointer< Tomahawk::Query > weakRef ) { m_ownRef = weakRef; }
+    QWeakPointer< Tomahawk::Query > weakRef();
+    void setWeakRef( QWeakPointer< Tomahawk::Query > weakRef );
 
     /// sorter for list of results
     static bool resultSorter( const result_ptr& left, const result_ptr& right );
@@ -116,6 +117,9 @@ public slots:
     void onResolvingFinished();
     void onResolverAdded();
 
+protected:
+    QScopedPointer<QueryPrivate> d_ptr;
+
 private slots:
     void onResultStatusChanged();
     void refreshResults();
@@ -125,31 +129,13 @@ private:
     explicit Query( const track_ptr& track, const QID& qid, bool autoResolve );
     explicit Query( const QString& query, const QID& qid );
 
+    Q_DECLARE_PRIVATE( Query )
+
     void init();
 
     void setCurrentResolver( Tomahawk::Resolver* resolver );
     void clearResults();
     void checkResults();
-
-    QList< Tomahawk::artist_ptr > m_artists;
-    QList< Tomahawk::album_ptr > m_albums;
-    QList< Tomahawk::result_ptr > m_results;
-    bool m_solved;
-    bool m_playable;
-    bool m_resolveFinished;
-    mutable QID m_qid;
-
-    QString m_fullTextQuery;
-
-    QString m_resultHint;
-    bool m_saveResultHint;
-
-    QList< QPointer< Tomahawk::Resolver > > m_resolvers;
-
-    track_ptr m_queryTrack;
-
-    mutable QMutex m_mutex;
-    QWeakPointer< Tomahawk::Query > m_ownRef;
 };
 
 } //ns
