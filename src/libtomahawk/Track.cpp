@@ -19,9 +19,6 @@
 
 #include "Track.h"
 
-#include <QtAlgorithms>
-#include <QReadWriteLock>
-
 #include "audio/AudioEngine.h"
 #include "collection/Collection.h"
 #include "database/Database.h"
@@ -35,6 +32,10 @@
 #include "Pipeline.h"
 #include "PlaylistEntry.h"
 #include "SourceList.h"
+
+#include <QtAlgorithms>
+#include <QDateTime>
+#include <QReadWriteLock>
 
 
 using namespace Tomahawk;

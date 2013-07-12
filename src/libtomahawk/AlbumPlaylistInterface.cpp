@@ -37,6 +37,8 @@
     #include "Result.h"
 #endif
 
+#include <QDateTime>
+
 
 using namespace Tomahawk;
 

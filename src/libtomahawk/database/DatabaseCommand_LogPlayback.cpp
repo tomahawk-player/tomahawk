@@ -19,8 +19,6 @@
 
 #include "DatabaseCommand_LogPlayback.h"
 
-#include <QSqlQuery>
-
 #include "collection/Collection.h"
 #include "database/Database.h"
 #include "network/Servent.h"
@@ -28,6 +26,9 @@
 
 #include "DatabaseImpl.h"
 #include "PlaylistEntry.h"
+
+#include <QDateTime>
+#include <QSqlQuery>
 
 #define STARTED_THRESHOLD 600   // Don't advertise tracks older than X seconds as currently playing
 #define FINISHED_THRESHOLD 10   // Don't store tracks played less than X seconds in the playback log

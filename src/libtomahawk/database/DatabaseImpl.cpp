@@ -36,6 +36,7 @@
 #include <QFile>
 #include <QRegExp>
 #include <QStringList>
+#include <QTime>
 #include <QTimer>
 
 /* !!!! You need to manually generate Schema.sql.h when the schema changes:

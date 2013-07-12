@@ -19,6 +19,7 @@
 #ifndef DATABASECOMMAND_PLAYBACKHISTORY_H
 #define DATABASECOMMAND_PLAYBACKHISTORY_H
 
+#include <QDateTime>
 #include <QObject>
 #include <QVariantMap>
 

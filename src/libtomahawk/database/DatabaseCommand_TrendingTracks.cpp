@@ -22,6 +22,8 @@
 #include "database/TomahawkSqlQuery.h"
 #include "Track.h"
 
+#include <QDateTime>
+
 #include <algorithm>
 
 namespace Tomahawk {

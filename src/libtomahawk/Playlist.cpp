@@ -20,6 +20,7 @@
 
 #include "Playlist_p.h"
 
+#include "collection/Collection.h"
 #include "database/Database.h"
 #include "database/DatabaseCommand_LoadPlaylistEntries.h"
 #include "database/DatabaseCommand_SetPlaylistRevision.h"

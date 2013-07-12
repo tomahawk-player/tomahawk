@@ -20,6 +20,7 @@
 
 #include "TomahawkSettings.h"
 
+#include "collection/Collection.h"
 #include "database/DatabaseCommand_UpdateSearchIndex.h"
 #include "database/Database.h"
 #include "infosystem/InfoSystemCache.h"

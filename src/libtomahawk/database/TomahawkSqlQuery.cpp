@@ -18,10 +18,12 @@
 
 #include "database/TomahawkSqlQuery.h"
 
+#include "collection/Collection.h"
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
+#include "Source.h"
 
 #include <QCoreApplication>
 #include <QSqlError>

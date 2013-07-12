@@ -20,6 +20,7 @@
 #include "RecentPlaylistsModel.h"
 
 #include "audio/AudioEngine.h"
+#include "collection/Collection.h"
 #include "database/Database.h"
 #include "database/DatabaseCommand_LoadAllSortedPlaylists.h"
 #include "network/Servent.h"
@@ -30,6 +31,7 @@
 #include "RecentlyPlayedPlaylistsModel.h"
 #include "SourceList.h"
 #include "TomahawkSettings.h"
+#include "Track.h"
 
 #define REFRESH_TIMEOUT 1000
 

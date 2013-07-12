@@ -21,16 +21,11 @@
 #ifndef DATABASECOMMAND_H
 #define DATABASECOMMAND_H
 
-#include <QObject>
 #include <QMetaType>
-#include <QTime>
-#include <QSqlQuery>
 #include <QVariant>
 
-#include "Typedefs.h"
-// #include "database/Op.h"
-
 #include "DllMacro.h"
+#include "Typedefs.h"
 
 namespace Tomahawk
 {

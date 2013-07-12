@@ -20,6 +20,7 @@
 #define DATABASECOMMAND_NETWORKCHARTS_H
 
 #include <QObject>
+#include <QDateTime>
 #include <QVariantMap>
 
 #include "Typedefs.h"

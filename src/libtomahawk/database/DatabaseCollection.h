@@ -21,13 +21,12 @@
 #ifndef DATABASECOLLECTION_H
 #define DATABASECOLLECTION_H
 
-#include <QDir>
-
 #include "collection/Collection.h"
+#include "DllMacro.h"
 #include "Source.h"
 #include "Typedefs.h"
 
-#include "DllMacro.h"
+#include <QDir>
 
 
 namespace Tomahawk

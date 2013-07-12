@@ -17,6 +17,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#pragma once
 #ifndef TYPEDEFS_H
 #define TYPEDEFS_H
 

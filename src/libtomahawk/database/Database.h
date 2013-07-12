@@ -17,28 +17,25 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#pragma once
 #ifndef DATABASE_H
 #define DATABASE_H
 
-#include <QSharedPointer>
-#include <QVariant>
-
-#include "Artist.h"
-#include "Album.h"
-#include "Source.h"
-#include "DatabaseCommand.h"
+#include "DllMacro.h"
 #include "Typedefs.h"
 
-#include "DllMacro.h"
+#include <QMutex>
+#include <QVariant>
+
 
 namespace Tomahawk
 {
+
+class DatabaseImpl;
+class DatabaseCommand;
 class DatabaseWorkerThread;
 class DatabaseWorker;
-
 class IdThreadWorker;
-class DatabaseImpl;
-
 
 class DLLEXPORT DatabaseCommandFactory : public QObject
 {
@@ -46,7 +43,7 @@ Q_OBJECT
     friend class Database;
 
 public:
-    virtual ~DatabaseCommandFactory() {};
+    virtual ~DatabaseCommandFactory() {}
     dbcmd_ptr newInstance();
 
 signals:
@@ -62,7 +59,7 @@ template <class COMMAND>
 class DatabaseCommandFactoryImplementation : public DatabaseCommandFactory
 {
 protected:
-    virtual COMMAND* create() const { return new COMMAND(); };
+    virtual COMMAND* create() const { return new COMMAND(); }
 };
 
 /*

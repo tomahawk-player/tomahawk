@@ -18,8 +18,6 @@
 
 #include "DatabaseCommand_AllAlbums.h"
 
-#include <QSqlQuery>
-
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
@@ -27,6 +25,10 @@
 #include "DatabaseImpl.h"
 #include "PlaylistEntry.h"
 #include "Source.h"
+
+#include <QDateTime>
+#include <QSqlQuery>
+
 
 namespace Tomahawk
 {

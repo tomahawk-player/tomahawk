@@ -18,6 +18,7 @@
 
 #include "ConnectionManager_p.h"
 
+#include "accounts/Account.h"
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
 #include "network/Msg.h"
@@ -30,6 +31,7 @@
 #include "PlaylistEntry.h"
 #include "QTcpSocketExtra.h"
 #include "Servent.h"
+#include "Source.h"
 
 #include <boost/bind.hpp>
 #include <qtconcurrentrun.h>

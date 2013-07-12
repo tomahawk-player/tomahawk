@@ -38,13 +38,14 @@
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
-#include <QLabel>
-#include <QTextEdit>
-#include <QDialogButtonBox>
-#include <QPushButton>
 #include <QApplication>
 #include <QClipboard>
+#include <QDateTime>
 #include <QDebug>
+#include <QDialogButtonBox>
+#include <QLabel>
+#include <QPushButton>
+#include <QTextEdit>
 
 
 DiagnosticsDialog::DiagnosticsDialog( QWidget *parent )

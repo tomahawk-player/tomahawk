@@ -33,6 +33,7 @@
 #include "Query.h"
 #include "SourceList.h"
 #include "TomahawkSettings.h"
+#include "Track.h"
 
 #include <echonest/CatalogUpdateEntry.h>
 #include <echonest/Config.h>

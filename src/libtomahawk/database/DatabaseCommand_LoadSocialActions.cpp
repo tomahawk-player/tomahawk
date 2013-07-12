@@ -20,6 +20,7 @@
 
 #include <QSqlQuery>
 
+#include "collection/Collection.h"
 #include "database/Database.h"
 #include "network/Servent.h"
 #include "utils/Logger.h"
@@ -27,6 +28,7 @@
 #include "DatabaseImpl.h"
 #include "PlaylistEntry.h"
 #include "Result.h"
+#include "Track.h"
 
 using namespace Tomahawk;
 

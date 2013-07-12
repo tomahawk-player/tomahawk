@@ -19,19 +19,23 @@
 
 #include "DynamicPlaylist_p.h"
 
+#include "collection/Collection.h"
 #include "database/Database.h"
 #include "database/DatabaseCommand.h"
 #include "database/DatabaseCommand_CreateDynamicPlaylist.h"
 #include "database/DatabaseCommand_SetDynamicPlaylistRevision.h"
 #include "database/DatabaseCommand_LoadDynamicPlaylistEntries.h"
 #include "database/DatabaseCommand_DeleteDynamicPlaylist.h"
-#include "TomahawkSettings.h"
 #include "utils/Logger.h"
 
 #include "GeneratorFactory.h"
 #include "Playlist_p.h"
+#include "PlaylistInterface.h"
 #include "PlaylistEntry.h"
+#include "PlaylistInterface.h"
 #include "SourceList.h"
+#include "TomahawkSettings.h"
+
 
 using namespace Tomahawk;
 

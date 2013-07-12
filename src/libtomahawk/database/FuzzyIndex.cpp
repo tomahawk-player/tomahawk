@@ -18,6 +18,7 @@
 
 #include "FuzzyIndex.h"
 
+#include "collection/Collection.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 
@@ -25,6 +26,7 @@
 #include "Database.h"
 #include "PlaylistEntry.h"
 #include "Source.h"
+#include "Track.h"
 
 #include <QDir>
 #include <QTime>
