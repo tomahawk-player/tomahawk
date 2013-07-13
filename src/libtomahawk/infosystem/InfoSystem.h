@@ -25,17 +25,14 @@
 #include "Typedefs.h"
 #include "TomahawkPlugin.h"
 
-#include <QtCore/QCryptographicHash>
-#include <QtCore/QObject>
-#include <QtCore/QtDebug>
-#include <QtCore/QMap>
-#include <QtCore/QPointer>
-#include <QtCore/QSet>
-#include <QtCore/QLinkedList>
-#include <QtCore/QUrl>
-#include <QtCore/QVariant>
-#include <QtCore/QThread>
-#include <QtCore/QStringList>
+#include <QCryptographicHash>
+#include <QMap>
+#include <QObject>
+#include <QPointer>
+#include <QSet>
+#include <QStringList>
+#include <QThread>
+#include <QVariant>
 
 class QNetworkAccessManager;
 class DiagnosticsDialog;
@@ -261,16 +258,16 @@ inline uint qHash( Tomahawk::InfoSystem::InfoStringHash hash )
     return returnval;
 }
 
-Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoRequestData );
-Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoPushData );
-Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoStringHash );
-Q_DECLARE_METATYPE( Tomahawk::InfoSystem::PushInfoPair );
-Q_DECLARE_METATYPE( Tomahawk::InfoSystem::PushInfoFlags );
-Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoType );
-Q_DECLARE_METATYPE( QList< Tomahawk::InfoSystem::InfoStringHash > );
-Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoPluginPtr );
-Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoPlugin* );
-Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoTypeSet );
+Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoRequestData )
+Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoPushData )
+Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoStringHash )
+Q_DECLARE_METATYPE( Tomahawk::InfoSystem::PushInfoPair )
+Q_DECLARE_METATYPE( Tomahawk::InfoSystem::PushInfoFlags )
+Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoType )
+Q_DECLARE_METATYPE( QList< Tomahawk::InfoSystem::InfoStringHash > )
+Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoPluginPtr )
+Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoPlugin* )
+Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoTypeSet )
 
 Q_DECLARE_INTERFACE( Tomahawk::InfoSystem::InfoPlugin, "tomahawk.InfoPlugin/1.0" )
 
