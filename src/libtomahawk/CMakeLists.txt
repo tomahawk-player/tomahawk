@@ -111,7 +111,6 @@ set( libGuiSources
     utils/ItunesLoader.cpp
     utils/RdioParser.cpp
     utils/ShortenedLinkParser.cpp
-    utils/ExfmParser.cpp
     utils/TomahawkStyle.cpp
     utils/DropJobNotifier.cpp
     utils/ProxyStyle.cpp
