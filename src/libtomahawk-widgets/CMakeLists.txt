@@ -8,6 +8,7 @@ list(APPEND ${TOMAHAWK_WIDGETS_LIBRARY_TARGET}_SOURCES
     # ViewPages
     Dashboard.cpp
     NetworkActivityWidget.cpp
+    NetworkActivityWorker.cpp
     SocialPlaylistWidget.cpp
 )
 

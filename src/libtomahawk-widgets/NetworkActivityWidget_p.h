@@ -22,6 +22,8 @@
 #include "NetworkActivityWidget.h"
 #include "ui_NetworkActivityWidget.h"
 
+#include "NetworkActivityWorker.h"
+
 class NetworkActivityWidgetPrivate
 {
 public:
@@ -31,6 +33,7 @@ public:
         , sortedProxy( 0 )
     {
     }
+
     Tomahawk::Widgets::NetworkActivityWidget* q_ptr;
     Q_DECLARE_PUBLIC ( Tomahawk::Widgets::NetworkActivityWidget )
 
@@ -48,6 +51,7 @@ private:
     QPointer<PlaylistModel> trendingTracksModel;
 
     Tomahawk::Widgets::NetworkActivityWidget::ViewType activeView;
+    Tomahawk::NetworkActivityWorker* worker;
 };
 
 #endif // NETWORKACTIVITYWIDGET_P_H

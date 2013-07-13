@@ -19,6 +19,9 @@
 #ifndef NETWORKACTIVITYWIDGET_H
 #define NETWORKACTIVITYWIDGET_H
 
+#define NETWORKCHARTS_NUM_TRACKS 20
+#define TRENDING_TRACKS_NUM 3
+
 #include "ViewPage.h"
 
 #include "WidgetsDllMacro.h"
@@ -66,7 +69,7 @@ private slots:
     void yearlyCharts( const QList<Tomahawk::track_ptr>& );
     void overallCharts( const QList<Tomahawk::track_ptr>& );
 
-    void trendingTracks( const QList< QPair< double,Tomahawk::track_ptr > >& tracks );
+    void trendingTracks( const QList< Tomahawk::track_ptr >& tracks );
 
     void leftCrumbIndexChanged( const QModelIndex& );
 

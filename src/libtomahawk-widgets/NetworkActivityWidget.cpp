@@ -18,13 +18,11 @@
 
 #include "NetworkActivityWidget_p.h"
 
-#include "Pipeline.h"
 #include "audio/AudioEngine.h"
 #include "database/Database.h"
 #include "database/DatabaseCommand_NetworkCharts.h"
 #include "database/DatabaseCommand_TrendingTracks.h"
 #include "playlist/AlbumItemDelegate.h"
-// #include "playlist/PlaylistChartItemDelegate.h"
 #include "playlist/ViewHeader.h"
 #include "utils/AnimatedSpinner.h"
 #include "utils/ImageRegistry.h"
@@ -32,14 +30,12 @@
 #include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "widgets/OverlayWidget.h"
+#include "Pipeline.h"
 
 #include <QDateTime>
 #include <QStandardItemModel>
 #include <QScrollArea>
 #include <QtConcurrentRun>
-
-#define NETWORKCHARTS_NUM_TRACKS 20
-#define TRENDING_TRACKS_NUM 3
 
 using namespace Tomahawk;
 using namespace Tomahawk::Widgets;
@@ -174,15 +170,13 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
         TomahawkUtils::unmarginLayout( layout );
     }
 
-    {
-        // Load trending tracks
-        qRegisterMetaType< QList< QPair< double,Tomahawk::track_ptr > > >("QList< QPair< double,Tomahawk::track_ptr > >");
-        DatabaseCommand_TrendingTracks* dbcmd = new DatabaseCommand_TrendingTracks();
-        dbcmd->setLimit( TRENDING_TRACKS_NUM );
-        connect( dbcmd, SIGNAL( done( QList< QPair< double,Tomahawk::track_ptr > >) ),
-                 SLOT( trendingTracks( QList< QPair< double,Tomahawk::track_ptr > > ) ) );
-        Database::instance()->enqueue( dbcmd_ptr( dbcmd ) );
-    }
+    // Load data in separate thread
+    d->worker = new NetworkActivityWorker();
+    d->worker->moveToThread( d->worker );
+    connect( d->worker, SIGNAL( trendingTracks( QList<Tomahawk::track_ptr> ) ),
+             SLOT( trendingTracks( QList<Tomahawk::track_ptr> ) ), Qt::QueuedConnection);
+    connect( d->worker, SIGNAL( finished() ), d->worker, SLOT( deleteLater() ) );
+    d->worker->start();
 }
 
 
@@ -287,19 +281,11 @@ NetworkActivityWidget::overallCharts( const QList<track_ptr>& tracks )
 
 
 void
-NetworkActivityWidget::trendingTracks( const QList<QPair<double, track_ptr> >& _tracks )
+NetworkActivityWidget::trendingTracks( const QList<track_ptr>& tracks )
 {
     Q_D( NetworkActivityWidget );
 
     d->trendingTracksModel->startLoading();
-    QList<track_ptr> tracks;
-    QList< QPair< double, track_ptr > >::const_iterator iter = _tracks.constBegin();
-    const QList< QPair< double, track_ptr > >::const_iterator end = _tracks.constEnd();
-    for(; iter != end; ++iter)
-    {
-        tracks << iter->second;
-    }
-
     d->trendingTracksModel->appendTracks( tracks );
     d->trendingTracksModel->finishLoading();
 }
