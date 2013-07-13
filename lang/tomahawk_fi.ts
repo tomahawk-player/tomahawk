@@ -1577,12 +1577,12 @@ salasana</translation>
 <context>
     <name>QSQLiteResult</name>
     <message>
-        <location filename="../src/libtomahawk/database/TomahawkSqlQuery.cpp" line="89"/>
+        <location filename="../src/libtomahawk/database/TomahawkSqlQuery.cpp" line="91"/>
         <source>No query</source>
         <translation>Ei kyselyä</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/database/TomahawkSqlQuery.cpp" line="90"/>
+        <location filename="../src/libtomahawk/database/TomahawkSqlQuery.cpp" line="92"/>
         <source>Parameter count mismatch</source>
         <translation>Parametrien määrä ei täsmää</translation>
     </message>
@@ -2954,7 +2954,7 @@ käyttäjätunnus@jabber.org</translation>
 <context>
     <name>Tomahawk::DatabaseCommand_AllAlbums</name>
     <message>
-        <location filename="../src/libtomahawk/database/DatabaseCommand_AllAlbums.cpp" line="117"/>
+        <location filename="../src/libtomahawk/database/DatabaseCommand_AllAlbums.cpp" line="119"/>
         <source>Unknown</source>
         <translation>Tuntematon</translation>
     </message>
@@ -3724,42 +3724,42 @@ kappaleen %2%4 %3.</translation>
 <context>
     <name>Tomahawk::Track</name>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="427"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="428"/>
         <source> and </source>
         <translation> ja </translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="435"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="436"/>
         <source>You</source>
         <translation>Sinä</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="437"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="438"/>
         <source>you</source>
         <translation>sinä</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="450"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="451"/>
         <source>and</source>
         <translation>ja</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="450"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="451"/>
         <source>%n other(s)</source>
         <translation><numerusform>%n muu</numerusform><numerusform>%n muuta</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="453"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="454"/>
         <source>%n people</source>
         <translation><numerusform>%n ihminen</numerusform><numerusform>%n ihmistä</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="457"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="458"/>
         <source>loved this track</source>
         <translation>tykkäsi tästä kappaleesta</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="459"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="460"/>
         <source>sent you this track %1</source>
         <translation>lähetti sinulle kappaleen %1</translation>
     </message>
@@ -3859,7 +3859,7 @@ anna siellä näytetty PIN-koodi tähän:</translation>
 <context>
     <name>TomahawkSettings</name>
     <message>
-        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="375"/>
+        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="376"/>
         <source>Local Network</source>
         <translation>Lähiverkko</translation>
     </message>

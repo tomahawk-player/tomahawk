@@ -1577,12 +1577,12 @@ Password</translation>
 <context>
     <name>QSQLiteResult</name>
     <message>
-        <location filename="../src/libtomahawk/database/TomahawkSqlQuery.cpp" line="89"/>
+        <location filename="../src/libtomahawk/database/TomahawkSqlQuery.cpp" line="91"/>
         <source>No query</source>
         <translation>No query</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/database/TomahawkSqlQuery.cpp" line="90"/>
+        <location filename="../src/libtomahawk/database/TomahawkSqlQuery.cpp" line="92"/>
         <source>Parameter count mismatch</source>
         <translation>Parameter count mismatch</translation>
     </message>
@@ -2951,7 +2951,7 @@ username@jabber.org</translation>
 <context>
     <name>Tomahawk::DatabaseCommand_AllAlbums</name>
     <message>
-        <location filename="../src/libtomahawk/database/DatabaseCommand_AllAlbums.cpp" line="117"/>
+        <location filename="../src/libtomahawk/database/DatabaseCommand_AllAlbums.cpp" line="119"/>
         <source>Unknown</source>
         <translation>Unknown</translation>
     </message>
@@ -3721,42 +3721,42 @@ Try tweaking the filters for a new set of songs to play.</translation>
 <context>
     <name>Tomahawk::Track</name>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="427"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="428"/>
         <source> and </source>
         <translation> and </translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="435"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="436"/>
         <source>You</source>
         <translation>You</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="437"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="438"/>
         <source>you</source>
         <translation>you</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="450"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="451"/>
         <source>and</source>
         <translation>and</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="450"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="451"/>
         <source>%n other(s)</source>
         <translation><numerusform>%n other</numerusform><numerusform>%n others</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="453"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="454"/>
         <source>%n people</source>
         <translation><numerusform>%n people</numerusform><numerusform>%n people</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="457"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="458"/>
         <source>loved this track</source>
         <translation>loved this track</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="459"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="460"/>
         <source>sent you this track %1</source>
         <translation>sent you this track %1</translation>
     </message>
@@ -3856,7 +3856,7 @@ enter the displayed PIN number here:</translation>
 <context>
     <name>TomahawkSettings</name>
     <message>
-        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="375"/>
+        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="376"/>
         <source>Local Network</source>
         <translation>Local Network</translation>
     </message>
