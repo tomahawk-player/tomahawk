@@ -1151,12 +1151,12 @@ Password</source>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.ui" line="39"/>
         <source>Trending Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Trending Tracks</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.ui" line="79"/>
         <source>Hot Playlists</source>
-        <translation type="unfinished"/>
+        <translation>Hot Playlists</translation>
     </message>
 </context>
 <context>
@@ -3314,12 +3314,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="499"/>
         <source>Acoustic</source>
-        <translation type="unfinished"/>
+        <translation>Акустично</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="500"/>
         <source>Electric</source>
-        <translation type="unfinished"/>
+        <translation>Електро</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="501"/>
@@ -3795,37 +3795,37 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::Widgets::NetworkActivityWidget</name>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="64"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="60"/>
         <source>Charts</source>
         <translation>Класации</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="66"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="62"/>
         <source>Last Week</source>
         <translation>Миналата седмица</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="69"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="65"/>
         <source>Last Month</source>
         <translation>Миналия месец</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="72"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="68"/>
         <source>Last Year</source>
         <translation>Миналата година</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="75"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="71"/>
         <source>Overall</source>
         <translation>Изцяло</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="95"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="91"/>
         <source>Sorry, we could not find any top hits for this artist!</source>
-        <translation type="unfinished"/>
+        <translation>Съжалявам, но не откривам нито една хитова песен на този артист!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.h" line="53"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.h" line="56"/>
         <source>Network Activity</source>
         <translation>Мрежова активност</translation>
     </message>

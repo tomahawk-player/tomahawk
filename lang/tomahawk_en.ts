@@ -3782,37 +3782,37 @@ Try tweaking the filters for a new set of songs to play.</translation>
 <context>
     <name>Tomahawk::Widgets::NetworkActivityWidget</name>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="64"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="60"/>
         <source>Charts</source>
         <translation>Charts</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="66"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="62"/>
         <source>Last Week</source>
         <translation>Last Week</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="69"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="65"/>
         <source>Last Month</source>
         <translation>Last Month</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="72"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="68"/>
         <source>Last Year</source>
         <translation>Last Year</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="75"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="71"/>
         <source>Overall</source>
         <translation>Overall</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="95"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="91"/>
         <source>Sorry, we could not find any top hits for this artist!</source>
         <translation>Sorry, we could not find any top hits for this artist!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.h" line="53"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.h" line="56"/>
         <source>Network Activity</source>
         <translation>Network Activity</translation>
     </message>
