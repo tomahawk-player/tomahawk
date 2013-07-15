@@ -46,7 +46,7 @@ namespace Utils
 
         virtual void setNoProxyHosts( const QStringList &hosts );
         virtual QStringList noProxyHosts() const { return m_noProxyHosts; }
-        virtual void setProxy( const QNetworkProxy &proxy );
+        virtual void setProxy( const QNetworkProxy &proxy, bool useProxyDns );
         virtual QNetworkProxy proxy() { return m_proxy; }
 
         virtual NetworkProxyFactory& operator=( const NetworkProxyFactory &rhs );

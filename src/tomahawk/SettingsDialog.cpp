@@ -296,12 +296,12 @@ SettingsDialog::saveSettings()
     if ( !m_advancedWidgetUi->enableProxyCheckBox->isChecked() )
     {
         tDebug() << Q_FUNC_INFO << "Got NoProxy selected";
-        proxyFactory->setProxy( QNetworkProxy::NoProxy );
+        proxyFactory->setProxy( QNetworkProxy::NoProxy, s->proxyDns() );
     }
     else
     {
         tDebug() << Q_FUNC_INFO << "Got Socks5Proxy selected";
-        proxyFactory->setProxy( QNetworkProxy( QNetworkProxy::Socks5Proxy, s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() ) );
+        proxyFactory->setProxy( QNetworkProxy( QNetworkProxy::Socks5Proxy, s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() ), s->proxyDns() );
         if ( !s->proxyNoProxyHosts().isEmpty() )
         {
             tDebug() << Q_FUNC_INFO << "noproxy hosts:" << s->proxyNoProxyHosts();

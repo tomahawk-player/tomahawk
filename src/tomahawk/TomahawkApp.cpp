@@ -198,6 +198,16 @@ TomahawkApp::init()
     new ACLRegistryImpl( this );
 
     tDebug( LOGINFO ) << "Setting NAM.";
+
+    TomahawkSettings *s = TomahawkSettings::instance();
+    Tomahawk::Utils::setProxyDns( s->proxyDns() );
+    Tomahawk::Utils::setProxyType( s->proxyType() );
+    Tomahawk::Utils::setProxyHost( s->proxyHost() );
+    Tomahawk::Utils::setProxyPort( s->proxyPort() );
+    Tomahawk::Utils::setProxyUsername( s->proxyUsername() );
+    Tomahawk::Utils::setProxyPassword( s->proxyPassword() );
+    Tomahawk::Utils::setProxyNoProxyHosts( s->proxyNoProxyHosts() );
+
     // Cause the creation of the nam, but don't need to address it directly, so prevent warning
     Q_UNUSED( Tomahawk::Utils::nam() );
 

@@ -23,15 +23,12 @@
 #include "NetworkProxyFactory.h"
 #include "utils/Logger.h"
 
-// TODO: get rid of this here!
-#include "TomahawkSettings.h"
-
-
 #include <QMutex>
 #include <QStringList>
 #include <QThread>
 #include <QCoreApplication>
 #include <QNetworkConfiguration>
+#include <QNetworkAccessManager>
 
 namespace Tomahawk
 {
@@ -57,7 +54,7 @@ NetworkProxyFactory::queryProxy( const QNetworkProxyQuery& query )
     s_noProxyHostsMutex.lock();
     if ( !hostname.isEmpty() && s_noProxyHosts.contains( hostname ) )
         proxies << QNetworkProxy::NoProxy << systemProxyForQuery( query );
-    else if ( m_proxy.hostName().isEmpty() || TomahawkSettings::instance()->proxyType() == QNetworkProxy::NoProxy )
+    else if ( m_proxy.hostName().isEmpty() || proxyType() == QNetworkProxy::NoProxy )
         proxies << systemProxyForQuery( query );
     else
         proxies << m_proxy << systemProxyForQuery( query );
@@ -87,7 +84,7 @@ NetworkProxyFactory::setNoProxyHosts( const QStringList& hosts )
 
 
 void
-NetworkProxyFactory::setProxy( const QNetworkProxy& proxy )
+NetworkProxyFactory::setProxy( const QNetworkProxy& proxy, bool useProxyDns )
 {
     m_proxyChanged = false;
     if ( m_proxy != proxy )
@@ -97,12 +94,12 @@ NetworkProxyFactory::setProxy( const QNetworkProxy& proxy )
     QFlags< QNetworkProxy::Capability > proxyCaps;
     proxyCaps |= QNetworkProxy::TunnelingCapability;
     proxyCaps |= QNetworkProxy::ListeningCapability;
-    if ( TomahawkSettings::instance()->proxyDns() )
+    if ( useProxyDns )
         proxyCaps |= QNetworkProxy::HostNameLookupCapability;
     
     m_proxy.setCapabilities( proxyCaps );
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Proxy using host" << proxy.hostName() << "and port" << proxy.port();
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "setting proxy to use proxy DNS?" << (TomahawkSettings::instance()->proxyDns() ? "true" : "false");
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "setting proxy to use proxy DNS?" << useProxyDns;
 }
 
 
@@ -242,25 +239,25 @@ setNam( QNetworkAccessManager* nam, bool noMutexLocker )
     {
         tDebug( LOGVERBOSE ) << "creating initial gui thread (" << QCoreApplication::instance()->thread() << ") nam";
         // Should only get here on first initialization of the nam
-        TomahawkSettings *s = TomahawkSettings::instance();
+
         NetworkProxyFactory* proxyFactory = new NetworkProxyFactory();
-        if ( s->proxyType() != QNetworkProxy::NoProxy && !s->proxyHost().isEmpty() )
+        if ( proxyType() != QNetworkProxy::NoProxy && !proxyHost().isEmpty() )
         {
             tDebug( LOGVERBOSE ) << "Setting proxy to saved values";
-            QNetworkProxy proxy( s->proxyType(), s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() );
-            proxyFactory->setProxy( proxy );
+            QNetworkProxy proxy( proxyType(), proxyHost(), proxyPort(), proxyUsername(), proxyPassword() );
+            proxyFactory->setProxy( proxy, proxyDns() );
             //FIXME: Jreen is broke without this
             //QNetworkProxy::setApplicationProxy( proxy );
             s_noProxyHostsMutex.lock();
-            if ( !s->proxyNoProxyHosts().isEmpty() && s_noProxyHosts.isEmpty() )
+            if ( !proxyNoProxyHosts().isEmpty() && s_noProxyHosts.isEmpty() )
             {
                 s_noProxyHostsMutex.unlock();
-                proxyFactory->setNoProxyHosts( s->proxyNoProxyHosts().split( ',', QString::SkipEmptyParts ) );
+                proxyFactory->setNoProxyHosts( proxyNoProxyHosts().split( ',', QString::SkipEmptyParts ) );
             }
             else
                 s_noProxyHostsMutex.unlock();
         }
-        
+
         QNetworkProxyFactory::setApplicationProxyFactory( proxyFactory );
         nam->setProxyFactory( proxyFactory );
         s_threadNamHash[ QThread::currentThread() ] = nam;
@@ -273,6 +270,113 @@ setNam( QNetworkAccessManager* nam, bool noMutexLocker )
     if ( QThread::currentThread() == QCoreApplication::instance()->thread() )
         setProxyFactory( dynamic_cast< NetworkProxyFactory* >( nam->proxyFactory() ), true );
 }
+
+
+bool s_proxyDns;
+QNetworkProxy::ProxyType s_proxyType;
+QString s_proxyHost;
+int s_proxyPort;
+QString s_proxyUsername;
+QString s_proxyPassword;
+QString s_proxyNoProxyHosts;
+
+QString
+proxyHost()
+{
+    return s_proxyHost;
+}
+
+
+void
+setProxyHost( const QString& host )
+{
+    s_proxyHost = host;
+}
+
+
+QString
+proxyNoProxyHosts()
+{
+    return s_proxyNoProxyHosts;
+}
+
+
+void
+setProxyNoProxyHosts( const QString& hosts )
+{
+    s_proxyNoProxyHosts = hosts;
+}
+
+
+qulonglong
+proxyPort()
+{
+    return s_proxyPort;
+}
+
+
+void
+setProxyPort( const qulonglong port )
+{
+    s_proxyPort = port;
+}
+
+
+QString
+proxyUsername()
+{
+    return s_proxyUsername;
+}
+
+
+void
+setProxyUsername( const QString& username )
+{
+    s_proxyUsername = username;
+}
+
+
+QString
+proxyPassword()
+{
+    return s_proxyPassword;
+}
+
+
+void
+setProxyPassword( const QString& password )
+{
+    s_proxyPassword = password;
+}
+
+
+QNetworkProxy::ProxyType
+proxyType()
+{
+    return s_proxyType;
+}
+
+
+void
+setProxyType( const QNetworkProxy::ProxyType type )
+{
+    s_proxyType = type;
+}
+
+
+bool
+proxyDns()
+{
+    return s_proxyDns;
+}
+
+
+void
+setProxyDns( bool proxyDns )
+{
+    s_proxyDns = proxyDns;
+}
+
 
 }
 }
