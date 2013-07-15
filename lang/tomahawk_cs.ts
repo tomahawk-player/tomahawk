@@ -1145,12 +1145,12 @@ heslo</translation>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.ui" line="39"/>
         <source>Trending Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Módní skladby</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.ui" line="79"/>
         <source>Hot Playlists</source>
-        <translation type="unfinished"/>
+        <translation>Výborné seznamy skladeb</translation>
     </message>
 </context>
 <context>
@@ -3299,12 +3299,12 @@ Zkuste vyladit filtry pro nové písně.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="499"/>
         <source>Acoustic</source>
-        <translation type="unfinished"/>
+        <translation>Akustické</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="500"/>
         <source>Electric</source>
-        <translation type="unfinished"/>
+        <translation>Elektrické</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="501"/>
@@ -3806,7 +3806,7 @@ Zkuste vyladit filtry pro nové písně.</translation>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="91"/>
         <source>Sorry, we could not find any top hits for this artist!</source>
-        <translation type="unfinished"/>
+        <translation>Promiňte, nepodařilo se najít žádné nejlepší hity tohoto umělce!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.h" line="56"/>
