@@ -18,3 +18,156 @@
  */
 
 #include "PlaylistDelegate.h"
+
+#include "playlist/dynamic/GeneratorInterface.h"
+#include "utils/TomahawkStyle.h"
+#include "utils/TomahawkUtils.h"
+#include "utils/TomahawkUtilsGui.h"
+
+#include <QApplication>
+#include <QPainter>
+
+#include "widgets/RecentlyPlayedPlaylistsModel.h"
+
+namespace Tomahawk
+{
+
+namespace Widgets
+{
+
+QSize
+PlaylistDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
+{
+    Q_UNUSED( option );
+    Q_UNUSED( index );
+
+    // Calculates the size for the bold line + 3 normal lines + margins
+    int height = 2 * 6; // margins
+    QFont font = option.font;
+    QFontMetrics fm1( font );
+    font.setPointSize( TomahawkUtils::defaultFontSize() - 1 );
+    height += fm1.height() * 3;
+    font.setPointSize( TomahawkUtils::defaultFontSize() );
+    QFontMetrics fm2( font );
+    height += fm2.height();
+
+    return QSize( 0, height );
+}
+
+
+void
+PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
+{
+    QStyleOptionViewItemV4 opt = option;
+    initStyleOption( &opt, QModelIndex() );
+    qApp->style()->drawControl( QStyle::CE_ItemViewItem, &opt, painter );
+
+    if ( option.state & QStyle::State_Selected && option.state & QStyle::State_Active )
+    {
+        opt.palette.setColor( QPalette::Text, opt.palette.color( QPalette::HighlightedText ) );
+    }
+
+    painter->save();
+    painter->setRenderHint( QPainter::Antialiasing );
+    painter->setPen( opt.palette.color( QPalette::Text ) );
+
+    QTextOption to;
+    to.setAlignment( Qt::AlignCenter );
+    QFont font = opt.font;
+    font.setPointSize( TomahawkUtils::defaultFontSize() - 1 );
+
+    QFont boldFont = font;
+    boldFont.setBold( true );
+    boldFont.setPointSize( TomahawkUtils::defaultFontSize() );
+    QFontMetrics boldFontMetrics( boldFont );
+
+    QFont figFont = boldFont;
+    figFont.setPointSize( TomahawkUtils::defaultFontSize() - 1 );
+
+    QPixmap icon;
+    QRect pixmapRect = option.rect.adjusted( 10, 14, -option.rect.width() + option.rect.height() - 18, -14 );
+    RecentlyPlayedPlaylistsModel::PlaylistTypes type = (RecentlyPlayedPlaylistsModel::PlaylistTypes)index.data( RecentlyPlayedPlaylistsModel::PlaylistTypeRole ).toInt();
+
+    if ( type == RecentlyPlayedPlaylistsModel::StaticPlaylist )
+        icon = TomahawkUtils::defaultPixmap( TomahawkUtils::Playlist, TomahawkUtils::Original, pixmapRect.size() );
+    else if ( type == RecentlyPlayedPlaylistsModel::AutoPlaylist )
+        icon = TomahawkUtils::defaultPixmap( TomahawkUtils::AutomaticPlaylist, TomahawkUtils::Original, pixmapRect.size() );
+    else if ( type == RecentlyPlayedPlaylistsModel::Station )
+        icon = TomahawkUtils::defaultPixmap( TomahawkUtils::Station, TomahawkUtils::Original, pixmapRect.size() );
+
+    painter->drawPixmap( pixmapRect, icon );
+
+    if ( type != RecentlyPlayedPlaylistsModel::Station )
+    {
+        painter->save();
+        painter->setFont( figFont );
+        QString tracks = index.data( RecentlyPlayedPlaylistsModel::TrackCountRole ).toString();
+        int width = painter->fontMetrics().width( tracks );
+//         int bottomEdge = pixmapRect
+        // right edge 10px past right edge of pixmapRect
+        // bottom edge flush with bottom of pixmap
+        QRect rect( pixmapRect.right() - width, 0, width - 8, 0 );
+        rect.adjust( -2, 0, 0, 0 );
+        rect.setTop( pixmapRect.bottom() - painter->fontMetrics().height() - 1 );
+        rect.setBottom( pixmapRect.bottom() + 1 );
+
+        QColor figColor( TomahawkStyle::DASHBOARD_ROUNDFIGURE_BACKGROUND );
+        painter->setPen( Qt::white );
+        painter->setBrush( figColor );
+
+        TomahawkUtils::drawBackgroundAndNumbers( painter, tracks, rect );
+        painter->restore();
+    }
+
+    QRect r( option.rect.width() - option.fontMetrics.height() * 2.5 - 10, option.rect.top() + option.rect.height() / 3 - option.fontMetrics.height(), option.fontMetrics.height() * 2.5, option.fontMetrics.height() * 2.5 );
+    QPixmap avatar = index.data( RecentlyPlayedPlaylistsModel::PlaylistRole ).value< Tomahawk::playlist_ptr >()->author()->avatar( TomahawkUtils::RoundedCorners, r.size() );
+    if ( avatar.isNull() )
+        avatar = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultSourceAvatar, TomahawkUtils::RoundedCorners, r.size() );
+    painter->drawPixmap( r, avatar );
+
+    painter->setFont( font );
+    QString author = index.data( RecentlyPlayedPlaylistsModel::PlaylistRole ).value< Tomahawk::playlist_ptr >()->author()->friendlyName();
+    if ( author.indexOf( '@' ) > 0 )
+        author = author.mid( 0, author.indexOf( '@' ) );
+
+    const int w = painter->fontMetrics().width( author ) + 2;
+    QRect avatarNameRect( opt.rect.width() - 10 - w, r.bottom(), w, opt.rect.bottom() - r.bottom() );
+    painter->drawText( avatarNameRect, author, QTextOption( Qt::AlignCenter ) );
+
+    const int leftEdge = opt.rect.width() - qMin( avatarNameRect.left(), r.left() );
+    QString descText;
+    if ( type == RecentlyPlayedPlaylistsModel::Station )
+    {
+        descText = index.data( RecentlyPlayedPlaylistsModel::DynamicPlaylistRole ).value< Tomahawk::dynplaylist_ptr >()->generator()->sentenceSummary();
+    }
+    else
+    {
+        descText = index.data( RecentlyPlayedPlaylistsModel::ArtistRole ).toString();
+    }
+
+    QColor c = painter->pen().color();
+    if ( !( option.state & QStyle::State_Selected && option.state & QStyle::State_Active ) )
+    {
+        painter->setPen( opt.palette.text().color().darker() );
+    }
+
+    QRect rectText = option.rect.adjusted( option.fontMetrics.height() * 4.5, boldFontMetrics.height() + 6, -leftEdge - 10, -8 );
+#ifdef Q_WS_MAC
+    rectText.adjust( 0, 1, 0, 0 );
+#elif defined Q_WS_WIN
+    rectText.adjust( 0, 2, 0, 0 );
+#endif
+
+    painter->drawText( rectText, descText );
+    painter->setPen( c );
+    painter->setFont( font );
+
+    painter->setFont( boldFont );
+    painter->drawText( option.rect.adjusted( option.fontMetrics.height() * 4, 6, -100, -option.rect.height() + boldFontMetrics.height() + 6 ), index.data().toString() );
+
+    painter->restore();
+}
+
+}
+
+}
