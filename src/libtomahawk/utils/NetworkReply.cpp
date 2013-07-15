@@ -20,6 +20,7 @@
 
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
+#include "utils/NetworkAccessManager.h"
 
 #include <QNetworkAccessManager>
 
@@ -62,7 +63,7 @@ NetworkReply::load( const QUrl& url )
     m_url = url;
     QNetworkRequest request( url );
 
-    Q_ASSERT( TomahawkUtils::nam() != 0 );
+    Q_ASSERT( Tomahawk::Utils::nam() != 0 );
 
     QNetworkAccessManager::Operation op = m_reply->operation();
     m_reply->deleteLater();
@@ -70,11 +71,11 @@ NetworkReply::load( const QUrl& url )
     switch ( op )
     {
         case QNetworkAccessManager::HeadOperation:
-            m_reply = TomahawkUtils::nam()->head( request );
+            m_reply = Tomahawk::Utils::nam()->head( request );
             break;
 
         default:
-            m_reply = TomahawkUtils::nam()->get( request );
+            m_reply = Tomahawk::Utils::nam()->get( request );
     }
 
     connect( m_reply, SIGNAL( finished() ), SLOT( networkLoadFinished() ) );

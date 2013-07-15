@@ -22,6 +22,7 @@
 #include "utils/Logger.h"
 #include "utils/NetworkReply.h"
 #include "utils/TomahawkUtils.h"
+#include "utils/NetworkAccessManager.h"
 
 #include "Playlist.h"
 #include "SourceList.h"
@@ -61,8 +62,8 @@ JSPFLoader::load( const QUrl& url )
 {
     QNetworkRequest request( url );
 
-    Q_ASSERT( TomahawkUtils::nam() != 0 );
-    NetworkReply* reply = new NetworkReply( TomahawkUtils::nam()->get( request ) );
+    Q_ASSERT( Tomahawk::Utils::nam() != 0 );
+    NetworkReply* reply = new NetworkReply( Tomahawk::Utils::nam()->get( request ) );
 
     connect( reply, SIGNAL( finished() ), SLOT( networkLoadFinished() ) );
     connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), SLOT( networkError( QNetworkReply::NetworkError ) ) );

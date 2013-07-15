@@ -33,6 +33,7 @@
 #include "utils/NetworkReply.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
+#include "utils/NetworkAccessManager.h"
 
 // Forward Declarations breaking QSharedPointer
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
@@ -112,7 +113,7 @@ ItunesParser::lookupItunesUri( const QString& link )
         url = QUrl( QString( "http://ax.phobos.apple.com.edgesuite.net/WebObjects/MZStoreServices.woa/wa/wsLookup?id=%1&entity=song" ).arg( ( trackId.isEmpty() ? id : trackId ) ) );
     }
 
-    NetworkReply* reply = new NetworkReply( TomahawkUtils::nam()->get( QNetworkRequest( url ) ) );
+    NetworkReply* reply = new NetworkReply( Tomahawk::Utils::nam()->get( QNetworkRequest( url ) ) );
     connect( reply, SIGNAL( finished() ), SLOT( itunesResponseLookupFinished() ) );
 
 #ifndef ENABLE_HEADLESS

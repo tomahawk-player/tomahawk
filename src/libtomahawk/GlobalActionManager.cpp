@@ -38,6 +38,7 @@
 #include "utils/TomahawkUtils.h"
 #include "utils/XspfLoader.h"
 #include "utils/XspfGenerator.h"
+#include "utils/NetworkAccessManager.h"
 #include "widgets/SearchWidget.h"
 
 #include "Album.h"
@@ -157,7 +158,7 @@ GlobalActionManager::shortenLink( const QUrl& url, const QVariant& callbackObj )
     request.setUrl( url );
 
     qDebug() << "Doing lookup:" << url.toEncoded();
-    QNetworkReply *reply = TomahawkUtils::nam()->get( request );
+    QNetworkReply *reply = Tomahawk::Utils::nam()->get( request );
     if ( callbackObj.isValid() )
         reply->setProperty( "callbackobj", callbackObj );
     connect( reply, SIGNAL( finished() ), SLOT( shortenLinkRequestFinished() ) );
@@ -245,7 +246,7 @@ GlobalActionManager::getShortLink( const playlist_ptr& pl )
     const QUrl url( QString( "%1/p/").arg( hostname() ) );
     QNetworkRequest req( url );
     req.setHeader( QNetworkRequest::ContentTypeHeader, QString( "multipart/form-data; boundary=%1" ).arg( QString::fromLatin1( boundary ) ) );
-    QNetworkReply *reply = TomahawkUtils::nam()->post( req, data );
+    QNetworkReply *reply = Tomahawk::Utils::nam()->post( req, data );
 
     connect( reply, SIGNAL( finished() ), SLOT( postShortenFinished() ) );
     connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), SLOT( shortenLinkRequestError( QNetworkReply::NetworkError ) ) );

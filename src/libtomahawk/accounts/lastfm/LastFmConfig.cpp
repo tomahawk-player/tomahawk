@@ -19,8 +19,6 @@
 #include "LastFmConfig.h"
 #include "ui_LastFmConfig.h"
 
-#include <boost/bind.hpp>
-
 #include "LastFmAccount.h"
 #include "database/Database.h"
 #include "database/DatabaseCommand_LogPlayback.h"
@@ -29,11 +27,14 @@
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 #include "utils/Closure.h"
+#include "utils/NetworkAccessManager.h"
 
 #include <lastfm/ws.h>
 #include <lastfm/User.h>
 #include <lastfm/XmlQuery.h>
 #include <lastfm/Track.h>
+
+#include <boost/bind.hpp>
 
 using namespace Tomahawk::Accounts;
 
@@ -101,7 +102,7 @@ LastFmConfig::testLogin()
     query[ "authToken" ] = authToken;
 
     // ensure they have up-to-date settings
-    lastfm::setNetworkAccessManager( TomahawkUtils::nam() );
+    lastfm::setNetworkAccessManager( Tomahawk::Utils::nam() );
 
     QNetworkReply* authJob = lastfm::ws::post( query );
 

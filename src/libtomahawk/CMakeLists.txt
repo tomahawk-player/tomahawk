@@ -124,6 +124,8 @@ set( libGuiSources
     utils/SharedTimeLine.cpp
     utils/ResultUrlChecker.cpp
     utils/NetworkReply.cpp
+    utils/NetworkProxyFactory.cpp
+    utils/NetworkAccessManager.cpp
 
     widgets/AnimatedCounterLabel.cpp
     widgets/BasicHeader.cpp

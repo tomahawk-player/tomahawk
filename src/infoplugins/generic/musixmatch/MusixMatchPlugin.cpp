@@ -21,6 +21,7 @@
 
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
+#include "utils/NetworkAccessManager.h"
 
 #include <QNetworkReply>
 #include <QDomDocument>
@@ -68,7 +69,7 @@ MusixMatchPlugin::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData )
     TomahawkUtils::urlAddQueryItem( url, "q_artist", artist );
     TomahawkUtils::urlAddQueryItem( url, "q_track", track );
 
-    QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
+    QNetworkReply* reply = Tomahawk::Utils::nam()->get( QNetworkRequest( url ) );
     reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
 
     connect( reply, SIGNAL( finished() ), SLOT( trackSearchSlot() ) );
@@ -128,7 +129,7 @@ MusixMatchPlugin::trackSearchSlot()
     TomahawkUtils::urlAddQueryItem( url, "apikey", m_apiKey );
     TomahawkUtils::urlAddQueryItem( url, "track_id", track_id );
 
-    QNetworkReply* newReply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
+    QNetworkReply* newReply = Tomahawk::Utils::nam()->get( QNetworkRequest( url ) );
     newReply->setProperty( "requestData", oldReply->property( "requestData" ) );
     connect( newReply, SIGNAL( finished() ), SLOT( trackLyricsSlot() ) );
 }

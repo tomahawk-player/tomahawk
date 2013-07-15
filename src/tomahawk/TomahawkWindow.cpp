@@ -443,8 +443,8 @@ TomahawkWindow::setupUpdateCheck()
         updaterUrl.setUrl( "http://download.tomahawk-player.org/sparklewin" );
 
     qtsparkle::Updater* updater = new qtsparkle::Updater( updaterUrl, this );
-    Q_ASSERT( TomahawkUtils::nam() != 0 );
-    updater->SetNetworkAccessManager( TomahawkUtils::nam() );
+    Q_ASSERT( Tomahawk::Utils::nam() != 0 );
+    updater->SetNetworkAccessManager( Tomahawk::Utils::nam() );
     updater->SetVersion( TomahawkUtils::appFriendlyVersion() );
 
     connect( ActionCollection::instance()->getAction( "checkForUpdates" ), SIGNAL( triggered() ),

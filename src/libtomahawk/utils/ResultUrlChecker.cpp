@@ -27,6 +27,7 @@
 #include "Result.h"
 #include "Source.h"
 #include "utils/Logger.h"
+#include "utils/NetworkAccessManager.h"
 
 using namespace Tomahawk;
 
@@ -55,7 +56,7 @@ ResultUrlChecker::check()
         if ( url.isEmpty() || !url.toString().startsWith( "http" ) )
             continue;
 
-        NetworkReply* reply = new NetworkReply( TomahawkUtils::nam()->head( QNetworkRequest( url ) ) );
+        NetworkReply* reply = new NetworkReply( Tomahawk::Utils::nam()->head( QNetworkRequest( url ) ) );
         m_replies.insert( reply, result );
         connect( reply, SIGNAL( finished() ), SLOT( headFinished() ) );
     }

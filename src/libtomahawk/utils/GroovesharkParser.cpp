@@ -42,6 +42,7 @@
 #include "utils/NetworkReply.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
+#include "utils/NetworkAccessManager.h"
 
 using namespace Tomahawk;
 
@@ -133,7 +134,7 @@ GroovesharkParser::lookupGroovesharkPlaylist( const QString& linkRaw )
     QString hash = QCA::arrayToHex( resultArray.toByteArray() );
     QUrl url = QUrl( base_url + hash );
 
-    NetworkReply* reply = new NetworkReply( TomahawkUtils::nam()->post( QNetworkRequest( url ), data ) );
+    NetworkReply* reply = new NetworkReply( Tomahawk::Utils::nam()->post( QNetworkRequest( url ), data ) );
     connect( reply, SIGNAL( finished() ), SLOT( groovesharkLookupFinished() ) );
 
 #ifndef ENABLE_HEADLESS
@@ -150,7 +151,7 @@ GroovesharkParser::lookupGroovesharkTrack( const QString& track )
 {
     tLog() << "Parsing Grooveshark Track Page:" << track;
 
-    NetworkReply* reply = new NetworkReply( TomahawkUtils::nam()->get( QNetworkRequest( QUrl( track ) ) ) );
+    NetworkReply* reply = new NetworkReply( Tomahawk::Utils::nam()->get( QNetworkRequest( QUrl( track ) ) ) );
     connect( reply, SIGNAL( finished() ), SLOT( trackPageFetchFinished() ) );
 
 #ifndef ENABLE_HEADLESS

@@ -40,6 +40,7 @@
 #include "SourceList.h"
 #include "TomahawkSettings.h"
 #include "TomahawkVersion.h"
+#include "utils/NetworkAccessManager.h"
 
 #include <QFile>
 #include <QFileInfo>
@@ -873,7 +874,7 @@ JSResolver::loadCollections()
                 {
                     QNetworkRequest req( iconUrl );
                     tDebug() << "Creating a QNetworkReply with url:" << req.url().toString();
-                    QNetworkReply* reply = TomahawkUtils::nam()->get( req );
+                    QNetworkReply* reply = Tomahawk::Utils::nam()->get( req );
                     reply->setProperty( "collectionName", collection->name() );
 
                     connect( reply, SIGNAL( finished() ),

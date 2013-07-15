@@ -31,6 +31,7 @@
 #include "TomahawkSettings.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
+#include "utils/NetworkAccessManager.h"
 #include "CountryUtils.h"
 #include "Source.h"
 
@@ -147,7 +148,7 @@ SpotifyPlugin::notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, To
             QUrl url = QUrl( QString( SPOTIFY_API_URL "toplist/%1/" ).arg( criteria["chart_id"] ) );
             qDebug() << Q_FUNC_INFO << "Getting chart url" << url;
 
-            QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
+            QNetworkReply* reply = Tomahawk::Utils::nam()->get( QNetworkRequest( url ) );
             reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
             connect( reply, SIGNAL( finished() ), SLOT( chartReturned() ) );
             return;
@@ -164,7 +165,7 @@ SpotifyPlugin::notInCacheSlot( Tomahawk::InfoSystem::InfoStringHash criteria, To
             tDebug() << "SpotifyPlugin: InfoChart fetching possible resources";
 
             QUrl url = QUrl( QString( SPOTIFY_API_URL "toplist/charts" )  );
-            QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
+            QNetworkReply* reply = Tomahawk::Utils::nam()->get( QNetworkRequest( url ) );
             tDebug() << Q_FUNC_INFO << "fetching:" << url;
             connect( reply, SIGNAL( finished() ), SLOT( chartTypes() ) );
             m_chartsFetchJobs++;

@@ -22,6 +22,7 @@
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 #include "utils/Closure.h"
+#include "utils/NetworkAccessManager.h"
 
 #include <qjson/parser.h>
 
@@ -97,7 +98,7 @@ DiscogsPlugin::notInCacheSlot( InfoStringHash criteria, InfoRequestData requestD
 
             QNetworkRequest req( url );
             req.setRawHeader( "User-Agent", "TomahawkPlayer/1.0 +http://tomahawk-player.org" );
-            QNetworkReply* reply = TomahawkUtils::nam()->get( req );
+            QNetworkReply* reply = Tomahawk::Utils::nam()->get( req );
 
             NewClosure( reply, SIGNAL( finished() ),  this, SLOT( albumSearchSlot( Tomahawk::InfoSystem::InfoRequestData, QNetworkReply* ) ), requestData, reply );
             break;
@@ -136,7 +137,7 @@ DiscogsPlugin::albumSearchSlot( const InfoRequestData &requestData, QNetworkRepl
     QNetworkRequest req( url );
     req.setRawHeader( "User-Agent", "TomahawkPlayer/1.0 +http://tomahawk-player.org" );
 
-    QNetworkReply* reply2 = TomahawkUtils::nam()->get( req );
+    QNetworkReply* reply2 = Tomahawk::Utils::nam()->get( req );
     NewClosure( reply2, SIGNAL( finished() ),  this, SLOT( albumInfoSlot( Tomahawk::InfoSystem::InfoRequestData, QNetworkReply* ) ), requestData, reply2 );
 }
 

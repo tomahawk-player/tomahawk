@@ -50,6 +50,7 @@
 #include "EchonestCatalogSynchronizer.h"
 #include "database/DatabaseImpl.h"
 #include "network/Msg.h"
+#include "utils/NetworkAccessManager.h"
 
 #include "accounts/lastfm/LastFmAccount.h"
 #include "accounts/spotify/SpotifyAccount.h"
@@ -198,7 +199,7 @@ TomahawkApp::init()
 
     tDebug( LOGINFO ) << "Setting NAM.";
     // Cause the creation of the nam, but don't need to address it directly, so prevent warning
-    Q_UNUSED( TomahawkUtils::nam() );
+    Q_UNUSED( Tomahawk::Utils::nam() );
 
     m_audioEngine = QPointer<AudioEngine>( new AudioEngine );
 
@@ -617,7 +618,7 @@ TomahawkApp::onInfoSystemReady()
 
     TomahawkSettings* s = TomahawkSettings::instance();
 
-    Echonest::Config::instance()->setNetworkAccessManager( TomahawkUtils::nam() );
+    Echonest::Config::instance()->setNetworkAccessManager( Tomahawk::Utils::nam() );
 #ifndef ENABLE_HEADLESS
     EchonestGenerator::setupCatalogs();
 
@@ -687,7 +688,7 @@ TomahawkApp::onInfoSystemReady()
     GlobalActionManager::instance();
 
     // check if our spotify playlist api server is up and running, and enable spotify playlist drops if so
-    QNetworkReply* r = TomahawkUtils::nam()->get( QNetworkRequest( QUrl( SPOTIFY_PLAYLIST_API_URL "/pong" ) ) );
+    QNetworkReply* r = Tomahawk::Utils::nam()->get( QNetworkRequest( QUrl( SPOTIFY_PLAYLIST_API_URL "/pong" ) ) );
     connect( r, SIGNAL( finished() ), this, SLOT( spotifyApiCheckFinished() ) );
 #endif
 

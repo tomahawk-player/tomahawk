@@ -21,6 +21,7 @@
 #include "SpotifyAccount.h"
 #include "utils/Closure.h"
 #include "utils/Logger.h"
+#include "utils/NetworkAccessManager.h"
 
 #include <qjson/parser.h>
 
@@ -144,7 +145,7 @@ SpotifyInfoPlugin::notInCacheSlot( InfoStringHash criteria, InfoRequestData requ
             QUrl lookupUrl( "http://ws.spotify.com/search/1/album.json" );
             TomahawkUtils::urlAddQueryItem( lookupUrl, "q", QString( "%1 %2" ).arg( artist ).arg( album ) );
 
-            QNetworkReply * reply = TomahawkUtils::nam()->get( QNetworkRequest( lookupUrl ) );
+            QNetworkReply * reply = Tomahawk::Utils::nam()->get( QNetworkRequest( lookupUrl ) );
             NewClosure( reply, SIGNAL( finished() ), this, SLOT( albumIdLookupFinished( QNetworkReply*, Tomahawk::InfoSystem::InfoRequestData ) ), reply, requestData );
         }
         else
@@ -234,7 +235,7 @@ SpotifyInfoPlugin::albumIdLookupFinished( QNetworkReply* reply, const InfoReques
         QUrl lookupUrl( QString( "http://spotikea.tomahawk-player.org/browse/%1" ).arg( id ) );
 
 
-        QNetworkReply * reply = TomahawkUtils::nam()->get( QNetworkRequest( lookupUrl ) );
+        QNetworkReply * reply = Tomahawk::Utils::nam()->get( QNetworkRequest( lookupUrl ) );
         NewClosure( reply, SIGNAL( finished() ), this, SLOT( albumContentsLookupFinished( QNetworkReply*, Tomahawk::InfoSystem::InfoRequestData ) ), reply, requestData );
     }
     else

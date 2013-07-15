@@ -30,6 +30,9 @@
 #include "accounts/AccountConfigWidget.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+#include "utils/NetworkAccessManager.h"
+#include "utils/NetworkProxyFactory.h"
+
 
 #include <QtEndian>
 #include <QFileInfo>
@@ -57,7 +60,7 @@ ScriptResolver::ScriptResolver( const QString& exe )
 
     startProcess();
 
-    if ( !TomahawkUtils::nam() )
+    if ( !Tomahawk::Utils::nam() )
         return;
 
     // set the name to the binary, if we launch properly we'll get the name the resolver reports
@@ -136,7 +139,7 @@ ScriptResolver::sendConfig()
 
     m_configSent = true;
 
-    TomahawkUtils::NetworkProxyFactory* factory = dynamic_cast<TomahawkUtils::NetworkProxyFactory*>( TomahawkUtils::nam()->proxyFactory() );
+    Tomahawk::Utils::NetworkProxyFactory* factory = dynamic_cast<Tomahawk::Utils::NetworkProxyFactory*>( Tomahawk::Utils::nam()->proxyFactory() );
     QNetworkProxy proxy = factory->proxy();
     QString proxyType = ( proxy.type() == QNetworkProxy::Socks5Proxy ? "socks5" : "none" );
     m.insert( "proxytype", proxyType );
