@@ -18,14 +18,16 @@
 
 #include "DatabaseCommand_LoadAllSources.h"
 
-#include <QSqlQuery>
-
-#include "network/Servent.h"
-#include "SourceList.h"
 #include "DatabaseImpl.h"
-#include "utils/Logger.h"
+#include "Source.h"
 
 using namespace Tomahawk;
+
+
+DatabaseCommand_LoadAllSources::DatabaseCommand_LoadAllSources( QObject* parent )
+    : DatabaseCommand( parent )
+{
+}
 
 
 void

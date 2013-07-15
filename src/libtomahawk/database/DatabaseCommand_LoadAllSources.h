@@ -16,6 +16,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#pragma once
 #ifndef DATABASECOMMAND_LOADALLSOURCES_H
 #define DATABASECOMMAND_LOADALLSOURCES_H
 
@@ -35,9 +36,7 @@ class DLLEXPORT DatabaseCommand_LoadAllSources : public DatabaseCommand
 Q_OBJECT
 
 public:
-    explicit DatabaseCommand_LoadAllSources( QObject* parent = 0 )
-        : DatabaseCommand( parent )
-    {}
+    explicit DatabaseCommand_LoadAllSources( QObject* parent = 0 );
 
     virtual void exec( DatabaseImpl* );
     virtual bool doesMutates() const { return false; }
@@ -47,6 +46,6 @@ signals:
     void done( const QList< Tomahawk::source_ptr >& sources );
 };
 
-}
+} // namespace Tomahawk
 
 #endif // DATABASECOMMAND_LOADALLSOURCES_H
