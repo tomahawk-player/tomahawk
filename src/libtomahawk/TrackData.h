@@ -24,10 +24,12 @@
 #include <QFuture>
 #include <QVariant>
 
-#include "Typedefs.h"
 #include "infosystem/InfoSystem.h"
-
 #include "DllMacro.h"
+#include "PlaybackLog.h"
+#include "SocialAction.h"
+#include "Typedefs.h"
+
 
 namespace Tomahawk
 {
@@ -35,21 +37,6 @@ namespace Tomahawk
 class DatabaseCommand_LogPlayback;
 class DatabaseCommand_PlaybackHistory;
 class IdThreadWorker;
-
-struct SocialAction
-{
-    QVariant action;
-    QVariant value;
-    QVariant timestamp;
-    Tomahawk::source_ptr source;
-};
-
-struct PlaybackLog
-{
-    Tomahawk::source_ptr source;
-    unsigned int timestamp;
-    unsigned int secsPlayed;
-};
 
 class DLLEXPORT TrackData : public QObject
 {
@@ -173,9 +160,9 @@ private:
     friend class DatabaseCommand_PlaybackHistory;
 };
 
-}; //ns
+} // namespace Tomahawk
 
-Q_DECLARE_METATYPE( QList<Tomahawk::PlaybackLog> );
-Q_DECLARE_METATYPE( Tomahawk::trackdata_ptr );
+Q_DECLARE_METATYPE( QList<Tomahawk::PlaybackLog> )
+Q_DECLARE_METATYPE( Tomahawk::trackdata_ptr )
 
 #endif // TRACKDATA_H

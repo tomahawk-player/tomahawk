@@ -2,6 +2,7 @@
  *
  *   Copyright 2013, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2013, Teo Mrnjavac <teo@kde.org>
+ *   Copyright 2013, Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -17,23 +18,24 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#pragma once
 #ifndef TRACK_H
 #define TRACK_H
 
-#include <QObject>
+#include "DllMacro.h"
+#include "PlaybackLog.h"
+#include "SocialAction.h"
+#include "Typedefs.h"
+
 #include <QList>
 #include <QVariant>
-
-#include "Typedefs.h"
-#include "TrackData.h"
-
-#include "DllMacro.h"
 
 
 namespace Tomahawk
 {
 
 class DatabaseCommand_LoadInboxEntries;
+class TrackPrivate;
 
 class DLLEXPORT Track : public QObject
 {
@@ -51,13 +53,13 @@ public:
 
     virtual ~Track();
 
-//    void setArtist( const QString& artist ) { m_artist = artist; updateSortNames(); }
-    void setAlbum( const QString& album ) { m_album = album; updateSortNames(); }
-//    void setTrack( const QString& track ) { m_track = track; updateSortNames(); }
-/*    void setDuration( int duration ) { m_duration = duration; }
-    void setAlbumPos( unsigned int albumpos ) { m_albumpos = albumpos; }
-    void setDiscNumber( unsigned int discnumber ) { m_discnumber = discnumber; }
-    void setComposer( const QString& composer ) { m_composer = composer; updateSortNames(); }*/
+    // void setArtist( const QString& artist ) { m_artist = artist; updateSortNames(); }
+    void setAlbum( const QString& album );
+    // void setTrack( const QString& track ) { m_track = track; updateSortNames(); }
+    // void setDuration( int duration ) { m_duration = duration; }
+    // void setAlbumPos( unsigned int albumpos ) { m_albumpos = albumpos; }
+    // void setDiscNumber( unsigned int discnumber ) { m_discnumber = discnumber; }
+    // void setComposer( const QString& composer ) { m_composer = composer; updateSortNames(); }
 
     bool equals( const Tomahawk::track_ptr& other, bool ignoreCase = false ) const;
 
@@ -65,19 +67,19 @@ public:
     QString toString() const;
     Tomahawk::query_ptr toQuery();
 
-    QString composerSortname() const { return m_composerSortname; }
-    QString albumSortname() const { return m_albumSortname; }
+    QString composerSortname() const;
+    QString albumSortname() const;
     QString artistSortname() const;
     QString trackSortname() const;
 
     QString artist() const;
     QString track() const;
-    QString composer() const { return m_composer; }
-    QString album() const { return m_album; }
-    int duration() const { return m_duration; }
+    QString composer() const;
+    QString album() const;
+    int duration() const;
     int year() const;
-    unsigned int albumpos() const { return m_albumpos; }
-    unsigned int discnumber() const { return m_discnumber; }
+    unsigned int albumpos() const;
+    unsigned int discnumber() const;
 
     Tomahawk::artist_ptr artistPtr() const;
     Tomahawk::album_ptr albumPtr() const;
@@ -112,8 +114,8 @@ public:
 
     unsigned int trackId() const;
 
-    QWeakPointer< Tomahawk::Track > weakRef() { return m_ownRef; }
-    void setWeakRef( QWeakPointer< Tomahawk::Track > weakRef ) { m_ownRef = weakRef; }
+    QWeakPointer< Tomahawk::Track > weakRef();
+    void setWeakRef( QWeakPointer< Tomahawk::Track > weakRef );
 
     void startPlaying();
     void finishPlaying( int timeElapsed );
@@ -134,7 +136,11 @@ signals:
 public slots:
     void deleteLater();
 
+protected:
+    QScopedPointer<TrackPrivate> d_ptr;
+
 private:
+    Q_DECLARE_PRIVATE( Track )
     explicit Track( unsigned int id, const QString& artist, const QString& track, const QString& album, int duration, const QString& composer, unsigned int albumpos, unsigned int discnumber );
     explicit Track( const QString& artist, const QString& track, const QString& album, int duration, const QString& composer, unsigned int albumpos, unsigned int discnumber );
 
@@ -144,29 +150,11 @@ private:
 
     void setAllSocialActions( const QList< SocialAction >& socialActions );
 
-    QString m_composer;
-    QString m_album;
-    QString m_composerSortname;
-    QString m_albumSortname;
-
-    int m_duration;
-    unsigned int m_albumpos;
-    unsigned int m_discnumber;
-
-    mutable Tomahawk::artist_ptr m_artistPtr;
-    mutable Tomahawk::album_ptr m_albumPtr;
-    mutable Tomahawk::artist_ptr m_composerPtr;
-
-    mutable trackdata_ptr m_trackData;
-
-    query_wptr m_query;
-    QWeakPointer< Tomahawk::Track > m_ownRef;
-
     static QHash< QString, track_wptr > s_tracksByName;
 };
 
-}; //ns
+} // namespace Tomahawk
 
-Q_DECLARE_METATYPE( Tomahawk::track_ptr );
+Q_DECLARE_METATYPE( Tomahawk::track_ptr )
 
 #endif // TRACK_H
