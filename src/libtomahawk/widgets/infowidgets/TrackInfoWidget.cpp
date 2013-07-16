@@ -87,7 +87,7 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
         //    ui->similarTracksView->setStyleSheet( "QListView { background-color: transparent; } QListView::item { background-color: transparent; }" );
 
         TomahawkStyle::stylePageFrame( ui->frame );
-}
+    }
 
     {
         QFont f = ui->trackLabel->font();
