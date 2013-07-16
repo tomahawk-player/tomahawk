@@ -17,42 +17,38 @@
  */
 
 #pragma once
-#ifndef NETWORKACTIVITYWORKER_P_H
-#define NETWORKACTIVITYWORKER_P_H
+#ifndef TOMAHAWK_PLAYLISTSMODEL_H
+#define TOMAHAWK_PLAYLISTSMODEL_H
 
-#include "NetworkActivityWorker.h"
+#include "DllMacro.h"
+#include "Typedefs.h"
 
-#include <QStack>
+#include <QAbstractListModel>
 
-namespace Tomahawk
+namespace Tomahawk {
+
+class PlaylistsModelPrivate;
+
+class DLLEXPORT PlaylistsModel : public QAbstractListModel
 {
-
-class NetworkActivityWorkerPrivate
-{
+    Q_OBJECT
 public:
-    NetworkActivityWorkerPrivate( NetworkActivityWorker* q )
-        : q_ptr( q )
-        , trendingTracksDone( false )
-        , hotPlaylistsDone( false )
-        , playlistsRevisionToLoad( 0 )
-        , trackStatsToLoad( 0 )
-    {
-    }
+    explicit PlaylistsModel( const QList<playlist_ptr>& playlists, QObject* parent = 0 );
+    virtual ~PlaylistsModel();
+    
+    virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
+    virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
 
-    NetworkActivityWorker* q_ptr;
-    Q_DECLARE_PUBLIC( NetworkActivityWorker )
+protected:
+    QScopedPointer<PlaylistsModelPrivate> d_ptr;
+
+    void updateArtists();
+
 private:
-    bool trendingTracksDone;
+    Q_DECLARE_PRIVATE( PlaylistsModel )
 
-    bool hotPlaylistsDone;
-    QList<Tomahawk::playlist_ptr> playlists;
-    uint playlistsRevisionToLoad;
-    uint sourcesToLoad;
-    uint trackStatsToLoad;
-    QStack<playlist_ptr> playlistStack;
-    QMultiMap<uint, playlist_ptr> playlistCount;
 };
 
-} // Tomahawk
+} // namespace Tomahawk
 
-#endif // NETWORKACTIVITYWORKER_P_H
+#endif // TOMAHAWK_PLAYLISTSMODEL_H

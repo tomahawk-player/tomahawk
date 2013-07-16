@@ -31,6 +31,7 @@ public:
         : q_ptr ( q )
         , ui( new Ui::NetworkActivityWidget )
         , sortedProxy( 0 )
+        , workerThread( 0 )
     {
     }
 
@@ -52,6 +53,7 @@ private:
 
     Tomahawk::Widgets::NetworkActivityWidget::ViewType activeView;
     Tomahawk::NetworkActivityWorker* worker;
+    QThread* workerThread;
 };
 
 #endif // NETWORKACTIVITYWIDGET_P_H

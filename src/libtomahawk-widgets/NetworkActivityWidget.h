@@ -19,9 +19,6 @@
 #ifndef NETWORKACTIVITYWIDGET_H
 #define NETWORKACTIVITYWIDGET_H
 
-#define NETWORKCHARTS_NUM_TRACKS 20
-#define TRENDING_TRACKS_NUM 3
-
 #include "ViewPage.h"
 
 #include "WidgetsDllMacro.h"
@@ -61,7 +58,13 @@ public:
     virtual bool isBeingPlayed() const;
 
     virtual bool jumpToCurrentTrack();
-signals:
+
+    static const uint numberOfHotPlaylists = 3;
+    static const uint numberOfTrendingTracks = 3;
+    static const uint numberOfNetworkChartEntries = 20;
+
+protected:
+    QScopedPointer<NetworkActivityWidgetPrivate> d_ptr;
 
 private slots:
     void weeklyCharts( const QList<Tomahawk::track_ptr>& );
@@ -69,6 +72,7 @@ private slots:
     void yearlyCharts( const QList<Tomahawk::track_ptr>& );
     void overallCharts( const QList<Tomahawk::track_ptr>& );
 
+    void hotPlaylists( const QList<Tomahawk::playlist_ptr>& playlists );
     void trendingTracks( const QList< Tomahawk::track_ptr >& tracks );
 
     void leftCrumbIndexChanged( const QModelIndex& );
@@ -85,11 +89,10 @@ private:
     void showOverallCharts();
 
     Q_DECLARE_PRIVATE( NetworkActivityWidget )
-    NetworkActivityWidgetPrivate* d_ptr;
 };
 
-}; // Widgets
+} // Widgets
 
-}; // Tomahawk
+} // Tomahawk
 
 #endif // NETWORKACTIVITYWIDGET_H

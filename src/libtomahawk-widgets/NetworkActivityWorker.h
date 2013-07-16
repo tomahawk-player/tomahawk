@@ -20,6 +20,7 @@
 #ifndef TOMAHAWK_NETWORKACTIVITYWORKER_H
 #define TOMAHAWK_NETWORKACTIVITYWORKER_H
 
+#include "Playlist.h"
 #include "Typedefs.h"
 
 #include <QThread>
@@ -28,27 +29,36 @@ namespace Tomahawk {
 
 class NetworkActivityWorkerPrivate;
 
-class NetworkActivityWorker : public QThread
+class NetworkActivityWorker : public QObject
 {
     Q_OBJECT
 public:
     explicit NetworkActivityWorker( QObject *parent = 0 );
     virtual ~NetworkActivityWorker();
 
+public slots:
     void run();
 
 signals:
     void trendingTracks( const QList<Tomahawk::track_ptr>& tracks );
+    void hotPlaylists( const QList<Tomahawk::playlist_ptr>& playlists );
+    void finished();
 
 protected:
     QScopedPointer<NetworkActivityWorkerPrivate> d_ptr;
 
 private slots:
+    void allPlaylistsReceived( const QList<Tomahawk::playlist_ptr>& playlists );
+    void allSourcesReceived( const QList< Tomahawk::source_ptr >& sources );
+    void playtime( uint playtime );
+    void revisionLoaded( Tomahawk::PlaylistRevision revision );
     void trendingTracksReceived( const QList< QPair< double,Tomahawk::track_ptr > >& tracks );
 
 private:
     Q_DECLARE_PRIVATE( NetworkActivityWorker )
 
+    void calculateNextPlaylist();
+    void checkRevisionLoadedDone();
     void checkDone();
 };
 

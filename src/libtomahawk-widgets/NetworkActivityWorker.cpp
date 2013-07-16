@@ -19,15 +19,19 @@
 #include "NetworkActivityWorker_p.h"
 
 #include "database/Database.h"
+#include "database/DatabaseCommand_CalculatePlaytime.h"
+#include "database/DatabaseCommand_LoadAllPlaylists.h"
+#include "database/DatabaseCommand_LoadAllSources.h"
 #include "database/DatabaseCommand_TrendingTracks.h"
 #include "database/DatabaseImpl.h"
-#include "utils/Logger.h"
 #include "NetworkActivityWidget.h"
+
+#include <QDateTime>
 
 namespace Tomahawk {
 
 NetworkActivityWorker::NetworkActivityWorker( QObject* parent )
-    : QThread( parent )
+    : QObject( parent )
     , d_ptr( new NetworkActivityWorkerPrivate( this ) )
 {
 }
@@ -41,19 +45,85 @@ NetworkActivityWorker::~NetworkActivityWorker()
 void
 NetworkActivityWorker::run()
 {
-    tLog() << Q_FUNC_INFO;
     {
         // Load trending tracks
         qRegisterMetaType< QList< QPair< double,Tomahawk::track_ptr > > >("QList< QPair< double,Tomahawk::track_ptr > >");
         DatabaseCommand_TrendingTracks* dbcmd = new DatabaseCommand_TrendingTracks();
-        dbcmd->setLimit( TRENDING_TRACKS_NUM );
+        dbcmd->setLimit( Tomahawk::Widgets::NetworkActivityWidget::numberOfTrendingTracks );
         connect( dbcmd, SIGNAL( done( QList< QPair< double,Tomahawk::track_ptr > >) ),
-                 SLOT( trendingTracksReceived( QList< QPair< double,Tomahawk::track_ptr > > ) ), Qt::QueuedConnection );
+                 SLOT( trendingTracksReceived( QList< QPair< double,Tomahawk::track_ptr > > ) ),
+                 Qt::QueuedConnection );
         Database::instance()->enqueue( dbcmd_ptr( dbcmd ) );
     }
+    {
+        DatabaseCommand_LoadAllSources* dbcmd = new DatabaseCommand_LoadAllSources();
+        connect( dbcmd, SIGNAL( done( QList<Tomahawk::source_ptr> ) ),
+                 SLOT( allSourcesReceived( QList<Tomahawk::source_ptr> ) ),
+                 Qt::QueuedConnection);
+        Database::instance()->enqueue( dbcmd_ptr( dbcmd ) );
+    }
+}
 
-    // Start the event loop
-    exec();
+
+void
+NetworkActivityWorker::allPlaylistsReceived( const QList<playlist_ptr>& playlists )
+{
+    Q_D( NetworkActivityWorker );
+    d->sourcesToLoad--;
+    d->playlists.append( playlists );
+
+    if ( d->sourcesToLoad == 0 )
+    {
+        // Load all playlist entries
+        foreach( playlist_ptr playlist, d->playlists )
+        {
+            if ( !playlist->loaded() )
+            {
+                d->playlistsRevisionToLoad++;
+                connect( playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ),
+                         SLOT( revisionLoaded( Tomahawk::PlaylistRevision ) ),
+                         Qt::QueuedConnection );
+                playlist->loadRevision();
+            }
+        }
+        checkRevisionLoadedDone();
+    }
+}
+
+
+void
+NetworkActivityWorker::allSourcesReceived( const QList<source_ptr>& sources )
+{
+    Q_D( NetworkActivityWorker );
+    d->sourcesToLoad = sources.count();
+
+    foreach ( const source_ptr& source, sources)
+    {
+        DatabaseCommand_LoadAllPlaylists* dbcmd = new DatabaseCommand_LoadAllPlaylists( source );
+        connect( dbcmd, SIGNAL( done( QList<Tomahawk::playlist_ptr> ) ),
+                 SLOT( allPlaylistsReceived ( QList<Tomahawk::playlist_ptr> ) ),
+                 Qt::QueuedConnection );
+        Database::instance()->enqueue( dbcmd_ptr( dbcmd ) );
+    }
+}
+
+
+void
+NetworkActivityWorker::playtime( uint playtime )
+{
+    Q_D( NetworkActivityWorker );
+    d->playlistCount.insert( playtime, d->playlistStack.pop() );
+    calculateNextPlaylist();
+}
+
+
+void
+NetworkActivityWorker::revisionLoaded(PlaylistRevision revision)
+{
+    Q_UNUSED( revision );
+    Q_D( NetworkActivityWorker );
+    d->playlistsRevisionToLoad--;
+    checkRevisionLoadedDone();
 }
 
 
@@ -75,13 +145,54 @@ NetworkActivityWorker::trendingTracksReceived( const QList<QPair<double, Tomahaw
     checkDone();
 }
 
+
+void
+NetworkActivityWorker::calculateNextPlaylist()
+{
+    Q_D( NetworkActivityWorker );
+    if ( !d->playlistStack.isEmpty() )
+    {
+        DatabaseCommand_CalculatePlaytime* dbcmd = new DatabaseCommand_CalculatePlaytime( d->playlistStack.top(), QDateTime::currentDateTime().addDays( -7 ), QDateTime::currentDateTime() );
+        connect( dbcmd, SIGNAL( done( uint ) ), SLOT( playtime( uint ) ), Qt::QueuedConnection );
+        Database::instance()->enqueue( dbcmd_ptr( dbcmd ) );
+    }
+    else
+    {
+        d->playlistCount.remove( 0 );
+        QList<playlist_ptr> playlists;
+        QMapIterator<uint, playlist_ptr> iter (d->playlistCount);
+        iter.toBack();
+        while (iter.hasPrevious() && (uint)playlists.size() < Widgets::NetworkActivityWidget::numberOfHotPlaylists )
+        {
+            iter.previous();
+            playlists << iter.value();
+        }
+        emit hotPlaylists( playlists );
+        d->hotPlaylistsDone = true;
+        checkDone();
+    }
+}
+
+void
+NetworkActivityWorker::checkRevisionLoadedDone()
+{
+    Q_D( NetworkActivityWorker );
+    if ( d->playlistsRevisionToLoad == 0 )
+    {
+        foreach (playlist_ptr playlist, d->playlists) {
+            d->playlistStack.push( playlist );
+        }
+        calculateNextPlaylist();
+    }
+}
+
 void
 NetworkActivityWorker::checkDone()
 {
     Q_D( NetworkActivityWorker );
-    if ( d->trendingTracksDone )
+    if ( d->trendingTracksDone && d->hotPlaylistsDone )
     {
-        quit();
+        emit finished();
     }
 }
 

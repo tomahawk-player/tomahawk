@@ -128,36 +128,37 @@ set( libGuiSources
     utils/NetworkAccessManager.cpp
 
     widgets/AnimatedCounterLabel.cpp
+    widgets/AnimatedSplitter.cpp
     widgets/BasicHeader.cpp
-    widgets/FilterHeader.cpp
-    widgets/ScriptCollectionHeader.cpp
     widgets/Breadcrumb.cpp
     widgets/BreadcrumbButton.cpp
-    widgets/CheckDirTree.cpp
-    widgets/QueryLabel.cpp
-    widgets/ImageButton.cpp
-    widgets/StatsGauge.cpp
-    widgets/AnimatedSplitter.cpp
-    widgets/ElidedLabel.cpp
-    widgets/NewPlaylistWidget.cpp
-    widgets/SearchWidget.cpp
-    widgets/SeekSlider.cpp
-    widgets/PlaylistTypeSelectorDialog.cpp
-    widgets/HistoryWidget.cpp
-    widgets/WhatsHotWidget.cpp
-    widgets/NewReleasesWidget.cpp
     widgets/ChartDataLoader.cpp
-    widgets/RecentlyPlayedPlaylistsModel.cpp
-    widgets/RecentPlaylistsModel.cpp
-    widgets/OverlayButton.cpp
-    widgets/OverlayWidget.cpp
+    widgets/CheckDirTree.cpp
+    widgets/ComboBox.cpp
+    widgets/ElidedLabel.cpp
+    widgets/FadingPixmap.cpp
+    widgets/FilterHeader.cpp
     widgets/HeaderLabel.cpp
     widgets/HeaderWidget.cpp
-    widgets/ComboBox.cpp
-    widgets/ToggleButton.cpp
-    widgets/FadingPixmap.cpp
+    widgets/HistoryWidget.cpp
+    widgets/ImageButton.cpp
+    widgets/NewPlaylistWidget.cpp
+    widgets/NewReleasesWidget.cpp
+    widgets/OverlayButton.cpp
+    widgets/OverlayWidget.cpp
     widgets/PlayableCover.cpp
+    widgets/PlaylistsModel.cpp
+    widgets/PlaylistTypeSelectorDialog.cpp
+    widgets/QueryLabel.cpp
+    widgets/RecentPlaylistsModel.cpp
+    widgets/RecentlyPlayedPlaylistsModel.cpp
+    widgets/ScriptCollectionHeader.cpp
+    widgets/SearchWidget.cpp
+    widgets/SeekSlider.cpp
     widgets/SourceTreePopupDialog.cpp
+    widgets/StatsGauge.cpp
+    widgets/ToggleButton.cpp
+    widgets/WhatsHotWidget.cpp
     widgets/infowidgets/SourceInfoWidget.cpp
     widgets/infowidgets/ArtistInfoWidget.cpp
     widgets/infowidgets/AlbumInfoWidget.cpp
@@ -245,6 +246,7 @@ list(APPEND libSources
     database/DatabaseCommand_AllArtists.cpp
     database/DatabaseCommand_AllTracks.cpp
     database/DatabaseCommand_ArtistStats.cpp
+    database/DatabaseCommand_CalculatePlaytime.cpp
     database/DatabaseCommand_ClientAuthValid.cpp
     database/DatabaseCommand_CollectionAttributes.cpp
     database/DatabaseCommand_CollectionStats.cpp

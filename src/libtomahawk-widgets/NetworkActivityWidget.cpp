@@ -30,7 +30,9 @@
 #include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "widgets/OverlayWidget.h"
+#include "widgets/PlaylistsModel.h"
 #include "Pipeline.h"
+#include "PlaylistDelegate.h"
 
 #include <QDateTime>
 #include <QStandardItemModel>
@@ -111,8 +113,6 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
     // Trending Tracks
     {
         d->trendingTracksModel = new PlaylistModel( d->ui->trendingTracksView );
-        // TODO:
-        // m_tracksModel = new RecentlyPlayedModel( ui->tracksView, HISTORY_TRACK_ITEMS );
         d->ui->trendingTracksView->proxyModel()->setStyle( PlayableProxyModel::Short );
         d->ui->trendingTracksView->overlay()->setEnabled( false );
         d->ui->trendingTracksView->setPlaylistModel( d->trendingTracksModel );
@@ -146,7 +146,7 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
 
     // Hot Playlists
     {
-        TomahawkStyle::stylePageFrame( d->ui->hotPlaylistsFrame );
+        TomahawkStyle::stylePageFrame( d->ui->playlistsFrame );
 
         QFont f = d->ui->hotPlaylistsLabel->font();
         f.setFamily( "Pathway Gothic One" );
@@ -156,6 +156,31 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
 
         d->ui->hotPlaylistsLabel->setFont( f );
         d->ui->hotPlaylistsLabel->setPalette( p );
+    }
+
+    {
+        d->ui->playlistView->setFrameShape( QFrame::NoFrame );
+        d->ui->playlistView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+        d->ui->playlistView->setItemDelegate( new PlaylistDelegate() );
+        d->ui->playlistView->overlay()->resize( 380, 86 );
+        d->ui->playlistView->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
+
+        QPalette p = d->ui->playlistView->palette();
+        p.setColor( QPalette::Text, TomahawkStyle::HEADER_TEXT );
+        p.setColor( QPalette::BrightText, TomahawkStyle::HEADER_TEXT );
+        p.setColor( QPalette::Foreground, TomahawkStyle::HEADER_TEXT );
+        p.setColor( QPalette::Highlight, TomahawkStyle::HEADER_TEXT );
+        p.setColor( QPalette::HighlightedText, TomahawkStyle::HEADER_BACKGROUND );
+
+        d->ui->playlistView->setPalette( p );
+        d->ui->playlistView->setMinimumHeight( 400 );
+        d->ui->playlistView->setStyleSheet( "QListView { background-color: transparent; }" );
+        TomahawkStyle::styleScrollBar( d->ui->playlistView->verticalScrollBar() );
+        TomahawkStyle::stylePageFrame( d->ui->playlistsFrame );
+
+        // updatePlaylists();
+        // connect( ui->playlistWidget, SIGNAL( activated( QModelIndex ) ), SLOT( onPlaylistActivated( QModelIndex ) ) );
+        // connect( model, SIGNAL( emptinessChanged( bool ) ), this, SLOT( updatePlaylists() ) );
     }
 
     {
@@ -171,18 +196,27 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
     }
 
     // Load data in separate thread
-    d->worker = new NetworkActivityWorker();
-    d->worker->moveToThread( d->worker );
+    d->workerThread = new QThread();
+    d->workerThread->start();
+    d->worker = new NetworkActivityWorker( );
+    d->worker->moveToThread( d->workerThread );
     connect( d->worker, SIGNAL( trendingTracks( QList<Tomahawk::track_ptr> ) ),
-             SLOT( trendingTracks( QList<Tomahawk::track_ptr> ) ), Qt::QueuedConnection);
-    connect( d->worker, SIGNAL( finished() ), d->worker, SLOT( deleteLater() ) );
-    d->worker->start();
+             SLOT( trendingTracks( QList<Tomahawk::track_ptr> ) ),
+             Qt::QueuedConnection);
+    connect( d->worker, SIGNAL( hotPlaylists(QList<Tomahawk::playlist_ptr>) ),
+             SLOT(hotPlaylists(QList<Tomahawk::playlist_ptr>)),
+             Qt::QueuedConnection);
+    connect( d->worker, SIGNAL( finished() ),
+             d->workerThread, SLOT( quit() ),
+             Qt::QueuedConnection );
+    // connect( d->workerThread, SIGNAL( finished() ), d->workerThread, SLOT( deleteLater() ), Qt::QueuedConnection );
+    // connect( d->workerThread, SIGNAL( destroyed() ), d->worker, SLOT( deleteLater() ), Qt::QueuedConnection );
+    QMetaObject::invokeMethod( d->worker, "run", Qt::QueuedConnection );
 }
 
 
 NetworkActivityWidget::~NetworkActivityWidget()
 {
-    delete d_ptr;
 }
 
 
@@ -279,6 +313,13 @@ NetworkActivityWidget::overallCharts( const QList<track_ptr>& tracks )
     }
 }
 
+void
+NetworkActivityWidget::hotPlaylists( const QList<playlist_ptr>& playlists )
+{
+    Q_D( NetworkActivityWidget );
+    d->ui->playlistView->setModel( new PlaylistsModel( playlists, this ) );
+}
+
 
 void
 NetworkActivityWidget::trendingTracks( const QList<track_ptr>& tracks )
@@ -326,7 +367,7 @@ NetworkActivityWidget::fetchYearCharts()
     QDateTime to = QDateTime::currentDateTime();
     QDateTime yearAgo = to.addYears( -1 );
     DatabaseCommand_NetworkCharts* yearCharts = new DatabaseCommand_NetworkCharts( yearAgo, to );
-    yearCharts->setLimit( NETWORKCHARTS_NUM_TRACKS );
+    yearCharts->setLimit( numberOfNetworkChartEntries );
     connect( yearCharts, SIGNAL( done( QList<Tomahawk::track_ptr> ) ), SLOT( yearlyCharts( QList<Tomahawk::track_ptr> ) ) );
     Database::instance()->enqueue( Tomahawk::dbcmd_ptr( yearCharts ) );
 }
@@ -336,7 +377,7 @@ void
 NetworkActivityWidget::fetchOverallCharts()
 {
     DatabaseCommand_NetworkCharts* overallCharts = new DatabaseCommand_NetworkCharts();
-    overallCharts->setLimit( NETWORKCHARTS_NUM_TRACKS );
+    overallCharts->setLimit( numberOfNetworkChartEntries );
     connect( overallCharts, SIGNAL( done( QList<Tomahawk::track_ptr> ) ), SLOT( overallCharts( QList<Tomahawk::track_ptr> ) ) );
     Database::instance()->enqueue( Tomahawk::dbcmd_ptr( overallCharts ) );
 }
@@ -348,7 +389,7 @@ NetworkActivityWidget::fetchWeekCharts()
     QDateTime to = QDateTime::currentDateTime();
     QDateTime weekAgo = to.addDays( -7 );
     DatabaseCommand_NetworkCharts* weekCharts = new DatabaseCommand_NetworkCharts( weekAgo, to );
-    weekCharts->setLimit( NETWORKCHARTS_NUM_TRACKS );
+    weekCharts->setLimit( numberOfNetworkChartEntries );
     connect( weekCharts, SIGNAL( done( QList<Tomahawk::track_ptr> ) ), SLOT( weeklyCharts( QList<Tomahawk::track_ptr> ) ) );
     Database::instance()->enqueue( Tomahawk::dbcmd_ptr( weekCharts ) );
 }
@@ -360,7 +401,7 @@ NetworkActivityWidget::fetchMonthCharts()
     QDateTime to = QDateTime::currentDateTime();
     QDateTime monthAgo = to.addMonths( -1 );
     DatabaseCommand_NetworkCharts* monthCharts = new DatabaseCommand_NetworkCharts( monthAgo, to );
-    monthCharts->setLimit( NETWORKCHARTS_NUM_TRACKS );
+    monthCharts->setLimit( numberOfNetworkChartEntries );
     connect( monthCharts, SIGNAL( done( QList<Tomahawk::track_ptr> ) ), SLOT( monthlyCharts( QList<Tomahawk::track_ptr> ) ) );
     Database::instance()->enqueue( Tomahawk::dbcmd_ptr( monthCharts ) );
 }

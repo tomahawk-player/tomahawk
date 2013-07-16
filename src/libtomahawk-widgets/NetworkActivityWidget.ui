@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>875</width>
-    <height>520</height>
+    <height>526</height>
    </rect>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -26,7 +26,7 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QFrame" name="hotPlaylistsFrame">
+       <widget class="QFrame" name="trendingTracksFrame">
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
           <widget class="QLabel" name="trendingTracksLabel">
@@ -60,7 +60,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QFrame" name="trendingTracksFrame">
+       <widget class="QFrame" name="playlistsFrame">
         <property name="frameShape">
          <enum>QFrame::StyledPanel</enum>
         </property>

@@ -17,42 +17,34 @@
  */
 
 #pragma once
-#ifndef NETWORKACTIVITYWORKER_P_H
-#define NETWORKACTIVITYWORKER_P_H
+#ifndef DATABASECOMMAND_CALCULATEPLAYTIME_P_H
+#define DATABASECOMMAND_CALCULATEPLAYTIME_P_H
 
-#include "NetworkActivityWorker.h"
+#include "database/DatabaseCommand_p.h"
+#include "database/DatabaseCommand_CalculatePlaytime.h"
 
-#include <QStack>
+#include <QDateTime>
 
 namespace Tomahawk
 {
 
-class NetworkActivityWorkerPrivate
+class DatabaseCommand_CalculatePlaytimePrivate : public DatabaseCommandPrivate
 {
-public:
-    NetworkActivityWorkerPrivate( NetworkActivityWorker* q )
-        : q_ptr( q )
-        , trendingTracksDone( false )
-        , hotPlaylistsDone( false )
-        , playlistsRevisionToLoad( 0 )
-        , trackStatsToLoad( 0 )
+    DatabaseCommand_CalculatePlaytimePrivate( DatabaseCommand_CalculatePlaytime* q, QDateTime _from, QDateTime _to )
+        : DatabaseCommandPrivate( q )
+        , from( _from )
+        , to( _to )
     {
     }
 
-    NetworkActivityWorker* q_ptr;
-    Q_DECLARE_PUBLIC( NetworkActivityWorker )
-private:
-    bool trendingTracksDone;
+    Q_DECLARE_PUBLIC( DatabaseCommand_CalculatePlaytime )
 
-    bool hotPlaylistsDone;
-    QList<Tomahawk::playlist_ptr> playlists;
-    uint playlistsRevisionToLoad;
-    uint sourcesToLoad;
-    uint trackStatsToLoad;
-    QStack<playlist_ptr> playlistStack;
-    QMultiMap<uint, playlist_ptr> playlistCount;
+private:
+    QDateTime from;
+    QDateTime to;
+    QList<track_ptr> tracks;
 };
 
-} // Tomahawk
+}
 
-#endif // NETWORKACTIVITYWORKER_P_H
+#endif // DATABASECOMMAND_CALCULATEPLAYTIME_P_H

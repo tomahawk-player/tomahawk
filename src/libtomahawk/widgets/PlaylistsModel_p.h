@@ -17,42 +17,31 @@
  */
 
 #pragma once
-#ifndef NETWORKACTIVITYWORKER_P_H
-#define NETWORKACTIVITYWORKER_P_H
+#ifndef PLAYLISTSMODEL_P_H
+#define PLAYLISTSMODEL_P_H
 
-#include "NetworkActivityWorker.h"
-
-#include <QStack>
+#include "PlaylistsModel.h"
 
 namespace Tomahawk
 {
 
-class NetworkActivityWorkerPrivate
+class PlaylistsModelPrivate
 {
 public:
-    NetworkActivityWorkerPrivate( NetworkActivityWorker* q )
+    PlaylistsModelPrivate( PlaylistsModel* q, const QList<playlist_ptr>& _playlists )
         : q_ptr( q )
-        , trendingTracksDone( false )
-        , hotPlaylistsDone( false )
-        , playlistsRevisionToLoad( 0 )
-        , trackStatsToLoad( 0 )
+        , playlists( _playlists )
     {
     }
+    virtual ~PlaylistsModelPrivate() {}
 
-    NetworkActivityWorker* q_ptr;
-    Q_DECLARE_PUBLIC( NetworkActivityWorker )
+    PlaylistsModel* q_ptr;
+    Q_DECLARE_PUBLIC( PlaylistsModel )
 private:
-    bool trendingTracksDone;
-
-    bool hotPlaylistsDone;
-    QList<Tomahawk::playlist_ptr> playlists;
-    uint playlistsRevisionToLoad;
-    uint sourcesToLoad;
-    uint trackStatsToLoad;
-    QStack<playlist_ptr> playlistStack;
-    QMultiMap<uint, playlist_ptr> playlistCount;
+    QList<playlist_ptr> playlists;
+    QMap<playlist_ptr, QString> artists;
 };
 
-} // Tomahawk
+}
 
-#endif // NETWORKACTIVITYWORKER_P_H
+#endif // PLAYLISTSMODEL_P_H
