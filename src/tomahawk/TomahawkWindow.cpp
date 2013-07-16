@@ -689,6 +689,7 @@ TomahawkWindow::keyPressEvent( QKeyEvent* e )
 bool
 TomahawkWindow::winEvent( MSG* msg, long* result )
 {
+    Q_UNUSED(RESULT);
     #define TB_PRESSED Q_FUNC_INFO << "Taskbar Button Pressed:"
 
     switch ( msg->message )
@@ -735,6 +736,7 @@ TomahawkWindow::winEvent( MSG* msg, long* result )
 void
 TomahawkWindow::audioStateChanged( AudioState newState, AudioState oldState )
 {
+    Q_UNUSED(oldState);
 #ifdef HAVE_THUMBBUTTON
     if ( m_taskbarList == 0 )
         return;
