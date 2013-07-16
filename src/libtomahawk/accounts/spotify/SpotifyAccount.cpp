@@ -1521,7 +1521,9 @@ SpotifyAccount::stopPlaylistSync( SpotifyPlaylistInfo* playlist, bool forceDontD
             playlist_ptr tomahawkPl = updater->playlist();
 
             if ( !tomahawkPl.isNull() )
-                Playlist::remove( tomahawkPl );
+            {
+                Playlist::removalHandler()->remove( tomahawkPl );
+            }
 
             updater->deleteLater();
 
