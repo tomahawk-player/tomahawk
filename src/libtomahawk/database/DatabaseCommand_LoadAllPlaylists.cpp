@@ -19,8 +19,6 @@
 
 #include "DatabaseCommand_LoadAllPlaylists.h"
 
-#include "utils/Logger.h"
-
 #include "DatabaseImpl.h"
 #include "Playlist.h"
 #include "PlaylistEntry.h"
