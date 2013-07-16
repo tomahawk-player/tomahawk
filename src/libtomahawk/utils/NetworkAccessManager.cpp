@@ -272,13 +272,13 @@ setNam( QNetworkAccessManager* nam, bool noMutexLocker )
 }
 
 
-bool s_proxyDns;
-QNetworkProxy::ProxyType s_proxyType;
-QString s_proxyHost;
-int s_proxyPort;
-QString s_proxyUsername;
-QString s_proxyPassword;
-QString s_proxyNoProxyHosts;
+static bool s_proxyDns;
+static QNetworkProxy::ProxyType s_proxyType;
+static QString s_proxyHost;
+static int s_proxyPort;
+static QString s_proxyUsername;
+static QString s_proxyPassword;
+static QString s_proxyNoProxyHosts;
 
 QString
 proxyHost()
