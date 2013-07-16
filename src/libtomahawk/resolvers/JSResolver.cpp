@@ -27,7 +27,6 @@
 #include "jobview/JobStatusModel.h"
 #include "jobview/ErrorStatusMessage.h"
 #include "utils/Logger.h"
-#include "utils/NetworkAccessManager.h"
 #include "utils/TomahawkUtilsGui.h"
 
 #include "Artist.h"

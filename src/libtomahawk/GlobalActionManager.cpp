@@ -32,7 +32,6 @@
 #include "resolvers/ScriptCommand_LookupUrl.h"
 #include "utils/JspfLoader.h"
 #include "utils/Logger.h"
-#include "utils/NetworkAccessManager.h"
 #include "utils/RdioParser.h"
 #include "utils/ShortenedLinkParser.h"
 #include "utils/ShortLinkHelper.h"
