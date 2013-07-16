@@ -20,6 +20,7 @@
 #define PLAYABLEPIXMAP_H
 
 #include <QLabel>
+#include <QPoint>
 #include <QPaintEvent>
 #include <QResizeEvent>
 
@@ -61,6 +62,7 @@ protected:
     virtual void resizeEvent( QResizeEvent* event );
     virtual void paintEvent( QPaintEvent* event );
 
+    virtual void mousePressEvent( QMouseEvent* event );
     virtual void mouseMoveEvent( QMouseEvent* event );
     virtual void mouseReleaseEvent( QMouseEvent* event );
 
@@ -81,6 +83,8 @@ private:
     Tomahawk::artist_ptr m_artist;
     Tomahawk::album_ptr m_album;
     Tomahawk::query_ptr m_query;
+
+    QPoint m_dragStartPosition;
 
     QList< QRect > m_itemRects;
     QRect m_hoveredRect;

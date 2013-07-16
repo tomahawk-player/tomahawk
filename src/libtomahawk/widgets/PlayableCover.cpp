@@ -28,6 +28,7 @@
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 
+#include <QApplication>
 #include <QPainter>
 
 using namespace Tomahawk;
@@ -86,6 +87,14 @@ PlayableCover::resizeEvent( QResizeEvent* event )
 
 
 void
+PlayableCover::mousePressEvent( QMouseEvent* event )
+{
+    if ( event->button() == Qt::LeftButton )
+         m_dragStartPosition = event->pos();
+}
+
+
+void
 PlayableCover::mouseMoveEvent( QMouseEvent* event )
 {
     QLabel::mouseMoveEvent( event );
@@ -110,6 +119,45 @@ PlayableCover::mouseMoveEvent( QMouseEvent* event )
         m_hoveredRect = QRect();
         repaint();
     }
+
+    if ( !( event->buttons() & Qt::LeftButton ) )
+        return;
+    if ( ( event->pos() - m_dragStartPosition ).manhattanLength() < QApplication::startDragDistance() )
+        return;
+
+    QByteArray resultData;
+    QDataStream resultStream( &resultData, QIODevice::WriteOnly );
+    QMimeData* mimeData = new QMimeData();
+    QPixmap pixmap;
+    const int pixHeight = TomahawkUtils::defaultFontHeight() * 3;
+    const QSize pixSize = QSize( pixHeight, pixHeight );
+
+    if ( m_artist )
+    {
+        pixmap = m_artist->cover( pixSize, false );
+        resultStream << m_artist->name();
+        mimeData->setData( "application/tomahawk.metadata.artist", resultData );
+    }
+    else if ( m_album )
+    {
+        pixmap = m_album->cover( pixSize, false );
+        resultStream << m_album->artist()->name();
+        resultStream << m_album->name();
+        mimeData->setData( "application/tomahawk.metadata.album", resultData );
+    }
+    else if ( m_query )
+    {
+        pixmap = m_query->track()->cover( pixSize, false );
+        resultStream << QString( "application/tomahawk.query.list" ) << qlonglong( &m_query );
+        mimeData->setData( "application/tomahawk.mixed", resultData );
+    }
+
+    QDrag* drag = new QDrag( this );
+    drag->setMimeData( mimeData );
+    drag->setPixmap( pixmap );
+    drag->setHotSpot( QPoint( -20, -20 ) );
+
+    Qt::DropAction action = drag->exec( Qt::CopyAction, Qt::CopyAction );
 }
 
 
