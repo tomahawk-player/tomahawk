@@ -61,7 +61,7 @@ public:
     // only used when loading from dbcmd
     static dyncontrol_ptr createControl( const QString& generatorType, const QString& controlType = QString() );
 
-    static void registerFactory( const QString& type, GeneratorFactoryInterface* interface );
+    static void registerFactory( const QString& type, GeneratorFactoryInterface* iface );
     static QStringList types();
     static QStringList typeSelectors( const QString& type );
 
