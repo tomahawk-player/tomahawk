@@ -899,10 +899,10 @@ Password</source>
 <context>
     <name>JSResolver</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="347"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="384"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="422"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="482"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="348"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="385"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="423"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="483"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
         <translation type="unfinished"/>
     </message>
@@ -1700,12 +1700,12 @@ Password</source>
 <context>
     <name>Servent</name>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="976"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="977"/>
         <source>Automatically detecting external IP failed: Could not parse JSON response.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="989"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="990"/>
         <source>Automatically detecting external IP failed: %1</source>
         <translation type="unfinished"/>
     </message>
@@ -1713,77 +1713,77 @@ Password</source>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="236"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="238"/>
         <source>Collection</source>
         <translation>收藏</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="239"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="241"/>
         <source>Advanced</source>
         <translation>高级</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="157"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="159"/>
         <source>All</source>
         <translation>所有</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="289"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="291"/>
         <source>Some changed settings will not take effect until Tomahawk is restarted</source>
         <translation>一些设置改动将在 Tomahawk 下次启动时生效。</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="231"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="233"/>
         <source>Services</source>
         <translation>服务</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="130"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="132"/>
         <source>Install from file</source>
         <translation>从文件安装</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="231"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="233"/>
         <source>Configure the accounts and services used by Tomahawk to search and retrieve music, find your friends and update your status.</source>
         <translation>配置 Tomahawk 使用的账户和服务以获取音乐，寻找朋友，更新状态</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="236"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="238"/>
         <source>Manage how Tomahawk finds music on your computer.</source>
         <translation>设置以便让 Tomahawk 发现你计算机上的音乐。</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="239"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="241"/>
         <source>Configure Tomahawk&apos;s advanced settings, including network connectivity settings, browser interaction and more.</source>
         <translation>配置 Tomahawk 的高级设置，包括网络链接设置，浏览交互设置等等。</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="471"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="473"/>
         <source>Install resolver from file</source>
         <translation>从文件安装解析器</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="473"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="475"/>
         <source>Tomahawk Resolvers (*.axe *.js);;All files (*)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="516"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="518"/>
         <source>Resolver installation from file %1 failed.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="535"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="537"/>
         <source>Delete all Access Control entries?</source>
         <translation>删除所有的访问控制项？</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="536"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="538"/>
         <source>Do you really want to delete all Access Control entries? You will be asked for a decision again for each peer that you connect to.</source>
         <translation>你真的想删除所有的访问控制项吗？将在对每个连接的客户端操作后再次询问。</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="289"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="291"/>
         <source>Information</source>
         <translation>信息</translation>
     </message>
@@ -2474,60 +2474,60 @@ Password</source>
 <context>
     <name>Tomahawk::Accounts::LastFmConfig</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="93"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="94"/>
         <source>Testing...</source>
         <translation>测试...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="115"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="116"/>
         <source>Test Login</source>
         <translation>测试登录</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="125"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="126"/>
         <source>Importing %1</source>
         <comment>e.g. Importing 2012/01/01</comment>
         <translation>正在导入 %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="128"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="129"/>
         <source>Importing History...</source>
         <translation>导入历史...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="197"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="198"/>
         <source>History Incomplete. Resume</source>
         <extracomment>Text on a button that resumes import</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="202"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="203"/>
         <source>Playback History Imported</source>
         <translation>播放历史已导入</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="225"/>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="241"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="226"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="242"/>
         <source>Failed</source>
         <translation>失败</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="230"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="231"/>
         <source>Success</source>
         <translation>成功</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="247"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="248"/>
         <source>Could not contact server</source>
         <translation>无法连接到服务器</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="261"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="262"/>
         <source>Synchronizing...</source>
         <translation>同步中...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="419"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="420"/>
         <source>Synchronization Finished</source>
         <translation>同步成功</translation>
     </message>
@@ -3449,7 +3449,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::GroovesharkParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/GroovesharkParser.cpp" line="243"/>
+        <location filename="../src/libtomahawk/utils/GroovesharkParser.cpp" line="244"/>
         <source>Error fetching Grooveshark information from the network!</source>
         <translation>从网络获取 Grooveshark 信息时出现错误！</translation>
     </message>
@@ -3457,17 +3457,17 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::InfoSystem::ChartsPlugin</name>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="578"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="579"/>
         <source>Artists</source>
         <translation>艺术家</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="580"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="581"/>
         <source>Albums</source>
         <translation>专辑</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="582"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="583"/>
         <source>Tracks</source>
         <translation>歌曲</translation>
     </message>
@@ -3522,27 +3522,27 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::InfoSystem::LastFmInfoPlugin</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="457"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="458"/>
         <source>Top Tracks</source>
         <translation>最热歌曲</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="460"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="461"/>
         <source>Loved Tracks</source>
         <translation>喜爱歌曲</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="463"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="464"/>
         <source>Hyped Tracks</source>
         <translation>活跃歌曲</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="469"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="470"/>
         <source>Top Artists</source>
         <translation>Top 艺术家</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="472"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="473"/>
         <source>Hyped Artists</source>
         <translation>活跃艺术家</translation>
     </message>
@@ -3550,7 +3550,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::InfoSystem::NewReleasesPlugin</name>
     <message>
-        <location filename="../src/infoplugins/generic/newreleases/NewReleasesPlugin.cpp" line="600"/>
+        <location filename="../src/infoplugins/generic/newreleases/NewReleasesPlugin.cpp" line="601"/>
         <source>Albums</source>
         <translation>专辑</translation>
     </message>
@@ -3566,7 +3566,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::ItunesParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/ItunesParser.cpp" line="183"/>
+        <location filename="../src/libtomahawk/utils/ItunesParser.cpp" line="184"/>
         <source>Error fetching iTunes information from the network!</source>
         <translation>从网络获取 iTunes 信息时出现错误！</translation>
     </message>
@@ -3574,27 +3574,27 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::JSPFLoader</name>
     <message>
-        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="150"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="151"/>
         <source>New Playlist</source>
         <translation>新播放列表</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="176"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="177"/>
         <source>Failed to save tracks</source>
         <translation>保存歌曲失败</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="176"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="177"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
         <translation>播放列表中的一些歌曲缺失艺术家和标题。它们将被忽略。</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="201"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="202"/>
         <source>XSPF Error</source>
         <translation>XSPF 错误</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="201"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="202"/>
         <source>This is not a valid XSPF playlist.</source>
         <translation>这不是一个合法的 XSPF 播放列表。</translation>
     </message>
@@ -3629,7 +3629,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::RdioParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/RdioParser.cpp" line="204"/>
+        <location filename="../src/libtomahawk/utils/RdioParser.cpp" line="205"/>
         <source>Error fetching Rdio information from the network!</source>
         <translation>从网络获取电台信息时出错！</translation>
     </message>
@@ -3654,7 +3654,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::ShortenedLinkParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/ShortenedLinkParser.cpp" line="101"/>
+        <location filename="../src/libtomahawk/utils/ShortenedLinkParser.cpp" line="102"/>
         <source>Network error parsing shortened link!</source>
         <translation>解析短链接时出错！</translation>
     </message>
@@ -3706,7 +3706,7 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::SpotifyParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="281"/>
+        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="282"/>
         <source>Error fetching Spotify information from the network!</source>
         <translation>从网络获取 Spotify 信息时出错！</translation>
     </message>
@@ -3821,12 +3821,12 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="526"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="527"/>
         <source>My Collection</source>
         <translation>我的收藏</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="710"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="711"/>
         <source>Automatically detecting external IP failed.</source>
         <translation type="unfinished"/>
     </message>
@@ -4357,22 +4357,22 @@ Lyrics for &quot;%1&quot; by %2:
 <context>
     <name>XSPFLoader</name>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="50"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="51"/>
         <source>Failed to parse contents of XSPF playlist</source>
         <translation>解析 XSPF 播放列表内容时出错</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="52"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="53"/>
         <source>Some playlist entries were found without artist and track name, they will be omitted</source>
         <translation>某些播放列表中的歌曲缺失艺术家和标题，它们将被忽略。</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="54"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="55"/>
         <source>Failed to fetch the desired playlist from the network, or the desired file does not exist</source>
         <translation>从网络获取指定播放列表时出错，或者指定文件不存在</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="200"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="201"/>
         <source>New Playlist</source>
         <translation>新播放列表</translation>
     </message>
@@ -4532,112 +4532,112 @@ Lyrics for &quot;%1&quot; by %2:
 <context>
     <name>XmppSipPlugin</name>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="383"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="384"/>
         <source>User Interaction</source>
         <translation>用户交互</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="386"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="387"/>
         <source>Host is unknown</source>
         <translation>服务器未知</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="389"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="390"/>
         <source>Item not found</source>
         <translation>项目未找到</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="392"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="393"/>
         <source>Authorization Error</source>
         <translation>认证错误</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="395"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="396"/>
         <source>Remote Stream Error</source>
         <translation>远端数据流错误</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="398"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="399"/>
         <source>Remote Connection failed</source>
         <translation>远程连接失败</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="401"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="402"/>
         <source>Internal Server Error</source>
         <translation>内部服务器错误</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="404"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="405"/>
         <source>System shutdown</source>
         <translation>系统挂起</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="407"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="408"/>
         <source>Conflict</source>
         <translation>冲突</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="422"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="423"/>
         <source>Unknown</source>
         <translation>未知</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="799"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="800"/>
         <source>Do you want to add &lt;b&gt;%1&lt;/b&gt; to your friend list?</source>
         <translation>你希望把 &lt;b&gt;%1&lt;/b&gt; 添加到你的朋友列表吗？</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="410"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="411"/>
         <source>No Compression Support</source>
         <translation>无压缩支持</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="200"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="201"/>
         <source>Enter Jabber ID</source>
         <translation>输入 Jabber ID</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="413"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="414"/>
         <source>No Encryption Support</source>
         <translation>无加密支持</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="416"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="417"/>
         <source>No Authorization Support</source>
         <translation>无认证支持</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="419"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="420"/>
         <source>No Supported Feature</source>
         <translation>无支持的特性</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="478"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="479"/>
         <source>Add Friend</source>
         <translation>添加朋友</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="479"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="480"/>
         <source>Enter Xmpp ID:</source>
         <translation>输入 Xmpp ID:</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="635"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="636"/>
         <source>Add Friend...</source>
         <translation>添加朋友</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="640"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="641"/>
         <source>XML Console...</source>
         <translation>XML 终端...</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="689"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="690"/>
         <source>I&apos;m sorry -- I&apos;m just an automatic presence used by Tomahawk Player (http://gettomahawk.com). If you are getting this message, the person you are trying to reach is probably not signed on, so please try again later!</source>
         <translation>对不起 —— 我只是一个由 Tomahawk 播放器(http://gettomahawk.com)自动生成的文字。如果你看到这条信息，说明你尝试连接的用户并不可用。请稍后再试！</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="798"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="799"/>
         <source>Authorize User</source>
         <translation>认证用户</translation>
     </message>

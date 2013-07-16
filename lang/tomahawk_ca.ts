@@ -899,10 +899,10 @@ Password</source>
 <context>
     <name>JSResolver</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="347"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="384"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="422"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="482"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="348"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="385"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="423"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="483"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
         <translation type="unfinished"/>
     </message>
@@ -1700,12 +1700,12 @@ Password</source>
 <context>
     <name>Servent</name>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="976"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="977"/>
         <source>Automatically detecting external IP failed: Could not parse JSON response.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="989"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="990"/>
         <source>Automatically detecting external IP failed: %1</source>
         <translation type="unfinished"/>
     </message>
@@ -1713,77 +1713,77 @@ Password</source>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="236"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="238"/>
         <source>Collection</source>
         <translation>Col·lecció</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="239"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="241"/>
         <source>Advanced</source>
         <translation>Avançat</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="157"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="159"/>
         <source>All</source>
         <translation>Tot</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="289"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="291"/>
         <source>Some changed settings will not take effect until Tomahawk is restarted</source>
         <translation>Alguns paràmetres no tindran efecte fins que no reinicieu Tomahawk</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="231"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="233"/>
         <source>Services</source>
         <translation>Serveis</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="130"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="132"/>
         <source>Install from file</source>
         <translation>Instal·la des d&apos;un fitxer</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="231"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="233"/>
         <source>Configure the accounts and services used by Tomahawk to search and retrieve music, find your friends and update your status.</source>
         <translation>Configura els comptes i serveis que fa servir el Tomahawk per a cercar i obtenir música, trobar els vostres amics i actualitzr el vostre estat.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="236"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="238"/>
         <source>Manage how Tomahawk finds music on your computer.</source>
         <translation>Gestiona com el Tomahawk troba musica a l&apos;ordinador.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="239"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="241"/>
         <source>Configure Tomahawk&apos;s advanced settings, including network connectivity settings, browser interaction and more.</source>
         <translation>Configura els paràmetres avançats del Tomahawk, incloent els paràmetres de connexió de xarxa, interacció del navegador i més.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="471"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="473"/>
         <source>Install resolver from file</source>
         <translation>Instal·la un Resolver des d&apos;un fitxer</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="473"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="475"/>
         <source>Tomahawk Resolvers (*.axe *.js);;All files (*)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="516"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="518"/>
         <source>Resolver installation from file %1 failed.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="535"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="537"/>
         <source>Delete all Access Control entries?</source>
         <translation>Voleu eliminar totes les entrades d&apos;Access Control?</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="536"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="538"/>
         <source>Do you really want to delete all Access Control entries? You will be asked for a decision again for each peer that you connect to.</source>
         <translation>Realment voleu eliminar totes les entrades de l&apos;Access Control? Se us demanarà per una decisió una altra vegada per cada recurs al que us connecteu.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="289"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="291"/>
         <source>Information</source>
         <translation>Informació</translation>
     </message>
@@ -2475,60 +2475,60 @@ i emissores basades en els vostres gusts musicals.</translation>
 <context>
     <name>Tomahawk::Accounts::LastFmConfig</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="93"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="94"/>
         <source>Testing...</source>
         <translation>S&apos;està comprovant...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="115"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="116"/>
         <source>Test Login</source>
         <translation>Comprova l&apos;inici de sessió</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="125"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="126"/>
         <source>Importing %1</source>
         <comment>e.g. Importing 2012/01/01</comment>
         <translation>S&apos;està important %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="128"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="129"/>
         <source>Importing History...</source>
         <translation>S&apos;està important l&apos;historial...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="197"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="198"/>
         <source>History Incomplete. Resume</source>
         <extracomment>Text on a button that resumes import</extracomment>
         <translation>Historial incomplet... Reprèn</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="202"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="203"/>
         <source>Playback History Imported</source>
         <translation>S&apos;ha importat l&apos;historial de reproducció</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="225"/>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="241"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="226"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="242"/>
         <source>Failed</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="230"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="231"/>
         <source>Success</source>
         <translation>Èxit</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="247"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="248"/>
         <source>Could not contact server</source>
         <translation>No s&apos;ha pogut contactar amb el servidor</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="261"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="262"/>
         <source>Synchronizing...</source>
         <translation>S&apos;està sincronitzant...</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="419"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="420"/>
         <source>Synchronization Finished</source>
         <translation>S&apos;ha finalitzat la sincronització</translation>
     </message>
@@ -3453,7 +3453,7 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
 <context>
     <name>Tomahawk::GroovesharkParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/GroovesharkParser.cpp" line="243"/>
+        <location filename="../src/libtomahawk/utils/GroovesharkParser.cpp" line="244"/>
         <source>Error fetching Grooveshark information from the network!</source>
         <translation>Error en cercar la informació de Grooveshark a través de la xarxa!</translation>
     </message>
@@ -3461,17 +3461,17 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
 <context>
     <name>Tomahawk::InfoSystem::ChartsPlugin</name>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="578"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="579"/>
         <source>Artists</source>
         <translation>Artistes</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="580"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="581"/>
         <source>Albums</source>
         <translation>Àlbums</translation>
     </message>
     <message>
-        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="582"/>
+        <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="583"/>
         <source>Tracks</source>
         <translation>Cançons</translation>
     </message>
@@ -3526,27 +3526,27 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
 <context>
     <name>Tomahawk::InfoSystem::LastFmInfoPlugin</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="457"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="458"/>
         <source>Top Tracks</source>
         <translation>Top Cançons Musicals</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="460"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="461"/>
         <source>Loved Tracks</source>
         <translation>Cançons Preferides</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="463"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="464"/>
         <source>Hyped Tracks</source>
         <translation>Cançons en alça</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="469"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="470"/>
         <source>Top Artists</source>
         <translation>Top Artistes</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="472"/>
+        <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="473"/>
         <source>Hyped Artists</source>
         <translation>Artistes en alça</translation>
     </message>
@@ -3554,7 +3554,7 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
 <context>
     <name>Tomahawk::InfoSystem::NewReleasesPlugin</name>
     <message>
-        <location filename="../src/infoplugins/generic/newreleases/NewReleasesPlugin.cpp" line="600"/>
+        <location filename="../src/infoplugins/generic/newreleases/NewReleasesPlugin.cpp" line="601"/>
         <source>Albums</source>
         <translation>Àlbums</translation>
     </message>
@@ -3570,7 +3570,7 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
 <context>
     <name>Tomahawk::ItunesParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/ItunesParser.cpp" line="183"/>
+        <location filename="../src/libtomahawk/utils/ItunesParser.cpp" line="184"/>
         <source>Error fetching iTunes information from the network!</source>
         <translation>Error en cercar la informació d&apos;iTunes a través de la xarxa!</translation>
     </message>
@@ -3578,27 +3578,27 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
 <context>
     <name>Tomahawk::JSPFLoader</name>
     <message>
-        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="150"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="151"/>
         <source>New Playlist</source>
         <translation>Nova llista de reproducció</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="176"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="177"/>
         <source>Failed to save tracks</source>
         <translation>Error en desar les cançons</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="176"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="177"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
         <translation>Algunes cançons de la llista no contenen ni artista ni titol i s&apos;han ignorat.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="201"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="202"/>
         <source>XSPF Error</source>
         <translation>Error XSPF</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="201"/>
+        <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="202"/>
         <source>This is not a valid XSPF playlist.</source>
         <translation>No és una llista XSPF vàlida.</translation>
     </message>
@@ -3633,7 +3633,7 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
 <context>
     <name>Tomahawk::RdioParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/RdioParser.cpp" line="204"/>
+        <location filename="../src/libtomahawk/utils/RdioParser.cpp" line="205"/>
         <source>Error fetching Rdio information from the network!</source>
         <translation>Error en cercar la informació de Rdio a través de la xarxa!</translation>
     </message>
@@ -3658,7 +3658,7 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
 <context>
     <name>Tomahawk::ShortenedLinkParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/ShortenedLinkParser.cpp" line="101"/>
+        <location filename="../src/libtomahawk/utils/ShortenedLinkParser.cpp" line="102"/>
         <source>Network error parsing shortened link!</source>
         <translation>Error de la xarxa en analitzar l&apos;enllaç escurçat!</translation>
     </message>
@@ -3710,7 +3710,7 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
 <context>
     <name>Tomahawk::SpotifyParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="281"/>
+        <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="282"/>
         <source>Error fetching Spotify information from the network!</source>
         <translation>Error en cercar la informació de Spotify a través de la xarxa!</translation>
     </message>
@@ -3825,12 +3825,12 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="526"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="527"/>
         <source>My Collection</source>
         <translation>La meva Col·lecció</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="710"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="711"/>
         <source>Automatically detecting external IP failed.</source>
         <translation type="unfinished"/>
     </message>
@@ -4365,22 +4365,22 @@ Lletres de la cancó &quot;%1&quot; de %2:
 <context>
     <name>XSPFLoader</name>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="50"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="51"/>
         <source>Failed to parse contents of XSPF playlist</source>
         <translation>Error en analitzar els continguts de la llista XSPF</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="52"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="53"/>
         <source>Some playlist entries were found without artist and track name, they will be omitted</source>
         <translation>Algunes entrades de la llista no disposaven d&apos;informació d&apos;artista ni de nom de cançó, s&apos;han omès</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="54"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="55"/>
         <source>Failed to fetch the desired playlist from the network, or the desired file does not exist</source>
         <translation>Error en cercar la llista a la xarxa. Pot ser no existeix el fitxer</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="200"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="201"/>
         <source>New Playlist</source>
         <translation>Nova llista de reproducció</translation>
     </message>
@@ -4540,112 +4540,112 @@ Lletres de la cancó &quot;%1&quot; de %2:
 <context>
     <name>XmppSipPlugin</name>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="383"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="384"/>
         <source>User Interaction</source>
         <translation>Interacció d&apos;usuari</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="386"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="387"/>
         <source>Host is unknown</source>
         <translation>El nom de l&apos;ordinador és desconegut</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="389"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="390"/>
         <source>Item not found</source>
         <translation>No s&apos;ha trobat l&apos;element</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="392"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="393"/>
         <source>Authorization Error</source>
         <translation>Error d&apos;autorització</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="395"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="396"/>
         <source>Remote Stream Error</source>
         <translation>Error de flux remot</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="398"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="399"/>
         <source>Remote Connection failed</source>
         <translation>Ha fallat la connexió remota</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="401"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="402"/>
         <source>Internal Server Error</source>
         <translation>Error del servidor intern</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="404"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="405"/>
         <source>System shutdown</source>
         <translation>Sistema apagat</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="407"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="408"/>
         <source>Conflict</source>
         <translation>Conflicte</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="422"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="423"/>
         <source>Unknown</source>
         <translation>Desconegut</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="799"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="800"/>
         <source>Do you want to add &lt;b&gt;%1&lt;/b&gt; to your friend list?</source>
         <translation>Voleu afegir &lt;b&gt;%1&lt;/b&gt; a la vostra llista d&apos;amics?</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="410"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="411"/>
         <source>No Compression Support</source>
         <translation>Compressió no suportada</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="200"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="201"/>
         <source>Enter Jabber ID</source>
         <translation>Introduïu l&apos;identificador Jabber</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="413"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="414"/>
         <source>No Encryption Support</source>
         <translation>Encriptació no suportada</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="416"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="417"/>
         <source>No Authorization Support</source>
         <translation>Autorització no suportada</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="419"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="420"/>
         <source>No Supported Feature</source>
         <translation>Característica no suportada</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="478"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="479"/>
         <source>Add Friend</source>
         <translation>Afegeix un Amic</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="479"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="480"/>
         <source>Enter Xmpp ID:</source>
         <translation>Introduiu la ID XMPP:</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="635"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="636"/>
         <source>Add Friend...</source>
         <translation>Afegeix un Amic...</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="640"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="641"/>
         <source>XML Console...</source>
         <translation>Consola XML...</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="689"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="690"/>
         <source>I&apos;m sorry -- I&apos;m just an automatic presence used by Tomahawk Player (http://gettomahawk.com). If you are getting this message, the person you are trying to reach is probably not signed on, so please try again later!</source>
         <translation>Sóc una presència automàtica emprada pel Reproductor Tomahawk. (http://gettomahawk.com. Si rebeu aquest missatge, la persona amb qui intenteu contactar probablement no està en línia, intenteu-ho més tard!</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="798"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="799"/>
         <source>Authorize User</source>
         <translation>Autorització d&apos;Usuari</translation>
     </message>
