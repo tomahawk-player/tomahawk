@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg width="200px" height="200px" viewBox="0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
-    <title>Slice 1</title>
+    <title>artist-placeholder-grid</title>
     <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
     <defs></defs>
-    <g id="Page 1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
-        <g id="artist-placeholder-grid" sketch:type="MSLayerGroup" transform="translate(-1.000000, 0.000000)">
-            <g id="Page 1" sketch:type="MSShapeGroup">
-                <g id="artist-placeholder">
-                    <g id="Page 1">
-                        <path d="M0,200 L200,200 L200,0 L0,0 L0,200 L0,200 Z M0,200" id="Rectangle 4"></path>
-                        <path d="M187,78 C187,76 185,74 182,74 L125,73 L107,16 C106,14 104,13 102,13 C99,13 98,14 97,16 L78,73 L21,74 C19,74 17,76 16,78 C16,80 16,83 18,84 L63,120 L47,178 C46,180 47,182 49,184 C51,185 53,185 55,184 L102,149 L149,184 C149,184 150,185 152,185 C153,185 154,184 155,184 C156,182 157,180 156,178 L140,120 L185,84 C187,83 188,80 187,78 C187,78 188,80 187,78 L187,78 M131,114 C129,115 128,117 129,120 L142,166 L105,138 C103,137 101,137 99,138 L61,166 L74,120 C75,117 74,115 73,114 L36,85 L82,84 C84,84 86,82 87,80 L102,34 L117,80 C117,82 119,84 122,84 L167,85 L131,114" id="Shape" fill="#9B9B9B"></path>
-                    </g>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <rect d="M0,0 L0,200 L200,200 L200,0 L0,0 Z M0,0" id="Rectangle-1" sketch:type="MSShapeGroup" x="0" y="0" width="200" height="200"></rect>
+        <g sketch:type="MSLayerGroup" transform="translate(14.000000, 6.000000)" id="artist-placeholder" fill="#9B9B9B">
+            <g sketch:type="MSShapeGroup">
+                <g id="Page-1">
+                    <path d="M171,65 C171,63 169,61 166,61 L109,60 L91,3 C90,1 88,0 86,0 C83,0 82,1 81,3 L62,60 L5,61 C3,61 1,63 0,65 C0,67 0,70 2,71 L47,107 L31,165 C30,167 31,169 33,171 C35,172 37,172 39,171 L86,136 L133,171 C133,171 134,172 136,172 C137,172 138,171 139,171 C140,169 141,167 140,165 L124,107 L169,71 C171,70 172,67 171,65 C171,65 172,67 171,65 L171,65 M115,101 C113,102 112,104 113,107 L126,153 L89,125 C87,124 85,124 83,125 L45,153 L58,107 C59,104 58,102 57,101 L20,72 L66,71 C68,71 70,69 71,67 L86,21 L101,67 C101,69 103,71 106,71 L151,72 L115,101" id="Shape"></path>
                 </g>
             </g>
         </g>
