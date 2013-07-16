@@ -46,20 +46,15 @@ public:
         Descending = 2
     };
 
-    explicit DatabaseCommand_LoadAllPlaylists( const Tomahawk::source_ptr& s, QObject* parent = 0 )
-        : DatabaseCommand( s, parent )
-        , m_limitAmount( 0 )
-        , m_sortOrder( None )
-        , m_sortDescending( false )
-    {}
+    explicit DatabaseCommand_LoadAllPlaylists( const Tomahawk::source_ptr& s, QObject* parent = 0 );
 
     virtual void exec( DatabaseImpl* );
     virtual bool doesMutates() const { return false; }
     virtual QString commandname() const { return "loadallplaylists"; }
 
-    void setLimit( unsigned int limit ) { m_limitAmount = limit; }
-    void setSortOrder( SortOrder order ) { m_sortOrder = order; }
-    void setSortDescending( bool descending ) { m_sortDescending = descending; }
+    void setLimit( unsigned int limit );
+    void setSortOrder( SortOrder order );
+    void setSortDescending( bool descending );
 
 signals:
     void done( const QList<Tomahawk::playlist_ptr>& playlists );
@@ -70,6 +65,6 @@ private:
     bool m_sortDescending;
 };
 
-}
+} // namespace Tomahawk
 
 #endif // DATABASECOMMAND_LOADALLPLAYLIST_H

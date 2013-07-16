@@ -31,6 +31,14 @@
 using namespace Tomahawk;
 
 
+DatabaseCommand_LoadAllPlaylists::DatabaseCommand_LoadAllPlaylists( const source_ptr& s, QObject* parent )
+    : DatabaseCommand( s, parent )
+    , m_limitAmount( 0 )
+    , m_sortOrder( None )
+    , m_sortDescending( false )
+{
+}
+
 void
 DatabaseCommand_LoadAllPlaylists::exec( DatabaseImpl* dbi )
 {
@@ -39,10 +47,10 @@ DatabaseCommand_LoadAllPlaylists::exec( DatabaseImpl* dbi )
 
     switch ( m_sortOrder )
     {
-        case 0:
-            break;
+    case 0:
+        break;
 
-        case ModificationTime:
+    case ModificationTime:
             orderToken = "playlist.createdOn";
     }
 
@@ -78,5 +86,26 @@ DatabaseCommand_LoadAllPlaylists::exec( DatabaseImpl* dbi )
     }
 
     emit done( plists );
+}
+
+
+void
+DatabaseCommand_LoadAllPlaylists::setLimit( unsigned int limit )
+{
+    m_limitAmount = limit;
+}
+
+
+void
+DatabaseCommand_LoadAllPlaylists::setSortOrder( DatabaseCommand_LoadAllPlaylists::SortOrder order )
+{
+    m_sortOrder = order;
+}
+
+
+void
+DatabaseCommand_LoadAllPlaylists::setSortDescending( bool descending )
+{
+    m_sortDescending = descending;
 }
 
