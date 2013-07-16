@@ -36,6 +36,54 @@ if (window.Tomahawk === undefined) {
     };
 }
 
+Tomahawk.apiVersion = "0.2.0";
+
+/**
+ * Compares versions strings
+ * (version1 < version2) == -1
+ * (version1 = version2) == 0
+ * (version1 > version2) == 1
+ */
+Tomahawk.versionCompare = function (version1, version2) {
+    var v1 = version1.split('.').map(function (item) { return parseInt(item); });
+    var v2 = version2.split('.').map(function (item) { return parseInt(item); })
+    var length = Math.max(v1.length, v2.length);
+    var i = 0;
+
+    for (; i < length; i++) {
+        if (typeof v1[i] == "undefined" || v1[i] === null) {
+            if (typeof v2[i] == "undefined" || v2[i] === null) {
+                // v1 == v2
+                return 0;
+            } else if (v2[i] === 0) {
+                continue;
+            } else {
+                // v1 < v2
+                return -1;
+            }
+        } else if (typeof v2[i] == "undefined" || v2[i] === null) {
+            if ( v1[i] === 0 ) {
+                continue;
+            } else {
+                // v1 > v2
+                return 1;
+            }
+        } else if (v2[i] > v1[i]) {
+            // v1 < v2
+            return -1;
+        } else if (v2[i] < v2[i]) {
+            // v1 > v2
+            return 1;
+        }
+    }
+    // v1 == v2
+    return 0;
+};
+
+Tomahawk.atLeastVersion = function (version) {
+    return (Tomahawk.versionCompare(version, Tomahawk.apiVersion) >= 0)
+};
+
 
 Tomahawk.resolver = {
     scriptPath: Tomahawk.resolverData().scriptPath
@@ -197,18 +245,44 @@ Tomahawk.valueForSubNode = function (node, tag) {
 };
 
 
-Tomahawk.syncRequest = function (url) {
-	var xmlHttpRequest = new XMLHttpRequest();
-	xmlHttpRequest.open('GET', url, false);
-	xmlHttpRequest.send(null);
+Tomahawk.syncRequest = function (url, extraHeaders, options) {
+    // unpack options
+    var opt = options || {};
+    var method = opt.method || 'GET';
+
+    var xmlHttpRequest = new XMLHttpRequest();
+    xmlHttpRequest.open(method, url, false, opt.username, opt.password);
+    if (extraHeaders) {
+        for (var headerName in extraHeaders) {
+            xmlHttpRequest.setRequestHeader(headerName, extraHeaders[headerName]);
+        }
+    }
+    xmlHttpRequest.send(null);
     if (xmlHttpRequest.status == 200) {
 		return xmlHttpRequest.responseText;
-	}
+    } else {
+        Tomahawk.log("Failed to do GET request: to: " + url);
+        Tomahawk.log("Status Code was: " + xmlHttpRequest.status);
+        if (opt.hasOwnProperty('errorHandler')) {
+            opt.errorHandler.call(window, xmlHttpRequest);
+        }
+    }
 };
 
-Tomahawk.asyncRequest = function (url, callback, extraHeaders) {
+/**
+ * Possible options:
+ *  - method: The HTTP request method (default: GET)
+ *  - username: The username for HTTP Basic Auth
+ *  - password: The password for HTTP Basic Auth
+ *  - errorHandler: callback called if the request was not completed
+ */
+Tomahawk.asyncRequest = function (url, callback, extraHeaders, options) {
+    // unpack options
+    var opt = options || {};
+    var method = opt.method || 'GET';
+
     var xmlHttpRequest = new XMLHttpRequest();
-    xmlHttpRequest.open('GET', url, true);
+    xmlHttpRequest.open(method, url, true, opt.username, opt.password);
     if (extraHeaders) {
         for (var headerName in extraHeaders) {
             xmlHttpRequest.setRequestHeader(headerName, extraHeaders[headerName]);
@@ -220,6 +294,9 @@ Tomahawk.asyncRequest = function (url, callback, extraHeaders) {
         } else if (xmlHttpRequest.readyState === 4) {
             Tomahawk.log("Failed to do GET request: to: " + url);
             Tomahawk.log("Status Code was: " + xmlHttpRequest.status);
+            if (opt.hasOwnProperty('errorHandler')) {
+                opt.errorHandler.call(window, xmlHttpRequest);
+            }
         }
     };
     xmlHttpRequest.send(null);
