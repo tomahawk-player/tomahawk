@@ -46,6 +46,7 @@
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/ProxyStyle.h"
 #include "utils/WidgetDragFilter.h"
+#include "utils/NetworkAccessManager.h"
 #include "widgets/AccountsToolButton.h"
 #include "widgets/AnimatedSplitter.h"
 #include "widgets/NewPlaylistWidget.h"
