@@ -875,7 +875,7 @@ JSResolver::loadCollections()
                 {
                     QNetworkRequest req( iconUrl );
                     tDebug() << "Creating a QNetworkReply with url:" << req.url().toString();
-                    QNetworkReply* reply = Tomahawk::Utils::nam()->get( req );
+                    QNetworkReply* reply = TomahawkUtils::nam()->get( req );
                     reply->setProperty( "collectionName", collection->name() );
 
                     connect( reply, SIGNAL( finished() ),

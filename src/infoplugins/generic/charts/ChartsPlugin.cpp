@@ -29,7 +29,6 @@
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 #include "utils/TomahawkCache.h"
-#include "utils/NetworkAccessManager.h"
 #include "Source.h"
 
 #include <qjson/parser.h>
@@ -281,7 +280,7 @@ ChartsPlugin::fetchChartSourcesList( bool fetchOnlySourceList )
 
     TomahawkUtils::urlAddQueryItem( url, "version", TomahawkUtils::appFriendlyVersion() );
 
-    QNetworkReply* reply = Tomahawk::Utils::nam()->get( QNetworkRequest( url ) );
+    QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
     reply->setProperty( "only_source_list", fetchOnlySourceList );
 
     connect( reply, SIGNAL( finished() ), SLOT( chartSourcesList() ) );
@@ -377,7 +376,7 @@ ChartsPlugin::fetchSource(const QString& source)
     QUrl url = QUrl( QString( CHART_URL "charts/%1" ).arg( source ) );
     TomahawkUtils::urlAddQueryItem( url, "version", TomahawkUtils::appFriendlyVersion() );
 
-    QNetworkReply* reply = Tomahawk::Utils::nam()->get( QNetworkRequest( url ) );
+    QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
     reply->setProperty( "chart_source", source );
 
     tDebug() << Q_FUNC_INFO << "fetching:" << url;
@@ -423,7 +422,7 @@ ChartsPlugin::fetchChart( Tomahawk::InfoSystem::InfoRequestData requestData, con
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "fetching: " << url;
 
-    QNetworkReply* reply = Tomahawk::Utils::nam()->get( QNetworkRequest( url ) );
+    QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
     reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
 
     connect( reply, SIGNAL( finished() ), SLOT( chartReturned() ) );

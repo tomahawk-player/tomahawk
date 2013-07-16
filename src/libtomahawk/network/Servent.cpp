@@ -33,7 +33,6 @@
 #include "utils/Closure.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
-#include "utils/NetworkAccessManager.h"
 
 #include "AclRegistry.h"
 #include "BufferIoDevice.h"
@@ -184,7 +183,7 @@ Servent::startListening( QHostAddress ha, bool upnp, int port, Tomahawk::Network
             d->externalPort = externalPort;
             if ( autoDetectExternalIp )
             {
-                QNetworkReply* reply = Tomahawk::Utils::nam()->get( QNetworkRequest( QUrl( "http://toma.hk/?stat=1" ) ) );
+                QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( QUrl( "http://toma.hk/?stat=1" ) ) );
                 connect( reply, SIGNAL( finished() ), SLOT( ipDetected() ) );
                 // Not emitting ready here as we are not done.
             }
@@ -1386,7 +1385,7 @@ Servent::httpIODeviceFactory( const Tomahawk::result_ptr& result,
                               boost::function< void ( QSharedPointer< QIODevice >& ) > callback )
 {
     QNetworkRequest req( result->url() );
-    QNetworkReply* reply = Tomahawk::Utils::nam()->get( req );
+    QNetworkReply* reply = TomahawkUtils::nam()->get( req );
 
     //boost::functions cannot accept temporaries as parameters
     QSharedPointer< QIODevice > sp = QSharedPointer< QIODevice >( reply, &QObject::deleteLater );

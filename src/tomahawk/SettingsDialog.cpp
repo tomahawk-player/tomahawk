@@ -54,8 +54,6 @@
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
 #include "jobview/ErrorStatusMessage.h"
-#include "utils/NetworkAccessManager.h"
-#include "utils/NetworkProxyFactory.h"
 
 #include <QDesktopServices>
 #include <QFileDialog>
@@ -292,7 +290,7 @@ SettingsDialog::saveSettings()
 
     m_collectionWidgetUi->dirTree->cleanup();
 
-    Tomahawk::Utils::NetworkProxyFactory* proxyFactory = Tomahawk::Utils::proxyFactory();
+    TomahawkUtils::NetworkProxyFactory* proxyFactory = TomahawkUtils::proxyFactory();
     if ( !m_advancedWidgetUi->enableProxyCheckBox->isChecked() )
     {
         tDebug() << Q_FUNC_INFO << "Got NoProxy selected";

@@ -21,7 +21,6 @@
 
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
-#include "utils/NetworkAccessManager.h"
 
 #include <QNetworkReply>
 #include <QDomDocument>
@@ -111,7 +110,7 @@ MusicBrainzPlugin::notInCacheSlot( InfoStringHash criteria, InfoRequestData requ
             TomahawkUtils::urlAddQueryItem( url, "limit", "100" );
 
             tDebug() << Q_FUNC_INFO << url.toString();
-            QNetworkReply* reply = Tomahawk::Utils::nam()->get( QNetworkRequest( url ) );
+            QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
             reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
 
             connect( reply, SIGNAL( finished() ), SLOT( gotReleaseGroupsSlot() ) );
@@ -131,7 +130,7 @@ MusicBrainzPlugin::notInCacheSlot( InfoStringHash criteria, InfoRequestData requ
             TomahawkUtils::urlAddQueryItem( url, "limit", "100" );
 
             tDebug() << Q_FUNC_INFO << url.toString();
-            QNetworkReply* reply = Tomahawk::Utils::nam()->get( QNetworkRequest( url ) );
+            QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
             reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
 
             connect( reply, SIGNAL( finished() ), SLOT( gotReleasesSlot() ) );
@@ -237,7 +236,7 @@ MusicBrainzPlugin::gotReleasesSlot()
             TomahawkUtils::urlAddQueryItem( url, "inc", "recordings" );
             tDebug() << Q_FUNC_INFO << url.toString();
 
-            QNetworkReply* newReply = Tomahawk::Utils::nam()->get( QNetworkRequest( url ) );
+            QNetworkReply* newReply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
             newReply->setProperty( "requestData", oldReply->property( "requestData" ) );
             connect( newReply, SIGNAL( finished() ), SLOT( gotRecordingsSlot() ) );
 

@@ -139,6 +139,33 @@ namespace TomahawkUtils
     };
 
 
+    class DLLEXPORT NetworkProxyFactory : public QNetworkProxyFactory
+    {
+    public:
+        NetworkProxyFactory()
+            : m_proxy( QNetworkProxy::NoProxy )
+            , m_proxyChanged( false )
+        {}
+
+        NetworkProxyFactory( const NetworkProxyFactory &other );
+        virtual ~NetworkProxyFactory() {}
+
+        virtual QList< QNetworkProxy > queryProxy( const QNetworkProxyQuery & query = QNetworkProxyQuery() );
+
+        virtual void setNoProxyHosts( const QStringList &hosts );
+        virtual QStringList noProxyHosts() const { return m_noProxyHosts; }
+        virtual void setProxy( const QNetworkProxy &proxy );
+        virtual QNetworkProxy proxy() { return m_proxy; }
+
+        virtual NetworkProxyFactory& operator=( const NetworkProxyFactory &rhs );
+        virtual bool operator==( const NetworkProxyFactory &other ) const;
+        bool changed() const { return m_proxyChanged; }
+    private:
+        QStringList m_noProxyHosts;
+        QNetworkProxy m_proxy;
+        bool m_proxyChanged;
+    };
+
     DLLEXPORT bool headless();
     DLLEXPORT void setHeadless( bool headless );
 
@@ -160,6 +187,10 @@ namespace TomahawkUtils
     DLLEXPORT bool newerVersion( const QString& oldVersion, const QString& newVersion );
     DLLEXPORT int levenshtein( const QString& source, const QString& target );
 
+    DLLEXPORT NetworkProxyFactory* proxyFactory( bool makeClone = false, bool noMutexLocker = false );
+    DLLEXPORT void setProxyFactory( TomahawkUtils::NetworkProxyFactory* factory, bool noMutexLocker = false );
+    DLLEXPORT QNetworkAccessManager* nam();
+    DLLEXPORT void setNam( QNetworkAccessManager* nam, bool noMutexLocker = false );
     DLLEXPORT quint64 infosystemRequestId();
 
     DLLEXPORT QString md5( const QByteArray& data );

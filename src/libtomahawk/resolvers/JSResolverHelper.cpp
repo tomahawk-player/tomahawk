@@ -27,7 +27,6 @@
 #include "resolvers/ScriptEngine.h"
 #include "network/Servent.h"
 #include "utils/Logger.h"
-#include "utils/NetworkAccessManager.h"
 
 #include "config.h"
 #include "JSResolver_p.h"
@@ -447,7 +446,7 @@ JSResolverHelper::returnStreamUrl( const QString& streamUrl, boost::function< vo
     QUrl url = QUrl::fromEncoded( streamUrl.toUtf8() );
     QNetworkRequest req( url );
     tDebug() << "Creating a QNetowrkReply with url:" << req.url().toString();
-    QNetworkReply* reply = Tomahawk::Utils::nam()->get( req );
+    QNetworkReply* reply = TomahawkUtils::nam()->get( req );
 
     //boost::functions cannot accept temporaries as parameters
     sp = QSharedPointer< QIODevice >( reply, &QObject::deleteLater );

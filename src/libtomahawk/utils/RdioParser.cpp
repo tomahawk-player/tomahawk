@@ -31,7 +31,6 @@
 #include "utils/NetworkReply.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
-#include "utils/NetworkAccessManager.h"
 
 
 #include <qjson/parser.h>
@@ -131,7 +130,7 @@ RdioParser::fetchObjectsFromUrl( const QString& url, DropJob::DropType type )
     QNetworkRequest request = generateRequest( "getObjectFromUrl", cleanedUrl, params, &data );
 
     request.setHeader( QNetworkRequest::ContentTypeHeader, QLatin1String( "application/x-www-form-urlencoded" ) );
-    NetworkReply* reply = new NetworkReply( Tomahawk::Utils::nam()->post( request, data ) );
+    NetworkReply* reply = new NetworkReply( TomahawkUtils::nam()->post( request, data ) );
     connect( reply, SIGNAL( finished() ), SLOT( rdioReturned() ) );
 
 #ifndef ENABLE_HEADLESS

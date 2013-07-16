@@ -34,7 +34,6 @@
 #include "utils/NetworkReply.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
-#include "utils/NetworkAccessManager.h"
 
 using namespace Tomahawk;
 
@@ -176,7 +175,7 @@ SpotifyParser::lookupSpotifyBrowse( const QString& link )
          url = QUrl( QString( SPOTIFY_PLAYLIST_API_URL "/browse/%1/%2" ).arg( m_browseUri )
                                                                         .arg ( m_limit ) );
 
-    NetworkReply* reply = new NetworkReply( Tomahawk::Utils::nam()->get( QNetworkRequest( url ) ) );
+    NetworkReply* reply = new NetworkReply( TomahawkUtils::nam()->get( QNetworkRequest( url ) ) );
     connect( reply, SIGNAL( finished() ), SLOT( spotifyBrowseFinished() ) );
 
 #ifndef ENABLE_HEADLESS
@@ -205,7 +204,7 @@ SpotifyParser::lookupTrack( const QString& link )
 
     QUrl url = QUrl( QString( "http://ws.spotify.com/lookup/1/.json?uri=%1" ).arg( uri ) );
 
-    NetworkReply* reply = new NetworkReply( Tomahawk::Utils::nam()->get( QNetworkRequest( url ) ) );
+    NetworkReply* reply = new NetworkReply( TomahawkUtils::nam()->get( QNetworkRequest( url ) ) );
     connect( reply, SIGNAL( finished() ), SLOT( spotifyTrackLookupFinished() ) );
 
 #ifndef ENABLE_HEADLESS

@@ -20,7 +20,6 @@
 #include "RoviPlugin.h"
 
 #include "utils/Logger.h"
-#include "utils/NetworkAccessManager.h"
 
 #include <qjson/parser.h>
 
@@ -184,7 +183,7 @@ RoviPlugin::makeRequest( QUrl url )
     TomahawkUtils::urlAddQueryItem( url, "sig", generateSig() );
 
     qDebug() << "Rovi request url:" << url.toString();
-    return Tomahawk::Utils::nam()->get( QNetworkRequest( url ) );
+    return TomahawkUtils::nam()->get( QNetworkRequest( url ) );
 }
 
 

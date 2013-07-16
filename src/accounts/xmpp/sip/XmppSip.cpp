@@ -32,7 +32,6 @@
 #include "TomahawkSettings.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "sip/PeerInfo.h"
-#include "utils/NetworkProxyFactory.h"
 
 #include "config.h"
 #include "TomahawkVersion.h"
@@ -605,7 +604,7 @@ XmppSipPlugin::configurationChanged()
 void
 XmppSipPlugin::setupClientHelper()
 {
-    m_client->setProxyFactory( Tomahawk::Utils::proxyFactory( true ) );
+    m_client->setProxyFactory( TomahawkUtils::proxyFactory( true ) );
     Jreen::JID jid = Jreen::JID( m_currentUsername );
     m_client->setJID( jid );
     m_client->setPassword( m_currentPassword );

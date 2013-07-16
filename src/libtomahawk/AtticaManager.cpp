@@ -29,7 +29,6 @@
 #include "accounts/AccountManager.h"
 #include "utils/BinaryInstallerHelper.h"
 #include "utils/Closure.h"
-#include "utils/NetworkAccessManager.h"
 
 #include <attica/downloaditem.h>
 
@@ -69,7 +68,7 @@ AtticaManager::AtticaManager( QObject* parent )
 //    m_manager.addProviderFile( QUrl( "http://bakery.tomahawk-player.org/resolvers/providers.xml" ) );
 
     const QString url = QString( "%1/resolvers/providers.xml?version=%2" ).arg( hostname() ).arg( TomahawkUtils::appFriendlyVersion() );
-    QNetworkReply* reply = Tomahawk::Utils::nam()->get( QNetworkRequest( QUrl( url ) ) );
+    QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( QUrl( url ) ) );
     NewClosure( reply, SIGNAL( finished() ), this, SLOT( providerFetched( QNetworkReply* ) ), reply );
     connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), this, SLOT( providerError( QNetworkReply::NetworkError ) ) );
 
@@ -104,7 +103,7 @@ AtticaManager::fetchMissingIcons()
 
         if ( !m_resolverStates.value( resolver.id() ).pixmap && !resolver.icons().isEmpty() && !resolver.icons().first().url().isEmpty() )
         {
-            QNetworkReply* fetch = Tomahawk::Utils::nam()->get( QNetworkRequest( resolver.icons().first().url() ) );
+            QNetworkReply* fetch = TomahawkUtils::nam()->get( QNetworkRequest( resolver.icons().first().url() ) );
             fetch->setProperty( "resolverId", resolver.id() );
 
             connect( fetch, SIGNAL( finished() ), this, SLOT( resolverIconFetched() ) );
@@ -551,7 +550,7 @@ void AtticaManager::doInstallResolver( const Content& resolver, bool autoCreate,
     QUrl url( QString( "%1/resolvers/v1/content/download/%2/1" ).arg( hostname() ).arg( resolver.id() ) );
 
     TomahawkUtils::urlAddQueryItem( url, "tomahawkversion", TomahawkUtils::appFriendlyVersion() );
-    QNetworkReply* r = Tomahawk::Utils::nam()->get( QNetworkRequest( url ) );
+    QNetworkReply* r = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
     NewClosure( r, SIGNAL( finished() ), this, SLOT( resolverDownloadFinished( QNetworkReply* ) ), r );
     r->setProperty( "resolverId", resolver.id() );
     r->setProperty( "createAccount", autoCreate );
@@ -612,7 +611,7 @@ AtticaManager::resolverDownloadFinished ( QNetworkReply *j )
            tLog() << "Found overridden signature in binary download:" << sig;
            signature = sig;
        }
-       QNetworkReply* reply = Tomahawk::Utils::nam()->get( QNetworkRequest( url ) );
+       QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
        connect( reply, SIGNAL( finished() ), this, SLOT( payloadFetched() ) );
        reply->setProperty( "resolverId", j->property( "resolverId" ) );
        reply->setProperty( "createAccount", j->property( "createAccount" ) );

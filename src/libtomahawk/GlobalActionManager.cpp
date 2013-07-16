@@ -184,7 +184,6 @@ GlobalActionManager::openUrl( const QString& url )
 
 
 #ifndef ENABLE_HEADLESS
-
 QString
 GlobalActionManager::copyPlaylistToClipboard( const dynplaylist_ptr& playlist )
 {

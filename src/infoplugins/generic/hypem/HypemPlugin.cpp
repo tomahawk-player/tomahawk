@@ -31,7 +31,6 @@
 #include "utils/TomahawkUtils.h"
 #include "infosystem/InfoSystemWorker.h"
 #include "utils/Logger.h"
-#include "utils/NetworkAccessManager.h"
 #include "Source.h"
 
 #define HYPEM_URL "http://hypem.com/playlist/"
@@ -205,7 +204,7 @@ HypemPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSys
             QUrl url = QUrl( QString( HYPEM_URL "%1/%2" ).arg( criteria["chart_id"].toLower() ).arg(HYPEM_END_URL) );
             qDebug() << Q_FUNC_INFO << "Getting chart url" << url;
 
-            QNetworkReply* reply = Tomahawk::Utils::nam()->get( QNetworkRequest( url ) );
+            QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
             reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
             connect( reply, SIGNAL( finished() ), SLOT( chartReturned() ) );
             return;

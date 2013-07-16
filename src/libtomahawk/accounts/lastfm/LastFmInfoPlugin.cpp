@@ -32,7 +32,6 @@
 #include "accounts/lastfm/LastFmAccount.h"
 #include "Source.h"
 #include "TomahawkSettings.h"
-#include "utils/NetworkAccessManager.h"
 
 #include <lastfm/ws.h>
 #include <lastfm/XmlQuery.h>
@@ -65,7 +64,7 @@ LastFmInfoPlugin::init()
     lastfm::ws::ApiKey = "7194b85b6d1f424fe1668173a78c0c4a";
     lastfm::ws::SharedSecret = "ba80f1df6d27ae63e9cb1d33ccf2052f";
     lastfm::ws::Username = m_account.data()->username();
-    lastfm::setNetworkAccessManager( Tomahawk::Utils::nam() );
+    lastfm::setNetworkAccessManager( TomahawkUtils::nam() );
 
     m_pw = m_account.data()->password();
 
@@ -412,7 +411,7 @@ LastFmInfoPlugin::fetchAlbumInfo( Tomahawk::InfoSystem::InfoRequestData requestD
 void
 LastFmInfoPlugin::notInCacheSlot( QHash<QString, QString> criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
-    if ( !Tomahawk::Utils::nam() )
+    if ( !TomahawkUtils::nam() )
     {
         tLog() << "Have a null QNAM, uh oh";
         emit info( requestData, QVariant() );
@@ -762,7 +761,7 @@ LastFmInfoPlugin::artistInfoReturned()
             imgurl = artist.imageUrl( lastfm::AbstractType::LargeImage );
 
         QNetworkRequest req( imgurl );
-        QNetworkReply* newReply = Tomahawk::Utils::nam()->get( req );
+        QNetworkReply* newReply = TomahawkUtils::nam()->get( req );
         newReply->setProperty( "requestData", reply->property( "requestData" ) );
         connect( newReply, SIGNAL( finished() ), SLOT( coverArtReturned() ) );
     }
@@ -787,7 +786,7 @@ LastFmInfoPlugin::albumInfoReturned()
                 imgurl = QUrl( lfm["album"]["image size=large"].text() );
 
             QNetworkRequest req( imgurl );
-            QNetworkReply* newReply = Tomahawk::Utils::nam()->get( req );
+            QNetworkReply* newReply = TomahawkUtils::nam()->get( req );
             newReply->setProperty( "requestData", reply->property( "requestData" ) );
             connect( newReply, SIGNAL( finished() ), SLOT( coverArtReturned() ) );
         }
@@ -834,7 +833,7 @@ LastFmInfoPlugin::coverArtReturned()
     {
         // Follow HTTP redirect
         QNetworkRequest req( redir );
-        QNetworkReply* newReply = Tomahawk::Utils::nam()->get( req );
+        QNetworkReply* newReply = TomahawkUtils::nam()->get( req );
         newReply->setProperty( "requestData", reply->property( "requestData" ) );
         connect( newReply, SIGNAL( finished() ), SLOT( coverArtReturned() ) );
     }
@@ -878,7 +877,7 @@ LastFmInfoPlugin::artistImagesReturned()
     }
     else
     {
-        if ( !Tomahawk::Utils::nam() )
+        if ( !TomahawkUtils::nam() )
         {
             tLog() << Q_FUNC_INFO << "Uh oh, nam is null";
             emit info( reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant() );
@@ -886,7 +885,7 @@ LastFmInfoPlugin::artistImagesReturned()
         }
         // Follow HTTP redirect
         QNetworkRequest req( redir );
-        QNetworkReply* newReply = Tomahawk::Utils::nam()->get( req );
+        QNetworkReply* newReply = TomahawkUtils::nam()->get( req );
         newReply->setProperty( "requestData", reply->property( "requestData" ) );
         connect( newReply, SIGNAL( finished() ), SLOT( artistImagesReturned() ) );
     }

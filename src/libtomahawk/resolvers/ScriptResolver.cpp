@@ -20,12 +20,6 @@
 
 #include "ScriptResolver.h"
 
-#include "accounts/AccountConfigWidget.h"
-#include "utils/TomahawkUtilsGui.h"
-#include "utils/Logger.h"
-#include "utils/NetworkAccessManager.h"
-#include "utils/NetworkProxyFactory.h"
-
 #include "Artist.h"
 #include "Album.h"
 #include "Pipeline.h"
@@ -60,7 +54,7 @@ ScriptResolver::ScriptResolver( const QString& exe )
 
     startProcess();
 
-    if ( !Tomahawk::Utils::nam() )
+    if ( !TomahawkUtils::nam() )
         return;
 
     // set the name to the binary, if we launch properly we'll get the name the resolver reports
@@ -139,11 +133,7 @@ ScriptResolver::sendConfig()
 
     m_configSent = true;
 
-    tDebug() << "Nam is:" << Tomahawk::Utils::nam();
-    tDebug() << "Nam proxy is:" << Tomahawk::Utils::nam()->proxyFactory();
-    Tomahawk::Utils::nam()->proxyFactory()->queryProxy();
-    Tomahawk::Utils::NetworkProxyFactory* factory = dynamic_cast<Tomahawk::Utils::NetworkProxyFactory*>( Tomahawk::Utils::nam()->proxyFactory() );
-    tDebug() << "Factory is:" << factory;
+    TomahawkUtils::NetworkProxyFactory* factory = dynamic_cast<TomahawkUtils::NetworkProxyFactory*>( TomahawkUtils::nam()->proxyFactory() );
     QNetworkProxy proxy = factory->proxy();
     QString proxyType = ( proxy.type() == QNetworkProxy::Socks5Proxy ? "socks5" : "none" );
     m.insert( "proxytype", proxyType );

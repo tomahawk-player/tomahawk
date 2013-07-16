@@ -18,12 +18,10 @@
  */
 
 #include "EchonestPlugin.h"
+#include <echonest/ArtistTypes.h>
 
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
-#include "utils/NetworkAccessManager.h"
-
-#include <echonest/ArtistTypes.h>
 
 #include <QNetworkConfiguration>
 
@@ -52,7 +50,7 @@ EchonestPlugin::~EchonestPlugin()
 void
 EchonestPlugin::init()
 {
-    Echonest::Config::instance()->setNetworkAccessManager( Tomahawk::Utils::nam() );
+    Echonest::Config::instance()->setNetworkAccessManager( TomahawkUtils::nam() );
 }
 
 

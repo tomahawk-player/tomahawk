@@ -32,7 +32,6 @@
 #include "utils/NetworkReply.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
-#include "utils/NetworkAccessManager.h"
 
 using namespace Tomahawk;
 
@@ -79,7 +78,7 @@ ShortenedLinkParser::lookupUrl( const QString& url )
     if ( cleaned.contains( "/#/s/" ) )
         cleaned.replace( "/#", "" );
 
-    NetworkReply* reply = new NetworkReply( Tomahawk::Utils::nam()->get( QNetworkRequest( QUrl( cleaned ) ) ) );
+    NetworkReply* reply = new NetworkReply( TomahawkUtils::nam()->get( QNetworkRequest( QUrl( cleaned ) ) ) );
     connect( reply, SIGNAL( finished() ), SLOT( lookupFinished() ) );
 
     m_queries.insert( reply );

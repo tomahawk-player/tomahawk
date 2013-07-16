@@ -24,7 +24,6 @@
 #include "utils/Logger.h"
 #include "sip/HatchetSip.h"
 #include "utils/TomahawkUtils.h"
-#include "utils/NetworkAccessManager.cpp"
 
 #include <QtPlugin>
 #include <QFile>
@@ -244,7 +243,7 @@ HatchetAccount::loginWithPassword( const QString& username, const QString& passw
 
     QNetworkRequest req( QUrl( c_loginServer + "/auth/credentials") );
     req.setHeader( QNetworkRequest::ContentTypeHeader, "application/json; charset=utf-8" );
-    QNetworkReply* reply = Tomahawk::Utils::nam()->post( req, msgJson );
+    QNetworkReply* reply = TomahawkUtils::nam()->post( req, msgJson );
 
     NewClosure( reply, SIGNAL( finished() ), this, SLOT( onPasswordLoginFinished( QNetworkReply*, const QString& ) ), reply, username );
 }
@@ -265,7 +264,7 @@ HatchetAccount::fetchAccessTokens( const QString& type )
     tLog() << "Fetching access tokens";
     QNetworkRequest req( QUrl( c_accessTokenServer + "/tokens/" + type + "?authtoken=" + authToken() ) );
 
-    QNetworkReply* reply = Tomahawk::Utils::nam()->get( req );
+    QNetworkReply* reply = TomahawkUtils::nam()->get( req );
 
     connect( reply, SIGNAL( finished() ), this, SLOT( onFetchAccessTokensFinished() ) );
 }

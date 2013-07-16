@@ -30,7 +30,6 @@
 #include "utils/Logger.h"
 #include "utils/TomahawkCache.h"
 #include "Source.h"
-#include "utils/NetworkAccessManager.h"
 
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
@@ -269,7 +268,7 @@ NewReleasesPlugin::notInCacheSlot( InfoStringHash criteria, InfoRequestData requ
 
             TomahawkUtils::urlAddQueryItem( url, "version", TomahawkUtils::appFriendlyVersion() );
 
-            QNetworkReply* reply = Tomahawk::Utils::nam()->get( QNetworkRequest ( url ) );
+            QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest ( url ) );
             reply->setProperty( "only_source_list", true );
 
             tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "fetching:" << url;
@@ -402,7 +401,7 @@ NewReleasesPlugin::fetchAllNRSources()
 
             TomahawkUtils::urlAddQueryItem( url, "version", TomahawkUtils::appFriendlyVersion() );
 
-            QNetworkReply* reply = Tomahawk::Utils::nam()->get( QNetworkRequest( url ) );
+            QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
             reply->setProperty( "nr_source", source[ "nr_source" ] );
 
             tDebug() << Q_FUNC_INFO << "fetching:" << url;
@@ -424,7 +423,7 @@ NewReleasesPlugin::fetchNR( InfoRequestData requestData, const QString& source, 
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "fetching: " << url;
 
-    QNetworkReply* reply = Tomahawk::Utils::nam()->get( QNetworkRequest( url ) );
+    QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
     reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
 
     connect ( reply, SIGNAL( finished() ), SLOT( nrReturned() ) );
