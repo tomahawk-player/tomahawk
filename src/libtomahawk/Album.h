@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013,      Uwe L. Korn  <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -20,11 +21,7 @@
 #ifndef TOMAHAWKALBUM_H
 #define TOMAHAWKALBUM_H
 
-#include <QtCore/QObject>
-#include <QtCore/QSharedPointer>
-#ifndef ENABLE_HEADLESS
-    #include <QtGui/QPixmap>
-#endif
+#include <QPixmap>
 #include <QFuture>
 
 #include "Typedefs.h"
@@ -51,20 +48,20 @@ public:
     virtual ~Album();
 
     unsigned int id() const;
-    QString name() const { return m_name; }
-    QString sortname() const { return m_sortname; }
+    QString name() const;
+    QString sortname() const;
 
     artist_ptr artist() const;
 #ifndef ENABLE_HEADLESS
     QPixmap cover( const QSize& size, bool forceLoad = true ) const;
 #endif
-    bool coverLoaded() const { return m_coverLoaded; }
+    bool coverLoaded() const;
 
     QList<Tomahawk::query_ptr> tracks( ModelMode mode = Mixed, const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr() );
     Tomahawk::playlistinterface_ptr playlistInterface( ModelMode mode, const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr() );
 
-    QWeakPointer< Tomahawk::Album > weakRef() { return m_ownRef; }
-    void setWeakRef( QWeakPointer< Tomahawk::Album > weakRef ) { m_ownRef = weakRef; }
+    QWeakPointer< Tomahawk::Album > weakRef();
+    void setWeakRef( QWeakPointer< Tomahawk::Album > weakRef );
 
     void loadId( bool autoCreate );
 

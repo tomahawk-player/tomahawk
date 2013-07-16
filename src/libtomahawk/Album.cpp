@@ -237,6 +237,20 @@ Album::id() const
 }
 
 
+QString
+Album::name() const
+{
+    return m_name;
+}
+
+
+QString
+Album::sortname() const
+{
+    return m_sortname;
+}
+
+
 #ifndef ENABLE_HEADLESS
 QPixmap
 Album::cover( const QSize& size, bool forceLoad ) const
@@ -303,6 +317,13 @@ Album::cover( const QSize& size, bool forceLoad ) const
     else
         return QPixmap();
 }
+
+bool
+Album::coverLoaded() const
+{
+    return m_coverLoaded;
+}
+
 #endif
 
 
@@ -366,6 +387,20 @@ Album::playlistInterface( ModelMode mode, const Tomahawk::collection_ptr& collec
     }
 
     return pli;
+}
+
+
+QWeakPointer<Album>
+Album::weakRef()
+{
+    return m_ownRef;
+}
+
+
+void
+Album::setWeakRef( QWeakPointer<Album> weakRef )
+{
+    m_ownRef = weakRef;
 }
 
 
