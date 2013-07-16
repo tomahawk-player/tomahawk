@@ -36,13 +36,13 @@
 #include "PlaylistPlaylistInterface.h"
 #include "Source.h"
 #include "SourceList.h"
-#include "TomahawkSettings.h"
 
 #include <QDomDocument>
 #include <QDomElement>
 
 using namespace Tomahawk;
 
+static QSharedPointer<PlaylistRemovalHandler> s_removalHandler;
 
 Playlist::Playlist( const source_ptr& author )
     : d_ptr( new PlaylistPrivate( this, author ) )
@@ -112,6 +112,16 @@ Playlist::~Playlist()
     delete d_ptr;
 }
 
+QSharedPointer<PlaylistRemovalHandler> Playlist::removalHandler()
+{
+    if ( s_removalHandler.isNull() )
+    {
+        s_removalHandler = QSharedPointer<PlaylistRemovalHandler>( new PlaylistRemovalHandler() );
+    }
+
+    return s_removalHandler;
+}
+
 
 playlist_ptr
 Playlist::create( const source_ptr& author,
@@ -176,18 +186,6 @@ Playlist::get( const QString& guid )
     }
 
     return p;
-}
-
-
-void
-Playlist::remove( const playlist_ptr& playlist )
-{
-    emit playlist->aboutToBeDeleted( playlist );
-
-    TomahawkSettings::instance()->removePlaylistSettings( playlist->guid() );
-
-    DatabaseCommand_DeletePlaylist* cmd = new DatabaseCommand_DeletePlaylist( playlist->author(), playlist->guid() );
-    Database::instance()->enqueue( Tomahawk::dbcmd_ptr(cmd) );
 }
 
 
@@ -500,6 +498,14 @@ Playlist::setNewRevision( const QString& rev,
     pr.newlist = d->entries;
 
     return pr;
+}
+
+void
+Playlist::removeFromDatabase()
+{
+    Q_D( Playlist );
+    DatabaseCommand_DeletePlaylist* cmd = new DatabaseCommand_DeletePlaylist( d->source, d->guid );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr(cmd) );
 }
 
 Playlist::Playlist( PlaylistPrivate *d )
@@ -895,4 +901,17 @@ Playlist::updaters() const
 {
     Q_D( const Playlist );
     return d->updaters;
+}
+
+
+void
+PlaylistRemovalHandler::remove( const playlist_ptr& playlist )
+{
+    emit playlist->aboutToBeDeleted( playlist );
+    playlist->removeFromDatabase();
+}
+
+
+PlaylistRemovalHandler::PlaylistRemovalHandler()
+{
 }

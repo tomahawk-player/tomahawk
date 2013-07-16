@@ -106,6 +106,7 @@ public slots:
     void instanceStarted( KDSingleApplicationGuard::Instance );
 
 private slots:
+    void playlistRemoved( const Tomahawk::playlist_ptr& playlist );
     void initServent();
     void initSIP();
     void initHTTP();

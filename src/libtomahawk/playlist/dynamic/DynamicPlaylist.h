@@ -155,6 +155,10 @@ public slots:
                       const QString& type,
                       const QList< Tomahawk::dyncontrol_ptr>& controls,
                       bool applied );
+
+protected:
+    virtual void removeFromDatabase();
+
 private:
     // called from loadAllPlaylists DB cmd via databasecollection (in GUI thread)
     explicit DynamicPlaylist( const source_ptr& src,

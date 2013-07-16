@@ -273,6 +273,9 @@ TomahawkApp::init()
         connect( m_shortcutHandler.data(), SIGNAL( mute() ), m_audioEngine.data(), SLOT( mute() ) );
     }
 
+    connect( Playlist::removalHandler().data(), SIGNAL( aboutToBeDeletePlaylist( Tomahawk::playlist_ptr ) ),
+                SLOT( playlistRemoved( Tomahawk::playlist_ptr ) ));
+
     tDebug() << "Init InfoSystem.";
     m_infoSystem = QPointer<Tomahawk::InfoSystem::InfoSystem>( Tomahawk::InfoSystem::InfoSystem::instance() );
     connect( m_infoSystem, SIGNAL( ready() ), SLOT( onInfoSystemReady() ) );
@@ -832,6 +835,13 @@ TomahawkApp::instanceStarted( KDSingleApplicationGuard::Instance instance )
         AudioEngine::instance()->raiseVolume();
     else
         activate();
+}
+
+
+void
+TomahawkApp::playlistRemoved(const playlist_ptr &playlist)
+{
+    TomahawkSettings::instance()->removePlaylistSettings( playlist->guid() );
 }
 
 

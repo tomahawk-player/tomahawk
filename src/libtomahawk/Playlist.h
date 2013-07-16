@@ -49,6 +49,7 @@ class DatabaseCommand_LoadAllSortedPlaylists;
 class DatabaseCommand_SetPlaylistRevision;
 class DatabaseCommand_CreatePlaylist;
 
+class Playlist;
 class PlaylistPrivate;
 class PlaylistUpdaterInterface;
 
@@ -60,6 +61,22 @@ struct PlaylistRevision
     QList<plentry_ptr> added;
     QList<plentry_ptr> removed;
     bool applied; // false if conflict
+};
+
+class DLLEXPORT PlaylistRemovalHandler : public QObject
+{
+Q_OBJECT
+
+    friend class Playlist;
+
+public slots:
+    void remove( const playlist_ptr& playlist );
+
+signals:
+    void aboutToBeDeletePlaylist( const Tomahawk::playlist_ptr& playlist );
+
+private:
+    PlaylistRemovalHandler();
 };
 
 
@@ -79,11 +96,13 @@ friend class DatabaseCommand_LoadAllSortedPlaylists;
 friend class DatabaseCommand_SetPlaylistRevision;
 friend class DatabaseCommand_CreatePlaylist;
 friend class DynamicPlaylist;
+friend class PlaylistRemovalHandler;
 friend class ::PlaylistModel;
 
 public:
     virtual ~Playlist();
 
+    static QSharedPointer<PlaylistRemovalHandler> removalHandler();
     static Tomahawk::playlist_ptr get( const QString& guid );
 
     // one CTOR is private, only called by DatabaseCommand_LoadAllPlaylists
@@ -95,7 +114,6 @@ public:
                                           bool shared,
                                           const QList<Tomahawk::query_ptr>& queries = QList<Tomahawk::query_ptr>() );
 
-    static void remove( const playlist_ptr& playlist );
     void rename( const QString& title );
 
     virtual void loadRevision( const QString& rev = "" );
@@ -245,6 +263,9 @@ protected:
                                      const QList<QString>& oldorderedguids,
                                      bool is_newest_rev,
                                      const QMap< QString, Tomahawk::plentry_ptr >& addedmap );
+
+    virtual void removeFromDatabase();
+
     Playlist( PlaylistPrivate* d );
 
     Tomahawk::PlaylistPrivate* d_ptr;

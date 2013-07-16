@@ -34,7 +34,6 @@
 #include "PlaylistEntry.h"
 #include "PlaylistInterface.h"
 #include "SourceList.h"
-#include "TomahawkSettings.h"
 
 
 using namespace Tomahawk;
@@ -320,18 +319,6 @@ DynamicPlaylist::loadRevision( const QString& rev )
 
 
 void
-DynamicPlaylist::remove( const Tomahawk::dynplaylist_ptr& playlist )
-{
-    playlist->aboutToBeDeleted( playlist );
-
-    TomahawkSettings::instance()->removePlaylistSettings( playlist->guid() );
-
-    DatabaseCommand_DeletePlaylist* cmd = new DatabaseCommand_DeleteDynamicPlaylist( playlist->author(), playlist->guid() );
-    Database::instance()->enqueue( Tomahawk::dbcmd_ptr(cmd) );
-}
-
-
-void
 DynamicPlaylist::reportCreated( const Tomahawk::dynplaylist_ptr& self )
 {
 //    qDebug() << Q_FUNC_INFO;
@@ -512,6 +499,14 @@ DynamicPlaylist::setRevision( const QString& rev,
     setBusy( false );
     setLoaded( true );
     emit dynamicRevisionLoaded( dpr );
+}
+
+
+void
+DynamicPlaylist::removeFromDatabase()
+{
+    DatabaseCommand_DeletePlaylist* cmd = new DatabaseCommand_DeleteDynamicPlaylist( author(), guid() ) ;
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr(cmd) );
 }
 
 
