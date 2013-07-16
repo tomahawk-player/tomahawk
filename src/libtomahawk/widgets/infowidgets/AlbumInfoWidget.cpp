@@ -53,7 +53,7 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
 
     m_pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::Original, QSize( 48, 48 ) );
     ui->cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultAlbumCover, TomahawkUtils::Grid, ui->cover->size() ) );
-    ui->cover->setShowText( true );
+    ui->cover->setShowText( false );
 
     ui->lineAbove->setStyleSheet( QString( "QFrame { border: 1px solid %1; }" ).arg( TomahawkStyle::HEADER_BACKGROUND.name() ) );
     ui->lineBelow->setStyleSheet( QString( "QFrame { border: 1px solid black; }" ) );
@@ -125,8 +125,35 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
     }
 
     {
+        QFont f = ui->albumLabel->font();
+        f.setFamily( "Titillium Web" );
+
+        QPalette p = ui->albumLabel->palette();
+        p.setColor( QPalette::Foreground, TomahawkStyle::HEADER_LABEL );
+
+        ui->albumLabel->setFont( f );
+        ui->albumLabel->setPalette( p );
+    }
+
+    {
+        ui->artistLabel->setContentsMargins( 6, 2, 6, 2 );
+        ui->artistLabel->setElideMode( Qt::ElideMiddle );
+        ui->artistLabel->setType( QueryLabel::Artist );
+        connect( ui->artistLabel, SIGNAL( clickedArtist() ), SLOT( onArtistClicked() ) );
+
+        QFont f = ui->artistLabel->font();
+        f.setFamily( "Titillium Web" );
+
+        QPalette p = ui->artistLabel->palette();
+        p.setColor( QPalette::Foreground, TomahawkStyle::HEADER_TEXT );
+
+        ui->artistLabel->setFont( f );
+        ui->artistLabel->setPalette( p );
+    }
+
+    {
         QFont f = ui->label->font();
-        f.setFamily( "Pathway Gothic One"  );
+        f.setFamily( "Pathway Gothic One" );
 
         QPalette p = ui->label->palette();
         p.setColor( QPalette::Foreground, TomahawkStyle::PAGE_CAPTION );
@@ -228,6 +255,8 @@ AlbumInfoWidget::load( const album_ptr& album )
 
     ui->label_2->setText( tr( "Other Albums by %1" ).arg( album->artist()->name() ) );
     ui->cover->setAlbum( album );
+    ui->albumLabel->setText( album->name() );
+    ui->artistLabel->setArtist( album->artist() );
 
     m_tracksModel->startLoading();
     m_tracksModel->addTracks( album, QModelIndex(), true );
