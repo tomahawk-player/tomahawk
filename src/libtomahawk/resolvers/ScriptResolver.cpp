@@ -140,6 +140,7 @@ ScriptResolver::sendConfig()
     m_configSent = true;
 
     Tomahawk::Utils::NetworkProxyFactory* factory = dynamic_cast<Tomahawk::Utils::NetworkProxyFactory*>( Tomahawk::Utils::nam()->proxyFactory() );
+    tDebug() << "Factory is:" << factory;
     QNetworkProxy proxy = factory->proxy();
     QString proxyType = ( proxy.type() == QNetworkProxy::Socks5Proxy ? "socks5" : "none" );
     m.insert( "proxytype", proxyType );
