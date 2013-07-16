@@ -35,9 +35,7 @@ class TOMAHAWK_WIDGETS_EXPORT PlaylistDelegate : public QStyledItemDelegate
 Q_OBJECT
 
 public:
-    PlaylistDelegate()
-    {
-    }
+    PlaylistDelegate();
 
 protected:
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;

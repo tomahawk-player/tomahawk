@@ -55,6 +55,11 @@ PlaylistDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelInde
 }
 
 
+PlaylistDelegate::PlaylistDelegate()
+{
+}
+
+
 void
 PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
