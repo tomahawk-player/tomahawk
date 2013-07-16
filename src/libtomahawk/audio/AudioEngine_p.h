@@ -29,7 +29,7 @@ public:
 
 public slots:
     void onStateChanged( Phonon::State newState, Phonon::State oldState );
-    void onAudioDataArrived( QMap< Phonon::AudioDataOutput::Channel, QVector<qint16> > data );
+    void onAudioDataArrived( QMap< Phonon::AudioDataOutput::Channel, QVector< qint16 > > data );
 
 private:
     QSharedPointer<QIODevice> input;

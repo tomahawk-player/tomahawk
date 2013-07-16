@@ -153,10 +153,10 @@ private:
     void checkStateQueue();
     void queueState( AudioState state );
     void setState( AudioState state );
-    void setCurrentTrackPlaylist( const Tomahawk::playlistinterface_ptr& playlist );\
+    void setCurrentTrackPlaylist( const Tomahawk::playlistinterface_ptr& playlist );
 
     void initEqualizer();
-    void audioDataArrived( QMap< AudioEngine::AudioChannel, QVector<qint16> >& data );
+    void audioDataArrived( QMap< AudioEngine::AudioChannel, QVector< qint16 > >& data );
 
 
     Q_DECLARE_PRIVATE( AudioEngine );
