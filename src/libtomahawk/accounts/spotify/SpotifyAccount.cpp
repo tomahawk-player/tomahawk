@@ -31,11 +31,13 @@
 #include "Pipeline.h"
 #include "Playlist.h"
 #include "PlaylistEntry.h"
+#include "PlaylistInterface.h"
 #include "SourceList.h"
 #include "SpotifyAccountConfig.h"
 #include "SpotifyInfoPlugin.h"
 #include "SpotifyPlaylistUpdater.h"
 #include "TomahawkSettings.h"
+#include "Track.h"
 
 #ifndef ENABLE_HEADLESS
 #include "jobview/JobStatusView.h"
