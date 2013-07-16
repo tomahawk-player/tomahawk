@@ -90,7 +90,7 @@ ShortLinkHelper::shortLink( const Tomahawk::playlist_ptr& pl )
     const QUrl url( QString( "%1/p/").arg( hostname() ) );
     QNetworkRequest req( url );
     req.setHeader( QNetworkRequest::ContentTypeHeader, QString( "multipart/form-data; boundary=%1" ).arg( QString::fromLatin1( boundary ) ) );
-    d->reply = Tomahawk::Utils::nam()->post( req, data );
+    d->reply = TomahawkUtils::nam()->post( req, data );
 
     NewClosure( d->reply, SIGNAL( finished() ),
                 this, SLOT( shortLinkRequestFinished( Tomahawk::playlist_ptr ) ), pl );
@@ -113,7 +113,7 @@ ShortLinkHelper::shortenLink( const QUrl& url, const QVariant& callbackObj )
     QNetworkRequest request;
     request.setUrl( url );
 
-    d->reply = Tomahawk::Utils::nam()->get( request );
+    d->reply = TomahawkUtils::nam()->get( request );
     if ( callbackObj.isValid() )
         d->reply->setProperty( "callbackobj", callbackObj );
     connect( d->reply, SIGNAL( finished() ), SLOT( shortenLinkRequestFinished() ) );
