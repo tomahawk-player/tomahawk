@@ -80,6 +80,13 @@ LocalConfigStorage::accountIds() const
 }
 
 
+unsigned int
+LocalConfigStorage::priority() const
+{
+    return 0;
+}
+
+
 void
 LocalConfigStorage::save( const QString& accountId, const Account::Configuration& cfg )
 {

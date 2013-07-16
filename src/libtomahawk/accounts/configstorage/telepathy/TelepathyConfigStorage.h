@@ -55,6 +55,8 @@ public:
 
     QStringList accountIds() const;
 
+    unsigned int priority() const;
+
     virtual void save( const QString& accountId, const Account::Configuration& cfg );
     virtual void load( const QString& accountId, Account::Configuration& cfg );
     virtual void remove( const QString& accountId );

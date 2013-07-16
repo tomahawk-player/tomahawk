@@ -311,7 +311,25 @@ AccountManager::loadPlugin( const QString& accountId )
 void
 AccountManager::addAccount( Account* account )
 {
-    tDebug() << Q_FUNC_INFO << "adding account plugin";
+    tDebug() << Q_FUNC_INFO << "adding account plugin" << account->accountId();
+    foreach ( Account* a, m_accounts )
+    {
+        if ( a->credentials()["username"] == account->credentials()["username"] )
+        {
+            ConfigStorage* configStorageForA = configStorageForAccount( a->accountId() );
+            ConfigStorage* configStorageForNewAccount = configStorageForAccount( account->accountId() );
+
+            if ( !configStorageForA || !configStorageForNewAccount || configStorageForA->priority() > configStorageForNewAccount->priority() )
+            {
+                removeAccount( a );
+                break;
+            }
+            else
+            {
+                return;
+            }
+        }
+    }
     m_accounts.append( account );
 
     if ( account->types() & Accounts::SipType )

@@ -201,6 +201,13 @@ Tomahawk::Accounts::TelepathyConfigStorage::accountIds() const
 }
 
 
+unsigned int
+Tomahawk::Accounts::TelepathyConfigStorage::priority() const
+{
+    return 30;
+}
+
+
 void
 Tomahawk::Accounts::TelepathyConfigStorage::save( const QString& accountId, const Account::Configuration& cfg )
 {

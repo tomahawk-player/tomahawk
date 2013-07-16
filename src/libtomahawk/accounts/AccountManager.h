@@ -151,8 +151,8 @@ private:
     static AccountManager* s_instance;
 };
 
-};
+}
 
-};
+}
 
 #endif

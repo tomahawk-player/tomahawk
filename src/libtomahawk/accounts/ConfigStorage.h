@@ -49,6 +49,8 @@ public:
 
     virtual QStringList accountIds() const = 0;
 
+    virtual unsigned int priority() const = 0; //LocalConfigStorage has 0, everything else comes later
+
     virtual void save( const QString& accountId, const Account::Configuration& cfg ) = 0;
     virtual void load( const QString& accountId, Account::Configuration& cfg ) = 0;
     virtual void remove( const QString& accountId ) = 0;
