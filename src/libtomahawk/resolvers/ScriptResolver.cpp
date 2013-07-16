@@ -28,6 +28,10 @@
 #include "SourceList.h"
 #include "Track.h"
 
+#include "utils/Logger.h"
+#include "utils/TomahawkUtilsGui.h"
+#include "accounts/AccountConfigWidget.h"
+
 #include <QtEndian>
 #include <QFileInfo>
 #include <QNetworkAccessManager>
