@@ -22,9 +22,6 @@
 #ifndef TOMAHAWK_UTILS_NETWORKACCESSMANAGER_H
 #define TOMAHAWK_UTILS_NETWORKACCESSMANAGER_H
 
-
-#include <QNetworkProxy>
-
 #include "DllMacro.h"
 
 class QNetworkAccessManager;
@@ -35,28 +32,6 @@ namespace Utils
 {
     DLLEXPORT QNetworkAccessManager* nam();
     DLLEXPORT void setNam( QNetworkAccessManager* nam, bool noMutexLocker = false );
-
-    // Proxy settings
-    DLLEXPORT bool proxyDns();
-    DLLEXPORT void setProxyDns( bool proxyDns );
-
-    DLLEXPORT QNetworkProxy::ProxyType proxyType();
-    DLLEXPORT void setProxyType( QNetworkProxy::ProxyType proxyType );
-
-    DLLEXPORT QString proxyHost();
-    DLLEXPORT void setProxyHost( const QString& proxyHost );
-
-    DLLEXPORT qulonglong proxyPort();
-    DLLEXPORT void setProxyPort( qulonglong proxyPort );
-
-    DLLEXPORT QString proxyUsername();
-    DLLEXPORT void setProxyUsername( const QString& proxyUsername );
-
-    DLLEXPORT QString proxyPassword();
-    DLLEXPORT void setProxyPassword( const QString& proxyPassword );
-
-    DLLEXPORT QString proxyNoProxyHosts();
-    DLLEXPORT void setProxyNoProxyHosts( const QString& proxyNoProxyHosts );
 }
 }
 
