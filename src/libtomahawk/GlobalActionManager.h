@@ -47,7 +47,6 @@ public:
     QUrl openLink( const QString& title, const QString& artist, const QString& album ) const;
 
 public slots:
-    void shortenLink( const QUrl& url, const QVariant &callbackObj = QVariant() );
 
 #ifndef ENABLE_HEADLESS
 
@@ -70,7 +69,6 @@ public slots:
     void savePlaylistToFile( const Tomahawk::playlist_ptr& playlist, const QString& filename );
 
     bool parseTomahawkLink( const QString& link );
-    void getShortLink( const Tomahawk::playlist_ptr& playlist );
     void waitingForResolved( bool );
 
     Tomahawk::dynplaylist_ptr loadDynamicPlaylist( const QUrl& url, bool station );
@@ -81,17 +79,11 @@ public slots:
     void handlePlayTrack( const Tomahawk::query_ptr& qry );
 #endif
 
-signals:
-    void shortLinkReady( const QUrl& longUrl, const QUrl& shortUrl, const QVariant& callbackObj );
-
 private slots:
     void informationForUrl( const QString& url, const QSharedPointer<QObject>& information );
-
-    void shortenLinkRequestFinished();
-    void shortenLinkRequestError( QNetworkReply::NetworkError );
+    void copyToClipboardReady( const QUrl& longUrl, const QUrl& shortUrl, const QVariant& callbackObj );
 
 #ifndef ENABLE_HEADLESS
-    void postShortenFinished();
     void showPlaylist();
 
     void playlistCreatedToShow( const Tomahawk::playlist_ptr& pl );
@@ -130,8 +122,6 @@ private:
     void createPlaylistFromUrl( const QString& type, const QString& url, const QString& title );
 
     QString hostname() const;
-
-    inline QByteArray percentEncode( const QUrl& url ) const;
 
     Tomahawk::playlist_ptr m_toShow;
     Tomahawk::query_ptr m_waitingToPlay;

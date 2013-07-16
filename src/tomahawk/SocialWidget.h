@@ -22,6 +22,8 @@
 
 #include "Query.h"
 
+#include "utils/ShortLinkHelper.h"
+
 #include <QWidget>
 #include <QAbstractItemView>
 #include <QTimer>
@@ -79,6 +81,7 @@ private:
     QWidget* m_parent;
     QRect m_parentRect;
     QTimer m_timer;
+    Tomahawk::Utils::ShortLinkHelper m_slh;
 };
 
 #endif // SOCIALWIDGET_H

@@ -32,13 +32,14 @@
 #include "resolvers/ScriptCommand_LookupUrl.h"
 #include "utils/JspfLoader.h"
 #include "utils/Logger.h"
+#include "utils/NetworkAccessManager.h"
 #include "utils/RdioParser.h"
 #include "utils/ShortenedLinkParser.h"
+#include "utils/ShortLinkHelper.h"
 #include "utils/SpotifyParser.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/XspfLoader.h"
 #include "utils/XspfGenerator.h"
-#include "utils/NetworkAccessManager.h"
 #include "widgets/SearchWidget.h"
 
 #include "Album.h"
@@ -143,29 +144,6 @@ GlobalActionManager::openLink( const QString& title, const QString& artist, cons
 }
 
 
-void
-GlobalActionManager::shortenLink( const QUrl& url, const QVariant& callbackObj )
-{
-    tDebug() << Q_FUNC_INFO << "callbackObj is valid: " << ( callbackObj.isValid() ? "true" : "false" );
-    if ( QThread::currentThread() != thread() )
-    {
-        qDebug() << "Reinvoking in correct thread:" << Q_FUNC_INFO;
-        QMetaObject::invokeMethod( this, "shortenLink", Qt::QueuedConnection, Q_ARG( QUrl, url ), Q_ARG( QVariant, callbackObj ) );
-        return;
-    }
-
-    QNetworkRequest request;
-    request.setUrl( url );
-
-    qDebug() << "Doing lookup:" << url.toEncoded();
-    QNetworkReply *reply = Tomahawk::Utils::nam()->get( request );
-    if ( callbackObj.isValid() )
-        reply->setProperty( "callbackobj", callbackObj );
-    connect( reply, SIGNAL( finished() ), SLOT( shortenLinkRequestFinished() ) );
-    connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), SLOT( shortenLinkRequestError( QNetworkReply::NetworkError ) ) );
-}
-
-
 bool
 GlobalActionManager::openUrl( const QString& url )
 {
@@ -206,52 +184,6 @@ GlobalActionManager::openUrl( const QString& url )
 
 
 #ifndef ENABLE_HEADLESS
-
-void
-GlobalActionManager::getShortLink( const playlist_ptr& pl )
-{
-    QVariantMap m;
-    m[ "title" ] = pl->title();
-    m[ "creator" ] = pl->author().isNull() ? "" : pl->author()->friendlyName();
-    QVariantList tracks;
-    foreach( const plentry_ptr& pl, pl->entries() )
-    {
-        if ( pl->query().isNull() )
-            continue;
-
-        QVariantMap track;
-        track[ "title" ] = pl->query()->track()->track();
-        track[ "creator" ] = pl->query()->track()->artist();
-        track[ "album" ] = pl->query()->track()->album();
-
-        tracks << track;
-    }
-    m[ "track" ] = tracks;
-
-    QVariantMap jspf;
-    jspf["playlist"] = m;
-
-    QJson::Serializer s;
-    QByteArray msg = s.serialize( jspf );
-
-    // No built-in Qt facilities for doing a FORM POST. So we build the payload ourselves...
-    const QByteArray boundary = "----------------------------2434992cccab";
-    QByteArray data( QByteArray( "--" + boundary + "\r\n" ) );
-    data += "Content-Disposition: form-data; name=\"data\"; filename=\"playlist.jspf\"\r\n";
-    data += "Content-Type: application/octet-stream\r\n\r\n";
-    data += msg;
-    data += "\r\n\r\n";
-    data += "--" + boundary + "--\r\n\r\n";
-
-    const QUrl url( QString( "%1/p/").arg( hostname() ) );
-    QNetworkRequest req( url );
-    req.setHeader( QNetworkRequest::ContentTypeHeader, QString( "multipart/form-data; boundary=%1" ).arg( QString::fromLatin1( boundary ) ) );
-    QNetworkReply *reply = Tomahawk::Utils::nam()->post( req, data );
-
-    connect( reply, SIGNAL( finished() ), SLOT( postShortenFinished() ) );
-    connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), SLOT( shortenLinkRequestError( QNetworkReply::NetworkError ) ) );
-}
-
 
 QString
 GlobalActionManager::copyPlaylistToClipboard( const dynplaylist_ptr& playlist )
@@ -337,7 +269,13 @@ void
 GlobalActionManager::copyToClipboard( const query_ptr& query )
 {
     m_clipboardLongUrl = openLinkFromQuery( query );
-    shortenLink( m_clipboardLongUrl );
+    Tomahawk::Utils::ShortLinkHelper* slh = new Tomahawk::Utils::ShortLinkHelper();
+    connect( slh, SIGNAL( shortLinkReady( QUrl, QUrl, QVariant ) ),
+             SLOT( copyToClipboardReady( QUrl, QUrl, QVariant ) ) );
+    connect( slh, SIGNAL( done() ),
+             slh, SLOT( deleteLater() ),
+             Qt::QueuedConnection );
+    slh->shortenLink( m_clipboardLongUrl );
 }
 
 
@@ -697,6 +635,22 @@ GlobalActionManager::informationForUrl(const QString& url, const QSharedPointer<
 
     // Could not cast to a known type.
     tLog() << Q_FUNC_INFO << "Can't load parsed information for " << url;
+}
+
+
+void
+GlobalActionManager::copyToClipboardReady( const QUrl& longUrl, const QUrl& shortUrl, const QVariant& )
+{
+    // Copy resulting url to clipboard
+    if ( m_clipboardLongUrl == longUrl )
+    {
+        QClipboard* cb = QApplication::clipboard();
+
+        QByteArray data = TomahawkUtils::percentEncode( shortUrl.isEmpty() ? longUrl : shortUrl );
+        cb->setText( data );
+
+        m_clipboardLongUrl.clear();
+    }
 }
 
 
@@ -1278,110 +1232,6 @@ GlobalActionManager::playRdio( const QUrl& url )
     return true;
 }
 
-#endif
-
-
-void
-GlobalActionManager::shortenLinkRequestFinished()
-{
-    qDebug() << Q_FUNC_INFO;
-    QNetworkReply *reply = qobject_cast<QNetworkReply*>( sender() );
-    bool error = false;
-
-    // NOTE: this should never happen
-    if ( !reply )
-    {
-        emit shortLinkReady( QUrl( "" ), QUrl( "" ), QVariantMap() );
-        return;
-    }
-
-    QVariant callbackObj;
-    if ( reply->property( "callbackobj" ).isValid() )
-        callbackObj = reply->property( "callbackobj" );
-
-    // Check for the redirect attribute, as this should be the shortened link
-    QVariant urlVariant = reply->attribute( QNetworkRequest::RedirectionTargetAttribute );
-
-    // NOTE: this should never happen
-    if ( urlVariant.isNull() || !urlVariant.isValid() )
-        error = true;
-
-    QUrl longUrl = reply->request().url();
-    QUrl shortUrl = urlVariant.toUrl();
-
-    // NOTE: this should never happen
-    if ( !shortUrl.isValid() )
-        error = true;
-
-#ifndef ENABLE_HEADLESS
-    // Success!  Here is the short link
-    if ( m_clipboardLongUrl == reply->request().url() )
-    {
-        QClipboard* cb = QApplication::clipboard();
-
-        QByteArray data = percentEncode( error ? longUrl : shortUrl );
-        cb->setText( data );
-
-        m_clipboardLongUrl.clear();
-    }
-    else
-#endif
-    {
-        if ( !error )
-            emit shortLinkReady( longUrl, shortUrl, callbackObj );
-        else
-            emit shortLinkReady( longUrl, longUrl, callbackObj );
-    }
-
-    reply->deleteLater();
-}
-
-
-#ifndef ENABLE_HEADLESS
-
-void
-GlobalActionManager::postShortenFinished()
-{
-    QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
-    Q_ASSERT( reply );
-    const QByteArray raw = reply->readAll();
-
-    const QUrl url = QUrl::fromUserInput( raw );
-    QClipboard* cb = QApplication::clipboard();
-
-    const QByteArray data = percentEncode( url );
-    cb->setText( data );
-
-    reply->deleteLater();
-}
-
-#endif
-
-
-void
-GlobalActionManager::shortenLinkRequestError( QNetworkReply::NetworkError error )
-{
-    tDebug() << Q_FUNC_INFO << "Network Error:" << error;
-
-    QNetworkReply *reply = qobject_cast<QNetworkReply*>( sender() );
-
-    // NOTE: this should never happen
-    if ( !reply )
-    {
-        emit shortLinkReady( QUrl( "" ), QUrl( "" ), QVariantMap() );
-        return;
-    }
-
-    QVariantMap callbackMap;
-    if ( reply->property( "callbackMap" ).canConvert< QVariantMap >() && !reply->property( "callbackMap" ).toMap().isEmpty() )
-        callbackMap = reply->property( "callbackMap" ).toMap();
-    reply->deleteLater();
-    emit shortLinkReady( QUrl( "" ), QUrl( "" ), callbackMap );
-}
-
-
-#ifndef ENABLE_HEADLESS
-
 void
 GlobalActionManager::showPlaylist()
 {
@@ -1454,16 +1304,4 @@ QString
 GlobalActionManager::hostname() const
 {
     return QString( "http://toma.hk" );
-}
-
-
-QByteArray
-GlobalActionManager::percentEncode( const QUrl& url ) const
-{
-    QByteArray data = url.toEncoded();
-
-    data.replace( "'", "%27" ); // QUrl doesn't encode ', which it doesn't have to. Some apps don't like ' though, and want %27. Both are valid.
-    data.replace( "%20", "+" );
-
-    return data;
 }

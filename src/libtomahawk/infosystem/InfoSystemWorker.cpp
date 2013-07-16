@@ -20,12 +20,12 @@
 
 #include "InfoSystemWorker.h"
 
-#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
-
+#include "utils/ShortLinkHelper.h"
+#include "utils/TomahawkUtils.h"
 #include "config.h"
-#include "InfoSystemCache.h"
 #include "GlobalActionManager.h"
+#include "InfoSystemCache.h"
 #include "PlaylistEntry.h"
 #include "Source.h"
 
@@ -388,8 +388,13 @@ InfoSystemWorker::getShortUrl( Tomahawk::InfoSystem::InfoPushData pushData )
 
     QUrl longUrl = GlobalActionManager::instance()->openLink( title, artist, album );
 
-    GlobalActionManager::instance()->shortenLink( longUrl, QVariant::fromValue< Tomahawk::InfoSystem::InfoPushData >( pushData ) );
-    connect( GlobalActionManager::instance(), SIGNAL( shortLinkReady( QUrl, QUrl, QVariant ) ), this, SLOT( shortLinkReady( QUrl, QUrl, QVariant ) ), Qt::UniqueConnection );
+    Tomahawk::Utils::ShortLinkHelper* slh = new Tomahawk::Utils::ShortLinkHelper();
+    connect( slh, SIGNAL( shortLinkReady( QUrl, QUrl, QVariant ) ),
+             SLOT( shortLinkReady( QUrl, QUrl, QVariant ) ) );
+    connect( slh, SIGNAL( done() ),
+             slh, SLOT( deleteLater() ),
+             Qt::QueuedConnection );
+    slh->shortenLink( longUrl, QVariant::fromValue< Tomahawk::InfoSystem::InfoPushData >( pushData ) );
     m_shortLinksWaiting++;
 }
 

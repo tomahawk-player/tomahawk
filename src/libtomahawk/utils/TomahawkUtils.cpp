@@ -883,5 +883,15 @@ urlSetQuery( QUrl& url, const QString& query )
 #endif
 }
 
+QByteArray
+percentEncode( const QUrl& url )
+{
+    QByteArray data = url.toEncoded();
+
+    data.replace( "'", "%27" ); // QUrl doesn't encode ', which it doesn't have to. Some apps don't like ' though, and want %27. Both are valid.
+    data.replace( "%20", "+" );
+
+    return data;
+}
 
 } // ns

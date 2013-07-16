@@ -31,21 +31,23 @@
 #include "sourcetree/items/SourceItem.h"
 #include "SourcePlaylistInterface.h"
 #include "TomahawkSettings.h"
-#include "GlobalActionManager.h"
 #include "DropJob.h"
 #include "items/GenericPageItems.h"
 #include "items/TemporaryPageItem.h"
 #include "database/DatabaseCommand_SocialAction.h"
 #include "database/Database.h"
 #include "LatchManager.h"
-#include "utils/TomahawkUtilsGui.h"
-#include "utils/Logger.h"
+#include "GlobalActionManager.h"
 #include "utils/Closure.h"
+#include "utils/Logger.h"
+#include "utils/ShortLinkHelper.h"
+#include "utils/TomahawkUtilsGui.h"
 #include "widgets/SourceTreePopupDialog.h"
 #include "PlaylistEntry.h"
 
 #include <QAction>
 #include <QApplication>
+#include <QClipboard>
 #include <QContextMenuEvent>
 #include <QDragEnterEvent>
 #include <QHeaderView>
@@ -473,6 +475,14 @@ SourceTreeView::onDeletePlaylistResult( bool result )
 
 
 void
+SourceTreeView::shortLinkReady( const playlist_ptr&, const QUrl& shortUrl )
+{
+    QByteArray data = TomahawkUtils::percentEncode( shortUrl );
+    QApplication::clipboard()->setText( data );
+}
+
+
+void
 SourceTreeView::copyPlaylistLink()
 {
     QModelIndex idx = m_contextMenuIndex;
@@ -491,7 +501,13 @@ SourceTreeView::copyPlaylistLink()
        const PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
        const playlist_ptr playlist = item->playlist();
 
-       GlobalActionManager::instance()->getShortLink( playlist );
+       Tomahawk::Utils::ShortLinkHelper* slh = new Tomahawk::Utils::ShortLinkHelper();
+       connect( slh, SIGNAL( shortLinkReady( Tomahawk::playlist_ptr, QUrl ) ),
+                SLOT( shortLinkReady( Tomahawk::playlist_ptr, QUrl ) ) );
+       connect( slh, SIGNAL( done() ),
+                slh, SLOT( deleteLater() ),
+                Qt::QueuedConnection );
+       slh->shortLink( playlist );
     }
 }
 

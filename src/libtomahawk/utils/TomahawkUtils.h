@@ -18,6 +18,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#pragma once
 #ifndef TOMAHAWKUTILS_H
 #define TOMAHAWKUTILS_H
 
@@ -153,6 +154,7 @@ namespace TomahawkUtils
     DLLEXPORT QString ageToString( const QDateTime& time, bool appendAgoString = false );
     DLLEXPORT QString filesizeToString( unsigned int size );
     DLLEXPORT QString extensionToMimetype( const QString& extension );
+    DLLEXPORT QByteArray percentEncode( const QUrl& url );
 
     DLLEXPORT void msleep( unsigned int ms );
     DLLEXPORT bool newerVersion( const QString& oldVersion, const QString& newVersion );

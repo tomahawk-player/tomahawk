@@ -81,7 +81,7 @@ SocialWidget::SocialWidget( QWidget* parent )
     connect( ui->textEdit, SIGNAL( textChanged() ), SLOT( onChanged() ) );
     connect( ui->facebookButton, SIGNAL( clicked( bool ) ), SLOT( onChanged() ) );
     connect( ui->twitterButton, SIGNAL( clicked( bool ) ), SLOT( onChanged() ) );
-    connect( GlobalActionManager::instance(), SIGNAL( shortLinkReady( QUrl, QUrl, QVariant ) ), SLOT( onShortLinkReady( QUrl, QUrl, QVariant ) ) );
+    connect( &m_slh, SIGNAL( shortLinkReady( QUrl, QUrl, QVariant ) ), SLOT( onShortLinkReady( QUrl, QUrl, QVariant ) ) );
 
     onChanged();
 
@@ -181,7 +181,7 @@ SocialWidget::setQuery( const Tomahawk::query_ptr& query )
     onChanged();
 
     QUrl longUrl = GlobalActionManager::instance()->openLinkFromQuery( query );
-    GlobalActionManager::instance()->shortenLink( longUrl );
+    m_slh.shortenLink( longUrl );
 }
 
 

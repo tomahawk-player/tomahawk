@@ -87,6 +87,8 @@ private slots:
 
     void onDeletePlaylistResult( bool result );
 
+    void shortLinkReady( const Tomahawk::playlist_ptr& playlist, const QUrl& shortUrl );
+
 protected:
     void drawRow( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     void drawBranches( QPainter *painter, const QRect &rect, const QModelIndex &index ) const;
