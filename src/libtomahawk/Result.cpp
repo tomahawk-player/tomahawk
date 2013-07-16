@@ -18,20 +18,22 @@
 
 #include "Result.h"
 
-#include "Album.h"
 #include "collection/Collection.h"
-#include "resolvers/Resolver.h"
-#include "Source.h"
-#include "Pipeline.h"
 #include "database/Database.h"
 #include "database/DatabaseCommand_Resolve.h"
 #include "database/DatabaseCommand_AllTracks.h"
 #include "database/DatabaseCommand_AddFiles.h"
 #include "filemetadata/MetadataEditor.h"
-
+#include "resolvers/ExternalResolverGui.h"
+#include "resolvers/Resolver.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
-#include "resolvers/ExternalResolverGui.h"
+
+#include "Album.h"
+#include "Pipeline.h"
+#include "PlaylistInterface.h"
+#include "Source.h"
+#include "Track.h"
 
 using namespace Tomahawk;
 

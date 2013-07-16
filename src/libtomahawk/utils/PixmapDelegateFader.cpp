@@ -25,9 +25,10 @@
 #include <QPaintEngine>
 #include <QTimer>
 
+#include "Logger.h"
 #include "Source.h"
 #include "TomahawkUtilsGui.h"
-#include "Logger.h"
+#include "Track.h"
 
 using namespace Tomahawk;
 

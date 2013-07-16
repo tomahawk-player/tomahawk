@@ -20,19 +20,19 @@
 
 #include "ScriptResolver.h"
 
-#include "Artist.h"
-#include "Album.h"
-#include "Pipeline.h"
-#include "Result.h"
-#include "ScriptCollection.h"
-#include "SourceList.h"
-
 #include "accounts/AccountConfigWidget.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
 #include "utils/NetworkAccessManager.h"
 #include "utils/NetworkProxyFactory.h"
 
+#include "Artist.h"
+#include "Album.h"
+#include "Pipeline.h"
+#include "Result.h"
+#include "ScriptCollection.h"
+#include "SourceList.h"
+#include "Track.h"
 
 #include <QtEndian>
 #include <QFileInfo>

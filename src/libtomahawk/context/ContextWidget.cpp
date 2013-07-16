@@ -28,11 +28,18 @@
 #include "context/pages/RelatedArtistsContext.h"
 #include "context/pages/TopTracksContext.h"
 #include "context/pages/WikipediaContext.h"
-
-#include "Source.h"
-
 #include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
+
+// Forward Declarations breaking QSharedPointer
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+    #include "PlaylistInterface.h"
+#endif
+
+
+#include "Source.h"
+#include "Track.h"
+
 
 #define ANIMATION_TIME 450
 #define SLIDE_TIME 350

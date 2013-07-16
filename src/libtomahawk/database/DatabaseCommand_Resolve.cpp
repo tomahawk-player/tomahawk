@@ -25,6 +25,7 @@
 #include "Pipeline.h"
 #include "PlaylistEntry.h"
 #include "SourceList.h"
+#include "Track.h"
 
 using namespace Tomahawk;
 

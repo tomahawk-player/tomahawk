@@ -27,6 +27,7 @@
 #include "jobview/JobStatusModel.h"
 #include "jobview/ErrorStatusMessage.h"
 #include "utils/Logger.h"
+#include "utils/NetworkAccessManager.h"
 #include "utils/TomahawkUtilsGui.h"
 
 #include "Artist.h"
@@ -40,7 +41,7 @@
 #include "SourceList.h"
 #include "TomahawkSettings.h"
 #include "TomahawkVersion.h"
-#include "utils/NetworkAccessManager.h"
+#include "Track.h"
 
 #include <QFile>
 #include <QFileInfo>

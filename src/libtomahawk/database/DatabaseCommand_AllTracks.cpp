@@ -28,6 +28,7 @@
 #include "DatabaseImpl.h"
 #include "Result.h"
 #include "SourceList.h"
+#include "Track.h"
 
 namespace Tomahawk
 {

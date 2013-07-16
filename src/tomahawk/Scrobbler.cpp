@@ -24,7 +24,7 @@
 #include "Source.h"
 #include "Typedefs.h"
 #include "TomahawkSettings.h"
-
+#include "Track.h"
 #include "audio/AudioEngine.h"
 #include "infosystem/InfoSystem.h"
 
