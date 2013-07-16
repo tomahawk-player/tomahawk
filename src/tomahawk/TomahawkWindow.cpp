@@ -689,7 +689,7 @@ TomahawkWindow::keyPressEvent( QKeyEvent* e )
 bool
 TomahawkWindow::winEvent( MSG* msg, long* result )
 {
-    Q_UNUSED(RESULT);
+    Q_UNUSED(result);
     #define TB_PRESSED Q_FUNC_INFO << "Taskbar Button Pressed:"
 
     switch ( msg->message )
