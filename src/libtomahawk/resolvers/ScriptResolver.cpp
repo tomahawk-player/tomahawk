@@ -139,6 +139,8 @@ ScriptResolver::sendConfig()
 
     m_configSent = true;
 
+    tDebug() << "Nam is:" << Tomahawk::Utils::nam();
+    tDebug() << "Nam proxy is:" << Tomahawk::Utils::nam()->proxyFactory();
     Tomahawk::Utils::NetworkProxyFactory* factory = dynamic_cast<Tomahawk::Utils::NetworkProxyFactory*>( Tomahawk::Utils::nam()->proxyFactory() );
     tDebug() << "Factory is:" << factory;
     QNetworkProxy proxy = factory->proxy();
