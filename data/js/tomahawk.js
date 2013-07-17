@@ -18,7 +18,7 @@
  */
 
 // if run in phantomjs add fake Tomahawk environment
-if (window.Tomahawk === undefined) {
+if ((typeof Tomahawk === "undefined") || (Tomahawk === null)) {
     var Tomahawk = {
         fakeEnv: function () {
             return true;
@@ -302,8 +302,8 @@ Tomahawk.asyncRequest = function (url, callback, extraHeaders, options) {
     xmlHttpRequest.send(null);
 };
 
-Tomahawk.sha256 = CryptoJS.SHA256;
+Tomahawk.sha256 = Tomahawk.sha256 || CryptoJS.SHA256;
 
 // some aliases
-Tomahawk.setTimeout = window.setTimeout;
-Tomahawk.setInterval = window.setInterval;
+Tomahawk.setTimeout = Tomahawk.setTimeout || window.setTimeout;
+Tomahawk.setInterval = Tomahawk.setInterval || window.setInterval;
