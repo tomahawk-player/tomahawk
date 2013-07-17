@@ -265,12 +265,12 @@ connect and stream from you?</source>
 <context>
     <name>AlbumInfoWidget</name>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="166"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="230"/>
         <source>Tracklist</source>
         <translation>Списък за изпълняване</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="237"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="301"/>
         <source>Other Albums</source>
         <translation>Други албуми</translation>
     </message>
@@ -285,7 +285,7 @@ connect and stream from you?</source>
         <translation>Съжалявам, но не откривам нито една песен за този изпълнител!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="229"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="256"/>
         <source>Other Albums by %1</source>
         <translation>Други албуми от %1</translation>
     </message>
@@ -383,17 +383,17 @@ connect and stream from you?</source>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="808"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="869"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>Съжалявам. Не успявам да открия изпълнение &apos;%1&apos; от &apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="832"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="893"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>Съжалявам, но не откривам &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="858"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="919"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>Съжалявам, но не откривам албум с име &apos;%1&apos; от &apos;%2&apos;</translation>
     </message>
@@ -522,12 +522,12 @@ connect and stream from you?</source>
     <name>ContextWidget</name>
     <message>
         <location filename="../src/libtomahawk/context/ContextWidget.ui" line="38"/>
-        <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="341"/>
+        <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="348"/>
         <source>Show Footnotes</source>
         <translation>Покажи подробности</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="335"/>
+        <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="342"/>
         <source>Hide Footnotes</source>
         <translation>Скрий подробности</translation>
     </message>
@@ -661,7 +661,7 @@ Tomahawk създаде доклад относно това и изпращай
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="82"/>
         <source>Much less</source>
-        <translation>Много по-малко</translation>
+        <translation>много по-малко</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="83"/>
@@ -691,7 +691,7 @@ Tomahawk създаде доклад относно това и изпращай
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="88"/>
         <source>Much more</source>
-        <translation>Много повече</translation>
+        <translation>много повече</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="91"/>
@@ -907,10 +907,10 @@ Password</source>
 <context>
     <name>JSResolver</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="348"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="385"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="423"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="483"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="349"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="386"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="424"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="484"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
         <translation>Предупреждение на скриптът за извличане:  Заявката към %1 върна данни синхронно.</translation>
     </message>
@@ -2110,68 +2110,68 @@ Password</source>
 <context>
     <name>SourceTreeView</name>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="224"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="226"/>
         <source>&amp;Copy Link</source>
         <translation>&amp;Копирай адреса</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="232"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="234"/>
         <source>&amp;Delete %1</source>
         <translation>&amp;Изтрий %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="236"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="238"/>
         <source>Add to my Playlists</source>
         <translation>Добави към моите списъци</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="238"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="240"/>
         <source>Add to my Automatic Playlists</source>
         <translation>Добави към моите автоматично-генерирани списъци</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="240"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="242"/>
         <source>Add to my Stations</source>
         <translation>Добави към станциите ми</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="228"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="230"/>
         <source>&amp;Export Playlist</source>
         <translation>&amp;Изнеси списък</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="382"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="384"/>
         <source>playlist</source>
         <translation>списък</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="386"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="388"/>
         <source>automatic playlist</source>
         <translation>автоматично-генериран списък</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="390"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="392"/>
         <source>station</source>
         <translation>станция</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="419"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="421"/>
         <source>Would you like to delete the %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
         <translation>Наистина ли желаеш да изтриеш %1 &lt;b&gt;&apos;&apos;%2&quot; &lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="421"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="423"/>
         <source>Delete</source>
         <translation>Изтрий</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="515"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="529"/>
         <source>Save XSPF</source>
         <translation>Запази XSPF</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="516"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="530"/>
         <source>Playlists (*.xspf)</source>
         <translation>Списъци (*.xspf)</translation>
     </message>
@@ -2580,47 +2580,47 @@ Password</source>
 <context>
     <name>Tomahawk::Accounts::SpotifyAccount</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="511"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="513"/>
         <source>Sync with Spotify</source>
         <translation>Синхронизирай с Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="515"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="517"/>
         <source>Re-enable syncing with Spotify</source>
         <translation>Включи отново синхронизирането с Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="523"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="525"/>
         <source>Create local copy</source>
         <translation>Създай локално копие</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="539"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="541"/>
         <source>Subscribe to playlist changes</source>
         <translation>Получавай актуализации за промяната на списъка</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="543"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="545"/>
         <source>Re-enable playlist subscription</source>
         <translation>Поднови получаването на промените на списъка</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="547"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="549"/>
         <source>Stop subscribing to changes</source>
         <translation>Спри получаването на промени в списъка</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="567"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="569"/>
         <source>Enable Spotify collaborations</source>
         <translation>Активирай  връзката с Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="569"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="571"/>
         <source>Disable Spotify collaborations</source>
         <translation>Деактивирай  връзката с Spotify</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="525"/>
+        <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="527"/>
         <source>Stop syncing with Spotify</source>
         <translation>Спри синхронизацията с Spotify</translation>
     </message>
@@ -3366,7 +3366,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="911"/>
         <source>Variety</source>
-        <translation>Разнообразие</translation>
+        <translation>разнообразие</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="914"/>
@@ -3376,7 +3376,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="920"/>
         <source>very low</source>
-        <translation>Много малко</translation>
+        <translation>много малко</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="922"/>
@@ -3396,7 +3396,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="928"/>
         <source>very high</source>
-        <translation>Много голямо</translation>
+        <translation>много голямо</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="929"/>
@@ -3734,42 +3734,42 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::Track</name>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="428"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="481"/>
         <source> and </source>
         <translation>и</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="436"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="489"/>
         <source>You</source>
         <translation>Ти</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="438"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="491"/>
         <source>you</source>
         <translation>ти</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="451"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="504"/>
         <source>and</source>
         <translation>и</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="451"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="504"/>
         <source>%n other(s)</source>
         <translation><numerusform>%n друг</numerusform><numerusform>%n други</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="454"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="507"/>
         <source>%n people</source>
         <translation><numerusform>%n човек</numerusform><numerusform>%n човека</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="458"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="511"/>
         <source>loved this track</source>
         <translation>Хареса тази песен</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="460"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="513"/>
         <source>sent you this track %1</source>
         <translation>ти изпрати тази песен %1</translation>
     </message>
@@ -3795,37 +3795,37 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::Widgets::NetworkActivityWidget</name>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="60"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="62"/>
         <source>Charts</source>
         <translation>Класации</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="62"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="64"/>
         <source>Last Week</source>
         <translation>Миналата седмица</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="65"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="67"/>
         <source>Last Month</source>
         <translation>Миналия месец</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="68"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="70"/>
         <source>Last Year</source>
         <translation>Миналата година</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="71"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="73"/>
         <source>Overall</source>
         <translation>Изцяло</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="91"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="93"/>
         <source>Sorry, we could not find any top hits for this artist!</source>
         <translation>Съжалявам, но не откривам нито една хитова песен на този артист!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.h" line="56"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.h" line="53"/>
         <source>Network Activity</source>
         <translation>Мрежова активност</translation>
     </message>
@@ -3841,12 +3841,12 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="527"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="540"/>
         <source>My Collection</source>
         <translation>Моята колекция</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="711"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="724"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>Автоматичното откриване на външен IP не успя.</translation>
     </message>
