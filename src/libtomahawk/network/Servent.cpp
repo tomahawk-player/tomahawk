@@ -36,12 +36,10 @@
 #include "utils/NetworkAccessManager.h"
 
 #include "AclRegistry.h"
-#include "BufferIoDevice.h"
 #include "Connection.h"
 #include "ControlConnection.h"
 #include "PortFwdThread.h"
 #include "QTcpSocketExtra.h"
-#include "Result.h"
 #include "Source.h"
 #include "SourceList.h"
 #include "StreamConnection.h"

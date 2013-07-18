@@ -30,10 +30,7 @@
 #include "DllMacro.h"
 #include "Typedefs.h"
 
-#include <QObject>
-#include <QMap>
-#include <QNetworkReply>
-#include <QSharedPointer>
+#include <QHostAddress>
 #include <QTcpServer>
 
 class Connection;
