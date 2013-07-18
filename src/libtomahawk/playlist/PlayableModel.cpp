@@ -326,6 +326,11 @@ PlayableModel::data( const QModelIndex& index, int role ) const
 
     switch ( role )
     {
+        case IsPlayingRole:
+        {
+            return entry->isPlaying();
+            break;
+        }
         case Qt::TextAlignmentRole:
         {
             return QVariant( columnAlignment( index.column() ) );
