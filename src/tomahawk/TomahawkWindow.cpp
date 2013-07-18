@@ -46,6 +46,7 @@
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/ProxyStyle.h"
 #include "utils/WidgetDragFilter.h"
+#include "utils/NetworkAccessManager.h"
 #include "widgets/AccountsToolButton.h"
 #include "widgets/AnimatedSplitter.h"
 #include "widgets/NewPlaylistWidget.h"
@@ -688,6 +689,7 @@ TomahawkWindow::keyPressEvent( QKeyEvent* e )
 bool
 TomahawkWindow::winEvent( MSG* msg, long* result )
 {
+    Q_UNUSED(result);
     #define TB_PRESSED Q_FUNC_INFO << "Taskbar Button Pressed:"
 
     switch ( msg->message )
@@ -734,6 +736,7 @@ TomahawkWindow::winEvent( MSG* msg, long* result )
 void
 TomahawkWindow::audioStateChanged( AudioState newState, AudioState oldState )
 {
+    Q_UNUSED(oldState);
 #ifdef HAVE_THUMBBUTTON
     if ( m_taskbarList == 0 )
         return;

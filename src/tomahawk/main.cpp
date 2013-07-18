@@ -45,6 +45,7 @@
 
 
 #ifdef Q_OS_WIN
+#include <windows.h>
 // code from patch attached to QTBUG-19064 by Honglei Zhang
 LRESULT QT_WIN_CALLBACK qt_LowLevelKeyboardHookProc( int nCode, WPARAM wParam, LPARAM lParam );
 HHOOK hKeyboardHook;
