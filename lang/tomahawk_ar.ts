@@ -340,7 +340,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="67"/>
         <source>YOUR ARTIST RANK</source>
-        <translation type="unfinished"/>
+        <translation>رتبة فنانك</translation>
     </message>
 </context>
 <context>
@@ -450,7 +450,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnItemDelegate.cpp" line="191"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>مجهول</translation>
     </message>
 </context>
 <context>
@@ -458,7 +458,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnView.cpp" line="303"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
-        <translation type="unfinished"/>
+        <translation>عذراً، ترشيحك &quot;%1&quot; لم يطابق أي نتائج.</translation>
     </message>
 </context>
 <context>
@@ -466,57 +466,57 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="192"/>
         <source>Composer</source>
-        <translation type="unfinished"/>
+        <translation>مؤلف</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="204"/>
         <source>Age</source>
-        <translation type="unfinished"/>
+        <translation>عمر</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="216"/>
         <source>Year</source>
-        <translation type="unfinished"/>
+        <translation>سنة</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="228"/>
         <source>Duration</source>
-        <translation type="unfinished"/>
+        <translation>مدة</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="240"/>
         <source>Bitrate</source>
-        <translation type="unfinished"/>
+        <translation>معدل البت</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="255"/>
         <source>Composer:</source>
-        <translation type="unfinished"/>
+        <translation>مؤلف:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="273"/>
         <source>Duration:</source>
-        <translation type="unfinished"/>
+        <translation>مدة:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="291"/>
         <source>Bitrate:</source>
-        <translation type="unfinished"/>
+        <translation>معدل البت:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="309"/>
         <source>Year:</source>
-        <translation type="unfinished"/>
+        <translation>سنة:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="327"/>
         <source>Age:</source>
-        <translation type="unfinished"/>
+        <translation>عمر:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.cpp" line="96"/>
         <source>%1 kbps</source>
-        <translation type="unfinished"/>
+        <translation>%1 كيلوبت في الثانية</translation>
     </message>
 </context>
 <context>
@@ -592,17 +592,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk-widgets/Dashboard.ui" line="89"/>
         <source>Recently Played Tracks</source>
-        <translation type="unfinished"/>
+        <translation>الأغاني التي إستمعت إليها مؤخرا</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/Dashboard.ui" line="147"/>
         <source>Recent Additions</source>
-        <translation type="unfinished"/>
+        <translation>الإضافات الأخيرة</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/Dashboard.ui" line="256"/>
         <source>Newest Stations &amp; Playlists</source>
-        <translation type="unfinished"/>
+        <translation>أجدد المحطات وقوائم الأغاني</translation>
     </message>
 </context>
 <context>
@@ -757,12 +757,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="312"/>
         <source>This playlist is currently empty.</source>
-        <translation type="unfinished"/>
+        <translation>هذه المجموعة فارغة حاليا.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="314"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
-        <translation type="unfinished"/>
+        <translation>هذه القائمة فارغة حاليا. أضف لها بعض الأغاني واستمتع للموسيقى!</translation>
     </message>
 </context>
 <context>
@@ -833,32 +833,32 @@ Password</source>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="67"/>
         <source>From:</source>
-        <translation type="unfinished"/>
+        <translation>من:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="70"/>
         <source>To:</source>
-        <translation type="unfinished"/>
+        <translation>إلى:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="78"/>
         <source>Recently Played Tracks</source>
-        <translation type="unfinished"/>
+        <translation>الأغاني التي إستمعت إليها مؤخرا</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="81"/>
         <source>Your recently played tracks</source>
-        <translation type="unfinished"/>
+        <translation>الأغاني التي إستمعت إليها مؤخرا</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="83"/>
         <source>%1&apos;s recently played tracks</source>
-        <translation type="unfinished"/>
+        <translation>الأغاني التي إستمع %1 إليها مؤخرا</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="89"/>
         <source>Sorry, we could not find any recent plays!</source>
-        <translation type="unfinished"/>
+        <translation>نعتذر، لم نستطيع إيجاد أغاني مسموعة مؤخرا!</translation>
     </message>
 </context>
 <context>
@@ -1145,12 +1145,12 @@ Password</source>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.ui" line="39"/>
         <source>Trending Tracks</source>
-        <translation type="unfinished"/>
+        <translation>الأغاني المتردد إليها</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.ui" line="79"/>
         <source>Hot Playlists</source>
-        <translation type="unfinished"/>
+        <translation>قوائم الأخاني الساخنة</translation>
     </message>
 </context>
 <context>
@@ -1682,22 +1682,22 @@ Password</source>
     <message>
         <location filename="../src/libtomahawk/widgets/SearchWidget.ui" line="72"/>
         <source>Tracks</source>
-        <translation type="unfinished"/>
+        <translation>أغاني</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/SearchWidget.ui" line="173"/>
         <source>Artists</source>
-        <translation type="unfinished"/>
+        <translation>فنانين</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/SearchWidget.ui" line="242"/>
         <source>Albums</source>
-        <translation type="unfinished"/>
+        <translation>ألبومات</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/SearchWidget.cpp" line="68"/>
         <source>Sorry, we could not find any tracks!</source>
-        <translation type="unfinished"/>
+        <translation>نعتذر، لم نستطيع إيجاد اي من الأغاني !</translation>
     </message>
 </context>
 <context>
@@ -1705,12 +1705,12 @@ Password</source>
     <message>
         <location filename="../src/libtomahawk/network/Servent.cpp" line="977"/>
         <source>Automatically detecting external IP failed: Could not parse JSON response.</source>
-        <translation type="unfinished"/>
+        <translation>الكشف التلقائي عن عنوان IP الخارجي فشل: تعذر تحليل إستجابة JSON.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/network/Servent.cpp" line="990"/>
         <source>Automatically detecting external IP failed: %1</source>
-        <translation type="unfinished"/>
+        <translation>الكشف التلقائي عن عنوان IP الخارجي فشل: %1</translation>
     </message>
 </context>
 <context>
@@ -1839,7 +1839,7 @@ Password</source>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="133"/>
         <source>Automatically detect external IP address</source>
-        <translation type="unfinished"/>
+        <translation>كشف عنوان IP الخارجي تلقائيا</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="161"/>
@@ -2286,12 +2286,12 @@ Password</source>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="184"/>
         <source>Use this to force Spotify to never announce listening data to Social Networks</source>
-        <translation type="unfinished"/>
+        <translation>إستخدم هذا الخيار لإجبار سبوتيفي على عدم إعلان بيانات الإستماع إلى الشبكات الإجتماعية</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="187"/>
         <source>Always run in Private Mode</source>
-        <translation type="unfinished"/>
+        <translation>تشغيل دائم في الوضع الخاص</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="134"/>
@@ -2327,7 +2327,7 @@ Password</source>
     <message>
         <location filename="../src/libtomahawk/widgets/StatsGauge.cpp" line="95"/>
         <source>out of %1</source>
-        <translation type="unfinished"/>
+        <translation>من أصل %1</translation>
     </message>
 </context>
 <context>
@@ -2951,7 +2951,7 @@ username@jabber.org</translation>
     <message>
         <location filename="../src/libtomahawk/database/DatabaseCommand_AllAlbums.cpp" line="119"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>مجهول</translation>
     </message>
 </context>
 <context>
@@ -3300,12 +3300,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="499"/>
         <source>Acoustic</source>
-        <translation type="unfinished"/>
+        <translation>صوتي</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="500"/>
         <source>Electric</source>
-        <translation type="unfinished"/>
+        <translation>كهربائي</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="501"/>
@@ -3622,12 +3622,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="46"/>
         <source>My Collection</source>
-        <translation type="unfinished"/>
+        <translation>مجموعتي الخاصة</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="53"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
-        <translation type="unfinished"/>
+        <translation>بعد مسح مجموعة الأغاني الخاصة بك سوف تجد الأغاني الخاصة بيك هنا.</translation>
     </message>
 </context>
 <context>
@@ -3643,7 +3643,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/network/RemoteCollection.cpp" line="36"/>
         <source>Collection of %1</source>
-        <translation type="unfinished"/>
+        <translation>مجموعة %1</translation>
     </message>
 </context>
 <context>
@@ -3763,17 +3763,17 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk-widgets/Dashboard.cpp" line="250"/>
         <source>No recently created playlists in your network.</source>
-        <translation type="unfinished"/>
+        <translation>لا انشأت جديدة لقوائم أغاني في شبكتك.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/Dashboard.h" line="63"/>
         <source>Dashboard</source>
-        <translation type="unfinished"/>
+        <translation>لوحة التحكم</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/Dashboard.h" line="64"/>
         <source>An overview of your recent activity</source>
-        <translation type="unfinished"/>
+        <translation>لمحة عامة عن نشاطاتك مؤخراً</translation>
     </message>
 </context>
 <context>
@@ -3781,37 +3781,37 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="62"/>
         <source>Charts</source>
-        <translation type="unfinished"/>
+        <translation>الرسوم البيانية</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="64"/>
         <source>Last Week</source>
-        <translation type="unfinished"/>
+        <translation>الأسبوع الفائت</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="67"/>
         <source>Last Month</source>
-        <translation type="unfinished"/>
+        <translation>الشهر الفائت</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="70"/>
         <source>Last Year</source>
-        <translation type="unfinished"/>
+        <translation>السنة الفائتة</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="73"/>
         <source>Overall</source>
-        <translation type="unfinished"/>
+        <translation>إجمالي</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="93"/>
         <source>Sorry, we could not find any top hits for this artist!</source>
-        <translation type="unfinished"/>
+        <translation>نعتذر، لم نستطيع إيجاد أغاني مشهورة جدا لهذا الفنان!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.h" line="53"/>
         <source>Network Activity</source>
-        <translation type="unfinished"/>
+        <translation>نشاط الشبكة</translation>
     </message>
 </context>
 <context>
@@ -3832,7 +3832,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="724"/>
         <source>Automatically detecting external IP failed.</source>
-        <translation type="unfinished"/>
+        <translation>الكشف التلقائي عن عنوان IP الخارجي فشل.</translation>
     </message>
 </context>
 <context>
@@ -4092,12 +4092,12 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="65"/>
         <source># PLAYS / ARTIST</source>
-        <translation type="unfinished"/>
+        <translation># يلعب / فنان</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="67"/>
         <source>YOUR SONG RANK</source>
-        <translation type="unfinished"/>
+        <translation>رتبة أغنيتك</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="277"/>
