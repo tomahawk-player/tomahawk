@@ -1067,6 +1067,19 @@ Servent::additionalPort() const
     return d_func()->externalPort;
 }
 
+bool
+equalByIPv6Address( QHostAddress a1, QHostAddress a2 )
+{
+    Q_IPV6ADDR addr1 = a1.toIPv6Address();
+    Q_IPV6ADDR addr2 = a2.toIPv6Address();
+
+    for (int i = 0; i < 16; ++i)
+    {
+        if ( addr1[i] != addr2[i] )
+            return false;
+    }
+    return true;
+}
 
 // return the appropriate connection for a given offer key, or NULL if invalid
 Connection*
@@ -1083,7 +1096,8 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
             foreach ( ControlConnection* cc, d_func()->controlconnections )
             {
                 tDebug() << Q_FUNC_INFO << "Probing:" << cc->name();
-                if ( cc->socket() && cc->socket()->peerAddress() == peer )
+                // Always compare IPv6 addresses as IPv4 address are sometime simply IPv4 addresses, sometimes mapped IPv6 addresses
+                if ( cc->socket() && equalByIPv6Address( cc->socket()->peerAddress(), peer ) )
                 {
                     authed = true;
                     break;
