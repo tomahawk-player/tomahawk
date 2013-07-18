@@ -24,6 +24,12 @@
 
 #include "NetworkActivityWorker.h"
 
+namespace Tomahawk
+{
+
+namespace Widgets
+{
+
 class NetworkActivityWidgetPrivate
 {
 public:
@@ -52,8 +58,12 @@ private:
     QPointer<PlaylistModel> trendingTracksModel;
 
     Tomahawk::Widgets::NetworkActivityWidget::ViewType activeView;
-    Tomahawk::NetworkActivityWorker* worker;
+    Tomahawk::Widgets::NetworkActivityWorker* worker;
     QThread* workerThread;
 };
+
+} // namespace Widgets
+
+} // namespace Tomahawk
 
 #endif // NETWORKACTIVITYWIDGET_P_H

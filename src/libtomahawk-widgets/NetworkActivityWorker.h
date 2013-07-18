@@ -23,9 +23,13 @@
 #include "Playlist.h"
 #include "Typedefs.h"
 
-#include <QThread>
+#include <QObject>
 
-namespace Tomahawk {
+namespace Tomahawk
+{
+
+namespace Widgets
+{
 
 class NetworkActivityWorkerPrivate;
 
@@ -61,6 +65,8 @@ private:
     void checkRevisionLoadedDone();
     void checkDone();
 };
+
+} // namespace Widgets
 
 } // namespace Tomahawk
 

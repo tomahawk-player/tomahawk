@@ -27,6 +27,9 @@
 namespace Tomahawk
 {
 
+namespace Widgets
+{
+
 class NetworkActivityWorkerPrivate
 {
 public:
@@ -53,6 +56,8 @@ private:
     QMultiMap<uint, playlist_ptr> playlistCount;
 };
 
-} // Tomahawk
+} // namespace Widgets
+
+} // namespace Tomahawk
 
 #endif // NETWORKACTIVITYWORKER_P_H

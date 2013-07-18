@@ -24,7 +24,6 @@
 #include "WidgetsDllMacro.h"
 
 class AnimatedSpinner;
-class NetworkActivityWidgetPrivate;
 class PlaylistModel;
 class QModelIndex;
 class QStandardItemModel;
@@ -38,6 +37,8 @@ namespace Tomahawk
 {
 namespace Widgets
 {
+
+class NetworkActivityWidgetPrivate;
 
 class TOMAHAWK_WIDGETS_EXPORT NetworkActivityWidget : public QWidget, public Tomahawk::ViewPage
 {

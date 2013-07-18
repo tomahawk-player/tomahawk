@@ -28,7 +28,11 @@
 
 #include <QDateTime>
 
-namespace Tomahawk {
+namespace Tomahawk
+{
+
+namespace Widgets
+{
 
 NetworkActivityWorker::NetworkActivityWorker( QObject* parent )
     : QObject( parent )
@@ -195,5 +199,7 @@ NetworkActivityWorker::checkDone()
         emit finished();
     }
 }
+
+} // namespace Widgets
 
 } // namespace Tomahawk
