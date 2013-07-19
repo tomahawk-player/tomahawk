@@ -1701,12 +1701,12 @@ Password</source>
 <context>
     <name>Servent</name>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="977"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="975"/>
         <source>Automatically detecting external IP failed: Could not parse JSON response.</source>
         <translation>Ο αυτόματος εντοπισμός της εξωτερικής διεύθυνσης IP απέτυχε: δεν ήταν δυνατή η ανάλυση της απόκρισης JSON</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="990"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="988"/>
         <source>Automatically detecting external IP failed: %1</source>
         <translation>Ο αυτόματος εντοπισμός της εξωτερικής διεύθυνσης IP απέτυχε: %1</translation>
     </message>
@@ -3810,7 +3810,7 @@ Try tweaking the filters for a new set of songs to play.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.h" line="53"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.h" line="54"/>
         <source>Network Activity</source>
         <translation>Δραστηριότητα δικτύου</translation>
     </message>
@@ -3915,156 +3915,156 @@ enter the displayed PIN number here:</source>
         <translation>Tomahawk</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="277"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="278"/>
         <source>Back</source>
         <translation>Πίσω</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="278"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="279"/>
         <source>Go back one page</source>
         <translation>Πήγαινε πίσω μία σελίδα</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="279"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="280"/>
         <source>Forward</source>
         <translation>Μπροστά</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="280"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="281"/>
         <source>Go forward one page</source>
         <translation>Πήγαινε μπροστά μία σελίδα</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="215"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1329"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="216"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1332"/>
         <source>Hide Menu Bar</source>
         <translation>Απόκρυψη Γραμμής Μενού</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="215"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1323"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="216"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1326"/>
         <source>Show Menu Bar</source>
         <translation>Εμφανιση του κεντρικου μενου</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="292"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="293"/>
         <source>Search for any artist, album or song...</source>
         <translation>Αναζήτηση για οποιονδήποτε καλλιτέχνη, άλμπουμ ή τραγούδι...</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="319"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="320"/>
         <source>&amp;Main Menu</source>
         <translation>&amp;Κεντρικο Μενου</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="891"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="894"/>
         <source>Exit Full Screen</source>
         <translation>Έξοδος από Πλήρη Οθόνη</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="903"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="906"/>
         <source>Enter Full Screen</source>
         <translation>Εισαγωγή σε Πλήρη Οθόνη</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="965"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="968"/>
         <source>XSPF Error</source>
         <translation>Σφάλμα XSPF</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="965"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="968"/>
         <source>This is not a valid XSPF playlist.</source>
         <translation>Αυτή δεν είναι μια έγκυρη λίστα αναπαραγωγής XSPF.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="969"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="972"/>
         <source>Failed to save tracks</source>
         <translation>Αποτυχία αποθήκευσης κομματιών.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="969"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="972"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
         <translation>Μερικά κομμάτια στην λίστα αναπαραγωγής δεν περιέχουν έναν καλλιτέχνη ή έναν τίτλο. Θα αγνοηθούν.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="983"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="986"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped. Make sure you have a suitable Phonon backend and required plugins installed.</source>
         <translation>Συγγνώμη, υπάρχει ένα πρόβλημα πρόσβασης στην συσκευή ήχου ή στο επιθυμητό κομμάτι, το τρέχον κομμάτι θα παραλειφθεί. Σιγουρευτείτε ότι έχετε εγκαταστήσει ένα κατάλληλο Phonon backend και τα απαιτούμενα πρόσθετα.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="985"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="988"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped.</source>
         <translation>Συγγνώμη, υπάρχει ένα πρόβλημα πρόσβασης στην συσκευή ήχου ή στο επιθυμητό κομμάτι, το τρέχον κομμάτι θα παραλειφθεί.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1022"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1025"/>
         <source>Station</source>
         <translation>Σταθμός</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1024"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1027"/>
         <source>Create New Station</source>
         <translation>Δημιουργία Νέου Σταθμού</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1024"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1027"/>
         <source>Name:</source>
         <translation>Όνομα:</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1087"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1090"/>
         <source>Playlist</source>
         <translation>Λίστας Αναπαραγωγής</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1109"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1112"/>
         <source>Automatic Playlist</source>
         <translation>Αυτόματη Λίστα Αναπαραγωγής</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1131"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1134"/>
         <source>Pause</source>
         <translation>Παύση</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1153"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1156"/>
         <source>&amp;Play</source>
         <translation>&amp;Αναπαραγωγή</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1185"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1188"/>
         <source>%1 by %2</source>
         <comment>track, artist name</comment>
         <translation>%1 από %2</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1186"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1189"/>
         <source>%1 - %2</source>
         <comment>current track, some window title</comment>
         <translation>%1 - %2</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1197"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1200"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1201"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1204"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1205"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1208"/>
         <source>Copyright 2010 - 2013</source>
         <translation>Copyright 2010 - 2013</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1206"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1209"/>
         <source>Thanks to:</source>
         <translation>Χάρη στους:</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1213"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1216"/>
         <source>About Tomahawk</source>
         <translation>Σχετικά με το Tomahawk</translation>
     </message>
