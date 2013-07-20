@@ -37,7 +37,7 @@ public:
         : q_ptr( q )
         , trendingTracksDone( false )
         , hotPlaylistsDone( false )
-        , playlistsRevisionToLoad( 0 )
+        , playtimesToLoad( 0 )
         , trackStatsToLoad( 0 )
     {
     }
@@ -48,8 +48,8 @@ private:
     bool trendingTracksDone;
 
     bool hotPlaylistsDone;
-    QList<Tomahawk::playlist_ptr> playlists;
-    uint playlistsRevisionToLoad;
+    QHash< Tomahawk::playlist_ptr, QStringList > playlists;
+    uint playtimesToLoad;
     uint sourcesToLoad;
     uint trackStatsToLoad;
     QStack<playlist_ptr> playlistStack;

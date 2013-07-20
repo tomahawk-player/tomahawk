@@ -52,17 +52,14 @@ protected:
     QScopedPointer<NetworkActivityWorkerPrivate> d_ptr;
 
 private slots:
-    void allPlaylistsReceived( const QList<Tomahawk::playlist_ptr>& playlists );
+    void allPlaylistsReceived( const QHash< Tomahawk::playlist_ptr, QStringList >& playlists );
     void allSourcesReceived( const QList< Tomahawk::source_ptr >& sources );
-    void playtime( uint playtime );
-    void revisionLoaded( Tomahawk::PlaylistRevision revision );
+    void playtime( const Tomahawk::playlist_ptr& playlist , uint playtime );
     void trendingTracksReceived( const QList< QPair< double,Tomahawk::track_ptr > >& tracks );
 
 private:
     Q_DECLARE_PRIVATE( NetworkActivityWorker )
 
-    void calculateNextPlaylist();
-    void checkRevisionLoadedDone();
     void checkDone();
 };
 

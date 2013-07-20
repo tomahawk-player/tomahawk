@@ -32,6 +32,15 @@ DatabaseCommand_CalculatePlaytime::DatabaseCommand_CalculatePlaytime( const play
     {
         d->trackIds.append( QString::number( entry->query()->track()->trackId() ) );
     }
+    d->playlist = playlist;
+}
+
+DatabaseCommand_CalculatePlaytime::DatabaseCommand_CalculatePlaytime( const playlist_ptr& playlist, const QStringList& plEntryIds, QDateTime from, QDateTime to, QObject* parent )
+    : DatabaseCommand( parent, new DatabaseCommand_CalculatePlaytimePrivate( this , from, to ) )
+{
+    Q_D( DatabaseCommand_CalculatePlaytime );
+    d->plEntryIds = plEntryIds;
+    d->playlist = playlist;
 }
 
 DatabaseCommand_CalculatePlaytime::DatabaseCommand_CalculatePlaytime( const track_ptr& track, QDateTime from, QDateTime to, QObject* parent )
@@ -81,11 +90,34 @@ DatabaseCommand_CalculatePlaytime::exec( DatabaseImpl *dbi )
 {
     Q_D( DatabaseCommand_CalculatePlaytime );
 
-    QString sql = QString(
-                " SELECT SUM(secs_played) "
-                " FROM playback_log "
-                " WHERE track in ( %1 ) AND playtime >= %2 AND playtime <= %3 "
-                ).arg( d->trackIds.join(", ") ).arg( d->from.toTime_t() ).arg( d->to.toTime_t() );
+    QString sql;
+
+    if ( d->plEntryIds.isEmpty() )
+    {
+        sql = QString(
+                    " SELECT SUM(pl.secs_played) "
+                    " FROM playback_log pl "
+                    " WHERE track in ( %1 ) AND playtime >= %2 AND playtime <= %3 "
+                    ).arg( d->trackIds.join(", ") ).arg( d->from.toTime_t() ).arg( d->to.toTime_t() );
+    }
+    else
+    {
+        // Escape all GUIDs
+        QMutableStringListIterator iter( d->plEntryIds );
+        while ( iter.hasNext() )
+        {
+            iter.setValue( QString( "'%1'" ).arg( iter.next() ) );
+        }
+        sql = QString(
+                    " SELECT SUM(pl.secs_played) "
+                    " FROM playlist_item pi "
+                    " JOIN track t ON pi.trackname = t.name "
+                    " JOIN artist a ON a.name = pi.artistname AND t.artist = a.id "
+                    " JOIN playback_log pl ON pl.track = t.id "
+                    " WHERE guid IN (%1); "
+                    )
+                .arg( d->plEntryIds.join(", ") );
+    }
 
     TomahawkSqlQuery query = dbi->newquery();
     query.prepare( sql );
@@ -97,6 +129,11 @@ DatabaseCommand_CalculatePlaytime::exec( DatabaseImpl *dbi )
         playtime = query.value( 0 ).toUInt();
     }
     emit done( playtime );
+
+    if ( !d->playlist.isNull() )
+    {
+        emit done( d->playlist, playtime );
+    }
 }
 
 

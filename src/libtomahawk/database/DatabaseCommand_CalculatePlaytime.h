@@ -31,6 +31,7 @@ class DLLEXPORT DatabaseCommand_CalculatePlaytime : public Tomahawk::DatabaseCom
     Q_OBJECT
 public:
     explicit DatabaseCommand_CalculatePlaytime( const playlist_ptr& playlist, QDateTime from, QDateTime to, QObject* parent = 0 );
+    explicit DatabaseCommand_CalculatePlaytime( const playlist_ptr& playlist, const QStringList& plEntryIds, QDateTime from, QDateTime to, QObject* parent = 0 );
     explicit DatabaseCommand_CalculatePlaytime( const track_ptr& track, QDateTime from, QDateTime to, QObject* parent = 0 );
     explicit DatabaseCommand_CalculatePlaytime( const QList<track_ptr>& tracks, QDateTime from, QDateTime to, QObject* parent = 0 );
     explicit DatabaseCommand_CalculatePlaytime( const query_ptr& query, QDateTime from, QDateTime to, QObject* parent = 0 );
@@ -45,6 +46,7 @@ public:
 
 signals:
     void done( uint playtime );
+    void done( const Tomahawk::playlist_ptr& playlist, uint playtime );
 
 private:
     Q_DECLARE_PRIVATE( DatabaseCommand_CalculatePlaytime )

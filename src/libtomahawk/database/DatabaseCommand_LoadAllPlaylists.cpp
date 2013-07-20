@@ -24,6 +24,8 @@
 #include "PlaylistEntry.h"
 #include "Source.h"
 
+#include <qjson/parser.h>
+
 #include <QSqlQuery>
 
 using namespace Tomahawk;
@@ -32,6 +34,7 @@ using namespace Tomahawk;
 DatabaseCommand_LoadAllPlaylists::DatabaseCommand_LoadAllPlaylists( const source_ptr& s, QObject* parent )
     : DatabaseCommand( parent, new DatabaseCommand_LoadAllPlaylistsPrivate( this, s ) )
 {
+    qRegisterMetaType< QHash< Tomahawk::playlist_ptr, QStringList > >("QHash< Tomahawk::playlist_ptr, QStringList >");
 }
 
 
@@ -55,19 +58,32 @@ DatabaseCommand_LoadAllPlaylists::exec( DatabaseImpl* dbi )
     if ( !source().isNull() )
         sourceToken = QString( "AND source %1 " ).arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) );
 
-    query.exec( QString( " SELECT p.guid, p.title, p.info, p.creator, p.lastmodified, p.shared, p.currentrevision, p.createdOn "
+    QString trackIdJoin;
+    QString trackIdFields;
+    if ( d->returnPlEntryIds )
+    {
+        trackIdFields = ", pr.entries";
+        trackIdJoin = "JOIN playlist_revision pr ON pr.playlist = p.guid AND pr.guid = p.currentrevision";
+    }
+
+    query.exec( QString( " SELECT p.guid, p.title, p.info, p.creator, p.lastmodified, p.shared, p.currentrevision, p.createdOn %6 "
                          " FROM playlist p "
+                         " %5 "
                          " WHERE dynplaylist = 'false' "
                          " %1 "
                          " %2 %3 %4 "
-                       )
-                       .arg( sourceToken )
-                       .arg( orderToken )
-                       .arg( d->sortDescending ? "DESC" : QString() )
-                       .arg( d->limitAmount > 0 ? QString( "LIMIT 0, %1" ).arg( d->limitAmount ) : QString() )
+                         )
+                .arg( sourceToken )
+                .arg( orderToken )
+                .arg( d->sortDescending ? "DESC" : QString() )
+                .arg( d->limitAmount > 0 ? QString( "LIMIT 0, %1" ).arg( d->limitAmount ) : QString() )
+                .arg( trackIdJoin )
+                .arg( trackIdFields )
                 );
 
     QList<playlist_ptr> plists;
+    QHash<playlist_ptr, QStringList> phash;
+    QJson::Parser parser;
     while ( query.next() )
     {
         playlist_ptr p( new Playlist( source(),                  //src
@@ -82,9 +98,20 @@ DatabaseCommand_LoadAllPlaylists::exec( DatabaseImpl* dbi )
                                     ), &QObject::deleteLater );
         p->setWeakSelf( p.toWeakRef() );
         plists.append( p );
+
+        if ( d->returnPlEntryIds )
+        {
+            QStringList trackIds = parser.parse( query.value( 8 ).toByteArray() ).toStringList();
+            phash.insert( p, trackIds );
+        }
     }
 
     emit done( plists );
+
+    if ( d->returnPlEntryIds )
+    {
+        emit done( phash );
+    }
 }
 
 
@@ -109,5 +136,13 @@ DatabaseCommand_LoadAllPlaylists::setSortDescending( bool descending )
 {
     Q_D( DatabaseCommand_LoadAllPlaylists );
     d->sortDescending = descending;
+}
+
+
+void
+DatabaseCommand_LoadAllPlaylists::setReturnPlEntryIds( bool returnPlEntryIds )
+{
+    Q_D( DatabaseCommand_LoadAllPlaylists );
+    d->returnPlEntryIds = returnPlEntryIds;
 }
 

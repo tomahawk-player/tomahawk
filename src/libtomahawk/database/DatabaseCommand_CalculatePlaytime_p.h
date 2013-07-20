@@ -43,7 +43,9 @@ class DatabaseCommand_CalculatePlaytimePrivate : public DatabaseCommandPrivate
 private:
     QDateTime from;
     QDateTime to;
+    QStringList plEntryIds;
     QStringList trackIds;
+    Tomahawk::playlist_ptr playlist;
 };
 
 }

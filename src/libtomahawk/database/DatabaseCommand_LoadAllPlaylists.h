@@ -54,8 +54,23 @@ public:
     void setSortOrder( SortOrder order );
     void setSortDescending( bool descending );
 
+    /**
+     * By default, only playlists with no revision will be loaded as fully
+     * loading a revision is a lot of work which cannot be integrated into
+     * one query.
+     *
+     * Often one only needs to know the trackIds of a playlist, not the
+     * whole revision information.
+     */
+    void setReturnPlEntryIds( bool returnPlEntryIds );
+
 signals:
     void done( const QList<Tomahawk::playlist_ptr>& playlists );
+
+    /**
+     * This signal is only emitted if returnTrackIds == true.
+     */
+    void done( const QHash< Tomahawk::playlist_ptr, QStringList >& playlists );
 
 private:
     Q_DECLARE_PRIVATE( DatabaseCommand_LoadAllPlaylists )

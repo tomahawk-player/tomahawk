@@ -35,6 +35,7 @@ public:
     DatabaseCommand_LoadAllPlaylistsPrivate( DatabaseCommand_LoadAllPlaylists* q, const source_ptr& s )
         : DatabaseCommandPrivate( q, s )
         , limitAmount( 0 )
+        , returnPlEntryIds( false )
         , sortOrder( DatabaseCommand_LoadAllPlaylists::None )
         , sortDescending( false )
     {
@@ -44,6 +45,7 @@ public:
 
 private:
     unsigned int limitAmount;
+    bool returnPlEntryIds;
     DatabaseCommand_LoadAllPlaylists::SortOrder sortOrder;
     bool sortDescending;
 };
