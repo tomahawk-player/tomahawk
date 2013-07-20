@@ -63,11 +63,11 @@ NetworkActivityWorker::run()
         Database::instance()->enqueue( dbcmd_ptr( dbcmd ) );
     }
     {
-        DatabaseCommand_LoadAllSources* dbcmd = new DatabaseCommand_LoadAllSources();
+        /* DatabaseCommand_LoadAllSources* dbcmd = new DatabaseCommand_LoadAllSources();
         connect( dbcmd, SIGNAL( done( QList<Tomahawk::source_ptr> ) ),
                  SLOT( allSourcesReceived( QList<Tomahawk::source_ptr> ) ),
                  Qt::QueuedConnection);
-        Database::instance()->enqueue( dbcmd_ptr( dbcmd ) );
+        Database::instance()->enqueue( dbcmd_ptr( dbcmd ) ); */
     }
     tLog() << Q_FUNC_INFO << QDateTime::currentDateTime().toTime_t();
 }
@@ -163,7 +163,7 @@ void
 NetworkActivityWorker::checkDone()
 {
     Q_D( NetworkActivityWorker );
-    if ( d->trendingTracksDone && d->hotPlaylistsDone )
+    if ( d->trendingTracksDone /* && d->hotPlaylistsDone */ )
     {
         emit finished();
     }
