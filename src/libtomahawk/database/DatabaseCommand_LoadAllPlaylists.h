@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2013, Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -17,6 +18,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#pragma once
 #ifndef DATABASECOMMAND_LOADALLPLAYLIST_H
 #define DATABASECOMMAND_LOADALLPLAYLIST_H
 
@@ -30,6 +32,8 @@
 
 namespace Tomahawk
 {
+
+class DatabaseCommand_LoadAllPlaylistsPrivate;
 
 class DLLEXPORT DatabaseCommand_LoadAllPlaylists : public DatabaseCommand
 {
@@ -60,9 +64,7 @@ signals:
     void done( const QList<Tomahawk::playlist_ptr>& playlists );
 
 private:
-    unsigned int m_limitAmount;
-    SortOrder m_sortOrder;
-    bool m_sortDescending;
+    Q_DECLARE_PRIVATE( DatabaseCommand_LoadAllPlaylists )
 };
 
 } // namespace Tomahawk

@@ -17,7 +17,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "DatabaseCommand_LoadAllPlaylists.h"
+#include "DatabaseCommand_LoadAllPlaylists_p.h"
 
 #include "DatabaseImpl.h"
 #include "Playlist.h"
@@ -30,20 +30,19 @@ using namespace Tomahawk;
 
 
 DatabaseCommand_LoadAllPlaylists::DatabaseCommand_LoadAllPlaylists( const source_ptr& s, QObject* parent )
-    : DatabaseCommand( s, parent )
-    , m_limitAmount( 0 )
-    , m_sortOrder( None )
-    , m_sortDescending( false )
+    : DatabaseCommand( parent, new DatabaseCommand_LoadAllPlaylistsPrivate( this, s ) )
 {
 }
 
 void
 DatabaseCommand_LoadAllPlaylists::exec( DatabaseImpl* dbi )
 {
+    Q_D( DatabaseCommand_LoadAllPlaylists );
+
     TomahawkSqlQuery query = dbi->newquery();
     QString orderToken, sourceToken;
 
-    switch ( m_sortOrder )
+    switch ( d->sortOrder )
     {
     case 0:
         break;
@@ -62,9 +61,9 @@ DatabaseCommand_LoadAllPlaylists::exec( DatabaseImpl* dbi )
                          "%2 %3 %4"
                        )
                        .arg( sourceToken )
-                       .arg( m_sortOrder > 0 ? QString( "ORDER BY %1" ).arg( orderToken ) : QString() )
-                       .arg( m_sortDescending ? "DESC" : QString() )
-                       .arg( m_limitAmount > 0 ? QString( "LIMIT 0, %1" ).arg( m_limitAmount ) : QString() ) );
+                       .arg( d->sortOrder > 0 ? QString( "ORDER BY %1" ).arg( orderToken ) : QString() )
+                       .arg( d->sortDescending ? "DESC" : QString() )
+                       .arg( d->limitAmount > 0 ? QString( "LIMIT 0, %1" ).arg( d->limitAmount ) : QString() ) );
 
     QList<playlist_ptr> plists;
     while ( query.next() )
@@ -90,20 +89,23 @@ DatabaseCommand_LoadAllPlaylists::exec( DatabaseImpl* dbi )
 void
 DatabaseCommand_LoadAllPlaylists::setLimit( unsigned int limit )
 {
-    m_limitAmount = limit;
+    Q_D( DatabaseCommand_LoadAllPlaylists );
+    d->limitAmount = limit;
 }
 
 
 void
 DatabaseCommand_LoadAllPlaylists::setSortOrder( DatabaseCommand_LoadAllPlaylists::SortOrder order )
 {
-    m_sortOrder = order;
+    Q_D( DatabaseCommand_LoadAllPlaylists );
+    d->sortOrder = order;
 }
 
 
 void
 DatabaseCommand_LoadAllPlaylists::setSortDescending( bool descending )
 {
-    m_sortDescending = descending;
+    Q_D( DatabaseCommand_LoadAllPlaylists );
+    d->sortDescending = descending;
 }
 
