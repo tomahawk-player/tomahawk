@@ -24,6 +24,7 @@
 #include "database/DatabaseCommand_CalculatePlaytime.h"
 
 #include <QDateTime>
+#include <QStringList>
 
 namespace Tomahawk
 {
@@ -42,7 +43,7 @@ class DatabaseCommand_CalculatePlaytimePrivate : public DatabaseCommandPrivate
 private:
     QDateTime from;
     QDateTime to;
-    QList<track_ptr> tracks;
+    QStringList trackIds;
 };
 
 }

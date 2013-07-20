@@ -28,9 +28,9 @@ DatabaseCommand_CalculatePlaytime::DatabaseCommand_CalculatePlaytime( const play
     : DatabaseCommand( parent, new DatabaseCommand_CalculatePlaytimePrivate( this , from, to ) )
 {
     Q_D( DatabaseCommand_CalculatePlaytime );
-    foreach( plentry_ptr entry, playlist->entries() )
+    foreach( const plentry_ptr& entry, playlist->entries() )
     {
-        d->tracks.append( entry->query()->track() );
+        d->trackIds.append( QString::number( entry->query()->track()->trackId() ) );
     }
 }
 
@@ -38,7 +38,7 @@ DatabaseCommand_CalculatePlaytime::DatabaseCommand_CalculatePlaytime( const trac
     : DatabaseCommand( parent, new DatabaseCommand_CalculatePlaytimePrivate( this , from, to ) )
 {
     Q_D( DatabaseCommand_CalculatePlaytime );
-    d->tracks.append( track );
+    d->trackIds.append( QString::number( track->trackId() ) );
 }
 
 
@@ -46,7 +46,10 @@ DatabaseCommand_CalculatePlaytime::DatabaseCommand_CalculatePlaytime( const QLis
     : DatabaseCommand( parent, new DatabaseCommand_CalculatePlaytimePrivate( this , from, to ) )
 {
     Q_D( DatabaseCommand_CalculatePlaytime );
-    d->tracks = tracks;
+    foreach ( const track_ptr& track, tracks )
+    {
+        d->trackIds.append( QString::number( track->trackId() ) );
+    }
 }
 
 
@@ -54,7 +57,7 @@ DatabaseCommand_CalculatePlaytime::DatabaseCommand_CalculatePlaytime( const quer
     : DatabaseCommand( parent, new DatabaseCommand_CalculatePlaytimePrivate( this , from, to ) )
 {
     Q_D( DatabaseCommand_CalculatePlaytime );
-    d->tracks.append( query->track() );
+    d->trackIds.append( QString::number( query->track()->trackId() ) );
 }
 
 
@@ -62,9 +65,9 @@ DatabaseCommand_CalculatePlaytime::DatabaseCommand_CalculatePlaytime( const QLis
     : DatabaseCommand( parent, new DatabaseCommand_CalculatePlaytimePrivate( this , from, to ) )
 {
     Q_D( DatabaseCommand_CalculatePlaytime );
-    foreach ( query_ptr query, queries )
+    foreach ( const query_ptr& query, queries )
     {
-        d->tracks.append( query->track() );
+        d->trackIds.append( QString::number( query->track()->trackId() ) );
     }
 }
 
@@ -78,24 +81,17 @@ DatabaseCommand_CalculatePlaytime::exec( DatabaseImpl *dbi )
 {
     Q_D( DatabaseCommand_CalculatePlaytime );
 
-    // Get all trackIds
-    QStringList trackIds;
-    foreach ( track_ptr track, d->tracks )
-    {
-        trackIds.append( QString::number( track->trackId() ) );
-    }
-
     QString sql = QString(
                 " SELECT SUM(secs_played) "
                 " FROM playback_log "
                 " WHERE track in ( %1 ) AND playtime >= %2 AND playtime <= %3 "
-                ).arg( trackIds.join(", ") ).arg( d->from.toTime_t() ).arg( d->to.toTime_t() );
+                ).arg( d->trackIds.join(", ") ).arg( d->from.toTime_t() ).arg( d->to.toTime_t() );
 
     TomahawkSqlQuery query = dbi->newquery();
     query.prepare( sql );
     query.exec();
 
-    uint playtime;
+    uint playtime = 0;
     while ( query.next() )
     {
         playtime = query.value( 0 ).toUInt();
