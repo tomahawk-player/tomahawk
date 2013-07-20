@@ -432,12 +432,12 @@ NetworkActivityWidget::fetchMonthCharts()
 void
 NetworkActivityWidget::showWeekCharts()
 {
-    d_func()->activeView = WeekChart;
-    if ( !d_func()->weeklyChartsModel.isNull() )
+    Q_D( NetworkActivityWidget );
+    d->activeView = WeekChart;
+    if ( !d->weeklyChartsModel.isNull() )
     {
-        d_func()->ui->tracksViewLeft->proxyModel()->setStyle( PlayableProxyModel::Large );
-        d_func()->ui->tracksViewLeft->setPlaylistModel( d_func()->weeklyChartsModel );
-        d_func()->ui->tracksViewLeft->proxyModel()->sort( -1 );
+        d->ui->tracksViewLeft->setPlaylistModel( d_func()->weeklyChartsModel );
+        d->ui->tracksViewLeft->setAutoResize( true );
     }
     else
     {
@@ -449,12 +449,13 @@ NetworkActivityWidget::showWeekCharts()
 void
 NetworkActivityWidget::showMonthCharts()
 {
-    d_func()->activeView = MonthChart;
+    Q_D( NetworkActivityWidget );
+
+    d->activeView = MonthChart;
     if ( !d_func()->monthlyChartsModel.isNull() )
     {
-        d_func()->ui->tracksViewLeft->proxyModel()->setStyle( PlayableProxyModel::Large );
-        d_func()->ui->tracksViewLeft->setPlaylistModel( d_func()->monthlyChartsModel );
-        d_func()->ui->tracksViewLeft->proxyModel()->sort( -1 );
+        d->ui->tracksViewLeft->setPlaylistModel( d_func()->monthlyChartsModel );
+        d->ui->tracksViewLeft->setAutoResize( true );
     }
     else
     {
@@ -466,12 +467,13 @@ NetworkActivityWidget::showMonthCharts()
 void
 NetworkActivityWidget::showYearCharts()
 {
-    d_func()->activeView = YearChart;
-    if ( !d_func()->yearlyChartsModel.isNull() )
+    Q_D( NetworkActivityWidget );
+
+    d->activeView = YearChart;
+    if ( !d->yearlyChartsModel.isNull() )
     {
-        d_func()->ui->tracksViewLeft->proxyModel()->setStyle( PlayableProxyModel::Large );
-        d_func()->ui->tracksViewLeft->setPlaylistModel( d_func()->yearlyChartsModel );
-        d_func()->ui->tracksViewLeft->proxyModel()->sort( -1 );
+        d->ui->tracksViewLeft->setPlaylistModel( d_func()->yearlyChartsModel );
+        d->ui->tracksViewLeft->setAutoResize( true );
     }
     else
     {
@@ -483,14 +485,13 @@ NetworkActivityWidget::showYearCharts()
 void
 NetworkActivityWidget::showOverallCharts()
 {
-    d_func()->activeView = OverallChart;
-    if ( !d_func()->overallChartsModel.isNull() )
+    Q_D( NetworkActivityWidget );
+
+    d->activeView = OverallChart;
+    if ( !d->overallChartsModel.isNull() )
     {
-        // d_func()->ui->tracksViewLeft->proxyModel()->setStyle( PlayableProxyModel::Large );
-        d_func()->ui->tracksViewLeft->setPlaylistModel( d_func()->overallChartsModel );
-        d_func()->ui->tracksViewLeft->setAutoResize( true );
-        // d_func()->ui->tracksViewLeft->proxyModel()->sort( -1 );
-        // d_func()->ui->tracksViewLeft->setAutoResize( true );
+        d->ui->tracksViewLeft->setPlaylistModel( d_func()->overallChartsModel );
+        d->ui->tracksViewLeft->setAutoResize( true );
     }
     else
     {
