@@ -22,13 +22,7 @@
 #ifndef DATABASECOMMAND_LOADALLPLAYLIST_H
 #define DATABASECOMMAND_LOADALLPLAYLIST_H
 
-#include <QObject>
-#include <QVariantMap>
-
-#include "Typedefs.h"
 #include "DatabaseCommand.h"
-
-#include "DllMacro.h"
 
 namespace Tomahawk
 {
