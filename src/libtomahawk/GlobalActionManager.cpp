@@ -55,12 +55,6 @@
 
 #include <QApplication>
 #include <QClipboard>
-#include <QMimeData>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QNetworkConfiguration>
-#include <QNetworkProxy>
-#include <QUrl>
 
 
 GlobalActionManager* GlobalActionManager::s_instance = 0;
