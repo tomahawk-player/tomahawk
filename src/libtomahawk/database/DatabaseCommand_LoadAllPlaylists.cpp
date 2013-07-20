@@ -34,6 +34,7 @@ DatabaseCommand_LoadAllPlaylists::DatabaseCommand_LoadAllPlaylists( const source
 {
 }
 
+
 void
 DatabaseCommand_LoadAllPlaylists::exec( DatabaseImpl* dbi )
 {
@@ -54,11 +55,11 @@ DatabaseCommand_LoadAllPlaylists::exec( DatabaseImpl* dbi )
     if ( !source().isNull() )
         sourceToken = QString( "AND source %1 " ).arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) );
 
-    query.exec( QString( "SELECT guid, title, info, creator, lastmodified, shared, currentrevision, createdOn "
-                         "FROM playlist "
-                         "WHERE dynplaylist = 'false' "
-                         "%1 "
-                         "%2 %3 %4"
+    query.exec( QString( " SELECT p.guid, p.title, p.info, p.creator, p.lastmodified, p.shared, p.currentrevision, p.createdOn "
+                         " FROM playlist p "
+                         " WHERE dynplaylist = 'false' "
+                         " %1 "
+                         " %2 %3 %4 "
                        )
                        .arg( sourceToken )
                        .arg( orderToken )
@@ -74,7 +75,7 @@ DatabaseCommand_LoadAllPlaylists::exec( DatabaseImpl* dbi )
                                       query.value(1).toString(), //title
                                       query.value(2).toString(), //info
                                       query.value(3).toString(), //creator
-                                      query.value(7).toInt(),    //lastmod
+                                      query.value(7).toInt(),    //lastmod / createdOn
                                       query.value(5).toBool(),   //shared
                                       query.value(4).toInt(),    //lastmod
                                       query.value(0).toString()  //GUID
