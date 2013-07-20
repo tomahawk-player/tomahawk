@@ -48,7 +48,7 @@ DatabaseCommand_LoadAllPlaylists::exec( DatabaseImpl* dbi )
         break;
 
     case ModificationTime:
-            orderToken = "playlist.createdOn";
+            orderToken = "ORDER BY playlist.createdOn";
     }
 
     if ( !source().isNull() )
@@ -61,9 +61,10 @@ DatabaseCommand_LoadAllPlaylists::exec( DatabaseImpl* dbi )
                          "%2 %3 %4"
                        )
                        .arg( sourceToken )
-                       .arg( d->sortOrder > 0 ? QString( "ORDER BY %1" ).arg( orderToken ) : QString() )
+                       .arg( orderToken )
                        .arg( d->sortDescending ? "DESC" : QString() )
-                       .arg( d->limitAmount > 0 ? QString( "LIMIT 0, %1" ).arg( d->limitAmount ) : QString() ) );
+                       .arg( d->limitAmount > 0 ? QString( "LIMIT 0, %1" ).arg( d->limitAmount ) : QString() )
+                );
 
     QList<playlist_ptr> plists;
     while ( query.next() )
