@@ -31,6 +31,7 @@
 #include "utils/TomahawkUtilsGui.h"
 #include "widgets/OverlayWidget.h"
 #include "widgets/PlaylistsModel.h"
+#include "MetaPlaylistInterface.h"
 #include "Pipeline.h"
 #include "PlaylistDelegate.h"
 
@@ -91,8 +92,6 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
         d->ui->tracksViewLeft->setAlternatingRowColors( false );
         d->ui->tracksViewLeft->setSortingEnabled( false );
         d->ui->tracksViewLeft->setEmptyTip( tr( "Sorry, we could not find any top hits for this artist!" ) );
-
-        d->playlistInterface = d->ui->tracksViewLeft->playlistInterface();
 
         QPalette p = d->ui->tracksViewLeft->palette();
         p.setColor( QPalette::Text, TomahawkStyle::PAGE_TRACKLIST_TRACK_SOLVED );
@@ -198,6 +197,12 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
         TomahawkUtils::unmarginLayout( layout );
     }
 
+    MetaPlaylistInterface* mpl = new MetaPlaylistInterface();
+    mpl->addChildInterface( d->ui->trendingTracksView->playlistInterface() );
+    mpl->addChildInterface( d->ui->tracksViewLeft->playlistInterface() );
+    d->playlistInterface = playlistinterface_ptr( mpl );
+
+
     // Load data in separate thread
     d->workerThread = new QThread();
     d->workerThread->start();
@@ -244,7 +249,12 @@ NetworkActivityWidget::pixmap() const
 bool
 NetworkActivityWidget::isBeingPlayed() const
 {
-    if ( AudioEngine::instance()->currentTrackPlaylist() == d_func()->ui->tracksViewLeft->playlistInterface() )
+    Q_D( const NetworkActivityWidget );
+
+    if ( AudioEngine::instance()->currentTrackPlaylist() == d->ui->tracksViewLeft->playlistInterface() )
+        return true;
+
+    if ( AudioEngine::instance()->currentTrackPlaylist() == d->ui->trendingTracksView->playlistInterface() )
         return true;
 
     return false;
@@ -254,7 +264,12 @@ NetworkActivityWidget::isBeingPlayed() const
 bool
 NetworkActivityWidget::jumpToCurrentTrack()
 {
-    if ( d_func()->ui->tracksViewLeft->model() && d_func()->ui->tracksViewLeft->jumpToCurrentTrack() )
+    Q_D( NetworkActivityWidget );
+
+    if ( d->ui->tracksViewLeft->model() && d_func()->ui->tracksViewLeft->jumpToCurrentTrack() )
+        return true;
+
+    if ( d->ui->trendingTracksView->model() && d_func()->ui->trendingTracksView->jumpToCurrentTrack() )
         return true;
 
     return false;
