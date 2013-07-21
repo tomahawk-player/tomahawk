@@ -249,7 +249,20 @@ void
 JSResolverHelper::addUrlResult( const QString& url, const QVariantMap& result )
 {
     QString type = result.value( "type" ).toString();
-    if ( type == "track" )
+    if ( type == "artist" )
+    {
+        QString name = result.value( "name" ).toString();
+        Q_ASSERT( !name.isEmpty() );
+        emit m_resolver->informationFound( url, Artist::get( name, true ).objectCast<QObject>() );
+    }
+    else if ( type == "album" )
+    {
+        QString name = result.value( "name" ).toString();
+        QString artist = result.value( "artist" ).toString();
+        emit m_resolver->informationFound( url, Album::get( Artist::get( artist, true ), name ).objectCast<QObject>() );
+
+    }
+    else if ( type == "track" )
     {
         Tomahawk::query_ptr query = parseTrack( result );
         if ( query.isNull() )

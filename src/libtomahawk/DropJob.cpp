@@ -827,11 +827,14 @@ DropJob::informationForUrl( const QString&, const QSharedPointer<QObject>& infor
         return;
     }
 
+    tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Got a drop from a ScriptResolver.";
+
 
     // Try to interpret as Album
     Tomahawk::album_ptr album = information.objectCast<Tomahawk::Album>();
     if ( !album.isNull() )
     {
+        tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Dropped an Album";
         if ( m_dropAction == Append )
         {
             onTracksAdded( album->tracks() );
@@ -847,9 +850,19 @@ DropJob::informationForUrl( const QString&, const QSharedPointer<QObject>& infor
         return;
     }
 
+    Tomahawk::artist_ptr artist = information.objectCast<Tomahawk::Artist>();
+    if ( !artist.isNull() )
+    {
+        tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Dropped an artist";
+        ViewManager::instance()->show( artist );
+        // We're done.
+        deleteLater();
+    }
+
     Tomahawk::playlisttemplate_ptr pltemplate = information.objectCast<Tomahawk::PlaylistTemplate>();
     if ( !pltemplate.isNull() )
     {
+        tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Dropped a playlist (template)";
         if ( m_dropAction == Create )
         {
             ViewManager::instance()->show( pltemplate->get() );
@@ -867,6 +880,7 @@ DropJob::informationForUrl( const QString&, const QSharedPointer<QObject>& infor
     Tomahawk::playlist_ptr playlist = information.objectCast<Tomahawk::Playlist>();
     if ( !playlist.isNull() )
     {
+        tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Dropped a playlist";
         if ( m_dropAction == Create )
         {
             QList<Tomahawk::query_ptr> tracks;
@@ -891,6 +905,7 @@ DropJob::informationForUrl( const QString&, const QSharedPointer<QObject>& infor
     Tomahawk::query_ptr query = information.objectCast<Tomahawk::Query>();
     if ( !query.isNull() )
     {
+        tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Dropped a track";
         QList<Tomahawk::query_ptr> tracks;
         // The Url describes a track
         tracks.append( query );
