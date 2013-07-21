@@ -31,7 +31,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountFactoryWrapper.cpp" line="42"/>
         <source>Add Account</source>
-        <translation type="unfinished"/>
+        <translation>Thêm tài khoản</translation>
     </message>
 </context>
 <context>
@@ -39,17 +39,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountFactoryWrapperDelegate.cpp" line="103"/>
         <source>Online</source>
-        <translation type="unfinished"/>
+        <translation>Trực tuyến</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountFactoryWrapperDelegate.cpp" line="108"/>
         <source>Connecting...</source>
-        <translation type="unfinished"/>
+        <translation>Đang kết nối..</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountFactoryWrapperDelegate.cpp" line="113"/>
         <source>Offline</source>
-        <translation type="unfinished"/>
+        <translation>Không có kết nối mạng</translation>
     </message>
 </context>
 <context>
@@ -92,34 +92,34 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="65"/>
         <source>&amp;Listen Along</source>
-        <translation type="unfinished"/>
+        <translation> &amp;Nghe kèm theo</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="68"/>
         <source>Stop &amp;Listening Along</source>
-        <translation type="unfinished"/>
+        <translation>Dừng chế độ ngh&amp;e kèm theo</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="72"/>
         <source>&amp;Follow in real-time</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Theo dõi trong thời gian thực</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="77"/>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="328"/>
         <source>&amp;Listen Privately</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Nghe riêng tư</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="77"/>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="328"/>
         <source>&amp;Listen Publicly</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Nghe ở nơi đông người</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="83"/>
         <source>&amp;Load Playlist</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Tải danh sách phát</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="84"/>
@@ -129,7 +129,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="85"/>
         <source>&amp;Rename Playlist</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Đổi tên danh sách phát</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="86"/>
@@ -139,32 +139,32 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="87"/>
         <source>&amp;Copy Playlist Link</source>
-        <translation type="unfinished"/>
+        <translation>%Sao chép liên kết danh sách phát</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="88"/>
         <source>&amp;Play</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Phát</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="92"/>
         <source>&amp;Stop</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Dừng lại</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="93"/>
         <source>&amp;Previous Track</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Track trước đó</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="95"/>
         <source>&amp;Next Track</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Track tiếp theo</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="97"/>
         <source>&amp;Quit</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Thoát</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="110"/>
@@ -287,7 +287,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="256"/>
         <source>Other Albums by %1</source>
-        <translation type="unfinished"/>
+        <translation>Các Album khác theo %1</translation>
     </message>
 </context>
 <context>
@@ -296,12 +296,12 @@ connect and stream from you?</source>
         <location filename="../src/libtomahawk/playlist/AlbumModel.cpp" line="65"/>
         <location filename="../src/libtomahawk/playlist/AlbumModel.cpp" line="107"/>
         <source>All albums from %1</source>
-        <translation type="unfinished"/>
+        <translation>Tất cả các album từ %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/AlbumModel.cpp" line="109"/>
         <source>All albums</source>
-        <translation type="unfinished"/>
+        <translation>Tất cả album</translation>
     </message>
 </context>
 <context>
@@ -309,17 +309,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="223"/>
         <source>Top Hits</source>
-        <translation type="unfinished"/>
+        <translation>Nghe nhiều nhất</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="280"/>
         <source>Related Artists</source>
-        <translation type="unfinished"/>
+        <translation>Các nghệ sĩ liên quan</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="389"/>
         <source>Albums</source>
-        <translation type="unfinished"/>
+        <translation>Album</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="108"/>
@@ -347,12 +347,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/tomahawk/AudioControls.cpp" line="295"/>
         <source>Shuffle</source>
-        <translation type="unfinished"/>
+        <translation>Ngẫu nhiên</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/AudioControls.cpp" line="296"/>
         <source>Repeat</source>
-        <translation type="unfinished"/>
+        <translation>Lặp lại</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/AudioControls.cpp" line="293"/>
@@ -414,13 +414,13 @@ connect and stream from you?</source>
         <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="183"/>
         <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="292"/>
         <source>New Station</source>
-        <translation type="unfinished"/>
+        <translation>Đài phát mới</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="183"/>
         <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="292"/>
         <source>%1 Station</source>
-        <translation type="unfinished"/>
+        <translation>%1 Đài</translation>
     </message>
 </context>
 <context>
@@ -428,12 +428,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="388"/>
         <source>Playlists</source>
-        <translation type="unfinished"/>
+        <translation>Danh sách phát</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="390"/>
         <source>Stations</source>
-        <translation type="unfinished"/>
+        <translation>Đài Phát</translation>
     </message>
 </context>
 <context>
@@ -441,7 +441,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/searchlineedit/ClearButton.cpp" line="38"/>
         <source>Clear</source>
-        <translation type="unfinished"/>
+        <translation>Dọn dẹp</translation>
     </message>
 </context>
 <context>
@@ -524,12 +524,12 @@ connect and stream from you?</source>
         <location filename="../src/libtomahawk/context/ContextWidget.ui" line="38"/>
         <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="348"/>
         <source>Show Footnotes</source>
-        <translation type="unfinished"/>
+        <translation>Hiển thị ghi chú ở cuối</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="342"/>
         <source>Hide Footnotes</source>
-        <translation type="unfinished"/>
+        <translation>Ẩn ghi chú</translation>
     </message>
 </context>
 <context>
@@ -537,7 +537,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/crashreporter/CrashReporter.ui" line="23"/>
         <source>Tomahawk Crash Reporter</source>
-        <translation type="unfinished"/>
+        <translation>Báo lỗi xảy ra về chương trình</translation>
     </message>
     <message utf8="true">
         <location filename="../src/crashreporter/CrashReporter.ui" line="80"/>
@@ -557,33 +557,33 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/crashreporter/CrashReporter.ui" line="190"/>
         <source>Abort</source>
-        <translation type="unfinished"/>
+        <translation>Hủy bỏ</translation>
     </message>
     <message>
         <location filename="../src/crashreporter/CrashReporter.ui" line="210"/>
         <source>You can disable sending crash reports in the configuration dialog.</source>
-        <translation type="unfinished"/>
+        <translation>Bạn có thể vô hiệu hóa việc gửi báo cáo lỗi trong hộp thoại cấu hình.</translation>
     </message>
     <message>
         <location filename="../src/crashreporter/CrashReporter.cpp" line="154"/>
         <source>Uploaded %L1 of %L2 KB.</source>
-        <translation type="unfinished"/>
+        <translation>Đã tải lên %L1 của %L2 KB.</translation>
     </message>
     <message>
         <location filename="../src/crashreporter/CrashReporter.cpp" line="168"/>
         <location filename="../src/crashreporter/CrashReporter.cpp" line="184"/>
         <source>Close</source>
-        <translation type="unfinished"/>
+        <translation>Đóng lại</translation>
     </message>
     <message>
         <location filename="../src/crashreporter/CrashReporter.cpp" line="177"/>
         <source>Sent! &lt;b&gt;Many thanks&lt;/b&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Đã gửi! &lt;b&gt;Xin cảm ơn&lt;/b&gt;.</translation>
     </message>
     <message>
         <location filename="../src/crashreporter/CrashReporter.cpp" line="185"/>
         <source>Failed to send crash info.</source>
-        <translation type="unfinished"/>
+        <translation>Xảy ra lỗi khi gửi thông báo lỗi.</translation>
     </message>
 </context>
 <context>
@@ -614,7 +614,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="86"/>
         <source>Delete Account</source>
-        <translation type="unfinished"/>
+        <translation>Xóa tài khoản</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="116"/>
@@ -632,7 +632,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/tomahawk/DiagnosticsDialog.ui" line="20"/>
         <source>Tomahawk Diagnostics</source>
-        <translation type="unfinished"/>
+        <translation>Chẩn đoán lỗi xảy ra với chương trình</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/DiagnosticsDialog.ui" line="42"/>
@@ -885,7 +885,7 @@ Password</source>
     <message>
         <location filename="../src/libtomahawk/jobview/IndexingJobItem.cpp" line="29"/>
         <source>Indexing database</source>
-        <translation type="unfinished"/>
+        <translation>Đánh mục chỉ số cơ sở dữ liệu</translation>
     </message>
 </context>
 <context>
@@ -893,7 +893,7 @@ Password</source>
     <message>
         <location filename="../src/libtomahawk/infobar/InfoBar.cpp" line="95"/>
         <source>Filter...</source>
-        <translation type="unfinished"/>
+        <translation>Lọc dữ liệu...</translation>
     </message>
 </context>
 <context>
@@ -912,22 +912,22 @@ Password</source>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="38"/>
         <source>Scrobble tracks to Last.fm</source>
-        <translation type="unfinished"/>
+        <translation>Tải về các track từ Last.fm</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="47"/>
         <source>Username:</source>
-        <translation type="unfinished"/>
+        <translation>Tên tài khoản:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="57"/>
         <source>Password:</source>
-        <translation type="unfinished"/>
+        <translation>Mật khẩu:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="73"/>
         <source>Test Login</source>
-        <translation type="unfinished"/>
+        <translation>Đăng nhập thử</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="80"/>
@@ -945,7 +945,7 @@ Password</source>
     <message>
         <location filename="../src/libtomahawk/context/pages/WikipediaContext.h" line="67"/>
         <source>Last.fm</source>
-        <translation type="unfinished"/>
+        <translation>Last.fm</translation>
     </message>
 </context>
 <context>
@@ -961,27 +961,27 @@ Password</source>
     <message>
         <location filename="../src/tomahawk/LoadXSPFDialog.ui" line="14"/>
         <source>Load XSPF</source>
-        <translation type="unfinished"/>
+        <translation>Tải XSPF</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/LoadXSPFDialog.ui" line="22"/>
         <source>Playlist URL</source>
-        <translation type="unfinished"/>
+        <translation>Đường dẫn liên kết danh sách phát</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/LoadXSPFDialog.ui" line="29"/>
         <source>Enter URL...</source>
-        <translation type="unfinished"/>
+        <translation>Điền vào đường dẫn liên kết...</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/LoadXSPFDialog.ui" line="42"/>
         <source>...</source>
-        <translation type="unfinished"/>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/LoadXSPFDialog.ui" line="51"/>
         <source>Automatically update</source>
-        <translation type="unfinished"/>
+        <translation>Tự động cập nhật</translation>
     </message>
 </context>
 <context>
@@ -989,12 +989,12 @@ Password</source>
     <message>
         <location filename="../src/tomahawk/LoadXSPFDialog.cpp" line="51"/>
         <source>Load XSPF File</source>
-        <translation type="unfinished"/>
+        <translation>Tải tập tin XSPF</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/LoadXSPFDialog.cpp" line="51"/>
         <source>XSPF Files (*.xspf)</source>
-        <translation type="unfinished"/>
+        <translation>Tập tin XSPF (*.xspf)</translation>
     </message>
 </context>
 <context>
@@ -1156,27 +1156,27 @@ Password</source>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.ui" line="20"/>
         <source>Enter a title for the new playlist:</source>
-        <translation type="unfinished"/>
+        <translation>Điền vào tiêu đề cho danh sách phát mới:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.ui" line="37"/>
         <source>Tomahawk offers a variety of ways to help you create playlists and find music you enjoy!</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk có khả năng cung cấp cách tạo các danh sách phát và tìm loại nhạc mà bạn thích!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.ui" line="47"/>
         <source>Just enter a genre or tag name and Tomahawk will suggest a few songs to get you started with your new playlist:</source>
-        <translation type="unfinished"/>
+        <translation>Chỉ cần điền vào thể loại nhạc hoặc một từ khóa nào đó thì Tomahawk sẽ đưa ra gợi ý giúp bạn bổ sung các bài hát vào danh sách phát mới:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.cpp" line="43"/>
         <source>&amp;Create Playlist</source>
-        <translation type="unfinished"/>
+        <translation>%Tạo danh sách phát</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.h" line="50"/>
         <source>Create a new playlist</source>
-        <translation type="unfinished"/>
+        <translation>Tạo mới danh sách phát</translation>
     </message>
 </context>
 <context>
@@ -1301,12 +1301,12 @@ Password</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="180"/>
         <source>played %1 by you</source>
-        <translation type="unfinished"/>
+        <translation>đã phát %1 bởi bạn</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="182"/>
         <source>played %1 by %2</source>
-        <translation type="unfinished"/>
+        <translation>đã phát %1 bởi %2</translation>
     </message>
 </context>
 <context>
@@ -1358,12 +1358,12 @@ Password</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="185"/>
         <source>All tracks by %1 on album %2</source>
-        <translation type="unfinished"/>
+        <translation>Tất cả các track từ %1 trong album %2</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="211"/>
         <source>All tracks by %1</source>
-        <translation type="unfinished"/>
+        <translation>Tất cả các track thuộc %1</translation>
     </message>
 </context>
 <context>
@@ -1371,7 +1371,7 @@ Password</source>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="32"/>
         <source>New Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Danh sách phát mới</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="49"/>
@@ -3765,33 +3765,38 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::Widgets::NetworkActivityWidget</name>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="62"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="63"/>
         <source>Charts</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="64"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="65"/>
         <source>Last Week</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="67"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="68"/>
         <source>Last Month</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="70"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="71"/>
         <source>Last Year</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="73"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="74"/>
         <source>Overall</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="93"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="94"/>
         <source>Sorry, we could not find any top hits for this artist!</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="165"/>
+        <source>Coming soon.</source>
         <translation type="unfinished"/>
     </message>
     <message>

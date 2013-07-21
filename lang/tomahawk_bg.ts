@@ -3795,34 +3795,39 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::Widgets::NetworkActivityWidget</name>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="62"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="63"/>
         <source>Charts</source>
         <translation>Класации</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="64"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="65"/>
         <source>Last Week</source>
         <translation>Миналата седмица</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="67"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="68"/>
         <source>Last Month</source>
         <translation>Миналия месец</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="70"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="71"/>
         <source>Last Year</source>
         <translation>Миналата година</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="73"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="74"/>
         <source>Overall</source>
         <translation>Изцяло</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="93"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="94"/>
         <source>Sorry, we could not find any top hits for this artist!</source>
         <translation>Съжалявам, но не откривам нито една хитова песен на този артист!</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="165"/>
+        <source>Coming soon.</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.h" line="54"/>

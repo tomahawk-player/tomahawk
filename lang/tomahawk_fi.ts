@@ -3785,34 +3785,39 @@ kappaleen %2%4 %3.</translation>
 <context>
     <name>Tomahawk::Widgets::NetworkActivityWidget</name>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="62"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="63"/>
         <source>Charts</source>
         <translation>Listat</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="64"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="65"/>
         <source>Last Week</source>
         <translation>Viime viikko</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="67"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="68"/>
         <source>Last Month</source>
         <translation>Viime kuukausi</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="70"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="71"/>
         <source>Last Year</source>
         <translation>Viime vuosi</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="73"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="74"/>
         <source>Overall</source>
         <translation>Kaikkiaan</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="93"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="94"/>
         <source>Sorry, we could not find any top hits for this artist!</source>
         <translation>Valitettavasti emme löytäneet yhtään tämän artistin parhaista hiteistä!</translation>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="165"/>
+        <source>Coming soon.</source>
+        <translation>Tulossa pian.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.h" line="54"/>
