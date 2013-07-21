@@ -74,6 +74,9 @@ public slots:
 
     void reportCapabilities( const QVariant& capabilities );
 
+private slots:
+    void tracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::ModelMode, const Tomahawk::collection_ptr& collection );
+
 private:
     Tomahawk::query_ptr parseTrack( const QVariantMap& track );
     void returnStreamUrl( const QString& streamUrl, boost::function< void( QSharedPointer< QIODevice >& ) > callback );
@@ -83,5 +86,7 @@ private:
     bool m_urlCallbackIsAsync;
     QVariantMap m_resolverConfig;
     JSResolver* m_resolver;
+    QString m_pendingUrl;
+    Tomahawk::album_ptr m_pendingAlbum;
 };
 #endif // JSRESOLVERHELPER_H

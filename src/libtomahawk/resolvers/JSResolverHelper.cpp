@@ -248,6 +248,11 @@ JSResolverHelper::parseTrack( const QVariantMap& track )
 void
 JSResolverHelper::addUrlResult( const QString& url, const QVariantMap& result )
 {
+    // It may seem a bit weird, but currently no slot should do anything
+    // more as we starting on a new URL and not task are waiting for it yet.
+    m_pendingUrl = QString();
+    m_pendingAlbum = album_ptr();
+
     QString type = result.value( "type" ).toString();
     if ( type == "artist" )
     {
@@ -259,8 +264,15 @@ JSResolverHelper::addUrlResult( const QString& url, const QVariantMap& result )
     {
         QString name = result.value( "name" ).toString();
         QString artist = result.value( "artist" ).toString();
-        emit m_resolver->informationFound( url, Album::get( Artist::get( artist, true ), name ).objectCast<QObject>() );
-
+        album_ptr album = Album::get( Artist::get( artist, true ), name );
+        m_pendingUrl = url;
+        m_pendingAlbum = album;
+        connect( album.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
+                 SLOT( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ) );
+        if ( album->tracks().count() > 0 )
+        {
+            emit m_resolver->informationFound( url, album.objectCast<QObject>() );
+        }
     }
     else if ( type == "track" )
     {
@@ -332,6 +344,19 @@ JSResolverHelper::reportCapabilities( const QVariant& v )
         capabilities = static_cast< Tomahawk::ExternalResolver::Capabilities >( intCap );
 
     m_resolver->onCapabilitiesChanged( capabilities );
+}
+
+
+void
+JSResolverHelper::tracksAdded( const QList<query_ptr>&, const ModelMode, const collection_ptr&)
+{
+    // Check if we still are actively waiting
+    if ( m_pendingAlbum.isNull() || m_pendingUrl.isNull() )
+        return;
+
+    emit m_resolver->informationFound( m_pendingUrl, m_pendingAlbum.objectCast<QObject>() );
+    m_pendingAlbum = album_ptr();
+    m_pendingUrl = QString();
 }
 
 
