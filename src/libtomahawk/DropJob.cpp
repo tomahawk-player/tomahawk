@@ -311,7 +311,10 @@ DropJob::isDropType( DropJob::DropType desired, const QMimeData* data )
         foreach ( QPointer<ExternalResolver> resolver, Pipeline::instance()->scriptResolvers() )
         {
             if ( resolver->canParseUrl( url, ExternalResolver::Playlist ) )
+            {
+                tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Accepting current drop as a playlist";
                 return true;
+            }
         }
 
     }
