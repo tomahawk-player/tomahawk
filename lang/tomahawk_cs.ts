@@ -3811,7 +3811,7 @@ Zkuste vyladit filtry pro nové písně.</translation>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="165"/>
         <source>Coming soon.</source>
-        <translation type="unfinished"/>
+        <translation>Přijde brzy.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.h" line="54"/>
