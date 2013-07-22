@@ -211,18 +211,12 @@ Tomahawk::Accounts::TelepathyConfigStorage::priority() const
 void
 Tomahawk::Accounts::TelepathyConfigStorage::save( const QString& accountId, const Account::Configuration& cfg )
 {
-//    TomahawkSettings* s = TomahawkSettings::instance();
-//    s->beginGroup( "accounts/" + accountId );
-//    s->setValue( "accountfriendlyname", cfg.accountFriendlyName );
-//    s->setValue( "enabled", cfg.enabled );
-//    s->setValue( "configuration", cfg.configuration );
-//    s->setValue( "acl", cfg.acl );
-//    s->setValue( "types", cfg.types );
-//    s->endGroup();
-//    s->sync();
-
-    //CredentialsManager* c = AccountManager::instance()->credentialsManager();
-    //c->setCredentials( m_credentialsServiceName, accountId, cfg.credentials );
+    TomahawkSettings* s = TomahawkSettings::instance();
+    s->beginGroup( "externalaccounts/" + accountId );
+    s->setValue( "enabled", cfg.enabled );
+    s->setValue( "acl", cfg.acl );
+    s->endGroup();
+    s->sync();
 
     if ( !m_accountIds.contains( accountId ) )
         m_accountIds.append( accountId );
@@ -232,6 +226,13 @@ Tomahawk::Accounts::TelepathyConfigStorage::save( const QString& accountId, cons
 void
 Tomahawk::Accounts::TelepathyConfigStorage::load( const QString& accountId, Account::Configuration& cfg )
 {
+    TomahawkSettings* s = TomahawkSettings::instance();
+    s->beginGroup( "externalaccounts/" + accountId );
+    cfg.enabled = s->value( "enabled", true ).toBool();
+    cfg.acl =     s->value( "acl", QVariantMap() ).toMap();
+    s->endGroup();
+
+
     Tp::AccountPtr account = m_tpam->accountForObjectPath( accountIdToTelepathyPath( accountId ) );
 
     if ( !account->normalizedName().isEmpty() )
@@ -241,9 +242,6 @@ Tomahawk::Accounts::TelepathyConfigStorage::load( const QString& accountId, Acco
 
     if ( cfg.accountFriendlyName.isEmpty() ) //this should never happen
         cfg.accountFriendlyName = accountId;
-
-    cfg.enabled = true;
-    cfg.acl = QVariantMap();
 
     QStringList types;
     types << "SipType";
@@ -282,18 +280,12 @@ Tomahawk::Accounts::TelepathyConfigStorage::load( const QString& accountId, Acco
 void
 Tomahawk::Accounts::TelepathyConfigStorage::remove( const QString& accountId )
 {
-//    TomahawkSettings* s = TomahawkSettings::instance();
-//    s->beginGroup( "accounts/" + accountId );
-//    s->remove( "accountfriendlyname" );
-//    s->remove( "enabled" );
-//    s->remove( "configuration" );
-//    s->remove( "acl" );
-//    s->remove( "types" );
-//    s->endGroup();
-//    s->remove( "accounts/" + accountId );
-
-//    Tomahawk::Accounts::CredentialsManager* c = Tomahawk::Accounts::AccountManager::instance()->credentialsManager();
-//    c->setCredentials( m_credentialsServiceName, account->uniqueIdentifier(), QVariantHash() );
+    TomahawkSettings* s = TomahawkSettings::instance();
+    s->beginGroup( "externalaccounts/" + accountId );
+    s->remove( "enabled" );
+    s->remove( "acl" );
+    s->endGroup();
+    s->remove( "externalaccounts/" + accountId );
 }
 
 Q_EXPORT_PLUGIN2( Tomahawk::Accounts::ConfigStorage, Tomahawk::Accounts::TelepathyConfigStorage )
