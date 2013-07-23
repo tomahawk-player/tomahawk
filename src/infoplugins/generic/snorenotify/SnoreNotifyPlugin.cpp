@@ -72,20 +72,20 @@ SnoreNotifyPlugin::SnoreNotifyPlugin()
     m_snore = new Snore::SnoreCore();
     m_snore->loadPlugins( Snore::PluginContainer::BACKEND );
     QString backend = qgetenv( "SNORE_BACKEND" ).constData();
-    backend.isEmpty()?m_snore->setPrimaryNotificationBackend():m_snore->setPrimaryNotificationBackend(backend);
+    backend.isEmpty()?m_snore->setPrimaryNotificationBackend():m_snore->setPrimaryNotificationBackend( backend );
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << m_snore->primaryNotificationBackend();
     m_application = new Snore::Application( qApp->applicationName(), m_defaultIcon );
 
-    m_snore->addApplication(m_application);
-    m_snore->applicationIsInitialized(m_application);
+    m_snore->addApplication( m_application );
+    m_snore->applicationIsInitialized( m_application );
 
-    addAlert( InfoNotifyUser,tr("Notify User") );
-    addAlert( InfoNowPlaying,tr("Now Playing") );
-    addAlert( InfoTrackUnresolved, tr("Unresolved track") );
-    addAlert( InfoNowStopped, tr("Playback Stopped") );
-    addAlert( InfoInboxReceived, tr("You recived a Song recomondation") );
+    addAlert( InfoNotifyUser, tr( "Notify User" ) );
+    addAlert( InfoNowPlaying, tr( "Now Playing" ) );
+    addAlert( InfoTrackUnresolved, tr( "Unresolved track" ) );
+    addAlert( InfoNowStopped, tr( "Playback Stopped" ) );
+    addAlert( InfoInboxReceived, tr( "You recived a Song recomondation" ) );
 
-    connect(m_snore,SIGNAL(actionInvoked(Snore::Notification)),this,SLOT(slotActionInvoked(Snore::Notification)));
+    connect( m_snore, SIGNAL( actionInvoked( Snore::Notification ) ), this, SLOT( slotActionInvoked( Snore::Notification ) ) );
 
 
 }
@@ -97,7 +97,7 @@ SnoreNotifyPlugin::~SnoreNotifyPlugin()
     m_snore->deleteLater();
     m_application->deleteLater();
 
-    foreach(Snore::Alert *alert,m_alerts)
+    foreach( Snore::Alert* alert, m_alerts )
     {
         alert->deleteLater();
     }
@@ -154,9 +154,9 @@ SnoreNotifyPlugin::notifyUser( Tomahawk::InfoSystem::InfoType type, const QStrin
     {
         icon = m_defaultIcon;
     }
-    Snore::Alert *alert = m_alerts[type];
+    Snore::Alert* alert = m_alerts[ type ];
     Snore::Notification n( qApp->applicationName(), alert->name(), alert->title(), messageText, icon );
-    m_snore->broadcastNotification(n);
+    m_snore->broadcastNotification( n );
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "showing notification:" << messageText;
 
 }
@@ -164,7 +164,7 @@ SnoreNotifyPlugin::notifyUser( Tomahawk::InfoSystem::InfoType type, const QStrin
 void
 SnoreNotifyPlugin::addAlert( Tomahawk::InfoSystem::InfoType type, const QString &title )
 {
-    Snore::Alert *alert = new Snore::Alert( title, title, m_defaultIcon );
+    Snore::Alert* alert = new Snore::Alert( title, title, m_defaultIcon );
     m_application->addAlert( alert );
     m_alerts[ type ] = alert;
 }
