@@ -88,9 +88,18 @@ function(tomahawk_add_library)
     if(NOT LIBRARY_NO_INSTALL)
         include(GNUInstallDirs)
         if(NOT LIBRARY_EXPORT)
-            install(TARGETS ${target} DESTINATION ${CMAKE_INSTALL_LIBDIR})
+            install( TARGETS ${target}
+                RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+                LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+                ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            )
         else()
-            install(TARGETS ${target} EXPORT ${LIBRARY_EXPORT} DESTINATION ${CMAKE_INSTALL_LIBDIR})
+            install( TARGETS ${target}
+                EXPORT ${LIBRARY_EXPORT}
+                RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+                LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+                ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            )
         endif()
     endif()
 endfunction()
