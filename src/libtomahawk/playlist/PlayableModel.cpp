@@ -235,7 +235,12 @@ PlayableModel::queryData( const query_ptr& query, int column, int role ) const
 
             case Score:
             {
-                float score = query->results().first()->score();
+                float score;
+                if ( query->results().first()->isOnline() )
+                    score = query->results().first()->score();
+                else
+                    score = 0.0;
+
                 return scoreText( score );
                 break;
             }
@@ -407,8 +412,6 @@ PlayableModel::mimeTypes() const
 QMimeData*
 PlayableModel::mimeData( const QModelIndexList &indexes ) const
 {
-    qDebug() << Q_FUNC_INFO;
-
     QByteArray resultData;
     QDataStream resultStream( &resultData, QIODevice::WriteOnly );
 
