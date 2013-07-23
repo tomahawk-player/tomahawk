@@ -25,18 +25,12 @@
 #include <QSharedPointer>
 #include <QVariantMap>
 
-#include "Typedefs.h"
 #include "accounts/AccountManager.h"
+#include "collection/Collection.h"
 #include "network/DBSyncConnectionState.h"
 #include "utils/TomahawkUtils.h"
-
 #include "DllMacro.h"
-
-// Forward Declarations breaking QSharedPointer
-#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    #include "collection/Collection.h"
-#endif
-
+#include "Typedefs.h"
 
 class ControlConnection;
 class DBSyncConnection;
