@@ -158,15 +158,16 @@ qt_add_resources( RC_SRCS "../../resources.qrc" )
 SET( final_src ${final_src} ${tomahawkUI_H} ${tomahawkMoc} ${tomahawkSources} ${RC_SRCS} )
 
 
-ADD_EXECUTABLE( tomahawk WIN32 MACOSX_BUNDLE ${final_src} )
-SET_TARGET_PROPERTIES(tomahawk
+ADD_EXECUTABLE( tomahawk_bin WIN32 MACOSX_BUNDLE ${final_src} )
+SET_TARGET_PROPERTIES(tomahawk_bin
     PROPERTIES
         AUTOMOC TRUE
         MACOSX_BUNDLE_INFO_PLIST "${CMAKE_BINARY_DIR}/Info.plist"
+        RUNTIME_OUTPUT_NAME tomahawk
 )
 
 
-qt5_use_modules(tomahawk Core Widgets Network Sql WebKitWidgets)
+qt5_use_modules(tomahawk_bin Core Widgets Network Sql WebKitWidgets)
 
 MESSAGE( STATUS "OS_SPECIFIC_LINK_LIBRARIES: ${OS_SPECIFIC_LINK_LIBRARIES}" )
 
@@ -180,7 +181,7 @@ IF( WITH_BREAKPAD )
     LIST(APPEND LINK_LIBRARIES ${LINK_LIBRARIES} tomahawk_breakpad )
 ENDIF()
 
-TARGET_LINK_LIBRARIES( tomahawk
+TARGET_LINK_LIBRARIES( tomahawk_bin
     ${LINK_LIBRARIES}
     ${TOMAHAWK_WIDGETS_LIBRARIES}
     ${TOMAHAWK_LIBRARIES}
@@ -201,7 +202,7 @@ IF( APPLE )
   ENDIF( HAVE_SPARKLE )
 ENDIF( APPLE )
 
-INSTALL( TARGETS tomahawk BUNDLE DESTINATION . RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} )
+INSTALL( TARGETS tomahawk_bin BUNDLE DESTINATION . RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} )
 
 IF( UNIX AND NOT APPLE AND KDE4_INSTALLED AND LEGACY_KDE_INTEGRATION ) #install protocol file
   FILE( READ ${CMAKE_SOURCE_DIR}/admin/unix/tomahawk.protocol protocol )
