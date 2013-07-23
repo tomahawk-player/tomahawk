@@ -1,4 +1,4 @@
-include( ../TomahawkUse.cmake )
+include( ${PROJECT_BINARY_DIR}/TomahawkUse.cmake )
 
 setup_qt()
 

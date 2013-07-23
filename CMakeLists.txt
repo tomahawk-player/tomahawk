@@ -45,6 +45,7 @@ option(WITH_BINARY_ATTICA "Enable support for downloading binary resolvers autom
 option(LEGACY_KDE_INTEGRATION "Install tomahawk.protocol file, deprecated since 4.6.0" OFF)
 option(WITH_UPOWER "Build with support for UPower events" OFF)
 option(WITH_GNOMESHORTCUTHANDLER "Build with shortcut handler for GNOME" OFF)
+option(WITH_KDE4 "Build with support for KDE specific stuff" ON)
 
 IF( CMAKE_SYSTEM_PROCESSOR MATCHES "arm" )
     message(STATUS "Build of breakpad library disabled on this platform.")
@@ -110,7 +111,6 @@ else()
     message( STATUS "Building Tomahawk ${TOMAHAWK_VERSION} full GUI version ***" )
 endif()
 
-
 if( NOT BUILD_WITH_QT4 )
     find_package(Qt5Core QUIET)
     if( Qt5Core_DIR )
@@ -145,6 +145,7 @@ if( NOT BUILD_WITH_QT4 )
         #FIXME: CrashReporter depends on deprecated QHttp
         set(WITH_CRASHREPORTER OFF)
         set(WITH_BREAKPAD OFF)
+        set(WITH_KDE4 OFF)
     endif()
 endif()
 if( NOT Qt5Core_DIR )
@@ -200,6 +201,12 @@ if( NOT Qt5Core_DIR )
     endmacro()
 endif()
 
+if( Qt5Core_DIR )
+    set( TOMAHAWK_QT5 TRUE )
+else( Qt5Core_DIR )
+    set( TOMAHAWK_QT5 FALSE )
+endif( Qt5Core_DIR )
+
 if( BUILD_GUI AND UNIX AND NOT APPLE )
     find_package( X11 )
 endif()
@@ -208,7 +215,6 @@ IF( UNIX AND NOT APPLE AND QT_QTDBUS_FOUND )
     SET( WITH_UPOWER ON )
     SET( WITH_GNOMESHORTCUTHANDLER ON )
 ENDIF( UNIX AND NOT APPLE AND QT_QTDBUS_FOUND  )
-
 
 macro_optional_find_package(Phonon 4.5.0)
 macro_log_feature(PHONON_FOUND "Phonon" "The Phonon multimedia library" "http://phonon.kde.org" TRUE "" "")
@@ -292,9 +298,11 @@ add_subdirectory(${THIRDPARTY_DIR}/libportfwd)
 
 #### submodules end
 
-macro_optional_find_package(KDE4)
-macro_optional_find_package(KDE4Installed)
 
+if (WITH_KDE4)
+    macro_optional_find_package(KDE4)
+    macro_optional_find_package(KDE4Installed)
+endif(WITH_KDE4)
 # this was used before we had FindKDE4Installed, just leaving it here to keep the flags
 # for future kde integration
 
@@ -331,6 +339,11 @@ IF( NOT APPLE )
     SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--no-undefined" )
 ENDIF( NOT APPLE )
 
+# Early configure these files as we need them later on
+configure_file(TomahawkUse.cmake.in "${PROJECT_BINARY_DIR}/TomahawkUse.cmake" @ONLY)
+file(COPY TomahawkAddPlugin.cmake DESTINATION "${PROJECT_BINARY_DIR}")
+file(COPY TomahawkAddLibrary.cmake DESTINATION "${PROJECT_BINARY_DIR}")
+
 SET( TOMAHAWK_LIBRARIES tomahawklib )
 SET( TOMAHAWK_WIDGETS_LIBRARIES tomahawk-widgets )
 
@@ -362,10 +375,6 @@ file(RELATIVE_PATH CONF_REL_INCLUDE_DIR "${CMAKE_INSTALL_FULL_CMAKEDIR}" "${CMAK
 
 configure_file(TomahawkConfig.cmake.in "${PROJECT_BINARY_DIR}/TomahawkConfig.cmake" @ONLY)
 configure_file(TomahawkConfigVersion.cmake.in "${PROJECT_BINARY_DIR}/TomahawkConfigVersion.cmake" @ONLY)
-
-file(COPY TomahawkUse.cmake DESTINATION "${PROJECT_BINARY_DIR}")
-file(COPY TomahawkAddPlugin.cmake DESTINATION "${PROJECT_BINARY_DIR}")
-file(COPY TomahawkAddLibrary.cmake DESTINATION "${PROJECT_BINARY_DIR}")
 
 # Install the cmake files
 install(

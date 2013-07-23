@@ -1,0 +1,63 @@
+#FIXME: this duplicates top level cmakelists: how can we reduce code duplication?
+
+set( TOMAHAWK_QT5 @TOMAHAWK_QT5@ )
+
+if(TOMAHAWK_QT5)
+    find_package(Qt5Core)
+    find_package(Qt5Network)
+    find_package(Qt5Gui)
+    find_package(Qt5Sql)
+
+    set(NEEDED_QT4_COMPONENTS "QtCore" "QtXml" "QtNetwork")
+    if(BUILD_GUI OR NOT DEFINED BUILD_GUI)
+        find_package(Qt5Widgets)
+        find_package(Qt5Svg)
+    endif()
+
+    macro(qt_wrap_ui)
+        qt5_wrap_ui(${ARGN})
+    endmacro()
+
+    macro(qt_add_resources)
+        qt5_add_resources(${ARGN})
+    endmacro()
+
+    find_package(Qt5LinguistTools REQUIRED)
+    macro(qt_add_translation)
+        qt5_add_translation(${ARGN})
+    endmacro()
+else(TOMAHAWK_QT5)
+    find_package(Qt4 COMPONENTS QtNetwork QtCore QtGui QtSql REQUIRED)
+    include( ${QT_USE_FILE} )
+
+    set(NEEDED_QT4_COMPONENTS "QtCore" "QtXml" "QtNetwork")
+    if(BUILD_GUI OR NOT DEFINED BUILD_GUI)
+        list(APPEND NEEDED_QT4_COMPONENTS "QtGui" "QtWebkit" "QtUiTools" "QtSvg")
+    endif()
+
+    find_package(Qt4 4.7.0 COMPONENTS ${NEEDED_QT4_COMPONENTS})
+    include( ${QT_USE_FILE} )
+
+    macro(qt5_use_modules)
+    endmacro()
+
+    macro(qt_wrap_ui)
+        qt4_wrap_ui(${ARGN})
+    endmacro()
+
+    macro(qt_add_resources)
+        qt4_add_resources(${ARGN})
+    endmacro()
+
+    macro(qt_add_translation)
+        qt4_add_translation(${ARGN})
+    endmacro()
+endif(TOMAHAWK_QT5)
+
+
+if(NOT TOMAHAWK_CMAKE_DIR)
+    set(TOMAHAWK_CMAKE_DIR ${CMAKE_CURRENT_LIST_DIR})
+endif()
+
+include( "${TOMAHAWK_CMAKE_DIR}/TomahawkAddLibrary.cmake" )
+include( "${TOMAHAWK_CMAKE_DIR}/TomahawkAddPlugin.cmake" )
