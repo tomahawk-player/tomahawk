@@ -29,13 +29,9 @@
 #include "Artist.h"
 #include "Pipeline.h"
 #include "Query.h"
+#include "Result.h"
 #include "Source.h"
 #include "SourceList.h"
-
-// Forward Declarations breaking QSharedPointer
-#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-    #include "Result.h"
-#endif
 
 #include <QDateTime>
 
