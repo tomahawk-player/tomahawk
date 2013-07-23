@@ -47,20 +47,30 @@ InfoBar::InfoBar( QWidget* parent )
 {
     ui->setupUi( this );
 
-    QFont boldFont = ui->captionLabel->font();
-    boldFont.setPointSize( TomahawkUtils::defaultFontSize() + 4 );
-    ui->captionLabel->setFont( boldFont );
+    QFont font = ui->captionLabel->font();
+
+    // TODO: This should be in stylesheet?
+    int captionFontSize = TomahawkUtils::defaultFontSize() + 10;
+    font.setPointSize( captionFontSize );
+    font.setBold( true );
+    font.setFamily( "Titillium Web" );
+
+    ui->captionLabel->setFont( font );
     ui->captionLabel->setElideMode( Qt::ElideRight );
+    ui->captionLabel->setAlignment( Qt::AlignTop | Qt::AlignLeft );
 
-    QFontMetrics boldFontMetrics( boldFont );
-    boldFont.setPointSize( TomahawkUtils::defaultFontSize() + 1 );
-    boldFont.setBold( false );
-    ui->descriptionLabel->setFont( boldFont );
+    // TODO: This should be in stylesheet?
+    int descriptionFontSize = TomahawkUtils::defaultFontSize() + 2;
+    font.setPointSize( descriptionFontSize );
+    font.setBold( false );
 
-    boldFontMetrics = QFontMetrics( boldFont );
-    QFont regFont = ui->longDescriptionLabel->font();
-    regFont.setPointSize( TomahawkUtils::defaultFontSize() );
-    ui->longDescriptionLabel->setFont( regFont );
+    ui->descriptionLabel->setFont( font );
+    ui->descriptionLabel->setAlignment( Qt::AlignTop | Qt::AlignLeft );
+
+    ui->longDescriptionLabel->setFont( font );
+
+    ui->captionLabel->setMargin( 2 );
+    ui->descriptionLabel->setMargin( 2 );
 
     m_whitePal = ui->captionLabel->palette();
     m_whitePal.setColor( QPalette::Foreground, TomahawkStyle::HEADER_TEXT );
@@ -87,7 +97,7 @@ InfoBar::InfoBar( QWidget* parent )
     m_queryLabel = new QueryLabel( this );
     m_queryLabel->setType( QueryLabel::Artist );
     m_queryLabel->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
-    m_queryLabel->setFont( boldFont );
+    m_queryLabel->setFont( font );
     m_queryLabel->hide();
     connect( m_queryLabel, SIGNAL( clickedArtist() ), this, SLOT( artistClicked() ) );
 
@@ -102,9 +112,11 @@ InfoBar::InfoBar( QWidget* parent )
     pal.setBrush( backgroundRole(), TomahawkStyle::HEADER_BACKGROUND );
 
     setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
-    setFixedHeight( 58 );
     setAutoFillBackground( true );
     setPalette( pal );
+
+    // top-margin + header + bottom-margin + top-margin + subheader + bottom-margin
+    setFixedHeight( 2 + 2 * captionFontSize + 2 + 2 + 2 * descriptionFontSize + 2 );
 
     connect( ViewManager::instance(), SIGNAL( filterAvailable( bool ) ), SLOT( setFilterAvailable( bool ) ) );
 }
