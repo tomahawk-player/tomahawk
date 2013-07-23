@@ -49,5 +49,7 @@ function(tomahawk_add_plugin)
 
     list(APPEND tomahawk_add_library_args "NO_VERSION")
 
+    list(APPEND tomahawk_add_library_args "INSTALL_BINDIR" "${CMAKE_INSTALL_LIBDIR}")
+
     tomahawk_add_library(${tomahawk_add_library_args})
 endfunction()

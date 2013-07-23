@@ -4,7 +4,7 @@ function(tomahawk_add_library)
     # parse arguments (name needs to be saved before passing ARGN into the macro)
     set(NAME ${ARGV0})
     set(options NO_INSTALL NO_VERSION)
-    set(oneValueArgs NAME TYPE EXPORT_MACRO TARGET TARGET_TYPE EXPORT VERSION SOVERSION)
+    set(oneValueArgs NAME TYPE EXPORT_MACRO TARGET TARGET_TYPE EXPORT VERSION SOVERSION INSTALL_BINDIR)
     set(multiValueArgs SOURCES UI LINK_LIBRARIES COMPILE_DEFINITIONS)
     cmake_parse_arguments(LIBRARY "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
     set(LIBRARY_NAME ${NAME})
@@ -84,19 +84,24 @@ function(tomahawk_add_library)
         set_target_properties(${target} PROPERTIES SOVERSION ${LIBRARY_SOVERSION})
     endif()
 
+
+    if(NOT LIBRARY_INSTALL_BINDIR)
+        set(LIBRARY_INSTALL_BINDIR "${CMAKE_INSTALL_BINDIR}")
+    endif()
+
     # make installation optional, maybe useful for dummy plugins one day
     if(NOT LIBRARY_NO_INSTALL)
         include(GNUInstallDirs)
         if(NOT LIBRARY_EXPORT)
             install( TARGETS ${target}
-                RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+                RUNTIME DESTINATION ${LIBRARY_INSTALL_BINDIR}
                 LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
                 ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
             )
         else()
             install( TARGETS ${target}
                 EXPORT ${LIBRARY_EXPORT}
-                RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+                RUNTIME DESTINATION ${LIBRARY_INSTALL_BINDIR}
                 LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
                 ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
             )
