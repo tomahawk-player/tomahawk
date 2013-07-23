@@ -80,6 +80,12 @@ ShortenedLinkParser::lookupUrl( const QString& url )
         cleaned.replace( "/#", "" );
 
     NetworkReply* reply = new NetworkReply( Tomahawk::Utils::nam()->get( QNetworkRequest( QUrl( cleaned ) ) ) );
+
+    // Deezer is doing a nasty redirect to /comingsoon in some countries.
+    // This removes valubale information from the URL.
+    reply->blacklistHostFromRedirection( "www.deezer.com" );
+    reply->blacklistHostFromRedirection( "deezer.com" );
+
     connect( reply, SIGNAL( finished() ), SLOT( lookupFinished() ) );
 
     m_queries.insert( reply );

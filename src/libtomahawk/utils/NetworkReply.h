@@ -21,6 +21,7 @@
 
 #include <QObject>
 #include <QNetworkReply>
+#include <QStringList>
 
 #include "Typedefs.h"
 
@@ -34,6 +35,7 @@ public:
     explicit NetworkReply( QNetworkReply* parent = 0 );
     virtual ~NetworkReply();
 
+    void blacklistHostFromRedirection( const QString& host );
     QNetworkReply* reply() const { return m_reply; }
 
 signals:
@@ -49,6 +51,7 @@ private slots:
 private:
     void load( const QUrl& url );
 
+    QStringList m_blacklistedHosts;
     QNetworkReply* m_reply;
     QUrl m_url;
 };

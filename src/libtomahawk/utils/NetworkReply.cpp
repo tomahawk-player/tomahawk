@@ -47,6 +47,13 @@ NetworkReply::~NetworkReply()
 
 
 void
+NetworkReply::blacklistHostFromRedirection( const QString& host )
+{
+    m_blacklistedHosts << host;
+}
+
+
+void
 NetworkReply::deletedByParent()
 {
     if ( sender() == m_reply )
@@ -97,8 +104,16 @@ NetworkReply::networkLoadFinished()
     if ( redir.isValid() && !redir.toUrl().isEmpty() )
     {
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Redirected HTTP request to" << redir;
-        load( redir.toUrl() );
-        emit redirected();
+        if ( m_blacklistedHosts.contains( redir.toUrl().host() ) )
+        {
+            tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Reached blacklisted host, not redirecting anymore.";
+            emit finished();
+        }
+        else
+        {
+            load( redir.toUrl() );
+            emit redirected();
+        }
     }
     else
         emit finished();
