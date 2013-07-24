@@ -101,11 +101,13 @@ TreeProxyModel::onModelReset()
 void
 TreeProxyModel::setFilter( const QString& pattern )
 {
-    reset();
     emit filteringStarted();
 
     m_filter = pattern;
+
+    beginResetModel();
     m_albumsFilter.clear();
+    endResetModel();
 
     if ( m_artistsFilterCmd )
     {
