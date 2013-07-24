@@ -55,7 +55,7 @@ public:
     static bool handlesUrl( const QString& url );
 
 public slots:
-    void lookupFinished();
+    void lookupFinished( const QUrl& url );
 
 signals:
     void urls( const QStringList& urls );

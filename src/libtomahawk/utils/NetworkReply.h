@@ -42,6 +42,7 @@ signals:
     void redirected();
 
     void finished();
+    void finished( const QUrl& finalUrl );
     void error( QNetworkReply::NetworkError error );
 
 private slots:

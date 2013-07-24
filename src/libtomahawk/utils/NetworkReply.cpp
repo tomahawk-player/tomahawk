@@ -107,6 +107,7 @@ NetworkReply::networkLoadFinished()
         if ( m_blacklistedHosts.contains( redir.toUrl().host() ) )
         {
             tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Reached blacklisted host, not redirecting anymore.";
+            emit finished( redir.toUrl() );
             emit finished();
         }
         else
@@ -116,5 +117,6 @@ NetworkReply::networkLoadFinished()
         }
     }
     else
+        emit finished( m_url );
         emit finished();
 }

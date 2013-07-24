@@ -86,7 +86,7 @@ ShortenedLinkParser::lookupUrl( const QString& url )
     reply->blacklistHostFromRedirection( "www.deezer.com" );
     reply->blacklistHostFromRedirection( "deezer.com" );
 
-    connect( reply, SIGNAL( finished() ), SLOT( lookupFinished() ) );
+    connect( reply, SIGNAL( finished( QUrl ) ), SLOT( lookupFinished( QUrl ) ) );
 
     m_queries.insert( reply );
 
@@ -98,7 +98,7 @@ ShortenedLinkParser::lookupUrl( const QString& url )
 
 
 void
-ShortenedLinkParser::lookupFinished()
+ShortenedLinkParser::lookupFinished( const QUrl& url )
 {
     NetworkReply* r = qobject_cast< NetworkReply* >( sender() );
     Q_ASSERT( r );
@@ -109,7 +109,7 @@ ShortenedLinkParser::lookupFinished()
 #endif
 
     tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Got an un-shortened url:" << r->reply()->url().toString();
-    m_links << r->reply()->url().toString();
+    m_links << url.toString();
     m_queries.remove( r );
     r->deleteLater();
 
