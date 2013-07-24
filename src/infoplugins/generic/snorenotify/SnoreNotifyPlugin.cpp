@@ -72,10 +72,19 @@ SnoreNotifyPlugin::SnoreNotifyPlugin()
     m_snore = new Snore::SnoreCore();
     m_snore->loadPlugins( Snore::PluginContainer::BACKEND );
     QString backend = qgetenv( "SNORE_BACKEND" ).constData();
-    backend.isEmpty()?m_snore->setPrimaryNotificationBackend():m_snore->setPrimaryNotificationBackend( backend );
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << m_snore->primaryNotificationBackend();
-    m_application = new Snore::Application( qApp->applicationName(), m_defaultIcon );
 
+    if( backend.isEmpty() )
+    {
+        m_snore->setPrimaryNotificationBackend();
+    }
+    else
+    {
+        m_snore->setPrimaryNotificationBackend( backend );
+    }
+
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << m_snore->primaryNotificationBackend();
+
+    m_application = new Snore::Application( qApp->applicationName(), m_defaultIcon );
     m_snore->addApplication( m_application );
     m_snore->applicationIsInitialized( m_application );
 
@@ -86,8 +95,6 @@ SnoreNotifyPlugin::SnoreNotifyPlugin()
     addAlert( InfoInboxReceived, tr( "You recived a Song recomondation" ) );
 
     connect( m_snore, SIGNAL( actionInvoked( Snore::Notification ) ), this, SLOT( slotActionInvoked( Snore::Notification ) ) );
-
-
 }
 
 
@@ -113,28 +120,28 @@ SnoreNotifyPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
 
     switch ( pushData.type )
     {
-    case Tomahawk::InfoSystem::InfoTrackUnresolved:
-        notifyUser( Tomahawk::InfoSystem::InfoTrackUnresolved,"The current track could not be resolved. Tomahawk will pick back up with the next resolvable track from this source." );
-        return;
+        case Tomahawk::InfoSystem::InfoTrackUnresolved:
+            notifyUser( Tomahawk::InfoSystem::InfoTrackUnresolved,"The current track could not be resolved. Tomahawk will pick back up with the next resolvable track from this source." );
+            return;
 
-    case Tomahawk::InfoSystem::InfoNotifyUser:
-        notifyUser( Tomahawk::InfoSystem::InfoNotifyUser,pushData.infoPair.second.toString() );
-        return;
+        case Tomahawk::InfoSystem::InfoNotifyUser:
+            notifyUser( Tomahawk::InfoSystem::InfoNotifyUser,pushData.infoPair.second.toString() );
+            return;
 
-    case Tomahawk::InfoSystem::InfoNowStopped:
-        notifyUser( Tomahawk::InfoSystem::InfoNowStopped, "Tomahawk stopped playback." );
-        return;
+        case Tomahawk::InfoSystem::InfoNowStopped:
+            notifyUser( Tomahawk::InfoSystem::InfoNowStopped, "Tomahawk stopped playback." );
+            return;
 
-    case Tomahawk::InfoSystem::InfoNowPlaying:
-        nowPlaying( pushData.infoPair.second );
-        return;
+        case Tomahawk::InfoSystem::InfoNowPlaying:
+            nowPlaying( pushData.infoPair.second );
+            return;
 
-    case Tomahawk::InfoSystem::InfoInboxReceived:
-        inboxReceived( pushData.infoPair.second );
-        return;
+        case Tomahawk::InfoSystem::InfoInboxReceived:
+            inboxReceived( pushData.infoPair.second );
+            return;
 
-    default:
-        return;
+        default:
+            return;
     }
 
 }

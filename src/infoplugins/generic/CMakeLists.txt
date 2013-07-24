@@ -3,7 +3,6 @@ include_directories(
     ${Boost_INCLUDE_DIR}
 )
 if(WIN32 OR APPLE)
-find_package(Libsnore)
 if(BUILD_GUI AND LIBSNORE_FOUND)
     SET(snore_srcs
         snorenotify/SnoreNotifyPlugin.cpp
