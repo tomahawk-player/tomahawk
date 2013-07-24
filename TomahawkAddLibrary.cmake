@@ -4,7 +4,7 @@ function(tomahawk_add_library)
     # parse arguments (name needs to be saved before passing ARGN into the macro)
     set(NAME ${ARGV0})
     set(options NO_INSTALL NO_VERSION)
-    set(oneValueArgs NAME TYPE EXPORT_MACRO TARGET TARGET_TYPE EXPORT VERSION SOVERSION INSTALL_BINDIR)
+    set(oneValueArgs NAME TYPE EXPORT_MACRO TARGET TARGET_TYPE EXPORT VERSION SOVERSION INSTALL_BINDIR QT5_MODULES)
     set(multiValueArgs SOURCES UI LINK_LIBRARIES COMPILE_DEFINITIONS)
     cmake_parse_arguments(LIBRARY "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
     set(LIBRARY_NAME ${NAME})
@@ -46,8 +46,7 @@ function(tomahawk_add_library)
     endif()
 
     # HACK: add qt modules - every lib should define its own set of modules
-    qt5_use_modules(${target} Core Network Widgets Sql Xml DBus)
-
+    qt5_use_modules(${target} Core Network Widgets Sql Xml DBus ${LIBRARY_QT5_MODULES})
 
     # definitions - can this be moved into set_target_properties below?
     add_definitions(${QT_DEFINITIONS})
