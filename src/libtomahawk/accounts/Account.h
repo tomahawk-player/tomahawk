@@ -82,7 +82,7 @@ public:
     enum AuthErrorCode { AuthError, ConnectionError };
     enum ConnectionState { Disconnected, Connecting, Connected, Disconnecting };
 
-    explicit Account(const QString &accountId);
+    explicit Account( const QString& accountId );
     virtual ~Account();
 
     QString accountServiceName() const { QMutexLocker locker( &m_mutex ); return m_accountServiceName; } // e.g. "Twitter", "Last.fm"
