@@ -68,7 +68,7 @@ void
 NetworkReply::load( const QUrl& url )
 {
     m_url = url;
-    m_formerUrls << url;
+    m_formerUrls << url.toString();
     QNetworkRequest request( url );
 
     Q_ASSERT( Tomahawk::Utils::nam() != 0 );

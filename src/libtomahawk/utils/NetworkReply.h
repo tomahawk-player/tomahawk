@@ -38,8 +38,8 @@ public:
     void blacklistHostFromRedirection( const QString& host );
     QNetworkReply* reply() const { return m_reply; }
 
-    static const uint maxRedirects = 100;
-    static const uint maxSameRedirects = 5;
+    static const int maxRedirects = 100;
+    static const int maxSameRedirects = 5;
 
 signals:
     void redirected();
