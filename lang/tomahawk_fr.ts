@@ -3656,7 +3656,7 @@ Essayez de changer les filtres pour avoir de nouveaux morceaux à jouer.</transl
 <context>
     <name>Tomahawk::ShortenedLinkParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/ShortenedLinkParser.cpp" line="102"/>
+        <location filename="../src/libtomahawk/utils/ShortenedLinkParser.cpp" line="108"/>
         <source>Network error parsing shortened link!</source>
         <translation>Erreur réseau lors du décodage de l&apos;URL courte!</translation>
     </message>

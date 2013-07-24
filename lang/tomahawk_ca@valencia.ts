@@ -3658,7 +3658,7 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
 <context>
     <name>Tomahawk::ShortenedLinkParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/ShortenedLinkParser.cpp" line="102"/>
+        <location filename="../src/libtomahawk/utils/ShortenedLinkParser.cpp" line="108"/>
         <source>Network error parsing shortened link!</source>
         <translation>Error de la xarxa en analitzar l&apos;enllaç escurçat!</translation>
     </message>

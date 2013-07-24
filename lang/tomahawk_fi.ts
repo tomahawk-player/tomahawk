@@ -3664,7 +3664,7 @@ kappaleen %2%4 %3.</translation>
 <context>
     <name>Tomahawk::ShortenedLinkParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/ShortenedLinkParser.cpp" line="102"/>
+        <location filename="../src/libtomahawk/utils/ShortenedLinkParser.cpp" line="108"/>
         <source>Network error parsing shortened link!</source>
         <translation>Verkkovirhe jäsennettäessä lyhennettyä linkkiä!</translation>
     </message>

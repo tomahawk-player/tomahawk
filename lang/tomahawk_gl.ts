@@ -3658,7 +3658,7 @@ Proba a trocar os filtros para ter outra lista música para escoitar. </translat
 <context>
     <name>Tomahawk::ShortenedLinkParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/ShortenedLinkParser.cpp" line="102"/>
+        <location filename="../src/libtomahawk/utils/ShortenedLinkParser.cpp" line="108"/>
         <source>Network error parsing shortened link!</source>
         <translation>Erro de rede no acurtamento de ligazóns!</translation>
     </message>

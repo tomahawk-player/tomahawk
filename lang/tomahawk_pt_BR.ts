@@ -3653,7 +3653,7 @@ Tente ajustar os filtros para ouvir um novo conjunto de músicas.</translation>
 <context>
     <name>Tomahawk::ShortenedLinkParser</name>
     <message>
-        <location filename="../src/libtomahawk/utils/ShortenedLinkParser.cpp" line="102"/>
+        <location filename="../src/libtomahawk/utils/ShortenedLinkParser.cpp" line="108"/>
         <source>Network error parsing shortened link!</source>
         <translation>Erro de rede ao analisar o encurtador de link!</translation>
     </message>
