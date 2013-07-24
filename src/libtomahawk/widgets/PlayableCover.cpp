@@ -29,6 +29,8 @@
 #include "utils/Logger.h"
 
 #include <QApplication>
+#include <QDrag>
+#include <QMimeData>
 #include <QPainter>
 
 using namespace Tomahawk;
