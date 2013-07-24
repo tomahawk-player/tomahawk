@@ -27,6 +27,7 @@
 #include "SourceList.h"
 #include "Typedefs.h"
 #include "Artist.h"
+#include "Track.h"
 
 #include "DllMacro.h"
 
