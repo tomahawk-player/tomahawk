@@ -8,7 +8,7 @@ if(NOT TOMAHAWK_LIBRARIES)
     find_package(Tomahawk REQUIRED)
 else()
     message(STATUS "BUILDING INSIDE TOMAHAWK")
-    set(TOMAHAWK_USE_FILE "${CMAKE_SOURCE_DIR}/TomahawkUse.cmake")
+    set(TOMAHAWK_USE_FILE "${PROJECT_BINARY_DIR}/TomahawkUse.cmake")
 endif()
 include( ${TOMAHAWK_USE_FILE} )
 
