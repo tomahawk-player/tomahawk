@@ -72,7 +72,7 @@ SnoreNotifyPlugin::SnoreNotifyPlugin()
     addAlert( InfoNowPlaying, tr( "Now Playing" ) );
     addAlert( InfoTrackUnresolved, tr( "Unresolved track" ) );
     addAlert( InfoNowStopped, tr( "Playback Stopped" ) );
-    addAlert( InfoInboxReceived, tr( "You recived a Song recomondation" ) );
+    addAlert( InfoInboxReceived, tr( "You received a Song recomondation" ) );
 
     connect( m_snore, SIGNAL( actionInvoked( Snore::Notification ) ), this, SLOT( slotActionInvoked( Snore::Notification ) ) );
 }
