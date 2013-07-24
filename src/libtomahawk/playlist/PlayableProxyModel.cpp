@@ -319,7 +319,7 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
     QString origin2;
     qint64 id1 = 0, id2 = 0;
 
-    if ( q1->numResults() )
+    if ( !q1->results().isEmpty() )
     {
         Tomahawk::result_ptr r = q1->results().first();
         bitrate1 = r->bitrate();
@@ -327,11 +327,10 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
         mtime1 = r->modificationTime();
         size1 = r->size();
         year1 = r->track()->year();
-        score1 = r->isOnline() ? r->score() : 0.0;
+        score1 = r->score();
         origin1 = r->friendlySource().toLower();
-        id1 = (qint64)&r;
     }
-    if ( q2->numResults() )
+    if ( !q2->results().isEmpty() )
     {
         Tomahawk::result_ptr r = q2->results().first();
         bitrate2 = r->bitrate();
@@ -339,9 +338,8 @@ PlayableProxyModel::lessThan( int column, const Tomahawk::query_ptr& q1, const T
         mtime2 = r->modificationTime();
         size2 = r->size();
         year2 = r->track()->year();
-        score2 = r->isOnline() ? r->score() : 0.0;
+        score2 = r->score();
         origin2 = r->friendlySource().toLower();
-        id2 = (qint64)&r;
     }
 
     // This makes it a stable sorter and prevents items from randomly jumping about.
