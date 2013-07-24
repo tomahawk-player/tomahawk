@@ -38,6 +38,9 @@ public:
     void blacklistHostFromRedirection( const QString& host );
     QNetworkReply* reply() const { return m_reply; }
 
+    static const uint maxRedirects = 100;
+    static const uint maxSameRedirects = 5;
+
 signals:
     void redirected();
 
@@ -53,6 +56,7 @@ private:
     void load( const QUrl& url );
 
     QStringList m_blacklistedHosts;
+    QStringList m_formerUrls;
     QNetworkReply* m_reply;
     QUrl m_url;
 };

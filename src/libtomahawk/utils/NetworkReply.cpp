@@ -68,6 +68,7 @@ void
 NetworkReply::load( const QUrl& url )
 {
     m_url = url;
+    m_formerUrls << url;
     QNetworkRequest request( url );
 
     Q_ASSERT( Tomahawk::Utils::nam() != 0 );
@@ -101,7 +102,7 @@ NetworkReply::networkLoadFinished()
     }
 
     QVariant redir = m_reply->attribute( QNetworkRequest::RedirectionTargetAttribute );
-    if ( redir.isValid() && !redir.toUrl().isEmpty() )
+    if ( redir.isValid() && !redir.toUrl().isEmpty() && m_formerUrls.count( redir.toUrl().toString() ) < maxSameRedirects && m_formerUrls.count() < maxRedirects )
     {
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Redirected HTTP request to" << redir;
         if ( m_blacklistedHosts.contains( redir.toUrl().host() ) )
