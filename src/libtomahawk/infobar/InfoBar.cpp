@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2012,      Leo Franchi            <lfranchi@kde.org>
+ *   Copyright 2013,      Teo Mrnjavac           <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -47,10 +48,16 @@ InfoBar::InfoBar( QWidget* parent )
 {
     ui->setupUi( this );
 
+    ui->imageLabel->setMargin( 0 );
+    ui->imageLabel->setFixedSize( TomahawkUtils::defaultIconSize().width() * 3,
+                                  TomahawkUtils::defaultIconSize().height() * 3 );
+
+    ui->horizontalLayout->insertSpacing( 1, TomahawkUtils::defaultIconSize().width() / 4 );
+    ui->horizontalLayout->setStretchFactor( ui->verticalLayout, 2 );
+
     QFont font = ui->captionLabel->font();
 
-    // TODO: This should be in stylesheet?
-    int captionFontSize = TomahawkUtils::defaultFontSize() + 10;
+    int captionFontSize = TomahawkUtils::defaultFontSize() + 6;
     font.setPointSize( captionFontSize );
     font.setBold( true );
     font.setFamily( "Titillium Web" );
@@ -58,19 +65,21 @@ InfoBar::InfoBar( QWidget* parent )
     ui->captionLabel->setFont( font );
     ui->captionLabel->setElideMode( Qt::ElideRight );
     ui->captionLabel->setAlignment( Qt::AlignTop | Qt::AlignLeft );
+    ui->captionLabel->setMargin( 2 );
+    ui->captionLabel->setMinimumHeight( QFontMetrics( font ).height() + 2 * ui->captionLabel->margin() );
 
-    // TODO: This should be in stylesheet?
     int descriptionFontSize = TomahawkUtils::defaultFontSize() + 2;
     font.setPointSize( descriptionFontSize );
     font.setBold( false );
-
     ui->descriptionLabel->setFont( font );
     ui->descriptionLabel->setAlignment( Qt::AlignTop | Qt::AlignLeft );
-
-    ui->longDescriptionLabel->setFont( font );
-
-    ui->captionLabel->setMargin( 2 );
     ui->descriptionLabel->setMargin( 2 );
+    ui->descriptionLabel->setMinimumHeight( QFontMetrics( font ).height() + 2 * ui->descriptionLabel->margin() );
+
+    QFont regFont = ui->longDescriptionLabel->font();
+    regFont.setPointSize( TomahawkUtils::defaultFontSize() );
+    ui->longDescriptionLabel->setFont( regFont );
+    ui->longDescriptionLabel->setMargin( 4 );
 
     m_whitePal = ui->captionLabel->palette();
     m_whitePal.setColor( QPalette::Foreground, TomahawkStyle::HEADER_TEXT );
@@ -79,10 +88,6 @@ InfoBar::InfoBar( QWidget* parent )
     ui->captionLabel->setPalette( m_whitePal );
     ui->descriptionLabel->setPalette( m_whitePal );
     ui->longDescriptionLabel->setPalette( m_whitePal );
-
-    ui->captionLabel->setMargin( 2 );
-    ui->descriptionLabel->setMargin( 2 );
-    ui->longDescriptionLabel->setMargin( 4 );
 
     ui->captionLabel->setText( QString() );
     ui->descriptionLabel->setText( QString() );
@@ -111,7 +116,20 @@ InfoBar::InfoBar( QWidget* parent )
     QPalette pal = m_whitePal;
     pal.setBrush( backgroundRole(), TomahawkStyle::HEADER_BACKGROUND );
 
+    TomahawkUtils::unmarginLayout( ui->horizontalLayout );
+
+    // on 72dpi, 1px = 1pt
+    // margins that should be around 8 4 8 4 on ~100dpi
+    int leftRightMargin = TomahawkUtils::defaultFontHeight() / 3;
+    int topBottomMargin = TomahawkUtils::defaultFontHeight() / 6;
+
+    ui->horizontalLayout->setContentsMargins( leftRightMargin, topBottomMargin,
+                                              leftRightMargin, topBottomMargin );
     setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
+    // top-margin + header + layout spacing + description + bottom-margin
+    setFixedHeight( qMax( topBottomMargin + ui->captionLabel->height() + TomahawkUtils::defaultIconSize().height() / 4 + ui->descriptionLabel->height() + topBottomMargin,
+                          topBottomMargin + ui->imageLabel->height() + topBottomMargin ) );
+
     setAutoFillBackground( true );
     setPalette( pal );
 
@@ -204,7 +222,7 @@ InfoBar::setLongDescription( const QString& s )
 void
 InfoBar::setPixmap( const QPixmap& p )
 {
-    ui->imageLabel->setPixmap( p.scaledToHeight( IMAGE_HEIGHT, Qt::SmoothTransformation ) );
+    ui->imageLabel->setPixmap( p.scaledToHeight( ui->imageLabel->height(), Qt::SmoothTransformation ) );
 }
 
 
