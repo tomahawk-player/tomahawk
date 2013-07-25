@@ -87,9 +87,11 @@ BasicHeader::BasicHeader( QWidget* parent )
     font.setPointSize( descriptionFontSize );
     font.setBold( false );
     m_descriptionLabel->setFont( font );
+    m_descriptionLabel->setElideMode( Qt::ElideRight );
     m_descriptionLabel->setAlignment( Qt::AlignTop | Qt::AlignLeft );
     m_descriptionLabel->setMargin( 2 );
     m_descriptionLabel->setMinimumHeight( QFontMetrics( font ).height() + 2 * m_descriptionLabel->margin() );
+    m_descriptionLabel->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
 
 /*    QGraphicsDropShadowEffect* effect = new QGraphicsDropShadowEffect();
     effect->setBlurRadius( 4 );

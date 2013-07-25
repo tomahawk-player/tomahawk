@@ -72,6 +72,7 @@ InfoBar::InfoBar( QWidget* parent )
     font.setPointSize( descriptionFontSize );
     font.setBold( false );
     ui->descriptionLabel->setFont( font );
+    ui->descriptionLabel->setElideMode( Qt::ElideRight );
     ui->descriptionLabel->setAlignment( Qt::AlignTop | Qt::AlignLeft );
     ui->descriptionLabel->setMargin( 2 );
     ui->descriptionLabel->setMinimumHeight( QFontMetrics( font ).height() + 2 * ui->descriptionLabel->margin() );
