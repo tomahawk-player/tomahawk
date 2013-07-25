@@ -1,7 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
- *   Copyright 2012,      Teo Mrnjavac <teo@kde.org>
+ *   Copyright 2012-2013, Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #include "ElidedLabel.h"
 #include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
+#include "utils/Logger.h"
 
 #include <QLabel>
 #include <QPixmap>
@@ -43,9 +44,12 @@ BasicHeader::BasicHeader( QWidget* parent )
     m_mainLayout = new QHBoxLayout;
 
     m_imageLabel = new QLabel( this );
-    m_imageLabel->setFixedSize( 48, 48 );
+    m_imageLabel->setMargin( 0 );
+    m_imageLabel->setFixedSize( TomahawkUtils::defaultIconSize().width() * 3,
+                                TomahawkUtils::defaultIconSize().height() * 3 );
+
     m_mainLayout->addWidget( m_imageLabel );
-    m_mainLayout->addSpacing( 8 );
+    m_mainLayout->addSpacing( TomahawkUtils::defaultIconSize().width() / 4 );
 
     m_verticalLayout = new QVBoxLayout;
     m_mainLayout->addLayout( m_verticalLayout );
@@ -56,7 +60,7 @@ BasicHeader::BasicHeader( QWidget* parent )
     m_verticalLayout->addWidget( m_descriptionLabel );
     m_verticalLayout->addStretch();
 
-    m_mainLayout->addSpacing( 8 );
+    m_mainLayout->addSpacing( TomahawkUtils::defaultIconSize().width() / 4 );
     m_mainLayout->setStretchFactor( m_verticalLayout, 2 );
 
     QPalette pal = palette();
@@ -68,8 +72,7 @@ BasicHeader::BasicHeader( QWidget* parent )
 
     QFont font = m_captionLabel->font();
     
-    // TODO: This should be in stylesheet?
-    int captionFontSize = TomahawkUtils::defaultFontSize() + 10;
+    int captionFontSize = TomahawkUtils::defaultFontSize() + 6;
     font.setPointSize( captionFontSize );
     font.setBold( true );
     font.setFamily( "Titillium Web" );
@@ -77,16 +80,16 @@ BasicHeader::BasicHeader( QWidget* parent )
     m_captionLabel->setFont( font );
     m_captionLabel->setElideMode( Qt::ElideRight );
     m_captionLabel->setAlignment( Qt::AlignTop | Qt::AlignLeft );
+    m_captionLabel->setMargin( 2 );
+    m_captionLabel->setMinimumHeight( QFontMetrics( font ).height() + 2 * m_captionLabel->margin() );
 
-    // TODO: This should be in stylesheet?
     int descriptionFontSize = TomahawkUtils::defaultFontSize() + 2;
     font.setPointSize( descriptionFontSize );
     font.setBold( false );
     m_descriptionLabel->setFont( font );
     m_descriptionLabel->setAlignment( Qt::AlignTop | Qt::AlignLeft );
-
-    m_captionLabel->setMargin( 2 );
     m_descriptionLabel->setMargin( 2 );
+    m_descriptionLabel->setMinimumHeight( QFontMetrics( font ).height() + 2 * m_descriptionLabel->margin() );
 
 /*    QGraphicsDropShadowEffect* effect = new QGraphicsDropShadowEffect();
     effect->setBlurRadius( 4 );
@@ -110,10 +113,18 @@ BasicHeader::BasicHeader( QWidget* parent )
     l->addWidget( lineBelow );
 
     TomahawkUtils::unmarginLayout( m_mainLayout );
-    m_mainLayout->setContentsMargins( 8, 4, 8, 4 );
+
+    // on 72dpi, 1px = 1pt
+    // margins that should be around 8 4 8 4 on ~100dpi
+    int leftRightMargin = TomahawkUtils::defaultFontHeight() / 3;
+    int topBottomMargin = TomahawkUtils::defaultFontHeight() / 6;
+
+    m_mainLayout->setContentsMargins( leftRightMargin, topBottomMargin,
+                                      leftRightMargin, topBottomMargin );
     setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
-    // top-margin + header + bottom-margin + top-margin + subheader + bottom-margin
-    setFixedHeight( 2 + 2 * captionFontSize + 2 + 2 + 2 * descriptionFontSize + 2 );
+    // top-margin + header + layout spacing + description + bottom-margin
+    setFixedHeight( qMax( topBottomMargin + m_captionLabel->height() + TomahawkUtils::defaultIconSize().height() / 4 + m_descriptionLabel->height() + topBottomMargin,
+                          topBottomMargin + m_imageLabel->height() + topBottomMargin ) );
 
     setAutoFillBackground( true );
     setPalette( pal );
