@@ -23,16 +23,17 @@
 #include <QtPlugin>
 
 #include "audio/AudioEngine.h"
+#include "audio/AudioEngine.h"
 #include "infosystem/InfoSystemWorker.h"
-#include "Album.h"
-#include "Artist.h"
-#include "Result.h"
-#include "TomahawkSettings.h"
-#include "GlobalActionManager.h"
 #include "utils/Logger.h"
 #include "utils/TomahawkUtils.h"
-#include "audio/AudioEngine.h"
+#include "Album.h"
+#include "Artist.h"
+#include "GlobalActionManager.h"
+#include "PlaylistInterface.h"
+#include "Result.h"
 #include "Source.h"
+#include "TomahawkSettings.h"
 
 #include "MprisPlugin.h"
 #include "MprisPluginRootAdaptor.h"
