@@ -76,11 +76,13 @@ HatchetAccountConfig::~HatchetAccountConfig()
 void
 HatchetAccountConfig::login()
 {
+    tLog() << Q_FUNC_INFO;
     const ButtonAction action = static_cast< ButtonAction>( m_ui->loginButton->property( "action" ).toInt() );
 
     if ( action == Login )
     {
         // Log in mode
+        tLog() << Q_FUNC_INFO << "Logging in...";
         m_account->loginWithPassword( m_ui->usernameEdit->text(), m_ui->passwordEdit->text(), m_ui->otpEdit->text() );
     }
     else if ( action == Logout )
@@ -110,9 +112,6 @@ HatchetAccountConfig::fieldsChanged()
     m_ui->loginButton->setEnabled( !username.isEmpty() && !password.isEmpty() && action == Login );
 
     m_ui->errorLabel->clear();
-
-    if ( action == Login )
-        m_ui->loginButton->setText( tr( "Login" ) );
 }
 
 
@@ -132,7 +131,7 @@ HatchetAccountConfig::showLoggedIn()
     m_ui->errorLabel->clear();
     m_ui->errorLabel->hide();
 
-    m_ui->loginButton->setText( "Log out" );
+    m_ui->loginButton->setText( tr("Log out") );
     m_ui->loginButton->setProperty( "action", Logout );
     m_ui->loginButton->setDefault( true );
 }
@@ -145,15 +144,16 @@ HatchetAccountConfig::showLoggedOut()
     m_ui->usernameEdit->show();
     m_ui->passwordLabel->show();
     m_ui->passwordEdit->show();
-    m_ui->otpEdit->show();
-    m_ui->otpLabel->show();
+    m_ui->otpLabel->hide();
+    m_ui->otpEdit->hide();
+    m_ui->otpEdit->clear();
 
     m_ui->loggedInLabel->clear();
     m_ui->loggedInLabel->hide();
 
     m_ui->errorLabel->clear();
 
-    m_ui->loginButton->setText( "Login" );
+    m_ui->loginButton->setText( tr("Log in") );
     m_ui->loginButton->setProperty( "action", Login );
     m_ui->loginButton->setDefault( true );
 }
@@ -170,6 +170,18 @@ HatchetAccountConfig::accountInfoUpdated()
 void
 HatchetAccountConfig::authError( const QString &error )
 {
+    if ( error.startsWith( "At least one OTP method is configured on this account" ) )
+    {
+        m_ui->usernameLabel->hide();
+        m_ui->usernameEdit->hide();
+        m_ui->otpLabel->show();
+        m_ui->otpEdit->show();
+        m_ui->passwordLabel->hide();
+        m_ui->passwordEdit->hide();
+        m_ui->loginButton->setText( tr("Continue") );
+        return;
+    }
+    m_account->deauthenticate();
     QMessageBox::critical( this, "An error was encountered logging in:", error );
 }
 

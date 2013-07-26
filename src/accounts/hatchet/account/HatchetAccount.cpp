@@ -24,7 +24,7 @@
 #include "utils/Logger.h"
 #include "sip/HatchetSip.h"
 #include "utils/TomahawkUtils.h"
-#include "utils/NetworkAccessManager.cpp"
+#include "utils/NetworkAccessManager.h"
 
 #include <QtPlugin>
 #include <QFile>
@@ -281,7 +281,6 @@ HatchetAccount::onPasswordLoginFinished( QNetworkReply* reply, const QString& us
     {
         tLog() << Q_FUNC_INFO << "Error getting parsed reply from auth server";
         emit authError( "An error occurred reading the reply from the server");
-        deauthenticate();
         return;
     }
 
@@ -289,7 +288,6 @@ HatchetAccount::onPasswordLoginFinished( QNetworkReply* reply, const QString& us
     {
         tLog() << Q_FUNC_INFO << "Auth server returned an error";
         emit authError( resp.value( "error" ).toString() );
-        deauthenticate();
         return;
     }
 
@@ -298,7 +296,6 @@ HatchetAccount::onPasswordLoginFinished( QNetworkReply* reply, const QString& us
     {
         tLog() << Q_FUNC_INFO << "Auth server nonce value does not match!";
         emit authError( "The nonce value was incorrect. YOUR ACCOUNT MAY BE COMPROMISED." );
-        deauthenticate();
         return;
     }
 
