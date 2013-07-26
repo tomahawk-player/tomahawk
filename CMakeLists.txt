@@ -354,10 +354,10 @@ ADD_SUBDIRECTORY( thirdparty )
 ADD_SUBDIRECTORY( src )
 ADD_SUBDIRECTORY( admin )
 
-#if( BUILD_TESTS )
-#    enable_testing()
-#    add_subdirectory( tests )
-#endif()
+if( BUILD_TESTS )
+    enable_testing()
+    add_subdirectory( tests )
+endif()
 
 
 # Add all targets to the build-tree export set
