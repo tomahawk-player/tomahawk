@@ -117,7 +117,7 @@ XmppSipPlugin::XmppSipPlugin( Account* account )
     setupClientHelper();
 
     m_client->registerPayload( new TomahawkXmppMessageFactory );
-    m_currentResource = QString::fromAscii( "tomahawk%1" ).arg( QString::number( qrand() % 10000 ) );
+    m_currentResource = QString( "tomahawk%1" ).arg( QString::number( qrand() % 10000 ) );
     m_client->setResource( m_currentResource );
 
 #ifndef ENABLE_HEADLESS
