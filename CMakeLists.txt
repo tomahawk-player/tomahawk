@@ -117,6 +117,9 @@ if( NOT BUILD_WITH_QT4 )
         find_package(Qt5Widgets QUIET)
         message(STATUS "Found Qt5! Be aware that Qt5-support is still experimental and not officially supported!")
 
+        # We need this to find the paths to qdbusxml2cpp and co
+        find_package(Qt5DBus REQUIRED)
+
         macro(qt_wrap_ui)
             qt5_wrap_ui(${ARGN})
         endmacro()
@@ -351,10 +354,10 @@ ADD_SUBDIRECTORY( thirdparty )
 ADD_SUBDIRECTORY( src )
 ADD_SUBDIRECTORY( admin )
 
-if( BUILD_TESTS )
-    enable_testing()
-    add_subdirectory( tests )
-endif()
+#if( BUILD_TESTS )
+#    enable_testing()
+#    add_subdirectory( tests )
+#endif()
 
 
 # Add all targets to the build-tree export set
