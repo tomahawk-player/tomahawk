@@ -83,6 +83,27 @@ XSPFLoader::setOverrideTitle( const QString& newTitle )
 }
 
 
+void
+XSPFLoader::setAutoResolveTracks( bool autoResolve )
+{
+    m_autoResolve = autoResolve;
+}
+
+
+void
+XSPFLoader::setAutoDelete( bool autoDelete )
+{
+    m_autoDelete = autoDelete;
+}
+
+
+void
+XSPFLoader::setErrorTitle( const QString& error)
+{
+   m_errorTitle = error;
+}
+
+
 QList< Tomahawk::query_ptr >
 XSPFLoader::entries() const
 {
