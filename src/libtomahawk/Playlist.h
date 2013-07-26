@@ -287,6 +287,10 @@ private:
 }
 
 Q_DECLARE_METATYPE( QSharedPointer< Tomahawk::Playlist > )
-Q_DECLARE_METATYPE( QList< QSharedPointer< Tomahawk::Query > > )
+
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+    // Qt5 automatically generated this Metatype
+    Q_DECLARE_METATYPE( QList< QSharedPointer< Tomahawk::Query > > )
+#endif
 
 #endif // PLAYLIST_H
