@@ -105,7 +105,11 @@ XmlConsole::XmlConsole(Client* client, QWidget *parent) :
 	m_stackOutgoing.paramColor = QColor(0xdd8811);
 
 	QAction *action = new QAction(tr("Close"),this);
-	action->setSoftKeyRole(QAction::NegativeSoftKey);
+    #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+        // Softkeys were removed in Qt 5
+        // See: http://qt.gitorious.org/qt/qtbase/blobs/stable/dist/changes-5.0.0#line510
+        action->setSoftKeyRole(QAction::NegativeSoftKey);
+    #endif
 	connect(action, SIGNAL(triggered()), SLOT(close()));
 	addAction(action);
 }
