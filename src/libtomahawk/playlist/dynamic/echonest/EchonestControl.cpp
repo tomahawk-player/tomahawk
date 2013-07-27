@@ -494,11 +494,11 @@ Tomahawk::EchonestControl::updateWidgets()
         match->addItem( tr( "is not" ), 0 );
 
         QComboBox* combo = new QComboBox();
-        combo->addItem( tr( "Studio" ), "studio" );
-        combo->addItem( tr( "Live" ), "live" );
-        combo->addItem( tr( "Acoustic" ), "acoustic" );
-        combo->addItem( tr( "Electric" ), "electric" );
-        combo->addItem( tr( "Christmas" ), "christmas" );
+        combo->addItem( tr( "Studio", "Song type: The song was recorded in a studio." ), "studio" );
+        combo->addItem( tr( "Live", "Song type: The song was a life performance." ), "live" );
+        combo->addItem( tr( "Acoustic", "Song type" ), "acoustic" );
+        combo->addItem( tr( "Electric", "Song type" ), "electric" );
+        combo->addItem( tr( "Christmas", "Song type: A christmas song" ), "christmas" );
 
         connect( match, SIGNAL( activated( int ) ), this, SLOT( updateData() ) );
         connect( match, SIGNAL( activated( int ) ), this, SLOT( editingFinished() ) );
