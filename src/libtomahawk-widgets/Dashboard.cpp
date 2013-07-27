@@ -285,5 +285,5 @@ Dashboard::changeEvent( QEvent* e )
 QPixmap
 Dashboard::pixmap() const
 {
-    return ImageRegistry::instance()->pixmap( RESPATH "images/dashboard.svg", QSize( 0, 0 ) );
+    return ImageRegistry::instance()->pixmap( RESPATH "images/dashboard.svg", QSize( 256, 256 ) );
 }
