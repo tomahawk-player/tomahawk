@@ -61,7 +61,7 @@ signals:
     void changed();
 
 private slots:
-    void typeSelectorChanged( const QString& selectedType, bool firstLoad = false );
+    void typeSelectorChanged( int selectedTypeIndex, bool firstLoad = false );
 
 private:
     QWidget* m_parent;
