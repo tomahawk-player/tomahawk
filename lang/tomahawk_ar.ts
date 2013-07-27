@@ -792,10 +792,9 @@ connect and stream from you?</source>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="62"/>
-        <source>One-time
-Password</source>
-        <translation>لمرة واحدة
-كلمة السر</translation>
+        <source>Enter One-time
+Password (OTP)</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="70"/>
@@ -816,11 +815,6 @@ Password</source>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="97"/>
         <source>Hatchet password</source>
         <translation>كلمة سر هاتشت</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="104"/>
-        <source>(Only if configured)</source>
-        <translation>(فقط إذا كان مكون)</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="138"/>
@@ -893,7 +887,7 @@ Password</source>
 <context>
     <name>InfoBar</name>
     <message>
-        <location filename="../src/libtomahawk/infobar/InfoBar.cpp" line="95"/>
+        <location filename="../src/libtomahawk/infobar/InfoBar.cpp" line="105"/>
         <source>Filter...</source>
         <translation>مرشح...</translation>
     </message>
@@ -1252,48 +1246,48 @@ Password</source>
         <translation>الدقة</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="758"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="761"/>
         <source>Perfect match</source>
         <translation>تطابق تام</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="759"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="762"/>
         <source>Very good match</source>
         <translation>تطابق جيد جدا</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="760"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="763"/>
         <source>Good match</source>
         <translation>تطابق جيد</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="761"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="764"/>
         <source>Vague match</source>
         <translation>تطابق مبهم</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="762"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="765"/>
         <source>Bad match</source>
         <translation>تطابق سيء</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="763"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="766"/>
         <source>Very bad match</source>
         <translation>تطابق سيء للغاية</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="764"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="767"/>
         <source>Not available</source>
         <translation>غير متوفر</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="765"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="768"/>
         <source>Searching...</source>
         <translation>قيد البحث...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="53"/>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="341"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="346"/>
         <source>Name</source>
         <translation>إسم</translation>
     </message>
@@ -2446,14 +2440,24 @@ Password</source>
 <context>
     <name>Tomahawk::Accounts::HatchetAccountConfig</name>
     <message>
-        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="115"/>
-        <source>Login</source>
-        <translation>تسجيل الدخول</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="129"/>
+        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="128"/>
         <source>Logged in as: %1</source>
         <translation>مسجل تحت اسم: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="134"/>
+        <source>Log out</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="156"/>
+        <source>Log in</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="181"/>
+        <source>Continue</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -4387,7 +4391,7 @@ Lyrics for &quot;%1&quot; by %2:
         <translation>فشل في جلب قائمة الأغاني المطلوبة من الشبكة، أو الملف المطلوب غير موجود</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="201"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="222"/>
         <source>New Playlist</source>
         <translation>قائمة أغاني جديدة</translation>
     </message>
@@ -4461,12 +4465,12 @@ Lyrics for &quot;%1&quot; by %2:
         <translation>اغلاق</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="358"/>
+        <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="357"/>
         <source>Save XMPP log to file</source>
         <translation>Save XMPP log to file</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="359"/>
+        <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="358"/>
         <source>OpenDocument Format (*.odf);;HTML file (*.html);;Plain text (*.txt)</source>
         <translation>OpenDocument Format (*.odf);;HTML file (*.html);;Plain text (*.txt)</translation>
     </message>

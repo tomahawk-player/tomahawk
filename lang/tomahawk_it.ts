@@ -791,10 +791,9 @@ connect and stream from you?</source>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="62"/>
-        <source>One-time
-Password</source>
-        <translation>Password⏎
-temporanea</translation>
+        <source>Enter One-time
+Password (OTP)</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="70"/>
@@ -815,11 +814,6 @@ temporanea</translation>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="97"/>
         <source>Hatchet password</source>
         <translation>Password Hatchet</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="104"/>
-        <source>(Only if configured)</source>
-        <translation>(Solo se configurato)</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="138"/>
@@ -892,7 +886,7 @@ temporanea</translation>
 <context>
     <name>InfoBar</name>
     <message>
-        <location filename="../src/libtomahawk/infobar/InfoBar.cpp" line="95"/>
+        <location filename="../src/libtomahawk/infobar/InfoBar.cpp" line="105"/>
         <source>Filter...</source>
         <translation>Filtra...</translation>
     </message>
@@ -1251,48 +1245,48 @@ temporanea</translation>
         <translation>Precisione</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="758"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="761"/>
         <source>Perfect match</source>
         <translation>Abbinamento perfetto</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="759"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="762"/>
         <source>Very good match</source>
         <translation>Abbinamento molto buono</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="760"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="763"/>
         <source>Good match</source>
         <translation>Buon abbinamento</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="761"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="764"/>
         <source>Vague match</source>
         <translation>Vaga corrispondenza</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="762"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="765"/>
         <source>Bad match</source>
         <translation>Brutto abbinamento</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="763"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="766"/>
         <source>Very bad match</source>
         <translation>Pessimo abbinamento</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="764"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="767"/>
         <source>Not available</source>
         <translation>Non disponibile</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="765"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="768"/>
         <source>Searching...</source>
         <translation>Sto cercando...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="53"/>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="341"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="346"/>
         <source>Name</source>
         <translation>Nome</translation>
     </message>
@@ -2443,14 +2437,24 @@ temporanea</translation>
 <context>
     <name>Tomahawk::Accounts::HatchetAccountConfig</name>
     <message>
-        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="115"/>
-        <source>Login</source>
-        <translation>Login</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="129"/>
+        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="128"/>
         <source>Logged in as: %1</source>
         <translation>Connesso come: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="134"/>
+        <source>Log out</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="156"/>
+        <source>Log in</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="181"/>
+        <source>Continue</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -4361,7 +4365,7 @@ Lyrics for &quot;%1&quot; by %2:
         <translation>Caricamento della playlist fallito, potrebbe essere un errore di rete oppure il file non esiste</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="201"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="222"/>
         <source>New Playlist</source>
         <translation>Nuova playlist</translation>
     </message>
@@ -4435,12 +4439,12 @@ Lyrics for &quot;%1&quot; by %2:
         <translation>Chiudi</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="358"/>
+        <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="357"/>
         <source>Save XMPP log to file</source>
         <translation>Salva il log XMPP</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="359"/>
+        <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="358"/>
         <source>OpenDocument Format (*.odf);;HTML file (*.html);;Plain text (*.txt)</source>
         <translation>Formato OpenDocument (*.odf);;file HTML  (*.html);;Testo (*.txt)</translation>
     </message>

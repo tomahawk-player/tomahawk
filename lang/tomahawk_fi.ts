@@ -792,10 +792,10 @@ yhdistää ja toistaa sinulta virtaa?</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="62"/>
-        <source>One-time
-Password</source>
-        <translation>Kerta-
-salasana</translation>
+        <source>Enter One-time
+Password (OTP)</source>
+        <translation>Anna kertakäyttöinen
+salasana (OTP)</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="70"/>
@@ -816,11 +816,6 @@ salasana</translation>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="97"/>
         <source>Hatchet password</source>
         <translation>Hatchet-salasana</translation>
-    </message>
-    <message>
-        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="104"/>
-        <source>(Only if configured)</source>
-        <translation>(Vain, jos asetettu)</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="138"/>
@@ -893,7 +888,7 @@ salasana</translation>
 <context>
     <name>InfoBar</name>
     <message>
-        <location filename="../src/libtomahawk/infobar/InfoBar.cpp" line="95"/>
+        <location filename="../src/libtomahawk/infobar/InfoBar.cpp" line="105"/>
         <source>Filter...</source>
         <translation>Suodata...</translation>
     </message>
@@ -1252,48 +1247,48 @@ salasana</translation>
         <translation>Tarkkuus</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="758"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="761"/>
         <source>Perfect match</source>
         <translation>Täysosuma</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="759"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="762"/>
         <source>Very good match</source>
         <translation>Erittäin hyvä osuma</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="760"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="763"/>
         <source>Good match</source>
         <translation>Hyvä osuma</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="761"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="764"/>
         <source>Vague match</source>
         <translation>Epämääräinen osuma</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="762"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="765"/>
         <source>Bad match</source>
         <translation>Kehno osuma</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="763"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="766"/>
         <source>Very bad match</source>
         <translation>Erittäin kehno osuma</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="764"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="767"/>
         <source>Not available</source>
         <translation>Ei saatavilla</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="765"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="768"/>
         <source>Searching...</source>
         <translation>Haetaan...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="53"/>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="341"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="346"/>
         <source>Name</source>
         <translation>Nimi</translation>
     </message>
@@ -2451,14 +2446,24 @@ napsauttamalla hiiren oikealla.</translation>
 <context>
     <name>Tomahawk::Accounts::HatchetAccountConfig</name>
     <message>
-        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="115"/>
-        <source>Login</source>
+        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="128"/>
+        <source>Logged in as: %1</source>
+        <translation>Kirjauduttu käyttäjänä: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="134"/>
+        <source>Log out</source>
+        <translation>Kirjaudu ulos</translation>
+    </message>
+    <message>
+        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="156"/>
+        <source>Log in</source>
         <translation>Kirjaudu</translation>
     </message>
     <message>
-        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="129"/>
-        <source>Logged in as: %1</source>
-        <translation>Kirjauduttu käyttäjänä: %1</translation>
+        <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="181"/>
+        <source>Continue</source>
+        <translation>Jatka</translation>
     </message>
 </context>
 <context>
@@ -4392,7 +4397,7 @@ Sanat artistin %2 kappaleelle ”%1”:
         <translation>Halutun soittolistan hakeminen verkosta epäonnistui tai haluttua tiedostoa ei ole olemassa</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="201"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="222"/>
         <source>New Playlist</source>
         <translation>Uusi soittolista</translation>
     </message>
@@ -4466,12 +4471,12 @@ Sanat artistin %2 kappaleelle ”%1”:
         <translation>Sulje</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="358"/>
+        <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="357"/>
         <source>Save XMPP log to file</source>
         <translation>Tallenna XMPP-loki tiedostoon</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="359"/>
+        <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="358"/>
         <source>OpenDocument Format (*.odf);;HTML file (*.html);;Plain text (*.txt)</source>
         <translation>OpenDocument Format (*.odf);;HTML-tiedosto (*.html);;Muotoilematon teksti (*.txt)</translation>
     </message>
