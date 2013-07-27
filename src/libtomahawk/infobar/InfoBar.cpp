@@ -134,9 +134,6 @@ InfoBar::InfoBar( QWidget* parent )
     setAutoFillBackground( true );
     setPalette( pal );
 
-    // top-margin + header + bottom-margin + top-margin + subheader + bottom-margin
-    setFixedHeight( 2 + 2 * captionFontSize + 2 + 2 + 2 * descriptionFontSize + 2 );
-
     connect( ViewManager::instance(), SIGNAL( filterAvailable( bool ) ), SLOT( setFilterAvailable( bool ) ) );
 }
 
