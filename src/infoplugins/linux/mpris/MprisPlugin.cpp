@@ -364,12 +364,9 @@ MprisPlugin::Next()
 
 
 void
-MprisPlugin::OpenUri( const QString& Uri )
+MprisPlugin::OpenUri( const QString& uri )
 {
-    if ( Uri.contains( "tomahawk://" ) )
-        GlobalActionManager::instance()->parseTomahawkLink( Uri );
-    else if ( Uri.contains( "spotify:" ) )
-        GlobalActionManager::instance()->openSpotifyLink( Uri );
+    GlobalActionManager::instance()->openUrl( uri );
 }
 
 
