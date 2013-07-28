@@ -20,3 +20,6 @@ add_subdirectory( infoplugins )
 # application
 add_subdirectory( tomahawk )
 add_subdirectory( crashreporter )
+
+# tests
+add_subdirectory( tests )
