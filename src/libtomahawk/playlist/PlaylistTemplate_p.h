@@ -52,7 +52,7 @@ public:
     Q_DECLARE_PUBLIC( PlaylistTemplate )
     PlaylistTemplate* q_ptr;
 
-private:
+protected:
     source_ptr author;
     QString guid;
     QString title;
@@ -64,7 +64,5 @@ private:
 };
 
 }
-
-Q_DECLARE_METATYPE( QSharedPointer< Tomahawk::PlaylistTemplate > )
 
 #endif // PLAYLISTTEMPLATE_P_H

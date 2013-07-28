@@ -37,12 +37,16 @@ Q_OBJECT
 
 public:
     enum XSPFErrorCode { ParseError, InvalidTrackError, FetchError };
-    explicit XSPFLoader( bool autoCreate = true, bool autoUpdate = false, QObject* parent = 0 );
+    explicit XSPFLoader( bool autoCreate = true, bool autoUpdate = false, QObject* parent = 0, const QString& guid = QString() );
 
     virtual ~XSPFLoader();
     QList< Tomahawk::query_ptr > entries() const;
     QString title() const;
 
+    /**
+     * Get the playlist for the most recent parsed XSPF url.
+     */
+    Tomahawk::playlist_ptr getPlaylistForRecentUrl();
     void setOverrideTitle( const QString& newTitle );
     void setAutoResolveTracks( bool autoResolve );
     void setAutoDelete( bool autoDelete );
@@ -69,6 +73,7 @@ private:
     void gotBody();
 
     bool m_autoCreate, m_autoUpdate, m_autoResolve, m_autoDelete;
+    QString m_guid;
     QString m_NS,m_overrideTitle;
     QList< Tomahawk::query_ptr > m_entries;
     QString m_title, m_info, m_creator, m_errorTitle;

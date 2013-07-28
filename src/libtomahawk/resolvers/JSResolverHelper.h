@@ -76,6 +76,7 @@ public slots:
 
 private slots:
     void tracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::ModelMode, const Tomahawk::collection_ptr& collection );
+    void pltemplateTracksLoadedForUrl( const QString& url, const Tomahawk::playlisttemplate_ptr& pltemplate );
 
 private:
     Tomahawk::query_ptr parseTrack( const QVariantMap& track );

@@ -62,3 +62,9 @@ Tomahawk::PlaylistTemplate::tracks() const
 
     return d->queries;
 }
+
+Tomahawk::PlaylistTemplate::PlaylistTemplate( Tomahawk::PlaylistTemplatePrivate* d )
+    : QObject( 0 )
+    , d_ptr( d )
+{
+}

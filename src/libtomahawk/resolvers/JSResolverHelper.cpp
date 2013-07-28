@@ -24,10 +24,12 @@
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
 #include "playlist/PlaylistTemplate.h"
+#include "playlist/XspfPlaylistTemplate.h"
 #include "resolvers/ScriptEngine.h"
 #include "network/Servent.h"
-#include "utils/Logger.h"
+#include "utils/Closure.h"
 #include "utils/NetworkAccessManager.h"
+#include "utils/Logger.h"
 
 #include "config.h"
 #include "JSResolver_p.h"
@@ -324,6 +326,33 @@ JSResolverHelper::addUrlResult( const QString& url, const QVariantMap& result )
         playlisttemplate_ptr pltemplate( new PlaylistTemplate( source, guid, title, info, creator, false, queries ) );
         emit m_resolver->informationFound( url, pltemplate.objectCast<QObject>() );
     }
+    else if ( type == "xspf-url" )
+    {
+        QString xspfUrl = result.value( "url" ).toString();
+        Q_ASSERT( !xspfUrl.isEmpty() );
+        QString guid = QString( "xspf-%1-%2" ).arg( xspfUrl.toUtf8().toBase64().constData() ).arg( Tomahawk::Database::instance()->impl()->dbid() );
+
+        // Do we already have this playlist loaded?
+        {
+            playlist_ptr playlist = Playlist::get( guid );
+            if ( !playlist.isNull() )
+            {
+                emit m_resolver->informationFound( url, playlist.objectCast<QObject>() );
+                return;
+            }
+        }
+
+
+        // Get all information to build a new playlist but do not build it until we know,
+        // if it is really handled as a playlist and not as a set of tracks.
+        Tomahawk::source_ptr source = SourceList::instance()->getLocal();
+        QSharedPointer<XspfPlaylistTemplate> pltemplate( new XspfPlaylistTemplate( xspfUrl, source, guid ) );
+        NewClosure( pltemplate, SIGNAL( tracksLoaded( QList< Tomahawk::query_ptr > ) ),
+                    this, SLOT( pltemplateTracksLoadedForUrl( QString, Tomahawk::playlisttemplate_ptr ) ),
+                    url, pltemplate.objectCast<Tomahawk::PlaylistTemplate>() );
+        tLog( LOGVERBOSE ) << Q_FUNC_INFO << m_resolver->name() << "Got playlist for " << url;
+        pltemplate->load();
+    }
     else
     {
         tLog( LOGVERBOSE ) << Q_FUNC_INFO << m_resolver->name() << "No usable information found for " << url;
@@ -357,6 +386,14 @@ JSResolverHelper::tracksAdded( const QList<query_ptr>&, const ModelMode, const c
     emit m_resolver->informationFound( m_pendingUrl, m_pendingAlbum.objectCast<QObject>() );
     m_pendingAlbum = album_ptr();
     m_pendingUrl = QString();
+}
+
+
+void
+JSResolverHelper::pltemplateTracksLoadedForUrl( const QString& url, const playlisttemplate_ptr& pltemplate )
+{
+    tLog() << Q_FUNC_INFO;
+    emit m_resolver->informationFound( url, pltemplate.objectCast<QObject>() );
 }
 
 

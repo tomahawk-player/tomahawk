@@ -326,6 +326,7 @@ list(APPEND libSources
 
     playlist/PlaylistUpdaterInterface.cpp
     playlist/PlaylistTemplate.cpp
+    playlist/XspfPlaylistTemplate.cpp
     playlist/dynamic/DynamicPlaylist.cpp
     playlist/dynamic/GeneratorFactory.cpp
     playlist/dynamic/GeneratorInterface.cpp

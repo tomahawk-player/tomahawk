@@ -16,6 +16,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#pragma once
 #ifndef PLAYLISTTEMPLATE_H
 #define PLAYLISTTEMPLATE_H
 
@@ -43,11 +44,12 @@ public:
     /**
      * Create or get the playlist for this template.
      */
-    Tomahawk::playlist_ptr get();
+    virtual Tomahawk::playlist_ptr get();
 
-    QList<Tomahawk::query_ptr> tracks() const;
+    virtual QList<Tomahawk::query_ptr> tracks() const;
 
 protected:
+    PlaylistTemplate( PlaylistTemplatePrivate* d );
     PlaylistTemplatePrivate* d_ptr;
 
 private:
@@ -55,5 +57,7 @@ private:
 };
 
 }
+
+Q_DECLARE_METATYPE( QSharedPointer< Tomahawk::PlaylistTemplate > )
 
 #endif // PLAYLISTTEMPLATE_H
