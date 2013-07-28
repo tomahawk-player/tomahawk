@@ -888,7 +888,7 @@ Password (OTP)</translation>
 <context>
     <name>InfoBar</name>
     <message>
-        <location filename="../src/libtomahawk/infobar/InfoBar.cpp" line="105"/>
+        <location filename="../src/libtomahawk/infobar/InfoBar.cpp" line="111"/>
         <source>Filter...</source>
         <translation>Filter...</translation>
     </message>
