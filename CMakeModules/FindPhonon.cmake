@@ -13,7 +13,7 @@
 
 include(FindPackageHandleStandardArgs)
 
-if( NOT BUILD_WITH_QT4 )
+if( TOMAHAWK_QT5 )
     find_package(Phonon4Qt5 NO_MODULE)
     set(Phonon_FOUND ${Phonon4Qt5_FOUND})
     set(Phonon_DIR ${Phonon4Qt5_DIR})
