@@ -25,7 +25,7 @@
 #include <QString>
 #include <QPixmap>
 
-#define peerInfoDebug(peerInfo) tDebug() << "PEERINFO:" << ( !peerInfo.isNull() ? peerInfo->debugName() : "Invalid PeerInfo" ).toLatin1().constData()
+#define peerInfoDebug(peerInfo) tLog( LOGVERBOSE ) << "PEERINFO:" << ( !peerInfo.isNull() ? peerInfo->debugName() : "Invalid PeerInfo" ).toLatin1().constData()
 
 class ControlConnection;
 class SipPlugin;
