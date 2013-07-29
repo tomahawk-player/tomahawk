@@ -44,7 +44,9 @@ DatabaseCommand_UpdateSearchIndex::DatabaseCommand_UpdateSearchIndex()
     tLog() << Q_FUNC_INFO << "Updating index.";
 
 #ifndef ENABLE_HEADLESS
-    JobStatusView::instance()->model()->addJob( m_statusJob.data() );
+    JobStatusView* jobStatusView = JobStatusView::instance();
+    if ( jobStatusView != NULL )
+            jobStatusView->model()->addJob( m_statusJob.data() );
 #endif
 }
 
