@@ -552,7 +552,7 @@ WhatsHotWidget::setLeftViewAlbums( PlayableModel* model )
 void
 WhatsHotWidget::setLeftViewArtists( TreeModel* model )
 {
-    ui->artistsViewLeft->proxyModel()->setStyle( PlayableProxyModel::Large );
+    ui->artistsViewLeft->proxyModel()->setStyle( PlayableProxyModel::Collection );
     ui->artistsViewLeft->setTreeModel( model );
     ui->artistsViewLeft->proxyModel()->sort( -1 ); // disable sorting, must be called after artistsViewLeft->setTreeModel
     ui->stackLeft->setCurrentIndex( 1 );
