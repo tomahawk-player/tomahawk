@@ -101,6 +101,7 @@ set( libGuiSources
     resolvers/JSResolverHelper.cpp
     resolvers/ScriptEngine.cpp
 
+    utils/DpiScaler.cpp
     utils/ImageRegistry.cpp
     utils/WidgetDragFilter.cpp
     utils/XspfGenerator.cpp
