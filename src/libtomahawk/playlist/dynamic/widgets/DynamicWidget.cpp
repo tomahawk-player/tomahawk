@@ -518,9 +518,9 @@ QPixmap
 DynamicWidget::pixmap() const
 {
     if ( m_playlist->mode() == OnDemand )
-        return TomahawkUtils::defaultPixmap( TomahawkUtils::Station );
+        return TomahawkUtils::defaultPixmap( TomahawkUtils::Station, TomahawkUtils::Original, QSize( 256, 256 ) );
     else if ( m_playlist->mode() == Static )
-        return TomahawkUtils::defaultPixmap( TomahawkUtils::AutomaticPlaylist );
+        return TomahawkUtils::defaultPixmap( TomahawkUtils::AutomaticPlaylist, TomahawkUtils::Original, QSize( 256, 256 ) );
     else
         return QPixmap();
 }
