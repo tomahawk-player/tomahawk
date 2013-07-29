@@ -601,7 +601,7 @@ SourceItem::latestAdditionsClicked()
     if ( !m_latestAdditionsPage )
     {
         FlexibleView* pv = new FlexibleView( ViewManager::instance()->widget() );
-        pv->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::NewAdditions, TomahawkUtils::Original ) );
+        pv->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::NewAdditions, TomahawkUtils::Original, QSize( 256, 256 ) ) );
 
         RecentlyAddedModel* raModel = new RecentlyAddedModel( pv );
         raModel->setTitle( tr( "Latest Additions" ) );
