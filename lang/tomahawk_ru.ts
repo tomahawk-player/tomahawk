@@ -4393,7 +4393,7 @@ Lyrics for &quot;%1&quot; by %2:
         <translation>Не удалось получить желаемый плейлист из сети, или нужный файл не существует</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="222"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="244"/>
         <source>New Playlist</source>
         <translation>Новый Плейлист</translation>
     </message>

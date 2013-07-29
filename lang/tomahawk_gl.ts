@@ -4388,7 +4388,7 @@ Lyrics for &quot;%1&quot; by %2:
         <translation>Ou ben fallou a busca da lista de reprodución que querías na rede ou o ben ese ficheiro non existe</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="222"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="244"/>
         <source>New Playlist</source>
         <translation>Nova lista de reprodución</translation>
     </message>

@@ -794,7 +794,8 @@ se s vámi spojil?</translation>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="62"/>
         <source>Enter One-time
 Password (OTP)</source>
-        <translation type="unfinished"/>
+        <translation>Zadejte jednorázové
+heslo</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="70"/>
@@ -2446,17 +2447,17 @@ Password (OTP)</source>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="134"/>
         <source>Log out</source>
-        <translation type="unfinished"/>
+        <translation>Odhlásit se</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="156"/>
         <source>Log in</source>
-        <translation type="unfinished"/>
+        <translation>Přihlásit se</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="181"/>
         <source>Continue</source>
-        <translation type="unfinished"/>
+        <translation>Pokračovat</translation>
     </message>
 </context>
 <context>
@@ -4389,7 +4390,7 @@ Lyrics for &quot;%1&quot; by %2:
         <translation>Chyba při nahrávání požadovaného seznamu skladeb ze sítě, nebo požadovaný soubor neexistuje</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="222"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="244"/>
         <source>New Playlist</source>
         <translation>Nový seznam skladeb</translation>
     </message>

@@ -4397,7 +4397,7 @@ Sanat artistin %2 kappaleelle ”%1”:
         <translation>Halutun soittolistan hakeminen verkosta epäonnistui tai haluttua tiedostoa ei ole olemassa</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="222"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="244"/>
         <source>New Playlist</source>
         <translation>Uusi soittolista</translation>
     </message>

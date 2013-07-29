@@ -4397,7 +4397,7 @@ Lyrics for &quot;%1&quot; by %2:
         <translation>Failed to fetch the desired playlist from the network, or the desired file does not exist</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="222"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="244"/>
         <source>New Playlist</source>
         <translation>New Playlist</translation>
     </message>

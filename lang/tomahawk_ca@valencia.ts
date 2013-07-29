@@ -4390,7 +4390,7 @@ Lletres de la cancó &quot;%1&quot; de %2:
         <translation>Error en cercar la llista a la xarxa. Pot ser no existeix el fitxer</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="222"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="244"/>
         <source>New Playlist</source>
         <translation>Nova llista de reproducció</translation>
     </message>

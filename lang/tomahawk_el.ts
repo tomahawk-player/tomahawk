@@ -793,7 +793,8 @@ connect and stream from you?</source>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="62"/>
         <source>Enter One-time
 Password (OTP)</source>
-        <translation type="unfinished"/>
+        <translation>Εισάγετε Εφάπαξ ⏎
+Κωδικός πρόσβασης (OTP)</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="70"/>
@@ -1138,12 +1139,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.ui" line="39"/>
         <source>Trending Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Τάσεις Τραγούδιων</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.ui" line="79"/>
         <source>Hot Playlists</source>
-        <translation type="unfinished"/>
+        <translation>Θερμές λίστες αναπαραγωγής</translation>
     </message>
 </context>
 <context>
@@ -2447,17 +2448,17 @@ Password (OTP)</source>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="134"/>
         <source>Log out</source>
-        <translation type="unfinished"/>
+        <translation>Αποσύνδεση</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="156"/>
         <source>Log in</source>
-        <translation type="unfinished"/>
+        <translation>Σύνδεση</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="181"/>
         <source>Continue</source>
-        <translation type="unfinished"/>
+        <translation>Συνέχεια</translation>
     </message>
 </context>
 <context>
@@ -2955,7 +2956,7 @@ username@jabber.org</translation>
     <message>
         <location filename="../src/libtomahawk/database/DatabaseCommand_AllAlbums.cpp" line="119"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>Αγνωστο</translation>
     </message>
 </context>
 <context>
@@ -3304,12 +3305,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="499"/>
         <source>Acoustic</source>
-        <translation type="unfinished"/>
+        <translation>Acoustic</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="500"/>
         <source>Electric</source>
-        <translation type="unfinished"/>
+        <translation>Electric</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="501"/>
@@ -3627,12 +3628,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="46"/>
         <source>My Collection</source>
-        <translation type="unfinished"/>
+        <translation>Η συλλογή μου</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="53"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
-        <translation type="unfinished"/>
+        <translation>Αφού έχετε σαρώσει τη μουσική συλλογή σας, θα βρείτε τα κομμάτια σας εδώ.</translation>
     </message>
 </context>
 <context>
@@ -3648,7 +3649,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/network/RemoteCollection.cpp" line="36"/>
         <source>Collection of %1</source>
-        <translation type="unfinished"/>
+        <translation>Συλλογή από 1%</translation>
     </message>
 </context>
 <context>
@@ -3811,12 +3812,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="94"/>
         <source>Sorry, we could not find any top hits for this artist!</source>
-        <translation type="unfinished"/>
+        <translation>Δυστυχώς, δεν μπορέσαμε να βρούμε top hits για αυτόν τον καλλιτέχνη!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="165"/>
         <source>Coming soon.</source>
-        <translation type="unfinished"/>
+        <translation>Σύντομα κοντά σας.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.h" line="54"/>
@@ -4386,7 +4387,7 @@ Lyrics for &quot;%1&quot; by %2:
         <translation>Απέτυχε να φέρει την επιθυμητή λίστα αναπαραγωγής από το δίκτυο, ή το επιθυμητό αρχείο δεν υπάρχει </translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="222"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="244"/>
         <source>New Playlist</source>
         <translation>Νέα Λίστα Αναπαραγωγής</translation>
     </message>

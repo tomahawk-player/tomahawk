@@ -794,7 +794,7 @@ erlauben sich mit dir zu verbinden?</translation>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="62"/>
         <source>Enter One-time
 Password (OTP)</source>
-        <translation type="unfinished"/>
+        <translation>Einmal Passwort (OTP) eingeben</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="70"/>
@@ -1139,12 +1139,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.ui" line="39"/>
         <source>Trending Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Trending Tracks</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.ui" line="79"/>
         <source>Hot Playlists</source>
-        <translation type="unfinished"/>
+        <translation>Hot Playlists</translation>
     </message>
 </context>
 <context>
@@ -1698,12 +1698,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/network/Servent.cpp" line="975"/>
         <source>Automatically detecting external IP failed: Could not parse JSON response.</source>
-        <translation type="unfinished"/>
+        <translation>Automatisches Erkennen externer IP fehlgeschlagen: die JSON-Antwort konnte nicht analysiert werden .</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/network/Servent.cpp" line="988"/>
         <source>Automatically detecting external IP failed: %1</source>
-        <translation type="unfinished"/>
+        <translation>Automatisches Erkennen externer IP fehlgeschlagen: %1</translation>
     </message>
 </context>
 <context>
@@ -1832,7 +1832,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="133"/>
         <source>Automatically detect external IP address</source>
-        <translation type="unfinished"/>
+        <translation>Automatische Erkennung externer IP-Adresse</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="161"/>
@@ -2446,17 +2446,17 @@ Password (OTP)</source>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="134"/>
         <source>Log out</source>
-        <translation type="unfinished"/>
+        <translation>Abmelden</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="156"/>
         <source>Log in</source>
-        <translation type="unfinished"/>
+        <translation>Anmelden</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="181"/>
         <source>Continue</source>
-        <translation type="unfinished"/>
+        <translation>Weiter</translation>
     </message>
 </context>
 <context>
@@ -2949,7 +2949,7 @@ username@jabber.org</source>
     <message>
         <location filename="../src/libtomahawk/database/DatabaseCommand_AllAlbums.cpp" line="119"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>Unbekannt</translation>
     </message>
 </context>
 <context>
@@ -3298,12 +3298,12 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="499"/>
         <source>Acoustic</source>
-        <translation type="unfinished"/>
+        <translation>Akustisch</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="500"/>
         <source>Electric</source>
-        <translation type="unfinished"/>
+        <translation>Elektrisch</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="501"/>
@@ -3621,12 +3621,12 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="46"/>
         <source>My Collection</source>
-        <translation type="unfinished"/>
+        <translation>Meine Sammlung</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="53"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
-        <translation type="unfinished"/>
+        <translation>Nachdem Sie Ihre Musik-Sammlung gescannt haben, werden Sie Ihre Lieder hier finden.</translation>
     </message>
 </context>
 <context>
@@ -3642,7 +3642,7 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
     <message>
         <location filename="../src/libtomahawk/network/RemoteCollection.cpp" line="36"/>
         <source>Collection of %1</source>
-        <translation type="unfinished"/>
+        <translation>Sammlung von %1</translation>
     </message>
 </context>
 <context>
@@ -3762,17 +3762,17 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
     <message>
         <location filename="../src/libtomahawk-widgets/Dashboard.cpp" line="250"/>
         <source>No recently created playlists in your network.</source>
-        <translation type="unfinished"/>
+        <translation>Keine kürzlich erstellten Wiedergabelisten in Ihrem Netzwerk erstellt.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/Dashboard.h" line="63"/>
         <source>Dashboard</source>
-        <translation type="unfinished"/>
+        <translation>Dashboard</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/Dashboard.h" line="64"/>
         <source>An overview of your recent activity</source>
-        <translation type="unfinished"/>
+        <translation>Ein Überblick über Ihre aktuellen Aktivitäten</translation>
     </message>
 </context>
 <context>
@@ -3780,42 +3780,42 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="63"/>
         <source>Charts</source>
-        <translation type="unfinished"/>
+        <translation>Charts</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="65"/>
         <source>Last Week</source>
-        <translation type="unfinished"/>
+        <translation>Letzte Woche</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="68"/>
         <source>Last Month</source>
-        <translation type="unfinished"/>
+        <translation>Letzter Monat</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="71"/>
         <source>Last Year</source>
-        <translation type="unfinished"/>
+        <translation>Letztes Jahr</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="74"/>
         <source>Overall</source>
-        <translation type="unfinished"/>
+        <translation>Insgesamt</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="94"/>
         <source>Sorry, we could not find any top hits for this artist!</source>
-        <translation type="unfinished"/>
+        <translation>Leider konnten wir keine Top-Hits für diesen Künstler finden!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="165"/>
         <source>Coming soon.</source>
-        <translation type="unfinished"/>
+        <translation>Bald verfügbar</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.h" line="54"/>
         <source>Network Activity</source>
-        <translation type="unfinished"/>
+        <translation>Netzwerkaktivität</translation>
     </message>
 </context>
 <context>
@@ -3836,7 +3836,7 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="724"/>
         <source>Automatically detecting external IP failed.</source>
-        <translation type="unfinished"/>
+        <translation>Automatisches Erkennen externer IP fehlgeschlagen.</translation>
     </message>
 </context>
 <context>
@@ -4382,7 +4382,7 @@ Lyrics for &quot;%1&quot; by %2:
         <translation>Fehler beim Laden der Playlist</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="222"/>
+        <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="244"/>
         <source>New Playlist</source>
         <translation>Neue Playlist</translation>
     </message>
