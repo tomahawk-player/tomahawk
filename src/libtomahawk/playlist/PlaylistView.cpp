@@ -166,5 +166,5 @@ PlaylistView::onMenuTriggered( int action )
 QPixmap
 PlaylistView::pixmap() const
 {
-    return TomahawkUtils::defaultPixmap( TomahawkUtils::Playlist );
+    return TomahawkUtils::defaultPixmap( TomahawkUtils::Playlist, TomahawkUtils::Original, QSize( 256, 256 ) );
 }
