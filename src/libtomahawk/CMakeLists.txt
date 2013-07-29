@@ -290,6 +290,7 @@ list(APPEND libSources
     database/DatabaseCommand_SourceOffline.cpp
     database/DatabaseCommand_TrackAttributes.cpp
     database/DatabaseCommand_TrackStats.cpp
+    database/DatabaseCommand_TrendingArtists.cpp
     database/DatabaseCommand_TrendingTracks.cpp
     database/DatabaseCommand_UpdateSearchIndex.cpp
     database/DatabaseCommandLoggable.cpp

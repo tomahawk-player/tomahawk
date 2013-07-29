@@ -22,6 +22,7 @@
 #include "database/DatabaseCommand_CalculatePlaytime.h"
 #include "database/DatabaseCommand_LoadAllPlaylists.h"
 #include "database/DatabaseCommand_LoadAllSources.h"
+#include "database/DatabaseCommand_TrendingArtists.h"
 #include "database/DatabaseCommand_TrendingTracks.h"
 #include "database/DatabaseImpl.h"
 #include "NetworkActivityWidget.h"
@@ -59,6 +60,15 @@ NetworkActivityWorker::run()
         dbcmd->setLimit( Tomahawk::Widgets::NetworkActivityWidget::numberOfTrendingTracks );
         connect( dbcmd, SIGNAL( done( QList< QPair< double,Tomahawk::track_ptr > >) ),
                  SLOT( trendingTracksReceived( QList< QPair< double,Tomahawk::track_ptr > > ) ),
+                 Qt::QueuedConnection );
+        Database::instance()->enqueue( dbcmd_ptr( dbcmd ) );
+    }
+    {
+        qRegisterMetaType< QList< QPair< double, Tomahawk::artist_ptr > > >("QList< QPair< double, Tomahawk::artist_ptr > >");
+        DatabaseCommand_TrendingArtists* dbcmd = new DatabaseCommand_TrendingArtists();
+        dbcmd->setLimit( Tomahawk::Widgets::NetworkActivityWidget::numberOfTrendingArtists );
+        connect( dbcmd, SIGNAL( done( QList< QPair< double, Tomahawk::artist_ptr > > ) ),
+                 SLOT( trendingArtistsReceived( QList< QPair< double, Tomahawk::artist_ptr > >) ),
                  Qt::QueuedConnection );
         Database::instance()->enqueue( dbcmd_ptr( dbcmd ) );
     }
@@ -142,6 +152,25 @@ NetworkActivityWorker::playtime( const Tomahawk::playlist_ptr& playlist, uint pl
 
 
 void
+NetworkActivityWorker::trendingArtistsReceived( const QList<QPair<double, artist_ptr> >& _artists )
+{
+    Q_D( NetworkActivityWorker );
+    d->trendingArtistsDone = true;
+
+    QList< artist_ptr > artists;
+    QList< QPair< double, artist_ptr > >::const_iterator iter = _artists.constBegin();
+    const QList< QPair< double, artist_ptr > >::const_iterator end = _artists.constEnd();
+    for(; iter != end; ++iter)
+    {
+        artists << iter->second;
+    }
+    emit trendingArtists( artists );
+
+    checkDone();
+}
+
+
+void
 NetworkActivityWorker::trendingTracksReceived( const QList<QPair<double, Tomahawk::track_ptr> >& _tracks)
 {
     Q_D( NetworkActivityWorker );
@@ -163,7 +192,7 @@ void
 NetworkActivityWorker::checkDone()
 {
     Q_D( NetworkActivityWorker );
-    if ( d->trendingTracksDone /* && d->hotPlaylistsDone */ )
+    if ( d->trendingTracksDone && d->trendingArtistsDone /* && d->hotPlaylistsDone */ )
     {
         emit finished();
     }

@@ -35,6 +35,7 @@ class NetworkActivityWorkerPrivate
 public:
     NetworkActivityWorkerPrivate( NetworkActivityWorker* q )
         : q_ptr( q )
+        , trendingArtistsDone( false )
         , trendingTracksDone( false )
         , hotPlaylistsDone( false )
         , playtimesToLoad( 0 )
@@ -45,6 +46,7 @@ public:
     NetworkActivityWorker* q_ptr;
     Q_DECLARE_PUBLIC( NetworkActivityWorker )
 private:
+    bool trendingArtistsDone;
     bool trendingTracksDone;
 
     bool hotPlaylistsDone;

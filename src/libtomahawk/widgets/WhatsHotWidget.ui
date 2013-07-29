@@ -64,25 +64,25 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>PlaylistView</class>
+   <extends>QTreeView</extends>
+   <header location="global">playlist/PlaylistView.h</header>
+  </customwidget>
+  <customwidget>
    <class>GridView</class>
    <extends>QListView</extends>
    <header location="global">playlist/GridView.h</header>
-  </customwidget>
-  <customwidget>
-   <class>TreeView</class>
-   <extends>QTreeView</extends>
-   <header>playlist/TreeView.h</header>
-  </customwidget>
-  <customwidget>
-   <class>PlaylistView</class>
-   <extends>QTreeView</extends>
-   <header>playlist/PlaylistView.h</header>
   </customwidget>
   <customwidget>
    <class>Tomahawk::Breadcrumb</class>
    <extends>QWidget</extends>
    <header>widgets/Breadcrumb.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TreeView</class>
+   <extends>QTreeView</extends>
+   <header>playlist/TreeView.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

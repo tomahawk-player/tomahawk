@@ -61,6 +61,7 @@ public:
     virtual bool jumpToCurrentTrack();
 
     static const uint numberOfHotPlaylists = 3;
+    static const uint numberOfTrendingArtists = 3;
     static const uint numberOfTrendingTracks = 6;
     static const uint numberOfNetworkChartEntries = 20;
 
@@ -74,6 +75,7 @@ private slots:
     void overallCharts( const QList<Tomahawk::track_ptr>& );
 
     void hotPlaylists( const QList<Tomahawk::playlist_ptr>& playlists );
+    void trendingArtists( const QList< Tomahawk::artist_ptr >& artists );
     void trendingTracks( const QList< Tomahawk::track_ptr >& tracks );
 
     void leftCrumbIndexChanged( const QModelIndex& );

@@ -44,6 +44,7 @@ public slots:
     void run();
 
 signals:
+    void trendingArtists( const QList< Tomahawk::artist_ptr >& artists );
     void trendingTracks( const QList<Tomahawk::track_ptr>& tracks );
     void hotPlaylists( const QList<Tomahawk::playlist_ptr>& playlists );
     void finished();
@@ -55,6 +56,7 @@ private slots:
     void allPlaylistsReceived( const QHash< Tomahawk::playlist_ptr, QStringList >& playlists );
     void allSourcesReceived( const QList< Tomahawk::source_ptr >& sources );
     void playtime( const Tomahawk::playlist_ptr& playlist , uint playtime );
+    void trendingArtistsReceived( const QList< QPair< double,Tomahawk::artist_ptr > >& tracks );
     void trendingTracksReceived( const QList< QPair< double,Tomahawk::track_ptr > >& tracks );
 
 private:

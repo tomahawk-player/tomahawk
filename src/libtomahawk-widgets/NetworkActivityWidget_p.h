@@ -49,6 +49,7 @@ private:
     Tomahawk::playlistinterface_ptr playlistInterface;
     QStandardItemModel* crumbModelLeft;
     QSortFilterProxyModel* sortedProxy;
+    QPointer<PlayableModel> artistsModel;
 
     QPointer<PlaylistModel> weeklyChartsModel;
     QPointer<PlaylistModel> monthlyChartsModel;

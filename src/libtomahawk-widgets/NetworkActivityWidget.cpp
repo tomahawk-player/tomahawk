@@ -23,6 +23,7 @@
 #include "database/DatabaseCommand_NetworkCharts.h"
 #include "database/DatabaseCommand_TrendingTracks.h"
 #include "playlist/AlbumItemDelegate.h"
+#include "playlist/TreeProxyModel.h"
 #include "playlist/ViewHeader.h"
 #include "utils/AnimatedSpinner.h"
 #include "utils/ImageRegistry.h"
@@ -185,6 +186,34 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
         // connect( model, SIGNAL( emptinessChanged( bool ) ), this, SLOT( updatePlaylists() ) );
     }
 
+    // Trending artists
+    {
+        d->artistsModel = new PlayableModel( d->ui->trendingArtistsView );
+        d->ui->trendingArtistsView->setPlayableModel( d->artistsModel );
+    }
+    {
+        d->ui->trendingArtistsView->setFrameShape( QFrame::NoFrame );
+        d->ui->trendingArtistsView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+        d->ui->trendingArtistsView->proxyModel()->sort( -1 );
+        d->ui->trendingArtistsView->proxyModel()->setHideDupeItems( true );
+
+        d->ui->trendingArtistsView->setAutoResize( true );
+        d->ui->trendingArtistsView->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+        d->ui->trendingArtistsView->setStyleSheet( "QListView { background-color: transparent; }" );
+        TomahawkStyle::stylePageFrame( d->ui->trendingArtistsFrame );
+    }
+    {
+        QFont f = d->ui->trendingArtistsLabel->font();
+        f.setFamily( "Pathway Gothic One" );
+
+        QPalette p = d->ui->trendingArtistsLabel->palette();
+        p.setColor( QPalette::Foreground, TomahawkStyle::PAGE_CAPTION );
+
+        d->ui->trendingArtistsLabel->setFont( f );
+        d->ui->trendingArtistsLabel->setPalette( p );
+    }
+
+
     {
         QScrollArea* area = new QScrollArea();
         area->setWidgetResizable( true );
@@ -214,6 +243,9 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
     connect( d->worker, SIGNAL( hotPlaylists(QList<Tomahawk::playlist_ptr>) ),
              SLOT(hotPlaylists(QList<Tomahawk::playlist_ptr>)),
              Qt::QueuedConnection);
+    connect( d->worker, SIGNAL( trendingArtists( QList< Tomahawk::artist_ptr > ) ),
+             SLOT( trendingArtists( QList< Tomahawk::artist_ptr > ) ),
+             Qt::QueuedConnection );
     connect( d->worker, SIGNAL( finished() ),
              d->workerThread, SLOT( quit() ),
              Qt::QueuedConnection );
@@ -340,6 +372,17 @@ NetworkActivityWidget::hotPlaylists( const QList<playlist_ptr>& playlists )
 {
     Q_D( NetworkActivityWidget );
     d->ui->playlistView->setModel( new PlaylistsModel( playlists, this ) );
+}
+
+
+void
+NetworkActivityWidget::trendingArtists( const QList<artist_ptr>& artists )
+{
+    Q_D( NetworkActivityWidget );
+
+    d->artistsModel->startLoading();
+    d->artistsModel->appendArtists( artists );
+    d->artistsModel->finishLoading();
 }
 
 
