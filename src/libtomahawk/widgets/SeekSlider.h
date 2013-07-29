@@ -21,12 +21,13 @@
 #define SEEKSLIDER_H
 
 #include "DllMacro.h"
+#include "utils/DpiScaler.h"
 
 #include <QSlider>
 
 class QTimeLine;
 
-class DLLEXPORT SeekSlider : public QSlider
+class DLLEXPORT SeekSlider : public QSlider, private TomahawkUtils::DpiScaler
 {
 Q_OBJECT
 
