@@ -80,6 +80,7 @@ DatabaseCommand_TrendingArtists::exec( DatabaseImpl* dbi )
                 " WHERE playback_log.source IS NOT NULL " // exclude self
                 " AND playback_log.playtime >= %1 AND playback_log.playtime <= %2 "
                 " GROUP BY track.artist "
+                " HAVING counter > 0 "
                 );
     QString lastWeekSql = timespanSql.arg( _1WeekAgo.toTime_t() ).arg( now.toTime_t() );
     QString _1BeforeLastWeekSql = timespanSql.arg( _2WeeksAgo.toTime_t() ).arg( _1WeekAgo.toTime_t() );
