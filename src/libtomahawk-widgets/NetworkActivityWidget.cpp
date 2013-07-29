@@ -266,7 +266,7 @@ NetworkActivityWidget::playlistInterface() const
 QPixmap
 NetworkActivityWidget::pixmap() const
 {
-    return ImageRegistry::instance()->pixmap( RESPATH "images/network-activity.svg", QSize( 0, 0 ) );
+    return TomahawkUtils::defaultPixmap( TomahawkUtils::NetworkActivity, TomahawkUtils::Original, QSize( 256, 256 ) );
 }
 
 
