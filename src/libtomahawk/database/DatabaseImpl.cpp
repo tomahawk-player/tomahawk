@@ -46,7 +46,7 @@
 */
 #include "Schema.sql.h"
 
-#define CURRENT_SCHEMA_VERSION 29
+#define CURRENT_SCHEMA_VERSION 30
 
 Tomahawk::DatabaseImpl::DatabaseImpl( const QString& dbname )
 {

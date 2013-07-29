@@ -272,6 +272,7 @@ CREATE TABLE IF NOT EXISTS playback_log (
 
 CREATE INDEX playback_log_source ON playback_log(source);
 CREATE INDEX playback_log_track ON playback_log(track);
+CREATE INDEX playback_log_playtime ON playback_log(playtime);
 
 
 
@@ -295,4 +296,4 @@ CREATE TABLE IF NOT EXISTS settings (
     v TEXT NOT NULL DEFAULT ''
 );
 
-INSERT INTO settings(k,v) VALUES('schema_version', '29');
+INSERT INTO settings(k,v) VALUES('schema_version', '30');
