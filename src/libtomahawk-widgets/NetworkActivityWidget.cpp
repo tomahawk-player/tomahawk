@@ -163,9 +163,6 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
         d->ui->playlistView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
         d->ui->playlistView->setItemDelegate( new PlaylistDelegate() );
         d->ui->playlistView->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
-        d->ui->playlistView->overlay()->setText( tr( "Coming soon." ) );
-        d->ui->playlistView->overlay()->resize( 380, 86 );
-        d->ui->playlistView->overlay()->setEnabled( true );
 
         QPalette p = d->ui->playlistView->palette();
         p.setColor( QPalette::Text, TomahawkStyle::HEADER_TEXT );
@@ -176,7 +173,6 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
 
         d->ui->playlistView->setPalette( p );
         d->ui->playlistView->overlay()->setPalette( p );
-        d->ui->playlistView->setMinimumHeight( 400 );
         d->ui->playlistView->setStyleSheet( "QListView { background-color: transparent; }" );
         TomahawkStyle::styleScrollBar( d->ui->playlistView->verticalScrollBar() );
         TomahawkStyle::stylePageFrame( d->ui->playlistsFrame );
