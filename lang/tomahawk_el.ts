@@ -1146,6 +1146,11 @@ Password (OTP)</source>
         <source>Hot Playlists</source>
         <translation>Θερμές λίστες αναπαραγωγής</translation>
     </message>
+    <message>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.ui" line="113"/>
+        <source>Trending Artists</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>NewPlaylistWidget</name>
@@ -1632,22 +1637,22 @@ Password (OTP)</source>
 <context>
     <name>ScriptEngine</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="65"/>
-        <source>Script Resolver Error: %1 %2 %3 %4</source>
-        <translation>Σφάλμα Script Resolver: %1 %2 %3 %4</translation>
+        <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="66"/>
+        <source>Resolver Error: %1:%2 %3</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="84"/>
+        <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="85"/>
         <source>SSL Error</source>
         <translation>SSL Σφάλμα</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="85"/>
+        <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="86"/>
         <source>You have asked Tomahawk to connect securely to &lt;b&gt;%1&lt;/b&gt;, but we can&apos;t confirm that your connection is secure:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Do you want to trust this connection?</source>
         <translation>Έχετε ζητήσει το Tomahawk να συνδεθεί με ασφάλεια στο &lt;b&gt;%1&lt;/b&gt;, αλλά δεν μπορούμε να επιβεβαιώσουμε ότι η σύνδεσή σας είναι ασφαλής:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Θέλετε να εμπιστεύθειτε αυτή τη σύνδεση; </translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="92"/>
+        <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="93"/>
         <source>Trust certificate</source>
         <translation>Εμπιστοσύνη πιστοποιητικόυ</translation>
     </message>
@@ -3785,37 +3790,37 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>Tomahawk::Widgets::NetworkActivityWidget</name>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="63"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="64"/>
         <source>Charts</source>
         <translation>Γραφήματα</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="65"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="66"/>
         <source>Last Week</source>
         <translation>Τελευταία εβδομάδα</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="68"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="69"/>
         <source>Last Month</source>
         <translation>Τελευταίος μήνας</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="71"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="72"/>
         <source>Last Year</source>
         <translation>Τελευταίο ετος</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="74"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="75"/>
         <source>Overall</source>
         <translation>Συνολικά </translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="94"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="95"/>
         <source>Sorry, we could not find any top hits for this artist!</source>
         <translation>Δυστυχώς, δεν μπορέσαμε να βρούμε top hits για αυτόν τον καλλιτέχνη!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="165"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="166"/>
         <source>Coming soon.</source>
         <translation>Σύντομα κοντά σας.</translation>
     </message>

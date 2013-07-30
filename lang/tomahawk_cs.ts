@@ -1147,6 +1147,11 @@ heslo</translation>
         <source>Hot Playlists</source>
         <translation>Výborné seznamy skladeb</translation>
     </message>
+    <message>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.ui" line="113"/>
+        <source>Trending Artists</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>NewPlaylistWidget</name>
@@ -1633,22 +1638,22 @@ heslo</translation>
 <context>
     <name>ScriptEngine</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="65"/>
-        <source>Script Resolver Error: %1 %2 %3 %4</source>
-        <translation>Chyba řešitele skriptu: %1 %2 %3 %4</translation>
+        <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="66"/>
+        <source>Resolver Error: %1:%2 %3</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="84"/>
+        <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="85"/>
         <source>SSL Error</source>
         <translation>Chyba SSL</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="85"/>
+        <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="86"/>
         <source>You have asked Tomahawk to connect securely to &lt;b&gt;%1&lt;/b&gt;, but we can&apos;t confirm that your connection is secure:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Do you want to trust this connection?</source>
         <translation>Požádal jste Tomahawk o to, aby se bezpečně připojil k &lt;b&gt;%1&lt;/b&gt;, ale nelze potvrdit, že je vaše připojení bezpečné:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Chcete tomuto připojení důvěřovat?</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="92"/>
+        <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="93"/>
         <source>Trust certificate</source>
         <translation>Důvěřovat certifikátu</translation>
     </message>
@@ -3784,37 +3789,37 @@ Zkuste vyladit filtry pro nové písně.</translation>
 <context>
     <name>Tomahawk::Widgets::NetworkActivityWidget</name>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="63"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="64"/>
         <source>Charts</source>
         <translation>Žebříčky</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="65"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="66"/>
         <source>Last Week</source>
         <translation>Poslední týden</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="68"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="69"/>
         <source>Last Month</source>
         <translation>Poslední měsíc</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="71"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="72"/>
         <source>Last Year</source>
         <translation>Poslední rok</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="74"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="75"/>
         <source>Overall</source>
         <translation>Celkový</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="94"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="95"/>
         <source>Sorry, we could not find any top hits for this artist!</source>
         <translation>Promiňte, nepodařilo se najít žádné nejlepší hity tohoto umělce!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="165"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="166"/>
         <source>Coming soon.</source>
         <translation>Přijde brzy.</translation>
     </message>
