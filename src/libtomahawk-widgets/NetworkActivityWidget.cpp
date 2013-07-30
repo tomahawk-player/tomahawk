@@ -87,18 +87,13 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
 
 
     {
-        // d->ui->tracksViewLeft->setHeaderHidden( true );
-        // d->ui->tracksViewLeft->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-        // PlaylistChartItemDelegate* del = new PlaylistChartItemDelegate( d->ui->tracksViewLeft, d->ui->tracksViewLeft->proxyModel() );
         AlbumItemDelegate* del = new AlbumItemDelegate( d->ui->tracksViewLeft, d->ui->tracksViewLeft->proxyModel(), true );
         d->ui->tracksViewLeft->setPlaylistItemDelegate( del );
-        // d->ui->tracksViewLeft->setUniformRowHeights( false );
-        // d->ui->tracksViewLeft->overlay()->setEnabled( false );
         d->ui->tracksViewLeft->proxyModel()->setStyle( PlayableProxyModel::Short );
         d->ui->tracksViewLeft->setAutoResize( true );
         d->ui->tracksViewLeft->setAlternatingRowColors( false );
         d->ui->tracksViewLeft->setSortingEnabled( false );
-        d->ui->tracksViewLeft->setEmptyTip( tr( "Sorry, we could not find any top hits for this artist!" ) );
+        d->ui->tracksViewLeft->setEmptyTip( tr( "Sorry, we are still loading the charts." ) );
 
         QPalette p = d->ui->tracksViewLeft->palette();
         p.setColor( QPalette::Text, TomahawkStyle::PAGE_TRACKLIST_TRACK_SOLVED );
