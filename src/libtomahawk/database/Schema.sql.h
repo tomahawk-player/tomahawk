@@ -1,5 +1,5 @@
 /*
-    This file was automatically generated from ./Schema.sql on Mon Jul 29 21:04:33 CEST 2013.
+    This file was automatically generated from ./Schema.sql on Tue Jul 30 12:51:06 CEST 2013.
 */
 
 static const char * tomahawk_schema_sql = 
@@ -20,6 +20,7 @@ static const char * tomahawk_schema_sql =
 "    sortname TEXT NOT NULL"
 ");"
 "CREATE UNIQUE INDEX artist_sortname ON artist(sortname);"
+"CREATE INDEX artist_name ON artist(name);"
 "CREATE TABLE IF NOT EXISTS track ("
 "    id INTEGER PRIMARY KEY AUTOINCREMENT,"
 "    artist INTEGER NOT NULL REFERENCES artist(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,"
@@ -27,6 +28,7 @@ static const char * tomahawk_schema_sql =
 "    sortname TEXT NOT NULL"
 ");"
 "CREATE UNIQUE INDEX track_artist_sortname ON track(artist,sortname);"
+"CREATE INDEX track_name ON track(name);"
 "CREATE TABLE IF NOT EXISTS album ("
 "    id INTEGER PRIMARY KEY AUTOINCREMENT,"
 "    artist INTEGER NOT NULL REFERENCES artist(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,"
@@ -67,6 +69,8 @@ static const char * tomahawk_schema_sql =
 "    result_hint TEXT        "
 ");"
 "CREATE INDEX playlist_item_playlist ON playlist_item(playlist);"
+"CREATE INDEX playlist_item_trackname ON playlist_item(trackname);"
+"CREATE INDEX playlist_item_artistname ON playlist_item(artistname);"
 "CREATE TABLE IF NOT EXISTS playlist_revision ("
 "    guid TEXT PRIMARY KEY,"
 "    playlist TEXT NOT NULL REFERENCES playlist(guid) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,"
@@ -193,7 +197,7 @@ static const char * tomahawk_schema_sql =
 "    k TEXT NOT NULL PRIMARY KEY,"
 "    v TEXT NOT NULL DEFAULT ''"
 ");"
-"INSERT INTO settings(k,v) VALUES('schema_version', '30');"
+"INSERT INTO settings(k,v) VALUES('schema_version', '31');"
     ;
 
 const char * get_tomahawk_sql()
