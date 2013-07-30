@@ -79,6 +79,7 @@ private slots:
     void trendingTracks( const QList< Tomahawk::track_ptr >& tracks );
 
     void leftCrumbIndexChanged( const QModelIndex& );
+    void onPlaylistActivated( const QModelIndex& );
 
 private:
     void fetchWeekCharts();

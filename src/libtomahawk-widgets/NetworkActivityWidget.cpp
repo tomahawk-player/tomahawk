@@ -32,9 +32,11 @@
 #include "utils/TomahawkUtilsGui.h"
 #include "widgets/OverlayWidget.h"
 #include "widgets/PlaylistsModel.h"
+#include "widgets/RecentlyPlayedPlaylistsModel.h"
 #include "MetaPlaylistInterface.h"
 #include "Pipeline.h"
 #include "PlaylistDelegate.h"
+#include "ViewManager.h"
 
 #include <QDateTime>
 #include <QStandardItemModel>
@@ -177,9 +179,7 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
         TomahawkStyle::styleScrollBar( d->ui->playlistView->verticalScrollBar() );
         TomahawkStyle::stylePageFrame( d->ui->playlistsFrame );
 
-        // updatePlaylists();
-        // connect( ui->playlistWidget, SIGNAL( activated( QModelIndex ) ), SLOT( onPlaylistActivated( QModelIndex ) ) );
-        // connect( model, SIGNAL( emptinessChanged( bool ) ), this, SLOT( updatePlaylists() ) );
+        connect( d->ui->playlistView, SIGNAL( activated( QModelIndex ) ), SLOT( onPlaylistActivated( QModelIndex ) ) );
     }
 
     // Trending artists
@@ -248,10 +248,6 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
     // connect( d->workerThread, SIGNAL( finished() ), d->workerThread, SLOT( deleteLater() ), Qt::QueuedConnection );
     // connect( d->workerThread, SIGNAL( destroyed() ), d->worker, SLOT( deleteLater() ), Qt::QueuedConnection );
     QMetaObject::invokeMethod( d->worker, "run", Qt::QueuedConnection );
-
-    // FIXME: Activate hot playlists again
-    // d->ui->playlistsFrame->hide();
-
 }
 
 
@@ -419,6 +415,14 @@ NetworkActivityWidget::leftCrumbIndexChanged( const QModelIndex& index )
         showOverallCharts();
         break;
     }
+}
+
+
+void
+NetworkActivityWidget::onPlaylistActivated( const QModelIndex& item )
+{
+    Tomahawk::playlist_ptr pl = item.data( RecentlyPlayedPlaylistsModel::PlaylistRole ).value< Tomahawk::playlist_ptr >();
+    ViewManager::instance()->show( pl );
 }
 
 
