@@ -17,6 +17,7 @@
  */
 
 #include "DpiScaler.h"
+#include "TomahawkUtilsGui.h"
 
 
 namespace TomahawkUtils
@@ -26,34 +27,36 @@ namespace TomahawkUtils
 DpiScaler::DpiScaler( const QPaintDevice* that )
     : that( that )
 {
+    m_ratioX = ratioX( that );
+    m_ratioY = ratioY( that );
 }
 
 
 QSize
 DpiScaler::scaled( int w, int h ) const
 {
-    return scaled( that, w, h );
+    return QSize( scaledX( w ), scaledY( h ) );
 }
 
 
 QSize
 DpiScaler::scaled( const QSize& size ) const
 {
-    return scaled( that, size );
+    return scaled( size.width(), size.height() );
 }
 
 
 int
 DpiScaler::scaledX( int x ) const
 {
-    return scaledX( that, x );
+    return qRound( x * m_ratioX );
 }
 
 
 int
 DpiScaler::scaledY( int y ) const
 {
-    return scaledY( that, y );
+    return qRound( y * m_ratioY );
 }
 
 // static methods start here
@@ -75,16 +78,58 @@ DpiScaler::scaled( const QPaintDevice* pd, const QSize& size )
 int
 DpiScaler::scaledX( const QPaintDevice* pd, int x )
 {
-    float ratioX = pd->logicalDpiX() / 100.0;
-    return qRound( x * ratioX );
+    return qRound( x * ratioX( pd ) );
 }
 
 
 int
 DpiScaler::scaledY( const QPaintDevice* pd, int y )
 {
-    float ratioY = pd->logicalDpiY() / 100.0;
-    return qRound( y * ratioY );
+    return qRound( y * ratioY( pd ) );
+}
+
+
+qreal
+DpiScaler::ratioX( const QPaintDevice* pd )
+{
+    qreal basePpp = s_baseDpi / 72.; //72*(1.333)=96 dpi
+
+    qreal ratioFromPpp = getPpp() / basePpp;
+    qreal ratioYFromDpi = pd->logicalDpiY() / s_baseDpi; //using Y because we compare with height
+
+    //if the error is less than 1%, we trust that the logical DPI setting has the best value
+    if ( qAbs( ratioFromPpp / ratioYFromDpi - 1 ) < 0.01 )
+        return pd->logicalDpiX() / s_baseDpi;
+    else
+        return ratioFromPpp;
+}
+
+
+qreal
+DpiScaler::ratioY( const QPaintDevice* pd )
+{
+    qreal basePpp = s_baseDpi / 72.; //72*(1.333)=96 dpi
+
+    qreal ratioFromPpp = getPpp() / basePpp;
+    qreal ratioYFromDpi = pd->logicalDpiY() / s_baseDpi; //using Y because we compare with height
+
+    //if the error is less than 1%, we trust that the logical DPI setting has the best value
+    if ( qAbs( ratioFromPpp / ratioYFromDpi - 1 ) < 0.01 )
+        return ratioYFromDpi;
+    else
+        return ratioFromPpp;
+}
+
+
+qreal
+DpiScaler::getPpp()
+{
+    int fS = TomahawkUtils::defaultFontSize();
+    QFont f;
+    f.setPointSize( fS );
+    int fH = QFontMetrics( f ).ascent() + 1; //a font's em-height should be ascent + 1px (baseline)
+    qreal ppp = fH / (qreal)fS; //pixels per point
+    return ppp;
 }
 
 

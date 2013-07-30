@@ -50,7 +50,20 @@ public:
     inline static int scaledY( const QPaintDevice* pd, int y );
 
 private:
+    inline static qreal ratioX( const QPaintDevice* pd );
+    inline static qreal ratioY( const QPaintDevice* pd );
+    inline static qreal getPpp();
+
+    qreal m_ratioX;
+    qreal m_ratioY;
+
     const QPaintDevice* that;
+
+#ifdef Q_OS_MAC
+    static const qreal s_baseDpi = 72.;
+#else
+    static const qreal s_baseDpi = 96.;
+#endif
 };
 
 }
