@@ -42,11 +42,41 @@ using namespace Tomahawk;
 
 
 JobStatusView* JobStatusView::s_instance = 0;
+QList< QPointer< JobStatusItem > > s_jobItems;
+
+void
+JobStatusView::addJob( JobStatusItem* item )
+{
+    if ( s_instance == 0 || s_instance->model() == 0 )
+    {
+        s_jobItems.append( QPointer<JobStatusItem>( item ) );
+    }
+    else
+    {
+        s_instance->model()->addJob( item );
+    }
+}
+
+
+void
+JobStatusView::addJob( const QPointer<JobStatusItem>& item )
+{
+    if ( s_instance == 0 || s_instance->model() == 0 )
+    {
+        s_jobItems.append( item );
+    }
+    else
+    {
+        s_instance->model()->addJob( item.data() );
+    }
+}
+
 
 JobStatusView::JobStatusView( AnimatedSplitter* parent )
     : AnimatedWidget( parent )
     , m_parent( parent )
     , m_cachedHeight( -1 )
+    , m_model( 0 )
 {
     s_instance = this;
 
@@ -89,6 +119,15 @@ JobStatusView::setModel( JobStatusSortModel* m )
     connect( m_view->model(), SIGNAL( customDelegateJobInserted( int, JobStatusItem* ) ), this, SLOT( customDelegateJobInserted( int, JobStatusItem* ) ) );
     connect( m_view->model(), SIGNAL( customDelegateJobRemoved( int ) ), this, SLOT( customDelegateJobRemoved( int ) ) );
     connect( m_view->model(), SIGNAL( refreshDelegates() ), this, SLOT( refreshDelegates() ) );
+
+    foreach ( const QPointer<JobStatusItem> item, s_jobItems )
+    {
+        if ( !item.isNull() )
+        {
+            m_model->addJob( item.data() );
+        }
+    }
+    s_jobItems.clear();
 }
 
 

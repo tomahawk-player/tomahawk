@@ -40,6 +40,9 @@ public:
         return s_instance;
     }
 
+    static void addJob( JobStatusItem* item );
+    static void addJob( const QPointer<JobStatusItem>& item );
+
     explicit JobStatusView( AnimatedSplitter* parent );
     virtual ~JobStatusView()
     {
