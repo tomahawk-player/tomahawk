@@ -38,6 +38,7 @@ public:
         , trendingArtistsDone( false )
         , trendingTracksDone( false )
         , hotPlaylistsDone( false )
+        , playlistsToLoad( 0 )
         , playtimesToLoad( 0 )
         , trackStatsToLoad( 0 )
     {
@@ -50,7 +51,9 @@ private:
     bool trendingTracksDone;
 
     bool hotPlaylistsDone;
+    QList< Tomahawk::playlist_ptr > hotPlaylists;
     QHash< Tomahawk::playlist_ptr, QStringList > playlists;
+    uint playlistsToLoad;
     uint playtimesToLoad;
     uint sourcesToLoad;
     uint trackStatsToLoad;

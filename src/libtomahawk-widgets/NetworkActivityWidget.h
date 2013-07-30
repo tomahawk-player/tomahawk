@@ -62,7 +62,7 @@ public:
 
     static const uint numberOfHotPlaylists = 3;
     static const uint numberOfTrendingArtists = 3;
-    static const uint numberOfTrendingTracks = 6;
+    static const uint numberOfTrendingTracks = 3;
     static const uint numberOfNetworkChartEntries = 20;
 
 protected:

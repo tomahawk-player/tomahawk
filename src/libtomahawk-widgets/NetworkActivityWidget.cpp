@@ -254,7 +254,7 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
     QMetaObject::invokeMethod( d->worker, "run", Qt::QueuedConnection );
 
     // FIXME: Activate hot playlists again
-    d->ui->playlistsFrame->hide();
+    // d->ui->playlistsFrame->hide();
 
 }
 

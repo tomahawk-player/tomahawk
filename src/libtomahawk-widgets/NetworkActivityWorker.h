@@ -55,6 +55,7 @@ protected:
 private slots:
     void allPlaylistsReceived( const QHash< Tomahawk::playlist_ptr, QStringList >& playlists );
     void allSourcesReceived( const QList< Tomahawk::source_ptr >& sources );
+    void playlistLoaded( Tomahawk::PlaylistRevision );
     void playtime( const Tomahawk::playlist_ptr& playlist , uint playtime );
     void trendingArtistsReceived( const QList< QPair< double,Tomahawk::artist_ptr > >& tracks );
     void trendingTracksReceived( const QList< QPair< double,Tomahawk::track_ptr > >& tracks );
@@ -63,6 +64,7 @@ private:
     Q_DECLARE_PRIVATE( NetworkActivityWorker )
 
     void checkDone();
+    void checkHotPlaylistsDone();
 };
 
 } // namespace Widgets

@@ -73,11 +73,11 @@ NetworkActivityWorker::run()
         Database::instance()->enqueue( dbcmd_ptr( dbcmd ) );
     }
     {
-        /* DatabaseCommand_LoadAllSources* dbcmd = new DatabaseCommand_LoadAllSources();
+        DatabaseCommand_LoadAllSources* dbcmd = new DatabaseCommand_LoadAllSources();
         connect( dbcmd, SIGNAL( done( QList<Tomahawk::source_ptr> ) ),
                  SLOT( allSourcesReceived( QList<Tomahawk::source_ptr> ) ),
                  Qt::QueuedConnection);
-        Database::instance()->enqueue( dbcmd_ptr( dbcmd ) ); */
+        Database::instance()->enqueue( dbcmd_ptr( dbcmd ) );
     }
     tLog() << Q_FUNC_INFO << QDateTime::currentDateTime().toTime_t();
 }
@@ -126,6 +126,16 @@ NetworkActivityWorker::allSourcesReceived( const QList<source_ptr>& sources )
 
 
 void
+NetworkActivityWorker::playlistLoaded(PlaylistRevision)
+{
+    Q_D( NetworkActivityWorker );
+
+    d->playlistsToLoad--;
+    checkHotPlaylistsDone();
+}
+
+
+void
 NetworkActivityWorker::playtime( const Tomahawk::playlist_ptr& playlist, uint playtime )
 {
     Q_D( NetworkActivityWorker );
@@ -142,11 +152,20 @@ NetworkActivityWorker::playtime( const Tomahawk::playlist_ptr& playlist, uint pl
         while (iter.hasPrevious() && (uint)playlists.size() < Widgets::NetworkActivityWidget::numberOfHotPlaylists )
         {
             iter.previous();
-            playlists << iter.value();
+            Tomahawk::playlist_ptr playlist = iter.value();
+            playlists << playlist;
+            if ( !playlist->loaded() )
+            {
+                d->playlistsToLoad++;
+                connect( playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ),
+                         SLOT( playlistLoaded( Tomahawk::PlaylistRevision ) ),
+                         Qt::QueuedConnection );
+                playlist->loadRevision();
+            }
         }
-        emit hotPlaylists( playlists );
-        d->hotPlaylistsDone = true;
-        checkDone();
+        d->hotPlaylists = playlists;
+
+        checkHotPlaylistsDone();
     }
 }
 
@@ -192,11 +211,26 @@ void
 NetworkActivityWorker::checkDone()
 {
     Q_D( NetworkActivityWorker );
-    if ( d->trendingTracksDone && d->trendingArtistsDone /* && d->hotPlaylistsDone */ )
+    if ( d->trendingTracksDone && d->trendingArtistsDone && d->hotPlaylistsDone )
     {
         emit finished();
     }
 }
+
+
+void
+NetworkActivityWorker::checkHotPlaylistsDone()
+{
+    Q_D(NetworkActivityWorker);
+
+    if ( d->playlistsToLoad == 0 )
+    {
+        emit hotPlaylists( d->hotPlaylists );
+        d->hotPlaylistsDone = true;
+        checkDone();
+    }
+}
+
 
 } // namespace Widgets
 

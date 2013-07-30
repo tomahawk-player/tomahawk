@@ -114,7 +114,7 @@ DatabaseCommand_CalculatePlaytime::exec( DatabaseImpl *dbi )
                     " JOIN track t ON pi.trackname = t.name "
                     " JOIN artist a ON a.name = pi.artistname AND t.artist = a.id "
                     " JOIN playback_log pl ON pl.track = t.id "
-                    " WHERE pi.guid IN (%1); "
+                    " WHERE pi.guid IN (%1) "
                     " AND pl.playtime >= %2 AND pl.playtime <= %3 "
                     )
                 .arg( d->plEntryIds.join(", ") )
