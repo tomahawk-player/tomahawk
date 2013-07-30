@@ -130,7 +130,7 @@ DpiScaler::ratioFromFontHeight()
 #ifdef Q_OS_MAC
     const int baseFontSize = 13;
 #else
-    const int baseFontSize = 7;
+    const int baseFontSize = 8;
 #endif
 
     qreal baseFontHeight = baseFontSize * basePpp; //we assume a minimum font size of 7pt
