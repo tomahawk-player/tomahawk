@@ -92,44 +92,44 @@ DpiScaler::scaledY( const QPaintDevice* pd, int y )
 qreal
 DpiScaler::ratioX( const QPaintDevice* pd )
 {
-    qreal basePpp = s_baseDpi / 72.; //72*(1.333)=96 dpi
-
-    qreal ratioFromPpp = getPpp() / basePpp;
+    qreal ratioFromFH = ratioFromFontHeight();
     qreal ratioYFromDpi = pd->logicalDpiY() / s_baseDpi; //using Y because we compare with height
 
     //if the error is less than 1%, we trust that the logical DPI setting has the best value
-    if ( qAbs( ratioFromPpp / ratioYFromDpi - 1 ) < 0.01 )
+    if ( qAbs( ratioFromFH / ratioYFromDpi - 1 ) < 0.01 )
         return pd->logicalDpiX() / s_baseDpi;
     else
-        return ratioFromPpp;
+        return ratioFromFH;
 }
 
 
 qreal
 DpiScaler::ratioY( const QPaintDevice* pd )
 {
-    qreal basePpp = s_baseDpi / 72.; //72*(1.333)=96 dpi
-
-    qreal ratioFromPpp = getPpp() / basePpp;
+    qreal ratioFromFH = ratioFromFontHeight();
     qreal ratioYFromDpi = pd->logicalDpiY() / s_baseDpi; //using Y because we compare with height
 
     //if the error is less than 1%, we trust that the logical DPI setting has the best value
-    if ( qAbs( ratioFromPpp / ratioYFromDpi - 1 ) < 0.01 )
+    if ( qAbs( ratioFromFH / ratioYFromDpi - 1 ) < 0.01 )
         return ratioYFromDpi;
     else
-        return ratioFromPpp;
+        return ratioFromFH;
 }
 
 
 qreal
-DpiScaler::getPpp()
+DpiScaler::ratioFromFontHeight()
 {
     int fS = TomahawkUtils::defaultFontSize();
     QFont f;
     f.setPointSize( fS );
     int fH = QFontMetrics( f ).ascent() + 1; //a font's em-height should be ascent + 1px (baseline)
-    qreal ppp = fH / (qreal)fS; //pixels per point
-    return ppp;
+
+    qreal basePpp = s_baseDpi / 72.; //72*(1.333)=96 dpi
+    qreal baseFontHeight = 7 * basePpp; //we assume a minimum font size of 7pt
+
+    qreal ratioFromFontHeights = qMax( fH / baseFontHeight, 1. );
+    return ratioFromFontHeights;
 }
 
 

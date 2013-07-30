@@ -52,7 +52,7 @@ public:
 private:
     inline static qreal ratioX( const QPaintDevice* pd );
     inline static qreal ratioY( const QPaintDevice* pd );
-    inline static qreal getPpp();
+    inline static qreal ratioFromFontHeight();
 
     qreal m_ratioX;
     qreal m_ratioY;
