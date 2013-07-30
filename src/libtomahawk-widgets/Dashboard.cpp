@@ -39,6 +39,7 @@
 #include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+#include "utils/DpiScaler.h"
 
 #include <QPainter>
 #include <QScrollArea>
@@ -285,5 +286,6 @@ Dashboard::changeEvent( QEvent* e )
 QPixmap
 Dashboard::pixmap() const
 {
-    return ImageRegistry::instance()->pixmap( RESPATH "images/dashboard.svg", QSize( 256, 256 ) );
+    return ImageRegistry::instance()->pixmap( RESPATH "images/dashboard.svg",
+                                              TomahawkUtils::DpiScaler::scaled( this, 80, 80 ) );
 }

@@ -37,6 +37,7 @@
 #include "utils/AnimatedSpinner.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+#include "utils/DpiScaler.h"
 
 #include <QVBoxLayout>
 #include <QLabel>
@@ -518,9 +519,13 @@ QPixmap
 DynamicWidget::pixmap() const
 {
     if ( m_playlist->mode() == OnDemand )
-        return TomahawkUtils::defaultPixmap( TomahawkUtils::Station, TomahawkUtils::Original, QSize( 256, 256 ) );
+        return TomahawkUtils::defaultPixmap( TomahawkUtils::Station,
+                                             TomahawkUtils::Original,
+                                             TomahawkUtils::DpiScaler::scaled( this, 80, 80 ) );
     else if ( m_playlist->mode() == Static )
-        return TomahawkUtils::defaultPixmap( TomahawkUtils::AutomaticPlaylist, TomahawkUtils::Original, QSize( 256, 256 ) );
+        return TomahawkUtils::defaultPixmap( TomahawkUtils::AutomaticPlaylist,
+                                             TomahawkUtils::Original,
+                                             TomahawkUtils::DpiScaler::scaled( this, 80, 80 ) );
     else
         return QPixmap();
 }

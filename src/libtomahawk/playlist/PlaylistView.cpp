@@ -26,6 +26,7 @@
 #include "Source.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+#include "utils/DpiScaler.h"
 
 using namespace Tomahawk;
 
@@ -166,5 +167,7 @@ PlaylistView::onMenuTriggered( int action )
 QPixmap
 PlaylistView::pixmap() const
 {
-    return TomahawkUtils::defaultPixmap( TomahawkUtils::Playlist, TomahawkUtils::Original, QSize( 256, 256 ) );
+    return TomahawkUtils::defaultPixmap( TomahawkUtils::Playlist,
+                                         TomahawkUtils::Original,
+                                         TomahawkUtils::DpiScaler::scaled( this, 80, 80 ) );
 }

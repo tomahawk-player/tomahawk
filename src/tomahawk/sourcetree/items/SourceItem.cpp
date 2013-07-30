@@ -44,6 +44,7 @@
 #include "utils/ImageRegistry.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+#include "utils/DpiScaler.h"
 #include "TomahawkApp.h"
 
 /// SourceItem
@@ -601,7 +602,9 @@ SourceItem::latestAdditionsClicked()
     if ( !m_latestAdditionsPage )
     {
         FlexibleView* pv = new FlexibleView( ViewManager::instance()->widget() );
-        pv->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::NewAdditions, TomahawkUtils::Original, QSize( 256, 256 ) ) );
+        pv->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::NewAdditions,
+                                                     TomahawkUtils::Original,
+                                                     TomahawkUtils::DpiScaler::scaled( pv, 80, 80 ) ) );
 
         RecentlyAddedModel* raModel = new RecentlyAddedModel( pv );
         raModel->setTitle( tr( "Latest Additions" ) );

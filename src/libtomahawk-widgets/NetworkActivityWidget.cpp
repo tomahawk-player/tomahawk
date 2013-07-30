@@ -30,6 +30,7 @@
 #include "utils/Logger.h"
 #include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
+#include "utils/DpiScaler.h"
 #include "widgets/OverlayWidget.h"
 #include "widgets/PlaylistsModel.h"
 #include "widgets/RecentlyPlayedPlaylistsModel.h"
@@ -266,7 +267,9 @@ NetworkActivityWidget::playlistInterface() const
 QPixmap
 NetworkActivityWidget::pixmap() const
 {
-    return TomahawkUtils::defaultPixmap( TomahawkUtils::NetworkActivity, TomahawkUtils::Original, QSize( 256, 256 ) );
+    return TomahawkUtils::defaultPixmap( TomahawkUtils::NetworkActivity,
+                                         TomahawkUtils::Original,
+                                         TomahawkUtils::DpiScaler::scaled( this, 80, 80 ) );
 }
 
 
