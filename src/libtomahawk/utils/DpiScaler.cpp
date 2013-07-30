@@ -126,7 +126,14 @@ DpiScaler::ratioFromFontHeight()
     int fH = QFontMetrics( f ).ascent() + 1; //a font's em-height should be ascent + 1px (baseline)
 
     qreal basePpp = s_baseDpi / 72.; //72*(1.333)=96 dpi
-    qreal baseFontHeight = 7 * basePpp; //we assume a minimum font size of 7pt
+
+#ifdef Q_OS_MAC
+    const int baseFontSize = 13;
+#else
+    const int baseFontSize = 7;
+#endif
+
+    qreal baseFontHeight = baseFontSize * basePpp; //we assume a minimum font size of 7pt
 
     qreal ratioFromFontHeights = qMax( fH / baseFontHeight, 1. );
     return ratioFromFontHeights;
