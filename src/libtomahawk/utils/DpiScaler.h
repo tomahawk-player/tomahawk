@@ -37,10 +37,17 @@ class DLLEXPORT DpiScaler
 {
 public:
     DpiScaler( const QPaintDevice* that );
+
     QSize scaled( int w, int h ) const;
     QSize scaled( const QSize& size ) const;
     int scaledX( int x ) const;
     int scaledY( int y ) const;
+
+    // convenience one-shot methods, usable without composing or private-inheriting DpiScaler
+    static QSize scaled( const QPaintDevice* pd, int w, int h );
+    static QSize scaled( const QPaintDevice* pd, const QSize& size );
+    inline static int scaledX( const QPaintDevice* pd, int x );
+    inline static int scaledY( const QPaintDevice* pd, int y );
 
 private:
     const QPaintDevice* that;

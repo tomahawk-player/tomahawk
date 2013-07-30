@@ -32,30 +32,59 @@ DpiScaler::DpiScaler( const QPaintDevice* that )
 QSize
 DpiScaler::scaled( int w, int h ) const
 {
-    float ratioX = that->logicalDpiX() / 100.0;
-    float ratioY = that->logicalDpiY() / 100.0;
-    return QSize( qRound( w * ratioX ), qRound( h * ratioY ) );
+    return scaled( that, w, h );
 }
 
 
 QSize
 DpiScaler::scaled( const QSize& size ) const
 {
-    return scaled( size.width(), size.height() );
+    return scaled( that, size );
 }
 
 
 int
 DpiScaler::scaledX( int x ) const
 {
-    return scaled( x, 0 ).width();
+    return scaledX( that, x );
 }
 
 
 int
 DpiScaler::scaledY( int y ) const
 {
-    return scaled( 0, y ).height();
+    return scaledY( that, y );
+}
+
+// static methods start here
+
+QSize
+DpiScaler::scaled( const QPaintDevice* pd, int w, int h )
+{
+    return QSize( scaledX( pd, w ), scaledY( pd, h ) );
+}
+
+
+QSize
+DpiScaler::scaled( const QPaintDevice* pd, const QSize& size )
+{
+    return scaled( pd, size.width(), size.height() );
+}
+
+
+int
+DpiScaler::scaledX( const QPaintDevice* pd, int x )
+{
+    float ratioX = pd->logicalDpiX() / 100.0;
+    return qRound( x * ratioX );
+}
+
+
+int
+DpiScaler::scaledY( const QPaintDevice* pd, int y )
+{
+    float ratioY = pd->logicalDpiY() / 100.0;
+    return qRound( y * ratioY );
 }
 
 
