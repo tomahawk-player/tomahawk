@@ -64,23 +64,26 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
 
     // Build up breadcrumb
     QStandardItem* rootItem = d_func()->crumbModelLeft->invisibleRootItem();
-    QStandardItem* chartItem = new QStandardItem( tr( "Charts" ) );
-    rootItem->appendRow( chartItem );
-    QStandardItem* weekItem = new QStandardItem( tr( "Last Week" ) );
-    weekItem->setData( WeekChart, Breadcrumb::DefaultRole );
-    chartItem->appendRow( weekItem );
-    QStandardItem* monthItem = new QStandardItem( tr( "Last Month" ) );
-    monthItem->setData( MonthChart, Breadcrumb::DefaultRole );
-    chartItem->appendRow( monthItem );
-    QStandardItem* yearItem = new QStandardItem( tr( "Last Year" ) );
-    yearItem->setData( YearChart, Breadcrumb::DefaultRole );
-    chartItem->appendRow( yearItem );
-    QStandardItem* overallItem = new QStandardItem( tr( "Overall" ) );
-    overallItem->setData( OverallChart, Breadcrumb::DefaultRole );
-    chartItem->appendRow( overallItem );
-    d_func()->sortedProxy->setSourceModel( d_func()->crumbModelLeft );
-    d_func()->ui->breadCrumbLeft->setModel( d_func()->sortedProxy );
-    d_func()->ui->breadCrumbLeft->setVisible( true );
+    // Breadcumps for Charts
+    {
+        QStandardItem* chartItem = new QStandardItem( tr( "Charts" ) );
+        rootItem->appendRow( chartItem );
+        QStandardItem* overallItem = new QStandardItem( tr( "Overall" ) );
+        overallItem->setData( OverallChart, Breadcrumb::DefaultRole );
+        chartItem->appendRow( overallItem );
+        QStandardItem* yearItem = new QStandardItem( tr( "Last Year" ) );
+        yearItem->setData( YearChart, Breadcrumb::DefaultRole );
+        chartItem->appendRow( yearItem );
+        QStandardItem* monthItem = new QStandardItem( tr( "Last Month" ) );
+        monthItem->setData( MonthChart, Breadcrumb::DefaultRole );
+        chartItem->appendRow( monthItem );
+        QStandardItem* weekItem = new QStandardItem( tr( "Last Week" ) );
+        weekItem->setData( WeekChart, Breadcrumb::DefaultRole );
+        chartItem->appendRow( weekItem );
+    }
+    d->sortedProxy->setSourceModel( d->crumbModelLeft );
+    d->ui->breadCrumbLeft->setModel( d->sortedProxy );
+    d->ui->breadCrumbLeft->setVisible( true );
 
 
     {
