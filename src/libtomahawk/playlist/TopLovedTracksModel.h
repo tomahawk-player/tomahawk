@@ -33,7 +33,7 @@ Q_OBJECT
 
 public:
     explicit TopLovedTracksModel( QObject* parent = 0 );
-    ~TopLovedTracksModel();
+    virtual ~TopLovedTracksModel();
 
     unsigned int limit() const;
     void setLimit( unsigned int limit );

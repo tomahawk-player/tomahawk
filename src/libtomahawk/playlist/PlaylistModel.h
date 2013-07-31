@@ -45,7 +45,7 @@ typedef struct {
 
 public:
     explicit PlaylistModel( QObject* parent = 0 );
-    ~PlaylistModel();
+    virtual ~PlaylistModel();
 
     virtual QString guid() const;
 
