@@ -52,6 +52,22 @@ LovedTracksModel::~LovedTracksModel()
 }
 
 
+unsigned int
+LovedTracksModel::limit() const
+{
+    Q_D( const LovedTracksModel );
+    return d->limit;
+}
+
+
+void
+LovedTracksModel::setLimit( unsigned int limit )
+{
+    Q_D( LovedTracksModel );
+    d->limit = limit;
+}
+
+
 bool
 LovedTracksModel::isTemporary() const
 {
