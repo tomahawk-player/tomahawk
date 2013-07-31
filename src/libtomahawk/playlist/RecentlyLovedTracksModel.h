@@ -24,7 +24,7 @@
 
 class RecentlyLovedTracksModelPrivate;
 
-class RecentlyLovedTracksModel : public LovedTracksModel
+class DLLEXPORT RecentlyLovedTracksModel : public LovedTracksModel
 {
     Q_OBJECT
 public:

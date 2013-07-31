@@ -45,7 +45,6 @@ RecentlyLovedTracksModel::loadTracks()
         sql = QString( "SELECT track.name, artist.name, source "
                        "FROM social_attributes, track, artist "
                        "WHERE social_attributes.id = track.id AND artist.id = track.artist AND social_attributes.k = 'Love' AND social_attributes.v = 'true' "
-                       "GROUP BY track.id "
                        "ORDER BY social_attributes.timestamp DESC LIMIT %1" )
                 .arg( d->limit );
     }
@@ -54,7 +53,6 @@ RecentlyLovedTracksModel::loadTracks()
         sql = QString( "SELECT track.name, artist.name "
                        "FROM social_attributes, track, artist "
                        "WHERE social_attributes.id = track.id AND artist.id = track.artist AND social_attributes.k = 'Love' AND social_attributes.v = 'true' AND social_attributes.source %1 "
-                       "GROUP BY track.id "
                        "ORDER BY social_attributes.timestamp DESC "
                        )
                 .arg( d->source->isLocal() ? "IS NULL" : QString( "= %1" ).arg( d->source->id() ) );
