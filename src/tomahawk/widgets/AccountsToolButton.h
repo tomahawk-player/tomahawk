@@ -23,10 +23,11 @@
 
 #include "accounts/AccountModel.h"
 #include "AccountModelFactoryProxy.h"
+#include "utils/DpiScaler.h"
 
 #include <QToolButton>
 
-class AccountsToolButton : public QToolButton
+class AccountsToolButton : public QToolButton, private TomahawkUtils::DpiScaler
 {
     Q_OBJECT
 public:

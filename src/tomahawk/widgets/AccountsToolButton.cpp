@@ -34,6 +34,7 @@
 
 AccountsToolButton::AccountsToolButton( QWidget* parent )
     : QToolButton( parent )
+    , TomahawkUtils::DpiScaler( this )
 {
     m_popup = new AccountsPopupWidget( this );
     m_popup->hide();
@@ -42,7 +43,7 @@ AccountsToolButton::AccountsToolButton( QWidget* parent )
     if ( toolbar )
         setIconSize( toolbar->iconSize() );
     else
-        setIconSize( QSize( 22, 22 ) );
+        setIconSize( scaled( 22, 22 ) );
 
     //Set up popup...
     QWidget *w = new QWidget( this );
@@ -52,7 +53,7 @@ AccountsToolButton::AccountsToolButton( QWidget* parent )
 
     TomahawkUtils::unmarginLayout( w->layout() );
 
-    w->setContentsMargins( 6, 6, 6, 6 );
+    w->setContentsMargins( scaled( 6, 6, 6, 6 ) );
 #ifdef Q_OS_MAC
     w->setContentsMargins( 6, 6, 6, 0 );
     wMainLayout->setMargin( 12 );
@@ -82,7 +83,7 @@ AccountsToolButton::AccountsToolButton( QWidget* parent )
                                   TomahawkStyle::BORDER_LINE.name() + "; }" ); //from ProxyStyle
     wMainLayout->addWidget( separatorLine );
 
-    wMainLayout->addSpacing( 6 );
+    wMainLayout->addSpacing( scaledY( 6 ) );
 
     QPushButton *settingsButton = new QPushButton( w );
     settingsButton->setIcon( TomahawkUtils::defaultPixmap( TomahawkUtils::AccountSettings ) );

@@ -19,6 +19,8 @@
 #ifndef ACCOUNTWIDGET_H
 #define ACCOUNTWIDGET_H
 
+#include "utils/DpiScaler.h"
+
 #include <QWidget>
 #include <QPersistentModelIndex>
 
@@ -31,7 +33,7 @@ class QLineEdit;
 class QPushButton;
 class QToolButton;
 
-class AccountWidget : public QWidget
+class AccountWidget : public QWidget, private TomahawkUtils::DpiScaler
 {
     Q_OBJECT
 public:

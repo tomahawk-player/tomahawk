@@ -45,15 +45,16 @@
 
 AccountWidget::AccountWidget( QWidget* parent )
     : QWidget( parent )
+    , TomahawkUtils::DpiScaler( this )
 {
     QHBoxLayout *mainLayout = new QHBoxLayout( this );
     TomahawkUtils::unmarginLayout( mainLayout );
     setLayout( mainLayout );
-    setContentsMargins( 0, 8, 0, 8 );
+    setContentsMargins( 0, scaledY( 8 ), 0, scaledY( 8 ) );
 
     m_imageLabel = new QLabel( this );
     mainLayout->addWidget( m_imageLabel );
-    mainLayout->setSpacing( 4 );
+    mainLayout->setSpacing( scaledX( 4 ) );
 
     QGridLayout* vLayout = new QGridLayout( this );
     vLayout->setSpacing( 8 );
@@ -156,7 +157,7 @@ AccountWidget::update( const QPersistentModelIndex& idx, int accountIdx )
     if ( account )
     {
         const QPixmap& pixmap = account->icon();
-        QSize pixmapSize( 32, 32 );
+        QSize pixmapSize( scaled( 32, 32 ) );
         m_imageLabel->setPixmap( pixmap.scaled( pixmapSize, Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
         m_imageLabel->setFixedSize( pixmapSize );
 

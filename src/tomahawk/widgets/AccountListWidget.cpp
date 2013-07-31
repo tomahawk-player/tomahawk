@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2012 Teo Mrnjavac <teo@kde.org>
+ *   Copyright 2012, 2013 Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@
 
 AccountListWidget::AccountListWidget( AccountModelFactoryProxy* model, QWidget* parent )
     : QWidget( parent )
+    , TomahawkUtils::DpiScaler( this )
     , m_model( model )
 {
     QVBoxLayout* mainLayout = new QVBoxLayout( this );
@@ -38,7 +39,7 @@ AccountListWidget::AccountListWidget( AccountModelFactoryProxy* model, QWidget* 
     m_layout = new QVBoxLayout;
     TomahawkUtils::unmarginLayout( m_layout );
     mainLayout->addLayout( m_layout );
-    mainLayout->setSpacing( 8 );
+    mainLayout->setSpacing( scaledY( 8 ) );
 
     connect( m_model, SIGNAL( dataChanged( QModelIndex, QModelIndex ) ),
              this, SLOT( updateEntries( QModelIndex, QModelIndex ) ) );
@@ -58,7 +59,7 @@ AccountListWidget::AccountListWidget( AccountModelFactoryProxy* model, QWidget* 
     separatorLine->setStyleSheet( "QWidget { border-top: 1px solid " +
                                   TomahawkStyle::BORDER_LINE.name() + "; }" ); //from ProxyStyle
     mainLayout->insertWidget( 0, separatorLine );
-    mainLayout->addSpacing( 6 );
+    mainLayout->addSpacing( scaledY( 6 ) );
 
     QLabel *connectionsLabel = new QLabel( tr( "Connections" ).toUpper(), this );
     QFont clFont = connectionsLabel->font();
@@ -75,7 +76,7 @@ AccountListWidget::AccountListWidget( AccountModelFactoryProxy* model, QWidget* 
 
     QHBoxLayout *headerLayout = new QHBoxLayout();
     headerLayout->addWidget( connectionsLabel );
-    headerLayout->addSpacing( 30 );
+    headerLayout->addSpacing( scaledX( 30 ) );
     headerLayout->addWidget( m_toggleOnlineButton );
     mainLayout->insertLayout( 0, headerLayout );
 

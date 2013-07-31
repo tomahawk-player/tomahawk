@@ -20,6 +20,7 @@
 #define ACCOUNTLISTWIDGET_H
 
 #include "AccountModelFactoryProxy.h"
+#include "utils/DpiScaler.h"
 
 #include <QLabel>
 #include <QVBoxLayout>
@@ -27,7 +28,7 @@
 class AccountWidget;
 class QPushButton;
 
-class AccountListWidget : public QWidget
+class AccountListWidget : public QWidget, private TomahawkUtils::DpiScaler
 {
     Q_OBJECT
 public:
