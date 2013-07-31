@@ -311,10 +311,6 @@ SourcesModel::appendGroups()
                                                   boost::bind( &ViewManager::superCollectionView, ViewManager::instance() ) );
     sc->setSortValue( 1 );
 
-    // browse section
-    LovedTracksItem* loved = new LovedTracksItem( this, m_browse );
-    loved->setSortValue( 2 );
-
     GenericPageItem* recent = new GenericPageItem( this, m_browse, tr( "Recently Played" ), ImageRegistry::instance()->icon( RESPATH "images/recently-played.svg" ),
                                                    boost::bind( &ViewManager::showRecentPlaysPage, ViewManager::instance() ),
                                                    boost::bind( &ViewManager::recentPlaysWidget, ViewManager::instance() ) );
