@@ -46,6 +46,26 @@ DpiScaler::scaled( const QSize& size ) const
 }
 
 
+QMargins
+DpiScaler::scaled( int left, int top, int right, int bottom ) const
+{
+    return QMargins( scaledX( left ),
+                     scaledY( top ),
+                     scaledX( right ),
+                     scaledY( bottom ) );
+}
+
+
+QMargins
+DpiScaler::scaled( const QMargins& margins ) const
+{
+    return scaled( margins.left(),
+                   margins.top(),
+                   margins.right(),
+                   margins.bottom() );
+}
+
+
 int
 DpiScaler::scaledX( int x ) const
 {
@@ -72,6 +92,27 @@ QSize
 DpiScaler::scaled( const QPaintDevice* pd, const QSize& size )
 {
     return scaled( pd, size.width(), size.height() );
+}
+
+
+QMargins
+DpiScaler::scaled( const QPaintDevice* pd, int left, int top, int right, int bottom )
+{
+    return QMargins( scaledX( pd, left ),
+                     scaledY( pd, top ),
+                     scaledX( pd, right ),
+                     scaledY( pd, bottom ) );
+}
+
+
+QMargins
+DpiScaler::scaled( const QPaintDevice* pd, const QMargins& margins )
+{
+    return scaled( pd,
+                   margins.left(),
+                   margins.top(),
+                   margins.right(),
+                   margins.bottom() );
 }
 
 
