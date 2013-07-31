@@ -26,7 +26,7 @@
 
 #include "playlist/FlexibleView.h"
 #include "playlist/TrackView.h"
-#include "playlist/LovedTracksModel.h"
+#include "playlist/TopLovedTracksModel.h"
 #include "playlist/PlaylistLargeItemDelegate.h"
 
 #include "utils/ImageRegistry.h"
@@ -76,7 +76,7 @@ LovedTracksItem::activate()
         FlexibleView* pv = new FlexibleView( ViewManager::instance()->widget() );
         pv->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::LovedPlaylist, TomahawkUtils::Original, QSize( 128, 128 ) ) );
 
-        LovedTracksModel* raModel = new LovedTracksModel( pv );
+        TopLovedTracksModel* raModel = new TopLovedTracksModel( pv );
         raModel->setTitle( text() );
 
         PlaylistLargeItemDelegate* del = new PlaylistLargeItemDelegate( PlaylistLargeItemDelegate::LovedTracks, pv->trackView(), pv->trackView()->proxyModel() );

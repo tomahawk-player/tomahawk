@@ -27,13 +27,13 @@
 
 #include "DllMacro.h"
 
-class DLLEXPORT LovedTracksModel : public PlaylistModel
+class DLLEXPORT TopLovedTracksModel : public PlaylistModel
 {
 Q_OBJECT
 
 public:
-    explicit LovedTracksModel( QObject* parent = 0 );
-    ~LovedTracksModel();
+    explicit TopLovedTracksModel( QObject* parent = 0 );
+    ~TopLovedTracksModel();
 
     unsigned int limit() const { return m_limit; }
     void setLimit( unsigned int limit ) { m_limit = limit; }

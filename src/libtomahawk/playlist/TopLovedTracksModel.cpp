@@ -16,7 +16,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "LovedTracksModel.h"
+#include "TopLovedTracksModel.h"
 
 #include <QMimeData>
 #include <QTreeView>
@@ -38,7 +38,7 @@
 using namespace Tomahawk;
 
 
-LovedTracksModel::LovedTracksModel( QObject* parent )
+TopLovedTracksModel::TopLovedTracksModel( QObject* parent )
     : PlaylistModel( parent )
     , m_smoothingTimer( new QTimer )
     , m_limit( LOVED_TRACK_ITEMS )
@@ -50,13 +50,13 @@ LovedTracksModel::LovedTracksModel( QObject* parent )
 }
 
 
-LovedTracksModel::~LovedTracksModel()
+TopLovedTracksModel::~TopLovedTracksModel()
 {
 }
 
 
 void
-LovedTracksModel::loadTracks()
+TopLovedTracksModel::loadTracks()
 {
     startLoading();
 
@@ -85,7 +85,7 @@ LovedTracksModel::loadTracks()
 
 
 void
-LovedTracksModel::onSourcesReady()
+TopLovedTracksModel::onSourcesReady()
 {
     Q_ASSERT( m_source.isNull() );
 
@@ -97,7 +97,7 @@ LovedTracksModel::onSourcesReady()
 
 
 void
-LovedTracksModel::setSource( const Tomahawk::source_ptr& source )
+TopLovedTracksModel::setSource( const Tomahawk::source_ptr& source )
 {
     m_source = source;
     if ( source.isNull() )
@@ -118,28 +118,28 @@ LovedTracksModel::setSource( const Tomahawk::source_ptr& source )
 
 
 void
-LovedTracksModel::onSourceAdded( const Tomahawk::source_ptr& source )
+TopLovedTracksModel::onSourceAdded( const Tomahawk::source_ptr& source )
 {
     connect( source.data(), SIGNAL( socialAttributesChanged( QString ) ), SLOT( onTrackLoved() ), Qt::UniqueConnection );
 }
 
 
 void
-LovedTracksModel::onTrackLoved()
+TopLovedTracksModel::onTrackLoved()
 {
     m_smoothingTimer->start();
 }
 
 
 bool
-LovedTracksModel::isTemporary() const
+TopLovedTracksModel::isTemporary() const
 {
     return true;
 }
 
 
 void
-LovedTracksModel::tracksLoaded( QList< query_ptr > newLoved )
+TopLovedTracksModel::tracksLoaded( QList< query_ptr > newLoved )
 {
     finishLoading();
 

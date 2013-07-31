@@ -71,7 +71,7 @@ set( libGuiSources
     playlist/ColumnView.cpp
     playlist/TreeWidget.cpp
     playlist/ViewHeader.cpp
-    playlist/LovedTracksModel.cpp
+    playlist/TopLovedTracksModel.cpp
     playlist/RecentlyAddedModel.cpp
     playlist/RecentlyPlayedModel.cpp
     playlist/AlbumItemDelegate.cpp
