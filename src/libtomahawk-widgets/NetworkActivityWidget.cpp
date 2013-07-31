@@ -81,6 +81,17 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
         weekItem->setData( WeekChart, Breadcrumb::DefaultRole );
         chartItem->appendRow( weekItem );
     }
+    // Breadcrumbs for Loved Tracks
+    {
+        QStandardItem* lovedItem = new QStandardItem( tr( "Loved Tracks" ) );
+        rootItem->appendRow( lovedItem );
+        QStandardItem* topItem = new QStandardItem( tr( "Top Loved" ) );
+        topItem->setData( TopLoved, Breadcrumb::DefaultRole );
+        lovedItem->appendRow( topItem );
+        QStandardItem* recentlyItem = new QStandardItem( tr( "Recently Loved" ) );
+        recentlyItem->setData( TopLoved, Breadcrumb::DefaultRole );
+        lovedItem->appendRow( recentlyItem );
+    }
     d->sortedProxy->setSourceModel( d->crumbModelLeft );
     d->ui->breadCrumbLeft->setModel( d->sortedProxy );
     d->ui->breadCrumbLeft->setVisible( true );
@@ -415,6 +426,10 @@ NetworkActivityWidget::leftCrumbIndexChanged( const QModelIndex& index )
     case OverallChart:
         showOverallCharts();
         break;
+    case TopLoved:
+        break;
+    case RecentlyLoved:
+        break;
     }
 }
 
@@ -534,7 +549,7 @@ NetworkActivityWidget::showOverallCharts()
     d->activeView = OverallChart;
     if ( !d->overallChartsModel.isNull() )
     {
-        d->ui->tracksViewLeft->setPlaylistModel( d_func()->overallChartsModel );
+        d->ui->tracksViewLeft->setPlaylistModel( d->overallChartsModel );
         d->ui->tracksViewLeft->setAutoResize( true );
     }
     else

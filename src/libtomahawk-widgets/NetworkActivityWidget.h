@@ -44,7 +44,16 @@ class TOMAHAWK_WIDGETS_EXPORT NetworkActivityWidget : public QWidget, public Tom
 {
     Q_OBJECT
 public:
-    enum ViewType { WeekChart = 1, MonthChart = 2, YearChart = 3, OverallChart = 4 };
+    enum ViewType
+    {
+        WeekChart = 1,
+        MonthChart = 2,
+        YearChart = 3,
+        OverallChart = 4,
+        TopLoved = 5,
+        RecentlyLoved = 6
+    };
+
     NetworkActivityWidget(QWidget* parent = 0);
     ~NetworkActivityWidget();
 
@@ -86,11 +95,15 @@ private:
     void fetchMonthCharts();
     void fetchYearCharts();
     void fetchOverallCharts();
+    void fetchTopLoved();
+    void fetchRecentlyLoved();
 
     void showWeekCharts();
     void showMonthCharts();
     void showYearCharts();
     void showOverallCharts();
+    void showTopLoved();
+    void showRecentlyLoved();
 
     Q_DECLARE_PRIVATE( NetworkActivityWidget )
 };

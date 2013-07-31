@@ -55,6 +55,8 @@ private:
     QPointer<PlaylistModel> monthlyChartsModel;
     QPointer<PlaylistModel> yearlyChartsModel;
     QPointer<PlaylistModel> overallChartsModel;
+    QPointer<PlaylistModel> topLovedModel;
+    QPointer<PlaylistModel> recentlyLovedModel;
 
     QPointer<PlaylistModel> trendingTracksModel;
 
