@@ -55,6 +55,20 @@ TopLovedTracksModel::~TopLovedTracksModel()
 }
 
 
+unsigned int
+TopLovedTracksModel::limit() const
+{
+    return m_limit;
+}
+
+
+void
+TopLovedTracksModel::setLimit( unsigned int limit )
+{
+    m_limit = limit;
+}
+
+
 void
 TopLovedTracksModel::loadTracks()
 {

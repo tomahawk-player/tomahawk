@@ -18,6 +18,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#pragma once
 #ifndef PLAYABLEMODEL_H
 #define PLAYABLEMODEL_H
 
@@ -82,19 +83,19 @@ public:
     virtual QModelIndex index( int row, int column, const QModelIndex& parent ) const;
     virtual QModelIndex parent( const QModelIndex& child ) const;
 
-    virtual bool isReadOnly() const { return m_readOnly; }
-    virtual void setReadOnly( bool b ) { m_readOnly = b; }
-    virtual bool isLoading() const { return m_loading; }
+    virtual bool isReadOnly() const;
+    virtual void setReadOnly( bool b );
+    virtual bool isLoading() const;
 
-    virtual QString title() const { return m_title; }
+    virtual QString title() const;
     virtual void setTitle( const QString& title );
-    virtual QString description() const { return m_description; }
+    virtual QString description() const;
     virtual void setDescription( const QString& description );
-    virtual QPixmap icon() const { return m_icon; }
+    virtual QPixmap icon() const;
     virtual void setIcon( const QPixmap& pixmap );
 
-    virtual int trackCount() const { return rowCount( QModelIndex() ); }
-    virtual int itemCount() const { return rowCount( QModelIndex() ); }
+    virtual int trackCount() const;
+    virtual int itemCount() const;
 
     virtual int rowCount( const QModelIndex& parent ) const;
     virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
@@ -112,10 +113,10 @@ public:
     virtual Qt::DropActions supportedDropActions() const;
     virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
 
-    virtual QPersistentModelIndex currentItem() { return m_currentIndex; }
-    virtual Tomahawk::QID currentItemUuid() { return m_currentUuid; }
+    virtual QPersistentModelIndex currentItem();
+    virtual Tomahawk::QID currentItemUuid();
 
-    virtual Tomahawk::PlaylistModes::RepeatMode repeatMode() const { return Tomahawk::PlaylistModes::NoRepeat; }
+    virtual Tomahawk::PlaylistModes::RepeatMode repeatMode() const;
     virtual bool shuffled() const { return false; }
 
     virtual void ensureResolved();
@@ -174,7 +175,7 @@ public slots:
     virtual void setShuffled( bool /*shuffled*/ ) {}
 
 protected:
-    PlayableItem* rootItem() const { return m_rootItem; }
+    PlayableItem* rootItem() const;
     QModelIndex createIndex( int row, int column, PlayableItem* item = 0 ) const;
 
 private slots:

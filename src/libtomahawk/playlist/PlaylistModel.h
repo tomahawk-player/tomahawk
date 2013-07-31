@@ -52,13 +52,13 @@ public:
     virtual QMimeData* mimeData( const QModelIndexList& indexes ) const;
     virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent );
 
-    Tomahawk::playlist_ptr playlist() const { return m_playlist; }
+    Tomahawk::playlist_ptr playlist() const;
 
     virtual void loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEntries = true );
     bool isTemporary() const;
 
-    bool acceptPlayableQueriesOnly() const { return m_acceptPlayableQueriesOnly; }
-    void setAcceptPlayableQueriesOnly( bool b ) { m_acceptPlayableQueriesOnly = b; }
+    bool acceptPlayableQueriesOnly() const;
+    void setAcceptPlayableQueriesOnly( bool b );
 
 public slots:
     virtual void clear();
@@ -79,8 +79,8 @@ signals:
     void playlistChanged();
 
 protected:
-    bool waitForRevision( const QString& revisionguid ) const { return m_waitForRevision.contains( revisionguid ); }
-    void removeFromWaitList( const QString& revisionguid ) { m_waitForRevision.removeAll( revisionguid ); }
+    bool waitForRevision( const QString& revisionguid ) const;
+    void removeFromWaitList( const QString& revisionguid );
 
     QList<Tomahawk::plentry_ptr> playlistEntries() const;
 

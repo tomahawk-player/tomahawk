@@ -140,6 +140,34 @@ PlayableModel::parent( const QModelIndex& child ) const
 }
 
 
+bool
+PlayableModel::isReadOnly() const
+{
+    return m_readOnly;
+}
+
+
+void
+PlayableModel::setReadOnly( bool b )
+{
+    m_readOnly = b;
+}
+
+
+bool
+PlayableModel::isLoading() const
+{
+    return m_loading;
+}
+
+
+QString
+PlayableModel::title() const
+{
+    return m_title;
+}
+
+
 QVariant
 PlayableModel::artistData( const artist_ptr& artist, int role ) const
 {
@@ -397,6 +425,27 @@ PlayableModel::flags( const QModelIndex& index ) const
         return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | defaultFlags;
     else
         return Qt::ItemIsDropEnabled | defaultFlags;
+}
+
+
+QPersistentModelIndex
+PlayableModel::currentItem()
+{
+    return m_currentIndex;
+}
+
+
+QID
+PlayableModel::currentItemUuid()
+{
+    return m_currentUuid;
+}
+
+
+PlaylistModes::RepeatMode
+PlayableModel::repeatMode() const
+{
+    return Tomahawk::PlaylistModes::NoRepeat;
 }
 
 
@@ -693,6 +742,13 @@ PlayableModel::removeIndexes( const QList<QPersistentModelIndex>& indexes )
 }
 
 
+PlayableItem*
+PlayableModel::rootItem() const
+{
+    return m_rootItem;
+}
+
+
 void
 PlayableModel::onPlaybackStarted( const Tomahawk::result_ptr& result )
 {
@@ -951,6 +1007,13 @@ PlayableModel::setTitle( const QString& title )
 }
 
 
+QString
+PlayableModel::description() const
+{
+    return m_description;
+}
+
+
 void
 PlayableModel::setDescription( const QString& description )
 {
@@ -959,11 +1022,32 @@ PlayableModel::setDescription( const QString& description )
 }
 
 
+QPixmap
+PlayableModel::icon() const
+{
+    return m_icon;
+}
+
+
 void
 PlayableModel::setIcon( const QPixmap& pixmap )
 {
     m_icon = pixmap;
     emit changed();
+}
+
+
+int
+PlayableModel::trackCount() const
+{
+    return rowCount( QModelIndex() );
+}
+
+
+int
+PlayableModel::itemCount() const
+{
+    return rowCount( QModelIndex() );
 }
 
 

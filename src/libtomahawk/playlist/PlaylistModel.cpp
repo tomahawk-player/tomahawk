@@ -391,6 +391,13 @@ PlaylistModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int r
 }
 
 
+playlist_ptr
+PlaylistModel::playlist() const
+{
+    return m_playlist;
+}
+
+
 void
 PlaylistModel::parsedDroppedTracks( QList< query_ptr > tracks )
 {
@@ -562,7 +569,35 @@ PlaylistModel::removeIndex( const QModelIndex& index, bool moreToCome )
 
 
 bool
+PlaylistModel::waitForRevision( const QString& revisionguid ) const
+{
+    return m_waitForRevision.contains( revisionguid );
+}
+
+
+void
+PlaylistModel::removeFromWaitList( const QString& revisionguid )
+{
+    m_waitForRevision.removeAll( revisionguid );
+}
+
+
+bool
 PlaylistModel::isTemporary() const
 {
     return m_isTemporary;
+}
+
+
+bool
+PlaylistModel::acceptPlayableQueriesOnly() const
+{
+    return m_acceptPlayableQueriesOnly;
+}
+
+
+void
+PlaylistModel::setAcceptPlayableQueriesOnly( bool b )
+{
+    m_acceptPlayableQueriesOnly = b;
 }

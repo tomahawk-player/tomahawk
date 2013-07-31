@@ -35,8 +35,8 @@ public:
     explicit TopLovedTracksModel( QObject* parent = 0 );
     ~TopLovedTracksModel();
 
-    unsigned int limit() const { return m_limit; }
-    void setLimit( unsigned int limit ) { m_limit = limit; }
+    unsigned int limit() const;
+    void setLimit( unsigned int limit );
 
     bool isTemporary() const;
 
