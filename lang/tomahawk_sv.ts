@@ -346,37 +346,37 @@ ansluta och strömma från dig?</translation>
 <context>
     <name>AudioControls</name>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="295"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="308"/>
         <source>Shuffle</source>
         <translation>Blanda</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="296"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="309"/>
         <source>Repeat</source>
         <translation>Upprepa</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="293"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="306"/>
         <source>Time Elapsed</source>
         <translation>Förfluten tid</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="294"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="307"/>
         <source>Time Remaining</source>
         <translation>Tid kvar</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="299"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="312"/>
         <source>Playing from %1</source>
         <translation>Spelar från %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="297"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="310"/>
         <source>Share</source>
         <translation>Dela</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/AudioControls.cpp" line="298"/>
+        <location filename="../src/tomahawk/AudioControls.cpp" line="311"/>
         <source>Love</source>
         <translation>Älska</translation>
     </message>
@@ -1408,12 +1408,12 @@ Password (OTP)</source>
 <context>
     <name>PlaylistView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistView.cpp" line="135"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistView.cpp" line="136"/>
         <source>This playlist is currently empty.</source>
         <translation>Denna spellistan är för närvarande tom</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistView.cpp" line="137"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistView.cpp" line="138"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
         <translation>Denna spellista är för närvarande tom. Lägg till några spår och njut av musiken!</translation>
     </message>
@@ -2063,33 +2063,33 @@ och radiostationer baserat på din personliga profil</translation>
 <context>
     <name>SourceItem</name>
     <message>
-        <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="84"/>
-        <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="607"/>
+        <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="85"/>
+        <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="610"/>
         <source>Latest Additions</source>
         <translation>Senast tillagda</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="88"/>
+        <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="89"/>
         <source>Recently Played</source>
         <translation>Senast spelade spår</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="151"/>
+        <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="152"/>
         <source>SuperCollection</source>
         <translation>Supersamling</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="610"/>
+        <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="613"/>
         <source>Latest additions to your collection</source>
         <translation>Senaste tillägget till ditt samling.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="612"/>
+        <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="615"/>
         <source>Latest additions to %1&apos;s collection</source>
         <translation>Senaste tillägget till %1&apos;s samling.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="620"/>
+        <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="623"/>
         <source>Sorry, we could not find any recent additions!</source>
         <translation>Tyvärr! Det gick inte hitta några nya tillägg!</translation>
     </message>
@@ -3056,7 +3056,7 @@ Var god och ändra filtrerna eller försök igen</translation>
 <context>
     <name>Tomahawk::DynamicWidget</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/dynamic/widgets/DynamicWidget.cpp" line="474"/>
+        <location filename="../src/libtomahawk/playlist/dynamic/widgets/DynamicWidget.cpp" line="475"/>
         <source>Station ran out of tracks!
 
 Try tweaking the filters for a new set of songs to play.</source>
@@ -3771,7 +3771,7 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
 <context>
     <name>Tomahawk::Widgets::Dashboard</name>
     <message>
-        <location filename="../src/libtomahawk-widgets/Dashboard.cpp" line="250"/>
+        <location filename="../src/libtomahawk-widgets/Dashboard.cpp" line="251"/>
         <source>No recently created playlists in your network.</source>
         <translation>Det finns ingen nyligen skapad spellista i ditt nätverk</translation>
     </message>
@@ -3789,39 +3789,34 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
 <context>
     <name>Tomahawk::Widgets::NetworkActivityWidget</name>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="64"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="69"/>
         <source>Charts</source>
         <translation>Lista</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="66"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="80"/>
         <source>Last Week</source>
         <translation>Förra veckan</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="69"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="96"/>
+        <source>Sorry, we are still loading the charts.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="77"/>
         <source>Last Month</source>
         <translation>Förra månaden</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="72"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="74"/>
         <source>Last Year</source>
         <translation>Förra året</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="75"/>
+        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="71"/>
         <source>Overall</source>
         <translation>Generell</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="95"/>
-        <source>Sorry, we could not find any top hits for this artist!</source>
-        <translation>Tyvärr! Det gick inte hitta några tophits av denna artisten</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="166"/>
-        <source>Coming soon.</source>
-        <translation>Kommer snart.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.h" line="54"/>
@@ -4174,7 +4169,7 @@ anger du PIN-koden här:</translation>
 <context>
     <name>TreeModel</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="150"/>
+        <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="151"/>
         <source>All Artists</source>
         <translation>Alla artister</translation>
     </message>
