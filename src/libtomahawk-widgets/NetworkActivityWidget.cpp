@@ -23,6 +23,8 @@
 #include "database/DatabaseCommand_NetworkCharts.h"
 #include "database/DatabaseCommand_TrendingTracks.h"
 #include "playlist/AlbumItemDelegate.h"
+#include "playlist/RecentlyLovedTracksModel.h"
+#include "playlist/TopLovedTracksModel.h"
 #include "playlist/TreeProxyModel.h"
 #include "playlist/ViewHeader.h"
 #include "utils/AnimatedSpinner.h"
@@ -89,7 +91,7 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
         topItem->setData( TopLoved, Breadcrumb::DefaultRole );
         lovedItem->appendRow( topItem );
         QStandardItem* recentlyItem = new QStandardItem( tr( "Recently Loved" ) );
-        recentlyItem->setData( TopLoved, Breadcrumb::DefaultRole );
+        recentlyItem->setData( RecentlyLoved, Breadcrumb::DefaultRole );
         lovedItem->appendRow( recentlyItem );
     }
     d->sortedProxy->setSourceModel( d->crumbModelLeft );
@@ -427,8 +429,10 @@ NetworkActivityWidget::leftCrumbIndexChanged( const QModelIndex& index )
         showOverallCharts();
         break;
     case TopLoved:
+        showTopLoved();
         break;
     case RecentlyLoved:
+        showRecentlyLoved();
         break;
     }
 }
@@ -556,4 +560,41 @@ NetworkActivityWidget::showOverallCharts()
     {
         fetchOverallCharts();
     }
+}
+
+
+void
+NetworkActivityWidget::showTopLoved()
+{
+    Q_D( NetworkActivityWidget );
+
+    d->activeView = TopLoved;
+    if ( d->topLovedModel.isNull() )
+    {
+        TopLovedTracksModel* model = new TopLovedTracksModel( this );
+        model->setLimit( numberOfNetworkChartEntries );
+        model->setSource( source_ptr() );
+        d->topLovedModel = model;
+    }
+    d->ui->tracksViewLeft->setPlaylistModel( d->topLovedModel );
+    d->ui->tracksViewLeft->setAutoResize( true );
+}
+
+
+void
+NetworkActivityWidget::showRecentlyLoved()
+{
+    Q_D( NetworkActivityWidget );
+
+    d->activeView = RecentlyLoved;
+    if ( d->recentlyLovedModel.isNull() )
+    {
+        RecentlyLovedTracksModel* model = new RecentlyLovedTracksModel( this );
+        model->setLimit( numberOfNetworkChartEntries );
+        model->setSource( source_ptr() );
+        d->recentlyLovedModel = model;
+    }
+
+    d->ui->tracksViewLeft->setPlaylistModel( d->recentlyLovedModel );
+    d->ui->tracksViewLeft->setAutoResize( true );
 }
