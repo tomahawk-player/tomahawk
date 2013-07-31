@@ -3,6 +3,7 @@
  *   Copyright 2010-2012, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2011       Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013,      Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -22,17 +23,16 @@
 #ifndef PLAYABLEMODEL_H
 #define PLAYABLEMODEL_H
 
-#include <QAbstractItemModel>
-#include <QPixmap>
-
-#include "PlaylistInterface.h"
+#include "DllMacro.h"
+#include "PlaybackLog.h"
 #include "Typedefs.h"
 
-#include "DllMacro.h"
+#include <QAbstractItemModel>
 
 class QMetaData;
 
 class PlayableItem;
+class PlayableModelPrivate;
 
 class DLLEXPORT PlayableModel : public QAbstractItemModel
 {
@@ -175,6 +175,9 @@ public slots:
     virtual void setShuffled( bool /*shuffled*/ ) {}
 
 protected:
+    QScopedPointer<PlayableModelPrivate> d_ptr;
+    PlayableModel( QObject* parent, PlayableModelPrivate* d );
+
     PlayableItem* rootItem() const;
     QModelIndex createIndex( int row, int column, PlayableItem* item = 0 ) const;
 
@@ -188,25 +191,14 @@ private slots:
     void onPlaybackStopped();
 
 private:
+    void init();
     template <typename T>
     void insertInternal( const QList< T >& items, int row, const QList< Tomahawk::PlaybackLog >& logs = QList< Tomahawk::PlaybackLog >() );
 
     QString scoreText( float score ) const;
     Qt::Alignment columnAlignment( int column ) const;
 
-    PlayableItem* m_rootItem;
-    QPersistentModelIndex m_currentIndex;
-    Tomahawk::QID m_currentUuid;
-
-    bool m_readOnly;
-
-    QString m_title;
-    QString m_description;
-    QPixmap m_icon;
-
-    QStringList m_header;
-
-    bool m_loading;
+    Q_DECLARE_PRIVATE( PlayableModel )
 };
 
 #endif // PLAYABLEMODEL_H

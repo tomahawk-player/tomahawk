@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2013,      Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -16,22 +17,25 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#pragma once
 #ifndef PLAYLISTMODEL_H
 #define PLAYLISTMODEL_H
 
 #include <QList>
 #include <QHash>
 
-#include "Typedefs.h"
-#include "PlayableModel.h"
 #include "Playlist.h"
 #include "Query.h"
 #include "PlaylistInterface.h"
 
 #include "DllMacro.h"
+#include "PlayableModel.h"
+#include "Typedefs.h"
 
 class QMimeData;
 class QMetaData;
+
+class PlaylistModelPrivate;
 
 class DLLEXPORT PlaylistModel : public PlayableModel
 {
@@ -79,6 +83,7 @@ signals:
     void playlistChanged();
 
 protected:
+    PlaylistModel( QObject* parent, PlaylistModelPrivate* d );
     bool waitForRevision( const QString& revisionguid ) const;
     void removeFromWaitList( const QString& revisionguid );
 
@@ -93,20 +98,9 @@ private slots:
 private:
     void beginPlaylistChanges();
     void endPlaylistChanges();
+    void init();
 
-    Tomahawk::playlist_ptr m_playlist;
-    bool m_isTemporary;
-    bool m_changesOngoing;
-    bool m_isLoading;
-    bool m_acceptPlayableQueriesOnly;
-    QList< Tomahawk::Query* > m_waitingForResolved;
-    QStringList m_waitForRevision;
-
-    int m_savedInsertPos;
-    QList< Tomahawk::plentry_ptr > m_savedInsertTracks;
-    QList< Tomahawk::query_ptr > m_savedRemoveTracks;
-
-    DropStorageData m_dropStorage;
+    Q_DECLARE_PRIVATE( PlaylistModel )
 };
 
 #endif // PLAYLISTMODEL_H

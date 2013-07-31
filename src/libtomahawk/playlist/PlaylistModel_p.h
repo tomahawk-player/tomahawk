@@ -18,26 +18,41 @@
  */
 
 #pragma once
-#ifndef TOPLOVEDTRACKSMODEL_H
-#define TOPLOVEDTRACKSMODEL_H
+#ifndef PLAYLISTMODEL_P_H
+#define PLAYLISTMODEL_P_H
 
-#include "LovedTracksModel.h"
+#include "PlaylistModel.h"
+#include "PlayableModel_p.h"
 
-class TopLovedTracksModelPrivate;
-
-class DLLEXPORT TopLovedTracksModel : public LovedTracksModel
+class PlaylistModelPrivate : public PlayableModelPrivate
 {
-Q_OBJECT
-
 public:
-    explicit TopLovedTracksModel( QObject* parent = 0 );
-    virtual ~TopLovedTracksModel();
+    PlaylistModelPrivate( PlaylistModel* q )
+        : PlayableModelPrivate( q, false )
+        , isTemporary( false )
+        , changesOngoing( false )
+        , isLoading( false )
+        , acceptPlayableQueriesOnly( false )
+        , savedInsertPos( -1 )
+    {
+    }
 
-private slots:
-    void loadTracks();
+    Q_DECLARE_PUBLIC( PlaylistModel )
 
 private:
-    Q_DECLARE_PRIVATE( TopLovedTracksModel )
+    Tomahawk::playlist_ptr playlist;
+    bool isTemporary;
+    bool changesOngoing;
+    bool isLoading;
+    bool acceptPlayableQueriesOnly;
+    QList< Tomahawk::Query* > waitingForResolved;
+    QStringList waitForRevision;
+
+    int savedInsertPos;
+    QList< Tomahawk::plentry_ptr > savedInsertTracks;
+    QList< Tomahawk::query_ptr > savedRemoveTracks;
+
+    PlaylistModel::DropStorageData dropStorage;
 };
 
-#endif // TOPLOVEDTRACKSMODEL_H
+#endif // PLAYLISTMODEL_P_H

@@ -18,7 +18,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "PlayableModel.h"
+#include "PlayableModel_p.h"
 
 #include "audio/AudioEngine.h"
 #include "utils/TomahawkUtils.h"
@@ -40,24 +40,40 @@
 using namespace Tomahawk;
 
 
-PlayableModel::PlayableModel( QObject* parent, bool loading )
-    : QAbstractItemModel( parent )
-    , m_rootItem( new PlayableItem( 0 ) )
-    , m_readOnly( true )
-    , m_loading( loading )
+void
+PlayableModel::init()
 {
+    Q_D( PlayableModel );
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( onPlaybackStarted( Tomahawk::result_ptr ) ), Qt::DirectConnection );
     connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( onPlaybackStopped() ), Qt::DirectConnection );
 
-    m_header << tr( "Artist" ) << tr( "Title" ) << tr( "Composer" ) << tr( "Album" ) << tr( "Track" ) << tr( "Duration" )
-             << tr( "Bitrate" ) << tr( "Age" ) << tr( "Year" ) << tr( "Size" ) << tr( "Origin" ) << tr( "Accuracy" ) << tr( "Name" );
+    d->header << tr( "Artist" ) << tr( "Title" ) << tr( "Composer" ) << tr( "Album" ) << tr( "Track" ) << tr( "Duration" )
+              << tr( "Bitrate" ) << tr( "Age" ) << tr( "Year" ) << tr( "Size" ) << tr( "Origin" ) << tr( "Accuracy" ) << tr( "Name" );
 }
+
+
+PlayableModel::PlayableModel( QObject* parent, bool loading )
+    : QAbstractItemModel( parent )
+    , d_ptr( new PlayableModelPrivate( this, loading ) )
+{
+    init();
+}
+
+PlayableModel::PlayableModel( QObject* parent, PlayableModelPrivate* d )
+    : QAbstractItemModel( parent )
+    , d_ptr( d )
+
+{
+    init();
+}
+
 
 
 PlayableModel::~PlayableModel()
 {
+    Q_D( PlayableModel );
     tDebug() << Q_FUNC_INFO;
-    delete m_rootItem;
+    delete d->rootItem;
 }
 
 
@@ -71,7 +87,8 @@ PlayableModel::createIndex( int row, int column, PlayableItem* item ) const
 QModelIndex
 PlayableModel::index( int row, int column, const QModelIndex& parent ) const
 {
-    if ( !m_rootItem || row < 0 || column < 0 )
+    Q_D( const PlayableModel );
+    if ( !d->rootItem || row < 0 || column < 0 )
         return QModelIndex();
 
     PlayableItem* parentItem = itemFromIndex( parent );
@@ -109,11 +126,12 @@ PlayableModel::columnCount( const QModelIndex& parent ) const
 bool
 PlayableModel::hasChildren( const QModelIndex& parent ) const
 {
+    Q_D( const PlayableModel );
     PlayableItem* parentItem = itemFromIndex( parent );
     if ( !parentItem )
         return false;
 
-    if ( parentItem == m_rootItem )
+    if ( parentItem == d->rootItem )
         return true;
 
     return ( !parentItem->artist().isNull() || !parentItem->album().isNull() );
@@ -143,28 +161,32 @@ PlayableModel::parent( const QModelIndex& child ) const
 bool
 PlayableModel::isReadOnly() const
 {
-    return m_readOnly;
+    Q_D( const PlayableModel );
+    return d->readOnly;
 }
 
 
 void
 PlayableModel::setReadOnly( bool b )
 {
-    m_readOnly = b;
+    Q_D( PlayableModel );
+    d->readOnly = b;
 }
 
 
 bool
 PlayableModel::isLoading() const
 {
-    return m_loading;
+    Q_D( const PlayableModel );
+    return d->loading;
 }
 
 
 QString
 PlayableModel::title() const
 {
-    return m_title;
+    Q_D( const PlayableModel );
+    return d->title;
 }
 
 
@@ -364,12 +386,13 @@ PlayableModel::data( const QModelIndex& index, int role ) const
 QVariant
 PlayableModel::headerData( int section, Qt::Orientation orientation, int role ) const
 {
+    Q_D( const PlayableModel );
     Q_UNUSED( orientation );
 
     if ( role == Qt::DisplayRole && section >= 0 )
     {
-        if ( section < m_header.count() )
-            return m_header.at( section );
+        if ( section < d->header.count() )
+            return d->header.at( section );
         else
             return tr( "Name" );
     }
@@ -386,7 +409,8 @@ PlayableModel::headerData( int section, Qt::Orientation orientation, int role ) 
 void
 PlayableModel::setCurrentIndex( const QModelIndex& index )
 {
-    PlayableItem* oldEntry = itemFromIndex( m_currentIndex );
+    Q_D( PlayableModel );
+    PlayableItem* oldEntry = itemFromIndex( d->currentIndex );
     if ( oldEntry )
     {
         oldEntry->setIsPlaying( false );
@@ -395,14 +419,14 @@ PlayableModel::setCurrentIndex( const QModelIndex& index )
     PlayableItem* entry = itemFromIndex( index );
     if ( index.isValid() && entry && !entry->query().isNull() )
     {
-        m_currentIndex = index;
-        m_currentUuid = entry->query()->id();
+        d->currentIndex = index;
+        d->currentUuid = entry->query()->id();
         entry->setIsPlaying( true );
     }
     else
     {
-        m_currentIndex = QModelIndex();
-        m_currentUuid = QString();
+        d->currentIndex = QModelIndex();
+        d->currentUuid = QString();
     }
 
     emit currentIndexChanged();
@@ -431,14 +455,16 @@ PlayableModel::flags( const QModelIndex& index ) const
 QPersistentModelIndex
 PlayableModel::currentItem()
 {
-    return m_currentIndex;
+    Q_D( PlayableModel );
+    return d->currentIndex;
 }
 
 
 QID
 PlayableModel::currentItemUuid()
 {
-    return m_currentUuid;
+    Q_D( PlayableModel );
+    return d->currentUuid;
 }
 
 
@@ -597,14 +623,15 @@ PlayableModel::mimeData( const QModelIndexList &indexes ) const
 void
 PlayableModel::clear()
 {
+    Q_D( PlayableModel );
     if ( rowCount( QModelIndex() ) )
     {
         finishLoading();
 
         emit beginResetModel();
-        delete m_rootItem;
-        m_rootItem = 0;
-        m_rootItem = new PlayableItem( 0 );
+        delete d->rootItem;
+        d->rootItem = 0;
+        d->rootItem = new PlayableItem( 0 );
         emit endResetModel();
     }
 }
@@ -613,10 +640,11 @@ PlayableModel::clear()
 QList< query_ptr >
 PlayableModel::queries() const
 {
-    Q_ASSERT( m_rootItem );
+    Q_D( const PlayableModel );
+    Q_ASSERT( d->rootItem );
 
     QList< query_ptr > tracks;
-    foreach ( PlayableItem* item, m_rootItem->children )
+    foreach ( PlayableItem* item, d->rootItem->children )
     {
         tracks << item->query();
     }
@@ -629,6 +657,7 @@ template <typename T>
 void
 PlayableModel::insertInternal( const QList< T >& items, int row, const QList< Tomahawk::PlaybackLog >& logs )
 {
+    Q_D( PlayableModel );
     if ( !items.count() )
     {
         emit itemCountChanged( rowCount( QModelIndex() ) );
@@ -648,7 +677,7 @@ PlayableModel::insertInternal( const QList< T >& items, int row, const QList< To
     PlayableItem* plitem;
     foreach ( const T& item, items )
     {
-        plitem = new PlayableItem( item, m_rootItem, row + i );
+        plitem = new PlayableItem( item, d->rootItem, row + i );
         plitem->index = createIndex( row + i, 0, plitem );
         if ( plitem->query() )
         {
@@ -683,6 +712,7 @@ PlayableModel::remove( int row, bool moreToCome )
 void
 PlayableModel::removeIndex( const QModelIndex& index, bool moreToCome )
 {
+    Q_D( PlayableModel );
     if ( QThread::currentThread() != thread() )
     {
         QMetaObject::invokeMethod( this, "remove",
@@ -698,7 +728,7 @@ PlayableModel::removeIndex( const QModelIndex& index, bool moreToCome )
     PlayableItem* item = itemFromIndex( index );
     if ( item )
     {
-        if ( index == m_currentIndex )
+        if ( index == d->currentIndex )
             setCurrentIndex( QModelIndex() );
 
         emit beginRemoveRows( index.parent(), index.row(), index.row() );
@@ -741,18 +771,19 @@ PlayableModel::removeIndexes( const QList<QPersistentModelIndex>& indexes )
     }
 }
 
-
 PlayableItem*
 PlayableModel::rootItem() const
 {
-    return m_rootItem;
+    Q_D( const PlayableModel );
+    return d->rootItem;
 }
 
 
 void
 PlayableModel::onPlaybackStarted( const Tomahawk::result_ptr& result )
 {
-    PlayableItem* oldEntry = itemFromIndex( m_currentIndex );
+    Q_D( PlayableModel );
+    PlayableItem* oldEntry = itemFromIndex( d->currentIndex );
     if ( oldEntry && ( oldEntry->query().isNull() || !oldEntry->query()->numResults() || oldEntry->query()->results().first().data() != result.data() ) )
     {
         oldEntry->setIsPlaying( false );
@@ -763,7 +794,8 @@ PlayableModel::onPlaybackStarted( const Tomahawk::result_ptr& result )
 void
 PlayableModel::onPlaybackStopped()
 {
-    PlayableItem* oldEntry = itemFromIndex( m_currentIndex );
+    Q_D( PlayableModel );
+    PlayableItem* oldEntry = itemFromIndex( d->currentIndex );
     if ( oldEntry )
     {
         oldEntry->setIsPlaying( false );
@@ -855,7 +887,8 @@ PlayableModel::onDataChanged()
 void
 PlayableModel::startLoading()
 {
-    m_loading = true;
+    Q_D( PlayableModel );
+    d->loading = true;
     emit loadingStarted();
 }
 
@@ -863,7 +896,8 @@ PlayableModel::startLoading()
 void
 PlayableModel::finishLoading()
 {
-    m_loading = false;
+    Q_D( PlayableModel );
+    d->loading = false;
     emit loadingFinished();
 }
 
@@ -871,13 +905,14 @@ PlayableModel::finishLoading()
 PlayableItem*
 PlayableModel::itemFromIndex( const QModelIndex& index ) const
 {
+    Q_D( const PlayableModel );
     if ( index.isValid() )
     {
         return static_cast<PlayableItem*>( index.internalPointer() );
     }
     else
     {
-        return m_rootItem;
+        return d->rootItem;
     }
 }
 
@@ -1002,7 +1037,8 @@ PlayableModel::insertQueries( const QList< Tomahawk::query_ptr >& queries, int r
 void
 PlayableModel::setTitle( const QString& title )
 {
-    m_title = title;
+    Q_D( PlayableModel );
+    d->title = title;
     emit changed();
 }
 
@@ -1010,14 +1046,16 @@ PlayableModel::setTitle( const QString& title )
 QString
 PlayableModel::description() const
 {
-    return m_description;
+    Q_D( const PlayableModel );
+    return d->description;
 }
 
 
 void
 PlayableModel::setDescription( const QString& description )
 {
-    m_description = description;
+    Q_D( PlayableModel );
+    d->description = description;
     emit changed();
 }
 
@@ -1025,14 +1063,16 @@ PlayableModel::setDescription( const QString& description )
 QPixmap
 PlayableModel::icon() const
 {
-    return m_icon;
+    Q_D( const PlayableModel );
+    return d->icon;
 }
 
 
 void
 PlayableModel::setIcon( const QPixmap& pixmap )
 {
-    m_icon = pixmap;
+    Q_D( PlayableModel );
+    d->icon = pixmap;
     emit changed();
 }
 

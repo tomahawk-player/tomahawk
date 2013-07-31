@@ -18,26 +18,30 @@
  */
 
 #pragma once
-#ifndef TOPLOVEDTRACKSMODEL_H
-#define TOPLOVEDTRACKSMODEL_H
+#ifndef LOVEDTRACKSMODEL_P_H
+#define LOVEDTRACKSMODEL_P_H
 
 #include "LovedTracksModel.h"
+#include "PlaylistModel_p.h"
 
-class TopLovedTracksModelPrivate;
+#include <QTimer>
 
-class DLLEXPORT TopLovedTracksModel : public LovedTracksModel
+class LovedTracksModelPrivate : public PlaylistModelPrivate
 {
-Q_OBJECT
-
 public:
-    explicit TopLovedTracksModel( QObject* parent = 0 );
-    virtual ~TopLovedTracksModel();
+    LovedTracksModelPrivate( LovedTracksModel* q )
+        : PlaylistModelPrivate( q )
+        , limit( defaultNumberOfLovedTracks )
+    {
+    }
 
-private slots:
-    void loadTracks();
+    Q_DECLARE_PUBLIC( LovedTracksModel )
+    static const uint defaultNumberOfLovedTracks = 25;
 
-private:
-    Q_DECLARE_PRIVATE( TopLovedTracksModel )
+protected:
+    uint limit;
+    Tomahawk::source_ptr source;
+    QTimer smoothingTimer;
 };
 
-#endif // TOPLOVEDTRACKSMODEL_H
+#endif // LOVEDTRACKSMODEL_P_H

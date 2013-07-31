@@ -18,26 +18,40 @@
  */
 
 #pragma once
-#ifndef TOPLOVEDTRACKSMODEL_H
-#define TOPLOVEDTRACKSMODEL_H
+#ifndef LOVEDTRACKSMODEL_H
+#define LOVEDTRACKSMODEL_H
 
-#include "LovedTracksModel.h"
+#include "PlaylistModel.h"
 
-class TopLovedTracksModelPrivate;
+class LovedTracksModelPrivate;
 
-class DLLEXPORT TopLovedTracksModel : public LovedTracksModel
+class DLLEXPORT LovedTracksModel : public PlaylistModel
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
-    explicit TopLovedTracksModel( QObject* parent = 0 );
-    virtual ~TopLovedTracksModel();
+    explicit LovedTracksModel( QObject* parent = 0 );
+    virtual ~LovedTracksModel();
+
+    unsigned int limit() const;
+    void setLimit( unsigned int limit );
+
+    bool isTemporary() const;
+
+public slots:
+    void setSource( const Tomahawk::source_ptr& source );
 
 private slots:
-    void loadTracks();
+    virtual void loadTracks();
+
+    void onSourcesReady();
+    void onSourceAdded( const Tomahawk::source_ptr& source );
+    void onTrackLoved();
+
+    void tracksLoaded( QList<Tomahawk::query_ptr> );
 
 private:
-    Q_DECLARE_PRIVATE( TopLovedTracksModel )
+    Q_DECLARE_PRIVATE( LovedTracksModel )
 };
 
-#endif // TOPLOVEDTRACKSMODEL_H
+#endif // LOVEDTRACKSMODEL_H

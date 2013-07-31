@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2012, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2013,      Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -16,37 +17,18 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "TopLovedTracksModel.h"
-
-#include <QMimeData>
-#include <QTreeView>
+#include "TopLovedTracksModel_p.h"
 
 #include "database/Database.h"
 #include "database/DatabaseCommand_GenericSelect.h"
-#include "utils/TomahawkUtils.h"
-#include "utils/Logger.h"
-
-#include "PlayableItem.h"
-#include "PlaylistEntry.h"
 #include "Source.h"
-#include "SourceList.h"
-
-#include <QTimer>
-
-#define LOVED_TRACK_ITEMS 25
 
 using namespace Tomahawk;
 
 
 TopLovedTracksModel::TopLovedTracksModel( QObject* parent )
-    : PlaylistModel( parent )
-    , m_smoothingTimer( new QTimer )
-    , m_limit( LOVED_TRACK_ITEMS )
+    : LovedTracksModel( parent )
 {
-    m_smoothingTimer->setInterval( 300 );
-    m_smoothingTimer->setSingleShot( true );
-
-    connect( m_smoothingTimer, SIGNAL( timeout() ), this, SLOT( loadTracks() ) );
 }
 
 
@@ -55,33 +37,21 @@ TopLovedTracksModel::~TopLovedTracksModel()
 }
 
 
-unsigned int
-TopLovedTracksModel::limit() const
-{
-    return m_limit;
-}
-
-
-void
-TopLovedTracksModel::setLimit( unsigned int limit )
-{
-    m_limit = limit;
-}
-
-
 void
 TopLovedTracksModel::loadTracks()
 {
+    Q_D( TopLovedTracksModel );
     startLoading();
 
     QString sql;
-    if ( m_source.isNull() )
+    if ( d->source.isNull() )
     {
         sql = QString( "SELECT track.name, artist.name, source, COUNT(*) as counter "
                        "FROM social_attributes, track, artist "
                        "WHERE social_attributes.id = track.id AND artist.id = track.artist AND social_attributes.k = 'Love' AND social_attributes.v = 'true' "
                        "GROUP BY track.id "
-                       "ORDER BY counter DESC, social_attributes.timestamp DESC LIMIT 0, 50" );
+                       "ORDER BY counter DESC, social_attributes.timestamp DESC LIMIT %1" )
+                .arg( d->limit );
     }
     else
     {
@@ -89,87 +59,12 @@ TopLovedTracksModel::loadTracks()
                        "FROM social_attributes, track, artist "
                        "WHERE social_attributes.id = track.id AND artist.id = track.artist AND social_attributes.k = 'Love' AND social_attributes.v = 'true' AND social_attributes.source %1 "
                        "GROUP BY track.id "
-                       "ORDER BY counter DESC, social_attributes.timestamp DESC " ).arg( m_source->isLocal() ? "IS NULL" : QString( "= %1" ).arg( m_source->id() ) );
+                       "ORDER BY counter DESC, social_attributes.timestamp DESC "
+                       )
+                .arg( d->source->isLocal() ? "IS NULL" : QString( "= %1" ).arg( d->source->id() ) );
     }
 
     DatabaseCommand_GenericSelect* cmd = new DatabaseCommand_GenericSelect( sql, DatabaseCommand_GenericSelect::Track, -1, 0 );
     connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksLoaded( QList<Tomahawk::query_ptr> ) ) );
     Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
-}
-
-
-void
-TopLovedTracksModel::onSourcesReady()
-{
-    Q_ASSERT( m_source.isNull() );
-
-    loadTracks();
-
-    foreach ( const source_ptr& source, SourceList::instance()->sources() )
-        onSourceAdded( source );
-}
-
-
-void
-TopLovedTracksModel::setSource( const Tomahawk::source_ptr& source )
-{
-    m_source = source;
-    if ( source.isNull() )
-    {
-        if ( SourceList::instance()->isReady() )
-            onSourcesReady();
-        else
-            connect( SourceList::instance(), SIGNAL( ready() ), SLOT( onSourcesReady() ) );
-
-        connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
-    }
-    else
-    {
-        onSourceAdded( source );
-        loadTracks();
-    }
-}
-
-
-void
-TopLovedTracksModel::onSourceAdded( const Tomahawk::source_ptr& source )
-{
-    connect( source.data(), SIGNAL( socialAttributesChanged( QString ) ), SLOT( onTrackLoved() ), Qt::UniqueConnection );
-}
-
-
-void
-TopLovedTracksModel::onTrackLoved()
-{
-    m_smoothingTimer->start();
-}
-
-
-bool
-TopLovedTracksModel::isTemporary() const
-{
-    return true;
-}
-
-
-void
-TopLovedTracksModel::tracksLoaded( QList< query_ptr > newLoved )
-{
-    finishLoading();
-
-    QList< query_ptr > tracks;
-
-    foreach ( const plentry_ptr ple, playlistEntries() )
-        tracks << ple->query();
-
-    bool changed = false;
-    QList< query_ptr > mergedTracks = TomahawkUtils::mergePlaylistChanges( tracks, newLoved, changed );
-
-    if ( changed )
-    {
-        QList<Tomahawk::plentry_ptr> el = playlist()->entriesFromQueries( mergedTracks, true );
-
-        clear();
-        appendEntries( el );
-    }
 }

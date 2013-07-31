@@ -18,26 +18,21 @@
  */
 
 #pragma once
-#ifndef TOPLOVEDTRACKSMODEL_H
-#define TOPLOVEDTRACKSMODEL_H
+#ifndef TOPLOVEDTRACKSMODEL_P_H
+#define TOPLOVEDTRACKSMODEL_P_H
 
-#include "LovedTracksModel.h"
+#include "LovedTracksModel_p.h"
+#include "TopLovedTracksModel.h"
 
-class TopLovedTracksModelPrivate;
-
-class DLLEXPORT TopLovedTracksModel : public LovedTracksModel
+class TopLovedTracksModelPrivate : public LovedTracksModelPrivate
 {
-Q_OBJECT
-
 public:
-    explicit TopLovedTracksModel( QObject* parent = 0 );
-    virtual ~TopLovedTracksModel();
+    TopLovedTracksModelPrivate( TopLovedTracksModel* q )
+        : LovedTracksModelPrivate( q )
+    {
+    }
 
-private slots:
-    void loadTracks();
-
-private:
-    Q_DECLARE_PRIVATE( TopLovedTracksModel )
+    Q_DECLARE_PUBLIC( TopLovedTracksModel )
 };
 
-#endif // TOPLOVEDTRACKSMODEL_H
+#endif // TOPLOVEDTRACKSMODEL_P_H
