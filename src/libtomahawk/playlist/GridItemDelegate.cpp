@@ -237,12 +237,15 @@ GridItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
 void
 GridItemDelegate::onPlayClicked( const QPersistentModelIndex& index )
 {
-    QPoint pos = m_playButton[ index ]->pos();
     clearButtons();
 
     AnimatedSpinner* spinner = new AnimatedSpinner( m_view );
     spinner->setAutoCenter( false );
     spinner->fadeIn();
+
+    QPoint pos = m_view->visualRect( index ).center() - QPoint( ( spinner->width() ) / 2 - 1,
+                                                                ( spinner->height() ) / 2 - 1 );
+
     spinner->move( pos );
     spinner->setFocusPolicy( Qt::NoFocus );
     spinner->installEventFilter( this );
@@ -309,8 +312,8 @@ GridItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const Q
             button->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PlayButton, TomahawkUtils::Original, scaled( 48, 48 ) ) );
             button->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PlayButtonPressed, TomahawkUtils::Original, scaled( 48, 48 ) ), QIcon::Off, QIcon::Active );
             button->setFixedSize( scaled( 48, 48 ) );
-            button->move( option.rect.center() - QPoint( button->width() / 2,
-                                                         button->height() / 2 ) );
+            button->move( option.rect.center() - QPoint( button->width() / 2 - 1,
+                                                         button->height() / 2 - 1 ) );
             button->setContentsMargins( 0, 0, 0, 0 );
             button->setFocusPolicy( Qt::NoFocus );
             button->installEventFilter( this );
@@ -428,20 +431,20 @@ GridItemDelegate::onViewChanged()
     foreach ( const QPersistentModelIndex& index, m_spinner.keys() )
     {
         QRect rect = m_view->visualRect( index );
-        m_spinner.value( index )->move( rect.center() - QPoint( m_spinner.value( index )->width() / 2,
-                                                                m_spinner.value( index )->height() / 2 ) );
+        m_spinner.value( index )->move( rect.center() - QPoint( m_spinner.value( index )->width() / 2 - 1,
+                                                                m_spinner.value( index )->height() / 2 - 1 ) );
     }
     foreach ( const QPersistentModelIndex& index, m_playButton.keys() )
     {
         QRect rect = m_view->visualRect( index );
-        m_playButton.value( index )->move( rect.center() - QPoint( m_playButton.value( index )->width() / 2,
-                                                                   m_playButton.value( index )->height() / 2 ) );
+        m_playButton.value( index )->move( rect.center() - QPoint( m_playButton.value( index )->width() / 2 - 1,
+                                                                   m_playButton.value( index )->height() / 2 - 1 ) );
     }
     foreach ( const QPersistentModelIndex& index, m_pauseButton.keys() )
     {
         QRect rect = m_view->visualRect( index );
-        m_pauseButton.value( index )->move( rect.center() - QPoint( m_pauseButton.value( index )->width() / 2,
-                                                                    m_pauseButton.value( index )->height() / 2 ) );
+        m_pauseButton.value( index )->move( rect.center() - QPoint( m_pauseButton.value( index )->width() / 2 - 1,
+                                                                    m_pauseButton.value( index )->height() / 2 - 1 ) );
     }
 }
 
@@ -560,8 +563,8 @@ GridItemDelegate::createPauseButton( const QPersistentModelIndex& index )
     button->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PauseButton, TomahawkUtils::Original, scaled( 48, 48 ) ) );
     button->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PauseButtonPressed, TomahawkUtils::Original, scaled( 48, 48 ) ), QIcon::Off, QIcon::Active );
     button->setFixedSize( scaled( 48, 48 ) );
-    button->move( m_view->visualRect( index ).center() - QPoint( button->width() / 2,
-                                                                 button->height() / 2 ) );
+    button->move( m_view->visualRect( index ).center() - QPoint( button->width() / 2 - 1,
+                                                                 button->height() / 2 - 1 ) );
     button->setContentsMargins( 0, 0, 0, 0 );
     button->setFocusPolicy( Qt::NoFocus );
     button->installEventFilter( this );
