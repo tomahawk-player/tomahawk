@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2011-2012, Leo Franchi            <lfranchi@kde.org>
+ *   Copyright 2013,      Teo Mrnjavac           <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -49,6 +50,7 @@ namespace {
 
 GridItemDelegate::GridItemDelegate( QAbstractItemView* parent, PlayableProxyModel* proxy )
     : QStyledItemDelegate( (QObject*)parent )
+    , TomahawkUtils::DpiScaler( parent )
     , m_view( parent )
     , m_model( proxy )
 {
@@ -304,10 +306,11 @@ GridItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const Q
             m_playButton.clear();
 
             ImageButton* button = new ImageButton( m_view );
-            button->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PlayButton, TomahawkUtils::Original, QSize( 48, 48 ) ) );
-            button->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PlayButtonPressed, TomahawkUtils::Original, QSize( 48, 48 ) ), QIcon::Off, QIcon::Active );
-            button->setFixedSize( 48, 48 );
-            button->move( option.rect.center() - QPoint( 23, 23 ) );
+            button->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PlayButton, TomahawkUtils::Original, scaled( 48, 48 ) ) );
+            button->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PlayButtonPressed, TomahawkUtils::Original, scaled( 48, 48 ) ), QIcon::Off, QIcon::Active );
+            button->setFixedSize( scaled( 48, 48 ) );
+            button->move( option.rect.center() - QPoint( button->width() / 2,
+                                                         button->height() / 2 ) );
             button->setContentsMargins( 0, 0, 0, 0 );
             button->setFocusPolicy( Qt::NoFocus );
             button->installEventFilter( this );
@@ -425,17 +428,20 @@ GridItemDelegate::onViewChanged()
     foreach ( const QPersistentModelIndex& index, m_spinner.keys() )
     {
         QRect rect = m_view->visualRect( index );
-        m_spinner.value( index )->move( rect.center() - QPoint( 23, 23 ) );
+        m_spinner.value( index )->move( rect.center() - QPoint( m_spinner.value( index )->width() / 2,
+                                                                m_spinner.value( index )->height() / 2 ) );
     }
     foreach ( const QPersistentModelIndex& index, m_playButton.keys() )
     {
         QRect rect = m_view->visualRect( index );
-        m_playButton.value( index )->move( rect.center() - QPoint( 23, 23 ) );
+        m_playButton.value( index )->move( rect.center() - QPoint( m_playButton.value( index )->width() / 2,
+                                                                   m_playButton.value( index )->height() / 2 ) );
     }
     foreach ( const QPersistentModelIndex& index, m_pauseButton.keys() )
     {
         QRect rect = m_view->visualRect( index );
-        m_pauseButton.value( index )->move( rect.center() - QPoint( 23, 23 ) );
+        m_pauseButton.value( index )->move( rect.center() - QPoint( m_pauseButton.value( index )->width() / 2,
+                                                                    m_pauseButton.value( index )->height() / 2 ) );
     }
 }
 
@@ -466,13 +472,13 @@ GridItemDelegate::updatePlayPauseButton( ImageButton* button, bool setState )
     {
         if ( button->property( "paused" ).toBool() )
         {
-            button->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PauseButton, TomahawkUtils::Original, QSize( 48, 48 ) ) );
-            button->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PauseButtonPressed, TomahawkUtils::Original, QSize( 48, 48 ) ), QIcon::Off, QIcon::Active );
+            button->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PauseButton, TomahawkUtils::Original, scaled( 48, 48 ) ) );
+            button->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PauseButtonPressed, TomahawkUtils::Original, scaled( 48, 48 ) ), QIcon::Off, QIcon::Active );
         }
         else
         {
-            button->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PlayButton, TomahawkUtils::Original, QSize( 48, 48 ) ) );
-            button->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PlayButtonPressed, TomahawkUtils::Original, QSize( 48, 48 ) ), QIcon::Off, QIcon::Active );
+            button->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PlayButton, TomahawkUtils::Original, scaled( 48, 48 ) ) );
+            button->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PlayButtonPressed, TomahawkUtils::Original, scaled( 48, 48 ) ), QIcon::Off, QIcon::Active );
         }
 
         if ( setState )
@@ -551,10 +557,11 @@ void
 GridItemDelegate::createPauseButton( const QPersistentModelIndex& index )
 {
     ImageButton* button = new ImageButton( m_view );
-    button->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PauseButton, TomahawkUtils::Original, QSize( 48, 48 ) ) );
-    button->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PauseButtonPressed, TomahawkUtils::Original, QSize( 48, 48 ) ), QIcon::Off, QIcon::Active );
-    button->setFixedSize( 48, 48 );
-    button->move( m_view->visualRect( index ).center() - QPoint( 23, 23 ) );
+    button->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PauseButton, TomahawkUtils::Original, scaled( 48, 48 ) ) );
+    button->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::PauseButtonPressed, TomahawkUtils::Original, scaled( 48, 48 ) ), QIcon::Off, QIcon::Active );
+    button->setFixedSize( scaled( 48, 48 ) );
+    button->move( m_view->visualRect( index ).center() - QPoint( button->width() / 2,
+                                                                 button->height() / 2 ) );
     button->setContentsMargins( 0, 0, 0, 0 );
     button->setFocusPolicy( Qt::NoFocus );
     button->installEventFilter( this );
