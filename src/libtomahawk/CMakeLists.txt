@@ -72,6 +72,7 @@ set( libGuiSources
     playlist/TreeWidget.cpp
     playlist/ViewHeader.cpp
     playlist/LovedTracksModel.cpp
+    playlist/RecentlyLovedTracksModel.cpp
     playlist/TopLovedTracksModel.cpp
     playlist/RecentlyAddedModel.cpp
     playlist/RecentlyPlayedModel.cpp

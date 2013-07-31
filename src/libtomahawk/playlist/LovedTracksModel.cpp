@@ -21,14 +21,29 @@
 
 #include "SourceList.h"
 
-LovedTracksModel::LovedTracksModel( QObject *parent )
-    : PlaylistModel( parent, new LovedTracksModelPrivate( this ) )
+
+void
+LovedTracksModel::init()
 {
     Q_D( LovedTracksModel );
     d->smoothingTimer.setInterval( 300 );
     d->smoothingTimer.setSingleShot( true );
 
     connect( &d->smoothingTimer, SIGNAL( timeout() ), this, SLOT( loadTracks() ) );
+}
+
+
+LovedTracksModel::LovedTracksModel( QObject *parent )
+    : PlaylistModel( parent, new LovedTracksModelPrivate( this ) )
+{
+    init();
+}
+
+
+LovedTracksModel::LovedTracksModel(QObject *parent, LovedTracksModelPrivate *d)
+    : PlaylistModel( parent, d )
+{
+    init();
 }
 
 

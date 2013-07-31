@@ -1,7 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
- *   Copyright 2013,      Uwe L. Korn <uwelk@xhochy.com>
+ *   Copyright 2013, Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -18,26 +17,25 @@
  */
 
 #pragma once
-#ifndef TOPLOVEDTRACKSMODEL_H
-#define TOPLOVEDTRACKSMODEL_H
+#ifndef RECENTLYLOVEDTRACKSMODEL_H
+#define RECENTLYLOVEDTRACKSMODEL_H
 
 #include "LovedTracksModel.h"
 
-class TopLovedTracksModelPrivate;
+class RecentlyLovedTracksModelPrivate;
 
-class DLLEXPORT TopLovedTracksModel : public LovedTracksModel
+class RecentlyLovedTracksModel : public LovedTracksModel
 {
-Q_OBJECT
-
+    Q_OBJECT
 public:
-    explicit TopLovedTracksModel( QObject* parent = 0 );
-    virtual ~TopLovedTracksModel();
+    explicit RecentlyLovedTracksModel(QObject *parent = 0);
+    virtual ~RecentlyLovedTracksModel();
 
 protected slots:
-    void loadTracks();
+    virtual void loadTracks();
 
 private:
-    Q_DECLARE_PRIVATE( TopLovedTracksModel )
+    Q_DECLARE_PRIVATE( RecentlyLovedTracksModel )
 };
 
-#endif // TOPLOVEDTRACKSMODEL_H
+#endif // RECENTLYLOVEDTRACKSMODEL_H

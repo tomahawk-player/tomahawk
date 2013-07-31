@@ -30,7 +30,6 @@ class DLLEXPORT LovedTracksModel : public PlaylistModel
     Q_OBJECT
 
 public:
-    explicit LovedTracksModel( QObject* parent = 0 );
     virtual ~LovedTracksModel();
 
     unsigned int limit() const;
@@ -41,9 +40,14 @@ public:
 public slots:
     void setSource( const Tomahawk::source_ptr& source );
 
-private slots:
+protected slots:
     virtual void loadTracks();
 
+protected:
+    explicit LovedTracksModel( QObject* parent = 0 );
+    explicit LovedTracksModel( QObject* parent, LovedTracksModelPrivate* d );
+
+private slots:
     void onSourcesReady();
     void onSourceAdded( const Tomahawk::source_ptr& source );
     void onTrackLoved();
@@ -52,6 +56,9 @@ private slots:
 
 private:
     Q_DECLARE_PRIVATE( LovedTracksModel )
+
+    void init();
+
 };
 
 #endif // LOVEDTRACKSMODEL_H
