@@ -25,6 +25,7 @@
 #include "Result.h"
 #include "audio/AudioEngine.h"
 #include "utils/XspfLoader.h"
+#include "utils/DpiScaler.h"
 
 #include "config.h"
 
@@ -67,7 +68,7 @@ namespace Ui
     class GlobalSearchWidget;
 }
 
-class TomahawkWindow : public QMainWindow
+class TomahawkWindow : public QMainWindow, private TomahawkUtils::DpiScaler
 {
 Q_OBJECT
 
