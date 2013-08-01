@@ -64,11 +64,7 @@ private:
 
     const QPaintDevice* that;
 
-#ifdef Q_OS_MAC
-    static const qreal s_baseDpi = 72.;
-#else
-    static const qreal s_baseDpi = 96.;
-#endif
+    static const qreal s_baseDpi;
 };
 
 }

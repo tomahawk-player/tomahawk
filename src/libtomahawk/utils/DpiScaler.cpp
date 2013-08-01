@@ -22,7 +22,11 @@
 
 namespace TomahawkUtils
 {
-
+#ifdef Q_OS_MAC
+    const qreal DpiScaler::s_baseDpi = 72.;
+#else
+    const qreal DpiScaler::s_baseDpi = 96.;
+#endif
 
 DpiScaler::DpiScaler( const QPaintDevice* that )
     : that( that )
