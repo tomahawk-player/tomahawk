@@ -54,7 +54,7 @@ HatchetAccountConfig::HatchetAccountConfig( HatchetAccount* account )
     connect( m_ui->passwordEdit, SIGNAL( textChanged( QString ) ), this, SLOT( fieldsChanged() ) );
     connect( m_ui->otpEdit, SIGNAL( textChanged( QString ) ), this, SLOT( fieldsChanged() ) );
 
-    connect( m_account, SIGNAL( authError( QString ) ), this, SLOT( authError( QString ) ) );
+    connect( m_account, SIGNAL( authError( QString, int ) ), this, SLOT( authError( QString, int ) ) );
     connect( m_account, SIGNAL( deauthenticated() ), this, SLOT( showLoggedOut() ) );
     connect( m_account, SIGNAL( accessTokensFetched() ), this, SLOT( accountInfoUpdated() ) );
 
@@ -168,9 +168,9 @@ HatchetAccountConfig::accountInfoUpdated()
 
 
 void
-HatchetAccountConfig::authError( const QString &error )
+HatchetAccountConfig::authError( const QString &error, int statusCode )
 {
-    if ( error.startsWith( "At least one OTP method is configured on this account" ) )
+    if ( statusCode == 401 )
     {
         m_ui->usernameLabel->hide();
         m_ui->usernameEdit->hide();

@@ -276,18 +276,25 @@ HatchetAccount::onPasswordLoginFinished( QNetworkReply* reply, const QString& us
 {
     Q_ASSERT( reply );
     bool ok;
+    int statusCode = reply->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt( &ok );
+    if ( !ok )
+    {
+        tLog() << Q_FUNC_INFO << "Error finding status code from auth server";
+        emit authError( "An error occurred getting the status code from the server", 0 );
+        return;
+    }
     const QVariantMap resp = parseReply( reply, ok );
     if ( !ok )
     {
         tLog() << Q_FUNC_INFO << "Error getting parsed reply from auth server";
-        emit authError( "An error occurred reading the reply from the server");
+        emit authError( "An error occurred reading the reply from the server", statusCode );
         return;
     }
 
     if ( !resp.value( "error" ).toString().isEmpty() )
     {
         tLog() << Q_FUNC_INFO << "Auth server returned an error";
-        emit authError( resp.value( "error" ).toString() );
+        emit authError( resp.value( "error" ).toString(), statusCode );
         return;
     }
 
@@ -295,7 +302,7 @@ HatchetAccount::onPasswordLoginFinished( QNetworkReply* reply, const QString& us
     if ( nonce != m_uuid )
     {
         tLog() << Q_FUNC_INFO << "Auth server nonce value does not match!";
-        emit authError( "The nonce value was incorrect. YOUR ACCOUNT MAY BE COMPROMISED." );
+        emit authError( "The nonce value was incorrect. YOUR ACCOUNT MAY BE COMPROMISED.", statusCode );
         return;
     }
 
@@ -324,12 +331,19 @@ HatchetAccount::onFetchAccessTokensFinished()
     QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
     Q_ASSERT( reply );
     bool ok;
+    int statusCode = reply->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt( &ok );
+    if ( !ok )
+    {
+        tLog() << Q_FUNC_INFO << "Error finding status code from auth server";
+        emit authError( "An error occurred getting the status code from the server", 0 );
+        return;
+    }
     const QVariantMap resp = parseReply( reply, ok );
     if ( !ok || !resp.value( "error" ).toString().isEmpty() )
     {
         tLog() << Q_FUNC_INFO << "Auth server returned an error";
         if ( ok )
-            emit authError( resp.value( "error" ).toString() );
+            emit authError( resp.value( "error" ).toString(), statusCode );
         deauthenticate();
         return;
     }

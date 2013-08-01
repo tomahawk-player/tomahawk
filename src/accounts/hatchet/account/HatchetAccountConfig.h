@@ -52,7 +52,7 @@ private slots:
 
     void accountInfoUpdated();
 
-    void authError( const QString& error );
+    void authError( const QString& error, int statusCode );
 
 protected:
     //virtual void changeEvent( QEvent* event );
