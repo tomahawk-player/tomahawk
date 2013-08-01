@@ -62,7 +62,7 @@ SourcesModel::SourcesModel( QObject* parent )
 {
     m_rootItem = new SourceTreeItem( this, 0, Invalid );
 
-    connect( ViewManager::instance(), SIGNAL( viewPageAdded( QString, QString, QIcon ) ), SLOT( appendPageItem( QString, QString, QIcon ) ) );
+    connect( ViewManager::instance(), SIGNAL( viewPageAdded( QString, QString, QIcon, int ) ), SLOT( appendPageItem( QString, QString, QIcon, int ) ) );
     appendGroups();
 
     onSourcesAdded( SourceList::instance()->sources() );
@@ -305,16 +305,15 @@ SourcesModel::appendGroups()
     m_myMusicGroup = new GroupItem( this, m_rootItem, tr( "My Music" ), 3 );
 
 
+    InboxItem* inbox = new InboxItem( this, m_browse );
+    inbox->setSortValue( 3 );
+
     // super collection
     GenericPageItem* sc = new GenericPageItem( this, m_browse, tr( "SuperCollection" ), ImageRegistry::instance()->icon( RESPATH "images/supercollection.svg" ),
                                                   boost::bind( &ViewManager::showSuperCollection, ViewManager::instance() ),
                                                   boost::bind( &ViewManager::superCollectionView, ViewManager::instance() ) );
-    sc->setSortValue( 1 );
+    sc->setSortValue( 4 );
 
-    GenericPageItem* recent = new GenericPageItem( this, m_browse, tr( "Recently Played" ), ImageRegistry::instance()->icon( RESPATH "images/recently-played.svg" ),
-                                                   boost::bind( &ViewManager::showRecentPlaysPage, ViewManager::instance() ),
-                                                   boost::bind( &ViewManager::recentPlaysWidget, ViewManager::instance() ) );
-    recent->setSortValue( 4 );
 
     GenericPageItem* hot = new GenericPageItem( this, m_browse, tr( "Charts" ), ImageRegistry::instance()->icon( RESPATH "images/charts.svg" ),
                                                 boost::bind( &ViewManager::showWhatsHotPage, ViewManager::instance() ),
@@ -327,8 +326,11 @@ SourcesModel::appendGroups()
     newReleases->setSortValue( 6 );
 
 
-    InboxItem* inbox = new InboxItem( this, m_browse );
-    inbox->setSortValue( 7 );
+    GenericPageItem* recent = new GenericPageItem( this, m_browse, tr( "Recently Played" ), ImageRegistry::instance()->icon( RESPATH "images/recently-played.svg" ),
+                                                boost::bind( &ViewManager::showRecentPlaysPage, ViewManager::instance() ),
+                                                boost::bind( &ViewManager::recentPlaysWidget, ViewManager::instance() ) );
+    recent->setSortValue( 7 );
+
 
     m_collectionsGroup = new GroupItem( this, m_rootItem, tr( "Friends" ), 4 );
 
@@ -337,11 +339,13 @@ SourcesModel::appendGroups()
     endInsertRows();
 
     // addDynamicPage takes care of begin/endInsertRows itself
-    ViewManager::instance()->addDynamicPage("dashboard",
+    ViewManager::instance()->addDynamicPage( "dashboard",
                                             tr( "Dashboard" ),
                                             ImageRegistry::instance()->icon( RESPATH "images/dashboard.svg" ),
-                                            boost::lambda::bind( boost::lambda::new_ptr< Tomahawk::Widgets::Dashboard >() )
+                                            boost::lambda::bind( boost::lambda::new_ptr< Tomahawk::Widgets::Dashboard >() ),
+                                            1
     );
+
     //HACK: this may not belong here, but adding the pages probably doesn't belong here either
     //TODO: find a good place for this
     ViewManager::instance()->showDynamicPage("dashboard");
@@ -349,19 +353,27 @@ SourcesModel::appendGroups()
     ViewManager::instance()->addDynamicPage("network_activity",
                                             tr( "Network Activity" ),
                                             TomahawkUtils::defaultPixmap( TomahawkUtils::NetworkActivity, TomahawkUtils::Original ),
-                                            boost::lambda::bind( boost::lambda::new_ptr< Tomahawk::Widgets::NetworkActivityWidget >() )
+                                            boost::lambda::bind( boost::lambda::new_ptr< Tomahawk::Widgets::NetworkActivityWidget >() ),
+                                            2
     );
 }
 
 void
-SourcesModel::appendPageItem( const QString& name, const QString& text, const QIcon& icon )
+SourcesModel::appendPageItem( const QString& name, const QString& text, const QIcon& icon, int sortValue )
 {
     QModelIndex parentIndex = indexFromItem( m_browse );
     beginInsertRows( parentIndex, rowCount( parentIndex ), rowCount( parentIndex ) );
     GenericPageItem* pageItem = new GenericPageItem( this, m_browse, text, icon,
                                             boost::bind( &ViewManager::showDynamicPage, ViewManager::instance(), name ),
                                             boost::bind( &ViewManager::dynamicPageWidget, ViewManager::instance(), name ) );
-    pageItem->setSortValue( rowCount( parentIndex ) );
+    if( sortValue )
+    {
+        pageItem->setSortValue( sortValue );
+    }
+    else
+    {
+        pageItem->setSortValue( rowCount( parentIndex ) );
+    }
 
     endInsertRows();
 }

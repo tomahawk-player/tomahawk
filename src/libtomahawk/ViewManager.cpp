@@ -878,7 +878,7 @@ ViewManager::dynamicPageWidget( const QString& pageName ) const
 
 
 void
-ViewManager::addDynamicPage( const QString& pageName, const QString& text, const QIcon& icon, boost::function<Tomahawk::ViewPage*()> instanceLoader )
+ViewManager::addDynamicPage( const QString& pageName, const QString& text, const QIcon& icon, boost::function<Tomahawk::ViewPage*()> instanceLoader, int sortValue )
 {
     tLog() << Q_FUNC_INFO << "Trying to add " << pageName;
 
@@ -889,7 +889,7 @@ ViewManager::addDynamicPage( const QString& pageName, const QString& text, const
     }
 
     m_dynamicPagesInstanceLoaders.insert( pageName, instanceLoader );
-    emit viewPageAdded( pageName, text, icon );
+    emit viewPageAdded( pageName, text, icon, sortValue );
 }
 
 

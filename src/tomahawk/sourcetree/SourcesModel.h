@@ -149,7 +149,7 @@ private slots:
     /*
      *  pageIcon and pageTitle are visible in the source tree, pageName is the internal name in the ViewManager
      */
-    void appendPageItem( const QString& name, const QString& text, const QIcon& icon );
+    void appendPageItem( const QString& name, const QString& text, const QIcon& icon, int sortValue );
 
 private:
     SourceTreeItem* itemFromIndex( const QModelIndex& idx ) const;
