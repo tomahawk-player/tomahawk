@@ -52,5 +52,5 @@ Tomahawk::ViewPagePlugin::pixmap() const
 const QString
 Tomahawk::ViewPagePlugin::pixmapPath() const
 {
-    return ( RESPATH "icons/tomahawk-icon-128x128.png" );
+    return ( RESPATH "icons/tomahawk-icon-256x256.png" );
 }
