@@ -19,7 +19,9 @@
  */
 
 #include "Dashboard.h"
-#include "ui_Dashboard.h"
+#include "ui_DashboardWidget.h"
+
+#include "libtomahawk-widgets/PlaylistDelegate.h"
 
 #include "ViewManager.h"
 #include "SourceList.h"
@@ -27,7 +29,6 @@
 #include "widgets/RecentPlaylistsModel.h"
 #include "widgets/RecentlyPlayedPlaylistsModel.h"
 #include "MetaPlaylistInterface.h"
-#include "PlaylistDelegate.h"
 #include "audio/AudioEngine.h"
 #include "playlist/AlbumModel.h"
 #include "playlist/RecentlyPlayedModel.h"
@@ -52,8 +53,19 @@ using namespace Tomahawk::Widgets;
 
 
 Dashboard::Dashboard( QWidget* parent )
+{
+}
+
+
+Dashboard::~Dashboard()
+{
+
+}
+
+
+DashboardWidget::DashboardWidget( QWidget* parent )
     : QWidget( parent )
-    , ui( new Ui::Dashboard )
+    , ui( new Ui::DashboardWidget )
 {
     QWidget* widget = new QWidget;
     ui->setupUi( widget );
@@ -182,7 +194,7 @@ Dashboard::Dashboard( QWidget* parent )
 }
 
 
-Dashboard::~Dashboard()
+DashboardWidget::~DashboardWidget()
 {
     delete ui;
 }
@@ -191,17 +203,17 @@ Dashboard::~Dashboard()
 Tomahawk::playlistinterface_ptr
 Dashboard::playlistInterface() const
 {
-    return m_playlistInterface;
+    return m_widget->m_playlistInterface;
 }
 
 
 bool
 Dashboard::jumpToCurrentTrack()
 {
-    if ( ui->tracksView->jumpToCurrentTrack() )
+    if ( m_widget->ui->tracksView->jumpToCurrentTrack() )
         return true;
 
-    if ( ui->additionsView->jumpToCurrentTrack() )
+    if ( m_widget->ui->additionsView->jumpToCurrentTrack() )
         return true;
 
     return false;
@@ -211,15 +223,15 @@ Dashboard::jumpToCurrentTrack()
 bool
 Dashboard::isBeingPlayed() const
 {
-    if ( ui->additionsView->isBeingPlayed() )
+    if ( m_widget->ui->additionsView->isBeingPlayed() )
         return true;
 
-    return AudioEngine::instance()->currentTrackPlaylist() == ui->tracksView->playlistInterface();
+    return AudioEngine::instance()->currentTrackPlaylist() == m_widget->ui->tracksView->playlistInterface();
 }
 
 
 void
-Dashboard::onSourcesReady()
+DashboardWidget::onSourcesReady()
 {
     foreach ( const source_ptr& source, SourceList::instance()->sources() )
         onSourceAdded( source );
@@ -229,21 +241,21 @@ Dashboard::onSourcesReady()
 
 
 void
-Dashboard::onSourceAdded( const Tomahawk::source_ptr& source )
+DashboardWidget::onSourceAdded( const Tomahawk::source_ptr& source )
 {
     connect( source->dbCollection().data(), SIGNAL( changed() ), SLOT( updateRecentAdditions() ), Qt::UniqueConnection );
 }
 
 
 void
-Dashboard::updateRecentAdditions()
+DashboardWidget::updateRecentAdditions()
 {
     m_recentAlbumsModel->addFilteredCollection( collection_ptr(), 20, DatabaseCommand_AllAlbums::ModificationTime, true );
 }
 
 
 void
-Dashboard::updatePlaylists()
+DashboardWidget::updatePlaylists()
 {
     int num = ui->playlistWidget->model()->rowCount( QModelIndex() );
     if ( num == 0 )
@@ -257,7 +269,7 @@ Dashboard::updatePlaylists()
 
 
 void
-Dashboard::onPlaylistActivated( const QModelIndex& item )
+DashboardWidget::onPlaylistActivated( const QModelIndex& item )
 {
     Tomahawk::playlist_ptr pl = item.data( RecentlyPlayedPlaylistsModel::PlaylistRole ).value< Tomahawk::playlist_ptr >();
     if ( Tomahawk::dynplaylist_ptr dynplaylist = pl.dynamicCast< Tomahawk::DynamicPlaylist >() )
@@ -268,7 +280,7 @@ Dashboard::onPlaylistActivated( const QModelIndex& item )
 
 
 void
-Dashboard::changeEvent( QEvent* e )
+DashboardWidget::changeEvent( QEvent* e )
 {
     QWidget::changeEvent( e );
     switch ( e->type() )
@@ -283,9 +295,4 @@ Dashboard::changeEvent( QEvent* e )
 }
 
 
-QPixmap
-Dashboard::pixmap() const
-{
-    return ImageRegistry::instance()->pixmap( RESPATH "images/dashboard.svg",
-                                              TomahawkUtils::DpiScaler::scaled( this, 80, 80 ) );
-}
+Q_EXPORT_PLUGIN2( ViewPagePlugin, Dashboard )

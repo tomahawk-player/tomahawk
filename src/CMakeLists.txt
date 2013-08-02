@@ -15,6 +15,7 @@ add_subdirectory( libtomahawk-widgets )
 # plugins
 add_subdirectory( accounts )
 add_subdirectory( infoplugins )
+add_subdirectory( viewpages )
 
 
 # application

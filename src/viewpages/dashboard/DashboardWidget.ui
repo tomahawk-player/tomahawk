@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dashboard</class>
- <widget class="QWidget" name="Dashboard">
+ <class>DashboardWidget</class>
+ <widget class="QWidget" name="DashboardWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -298,7 +298,7 @@
   <customwidget>
    <class>Tomahawk::Widgets::PlaylistWidget</class>
    <extends>QListWidget</extends>
-   <header>PlaylistWidget.h</header>
+   <header>libtomahawk-widgets/PlaylistWidget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
