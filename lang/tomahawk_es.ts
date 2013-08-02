@@ -2191,42 +2191,42 @@ y estaciones basadas en sus gustos personales.</translation>
         <translation>Mi música</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="309"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="312"/>
         <source>SuperCollection</source>
         <translation>Supercolección</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="350"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="354"/>
         <source>Network Activity</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="335"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="337"/>
         <source>Cloud</source>
         <translation>Nube</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="341"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="343"/>
         <source>Dashboard</source>
         <translation>Panel de inicio</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="314"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="329"/>
         <source>Recently Played</source>
         <translation>Reproducido recientemente</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="319"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="318"/>
         <source>Charts</source>
         <translation>Listas</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="324"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="323"/>
         <source>New Releases</source>
         <translation>Últimas novedades</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="333"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="335"/>
         <source>Friends</source>
         <translation>Amigos</translation>
     </message>

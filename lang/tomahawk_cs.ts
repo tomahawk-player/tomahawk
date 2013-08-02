@@ -1134,7 +1134,7 @@ heslo</translation>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.ui" line="113"/>
         <source>Trending Artists</source>
-        <translation type="unfinished"/>
+        <translation>Módní umělci</translation>
     </message>
 </context>
 <context>
@@ -1624,7 +1624,7 @@ heslo</translation>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="66"/>
         <source>Resolver Error: %1:%2 %3</source>
-        <translation type="unfinished"/>
+        <translation>Chyba řešitele: %1 %2 %3</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="85"/>
@@ -2189,42 +2189,42 @@ heslo</translation>
         <translation>Moje hudba</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="309"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="312"/>
         <source>SuperCollection</source>
         <translation>Supersbírka</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="350"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="354"/>
         <source>Network Activity</source>
         <translation>Činnost sítě</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="335"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="337"/>
         <source>Cloud</source>
         <translation>Mračno</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="341"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="343"/>
         <source>Dashboard</source>
         <translation>Nástěnka</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="314"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="329"/>
         <source>Recently Played</source>
         <translation>Nedávno poslouchané</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="319"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="318"/>
         <source>Charts</source>
         <translation>Žebříčky</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="324"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="323"/>
         <source>New Releases</source>
         <translation>Novinky</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="333"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="335"/>
         <source>Friends</source>
         <translation>Přátelé</translation>
     </message>
@@ -3785,22 +3785,22 @@ Zkuste vyladit filtry pro nové písně.</translation>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="88"/>
         <source>Loved Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Oblíbené skladby</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="90"/>
         <source>Top Loved</source>
-        <translation type="unfinished"/>
+        <translation>Nejoblíbenější</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="93"/>
         <source>Recently Loved</source>
-        <translation type="unfinished"/>
+        <translation>Nedávno oblíbené</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="109"/>
         <source>Sorry, we are still loading the charts.</source>
-        <translation type="unfinished"/>
+        <translation>Promiňte, stále ještě se nahrávají žebříčky.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="79"/>
@@ -3921,12 +3921,12 @@ služby Twitter zde zadejte tam zobrazené číslo PIN:</translation>
     <message>
         <location filename="../src/tomahawk/widgets/AccountsToolButton.cpp" line="90"/>
         <source>Configure Accounts</source>
-        <translation type="unfinished"/>
+        <translation>Nastavit účty</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/widgets/AccountWidget.cpp" line="132"/>
         <source>Invite</source>
-        <translation type="unfinished"/>
+        <translation>Pozvat</translation>
     </message>
 </context>
 <context>

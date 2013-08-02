@@ -2190,42 +2190,42 @@ och radiostationer baserat på din personliga profil</translation>
         <translation>Min Musik</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="309"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="312"/>
         <source>SuperCollection</source>
         <translation>Supersamling</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="350"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="354"/>
         <source>Network Activity</source>
         <translation>Nätverksaktivitet</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="335"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="337"/>
         <source>Cloud</source>
         <translation>Moln</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="341"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="343"/>
         <source>Dashboard</source>
         <translation>Dashboard</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="314"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="329"/>
         <source>Recently Played</source>
         <translation>Nyligen Spelade</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="319"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="318"/>
         <source>Charts</source>
         <translation>Topplistor</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="324"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="323"/>
         <source>New Releases</source>
         <translation>Nya släpp</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="333"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="335"/>
         <source>Friends</source>
         <translation>Vänner</translation>
     </message>

@@ -2186,42 +2186,42 @@ Password (OTP)</source>
         <translation>我的音樂</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="309"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="312"/>
         <source>SuperCollection</source>
         <translation>超級收藏</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="350"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="354"/>
         <source>Network Activity</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="335"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="337"/>
         <source>Cloud</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="341"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="343"/>
         <source>Dashboard</source>
         <translation>儀表板</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="314"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="329"/>
         <source>Recently Played</source>
         <translation>最近播放的</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="319"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="318"/>
         <source>Charts</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="324"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="323"/>
         <source>New Releases</source>
         <translation>新版本</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="333"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="335"/>
         <source>Friends</source>
         <translation>朋友</translation>
     </message>

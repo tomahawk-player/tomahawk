@@ -2194,42 +2194,42 @@ käyttäjäradion käyttöönottamiseksi</translation>
         <translation>Oma musiikki</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="309"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="312"/>
         <source>SuperCollection</source>
         <translation>Superkokoelma</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="350"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="354"/>
         <source>Network Activity</source>
         <translation>Verkkotoiminta</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="335"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="337"/>
         <source>Cloud</source>
         <translation>Pilvi</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="341"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="343"/>
         <source>Dashboard</source>
         <translation>Kojelauta</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="314"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="329"/>
         <source>Recently Played</source>
         <translation>Viime aikoina kuunnellut</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="319"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="318"/>
         <source>Charts</source>
         <translation>Listat</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="324"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="323"/>
         <source>New Releases</source>
         <translation>Uudet julkaisut</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="333"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="335"/>
         <source>Friends</source>
         <translation>Kaverit</translation>
     </message>
@@ -3791,17 +3791,17 @@ kappaleen %2%4 %3.</translation>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="88"/>
         <source>Loved Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Tykätyt kappaleet</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="90"/>
         <source>Top Loved</source>
-        <translation type="unfinished"/>
+        <translation>Tykätyimmät</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="93"/>
         <source>Recently Loved</source>
-        <translation type="unfinished"/>
+        <translation>Viime aikoina tykätyt</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="109"/>
