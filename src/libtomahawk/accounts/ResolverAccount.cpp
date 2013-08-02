@@ -22,6 +22,9 @@
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
 #include "jobview/ErrorStatusMessage.h"
+#include "AccountManager.h"
+#include "AtticaManager.h"
+#include "ConfigStorage.h"
 #include "resolvers/ExternalResolver.h"
 #include "resolvers/ExternalResolverGui.h"
 #include "utils/Logger.h"
@@ -301,6 +304,10 @@ ResolverAccount::ResolverAccount( const QString& accountId, const QString& path,
     configuration[ "path" ] = path;
 
     setConfiguration( configuration );
+
+    //just init so this account is tracked by LCS, we'll sync later
+    if ( !AccountManager::instance()->configStorageForAccount( accountId ) )
+        AccountManager::instance()->localConfigStorage()->save( accountId, Account::Configuration() );
 
     init( path );
 

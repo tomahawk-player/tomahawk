@@ -24,7 +24,6 @@
 
 #include <QStringList>
 
-#define TOMAHAWK_KEYCHAINSVC QLatin1String("Tomahawk")
 
 namespace Tomahawk
 {
@@ -32,6 +31,32 @@ namespace Tomahawk
 namespace Accounts
 {
 
+CredentialsStorageKey::CredentialsStorageKey( const QString& service, const QString& key )
+    : m_service( service )
+    , m_key( key )
+{}
+
+bool
+CredentialsStorageKey::operator ==( const CredentialsStorageKey& other ) const
+{
+    return ( m_key == other.m_key ) && ( m_service == other.m_service );
+}
+
+
+bool
+CredentialsStorageKey::operator !=( const CredentialsStorageKey& other ) const
+{
+    return !operator ==( other );
+}
+
+uint
+qHash( const Tomahawk::Accounts::CredentialsStorageKey& key )
+{
+    return qHash( key.service() + key.key() );
+}
+
+
+// CredentialsManager
 
 CredentialsManager::CredentialsManager( QObject* parent )
     : QObject( parent )
@@ -41,75 +66,118 @@ CredentialsManager::CredentialsManager( QObject* parent )
 
 
 void
-CredentialsManager::loadCredentials( QStringList keys )
+CredentialsManager::addService( const QString& service , const QStringList& accountIds )
 {
-    tDebug() << Q_FUNC_INFO << "keys:" << keys;
-    foreach ( QString key, keys )
+    if ( m_services.contains( service ) )
+        m_services.remove( service );
+    m_services.insert( service, accountIds );
+    loadCredentials( service );
+}
+
+
+void
+CredentialsManager::loadCredentials( const QString &service )
+{
+
+    const QStringList& accountIds = m_services.value( service );
+    tDebug() << Q_FUNC_INFO << "keys for service" << service << ":" << accountIds;
+    foreach ( QString key, accountIds )
     {
-        QKeychain::ReadPasswordJob* j = new QKeychain::ReadPasswordJob( TOMAHAWK_KEYCHAINSVC, this );
+        QKeychain::ReadPasswordJob* j = new QKeychain::ReadPasswordJob( service, this );
         j->setKey( key );
         j->setAutoDelete( false );
 #if defined( Q_OS_UNIX ) && !defined( Q_OS_MAC )
         j->setInsecureFallback( true );
 #endif
         connect( j, SIGNAL( finished( QKeychain::Job* ) ),
-                 SLOT( keychainJobFinished( QKeychain::Job* ) ) );
-        m_readJobs << j;
+                    SLOT( keychainJobFinished( QKeychain::Job* ) ) );
+        m_readJobs[ service ] << j;
         j->start();
         tDebug()  << "Launching QtKeychain readJob for" << key;
     }
-
 }
 
 
 QStringList
-CredentialsManager::keys() const
+CredentialsManager::keys( const QString& service ) const
 {
-    QStringList keys = m_credentials.keys();
+    QStringList keys;
+    foreach ( const CredentialsStorageKey& k, m_credentials.keys() )
+    {
+        if ( k.service() == service )
+            keys << k.key();
+    }
     return keys;
 }
 
 
-QVariantHash
-CredentialsManager::credentials( const QString& key ) const
+QStringList
+CredentialsManager::services() const
+{
+    return m_services.keys();
+}
+
+
+QVariant
+CredentialsManager::credentials( const CredentialsStorageKey& key ) const
 {
     return m_credentials.value( key );
 }
 
 
+QVariant
+CredentialsManager::credentials( const QString& serviceName, const QString& key ) const
+{
+    return credentials( CredentialsStorageKey( serviceName, key ) );
+}
+
+
 void
-CredentialsManager::setCredentials( const QString& key, const QVariantHash& value )
+CredentialsManager::setCredentials( const CredentialsStorageKey& csKey, const QVariant& value, bool tryToWriteAsString )
 {
     QMutexLocker locker( &m_mutex );
 
     QKeychain::Job* j;
-    if ( value.isEmpty() )
+    if ( value.isNull() ||
+         ( value.type() == QVariant::Hash && value.toHash().isEmpty() ) ||
+         ( value.type() == QVariant::String && value.toString().isEmpty() ) )
     {
-        if ( !m_credentials.contains( key ) ) //if we don't have any credentials for this key, we bail
+        if ( !m_credentials.contains( csKey ) ) //if we don't have any credentials for this key, we bail
             return;
 
-        m_credentials.remove( key );
+        m_credentials.remove( csKey );
 
-        QKeychain::DeletePasswordJob* dj = new QKeychain::DeletePasswordJob( TOMAHAWK_KEYCHAINSVC, this );
-        dj->setKey( key );
+        QKeychain::DeletePasswordJob* dj = new QKeychain::DeletePasswordJob( csKey.service(), this );
+        dj->setKey( csKey.key() );
         j = dj;
     }
     else
     {
-        if ( value == m_credentials.value( key ) ) //if the credentials haven't actually changed, we bail
+        if ( value == m_credentials.value( csKey ) ) //if the credentials haven't actually changed, we bail
             return;
 
-        m_credentials.insert( key, value );
+        m_credentials.insert( csKey, value );
 
-        QByteArray data;
+        QKeychain::WritePasswordJob* wj = new QKeychain::WritePasswordJob( csKey.service(), this );
+        wj->setKey( csKey.key() );
+
+        Q_ASSERT( value.type() == QVariant::String || value.type() == QVariant::Hash );
+
+        if ( tryToWriteAsString && value.type() == QVariant::String )
         {
-            QDataStream ds( &data, QIODevice::WriteOnly );
-            ds << value;
+            wj->setTextData( value.toString() );
+        }
+        else if ( value.type() == QVariant::Hash )
+        {
+            QByteArray data;
+            {
+                QDataStream ds( &data, QIODevice::WriteOnly );
+                ds << value.toHash();
+            }
+
+            wj->setBinaryData( data );
         }
 
-        QKeychain::WritePasswordJob* wj = new QKeychain::WritePasswordJob( TOMAHAWK_KEYCHAINSVC, this );
-        wj->setKey( key );
-        wj->setBinaryData( data );
         j = wj;
     }
 
@@ -124,6 +192,20 @@ CredentialsManager::setCredentials( const QString& key, const QVariantHash& valu
 
 
 void
+CredentialsManager::setCredentials( const QString& serviceName, const QString& key, const QVariantHash& value )
+{
+    setCredentials( CredentialsStorageKey( serviceName, key ), QVariant( value ) );
+}
+
+
+void
+CredentialsManager::setCredentials( const QString& serviceName, const QString& key, const QString& value )
+{
+    setCredentials( CredentialsStorageKey( serviceName, key ), QVariant( value ), true );
+}
+
+
+void
 CredentialsManager::keychainJobFinished( QKeychain::Job* j )
 {
     tDebug() << Q_FUNC_INFO;
@@ -133,22 +215,31 @@ CredentialsManager::keychainJobFinished( QKeychain::Job* j )
         {
             tDebug() << "QtKeychain readJob for" << readJob->key() << "finished without errors";
 
-            QVariantHash creds;
-            QDataStream dataStream( readJob->binaryData() );
-            dataStream >> creds;
+            QVariant creds;
+            if ( !readJob->textData().isEmpty() )
+            {
+                creds = QVariant( readJob->textData() );
+            }
+            else //must be a QVH
+            {
+                QDataStream dataStream( readJob->binaryData() );
+                QVariantHash hash;
+                dataStream >> hash;
+                creds = QVariant( hash );
+            }
 
-            m_credentials.insert( readJob->key(), creds );
+            m_credentials.insert( CredentialsStorageKey( readJob->service(), readJob->key() ), creds );
         }
         else
         {
             tDebug() << "QtKeychain readJob for" << readJob->key() << "finished with error:" << j->error() << j->errorString();
         }
 
-        m_readJobs.removeOne( readJob );
+        m_readJobs[ readJob->service() ].removeOne( readJob );
 
-        if ( m_readJobs.isEmpty() )
+        if ( m_readJobs[ readJob->service() ].isEmpty() )
         {
-            emit ready();
+            emit serviceReady( readJob->service() );
         }
     }
     else if ( QKeychain::WritePasswordJob* writeJob = qobject_cast< QKeychain::WritePasswordJob* >( j ) )
@@ -163,7 +254,6 @@ CredentialsManager::keychainJobFinished( QKeychain::Job* j )
     }
     j->deleteLater();
 }
-
 
 } //namespace Accounts
 

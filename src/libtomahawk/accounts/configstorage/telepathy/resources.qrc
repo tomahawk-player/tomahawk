@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/telepathy">
+        <file>kde.png</file>
+    </qresource>
+</RCC>

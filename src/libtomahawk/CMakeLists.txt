@@ -222,6 +222,8 @@ list(APPEND libSources
     accounts/AccountFactoryWrapper.cpp
     accounts/AccountFactoryWrapperDelegate.cpp
     accounts/AccountConfigWidget.cpp
+    accounts/ConfigStorage.cpp
+    accounts/LocalConfigStorage.cpp
 
     accounts/spotify/SpotifyAccount.cpp
     accounts/spotify/SpotifyAccountConfig.cpp
@@ -361,13 +363,15 @@ list(APPEND libSources
     utils/TomahawkCache.cpp
     utils/GuiHelpers.cpp
     utils/WeakObjectHash.cpp
-
+    utils/PluginLoader.cpp
 
     thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.cpp
     thirdparty/kdsingleapplicationguard/kdsharedmemorylocker.cpp
     thirdparty/kdsingleapplicationguard/kdtoolsglobal.cpp
     thirdparty/kdsingleapplicationguard/kdlockedsharedmemorypointer.cpp
 )
+
+add_subdirectory( accounts/configstorage )
 
 IF(LIBLASTFM_FOUND)
     include_directories( ${LIBLASTFM_INCLUDE_DIRS} )

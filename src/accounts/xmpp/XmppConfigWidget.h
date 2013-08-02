@@ -56,6 +56,7 @@ signals:
 
 private slots:
     void onCheckJidExists( const QString& jid );
+    void launchExternalConfigDialog();
 
 private:
     Ui::XmppConfigWidget *m_ui;

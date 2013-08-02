@@ -26,17 +26,17 @@
 #include "jobview/JobStatusModel.h"
 #include "utils/Closure.h"
 #include "utils/Logger.h"
+#include "utils/PluginLoader.h"
 
 #include "CredentialsManager.h"
 #include "config.h"
 #include "ResolverAccount.h"
 #include "SourceList.h"
 #include "TomahawkSettings.h"
+#include "LocalConfigStorage.h"
 
-#include <QtCore/QLibrary>
-#include <QtCore/QDir>
-#include <QtCore/QPluginLoader>
-#include <QtCore/QCoreApplication>
+#include <QCoreApplication>
+#include <QSet>
 #include <QTimer>
 
 
@@ -88,7 +88,7 @@ AccountManager::init()
 
     connect( TomahawkSettings::instance(), SIGNAL( changed() ), SLOT( onSettingsChanged() ) );
 
-    loadPluginFactories( findPluginFactories() );
+    loadPluginFactories();
 
     // We include the resolver factory manually, not in a plugin
     ResolverAccountFactory* f = new ResolverAccountFactory();
@@ -99,58 +99,21 @@ AccountManager::init()
 }
 
 
-QStringList
-AccountManager::findPluginFactories()
-{
-    QStringList paths;
-    QList< QDir > pluginDirs;
-
-    QDir appDir( qApp->applicationDirPath() );
-#ifdef Q_WS_MAC
-    if ( appDir.dirName() == "MacOS" )
-    {
-        // Development convenience-hack
-        appDir.cdUp();
-        appDir.cdUp();
-        appDir.cdUp();
-    }
-#endif
-
-    QDir libDir( CMAKE_INSTALL_PREFIX "/lib" );
-
-    QDir lib64Dir( appDir );
-    lib64Dir.cdUp();
-    lib64Dir.cd( "lib64" );
-
-    pluginDirs << appDir << libDir << lib64Dir << QDir( qApp->applicationDirPath() );
-    foreach ( const QDir& pluginDir, pluginDirs )
-    {
-        tDebug() << Q_FUNC_INFO << "Checking directory for plugins:" << pluginDir;
-        foreach ( QString fileName, pluginDir.entryList( QStringList() << "*tomahawk_account_*.so" << "*tomahawk_account_*.dylib" << "*tomahawk_account_*.dll", QDir::Files ) )
-        {
-            if ( fileName.startsWith( "libtomahawk_account" ) )
-            {
-                const QString path = pluginDir.absoluteFilePath( fileName );
-                if ( !paths.contains( path ) )
-                    paths << path;
-            }
-        }
-    }
-
-    return paths;
-}
-
-
 void
-AccountManager::loadPluginFactories( const QStringList& paths )
+AccountManager::loadPluginFactories()
 {
-    foreach ( QString fileName, paths )
+    QHash< QString, QObject* > plugins = Tomahawk::Utils::PluginLoader( "account" ).loadPlugins();
+    foreach ( QObject* plugin, plugins.values() )
     {
-        if ( !QLibrary::isLibrary( fileName ) )
-            continue;
-
-        tDebug() << Q_FUNC_INFO << "Trying to load plugin:" << fileName;
-        loadPluginFactory( fileName );
+        AccountFactory* accountfactory = qobject_cast<AccountFactory*>( plugin );
+        if ( accountfactory )
+        {
+            tDebug() << Q_FUNC_INFO << "Loaded plugin factory:" << plugins.key( plugin ) << accountfactory->factoryId() << accountfactory->prettyName();
+            m_accountFactories[ accountfactory->factoryId() ] = accountfactory;
+        } else
+        {
+            tDebug() << Q_FUNC_INFO << "Loaded invalid plugin.." << plugins.key( plugin );
+        }
     }
 }
 
@@ -181,29 +144,6 @@ AccountManager::factoryForAccount( Account* account ) const
     const QString factoryId = factoryFromId( account->accountId() );
     return m_accountFactories.value( factoryId, 0 );
 }
-
-
-void
-AccountManager::loadPluginFactory( const QString& path )
-{
-    QPluginLoader loader( path );
-    QObject* plugin = loader.instance();
-    if ( !plugin )
-    {
-        tDebug() << Q_FUNC_INFO << "Error loading plugin:" << loader.errorString();
-    }
-
-    AccountFactory* accountfactory = qobject_cast<AccountFactory*>( plugin );
-    if ( accountfactory )
-    {
-        tDebug() << Q_FUNC_INFO << "Loaded plugin factory:" << loader.fileName() << accountfactory->factoryId() << accountfactory->prettyName();
-        m_accountFactories[ accountfactory->factoryId() ] = accountfactory;
-    } else
-    {
-        tDebug() << Q_FUNC_INFO << "Loaded invalid plugin.." << loader.fileName();
-    }
-}
-
 
 
 void
@@ -284,32 +224,57 @@ AccountManager::toggleAccountsConnected()
 void
 AccountManager::loadFromConfig()
 {
-    QStringList accountIds = TomahawkSettings::instance()->accounts();
-
-    qDebug() << "LOADING ALL CREDENTIALS" << accountIds;
-
     m_creds = new CredentialsManager( this );
-    NewClosure( m_creds, SIGNAL( ready() ),
-                this, SLOT( finishLoadingFromConfig( QStringList ) ), accountIds );
-    m_creds->loadCredentials( accountIds );
+
+    ConfigStorage* localCS = new LocalConfigStorage( this );
+    m_configStorageById.insert( localCS->id(), localCS );
+
+    QList< QObject* > configStoragePlugins = Tomahawk::Utils::PluginLoader( "configstorage" ).loadPlugins().values();
+    foreach( QObject* plugin, configStoragePlugins )
+    {
+        ConfigStorage* cs = qobject_cast< ConfigStorage* >( plugin );
+        if ( !cs )
+            continue;
+
+        m_configStorageById.insert( cs->id(), cs );
+    }
+
+    foreach ( ConfigStorage* cs, m_configStorageById )
+    {
+        m_configStorageLoading.insert( cs->id() );
+        NewClosure( cs, SIGNAL( ready() ),
+                    this, SLOT( finishLoadingFromConfig( QString ) ), cs->id() );
+        cs->init();
+    }
 }
 
 
 void
-AccountManager::finishLoadingFromConfig( const QStringList& accountIds )
+AccountManager::finishLoadingFromConfig( const QString& csid )
 {
-    qDebug() << "LOADING ALL ACCOUNTS" << accountIds;
+    if ( m_configStorageLoading.contains( csid ) )
+        m_configStorageLoading.remove( csid );
 
-    foreach ( const QString& accountId, accountIds )
+    if ( !m_configStorageLoading.isEmpty() )
+        return;
+
+    foreach ( const ConfigStorage* cs, m_configStorageById )
     {
-        QString pluginFactory = factoryFromId( accountId );
-        if ( m_accountFactories.contains( pluginFactory ) )
+        QStringList accountIds = cs->accountIds();
+
+        qDebug() << "LOADING ALL ACCOUNTS FOR STORAGE" << cs->metaObject()->className()
+                 << ":" << accountIds;
+
+        foreach ( const QString& accountId, accountIds )
         {
-            Account* account = loadPlugin( accountId );
-            addAccount( account );
+            QString pluginFactory = factoryFromId( accountId );
+            if ( m_accountFactories.contains( pluginFactory ) )
+            {
+                Account* account = loadPlugin( accountId );
+                addAccount( account );
+            }
         }
     }
-
     m_readyForSip = true;
     emit readyForSip(); //we have to yield to TomahawkApp because we don't know if Servent is ready
 }
@@ -346,7 +311,25 @@ AccountManager::loadPlugin( const QString& accountId )
 void
 AccountManager::addAccount( Account* account )
 {
-    tDebug() << Q_FUNC_INFO << "adding account plugin";
+    tDebug() << Q_FUNC_INFO << "adding account plugin" << account->accountId();
+    foreach ( Account* a, m_accounts )
+    {
+        if ( a->credentials()["username"] == account->credentials()["username"] )
+        {
+            ConfigStorage* configStorageForA = configStorageForAccount( a->accountId() );
+            ConfigStorage* configStorageForNewAccount = configStorageForAccount( account->accountId() );
+
+            if ( !configStorageForA || !configStorageForNewAccount || configStorageForA->priority() > configStorageForNewAccount->priority() )
+            {
+                removeAccount( a );
+                break;
+            }
+            else
+            {
+                return;
+            }
+        }
+    }
     m_accounts.append( account );
 
     if ( account->types() & Accounts::SipType )
@@ -444,6 +427,26 @@ AccountManager::zeroconfAccount() const
     }
 
     return 0;
+}
+
+
+ConfigStorage*
+AccountManager::configStorageForAccount( const QString& accountId )
+{
+    foreach ( ConfigStorage* cs, m_configStorageById )
+    {
+        if ( cs->accountIds().contains( accountId ) )
+            return cs;
+    }
+    tLog() << "Warning: defaulting to LocalConfigStorage for account" << accountId;
+    return localConfigStorage();
+}
+
+
+ConfigStorage*
+AccountManager::localConfigStorage()
+{
+    return m_configStorageById.value( "localconfigstorage" );
 }
 
 

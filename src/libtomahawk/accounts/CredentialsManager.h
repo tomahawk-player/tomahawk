@@ -19,9 +19,12 @@
 #ifndef CREDENTIALSMANAGER_H
 #define CREDENTIALSMANAGER_H
 
+#include "DllMacro.h"
+
 #include <QObject>
 #include <QVariantHash>
 #include <QMutex>
+#include <QStringList>
 
 
 namespace QKeychain
@@ -30,49 +33,69 @@ class Job;
 class ReadPasswordJob;
 }
 
-
 namespace Tomahawk
 {
 
 namespace Accounts
 {
 
+class CredentialsStorageKey
+{
+public:
+    explicit CredentialsStorageKey( const QString &service, const QString &key );
+    bool operator ==( const CredentialsStorageKey& other ) const;
+    bool operator !=( const CredentialsStorageKey& other ) const;
+    QString service() const { return m_service; }
+    QString key() const { return m_key; }
+private:
+    QString m_service;
+    QString m_key;
+};
+
 /**
  * @brief The CredentialsManager class holds an in-memory cache of whatever credentials are stored
  * in the system's QtKeychain-accessible credentials storage.
- * After instantiating the class, loadCredentials should be called, and this is the only time a read
- * operation from QtKeychain is performed. When CredentialsManager emits ready(), it can be used for
- * all other operations. The only QtKeychain operations performed at any time after startup are
- * write and delete.
  * This ensures an illusion of synchronous operations for Tomahawk's Account classes, even though all
  * QtKeychain jobs are async.
  */
-class CredentialsManager : public QObject
+class DLLEXPORT CredentialsManager : public QObject
 {
     Q_OBJECT
 public:
     explicit CredentialsManager( QObject* parent = 0 );
     
-    void loadCredentials( QStringList keys );
+    void addService( const QString& service, const QStringList& accountIds );
 
-    QStringList keys() const;
+    QStringList keys( const QString& service ) const;
+    QStringList services() const;
 
-    QVariantHash credentials( const QString& key ) const;
-    void setCredentials( const QString& key, const QVariantHash& value );
+    QVariant credentials( const QString& serviceName, const QString& key ) const; //returns QString or QVH
+    void setCredentials( const QString& serviceName, const QString& key, const QVariantHash& value );
+    void setCredentials( const QString& serviceName, const QString& key, const QString& value );
 
 signals:
-    void ready();
+    void serviceReady( const QString& service );
 
 private slots:
+    void loadCredentials( const QString& service );
+
     void keychainJobFinished( QKeychain::Job* );
 
+protected:
+    QVariant credentials( const CredentialsStorageKey& key ) const;
+    void setCredentials( const CredentialsStorageKey& key, const QVariant& value, bool tryToWriteAsString = false );
+
 private:
-    QHash< QString, QVariantHash > m_credentials;
-    QList< QKeychain::ReadPasswordJob* > m_readJobs;
+    QHash< QString, QStringList > m_services;
+    QHash< CredentialsStorageKey, QVariant > m_credentials;
+    QHash< QString, QList< QKeychain::ReadPasswordJob* > > m_readJobs;
     QMutex m_mutex;
 };
+
+uint qHash( const Tomahawk::Accounts::CredentialsStorageKey& key );
 
 } //namespace Accounts
 
 } //namespace Tomahawk
+
 #endif // CREDENTIALSMANAGER_H

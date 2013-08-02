@@ -38,6 +38,7 @@ option(BUILD_GUI "Build Tomahawk with GUI" ON)
 option(BUILD_RELEASE "Generate TOMAHAWK_VERSION without GIT info" OFF)
 option(BUILD_TESTS "Build Tomahawk with unit tests" ON)
 option(BUILD_HATCHET "Build the Hatchet plugin" OFF)
+option(BUILD_WITH_QT4 "Build Tomahawk with Qt4 no matter if Qt5 was found" ON)
 
 option(WITH_BREAKPAD "Build with breakpad integration" ON)
 option(WITH_CRASHREPORTER "Build with CrashReporter" ON)
@@ -266,6 +267,11 @@ macro_log_feature(LIBLASTFM_FOUND "liblastfm" "Qt library for the Last.fm webser
 macro_optional_find_package(QtKeychain 0.1.0)
 macro_log_feature(QTKEYCHAIN_FOUND "QtKeychain" "Provides support for secure credentials storage" "https://github.com/frankosterfeld/qtkeychain" TRUE "" "")
 
+if( UNIX AND NOT APPLE )
+    macro_optional_find_package(TelepathyQt 0.9.3)
+    macro_log_feature(TelepathyQt4_FOUND "Telepathy-Qt" "Telepathy-Qt is a Qt high-level binding for Telepathy, a D-Bus framework for unifying real time communication." FALSE "" "Telepathy-Qt is needed for sharing Jabber/GTalk accounts with Telepathy.\n")
+endif()
+
 # we need pthreads too
 macro_optional_find_package(Threads)
 macro_log_feature(THREADS_FOUND "Threads" "Threading Library" "" TRUE "" "Platform specific library for threading")
@@ -308,8 +314,8 @@ if (WITH_KDE4)
 endif(WITH_KDE4)
 # this was used before we had FindKDE4Installed, just leaving it here to keep the flags
 # for future kde integration
+macro_log_feature(KDE4_FOUND "KDE4" "Provides support for configuring Telepathy Accounts from inside Tomahawk" "https://www.kde.org" FALSE "" "")
 
-# macro_optional_find_package(KDE4)
 IF( KDE4_FOUND )
     IF( CMAKE_C_FLAGS )
         # KDE4 adds and removes some compiler flags that we don't like
