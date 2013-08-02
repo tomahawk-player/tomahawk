@@ -13,7 +13,7 @@ list(APPEND ${TOMAHAWK_WIDGETS_LIBRARY_TARGET}_SOURCES
 )
 
 list(APPEND ${TOMAHAWK_WIDGETS_LIBRARY_TARGET}_UI
-    Dashboard.ui
+    DashboardWidget.ui
     NetworkActivityWidget.ui
     SocialPlaylistWidget.ui
 )

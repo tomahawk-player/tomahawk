@@ -339,16 +339,11 @@ SourcesModel::appendGroups()
     endInsertRows();
 
     // addDynamicPage takes care of begin/endInsertRows itself
-    ViewManager::instance()->addDynamicPage( "dashboard",
-                                            tr( "Dashboard" ),
-                                            ImageRegistry::instance()->icon( RESPATH "images/dashboard.svg" ),
-                                            boost::lambda::bind( boost::lambda::new_ptr< Tomahawk::Widgets::Dashboard >() ),
-                                            1
-    );
+    ViewManager::instance()->addDynamicPage( new Tomahawk::Widgets::Dashboard, Tomahawk::Widgets::DASHBOARD_VIEWPAGE_NAME );
 
     //HACK: this may not belong here, but adding the pages probably doesn't belong here either
     //TODO: find a good place for this
-    ViewManager::instance()->showDynamicPage("dashboard");
+    ViewManager::instance()->showDynamicPage( Tomahawk::Widgets::DASHBOARD_VIEWPAGE_NAME );
 
     ViewManager::instance()->addDynamicPage("network_activity",
                                             tr( "Network Activity" ),

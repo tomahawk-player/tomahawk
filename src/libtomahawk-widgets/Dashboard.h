@@ -20,17 +20,18 @@
 #ifndef DASHBOARD_H
 #define DASHBOARD_H
 
-#include <QWidget>
-#include <QListWidgetItem>
-#include <QStyledItemDelegate>
-
 #include "PlaylistInterface.h"
 
 #include "Query.h"
 #include "Source.h"
-#include "ViewPage.h"
+#include "ViewPagePlugin.h"
+#include "ViewPageLazyLoader.h"
 
 #include "utils/TomahawkUtilsGui.h"
+
+#include <QWidget>
+#include <QListWidgetItem>
+#include <QStyledItemDelegate>
 
 #include "WidgetsDllMacro.h"
 
@@ -41,7 +42,7 @@ class BasicHeader;
 
 namespace Ui
 {
-    class Dashboard;
+    class DashboardWidget;
 }
 
 namespace Tomahawk
@@ -49,31 +50,16 @@ namespace Tomahawk
 namespace Widgets
 {
 
-class TOMAHAWK_WIDGETS_EXPORT Dashboard : public QWidget, public Tomahawk::ViewPage
+
+class DashboardWidget : public QWidget
 {
 Q_OBJECT
 
+friend class Dashboard;
+
 public:
-    Dashboard( QWidget* parent = 0 );
-    virtual ~Dashboard();
-
-    virtual QWidget* widget() { return this; }
-    virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
-
-    virtual QString title() const { return tr( "Dashboard" ); }
-    virtual QString description() const { return tr( "An overview of your recent activity" ); }
-    virtual QPixmap pixmap() const;
-
-    virtual bool showInfoBar() const { return true; }
-    virtual bool isBeingPlayed() const;
-
-    virtual bool jumpToCurrentTrack();
-
-protected:
-    void changeEvent( QEvent* e );
-
-signals:
-    void destroyed( QWidget* widget );
+    DashboardWidget( QWidget* parent = 0 );
+    virtual ~DashboardWidget();
 
 public slots:
     void updatePlaylists();
@@ -84,13 +70,43 @@ private slots:
     void onSourceAdded( const Tomahawk::source_ptr& source );
     void onPlaylistActivated( const QModelIndex& );
 
+protected:
+    void changeEvent( QEvent* e );
+
 private:
-    Ui::Dashboard *ui;
+    Ui::DashboardWidget *ui;
 
     RecentlyPlayedModel* m_tracksModel;
     AlbumModel* m_recentAlbumsModel;
     Tomahawk::playlistinterface_ptr m_playlistInterface;
 };
+
+const QString DASHBOARD_VIEWPAGE_NAME = "dashboard";
+
+class TOMAHAWK_WIDGETS_EXPORT Dashboard : public Tomahawk::ViewPageLazyLoader< DashboardWidget >
+{
+Q_OBJECT
+Q_INTERFACES( Tomahawk::ViewPagePlugin )
+
+public:
+    Dashboard( QWidget* parent = 0 );
+    virtual ~Dashboard();
+
+    virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
+
+    virtual const QString defaultName() { return DASHBOARD_VIEWPAGE_NAME; }
+    virtual QString title() const { return tr( "Dashboard" ); }
+    virtual QString description() const { return tr( "An overview of your recent activity" ); }
+    virtual const QString pixmapPath() const { return ( RESPATH "images/dashboard.svg" ); }
+
+    virtual int sortValue() { return 1; }
+
+    virtual bool showInfoBar() const { return true; }
+    virtual bool isBeingPlayed() const;
+
+    virtual bool jumpToCurrentTrack();
+};
+
 
 }; // Widgets
 }; // Tomahawk
