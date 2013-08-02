@@ -33,7 +33,7 @@
 #include <QListWidgetItem>
 #include <QStyledItemDelegate>
 
-#include "WidgetsDllMacro.h"
+#include "../ViewPageDllMacro.h"
 
 class AlbumModel;
 class RecentlyPlayedModel;
@@ -83,7 +83,7 @@ private:
 
 const QString DASHBOARD_VIEWPAGE_NAME = "dashboard";
 
-class TOMAHAWK_WIDGETS_EXPORT Dashboard : public Tomahawk::ViewPageLazyLoader< DashboardWidget >
+class TOMAHAWK_VIEWPAGE_EXPORT Dashboard : public Tomahawk::ViewPageLazyLoader< DashboardWidget >
 {
 Q_OBJECT
 Q_INTERFACES( Tomahawk::ViewPagePlugin )

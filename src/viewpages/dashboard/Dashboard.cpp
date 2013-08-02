@@ -21,13 +21,14 @@
 #include "Dashboard.h"
 #include "ui_DashboardWidget.h"
 
+#include "libtomahawk-widgets/PlaylistDelegate.h"
+
 #include "ViewManager.h"
 #include "SourceList.h"
 #include "TomahawkSettings.h"
 #include "widgets/RecentPlaylistsModel.h"
 #include "widgets/RecentlyPlayedPlaylistsModel.h"
 #include "MetaPlaylistInterface.h"
-#include "PlaylistDelegate.h"
 #include "audio/AudioEngine.h"
 #include "playlist/AlbumModel.h"
 #include "playlist/RecentlyPlayedModel.h"

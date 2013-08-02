@@ -38,7 +38,6 @@
 #include <QWidget>
 
 #include "WidgetsDllMacro.h"
-#include "Dashboard.h"
 
 
 class PlayableModel;

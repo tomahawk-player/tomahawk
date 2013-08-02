@@ -20,8 +20,9 @@
 
 #include "sourcetree/SourcesModel.h"
 
+#include "../../viewpages/dashboard/Dashboard.h"
+
 #include <libtomahawk-widgets/NetworkActivityWidget.h>
-#include <libtomahawk-widgets/Dashboard.h>
 
 #include "sourcetree/items/ScriptCollectionItem.h"
 #include "sourcetree/items/SourceTreeItem.h"
@@ -44,6 +45,7 @@
 #include "playlist/dynamic/widgets/DynamicWidget.h"
 #include "utils/ImageRegistry.h"
 #include "utils/Logger.h"
+#include "utils/PluginLoader.h"
 
 #include <QMimeData>
 #include <QSize>
@@ -338,19 +340,29 @@ SourcesModel::appendGroups()
 
     endInsertRows();
 
-    // addDynamicPage takes care of begin/endInsertRows itself
-    ViewManager::instance()->addDynamicPage( new Tomahawk::Widgets::Dashboard, Tomahawk::Widgets::DASHBOARD_VIEWPAGE_NAME );
-
-    //HACK: this may not belong here, but adding the pages probably doesn't belong here either
-    //TODO: find a good place for this
-    ViewManager::instance()->showDynamicPage( Tomahawk::Widgets::DASHBOARD_VIEWPAGE_NAME );
-
     ViewManager::instance()->addDynamicPage("network_activity",
                                             tr( "Network Activity" ),
                                             TomahawkUtils::defaultPixmap( TomahawkUtils::NetworkActivity, TomahawkUtils::Original ),
                                             boost::lambda::bind( boost::lambda::new_ptr< Tomahawk::Widgets::NetworkActivityWidget >() ),
                                             2
     );
+
+    QHash< QString, QObject* > plugins = Tomahawk::Utils::PluginLoader( "viewpage" ).loadPlugins();
+    foreach ( QObject* plugin, plugins.values() )
+    {
+        Tomahawk::ViewPagePlugin* viewPagePlugin = qobject_cast< ViewPagePlugin* >( plugin );
+        if ( viewPagePlugin )
+        {
+            tDebug() << Q_FUNC_INFO << "Loaded viewpage plugin:" << plugins.key( plugin );
+            ViewManager::instance()->addDynamicPage( viewPagePlugin );
+        }
+        else
+        {
+            tDebug() << Q_FUNC_INFO << "Loaded invalid plugin:" << plugins.key( plugin );
+        }
+    }
+
+    ViewManager::instance()->showDynamicPage( Tomahawk::Widgets::DASHBOARD_VIEWPAGE_NAME );
 }
 
 void

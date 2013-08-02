@@ -6,14 +6,12 @@ list(APPEND ${TOMAHAWK_WIDGETS_LIBRARY_TARGET}_SOURCES
     PlaylistWidget.cpp
 
     # ViewPages
-    Dashboard.cpp
     NetworkActivityWidget.cpp
     NetworkActivityWorker.cpp
     SocialPlaylistWidget.cpp
 )
 
 list(APPEND ${TOMAHAWK_WIDGETS_LIBRARY_TARGET}_UI
-    DashboardWidget.ui
     NetworkActivityWidget.ui
     SocialPlaylistWidget.ui
 )
