@@ -18,6 +18,7 @@ set( libGuiSources
     DropJob.cpp
     GlobalActionManager.cpp
     ViewPage.cpp
+    ViewPagePlugin.cpp
     ViewManager.cpp
     LatchManager.cpp
     TomahawkSettingsGui.cpp

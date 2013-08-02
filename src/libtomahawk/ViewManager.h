@@ -25,6 +25,7 @@
 #include "PlaylistInterface.h"
 #include "playlist/QueueView.h"
 #include "ViewPage.h"
+#include "ViewPagePlugin.h"
 
 #include <QObject>
 #include <QHash>
@@ -115,6 +116,8 @@ public:
 
     FlexibleView* createPageForList( const QString& title, const QList< Tomahawk::query_ptr >& queries );
 
+    void addDynamicPage( Tomahawk::ViewPagePlugin* viewPage, const QString& pageName = QString() );
+
 signals:
     void filterAvailable( bool b );
 
@@ -196,6 +199,7 @@ private:
     InboxModel* m_inboxModel;
 
     QHash< QString, Tomahawk::ViewPage* > m_dynamicPages;
+    QHash< QString, QPointer< Tomahawk::ViewPagePlugin > > m_dynamicPagePlugins;
     QHash< QString, boost::function< Tomahawk::ViewPage*() > > m_dynamicPagesInstanceLoaders;
 
     QList< Tomahawk::collection_ptr > m_superCollections;
