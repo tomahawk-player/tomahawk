@@ -572,21 +572,21 @@ se s vámi spojil?</translation>
     </message>
 </context>
 <context>
-    <name>Dashboard</name>
+    <name>DashboardWidget</name>
     <message>
-        <location filename="../src/libtomahawk-widgets/Dashboard.ui" line="89"/>
+        <location filename="../src/viewpages/dashboard/DashboardWidget.ui" line="89"/>
         <source>Recently Played Tracks</source>
-        <translation>Nedávno poslouchané skladby</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/Dashboard.ui" line="147"/>
+        <location filename="../src/viewpages/dashboard/DashboardWidget.ui" line="147"/>
         <source>Recent Additions</source>
-        <translation>Nedávné přídavky</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/Dashboard.ui" line="256"/>
+        <location filename="../src/viewpages/dashboard/DashboardWidget.ui" line="256"/>
         <source>Newest Stations &amp; Playlists</source>
-        <translation>Nejnovější stanice a seznamy skladeb</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1531,17 +1531,17 @@ heslo</translation>
         <translation>právě teď</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/Account.cpp" line="38"/>
+        <location filename="../src/libtomahawk/accounts/Account.cpp" line="39"/>
         <source>Friend Finders</source>
         <translation>Hledač přátel</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/Account.cpp" line="40"/>
+        <location filename="../src/libtomahawk/accounts/Account.cpp" line="41"/>
         <source>Music Finders</source>
         <translation>Hledač hudby</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/Account.cpp" line="43"/>
+        <location filename="../src/libtomahawk/accounts/Account.cpp" line="44"/>
         <source>Status Updaters</source>
         <translation>Obnova stavu</translation>
     </message>
@@ -2149,82 +2149,77 @@ heslo</translation>
 <context>
     <name>SourcesModel</name>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="101"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="103"/>
         <source>Group</source>
         <translation>Skupina</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="104"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="106"/>
         <source>Collection</source>
         <translation>Sbírka</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="107"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="109"/>
         <source>Playlist</source>
         <translation>Seznam skladeb</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="110"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="112"/>
         <source>Automatic Playlist</source>
         <translation>Automatický seznam skladeb</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="113"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="115"/>
         <source>Station</source>
         <translation>Stanice</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="302"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="304"/>
         <source>Browse</source>
         <translation>Procházet</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="303"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="305"/>
         <source>Search History</source>
         <translation>Historie hledání</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="305"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="307"/>
         <source>My Music</source>
         <translation>Moje hudba</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="312"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="314"/>
         <source>SuperCollection</source>
         <translation>Supersbírka</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="354"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="344"/>
         <source>Network Activity</source>
         <translation>Činnost sítě</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="337"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="339"/>
         <source>Cloud</source>
         <translation>Mračno</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="343"/>
-        <source>Dashboard</source>
-        <translation>Nástěnka</translation>
-    </message>
-    <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="329"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="331"/>
         <source>Recently Played</source>
         <translation>Nedávno poslouchané</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="318"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="320"/>
         <source>Charts</source>
         <translation>Žebříčky</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="323"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="325"/>
         <source>New Releases</source>
         <translation>Novinky</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="335"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="337"/>
         <source>Friends</source>
         <translation>Přátelé</translation>
     </message>
@@ -2529,27 +2524,27 @@ heslo</translation>
 <context>
     <name>Tomahawk::Accounts::ResolverAccountFactory</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="111"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="114"/>
         <source>Resolver installation error: cannot open bundle.</source>
         <translation>Chyba při instalaci řešitele: Nelze otevřít balík.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="118"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="121"/>
         <source>Resolver installation error: incomplete bundle.</source>
         <translation>Chyba při instalaci řešitele: Neúplný balík.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="157"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="160"/>
         <source>Resolver installation error: bad metadata in bundle.</source>
         <translation>Chyba při instalaci řešitele: Špatná popisná data v balíku.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="195"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="198"/>
         <source>Resolver installation error: platform mismatch.</source>
         <translation>Chyba při instalaci řešitele: Neodpovídající platforma.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="208"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="211"/>
         <source>Resolver installation error: Tomahawk %1 or newer is required.</source>
         <translation>Chyba při instalaci řešitele: Je požadován Tomahawk %1 nebo novější.</translation>
     </message>
@@ -2637,6 +2632,19 @@ heslo</translation>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.h" line="72"/>
         <source>Play music from and sync your playlists with Spotify Premium</source>
         <translation>Přehrávat hudbu a seřizovat své seznamy skladeb se Spotify Premium</translation>
+    </message>
+</context>
+<context>
+    <name>Tomahawk::Accounts::TelepathyConfigStorage</name>
+    <message>
+        <location filename="../src/libtomahawk/accounts/configstorage/telepathy/TelepathyConfigStorage.cpp" line="77"/>
+        <source>the KDE instant messaging framework</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/accounts/configstorage/telepathy/TelepathyConfigStorage.cpp" line="94"/>
+        <source>KDE Instant Messaging Accounts</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2787,17 +2795,22 @@ Měl byste ještě jednou zkusit ověření pravosti.</translation>
 <context>
     <name>Tomahawk::Accounts::XmppConfigWidget</name>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="123"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="73"/>
+        <source>Account provided by %1.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="157"/>
         <source>You forgot to enter your username!</source>
         <translation>e zadat své uživatelské jméno!</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="131"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="165"/>
         <source>Your Xmpp Id should look like an email address</source>
         <translation>Váš identifikátor XMPP by měl vypadat jako adresa e-mailu</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="137"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="171"/>
         <source>
 
 Example:
@@ -3755,19 +3768,22 @@ Zkuste vyladit filtry pro nové písně.</translation>
 <context>
     <name>Tomahawk::Widgets::Dashboard</name>
     <message>
-        <location filename="../src/libtomahawk-widgets/Dashboard.cpp" line="251"/>
-        <source>No recently created playlists in your network.</source>
-        <translation>Ve vaší síti nejsou žádné nedávno vytvořené seznamy skladeb.</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk-widgets/Dashboard.h" line="63"/>
+        <location filename="../src/viewpages/dashboard/Dashboard.h" line="98"/>
         <source>Dashboard</source>
         <translation>Nástěnka</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/Dashboard.h" line="64"/>
+        <location filename="../src/viewpages/dashboard/Dashboard.h" line="99"/>
         <source>An overview of your recent activity</source>
         <translation>Přehled vaší poslední činnosti</translation>
+    </message>
+</context>
+<context>
+    <name>Tomahawk::Widgets::DashboardWidget</name>
+    <message>
+        <location filename="../src/viewpages/dashboard/Dashboard.cpp" line="263"/>
+        <source>No recently created playlists in your network.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -3834,12 +3850,12 @@ Zkuste vyladit filtry pro nové písně.</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="540"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="539"/>
         <source>My Collection</source>
         <translation>Moje sbírka</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="724"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="723"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>Automatické zjištění vnější adresy IP se nezdařilo.</translation>
     </message>
@@ -4489,72 +4505,77 @@ Lyrics for &quot;%1&quot; by %2:
 <context>
     <name>XmppConfigWidget</name>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="14"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="20"/>
         <source>Xmpp Configuration</source>
         <translation>Nastavení XMPP</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="52"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="58"/>
         <source>Configure this Xmpp account</source>
         <translation>Nastavit tento účet u XMPP</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="89"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="104"/>
         <source>Enter your Xmpp login to connect with your friends using Tomahawk!</source>
         <translation>Zadejte své přihlášení u Xmpp a spojte se pomocí Tomahawku s vašimi přáteli!</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="111"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="196"/>
+        <source>Configure</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="211"/>
         <source>Login Information</source>
         <translation>Informace přihlášení</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="131"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="231"/>
         <source>Xmpp ID:</source>
         <translation>Uživatel XMPP:</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="147"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="247"/>
         <source>e.g. user@example.com</source>
         <translation>např. uživatel@příklad.cz</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="160"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="260"/>
         <source>Password:</source>
         <translation>Heslo:</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="188"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="288"/>
         <source>An account with this name already exists!</source>
         <translation>Ǔčet se stejným názvem už existuje!</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="210"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="310"/>
         <source>Advanced Xmpp Settings</source>
         <translation>Pokročilá nastavení XMPP</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="230"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="330"/>
         <source>Server:</source>
         <translation>Server:</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="253"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="353"/>
         <source>Port:</source>
         <translation>Přípojka:</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="299"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="399"/>
         <source>Lots of servers don&apos;t support this (e.g. GTalk, jabber.org)</source>
         <translation>Mnoho serverů toto nepodporuje (např. GTalk, jabber.org)</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="302"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="402"/>
         <source>Publish currently playing track</source>
         <translation>Zveřejnit nyní přehrávanou skladbu</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="309"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="409"/>
         <source>Enforce secure connection</source>
         <translation>Vynutit bezpečné spojení</translation>
     </message>

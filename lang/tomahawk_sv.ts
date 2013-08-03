@@ -572,21 +572,21 @@ ansluta och strömma från dig?</translation>
     </message>
 </context>
 <context>
-    <name>Dashboard</name>
+    <name>DashboardWidget</name>
     <message>
-        <location filename="../src/libtomahawk-widgets/Dashboard.ui" line="89"/>
+        <location filename="../src/viewpages/dashboard/DashboardWidget.ui" line="89"/>
         <source>Recently Played Tracks</source>
-        <translation>Nyligen uppspelade spår</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/Dashboard.ui" line="147"/>
+        <location filename="../src/viewpages/dashboard/DashboardWidget.ui" line="147"/>
         <source>Recent Additions</source>
-        <translation>Nyligen tillagda</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/Dashboard.ui" line="256"/>
+        <location filename="../src/viewpages/dashboard/DashboardWidget.ui" line="256"/>
         <source>Newest Stations &amp; Playlists</source>
-        <translation>Nyaste Stationer och Spellistor</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1530,17 +1530,17 @@ Password (OTP)</source>
         <translation>precis nyss</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/Account.cpp" line="38"/>
+        <location filename="../src/libtomahawk/accounts/Account.cpp" line="39"/>
         <source>Friend Finders</source>
         <translation>Hitta vänner</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/Account.cpp" line="40"/>
+        <location filename="../src/libtomahawk/accounts/Account.cpp" line="41"/>
         <source>Music Finders</source>
         <translation>Hitta musik</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/Account.cpp" line="43"/>
+        <location filename="../src/libtomahawk/accounts/Account.cpp" line="44"/>
         <source>Status Updaters</source>
         <translation>Status uppdaterare</translation>
     </message>
@@ -2150,82 +2150,77 @@ och radiostationer baserat på din personliga profil</translation>
 <context>
     <name>SourcesModel</name>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="101"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="103"/>
         <source>Group</source>
         <translation>Grupp</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="104"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="106"/>
         <source>Collection</source>
         <translation>Samling</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="107"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="109"/>
         <source>Playlist</source>
         <translation>Spellista</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="110"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="112"/>
         <source>Automatic Playlist</source>
         <translation>Automatisk spellista</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="113"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="115"/>
         <source>Station</source>
         <translation>Station</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="302"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="304"/>
         <source>Browse</source>
         <translation>Bläddra</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="303"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="305"/>
         <source>Search History</source>
         <translation>Sökhistorik</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="305"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="307"/>
         <source>My Music</source>
         <translation>Min Musik</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="312"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="314"/>
         <source>SuperCollection</source>
         <translation>Supersamling</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="354"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="344"/>
         <source>Network Activity</source>
         <translation>Nätverksaktivitet</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="337"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="339"/>
         <source>Cloud</source>
         <translation>Moln</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="343"/>
-        <source>Dashboard</source>
-        <translation>Dashboard</translation>
-    </message>
-    <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="329"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="331"/>
         <source>Recently Played</source>
         <translation>Nyligen Spelade</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="318"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="320"/>
         <source>Charts</source>
         <translation>Topplistor</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="323"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="325"/>
         <source>New Releases</source>
         <translation>Nya släpp</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="335"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="337"/>
         <source>Friends</source>
         <translation>Vänner</translation>
     </message>
@@ -2530,27 +2525,27 @@ och radiostationer baserat på din personliga profil</translation>
 <context>
     <name>Tomahawk::Accounts::ResolverAccountFactory</name>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="111"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="114"/>
         <source>Resolver installation error: cannot open bundle.</source>
         <translation>Resolver-installationsfel: Det går inte öppna paketet</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="118"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="121"/>
         <source>Resolver installation error: incomplete bundle.</source>
         <translation>Resolver-installationsfel: Ofullständigt paket</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="157"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="160"/>
         <source>Resolver installation error: bad metadata in bundle.</source>
         <translation>Resolver-installationsfel: Felaktig metadata i paketet</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="195"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="198"/>
         <source>Resolver installation error: platform mismatch.</source>
         <translation>Resolver-installationsfel: Plattformarna stämmer inte överens</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="208"/>
+        <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="211"/>
         <source>Resolver installation error: Tomahawk %1 or newer is required.</source>
         <translation>Resolver-installationsfel: Tomahawk %1 eller nyare krävs</translation>
     </message>
@@ -2638,6 +2633,19 @@ och radiostationer baserat på din personliga profil</translation>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.h" line="72"/>
         <source>Play music from and sync your playlists with Spotify Premium</source>
         <translation>Spela musik från, och synca dina spellistor med Spotify Premium</translation>
+    </message>
+</context>
+<context>
+    <name>Tomahawk::Accounts::TelepathyConfigStorage</name>
+    <message>
+        <location filename="../src/libtomahawk/accounts/configstorage/telepathy/TelepathyConfigStorage.cpp" line="77"/>
+        <source>the KDE instant messaging framework</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/libtomahawk/accounts/configstorage/telepathy/TelepathyConfigStorage.cpp" line="94"/>
+        <source>KDE Instant Messaging Accounts</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2788,17 +2796,22 @@ Försök autentisera igen</translation>
 <context>
     <name>Tomahawk::Accounts::XmppConfigWidget</name>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="123"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="73"/>
+        <source>Account provided by %1.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="157"/>
         <source>You forgot to enter your username!</source>
         <translation>Du glömde ange ditt användarnamn!</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="131"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="165"/>
         <source>Your Xmpp Id should look like an email address</source>
         <translation>Ditt XMPP-id ska se ut som en epostadress</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="137"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="171"/>
         <source>
 
 Example:
@@ -3755,19 +3768,22 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
 <context>
     <name>Tomahawk::Widgets::Dashboard</name>
     <message>
-        <location filename="../src/libtomahawk-widgets/Dashboard.cpp" line="251"/>
-        <source>No recently created playlists in your network.</source>
-        <translation>Det finns ingen nyligen skapad spellista i ditt nätverk</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk-widgets/Dashboard.h" line="63"/>
+        <location filename="../src/viewpages/dashboard/Dashboard.h" line="98"/>
         <source>Dashboard</source>
         <translation>Dashboard</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/Dashboard.h" line="64"/>
+        <location filename="../src/viewpages/dashboard/Dashboard.h" line="99"/>
         <source>An overview of your recent activity</source>
         <translation>En överblick över din senaste aktivitet</translation>
+    </message>
+</context>
+<context>
+    <name>Tomahawk::Widgets::DashboardWidget</name>
+    <message>
+        <location filename="../src/viewpages/dashboard/Dashboard.cpp" line="263"/>
+        <source>No recently created playlists in your network.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -3834,12 +3850,12 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="540"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="539"/>
         <source>My Collection</source>
         <translation>Min samling</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="724"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="723"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>Automatisk extern IP-upptäckt misslyckades</translation>
     </message>
@@ -4491,72 +4507,77 @@ Lyrics for &quot;%1&quot; by %2:
 <context>
     <name>XmppConfigWidget</name>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="14"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="20"/>
         <source>Xmpp Configuration</source>
         <translation>XMPP Konfiguration</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="52"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="58"/>
         <source>Configure this Xmpp account</source>
         <translation>Konfigurera detta XMPP-kontot</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="89"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="104"/>
         <source>Enter your Xmpp login to connect with your friends using Tomahawk!</source>
         <translation>Ange dina XMPP-uppgifter för att kontakta dina vänner med Tomahawk</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="111"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="196"/>
+        <source>Configure</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="211"/>
         <source>Login Information</source>
         <translation>Inloggningsinformation</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="131"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="231"/>
         <source>Xmpp ID:</source>
         <translation>XMPP ID:</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="147"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="247"/>
         <source>e.g. user@example.com</source>
         <translation>t ex användare@exempel.com</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="160"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="260"/>
         <source>Password:</source>
         <translation>Lösenord:</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="188"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="288"/>
         <source>An account with this name already exists!</source>
         <translation>Ett konto med det namnet finns redan!</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="210"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="310"/>
         <source>Advanced Xmpp Settings</source>
         <translation>Avancerade XMPP-inställningar</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="230"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="330"/>
         <source>Server:</source>
         <translation>Server:</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="253"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="353"/>
         <source>Port:</source>
         <translation>Port:</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="299"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="399"/>
         <source>Lots of servers don&apos;t support this (e.g. GTalk, jabber.org)</source>
         <translation>Många servrar stödjer inte detta (t ex GTalk eller Jabber.org)</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="302"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="402"/>
         <source>Publish currently playing track</source>
         <translation>Publicera låt</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="309"/>
+        <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="409"/>
         <source>Enforce secure connection</source>
         <translation>Tvinga säker anslutning</translation>
     </message>
