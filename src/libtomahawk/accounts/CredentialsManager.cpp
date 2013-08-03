@@ -213,7 +213,8 @@ CredentialsManager::keychainJobFinished( QKeychain::Job* j )
     {
         if ( readJob->error() == QKeychain::NoError )
         {
-            tDebug() << "QtKeychain readJob for" << readJob->key() << "finished without errors";
+            tDebug() << "QtKeychain readJob for" << readJob->service() << "/"
+                     << readJob->key() << "finished without errors";
 
             QVariant creds;
             if ( !readJob->textData().isEmpty() )
@@ -232,7 +233,7 @@ CredentialsManager::keychainJobFinished( QKeychain::Job* j )
         }
         else
         {
-            tDebug() << "QtKeychain readJob for" << readJob->key() << "finished with error:" << j->error() << j->errorString();
+            tDebug() << "QtKeychain readJob for" << readJob->service() << "/" << readJob->key() << "finished with error:" << j->error() << j->errorString();
         }
 
         m_readJobs[ readJob->service() ].removeOne( readJob );
@@ -244,12 +245,12 @@ CredentialsManager::keychainJobFinished( QKeychain::Job* j )
     }
     else if ( QKeychain::WritePasswordJob* writeJob = qobject_cast< QKeychain::WritePasswordJob* >( j ) )
     {
-        tLog() << Q_FUNC_INFO << "QtKeychain writeJob for" << writeJob->key() << "finished"
+        tLog() << Q_FUNC_INFO << "QtKeychain writeJob for" << writeJob->service() << "/" << writeJob->key() << "finished"
                << ( ( j->error() == QKeychain::NoError ) ? "without error" : j->errorString() );
     }
     else if ( QKeychain::DeletePasswordJob* deleteJob = qobject_cast< QKeychain::DeletePasswordJob* >( j ) )
     {
-        tLog() << Q_FUNC_INFO << "QtKeychain deleteJob for" << deleteJob->key() << "finished"
+        tLog() << Q_FUNC_INFO << "QtKeychain deleteJob for" << deleteJob->service() << "/" << deleteJob->key() << "finished"
                << ( ( j->error() == QKeychain::NoError ) ? "without error" : j->errorString() );
     }
     j->deleteLater();
