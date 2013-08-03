@@ -347,19 +347,11 @@ SourcesModel::appendGroups()
                                             2
     );
 
-    QHash< QString, QObject* > plugins = Tomahawk::Utils::PluginLoader( "viewpage" ).loadPlugins();
-    foreach ( QObject* plugin, plugins.values() )
+    QHash< QString, ViewPagePlugin* > plugins = Tomahawk::Utils::PluginLoader( "viewpage" ).loadPlugins< ViewPagePlugin >();
+    foreach ( ViewPagePlugin* plugin, plugins.values() )
     {
-        Tomahawk::ViewPagePlugin* viewPagePlugin = qobject_cast< ViewPagePlugin* >( plugin );
-        if ( viewPagePlugin )
-        {
-            tDebug() << Q_FUNC_INFO << "Loaded viewpage plugin:" << plugins.key( plugin );
-            ViewManager::instance()->addDynamicPage( viewPagePlugin );
-        }
-        else
-        {
-            tDebug() << Q_FUNC_INFO << "Loaded invalid plugin:" << plugins.key( plugin );
-        }
+
+        ViewManager::instance()->addDynamicPage( plugin );
     }
 
     ViewManager::instance()->showDynamicPage( Tomahawk::Widgets::DASHBOARD_VIEWPAGE_NAME );
