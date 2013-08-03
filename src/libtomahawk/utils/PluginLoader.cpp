@@ -57,6 +57,15 @@ PluginLoader::~PluginLoader()
 }
 
 
+const QString
+PluginLoader::type() const
+{
+    Q_D( const PluginLoader );
+
+    return d->type;
+}
+
+
 const QHash< QString, QObject* > PluginLoader::loadPlugins() const
 {
     tLog() << "Load plugins of type" << d_ptr->type;

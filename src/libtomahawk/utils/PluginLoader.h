@@ -19,6 +19,8 @@
 #ifndef LIBTOMAHAWK_UTILS_PLUGINLOADER_H
 #define LIBTOMAHAWK_UTILS_PLUGINLOADER_H
 
+#include "Logger.h"
+
 #include <QStringList>
 
 #include "DllMacro.h"
@@ -38,6 +40,29 @@ public:
     PluginLoader( const QString& type );
     virtual ~PluginLoader();
 
+    const QString type() const;
+
+    template<typename T> const QHash< QString, T* > loadPlugins()
+    {
+        const QHash< QString, QObject* > plugins = loadPlugins();
+
+        QHash< QString, T* > tPlugins;
+        foreach ( QObject* plugin, plugins.values() )
+        {
+            T* tPlugin = qobject_cast< T* >( plugin );
+            if ( tPlugin )
+            {
+                tDebug() << "PluginLoader(" << type() << "): Loaded valid" << T::staticMetaObject.className() << "from" << plugins.key( plugin );
+                tPlugins.insert( plugins.key( plugin ), tPlugin );
+            }
+            else
+            {
+                tLog() << "PluginLoader(" << type() << "): Loaded invalid" << T::staticMetaObject.className() << "from" << plugins.key( plugin );
+            }
+        }
+
+        return tPlugins;
+    }
     const QHash< QString, QObject* > loadPlugins() const;
 
 private:
