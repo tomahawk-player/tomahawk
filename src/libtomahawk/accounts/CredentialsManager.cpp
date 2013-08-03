@@ -95,6 +95,13 @@ CredentialsManager::loadCredentials( const QString &service )
         j->start();
         tDebug()  << "Launching QtKeychain readJob for" << key;
     }
+
+    if ( m_readJobs[ service ].isEmpty() )
+    {
+        // We did not launch any readJob, so we're done already.
+        emit serviceReady( service );
+    }
+
 }
 
 
