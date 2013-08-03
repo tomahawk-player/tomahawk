@@ -248,7 +248,7 @@ GridView::verifySize()
         scrollbar = 0; //don't count it any more
 
     const int rectWidth = contentsRect().width() - scrollbar - 3;
-    const int itemWidth = scaledX( 120 );
+    const int itemWidth = scaledX( 140 );
     const int itemsPerRow = qMax( 1, qFloor( rectWidth / itemWidth ) );
 
     const int overlapRows = m_model->rowCount( QModelIndex() ) % itemsPerRow;
@@ -288,7 +288,7 @@ GridView::layoutItems()
             scrollbar = 0; //don't count it any more
 
         const int rectWidth = contentsRect().width() - scrollbar - 3;
-        const int itemWidth = scaledX( 120 );
+        const int itemWidth = scaledX( 140 );
         const int itemsPerRow = qMax( 1, qFloor( rectWidth / itemWidth ) );
 
         const int remSpace = rectWidth - ( itemsPerRow * itemWidth );
