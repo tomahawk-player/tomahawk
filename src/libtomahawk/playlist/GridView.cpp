@@ -51,7 +51,6 @@ using namespace Tomahawk;
 
 GridView::GridView( QWidget* parent )
     : QListView( parent )
-    , TomahawkUtils::DpiScaler( this )
     , m_model( 0 )
     , m_proxyModel( 0 )
     , m_delegate( 0 )

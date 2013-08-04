@@ -28,8 +28,6 @@
 #include "PlayableProxyModel.h"
 #include "widgets/OverlayWidget.h"
 #include "DllMacro.h"
-#include "utils/DpiScaler.h"
-
 
 namespace Tomahawk
 {
@@ -41,9 +39,7 @@ class GridItemDelegate;
 class PlayableModel;
 class GridPlaylistInterface;
 
-class DLLEXPORT GridView : public QListView,
-                           public Tomahawk::ViewPage,
-                           private TomahawkUtils::DpiScaler
+class DLLEXPORT GridView : public QListView, public Tomahawk::ViewPage
 {
 Q_OBJECT
 

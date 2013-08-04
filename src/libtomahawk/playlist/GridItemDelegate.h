@@ -24,7 +24,6 @@
 #include <QTimeLine>
 
 #include "DllMacro.h"
-#include "utils/DpiScaler.h"
 
 namespace Tomahawk {
     class PixmapDelegateFader;
@@ -39,7 +38,7 @@ class QTimeLine;
 class PlayableProxyModel;
 class ImageButton;
 
-class DLLEXPORT GridItemDelegate : public QStyledItemDelegate, private TomahawkUtils::DpiScaler
+class DLLEXPORT GridItemDelegate : public QStyledItemDelegate
 {
 Q_OBJECT
 
