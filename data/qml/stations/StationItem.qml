@@ -5,13 +5,10 @@ import "../tomahawkimports"
 Item {
     id: stationItem
 
-    CoverFlip {
+    CoverFlow {
         id: coverView
-        anchors.right: parent.right
-        anchors.top: parent.top
-        height: parent.height
-        width: parent.width
         interactive: false
+        anchors.fill: parent
 
         backgroundColor: scene.color
 
@@ -25,40 +22,6 @@ Item {
         onItemClicked: {
             mainView.playItem(index)
         }
-
-        states: [
-            State {
-                name: "empty"; when: mainView.loading
-                PropertyChanges {
-                    target: coverView
-                    anchors.rightMargin: -coverView.width
-                    anchors.topMargin: - coverView.height
-                    scale: 0
-                }
-            }
-        ]
-        transitions: [
-            Transition {
-                from: "empty"
-                to: "*"
-                NumberAnimation {
-                    properties: "anchors.topMargin,anchors.rightMargin,scale"
-                    duration: 1000
-                    easing.type: Easing.OutQuad
-                }
-            }
-
-        ]
-//                Behavior on anchors.topMargin {
-//                    NumberAnimation { duration: 500 }
-//                }
-//                Behavior on anchors.rightMargin {
-//                    NumberAnimation { duration: 500 }
-//                }
-//                Behavior on scale {
-//                    NumberAnimation { duration: 500 }
-//                }
-
     }
     BusyIndicator {
         id: busyIndicator

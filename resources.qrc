@@ -101,6 +101,7 @@
         <file>data/qml/tomahawkimports/RoundedButton.qml</file>
         <file>data/qml/tomahawkimports/PushButton.qml</file>
         <file>data/qml/tomahawkimports/CoverFlip.qml</file>
+        <file>data/qml/tomahawkimports/CoverFlow.qml</file>
         <file>data/qml/tomahawkimports/BusyIndicator.qml</file>
         <file>data/qml/tomahawkimports/InputBubble.qml</file>
         <file>data/qml/StationView.qml</file>
