@@ -20,11 +20,16 @@ FocusScope {
         }
     }
 
+    Behavior on opacity {
+        NumberAnimation { duration: 200 }
+    }
+
     MouseArea {
         anchors.fill: parent
         anchors.margins: -999999999
         hoverEnabled: root.opacity > 0
         enabled: root.opacity > 0
+        onClicked: root.rejected();
     }
 
     Item {
