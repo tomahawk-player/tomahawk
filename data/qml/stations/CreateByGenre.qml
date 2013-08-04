@@ -83,7 +83,7 @@ Item {
             TagCloud {
                 anchors.fill: parent
                 anchors.margins: parent.width / 6
-                model: allGenres
+                model: styleModel
 
                 onTagClicked: {
                     root.createStation(tag);
