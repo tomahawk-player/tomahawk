@@ -52,8 +52,9 @@ Item {
 
         Row {
             height: artistInputField.height
-            width: parent.width
+            width: Math.min(defaultFontHeight * 30, parent.width)
             spacing: defaultFontHeight * 0.5
+            anchors.horizontalCenter: parent.horizontalCenter
 
             InputField {
                 id: artistInputField

@@ -45,13 +45,12 @@ Item {
 
         HeaderLabel {
             id: headerText
-            anchors.horizontalCenter: parent.horizontalCenter
-            text: "Enter or pick a genre"
+            text: "Enter a genre,"
         }
 
         Row {
-            width: defaultFontHeight * 30
-            height: genreInputField.height
+            width: Math.min(defaultFontHeight * 30, parent.width)
+            height: parent.height * 0.2
             spacing: defaultFontHeight * 0.5
             anchors.horizontalCenter: parent.horizontalCenter
 
@@ -64,16 +63,21 @@ Item {
 
             PushButton {
                 id: createFromInputButton
-                text: "Go!"
+                text: "Create station"
                 height: genreInputField.height
                 enabled: genreInputField.text.length > 2
                 onClicked: createStation(genreInputField.text)
             }
         }
 
+        HeaderLabel {
+            text: "Or, pick one of your most listened genres"
+        }
+
         Item {
-            height: parent.height - headerText.height - genreInputField.height
+            height: parent.height - y
             width: parent.width
+            clip: true
             TagCloud {
                 anchors.fill: parent
                 anchors.margins: parent.width / 6

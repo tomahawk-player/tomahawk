@@ -33,7 +33,7 @@ Item {
                     color: "gray"
                     //text: controlModel.controlAt( index ).summary
                     text: modelData
-                    font.pointSize: 16
+                    font.pixelSize: defaultFontHeight * 1.8
                     anchors.verticalCenter: parent.verticalCenter
                     //anchors.verticalCenterOffset: tagCloud.randomNumber(0, 15)
 
