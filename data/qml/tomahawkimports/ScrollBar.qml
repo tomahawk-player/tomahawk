@@ -11,6 +11,8 @@ Item {
 
     property int margin: defaultFontHeight * 0.25
 
+    property color color: "white"
+
     states: [
         State {
             name: "hidden"; when: !listView.moving
@@ -48,7 +50,7 @@ Item {
         id: background
         anchors.fill: parent
         radius: orientation == Qt.Vertical ? (width/2 - 1) : (height/2 - 1)
-        color: "white"
+        color: scrollBar.color
         opacity: 0.2
         clip: true
         // Size the bar to the required size, depending upon the orientation.
@@ -61,7 +63,7 @@ Item {
             width: orientation == Qt.Vertical ? (parent.width-2) : (pageSize * (scrollBar.width-2))
             height: orientation == Qt.Vertical ? (pageSize * (scrollBar.height-2)) : (parent.height-2)
             radius: orientation == Qt.Vertical ? (width/2 - 1) : (height/2 - 1)
-            color: "white"
+            color: scrollBar.color
             opacity: 1
         }
     }

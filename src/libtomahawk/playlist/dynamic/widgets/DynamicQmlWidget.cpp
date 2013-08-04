@@ -15,6 +15,7 @@
 #include "widgets/DeclarativeCoverArtProvider.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+#include "utils/TomahawkCache.h"
 
 #include <QUrl>
 #include <QSize>
@@ -61,6 +62,8 @@ DynamicQmlWidget::DynamicQmlWidget( const dynplaylist_ptr& playlist, QWidget* pa
     } else {
         // TODO: only load if needed, i.e. the user clicks on start station by artist
         loadArtistCharts();
+
+        rootContext()->setContextProperty("allGenres", TomahawkUtils::Cache::instance()->getData( "EchonesGenerator", "genres"));
     }
 }
 

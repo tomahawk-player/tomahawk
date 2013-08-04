@@ -53,10 +53,12 @@ Item {
             height: parent.height * 0.2
             spacing: defaultFontHeight * 0.5
             anchors.horizontalCenter: parent.horizontalCenter
+            z: 2
 
             InputField {
                 id: genreInputField
                 width: parent.width - createFromInputButton.width - parent.spacing
+                completionModel: allGenres
 
                 onAccepted: createStation(text);
             }
@@ -81,7 +83,7 @@ Item {
             TagCloud {
                 anchors.fill: parent
                 anchors.margins: parent.width / 6
-                model: styleModel
+                model: allGenres
 
                 onTagClicked: {
                     root.createStation(tag);
