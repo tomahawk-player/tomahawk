@@ -31,30 +31,35 @@ FocusScope {
         id: backgroundItem
         anchors.fill: parent
         opacity: 0.9
-        Rectangle {
-            id: arrowRect
-            height: defaultFontHeight / 1.8
-            width: height
-            rotation: 45
-            color: "black"
-            anchors.top: backgroundItem.top
-            x: defaultFontHeight - arrowRect.width/2 + (root.width - defaultFontHeight*2) * arrowPosition
-        }
+
         Rectangle {
             id: background
             anchors.fill: parent
             color: "white"
             border.color: "black"
-            border.width: defaultFontHeight / 8
+            border.width: defaultFontHeight / 10
             radius: defaultFontHeight / 2
             anchors.topMargin: defaultFontHeight / 4
         }
-        Rectangle {
-            height: defaultFontHeight / 2
+
+        Item {
+            clip: true
+            anchors.bottom: backgroundItem.top
+            anchors.bottomMargin: -background.border.width*3
+            height: defaultFontHeight
             width: height
-            rotation: 45
-            color: "white"
-            anchors.centerIn: arrowRect
+            x: defaultFontHeight - arrowRect.width/2 + (root.width - defaultFontHeight*2) * arrowPosition
+            Rectangle {
+                id: arrowRect
+                height: defaultFontHeight / 1.8
+                width: height
+                rotation: 45
+                color: "white"
+                anchors.centerIn: parent
+                anchors.verticalCenterOffset: parent.height/2
+                border.color: "black"
+                border.width: defaultFontHeight / 10
+            }
         }
     }
 

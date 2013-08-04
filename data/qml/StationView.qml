@@ -148,6 +148,7 @@ Rectangle {
         anchors.topMargin: -defaultFontHeight / 2
         z: 2
         opacity: 0
+        arrowPosition: 0.95
 
         onAccepted: {
             mainView.title = inputBubble.inputText
