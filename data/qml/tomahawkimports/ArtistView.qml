@@ -1,16 +1,14 @@
 import QtQuick 1.1
 import tomahawk 1.0
 
-ListView {
+GridView {
     id: root
-
-    property int delegateHeight: defaultFontHeight * 3
-
     signal itemClicked(int index)
+    property int spacing
 
     delegate: Item {
-        width: parent.width
-        height: root.delegateHeight
+        width: root.cellWidth - root.spacing / 2
+        height: root.cellHeight - root.spacing / 2
 
         Rectangle {
             id: background
@@ -41,24 +39,13 @@ ListView {
             ]
         }
 
-        Row {
-            anchors.fill: parent
-            spacing: defaultFontHeight
-
-            CoverImage {
-                id: coverImage
-                height: parent.height
-                width: height
-                showLabels: false
-                artworkId: model.coverID
-            }
-            Text {
-                text: model.artistName
-                color: "white"
-                anchors.verticalCenter: parent.verticalCenter
-                width: parent.width - coverImage.width - parent.spacing
-                elide: Text.ElideRight
-            }
+        CoverImage {
+            id: coverImage
+            height: parent.height
+            width: height
+            showLabels: true
+            artworkId: model.coverID
+            artistName: model.artistName
         }
 
         MouseArea {

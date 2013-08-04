@@ -15,15 +15,39 @@ Item {
 
     Column {
         id: upperColumn
-        anchors.horizontalCenter: parent.horizontalCenter
-        height: parent.height
-        width: defaultFontHeight * 30
-        anchors.bottomMargin: defaultFontHeight
+        anchors.fill: parent
+        anchors.margins: defaultFontHeight
         spacing: defaultFontHeight
 
         HeaderLabel {
             id: headerText
-            text: "Enter or pick an artist"
+            text: "Pick one of your top artists,"
+        }
+
+        Item {
+            height: parent.height - headerText.height*2 - artistInputField.height - parent.spacing * 3
+            width: parent.width
+            ArtistView {
+                id: artistView
+                height: parent.height
+                width: parent.width
+                model: artistChartsModel
+                clip: true
+                cellWidth: defaultFontHeight * 12
+                cellHeight: defaultFontHeight * 12
+                spacing: defaultFontHeight / 2
+
+                onItemClicked: {
+                    createStation(artistChartsModel.itemFromIndex(index).artistName);
+                }
+            }
+            ScrollBar {
+                listView: artistView
+            }
+        }
+
+        HeaderLabel {
+            text: "Or enter an artist name"
         }
 
         Row {
@@ -40,29 +64,9 @@ Item {
 
             PushButton {
                 id: createFromInputButton
-                text: "Go!"
+                text: "Create station"
                 enabled: artistInputField.text.length > 2
                 onClicked: createStation(artistInputField.text)
-            }
-        }
-
-        Item {
-            height: parent.height - headerText.height - artistInputField.height - parent.spacing * 3
-            width: parent.width
-            ArtistView {
-                id: artistView
-                height: parent.height
-                width: parent.width
-                model: artistChartsModel
-                clip: true
-                delegateHeight: defaultFontHeight * 6
-
-                onItemClicked: {
-                    createStation(artistChartsModel.itemFromIndex(index).artistName);
-                }
-            }
-            ScrollBar {
-                listView: artistView
             }
         }
     }
