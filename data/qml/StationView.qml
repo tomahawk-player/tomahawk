@@ -23,7 +23,7 @@ Rectangle {
         subtitle: generator.summary
         showSearchField: false
         showBackButton: stationListView.currentIndex > 0
-        showNextButton: mainView.configured && stationListView.currentIndex > 0
+        showNextButton: mainView.configured && stationListView.currentIndex == 2
         nextButtonText: "Save"
         backButtonText: "Back"
 
@@ -32,11 +32,13 @@ Rectangle {
         onBackPressed: {
             inputBubble.opacity = 0
             stationListView.decrementCurrentIndex()
-            if(stationListView.currentIndex == 1) {
-                subtitle = modeModel.get(stationCreator.modeIndex).headerSubtitle + "..."
-            }
-            if(stationListView.currentIndex == 0) {
+            switch (stationListView.currentIndex) {
+            case 0:
                 subtitle = ""
+                break;
+            case 1:
+                subtitle = modeModel.get(stationCreator.modeIndex).headerSubtitle + "..."
+                break;
             }
         }
         // In our case the next button is the save button
