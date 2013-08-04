@@ -105,7 +105,7 @@ PluginLoader::pluginDirs()
 {
     QList< QDir > pluginDirs;
 
-    QDir appDir( QCoreApplication::instance()->applicationDirPath() );
+    const QDir appDir( QCoreApplication::instance()->applicationDirPath() );
 #ifdef Q_WS_MAC
     if ( appDir.dirName() == "MacOS" )
     {
@@ -116,13 +116,17 @@ PluginLoader::pluginDirs()
     }
 #endif
 
-    QDir libDir( CMAKE_INSTALL_PREFIX "/lib" );
+    QDir installLibDir( CMAKE_INSTALL_PREFIX "/lib" );
+
+    QDir libDir( appDir );
+    libDir.cdUp();
+    libDir.cd( "lib" );
 
     QDir lib64Dir( appDir );
     lib64Dir.cdUp();
     lib64Dir.cd( "lib64" );
 
-    pluginDirs << appDir << libDir << lib64Dir << QDir( qApp->applicationDirPath() );
+    pluginDirs << appDir << installLibDir << libDir << lib64Dir;
     return pluginDirs;
 }
 
