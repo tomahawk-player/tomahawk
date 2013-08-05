@@ -32,6 +32,8 @@
 #include "PlaylistInterface.h"
 #include "Source.h"
 
+#include <qjson/serializer.h>
+
 #include <qtkeychain/keychain.h>
 #include <QDir>
 
@@ -634,11 +636,20 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
 #if defined( Q_OS_UNIX ) && !defined( Q_OS_MAC )
                 j->setInsecureFallback( true );
 #endif
-                QByteArray data;
-                QDataStream ds( &data, QIODevice::WriteOnly );
-                ds << creds;
+                QJson::Serializer serializer;
+                bool ok;
+                QByteArray data = serializer.serialize( creds, &ok );
 
-                j->setBinaryData( data );
+                if ( ok )
+                {
+                    tDebug() << "Performing upgrade for account" << account;
+                }
+                else
+                {
+                    tDebug() << "Upgrade error:" << serializer.errorMessage();
+                }
+
+                j->setTextData( data );
                 j->start();
             }
 

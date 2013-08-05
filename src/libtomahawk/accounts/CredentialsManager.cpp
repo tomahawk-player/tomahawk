@@ -22,6 +22,9 @@
 
 #include <qtkeychain/keychain.h>
 
+#include <qjson/serializer.h>
+#include <qjson/parser.h>
+
 #include <QStringList>
 
 
@@ -176,13 +179,20 @@ CredentialsManager::setCredentials( const CredentialsStorageKey& csKey, const QV
         }
         else if ( value.type() == QVariant::Hash )
         {
-            QByteArray data;
+            QJson::Serializer serializer;
+            bool ok;
+            QByteArray data = serializer.serialize( value.toHash(), &ok );
+
+            if ( ok )
             {
-                QDataStream ds( &data, QIODevice::WriteOnly );
-                ds << value.toHash();
+                tDebug() << "About to write credentials for key" << csKey.key();
+            }
+            else
+            {
+                tDebug() << "Cannot serialize credentials for writing:" << serializer.errorMessage();
             }
 
-            wj->setBinaryData( data );
+            wj->setTextData( data );
         }
 
         j = wj;
@@ -224,16 +234,23 @@ CredentialsManager::keychainJobFinished( QKeychain::Job* j )
                      << readJob->key() << "finished without errors";
 
             QVariant creds;
-            if ( !readJob->textData().isEmpty() )
+            QJson::Parser parser;
+            bool ok;
+
+            creds = parser.parse( readJob->textData().toLatin1(), &ok );
+
+            QVariantMap map = creds.toMap();
+            QVariantHash hash;
+            for ( QVariantMap::const_iterator it = map.constBegin();
+                  it != map.constEnd(); ++it )
+            {
+                hash.insert( it.key(), it.value() );
+            }
+            creds = QVariant( hash );
+
+            if ( !ok || creds.toHash().isEmpty() )
             {
                 creds = QVariant( readJob->textData() );
-            }
-            else //must be a QVH
-            {
-                QDataStream dataStream( readJob->binaryData() );
-                QVariantHash hash;
-                dataStream >> hash;
-                creds = QVariant( hash );
             }
 
             m_credentials.insert( CredentialsStorageKey( readJob->service(), readJob->key() ), creds );
