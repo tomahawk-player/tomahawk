@@ -576,17 +576,17 @@ se s vámi spojil?</translation>
     <message>
         <location filename="../src/viewpages/dashboard/DashboardWidget.ui" line="89"/>
         <source>Recently Played Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Nedávno poslouchané skladby</translation>
     </message>
     <message>
         <location filename="../src/viewpages/dashboard/DashboardWidget.ui" line="147"/>
         <source>Recent Additions</source>
-        <translation type="unfinished"/>
+        <translation>Nedávné přídavky</translation>
     </message>
     <message>
         <location filename="../src/viewpages/dashboard/DashboardWidget.ui" line="256"/>
         <source>Newest Stations &amp; Playlists</source>
-        <translation type="unfinished"/>
+        <translation>Nejnovější stanice a seznamy skladeb</translation>
     </message>
 </context>
 <context>
@@ -2639,12 +2639,12 @@ heslo</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/configstorage/telepathy/TelepathyConfigStorage.cpp" line="77"/>
         <source>the KDE instant messaging framework</source>
-        <translation type="unfinished"/>
+        <translation>Soustava KDE pro okamžitou výměnu zpráv</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/configstorage/telepathy/TelepathyConfigStorage.cpp" line="94"/>
         <source>KDE Instant Messaging Accounts</source>
-        <translation type="unfinished"/>
+        <translation>Účty KDE pro okamžitou výměnu zpráv</translation>
     </message>
 </context>
 <context>
@@ -2797,7 +2797,7 @@ Měl byste ještě jednou zkusit ověření pravosti.</translation>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="73"/>
         <source>Account provided by %1.</source>
-        <translation type="unfinished"/>
+        <translation>Účet poskytován %1.</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="157"/>
@@ -3783,7 +3783,7 @@ Zkuste vyladit filtry pro nové písně.</translation>
     <message>
         <location filename="../src/viewpages/dashboard/Dashboard.cpp" line="263"/>
         <source>No recently created playlists in your network.</source>
-        <translation type="unfinished"/>
+        <translation>Ve vaší síti nejsou žádné nedávno vytvořené seznamy skladeb.</translation>
     </message>
 </context>
 <context>
@@ -4522,7 +4522,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="196"/>
         <source>Configure</source>
-        <translation type="unfinished"/>
+        <translation>Nastavit</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="211"/>
