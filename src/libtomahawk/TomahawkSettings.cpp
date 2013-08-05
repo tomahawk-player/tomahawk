@@ -646,7 +646,7 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
                 }
                 else
                 {
-                    tDebug() << "Upgrade error:" << serializer.errorMessage();
+                    tDebug() << "Upgrade error: cannot serialize credentials to JSON for account" << account;
                 }
 
                 j->setTextData( data );

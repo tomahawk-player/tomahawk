@@ -189,7 +189,7 @@ CredentialsManager::setCredentials( const CredentialsStorageKey& csKey, const QV
             }
             else
             {
-                tDebug() << "Cannot serialize credentials for writing:" << serializer.errorMessage();
+                tDebug() << "Cannot serialize credentials for writing" << csKey.key();
             }
 
             wj->setTextData( data );
