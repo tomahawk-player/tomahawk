@@ -220,12 +220,6 @@ IF( UNIX AND NOT APPLE AND QT_QTDBUS_FOUND )
     SET( WITH_GNOMESHORTCUTHANDLER ON )
 ENDIF( UNIX AND NOT APPLE AND QT_QTDBUS_FOUND  )
 
-macro_optional_find_package(Phonon 4.5.0)
-macro_log_feature(Phonon_FOUND "Phonon" "The Phonon multimedia library" "http://phonon.kde.org" TRUE "" "")
-if(Phonon_FOUND)
-    message(STATUS "Phonon found; ensure that phonon-vlc is at least 0.4")
-endif()
-
 macro_optional_find_package(Echonest 2.1.0)
 macro_log_feature(ECHONEST_FOUND "Echonest" "Qt library for communicating with The Echo Nest" "http://projects.kde.org/libechonest" TRUE "" "libechonest 2.1.0 is needed for dynamic playlists and the infosystem")
 
@@ -312,9 +306,16 @@ if (WITH_KDE4)
     macro_optional_find_package(KDE4)
     macro_optional_find_package(KDE4Installed)
 endif(WITH_KDE4)
-# this was used before we had FindKDE4Installed, just leaving it here to keep the flags
-# for future kde integration
 macro_log_feature(KDE4_FOUND "KDE4" "Provides support for configuring Telepathy Accounts from inside Tomahawk" "https://www.kde.org" FALSE "" "")
+
+if(NOT Phonon_FOUND)
+  macro_optional_find_package(Phonon 4.5.0)
+endif()
+macro_log_feature(Phonon_FOUND "Phonon" "The Phonon multimedia library" "http://phonon.kde.org" TRUE "" "")
+
+if(Phonon_FOUND)
+    message(STATUS "Phonon found; ensure that phonon-vlc is at least 0.4")
+endif()
 
 IF( KDE4_FOUND )
     IF( CMAKE_C_FLAGS )
