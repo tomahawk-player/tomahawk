@@ -51,8 +51,10 @@ public:
 
     virtual unsigned int priority() const = 0; //LocalConfigStorage has 0, everything else comes later
 
+    virtual void deduplicateFrom( const ConfigStorage* other ) = 0;
+
     virtual void save( const QString& accountId, const Account::Configuration& cfg ) = 0;
-    virtual void load( const QString& accountId, Account::Configuration& cfg ) = 0;
+    virtual void load( const QString& accountId, Account::Configuration& cfg ) const = 0;
     virtual void remove( const QString& accountId ) = 0;
 
 signals:

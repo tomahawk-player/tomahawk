@@ -258,6 +258,30 @@ AccountManager::finishLoadingFromConfig( const QString& csid )
     if ( !m_configStorageLoading.isEmpty() )
         return;
 
+    // First we prioritize available ConfigStorages
+    QList< ConfigStorage* > csByPriority;
+    foreach ( ConfigStorage* cs, m_configStorageById )
+    {
+        int i = 0;
+        for ( ; i < csByPriority.length(); ++i )
+        {
+            if ( csByPriority.at( i )->priority() > cs->priority() )
+                break;
+        }
+        csByPriority.insert( i, cs );
+    }
+
+    // And we deduplicate
+    for ( int i = 1; i < csByPriority.length(); ++i )
+    {
+        for ( int j = 0; j < i; ++j )
+        {
+            ConfigStorage* prioritized = csByPriority.value( j );
+            ConfigStorage* trimming    = csByPriority.value( i );
+            trimming->deduplicateFrom( prioritized );
+        }
+    }
+
     foreach ( const ConfigStorage* cs, m_configStorageById )
     {
         QStringList accountIds = cs->accountIds();
@@ -312,24 +336,6 @@ void
 AccountManager::addAccount( Account* account )
 {
     tDebug() << Q_FUNC_INFO << "adding account plugin" << account->accountId();
-    foreach ( Account* a, m_accounts )
-    {
-        if ( a->credentials()["username"] == account->credentials()["username"] )
-        {
-            ConfigStorage* configStorageForA = configStorageForAccount( a->accountId() );
-            ConfigStorage* configStorageForNewAccount = configStorageForAccount( account->accountId() );
-
-            if ( !configStorageForA || !configStorageForNewAccount || configStorageForA->priority() > configStorageForNewAccount->priority() )
-            {
-                removeAccount( a );
-                break;
-            }
-            else
-            {
-                return;
-            }
-        }
-    }
     m_accounts.append( account );
 
     if ( account->types() & Accounts::SipType )

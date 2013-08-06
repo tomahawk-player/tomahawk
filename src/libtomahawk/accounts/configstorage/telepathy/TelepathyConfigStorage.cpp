@@ -50,6 +50,8 @@ Tomahawk::Accounts::TelepathyConfigStorage::TelepathyConfigStorage( QObject* par
     , m_credentialsServiceName( "telepathy-kde" )
 {
     tDebug() << Q_FUNC_INFO;
+    m_allowedPrefixes << "xmppaccount_"
+                      << "googleaccount_";
     loadConfigWidgetPlugins();
 }
 
@@ -179,13 +181,10 @@ Tomahawk::Accounts::TelepathyConfigStorage::telepathyPathToAccountId( const QStr
 
 
 QString
-Tomahawk::Accounts::TelepathyConfigStorage::accountIdToTelepathyPath( const QString& accountId )
+Tomahawk::Accounts::TelepathyConfigStorage::accountIdToTelepathyPath( const QString& accountId ) const
 {
-    QStringList allowedPrefixes;
-    allowedPrefixes << "xmppaccount_"
-                    << "googleaccount_";
     QString r = accountId;
-    foreach ( QString prefix, allowedPrefixes )
+    foreach ( QString prefix, m_allowedPrefixes )
     {
         if ( r.startsWith( prefix ) )
             r.remove( 0, prefix.length() );
@@ -209,6 +208,64 @@ Tomahawk::Accounts::TelepathyConfigStorage::priority() const
 
 
 void
+Tomahawk::Accounts::TelepathyConfigStorage::deduplicateFrom( const Tomahawk::Accounts::ConfigStorage* other )
+{
+    tDebug() << "MY    ACCOUNTS:" << accountIds();
+    tDebug() << "OTHER ACCOUNTS:" << other->accountIds();
+
+    QSet< QString > toDelete;
+    foreach ( QString myId, m_accountIds )
+    {
+        QString myUsername;
+        {
+            Account::Configuration cfg;
+            load( myId, cfg );
+            myUsername = cfg.credentials[ "username" ].toString();
+        }
+
+        if ( myUsername.isEmpty() )
+        {
+            toDelete.insert( myId );
+            continue;
+        }
+
+        foreach ( QString otherId, other->accountIds() )
+        {
+            bool typesMatch = false;
+            foreach ( QString prefix, m_allowedPrefixes )
+            {
+                if ( otherId.startsWith( prefix ) && myId.startsWith( prefix ) )
+                {
+                    typesMatch = true;
+                    break;
+                }
+            }
+            if ( !typesMatch )
+                continue;
+
+            QString otherUsername;
+            {
+                Account::Configuration cfg;
+                other->load( otherId, cfg );
+                otherUsername = cfg.credentials[ "username" ].toString();
+            }
+
+            if ( myUsername == otherUsername )
+            {
+                toDelete.insert( myId );
+                break;
+            }
+        }
+    }
+
+    foreach ( QString id, toDelete )
+    {
+        m_accountIds.removeAll( id );
+    }
+}
+
+
+void
 Tomahawk::Accounts::TelepathyConfigStorage::save( const QString& accountId, const Account::Configuration& cfg )
 {
     TomahawkSettings* s = TomahawkSettings::instance();
@@ -224,7 +281,7 @@ Tomahawk::Accounts::TelepathyConfigStorage::save( const QString& accountId, cons
 
 
 void
-Tomahawk::Accounts::TelepathyConfigStorage::load( const QString& accountId, Account::Configuration& cfg )
+Tomahawk::Accounts::TelepathyConfigStorage::load( const QString& accountId, Account::Configuration& cfg ) const
 {
     TomahawkSettings* s = TomahawkSettings::instance();
     s->beginGroup( "externalaccounts/" + accountId );

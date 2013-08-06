@@ -57,8 +57,10 @@ public:
 
     unsigned int priority() const;
 
+    void deduplicateFrom( const ConfigStorage* other );
+
     virtual void save( const QString& accountId, const Account::Configuration& cfg );
-    virtual void load( const QString& accountId, Account::Configuration& cfg );
+    virtual void load( const QString& accountId, Account::Configuration& cfg ) const;
     virtual void remove( const QString& accountId );
 
 private slots:
@@ -69,7 +71,7 @@ private:
     void loadConfigWidgetPlugins();
 
     QString telepathyPathToAccountId( const QString& objectPath, const QString& telepathyServiceName );
-    QString accountIdToTelepathyPath( const QString& accountId );
+    QString accountIdToTelepathyPath( const QString& accountId ) const;
 
     const QString m_credentialsServiceName;
     QStringList m_accountIds;
@@ -77,6 +79,7 @@ private:
     QList< TelepathyConfigStorageConfigWidgetPlugin* > m_configWidgetPlugins;
 
     static TelepathyConfigStorage* s_instance;
+    QStringList m_allowedPrefixes;
 };
 
 } //namespace Accounts

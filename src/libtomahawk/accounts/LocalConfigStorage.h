@@ -41,8 +41,10 @@ public:
 
     unsigned int priority() const;
 
+    void deduplicateFrom( const ConfigStorage* other );
+
     virtual void save( const QString& accountId, const Account::Configuration& cfg );
-    virtual void load( const QString& accountId, Account::Configuration& cfg );
+    virtual void load( const QString& accountId, Account::Configuration& cfg ) const;
     virtual void remove( const QString& accountId );
 
 

@@ -88,6 +88,14 @@ LocalConfigStorage::priority() const
 
 
 void
+LocalConfigStorage::deduplicateFrom( const ConfigStorage* other)
+{
+    Q_UNUSED( other )
+    // I'm priority 0 so I don't have to deduplicate anything
+}
+
+
+void
 LocalConfigStorage::save( const QString& accountId, const Account::Configuration& cfg )
 {
     TomahawkSettings* s = TomahawkSettings::instance();
@@ -109,7 +117,7 @@ LocalConfigStorage::save( const QString& accountId, const Account::Configuration
 
 
 void
-LocalConfigStorage::load( const QString& accountId, Account::Configuration& cfg )
+LocalConfigStorage::load( const QString& accountId, Account::Configuration& cfg ) const
 {
     TomahawkSettings* s = TomahawkSettings::instance();
     s->beginGroup( "accounts/" + accountId );
