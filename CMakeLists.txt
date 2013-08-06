@@ -339,10 +339,10 @@ CONFIGURE_FILE(
   "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
   IMMEDIATE @ONLY)
 
-# KDE4 defines an uninstall target for us automatically
-IF( NOT KDE4_FOUND )
-    ADD_CUSTOM_TARGET(uninstall "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
-ENDIF()
+# KDE4 defines an uninstall target for us automatically (and at least with Qt4 Phonon does as well no matter if kdelibs was found)
+# IF( NOT KDE4_FOUND )
+#     ADD_CUSTOM_TARGET(uninstall "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
+# ENDIF()
 
 IF( NOT APPLE )
     # Make linking as strict on linux as it is on osx. Then we don't break linking on mac so often

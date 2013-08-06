@@ -32,3 +32,6 @@ SET(QT_MOC_EXECUTABLE       ${MINGW_PREFIX}-moc)
 SET(QT_RCC_EXECUTABLE       ${MINGW_PREFIX}-rcc)
 SET(QT_UIC_EXECUTABLE       ${MINGW_PREFIX}-uic)
 SET(QT_LRELEASE_EXECUTABLE  ${MINGW_PREFIX}-lrelease)
+
+# phonon -_-
+SET(Automoc4_DIR	    "/usr/lib64/automoc4/")
