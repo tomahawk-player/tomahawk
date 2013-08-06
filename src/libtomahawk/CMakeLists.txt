@@ -511,14 +511,16 @@ ENDIF( UNIX AND NOT APPLE )
 
 TARGET_LINK_LIBRARIES( tomahawklib
     LINK_PRIVATE
+    ${PHONON_LIBS}
+
     # Thirdparty shipped with tomahawk
     ${LIBPORTFWD_LIBRARIES}
     ${QTKEYCHAIN_LIBRARIES}
 
+
     LINK_PUBLIC
     # External deps
     ${QJSON_LIBRARIES}
-    ${PHONON_LIBS}
     ${TAGLIB_LIBRARIES}
     ${CLUCENE_LIBRARIES}
     ${ECHONEST_LIBRARIES}
