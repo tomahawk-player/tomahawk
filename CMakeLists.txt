@@ -317,7 +317,7 @@ if(Phonon_FOUND)
     message(STATUS "Phonon found; ensure that phonon-vlc is at least 0.4")
 endif()
 
-IF( KDE4_FOUND )
+IF( KDE4_FOUND OR Phonon_FOUND )
     IF( CMAKE_C_FLAGS )
         # KDE4 adds and removes some compiler flags that we don't like
         # (only for gcc not for clang e.g.)
