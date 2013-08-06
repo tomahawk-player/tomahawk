@@ -43,8 +43,8 @@ using namespace Accounts;
 static QPixmap* s_icon = 0;
 HatchetAccount* HatchetAccount::s_instance  = 0;
 
-const QString c_loginServer("https://mandella.hatchet.is/v1");
-const QString c_accessTokenServer("https://mandella.hatchet.is/v1");
+const QString c_loginServer("https://auth.hatchet.is/v1");
+const QString c_accessTokenServer("https://auth.hatchet.is/v1");
 
 HatchetAccountFactory::HatchetAccountFactory()
 {

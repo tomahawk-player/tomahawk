@@ -211,7 +211,7 @@ WebSocket::readOutput()
     if ( !m_connection )
         return;
 
-    tDebug() << Q_FUNC_INFO;
+    //tDebug() << Q_FUNC_INFO;
 
     std::string outputString = m_outputStream.str();
     if ( outputString.size() > 0 )
