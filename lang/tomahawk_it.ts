@@ -3864,7 +3864,7 @@ enter the displayed PIN number here:</source>
 <context>
     <name>TomahawkSettings</name>
     <message>
-        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="376"/>
+        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="378"/>
         <source>Local Network</source>
         <translation>Network locale</translation>
     </message>

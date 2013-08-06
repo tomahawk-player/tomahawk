@@ -3879,7 +3879,7 @@ introduzca su número PIN aquí:</translation>
 <context>
     <name>TomahawkSettings</name>
     <message>
-        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="376"/>
+        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="378"/>
         <source>Local Network</source>
         <translation>Red local</translation>
     </message>

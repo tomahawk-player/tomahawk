@@ -581,7 +581,7 @@ yhdistää ja toistaa sinulta virtaa?</translation>
     <message>
         <location filename="../src/viewpages/dashboard/DashboardWidget.ui" line="147"/>
         <source>Recent Additions</source>
-        <translation type="unfinished"/>
+        <translation>Viimeisimmät lisäykset</translation>
     </message>
     <message>
         <location filename="../src/viewpages/dashboard/DashboardWidget.ui" line="256"/>
@@ -2645,12 +2645,12 @@ napsauttamalla hiiren oikealla.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/configstorage/telepathy/TelepathyConfigStorage.cpp" line="77"/>
         <source>the KDE instant messaging framework</source>
-        <translation type="unfinished"/>
+        <translation>KDE:n pikaviestintäjärjestelmä</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/configstorage/telepathy/TelepathyConfigStorage.cpp" line="94"/>
         <source>KDE Instant Messaging Accounts</source>
-        <translation type="unfinished"/>
+        <translation>KDE:n pikaviestintätilit</translation>
     </message>
 </context>
 <context>
@@ -2803,7 +2803,7 @@ Voit haluta yrittää tunnistautumista uudelleen.</translation>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="73"/>
         <source>Account provided by %1.</source>
-        <translation type="unfinished"/>
+        <translation>Tilin lähde: %1</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="157"/>
@@ -3884,7 +3884,7 @@ anna siellä näytetty PIN-koodi tähän:</translation>
 <context>
     <name>TomahawkSettings</name>
     <message>
-        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="376"/>
+        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="378"/>
         <source>Local Network</source>
         <translation>Lähiverkko</translation>
     </message>

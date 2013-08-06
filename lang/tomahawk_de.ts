@@ -3872,7 +3872,7 @@ Tomahawk auf Twitter&apos;s Website authentifiziert hast:</translation>
 <context>
     <name>TomahawkSettings</name>
     <message>
-        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="376"/>
+        <location filename="../src/libtomahawk/TomahawkSettings.cpp" line="378"/>
         <source>Local Network</source>
         <translation>Lokales Netzwerk</translation>
     </message>
