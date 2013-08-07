@@ -200,20 +200,20 @@ DashboardWidget::~DashboardWidget()
 }
 
 
-Tomahawk::playlistinterface_ptr
-Dashboard::playlistInterface() const
+playlistinterface_ptr
+DashboardWidget::playlistInterface() const
 {
-    return m_widget->m_playlistInterface;
+    return m_playlistInterface;
 }
 
 
 bool
-Dashboard::jumpToCurrentTrack()
+DashboardWidget::jumpToCurrentTrack()
 {
-    if ( m_widget->ui->tracksView->jumpToCurrentTrack() )
+    if ( ui->tracksView->jumpToCurrentTrack() )
         return true;
 
-    if ( m_widget->ui->additionsView->jumpToCurrentTrack() )
+    if ( ui->additionsView->jumpToCurrentTrack() )
         return true;
 
     return false;
@@ -221,12 +221,12 @@ Dashboard::jumpToCurrentTrack()
 
 
 bool
-Dashboard::isBeingPlayed() const
+DashboardWidget::isBeingPlayed() const
 {
-    if ( m_widget->ui->additionsView->isBeingPlayed() )
+    if ( ui->additionsView->isBeingPlayed() )
         return true;
 
-    return AudioEngine::instance()->currentTrackPlaylist() == m_widget->ui->tracksView->playlistInterface();
+    return AudioEngine::instance()->currentTrackPlaylist() == ui->tracksView->playlistInterface();
 }
 
 

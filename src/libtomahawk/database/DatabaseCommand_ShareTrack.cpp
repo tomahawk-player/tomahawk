@@ -28,7 +28,6 @@
 #include "Database.h"
 #include "DatabaseImpl.h"
 #include "PlaylistEntry.h"
-#include "ViewManager.h"
 
 namespace Tomahawk
 {

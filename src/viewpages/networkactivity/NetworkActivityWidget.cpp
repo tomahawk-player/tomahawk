@@ -18,6 +18,8 @@
 
 #include "NetworkActivityWidget_p.h"
 
+#include "libtomahawk-widgets/PlaylistDelegate.h"
+
 #include "audio/AudioEngine.h"
 #include "database/Database.h"
 #include "database/DatabaseCommand_NetworkCharts.h"
@@ -38,7 +40,6 @@
 #include "widgets/RecentlyPlayedPlaylistsModel.h"
 #include "MetaPlaylistInterface.h"
 #include "Pipeline.h"
-#include "PlaylistDelegate.h"
 #include "ViewManager.h"
 
 #include <QDateTime>
@@ -272,15 +273,6 @@ Tomahawk::playlistinterface_ptr
 NetworkActivityWidget::playlistInterface() const
 {
     return d_func()->playlistInterface;
-}
-
-
-QPixmap
-NetworkActivityWidget::pixmap() const
-{
-    return TomahawkUtils::defaultPixmap( TomahawkUtils::NetworkActivity,
-                                         TomahawkUtils::Original,
-                                         TomahawkUtils::DpiScaler::scaled( this, 80, 80 ) );
 }
 
 
