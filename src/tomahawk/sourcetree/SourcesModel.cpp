@@ -22,8 +22,6 @@
 
 #include "../../viewpages/dashboard/Dashboard.h"
 
-#include <libtomahawk-widgets/NetworkActivityWidget.h>
-
 #include "sourcetree/items/ScriptCollectionItem.h"
 #include "sourcetree/items/SourceTreeItem.h"
 #include "sourcetree/items/SourceItem.h"
@@ -339,13 +337,6 @@ SourcesModel::appendGroups()
     m_cloudGroup = new GroupItem( this, m_rootItem, tr( "Cloud" ), 5 );
 
     endInsertRows();
-
-    ViewManager::instance()->addDynamicPage("network_activity",
-                                            tr( "Network Activity" ),
-                                            TomahawkUtils::defaultPixmap( TomahawkUtils::NetworkActivity, TomahawkUtils::Original ),
-                                            boost::lambda::bind( boost::lambda::new_ptr< Tomahawk::Widgets::NetworkActivityWidget >() ),
-                                            2
-    );
 
     QHash< QString, ViewPagePlugin* > plugins = Tomahawk::Utils::PluginLoader( "viewpage" ).loadPlugins< ViewPagePlugin >();
     foreach ( ViewPagePlugin* plugin, plugins.values() )

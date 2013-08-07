@@ -190,7 +190,7 @@
   <customwidget>
    <class>Tomahawk::Widgets::PlaylistWidget</class>
    <extends>QListWidget</extends>
-   <header>PlaylistWidget.h</header>
+   <header>libtomahawk-widgets/PlaylistWidget.h</header>
   </customwidget>
   <customwidget>
    <class>Tomahawk::Breadcrumb</class>

@@ -21,7 +21,7 @@
 
 #include "ViewPage.h"
 
-#include "WidgetsDllMacro.h"
+#include "../ViewPageDllMacro.h"
 
 class AnimatedSpinner;
 class PlaylistModel;
@@ -40,7 +40,7 @@ namespace Widgets
 
 class NetworkActivityWidgetPrivate;
 
-class TOMAHAWK_WIDGETS_EXPORT NetworkActivityWidget : public QWidget, public Tomahawk::ViewPage
+class TOMAHAWK_VIEWPAGE_EXPORT NetworkActivityWidget : public QWidget
 {
     Q_OBJECT
 public:
@@ -57,22 +57,15 @@ public:
     NetworkActivityWidget(QWidget* parent = 0);
     ~NetworkActivityWidget();
 
-    virtual QWidget* widget() { return this; }
-    virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
-
-    virtual QString title() const { return tr( "Network Activity" ); }
-    virtual QString description() const { return QString("Listening activity among your friends"); }
-    virtual QPixmap pixmap() const;
-
-    virtual bool showInfoBar() const { return true; }
-    virtual bool isBeingPlayed() const;
-
-    virtual bool jumpToCurrentTrack();
-
     static const uint numberOfHotPlaylists = 3;
     static const uint numberOfTrendingArtists = 3;
     static const uint numberOfTrendingTracks = 3;
     static const uint numberOfNetworkChartEntries = 20;
+    
+    // ViewPageWidget interface
+    virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
+    virtual bool isBeingPlayed() const;
+    virtual bool jumpToCurrentTrack();
 
 protected:
     QScopedPointer<NetworkActivityWidgetPrivate> d_ptr;

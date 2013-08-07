@@ -720,10 +720,6 @@ defaultPixmap( ImageType type, ImageMode mode, const QSize& size )
             pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/outbox.svg", size );
             break;
 
-        case NetworkActivity:
-            pixmap = ImageRegistry::instance()->pixmap( RESPATH "images/network-activity.svg", size );
-            break;
-
         default:
             break;
     }
