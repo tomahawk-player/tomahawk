@@ -35,10 +35,12 @@ public:
     {
     }
 
+
     virtual ~ViewPageLazyLoader()
     {
         delete m_widget;
     }
+
 
     virtual T* widget()
     {
@@ -48,6 +50,32 @@ public:
         return m_widget;
     }
 
+
+    virtual playlistinterface_ptr playlistInterface() const
+    {
+        if( m_widget )
+            return m_widget->playlistInterface();
+
+        return playlistinterface_ptr();
+    }
+
+
+    virtual bool isBeingPlayed() const
+    {
+        if( m_widget && m_widget->isBeingPlayed() )
+            return true;
+
+        return false;
+    }
+
+
+    virtual bool jumpToCurrentTrack()
+    {
+        if( m_widget && m_widget->jumpToCurrentTrack() )
+            return true;
+
+        return false;
+    }
 
 protected:
     T* m_widget;

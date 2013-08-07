@@ -61,6 +61,10 @@ public:
     DashboardWidget( QWidget* parent = 0 );
     virtual ~DashboardWidget();
 
+    virtual bool isBeingPlayed() const;
+    virtual playlistinterface_ptr playlistInterface() const;
+    virtual bool jumpToCurrentTrack();
+
 public slots:
     void updatePlaylists();
     void updateRecentAdditions();
@@ -92,8 +96,6 @@ public:
     Dashboard( QWidget* parent = 0 );
     virtual ~Dashboard();
 
-    virtual Tomahawk::playlistinterface_ptr playlistInterface() const;
-
     virtual const QString defaultName() { return DASHBOARD_VIEWPAGE_NAME; }
     virtual QString title() const { return tr( "Dashboard" ); }
     virtual QString description() const { return tr( "An overview of your recent activity" ); }
@@ -102,9 +104,6 @@ public:
     virtual int sortValue() { return 1; }
 
     virtual bool showInfoBar() const { return true; }
-    virtual bool isBeingPlayed() const;
-
-    virtual bool jumpToCurrentTrack();
 };
 
 
