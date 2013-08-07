@@ -511,7 +511,7 @@ ENDIF( UNIX AND NOT APPLE )
 
 TARGET_LINK_LIBRARIES( tomahawklib
     LINK_PRIVATE
-    ${PHONON_LIBS}
+    ${PHONON_LIBRARY}
 
     # Thirdparty shipped with tomahawk
     ${LIBPORTFWD_LIBRARIES}
