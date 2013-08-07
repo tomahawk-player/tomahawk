@@ -29,10 +29,6 @@
 #include "SourceList.h"
 #include "TomahawkSqlQuery.h"
 
-#ifndef ENABLE_HEADLESS
-    #include "ViewManager.h"
-#endif
-
 #include <QSqlQuery>
 #include <QSqlDriver>
 
