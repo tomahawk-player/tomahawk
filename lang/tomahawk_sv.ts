@@ -1121,17 +1121,17 @@ Password (OTP)</source>
 <context>
     <name>NetworkActivityWidget</name>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.ui" line="39"/>
+        <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.ui" line="39"/>
         <source>Trending Tracks</source>
         <translation>Trendiga Spår</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.ui" line="79"/>
+        <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.ui" line="79"/>
         <source>Hot Playlists</source>
         <translation>Heta spellistor</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.ui" line="113"/>
+        <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.ui" line="113"/>
         <source>Trending Artists</source>
         <translation type="unfinished"/>
     </message>
@@ -2150,77 +2150,72 @@ och radiostationer baserat på din personliga profil</translation>
 <context>
     <name>SourcesModel</name>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="103"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="101"/>
         <source>Group</source>
         <translation>Grupp</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="106"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="104"/>
         <source>Collection</source>
         <translation>Samling</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="109"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="107"/>
         <source>Playlist</source>
         <translation>Spellista</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="112"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="110"/>
         <source>Automatic Playlist</source>
         <translation>Automatisk spellista</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="115"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="113"/>
         <source>Station</source>
         <translation>Station</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="304"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="302"/>
         <source>Browse</source>
         <translation>Bläddra</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="305"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="303"/>
         <source>Search History</source>
         <translation>Sökhistorik</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="307"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="305"/>
         <source>My Music</source>
         <translation>Min Musik</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="314"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="312"/>
         <source>SuperCollection</source>
         <translation>Supersamling</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="344"/>
-        <source>Network Activity</source>
-        <translation>Nätverksaktivitet</translation>
-    </message>
-    <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="339"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="337"/>
         <source>Cloud</source>
         <translation>Moln</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="331"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="329"/>
         <source>Recently Played</source>
         <translation>Nyligen Spelade</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="320"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="318"/>
         <source>Charts</source>
         <translation>Topplistor</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="325"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="323"/>
         <source>New Releases</source>
         <translation>Nya släpp</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="337"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="335"/>
         <source>Friends</source>
         <translation>Vänner</translation>
     </message>
@@ -3768,12 +3763,12 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
 <context>
     <name>Tomahawk::Widgets::Dashboard</name>
     <message>
-        <location filename="../src/viewpages/dashboard/Dashboard.h" line="98"/>
+        <location filename="../src/viewpages/dashboard/Dashboard.h" line="100"/>
         <source>Dashboard</source>
         <translation>Dashboard</translation>
     </message>
     <message>
-        <location filename="../src/viewpages/dashboard/Dashboard.h" line="99"/>
+        <location filename="../src/viewpages/dashboard/Dashboard.h" line="101"/>
         <source>An overview of your recent activity</source>
         <translation>En överblick över din senaste aktivitet</translation>
     </message>
@@ -3787,56 +3782,64 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
     </message>
 </context>
 <context>
+    <name>Tomahawk::Widgets::NetworkActivity</name>
+    <message>
+        <location filename="../src/viewpages/networkactivity/NetworkActivity.h" line="56"/>
+        <source>Network Activity</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/viewpages/networkactivity/NetworkActivity.h" line="57"/>
+        <source>Listening activity among your friends</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Tomahawk::Widgets::NetworkActivityWidget</name>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="71"/>
+        <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="72"/>
         <source>Charts</source>
         <translation>Lista</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="82"/>
+        <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="83"/>
         <source>Last Week</source>
         <translation>Förra veckan</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="88"/>
+        <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="89"/>
         <source>Loved Tracks</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="90"/>
+        <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="91"/>
         <source>Top Loved</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="93"/>
+        <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="94"/>
         <source>Recently Loved</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="109"/>
+        <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="110"/>
         <source>Sorry, we are still loading the charts.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="79"/>
+        <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="80"/>
         <source>Last Month</source>
         <translation>Förra månaden</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="76"/>
+        <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="77"/>
         <source>Last Year</source>
         <translation>Förra året</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="73"/>
+        <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="74"/>
         <source>Overall</source>
         <translation>Generell</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.h" line="63"/>
-        <source>Network Activity</source>
-        <translation>Nätverksaktivitet</translation>
     </message>
 </context>
 <context>

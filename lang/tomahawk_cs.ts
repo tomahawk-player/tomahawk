@@ -1122,17 +1122,17 @@ heslo</translation>
 <context>
     <name>NetworkActivityWidget</name>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.ui" line="39"/>
+        <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.ui" line="39"/>
         <source>Trending Tracks</source>
         <translation>Módní skladby</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.ui" line="79"/>
+        <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.ui" line="79"/>
         <source>Hot Playlists</source>
         <translation>Výborné seznamy skladeb</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.ui" line="113"/>
+        <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.ui" line="113"/>
         <source>Trending Artists</source>
         <translation>Módní umělci</translation>
     </message>
@@ -2149,77 +2149,72 @@ heslo</translation>
 <context>
     <name>SourcesModel</name>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="103"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="101"/>
         <source>Group</source>
         <translation>Skupina</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="106"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="104"/>
         <source>Collection</source>
         <translation>Sbírka</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="109"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="107"/>
         <source>Playlist</source>
         <translation>Seznam skladeb</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="112"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="110"/>
         <source>Automatic Playlist</source>
         <translation>Automatický seznam skladeb</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="115"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="113"/>
         <source>Station</source>
         <translation>Stanice</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="304"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="302"/>
         <source>Browse</source>
         <translation>Procházet</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="305"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="303"/>
         <source>Search History</source>
         <translation>Historie hledání</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="307"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="305"/>
         <source>My Music</source>
         <translation>Moje hudba</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="314"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="312"/>
         <source>SuperCollection</source>
         <translation>Supersbírka</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="344"/>
-        <source>Network Activity</source>
-        <translation>Činnost sítě</translation>
-    </message>
-    <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="339"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="337"/>
         <source>Cloud</source>
         <translation>Mračno</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="331"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="329"/>
         <source>Recently Played</source>
         <translation>Nedávno poslouchané</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="320"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="318"/>
         <source>Charts</source>
         <translation>Žebříčky</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="325"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="323"/>
         <source>New Releases</source>
         <translation>Novinky</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="337"/>
+        <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="335"/>
         <source>Friends</source>
         <translation>Přátelé</translation>
     </message>
@@ -3768,12 +3763,12 @@ Zkuste vyladit filtry pro nové písně.</translation>
 <context>
     <name>Tomahawk::Widgets::Dashboard</name>
     <message>
-        <location filename="../src/viewpages/dashboard/Dashboard.h" line="98"/>
+        <location filename="../src/viewpages/dashboard/Dashboard.h" line="100"/>
         <source>Dashboard</source>
         <translation>Nástěnka</translation>
     </message>
     <message>
-        <location filename="../src/viewpages/dashboard/Dashboard.h" line="99"/>
+        <location filename="../src/viewpages/dashboard/Dashboard.h" line="101"/>
         <source>An overview of your recent activity</source>
         <translation>Přehled vaší poslední činnosti</translation>
     </message>
@@ -3787,56 +3782,64 @@ Zkuste vyladit filtry pro nové písně.</translation>
     </message>
 </context>
 <context>
+    <name>Tomahawk::Widgets::NetworkActivity</name>
+    <message>
+        <location filename="../src/viewpages/networkactivity/NetworkActivity.h" line="56"/>
+        <source>Network Activity</source>
+        <translation>Činnost sítě</translation>
+    </message>
+    <message>
+        <location filename="../src/viewpages/networkactivity/NetworkActivity.h" line="57"/>
+        <source>Listening activity among your friends</source>
+        <translation>Sledování činnosti vašich přátel</translation>
+    </message>
+</context>
+<context>
     <name>Tomahawk::Widgets::NetworkActivityWidget</name>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="71"/>
+        <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="72"/>
         <source>Charts</source>
         <translation>Žebříčky</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="82"/>
+        <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="83"/>
         <source>Last Week</source>
         <translation>Poslední týden</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="88"/>
+        <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="89"/>
         <source>Loved Tracks</source>
         <translation>Oblíbené skladby</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="90"/>
+        <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="91"/>
         <source>Top Loved</source>
         <translation>Nejoblíbenější</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="93"/>
+        <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="94"/>
         <source>Recently Loved</source>
         <translation>Nedávno oblíbené</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="109"/>
+        <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="110"/>
         <source>Sorry, we are still loading the charts.</source>
         <translation>Promiňte, stále ještě se nahrávají žebříčky.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="79"/>
+        <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="80"/>
         <source>Last Month</source>
         <translation>Poslední měsíc</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="76"/>
+        <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="77"/>
         <source>Last Year</source>
         <translation>Poslední rok</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.cpp" line="73"/>
+        <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="74"/>
         <source>Overall</source>
         <translation>Celkový</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk-widgets/NetworkActivityWidget.h" line="63"/>
-        <source>Network Activity</source>
-        <translation>Činnost sítě</translation>
     </message>
 </context>
 <context>
