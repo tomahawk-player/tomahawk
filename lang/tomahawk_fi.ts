@@ -3792,12 +3792,12 @@ kappaleen %2%4 %3.</translation>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivity.h" line="56"/>
         <source>Network Activity</source>
-        <translation type="unfinished"/>
+        <translation>Verkoston kuuntelemat</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivity.h" line="57"/>
         <source>Listening activity among your friends</source>
-        <translation type="unfinished"/>
+        <translation>Näyttää, mitä kaverisi ovat kuunnelleet</translation>
     </message>
 </context>
 <context>
