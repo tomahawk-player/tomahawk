@@ -74,9 +74,9 @@ JobStatusView::addJob( const QPointer<JobStatusItem>& item )
 
 JobStatusView::JobStatusView( AnimatedSplitter* parent )
     : AnimatedWidget( parent )
+    , m_model( 0 )
     , m_parent( parent )
     , m_cachedHeight( -1 )
-    , m_model( 0 )
 {
     s_instance = this;
 
