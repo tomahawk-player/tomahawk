@@ -359,6 +359,13 @@ XmppSipPlugin::onDisconnect( Jreen::Client::DisconnectReason reason )
             break;
     }
     m_state = Account::Disconnected;
+
+    // Set the state of all peers to offline.
+    foreach( Jreen::JID peer, m_peers.keys() )
+    {
+        m_peers[ peer ] = Jreen::Presence::Unavailable;
+    }
+
     emit stateChanged( m_state );
 
     removeMenuHelper();
