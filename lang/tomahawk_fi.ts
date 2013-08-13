@@ -4593,62 +4593,62 @@ Sanat artistin %2 kappaleelle ”%1”:
 <context>
     <name>XmppSipPlugin</name>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="384"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="391"/>
         <source>User Interaction</source>
         <translation>Käyttäjän toiminta</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="387"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="394"/>
         <source>Host is unknown</source>
         <translation>Kone on tuntematon</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="390"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="397"/>
         <source>Item not found</source>
         <translation>Kohdetta ei löydy</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="393"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="400"/>
         <source>Authorization Error</source>
         <translation>Valtuutusvirhe</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="396"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="403"/>
         <source>Remote Stream Error</source>
         <translation>Etävirran virhe</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="399"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="406"/>
         <source>Remote Connection failed</source>
         <translation>Etäyhteys epäonnistui</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="402"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="409"/>
         <source>Internal Server Error</source>
         <translation>Sisäinen palvelinvirhe</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="405"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="412"/>
         <source>System shutdown</source>
         <translation>Järjestelmän sammutus</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="408"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="415"/>
         <source>Conflict</source>
         <translation>Ristiriita</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="423"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="430"/>
         <source>Unknown</source>
         <translation>Tuntematon</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="800"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="807"/>
         <source>Do you want to add &lt;b&gt;%1&lt;/b&gt; to your friend list?</source>
         <translation>Haluatko lisätä käyttäjän &lt;b&gt;%1&lt;/b&gt; kaverilistallesi?</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="411"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="418"/>
         <source>No Compression Support</source>
         <translation>Ei pakkaustukea</translation>
     </message>
@@ -4658,47 +4658,47 @@ Sanat artistin %2 kappaleelle ”%1”:
         <translation>Anna Jabber-tunnus</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="414"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="421"/>
         <source>No Encryption Support</source>
         <translation>Ei salaustukea</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="417"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="424"/>
         <source>No Authorization Support</source>
         <translation>Ei valtuutustukea</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="420"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="427"/>
         <source>No Supported Feature</source>
         <translation>Ei-tuettu ominaisuus</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="479"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="486"/>
         <source>Add Friend</source>
         <translation>Lisää kaveri</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="480"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="487"/>
         <source>Enter Xmpp ID:</source>
         <translation>Anna XMPP-tunnus:</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="636"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="643"/>
         <source>Add Friend...</source>
         <translation>Lisää kaveri...</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="641"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="648"/>
         <source>XML Console...</source>
         <translation>XML-konsoli...</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="690"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="697"/>
         <source>I&apos;m sorry -- I&apos;m just an automatic presence used by Tomahawk Player (http://gettomahawk.com). If you are getting this message, the person you are trying to reach is probably not signed on, so please try again later!</source>
         <translation>Pahoittelen – olen pelkkä Tomahawk-soittimen (http://gettomahawk.com) automaattinen läsnäoloviesti. Jos näet tämän viestin, tavoittelemasi henkilö ei todennäköisesti ole kirjautuneena, joten yritä myöhemmin uudelleen!</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="799"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="806"/>
         <source>Authorize User</source>
         <translation>Salli käyttäjä</translation>
     </message>
