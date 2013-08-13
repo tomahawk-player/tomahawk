@@ -150,12 +150,13 @@ InfoSystem::~InfoSystem()
 void
 InfoSystem::init()
 {
-    tDebug() << Q_FUNC_INFO;
+    // tDebug() << Q_FUNC_INFO;
     if ( m_inited )
         return;
 
     if ( !m_infoSystemCacheThreadController->cache() || !m_infoSystemWorkerThreadController->worker() )
     {
+        // tLog() << "Worker not found";
         QTimer::singleShot( 0, this, SLOT( init() ) );
         return;
     }

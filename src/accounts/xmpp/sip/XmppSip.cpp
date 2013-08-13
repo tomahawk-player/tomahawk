@@ -72,6 +72,7 @@ using namespace Accounts;
 #define TOMAHAWK_CAP_NODE_NAME QLatin1String( "http://tomahawk-player.org/" )
 
 
+#if QT_VERSION <= QT_VERSION_CHECK( 5, 0, 0 )
 void
 JreenMessageHandler( QtMsgType type, const char *msg )
 {
@@ -91,6 +92,7 @@ JreenMessageHandler( QtMsgType type, const char *msg )
             abort();
     }
 }
+#endif
 
 
 XmppSipPlugin::XmppSipPlugin( Account* account )
@@ -102,7 +104,9 @@ XmppSipPlugin::XmppSipPlugin( Account* account )
     , m_pubSubManager( 0 )
 #endif
 {
+#if QT_VERSION <= QT_VERSION_CHECK( 5, 0, 0 )
     Jreen::Logger::addHandler( JreenMessageHandler );
+#endif
 
     m_currentUsername = readUsername();
     m_currentServer = readServer();
