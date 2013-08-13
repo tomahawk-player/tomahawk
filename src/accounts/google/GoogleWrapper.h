@@ -32,6 +32,7 @@ class ACCOUNTDLLEXPORT GoogleWrapperFactory : public XmppAccountFactory
 {
     Q_OBJECT
     Q_INTERFACES( Tomahawk::Accounts::AccountFactory )
+    Q_PLUGIN_METADATA( IID "org.tomahawk-player.Player.AccountFactory" )
 
 public:
     GoogleWrapperFactory() {}

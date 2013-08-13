@@ -41,6 +41,7 @@ class ACCOUNTDLLEXPORT XmppAccountFactory : public AccountFactory
 {
     Q_OBJECT
     Q_INTERFACES( Tomahawk::Accounts::AccountFactory )
+    Q_PLUGIN_METADATA( IID "org.tomahawk-player.Player.AccountFactory" )
 
     // for settings access
     friend class XmppConfigWidget;
