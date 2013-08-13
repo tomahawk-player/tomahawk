@@ -47,6 +47,7 @@ class TOMAHAWK_VIEWPAGE_EXPORT NetworkActivity : public Tomahawk::ViewPageLazyLo
 {
 Q_OBJECT
 Q_INTERFACES( Tomahawk::ViewPagePlugin )
+Q_PLUGIN_METADATA( IID "org.tomahawk-player.Player.ViewPagePlugin" )
 
 public:
     NetworkActivity() {}
