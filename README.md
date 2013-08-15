@@ -39,7 +39,7 @@ Required dependencies:
 * CMake 2.8.6 - http://www.cmake.org/
 * Qt 4.7.0 - http://qt-project.org/
 * Phonon 4.6.0 - http://phonon.kde.org/
-* QJson 0.7.1 - http://qjson.sourceforge.net/
+* QJson 0.8.1 - http://qjson.sourceforge.net/
 * SQLite 3.6.22 - http://www.sqlite.org/
 * TagLib 1.6.2 - http://developer.kde.org/~wheeler/taglib.html
 * Boost 1.3 - http://www.boost.org/
