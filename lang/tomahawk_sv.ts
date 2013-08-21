@@ -576,17 +576,17 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/viewpages/dashboard/DashboardWidget.ui" line="89"/>
         <source>Recently Played Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Nyligen spelade spår</translation>
     </message>
     <message>
         <location filename="../src/viewpages/dashboard/DashboardWidget.ui" line="147"/>
         <source>Recent Additions</source>
-        <translation type="unfinished"/>
+        <translation>Senaste tillägg</translation>
     </message>
     <message>
         <location filename="../src/viewpages/dashboard/DashboardWidget.ui" line="256"/>
         <source>Newest Stations &amp; Playlists</source>
-        <translation type="unfinished"/>
+        <translation>Nyaste stationer och spellistor</translation>
     </message>
 </context>
 <context>
@@ -1133,7 +1133,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.ui" line="113"/>
         <source>Trending Artists</source>
-        <translation type="unfinished"/>
+        <translation>Artist-trender</translation>
     </message>
 </context>
 <context>
@@ -1623,7 +1623,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="66"/>
         <source>Resolver Error: %1:%2 %3</source>
-        <translation type="unfinished"/>
+        <translation>Resolver-fel: %1:%2 %3</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="85"/>
@@ -2635,12 +2635,12 @@ och radiostationer baserat på din personliga profil</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/configstorage/telepathy/TelepathyConfigStorage.cpp" line="79"/>
         <source>the KDE instant messaging framework</source>
-        <translation type="unfinished"/>
+        <translation>KDE&apos;s Instant Messaging-ramverk</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/configstorage/telepathy/TelepathyConfigStorage.cpp" line="96"/>
         <source>KDE Instant Messaging Accounts</source>
-        <translation type="unfinished"/>
+        <translation>KDE Instant Messaging-konton</translation>
     </message>
 </context>
 <context>
@@ -2793,7 +2793,7 @@ Försök autentisera igen</translation>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="73"/>
         <source>Account provided by %1.</source>
-        <translation type="unfinished"/>
+        <translation>Konto tillhandahållet av %1.</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="157"/>
@@ -3778,7 +3778,7 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
     <message>
         <location filename="../src/viewpages/dashboard/Dashboard.cpp" line="263"/>
         <source>No recently created playlists in your network.</source>
-        <translation type="unfinished"/>
+        <translation>Inga skapade spellistor i ditt nätverk på sistone.</translation>
     </message>
 </context>
 <context>
@@ -3786,12 +3786,12 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivity.h" line="57"/>
         <source>Network Activity</source>
-        <translation type="unfinished"/>
+        <translation>Nätverksaktivitet</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivity.h" line="58"/>
         <source>Listening activity among your friends</source>
-        <translation type="unfinished"/>
+        <translation>Lyssnar-aktivitet bland dina vänner</translation>
     </message>
 </context>
 <context>
@@ -3809,22 +3809,22 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="89"/>
         <source>Loved Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Älskade spår</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="91"/>
         <source>Top Loved</source>
-        <translation type="unfinished"/>
+        <translation>Mest älskade</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="94"/>
         <source>Recently Loved</source>
-        <translation type="unfinished"/>
+        <translation>Nyligen älskade</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="110"/>
         <source>Sorry, we are still loading the charts.</source>
-        <translation type="unfinished"/>
+        <translation>Ursäkta, listorna laddas fortfarande</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="80"/>
@@ -3940,12 +3940,12 @@ anger du PIN-koden här:</translation>
     <message>
         <location filename="../src/tomahawk/widgets/AccountsToolButton.cpp" line="90"/>
         <source>Configure Accounts</source>
-        <translation type="unfinished"/>
+        <translation>Konfigurera konton</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/widgets/AccountWidget.cpp" line="132"/>
         <source>Invite</source>
-        <translation type="unfinished"/>
+        <translation>Bjud in</translation>
     </message>
 </context>
 <context>
@@ -4527,7 +4527,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="196"/>
         <source>Configure</source>
-        <translation type="unfinished"/>
+        <translation>Konfigurera</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="211"/>
