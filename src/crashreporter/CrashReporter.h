@@ -21,6 +21,8 @@
 
 #include <QDialog>
 #include <QFile>
+#include <QNetworkReply>
+#include <QNetworkRequest>
 
 #include "ui_CrashReporter.h"
 
@@ -31,7 +33,7 @@ class CrashReporter : public QDialog
 
 public:
     CrashReporter( const QStringList& argv );
-    ~CrashReporter( );
+    virtual ~CrashReporter( );
 
 private:
     Ui::CrashReporter ui;
@@ -39,14 +41,15 @@ private:
     QString m_minidump;
     QString m_dir;
     QString m_product_name;
-    class QHttp* m_http;
+    QNetworkRequest* m_request;
+    QNetworkReply* m_reply;
 
 public slots:
     void send();
 
 private slots:
     void onDone();
-    void onProgress( int done, int total );
+    void onProgress( qint64 done, qint64 total );
     void onFail( int error, const QString& errorString );
     void onSendButton();
 };

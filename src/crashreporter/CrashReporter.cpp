@@ -23,7 +23,6 @@
 #include <QTimer>
 #include <QDir>
 #include <QDateTime>
-#include <QHttp>
 
 #include "utils/TomahawkUtils.h"
 
@@ -41,7 +40,7 @@ CrashReporter::CrashReporter( const QStringList& args )
     ui.progressBar->setValue( 0 );
     ui.progressLabel->setPalette( Qt::gray );
 
-  #ifdef Q_WS_MAC
+  #ifdef Q_OS_MAC
     QFont f = ui.bottomLabel->font();
     f.setPointSize( 10 );
     ui.bottomLabel->setFont( f );
@@ -55,12 +54,9 @@ CrashReporter::CrashReporter( const QStringList& args )
     ui.progressLabel->setIndent( 1 );
     ui.bottomLabel->setDisabled( true );
     ui.bottomLabel->setIndent( 1 );
-  #endif //Q_WS_MAC
+  #endif //Q_OS_MAC
 
-    m_http = new QHttp( "oops.tomahawk-player.org", 80, this );
-
-    connect( m_http, SIGNAL( done( bool ) ), SLOT( onDone() ), Qt::QueuedConnection );
-    connect( m_http, SIGNAL( dataSendProgress( int, int ) ), SLOT( onProgress( int, int ) ) );
+    m_request = new QNetworkRequest( QUrl( "http://oops.tomahawk-player.org/addreport.php" ) );
 
     m_dir = args.value( 1 );
     m_minidump = m_dir + '/' + args.value( 2 ) + ".dmp";
@@ -79,7 +75,8 @@ CrashReporter::CrashReporter( const QStringList& args )
 
 CrashReporter::~CrashReporter()
 {
-    delete m_http;
+    delete m_request;
+    delete m_reply;
 }
 
 
@@ -138,16 +135,23 @@ CrashReporter::send()
     body += "\r\n";
     body += "--thkboundary--\r\n";
 
-    QHttpRequestHeader header( "POST", "/addreport.php" );
-    header.setContentType( "multipart/form-data; boundary=thkboundary" );
-    header.setValue( "HOST", "oops.tomahawk-player.org" );
 
-    m_http->request( header, body );
+    QNetworkAccessManager* nam = new QNetworkAccessManager( this );
+    m_request->setHeader( QNetworkRequest::ContentTypeHeader, "multipart/form-data; boundary=thkboundary" );
+    m_reply = nam->post( *m_request, body );
+
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+    connect( m_reply, SIGNAL( finished() ), SLOT( onDone() ), Qt::QueuedConnection );
+    connect( m_reply, SIGNAL( uploadProgress( qint64, qint64 ) ), SLOT( onProgress( qint64, qint64 ) ) );
+#else
+    connect( m_reply, &QNetworkReply::finished, this, &CrashReporter::onDone );
+    connect( m_reply, &QNetworkReply::uploadProgress, this, &CrashReporter::onProgress );
+#endif
 }
 
 
 void
-CrashReporter::onProgress( int done, int total )
+CrashReporter::onProgress( qint64 done, qint64 total )
 {
     if ( total )
     {
@@ -163,15 +167,15 @@ CrashReporter::onProgress( int done, int total )
 void
 CrashReporter::onDone()
 {
-    QByteArray data = m_http->readAll();
+    QByteArray data = m_reply->readAll();
     ui.progressBar->setValue( ui.progressBar->maximum() );
     ui.button->setText( tr( "Close" ) );
 
     QString const response = QString::fromUtf8( data );
 
-    if ( m_http->error() != QHttp::NoError || !response.startsWith( "CrashID=" ) )
+    if ( ( m_reply->error() != QNetworkReply::NoError ) || !response.startsWith( "CrashID=" ) )
     {
-        onFail( m_http->error(), m_http->errorString() );
+        onFail( m_reply->error(), m_reply->errorString() );
     }
     else
         ui.progressLabel->setText( tr( "Sent! <b>Many thanks</b>." ) );
