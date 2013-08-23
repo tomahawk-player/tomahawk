@@ -144,7 +144,7 @@ CrashReporter::send()
     connect( m_reply, SIGNAL( finished() ), SLOT( onDone() ), Qt::QueuedConnection );
     connect( m_reply, SIGNAL( uploadProgress( qint64, qint64 ) ), SLOT( onProgress( qint64, qint64 ) ) );
 #else
-    connect( m_reply, &QNetworkReply::finished, this, &CrashReporter::onDone );
+    connect( m_reply, &QNetworkReply::finished, this, &CrashReporter::onDone, Qt::QueuedConnection );
     connect( m_reply, &QNetworkReply::uploadProgress, this, &CrashReporter::onProgress );
 #endif
 }
