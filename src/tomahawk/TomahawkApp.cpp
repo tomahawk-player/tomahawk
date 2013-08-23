@@ -510,15 +510,15 @@ TomahawkApp::initHTTP()
         return;
     }
 
-    m_httpv1_session.data()->setPort( 60210 ); //TODO config
-    m_httpv1_session.data()->setListenInterface( QHostAddress::LocalHost );
-    m_httpv1_session.data()->setConnector( m_httpv1_connector.data() );
+    m_httpv1_session->setPort( 60210 ); //TODO config
+    m_httpv1_session->setListenInterface( QHostAddress::LocalHost );
+    m_httpv1_session->setConnector( m_httpv1_connector.data() );
 
     Api_v1* api = new Api_v1( m_httpv1_session.data() );
-    m_httpv1_session.data()->setStaticContentService( api );
+    m_httpv1_session->setStaticContentService( api );
 
-    tLog() << "Starting HTTPd on" << m_httpv1_session.data()->listenInterface().toString() << m_httpv1_session.data()->port();
-    m_httpv1_session.data()->start();
+    tLog() << "Starting HTTPd on" << m_httpv1_session->listenInterface().toString() << m_httpv1_session->port();
+    m_httpv1_session->start();
 }
 
 
