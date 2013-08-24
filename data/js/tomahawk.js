@@ -80,6 +80,9 @@ Tomahawk.versionCompare = function (version1, version2) {
     return 0;
 };
 
+/**
+  * Check if this is at least specified tomahawk-api-version.
+  */
 Tomahawk.atLeastVersion = function (version) {
     return (Tomahawk.versionCompare(version, Tomahawk.apiVersion) >= 0)
 };
@@ -135,7 +138,9 @@ var TomahawkUrlType = {
 };
 
 
-// Resolver BaseObject, inherit it to implement your own resolver
+/**
+ * Resolver BaseObject, inherit it to implement your own resolver.
+ */
 var TomahawkResolver = {
     init: function() {
     },
@@ -244,7 +249,10 @@ Tomahawk.valueForSubNode = function (node, tag) {
     return element.textContent;
 };
 
-
+/**
+ * Do a synchronous HTTP(S) request. For further options see
+ * Tomahawk.asyncRequest
+ */
 Tomahawk.syncRequest = function (url, extraHeaders, options) {
     // unpack options
     var opt = options || {};
