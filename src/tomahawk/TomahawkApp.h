@@ -31,9 +31,6 @@
 #include "HeadlessCheck.h"
 #include "config.h"
 
-#include <QxtWeb/QxtHttpServerConnector>
-#include <QxtWeb/HttpSessionManager>
-
 #include <QRegExp>
 #include <QFile>
 #include <QSettings>
@@ -147,9 +144,6 @@ private:
 #endif
 
     bool m_headless;
-
-    QPointer< QxtHttpServerConnector > m_httpv1_connector;
-    QPointer< QxtHttpSessionManager > m_httpv1_session;
 };
 
 Q_DECLARE_METATYPE( PairList )

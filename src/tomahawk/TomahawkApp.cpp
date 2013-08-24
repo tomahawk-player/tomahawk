@@ -285,11 +285,6 @@ TomahawkApp::~TomahawkApp()
 {
     tDebug( LOGVERBOSE ) << "Shutting down Tomahawk...";
 
-    if ( !m_httpv1_session.isNull() )
-        delete m_httpv1_session.data();
-    if ( !m_httpv1_connector.isNull() )
-        delete m_httpv1_connector.data();
-
     if ( Pipeline::instance() )
         Pipeline::instance()->stop();
 
@@ -482,43 +477,14 @@ TomahawkApp::initDatabase()
 void
 TomahawkApp::initHTTP()
 {
-    if ( !TomahawkSettings::instance()->httpEnabled() )
+    if ( TomahawkSettings::instance()->httpEnabled() )
     {
-        tLog() << "Stopping HTTPd, not enabled";
-        if ( !m_httpv1_session.isNull() )
-            delete m_httpv1_session.data();
-        if ( !m_httpv1_connector.isNull() )
-            delete m_httpv1_connector.data();
-        return;
+        Api_v1::startInstance( QHostAddress::LocalHost, 60210 ); // TODO: Config
     }
-
-    if ( m_httpv1_session )
+    else
     {
-        tLog() << "HTTPd session already exists, returning";
-        return;
+        Api_v1::stopInstance();
     }
-
-    m_httpv1_session = QPointer< QxtHttpSessionManager >( new QxtHttpSessionManager() );
-    m_httpv1_connector = QPointer< QxtHttpServerConnector >( new QxtHttpServerConnector );
-    if ( m_httpv1_session.isNull() || m_httpv1_connector.isNull() )
-    {
-        if ( !m_httpv1_session.isNull() )
-            delete m_httpv1_session.data();
-        if ( !m_httpv1_connector.isNull() )
-            delete m_httpv1_connector.data();
-        tLog() << "Failed to start HTTPd, could not create object";
-        return;
-    }
-
-    m_httpv1_session->setPort( 60210 ); //TODO config
-    m_httpv1_session->setListenInterface( QHostAddress::LocalHost );
-    m_httpv1_session->setConnector( m_httpv1_connector.data() );
-
-    Api_v1* api = new Api_v1( m_httpv1_session.data() );
-    m_httpv1_session->setStaticContentService( api );
-
-    tLog() << "Starting HTTPd on" << m_httpv1_session->listenInterface().toString() << m_httpv1_session->port();
-    m_httpv1_session->start();
 }
 
 
