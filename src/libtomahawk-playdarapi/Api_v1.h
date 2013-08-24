@@ -52,24 +52,6 @@ Q_OBJECT
 public:
     Api_v1( QxtAbstractWebSessionManager* sm, QObject* parent = 0 );
 
-    /**
-     * Get the current running instance instaniated by the singleton helper
-     * functions.
-     */
-    static Api_v1* instance();
-
-    /**
-     * Start a singleton instance of the playdar API. Though you are not
-     * limited to use one instance of this class, this helper function takes
-     * care of all related Qxt classes that need to be instantiated to run the API.
-     */
-    static Api_v1* startInstance( QHostAddress interface, qint16 port );
-
-    /**
-     * Stop the singleton instance and release its resources.
-     */
-    static void stopInstance();
-
 public slots:
     // authenticating uses /auth_1
     // we redirect to /auth_2 for the callback
@@ -100,12 +82,6 @@ private:
 
     QxtWebRequestEvent* m_storedEvent;
     QSharedPointer< QIODevice > m_ioDevice;
-
-    // Static variables for the singleton instance.
-    static QPointer< Api_v1 > s_instance;
-    static QPointer< QxtHttpServerConnector > s_connector;
-    static QPointer< QxtHttpSessionManager > s_session;
-
 };
 
 #endif

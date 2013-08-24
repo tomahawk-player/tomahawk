@@ -39,61 +39,10 @@
 using namespace Tomahawk;
 using namespace TomahawkUtils;
 
-QPointer< Api_v1 > Api_v1::s_instance = NULL;
-QPointer< QxtHttpServerConnector > Api_v1::s_connector;
-QPointer< QxtHttpSessionManager > Api_v1::s_session;
-
-
 Api_v1::Api_v1( QxtAbstractWebSessionManager* sm, QObject* parent )
     : QxtWebSlotService(sm, parent)
 {
 }
-
-Api_v1*
-Api_v1::startInstance( QHostAddress interface, qint16 port )
-{
-    if ( !s_session.isNull() )
-    {
-        tLog() << "HTTPd session already exists, returning";
-        return NULL;
-    }
-
-    s_session = QPointer< QxtHttpSessionManager >( new QxtHttpSessionManager() );
-    s_connector = QPointer< QxtHttpServerConnector >( new QxtHttpServerConnector );
-    if ( s_session.isNull() || s_connector.isNull() )
-    {
-        if ( !s_session.isNull() )
-            delete s_session.data();
-        if ( !s_connector.isNull() )
-            delete s_connector.data();
-        tLog() << "Failed to start HTTPd, could not create object";
-        return NULL;
-    }
-
-    s_session->setListenInterface( interface );
-    s_session->setPort( port );
-    s_session->setConnector( s_connector.data() );
-
-    s_instance = new Api_v1( s_session.data() );
-    s_session->setStaticContentService( s_instance );
-
-    tLog() << "Starting HTTPd on" << s_session->listenInterface().toString() << s_session->port();
-    s_session->start();
-    return s_instance;
-}
-
-
-void
-Api_v1::stopInstance()
-{
-    if ( !s_connector.isNull() )
-        delete s_connector.data();
-    if ( !s_session.isNull() )
-        delete s_session.data();
-    if ( !s_instance.isNull() )
-        delete s_instance;
-}
-
 
 void
 Api_v1::auth_1( QxtWebRequestEvent* event, QString arg )

@@ -25,6 +25,7 @@
 
 #include "mac/TomahawkApp_Mac.h" // for PlatforInterface
 #include "Typedefs.h"
+#include "libtomahawk-playdarapi/PlaydarApi.h"
 #include "utils/TomahawkUtils.h"
 #include "thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.h"
 
@@ -142,6 +143,7 @@ private:
 #ifndef TOMAHAWK_HEADLESS
     TomahawkWindow* m_mainwindow;
 #endif
+    QPointer<PlaydarApi> playdarApi;
 
     bool m_headless;
 };

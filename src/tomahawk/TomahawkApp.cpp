@@ -64,7 +64,6 @@
 #include "jobview/ErrorStatusMessage.h"
 #include "jobview/JobStatusModel.h"
 #include "jobview/JobStatusView.h"
-#include "libtomahawk-playdarapi/Api_v1.h"
 #include "utils/XspfLoader.h"
 #include "utils/JspfLoader.h"
 #include "utils/Logger.h"
@@ -479,11 +478,11 @@ TomahawkApp::initHTTP()
 {
     if ( TomahawkSettings::instance()->httpEnabled() )
     {
-        Api_v1::startInstance( QHostAddress::LocalHost, 60210 ); // TODO: Config
-    }
-    else
-    {
-        Api_v1::stopInstance();
+        if ( playdarApi.isNull() )
+        {
+            playdarApi = new PlaydarApi( QHostAddress::LocalHost, 60210, this ); // TODO Config
+        }
+        playdarApi->start();
     }
 }
 
