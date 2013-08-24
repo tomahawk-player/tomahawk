@@ -5,7 +5,7 @@ function(tomahawk_add_library)
     set(NAME ${ARGV0})
     set(options NO_INSTALL NO_VERSION)
     set(oneValueArgs NAME TYPE EXPORT_MACRO TARGET TARGET_TYPE EXPORT VERSION SOVERSION INSTALL_BINDIR)
-    set(multiValueArgs SOURCES UI LINK_LIBRARIES COMPILE_DEFINITIONS QT5_MODULES)
+    set(multiValueArgs SOURCES UI LINK_LIBRARIES LINK_PRIVATE_LIBRARIES COMPILE_DEFINITIONS QT5_MODULES)
     cmake_parse_arguments(LIBRARY "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
     set(LIBRARY_NAME ${NAME})
 
@@ -70,6 +70,9 @@ function(tomahawk_add_library)
     target_link_libraries(${target} ${TOMAHAWK_LIBRARIES})
     if(LIBRARY_LINK_LIBRARIES)
         target_link_libraries(${target} ${LIBRARY_LINK_LIBRARIES})
+    endif()
+    if(LIBRARY_LINK_PRIVATE_LIBRARIES)
+        target_link_libraries(${target} LINK_PRIVATE ${LIBRARY_LINK_PRIVATE_LIBRARIES})
     endif()
 
     # add soversion

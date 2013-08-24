@@ -11,6 +11,7 @@ include_directories( ${CMAKE_CURRENT_LIST_DIR} )
 # library
 add_subdirectory( libtomahawk )
 add_subdirectory( libtomahawk-widgets )
+add_subdirectory( libtomahawk-playdarapi )
 
 # plugins
 add_subdirectory( accounts )

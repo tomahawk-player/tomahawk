@@ -356,6 +356,7 @@ file(COPY TomahawkAddLibrary.cmake DESTINATION "${PROJECT_BINARY_DIR}")
 
 SET( TOMAHAWK_LIBRARIES tomahawklib )
 SET( TOMAHAWK_WIDGETS_LIBRARIES tomahawk-widgets )
+SET( TOMAHAWK_PLAYDARAPI_LIBRARIES tomahawk-playdarapi )
 
 ADD_SUBDIRECTORY( thirdparty )
 ADD_SUBDIRECTORY( src )

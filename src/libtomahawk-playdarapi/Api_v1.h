@@ -23,6 +23,8 @@
 
 // See: http://doc.libqxt.org/tip/qxtweb.html
 
+#include "PlaydarAPIDllMacro.h"
+
 #include <QxtWeb/QxtHttpServerConnector>
 #include <QxtWeb/QxtHttpSessionManager>
 #include <QxtWeb/QxtWebContent>
@@ -43,7 +45,7 @@ namespace Tomahawk
     typedef QSharedPointer< Result > result_ptr;
 }
 
-class Api_v1 : public QxtWebSlotService
+class TOMAHAWK_PLAYDARAPI_EXPORT Api_v1 : public QxtWebSlotService
 {
 Q_OBJECT
 
