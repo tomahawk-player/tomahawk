@@ -28,7 +28,7 @@
 #include "config.h"
 
 #include "AtticaManager.h"
-#include "AclRegistry.h"
+#include "network/acl/AclRegistry.h"
 #include "TomahawkApp.h"
 #include "TomahawkSettings.h"
 #include "accounts/DelegateConfigWrapper.h"

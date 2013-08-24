@@ -20,11 +20,11 @@
 
 #include "Connection_p.h"
 
+#include "network/acl/AclRegistry.h"
 #include "network/Servent.h"
 #include "network/Msg.h"
 #include "utils/Logger.h"
 
-#include "AclRegistry.h"
 #include "QTcpSocketExtra.h"
 #include "Source.h"
 

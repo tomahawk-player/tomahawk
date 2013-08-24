@@ -24,6 +24,7 @@
 #include "accounts/AccountManager.h"
 #include "database/Database.h"
 #include "database/DatabaseImpl.h"
+#include "network/acl/AclRegistry.h"
 #include "network/Msg.h"
 #include "network/ConnectionManager.h"
 #include "network/DbSyncConnection.h"
@@ -35,7 +36,6 @@
 #include "utils/Logger.h"
 #include "utils/NetworkAccessManager.h"
 
-#include "AclRegistry.h"
 #include "Connection.h"
 #include "ControlConnection.h"
 #include "PortFwdThread.h"

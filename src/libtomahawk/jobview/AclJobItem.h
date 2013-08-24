@@ -20,8 +20,9 @@
 #ifndef ACLJOBITEM_H
 #define ACLJOBITEM_H
 
-#include "AclRegistry.h"
 #include "DllMacro.h"
+
+#include "network/acl/AclRegistry.h"
 #include "jobview/JobStatusItem.h"
 
 #include <QStyledItemDelegate>

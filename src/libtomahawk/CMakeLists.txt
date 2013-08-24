@@ -192,7 +192,6 @@ list(APPEND libSources
     SourceList.cpp
     Pipeline.cpp
 
-    AclRegistry.cpp
     Artist.cpp
     ArtistPlaylistInterface.cpp
     Album.cpp
@@ -319,6 +318,7 @@ list(APPEND libSources
     filemetadata/taghandlers/oggtag.cpp
     filemetadata/MetadataEditor.cpp
 
+    network/acl/AclRegistry.cpp
     network/BufferIoDevice.cpp
     network/Msg.cpp
     network/MsgProcessor.cpp

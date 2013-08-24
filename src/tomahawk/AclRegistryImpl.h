@@ -20,7 +20,7 @@
 #ifndef TOMAHAWK_ACLREGISTRYIMPL_H
 #define TOMAHAWK_ACLREGISTRYIMPL_H
 
-#include "AclRegistry.h"
+#include "network/acl/AclRegistry.h"
 #include "HeadlessCheck.h"
 
 #include <QObject>
