@@ -3853,12 +3853,12 @@ Proba a trocar os filtros para ter outra lista música para escoitar. </translat
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="539"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="505"/>
         <source>My Collection</source>
         <translation>A miña colección</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="723"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="689"/>
         <source>Automatically detecting external IP failed.</source>
         <translation type="unfinished"/>
     </message>

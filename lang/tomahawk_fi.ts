@@ -3859,12 +3859,12 @@ kappaleen %2%4 %3.</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="539"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="505"/>
         <source>My Collection</source>
         <translation>Oma kokoelma</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="723"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="689"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>Ulkoisen IP-osoitteen automaattinen tunnistus epäonnistui.</translation>
     </message>

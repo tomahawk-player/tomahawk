@@ -3853,12 +3853,12 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="539"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="505"/>
         <source>My Collection</source>
         <translation>Min samling</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="723"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="689"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>Automatisk extern IP-upptäckt misslyckades</translation>
     </message>

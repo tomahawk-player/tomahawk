@@ -3848,12 +3848,12 @@ Spróbuj poprawić filtry aby uzyskać nowy zestaw piosenek do odtworzenia.</tra
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="539"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="505"/>
         <source>My Collection</source>
         <translation>Moja Kolekcja</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="723"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="689"/>
         <source>Automatically detecting external IP failed.</source>
         <translation type="unfinished"/>
     </message>

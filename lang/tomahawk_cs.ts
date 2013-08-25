@@ -3853,12 +3853,12 @@ Zkuste vyladit filtry pro nové písně.</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="539"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="505"/>
         <source>My Collection</source>
         <translation>Moje sbírka</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="723"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="689"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>Automatické zjištění vnější adresy IP se nezdařilo.</translation>
     </message>
