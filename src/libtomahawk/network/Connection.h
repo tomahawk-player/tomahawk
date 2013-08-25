@@ -116,7 +116,7 @@ private slots:
     void readyRead();
     void doSetup();
     void checkACL();
-    void checkACLResult( const QString &nodeid, const QString &username, Tomahawk::ACLStatus::Type peerStatus );
+    void aclDecision( Tomahawk::ACLStatus::Type status );
     void bytesWritten( qint64 );
     void calcStats();
 

@@ -20,6 +20,9 @@
 #ifndef TOMAHAWK_ACLREGISTRY_H
 #define TOMAHAWK_ACLREGISTRY_H
 
+#include "network/acl/AclRequest.h"
+#include "utils/WeakObjectList.h"
+
 #include "DllMacro.h"
 #include "Typedefs.h"
 
@@ -82,6 +85,17 @@ public:
     ACLRegistry( QObject *parent = 0 );
     virtual ~ACLRegistry();
 
+    /**
+     * @brief Check if the request is authorized to access via our instance via network.
+     *
+     * Checking is done asynchronously and will not block the calling thread. This function
+     * can be called from any thread. It will ensure itself that the underlying logic is run
+     * in the correct thread.
+     *
+     * @param request The connection request which should be authorized.
+     */
+    virtual void isAuthorizedRequest( const Tomahawk::Network::ACL::aclrequest_ptr& request );
+
 signals:
     void aclResult( QString nodeid, QString username, Tomahawk::ACLStatus::Type peerStatus );
 
@@ -109,6 +123,12 @@ protected:
     QList< ACLRegistry::User > m_cache;
 
     static ACLRegistry* s_instance;
+
+private slots:
+    void aclResultForRequest( QString nodeid, QString username, Tomahawk::ACLStatus::Type peerStatus );
+
+private:
+    Tomahawk::Utils::WeakObjectList<Tomahawk::Network::ACL::AclRequest> m_aclRequests;
 };
 
 Q_DECLARE_METATYPE( ACLRegistry::User )

@@ -52,6 +52,7 @@ public:
         , stats_rx_bytes_per_sec( 0 )
         , rx_bytes_last( 0 )
         , tx_bytes_last( 0 )
+        , aclRequest( 0 )
     {
     }
     Connection* q_ptr;
@@ -88,6 +89,8 @@ private:
 
     MsgProcessor msgprocessor_in;
     MsgProcessor msgprocessor_out;
+
+    Tomahawk::Network::ACL::aclrequest_ptr aclRequest;
 };
 
 

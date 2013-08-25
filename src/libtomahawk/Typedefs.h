@@ -247,6 +247,16 @@ namespace Tomahawk
 
         typedef QPointer< InfoPlugin > InfoPluginPtr;
     }
+
+    namespace Network
+    {
+        namespace ACL
+        {
+            class AclRequest;
+            typedef QSharedPointer<AclRequest> aclrequest_ptr;
+            typedef QWeakPointer<AclRequest> aclrequest_wptr;
+        }
+    }
 } // ns
 
 typedef int AudioErrorCode;

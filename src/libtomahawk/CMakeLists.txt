@@ -319,6 +319,7 @@ list(APPEND libSources
     filemetadata/MetadataEditor.cpp
 
     network/acl/AclRegistry.cpp
+    network/acl/AclRequest.cpp
     network/BufferIoDevice.cpp
     network/Msg.cpp
     network/MsgProcessor.cpp
@@ -365,6 +366,7 @@ list(APPEND libSources
     utils/TomahawkCache.cpp
     utils/GuiHelpers.cpp
     utils/WeakObjectHash.cpp
+    utils/WeakObjectList.cpp
     utils/PluginLoader.cpp
 
     thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.cpp

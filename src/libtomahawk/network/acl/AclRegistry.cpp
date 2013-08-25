@@ -94,6 +94,9 @@ ACLRegistry::ACLRegistry( QObject* parent )
     qRegisterMetaType< Tomahawk::ACLStatus::Type >( "Tomahawk::ACLStatus::Type" );
     qRegisterMetaType< ACLRegistry::User >( "ACLRegistry::User" );
     qRegisterMetaTypeStreamOperators< ACLRegistry::User >( "ACLRegistry::User" );
+
+    connect( this, SIGNAL( aclResult( QString, QString, Tomahawk::ACLStatus::Type ) ),
+             SLOT( aclResultForRequest(QString,QString,Tomahawk::ACLStatus::Type ) ) );
 }
 
 
@@ -103,8 +106,46 @@ ACLRegistry::~ACLRegistry()
 
 
 void
+ACLRegistry::isAuthorizedRequest( const Tomahawk::Network::ACL::aclrequest_ptr& request )
+{
+    m_aclRequests.insert( request );
+    // Ensure that we calling the registry in its own function and do not block the caller thread.
+    QMetaObject::invokeMethod( this, "isAuthorizedUser", Qt::QueuedConnection,
+                               Q_ARG( QString, request->nodeid() ),
+                               Q_ARG( QString, request->username() ),
+                               Q_ARG( Tomahawk::ACLStatus::Type, request->status() ) );
+}
+
+
+void
 ACLRegistry::load()
 {
+}
+
+void
+ACLRegistry::aclResultForRequest( QString nodeid, QString username, Tomahawk::ACLStatus::Type peerStatus )
+{
+    QMutableListIterator<Tomahawk::Network::ACL::aclrequest_wptr> iter = m_aclRequests.iter();
+    while ( iter.hasNext() )
+    {
+        Tomahawk::Network::ACL::aclrequest_wptr wptr = iter.next();
+
+        // Remove dangling objects
+        if ( wptr.isNull() )
+        {
+            iter.remove();
+            continue;
+        }
+
+        // Try to (greedy) match all possible AclRequests
+        Tomahawk::Network::ACL::aclrequest_ptr request = wptr.toStrongRef();
+        if ( request->nodeid() == nodeid && request->username() == username )
+        {
+            QMetaObject::invokeMethod( request.data(), "emitDecision", Q_ARG( Tomahawk::ACLStatus::Type, peerStatus ) );
+            // We made a decision, so strip this request from the queue
+            iter.remove();
+        }
+    }
 }
 
 
