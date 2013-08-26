@@ -3851,12 +3851,12 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="505"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="504"/>
         <source>My Collection</source>
         <translation>マイコレクション</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="689"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="688"/>
         <source>Automatically detecting external IP failed.</source>
         <translation type="unfinished"/>
     </message>
