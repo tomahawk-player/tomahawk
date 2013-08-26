@@ -277,6 +277,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
 
         File "${INSTALL_PATH}\bin\libtomahawk.dll"
         File "${INSTALL_PATH}\bin\libtomahawk-widgets.dll"
+        File "${INSTALL_PATH}\bin\libtomahawk-playdarapi.dll"
 
         ; plugins
         File "${INSTALL_PATH}\lib\libtomahawk_*_*.dll"
@@ -289,6 +290,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
 
         File "${BUILD_PATH}\libtomahawk.dll"
         File "${BUILD_PATH}\libtomahawk-widgets.dll"
+        File "${BUILD_PATH}\libtomahawk-playdarapi.dll"
 
         ; plugins
         File "${BUILD_PATH}\libtomahawk_*_*.dll"
