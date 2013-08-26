@@ -40,7 +40,7 @@ void
 PlaydarApi::start()
 {
     Q_D( PlaydarApi );
-    if ( d->session.isNull() )
+    if ( !d->session.isNull() )
     {
         tLog() << "HTTPd session already exists, returning";
         return;
