@@ -23,7 +23,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="185"/>
         <source>Tomahawk needs you to decide whether %1 is allowed to connect.</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk are nevoie să decizi dacă %1 are permisiunea  să se conecteze.</translation>
     </message>
 </context>
 <context>
@@ -31,7 +31,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountFactoryWrapper.cpp" line="42"/>
         <source>Add Account</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă cont</translation>
     </message>
 </context>
 <context>
@@ -39,17 +39,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountFactoryWrapperDelegate.cpp" line="103"/>
         <source>Online</source>
-        <translation type="unfinished"/>
+        <translation>Conectat</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountFactoryWrapperDelegate.cpp" line="108"/>
         <source>Connecting...</source>
-        <translation type="unfinished"/>
+        <translation>Se conectează...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountFactoryWrapperDelegate.cpp" line="113"/>
         <source>Offline</source>
-        <translation type="unfinished"/>
+        <translation>Deconectat</translation>
     </message>
 </context>
 <context>
@@ -57,18 +57,18 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/tomahawk/widgets/AccountListWidget.cpp" line="64"/>
         <source>Connections</source>
-        <translation type="unfinished"/>
+        <translation>Conectări</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/widgets/AccountListWidget.cpp" line="72"/>
         <location filename="../src/tomahawk/widgets/AccountListWidget.cpp" line="234"/>
         <source>Connect &amp;All</source>
-        <translation type="unfinished"/>
+        <translation>Conectează to&amp;ate</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/widgets/AccountListWidget.cpp" line="233"/>
         <source>Disconnect &amp;All</source>
-        <translation type="unfinished"/>
+        <translation>Deconectează t&amp;ot</translation>
     </message>
 </context>
 <context>
@@ -76,174 +76,174 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="65"/>
         <source>&amp;Listen Along</source>
-        <translation type="unfinished"/>
+        <translation>Ascu&amp;ltă împreună cu</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="68"/>
         <source>Stop &amp;Listening Along</source>
-        <translation type="unfinished"/>
+        <translation>Oprește ascu&amp;ltarea împreună</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="72"/>
         <source>&amp;Follow in real-time</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Urmărește în timp real</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="77"/>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="328"/>
         <source>&amp;Listen Privately</source>
-        <translation type="unfinished"/>
+        <translation>Ascu&amp;ltă privat</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="77"/>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="328"/>
         <source>&amp;Listen Publicly</source>
-        <translation type="unfinished"/>
+        <translation>Ascu&amp;ltă public</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="83"/>
         <source>&amp;Load Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Încarcă &amp;lista de redare</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="84"/>
         <source>&amp;Load Station</source>
-        <translation type="unfinished"/>
+        <translation>Încarcă &amp;stație</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="85"/>
         <source>&amp;Rename Playlist</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Redenumește lista de redare</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="86"/>
         <source>&amp;Rename Station</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Redenumește stația</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="87"/>
         <source>&amp;Copy Playlist Link</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Copiază legătura către lista de redare</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="88"/>
         <source>&amp;Play</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Redă</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="92"/>
         <source>&amp;Stop</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Oprește</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="93"/>
         <source>&amp;Previous Track</source>
-        <translation type="unfinished"/>
+        <translation>Piesa &amp;precedentă</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="95"/>
         <source>&amp;Next Track</source>
-        <translation type="unfinished"/>
+        <translation>Piesa &amp;următoare</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="97"/>
         <source>&amp;Quit</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Ieșire</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="110"/>
         <source>Load &amp;XSPF...</source>
-        <translation type="unfinished"/>
+        <translation>Încarcă &amp;XSPF...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="111"/>
         <source>U&amp;pdate Collection</source>
-        <translation type="unfinished"/>
+        <translation>A&amp;ctualizează colecția</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="112"/>
         <source>Fully &amp;Rescan Collection</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Rescanează complet colecția</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="113"/>
         <source>Show Offline Sources</source>
-        <translation type="unfinished"/>
+        <translation>Arată sursele offline</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="115"/>
         <source>&amp;Configure Tomahawk...</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Configurează Tomahawk...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="119"/>
         <source>Minimize</source>
-        <translation type="unfinished"/>
+        <translation>Minimizare</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="121"/>
         <source>Zoom</source>
-        <translation type="unfinished"/>
+        <translation>Zoom</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="123"/>
         <source>Enter Full Screen</source>
-        <translation type="unfinished"/>
+        <translation>Intră în mod pe tot ecranul</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="126"/>
         <source>Hide Menu Bar</source>
-        <translation type="unfinished"/>
+        <translation>Ascunde bara de meniu</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="130"/>
         <source>Diagnostics...</source>
-        <translation type="unfinished"/>
+        <translation>Diagnosticare...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="132"/>
         <source>About &amp;Tomahawk...</source>
-        <translation type="unfinished"/>
+        <translation>Despre &amp;Tomahaek...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="135"/>
         <source>&amp;Legal Information...</source>
-        <translation type="unfinished"/>
+        <translation>Informații &amp;legale...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="137"/>
         <source>&amp;View Logfile</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Vizualizează jurnalul</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="140"/>
         <source>Check For Updates...</source>
-        <translation type="unfinished"/>
+        <translation>Verifică pentru actualizări...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="152"/>
         <source>&amp;Controls</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Controale</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="166"/>
         <source>&amp;Settings</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Setări</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="172"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Ajutor</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="199"/>
         <source>&amp;Window</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Fereastră</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="215"/>
         <source>Main Menu</source>
-        <translation type="unfinished"/>
+        <translation>Meniu principal</translation>
     </message>
 </context>
 <context>
@@ -251,12 +251,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="230"/>
         <source>Tracklist</source>
-        <translation type="unfinished"/>
+        <translation>Lista de piese</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.ui" line="301"/>
         <source>Other Albums</source>
-        <translation type="unfinished"/>
+        <translation>Alte albume</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="92"/>
@@ -280,12 +280,12 @@ connect and stream from you?</source>
         <location filename="../src/libtomahawk/playlist/AlbumModel.cpp" line="65"/>
         <location filename="../src/libtomahawk/playlist/AlbumModel.cpp" line="107"/>
         <source>All albums from %1</source>
-        <translation type="unfinished"/>
+        <translation>Toate albumele de la %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/AlbumModel.cpp" line="109"/>
         <source>All albums</source>
-        <translation type="unfinished"/>
+        <translation>Toate albumele</translation>
     </message>
 </context>
 <context>
@@ -303,7 +303,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.ui" line="389"/>
         <source>Albums</source>
-        <translation type="unfinished"/>
+        <translation>Albume</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="108"/>
@@ -331,22 +331,22 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/tomahawk/AudioControls.cpp" line="308"/>
         <source>Shuffle</source>
-        <translation type="unfinished"/>
+        <translation>Amestecă</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/AudioControls.cpp" line="309"/>
         <source>Repeat</source>
-        <translation type="unfinished"/>
+        <translation>Repetă</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/AudioControls.cpp" line="306"/>
         <source>Time Elapsed</source>
-        <translation type="unfinished"/>
+        <translation>Timp scurs</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/AudioControls.cpp" line="307"/>
         <source>Time Remaining</source>
-        <translation type="unfinished"/>
+        <translation>Timp rămas</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/AudioControls.cpp" line="312"/>
@@ -387,24 +387,24 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="62"/>
         <source>Create new Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Crează o nouă listă de redare</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="65"/>
         <source>Create new Station</source>
-        <translation type="unfinished"/>
+        <translation>Crează o nouă stație</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="183"/>
         <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="292"/>
         <source>New Station</source>
-        <translation type="unfinished"/>
+        <translation>Stație nouă</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="183"/>
         <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="292"/>
         <source>%1 Station</source>
-        <translation type="unfinished"/>
+        <translation>Stația %1</translation>
     </message>
 </context>
 <context>
@@ -412,12 +412,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="388"/>
         <source>Playlists</source>
-        <translation type="unfinished"/>
+        <translation>Liste de redare</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="390"/>
         <source>Stations</source>
-        <translation type="unfinished"/>
+        <translation>Stații</translation>
     </message>
 </context>
 <context>
@@ -425,7 +425,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/searchlineedit/ClearButton.cpp" line="38"/>
         <source>Clear</source>
-        <translation type="unfinished"/>
+        <translation>Șterge</translation>
     </message>
 </context>
 <context>
@@ -433,7 +433,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnItemDelegate.cpp" line="191"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>Necunoscut</translation>
     </message>
 </context>
 <context>
@@ -449,57 +449,57 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="192"/>
         <source>Composer</source>
-        <translation type="unfinished"/>
+        <translation>Compozitor</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="204"/>
         <source>Age</source>
-        <translation type="unfinished"/>
+        <translation>Vechime</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="216"/>
         <source>Year</source>
-        <translation type="unfinished"/>
+        <translation>An</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="228"/>
         <source>Duration</source>
-        <translation type="unfinished"/>
+        <translation>Durată</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="240"/>
         <source>Bitrate</source>
-        <translation type="unfinished"/>
+        <translation>Rată de biți</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="255"/>
         <source>Composer:</source>
-        <translation type="unfinished"/>
+        <translation>Compozitor:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="273"/>
         <source>Duration:</source>
-        <translation type="unfinished"/>
+        <translation>Durată:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="291"/>
         <source>Bitrate:</source>
-        <translation type="unfinished"/>
+        <translation>Rată de biți:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="309"/>
         <source>Year:</source>
-        <translation type="unfinished"/>
+        <translation>An:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="327"/>
         <source>Age:</source>
-        <translation type="unfinished"/>
+        <translation>Vechime:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.cpp" line="96"/>
         <source>%1 kbps</source>
-        <translation type="unfinished"/>
+        <translation>%1 kbps</translation>
     </message>
 </context>
 <context>
@@ -508,12 +508,12 @@ connect and stream from you?</source>
         <location filename="../src/libtomahawk/context/ContextWidget.ui" line="38"/>
         <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="348"/>
         <source>Show Footnotes</source>
-        <translation type="unfinished"/>
+        <translation>Arată note de subsol</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/context/ContextWidget.cpp" line="342"/>
         <source>Hide Footnotes</source>
-        <translation type="unfinished"/>
+        <translation>Ascunde note de subsol</translation>
     </message>
 </context>
 <context>
@@ -575,17 +575,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/viewpages/dashboard/DashboardWidget.ui" line="89"/>
         <source>Recently Played Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Piese redate recent</translation>
     </message>
     <message>
         <location filename="../src/viewpages/dashboard/DashboardWidget.ui" line="147"/>
         <source>Recent Additions</source>
-        <translation type="unfinished"/>
+        <translation>Adăugate recent</translation>
     </message>
     <message>
         <location filename="../src/viewpages/dashboard/DashboardWidget.ui" line="256"/>
         <source>Newest Stations &amp; Playlists</source>
-        <translation type="unfinished"/>
+        <translation>Cele mai noi stații și liste de redare</translation>
     </message>
 </context>
 <context>
@@ -732,7 +732,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/FilterHeader.cpp" line="29"/>
         <source>Filter...</source>
-        <translation type="unfinished"/>
+        <translation>Filtrare...</translation>
     </message>
 </context>
 <context>
@@ -810,32 +810,32 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="67"/>
         <source>From:</source>
-        <translation type="unfinished"/>
+        <translation>De la:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="70"/>
         <source>To:</source>
-        <translation type="unfinished"/>
+        <translation>Către:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="78"/>
         <source>Recently Played Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Piese redate recent</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="81"/>
         <source>Your recently played tracks</source>
-        <translation type="unfinished"/>
+        <translation>Piesele tale redate recent</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="83"/>
         <source>%1&apos;s recently played tracks</source>
-        <translation type="unfinished"/>
+        <translation>Pisele redate recent ale %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="89"/>
         <source>Sorry, we could not find any recent plays!</source>
-        <translation type="unfinished"/>
+        <translation>Ne pare rău, nu am găsit redări recente!</translation>
     </message>
 </context>
 <context>
@@ -843,7 +843,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/InboxItem.cpp" line="35"/>
         <source>Inbox</source>
-        <translation type="unfinished"/>
+        <translation>Inbox</translation>
     </message>
 </context>
 <context>
@@ -872,7 +872,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/infobar/InfoBar.cpp" line="111"/>
         <source>Filter...</source>
-        <translation type="unfinished"/>
+        <translation>Filtrare...</translation>
     </message>
 </context>
 <context>
@@ -940,27 +940,27 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/LoadXSPFDialog.ui" line="14"/>
         <source>Load XSPF</source>
-        <translation type="unfinished"/>
+        <translation>Încarcă XSPF</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/LoadXSPFDialog.ui" line="22"/>
         <source>Playlist URL</source>
-        <translation type="unfinished"/>
+        <translation>URL pentru lista de redare</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/LoadXSPFDialog.ui" line="29"/>
         <source>Enter URL...</source>
-        <translation type="unfinished"/>
+        <translation>Introdu URL...</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/LoadXSPFDialog.ui" line="42"/>
         <source>...</source>
-        <translation type="unfinished"/>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/LoadXSPFDialog.ui" line="51"/>
         <source>Automatically update</source>
-        <translation type="unfinished"/>
+        <translation>Actualizează automat</translation>
     </message>
 </context>
 <context>
@@ -968,12 +968,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/LoadXSPFDialog.cpp" line="51"/>
         <source>Load XSPF File</source>
-        <translation type="unfinished"/>
+        <translation>Încarcă fișier XSPF</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/LoadXSPFDialog.cpp" line="51"/>
         <source>XSPF Files (*.xspf)</source>
-        <translation type="unfinished"/>
+        <translation>Fișiere XSPF (*.xspf)</translation>
     </message>
 </context>
 <context>
@@ -981,7 +981,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="57"/>
         <source>Top Loved Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Top piese îndrăgite</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="85"/>
@@ -996,17 +996,17 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="94"/>
         <source>All of your loved tracks</source>
-        <translation type="unfinished"/>
+        <translation>Toate piesele tale îndrăgite</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="96"/>
         <source>All of %1&apos;s loved tracks</source>
-        <translation type="unfinished"/>
+        <translation>Toate piesele îndrăgite ale %1</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="59"/>
         <source>Loved Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Piese îndrăgite</translation>
     </message>
 </context>
 <context>
@@ -1014,107 +1014,107 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="30"/>
         <source>Tags</source>
-        <translation type="unfinished"/>
+        <translation>Etichete</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="39"/>
         <source>Title:</source>
-        <translation type="unfinished"/>
+        <translation>Titlu:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="49"/>
         <source>Title...</source>
-        <translation type="unfinished"/>
+        <translation>Titlu...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="56"/>
         <source>Artist:</source>
-        <translation type="unfinished"/>
+        <translation>Artist:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="66"/>
         <source>Artist...</source>
-        <translation type="unfinished"/>
+        <translation>Artist...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="73"/>
         <source>Album:</source>
-        <translation type="unfinished"/>
+        <translation>Album:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="83"/>
         <source>Album...</source>
-        <translation type="unfinished"/>
+        <translation>Album...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="90"/>
         <source>Track Number:</source>
-        <translation type="unfinished"/>
+        <translation>Număr piesă:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="119"/>
         <source>Duration:</source>
-        <translation type="unfinished"/>
+        <translation>Durată:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="129"/>
         <source>00.00</source>
-        <translation type="unfinished"/>
+        <translation>00.00</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="136"/>
         <source>Year:</source>
-        <translation type="unfinished"/>
+        <translation>An:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="162"/>
         <source>Bitrate:</source>
-        <translation type="unfinished"/>
+        <translation>Rată de biți:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="183"/>
         <source>File</source>
-        <translation type="unfinished"/>
+        <translation>Fișier</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="189"/>
         <source>File Name:</source>
-        <translation type="unfinished"/>
+        <translation>Nume fișier:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="199"/>
         <source>File Name...</source>
-        <translation type="unfinished"/>
+        <translation>Nume fișier...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="206"/>
         <source>File Size...</source>
-        <translation type="unfinished"/>
+        <translation>Mărime fișier...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="212"/>
         <source>File size...</source>
-        <translation type="unfinished"/>
+        <translation>Mărime fișier...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="219"/>
         <source>File Size:</source>
-        <translation type="unfinished"/>
+        <translation>Mărime fișier:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="235"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Înapoi</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="245"/>
         <source>Forward</source>
-        <translation type="unfinished"/>
+        <translation>Înainte</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="381"/>
         <source>Properties</source>
-        <translation type="unfinished"/>
+        <translation>Proprietăți</translation>
     </message>
 </context>
 <context>
@@ -1122,17 +1122,17 @@ Password (OTP)</source>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.ui" line="39"/>
         <source>Trending Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Piese la modă</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.ui" line="79"/>
         <source>Hot Playlists</source>
-        <translation type="unfinished"/>
+        <translation>Liste de redare fierbinți</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.ui" line="113"/>
         <source>Trending Artists</source>
-        <translation type="unfinished"/>
+        <translation>Artiști la modă</translation>
     </message>
 </context>
 <context>
@@ -1140,7 +1140,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.ui" line="20"/>
         <source>Enter a title for the new playlist:</source>
-        <translation type="unfinished"/>
+        <translation>Introdu un titlu pentru noua listă de redare:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.ui" line="37"/>
@@ -1155,12 +1155,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.cpp" line="43"/>
         <source>&amp;Create Playlist</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Crează listă de redare</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.h" line="50"/>
         <source>Create a new playlist</source>
-        <translation type="unfinished"/>
+        <translation>Crează o nouă listă de redare</translation>
     </message>
 </context>
 <context>
@@ -1168,7 +1168,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/widgets/NewReleasesWidget.h" line="71"/>
         <source>New Releases</source>
-        <translation type="unfinished"/>
+        <translation>Nou lansate</translation>
     </message>
 </context>
 <context>
@@ -1176,108 +1176,108 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Artist</source>
-        <translation type="unfinished"/>
+        <translation>Artist</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Title</source>
-        <translation type="unfinished"/>
+        <translation>Titlu</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Composer</source>
-        <translation type="unfinished"/>
+        <translation>Compozitor</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Album</source>
-        <translation type="unfinished"/>
+        <translation>Album</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Track</source>
-        <translation type="unfinished"/>
+        <translation>Piesă</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Duration</source>
-        <translation type="unfinished"/>
+        <translation>Durată</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
         <source>Bitrate</source>
-        <translation type="unfinished"/>
+        <translation>Rată de biți</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
         <source>Age</source>
-        <translation type="unfinished"/>
+        <translation>Vechime</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
         <source>Year</source>
-        <translation type="unfinished"/>
+        <translation>An</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
         <source>Size</source>
-        <translation type="unfinished"/>
+        <translation>Mărime</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
         <source>Origin</source>
-        <translation type="unfinished"/>
+        <translation>Origine</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
         <source>Accuracy</source>
-        <translation type="unfinished"/>
+        <translation>Acuratețe</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="849"/>
         <source>Perfect match</source>
-        <translation type="unfinished"/>
+        <translation>Potrvire perfectă</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="850"/>
         <source>Very good match</source>
-        <translation type="unfinished"/>
+        <translation>Potrivire foarte bună</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="851"/>
         <source>Good match</source>
-        <translation type="unfinished"/>
+        <translation>Potrivire bună</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="852"/>
         <source>Vague match</source>
-        <translation type="unfinished"/>
+        <translation>Potrivire vagă</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="853"/>
         <source>Bad match</source>
-        <translation type="unfinished"/>
+        <translation>Potrivire greșită</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="854"/>
         <source>Very bad match</source>
-        <translation type="unfinished"/>
+        <translation>Potrivire foarte greșită</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="855"/>
         <source>Not available</source>
-        <translation type="unfinished"/>
+        <translation>Nu este disponibil</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="856"/>
         <source>Searching...</source>
-        <translation type="unfinished"/>
+        <translation>Se caută...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="397"/>
         <source>Name</source>
-        <translation type="unfinished"/>
+        <translation>Nume</translation>
     </message>
 </context>
 <context>
@@ -1285,12 +1285,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="180"/>
         <source>played %1 by you</source>
-        <translation type="unfinished"/>
+        <translation>redat %1 de tine</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="182"/>
         <source>played %1 by %2</source>
-        <translation type="unfinished"/>
+        <translation>redat %1 de către %2</translation>
     </message>
 </context>
 <context>
@@ -1299,31 +1299,31 @@ Password (OTP)</source>
         <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="135"/>
         <source>played %1 by you</source>
         <comment>e.g. played 3 hours ago by you</comment>
-        <translation type="unfinished"/>
+        <translation>redat %1 de tine</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="137"/>
         <source>played %1 by %2</source>
         <comment>e.g. played 3 hours ago by SomeSource</comment>
-        <translation type="unfinished"/>
+        <translation>redat %1 de către %2</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="143"/>
         <source>added %1</source>
         <comment>e.g. added 3 hours ago</comment>
-        <translation type="unfinished"/>
+        <translation>adăugat %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="204"/>
         <source>by &lt;b&gt;%1&lt;/b&gt;</source>
         <comment>e.g. by SomeArtist</comment>
-        <translation type="unfinished"/>
+        <translation>de &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="206"/>
         <source>by &lt;b&gt;%1&lt;/b&gt; on &lt;b&gt;%2&lt;/b&gt;</source>
         <comment>e.g. by SomeArtist on SomeAlbum</comment>
-        <translation type="unfinished"/>
+        <translation>de &lt;b&gt;%1&lt;/b&gt; pe &lt;b&gt;%2&lt;/b&gt;</translation>
     </message>
 </context>
 <context>
@@ -1331,23 +1331,23 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="139"/>
         <source>A playlist you created %1.</source>
-        <translation type="unfinished"/>
+        <translation>O listă de redare creată de tine %1.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="144"/>
         <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="151"/>
         <source>A playlist by %1, created %2.</source>
-        <translation type="unfinished"/>
+        <translation>O listă de redare de la %1, creată %2.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="200"/>
         <source>All tracks by %1 on album %2</source>
-        <translation type="unfinished"/>
+        <translation>Toate piesele de la %1 pe albumul %2</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="227"/>
         <source>All tracks by %1</source>
-        <translation type="unfinished"/>
+        <translation>Toate piesele de la %1</translation>
     </message>
 </context>
 <context>
@@ -1355,7 +1355,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="32"/>
         <source>New Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Listă de redare nouă</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="49"/>
@@ -1370,22 +1370,22 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="92"/>
         <source>Name:</source>
-        <translation type="unfinished"/>
+        <translation>Nume:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="102"/>
         <source>New Playlist...</source>
-        <translation type="unfinished"/>
+        <translation>Listă de redare nouă...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="113"/>
         <source>Create Manual Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Crează listă de redare manuală</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="123"/>
         <source>Create Automatic Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Crează listă de redare automată</translation>
     </message>
 </context>
 <context>
@@ -1465,94 +1465,94 @@ Password (OTP)</source>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="244"/>
         <source>%n year(s) ago</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>acum %n an</numerusform><numerusform>acum %n ani</numerusform><numerusform>acum %n de ani</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="246"/>
         <source>%n year(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n an</numerusform><numerusform>%n ani</numerusform><numerusform>%n de ani</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="252"/>
         <source>%n month(s) ago</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>acum %n lună</numerusform><numerusform>acum %n luni</numerusform><numerusform>acum %n de luni</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="254"/>
         <source>%n month(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n lună</numerusform><numerusform>%n luni</numerusform><numerusform>%n de luni</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="260"/>
         <source>%n week(s) ago</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>acum %n săptămână</numerusform><numerusform>acum %n săptămâni</numerusform><numerusform>acum %n de săptămâni</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="262"/>
         <source>%n week(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n săptămână</numerusform><numerusform>%n săptămâni</numerusform><numerusform>%n de săptămâni</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="268"/>
         <source>%n day(s) ago</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>acum %n zi</numerusform><numerusform>acum %n zile</numerusform><numerusform>acum %n de zile</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="270"/>
         <source>%n day(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n zi</numerusform><numerusform>%n zile</numerusform><numerusform>%n de zile</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="276"/>
         <source>%n hour(s) ago</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>acum %n oră</numerusform><numerusform>acum %n ore</numerusform><numerusform>acum %n de ore</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="278"/>
         <source>%n hour(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n oră</numerusform><numerusform>%n ore</numerusform><numerusform>%n de ore</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="284"/>
         <source>%1 minutes ago</source>
-        <translation type="unfinished"/>
+        <translation>acum %1 minute</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="286"/>
         <source>%1 minutes</source>
-        <translation type="unfinished"/>
+        <translation>%1 minute</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/TomahawkUtils.cpp" line="290"/>
         <source>just now</source>
-        <translation type="unfinished"/>
+        <translation>chiar acum</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/Account.cpp" line="39"/>
         <source>Friend Finders</source>
-        <translation type="unfinished"/>
+        <translation>Căutători de prieteni</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/Account.cpp" line="41"/>
         <source>Music Finders</source>
-        <translation type="unfinished"/>
+        <translation>Căutători de muzică</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/Account.cpp" line="44"/>
         <source>Status Updaters</source>
-        <translation type="unfinished"/>
+        <translation>Actualizează statusul</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/GuiHelpers.cpp" line="103"/>
         <location filename="../src/libtomahawk/utils/GuiHelpers.cpp" line="114"/>
         <source>%1 Config</source>
-        <translation type="unfinished"/>
+        <translation>%1 Config</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/GuiHelpers.cpp" line="143"/>
         <location filename="../src/libtomahawk/utils/GuiHelpers.cpp" line="158"/>
         <source>%1 Configuration</source>
-        <translation type="unfinished"/>
+        <translation>%1 Configurație</translation>
     </message>
 </context>
 <context>
@@ -1574,17 +1574,17 @@ Password (OTP)</source>
         <location filename="../src/libtomahawk/playlist/QueueView.ui" line="41"/>
         <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="204"/>
         <source>Open Queue</source>
-        <translation type="unfinished"/>
+        <translation>Deschide coada de redare</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="202"/>
         <source>Open Queue - %n item(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Deschide coada - %n element</numerusform><numerusform>Deschide coada - %n elemente</numerusform><numerusform>Deschide coada - %n de elemente</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="208"/>
         <source>Close Queue</source>
-        <translation type="unfinished"/>
+        <translation>Închide coada de redare</translation>
     </message>
 </context>
 <context>
@@ -1600,12 +1600,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/ResolverConfigDelegate.cpp" line="111"/>
         <source>Not found: %1</source>
-        <translation type="unfinished"/>
+        <translation>Nu s-a găsit: %1</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/ResolverConfigDelegate.cpp" line="114"/>
         <source>Failed to load: %1</source>
-        <translation type="unfinished"/>
+        <translation>A eșuat încărcarea: %1</translation>
     </message>
 </context>
 <context>
@@ -1613,7 +1613,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/widgets/ScriptCollectionHeader.cpp" line="50"/>
         <source>Reload Collection</source>
-        <translation type="unfinished"/>
+        <translation>Reîncarcă colecția</translation>
     </message>
 </context>
 <context>
@@ -1626,7 +1626,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="85"/>
         <source>SSL Error</source>
-        <translation type="unfinished"/>
+        <translation>Eroare SSL</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="86"/>
@@ -1636,7 +1636,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="93"/>
         <source>Trust certificate</source>
-        <translation type="unfinished"/>
+        <translation>Certificat de încredere</translation>
     </message>
 </context>
 <context>
@@ -1644,7 +1644,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/widgets/searchlineedit/SearchLineEdit.cpp" line="58"/>
         <source>Search</source>
-        <translation type="unfinished"/>
+        <translation>Caută</translation>
     </message>
 </context>
 <context>
@@ -1652,32 +1652,32 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/widgets/SearchWidget.h" line="53"/>
         <source>Search: %1</source>
-        <translation type="unfinished"/>
+        <translation>Caută: %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/SearchWidget.h" line="54"/>
         <source>Results for &apos;%1&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Rezultate pentru &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/SearchWidget.ui" line="72"/>
         <source>Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Piese</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/SearchWidget.ui" line="173"/>
         <source>Artists</source>
-        <translation type="unfinished"/>
+        <translation>Artiști</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/SearchWidget.ui" line="242"/>
         <source>Albums</source>
-        <translation type="unfinished"/>
+        <translation>Albume</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/SearchWidget.cpp" line="68"/>
         <source>Sorry, we could not find any tracks!</source>
-        <translation type="unfinished"/>
+        <translation>Ne pare rău, nu am găsit nicio piesă!</translation>
     </message>
 </context>
 <context>
@@ -1698,17 +1698,17 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/SettingsDialog.cpp" line="238"/>
         <source>Collection</source>
-        <translation type="unfinished"/>
+        <translation>Colecție</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/SettingsDialog.cpp" line="241"/>
         <source>Advanced</source>
-        <translation type="unfinished"/>
+        <translation>Avansat</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/SettingsDialog.cpp" line="159"/>
         <source>All</source>
-        <translation type="unfinished"/>
+        <translation>Toate</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/SettingsDialog.cpp" line="291"/>
@@ -1718,22 +1718,22 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/SettingsDialog.cpp" line="233"/>
         <source>Services</source>
-        <translation type="unfinished"/>
+        <translation>Servicii</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/SettingsDialog.cpp" line="132"/>
         <source>Install from file</source>
-        <translation type="unfinished"/>
+        <translation>Instalează din fișier</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/SettingsDialog.cpp" line="233"/>
         <source>Configure the accounts and services used by Tomahawk to search and retrieve music, find your friends and update your status.</source>
-        <translation type="unfinished"/>
+        <translation>Configurează conturile și serviciile folosite de Tomahawk pentru a căuta și obține muzică, pentru a îți găsi prietenii și pentru a îți actualiza statusul.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/SettingsDialog.cpp" line="238"/>
         <source>Manage how Tomahawk finds music on your computer.</source>
-        <translation type="unfinished"/>
+        <translation>Configurează cum poate găsi Tomahawk muzică pe computerul tău.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/SettingsDialog.cpp" line="241"/>
@@ -1768,7 +1768,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/SettingsDialog.cpp" line="291"/>
         <source>Information</source>
-        <translation type="unfinished"/>
+        <translation>Informație</translation>
     </message>
 </context>
 <context>
@@ -1776,7 +1776,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/Settings_Accounts.ui" line="48"/>
         <source>Filter by capability:</source>
-        <translation type="unfinished"/>
+        <translation>Filtrează după capabilitate:</translation>
     </message>
 </context>
 <context>
@@ -1814,7 +1814,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="96"/>
         <source>Static Port:</source>
-        <translation type="unfinished"/>
+        <translation>Port static:</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="133"/>
@@ -1824,22 +1824,22 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="161"/>
         <source>SOCKS Proxy</source>
-        <translation type="unfinished"/>
+        <translation>Proxy SOCKS</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="167"/>
         <source>Use SOCKS Proxy</source>
-        <translation type="unfinished"/>
+        <translation>Folosește proxy SOCKS</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="196"/>
         <source>Proxy Settings...</source>
-        <translation type="unfinished"/>
+        <translation>Setări proxy...</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="222"/>
         <source>Other Settings</source>
-        <translation type="unfinished"/>
+        <translation>Alte setări</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="231"/>
@@ -1898,12 +1898,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/widgets/SlideSwitchButton.cpp" line="46"/>
         <source>On</source>
-        <translation type="unfinished"/>
+        <translation>Da</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/widgets/SlideSwitchButton.cpp" line="47"/>
         <source>Off</source>
-        <translation type="unfinished"/>
+        <translation>Nu</translation>
     </message>
 </context>
 <context>
@@ -1911,17 +1911,17 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk-widgets/SocialPlaylistWidget.ui" line="34"/>
         <source>Popular New Albums From Your Friends</source>
-        <translation type="unfinished"/>
+        <translation>Albume populare noi de la prietenii tăi</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/SocialPlaylistWidget.ui" line="48"/>
         <source>Most Played Playlists</source>
-        <translation type="unfinished"/>
+        <translation>Cele mai rulate liste de redare</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/SocialPlaylistWidget.ui" line="63"/>
         <source>Most Played Tracks You Don&apos;t Have</source>
-        <translation type="unfinished"/>
+        <translation>Cele mai rulate piese pe care nu le deții</translation>
     </message>
 </context>
 <context>
@@ -1929,32 +1929,32 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/SocialWidget.ui" line="28"/>
         <source>Facebook</source>
-        <translation type="unfinished"/>
+        <translation>Facebook</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/SocialWidget.ui" line="38"/>
         <source>Twitter</source>
-        <translation type="unfinished"/>
+        <translation>Twitter</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/SocialWidget.cpp" line="71"/>
         <source>Tweet</source>
-        <translation type="unfinished"/>
+        <translation>Tweet</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/SocialWidget.cpp" line="169"/>
         <source>Listening to &quot;%1&quot; by %2. %3</source>
-        <translation type="unfinished"/>
+        <translation>Ascultând &quot;%1&quot; de la %2. %3</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/SocialWidget.cpp" line="171"/>
         <source>Listening to &quot;%1&quot; by %2 on &quot;%3&quot;. %4</source>
-        <translation type="unfinished"/>
+        <translation>Ascultând &quot;%1&quot; de la %2 pe &quot;%3&quot;. %4</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/SocialWidget.cpp" line="192"/>
         <source>%1 characters left</source>
-        <translation type="unfinished"/>
+        <translation>%1 caractere rămase</translation>
     </message>
 </context>
 <context>
@@ -1962,32 +1962,32 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="66"/>
         <source>Track</source>
-        <translation type="unfinished"/>
+        <translation>Piesă</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="67"/>
         <source>Album</source>
-        <translation type="unfinished"/>
+        <translation>Album</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="68"/>
         <source>Artist</source>
-        <translation type="unfinished"/>
+        <translation>Artist</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="69"/>
         <source>Local</source>
-        <translation type="unfinished"/>
+        <translation>Local</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="70"/>
         <source>Top 10</source>
-        <translation type="unfinished"/>
+        <translation>Top 10</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="267"/>
         <source>All available tracks</source>
-        <translation type="unfinished"/>
+        <translation>Toate piesele disponibile</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="387"/>
@@ -1998,13 +1998,13 @@ Password (OTP)</source>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="468"/>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="509"/>
         <source>Show</source>
-        <translation type="unfinished"/>
+        <translation>Arată</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="470"/>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="511"/>
         <source>Hide</source>
-        <translation type="unfinished"/>
+        <translation>Ascunde</translation>
     </message>
 </context>
 <context>
@@ -2012,32 +2012,32 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.ui" line="30"/>
         <source>Recent Albums</source>
-        <translation type="unfinished"/>
+        <translation>Albume recente</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.ui" line="74"/>
         <source>Latest Additions</source>
-        <translation type="unfinished"/>
+        <translation>Ultimele adăugate</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.ui" line="88"/>
         <source>Recently Played Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Piese rulate recent</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.cpp" line="70"/>
         <source>New Additions</source>
-        <translation type="unfinished"/>
+        <translation>Nou adăugate</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.cpp" line="73"/>
         <source>My recent activity</source>
-        <translation type="unfinished"/>
+        <translation>Activitatea mea recentă</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.cpp" line="77"/>
         <source>Recent activity from %1</source>
-        <translation type="unfinished"/>
+        <translation>Activitatea recentă de la %1</translation>
     </message>
 </context>
 <context>
@@ -2046,32 +2046,32 @@ Password (OTP)</source>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="85"/>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="610"/>
         <source>Latest Additions</source>
-        <translation type="unfinished"/>
+        <translation>Ultimele adăugate</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="89"/>
         <source>Recently Played</source>
-        <translation type="unfinished"/>
+        <translation>Rulate recent</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="152"/>
         <source>SuperCollection</source>
-        <translation type="unfinished"/>
+        <translation>SuperColecție</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="613"/>
         <source>Latest additions to your collection</source>
-        <translation type="unfinished"/>
+        <translation>Ultimele adăugate în colecția ta</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="615"/>
         <source>Latest additions to %1&apos;s collection</source>
-        <translation type="unfinished"/>
+        <translation>Ultimele adăugate în colecția %1</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="623"/>
         <source>Sorry, we could not find any recent additions!</source>
-        <translation type="unfinished"/>
+        <translation>Ne pare rău, nu am putut găsi adaugări recente!</translation>
     </message>
 </context>
 <context>
@@ -2079,68 +2079,68 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="226"/>
         <source>&amp;Copy Link</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Copiază legătura</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="234"/>
         <source>&amp;Delete %1</source>
-        <translation type="unfinished"/>
+        <translation>Ș&amp;terge %1</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="238"/>
         <source>Add to my Playlists</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă la listele mele de redare</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="240"/>
         <source>Add to my Automatic Playlists</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă la listele mele de redare automate</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="242"/>
         <source>Add to my Stations</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă la stațiile mele</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="230"/>
         <source>&amp;Export Playlist</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Exportă lista de redare</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="384"/>
         <source>playlist</source>
-        <translation type="unfinished"/>
+        <translation>listă de redare</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="388"/>
         <source>automatic playlist</source>
-        <translation type="unfinished"/>
+        <translation>listă de redare automată</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="392"/>
         <source>station</source>
-        <translation type="unfinished"/>
+        <translation>stație</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="421"/>
         <source>Would you like to delete the %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
-        <translation type="unfinished"/>
+        <translation>Dorești să ștergi %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="423"/>
         <source>Delete</source>
-        <translation type="unfinished"/>
+        <translation>Șterge</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="529"/>
         <source>Save XSPF</source>
-        <translation type="unfinished"/>
+        <translation>Salvează XSPF</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="530"/>
         <source>Playlists (*.xspf)</source>
-        <translation type="unfinished"/>
+        <translation>Liste de redare (*.xspf)</translation>
     </message>
 </context>
 <context>
@@ -2148,47 +2148,47 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="101"/>
         <source>Group</source>
-        <translation type="unfinished"/>
+        <translation>Grup</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="104"/>
         <source>Collection</source>
-        <translation type="unfinished"/>
+        <translation>Colecție</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="107"/>
         <source>Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Listă de redare</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="110"/>
         <source>Automatic Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Listă de redare automată</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="113"/>
         <source>Station</source>
-        <translation type="unfinished"/>
+        <translation>Stație</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="302"/>
         <source>Browse</source>
-        <translation type="unfinished"/>
+        <translation>Răsfoiește</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="303"/>
         <source>Search History</source>
-        <translation type="unfinished"/>
+        <translation>Istoric căutări</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="305"/>
         <source>My Music</source>
-        <translation type="unfinished"/>
+        <translation>Muzica mea</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="312"/>
         <source>SuperCollection</source>
-        <translation type="unfinished"/>
+        <translation>SuperColecție</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="337"/>
@@ -2198,22 +2198,22 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="329"/>
         <source>Recently Played</source>
-        <translation type="unfinished"/>
+        <translation>Redate recent</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="318"/>
         <source>Charts</source>
-        <translation type="unfinished"/>
+        <translation>Clasamente</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="323"/>
         <source>New Releases</source>
-        <translation type="unfinished"/>
+        <translation>Nou lansate</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="335"/>
         <source>Friends</source>
-        <translation type="unfinished"/>
+        <translation>Prieteni</translation>
     </message>
 </context>
 <context>
@@ -2297,7 +2297,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/widgets/StatsGauge.cpp" line="95"/>
         <source>out of %1</source>
-        <translation type="unfinished"/>
+        <translation>din %1</translation>
     </message>
 </context>
 <context>
@@ -2305,17 +2305,17 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/TemporaryPageItem.cpp" line="52"/>
         <source>Copy Artist Link</source>
-        <translation type="unfinished"/>
+        <translation>Copiază legătura către artist</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/TemporaryPageItem.cpp" line="59"/>
         <source>Copy Album Link</source>
-        <translation type="unfinished"/>
+        <translation>Copiază legătura către album</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/TemporaryPageItem.cpp" line="66"/>
         <source>Copy Track Link</source>
-        <translation type="unfinished"/>
+        <translation>Copiază legătura către piesă</translation>
     </message>
 </context>
 <context>
@@ -2323,32 +2323,32 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="201"/>
         <source>Add Account</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă cont</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="251"/>
         <source>Remove</source>
-        <translation type="unfinished"/>
+        <translation>Șterge</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="368"/>
         <source>%1 downloads</source>
-        <translation type="unfinished"/>
+        <translation>%1 descărcări</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="574"/>
         <source>Online</source>
-        <translation type="unfinished"/>
+        <translation>Conectat</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="579"/>
         <source>Connecting...</source>
-        <translation type="unfinished"/>
+        <translation>Se conectează...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="584"/>
         <source>Offline</source>
-        <translation type="unfinished"/>
+        <translation>Deconectat</translation>
     </message>
 </context>
 <context>
@@ -2369,22 +2369,22 @@ Password (OTP)</source>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.cpp" line="89"/>
         <source>Configure this Google Account</source>
-        <translation type="unfinished"/>
+        <translation>Configurează acest cont Google</translation>
     </message>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.cpp" line="90"/>
         <source>Google Address:</source>
-        <translation type="unfinished"/>
+        <translation>Adresă Google:</translation>
     </message>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.cpp" line="91"/>
         <source>Enter your Google login to connect with your friends using Tomahawk!</source>
-        <translation type="unfinished"/>
+        <translation>Introdu contul tău Google pentru a te conecta cu prietenii tăi folosind Tomahawk!</translation>
     </message>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.cpp" line="92"/>
         <source>username@gmail.com</source>
-        <translation type="unfinished"/>
+        <translation>utilizator@gmail.com</translation>
     </message>
 </context>
 <context>
@@ -2392,7 +2392,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.h" line="43"/>
         <source>Connect to Google Talk to find your friends</source>
-        <translation type="unfinished"/>
+        <translation>Conectează-te la Google Talk pentru a îți găsi prietenii</translation>
     </message>
 </context>
 <context>
@@ -2400,17 +2400,17 @@ Password (OTP)</source>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.cpp" line="59"/>
         <source>Enter Google Address</source>
-        <translation type="unfinished"/>
+        <translation>Introdu adresa Google</translation>
     </message>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.cpp" line="67"/>
         <source>Add Friend</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă prieten</translation>
     </message>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.cpp" line="68"/>
         <source>Enter Google Address:</source>
-        <translation type="unfinished"/>
+        <translation>Introdu adresa Google:</translation>
     </message>
 </context>
 <context>
@@ -2433,7 +2433,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="181"/>
         <source>Continue</source>
-        <translation type="unfinished"/>
+        <translation>Continuă</translation>
     </message>
 </context>
 <context>
@@ -2835,12 +2835,12 @@ username@jabber.org</source>
         <location filename="../src/libtomahawk/collection/Collection.cpp" line="66"/>
         <location filename="../src/libtomahawk/collection/Collection.cpp" line="80"/>
         <source>Collection</source>
-        <translation type="unfinished"/>
+        <translation>Colecție</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/collection/Collection.cpp" line="103"/>
         <source>This collection is empty.</source>
-        <translation type="unfinished"/>
+        <translation>Această colecție este goală.</translation>
     </message>
 </context>
 <context>
@@ -2848,24 +2848,24 @@ username@jabber.org</source>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="121"/>
         <source>&amp;Play</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Redă</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="124"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="266"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="317"/>
         <source>Add to &amp;Queue</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă la &amp;coadă</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="137"/>
         <source>Add to &amp;Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă în &amp;lista de redare</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="158"/>
         <source>Send to &amp;Friend</source>
-        <translation type="unfinished"/>
+        <translation>Trimite unui &amp;prieten</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="172"/>
@@ -2888,44 +2888,44 @@ username@jabber.org</source>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="274"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="325"/>
         <source>&amp;Go to &quot;%1&quot;</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Mergi la &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="200"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="204"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="277"/>
         <source>Go to &quot;%1&quot;</source>
-        <translation type="unfinished"/>
+        <translation>Mergi la &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="210"/>
         <source>&amp;Copy Track Link</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Copiază legătura piesei</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="230"/>
         <source>Mark as &amp;Listened</source>
-        <translation type="unfinished"/>
+        <translation>Marchează ca ascu&amp;ltat</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="234"/>
         <source>&amp;Remove Items</source>
-        <translation type="unfinished"/>
+        <translation>Ș&amp;terge elemente</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="234"/>
         <source>&amp;Remove Item</source>
-        <translation type="unfinished"/>
+        <translation>Ș&amp;terge element</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="285"/>
         <source>Copy Album &amp;Link</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Copiază legătura către album</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="333"/>
         <source>Copy Artist &amp;Link</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Copiază legătura către artist</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="482"/>
@@ -2935,7 +2935,7 @@ username@jabber.org</source>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="213"/>
         <source>Properties...</source>
-        <translation type="unfinished"/>
+        <translation>Proprietăți...</translation>
     </message>
 </context>
 <context>
@@ -2943,7 +2943,7 @@ username@jabber.org</source>
     <message>
         <location filename="../src/libtomahawk/database/DatabaseCommand_AllAlbums.cpp" line="119"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>Necunoscut</translation>
     </message>
 </context>
 <context>
@@ -3325,7 +3325,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="898"/>
         <source>My Collection</source>
-        <translation type="unfinished"/>
+        <translation>Colecția mea</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="899"/>
@@ -3610,7 +3610,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="46"/>
         <source>My Collection</source>
-        <translation type="unfinished"/>
+        <translation>Colecția mea</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="53"/>
@@ -3631,7 +3631,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/network/RemoteCollection.cpp" line="36"/>
         <source>Collection of %1</source>
-        <translation type="unfinished"/>
+        <translation>Colecția %1</translation>
     </message>
 </context>
 <context>
@@ -3640,7 +3640,7 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="66"/>
         <source>%1 Collection</source>
         <comment>Name of a collection based on a resolver, e.g. Subsonic Collection</comment>
-        <translation type="unfinished"/>
+        <translation>Colecție %1</translation>
     </message>
 </context>
 <context>
@@ -3682,17 +3682,17 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/Source.cpp" line="721"/>
         <source>Saving (%1%)</source>
-        <translation type="unfinished"/>
+        <translation>Se salvează (%1%)</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Source.cpp" line="808"/>
         <source>Online</source>
-        <translation type="unfinished"/>
+        <translation>Conectat</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Source.cpp" line="812"/>
         <source>Offline</source>
-        <translation type="unfinished"/>
+        <translation>Deconectat</translation>
     </message>
 </context>
 <context>
@@ -3751,12 +3751,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/dashboard/Dashboard.h" line="101"/>
         <source>Dashboard</source>
-        <translation type="unfinished"/>
+        <translation>Panou de bord</translation>
     </message>
     <message>
         <location filename="../src/viewpages/dashboard/Dashboard.h" line="102"/>
         <source>An overview of your recent activity</source>
-        <translation type="unfinished"/>
+        <translation>O privire de ansamblu asupra activității tale recente</translation>
     </message>
 </context>
 <context>
@@ -3764,7 +3764,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/dashboard/Dashboard.cpp" line="263"/>
         <source>No recently created playlists in your network.</source>
-        <translation type="unfinished"/>
+        <translation>Nu există liste de redare recent create în rețeaua ta.</translation>
     </message>
 </context>
 <context>
@@ -3772,7 +3772,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivity.h" line="57"/>
         <source>Network Activity</source>
-        <translation type="unfinished"/>
+        <translation>Activitatea rețelei</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivity.h" line="58"/>
@@ -3785,47 +3785,47 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="72"/>
         <source>Charts</source>
-        <translation type="unfinished"/>
+        <translation>Clasamente</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="83"/>
         <source>Last Week</source>
-        <translation type="unfinished"/>
+        <translation>Săptămâna trecută</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="89"/>
         <source>Loved Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Piese îndrăgite</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="91"/>
         <source>Top Loved</source>
-        <translation type="unfinished"/>
+        <translation>Top îndrăgite</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="94"/>
         <source>Recently Loved</source>
-        <translation type="unfinished"/>
+        <translation>Recent îndrăgite</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="110"/>
         <source>Sorry, we are still loading the charts.</source>
-        <translation type="unfinished"/>
+        <translation>Ne pare rău, încă se încarcă clasamentele.</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="80"/>
         <source>Last Month</source>
-        <translation type="unfinished"/>
+        <translation>Luna trecută</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="77"/>
         <source>Last Year</source>
-        <translation type="unfinished"/>
+        <translation>Anul trecut</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="74"/>
         <source>Overall</source>
-        <translation type="unfinished"/>
+        <translation>Per ansamblu</translation>
     </message>
 </context>
 <context>
@@ -3841,7 +3841,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="504"/>
         <source>My Collection</source>
-        <translation type="unfinished"/>
+        <translation>Colecția mea</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="688"/>
@@ -3925,12 +3925,12 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/tomahawk/widgets/AccountsToolButton.cpp" line="90"/>
         <source>Configure Accounts</source>
-        <translation type="unfinished"/>
+        <translation>Configurează conturi</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/widgets/AccountWidget.cpp" line="132"/>
         <source>Invite</source>
-        <translation type="unfinished"/>
+        <translation>Invită</translation>
     </message>
 </context>
 <context>
@@ -3938,69 +3938,69 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.ui" line="14"/>
         <source>Tomahawk</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="284"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Înapoi</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="287"/>
         <source>Go back one page</source>
-        <translation type="unfinished"/>
+        <translation>Mergi înapoi o pagină</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="289"/>
         <source>Forward</source>
-        <translation type="unfinished"/>
+        <translation>Înainte</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="292"/>
         <source>Go forward one page</source>
-        <translation type="unfinished"/>
+        <translation>Mergi înainte o pagină</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="217"/>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1343"/>
         <source>Hide Menu Bar</source>
-        <translation type="unfinished"/>
+        <translation>Ascunde bara de meniu</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="217"/>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1337"/>
         <source>Show Menu Bar</source>
-        <translation type="unfinished"/>
+        <translation>Arată bara de meniu</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="304"/>
         <source>Search for any artist, album or song...</source>
-        <translation type="unfinished"/>
+        <translation>Caută orice artist, album sau piesă...</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="331"/>
         <source>&amp;Main Menu</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Meniu principal</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="905"/>
         <source>Exit Full Screen</source>
-        <translation type="unfinished"/>
+        <translation>Ieșire din modul pe tot ecranul</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="917"/>
         <source>Enter Full Screen</source>
-        <translation type="unfinished"/>
+        <translation>Pe tot ecranul</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="979"/>
         <source>XSPF Error</source>
-        <translation type="unfinished"/>
+        <translation>Eroare XSPF</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="979"/>
         <source>This is not a valid XSPF playlist.</source>
-        <translation type="unfinished"/>
+        <translation>Aceasta nu este o listă de redare XSPF validă.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="983"/>
@@ -4025,74 +4025,74 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1036"/>
         <source>Station</source>
-        <translation type="unfinished"/>
+        <translation>Stație</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1038"/>
         <source>Create New Station</source>
-        <translation type="unfinished"/>
+        <translation>Crează o nouă stație</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1038"/>
         <source>Name:</source>
-        <translation type="unfinished"/>
+        <translation>Nume:</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1101"/>
         <source>Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Listă de redare</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1123"/>
         <source>Automatic Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Listă de redare automată</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1145"/>
         <source>Pause</source>
-        <translation type="unfinished"/>
+        <translation>Pauză</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1167"/>
         <source>&amp;Play</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Redare</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1199"/>
         <source>%1 by %2</source>
         <comment>track, artist name</comment>
-        <translation type="unfinished"/>
+        <translation>%1 de %2</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1200"/>
         <source>%1 - %2</source>
         <comment>current track, some window title</comment>
-        <translation type="unfinished"/>
+        <translation>%1 - %2</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1211"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1215"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1219"/>
         <source>Copyright 2010 - 2013</source>
-        <translation type="unfinished"/>
+        <translation>Copyright 2010 - 2013</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1220"/>
         <source>Thanks to:</source>
-        <translation type="unfinished"/>
+        <translation>Mulțumiri:</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1227"/>
         <source>About Tomahawk</source>
-        <translation type="unfinished"/>
+        <translation>Despre Tomahawk</translation>
     </message>
 </context>
 <context>
@@ -4108,7 +4108,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="260"/>
         <source>Similar Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Piese similare</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="82"/>
@@ -4118,7 +4118,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="65"/>
         <source># PLAYS / ARTIST</source>
-        <translation type="unfinished"/>
+        <translation># REDĂRI / ARTIST</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="67"/>
@@ -4128,27 +4128,27 @@ enter the displayed PIN number here:</source>
     <message numerus="yes">
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="277"/>
         <source>You&apos;ve listened to this track %n time(s).</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Ai ascultat această piesă %n dată.</numerusform><numerusform>Ai ascultat această piesă de %n ori.</numerusform><numerusform>Ai ascultat această piesă de %n de ori.</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="279"/>
         <source>You&apos;ve never listened to this track before.</source>
-        <translation type="unfinished"/>
+        <translation>Nu ai ascultat niciodată această piesă.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="283"/>
         <source>You first listened to it on %1.</source>
-        <translation type="unfinished"/>
+        <translation>Ai ascultat-o prima dată pe %1.</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="288"/>
         <source>You&apos;ve listened to %1 %n time(s).</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Ai ascultat %1 %n dată.</numerusform><numerusform>Ai ascultat %1 de %n ori.</numerusform><numerusform>Ai ascultat %1 de %n de ori.</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="294"/>
         <source>You&apos;ve never listened to %1 before.</source>
-        <translation type="unfinished"/>
+        <translation>Nu ai ascultat niciodată %1.</translation>
     </message>
 </context>
 <context>
@@ -4156,7 +4156,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="619"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
-        <translation type="unfinished"/>
+        <translation>Ne pare rău, căutarea ta &apos;%1&apos; nu a avut rezultate.</translation>
     </message>
 </context>
 <context>
@@ -4165,13 +4165,13 @@ enter the displayed PIN number here:</source>
         <location filename="../src/libtomahawk/jobview/TransferStatusItem.cpp" line="70"/>
         <source>from</source>
         <comment>streaming artist - track from friend</comment>
-        <translation type="unfinished"/>
+        <translation>de la</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/TransferStatusItem.cpp" line="70"/>
         <source>to</source>
         <comment>streaming artist - track to friend</comment>
-        <translation type="unfinished"/>
+        <translation>către</translation>
     </message>
 </context>
 <context>
@@ -4179,7 +4179,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/playlist/TreeItemDelegate.cpp" line="180"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>Necunoscut</translation>
     </message>
 </context>
 <context>
@@ -4187,7 +4187,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="151"/>
         <source>All Artists</source>
-        <translation type="unfinished"/>
+        <translation>Toți artiștii</translation>
     </message>
 </context>
 <context>
@@ -4279,48 +4279,48 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="95"/>
         <source>Inbox</source>
-        <translation type="unfinished"/>
+        <translation>Inbox</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="96"/>
         <source>Listening suggestions from your friends</source>
-        <translation type="unfinished"/>
+        <translation>Sugestii de ascultare de la prietenii tăi</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="148"/>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="170"/>
         <source>This playlist is empty!</source>
-        <translation type="unfinished"/>
+        <translation>Această listă de redare este goală!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="377"/>
         <source>SuperCollection</source>
-        <translation type="unfinished"/>
+        <translation>SuperColecție</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="378"/>
         <source>Combined libraries of all your online friends</source>
-        <translation type="unfinished"/>
+        <translation>Bibliotecile combinate ale tuturor prietenilor tăi conectați</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="438"/>
         <source>Recently Played Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Piese redate recent</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="439"/>
         <source>Recently played tracks from all your friends</source>
-        <translation type="unfinished"/>
+        <translation>Piese redate recent de la toți pritenii tăi</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="445"/>
         <source>Sorry, we could not find any recent plays!</source>
-        <translation type="unfinished"/>
+        <translation>Ne pare rău, nu am găsit redări recente!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="472"/>
         <source>No listening suggestions here.</source>
-        <translation type="unfinished"/>
+        <translation>Nu există sugestii de ascultare aici.</translation>
     </message>
 </context>
 <context>
@@ -4328,7 +4328,7 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/libtomahawk/widgets/WhatsHotWidget.h" line="69"/>
         <source>Charts</source>
-        <translation type="unfinished"/>
+        <translation>Clasamente</translation>
     </message>
 </context>
 <context>
@@ -4336,7 +4336,7 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/libtomahawk/context/pages/WikipediaContext.h" line="42"/>
         <source>Wikipedia</source>
-        <translation type="unfinished"/>
+        <translation>Wikipedia</translation>
     </message>
 </context>
 <context>
@@ -4602,12 +4602,12 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="419"/>
         <source>Conflict</source>
-        <translation type="unfinished"/>
+        <translation>Conflict</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="434"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>Necunoscut</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="811"/>
@@ -4622,7 +4622,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="205"/>
         <source>Enter Jabber ID</source>
-        <translation type="unfinished"/>
+        <translation>Introdu ID Jabber</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="425"/>
@@ -4642,22 +4642,22 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="490"/>
         <source>Add Friend</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă prieten</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="491"/>
         <source>Enter Xmpp ID:</source>
-        <translation type="unfinished"/>
+        <translation>Introdu ID Xmpp:</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="647"/>
         <source>Add Friend...</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă prieten...</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="652"/>
         <source>XML Console...</source>
-        <translation type="unfinished"/>
+        <translation>Consolă XML...</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="701"/>
@@ -4667,7 +4667,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="810"/>
         <source>Authorize User</source>
-        <translation type="unfinished"/>
+        <translation>Autorizează utilizator</translation>
     </message>
 </context>
 <context>
@@ -4675,17 +4675,17 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/zeroconf/ConfigWidget.ui" line="55"/>
         <source>Local Network configuration</source>
-        <translation type="unfinished"/>
+        <translation>Configurarea rețelei locale</translation>
     </message>
     <message>
         <location filename="../src/accounts/zeroconf/ConfigWidget.ui" line="77"/>
         <source>This plugin will automatically find other users running Tomahawk on your local network</source>
-        <translation type="unfinished"/>
+        <translation>Această extensie va găsi automat alți utilizatori care rulează Tomahawk în rețeaua ta locală</translation>
     </message>
     <message>
         <location filename="../src/accounts/zeroconf/ConfigWidget.ui" line="84"/>
         <source>Connect automatically when Tomahawk starts</source>
-        <translation type="unfinished"/>
+        <translation>Conectează automat la pornirea Tomahawk</translation>
     </message>
 </context>
 </TS>
