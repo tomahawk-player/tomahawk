@@ -103,6 +103,39 @@ ConnectionManager::setWeakRef( QWeakPointer<ConnectionManager> weakRef )
     d_func()->ownRef = weakRef;
 }
 
+
+void
+ConnectionManager::authSuccessful()
+{
+    Q_D( ConnectionManager );
+
+    // We have successfully connected to the other peer, we're done.
+    disconnect( d->controlConnection.data(), SIGNAL( authSuccessful() ), this, SLOT( authSuccessful() ) );
+    disconnect( d->controlConnection.data(), SIGNAL( authFailed() ), this , SLOT( authFailed() ) );
+    disconnect( d->controlConnection.data(), SIGNAL( authTimeout() ), this, SLOT( authFailed() ) );
+
+    d->currentPeerInfo.clear();
+    deactivate();
+}
+
+
+void
+ConnectionManager::authFailed()
+{
+    Q_D( ConnectionManager );
+
+    // We could not auth with the peer on the other side, maybe this is the wrong one?
+    disconnect( d->controlConnection.data(), SIGNAL( authSuccessful() ), this, SLOT( authSuccessful() ) );
+    disconnect( d->controlConnection.data(), SIGNAL( authFailed() ), this, SLOT( authFailed() ) );
+    disconnect( d->controlConnection.data(), SIGNAL( authTimeout() ), this, SLOT( authFailed() ) );
+
+    // If auth failed, we need to setup a new controlconnection as the old will be destroyed.
+    newControlConnection( d->currentPeerInfo );
+    // Try to connect with the next available SipInfo.
+    tryConnect();
+}
+
+
 void
 ConnectionManager::handleSipInfoPrivate( const Tomahawk::peerinfo_ptr &peerInfo )
 {
@@ -141,6 +174,32 @@ ConnectionManager::handleSipInfoPrivate( const Tomahawk::peerinfo_ptr &peerInfo 
     }
     deactivate();
 }
+
+
+void
+ConnectionManager::newControlConnection( const Tomahawk::peerinfo_ptr& peerInfo )
+{
+    Q_D( ConnectionManager );
+    QVariantMap m;
+    m["conntype"]  = "accept-offer";
+    m["key"]       = peerInfo->key();
+    m["nodeid"]    = Tomahawk::Database::instance()->impl()->dbid();
+
+    d->controlConnection = QPointer<ControlConnection>( new ControlConnection( Servent::instance() ) );
+    d->controlConnection->setShutdownOnEmptyPeerInfos( false );
+    d->controlConnection->addPeerInfo( peerInfo );
+    d->controlConnection->setFirstMessage( m );
+
+    if ( peerInfo->id().length() )
+        d->controlConnection->setName( peerInfo->contactId() );
+    if ( peerInfo->nodeId().length() )
+        d->controlConnection->setId( peerInfo->nodeId() );
+
+    d->controlConnection->setNodeId( peerInfo->nodeId() );
+
+    Servent::instance()->registerControlConnection( d->controlConnection.data() );
+}
+
 
 void
 ConnectionManager::connectToPeer( const Tomahawk::peerinfo_ptr &peerInfo, bool lock )
@@ -234,24 +293,7 @@ ConnectionManager::connectToPeer( const Tomahawk::peerinfo_ptr &peerInfo, bool l
         d_func()->sipCandidates.append( privateIPv6 );
     }
 
-    QVariantMap m;
-    m["conntype"]  = "accept-offer";
-    m["key"]       = peerInfo->key();
-    m["nodeid"]    = Tomahawk::Database::instance()->impl()->dbid();
-
-    d_func()->controlConnection = QPointer<ControlConnection>( new ControlConnection( Servent::instance() ) );
-    d_func()->controlConnection->setShutdownOnEmptyPeerInfos( false );
-    d_func()->controlConnection->addPeerInfo( peerInfo );
-    d_func()->controlConnection->setFirstMessage( m );
-
-    if ( peerInfo->id().length() )
-        d_func()->controlConnection->setName( peerInfo->contactId() );
-    if ( peerInfo->nodeId().length() )
-        d_func()->controlConnection->setId( peerInfo->nodeId() );
-
-    d_func()->controlConnection->setNodeId( peerInfo->nodeId() );
-
-    Servent::instance()->registerControlConnection( d_func()->controlConnection.data() );
+    newControlConnection( peerInfo );
     tryConnect();
 }
 
@@ -357,15 +399,19 @@ ConnectionManager::deactivate()
 void
 ConnectionManager::socketConnected()
 {
+    Q_D( ConnectionManager );
     QTcpSocketExtra* sock = (QTcpSocketExtra*)sender();
 
-    peerInfoDebug( d_func()->currentPeerInfo ) << Q_FUNC_INFO << "Connected to hostaddr: " << sock->peerAddress() << ", hostname:" << sock->peerName();
+    peerInfoDebug( d->currentPeerInfo ) << Q_FUNC_INFO << "Connected to hostaddr: " << sock->peerAddress() << ", hostname:" << sock->peerName();
 
     Q_ASSERT( !sock->_conn.isNull() );
 
     handoverSocket( sock );
-    d_func()->currentPeerInfo.clear();
-    deactivate();
+
+    // Connect signal to wait for authentication result.
+    connect( d->controlConnection.data(), SIGNAL( authSuccessful() ), SLOT( authSuccessful() ) );
+    connect( d->controlConnection.data(), SIGNAL( authFailed()) , SLOT( authFailed() ) );
+    connect( d->controlConnection.data(), SIGNAL( authTimeout() ), SLOT( authFailed() ) );
 }
 
 void

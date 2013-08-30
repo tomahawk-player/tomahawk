@@ -331,12 +331,14 @@ Connection::checkACL()
     {
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Not checking ACL, nodeid is empty";
         QTimer::singleShot( 0, this, SLOT( doSetup() ) );
+        emit authSuccessful();
         return;
     }
 
     if ( Servent::isIPWhitelisted( d_func()->peerIpAddress ) )
     {
         QTimer::singleShot( 0, this, SLOT( doSetup() ) );
+        emit authSuccessful();
         return;
     }
 
@@ -358,14 +360,18 @@ Connection::aclDecision( Tomahawk::ACLStatus::Type status )
 {
     Q_D( Connection );
     tLog( LOGVERBOSE ) << Q_FUNC_INFO << "ACL decision for" << name() << ":" << status;
-    if ( status == Tomahawk::ACLStatus::Stream )
-    {
-        QTimer::singleShot( 0, this, SLOT( doSetup() ) );
-        return;
-    }
 
     // We have a decision, free memory.
     d->aclRequest->deleteLater();
+
+    if ( status == Tomahawk::ACLStatus::Stream )
+    {
+        QTimer::singleShot( 0, this, SLOT( doSetup() ) );
+        emit authSuccessful();
+        return;
+    }
+
+    emit authFailed();
 
     shutdown();
 }
@@ -378,6 +384,8 @@ Connection::authCheckTimeout()
 
     if ( d->ready )
         return;
+
+    emit authTimeout();
 
     tDebug( LOGVERBOSE ) << "Closing connection, not authed in time.";
     shutdown();

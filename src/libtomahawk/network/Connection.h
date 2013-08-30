@@ -87,6 +87,24 @@ public:
 
     QString bareName() const;
 signals:
+    /**
+     * Emitted if the authentication of this connection finally failed.
+     */
+    void authFailed();
+
+    /**
+     * Emitted if this connection was authenticated so that we can start talking to the other peer.
+     */
+    void authSuccessful();
+
+    /**
+     * Emiited if the authentication could not be processed in a given timespan.
+     *
+     * Though this does implicate a permanent problem in establishing a connection to the other peer,
+     * this connection will be shutdown. In most cases this signal is emitted because we are waiting
+     * for a user decision which has not yet be given.
+     */
+    void authTimeout();
     void ready();
     void failed();
     void finished();
