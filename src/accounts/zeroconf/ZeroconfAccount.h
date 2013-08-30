@@ -19,6 +19,7 @@
 #ifndef ZEROCONF_ACCOUNTS_H
 #define ZEROCONF_ACCOUNTS_H
 
+#include "TomahawkPlugin.h"
 #include "Zeroconf.h"
 #include "accounts/Account.h"
 #include "accounts/AccountDllMacro.h"
