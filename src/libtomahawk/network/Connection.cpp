@@ -343,7 +343,9 @@ Connection::checkACL()
     }
 
     tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Checking ACL for" << name();
-    d->aclRequest = Tomahawk::Network::ACL::aclrequest_ptr( new Tomahawk::Network::ACL::AclRequest( d->nodeid, bareName(), Tomahawk::ACLStatus::NotFound ) );
+    d->aclRequest = Tomahawk::Network::ACL::aclrequest_ptr(
+                new Tomahawk::Network::ACL::AclRequest( d->nodeid, bareName(), Tomahawk::ACLStatus::NotFound ),
+                &QObject::deleteLater );
     connect( d->aclRequest.data(), SIGNAL( decision( Tomahawk::ACLStatus::Type ) ), SLOT( aclDecision( Tomahawk::ACLStatus::Type ) ), Qt::QueuedConnection );
     ACLRegistry::instance()->isAuthorizedRequest( d->aclRequest );
 }
@@ -362,7 +364,7 @@ Connection::aclDecision( Tomahawk::ACLStatus::Type status )
     tLog( LOGVERBOSE ) << Q_FUNC_INFO << "ACL decision for" << name() << ":" << status;
 
     // We have a decision, free memory.
-    d->aclRequest->deleteLater();
+    d->aclRequest.clear();
 
     if ( status == Tomahawk::ACLStatus::Stream )
     {
