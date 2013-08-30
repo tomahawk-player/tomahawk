@@ -38,22 +38,23 @@ public:
 
     virtual ~ViewPageLazyLoader()
     {
-        delete m_widget;
+        if ( !m_widget.isNull() )
+            delete m_widget.data();
     }
 
 
     virtual T* widget()
     {
-        if( !m_widget )
+        if ( m_widget.isNull() )
             m_widget = new T();
 
-        return m_widget;
+        return m_widget.data();
     }
 
 
     virtual playlistinterface_ptr playlistInterface() const
     {
-        if( m_widget )
+        if ( !m_widget.isNull() )
             return m_widget->playlistInterface();
 
         return playlistinterface_ptr();
@@ -62,7 +63,7 @@ public:
 
     virtual bool isBeingPlayed() const
     {
-        if( m_widget && m_widget->isBeingPlayed() )
+        if ( !m_widget.isNull() && m_widget->isBeingPlayed() )
             return true;
 
         return false;
@@ -71,14 +72,14 @@ public:
 
     virtual bool jumpToCurrentTrack()
     {
-        if( m_widget && m_widget->jumpToCurrentTrack() )
+        if ( !m_widget.isNull() && m_widget->jumpToCurrentTrack() )
             return true;
 
         return false;
     }
 
 protected:
-    T* m_widget;
+    QPointer<T> m_widget;
 };
 
 } // ns
