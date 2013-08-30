@@ -701,7 +701,7 @@ TomahawkSettings::scannerPaths() const
 {
     QString musicLocation;
 
-#if defined(Q_WS_X11)
+#if defined(Q_OS_LINUX)
     musicLocation = QDir::homePath() + QLatin1String("/Music");
 #endif
 
