@@ -1685,12 +1685,12 @@ Password (OTP)</source>
 <context>
     <name>Servent</name>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="975"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="979"/>
         <source>Automatically detecting external IP failed: Could not parse JSON response.</source>
         <translation>Automatisches Erkennen externer IP fehlgeschlagen: die JSON-Antwort konnte nicht analysiert werden .</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="988"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="992"/>
         <source>Automatically detecting external IP failed: %1</source>
         <translation>Automatisches Erkennen externer IP fehlgeschlagen: %1</translation>
     </message>
@@ -2822,12 +2822,12 @@ username@jabber.org</source>
 <context>
     <name>Tomahawk::Accounts::ZeroconfFactory</name>
     <message>
-        <location filename="../src/accounts/zeroconf/ZeroconfAccount.h" line="42"/>
+        <location filename="../src/accounts/zeroconf/ZeroconfAccount.h" line="45"/>
         <source>Local Network</source>
         <translation>Lokales Netzwerk</translation>
     </message>
     <message>
-        <location filename="../src/accounts/zeroconf/ZeroconfAccount.h" line="43"/>
+        <location filename="../src/accounts/zeroconf/ZeroconfAccount.h" line="46"/>
         <source>Automatically connect to Tomahawks on the local network</source>
         <translation>Automatisch mit anderen Tomahawks im Netzwerk verbinden</translation>
     </message>

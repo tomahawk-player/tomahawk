@@ -1686,12 +1686,12 @@ heslo</translation>
 <context>
     <name>Servent</name>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="975"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="979"/>
         <source>Automatically detecting external IP failed: Could not parse JSON response.</source>
         <translation>Automatické zjištění vnější adresy IP se nezdařilo: Nepodařilo se zpracovat odpověď JSON.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="988"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="992"/>
         <source>Automatically detecting external IP failed: %1</source>
         <translation>Automatické zjištění vnější adresy IP se nezdařilo: %1</translation>
     </message>
@@ -2828,12 +2828,12 @@ username@jabber.org</translation>
 <context>
     <name>Tomahawk::Accounts::ZeroconfFactory</name>
     <message>
-        <location filename="../src/accounts/zeroconf/ZeroconfAccount.h" line="42"/>
+        <location filename="../src/accounts/zeroconf/ZeroconfAccount.h" line="45"/>
         <source>Local Network</source>
         <translation>Místní síť</translation>
     </message>
     <message>
-        <location filename="../src/accounts/zeroconf/ZeroconfAccount.h" line="43"/>
+        <location filename="../src/accounts/zeroconf/ZeroconfAccount.h" line="46"/>
         <source>Automatically connect to Tomahawks on the local network</source>
         <translation>Automaticky se spojit s ostatními Tomahawky v místní síti</translation>
     </message>
