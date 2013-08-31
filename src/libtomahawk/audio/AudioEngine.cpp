@@ -639,8 +639,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
 
     setCurrentTrack( result );
 
-    if ( !TomahawkUtils::isHttpResult( d->currentTrack->url() ) &&
-         !TomahawkUtils::isLocalResult( d->currentTrack->url() ) )
+    if ( !TomahawkUtils::isLocalResult( d->currentTrack->url() ) )
     {
         boost::function< void ( QSharedPointer< QIODevice >& ) > callback =
                 boost::bind( &AudioEngine::performLoadTrack, this, result, _1 );
@@ -661,9 +660,7 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr& result, QSharedPointe
 
     bool err = false;
     {
-        if ( !TomahawkUtils::isHttpResult( d->currentTrack->url() ) &&
-             !TomahawkUtils::isLocalResult( d->currentTrack->url() ) &&
-             ( !io || io.isNull() ) )
+        if ( !TomahawkUtils::isLocalResult( d->currentTrack->url() ) && ( !io || io.isNull() ) )
         {
             tLog() << "Error getting iodevice for" << result->url();
             err = true;
@@ -675,8 +672,7 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr& result, QSharedPointe
             d->state = Loading;
             emit loading( d->currentTrack );
 
-            if ( !TomahawkUtils::isHttpResult( d->currentTrack->url() ) &&
-                 !TomahawkUtils::isLocalResult( d->currentTrack->url() ) )
+            if ( !TomahawkUtils::isLocalResult( d->currentTrack->url() ) )
             {
                 if ( QNetworkReply* qnr_io = qobject_cast< QNetworkReply* >( io.data() ) )
                     d->mediaObject->setCurrentSource( new QNR_IODeviceStream( qnr_io, this ) );
@@ -686,6 +682,9 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr& result, QSharedPointe
             }
             else
             {
+                /*
+                 * TODO: Do we need this anymore as we now do HTTP streaming ourselves?
+                 * Maybe this can be useful for letting phonon do other protocols?
                 if ( !TomahawkUtils::isLocalResult( d->currentTrack->url() ) )
                 {
                     QUrl furl = d->currentTrack->url();
@@ -698,7 +697,7 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr& result, QSharedPointe
                     tLog( LOGVERBOSE ) << "Passing to Phonon:" << furl;
                     d->mediaObject->setCurrentSource( furl );
                 }
-                else
+                else*/
                 {
                     QString furl = d->currentTrack->url();
                     if ( furl.startsWith( "file://" ) )

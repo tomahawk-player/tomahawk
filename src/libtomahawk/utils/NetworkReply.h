@@ -61,4 +61,6 @@ private:
     QUrl m_url;
 };
 
+Q_DECLARE_METATYPE( QSharedPointer<NetworkReply> )
+
 #endif // NETWORKREPLY_H

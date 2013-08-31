@@ -35,6 +35,7 @@
 #include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
 #include "utils/NetworkAccessManager.h"
+#include "utils/NetworkReply.h"
 
 #include "Connection.h"
 #include "ControlConnection.h"
@@ -62,6 +63,7 @@ Q_DECLARE_METATYPE( QList< SipInfo > )
 Q_DECLARE_METATYPE( Connection* )
 Q_DECLARE_METATYPE( QTcpSocketExtra* )
 Q_DECLARE_METATYPE( Tomahawk::peerinfo_ptr )
+Q_DECLARE_METATYPE( IODeviceCallback )
 
 using namespace Tomahawk;
 
@@ -1402,10 +1404,20 @@ Servent::httpIODeviceFactory( const Tomahawk::result_ptr& result,
                               boost::function< void ( QSharedPointer< QIODevice >& ) > callback )
 {
     QNetworkRequest req( result->url() );
-    QNetworkReply* reply = Tomahawk::Utils::nam()->get( req );
+    // Follow HTTP Redirects
+    NetworkReply* reply = new NetworkReply( Tomahawk::Utils::nam()->get( req ) );
+    qRegisterMetaType<NetworkReply*>("NetworkReply*");
+    qRegisterMetaType<IODeviceCallback>("IODeviceCallback");
+    NewClosure( reply, SIGNAL( finished() ),
+                this, SLOT( httpIODeviceReady( NetworkReply*, IODeviceCallback ) ),
+                reply, callback );
+}
 
+void
+Servent::httpIODeviceReady( NetworkReply* reply, IODeviceCallback callback )
+{
     //boost::functions cannot accept temporaries as parameters
-    QSharedPointer< QIODevice > sp = QSharedPointer< QIODevice >( reply, &QObject::deleteLater );
+    QSharedPointer< QIODevice > sp = QSharedPointer< QIODevice >( reply->reply(), &QObject::deleteLater );
     callback( sp );
 }
 
