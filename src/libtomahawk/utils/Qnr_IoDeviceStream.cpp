@@ -42,7 +42,6 @@ QNR_IODeviceStream::QNR_IODeviceStream( QNetworkReply* reply, QObject* parent )
         m_networkReply->open(QIODevice::ReadOnly);
     }
 
-    tLog() << Q_FUNC_INFO;
     Q_ASSERT( m_networkReply->isOpen() );
     Q_ASSERT( m_networkReply->isReadable() );
 
@@ -53,12 +52,18 @@ QNR_IODeviceStream::QNR_IODeviceStream( QNetworkReply* reply, QObject* parent )
         Q_ASSERT( m_networkReply->atEnd() );
         setStreamSeekable( true );
         setStreamSize( m_data.size() );
-        tLog() << Q_FUNC_INFO << "Got data of size:" << m_data.size();
     }
     else
     {
-        Q_ASSERT( false );
         // TODO: Connect to finished() signal
+        QVariant contentLength = m_networkReply->header( QNetworkRequest::ContentLengthHeader );
+        if ( contentLength.isValid() && contentLength.toLongLong() > 0 )
+        {
+            setStreamSize( contentLength.toLongLong() );
+        }
+        // Just consume all data that is already available.
+        m_data = m_networkReply->readAll();
+        connect( m_networkReply, SIGNAL( readyRead() ), SLOT( readyRead() ) );
     }
 
     m_timer->setInterval( 0 );
@@ -68,14 +73,12 @@ QNR_IODeviceStream::QNR_IODeviceStream( QNetworkReply* reply, QObject* parent )
 
 QNR_IODeviceStream::~QNR_IODeviceStream()
 {
-    tLog() << Q_FUNC_INFO;
 }
 
 
 void
 QNR_IODeviceStream::enoughData()
 {
-    tLog() << Q_FUNC_INFO;
     m_timer->stop();
 }
 
@@ -83,7 +86,6 @@ QNR_IODeviceStream::enoughData()
 void
 QNR_IODeviceStream::needData()
 {
-    tLog() << Q_FUNC_INFO;
     m_timer->start();
     moreData();
 }
@@ -91,7 +93,6 @@ QNR_IODeviceStream::needData()
 void
 QNR_IODeviceStream::reset()
 {
-    tLog() << Q_FUNC_INFO;
     m_pos = 0;
 }
 
@@ -99,7 +100,6 @@ QNR_IODeviceStream::reset()
 void
 QNR_IODeviceStream::seekStream( qint64 offset )
 {
-    tLog() << Q_FUNC_INFO;
     m_pos = offset;
 }
 
@@ -107,12 +107,8 @@ void
 QNR_IODeviceStream::moreData()
 {
     QByteArray data = m_data.mid( m_pos, BLOCK_SIZE );
-    tLog() << Q_FUNC_INFO << data.size();
     m_pos += data.size();
-    if (m_data.size() == 0
-            // && m_networkReply->atEnd()
-            // && m_networkReply->isFinished()
-            )
+    if ( ( data.size() == 0 ) && m_networkReply->atEnd() && m_networkReply->isFinished() )
     {
         // We're done.
         endOfData();
@@ -122,6 +118,13 @@ QNR_IODeviceStream::moreData()
     {
         writeData( data );
     }
+}
+
+
+void
+QNR_IODeviceStream::readyRead()
+{
+    m_data += m_networkReply->readAll();
 }
 
 

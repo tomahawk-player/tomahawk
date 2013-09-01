@@ -49,6 +49,7 @@ public:
 
 private slots:
     void moreData();
+    void readyRead();
 
 private:
     QByteArray m_data;
