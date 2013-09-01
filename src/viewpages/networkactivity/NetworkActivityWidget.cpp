@@ -180,11 +180,11 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
         d->ui->playlistView->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
 
         QPalette p = d->ui->playlistView->palette();
-        p.setColor( QPalette::Text, TomahawkStyle::HEADER_TEXT );
-        p.setColor( QPalette::BrightText, TomahawkStyle::HEADER_TEXT );
-        p.setColor( QPalette::Foreground, TomahawkStyle::HEADER_TEXT );
-        p.setColor( QPalette::Highlight, TomahawkStyle::HEADER_TEXT );
-        p.setColor( QPalette::HighlightedText, TomahawkStyle::HEADER_BACKGROUND );
+        p.setColor( QPalette::Text, TomahawkStyle::PAGE_FOREGROUND );
+        p.setColor( QPalette::BrightText, TomahawkStyle::PAGE_FOREGROUND );
+        p.setColor( QPalette::Foreground, TomahawkStyle::PAGE_FOREGROUND );
+        p.setColor( QPalette::Highlight, TomahawkStyle::PAGE_FOREGROUND );
+        p.setColor( QPalette::HighlightedText, TomahawkStyle::PAGE_BACKGROUND );
 
         d->ui->playlistView->setPalette( p );
         d->ui->playlistView->overlay()->setPalette( p );
