@@ -5,17 +5,18 @@
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="67"/>
         <source>Allow %1 to
 connect and stream from you?</source>
-        <translation type="unfinished"/>
+        <translation>Îi permiți lui %1 să
+se conecteze și să redea de la tine?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="83"/>
         <source>Allow Streaming</source>
-        <translation type="unfinished"/>
+        <translation>Permite redarea</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="86"/>
         <source>Deny Access</source>
-        <translation type="unfinished"/>
+        <translation>Refuză accesul</translation>
     </message>
 </context>
 <context>
@@ -261,12 +262,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="92"/>
         <source>Sorry, we could not find any other albums for this artist!</source>
-        <translation type="unfinished"/>
+        <translation>Ne pare rău, nu am găsit alte albume de la acest artist!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="67"/>
         <source>Sorry, we could not find any tracks for this album!</source>
-        <translation type="unfinished"/>
+        <translation>Ne pare rău, nu am găsit alte piese de pe acest album!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="256"/>
@@ -308,17 +309,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="108"/>
         <source>Sorry, we could not find any albums for this artist!</source>
-        <translation type="unfinished"/>
+        <translation>Ne pare rău, nu am găsit albume de la acest artist!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="84"/>
         <source>Sorry, we could not find any related artists!</source>
-        <translation type="unfinished"/>
+        <translation>Ne pare rău, nu am putut găsi artiști similari!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="122"/>
         <source>Sorry, we could not find any top hits for this artist!</source>
-        <translation type="unfinished"/>
+        <translation>Ne pare rău, nu am găsit vreun hit de top pentru acest artist!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="67"/>
@@ -351,35 +352,35 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/tomahawk/AudioControls.cpp" line="312"/>
         <source>Playing from %1</source>
-        <translation type="unfinished"/>
+        <translation>Se redă de la %1</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/AudioControls.cpp" line="310"/>
         <source>Share</source>
-        <translation type="unfinished"/>
+        <translation>Partajează</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/AudioControls.cpp" line="311"/>
         <source>Love</source>
-        <translation type="unfinished"/>
+        <translation>Îndrăgit</translation>
     </message>
 </context>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="869"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="868"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
-        <translation type="unfinished"/>
+        <translation>Ne pare rău, Tomahawk nu a găsit piesa &apos;%1&apos; de %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="893"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="892"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Ne pare rău, Tomahawk nu a găsit artistul &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="919"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="918"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
-        <translation type="unfinished"/>
+        <translation>Ne pare rău, Tomahawk nu a găsit albumul &apos;%1&apos; de la %2</translation>
     </message>
 </context>
 <context>
@@ -387,12 +388,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="62"/>
         <source>Create new Playlist</source>
-        <translation>Crează o nouă listă de redare</translation>
+        <translation>Creează o nouă listă de redare</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="65"/>
         <source>Create new Station</source>
-        <translation>Crează o nouă stație</translation>
+        <translation>Creează o nouă stație</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/CategoryItems.cpp" line="183"/>
@@ -441,7 +442,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnView.cpp" line="303"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
-        <translation type="unfinished"/>
+        <translation>Ne pare rău, filtrul tău &apos;%1&apos; nu are niciun rezultat.</translation>
     </message>
 </context>
 <context>
@@ -521,53 +522,53 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/crashreporter/CrashReporter.ui" line="23"/>
         <source>Tomahawk Crash Reporter</source>
-        <translation type="unfinished"/>
+        <translation>Raportor de erori Tomahawk</translation>
     </message>
     <message utf8="true">
         <location filename="../src/crashreporter/CrashReporter.ui" line="80"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Sorry!&lt;/span&gt; Tomahawk crashed. Please tell us about it! Tomahawk has created an error report for you that can help improve the stability in the future. You can now send this report directly to the Tomahawk developers.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Ne pare rău!&lt;/span&gt; Tomahawk s-a prăbușit. Te rugăm să ne spui ce s-a întâmplat! Tomahawk a creat pentru tine un raport de eroare care în viitor poate îmbunătăți stabilitatea. Poți trimite acest raport direct către dezvoltatorii Tomahawk.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/crashreporter/CrashReporter.ui" line="129"/>
         <source>Send this report</source>
-        <translation type="unfinished"/>
+        <translation>Trimite acest raport</translation>
     </message>
     <message>
         <location filename="../src/crashreporter/CrashReporter.ui" line="136"/>
         <source>Don&apos;t send</source>
-        <translation type="unfinished"/>
+        <translation>Nu trimite</translation>
     </message>
     <message>
         <location filename="../src/crashreporter/CrashReporter.ui" line="190"/>
         <source>Abort</source>
-        <translation type="unfinished"/>
+        <translation>Renunță</translation>
     </message>
     <message>
         <location filename="../src/crashreporter/CrashReporter.ui" line="210"/>
         <source>You can disable sending crash reports in the configuration dialog.</source>
-        <translation type="unfinished"/>
+        <translation>Poți dezactiva trimiterea rapoartelor de prăbușire în dialogul de configurare.</translation>
     </message>
     <message>
         <location filename="../src/crashreporter/CrashReporter.cpp" line="154"/>
         <source>Uploaded %L1 of %L2 KB.</source>
-        <translation type="unfinished"/>
+        <translation>S-a încărcat %L1 din %L2 KB.</translation>
     </message>
     <message>
         <location filename="../src/crashreporter/CrashReporter.cpp" line="168"/>
         <location filename="../src/crashreporter/CrashReporter.cpp" line="184"/>
         <source>Close</source>
-        <translation type="unfinished"/>
+        <translation>Închide</translation>
     </message>
     <message>
         <location filename="../src/crashreporter/CrashReporter.cpp" line="177"/>
         <source>Sent! &lt;b&gt;Many thanks&lt;/b&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Trimis! &lt;b&gt;Mulțumim&lt;/b&gt;.</translation>
     </message>
     <message>
         <location filename="../src/crashreporter/CrashReporter.cpp" line="185"/>
         <source>Failed to send crash info.</source>
-        <translation type="unfinished"/>
+        <translation>Trimiterea informațiilor despre prabușire a eșuat.</translation>
     </message>
 </context>
 <context>
@@ -593,22 +594,22 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="54"/>
         <source>About</source>
-        <translation type="unfinished"/>
+        <translation>Despre</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="86"/>
         <source>Delete Account</source>
-        <translation type="unfinished"/>
+        <translation>Șterge cont</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="116"/>
         <source>Config Error</source>
-        <translation type="unfinished"/>
+        <translation>Eroare de configurare</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="170"/>
         <source>About this Account</source>
-        <translation type="unfinished"/>
+        <translation>Despre acest cont</translation>
     </message>
 </context>
 <context>
@@ -616,17 +617,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/tomahawk/DiagnosticsDialog.ui" line="20"/>
         <source>Tomahawk Diagnostics</source>
-        <translation type="unfinished"/>
+        <translation>Diagnosticări Tomahawk</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/DiagnosticsDialog.ui" line="42"/>
         <source>&amp;Copy to Clipboard</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Copiază în clipboard</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/DiagnosticsDialog.ui" line="49"/>
         <source>Open &amp;Log-file</source>
-        <translation type="unfinished"/>
+        <translation>Deschide fișierul &amp;jurnal</translation>
     </message>
 </context>
 <context>
@@ -634,97 +635,97 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="59"/>
         <source>Steer this station:</source>
-        <translation type="unfinished"/>
+        <translation>Dirijează această stație:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="82"/>
         <source>Much less</source>
-        <translation type="unfinished"/>
+        <translation>Mult mai puțin</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="83"/>
         <source>Less</source>
-        <translation type="unfinished"/>
+        <translation>Puțin</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="84"/>
         <source>A bit less</source>
-        <translation type="unfinished"/>
+        <translation>Mai puțin</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="85"/>
         <source>Keep at current</source>
-        <translation type="unfinished"/>
+        <translation>Menține actual</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="86"/>
         <source>A bit more</source>
-        <translation type="unfinished"/>
+        <translation>Mai mult</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="87"/>
         <source>More</source>
-        <translation type="unfinished"/>
+        <translation>Mult</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="88"/>
         <source>Much more</source>
-        <translation type="unfinished"/>
+        <translation>Mult mai mult</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="91"/>
         <source>Tempo</source>
-        <translation type="unfinished"/>
+        <translation>Tempo</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="92"/>
         <source>Loudness</source>
-        <translation type="unfinished"/>
+        <translation>Intensitate</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="93"/>
         <source>Danceability</source>
-        <translation type="unfinished"/>
+        <translation>Dansabilitate</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="94"/>
         <source>Energy</source>
-        <translation type="unfinished"/>
+        <translation>Energie</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="95"/>
         <source>Song Hotttnesss</source>
-        <translation type="unfinished"/>
+        <translation>Popularitatea cântecului</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="96"/>
         <source>Artist Hotttnesss</source>
-        <translation type="unfinished"/>
+        <translation>Popularitatea artistului</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="97"/>
         <source>Artist Familiarity</source>
-        <translation type="unfinished"/>
+        <translation>Familiaritatea artistului</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="98"/>
         <source>By Description</source>
-        <translation type="unfinished"/>
+        <translation>După descriere</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="106"/>
         <source>Enter a description</source>
-        <translation type="unfinished"/>
+        <translation>Introdu o descriere</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="113"/>
         <source>Apply steering command</source>
-        <translation type="unfinished"/>
+        <translation>Execută comanda de dirijare</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestSteerer.cpp" line="119"/>
         <source>Reset all steering commands</source>
-        <translation type="unfinished"/>
+        <translation>Resetează toate comenzile de dirijare</translation>
     </message>
 </context>
 <context>
@@ -740,12 +741,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="312"/>
         <source>This playlist is currently empty.</source>
-        <translation type="unfinished"/>
+        <translation>Această listă de redare este momentan goală.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="314"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
-        <translation type="unfinished"/>
+        <translation>Această listă de redare este momentan goală. Adaugă niște piese și bucură-te de muzică!</translation>
     </message>
 </context>
 <context>
@@ -753,12 +754,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleView.cpp" line="318"/>
         <source>This playlist is currently empty.</source>
-        <translation type="unfinished"/>
+        <translation>Această listă de redare este momentan goală.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/FlexibleView.cpp" line="320"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
-        <translation type="unfinished"/>
+        <translation>Această listă de redare este momentan goală. Adaugă niște piese și bucură-te de muzică!</translation>
     </message>
 </context>
 <context>
@@ -766,43 +767,44 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>Formular</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="33"/>
         <source>Connect to your Hatchet account</source>
-        <translation type="unfinished"/>
+        <translation>Conectare la contul tău Hatchet</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="62"/>
         <source>Enter One-time
 Password (OTP)</source>
-        <translation type="unfinished"/>
+        <translation>Introdu One-time
+Password (OTP)</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="70"/>
         <source>Username</source>
-        <translation type="unfinished"/>
+        <translation>Utilizator</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="77"/>
         <source>Hatchet username</source>
-        <translation type="unfinished"/>
+        <translation>Utilizator Hatchet</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="84"/>
         <source>Password:</source>
-        <translation type="unfinished"/>
+        <translation>Parolă:</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="97"/>
         <source>Hatchet password</source>
-        <translation type="unfinished"/>
+        <translation>Parolă Hatchet</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="138"/>
         <source>Login</source>
-        <translation type="unfinished"/>
+        <translation>Autentificare</translation>
     </message>
 </context>
 <context>
@@ -851,12 +853,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/jobview/InboxJobItem.cpp" line="67"/>
         <source>Sent %1 by %2 to %3.</source>
-        <translation type="unfinished"/>
+        <translation>Trimis %1 de %2 către %3.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/InboxJobItem.cpp" line="72"/>
         <source>%1 sent you %2 by %3.</source>
-        <translation type="unfinished"/>
+        <translation>%1 ți-a trimis %2 de %3.</translation>
     </message>
 </context>
 <context>
@@ -864,7 +866,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/jobview/IndexingJobItem.cpp" line="29"/>
         <source>Indexing database</source>
-        <translation type="unfinished"/>
+        <translation>Se indexează baza de date</translation>
     </message>
 </context>
 <context>
@@ -883,7 +885,7 @@ Password (OTP)</source>
         <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="424"/>
         <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="484"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
-        <translation type="unfinished"/>
+        <translation>Atenționare script rezolvator: Apelul API %1 a returnat date sincron.</translation>
     </message>
 </context>
 <context>
@@ -891,32 +893,32 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="38"/>
         <source>Scrobble tracks to Last.fm</source>
-        <translation type="unfinished"/>
+        <translation>Publică piese pe Last.fm</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="47"/>
         <source>Username:</source>
-        <translation type="unfinished"/>
+        <translation>Utilizator:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="57"/>
         <source>Password:</source>
-        <translation type="unfinished"/>
+        <translation>Parolă:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="73"/>
         <source>Test Login</source>
-        <translation type="unfinished"/>
+        <translation>Testează autentificarea</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="80"/>
         <source>Import Playback History</source>
-        <translation type="unfinished"/>
+        <translation>Importă istoricul de redare</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.ui" line="87"/>
         <source>Synchronize Loved Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Sincronizează piesele îndrăgite</translation>
     </message>
 </context>
 <context>
@@ -924,7 +926,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/context/pages/WikipediaContext.h" line="67"/>
         <source>Last.fm</source>
-        <translation type="unfinished"/>
+        <translation>Last.fm</translation>
     </message>
 </context>
 <context>
@@ -932,7 +934,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/jobview/LatchedStatusItem.cpp" line="38"/>
         <source>%1 is listening along with you!</source>
-        <translation type="unfinished"/>
+        <translation>%1 ascultă împreună cu tine!</translation>
     </message>
 </context>
 <context>
@@ -986,12 +988,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="85"/>
         <source>Sorry, we could not find any loved tracks!</source>
-        <translation type="unfinished"/>
+        <translation>Ne pare rău, nu am găsit piese îndrăgite!</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="88"/>
         <source>The most loved tracks from all your friends</source>
-        <translation type="unfinished"/>
+        <translation>Cele mai îndrăgite piese de la toți prietenii tăi</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="94"/>
@@ -1145,22 +1147,22 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.ui" line="37"/>
         <source>Tomahawk offers a variety of ways to help you create playlists and find music you enjoy!</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk îți oferă o varietate de metode pentru a te ajuta să creezi liste de redare și să găsești muzica care îți place!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.ui" line="47"/>
         <source>Just enter a genre or tag name and Tomahawk will suggest a few songs to get you started with your new playlist:</source>
-        <translation type="unfinished"/>
+        <translation>Introdu doar un gen sau un nume de etichetă iar Tomahawk îți va sugera câteva cântece ca început pentru noua ta listă de redare:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.cpp" line="43"/>
         <source>&amp;Create Playlist</source>
-        <translation>&amp;Crează listă de redare</translation>
+        <translation>&amp;Creează listă de redare</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/NewPlaylistWidget.h" line="50"/>
         <source>Create a new playlist</source>
-        <translation>Crează o nouă listă de redare</translation>
+        <translation>Creează o nouă listă de redare</translation>
     </message>
 </context>
 <context>
@@ -1360,12 +1362,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="49"/>
         <source>Just a regular old playlist... Give it a name, drag in some tracks, and go!</source>
-        <translation type="unfinished"/>
+        <translation>Doar o veche listă obișnuită de redare... Dă-i un nume, trage câteva piese în ea și gata!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="75"/>
         <source>Don&apos;t know exactly what you want? Give Tomahawk a few pointers and let it build a playlist for you!</source>
-        <translation type="unfinished"/>
+        <translation>Nu știi exact ce îți dorești? Oferă-i câteva indicii lui Tomahawk și lasă-l să construiască o listă de redare pentru tine!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="92"/>
@@ -1380,12 +1382,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="113"/>
         <source>Create Manual Playlist</source>
-        <translation>Crează listă de redare manuală</translation>
+        <translation>Creează listă de redare manuală</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="123"/>
         <source>Create Automatic Playlist</source>
-        <translation>Crează listă de redare automată</translation>
+        <translation>Creează listă de redare automată</translation>
     </message>
 </context>
 <context>
@@ -1393,12 +1395,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistView.cpp" line="136"/>
         <source>This playlist is currently empty.</source>
-        <translation type="unfinished"/>
+        <translation>Această listă de redare este momentan goală.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlaylistView.cpp" line="138"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
-        <translation type="unfinished"/>
+        <translation>Această listă de redare este momentan goală. Adaugă niște piese și bucură-te de muzică!</translation>
     </message>
 </context>
 <context>
@@ -1406,58 +1408,59 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/ProxyDialog.ui" line="17"/>
         <source>Proxy Settings</source>
-        <translation type="unfinished"/>
+        <translation>Setări proxy</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/ProxyDialog.ui" line="37"/>
         <source>Hostname of proxy server</source>
-        <translation type="unfinished"/>
+        <translation>Nume de gazdă pentru serverul proxy</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/ProxyDialog.ui" line="44"/>
         <source>Host</source>
-        <translation type="unfinished"/>
+        <translation>Gazdă</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/ProxyDialog.ui" line="51"/>
         <source>Port</source>
-        <translation type="unfinished"/>
+        <translation>Port</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/ProxyDialog.ui" line="71"/>
         <source>Proxy login</source>
-        <translation type="unfinished"/>
+        <translation>Login proxy</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/ProxyDialog.ui" line="78"/>
         <source>User</source>
-        <translation type="unfinished"/>
+        <translation>Utilizator</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/ProxyDialog.ui" line="85"/>
         <source>Password</source>
-        <translation type="unfinished"/>
+        <translation>Parolă</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/ProxyDialog.ui" line="95"/>
         <source>Proxy password</source>
-        <translation type="unfinished"/>
+        <translation>Parolă proxy</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/ProxyDialog.ui" line="102"/>
         <source>No Proxy Hosts:
 (Overrides system proxy)</source>
-        <translation type="unfinished"/>
+        <translation>Gazde fără proxy:
+(Nu ține cont de proxy de sistem)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/ProxyDialog.ui" line="110"/>
         <source>localhost *.example.com (space separated)</source>
-        <translation type="unfinished"/>
+        <translation>localhost *.example.com (separate prin spațiu)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/ProxyDialog.ui" line="127"/>
         <source>Use proxy for DNS lookups?</source>
-        <translation type="unfinished"/>
+        <translation>Folosește proxy pentru interogări DNS?</translation>
     </message>
 </context>
 <context>
@@ -1560,12 +1563,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/database/TomahawkSqlQuery.cpp" line="91"/>
         <source>No query</source>
-        <translation type="unfinished"/>
+        <translation>Nicio interogare</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/database/TomahawkSqlQuery.cpp" line="92"/>
         <source>Parameter count mismatch</source>
-        <translation type="unfinished"/>
+        <translation>Număr de parametri nepotriviți</translation>
     </message>
 </context>
 <context>
@@ -1621,7 +1624,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="66"/>
         <source>Resolver Error: %1:%2 %3</source>
-        <translation type="unfinished"/>
+        <translation>Eroare rezolvator: %1:%2 %3</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="85"/>
@@ -1631,7 +1634,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="86"/>
         <source>You have asked Tomahawk to connect securely to &lt;b&gt;%1&lt;/b&gt;, but we can&apos;t confirm that your connection is secure:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Do you want to trust this connection?</source>
-        <translation type="unfinished"/>
+        <translation>Ai cerut ca Tomahawk să se conecteze securizat la &lt;b&gt;%1&lt;/b&gt;, dar nu putem confirma că această conexiune este sigură:&lt;br&gt;&lt;br&gt;&lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Dorești să ai încredere în această conexiune?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/resolvers/ScriptEngine.cpp" line="93"/>
@@ -1683,14 +1686,14 @@ Password (OTP)</source>
 <context>
     <name>Servent</name>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="979"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="981"/>
         <source>Automatically detecting external IP failed: Could not parse JSON response.</source>
-        <translation type="unfinished"/>
+        <translation>Detectarea automată a IP-ului extern a eșuat: Nu s-a putut interpreta răspunsul JSON.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="992"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="994"/>
         <source>Automatically detecting external IP failed: %1</source>
-        <translation type="unfinished"/>
+        <translation>Detectarea automată a IP-ului extern a eșuat: %1</translation>
     </message>
 </context>
 <context>
@@ -1713,7 +1716,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/SettingsDialog.cpp" line="291"/>
         <source>Some changed settings will not take effect until Tomahawk is restarted</source>
-        <translation type="unfinished"/>
+        <translation>Unele setări modificate nu vor intra în efect decăt după ce Tomahawk este repornit</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/SettingsDialog.cpp" line="233"/>
@@ -1738,32 +1741,32 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/SettingsDialog.cpp" line="241"/>
         <source>Configure Tomahawk&apos;s advanced settings, including network connectivity settings, browser interaction and more.</source>
-        <translation type="unfinished"/>
+        <translation>Configurează setările avansate Tomahawk, inclusiv setări de conectare la rețea, interacțiunea cu navigatorul si multe altele.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/SettingsDialog.cpp" line="473"/>
         <source>Install resolver from file</source>
-        <translation type="unfinished"/>
+        <translation>Instalează rezolvator din fișier</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/SettingsDialog.cpp" line="475"/>
         <source>Tomahawk Resolvers (*.axe *.js);;All files (*)</source>
-        <translation type="unfinished"/>
+        <translation>Rezolvatori Tomahawk (*.axe *.js);;Toate fișierele (*)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/SettingsDialog.cpp" line="518"/>
         <source>Resolver installation from file %1 failed.</source>
-        <translation type="unfinished"/>
+        <translation>Instalarea rezolvatorului %1 din fișier a eșuat.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/SettingsDialog.cpp" line="537"/>
         <source>Delete all Access Control entries?</source>
-        <translation type="unfinished"/>
+        <translation>Șterge toate înregistrările de control de acces?</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/SettingsDialog.cpp" line="538"/>
         <source>Do you really want to delete all Access Control entries? You will be asked for a decision again for each peer that you connect to.</source>
-        <translation type="unfinished"/>
+        <translation>Chiar dorești să ștergi toate înregistrările de control de acces? Va trebui să decizi din nou pentru fiecare sistem la care te conectezi.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/SettingsDialog.cpp" line="291"/>
@@ -1784,32 +1787,32 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="29"/>
         <source>Remote Peer Connection Method</source>
-        <translation type="unfinished"/>
+        <translation>Metoda de conectare la sistemul de la distanță</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="35"/>
         <source>Active (your host needs to be directly reachable)</source>
-        <translation type="unfinished"/>
+        <translation>Activă (calculatorul tău trebuie să fie accesibil direct)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="42"/>
         <source>Use UPnP to establish port forward (recommended)</source>
-        <translation type="unfinished"/>
+        <translation>Folosește UPnP pentru a stabili înaintări de porturi (recomandat)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="49"/>
         <source>Use static external IP address/host name and port</source>
-        <translation type="unfinished"/>
+        <translation>Folosește port și adresă IP externă/nume gazdă statice</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="62"/>
         <source>Set this to your external IP address or host name. Make sure to forward the port to this host!</source>
-        <translation type="unfinished"/>
+        <translation>Setează aici adresa ta IP externă sau numele de gazdă. Asigură-te că ai înaintat portul către acest calculator!</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="80"/>
         <source>Static Host Name:</source>
-        <translation type="unfinished"/>
+        <translation>Nume gazdă static:</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="96"/>
@@ -1819,7 +1822,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="133"/>
         <source>Automatically detect external IP address</source>
-        <translation type="unfinished"/>
+        <translation>Detectare automată a adresei IP externe</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="161"/>
@@ -1844,22 +1847,22 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="231"/>
         <source>Allow web browsers to interact with Tomahawk (recommended)</source>
-        <translation type="unfinished"/>
+        <translation>Permite navigatoarelor de web să interacționeze cu Tomahawk (recomandat)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="244"/>
         <source>Send reports after Tomahawk crashed</source>
-        <translation type="unfinished"/>
+        <translation>Trimite rapoarte dacă Tomahawk se prabușește</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="254"/>
         <source>Show notification when a new song starts to play</source>
-        <translation type="unfinished"/>
+        <translation>Arată o notificare când începe redarea un cântec nou</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="282"/>
         <source>Clear All Access Control Entries</source>
-        <translation type="unfinished"/>
+        <translation>Șterge toate înregistrările de control de acces</translation>
     </message>
 </context>
 <context>
@@ -1875,12 +1878,15 @@ Password (OTP)</source>
  and using it to craft personalized radios. Enabling this option
  will allow you (and all your friends) to create automatic playlists
  and stations based on your personal taste profile.</source>
-        <translation type="unfinished"/>
+        <translation>Echo Nest suportă monitorizarea metadatelor din catalogul tău
+ folosindu-le pentru a crea radiouri personalizate. Activarea acestei opțiuni
+ îți va permite (la fel și prietenilor tăi) să creeze liste de redare automate
+ și stații bazate pe profilul tău de gust personal.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/Settings_Collection.ui" line="51"/>
         <source>Upload collection list to The Echo Nest to enable user radio</source>
-        <translation type="unfinished"/>
+        <translation>Încarcă lista de colecție la Echo Nest pentru a activa radio utilizator</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/Settings_Collection.ui" line="64"/>
@@ -1992,7 +1998,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="387"/>
         <source>Drop to send tracks</source>
-        <translation type="unfinished"/>
+        <translation>Trage aici ca să trimiți piese</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="468"/>
@@ -2221,67 +2227,67 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="57"/>
         <source>Configure your Spotify account</source>
-        <translation type="unfinished"/>
+        <translation>Configurează contul tău Spotify</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="89"/>
         <source>Username or Facebook Email</source>
-        <translation type="unfinished"/>
+        <translation>Nume utilizator sau email Facebook</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="117"/>
         <source>Log In</source>
-        <translation type="unfinished"/>
+        <translation>Autentificare</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="124"/>
         <source>Right click on any Tomahawk playlist to sync it to Spotify.</source>
-        <translation type="unfinished"/>
+        <translation>Clic dreapta pe orice listă de redare Tomahawk pentru a o sincroniza cu Spotify.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="141"/>
         <source>Select All</source>
-        <translation type="unfinished"/>
+        <translation>Selectează tot</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="154"/>
         <source>Sync Starred tracks to Loved tracks</source>
-        <translation type="unfinished"/>
+        <translation>Sincronizează piesele cu steluță ca piese îndrăgite</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="167"/>
         <source>High Quality Streams</source>
-        <translation type="unfinished"/>
+        <translation>Fluxuri de calitate înaltă</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="184"/>
         <source>Use this to force Spotify to never announce listening data to Social Networks</source>
-        <translation type="unfinished"/>
+        <translation>Folosește asta pentru a forța Spotify să nu anunțe datele de ascultare în rețelele sociale</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="187"/>
         <source>Always run in Private Mode</source>
-        <translation type="unfinished"/>
+        <translation>Rulează mereu în mod privat</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="134"/>
         <source>Spotify playlists to keep in sync:</source>
-        <translation type="unfinished"/>
+        <translation>Liste de redare Spotify de sincronizat:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="177"/>
         <source>Delete Tomahawk playlist when removing synchronization</source>
-        <translation type="unfinished"/>
+        <translation>Șterge lista de redare Tomahawk când se înlătură sincronizarea</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="79"/>
         <source>Username:</source>
-        <translation type="unfinished"/>
+        <translation>Utilizator:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="96"/>
         <source>Password:</source>
-        <translation type="unfinished"/>
+        <translation>Parolă:</translation>
     </message>
 </context>
 <context>
@@ -2361,7 +2367,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="563"/>
         <source>Unfortunately, automatic installation of this resolver is not available or disabled for your platform.&lt;br /&gt;&lt;br /&gt;Please use &quot;Install from file&quot; above, by fetching it from your distribution or compiling it yourself. Further instructions can be found here:&lt;br /&gt;&lt;br /&gt;http://www.tomahawk-player.org/resolvers/%1</source>
-        <translation type="unfinished"/>
+        <translation>Din nefericire, instalarea automată a acestui rezolvator nu este disponibilă sau este dezactivată pe platforma ta.&lt;br /&gt;&lt;br /&gt;Te rog folosește &quot;Instalează din fișier&quot; mai sus, și descarcă-l din distribuția ta sau compilează-l personal. Mai multe instrucțiuni pot fi găsite aici:&lt;br /&gt;&lt;br /&gt;http://www.tomahawk-player.org/resolvers/%1</translation>
     </message>
 </context>
 <context>
@@ -2418,17 +2424,17 @@ Password (OTP)</source>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="128"/>
         <source>Logged in as: %1</source>
-        <translation type="unfinished"/>
+        <translation>Autentificat ca: %1</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="134"/>
         <source>Log out</source>
-        <translation type="unfinished"/>
+        <translation>Dezautentificare</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="156"/>
         <source>Log in</source>
-        <translation type="unfinished"/>
+        <translation>Autentificare</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.cpp" line="181"/>
@@ -2441,7 +2447,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccount.h" line="49"/>
         <source>Connect to your Hatchet account</source>
-        <translation type="unfinished"/>
+        <translation>Conectare la contul tău Hatchet</translation>
     </message>
 </context>
 <context>
@@ -2449,7 +2455,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmAccount.h" line="52"/>
         <source>Scrobble your tracks to last.fm, and find freely downloadable tracks to play</source>
-        <translation type="unfinished"/>
+        <translation>Publică piesele tale pe last.fm și găsește piese de descărcat gratuite</translation>
     </message>
 </context>
 <context>
@@ -2457,60 +2463,60 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="94"/>
         <source>Testing...</source>
-        <translation type="unfinished"/>
+        <translation>Se testează...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="116"/>
         <source>Test Login</source>
-        <translation type="unfinished"/>
+        <translation>Testează autentificarea</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="126"/>
         <source>Importing %1</source>
         <comment>e.g. Importing 2012/01/01</comment>
-        <translation type="unfinished"/>
+        <translation>Se importă %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="129"/>
         <source>Importing History...</source>
-        <translation type="unfinished"/>
+        <translation>Se importă istoricul...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="198"/>
         <source>History Incomplete. Resume</source>
         <extracomment>Text on a button that resumes import</extracomment>
-        <translation type="unfinished"/>
+        <translation>Istoric incomplet. Reia</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="203"/>
         <source>Playback History Imported</source>
-        <translation type="unfinished"/>
+        <translation>Istoric redare importat</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="226"/>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="242"/>
         <source>Failed</source>
-        <translation type="unfinished"/>
+        <translation>Eșuat</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="231"/>
         <source>Success</source>
-        <translation type="unfinished"/>
+        <translation>Succes</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="248"/>
         <source>Could not contact server</source>
-        <translation type="unfinished"/>
+        <translation>Nu s-a putut contacta serverul</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="262"/>
         <source>Synchronizing...</source>
-        <translation type="unfinished"/>
+        <translation>Se sincronizează...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="420"/>
         <source>Synchronization Finished</source>
-        <translation type="unfinished"/>
+        <translation>Sincronizarea s-a terminat</translation>
     </message>
 </context>
 <context>
@@ -2518,27 +2524,27 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="114"/>
         <source>Resolver installation error: cannot open bundle.</source>
-        <translation type="unfinished"/>
+        <translation>Eroare de instalare rezolvator: nu se poate deschide pachetul.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="121"/>
         <source>Resolver installation error: incomplete bundle.</source>
-        <translation type="unfinished"/>
+        <translation>Eroare de instalare rezolvator: pachet incomplet.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="160"/>
         <source>Resolver installation error: bad metadata in bundle.</source>
-        <translation type="unfinished"/>
+        <translation>Eroare de instalare rezolvator: metadate greșite în pachet.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="198"/>
         <source>Resolver installation error: platform mismatch.</source>
-        <translation type="unfinished"/>
+        <translation>Eroare de instalare rezolvator: platformă nepotrivită.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/ResolverAccount.cpp" line="211"/>
         <source>Resolver installation error: Tomahawk %1 or newer is required.</source>
-        <translation type="unfinished"/>
+        <translation>Eroare de instalare rezolvator: este necesar Tomahawk %1 sau mai nou.</translation>
     </message>
 </context>
 <context>
@@ -2546,47 +2552,47 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="513"/>
         <source>Sync with Spotify</source>
-        <translation type="unfinished"/>
+        <translation>Sincronizează cu Spotify</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="517"/>
         <source>Re-enable syncing with Spotify</source>
-        <translation type="unfinished"/>
+        <translation>Re-activează sincronizarea cu Spotify</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="525"/>
         <source>Create local copy</source>
-        <translation type="unfinished"/>
+        <translation>Creează copie locală</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="541"/>
         <source>Subscribe to playlist changes</source>
-        <translation type="unfinished"/>
+        <translation>Abonează-te la modificările listei de redare</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="545"/>
         <source>Re-enable playlist subscription</source>
-        <translation type="unfinished"/>
+        <translation>Re-activează abonarea la lista de redare</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="549"/>
         <source>Stop subscribing to changes</source>
-        <translation type="unfinished"/>
+        <translation>Oprește abonarea la modificări</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="569"/>
         <source>Enable Spotify collaborations</source>
-        <translation type="unfinished"/>
+        <translation>Activează colaborările Spotify</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="571"/>
         <source>Disable Spotify collaborations</source>
-        <translation type="unfinished"/>
+        <translation>Dezactivează colaborările Spotify</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="527"/>
         <source>Stop syncing with Spotify</source>
-        <translation type="unfinished"/>
+        <translation>Oprește sincronizarea cu Spotify</translation>
     </message>
 </context>
 <context>
@@ -2594,28 +2600,28 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="193"/>
         <source>Logging in...</source>
-        <translation type="unfinished"/>
+        <translation>Autentificare...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="230"/>
         <source>Failed: %1</source>
-        <translation type="unfinished"/>
+        <translation>A eșuat: %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="273"/>
         <source>Logged in as %1</source>
-        <translation type="unfinished"/>
+        <translation>Autentificat ca %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="275"/>
         <source>Log Out</source>
-        <translation type="unfinished"/>
+        <translation>Dezautentificare</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="291"/>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="301"/>
         <source>Log In</source>
-        <translation type="unfinished"/>
+        <translation>Autentificare</translation>
     </message>
 </context>
 <context>
@@ -2623,7 +2629,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.h" line="72"/>
         <source>Play music from and sync your playlists with Spotify Premium</source>
-        <translation type="unfinished"/>
+        <translation>Redă muzică și sincronizează listele de redare cu Spotify Premium</translation>
     </message>
 </context>
 <context>
@@ -2631,12 +2637,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/accounts/configstorage/telepathy/TelepathyConfigStorage.cpp" line="79"/>
         <source>the KDE instant messaging framework</source>
-        <translation type="unfinished"/>
+        <translation>platforma de mesagerie instantă KDE</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/configstorage/telepathy/TelepathyConfigStorage.cpp" line="96"/>
         <source>KDE Instant Messaging Accounts</source>
-        <translation type="unfinished"/>
+        <translation>Conturi de mesagerie instantă KDE</translation>
     </message>
 </context>
 <context>
@@ -2654,32 +2660,32 @@ Password (OTP)</source>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="144"/>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="192"/>
         <source>Tweet!</source>
-        <translation type="unfinished"/>
+        <translation>Tweet!</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="68"/>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="170"/>
         <source>Status: No saved credentials</source>
-        <translation type="unfinished"/>
+        <translation>Status: Nu există date de autentificare salvate</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="69"/>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="95"/>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="171"/>
         <source>Authenticate</source>
-        <translation type="unfinished"/>
+        <translation>Autentificare</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="76"/>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="139"/>
         <source>Status: Credentials saved for %1</source>
-        <translation type="unfinished"/>
+        <translation>Status: Date de autentificare salvate pentru %1</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="77"/>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="140"/>
         <source>De-authenticate</source>
-        <translation type="unfinished"/>
+        <translation>Dez-autentificare</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="125"/>
@@ -2690,87 +2696,89 @@ Password (OTP)</source>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="283"/>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="293"/>
         <source>Tweetin&apos; Error</source>
-        <translation type="unfinished"/>
+        <translation>Eroare de tweet</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="125"/>
         <source>The credentials could not be verified.
 You may wish to try re-authenticating.</source>
-        <translation type="unfinished"/>
+        <translation>Datele de autentificare nu au putut fi verificate. Poate dorești să te re-autentifici.</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="155"/>
         <source>Status: Error validating credentials</source>
-        <translation type="unfinished"/>
+        <translation>Status: Eroare la validarea datelor de autentificare</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="182"/>
         <source>Global Tweet</source>
-        <translation type="unfinished"/>
+        <translation>Tweet global</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="187"/>
         <source>Direct Message</source>
-        <translation type="unfinished"/>
+        <translation>Mesaj direct</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="188"/>
         <source>Send Message!</source>
-        <translation type="unfinished"/>
+        <translation>Trimite mesaj!</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="189"/>
         <source>@Mention</source>
-        <translation type="unfinished"/>
+        <translation>@Mențiune</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="190"/>
         <source>Send Mention!</source>
-        <translation type="unfinished"/>
+        <translation>Trimite mențiune!</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="203"/>
         <source>You must enter a user name for this type of tweet.</source>
-        <translation type="unfinished"/>
+        <translation>Trebuie să introduci un nume de utilizator pentru acest tip de tweet.</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="214"/>
         <source>Your saved credentials could not be loaded.
 You may wish to try re-authenticating.</source>
-        <translation type="unfinished"/>
+        <translation>Datele tale de autentificare salvate nu au putut fi încărcate.
+Poate dorești să te re-autentifici.</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="232"/>
         <source>Your saved credentials could not be verified.
 You may wish to try re-authenticating.</source>
-        <translation type="unfinished"/>
+        <translation>Datele tale de autentificare salvate nu au putut fi verificate.
+Poate dorești să te re-autentifici.</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="274"/>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="293"/>
         <source>There was an error posting your status -- sorry!</source>
-        <translation type="unfinished"/>
+        <translation>A intervenit o eroare la postarea statusului -- ne pare rău!</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="276"/>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="285"/>
         <source>Tweeted!</source>
-        <translation type="unfinished"/>
+        <translation>Tweeted!</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="276"/>
         <source>Your tweet has been posted!</source>
-        <translation type="unfinished"/>
+        <translation>Tweetul tău a fost postat!</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="283"/>
         <source>There was an error posting your direct message -- sorry!</source>
-        <translation type="unfinished"/>
+        <translation>A intervenit o eroare la postarea mesajului direct -- ne pare rău!</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="285"/>
         <source>Your message has been posted!</source>
-        <translation type="unfinished"/>
+        <translation>Mesajul tău a fost postat!</translation>
     </message>
 </context>
 <context>
@@ -2778,7 +2786,7 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/accounts/xmpp/XmppAccount.h" line="53"/>
         <source>Log on to your Jabber/XMPP account to connect to your friends</source>
-        <translation type="unfinished"/>
+        <translation>Autentifică-te la contul tău Jabber/XMPP și conectează-te cu prietenii tăi</translation>
     </message>
 </context>
 <context>
@@ -2786,17 +2794,17 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="73"/>
         <source>Account provided by %1.</source>
-        <translation type="unfinished"/>
+        <translation>Cont furnizat de %1.</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="157"/>
         <source>You forgot to enter your username!</source>
-        <translation type="unfinished"/>
+        <translation>Ai uitat să introduci un nume de utilizator!</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="165"/>
         <source>Your Xmpp Id should look like an email address</source>
-        <translation type="unfinished"/>
+        <translation>ID-ul tău XMPP ar trebui să arate ca o adresă de email</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="171"/>
@@ -2804,7 +2812,10 @@ You may wish to try re-authenticating.</source>
 
 Example:
 username@jabber.org</source>
-        <translation type="unfinished"/>
+        <translation>
+
+Exemplu:
+utilizator@jabber.org</translation>
     </message>
 </context>
 <context>
@@ -2826,7 +2837,7 @@ username@jabber.org</source>
     <message>
         <location filename="../src/accounts/zeroconf/ZeroconfAccount.h" line="46"/>
         <source>Automatically connect to Tomahawks on the local network</source>
-        <translation type="unfinished"/>
+        <translation>Conectare automată la Tomahawkurile din rețeaua locală</translation>
     </message>
 </context>
 <context>
@@ -2995,12 +3006,14 @@ username@jabber.org</source>
         <source>Could not find a playable track.
 
 Please change the filters or try again.</source>
-        <translation type="unfinished"/>
+        <translation>Nu s-a găsit o piesă redabilă.
+
+Te rog modifică filtrele sau încearcă din nou.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/DynamicModel.cpp" line="231"/>
         <source>Failed to generate preview with the desired filters</source>
-        <translation type="unfinished"/>
+        <translation>Generarea previzualizaării a eșuat cu filtrele dorite</translation>
     </message>
 </context>
 <context>
@@ -3041,7 +3054,9 @@ Please change the filters or try again.</source>
         <source>Station ran out of tracks!
 
 Try tweaking the filters for a new set of songs to play.</source>
-        <translation type="unfinished"/>
+        <translation>Stația a rămas fără piese!
+
+Încercă să modifici filtrele pentru un nou set de cântece.</translation>
     </message>
 </context>
 <context>
@@ -3066,7 +3081,7 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="225"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="699"/>
         <source>No users with Echo Nest Catalogs enabled. Try enabling option in Collection settings</source>
-        <translation type="unfinished"/>
+        <translation>Nu există utilizatori cu cataloage Echo Nest activate. Încearcă să activezi opțiunea în setările de Colecție</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="246"/>
@@ -3224,19 +3239,19 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="438"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="913"/>
         <source>Artist Familiarity</source>
-        <translation type="unfinished"/>
+        <translation>Familiaritate artist</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="439"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="912"/>
         <source>Artist Hotttnesss</source>
-        <translation type="unfinished"/>
+        <translation>Popularitate artist</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="440"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="913"/>
         <source>Song Hotttnesss</source>
-        <translation type="unfinished"/>
+        <translation>Popularitate cântec</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="441"/>
@@ -3345,7 +3360,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="914"/>
         <source>Adventurousness</source>
-        <translation type="unfinished"/>
+        <translation>Spirit de aventură</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="920"/>
@@ -3385,57 +3400,57 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message numerus="yes">
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="937"/>
         <source>about %n minute(s) long</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>aprox %n minut</numerusform><numerusform>aprox %n minute</numerusform><numerusform>aprox %n de minute</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="941"/>
         <source>about %1 dB</source>
-        <translation type="unfinished"/>
+        <translation>aprox %1 dB</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="945"/>
         <source>at around %1%2 %3</source>
-        <translation type="unfinished"/>
+        <translation>în jurul %1%2 %3</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="952"/>
         <source>in %1</source>
-        <translation type="unfinished"/>
+        <translation>în %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="959"/>
         <source>in a %1 key</source>
-        <translation type="unfinished"/>
+        <translation>în cheia %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="971"/>
         <source>sorted in %1 %2 order</source>
-        <translation type="unfinished"/>
+        <translation>sortate în ordinea %1 %2</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="978"/>
         <source>with a %1 mood</source>
-        <translation type="unfinished"/>
+        <translation>cu starea %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="985"/>
         <source>in a %1 style</source>
-        <translation type="unfinished"/>
+        <translation>în stilul %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="992"/>
         <source>where genre is %1</source>
-        <translation type="unfinished"/>
+        <translation>unde genul este %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1005"/>
         <source>where song type is %1</source>
-        <translation type="unfinished"/>
+        <translation>unde tipul cântecului este %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1007"/>
         <source>where song type is not %1</source>
-        <translation type="unfinished"/>
+        <translation>unde tipul cântecului nu este %1</translation>
     </message>
 </context>
 <context>
@@ -3443,7 +3458,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/utils/GroovesharkParser.cpp" line="244"/>
         <source>Error fetching Grooveshark information from the network!</source>
-        <translation type="unfinished"/>
+        <translation>Eroare la descărcarea informațiilor Grooveshark din rețea!</translation>
     </message>
 </context>
 <context>
@@ -3553,7 +3568,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/accounts/twitter/TwitterInfoPlugin.cpp" line="159"/>
         <source>Listening to &quot;%1&quot; by %2 and loving it! %3</source>
-        <translation type="unfinished"/>
+        <translation>Ascultă &quot;%1&quot; de %2 și îi place! %3</translation>
     </message>
 </context>
 <context>
@@ -3624,7 +3639,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/utils/RdioParser.cpp" line="205"/>
         <source>Error fetching Rdio information from the network!</source>
-        <translation type="unfinished"/>
+        <translation>Eroare la descărcarea informațiilor Rdio din rețea!</translation>
     </message>
 </context>
 <context>
@@ -3701,7 +3716,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/utils/SpotifyParser.cpp" line="282"/>
         <source>Error fetching Spotify information from the network!</source>
-        <translation type="unfinished"/>
+        <translation>Eroare la descărcarea informațiilor Spotify din rețea!</translation>
     </message>
 </context>
 <context>
@@ -4032,7 +4047,7 @@ introdu aici PIN-ul afișat:</translation>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1038"/>
         <source>Create New Station</source>
-        <translation>Crează o nouă stație</translation>
+        <translation>Creează o nouă stație</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1038"/>
@@ -4197,7 +4212,7 @@ introdu aici PIN-ul afișat:</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/TreeView.cpp" line="306"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
-        <translation type="unfinished"/>
+        <translation>Ne pare rău, filtrul tău &apos;%1&apos; nu are niciun rezultat.</translation>
     </message>
 </context>
 <context>
@@ -4205,27 +4220,27 @@ introdu aici PIN-ul afișat:</translation>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="73"/>
         <source>Configure this Twitter account</source>
-        <translation type="unfinished"/>
+        <translation>Configurează acest cont Twittter</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="119"/>
         <source>The Twitter plugin allows you to post messages to your Twitter account.</source>
-        <translation type="unfinished"/>
+        <translation>Extensia Twitter îți permite să postezi mesaje pe contul tău Twittter.</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="137"/>
         <source>Status: No saved credentials</source>
-        <translation type="unfinished"/>
+        <translation>Status: Nu există date de autentificare salvate</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="166"/>
         <source>Authenticate with Twitter</source>
-        <translation type="unfinished"/>
+        <translation>Autentificare la Twitter</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="196"/>
         <source>Twitter Connections</source>
-        <translation type="unfinished"/>
+        <translation>Conexiuni Twitter</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="202"/>
@@ -4235,22 +4250,27 @@ If you only want to post tweets, you're done.
 If you want to connect Tomahawk to your friends using Twitter, select the type of tweet and press the button below to send a sync message. You must both be following each other as Direct Messages are used. Then be (very) patient -- it can take several minutes!
 
 You can re-send a sync message at any time simply by sending another tweet using the button.</source>
-        <translation type="unfinished"/>
+        <translation>
+Dacă doar dorești să postezi tweeturi ești gata.
+
+Dacă vrei să conectezi Tomahawk cu prietenii tăi care folosesc Twitter selectează tipul de tweet și apasă butonul de mai jos pentru a trimite un mesaj de sincronizare. Trebuie să vă urmăriți reciproc deoarece se folosesc mesaje directe. Apoi fii (foarte) răbdător -- poate dura câteva minute!
+
+Poți retrimite un mesaj de sincronizare oricând doar prin trimiterea unui alt tweet cu ajutorul butonului.</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="244"/>
         <source>Select the kind of tweet you would like, then press the button to post it:</source>
-        <translation type="unfinished"/>
+        <translation>Selectează tipul dorit de tweet apoi apasă butonul pentru a îl posta:</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="276"/>
         <source>Global Tweet</source>
-        <translation type="unfinished"/>
+        <translation>Tweet global</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="281"/>
         <source>@Mention</source>
-        <translation type="unfinished"/>
+        <translation>@Mențiune</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="286"/>
@@ -4355,21 +4375,25 @@ Termeni pentru %1:
     <message>
         <location filename="../src/tomahawk/xmppbot/XmppBot.cpp" line="317"/>
         <source>No terms found, sorry.</source>
-        <translation type="unfinished"/>
+        <translation>Niciun termen găsit, ne pare rău.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/xmppbot/XmppBot.cpp" line="350"/>
         <source>
 Hotttness for %1: %2
 </source>
-        <translation type="unfinished"/>
+        <translation>
+Popularitate pentru %1: %2
+</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/xmppbot/XmppBot.cpp" line="366"/>
         <source>
 Familiarity for %1: %2
 </source>
-        <translation type="unfinished"/>
+        <translation>
+Familiaritate pentru %1: %2
+</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/xmppbot/XmppBot.cpp" line="384"/>
@@ -4378,7 +4402,11 @@ Lyrics for &quot;%1&quot; by %2:
 
 %3
 </source>
-        <translation type="unfinished"/>
+        <translation>
+Versuri pentru &quot;%1&quot; de %2:
+
+%3
+</translation>
     </message>
 </context>
 <context>
@@ -4386,22 +4414,22 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="51"/>
         <source>Failed to parse contents of XSPF playlist</source>
-        <translation type="unfinished"/>
+        <translation>Eșec la interpretarea conținutului listei de redare XSPF</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="53"/>
         <source>Some playlist entries were found without artist and track name, they will be omitted</source>
-        <translation type="unfinished"/>
+        <translation>Unele piese din lista de redare nu conțin un artist și un titlu. Vor fi omise</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="55"/>
         <source>Failed to fetch the desired playlist from the network, or the desired file does not exist</source>
-        <translation type="unfinished"/>
+        <translation>A eșuat descărcarea listei de redare dorite din rețea sau fișierul dorit nu există</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/XspfLoader.cpp" line="244"/>
         <source>New Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Listă de redare nouă</translation>
     </message>
 </context>
 <context>
@@ -4409,43 +4437,43 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.ui" line="14"/>
         <source>Xml stream console</source>
-        <translation type="unfinished"/>
+        <translation>Consolă flux XML</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.ui" line="33"/>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="60"/>
         <source>Filter</source>
-        <translation type="unfinished"/>
+        <translation>Filtrare</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.ui" line="43"/>
         <source>Save log</source>
-        <translation type="unfinished"/>
+        <translation>Salvează jurnal</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="62"/>
         <source>Disabled</source>
-        <translation type="unfinished"/>
+        <translation>Dezactivat</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="65"/>
         <source>By JID</source>
-        <translation type="unfinished"/>
+        <translation>După JID</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="68"/>
         <source>By namespace uri</source>
-        <translation type="unfinished"/>
+        <translation>După namespace uri</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="71"/>
         <source>By all attributes</source>
-        <translation type="unfinished"/>
+        <translation>După toate atributele</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="76"/>
         <source>Visible stanzas</source>
-        <translation type="unfinished"/>
+        <translation>Stanțe vizibile</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="79"/>
@@ -4455,32 +4483,32 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="83"/>
         <source>Message</source>
-        <translation type="unfinished"/>
+        <translation>Mesaj</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="87"/>
         <source>Presence</source>
-        <translation type="unfinished"/>
+        <translation>Prezentă</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="91"/>
         <source>Custom</source>
-        <translation type="unfinished"/>
+        <translation>Personalizat</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="107"/>
         <source>Close</source>
-        <translation type="unfinished"/>
+        <translation>Închide</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="357"/>
         <source>Save XMPP log to file</source>
-        <translation type="unfinished"/>
+        <translation>Salvează jurnalul XMPP în fișier</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="358"/>
         <source>OpenDocument Format (*.odf);;HTML file (*.html);;Plain text (*.txt)</source>
-        <translation type="unfinished"/>
+        <translation>Format OpenDocument (*.odf);;fișier HTML (*.html);;Text simplu (*.txt)</translation>
     </message>
 </context>
 <context>
@@ -4488,77 +4516,77 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="20"/>
         <source>Xmpp Configuration</source>
-        <translation type="unfinished"/>
+        <translation>Configurare Xmpp</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="58"/>
         <source>Configure this Xmpp account</source>
-        <translation type="unfinished"/>
+        <translation>Configurează acest cont Xmpp</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="104"/>
         <source>Enter your Xmpp login to connect with your friends using Tomahawk!</source>
-        <translation type="unfinished"/>
+        <translation>Introdu contul tău Xmpp pentru a te conecta cu prietenii tăi folosind Tomahawk!</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="196"/>
         <source>Configure</source>
-        <translation type="unfinished"/>
+        <translation>Configurează</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="211"/>
         <source>Login Information</source>
-        <translation type="unfinished"/>
+        <translation>Informații de autentificare</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="231"/>
         <source>Xmpp ID:</source>
-        <translation type="unfinished"/>
+        <translation>ID Xmpp:</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="247"/>
         <source>e.g. user@example.com</source>
-        <translation type="unfinished"/>
+        <translation>ex. utilizator@example.com</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="260"/>
         <source>Password:</source>
-        <translation type="unfinished"/>
+        <translation>Parolă:</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="288"/>
         <source>An account with this name already exists!</source>
-        <translation type="unfinished"/>
+        <translation>Un cont cu acest nume există deja!</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="310"/>
         <source>Advanced Xmpp Settings</source>
-        <translation type="unfinished"/>
+        <translation>Setări Xmpp avansate</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="330"/>
         <source>Server:</source>
-        <translation type="unfinished"/>
+        <translation>Server:</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="353"/>
         <source>Port:</source>
-        <translation type="unfinished"/>
+        <translation>Port:</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="399"/>
         <source>Lots of servers don&apos;t support this (e.g. GTalk, jabber.org)</source>
-        <translation type="unfinished"/>
+        <translation>Multe servere nu suportă asta (ex. GTalk, jabber.org)</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="402"/>
         <source>Publish currently playing track</source>
-        <translation type="unfinished"/>
+        <translation>Publică piesa redată curent</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="409"/>
         <source>Enforce secure connection</source>
-        <translation type="unfinished"/>
+        <translation>Forțează conexiune securizată</translation>
     </message>
 </context>
 <context>
@@ -4566,42 +4594,42 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="395"/>
         <source>User Interaction</source>
-        <translation type="unfinished"/>
+        <translation>Interacțiune utilizator</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="398"/>
         <source>Host is unknown</source>
-        <translation type="unfinished"/>
+        <translation>Gazda este necunoscută</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="401"/>
         <source>Item not found</source>
-        <translation type="unfinished"/>
+        <translation>Elementul nu s-a găsit</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="404"/>
         <source>Authorization Error</source>
-        <translation type="unfinished"/>
+        <translation>Eroare de autorizare</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="407"/>
         <source>Remote Stream Error</source>
-        <translation type="unfinished"/>
+        <translation>Eroare de flux</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="410"/>
         <source>Remote Connection failed</source>
-        <translation type="unfinished"/>
+        <translation>Conectarea la distanță a eșuat</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="413"/>
         <source>Internal Server Error</source>
-        <translation type="unfinished"/>
+        <translation>Eroare internă a serverului</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="416"/>
         <source>System shutdown</source>
-        <translation type="unfinished"/>
+        <translation>Închidere sistem</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="419"/>
@@ -4616,12 +4644,12 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="811"/>
         <source>Do you want to add &lt;b&gt;%1&lt;/b&gt; to your friend list?</source>
-        <translation type="unfinished"/>
+        <translation>Dorești să adaugi &lt;b&gt;%1&lt;/b&gt; în lista ta de prieteni?</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="422"/>
         <source>No Compression Support</source>
-        <translation type="unfinished"/>
+        <translation>Fără suport de comprimare</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="205"/>
@@ -4631,17 +4659,17 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="425"/>
         <source>No Encryption Support</source>
-        <translation type="unfinished"/>
+        <translation>Fără suport de criptare</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="428"/>
         <source>No Authorization Support</source>
-        <translation type="unfinished"/>
+        <translation>Fără suport de autorizare</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="431"/>
         <source>No Supported Feature</source>
-        <translation type="unfinished"/>
+        <translation>Nicio funcție suportată</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="490"/>
@@ -4666,7 +4694,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="701"/>
         <source>I&apos;m sorry -- I&apos;m just an automatic presence used by Tomahawk Player (http://gettomahawk.com). If you are getting this message, the person you are trying to reach is probably not signed on, so please try again later!</source>
-        <translation type="unfinished"/>
+        <translation>Îmi pare rău -- Sunt doar o prezență automată folosită de playerul Tomahawk (http://gettomahawk.com). Dacă primești acest mesaj, probabil persoana pe care o cauți nu este conectată, te rog încearcă din nou mai târziu!</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="810"/>

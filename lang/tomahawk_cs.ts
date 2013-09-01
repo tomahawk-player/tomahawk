@@ -368,17 +368,17 @@ se s vámi spojil?</translation>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="869"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="868"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>Promiňte,  Tomahawku se nepodařilo najít skladbu &apos;%1&apos; od %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="893"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="892"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>Promiňte,  Tomahawku se nepodařilo najít umělce &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="919"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="918"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>Promiňte,  Tomahawku se nepodařilo najít album &apos;%1&apos; od %2</translation>
     </message>
@@ -1686,12 +1686,12 @@ heslo</translation>
 <context>
     <name>Servent</name>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="979"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="981"/>
         <source>Automatically detecting external IP failed: Could not parse JSON response.</source>
         <translation>Automatické zjištění vnější adresy IP se nezdařilo: Nepodařilo se zpracovat odpověď JSON.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="992"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="994"/>
         <source>Automatically detecting external IP failed: %1</source>
         <translation>Automatické zjištění vnější adresy IP se nezdařilo: %1</translation>
     </message>

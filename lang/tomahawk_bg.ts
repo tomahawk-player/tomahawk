@@ -367,17 +367,17 @@ connect and stream from you?</source>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="869"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="868"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>Съжалявам. Не успявам да открия изпълнение &apos;%1&apos; от &apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="893"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="892"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>Съжалявам, но не откривам &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="919"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="918"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>Съжалявам, но не откривам албум с име &apos;%1&apos; от &apos;%2&apos;</translation>
     </message>
@@ -1696,12 +1696,12 @@ Password (OTP)</source>
 <context>
     <name>Servent</name>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="979"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="981"/>
         <source>Automatically detecting external IP failed: Could not parse JSON response.</source>
         <translation>Автоматичното откриване на външния IP не успя: Неуспех при обработката на JSON отговора.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="992"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="994"/>
         <source>Automatically detecting external IP failed: %1</source>
         <translation>Автоматичното откриване на външен IP не успя: %1</translation>
     </message>
