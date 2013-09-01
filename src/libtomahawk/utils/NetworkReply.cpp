@@ -33,9 +33,7 @@ NetworkReply::NetworkReply( QNetworkReply* parent )
 {
     m_url = m_reply->url();
 
-    connect( m_reply, SIGNAL( finished() ), SLOT( networkLoadFinished() ) );
-    connect( m_reply, SIGNAL( error( QNetworkReply::NetworkError ) ), SIGNAL( error( QNetworkReply::NetworkError ) ) );
-    connect( m_reply, SIGNAL( destroyed( QObject* ) ), SLOT( deletedByParent() ) );
+    connectReplySignals();
 }
 
 
@@ -65,6 +63,70 @@ NetworkReply::deletedByParent()
 
 
 void
+NetworkReply::metaDataChanged()
+{
+    // Do an early check if we are redirected.
+    QVariant redir = m_reply->attribute( QNetworkRequest::RedirectionTargetAttribute );
+    if ( redir.isValid() && !redir.toUrl().isEmpty() )
+    {
+        // We have found a redirect, so follow it.
+        if ( m_formerUrls.count( redir.toUrl().toString() ) < maxSameRedirects && m_formerUrls.count() < maxRedirects )
+        {
+            tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Redirected HTTP request to" << redir;
+            if ( m_blacklistedHosts.contains( redir.toUrl().host() ) )
+            {
+                // Nope, we won't follow this redirect, emit some other signal here.
+                emit finalUrlReached();
+                emit finalUrlReached( redir.toUrl() );
+            }
+            else
+            {
+                disconnectReplySignals();
+                load( redir.toUrl() );
+                emit redirected();
+            }
+        }
+        else
+        {
+            // Nope, we won't follow this redirect, emit some other signal here.
+            emit finalUrlReached();
+            emit finalUrlReached( m_url );
+        }
+    }
+    else
+    {
+        // We do not have enough information to handle a redirect but if this isn't a redirect, we're maybe already done.
+        QVariant statusCode = m_reply->attribute( QNetworkRequest::HttpStatusCodeAttribute );
+        if ( statusCode.isValid() && statusCode.toInt() >= 200 && statusCode.toInt() <= 207 )
+        {
+            emit finalUrlReached();
+            emit finalUrlReached( m_url );
+        }
+    }
+
+}
+
+
+void
+NetworkReply::connectReplySignals()
+{
+    connect( m_reply, SIGNAL( finished() ), SLOT( networkLoadFinished() ) );
+    connect( m_reply, SIGNAL( error( QNetworkReply::NetworkError ) ), SIGNAL( error( QNetworkReply::NetworkError ) ) );
+    connect( m_reply, SIGNAL( destroyed( QObject* ) ), SLOT( deletedByParent() ) );
+    connect( m_reply, SIGNAL( metaDataChanged() ), SLOT( metaDataChanged() ) );
+}
+
+void
+NetworkReply::disconnectReplySignals()
+{
+    disconnect( m_reply, SIGNAL( finished() ), this, SLOT( networkLoadFinished() ) );
+    disconnect( m_reply, SIGNAL( error( QNetworkReply::NetworkError ) ), this, SIGNAL( error( QNetworkReply::NetworkError ) ) );
+    disconnect( m_reply, SIGNAL( destroyed( QObject* ) ), this, SLOT( deletedByParent() ) );
+    disconnect( m_reply, SIGNAL( metaDataChanged() ), this, SLOT( metaDataChanged() ) );
+}
+
+
+void
 NetworkReply::load( const QUrl& url )
 {
     m_url = url;
@@ -86,9 +148,17 @@ NetworkReply::load( const QUrl& url )
             m_reply = Tomahawk::Utils::nam()->get( request );
     }
 
-    connect( m_reply, SIGNAL( finished() ), SLOT( networkLoadFinished() ) );
-    connect( m_reply, SIGNAL( error( QNetworkReply::NetworkError ) ), SIGNAL( error( QNetworkReply::NetworkError ) ) );
-    connect( m_reply, SIGNAL( destroyed( QObject* ) ), SLOT( deletedByParent() ) );
+    connectReplySignals();
+}
+
+
+void
+NetworkReply::emitFinished( const QUrl& url )
+{
+    emit finalUrlReached();
+    emit finalUrlReached( url );
+    emit finished( url );
+    emit finished();
 }
 
 
@@ -97,7 +167,7 @@ NetworkReply::networkLoadFinished()
 {
     if ( m_reply->error() != QNetworkReply::NoError )
     {
-        emit finished();
+        emitFinished( m_url );
         return;
     }
 
@@ -108,8 +178,7 @@ NetworkReply::networkLoadFinished()
         if ( m_blacklistedHosts.contains( redir.toUrl().host() ) )
         {
             tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Reached blacklisted host, not redirecting anymore.";
-            emit finished( redir.toUrl() );
-            emit finished();
+            emitFinished( redir.toUrl() );
         }
         else
         {
@@ -119,7 +188,6 @@ NetworkReply::networkLoadFinished()
     }
     else
     {
-        emit finished( m_url );
-        emit finished();
+        emitFinished( m_url );
     }
 }
