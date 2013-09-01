@@ -630,6 +630,7 @@ void
 AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
 {
     Q_D( AudioEngine );
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO << ( result.isNull() ? QString() : result->url() );
 
     if ( result.isNull() )
     {
@@ -657,6 +658,12 @@ void
 AudioEngine::performLoadTrack( const Tomahawk::result_ptr& result, QSharedPointer< QIODevice >& io )
 {
     Q_D( AudioEngine );
+    if ( currentTrack() != result )
+    {
+        tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Track loaded too late, skip.";
+        return;
+    }
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO << ( result.isNull() ? QString() : result->url() );
 
     bool err = false;
     {
