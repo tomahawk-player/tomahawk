@@ -1408,9 +1408,9 @@ Servent::httpIODeviceFactory( const Tomahawk::result_ptr& result,
     NetworkReply* reply = new NetworkReply( Tomahawk::Utils::nam()->get( req ) );
     qRegisterMetaType<NetworkReply*>("NetworkReply*");
     qRegisterMetaType<IODeviceCallback>("IODeviceCallback");
-    NewClosure( reply, SIGNAL( finished() ),
+    NewClosure( reply, SIGNAL( finalUrlReached() ),
                 this, SLOT( httpIODeviceReady( NetworkReply*, IODeviceCallback ) ),
-                reply, callback );
+                reply, callback )->setAutoDelete( true );
 }
 
 void
