@@ -251,7 +251,7 @@ GridView::verifySize()
     const int itemsPerRow = qMax( 1, qFloor( rectWidth / itemWidth ) );
 
     const int overlapRows = m_model->rowCount( QModelIndex() ) % itemsPerRow;
-    const int rows = floor( (double)m_model->rowCount( QModelIndex() ) / (double)itemsPerRow );
+    const int rows = qMax( 1.0, floor( (double)m_model->rowCount( QModelIndex() ) / (double)itemsPerRow ) );
     const int newHeight = rows * m_delegate->itemSize().height();
 
     m_proxyModel->setMaxVisibleItems( m_model->rowCount( QModelIndex() ) - overlapRows );
