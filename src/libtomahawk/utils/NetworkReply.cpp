@@ -118,6 +118,8 @@ NetworkReply::networkLoadFinished()
         }
     }
     else
+    {
         emit finished( m_url );
         emit finished();
+    }
 }
