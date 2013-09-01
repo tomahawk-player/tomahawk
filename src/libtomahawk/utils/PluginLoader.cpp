@@ -70,7 +70,7 @@ const QHash< QString, QObject* > PluginLoader::loadPlugins() const
 {
     tLog() << "Load plugins of type" << d_ptr->type;
 
-    const QString errorMessage("Error loading plugin: %1: %2");
+    const QString errorMessage( "Error loading plugin: %1: %2" );
 
     QHash< QString, QObject* > plugins;
 
@@ -106,7 +106,9 @@ PluginLoader::pluginDirs()
     QList< QDir > pluginDirs;
 
     QDir appDir( QCoreApplication::instance()->applicationDirPath() );
-#ifdef Q_WS_MAC
+
+#ifdef Q_OS_MAC
+    pluginDirs << appDir;
     if ( appDir.dirName() == "MacOS" )
     {
         // Development convenience-hack
