@@ -129,10 +129,11 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
     {
         d->trendingTracksModel = new PlaylistModel( d->ui->trendingTracksView );
         d->ui->trendingTracksView->proxyModel()->setStyle( PlayableProxyModel::Short );
-        d->ui->trendingTracksView->overlay()->setEnabled( false );
+        d->ui->trendingTracksView->overlay()->setEnabled( true );
         d->ui->trendingTracksView->setPlaylistModel( d->trendingTracksModel );
         d->ui->trendingTracksView->setAutoResize( true );
         d->ui->trendingTracksView->setAlternatingRowColors( false );
+        d->ui->trendingTracksView->setEmptyTip( tr( "Sorry, we couldn't find any trending tracks." ) );
 
         QPalette p = d->ui->trendingTracksView->palette();
         p.setColor( QPalette::Text, TomahawkStyle::PAGE_TRACKLIST_TRACK_SOLVED );
