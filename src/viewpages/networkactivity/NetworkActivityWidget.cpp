@@ -478,15 +478,17 @@ void
 NetworkActivityWidget::showWeekCharts()
 {
     Q_D( NetworkActivityWidget );
+
     d->activeView = WeekChart;
-    if ( !d->weeklyChartsModel.isNull() )
-    {
-        d->ui->tracksViewLeft->setPlaylistModel( d_func()->weeklyChartsModel );
-        d->ui->tracksViewLeft->setAutoResize( true );
-    }
-    else
+    if ( !d->weeklyChartsModel )
     {
         d->weeklyChartsModel = new PlaylistModel( d->ui->tracksViewLeft );
+    }
+    d->ui->tracksViewLeft->setPlaylistModel( d_func()->weeklyChartsModel );
+    d->ui->tracksViewLeft->setAutoResize( true );
+
+    if ( d->weeklyChartsModel->rowCount( QModelIndex() ) == 0 )
+    {
         d->weeklyChartsModel->startLoading();
         fetchWeekCharts();
     }
@@ -499,14 +501,15 @@ NetworkActivityWidget::showMonthCharts()
     Q_D( NetworkActivityWidget );
 
     d->activeView = MonthChart;
-    if ( !d->monthlyChartsModel.isNull() )
-    {
-        d->ui->tracksViewLeft->setPlaylistModel( d_func()->monthlyChartsModel );
-        d->ui->tracksViewLeft->setAutoResize( true );
-    }
-    else
+    if ( !d->monthlyChartsModel )
     {
         d->monthlyChartsModel = new PlaylistModel( d->ui->tracksViewLeft );
+    }
+    d->ui->tracksViewLeft->setPlaylistModel( d_func()->monthlyChartsModel );
+    d->ui->tracksViewLeft->setAutoResize( true );
+
+    if ( d->monthlyChartsModel->rowCount( QModelIndex() ) == 0 )
+    {
         d->monthlyChartsModel->startLoading();
         fetchMonthCharts();
     }
@@ -519,14 +522,15 @@ NetworkActivityWidget::showYearCharts()
     Q_D( NetworkActivityWidget );
 
     d->activeView = YearChart;
-    if ( !d->yearlyChartsModel.isNull() )
-    {
-        d->ui->tracksViewLeft->setPlaylistModel( d->yearlyChartsModel );
-        d->ui->tracksViewLeft->setAutoResize( true );
-    }
-    else
+    if ( !d->yearlyChartsModel )
     {
         d->yearlyChartsModel = new PlaylistModel( d->ui->tracksViewLeft );
+    }
+    d->ui->tracksViewLeft->setPlaylistModel( d->yearlyChartsModel );
+    d->ui->tracksViewLeft->setAutoResize( true );
+
+    if ( d->yearlyChartsModel->rowCount( QModelIndex() ) == 0 )
+    {
         d->yearlyChartsModel->startLoading();
         fetchYearCharts();
     }
@@ -539,14 +543,15 @@ NetworkActivityWidget::showOverallCharts()
     Q_D( NetworkActivityWidget );
 
     d->activeView = OverallChart;
-    if ( !d->overallChartsModel.isNull() )
-    {
-        d->ui->tracksViewLeft->setPlaylistModel( d->overallChartsModel );
-        d->ui->tracksViewLeft->setAutoResize( true );
-    }
-    else
+    if ( !d->overallChartsModel )
     {
         d->overallChartsModel = new PlaylistModel( d->ui->tracksViewLeft );
+    }
+    d->ui->tracksViewLeft->setPlaylistModel( d->overallChartsModel );
+    d->ui->tracksViewLeft->setAutoResize( true );
+
+    if ( d->overallChartsModel->rowCount( QModelIndex() ) == 0 )
+    {
         d->overallChartsModel->startLoading();
         fetchOverallCharts();
     }
