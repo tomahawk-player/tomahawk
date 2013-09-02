@@ -368,17 +368,17 @@ se s vámi spojil?</translation>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="868"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="875"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>Promiňte,  Tomahawku se nepodařilo najít skladbu &apos;%1&apos; od %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="892"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="899"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>Promiňte,  Tomahawku se nepodařilo najít umělce &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="918"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="925"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>Promiňte,  Tomahawku se nepodařilo najít album &apos;%1&apos; od %2</translation>
     </message>
@@ -3825,6 +3825,11 @@ Zkuste vyladit filtry pro nové písně.</translation>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="110"/>
         <source>Sorry, we are still loading the charts.</source>
         <translation>Promiňte, stále ještě se nahrávají žebříčky.</translation>
+    </message>
+    <message>
+        <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="136"/>
+        <source>Sorry, we couldn&apos;t find any trending tracks.</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="80"/>

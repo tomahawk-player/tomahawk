@@ -367,17 +367,17 @@ connect and stream from you?</source>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="868"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="875"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>No s&apos;ha trobat la cançó «%1» de «%2»</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="892"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="899"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>No s&apos;ha trobat l&apos;artista «%1»</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="918"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="925"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>No s&apos;ha trobat l&apos;àlbum «%1» de «%2»</translation>
     </message>
@@ -3824,6 +3824,11 @@ Intenteu ajustar els filtres per reproduir noves cançons.</translation>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="110"/>
         <source>Sorry, we are still loading the charts.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="136"/>
+        <source>Sorry, we couldn&apos;t find any trending tracks.</source>
         <translation type="unfinished"/>
     </message>
     <message>

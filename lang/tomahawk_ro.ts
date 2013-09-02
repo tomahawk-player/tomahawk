@@ -368,17 +368,17 @@ se conecteze și să redea de la tine?</translation>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="868"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="875"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>Ne pare rău, Tomahawk nu a găsit piesa &apos;%1&apos; de %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="892"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="899"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>Ne pare rău, Tomahawk nu a găsit artistul &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="918"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="925"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>Ne pare rău, Tomahawk nu a găsit albumul &apos;%1&apos; de la %2</translation>
     </message>
@@ -2199,7 +2199,7 @@ Password (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="337"/>
         <source>Cloud</source>
-        <translation type="unfinished"/>
+        <translation>Cloud</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="329"/>
@@ -3829,6 +3829,11 @@ Try tweaking the filters for a new set of songs to play.</source>
         <translation>Ne pare rău, încă se încarcă clasamentele.</translation>
     </message>
     <message>
+        <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="136"/>
+        <source>Sorry, we couldn&apos;t find any trending tracks.</source>
+        <translation>Ne pare rău, nu am găsit piese la modă.</translation>
+    </message>
+    <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="80"/>
         <source>Last Month</source>
         <translation>Luna trecută</translation>
@@ -4032,12 +4037,12 @@ introdu aici PIN-ul afișat:</translation>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="997"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped. Make sure you have a suitable Phonon backend and required plugins installed.</source>
-        <translation type="unfinished"/>
+        <translation>Ne pare rău, a apărut o problemă la accesarea dispozitivului audio sau a piesei dorite, piesa curentă va fi sărită. Asigură-te că ai o platformă Phonon potrivită și că modulele necesare sunt instalate.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="999"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped.</source>
-        <translation type="unfinished"/>
+        <translation>Ne pare rău, a apărut o problemă la accesarea dispozitivului audio sau a piesei dorite, piesa curentă va fi sărită.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1036"/>
@@ -4478,7 +4483,7 @@ Versuri pentru &quot;%1&quot; de %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="79"/>
         <source>Information query</source>
-        <translation type="unfinished"/>
+        <translation>Interogare pentru informație</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="83"/>
