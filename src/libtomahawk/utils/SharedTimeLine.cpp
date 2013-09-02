@@ -20,6 +20,7 @@
 
 #include "SharedTimeLine.h"
 
+#include <QMetaMethod>
 
 namespace TomahawkUtils
 {
@@ -37,20 +38,39 @@ SharedTimeLine::SharedTimeLine()
 
 
 void
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+SharedTimeLine::connectNotify( const QMetaMethod& signal )
+#else
 SharedTimeLine::connectNotify( const char* signal )
+#endif
 {
-    if ( signal == QMetaObject::normalizedSignature( SIGNAL( frameChanged( int ) ) ) ) {
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    if ( signal == QMetaMethod::fromSignal( &SharedTimeLine::frameChanged ) )
+#else
+    if ( signal == QMetaObject::normalizedSignature( SIGNAL( frameChanged( int ) ) ) )
+#endif
+    {
         m_refcount++;
         if ( m_timeline.state() != QTimeLine::Running )
+        {
             m_timeline.start();
+        }
     }
 }
 
 
 void
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+SharedTimeLine::disconnectNotify( const QMetaMethod& signal )
+#else
 SharedTimeLine::disconnectNotify( const char* signal )
+#endif
 {
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    if ( signal == QMetaMethod::fromSignal( &SharedTimeLine::frameChanged ) )
+#else
     if ( signal == QMetaObject::normalizedSignature( SIGNAL( frameChanged( int ) ) ) )
+#endif
     {
         m_refcount--;
         if ( m_timeline.state() == QTimeLine::Running && m_refcount == 0 )

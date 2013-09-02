@@ -31,28 +31,32 @@ namespace TomahawkUtils
 
 class DLLEXPORT SharedTimeLine : public QObject
 {
-    Q_OBJECT
+Q_OBJECT
 
-    public:
-        SharedTimeLine();
+public:
+    SharedTimeLine();
 
-        virtual ~SharedTimeLine() {}
+    virtual ~SharedTimeLine() {}
 
-        int currentFrame() { return m_timeline.currentFrame(); }
+    int currentFrame() { return m_timeline.currentFrame(); }
 
-        void setUpdateInterval( int msec ) { if ( msec != m_timeline.updateInterval() ) m_timeline.setUpdateInterval( msec ); }
+    void setUpdateInterval( int msec ) { if ( msec != m_timeline.updateInterval() ) m_timeline.setUpdateInterval( msec ); }
 
-    signals:
-        void frameChanged( int );
+signals:
+    void frameChanged( int );
 
-    protected slots:
-        virtual void connectNotify( const char *signal );
+protected slots:
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    virtual void connectNotify( const QMetaMethod & signal );
+    virtual void disconnectNotify( const QMetaMethod & signal );
+#else
+    virtual void connectNotify( const char *signal );
+    virtual void disconnectNotify( const char *signal );
+#endif
 
-        virtual void disconnectNotify( const char *signal );
-
-    private:
-        int m_refcount;
-        QTimeLine m_timeline;
+private:
+    int m_refcount;
+    QTimeLine m_timeline;
 };
 
 }
