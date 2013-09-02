@@ -99,7 +99,6 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
     d->ui->breadCrumbLeft->setModel( d->sortedProxy );
     d->ui->breadCrumbLeft->setVisible( true );
 
-
     {
         AlbumItemDelegate* del = new AlbumItemDelegate( d->ui->tracksViewLeft, d->ui->tracksViewLeft->proxyModel(), true );
         d->ui->tracksViewLeft->setPlaylistItemDelegate( del );
@@ -124,7 +123,6 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
         TomahawkStyle::stylePageFrame( d->ui->chartsFrame );
     }
 
-
     // Trending Tracks
     {
         d->trendingTracksModel = new PlaylistModel( d->ui->trendingTracksView );
@@ -134,6 +132,7 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
         d->ui->trendingTracksView->setAutoResize( true );
         d->ui->trendingTracksView->setAlternatingRowColors( false );
         d->ui->trendingTracksView->setEmptyTip( tr( "Sorry, we couldn't find any trending tracks." ) );
+        d->trendingTracksModel->startLoading();
 
         QPalette p = d->ui->trendingTracksView->palette();
         p.setColor( QPalette::Text, TomahawkStyle::PAGE_TRACKLIST_TRACK_SOLVED );
@@ -200,6 +199,7 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
     {
         d->artistsModel = new PlayableModel( d->ui->trendingArtistsView );
         d->ui->trendingArtistsView->setPlayableModel( d->artistsModel );
+        d->artistsModel->startLoading();
     }
     {
         d->ui->trendingArtistsView->setFrameShape( QFrame::NoFrame );
@@ -223,7 +223,6 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
         d->ui->trendingArtistsLabel->setPalette( p );
     }
 
-
     {
         QScrollArea* area = new QScrollArea();
         area->setWidgetResizable( true );
@@ -241,7 +240,6 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
     mpl->addChildInterface( d->ui->tracksViewLeft->playlistInterface() );
     d->playlistInterface = playlistinterface_ptr( mpl );
 
-
     // Load data in separate thread
     d->workerThread = new QThread();
     d->workerThread->start();
@@ -249,10 +247,10 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
     d->worker->moveToThread( d->workerThread );
     connect( d->worker, SIGNAL( trendingTracks( QList<Tomahawk::track_ptr> ) ),
              SLOT( trendingTracks( QList<Tomahawk::track_ptr> ) ),
-             Qt::QueuedConnection);
+             Qt::QueuedConnection );
     connect( d->worker, SIGNAL( hotPlaylists(QList<Tomahawk::playlist_ptr>) ),
              SLOT(hotPlaylists(QList<Tomahawk::playlist_ptr>)),
-             Qt::QueuedConnection);
+             Qt::QueuedConnection );
     connect( d->worker, SIGNAL( trendingArtists( QList< Tomahawk::artist_ptr > ) ),
              SLOT( trendingArtists( QList< Tomahawk::artist_ptr > ) ),
              Qt::QueuedConnection );
@@ -311,7 +309,6 @@ void
 NetworkActivityWidget::weeklyCharts( const QList<Tomahawk::track_ptr>& tracks )
 {
     d_func()->weeklyChartsModel = new PlaylistModel( d_func()->ui->tracksViewLeft );
-    d_func()->weeklyChartsModel->startLoading();
     d_func()->weeklyChartsModel->appendTracks( tracks );
     d_func()->weeklyChartsModel->finishLoading();
 
@@ -326,7 +323,6 @@ void
 NetworkActivityWidget::monthlyCharts( const QList<Tomahawk::track_ptr>& tracks )
 {
     d_func()->monthlyChartsModel = new PlaylistModel( d_func()->ui->tracksViewLeft );
-    d_func()->monthlyChartsModel->startLoading();
     d_func()->monthlyChartsModel->appendTracks( tracks );
     d_func()->monthlyChartsModel->finishLoading();
 
@@ -341,7 +337,6 @@ void
 NetworkActivityWidget::yearlyCharts( const QList<Tomahawk::track_ptr>& tracks )
 {
     d_func()->yearlyChartsModel = new PlaylistModel( d_func()->ui->tracksViewLeft );
-    d_func()->yearlyChartsModel->startLoading();
     d_func()->yearlyChartsModel->appendTracks( tracks );
     d_func()->yearlyChartsModel->finishLoading();
 
@@ -356,7 +351,6 @@ void
 NetworkActivityWidget::overallCharts( const QList<track_ptr>& tracks )
 {
     d_func()->overallChartsModel = new PlaylistModel( d_func()->ui->tracksViewLeft );
-    d_func()->overallChartsModel->startLoading();
     d_func()->overallChartsModel->appendTracks( tracks );
     d_func()->overallChartsModel->finishLoading();
 
@@ -365,6 +359,7 @@ NetworkActivityWidget::overallCharts( const QList<track_ptr>& tracks )
         showOverallCharts();
     }
 }
+
 
 void
 NetworkActivityWidget::hotPlaylists( const QList<playlist_ptr>& playlists )
@@ -379,7 +374,6 @@ NetworkActivityWidget::trendingArtists( const QList<artist_ptr>& artists )
 {
     Q_D( NetworkActivityWidget );
 
-    d->artistsModel->startLoading();
     d->artistsModel->appendArtists( artists );
     d->artistsModel->finishLoading();
 }
@@ -390,7 +384,6 @@ NetworkActivityWidget::trendingTracks( const QList<track_ptr>& tracks )
 {
     Q_D( NetworkActivityWidget );
 
-    d->trendingTracksModel->startLoading();
     d->trendingTracksModel->appendTracks( tracks );
     d->trendingTracksModel->finishLoading();
 }
@@ -409,24 +402,24 @@ NetworkActivityWidget::leftCrumbIndexChanged( const QModelIndex& index )
     tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Showing chart" << chartId;
     switch ( chartId )
     {
-    case WeekChart:
-        showWeekCharts();
-        break;
-    case MonthChart:
-        showMonthCharts();
-        break;
-    case YearChart:
-        showYearCharts();
-        break;
-    case OverallChart:
-        showOverallCharts();
-        break;
-    case TopLoved:
-        showTopLoved();
-        break;
-    case RecentlyLoved:
-        showRecentlyLoved();
-        break;
+        case WeekChart:
+            showWeekCharts();
+            break;
+        case MonthChart:
+            showMonthCharts();
+            break;
+        case YearChart:
+            showYearCharts();
+            break;
+        case OverallChart:
+            showOverallCharts();
+            break;
+        case TopLoved:
+            showTopLoved();
+            break;
+        case RecentlyLoved:
+            showRecentlyLoved();
+            break;
     }
 }
 
@@ -497,6 +490,7 @@ NetworkActivityWidget::showWeekCharts()
     }
     else
     {
+        d_func()->weeklyChartsModel->startLoading();
         fetchWeekCharts();
     }
 }
@@ -515,6 +509,7 @@ NetworkActivityWidget::showMonthCharts()
     }
     else
     {
+        d_func()->monthlyChartsModel->startLoading();
         fetchMonthCharts();
     }
 }
@@ -533,6 +528,7 @@ NetworkActivityWidget::showYearCharts()
     }
     else
     {
+        d_func()->yearlyChartsModel->startLoading();
         fetchYearCharts();
     }
 }
@@ -551,6 +547,7 @@ NetworkActivityWidget::showOverallCharts()
     }
     else
     {
+        d_func()->overallChartsModel->startLoading();
         fetchOverallCharts();
     }
 }
@@ -569,6 +566,7 @@ NetworkActivityWidget::showTopLoved()
         model->setSource( source_ptr() );
         d->topLovedModel = model;
     }
+
     d->ui->tracksViewLeft->setPlaylistModel( d->topLovedModel );
     d->ui->tracksViewLeft->setAutoResize( true );
 }
