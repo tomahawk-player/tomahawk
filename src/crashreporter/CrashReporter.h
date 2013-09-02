@@ -32,7 +32,7 @@ class CrashReporter : public QDialog
     Q_OBJECT
 
 public:
-    CrashReporter( const QStringList& argv );
+    CrashReporter( const QUrl& url, const QStringList& argv );
     virtual ~CrashReporter( );
 
 private:
@@ -43,6 +43,7 @@ private:
     QString m_product_name;
     QNetworkRequest* m_request;
     QNetworkReply* m_reply;
+    QUrl m_url;
 
 public slots:
     void send();

@@ -30,7 +30,8 @@
 #define RESPATH ":/data/"
 
 
-CrashReporter::CrashReporter( const QStringList& args )
+CrashReporter::CrashReporter( const QUrl& url, const QStringList& args )
+    : m_url( url )
 {
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
 
@@ -56,7 +57,7 @@ CrashReporter::CrashReporter( const QStringList& args )
     ui.bottomLabel->setIndent( 1 );
   #endif //Q_OS_MAC
 
-    m_request = new QNetworkRequest( QUrl( "http://oops.tomahawk-player.org/addreport.php" ) );
+    m_request = new QNetworkRequest( m_url );
 
     m_dir = args.value( 1 );
     m_minidump = m_dir + '/' + args.value( 2 ) + ".dmp";

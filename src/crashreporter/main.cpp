@@ -45,7 +45,7 @@ int main( int argc, char* argv[] )
         return 1;
     }
 
-    CrashReporter reporter( app.arguments() );
+    CrashReporter reporter( QUrl( "http://oops.tomahawk-player.org/addreport.php" ),  app.arguments() );
     reporter.show();
 
     return app.exec();
