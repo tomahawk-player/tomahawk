@@ -38,17 +38,26 @@ SharedTimeLine::SharedTimeLine()
 
 
 void
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
 SharedTimeLine::connectNotify( const QMetaMethod& signal )
-#else
-SharedTimeLine::connectNotify( const char* signal )
-#endif
 {
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     if ( signal == QMetaMethod::fromSignal( &SharedTimeLine::frameChanged ) )
+    {
+        m_refcount++;
+        if ( m_timeline.state() != QTimeLine::Running )
+        {
+            m_timeline.start();
+        }
+    }
 #else
-    if ( signal == QMetaObject::normalizedSignature( SIGNAL( frameChanged( int ) ) ) )
+    Q_ASSERT( false );
 #endif
+}
+
+void
+SharedTimeLine::connectNotify( const char* signal )
+{
+    if ( signal == QMetaObject::normalizedSignature( SIGNAL( frameChanged( int ) ) ) )
     {
         m_refcount++;
         if ( m_timeline.state() != QTimeLine::Running )
@@ -60,17 +69,28 @@ SharedTimeLine::connectNotify( const char* signal )
 
 
 void
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
 SharedTimeLine::disconnectNotify( const QMetaMethod& signal )
-#else
-SharedTimeLine::disconnectNotify( const char* signal )
-#endif
 {
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     if ( signal == QMetaMethod::fromSignal( &SharedTimeLine::frameChanged ) )
+    {
+        m_refcount--;
+        if ( m_timeline.state() == QTimeLine::Running && m_refcount == 0 )
+        {
+            m_timeline.stop();
+            deleteLater();
+        }
+    }
 #else
-    if ( signal == QMetaObject::normalizedSignature( SIGNAL( frameChanged( int ) ) ) )
+    Q_ASSERT( false );
 #endif
+}
+
+
+void
+SharedTimeLine::disconnectNotify( const char* signal )
+{
+    if ( signal == QMetaObject::normalizedSignature( SIGNAL( frameChanged( int ) ) ) )
     {
         m_refcount--;
         if ( m_timeline.state() == QTimeLine::Running && m_refcount == 0 )
