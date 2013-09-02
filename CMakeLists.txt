@@ -147,8 +147,6 @@ if( NOT BUILD_WITH_QT4 )
 
         set(QT_RCC_EXECUTABLE "${Qt5Core_RCC_EXECUTABLE}")
         #FIXME: CrashReporter depends on deprecated QHttp
-        set(WITH_CRASHREPORTER OFF)
-        set(WITH_BREAKPAD OFF)
         set(WITH_KDE4 OFF)
     endif()
 endif()
