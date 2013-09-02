@@ -19,7 +19,7 @@
 #ifndef HATCHET_ACCOUNT_H
 #define HATCHET_ACCOUNT_H
 
-
+#include "TomahawkPlugin.h"
 #include <accounts/Account.h>
 #include <accounts/AccountDllMacro.h>
 

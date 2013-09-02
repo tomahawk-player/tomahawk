@@ -20,7 +20,6 @@
 #include <QHostInfo>
 
 #include "HatchetAccountConfig.h"
-#include "TomahawkPlugin.h"
 #include "utils/Closure.h"
 #include "utils/Logger.h"
 #include "sip/HatchetSip.h"
