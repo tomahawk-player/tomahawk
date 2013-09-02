@@ -45,6 +45,8 @@
 #include "widgets/SourceTreePopupDialog.h"
 #include "PlaylistEntry.h"
 
+#include "../../viewpages/dashboard/Dashboard.h"
+
 #include <QAction>
 #include <QApplication>
 #include <QClipboard>
@@ -149,6 +151,8 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     renamePlaylistAction->setShortcut( Qt::Key_F2 );
     addAction( renamePlaylistAction );
     connect( renamePlaylistAction, SIGNAL( triggered() ), SLOT( renamePlaylist() ) );
+
+    ViewManager::instance()->showDynamicPage( Tomahawk::Widgets::DASHBOARD_VIEWPAGE_NAME );
 }
 
 
@@ -324,7 +328,7 @@ SourceTreeView::onItemExpanded( const QModelIndex& idx )
     // make sure to expand children nodes for collections
     if ( idx.data( SourcesModel::SourceTreeItemTypeRole ) == SourcesModel::Collection )
     {
-       for( int i = 0; i < model()->rowCount( idx ); i++ )
+       for ( int i = 0; i < model()->rowCount( idx ); i++ )
        {
            setExpanded( model()->index( i, 0, idx ), true );
        }
