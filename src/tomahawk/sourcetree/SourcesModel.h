@@ -147,9 +147,9 @@ private slots:
     void onWidgetDestroyed( QWidget* w );
 
     /*
-     *  pageIcon and pageTitle are visible in the source tree, pageName is the internal name in the ViewManager
+     *  name is the internal name in the ViewManager
      */
-    void appendPageItem( const QString& name, const QString& text, const QIcon& icon, int sortValue );
+    void appendPageItem( const QString& name, Tomahawk::ViewPage* page, int sortValue );
 
 private:
     SourceTreeItem* itemFromIndex( const QModelIndex& idx ) const;

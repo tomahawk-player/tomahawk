@@ -20,8 +20,6 @@
 
 #include "sourcetree/SourcesModel.h"
 
-#include "../../viewpages/dashboard/Dashboard.h"
-
 #include "sourcetree/items/ScriptCollectionItem.h"
 #include "sourcetree/items/SourceTreeItem.h"
 #include "sourcetree/items/SourceItem.h"
@@ -62,9 +60,10 @@ SourcesModel::SourcesModel( QObject* parent )
 {
     m_rootItem = new SourceTreeItem( this, 0, Invalid );
 
-    connect( ViewManager::instance(), SIGNAL( viewPageAdded( QString, QString, QIcon, int ) ), SLOT( appendPageItem( QString, QString, QIcon, int ) ) );
-    appendGroups();
+    connect( ViewManager::instance(), SIGNAL( viewPageAdded( QString, Tomahawk::ViewPage*, int ) ),
+             SLOT( appendPageItem( QString, Tomahawk::ViewPage*, int ) ) );
 
+    appendGroups();
     onSourcesAdded( SourceList::instance()->sources() );
 
     connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ),
@@ -72,7 +71,7 @@ SourcesModel::SourcesModel( QObject* parent )
     connect( SourceList::instance(), SIGNAL( sourceRemoved( Tomahawk::source_ptr ) ),
              SLOT( onSourceRemoved( Tomahawk::source_ptr ) ) );
     connect( ViewManager::instance(), SIGNAL( viewPageActivated( Tomahawk::ViewPage* ) ),
-             this, SLOT( viewPageActivated( Tomahawk::ViewPage* ) ) );
+             SLOT( viewPageActivated( Tomahawk::ViewPage* ) ) );
 
     foreach ( const collection_ptr& c, SourceList::instance()->scriptCollections() )
     {
@@ -304,7 +303,6 @@ SourcesModel::appendGroups()
 //    new SourceTreeItem( this, m_rootItem, SourcesModel::Divider, 2 );
     m_myMusicGroup = new GroupItem( this, m_rootItem, tr( "My Music" ), 3 );
 
-
     InboxItem* inbox = new InboxItem( this, m_browse );
     inbox->setSortValue( 3 );
 
@@ -333,7 +331,6 @@ SourcesModel::appendGroups()
 
 
     m_collectionsGroup = new GroupItem( this, m_rootItem, tr( "Friends" ), 4 );
-
     m_cloudGroup = new GroupItem( this, m_rootItem, tr( "Cloud" ), 5 );
 
     endInsertRows();
@@ -341,22 +338,20 @@ SourcesModel::appendGroups()
     QHash< QString, ViewPagePlugin* > plugins = Tomahawk::Utils::PluginLoader( "viewpage" ).loadPlugins< ViewPagePlugin >();
     foreach ( ViewPagePlugin* plugin, plugins.values() )
     {
-
         ViewManager::instance()->addDynamicPage( plugin );
     }
-
-    ViewManager::instance()->showDynamicPage( Tomahawk::Widgets::DASHBOARD_VIEWPAGE_NAME );
 }
 
+
 void
-SourcesModel::appendPageItem( const QString& name, const QString& text, const QIcon& icon, int sortValue )
+SourcesModel::appendPageItem( const QString& name, ViewPage* page, int sortValue )
 {
     QModelIndex parentIndex = indexFromItem( m_browse );
     beginInsertRows( parentIndex, rowCount( parentIndex ), rowCount( parentIndex ) );
-    GenericPageItem* pageItem = new GenericPageItem( this, m_browse, text, icon,
+    GenericPageItem* pageItem = new GenericPageItem( this, m_browse, page->title(), page->pixmap(),
                                             boost::bind( &ViewManager::showDynamicPage, ViewManager::instance(), name ),
                                             boost::bind( &ViewManager::dynamicPageWidget, ViewManager::instance(), name ) );
-    if( sortValue )
+    if ( sortValue )
     {
         pageItem->setSortValue( sortValue );
     }
@@ -366,6 +361,8 @@ SourcesModel::appendPageItem( const QString& name, const QString& text, const QI
     }
 
     endInsertRows();
+
+    linkSourceItemToPage( pageItem, page );
 }
 
 
@@ -439,7 +436,7 @@ SourcesModel::viewPageActivated( Tomahawk::ViewPage* page )
     if ( m_sourceTreeLinks.contains( page ) )
     {
         Q_ASSERT( m_sourceTreeLinks[ page ] );
-//        qDebug() << "Got view page activated for item:" << m_sourceTreeLinks[ page ]->text();
+        tDebug() << "Got view page activated for item:" << m_sourceTreeLinks[ page ]->text();
         QModelIndex idx = indexFromItem( m_sourceTreeLinks[ page ] );
 
         if ( !idx.isValid() )

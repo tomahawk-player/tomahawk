@@ -870,10 +870,10 @@ ViewManager::inboxWidget() const
 ViewPage*
 ViewManager::dynamicPageWidget( const QString& pageName ) const
 {
-    if( m_dynamicPages.contains( pageName ) )
+    if ( m_dynamicPages.contains( pageName ) )
         return m_dynamicPages.value( pageName );
 
-    if( m_dynamicPagePlugins.contains( pageName ) )
+    if ( m_dynamicPagePlugins.contains( pageName ) )
         return m_dynamicPagePlugins.value( pageName ).data();
 
     return 0;
@@ -885,53 +885,51 @@ ViewManager::addDynamicPage( Tomahawk::ViewPagePlugin* viewPage, const QString& 
 {
     const QString pageId = !pageName.isEmpty() ? pageName : viewPage->defaultName();
 
-    tLog() << Q_FUNC_INFO << "Trying to add " << pageId;
+    tLog() << Q_FUNC_INFO << "Trying to add" << pageId;
 
-    if( m_dynamicPages.contains( pageId ) || m_dynamicPagePlugins.contains( pageId ) )
+    if ( m_dynamicPages.contains( pageId ) || m_dynamicPagePlugins.contains( pageId ) )
     {
-        tLog() << "Not adding a second ViewPage with name " << pageName;
+        tLog() << "Not adding a second ViewPage with name" << pageName;
         Q_ASSERT( false );
     }
 
     m_dynamicPagePlugins.insert( pageId, viewPage );
-
-    // HACK: rather emit the viewpage itself ...
-    emit viewPageAdded( pageId, viewPage->title(), viewPage->pixmap(), viewPage->sortValue() );
+    emit viewPageAdded( pageId, viewPage, viewPage->sortValue() );
 }
 
 
-void
+/*void
 ViewManager::addDynamicPage( const QString& pageName, const QString& text, const QIcon& icon, boost::function<Tomahawk::ViewPage*()> instanceLoader, int sortValue )
 {
-    tLog() << Q_FUNC_INFO << "Trying to add " << pageName;
+    tLog() << Q_FUNC_INFO << "Trying to add" << pageName;
 
-    if( m_dynamicPages.contains( pageName ) || m_dynamicPagePlugins.contains( pageName ) )
+    if ( m_dynamicPages.contains( pageName ) || m_dynamicPagePlugins.contains( pageName ) )
     {
-        tLog() << "Not adding a second ViewPage with name " << pageName;
+        tLog() << "Not adding a second ViewPage with name" << pageName;
         Q_ASSERT( false );
     }
 
     m_dynamicPagesInstanceLoaders.insert( pageName, instanceLoader );
     emit viewPageAdded( pageName, text, icon, sortValue );
-}
+}*/
 
 
 ViewPage*
 ViewManager::showDynamicPage( const QString& pageName )
 {
-    tLog() << Q_FUNC_INFO << "pageName: " << pageName;
+    tLog() << Q_FUNC_INFO << "pageName:" << pageName;
 
-    if( !m_dynamicPages.contains( pageName ) && !m_dynamicPagePlugins.contains( pageName ) )
+    if ( !m_dynamicPages.contains( pageName ) && !m_dynamicPagePlugins.contains( pageName ) )
     {
-        if( !m_dynamicPagesInstanceLoaders.contains( pageName ) )
+        if ( !m_dynamicPagesInstanceLoaders.contains( pageName ) )
         {
            tLog() << "Trying to show a page that does not exist and does not have a registered loader";
-           Q_ASSERT(false);
+           Q_ASSERT( false );
            return 0;
         }
 
         ViewPage* viewPage = m_dynamicPagesInstanceLoaders.value( pageName )();
-        Q_ASSERT(viewPage);
+        Q_ASSERT( viewPage );
         m_dynamicPages.insert( pageName, viewPage );
 
         m_dynamicPagesInstanceLoaders.remove( pageName );
@@ -946,6 +944,7 @@ ViewManager::superCollectionView() const
 {
     return m_superCollectionView;
 }
+
 
 InboxModel*
 ViewManager::inboxModel()
