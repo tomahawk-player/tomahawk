@@ -69,7 +69,7 @@ DatabaseCommand_LoadAllPlaylists::exec( DatabaseImpl* dbi )
     query.exec( QString( " SELECT p.guid, p.title, p.info, p.creator, p.lastmodified, p.shared, p.currentrevision, p.createdOn %6 "
                          " FROM playlist p "
                          " %5 "
-                         " WHERE dynplaylist = 'false' "
+                         " WHERE ( ( dynplaylist = 'false' ) OR ( dynplaylist = 0 ) ) "
                          " %1 "
                          " %2 %3 %4 "
                          )
