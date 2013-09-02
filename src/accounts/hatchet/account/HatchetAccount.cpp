@@ -20,6 +20,7 @@
 #include <QHostInfo>
 
 #include "HatchetAccountConfig.h"
+#include "TomahawkPlugin.h"
 #include "utils/Closure.h"
 #include "utils/Logger.h"
 #include "sip/HatchetSip.h"
@@ -116,7 +117,7 @@ AccountConfigWidget*
 HatchetAccount::configurationWidget()
 {
     if ( m_configWidget.isNull() )
-        m_configWidget = QWeakPointer<HatchetAccountConfig>( new HatchetAccountConfig( this ) );
+        m_configWidget = QPointer<HatchetAccountConfig>( new HatchetAccountConfig( this ) );
 
     return m_configWidget.data();
 }
@@ -172,7 +173,7 @@ HatchetAccount::sipPlugin()
     if ( m_tomahawkSipPlugin.isNull() )
     {
         tLog() << Q_FUNC_INFO;
-        m_tomahawkSipPlugin = QWeakPointer< HatchetSipPlugin >( new HatchetSipPlugin( this ) );
+        m_tomahawkSipPlugin = QPointer< HatchetSipPlugin >( new HatchetSipPlugin( this ) );
         connect( m_tomahawkSipPlugin.data(), SIGNAL( authUrlDiscovered( Tomahawk::Accounts::HatchetAccount::Service, QString ) ),
                  this, SLOT( authUrlDiscovered( Tomahawk::Accounts::HatchetAccount::Service, QString ) ) );
 

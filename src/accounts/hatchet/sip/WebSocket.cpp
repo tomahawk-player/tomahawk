@@ -105,7 +105,7 @@ WebSocket::disconnectWs( websocketpp::close::status::value status, const QString
     error_code ec;
     if ( m_connection )
     {
-        m_connection->close( status, reason.toAscii().constData(), ec );
+        m_connection->close( status, reason.toLatin1().constData(), ec );
         QMetaObject::invokeMethod( this, "readOutput", Qt::QueuedConnection );
         QTimer::singleShot( 5000, this, SLOT( disconnectSocket() ) ); //safety
         return;

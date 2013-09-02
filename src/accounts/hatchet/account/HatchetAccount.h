@@ -40,6 +40,8 @@ class ACCOUNTDLLEXPORT HatchetAccountFactory : public AccountFactory
 {
     Q_OBJECT
     Q_INTERFACES( Tomahawk::Accounts::AccountFactory )
+    Q_PLUGIN_METADATA( IID "org.tomahawk-player.Player.AccountFactory" )
+
 public:
     HatchetAccountFactory();
     virtual ~HatchetAccountFactory();
@@ -48,7 +50,7 @@ public:
     virtual QString prettyName() const { return "Hatchet"; }
     virtual QString description() const { return tr( "Connect to your Hatchet account" ); }
     virtual bool isUnique() const { return true; }
-    AccountTypes types() const { return AccountTypes( SipType ); };
+    AccountTypes types() const { return AccountTypes( SipType ); }
 //    virtual bool allowUserCreation() const { return false; }
 #ifndef ENABLE_HEADLESS
     virtual QPixmap icon() const;
@@ -111,11 +113,11 @@ private:
 
     QVariantMap parseReply( QNetworkReply* reply, bool& ok ) const;
 
-    QWeakPointer<HatchetAccountConfig> m_configWidget;
+    QPointer<HatchetAccountConfig> m_configWidget;
 
     Account::ConnectionState m_state;
 
-    QWeakPointer< HatchetSipPlugin > m_tomahawkSipPlugin;
+    QPointer< HatchetSipPlugin > m_tomahawkSipPlugin;
     QHash< Service, QString > m_extraAuthUrls;
 
     static HatchetAccount* s_instance;
