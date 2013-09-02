@@ -308,7 +308,6 @@ NetworkActivityWidget::jumpToCurrentTrack()
 void
 NetworkActivityWidget::weeklyCharts( const QList<Tomahawk::track_ptr>& tracks )
 {
-    d_func()->weeklyChartsModel = new PlaylistModel( d_func()->ui->tracksViewLeft );
     d_func()->weeklyChartsModel->appendTracks( tracks );
     d_func()->weeklyChartsModel->finishLoading();
 
@@ -322,7 +321,6 @@ NetworkActivityWidget::weeklyCharts( const QList<Tomahawk::track_ptr>& tracks )
 void
 NetworkActivityWidget::monthlyCharts( const QList<Tomahawk::track_ptr>& tracks )
 {
-    d_func()->monthlyChartsModel = new PlaylistModel( d_func()->ui->tracksViewLeft );
     d_func()->monthlyChartsModel->appendTracks( tracks );
     d_func()->monthlyChartsModel->finishLoading();
 
@@ -336,7 +334,6 @@ NetworkActivityWidget::monthlyCharts( const QList<Tomahawk::track_ptr>& tracks )
 void
 NetworkActivityWidget::yearlyCharts( const QList<Tomahawk::track_ptr>& tracks )
 {
-    d_func()->yearlyChartsModel = new PlaylistModel( d_func()->ui->tracksViewLeft );
     d_func()->yearlyChartsModel->appendTracks( tracks );
     d_func()->yearlyChartsModel->finishLoading();
 
@@ -350,7 +347,6 @@ NetworkActivityWidget::yearlyCharts( const QList<Tomahawk::track_ptr>& tracks )
 void
 NetworkActivityWidget::overallCharts( const QList<track_ptr>& tracks )
 {
-    d_func()->overallChartsModel = new PlaylistModel( d_func()->ui->tracksViewLeft );
     d_func()->overallChartsModel->appendTracks( tracks );
     d_func()->overallChartsModel->finishLoading();
 
@@ -490,7 +486,8 @@ NetworkActivityWidget::showWeekCharts()
     }
     else
     {
-        d_func()->weeklyChartsModel->startLoading();
+        d->weeklyChartsModel = new PlaylistModel( d->ui->tracksViewLeft );
+        d->weeklyChartsModel->startLoading();
         fetchWeekCharts();
     }
 }
@@ -502,14 +499,15 @@ NetworkActivityWidget::showMonthCharts()
     Q_D( NetworkActivityWidget );
 
     d->activeView = MonthChart;
-    if ( !d_func()->monthlyChartsModel.isNull() )
+    if ( !d->monthlyChartsModel.isNull() )
     {
         d->ui->tracksViewLeft->setPlaylistModel( d_func()->monthlyChartsModel );
         d->ui->tracksViewLeft->setAutoResize( true );
     }
     else
     {
-        d_func()->monthlyChartsModel->startLoading();
+        d->monthlyChartsModel = new PlaylistModel( d->ui->tracksViewLeft );
+        d->monthlyChartsModel->startLoading();
         fetchMonthCharts();
     }
 }
@@ -523,12 +521,13 @@ NetworkActivityWidget::showYearCharts()
     d->activeView = YearChart;
     if ( !d->yearlyChartsModel.isNull() )
     {
-        d->ui->tracksViewLeft->setPlaylistModel( d_func()->yearlyChartsModel );
+        d->ui->tracksViewLeft->setPlaylistModel( d->yearlyChartsModel );
         d->ui->tracksViewLeft->setAutoResize( true );
     }
     else
     {
-        d_func()->yearlyChartsModel->startLoading();
+        d->yearlyChartsModel = new PlaylistModel( d->ui->tracksViewLeft );
+        d->yearlyChartsModel->startLoading();
         fetchYearCharts();
     }
 }
@@ -547,7 +546,8 @@ NetworkActivityWidget::showOverallCharts()
     }
     else
     {
-        d_func()->overallChartsModel->startLoading();
+        d->overallChartsModel = new PlaylistModel( d->ui->tracksViewLeft );
+        d->overallChartsModel->startLoading();
         fetchOverallCharts();
     }
 }
