@@ -20,6 +20,7 @@
 #ifndef TOMAHAWK_DATABASECOMMAND_TRENDINGARTISTS_H
 #define TOMAHAWK_DATABASECOMMAND_TRENDINGARTISTS_H
 
+#include "Artist.h"
 #include "DatabaseCommand.h"
 
 namespace Tomahawk {
@@ -30,7 +31,7 @@ class DLLEXPORT DatabaseCommand_TrendingArtists : public Tomahawk::DatabaseComma
 {
     Q_OBJECT
 public:
-    explicit DatabaseCommand_TrendingArtists( QObject *parent = 0 );
+    explicit DatabaseCommand_TrendingArtists( QObject* parent = 0 );
     virtual ~DatabaseCommand_TrendingArtists();
 
     virtual void exec( DatabaseImpl* );

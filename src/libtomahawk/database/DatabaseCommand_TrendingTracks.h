@@ -19,6 +19,7 @@
 #ifndef TOMAHAWK_DATABASECOMMAND_TRENDINGTRACKS_H
 #define TOMAHAWK_DATABASECOMMAND_TRENDINGTRACKS_H
 
+#include "Track.h"
 #include "database/DatabaseCommand.h"
 
 namespace Tomahawk {
@@ -43,7 +44,7 @@ class DLLEXPORT DatabaseCommand_TrendingTracks : public Tomahawk::DatabaseComman
 {
     Q_OBJECT
 public:
-    explicit DatabaseCommand_TrendingTracks( QObject *parent = 0 );
+    explicit DatabaseCommand_TrendingTracks( QObject* parent = 0 );
     virtual ~DatabaseCommand_TrendingTracks();
 
     virtual void exec( DatabaseImpl* );
