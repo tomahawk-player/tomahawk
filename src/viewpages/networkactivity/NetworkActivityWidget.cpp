@@ -229,6 +229,13 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
         area->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
         area->setWidget( widget );
 
+        QPalette pal = palette();
+        pal.setBrush( backgroundRole(), TomahawkStyle::PAGE_BACKGROUND );
+        area->setPalette( pal );
+        area->setAutoFillBackground( true );
+        area->setFrameShape( QFrame::NoFrame );
+        area->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
         QVBoxLayout* layout = new QVBoxLayout();
         layout->addWidget( area );
         setLayout( layout );
