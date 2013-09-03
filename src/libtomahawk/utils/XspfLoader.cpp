@@ -276,11 +276,13 @@ XSPFLoader::gotBody()
             }
             else if ( n.namespaceURI() == m_NS && n.localName() == "url" )
             {
-                url = n.text();
+                if ( !n.text().startsWith( "http" ) || TomahawkUtils::whitelistedHttpResultHint( n.text() ) )
+                    url = n.text();
             }
             else if ( n.namespaceURI() == m_NS && n.localName() == "location" )
             {
-                url = n.text();
+                if ( !n.text().startsWith( "http" ) || TomahawkUtils::whitelistedHttpResultHint( n.text() ) )
+                    url = n.text();
             }
         }
 
