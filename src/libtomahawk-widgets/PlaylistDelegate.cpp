@@ -23,6 +23,7 @@
 #include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtils.h"
 #include "utils/TomahawkUtilsGui.h"
+#include "utils/Logger.h"
 
 #include <QApplication>
 #include <QPainter>
@@ -89,8 +90,14 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     QFont figFont = boldFont;
     figFont.setPointSize( TomahawkUtils::defaultFontSize() - 1 );
 
+    QRect pixmapRect = option.rect.adjusted( 12, 12, -option.rect.width() + option.rect.height() - 12, -12 );
+    QPixmap avatar = index.data( RecentlyPlayedPlaylistsModel::PlaylistRole ).value< Tomahawk::playlist_ptr >()->author()->avatar( TomahawkUtils::RoundedCorners, pixmapRect.size() );
+    if ( avatar.isNull() )
+        avatar = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultSourceAvatar, TomahawkUtils::RoundedCorners, pixmapRect.size() );
+    painter->drawPixmap( pixmapRect, avatar );
+
+    pixmapRect = QRect( option.rect.width() - option.fontMetrics.height() * 2.5 - 10, option.rect.top() + option.rect.height() / 4, option.fontMetrics.height() * 2.5, option.fontMetrics.height() * 2.5 );
     QPixmap icon;
-    QRect pixmapRect = option.rect.adjusted( 10, 14, -option.rect.width() + option.rect.height() - 18, -14 );
     RecentlyPlayedPlaylistsModel::PlaylistTypes type = (RecentlyPlayedPlaylistsModel::PlaylistTypes)index.data( RecentlyPlayedPlaylistsModel::PlaylistTypeRole ).toInt();
 
     if ( type == RecentlyPlayedPlaylistsModel::StaticPlaylist )
@@ -124,22 +131,17 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
         painter->restore();
     }
 
-    QRect r( option.rect.width() - option.fontMetrics.height() * 2.5 - 10, option.rect.top() + option.rect.height() / 3 - option.fontMetrics.height(), option.fontMetrics.height() * 2.5, option.fontMetrics.height() * 2.5 );
-    QPixmap avatar = index.data( RecentlyPlayedPlaylistsModel::PlaylistRole ).value< Tomahawk::playlist_ptr >()->author()->avatar( TomahawkUtils::RoundedCorners, r.size() );
-    if ( avatar.isNull() )
-        avatar = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultSourceAvatar, TomahawkUtils::RoundedCorners, r.size() );
-    painter->drawPixmap( r, avatar );
-
     painter->setFont( font );
     QString author = index.data( RecentlyPlayedPlaylistsModel::PlaylistRole ).value< Tomahawk::playlist_ptr >()->author()->friendlyName();
     if ( author.indexOf( '@' ) > 0 )
         author = author.mid( 0, author.indexOf( '@' ) );
 
-    const int w = painter->fontMetrics().width( author ) + 2;
+/*    const int w = painter->fontMetrics().width( author ) + 2;
     QRect avatarNameRect( opt.rect.width() - 10 - w, r.bottom(), w, opt.rect.bottom() - r.bottom() );
     painter->drawText( avatarNameRect, author, QTextOption( Qt::AlignCenter ) );
 
-    const int leftEdge = opt.rect.width() - qMin( avatarNameRect.left(), r.left() );
+    const int leftEdge = opt.rect.width() - qMin( avatarNameRect.left(), r.left() );*/
+    const int leftEdge = opt.rect.width() - pixmapRect.left();
     QString descText;
     if ( type == RecentlyPlayedPlaylistsModel::Station )
     {
@@ -156,7 +158,7 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
         painter->setPen( opt.palette.text().color().darker() );
     }
 
-    QRect rectText = option.rect.adjusted( option.fontMetrics.height() * 4.5, boldFontMetrics.height() + 6, -leftEdge - 10, -8 );
+    QRect rectText = option.rect.adjusted( option.fontMetrics.height() * 5.5, boldFontMetrics.height() + 6, -leftEdge - 10, -8 );
 #ifdef Q_WS_MAC
     rectText.adjust( 0, 1, 0, 0 );
 #elif defined Q_WS_WIN
@@ -168,7 +170,7 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     painter->setFont( font );
 
     painter->setFont( boldFont );
-    painter->drawText( option.rect.adjusted( option.fontMetrics.height() * 4, 6, -100, -option.rect.height() + boldFontMetrics.height() + 6 ), index.data().toString() );
+    painter->drawText( option.rect.adjusted( option.fontMetrics.height() * 5, 6, -100, -option.rect.height() + boldFontMetrics.height() + 6 ), index.data().toString() );
 
     painter->restore();
 }
