@@ -49,7 +49,7 @@ ScriptEngine::ScriptEngine( JSResolver* parent )
     m_header = QWebPage::userAgentForUrl( QUrl() ).replace( QString( "%1/%2" )
                .arg( TOMAHAWK_APPLICATION_NAME )
                .arg( TOMAHAWK_VERSION )
-               ,"");
+               , "" );
     tLog( LOGVERBOSE ) << "JSResolver Using header" << m_header;
 
     connect( networkAccessManager(), SIGNAL( sslErrors( QNetworkReply*, QList<QSslError> ) ),

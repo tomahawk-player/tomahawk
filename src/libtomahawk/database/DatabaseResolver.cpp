@@ -48,7 +48,6 @@ DatabaseResolver::resolve( const Tomahawk::query_ptr& query )
                     SLOT( gotArtists( Tomahawk::QID, QList< Tomahawk::artist_ptr > ) ), Qt::QueuedConnection );
 
     Tomahawk::Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
-
 }
 
 

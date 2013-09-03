@@ -426,7 +426,9 @@ JSResolver::tracks( const Tomahawk::collection_ptr& collection, const Tomahawk::
     tDebug() << errorMessage << m;
 }
 
-bool JSResolver::canParseUrl( const QString& url, UrlType type )
+
+bool
+JSResolver::canParseUrl( const QString& url, UrlType type )
 {
     Q_D( JSResolver );
 
