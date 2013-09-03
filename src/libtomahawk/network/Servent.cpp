@@ -577,6 +577,17 @@ Servent::handleSipInfo( const Tomahawk::peerinfo_ptr& peerInfo )
 void
 Servent::incomingConnection( int sd )
 {
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    Q_UNUSED( sd );
+    Q_ASSERT( false );
+#else
+    incomingConnection( (qintptr) sd );
+#endif
+}
+
+void
+Servent::incomingConnection( qintptr sd )
+{
     Q_ASSERT( this->thread() == QThread::currentThread() );
 
     QTcpSocketExtra* sock = new QTcpSocketExtra;
