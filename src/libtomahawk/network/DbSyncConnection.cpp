@@ -191,7 +191,7 @@ DBSyncConnection::handleMsg( msg_ptr msg )
     QVariantMap m = msg->json().toMap();
     if ( m.empty() )
     {
-        tLog() << "Failed to parse msg in dbsync from:" << m_source->id() << m_source->friendlyName() << msg->json();
+        tLog() << "Failed to parse msg in dbsync from:" << m_source->id() << m_source->friendlyName() << msg->payload();
         Q_ASSERT( false );
         return;
     }
