@@ -210,7 +210,7 @@ TomahawkApp::init()
     Tomahawk::Utils::setProxyNoProxyHosts( s->proxyNoProxyHosts() );
 
     // Cause the creation of the nam, but don't need to address it directly, so prevent warning
-    Q_UNUSED( Tomahawk::Utils::nam() );
+    tDebug() << "Setting NAM:" << Tomahawk::Utils::nam();
 
     m_audioEngine = QPointer<AudioEngine>( new AudioEngine );
 
