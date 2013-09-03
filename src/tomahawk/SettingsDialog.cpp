@@ -78,7 +78,6 @@ SettingsDialog::SettingsDialog(QObject *parent )
     , m_advancedWidgetUi( new Ui_Settings_Advanced )
     , m_advancedWidget( new QWidget )
     , m_proxySettings( 0 )
-    , m_rejected( false )
     , m_restartRequired( false )
     , m_accountModel( 0 )
     , m_sipSpinner( 0 )
@@ -308,6 +307,7 @@ SettingsDialog::saveSettings()
         }
     }
 
+    emit finished( true );
 }
 
 
@@ -338,7 +338,7 @@ SettingsDialog::serventReady()
 void
 SettingsDialog::onRejected()
 {
-    m_rejected = true;
+    emit finished( false );
 }
 
 
@@ -478,7 +478,7 @@ SettingsDialog::installFromFile()
                                                            0,
                                                            QFileDialog::ReadOnly );
 
-    if( !resolver.isEmpty() )
+    if ( !resolver.isEmpty() )
     {
         const QFileInfo resolverAbsoluteFilePath( resolver );
         TomahawkSettings::instance()->setScriptDefaultPath( resolverAbsoluteFilePath.absolutePath() );

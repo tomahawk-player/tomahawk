@@ -78,12 +78,13 @@ public:
 
     void show();
 
+signals:
+    void finished( bool saved );
+
 protected:
     void changeEvent( QEvent* e );
 
 private slots:
-    void onRejected();
-
     void toggleRemoteMode();
     void toggleProxyEnabled();
     void toggleAutoDetectIp( bool checked );
@@ -101,10 +102,10 @@ private slots:
     void updateScanOptionsView();
     void serventReady();
     void aclEntryClearButtonClicked();
-    void requiresRestart();
 
-private slots:
+    void requiresRestart();
     void saveSettings();
+    void onRejected();
 
 private:
     Ui_Settings_Accounts* m_accountsWidgetUi;
@@ -119,7 +120,6 @@ private:
     QToolbarTabDialog* m_dialog;
 
     ProxyDialog m_proxySettings;
-    bool m_rejected;
     bool m_restartRequired;
     Tomahawk::Accounts::AccountModel* m_accountModel;
     Tomahawk::Accounts::AccountModelFilterProxy* m_accountProxy;
