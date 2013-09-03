@@ -518,6 +518,29 @@ Track::socialActionDescription( const QString& action, DescriptionMode mode ) co
 }
 
 
+QList< QPixmap >
+Track::socialActionPixmaps( const QString& action, unsigned int height ) const
+{
+    QList< QPixmap > pixmaps;
+    QList< Tomahawk::SocialAction > socialActions = allSocialActions();
+    QStringList actionSources;
+
+    foreach ( const Tomahawk::SocialAction& sa, socialActions )
+    {
+        if ( sa.action == action )
+        {
+            if ( actionSources.contains( sa.source->friendlyName() ) )
+                continue;
+
+            actionSources << sa.source->friendlyName();
+            pixmaps << sa.source->avatar( TomahawkUtils::Original, QSize( height, height ) );
+       }
+    }
+
+    return pixmaps;
+}
+
+
 artist_ptr
 Track::artistPtr() const
 {
