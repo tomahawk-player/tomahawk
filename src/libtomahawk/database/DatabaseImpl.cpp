@@ -659,7 +659,7 @@ Tomahawk::DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
     query.bindValue( 0, fileUrl );
     query.exec();
 
-    if( query.next() )
+    if ( query.next() )
     {
         QString url = query.value( 0 ).toString();
         Tomahawk::source_ptr s = SourceList::instance()->get( query.value( 15 ).toUInt() );
