@@ -170,6 +170,16 @@ TomahawkStyle::stylePageFrame( QFrame* frame )
 {
     frame->setStyleSheet( QString( "QFrame#%1 { background-color: transparent; border: 0px solid white; border-radius: 0px; }" )
                              .arg( frame->objectName() ) );
+    frame->setFrameShape( QFrame::NoFrame );
+    frame->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+}
+
+
+void
+TomahawkStyle::stylePageWidget( QWidget* widget )
+{
+    widget->setStyleSheet( QString( "QWidget%1 { background-color: transparent; }" )
+                              .arg( widget->objectName() ) );
 }
 
 

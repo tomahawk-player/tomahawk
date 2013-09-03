@@ -47,6 +47,7 @@ namespace TomahawkStyle
     DLLEXPORT void drawArrow( QStyle::PrimitiveElement, QPainter* painter, const QStyleOption* opt );
 
     DLLEXPORT void stylePageFrame( QFrame* frame );
+    DLLEXPORT void stylePageWidget( QWidget* widget );
     DLLEXPORT void styleScrollBar( QScrollBar* scrollBar );
 
     static const QColor BORDER_LINE = QColor( "#8c8c8c" );
