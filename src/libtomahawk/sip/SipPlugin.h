@@ -51,8 +51,10 @@ class DLLEXPORT SipPlugin : public QObject
 friend class Tomahawk::PeerInfo;
 
 public:
+    enum AddContactOptions { NoOptions = 0, SendInvite = 1 };
+
     SipPlugin();
-    explicit SipPlugin( Tomahawk::Accounts::Account *account, QObject* parent = 0 );
+    explicit SipPlugin( Tomahawk::Accounts::Account* account, QObject* parent = 0 );
     virtual ~SipPlugin();
 
     // plugin id is "pluginfactoryname_someuniqueid".  get it from SipPluginFactory::generateId
@@ -76,7 +78,7 @@ public slots:
     virtual void checkSettings() = 0;
     virtual void configurationChanged() = 0;
 
-    virtual void addContact( const QString& peerId, const QString& msg = QString() ) = 0;
+    virtual bool addContact( const QString& peerId, AddContactOptions options = NoOptions, const QString& msg = QString() ) = 0;
 
     /**
      * Send a list of SipInfos to all contacts.

@@ -72,10 +72,13 @@ public slots:
         Q_UNUSED( msg );
     }
 
-    void addContact( const QString &peerId, const QString& msg = QString() )
+    bool addContact( const QString &peerId, AddContactOptions options, const QString& msg = QString() )
     {
         Q_UNUSED( peerId );
         Q_UNUSED( msg );
+        Q_UNUSED( options );
+
+        return false;
     }
 
     void checkSettings();

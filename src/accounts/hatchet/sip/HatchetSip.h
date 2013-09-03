@@ -57,7 +57,7 @@ public slots:
     void disconnectPlugin();
     void checkSettings() {}
     void configurationChanged() {}
-    void addContact( const QString &, const QString& ) {}
+    bool addContact( const QString&, AddContactOptions, const QString& ) { return false; }
     void sendMsg( const QString&, const SipInfo& ) {}
     void webSocketConnected();
     void webSocketDisconnected();

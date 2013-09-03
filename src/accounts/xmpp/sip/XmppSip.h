@@ -90,7 +90,7 @@ public slots:
     virtual void disconnectPlugin();
     virtual void checkSettings();
     virtual void configurationChanged();
-    virtual void addContact( const QString& peerId, const QString& msg = QString() );
+    virtual bool addContact( const QString& peerId, AddContactOptions options = NoOptions, const QString& msg = QString() );
 
     virtual void sendSipInfos( const Tomahawk::peerinfo_ptr& receiver, const QList<SipInfo>& info );
 

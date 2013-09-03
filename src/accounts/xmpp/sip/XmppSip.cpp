@@ -465,20 +465,28 @@ XmppSipPlugin::sendSipInfos( const Tomahawk::peerinfo_ptr& receiver, const QList
 }
 
 
-void
-XmppSipPlugin::addContact( const QString& jid, const QString& msg )
+bool
+XmppSipPlugin::addContact( const QString& jid, AddContactOptions options, const QString& msg )
 {
     // Add contact to the Tomahawk group on the roster
     QStringList jidParts = jid.split( '@' );
     if ( jidParts.count() == 2 && !jidParts[0].trimmed().isEmpty() && !jidParts[1].trimmed().isEmpty() )
     {
         m_roster->subscribe( jid, msg, jid, QStringList() << "Tomahawk" );
-        emit inviteSentSuccess( jid );
+
+        if ( options & SendInvite )
+        {
+            emit inviteSentSuccess( jid );
+        }
+        return true;
     }
-    else
+
+    if ( options & SendInvite )
     {
         emit inviteSentFailure( jid );
     }
+
+    return false;
 }
 
 
@@ -494,7 +502,7 @@ XmppSipPlugin::showAddFriendDialog()
         return;
 
     qDebug() << "Attempting to add xmpp contact to roster:" << id;
-    addContact( id );
+    addContact( id, SendInvite );
 #endif
 }
 
@@ -847,7 +855,7 @@ XmppSipPlugin::onSubscriptionRequestConfirmed( int result )
     if ( allowSubscription == QMessageBox::Yes )
     {
         qDebug() << Q_FUNC_INFO << jid.bare() << "accepted by user, adding to roster";
-        addContact( jid, "" );
+        addContact( jid );
     }
     else
     {
