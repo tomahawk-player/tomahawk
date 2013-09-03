@@ -53,11 +53,12 @@ public:
 
     virtual ~Track();
 
-    // void setArtist( const QString& artist ) { m_artist = artist; updateSortNames(); }
+    void setArtist( const QString& artist );
     void setAlbum( const QString& album );
-    // void setTrack( const QString& track ) { m_track = track; updateSortNames(); }
+    void setTrack( const QString& track );
+
+    void setAlbumPos( unsigned int albumpos );
     // void setDuration( int duration ) { m_duration = duration; }
-    // void setAlbumPos( unsigned int albumpos ) { m_albumpos = albumpos; }
     // void setDiscNumber( unsigned int discnumber ) { m_discnumber = discnumber; }
     // void setComposer( const QString& composer ) { m_composer = composer; updateSortNames(); }
 
@@ -97,6 +98,7 @@ public:
 
     void loadAttributes();
     QVariantMap attributes() const;
+    void setAttributes( const QVariantMap& map );
 
     void loadStats();
     QList< Tomahawk::PlaybackLog > playbackHistory( const Tomahawk::source_ptr& source = Tomahawk::source_ptr() ) const;

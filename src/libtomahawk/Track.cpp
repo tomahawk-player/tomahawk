@@ -129,11 +129,62 @@ Track::~Track()
 
 
 void
+Track::setArtist( const QString& artist )
+{
+    Q_D( Track );
+
+    d->artistPtr = artist_ptr();
+    d->trackData = TrackData::get( 0, artist, track() );
+
+    init();
+    emit updated();
+}
+
+
+void
 Track::setAlbum( const QString& album )
 {
     Q_D( Track );
+
+    d->albumPtr = album_ptr();
     d->album = album;
     updateSortNames();
+
+    emit updated();
+}
+
+
+void
+Track::setTrack( const QString& track )
+{
+    Q_D( Track );
+
+    d->trackData = TrackData::get( 0, artist(), track );
+
+    init();
+    emit updated();
+}
+
+
+void
+Track::setAlbumPos( unsigned int albumpos )
+{
+    Q_D( Track );
+
+    d->albumpos = albumpos;
+
+    emit updated();
+}
+
+
+void
+Track::setAttributes( const QVariantMap& map )
+{
+    Q_D( Track );
+
+    d->trackData->setAttributes( map );
+
+    emit attributesLoaded();
 }
 
 
