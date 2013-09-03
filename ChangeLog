@@ -8,6 +8,8 @@ Version 0.8.0:
     * Added Network Activity showing you the most played tracks of your friends.
     * JavaScript-Resolver can now handle URLs (e.g. when dropped from a browser)
       and resolve them to Playlists/Tracks/Artists/Albums
+    * HTTP(S) streaming is now done by Tomahawk instead of the phonon backend
+      (fixed HTTPS streaming on MacOS)
 
 Version 0.7.1:
     * Heavily reduced memory footprint during and after indexing the database.
