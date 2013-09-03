@@ -150,12 +150,11 @@ signals:
     void ready();
 
 protected:
-// Would be nice to ifdef this, but we would need CMake 2.8.11 for that as a requirement
-// #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
     virtual void incomingConnection( qintptr sd );
-// #else
+#else
     virtual void incomingConnection( int sd );
-// #endif
+#endif
 
 public slots:
     void setExternalAddress( QHostAddress ha, unsigned int port );
