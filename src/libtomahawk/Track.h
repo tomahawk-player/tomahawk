@@ -108,6 +108,7 @@ public:
     void loadSocialActions();
     QList< Tomahawk::SocialAction > allSocialActions() const;
     QString socialActionDescription( const QString& action, DescriptionMode mode ) const;
+    QList< QPixmap > socialActionPixmaps( const QString& action, unsigned int height ) const;
 
     QList<Tomahawk::query_ptr> similarTracks() const;
     QStringList lyrics() const;
