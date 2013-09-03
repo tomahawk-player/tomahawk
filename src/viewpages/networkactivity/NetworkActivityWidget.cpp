@@ -63,10 +63,10 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
     d->sortedProxy = new QSortFilterProxyModel( this );
 
     // d_func()->ui->breadCrumbLeft->setRootIcon( TomahawkUtils::defaultPixmap( TomahawkUtils::NetworkActivity, TomahawkUtils::Original ) );
-    connect( d_func()->ui->breadCrumbLeft, SIGNAL( activateIndex( QModelIndex ) ), SLOT( leftCrumbIndexChanged( QModelIndex ) ) );
+    connect( d->ui->breadCrumbLeft, SIGNAL( activateIndex( QModelIndex ) ), SLOT( leftCrumbIndexChanged( QModelIndex ) ) );
 
     // Build up breadcrumb
-    QStandardItem* rootItem = d_func()->crumbModelLeft->invisibleRootItem();
+    QStandardItem* rootItem = d->crumbModelLeft->invisibleRootItem();
     // Breadcumps for Charts
     {
         QStandardItem* chartItem = new QStandardItem( tr( "Charts" ) );
@@ -116,10 +116,8 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
         p.setColor( QPalette::HighlightedText, TomahawkStyle::PAGE_TRACKLIST_HIGHLIGHT_TEXT );
 
         d->ui->tracksViewLeft->setPalette( p );
-        d->ui->tracksViewLeft->setFrameShape( QFrame::NoFrame );
-        d->ui->tracksViewLeft->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-        d->ui->tracksViewLeft->setStyleSheet( "QTreeView { background-color: transparent; }" );
 
+        TomahawkStyle::stylePageFrame( d->ui->tracksViewLeft );
         TomahawkStyle::stylePageFrame( d->ui->chartsFrame );
     }
 
@@ -142,10 +140,8 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
         p.setColor( QPalette::HighlightedText, TomahawkStyle::PAGE_TRACKLIST_HIGHLIGHT_TEXT );
 
         d->ui->trendingTracksView->setPalette( p );
-        d->ui->trendingTracksView->setFrameShape( QFrame::NoFrame );
-        d->ui->trendingTracksView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-        d->ui->trendingTracksView->setStyleSheet( "QTreeView { background-color: transparent; }" );
 
+        TomahawkStyle::stylePageFrame( d->ui->trendingTracksView );
         TomahawkStyle::stylePageFrame( d->ui->trendingTracksFrame );
     }
     {
@@ -174,8 +170,6 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
     }
 
     {
-        d->ui->playlistView->setFrameShape( QFrame::NoFrame );
-        d->ui->playlistView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
         d->ui->playlistView->setItemDelegate( new PlaylistDelegate() );
         d->ui->playlistView->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
 
@@ -188,8 +182,8 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
 
         d->ui->playlistView->setPalette( p );
         d->ui->playlistView->overlay()->setPalette( p );
-        d->ui->playlistView->setStyleSheet( "QListView { background-color: transparent; }" );
         TomahawkStyle::styleScrollBar( d->ui->playlistView->verticalScrollBar() );
+        TomahawkStyle::stylePageFrame( d->ui->playlistView );
         TomahawkStyle::stylePageFrame( d->ui->playlistsFrame );
 
         connect( d->ui->playlistView, SIGNAL( activated( QModelIndex ) ), SLOT( onPlaylistActivated( QModelIndex ) ) );
@@ -202,14 +196,12 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
         d->artistsModel->startLoading();
     }
     {
-        d->ui->trendingArtistsView->setFrameShape( QFrame::NoFrame );
-        d->ui->trendingArtistsView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
         d->ui->trendingArtistsView->proxyModel()->sort( -1 );
         d->ui->trendingArtistsView->proxyModel()->setHideDupeItems( true );
 
         d->ui->trendingArtistsView->setAutoResize( true );
         d->ui->trendingArtistsView->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-        d->ui->trendingArtistsView->setStyleSheet( "QListView { background-color: transparent; }" );
+        TomahawkStyle::stylePageFrame( d->ui->trendingArtistsView );
         TomahawkStyle::stylePageFrame( d->ui->trendingArtistsFrame );
     }
     {
@@ -250,7 +242,7 @@ NetworkActivityWidget::NetworkActivityWidget( QWidget* parent )
     // Load data in separate thread
     d->workerThread = new QThread();
     d->workerThread->start();
-    d->worker = new NetworkActivityWorker( );
+    d->worker = new NetworkActivityWorker();
     d->worker->moveToThread( d->workerThread );
     connect( d->worker, SIGNAL( trendingTracks( QList<Tomahawk::track_ptr> ) ),
              SLOT( trendingTracks( QList<Tomahawk::track_ptr> ) ),
@@ -278,7 +270,9 @@ NetworkActivityWidget::~NetworkActivityWidget()
 Tomahawk::playlistinterface_ptr
 NetworkActivityWidget::playlistInterface() const
 {
-    return d_func()->playlistInterface;
+    Q_D( const NetworkActivityWidget );
+
+    return d->playlistInterface;
 }
 
 
@@ -302,10 +296,10 @@ NetworkActivityWidget::jumpToCurrentTrack()
 {
     Q_D( NetworkActivityWidget );
 
-    if ( d->ui->tracksViewLeft->model() && d_func()->ui->tracksViewLeft->jumpToCurrentTrack() )
+    if ( d->ui->tracksViewLeft->model() && d->ui->tracksViewLeft->jumpToCurrentTrack() )
         return true;
 
-    if ( d->ui->trendingTracksView->model() && d_func()->ui->trendingTracksView->jumpToCurrentTrack() )
+    if ( d->ui->trendingTracksView->model() && d->ui->trendingTracksView->jumpToCurrentTrack() )
         return true;
 
     return false;
@@ -315,10 +309,12 @@ NetworkActivityWidget::jumpToCurrentTrack()
 void
 NetworkActivityWidget::weeklyCharts( const QList<Tomahawk::track_ptr>& tracks )
 {
-    d_func()->weeklyChartsModel->appendTracks( tracks );
-    d_func()->weeklyChartsModel->finishLoading();
+    Q_D( NetworkActivityWidget );
 
-    if ( d_func()->activeView == WeekChart )
+    d->weeklyChartsModel->appendTracks( tracks );
+    d->weeklyChartsModel->finishLoading();
+
+    if ( d->activeView == WeekChart )
     {
         showWeekCharts();
     }
@@ -328,10 +324,12 @@ NetworkActivityWidget::weeklyCharts( const QList<Tomahawk::track_ptr>& tracks )
 void
 NetworkActivityWidget::monthlyCharts( const QList<Tomahawk::track_ptr>& tracks )
 {
-    d_func()->monthlyChartsModel->appendTracks( tracks );
-    d_func()->monthlyChartsModel->finishLoading();
+    Q_D( NetworkActivityWidget );
 
-    if ( d_func()->activeView == MonthChart )
+    d->monthlyChartsModel->appendTracks( tracks );
+    d->monthlyChartsModel->finishLoading();
+
+    if ( d->activeView == MonthChart )
     {
         showMonthCharts();
     }
@@ -341,10 +339,12 @@ NetworkActivityWidget::monthlyCharts( const QList<Tomahawk::track_ptr>& tracks )
 void
 NetworkActivityWidget::yearlyCharts( const QList<Tomahawk::track_ptr>& tracks )
 {
-    d_func()->yearlyChartsModel->appendTracks( tracks );
-    d_func()->yearlyChartsModel->finishLoading();
+    Q_D( NetworkActivityWidget );
 
-    if ( d_func()->activeView == YearChart )
+    d->yearlyChartsModel->appendTracks( tracks );
+    d->yearlyChartsModel->finishLoading();
+
+    if ( d->activeView == YearChart )
     {
         showYearCharts();
     }
@@ -354,10 +354,12 @@ NetworkActivityWidget::yearlyCharts( const QList<Tomahawk::track_ptr>& tracks )
 void
 NetworkActivityWidget::overallCharts( const QList<track_ptr>& tracks )
 {
-    d_func()->overallChartsModel->appendTracks( tracks );
-    d_func()->overallChartsModel->finishLoading();
+    Q_D( NetworkActivityWidget );
 
-    if ( d_func()->activeView == OverallChart )
+    d->overallChartsModel->appendTracks( tracks );
+    d->overallChartsModel->finishLoading();
+
+    if ( d->activeView == OverallChart )
     {
         showOverallCharts();
     }
@@ -368,6 +370,7 @@ void
 NetworkActivityWidget::hotPlaylists( const QList<playlist_ptr>& playlists )
 {
     Q_D( NetworkActivityWidget );
+
     d->ui->playlistView->setModel( new PlaylistsModel( playlists, this ) );
 }
 
@@ -395,7 +398,9 @@ NetworkActivityWidget::trendingTracks( const QList<track_ptr>& tracks )
 void
 NetworkActivityWidget::leftCrumbIndexChanged( const QModelIndex& index )
 {
-    QStandardItem* item = d_func()->crumbModelLeft->itemFromIndex( d_func()->sortedProxy->mapToSource( index ) );
+    Q_D( NetworkActivityWidget );
+
+    QStandardItem* item = d->crumbModelLeft->itemFromIndex( d->sortedProxy->mapToSource( index ) );
     if ( !item )
         return;
     if ( !item->data( Breadcrumb::DefaultRole ).isValid() )
@@ -491,7 +496,7 @@ NetworkActivityWidget::showWeekCharts()
     {
         d->weeklyChartsModel = new PlaylistModel( d->ui->tracksViewLeft );
     }
-    d->ui->tracksViewLeft->setPlaylistModel( d_func()->weeklyChartsModel );
+    d->ui->tracksViewLeft->setPlaylistModel( d->weeklyChartsModel );
     d->ui->tracksViewLeft->setAutoResize( true );
 
     if ( d->weeklyChartsModel->rowCount( QModelIndex() ) == 0 )
@@ -512,7 +517,7 @@ NetworkActivityWidget::showMonthCharts()
     {
         d->monthlyChartsModel = new PlaylistModel( d->ui->tracksViewLeft );
     }
-    d->ui->tracksViewLeft->setPlaylistModel( d_func()->monthlyChartsModel );
+    d->ui->tracksViewLeft->setPlaylistModel( d->monthlyChartsModel );
     d->ui->tracksViewLeft->setAutoResize( true );
 
     if ( d->monthlyChartsModel->rowCount( QModelIndex() ) == 0 )

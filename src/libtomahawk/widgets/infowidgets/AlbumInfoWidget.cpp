@@ -78,11 +78,9 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
         p.setColor( QPalette::HighlightedText, TomahawkStyle::PAGE_TRACKLIST_HIGHLIGHT_TEXT );
 
         ui->tracks->setPalette( p );
-        ui->tracks->setFrameShape( QFrame::NoFrame );
-        ui->tracks->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-        ui->tracks->setStyleSheet( "QTreeView#tracks { background-color: transparent; }" );
 
         TomahawkStyle::styleScrollBar( ui->tracks->horizontalScrollBar() );
+        TomahawkStyle::stylePageFrame( ui->tracks );
         TomahawkStyle::stylePageFrame( ui->trackFrame );
     }
 
@@ -98,8 +96,8 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
         ui->albums->delegate()->setItemSize( QSize( 170, 170 ) );
         ui->albums->proxyModel()->setHideDupeItems( true );
 
-        ui->albums->setStyleSheet( "QListView { background-color: transparent; }" );
         TomahawkStyle::styleScrollBar( ui->albums->verticalScrollBar() );
+        TomahawkStyle::stylePageFrame( ui->albums );
         TomahawkStyle::stylePageFrame( ui->albumFrame );
     }
 
@@ -114,11 +112,9 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
         ui->biography->setPalette( p );
         ui->biography->setOpenLinks( false );
         ui->biography->setOpenExternalLinks( true );
-        ui->biography->setFrameShape( QFrame::NoFrame );
-        ui->biography->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
-        ui->biography->setStyleSheet( "QTextBrowser#biography { background-color: transparent; }" );
         ui->biography->document()->setDefaultStyleSheet( QString( "a { text-decoration: none; font-weight: bold; color: %1; }" ).arg( TomahawkStyle::HEADER_LINK.name() ) );
+        TomahawkStyle::stylePageFrame( ui->biography );
         TomahawkStyle::styleScrollBar( ui->biography->verticalScrollBar() );
 
 //        connect( ui->biography, SIGNAL( anchorClicked( QUrl ) ), SLOT( onBiographyLinkClicked( QUrl ) ) );

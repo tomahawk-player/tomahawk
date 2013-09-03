@@ -56,9 +56,8 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
         p.setColor( QPalette::HighlightedText, TomahawkStyle::PAGE_TRACKLIST_HIGHLIGHT_TEXT );
 
         ui->resultsView->setPalette( p );
+        TomahawkStyle::stylePageFrame( ui->resultsView );
         ui->resultsView->setFrameShape( QFrame::Panel );
-        ui->resultsView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-        ui->resultsView->setStyleSheet( "QTreeView { background-color: transparent; }" );
         TomahawkStyle::stylePageFrame( ui->resultsFrame );
 
         ui->resultsView->setAlternatingRowColors( false );
@@ -72,14 +71,12 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
         m_albumsModel = new PlayableModel( ui->albumView );
         ui->albumView->setPlayableModel( m_albumsModel );
 
-        ui->albumView->setFrameShape( QFrame::NoFrame );
-        ui->albumView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
         ui->albumView->proxyModel()->sort( -1 );
         ui->albumView->proxyModel()->setHideDupeItems( true );
 
         ui->albumView->setAutoResize( true );
         ui->albumView->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-        ui->albumView->setStyleSheet( "QListView { background-color: transparent; }" );
+        TomahawkStyle::stylePageFrame( ui->albumView );
         TomahawkStyle::stylePageFrame( ui->albumFrame );
     }
 
@@ -87,14 +84,12 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
         m_artistsModel = new PlayableModel( ui->artistView );
         ui->artistView->setPlayableModel( m_artistsModel );
 
-        ui->artistView->setFrameShape( QFrame::NoFrame );
-        ui->artistView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
         ui->artistView->proxyModel()->sort( -1 );
         ui->artistView->proxyModel()->setHideDupeItems( true );
 
         ui->artistView->setAutoResize( true );
         ui->artistView->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-        ui->artistView->setStyleSheet( "QListView { background-color: transparent; }" );
+        TomahawkStyle::stylePageFrame( ui->artistView );
         TomahawkStyle::stylePageFrame( ui->artistFrame );
     }
 

@@ -90,9 +90,7 @@ DashboardWidget::DashboardWidget( QWidget* parent )
         p.setColor( QPalette::HighlightedText, TomahawkStyle::PAGE_TRACKLIST_HIGHLIGHT_TEXT );
 
         ui->tracksView->setPalette( p );
-        ui->tracksView->setFrameShape( QFrame::NoFrame );
-        ui->tracksView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-        ui->tracksView->setStyleSheet( "QTreeView { background-color: transparent; }" );
+        TomahawkStyle::stylePageFrame( ui->tracksView );
         TomahawkStyle::stylePageFrame( ui->trackFrame );
     }
 
@@ -115,8 +113,8 @@ DashboardWidget::DashboardWidget( QWidget* parent )
 
         ui->playlistWidget->setPalette( p );
         ui->playlistWidget->setMinimumHeight( 400 );
-        ui->playlistWidget->setStyleSheet( "QListView { background-color: transparent; }" );
         TomahawkStyle::styleScrollBar( ui->playlistWidget->verticalScrollBar() );
+        TomahawkStyle::stylePageFrame( ui->playlistWidget );
         TomahawkStyle::stylePageFrame( ui->playlistFrame );
 
         updatePlaylists();
@@ -129,9 +127,9 @@ DashboardWidget::DashboardWidget( QWidget* parent )
         ui->additionsView->setPlayableModel( m_recentAlbumsModel );
         ui->additionsView->proxyModel()->sort( -1 );
 
-        ui->additionsView->setStyleSheet( "QListView { background-color: transparent; }" );
-        TomahawkStyle::stylePageFrame( ui->additionsFrame );
         TomahawkStyle::styleScrollBar( ui->additionsView->verticalScrollBar() );
+        TomahawkStyle::stylePageFrame( ui->additionsView );
+        TomahawkStyle::stylePageFrame( ui->additionsFrame );
     }
 
     {

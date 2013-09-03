@@ -89,7 +89,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
         ui->relatedArtists->setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );*/
         ui->relatedArtists->delegate()->setItemSize( QSize( 170, 170 ) );
 
-        ui->relatedArtists->setStyleSheet( "QListView { background-color: transparent; }" );
+        TomahawkStyle::stylePageFrame( ui->relatedArtists );
         TomahawkStyle::stylePageFrame( ui->artistFrame );
         TomahawkStyle::styleScrollBar( ui->relatedArtists->verticalScrollBar() );
     }
@@ -131,9 +131,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
         p.setColor( QPalette::HighlightedText, TomahawkStyle::PAGE_TRACKLIST_HIGHLIGHT_TEXT );
 
         ui->topHits->setPalette( p );
-        ui->topHits->setFrameShape( QFrame::NoFrame );
-        ui->topHits->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-        ui->topHits->setStyleSheet( "QTreeView#topHits { background-color: transparent; }" );
+        TomahawkStyle::stylePageFrame( ui->topHits );
         TomahawkStyle::stylePageFrame( ui->trackFrame );
     }
 
@@ -148,11 +146,9 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
         ui->biography->setPalette( p );
         ui->biography->setOpenLinks( false );
         ui->biography->setOpenExternalLinks( true );
-        ui->biography->setFrameShape( QFrame::NoFrame );
-        ui->biography->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
-        ui->biography->setStyleSheet( "QTextBrowser#biography { background-color: transparent; }" );
         ui->biography->document()->setDefaultStyleSheet( QString( "a { text-decoration: none; font-weight: bold; color: %1; }" ).arg( TomahawkStyle::HEADER_LINK.name() ) );
+        TomahawkStyle::stylePageFrame( ui->biography );
         TomahawkStyle::styleScrollBar( ui->biography->verticalScrollBar() );
 
         connect( ui->biography, SIGNAL( anchorClicked( QUrl ) ), SLOT( onBiographyLinkClicked( QUrl ) ) );
@@ -185,7 +181,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     {
         QFont f = ui->albumLabel->font();
         f.setFamily( "Pathway Gothic One" );
-        
+
         QPalette p = ui->albumLabel->palette();
         p.setColor( QPalette::Foreground, TomahawkStyle::HEADER_TEXT );
 
