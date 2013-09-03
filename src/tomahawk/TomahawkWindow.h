@@ -39,7 +39,6 @@
     #include <shobjidl.h>
 #endif
 
-class SettingsDialog;
 namespace Tomahawk
 {
     namespace Accounts
@@ -181,7 +180,6 @@ private:
     QueueView* m_queueView;
     AnimatedSplitter* m_sidebar;
     JobStatusSortModel* m_jobsModel;
-    SettingsDialog* m_settingsDialog;
 
     // Menus and menu actions: Accounts menu
     QMenuBar    *m_menuBar;

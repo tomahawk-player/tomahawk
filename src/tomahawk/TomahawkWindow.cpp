@@ -112,7 +112,6 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     , ui( new Ui::TomahawkWindow )
     , m_searchWidget( 0 )
     , m_trayIcon( new TomahawkTrayIcon( this ) )
-    , m_settingsDialog( 0 )
     , m_audioRetryCounter( 0 )
 {
     TomahawkStyle::loadFonts();
@@ -836,10 +835,10 @@ TomahawkWindow::onHistoryForwardAvailable( bool avail )
 void
 TomahawkWindow::showSettingsDialog()
 {
-    if ( !m_settingsDialog )
-        m_settingsDialog = new SettingsDialog;
+    SettingsDialog* settingsDialog = new SettingsDialog;
+    connect( settingsDialog, SIGNAL( finished( bool ) ), settingsDialog, SLOT( deleteLater() ) );
 
-    m_settingsDialog->show();
+    settingsDialog->show();
 }
 
 
