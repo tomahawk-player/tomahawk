@@ -62,8 +62,8 @@ PlaylistLargeItemDelegate::sizeHint( const QStyleOptionViewItem& option, const Q
 {
     QSize size = QStyledItemDelegate::sizeHint( option, index );
 
-    int rowHeight = option.fontMetrics.height() + 8;
-    size.setHeight( rowHeight * 3 );
+    int rowHeight = option.fontMetrics.height() + 5;
+    size.setHeight( rowHeight * 2.5 );
 
     return size;
 }
@@ -125,7 +125,6 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
 
     const track_ptr track = item->query()->track();
     QString lowerText;
-    QSize avatarSize( 32, 32 );
 
     if ( m_mode == RecentlyPlayed && item->playbackLog().source )
     {
@@ -194,22 +193,26 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
             rightRect.moveLeft( rightRect.left() - ( leftRectBefore.width() - leftRect.width() ) );
         }
 
-        painter->setFont( m_bigBoldFont );
+        QFont bigBoldFont = m_bigBoldFont;
+        bigBoldFont.setPointSize( TomahawkUtils::defaultFontSize() + 3 );
+        bigBoldFont.setWeight( 99 );
+
+        painter->setFont( bigBoldFont );
         const QString text = painter->fontMetrics().elidedText( track->track(), Qt::ElideRight, leftRect.width() );
         painter->drawText( leftRect, text, m_topOption );
 
         painter->setFont( m_smallFont );
         QTextDocument textDoc;
-        if ( track->album().isEmpty() )
-            textDoc.setHtml( tr( "by <b>%1</b>", "e.g. by SomeArtist" ).arg( track->artist() ) );
-        else
-            textDoc.setHtml( tr( "by <b>%1</b> on <b>%2</b>", "e.g. by SomeArtist on SomeAlbum" ).arg( track->artist() ).arg( track->album() ) );
+//        if ( track->album().isEmpty() )
+            textDoc.setHtml( tr( "<b>%1</b>", "e.g. by SomeArtist" ).arg( track->artist() ) );
+/*        else
+            textDoc.setHtml( tr( "by <b>%1</b> on <b>%2</b>", "e.g. by SomeArtist on SomeAlbum" ).arg( track->artist() ).arg( track->album() ) );*/
         textDoc.setDocumentMargin( 0 );
         textDoc.setDefaultFont( painter->font() );
         textDoc.setDefaultTextOption( m_topOption );
 
         if ( textDoc.idealWidth() <= leftRect.width() )
-            drawRichText( painter, opt, leftRect.adjusted( 0, m_bigBoldFontMetrics.height() + 1, 0, 0 ), Qt::AlignTop, textDoc );
+            drawRichText( painter, opt, leftRect.adjusted( 0, QFontMetrics( bigBoldFont ).height() + 1, 0, 0 ), Qt::AlignTop, textDoc );
 
         if ( !( option.state & QStyle::State_Selected || item->isPlaying() ) )
             painter->setPen( opt.palette.text().color().darker() );
@@ -222,7 +225,11 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         if ( textDoc.idealWidth() > leftRect.width() )
             textDoc.setHtml( item->query()->queryTrack()->socialActionDescription( "Love", Track::Short ) );
 
-        drawRichText( painter, opt, leftRect, Qt::AlignBottom, textDoc );
+//        drawRichText( painter, opt, leftRect, Qt::AlignBottom, textDoc );
+
+        leftRect = rightRect.adjusted( -128, 4, 0, -4 );
+        leftRect.setWidth( 96 );
+        drawLoveBox( painter, leftRect, item, index );
 
         if ( track->duration() > 0 )
         {
