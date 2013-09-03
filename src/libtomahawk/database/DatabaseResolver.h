@@ -35,7 +35,6 @@ public:
 
     virtual QString name() const;
     virtual unsigned int weight() const { return m_weight; }
-    virtual unsigned int preference() const { return 100; }
     virtual unsigned int timeout() const { return 0; }
 
 public slots:
