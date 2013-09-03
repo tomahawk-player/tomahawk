@@ -77,6 +77,7 @@ public:
     ~SettingsDialog();
 
     void show();
+
 protected:
     void changeEvent( QEvent* e );
 
@@ -98,11 +99,8 @@ private slots:
     void scrollTo( const QModelIndex& );
 
     void updateScanOptionsView();
-
     void serventReady();
-
     void aclEntryClearButtonClicked();
-
     void requiresRestart();
 
 private slots:

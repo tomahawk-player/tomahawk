@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2013, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2012,      Teo Mrnjavac <teo@kde.org>
@@ -88,9 +88,7 @@ SettingsDialog::SettingsDialog(QObject *parent )
     m_advancedWidgetUi->setupUi( m_advancedWidget );
 
     m_accountsWidgetUi->accountsFilterCombo->setFocusPolicy( Qt::NoFocus );
-
     m_dialog = new QToolbarTabDialog;
-
     TomahawkSettings* s = TomahawkSettings::instance();
 
     m_advancedWidgetUi->checkBoxReporter->setChecked( s->crashReporterEnabled() );
@@ -138,8 +136,8 @@ SettingsDialog::SettingsDialog(QObject *parent )
     m_accountsWidgetUi->accountsView->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
     m_accountsWidgetUi->accountsView->setMouseTracking( true );
 
-    connect( accountDelegate, SIGNAL( openConfig( Tomahawk::Accounts::Account* ) ), this, SLOT( openAccountConfig( Tomahawk::Accounts::Account* ) ) );
-    connect( accountDelegate, SIGNAL( openConfig( Tomahawk::Accounts::AccountFactory* ) ), this, SLOT( openAccountFactoryConfig( Tomahawk::Accounts::AccountFactory* ) ) );
+    connect( accountDelegate, SIGNAL( openConfig( Tomahawk::Accounts::Account* ) ), SLOT( openAccountConfig( Tomahawk::Accounts::Account* ) ) );
+    connect( accountDelegate, SIGNAL( openConfig( Tomahawk::Accounts::AccountFactory* ) ), SLOT( openAccountFactoryConfig( Tomahawk::Accounts::AccountFactory* ) ) );
     connect( accountDelegate, SIGNAL( update( QModelIndex ) ), m_accountsWidgetUi->accountsView, SLOT( update( QModelIndex ) ) );
 
     m_accountModel = new AccountModel( this );
@@ -149,26 +147,26 @@ SettingsDialog::SettingsDialog(QObject *parent )
     connect( m_accountProxy, SIGNAL( startInstalling( QPersistentModelIndex ) ), accountDelegate, SLOT( startInstalling(QPersistentModelIndex) ) );
     connect( m_accountProxy, SIGNAL( doneInstalling( QPersistentModelIndex ) ), accountDelegate, SLOT( doneInstalling(QPersistentModelIndex) ) );
     connect( m_accountProxy, SIGNAL( errorInstalling( QPersistentModelIndex ) ), accountDelegate, SLOT( errorInstalling(QPersistentModelIndex) ) );
-    connect( m_accountProxy, SIGNAL( scrollTo( QModelIndex ) ), this, SLOT( scrollTo( QModelIndex ) ) );
+    connect( m_accountProxy, SIGNAL( scrollTo( QModelIndex ) ), SLOT( scrollTo( QModelIndex ) ) );
 
     m_accountsWidgetUi->accountsView->setModel( m_accountProxy );
 
-    connect( m_accountsWidgetUi->installFromFileBtn, SIGNAL( clicked( bool ) ), this, SLOT( installFromFile() ) );
-    connect( m_accountModel, SIGNAL( createAccount( Tomahawk::Accounts::AccountFactory* ) ), this, SLOT( createAccountFromFactory( Tomahawk::Accounts::AccountFactory* ) ) );
+    connect( m_accountsWidgetUi->installFromFileBtn, SIGNAL( clicked( bool ) ), SLOT( installFromFile() ) );
+    connect( m_accountModel, SIGNAL( createAccount( Tomahawk::Accounts::AccountFactory* ) ), SLOT( createAccountFromFactory( Tomahawk::Accounts::AccountFactory* ) ) );
 
     m_accountsWidgetUi->accountsFilterCombo->addItem( tr( "All" ), Accounts::NoType );
     m_accountsWidgetUi->accountsFilterCombo->addItem( accountTypeToString( SipType ), SipType );
     m_accountsWidgetUi->accountsFilterCombo->addItem( accountTypeToString( ResolverType ), ResolverType );
     m_accountsWidgetUi->accountsFilterCombo->addItem( accountTypeToString( StatusPushType ), StatusPushType );
 
-    connect( m_accountsWidgetUi->accountsFilterCombo, SIGNAL( activated( int ) ), this, SLOT( accountsFilterChanged( int ) ) );
+    connect( m_accountsWidgetUi->accountsFilterCombo, SIGNAL( activated( int ) ), SLOT( accountsFilterChanged( int ) ) );
 
     if ( !Servent::instance()->isReady() )
     {
         m_sipSpinner = new AnimatedSpinner( m_accountsWidgetUi->accountsView );
         m_sipSpinner->fadeIn();
 
-        connect( Servent::instance(), SIGNAL( ready() ), this, SLOT( serventReady() ) );
+        connect( Servent::instance(), SIGNAL( ready() ), SLOT( serventReady() ) );
     }
 
     // ADVANCED
@@ -244,16 +242,16 @@ SettingsDialog::SettingsDialog(QObject *parent )
 
     m_dialog->setCurrentIndex( 0 );
 
-    connect( m_advancedWidgetUi->proxyButton,  SIGNAL( clicked() ),  SLOT( showProxySettings() ) );
-    connect( m_advancedWidgetUi->lanOnlyRadioButton, SIGNAL( toggled(bool) ), SLOT( requiresRestart() ) );
-    connect( m_advancedWidgetUi->staticIpRadioButton, SIGNAL( toggled(bool) ), SLOT( requiresRestart() ) );
-    connect( m_advancedWidgetUi->upnpRadioButton, SIGNAL( toggled(bool) ), SLOT( requiresRestart() ) );
-    connect( m_advancedWidgetUi->lanOnlyRadioButton, SIGNAL( toggled(bool) ), SLOT( toggleRemoteMode() ) );
-    connect( m_advancedWidgetUi->staticIpRadioButton, SIGNAL( toggled(bool) ), SLOT( toggleRemoteMode() ) );
-    connect( m_advancedWidgetUi->upnpRadioButton, SIGNAL( toggled(bool) ), SLOT( toggleRemoteMode() ) );
+    connect( m_advancedWidgetUi->proxyButton,  SIGNAL( clicked() ), SLOT( showProxySettings() ) );
+    connect( m_advancedWidgetUi->lanOnlyRadioButton, SIGNAL( toggled( bool ) ), SLOT( requiresRestart() ) );
+    connect( m_advancedWidgetUi->staticIpRadioButton, SIGNAL( toggled( bool ) ), SLOT( requiresRestart() ) );
+    connect( m_advancedWidgetUi->upnpRadioButton, SIGNAL( toggled( bool ) ), SLOT( requiresRestart() ) );
+    connect( m_advancedWidgetUi->lanOnlyRadioButton, SIGNAL( toggled( bool ) ), SLOT( toggleRemoteMode() ) );
+    connect( m_advancedWidgetUi->staticIpRadioButton, SIGNAL( toggled( bool ) ), SLOT( toggleRemoteMode() ) );
+    connect( m_advancedWidgetUi->upnpRadioButton, SIGNAL( toggled( bool ) ), SLOT( toggleRemoteMode() ) );
     connect( m_advancedWidgetUi->autoDetectIpCheckBox, SIGNAL( toggled( bool ) ), SLOT( toggleAutoDetectIp( bool ) ) );
-    connect( m_advancedWidgetUi->enableProxyCheckBox, SIGNAL( toggled(bool) ), SLOT( toggleProxyEnabled() ) );
-    connect( m_advancedWidgetUi->enableProxyCheckBox, SIGNAL( toggled(bool) ), SLOT( requiresRestart() ) );
+    connect( m_advancedWidgetUi->enableProxyCheckBox, SIGNAL( toggled( bool ) ), SLOT( toggleProxyEnabled() ) );
+    connect( m_advancedWidgetUi->enableProxyCheckBox, SIGNAL( toggled( bool ) ), SLOT( requiresRestart() ) );
 
     connect( m_dialog, SIGNAL( accepted() ), SLOT( saveSettings() ) );
     connect( m_dialog, SIGNAL( rejected() ), SLOT( onRejected() ) );
@@ -329,6 +327,7 @@ SettingsDialog::show()
     m_dialog->show();
 }
 
+
 void
 SettingsDialog::serventReady()
 {
@@ -349,10 +348,12 @@ SettingsDialog::changeEvent( QEvent *e )
     switch ( e->type() )
     {
         case QEvent::LanguageChange:
+        {
             m_accountsWidgetUi->retranslateUi( m_accountsWidget );
             m_collectionWidgetUi->retranslateUi( m_collectionWidget );
             m_advancedWidgetUi->retranslateUi( m_advancedWidget );
             break;
+        }
 
         default:
             break;
@@ -562,13 +563,12 @@ SettingsDialog::requiresRestart()
 
 
 ProxyDialog::ProxyDialog( QWidget *parent )
-: QDialog( parent )
-, ui( new Ui::ProxyDialog )
+    : QDialog( parent )
+    , ui( new Ui::ProxyDialog )
 {
     ui->setupUi( this );
 
     // ugly, I know, but...
-
     TomahawkSettings* s = TomahawkSettings::instance();
 
     ui->hostLineEdit->setText( s->proxyHost() );
