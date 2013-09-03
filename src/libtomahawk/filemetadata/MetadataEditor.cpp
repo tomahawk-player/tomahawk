@@ -100,8 +100,7 @@ MetadataEditor::writeMetadata( bool closeDlg )
             tDebug() << Q_FUNC_INFO << "Track changed" << title() << m_result->track();
 
             tag->setTitle( title() );
-            //FIXME
-//            m_result->track()->setTrack( title() );
+            m_result->track()->setTrack( title() );
 
             changed = true;
         }
@@ -112,8 +111,7 @@ MetadataEditor::writeMetadata( bool closeDlg )
             tDebug() << Q_FUNC_INFO << "Artist changed" << artist() << m_result->track()->artist();
 
             tag->setArtist( artist() );
-            //FIXME
-//            m_result->track()->setArtist( artist() );
+            m_result->track()->setArtist( artist() );
 
             changed = true;
         }
@@ -137,7 +135,7 @@ MetadataEditor::writeMetadata( bool closeDlg )
         if ( albumPos() != 0 && albumPos() != (int)m_result->track()->albumpos() )
         {
             tag->setTrack( albumPos() );
-            //FIXME:m_result->track()->setAlbumPos( albumPos() );
+            m_result->track()->setAlbumPos( albumPos() );
 
             tDebug() << Q_FUNC_INFO << "Albumpos changed";
             changed = true;
@@ -148,10 +146,9 @@ MetadataEditor::writeMetadata( bool closeDlg )
         {
             tag->setYear( year() );
             {
-                QVariantMap attr;
+                QVariantMap attr = m_result->track()->attributes();
                 attr[ "releaseyear" ] = year();
-                //FIXME
-//                m_result->track()->setAttributes( attr );
+                m_result->track()->setAttributes( attr );
             }
 
             tDebug() << Q_FUNC_INFO << "Year changed";
