@@ -102,7 +102,7 @@ PlaylistItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModel
     QSize size = QStyledItemDelegate::sizeHint( option, index );
 
     {
-        if ( m_model->style() == PlayableProxyModel::Short || m_model->style() == PlayableProxyModel::ShortWithAvatars )
+        if ( m_model->style() == PlayableProxyModel::Short )
         {
             int rowHeight = option.fontMetrics.height() + 8;
             size.setHeight( rowHeight * 2 );
@@ -140,15 +140,12 @@ PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& opti
         case PlayableProxyModel::Short:
             paintShort( painter, option, index );
             break;
-        case PlayableProxyModel::ShortWithAvatars:
-            paintShort( painter, option, index, true );
-            break;
     }
 }
 
 
 void
-PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index, bool useAvatars ) const
+PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
     PlayableItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
     Q_ASSERT( item );
@@ -199,21 +196,11 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
         painter->setPen( opt.palette.text().color() );
 
         QRect ir = r.adjusted( 4, 0, -option.rect.width() + option.rect.height() - 8 + r.left(), 0 );
-
-        if ( useAvatars )
-        {
-            if ( item->playbackLog().source )
-                pixmap = item->playbackLog().source->avatar( TomahawkUtils::RoundedCorners, ir.size() );
-        }
-        else
-            pixmap = item->query()->track()->cover( ir.size(), false );
+        pixmap = item->query()->track()->cover( ir.size(), true );
 
         if ( pixmap.isNull() )
         {
-            if ( !useAvatars )
-                pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::Original, ir.size() );
-            else
-                pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultSourceAvatar, TomahawkUtils::RoundedCorners, ir.size() );
+            pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::RoundedCorners, ir.size() );
         }
 
         painter->drawPixmap( ir, pixmap );
@@ -345,21 +332,71 @@ PlaylistItemDelegate::drawCover( QPainter* painter, const QRect& rect, PlayableI
 
 
 QRect
+PlaylistItemDelegate::drawLoveBox( QPainter* painter, const QRect& rect, PlayableItem* item, const QModelIndex& index ) const
+{
+    const int height = rect.height() - 4 * 2;
+    const int width = 2 + rect.height() - 4 * 2;
+    QList< QPixmap > pixmaps = item->query()->queryTrack()->socialActionPixmaps( "Love", height );
+    const int max = 5;
+    const unsigned int count = qMin( pixmaps.count(), max );
+
+    painter->save();
+
+    painter->setRenderHint( QPainter::Antialiasing, true );
+    painter->setBrush( Qt::transparent );
+    QPen pen = painter->pen().color();
+    pen.setWidthF( 0.4 );
+    painter->setPen( pen );
+
+    QRect innerRect = rect.adjusted( rect.width() - width * ( count + 1 ) - 4 * 4, 0, 0, 0 );
+
+    if ( !pixmaps.isEmpty() )
+        painter->drawRoundedRect( innerRect, 4, 4, Qt::RelativeSize );
+
+    unsigned int i = 0;
+    foreach ( QPixmap pixmap, pixmaps )
+    {
+        if ( i >= max )
+            break;
+
+        QRect r = innerRect.adjusted( 4, 4, -4, -4 );
+        r.adjust( width * i, 0, 0, 0 );
+        r.setWidth( width );
+
+        if ( pixmap.isNull() )
+            pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultSourceAvatar, TomahawkUtils::Original, QSize( r.height(), r.height() ) );
+        painter->drawPixmap( r.adjusted( 1, 0, -1, 0 ), pixmap );
+
+        i++;
+    }
+
+    TomahawkUtils::ImageType type = item->query()->queryTrack()->loved() ? TomahawkUtils::Loved : TomahawkUtils::NotLoved;
+    QRect r = innerRect.adjusted( innerRect.width() - rect.height() + 4, 4, -4, -4 );
+    painter->drawPixmap( r, TomahawkUtils::defaultPixmap( type, TomahawkUtils::Original, QSize( r.height(), r.height() ) ) );
+    m_loveButtonRects[ index ] = r;
+
+    painter->restore();
+    return rect;
+}
+
+
+QRect
 PlaylistItemDelegate::drawSourceIcon( QPainter* painter, const QRect& rect, PlayableItem* item, float height ) const
 {
-    if ( item->query()->numResults() == 0 )
-        return rect;
-
     const int sourceIconSize = rect.height() * height;
+    QRect resultRect = rect.adjusted( 0, 0, -( sourceIconSize + 8 ), 0 );
+    if ( item->query()->numResults() == 0 || !item->query()->results().first()->isOnline() )
+        return resultRect;
+
     const QPixmap sourceIcon = item->query()->results().first()->sourceIcon( TomahawkUtils::RoundedCorners, QSize( sourceIconSize, sourceIconSize ) );
     if ( sourceIcon.isNull() )
-        return rect;
+        return resultRect;
 
     painter->setOpacity( 0.8 );
     painter->drawPixmap( QRect( rect.right() - sourceIconSize, rect.center().y() - sourceIconSize / 2, sourceIcon.width(), sourceIcon.height() ), sourceIcon );
     painter->setOpacity( 1.0 );
 
-    return rect.adjusted( 0, 0, -( sourceIcon.width() + 8 ), 0 );
+    return resultRect;
 }
 
 
@@ -376,16 +413,23 @@ PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, con
     }
 
     bool hoveringInfo = false;
+    bool hoveringLove = false;
     if ( m_infoButtonRects.contains( index ) )
     {
         const QRect infoRect = m_infoButtonRects[ index ];
         const QMouseEvent* ev = static_cast< QMouseEvent* >( event );
         hoveringInfo = infoRect.contains( ev->pos() );
     }
+    if ( m_loveButtonRects.contains( index ) )
+    {
+        const QRect loveRect = m_loveButtonRects[ index ];
+        const QMouseEvent* ev = static_cast< QMouseEvent* >( event );
+        hoveringLove = loveRect.contains( ev->pos() );
+    }
 
     if ( event->type() == QEvent::MouseMove )
     {
-        if ( hoveringInfo )
+        if ( hoveringInfo || hoveringLove )
             m_view->setCursor( Qt::PointingHandCursor );
         else
             m_view->setCursor( Qt::ArrowCursor );
@@ -404,17 +448,21 @@ PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, con
         return false;
     }
 
-    // reset mouse cursor. we switch to a pointing hand cursor when hovering an info button
+    // reset mouse cursor. we switch to a pointing hand cursor when hovering a button
     m_view->setCursor( Qt::ArrowCursor );
 
-    if ( hoveringInfo )
+    if ( event->type() == QEvent::MouseButtonRelease )
     {
-        if ( event->type() == QEvent::MouseButtonRelease )
-        {
-            PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
-            if ( !item )
-                return false;
+        PlayableItem* item = m_model->sourceModel()->itemFromIndex( m_model->mapToSource( index ) );
+        if ( !item )
+            return false;
 
+        if ( hoveringLove )
+        {
+            item->query()->track()->setLoved( !item->query()->track()->loved() );
+        }
+        else if ( hoveringInfo )
+        {
             if ( m_model->style() != PlayableProxyModel::Detailed )
             {
                 if ( item->query() )
@@ -446,10 +494,10 @@ PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, con
                         break;
                 }
             }
-
-            event->accept();
-            return true;
         }
+
+        event->accept();
+        return true;
     }
 
     return false;
@@ -466,6 +514,7 @@ PlaylistItemDelegate::resetHoverIndex()
 
     m_hoveringOver = QModelIndex();
     m_infoButtonRects.clear();
+    m_loveButtonRects.clear();
 
     QModelIndex itemIdx = m_model->mapToSource( idx );
     if ( itemIdx.isValid() )

@@ -64,9 +64,10 @@ protected:
     QRect drawInfoButton( QPainter* painter, const QRect& rect, const QModelIndex& index, float height ) const;
     QRect drawSourceIcon( QPainter* painter, const QRect& rect, PlayableItem* item, float height ) const;
     QRect drawCover( QPainter* painter, const QRect& rect, PlayableItem* item, const QModelIndex& index ) const;
+    QRect drawLoveBox( QPainter* painter, const QRect& rect, PlayableItem* item, const QModelIndex& index ) const;
 
     void paintDetailed( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
-    void paintShort( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index, bool useAvatars = false ) const;
+    void paintShort( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
     QTextOption m_topOption;
     QTextOption m_bottomOption;
@@ -87,6 +88,7 @@ protected slots:
 private:
     mutable QHash< QPersistentModelIndex, QSharedPointer< Tomahawk::PixmapDelegateFader > > m_pixmaps;
     mutable QHash< QPersistentModelIndex, QRect > m_infoButtonRects;
+    mutable QHash< QPersistentModelIndex, QRect > m_loveButtonRects;
     QPersistentModelIndex m_hoveringOver;
 
     TrackView* m_view;
