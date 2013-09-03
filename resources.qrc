@@ -156,7 +156,6 @@
         <file>data/images/network-activity.svg</file>
         <file>data/fonts/TitilliumWeb-Bold.ttf</file>
         <file>data/fonts/TitilliumWeb-Regular.ttf</file>
-        <file>data/fonts/FaunaOne-Regular.ttf</file>
         <file>data/fonts/PathwayGothicOne-Regular.ttf</file>
         <file>data/js/cryptojs-core.js</file>
         <file>data/js/cryptojs-sha256.js</file>

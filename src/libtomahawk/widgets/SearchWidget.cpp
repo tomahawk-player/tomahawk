@@ -100,7 +100,7 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
 
     {
         QFont f = ui->label->font();
-        f.setFamily( "Fauna One" );
+        f.setFamily( "Pathway Gothic One" );
 
         QPalette p = ui->label->palette();
         p.setColor( QPalette::Foreground, TomahawkStyle::PAGE_CAPTION );
@@ -111,7 +111,7 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
 
     {
         QFont f = ui->label_2->font();
-        f.setFamily( "Fauna One" );
+        f.setFamily( "Pathway Gothic One" );
 
         QPalette p = ui->label_2->palette();
         p.setColor( QPalette::Foreground, TomahawkStyle::HEADER_TEXT );
