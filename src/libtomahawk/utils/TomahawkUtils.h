@@ -179,7 +179,7 @@ namespace TomahawkUtils
     // Used by the above, not exported
     void copyWithAuthentication( const QString& srcFile, const QDir dest, QObject* receiver );
 
-    DLLEXPORT bool whitelistedHttpResultHint( const QString& url );
+    DLLEXPORT bool whitelistedHttpResultHint( const QUrl& url );
 
     DLLEXPORT int compareVersionStrings( const QString& first, const QString& second );
 

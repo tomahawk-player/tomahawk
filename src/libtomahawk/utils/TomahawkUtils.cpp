@@ -773,10 +773,10 @@ extractBinaryResolver( const QString& zipFilename, QObject* receiver )
 
 
 bool
-whitelistedHttpResultHint( const QString& url )
+whitelistedHttpResultHint( const QUrl& url )
 {
     // For now, just http/https
-    return url.startsWith( "http" );
+    return ( url.scheme().startsWith( "http" ) && !url.host().endsWith( "youtube.com" ) );
 }
 
 
