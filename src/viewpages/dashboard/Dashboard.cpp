@@ -75,7 +75,7 @@ DashboardWidget::DashboardWidget( QWidget* parent )
 
     {
         m_tracksModel = new RecentlyPlayedModel( ui->tracksView, HISTORY_TRACK_ITEMS );
-        ui->tracksView->proxyModel()->setStyle( PlayableProxyModel::ShortWithAvatars );
+        ui->tracksView->proxyModel()->setStyle( PlayableProxyModel::Short );
         ui->tracksView->overlay()->setEnabled( false );
         ui->tracksView->setPlaylistModel( m_tracksModel );
         ui->tracksView->setAutoResize( true );

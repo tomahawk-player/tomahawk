@@ -507,7 +507,6 @@ PlayableProxyModel::columnCount( const QModelIndex& parent ) const
     switch ( m_style )
     {
         case Short:
-        case ShortWithAvatars:
         case Large:
             return 1;
             break;
@@ -571,7 +570,6 @@ PlayableProxyModel::columnWeights() const
     switch ( m_style )
     {
         case Short:
-        case ShortWithAvatars:
         case Large:
             w << 1.0;
             break;
