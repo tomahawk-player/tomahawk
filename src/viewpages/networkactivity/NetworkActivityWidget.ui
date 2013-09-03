@@ -135,7 +135,7 @@
         <property name="sizeHint" stdset="0">
          <size>
           <width>20</width>
-          <height>100</height>
+          <height>8</height>
          </size>
         </property>
        </spacer>
@@ -145,31 +145,42 @@
    </item>
    <item>
     <widget class="QFrame" name="chartsFrame">
-     <layout class="QVBoxLayout" name="verticalLayout_2">
-      <property name="spacing">
-       <number>0</number>
-      </property>
-      <property name="margin">
-       <number>0</number>
-      </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="Tomahawk::Breadcrumb" name="breadCrumbLeft" native="true"/>
-      </item>
-      <item>
-       <widget class="PlaylistView" name="tracksViewLeft">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>320</width>
-          <height>0</height>
-         </size>
-        </property>
-       </widget>
+       <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1,0">
+        <item>
+         <widget class="Tomahawk::Breadcrumb" name="breadCrumbLeft" native="true"/>
+        </item>
+        <item>
+         <widget class="PlaylistView" name="tracksViewLeft">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>320</width>
+            <height>0</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>8</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
       </item>
      </layout>
     </widget>
