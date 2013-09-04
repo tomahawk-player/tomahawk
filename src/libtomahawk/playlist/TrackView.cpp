@@ -537,6 +537,8 @@ TrackView::dropEvent( QDropEvent* event )
     }
     else if ( event->source() != this )
     {
+        // This code shouldn't be required when the PlayableModel properly accepts the incoming drop.
+        // If we remove it, the queue for some reason doesn't accept the drops yet, though.
         if ( DropJob::acceptsMimeData( event->mimeData() ) )
         {
             const QPoint pos = event->pos();
