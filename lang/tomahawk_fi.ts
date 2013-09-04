@@ -260,7 +260,7 @@ yhdistää ja toistaa sinulta virtaa?</translation>
         <translation>Muita albumeita</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="92"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="90"/>
         <source>Sorry, we could not find any other albums for this artist!</source>
         <translation>Valitettavasti emme löytänet mitään muita albumeita tältä artistilta!</translation>
     </message>
@@ -270,7 +270,7 @@ yhdistää ja toistaa sinulta virtaa?</translation>
         <translation>Valitettavasti emme löytäneet mitään tämän albumin kappaleita!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="256"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/AlbumInfoWidget.cpp" line="252"/>
         <source>Other Albums by %1</source>
         <translation>Muita artistin %1 levyjä</translation>
     </message>
@@ -883,7 +883,7 @@ salasana (OTP)</translation>
         <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="349"/>
         <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="386"/>
         <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="424"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="484"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="486"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
         <translation>Skriptiselvittimen varoitus: API-kutsu %1 palautti dataa synkronisesti.</translation>
     </message>
@@ -1114,7 +1114,7 @@ salasana (OTP)</translation>
         <translation>Seuraava</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="381"/>
+        <location filename="../src/libtomahawk/filemetadata/MetadataEditor.cpp" line="378"/>
         <source>Properties</source>
         <translation>Ominaisuudet</translation>
     </message>
@@ -1285,12 +1285,12 @@ salasana (OTP)</translation>
 <context>
     <name>PlaylistItemDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="180"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="177"/>
         <source>played %1 by you</source>
         <translation>kuuntelit %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="182"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistItemDelegate.cpp" line="179"/>
         <source>played %1 by %2</source>
         <translation>%2 kuunteli %1</translation>
     </message>
@@ -1298,34 +1298,28 @@ salasana (OTP)</translation>
 <context>
     <name>PlaylistLargeItemDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="135"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="134"/>
         <source>played %1 by you</source>
         <comment>e.g. played 3 hours ago by you</comment>
         <translation>kuuntelit %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="137"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="136"/>
         <source>played %1 by %2</source>
         <comment>e.g. played 3 hours ago by SomeSource</comment>
         <translation>%2 kuunteli %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="143"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="142"/>
         <source>added %1</source>
         <comment>e.g. added 3 hours ago</comment>
         <translation>lisätty %1</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="204"/>
-        <source>by &lt;b&gt;%1&lt;/b&gt;</source>
+        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="207"/>
+        <source>&lt;b&gt;%1&lt;/b&gt;</source>
         <comment>e.g. by SomeArtist</comment>
-        <translation>artistilta &lt;b&gt;%1&lt;/b&gt;</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="206"/>
-        <source>by &lt;b&gt;%1&lt;/b&gt; on &lt;b&gt;%2&lt;/b&gt;</source>
-        <comment>e.g. by SomeArtist on SomeAlbum</comment>
-        <translation>artistilta &lt;b&gt;%1&lt;/b&gt; albumilla &lt;b&gt;%2&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
 </context>
 <context>
@@ -1678,7 +1672,7 @@ salasana (OTP)</translation>
         <translation>Albumit</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/SearchWidget.cpp" line="68"/>
+        <location filename="../src/libtomahawk/widgets/SearchWidget.cpp" line="67"/>
         <source>Sorry, we could not find any tracks!</source>
         <translation>Valitettavasti emme löytäneet yhtään kappaletta!</translation>
     </message>
@@ -1686,12 +1680,12 @@ salasana (OTP)</translation>
 <context>
     <name>Servent</name>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="981"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="985"/>
         <source>Automatically detecting external IP failed: Could not parse JSON response.</source>
         <translation>Ulkoisen IP-osoitteen automaattinen tunnistus epäonnistui: JSON-vastausta ei saatu jäsennettyä.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="994"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="998"/>
         <source>Automatically detecting external IP failed: %1</source>
         <translation>Ulkoisen IP-osoitteen automaattinen tunnistus epäonnistui: %1</translation>
     </message>
@@ -1699,77 +1693,77 @@ salasana (OTP)</translation>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="238"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="235"/>
         <source>Collection</source>
         <translation>Kokoelma</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="241"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="238"/>
         <source>Advanced</source>
         <translation>Lisäasetukset</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="159"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="156"/>
         <source>All</source>
         <translation>Kaikki</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="291"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="288"/>
         <source>Some changed settings will not take effect until Tomahawk is restarted</source>
         <translation>Jotkin asetusmuutokset tulevat voimaan vasta, kun Tomahawk käynnistetään uudelleen.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="233"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="230"/>
         <source>Services</source>
         <translation>Palvelut</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="132"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="129"/>
         <source>Install from file</source>
         <translation>Asenna tiedostosta</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="233"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="230"/>
         <source>Configure the accounts and services used by Tomahawk to search and retrieve music, find your friends and update your status.</source>
         <translation>Aseta tilit ja palvelut, joita Tomahawk käyttää musiikin etsimiseen ja noutamiseen, kaveriesi etsimiseen sekä tilasi päivittämiseen.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="238"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="235"/>
         <source>Manage how Tomahawk finds music on your computer.</source>
         <translation>Hallitse Tomahawkin tapaa etsiä musiikkia tietokoneeltasi.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="241"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="238"/>
         <source>Configure Tomahawk&apos;s advanced settings, including network connectivity settings, browser interaction and more.</source>
         <translation>Aseta Tomahawkin lisäasetuksia, joihin kuuluu verkkoyhteysasetukset, selainyhteys ja muuta.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="473"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="474"/>
         <source>Install resolver from file</source>
         <translation>Asenna selvitin tiedostosta</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="475"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="476"/>
         <source>Tomahawk Resolvers (*.axe *.js);;All files (*)</source>
         <translation>Tomahawk-selvittimet (*.axe *.js);;Kaikki tiedostot (*)</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="518"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="519"/>
         <source>Resolver installation from file %1 failed.</source>
         <translation>Selvittimen asennus tiedostosta %1 epäonnistui.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="537"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="538"/>
         <source>Delete all Access Control entries?</source>
         <translation>Poistetaanko kaikki pääsynvalvontatietueet?</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="538"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="539"/>
         <source>Do you really want to delete all Access Control entries? You will be asked for a decision again for each peer that you connect to.</source>
         <translation>Haluatko varmasti poistaa kaikki pääsynvalvontatietueet? Sinulta tullaan kysymään päätös uudelleen jokaisen sellaisen vertaisen kohdalla, johon yhdistät.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="291"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="288"/>
         <source>Information</source>
         <translation>Tiedoksi</translation>
     </message>
@@ -2399,7 +2393,7 @@ napsauttamalla hiiren oikealla.</translation>
 <context>
     <name>Tomahawk::Accounts::GoogleWrapperFactory</name>
     <message>
-        <location filename="../src/accounts/google/GoogleWrapper.h" line="43"/>
+        <location filename="../src/accounts/google/GoogleWrapper.h" line="44"/>
         <source>Connect to Google Talk to find your friends</source>
         <translation>Löydä kaverisi yhdistämällä Google Talkiin</translation>
     </message>
@@ -3726,42 +3720,42 @@ kappaleen %2%4 %3.</translation>
 <context>
     <name>Tomahawk::Track</name>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="481"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="532"/>
         <source> and </source>
         <translation> ja </translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="489"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="540"/>
         <source>You</source>
         <translation>Sinä</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="491"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="542"/>
         <source>you</source>
         <translation>sinä</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="504"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="555"/>
         <source>and</source>
         <translation>ja</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="504"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="555"/>
         <source>%n other(s)</source>
         <translation><numerusform>%n muu</numerusform><numerusform>%n muuta</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/Track.cpp" line="507"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="558"/>
         <source>%n people</source>
         <translation><numerusform>%n ihminen</numerusform><numerusform>%n ihmistä</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="511"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="562"/>
         <source>loved this track</source>
         <translation>tykkäsi tästä kappaleesta</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/Track.cpp" line="513"/>
+        <location filename="../src/libtomahawk/Track.cpp" line="564"/>
         <source>sent you this track %1</source>
         <translation>lähetti sinulle kappaleen %1</translation>
     </message>
@@ -3782,7 +3776,7 @@ kappaleen %2%4 %3.</translation>
 <context>
     <name>Tomahawk::Widgets::DashboardWidget</name>
     <message>
-        <location filename="../src/viewpages/dashboard/Dashboard.cpp" line="263"/>
+        <location filename="../src/viewpages/dashboard/Dashboard.cpp" line="261"/>
         <source>No recently created playlists in your network.</source>
         <translation>Verkossasi ei ole viime aikoina luotuja soittolistoja.</translation>
     </message>
@@ -3833,7 +3827,7 @@ kappaleen %2%4 %3.</translation>
         <translation>Kaaviot ovat vielä latautumassa.</translation>
     </message>
     <message>
-        <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="134"/>
+        <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="132"/>
         <source>Sorry, we couldn&apos;t find any trending tracks.</source>
         <translation>Valitettavasti emme löytäneet yhtään suosittua kappaletta.</translation>
     </message>
@@ -3967,156 +3961,156 @@ anna siellä näytetty PIN-koodi tähän:</translation>
         <translation>Tomahawk</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="284"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="283"/>
         <source>Back</source>
         <translation>Takaisin</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="287"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="286"/>
         <source>Go back one page</source>
         <translation>Mene yksi sivu takaisin</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="289"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="288"/>
         <source>Forward</source>
         <translation>Eteenpäin</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="292"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="291"/>
         <source>Go forward one page</source>
         <translation>Mene yksi sivu eteenpäin</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="217"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1343"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="216"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1342"/>
         <source>Hide Menu Bar</source>
         <translation>Piilota valikkorivi</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="217"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1337"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="216"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1336"/>
         <source>Show Menu Bar</source>
         <translation>Näytä valikkorivi</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="304"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="303"/>
         <source>Search for any artist, album or song...</source>
         <translation>Hae artistia, albumia tai kappaletta...</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="331"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="330"/>
         <source>&amp;Main Menu</source>
         <translation>&amp;Päävalikko</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="905"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="904"/>
         <source>Exit Full Screen</source>
         <translation>Poistu koko näytöstä</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="917"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="916"/>
         <source>Enter Full Screen</source>
         <translation>Siirry koko näyttöön</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="979"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="978"/>
         <source>XSPF Error</source>
         <translation>XSPF-virhe</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="979"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="978"/>
         <source>This is not a valid XSPF playlist.</source>
         <translation>Tämä ei ole kelvollinen XSPF-soittolista.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="983"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="982"/>
         <source>Failed to save tracks</source>
         <translation>Kappaleiden tallentaminen epäonnistui</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="983"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="982"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
         <translation>Joillakin soittolistan kappaleilla ei ole artistia ja nimeä. Ne jätetään huomiotta.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="997"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="996"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped. Make sure you have a suitable Phonon backend and required plugins installed.</source>
         <translation>Valitettavasti äänilaitteen tai halutun kappaleen kanssa on ongelmia ja nykyinen kappale ohitetaan. Varmista, että sopiva Phononin taustaosa ja vaaditut liitännäiset on asennettu.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="999"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="998"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped.</source>
         <translation>Valitettavasti äänilaitteen tai halutun kappaleen kanssa on ongelmia ja nykyinen kappale ohitetaan.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1036"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1035"/>
         <source>Station</source>
         <translation>Asema</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1038"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1037"/>
         <source>Create New Station</source>
         <translation>Luo uusi asema</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1038"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1037"/>
         <source>Name:</source>
         <translation>Nimi:</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1101"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1100"/>
         <source>Playlist</source>
         <translation>Soittolista</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1123"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1122"/>
         <source>Automatic Playlist</source>
         <translation>Automaattinen soittolista</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1145"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1144"/>
         <source>Pause</source>
         <translation>Tauko</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1167"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1166"/>
         <source>&amp;Play</source>
         <translation>&amp;Soita</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1199"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1198"/>
         <source>%1 by %2</source>
         <comment>track, artist name</comment>
         <translation>%1 artistilta %2</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1200"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1199"/>
         <source>%1 - %2</source>
         <comment>current track, some window title</comment>
         <translation>%1 – %2</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1211"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1210"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1215"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1214"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1219"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1218"/>
         <source>Copyright 2010 - 2013</source>
         <translation>Copyright 2010–2013</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1220"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1219"/>
         <source>Thanks to:</source>
         <translation>Kiitokset:</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1227"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1226"/>
         <source>About Tomahawk</source>
         <translation>Tietoa Tomahawkista</translation>
     </message>
@@ -4137,42 +4131,42 @@ anna siellä näytetty PIN-koodi tähän:</translation>
         <translation>Samankaltaisia kappaleita</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="82"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="80"/>
         <source>Sorry, but we could not find similar tracks for this song!</source>
         <translation>Valitettavasti emme löytäneet tälle kappaleelle samankaltaisia kappaleita!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="65"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="63"/>
         <source># PLAYS / ARTIST</source>
         <translation>SOITTOJA / ARTISTI</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="67"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="65"/>
         <source>YOUR SONG RANK</source>
         <translation>KAPPALEEN SIJOITUS</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="277"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="275"/>
         <source>You&apos;ve listened to this track %n time(s).</source>
         <translation><numerusform>Olet kuunnellut tätä kappaletta %n kerran.</numerusform><numerusform>Olet kuunnellut tätä kappaletta %n kertaa.</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="279"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="277"/>
         <source>You&apos;ve never listened to this track before.</source>
         <translation>Et ole kuunnellut tätä kappaletta aiemmin.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="283"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="281"/>
         <source>You first listened to it on %1.</source>
         <translation>Kuuntelit sitä ensi kerran %1.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="288"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="286"/>
         <source>You&apos;ve listened to %1 %n time(s).</source>
         <translation><numerusform>Olet kuunnellut artistia %1 %n kerran.</numerusform><numerusform>Olet kuunnellut artistia %1 %n kertaa.</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="294"/>
+        <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="292"/>
         <source>You&apos;ve never listened to %1 before.</source>
         <translation>Et ole kuunnellut artistia %1 aiemmin.</translation>
     </message>
@@ -4180,7 +4174,7 @@ anna siellä näytetty PIN-koodi tähän:</translation>
 <context>
     <name>TrackView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="619"/>
+        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="618"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Valitettavasti suodattimesi ”%1” ei tuottanut yhtään tuloksia.</translation>
     </message>
@@ -4648,7 +4642,7 @@ Sanat artistin %2 kappaleelle ”%1”:
         <translation>Tuntematon</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="811"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="819"/>
         <source>Do you want to add &lt;b&gt;%1&lt;/b&gt; to your friend list?</source>
         <translation>Haluatko lisätä käyttäjän &lt;b&gt;%1&lt;/b&gt; kaverilistallesi?</translation>
     </message>
@@ -4678,32 +4672,32 @@ Sanat artistin %2 kappaleelle ”%1”:
         <translation>Ei-tuettu ominaisuus</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="490"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="498"/>
         <source>Add Friend</source>
         <translation>Lisää kaveri</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="491"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="499"/>
         <source>Enter Xmpp ID:</source>
         <translation>Anna XMPP-tunnus:</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="647"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="655"/>
         <source>Add Friend...</source>
         <translation>Lisää kaveri...</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="652"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="660"/>
         <source>XML Console...</source>
         <translation>XML-konsoli...</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="701"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="709"/>
         <source>I&apos;m sorry -- I&apos;m just an automatic presence used by Tomahawk Player (http://gettomahawk.com). If you are getting this message, the person you are trying to reach is probably not signed on, so please try again later!</source>
         <translation>Pahoittelen – olen pelkkä Tomahawk-soittimen (http://gettomahawk.com) automaattinen läsnäoloviesti. Jos näet tämän viestin, tavoittelemasi henkilö ei todennäköisesti ole kirjautuneena, joten yritä myöhemmin uudelleen!</translation>
     </message>
     <message>
-        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="810"/>
+        <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="818"/>
         <source>Authorize User</source>
         <translation>Salli käyttäjä</translation>
     </message>
