@@ -715,7 +715,7 @@ PlayableModel::removeIndex( const QModelIndex& index, bool moreToCome )
     Q_D( PlayableModel );
     if ( QThread::currentThread() != thread() )
     {
-        QMetaObject::invokeMethod( this, "remove",
+        QMetaObject::invokeMethod( this, "removeIndex",
                                    Qt::QueuedConnection,
                                    Q_ARG(const QModelIndex, index),
                                    Q_ARG(bool, moreToCome) );
@@ -770,6 +770,7 @@ PlayableModel::removeIndexes( const QList<QPersistentModelIndex>& indexes )
         removeIndex( finalIndexes.at( i ), i + 1 != finalIndexes.count() );
     }
 }
+
 
 PlayableItem*
 PlayableModel::rootItem() const
