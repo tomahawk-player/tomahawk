@@ -535,7 +535,7 @@ TrackView::dropEvent( QDropEvent* event )
     {
         tDebug() << "Ignoring accepted event!";
     }
-    else
+    else if ( event->source() != this )
     {
         if ( DropJob::acceptsMimeData( event->mimeData() ) )
         {
