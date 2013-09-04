@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="304px" height="333px" viewBox="0 0 304 333" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <title>splash_screen</title>
+    <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
+    <defs>
+        <filter x="-20%" y="-20%" width="140%" height="140%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.7 0" in="shadowBlurOuter1" type="matrix" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+        <filter x="-20%" y="-20%" width="140%" height="140%" filterUnits="objectBoundingBox" id="filter-2">
+            <feMorphology radius="5" in="SourceAlpha" operator="dilate" result="shadowSpreadInner1"></feMorphology>
+            <feOffset dx="0" dy="1" in="shadowSpreadInner1" result="shadowOffsetInner1"></feOffset>
+            <feGaussianBlur stdDeviation="1.5" in="shadowOffsetInner1" result="shadowBlurInner1"></feGaussianBlur>
+            <feComposite in="shadowBlurInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.7 0" in="shadowInnerInner1" type="matrix" result="shadowMatrixInner1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+                <feMergeNode in="shadowMatrixInner1"></feMergeNode>
+            </feMerge>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <rect d="M11.9938714,2 C7.57897813,2 4,5.58048287 4,9.99335196 L4,319.006648 C4,323.421254 7.58290025,327 11.9938714,327 L292.006129,327 C296.421022,327 300,323.419517 300,319.006648 L300,9.99335196 C300,5.57874557 296.4171,2 292.006129,2 L11.9938714,2 Z M11.9938714,2" id="Rectangle-4" filter="url(#filter-1)" sketch:type="MSShapeGroup" x="4" y="2" width="296" height="325" rx="8"></rect>
+        <g id="tomahawk-icon" sketch:type="MSLayerGroup" transform="translate(108.523976, 83.845121)">
+            <g id="Page-1" sketch:type="MSShapeGroup">
+                <ellipse d="M43.976024,88.04 C68.2633126,88.04 87.952048,68.3512646 87.952048,44.063976 C87.952048,19.7766874 68.2633126,0.087952048 43.976024,0.087952048 C19.6887354,0.087952048 0,19.7766874 0,44.063976 C0,68.3512646 19.6887354,88.04 43.976024,88.04 Z M43.976024,88.04" id="Oval-1" stroke="#979797" fill="#FFFFFF" cx="43.976024" cy="44.063976" rx="43.976024" ry="43.976024"></ellipse>
+                <g id="Group">
+                    <path d="M43.9760316,9.57393941 C24.9881687,9.57393941 9.54641449,25.019712 9.54641449,44.0095827 C9.54641449,62.9983923 24.9871061,78.4494695 43.9760316,78.4494695 C46.6984278,78.4494695 49.3402543,78.1122393 51.8834898,77.5077704 L51.8834898,47.8028926 L28.2024618,64.564711 C27.9925575,64.7078746 27.7317672,64.7905915 27.4805181,64.7905915 C27.2854554,64.7905915 27.0861523,64.7492332 26.9069915,64.6463674 C26.4871828,64.432152 26.2263924,64.0016003 26.2263924,63.5402951 L26.2263924,24.246629 C26.2263924,23.7853237 26.4871827,23.3505302 26.9069915,23.1299521 C27.3268002,22.925281 27.8229378,22.9613371 28.2024618,23.2275155 L51.8834898,39.9903948 L51.8834898,22.9931515 L52.8916665,22.9931515 L62.3744669,22.9931515 L62.3744669,73.0834819 C71.9961439,66.9709219 78.4045878,56.2347051 78.4045878,44.0085243 C78.4045855,25.020783 62.9585849,9.57393941 43.9760316,9.57393941 L43.9760316,9.57393941" id="Shape"></path>
+                    <path d="M43.9760316,0.0265208588 C19.7267767,0.0265208588 0.00212849594,19.7576617 0.00212849594,44.0095906 C0.00212849594,68.2625836 19.7267788,87.9926604 43.9760316,87.9926604 C68.2199849,87.9926604 87.9456969,68.2625815 87.9456969,44.0095906 C87.9446251,19.7576476 68.2199729,0.0265208588 43.9760316,0.0265208588 L43.9760316,0.0265208588 M62.3744625,73.0845482 L62.3744625,22.9942179 L52.8916624,22.9942179 L51.8834854,22.9942179 L51.8834854,39.9914611 L28.2024575,23.2285819 C27.8239936,22.9624034 27.3267959,22.9263474 26.9069872,23.1310185 C26.4871784,23.3515966 26.2263882,23.7863901 26.2263882,24.2476953 L26.2263882,63.5413616 C26.2263882,64.0026669 26.4871784,64.4332185 26.9069872,64.6474337 C27.086148,64.7502995 27.2854511,64.791658 27.4805137,64.791658 C27.7307028,64.791658 27.991493,64.7089412 28.2024575,64.5657775 L51.8834854,47.8039589 L51.8834854,77.5088367 C49.3402502,78.1122452 46.6984237,78.4505357 43.9760275,78.4505357 C24.9881644,78.4505357 9.54641018,62.9994606 9.54641018,44.0106489 C9.54641018,25.0218392 24.9871018,9.57500577 43.9760275,9.57500577 C62.9585908,9.57500577 78.4056447,25.0207783 78.4056447,44.0106489 C78.4045855,56.2357702 71.9961436,66.9719802 62.3744625,73.0845482 L60.7620121,11.6991258" id="Shape" fill="#E63E30"></path>
+                </g>
+            </g>
+        </g>
+        <text id="TOMAHAWK" fill="#262626" filter="url(#filter-2)" sketch:type="MSTextLayer" font-family="Proxima Nova" font-size="36" font-weight="bold">
+            <tspan x="48" y="60.8451211">TOMAHAWK</tspan>
+        </text>
+        <text id="&lt;launch-sequence>" fill="#262626" sketch:type="MSTextLayer" font-family="Avenir Next" font-size="12" font-weight="normal">
+            <tspan x="98" y="200.885121">&lt;launch sequence></tspan>
+        </text>
+    </g>
+</svg>
