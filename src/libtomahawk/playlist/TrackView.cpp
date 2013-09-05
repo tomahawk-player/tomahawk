@@ -477,7 +477,6 @@ TrackView::dragEnterEvent( QDragEnterEvent* event )
 void
 TrackView::dragMoveEvent( QDragMoveEvent* event )
 {
-    tDebug() << Q_FUNC_INFO;
     QTreeView::dragMoveEvent( event );
 
     if ( model()->isReadOnly() )

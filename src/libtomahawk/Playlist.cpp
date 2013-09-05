@@ -461,7 +461,6 @@ Playlist::setNewRevision( const QString& rev,
     QMap<QString, plentry_ptr> entriesmap;
     foreach ( const plentry_ptr& p, d->entries )
     {
-        tDebug() << p->guid() << p->query()->toString();
         entriesmap.insert( p->guid(), p );
     }
 
