@@ -166,6 +166,7 @@ public slots:
     virtual void insertArtist( const Tomahawk::artist_ptr& artist, int row = 0 );
     virtual void insertAlbum( const Tomahawk::album_ptr& album, int row = 0 );
 
+    virtual bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() );
     virtual void remove( int row, bool moreToCome = false );
     virtual void removeIndex( const QModelIndex& index, bool moreToCome = false );
     virtual void removeIndexes( const QList<QModelIndex>& indexes );

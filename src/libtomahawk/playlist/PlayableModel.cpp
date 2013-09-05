@@ -702,6 +702,21 @@ PlayableModel::insertInternal( const QList< T >& items, int row, const QList< To
 }
 
 
+bool
+PlayableModel::removeRows( int row, int count, const QModelIndex& parent )
+{
+    tDebug() << Q_FUNC_INFO << row << count << parent;
+    QList<QPersistentModelIndex> pil;
+    for ( int i = row; i < row + count; i++ )
+    {
+        pil << index( i, 0, parent );
+    }
+
+    removeIndexes( pil );
+    return true;
+}
+
+
 void
 PlayableModel::remove( int row, bool moreToCome )
 {
