@@ -55,6 +55,17 @@ ShortLinkHelper::shortLink( const Tomahawk::playlist_ptr& pl )
         return;
     }
 
+    if ( !pl->loaded() )
+    {
+        pl->loadRevision();
+    }
+    if ( pl->busy() || !pl->loaded() )
+    {
+        NewClosure( pl.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ),
+                    this, SLOT( shortLink( Tomahawk::playlist_ptr ) ), pl );
+        return;
+    }
+
     QVariantMap m;
     m[ "title" ] = pl->title();
     m[ "creator" ] = pl->author().isNull() ? "" : pl->author()->friendlyName();
