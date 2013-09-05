@@ -97,7 +97,11 @@ private slots:
     void onCustomContextMenu( const QPoint& pos );
     void onMenuTriggered( int action );
 
+    void onScrollBarChanged( int value );
+
 private:
+    void fixScrollBars();
+
     OverlayWidget* m_overlay;
     TreeModel* m_model;
     TreeProxyModel* m_proxyModel;
@@ -109,6 +113,8 @@ private:
 
     QModelIndex m_contextMenuIndex;
     Tomahawk::ContextMenu* m_contextMenu;
+
+    int m_scrollDelta;
 
     QString m_emptyTip;
     QTimer m_timer;

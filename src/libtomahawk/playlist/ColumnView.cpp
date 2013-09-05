@@ -58,6 +58,7 @@ ColumnView::ColumnView( QWidget* parent )
     , m_previewWidget( new ColumnViewPreviewWidget( this ) )
     , m_updateContextView( true )
     , m_contextMenu( new ContextMenu( this ) )
+    , m_scrollDelta( 0 )
 {
     setFrameShape( QFrame::NoFrame );
     setAttribute( Qt::WA_MacShowFocusRect, 0 );
@@ -73,6 +74,7 @@ ColumnView::ColumnView( QWidget* parent )
     setSelectionBehavior( QAbstractItemView::SelectRows );
     setContextMenuPolicy( Qt::CustomContextMenu );
     setProxyModel( new TreeProxyModel( this ) );
+
     setPreviewWidget( m_previewWidget );
 
     m_timer.setInterval( SCROLL_TIMEOUT );
@@ -454,8 +456,52 @@ ColumnView::guid() const
 
 
 void
+ColumnView::onScrollBarChanged( int value )
+{
+    QWidget* parent = qobject_cast< QWidget* >( m_previewWidget->parent() );
+    parent->scroll( 0, m_scrollDelta - value );
+
+    m_scrollDelta = value;
+}
+
+
+void
+ColumnView::fixScrollBars()
+{
+    foreach ( QObject* widget, children() )
+    {
+        foreach ( QObject* view, widget->children() )
+        {
+            QScrollBar* sb = qobject_cast< QScrollBar* >( view );
+            if ( sb && sb->orientation() == Qt::Horizontal )
+            {
+                sb->setSingleStep( 6 );
+            }
+
+            foreach ( QObject* subviews, view->children() )
+            {
+                foreach ( QObject* scrollbar, subviews->children() )
+                {
+                    QScrollBar* sb = qobject_cast< QScrollBar* >( scrollbar );
+                    if ( sb && sb->orientation() == Qt::Vertical )
+                    {
+                        sb->setSingleStep( 6 );
+                        connect( sb, SIGNAL( valueChanged( int ) ), SLOT( onScrollBarChanged( int ) ), Qt::UniqueConnection );
+
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+void
 ColumnView::onUpdatePreviewWidget( const QModelIndex& index )
 {
+    fixScrollBars();
+
     PlayableItem* item = m_proxyModel->itemFromIndex( m_proxyModel->mapToSource( index ) );
     if ( !item || !item->result() )
     {
