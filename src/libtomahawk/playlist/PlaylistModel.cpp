@@ -311,8 +311,8 @@ PlaylistModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int
 
     if ( !d->waitingForResolved.isEmpty() )
     {
+        startLoading();
         Pipeline::instance()->resolve( queries );
-        emit loadingStarted();
     }
     else
         finishLoading();
@@ -341,7 +341,7 @@ PlaylistModel::trackResolved( bool )
 
     if ( d->waitingForResolved.isEmpty() )
     {
-        emit loadingFinished();
+        finishLoading();
     }
 }
 
@@ -579,7 +579,7 @@ PlaylistModel::removeIndex( const QModelIndex& index, bool moreToCome )
         disconnect( item->query().data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( trackResolved( bool ) ) );
         d->waitingForResolved.removeAll( item->query().data() );
         if ( d->waitingForResolved.isEmpty() )
-            emit loadingFinished();
+            finishLoading();
     }
 
     if ( !d->changesOngoing )
