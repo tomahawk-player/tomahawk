@@ -59,6 +59,7 @@ PlayableModel::PlayableModel( QObject* parent, bool loading )
     init();
 }
 
+
 PlayableModel::PlayableModel( QObject* parent, PlayableModelPrivate* d )
     : QAbstractItemModel( parent )
     , d_ptr( d )

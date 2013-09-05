@@ -173,8 +173,8 @@ PlayableProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourcePa
         {
             s = s.toLower();
             if ( !pi->query()->track()->artist().toLower().contains( s ) &&
-                !pi->query()->track()->album().toLower().contains( s ) &&
-                !pi->query()->track()->track().toLower().contains( s ) )
+                 !pi->query()->track()->album().toLower().contains( s ) &&
+                 !pi->query()->track()->track().toLower().contains( s ) )
             {
                 return false;
             }
