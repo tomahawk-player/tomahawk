@@ -48,10 +48,9 @@ QueueView::QueueView( AnimatedSplitter* parent )
     ui->queue->setProxyModel( new QueueProxyModel( ui->queue ) );
     ui->queue->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Ignored );
 
-    PlaylistModel* queueModel = new PlaylistModel( this );
+    PlaylistModel* queueModel = new PlaylistModel( ui->queue );
     queueModel->setAcceptPlayableQueriesOnly( true );
     ui->queue->proxyModel()->setStyle( PlayableProxyModel::Short );
-    queueModel->finishLoading();
     ui->queue->setPlaylistModel( queueModel );
     queueModel->setReadOnly( false );
 
