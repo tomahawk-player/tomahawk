@@ -75,7 +75,8 @@ QString
 PlaylistModel::guid() const
 {
     Q_D( const PlaylistModel );
-    if ( !d->playlist.isNull() )
+
+    if ( d->playlist )
     {
         return QString( "playlistmodel/%1" ).arg( d->playlist->guid() );
     }
@@ -88,17 +89,19 @@ void
 PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEntries )
 {
     Q_D( PlaylistModel );
-    if ( !d->playlist.isNull() )
+
+    if ( d->playlist )
     {
         disconnect( d->playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( onRevisionLoaded( Tomahawk::PlaylistRevision ) ) );
         disconnect( d->playlist.data(), SIGNAL( deleted( Tomahawk::playlist_ptr ) ), this, SIGNAL( playlistDeleted() ) );
         disconnect( d->playlist.data(), SIGNAL( changed() ), this, SLOT( onPlaylistChanged() ) );
     }
 
-    d->isLoading = true;
-
     if ( loadEntries )
+    {
+        startLoading();
         clear();
+    }
 
     d->playlist = playlist;
     connect( playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), SLOT( onRevisionLoaded( Tomahawk::PlaylistRevision ) ) );
@@ -109,20 +112,20 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
     d->isTemporary = false;
 
     onPlaylistChanged();
-
     if ( !loadEntries )
-    {
-        d->isLoading = false;
         return;
+
+    if ( playlist->loaded() )
+    {
+        QList<plentry_ptr> entries = playlist->entries();
+        appendEntries( entries );
+
+        // finishLoading() will be called by appendEntries, so it can keep showing it until all tracks are resolved
+        // finishLoading();
+
+        /*    foreach ( const plentry_ptr& p, entries )
+                  qDebug() << p->guid() << p->query()->track() << p->query()->artist(); */
     }
-
-    QList<plentry_ptr> entries = playlist->entries();
-/*    foreach ( const plentry_ptr& p, entries )
-        qDebug() << p->guid() << p->query()->track() << p->query()->artist();*/
-
-    appendEntries( entries );
-
-    d->isLoading = false;
 }
 
 
@@ -185,7 +188,7 @@ PlaylistModel::insertAlbums( const QList< Tomahawk::album_ptr >& albums, int row
 
     foreach ( const album_ptr& album, albums )
     {
-        if ( album.isNull() )
+        if ( !album )
             return;
 
         connect( album.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
@@ -212,7 +215,7 @@ PlaylistModel::insertArtists( const QList< Tomahawk::artist_ptr >& artists, int 
 
     foreach ( const artist_ptr& artist, artists )
     {
-        if ( artist.isNull() )
+        if ( !artist )
             return;
 
         connect( artist.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::ModelMode, Tomahawk::collection_ptr ) ),
@@ -315,7 +318,9 @@ PlaylistModel::insertEntries( const QList< Tomahawk::plentry_ptr >& entries, int
         Pipeline::instance()->resolve( queries );
     }
     else
+    {
         finishLoading();
+    }
 
     emit endInsertRows();
     emit itemCountChanged( rowCount( QModelIndex() ) );
@@ -350,10 +355,15 @@ void
 PlaylistModel::onRevisionLoaded( Tomahawk::PlaylistRevision revision )
 {
     Q_D( PlaylistModel );
+
     if ( !d->waitForRevision.contains( revision.revisionguid ) )
+    {
         loadPlaylist( d->playlist );
+    }
     else
+    {
         d->waitForRevision.removeAll( revision.revisionguid );
+    }
 }
 
 
@@ -361,9 +371,10 @@ QMimeData*
 PlaylistModel::mimeData( const QModelIndexList& indexes ) const
 {
     Q_D( const PlaylistModel );
+
     // Add the playlist id to the mime data so that we can detect dropping on ourselves
     QMimeData* data = PlayableModel::mimeData( indexes );
-    if ( !d->playlist.isNull() )
+    if ( d->playlist )
         data->setData( "application/tomahawk.playlist.id", d->playlist->guid().toLatin1() );
 
     return data;
@@ -400,7 +411,7 @@ PlaylistModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int r
     // On mac, drags from outside the app are still Qt::MoveActions instead of Qt::CopyAction by default
     // so check if the drag originated in this playlist to determine whether or not to copy
     if ( !data->hasFormat( "application/tomahawk.playlist.id" ) ||
-       ( !d->playlist.isNull() && data->data( "application/tomahawk.playlist.id" ) != d->playlist->guid() ) )
+       ( d->playlist && data->data( "application/tomahawk.playlist.id" ) != d->playlist->guid() ) )
     {
         dj->setDropAction( DropJob::Append );
     }
@@ -457,7 +468,7 @@ void
 PlaylistModel::beginPlaylistChanges()
 {
     Q_D( PlaylistModel );
-    if ( d->playlist.isNull() || !d->playlist->author()->isLocal() )
+    if ( !d->playlist || !d->playlist->author()->isLocal() )
         return;
 
     Q_ASSERT( !d->changesOngoing );
@@ -469,7 +480,8 @@ void
 PlaylistModel::endPlaylistChanges()
 {
     Q_D( PlaylistModel );
-    if ( d->playlist.isNull() || !d->playlist->author()->isLocal() )
+
+    if ( !d->playlist || !d->playlist->author()->isLocal() )
     {
         d->savedInsertPos = -1;
         d->savedInsertTracks.clear();
@@ -520,7 +532,7 @@ PlaylistModel::endPlaylistChanges()
             if ( !idx.isValid() )
                 continue;
             const PlayableItem* item = itemFromIndex( idx );
-            if ( !item || item->entry().isNull() )
+            if ( !item || !item->entry() )
                 continue;
 
 //             qDebug() << "Checking for equality:" << (item->entry() == m_savedInsertTracks.first()) << m_savedInsertTracks.first()->query()->track() << m_savedInsertTracks.first()->query()->artist();
@@ -572,8 +584,8 @@ void
 PlaylistModel::removeIndex( const QModelIndex& index, bool moreToCome )
 {
     Q_D( PlaylistModel );
-    PlayableItem* item = itemFromIndex( index );
 
+    PlayableItem* item = itemFromIndex( index );
     if ( item && d->waitingForResolved.contains( item->query().data() ) )
     {
         disconnect( item->query().data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( trackResolved( bool ) ) );
