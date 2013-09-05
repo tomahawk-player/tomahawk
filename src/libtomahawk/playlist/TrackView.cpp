@@ -42,7 +42,6 @@
     #include "utils/PixmapDelegateFader.h"
 #endif
 
-
 #include <QKeyEvent>
 #include <QPainter>
 #include <QScrollBar>
@@ -130,6 +129,9 @@ TrackView::guid() const
 void
 TrackView::setGuid( const QString& newguid )
 {
+    if ( newguid == m_guid )
+        return;
+
     if ( !newguid.isEmpty() )
     {
         tDebug() << Q_FUNC_INFO << "Setting guid on header" << newguid << "for a view with" << m_proxyModel->columnCount() << "columns";
