@@ -145,7 +145,6 @@ ViewManager::createPageForPlaylist( const playlist_ptr& playlist )
     PlaylistView* pv = new PlaylistView();
     view->setDetailedView( pv );
     view->setPixmap( pv->pixmap() );
-    view->setEmptyTip( tr( "This playlist is empty!" ) );
 
     // We need to set the model on the view before loading the playlist, so spinners & co are connected
     view->setPlaylistModel( model );
@@ -167,7 +166,6 @@ ViewManager::createPageForList( const QString& title, const QList< query_ptr >& 
     PlaylistView* pv = new PlaylistView();
     view->setDetailedView( pv );
     view->setPixmap( pv->pixmap() );
-    view->setEmptyTip( tr( "This playlist is empty!" ) );
     view->setTemporaryPage( true );
 
     // We need to set the model on the view before loading the playlist, so spinners & co are connected
