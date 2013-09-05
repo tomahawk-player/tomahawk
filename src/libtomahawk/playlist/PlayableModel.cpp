@@ -904,6 +904,7 @@ PlayableModel::onDataChanged()
 void
 PlayableModel::startLoading()
 {
+    tDebug() << Q_FUNC_INFO;
     Q_D( PlayableModel );
     d->loading = true;
     emit loadingStarted();
@@ -913,6 +914,7 @@ PlayableModel::startLoading()
 void
 PlayableModel::finishLoading()
 {
+    tDebug() << Q_FUNC_INFO;
     Q_D( PlayableModel );
     d->loading = false;
     emit loadingFinished();

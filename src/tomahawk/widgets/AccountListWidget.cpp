@@ -83,6 +83,7 @@ AccountListWidget::AccountListWidget( AccountModelFactoryProxy* model, QWidget* 
     updateToggleOnlineStateButton();
 }
 
+
 void
 AccountListWidget::updateEntries( const QModelIndex& topLeft, const QModelIndex& bottomRight )
 {
@@ -105,6 +106,7 @@ AccountListWidget::updateEntries( const QModelIndex& topLeft, const QModelIndex&
     }
 }
 
+
 void
 AccountListWidget::updateEntry( const QPersistentModelIndex& idx )
 {
@@ -113,6 +115,7 @@ AccountListWidget::updateEntry( const QPersistentModelIndex& idx )
         m_entries[ idx ][ i ]->update( idx, i ); //update the i-th account of the idx-th factory
     }
 }
+
 
 void
 AccountListWidget::loadAllEntries()
@@ -131,6 +134,7 @@ AccountListWidget::loadAllEntries()
     int rc =  m_model->rowCount();
     insertEntries( QModelIndex(), 0, rc - 1 );
 }
+
 
 void
 AccountListWidget::insertEntries(  const QModelIndex& parent, int start, int end )
@@ -159,6 +163,7 @@ AccountListWidget::insertEntries(  const QModelIndex& parent, int start, int end
         }
     }
 }
+
 
 void
 AccountListWidget::removeEntries( const QModelIndex& parent, int start, int end )
@@ -191,9 +196,11 @@ AccountListWidget::removeEntries( const QModelIndex& parent, int start, int end 
     qobject_cast< QWidget* >( QWidget::parent() )->adjustSize();
 }
 
+
 void
 AccountListWidget::toggleOnlineStateForAll()
 {
+    tDebug() << Q_FUNC_INFO;
     bool newState = !m_toggleOnlineButtonState;
     foreach ( QList< AccountWidget* > awgts, m_entries )
     {
@@ -203,6 +210,7 @@ AccountListWidget::toggleOnlineStateForAll()
         }
     }
 }
+
 
 void
 AccountListWidget::updateToggleOnlineStateButton()
@@ -223,6 +231,7 @@ AccountListWidget::updateToggleOnlineStateButton()
 
     if ( newState != m_toggleOnlineButtonState )
     {
+        tDebug() << Q_FUNC_INFO;
         m_toggleOnlineButtonState = newState;
         if ( newState )
             Tomahawk::Accounts::AccountManager::instance()->connectAll();
