@@ -136,7 +136,6 @@ PlaylistView::onChanged()
             setEmptyTip( tr( "This playlist is currently empty." ) );
         else
             setEmptyTip( tr( "This playlist is currently empty. Add some tracks to it and enjoy the music!" ) );
-        m_model->finishLoading();
 
         setGuid( proxyModel()->guid() );
 
