@@ -188,11 +188,16 @@ AccountManager::connectAll()
     {
         if ( acc->enabled() )
         {
-            acc->authenticate();
-            m_enabledAccounts << acc;
-        }
+            if ( acc->sipPlugin() )
+            {
+                tDebug() << Q_FUNC_INFO << "Connecting" << acc->accountFriendlyName();
+                acc->authenticate();
 
+                m_enabledAccounts << acc;
+            }
+        }
     }
+
     m_connected = true;
 }
 
@@ -202,9 +207,16 @@ AccountManager::disconnectAll()
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     foreach ( Account* acc, m_enabledAccounts )
-        acc->deauthenticate();
+    {
+        if ( acc->sipPlugin() )
+        {
+            tDebug() << Q_FUNC_INFO << "Disconnecting" << acc->accountFriendlyName();
+            acc->deauthenticate();
 
-    m_enabledAccounts.clear();
+            m_enabledAccounts.removeAll( acc );
+        }
+    }
+
     SourceList::instance()->removeAllRemote();
     m_connected = false;
 }
