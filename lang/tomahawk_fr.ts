@@ -1235,42 +1235,42 @@ Password (OTP)</source>
         <translation>Précision</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="849"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="850"/>
         <source>Perfect match</source>
         <translation>Correspondance parfaite</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="850"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="851"/>
         <source>Very good match</source>
         <translation>Très bonne correspondance</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="851"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="852"/>
         <source>Good match</source>
         <translation>Bonne correspondance</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="852"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="853"/>
         <source>Vague match</source>
         <translation>Vague correspondance</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="853"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="854"/>
         <source>Bad match</source>
         <translation>Mauvaise correspondance</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="854"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="855"/>
         <source>Very bad match</source>
         <translation>Très mauvaise correspondance</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="855"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="856"/>
         <source>Not available</source>
         <translation>Indisponible</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="856"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="857"/>
         <source>Searching...</source>
         <translation>Recherche...</translation>
     </message>
@@ -4167,7 +4167,7 @@ saisissez le numéro PIN ici :</translation>
 <context>
     <name>TrackView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="618"/>
+        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="620"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Désolé, votre filtre &apos;%1&apos; ne correspond à aucun résultat.</translation>
     </message>
