@@ -72,6 +72,8 @@ public:
     Q_DECLARE_PUBLIC( DynamicPlaylist )
 
 private:
+    QWeakPointer< DynamicPlaylist > weakSelf;
+
     geninterface_ptr generator;
     bool autoLoad;
 

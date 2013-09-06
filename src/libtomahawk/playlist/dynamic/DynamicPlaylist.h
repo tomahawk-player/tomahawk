@@ -32,8 +32,6 @@
 #include <QList>
 #include <QSharedPointer>
 
-
-
 namespace Tomahawk
 {
 
@@ -155,6 +153,8 @@ public slots:
                       const QString& type,
                       const QList< Tomahawk::dyncontrol_ptr>& controls,
                       bool applied );
+
+    void setWeakSelf( QWeakPointer< DynamicPlaylist > self );
 
 protected:
     virtual void removeFromDatabase();

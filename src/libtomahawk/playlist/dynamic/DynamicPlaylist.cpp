@@ -50,7 +50,6 @@ DynamicPlaylist::DynamicPlaylist( const Tomahawk::source_ptr& author, const QStr
 
 DynamicPlaylist::~DynamicPlaylist()
 {
-
 }
 
 
@@ -172,7 +171,16 @@ DynamicPlaylist::create( const Tomahawk::source_ptr& author,
     Database::instance()->enqueue( Tomahawk::dbcmd_ptr(cmd) );
     if ( autoLoad )
         dynplaylist->reportCreated( dynplaylist );
+
     return dynplaylist;
+}
+
+
+void
+DynamicPlaylist::setWeakSelf( QWeakPointer< DynamicPlaylist > self )
+{
+    Q_D( DynamicPlaylist );
+    d->weakSelf = self;
 }
 
 
@@ -505,8 +513,11 @@ DynamicPlaylist::setRevision( const QString& rev,
 void
 DynamicPlaylist::removeFromDatabase()
 {
+    Q_D( DynamicPlaylist );
+
+    emit aboutToBeDeleted( d->weakSelf.toStrongRef() );
     DatabaseCommand_DeletePlaylist* cmd = new DatabaseCommand_DeleteDynamicPlaylist( author(), guid() ) ;
-    Database::instance()->enqueue( Tomahawk::dbcmd_ptr(cmd) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
 
 
