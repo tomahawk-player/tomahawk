@@ -31,7 +31,8 @@
 
 
 CrashReporter::CrashReporter( const QUrl& url, const QStringList& args )
-    : m_url( url )
+    : m_reply( 0 )
+    , m_url( url )
 {
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
 
@@ -135,7 +136,6 @@ CrashReporter::send()
     body += qCompress( contents( LOGFILE ) );
     body += "\r\n";
     body += "--thkboundary--\r\n";
-
 
     QNetworkAccessManager* nam = new QNetworkAccessManager( this );
     m_request->setHeader( QNetworkRequest::ContentTypeHeader, "multipart/form-data; boundary=thkboundary" );
