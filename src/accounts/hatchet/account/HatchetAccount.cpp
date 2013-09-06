@@ -263,7 +263,7 @@ HatchetAccount::fetchAccessTokens( const QString& type )
         tLog() << "Auth token has expired, but may still be valid on the server";
 
     tLog() << "Fetching access tokens";
-    QNetworkRequest req( QUrl( c_accessTokenServer + "/tokens/" + type + "?authtoken=" + authToken() ) );
+    QNetworkRequest req( QUrl( c_accessTokenServer + "/tokens/" + type + "?username=" + username() + "&authtoken=" + authToken() ) );
 
     QNetworkReply* reply = Tomahawk::Utils::nam()->get( req );
 
@@ -287,18 +287,24 @@ HatchetAccount::onPasswordLoginFinished( QNetworkReply* reply, const QString& us
     if ( !ok )
     {
         tLog() << Q_FUNC_INFO << "Error getting parsed reply from auth server";
-        emit authError( "An error occurred reading the reply from the server", statusCode );
+        emit authError( "An error occurred reading the reply from the authentication server", statusCode );
         return;
     }
-
-    if ( !resp.value( "error" ).toString().isEmpty() )
+    if ( statusCode >= 500 )
     {
-        tLog() << Q_FUNC_INFO << "Auth server returned an error";
-        emit authError( resp.value( "error" ).toString(), statusCode );
+        tLog() << Q_FUNC_INFO << "Encountered internal error from auth server, cannot continue";
+        emit authError( "The authentication server reported an internal error, please try again later", statusCode );
+        return;
+    }
+    if ( statusCode >= 400 )
+    {
+        QString errString = resp.value( "result" ).toMap().value( "errorinfo" ).toMap().value( "description" ).toString();
+        tLog() << Q_FUNC_INFO << "An error was returned from the authentication server: " << errString;
+        emit authError( errString, statusCode );
         return;
     }
 
-    const QString nonce = resp.value( "data" ).toMap().value( "nonce" ).toString();
+    const QString nonce = resp.value( "result" ).toMap().value( "nonce" ).toString();
     if ( nonce != m_uuid )
     {
         tLog() << Q_FUNC_INFO << "Auth server nonce value does not match!";
@@ -306,8 +312,8 @@ HatchetAccount::onPasswordLoginFinished( QNetworkReply* reply, const QString& us
         return;
     }
 
-    const QByteArray authenticationToken = resp.value( "data" ).toMap().value( "token" ).toByteArray();
-    uint expiration = resp.value( "data" ).toMap().value( "expiration" ).toUInt( &ok );
+    const QByteArray authenticationToken = resp.value( "result" ).toMap().value( "token" ).toByteArray();
+    uint expiration = resp.value( "result" ).toMap().value( "expiration" ).toUInt( &ok );
 
     QVariantHash creds = credentials();
     creds[ "username" ] = username;
@@ -330,6 +336,7 @@ HatchetAccount::onFetchAccessTokensFinished()
     tLog() << Q_FUNC_INFO;
     QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
     Q_ASSERT( reply );
+
     bool ok;
     int statusCode = reply->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt( &ok );
     if ( !ok )
@@ -339,12 +346,23 @@ HatchetAccount::onFetchAccessTokensFinished()
         return;
     }
     const QVariantMap resp = parseReply( reply, ok );
-    if ( !ok || !resp.value( "error" ).toString().isEmpty() )
+    if ( !ok )
     {
-        tLog() << Q_FUNC_INFO << "Auth server returned an error";
-        if ( ok )
-            emit authError( resp.value( "error" ).toString(), statusCode );
-        deauthenticate();
+        tLog() << Q_FUNC_INFO << "Error getting parsed reply from auth server";
+        emit authError( "An error occurred reading the reply from the authentication server", statusCode );
+        return;
+    }
+    if ( statusCode >= 500 )
+    {
+        tLog() << Q_FUNC_INFO << "Encountered internal error from auth server, cannot continue";
+        emit authError( "The authentication server reported an internal error, please try again later", statusCode );
+        return;
+    }
+    if ( statusCode >= 400 )
+    {
+        QString errString = resp.value( "result" ).toMap().value( "errorinfo" ).toMap().value( "description" ).toString();
+        tLog() << Q_FUNC_INFO << "An error was returned from the authentication server: " << errString;
+        emit authError( errString, statusCode );
         return;
     }
 
@@ -353,7 +371,7 @@ HatchetAccount::onFetchAccessTokensFinished()
 
     tDebug() << Q_FUNC_INFO << "resp: " << resp;
 
-    foreach( QVariant tokenVariant, resp[ "data" ].toMap()[ "tokens" ].toList() )
+    foreach( QVariant tokenVariant, resp[ "result" ].toMap()[ "tokens" ].toList() )
     {
         QVariantMap tokenMap = tokenVariant.toMap();
         QString tokenTypeName = tokenMap[ "type" ].toString() + "tokens";
@@ -399,7 +417,7 @@ HatchetAccount::parseReply( QNetworkReply* reply, bool& okRet ) const
 
     bool ok;
     int statusCode = reply->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt( &ok );
-    if ( reply->error() != QNetworkReply::NoError && statusCode != 400 && statusCode != 500 )
+    if ( reply->error() != QNetworkReply::NoError && statusCode < 400 )
     {
         tLog() << Q_FUNC_INFO << "Network error in command:" << reply->error() << reply->errorString();
         okRet = false;
@@ -416,9 +434,9 @@ HatchetAccount::parseReply( QNetworkReply* reply, bool& okRet ) const
         return resp;
     }
 
-    if ( !resp.value( "error", "" ).toString().isEmpty() )
+    if ( statusCode >= 400 )
     {
-        tLog() << "Error from tomahawk server response, or in parsing from json:" << resp.value( "error" ).toString() << resp;
+        tDebug() << "Error from tomahawk server response, or in parsing from json:" << resp.value( "error" ).toString() << resp;
     }
 
     tDebug() << Q_FUNC_INFO << "Got keys" << resp.keys();
