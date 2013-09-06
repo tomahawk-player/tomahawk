@@ -92,7 +92,6 @@ protected:
 #endif
 
 public slots:
-    void createAutomaticPlaylist( QString );
     void createStation();
     void createPlaylist();
     void loadSpiff();
@@ -137,8 +136,6 @@ private slots:
     void minimize();
     void maximize();
     void toggleFullscreen();
-
-    void playlistCreateDialogFinished( int ret );
 
     void crashNow();
 
