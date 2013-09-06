@@ -181,8 +181,9 @@ HatchetAccountConfig::authError( const QString &error, int statusCode, const QVa
         m_ui->loginButton->setText( tr("Continue") );
         return;
     }
-    m_account->deauthenticate();
-    QMessageBox::critical( this, "An error was encountered logging in:", error );
+    if ( statusCode == 401 )
+       m_account->deauthenticate();
+    QMessageBox::critical( this, "An error was encountered:", error );
 }
 
 
