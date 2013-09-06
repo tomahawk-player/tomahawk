@@ -62,12 +62,12 @@ se s vámi spojil?</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/widgets/AccountListWidget.cpp" line="72"/>
-        <location filename="../src/tomahawk/widgets/AccountListWidget.cpp" line="234"/>
+        <location filename="../src/tomahawk/widgets/AccountListWidget.cpp" line="243"/>
         <source>Connect &amp;All</source>
         <translation>Spojit &amp;vše</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/widgets/AccountListWidget.cpp" line="233"/>
+        <location filename="../src/tomahawk/widgets/AccountListWidget.cpp" line="242"/>
         <source>Disconnect &amp;All</source>
         <translation>&amp;Odpojit vše</translation>
     </message>
@@ -440,7 +440,7 @@ se s vámi spojil?</translation>
 <context>
     <name>ColumnView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/ColumnView.cpp" line="303"/>
+        <location filename="../src/libtomahawk/playlist/ColumnView.cpp" line="305"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Promiňte, vašemu filtru &apos;%1&apos; se nepodařilo najít žádné výsledky.</translation>
     </message>
@@ -1236,48 +1236,48 @@ heslo</translation>
         <translation>Přesnost</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="850"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="866"/>
         <source>Perfect match</source>
         <translation>Přesná shoda</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="851"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="867"/>
         <source>Very good match</source>
         <translation>Velmi dobrá shoda</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="852"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="868"/>
         <source>Good match</source>
         <translation>Dobrá shoda</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="853"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="869"/>
         <source>Vague match</source>
         <translation>Mlhavá shoda</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="854"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="870"/>
         <source>Bad match</source>
         <translation>Špatná shoda</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="855"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="871"/>
         <source>Very bad match</source>
         <translation>Velmi špatná shoda</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="856"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="872"/>
         <source>Not available</source>
         <translation>Nedostupné</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="857"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="873"/>
         <source>Searching...</source>
         <translation>Hledá se...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
-        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="397"/>
+        <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="398"/>
         <source>Name</source>
         <translation>Název</translation>
     </message>
@@ -1325,23 +1325,23 @@ heslo</translation>
 <context>
     <name>PlaylistModel</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="139"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="142"/>
         <source>A playlist you created %1.</source>
         <translation>Seznam skladeb, který jste vytvořil %1.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="144"/>
-        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="151"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="147"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="154"/>
         <source>A playlist by %1, created %2.</source>
         <translation>Seznam skladeb od %1, vytvořen %2.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="200"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="203"/>
         <source>All tracks by %1 on album %2</source>
         <translation>Seznam skladeb od %1 na albu. %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="227"/>
+        <location filename="../src/libtomahawk/playlist/PlaylistModel.cpp" line="230"/>
         <source>All tracks by %1</source>
         <translation>Všechny skladby od %1</translation>
     </message>
@@ -1569,17 +1569,17 @@ heslo</translation>
     <name>QueueView</name>
     <message>
         <location filename="../src/libtomahawk/playlist/QueueView.ui" line="41"/>
-        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="204"/>
+        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="203"/>
         <source>Open Queue</source>
         <translation>Otevřít řadu</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="202"/>
+        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="201"/>
         <source>Open Queue - %n item(s)</source>
         <translation><numerusform>Otevřít řadu - jedna píseň</numerusform><numerusform>Otevřít řadu - %n písně</numerusform><numerusform>Otevřít řadu - %n písní</numerusform></translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="208"/>
+        <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="207"/>
         <source>Close Queue</source>
         <translation>Zavřít řadu</translation>
     </message>
@@ -3942,7 +3942,7 @@ služby Twitter zde zadejte tam zobrazené číslo PIN:</translation>
         <translation>Nastavit účty</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/widgets/AccountWidget.cpp" line="132"/>
+        <location filename="../src/tomahawk/widgets/AccountWidget.cpp" line="133"/>
         <source>Invite</source>
         <translation>Pozvat</translation>
     </message>
@@ -4168,7 +4168,7 @@ služby Twitter zde zadejte tam zobrazené číslo PIN:</translation>
 <context>
     <name>TrackView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="620"/>
+        <location filename="../src/libtomahawk/playlist/TrackView.cpp" line="621"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
         <translation>Promiňte, vašemu filtru &apos;%1&apos; se nepodařilo najít žádné výsledky.</translation>
     </message>
@@ -4305,38 +4305,32 @@ Kdykoli můžete odeslat novou seřizovací zprávu.</translation>
         <translation>Sledování návrhů od vašich přátel</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="148"/>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="170"/>
-        <source>This playlist is empty!</source>
-        <translation>Tento seznam skladeb je prázdný!</translation>
-    </message>
-    <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="377"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="375"/>
         <source>SuperCollection</source>
         <translation>Supersbírka</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="378"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="376"/>
         <source>Combined libraries of all your online friends</source>
         <translation>Spojená sbírka všech vašich přátel</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="438"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="436"/>
         <source>Recently Played Tracks</source>
         <translation>Nedávno poslouchané skladby</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="439"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="437"/>
         <source>Recently played tracks from all your friends</source>
         <translation>Naposledy poslouchané skladby všech vašich přátel</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="445"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="443"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>Promiňte, ale nepodařilo se najít žádné nedávno poslouchané skladby!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="472"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="470"/>
         <source>No listening suggestions here.</source>
         <translation>Žádné sledování návrhů.</translation>
     </message>
