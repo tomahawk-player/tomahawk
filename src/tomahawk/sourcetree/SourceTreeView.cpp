@@ -459,7 +459,7 @@ SourceTreeView::onDeletePlaylistResult( bool result )
         {
             updater->setQuestionResults( questionResults );
         }
-        qDebug() << "Doing delete of playlist:" << playlist->title();
+        tDebug() << Q_FUNC_INFO << "Deleting playlist:" << playlist->guid() << playlist->title();
         Playlist::removalHandler()->remove( playlist );
     }
     else if ( type == SourcesModel::AutomaticPlaylist || type == SourcesModel::Station )
@@ -470,8 +470,8 @@ SourceTreeView::onDeletePlaylistResult( bool result )
         {
             updater->setQuestionResults( questionResults );
         }
-        qDebug() << "Doing delete of playlist:" << playlist->title();
-        Playlist::removalHandler()->remove( playlist );
+        tDebug() << Q_FUNC_INFO << "Deleting dynamic playlist:" << playlist->guid() << playlist->title();
+        DynamicPlaylist::removalHandler()->remove( playlist );
     }
 }
 
