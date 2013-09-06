@@ -87,9 +87,9 @@ public:
     {
     }
 
-
     Playlist* q_ptr;
     Q_DECLARE_PUBLIC ( Playlist )
+
 private:
     QWeakPointer< Playlist > weakSelf;
     source_ptr source;

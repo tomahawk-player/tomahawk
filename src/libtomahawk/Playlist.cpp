@@ -503,9 +503,12 @@ void
 Playlist::removeFromDatabase()
 {
     Q_D( Playlist );
+
+    emit aboutToBeDeleted( d->weakSelf.toStrongRef() );
     DatabaseCommand_DeletePlaylist* cmd = new DatabaseCommand_DeletePlaylist( d->source, d->guid );
-    Database::instance()->enqueue( Tomahawk::dbcmd_ptr(cmd) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
+
 
 Playlist::Playlist( PlaylistPrivate *d )
     : d_ptr( d )
@@ -906,7 +909,6 @@ Playlist::updaters() const
 void
 PlaylistRemovalHandler::remove( const playlist_ptr& playlist )
 {
-    emit playlist->aboutToBeDeleted( playlist );
     playlist->removeFromDatabase();
 }
 
