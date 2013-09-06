@@ -89,6 +89,8 @@ private slots:
     void toggleProxyEnabled();
     void toggleAutoDetectIp( bool checked );
     void showProxySettings();
+    void addLibraryPath();
+    void removeLibraryPath();
 
     void accountsFilterChanged( int );
 

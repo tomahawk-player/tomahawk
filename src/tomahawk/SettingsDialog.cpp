@@ -191,10 +191,18 @@ SettingsDialog::SettingsDialog(QObject *parent )
         m_collectionWidgetUi->scannerTimeSpinBox->hide();
     }
 
-    foreach ( const QString& dir, TomahawkSettings::instance()->scannerPaths() )
+/*    foreach ( const QString& dir, TomahawkSettings::instance()->scannerPaths() )
     {
         m_collectionWidgetUi->dirTree->checkPath( dir, Qt::Checked );
-    }
+    }*/
+    m_collectionWidgetUi->pathListWidget->addItems( TomahawkSettings::instance()->scannerPaths() );
+
+    const int buttonSize = TomahawkUtils::defaultFontHeight() * 2.5;
+    m_collectionWidgetUi->addLibraryPathButton->setFixedSize( buttonSize, buttonSize );
+    m_collectionWidgetUi->removeLibraryPathButton->setFixedSize( m_collectionWidgetUi->addLibraryPathButton->size() );
+
+    connect( m_collectionWidgetUi->addLibraryPathButton, SIGNAL( clicked() ), SLOT( addLibraryPath() ) );
+    connect( m_collectionWidgetUi->removeLibraryPathButton, SIGNAL( clicked() ), SLOT( removeLibraryPath() ) );
 
     int buttonsWidth = qMax( m_advancedWidgetUi->proxyButton->sizeHint().width(),
                              m_advancedWidgetUi->aclEntryClearButton->sizeHint().width() );
@@ -213,7 +221,7 @@ SettingsDialog::SettingsDialog(QObject *parent )
 
     m_collectionWidget->setContentsMargins( 6, 6, 6, 6 );
     m_collectionWidget->setMinimumHeight( m_collectionWidgetUi->verticalLayout->sizeHint().height() + 20 );
-    m_collectionWidgetUi->dirTree->setAttribute( Qt::WA_MacShowFocusRect, false );
+    m_collectionWidgetUi->pathListWidget->setAttribute( Qt::WA_MacShowFocusRect, false );
 
     m_advancedWidget->setContentsMargins( 6, 6, 6, 6 );
     m_advancedWidget->setMinimumHeight( m_advancedWidgetUi->verticalLayout->sizeHint().height() );
@@ -274,7 +282,13 @@ SettingsDialog::saveSettings()
     s->setExternalHostname( m_advancedWidgetUi->staticHostName->text() );
     s->setExternalPort( m_advancedWidgetUi->staticPort->value() );
 
-    s->setScannerPaths( m_collectionWidgetUi->dirTree->getCheckedPaths() );
+    QStringList libraryPaths;
+    for ( int i = 0; i < m_collectionWidgetUi->pathListWidget->count(); i++ )
+    {
+        libraryPaths << m_collectionWidgetUi->pathListWidget->item( i )->text();
+    }
+    s->setScannerPaths( libraryPaths );
+//    s->setScannerPaths( m_collectionWidgetUi->dirTree->getCheckedPaths() );
     s->setWatchForChanges( m_collectionWidgetUi->checkBoxWatchForChanges->isChecked() );
     s->setScannerTime( m_collectionWidgetUi->scannerTimeSpinBox->value() );
     s->setEnableEchonestCatalogs( m_collectionWidgetUi->enableEchonestCatalog->isChecked() );
@@ -287,7 +301,7 @@ SettingsDialog::saveSettings()
     if ( m_restartRequired )
         QMessageBox::information( 0, tr( "Information" ), tr( "Some changed settings will not take effect until Tomahawk is restarted" ) );
 
-    m_collectionWidgetUi->dirTree->cleanup();
+//    m_collectionWidgetUi->dirTree->cleanup();
 
     Tomahawk::Utils::NetworkProxyFactory* proxyFactory = Tomahawk::Utils::proxyFactory();
     if ( !m_advancedWidgetUi->enableProxyCheckBox->isChecked() )
@@ -395,6 +409,30 @@ void
 SettingsDialog::toggleAutoDetectIp( bool checked )
 {
     m_advancedWidgetUi->staticHostName->setEnabled( !checked );
+}
+
+
+void
+SettingsDialog::addLibraryPath()
+{
+    QString dir = QFileDialog::getExistingDirectory( m_collectionWidget, tr( "Open Directory" ),
+                                                     QDir::homePath(),
+                                                     QFileDialog::ShowDirsOnly );
+
+    if ( !dir.isEmpty() )
+    {
+        m_collectionWidgetUi->pathListWidget->addItem( dir );
+    }
+}
+
+
+void
+SettingsDialog::removeLibraryPath()
+{
+    if ( m_collectionWidgetUi->pathListWidget->currentRow() >= 0 )
+    {
+        m_collectionWidgetUi->pathListWidget->takeItem( m_collectionWidgetUi->pathListWidget->currentRow() );
+    }
 }
 
 
