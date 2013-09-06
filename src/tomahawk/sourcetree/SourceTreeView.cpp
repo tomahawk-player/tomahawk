@@ -215,7 +215,6 @@ SourceTreeView::setupMenus()
     {
         loadPlaylistAction = ActionCollection::instance()->getAction( "loadStation" );
         renamePlaylistAction = ActionCollection::instance()->getAction( "renameStation" );
-
     }
     else
     {

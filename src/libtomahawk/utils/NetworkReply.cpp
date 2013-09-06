@@ -103,7 +103,6 @@ NetworkReply::metaDataChanged()
             emit finalUrlReached( m_url );
         }
     }
-
 }
 
 
@@ -115,6 +114,7 @@ NetworkReply::connectReplySignals()
     connect( m_reply, SIGNAL( destroyed( QObject* ) ), SLOT( deletedByParent() ) );
     connect( m_reply, SIGNAL( metaDataChanged() ), SLOT( metaDataChanged() ) );
 }
+
 
 void
 NetworkReply::disconnectReplySignals()

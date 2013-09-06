@@ -361,6 +361,7 @@ Servent::deleteLazyOffer( const QString& key )
     }
 }
 
+
 void
 Servent::registerControlConnection( ControlConnection* conn )
 {
@@ -844,7 +845,7 @@ Servent::handoverSocket( Connection* conn, QTcpSocketExtra* sock )
 
 
 void
-Servent::cleanupSocket( QTcpSocketExtra *sock )
+Servent::cleanupSocket( QTcpSocketExtra* sock )
 {
     if ( !sock )
     {
@@ -869,7 +870,7 @@ Servent::initiateConnection( const SipInfo& sipInfo, Connection* conn )
     Q_ASSERT( conn );
 
     // Check that we are not connecting to ourselves
-    foreach( QHostAddress ha, d_func()->externalAddresses )
+    foreach ( QHostAddress ha, d_func()->externalAddresses )
     {
         if ( sipInfo.host() == ha.toString() )
         {
@@ -966,6 +967,7 @@ Servent::checkACLResult( const QString& nodeid, const QString& username, Tomahaw
     // We have a result, so remove from queue
     d_func()->queuedForACLResult[username].remove( nodeid );
 }
+
 
 void
 Servent::ipDetected()
@@ -1075,6 +1077,7 @@ Servent::additionalPort() const
     return d_func()->externalPort;
 }
 
+
 bool
 equalByIPv6Address( QHostAddress a1, QHostAddress a2 )
 {
@@ -1088,6 +1091,7 @@ equalByIPv6Address( QHostAddress a1, QHostAddress a2 )
     }
     return true;
 }
+
 
 // return the appropriate connection for a given offer key, or NULL if invalid
 Connection*
@@ -1330,7 +1334,7 @@ Servent::numConnectedPeers() const
 }
 
 
-QList<StreamConnection *>
+QList<StreamConnection*>
 Servent::streams() const
 {
     return d_func()->scsessions;
@@ -1416,6 +1420,7 @@ Servent::httpIODeviceFactory( const Tomahawk::result_ptr& result,
                 this, SLOT( httpIODeviceReady( NetworkReply*, IODeviceCallback ) ),
                 reply, callback )->setAutoDelete( true );
 }
+
 
 void
 Servent::httpIODeviceReady( NetworkReply* reply, IODeviceCallback callback )

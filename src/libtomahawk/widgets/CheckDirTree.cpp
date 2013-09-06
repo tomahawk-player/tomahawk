@@ -58,7 +58,7 @@ CheckDirModel::cleanup()
 #ifdef Q_OS_MAC
     // reset to previous state
     if ( m_shownVolumes )
-        QProcess::startDetached( QString( "%1 -a V %2" ).arg( m_setFilePath).arg( s_macVolumePath ) );
+        QProcess::startDetached( QString( "%1 -a V %2" ).arg( m_setFilePath ).arg( s_macVolumePath ) );
 #endif
 }
 
