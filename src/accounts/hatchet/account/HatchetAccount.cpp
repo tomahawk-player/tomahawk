@@ -280,27 +280,27 @@ HatchetAccount::onPasswordLoginFinished( QNetworkReply* reply, const QString& us
     if ( !ok )
     {
         tLog() << Q_FUNC_INFO << "Error finding status code from auth server";
-        emit authError( "An error occurred getting the status code from the server", 0 );
+        emit authError( "An error occurred getting the status code from the server", 0, QVariantMap() );
         return;
     }
     const QVariantMap resp = parseReply( reply, ok );
     if ( !ok )
     {
         tLog() << Q_FUNC_INFO << "Error getting parsed reply from auth server";
-        emit authError( "An error occurred reading the reply from the authentication server", statusCode );
+        emit authError( "An error occurred reading the reply from the authentication server", statusCode, resp );
         return;
     }
     if ( statusCode >= 500 )
     {
         tLog() << Q_FUNC_INFO << "Encountered internal error from auth server, cannot continue";
-        emit authError( "The authentication server reported an internal error, please try again later", statusCode );
+        emit authError( "The authentication server reported an internal error, please try again later", statusCode, resp );
         return;
     }
     if ( statusCode >= 400 )
     {
         QString errString = resp.value( "result" ).toMap().value( "errorinfo" ).toMap().value( "description" ).toString();
         tLog() << Q_FUNC_INFO << "An error was returned from the authentication server: " << errString;
-        emit authError( errString, statusCode );
+        emit authError( errString, statusCode, resp );
         return;
     }
 
@@ -308,7 +308,7 @@ HatchetAccount::onPasswordLoginFinished( QNetworkReply* reply, const QString& us
     if ( nonce != m_uuid )
     {
         tLog() << Q_FUNC_INFO << "Auth server nonce value does not match!";
-        emit authError( "The nonce value was incorrect. YOUR ACCOUNT MAY BE COMPROMISED.", statusCode );
+        emit authError( "The nonce value was incorrect. YOUR ACCOUNT MAY BE COMPROMISED.", statusCode, resp );
         return;
     }
 
@@ -342,27 +342,27 @@ HatchetAccount::onFetchAccessTokensFinished()
     if ( !ok )
     {
         tLog() << Q_FUNC_INFO << "Error finding status code from auth server";
-        emit authError( "An error occurred getting the status code from the server", 0 );
+        emit authError( "An error occurred getting the status code from the server", 0, QVariantMap() );
         return;
     }
     const QVariantMap resp = parseReply( reply, ok );
     if ( !ok )
     {
         tLog() << Q_FUNC_INFO << "Error getting parsed reply from auth server";
-        emit authError( "An error occurred reading the reply from the authentication server", statusCode );
+        emit authError( "An error occurred reading the reply from the authentication server", statusCode, resp );
         return;
     }
     if ( statusCode >= 500 )
     {
         tLog() << Q_FUNC_INFO << "Encountered internal error from auth server, cannot continue";
-        emit authError( "The authentication server reported an internal error, please try again later", statusCode );
+        emit authError( "The authentication server reported an internal error, please try again later", statusCode, resp );
         return;
     }
     if ( statusCode >= 400 )
     {
         QString errString = resp.value( "result" ).toMap().value( "errorinfo" ).toMap().value( "description" ).toString();
         tLog() << Q_FUNC_INFO << "An error was returned from the authentication server: " << errString;
-        emit authError( errString, statusCode );
+        emit authError( errString, statusCode, resp );
         return;
     }
 

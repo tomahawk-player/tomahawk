@@ -96,7 +96,7 @@ public:
     QString authUrlForService( const Service& service ) const;
 
 signals:
-    void authError( QString error, int statusCode );
+    void authError( QString error, int statusCode, const QVariantMap );
     void deauthenticated();
     void accessTokensFetched();
 
