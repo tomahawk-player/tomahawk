@@ -310,7 +310,7 @@ void
 TrackInfoWidget::onSimilarTracksLoaded()
 {
     m_relatedTracksModel->appendQueries( m_query->track()->similarTracks() );
-    m_relatedTracksModel->finishLoading();
+    m_relatedTracksModel->ensureResolved();
 }
 
 
