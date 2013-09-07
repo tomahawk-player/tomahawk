@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2010-2013, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -26,6 +27,7 @@
 #include "widgets/SearchWidget.h"
 #include "utils/ImageRegistry.h"
 #include "utils/Closure.h"
+#include "utils/Logger.h"
 
 #include <QAction>
 
@@ -39,7 +41,7 @@ namespace {
 
 using namespace Tomahawk;
 
-TemporaryPageItem::TemporaryPageItem ( SourcesModel* mdl, SourceTreeItem* parent, ViewPage* page, int sortValue )
+TemporaryPageItem::TemporaryPageItem( SourcesModel* mdl, SourceTreeItem* parent, ViewPage* page, int sortValue )
     : SourceTreeItem( mdl, parent, SourcesModel::TemporaryPage )
     , m_page( page )
     , m_icon( ImageRegistry::instance()->icon( RESPATH "images/playlist-icon.svg" ) )
@@ -77,6 +79,12 @@ TemporaryPageItem::TemporaryPageItem ( SourcesModel* mdl, SourceTreeItem* parent
     {
         m_customActions << action;
         NewClosure( action, SIGNAL( triggered() ), this, SLOT( linkActionTriggered( QAction* ) ), action );
+    }
+
+    if ( QObject* obj = dynamic_cast< QObject* >( page ) )
+    {
+        if ( obj->metaObject()->indexOfSignal( "destroyed(QObject*)" ) > -1 )
+            connect( obj, SIGNAL( destroyed( QObject* ) ), SLOT( pageDestroyed() ) );
     }
 
     model()->linkSourceItemToPage( this, page );
@@ -126,6 +134,14 @@ TemporaryPageItem::IDValue() const
 void
 TemporaryPageItem::removeFromList()
 {
+    pageDestroyed();
+    ViewManager::instance()->destroyPage( m_page );
+}
+
+
+void
+TemporaryPageItem::pageDestroyed()
+{
     model()->removeSourceItemLink( this );
 
     int idx = parent()->children().indexOf( this );
@@ -134,8 +150,6 @@ TemporaryPageItem::removeFromList()
     parent()->endRowsRemoved();
 
     emit removed();
-
-    ViewManager::instance()->destroyPage( m_page );
     deleteLater();
 }
 
@@ -150,30 +164,30 @@ TemporaryPageItem::linkActionTriggered( QAction* action )
     const LinkType type = (LinkType)action->property( "linkType" ).toInt();
     switch( type )
     {
-    case ArtistLink:
-    {
-        ArtistInfoWidget* aPage = dynamic_cast< ArtistInfoWidget* >( m_page );
-        Q_ASSERT( aPage );
-        GlobalActionManager::instance()->copyOpenLink( aPage->artist() );
+        case ArtistLink:
+        {
+            ArtistInfoWidget* aPage = dynamic_cast< ArtistInfoWidget* >( m_page );
+            Q_ASSERT( aPage );
+            GlobalActionManager::instance()->copyOpenLink( aPage->artist() );
 
-        break;
-    }
-    case AlbumLink:
-    {
-        AlbumInfoWidget* aPage = dynamic_cast< AlbumInfoWidget* >( m_page );
-        Q_ASSERT( aPage );
-        GlobalActionManager::instance()->copyOpenLink( aPage->album() );
+            break;
+        }
+        case AlbumLink:
+        {
+            AlbumInfoWidget* aPage = dynamic_cast< AlbumInfoWidget* >( m_page );
+            Q_ASSERT( aPage );
+            GlobalActionManager::instance()->copyOpenLink( aPage->album() );
 
-        break;
-    }
-    case TrackLink:
-    {
-        TrackInfoWidget* tPage = dynamic_cast< TrackInfoWidget* >( m_page );
-        Q_ASSERT( tPage );
-        GlobalActionManager::instance()->copyToClipboard( tPage->query() );
+            break;
+        }
+        case TrackLink:
+        {
+            TrackInfoWidget* tPage = dynamic_cast< TrackInfoWidget* >( m_page );
+            Q_ASSERT( tPage );
+            GlobalActionManager::instance()->copyToClipboard( tPage->query() );
 
-        break;
-    }
+            break;
+        }
     }
 }
 
