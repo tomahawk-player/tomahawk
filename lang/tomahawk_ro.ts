@@ -1680,12 +1680,12 @@ Password (OTP)</translation>
 <context>
     <name>Servent</name>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="985"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="987"/>
         <source>Automatically detecting external IP failed: Could not parse JSON response.</source>
         <translation>Detectarea automată a IP-ului extern a eșuat: Nu s-a putut interpreta răspunsul JSON.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="998"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="1000"/>
         <source>Automatically detecting external IP failed: %1</source>
         <translation>Detectarea automată a IP-ului extern a eșuat: %1</translation>
     </message>
@@ -1693,12 +1693,12 @@ Password (OTP)</translation>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="235"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="243"/>
         <source>Collection</source>
         <translation>Colecție</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="238"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="246"/>
         <source>Advanced</source>
         <translation>Avansat</translation>
     </message>
@@ -1708,12 +1708,12 @@ Password (OTP)</translation>
         <translation>Toate</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="288"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="302"/>
         <source>Some changed settings will not take effect until Tomahawk is restarted</source>
         <translation>Unele setări modificate nu vor intra în efect decăt după ce Tomahawk este repornit</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="230"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="238"/>
         <source>Services</source>
         <translation>Servicii</translation>
     </message>
@@ -1723,47 +1723,52 @@ Password (OTP)</translation>
         <translation>Instalează din fișier</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="230"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="238"/>
         <source>Configure the accounts and services used by Tomahawk to search and retrieve music, find your friends and update your status.</source>
         <translation>Configurează conturile și serviciile folosite de Tomahawk pentru a căuta și obține muzică, pentru a îți găsi prietenii și pentru a îți actualiza statusul.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="235"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="243"/>
         <source>Manage how Tomahawk finds music on your computer.</source>
         <translation>Configurează cum poate găsi Tomahawk muzică pe computerul tău.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="238"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="246"/>
         <source>Configure Tomahawk&apos;s advanced settings, including network connectivity settings, browser interaction and more.</source>
         <translation>Configurează setările avansate Tomahawk, inclusiv setări de conectare la rețea, interacțiunea cu navigatorul si multe altele.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="474"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="418"/>
+        <source>Open Directory</source>
+        <translation>Deschide dosar</translation>
+    </message>
+    <message>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="512"/>
         <source>Install resolver from file</source>
         <translation>Instalează rezolvator din fișier</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="476"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="514"/>
         <source>Tomahawk Resolvers (*.axe *.js);;All files (*)</source>
         <translation>Rezolvatori Tomahawk (*.axe *.js);;Toate fișierele (*)</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="519"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="557"/>
         <source>Resolver installation from file %1 failed.</source>
         <translation>Instalarea rezolvatorului %1 din fișier a eșuat.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="538"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="576"/>
         <source>Delete all Access Control entries?</source>
         <translation>Șterge toate înregistrările de control de acces?</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="539"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="577"/>
         <source>Do you really want to delete all Access Control entries? You will be asked for a decision again for each peer that you connect to.</source>
         <translation>Chiar dorești să ștergi toate înregistrările de control de acces? Va trebui să decizi din nou pentru fiecare sistem la care te conectezi.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="288"/>
+        <location filename="../src/tomahawk/SettingsDialog.cpp" line="302"/>
         <source>Information</source>
         <translation>Informație</translation>
     </message>
@@ -1862,12 +1867,22 @@ Password (OTP)</translation>
 <context>
     <name>Settings_Collection</name>
     <message>
-        <location filename="../src/tomahawk/Settings_Collection.ui" line="31"/>
+        <location filename="../src/tomahawk/Settings_Collection.ui" line="29"/>
         <source>Path to scan for music files:</source>
         <translation>Calea de scanat pentru fișiere de muzică:</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/Settings_Collection.ui" line="45"/>
+        <location filename="../src/tomahawk/Settings_Collection.ui" line="55"/>
+        <source>+</source>
+        <translation>+</translation>
+    </message>
+    <message>
+        <location filename="../src/tomahawk/Settings_Collection.ui" line="62"/>
+        <source>-</source>
+        <translation>-</translation>
+    </message>
+    <message>
+        <location filename="../src/tomahawk/Settings_Collection.ui" line="88"/>
         <source>The Echo Nest supports keeping track of your catalog metadata
  and using it to craft personalized radios. Enabling this option
  will allow you (and all your friends) to create automatic playlists
@@ -1878,17 +1893,17 @@ Password (OTP)</translation>
  și stații bazate pe profilul tău de gust personal.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/Settings_Collection.ui" line="51"/>
+        <location filename="../src/tomahawk/Settings_Collection.ui" line="94"/>
         <source>Upload collection list to The Echo Nest to enable user radio</source>
         <translation>Încarcă lista de colecție la Echo Nest pentru a activa radio utilizator</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/Settings_Collection.ui" line="64"/>
+        <location filename="../src/tomahawk/Settings_Collection.ui" line="107"/>
         <source>Watch for changes</source>
         <translation>Verifică pentru modificări</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/Settings_Collection.ui" line="73"/>
+        <location filename="../src/tomahawk/Settings_Collection.ui" line="116"/>
         <source>Time between scans, in seconds:</source>
         <translation>Intervalul între scanări, în secunde:</translation>
     </message>
@@ -2077,68 +2092,68 @@ Password (OTP)</translation>
 <context>
     <name>SourceTreeView</name>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="230"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="229"/>
         <source>&amp;Copy Link</source>
         <translation>&amp;Copiază legătura</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="238"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="237"/>
         <source>&amp;Delete %1</source>
         <translation>Ș&amp;terge %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="242"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="241"/>
         <source>Add to my Playlists</source>
         <translation>Adaugă la listele mele de redare</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="244"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="243"/>
         <source>Add to my Automatic Playlists</source>
         <translation>Adaugă la listele mele de redare automate</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="246"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="245"/>
         <source>Add to my Stations</source>
         <translation>Adaugă la stațiile mele</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="234"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="233"/>
         <source>&amp;Export Playlist</source>
         <translation>&amp;Exportă lista de redare</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="388"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="387"/>
         <source>playlist</source>
         <translation>listă de redare</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="392"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="391"/>
         <source>automatic playlist</source>
         <translation>listă de redare automată</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="396"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="395"/>
         <source>station</source>
         <translation>stație</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="425"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="424"/>
         <source>Would you like to delete the %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
         <translation>Dorești să ștergi %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="427"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="426"/>
         <source>Delete</source>
         <translation>Șterge</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="533"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="532"/>
         <source>Save XSPF</source>
         <translation>Salvează XSPF</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="534"/>
+        <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="533"/>
         <source>Playlists (*.xspf)</source>
         <translation>Liste de redare (*.xspf)</translation>
     </message>
@@ -3957,156 +3972,157 @@ introdu aici PIN-ul afișat:</translation>
         <translation>Tomahawk</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="283"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="282"/>
         <source>Back</source>
         <translation>Înapoi</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="286"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="285"/>
         <source>Go back one page</source>
         <translation>Mergi înapoi o pagină</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="288"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="287"/>
         <source>Forward</source>
         <translation>Înainte</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="291"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="290"/>
         <source>Go forward one page</source>
         <translation>Mergi înainte o pagină</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="216"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1342"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="215"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1283"/>
         <source>Hide Menu Bar</source>
         <translation>Ascunde bara de meniu</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="216"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1336"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="215"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1277"/>
         <source>Show Menu Bar</source>
         <translation>Arată bara de meniu</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="303"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="302"/>
         <source>Search for any artist, album or song...</source>
         <translation>Caută orice artist, album sau piesă...</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="330"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="329"/>
         <source>&amp;Main Menu</source>
         <translation>&amp;Meniu principal</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="904"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="903"/>
         <source>Exit Full Screen</source>
         <translation>Ieșire din modul pe tot ecranul</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="916"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="915"/>
         <source>Enter Full Screen</source>
         <translation>Pe tot ecranul</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="978"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="977"/>
         <source>XSPF Error</source>
         <translation>Eroare XSPF</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="978"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="977"/>
         <source>This is not a valid XSPF playlist.</source>
         <translation>Aceasta nu este o listă de redare XSPF validă.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="982"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="981"/>
         <source>Failed to save tracks</source>
         <translation>Salvarea pieselor a eșuat</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="982"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="981"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
         <translation>Unele piese din lista de redare nu conțin un artist și un titlu. Vor fi ignorate.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="996"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="995"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped. Make sure you have a suitable Phonon backend and required plugins installed.</source>
         <translation>Ne pare rău, a apărut o problemă la accesarea dispozitivului audio sau a piesei dorite, piesa curentă va fi sărită. Asigură-te că ai o platformă Phonon potrivită și că modulele necesare sunt instalate.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="998"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="997"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped.</source>
         <translation>Ne pare rău, a apărut o problemă la accesarea dispozitivului audio sau a piesei dorite, piesa curentă va fi sărită.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1035"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1015"/>
         <source>Station</source>
         <translation>Stație</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1037"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1017"/>
         <source>Create New Station</source>
         <translation>Creează o nouă stație</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1037"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1017"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1052"/>
         <source>Name:</source>
         <translation>Nume:</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1100"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1050"/>
         <source>Playlist</source>
         <translation>Listă de redare</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1122"/>
-        <source>Automatic Playlist</source>
-        <translation>Listă de redare automată</translation>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1052"/>
+        <source>Create New Playlist</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1144"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1085"/>
         <source>Pause</source>
         <translation>Pauză</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1166"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1107"/>
         <source>&amp;Play</source>
         <translation>&amp;Redare</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1198"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1139"/>
         <source>%1 by %2</source>
         <comment>track, artist name</comment>
         <translation>%1 de %2</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1199"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1140"/>
         <source>%1 - %2</source>
         <comment>current track, some window title</comment>
         <translation>%1 - %2</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1210"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1151"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1214"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1155"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1218"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1159"/>
         <source>Copyright 2010 - 2013</source>
         <translation>Copyright 2010 - 2013</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1219"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1160"/>
         <source>Thanks to:</source>
         <translation>Mulțumiri:</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1226"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1167"/>
         <source>About Tomahawk</source>
         <translation>Despre Tomahawk</translation>
     </message>
