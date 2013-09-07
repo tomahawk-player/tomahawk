@@ -47,9 +47,9 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
     ui->statsLabel->setStyleSheet( "QLabel { background-image:url(); border: 2px solid #dddddd; background-color: #faf9f9; border-radius: 4px; padding: 12px; }" );
     ui->statsLabel->setVisible( false );
 
-    ui->lyricsView->setVisible( false ); // FIXME eventually
+/*    ui->lyricsView->setVisible( false ); // FIXME eventually
     TomahawkStyle::stylePageFrame( ui->lyricsView );
-    TomahawkStyle::styleScrollBar( ui->lyricsView->verticalScrollBar() );
+    TomahawkStyle::styleScrollBar( ui->lyricsView->verticalScrollBar() );*/
 
     ui->lineAbove->setStyleSheet( QString( "QFrame { border: 1px solid %1; }" ).arg( TomahawkStyle::HEADER_BACKGROUND.name() ) );
     ui->lineBelow->setStyleSheet( QString( "QFrame { border: 1px solid black; }" ) );
@@ -131,12 +131,12 @@ TrackInfoWidget::TrackInfoWidget( const Tomahawk::query_ptr& query, QWidget* par
         ui->statsLabel->setFont( f );
     }
 
-    {
+    /*{
         QPalette p = ui->lyricsView->palette();
         p.setColor( QPalette::Foreground, TomahawkStyle::PAGE_FOREGROUND );
         p.setColor( QPalette::Text, TomahawkStyle::PAGE_FOREGROUND );
         ui->lyricsView->setPalette( p );
-    }
+    }*/
 
     {
         m_scrollArea = new QScrollArea();
@@ -317,7 +317,7 @@ TrackInfoWidget::onSimilarTracksLoaded()
 void
 TrackInfoWidget::onLyricsLoaded()
 {
-    ui->lyricsView->setHtml( m_query->track()->lyrics().join( "<br/>" ) );
+//    ui->lyricsView->setHtml( m_query->track()->lyrics().join( "<br/>" ) );
 }
 
 
