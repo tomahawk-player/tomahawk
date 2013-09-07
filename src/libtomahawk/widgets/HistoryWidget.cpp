@@ -56,18 +56,25 @@ HistoryWidget::HistoryWidget( const source_ptr& source, QWidget* parent )
     m_calendarTo->setStyleSheet( calSheet );
 
     QPalette pal = m_header->palette();
-    pal.setColor( QPalette::Foreground, Qt::white );
-    pal.setColor( QPalette::Text, Qt::white );
+    pal.setColor( QPalette::Foreground, TomahawkStyle::HEADER_TEXT );
+    pal.setColor( QPalette::Text, TomahawkStyle::HEADER_TEXT );
+    pal.setColor( foregroundRole(), TomahawkStyle::HEADER_TEXT );
     pal.setBrush( backgroundRole(), TomahawkStyle::HEADER_BACKGROUND.lighter() );
     m_header->setPalette( pal );
     m_header->setAutoFillBackground( true );
 
+    QLabel* fromLabel = new QLabel( tr( "From:" ) );
+    fromLabel->setPalette( m_header->palette() );
+    QLabel* toLabel = new QLabel( tr( "To:" ) );
+    toLabel->setPalette( m_header->palette() );
     QHBoxLayout* layout = new QHBoxLayout( m_header );
+    layout->setContentsMargins( 4, 4, 4, 4 );
+    layout->setSpacing( 4 );
     layout->addSpacerItem( new QSpacerItem( 1, 0, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum ) );
-    layout->addWidget( new QLabel( tr( "From:" ) ) );
+    layout->addWidget( fromLabel );
     layout->addWidget( m_calendarFrom );
     layout->addSpacerItem( new QSpacerItem( 16, 0, QSizePolicy::Fixed, QSizePolicy::Minimum ) );
-    layout->addWidget( new QLabel( tr( "To:" ) ) );
+    layout->addWidget( toLabel );
     layout->addWidget( m_calendarTo );
     layout->addSpacerItem( new QSpacerItem( 1, 0, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum ) );
     m_header->setLayout( layout );
