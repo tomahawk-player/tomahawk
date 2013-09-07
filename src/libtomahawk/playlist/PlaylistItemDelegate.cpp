@@ -338,7 +338,7 @@ PlaylistItemDelegate::drawLoveBox( QPainter* painter, const QRect& rect, Playabl
     const int width = 2 + rect.height() - 4 * 2;
 
     QList< QPixmap > pixmaps;
-    foreach ( const Tomahawk::source_ptr& source, item->query()->track()->sourcesWithSocialAction( "Love", true ) )
+    foreach ( const Tomahawk::source_ptr& source, item->query()->queryTrack()->sourcesWithSocialAction( "Love", true ) )
         pixmaps << source->avatar( TomahawkUtils::Original, QSize( height, height ) );
     const int max = 5;
     const unsigned int count = qMin( pixmaps.count(), max );
