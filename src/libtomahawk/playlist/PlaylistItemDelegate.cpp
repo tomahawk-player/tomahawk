@@ -373,7 +373,7 @@ PlaylistItemDelegate::drawLoveBox( QPainter* painter, const QRect& rect, Playabl
         i++;
     }
 
-    TomahawkUtils::ImageType type = item->query()->track()->loved() ? TomahawkUtils::Loved : TomahawkUtils::NotLoved;
+    TomahawkUtils::ImageType type = item->query()->queryTrack()->loved() ? TomahawkUtils::Loved : TomahawkUtils::NotLoved;
     QRect r = innerRect.adjusted( innerRect.width() - rect.height() + 4, 4, -4, -4 );
     painter->drawPixmap( r, TomahawkUtils::defaultPixmap( type, TomahawkUtils::Original, QSize( r.height(), r.height() ) ) );
     m_loveButtonRects[ index ] = r;
@@ -462,7 +462,7 @@ PlaylistItemDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, con
 
         if ( hoveringLove )
         {
-            item->query()->track()->setLoved( !item->query()->track()->loved() );
+            item->query()->queryTrack()->setLoved( !item->query()->queryTrack()->loved() );
         }
         else if ( hoveringInfo )
         {
