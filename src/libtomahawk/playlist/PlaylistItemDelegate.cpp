@@ -336,7 +336,10 @@ PlaylistItemDelegate::drawLoveBox( QPainter* painter, const QRect& rect, Playabl
 {
     const int height = rect.height() - 4 * 2;
     const int width = 2 + rect.height() - 4 * 2;
-    QList< QPixmap > pixmaps = item->query()->queryTrack()->socialActionPixmaps( "Love", height );
+
+    QList< QPixmap > pixmaps;
+    foreach ( const Tomahawk::source_ptr& source, item->query()->track()->sourcesWithSocialAction( "Love", true ) )
+        pixmaps << source->avatar( TomahawkUtils::Original, QSize( height, height ) );
     const int max = 5;
     const unsigned int count = qMin( pixmaps.count(), max );
 
@@ -345,7 +348,7 @@ PlaylistItemDelegate::drawLoveBox( QPainter* painter, const QRect& rect, Playabl
     painter->setRenderHint( QPainter::Antialiasing, true );
     painter->setBrush( Qt::transparent );
     QPen pen = painter->pen().color();
-    pen.setWidthF( 0.4 );
+    pen.setWidthF( 0.2 );
     painter->setPen( pen );
 
     QRect innerRect = rect.adjusted( rect.width() - width * ( count + 1 ) - 4 * 4, 0, 0, 0 );
@@ -370,7 +373,7 @@ PlaylistItemDelegate::drawLoveBox( QPainter* painter, const QRect& rect, Playabl
         i++;
     }
 
-    TomahawkUtils::ImageType type = item->query()->queryTrack()->loved() ? TomahawkUtils::Loved : TomahawkUtils::NotLoved;
+    TomahawkUtils::ImageType type = item->query()->track()->loved() ? TomahawkUtils::Loved : TomahawkUtils::NotLoved;
     QRect r = innerRect.adjusted( innerRect.width() - rect.height() + 4, 4, -4, -4 );
     painter->drawPixmap( r, TomahawkUtils::defaultPixmap( type, TomahawkUtils::Original, QSize( r.height(), r.height() ) ) );
     m_loveButtonRects[ index ] = r;
