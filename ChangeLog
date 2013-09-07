@@ -5,26 +5,25 @@ Version 0.8.0:
     * You will now be asked whether you want to trust invalid SSL certificates.
     * Improved connecting between Tomahawk peers and support having multiple IPs
       (including IPv6).
-    * Added Network Activity showing you the most played tracks of your friends, trending songs and playlists
-    * Removed Top Loved from sidebar 
+    * Added Network Activity showing you the most played tracks of your friends,
+      trending songs and playlists.
+    * Removed Top Loved from sidebar.
     * JavaScript-Resolver can now handle URLs (e.g. when dropped from a browser)
       and resolve them to Playlists/Tracks/Artists/Albums.
-    * HTTP(S) streaming is now done by Tomahawk instead of the phonon backend
-      (fixed HTTPS streaming on MacOS)
+    * HTTP(S) streaming is now done by Tomahawk instead of the Phonon backend
+      (fixed HTTPS streaming on MacOS).
     * Heavily reduced memory footprint during and after indexing the database.
-    * New Loved widget shows what friends have loved tracks throughout the app
-    * New Artist, Album and Track page design - new fonts, colors, layout
-    * Retina display and DPI scaling fixes
-    * New Dashboard layout
-    * New Stats widget
-    * New Collection views
-    * Added Telepathy support
-    * Plugin refactoring (and .AXE resolver binaries)
-    * Removed Twitter due to change in Twitter's API
-    * Improve error messages in Jobview
-    * Support drag & drop of artist and album from Artist and Album page headers
-
-
+    * New Loved widget shows what friends have loved tracks throughout the app.
+    * New Artist, Album and Track page design - new fonts, colors, layout.
+    * Retina display and DPI scaling fixes.
+    * New Dashboard layout.
+    * New Stats widget.
+    * New Collection views.
+    * Added Telepathy support.
+    * Plugin refactoring (and .AXE resolver binaries).
+    * Removed Twitter due to change in Twitter's API.
+    * Improved error messages.
+    * Support drag & drop of items from Artist and Album page headers.
 
 Version 0.7.0:
     * JavaScript Resolvers can now expose collections.
