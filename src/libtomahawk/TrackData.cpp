@@ -342,6 +342,9 @@ TrackData::loved()
 void
 TrackData::setLoved( bool loved )
 {
+    m_currentSocialActions[ "Love" ] = loved;
+    emit socialActionsLoaded();
+
     DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction( m_ownRef.toStrongRef(), QString( "Love" ), loved ? QString( "true" ) : QString( "false" ) );
     Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
