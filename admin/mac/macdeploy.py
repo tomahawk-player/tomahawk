@@ -214,6 +214,8 @@ TOMAHAWK_PLUGINS = [
   'libtomahawk_infoplugin_newreleases.so',
   'libtomahawk_infoplugin_rovi.so',
   'libtomahawk_infoplugin_spotify.so',
+  'libtomahawk_viewpage_dashboard.so',
+  'libtomahawk_viewpage_networkactivity.so',
 ]
 
 QT_PLUGINS_SEARCH_PATH=[
