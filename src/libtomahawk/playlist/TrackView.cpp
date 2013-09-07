@@ -799,12 +799,16 @@ TrackView::deleteSelectedItems()
 void
 TrackView::verifySize()
 {
-    if ( !autoResize() || !m_proxyModel )
+    if ( !autoResize() || !m_proxyModel || !m_proxyModel->rowCount() )
         return;
 
-    if ( m_proxyModel->rowCount() > 0 )
-        setFixedHeight( m_proxyModel->rowCount() * m_delegate->sizeHint( QStyleOptionViewItem(), m_proxyModel->index( 0, 0 ) ).height() +
-                        contentsMargins().top() + contentsMargins().bottom() );
+    unsigned int height = 0;
+    for ( int i = 0; i < m_proxyModel->rowCount(); i++ )
+    {
+        height += indexRowSizeHint( m_proxyModel->index( i, 0 ) );
+    }
+
+    setFixedHeight( height + contentsMargins().top() + contentsMargins().bottom() );
 }
 
 
