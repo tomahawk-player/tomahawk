@@ -40,6 +40,10 @@ DatabaseCommand_SocialAction::postCommitHook()
         Servent::instance()->triggerDBSync();
     }
 
+    trackdata_ptr trackData = TrackData::get( 0, m_artist, m_title );
+    if ( trackData )
+        trackData->loadSocialActions( true );
+
     source()->reportSocialAttributesChanged( this );
 }
 
