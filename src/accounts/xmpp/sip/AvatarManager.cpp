@@ -135,6 +135,7 @@ AvatarManager::onNewIq( const Jreen::IQ& iq )
             m_cachedAvatars.append( avatarHash );
             m_JidsAvatarHashes.insert( avatarHash, iq.from().bare() );
 
+            // 00:14:48 [0]: ASSERT: "!this->avatar( iq.from().bare() ).isNull()" in file /home/muesli/Sources/tomahawk/master/src/accounts/xmpp/sip/AvatarManager.cpp, line 138
             Q_ASSERT( !this->avatar( iq.from().bare() ).isNull() );
             emit newAvatar( iq.from().bare() );
         }
