@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2013, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2010-2012, Leo Franchi   <lfranchi@kde.org>
  *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
@@ -586,6 +586,17 @@ ViewManager::destroyPage( ViewPage* page )
 }
 
 
+bool
+ViewManager::destroyCurrentPage()
+{
+    if ( !currentPage() || !currentPage()->isTemporaryPage() )
+        return false;
+
+    destroyPage( currentPage() );
+    return true;
+}
+
+
 void
 ViewManager::setPage( ViewPage* page, bool trackHistory )
 {
@@ -649,7 +660,7 @@ ViewManager::setPage( ViewPage* page, bool trackHistory )
     m_stack->setCurrentWidget( page->widget() );
 
     //This should save the CPU cycles, especially with pages like the visualizer
-    if(previousPage && previousPage != page->widget())
+    if ( previousPage && previousPage != page->widget() )
         previousPage->hide();
 
     updateView();
