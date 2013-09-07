@@ -42,7 +42,7 @@ TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
     , m_loveTrackAction( 0 )
 {
 #ifdef Q_WS_MAC
-    QIcon icon( RESPATH "icons/tomahawk-icon-128x128-grayscale.png" );
+    QIcon icon( RESPATH "icons/tomahawk-grayscale-icon-128x128.png" );
 #else
     QIcon icon( RESPATH "icons/tomahawk-icon-128x128.png" );
 #endif

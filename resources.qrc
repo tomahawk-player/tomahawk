@@ -127,7 +127,7 @@
         <file>data/images/spotifycore-logo.png</file>
         <file>data/images/share.svg</file>
         <file>data/images/process-stop.svg</file>
-        <file>data/icons/tomahawk-icon-128x128-grayscale.png</file>
+        <file>data/icons/tomahawk-grayscale-icon-128x128.png</file>
         <file>data/images/collection.svg</file>
         <file>data/misc/tomahawk_pubkey.pem</file>
         <file>data/images/jump-link.svg</file>
