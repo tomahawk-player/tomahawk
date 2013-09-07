@@ -51,7 +51,7 @@ HistoryWidget::HistoryWidget( const source_ptr& source, QWidget* parent )
     m_calendarTo->setDisplayFormat( "yyyy MMMM dd" );
 
     // setting an empty style-sheet prevents the QDateEdits from adopting their parent's QPalette
-    QString calSheet = QString( "QDateEdit { }" );
+    QString calSheet = QString( "QDateEdit {}" );
     m_calendarFrom->setStyleSheet( calSheet );
     m_calendarTo->setStyleSheet( calSheet );
 

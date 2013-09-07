@@ -398,6 +398,7 @@ void
 SourceItem::playlistDeletedInternal( SourceTreeItem* parent, const T& p )
 {
     Q_ASSERT( parent ); // How can we delete playlists if we have none?
+
     int curCount = parent->children().count();
     for( int i = 0; i < curCount; i++ )
     {

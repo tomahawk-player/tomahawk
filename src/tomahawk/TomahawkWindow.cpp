@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2013, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2012,      Teo Mrnjavac <teo@kde.org>
@@ -214,6 +214,8 @@ TomahawkWindow::loadSettings()
     m_compactMenuAction->setVisible( !mbVisible );
     ActionCollection::instance()->getAction( "toggleMenuBar" )->setText( mbVisible ? tr( "Hide Menu Bar" ) : tr( "Show Menu Bar" ) );
 #endif
+
+    ActionCollection::instance()->getAction( "showOfflineSources" )->setChecked( TomahawkSettings::instance()->showOfflineSources() );
 }
 
 
@@ -254,6 +256,7 @@ TomahawkWindow::applyPlatformTweaks()
     ui->hline2->setStyleSheet( "border: 1px solid gray;" );
 #endif
 }
+
 
 void
 TomahawkWindow::setupToolBar()
@@ -302,9 +305,10 @@ TomahawkWindow::setupToolBar()
     m_searchWidget->setPlaceholderText( tr( "Search for any artist, album or song..." ) );
     m_searchWidget->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred );
     m_searchWidget->setFixedWidth( scaledX( 340 ) );
-    connect( m_searchWidget, SIGNAL( returnPressed() ), this, SLOT( onFilterEdited() ) );
+    connect( m_searchWidget, SIGNAL( returnPressed() ), SLOT( onFilterEdited() ) );
+
     // Use Ctrl+F to focus the searchWidget
-    QShortcut *shortcut = new QShortcut( QKeySequence( QKeySequence::Find ), this );
+    QShortcut* shortcut = new QShortcut( QKeySequence( QKeySequence::Find ), this );
     QObject::connect( shortcut, SIGNAL( activated() ), m_searchWidget, SLOT( setFocus() ) );
 
     m_toolbar->addWidget( m_searchWidget )->setProperty( "kind", QString( "search" ) );
@@ -320,8 +324,7 @@ TomahawkWindow::setupToolBar()
 
     m_accountsButton = new AccountsToolButton( m_toolbar );
     m_toolbar->addWidget( m_accountsButton );
-    connect( m_accountsButton, SIGNAL( widthChanged() ),
-             this, SLOT( balanceToolbar() ) );
+    connect( m_accountsButton, SIGNAL( widthChanged() ), SLOT( balanceToolbar() ) );
 
 #ifndef Q_OS_MAC
     ContainedMenuButton* compactMenuButton = new ContainedMenuButton( m_toolbar );
@@ -338,6 +341,7 @@ TomahawkWindow::setupToolBar()
     addAction( ActionCollection::instance()->getAction( "toggleMenuBar" ) );
     addAction( ActionCollection::instance()->getAction( "quit" ) );
 #endif
+
     balanceToolbar();
 }
 
@@ -350,9 +354,10 @@ TomahawkWindow::balanceToolbar()
     bool flip = false;
     foreach ( QAction* action, m_toolbar->actions() )
     {
-        if ( action->property( "kind" ) == QString( "spacer" ) ||
-            !action->isVisible() )
+        if ( action->property( "kind" ) == QString( "spacer" ) || !action->isVisible() )
+        {
             continue;
+        }
         else if ( action->property( "kind" ) == QString( "search" ) )
         {
             flip = true;
@@ -432,9 +437,6 @@ TomahawkWindow::setupSideBar()
     ui->splitter->addWidget( ViewManager::instance()->widget() );
     ui->splitter->setCollapsible( 0, false );
     ui->splitter->setCollapsible( 1, false );
-
-    ActionCollection::instance()->getAction( "showOfflineSources" )
-            ->setChecked( TomahawkSettings::instance()->showOfflineSources() );
 }
 
 
@@ -524,10 +526,10 @@ TomahawkWindow::setupWindowsButtons()
 
 
 HICON
-TomahawkWindow::thumbIcon(TomahawkUtils::ImageType type)
+TomahawkWindow::thumbIcon( TomahawkUtils::ImageType type )
 {
     static QMap<TomahawkUtils::ImageType,HICON> thumbIcons;
-    if (!thumbIcons.contains( type ) )
+    if ( !thumbIcons.contains( type ) )
     {
         QPixmap pix ( TomahawkUtils::defaultPixmap(type , TomahawkUtils::Original, QSize( 20, 20 ) ) );
         thumbIcons[type] = pix.toWinHICON();

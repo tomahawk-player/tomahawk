@@ -63,6 +63,7 @@ private slots:
     void parsedDroppedTracks( const QList<Tomahawk::query_ptr>& tracks );
 
     void onUpdated();
+
 private:
     bool createOverlay();
 
