@@ -287,11 +287,21 @@ TomahawkWindow::setupToolBar()
                                          ViewManager::instance(),
                                          SLOT( historyBack() ) );
     m_backAction->setToolTip( tr( "Go back one page" ) );
+#ifdef Q_OS_MAC
+    m_backAction->setShortcut( QKeySequence( "Ctrl+Left" ) );
+#else
+    m_backAction->setShortcut( QKeySequence( "Alt+Left" ) );
+#endif
     m_forwardAction = m_toolbar->addAction( ImageRegistry::instance()->pixmap( RESPATH "images/forward.svg", m_toolbar->iconSize() ),
                                             tr( "Forward" ),
                                             ViewManager::instance(),
                                             SLOT( historyForward() ) );
     m_forwardAction->setToolTip( tr( "Go forward one page" ) );
+#ifdef Q_OS_MAC
+    m_forwardAction->setShortcut( QKeySequence( "Ctrl+Right" ) );
+#else
+    m_forwardAction->setShortcut( QKeySequence( "Alt+Right" ) );
+#endif
 
     m_toolbarLeftBalancer = new QWidget( this );
     m_toolbarLeftBalancer->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred );
@@ -456,6 +466,16 @@ TomahawkWindow::setupShortcuts()
         // Use Ctrl+W to close current page
         QShortcut* shortcut = new QShortcut( QKeySequence( QKeySequence::Close ), this );
         QObject::connect( shortcut, SIGNAL( activated() ), ViewManager::instance(), SLOT( destroyCurrentPage() ) );
+    }
+    {
+        // Ctrl Up for raising the volume
+        QShortcut* shortcut = new QShortcut( QKeySequence( QKeySequence( "Ctrl+Up" ) ), this );
+        QObject::connect( shortcut, SIGNAL( activated() ), AudioEngine::instance(), SLOT( raiseVolume() ) );
+    }
+    {
+        // Ctrl Down for lowering the volume
+        QShortcut* shortcut = new QShortcut( QKeySequence( QKeySequence( "Ctrl+Down" ) ), this );
+        QObject::connect( shortcut, SIGNAL( activated() ), AudioEngine::instance(), SLOT( lowerVolume() ) );
     }
 }
 
