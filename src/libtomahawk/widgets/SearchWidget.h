@@ -55,6 +55,7 @@ public:
     virtual QPixmap pixmap() const;
 
     virtual bool showInfoBar() const { return true; }
+    virtual bool isBeingPlayed() const;
     virtual bool isTemporaryPage() const { return true; }
     virtual bool jumpToCurrentTrack();
 

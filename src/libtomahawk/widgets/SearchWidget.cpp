@@ -22,6 +22,7 @@
 
 #include "SourceList.h"
 #include "ViewManager.h"
+#include "audio/AudioEngine.h"
 #include "playlist/PlayableModel.h"
 #include "playlist/PlaylistModel.h"
 #include "utils/AnimatedSpinner.h"
@@ -310,4 +311,26 @@ QPixmap
 SearchWidget::pixmap() const
 {
     return TomahawkUtils::defaultPixmap( TomahawkUtils::Search );
+}
+
+
+bool
+SearchWidget::isBeingPlayed() const
+{
+    if ( ui->resultsView->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+        return true;
+    if ( ui->resultsView->playlistInterface()->hasChildInterface( AudioEngine::instance()->currentTrackPlaylist() ) )
+        return true;
+
+    if ( ui->albumView->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+        return true;
+    if ( ui->albumView->playlistInterface()->hasChildInterface( AudioEngine::instance()->currentTrackPlaylist() ) )
+        return true;
+
+    if ( ui->artistView->playlistInterface() == AudioEngine::instance()->currentTrackPlaylist() )
+        return true;
+    if ( ui->artistView->playlistInterface()->hasChildInterface( AudioEngine::instance()->currentTrackPlaylist() ) )
+        return true;
+
+    return false;
 }
