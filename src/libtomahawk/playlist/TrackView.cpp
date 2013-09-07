@@ -803,7 +803,8 @@ TrackView::verifySize()
         return;
 
     if ( m_proxyModel->rowCount() > 0 )
-        setFixedHeight( m_proxyModel->rowCount() * m_delegate->sizeHint( QStyleOptionViewItem(), m_proxyModel->index( 0, 0 ) ).height() + frameWidth() * 2 );
+        setFixedHeight( m_proxyModel->rowCount() * m_delegate->sizeHint( QStyleOptionViewItem(), m_proxyModel->index( 0, 0 ) ).height() +
+                        contentsMargins().top() + contentsMargins().bottom() );
 }
 
 
