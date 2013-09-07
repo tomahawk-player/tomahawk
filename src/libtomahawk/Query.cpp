@@ -352,10 +352,16 @@ Query::resultSorter( const result_ptr& left, const result_ptr& right )
 
     if ( ls == rs )
     {
-        if ( !left->collection().isNull() && left->collection()->source()->isLocal() )
+/*        if ( left->collection() && left->collection()->source()->isLocal() )
+        {
             return true;
-        else
+        }*/
+        if ( right->collection() && right->collection()->source()->isLocal() )
+        {
             return false;
+        }
+
+        return true;
     }
 
     return ls > rs;
