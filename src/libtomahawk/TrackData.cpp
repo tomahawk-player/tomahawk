@@ -244,15 +244,15 @@ TrackData::updateAttributes()
 
 
 void
-TrackData::loadSocialActions()
+TrackData::loadSocialActions( bool force )
 {
-    if ( m_socialActionsLoaded )
+    if ( !force && m_socialActionsLoaded )
         return;
 
     m_socialActionsLoaded = true;
 
     DatabaseCommand_LoadSocialActions* cmd = new DatabaseCommand_LoadSocialActions( m_ownRef.toStrongRef() );
-    Database::instance()->enqueue( Tomahawk::dbcmd_ptr(cmd) );
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
 
 
@@ -274,6 +274,32 @@ TrackData::allSocialActions() const
 {
     QMutexLocker locker( &s_memberMutex );
     return m_allSocialActions;
+}
+
+
+QList< Tomahawk::source_ptr >
+TrackData::sourcesWithSocialAction( const QString& action, const QVariant& value )
+{
+    QMutexLocker locker( &s_memberMutex );
+
+    QList< Tomahawk::source_ptr > sources;
+    foreach ( const Tomahawk::SocialAction& sa, m_allSocialActions )
+    {
+        if ( sa.action == action )
+        {
+            if ( !value.isNull() && sa.value != value )
+            {
+                sources.removeAll( sa.source );
+                continue;
+            }
+            if ( sources.contains( sa.source ) )
+                continue;
+
+            sources << sa.source;
+       }
+    }
+
+    return sources;
 }
 
 
@@ -316,12 +342,8 @@ TrackData::loved()
 void
 TrackData::setLoved( bool loved )
 {
-    m_currentSocialActions[ "Love" ] = loved;
-
     DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction( m_ownRef.toStrongRef(), QString( "Love" ), loved ? QString( "true" ) : QString( "false" ) );
-    Database::instance()->enqueue( Tomahawk::dbcmd_ptr(cmd) );
-
-    emit socialActionsLoaded();
+    Database::instance()->enqueue( Tomahawk::dbcmd_ptr( cmd ) );
 }
 
 

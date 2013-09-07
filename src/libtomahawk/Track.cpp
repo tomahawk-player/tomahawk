@@ -445,10 +445,11 @@ Track::loadAttributes()
 
 
 void
-Track::loadSocialActions()
+Track::loadSocialActions( bool force )
 {
     Q_D( Track );
-    d->trackData->loadSocialActions();
+
+    d->trackData->loadSocialActions( force );
 }
 
 
@@ -569,26 +570,11 @@ Track::socialActionDescription( const QString& action, DescriptionMode mode ) co
 }
 
 
-QList< QPixmap >
-Track::socialActionPixmaps( const QString& action, unsigned int height ) const
+QList< Tomahawk::source_ptr >
+Track::sourcesWithSocialAction( const QString& action, const QVariant& value )
 {
-    QList< QPixmap > pixmaps;
-    QList< Tomahawk::SocialAction > socialActions = allSocialActions();
-    QStringList actionSources;
-
-    foreach ( const Tomahawk::SocialAction& sa, socialActions )
-    {
-        if ( sa.action == action )
-        {
-            if ( actionSources.contains( sa.source->friendlyName() ) )
-                continue;
-
-            actionSources << sa.source->friendlyName();
-            pixmaps << sa.source->avatar( TomahawkUtils::Original, QSize( height, height ) );
-       }
-    }
-
-    return pixmaps;
+    Q_D( Track );
+    return d->trackData->sourcesWithSocialAction( action, value );
 }
 
 

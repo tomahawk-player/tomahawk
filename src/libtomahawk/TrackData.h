@@ -78,8 +78,9 @@ public:
     QVariantMap attributes() const { return m_attributes; }
     void setAttributes( const QVariantMap& map ) { m_attributes = map; updateAttributes(); }
 
-    void loadSocialActions();
+    void loadSocialActions( bool force = false );
     QList< Tomahawk::SocialAction > allSocialActions() const;
+    QList< Tomahawk::source_ptr > sourcesWithSocialAction( const QString& action, const QVariant& value = QVariant() );
     void setAllSocialActions( const QList< Tomahawk::SocialAction >& socialActions );
 
     void loadStats();

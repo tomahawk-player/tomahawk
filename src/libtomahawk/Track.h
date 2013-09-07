@@ -107,10 +107,10 @@ public:
     unsigned int chartPosition() const;
     unsigned int chartCount() const;
 
-    void loadSocialActions();
+    void loadSocialActions( bool force = false );
     QList< Tomahawk::SocialAction > allSocialActions() const;
+    QList< Tomahawk::source_ptr > sourcesWithSocialAction( const QString& action, const QVariant& value = QVariant() );
     QString socialActionDescription( const QString& action, DescriptionMode mode ) const;
-    QList< QPixmap > socialActionPixmaps( const QString& action, unsigned int height ) const;
 
     QList<Tomahawk::query_ptr> similarTracks() const;
     QStringList lyrics() const;
