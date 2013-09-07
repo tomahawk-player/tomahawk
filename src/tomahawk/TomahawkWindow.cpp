@@ -135,11 +135,12 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     setupMenuBar();
     setupToolBar();
     setupSideBar();
-    statusBar()->addPermanentWidget( m_audioControls, 1 );
+    setupStatusBar();
 
     setupUpdateCheck();
     loadSettings();
     setupSignals();
+    setupShortcuts();
 
     if ( qApp->arguments().contains( "--debug" ) )
     {
@@ -307,10 +308,6 @@ TomahawkWindow::setupToolBar()
     m_searchWidget->setFixedWidth( scaledX( 340 ) );
     connect( m_searchWidget, SIGNAL( returnPressed() ), SLOT( onFilterEdited() ) );
 
-    // Use Ctrl+F to focus the searchWidget
-    QShortcut* shortcut = new QShortcut( QKeySequence( QKeySequence::Find ), this );
-    QObject::connect( shortcut, SIGNAL( activated() ), m_searchWidget, SLOT( setFocus() ) );
-
     m_toolbar->addWidget( m_searchWidget )->setProperty( "kind", QString( "search" ) );
 
     QWidget* rightSpacer = new QWidget( this );
@@ -437,6 +434,29 @@ TomahawkWindow::setupSideBar()
     ui->splitter->addWidget( ViewManager::instance()->widget() );
     ui->splitter->setCollapsible( 0, false );
     ui->splitter->setCollapsible( 1, false );
+}
+
+
+void
+TomahawkWindow::setupStatusBar()
+{
+    statusBar()->addPermanentWidget( m_audioControls, 1 );
+}
+
+
+void
+TomahawkWindow::setupShortcuts()
+{
+    {
+        // Use Ctrl+F to focus the searchWidget
+        QShortcut* shortcut = new QShortcut( QKeySequence( QKeySequence::Find ), this );
+        QObject::connect( shortcut, SIGNAL( activated() ), m_searchWidget, SLOT( setFocus() ) );
+    }
+    {
+        // Use Ctrl+W to close current page
+        QShortcut* shortcut = new QShortcut( QKeySequence( QKeySequence::Close ), this );
+        QObject::connect( shortcut, SIGNAL( activated() ), ViewManager::instance(), SLOT( destroyCurrentPage() ) );
+    }
 }
 
 

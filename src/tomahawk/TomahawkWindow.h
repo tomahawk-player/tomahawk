@@ -154,6 +154,8 @@ private:
     void setupMenuBar();
     void setupToolBar();
     void setupSideBar();
+    void setupStatusBar();
+    void setupShortcuts();
     void setupUpdateCheck();
 
 #ifdef Q_OS_WIN
