@@ -307,11 +307,10 @@ SourcesModel::appendGroups()
     inbox->setSortValue( 3 );
 
     // super collection
-    GenericPageItem* sc = new GenericPageItem( this, m_browse, tr( "SuperCollection" ), ImageRegistry::instance()->icon( RESPATH "images/supercollection.svg" ),
+/*    GenericPageItem* sc = new GenericPageItem( this, m_browse, tr( "SuperCollection" ), ImageRegistry::instance()->icon( RESPATH "images/supercollection.svg" ),
                                                   boost::bind( &ViewManager::showSuperCollection, ViewManager::instance() ),
                                                   boost::bind( &ViewManager::superCollectionView, ViewManager::instance() ) );
-    sc->setSortValue( 4 );
-
+    sc->setSortValue( 4 );*/
 
     GenericPageItem* hot = new GenericPageItem( this, m_browse, tr( "Charts" ), ImageRegistry::instance()->icon( RESPATH "images/charts.svg" ),
                                                 boost::bind( &ViewManager::showWhatsHotPage, ViewManager::instance() ),
@@ -323,12 +322,10 @@ SourcesModel::appendGroups()
                                                 boost::bind( &ViewManager::newReleasesWidget, ViewManager::instance() ) );
     newReleases->setSortValue( 6 );
 
-
     GenericPageItem* recent = new GenericPageItem( this, m_browse, tr( "Recently Played" ), ImageRegistry::instance()->icon( RESPATH "images/recently-played.svg" ),
                                                 boost::bind( &ViewManager::showRecentPlaysPage, ViewManager::instance() ),
                                                 boost::bind( &ViewManager::recentPlaysWidget, ViewManager::instance() ) );
     recent->setSortValue( 7 );
-
 
     m_collectionsGroup = new GroupItem( this, m_rootItem, tr( "Friends" ), 4 );
     m_cloudGroup = new GroupItem( this, m_rootItem, tr( "Cloud" ), 5 );
