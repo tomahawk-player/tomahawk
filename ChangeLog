@@ -5,7 +5,7 @@ Version 0.8.0:
     * You will now be asked whether you want to trust invalid SSL certificates.
     * Improved connecting between Tomahawk peers and support having multiple IPs
       (including IPv6).
-    * Added Network Activity showing you the most played tracks of your friends,
+    * Added Trending page, showing you the most played tracks of your friends recently,
       trending songs and playlists.
     * Removed Top Loved from sidebar.
     * JavaScript-Resolver can now handle URLs (e.g. when dropped from a browser)

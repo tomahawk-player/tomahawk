@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="51px" height="48px" viewBox="0 0 51 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <title>trending</title>
+    <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
+    <defs>
+        <filter x="-20%" y="-20%" width="140%" height="140%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetInner1"></feOffset>
+            <feGaussianBlur stdDeviation="1.5" in="shadowOffsetInner1" result="shadowBlurInner1"></feGaussianBlur>
+            <feComposite in="shadowBlurInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.7 0" in="shadowInnerInner1" type="matrix" result="shadowMatrixInner1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+                <feMergeNode in="shadowMatrixInner1"></feMergeNode>
+            </feMerge>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="basic2-089_heart_beat" sketch:type="MSLayerGroup" filter="url(#filter-1)" fill="#C33A35">
+            <path d="M27.935,47.562 C26.966,47.562 26.126,46.89 25.915,45.941 L18.221,11.314 L13.601,29.363 C13.367,30.279 12.542,30.92 11.596,30.92 L2.925,30.92 C1.78,30.92 0.855,29.994 0.855,28.85 C0.855,27.707 1.781,26.782 2.925,26.782 L9.989,26.782 L16.358,1.901 C16.594,0.973 17.434,0.3 18.395,0.344 C19.353,0.36 20.174,1.031 20.383,1.965 L27.826,35.462 L31.625,16.425 C31.799,15.553 32.514,14.889 33.396,14.778 C34.283,14.663 35.133,15.13 35.52,15.932 L40.082,25.405 L48.037,25.405 C49.181,25.405 50.107,26.333 50.107,27.475 C50.107,28.62 49.18,29.545 48.037,29.545 L38.781,29.545 C37.986,29.545 37.261,29.09 36.917,28.373 L34.476,23.3 L29.966,45.895 C29.775,46.856 28.938,47.549 27.958,47.561 C27.951,47.562 27.943,47.562 27.935,47.562 L27.935,47.562 L27.935,47.562 L27.935,47.562 L27.935,47.562 Z M27.935,47.562" id="Shape" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>

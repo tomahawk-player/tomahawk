@@ -56,7 +56,7 @@ public:
     virtual const QString defaultName() { return QLatin1String( "networkactivity" ); }
     virtual QString title() const { return tr( "Trending" ); }
     virtual QString description() const { return tr( "Listening activity among your friends" ); }
-    virtual const QString pixmapPath() const { return ( RESPATH "images/network-activity.svg" ); }
+    virtual const QString pixmapPath() const { return ( RESPATH "images/trending.svg" ); }
     virtual bool showInfoBar() const { return true; }
     
     virtual int sortValue() { return 2; }

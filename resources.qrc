@@ -161,5 +161,6 @@
         <file>data/js/cryptojs-sha256.js</file>
         <file>data/sql/dbmigrate-29_to_30.sql</file>
         <file>data/sql/dbmigrate-30_to_31.sql</file>
+        <file>data/images/trending.svg</file>
     </qresource>
 </RCC>
