@@ -3797,8 +3797,8 @@ Try tweaking the filters for a new set of songs to play.</translation>
     <name>Tomahawk::Widgets::NetworkActivity</name>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivity.h" line="57"/>
-        <source>Network Activity</source>
-        <translation>Network Activity</translation>
+        <source>Trending</source>
+        <translation>Trending</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivity.h" line="58"/>
