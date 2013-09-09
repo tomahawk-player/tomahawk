@@ -278,7 +278,7 @@ TrackData::allSocialActions() const
 
 
 QList< Tomahawk::source_ptr >
-TrackData::sourcesWithSocialAction( const QString& action, const QVariant& value )
+TrackData::sourcesWithSocialAction( const QString& action, const QVariant& value, bool filterDupeNames )
 {
     QMutexLocker locker( &s_memberMutex );
 
@@ -292,9 +292,24 @@ TrackData::sourcesWithSocialAction( const QString& action, const QVariant& value
                 sources.removeAll( sa.source );
                 continue;
             }
-            if ( sources.contains( sa.source ) )
-                continue;
 
+            bool dupe = false;
+            if ( sources.contains( sa.source ) )
+                dupe = true;
+            if ( filterDupeNames )
+            {
+                foreach ( const Tomahawk::source_ptr& source, sources )
+                {
+                    if ( source->friendlyName() == sa.source->friendlyName() )
+                    {
+                        dupe = true;
+                        break;
+                    }
+                }
+            }
+
+            if ( dupe )
+                continue;
             sources << sa.source;
        }
     }

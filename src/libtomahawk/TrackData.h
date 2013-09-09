@@ -80,7 +80,7 @@ public:
 
     void loadSocialActions( bool force = false );
     QList< Tomahawk::SocialAction > allSocialActions() const;
-    QList< Tomahawk::source_ptr > sourcesWithSocialAction( const QString& action, const QVariant& value = QVariant() );
+    QList< Tomahawk::source_ptr > sourcesWithSocialAction( const QString& action, const QVariant& value = QVariant(), bool filterDupeNames = false );
     void setAllSocialActions( const QList< Tomahawk::SocialAction >& socialActions );
 
     void loadStats();
