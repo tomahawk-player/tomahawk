@@ -99,7 +99,7 @@ public:
 
     virtual const QString defaultName() { return DASHBOARD_VIEWPAGE_NAME; }
     virtual QString title() const { return tr( "Dashboard" ); }
-    virtual QString description() const { return tr( "An overview of your network's recent activity" ); }
+    virtual QString description() const { return tr( "An overview of your friends' recent activity" ); }
     virtual const QString pixmapPath() const { return ( RESPATH "images/dashboard.svg" ); }
 
     virtual int sortValue() { return 1; }
