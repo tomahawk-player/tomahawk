@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg width="304px" height="333px" viewBox="0 0 304 333" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
-    <title>splash_screen</title>
+    <title>splash</title>
     <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
     <defs>
-        <filter x="-20%" y="-20%" width="140%" height="140%" filterUnits="objectBoundingBox" id="filter-1">
+        <radialGradient cx="50%" cy="38.2163462%" fx="50%" fy="38.2163462%" r="321.977806%" id="radialGradient-1">
+            <stop stop-color="#FEFFFE" offset="0%"></stop>
+            <stop stop-color="#000000" offset="100%"></stop>
+        </radialGradient>
+        <filter x="-20%" y="-20%" width="140%" height="140%" filterUnits="objectBoundingBox" id="filter-2">
             <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
             <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
             <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.7 0" in="shadowBlurOuter1" type="matrix" result="shadowMatrixOuter1"></feColorMatrix>
@@ -12,7 +16,7 @@
                 <feMergeNode in="SourceGraphic"></feMergeNode>
             </feMerge>
         </filter>
-        <filter x="-20%" y="-20%" width="140%" height="140%" filterUnits="objectBoundingBox" id="filter-2">
+        <filter x="-20%" y="-20%" width="140%" height="140%" filterUnits="objectBoundingBox" id="filter-3">
             <feMorphology radius="5" in="SourceAlpha" operator="dilate" result="shadowSpreadInner1"></feMorphology>
             <feOffset dx="0" dy="1" in="shadowSpreadInner1" result="shadowOffsetInner1"></feOffset>
             <feGaussianBlur stdDeviation="1.5" in="shadowOffsetInner1" result="shadowBlurInner1"></feGaussianBlur>
@@ -25,7 +29,7 @@
         </filter>
     </defs>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
-        <rect d="M11.9938714,2 C7.57897813,2 4,5.58048287 4,9.99335196 L4,319.006648 C4,323.421254 7.58290025,327 11.9938714,327 L292.006129,327 C296.421022,327 300,323.419517 300,319.006648 L300,9.99335196 C300,5.57874557 296.4171,2 292.006129,2 L11.9938714,2 Z M11.9938714,2" id="Rectangle-4" filter="url(#filter-1)" sketch:type="MSShapeGroup" x="4" y="2" width="296" height="325" rx="8"></rect>
+        <rect d="M11.9938714,2 C7.57897813,2 4,5.58048287 4,9.99335196 L4,319.006648 C4,323.421254 7.58290025,327 11.9938714,327 L292.006129,327 C296.421022,327 300,323.419517 300,319.006648 L300,9.99335196 C300,5.57874557 296.4171,2 292.006129,2 L11.9938714,2 Z M11.9938714,2" id="Rectangle-4" fill="url(#radialGradient-1)" filter="url(#filter-2)" sketch:type="MSShapeGroup" x="4" y="2" width="296" height="325" rx="8"></rect>
         <g id="tomahawk-icon" sketch:type="MSLayerGroup" transform="translate(108.523976, 83.845121)">
             <g id="Page-1" sketch:type="MSShapeGroup">
                 <ellipse d="M43.976024,88.04 C68.2633126,88.04 87.952048,68.3512646 87.952048,44.063976 C87.952048,19.7766874 68.2633126,0.087952048 43.976024,0.087952048 C19.6887354,0.087952048 0,19.7766874 0,44.063976 C0,68.3512646 19.6887354,88.04 43.976024,88.04 Z M43.976024,88.04" id="Oval-1" stroke="#979797" fill="#FFFFFF" cx="43.976024" cy="44.063976" rx="43.976024" ry="43.976024"></ellipse>
@@ -35,7 +39,7 @@
                 </g>
             </g>
         </g>
-        <text id="TOMAHAWK" fill="#262626" filter="url(#filter-2)" sketch:type="MSTextLayer" font-family="Proxima Nova" font-size="36" font-weight="bold">
+        <text id="TOMAHAWK" fill="#262626" filter="url(#filter-3)" sketch:type="MSTextLayer" font-family="Proxima Nova" font-size="36" font-weight="bold">
             <tspan x="48" y="60.8451211">TOMAHAWK</tspan>
         </text>
         <text id="&lt;launch-sequence>" fill="#262626" sketch:type="MSTextLayer" font-family="Avenir Next" font-size="12" font-weight="normal">
