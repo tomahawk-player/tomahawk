@@ -18,6 +18,10 @@
 
 #include "CredentialsManager.h"
 
+#ifdef Q_OS_MAC
+#include "LocalConfigStorage.h"
+#endif
+
 #include "utils/Logger.h"
 
 #include <qtkeychain/keychain.h>
@@ -94,7 +98,7 @@ CredentialsManager::loadCredentials( const QString &service )
     //      Therefore, we make sure that our LocalConfigStorage stores everything
     //      into a single key.
 #ifdef Q_OS_MAC
-    if ( service == "Tomahawk" ) //LocalConfigStorage::m_credentialsServiceName
+    if ( service == LocalConfigStorage::credentialsServiceName() )
     {
         QKeychain::ReadPasswordJob* j = new QKeychain::ReadPasswordJob( service, this );
         j->setKey( OSX_SINGLE_KEY );
@@ -184,7 +188,7 @@ CredentialsManager::setCredentials( const CredentialsStorageKey& csKey, const QV
         m_credentials.remove( csKey );
 
 #ifdef Q_OS_MAC
-        if ( csKey.service() == "Tomahawk" )
+        if ( csKey.service() == LocalConfigStorage::credentialsServiceName() )
         {
             rewriteCredentialsOsx( csKey.service() );
             return;
@@ -207,7 +211,7 @@ CredentialsManager::setCredentials( const CredentialsStorageKey& csKey, const QV
         m_credentials.insert( csKey, value );
 
 #ifdef Q_OS_MAC
-        if ( csKey.service() == "Tomahawk" )
+        if ( csKey.service() == LocalConfigStorage::credentialsServiceName() )
         {
             rewriteCredentialsOsx( csKey.service() );
             return;
@@ -262,7 +266,7 @@ CredentialsManager::setCredentials( const CredentialsStorageKey& csKey, const QV
 void
 CredentialsManager::rewriteCredentialsOsx( const QString& service )
 {
-    if ( service != "Tomahawk" ) //always LocalConfigStorage::m_credentialsServiceName
+    if ( service != LocalConfigStorage::credentialsServiceName() )
         return;
 
     QVariantMap everythingMap;
