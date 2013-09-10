@@ -107,7 +107,7 @@ CredentialsManager::loadCredentials( const QString &service )
                     SLOT( keychainJobFinished( QKeychain::Job* ) ) );
         m_readJobs[ service ] << j;
         j->start();
-        tDebug()  << "Launching OSX-specific QtKeychain readJob for" << key;
+        tDebug()  << "Launching OSX-specific QtKeychain readJob for" << OSX_SINGLE_KEY;
     }
     else
     {
