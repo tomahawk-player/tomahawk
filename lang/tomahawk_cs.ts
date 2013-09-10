@@ -3773,8 +3773,8 @@ Zkuste vyladit filtry pro nové písně.</translation>
     </message>
     <message>
         <location filename="../src/viewpages/dashboard/Dashboard.h" line="102"/>
-        <source>An overview of your recent activity</source>
-        <translation>Přehled vaší poslední činnosti</translation>
+        <source>An overview of your friends&apos; recent activity</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

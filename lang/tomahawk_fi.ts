@@ -3779,8 +3779,8 @@ kappaleen %2%4 %3.</translation>
     </message>
     <message>
         <location filename="../src/viewpages/dashboard/Dashboard.h" line="102"/>
-        <source>An overview of your recent activity</source>
-        <translation>Yleiskatsaus viimeaikaisesta toiminnastasi</translation>
+        <source>An overview of your friends&apos; recent activity</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -3796,12 +3796,12 @@ kappaleen %2%4 %3.</translation>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivity.h" line="57"/>
         <source>Trending</source>
-        <translation type="unfinished"/>
+        <translation>Trendit</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivity.h" line="58"/>
         <source>What&apos;s hot amongst your friends</source>
-        <translation type="unfinished"/>
+        <translation>Mikä on suosittua kaveriesi keskuudessa</translation>
     </message>
 </context>
 <context>

@@ -3774,7 +3774,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     </message>
     <message>
         <location filename="../src/viewpages/dashboard/Dashboard.h" line="102"/>
-        <source>An overview of your recent activity</source>
+        <source>An overview of your friends&apos; recent activity</source>
         <translation type="unfinished"/>
     </message>
 </context>

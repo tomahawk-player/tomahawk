@@ -1318,7 +1318,7 @@ Password (OTP)</source>
         <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="207"/>
         <source>&lt;b&gt;%1&lt;/b&gt;</source>
         <comment>e.g. by SomeArtist</comment>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
 </context>
 <context>
@@ -1739,7 +1739,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/SettingsDialog.cpp" line="418"/>
         <source>Open Directory</source>
-        <translation type="unfinished"/>
+        <translation>Öppna Katalog</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/SettingsDialog.cpp" line="512"/>
@@ -1873,12 +1873,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/Settings_Collection.ui" line="55"/>
         <source>+</source>
-        <translation type="unfinished"/>
+        <translation>+</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/Settings_Collection.ui" line="62"/>
         <source>-</source>
-        <translation type="unfinished"/>
+        <translation>-</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/Settings_Collection.ui" line="88"/>
@@ -3773,8 +3773,8 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
     </message>
     <message>
         <location filename="../src/viewpages/dashboard/Dashboard.h" line="102"/>
-        <source>An overview of your recent activity</source>
-        <translation>En överblick över din senaste aktivitet</translation>
+        <source>An overview of your friends&apos; recent activity</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -3790,12 +3790,12 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivity.h" line="57"/>
         <source>Trending</source>
-        <translation type="unfinished"/>
+        <translation>Trendig</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivity.h" line="58"/>
         <source>What&apos;s hot amongst your friends</source>
-        <translation type="unfinished"/>
+        <translation>Vad är hett bland dina vänner</translation>
     </message>
 </context>
 <context>
@@ -3833,7 +3833,7 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="132"/>
         <source>Sorry, we couldn&apos;t find any trending tracks.</source>
-        <translation type="unfinished"/>
+        <translation>Tyvärr kunde vi inte hitta några trendiga spår</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="80"/>
@@ -4070,7 +4070,7 @@ anger du PIN-koden här:</translation>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1106"/>
         <source>Create New Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Skapa en ny spellista</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1139"/>

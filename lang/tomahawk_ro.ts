@@ -3775,8 +3775,8 @@ Try tweaking the filters for a new set of songs to play.</source>
     </message>
     <message>
         <location filename="../src/viewpages/dashboard/Dashboard.h" line="102"/>
-        <source>An overview of your recent activity</source>
-        <translation>O privire de ansamblu asupra activității tale recente</translation>
+        <source>An overview of your friends&apos; recent activity</source>
+        <translation>O privire de ansamblu asupra activității recente a prietenilor tăi</translation>
     </message>
 </context>
 <context>
@@ -3792,12 +3792,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivity.h" line="57"/>
         <source>Trending</source>
-        <translation type="unfinished"/>
+        <translation>La modă</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivity.h" line="58"/>
         <source>What&apos;s hot amongst your friends</source>
-        <translation type="unfinished"/>
+        <translation>Ce e la modă la prietenii tăi</translation>
     </message>
 </context>
 <context>

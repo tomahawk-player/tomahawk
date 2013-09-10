@@ -3789,8 +3789,8 @@ Try tweaking the filters for a new set of songs to play.</source>
     </message>
     <message>
         <location filename="../src/viewpages/dashboard/Dashboard.h" line="102"/>
-        <source>An overview of your recent activity</source>
-        <translation>Изглед на скорошната ти активност</translation>
+        <source>An overview of your friends&apos; recent activity</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

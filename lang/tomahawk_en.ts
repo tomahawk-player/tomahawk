@@ -3776,8 +3776,8 @@ Try tweaking the filters for a new set of songs to play.</translation>
     </message>
     <message>
         <location filename="../src/viewpages/dashboard/Dashboard.h" line="102"/>
-        <source>An overview of your recent activity</source>
-        <translation>An overview of your recent activity</translation>
+        <source>An overview of your friends&apos; recent activity</source>
+        <translation>An overview of your friends&apos; recent activity</translation>
     </message>
 </context>
 <context>
