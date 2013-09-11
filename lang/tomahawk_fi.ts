@@ -3780,7 +3780,7 @@ kappaleen %2%4 %3.</translation>
     <message>
         <location filename="../src/viewpages/dashboard/Dashboard.h" line="102"/>
         <source>An overview of your friends&apos; recent activity</source>
-        <translation type="unfinished"/>
+        <translation>Yleiskatsaus kaveriesi viimeaikaisesta toiminnasta</translation>
     </message>
 </context>
 <context>
