@@ -298,6 +298,7 @@ CredentialsManager::rewriteCredentialsOsx( const QString& service )
 
     QKeychain::WritePasswordJob* j = new QKeychain::WritePasswordJob( service, this );
     j->setKey( OSX_SINGLE_KEY );
+    j->setTextData( data );
 
     j->setAutoDelete( false );
 #if defined( Q_OS_UNIX ) && !defined( Q_OS_MAC )
