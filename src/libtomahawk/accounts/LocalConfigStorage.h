@@ -47,12 +47,15 @@ public:
     virtual void load( const QString& accountId, Account::Configuration& cfg ) const;
     virtual void remove( const QString& accountId );
 
+#ifdef Q_OS_MAC
+    static QString credentialsServiceName();
+#endif
 
 private slots:
     void onCredentialsManagerReady( const QString& service );
 
 private:
-    const QString m_credentialsServiceName;
+    static const QString s_credentialsServiceName;
     QStringList m_accountIds;
 
     static LocalConfigStorage* s_instance;

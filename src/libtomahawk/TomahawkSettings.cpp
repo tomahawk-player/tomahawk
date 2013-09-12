@@ -619,6 +619,15 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
     {
         const QStringList accounts = value( "accounts/allaccounts" ).toStringList();
         tDebug() << "About to move these accounts to QtKeychain:" << accounts;
+
+        //On OSX we store everything under a single Keychain key, so we first need
+        //to gather all the entries in a QVariantMap and then write them all in a
+        //single shot.
+        //NOTE: The following OSX-specific #ifdefs do not affect the config file
+        //      format, which stays the same on all platforms. --Teo 9/2013
+#ifdef Q_OS_MAC
+        QVariantMap everythingMap;
+#endif
         //Move storage of Credentials from QSettings to QtKeychain
         foreach ( const QString& account, accounts )
         {
@@ -630,6 +639,10 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
 
             if ( !creds.isEmpty() )
             {
+#ifdef Q_OS_MAC
+                everythingMap.insert( account, creds );
+                tDebug() << "Preparing upgrade for account" << account;
+#else
                 QKeychain::WritePasswordJob* j = new QKeychain::WritePasswordJob( QLatin1String( "Tomahawk" ), this );
                 j->setKey( account );
                 j->setAutoDelete( true );
@@ -651,12 +664,38 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
 
                 j->setTextData( data );
                 j->start();
+#endif //Q_OS_MAC
             }
 
             remove( "credentials" );
 
             endGroup();
         }
+
+#ifdef Q_OS_MAC
+        QJson::Serializer serializer;
+        bool ok;
+        QByteArray data = serializer.serialize( everythingMap, &ok );
+
+        if ( ok )
+        {
+            QKeychain::WritePasswordJob* j = new QKeychain::WritePasswordJob( QLatin1String( "Tomahawk" ), this );
+            j->setKey( "tomahawksecrets" ); //Tomahawk::Accounts::OSX_SINGLE_KEY in CredentialsManager.cpp
+            j->setAutoDelete( true );
+
+            j->setTextData( data );
+
+            tDebug() << "Performing OSX-specific upgrade for all accounts.";
+
+            j->start();
+        }
+        else
+        {
+            tDebug() << "Cannot serialize credentials for OSX-specific upgrade"
+                     << "in map:" << everythingMap.keys();
+        }
+#endif
+
     }
 }
 

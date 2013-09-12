@@ -29,10 +29,18 @@ namespace Tomahawk
 namespace Accounts
 {
 
+const QString LocalConfigStorage::s_credentialsServiceName = "Tomahawk";
+
+#ifdef Q_OS_MAC
+QString
+LocalConfigStorage::credentialsServiceName()
+{
+    return s_credentialsServiceName;
+}
+#endif
 
 LocalConfigStorage::LocalConfigStorage( QObject* parent )
     : ConfigStorage( parent )
-    , m_credentialsServiceName( "Tomahawk" )
 {
     m_accountIds = TomahawkSettings::instance()->accounts();
 }
@@ -46,10 +54,10 @@ LocalConfigStorage::init()
     CredentialsManager* cm = AccountManager::instance()->credentialsManager();
     connect( cm, SIGNAL( serviceReady( QString ) ),
              this, SLOT( onCredentialsManagerReady( QString ) ) );
-    AccountManager::instance()->credentialsManager()->addService( m_credentialsServiceName,
+    AccountManager::instance()->credentialsManager()->addService( s_credentialsServiceName,
                                                                   m_accountIds );
 
-    tDebug() << Q_FUNC_INFO << "LOADING ALL CREDENTIALS FOR SERVICE" << m_credentialsServiceName << m_accountIds;
+    tDebug() << Q_FUNC_INFO << "LOADING ALL CREDENTIALS FOR SERVICE" << s_credentialsServiceName << m_accountIds;
 }
 
 
@@ -63,7 +71,7 @@ LocalConfigStorage::id() const
 void
 LocalConfigStorage::onCredentialsManagerReady( const QString& service )
 {
-    if ( service != m_credentialsServiceName )
+    if ( service != s_credentialsServiceName )
         return;
 
     //no need to listen for it any more
@@ -109,7 +117,7 @@ LocalConfigStorage::save( const QString& accountId, const Account::Configuration
     s->sync();
 
     CredentialsManager* c = AccountManager::instance()->credentialsManager();
-    c->setCredentials( m_credentialsServiceName, accountId, cfg.credentials );
+    c->setCredentials( s_credentialsServiceName, accountId, cfg.credentials );
 
     if ( !m_accountIds.contains( accountId ) )
         m_accountIds.append( accountId );
@@ -129,7 +137,7 @@ LocalConfigStorage::load( const QString& accountId, Account::Configuration& cfg 
     s->endGroup();
 
     CredentialsManager* c = AccountManager::instance()->credentialsManager();
-    QVariant credentials = c->credentials( m_credentialsServiceName, accountId );
+    QVariant credentials = c->credentials( s_credentialsServiceName, accountId );
     if ( credentials.type() == QVariant::Hash )
         cfg.credentials = credentials.toHash();
 }
@@ -149,7 +157,7 @@ LocalConfigStorage::remove( const QString& accountId )
     s->remove( "accounts/" + accountId );
 
     CredentialsManager* c = AccountManager::instance()->credentialsManager();
-    c->setCredentials( m_credentialsServiceName, accountId, QVariantHash() );
+    c->setCredentials( s_credentialsServiceName, accountId, QVariantHash() );
 }
 
 }
