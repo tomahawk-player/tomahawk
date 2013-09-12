@@ -301,9 +301,7 @@ CredentialsManager::rewriteCredentialsOsx( const QString& service )
     j->setTextData( data );
 
     j->setAutoDelete( false );
-#if defined( Q_OS_UNIX ) && !defined( Q_OS_MAC )
-    j->setInsecureFallback( true );
-#endif
+
     connect( j, SIGNAL( finished( QKeychain::Job* ) ),
              SLOT( keychainJobFinished( QKeychain::Job* ) ) );
     j->start();
