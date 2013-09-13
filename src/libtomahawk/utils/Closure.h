@@ -1,4 +1,4 @@
-/* This file is part of Tomabawk.
+/* This file is part of Tomahawk.
    Copyright 2011, David Sansome <me@davidsansome.com>
    Copyright 2012, Leo Franchi <lfranchi@kde.org>
 
