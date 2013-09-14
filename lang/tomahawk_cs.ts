@@ -3774,7 +3774,7 @@ Zkuste vyladit filtry pro nové písně.</translation>
     <message>
         <location filename="../src/viewpages/dashboard/Dashboard.h" line="102"/>
         <source>An overview of your friends&apos; recent activity</source>
-        <translation type="unfinished"/>
+        <translation>Přehled poslední činnosti vašich přátel</translation>
     </message>
 </context>
 <context>
@@ -3790,12 +3790,12 @@ Zkuste vyladit filtry pro nové písně.</translation>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivity.h" line="57"/>
         <source>Trending</source>
-        <translation type="unfinished"/>
+        <translation>Módní</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivity.h" line="58"/>
         <source>What&apos;s hot amongst your friends</source>
-        <translation type="unfinished"/>
+        <translation>Co letí mezi vašimi přáteli</translation>
     </message>
 </context>
 <context>
