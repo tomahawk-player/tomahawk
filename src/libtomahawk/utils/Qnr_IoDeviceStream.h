@@ -27,8 +27,9 @@
 
 #include <phonon/abstractmediastream.h>
 #include <QByteArray>
+#include <QNetworkReply>
+#include <QSharedPointer>
 
-class QNetworkReply;
 class QIODevice;
 class QTimer;
 
@@ -39,7 +40,7 @@ class DLLEXPORT QNR_IODeviceStream : public Phonon::AbstractMediaStream
 {
     Q_OBJECT
 public:
-    explicit QNR_IODeviceStream( QNetworkReply* reply, QObject *parent = 0 );
+    explicit QNR_IODeviceStream( const QSharedPointer<QNetworkReply>& reply, QObject *parent = 0 );
     ~QNR_IODeviceStream();
 
     virtual void enoughData();
@@ -53,7 +54,7 @@ private slots:
 
 private:
     QByteArray m_data;
-    QNetworkReply *m_networkReply;
+    QSharedPointer<QNetworkReply> m_networkReply;
     qint64 m_pos;
     QTimer* m_timer;
 };

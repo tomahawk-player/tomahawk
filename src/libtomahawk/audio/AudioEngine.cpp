@@ -664,6 +664,7 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr& result, QSharedPointe
         return;
     }
     tDebug( LOGEXTRA ) << Q_FUNC_INFO << ( result.isNull() ? QString() : result->url() );
+    QSharedPointer< QIODevice > ioToKeep = io;
 
     bool err = false;
     {
@@ -681,11 +682,22 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr& result, QSharedPointe
 
             if ( !TomahawkUtils::isLocalResult( d->currentTrack->url() ) )
             {
-                if ( QNetworkReply* qnr_io = qobject_cast< QNetworkReply* >( io.data() ) )
-                    d->mediaObject->setCurrentSource( new QNR_IODeviceStream( qnr_io, this ) );
+                QSharedPointer<QNetworkReply> qnr = io.objectCast<QNetworkReply>();
+                if ( !qnr.isNull() )
+                {
+                    d->mediaObject->setCurrentSource( new QNR_IODeviceStream( qnr, this ) );
+                    // We keep track of the QNetworkReply in QNR_IODeviceStream
+                    // and Phonon handles the deletion of the
+                    // QNR_IODeviceStream object
+                    ioToKeep.clear();
+                    d->mediaObject->currentSource().setAutoDelete( true );
+                }
                 else
+                {
                     d->mediaObject->setCurrentSource( io.data() );
-                d->mediaObject->currentSource().setAutoDelete( false );
+                    // We handle the deletion via tracking in d->input
+                    d->mediaObject->currentSource().setAutoDelete( false );
+                }
             }
             else
             {
@@ -722,7 +734,7 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr& result, QSharedPointe
                 d->input->close();
                 d->input.clear();
             }
-            d->input = io;
+            d->input = ioToKeep;
             queueState( Playing );
 
             if ( TomahawkSettings::instance()->privateListeningMode() != TomahawkSettings::FullyPrivate )

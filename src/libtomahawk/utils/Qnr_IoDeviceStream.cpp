@@ -32,7 +32,7 @@ using namespace Tomahawk;
 // Feed Phonon in 1MiB blocks
 #define BLOCK_SIZE 1048576
 
-QNR_IODeviceStream::QNR_IODeviceStream( QNetworkReply* reply, QObject* parent )
+QNR_IODeviceStream::QNR_IODeviceStream( const QSharedPointer<QNetworkReply>& reply, QObject* parent )
     : Phonon::AbstractMediaStream( parent )
     , m_networkReply( reply )
     , m_pos( 0 )
@@ -63,7 +63,7 @@ QNR_IODeviceStream::QNR_IODeviceStream( QNetworkReply* reply, QObject* parent )
         }
         // Just consume all data that is already available.
         m_data = m_networkReply->readAll();
-        connect( m_networkReply, SIGNAL( readyRead() ), SLOT( readyRead() ) );
+        connect( m_networkReply.data(), SIGNAL( readyRead() ), SLOT( readyRead() ) );
     }
 
     m_timer->setInterval( 0 );
