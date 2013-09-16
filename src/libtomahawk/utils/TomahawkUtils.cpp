@@ -543,7 +543,7 @@ md5( const QByteArray& data )
 bool
 isHttpResult( const QString& url )
 {
-    return url.startsWith( "http://" ) || url.startsWith( "https://" );
+    return url.startsWith( "http://" ); // || url.startsWith( "https://" );
 }
 
 

@@ -165,6 +165,11 @@ namespace TomahawkUtils
     DLLEXPORT QString md5( const QByteArray& data );
     DLLEXPORT bool removeDirectory( const QString& dir );
 
+    /**
+      * Check if this URL refers to a http-Result.
+      *
+      * Attention: This only checks for a http result, not a httpS result.
+      */
     DLLEXPORT bool isHttpResult( const QString& url );
     DLLEXPORT bool isLocalResult( const QString& url );
 
