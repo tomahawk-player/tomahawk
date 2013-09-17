@@ -368,17 +368,17 @@ se s vámi spojil?</translation>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="875"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="889"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>Promiňte,  Tomahawku se nepodařilo najít skladbu &apos;%1&apos; od %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="899"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="913"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>Promiňte,  Tomahawku se nepodařilo najít umělce &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="925"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="939"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>Promiňte,  Tomahawku se nepodařilo najít album &apos;%1&apos; od %2</translation>
     </message>

@@ -368,17 +368,17 @@ ansluta och strömma från dig?</translation>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="875"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="889"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>Tyvärr! Tomahawk kunde inte hitta spåret &apos;%1&apos; av %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="899"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="913"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>Tyvärr! Tomahawk kunde inte hitta artisten &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="925"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="939"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>Tyvärr! Tomahawk kunde inte hitta albumet &apos;%1&apos; av %2 </translation>
     </message>
@@ -3774,7 +3774,7 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
     <message>
         <location filename="../src/viewpages/dashboard/Dashboard.h" line="102"/>
         <source>An overview of your friends&apos; recent activity</source>
-        <translation type="unfinished"/>
+        <translation>En överblick över dina vänners senaste aktiviteter</translation>
     </message>
 </context>
 <context>
