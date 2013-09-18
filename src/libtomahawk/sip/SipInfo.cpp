@@ -94,15 +94,17 @@ SipInfo::clear()
 bool
 SipInfo::isValid() const
 {
-//    tDebug() << Q_FUNC_INFO << d->visible << d->host << d->port << d->nodeId << d->key;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << d->visible << d->host << d->port << d->nodeId << d->key;
     if ( !d->visible.isNull() )
     {
-        if (
-            // visible and all data available
-            (  d->visible.toBool() && !d->host.isEmpty() && ( d->port > 0 ) && !d->nodeId.isNull() && !d->key.isNull() )
-            // invisible and no data available
-         || ( !d->visible.toBool() &&  d->host.isEmpty() && ( d->port < 0 ) && d->nodeId.isNull() &&   d->key.isNull() )
-        )
+        // visible and all data available
+        if (  d->visible.toBool() && !d->host.isEmpty() && ( d->port > 0 ) && !d->nodeId.isNull() && !d->key.isNull() )
+            return true;
+        // invisible and no data available
+        if ( !d->visible.toBool() &&  d->host.isEmpty() && ( d->port < 0 ) && d->nodeId.isNull() && d->key.isNull() )
+            return true;
+        // invisible and but nodeId and key available
+        if ( !d->visible.toBool() &&  d->host.isEmpty() && ( d->port < 0 ) && !d->nodeId.isNull() && !d->key.isNull() )
             return true;
     }
 
