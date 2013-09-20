@@ -85,7 +85,7 @@ HatchetAccount::HatchetAccount( const QString& accountId )
 
     QFile pemFile( ":/hatchet-account/mandella.pem" );
     pemFile.open( QIODevice::ReadOnly );
-    tDebug() << Q_FUNC_INFO << "certs/mandella.pem: " << pemFile.readAll();
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "certs/mandella.pem: " << pemFile.readAll();
     pemFile.close();
     pemFile.open( QIODevice::ReadOnly );
     QCA::ConvertResult conversionResult;
