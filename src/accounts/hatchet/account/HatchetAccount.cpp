@@ -425,11 +425,12 @@ HatchetAccount::parseReply( QNetworkReply* reply, bool& okRet ) const
     }
 
     QJson::Parser p;
-    resp = p.parse( reply, &ok ).toMap();
+    QByteArray replyData = reply->readAll();
+    resp = p.parse( replyData, &ok ).toMap();
 
     if ( !ok )
     {
-        tLog() << Q_FUNC_INFO << "Error parsing JSON from server";
+        tLog() << Q_FUNC_INFO << "Error parsing JSON from server" << replyData;
         okRet = false;
         return resp;
     }
