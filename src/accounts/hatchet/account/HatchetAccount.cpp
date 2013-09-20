@@ -83,6 +83,10 @@ HatchetAccount::HatchetAccount( const QString& accountId )
 {
     s_instance = this;
 
+    setAccountServiceName( "Hatchet" );
+    // We're connecting peers.
+    setTypes( SipType );
+
     QFile pemFile( ":/hatchet-account/mandella.pem" );
     pemFile.open( QIODevice::ReadOnly );
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "certs/mandella.pem: " << pemFile.readAll();
@@ -133,9 +137,11 @@ HatchetAccount::authenticate()
         qDebug() << "Have saved credentials with auth token:" << authToken();
         if ( sipPlugin() )
             sipPlugin()->connectPlugin();
+        setAccountFriendlyName( username() );
     }
     else if ( !username().isEmpty() )
     {
+        setAccountFriendlyName( username() );
         // Need to re-prompt for password, since we don't save it!
     }
 }

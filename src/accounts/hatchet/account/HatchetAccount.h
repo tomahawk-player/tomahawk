@@ -52,10 +52,7 @@ public:
     virtual bool isUnique() const { return true; }
     AccountTypes types() const { return AccountTypes( SipType ); }
 //    virtual bool allowUserCreation() const { return false; }
-#ifndef ENABLE_HEADLESS
     virtual QPixmap icon() const;
-#endif
-
 
     virtual Account* createAccount ( const QString& pluginId = QString() );
 };

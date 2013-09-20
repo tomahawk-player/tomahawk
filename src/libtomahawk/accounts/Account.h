@@ -56,7 +56,7 @@ enum AccountType
 
 DLLEXPORT QString accountTypeToString( AccountType type );
 
-Q_DECLARE_FLAGS(AccountTypes, AccountType);
+Q_DECLARE_FLAGS( AccountTypes, AccountType )
 
 inline QString generateId( const QString& factoryId )
 {
