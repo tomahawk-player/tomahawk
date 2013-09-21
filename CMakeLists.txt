@@ -2,6 +2,7 @@ PROJECT( tomahawk )
 CMAKE_MINIMUM_REQUIRED( VERSION 2.8.6 )
 SET( CMAKE_MODULE_PATH  "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules" )
 CMAKE_POLICY(SET CMP0017 NEW)
+INCLUDE(CMakeDependentOption)
 
 ###
 ### Tomahawk application info
@@ -44,9 +45,12 @@ option(WITH_BREAKPAD "Build with breakpad integration" ON)
 option(WITH_CRASHREPORTER "Build with CrashReporter" ON)
 option(WITH_BINARY_ATTICA "Enable support for downloading binary resolvers automatically" ON)
 option(LEGACY_KDE_INTEGRATION "Install tomahawk.protocol file, deprecated since 4.6.0" OFF)
-option(WITH_UPOWER "Build with support for UPower events" OFF)
-option(WITH_GNOMESHORTCUTHANDLER "Build with shortcut handler for GNOME" OFF)
 option(WITH_KDE4 "Build with support for KDE specific stuff" ON)
+
+CMAKE_DEPENDENT_OPTION(WITH_UPOWER "Build with support for UPower events" ON
+       "UNIX;NOT APPLE" OFF)
+CMAKE_DEPENDENT_OPTION(WITH_GNOMESHORTCUTHANDLER "Build with shortcut handler for GNOME" ON
+       "UNIX;NOT APPLE" OFF)
 
 IF( CMAKE_SYSTEM_PROCESSOR MATCHES "arm" )
     message(STATUS "Build of breakpad library disabled on this platform.")
@@ -118,8 +122,10 @@ if( NOT BUILD_WITH_QT4 )
         find_package(Qt5Widgets QUIET)
         message(STATUS "Found Qt5! Be aware that Qt5-support is still experimental and not officially supported!")
 
-        # We need this to find the paths to qdbusxml2cpp and co
-        find_package(Qt5DBus REQUIRED)
+        if( UNIX AND NOT APPLE )
+            # We need this to find the paths to qdbusxml2cpp and co
+            find_package(Qt5DBus REQUIRED)
+        endif()
 
         macro(qt_wrap_ui)
             qt5_wrap_ui(${ARGN})
@@ -212,11 +218,6 @@ endif( Qt5Core_DIR )
 if( BUILD_GUI AND UNIX AND NOT APPLE )
     find_package( X11 )
 endif()
-
-IF( UNIX AND NOT APPLE AND QT_QTDBUS_FOUND )
-    SET( WITH_UPOWER ON )
-    SET( WITH_GNOMESHORTCUTHANDLER ON )
-ENDIF( UNIX AND NOT APPLE AND QT_QTDBUS_FOUND  )
 
 macro_optional_find_package(Echonest 2.1.0)
 macro_log_feature(ECHONEST_FOUND "Echonest" "Qt library for communicating with The Echo Nest" "http://projects.kde.org/libechonest" TRUE "" "libechonest 2.1.0 is needed for dynamic playlists and the infosystem")

@@ -6,7 +6,7 @@ FOREACH( _file ${_icons} )
 ENDFOREACH( _file )
 
 IF( WITH_UPOWER )
-    qt4_add_dbus_interface(tomahawkSources "${CMAKE_CURRENT_SOURCE_DIR}/linux/org.freedesktop.UPower.xml" "UPowerProxy")
+    qt_add_dbus_interface(tomahawkSources "${CMAKE_CURRENT_SOURCE_DIR}/linux/org.freedesktop.UPower.xml" "UPowerProxy")
     SET( tomahawkSources ${tomahawkSources} linux/UPowerHandler.cpp  )
 ENDIF( WITH_UPOWER )
 
