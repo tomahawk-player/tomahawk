@@ -53,7 +53,7 @@ HatchetSipPlugin::HatchetSipPlugin( Tomahawk::Accounts::Account *account )
 
     QFile pemFile( ":/hatchet-account/dreamcatcher.pem" );
     pemFile.open( QIODevice::ReadOnly );
-    tDebug() << Q_FUNC_INFO << "certs/dreamcatcher.pem: " << pemFile.readAll();
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "certs/dreamcatcher.pem: " << pemFile.readAll();
     pemFile.close();
     pemFile.open( QIODevice::ReadOnly );
     QCA::ConvertResult conversionResult;
@@ -217,7 +217,7 @@ HatchetSipPlugin::webSocketConnected()
     QCA::SecureArray sa( m_uuid.toLatin1() );
     QCA::SecureArray result = m_publicKey->encrypt( sa, QCA::EME_PKCS1_OAEP );
 
-    tDebug() << Q_FUNC_INFO << "uuid:" << m_uuid << ", size of uuid:" << m_uuid.size() << ", size of sa:" << sa.size() << ", size of result:" << result.size();
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "uuid:" << m_uuid << ", size of uuid:" << m_uuid.size() << ", size of sa:" << sa.size() << ", size of result:" << result.size();
 
     QVariantMap nonceVerMap;
     nonceVerMap[ "version" ] = VERSION;
@@ -261,7 +261,6 @@ HatchetSipPlugin::webSocketDisconnected()
 bool
 HatchetSipPlugin::sendBytes( const QVariantMap& jsonMap ) const
 {
-    tLog() << Q_FUNC_INFO;
     if ( m_sipState == Closed )
     {
         tLog() << Q_FUNC_INFO << "was told to send bytes on a closed connection, not gonna do it";
@@ -276,7 +275,7 @@ HatchetSipPlugin::sendBytes( const QVariantMap& jsonMap ) const
         return false;
     }
 
-    tDebug() << Q_FUNC_INFO << "Sending bytes of size" << bytes.size();
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Sending bytes of size" << bytes.size();
     emit rawBytes( bytes );
     return true;
 }
@@ -285,7 +284,7 @@ HatchetSipPlugin::sendBytes( const QVariantMap& jsonMap ) const
 void
 HatchetSipPlugin::messageReceived( const QByteArray &msg )
 {
-    tDebug() << Q_FUNC_INFO << "WebSocket message: " << msg;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "WebSocket message: " << msg;
 
     QJson::Parser parser;
     bool ok;
@@ -553,7 +552,6 @@ HatchetSipPlugin::sendOplog( const QVariantMap& valMap ) const
 void
 HatchetSipPlugin::oplogFetched( const QString& sinceguid, const QString& /* lastguid */, const QList< dbop_ptr > ops )
 {
-    tDebug() << Q_FUNC_INFO;
     const uint_fast32_t byteMax = 1 << 25;
     int currBytes = 0;
     QVariantMap commandMap;
