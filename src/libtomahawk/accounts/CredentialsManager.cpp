@@ -319,10 +319,11 @@ CredentialsManager::rewriteCredentialsOsx( const QString& service )
     tDebug() << "Launched OSX-specific rewrite job. The following should appear in Keychain Access:";
     QString dataString = QString::fromLatin1(data);
     QStringList dataSL = dataString.split("\n");
-    foreach( QString& line, dataSL )
+    for ( QStringList::iterator it = dataSL.begin();
+          it != dataSL.end(); ++it )
     {
-        if ( line.contains( "\"password\" :" ) )
-            line = "***** password line hidden *****";
+        if ( it->contains( "\"password\" :" ) )
+            *it = QString( "***** password line hidden *****" );
     }
     dataString = dataSL.join( "\n" );
     tDebug() << dataString;
