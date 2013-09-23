@@ -27,7 +27,7 @@ SET( TOMAHAWK_VERSION_MINOR 7 )
 SET( TOMAHAWK_VERSION_PATCH 100 )
 #SET( TOMAHAWK_VERSION_RC 0 )
 
-SET( TOMAHAWK_TRANSLATION_LANGUAGES ar bg bn_IN ca cs de en el es fi fr hi_IN hu gl it ja lt pl pt_BR ru sv tr zh_CN zh_TW )
+SET( TOMAHAWK_TRANSLATION_LANGUAGES ar bg bn_IN ca cs de en el es fi fr hi_IN hu gl it ja lt pl pt_BR ro ru sv tr zh_CN zh_TW )
 
 # enforce proper symbol exporting on all platforms
 add_definitions( "-fvisibility=hidden" )
