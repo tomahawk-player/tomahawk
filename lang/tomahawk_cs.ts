@@ -4158,7 +4158,7 @@ služby Twitter zde zadejte tam zobrazené číslo PIN:</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="277"/>
         <source>You&apos;ve never listened to this track before.</source>
-        <translation>Tuto píseň jste si ještě nikdy neposlechl.</translation>
+        <translation>Tuto píseň jste si předtím ještě nikdy neposlechl.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="281"/>
@@ -4173,7 +4173,7 @@ služby Twitter zde zadejte tam zobrazené číslo PIN:</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="292"/>
         <source>You&apos;ve never listened to %1 before.</source>
-        <translation>%1 jste si předtím ještě nikdy neposlechl.</translation>
+        <translation>Píseň od %1 vámi předtím ještě nikdy nebyla poslechnuta.</translation>
     </message>
 </context>
 <context>

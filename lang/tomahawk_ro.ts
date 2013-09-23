@@ -3758,7 +3758,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/Track.cpp" line="563"/>
         <source>loved this track</source>
-        <translation>au îndrăgit această piesă</translation>
+        <translation>îndrăgești această piesă</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Track.cpp" line="565"/>
