@@ -273,7 +273,7 @@ CredentialsManager::setCredentials( const CredentialsStorageKey& csKey, const QV
 void
 CredentialsManager::rewriteCredentialsOsx( const QString& service )
 {
-    tDebug() << "Q_FUNC_INFO" < "OSX-specific starting.";
+    tDebug() << "Q_FUNC_INFO" << "OSX-specific starting.";
     if ( service != LocalConfigStorage::credentialsServiceName() )
         return;
 
