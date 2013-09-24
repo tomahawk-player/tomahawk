@@ -845,7 +845,7 @@ Password (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/InboxItem.cpp" line="35"/>
         <source>Inbox</source>
-        <translation>Inbox</translation>
+        <translation>Intrare</translation>
     </message>
 </context>
 <context>
@@ -4311,7 +4311,7 @@ Poți retrimite un mesaj de sincronizare oricând doar prin trimiterea unui alt 
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="95"/>
         <source>Inbox</source>
-        <translation>Inbox</translation>
+        <translation>Intrare</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="96"/>
