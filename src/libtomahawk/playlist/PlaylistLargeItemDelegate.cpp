@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -20,7 +21,6 @@
 
 #include <QApplication>
 #include <QPainter>
-#include <QAbstractTextDocumentLayout>
 #include <QDateTime>
 
 #include "Query.h"
@@ -66,31 +66,6 @@ PlaylistLargeItemDelegate::sizeHint( const QStyleOptionViewItem& option, const Q
     size.setHeight( rowHeight * 2.5 );
 
     return size;
-}
-
-
-void
-PlaylistLargeItemDelegate::drawRichText( QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, int flags, QTextDocument& text ) const
-{
-    Q_UNUSED( option );
-
-    text.setPageSize( QSize( rect.width(), QWIDGETSIZE_MAX ) );
-    QAbstractTextDocumentLayout* layout = text.documentLayout();
-
-    const int height = qRound( layout->documentSize().height() );
-    int y = rect.y();
-    if ( flags & Qt::AlignBottom )
-        y += ( rect.height() - height );
-    else if ( flags & Qt::AlignVCenter )
-        y += ( rect.height() - height ) / 2;
-
-    QAbstractTextDocumentLayout::PaintContext context;
-    context.palette.setColor( QPalette::Text, painter->pen().color() );
-
-    painter->save();
-    painter->translate( rect.x(), y );
-    layout->draw( painter, context );
-    painter->restore();
 }
 
 
@@ -217,6 +192,7 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         if ( !( option.state & QStyle::State_Selected || item->isPlaying() ) )
             painter->setPen( opt.palette.text().color().darker() );
 
+//TODO: replace usage of lowerText which is not drawn any more with appropriate loveBox/sentBox style boxes
         textDoc.setHtml( lowerText );
         textDoc.setDocumentMargin( 0 );
         textDoc.setDefaultFont( painter->font() );
@@ -229,7 +205,10 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
 
         leftRect = rightRect.adjusted( -128, 4, 0, -4 );
         leftRect.setWidth( 96 );
-        drawLoveBox( painter, leftRect, item, index );
+        if ( m_mode == Inbox )
+            drawSentBox( painter, opt, leftRect, item, index );
+        else
+            drawLoveBox( painter, leftRect, item, index );
 
         if ( track->duration() > 0 )
         {

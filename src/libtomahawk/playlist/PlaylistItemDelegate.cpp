@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -19,10 +20,11 @@
 
 #include "PlaylistItemDelegate.h"
 
+#include <QAbstractTextDocumentLayout>
 #include <QApplication>
-#include <QPainter>
-#include <QMouseEvent>
 #include <QDateTime>
+#include <QMouseEvent>
+#include <QPainter>
 
 #include <boost/concept_check.hpp>
 
@@ -338,8 +340,10 @@ PlaylistItemDelegate::drawLoveBox( QPainter* painter, const QRect& rect, Playabl
     const int width = 2 + rect.height() - 4 * 2;
 
     QList< QPixmap > pixmaps;
-    foreach ( const Tomahawk::source_ptr& source, item->query()->queryTrack()->sourcesWithSocialAction( "Love", true, true ) )
-        pixmaps << source->avatar( TomahawkUtils::Original, QSize( height, height ) );
+    foreach ( const Tomahawk::SocialAction& sa, item->query()->queryTrack()->socialActions( "Love", true, true ) )
+    {
+        pixmaps << sa.source->avatar( TomahawkUtils::Original, QSize( height, height ) );
+    }
     const int max = 5;
     const unsigned int count = qMin( pixmaps.count(), max );
 
@@ -380,6 +384,104 @@ PlaylistItemDelegate::drawLoveBox( QPainter* painter, const QRect& rect, Playabl
 
     painter->restore();
     return rect;
+}
+
+
+QRect
+PlaylistItemDelegate::drawSentBox( QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, PlayableItem* item, const QModelIndex& index ) const
+{
+    const int height = rect.height() - 4 * 2;
+    const int width = 2 + rect.height() - 4 * 2;
+
+    QList< QPixmap > pixmaps;
+    QDateTime earliestTimestamp = QDateTime::currentDateTime();
+    foreach ( const Tomahawk::SocialAction& sa, item->query()->queryTrack()->socialActions( "Inbox", QVariant() /*neither true nor false!*/, true ) )
+    {
+        QDateTime saTimestamp = QDateTime::fromTime_t( sa.timestamp.toInt() );
+        if ( saTimestamp < earliestTimestamp && saTimestamp.toTime_t() > 0 )
+            earliestTimestamp = saTimestamp;
+
+        pixmaps << sa.source->avatar( TomahawkUtils::Original, QSize( height, height ) );
+    }
+    const int max = 5;
+    const unsigned int count = qMin( pixmaps.count(), max );
+
+    painter->save();
+
+    painter->setRenderHint( QPainter::Antialiasing, true );
+    painter->setBrush( Qt::transparent );
+    QPen pen = painter->pen().color();
+    pen.setWidthF( 0.2 );
+    painter->setPen( pen );
+
+    QTextDocument textDoc;
+    textDoc.setHtml( QString( "<b>%1</b>" )
+                     .arg( TomahawkUtils::ageToString( earliestTimestamp, true ) ) );
+    textDoc.setDocumentMargin( 0 );
+    textDoc.setDefaultFont( painter->font() );
+    textDoc.setDefaultTextOption( m_bottomOption );
+
+    QRect innerRect = rect.adjusted( rect.width() - width * count - 4 * 4 -
+                                     textDoc.idealWidth(),
+                                     0, 0, 0 );
+
+    QRect textRect = innerRect.adjusted( innerRect.width() - textDoc.idealWidth() - 4, 4, -4, -4 );
+
+    drawRichText( painter, option, textRect, Qt::AlignVCenter|Qt::AlignRight, textDoc );
+
+    if ( !pixmaps.isEmpty() && !textDoc.isEmpty() )
+        painter->drawRoundedRect( innerRect, 4, 4, Qt::RelativeSize );
+
+    unsigned int i = 0;
+    foreach ( QPixmap pixmap, pixmaps )
+    {
+        if ( i >= max )
+            break;
+
+        QRect r = innerRect.adjusted( 4, 4, -4, -4 );
+        r.adjust( width * i, 0, 0, 0 );
+        r.setWidth( width );
+
+        if ( pixmap.isNull() )
+            pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultSourceAvatar, TomahawkUtils::Original, QSize( r.height(), r.height() ) );
+        painter->drawPixmap( r.adjusted( 1, 0, -1, 0 ), pixmap );
+
+        i++;
+    }
+
+
+/*    TomahawkUtils::ImageType type = item->query()->queryTrack()->loved() ? TomahawkUtils::Loved : TomahawkUtils::NotLoved;
+    QRect r = innerRect.adjusted( innerRect.width() - rect.height() + 4, 4, -4, -4 );
+    painter->drawPixmap( r, TomahawkUtils::defaultPixmap( type, TomahawkUtils::Original, QSize( r.height(), r.height() ) ) );
+    m_loveButtonRects[ index ] = r;
+*/
+    painter->restore();
+    return rect;
+}
+
+
+void
+PlaylistItemDelegate::drawRichText( QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, int flags, QTextDocument& text ) const
+{
+    Q_UNUSED( option );
+
+    text.setPageSize( QSize( rect.width(), QWIDGETSIZE_MAX ) );
+    QAbstractTextDocumentLayout* layout = text.documentLayout();
+
+    const int height = qRound( layout->documentSize().height() );
+    int y = rect.y();
+    if ( flags & Qt::AlignBottom )
+        y += ( rect.height() - height );
+    else if ( flags & Qt::AlignVCenter )
+        y += ( rect.height() - height ) / 2;
+
+    QAbstractTextDocumentLayout::PaintContext context;
+    context.palette.setColor( QPalette::Text, painter->pen().color() );
+
+    painter->save();
+    painter->translate( rect.x(), y );
+    layout->draw( painter, context );
+    painter->restore();
 }
 
 

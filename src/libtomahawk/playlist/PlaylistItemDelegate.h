@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -21,6 +22,7 @@
 
 #include <QStyledItemDelegate>
 #include <QTextOption>
+#include <QTextDocument>
 
 #include "DllMacro.h"
 
@@ -65,6 +67,8 @@ protected:
     QRect drawSourceIcon( QPainter* painter, const QRect& rect, PlayableItem* item, float height ) const;
     QRect drawCover( QPainter* painter, const QRect& rect, PlayableItem* item, const QModelIndex& index ) const;
     QRect drawLoveBox( QPainter* painter, const QRect& rect, PlayableItem* item, const QModelIndex& index ) const;
+    void drawRichText( QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, int flags, QTextDocument& text ) const;
+    QRect drawSentBox( QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, PlayableItem* item, const QModelIndex& index ) const;
 
     void paintDetailed( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     void paintShort( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;

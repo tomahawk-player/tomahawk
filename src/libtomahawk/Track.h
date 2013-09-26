@@ -109,8 +109,8 @@ public:
 
     void loadSocialActions( bool force = false );
     QList< Tomahawk::SocialAction > allSocialActions() const;
-    QList< Tomahawk::source_ptr > sourcesWithSocialAction( const QString& action, const QVariant& value = QVariant(), bool filterDupeNames = false );
-    QString socialActionDescription( const QString& action, DescriptionMode mode ) const;
+    QList< Tomahawk::SocialAction > socialActions( const QString& actionName, const QVariant& value = QVariant(), bool filterDupeSourceNames = false );
+    QString socialActionDescription( const QString& actionName, DescriptionMode mode ) const;
 
     QList<Tomahawk::query_ptr> similarTracks() const;
     QStringList lyrics() const;

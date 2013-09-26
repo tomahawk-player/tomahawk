@@ -570,11 +570,11 @@ Track::socialActionDescription( const QString& action, DescriptionMode mode ) co
 }
 
 
-QList< Tomahawk::source_ptr >
-Track::sourcesWithSocialAction( const QString& action, const QVariant& value, bool filterDupeNames )
+QList< Tomahawk::SocialAction >
+Track::socialActions( const QString& actionName, const QVariant& value, bool filterDupeSourceNames )
 {
     Q_D( Track );
-    return d->trackData->sourcesWithSocialAction( action, value, filterDupeNames );
+    return d->trackData->socialActions( actionName, value, filterDupeSourceNames );
 }
 
 

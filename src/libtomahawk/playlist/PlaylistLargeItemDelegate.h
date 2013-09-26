@@ -50,8 +50,6 @@ protected slots:
     virtual void modelChanged();
 
 private:
-    void drawRichText( QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, int flags, QTextDocument& text ) const;
-
     TrackView* m_view;
     PlayableProxyModel* m_model;
     DisplayMode m_mode;
