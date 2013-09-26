@@ -425,7 +425,7 @@ PlaylistItemDelegate::drawSentBox( QPainter* painter, const QStyleOptionViewItem
                                      textDoc.idealWidth(),
                                      0, 0, 0 );
 
-    QRect textRect = innerRect.adjusted( innerRect.width() - textDoc.idealWidth() - 4, 4, -4, -4 );
+    QRect textRect = innerRect.adjusted( 4, 4, - innerRect.width() + textDoc.idealWidth() + 2*4, -4 );
 
     drawRichText( painter, option, textRect, Qt::AlignVCenter|Qt::AlignRight, textDoc );
 
@@ -438,7 +438,7 @@ PlaylistItemDelegate::drawSentBox( QPainter* painter, const QStyleOptionViewItem
         if ( i >= max )
             break;
 
-        QRect r = innerRect.adjusted( 4, 4, -4, -4 );
+        QRect r = innerRect.adjusted( textDoc.idealWidth() + 3*4, 4, -4, -4 );
         r.adjust( width * i, 0, 0, 0 );
         r.setWidth( width );
 
