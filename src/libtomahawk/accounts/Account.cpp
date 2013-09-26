@@ -21,7 +21,6 @@
 #include "Account.h"
 
 #include "AccountManager.h"
-#include "CredentialsManager.h"
 #include "ConfigStorage.h"
 
 namespace Tomahawk
