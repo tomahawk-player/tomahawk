@@ -77,6 +77,8 @@ LocalConfigStorage::onCredentialsManagerReady( const QString& service )
     //no need to listen for it any more
     disconnect( this, SLOT( onCredentialsManagerReady( QString ) ) );
 
+    tDebug() << Q_FUNC_INFO << "CredentialsManager is now ready for service" << service
+             << "with keys" << AccountManager::instance()->credentialsManager()->keys( service );
     emit ready();
 }
 
@@ -106,6 +108,7 @@ LocalConfigStorage::deduplicateFrom( const ConfigStorage* other)
 void
 LocalConfigStorage::save( const QString& accountId, const Account::Configuration& cfg )
 {
+    tDebug() << Q_FUNC_INFO << "about to save configuration for" << accountId;
     TomahawkSettings* s = TomahawkSettings::instance();
     s->beginGroup( "accounts/" + accountId );
     s->setValue( "accountfriendlyname", cfg.accountFriendlyName );
@@ -127,6 +130,7 @@ LocalConfigStorage::save( const QString& accountId, const Account::Configuration
 void
 LocalConfigStorage::load( const QString& accountId, Account::Configuration& cfg ) const
 {
+    tDebug() << Q_FUNC_INFO << "about to load creds for" << accountId << "- assuming CredentialsManager is *ready*.";
     TomahawkSettings* s = TomahawkSettings::instance();
     s->beginGroup( "accounts/" + accountId );
     cfg.accountFriendlyName = s->value( "accountfriendlyname", QString() ).toString();
