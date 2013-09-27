@@ -226,12 +226,26 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         }
         else if ( m_mode == RecentlyPlayed )
         {
-            QList< Tomahawk::source_ptr > sources;
-            sources << item->playbackLog().source;
+            if ( item->playbackLog().source )
+            {
+                QList< Tomahawk::source_ptr > sources;
+                sources << item->playbackLog().source;
 
-            QString playtime = TomahawkUtils::ageToString( QDateTime::fromTime_t( item->playbackLog().timestamp ), true );
+                QString playtime = TomahawkUtils::ageToString( QDateTime::fromTime_t( item->playbackLog().timestamp ), true );
 
-            drawGenericBox( painter, opt, leftRect, playtime, sources );
+                drawGenericBox( painter, opt, leftRect, playtime, sources );
+            }
+        }
+        else if ( m_mode == LatestAdditions )
+        {
+            if ( item->query()->numResults() )
+            {
+                QList< Tomahawk::source_ptr > sources;
+
+                QString modtime = TomahawkUtils::ageToString( QDateTime::fromTime_t( item->query()->results().first()->modificationTime() ), true );
+
+                drawGenericBox( painter, opt, leftRect, modtime, sources );
+            }
         }
         else
         {
