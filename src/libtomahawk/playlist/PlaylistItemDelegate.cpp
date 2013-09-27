@@ -393,7 +393,7 @@ PlaylistItemDelegate::drawGenericBox( QPainter* painter, const QStyleOptionViewI
 
     drawRichText( painter, option, textRect, Qt::AlignVCenter|Qt::AlignRight, textDoc );
 
-    if ( !sources.isEmpty() && !textDoc.isEmpty() )
+    if ( !sources.isEmpty() )
         drawRectForBox( painter, innerRect );
 
     QRect avatarsRect = innerRect.adjusted( textDoc.idealWidth() + 3*4, 4, -4, -4 );
