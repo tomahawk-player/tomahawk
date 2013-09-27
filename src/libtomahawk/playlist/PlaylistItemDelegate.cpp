@@ -387,7 +387,8 @@ PlaylistItemDelegate::drawLoveBox( QPainter* painter, const QRect& rect, Playabl
 }
 
 
-QRect PlaylistItemDelegate::drawGenericBox( QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, const QString& text, const QList< Tomahawk::source_ptr >& sources ) const
+QRect
+PlaylistItemDelegate::drawGenericBox( QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, const QString& text, const QList< Tomahawk::source_ptr >& sources ) const
 {
     const int height = rect.height() - 4 * 2;
     const int width = 2 + rect.height() - 4 * 2;
