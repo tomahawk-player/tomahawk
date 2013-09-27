@@ -68,7 +68,11 @@ protected:
     QRect drawSourceIcon( QPainter* painter, const QRect& rect, PlayableItem* item, float height ) const;
     QRect drawCover( QPainter* painter, const QRect& rect, PlayableItem* item, const QModelIndex& index ) const;
     QRect drawLoveBox( QPainter* painter, const QRect& rect, PlayableItem* item, const QModelIndex& index ) const;
-    QRect drawGenericBox( QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, const QString& text, const QList< Tomahawk::source_ptr >& sources ) const;
+    QRect drawGenericBox( QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect,
+                          const QString& text, const QList< Tomahawk::source_ptr >& sources ) const;
+    void drawRectForBox( QPainter* painter, const QRect& rect ) const;
+    void drawAvatarsForBox( QPainter* painter, const QRect& avatarsRect, int avatarSize, int avatarMargin,
+                            int count, const QList< Tomahawk::source_ptr >& sources ) const;
     void drawRichText( QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, int flags, QTextDocument& text ) const;
 
     void paintDetailed( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;

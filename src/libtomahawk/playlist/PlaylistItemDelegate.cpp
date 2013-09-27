@@ -336,80 +336,48 @@ PlaylistItemDelegate::drawCover( QPainter* painter, const QRect& rect, PlayableI
 QRect
 PlaylistItemDelegate::drawLoveBox( QPainter* painter, const QRect& rect, PlayableItem* item, const QModelIndex& index ) const
 {
-    const int height = rect.height() - 4 * 2;
-    const int width = 2 + rect.height() - 4 * 2;
+    const int avatarSize = rect.height() - 4 * 2;
+    const int avatarMargin = 2;
 
-    QList< QPixmap > pixmaps;
+    QList< Tomahawk::source_ptr > sources;
     foreach ( const Tomahawk::SocialAction& sa, item->query()->queryTrack()->socialActions( "Love", true, true ) )
     {
-        pixmaps << sa.source->avatar( TomahawkUtils::Original, QSize( height, height ) );
+        sources << sa.source;
     }
     const int max = 5;
-    const unsigned int count = qMin( pixmaps.count(), max );
+    const unsigned int count = qMin( sources.count(), max );
 
-    painter->save();
+    QRect innerRect = rect.adjusted( rect.width() -
+                                     ( avatarSize + avatarMargin ) * ( count + 1 ) -
+                                     4 * 4,
+                                     0, 0, 0 );
 
-    painter->setRenderHint( QPainter::Antialiasing, true );
-    painter->setBrush( Qt::transparent );
-    QPen pen = painter->pen().color();
-    pen.setWidthF( 0.2 );
-    painter->setPen( pen );
+    if ( !sources.isEmpty() )
+        drawRectForBox( painter, innerRect );
 
-    QRect innerRect = rect.adjusted( rect.width() - width * ( count + 1 ) - 4 * 4, 0, 0, 0 );
+    QRect avatarsRect = innerRect.adjusted( 4, 4, -4, -4 );
 
-    if ( !pixmaps.isEmpty() )
-        painter->drawRoundedRect( innerRect, 4, 4, Qt::RelativeSize );
-
-    unsigned int i = 0;
-    foreach ( QPixmap pixmap, pixmaps )
-    {
-        if ( i >= max )
-            break;
-
-        QRect r = innerRect.adjusted( 4, 4, -4, -4 );
-        r.adjust( width * i, 0, 0, 0 );
-        r.setWidth( width );
-
-        if ( pixmap.isNull() )
-            pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultSourceAvatar, TomahawkUtils::Original, QSize( r.height(), r.height() ) );
-        painter->drawPixmap( r.adjusted( 1, 0, -1, 0 ), pixmap );
-
-        i++;
-    }
+    drawAvatarsForBox( painter, avatarsRect, avatarSize, avatarMargin, count, sources );
 
     TomahawkUtils::ImageType type = item->query()->queryTrack()->loved() ? TomahawkUtils::Loved : TomahawkUtils::NotLoved;
     QRect r = innerRect.adjusted( innerRect.width() - rect.height() + 4, 4, -4, -4 );
     painter->drawPixmap( r, TomahawkUtils::defaultPixmap( type, TomahawkUtils::Original, QSize( r.height(), r.height() ) ) );
     m_loveButtonRects[ index ] = r;
 
-    painter->restore();
     return rect;
 }
 
 
 QRect
-PlaylistItemDelegate::drawGenericBox( QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, const QString& text, const QList< Tomahawk::source_ptr >& sources ) const
+PlaylistItemDelegate::drawGenericBox( QPainter* painter, const QStyleOptionViewItem& option,
+                                      const QRect& rect, const QString& text,
+                                      const QList< Tomahawk::source_ptr >& sources ) const
 {
-    const int height = rect.height() - 4 * 2;
-    const int width = 2 + rect.height() - 4 * 2;
-
-    QList< QPixmap > pixmaps;
-    foreach ( const Tomahawk::source_ptr& s, sources )
-    {
-        pixmaps << s->avatar( TomahawkUtils::Original, QSize( height, height ) );
-    }
+    const int avatarSize = rect.height() - 4 * 2;
+    const int avatarMargin = 2;
 
     const int max = 5;
-    const unsigned int count = qMin( pixmaps.count(), max );
-
-    painter->save();
-
-    painter->setRenderHint( QPainter::Antialiasing, true );
-    painter->setBrush( Qt::transparent );
-    QPen pen = painter->pen().color();
-    pen.setWidthF( 0.2 );
-    painter->setPen( pen );
-
+    const unsigned int count = qMin( sources.count(), max );
 
     QTextDocument textDoc;
     textDoc.setHtml( QString( "<b>%1</b>" ).arg( text ) );
@@ -417,7 +385,7 @@ PlaylistItemDelegate::drawGenericBox( QPainter* painter, const QStyleOptionViewI
     textDoc.setDefaultFont( painter->font() );
     textDoc.setDefaultTextOption( m_bottomOption );
 
-    QRect innerRect = rect.adjusted( rect.width() - width * count - 4 * 4 -
+    QRect innerRect = rect.adjusted( rect.width() - ( avatarSize + avatarMargin ) * count - 4 * 4 -
                                      textDoc.idealWidth(),
                                      0, 0, 0 );
 
@@ -425,30 +393,64 @@ PlaylistItemDelegate::drawGenericBox( QPainter* painter, const QStyleOptionViewI
 
     drawRichText( painter, option, textRect, Qt::AlignVCenter|Qt::AlignRight, textDoc );
 
-    if ( !pixmaps.isEmpty() && !textDoc.isEmpty() )
-        painter->drawRoundedRect( innerRect, 4, 4, Qt::RelativeSize );
+    if ( !sources.isEmpty() && !textDoc.isEmpty() )
+        drawRectForBox( painter, innerRect );
+
+    QRect avatarsRect = innerRect.adjusted( textDoc.idealWidth() + 3*4, 4, -4, -4 );
+    drawAvatarsForBox( painter, avatarsRect, avatarSize, avatarMargin, count, sources );
+
+    return rect;
+}
+
+
+void
+PlaylistItemDelegate::drawRectForBox( QPainter* painter, const QRect& rect ) const
+{
+    painter->save();
+
+    painter->setRenderHint( QPainter::Antialiasing, true );
+    painter->setBrush( Qt::transparent );
+    QPen pen = painter->pen().color();
+    pen.setWidthF( 0.2 );
+    painter->setPen( pen );
+
+    painter->drawRoundedRect( rect, 4, 4, Qt::RelativeSize );
+
+    painter->restore();
+}
+
+
+void
+PlaylistItemDelegate::drawAvatarsForBox( QPainter* painter, const QRect& avatarsRect,
+                                         int avatarSize, int avatarMargin, int count,
+                                         const QList< Tomahawk::source_ptr >& sources ) const
+{
+    QList< QPixmap > pixmaps;
+    foreach ( const Tomahawk::source_ptr& s, sources )
+    {
+        pixmaps << s->avatar( TomahawkUtils::Original, QSize( avatarSize, avatarSize ) );
+    }
+
+    painter->save();
 
     unsigned int i = 0;
     foreach ( QPixmap pixmap, pixmaps )
     {
-        if ( i >= max )
+        if ( i >= count )
             break;
 
-        QRect r = innerRect.adjusted( textDoc.idealWidth() + 3*4, 4, -4, -4 );
-        r.adjust( width * i, 0, 0, 0 );
-        r.setWidth( width );
+        QRect r = avatarsRect.adjusted( ( avatarSize + avatarMargin ) * i, 0, 0, 0 );
+        r.setWidth( avatarSize + avatarMargin );
 
         if ( pixmap.isNull() )
             pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultSourceAvatar, TomahawkUtils::Original, QSize( r.height(), r.height() ) );
-        painter->drawPixmap( r.adjusted( 1, 0, -1, 0 ), pixmap );
+        painter->drawPixmap( r.adjusted( avatarMargin/2, 0, -(avatarMargin/2), 0 ), pixmap );
 
         i++;
     }
 
     painter->restore();
-    return rect;
 }
-
 
 void
 PlaylistItemDelegate::drawRichText( QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, int flags, QTextDocument& text ) const
