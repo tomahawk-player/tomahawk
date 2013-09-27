@@ -69,6 +69,7 @@ protected:
     QRect drawLoveBox( QPainter* painter, const QRect& rect, PlayableItem* item, const QModelIndex& index ) const;
     void drawRichText( QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, int flags, QTextDocument& text ) const;
     QRect drawSentBox( QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, PlayableItem* item, const QModelIndex& index ) const;
+    QRect drawRecentBox( QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, PlayableItem* item, const QModelIndex& index ) const;
 
     void paintDetailed( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     void paintShort( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;

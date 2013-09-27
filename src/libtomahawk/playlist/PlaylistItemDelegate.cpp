@@ -449,12 +449,66 @@ PlaylistItemDelegate::drawSentBox( QPainter* painter, const QStyleOptionViewItem
         i++;
     }
 
+    painter->restore();
+    return rect;
+}
 
-/*    TomahawkUtils::ImageType type = item->query()->queryTrack()->loved() ? TomahawkUtils::Loved : TomahawkUtils::NotLoved;
-    QRect r = innerRect.adjusted( innerRect.width() - rect.height() + 4, 4, -4, -4 );
-    painter->drawPixmap( r, TomahawkUtils::defaultPixmap( type, TomahawkUtils::Original, QSize( r.height(), r.height() ) ) );
-    m_loveButtonRects[ index ] = r;
-*/
+
+QRect PlaylistItemDelegate::drawRecentBox(QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, PlayableItem* item, const QModelIndex& index) const
+{
+    const int height = rect.height() - 4 * 2;
+    const int width = 2 + rect.height() - 4 * 2;
+
+    QList< QPixmap > pixmaps;
+    pixmaps << item->playbackLog().source->avatar( TomahawkUtils::Original, QSize( height, height ) );
+
+    const int max = 5;
+    const unsigned int count = qMin( pixmaps.count(), max );
+
+    painter->save();
+
+    painter->setRenderHint( QPainter::Antialiasing, true );
+    painter->setBrush( Qt::transparent );
+    QPen pen = painter->pen().color();
+    pen.setWidthF( 0.2 );
+    painter->setPen( pen );
+
+    QString playtime = TomahawkUtils::ageToString( QDateTime::fromTime_t( item->playbackLog().timestamp ), true );
+
+    QTextDocument textDoc;
+    textDoc.setHtml( QString( "<b>%1</b>" ).arg( playtime ) );
+    textDoc.setDocumentMargin( 0 );
+    textDoc.setDefaultFont( painter->font() );
+    textDoc.setDefaultTextOption( m_bottomOption );
+
+    QRect innerRect = rect.adjusted( rect.width() - width * count - 4 * 4 -
+                                     textDoc.idealWidth(),
+                                     0, 0, 0 );
+
+    QRect textRect = innerRect.adjusted( 4, 4, - innerRect.width() + textDoc.idealWidth() + 2*4, -4 );
+
+    drawRichText( painter, option, textRect, Qt::AlignVCenter|Qt::AlignRight, textDoc );
+
+    if ( !pixmaps.isEmpty() && !textDoc.isEmpty() )
+        painter->drawRoundedRect( innerRect, 4, 4, Qt::RelativeSize );
+
+    unsigned int i = 0;
+    foreach ( QPixmap pixmap, pixmaps )
+    {
+        if ( i >= max )
+            break;
+
+        QRect r = innerRect.adjusted( textDoc.idealWidth() + 3*4, 4, -4, -4 );
+        r.adjust( width * i, 0, 0, 0 );
+        r.setWidth( width );
+
+        if ( pixmap.isNull() )
+            pixmap = TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultSourceAvatar, TomahawkUtils::Original, QSize( r.height(), r.height() ) );
+        painter->drawPixmap( r.adjusted( 1, 0, -1, 0 ), pixmap );
+
+        i++;
+    }
+
     painter->restore();
     return rect;
 }

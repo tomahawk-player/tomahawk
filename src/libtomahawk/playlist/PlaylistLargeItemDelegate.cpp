@@ -99,6 +99,8 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         return;
 
     const track_ptr track = item->query()->track();
+
+    //TODO: lowerText isn't displayed any more, get rid of the code path once we have an alternative
     QString lowerText;
 
     if ( m_mode == RecentlyPlayed && item->playbackLog().source )
@@ -207,6 +209,8 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         leftRect.setWidth( 96 );
         if ( m_mode == Inbox )
             drawSentBox( painter, opt, leftRect, item, index );
+        else if ( m_mode == RecentlyPlayed )
+            drawRecentBox( painter, opt, leftRect, item, index );
         else
             drawLoveBox( painter, leftRect, item, index );
 
