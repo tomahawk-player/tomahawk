@@ -208,11 +208,35 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         leftRect = rightRect.adjusted( -128, 4, 0, -4 );
         leftRect.setWidth( 96 );
         if ( m_mode == Inbox )
-            drawSentBox( painter, opt, leftRect, item, index );
+        {
+            QDateTime earliestTimestamp = QDateTime::currentDateTime();
+            QList< Tomahawk::source_ptr > sources;
+            foreach ( const Tomahawk::SocialAction& sa, item->query()->queryTrack()->socialActions( "Inbox", QVariant() /*neither true nor false!*/, true ) )
+            {
+                QDateTime saTimestamp = QDateTime::fromTime_t( sa.timestamp.toInt() );
+                if ( saTimestamp < earliestTimestamp && saTimestamp.toTime_t() > 0 )
+                    earliestTimestamp = saTimestamp;
+
+                sources << sa.source;
+            }
+
+            QString timeString = TomahawkUtils::ageToString( earliestTimestamp, true );
+
+            drawGenericBox( painter, opt, leftRect, timeString, sources );
+        }
         else if ( m_mode == RecentlyPlayed )
-            drawRecentBox( painter, opt, leftRect, item, index );
+        {
+            QList< Tomahawk::source_ptr > sources;
+            sources << item->playbackLog().source;
+
+            QString playtime = TomahawkUtils::ageToString( QDateTime::fromTime_t( item->playbackLog().timestamp ), true );
+
+            drawGenericBox( painter, opt, leftRect, playtime, sources );
+        }
         else
+        {
             drawLoveBox( painter, leftRect, item, index );
+        }
 
         if ( track->duration() > 0 )
         {

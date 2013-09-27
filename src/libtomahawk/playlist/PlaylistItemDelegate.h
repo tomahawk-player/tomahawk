@@ -25,6 +25,7 @@
 #include <QTextDocument>
 
 #include "DllMacro.h"
+#include "Typedefs.h"
 
 class TrackModel;
 class PlayableItem;
@@ -67,9 +68,8 @@ protected:
     QRect drawSourceIcon( QPainter* painter, const QRect& rect, PlayableItem* item, float height ) const;
     QRect drawCover( QPainter* painter, const QRect& rect, PlayableItem* item, const QModelIndex& index ) const;
     QRect drawLoveBox( QPainter* painter, const QRect& rect, PlayableItem* item, const QModelIndex& index ) const;
+    QRect drawGenericBox( QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, const QString& text, const QList< Tomahawk::source_ptr >& sources ) const;
     void drawRichText( QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, int flags, QTextDocument& text ) const;
-    QRect drawSentBox( QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, PlayableItem* item, const QModelIndex& index ) const;
-    QRect drawRecentBox( QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, PlayableItem* item, const QModelIndex& index ) const;
 
     void paintDetailed( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     void paintShort( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
