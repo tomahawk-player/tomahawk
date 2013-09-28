@@ -77,8 +77,8 @@ XmppAccount::authenticate()
 void
 XmppAccount::deauthenticate()
 {
-    if ( connectionState() != Account::Disconnected )
-        sipPlugin()->disconnectPlugin();
+    if ( connectionState() != Account::Disconnected && !m_xmppSipPlugin.isNull() )
+        m_xmppSipPlugin->disconnectPlugin();
 }
 
 bool
@@ -116,10 +116,13 @@ XmppAccount::infoPlugin()
 
 
 SipPlugin*
-XmppAccount::sipPlugin()
+XmppAccount::sipPlugin( bool create )
 {
     if ( m_xmppSipPlugin.isNull() )
     {
+        if ( !create )
+            return 0;
+
         m_xmppSipPlugin = QPointer< XmppSipPlugin >( new XmppSipPlugin( this ) );
 
         connect( m_xmppSipPlugin.data(), SIGNAL( stateChanged( Tomahawk::Accounts::Account::ConnectionState ) ), this, SIGNAL( connectionStateChanged( Tomahawk::Accounts::Account::ConnectionState ) ) );

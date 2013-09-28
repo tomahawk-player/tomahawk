@@ -72,7 +72,7 @@ public:
     virtual const QString name() const { return QString( "Google" ); }
     virtual const QString friendlyName() const { return "Google"; }
 
-    virtual SipPlugin* sipPlugin();
+    virtual SipPlugin* sipPlugin( bool create = true );
 
 private:
     QPointer< GoogleWrapperSip > m_sipPlugin;

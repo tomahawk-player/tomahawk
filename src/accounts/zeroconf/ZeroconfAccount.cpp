@@ -91,8 +91,8 @@ ZeroconfAccount::authenticate()
 void
 ZeroconfAccount::deauthenticate()
 {
-    if ( isAuthenticated() )
-        sipPlugin()->disconnectPlugin();
+    if ( isAuthenticated() && !m_sipPlugin.isNull() )
+        m_sipPlugin->disconnectPlugin();
 }
 
 
@@ -110,15 +110,19 @@ ZeroconfAccount::connectionState() const
         return Disconnected;
 
     // TODO can we get called before sipPlugin()?
-    return m_sipPlugin.data()->connectionState();
+    return m_sipPlugin->connectionState();
 }
 
 
 SipPlugin*
-ZeroconfAccount::sipPlugin()
+ZeroconfAccount::sipPlugin( bool create )
 {
-    if ( m_sipPlugin.isNull() )
+    if ( m_sipPlugin.isNull() ) {
+        if ( !create )
+            return 0;
+
         m_sipPlugin = QPointer< ZeroconfPlugin >( new ZeroconfPlugin( this ) );
+    }
 
     return m_sipPlugin.data();
 }

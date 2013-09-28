@@ -69,7 +69,7 @@ public:
     ConnectionState connectionState() const;
 
     virtual Tomahawk::InfoSystem::InfoPluginPtr infoPlugin() { return Tomahawk::InfoSystem::InfoPluginPtr(); }
-    SipPlugin* sipPlugin();
+    SipPlugin* sipPlugin( bool create = true );
 
     AccountConfigWidget* configurationWidget() { return 0; }
     QWidget* aclWidget() { return 0; }

@@ -117,7 +117,7 @@ public:
     virtual QString errorMessage() const { QMutexLocker locker( &m_mutex ); return m_cachedError; }
 
     virtual Tomahawk::InfoSystem::InfoPluginPtr infoPlugin() = 0;
-    virtual SipPlugin* sipPlugin() = 0;
+    virtual SipPlugin* sipPlugin( bool create = true ) = 0;
 
     // Some accounts cannot be enabled if authentication fails. Return true after failing to authenticate
     // if this is the case, and the account will not be enabled

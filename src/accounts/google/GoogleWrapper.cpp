@@ -106,10 +106,13 @@ GoogleWrapper::~GoogleWrapper()
 
 
 SipPlugin*
-GoogleWrapper::sipPlugin()
+GoogleWrapper::sipPlugin( bool create )
 {
     if ( m_xmppSipPlugin.isNull() )
     {
+        if ( !create )
+            return 0;
+
         m_xmppSipPlugin = QPointer< XmppSipPlugin >( new GoogleWrapperSip( const_cast< GoogleWrapper* >( this ) ) );
 
         connect( m_xmppSipPlugin.data(), SIGNAL( stateChanged( Tomahawk::Accounts::Account::ConnectionState ) ), this, SIGNAL( connectionStateChanged( Tomahawk::Accounts::Account::ConnectionState ) ) );

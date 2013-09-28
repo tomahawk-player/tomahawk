@@ -73,7 +73,7 @@ public:
 
     Tomahawk::InfoSystem::InfoPluginPtr infoPlugin();
 
-    SipPlugin* sipPlugin();
+    SipPlugin* sipPlugin( bool create = true );
 
     AccountConfigWidget* configurationWidget() { return m_configWidget.data(); }
     QWidget* aclWidget() { return 0; }

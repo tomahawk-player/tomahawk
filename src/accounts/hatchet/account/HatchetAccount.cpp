@@ -151,7 +151,7 @@ void
 HatchetAccount::deauthenticate()
 {
     if ( !m_tomahawkSipPlugin.isNull() )
-        sipPlugin()->disconnectPlugin();
+        m_tomahawkSipPlugin->disconnectPlugin();
     emit deauthenticated();
 }
 
@@ -173,10 +173,13 @@ HatchetAccount::connectionState() const
 
 
 SipPlugin*
-HatchetAccount::sipPlugin()
+HatchetAccount::sipPlugin( bool create )
 {
     if ( m_tomahawkSipPlugin.isNull() )
     {
+        if ( !create )
+            return 0;
+
         tLog() << Q_FUNC_INFO;
         m_tomahawkSipPlugin = QPointer< HatchetSipPlugin >( new HatchetSipPlugin( this ) );
         connect( m_tomahawkSipPlugin.data(), SIGNAL( authUrlDiscovered( Tomahawk::Accounts::HatchetAccount::Service, QString ) ),

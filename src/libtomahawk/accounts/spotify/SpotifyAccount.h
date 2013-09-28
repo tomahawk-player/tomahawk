@@ -100,7 +100,7 @@ public:
 
     virtual QWidget* aclWidget() { return 0; }
     virtual Tomahawk::InfoSystem::InfoPluginPtr infoPlugin();
-    virtual SipPlugin* sipPlugin() { return 0; }
+    virtual SipPlugin* sipPlugin( bool ) { return 0; }
     virtual bool preventEnabling() const { return m_preventEnabling; }
 
     bool hasPlaylist( const QString& plId );

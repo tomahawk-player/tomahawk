@@ -208,7 +208,7 @@ AccountManager::disconnectAll()
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     foreach ( Account* acc, m_enabledAccounts )
     {
-        if ( acc->sipPlugin() )
+        if ( acc->sipPlugin( false ) )
         {
             tDebug() << Q_FUNC_INFO << "Disconnecting" << acc->accountFriendlyName();
             acc->deauthenticate();
@@ -440,7 +440,7 @@ AccountManager::zeroconfAccount() const
 {
     foreach ( Account* account, accounts() )
     {
-        if ( account->sipPlugin() && account->sipPlugin()->serviceName() == "zeroconf" )
+        if ( account->sipPlugin( false ) && account->sipPlugin()->serviceName() == "zeroconf" )
             return account;
     }
 
@@ -521,7 +521,7 @@ AccountManager::onSettingsChanged()
 {
     foreach ( Account* account, m_accounts )
     {
-        if ( account->types() & Accounts::SipType && account->sipPlugin() )
+        if ( account->types() & Accounts::SipType && account->sipPlugin( false ) )
             account->sipPlugin()->checkSettings();
     }
 }
