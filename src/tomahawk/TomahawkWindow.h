@@ -158,6 +158,8 @@ private:
     void setupShortcuts();
     void setupUpdateCheck();
 
+    void handleUrlInput( const QUrl& url );
+
 #ifdef Q_OS_WIN
     bool setupWindowsButtons();
     const unsigned int m_buttonCreatedID;

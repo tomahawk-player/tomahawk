@@ -77,6 +77,7 @@
 #include "TomahawkTrayIcon.h"
 #include "TomahawkApp.h"
 #include "LoadXSPFDialog.h"
+#include "DropJob.h"
 #include "utils/ImageRegistry.h"
 #include "utils/Logger.h"
 
@@ -985,12 +986,8 @@ TomahawkWindow::loadSpiff()
     if ( !safe.isNull() && ret == QDialog::Accepted )
     {
         QUrl url = QUrl::fromUserInput( safe.data()->xspfUrl() );
-        bool autoUpdate = safe.data()->autoUpdate();
 
-        XSPFLoader* loader = new XSPFLoader( true, autoUpdate );
-        connect( loader, SIGNAL( error( XSPFLoader::XSPFErrorCode ) ), SLOT( onXSPFError( XSPFLoader::XSPFErrorCode ) ) );
-        connect( loader, SIGNAL( ok( Tomahawk::playlist_ptr ) ), SLOT( onXSPFOk( Tomahawk::playlist_ptr ) ) );
-        loader->load( url );
+        handleUrlInput( url );
     }
 #endif
 }
@@ -1004,14 +1001,28 @@ TomahawkWindow::loadXspfFinished( int ret )
     if ( ret == QDialog::Accepted )
     {
         QUrl url = QUrl::fromUserInput( d->xspfUrl() );
-        bool autoUpdate = d->autoUpdate();
 
-        XSPFLoader* loader = new XSPFLoader( true, autoUpdate );
-        connect( loader, SIGNAL( error( XSPFLoader::XSPFErrorCode ) ), SLOT( onXSPFError( XSPFLoader::XSPFErrorCode ) ) );
-        connect( loader, SIGNAL( ok( Tomahawk::playlist_ptr ) ), SLOT( onXSPFOk( Tomahawk::playlist_ptr ) ) );
-        loader->load( url );
+        handleUrlInput( url );
     }
     d->deleteLater();
+}
+
+
+void
+TomahawkWindow::handleUrlInput( const QUrl& url )
+{
+    QMimeData* data = new QMimeData( );
+    data->setData( "text/plain" , url.toEncoded() );
+    if ( DropJob::isDropType( DropJob::Playlist, data  ) )
+    {
+        qDebug() << Q_FUNC_INFO << "Current Event";
+        DropJob* dropThis = new DropJob;
+        dropThis->setDropTypes( DropJob::Playlist );
+        dropThis->setDropAction( DropJob::Create );
+        dropThis->parseMimeData( data );
+
+        // Don't add it to the playlist under drop, it's a new playlist now
+    }
 }
 
 
