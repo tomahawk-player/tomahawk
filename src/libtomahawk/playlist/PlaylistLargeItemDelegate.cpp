@@ -222,7 +222,7 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
 
             QString timeString = TomahawkUtils::ageToString( earliestTimestamp, true );
 
-            drawGenericBox( painter, opt, leftRect, timeString, sources );
+            drawGenericBox( painter, opt, leftRect, timeString, sources, index );
         }
         else if ( m_mode == RecentlyPlayed )
         {
@@ -233,7 +233,7 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
 
                 QString playtime = TomahawkUtils::ageToString( QDateTime::fromTime_t( item->playbackLog().timestamp ), true );
 
-                drawGenericBox( painter, opt, leftRect, playtime, sources );
+                drawGenericBox( painter, opt, leftRect, playtime, sources, index );
             }
         }
         else if ( m_mode == LatestAdditions )
@@ -244,7 +244,7 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
 
                 QString modtime = TomahawkUtils::ageToString( QDateTime::fromTime_t( item->query()->results().first()->modificationTime() ), true );
 
-                drawGenericBox( painter, opt, leftRect, modtime, sources );
+                drawGenericBox( painter, opt, leftRect, modtime, sources, index );
             }
         }
         else
