@@ -767,7 +767,7 @@ conectarse a usted y transmitir música?</translation>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>Formulario</translation>
     </message>
     <message>
         <location filename="../src/accounts/hatchet/account/HatchetAccountConfig.ui" line="33"/>
@@ -1556,12 +1556,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/database/TomahawkSqlQuery.cpp" line="91"/>
         <source>No query</source>
-        <translation type="unfinished"/>
+        <translation>No hay consulta</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/database/TomahawkSqlQuery.cpp" line="92"/>
         <source>Parameter count mismatch</source>
-        <translation type="unfinished"/>
+        <translation>La cantidad de parámetros no coincide</translation>
     </message>
 </context>
 <context>
@@ -1873,12 +1873,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/Settings_Collection.ui" line="55"/>
         <source>+</source>
-        <translation type="unfinished"/>
+        <translation>+</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/Settings_Collection.ui" line="62"/>
         <source>-</source>
-        <translation type="unfinished"/>
+        <translation>−</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/Settings_Collection.ui" line="88"/>
@@ -2772,7 +2772,7 @@ Deberá volverse a autenticar.</translation>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="276"/>
         <source>Your tweet has been posted!</source>
-        <translation>¡Se ha publicado su twit!</translation>
+        <translation>Se ha publicado su tuit.</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="283"/>
@@ -2958,7 +2958,7 @@ usuario@jabber.org</translation>
     <message>
         <location filename="../src/libtomahawk/database/DatabaseCommand_AllAlbums.cpp" line="119"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>Desconocido</translation>
     </message>
 </context>
 <context>
@@ -3747,12 +3747,12 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message numerus="yes">
         <location filename="../src/libtomahawk/Track.cpp" line="556"/>
         <source>%n other(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n más</numerusform><numerusform>%n más</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/Track.cpp" line="559"/>
         <source>%n people</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n persona</numerusform><numerusform>%n personas</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Track.cpp" line="563"/>
@@ -3775,7 +3775,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/viewpages/dashboard/Dashboard.h" line="102"/>
         <source>An overview of your friends&apos; recent activity</source>
-        <translation type="unfinished"/>
+        <translation>Un resumen de la actividad reciente de sus amigos</translation>
     </message>
 </context>
 <context>
@@ -3804,12 +3804,12 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="72"/>
         <source>Charts</source>
-        <translation type="unfinished"/>
+        <translation>Listas</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="83"/>
         <source>Last Week</source>
-        <translation type="unfinished"/>
+        <translation>Semana pasada</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="89"/>
@@ -3839,17 +3839,17 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="80"/>
         <source>Last Month</source>
-        <translation type="unfinished"/>
+        <translation>Mes pasado</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="77"/>
         <source>Last Year</source>
-        <translation type="unfinished"/>
+        <translation>Año pasado</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivityWidget.cpp" line="74"/>
         <source>Overall</source>
-        <translation type="unfinished"/>
+        <translation>General</translation>
     </message>
 </context>
 <context>
