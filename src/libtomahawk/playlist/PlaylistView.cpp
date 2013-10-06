@@ -35,7 +35,6 @@ PlaylistView::PlaylistView( QWidget* parent )
     : TrackView( parent )
     , m_model( 0 )
 {
-    connect( contextMenu(), SIGNAL( triggered( int ) ), SLOT( onMenuTriggered( int ) ) );
 }
 
 
@@ -155,6 +154,8 @@ PlaylistView::isTemporaryPage() const
 void
 PlaylistView::onMenuTriggered( int action )
 {
+    TrackView::onMenuTriggered( action );
+
     switch ( action )
     {
         default:
