@@ -173,7 +173,7 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
     }
     else
     {
-        upperText = QString( "%1 - %2" ).arg( track->artist() ).arg( track->track() );
+        upperText = QString( "%1 - %2" ).arg( track->track() ).arg( track->artist() );
         QString playtime = TomahawkUtils::ageToString( QDateTime::fromTime_t( item->playbackLog().timestamp ), true );
 
         if ( item->playbackLog().source->isLocal() )

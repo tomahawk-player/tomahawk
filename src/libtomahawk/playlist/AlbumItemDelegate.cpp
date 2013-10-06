@@ -123,7 +123,7 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
         QString rawText = track->track();
         if ( m_showArtist )
         {
-            rawText = QString( "%1 - %2" ).arg( track->artist() ).arg( rawText );
+            rawText = QString( "%1 - %2" ).arg( rawText ).arg( track->artist() );
         }
         const QString text = painter->fontMetrics().elidedText( rawText, Qt::ElideRight, leftRect.width() );
         painter->setPen( opt.palette.text().color() );
