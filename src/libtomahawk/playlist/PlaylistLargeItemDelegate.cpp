@@ -188,13 +188,13 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         textDoc.setDefaultFont( painter->font() );
         textDoc.setDefaultTextOption( m_topOption );
 
+        if ( !( option.state & QStyle::State_Selected || item->isPlaying() ) )
+            painter->setPen( opt.palette.mid().color() );
+
         if ( textDoc.idealWidth() <= leftRect.width() )
             drawRichText( painter, opt, leftRect.adjusted( 0, QFontMetrics( bigBoldFont ).height() + 1, 0, 0 ), Qt::AlignTop, textDoc );
 
-        if ( !( option.state & QStyle::State_Selected || item->isPlaying() ) )
-            painter->setPen( opt.palette.text().color().darker() );
-
-//TODO: replace usage of lowerText which is not drawn any more with appropriate loveBox/sentBox style boxes
+        //TODO: replace usage of lowerText which is not drawn any more with appropriate loveBox/sentBox style boxes
         textDoc.setHtml( lowerText );
         textDoc.setDocumentMargin( 0 );
         textDoc.setDefaultFont( painter->font() );
