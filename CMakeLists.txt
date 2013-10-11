@@ -47,10 +47,13 @@ option(WITH_BINARY_ATTICA "Enable support for downloading binary resolvers autom
 option(LEGACY_KDE_INTEGRATION "Install tomahawk.protocol file, deprecated since 4.6.0" OFF)
 option(WITH_KDE4 "Build with support for KDE specific stuff" ON)
 
+find_package(QtSystemd QUIET)
 CMAKE_DEPENDENT_OPTION(WITH_UPOWER "Build with support for UPower events" ON
        "UNIX;NOT APPLE" OFF)
 CMAKE_DEPENDENT_OPTION(WITH_GNOMESHORTCUTHANDLER "Build with shortcut handler for GNOME" ON
        "UNIX;NOT APPLE" OFF)
+CMAKE_DEPENDENT_OPTION(WITH_SYSTEMD "Build with support for systemd events" ON
+       "QtSystemd_FOUND" OFF)
 
 IF( CMAKE_SYSTEM_PROCESSOR MATCHES "arm" )
     message(STATUS "Build of breakpad library disabled on this platform.")

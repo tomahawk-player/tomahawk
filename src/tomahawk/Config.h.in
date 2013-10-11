@@ -18,6 +18,7 @@
 #cmakedefine WITH_QtSparkle
 #cmakedefine WITH_UPOWER
 #cmakedefine WITH_GNOMESHORTCUTHANDLER
+#cmakedefine WITH_SYSTEMD
 
 #cmakedefine LIBLASTFM_FOUND
 #cmakedefine QCA2_FOUND

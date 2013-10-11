@@ -15,6 +15,10 @@ IF( WITH_GNOMESHORTCUTHANDLER )
     SET( tomahawkSources ${tomahawkSources} linux/GnomeShortcutHandler.cpp )
 ENDIF( WITH_GNOMESHORTCUTHANDLER )
 
+IF( WITH_SYSTEMD )
+    SET( tomahawkSources ${tomahawkSources} linux/SystemdHandler.cpp )
+ENDIF( WITH_SYSTEMD )
+
 INSTALL( FILES ${CMAKE_SOURCE_DIR}/data/icons/tomahawk-icon.svg RENAME tomahawk.svg  DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps )
 
 INSTALL( FILES ${CMAKE_SOURCE_DIR}/admin/unix/tomahawk.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications )

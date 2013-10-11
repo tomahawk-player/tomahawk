@@ -92,6 +92,10 @@
     #include "linux/GnomeShortcutHandler.h"
 #endif
 
+#ifdef WITH_SYSTEMD
+    #include "linux/SystemdHandler.h"
+#endif
+
 #ifndef ENABLE_HEADLESS
     #include <QMessageBox>
 #endif
@@ -568,6 +572,10 @@ TomahawkApp::initEnergyEventHandler()
     UPowerHandler* upower = new UPowerHandler( this );
     upower->registerHandler();
 #endif // WITH_UPOWER
+
+#ifdef WITH_SYSTEMD
+    new SystemdHandler( this );
+#endif // WITH_SYSTEMD
 }
 
 
