@@ -857,7 +857,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/jobview/InboxJobItem.cpp" line="72"/>
         <source>%1 sent you %2 by %3.</source>
-        <translation>%1 le envió %2 de %3.</translation>
+        <translation>%1 te envió %2 de %3.</translation>
     </message>
 </context>
 <context>
@@ -2798,7 +2798,7 @@ Deberá volverse a autenticar.</translation>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="73"/>
         <source>Account provided by %1.</source>
-        <translation type="unfinished"/>
+        <translation>Cuenta proporcionada por %1.</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="157"/>
@@ -3509,13 +3509,14 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
         <source>%1 sent you
 %2%4 %3.</source>
         <comment>%1 is a nickname, %2 is a title, %3 is an artist, %4 is the preposition used to link track and artist ('by' in english)</comment>
-        <translation type="unfinished"/>
+        <translation>%1 te envió
+%2%4 %3.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="208"/>
         <source>%1 sent you &quot;%2&quot; by %3.</source>
         <comment>%1 is a nickname, %2 is a title, %3 is an artist</comment>
-        <translation type="unfinished"/>
+        <translation>%1 te envió &quot;%2&quot; de %3.</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="271"/>
@@ -3762,7 +3763,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/libtomahawk/Track.cpp" line="565"/>
         <source>sent you this track %1</source>
-        <translation type="unfinished"/>
+        <translation>te envió esta pista %1</translation>
     </message>
 </context>
 <context>
@@ -3796,7 +3797,7 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivity.h" line="58"/>
         <source>What&apos;s hot amongst your friends</source>
-        <translation type="unfinished"/>
+        <translation>Qué es popular entre tus amigos</translation>
     </message>
 </context>
 <context>

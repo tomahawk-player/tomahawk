@@ -433,7 +433,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnItemDelegate.cpp" line="191"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>Sconosciuto</translation>
     </message>
 </context>
 <context>
@@ -449,7 +449,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="192"/>
         <source>Composer</source>
-        <translation type="unfinished"/>
+        <translation>Compositore</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="204"/>
@@ -484,22 +484,22 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="291"/>
         <source>Bitrate:</source>
-        <translation type="unfinished"/>
+        <translation>Bitrate:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="309"/>
         <source>Year:</source>
-        <translation type="unfinished"/>
+        <translation>Anno:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.ui" line="327"/>
         <source>Age:</source>
-        <translation type="unfinished"/>
+        <translation>Età:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.cpp" line="96"/>
         <source>%1 kbps</source>
-        <translation type="unfinished"/>
+        <translation>%1 kbps</translation>
     </message>
 </context>
 <context>
@@ -836,7 +836,7 @@ temporanea (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/HistoryWidget.cpp" line="96"/>
         <source>Sorry, we could not find any recent plays!</source>
-        <translation type="unfinished"/>
+        <translation>Spiacente, non è stato possibile trovare ascolti recenti!</translation>
     </message>
 </context>
 <context>
@@ -1657,7 +1657,7 @@ temporanea (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/SearchWidget.ui" line="72"/>
         <source>Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Tracce</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/SearchWidget.ui" line="173"/>
@@ -1667,12 +1667,12 @@ temporanea (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/SearchWidget.ui" line="242"/>
         <source>Albums</source>
-        <translation type="unfinished"/>
+        <translation>Albums</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/SearchWidget.cpp" line="68"/>
         <source>Sorry, we could not find any tracks!</source>
-        <translation type="unfinished"/>
+        <translation>Spiacente, non siamo riusciti a trovare alcuna traccia!</translation>
     </message>
 </context>
 <context>
@@ -2261,7 +2261,7 @@ temporanea (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="184"/>
         <source>Use this to force Spotify to never announce listening data to Social Networks</source>
-        <translation type="unfinished"/>
+        <translation>Usa questo per forzare Spotify a non comunicare i tuoi ascolti ai Social Network</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="187"/>
@@ -4130,7 +4130,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="63"/>
         <source># PLAYS / ARTIST</source>
-        <translation type="unfinished"/>
+        <translation>#ASCOLTI / ARTISTA</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="65"/>
