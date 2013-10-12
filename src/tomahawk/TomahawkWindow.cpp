@@ -1346,8 +1346,13 @@ TomahawkWindow::checkForUpdates()
 void
 TomahawkWindow::onSearch( const QString& search )
 {
-    if ( !search.trimmed().isEmpty() )
-        ViewManager::instance()->show( new SearchWidget( search, this ) );
+	if ( !search.trimmed().isEmpty() ) {
+		if( search.startsWith( "tomahawk:" ) ) {
+			APP->loadUrl(search);
+		} else {
+			ViewManager::instance()->show( new SearchWidget( search, this ) );
+		}
+	}
 }
 
 
