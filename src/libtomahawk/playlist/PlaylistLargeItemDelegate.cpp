@@ -189,7 +189,15 @@ PlaylistLargeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem&
         textDoc.setDefaultTextOption( m_topOption );
 
         if ( !( option.state & QStyle::State_Selected || item->isPlaying() ) )
-            painter->setPen( opt.palette.mid().color() );
+        {
+            QColor mid = opt.palette.mid().color();
+            //HACK: adjust small text shade based on a guess if normal text is darker or lighter
+            //      than normal background.
+            if ( opt.palette.text().color().lightness() < opt.palette.base().color().lightness() )
+                painter->setPen( mid.darker( 140 ) );
+            else
+                painter->setPen( mid.lighter( 140 ) );
+        }
 
         if ( textDoc.idealWidth() <= leftRect.width() )
             drawRichText( painter, opt, leftRect.adjusted( 0, QFontMetrics( bigBoldFont ).height() + 1, 0, 0 ), Qt::AlignTop, textDoc );
