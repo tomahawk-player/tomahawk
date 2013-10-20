@@ -1326,7 +1326,7 @@ Password (OTP)</source>
         <location filename="../src/libtomahawk/playlist/PlaylistLargeItemDelegate.cpp" line="184"/>
         <source>&lt;b&gt;%1&lt;/b&gt;</source>
         <comment>e.g. by SomeArtist</comment>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
 </context>
 <context>
@@ -1750,7 +1750,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/SettingsDialog.cpp" line="418"/>
         <source>Open Directory</source>
-        <translation type="unfinished"/>
+        <translation>Отвори папка</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/SettingsDialog.cpp" line="512"/>
@@ -1887,12 +1887,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/Settings_Collection.ui" line="55"/>
         <source>+</source>
-        <translation type="unfinished"/>
+        <translation>+</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/Settings_Collection.ui" line="62"/>
         <source>-</source>
-        <translation type="unfinished"/>
+        <translation>-</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/Settings_Collection.ui" line="88"/>
@@ -3790,7 +3790,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/dashboard/Dashboard.h" line="102"/>
         <source>An overview of your friends&apos; recent activity</source>
-        <translation type="unfinished"/>
+        <translation>Обобщение на скорошната активност на приятелите ти</translation>
     </message>
 </context>
 <context>
@@ -3806,12 +3806,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivity.h" line="57"/>
         <source>Trending</source>
-        <translation type="unfinished"/>
+        <translation>Насока</translation>
     </message>
     <message>
         <location filename="../src/viewpages/networkactivity/NetworkActivity.h" line="58"/>
         <source>What&apos;s hot amongst your friends</source>
-        <translation type="unfinished"/>
+        <translation>Какво е популярно сред приятелите ти</translation>
     </message>
 </context>
 <context>
@@ -4088,7 +4088,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1106"/>
         <source>Create New Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Създай нов списък</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1139"/>
