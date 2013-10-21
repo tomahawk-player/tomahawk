@@ -4,59 +4,61 @@
 <!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
 <!--[if (gte IE 9)|!(IE)]><!-->
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <meta content="" name="description">
   <meta content="Tomahawk" name="author">
-  <link href="../../assets/ico/favicon.png" rel="shortcut icon">
+  <link href="/staticdata/favicon.png" rel="shortcut icon">
 
-  <title>Tomahawk</title><!-- CSS -->
-  <link href="css/bootstrap.css" rel="stylesheet">
-  <link href="css/style.css" rel="stylesheet"><!-- Theme Style -->
-  <link href="css/elements.css" rel="stylesheet"><!-- Theme elements style -->
-  <link href="css/animate.css" rel="stylesheet"><!-- CSS Animations -->
- 
- <!--[if lt IE 9]>
-        <script src="js/html5shim.js"></script>
-    <![endif]-->
-<noscript><link rel="stylesheet" href="css/no-js.css"></noscript>
-  <!--  Google Web Fonts -->
- <link href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,900' rel='stylesheet' type='text/css'>
-  <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900' rel='stylesheet' type='text/css'>
+  <title>Tomahawk</title>
+  <!-- CSS -->
+  <link href="/staticdata/css/bootstrap.css" rel="stylesheet">
+  <link href="/staticdata/css/style.css" rel="stylesheet"><!-- Theme Style -->
+  <link href="/staticdata/css/elements.css" rel="stylesheet"><!-- Theme elements style -->
+  <link href="/staticdata/css/animate.css" rel="stylesheet"><!-- CSS Animations -->
+
+   <!--[if lt IE 9]>
+        <script src="/staticdata/js/html5shim.js"></script>
+   <![endif]-->
+
+    <noscript><link rel="stylesheet" href="/staticdata/css/no-js.css"></noscript>
+
+   <!--  Google Web Fonts -->
+   <link href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,900' rel='stylesheet' type='text/css'>
+   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900' rel='stylesheet' type='text/css'>
 </head>
+
 <body>
-  <!--NAVBAR -->
-  <header id="header">
-    <div class="navbar navbar-fixed-top" id="nav">
-      <div class="ribbon-top"></div>
-
-      <div class="container">
-        <div class="navbar-header">
-          <button class="navbar-toggle" data-target=".navbar-collapse"
-          data-toggle="collapse" type="button"><span class="icon-bar"></span>
-          <span class="icon-bar"></span> <span class=
-          "icon-bar"></span></button> <a class="navbar-brand" href=
-          "http://tomahawk-player.org/index.html"><img alt="" src="logo.png" height="50"></a>
+    <!--NAVBAR -->
+    <header id="header">
+        <div class="navbar navbar-fixed-top" id="nav">
+            <div class="ribbon-top"></div>
+            <div class="container">
+                <div class="navbar-header">
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse" type="button">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://tomahawk-player.org/index.html">
+                        <img alt="" src="/staticdata/tomahawk_auth_logo.png" height="50">
+                    </a>
+                </div>
+            </div>
         </div>
+    </header>
+    <!--/.NAVBAR:end -->
 
-       
-      </div>
-    </div>
-  </header>
-  <!--/.NAVBAR:end -->
-
- <!--Content WRAPPER-->
-               <div id="wrapper-content">
-                <div class="row">
-                    <div class="col-md-4"></div>
-                    <div class="col-md-4">
+    <!--Content WRAPPER-->
+        <div id="wrapper-content">
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <br><br>
+                    <center>
                         <br><br>
-                        <center>
-                        <a href="http://www.tomahawk-player.org" title="Tomahawk - Powered by Playdar" id="head">
-                        <img alt="Tomahawk" src="/staticdata/tomahawk_auth_logo.png" width="200" height="30"></a>
-                        <br><br>
-        
                         <div id="content">
                             <form method="post" action="/auth_2/" id="auth">
                                 <p>Grant access to Tomahawk from <a href="<%WEBSITE%>"><%NAME%></a>?</p>
@@ -70,17 +72,14 @@
                                 <input type="hidden" name="website" value="<%WEBSITE%>" />
                                 <input type="hidden" name="name" value="<%NAME%>" />
                             </form>
-                        </center>
-                        <br><br>
                         </div>
-                    <div class="col-md-4"></div>
-                    </div>
-                </div><!-- #Wraper-content:ends -->
-  
+                    </center>
+                    <br><br>
+                </div>
+            <div class="col-md-4"></div>
+        </div>
+    </div>
+    <!-- #Wraper-content:ends -->
 
- 
 </body>
 </html>
-
-
-
