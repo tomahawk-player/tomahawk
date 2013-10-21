@@ -96,9 +96,6 @@
         <file>data/icons/tomahawk-icon-128x128.png</file>
         <file>data/icons/tomahawk-icon-256x256.png</file>
         <file>data/icons/tomahawk-icon-512x512.png</file>
-        <file>data/www/auth.html</file>
-        <file>data/www/auth.na.html</file>
-        <file>data/www/tomahawk_auth_logo.png</file>
         <file>data/sql/dbmigrate-22_to_23.sql</file>
         <file>data/sql/dbmigrate-23_to_24.sql</file>
         <file>data/sql/dbmigrate-24_to_25.sql</file>
@@ -162,7 +159,9 @@
         <file>data/sql/dbmigrate-29_to_30.sql</file>
         <file>data/sql/dbmigrate-30_to_31.sql</file>
         <file>data/images/trending.svg</file>
-        <file>data/www/logo.png</file>
+        <file>data/www/auth.html</file>
+        <file>data/www/auth.na.html</file>
+        <file>data/www/tomahawk_auth_logo.png</file>
         <file>data/www/css/animate.css</file>
         <file>data/www/css/bootstrap.css</file>
         <file>data/www/css/elements.css</file>
