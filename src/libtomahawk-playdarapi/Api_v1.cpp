@@ -316,13 +316,19 @@ void
 Api_v1::staticdata( QxtWebRequestEvent* event, const QString& str )
 {
     tDebug( LOGVERBOSE ) << "STATIC request:" << event << str;
-    if ( str.contains( "tomahawk_auth_logo.png" ) )
+
+    bool whitelisted = ( str == QString( "tomahawk_auth_logo.png" ) );
+    if ( whitelisted )
     {
-        QFile f( RESPATH "www/tomahawk_banner_small.png" );
+        QFile f( RESPATH "www/" + str );
         f.open( QIODevice::ReadOnly );
         QByteArray data = f.readAll();
-        QxtWebPageEvent * e = new QxtWebPageEvent( event->sessionID, event->requestID, data );
-        e->contentType = "image/png";
+
+        QxtWebPageEvent* e = new QxtWebPageEvent( event->sessionID, event->requestID, data );
+
+        if ( str.endsWith( ".png" ) )
+            e->contentType = "image/png";
+
         postEvent( e );
     }
 }
