@@ -313,24 +313,43 @@ Api_v1::resolve( QxtWebRequestEvent* event )
 
 
 void
-Api_v1::staticdata( QxtWebRequestEvent* event, const QString& str )
+Api_v1::staticdata( QxtWebRequestEvent* event, const QString& file )
 {
-    tDebug( LOGVERBOSE ) << "STATIC request:" << event << str;
+    tDebug( LOGVERBOSE ) << "STATIC request:" << event << file;
 
-    bool whitelisted = ( str == QString( "tomahawk_auth_logo.png" ) );
+    bool whitelisted = ( file == QString( "tomahawk_auth_logo.png" ) ||
+                         file.startsWith( "css/" ) ||
+                         file.startsWith( "js/" ) );
+
     if ( whitelisted )
     {
-        QFile f( RESPATH "www/" + str );
+        QFile f( RESPATH "www/" + file );
         f.open( QIODevice::ReadOnly );
         QByteArray data = f.readAll();
 
         QxtWebPageEvent* e = new QxtWebPageEvent( event->sessionID, event->requestID, data );
 
-        if ( str.endsWith( ".png" ) )
+        if ( file.endsWith( ".png" ) )
             e->contentType = "image/png";
+        if ( file.endsWith( ".css" ) )
+            e->contentType = "text/css";
+        if ( file.endsWith( ".js" ) )
+            e->contentType = "application/javascript";
 
         postEvent( e );
     }
+    else
+    {
+        send404( event );
+        return;
+    }
+}
+
+
+void
+Api_v1::staticdata( QxtWebRequestEvent* event, const QString& path, const QString& file )
+{
+    return staticdata( event, path + "/" + file );
 }
 
 
