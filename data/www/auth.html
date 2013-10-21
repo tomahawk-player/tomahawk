@@ -1,64 +1,143 @@
-<!DOCTYPE HTML>
-<html>
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Allow Tomahawk Access</title>
-    <style>
-    body {
-        margin: 0;
-        padding: 0;
-        font: normal 12px 'Verdana', sans-serif;
-    }
-    a img,
-    img {
-        border: 0;
-    }
-    a {
-        color: #598d0c;
-    }
-    a#head {
-        display: block;
-        width: 100%;
-        height: 68px;
-        background: #cbdab1;
-    }
-    div#content {
-        margin: 30px;
-        text-align: center;
-    }
-    div#content p {
-        margin: 0 0 25px 0;
-    }
-    input.button {
-        border: 1px solid #999;
-        padding: 4px 10px;
-        border-color: #999 #555 #555 #999;
-        background: #ddd;
-    }
-    input.confirm {
-        background: #81bd0e;
-        color: #fff;
-        border-color: #6ba318 #426c0b #426c0b #6ba318;
-    }
-    </style>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="" name="description">
+  <meta content="Tomahawk" name="author">
+  <link href="../../assets/ico/favicon.png" rel="shortcut icon">
+
+  <title>Tomahawk</title><!-- CSS -->
+  <link href="http://tomahawk-player.org/css/bootstrap.css" rel="stylesheet">
+  <link href="http://tomahawk-player.org/css/style.css" rel="stylesheet"><!-- Theme Style -->
+  <link href="http://tomahawk-player.org/css/elements.css" rel="stylesheet"><!-- Theme elements style -->
+  <link href="http://tomahawk-player.org/css/animate.css" rel="stylesheet"><!-- CSS Animations -->
+  <link href="http://tomahawk-player.org/css/font-awesome.css" rel="stylesheet">
+<!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+<noscript><link rel="stylesheet" href="css/no-js.css"></noscript>
+  <!--  Google Web Fonts -->
+ <link href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,900' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900' rel='stylesheet' type='text/css'>
 </head>
 <body>
-    <a href="http://www.tomahawk-player.org" title="Tomahawk - Powered by Playdar" id="head">
-        <img alt="Tomahawk - Powered by Playdar" src="/staticdata/tomahawk_auth_logo.png" width="200" height="30">
-    </a>
-    
-    <div id="content">
-        <form method="post" action="/auth_2/" id="auth">
-            <p>Allow access to Tomahawk from <a href="<%WEBSITE%>"><%NAME%></a></p>
-            <p class="buttons">
-                <input type="button" value="Deny" class="button" onclick="window.close();" />
-                <input type="submit" value="Allow" class="confirm button" />
-            </p>
-            <input type="hidden" name="formtoken" value="<%FORMTOKEN%>" />
-            <input type="hidden" name="receiverurl" value="<%URL%>" />
-            <input type="hidden" name="website" value="<%WEBSITE%>" />
-            <input type="hidden" name="name" value="<%NAME%>" />
-        </form>
+  <!--NAVBAR -->
+  <header id="header">
+    <div class="navbar navbar-fixed-top" id="nav">
+      <div class="ribbon-top"></div>
+
+      <div class="container">
+        <div class="navbar-header">
+          <button class="navbar-toggle" data-target=".navbar-collapse"
+          data-toggle="collapse" type="button"><span class="icon-bar"></span>
+          <span class="icon-bar"></span> <span class=
+          "icon-bar"></span></button> <a class="navbar-brand" href=
+          "http://tomahawk-player.org/index.html"><img alt="" src="http://tomahawk-player.org/img/logo.png" height="50"></a>
+        </div>
+
+       
+      </div>
     </div>
+  </header>
+  <!--/.NAVBAR:end -->
+
+ <!--Content WRAPPER-->
+               <div id="wrapper-content">
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <br><br>
+                        <center>
+                        <a href="http://www.tomahawk-player.org" title="Tomahawk - Powered by Playdar" id="head">
+                        <img alt="Tomahawk" src="/staticdata/tomahawk_auth_logo.png" width="200" height="30"></a>
+                        <br><br>
+        
+                        <div id="content">
+                            <form method="post" action="/auth_2/" id="auth">
+                                <p>Grant access to Tomahawk from <a href="<%WEBSITE%>"><%NAME%></a>?</p>
+                                <br><br>
+                                <p class="buttons">
+                                    <input type="button" value="Deny" class="btn btn-red" onclick="window.close();" />
+                                    <input type="submit" value="Allow" class="btn btn-green" />
+                                </p>
+                                <input type="hidden" name="formtoken" value="<%FORMTOKEN%>" />
+                                <input type="hidden" name="receiverurl" value="<%URL%>" />
+                                <input type="hidden" name="website" value="<%WEBSITE%>" />
+                                <input type="hidden" name="name" value="<%NAME%>" />
+                            </form>
+                        </center>
+                        <br><br>
+                        </div>
+                    <div class="col-md-4"></div>
+                    </div>
+                </div><!-- #Wraper-content:ends -->
+   <!-- Footer -->
+  <footer id="footer">
+    <div class="container">
+      <ul class="footer-links clearfix">
+        <li>
+          <a href="#download">Download</a>
+        </li>
+
+        <li>
+          <a href="http://blog.tomahawk-player.org" target="_blank">Blog</a>
+        </li>
+
+        <li>
+          <a href="about.html">About</a>
+        </li>
+
+        <li>
+          <a href="developer.html">Developers</a>
+        </li>
+
+        <li>
+          <a href="about.html#privacy">Privacy</a>
+        </li>
+
+        <li>
+          <a href="contact-form.html">Contact</a>
+        </li>
+
+        <li>
+          <a href="https://tomahawk.uservoice.com" target="_blank">Feedback</a>
+        </li>
+      </ul>
+
+      <div class="logo">
+        <a href="#"><img alt="" src="http://tomahawk-player.org/img/logo-footer.png"></a>
+      </div>
+
+      <p>All Rights Reserved ©2013 Tomahawk</p>
+
+      <div class="socials">
+        <div class="clearfix">
+          <a class="about-social-icon gplus" href="https://plus.google.com/u/0/b/110418274040899591862/110418274040899591862/posts" target="_blank"><i class=
+          "icon-google-plus" style=""></i></a> <a class="about-social-icon twitter" href=
+          "http://twitter.com/tomahawk"><i class="icon-twitter" style=""></i></a> <a class=
+          "about-social-icon rss" href="http://blog.tomahawk-player.org/rss"><i class="icon-rss" style=
+          ""></i></a> <a class="about-social-icon facebook" href=
+          "https://www.facebook.com/TomahawkPlayer" target="_blank"><i class="icon-facebook" style=""></i></a><a class="about-social-icon pinterest" href=
+          "irc://irc.freenode.net/tomahawk" target="_blank"><img src="http://tomahawk-player.org/img/logos/irc.png" width="25"></i></a>
+        </div>
+      </div><!--end:Socials-->
+    </div>
+  </footer>
+   <!-- Footer:end --> <!-- JavaScript -->
+  <!-- JavaScript -->
+  <script src="js/jquery.js"></script>
+  <script src="js/bootstrap.js"></script> 
+   <script src="js/inview.js"></script>
+  <script src="js/custom.js"></script> 
+
+ 
 </body>
 </html>
+
+
+
