@@ -162,5 +162,11 @@
         <file>data/sql/dbmigrate-29_to_30.sql</file>
         <file>data/sql/dbmigrate-30_to_31.sql</file>
         <file>data/images/trending.svg</file>
+        <file>data/www/logo.png</file>
+        <file>data/www/css/animate.css</file>
+        <file>data/www/css/bootstrap.css</file>
+        <file>data/www/css/elements.css</file>
+        <file>data/www/css/font-awesome.css</file>
+        <file>data/www/css/style.css</file>
     </qresource>
 </RCC>

@@ -1,0 +1,225 @@
+.border-white
+{
+	border:2px solid #fff;
+	color:#fff;
+	display:inline-block;
+	font-size:15px;
+	font-weight:500;
+	letter-spacing:0;
+	line-height:15px;
+	padding:10px 16px 9px;
+}
+
+.border-dark
+{
+	border:2px solid #CCCED5;
+	color:#CCCED5;
+	display:inline-block;
+	font-size:15px;
+	font-weight:500;
+	letter-spacing:0;
+	line-height:15px;
+	padding:10px 16px 9px;
+}
+
+hr
+{
+	border:0;
+	border-bottom:1px solid #fff;
+	border-top:1px solid #eee;
+	margin:35px 0;
+}
+
+.btn
+{
+	-moz-transition:.5s;
+	-o-transition:.5s;
+	-webkit-transition:.5s;
+	border:none;
+	border-radius:0;
+	color:#fff;
+	font-weight:400;
+	padding:10px 23px;
+	text-shadow:none;
+	transition:.5s;
+}
+
+.btn-info
+{
+	background:#8BCBDE;
+}
+
+.btn-orange
+{
+	background:#FC6042;
+}
+
+.btn-red
+{
+	background:#E51400;
+}
+
+.btn-blue
+{
+	background:#52A5FF;
+}
+
+.btn-dark
+{
+	background:#2d323c;
+}
+
+.btn-green
+{
+	background:#00ABA9;
+}
+
+.btn-lime
+{
+	background:#8CBF26;
+}
+
+.btn-pink
+{
+	background:#8E44AD;
+}
+
+.btn-yelow
+{
+	background:#f1c40f;
+}
+
+.btn-facebook
+{
+	background:#3b5999;
+}
+
+.btn-google
+{
+	background:#cd1a1a;
+}
+
+.btn-twitter
+{
+	background:#00bbf5;
+}
+
+.btn:hover
+{
+	background:#313844;
+	border:transparent;
+	color:#fff;
+	text-decoration:none;
+}
+
+.btn-border
+{
+	-moz-transition:.5s;
+	-o-transition:.5s;
+	-webkit-transition:.5s;
+	background-color:transparent;
+	border:2px solid #CCCED5;
+	color:#CCCED5;
+	display:inline-block;
+	line-height:15px;
+	padding:14px 23px;
+	transition:.5s;
+}
+
+.btn-border:hover
+{
+	background:transparent;
+	border:2px solid #6bb8db;
+	color:#6bb8db;
+	text-decoration:none;
+}
+
+.btn-teal
+{
+	-moz-box-shadow:0 0 1px 0 #62a6ce;
+	-webkit-box-shadow:0 0 1px 0 #62a6ce;
+	background:0;
+	background-color:#70c0df;
+	border:1px solid #6db8de;
+	box-shadow:0 0 1px 0 #62a6ce;
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#70c0df',endColorstr='#6bb8db');
+	text-indent:0;
+	text-shadow:1px 0 0 #4595db;
+}
+
+.btn-teal:hover
+{
+	background:0;
+	background-color:#6bb8db;
+	border:1px solid #6db8de;
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#6bb8db',endColorstr='#70c0df');
+}
+
+.btn-teal:active
+{
+	color:#fff;
+	position:relative;
+}
+
+.socials
+{
+	float:none;
+}
+
+.socials a.pinterest:hover
+{
+	background:#f13434;
+}
+
+.socials a.facebook:hover
+{
+	background:#3b5999;
+}
+
+.socials a.twitter:hover
+{
+	background:#00bbf5;
+}
+
+.socials a.gplus:hover
+{
+	background:#cd1a1a;
+}
+
+.socials a.rss:hover
+{
+	background:#f6a42b;
+}
+
+.socials a
+{
+	-moz-transition:.4s;
+	-o-transition:.4s;
+	-webkit-transition:.4s;
+	color:#465a73;
+	cursor:pointer;
+	display:inline-block;
+	height:30px;
+	margin-left:10px;
+	padding:3px;
+	text-align:center;
+	text-decoration:none;
+	transition:.4s;
+	width:30px;
+}
+
+.socials a:hover
+{
+	-moz-animation:all .3s ease-in-out;
+	-ms-animation:all .3s ease-in-out;
+	-o-animation:all .3s ease-in-out;
+	-webkit-animation:all .3s ease-in-out;
+	animation:all .3s ease-in-out;
+	color:#fff;
+}
+
+.socials a i
+{
+	font-size:18px;
+	line-height:27px;
+}
