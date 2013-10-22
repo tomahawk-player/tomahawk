@@ -147,11 +147,7 @@ private slots:
     void sendNowPlayingNotification( const Tomahawk::InfoSystem::InfoType type );
     void sendWaitingNotification() const;
 
-    void queueStateSafety();
-
 private:
-    void checkStateQueue();
-    void queueState( AudioState state );
     void setState( AudioState state );
     void setCurrentTrackPlaylist( const Tomahawk::playlistinterface_ptr& playlist );
 

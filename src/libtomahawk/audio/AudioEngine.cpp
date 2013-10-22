@@ -146,16 +146,6 @@ AudioEnginePrivate::onStateChanged( Phonon::State newState, Phonon::State oldSta
             }
         }
     }
-
-    if ( newState == Phonon::PausedState || newState == Phonon::PlayingState || newState == Phonon::ErrorState )
-    {
-        tDebug( LOGVERBOSE ) << "Phonon state now:" << newState;
-        if ( stateQueue.count() )
-        {
-            /*/ AudioState qState = */ stateQueue.dequeue();
-            q_ptr->checkStateQueue();
-        }
-    }
 }
 
 
@@ -233,12 +223,7 @@ AudioEngine::AudioEngine()
     connect( d->mediaObject, SIGNAL( stateChanged( Phonon::State, Phonon::State ) ), d_func(), SLOT( onStateChanged( Phonon::State, Phonon::State ) ) );
     connect( d->mediaObject, SIGNAL( tick( qint64 ) ), SLOT( timerTriggered( qint64 ) ) );
     connect( d->mediaObject, SIGNAL( aboutToFinish() ), SLOT( onAboutToFinish() ) );
-
     connect( d->audioOutput, SIGNAL( volumeChanged( qreal ) ), SLOT( onVolumeChanged( qreal ) ) );
-
-    d->stateQueueTimer.setInterval( 5000 );
-    d->stateQueueTimer.setSingleShot( true );
-    connect( &d->stateQueueTimer, SIGNAL( timeout() ), SLOT( queueStateSafety() ) );
 
     onVolumeChanged( d->audioOutput->volume() );
 
@@ -294,7 +279,7 @@ AudioEngine::play()
 
     if ( isPaused() )
     {
-        queueState( Playing );
+        d->mediaObject->play();
         emit resumed();
 
         sendNowPlayingNotification( Tomahawk::InfoSystem::InfoNowResumed );
@@ -314,9 +299,11 @@ AudioEngine::play()
 void
 AudioEngine::pause()
 {
+    Q_D( AudioEngine );
+
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
-    queueState( Paused );
+    d->mediaObject->pause();
     emit paused();
 
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( Tomahawk::InfoSystem::InfoPushData( s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowPaused, QVariant(), Tomahawk::InfoSystem::PushNoFlag ) );
@@ -737,7 +724,7 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr& result, QSharedPointe
                 d->input.clear();
             }
             d->input = ioToKeep;
-            queueState( Playing );
+            d->mediaObject->play();
 
             if ( TomahawkSettings::instance()->privateListeningMode() != TomahawkSettings::FullyPrivate )
             {
@@ -1143,68 +1130,6 @@ AudioEngine::setCurrentTrack( const Tomahawk::result_ptr& result )
             d->playlist->setCurrentIndex( d->playlist->indexOfResult( result ) );
         }
     }
-}
-
-
-void
-AudioEngine::checkStateQueue()
-{
-    Q_D( AudioEngine );
-
-    if ( d->stateQueue.count() )
-    {
-        AudioState state = (AudioState) d->stateQueue.head();
-        tDebug( LOGVERBOSE ) << "Applying state command:" << state;
-        switch ( state )
-        {
-            case Playing:
-            {
-                d->mediaObject->play();
-                break;
-            }
-
-            case Paused:
-            {
-                d->mediaObject->pause();
-                break;
-            }
-
-            default:
-                break;
-        }
-    }
-    else
-        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Queue is empty";
-}
-
-
-void
-AudioEngine::queueStateSafety()
-{
-    Q_D( AudioEngine );
-
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
-    d->stateQueue.clear();
-}
-
-
-void
-AudioEngine::queueState( AudioState state )
-{
-    Q_D( AudioEngine );
-
-    if ( d->stateQueueTimer.isActive() )
-        d->stateQueueTimer.stop();
-
-    tDebug( LOGVERBOSE ) << "Enqueuing state command:" << state << d->stateQueue.count();
-    d->stateQueue.enqueue( state );
-
-    if ( d->stateQueue.count() == 1 )
-    {
-        checkStateQueue();
-    }
-
-    d->stateQueueTimer.start();
 }
 
 
