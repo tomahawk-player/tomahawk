@@ -2,6 +2,12 @@ PROJECT( tomahawk )
 CMAKE_MINIMUM_REQUIRED( VERSION 2.8.6 )
 SET( CMAKE_MODULE_PATH  "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules" )
 CMAKE_POLICY(SET CMP0017 NEW)
+CMAKE_POLICY(SET CMP0022 NEW)
+
+# TODO:
+# Update to NEW and fix things up when we can depend on 2.8.12
+CMAKE_POLICY(SET CMP0023 OLD)
+
 INCLUDE(CMakeDependentOption)
 
 ###
@@ -257,7 +263,7 @@ macro_log_feature(QTWEETLIB_FOUND "QTweetLib" "Qt Twitter Library" "https://gith
 macro_optional_find_package(LibLastFm 1.0.0)
 macro_log_feature(LIBLASTFM_FOUND "liblastfm" "Qt library for the Last.fm webservices" "https://github.com/lastfm/liblastfm" TRUE "" "liblastfm is needed for scrobbling tracks to Last.fm and fetching cover artwork")
 
-macro_optional_find_package(QtKeychain 0.1.0)
+macro_optional_find_package(QtKeychain 0.2.0)
 macro_log_feature(QTKEYCHAIN_FOUND "QtKeychain" "Provides support for secure credentials storage" "https://github.com/frankosterfeld/qtkeychain" TRUE "" "")
 
 if( UNIX AND NOT APPLE )
