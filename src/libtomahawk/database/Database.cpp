@@ -341,6 +341,9 @@ Database::createCommandInstance(const QVariant& op, const source_ptr& source)
     const QString commandName = op.toMap().value( "command" ).toString();
 
     dbcmd_ptr command = createCommandInstance( commandName );
+    if ( command.isNull() )
+        return command;
+
     command->setSource( source );
     QJson::QObjectHelper::qvariant2qobject( op.toMap(), command.data() );
     return command;
