@@ -368,19 +368,19 @@ conectarse a usted y transmitir música?</translation>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="889"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="876"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
-        <translation>Tomahawk no pudo encontrar la pista &apos;%1&apos; de %2</translation>
+        <translation>Tomahawk no pudo encontrar la pista «%1» de %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="913"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="900"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
-        <translation>Tomahawk no pudo encontrar el artista &apos;%1&apos;</translation>
+        <translation>Tomahawk no pudo encontrar el artista «%1»</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="939"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="926"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
-        <translation>Tomahawk no pudo encontrar el álbum &apos;%1&apos; de %2</translation>
+        <translation>Tomahawk no pudo encontrar el álbum «%1» de %2</translation>
     </message>
 </context>
 <context>
@@ -527,7 +527,7 @@ conectarse a usted y transmitir música?</translation>
     <message utf8="true">
         <location filename="../src/crashreporter/CrashReporter.ui" line="80"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Sorry!&lt;/span&gt; Tomahawk crashed. Please tell us about it! Tomahawk has created an error report for you that can help improve the stability in the future. You can now send this report directly to the Tomahawk developers.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;¡Lo sentimos!&lt;/span&gt;Tomahawk ha fallado. ¡Por favor infórmenos! Tomahawk ha creado un informe de error que puede mejorar la estabilidad del programa en el futuro. Usted puede mandar este informe directamente a los desarrolladores de Tomahawk.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;¡Lo sentimos!&lt;/span&gt;Tomahawk ha fallado. ¡Por favor infórmenos! Tomahawk ha creado un informe de error que puede mejorar la estabilidad del programa en el futuro. Puede enviar este informe directamente a los desarrolladores de Tomahawk.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/crashreporter/CrashReporter.ui" line="129"/>
@@ -1959,12 +1959,12 @@ y estaciones basadas en sus gustos personales.</translation>
     <message>
         <location filename="../src/tomahawk/SocialWidget.cpp" line="169"/>
         <source>Listening to &quot;%1&quot; by %2. %3</source>
-        <translation>Escuchando &quot;%1&quot; de %2.%3</translation>
+        <translation>Escuchando «%1» de %2. %3</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/SocialWidget.cpp" line="171"/>
         <source>Listening to &quot;%1&quot; by %2 on &quot;%3&quot;. %4</source>
-        <translation>Escuchando &quot;%1&quot; de %2 en &quot;%3&quot;. %4</translation>
+        <translation>Escuchando «%1» de %2 en «%3». %4</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/SocialWidget.cpp" line="192"/>
@@ -2140,7 +2140,7 @@ y estaciones basadas en sus gustos personales.</translation>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="424"/>
         <source>Would you like to delete the %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</source>
         <comment>e.g. Would you like to delete the playlist named Foobar?</comment>
-        <translation>¿Borrar lista de reproducción %1 &lt;b&gt;&quot;%2&quot;&lt;/b&gt;?</translation>
+        <translation>¿Quiere eliminar la %1 &lt;b&gt;«%2»&lt;/b&gt;?</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="426"/>
@@ -2371,7 +2371,7 @@ y estaciones basadas en sus gustos personales.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="563"/>
         <source>Unfortunately, automatic installation of this resolver is not available or disabled for your platform.&lt;br /&gt;&lt;br /&gt;Please use &quot;Install from file&quot; above, by fetching it from your distribution or compiling it yourself. Further instructions can be found here:&lt;br /&gt;&lt;br /&gt;http://www.tomahawk-player.org/resolvers/%1</source>
-        <translation>Desafortunadamente, la instalación automática de este servicio no está disponible o está desactivada para su plataforma.&lt;br /&gt;&lt;br /&gt;Por favor use &quot;Instalar desde archivo&quot;, obteniéndolo desde su distribución o compilándolo. Más instrucciones aquí:&lt;br /&gt;&lt;br /&gt;http://www.tomahawk-player.org/resolvers/%1</translation>
+        <translation>Desafortunadamente, la instalación automática de este servicio no está disponible o está desactivada para su plataforma.&lt;br /&gt;&lt;br /&gt;Use «Instalar desde archivo», obteniéndolo desde su distribución o compilándolo. Más instrucciones aquí:&lt;br /&gt;&lt;br /&gt;http://www.tomahawk-player.org/resolvers/%1</translation>
     </message>
 </context>
 <context>
@@ -2904,7 +2904,7 @@ usuario@jabber.org</translation>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="274"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="325"/>
         <source>&amp;Go to &quot;%1&quot;</source>
-        <translation>&amp;Ir a &quot;%1&quot;</translation>
+        <translation>&amp;Ir a «%1»</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="200"/>
@@ -4176,7 +4176,7 @@ de Twitter, escriba el número PIN aquí:</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="292"/>
         <source>You&apos;ve never listened to %1 before.</source>
-        <translation>Nunca ha escuchado %1 antes.tweet</translation>
+        <translation>Nunca ha escuchado %1 antes.</translation>
     </message>
 </context>
 <context>
@@ -4648,7 +4648,7 @@ Letras de «%1» por %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="819"/>
         <source>Do you want to add &lt;b&gt;%1&lt;/b&gt; to your friend list?</source>
-        <translation>¿Le gustaría añadir &lt;b&gt;%1&lt;/b&gt; a su lista de amigos?</translation>
+        <translation>¿Quiere añadir a &lt;b&gt;%1&lt;/b&gt; a su lista de amigos?</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="422"/>
