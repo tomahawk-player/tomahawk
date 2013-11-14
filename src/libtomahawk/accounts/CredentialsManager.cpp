@@ -424,12 +424,12 @@ CredentialsManager::keychainJobFinished( QKeychain::Job* j )
     else if ( QKeychain::WritePasswordJob* writeJob = qobject_cast< QKeychain::WritePasswordJob* >( j ) )
     {
         tLog() << Q_FUNC_INFO << "QtKeychain writeJob for" << writeJob->service() << "/" << writeJob->key() << "finished"
-               << ( ( j->error() == QKeychain::NoError ) ? "without error" : QString( "with ERROR: %1").arg( j->errorString() ) );
+               << ( ( j->error() == QKeychain::NoError ) ? "without error" : QString( "with ERROR: %1 %2" ).arg( j->error() ).arg( j->errorString() ) );
     }
     else if ( QKeychain::DeletePasswordJob* deleteJob = qobject_cast< QKeychain::DeletePasswordJob* >( j ) )
     {
         tLog() << Q_FUNC_INFO << "QtKeychain deleteJob for" << deleteJob->service() << "/" << deleteJob->key() << "finished"
-               << ( ( j->error() == QKeychain::NoError ) ? "without error" : QString( "with ERROR: %1").arg( j->errorString() ) );
+               << ( ( j->error() == QKeychain::NoError ) ? "without error" : QString( "with ERROR: %1 %2" ).arg( j->error() ).arg( j->errorString() ) );
     }
     j->deleteLater();
 }
