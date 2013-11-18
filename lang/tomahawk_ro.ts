@@ -1856,7 +1856,7 @@ Password (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="254"/>
         <source>Show notification when a new song starts to play</source>
-        <translation>Arată o notificare când începe redarea un cântec nou</translation>
+        <translation>Arată o notificare când începe redarea unui cântec</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/Settings_Advanced.ui" line="282"/>
