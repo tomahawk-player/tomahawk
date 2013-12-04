@@ -17,8 +17,8 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACCOUNTDLLMACRO_H
-#define ACCOUNTDLLMACRO_H
+#ifndef VIEWPAGEDLLMACRO_H
+#define VIEWPAGEDLLMACRO_H
 
 #include <QtCore/qglobal.h>
 
