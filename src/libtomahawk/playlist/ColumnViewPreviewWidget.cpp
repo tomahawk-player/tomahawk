@@ -119,7 +119,9 @@ ColumnViewPreviewWidget::setQuery( const Tomahawk::query_ptr& query )
         ui->ageValue->setVisible( false );
     }
 
+#ifndef Q_OS_MAC //we don't need to scale on OSX anyway
     setMinimumHeight( TomahawkUtils::DpiScaler::scaledY( this, 480 ) );
+#endif
 }
 
 
