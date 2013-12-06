@@ -26,6 +26,7 @@
 #include "utils/Logger.h"
 #include "Source.h"
 #include "utils/TomahawkUtilsGui.h"
+#include "utils/DpiScaler.h"
 
 using namespace Tomahawk;
 
@@ -117,6 +118,8 @@ ColumnViewPreviewWidget::setQuery( const Tomahawk::query_ptr& query )
         ui->ageLabel->setVisible( false );
         ui->ageValue->setVisible( false );
     }
+
+    setMinimumHeight( TomahawkUtils::DpiScaler::scaledY( this, 480 ) );
 }
 
 
