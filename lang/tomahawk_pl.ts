@@ -498,7 +498,7 @@ połączyć się i strumieniować od ciebie?</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.cpp" line="96"/>
+        <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.cpp" line="97"/>
         <source>%1 kbps</source>
         <translation type="unfinished"/>
     </message>

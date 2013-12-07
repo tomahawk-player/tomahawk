@@ -498,7 +498,7 @@ ansluta och strömma från dig?</translation>
         <translation>Ålder:</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.cpp" line="96"/>
+        <location filename="../src/libtomahawk/playlist/ColumnViewPreviewWidget.cpp" line="97"/>
         <source>%1 kbps</source>
         <translation>%1 kbps</translation>
     </message>
