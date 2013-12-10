@@ -58,7 +58,7 @@ HatchetAccountConfig::HatchetAccountConfig( HatchetAccount* account )
     connect( m_account, SIGNAL( deauthenticated() ), this, SLOT( showLoggedOut() ) );
     connect( m_account, SIGNAL( accessTokensFetched() ), this, SLOT( accountInfoUpdated() ) );
 
-    if ( !m_account->authToken().isEmpty() )
+    if ( !m_account->refreshToken().isEmpty() )
         accountInfoUpdated();
     else
     {

@@ -103,8 +103,8 @@ private slots:
     void authUrlDiscovered( Tomahawk::Accounts::HatchetAccount::Service service, const QString& authUrl );
 
 private:
-    QByteArray authToken() const;
-    uint authTokenExpiration() const;
+    QByteArray refreshToken() const;
+    uint refreshTokenExpiration() const;
 
     void loginWithPassword( const QString& username, const QString& password, const QString &otp );
 

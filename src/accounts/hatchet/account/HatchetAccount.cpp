@@ -132,9 +132,9 @@ HatchetAccount::authenticate()
     if ( connectionState() == Connected )
         return;
 
-    if ( !authToken().isEmpty() )
+    if ( !refreshToken().isEmpty() )
     {
-        qDebug() << "Have saved credentials with auth token:" << authToken();
+        qDebug() << "Have saved credentials with refresh token:" << refreshToken();
         if ( sipPlugin() )
             sipPlugin()->connectPlugin();
         setAccountFriendlyName( username() );
@@ -201,7 +201,7 @@ HatchetAccount::icon() const
 bool
 HatchetAccount::isAuthenticated() const
 {
-    return credentials().contains( "authtoken" );
+    return credentials().contains( "refresh_token" );
 }
 
 
@@ -213,14 +213,14 @@ HatchetAccount::username() const
 
 
 QByteArray
-HatchetAccount::authToken() const
+HatchetAccount::refreshToken() const
 {
-    return credentials().value( "authtoken" ).toByteArray();
+    return credentials().value( "refresh_token" ).toByteArray();
 }
 
 
 uint
-HatchetAccount::authTokenExpiration() const
+HatchetAccount::refreshTokenExpiration() const
 {
     bool ok;
     return credentials().value( "expiration" ).toUInt( &ok );
@@ -262,17 +262,17 @@ HatchetAccount::loginWithPassword( const QString& username, const QString& passw
 void
 HatchetAccount::fetchAccessTokens( const QString& type )
 {
-    if ( username().isEmpty() || authToken().isEmpty() )
+    if ( username().isEmpty() || refreshToken().isEmpty() )
     {
-        tLog() << "No authToken, not logging in";
+        tLog() << "No refresh token, not logging in";
         return;
     }
 
-    if ( authTokenExpiration() < ( QDateTime::currentMSecsSinceEpoch() / 1000 ) )
-        tLog() << "Auth token has expired, but may still be valid on the server";
+    if ( refreshTokenExpiration() < ( QDateTime::currentMSecsSinceEpoch() / 1000 ) )
+        tLog() << "Refresh token has expired, but may still be valid on the server";
 
     tLog() << "Fetching access tokens";
-    QNetworkRequest req( QUrl( c_accessTokenServer + "/tokens/" + type + "?username=" + username() + "&authtoken=" + authToken() ) );
+    QNetworkRequest req( QUrl( c_accessTokenServer + "/tokens/" + type + "?username=" + username() + "&refresh_token=" + refreshToken() ) );
 
     QNetworkReply* reply = Tomahawk::Utils::nam()->get( req );
 
@@ -321,17 +321,17 @@ HatchetAccount::onPasswordLoginFinished( QNetworkReply* reply, const QString& us
         return;
     }
 
-    const QByteArray authenticationToken = resp.value( "result" ).toMap().value( "token" ).toByteArray();
+    const QByteArray refreshTokenBytes = resp.value( "result" ).toMap().value( "refresh_token" ).toByteArray();
     uint expiration = resp.value( "result" ).toMap().value( "expiration" ).toUInt( &ok );
 
     QVariantHash creds = credentials();
     creds[ "username" ] = username;
-    creds[ "authtoken" ] = authenticationToken;
+    creds[ "refresh_token" ] = refreshTokenBytes;
     creds[ "expiration" ] = expiration;
     setCredentials( creds );
     syncConfig();
 
-    if ( !authenticationToken.isEmpty() )
+    if ( !refreshTokenBytes.isEmpty() )
     {
         if ( sipPlugin() )
             sipPlugin()->connectPlugin();
@@ -379,6 +379,13 @@ HatchetAccount::onFetchAccessTokensFinished()
     QStringList tokenTypesFound;
 
     tDebug() << Q_FUNC_INFO << "resp: " << resp;
+
+    if ( resp[ "result" ].toMap().contains( "refresh_token_expiration" ) )
+    {
+        bool ok;
+        uint expiration = resp.value( "result" ).toMap().value( "refresh_token_expiration" ).toUInt( &ok );
+        creds[ "expiration" ] = expiration;
+    }
 
     foreach( QVariant tokenVariant, resp[ "result" ].toMap()[ "tokens" ].toList() )
     {
