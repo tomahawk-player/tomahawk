@@ -26,7 +26,6 @@
 #include <QMutex>
 #include <QStringList>
 
-
 namespace QKeychain
 {
 class Job;
@@ -84,10 +83,6 @@ private slots:
 protected:
     QVariant credentials( const CredentialsStorageKey& key ) const;
     void setCredentials( const CredentialsStorageKey& key, const QVariant& value, bool tryToWriteAsString = false );
-
-#ifdef Q_OS_MAC
-    void rewriteCredentialsOsx( const QString& service );
-#endif
 
 private:
     QHash< QString, QStringList > m_services;

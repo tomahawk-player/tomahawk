@@ -18,16 +18,15 @@
 
 #include "CredentialsManager.h"
 
-#ifdef Q_OS_MAC
-#include "LocalConfigStorage.h"
-#endif
-
 #include "utils/Logger.h"
 
+#ifdef Q_OS_MAC
+#include "TomahawkSettings.h"
+#else
 #include <qtkeychain/keychain.h>
-
 #include <qjson/serializer.h>
 #include <qjson/parser.h>
+#endif
 
 #include <QStringList>
 
@@ -37,11 +36,6 @@ namespace Tomahawk
 
 namespace Accounts
 {
-
-#ifdef Q_OS_MAC
-const QString OSX_SINGLE_KEY = QString( "tomahawksecrets" );
-#endif
-
 
 CredentialsStorageKey::CredentialsStorageKey( const QString& service, const QString& key )
     : m_service( service )
@@ -93,24 +87,24 @@ CredentialsManager::loadCredentials( const QString &service )
     const QStringList& accountIds = m_services.value( service );
     tDebug() << Q_FUNC_INFO << "keys for service" << service << ":" << accountIds;
 
-    //HACK: OSX Keychain inevitably pops up a dialog for every key.
-    //      Therefore, we make sure that our LocalConfigStorage stores everything
-    //      into a single key.
 #ifdef Q_OS_MAC
-    if ( service == LocalConfigStorage::credentialsServiceName() )
+    foreach ( QString key, accountIds )
     {
-        QKeychain::ReadPasswordJob* j = new QKeychain::ReadPasswordJob( service, this );
-        j->setKey( OSX_SINGLE_KEY );
-        j->setAutoDelete( false );
-        connect( j, SIGNAL( finished( QKeychain::Job* ) ),
-                    SLOT( keychainJobFinished( QKeychain::Job* ) ) );
-        m_readJobs[ service ] << j;
-        j->start();
-        tDebug()  << "Launching OSX-specific QtKeychain readJob for" << OSX_SINGLE_KEY;
+        tDebug() << "beginGroup" << QString( "accounts/%1" ).arg( key );
+        TomahawkSettings::instance()->beginGroup( QString( "accounts/%1" ).arg( key ) );
+        const QVariantHash creds = TomahawkSettings::instance()->value( "credentials" ).toHash();
+        tDebug() << creds[ "username" ]
+                 << ( creds[ "password" ].isNull() ? ", no password" : ", has password" );
+
+        if ( !creds.isEmpty() )
+        {
+            m_credentials.insert( CredentialsStorageKey( service, key ), creds );
+        }
+        TomahawkSettings::instance()->endGroup();
     }
-    else
-    {
-#endif
+
+    emit serviceReady( service );
+#else
     foreach ( QString key, accountIds )
     {
         QKeychain::ReadPasswordJob* j = new QKeychain::ReadPasswordJob( service, this );
@@ -125,15 +119,13 @@ CredentialsManager::loadCredentials( const QString &service )
         j->start();
         tDebug()  << "Launching QtKeychain readJob for" << key;
     }
-#ifdef Q_OS_MAC
-    }
-#endif
 
     if ( m_readJobs[ service ].isEmpty() )
     {
         // We did not launch any readJob, so we're done already.
         emit serviceReady( service );
     }
+#endif //Q_OS_MAC
 }
 
 
@@ -190,21 +182,13 @@ CredentialsManager::setCredentials( const CredentialsStorageKey& csKey, const QV
         m_credentials.remove( csKey );
 
 #ifdef Q_OS_MAC
-        tDebug() << Q_FUNC_INFO << "about to rewrite all credentials because of" << csKey.key() << "removal";
-        if ( csKey.service() == LocalConfigStorage::credentialsServiceName() )
-        {
-            rewriteCredentialsOsx( csKey.service() );
-            return;
-        }
-        else
-        {
-            tDebug() << "About to run DeletePasswordJob. This should pretty much never happen on OSX.";
-#endif
+        TomahawkSettings::instance()->beginGroup( QString( "accounts/%1" ).arg( csKey.key() ) );
+        TomahawkSettings::instance()->remove( "credentials" );
+        TomahawkSettings::instance()->endGroup();
+#else
         QKeychain::DeletePasswordJob* dj = new QKeychain::DeletePasswordJob( csKey.service(), this );
         dj->setKey( csKey.key() );
         j = dj;
-#ifdef Q_OS_MAC
-        }
 #endif
     }
     else
@@ -215,16 +199,10 @@ CredentialsManager::setCredentials( const CredentialsStorageKey& csKey, const QV
         m_credentials.insert( csKey, value );
 
 #ifdef Q_OS_MAC
-        tDebug() << Q_FUNC_INFO << "about to rewrite all credentials because of" << csKey.key() << "insert/update";
-        if ( csKey.service() == LocalConfigStorage::credentialsServiceName() )
-        {
-            rewriteCredentialsOsx( csKey.service() );
-            return;
-        }
-        else
-        {
-            tDebug() << "About to run WritePasswordJob. This should pretty much never happen on OSX.";
-#endif
+        TomahawkSettings::instance()->beginGroup( QString( "accounts/%1" ).arg( csKey.key() ) );
+        TomahawkSettings::instance()->setValue( "credentials", value );
+        TomahawkSettings::instance()->endGroup();
+#else
         QKeychain::WritePasswordJob* wj = new QKeychain::WritePasswordJob( csKey.service(), this );
         wj->setKey( csKey.key() );
 
@@ -253,11 +231,10 @@ CredentialsManager::setCredentials( const CredentialsStorageKey& csKey, const QV
         }
 
         j = wj;
-#ifdef Q_OS_MAC
-        }
-#endif
+#endif //Q_OS_MAC
     }
 
+#ifndef Q_OS_MAC
     j->setAutoDelete( false );
 #if defined( Q_OS_UNIX ) && !defined( Q_OS_MAC )
     j->setInsecureFallback( true );
@@ -266,69 +243,8 @@ CredentialsManager::setCredentials( const CredentialsStorageKey& csKey, const QV
              SLOT( keychainJobFinished( QKeychain::Job* ) ) );
     j->start();
     tDebug() << Q_FUNC_INFO << "launched" << j->metaObject()->className() << "for service" << j->service();
-}
-
-
-#ifdef Q_OS_MAC
-void
-CredentialsManager::rewriteCredentialsOsx( const QString& service )
-{
-    tDebug() << "Q_FUNC_INFO" << "OSX-specific starting.";
-    if ( service != LocalConfigStorage::credentialsServiceName() )
-        return;
-
-    QVariantMap everythingMap;
-
-    for ( QHash< CredentialsStorageKey, QVariant >::const_iterator it = m_credentials.constBegin();
-          it != m_credentials.constEnd(); ++it )
-    {
-        if ( it.key().service() != service )
-            continue;
-
-        everythingMap.insert( it.key().key(), it.value() );
-    }
-
-    tDebug() << "About to JSON-serialize QVariantMap with the following keys:" << everythingMap.keys();
-
-    QJson::Serializer serializer;
-    bool ok;
-    serializer.setIndentMode(QJson::IndentFull);
-    QByteArray data = serializer.serialize( everythingMap, &ok );
-
-    if ( ok )
-    {
-        tDebug() << "Serialization ok. About to perform OSX-specific rewrite for service" << service;
-    }
-    else
-    {
-        tDebug() << "Cannot serialize credentials for OSX-specific rewrite, service:" << service
-                 << "keys:" << m_services.value( service )
-                 << "in map:" << everythingMap.keys();
-        return;
-    }
-
-    QKeychain::WritePasswordJob* j = new QKeychain::WritePasswordJob( service, this );
-    j->setKey( OSX_SINGLE_KEY );
-    j->setTextData( data );
-
-    j->setAutoDelete( false );
-
-    connect( j, SIGNAL( finished( QKeychain::Job* ) ),
-             SLOT( keychainJobFinished( QKeychain::Job* ) ) );
-    j->start();
-    tDebug() << "Launched OSX-specific rewrite job. The following should appear in Keychain Access:";
-    QString dataString = QString::fromLatin1(data);
-    QStringList dataSL = dataString.split("\n");
-    for ( QStringList::iterator it = dataSL.begin();
-          it != dataSL.end(); ++it )
-    {
-        if ( it->contains( "\"password\" :" ) )
-            *it = QString( "***** password line hidden *****" );
-    }
-    dataString = dataSL.join( "\n" );
-    tDebug() << dataString;
-}
 #endif
+}
 
 
 void
@@ -348,6 +264,7 @@ CredentialsManager::setCredentials( const QString& serviceName, const QString& k
 void
 CredentialsManager::keychainJobFinished( QKeychain::Job* j )
 {
+#ifndef Q_OS_MAC
     tDebug() << Q_FUNC_INFO;
     if ( QKeychain::ReadPasswordJob* readJob = qobject_cast< QKeychain::ReadPasswordJob* >( j ) )
     {
@@ -362,33 +279,6 @@ CredentialsManager::keychainJobFinished( QKeychain::Job* j )
 
             creds = parser.parse( readJob->textData().toLatin1(), &ok );
 
-#ifdef Q_OS_MAC
-            tDebug() << Q_FUNC_INFO << "about to check of OSX-specific key storage.";
-            if ( readJob->key() == OSX_SINGLE_KEY )
-            {
-                QVariantMap everythingMap = creds.toMap();
-                tDebug() << "Main map keys:" << everythingMap.keys();
-                for ( QVariantMap::const_iterator jt = everythingMap.constBegin();
-                      jt != everythingMap.constEnd(); ++jt )
-                {
-                    QVariantMap map = jt.value().toMap();
-                    tDebug() << "Keys:" << map.keys();
-                    QVariantHash hash;
-                    for ( QVariantMap::const_iterator it = map.constBegin();
-                          it != map.constEnd(); ++it )
-                    {
-                        hash.insert( it.key(), it.value() );
-                    }
-                    QVariant oneCred = QVariant( hash );
-
-                    tDebug() << "Inserting creds from OSX keychain for service" << readJob->service() << "key:" << jt.key();
-                    m_credentials.insert( CredentialsStorageKey( readJob->service(), jt.key() ), oneCred );
-                }
-            }
-            else
-            {
-                tDebug() << Q_FUNC_INFO << "This should pretty much never happen on OSX.";
-#endif
             QVariantMap map = creds.toMap();
             QVariantHash hash;
             for ( QVariantMap::const_iterator it = map.constBegin();
@@ -404,9 +294,6 @@ CredentialsManager::keychainJobFinished( QKeychain::Job* j )
             }
 
             m_credentials.insert( CredentialsStorageKey( readJob->service(), readJob->key() ), creds );
-#ifdef Q_OS_MAC
-            }
-#endif
         }
         else
         {
@@ -432,6 +319,7 @@ CredentialsManager::keychainJobFinished( QKeychain::Job* j )
                << ( ( j->error() == QKeychain::NoError ) ? "without error" : QString( "with ERROR: %1 %2" ).arg( j->error() ).arg( j->errorString() ) );
     }
     j->deleteLater();
+#endif //Q_OS_MAC
 }
 
 } //namespace Accounts

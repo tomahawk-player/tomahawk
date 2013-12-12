@@ -266,12 +266,14 @@ macro_log_feature(QTWEETLIB_FOUND "QTweetLib" "Qt Twitter Library" "https://gith
 macro_optional_find_package(LibLastFm 1.0.0)
 macro_log_feature(LIBLASTFM_FOUND "liblastfm" "Qt library for the Last.fm webservices" "https://github.com/lastfm/liblastfm" TRUE "" "liblastfm is needed for scrobbling tracks to Last.fm and fetching cover artwork")
 
+if( NOT APPLE )
 if( TOMAHAWK_QT5 )
     macro_optional_find_package(Qt5Keychain 0.1.0)
 else()
     macro_optional_find_package(QtKeychain 0.1.0)
 endif()
 macro_log_feature(QTKEYCHAIN_FOUND "QtKeychain" "Provides support for secure credentials storage" "https://github.com/frankosterfeld/qtkeychain" TRUE "" "")
+endif()
 
 if( UNIX AND NOT APPLE )
     macro_optional_find_package(TelepathyQt 0.9.3)
