@@ -719,23 +719,26 @@ TomahawkApp::activate()
 bool
 TomahawkApp::loadUrl( const QString& url )
 {
-    QFile f( url );
-    QFileInfo info( f );
-    if ( info.suffix() == "xspf" )
+    if ( !url.startsWith( "tomahawk://" ) )
     {
-        XSPFLoader* l = new XSPFLoader( true, this );
-        tDebug( LOGINFO ) << "Loading spiff:" << url;
-        l->load( QUrl::fromUserInput( url ) );
+        QFile f( url );
+        QFileInfo info( f );
+        if ( info.suffix() == "xspf" )
+        {
+            XSPFLoader* l = new XSPFLoader( true, this );
+            tDebug( LOGINFO ) << "Loading spiff:" << url;
+            l->load( QUrl::fromUserInput( url ) );
 
-        return true;
-    }
-    else if ( info.suffix() == "jspf" )
-    {
-        JSPFLoader* l = new JSPFLoader( true, this );
-        tDebug( LOGINFO ) << "Loading j-spiff:" << url;
-        l->load( QUrl::fromUserInput( url ) );
+            return true;
+        }
+        else if ( info.suffix() == "jspf" )
+        {
+            JSPFLoader* l = new JSPFLoader( true, this );
+            tDebug( LOGINFO ) << "Loading j-spiff:" << url;
+            l->load( QUrl::fromUserInput( url ) );
 
-        return true;
+            return true;
+        }
     }
 
     return GlobalActionManager::instance()->openUrl( url );
