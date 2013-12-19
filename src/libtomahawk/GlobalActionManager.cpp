@@ -360,6 +360,10 @@ GlobalActionManager::parseTomahawkLink( const QString& urlIn )
         {
             return handleImportCommand( u );
         }
+        else if ( cmdType == "love" )
+        {
+            return handleLoveCommand( u );
+        }
         else
         {
             tLog() << "Tomahawk link not supported, command not known!" << cmdType << u.path();
@@ -523,6 +527,38 @@ GlobalActionManager::handleOpenCommand( const QUrl& url )
     }
     // TODO user configurable in the UI
     return doQueueAdd( parts, urlQueryItems( url ) );
+}
+
+
+bool
+GlobalActionManager::handleLoveCommand( const QUrl& url )
+{
+    QStringList parts = url.path().split( "/" ).mid( 1 ); // get the rest of the command
+    if ( parts.isEmpty() )
+    {
+        tLog() << "No specific love command:" << url.toString();
+        return false;
+    }
+
+    QPair< QString, QString > pair;
+    QString title, artist, album;
+    foreach ( pair, urlQueryItems( url ) )
+    {
+        if ( pair.first == "title" )
+            title = pair.second;
+        else if ( pair.first == "artist" )
+            artist = pair.second;
+        else if ( pair.first == "album" )
+            album = pair.second;
+    }
+
+    track_ptr t = Track::get( artist, title, album );
+    if ( t.isNull() )
+        return false;
+
+    t->setLoved( true );
+
+    return true;
 }
 
 

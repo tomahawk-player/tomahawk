@@ -118,6 +118,7 @@ private:
     bool handleCollectionCommand( const QUrl& url );
     bool handlePlayCommand( const QUrl& url );
     bool handleOpenCommand( const QUrl& url );
+    bool handleLoveCommand( const QUrl& url );
 
     void createPlaylistFromUrl( const QString& type, const QString& url, const QString& title );
 
