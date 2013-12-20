@@ -21,8 +21,9 @@
 #include "DatabaseImpl.h"
 
 #include "database/Database.h"
-#include "utils/TomahawkUtils.h"
 #include "utils/Logger.h"
+#include "utils/ResultUrlChecker.h"
+#include "utils/TomahawkUtils.h"
 
 #include "Album.h"
 #include "Artist.h"
@@ -619,6 +620,15 @@ Tomahawk::DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
 
         Tomahawk::track_ptr track = Tomahawk::Track::get( origquery->queryTrack()->artist(), origquery->queryTrack()->track(), origquery->queryTrack()->album(), origquery->queryTrack()->duration() );
         res->setTrack( track );
+
+        ResultUrlChecker* checker = new ResultUrlChecker( origquery, QList< result_ptr >() << res );
+        QEventLoop loop;
+        connect( checker, SIGNAL( done() ), &loop, SLOT( quit() ) );
+        loop.exec();
+        checker->deleteLater();
+
+        if ( checker->validResults().isEmpty() )
+            res = result_ptr();
 
         return res;
     }
