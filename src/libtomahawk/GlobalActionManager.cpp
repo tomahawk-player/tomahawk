@@ -4,6 +4,7 @@
  *   Copyright (C) 2011, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright (C) 2011-2012, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright (C) 2013, Uwe L. Korn <uwelk@xhochy.com>
+ *   Copyright (C) 2013, Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -767,7 +768,14 @@ GlobalActionManager::doQueueAdd( const QStringList& parts, const QList< QPair< Q
                 else
                 { // give it a web result hint
                     QFileInfo info( track.path() );
-                    query_ptr q = Query::get( QString(), info.baseName(), QString(), uuid(), false );
+
+                    QString artistText = track.host();
+                    if ( artistText.isEmpty() )
+                        artistText = info.absolutePath();
+                    if ( artistText.isEmpty() )
+                        artistText = track.toString();
+
+                    query_ptr q = Query::get( artistText, info.baseName(), QString(), uuid(), false );
 
                     if ( q.isNull() )
                         continue;
@@ -775,8 +783,6 @@ GlobalActionManager::doQueueAdd( const QStringList& parts, const QList< QPair< Q
                     q->setResultHint( track.toString() );
                     q->setSaveHTTPResultHint( true );
 
-
-                    q->setResultHint( track.toString() );
                     Pipeline::instance()->resolve( q );
 
                     ViewManager::instance()->queue()->model()->appendQuery( q );
