@@ -17,54 +17,142 @@
  */
 
 #include "ColumnViewPreviewWidget.h"
-#include "ui_ColumnViewPreviewWidget.h"
-
-#include <QVBoxLayout>
-#include <boost/concept_check.hpp>
 
 #include "ColumnView.h"
+#include "widgets/PlayableCover.h"
+#include "widgets/QueryLabel.h"
 #include "utils/Logger.h"
 #include "Source.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/DpiScaler.h"
+
+#include <QLabel>
+#include <QVBoxLayout>
+#include <boost/concept_check.hpp>
 
 using namespace Tomahawk;
 
 
 ColumnViewPreviewWidget::ColumnViewPreviewWidget( ColumnView* parent )
     : QWidget( parent )
-    , ui( new Ui::ColumnViewPreviewWidget )
 {
     setVisible( false );
-    ui->setupUi( this );
 
-    ui->cover->setShowText( false );
-    ui->artistLabel->setContentsMargins( 6, 2, 6, 2 );
-    ui->artistLabel->setElideMode( Qt::ElideMiddle );
-    ui->artistLabel->setType( QueryLabel::Artist );
-    connect( ui->artistLabel, SIGNAL( clickedArtist() ), SLOT( onArtistClicked() ) );
+    QBoxLayout* mainLayout = new QVBoxLayout;
+    setLayout( mainLayout );
+
+    mainLayout->addSpacing( TomahawkUtils::DpiScaler::scaledY( this, 8 ) );
+
+    QBoxLayout* coverCenterLayout = new QHBoxLayout;
+    mainLayout->addLayout( coverCenterLayout );
+
+    m_cover = new PlayableCover( this );
+    m_cover->setShowText( false );
+    m_cover->setFixedSize( 260, 260 );
+    m_cover->setAlignment( Qt::AlignCenter );
+
+    coverCenterLayout->addStretch();
+    coverCenterLayout->addWidget( m_cover );
+    coverCenterLayout->addStretch();
+
+    mainLayout->addSpacing( TomahawkUtils::DpiScaler::scaledY( this, 16 ) );
+
+    m_trackLabel = new QLabel( this );
+    m_trackLabel->setAlignment( Qt::AlignCenter );
+    QFont font;
+    font.setPointSize( TomahawkUtils::defaultFontSize() + 9 );
+    font.setBold( true );
+    m_trackLabel->setFont( font );
+    mainLayout->addWidget( m_trackLabel );
+
+    m_artistLabel = new QueryLabel( this );
+    m_artistLabel->setContentsMargins( 6, 2, 6, 2 );
+    m_artistLabel->setElideMode( Qt::ElideMiddle );
+    m_artistLabel->setType( QueryLabel::Artist );
+    m_artistLabel->setAlignment( Qt::AlignCenter );
+    connect( m_artistLabel, SIGNAL( clickedArtist() ), SLOT( onArtistClicked() ) );
+    font.setPointSize( TomahawkUtils::defaultFontSize() + 5 );
+    m_artistLabel->setFont( font );
+    mainLayout->addWidget( m_artistLabel );
+
+    mainLayout->addSpacing( TomahawkUtils::DpiScaler::scaledY( this, 16 ) );
+
+    QGridLayout* gridLayout = new QGridLayout;
+    mainLayout->addLayout( gridLayout );
+
+    font.setPointSize( TomahawkUtils::defaultFontSize() + 3 );
+
+    m_composerLabel = new QLabel( this );
+    m_composerLabel->setEnabled( false );
+    m_composerLabel->setFont( font );
+    m_composerLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
+    m_composerLabel->setText( tr( "Composer:" ) );
+    gridLayout->addWidget( m_composerLabel, 0, 0 );
+
+    m_durationLabel = new QLabel( this );
+    m_durationLabel->setEnabled( false );
+    m_durationLabel->setFont( font );
+    m_durationLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
+    m_durationLabel->setText( tr( "Duration:" ) );
+    gridLayout->addWidget( m_durationLabel, 1, 0 );
+
+    m_bitrateLabel = new QLabel( this );
+    m_bitrateLabel->setEnabled( false );
+    m_bitrateLabel->setFont( font );
+    m_bitrateLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
+    m_bitrateLabel->setText( tr( "Bitrate:" ) );
+    gridLayout->addWidget( m_bitrateLabel, 2, 0 );
+
+    m_yearLabel = new QLabel( this );
+    m_yearLabel->setEnabled( false );
+    m_yearLabel->setFont( font );
+    m_yearLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
+    m_yearLabel->setText( tr( "Year:" ) );
+    gridLayout->addWidget( m_yearLabel, 3, 0 );
+
+    m_ageLabel = new QLabel( this );
+    m_ageLabel->setEnabled( false );
+    m_ageLabel->setFont( font );
+    m_ageLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
+    m_ageLabel->setText( tr( "Age:" ) );
+    gridLayout->addWidget( m_ageLabel, 4, 0 );
+
+    m_composerValue = new QLabel( this );
+    m_composerValue->setFont( font );
+    m_composerValue->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
+    gridLayout->addWidget( m_composerValue, 0, 1 );
+
+    m_durationValue = new QLabel( this );
+    m_durationValue->setFont( font );
+    m_durationValue->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
+    gridLayout->addWidget( m_durationValue, 1, 1 );
+
+    m_bitrateValue = new QLabel( this );
+    m_bitrateValue->setFont( font );
+    m_bitrateValue->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
+    gridLayout->addWidget( m_bitrateValue, 2, 1 );
+
+    m_yearValue = new QLabel( this );
+    m_yearValue->setFont( font );
+    m_yearValue->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
+    gridLayout->addWidget( m_yearValue, 3, 1 );
+
+    m_ageValue = new QLabel( this );
+    m_ageValue->setFont( font );
+    m_ageValue->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
+    gridLayout->addWidget( m_ageValue, 4, 1 );
+
+    mainLayout->addStretch();
+
+    TomahawkUtils::unmarginLayout( mainLayout );
+
+    gridLayout->setSpacing( TomahawkUtils::DpiScaler::scaledX( this, 4 ) );
 }
 
 
 ColumnViewPreviewWidget::~ColumnViewPreviewWidget()
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
-}
-
-
-void
-ColumnViewPreviewWidget::changeEvent( QEvent* e )
-{
-    QWidget::changeEvent( e );
-    switch ( e->type() )
-    {
-        case QEvent::LanguageChange:
-            ui->retranslateUi( this );
-            break;
-
-        default:
-            break;
-    }
 }
 
 
@@ -80,48 +168,48 @@ ColumnViewPreviewWidget::setQuery( const Tomahawk::query_ptr& query )
     connect( m_query->track().data(), SIGNAL( updated() ), SLOT( onCoverUpdated() ) );
 
     onCoverUpdated();
-    ui->cover->setQuery( query );
+    m_cover->setQuery( query );
 
     setVisible( true );
 
-    ui->trackLabel->setText( query->track()->track() );
-    ui->artistLabel->setArtist( query->track()->artistPtr() );
-    ui->composerValue->setText( query->track()->composer() );
+    m_trackLabel->setText( query->track()->track() );
+    m_artistLabel->setArtist( query->track()->artistPtr() );
+    m_composerValue->setText( query->track()->composer() );
 
-    ui->composerValue->setVisible( !query->track()->composerPtr().isNull() );
-    ui->composerLabel->setVisible( !query->track()->composerPtr().isNull() );
+    m_composerValue->setVisible( !query->track()->composerPtr().isNull() );
+    m_composerLabel->setVisible( !query->track()->composerPtr().isNull() );
 
     if ( query->numResults() )
     {
-        ui->yearValue->setText( QString::number( query->track()->year() ) );
-        ui->bitrateValue->setText( tr( "%1 kbps" ).arg( query->results().first()->bitrate() ) );
-        ui->durationValue->setText( TomahawkUtils::timeToString( query->track()->duration() ) );
-        ui->ageValue->setText( TomahawkUtils::ageToString( QDateTime::fromTime_t( query->results().first()->modificationTime() ) ) );
+        m_yearValue->setText( QString::number( query->track()->year() ) );
+        m_bitrateValue->setText( tr( "%1 kbps" ).arg( query->results().first()->bitrate() ) );
+        m_durationValue->setText( TomahawkUtils::timeToString( query->track()->duration() ) );
+        m_ageValue->setText( TomahawkUtils::ageToString( QDateTime::fromTime_t( query->results().first()->modificationTime() ) ) );
 
-        ui->yearValue->setVisible( query->track()->year() > 0 );
-        ui->yearLabel->setVisible( query->track()->year() > 0 );
-        ui->bitrateLabel->setVisible( query->results().first()->bitrate() > 0 );
-        ui->bitrateValue->setVisible( query->results().first()->bitrate() > 0 );
-        ui->durationLabel->setVisible( query->track()->duration() > 0 );
-        ui->durationValue->setVisible( query->track()->duration() > 0 );
-        ui->ageLabel->setVisible( query->results().first()->modificationTime() > 0 );
-        ui->ageValue->setVisible( query->results().first()->modificationTime() > 0 );
+        m_yearValue->setVisible( query->track()->year() > 0 );
+        m_yearLabel->setVisible( query->track()->year() > 0 );
+        m_bitrateLabel->setVisible( query->results().first()->bitrate() > 0 );
+        m_bitrateValue->setVisible( query->results().first()->bitrate() > 0 );
+        m_durationLabel->setVisible( query->track()->duration() > 0 );
+        m_durationValue->setVisible( query->track()->duration() > 0 );
+        m_ageLabel->setVisible( query->results().first()->modificationTime() > 0 );
+        m_ageValue->setVisible( query->results().first()->modificationTime() > 0 );
     }
     else
     {
-        ui->yearLabel->setVisible( false );
-        ui->yearValue->setVisible( false );
-        ui->bitrateLabel->setVisible( false );
-        ui->bitrateValue->setVisible( false );
-        ui->durationLabel->setVisible( false );
-        ui->durationValue->setVisible( false );
-        ui->ageLabel->setVisible( false );
-        ui->ageValue->setVisible( false );
+        m_yearLabel->setVisible( false );
+        m_yearValue->setVisible( false );
+        m_bitrateLabel->setVisible( false );
+        m_bitrateValue->setVisible( false );
+        m_durationLabel->setVisible( false );
+        m_durationValue->setVisible( false );
+        m_ageLabel->setVisible( false );
+        m_ageValue->setVisible( false );
     }
 
 #ifndef Q_OS_MAC //we don't need to scale on OSX anyway
     TomahawkUtils::DpiScaler dpi( this );
-    setMinimumHeight( dpi.scaledY( 480 ) );
+    setMinimumHeight( dpi.scaledY( 400 ) );
 #endif
 }
 
@@ -131,17 +219,24 @@ ColumnViewPreviewWidget::onCoverUpdated()
 {
     if ( m_query->track()->cover( QSize( 0, 0 ) ).isNull() )
     {
-        ui->cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::Grid, ui->cover->size() ) );
+        m_cover->setPixmap( TomahawkUtils::defaultPixmap( TomahawkUtils::DefaultTrackImage, TomahawkUtils::Grid, m_cover->size() ) );
         return;
     }
 
-    ui->cover->setPixmap( TomahawkUtils::createRoundedImage( m_query->track()->cover( ui->cover->size() ), QSize( 0, 0 ) ) );
+    m_cover->setPixmap( TomahawkUtils::createRoundedImage( m_query->track()->cover( m_cover->size() ), QSize( 0, 0 ) ) );
+}
+
+
+void
+ColumnViewPreviewWidget::onArtistClicked()
+{
+    //TODO
 }
 
 
 QSize
 ColumnViewPreviewWidget::minimumSize() const
 {
-    int minWidth = qMax( ui->trackLabel->sizeHint().width() + 32, ui->artistLabel->sizeHint().width() + 32 );
+    int minWidth = qMax( m_trackLabel->sizeHint().width() + 32, m_artistLabel->sizeHint().width() + 32 );
     return QSize( qMax( minWidth, 348 ), minimumHeight() );
 }

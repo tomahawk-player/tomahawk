@@ -25,11 +25,9 @@
 #include "DllMacro.h"
 
 class ColumnView;
-
-namespace Ui
-{
-    class ColumnViewPreviewWidget;
-}
+class QueryLabel;
+class PlayableCover;
+class QLabel;
 
 class DLLEXPORT ColumnViewPreviewWidget : public QWidget
 {
@@ -44,15 +42,33 @@ public:
 public slots:
     void setQuery( const Tomahawk::query_ptr& query );
 
-protected:
-    void changeEvent( QEvent* e );
-
 private slots:
     void onCoverUpdated();
+    void onArtistClicked();
 
 private:
-    Ui::ColumnViewPreviewWidget* ui;
     Tomahawk::query_ptr m_query;
+
+    PlayableCover* m_cover;
+
+    QLabel* m_ageLabel;
+    QLabel* m_ageValue;
+
+    QLabel* m_bitrateLabel;
+    QLabel* m_bitrateValue;
+
+    QLabel* m_composerLabel;
+    QLabel* m_composerValue;
+
+    QLabel* m_durationLabel;
+    QLabel* m_durationValue;
+
+    QLabel* m_yearLabel;
+    QLabel* m_yearValue;
+
+    QLabel* m_trackLabel;
+
+    QueryLabel* m_artistLabel;
 };
 
 #endif // COLUMNVIEWPREVIEWWIDGET_H

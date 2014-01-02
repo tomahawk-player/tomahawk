@@ -398,7 +398,6 @@ set( libUI ${libUI}
     widgets/infowidgets/AlbumInfoWidget.ui
     widgets/infowidgets/TrackInfoWidget.ui
     playlist/QueueView.ui
-    playlist/ColumnViewPreviewWidget.ui
     filemetadata/MetadataEditor.ui
     context/ContextWidget.ui
     infobar/InfoBar.ui
