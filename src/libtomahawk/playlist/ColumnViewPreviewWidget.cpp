@@ -227,6 +227,8 @@ ColumnViewPreviewWidget::setQuery( const Tomahawk::query_ptr& query )
 #ifndef Q_OS_MAC //we don't need to scale on OSX anyway
     TomahawkUtils::DpiScaler dpi( this );
     setMinimumHeight( dpi.scaledY( 400 ) );
+#else
+    setMinimumHeight( 400 );
 #endif
 }
 
