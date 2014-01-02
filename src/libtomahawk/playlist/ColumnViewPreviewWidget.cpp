@@ -25,6 +25,7 @@
 #include "Source.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/DpiScaler.h"
+#include "ViewManager.h"
 
 #include <QLabel>
 #include <QVBoxLayout>
@@ -230,7 +231,8 @@ ColumnViewPreviewWidget::onCoverUpdated()
 void
 ColumnViewPreviewWidget::onArtistClicked()
 {
-    //TODO
+    if ( !m_query->track()->artistPtr().isNull() )
+        ViewManager::instance()->show( m_query->track()->artistPtr() );
 }
 
 
