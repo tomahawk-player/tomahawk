@@ -486,7 +486,8 @@ ColumnView::fixScrollBars()
                     if ( sb && sb->orientation() == Qt::Vertical )
                     {
                         sb->setSingleStep( 6 );
-                        connect( sb, SIGNAL( valueChanged( int ) ), SLOT( onScrollBarChanged( int ) ), Qt::UniqueConnection );
+                        //FIXME: The preview widget should probably never scroll. Do we even need the following hack?
+                        //connect( sb, SIGNAL( valueChanged( int ) ), SLOT( onScrollBarChanged( int ) ), Qt::UniqueConnection );
 
                         break;
                     }
