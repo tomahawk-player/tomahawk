@@ -97,8 +97,6 @@ private slots:
     void onCustomContextMenu( const QPoint& pos );
     void onMenuTriggered( int action );
 
-    void onScrollBarChanged( int value );
-
 private:
     void fixScrollBars();
 

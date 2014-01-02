@@ -191,6 +191,7 @@ ColumnViewPreviewWidget::setQuery( const Tomahawk::query_ptr& query )
 
     m_trackLabel->setText( query->track()->track() );
     m_artistLabel->setArtist( query->track()->artistPtr() );
+    m_artistLabel->setElideMode( Qt::ElideRight );
     m_composerValue->setText( query->track()->composer() );
 
     m_composerValue->setVisible( !query->track()->composerPtr().isNull() );
