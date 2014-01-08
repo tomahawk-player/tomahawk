@@ -258,6 +258,6 @@ ColumnViewPreviewWidget::onArtistClicked()
 QSize
 ColumnViewPreviewWidget::minimumSize() const
 {
-    int minWidth = qMax( m_trackLabel->sizeHint().width() + 32, m_artistLabel->sizeHint().width() + 32 );
+    int minWidth = TomahawkUtils::DpiScaler::scaledX( this, 280 );
     return QSize( qMax( minWidth, 348 ), minimumHeight() );
 }
