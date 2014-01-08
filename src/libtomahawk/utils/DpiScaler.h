@@ -51,8 +51,8 @@ public:
     static QSize scaled( const QPaintDevice* pd, const QSize& size );
     static QMargins scaled( const QPaintDevice* pd, int left, int top, int right, int bottom );
     static QMargins scaled( const QPaintDevice* pd, const QMargins& margins );
-    inline static int scaledX( const QPaintDevice* pd, int x );
-    inline static int scaledY( const QPaintDevice* pd, int y );
+    static int scaledX( const QPaintDevice* pd, int x );
+    static int scaledY( const QPaintDevice* pd, int y );
 
 private:
     inline static qreal ratioX( const QPaintDevice* pd );
