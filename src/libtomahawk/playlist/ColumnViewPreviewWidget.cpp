@@ -84,7 +84,11 @@ ColumnViewPreviewWidget::ColumnViewPreviewWidget( ColumnView* parent )
     connect( m_artistLabel, SIGNAL( clickedArtist() ), SLOT( onArtistClicked() ) );
     font.setPointSize( TomahawkUtils::defaultFontSize() + 5 );
     m_artistLabel->setFont( font );
-    mainLayout->addWidget( m_artistLabel );
+    QHBoxLayout* artistLayout = new QHBoxLayout;
+    artistLayout->addStretch();
+    artistLayout->addWidget( m_artistLabel );
+    artistLayout->addStretch();
+    mainLayout->addLayout( artistLayout );
 
 #ifndef Q_OS_MAC //we don't need to scale on OSX anyway
     mainLayout->addSpacing( TomahawkUtils::DpiScaler::scaledY( this, 16 ) );
