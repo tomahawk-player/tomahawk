@@ -21,6 +21,7 @@
 #include "ColumnView.h"
 #include "widgets/PlayableCover.h"
 #include "widgets/QueryLabel.h"
+#include "widgets/ScrollingLabel.h"
 #include "utils/Logger.h"
 #include "Source.h"
 #include "utils/TomahawkUtilsGui.h"
@@ -66,12 +67,13 @@ ColumnViewPreviewWidget::ColumnViewPreviewWidget( ColumnView* parent )
     mainLayout->addSpacing( 16 );
 #endif
 
-    m_trackLabel = new QLabel( this );
-    m_trackLabel->setAlignment( Qt::AlignCenter );
+    m_trackLabel = new ScrollingLabel( this );
+    //m_trackLabel->setAlignment( Qt::AlignCenter );
     QFont font;
     font.setPointSize( TomahawkUtils::defaultFontSize() + 9 );
     font.setBold( true );
     m_trackLabel->setFont( font );
+    m_trackLabel->setFixedHeight( QFontMetrics( font ).height() + 6 );
     mainLayout->addWidget( m_trackLabel );
 
     m_artistLabel = new QueryLabel( this );

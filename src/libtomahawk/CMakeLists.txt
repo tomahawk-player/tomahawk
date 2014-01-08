@@ -159,6 +159,7 @@ set( libGuiSources
     widgets/RecentPlaylistsModel.cpp
     widgets/RecentlyPlayedPlaylistsModel.cpp
     widgets/ScriptCollectionHeader.cpp
+    widgets/ScrollingLabel.cpp
     widgets/SearchWidget.cpp
     widgets/SeekSlider.cpp
     widgets/SourceTreePopupDialog.cpp

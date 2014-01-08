@@ -28,6 +28,7 @@ class ColumnView;
 class QueryLabel;
 class PlayableCover;
 class QLabel;
+class ScrollingLabel;
 
 class DLLEXPORT ColumnViewPreviewWidget : public QWidget
 {
@@ -66,7 +67,7 @@ private:
     QLabel* m_yearLabel;
     QLabel* m_yearValue;
 
-    QLabel* m_trackLabel;
+    ScrollingLabel* m_trackLabel;
 
     QueryLabel* m_artistLabel;
 };
