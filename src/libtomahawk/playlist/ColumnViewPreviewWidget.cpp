@@ -87,7 +87,7 @@ ColumnViewPreviewWidget::ColumnViewPreviewWidget( ColumnView* parent )
     QHBoxLayout* artistLayout = new QHBoxLayout;
     artistLayout->addStretch();
     artistLayout->addWidget( m_artistLabel );
-    m_artistLabel->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Preferred );
+    m_artistLabel->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
     artistLayout->addStretch();
     mainLayout->addLayout( artistLayout );
 
