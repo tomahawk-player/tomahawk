@@ -105,7 +105,6 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 #ifdef Q_OS_WIN
     , m_buttonCreatedID( RegisterWindowMessage( L"TaskbarButtonCreated" ) )
     , m_taskbarList( 0 )
-  #endif
 #endif
     , ui( new Ui::TomahawkWindow )
     , m_searchWidget( 0 )
