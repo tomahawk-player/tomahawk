@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2013, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2014,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -154,7 +155,8 @@ ColumnView::setTreeModel( TreeModel* model )
     sortByColumn( PlayableModel::Artist, Qt::AscendingOrder );*/
 
     QList< int > widths;
-    widths << m_previewWidget->minimumSize().width() + 32;
+    int baseUnit = m_previewWidget->minimumSize().width() + 32;
+    widths << baseUnit << baseUnit << baseUnit << baseUnit;
     setColumnWidths( widths );
 }
 
