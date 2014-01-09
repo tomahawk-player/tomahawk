@@ -59,7 +59,7 @@ SnoreNotifyPlugin::SnoreNotifyPlugin()
     }
     else
     {
-        if(!m_snore->setPrimaryNotificationBackend( backend ))
+        if( !m_snore->setPrimaryNotificationBackend( backend ) )
         {
             tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Ivalid or unavailible Snore backend: " << backend << " availible backens: " << m_snore->notificationBackends();
             m_snore->setPrimaryNotificationBackend();
@@ -102,6 +102,12 @@ SnoreNotifyPlugin::pushInfo( Tomahawk::InfoSystem::InfoPushData pushData )
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "showing notification:" << TomahawkSettings::instance()->songChangeNotificationEnabled();
     if ( !TomahawkSettings::instance()->songChangeNotificationEnabled() )
         return;
+
+    if( m_snore->primaryNotificationBackend().isNull() )
+    {
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "no notification backend set";
+        return;
+    }
 
 
     switch ( pushData.type )
