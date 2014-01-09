@@ -775,7 +775,6 @@ TomahawkWindow::winEvent( MSG* msg, long* result )
 
     return false;
 }
-#endif // Q_OS_WIN
 
 
 void
@@ -844,6 +843,7 @@ TomahawkWindow::updateWindowsLoveButton()
     m_thumbButtons[TP_LOVE].dwFlags = THBF_ENABLED;
     m_taskbarList->ThumbBarUpdateButtons( winId(), ARRAYSIZE( m_thumbButtons ), m_thumbButtons );
 }
+#endif // Q_OS_WIN
 
 
 void
