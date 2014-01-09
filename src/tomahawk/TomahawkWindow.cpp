@@ -104,7 +104,6 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     , TomahawkUtils::DpiScaler( this )
 #ifdef Q_OS_WIN
     , m_buttonCreatedID( RegisterWindowMessage( L"TaskbarButtonCreated" ) )
-  #ifdef HAVE_THUMBBUTTON
     , m_taskbarList( 0 )
   #endif
 #endif
@@ -509,7 +508,6 @@ TomahawkWindow::setupUpdateCheck()
 bool
 TomahawkWindow::setupWindowsButtons()
 {
-#ifdef HAVE_THUMBBUTTON
     const GUID IID_ITaskbarList3 = { 0xea1afb91,0x9e28,0x4b86, { 0x90,0xe9,0x9e,0x9f,0x8a,0x5e,0xef,0xaf } };
     HRESULT hr = S_OK;
 
@@ -559,9 +557,6 @@ TomahawkWindow::setupWindowsButtons()
     }
 
     return SUCCEEDED( hr );
-#else // HAVE_THUMBBUTTON
-    return false;
-#endif
 }
 
 
@@ -788,7 +783,6 @@ void
 TomahawkWindow::audioStateChanged( AudioState newState, AudioState oldState )
 {
     Q_UNUSED(oldState);
-#ifdef HAVE_THUMBBUTTON
     if ( m_taskbarList == 0 )
         return;
     switch ( newState )
@@ -829,17 +823,12 @@ TomahawkWindow::audioStateChanged( AudioState newState, AudioState oldState )
     }
 
     m_taskbarList->ThumbBarUpdateButtons( winId(), ARRAYSIZE( m_thumbButtons ), m_thumbButtons );
-#else
-    Q_UNUSED( newState );
-    Q_UNUSED( oldState );
-#endif // HAVE_THUMBBUTTON
 }
 
 
 void
 TomahawkWindow::updateWindowsLoveButton()
 {
-#ifdef HAVE_THUMBBUTTON
     if ( m_taskbarList == 0 )
         return;
     if ( !AudioEngine::instance()->currentTrack().isNull() && AudioEngine::instance()->currentTrack()->track()->loved() )
@@ -855,7 +844,6 @@ TomahawkWindow::updateWindowsLoveButton()
 
     m_thumbButtons[TP_LOVE].dwFlags = THBF_ENABLED;
     m_taskbarList->ThumbBarUpdateButtons( winId(), ARRAYSIZE( m_thumbButtons ), m_thumbButtons );
-#endif // HAVE_THUMBBUTTON
 }
 
 
