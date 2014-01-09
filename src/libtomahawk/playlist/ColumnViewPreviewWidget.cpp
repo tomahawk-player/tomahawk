@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2013, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2013,      Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2013-2014, Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -68,7 +69,6 @@ ColumnViewPreviewWidget::ColumnViewPreviewWidget( ColumnView* parent )
 #endif
 
     m_trackLabel = new ScrollingLabel( this );
-    //m_trackLabel->setAlignment( Qt::AlignCenter );
     QFont font;
     font.setPointSize( TomahawkUtils::defaultFontSize() + 9 );
     font.setBold( true );
@@ -87,6 +87,7 @@ ColumnViewPreviewWidget::ColumnViewPreviewWidget( ColumnView* parent )
     QHBoxLayout* artistLayout = new QHBoxLayout;
     artistLayout->addStretch();
     artistLayout->addWidget( m_artistLabel );
+    m_artistLabel->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Preferred );
     artistLayout->addStretch();
     mainLayout->addLayout( artistLayout );
 
@@ -197,6 +198,11 @@ ColumnViewPreviewWidget::setQuery( const Tomahawk::query_ptr& query )
 
     m_trackLabel->setText( query->track()->track() );
     m_artistLabel->setArtist( query->track()->artistPtr() );
+    m_artistLabel->setMinimumWidth( qMin( m_artistLabel->fontMetrics().width( query->track()->artist() ) +
+                                          m_artistLabel->contentsMargins().left() +
+                                          m_artistLabel->contentsMargins().right() +
+                                          2 * m_artistLabel->lineWidth(),
+                                          width() ) );
     m_artistLabel->setElideMode( Qt::ElideRight );
     m_composerValue->setText( query->track()->composer() );
 
