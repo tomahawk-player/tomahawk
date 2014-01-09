@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2013     , Patrick von Reth <vonreth@kde.org>
+ *   Copyright 2013-2014, Patrick von Reth <vonreth@kde.org>
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *
@@ -59,20 +59,25 @@ SnoreNotifyPlugin::SnoreNotifyPlugin()
     }
     else
     {
-        m_snore->setPrimaryNotificationBackend( backend );
+        if(!m_snore->setPrimaryNotificationBackend( backend ))
+        {
+            tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "Ivalid or unavailible Snore backend: " << backend << " availible backens: " << m_snore->notificationBackends();
+            m_snore->setPrimaryNotificationBackend();
+        }
     }
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << m_snore->primaryNotificationBackend();
 
     m_application = new Snore::Application( qApp->applicationName(), m_defaultIcon );
-    m_snore->addApplication( m_application );
-    m_snore->applicationIsInitialized( m_application );
 
     addAlert( InfoNotifyUser, tr( "Notify User" ) );
     addAlert( InfoNowPlaying, tr( "Now Playing" ) );
     addAlert( InfoTrackUnresolved, tr( "Unresolved track" ) );
     addAlert( InfoNowStopped, tr( "Playback Stopped" ) );
     addAlert( InfoInboxReceived, tr( "You received a Song recomondation" ) );
+
+    m_snore->addApplication( m_application );
+    m_snore->applicationIsInitialized( m_application );
 
     connect( m_snore, SIGNAL( actionInvoked( Snore::Notification ) ), this, SLOT( slotActionInvoked( Snore::Notification ) ) );
 }
@@ -81,13 +86,14 @@ SnoreNotifyPlugin::SnoreNotifyPlugin()
 SnoreNotifyPlugin::~SnoreNotifyPlugin()
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
-    m_snore->deleteLater();
-    m_application->deleteLater();
 
+    m_snore->removeApplication(m_application->name());
     foreach( Snore::Alert* alert, m_alerts )
     {
         alert->deleteLater();
     }
+    m_snore->deleteLater();
+    m_application->deleteLater();
 }
 
 void
