@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2013, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2014, Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -32,6 +33,7 @@
 #include "playlist/ModeHeader.h"
 #include "playlist/PlaylistLargeItemDelegate.h"
 #include "PlayableProxyModelPlaylistInterface.h"
+#include "TomahawkSettings.h"
 #include "utils/TomahawkStyle.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Closure.h"
@@ -93,8 +95,6 @@ FlexibleTreeView::FlexibleTreeView( QWidget* parent, QWidget* extraHeader )
     m_stack->addWidget( m_treeView );
     /*    m_stack->addWidget( m_gridView );
     m_stack->addWidget( m_trackView );*/
-
-    setCurrentMode( Columns );
 
     connect( m_header, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
 
@@ -198,7 +198,15 @@ FlexibleTreeView::setTreeModel( TreeModel* model )
 void
 FlexibleTreeView::setCurrentMode( FlexibleTreeViewMode mode )
 {
-    m_mode = mode;
+    if ( m_mode != mode )
+    {
+        TomahawkSettings::instance()->beginGroup( "ui" );
+        TomahawkSettings::instance()->setValue( "flexibleTreeViewMode", mode );
+        TomahawkSettings::instance()->endGroup();
+        TomahawkSettings::instance()->sync();
+
+        m_mode = mode;
+    }
 
     switch ( mode )
     {
@@ -280,6 +288,28 @@ FlexibleTreeView::setFilter( const QString& pattern )
     m_trackView->setFilter( pattern );*/
 
     return true;
+}
+
+
+void
+FlexibleTreeView::restoreViewMode()
+{
+    TomahawkSettings::instance()->beginGroup( "ui" );
+    int modeNumber = TomahawkSettings::instance()->value( "flexibleTreeViewMode", Columns ).toInt();
+    m_mode = static_cast< FlexibleTreeViewMode >( modeNumber );
+    TomahawkSettings::instance()->endGroup();
+
+    switch ( m_mode )
+    {
+    case Columns:
+        m_modeHeader->switchTo( 0 );
+        break;
+    case Flat:
+        m_modeHeader->switchTo( 1 );
+        break;
+    case Albums:
+        m_modeHeader->switchTo( 2 );
+    }
 }
 
 

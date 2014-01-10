@@ -323,6 +323,7 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
     {
         view = m_collectionViews.value( collection ).data();
     }
+    view->restoreViewMode();
 
     setPage( view );
     return view;

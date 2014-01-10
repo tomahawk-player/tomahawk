@@ -1,7 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2013, Christian Muehlhaeuser <muesli@tomahawk-player.org>
- *   Copyright 2012-2013, Teo Mrnjavac <teo@kde.org>
+ *   Copyright 2012-2014, Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -33,6 +33,8 @@ class DLLEXPORT ModeHeader : public QWidget
 public:
     ModeHeader( QWidget* parent );
     ~ModeHeader();
+
+    void switchTo( int buttonIndex );
 
 protected:
     void changeEvent( QEvent* e );

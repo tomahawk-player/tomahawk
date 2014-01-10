@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2012, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2014, Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -76,6 +77,7 @@ public:
 public slots:
     void setCurrentMode( FlexibleTreeViewMode mode );
     virtual bool setFilter( const QString& pattern );
+    void restoreViewMode(); //ViewManager calls this on every show
 
 signals:
     void modeChanged( FlexibleTreeViewMode mode );
