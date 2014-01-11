@@ -713,12 +713,12 @@ connect and stream from you?</source>
 <context>
     <name>FlexibleTreeView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="312"/>
+        <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="342"/>
         <source>This playlist is currently empty.</source>
         <translation>Questa playlist è vuota.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="314"/>
+        <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="344"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
         <translation type="unfinished"/>
     </message>
@@ -4274,32 +4274,32 @@ You can re-send a sync message at any time simply by sending another tweet using
         <translation>Suggerimenti per l&apos;ascolto dai tuoi amici.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="375"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="376"/>
         <source>SuperCollection</source>
         <translation>Supercollezione</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="376"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="377"/>
         <source>Combined libraries of all your online friends</source>
         <translation>Collezioni combinate di tutti i tuoi amici online</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="436"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="437"/>
         <source>Recently Played Tracks</source>
         <translation>Tracce ascoltate di recente</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="437"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="438"/>
         <source>Recently played tracks from all your friends</source>
         <translation>Tracce ascoltate di recente dai tuoi amici</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="443"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="444"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>Spiacente, non sono riuscito a trovare nessuna riproduzione recente!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="470"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="471"/>
         <source>No listening suggestions here.</source>
         <translation>Nessun suggerimento musicale qui.</translation>
     </message>

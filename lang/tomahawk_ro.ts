@@ -714,12 +714,12 @@ se conecteze și să redea de la tine?</translation>
 <context>
     <name>FlexibleTreeView</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="312"/>
+        <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="342"/>
         <source>This playlist is currently empty.</source>
         <translation>Această listă de redare este momentan goală.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="314"/>
+        <location filename="../src/libtomahawk/playlist/FlexibleTreeView.cpp" line="344"/>
         <source>This playlist is currently empty. Add some tracks to it and enjoy the music!</source>
         <translation>Această listă de redare este momentan goală. Adaugă niște piese și bucură-te de muzică!</translation>
     </message>
@@ -4294,32 +4294,32 @@ Poți retrimite un mesaj de sincronizare oricând doar prin trimiterea unui alt 
         <translation>Sugestii de ascultare de la prietenii tăi</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="375"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="376"/>
         <source>SuperCollection</source>
         <translation>SuperColecție</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="376"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="377"/>
         <source>Combined libraries of all your online friends</source>
         <translation>Bibliotecile combinate ale tuturor prietenilor tăi conectați</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="436"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="437"/>
         <source>Recently Played Tracks</source>
         <translation>Piese redate recent</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="437"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="438"/>
         <source>Recently played tracks from all your friends</source>
         <translation>Piese redate recent de la toți pritenii tăi</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="443"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="444"/>
         <source>Sorry, we could not find any recent plays!</source>
         <translation>Ne pare rău, nu am găsit redări recente!</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/ViewManager.cpp" line="470"/>
+        <location filename="../src/libtomahawk/ViewManager.cpp" line="471"/>
         <source>No listening suggestions here.</source>
         <translation>Nu există sugestii de ascultare aici.</translation>
     </message>
