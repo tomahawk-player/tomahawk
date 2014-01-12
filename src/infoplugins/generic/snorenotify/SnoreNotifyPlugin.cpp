@@ -76,8 +76,7 @@ SnoreNotifyPlugin::SnoreNotifyPlugin()
     addAlert( InfoNowStopped, tr( "Playback Stopped" ) );
     addAlert( InfoInboxReceived, tr( "You received a Song recomondation" ) );
 
-    m_snore->addApplication( m_application );
-    m_snore->applicationIsInitialized( m_application );
+    m_snore->registerApplication( m_application );
 
     connect( m_snore, SIGNAL( actionInvoked( Snore::Notification ) ), this, SLOT( slotActionInvoked( Snore::Notification ) ) );
 }
@@ -87,7 +86,7 @@ SnoreNotifyPlugin::~SnoreNotifyPlugin()
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
 
-    m_snore->removeApplication(m_application->name());
+    m_snore->deregisterApplication( m_application );
     foreach( Snore::Alert* alert, m_alerts )
     {
         alert->deleteLater();
