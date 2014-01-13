@@ -1,7 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2012 Leo Franchi <lfranchi@kde.org>
- *   Copyright 2012 Teo Mrnjavac <teo@kde.org>
+ *   Copyright 2012      Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2012-2014 Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -88,6 +88,12 @@ SourceTreePopupDialog::SourceTreePopupDialog()
                                     TomahawkStyle::BORDER_LINE.name() + "; }" );
     m_layout->addWidget( m_separatorLine );
     m_layout->addWidget( m_label );
+    QHBoxLayout* questionsSpacerLayout = new QHBoxLayout;
+    m_layout->addLayout( questionsSpacerLayout );
+    m_questionsLayout = new QVBoxLayout;
+    questionsSpacerLayout->addStretch( 1 );
+    questionsSpacerLayout->addLayout( m_questionsLayout );
+    TomahawkUtils::unmarginLayout( questionsSpacerLayout );
     m_layout->addWidget( m_buttons );
     setContentsMargins( contentsMargins().left() + 12,
                         contentsMargins().top() + 8,
@@ -155,25 +161,22 @@ SourceTreePopupDialog::setOkButtonText( const QString& text )
 void
 SourceTreePopupDialog::setExtraQuestions( const Tomahawk::PlaylistDeleteQuestions& questions )
 {
+    //First we clear
+    clearQuestionWidgets();
+
     m_questions = questions;
 
     int baseHeight = 80;
-    int idx = m_layout->indexOf( m_label ) + 1;
     foreach ( const Tomahawk::PlaylistDeleteQuestion& question, m_questions )
     {
         QCheckBox* cb = new QCheckBox( question.first, this );
         cb->setLayoutDirection( Qt::RightToLeft );
         cb->setProperty( "data", question.second );
 
-        QHBoxLayout* h = new QHBoxLayout;
-        h->addStretch( 1 );
-        h->addWidget( cb );
-//         m_layout->insertLayout( h, cb, 0 );
-        m_layout->insertLayout( idx, h, 0 );
+        m_questionsLayout->addWidget( cb );
 
         m_questionCheckboxes << cb;
-        idx++;
-        baseHeight += cb->height() + m_layout->spacing();
+        baseHeight += cb->height() + m_questionsLayout->spacing();
     }
     setFixedHeight( baseHeight );
 }
@@ -234,6 +237,15 @@ SourceTreePopupDialog::showEvent( QShowEvent* )
 
 
 void
+SourceTreePopupDialog::hideEvent( QHideEvent* e )
+{
+    clearQuestionWidgets();
+
+    QWidget::hideEvent( e );
+}
+
+
+void
 SourceTreePopupDialog::onAccepted()
 {
     hide();
@@ -263,4 +275,16 @@ SourceTreePopupDialog::calculateResults()
             m_questionResults[ b->property( "data" ).toInt() ] = ( b->checkState() == Qt::Checked );
         }
     }
+}
+
+
+void
+SourceTreePopupDialog::clearQuestionWidgets()
+{
+    while ( QLayoutItem* item = m_questionsLayout->takeAt( 0 ) )
+        if ( QWidget* widget = item->widget() )
+            delete widget;
+    m_questionCheckboxes.clear();
+
+    setFixedHeight( 80 );
 }

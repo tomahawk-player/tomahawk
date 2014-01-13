@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2012 Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2014 Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -59,6 +60,7 @@ protected:
     virtual void paintEvent( QPaintEvent* );
     virtual void focusOutEvent( QFocusEvent* );
     virtual void showEvent( QShowEvent* );
+    virtual void hideEvent( QHideEvent* );
 
 private slots:
     void onAccepted();
@@ -66,8 +68,10 @@ private slots:
 
 private:
     void calculateResults();
+    void clearQuestionWidgets();
 
     QVBoxLayout* m_layout;
+    QVBoxLayout* m_questionsLayout;
     QList< QCheckBox* > m_questionCheckboxes;
 
     bool m_result;
