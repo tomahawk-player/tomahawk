@@ -2,7 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
- *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
+ *   Copyright 2013-2014, Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -164,16 +164,17 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
 
     const track_ptr track = item->query()->track();
     QPixmap pixmap;
-    QString upperText, lowerText;
+    QString upperLeftText, upperRightText, lowerText;
 
     if ( !item->playbackLog().source )
     {
-        upperText = track->track();
+        upperLeftText = track->track();
         lowerText = track->artist();
     }
     else
     {
-        upperText = QString( "%1 - %2" ).arg( track->track() ).arg( track->artist() );
+        upperLeftText = track->track();
+        upperRightText = QString( " - %2" ).arg( track->artist() );
         QString playtime = TomahawkUtils::ageToString( QDateTime::fromTime_t( item->playbackLog().timestamp ), true );
 
         if ( item->playbackLog().source->isLocal() )
@@ -210,15 +211,30 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
 
         r.adjust( ir.width() + 12, 0, -12, 0 );
         painter->setFont( m_boldFont );
-        QString text = painter->fontMetrics().elidedText( upperText, Qt::ElideRight, r.width() );
-        painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, m_topOption );
+        QFontMetrics fm = painter->fontMetrics();
+        QString elided = fm.elidedText( upperLeftText, Qt::ElideRight, r.width() );
+        if ( fm.width( elided ) != fm.width( upperLeftText ) ) //if we had to elide the track title
+        {                                                      //we just paint that and we're done
+            painter->drawText( r.adjusted( 0, 1, 0, 0 ), elided, m_topOption );
+        }
+        else
+        {
+            int remainingSpace = r.width() - fm.width( upperLeftText );
+            elided = fm.elidedText( upperRightText, Qt::ElideRight, remainingSpace );
+            painter->drawText( r.adjusted( 0, 1, -remainingSpace, 0 ), upperLeftText, m_topOption );
+
+            if ( item->query()->numResults() > 0 && item->query()->results().first()->isOnline() )
+                painter->setPen( opt.palette.text().color().lighter( 220 ) );
+
+            painter->drawText( r.adjusted( r.width() - remainingSpace, 1, 0, 0 ), elided, m_topOption );
+        }
 
         painter->setFont( opt.font );
         if ( !( option.state & QStyle::State_Selected || item->isPlaying() ) )
             painter->setPen( Qt::gray );
 
-        text = painter->fontMetrics().elidedText( lowerText, Qt::ElideRight, r.width() );
-        painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, m_bottomOption );
+        elided = painter->fontMetrics().elidedText( lowerText, Qt::ElideRight, r.width() );
+        painter->drawText( r.adjusted( 0, 1, 0, 0 ), elided, m_bottomOption );
     }
 
     painter->restore();
