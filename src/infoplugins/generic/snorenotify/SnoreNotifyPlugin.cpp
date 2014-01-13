@@ -50,7 +50,7 @@ SnoreNotifyPlugin::SnoreNotifyPlugin()
     m_supportedPushTypes << InfoNotifyUser << InfoNowPlaying << InfoTrackUnresolved << InfoNowStopped << InfoInboxReceived;
 
     m_snore = new Snore::SnoreCore();
-    m_snore->loadPlugins( Snore::PluginContainer::BACKEND );
+    m_snore->loadPlugins( Snore::SnorePlugin::BACKEND );
     QString backend = qgetenv( "SNORE_BACKEND" ).constData();
 
     if( backend.isEmpty() )
@@ -68,7 +68,7 @@ SnoreNotifyPlugin::SnoreNotifyPlugin()
 
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << m_snore->primaryNotificationBackend();
 
-    m_application = new Snore::Application( qApp->applicationName(), m_defaultIcon );
+    m_application = Snore::Application( qApp->applicationName(), m_defaultIcon );
 
     addAlert( InfoNotifyUser, tr( "Notify User" ) );
     addAlert( InfoNowPlaying, tr( "Now Playing" ) );
@@ -87,12 +87,7 @@ SnoreNotifyPlugin::~SnoreNotifyPlugin()
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
 
     m_snore->deregisterApplication( m_application );
-    foreach( Snore::Alert* alert, m_alerts )
-    {
-        alert->deleteLater();
-    }
     m_snore->deleteLater();
-    m_application->deleteLater();
 }
 
 void
@@ -152,8 +147,8 @@ SnoreNotifyPlugin::notifyUser( Tomahawk::InfoSystem::InfoType type, const QStrin
     {
         icon = m_defaultIcon;
     }
-    Snore::Alert* alert = m_alerts[ type ];
-    Snore::Notification n( qApp->applicationName(), alert->name(), alert->title(), messageText, icon );
+    const Snore::Alert &alert = m_alerts[ type ];
+    Snore::Notification n( m_application , alert, alert.title(), messageText, icon );
     m_snore->broadcastNotification( n );
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "showing notification:" << messageText;
 
@@ -162,8 +157,8 @@ SnoreNotifyPlugin::notifyUser( Tomahawk::InfoSystem::InfoType type, const QStrin
 void
 SnoreNotifyPlugin::addAlert( Tomahawk::InfoSystem::InfoType type, const QString &title )
 {
-    Snore::Alert* alert = new Snore::Alert( title, title, m_defaultIcon );
-    m_application->addAlert( alert );
+    Snore::Alert alert( title, title, m_defaultIcon );
+    m_application.addAlert( alert );
     m_alerts[ type ] = alert;
 }
 

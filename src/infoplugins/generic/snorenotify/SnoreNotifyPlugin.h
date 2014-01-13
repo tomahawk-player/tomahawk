@@ -66,9 +66,9 @@ private:
     void notifyUser( InfoType type, const QString &messageText, Snore::Icon icon = Snore::Icon() );
     void addAlert( Tomahawk::InfoSystem::InfoType type, const QString &title );
     Snore::SnoreCore *m_snore;
-    Snore::Application *m_application;
+    Snore::Application m_application;
     Snore::Icon m_defaultIcon;
-    QHash< Tomahawk::InfoSystem::InfoType, Snore::Alert* > m_alerts;
+    QHash< Tomahawk::InfoSystem::InfoType, Snore::Alert > m_alerts;
 
     void nowPlaying( const QVariant &input );
     void inboxReceived( const QVariant &input );
