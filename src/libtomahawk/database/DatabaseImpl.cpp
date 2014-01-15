@@ -222,6 +222,7 @@ Tomahawk::DatabaseImpl::updateSchema( int oldVersion )
     }
     else // update in place! run the proper upgrade script
     {
+        emit schemaUpdateStarted();
         int cur = oldVersion;
         m_db.transaction();
         while ( cur < CURRENT_SCHEMA_VERSION )
@@ -251,6 +252,7 @@ Tomahawk::DatabaseImpl::updateSchema( int oldVersion )
         }
         m_db.commit();
         tLog() << "DB Upgrade successful!";
+        emit schemaUpdateDone();
         return true;
     }
 }

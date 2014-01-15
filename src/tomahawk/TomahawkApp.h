@@ -45,6 +45,7 @@ class Servent;
 class SipHandler;
 class TomahawkSettings;
 class AudioControls;
+class SplashWidget;
 
 namespace Tomahawk
 {
@@ -114,6 +115,10 @@ private slots:
     void spotifyApiCheckFinished();
     void onInfoSystemReady();
 
+    void startSplashWidget( const QString& initialMessage = QString() );
+    void updateSplashWidgetMessage( const QString& message );
+    void killSplashWidget();
+
     void ipDetectionFailed( QNetworkReply::NetworkError error, QString errorString );
 
 private:
@@ -144,6 +149,8 @@ private:
     TomahawkWindow* m_mainwindow;
 #endif
     QPointer<PlaydarApi> playdarApi;
+
+    SplashWidget* m_splashWidget;
 
     bool m_headless;
 };

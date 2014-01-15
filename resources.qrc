@@ -168,5 +168,6 @@
         <file>data/www/css/font-awesome.css</file>
         <file>data/www/css/style.css</file>
         <file>data/www/js/html5shim.js</file>
+        <file>data/images/splash.svg</file>
     </qresource>
 </RCC>

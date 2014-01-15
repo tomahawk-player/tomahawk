@@ -66,6 +66,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      widgets/AccountsPopupWidget.cpp
      widgets/AccountsToolButton.cpp
      widgets/SlideSwitchButton.cpp
+     widgets/SplashWidget.cpp
      widgets/UnstyledFrame.cpp
 )
 

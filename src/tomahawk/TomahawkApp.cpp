@@ -69,6 +69,7 @@
 #include "utils/Logger.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/TomahawkCache.h"
+#include "widgets/SplashWidget.h"
 
 #ifndef ENABLE_HEADLESS
     #include "resolvers/JSResolver.h"
@@ -148,6 +149,7 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     , m_mainwindow( 0 )
 #endif
     , m_headless( false )
+    , m_splashWidget( 0 )
 {
     if ( arguments().contains( "--help" ) || arguments().contains( "-h" ) )
     {
@@ -180,6 +182,9 @@ TomahawkApp::init()
     m_headless = arguments().contains( "--headless" );
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
     setQuitOnLastWindowClosed( false );
+
+    if ( arguments().contains( "--splash" ) )
+        startSplashWidget( "Splash screen test" );
 
     QFont f = font();
 #ifdef Q_OS_MAC
@@ -472,6 +477,12 @@ TomahawkApp::initDatabase()
 
     tDebug( LOGEXTRA ) << "Using database:" << dbpath;
     m_database = QPointer<Tomahawk::Database>( new Tomahawk::Database( dbpath, this ) );
+
+    connect( m_database->impl(), SIGNAL( schemaUpdateStarted() ),
+             this, SLOT( startSplashWidget() ) );
+    connect( m_database->impl(), SIGNAL( schemaUpdateDone() ),
+             this, SLOT( killSplashWidget() ) );
+
     Pipeline::instance()->databaseReady();
 }
 
@@ -679,6 +690,36 @@ TomahawkApp::onInfoSystemReady()
 
     initEnergyEventHandler();
     emit tomahawkLoaded();
+}
+
+
+void
+TomahawkApp::startSplashWidget( const QString& initialMessage )
+{
+    tDebug() << Q_FUNC_INFO;
+    m_splashWidget = new SplashWidget();
+    m_splashWidget->showMessage( initialMessage );
+    m_splashWidget->show();
+}
+
+
+void
+TomahawkApp::updateSplashWidgetMessage( const QString& message )
+{
+
+}
+
+
+void
+TomahawkApp::killSplashWidget()
+{
+    tDebug() << Q_FUNC_INFO;
+    if ( m_splashWidget )
+    {
+        m_splashWidget->finish( mainWindow() );
+        m_splashWidget->deleteLater();
+    }
+    m_splashWidget = 0;
 }
 
 

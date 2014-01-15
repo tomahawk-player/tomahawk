@@ -86,6 +86,8 @@ public:
 
 signals:
     void indexReady();
+    void schemaUpdateStarted();
+    void schemaUpdateDone();
 
 private:
     DatabaseImpl( const QString& dbname, bool internal );
