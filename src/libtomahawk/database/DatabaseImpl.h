@@ -2,6 +2,7 @@
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2014,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -87,6 +88,7 @@ public:
 signals:
     void indexReady();
     void schemaUpdateStarted();
+    void schemaUpdateStatus( const QString& message );
     void schemaUpdateDone();
 
 private:

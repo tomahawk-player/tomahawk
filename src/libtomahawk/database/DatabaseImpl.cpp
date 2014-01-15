@@ -3,6 +3,7 @@
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2011, Jeff Mitchell <jeff@tomahawk-player.org>
+ *   Copyright 2014,      Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -53,6 +54,14 @@ Tomahawk::DatabaseImpl::DatabaseImpl( const QString& dbname )
 {
     QTime t;
     t.start();
+
+    // Signals for splash screen must be connected here
+    connect( this, SIGNAL( schemaUpdateStarted() ),
+             qApp, SLOT( onSchemaUpdateStarted() ) );
+    connect( this, SIGNAL( schemaUpdateStatus( QString ) ),
+             qApp, SLOT( onSchemaUpdateStatus( QString ) ) );
+    connect( this, SIGNAL( schemaUpdateDone() ),
+             qApp, SLOT( onSchemaUpdateDone() ) );
 
     bool schemaUpdated = openDatabase( dbname );
     tDebug( LOGVERBOSE ) << "Opened database:" << t.elapsed();
@@ -239,8 +248,9 @@ Tomahawk::DatabaseImpl::updateSchema( int oldVersion )
 
             QString sql = QString::fromUtf8( script.readAll() ).trimmed();
             QStringList statements = sql.split( ";", QString::SkipEmptyParts );
-            foreach ( const QString& sql, statements )
+            for ( int i = 0; i < statements.count(); ++i )
             {
+                QString sql = statements.at( i );
                 QString clean = cleanSql( sql ).trimmed();
                 if ( clean.isEmpty() )
                     continue;
@@ -248,6 +258,10 @@ Tomahawk::DatabaseImpl::updateSchema( int oldVersion )
                 tLog() << "Executing upgrade statement:" << clean;
                 TomahawkSqlQuery q = newquery();
                 q.exec( clean );
+
+                //Report to splash screen
+                emit schemaUpdateStatus( QString( "%1/%2" ).arg( QString::number( i + 1 ) )
+                                                           .arg( QString::number( statements.count() ) ) );
             }
         }
         m_db.commit();

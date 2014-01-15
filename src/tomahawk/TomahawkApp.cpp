@@ -3,7 +3,7 @@
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
- *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
+ *   Copyright 2013-2014, Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -184,7 +184,10 @@ TomahawkApp::init()
     setQuitOnLastWindowClosed( false );
 
     if ( arguments().contains( "--splash" ) )
-        startSplashWidget( "Splash screen test" );
+    {
+        startSplashWidget( "Splash screen test\n" );
+        updateSplashWidgetMessage( "Splash screen test\n2/7" );
+    }
 
     QFont f = font();
 #ifdef Q_OS_MAC
@@ -477,11 +480,7 @@ TomahawkApp::initDatabase()
 
     tDebug( LOGEXTRA ) << "Using database:" << dbpath;
     m_database = QPointer<Tomahawk::Database>( new Tomahawk::Database( dbpath, this ) );
-
-    connect( m_database->impl(), SIGNAL( schemaUpdateStarted() ),
-             this, SLOT( startSplashWidget() ) );
-    connect( m_database->impl(), SIGNAL( schemaUpdateDone() ),
-             this, SLOT( killSplashWidget() ) );
+    // this also connects dbImpl schema update signals
 
     Pipeline::instance()->databaseReady();
 }
@@ -694,6 +693,27 @@ TomahawkApp::onInfoSystemReady()
 
 
 void
+TomahawkApp::onSchemaUpdateStarted()
+{
+    startSplashWidget( tr( "Updating database\n") );
+}
+
+
+void
+TomahawkApp::onSchemaUpdateStatus( const QString& status )
+{
+    updateSplashWidgetMessage( tr("Updating database\n%1" ).arg( status ) );
+}
+
+
+void
+TomahawkApp::onSchemaUpdateDone()
+{
+    killSplashWidget();
+}
+
+
+void
 TomahawkApp::startSplashWidget( const QString& initialMessage )
 {
     tDebug() << Q_FUNC_INFO;
@@ -706,7 +726,10 @@ TomahawkApp::startSplashWidget( const QString& initialMessage )
 void
 TomahawkApp::updateSplashWidgetMessage( const QString& message )
 {
-
+    if ( m_splashWidget )
+    {
+        m_splashWidget->showMessage( message );
+    }
 }
 
 

@@ -43,5 +43,5 @@ SplashWidget::SplashWidget()
 void
 SplashWidget::showMessage( const QString& message )
 {
-    QSplashScreen::showMessage( message + "\n\n", Qt::AlignBottom | Qt::AlignHCenter );
+    QSplashScreen::showMessage( message + "\n", Qt::AlignBottom | Qt::AlignHCenter );
 }
