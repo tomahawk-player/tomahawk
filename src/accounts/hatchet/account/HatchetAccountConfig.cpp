@@ -56,7 +56,7 @@ HatchetAccountConfig::HatchetAccountConfig( HatchetAccount* account )
 
     connect( m_account, SIGNAL( authError( QString, int, QVariantMap ) ), this, SLOT( authError( QString, int, QVariantMap ) ) );
     connect( m_account, SIGNAL( deauthenticated() ), this, SLOT( showLoggedOut() ) );
-    connect( m_account, SIGNAL( accessTokensFetched() ), this, SLOT( accountInfoUpdated() ) );
+    connect( m_account, SIGNAL( accessTokenFetched() ), this, SLOT( accountInfoUpdated() ) );
 
     if ( !m_account->refreshToken().isEmpty() )
         accountInfoUpdated();
@@ -170,7 +170,7 @@ HatchetAccountConfig::accountInfoUpdated()
 void
 HatchetAccountConfig::authError( const QString &error, int statusCode, const QVariantMap& resp )
 {
-    if ( statusCode == 401 && resp["result"].toMap()["errorinfo"].toMap().contains("missingotp") )
+    if ( statusCode == 400 && error == "otp_needed" )
     {
         m_ui->usernameLabel->hide();
         m_ui->usernameEdit->hide();
@@ -182,7 +182,7 @@ HatchetAccountConfig::authError( const QString &error, int statusCode, const QVa
         return;
     }
     if ( statusCode == 401 )
-       m_account->deauthenticate();
+        m_account->deauthenticate();
     QMessageBox::critical( this, "An error was encountered:", error );
 }
 

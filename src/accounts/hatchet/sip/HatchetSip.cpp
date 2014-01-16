@@ -48,7 +48,7 @@ HatchetSipPlugin::HatchetSipPlugin( Tomahawk::Accounts::Account *account )
 {
     tLog() << Q_FUNC_INFO;
 
-    connect( m_account, SIGNAL( accessTokensFetched() ), this, SLOT( connectWebSocket() ) );
+    connect( m_account, SIGNAL( accessTokenFetched() ), this, SLOT( connectWebSocket() ) );
     connect( Servent::instance(), SIGNAL( dbSyncTriggered() ), this, SLOT( dbSyncTriggered() ));
 
     QFile pemFile( ":/hatchet-account/dreamcatcher.pem" );
@@ -113,7 +113,7 @@ HatchetSipPlugin::connectPlugin()
     }
 
     hatchetAccount()->setConnectionState( Tomahawk::Accounts::Account::Connecting );
-    hatchetAccount()->fetchAccessTokens();
+    hatchetAccount()->fetchAccessToken( "dreamcatcher" );
 }
 
 
@@ -156,42 +156,18 @@ HatchetSipPlugin::connectWebSocket()
       return;
     }
 
-    m_token.clear();
+    m_token = m_account->credentials()[ "dreamcatcher_access_token" ].toString();
 
-    QVariantList tokensCreds = m_account->credentials()[ "dreamcatchertokens" ].toList();
 
-    //FIXME: Don't blindly pick the first one that matches? Most likely, cycle through if the first one fails
-    QVariantMap connectVals;
-    foreach ( QVariant credObj, tokensCreds )
+    if ( m_token.isEmpty() )
     {
-        QVariantMap creds = credObj.toMap();
-        if ( creds.contains( "type" ) && creds[ "type" ].toString() == "dreamcatcher" )
-        {
-            connectVals = creds;
-            m_token = creds[ "token" ].toString();
-            break;
-        }
-    }
-
-    QString url;
-    if ( !connectVals.isEmpty() )
-    {
-        QString port = connectVals[ "port" ].toString();
-        if ( port == "443" )
-            url = "wss://";
-        else
-            url = "ws://";
-        url += connectVals[ "host" ].toString() + ':' + connectVals[ "port" ].toString();
-    }
-
-    if ( url.isEmpty() || m_token.isEmpty() )
-    {
-        tLog() << Q_FUNC_INFO << "Unable to find a proper connection endpoint; bailing";
+        tLog() << Q_FUNC_INFO << "Unable to find an access token"; 
         disconnectPlugin();
         return;
     }
-    else
-        tLog() << Q_FUNC_INFO << "Connecting to Dreamcatcher endpoint at: " << url;
+
+    QString url( "wss://dreamcatcher.hatchet.is:443" );
+    tLog() << Q_FUNC_INFO << "Connecting to Dreamcatcher endpoint at: " << url;
 
     m_webSocketThreadController->setUrl( url );
     m_webSocketThreadController->start();

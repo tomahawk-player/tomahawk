@@ -79,7 +79,6 @@ public:
     void setConnectionState( Account::ConnectionState connectionState );
     ConnectionState connectionState() const;
 
-
     virtual Tomahawk::InfoSystem::InfoPluginPtr infoPlugin() { return Tomahawk::InfoSystem::InfoPluginPtr(); }
     SipPlugin* sipPlugin( bool create = true );
 
@@ -88,23 +87,28 @@ public:
 
     QString username() const;
 
-    void fetchAccessTokens( const QString& type = "dreamcatcher" );
+    void fetchAccessToken( const QString& type = "dreamcatcher" );
 
     QString authUrlForService( const Service& service ) const;
 
 signals:
     void authError( QString error, int statusCode, const QVariantMap );
     void deauthenticated();
-    void accessTokensFetched();
+    void accessTokenFetched();
 
 private slots:
     void onPasswordLoginFinished( QNetworkReply*, const QString& username );
-    void onFetchAccessTokensFinished();
+    void onFetchAccessTokenFinished( QNetworkReply*, const QString& type );
     void authUrlDiscovered( Tomahawk::Accounts::HatchetAccount::Service service, const QString& authUrl );
 
 private:
     QByteArray refreshToken() const;
     uint refreshTokenExpiration() const;
+
+    QByteArray mandellaAccessToken() const;
+    uint mandellaAccessTokenExpiration() const;
+
+    QByteArray mandellaTokenType() const;
 
     void loginWithPassword( const QString& username, const QString& password, const QString &otp );
 
