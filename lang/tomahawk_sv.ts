@@ -3837,12 +3837,26 @@ Försök att ändra i filtrerna för att få en ny låtlista</translation>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="507"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="517"/>
         <source>My Collection</source>
         <translation>Min samling</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="691"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="698"/>
+        <source>Updating database
+</source>
+        <translation>Uppdaterar databasen
+</translation>
+    </message>
+    <message>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="705"/>
+        <source>Updating database
+%1</source>
+        <translation>Uppdaterar databasen
+%1</translation>
+    </message>
+    <message>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="755"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>Automatisk extern IP-upptäckt misslyckades</translation>
     </message>

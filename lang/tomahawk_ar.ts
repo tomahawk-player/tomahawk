@@ -3838,12 +3838,24 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="507"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="517"/>
         <source>My Collection</source>
         <translation>مجموعتي الخاصة</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="691"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="698"/>
+        <source>Updating database
+</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="705"/>
+        <source>Updating database
+%1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="755"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>الكشف التلقائي عن عنوان IP الخارجي فشل.</translation>
     </message>
