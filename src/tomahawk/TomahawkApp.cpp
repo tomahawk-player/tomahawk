@@ -77,7 +77,7 @@
     #include "utils/SpotifyParser.h"
     #include "AtticaManager.h"
     #include "TomahawkWindow.h"
-    #include "SettingsDialog.h"
+    #include "dialogs/SettingsDialog.h"
     #include "ActionCollection.h"
     #include "widgets/HeaderLabel.h"
     #include "TomahawkSettingsGui.h"

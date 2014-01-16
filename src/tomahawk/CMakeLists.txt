@@ -33,6 +33,10 @@ IF( LIBLASTFM_FOUND )
 ENDIF( LIBLASTFM_FOUND )
 
 SET( tomahawkSourcesGui ${tomahawkSourcesGui}
+     dialogs/DiagnosticsDialog.cpp
+     dialogs/LoadXSPFDialog.cpp
+     dialogs/SettingsDialog.cpp
+
      sourcetree/SourcesModel.cpp
      sourcetree/SourcesProxyModel.cpp
      sourcetree/SourceTreeView.cpp
@@ -52,11 +56,8 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
 
      TomahawkTrayIcon.cpp
      AudioControls.cpp
-     SettingsDialog.cpp
-     DiagnosticsDialog.cpp
-     TomahawkWindow.cpp
-     LoadXSPFDialog.cpp
      SocialWidget.cpp
+     TomahawkWindow.cpp
 
      widgets/ContainedMenuButton.cpp
      widgets/AccountListView.cpp
@@ -75,16 +76,17 @@ IF( WITH_BREAKPAD )
 ENDIF()
 
 SET( tomahawkUI ${tomahawkUI}
+     dialogs/DiagnosticsDialog.ui
+     dialogs/HostDialog.ui
+     dialogs/LoadXSPFDialog.ui
+     dialogs/ProxyDialog.ui
+     dialogs/Settings_Accounts.ui
+     dialogs/Settings_Advanced.ui
+     dialogs/Settings_Collection.ui
+
      TomahawkWindow.ui
-     DiagnosticsDialog.ui
-     Settings_Accounts.ui
-     Settings_Advanced.ui
-     Settings_Collection.ui
-     HostDialog.ui
-     ProxyDialog.ui
 
      AudioControls.ui
-     LoadXSPFDialog.ui
      SocialWidget.ui
 )
 
