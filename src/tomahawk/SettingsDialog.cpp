@@ -266,7 +266,10 @@ SettingsDialog::SettingsDialog(QObject *parent )
 #ifdef Q_OS_MAC
     //Workaround for QTBUG-26351
     if ( m_advancedWidgetUi->staticHostName->isEnabled() )
+    {
         m_advancedWidgetUi->remoteConnectionsGroupBox->setFocus();
+        m_advancedWidgetUi->staticHostName->setFocus();
+    }
 #endif
 }
 
@@ -405,7 +408,10 @@ SettingsDialog::toggleRemoteMode()
 #ifdef Q_OS_MAC
     //Workaround for QTBUG-26351
     if ( m_advancedWidgetUi->staticHostName->isEnabled() )
+    {
         m_advancedWidgetUi->remoteConnectionsGroupBox->setFocus();
+        m_advancedWidgetUi->staticHostName->setFocus();
+    }
 #endif
 }
 
