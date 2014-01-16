@@ -262,15 +262,6 @@ SettingsDialog::SettingsDialog(QObject *parent )
 
     connect( m_dialog, SIGNAL( accepted() ), SLOT( saveSettings() ) );
     connect( m_dialog, SIGNAL( rejected() ), SLOT( onRejected() ) );
-
-#ifdef Q_OS_MAC
-    //Workaround for QTBUG-26351
-    if ( m_advancedWidgetUi->staticHostName->isEnabled() )
-    {
-        m_advancedWidgetUi->remoteConnectionsGroupBox->setFocus();
-        m_advancedWidgetUi->staticHostName->setFocus();
-    }
-#endif
 }
 
 
@@ -404,15 +395,6 @@ SettingsDialog::toggleRemoteMode()
     m_advancedWidgetUi->staticPort->setEnabled( m_advancedWidgetUi->staticIpRadioButton->isChecked() );
     m_advancedWidgetUi->staticHostNameLabel->setEnabled( m_advancedWidgetUi->staticIpRadioButton->isChecked() );
     m_advancedWidgetUi->staticPortLabel->setEnabled( m_advancedWidgetUi->staticIpRadioButton->isChecked() );
-
-#ifdef Q_OS_MAC
-    //Workaround for QTBUG-26351
-    if ( m_advancedWidgetUi->staticHostName->isEnabled() )
-    {
-        m_advancedWidgetUi->remoteConnectionsGroupBox->setFocus();
-        m_advancedWidgetUi->staticHostName->setFocus();
-    }
-#endif
 }
 
 
