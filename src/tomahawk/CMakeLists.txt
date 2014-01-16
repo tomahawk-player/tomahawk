@@ -80,6 +80,7 @@ SET( tomahawkUI ${tomahawkUI}
      Settings_Accounts.ui
      Settings_Advanced.ui
      Settings_Collection.ui
+     HostDialog.ui
      ProxyDialog.ui
 
      AudioControls.ui

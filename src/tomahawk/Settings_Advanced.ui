@@ -39,37 +39,30 @@
       <item>
        <widget class="QRadioButton" name="upnpRadioButton">
         <property name="text">
-         <string>Use UPnP to establish port forward (recommended)</string>
+         <string>Automatic port forward with UPnP (recommended)</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QRadioButton" name="staticIpRadioButton">
-        <property name="text">
-         <string>Use static external IP address/host name and port</string>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <property name="spacing">
+         <number>0</number>
         </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="staticHostNamePortLabel">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>Set this to your external IP address or host name. Make sure to forward the port to this host!</string>
-        </property>
-        <property name="wordWrap">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="staticHostNamePortLayout">
         <item>
-         <widget class="QLabel" name="staticHostNameLabel">
+         <widget class="QRadioButton" name="staticIpRadioButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Manual port forward</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="staticHostSettingsButton">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -77,60 +70,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Static Host Name:</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="staticHostName"/>
-        </item>
-        <item>
-         <widget class="QLabel" name="staticPortLabel">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>Static Port:</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="staticPort">
-          <property name="maximum">
-           <number>65535</number>
-          </property>
-          <property name="value">
-           <number>50210</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Fixed</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="autoDetectIpCheckBox">
-          <property name="text">
-           <string>Automatically detect external IP address</string>
+           <string>Host Settings...</string>
           </property>
          </widget>
         </item>

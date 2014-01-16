@@ -3,7 +3,7 @@
  *   Copyright 2010-2013, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
- *   Copyright 2012,      Teo Mrnjavac <teo@kde.org>
+ *   Copyright 2012-2014, Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
  */
 
 #include "SettingsDialog.h"
+#include "ui_HostDialog.h"
 #include "ui_ProxyDialog.h"
 #include "ui_Settings_Accounts.h"
 #include "ui_Settings_Collection.h"
@@ -77,6 +78,7 @@ SettingsDialog::SettingsDialog(QObject *parent )
     , m_collectionWidget( new QWidget )
     , m_advancedWidgetUi( new Ui_Settings_Advanced )
     , m_advancedWidget( new QWidget )
+    , m_staticHostSettings( 0 )
     , m_proxySettings( 0 )
     , m_restartRequired( false )
     , m_accountModel( 0 )
@@ -106,11 +108,7 @@ SettingsDialog::SettingsDialog(QObject *parent )
     else
         m_advancedWidgetUi->upnpRadioButton->setChecked( true );
 
-    m_advancedWidgetUi->staticHostNamePortLabel->setEnabled( m_advancedWidgetUi->staticIpRadioButton->isChecked() );
-    m_advancedWidgetUi->staticHostName->setEnabled( m_advancedWidgetUi->staticIpRadioButton->isChecked() && !s->autoDetectExternalIp() );
-    m_advancedWidgetUi->staticPort->setEnabled( m_advancedWidgetUi->staticIpRadioButton->isChecked() );
-    m_advancedWidgetUi->staticHostNameLabel->setEnabled( m_advancedWidgetUi->staticIpRadioButton->isChecked() );
-    m_advancedWidgetUi->staticPortLabel->setEnabled( m_advancedWidgetUi->staticIpRadioButton->isChecked() );
+    m_advancedWidgetUi->staticHostSettingsButton->setEnabled( m_advancedWidgetUi->staticIpRadioButton->isChecked() );
 
     bool useProxy = TomahawkSettings::instance()->proxyType() == QNetworkProxy::Socks5Proxy;
     m_advancedWidgetUi->enableProxyCheckBox->setChecked( useProxy );
@@ -123,6 +121,9 @@ SettingsDialog::SettingsDialog(QObject *parent )
     // Avoid resize handles on sheets on osx
     m_proxySettings.setSizeGripEnabled( true );
     QSizeGrip* p = m_proxySettings.findChild< QSizeGrip* >();
+    p->setFixedSize( 0, 0 );
+    m_staticHostSettings.setSizeGripEnabled( true );
+    p = m_staticHostSettings.findChild< QSizeGrip* >();
     p->setFixedSize( 0, 0 );
 #endif
 
@@ -169,10 +170,7 @@ SettingsDialog::SettingsDialog(QObject *parent )
     }
 
     // ADVANCED
-    m_advancedWidgetUi->staticHostName->setText( s->externalHostname() );
-    m_advancedWidgetUi->staticPort->setValue( s->externalPort() );
     m_advancedWidgetUi->proxyButton->setVisible( true );
-    m_advancedWidgetUi->autoDetectIpCheckBox->setChecked( s->autoDetectExternalIp() );
 
     m_collectionWidgetUi->checkBoxWatchForChanges->setChecked( s->watchForChanges() );
     m_collectionWidgetUi->scannerTimeSpinBox->setValue( s->scannerTime() );
@@ -249,6 +247,7 @@ SettingsDialog::SettingsDialog(QObject *parent )
 
     m_dialog->setCurrentIndex( 0 );
 
+    connect( m_advancedWidgetUi->staticHostSettingsButton, SIGNAL( clicked() ), SLOT( showStaticHostSettings() ) );
     connect( m_advancedWidgetUi->proxyButton,  SIGNAL( clicked() ), SLOT( showProxySettings() ) );
     connect( m_advancedWidgetUi->lanOnlyRadioButton, SIGNAL( toggled( bool ) ), SLOT( requiresRestart() ) );
     connect( m_advancedWidgetUi->staticIpRadioButton, SIGNAL( toggled( bool ) ), SLOT( requiresRestart() ) );
@@ -256,7 +255,6 @@ SettingsDialog::SettingsDialog(QObject *parent )
     connect( m_advancedWidgetUi->lanOnlyRadioButton, SIGNAL( toggled( bool ) ), SLOT( toggleRemoteMode() ) );
     connect( m_advancedWidgetUi->staticIpRadioButton, SIGNAL( toggled( bool ) ), SLOT( toggleRemoteMode() ) );
     connect( m_advancedWidgetUi->upnpRadioButton, SIGNAL( toggled( bool ) ), SLOT( toggleRemoteMode() ) );
-    connect( m_advancedWidgetUi->autoDetectIpCheckBox, SIGNAL( toggled( bool ) ), SLOT( toggleAutoDetectIp( bool ) ) );
     connect( m_advancedWidgetUi->enableProxyCheckBox, SIGNAL( toggled( bool ) ), SLOT( toggleProxyEnabled() ) );
     connect( m_advancedWidgetUi->enableProxyCheckBox, SIGNAL( toggled( bool ) ), SLOT( requiresRestart() ) );
 
@@ -277,10 +275,6 @@ SettingsDialog::saveSettings()
     s->setSongChangeNotificationEnabled( m_advancedWidgetUi->checkBoxSongChangeNotifications->checkState() == Qt::Checked );
     s->setProxyType( m_advancedWidgetUi->enableProxyCheckBox->isChecked() ? QNetworkProxy::Socks5Proxy : QNetworkProxy::NoProxy );
     s->setExternalAddressMode( m_advancedWidgetUi->upnpRadioButton->isChecked() ? Tomahawk::Network::ExternalAddress::Upnp : ( m_advancedWidgetUi->lanOnlyRadioButton->isChecked() ? Tomahawk::Network::ExternalAddress::Lan : Tomahawk::Network::ExternalAddress::Static ) );
-    s->setAutoDetectExternalIp( m_advancedWidgetUi->autoDetectIpCheckBox->isChecked() );
-
-    s->setExternalHostname( m_advancedWidgetUi->staticHostName->text() );
-    s->setExternalPort( m_advancedWidgetUi->staticPort->value() );
 
     QStringList libraryPaths;
     for ( int i = 0; i < m_collectionWidgetUi->pathListWidget->count(); i++ )
@@ -376,6 +370,18 @@ SettingsDialog::changeEvent( QEvent *e )
 
 
 void
+SettingsDialog::showStaticHostSettings()
+{
+    m_staticHostSettings.exec();
+    if ( m_staticHostSettings.result() == QDialog::Accepted )
+    {
+        requiresRestart();
+        m_staticHostSettings.saveSettings();
+    }
+}
+
+
+void
 SettingsDialog::showProxySettings()
 {
     m_proxySettings.exec();
@@ -390,11 +396,7 @@ SettingsDialog::showProxySettings()
 void
 SettingsDialog::toggleRemoteMode()
 {
-    m_advancedWidgetUi->staticHostNamePortLabel->setEnabled( m_advancedWidgetUi->staticIpRadioButton->isChecked() );
-    m_advancedWidgetUi->staticHostName->setEnabled( m_advancedWidgetUi->staticIpRadioButton->isChecked() );
-    m_advancedWidgetUi->staticPort->setEnabled( m_advancedWidgetUi->staticIpRadioButton->isChecked() );
-    m_advancedWidgetUi->staticHostNameLabel->setEnabled( m_advancedWidgetUi->staticIpRadioButton->isChecked() );
-    m_advancedWidgetUi->staticPortLabel->setEnabled( m_advancedWidgetUi->staticIpRadioButton->isChecked() );
+    m_advancedWidgetUi->staticHostSettingsButton->setEnabled( m_advancedWidgetUi->staticIpRadioButton->isChecked() );
 }
 
 
@@ -402,13 +404,6 @@ void
 SettingsDialog::toggleProxyEnabled()
 {
     m_advancedWidgetUi->proxyButton->setEnabled( m_advancedWidgetUi->enableProxyCheckBox->isChecked() );
-}
-
-
-void
-SettingsDialog::toggleAutoDetectIp( bool checked )
-{
-    m_advancedWidgetUi->staticHostName->setEnabled( !checked );
 }
 
 
@@ -597,6 +592,43 @@ void
 SettingsDialog::requiresRestart()
 {
     m_restartRequired = true;
+}
+
+
+HostDialog::HostDialog( QWidget* parent )
+    : QDialog( parent )
+    , ui( new Ui::HostDialog )
+{
+    ui->setupUi( this );
+
+    TomahawkSettings* s = TomahawkSettings::instance();
+
+    connect( ui->autoDetectIpCheckBox, SIGNAL( toggled( bool ) ),
+             SLOT( toggleAutoDetectIp( bool ) ) );
+
+    ui->staticHostName->setText( s->externalHostname() );
+    ui->staticPort->setValue( s->externalPort() );
+    ui->autoDetectIpCheckBox->setChecked( s->autoDetectExternalIp() );
+}
+
+
+void
+HostDialog::saveSettings()
+{
+    TomahawkSettings* s = TomahawkSettings::instance();
+
+    s->setAutoDetectExternalIp( ui->autoDetectIpCheckBox->isChecked() );
+    s->setExternalHostname( ui->staticHostName->text() );
+    s->setExternalPort( ui->staticPort->value() );
+
+    s->sync();
+}
+
+
+void
+HostDialog::toggleAutoDetectIp( bool checked )
+{
+    ui->staticHostName->setEnabled( !checked );
 }
 
 

@@ -3,7 +3,7 @@
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
- *   Copyright 2012,      Teo Mrnjavac <teo@kde.org>
+ *   Copyright 2012-2014, Teo Mrnjavac <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -39,6 +39,7 @@ class QToolbarTabDialog;
 
 namespace Ui
 {
+class HostDialog;
 class ProxyDialog;
 }
 
@@ -53,6 +54,24 @@ class Account;
 class AccountModelFilterProxy;
 }
 }
+
+
+class HostDialog : public QDialog
+{
+Q_OBJECT
+
+public:
+    explicit HostDialog( QWidget* parent = 0 );
+    ~HostDialog() {}
+
+    void saveSettings();
+
+private slots:
+    void toggleAutoDetectIp( bool checked );
+
+private:
+    Ui::HostDialog* ui;
+};
 
 class ProxyDialog : public QDialog
 {
@@ -87,7 +106,7 @@ protected:
 private slots:
     void toggleRemoteMode();
     void toggleProxyEnabled();
-    void toggleAutoDetectIp( bool checked );
+    void showStaticHostSettings();
     void showProxySettings();
     void addLibraryPath();
     void removeLibraryPath();
@@ -121,6 +140,7 @@ private:
 
     QToolbarTabDialog* m_dialog;
 
+    HostDialog  m_staticHostSettings;
     ProxyDialog m_proxySettings;
     bool m_restartRequired;
     Tomahawk::Accounts::AccountModel* m_accountModel;
