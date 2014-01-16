@@ -56,7 +56,6 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
 
      TomahawkTrayIcon.cpp
      AudioControls.cpp
-     SocialWidget.cpp
      TomahawkWindow.cpp
 
      widgets/ContainedMenuButton.cpp
@@ -67,6 +66,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      widgets/AccountsPopupWidget.cpp
      widgets/AccountsToolButton.cpp
      widgets/SlideSwitchButton.cpp
+     widgets/SocialWidget.cpp
      widgets/SplashWidget.cpp
      widgets/UnstyledFrame.cpp
 )
@@ -87,7 +87,8 @@ SET( tomahawkUI ${tomahawkUI}
      TomahawkWindow.ui
 
      AudioControls.ui
-     SocialWidget.ui
+
+     widgets/SocialWidget.ui
 )
 
 INCLUDE_DIRECTORIES(

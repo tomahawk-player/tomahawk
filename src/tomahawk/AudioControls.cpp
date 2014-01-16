@@ -23,23 +23,23 @@
 
 #include "Album.h"
 #include "DropJob.h"
-#include "SocialWidget.h"
 #include "GlobalActionManager.h"
-#include "ViewManager.h"
 #include "Source.h"
+#include "ViewManager.h"
 
 #include "audio/AudioEngine.h"
-#include "playlist/PlaylistView.h"
 #include "database/Database.h"
-#include "widgets/ImageButton.h"
+#include "playlist/PlaylistView.h"
 #include "utils/TomahawkUtilsGui.h"
 #include "utils/Logger.h"
+#include "widgets/ImageButton.h"
+#include "widgets/SocialWidget.h"
 
-#include <QNetworkReply>
-#include <QDropEvent>
-#include <QMouseEvent>
 #include <QDesktopServices>
+#include <QDropEvent>
 #include <QGraphicsDropShadowEffect>
+#include <QMouseEvent>
+#include <QNetworkReply>
 
 const static int ALLOWED_MAX_DIVERSION = 300;
 
