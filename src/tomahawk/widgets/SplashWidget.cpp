@@ -24,12 +24,32 @@
 
 #include <QBoxLayout>
 #include <QLabel>
+#ifdef Q_WS_X11
+#include <QX11Info>
+#endif
 
 SplashWidget::SplashWidget()
     : QSplashScreen()
 {
-    setPixmap( ImageRegistry::instance()->pixmap( RESPATH "images/splash.svg",
-        TomahawkUtils::DpiScaler::scaled( this, QSize( 304, 333 ) ) ) );
+    //In 2014 there are still operating systems that cannot do transparency
+    bool compositingWorks = true;
+#if defined(Q_WS_WIN)
+    compositingWorks = false;
+#elif defined(Q_WS_X11)
+    if ( !QX11Info::isCompositingManagerRunning() )
+        compositingWorks = false;
+#endif
+
+    QString imagePath;
+    if ( compositingWorks )
+        imagePath = RESPATH "images/splash.svg";
+    else
+        imagePath = RESPATH "images/splash-unrounded.svg";
+
+    QSize size( 304, 333 );
+
+    setPixmap( ImageRegistry::instance()->pixmap( imagePath,
+        TomahawkUtils::DpiScaler::scaled( this, size ), TomahawkUtils::Original ) );
 
     QFont font = this->font();
 
