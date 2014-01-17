@@ -248,7 +248,12 @@ macro_log_feature(Boost_FOUND "Boost" "Provides free peer-reviewed portable C++ 
 macro_optional_find_package(QCA2)
 macro_log_feature(QCA2_FOUND "QCA2" "Provides encryption and signing functions necessary for some resolvers and accounts" "http://delta.affinix.com/qca/" TRUE "" "")
 
-macro_optional_find_package(LibAttica 0.4.0)
+if( TOMAHAWK_QT5 )
+    macro_optional_find_package(KF5Attica 1.0.0)
+    set(LIBATTICA_FOUND ${KF5Attica_FOUND})
+else()
+    macro_optional_find_package(LibAttica 0.4.0)
+endif()
 macro_log_feature(LIBATTICA_FOUND "libattica" "Provides support for installation of resolvers from the Tomahawk website" "https://projects.kde.org/projects/kdesupport/attica" TRUE "" "")
 
 macro_optional_find_package(QuaZip)
