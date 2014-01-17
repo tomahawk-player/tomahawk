@@ -589,17 +589,17 @@ connect and stream from you?</source>
 <context>
     <name>DiagnosticsDialog</name>
     <message>
-        <location filename="../src/tomahawk/DiagnosticsDialog.ui" line="20"/>
+        <location filename="../src/tomahawk/dialogs/DiagnosticsDialog.ui" line="20"/>
         <source>Tomahawk Diagnostics</source>
         <translation>Tomahawk diagnosztizálás</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/DiagnosticsDialog.ui" line="42"/>
+        <location filename="../src/tomahawk/dialogs/DiagnosticsDialog.ui" line="42"/>
         <source>&amp;Copy to Clipboard</source>
         <translation>Másolás a vágólapra</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/DiagnosticsDialog.ui" line="49"/>
+        <location filename="../src/tomahawk/dialogs/DiagnosticsDialog.ui" line="49"/>
         <source>Open &amp;Log-file</source>
         <translation type="unfinished"/>
     </message>
@@ -814,6 +814,34 @@ Password (OTP)</source>
     </message>
 </context>
 <context>
+    <name>HostDialog</name>
+    <message>
+        <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="17"/>
+        <source>Host Settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="35"/>
+        <source>Configure your external IP address or host name here. Make sure to manually forward the selected port to this host on your router.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="53"/>
+        <source>Static Host Name:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="69"/>
+        <source>Static Port:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="106"/>
+        <source>Automatically detect external IP address</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>InboxItem</name>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/InboxItem.cpp" line="35"/>
@@ -913,27 +941,27 @@ Password (OTP)</source>
 <context>
     <name>LoadXSPF</name>
     <message>
-        <location filename="../src/tomahawk/LoadXSPFDialog.ui" line="14"/>
+        <location filename="../src/tomahawk/dialogs/LoadXSPFDialog.ui" line="14"/>
         <source>Load XSPF</source>
         <translation>XSPF betöltése</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/LoadXSPFDialog.ui" line="22"/>
+        <location filename="../src/tomahawk/dialogs/LoadXSPFDialog.ui" line="22"/>
         <source>Playlist URL</source>
         <translation>Lejátszólista URL</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/LoadXSPFDialog.ui" line="29"/>
+        <location filename="../src/tomahawk/dialogs/LoadXSPFDialog.ui" line="29"/>
         <source>Enter URL...</source>
         <translation>URL beírása...</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/LoadXSPFDialog.ui" line="42"/>
+        <location filename="../src/tomahawk/dialogs/LoadXSPFDialog.ui" line="42"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/LoadXSPFDialog.ui" line="51"/>
+        <location filename="../src/tomahawk/dialogs/LoadXSPFDialog.ui" line="51"/>
         <source>Automatically update</source>
         <translation>Automatikus frissítés</translation>
     </message>
@@ -941,12 +969,12 @@ Password (OTP)</source>
 <context>
     <name>LoadXSPFDialog</name>
     <message>
-        <location filename="../src/tomahawk/LoadXSPFDialog.cpp" line="51"/>
+        <location filename="../src/tomahawk/dialogs/LoadXSPFDialog.cpp" line="51"/>
         <source>Load XSPF File</source>
         <translation>XSPF fájl betöltése</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/LoadXSPFDialog.cpp" line="51"/>
+        <location filename="../src/tomahawk/dialogs/LoadXSPFDialog.cpp" line="51"/>
         <source>XSPF Files (*.xspf)</source>
         <translation>XSPF fájlok (*.xspf)</translation>
     </message>
@@ -1373,58 +1401,58 @@ Password (OTP)</source>
 <context>
     <name>ProxyDialog</name>
     <message>
-        <location filename="../src/tomahawk/ProxyDialog.ui" line="17"/>
+        <location filename="../src/tomahawk/dialogs/ProxyDialog.ui" line="17"/>
         <source>Proxy Settings</source>
         <translation>Proxy beállítások</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/ProxyDialog.ui" line="37"/>
+        <location filename="../src/tomahawk/dialogs/ProxyDialog.ui" line="37"/>
         <source>Hostname of proxy server</source>
         <translation>Proxy szerver hosztneve</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/ProxyDialog.ui" line="44"/>
+        <location filename="../src/tomahawk/dialogs/ProxyDialog.ui" line="44"/>
         <source>Host</source>
         <translation>Hosztnév</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/ProxyDialog.ui" line="51"/>
+        <location filename="../src/tomahawk/dialogs/ProxyDialog.ui" line="51"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/ProxyDialog.ui" line="71"/>
+        <location filename="../src/tomahawk/dialogs/ProxyDialog.ui" line="71"/>
         <source>Proxy login</source>
         <translation>Proxy bejelentkezés</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/ProxyDialog.ui" line="78"/>
+        <location filename="../src/tomahawk/dialogs/ProxyDialog.ui" line="78"/>
         <source>User</source>
         <translation>Felhasználó</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/ProxyDialog.ui" line="85"/>
+        <location filename="../src/tomahawk/dialogs/ProxyDialog.ui" line="85"/>
         <source>Password</source>
         <translation>Jelszó</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/ProxyDialog.ui" line="95"/>
+        <location filename="../src/tomahawk/dialogs/ProxyDialog.ui" line="95"/>
         <source>Proxy password</source>
         <translation>Proxy jelszó</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/ProxyDialog.ui" line="102"/>
+        <location filename="../src/tomahawk/dialogs/ProxyDialog.ui" line="102"/>
         <source>No Proxy Hosts:
 (Overrides system proxy)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/ProxyDialog.ui" line="110"/>
+        <location filename="../src/tomahawk/dialogs/ProxyDialog.ui" line="110"/>
         <source>localhost *.example.com (space separated)</source>
         <translation>localhost *.example.com (szóközzel elválasztva)</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/ProxyDialog.ui" line="127"/>
+        <location filename="../src/tomahawk/dialogs/ProxyDialog.ui" line="127"/>
         <source>Use proxy for DNS lookups?</source>
         <translation type="unfinished"/>
     </message>
@@ -1665,82 +1693,82 @@ Password (OTP)</source>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="243"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="241"/>
         <source>Collection</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="246"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="244"/>
         <source>Advanced</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="156"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="157"/>
         <source>All</source>
         <translation>Mind</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="302"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="296"/>
         <source>Some changed settings will not take effect until Tomahawk is restarted</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="238"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="236"/>
         <source>Services</source>
         <translation>Szolgáltatások</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="129"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="130"/>
         <source>Install from file</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="238"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="236"/>
         <source>Configure the accounts and services used by Tomahawk to search and retrieve music, find your friends and update your status.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="243"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="241"/>
         <source>Manage how Tomahawk finds music on your computer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="246"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="244"/>
         <source>Configure Tomahawk&apos;s advanced settings, including network connectivity settings, browser interaction and more.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="418"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="413"/>
         <source>Open Directory</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="512"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="507"/>
         <source>Install resolver from file</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="514"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="509"/>
         <source>Tomahawk Resolvers (*.axe *.js);;All files (*)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="557"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="552"/>
         <source>Resolver installation from file %1 failed.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="576"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="571"/>
         <source>Delete all Access Control entries?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="577"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="572"/>
         <source>Do you really want to delete all Access Control entries? You will be asked for a decision again for each peer that you connect to.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/SettingsDialog.cpp" line="302"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="296"/>
         <source>Information</source>
         <translation>Információ</translation>
     </message>
@@ -1748,7 +1776,7 @@ Password (OTP)</source>
 <context>
     <name>Settings_Accounts</name>
     <message>
-        <location filename="../src/tomahawk/Settings_Accounts.ui" line="48"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Accounts.ui" line="48"/>
         <source>Filter by capability:</source>
         <translation type="unfinished"/>
     </message>
@@ -1756,82 +1784,67 @@ Password (OTP)</source>
 <context>
     <name>Settings_Advanced</name>
     <message>
-        <location filename="../src/tomahawk/Settings_Advanced.ui" line="29"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="29"/>
         <source>Remote Peer Connection Method</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/Settings_Advanced.ui" line="35"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="35"/>
         <source>Active (your host needs to be directly reachable)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/Settings_Advanced.ui" line="42"/>
-        <source>Use UPnP to establish port forward (recommended)</source>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="42"/>
+        <source>Automatic port forward with UPnP (recommended)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/Settings_Advanced.ui" line="49"/>
-        <source>Use static external IP address/host name and port</source>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="60"/>
+        <source>Manual port forward</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/Settings_Advanced.ui" line="62"/>
-        <source>Set this to your external IP address or host name. Make sure to forward the port to this host!</source>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="73"/>
+        <source>Host Settings...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/Settings_Advanced.ui" line="80"/>
-        <source>Static Host Name:</source>
-        <translation>Statikus hosztnév:</translation>
-    </message>
-    <message>
-        <location filename="../src/tomahawk/Settings_Advanced.ui" line="96"/>
-        <source>Static Port:</source>
-        <translation>Statikus port:</translation>
-    </message>
-    <message>
-        <location filename="../src/tomahawk/Settings_Advanced.ui" line="133"/>
-        <source>Automatically detect external IP address</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/tomahawk/Settings_Advanced.ui" line="161"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="101"/>
         <source>SOCKS Proxy</source>
         <translation>SOCKS Proxy</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/Settings_Advanced.ui" line="167"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="107"/>
         <source>Use SOCKS Proxy</source>
         <translation>SOCKS proxy használata</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/Settings_Advanced.ui" line="196"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="136"/>
         <source>Proxy Settings...</source>
         <translation>Proxy beállítások...</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/Settings_Advanced.ui" line="222"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="162"/>
         <source>Other Settings</source>
         <translation>Egyéb beállítások</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/Settings_Advanced.ui" line="231"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="171"/>
         <source>Allow web browsers to interact with Tomahawk (recommended)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/Settings_Advanced.ui" line="244"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="184"/>
         <source>Send reports after Tomahawk crashed</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/Settings_Advanced.ui" line="254"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="194"/>
         <source>Show notification when a new song starts to play</source>
         <translation>Értesítések mutatása ha egy új zene elindul</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/Settings_Advanced.ui" line="282"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="222"/>
         <source>Clear All Access Control Entries</source>
         <translation type="unfinished"/>
     </message>
@@ -1839,22 +1852,22 @@ Password (OTP)</source>
 <context>
     <name>Settings_Collection</name>
     <message>
-        <location filename="../src/tomahawk/Settings_Collection.ui" line="29"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="29"/>
         <source>Path to scan for music files:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/Settings_Collection.ui" line="55"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="55"/>
         <source>+</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/Settings_Collection.ui" line="62"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="62"/>
         <source>-</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/Settings_Collection.ui" line="88"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="88"/>
         <source>The Echo Nest supports keeping track of your catalog metadata
  and using it to craft personalized radios. Enabling this option
  will allow you (and all your friends) to create automatic playlists
@@ -1862,17 +1875,17 @@ Password (OTP)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/Settings_Collection.ui" line="94"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="94"/>
         <source>Upload collection list to The Echo Nest to enable user radio</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/Settings_Collection.ui" line="107"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="107"/>
         <source>Watch for changes</source>
         <translation>Változások figyelése</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/Settings_Collection.ui" line="116"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Collection.ui" line="116"/>
         <source>Time between scans, in seconds:</source>
         <translation>Szkennelések közötti idő, másodpercben:</translation>
     </message>
@@ -1911,32 +1924,32 @@ Password (OTP)</source>
 <context>
     <name>SocialWidget</name>
     <message>
-        <location filename="../src/tomahawk/SocialWidget.ui" line="28"/>
+        <location filename="../src/tomahawk/widgets/SocialWidget.ui" line="28"/>
         <source>Facebook</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/SocialWidget.ui" line="38"/>
+        <location filename="../src/tomahawk/widgets/SocialWidget.ui" line="38"/>
         <source>Twitter</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/SocialWidget.cpp" line="71"/>
+        <location filename="../src/tomahawk/widgets/SocialWidget.cpp" line="71"/>
         <source>Tweet</source>
         <translation>Tweet</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/SocialWidget.cpp" line="169"/>
+        <location filename="../src/tomahawk/widgets/SocialWidget.cpp" line="169"/>
         <source>Listening to &quot;%1&quot; by %2. %3</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/SocialWidget.cpp" line="171"/>
+        <location filename="../src/tomahawk/widgets/SocialWidget.cpp" line="171"/>
         <source>Listening to &quot;%1&quot; by %2 on &quot;%3&quot;. %4</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/SocialWidget.cpp" line="192"/>
+        <location filename="../src/tomahawk/widgets/SocialWidget.cpp" line="192"/>
         <source>%1 characters left</source>
         <translation type="unfinished"/>
     </message>
