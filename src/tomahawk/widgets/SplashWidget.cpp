@@ -24,7 +24,7 @@
 
 #include <QBoxLayout>
 #include <QLabel>
-#ifdef Q_WS_X11
+#if defined( Q_OS_UNIX ) && !defined( Q_OS_MAC )
 #include <QX11Info>
 #endif
 
@@ -33,9 +33,9 @@ SplashWidget::SplashWidget()
 {
     //In 2014 there are still operating systems that cannot do transparency
     bool compositingWorks = true;
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     compositingWorks = false;
-#elif defined(Q_WS_X11)
+#elif defined( Q_OS_UNIX ) && !defined( Q_OS_MAC )
     if ( !QX11Info::isCompositingManagerRunning() )
         compositingWorks = false;
 #endif
