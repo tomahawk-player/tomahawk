@@ -1,7 +1,8 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
- *   Copyright 2012       Leo Franchi            <lfranchi@kde.org>
+ *   Copyright 2012,      Leo Franchi            <lfranchi@kde.org>
+ *   Copyright 2014,      Teo Mrnjavac           <teo@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -176,6 +177,8 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     else
         return;
 
+    //From here on it's either an artist or an album item
+
     if ( text.trimmed().isEmpty() )
         text = tr( "Unknown" );
 
@@ -186,15 +189,6 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     if ( option.state & QStyle::State_Selected )
     {
         opt.palette.setColor( QPalette::Text, opt.palette.color( QPalette::HighlightedText ) );
-    }
-
-    QRect arrowRect( m_view->viewport()->width() - option.rect.height(), option.rect.y() + 1, option.rect.height() - 2, option.rect.height() - 2 );
-    if ( m_hoveringOver.row() == index.row() && m_hoveringOver.parent() == index.parent() )
-    {
-        QPixmap infoIcon = TomahawkUtils::defaultPixmap( TomahawkUtils::InfoIcon, TomahawkUtils::Original, arrowRect.size() );
-        painter->drawPixmap( arrowRect, infoIcon );
-
-        m_infoButtonRects[ index ] = arrowRect;
     }
 
     if ( index.column() > 0 )
@@ -223,8 +217,18 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
         }
     }
 
-    const QPixmap cover = m_pixmaps[ index ]->currentPixmap();
-    painter->drawPixmap( r, cover );
+    if ( m_hoveringOver.row() == index.row() && m_hoveringOver.parent() == index.parent() )
+    {
+        QPixmap infoIcon = TomahawkUtils::defaultPixmap( TomahawkUtils::InfoIcon, TomahawkUtils::Original, r.size() );
+        painter->drawPixmap( r, infoIcon );
+
+        m_infoButtonRects[ index ] = r;
+    }
+    else
+    {
+        const QPixmap cover = m_pixmaps[ index ]->currentPixmap();
+        painter->drawPixmap( r, cover );
+    }
 
     r = option.rect.adjusted( option.rect.height(), 6, -4, -option.rect.height() + 22 );
     text = painter->fontMetrics().elidedText( text, Qt::ElideRight, r.width() );
