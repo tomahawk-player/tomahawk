@@ -45,7 +45,7 @@ yhdistää ja toistaa sinulta virtaa?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountFactoryWrapperDelegate.cpp" line="108"/>
         <source>Connecting...</source>
-        <translation>Yhdistetään...</translation>
+        <translation>Yhdistetään…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountFactoryWrapperDelegate.cpp" line="113"/>
@@ -154,7 +154,7 @@ yhdistää ja toistaa sinulta virtaa?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="112"/>
         <source>Load &amp;XSPF...</source>
-        <translation>Lataa &amp;XSPF...</translation>
+        <translation>Lataa &amp;XSPF…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="113"/>
@@ -174,7 +174,7 @@ yhdistää ja toistaa sinulta virtaa?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="117"/>
         <source>&amp;Configure Tomahawk...</source>
-        <translation>Tomahawkin &amp;asetukset...</translation>
+        <translation>Tomahawkin &amp;asetukset…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="121"/>
@@ -199,17 +199,17 @@ yhdistää ja toistaa sinulta virtaa?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="132"/>
         <source>Diagnostics...</source>
-        <translation>Diagnostiikka...</translation>
+        <translation>Diagnostiikka…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="134"/>
         <source>About &amp;Tomahawk...</source>
-        <translation>Tietoa &amp;Tomahawkista...</translation>
+        <translation>Tietoa &amp;Tomahawkista…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="137"/>
         <source>&amp;Legal Information...</source>
-        <translation>Lakitiet&amp;oa...</translation>
+        <translation>Lakitiet&amp;oa…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="139"/>
@@ -219,7 +219,7 @@ yhdistää ja toistaa sinulta virtaa?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="142"/>
         <source>Check For Updates...</source>
-        <translation>Tarkista päivitykset...</translation>
+        <translation>Tarkista päivitykset…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="154"/>
@@ -708,7 +708,7 @@ yhdistää ja toistaa sinulta virtaa?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/FilterHeader.cpp" line="29"/>
         <source>Filter...</source>
-        <translation>Suodata...</translation>
+        <translation>Suodata…</translation>
     </message>
 </context>
 <context>
@@ -820,12 +820,12 @@ salasana (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="17"/>
         <source>Host Settings</source>
-        <translation type="unfinished"/>
+        <translation>Koneasetukset</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="35"/>
         <source>Configure your external IP address or host name here. Make sure to manually forward the selected port to this host on your router.</source>
-        <translation type="unfinished"/>
+        <translation>Aseta julkinen IP-osoitteesi tai konenimesi tähän. Varmista, että ohjaat reitittimestäsi valitun portin tähän koneeseen manuaalisesti.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="53"/>
@@ -877,7 +877,7 @@ salasana (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/infobar/InfoBar.cpp" line="111"/>
         <source>Filter...</source>
-        <translation>Suodata...</translation>
+        <translation>Suodata…</translation>
     </message>
 </context>
 <context>
@@ -955,12 +955,12 @@ salasana (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadXSPFDialog.ui" line="29"/>
         <source>Enter URL...</source>
-        <translation>Anna osoite...</translation>
+        <translation>Anna osoite…</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadXSPFDialog.ui" line="42"/>
         <source>...</source>
-        <translation>...</translation>
+        <translation>…</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/LoadXSPFDialog.ui" line="51"/>
@@ -1029,7 +1029,7 @@ salasana (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="49"/>
         <source>Title...</source>
-        <translation>Nimi...</translation>
+        <translation>Nimi…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="56"/>
@@ -1039,7 +1039,7 @@ salasana (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="66"/>
         <source>Artist...</source>
-        <translation>Artisti...</translation>
+        <translation>Artisti…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="73"/>
@@ -1049,7 +1049,7 @@ salasana (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="83"/>
         <source>Album...</source>
-        <translation>Albumi...</translation>
+        <translation>Albumi…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="90"/>
@@ -1089,17 +1089,17 @@ salasana (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="199"/>
         <source>File Name...</source>
-        <translation>Tiedostonimi...</translation>
+        <translation>Tiedostonimi…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="206"/>
         <source>File Size...</source>
-        <translation>Tiedostokoko...</translation>
+        <translation>Tiedostokoko…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="212"/>
         <source>File size...</source>
-        <translation>Tiedostokoko...</translation>
+        <translation>Tiedostokoko…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/filemetadata/MetadataEditor.ui" line="219"/>
@@ -1276,7 +1276,7 @@ salasana (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="873"/>
         <source>Searching...</source>
-        <translation>Haetaan...</translation>
+        <translation>Haetaan…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
@@ -1359,7 +1359,7 @@ salasana (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="49"/>
         <source>Just a regular old playlist... Give it a name, drag in some tracks, and go!</source>
-        <translation>Ihan tavanomainen soittolista... Anna sille nimi, vedä siihen joitain kappaleita ja anna mennä!</translation>
+        <translation>Ihan tavanomainen soittolista… Anna sille nimi, vedä siihen joitain kappaleita ja anna mennä!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="75"/>
@@ -1374,7 +1374,7 @@ salasana (OTP)</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="102"/>
         <source>New Playlist...</source>
-        <translation>Uusi soittolista...</translation>
+        <translation>Uusi soittolista…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/PlaylistTypeSelectorDialog.ui" line="113"/>
@@ -1799,17 +1799,17 @@ salasana (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="42"/>
         <source>Automatic port forward with UPnP (recommended)</source>
-        <translation type="unfinished"/>
+        <translation>Automaattinen porttien uudelleenohjaus käyttäen UPnP:tä (suositellaan)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="60"/>
         <source>Manual port forward</source>
-        <translation type="unfinished"/>
+        <translation>Manuaalinen porttien uudelleenohjaus</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="73"/>
         <source>Host Settings...</source>
-        <translation type="unfinished"/>
+        <translation>Koneasetukset…</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="101"/>
@@ -1824,7 +1824,7 @@ salasana (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="136"/>
         <source>Proxy Settings...</source>
-        <translation>Välityspalvelinasetukset...</translation>
+        <translation>Välityspalvelinasetukset…</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="162"/>
@@ -2344,7 +2344,7 @@ napsauttamalla hiiren oikealla.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="579"/>
         <source>Connecting...</source>
-        <translation>Yhdistetään...</translation>
+        <translation>Yhdistetään…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountDelegate.cpp" line="584"/>
@@ -2458,7 +2458,7 @@ napsauttamalla hiiren oikealla.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="94"/>
         <source>Testing...</source>
-        <translation>Kokeillaan...</translation>
+        <translation>Kokeillaan…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="116"/>
@@ -2474,7 +2474,7 @@ napsauttamalla hiiren oikealla.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="129"/>
         <source>Importing History...</source>
-        <translation>Tuodaan historiaa...</translation>
+        <translation>Tuodaan historiaa…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="198"/>
@@ -2506,7 +2506,7 @@ napsauttamalla hiiren oikealla.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="262"/>
         <source>Synchronizing...</source>
-        <translation>Synkronoidaan...</translation>
+        <translation>Synkronoidaan…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="420"/>
@@ -2595,7 +2595,7 @@ napsauttamalla hiiren oikealla.</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="193"/>
         <source>Logging in...</source>
-        <translation>Kirjaudutaan...</translation>
+        <translation>Kirjaudutaan…</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="230"/>
@@ -2942,7 +2942,7 @@ käyttäjätunnus@jabber.org</translation>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="213"/>
         <source>Properties...</source>
-        <translation>Ominaisuudet...</translation>
+        <translation>Ominaisuudet…</translation>
     </message>
 </context>
 <context>
@@ -4007,7 +4007,7 @@ anna siellä näytetty PIN-koodi tähän:</translation>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="314"/>
         <source>Search for any artist, album or song...</source>
-        <translation>Hae artistia, albumia tai kappaletta...</translation>
+        <translation>Hae artistia, albumia tai kappaletta…</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="337"/>
@@ -4210,7 +4210,7 @@ anna siellä näytetty PIN-koodi tähän:</translation>
 <context>
     <name>TreeItemDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeItemDelegate.cpp" line="180"/>
+        <location filename="../src/libtomahawk/playlist/TreeItemDelegate.cpp" line="183"/>
         <source>Unknown</source>
         <translation>Tuntematon</translation>
     </message>
@@ -4691,12 +4691,12 @@ Sanat artistin %2 kappaleelle ”%1”:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="655"/>
         <source>Add Friend...</source>
-        <translation>Lisää kaveri...</translation>
+        <translation>Lisää kaveri…</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="660"/>
         <source>XML Console...</source>
-        <translation>XML-konsoli...</translation>
+        <translation>XML-konsoli…</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="709"/>

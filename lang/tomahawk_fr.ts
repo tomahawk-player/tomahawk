@@ -4201,7 +4201,7 @@ saisissez le numéro PIN ici :</translation>
 <context>
     <name>TreeItemDelegate</name>
     <message>
-        <location filename="../src/libtomahawk/playlist/TreeItemDelegate.cpp" line="180"/>
+        <location filename="../src/libtomahawk/playlist/TreeItemDelegate.cpp" line="183"/>
         <source>Unknown</source>
         <translation>Inconnu</translation>
     </message>
