@@ -102,25 +102,6 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
     }
 
     {
-        QFont f = ui->biography->font();
-        f.setFamily( "Titillium Web" );
-
-        QPalette p = ui->biography->palette();
-        p.setColor( QPalette::Text, TomahawkStyle::HEADER_TEXT );
-
-        ui->biography->setFont( f );
-        ui->biography->setPalette( p );
-        ui->biography->setOpenLinks( false );
-        ui->biography->setOpenExternalLinks( true );
-
-        ui->biography->document()->setDefaultStyleSheet( QString( "a { text-decoration: none; font-weight: bold; color: %1; }" ).arg( TomahawkStyle::HEADER_LINK.name() ) );
-        TomahawkStyle::stylePageFrame( ui->biography );
-        TomahawkStyle::styleScrollBar( ui->biography->verticalScrollBar() );
-
-//        connect( ui->biography, SIGNAL( anchorClicked( QUrl ) ), SLOT( onBiographyLinkClicked( QUrl ) ) );
-    }
-
-    {
         QFont f = ui->albumLabel->font();
         f.setFamily( "Titillium Web" );
 
