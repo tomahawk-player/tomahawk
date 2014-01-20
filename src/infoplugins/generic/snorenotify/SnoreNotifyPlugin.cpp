@@ -149,7 +149,7 @@ SnoreNotifyPlugin::notifyUser( Tomahawk::InfoSystem::InfoType type, const QStrin
         icon = m_defaultIcon;
     }
     const Snore::Alert &alert = m_alerts[ type ];
-    Snore::Notification n( m_application , alert, alert.title(), messageText, icon );
+    Snore::Notification n( m_application , alert, alert.name(), messageText, icon );
     m_snore->broadcastNotification( n );
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "showing notification:" << messageText;
 
@@ -158,7 +158,7 @@ SnoreNotifyPlugin::notifyUser( Tomahawk::InfoSystem::InfoType type, const QStrin
 void
 SnoreNotifyPlugin::addAlert( Tomahawk::InfoSystem::InfoType type, const QString &title )
 {
-    Snore::Alert alert( title, title, m_defaultIcon );
+    Snore::Alert alert( title, m_defaultIcon );
     m_application.addAlert( alert );
     m_alerts[ type ] = alert;
 }
@@ -213,10 +213,10 @@ SnoreNotifyPlugin::nowPlaying( const QVariant& input )
 
     // If there is a cover availble use it, else use Tomahawk logo as default.
     Snore::Icon image;
-    if ( map.contains( "coveruri" ) && map[ "coveruri" ].canConvert< QString >() )
+    if ( map.contains( "cover" ) && map[ "cover" ].canConvert< QImage >() )
     {
-        image = Snore::Icon( QImage(map[ "coveruri" ].toString(),"PNG"));
-        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << map[ "coveruri" ].toString();
+        image = Snore::Icon( map[ "cover" ].value<QImage>() );
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << image;
     }
     notifyUser( InfoNowPlaying, messageText, image );
 }
