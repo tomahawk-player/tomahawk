@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1276</width>
-    <height>830</height>
+    <height>828</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -61,7 +61,7 @@
        <item>
         <widget class="ScrollingLabel" name="trackLabel">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+          <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
