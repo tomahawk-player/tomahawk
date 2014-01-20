@@ -59,9 +59,9 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QLabel" name="artistLabel">
+        <widget class="ScrollingLabel" name="artistLabel">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+          <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -434,12 +434,17 @@
   <customwidget>
    <class>GridView</class>
    <extends>QListView</extends>
-   <header location="global">playlist/GridView.h</header>
+   <header>playlist/GridView.h</header>
   </customwidget>
   <customwidget>
    <class>PlayableCover</class>
    <extends>QLabel</extends>
    <header>widgets/PlayableCover.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ScrollingLabel</class>
+   <extends>QLabel</extends>
+   <header location="global">widgets/ScrollingLabel.h</header>
   </customwidget>
   <customwidget>
    <class>PlaylistView</class>
