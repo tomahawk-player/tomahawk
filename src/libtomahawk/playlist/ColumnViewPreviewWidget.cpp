@@ -75,7 +75,11 @@ ColumnViewPreviewWidget::ColumnViewPreviewWidget( ColumnView* parent )
     m_trackLabel->setFont( font );
     m_trackLabel->setFixedHeight( QFontMetrics( font ).height() + 6 );
     m_trackLabel->setAlignment( Qt::AlignCenter );
-    mainLayout->addWidget( m_trackLabel );
+    QHBoxLayout* trackLayout = new QHBoxLayout;
+    trackLayout->addSpacing( 3 );
+    trackLayout->addWidget( m_trackLabel );
+    trackLayout->addSpacing( 3 );
+    mainLayout->addLayout( trackLayout );
 
     m_artistLabel = new QueryLabel( this );
     m_artistLabel->setContentsMargins( 6, 2, 6, 2 );
