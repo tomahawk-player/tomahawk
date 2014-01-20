@@ -25,12 +25,10 @@
 
 ScrollingLabel::ScrollingLabel( QWidget* parent)
     : QLabel( parent )
-    , m_scrollPos( 0 )
     , m_isMouseOver( false )
+    , m_scrollPos( 0 )
 {
     m_staticText.setTextFormat( Qt::PlainText );
-
-    m_leftMargin = height() / 3;
 
     m_separator = QString::fromUtf8( "    \u26AB    " );
 
@@ -54,7 +52,7 @@ ScrollingLabel::updateText()
     m_timer.stop();
 
     m_singleTextWidth = fontMetrics().width( text() );
-    m_scrollEnabled = ( m_singleTextWidth > width() - m_leftMargin );
+    m_scrollEnabled = ( m_singleTextWidth > width() - indent() );
 
     m_scrollPos = -64;
 
@@ -84,7 +82,7 @@ ScrollingLabel::paintEvent( QPaintEvent* )
         pb.setPen( p.pen() );
         pb.setFont( p.font() );
 
-        int x = qMin( -m_scrollPos, 0 ) + m_leftMargin;
+        int x = qMin( -m_scrollPos, 0 ) + indent();
         while ( x < width() )
         {
             pb.drawStaticText( QPointF( x, ( height() - m_wholeTextSize.height() ) / 2 ) + QPoint( 2, 2 ), m_staticText );
@@ -110,9 +108,9 @@ ScrollingLabel::paintEvent( QPaintEvent* )
     }
     else
     {
-        if ( m_wholeTextSize.width() > width() - 2*m_leftMargin )
+        if ( m_wholeTextSize.width() > width() - indent() )
         {
-            p.drawStaticText( QPointF( m_leftMargin, ( height() - m_wholeTextSize.height() ) / 2 ),
+            p.drawStaticText( QPointF( indent(), ( height() - m_wholeTextSize.height() ) / 2 ),
                               m_staticText );
         }
         else
@@ -166,7 +164,7 @@ ScrollingLabel::resizeEvent( QResizeEvent* )
 
 
     //Update scrolling state
-    bool newScrollEnabled = ( m_singleTextWidth > width() - m_leftMargin );
+    bool newScrollEnabled = ( m_singleTextWidth > width() - indent() );
     if( newScrollEnabled != m_scrollEnabled )
         updateText();
 }

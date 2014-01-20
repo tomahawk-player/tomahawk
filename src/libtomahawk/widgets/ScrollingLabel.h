@@ -48,7 +48,6 @@ private:
     QStaticText m_staticText;
     int m_singleTextWidth;
     QSize m_wholeTextSize;
-    int m_leftMargin;
     bool m_scrollEnabled;
     int m_scrollPos;
     QImage m_alphaChannel;
