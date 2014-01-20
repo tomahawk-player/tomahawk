@@ -24,13 +24,12 @@
 
 
 ScrollingLabel::ScrollingLabel( QWidget* parent)
-    : QWidget( parent )
+    : QLabel( parent )
     , m_scrollPos( 0 )
     , m_isMouseOver( false )
 {
     m_staticText.setTextFormat( Qt::PlainText );
 
-    setFixedHeight( fontMetrics().height() );
     m_leftMargin = height() / 3;
 
     m_separator = QString::fromUtf8( "    \u26AB    " );
@@ -40,17 +39,10 @@ ScrollingLabel::ScrollingLabel( QWidget* parent)
 }
 
 
-QString
-ScrollingLabel::text() const
-{
-    return m_text;
-}
-
-
 void
-ScrollingLabel::setText( QString text )
+ScrollingLabel::setText( const QString& text )
 {
-    m_text = text;
+    QLabel::setText( text );
     updateText();
     update();
 }
@@ -61,18 +53,18 @@ ScrollingLabel::updateText()
 {
     m_timer.stop();
 
-    m_singleTextWidth = fontMetrics().width( m_text );
+    m_singleTextWidth = fontMetrics().width( text() );
     m_scrollEnabled = ( m_singleTextWidth > width() - m_leftMargin );
 
     m_scrollPos = -64;
 
     if ( m_scrollEnabled && m_isMouseOver )
     {
-        m_staticText.setText( m_text + m_separator );
+        m_staticText.setText( text() + m_separator );
         m_timer.start();
     }
     else
-        m_staticText.setText( m_text );
+        m_staticText.setText( text() );
 
     m_staticText.prepare( QTransform(), font() );
     m_wholeTextSize = QSize( fontMetrics().width( m_staticText.text() ),
@@ -125,9 +117,24 @@ ScrollingLabel::paintEvent( QPaintEvent* )
         }
         else
         {
-            p.drawStaticText( QPointF( ( width() - m_wholeTextSize.width() ) / 2.,
-                                       ( height() - m_wholeTextSize.height() ) / 2. ),
-                              m_staticText );
+            //Horizontal alignment matters here
+            if ( alignment().testFlag( Qt::AlignLeft ) )
+            {
+                p.drawStaticText( QPointF( indent(), ( height() - m_wholeTextSize.height() ) / 2 ),
+                                  m_staticText );
+            }
+            else if ( alignment().testFlag( Qt::AlignRight ) )
+            {
+                p.drawStaticText( QPointF( width() - m_wholeTextSize.width(),
+                                           ( height() - m_wholeTextSize.height() ) / 2 ),
+                                  m_staticText );
+            }
+            else //center!
+            {
+                p.drawStaticText( QPointF( ( width() - m_wholeTextSize.width() ) / 2.,
+                                           ( height() - m_wholeTextSize.height() ) / 2. ),
+                                  m_staticText );
+            }
         }
     }
 }

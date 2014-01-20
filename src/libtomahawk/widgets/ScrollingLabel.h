@@ -19,22 +19,20 @@
 #ifndef SCROLLINGLABEL_H
 #define SCROLLINGLABEL_H
 
-#include <QWidget>
+#include <QLabel>
 #include <QStaticText>
 #include <QTimer>
 
 
-class ScrollingLabel : public QWidget
+class ScrollingLabel : public QLabel
 {
     Q_OBJECT
-    Q_PROPERTY( QString text READ text WRITE setText )
 
 public:
     explicit ScrollingLabel( QWidget* parent = 0 );
 
 public slots:
-    QString text() const;
-    void setText( QString text );
+    void setText( const QString& text );
 
 protected:
     virtual void paintEvent( QPaintEvent* );

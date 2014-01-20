@@ -74,6 +74,7 @@ ColumnViewPreviewWidget::ColumnViewPreviewWidget( ColumnView* parent )
     font.setBold( true );
     m_trackLabel->setFont( font );
     m_trackLabel->setFixedHeight( QFontMetrics( font ).height() + 6 );
+    m_trackLabel->setAlignment( Qt::AlignCenter );
     mainLayout->addWidget( m_trackLabel );
 
     m_artistLabel = new QueryLabel( this );

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>989</width>
-    <height>832</height>
+    <width>1276</width>
+    <height>830</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -59,7 +59,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QLabel" name="trackLabel">
+        <widget class="ScrollingLabel" name="trackLabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -293,7 +293,7 @@
   <customwidget>
    <class>GridView</class>
    <extends>QListView</extends>
-   <header location="global">playlist/GridView.h</header>
+   <header>playlist/GridView.h</header>
   </customwidget>
   <customwidget>
    <class>PlayableCover</class>
@@ -304,6 +304,11 @@
    <class>QueryLabel</class>
    <extends>QLabel</extends>
    <header>widgets/QueryLabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ScrollingLabel</class>
+   <extends>QLabel</extends>
+   <header location="global">widgets/ScrollingLabel.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
