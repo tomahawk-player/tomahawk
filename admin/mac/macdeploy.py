@@ -26,7 +26,7 @@ FRAMEWORK_SEARCH_PATH=[
     os.path.join(os.environ['HOME'], 'Library/Frameworks')
 ]
 
-LIBRARY_SEARCH_PATH=['/usr/local/lib', '/usr/local/Cellar/gettext/0.18.1.1/lib', '.']
+LIBRARY_SEARCH_PATH=['/usr/local/lib', '/usr/local/Cellar/gettext/0.18.3.2/lib', '.']
 
 VLC_PLUGINS=[
   'libaccess_attachment_plugin.dylib',
@@ -219,7 +219,7 @@ TOMAHAWK_PLUGINS = [
 ]
 
 QT_PLUGINS_SEARCH_PATH=[
-    '/usr/local/Cellar/qt/4.8.4/plugins',
+    '/usr/local/Cellar/qt/4.8.5/plugins',
 ]
 
 
