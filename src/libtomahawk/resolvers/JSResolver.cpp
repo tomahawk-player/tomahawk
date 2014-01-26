@@ -43,6 +43,7 @@
 #include "TomahawkVersion.h"
 #include "Track.h"
 
+#include <QDir>
 #include <QFile>
 #include <QFileInfo>
 #include <QImageReader>
@@ -214,8 +215,8 @@ JSResolver::init()
     // add c++ part of tomahawk javascript library
     d->engine->mainFrame()->addToJavaScriptWindowObject( "Tomahawk", d->resolverHelper );
 
+    // Load CrytoJS
     {
-        // Load CrytoJS core
         d->engine->setScriptPath( "cryptojs-core.js" );
         QFile jslib( RESPATH "js/cryptojs-core.js" );
         jslib.open( QIODevice::ReadOnly );
@@ -223,12 +224,18 @@ JSResolver::init()
         jslib.close();
     }
     {
-        // Load a SHA256 implementation from CryptoJS
-        d->engine->setScriptPath( "cryptojs-sha256.js" );
-        QFile jslib( RESPATH "js/cryptojs-sha256.js" );
-        jslib.open( QIODevice::ReadOnly );
-        d->engine->mainFrame()->evaluateJavaScript( jslib.readAll() );
-        jslib.close();
+        QStringList jsfiles;
+        jsfiles << "*.js";
+        QDir cryptojs( RESPATH "js/cryptojs" );
+        foreach ( QString jsfile, cryptojs.entryList( jsfiles ) )
+        {
+            qWarning() << Q_FUNC_INFO << ( RESPATH "js/cryptojs/" +  jsfile );
+            d->engine->setScriptPath( RESPATH "js/cryptojs/" +  jsfile );
+            QFile jslib(  RESPATH "js/cryptojs/" +  jsfile  );
+            jslib.open( QIODevice::ReadOnly );
+            d->engine->mainFrame()->evaluateJavaScript( jslib.readAll() );
+            jslib.close();
+        }
     }
     {
         // Load the tomahawk javascript utilities
