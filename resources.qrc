@@ -154,8 +154,6 @@
         <file>data/fonts/TitilliumWeb-Bold.ttf</file>
         <file>data/fonts/TitilliumWeb-Regular.ttf</file>
         <file>data/fonts/PathwayGothicOne-Regular.ttf</file>
-        <file>data/js/cryptojs-core.js</file>
-        <file>data/js/cryptojs-sha256.js</file>
         <file>data/sql/dbmigrate-29_to_30.sql</file>
         <file>data/sql/dbmigrate-30_to_31.sql</file>
         <file>data/images/trending.svg</file>
@@ -170,5 +168,28 @@
         <file>data/www/js/html5shim.js</file>
         <file>data/images/splash.svg</file>
         <file>data/images/splash-unrounded.svg</file>
+        <file>data/js/cryptojs/aes.js</file>
+        <file>data/js/cryptojs/hmac-md5.js</file>
+        <file>data/js/cryptojs/hmac-ripemd160.js</file>
+        <file>data/js/cryptojs/hmac-sha1.js</file>
+        <file>data/js/cryptojs/hmac-sha3.js</file>
+        <file>data/js/cryptojs/hmac-sha224.js</file>
+        <file>data/js/cryptojs/hmac-sha256.js</file>
+        <file>data/js/cryptojs/hmac-sha384.js</file>
+        <file>data/js/cryptojs/hmac-sha512.js</file>
+        <file>data/js/cryptojs/md5.js</file>
+        <file>data/js/cryptojs/pbkdf2.js</file>
+        <file>data/js/cryptojs/rabbit.js</file>
+        <file>data/js/cryptojs/rabbit-legacy.js</file>
+        <file>data/js/cryptojs/rc4.js</file>
+        <file>data/js/cryptojs/ripemd160.js</file>
+        <file>data/js/cryptojs/sha1.js</file>
+        <file>data/js/cryptojs/sha3.js</file>
+        <file>data/js/cryptojs/sha224.js</file>
+        <file>data/js/cryptojs/sha256.js</file>
+        <file>data/js/cryptojs/sha384.js</file>
+        <file>data/js/cryptojs/sha512.js</file>
+        <file>data/js/cryptojs/tripledes.js</file>
+        <file>data/js/cryptojs-core.js</file>
     </qresource>
 </RCC>
