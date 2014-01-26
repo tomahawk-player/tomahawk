@@ -36,7 +36,7 @@ if ((typeof Tomahawk === "undefined") || (Tomahawk === null)) {
     };
 }
 
-Tomahawk.apiVersion = "0.2.0";
+Tomahawk.apiVersion = "0.2.1";
 
 /**
  * Compares versions strings
@@ -283,6 +283,7 @@ Tomahawk.syncRequest = function (url, extraHeaders, options) {
  *  - username: The username for HTTP Basic Auth
  *  - password: The password for HTTP Basic Auth
  *  - errorHandler: callback called if the request was not completed
+ *  - data: body data included in POST requests
  */
 Tomahawk.asyncRequest = function (url, callback, extraHeaders, options) {
     // unpack options
@@ -307,7 +308,7 @@ Tomahawk.asyncRequest = function (url, callback, extraHeaders, options) {
             }
         }
     };
-    xmlHttpRequest.send(null);
+    xmlHttpRequest.send(opt.data || null);
 };
 
 Tomahawk.sha256 = Tomahawk.sha256 || CryptoJS.SHA256;
