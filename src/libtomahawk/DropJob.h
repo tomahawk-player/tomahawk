@@ -113,7 +113,6 @@ public:
     void handleXspfs( const QString& files );
     void handleM3u( const QString& urls );
     void handleSpotifyUrls( const QString& urls );
-    void handleRdioUrls( const QString& urls );
     void handleGroovesharkUrls( const QString& urls );
 
     static bool canParseSpotifyPlaylists();

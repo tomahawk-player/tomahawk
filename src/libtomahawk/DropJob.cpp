@@ -30,7 +30,6 @@
 #include "utils/SpotifyParser.h"
 #include "utils/ItunesParser.h"
 #include "utils/ItunesLoader.h"
-#include "utils/RdioParser.h"
 #include "utils/M3uLoader.h"
 #include "utils/ShortenedLinkParser.h"
 #include "utils/Logger.h"
@@ -664,24 +663,6 @@ DropJob::handleSpotifyUrls( const QString& urlsRaw )
 
 
 void
-DropJob::handleRdioUrls( const QString& urlsRaw )
-{
-    QStringList urls = urlsRaw.split( QRegExp( "\\s+" ), QString::SkipEmptyParts );
-    qDebug() << "Got Rdio urls!" << urls;
-
-    if ( dropAction() == Default )
-        setDropAction( Create );
-
-    RdioParser* rdio = new RdioParser( this );
-    connect( rdio, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
-
-    m_queryCount++;
-    rdio->setCreatePlaylist( dropAction() == Create  );
-    rdio->parse( urls );
-}
-
-
-void
 DropJob::handleGroovesharkUrls ( const QString& urlsRaw )
 {
 #ifdef QCA2_FOUND
@@ -731,8 +712,6 @@ DropJob::handleAllUrls( const QString& urls )
               && ( urls.contains( "playlist" ) || urls.contains( "artist" ) || urls.contains( "album" ) || urls.contains( "track" ) )
               && s_canParseSpotifyPlaylists )
         handleSpotifyUrls( urls );
-    else if ( urls.contains( "rdio.com" ) )
-        handleRdioUrls( urls );
 #ifdef QCA2_FOUND
     else if ( urls.contains( "grooveshark.com" ) )
         handleGroovesharkUrls( urls );
@@ -768,17 +747,6 @@ DropJob::handleTrackUrls( const QString& urls )
         SpotifyParser* spot = new SpotifyParser( tracks, this );
         connect( spot, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
         m_queryCount++;
-    }
-    else if ( urls.contains( "rdio.com" ) )
-    {
-        QStringList tracks = urls.split( QRegExp( "\\s+" ), QString::SkipEmptyParts );
-
-        tDebug() << "Got a list of rdio urls!" << tracks;
-        RdioParser* rdio = new RdioParser( this );
-        connect( rdio, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
-        m_queryCount++;
-
-        rdio->parse( tracks );
     }
     else if ( ShortenedLinkParser::handlesUrl( urls ) )
     {

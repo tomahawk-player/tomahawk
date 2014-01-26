@@ -58,9 +58,6 @@ public slots:
     /// Takes a spotify link and performs the default open action on it
     bool openSpotifyLink( const QString& link );
 
-    /// Takes a spotify link and performs the default open action on it
-    bool openRdioLink( const QString& link );
-
     /// Creates a link from the requested data and copies it to the clipboard
     void copyToClipboard( const Tomahawk::query_ptr& query );
 
@@ -111,8 +108,6 @@ private:
 
     bool playSpotify( const QUrl& url );
     bool queueSpotify( const QStringList& parts, const QList< QPair< QString, QString > >& queryItems );
-    bool playRdio( const QUrl& url );
-    bool queueRdio( const QStringList& parts, const QList< QPair< QString, QString > >& queryItems );
 #endif
 
     bool handleCollectionCommand( const QUrl& url );

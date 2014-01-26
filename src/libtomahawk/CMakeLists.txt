@@ -114,7 +114,6 @@ set( libGuiSources
     utils/M3uLoader.cpp
     utils/ItunesParser.cpp
     utils/ItunesLoader.cpp
-    utils/RdioParser.cpp
     utils/ShortenedLinkParser.cpp
     utils/TomahawkStyle.cpp
     utils/DropJobNotifier.cpp
