@@ -129,10 +129,13 @@ ConnectionManager::authFailed()
     disconnect( d->controlConnection.data(), SIGNAL( authFailed() ), this, SLOT( authFailed() ) );
     disconnect( d->controlConnection.data(), SIGNAL( authTimeout() ), this, SLOT( authFailed() ) );
 
-    // If auth failed, we need to setup a new controlconnection as the old will be destroyed.
-    newControlConnection( d->currentPeerInfo );
-    // Try to connect with the next available SipInfo.
-    tryConnect();
+    // Only retry if we have any retries left.
+    if (!d->currentPeerInfo->sipInfos().isEmpty()) {
+      // If auth failed, we need to setup a new controlconnection as the old will be destroyed.
+      newControlConnection( d->currentPeerInfo );
+      // Try to connect with the next available SipInfo.
+      tryConnect();
+    }
 }
 
 
