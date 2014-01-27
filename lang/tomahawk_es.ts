@@ -883,10 +883,10 @@ de un solo uso (OTP)</translation>
 <context>
     <name>JSResolver</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="349"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="386"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="424"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="486"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="356"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="393"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="431"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="493"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
         <translation>Aviso del script del servicio: la llamada a la API %1 devolvió datos en sincronía.</translation>
     </message>
@@ -3625,14 +3625,6 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="53"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
         <translation>Después de que haya analizado su colección de música encontrará sus pistas aquí.</translation>
-    </message>
-</context>
-<context>
-    <name>Tomahawk::RdioParser</name>
-    <message>
-        <location filename="../src/libtomahawk/utils/RdioParser.cpp" line="205"/>
-        <source>Error fetching Rdio information from the network!</source>
-        <translation>¡Error al obtener la información de Rdio en la red!</translation>
     </message>
 </context>
 <context>

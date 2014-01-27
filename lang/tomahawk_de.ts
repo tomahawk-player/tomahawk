@@ -882,10 +882,10 @@ Password (OTP)</source>
 <context>
     <name>JSResolver</name>
     <message>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="349"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="386"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="424"/>
-        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="486"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="356"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="393"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="431"/>
+        <location filename="../src/libtomahawk/resolvers/JSResolver.cpp" line="493"/>
         <source>Script Resolver Warning: API call %1 returned data synchronously.</source>
         <translation>Script Resolver Warnung: API aufruf %1 zurückgegebener Daten synchron. </translation>
     </message>
@@ -3616,14 +3616,6 @@ Versuch die Filter anzupassen für neue Lieder.</translation>
         <location filename="../src/libtomahawk/database/LocalCollection.cpp" line="53"/>
         <source>After you have scanned your music collection you will find your tracks right here.</source>
         <translation>Nachdem Sie Ihre Musik-Sammlung gescannt haben, werden Sie Ihre Lieder hier finden.</translation>
-    </message>
-</context>
-<context>
-    <name>Tomahawk::RdioParser</name>
-    <message>
-        <location filename="../src/libtomahawk/utils/RdioParser.cpp" line="205"/>
-        <source>Error fetching Rdio information from the network!</source>
-        <translation>Konnte Rdio-Daten nicht laden!</translation>
     </message>
 </context>
 <context>
