@@ -514,3 +514,14 @@ Api_v1::apiCallFailed( QxtWebRequestEvent* event, const QString& method )
 {
     sendPlain404( event, QString( "Method \"%1\" for API 1.5 not found" ).arg( method ), "Method in API 1.5 not found" );
 }
+
+
+void
+Api_v1::sendJsonError( QxtWebRequestEvent* event, const QString& message )
+{
+    QxtWebPageEvent * e = new QxtWebPageEvent( event->sessionID, event->requestID, QString( "{ result: \"error\", error: \"%1\" }" ).arg( message ).toUtf8().constData() );
+    e->contentType = "application/json";
+    e->status = 500;
+    e->statusMessage = "Method call failed.";
+    postEvent( e );
+}
