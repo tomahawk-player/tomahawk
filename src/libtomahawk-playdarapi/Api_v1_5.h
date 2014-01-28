@@ -40,6 +40,14 @@ public slots:
      */
     void ping( QxtWebRequestEvent* event );
 
+    /**
+     *  Control playback.
+     */
+    void playback( QxtWebRequestEvent* event, const QString& command );
+
+protected:
+    void jsonReply( QxtWebRequestEvent* event, const char* funcInfo, const QString& errorMessage, bool isError );
+
 private:
     Api_v1* m_service;
 };
