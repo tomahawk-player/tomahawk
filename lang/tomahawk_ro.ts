@@ -820,27 +820,27 @@ Password (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="17"/>
         <source>Host Settings</source>
-        <translation type="unfinished"/>
+        <translation>Setări pentru gazdă</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="35"/>
         <source>Configure your external IP address or host name here. Make sure to manually forward the selected port to this host on your router.</source>
-        <translation type="unfinished"/>
+        <translation>Setează aici adresa ta IP externă sau numele de gazdă. Asigură-te că ai înaintat portul către acest calculator în router.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="53"/>
         <source>Static Host Name:</source>
-        <translation type="unfinished"/>
+        <translation>Nume de gazdă static:</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="69"/>
         <source>Static Port:</source>
-        <translation type="unfinished"/>
+        <translation>Port static:</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="106"/>
         <source>Automatically detect external IP address</source>
-        <translation type="unfinished"/>
+        <translation>Detectează automat adresa IP externă</translation>
     </message>
 </context>
 <context>
@@ -1799,17 +1799,17 @@ Password (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="42"/>
         <source>Automatic port forward with UPnP (recommended)</source>
-        <translation type="unfinished"/>
+        <translation>Foloseșște UPnP pentru a stabili înaintări de porturi (recomandat)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="60"/>
         <source>Manual port forward</source>
-        <translation type="unfinished"/>
+        <translation>Înaintare de port manuală</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="73"/>
         <source>Host Settings...</source>
-        <translation type="unfinished"/>
+        <translation>Setări pentru gazdă...</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="101"/>
@@ -3852,13 +3852,15 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="698"/>
         <source>Updating database
 </source>
-        <translation type="unfinished"/>
+        <translation>Se actualizează baza de date
+</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="705"/>
         <source>Updating database
 %1</source>
-        <translation type="unfinished"/>
+        <translation>Se actualizează baza de date
+%1</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="755"/>
