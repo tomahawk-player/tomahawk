@@ -38,6 +38,7 @@ void
 Api_v1_5::ping( QxtWebRequestEvent* event )
 {
     QxtWebPageEvent * e = new QxtWebPageEvent( event->sessionID, event->requestID, "pong" );
+    e->headers.insert( "Access-Control-Allow-Origin", "*" );
     e->contentType = "text/plain";
     m_service->postEvent( e );
 }

@@ -472,6 +472,7 @@ Api_v1::sendJSON( const QVariantMap& m, QxtWebRequestEvent* event )
     QxtWebPageEvent * e = new QxtWebPageEvent( event->sessionID, event->requestID, body );
     e->contentType = ctype;
     e->headers.insert( "Content-Length", QString::number( body.length() ) );
+    e->headers.insert( "Access-Control-Allow-Origin", "*" );
     postEvent( e );
     tDebug( LOGVERBOSE ) << "JSON response" << event->url.toString() << body;
 }
@@ -519,6 +520,7 @@ void
 Api_v1::sendJsonOk( QxtWebRequestEvent* event )
 {
     QxtWebPageEvent * e = new QxtWebPageEvent( event->sessionID, event->requestID, "{ result: \"ok\" }" );
+    e->headers.insert( "Access-Control-Allow-Origin", "*" );
     e->contentType = "application/json";
     postEvent( e );
 }
@@ -528,6 +530,7 @@ void
 Api_v1::sendJsonError( QxtWebRequestEvent* event, const QString& message )
 {
     QxtWebPageEvent * e = new QxtWebPageEvent( event->sessionID, event->requestID, QString( "{ result: \"error\", error: \"%1\" }" ).arg( message ).toUtf8().constData() );
+    e->headers.insert( "Access-Control-Allow-Origin", "*" );
     e->contentType = "application/json";
     e->status = 500;
     e->statusMessage = "Method call failed.";
