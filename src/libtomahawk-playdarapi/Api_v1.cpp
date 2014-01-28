@@ -190,9 +190,33 @@ Api_v1::api( QxtWebRequestEvent* event, const QString& version, const QString& m
     }
     else if ( version == "1.5" )
     {
-        if ( !QMetaObject::invokeMethod( m_api_v1_5, method.toLatin1().constData(), Q_ARG( QxtWebRequestEvent*, event ) ) )
+        if ( !arg3.isEmpty() )
         {
-            apiCallFailed(event, method);
+            if ( !QMetaObject::invokeMethod( m_api_v1_5, method.toLatin1().constData(), Q_ARG( QxtWebRequestEvent*, event ), Q_ARG( QString, arg1 ), Q_ARG( QString, arg2 ), Q_ARG( QString, arg3 ) ) )
+            {
+                apiCallFailed(event, method);
+            }
+        }
+        else if ( !arg2.isEmpty() )
+        {
+            if ( !QMetaObject::invokeMethod( m_api_v1_5, method.toLatin1().constData(), Q_ARG( QxtWebRequestEvent*, event ), Q_ARG( QString, arg1 ), Q_ARG( QString, arg2 ) ) )
+            {
+                apiCallFailed(event, method);
+            }
+        }
+        else if ( !arg1.isEmpty() )
+        {
+            if ( !QMetaObject::invokeMethod( m_api_v1_5, method.toLatin1().constData(), Q_ARG( QxtWebRequestEvent*, event ), Q_ARG( QString, arg1 ) ) )
+            {
+                apiCallFailed(event, method);
+            }
+        }
+        else
+        {
+            if ( !QMetaObject::invokeMethod( m_api_v1_5, method.toLatin1().constData(), Q_ARG( QxtWebRequestEvent*, event ) ) )
+            {
+                apiCallFailed(event, method);
+            }
         }
     }
     else
