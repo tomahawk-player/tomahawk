@@ -39,6 +39,8 @@
 #include <QSharedPointer>
 #include <QStringList>
 
+class Api_v1_5;
+
 namespace Tomahawk
 {
     class Result;
@@ -51,6 +53,7 @@ Q_OBJECT
 
 public:
     Api_v1( QxtAbstractWebSessionManager* sm, QObject* parent = 0 );
+    virtual ~Api_v1();
 
 public slots:
     // authenticating uses /auth_1
@@ -59,7 +62,12 @@ public slots:
     void auth_2( QxtWebRequestEvent* event, QString unused = QString() );
 
     // all v1 api calls go to /api/
-    void api( QxtWebRequestEvent* event );
+    void api( QxtWebRequestEvent* event,
+        const QString& version = QString(),
+        const QString& method = QString(),
+        const QString& arg1 = QString(),
+        const QString& arg2 = QString(),
+        const QString& arg3 = QString() );
 
     // request for stream: /sid/<id>
     void sid( QxtWebRequestEvent* event, QString unused = QString() );
@@ -78,11 +86,16 @@ public slots:
 
     void index( QxtWebRequestEvent* event );
 
+protected:
+    void apiCallFailed( QxtWebRequestEvent* event, const QString& method );
+    void sendPlain404( QxtWebRequestEvent* event, const QString& message, const QString& statusmessage );
+
 private:
     void processSid( QxtWebRequestEvent* event, Tomahawk::result_ptr&, QSharedPointer< QIODevice >& );
 
     QxtWebRequestEvent* m_storedEvent;
     QSharedPointer< QIODevice > m_ioDevice;
+    Api_v1_5* m_api_v1_5;
 };
 
 #endif
