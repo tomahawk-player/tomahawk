@@ -3,6 +3,7 @@ set(TOMAHAWK_PLAYDARAPI_LIBRARY_TARGET tomahawk-playdarapi)
 
 list(APPEND ${TOMAHAWK_PLAYDARAPI_LIBRARY_TARGET}_SOURCES
     Api_v1.cpp
+    Api_v1_5.cpp
     PlaydarApi.cpp
     )
 

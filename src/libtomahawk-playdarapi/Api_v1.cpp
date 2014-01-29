@@ -28,6 +28,7 @@
 #include "utils/Logger.h"
 #include "utils/TomahawkUtils.h"
 
+#include "Api_v1_5.h"
 #include "Pipeline.h"
 #include "Result.h"
 #include "Source.h"
@@ -41,7 +42,13 @@ using namespace TomahawkUtils;
 
 Api_v1::Api_v1( QxtAbstractWebSessionManager* sm, QObject* parent )
     : QxtWebSlotService(sm, parent)
+    , m_api_v1_5( new Api_v1_5( this ) )
 {
+}
+
+Api_v1::~Api_v1()
+{
+  delete m_api_v1_5;
 }
 
 void
@@ -155,23 +162,67 @@ Api_v1::auth_2( QxtWebRequestEvent* event, QString arg )
 }
 
 
-// all v1 api calls go to /api/
+/**
+ * Handle API calls.
+ *
+ * All v1.0 API (standard Playdar) calls go to /api/?method=
+ * All v1.5 API (simple remote control) calls go to /api/1.5/
+ */
 void
-Api_v1::api( QxtWebRequestEvent* event )
+Api_v1::api( QxtWebRequestEvent* event, const QString& version, const QString& method, const QString& arg1, const QString& arg2, const QString& arg3 )
 {
     tDebug( LOGVERBOSE ) << "HTTP" << event->url.toString();
 
-    const QUrl& url = event->url;
-    if ( urlHasQueryItem( url, "method" ) )
-    {
-        const QString method = urlQueryItemValue( url, "method" );
+    if ( version.isEmpty() ) {
+      // We dealing with API 1.0
 
-        if ( method == "stat" )        return stat( event );
-        if ( method == "resolve" )     return resolve( event );
-        if ( method == "get_results" ) return get_results( event );
+      const QUrl& url = event->url;
+      if ( urlHasQueryItem( url, "method" ) )
+      {
+          const QString method = urlQueryItemValue( url, "method" );
+
+          if ( method == "stat" )        return stat( event );
+          if ( method == "resolve" )     return resolve( event );
+          if ( method == "get_results" ) return get_results( event );
+      }
+
+      send404( event );
     }
-
-    send404( event );
+    else if ( version == "1.5" )
+    {
+        if ( !arg3.isEmpty() )
+        {
+            if ( !QMetaObject::invokeMethod( m_api_v1_5, method.toLatin1().constData(), Q_ARG( QxtWebRequestEvent*, event ), Q_ARG( QString, arg1 ), Q_ARG( QString, arg2 ), Q_ARG( QString, arg3 ) ) )
+            {
+                apiCallFailed(event, method);
+            }
+        }
+        else if ( !arg2.isEmpty() )
+        {
+            if ( !QMetaObject::invokeMethod( m_api_v1_5, method.toLatin1().constData(), Q_ARG( QxtWebRequestEvent*, event ), Q_ARG( QString, arg1 ), Q_ARG( QString, arg2 ) ) )
+            {
+                apiCallFailed(event, method);
+            }
+        }
+        else if ( !arg1.isEmpty() )
+        {
+            if ( !QMetaObject::invokeMethod( m_api_v1_5, method.toLatin1().constData(), Q_ARG( QxtWebRequestEvent*, event ), Q_ARG( QString, arg1 ) ) )
+            {
+                apiCallFailed(event, method);
+            }
+        }
+        else
+        {
+            if ( !QMetaObject::invokeMethod( m_api_v1_5, method.toLatin1().constData(), Q_ARG( QxtWebRequestEvent*, event ) ) )
+            {
+                apiCallFailed(event, method);
+            }
+        }
+    }
+    else
+    {
+        sendPlain404( event, QString( "Unknown API version %1" ).arg( version ), "API version not found" );
+    }
 }
 
 
@@ -224,6 +275,16 @@ Api_v1::send404( QxtWebRequestEvent* event )
     wpe->status = 404;
     wpe->statusMessage = "no event found";
     postEvent( wpe );
+}
+
+void
+Api_v1::sendPlain404( QxtWebRequestEvent* event, const QString& message, const QString& statusmessage )
+{
+    QxtWebPageEvent * e = new QxtWebPageEvent( event->sessionID, event->requestID, message.toUtf8() );
+    e->contentType = "text/plain";
+    e->status = 404;
+    e->statusMessage = statusmessage.toLatin1().constData();
+    postEvent( e );
 }
 
 
@@ -411,6 +472,7 @@ Api_v1::sendJSON( const QVariantMap& m, QxtWebRequestEvent* event )
     QxtWebPageEvent * e = new QxtWebPageEvent( event->sessionID, event->requestID, body );
     e->contentType = ctype;
     e->headers.insert( "Content-Length", QString::number( body.length() ) );
+    e->headers.insert( "Access-Control-Allow-Origin", "*" );
     postEvent( e );
     tDebug( LOGVERBOSE ) << "JSON response" << event->url.toString() << body;
 }
@@ -446,4 +508,31 @@ void
 Api_v1::index( QxtWebRequestEvent* event )
 {
     send404( event );
+}
+
+void
+Api_v1::apiCallFailed( QxtWebRequestEvent* event, const QString& method )
+{
+    sendPlain404( event, QString( "Method \"%1\" for API 1.5 not found" ).arg( method ), "Method in API 1.5 not found" );
+}
+
+void
+Api_v1::sendJsonOk( QxtWebRequestEvent* event )
+{
+    QxtWebPageEvent * e = new QxtWebPageEvent( event->sessionID, event->requestID, "{ result: \"ok\" }" );
+    e->headers.insert( "Access-Control-Allow-Origin", "*" );
+    e->contentType = "application/json";
+    postEvent( e );
+}
+
+
+void
+Api_v1::sendJsonError( QxtWebRequestEvent* event, const QString& message )
+{
+    QxtWebPageEvent * e = new QxtWebPageEvent( event->sessionID, event->requestID, QString( "{ result: \"error\", error: \"%1\" }" ).arg( message ).toUtf8().constData() );
+    e->headers.insert( "Access-Control-Allow-Origin", "*" );
+    e->contentType = "application/json";
+    e->status = 500;
+    e->statusMessage = "Method call failed.";
+    postEvent( e );
 }
