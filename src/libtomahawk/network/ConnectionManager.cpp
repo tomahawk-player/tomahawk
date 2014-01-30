@@ -129,6 +129,8 @@ ConnectionManager::authFailed()
     disconnect( d->controlConnection.data(), SIGNAL( authFailed() ), this, SLOT( authFailed() ) );
     disconnect( d->controlConnection.data(), SIGNAL( authTimeout() ), this, SLOT( authFailed() ) );
 
+    peerInfoDebug( d->currentPeerInfo ) << Q_FUNC_INFO << "Connection authentication failed";
+
     // Only retry if we have any retries left.
     if (!d->currentPeerInfo->sipInfos().isEmpty()) {
       // If auth failed, we need to setup a new controlconnection as the old will be destroyed.

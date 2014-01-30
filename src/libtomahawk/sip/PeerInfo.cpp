@@ -125,6 +125,8 @@ PeerInfo::~PeerInfo()
 {
     Q_D( PeerInfo );
 
+    tLog( LOGVERBOSE ) << Q_FUNC_INFO;
+
     delete d->avatar;
     delete d->fancyAvatar;
     delete d_ptr;
