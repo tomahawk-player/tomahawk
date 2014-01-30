@@ -365,27 +365,35 @@ Servent::deleteLazyOffer( const QString& key )
 void
 Servent::registerControlConnection( ControlConnection* conn )
 {
+    Q_D( Servent );
     Q_ASSERT( conn );
+
+    QMutexLocker locker( &d->controlconnectionsMutex );
     tLog( LOGVERBOSE ) << Q_FUNC_INFO << conn->name();
-    d_func()->controlconnections << conn;
-    d_func()->connectedNodes << conn->id();
+    d->controlconnections << conn;
+    d->connectedNodes << conn->id();
 }
 
 
 void
 Servent::unregisterControlConnection( ControlConnection* conn )
 {
+    Q_D( Servent );
     Q_ASSERT( conn );
 
+    QMutexLocker locker( &d->controlconnectionsMutex );
     tLog( LOGVERBOSE ) << Q_FUNC_INFO << conn->name();
-    d_func()->connectedNodes.removeAll( conn->id() );
-    d_func()->controlconnections.removeAll( conn );
+    d->connectedNodes.removeAll( conn->id() );
+    d->controlconnections.removeAll( conn );
 }
 
 
 ControlConnection*
 Servent::lookupControlConnection( const SipInfo& sipInfo )
 {
+    Q_D( Servent );
+    QMutexLocker locker( &d->controlconnectionsMutex );
+    
     foreach ( ControlConnection* c, d_func()->controlconnections )
     {
         tLog() << sipInfo.port() << c->peerPort() << sipInfo.host() << c->peerIpAddress().toString();
@@ -400,6 +408,9 @@ Servent::lookupControlConnection( const SipInfo& sipInfo )
 ControlConnection*
 Servent::lookupControlConnection( const QString& nodeid )
 {
+    Q_D( Servent );
+    QMutexLocker locker( &d->controlconnectionsMutex );
+    
     foreach ( ControlConnection* c, d_func()->controlconnections )
     {
         if ( c->id() == nodeid )
@@ -604,6 +615,7 @@ Servent::incomingConnection( int sd )
 void
 Servent::readyRead()
 {
+    Q_D( Servent );
     Q_ASSERT( this->thread() == QThread::currentThread() );
     QPointer< QTcpSocketExtra > sock = (QTcpSocketExtra*)sender();
     tLog( LOGVERBOSE ) << Q_FUNC_INFO << "Starting to read from new incoming connection from: " << sock->peerAddress().toString();
@@ -654,6 +666,7 @@ Servent::readyRead()
     tDebug( LOGVERBOSE ) << "Incoming connection details:" << m;
     if ( !nodeid.isEmpty() ) // only control connections send nodeid
     {
+        QMutexLocker locker( &d->controlconnectionsMutex );
         bool dupe = false;
         if ( d_func()->connectedNodes.contains( nodeid ) )
         {
@@ -710,15 +723,18 @@ Servent::readyRead()
         }
     }
 
-    foreach ( ControlConnection* con, d_func()->controlconnections )
     {
-        Q_ASSERT( con );
-
-        // Only check for known inboud ControlConnections
-        if ( con->id() == controlid && !con->outbound() )
+        QMutexLocker locker( &d->controlconnectionsMutex );
+        foreach ( ControlConnection* con, d_func()->controlconnections )
         {
-            cc = con;
-            break;
+            Q_ASSERT( con );
+
+            // Only check for known inboud ControlConnections
+            if ( con->id() == controlid && !con->outbound() )
+            {
+                cc = con;
+                break;
+            }
         }
     }
 
@@ -1097,6 +1113,8 @@ equalByIPv6Address( QHostAddress a1, QHostAddress a2 )
 Connection*
 Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString &key, const QHostAddress peer )
 {
+    Q_D( Servent );
+    
     // magic key for stream connections:
     if ( key.startsWith( "FILE_REQUEST_KEY:" ) )
     {
@@ -1105,6 +1123,7 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
         {
             bool authed = false;
             tDebug() << Q_FUNC_INFO << "Checking for ControlConnection with IP" << peer;
+            QMutexLocker locker( &d->controlconnectionsMutex );
             foreach ( ControlConnection* cc, d_func()->controlconnections )
             {
                 tDebug() << Q_FUNC_INFO << "Probing:" << cc->name();
@@ -1315,6 +1334,9 @@ Servent::isIPWhitelisted( QHostAddress ip )
 bool
 Servent::connectedToSession( const QString& session )
 {
+    Q_D( Servent );
+
+    QMutexLocker locker( &d->controlconnectionsMutex );
     foreach ( ControlConnection* cc, d_func()->controlconnections )
     {
         Q_ASSERT( cc );

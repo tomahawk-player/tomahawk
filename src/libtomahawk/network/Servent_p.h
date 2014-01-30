@@ -57,6 +57,7 @@ private:
     /**
      * canonical list of authed peers
      */
+    QMutex controlconnectionsMutex;
     QList< ControlConnection* > controlconnections;
 
     /**
