@@ -491,9 +491,21 @@ TomahawkApp::initHTTP()
 {
     if ( TomahawkSettings::instance()->httpEnabled() )
     {
-        if ( playdarApi.isNull() )
+        if ( !playdarApi.isNull() )
         {
-            playdarApi = new PlaydarApi( QHostAddress::LocalHost, 60210, this ); // TODO Config
+            delete playdarApi.data();
+        }
+        if ( TomahawkSettings::instance()->httpBindAll() )
+        {
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+            playdarApi = new PlaydarApi( QHostAddress::Any, 60210, this ); // TODO Auth
+#else
+            playdarApi = new PlaydarApi( QHostAddress::AnyIPv6, 60210, this ); // TODO Auth
+#endif
+        }
+        else
+        {
+            playdarApi = new PlaydarApi( QHostAddress::LocalHost, 60210, this ); // TODO Config port
         }
         playdarApi->start();
     }

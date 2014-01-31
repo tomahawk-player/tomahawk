@@ -176,6 +176,19 @@
        </widget>
       </item>
       <item>
+       <widget class="QCheckBox" name="checkBoxListenApi">
+        <property name="layoutDirection">
+         <enum>Qt::LeftToRight</enum>
+        </property>
+        <property name="text">
+         <string>Allow other computers to interact with Tomahawk (not recommended yet)</string>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QCheckBox" name="checkBoxReporter">
         <property name="layoutDirection">
          <enum>Qt::LeftToRight</enum>

@@ -772,6 +772,20 @@ TomahawkSettings::setHttpEnabled( bool enable )
 
 
 bool
+TomahawkSettings::httpBindAll() const
+{
+    return value ( "network/httpbindall", false ).toBool();
+}
+
+
+void
+TomahawkSettings::setHttpBindAll( bool bindAll )
+{
+    setValue( "network/httpbindall", bindAll );
+}
+
+
+bool
 TomahawkSettings::crashReporterEnabled() const
 {
     return value( "ui/crashReporter", true ).toBool();

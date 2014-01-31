@@ -142,6 +142,9 @@ public:
     bool httpEnabled() const; /// true by default
     void setHttpEnabled( bool enable );
 
+    bool httpBindAll() const; /// false by default
+    void setHttpBindAll( bool bindAll );
+
     bool crashReporterEnabled() const; /// true by default
     void setCrashReporterEnabled( bool enable );
 
