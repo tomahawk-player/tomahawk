@@ -19,8 +19,11 @@
 #include "Api_v1_5.h"
 
 #include "Api_v1.h"
+#include "Result.h"
+#include "Track.h"
 
 #include "audio/AudioEngine.h"
+#include "resolvers/Resolver.h"
 #include "utils/Logger.h"
 
 // Assumptions: QxtWebRequestEvent instance is called event and result is true on success
@@ -77,6 +80,39 @@ Api_v1_5::playback( QxtWebRequestEvent* event, const QString& command )
   else if ( command == "raisevolume" )
   {
       JSON_REPLY( QMetaObject::invokeMethod( AudioEngine::instance(), "raiseVolume", Qt::QueuedConnection ), "Raising volume failed." );
+  }
+  else if ( command == "currenttrack" )
+  {
+        QByteArray json;
+        Tomahawk::result_ptr currentTrack =  AudioEngine::instance()->currentTrack();
+
+        if ( currentTrack.isNull() )
+        {
+            json = "{ playing: false }";
+        }
+        else
+        {
+            QVariantMap trackInfo;
+            trackInfo.insert( "playing", true );
+            trackInfo.insert( "bitrate", currentTrack->bitrate() );
+            trackInfo.insert( "resolvedBy", currentTrack->resolvedBy()->name() );
+            trackInfo.insert( "score", currentTrack->score() );
+            trackInfo.insert( "album", currentTrack->track()->album() );
+            trackInfo.insert( "albumpos", currentTrack->track()->albumpos() );
+            trackInfo.insert( "artist", currentTrack->track()->artist() );
+            trackInfo.insert( "duration", currentTrack->track()->duration() );
+            trackInfo.insert( "track", currentTrack->track()->track() );
+
+            QJson::Serializer serializer;
+            bool ok;
+            json = serializer.serialize( trackInfo, &ok );
+            Q_ASSERT( ok );
+        }
+
+        QxtWebPageEvent * e = new QxtWebPageEvent( event->sessionID, event->requestID, json );
+        e->headers.insert( "Access-Control-Allow-Origin", "*" );
+        e->contentType = "application/json";
+        m_service->postEvent( e );
   }
   else
   {
