@@ -148,8 +148,8 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
 #ifndef ENABLE_HEADLESS
     , m_mainwindow( 0 )
 #endif
-    , m_headless( false )
     , m_splashWidget( 0 )
+    , m_headless( false )
 {
     if ( arguments().contains( "--help" ) || arguments().contains( "-h" ) )
     {
