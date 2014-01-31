@@ -507,7 +507,9 @@ Api_v1::sendWebpageWithArgs( QxtWebRequestEvent* event, const QString& filenameS
 void
 Api_v1::index( QxtWebRequestEvent* event )
 {
-    send404( event );
+    QString indexPage = RESPATH "www/index.html";
+    QHash< QString, QString > args;
+    sendWebpageWithArgs( event, indexPage, args );
 }
 
 void

@@ -191,5 +191,6 @@
         <file>data/js/cryptojs/sha512.js</file>
         <file>data/js/cryptojs/tripledes.js</file>
         <file>data/js/cryptojs-core.js</file>
+        <file>data/www/index.html</file>
     </qresource>
 </RCC>

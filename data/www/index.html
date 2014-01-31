@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="" name="description">
+  <meta content="Tomahawk" name="author">
+  <link href="/staticdata/favicon.png" rel="shortcut icon">
+
+  <title>Tomahawk</title>
+  <!-- CSS -->
+  <link href="/staticdata/css/bootstrap.css" rel="stylesheet">
+  <link href="/staticdata/css/style.css" rel="stylesheet"><!-- Theme Style -->
+  <link href="/staticdata/css/elements.css" rel="stylesheet"><!-- Theme elements style -->
+  <link href="/staticdata/css/animate.css" rel="stylesheet"><!-- CSS Animations -->
+
+   <!--[if lt IE 9]>
+        <script src="/staticdata/js/html5shim.js"></script>
+   <![endif]-->
+
+    <noscript><link rel="stylesheet" href="/staticdata/css/no-js.css"></noscript>
+
+   <!--  Google Web Fonts -->
+   <link href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,900' rel='stylesheet' type='text/css'>
+   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900' rel='stylesheet' type='text/css'>
+</head>
+
+<body>
+    <!--NAVBAR -->
+    <header id="header">
+        <div class="navbar navbar-fixed-top" id="nav">
+            <div class="ribbon-top"></div>
+            <div class="container">
+                <div class="navbar-header">
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse" type="button">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://tomahawk-player.org/index.html">
+                        <img alt="" src="/staticdata/tomahawk_auth_logo.png" height="50">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!--/.NAVBAR:end -->
+
+    <!--Content WRAPPER-->
+    <div id="wrapper-content">
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <div class="jumbotron">
+                    Now playing:
+                    <h2 id="currenttrack"></h2>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-blue" onclick="prevTrack();">Prev</button>
+                        <button type="button" class="btn btn-blue" onclick="playpause();">Pause/Play</button>
+                        <button type="button" class="btn btn-blue" onclick="nextTrack();">Next</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+    </div>
+    <!-- #Wraper-content:ends -->
+
+    <script type="text/javascript">
+        // We are at the end of the document, everything we write to is already rendered.
+        function updateCurrentTrack() {
+            var xmlHttpRequest = new XMLHttpRequest();
+            xmlHttpRequest.open('GET', '/api/1.5/playback/currenttrack', true);
+            xmlHttpRequest.onreadystatechange = function () {
+                if (xmlHttpRequest.readyState == 4 && xmlHttpRequest.status == 200) {
+                    var res = JSON.parse(xmlHttpRequest.responseText);
+                    if (res.playing) {
+                        document.getElementById('currenttrack').innerHTML = res.track + " <em>by</em> " + res.artist;
+                    } else {
+                        document.getElementById('currenttrack').innerHTML = "<em>Not Playing</em>";
+                    }
+                }
+            }
+            xmlHttpRequest.send(null);
+        }
+
+        function prevTrack() {
+            var xmlHttpRequest = new XMLHttpRequest();
+            xmlHttpRequest.open('GET', '/api/1.5/playback/previous', true);
+            xmlHttpRequest.send(null);
+        }
+
+        function playpause() {
+            var xmlHttpRequest = new XMLHttpRequest();
+            xmlHttpRequest.open('GET', '/api/1.5/playback/playpause', true);
+            xmlHttpRequest.send(null);
+        }
+
+        function nextTrack() {
+            var xmlHttpRequest = new XMLHttpRequest();
+            xmlHttpRequest.open('GET', '/api/1.5/playback/next', true);
+            xmlHttpRequest.send(null);
+        }
+
+        updateCurrentTrack();
+        setInterval(updateCurrentTrack, 250);
+    </script>
+</body>
+</html>
