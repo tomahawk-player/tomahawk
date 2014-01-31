@@ -57,6 +57,7 @@ public slots:
     QByteArray readRaw( const QString& fileName );
     QString readBase64( const QString& fileName );
     QString readCompressed( const QString& fileName );
+    QString instanceUUID();
 
     QString compress( const QString& data );
     QVariantMap resolverData();

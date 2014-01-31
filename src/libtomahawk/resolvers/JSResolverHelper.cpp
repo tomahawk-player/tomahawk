@@ -247,6 +247,14 @@ JSResolverHelper::parseTrack( const QVariantMap& track )
     return query;
 }
 
+
+QString
+JSResolverHelper::instanceUUID()
+{
+    return Tomahawk::Database::instance()->impl()->dbid();
+}
+
+
 void
 JSResolverHelper::addUrlResult( const QString& url, const QVariantMap& result )
 {
