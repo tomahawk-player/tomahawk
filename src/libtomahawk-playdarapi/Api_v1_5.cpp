@@ -89,7 +89,7 @@ Api_v1_5::playback( QxtWebRequestEvent* event, const QString& command )
 
         if ( currentTrack.isNull() )
         {
-            json = "{ playing: false }";
+            json = "{ \"playing\": false }";
         }
         else
         {
