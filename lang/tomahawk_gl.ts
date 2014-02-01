@@ -1694,82 +1694,82 @@ Password (OTP)</source>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="241"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="242"/>
         <source>Collection</source>
         <translation>Colección</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="244"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="245"/>
         <source>Advanced</source>
         <translation>Avanzado</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="157"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="158"/>
         <source>All</source>
         <translation>Todo</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="296"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="298"/>
         <source>Some changed settings will not take effect until Tomahawk is restarted</source>
         <translation>Algunhas das configuracións que se cambiaron non van a ter efecto ata que se reinicie Tomahawk</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="236"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="237"/>
         <source>Services</source>
         <translation>Servizos</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="130"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="131"/>
         <source>Install from file</source>
         <translation>Instalar dende ficheiro</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="236"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="237"/>
         <source>Configure the accounts and services used by Tomahawk to search and retrieve music, find your friends and update your status.</source>
         <translation>Configurar as contas e servizos que emprega Tomahawk para buscar e obter música, atopar ás túas amizades e actualizar o teu estado.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="241"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="242"/>
         <source>Manage how Tomahawk finds music on your computer.</source>
         <translation>Xestionar como Tomahawk busca música no teu computador.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="244"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="245"/>
         <source>Configure Tomahawk&apos;s advanced settings, including network connectivity settings, browser interaction and more.</source>
         <translation>Configurar as propiedades avanzadas de Tomahawk, incluíndo a conectividade a rede, a interacción co navegador e outras.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="413"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="415"/>
         <source>Open Directory</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="507"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="509"/>
         <source>Install resolver from file</source>
         <translation>Instalar un resolvedor dende un ficheiro</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="509"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="511"/>
         <source>Tomahawk Resolvers (*.axe *.js);;All files (*)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="552"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="554"/>
         <source>Resolver installation from file %1 failed.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="571"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="573"/>
         <source>Delete all Access Control entries?</source>
         <translation>Queres borrar tódalas entradas de control de acceso?</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="572"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="574"/>
         <source>Do you really want to delete all Access Control entries? You will be asked for a decision again for each peer that you connect to.</source>
         <translation>Seguro que queres borrar tódalas entradas de control de acceso? Preguntaráseche de novo para que o confirmes cada vez que te conectes a un parceiro. </translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="296"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="298"/>
         <source>Information</source>
         <translation>Información</translation>
     </message>
@@ -1836,16 +1836,21 @@ Password (OTP)</source>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="184"/>
+        <source>Allow other computers to interact with Tomahawk (not recommended yet)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="197"/>
         <source>Send reports after Tomahawk crashed</source>
         <translation>Enviar informes cando falle Tomahawk</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="194"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="207"/>
         <source>Show notification when a new song starts to play</source>
         <translation>Mostrar notificacións cando se comece a reproducir unha nova canción</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="222"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="235"/>
         <source>Clear All Access Control Entries</source>
         <translation>Limpar tódalas entradas de control de acceso</translation>
     </message>
@@ -3842,24 +3847,24 @@ Proba a trocar os filtros para ter outra lista música para escoitar. </translat
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="517"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="529"/>
         <source>My Collection</source>
         <translation>A miña colección</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="698"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="710"/>
         <source>Updating database
 </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="705"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="717"/>
         <source>Updating database
 %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="755"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="767"/>
         <source>Automatically detecting external IP failed.</source>
         <translation type="unfinished"/>
     </message>

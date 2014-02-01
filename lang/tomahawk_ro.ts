@@ -1696,82 +1696,82 @@ Password (OTP)</translation>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="241"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="242"/>
         <source>Collection</source>
         <translation>Colecție</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="244"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="245"/>
         <source>Advanced</source>
         <translation>Avansat</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="157"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="158"/>
         <source>All</source>
         <translation>Toate</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="296"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="298"/>
         <source>Some changed settings will not take effect until Tomahawk is restarted</source>
         <translation>Unele setări modificate nu vor intra în efect decăt după ce Tomahawk este repornit</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="236"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="237"/>
         <source>Services</source>
         <translation>Servicii</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="130"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="131"/>
         <source>Install from file</source>
         <translation>Instalează din fișier</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="236"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="237"/>
         <source>Configure the accounts and services used by Tomahawk to search and retrieve music, find your friends and update your status.</source>
         <translation>Configurează conturile și serviciile folosite de Tomahawk pentru a căuta și obține muzică, pentru a îți găsi prietenii și pentru a îți actualiza statusul.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="241"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="242"/>
         <source>Manage how Tomahawk finds music on your computer.</source>
         <translation>Configurează cum poate găsi Tomahawk muzică pe computerul tău.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="244"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="245"/>
         <source>Configure Tomahawk&apos;s advanced settings, including network connectivity settings, browser interaction and more.</source>
         <translation>Configurează setările avansate Tomahawk, inclusiv setări de conectare la rețea, interacțiunea cu navigatorul si multe altele.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="413"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="415"/>
         <source>Open Directory</source>
         <translation>Deschide dosar</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="507"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="509"/>
         <source>Install resolver from file</source>
         <translation>Instalează rezolvator din fișier</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="509"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="511"/>
         <source>Tomahawk Resolvers (*.axe *.js);;All files (*)</source>
         <translation>Rezolvatori Tomahawk (*.axe *.js);;Toate fișierele (*)</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="552"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="554"/>
         <source>Resolver installation from file %1 failed.</source>
         <translation>Instalarea rezolvatorului %1 din fișier a eșuat.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="571"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="573"/>
         <source>Delete all Access Control entries?</source>
         <translation>Șterge toate înregistrările de control de acces?</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="572"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="574"/>
         <source>Do you really want to delete all Access Control entries? You will be asked for a decision again for each peer that you connect to.</source>
         <translation>Chiar dorești să ștergi toate înregistrările de control de acces? Va trebui să decizi din nou pentru fiecare sistem la care te conectezi.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="296"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="298"/>
         <source>Information</source>
         <translation>Informație</translation>
     </message>
@@ -1838,16 +1838,21 @@ Password (OTP)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="184"/>
+        <source>Allow other computers to interact with Tomahawk (not recommended yet)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="197"/>
         <source>Send reports after Tomahawk crashed</source>
         <translation>Trimite rapoarte dacă Tomahawk se prabușește</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="194"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="207"/>
         <source>Show notification when a new song starts to play</source>
         <translation>Arată o notificare când începe redarea unui cântec</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="222"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="235"/>
         <source>Clear All Access Control Entries</source>
         <translation>Șterge toate înregistrările de control de acces</translation>
     </message>
@@ -3844,26 +3849,26 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="517"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="529"/>
         <source>My Collection</source>
         <translation>Colecția mea</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="698"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="710"/>
         <source>Updating database
 </source>
         <translation>Se actualizează baza de date
 </translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="705"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="717"/>
         <source>Updating database
 %1</source>
         <translation>Se actualizează baza de date
 %1</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="755"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="767"/>
         <source>Automatically detecting external IP failed.</source>
         <translation>Detectarea automată a IP-ului extern a eșuat.</translation>
     </message>

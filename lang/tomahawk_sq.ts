@@ -1693,82 +1693,82 @@ Password (OTP)</source>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="241"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="242"/>
         <source>Collection</source>
         <translation>Koleksion</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="244"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="245"/>
         <source>Advanced</source>
         <translation>Avancuar</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="157"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="158"/>
         <source>All</source>
         <translation>T&apos;gjithë</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="296"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="298"/>
         <source>Some changed settings will not take effect until Tomahawk is restarted</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="236"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="237"/>
         <source>Services</source>
         <translation>Shërbime</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="130"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="131"/>
         <source>Install from file</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="236"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="237"/>
         <source>Configure the accounts and services used by Tomahawk to search and retrieve music, find your friends and update your status.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="241"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="242"/>
         <source>Manage how Tomahawk finds music on your computer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="244"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="245"/>
         <source>Configure Tomahawk&apos;s advanced settings, including network connectivity settings, browser interaction and more.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="413"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="415"/>
         <source>Open Directory</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="507"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="509"/>
         <source>Install resolver from file</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="509"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="511"/>
         <source>Tomahawk Resolvers (*.axe *.js);;All files (*)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="552"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="554"/>
         <source>Resolver installation from file %1 failed.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="571"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="573"/>
         <source>Delete all Access Control entries?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="572"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="574"/>
         <source>Do you really want to delete all Access Control entries? You will be asked for a decision again for each peer that you connect to.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="296"/>
+        <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="298"/>
         <source>Information</source>
         <translation>Informacion</translation>
     </message>
@@ -1835,16 +1835,21 @@ Password (OTP)</source>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="184"/>
+        <source>Allow other computers to interact with Tomahawk (not recommended yet)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="197"/>
         <source>Send reports after Tomahawk crashed</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="194"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="207"/>
         <source>Show notification when a new song starts to play</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="222"/>
+        <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="235"/>
         <source>Clear All Access Control Entries</source>
         <translation type="unfinished"/>
     </message>
@@ -1913,7 +1918,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk-widgets/SocialPlaylistWidget.ui" line="48"/>
         <source>Most Played Playlists</source>
-        <translation type="unfinished"/>
+        <translation>Lista më e Luajtur</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk-widgets/SocialPlaylistWidget.ui" line="63"/>
@@ -1974,7 +1979,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="69"/>
         <source>Local</source>
-        <translation type="unfinished"/>
+        <translation>Vendorë</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="70"/>
@@ -1984,7 +1989,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="267"/>
         <source>All available tracks</source>
-        <translation type="unfinished"/>
+        <translation>T&apos;gjithë këngët dispozicion</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceDelegate.cpp" line="387"/>
@@ -2009,12 +2014,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.ui" line="30"/>
         <source>Recent Albums</source>
-        <translation type="unfinished"/>
+        <translation>Albume Fundit</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.ui" line="74"/>
         <source>Latest Additions</source>
-        <translation type="unfinished"/>
+        <translation>Shtimet Fundit</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.ui" line="88"/>
@@ -2024,12 +2029,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.cpp" line="70"/>
         <source>New Additions</source>
-        <translation type="unfinished"/>
+        <translation>Shtimet Reja</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.cpp" line="73"/>
         <source>My recent activity</source>
-        <translation type="unfinished"/>
+        <translation>Aktivitetet e fundit t&apos;mia</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/SourceInfoWidget.cpp" line="77"/>
@@ -2043,7 +2048,7 @@ Password (OTP)</source>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="85"/>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="611"/>
         <source>Latest Additions</source>
-        <translation type="unfinished"/>
+        <translation>Shtimet e Fundit</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="89"/>
@@ -2137,7 +2142,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourceTreeView.cpp" line="533"/>
         <source>Playlists (*.xspf)</source>
-        <translation type="unfinished"/>
+        <translation>Lista (*.xspf)</translation>
     </message>
 </context>
 <context>
@@ -2371,7 +2376,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.cpp" line="91"/>
         <source>Enter your Google login to connect with your friends using Tomahawk!</source>
-        <translation type="unfinished"/>
+        <translation>Shkruani llogarinë tuaj Google të për lidhur me miqtë tuaj duke përdorur TOMAHAWK!</translation>
     </message>
     <message>
         <location filename="../src/accounts/google/GoogleWrapper.cpp" line="92"/>
@@ -2492,7 +2497,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="248"/>
         <source>Could not contact server</source>
-        <translation type="unfinished"/>
+        <translation>Nuk mund të kontaktoni server&apos;in</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="262"/>
@@ -2615,7 +2620,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.h" line="72"/>
         <source>Play music from and sync your playlists with Spotify Premium</source>
-        <translation type="unfinished"/>
+        <translation>Luaj muzikë nga lista juaj dhe sinkronizo me Spotify Premium</translation>
     </message>
 </context>
 <context>
@@ -2741,7 +2746,7 @@ You may wish to try re-authenticating.</source>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="274"/>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="293"/>
         <source>There was an error posting your status -- sorry!</source>
-        <translation type="unfinished"/>
+        <translation>Pati një gabim postimi në statusin tuaj -- na vjen keq!</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="276"/>
@@ -2762,7 +2767,7 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="285"/>
         <source>Your message has been posted!</source>
-        <translation type="unfinished"/>
+        <translation>Mesazhi juaj u dërgua!</translation>
     </message>
 </context>
 <context>
@@ -2818,7 +2823,7 @@ username@jabber.org</source>
     <message>
         <location filename="../src/accounts/zeroconf/ZeroconfAccount.h" line="46"/>
         <source>Automatically connect to Tomahawks on the local network</source>
-        <translation type="unfinished"/>
+        <translation>Lidhu automatikisht me Tomahawks në rrjetin lokal</translation>
     </message>
 </context>
 <context>
@@ -2963,7 +2968,7 @@ username@jabber.org</source>
     <message>
         <location filename="../src/libtomahawk/utils/DropJobNotifier.cpp" line="107"/>
         <source>Fetching %1 from database</source>
-        <translation type="unfinished"/>
+        <translation>Duke ngarkuar %1 nga baza e të dhënave</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/DropJobNotifier.cpp" line="111"/>
@@ -2976,7 +2981,7 @@ username@jabber.org</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/widgets/DynamicControlList.cpp" line="84"/>
         <source>Click to collapse</source>
-        <translation type="unfinished"/>
+        <translation>Kliko për përhapje</translation>
     </message>
 </context>
 <context>
@@ -2987,12 +2992,14 @@ username@jabber.org</source>
         <source>Could not find a playable track.
 
 Please change the filters or try again.</source>
-        <translation type="unfinished"/>
+        <translation>Nuk gjeti këngë për të luajtur.
+
+Ju lutëm ndryshoni filterat dhe provoni përsëri.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/DynamicModel.cpp" line="231"/>
         <source>Failed to generate preview with the desired filters</source>
-        <translation type="unfinished"/>
+        <translation>Dështoi në gjenerimin e shikimit paraprak me filterat e dëshiruar</translation>
     </message>
 </context>
 <context>
@@ -3005,7 +3012,7 @@ Please change the filters or try again.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/widgets/DynamicSetupWidget.cpp" line="67"/>
         <source>Generate</source>
-        <translation type="unfinished"/>
+        <translation>Gjenero</translation>
     </message>
 </context>
 <context>
@@ -3018,12 +3025,12 @@ Please change the filters or try again.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/DynamicView.cpp" line="145"/>
         <source>Press Generate to get started!</source>
-        <translation type="unfinished"/>
+        <translation>Shtyp gjenero për të filluar!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/DynamicView.cpp" line="147"/>
         <source>Add some filters above, and press Generate to get started!</source>
-        <translation type="unfinished"/>
+        <translation>Shto disa filtra më lart, dhe shtyp gjenero për të filluar!</translation>
     </message>
 </context>
 <context>
@@ -3074,7 +3081,7 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="352"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="358"/>
         <source>Less</source>
-        <translation type="unfinished"/>
+        <translation>Pak</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="269"/>
@@ -3090,12 +3097,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="315"/>
         <source>0 BPM</source>
-        <translation type="unfinished"/>
+        <translation>0 BPM</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="315"/>
         <source>500 BPM</source>
-        <translation type="unfinished"/>
+        <translation>500 BPM</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="321"/>
@@ -3110,22 +3117,22 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="327"/>
         <source>-100 dB</source>
-        <translation type="unfinished"/>
+        <translation>-100 dB</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="327"/>
         <source>100 dB</source>
-        <translation type="unfinished"/>
+        <translation>100 dB</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="380"/>
         <source>Major</source>
-        <translation type="unfinished"/>
+        <translation>Madh</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="381"/>
         <source>Minor</source>
-        <translation type="unfinished"/>
+        <translation>Mitur</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="401"/>
@@ -3828,24 +3835,24 @@ Try tweaking the filters for a new set of songs to play.</source>
 <context>
     <name>TomahawkApp</name>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="517"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="529"/>
         <source>My Collection</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="698"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="710"/>
         <source>Updating database
 </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="705"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="717"/>
         <source>Updating database
 %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkApp.cpp" line="755"/>
+        <location filename="../src/tomahawk/TomahawkApp.cpp" line="767"/>
         <source>Automatically detecting external IP failed.</source>
         <translation type="unfinished"/>
     </message>
