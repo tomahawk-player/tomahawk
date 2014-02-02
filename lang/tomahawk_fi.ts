@@ -1839,7 +1839,7 @@ salasana (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="184"/>
         <source>Allow other computers to interact with Tomahawk (not recommended yet)</source>
-        <translation type="unfinished"/>
+        <translation>Salli muiden tietokoneiden olla yhteydessä Tomahawkiin (ei vielä suositeltavaa)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="197"/>

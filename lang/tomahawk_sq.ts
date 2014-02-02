@@ -568,7 +568,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="54"/>
         <source>About</source>
-        <translation type="unfinished"/>
+        <translation>Rreth</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="86"/>
@@ -583,7 +583,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="170"/>
         <source>About this Account</source>
-        <translation type="unfinished"/>
+        <translation>Rreth kësaj Llogarie</translation>
     </message>
 </context>
 <context>
@@ -1931,12 +1931,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/widgets/SocialWidget.ui" line="28"/>
         <source>Facebook</source>
-        <translation type="unfinished"/>
+        <translation>Facebook</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/widgets/SocialWidget.ui" line="38"/>
         <source>Twitter</source>
-        <translation type="unfinished"/>
+        <translation>Twitter</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/widgets/SocialWidget.cpp" line="71"/>
@@ -1956,7 +1956,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/widgets/SocialWidget.cpp" line="192"/>
         <source>%1 characters left</source>
-        <translation type="unfinished"/>
+        <translation>%1 karaktere të mbetur</translation>
     </message>
 </context>
 <context>
@@ -2218,22 +2218,22 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="57"/>
         <source>Configure your Spotify account</source>
-        <translation type="unfinished"/>
+        <translation>Konfiguro Llogarine tuaj Spotify</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="89"/>
         <source>Username or Facebook Email</source>
-        <translation type="unfinished"/>
+        <translation>Përdorues ose Adresë Facebook</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="117"/>
         <source>Log In</source>
-        <translation type="unfinished"/>
+        <translation>Hyrni</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="124"/>
         <source>Right click on any Tomahawk playlist to sync it to Spotify.</source>
-        <translation type="unfinished"/>
+        <translation>Kliko në të djathtë në cilënbo listë të Tomahawk për sinkronizimin me Spotify.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="141"/>
@@ -2268,7 +2268,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="177"/>
         <source>Delete Tomahawk playlist when removing synchronization</source>
-        <translation type="unfinished"/>
+        <translation>Fshij listën Tomahawk kur të hiqni sinkronizimin</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="79"/>
@@ -2543,7 +2543,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="513"/>
         <source>Sync with Spotify</source>
-        <translation type="unfinished"/>
+        <translation>Synk me Spotify</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="517"/>
@@ -2583,7 +2583,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="527"/>
         <source>Stop syncing with Spotify</source>
-        <translation type="unfinished"/>
+        <translation>Ndalo sinkronizimin me Spotify</translation>
     </message>
 </context>
 <context>
@@ -2596,7 +2596,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="230"/>
         <source>Failed: %1</source>
-        <translation type="unfinished"/>
+        <translation>Dështoi: %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="273"/>
@@ -2612,7 +2612,7 @@ Password (OTP)</source>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="291"/>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="301"/>
         <source>Log In</source>
-        <translation type="unfinished"/>
+        <translation>Hyr</translation>
     </message>
 </context>
 <context>
@@ -2651,13 +2651,13 @@ Password (OTP)</source>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="144"/>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="192"/>
         <source>Tweet!</source>
-        <translation type="unfinished"/>
+        <translation>Tweet!</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="68"/>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="170"/>
         <source>Status: No saved credentials</source>
-        <translation type="unfinished"/>
+        <translation>Statusi: kredencialet nuk u ruajten</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="69"/>
@@ -2670,7 +2670,7 @@ Password (OTP)</source>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="76"/>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="139"/>
         <source>Status: Credentials saved for %1</source>
-        <translation type="unfinished"/>
+        <translation>Statusi: Kredenciale të ruajtur për %1</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="77"/>
@@ -2687,7 +2687,7 @@ Password (OTP)</source>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="283"/>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="293"/>
         <source>Tweetin&apos; Error</source>
-        <translation type="unfinished"/>
+        <translation>Gabim Tweetin&apos;</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="125"/>
@@ -2703,7 +2703,7 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="182"/>
         <source>Global Tweet</source>
-        <translation type="unfinished"/>
+        <translation>Tweet Global</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="187"/>
@@ -2718,12 +2718,12 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="189"/>
         <source>@Mention</source>
-        <translation type="unfinished"/>
+        <translation>@Prëmend</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="190"/>
         <source>Send Mention!</source>
-        <translation type="unfinished"/>
+        <translation>Dërgo Përmendje</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="203"/>
@@ -2734,7 +2734,8 @@ You may wish to try re-authenticating.</source>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="214"/>
         <source>Your saved credentials could not be loaded.
 You may wish to try re-authenticating.</source>
-        <translation type="unfinished"/>
+        <translation>Kredencialet e ruajtura nuk mund të ngarkohen.
+Ju mund të dëshironi të provoni ri-vërtetimin.</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="232"/>
@@ -2757,12 +2758,12 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="276"/>
         <source>Your tweet has been posted!</source>
-        <translation type="unfinished"/>
+        <translation>Mesazhi juaj Tweet u dërgua!</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="283"/>
         <source>There was an error posting your direct message -- sorry!</source>
-        <translation type="unfinished"/>
+        <translation>Pati një gabim postimi në statusin tuaj -- na vjen keq!</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.cpp" line="285"/>
@@ -2852,7 +2853,7 @@ username@jabber.org</source>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="266"/>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="317"/>
         <source>Add to &amp;Queue</source>
-        <translation type="unfinished"/>
+        <translation>Shto tek &amp;Rradha</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="137"/>
@@ -3152,7 +3153,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="404"/>
         <source>E Flat</source>
-        <translation type="unfinished"/>
+        <translation>E Sheshtë</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="405"/>
@@ -3167,7 +3168,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="407"/>
         <source>F Sharp</source>
-        <translation type="unfinished"/>
+        <translation>F Mprehtë</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="408"/>
@@ -3177,7 +3178,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="409"/>
         <source>A Flat</source>
-        <translation type="unfinished"/>
+        <translation>A Sheshtë</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="410"/>
@@ -3187,7 +3188,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="411"/>
         <source>B Flat</source>
-        <translation type="unfinished"/>
+        <translation>B Sheshtë</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="412"/>
@@ -3207,7 +3208,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="435"/>
         <source>Tempo</source>
-        <translation type="unfinished"/>
+        <translation>Ritëm</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="436"/>
@@ -3223,7 +3224,7 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="438"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="913"/>
         <source>Artist Familiarity</source>
-        <translation type="unfinished"/>
+        <translation>Njohja Artistit</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="439"/>
@@ -3240,28 +3241,28 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="441"/>
         <source>Latitude</source>
-        <translation type="unfinished"/>
+        <translation>Gjerësi</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="442"/>
         <source>Longitude</source>
-        <translation type="unfinished"/>
+        <translation>Gjatësi</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="443"/>
         <source>Mode</source>
-        <translation type="unfinished"/>
+        <translation>Mënyrë</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="444"/>
         <source>Key</source>
-        <translation type="unfinished"/>
+        <translation>Çelës</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="445"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="912"/>
         <source>Energy</source>
-        <translation type="unfinished"/>
+        <translation>Energji</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="446"/>
@@ -3302,29 +3303,29 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="880"/>
         <source>only by ~%1</source>
-        <translation type="unfinished"/>
+        <translation>vetëm me ~%1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="882"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="909"/>
         <source>similar to ~%1</source>
-        <translation type="unfinished"/>
+        <translation>përbashket me ~%1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="886"/>
         <source>with genre ~%1</source>
-        <translation type="unfinished"/>
+        <translation>me lloj ~%1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="894"/>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="905"/>
         <source>from no one</source>
-        <translation type="unfinished"/>
+        <translation>nga as një</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="898"/>
         <source>My Collection</source>
-        <translation type="unfinished"/>
+        <translation>Koleksion Im</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="899"/>
@@ -3334,7 +3335,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="901"/>
         <source>from %1 radio</source>
-        <translation type="unfinished"/>
+        <translation>nga %1 radio</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="911"/>
@@ -3374,12 +3375,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="929"/>
         <source>with %1 %2</source>
-        <translation type="unfinished"/>
+        <translation>me %1 %2</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="933"/>
         <source>about %1 BPM</source>
-        <translation type="unfinished"/>
+        <translation>rreth %1 BPM</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="937"/>
@@ -3389,37 +3390,37 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="941"/>
         <source>about %1 dB</source>
-        <translation type="unfinished"/>
+        <translation>rreth %1 dB</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="945"/>
         <source>at around %1%2 %3</source>
-        <translation type="unfinished"/>
+        <translation>përafërsisht %1 %2 %3</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="952"/>
         <source>in %1</source>
-        <translation type="unfinished"/>
+        <translation>në %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="959"/>
         <source>in a %1 key</source>
-        <translation type="unfinished"/>
+        <translation>në një %1 çelës</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="971"/>
         <source>sorted in %1 %2 order</source>
-        <translation type="unfinished"/>
+        <translation>renditur no %1 %2 rregull</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="978"/>
         <source>with a %1 mood</source>
-        <translation type="unfinished"/>
+        <translation>me një %1 mënyrë</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="985"/>
         <source>in a %1 style</source>
-        <translation type="unfinished"/>
+        <translation>në një %1 stil</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="992"/>
@@ -3450,17 +3451,17 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="579"/>
         <source>Artists</source>
-        <translation type="unfinished"/>
+        <translation>Artistë</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="581"/>
         <source>Albums</source>
-        <translation type="unfinished"/>
+        <translation>Albume</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/generic/charts/ChartsPlugin.cpp" line="583"/>
         <source>Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Këngë</translation>
     </message>
 </context>
 <context>
@@ -3543,7 +3544,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/infoplugins/generic/newreleases/NewReleasesPlugin.cpp" line="601"/>
         <source>Albums</source>
-        <translation type="unfinished"/>
+        <translation>Albume</translation>
     </message>
 </context>
 <context>
@@ -3551,7 +3552,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/accounts/twitter/TwitterInfoPlugin.cpp" line="159"/>
         <source>Listening to &quot;%1&quot; by %2 and loving it! %3</source>
-        <translation type="unfinished"/>
+        <translation>Degjo tek &quot;%1&quot; dhe %2 dhe duaje atë! %3</translation>
     </message>
 </context>
 <context>
@@ -3567,27 +3568,27 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="151"/>
         <source>New Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Lista e&apos;re</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="177"/>
         <source>Failed to save tracks</source>
-        <translation type="unfinished"/>
+        <translation>Dështoi në ruajtjen e këngëve</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="177"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
-        <translation type="unfinished"/>
+        <translation>Disa këngë në listë nuk përmbajnë artist apo titull. Do të injorohen.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="202"/>
         <source>XSPF Error</source>
-        <translation type="unfinished"/>
+        <translation>Gabim XSPF</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/utils/JspfLoader.cpp" line="202"/>
         <source>This is not a valid XSPF playlist.</source>
-        <translation type="unfinished"/>
+        <translation>Kjo nuk është listë e vlefshme XSPF.</translation>
     </message>
 </context>
 <context>
@@ -3595,13 +3596,13 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/LatchManager.cpp" line="96"/>
         <source>&amp;Catch Up</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Kape</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/LatchManager.cpp" line="133"/>
         <location filename="../src/libtomahawk/LatchManager.cpp" line="166"/>
         <source>&amp;Listen Along</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Dëgjo gjatë</translation>
     </message>
 </context>
 <context>
@@ -3648,17 +3649,17 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/Source.cpp" line="483"/>
         <location filename="../src/libtomahawk/Source.cpp" line="538"/>
         <source>Scanning (%L1 tracks)</source>
-        <translation type="unfinished"/>
+        <translation>Skanim (%L1 Këgët)</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Source.cpp" line="485"/>
         <source>Scanning</source>
-        <translation type="unfinished"/>
+        <translation>Skanim</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Source.cpp" line="523"/>
         <source>Checking</source>
-        <translation type="unfinished"/>
+        <translation>Kontrollo</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Source.cpp" line="528"/>
@@ -3673,7 +3674,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/Source.cpp" line="721"/>
         <source>Saving (%1%)</source>
-        <translation type="unfinished"/>
+        <translation>Ruaj (%1%)</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/Source.cpp" line="808"/>
@@ -3837,7 +3838,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="529"/>
         <source>My Collection</source>
-        <translation type="unfinished"/>
+        <translation>Koleksioni Im</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="710"/>
@@ -3862,7 +3863,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/accounts/twitter/TomahawkOAuthTwitter.cpp" line="39"/>
         <source>Twitter PIN</source>
-        <translation type="unfinished"/>
+        <translation>PIN&apos;ni Twitter</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TomahawkOAuthTwitter.cpp" line="39"/>
@@ -3890,27 +3891,27 @@ enter the displayed PIN number here:</source>
         <location filename="../src/tomahawk/TomahawkTrayIcon.cpp" line="75"/>
         <location filename="../src/tomahawk/TomahawkTrayIcon.cpp" line="114"/>
         <source>Hide Tomahawk Window</source>
-        <translation type="unfinished"/>
+        <translation>Fsheh Dritaren Tomahawk</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkTrayIcon.cpp" line="119"/>
         <source>Show Tomahawk Window</source>
-        <translation type="unfinished"/>
+        <translation>Shfaq Dritaren Tomahawk</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkTrayIcon.cpp" line="200"/>
         <source>Currently not playing.</source>
-        <translation type="unfinished"/>
+        <translation>Momentalisht nuk po dëgjohet.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkTrayIcon.cpp" line="261"/>
         <source>Play</source>
-        <translation type="unfinished"/>
+        <translation>Luaj</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkTrayIcon.cpp" line="289"/>
         <source>Pause</source>
-        <translation type="unfinished"/>
+        <translation>Pushim</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkTrayIcon.cpp" line="319"/>
@@ -3946,7 +3947,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.ui" line="14"/>
         <source>Tomahawk</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="284"/>
@@ -4003,22 +4004,22 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1018"/>
         <source>XSPF Error</source>
-        <translation type="unfinished"/>
+        <translation>Gabim XSPF</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1018"/>
         <source>This is not a valid XSPF playlist.</source>
-        <translation type="unfinished"/>
+        <translation>Kjo nuk është listë e vlefshme XSPF.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1022"/>
         <source>Failed to save tracks</source>
-        <translation type="unfinished"/>
+        <translation>Dështoi në ruajtjen e këngëve</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1022"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
-        <translation type="unfinished"/>
+        <translation>Disa këngë në listë nuk përmbajnë artist apo titull. Do të injorohen.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1036"/>
@@ -4038,13 +4039,13 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1058"/>
         <source>Create New Station</source>
-        <translation type="unfinished"/>
+        <translation>Krijo Stacion Te Ri</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1058"/>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1093"/>
         <source>Name:</source>
-        <translation type="unfinished"/>
+        <translation>Emri:</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1091"/>
@@ -4059,7 +4060,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1126"/>
         <source>Pause</source>
-        <translation type="unfinished"/>
+        <translation>Pushim</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1148"/>
@@ -4070,23 +4071,23 @@ enter the displayed PIN number here:</source>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1180"/>
         <source>%1 by %2</source>
         <comment>track, artist name</comment>
-        <translation type="unfinished"/>
+        <translation>%1 nga %2</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1181"/>
         <source>%1 - %2</source>
         <comment>current track, some window title</comment>
-        <translation type="unfinished"/>
+        <translation>%1 - %2</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1192"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1196"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1200"/>
@@ -4101,7 +4102,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1208"/>
         <source>About Tomahawk</source>
-        <translation type="unfinished"/>
+        <translation>Rreth Tomahawk</translation>
     </message>
 </context>
 <context>
@@ -4109,7 +4110,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/context/pages/TopTracksContext.h" line="47"/>
         <source>Top Hits</source>
-        <translation type="unfinished"/>
+        <translation>Hitet Krye</translation>
     </message>
 </context>
 <context>
@@ -4188,7 +4189,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/playlist/TreeItemDelegate.cpp" line="183"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>Panjohur</translation>
     </message>
 </context>
 <context>
@@ -4196,7 +4197,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/playlist/TreeModel.cpp" line="151"/>
         <source>All Artists</source>
-        <translation type="unfinished"/>
+        <translation>T&apos;gjithë Artistët</translation>
     </message>
 </context>
 <context>
@@ -4212,7 +4213,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="73"/>
         <source>Configure this Twitter account</source>
-        <translation type="unfinished"/>
+        <translation>Konfiguro këtë Llogari Twitter</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="119"/>
@@ -4222,17 +4223,17 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="137"/>
         <source>Status: No saved credentials</source>
-        <translation type="unfinished"/>
+        <translation>Statusi: kredencialet nuk u ruajten</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="166"/>
         <source>Authenticate with Twitter</source>
-        <translation type="unfinished"/>
+        <translation>Verifikohu me Twitter</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="196"/>
         <source>Twitter Connections</source>
-        <translation type="unfinished"/>
+        <translation>Lidhjet Twitter</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="202"/>
@@ -4247,32 +4248,32 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="244"/>
         <source>Select the kind of tweet you would like, then press the button to post it:</source>
-        <translation type="unfinished"/>
+        <translation>Zgjidh Tweet&apos;en që deshironi, dhe kliko butonin ta postoni:</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="276"/>
         <source>Global Tweet</source>
-        <translation type="unfinished"/>
+        <translation>Tweet Global</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="281"/>
         <source>@Mention</source>
-        <translation type="unfinished"/>
+        <translation>@Prëmend</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="286"/>
         <source>Direct Message</source>
-        <translation type="unfinished"/>
+        <translation>Mesazh drejtpërdrejtë</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="322"/>
         <source>e.g. @tomahawk</source>
-        <translation type="unfinished"/>
+        <translation>sh.m. @tomahawk</translation>
     </message>
     <message>
         <location filename="../src/accounts/twitter/TwitterConfigWidget.ui" line="351"/>
         <source>Send Message</source>
-        <translation type="unfinished"/>
+        <translation>Dërgo Mesazh</translation>
     </message>
 </context>
 <context>
@@ -4298,7 +4299,7 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="376"/>
         <source>SuperCollection</source>
-        <translation type="unfinished"/>
+        <translation>KoleksionSuper</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="377"/>
@@ -4331,7 +4332,7 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/libtomahawk/widgets/WhatsHotWidget.h" line="69"/>
         <source>Charts</source>
-        <translation type="unfinished"/>
+        <translation>Grafik</translation>
     </message>
 </context>
 <context>
@@ -4339,7 +4340,7 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/libtomahawk/context/pages/WikipediaContext.h" line="42"/>
         <source>Wikipedia</source>
-        <translation type="unfinished"/>
+        <translation>Wikipedia</translation>
     </message>
 </context>
 <context>
@@ -4349,12 +4350,14 @@ You can re-send a sync message at any time simply by sending another tweet using
         <source>
 Terms for %1:
 </source>
-        <translation type="unfinished"/>
+        <translation>
+Termat për %1:
+</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/xmppbot/XmppBot.cpp" line="317"/>
         <source>No terms found, sorry.</source>
-        <translation type="unfinished"/>
+        <translation>Termat nuk u gjeden, na falni.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/xmppbot/XmppBot.cpp" line="350"/>
@@ -4414,22 +4417,22 @@ Lyrics for &quot;%1&quot; by %2:
         <location filename="../src/accounts/xmpp/sip/XmlConsole.ui" line="33"/>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="60"/>
         <source>Filter</source>
-        <translation type="unfinished"/>
+        <translation>Filter</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.ui" line="43"/>
         <source>Save log</source>
-        <translation type="unfinished"/>
+        <translation>Ruaj shënimet</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="62"/>
         <source>Disabled</source>
-        <translation type="unfinished"/>
+        <translation>Gjymto</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="65"/>
         <source>By JID</source>
-        <translation type="unfinished"/>
+        <translation>Nga JID</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="68"/>
@@ -4439,7 +4442,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="71"/>
         <source>By all attributes</source>
-        <translation type="unfinished"/>
+        <translation>Nga të gjithë atributet</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="76"/>
@@ -4454,22 +4457,22 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="83"/>
         <source>Message</source>
-        <translation type="unfinished"/>
+        <translation>Mesazhi</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="87"/>
         <source>Presence</source>
-        <translation type="unfinished"/>
+        <translation>Prani</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="91"/>
         <source>Custom</source>
-        <translation type="unfinished"/>
+        <translation>Me porosi</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="107"/>
         <source>Close</source>
-        <translation type="unfinished"/>
+        <translation>Mbyll</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmlConsole.cpp" line="357"/>
@@ -4492,12 +4495,12 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="58"/>
         <source>Configure this Xmpp account</source>
-        <translation type="unfinished"/>
+        <translation>Konfiguro këtë Llogari Xmpp</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="104"/>
         <source>Enter your Xmpp login to connect with your friends using Tomahawk!</source>
-        <translation type="unfinished"/>
+        <translation>Shkruani llogarinë tuaj Xmpptë për lidhur me miqtë tuaj duke përdorur TOMAHAWK!</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="196"/>
@@ -4507,52 +4510,52 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="211"/>
         <source>Login Information</source>
-        <translation type="unfinished"/>
+        <translation>Informacioni Hyres</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="231"/>
         <source>Xmpp ID:</source>
-        <translation type="unfinished"/>
+        <translation>Xmpp ID:</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="247"/>
         <source>e.g. user@example.com</source>
-        <translation type="unfinished"/>
+        <translation>sh.m. user@example.com</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="260"/>
         <source>Password:</source>
-        <translation type="unfinished"/>
+        <translation>Fjalëkalim:</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="288"/>
         <source>An account with this name already exists!</source>
-        <translation type="unfinished"/>
+        <translation>Një llogari me këtë emer ekziston!</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="310"/>
         <source>Advanced Xmpp Settings</source>
-        <translation type="unfinished"/>
+        <translation>Cilësime të Avancuara Xmpp</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="330"/>
         <source>Server:</source>
-        <translation type="unfinished"/>
+        <translation>Server:</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="353"/>
         <source>Port:</source>
-        <translation type="unfinished"/>
+        <translation>Porti:</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="399"/>
         <source>Lots of servers don&apos;t support this (e.g. GTalk, jabber.org)</source>
-        <translation type="unfinished"/>
+        <translation>Shumë servera nuk e mbështesin këtë (sh.m. GTalk, jabber.org)</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="402"/>
         <source>Publish currently playing track</source>
-        <translation type="unfinished"/>
+        <translation>Publiko listën e këngëve aktuale</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.ui" line="409"/>
@@ -4565,7 +4568,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="395"/>
         <source>User Interaction</source>
-        <translation type="unfinished"/>
+        <translation>Nërfaqja Përdoruesit</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="398"/>
@@ -4590,27 +4593,27 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="410"/>
         <source>Remote Connection failed</source>
-        <translation type="unfinished"/>
+        <translation>Lidhja Distancë Dështoj</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="413"/>
         <source>Internal Server Error</source>
-        <translation type="unfinished"/>
+        <translation>Gabim Internal Serveri</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="416"/>
         <source>System shutdown</source>
-        <translation type="unfinished"/>
+        <translation>Fikja Sistemit</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="419"/>
         <source>Conflict</source>
-        <translation type="unfinished"/>
+        <translation>Konflikt</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="434"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>Panjohur</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="819"/>
@@ -4645,17 +4648,17 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="498"/>
         <source>Add Friend</source>
-        <translation type="unfinished"/>
+        <translation>Shto Shok</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="499"/>
         <source>Enter Xmpp ID:</source>
-        <translation type="unfinished"/>
+        <translation>Fut Xmpp ID:</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="655"/>
         <source>Add Friend...</source>
-        <translation type="unfinished"/>
+        <translation>Shto Shok...</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="660"/>
@@ -4670,7 +4673,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/xmpp/sip/XmppSip.cpp" line="818"/>
         <source>Authorize User</source>
-        <translation type="unfinished"/>
+        <translation>Autorizo Përdoruesin</translation>
     </message>
 </context>
 <context>
@@ -4678,7 +4681,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/zeroconf/ConfigWidget.ui" line="55"/>
         <source>Local Network configuration</source>
-        <translation type="unfinished"/>
+        <translation>Kopnfigurimi Rrjetit Vendorë</translation>
     </message>
     <message>
         <location filename="../src/accounts/zeroconf/ConfigWidget.ui" line="77"/>
@@ -4688,7 +4691,7 @@ Lyrics for &quot;%1&quot; by %2:
     <message>
         <location filename="../src/accounts/zeroconf/ConfigWidget.ui" line="84"/>
         <source>Connect automatically when Tomahawk starts</source>
-        <translation type="unfinished"/>
+        <translation>Lidhu automatikisht kur Tomahawk fillon</translation>
     </message>
 </context>
 </TS>
