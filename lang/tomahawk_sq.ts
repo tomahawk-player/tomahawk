@@ -5,17 +5,18 @@
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="67"/>
         <source>Allow %1 to
 connect and stream from you?</source>
-        <translation type="unfinished"/>
+        <translation>Lejo %1 në
+lidhuni dhe transmeto nga ju?</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="83"/>
         <source>Allow Streaming</source>
-        <translation type="unfinished"/>
+        <translation>Lejo Transmetimin</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/jobview/AclJobItem.cpp" line="86"/>
         <source>Deny Access</source>
-        <translation type="unfinished"/>
+        <translation>Blloko Aksesin</translation>
     </message>
 </context>
 <context>
@@ -168,7 +169,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="115"/>
         <source>Show Offline Sources</source>
-        <translation type="unfinished"/>
+        <translation>Shfaq Burimet Jashtlinje</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="117"/>
@@ -183,7 +184,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="123"/>
         <source>Zoom</source>
-        <translation type="unfinished"/>
+        <translation>Zoom</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="125"/>
@@ -198,7 +199,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="132"/>
         <source>Diagnostics...</source>
-        <translation type="unfinished"/>
+        <translation>Diagnostikimi...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="134"/>
@@ -318,7 +319,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="122"/>
         <source>Sorry, we could not find any top hits for this artist!</source>
-        <translation type="unfinished"/>
+        <translation>Na vjen keq, ne nuk mund të gjejm hitet e parë për këtë artist!</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/ArtistInfoWidget.cpp" line="67"/>
@@ -356,7 +357,7 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/tomahawk/AudioControls.cpp" line="310"/>
         <source>Share</source>
-        <translation type="unfinished"/>
+        <translation>Shpërndajë</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/AudioControls.cpp" line="311"/>
@@ -369,17 +370,17 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="876"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
-        <translation type="unfinished"/>
+        <translation>Na vjen keq, Tomahawk nuk mund të gjejë këngën &apos;%1&apos; nga %2</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="900"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Na vjen keq, Tomahawk nuk mund të gjejë artistin &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="926"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
-        <translation type="unfinished"/>
+        <translation>Na vjen keq, Tomahawk nuk mund të gjejë albumin &apos;%1&apos; nga %2</translation>
     </message>
 </context>
 <context>
@@ -506,12 +507,12 @@ connect and stream from you?</source>
     <message>
         <location filename="../src/crashreporter/CrashReporter.ui" line="129"/>
         <source>Send this report</source>
-        <translation type="unfinished"/>
+        <translation>Dërgo këtë raport</translation>
     </message>
     <message>
         <location filename="../src/crashreporter/CrashReporter.ui" line="136"/>
         <source>Don&apos;t send</source>
-        <translation type="unfinished"/>
+        <translation>Mos dërgo</translation>
     </message>
     <message>
         <location filename="../src/crashreporter/CrashReporter.ui" line="190"/>
@@ -994,7 +995,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="88"/>
         <source>The most loved tracks from all your friends</source>
-        <translation type="unfinished"/>
+        <translation>Këngët e dashurisë nga të gjithë shokët tuaj</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="94"/>
@@ -1004,7 +1005,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="96"/>
         <source>All of %1&apos;s loved tracks</source>
-        <translation type="unfinished"/>
+        <translation>Të gjitha %1 këngët e dashurise</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/LovedTracksItem.cpp" line="59"/>
@@ -1179,32 +1180,32 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Artist</source>
-        <translation type="unfinished"/>
+        <translation>Artisti</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Title</source>
-        <translation type="unfinished"/>
+        <translation>Titull</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Composer</source>
-        <translation type="unfinished"/>
+        <translation>Kompozer</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Album</source>
-        <translation type="unfinished"/>
+        <translation>Albumi</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Track</source>
-        <translation type="unfinished"/>
+        <translation>Kënga</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="50"/>
         <source>Duration</source>
-        <translation type="unfinished"/>
+        <translation>Kohëzgjatje</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
@@ -1214,22 +1215,22 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
         <source>Age</source>
-        <translation type="unfinished"/>
+        <translation>Mosha</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
         <source>Year</source>
-        <translation type="unfinished"/>
+        <translation>Viti</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
         <source>Size</source>
-        <translation type="unfinished"/>
+        <translation>Masë</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
         <source>Origin</source>
-        <translation type="unfinished"/>
+        <translation>Origjina</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="51"/>
@@ -1576,7 +1577,7 @@ Password (OTP)</source>
     <message numerus="yes">
         <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="201"/>
         <source>Open Queue - %n item(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Hap Radhë - %n artikull</numerusform><numerusform>Hap Radhë - %n artikuj</numerusform></translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/QueueView.cpp" line="207"/>
@@ -1710,7 +1711,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="298"/>
         <source>Some changed settings will not take effect until Tomahawk is restarted</source>
-        <translation type="unfinished"/>
+        <translation>Disa ndyshime cilësimesh nuk do të hyjnë në fuqi deri kur Tomahawk është rifilluar</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="237"/>
@@ -2063,12 +2064,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="614"/>
         <source>Latest additions to your collection</source>
-        <translation type="unfinished"/>
+        <translation>Futjet më të fundit për koleksionin tuaj</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="616"/>
         <source>Latest additions to %1&apos;s collection</source>
-        <translation type="unfinished"/>
+        <translation>Futjet më të fundit për koleksionin %1</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/items/SourceItem.cpp" line="624"/>
@@ -2263,7 +2264,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="134"/>
         <source>Spotify playlists to keep in sync:</source>
-        <translation type="unfinished"/>
+        <translation>Mbajë listën Spotify të sinkronizuar:</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.ui" line="177"/>
@@ -2353,7 +2354,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="560"/>
         <source>Manual Install Required</source>
-        <translation type="unfinished"/>
+        <translation>Instalo Manualisht Nevojshëm</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountModel.cpp" line="563"/>
@@ -2454,23 +2455,23 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="94"/>
         <source>Testing...</source>
-        <translation type="unfinished"/>
+        <translation>Testimi...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="116"/>
         <source>Test Login</source>
-        <translation type="unfinished"/>
+        <translation>Hyrje Testi</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="126"/>
         <source>Importing %1</source>
         <comment>e.g. Importing 2012/01/01</comment>
-        <translation type="unfinished"/>
+        <translation>Importo %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="129"/>
         <source>Importing History...</source>
-        <translation type="unfinished"/>
+        <translation>Importo Historine...</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="198"/>
@@ -2481,7 +2482,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="203"/>
         <source>Playback History Imported</source>
-        <translation type="unfinished"/>
+        <translation>Historia Importuar Ridëgjimit</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmConfig.cpp" line="226"/>
@@ -2573,12 +2574,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="569"/>
         <source>Enable Spotify collaborations</source>
-        <translation type="unfinished"/>
+        <translation>Mundëso Bashkëpunimin Spotify</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="571"/>
         <source>Disable Spotify collaborations</source>
-        <translation type="unfinished"/>
+        <translation>Gjymto Bashkëpunimin Spotify</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccount.cpp" line="527"/>
@@ -2601,7 +2602,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="273"/>
         <source>Logged in as %1</source>
-        <translation type="unfinished"/>
+        <translation>Hyrë si %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/spotify/SpotifyAccountConfig.cpp" line="275"/>
@@ -3516,12 +3517,12 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="458"/>
         <source>Top Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Këngët Hite</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="461"/>
         <source>Loved Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Këngë Dashurie</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="464"/>
@@ -3531,7 +3532,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="470"/>
         <source>Top Artists</source>
-        <translation type="unfinished"/>
+        <translation>Artistë Lartë</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/lastfm/LastFmInfoPlugin.cpp" line="473"/>
@@ -3830,7 +3831,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/XspfUpdater.cpp" line="63"/>
         <source>Automatically update from XSPF</source>
-        <translation type="unfinished"/>
+        <translation>Azhornim automatikisht nga XSPF</translation>
     </message>
 </context>
 <context>
@@ -3952,22 +3953,22 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="284"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Mbrapa</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="287"/>
         <source>Go back one page</source>
-        <translation type="unfinished"/>
+        <translation>Shko mbrapa një faqe</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="294"/>
         <source>Forward</source>
-        <translation type="unfinished"/>
+        <translation>Përpara</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="297"/>
         <source>Go forward one page</source>
-        <translation type="unfinished"/>
+        <translation>Shko përpara një faqe</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="214"/>
@@ -4118,7 +4119,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.ui" line="241"/>
         <source>Similar Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Këngë te Njëjta</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="80"/>
@@ -4143,12 +4144,12 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="277"/>
         <source>You&apos;ve never listened to this track before.</source>
-        <translation type="unfinished"/>
+        <translation>Ju kurrë nuk keni dëgjuar për këtë këngë përpara.</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="281"/>
         <source>You first listened to it on %1.</source>
-        <translation type="unfinished"/>
+        <translation>Ju keni dëgjuar për herë të parë në %1.</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/libtomahawk/widgets/infowidgets/TrackInfoWidget.cpp" line="286"/>
@@ -4205,7 +4206,7 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/libtomahawk/playlist/TreeView.cpp" line="306"/>
         <source>Sorry, your filter &apos;%1&apos; did not match any results.</source>
-        <translation type="unfinished"/>
+        <translation>Na vjen keq, filtëri ruaj &apos;%1&apos; nuk korespondon me ndonjë rezultat.</translation>
     </message>
 </context>
 <context>
@@ -4309,7 +4310,7 @@ You can re-send a sync message at any time simply by sending another tweet using
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="437"/>
         <source>Recently Played Tracks</source>
-        <translation type="unfinished"/>
+        <translation>Këngët e luajtura kohët e fundit</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ViewManager.cpp" line="438"/>
