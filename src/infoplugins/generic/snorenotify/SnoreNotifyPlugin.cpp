@@ -69,7 +69,7 @@ SnoreNotifyPlugin::SnoreNotifyPlugin()
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << m_snore->primaryNotificationBackend();
 
     m_application = Snore::Application( qApp->applicationName(), m_defaultIcon );
-    m_application.hints().setValue("desktop-entry","tomahawk");
+    m_application.hints().setValue( "desktop-entry" ,"tomahawk" );
 
     addAlert( InfoNotifyUser, tr( "Notify User" ) );
     addAlert( InfoNowPlaying, tr( "Now Playing" ) );
@@ -215,7 +215,7 @@ SnoreNotifyPlugin::nowPlaying( const QVariant& input )
     Snore::Icon image;
     if ( map.contains( "cover" ) && map[ "cover" ].canConvert< QImage >() )
     {
-        image = Snore::Icon( map[ "cover" ].value<QImage>() );
+        image = Snore::Icon( map[ "cover" ].value< QImage >() );
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << image;
     }
     notifyUser( InfoNowPlaying, messageText, image );
