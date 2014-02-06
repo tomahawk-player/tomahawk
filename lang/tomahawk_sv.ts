@@ -40,7 +40,7 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountFactoryWrapperDelegate.cpp" line="103"/>
         <source>Online</source>
-        <translation>Online</translation>
+        <translation>Uppkopplad</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountFactoryWrapperDelegate.cpp" line="108"/>
@@ -50,7 +50,7 @@ ansluta och strömma från dig?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/AccountFactoryWrapperDelegate.cpp" line="113"/>
         <source>Offline</source>
-        <translation>Offline</translation>
+        <translation>Nedkopplad</translation>
     </message>
 </context>
 <context>
