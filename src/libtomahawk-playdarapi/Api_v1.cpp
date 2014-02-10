@@ -521,7 +521,7 @@ Api_v1::apiCallFailed( QxtWebRequestEvent* event, const QString& method )
 void
 Api_v1::sendJsonOk( QxtWebRequestEvent* event )
 {
-    QxtWebPageEvent * e = new QxtWebPageEvent( event->sessionID, event->requestID, "{ result: \"ok\" }" );
+    QxtWebPageEvent * e = new QxtWebPageEvent( event->sessionID, event->requestID, "{ \"result\": \"ok\" }" );
     e->headers.insert( "Access-Control-Allow-Origin", "*" );
     e->contentType = "application/json";
     postEvent( e );
@@ -531,7 +531,7 @@ Api_v1::sendJsonOk( QxtWebRequestEvent* event )
 void
 Api_v1::sendJsonError( QxtWebRequestEvent* event, const QString& message )
 {
-    QxtWebPageEvent * e = new QxtWebPageEvent( event->sessionID, event->requestID, QString( "{ result: \"error\", error: \"%1\" }" ).arg( message ).toUtf8().constData() );
+    QxtWebPageEvent * e = new QxtWebPageEvent( event->sessionID, event->requestID, QString( "{ \"result\": \"error\", \"error\": \"%1\" }" ).arg( message ).toUtf8().constData() );
     e->headers.insert( "Access-Control-Allow-Origin", "*" );
     e->contentType = "application/json";
     e->status = 500;
