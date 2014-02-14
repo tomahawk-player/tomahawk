@@ -633,7 +633,7 @@ EchonestGenerator::loadStyles()
     {
         if ( s_styles_lock.tryLockForRead() )
         {
-            QVariant styles = TomahawkUtils::Cache::instance()->getData( "EchonesGenerator", "styles" );
+            QVariant styles = TomahawkUtils::Cache::instance()->getData( "EchonestGenerator", "styles" );
             s_styles_lock.unlock();
             if ( styles.isValid() && styles.canConvert< QStringList >() )
             {
@@ -661,7 +661,7 @@ EchonestGenerator::loadMoods()
     {
         if ( s_moods_lock.tryLockForRead() )
         {
-            QVariant moods = TomahawkUtils::Cache::instance()->getData( "EchonesGenerator", "moods" );
+            QVariant moods = TomahawkUtils::Cache::instance()->getData( "EchonestGenerator", "moods" );
             s_moods_lock.unlock();
             if ( moods.isValid() && moods.canConvert< QStringList >() ) {
                 s_moods = moods.toStringList();
@@ -688,7 +688,7 @@ EchonestGenerator::loadGenres()
     {
         if ( s_genres_lock.tryLockForRead() )
         {
-            QVariant genres = TomahawkUtils::Cache::instance()->getData( "EchonesGenerator", "genres" );
+            QVariant genres = TomahawkUtils::Cache::instance()->getData( "EchonestGenerator", "genres" );
             s_genres_lock.unlock();
             if ( genres.isValid() && genres.canConvert< QStringList >() )
             {
@@ -732,7 +732,7 @@ EchonestGenerator::moodsReceived()
     }
     s_moodsJob = 0;
 
-    TomahawkUtils::Cache::instance()->putData( "EchonesGenerator", 1209600000 /* 2 weeks */, "moods", QVariant::fromValue< QStringList >( s_moods ) );
+    TomahawkUtils::Cache::instance()->putData( "EchonestGenerator", 1209600000 /* 2 weeks */, "moods", QVariant::fromValue< QStringList >( s_moods ) );
     s_moods_lock.unlock();
     emit moodsSaved();
 }
@@ -761,7 +761,7 @@ EchonestGenerator::stylesReceived()
     }
     s_stylesJob = 0;
 
-    TomahawkUtils::Cache::instance()->putData( "EchonesGenerator", 1209600000 /* 2 weeks */, "styles", QVariant::fromValue< QStringList >( s_styles ) );
+    TomahawkUtils::Cache::instance()->putData( "EchonestGenerator", 1209600000 /* 2 weeks */, "styles", QVariant::fromValue< QStringList >( s_styles ) );
     s_styles_lock.unlock();
     emit stylesSaved();
 }
@@ -788,7 +788,7 @@ EchonestGenerator::genresReceived()
     }
     s_genresJob = 0;
 
-    TomahawkUtils::Cache::instance()->putData( "EchonesGenerator", 1209600000 /* 2 weeks */, "genres", QVariant::fromValue< QStringList >( s_genres ) );
+    TomahawkUtils::Cache::instance()->putData( "EchonestGenerator", 1209600000 /* 2 weeks */, "genres", QVariant::fromValue< QStringList >( s_genres ) );
     s_genres_lock.unlock();
     emit genresSaved();
 }
