@@ -359,7 +359,7 @@ MprisPlugin::setVolume( double value )
 void
 MprisPlugin::Next()
 {
-    AudioEngine::instance()->next();
+    QMetaObject::invokeMethod( AudioEngine::instance(), "next", Qt::QueuedConnection );
 }
 
 
@@ -373,28 +373,28 @@ MprisPlugin::OpenUri( const QString& uri )
 void
 MprisPlugin::Pause()
 {
-    AudioEngine::instance()->pause();
+    QMetaObject::invokeMethod( AudioEngine::instance(), "pause", Qt::QueuedConnection );
 }
 
 
 void
 MprisPlugin::Play()
 {
-    AudioEngine::instance()->play();
+    QMetaObject::invokeMethod( AudioEngine::instance(), "play", Qt::QueuedConnection );
 }
 
 
 void
 MprisPlugin::PlayPause()
 {
-    AudioEngine::instance()->playPause();
+    QMetaObject::invokeMethod( AudioEngine::instance(), "playPause", Qt::QueuedConnection );
 }
 
 
 void
 MprisPlugin::Previous()
 {
-    AudioEngine::instance()->previous();
+    QMetaObject::invokeMethod( AudioEngine::instance(), "previous", Qt::QueuedConnection );
 }
 
 
@@ -436,7 +436,7 @@ MprisPlugin::SetPosition( const QDBusObjectPath& TrackId, qlonglong Position )
 void
 MprisPlugin::Stop()
 {
-    AudioEngine::instance()->stop();
+    QMetaObject::invokeMethod( AudioEngine::instance(), "stop", Qt::QueuedConnection );
 }
 
 
