@@ -186,13 +186,13 @@ SnoreNotifyPlugin::nowPlaying( const QVariant& input )
         // Remark: If using xml-based markup in notifications, the supplied strings need to be escaped.
         QString album;
         if ( !hash[ "album" ].isEmpty() )
-            album = QString( "\n<i>%1</i> %2" ).arg( tr( "on", "'on' is followed by an album name" ) ).arg( Qt::escape( hash[ "album" ] ) );
+            album = QString( "<br><i>%1</i> %2" ).arg( tr( "on", "'on' is followed by an album name" ) ).arg( Qt::escape( hash[ "album" ] ) );
 
         messageText = tr( "%1%4 %2%3.", "%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing, %4 is the preposition used to link track and artist ('by' in english)" )
                 .arg( Qt::escape( hash[ "title" ] ) )
                 .arg( Qt::escape( hash[ "artist" ] ) )
                 .arg( album )
-                .arg( QString( "\n<i>%1</i>" ).arg( tr( "by", "preposition to link track and artist" ) ) );
+                .arg( QString( "<br><i>%1</i>" ).arg( tr( "by", "preposition to link track and artist" ) ) );
 
         // Dirty hack(TM) so that KNotify/QLabel recognizes the message as Rich Text
         messageText = QString( "<i></i>%1" ).arg( messageText );
