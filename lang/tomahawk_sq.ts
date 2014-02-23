@@ -189,7 +189,7 @@ lidhuni dhe transmeto nga ju?</translation>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="125"/>
         <source>Enter Full Screen</source>
-        <translation type="unfinished"/>
+        <translation>Futu Ekran të Plotë</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ActionCollection.cpp" line="128"/>
@@ -579,7 +579,7 @@ lidhuni dhe transmeto nga ju?</translation>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="116"/>
         <source>Config Error</source>
-        <translation type="unfinished"/>
+        <translation>Konfigurim Gabimi</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/accounts/DelegateConfigWrapper.cpp" line="170"/>
@@ -708,7 +708,7 @@ lidhuni dhe transmeto nga ju?</translation>
     <message>
         <location filename="../src/libtomahawk/widgets/FilterHeader.cpp" line="29"/>
         <source>Filter...</source>
-        <translation type="unfinished"/>
+        <translation>Filter...</translation>
     </message>
 </context>
 <context>
@@ -1265,7 +1265,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="871"/>
         <source>Very bad match</source>
-        <translation type="unfinished"/>
+        <translation>Përshtatje shumë e keqe</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/PlayableModel.cpp" line="872"/>
@@ -1611,7 +1611,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/libtomahawk/widgets/ScriptCollectionHeader.cpp" line="50"/>
         <source>Reload Collection</source>
-        <translation type="unfinished"/>
+        <translation>Ngarko Koleksionin</translation>
     </message>
 </context>
 <context>
@@ -1751,12 +1751,12 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="511"/>
         <source>Tomahawk Resolvers (*.axe *.js);;All files (*)</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk Zgjidhës (*.axe *.js);;të gjithë dokumentet (*)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="554"/>
         <source>Resolver installation from file %1 failed.</source>
-        <translation type="unfinished"/>
+        <translation>Zgjidhës instaluesi nga dokumenti %1 dështoi.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/SettingsDialog.cpp" line="573"/>
@@ -2191,7 +2191,7 @@ Password (OTP)</source>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="331"/>
         <source>Cloud</source>
-        <translation type="unfinished"/>
+        <translation>Re</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/sourcetree/SourcesModel.cpp" line="325"/>
@@ -2790,12 +2790,12 @@ You may wish to try re-authenticating.</source>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="157"/>
         <source>You forgot to enter your username!</source>
-        <translation type="unfinished"/>
+        <translation>Keni harruar të fusni përdoruesin!</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="165"/>
         <source>Your Xmpp Id should look like an email address</source>
-        <translation type="unfinished"/>
+        <translation>ID juaj Xmpp duhet të duket si adresë emaili</translation>
     </message>
     <message>
         <location filename="../src/accounts/xmpp/XmppConfigWidget.cpp" line="171"/>
@@ -2803,7 +2803,10 @@ You may wish to try re-authenticating.</source>
 
 Example:
 username@jabber.org</source>
-        <translation type="unfinished"/>
+        <translation>
+
+Shembull:
+username@jabber.org</translation>
     </message>
 </context>
 <context>
@@ -2834,12 +2837,12 @@ username@jabber.org</source>
         <location filename="../src/libtomahawk/collection/Collection.cpp" line="66"/>
         <location filename="../src/libtomahawk/collection/Collection.cpp" line="80"/>
         <source>Collection</source>
-        <translation type="unfinished"/>
+        <translation>Koleksion</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/collection/Collection.cpp" line="103"/>
         <source>This collection is empty.</source>
-        <translation type="unfinished"/>
+        <translation>Ky koleksion është bosh.</translation>
     </message>
 </context>
 <context>
@@ -2859,7 +2862,7 @@ username@jabber.org</source>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="137"/>
         <source>Add to &amp;Playlist</source>
-        <translation type="unfinished"/>
+        <translation>Shto tek &amp;Lista</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/ContextMenu.cpp" line="158"/>
@@ -3274,17 +3277,17 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="494"/>
         <source>is not</source>
-        <translation type="unfinished"/>
+        <translation>nuk është</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="497"/>
         <source>Studio</source>
-        <translation type="unfinished"/>
+        <translation>Studio</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="498"/>
         <source>Live</source>
-        <translation type="unfinished"/>
+        <translation>Direkt</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="499"/>
@@ -3299,7 +3302,7 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="501"/>
         <source>Christmas</source>
-        <translation type="unfinished"/>
+        <translation>Krishtlindje</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="880"/>
@@ -3426,17 +3429,17 @@ Try tweaking the filters for a new set of songs to play.</source>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="992"/>
         <source>where genre is %1</source>
-        <translation type="unfinished"/>
+        <translation>ku zhanri është %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1005"/>
         <source>where song type is %1</source>
-        <translation type="unfinished"/>
+        <translation>ku është tipi i këngës %1</translation>
     </message>
     <message>
         <location filename="../src/libtomahawk/playlist/dynamic/echonest/EchonestControl.cpp" line="1007"/>
         <source>where song type is not %1</source>
-        <translation type="unfinished"/>
+        <translation>ku nuk është tipi i këngës %1</translation>
     </message>
 </context>
 <context>
@@ -3503,13 +3506,13 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="271"/>
         <source>on &quot;%1&quot;</source>
         <comment>%1 is an album name</comment>
-        <translation type="unfinished"/>
+        <translation>ndezur &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../src/infoplugins/linux/fdonotify/FdoNotifyPlugin.cpp" line="273"/>
         <source>&quot;%1&quot; by %2%3.</source>
         <comment>%1 is a title, %2 is an artist and %3 is replaced by either the previous message or nothing</comment>
-        <translation type="unfinished"/>
+        <translation>&quot;%1&quot; nga %2%3.</translation>
     </message>
 </context>
 <context>
@@ -3633,7 +3636,7 @@ Try tweaking the filters for a new set of songs to play.</source>
         <location filename="../src/libtomahawk/resolvers/ScriptCollection.cpp" line="66"/>
         <source>%1 Collection</source>
         <comment>Name of a collection based on a resolver, e.g. Subsonic Collection</comment>
-        <translation type="unfinished"/>
+        <translation>%1 Koleksion</translation>
     </message>
 </context>
 <context>
@@ -3995,12 +3998,12 @@ enter the displayed PIN number here:</source>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="938"/>
         <source>Exit Full Screen</source>
-        <translation type="unfinished"/>
+        <translation>Dil Ekran të Plotë</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="956"/>
         <source>Enter Full Screen</source>
-        <translation type="unfinished"/>
+        <translation>Futu Ekran të Plotë</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1018"/>
