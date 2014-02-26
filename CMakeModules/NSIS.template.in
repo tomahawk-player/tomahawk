@@ -362,8 +362,8 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    SetOutPath "$INSTDIR\crypto"
    File "${MING_LIB}\qt4\plugins\crypto\libqca-ossl.dll"
    SetOutPath "$INSTDIR"
-   File "${MING_BIN}\libssl-8.dll"
-   File "${MING_BIN}\libcrypto-8.dll"
+   File "${MING_BIN}\libssl-10.dll"
+   File "${MING_BIN}\libcrypto-10.dll"
 
    File "${MING_BIN}\libclucene-core.dll"
    File "${MING_BIN}\libclucene-shared.dll"
