@@ -282,7 +282,11 @@ endif()
 
 if( UNIX AND NOT APPLE )
     macro_optional_find_package(TelepathyQt 0.9.3)
-    macro_log_feature(TelepathyQt4_FOUND "Telepathy-Qt" "Telepathy-Qt is a Qt high-level binding for Telepathy, a D-Bus framework for unifying real time communication." FALSE "" "Telepathy-Qt is needed for sharing Jabber/GTalk accounts with Telepathy.\n")
+    if ( TOMAHAWK_QT5 )
+        macro_log_feature(TelepathyQt5_FOUND "Telepathy-Qt" "Telepathy-Qt is a Qt high-level binding for Telepathy, a D-Bus framework for unifying real time communication." FALSE "" "Telepathy-Qt is needed for sharing Jabber/GTalk accounts with Telepathy.\n")
+    else ( TOMAHAWK_QT5)
+        macro_log_feature(TelepathyQt4_FOUND "Telepathy-Qt" "Telepathy-Qt is a Qt high-level binding for Telepathy, a D-Bus framework for unifying real time communication." FALSE "" "Telepathy-Qt is needed for sharing Jabber/GTalk accounts with Telepathy.\n")
+    endif()
 endif()
 
 # we need pthreads too
