@@ -269,7 +269,7 @@ HatchetAccount::loginWithPassword( const QString& username, const QString& passw
 
     QNetworkRequest req( QUrl( c_loginServer + "/authentication/password") );
     req.setHeader( QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded" );
-    
+
     QUrl params;
     params.addQueryItem( "username", username );
     params.addQueryItem( "password", password );
