@@ -280,10 +280,10 @@ HatchetSipPlugin::messageReceived( const QByteArray &msg )
 
     if ( m_sipState == AcquiringVersion )
     {
-        tLog() << Q_FUNC_INFO << "In acquiring version state, expecting version/nonce information";
-        if ( !retMap.contains( "version" ) || !retMap.contains( "nonce" ) )
+        tLog() << Q_FUNC_INFO << "In acquiring version state, expecting versioninformation";
+        if ( !retMap.contains( "version" ) )
         {
-            tLog() << Q_FUNC_INFO << "Failed to acquire version or nonce information";
+            tLog() << Q_FUNC_INFO << "Failed to acquire version information";
             disconnectPlugin();
             return;
         }
@@ -296,12 +296,14 @@ HatchetSipPlugin::messageReceived( const QByteArray &msg )
             return;
         }
 
+        /*
         if ( retMap[ "nonce" ].toString() != m_uuid )
         {
             tLog() << Q_FUNC_INFO << "Failed to validate nonce";
             disconnectPlugin();
             return;
         }
+        */
 
         m_version = ver;
 
