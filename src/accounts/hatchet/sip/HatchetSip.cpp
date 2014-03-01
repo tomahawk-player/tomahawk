@@ -189,15 +189,8 @@ HatchetSipPlugin::webSocketConnected()
     hatchetAccount()->setConnectionState( Tomahawk::Accounts::Account::Connected );
     m_sipState = AcquiringVersion;
 
-    m_uuid = QUuid::createUuid().toString();
-    QCA::SecureArray sa( m_uuid.toLatin1() );
-    QCA::SecureArray result = m_publicKey->encrypt( sa, QCA::EME_PKCS1_OAEP );
-
-    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << "uuid:" << m_uuid << ", size of uuid:" << m_uuid.size() << ", size of sa:" << sa.size() << ", size of result:" << result.size();
-
     QVariantMap nonceVerMap;
     nonceVerMap[ "version" ] = VERSION;
-    nonceVerMap[ "nonce" ] = QString( result.toByteArray().toBase64() );
     sendBytes( nonceVerMap );
 }
 
@@ -275,10 +268,10 @@ HatchetSipPlugin::messageReceived( const QByteArray &msg )
 
     if ( m_sipState == AcquiringVersion )
     {
-        tLog() << Q_FUNC_INFO << "In acquiring version state, expecting version/nonce information";
-        if ( !retMap.contains( "version" ) || !retMap.contains( "nonce" ) )
+        tLog() << Q_FUNC_INFO << "In acquiring version state, expecting version information";
+        if ( !retMap.contains( "version" ) )
         {
-            tLog() << Q_FUNC_INFO << "Failed to acquire version or nonce information";
+            tLog() << Q_FUNC_INFO << "Failed to acquire version information";
             disconnectPlugin();
             return;
         }
@@ -287,13 +280,6 @@ HatchetSipPlugin::messageReceived( const QByteArray &msg )
         if ( ver == 0 || !ok )
         {
             tLog() << Q_FUNC_INFO << "Failed to acquire version information";
-            disconnectPlugin();
-            return;
-        }
-
-        if ( retMap[ "nonce" ].toString() != m_uuid )
-        {
-            tLog() << Q_FUNC_INFO << "Failed to validate nonce";
             disconnectPlugin();
             return;
         }
