@@ -26,6 +26,8 @@
 #include "config.h"
 #include "utils/Logger.h"
 
+#include "qca.h"
+
 #ifdef Q_WS_MAC
     #include "TomahawkApp_Mac.h"
     #include </System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/AE.framework/Versions/A/Headers/AppleEvents.h>
@@ -128,6 +130,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine
 int
 main( int argc, char *argv[] )
 {
+    QCA::Initializer init;
+    Q_UNUSED( init )
+
 #ifdef Q_WS_MAC
     // Do Mac specific startup to get media keys working.
     // This must go before QApplication initialisation.
