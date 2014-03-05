@@ -271,13 +271,13 @@ HatchetAccount::loginWithPassword( const QString& username, const QString& passw
     req.setHeader( QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded" );
 
     QUrl params;
-    params.addQueryItem( "username", username );
-    params.addQueryItem( "password", password );
-    params.addQueryItem( "grant_type", "password" );
+    TomahawkUtils::urlAddQueryItem( params, "username", username );
+    TomahawkUtils::urlAddQueryItem( params, "password", password );
+    TomahawkUtils::urlAddQueryItem( params, "grant_type", "password" );
     if ( !otp.isEmpty() )
-        params.addQueryItem( "otp", otp );
+        TomahawkUtils::urlAddQueryItem( params, "otp", otp );
 
-    QByteArray data = params.encodedQuery();
+    QByteArray data = TomahawkUtils::encodedQuery( params );
 
     QNetworkReply* reply = Tomahawk::Utils::nam()->post( req, data );
 
@@ -325,9 +325,9 @@ HatchetAccount::fetchAccessToken( const QString& type )
         tLog() << "Intercepting; new mandella access token needed";
         req.setHeader( QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded" );
         QUrl params;
-        params.addQueryItem( "grant_type", "refresh_token" );
-        params.addQueryItem( "refresh_token", refreshToken() );
-        QByteArray data = params.encodedQuery();
+        TomahawkUtils::urlAddQueryItem( params, "grant_type", "refresh_token" );
+        TomahawkUtils::urlAddQueryItem( params, "refresh_token", refreshToken() );
+        QByteArray data = TomahawkUtils::encodedQuery( params );
         reply = Tomahawk::Utils::nam()->post( req, data );
         reply->setProperty( "originalType", type );
     }
