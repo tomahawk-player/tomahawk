@@ -213,6 +213,7 @@ namespace TomahawkUtils
     DLLEXPORT bool urlHasQueryItem( const QUrl& url, const QString& key );
     DLLEXPORT QList<QPair<QString, QString> > urlQueryItems( const QUrl& url );
     DLLEXPORT void urlSetQuery( QUrl& url, const QString& query );
+    DLLEXPORT QByteArray encodedQuery( const QUrl& url );
 
 }
 

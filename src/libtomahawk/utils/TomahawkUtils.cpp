@@ -904,4 +904,14 @@ percentEncode( const QUrl& url )
     return data;
 }
 
+QByteArray
+encodedQuery( const QUrl& url )
+{
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+    return url.query(QUrl::FullyEncoded).toUtf8();
+#else
+    return url.encodedQuery();
+#endif
+}
+
 } // ns
