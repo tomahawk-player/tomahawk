@@ -820,27 +820,27 @@ Password (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="17"/>
         <source>Host Settings</source>
-        <translation type="unfinished"/>
+        <translation>Host Settings</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="35"/>
         <source>Configure your external IP address or host name here. Make sure to manually forward the selected port to this host on your router.</source>
-        <translation type="unfinished"/>
+        <translation>Configure your external IP address or host name here. Make sure to manually forward the selected port to this host on your router.</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="53"/>
         <source>Static Host Name:</source>
-        <translation type="unfinished"/>
+        <translation>Static Host Name:</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="69"/>
         <source>Static Port:</source>
-        <translation type="unfinished"/>
+        <translation>Static Port:</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="106"/>
         <source>Automatically detect external IP address</source>
-        <translation type="unfinished"/>
+        <translation>Automatically detect external IP address</translation>
     </message>
 </context>
 <context>
@@ -1799,17 +1799,17 @@ Password (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="42"/>
         <source>Automatic port forward with UPnP (recommended)</source>
-        <translation type="unfinished"/>
+        <translation>Automatic port forward with UPnP (recommended)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="60"/>
         <source>Manual port forward</source>
-        <translation type="unfinished"/>
+        <translation>Manual port forward</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="73"/>
         <source>Host Settings...</source>
-        <translation type="unfinished"/>
+        <translation>Host Settings...</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="101"/>
@@ -1839,7 +1839,7 @@ Password (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="184"/>
         <source>Allow other computers to interact with Tomahawk (not recommended yet)</source>
-        <translation type="unfinished"/>
+        <translation>Allow other computers to interact with Tomahawk (not recommended yet)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="197"/>
@@ -3858,13 +3858,15 @@ Try tweaking the filters for a new set of songs to play.</translation>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="710"/>
         <source>Updating database
 </source>
-        <translation type="unfinished"/>
+        <translation>Updating database
+</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="717"/>
         <source>Updating database
 %1</source>
-        <translation type="unfinished"/>
+        <translation>Updating database
+%1</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="767"/>
