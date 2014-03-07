@@ -115,6 +115,14 @@ Api_v1_5::playback( QxtWebRequestEvent* event, const QString& command )
         e->contentType = "application/json";
         m_service->postEvent( e );
     }
+    else if ( command == "volume" )
+    {
+        QByteArray json = QString( "{ \"result\": \"ok\", \"volume\": %1}" ).arg( AudioEngine::instance()->volume() ).toUtf8();
+        QxtWebPageEvent * e = new QxtWebPageEvent( event->sessionID, event->requestID, json );
+        e->headers.insert( "Access-Control-Allow-Origin", "*" );
+        e->contentType = "application/json";
+        m_service->postEvent( e );
+    }
     else
     {
         m_service->sendJsonError( event, "No such playback command." );
