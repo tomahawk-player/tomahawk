@@ -172,6 +172,7 @@ namespace TomahawkUtils
       */
     DLLEXPORT bool isHttpResult( const QString& url );
     DLLEXPORT bool isLocalResult( const QString& url );
+    DLLEXPORT bool isRtmpResult( const QString& url );
 
     DLLEXPORT bool verifyFile( const QString& filePath, const QString& signature );
     DLLEXPORT QString extractScriptPayload( const QString& filename, const QString& resolverId, const QString& dirName = "atticaresolvers" );

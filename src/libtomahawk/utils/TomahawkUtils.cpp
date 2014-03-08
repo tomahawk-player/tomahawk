@@ -554,6 +554,13 @@ isLocalResult( const QString& url )
 }
 
 
+bool
+isRtmpResult( const QString& url )
+{
+    return url.startsWith( "rtmp://" );
+}
+
+
 void
 crash()
 {

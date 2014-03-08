@@ -627,7 +627,8 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
 
     setCurrentTrack( result );
 
-    if ( !TomahawkUtils::isLocalResult( d->currentTrack->url() ) && !TomahawkUtils::isHttpResult( d->currentTrack->url() ) )
+    if ( !TomahawkUtils::isLocalResult( d->currentTrack->url() ) && !TomahawkUtils::isHttpResult( d->currentTrack->url() )
+         && !TomahawkUtils::isRtmpResult( d->currentTrack->url() ) )
     {
         boost::function< void ( QSharedPointer< QIODevice >& ) > callback =
                 boost::bind( &AudioEngine::performLoadTrack, this, result, _1 );
@@ -655,7 +656,7 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr& result, QSharedPointe
 
     bool err = false;
     {
-        if ( !( TomahawkUtils::isLocalResult( d->currentTrack->url() ) || TomahawkUtils::isHttpResult( d->currentTrack->url() ) )
+        if ( !( TomahawkUtils::isLocalResult( d->currentTrack->url() ) || TomahawkUtils::isHttpResult( d->currentTrack->url() ) || TomahawkUtils::isRtmpResult( d->currentTrack->url() )  )
              && ( !io || io.isNull() ) )
         {
             tLog() << "Error getting iodevice for" << result->url();
@@ -668,7 +669,8 @@ AudioEngine::performLoadTrack( const Tomahawk::result_ptr& result, QSharedPointe
             d->state = Loading;
             emit loading( d->currentTrack );
 
-            if ( !TomahawkUtils::isLocalResult( d->currentTrack->url() ) && !TomahawkUtils::isHttpResult( d->currentTrack->url() ) )
+            if ( !TomahawkUtils::isLocalResult( d->currentTrack->url() ) && !TomahawkUtils::isHttpResult( d->currentTrack->url() )
+                 && !TomahawkUtils::isRtmpResult( d->currentTrack->url() ) )
             {
                 QSharedPointer<QNetworkReply> qnr = io.objectCast<QNetworkReply>();
                 if ( !qnr.isNull() )
