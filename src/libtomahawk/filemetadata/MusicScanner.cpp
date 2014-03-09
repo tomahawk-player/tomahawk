@@ -35,7 +35,6 @@
 
 #include <QCoreApplication>
 
-
 using namespace Tomahawk;
 
 void
@@ -143,6 +142,9 @@ MusicScanner::MusicScanner( MusicScanner::ScanMode scanMode, const QStringList& 
     m_ext2mime.insert( "mp3",  TomahawkUtils::extensionToMimetype( "mp3" ) );
     m_ext2mime.insert( "ogg",  TomahawkUtils::extensionToMimetype( "ogg" ) );
     m_ext2mime.insert( "oga",  TomahawkUtils::extensionToMimetype( "oga" ) );
+#if TAGLIB_MAJOR_VERSION >= 1 && TAGLIB_MINOR_VERSION >= 9
+    m_ext2mime.insert( "opus",  TomahawkUtils::extensionToMimetype( "opus" ) );
+#endif
     m_ext2mime.insert( "mpc",  TomahawkUtils::extensionToMimetype( "mpc" ) );
     m_ext2mime.insert( "wma",  TomahawkUtils::extensionToMimetype( "wma" ) );
     m_ext2mime.insert( "aac",  TomahawkUtils::extensionToMimetype( "aac" ) );

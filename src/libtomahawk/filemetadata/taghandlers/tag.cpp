@@ -28,6 +28,9 @@
 #include <taglib/xiphcomment.h>
 #include <taglib/vorbisfile.h>
 #include <taglib/oggflacfile.h>
+#if TAGLIB_MAJOR_VERSION >= 1 && TAGLIB_MINOR_VERSION >= 9
+    #include <taglib/opusfile.h>
+#endif
 #include <taglib/flacfile.h>
 #include <taglib/speexfile.h>
 #include <taglib/mpegfile.h>
@@ -58,6 +61,16 @@ namespace Tomahawk
         if( file->tag() )
             t = new OggTag( f.tag(), file->tag() );
     }
+#if TAGLIB_MAJOR_VERSION >= 1 && TAGLIB_MINOR_VERSION >= 9
+    else if ( TagLib::Ogg::Opus::File *file =
+              dynamic_cast< TagLib::Ogg::Opus::File * >( f.file() ) )
+    {
+        if ( file->tag() )
+        {
+            t = new OggTag( f.tag(), file->tag() );
+        }
+    }
+#endif
     else if( TagLib::RIFF::AIFF::File *file =
              dynamic_cast< TagLib::RIFF::AIFF::File * >( f.file() ) )
     {

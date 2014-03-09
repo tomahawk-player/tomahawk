@@ -322,6 +322,9 @@ extensionToMimetype( const QString& extension )
         s_ext2mime.insert( "mp3",  "audio/mpeg" );
         s_ext2mime.insert( "ogg",  "application/ogg" );
         s_ext2mime.insert( "oga",  "application/ogg" );
+#if TAGLIB_MAJOR_VERSION >= 1 && TAGLIB_MINOR_VERSION >= 9
+        s_ext2mime.insert( "opus",  "application/opus" );
+#endif
         s_ext2mime.insert( "mpc",  "audio/x-musepack" );
         s_ext2mime.insert( "wma",  "audio/x-ms-wma" );
         s_ext2mime.insert( "aac",  "audio/mp4" );
