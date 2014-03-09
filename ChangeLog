@@ -25,7 +25,8 @@ Version 0.8.0:
     * Improved error messages.
     * Support drag & drop of items from Artist and Album page headers.
     * Added basic remote control API
-	* Add support for Opus codec in local files (requires TagLib 1.9)
+    * Add support for Opus codec in local files (requires TagLib 1.9)
+    * Support rtmp:// streams
 
 Version 0.7.0:
     * JavaScript Resolvers can now expose collections.
