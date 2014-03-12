@@ -29,6 +29,8 @@
 #ifndef WEBSOCKETPP_CONFIG_HATCHET_CLIENT_HPP
 #define WEBSOCKETPP_CONFIG_HATCHET_CLIENT_HPP
 
+#define _WEBSOCKETPP_NO_THREADING_
+
 #include <websocketpp/config/core_client.hpp>
 #include <websocketpp/transport/iostream/endpoint.hpp>
 #include <websocketpp/concurrency/none.hpp>
@@ -38,8 +40,6 @@ namespace config {
 
 struct hatchet_client : public core_client {
     typedef hatchet_client type;
-
-    typedef websocketpp::concurrency::none concurrency_type;
 
     typedef core_client::request_type request_type;
     typedef core_client::response_type response_type;
