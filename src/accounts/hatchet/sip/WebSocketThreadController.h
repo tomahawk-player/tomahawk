@@ -18,14 +18,12 @@
 #ifndef WEBSOCKET_THREAD_CONTROLLER_H
 #define WEBSOCKET_THREAD_CONTROLLER_H
 
-#include "DllMacro.h"
-
 #include <QPointer>
 #include <QThread>
 
 class WebSocket;
 
-class DLLEXPORT WebSocketThreadController : public QThread
+class WebSocketThreadController : public QThread
 {
     Q_OBJECT
 

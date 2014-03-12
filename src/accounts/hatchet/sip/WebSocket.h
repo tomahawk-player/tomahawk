@@ -18,8 +18,6 @@
 #ifndef WEBSOCKET__H
 #define WEBSOCKET__H
 
-#include "DllMacro.h"
-
 #include "hatchet_config.hpp"
 #include <websocketpp/client.hpp>
 
@@ -37,7 +35,7 @@ class WebSocket;
 void onMessage( WebSocket* ws, websocketpp::connection_hdl, hatchet_client::message_ptr msg );
 void onClose( WebSocket* ws, websocketpp::connection_hdl );
 
-class DLLEXPORT WebSocket : public QObject
+class WebSocket : public QObject
 {
     Q_OBJECT
 public:
