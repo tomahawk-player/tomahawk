@@ -331,14 +331,10 @@ if (WITH_KDE4)
 endif(WITH_KDE4)
 macro_log_feature(KDE4_FOUND "KDE4" "Provides support for configuring Telepathy Accounts from inside Tomahawk" "https://www.kde.org" FALSE "" "")
 
-if(NOT Phonon_FOUND)
-  macro_optional_find_package(Phonon 4.5.0)
+if(NOT Phonon5_FOUND)
+  macro_optional_find_package(Phonon5)
 endif()
-macro_log_feature(Phonon_FOUND "Phonon" "The Phonon multimedia library" "http://phonon.kde.org" TRUE "" "")
-
-if(Phonon_FOUND)
-    message(STATUS "Phonon found; ensure that phonon-vlc is at least 0.4")
-endif()
+macro_log_feature(Phonon5_FOUND "Phonon5" "The Phonon multimedia library" "http://phonon.kde.org" TRUE "" "")
 
 IF( KDE4_FOUND OR Phonon_FOUND )
     IF( CMAKE_C_FLAGS )
