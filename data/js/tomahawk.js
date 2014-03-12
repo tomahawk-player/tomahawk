@@ -301,7 +301,7 @@ Tomahawk.asyncRequest = function (url, callback, extraHeaders, options) {
         if (xmlHttpRequest.readyState == 4 && xmlHttpRequest.status == 200) {
             callback.call(window, xmlHttpRequest);
         } else if (xmlHttpRequest.readyState === 4) {
-            Tomahawk.log("Failed to do GET request: to: " + url);
+            Tomahawk.log("Failed to do " + method + " request: to: " + url);
             Tomahawk.log("Status Code was: " + xmlHttpRequest.status);
             if (opt.hasOwnProperty('errorHandler')) {
                 opt.errorHandler.call(window, xmlHttpRequest);
