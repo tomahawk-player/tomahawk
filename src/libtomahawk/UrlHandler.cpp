@@ -34,18 +34,19 @@ namespace Tomahawk {
 namespace UrlHandler {
 
 QMap< QString, IODeviceFactoryFunc > iofactories;
+QMap< QString, UrlTranslatorFunc > urltranslators;
 
 void
 initialiseDefaultIOFactories()
 {
     {
         // _1 = result, _2 = callback function for IODevice
-        IODeviceFactoryFunc fac = boost::bind( localFileIODeviceFactory, _1, _2 );
+        IODeviceFactoryFunc fac = boost::bind( localFileIODeviceFactory, _1, _2, _3 );
         iofactories.insert( "file", fac );
     }
 
     {
-        IODeviceFactoryFunc fac = boost::bind( httpIODeviceFactory, _1, _2 );
+        IODeviceFactoryFunc fac = boost::bind( httpIODeviceFactory, _1, _2, _3 );
         iofactories.insert( "http", fac );
         iofactories.insert( "https", fac );
     }
@@ -65,7 +66,7 @@ registerIODeviceFactory( const QString &proto, IODeviceFactoryFunc fac )
 
 
 void
-getIODeviceForUrl( const Tomahawk::result_ptr& result,
+getIODeviceForUrl( const Tomahawk::result_ptr& result, const QString& url,
                             boost::function< void ( QSharedPointer< QIODevice >& ) > callback )
 {
     if ( iofactories.isEmpty() )
@@ -76,7 +77,7 @@ getIODeviceForUrl( const Tomahawk::result_ptr& result,
     QSharedPointer<QIODevice> sp;
 
     QRegExp rx( "^([a-zA-Z0-9]+)://(.+)$" );
-    if ( rx.indexIn( result->url() ) == -1 )
+    if ( rx.indexIn( url ) == -1 )
     {
         callback( sp );
         return;
@@ -90,16 +91,16 @@ getIODeviceForUrl( const Tomahawk::result_ptr& result,
     }
 
     // JSResolverHelper::customIODeviceFactory is async!
-    iofactories.value( proto )( result, callback );
+    iofactories.value( proto )( result, url, callback );
 }
 
 
 void
-localFileIODeviceFactory( const Tomahawk::result_ptr& result,
+localFileIODeviceFactory( const Tomahawk::result_ptr&, const QString& url,
                                    boost::function< void ( QSharedPointer< QIODevice >& ) > callback )
 {
     // ignore "file://" at front of url
-    QFile* io = new QFile( result->url().mid( QString( "file://" ).length() ) );
+    QFile* io = new QFile( url.mid( QString( "file://" ).length() ) );
     if ( io )
         io->open( QIODevice::ReadOnly );
 
@@ -110,10 +111,10 @@ localFileIODeviceFactory( const Tomahawk::result_ptr& result,
 
 
 void
-httpIODeviceFactory( const Tomahawk::result_ptr& result,
+httpIODeviceFactory( const Tomahawk::result_ptr&, const QString& url,
                               boost::function< void ( QSharedPointer< QIODevice >& ) > callback )
 {
-    QNetworkRequest req( result->url() );
+    QNetworkRequest req( url );
     // Follow HTTP Redirects
     NetworkReply* reply = new NetworkReply( Tomahawk::Utils::nam()->get( req ) );
     qRegisterMetaType<NetworkReply*>("NetworkReply*");
@@ -124,6 +125,31 @@ httpIODeviceFactory( const Tomahawk::result_ptr& result,
 }
 
 
+void
+getUrlTranslation( const Tomahawk::result_ptr& result, const QString& url, boost::function< void ( const QString& ) > callback )
+{
+    QRegExp rx( "^([a-zA-Z0-9]+)://(.+)$" );
+    if ( rx.indexIn( url ) == -1 )
+    {
+        callback( QString() );
+        return;
+    }
+
+    const QString proto = rx.cap( 1 );
+    if ( !urltranslators.contains( proto ) )
+    {
+        callback( url );
+        return;
+    }
+
+    urltranslators.value( proto )( result, url, callback );
+}
+
+void
+registerUrlTranslator( const QString &proto, UrlTranslatorFunc fac )
+{
+    urltranslators.insert( proto, fac );
+}
 
 
 } // namespace UrlHandler

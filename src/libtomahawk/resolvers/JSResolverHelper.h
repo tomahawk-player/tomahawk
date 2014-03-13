@@ -46,12 +46,16 @@ public:
 
     Q_INVOKABLE void addCustomUrlHandler( const QString& protocol, const QString& callbackFuncName, const QString& isAsynchronous = "false" );
     Q_INVOKABLE void reportStreamUrl( const QString& qid, const QString& streamUrl );
+    Q_INVOKABLE void addCustomUrlTranslator( const QString& protocol, const QString& callbackFuncName, const QString& isAsynchronous = "false" );
+    Q_INVOKABLE void reportUrlTranslation( const QString& qid, const QString& streamUrl );
 
     Q_INVOKABLE QByteArray base64Encode( const QByteArray& input );
     Q_INVOKABLE QByteArray base64Decode( const QByteArray& input );
 
-    void customIODeviceFactory( const Tomahawk::result_ptr& result,
+    void customIODeviceFactory( const Tomahawk::result_ptr&, const QString& url,
                                 boost::function< void( QSharedPointer< QIODevice >& ) > callback ); // async
+    void customUrlTranslator( const Tomahawk::result_ptr&, const QString& url,
+                                boost::function< void( const QString& ) > callback ); // async
 
 public slots:
     QByteArray readRaw( const QString& fileName );
@@ -82,10 +86,13 @@ private slots:
 private:
     Tomahawk::query_ptr parseTrack( const QVariantMap& track );
     void returnStreamUrl( const QString& streamUrl, boost::function< void( QSharedPointer< QIODevice >& ) > callback );
+    void returnUrlTranslation( const QString& streamUrl, boost::function< void( const QString& ) > callback );
 
-    QString m_scriptPath, m_urlCallback;
+    QString m_scriptPath, m_urlCallback, m_urlTranslator;
     QHash< QString, boost::function< void( QSharedPointer< QIODevice >& ) > > m_streamCallbacks;
+    QHash< QString, boost::function< void( const QString& ) > > m_translatorCallbacks;
     bool m_urlCallbackIsAsync;
+    bool m_urlTranslatorIsAsync;
     QVariantMap m_resolverConfig;
     JSResolver* m_resolver;
     QString m_pendingUrl;

@@ -132,7 +132,8 @@ signals:
 
 private slots:
     void loadTrack( const Tomahawk::result_ptr& result ); //async!
-    void performLoadTrack( const Tomahawk::result_ptr& result, QSharedPointer< QIODevice >& io ); //only call from loadTrack kthxbi
+    void performLoadIODevice( const Tomahawk::result_ptr& result, const QString& url ); //only call from loadTrack kthxbi
+    void performLoadTrack( const Tomahawk::result_ptr& result, const QString& url, QSharedPointer< QIODevice >& io ); //only call from loadTrack or performLoadIODevice kthxbi
     void loadPreviousTrack();
     void loadNextTrack();
 
@@ -155,7 +156,7 @@ private:
     void audioDataArrived( QMap< AudioEngine::AudioChannel, QVector< qint16 > >& data );
 
 
-    Q_DECLARE_PRIVATE( AudioEngine );
+    Q_DECLARE_PRIVATE( AudioEngine )
     AudioEnginePrivate* d_ptr;
 };
 

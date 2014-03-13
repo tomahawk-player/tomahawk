@@ -244,7 +244,7 @@ Api_v1::sid( QxtWebRequestEvent* event, QString unused )
 
     boost::function< void ( QSharedPointer< QIODevice >& ) > callback =
             boost::bind( &Api_v1::processSid, this, event, rp, _1 );
-    Tomahawk::UrlHandler::getIODeviceForUrl( rp, callback );
+    Tomahawk::UrlHandler::getIODeviceForUrl( rp, rp->url(), callback );
 }
 
 

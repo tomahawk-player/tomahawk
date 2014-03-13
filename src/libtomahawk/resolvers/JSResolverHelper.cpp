@@ -49,6 +49,7 @@ using namespace Tomahawk;
 JSResolverHelper::JSResolverHelper( const QString& scriptPath, JSResolver* parent )
     : QObject( parent )
     , m_urlCallbackIsAsync( false )
+    , m_urlTranslatorIsAsync( false )
 {
     m_scriptPath = scriptPath;
     m_resolver = parent;
@@ -453,12 +454,40 @@ JSResolverHelper::addCustomUrlHandler( const QString& protocol,
 {
     m_urlCallbackIsAsync = ( isAsynchronous.toLower() == "true" ) ? true : false;
 
-    boost::function< void( const Tomahawk::result_ptr&,
+    boost::function< void( const Tomahawk::result_ptr&, const QString&,
                            boost::function< void( QSharedPointer< QIODevice >& ) > )> fac =
-            boost::bind( &JSResolverHelper::customIODeviceFactory, this, _1, _2 );
+            boost::bind( &JSResolverHelper::customIODeviceFactory, this, _1, _2, _3 );
     Tomahawk::UrlHandler::registerIODeviceFactory( protocol, fac );
 
     m_urlCallback = callbackFuncName;
+}
+
+
+void
+JSResolverHelper::addCustomUrlTranslator( const QString& protocol,
+                                             const QString& callbackFuncName,
+                                             const QString& isAsynchronous )
+{
+    m_urlTranslatorIsAsync = ( isAsynchronous.toLower() == "true" ) ? true : false;
+
+    boost::function< void( const Tomahawk::result_ptr&, const QString&,
+                           boost::function< void( const QString& ) > )> fac =
+            boost::bind( &JSResolverHelper::customUrlTranslator, this, _1, _2, _3 );
+    Tomahawk::UrlHandler::registerUrlTranslator( protocol, fac );
+
+    m_urlTranslator = callbackFuncName;
+}
+
+
+void
+JSResolverHelper::reportUrlTranslation( const QString& qid, const QString& streamUrl )
+{
+    if ( !m_translatorCallbacks.contains( qid ) )
+        return;
+
+    boost::function< void( const QString& ) > callback = m_translatorCallbacks.take( qid );
+
+    returnUrlTranslation( streamUrl, callback );
 }
 
 
@@ -477,11 +506,11 @@ JSResolverHelper::base64Decode( const QByteArray& input )
 
 
 void
-JSResolverHelper::customIODeviceFactory( const Tomahawk::result_ptr& result,
+JSResolverHelper::customIODeviceFactory( const Tomahawk::result_ptr&, const QString& url,
                                                boost::function< void( QSharedPointer< QIODevice >& ) > callback )
 {
     //can be sync or async
-    QString origResultUrl = QString( QUrl( result->url() ).toEncoded() );
+    QString origResultUrl = QString( QUrl( url ).toEncoded() );
 
     if ( m_urlCallbackIsAsync )
     {
@@ -501,6 +530,34 @@ JSResolverHelper::customIODeviceFactory( const Tomahawk::result_ptr& result,
         QString urlStr = m_resolver->d_func()->engine->mainFrame()->evaluateJavaScript( getUrl ).toString();
 
         returnStreamUrl( urlStr, callback );
+    }
+}
+
+
+void
+JSResolverHelper::customUrlTranslator( const Tomahawk::result_ptr&, const QString& url, boost::function<void (const QString& )> callback )
+{
+    //can be sync or async
+    QString origResultUrl = QString( QUrl( url ).toEncoded() );
+
+    if ( m_urlTranslatorIsAsync )
+    {
+        QString qid = uuid();
+        QString getUrl = QString( "Tomahawk.resolver.instance.%1( '%2', '%3' );" ).arg( m_urlTranslator )
+                                                                                  .arg( qid )
+                                                                                  .arg( origResultUrl );
+
+        m_translatorCallbacks.insert( qid, callback );
+        m_resolver->d_func()->engine->mainFrame()->evaluateJavaScript( getUrl );
+    }
+    else
+    {
+        QString getUrl = QString( "Tomahawk.resolver.instance.%1( '%2' );" ).arg( m_urlTranslator )
+                                                                            .arg( origResultUrl );
+
+        QString urlStr = m_resolver->d_func()->engine->mainFrame()->evaluateJavaScript( getUrl ).toString();
+
+        returnUrlTranslation( urlStr, callback );
     }
 }
 
@@ -536,4 +593,19 @@ JSResolverHelper::returnStreamUrl( const QString& streamUrl, boost::function< vo
     //boost::functions cannot accept temporaries as parameters
     sp = QSharedPointer< QIODevice >( reply, &QObject::deleteLater );
     callback( sp );
+}
+
+
+void
+JSResolverHelper::returnUrlTranslation( const QString& streamUrl, boost::function<void (const QString& )> callback )
+{
+    if ( streamUrl.isEmpty() )
+    {
+        callback( QString() );
+        return;
+    }
+
+    //boost::functions cannot accept temporaries as parameters
+    // sp = QSharedPointer< QString >( streamUrl , &QObject::deleteLater );
+    callback( streamUrl );
 }

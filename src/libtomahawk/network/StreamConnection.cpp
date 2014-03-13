@@ -190,7 +190,7 @@ StreamConnection::startSending( const Tomahawk::result_ptr& result )
 
     boost::function< void ( QSharedPointer< QIODevice >& ) > callback =
             boost::bind( &StreamConnection::reallyStartSending, this, result, _1 );
-    Tomahawk::UrlHandler::getIODeviceForUrl( m_result, callback );
+    Tomahawk::UrlHandler::getIODeviceForUrl( m_result, m_result->url(), callback );
 }
 
 

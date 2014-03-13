@@ -88,7 +88,7 @@ Servent::Servent( QObject* parent )
 
     setProxy( QNetworkProxy::NoProxy );
 
-    IODeviceFactoryFunc fac = boost::bind( &Servent::remoteIODeviceFactory, this, _1, _2 );
+    IODeviceFactoryFunc fac = boost::bind( &Servent::remoteIODeviceFactory, this, _1, _2, _3 );
     Tomahawk::UrlHandler::registerIODeviceFactory( "servent", fac );
 }
 
@@ -1224,12 +1224,12 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
 
 
 void
-Servent::remoteIODeviceFactory( const Tomahawk::result_ptr& result,
+Servent::remoteIODeviceFactory( const Tomahawk::result_ptr& result, const QString& url,
                                 boost::function< void ( QSharedPointer< QIODevice >& ) > callback )
 {
     QSharedPointer<QIODevice> sp;
 
-    QStringList parts = result->url().mid( QString( "servent://" ).length() ).split( "\t" );
+    QStringList parts = url.mid( QString( "servent://" ).length() ).split( "\t" );
     const QString sourceName = parts.at( 0 );
     const QString fileId = parts.at( 1 );
     source_ptr s = SourceList::instance()->get( sourceName );

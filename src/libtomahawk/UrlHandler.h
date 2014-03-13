@@ -27,8 +27,10 @@
 
 #include <boost/function.hpp>
 
-typedef boost::function< void( const Tomahawk::result_ptr&,
+typedef boost::function< void( const Tomahawk::result_ptr&, const QString&,
                                boost::function< void( QSharedPointer< QIODevice >& ) > )> IODeviceFactoryFunc;
+typedef boost::function< void( const Tomahawk::result_ptr&, const QString&,
+                               boost::function< void( const QString& ) > )> UrlTranslatorFunc;
 typedef boost::function< void ( QSharedPointer< QIODevice >& ) > IODeviceCallback;
 
 
@@ -38,10 +40,16 @@ namespace Tomahawk
 namespace UrlHandler
 {
 
-    DLLEXPORT void getIODeviceForUrl( const Tomahawk::result_ptr& result, boost::function< void ( QSharedPointer< QIODevice >& ) > callback );
-    DLLEXPORT void registerIODeviceFactory( const QString &proto, IODeviceFactoryFunc fac );
-    DLLEXPORT void localFileIODeviceFactory( const Tomahawk::result_ptr& result, boost::function< void ( QSharedPointer< QIODevice >& ) > callback );
-    DLLEXPORT void httpIODeviceFactory( const Tomahawk::result_ptr& result, boost::function< void ( QSharedPointer< QIODevice >& ) > callback );
+    DLLEXPORT void getIODeviceForUrl( const Tomahawk::result_ptr&, const QString& url, boost::function< void ( QSharedPointer< QIODevice >& ) > callback );
+    DLLEXPORT void registerIODeviceFactory( const QString& proto, IODeviceFactoryFunc fac );
+    DLLEXPORT void localFileIODeviceFactory( const Tomahawk::result_ptr& result, const QString& url,
+                                             boost::function< void ( QSharedPointer< QIODevice >& ) > callback );
+    DLLEXPORT void httpIODeviceFactory( const Tomahawk::result_ptr& result, const QString& url,
+                                       boost::function< void ( QSharedPointer< QIODevice >& ) > callback );
+
+    DLLEXPORT void getUrlTranslation( const Tomahawk::result_ptr& result, const QString& url,
+                                      boost::function< void ( const QString& ) > callback );
+    DLLEXPORT void registerUrlTranslator( const QString &proto, UrlTranslatorFunc fac );
 
 } // namespace UrlHandler
 
