@@ -118,7 +118,7 @@ PluginLoader::pluginDirs()
     }
 #endif
 
-    QDir installLibDir( CMAKE_INSTALL_PREFIX "/lib" );
+    QDir installLibDir( CMAKE_INSTALL_LIBDIR );
 
     QDir libDir( appDir );
     libDir.cdUp();
