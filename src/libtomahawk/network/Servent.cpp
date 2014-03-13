@@ -3,7 +3,7 @@
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *   Copyright 2010-2012, Jeff Mitchell <jeff@tomahawk-player.org>
  *   Copyright 2013,      Teo Mrnjavac <teo@kde.org>
- *   Copyright 2013, Uwe L. Korn <uwelk@xhochy.com>
+ *   Copyright 2013-2014, Uwe L. Korn <uwelk@xhochy.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -44,6 +44,7 @@
 #include "Source.h"
 #include "SourceList.h"
 #include "StreamConnection.h"
+#include "UrlHandler.h"
 
 #include <QCoreApplication>
 #include <QMutexLocker>
@@ -63,7 +64,7 @@ Q_DECLARE_METATYPE( QList< SipInfo > )
 Q_DECLARE_METATYPE( Connection* )
 Q_DECLARE_METATYPE( QTcpSocketExtra* )
 Q_DECLARE_METATYPE( Tomahawk::peerinfo_ptr )
-Q_DECLARE_METATYPE( IODeviceCallback )
+
 
 using namespace Tomahawk;
 
@@ -87,22 +88,8 @@ Servent::Servent( QObject* parent )
 
     setProxy( QNetworkProxy::NoProxy );
 
-    {
-        // _1 = result, _2 = callback function for IODevice
-        IODeviceFactoryFunc fac = boost::bind( &Servent::localFileIODeviceFactory, this, _1, _2 );
-        this->registerIODeviceFactory( "file", fac );
-    }
-
-    {
-        IODeviceFactoryFunc fac = boost::bind( &Servent::remoteIODeviceFactory, this, _1, _2 );
-        this->registerIODeviceFactory( "servent", fac );
-    }
-
-    {
-        IODeviceFactoryFunc fac = boost::bind( &Servent::httpIODeviceFactory, this, _1, _2 );
-        this->registerIODeviceFactory( "http", fac );
-        this->registerIODeviceFactory( "https", fac );
-    }
+    IODeviceFactoryFunc fac = boost::bind( &Servent::remoteIODeviceFactory, this, _1, _2 );
+    Tomahawk::UrlHandler::registerIODeviceFactory( "servent", fac );
 }
 
 
@@ -1378,78 +1365,6 @@ Servent::triggerDBSync()
             src->controlConnection()->dbSyncConnection()->trigger();
     }
     emit dbSyncTriggered();
-}
-
-
-void
-Servent::registerIODeviceFactory( const QString &proto,
-                                  IODeviceFactoryFunc fac )
-{
-    d_func()->iofactories.insert( proto, fac );
-}
-
-
-void
-Servent::getIODeviceForUrl( const Tomahawk::result_ptr& result,
-                            boost::function< void ( QSharedPointer< QIODevice >& ) > callback )
-{
-    QSharedPointer<QIODevice> sp;
-
-    QRegExp rx( "^([a-zA-Z0-9]+)://(.+)$" );
-    if ( rx.indexIn( result->url() ) == -1 )
-    {
-        callback( sp );
-        return;
-    }
-
-    const QString proto = rx.cap( 1 );
-    if ( !d_func()->iofactories.contains( proto ) )
-    {
-        callback( sp );
-        return;
-    }
-
-    //JSResolverHelper::customIODeviceFactory is async!
-    d_func()->iofactories.value( proto )( result, callback );
-}
-
-
-void
-Servent::localFileIODeviceFactory( const Tomahawk::result_ptr& result,
-                                   boost::function< void ( QSharedPointer< QIODevice >& ) > callback )
-{
-    // ignore "file://" at front of url
-    QFile* io = new QFile( result->url().mid( QString( "file://" ).length() ) );
-    if ( io )
-        io->open( QIODevice::ReadOnly );
-
-    //boost::functions cannot accept temporaries as parameters
-    QSharedPointer< QIODevice > sp = QSharedPointer<QIODevice>( io );
-    callback( sp );
-}
-
-
-void
-Servent::httpIODeviceFactory( const Tomahawk::result_ptr& result,
-                              boost::function< void ( QSharedPointer< QIODevice >& ) > callback )
-{
-    QNetworkRequest req( result->url() );
-    // Follow HTTP Redirects
-    NetworkReply* reply = new NetworkReply( Tomahawk::Utils::nam()->get( req ) );
-    qRegisterMetaType<NetworkReply*>("NetworkReply*");
-    qRegisterMetaType<IODeviceCallback>("IODeviceCallback");
-    NewClosure( reply, SIGNAL( finalUrlReached() ),
-                this, SLOT( httpIODeviceReady( NetworkReply*, IODeviceCallback ) ),
-                reply, callback )->setAutoDelete( true );
-}
-
-
-void
-Servent::httpIODeviceReady( NetworkReply* reply, IODeviceCallback callback )
-{
-    //boost::functions cannot accept temporaries as parameters
-    QSharedPointer< QIODevice > sp = QSharedPointer< QIODevice >( reply->reply(), &QObject::deleteLater );
-    callback( sp );
 }
 
 

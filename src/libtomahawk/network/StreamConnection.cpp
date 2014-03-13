@@ -31,6 +31,7 @@
 #include "MsgProcessor.h"
 #include "Result.h"
 #include "SourceList.h"
+#include "UrlHandler.h"
 
 #include <boost/bind.hpp>
 #include <boost/function.hpp>
@@ -189,7 +190,7 @@ StreamConnection::startSending( const Tomahawk::result_ptr& result )
 
     boost::function< void ( QSharedPointer< QIODevice >& ) > callback =
             boost::bind( &StreamConnection::reallyStartSending, this, result, _1 );
-    Servent::instance()->getIODeviceForUrl( m_result, callback );
+    Tomahawk::UrlHandler::getIODeviceForUrl( m_result, callback );
 }
 
 

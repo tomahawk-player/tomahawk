@@ -32,6 +32,7 @@
 #include "Pipeline.h"
 #include "Result.h"
 #include "Source.h"
+#include "UrlHandler.h"
 
 #include <boost/bind.hpp>
 
@@ -243,7 +244,7 @@ Api_v1::sid( QxtWebRequestEvent* event, QString unused )
 
     boost::function< void ( QSharedPointer< QIODevice >& ) > callback =
             boost::bind( &Api_v1::processSid, this, event, rp, _1 );
-    Servent::instance()->getIODeviceForUrl( rp, callback );
+    Tomahawk::UrlHandler::getIODeviceForUrl( rp, callback );
 }
 
 

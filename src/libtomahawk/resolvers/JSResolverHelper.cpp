@@ -36,6 +36,7 @@
 #include "Pipeline.h"
 #include "Result.h"
 #include "SourceList.h"
+#include "UrlHandler.h"
 
 #include <boost/bind.hpp>
 #include <QFile>
@@ -455,7 +456,7 @@ JSResolverHelper::addCustomUrlHandler( const QString& protocol,
     boost::function< void( const Tomahawk::result_ptr&,
                            boost::function< void( QSharedPointer< QIODevice >& ) > )> fac =
             boost::bind( &JSResolverHelper::customIODeviceFactory, this, _1, _2 );
-    Servent::instance()->registerIODeviceFactory( protocol, fac );
+    Tomahawk::UrlHandler::registerIODeviceFactory( protocol, fac );
 
     m_urlCallback = callbackFuncName;
 }

@@ -50,10 +50,6 @@ namespace boost
     template <class T> class function;
 } // boost
 
-typedef boost::function< void( const Tomahawk::result_ptr&,
-                               boost::function< void( QSharedPointer< QIODevice >& ) > )> IODeviceFactoryFunc;
-typedef boost::function< void ( QSharedPointer< QIODevice >& ) > IODeviceCallback;
-
 class ServentPrivate;
 
 class DLLEXPORT Servent : public QTcpServer
@@ -80,6 +76,9 @@ public:
     void unregisterControlConnection( ControlConnection* conn );
     ControlConnection* lookupControlConnection( const SipInfo& sipInfo );
     ControlConnection* lookupControlConnection( const QString& nodeid );
+
+    void remoteIODeviceFactory( const Tomahawk::result_ptr& result,
+                                    boost::function< void ( QSharedPointer< QIODevice >& ) > callback );
 
     // you may call this method as often as you like for the same peerInfo, dupe checking is done inside
     void registerPeer( const Tomahawk::peerinfo_ptr& peerInfo );
@@ -124,12 +123,6 @@ public:
 
     QList< StreamConnection* > streams() const;
 
-    void getIODeviceForUrl( const Tomahawk::result_ptr& result, boost::function< void ( QSharedPointer< QIODevice >& ) > callback );
-    void registerIODeviceFactory( const QString &proto, IODeviceFactoryFunc fac );
-    void remoteIODeviceFactory( const Tomahawk::result_ptr& result, boost::function< void ( QSharedPointer< QIODevice >& ) > callback );
-    void localFileIODeviceFactory( const Tomahawk::result_ptr& result, boost::function< void ( QSharedPointer< QIODevice >& ) > callback );
-    void httpIODeviceFactory( const Tomahawk::result_ptr& result, boost::function< void ( QSharedPointer< QIODevice >& ) > callback );
-
     bool isReady() const;
 
     QList<SipInfo> getLocalSipInfos(const QString& nodeid, const QString &key);
@@ -168,7 +161,6 @@ public slots:
     void triggerDBSync();
 
     void onSipInfoChanged();
-    void httpIODeviceReady( NetworkReply* reply, IODeviceCallback callback );
 
 private slots:
     void deleteLazyOffer( const QString& key );

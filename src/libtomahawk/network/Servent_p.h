@@ -48,7 +48,6 @@ public:
     Q_DECLARE_PUBLIC ( Servent )
 
 private:
-    QMap< QString, IODeviceFactoryFunc > iofactories;
     QMap< QString, QPointer< Connection > > offers;
     QMap< QString, QPair< Tomahawk::peerinfo_ptr, QString > > lazyoffers;
     QStringList connectedNodes;

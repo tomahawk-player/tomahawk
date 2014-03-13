@@ -209,6 +209,7 @@ list(APPEND libSources
     TrackData.cpp
     SourcePlaylistInterface.cpp
     PlaylistInterface.cpp
+    UrlHandler.cpp
 
     EchonestCatalogSynchronizer.cpp
 

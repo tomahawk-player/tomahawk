@@ -37,6 +37,7 @@
 #include "Pipeline.h"
 #include "PlaylistEntry.h"
 #include "TomahawkSettings.h"
+#include "UrlHandler.h"
 
 #include <QDir>
 
@@ -632,7 +633,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
     {
         boost::function< void ( QSharedPointer< QIODevice >& ) > callback =
                 boost::bind( &AudioEngine::performLoadTrack, this, result, _1 );
-        Servent::instance()->getIODeviceForUrl( d->currentTrack, callback );
+        Tomahawk::UrlHandler::getIODeviceForUrl( d->currentTrack, callback );
     }
     else
     {
