@@ -367,17 +367,17 @@ connect and stream from you?</source>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="878"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="900"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>Συγνωμη, το Tomahawk δεν βρηκε το τραγουδι &apos;%1&apos; απο %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="902"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="924"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>Συγνωμη, το Tomahawk δεν μπορεσε να βρει τον καλλιτεχνη &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="928"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="950"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>Συγνωμη, το Tomahawk δεν μπορεσε να βρει το αλμπουμ του &apos;%1&apos; απο %2 </translation>
     </message>
@@ -1682,12 +1682,12 @@ Password (OTP)</source>
 <context>
     <name>Servent</name>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="1003"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="990"/>
         <source>Automatically detecting external IP failed: Could not parse JSON response.</source>
         <translation>Ο αυτόματος εντοπισμός της εξωτερικής διεύθυνσης IP απέτυχε: δεν ήταν δυνατή η ανάλυση της απόκρισης JSON</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="1016"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="1003"/>
         <source>Automatically detecting external IP failed: %1</source>
         <translation>Ο αυτόματος εντοπισμός της εξωτερικής διεύθυνσης IP απέτυχε: %1</translation>
     </message>

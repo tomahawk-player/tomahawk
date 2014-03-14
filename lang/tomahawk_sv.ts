@@ -368,17 +368,17 @@ ansluta och strömma från dig?</translation>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="878"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="900"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>Tyvärr! Tomahawk kunde inte hitta spåret &apos;%1&apos; av %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="902"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="924"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>Tyvärr! Tomahawk kunde inte hitta artisten &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="928"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="950"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>Tyvärr! Tomahawk kunde inte hitta albumet &apos;%1&apos; av %2 </translation>
     </message>
@@ -1682,12 +1682,12 @@ Password (OTP)</source>
 <context>
     <name>Servent</name>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="1003"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="990"/>
         <source>Automatically detecting external IP failed: Could not parse JSON response.</source>
         <translation>Automatisk IP-adress-upptäckt misslyckades: JSON-responsen kunde inte parsas</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="1016"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="1003"/>
         <source>Automatically detecting external IP failed: %1</source>
         <translation>Automatisk extern IP-upptäckt misslyckades: %1</translation>
     </message>

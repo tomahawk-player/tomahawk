@@ -368,17 +368,17 @@ connect and stream from you?</source>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="878"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="900"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>نعتذر، لم نستطيع إيجاد الأغنية &apos;%1&apos; ل%2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="902"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="924"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>نعتذر، لم نستطيع إيجاد الفنان &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="928"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="950"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>نعتذر، لم نستطيع إيجاد الألبوم &apos;%1&apos; ل%2</translation>
     </message>
@@ -1685,12 +1685,12 @@ Password (OTP)</source>
 <context>
     <name>Servent</name>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="1003"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="990"/>
         <source>Automatically detecting external IP failed: Could not parse JSON response.</source>
         <translation>الكشف التلقائي عن عنوان IP الخارجي فشل: تعذر تحليل إستجابة JSON.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="1016"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="1003"/>
         <source>Automatically detecting external IP failed: %1</source>
         <translation>الكشف التلقائي عن عنوان IP الخارجي فشل: %1</translation>
     </message>

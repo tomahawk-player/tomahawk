@@ -368,17 +368,17 @@ se conecteze și să redea de la tine?</translation>
 <context>
     <name>AudioEngine</name>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="878"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="900"/>
         <source>Sorry, Tomahawk couldn&apos;t find the track &apos;%1&apos; by %2</source>
         <translation>Ne pare rău, Tomahawk nu a găsit piesa &apos;%1&apos; de %2</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="902"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="924"/>
         <source>Sorry, Tomahawk couldn&apos;t find the artist &apos;%1&apos;</source>
         <translation>Ne pare rău, Tomahawk nu a găsit artistul &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="928"/>
+        <location filename="../src/libtomahawk/audio/AudioEngine.cpp" line="950"/>
         <source>Sorry, Tomahawk couldn&apos;t find the album &apos;%1&apos; by %2</source>
         <translation>Ne pare rău, Tomahawk nu a găsit albumul &apos;%1&apos; de la %2</translation>
     </message>
@@ -1683,12 +1683,12 @@ Password (OTP)</translation>
 <context>
     <name>Servent</name>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="1003"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="990"/>
         <source>Automatically detecting external IP failed: Could not parse JSON response.</source>
         <translation>Detectarea automată a IP-ului extern a eșuat: Nu s-a putut interpreta răspunsul JSON.</translation>
     </message>
     <message>
-        <location filename="../src/libtomahawk/network/Servent.cpp" line="1016"/>
+        <location filename="../src/libtomahawk/network/Servent.cpp" line="1003"/>
         <source>Automatically detecting external IP failed: %1</source>
         <translation>Detectarea automată a IP-ului extern a eșuat: %1</translation>
     </message>
