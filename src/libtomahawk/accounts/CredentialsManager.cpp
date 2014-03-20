@@ -21,11 +21,15 @@
 #include "utils/Logger.h"
 
 #ifdef Q_OS_MAC
-#include "TomahawkSettings.h"
+    #include "TomahawkSettings.h"
 #else
-#include <qtkeychain/keychain.h>
-#include <qjson/serializer.h>
-#include <qjson/parser.h>
+    #if QT_VERSION < QT_VERSION_CHECK(5,0,0)
+        #include <qtkeychain/keychain.h>
+    #else
+        #include <qt5keychain/keychain.h>
+    #endif
+    #include <qjson/serializer.h>
+    #include <qjson/parser.h>
 #endif
 
 #include <QStringList>
