@@ -28,8 +28,10 @@
 #include <taglib/xiphcomment.h>
 #include <taglib/vorbisfile.h>
 #include <taglib/oggflacfile.h>
-#if TAGLIB_MAJOR_VERSION >= 1 && TAGLIB_MINOR_VERSION >= 9
-    #include <taglib/opusfile.h>
+#if defined(TAGLIB_MAJOR_VERSION) && defined(TAGLIB_MINOR_VERSION)
+    #if TAGLIB_MAJOR_VERSION >= 1 && TAGLIB_MINOR_VERSION >= 9
+        #include <taglib/opusfile.h>
+    #endif
 #endif
 #include <taglib/flacfile.h>
 #include <taglib/speexfile.h>

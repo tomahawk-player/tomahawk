@@ -38,6 +38,9 @@
 #include <quazip/quazip.h>
 #include <quazip/quazipfile.h>
 
+// We need this for the version info (if available)
+#include <taglib/taglib.h>
+
 #include <QNetworkConfiguration>
 #include <QNetworkAccessManager>
 #include <QNetworkProxy>
@@ -322,8 +325,10 @@ extensionToMimetype( const QString& extension )
         s_ext2mime.insert( "mp3",  "audio/mpeg" );
         s_ext2mime.insert( "ogg",  "application/ogg" );
         s_ext2mime.insert( "oga",  "application/ogg" );
+#if defined(TAGLIB_MAJOR_VERSION) && defined(TAGLIB_MINOR_VERSION)
 #if TAGLIB_MAJOR_VERSION >= 1 && TAGLIB_MINOR_VERSION >= 9
         s_ext2mime.insert( "opus",  "application/opus" );
+#endif
 #endif
         s_ext2mime.insert( "mpc",  "audio/x-musepack" );
         s_ext2mime.insert( "wma",  "audio/x-ms-wma" );
