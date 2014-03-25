@@ -180,7 +180,7 @@ DpiScaler::ratioFromFontHeight()
 
     qreal baseFontHeight = baseFontSize * basePpp; //we assume a minimum font size of 7pt
 
-    qreal ratioFromFontHeights = qMax( fH / baseFontHeight, 1. );
+    qreal ratioFromFontHeights = qMax( fH / baseFontHeight, static_cast<qreal>(1.) );
     return ratioFromFontHeights;
 }
 
