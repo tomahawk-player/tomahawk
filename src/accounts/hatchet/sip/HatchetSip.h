@@ -65,7 +65,6 @@ public slots:
 signals:
     void connectWebSocket() const;
     void disconnectWebSocket() const;
-    void authUrlDiscovered( Tomahawk::Accounts::HatchetAccount::Service service, const QString& authUrl ) const;
     void rawBytes( QByteArray bytes ) const;
 
 private slots:

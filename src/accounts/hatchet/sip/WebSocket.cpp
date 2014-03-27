@@ -23,10 +23,11 @@
 
 typedef typename websocketpp::lib::error_code error_code;
 
-WebSocket::WebSocket( const QString& url )
+WebSocket::WebSocket( const QString& url, const QString& authorizationHeader )
     : QObject( nullptr )
     , m_disconnecting( false )
     , m_url( url )
+    , m_authorizationHeader( authorizationHeader )
     , m_outputStream()
     , m_lastSocketState( QAbstractSocket::UnconnectedState )
     , m_connectionTimer( this )
@@ -46,12 +47,16 @@ WebSocket::WebSocket( const QString& url )
 WebSocket::~WebSocket()
 {
     if ( m_connection )
+    {
         m_connection.reset();
+    }
 
     m_client.reset();
 
     if ( m_socket )
+    {
         delete m_socket.data();
+    }
 }
 
 
@@ -60,11 +65,32 @@ WebSocket::setUrl( const QString &url )
 {
     tLog() << Q_FUNC_INFO << "Setting url to" << url;
     if ( m_url == url )
+    {
         return;
+    }
 
     // We'll let automatic reconnection handle things
     if ( m_socket && m_socket->isEncrypted() )
+    {
         disconnectWs();
+    }
+}
+
+
+void
+WebSocket::setAuthorizationHeader( const QString &authorizationHeader )
+{
+    tLog() << Q_FUNC_INFO << "Setting authorization header";
+    if ( m_authorizationHeader == authorizationHeader )
+    {
+        return;
+    }
+
+    // We'll let automatic reconnection handle things
+    if ( m_socket && m_socket->isEncrypted() )
+    {
+        disconnectWs();
+    }
 }
 
 
@@ -76,10 +102,14 @@ WebSocket::connectWs()
     if ( m_socket )
     {
         if ( m_socket->isEncrypted() )
+        {
             return;
+        }
 
         if ( m_socket->state() == QAbstractSocket::ClosingState )
+        {
             QMetaObject::invokeMethod( this, "connectWs", Qt::QueuedConnection );
+        }
 
         return;
     }
@@ -119,9 +149,13 @@ void
 WebSocket::disconnectSocket()
 {
     if ( m_socket && m_socket->state() == QAbstractSocket::ConnectedState )
+    {
         m_socket->disconnectFromHost();
+    }
     else
+    {
         QMetaObject::invokeMethod( this, "cleanup", Qt::QueuedConnection );
+    }
 
     QTimer::singleShot( 5000, this, SLOT( cleanup() ) ); //safety
 }
@@ -178,7 +212,9 @@ WebSocket::sslErrors( const QList< QSslError >& errors )
 {
     tLog() << Q_FUNC_INFO << "Encountered errors when trying to connect via SSL";
     foreach( QSslError error, errors )
+    {
         tLog() << Q_FUNC_INFO << "Error: " << error.errorString();
+    }
     QMetaObject::invokeMethod( this, "disconnectWs", Qt::QueuedConnection );
 }
 
@@ -198,6 +234,10 @@ WebSocket::encrypted()
         tLog() << Q_FUNC_INFO << "Got error creating WS connection, error is:" << QString::fromStdString( ec.message() );
         disconnectWs();
         return;
+    }
+    if ( !m_authorizationHeader.isEmpty() )
+    {
+        m_connection->replace_header( "Authorization", m_authorizationHeader.toStdString() );
     }
     m_client->connect( m_connection );
     QMetaObject::invokeMethod( this, "readOutput", Qt::QueuedConnection );
@@ -241,17 +281,23 @@ WebSocket::readOutput()
             m_connectionTimer.stop();
         }
         else if ( !m_disconnecting )
+        {
             QTimer::singleShot( 200, this, SLOT( readOutput() ) );
+        }
     }
     else
+    {
         m_connectionTimer.stop();
+    }
 }
 
 void
 WebSocket::socketReadyRead()
 {
     if ( !m_socket || !m_socket->isEncrypted() )
+    {
         return;
+    }
 
     if ( !m_socket->isValid() )
     {
@@ -296,7 +342,9 @@ WebSocket::encodeMessage( const QByteArray &bytes )
         m_connectionTimer.start();
     }
     else
+    {
         m_connection->send( std::string( bytes.constData() ), websocketpp::frame::opcode::TEXT );
+    }
 
     QMetaObject::invokeMethod( this, "readOutput", Qt::QueuedConnection );
 }

@@ -39,7 +39,7 @@ class WebSocket : public QObject
 {
     Q_OBJECT
 public:
-    explicit WebSocket( const QString& url );
+    explicit WebSocket( const QString& url, const QString& authorizationHeader = QString() );
     virtual ~WebSocket();
 
 signals:
@@ -49,6 +49,7 @@ signals:
 
 public slots:
     void setUrl( const QString& url );
+    void setAuthorizationHeader( const QString& authorizationHeader );
     void connectWs();
     void disconnectWs( websocketpp::close::status::value status = websocketpp::close::status::normal, const QString& reason = QString( "Disconnecting" ) );
     void encodeMessage( const QByteArray& bytes );
@@ -70,6 +71,7 @@ private:
 
     bool m_disconnecting;
     QUrl m_url;
+    QString m_authorizationHeader;
     std::stringstream m_outputStream;
     std::unique_ptr< hatchet_client > m_client;
     hatchet_client::connection_ptr m_connection;

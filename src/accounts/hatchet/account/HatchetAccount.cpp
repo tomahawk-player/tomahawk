@@ -183,8 +183,6 @@ HatchetAccount::sipPlugin( bool create )
 
         tLog() << Q_FUNC_INFO;
         m_tomahawkSipPlugin = QPointer< HatchetSipPlugin >( new HatchetSipPlugin( this ) );
-        connect( m_tomahawkSipPlugin.data(), SIGNAL( authUrlDiscovered( Tomahawk::Accounts::HatchetAccount::Service, QString ) ),
-                 this, SLOT( authUrlDiscovered( Tomahawk::Accounts::HatchetAccount::Service, QString ) ) );
 
         return m_tomahawkSipPlugin.data();
     }
@@ -521,20 +519,6 @@ HatchetAccount::onFetchAccessTokenFinished( QNetworkReply* reply, const QString&
     tLog() << Q_FUNC_INFO << "Access tokens fetched successfully";
 
     emit accessTokenFetched();
-}
-
-
-QString
-HatchetAccount::authUrlForService( const Service &service ) const
-{
-    return m_extraAuthUrls.value( service, QString() );
-}
-
-
-void
-HatchetAccount::authUrlDiscovered( Service service, const QString &authUrl )
-{
-    m_extraAuthUrls[ service ] = authUrl;
 }
 
 

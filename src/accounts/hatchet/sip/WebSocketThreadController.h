@@ -32,6 +32,7 @@ public:
     virtual ~WebSocketThreadController();
 
     void setUrl( const QString &url );
+    void setAuthorizationHeader( const QString &authorizationHeader );
 
 protected:
     void run();
@@ -42,6 +43,7 @@ private:
     QPointer< WebSocket > m_webSocket;
     QPointer< QObject > m_sip;
     QString m_url;
+    QString m_authorizationHeader;
 };
 
 #endif

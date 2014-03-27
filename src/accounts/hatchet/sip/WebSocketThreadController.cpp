@@ -50,10 +50,21 @@ WebSocketThreadController::setUrl( const QString &url )
 
 
 void
+WebSocketThreadController::setAuthorizationHeader( const QString &authorizationHeader )
+{
+    m_authorizationHeader = authorizationHeader;
+    if ( m_webSocket )
+    {
+        QMetaObject::invokeMethod( m_webSocket, "setAuthorizationHeader", Qt::QueuedConnection, Q_ARG( QString, authorizationHeader ));
+    }
+}
+
+
+void
 WebSocketThreadController::run()
 {
     tLog() << Q_FUNC_INFO << "Starting";
-    m_webSocket = QPointer< WebSocket >( new WebSocket( m_url ) );
+    m_webSocket = QPointer< WebSocket >( new WebSocket( m_url, m_authorizationHeader ) );
     if ( m_webSocket && m_sip )
     {
         tLog() << Q_FUNC_INFO << "Have a valid websocket and parent";

@@ -89,8 +89,6 @@ public:
 
     void fetchAccessToken( const QString& type = "dreamcatcher" );
 
-    QString authUrlForService( const Service& service ) const;
-
 signals:
     void authError( QString error, int statusCode, const QVariantMap );
     void deauthenticated();
@@ -99,7 +97,6 @@ signals:
 private slots:
     void onPasswordLoginFinished( QNetworkReply*, const QString& username );
     void onFetchAccessTokenFinished( QNetworkReply*, const QString& type );
-    void authUrlDiscovered( Tomahawk::Accounts::HatchetAccount::Service service, const QString& authUrl );
 
 private:
     QByteArray refreshToken() const;
@@ -119,7 +116,6 @@ private:
     Account::ConnectionState m_state;
 
     QPointer< HatchetSipPlugin > m_tomahawkSipPlugin;
-    QHash< Service, QString > m_extraAuthUrls;
 
     static HatchetAccount* s_instance;
     friend class HatchetAccountConfig;
