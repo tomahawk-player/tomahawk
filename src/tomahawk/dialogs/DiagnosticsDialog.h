@@ -16,7 +16,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DIGANOSTICSDIALOG_H
+#ifndef DIAGNOSTICSDIALOG_H
 #define DIAGNOSTICSDIALOG_H
 
 #include "accounts/Account.h"

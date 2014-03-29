@@ -18,7 +18,7 @@
  */
 
 #ifndef PLAYDARAPIDLLMACRO_H
-#define PLAYDARAPISDLLMACRO_H
+#define PLAYDARAPIDLLMACRO_H
 
 #include <QtCore/qglobal.h>
 
