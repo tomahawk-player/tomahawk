@@ -46,7 +46,7 @@
     #include <libqnetwm/netwm.h>
 #endif
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     #include <windows.h>
     #include <windowsx.h>
     #include <shellapi.h>
@@ -282,7 +282,7 @@ bringToFront()
 
         XSendEvent( QX11Info::display(), RootWindow( QX11Info::display(), DefaultScreen( QX11Info::display() ) ), False, SubstructureRedirectMask | SubstructureNotifyMask, &e );
     }
-#elif defined(Q_WS_WIN)
+#elif defined(Q_OS_WIN)
     {
         qDebug() << Q_FUNC_INFO;
 
@@ -940,7 +940,7 @@ drawCompositedPopup( QWidget* widget,
                      qreal opacity )
 {
     bool compositingWorks = true;
-#if defined(Q_WS_WIN)   //HACK: Windows refuses to perform compositing so we must fake it
+#if defined(Q_OS_WIN)   //HACK: Windows refuses to perform compositing so we must fake it
     compositingWorks = false;
 #elif defined(Q_WS_X11)
     if ( !QX11Info::isCompositingManagerRunning() )

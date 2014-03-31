@@ -67,7 +67,7 @@ protected:
     /*! \reimp */ bool event( QEvent * event );
 
 private:
-#ifndef Q_WS_WIN
+#ifndef Q_OS_WIN
     static void SIGINT_handler( int );
 #endif
 

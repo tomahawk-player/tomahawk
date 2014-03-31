@@ -19,12 +19,12 @@
 #include <cstring>
 #include <cassert>
 
-#ifndef Q_WS_WIN
+#ifndef Q_OS_WIN
 #include <csignal>
 #include <unistd.h>
 #endif
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 #include <windows.h>
 #ifndef _SSIZE_T_DEFINED
 typedef signed int ssize_t;
@@ -633,7 +633,7 @@ void KDSingleApplicationGuard::Instance::raise()
 }
 
 
-#ifndef Q_WS_WIN
+#ifndef Q_OS_WIN
 // static
 void KDSingleApplicationGuard::SIGINT_handler( int sig )
 {
@@ -735,7 +735,7 @@ void KDSingleApplicationGuard::Private::create( const QStringList & arguments )
 
     // if another instance crashed, the shared memory segment is still there on Unix
     // the following lines trigger deletion in that case
-#ifndef Q_WS_WIN
+#ifndef Q_OS_WIN
     mem.attach();
     mem.detach();
 #endif
@@ -767,7 +767,7 @@ void KDSingleApplicationGuard::Private::create( const QStringList & arguments )
         {
             const KDLockedSharedMemoryPointer< InstanceRegister > instances( &mem );
             initialized = instances->isValid();
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
             ::Sleep(20);
 #else
             usleep(20000);
@@ -815,7 +815,7 @@ void KDSingleApplicationGuard::Private::create( const QStringList & arguments )
         instances->info[ 0 ] = ProcessInfo( NoCommand, arguments, QCoreApplication::applicationPid() );
     }
 
-#ifndef Q_WS_WIN
+#ifndef Q_OS_WIN
     ::signal( SIGINT, SIGINT_handler );
 #endif
 
