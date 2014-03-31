@@ -830,17 +830,17 @@ de un solo uso (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="53"/>
         <source>Static Host Name:</source>
-        <translation type="unfinished"/>
+        <translation>Nombre del puerto estático:</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="69"/>
         <source>Static Port:</source>
-        <translation type="unfinished"/>
+        <translation>Puerto estático:</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/HostDialog.ui" line="106"/>
         <source>Automatically detect external IP address</source>
-        <translation type="unfinished"/>
+        <translation>Detectar dirección IP externa automáticamente</translation>
     </message>
 </context>
 <context>
@@ -1804,7 +1804,7 @@ de un solo uso (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="60"/>
         <source>Manual port forward</source>
-        <translation type="unfinished"/>
+        <translation>Redirección de puertos manual</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="73"/>
@@ -1839,7 +1839,7 @@ de un solo uso (OTP)</translation>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="184"/>
         <source>Allow other computers to interact with Tomahawk (not recommended yet)</source>
-        <translation type="unfinished"/>
+        <translation>Permitir a otros ordenadores interactuar con Tomahawk (no recomendado aún)</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/dialogs/Settings_Advanced.ui" line="197"/>
@@ -3858,13 +3858,15 @@ Intente ajustar los filtros para reproducir nuevas canciones.</translation>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="710"/>
         <source>Updating database
 </source>
-        <translation type="unfinished"/>
+        <translation>Actualizando la base de datos
+</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="717"/>
         <source>Updating database
 %1</source>
-        <translation type="unfinished"/>
+        <translation>Actualizando la base de datos
+%1</translation>
     </message>
     <message>
         <location filename="../src/tomahawk/TomahawkApp.cpp" line="767"/>
