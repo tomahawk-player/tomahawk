@@ -7,9 +7,6 @@ ADD_DEFINITIONS( -DUNICODE )
 
 SET( OS_SPECIFIC_LINK_LIBRARIES
     ${OS_SPECIFIC_LINK_LIBRARIES}
-
-    ${QTSPARKLE_LIBRARIES}
-
 # third party shipped with tomahawk
 
 # system libs
@@ -22,3 +19,11 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
     "winmm.dll"
     "advapi32.dll"
 )
+
+if(QTSPARKLE_FOUND)
+    SET( OS_SPECIFIC_LINK_LIBRARIES
+        ${OS_SPECIFIC_LINK_LIBRARIES}
+        
+        ${QTSPARKLE_LIBRARIES}
+    )
+endif()

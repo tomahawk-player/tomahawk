@@ -77,7 +77,7 @@ LRESULT QT_WIN_CALLBACK qt_LowLevelKeyboardHookProc( int nCode, WPARAM wParam, L
                     if ( QApplication::activeWindow() == widget )
                         continue;
 
-                    hWnd = widget->winId();
+                    hWnd = (HWND)widget->winId();
 
                     // generate message and post it to the message queue
                     LPKBDLLHOOKSTRUCT pKeyboardHookStruct = reinterpret_cast<LPKBDLLHOOKSTRUCT>(lParam);

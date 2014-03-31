@@ -166,6 +166,9 @@ SET_TARGET_PROPERTIES(tomahawk_bin
 
 
 qt5_use_modules(tomahawk_bin Core Widgets Network Sql WebKitWidgets)
+if(WIN32)
+    qt5_use_modules(tomahawk_bin WinExtras)
+endif()
 
 MESSAGE( STATUS "OS_SPECIFIC_LINK_LIBRARIES: ${OS_SPECIFIC_LINK_LIBRARIES}" )
 
