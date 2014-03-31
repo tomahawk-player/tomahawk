@@ -17,8 +17,8 @@
  */
 
 #include "HatchetAccount.h"
-#include <QHostInfo>
 
+#include "HatchetHelpers.h"
 #include "HatchetAccountConfig.h"
 #include "utils/Closure.h"
 #include "utils/Logger.h"
@@ -26,19 +26,24 @@
 #include "utils/TomahawkUtils.h"
 #include "utils/NetworkAccessManager.h"
 
-#include <QtPlugin>
+#include <QHostInfo>
 #include <QFile>
 #include <QNetworkRequest>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QUrl>
 #include <QUuid>
+#include <QtPlugin>
 
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 
-using namespace Tomahawk;
-using namespace Accounts;
+namespace Tomahawk
+{
+namespace Accounts
+{
+namespace Hatchet
+{
 
 static QPixmap* s_icon = 0;
 HatchetAccount* HatchetAccount::s_instance  = 0;
@@ -57,7 +62,6 @@ HatchetAccountFactory::HatchetAccountFactory()
 
 HatchetAccountFactory::~HatchetAccountFactory()
 {
-
 }
 
 
@@ -227,14 +231,14 @@ HatchetAccount::refreshTokenExpiration() const
 
 
 QByteArray
-HatchetAccount::mandellaAccessToken() const
+HatchetAccount::bearerToken() const
 {
     return credentials().value( "mandella_access_token" ).toByteArray();
 }
 
 
 uint
-HatchetAccount::mandellaAccessTokenExpiration() const
+HatchetAccount::bearerTokenExpiration() const
 {
     bool ok;
     return credentials().value( "mandella_access_token_expiration" ).toUInt( &ok );
@@ -242,7 +246,7 @@ HatchetAccount::mandellaAccessTokenExpiration() const
 
 
 QByteArray
-HatchetAccount::mandellaTokenType() const
+HatchetAccount::bearerTokenType() const
 {
     return credentials().value( "mandella_token_type" ).toByteArray();
 }
@@ -284,67 +288,13 @@ HatchetAccount::loginWithPassword( const QString& username, const QString& passw
 
 
 void
-HatchetAccount::fetchAccessToken( const QString& type )
-{
-    if ( username().isEmpty() )
-    {
-        tLog() << "No username, not logging in";
-        return;
-    }
-    if ( mandellaAccessToken().isEmpty() ||
-        (mandellaAccessTokenExpiration() < QDateTime::currentDateTime().toTime_t() &&
-          (refreshToken().isEmpty() ||
-            (refreshTokenExpiration() != 0 && refreshTokenExpiration() < QDateTime::currentDateTime().toTime_t()))) )
-    {
-        tLog() << "No valid combination of access/refresh tokens, not logging in";
-        tLog() << "Mandella access token expiration:" << mandellaAccessTokenExpiration() << ", refresh token expiration:" << refreshTokenExpiration();
-        emit authError( "No valid credentials are stored locally, please log in again.", 401, QVariantMap() );
-        return;
-    }
-
-    uint matExpiration = mandellaAccessTokenExpiration();
-    bool interceptionNeeded = false;
-
-    if ( matExpiration < QDateTime::currentDateTime().toTime_t() )
-    {
-        interceptionNeeded = true;
-        tLog() << "Mandella access token has expired, fetching new ones first";
-    }
-    else
-    {
-        tLog() << "Fetching access tokens of type" << type;
-    }
-
-    QNetworkRequest req( QUrl( c_accessTokenServer + "/tokens/" + (interceptionNeeded ? "refresh/" + QString::fromUtf8(mandellaTokenType()).toLower() : "fetch/" + type) ) );
-    QNetworkReply* reply;
-
-    if ( interceptionNeeded )
-    {
-        tLog() << "Intercepting; new mandella access token needed";
-        req.setHeader( QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded" );
-        QUrl params;
-        TomahawkUtils::urlAddQueryItem( params, "grant_type", "refresh_token" );
-        TomahawkUtils::urlAddQueryItem( params, "refresh_token", refreshToken() );
-        QByteArray data = TomahawkUtils::encodedQuery( params );
-        reply = Tomahawk::Utils::nam()->post( req, data );
-        reply->setProperty( "originalType", type );
-    }
-    else
-    {
-        tLog() << "Fetching token of type" << type;
-        req.setRawHeader( "Authorization", QString( mandellaTokenType() + " " + mandellaAccessToken()).toUtf8() );
-        reply = Tomahawk::Utils::nam()->get( req );
-    } 
-
-    NewClosure( reply, SIGNAL( finished() ), this, SLOT( onFetchAccessTokenFinished( QNetworkReply*, const QString& ) ), reply, type );
-}
-
-
-void
 HatchetAccount::onPasswordLoginFinished( QNetworkReply* reply, const QString& username )
 {
     tLog() << Q_FUNC_INFO;
     Q_ASSERT( reply );
+
+    reply->deleteLater();
+
     bool ok;
     int statusCode = reply->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt( &ok );
     if ( !ok )
@@ -353,7 +303,7 @@ HatchetAccount::onPasswordLoginFinished( QNetworkReply* reply, const QString& us
         emit authError( "An error occurred getting the status code from the server", 0, QVariantMap() );
         return;
     }
-    const QVariantMap resp = parseReply( reply, ok );
+    const QVariantMap resp = HatchetHelpers::parseReply( reply, ok );
     if ( !ok )
     {
         tLog() << Q_FUNC_INFO << "Error getting parsed reply from auth server";
@@ -424,140 +374,64 @@ HatchetAccount::onPasswordLoginFinished( QNetworkReply* reply, const QString& us
 
 
 void
-HatchetAccount::onFetchAccessTokenFinished( QNetworkReply* reply, const QString& type )
+HatchetAccount::fetchAccessToken( const QString& type )
 {
-    tLog() << Q_FUNC_INFO;
-    Q_ASSERT( reply );
-
-    QString originalType;
-    if ( reply->property( "originalType" ).isValid() )
-    {
-        originalType = reply->property( "originalType" ).toString();
-    }
-
-    bool ok;
-    int statusCode = reply->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt( &ok );
-    if ( !ok )
-    {
-        tLog() << Q_FUNC_INFO << "Error finding status code from auth server";
-        emit authError( "An error occurred getting the status code from the server", 0, QVariantMap() );
-        return;
-    }
-    const QVariantMap resp = parseReply( reply, ok );
-    if ( !ok )
-    {
-        tLog() << Q_FUNC_INFO << "Error getting parsed reply from auth server";
-        emit authError( "An error occurred reading the reply from the authentication server", statusCode, resp );
-        return;
-    }
-    if ( statusCode >= 500 )
-    {
-        tLog() << Q_FUNC_INFO << "Encountered internal error from auth server, cannot continue";
-        emit authError( "The authentication server reported an internal error, please try again later", statusCode, resp );
-        return;
-    }
-    if ( statusCode >= 400 )
-    {
-        QString errString = resp.value( "error_description" ).toString();
-        tLog() << Q_FUNC_INFO << "An error was returned from the authentication server: " << errString;
-        emit authError( errString, statusCode, resp );
-        return;
-    }
-
     QVariantHash creds = credentials();
+    HatchetHelpers::MandellaInformation mandellaInfo;
+    mandellaInfo.bearerToken = bearerToken();
+    mandellaInfo.bearerTokenExpiration = bearerTokenExpiration();
+    mandellaInfo.bearerTokenType = bearerTokenType();
+    mandellaInfo.refreshToken = refreshToken();
+    mandellaInfo.refreshTokenExpiration = refreshTokenExpiration();
 
-    if ( !originalType.isEmpty() )
-    {
-        const QByteArray accessTokenBytes = resp.value( "access_token" ).toByteArray();
-        uint accessTokenExpiration = resp.value( "expires_in" ).toUInt( &ok );
-        if ( accessTokenBytes.isEmpty() || !ok )
-        {
-            tLog() << Q_FUNC_INFO << "Error reading access token or its expiration";
-            emit authError( "An error encountered parsing the authentication server's response", 0, QVariantMap() );
-            return;
-        }
-        const QByteArray tokenTypeBytes = resp.value( "token_type" ).toByteArray();
-        if ( tokenTypeBytes.isEmpty() )
-        {
-            tLog() << Q_FUNC_INFO << "Error reading access token type";
-            emit authError( "An error encountered parsing the authentication server's response", 0, QVariantMap() );
-            return;
-        }
-        creds[ "mandella_access_token" ] = accessTokenBytes;
-        creds[ "mandella_access_token_expiration" ] = QDateTime::currentDateTime().toTime_t() + accessTokenExpiration;
-        creds[ "mandella_token_type" ] = tokenTypeBytes;
-        setCredentials( creds );
-        syncConfig();
+    HatchetHelpers::HatchetCredentialFetcher* fetcher = new HatchetHelpers::HatchetCredentialFetcher( this );
+    connect( fetcher,
+        SIGNAL( mandellaInformationUpdated( const HatchetHelpers::MandellaInformation& ) ),
+        SLOT( onFetcherMandellaInformationUpdated( const HatchetHelpers::MandellaInformation& ) ) );
+    connect( fetcher,
+        SIGNAL( authError( const QString&, int, const QVariantMap& ) ),
+        SLOT( onFetcherAuthError( const QString&, int, const QVariantMap& ) ) );
+    connect( fetcher,
+        SIGNAL( accessTokenFetched( const HatchetHelpers::AccessTokenInformation& ) ),
+        SLOT( onFetcherAccessTokenFetched( const HatchetHelpers::AccessTokenInformation& ) ) );
 
-        fetchAccessToken( originalType );
-        return;
-    }
+    fetcher->fetchAccessToken( type, mandellaInfo );
+}
 
-    const QByteArray accessTokenBytes = resp.value( "access_token" ).toByteArray();
-    uint accessTokenExpiration = resp.value( "expires_in" ).toUInt( &ok );
-    if ( accessTokenBytes.isEmpty() || !ok )
-    {
-        tLog() << Q_FUNC_INFO << "Error reading access token or its expiration";
-        emit authError( "An error encountered parsing the authentication server's response", 0, QVariantMap() );
-        return;
-    }
-    const QByteArray tokenTypeBytes = resp.value( "token_type" ).toByteArray();
-    if ( tokenTypeBytes.isEmpty() )
-    {
-        tLog() << Q_FUNC_INFO << "Error reading access token type";
-        emit authError( "An error encountered parsing the authentication server's response", 0, QVariantMap() );
-        return;
-    }
 
-    creds[ type + "_access_token" ] = accessTokenBytes;
-
-    tDebug() << Q_FUNC_INFO << "Creds: " << creds;
-
+void
+HatchetAccount::onFetcherMandellaInformationUpdated( const HatchetHelpers::MandellaInformation& mandellaInformation )
+{
+    QVariantHash creds = credentials();
+    creds[ "mandella_access_token" ] = mandellaInformation.bearerToken;
+    creds[ "mandella_access_token_expiration" ] = QDateTime::currentDateTime().toTime_t() + mandellaInformation.bearerTokenExpiration;
+    creds[ "mandella_token_type" ] = mandellaInformation.bearerTokenType;
     setCredentials( creds );
     syncConfig();
-
-    tLog() << Q_FUNC_INFO << "Access tokens fetched successfully";
-
-    emit accessTokenFetched();
 }
 
 
-QVariantMap
-HatchetAccount::parseReply( QNetworkReply* reply, bool& okRet ) const
+void
+HatchetAccount::onFetcherAuthError( const QString& error, int code, const QVariantMap& resp )
 {
-    QVariantMap resp;
-
-    reply->deleteLater();
-
-    bool ok;
-    int statusCode = reply->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt( &ok );
-    if ( reply->error() != QNetworkReply::NoError && statusCode < 400 )
-    {
-        tLog() << Q_FUNC_INFO << "Network error in command:" << reply->error() << reply->errorString();
-        okRet = false;
-        return resp;
-    }
-
-    QJson::Parser p;
-    QByteArray replyData = reply->readAll();
-    resp = p.parse( replyData, &ok ).toMap();
-
-    if ( !ok )
-    {
-        tLog() << Q_FUNC_INFO << "Error parsing JSON from server" << replyData;
-        okRet = false;
-        return resp;
-    }
-
-    if ( statusCode >= 400 )
-    {
-        tDebug() << "Error from tomahawk server response, or in parsing from json:" << resp.value( "error" ).toString() << resp;
-    }
-
-    tDebug() << Q_FUNC_INFO << "Got keys" << resp.keys();
-    tDebug() << Q_FUNC_INFO << "Got values" << resp.values();
-    okRet = true;
-    return resp;
+    if ( sender() )
+        sender()->deleteLater();
+    emit authError( error, code, resp );
 }
 
-Q_EXPORT_PLUGIN2( Tomahawk::Accounts::AccountFactory, Tomahawk::Accounts::HatchetAccountFactory )
+
+void
+HatchetAccount::onFetcherAccessTokenFetched( const HatchetHelpers::AccessTokenInformation& accessTokenInfo )
+{
+    if ( sender() )
+        sender()->deleteLater();
+    emit accessTokenFetched( accessTokenInfo );
+}
+
+
+}
+}
+}
+
+
+Q_EXPORT_PLUGIN2( Tomahawk::Accounts::AccountFactory, Tomahawk::Accounts::Hatchet::HatchetAccountFactory )

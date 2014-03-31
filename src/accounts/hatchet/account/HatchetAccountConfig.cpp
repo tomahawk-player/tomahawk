@@ -27,6 +27,7 @@
 
 using namespace Tomahawk;
 using namespace Accounts;
+using namespace Hatchet;
 
 namespace {
     enum ButtonAction {
