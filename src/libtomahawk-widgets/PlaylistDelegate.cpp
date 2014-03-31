@@ -161,7 +161,7 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     QRect rectText = option.rect.adjusted( option.fontMetrics.height() * 5.5, boldFontMetrics.height() + 6, -leftEdge - 10, -8 );
 #ifdef Q_WS_MAC
     rectText.adjust( 0, 1, 0, 0 );
-#elif defined Q_WS_WIN
+#elif defined Q_OS_WIN
     rectText.adjust( 0, 2, 0, 0 );
 #endif
 

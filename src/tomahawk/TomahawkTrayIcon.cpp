@@ -200,7 +200,7 @@ TomahawkTrayIcon::refreshToolTip()
         tip = tr( "Currently not playing." );
     }
 
-    #ifdef Q_WS_WIN
+    #ifdef Q_OS_WIN
         // Good old crappy Win32
         tip.replace( "&", "&&&" );
     #endif
