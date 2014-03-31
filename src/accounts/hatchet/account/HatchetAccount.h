@@ -20,6 +20,8 @@
 #define HATCHET_ACCOUNT_H
 
 #include "TomahawkPlugin.h"
+#include "HatchetHelpers.h"
+
 #include <accounts/Account.h>
 #include <accounts/AccountDllMacro.h>
 
@@ -27,14 +29,15 @@
 
 class QNetworkReply;
 
-class HatchetSipPlugin;
-
 namespace Tomahawk
 {
 namespace Accounts
 {
+namespace Hatchet
+{
 
 class HatchetAccountConfig;
+class HatchetSipPlugin;
 
 class ACCOUNTDLLEXPORT HatchetAccountFactory : public AccountFactory
 {
@@ -87,29 +90,30 @@ public:
 
     QString username() const;
 
-    void fetchAccessToken( const QString& type = "dreamcatcher" );
-
 signals:
-    void authError( QString error, int statusCode, const QVariantMap );
+    void authError( const QString&, int, const QVariantMap&);
     void deauthenticated();
-    void accessTokenFetched();
+    void accessTokenFetched( const HatchetHelpers::AccessTokenInformation& );
+
+public slots:
+    void fetchAccessToken( const QString& type );
 
 private slots:
-    void onPasswordLoginFinished( QNetworkReply*, const QString& username );
-    void onFetchAccessTokenFinished( QNetworkReply*, const QString& type );
+    void onPasswordLoginFinished( QNetworkReply*, const QString& );
+    void onFetcherMandellaInformationUpdated( const HatchetHelpers::MandellaInformation& );
+    void onFetcherAccessTokenFetched( const HatchetHelpers::AccessTokenInformation& );
+    void onFetcherAuthError( const QString&, int, const QVariantMap& );
 
 private:
     QByteArray refreshToken() const;
     uint refreshTokenExpiration() const;
 
-    QByteArray mandellaAccessToken() const;
-    uint mandellaAccessTokenExpiration() const;
+    QByteArray bearerToken() const;
+    uint bearerTokenExpiration() const;
 
-    QByteArray mandellaTokenType() const;
+    QByteArray bearerTokenType() const;
 
     void loginWithPassword( const QString& username, const QString& password, const QString &otp );
-
-    QVariantMap parseReply( QNetworkReply* reply, bool& ok ) const;
 
     QPointer<HatchetAccountConfig> m_configWidget;
 
@@ -124,6 +128,7 @@ private:
     QString m_uuid;
 };
 
+}
 }
 }
 

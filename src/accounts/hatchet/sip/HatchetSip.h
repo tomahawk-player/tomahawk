@@ -32,6 +32,13 @@ class WebSocketThreadController;
 
 const int VERSION = 1;
 
+namespace Tomahawk
+{
+namespace Accounts
+{
+namespace Hatchet
+{
+
 class ACCOUNTDLLEXPORT HatchetSipPlugin : public SipPlugin
 {
     Q_OBJECT
@@ -63,14 +70,14 @@ public slots:
     void webSocketDisconnected();
 
 signals:
-    void connectWebSocket() const;
+    void connectWebSocket( const HatchetHelpers::AccessTokenInformation& ) const;
     void disconnectWebSocket() const;
     void rawBytes( QByteArray bytes ) const;
 
 private slots:
     void dbSyncTriggered();
     void messageReceived( const QByteArray& msg );
-    void connectWebSocket();
+    void connectWebSocket( const HatchetHelpers::AccessTokenInformation& );
     void oplogFetched( const QString& sinceguid, const QString& lastguid, const QList< dbop_ptr > ops );
 
 private:
@@ -79,7 +86,7 @@ private:
     void newPeer( const QVariantMap& valMap );
     void peerAuthorization( const QVariantMap& valMap );
     void sendOplog( const QVariantMap& valMap ) const;
-    Tomahawk::Accounts::HatchetAccount* hatchetAccount() const;
+    HatchetAccount* hatchetAccount() const;
 
     QPointer< WebSocketThreadController > m_webSocketThreadController;
     QString m_token;
@@ -90,5 +97,9 @@ private:
     QTimer m_reconnectTimer;
     QHash< QString, QList< SipInfo > > m_sipInfoHash;
 };
+
+}
+}
+}
 
 #endif

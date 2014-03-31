@@ -37,6 +37,14 @@
 #include <QHostInfo>
 #include <QUuid>
 
+namespace Tomahawk
+{
+namespace Accounts
+{
+namespace Hatchet
+{
+
+
 HatchetSipPlugin::HatchetSipPlugin( Tomahawk::Accounts::Account *account )
     : SipPlugin( account )
     , m_sipState( Closed )
@@ -46,7 +54,9 @@ HatchetSipPlugin::HatchetSipPlugin( Tomahawk::Accounts::Account *account )
 {
     tLog() << Q_FUNC_INFO;
 
-    connect( m_account, SIGNAL( accessTokenFetched() ), this, SLOT( connectWebSocket() ) );
+    connect( m_account,
+        SIGNAL( accessTokenFetched( const HatchetHelpers::AccessTokenInformation& ) ),
+        SLOT( connectWebSocket( const HatchetHelpers::AccessTokenInformation& ) ) );
     connect( Servent::instance(), SIGNAL( dbSyncTriggered() ), this, SLOT( dbSyncTriggered() ));
 
     /*
@@ -95,10 +105,10 @@ HatchetSipPlugin::isValid() const
 }
 
 
-Tomahawk::Accounts::HatchetAccount*
+HatchetAccount*
 HatchetSipPlugin::hatchetAccount() const
 {
-    return qobject_cast< Tomahawk::Accounts::HatchetAccount* >( m_account );
+    return qobject_cast< HatchetAccount* >( m_account );
 }
 
 
@@ -133,7 +143,7 @@ HatchetSipPlugin::disconnectPlugin()
 
 
 void
-HatchetSipPlugin::connectWebSocket()
+HatchetSipPlugin::connectWebSocket( const HatchetHelpers::AccessTokenInformation& accessTokenInformation )
 {
     tLog() << Q_FUNC_INFO;
     if ( m_webSocketThreadController )
@@ -157,8 +167,7 @@ HatchetSipPlugin::connectWebSocket()
       return;
     }
 
-    m_token = m_account->credentials()[ "dreamcatcher_access_token" ].toString();
-
+    m_token = accessTokenInformation.token;
 
     if ( m_token.isEmpty() )
     {
@@ -585,3 +594,6 @@ HatchetSipPlugin::oplogFetched( const QString& sinceguid, const QString& /* last
 }
 
 
+}
+}
+}

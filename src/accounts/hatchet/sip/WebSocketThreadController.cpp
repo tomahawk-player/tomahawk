@@ -68,7 +68,6 @@ WebSocketThreadController::run()
     if ( m_webSocket && m_sip )
     {
         tLog() << Q_FUNC_INFO << "Have a valid websocket and parent";
-        connect( m_sip, SIGNAL( connectWebSocket() ), m_webSocket, SLOT( connectWs() ), Qt::QueuedConnection );
         connect( m_sip, SIGNAL( disconnectWebSocket() ), m_webSocket, SLOT( disconnectWs() ), Qt::QueuedConnection );
         connect( m_sip, SIGNAL( rawBytes( QByteArray ) ), m_webSocket, SLOT( encodeMessage( QByteArray ) ), Qt::QueuedConnection );
         connect( m_webSocket, SIGNAL( connected() ), m_sip, SLOT( webSocketConnected() ), Qt::QueuedConnection );

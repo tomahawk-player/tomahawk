@@ -32,6 +32,7 @@ namespace Ui {
 
 namespace Tomahawk {
 namespace Accounts {
+namespace Hatchet {
 
 class HatchetAccount;
 
@@ -63,6 +64,7 @@ private:
     HatchetAccount* m_account;
 };
 
+}
 }
 }
 
