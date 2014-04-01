@@ -933,8 +933,7 @@ ViewManager::showDynamicPage( const QString& pageName )
     {
         if ( !m_dynamicPagesInstanceLoaders.contains( pageName ) )
         {
-           tLog() << "Trying to show a page that does not exist and does not have a registered loader";
-           Q_ASSERT( false );
+           Q_ASSERT_X( false, Q_FUNC_INFO, QString("Trying to show a page that does not exist and does not have a registered loader: %d" ).arg( pageName ).toStdString().c_str() );
            return 0;
         }
 
