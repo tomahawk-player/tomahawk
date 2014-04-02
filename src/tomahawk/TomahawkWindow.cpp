@@ -83,10 +83,12 @@
 #include "config.h"
 
 #if defined( Q_OS_WIN )
-    #if defined ( WITH_QtSparkle )
+    #if defined ( WITH_QTSPARKLE )
         #include <qtsparkle/Updater>
     #endif
-
+    #if QT_VERSION >= QT_VERSION_CHECK(5,2,0)
+        #include <QtWin>
+    #endif
     #include <windows.h>
     #include <shellapi.h>
 
@@ -484,7 +486,7 @@ TomahawkWindow::setupUpdateCheck()
 #if defined( Q_OS_MAC ) && defined( HAVE_SPARKLE )
     connect( ActionCollection::instance()->getAction( "checkForUpdates" ), SIGNAL( triggered( bool ) ),
              SLOT( checkForUpdates() ) );
-    #elif defined( Q_OS_WIN ) && defined( WITH_QtSparkle )
+    #elif defined( Q_OS_WIN ) && defined( WITH_QTSPARKLE )
     QUrl updaterUrl;
 
     if ( qApp->arguments().contains( "--debug" ) )
@@ -546,7 +548,7 @@ TomahawkWindow::setupWindowsButtons()
         hr = m_taskbarList->HrInit();
         if ( SUCCEEDED( hr ) )
         {
-            hr = m_taskbarList->ThumbBarAddButtons( winId(), ARRAYSIZE( m_thumbButtons ), m_thumbButtons );
+            hr = m_taskbarList->ThumbBarAddButtons( (HWND)winId(), ARRAYSIZE( m_thumbButtons ), m_thumbButtons );
         }
         else
         {
@@ -566,7 +568,11 @@ TomahawkWindow::thumbIcon( TomahawkUtils::ImageType type )
     if ( !thumbIcons.contains( type ) )
     {
         QPixmap pix ( TomahawkUtils::defaultPixmap(type , TomahawkUtils::Original, QSize( 20, 20 ) ) );
+#if QT_VERSION >= QT_VERSION_CHECK(5,2,0)
+        thumbIcons[type] = QtWin::toHICON(pix);
+#else
         thumbIcons[type] = pix.toWinHICON();
+#endif
     }
     return thumbIcons[type];
 }
@@ -820,7 +826,7 @@ TomahawkWindow::audioStateChanged( AudioState newState, AudioState oldState )
         return;
     }
 
-    m_taskbarList->ThumbBarUpdateButtons( winId(), ARRAYSIZE( m_thumbButtons ), m_thumbButtons );
+    m_taskbarList->ThumbBarUpdateButtons( (HWND)winId(), ARRAYSIZE( m_thumbButtons ), m_thumbButtons );
 }
 
 
@@ -841,7 +847,7 @@ TomahawkWindow::updateWindowsLoveButton()
     }
 
     m_thumbButtons[TP_LOVE].dwFlags = THBF_ENABLED;
-    m_taskbarList->ThumbBarUpdateButtons( winId(), ARRAYSIZE( m_thumbButtons ), m_thumbButtons );
+    m_taskbarList->ThumbBarUpdateButtons( (HWND)winId(), ARRAYSIZE( m_thumbButtons ), m_thumbButtons );
 }
 #endif // Q_OS_WIN
 

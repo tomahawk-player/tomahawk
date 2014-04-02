@@ -300,8 +300,8 @@ bringToFront()
         int  idActive      = GetWindowThreadProcessId(hwndActiveWin, NULL);
         if ( AttachThreadInput(GetCurrentThreadId(), idActive, TRUE) )
         {
-            SetForegroundWindow( wid );
-            SetFocus( wid );
+            SetForegroundWindow( (HWND)wid );
+            SetFocus( (HWND)wid );
             AttachThreadInput(GetCurrentThreadId(), idActive, FALSE);
         }
     }

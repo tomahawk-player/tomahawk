@@ -15,7 +15,7 @@
 #cmakedefine WITH_BREAKPAD
 #cmakedefine WITH_CRASHREPORTER
 #cmakedefine WITH_BINARY_ATTICA
-#cmakedefine WITH_QtSparkle
+#cmakedefine WITH_QTSPARKLE
 #cmakedefine WITH_UPOWER
 #cmakedefine WITH_GNOMESHORTCUTHANDLER
 

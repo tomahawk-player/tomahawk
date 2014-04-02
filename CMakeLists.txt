@@ -135,6 +135,10 @@ if( NOT BUILD_WITH_QT4 )
             # We need this to find the paths to qdbusxml2cpp and co
             find_package(Qt5DBus REQUIRED)
         endif()
+        
+        if(WIN32)
+            find_package(Qt5WinExtras REQUIRED)
+        endif()
 
         macro(qt_wrap_ui)
             qt5_wrap_ui(${ARGN})
