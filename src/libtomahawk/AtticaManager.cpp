@@ -464,7 +464,7 @@ AtticaManager::resolverIconFetched()
 
     const QString resolverId = reply->property( "resolverId" ).toString();
 
-    if ( !reply->error() == QNetworkReply::NoError )
+    if ( reply->error() != QNetworkReply::NoError )
     {
         tLog() << "Failed to fetch resolver icon image:" << reply->errorString();
         return;
