@@ -3966,157 +3966,157 @@ introdu aici PIN-ul afișat:</translation>
         <translation>Tomahawk</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="284"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="286"/>
         <source>Back</source>
         <translation>Înapoi</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="287"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="289"/>
         <source>Go back one page</source>
         <translation>Mergi înapoi o pagină</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="294"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="296"/>
         <source>Forward</source>
         <translation>Înainte</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="297"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="299"/>
         <source>Go forward one page</source>
         <translation>Mergi înainte o pagină</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="214"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1324"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="216"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1330"/>
         <source>Hide Menu Bar</source>
         <translation>Ascunde bara de meniu</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="214"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1318"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="216"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1324"/>
         <source>Show Menu Bar</source>
         <translation>Arată bara de meniu</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="314"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="316"/>
         <source>Search for any artist, album or song...</source>
         <translation>Caută orice artist, album sau piesă...</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="337"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="339"/>
         <source>&amp;Main Menu</source>
         <translation>&amp;Meniu principal</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="938"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="944"/>
         <source>Exit Full Screen</source>
         <translation>Ieșire din modul pe tot ecranul</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="956"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="962"/>
         <source>Enter Full Screen</source>
         <translation>Pe tot ecranul</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1018"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1024"/>
         <source>XSPF Error</source>
         <translation>Eroare XSPF</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1018"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1024"/>
         <source>This is not a valid XSPF playlist.</source>
         <translation>Aceasta nu este o listă de redare XSPF validă.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1022"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1028"/>
         <source>Failed to save tracks</source>
         <translation>Salvarea pieselor a eșuat</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1022"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1028"/>
         <source>Some tracks in the playlist do not contain an artist and a title. They will be ignored.</source>
         <translation>Unele piese din lista de redare nu conțin un artist și un titlu. Vor fi ignorate.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1036"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1042"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped. Make sure you have a suitable Phonon backend and required plugins installed.</source>
         <translation>Ne pare rău, a apărut o problemă la accesarea dispozitivului audio sau a piesei dorite, piesa curentă va fi sărită. Asigură-te că ai o platformă Phonon potrivită și că modulele necesare sunt instalate.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1038"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1044"/>
         <source>Sorry, there is a problem accessing your audio device or the desired track, current track will be skipped.</source>
         <translation>Ne pare rău, a apărut o problemă la accesarea dispozitivului audio sau a piesei dorite, piesa curentă va fi sărită.</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1056"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1062"/>
         <source>Station</source>
         <translation>Stație</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1058"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1064"/>
         <source>Create New Station</source>
         <translation>Creează o nouă stație</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1058"/>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1093"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1064"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1099"/>
         <source>Name:</source>
         <translation>Nume:</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1091"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1097"/>
         <source>Playlist</source>
         <translation>Listă de redare</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1093"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1099"/>
         <source>Create New Playlist</source>
         <translation>Creează o nouă listă de redare</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1126"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1132"/>
         <source>Pause</source>
         <translation>Pauză</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1148"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1154"/>
         <source>&amp;Play</source>
         <translation>&amp;Redare</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1180"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1186"/>
         <source>%1 by %2</source>
         <comment>track, artist name</comment>
         <translation>%1 de %2</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1181"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1187"/>
         <source>%1 - %2</source>
         <comment>current track, some window title</comment>
         <translation>%1 - %2</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1192"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1198"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;br/&gt;(%2)&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1196"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1202"/>
         <source>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;&lt;b&gt;Tomahawk %1&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1200"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1206"/>
         <source>Copyright 2010 - 2013</source>
         <translation>Copyright 2010 - 2013</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1201"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1207"/>
         <source>Thanks to:</source>
         <translation>Mulțumiri:</translation>
     </message>
     <message>
-        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1208"/>
+        <location filename="../src/tomahawk/TomahawkWindow.cpp" line="1214"/>
         <source>About Tomahawk</source>
         <translation>Despre Tomahawk</translation>
     </message>
